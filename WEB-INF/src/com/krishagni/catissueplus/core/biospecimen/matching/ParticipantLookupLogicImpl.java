@@ -33,7 +33,7 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 	public List<Participant> getMatchingParticipants(ParticipantDetail detail) {
 		List<Participant> matchParticipantsList = new ArrayList<Participant>();
 		if ((CommonValidator.isBlank(detail.getFirstName()) && CommonValidator.isBlank(detail.getLastName()))
-				&& CommonValidator.isBlank(detail.getSsn()) && detail.getPmiCollection().isEmpty()) {
+				&& CommonValidator.isBlank(detail.getSsn()) && detail.getPmis().isEmpty()) {
 			return matchParticipantsList;
 		}
 
@@ -56,7 +56,7 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 			disjunction.add(Restrictions.eq("socialSecurityNumber", detail.getSsn()));
 		}
 
-		List<ParticipantMedicalIdentifierNumberDetail> list = detail.getPmiCollection();
+		List<ParticipantMedicalIdentifierNumberDetail> list = detail.getPmis();
 		if (list != null && !list.isEmpty()) {
 			criteria.createAlias("pmiCollection", "pmi");
 			criteria.setFetchMode("pmi", FetchMode.JOIN);

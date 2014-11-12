@@ -162,7 +162,7 @@ public class CollectionProtocolRegistrationDaoImpl
 	}
 
 	@Override
-	public boolean isBacodeUnique(String barcode) {
+	public boolean isBarcodeUnique(String barcode) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CPR_ID_BY_BARCODE);
 		query.setString("barcode", barcode);
 		return query.list().isEmpty() ? true : false;

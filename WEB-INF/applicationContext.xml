@@ -147,6 +147,7 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="registrationFactory" ref="cprFactory"/>
     <property name="privilegeSvc" ref="privSvc"/>
+    <property name="participantService" ref="participantSvc"/>
   </bean>
 
    <bean id="userFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.UserFactoryImpl">

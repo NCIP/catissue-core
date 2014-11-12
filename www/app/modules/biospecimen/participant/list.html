@@ -1,4 +1,5 @@
 <div>
+  <alert ng-if="alert.msg" type="{{alert.type}}" class="os-alert">{{alert.msg}}</alert>
   <div class="os-page-hdr">
     <h3>Participants</h3>
     <a class="os-icon-btn" title="Click to register new Participant" ng-click="registerParticipant()">

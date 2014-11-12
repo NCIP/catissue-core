@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.MatchParticipantEvent;
@@ -36,4 +37,6 @@ public interface ParticipantService {
 	public ParticipantMatchedEvent getMatchingParticipants(MatchParticipantEvent event);
 
 	public SubRegistrationDetailsEvent getSubRegistrationDetails(ReqSubRegistrationDetailEvent event);
+	
+	public void createParticipant(Participant participant);
 }

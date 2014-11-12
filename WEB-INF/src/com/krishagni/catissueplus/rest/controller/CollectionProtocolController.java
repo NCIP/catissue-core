@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -22,12 +21,9 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegi
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
@@ -110,22 +106,27 @@ public class CollectionProtocolController {
 //		return resp.getParticipantInfo();
 //	}
 //
-//	@RequestMapping(method = RequestMethod.POST, value = "/{id}/registrations")
-//	@ResponseStatus(HttpStatus.OK)
-//	@ResponseBody
-//	public CollectionProtocolRegistrationDetail register(@PathVariable("id") Long cpId,
-//			@RequestBody CollectionProtocolRegistrationDetail cprDetails) {
-//		CreateRegistrationEvent event = new CreateRegistrationEvent();
-//		event.setCpId(cpId);
-//		cprDetails.setCpId(cpId);
-//		event.setCprDetail(cprDetails);
-//		event.setSessionDataBean(getSession());
-//		RegistrationCreatedEvent resp = cprSvc.createRegistration(event);
-//		if (!resp.isSuccess()) {
-//			resp.raiseException();
-//		}
-//		return resp.getCprDetail();
-//	}
+	@RequestMapping(method = RequestMethod.POST, value = "/{id}/registered-participants")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public CollectionProtocolRegistrationDetail register(
+			@PathVariable("id") Long cpId,
+			@RequestBody CollectionProtocolRegistrationDetail cprDetails) {
+		
+		cprDetails.setCpId(cpId);
+		
+		CreateRegistrationEvent req = new CreateRegistrationEvent();
+		req.setCpId(cpId);		
+		req.setCprDetail(cprDetails);
+		req.setSessionDataBean(getSession());
+		
+		RegistrationCreatedEvent resp = cprSvc.createRegistration(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		
+		return resp.getCprDetail();
+	}
 
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);

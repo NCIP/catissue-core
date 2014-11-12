@@ -6,15 +6,12 @@ import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
-import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
+import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
 
 public class CollectionProtocolRegistrationDetail {
-
-	private ParticipantDetail participantDetail;
-
-	private List<String> modifiedAttributes = new ArrayList<String>();
-
 	private Long id;
+	
+	private ParticipantDetail participant;
 
 	private Long cpId;
 	
@@ -28,63 +25,9 @@ public class CollectionProtocolRegistrationDetail {
 
 	private Date registrationDate;
 
-	private ConsentResponseDetail responseDetail;
-
-	public Boolean isPpidModified() {
-		return modifiedAttributes.contains("ppid");
-	}
-
-	public Boolean isBarcodeModified() {
-		return modifiedAttributes.contains("barcode");
-	}
-
-	public Boolean isActivityStatusModified() {
-		return modifiedAttributes.contains("activityStatus");
-	}
-
-	public Boolean isRegistrationDateModified() {
-		return modifiedAttributes.contains("registrationDate");
-	}
-
-	public Boolean isParticipantModified() {
-		return modifiedAttributes.contains("participantDetail");
-	}
+	private ConsentDetail consentDetails;
 	
-	public void modifyParticipant() {
-		modifiedAttributes.add("participantDetail");
-	}
-
-	public String getActivityStatus() {
-		return activityStatus;
-	}
-
-	public void setActivityStatus(String activityStatus) {
-		this.activityStatus = activityStatus;
-	}
-
-	public ConsentResponseDetail getResponseDetail() {
-		return responseDetail;
-	}
-
-	public void setResponseDetail(ConsentResponseDetail responseDetail) {
-		this.responseDetail = responseDetail;
-	}
-
-	public String getBarcode() {
-		return barcode;
-	}
-
-	public void setBarcode(String barcode) {
-		this.barcode = barcode;
-	}
-
-	public Date getRegistrationDate() {
-		return registrationDate;
-	}
-
-	public void setRegistrationDate(Date registrationDate) {
-		this.registrationDate = registrationDate;
-	}
+	private List<String> modifiedAttributes = new ArrayList<String>();
 
 	public Long getId() {
 		return id;
@@ -92,6 +35,14 @@ public class CollectionProtocolRegistrationDetail {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public ParticipantDetail getParticipant() {
+		return participant;
+	}
+
+	public void setParticipant(ParticipantDetail participant) {
+		this.participant = participant;
 	}
 
 	public Long getCpId() {
@@ -118,22 +69,70 @@ public class CollectionProtocolRegistrationDetail {
 		this.ppid = ppid;
 	}
 
-	public ParticipantDetail getParticipantDetail() {
-		return participantDetail;
+	public String getBarcode() {
+		return barcode;
 	}
 
-	public void setParticipantDetail(ParticipantDetail participantDetail) {
-		this.participantDetail = participantDetail;
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
+	}
+
+	public String getActivityStatus() {
+		return activityStatus;
+	}
+
+	public void setActivityStatus(String activityStatus) {
+		this.activityStatus = activityStatus;
+	}
+
+	public Date getRegistrationDate() {
+		return registrationDate;
+	}
+
+	public void setRegistrationDate(Date registrationDate) {
+		this.registrationDate = registrationDate;
+	}
+
+	public ConsentDetail getConsentDetails() {
+		return consentDetails;
+	}
+
+	public void setConsentDetails(ConsentDetail consentDetails) {
+		this.consentDetails = consentDetails;
+	}
+
+	public Boolean isPpidModified() {
+		return modifiedAttributes.contains("ppid");
+	}
+
+	public Boolean isBarcodeModified() {
+		return modifiedAttributes.contains("barcode");
+	}
+
+	public Boolean isActivityStatusModified() {
+		return modifiedAttributes.contains("activityStatus");
+	}
+
+	public Boolean isRegistrationDateModified() {
+		return modifiedAttributes.contains("registrationDate");
+	}
+
+	public Boolean isParticipantModified() {
+		return modifiedAttributes.contains("participantDetail");
+	}
+	
+	public void modifyParticipant() {
+		modifiedAttributes.add("participantDetail");
 	}
 
 	public void setModifiedAttributes(List<String> modifiedAttributes) {
 		this.modifiedAttributes = modifiedAttributes;
 	}
 
-	public static CollectionProtocolRegistrationDetail fromDomain(CollectionProtocolRegistration cpr) {
-		 
+	public static CollectionProtocolRegistrationDetail fromDomain(CollectionProtocolRegistration cpr) {		 
 		CollectionProtocolRegistrationDetail detail = new CollectionProtocolRegistrationDetail();
-		detail.setParticipantDetail(ParticipantDetail.fromDomain(cpr.getParticipant()));
+		
+		detail.setParticipant(ParticipantDetail.fromDomain(cpr.getParticipant()));
 		detail.setId(cpr.getId());
 		detail.setCpId(cpr.getCollectionProtocol().getId());
 		detail.setActivityStatus(cpr.getActivityStatus());
@@ -141,6 +140,27 @@ public class CollectionProtocolRegistrationDetail {
 		detail.setBarcode(cpr.getBarcode());
 		detail.setPpid(cpr.getProtocolParticipantIdentifier());
 		detail.setRegistrationDate(cpr.getRegistrationDate());
+		
+		ConsentDetail consent = new ConsentDetail();
+		consent.setConsentDocumentUrl(cpr.getSignedConsentDocumentURL());
+		consent.setConsentSignatureDate(cpr.getConsentSignatureDate());
+		if (cpr.getConsentWitness() != null) {
+			consent.setWitnessName(cpr.getConsentWitness().getEmailAddress());
+		}
+		
+		if (cpr.getConsentResponseCollection() != null) {
+			for (ConsentTierResponse response : cpr.getConsentResponseCollection()) {
+				ConsentTierDetail stmt = new ConsentTierDetail();
+				if (response.getConsentTier() != null) {
+					stmt.setConsentStatment(response.getConsentTier().getStatement());
+					stmt.setParticipantResponse(response.getResponse());
+					consent.getConsenTierStatements().add(stmt);
+				}
+				
+			}
+		}
+		
+		detail.setConsentDetails(consent);
 		return detail;
 	}
 	

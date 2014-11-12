@@ -3,10 +3,12 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimenCollGroupsSummaryEvent;
@@ -15,8 +17,10 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegi
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CprRegistrationDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateBulkRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchRegistrationEvent;
@@ -27,6 +31,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSu
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
+import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
@@ -34,6 +39,8 @@ import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.security.global.Permissions;
 
 @Service(value = "CollectionProtocolRegistrationServiceImpl")
@@ -46,8 +53,10 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	private DaoFactory daoFactory;
 
 	private CollectionProtocolRegistrationFactory registrationFactory;
-
+	
 	private PrivilegeService privilegeSvc;
+	
+	private ParticipantService participantService;
 
 	public void setPrivilegeSvc(PrivilegeService privilegeSvc) {
 		this.privilegeSvc = privilegeSvc;
@@ -59,6 +68,10 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 
 	public void setRegistrationFactory(CollectionProtocolRegistrationFactory registrationFactory) {
 		this.registrationFactory = registrationFactory;
+	}
+	
+	public void setParticipantService(ParticipantService participantService) {
+		this.participantService = participantService;
 	}
 
 	@Override
@@ -74,29 +87,30 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 
 	@Override
 	@PlusTransactional
-	public RegistrationCreatedEvent createRegistration(CreateRegistrationEvent event) {
+	public RegistrationCreatedEvent createRegistration(CreateRegistrationEvent req) {
 		try {
-			Long cpId = getCpId(event);
-			if(!privilegeSvc.hasPrivilege(event.getSessionDataBean().getUserId(), cpId, Permissions.REGISTRATION)){
+			Long cpId = getCpId(req);
+			if (!privilegeSvc.hasPrivilege(req.getSessionDataBean().getUserId(), cpId, Permissions.REGISTRATION)){
 				return RegistrationCreatedEvent.accessDenied(Permissions.REGISTRATION, cpId);
 			}
-				
-			CollectionProtocolRegistration registration = registrationFactory.createCpr(event.getCprDetail());
-			ObjectCreationException errorHandler = new ObjectCreationException();
-			ensureUniquePpid(registration, errorHandler);
-			ensureUniqueBarcode(registration.getBarcode(), errorHandler);
-			errorHandler.checkErrorAndThrow();
-			daoFactory.getCprDao().saveOrUpdate(registration);
-			return RegistrationCreatedEvent.ok(CollectionProtocolRegistrationDetail.fromDomain(registration));
-		}
-		catch (ObjectCreationException ce) {
+			
+			CollectionProtocolRegistration cpr = registrationFactory.createCpr(req.getCprDetail());
+			
+			ObjectCreationException oce = new ObjectCreationException();
+			ensureUniquePpid(cpr, oce);
+			ensureUniqueBarcode(cpr.getBarcode(), oce);
+			oce.checkErrorAndThrow();
+			
+			saveParticipant(cpr, req);
+			daoFactory.getCprDao().saveOrUpdate(cpr);
+			return RegistrationCreatedEvent.ok(CollectionProtocolRegistrationDetail.fromDomain(cpr));
+		} catch (ObjectCreationException ce) {
 			return RegistrationCreatedEvent.invalidRequest(ParticipantErrorCode.ERRORS.message(), ce.getErroneousFields());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return RegistrationCreatedEvent.serverError(e);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public BulkRegistrationCreatedEvent createBulkRegistration(CreateBulkRegistrationEvent req) {
@@ -113,7 +127,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				
 				if (response.getStatus() == EventStatus.OK) {
 					CollectionProtocolRegistrationDetail savedCpr = response.getCprDetail(); 
-					participantRegDetails.setId(savedCpr.getParticipantDetail().getId());
+					participantRegDetails.setId(savedCpr.getParticipant().getId());
 					participantRegDetails.getRegistrationDetails().get(i).setCprId(savedCpr.getId());
 				} else {
 					return BulkRegistrationCreatedEvent.invalidRequest(response.getMessage(), response.getErroneousFields());
@@ -163,35 +177,36 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@Override
 	@PlusTransactional
 	public RegistrationUpdatedEvent patchRegistration(PatchRegistrationEvent event) {
-		try {
-			CollectionProtocolRegistration oldCpr = null;
-			CollectionProtocolRegistrationPatchDetail detail = event.getCollectionProtocolRegistrationDetail();
-			if (event.getId() != null) {
-				oldCpr = daoFactory.getCprDao().getCpr(event.getId());
-			}
-			else if (detail.getPpid() != null && detail.getCpId() != null) {
-				oldCpr = daoFactory.getCprDao().getCprByPpId(detail.getCpId(), detail.getPpid());
-			}
-
-			if (oldCpr == null) {
-				RegistrationUpdatedEvent.notFound(event.getId());
-			}
-			ObjectCreationException errorHandler = new ObjectCreationException();
-			CollectionProtocolRegistration cpr = registrationFactory.patchCpr(oldCpr, detail);
-
-			validatePpid(oldCpr, cpr, errorHandler);
-			validateBarcode(oldCpr.getBarcode(), cpr.getBarcode(), errorHandler);
-			errorHandler.checkErrorAndThrow();
-			oldCpr.update(cpr);
-			daoFactory.getCprDao().saveOrUpdate(oldCpr);
-			return RegistrationUpdatedEvent.ok(CollectionProtocolRegistrationDetail.fromDomain(oldCpr));
-		}
-		catch (ObjectCreationException ce) {
-			return RegistrationUpdatedEvent.invalidRequest(ParticipantErrorCode.ERRORS.message(), ce.getErroneousFields());
-		}
-		catch (Exception e) {
-			return RegistrationUpdatedEvent.serverError(e);
-		}
+//		try {
+//			CollectionProtocolRegistration oldCpr = null;
+//			CollectionProtocolRegistrationPatchDetail detail = event.getCollectionProtocolRegistrationDetail();
+//			if (event.getId() != null) {
+//				oldCpr = daoFactory.getCprDao().getCpr(event.getId());
+//			}
+//			else if (detail.getPpid() != null && detail.getCpId() != null) {
+//				oldCpr = daoFactory.getCprDao().getCprByPpId(detail.getCpId(), detail.getPpid());
+//			}
+//
+//			if (oldCpr == null) {
+//				RegistrationUpdatedEvent.notFound(event.getId());
+//			}
+//			ObjectCreationException errorHandler = new ObjectCreationException();
+//			CollectionProtocolRegistration cpr = registrationFactory.patchCpr(oldCpr, detail);
+//
+//			validatePpid(oldCpr, cpr, errorHandler);
+//			validateBarcode(oldCpr.getBarcode(), cpr.getBarcode(), errorHandler);
+//			errorHandler.checkErrorAndThrow();
+//			oldCpr.update(cpr);
+//			daoFactory.getCprDao().saveOrUpdate(oldCpr);
+//			return RegistrationUpdatedEvent.ok(CollectionProtocolRegistrationDetail.fromDomain(oldCpr));
+//		}
+//		catch (ObjectCreationException ce) {
+//			return RegistrationUpdatedEvent.invalidRequest(ParticipantErrorCode.ERRORS.message(), ce.getErroneousFields());
+//		}
+//		catch (Exception e) {
+//			return RegistrationUpdatedEvent.serverError(e);
+//		}
+		return null;
 	}
 
 	@Override
@@ -215,46 +230,55 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 	}
 	
+	private void saveParticipant(CollectionProtocolRegistration cpr, CreateRegistrationEvent req) {
+		if (req.getCprDetail().getParticipant().getId() != null) {
+			return; 
+		}
+		
+		Participant participant = cpr.getParticipant();
+		participantService.createParticipant(participant);
+		cpr.setParticipant(participant);
+	}
+	
 	private Long getCpId(CreateRegistrationEvent req) {
-		if (req.getCpId() != null) {
-			return req.getCpId();
-		} else if (req.getCprDetail() != null) {
-			Long cpId = req.getCprDetail().getCpId();
-			String title = req.getCprDetail().getCpTitle();
+		Long cpId = req.getCpId();
+		if (cpId == null && req.getCprDetail() != null) {
+			cpId = req.getCprDetail().getCpId();
 			
-			if (cpId != null) {
-				return cpId;
-			} else if (!CommonValidator.isBlank(title)) {
-				CollectionProtocol cp = null; // TODO: Fix this daoFactory.getCollectionProtocolDao().getCPByTitle(title);				
+			String title = req.getCprDetail().getCpTitle();			
+			if (cpId == null && StringUtils.isNotBlank(title)) {
+				CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);				
 				if (cp == null) {
-					ObjectCreationException exception = new ObjectCreationException();
-					exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, "collection protocol");
-					throw exception;
+					ObjectCreationException oce = new ObjectCreationException();
+					oce.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, "collection protocol");
+					throw oce;
 				}
 				
-				return cp.getId();
-			} else {
-				ObjectCreationException exception = new ObjectCreationException();
-				exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, "collection protocol");
-				throw exception;
+				cpId = cp.getId();
 			}
-		} else {
-			ObjectCreationException exception = new ObjectCreationException();
-			exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, "collection protocol");
-			throw exception;
+		}
+		
+		if (cpId != null) {
+			return cpId;
+		}
+		
+		ObjectCreationException exception = new ObjectCreationException();
+		exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, "collection protocol");
+		throw exception;
+	}
+
+	private void ensureUniquePpid(CollectionProtocolRegistration cpr, ObjectCreationException oce) {
+		Long cpId = cpr.getCollectionProtocol().getId();
+		String ppid = cpr.getProtocolParticipantIdentifier();
+		
+		if (!daoFactory.getCprDao().isPpidUniqueForProtocol(cpId, ppid)) {
+			oce.addError(ParticipantErrorCode.DUPLICATE_PPID, PPID);
 		}
 	}
 
-	private void ensureUniquePpid(CollectionProtocolRegistration registration, ObjectCreationException errorHandler) {
-		if (!daoFactory.getCprDao().isPpidUniqueForProtocol(registration.getCollectionProtocol().getId(),
-				registration.getProtocolParticipantIdentifier())) {
-			errorHandler.addError(ParticipantErrorCode.DUPLICATE_PPID, PPID);
-		}
-	}
-
-	private void ensureUniqueBarcode(String barcode, ObjectCreationException errorHandler) {
-		if (!CommonValidator.isBlank(barcode) && !daoFactory.getCprDao().isBacodeUnique(barcode)) {
-			errorHandler.addError(ParticipantErrorCode.DUPLICATE_BARCODE, BARCODE);
+	private void ensureUniqueBarcode(String barcode, ObjectCreationException oce) {
+		if (!StringUtils.isBlank(barcode) && !daoFactory.getCprDao().isBarcodeUnique(barcode)) {
+			oce.addError(ParticipantErrorCode.DUPLICATE_BARCODE, BARCODE);
 		}
 	}
 
@@ -278,14 +302,14 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		CollectionProtocolRegistrationDetail cprDetails = new CollectionProtocolRegistrationDetail();
 		ParticipantDetail participant = (ParticipantDetail)participantDetails;
 		
-		cprDetails.setParticipantDetail(participant);
+		cprDetails.setParticipant(participant);
 		CprRegistrationDetails cpr = participantDetails.getRegistrationDetails().get(i);
 		cprDetails.setCpId(cpr.getCpId());
 		cprDetails.setCpTitle(cpr.getCpTitle());
 		cprDetails.setId(cpr.getCprId());
 		cprDetails.setPpid(cpr.getPpId());
 		cprDetails.setRegistrationDate(cpr.getRegistrationDate());
-		cprDetails.setResponseDetail(cpr.getConsentResponseDetail());
+		cprDetails.setConsentDetails(cpr.getConsentResponseDetail());
 		return cprDetails;
 	}
 }

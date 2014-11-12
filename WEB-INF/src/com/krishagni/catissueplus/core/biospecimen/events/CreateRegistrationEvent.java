@@ -6,7 +6,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 public class CreateRegistrationEvent extends RequestEvent {
 
 	private Long cpId;
-
+	
 	private CollectionProtocolRegistrationDetail cprDetail;
 
 	public CollectionProtocolRegistrationDetail getCprDetail() {

@@ -4,6 +4,8 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 public class ConsentTierDetail {
 
 	private String consentStatment;
+	
+	private String participantResponse;
 
 	public String getConsentStatment() {
 		return consentStatment;
@@ -20,6 +22,4 @@ public class ConsentTierDetail {
 	public void setParticipantResponse(String participantResponse) {
 		this.participantResponse = participantResponse;
 	}
-
-	private String participantResponse;
 }

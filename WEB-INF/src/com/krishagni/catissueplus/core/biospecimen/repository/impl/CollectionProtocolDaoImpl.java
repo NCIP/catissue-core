@@ -94,14 +94,25 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		return cp;		
 	}
 	
+	@Override
+	@SuppressWarnings(value = {"unchecked"})
+	public CollectionProtocol getCollectionProtocol(String cpTitle) {
+		List<CollectionProtocol> cpList = sessionFactory.getCurrentSession()
+				.createCriteria(CollectionProtocol.class)
+				.add(Restrictions.eq("title", cpTitle))
+				.list();
+		return cpList == null || cpList.isEmpty() ? null : cpList.iterator().next();
+	}
+
+	@Override
+	public CollectionProtocol getCollectionProtocol(Long cpId) {
+		return (CollectionProtocol) sessionFactory.getCurrentSession().get(CollectionProtocol.class.getName(), cpId);
+	}
+	
 	private static final String FQN = CollectionProtocol.class.getName();
 	
 	private static final String GET_PARTICIPANT_N_SPECIMEN_CNT = FQN + ".getParticipantAndSpecimenCount";
-
-//	@Override
-//	public CollectionProtocol getCollectionProtocol(Long cpId) {
-//		return (CollectionProtocol) sessionFactory.getCurrentSession().get(CollectionProtocol.class.getName(), cpId);
-//	}
+	
 //
 //	@Override
 //	public CollectionProtocolEvent getCpe(Long cpeId) {

@@ -1,39 +1,33 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
-
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationPatchDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.util.PpidGenerator;
 import com.krishagni.catissueplus.core.biospecimen.util.impl.PpidGeneratorImpl;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.KeyGenFactory;
 
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.ConsentTier;
 
 public class CollectionProtocolRegistrationFactoryImpl implements CollectionProtocolRegistrationFactory {
 
@@ -47,10 +41,6 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 
 	private final String CONSENT_WITNESS = "consent witness";
 	
-	private final String SSN = "social security number";
-
-	private static final String PMI = "participant medical identifier";
-
 	private ParticipantFactory participantFactory;
 
 	private KeyGenFactory keyFactory;
@@ -74,289 +64,163 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	 */
 	@Override
 	public CollectionProtocolRegistration createCpr(CollectionProtocolRegistrationDetail detail) {
-		CollectionProtocolRegistration registration = new CollectionProtocolRegistration();
-		ObjectCreationException exception = new ObjectCreationException();
-		setBarcode(registration, detail.getBarcode(), exception);
-		setRegistrationDate(registration, detail.getRegistrationDate(), exception);
-		setActivityStatus(registration, detail.getActivityStatus(), exception);
-		setCollectionProtocol(registration, detail, exception);
-		setPPId(registration, detail.getPpid(), exception);
-
-		Long participantId = detail.getParticipantDetail().getId();
-		Participant participant;
-		if (participantId == null) {
-			participant = participantFactory.createParticipant(detail.getParticipantDetail());
-			
-			if (participant != null) {
-				ensureUniqueSsn(participant.getSocialSecurityNumber(), exception);
-				ensureUniquePMI(participant.getPmiCollection(), exception);
-			}
-		}
-		else {
-			participant = daoFactory.getParticipantDao().getParticipant(participantId);
-		}
-		if (participant == null) {
-			exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, "participant");
-		}
-		registration.setParticipant(participant);
-		exception.checkErrorAndThrow();
-		return registration;
+		ObjectCreationException oce = new ObjectCreationException();
+		
+		CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+		cpr.setBarcode(detail.getBarcode());
+		setRegistrationDate(cpr, detail.getRegistrationDate());
+		setActivityStatus(cpr, detail.getActivityStatus());
+		setCollectionProtocol(cpr, detail, oce);
+		setConsents(cpr, detail, oce);
+		setPpid(cpr, detail.getPpid(), oce);
+		setParticipant(cpr, detail.getParticipant(), oce);
+		
+		oce.checkErrorAndThrow();
+		return cpr;
 	}
 	
-	private void ensureUniqueSsn(String ssn, ObjectCreationException errorHandler) {
-		if (!daoFactory.getParticipantDao().isSsnUnique(ssn)) {
-			errorHandler.addError(ParticipantErrorCode.DUPLICATE_SSN, SSN);
+	private void setRegistrationDate(CollectionProtocolRegistration cpr, Date regDate) {
+		if (regDate == null) {
+			regDate = Calendar.getInstance().getTime();
 		}
+		
+		cpr.setRegistrationDate(regDate);
 	}
 
-	private void ensureUniquePMI(Map<String, ParticipantMedicalIdentifier> pmiCollection,
-			ObjectCreationException errorHandler) {
-		//TODO: need to handle for update
-		for (Entry<String, ParticipantMedicalIdentifier> entry : pmiCollection.entrySet()) {
-			String siteName = entry.getKey();
-			String mrn = entry.getValue().getMedicalRecordNumber();
-			if (!daoFactory.getParticipantDao().isPmiUnique(siteName, mrn)) {
-				errorHandler.addError(ParticipantErrorCode.DUPLICATE_PMI, PMI);
-			}
-
-		}
-	}
-
-	//	@Override
-	//	public CollectionProtocolRegistration patchCpr(CollectionProtocolRegistration oldCpr,
-	//			CollectionProtocolRegistrationDetail detail) {
-	//		ObjectCreationException exception = new ObjectCreationException();
-	//		if (detail.isBarcodeModified()) {
-	//			setBarcode(oldCpr, detail.getBarcode(), exception);
-	//		}
-	//		if (detail.isPpidModified()) {
-	//			setPPId(oldCpr, detail.getPpid(), exception);
-	//		}
-	//		if (detail.isActivityStatusModified()) {
-	//			setActivityStatus(oldCpr, detail.getActivityStatus(), exception);
-	//		}
-	//		if (detail.isRegistrationDateModified()) {
-	//			setRegistrationDate(oldCpr, detail.getRegistrationDate(), exception);
-	//		}
-	//		if (detail.isParticipantModified()) {
-	//			setRegistrationDate(oldCpr, detail.getRegistrationDate(), exception);
-	//		}
-	//		return null;
-	//	}
-
-	/**
-	 * Sets barcode
-	 * @param registration
-	 * @param barcode
-	 * @param exception 
-	 */
-	private void setBarcode(CollectionProtocolRegistration registration, String barcode, ObjectCreationException exception) {
-		registration.setBarcode(barcode);
-	}
-
-	/**
-	 * Sets the registration date. If null then sets the current date as registration date
-	 * @param registration
-	 * @param date
-	 * @param exception 
-	 */
-	private void setRegistrationDate(CollectionProtocolRegistration registration, Date date,
-			ObjectCreationException exception) {
-		if (date == null) {
-			registration.setRegistrationDate(new Date());
-		}
-		else {
-			registration.setRegistrationDate(date);
-		}
-	}
-
-	/**
-	 * Sets the activity status Active
-	 * @param registration
-	 * @param activityStatus
-	 * @param exception 
-	 */
-	private void setActivityStatus(CollectionProtocolRegistration registration, String activityStatus,
-			ObjectCreationException exception) {
-		if (isBlank(activityStatus)) {
+	private void setActivityStatus(CollectionProtocolRegistration registration, String activityStatus) {
+		if (StringUtils.isBlank(activityStatus)) {
 			registration.setActive();
-		}
-		else {
+		} else {
 			registration.setActivityStatus(activityStatus);
 		}
-
 	}
 
-	/**
-	 * Sets the Collection Protocol
-	 * @param registration
-	 * @param detail
-	 * @param exception 
-	 */
-	private void setCollectionProtocol(CollectionProtocolRegistration registration,
-			CollectionProtocolRegistrationDetail detail, ObjectCreationException exception) {
-		// TODO: Fix this
+	private void setCollectionProtocol(
+			CollectionProtocolRegistration cpr, 
+			CollectionProtocolRegistrationDetail detail, 
+			ObjectCreationException oce) {
+				
+		Long cpId = detail.getCpId();
+		String title = detail.getCpTitle();
 		
-//		CollectionProtocol protocol = null;
-//		
-//		if (detail.getCpId() == null) {
-//			
-//			String cpTitle = detail.getCpTitle();
-//			if (StringUtils.isNotBlank(cpTitle)) {
-//				protocol = daoFactory.getCollectionProtocolDao().getCpByTitle(cpTitle);
-//			} else {
-//				exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, COLLECTION_PROTOCOL);
-//				return;
-//			}
-//		} else {
-//			protocol = daoFactory.getCollectionProtocolDao().getCollectionProtocol(detail.getCpId());
-//		}
-//		
-//		if (protocol == null) {
-//			exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROTOCOL);
-//			return;
-//		}
-//		registration.setCollectionProtocol(protocol);
-//		setConsents(registration, detail, exception);
-	}
-
-	/**
-	 * Sets the given participant protocol identifier
-	 * @param registration
-	 * @param ppId
-	 * @param exception 
-	 */
-	private void setPPId(CollectionProtocolRegistration registration, String ppId, ObjectCreationException exception) {
-		//TODO: Fix this
+		CollectionProtocol protocol = null;
+		if (cpId == null && StringUtils.isNotBlank(title)) {			
+			protocol = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);
+		} else if (cpId != null){
+			protocol = daoFactory.getCollectionProtocolDao().getCollectionProtocol(detail.getCpId());
+		} else {
+			oce.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, COLLECTION_PROTOCOL);
+		} 
 		
-//	    String ppidFormat = registration.getCollectionProtocol().getPpidFormat();
-//	   if (StringUtils.isBlank(ppId)){
-//	        if(StringUtils.isBlank(ppidFormat)){
-//	            exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, PPID);
-//	            return;
-//	        }
-//	        
-//	        Long value = keyFactory.getValueByKey(registration.getCollectionProtocol().getId().toString(),
-//	                CollectionProtocol.class.getName());
-//	        PpidGenerator generator = new PpidGeneratorImpl();
-//	        registration.setProtocolParticipantIdentifier(generator.generatePpid(ppidFormat, value));
-//	    }
-//	    else{
-//	        registration.setProtocolParticipantIdentifier(ppId);
-//	    }
-	}
-
-	/**
-	 * This method converts the consent tier from the CP to consent response.  
-	 * @param registration
-	 * @param detail
-	 * @param exception 
-	 */
-	private void setConsents(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetail detail,
-			ObjectCreationException exception) {
-		// TODO: Fix this
+		if (protocol == null) {
+			oce.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROTOCOL);
+			return;
+		}
 		
-//		List<ConsentTierDetail> userProvidedConsents = new ArrayList<ConsentTierDetail>();
-//		Collection<ConsentTier> consentTierCollection = registration.getCollectionProtocol().getConsentTierCollection();
-//		if (consentTierCollection == null || consentTierCollection.isEmpty()) {
-//			return;
-//		}
-//
-//		if (detail.getResponseDetail() != null) {
-//			userProvidedConsents = detail.getResponseDetail().getConsentTierList();
-//			setConsentSignDate(registration, detail.getResponseDetail().getConsentDate());
-//			String witnessName = detail.getResponseDetail().getWitnessName();
-//			if (StringUtils.isNotBlank(witnessName)) {
-//				User witness = daoFactory.getUserDao().getUser(witnessName);
-//				if (witness == null) {
-//					exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, CONSENT_WITNESS);
-//				}
-//				registration.setConsentWitness(witness);
-//			}
-//		}
-//
-//		Set<ConsentTierResponse> consentTierResponseCollection = new HashSet<ConsentTierResponse>();
-//
-//		Iterator<ConsentTier> iter = consentTierCollection.iterator();
-//		while (iter.hasNext()) {
-//			ConsentTier consentTier = (ConsentTier) iter.next();
-//			ConsentTierResponse consentTierResponse = new ConsentTierResponse();
-//			consentTierResponse.setResponse(CONSENT_RESP_NOT_SPECIFIED);
-//			consentTierResponse.setConsentTier(consentTier);
-//			consentTierResponse.setCpr(registration);
-//			consentTierResponseCollection.add(consentTierResponse);
-//			for (ConsentTierDetail tier : userProvidedConsents) {
-//				if (consentTier.getStatement().equals(tier.getConsentStatment())) {
-//					consentTierResponse.setResponse(tier.getParticipantResponse());
-//				}
-//
-//			}
-//		}
-//		registration.setConsentResponseCollection(consentTierResponseCollection);
+		cpr.setCollectionProtocol(protocol);
 	}
 
-	//	private void setConsentDuringUpdate(CollectionProtocolRegistration registration,
-	//			CollectionProtocolRegistrationDetail detail) {
-	//
-	//		if (detail.getResponseDetail() == null) {
-	//			return;
-	//		}
-	//		List<ConsentTierDetail> userProvidedConsents = detail.getResponseDetail().getConsentTierList();
-	//		setConsentSignDate(registration, detail.getResponseDetail().getConsentDate());
-	//		String witnessName = detail.getResponseDetail().getWitnessName();
-	//		if (StringUtils.isNotBlank(witnessName)) {
-	//			User witness = daoFactory.getUserDao().getUser(witnessName);
-	//			if (witness == null) {
-	//				addError(ParticipantErrorCode.INVALID_ATTR_VALUE, CONSENT_WITNESS);
-	//			}
-	//			registration.setConsentWitness(witness);
-	//		}
-	//		Set<ConsentTierResponse> consentTierResponseCollection = new HashSet<ConsentTierResponse>();
-	//
-	//		for (ConsentTierDetail tier : userProvidedConsents) {
-	//			ConsentTier consentTier = new ConsentTier();
-	//			consentTier.setStatement(tier.getConsentStatment());
-	//			ConsentTierResponse consentTierResponse = new ConsentTierResponse();
-	//			consentTierResponse.setCpr(registration);
-	//			consentTierResponse.setResponse(tier.getParticipantResponse());
-	//			consentTierResponse.setConsentTier(consentTier);
-	//			consentTierResponseCollection.add(consentTierResponse);
-	//			
-	//		}
-	//
-	//		registration.setConsentResponseCollection(consentTierResponseCollection);
-	//	}
+	private void setPpid(CollectionProtocolRegistration cpr, String ppid, ObjectCreationException oce) {
+		// TODO: Requires little bit of refactoring
+		String ppidFormat = cpr.getCollectionProtocol().getPpidFormat();
 
-	private void setConsentSignDate(CollectionProtocolRegistration registration, Date consentDate) {
-		if (consentDate != null) {
-			registration.setConsentSignatureDate(consentDate);
+		if (StringUtils.isBlank(ppid) && StringUtils.isBlank(ppidFormat)) {
+			oce.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, PPID);
+			return;
+		} else if (StringUtils.isBlank(ppid)) {
+			Long value = keyFactory.getValueByKey(
+					cpr.getCollectionProtocol().getId().toString(), CollectionProtocol.class.getName());
+
+			PpidGenerator generator = new PpidGeneratorImpl();
+			cpr.setProtocolParticipantIdentifier(generator.generatePpid(ppidFormat, value));
+		} else {
+			cpr.setProtocolParticipantIdentifier(ppid);
 		}
 	}
 
-	@Override
-	public CollectionProtocolRegistration patchCpr(CollectionProtocolRegistration oldCpr,
-			CollectionProtocolRegistrationPatchDetail detail) {
-		ObjectCreationException exception = new ObjectCreationException();
-	if(detail.isActivityStatusModified()){
-		setActivityStatus(oldCpr, detail.getActivityStatus(), exception);
+	private void setConsents(
+			CollectionProtocolRegistration cpr, 
+			CollectionProtocolRegistrationDetail detail,
+			ObjectCreationException oce) {
+		
+		Collection<ConsentTier> consents = cpr.getCollectionProtocol().getConsentTier();
+		if (consents == null || consents.isEmpty()) {
+			return;
+		}
+
+		ConsentDetail consentDetail = detail.getConsentDetails();
+		if (consentDetail == null) {
+			return;
+		}
+				
+		setConsentSignDate(cpr, consentDetail);
+		setConsentWitness(cpr, consentDetail, oce);
+		setConsentResponses(cpr, consentDetail);			
 	}
-	if(detail.isBarcodeModified()){
-		setBarcode(oldCpr, detail.getBarcode(), exception);
+	
+	private void setConsentSignDate(CollectionProtocolRegistration cpr, ConsentDetail consentDetail) {
+		if (consentDetail.getConsentSignatureDate() != null) {
+			cpr.setConsentSignatureDate(consentDetail.getConsentSignatureDate());
+		}				
 	}
-	if(detail.isPpidModified()){
-		setPPId(oldCpr, detail.getPpid(), exception);
+	
+	private void setConsentWitness(CollectionProtocolRegistration cpr, ConsentDetail consentDetail, ObjectCreationException oce) {
+		String witnessEmailId = consentDetail.getWitnessName();
+		if (StringUtils.isBlank(witnessEmailId)) {
+			return;
+		}
+		
+		User witness = daoFactory.getUserDao().getUser(witnessEmailId);
+		if (witness == null) {
+			oce.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, CONSENT_WITNESS);
+		}
+		cpr.setConsentWitness(witness);
 	}
-	if(detail.isRegistrationDateModified()){
-		setRegistrationDate(oldCpr, detail.getRegistrationDate(), exception);
-	}
-//	if(detail.isParticipantModified()){
-//		participantFactory.
-//	}
-	exception.checkErrorAndThrow();
-		return oldCpr;
+	
+	private void setConsentResponses(CollectionProtocolRegistration cpr, ConsentDetail consentDetail) {
+		Set<ConsentTierResponse> consentResponses = new HashSet<ConsentTierResponse>();
+		
+		for (ConsentTier consent : cpr.getCollectionProtocol().getConsentTier()) {
+			ConsentTierResponse response = new ConsentTierResponse();
+			response.setResponse(CONSENT_RESP_NOT_SPECIFIED);
+			response.setConsentTier(consent);
+			response.setCpr(cpr);
+			
+			for (ConsentTierDetail userResp : consentDetail.getConsenTierStatements()) {
+				if (consent.getStatement().equals(userResp.getConsentStatment())) {
+					response.setResponse(userResp.getParticipantResponse());
+					break;
+				}
+			}
+			
+			consentResponses.add(response);
+		}
+		
+		cpr.setConsentResponseCollection(consentResponses);		
 	}
 
-	//	private void addError(CatissueErrorCode event, String field) {
-	//		exception.addError(event, field);
-	//	}
+	private void setParticipant(
+			CollectionProtocolRegistration cpr,
+			ParticipantDetail participantDetail, 
+			ObjectCreationException oce) {
+		
+		if (participantDetail == null) {
+			oce.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, "participant");
+			return;
+		}
+		
+		Long participantId = participantDetail.getId();
+		Participant participant;
+		if (participantId == null) {
+			participant = participantFactory.createParticipant(participantDetail);
+		} else {
+			participant = daoFactory.getParticipantDao().getParticipant(participantId);
+		}
+		
+		if (participant == null) {
+			oce.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, "participant");
+		}
+		
+		cpr.setParticipant(participant);
+	}
 }

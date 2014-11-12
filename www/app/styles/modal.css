@@ -45,3 +45,7 @@
   content: ' ';
   display: table;
 }
+
+.os-modal-body .os-alert {
+  margin-top: -10px;
+}

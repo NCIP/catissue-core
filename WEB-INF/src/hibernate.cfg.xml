@@ -184,6 +184,10 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Equipment.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Image.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/PermissibleValue.hbm.xml"/>
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ClinicalDiagnosis.hbm.xml"/>
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConsentTier.hbm.xml"/>
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocolEvent.hbm.xml"/>
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenRequirement.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/bulkoperator/JobDetails.hbm.xml" />
 
 		<mapping resource="com/krishagni/rbac/resources/Group.hbm.xml"/>

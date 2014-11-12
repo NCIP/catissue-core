@@ -25,7 +25,7 @@ public class CollectionProtocolRegistrationPatchDetail {
 
 	private Date registrationDate;
 
-	private ConsentResponseDetail responseDetail;
+	private ConsentDetail responseDetail;
 
 	public Boolean isPpidModified() {
 		return modifiedAttributes.contains("ppid");
@@ -55,11 +55,11 @@ public class CollectionProtocolRegistrationPatchDetail {
 		this.activityStatus = activityStatus;
 	}
 
-	public ConsentResponseDetail getResponseDetail() {
+	public ConsentDetail getResponseDetail() {
 		return responseDetail;
 	}
 
-	public void setResponseDetail(ConsentResponseDetail responseDetail) {
+	public void setResponseDetail(ConsentDetail responseDetail) {
 		this.responseDetail = responseDetail;
 	}
 

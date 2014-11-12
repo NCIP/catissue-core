@@ -77,22 +77,25 @@ public class ParticipantServiceImpl implements ParticipantService {
 	@PlusTransactional
 	public ParticipantCreatedEvent createParticipant(CreateParticipantEvent event) {
 		try {
-//			List<Participant> list = participantLookupLogic.getMatchingParticipants(event.getParticipantDetail());
 			Participant participant = participantFactory.createParticipant(event.getParticipantDetail());
-			ObjectCreationException errorHandler = new ObjectCreationException();
-
-			ensureUniqueSsn(participant.getSocialSecurityNumber(), errorHandler);
-			ensureUniquePMI(participant.getPmiCollection(), errorHandler);
-			errorHandler.checkErrorAndThrow();
-			daoFactory.getParticipantDao().saveOrUpdate(participant);
+			createParticipant(participant);
 			return ParticipantCreatedEvent.ok(ParticipantDetail.fromDomain(participant));
-		}
-		catch (ObjectCreationException ce) {
+		} catch (ObjectCreationException ce) {
 			return ParticipantCreatedEvent.invalidRequest(ParticipantErrorCode.ERRORS.message(), ce.getErroneousFields());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return ParticipantCreatedEvent.serverError(e);
 		}
+	}
+	
+//	@PlusTransactional
+	public void createParticipant(Participant participant) {
+		ObjectCreationException oce = new ObjectCreationException();
+		
+		ensureUniqueSsn(participant.getSocialSecurityNumber(), oce);
+		ensureUniquePMI(participant.getPmiCollection(), oce);
+		
+		oce.checkErrorAndThrow();
+		daoFactory.getParticipantDao().saveOrUpdate(participant);
 	}
 
 	/* 
@@ -131,31 +134,32 @@ public class ParticipantServiceImpl implements ParticipantService {
 	@Override
 	@PlusTransactional
 	public ParticipantUpdatedEvent patchParticipant(PatchParticipantEvent event) {
-		try {
-			Long participantId = event.getId();
-			Participant oldParticipant = daoFactory.getParticipantDao().getParticipant(participantId);
-			if (oldParticipant == null) {
-				return ParticipantUpdatedEvent.notFound(participantId);
-			}
-			Map<String, ParticipantMedicalIdentifier> oldPmiCollection = oldParticipant.getPmiCollection();
-			Participant participant = participantFactory.patchParticipant(oldParticipant, event.getParticipantDetail());
-			
-			ObjectCreationException errorHandler = new ObjectCreationException();;
-			validateSsn(oldParticipant.getSocialSecurityNumber(), participant.getSocialSecurityNumber(), errorHandler);
-			checkForUniquePMI(oldPmiCollection, participant.getPmiCollection(), errorHandler);
-//			ensureUniquePMI(participant.getPmiCollection(), errorHandler);
-			errorHandler.checkErrorAndThrow();
-			
-			oldParticipant.update(participant);
-			daoFactory.getParticipantDao().saveOrUpdate(oldParticipant);
-			return ParticipantUpdatedEvent.ok(ParticipantDetail.fromDomain(oldParticipant));
-		}
-		catch (ObjectCreationException ce) {
-			return ParticipantUpdatedEvent.invalidRequest(ParticipantErrorCode.ERRORS.message(), ce.getErroneousFields());
-		}
-		catch (Exception e) {
-			return ParticipantUpdatedEvent.serverError(e);
-		}
+//		try {
+//			Long participantId = event.getId();
+//			Participant oldParticipant = daoFactory.getParticipantDao().getParticipant(participantId);
+//			if (oldParticipant == null) {
+//				return ParticipantUpdatedEvent.notFound(participantId);
+//			}
+//			Map<String, ParticipantMedicalIdentifier> oldPmiCollection = oldParticipant.getPmiCollection();
+//			Participant participant = participantFactory.patchParticipant(oldParticipant, event.getParticipantDetail());
+//			
+//			ObjectCreationException errorHandler = new ObjectCreationException();;
+//			validateSsn(oldParticipant.getSocialSecurityNumber(), participant.getSocialSecurityNumber(), errorHandler);
+//			checkForUniquePMI(oldPmiCollection, participant.getPmiCollection(), errorHandler);
+////			ensureUniquePMI(participant.getPmiCollection(), errorHandler);
+//			errorHandler.checkErrorAndThrow();
+//			
+//			oldParticipant.update(participant);
+//			daoFactory.getParticipantDao().saveOrUpdate(oldParticipant);
+//			return ParticipantUpdatedEvent.ok(ParticipantDetail.fromDomain(oldParticipant));
+//		}
+//		catch (ObjectCreationException ce) {
+//			return ParticipantUpdatedEvent.invalidRequest(ParticipantErrorCode.ERRORS.message(), ce.getErroneousFields());
+//		}
+//		catch (Exception e) {
+//			return ParticipantUpdatedEvent.serverError(e);
+//		}
+		return null;
 	}
 
 	@Override
