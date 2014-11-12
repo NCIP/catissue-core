@@ -42,6 +42,7 @@ angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.m
     ApiUrlsProvider.urls = {
       'sessions': '/rest/ng/sessions',
       'collection-protocols': '/rest/ng/collection-protocols',
+      'participants': '/rest/ng/participants',
       'sites': '/rest/ng/sites'
     };
 

@@ -1,15 +1,18 @@
 
 angular.module('openspecimen')
-  .controller('ParticipantAddEditCtrl', 
-    function($scope, $modalInstance, $stateParams, AlertService, CollectionProtocolService, SiteService, PvManager) {
+  .controller('ParticipantAddEditCtrl', function(
+    $scope, $modalInstance, $stateParams, 
+    AlertService, CollectionProtocolService, ParticipantService,
+    SiteService, PvManager) {
 
     $scope.cpId = $stateParams.cpId;
+    $scope.pid = undefined;
 
     $scope.cpr = {
       participant: {
         pmis: []
       },
-      registrationDate: new Date()
+      registrationDate: Date.now()
     };
 
     $scope.addPmi = function() {
@@ -34,6 +37,87 @@ angular.module('openspecimen')
     PvManager.loadPvs($scope, 'vitalStatus');
     PvManager.loadPvs($scope, 'race');
 
+
+    var isMatchingInfoPresent = function(participant) { 
+      if (participant.lastName && participant.birthDate) {
+        return true;
+      }
+
+      if (participant.ssn) {
+        return true;
+      }
+ 
+      if (participant.pmis && participant.pmis.length > 0) {
+        return true;
+      }
+
+      return false;
+    };
+ 
+    $scope.ignoreAndCreateNew = function(wizard) {
+      $scope.matchedResults = undefined;
+      $scope.ignoreMatches = true; 
+      wizard.next(false);
+    };
+
+ 
+    var handleMatchedResults = function() {
+      if (!$scope.selectedParticipant) {
+        AlertService.display($scope, "Select Participant before moving forward", "danger");
+        return false;
+      }
+
+      $scope.cpr.participant = angular.extend({}, $scope.selectedParticipant);
+      angular.forEach($scope.cpr.participant.pmis, function(pmi) {
+        pmi.site = {name: pmi.siteName};
+      });
+
+      $scope.matchedResults = undefined;
+      return true;
+    };
+
+    $scope.validateBasicInfo = function() {
+      if ($scope.matchedResults) {
+        return handleMatchedResults();
+      }   
+
+      var participant = $scope.cpr.participant;
+      if (participant.id || $scope.ignoreMatches || !isMatchingInfoPresent(participant)) {
+        return true;
+      }
+
+      var criteria = {
+        lastName: participant.lastName,
+        birthDate: participant.birthDate,
+        ssn : formatSsn(participant.ssn),
+        pmis: formatPmis(participant.pmis)
+      };
+
+      $scope.matchedResults = undefined;
+      return ParticipantService.getMatchingParticipants(criteria).then(
+        function(result) {
+          if (result.status != 'ok') {
+            AlertService.display($scope, "Participant matching failed", "danger");
+            return false;
+          }
+
+          if (result.data.matchedAttr == 'none') {
+            return true;
+          }
+
+          $scope.matchedResults = result.data;
+          return false;
+        }
+      );
+    };
+
+    $scope.selectParticipant = function(participant) {
+      $scope.selectedParticipant = participant;
+    };
+
+    $scope.lookupAgain = function() {
+      $scope.matchedResults = undefined;
+    };
 
     var formatSsn = function(ssn) {
       if (ssn && ssn.length > 0) {
@@ -70,5 +154,9 @@ angular.module('openspecimen')
       req.participant.ssn = formatSsn(req.participant.ssn);
       req.participant.pmis = formatPmis(req.participant.pmis);
       CollectionProtocolService.registerParticipant($scope.cpId, req).then(handleRegResult);
+    };
+
+    $scope.cancel = function() {
+      $modalInstance.dismiss('cancel');
     };
   });

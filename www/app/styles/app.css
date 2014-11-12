@@ -198,3 +198,7 @@ input.ng-dirty.ng-invalid {
   border-color: #555;
 }
 
+.os-btn-text {
+  background: transparent;
+  color: #428bca;
+}

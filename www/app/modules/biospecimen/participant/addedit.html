@@ -1,14 +1,15 @@
 <div>
   <div class="os-modal-header">
     <span> Register Participant </span>
-    <a class="os-close">&times;</a>
+    <a class="os-close" ng-click="cancel()">&times;</a>
   </div>
   <div class="os-modal-body">
     <alert ng-if="alert" type="{{alert.type}}" class="os-alert">{{alert.msg}}</alert>
 
     <div os-wizard="regWizard">
-      <os-wizard-step on-finish="" title="Basic Info">
-        <div ng-include="'participant-basic-info.html'"></div>
+      <os-wizard-step on-finish="validateBasicInfo" title="Basic Info">
+        <div ng-include="'participant-basic-info.html'" ng-if="!matchedResults || matchedResults.matchedAttr == 'none'"></div>
+        <div ng-include="'matched-participants.html'" ng-if="matchedResults.matchedAttr && matchedResults.matchedAttr != 'none'"></div>
       </os-wizard-step>
 
       <os-wizard-step on-finish="" title="Additional Info">
@@ -26,6 +27,10 @@
         <button class="btn os-btn-secondary" ng-if="!regWizard.isFirstStep()" 
           ng-click="regWizard.previous(false)">
           Previous
+        </button>
+        <button class="btn btn-primary" ng-if="matchedResults && matchedResults.matchedAttr == 'lnameAndDob'"
+          ng-click="ignoreAndCreateNew(regWizard)">
+          Ignore and Create New
         </button>
         <button class="btn btn-primary" ng-if="!regWizard.isLastStep()" 
           ng-click="regWizard.next(false)">
@@ -106,12 +111,46 @@
     </div>
 
     <div class="form-group">
-      <button class="btn btn-success os-btn-col" ng-click="addPmi()">
+      <button class="btn os-btn-text os-btn-col" ng-click="addPmi()">
         <span class="glyphicon glyphicon-plus"></span>
         Add MRN
       </button>
     </div>
   </form>
+</script>
+
+<script type="text/ng-template" id="matched-participants.html">
+  <div ng-switch on="matchedResults.matchedAttr">
+    <span ng-switch-when="ssn">Following Participant matched based on SSN</span>
+    <span ng-switch-when="pmi">Following Participant matched based on medical identifiers</span>
+    <span ng-switch-when="lnameAndDob">Following possible Participants matched based on last name and birth date</span>
+  </div>
+  <table class="table table-bordered table-condensed table-hover">
+    <thead>
+      <tr>
+        <th>&nbsp;</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Birth Date</th>
+        <th>SSN</th>
+        <th>Medical Identifiers</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="participant in matchedResults.participants" ng-class="{'info': selectedParticipant.id == participant.id}">
+        <td><input type="radio" name="selectedParticipant" ng-click="selectParticipant(participant)" value="{{participant.id}}"></td>
+        <td>{{participant.firstName}}</td>
+        <td>{{participant.lastName}}</td>
+        <td>{{participant.birthDate}}</td>
+        <td>{{participant.ssn}}</td>
+        <td>{{participant.pmis | showMrns}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <button class="btn os-btn-text" ng-click="lookupAgain()">
+    <span class="glyphicon glyphicon-repeat"></span>
+    Lookup Again
+  </button>
 </script>
 
 <script type="text/ng-template" id="participant-additional-info.html">
