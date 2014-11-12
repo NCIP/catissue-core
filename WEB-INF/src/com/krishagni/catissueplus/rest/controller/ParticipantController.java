@@ -170,18 +170,19 @@ public class ParticipantController {
 			return resp.getMessage();
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/matchParticipants")
+	@RequestMapping(method = RequestMethod.POST, value = "/match")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<ParticipantDetail> getMatchedParticipants(@RequestBody ParticipantDetail participantDetail) {
-		MatchParticipantEvent event = new MatchParticipantEvent();
-		event.setSessionDataBean(getSession());
-		event.setParticipantDetail(participantDetail);
-		ParticipantMatchedEvent resp = participantSvc.getMatchingParticipants(event);
+	public ParticipantMatchedEvent getMatchedParticipants(@RequestBody ParticipantDetail participant) {
+		MatchParticipantEvent req = new MatchParticipantEvent();
+		req.setSessionDataBean(getSession());
+		req.setParticipantDetail(participant);
+		ParticipantMatchedEvent resp = participantSvc.getMatchingParticipants(req);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
-			return resp.getMatchingParticipants();
+		
+		return resp;
 	}
 
 	private SessionDataBean getSession() {

@@ -1,41 +1,80 @@
 
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.Query;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
-import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 public class ParticipantDaoImpl extends AbstractDao<Participant> implements ParticipantDao {
 
 	@Override
 	public Participant getParticipant(Long id) {
-		//		String hql = "select part from "+Participant.class.getName()+" part join part.pmiCollection pmi where part.firstName ='Fred' and " +
-		//				"pmi.medicalRecordNumber = '87782'";
-		//		sessionFactory.getCurrentSession().createQuery("select part from "+Participant.class.getName()+" part join part.pmiCollection pmi where part.gender ='Unspecified' and " +
-		//				"pmi.medicalRecordNumber = '121'").list()
 		return (Participant) sessionFactory.getCurrentSession().get(Participant.class, id);
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public Participant getBySsn(String ssn) {		
+		List<Participant> participants = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_BY_SSN)
+				.setString("ssn", ssn)
+				.list();
+		return participants == null || participants.isEmpty() ? null : participants.iterator().next();
 	}
 
 	@Override
-	public boolean isSsnUnique(String socialSecurityNumber) {
+	@SuppressWarnings("unchecked")	
+	public List<Participant> getByLastNameAndBirthDate(String lname, Date dob) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_BY_LNAME_AND_DOB)
+				.setString("lname", lname)
+				.setDate("dob", dob)
+				.list();
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")	
+	public List<Participant> getByPmis(List<ParticipantMedicalIdentifierNumberDetail> pmis) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(Participant.class)
+				.createAlias("pmiCollection", "pmi")
+				.createAlias("pmi.site", "site");
+		
+		Disjunction junction = Restrictions.disjunction();
+		boolean added = false;
+		for (ParticipantMedicalIdentifierNumberDetail pmi : pmis) {
+			if (StringUtils.isBlank(pmi.getSiteName()) || StringUtils.isBlank(pmi.getMrn())) {
+				continue;
+			}
+			
+			junction.add(
+					Restrictions.and(
+							Restrictions.eq("pmi.medicalRecordNumber", pmi.getMrn()),
+							Restrictions.eq("site.name", pmi.getSiteName())));
+			added = true;
+		}
+		
+		if (!added) {
+			return Collections.emptyList();
+		}
+		
+		return query.add(junction).list();						
+	}
+	
+	@Override
+	public boolean isSsnUnique(String ssn) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PARTICIPANT_ID_BY_SSN);
-		query.setString("ssn", socialSecurityNumber);
+		query.setString("ssn", ssn);
 		return query.list().isEmpty() ? true : false;
 	}
 
@@ -52,11 +91,8 @@ public class ParticipantDaoImpl extends AbstractDao<Participant> implements Part
 	private static final String GET_PARTICIPANT_ID_BY_SSN = FQN + ".getParticipantIdBySSN";
 
 	private static final String GET_PMI_ID_BY_SITE_MRN = FQN + ".getPmiIdBySiteMrn";
-
-	@Override
-	public List<Participant> getMatchingParticipants(DetachedCriteria criteria) {
-
-		return criteria.getExecutableCriteria(sessionFactory.getCurrentSession()).list();
-	}
-
+	
+	private static final String GET_BY_SSN = FQN + ".getBySsn";
+	
+	private static final String GET_BY_LNAME_AND_DOB = FQN + ".getByLnameAndDob";
 }

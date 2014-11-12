@@ -184,14 +184,8 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	@Override
 	@PlusTransactional
-	public ParticipantMatchedEvent getMatchingParticipants(MatchParticipantEvent event) {
-		List<Participant> list = participantLookupLogic.getMatchingParticipants(event.getParticipantDetail()); 
-//				daoFactory.getParticipantDao().getMatchingParticipants(event.getParticipantDetail());
-		List<ParticipantDetail> details = new ArrayList<ParticipantDetail>();
-		for (Participant participant : list) {
-			details.add(ParticipantDetail.fromDomain(participant));
-		}
-		return ParticipantMatchedEvent.ok(details);
+	public ParticipantMatchedEvent getMatchingParticipants(MatchParticipantEvent req) {
+		return participantLookupLogic.getMatchingParticipants(req); 
 	}
 	
 	@Override

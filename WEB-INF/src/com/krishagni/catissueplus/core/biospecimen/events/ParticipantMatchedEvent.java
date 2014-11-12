@@ -6,23 +6,35 @@ import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 
-public class ParticipantMatchedEvent extends ResponseEvent{
+public class ParticipantMatchedEvent extends ResponseEvent{	
+	private String matchedAttr;
 
-	private List<ParticipantDetail> matchingParticipants;
+	private List<ParticipantDetail> participants;
 	
 	
-	public List<ParticipantDetail> getMatchingParticipants() {
-		return matchingParticipants;
+	public String getMatchedAttr() {
+		return matchedAttr;
+	}
+
+
+	public void setMatchedAttr(String matchedAttr) {
+		this.matchedAttr = matchedAttr;
+	}
+
+
+	public List<ParticipantDetail> getParticipants() {
+		return participants;
 	}
 
 	
-	public void setMatchingParticipants(List<ParticipantDetail> matchingParticipants) {
-		this.matchingParticipants = matchingParticipants;
+	public void setParticipants(List<ParticipantDetail> participants) {
+		this.participants = participants;
 	}
 
-	public static ParticipantMatchedEvent ok(List<ParticipantDetail> participantDetails) {
+	public static ParticipantMatchedEvent ok(String matchedAttr, List<ParticipantDetail> participants) {
 		ParticipantMatchedEvent event = new ParticipantMatchedEvent();
-		event.setMatchingParticipants(participantDetails);
+		event.setMatchedAttr(matchedAttr);
+		event.setParticipants(participants);
 		event.setStatus(EventStatus.OK);
 		return event;
 	}

@@ -64,6 +64,16 @@
 			<element column="RACE_NAME" type="string" />
 		</set>
 
+                <query name="getBySsn">
+                  from com.krishagni.catissueplus.core.biospecimen.domain.Participant p
+                  where p.socialSecurityNumber = :ssn
+                </query>
+
+                <query name="getByLnameAndDob">
+                  from com.krishagni.catissueplus.core.biospecimen.domain.Participant p
+                  where p.lastName = :lname and birthDate = :dob
+                </query>
+
 		<query name="getParticipantIdBySSN">
 			select participant.id from
 			com.krishagni.catissueplus.core.biospecimen.domain.Participant

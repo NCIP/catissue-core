@@ -200,4 +200,13 @@ public class ParticipantDetail {
 		participantDetail.setVitalStatus(participant.getVitalStatus());
 		return participantDetail;
 	}
+	
+	public static List<ParticipantDetail> from(List<Participant> participants) {
+		List<ParticipantDetail> result = new ArrayList<ParticipantDetail>();
+		for (Participant participant : participants) {
+			result.add(ParticipantDetail.fromDomain(participant));
+		}
+		
+		return result;
+	}
 }
