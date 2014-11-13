@@ -1,10 +1,12 @@
 <div>
   <div class="os-modal-header">
-    <span> Collection Protocol </span>
-    <a class="os-close">&times;</a>
+    <span> Create Collection Protocol </span>
+    <a class="os-close" ng-click="cancel()">&times;</a>
   </div>
   <div class="os-modal-body">
-    <div os-wizard="regWizard">
+    <alert ng-if="alert" type="{{alert.type}}" class="os-alert">{{alert.msg}}</alert>
+
+    <div os-wizard="cpWizard">
       <os-wizard-step on-finish="" title="Basic Info">
         <div ng-include="'cp-basic-info.html'"></div>
       </os-wizard-step>
@@ -17,16 +19,16 @@
         <button class="btn os-btn-text" ng-click="cancel()">
           Cancel
         </button>
-        <button class="btn os-btn-secondary" ng-if="!regWizard.isFirstStep()"
-          ng-click="regWizard.previous(false)">
+        <button class="btn os-btn-secondary" ng-if="!cpWizard.isFirstStep()"
+          ng-click="cpWizard.previous(false)">
           Previous
         </button>
-        <button class="btn btn-primary" ng-if="!regWizard.isLastStep()"
-          ng-click="regWizard.next(false)">
+        <button class="btn btn-primary" ng-if="!cpWizard.isLastStep()"
+          ng-click="cpWizard.next(false)">
           Next
         </button>
-        <button class="btn btn-primary" ng-click="save()">
-          Done
+        <button class="btn btn-primary" ng-click="save()" ng-if="cpWizard.isLastStep()">
+          Create
         </button>
       </div>
     </div>
@@ -60,13 +62,13 @@
     <div class="form-group clearfix">
       <div class="col-xs-12">
         <label class="control-label">Title</label>
-        <textarea class="form-control" ng-model="collectionProtocol.title" placeholder="Title"></textarea>
+        <textarea class="form-control" ng-model="collectionProtocol.title" placeholder="Title" maxlength="512" required></textarea>
       </div>
     </div>
     <div class="form-group clearfix">
       <div class="col-xs-12">
         <label class="control-label">Short Title</label>
-        <input type="text" class="form-control" ng-model="collectionProtocol.shortTitle" placeholder="Short Title">
+        <input type="text" class="form-control" ng-model="collectionProtocol.shortTitle" placeholder="Short Title" maxlength="255" required>
       </div>
     </div>
     <div class="form-group clearfix">
@@ -112,7 +114,7 @@
     </div>
 
     <div class="form-group">
-      <button class="btn btn-success os-btn-col" ng-click="addStatement(collectionProtocol.statements)">
+      <button class="btn os-btn-text os-btn-col" ng-click="addStatement()">
         <span class="glyphicon glyphicon-plus"></span>
         Add Statement
       </button>

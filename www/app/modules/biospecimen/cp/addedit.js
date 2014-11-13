@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .controller('CollectionProtocolAddEditCtrl', function($scope, UserService) {
+  .controller('CollectionProtocolAddEditCtrl', function($scope, $modalInstance, AlertService, CollectionProtocolService, UserService) {
 
     $scope.collectionProtocol = {
       pi: '',
@@ -10,23 +10,35 @@ angular.module('openspecimen')
 
     UserService.getUsers().then(
       function(result) {
-        if (result.status != "ok") {
-          alert("Failed to load users information");
+        if (result.status != 'ok') {
+          AlertService.display($scope, 'Failed to load users information', 'danger');
         }
         $scope.users = result.data.users;
       }
     );
 
-    $scope.addStatement = function(statements) {
-      statements.push({text:''});
+    $scope.addStatement = function() {
+      $scope.collectionProtocol.statements.push({text:''});
     }
 
     $scope.removeStatement = function(index) {
       $scope.collectionProtocol.statements.splice(index,1);
     }
 
-    $scope.save = function() {
-      alert(JSON.stringify($scope.collectionProtocol))
+    var handelCPResult = function(result) {
+      if(result.status == 'ok') {
+        $modalInstance.close('ok');
+      } else {
+        AlertService.display($scope, 'Create Collection Protocol Failed', 'danger');
+      }
     }
+
+    $scope.save = function() {
+      CollectionProtocolService.createCollectionProtocol($scope.collectionProtocol).then(handelCPResult);
+    }
+
+    $scope.cancel = function() {
+      $modalInstance.dismiss('cancel');
+    };
 
   });

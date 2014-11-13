@@ -7,7 +7,7 @@ angular.module('openspecimen')
 
     return {
       getUsers: function() {
-        return $http.get(url()).then(ApiUtil.processResp);
+        return $http.get(url()).then(ApiUtil.processResp, ApiUtil.processResp);
       }
     };
   });
