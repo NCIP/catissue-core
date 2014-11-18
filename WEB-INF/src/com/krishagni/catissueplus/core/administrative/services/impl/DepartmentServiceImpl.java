@@ -46,7 +46,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		List<DepartmentDetails> result = new ArrayList<DepartmentDetails>();
 
 		for (Department department : departments) {
-			result.add(DepartmentDetails.fromDomain(department));
+			result.add(DepartmentDetails.fromDepartment(department));
 		}
 
 		return AllDepartmentsEvent.ok(result);
@@ -63,7 +63,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 			exceptionHandler.checkErrorAndThrow();
 
 			daoFactory.getDepartmentDao().saveOrUpdate(department);
-			return DepartmentCreatedEvent.ok(DepartmentDetails.fromDomain(department));
+			return DepartmentCreatedEvent.ok(DepartmentDetails.fromDepartment(department));
 		}
 		catch (ObjectCreationException ce) {
 			return DepartmentCreatedEvent.invalidRequest(UserErrorCode.ERRORS.message(), ce.getErroneousFields());
@@ -90,7 +90,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 			oldDepartment.update(department);
 			daoFactory.getDepartmentDao().saveOrUpdate(oldDepartment);
-			return DepartmentUpdatedEvent.ok(DepartmentDetails.fromDomain(oldDepartment));
+			return DepartmentUpdatedEvent.ok(DepartmentDetails.fromDepartment(oldDepartment));
 		}
 		catch (ObjectCreationException ce) {
 			return DepartmentUpdatedEvent.invalidRequest(UserErrorCode.ERRORS.message(), ce.getErroneousFields());
@@ -143,7 +143,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 					return DepartmentGotEvent.notFound(event.getId());
 				}
 			}
-			return DepartmentGotEvent.ok(DepartmentDetails.fromDomain(department));
+			return DepartmentGotEvent.ok(DepartmentDetails.fromDepartment(department));
 		}
 		catch (Exception e) {
 			return DepartmentGotEvent.serverError(e);
