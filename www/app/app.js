@@ -29,6 +29,12 @@ angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.m
         templateUrl: 'modules/biospecimen/participant/list.html',
         controller: 'ParticipantListCtrl',
         parent: 'signed-in'
+      })
+      .state('institute-list', {
+        url: '/institution',
+        templateUrl: 'modules/administrative/list.html',
+        controller: 'InstituteCtrl',
+        parent: 'signed-in'
       });
 
     $urlRouterProvider.otherwise('/');
@@ -36,7 +42,7 @@ angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.m
     //$httpProvider.interceptors.push('httpRespInterceptor');
 
     ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 8180;
+    ApiUrlsProvider.port = 8080;
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
@@ -44,7 +50,8 @@ angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.m
       'collection-protocols': '/rest/ng/collection-protocols',
       'participants': '/rest/ng/participants',
       'users': '/rest/ng/users',
-      'sites': '/rest/ng/sites'
+      'sites': '/rest/ng/sites',
+      'institutions': '/rest/ng/institutes'
     };
 
     uiSelectConfig.theme = 'bootstrap';

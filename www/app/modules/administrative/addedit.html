@@ -1,0 +1,52 @@
+<div>
+  <div class="os-modal-header">
+    <span ng-if="!isEdit"> Create Institute </span>
+    <span ng-if="isEdit"> Update Institute </span> 
+    <a class="os-close" ng-click="cancel()">&times;</a>
+  </div>
+  <div class="os-modal-body">
+    <alert ng-if="alert" type="{{alert.type}}" class="os-alert">{{alert.msg}}</alert>
+    <div>
+      <div ng-include="'institute-add-edit.html'"></div>
+      <div class="os-modal-footer">        
+        <button class="btn os-btn-text" ng-click="cancel()">
+          Cancel
+        </button>
+        <button class="btn btn-primary" ng-click="save()">
+          <span ng-if="!isEdit"> Create </span>
+          <span ng-if="isEdit"> Update </span> 
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="institute-add-edit.html">
+  <form name="instituteForm">
+    <div class="form-group clearfix">
+      <div class="col-xs-12">
+        <label class="control-label">Name</label>
+        <input type="text" placeholder="Name" ng-model="instituteDetail.name" class="form-control" required>
+      <div>
+    </div>
+    <div class="form-group clearfix">
+      <div class="col-xs-14">
+        <label class="control-label">Departments</label>
+        <button style="margin-left: 270px;" class="btn os-btn-text os-btn-col" ng-click="addDepartment()"> 
+          Add Department  <span class="glyphicon glyphicon-plus"></span> 
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group clearfix" ng-repeat="department in instituteDetail.departments" style="margin-left: -15px;">
+      <div class="col-xs-10">
+        <input type="text" class="form-control" ng-model="department.name" placeholder="Name">
+      </div>
+      <div class="col-xs-2">
+        <button class="btn btn-default" ng-click="removeDepartment($index)">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
+      </div>
+    </div>
+  </form>
+</script>
