@@ -43,6 +43,10 @@ angular.module('openspecimen')
         return true;
       }
 
+      if (participant.empi) {
+        return true;
+      }
+
       if (participant.ssn) {
         return true;
       }
@@ -74,6 +78,7 @@ angular.module('openspecimen')
       return {
         lastName: participant.lastName,
         birthDate: participant.birthDate,
+        empi: participant.empi,
         ssn : formatSsn(participant.ssn),
         pmis: formatPmis(participant.pmis)
       };

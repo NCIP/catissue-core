@@ -32,6 +32,16 @@ public class ParticipantDaoImpl extends AbstractDao<Participant> implements Part
 				.list();
 		return participants == null || participants.isEmpty() ? null : participants.iterator().next();
 	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public Participant getByEmpi(String empi) {
+		List<Participant> participants = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_BY_EMPI)
+				.setString("empi", empi)
+				.list();
+		return participants == null || participants.isEmpty() ? null : participants.iterator().next();
+	}
 
 	@Override
 	@SuppressWarnings("unchecked")	
@@ -93,6 +103,8 @@ public class ParticipantDaoImpl extends AbstractDao<Participant> implements Part
 	private static final String GET_PMI_ID_BY_SITE_MRN = FQN + ".getPmiIdBySiteMrn";
 	
 	private static final String GET_BY_SSN = FQN + ".getBySsn";
+	
+	private static final String GET_BY_EMPI = FQN + ".getByEmpi";
 	
 	private static final String GET_BY_LNAME_AND_DOB = FQN + ".getByLnameAndDob";
 }
