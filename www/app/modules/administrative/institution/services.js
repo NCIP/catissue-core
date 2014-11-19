@@ -17,6 +17,11 @@ angular.module('openspecimen')
         return $http.post(url(), instituteDetail)
           .then(ApiUtil.processResp, ApiUtil.processResp);
       }
+    },
+
+    deleteInstitute : function(id) {
+      return $http.delete(
+        url() + '/' + id).then(ApiUtil.processResp, ApiUtil.processResp);
     }
   }
 })

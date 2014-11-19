@@ -8,7 +8,10 @@
     <alert ng-if="alert" type="{{alert.type}}" class="os-alert">{{alert.msg}}</alert>
     <div>
       <div ng-include="'institute-add-edit.html'"></div>
-      <div class="os-modal-footer">        
+      <div class="os-modal-footer">
+        <button class="btn os-btn-secondary" ng-click="deleteInstitute(instituteDetail.id)" ng-if="instituteDetail.id">
+          Delete Institute <span class="glyphicon glyphicon-trash"></span>
+        </button>
         <button class="btn os-btn-text" ng-click="cancel()">
           Cancel
         </button>

@@ -32,7 +32,7 @@ angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.m
       })
       .state('institute-list', {
         url: '/institution',
-        templateUrl: 'modules/administrative/list.html',
+        templateUrl: 'modules/administrative/institution/list.html',
         controller: 'InstituteCtrl',
         parent: 'signed-in'
       });
@@ -42,7 +42,7 @@ angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.m
     //$httpProvider.interceptors.push('httpRespInterceptor');
 
     ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 8080;
+    ApiUrlsProvider.port = 8180;
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {

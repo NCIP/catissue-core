@@ -25,6 +25,10 @@ angular.module('openspecimen')
       InstituteService.saveOrUpdateInstitute($scope.instituteDetail).then(handleResult);
     }
 
+    $scope.deleteInstitute = function(id) {
+      InstituteService.deleteInstitute(id).then(handleResult);
+    }
+
     if($scope.instituteDetail.departments == null) {
       $scope.instituteDetail.departments = [];
     }

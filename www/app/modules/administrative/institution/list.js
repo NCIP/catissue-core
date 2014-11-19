@@ -12,7 +12,7 @@ angular.module('openspecimen')
 
   $scope.addEditInstitute = function(instituteDetail) {
     var modalInstance = $modal.open({
-      templateUrl: 'modules/administrative/addedit.html',
+      templateUrl: 'modules/administrative/institution/addedit.html',
       controller: 'InstituteAddEditCtrl',
       resolve: {
         instituteDetail: function() {
