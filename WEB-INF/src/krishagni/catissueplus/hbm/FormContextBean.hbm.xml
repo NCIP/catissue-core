@@ -215,11 +215,11 @@
               f.entityType = :entityType
         </query>
                 
-        <query name="getFormContextsById"> <!-- TODO used in data entry-->
+        <query name="getFormContextById"> <!-- TODO used in data entry-->
             from
               FormContextBean as f 
             where
-              f.identifier in (:ids)
+              f.identifier = :id
         </query>
         
         <query name="getQueryFormCtxtByContainerId"> <!-- TODO used in aq forms import-->
