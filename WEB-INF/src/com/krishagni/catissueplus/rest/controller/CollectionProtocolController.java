@@ -17,13 +17,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRespEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
@@ -64,6 +67,22 @@ public class CollectionProtocolController {
 		return resp.getCpList();
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public  CollectionProtocolDetail getCollectionProtocol(@PathVariable("id") Long cpId) {
+		ReqCollectionProtocolEvent req = new ReqCollectionProtocolEvent();
+		req.setCpId(cpId);
+		req.setSessionDataBean(getSession());
+		
+		CollectionProtocolRespEvent resp = cpSvc.getCollectionProtocol(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+				
+		return resp.getCp();
+	}	
+		
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/registered-participants")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -145,14 +164,4 @@ public class CollectionProtocolController {
 //		return result.getChildProtocols();
 //	}
 
-	/*	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
-		@ResponseStatus(HttpStatus.OK)
-		@ResponseBody
-		public CollectionProtocolDetail getCollectionProtocolList(@PathVariable("id") Long id) {
-			ReqCollProtocolDetailEvent event = new ReqCollProtocolDetailEvent();
-			event.setId(id);
-			event.setSessionDataBean((SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA));
-			CollectionProtocolDetailEvent result = collectionProtocolService.getCollectionProtocol(event);
-			return result.getCollectionProtocolDetail();
-		}*/	
 }

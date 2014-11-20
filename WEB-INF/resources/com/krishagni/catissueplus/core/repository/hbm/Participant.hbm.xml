@@ -38,6 +38,8 @@
 
 		<property name="vitalStatus" type="string" column="VITAL_STATUS" />
 
+                <property name="empi" column="EMPI_ID"/>
+
 
 		<map name="pmiCollection" table="CATISSUE_PART_MEDICAL_ID"
 			cascade="all-delete-orphan">
@@ -67,6 +69,11 @@
                 <query name="getBySsn">
                   from com.krishagni.catissueplus.core.biospecimen.domain.Participant p
                   where p.socialSecurityNumber = :ssn
+                </query>
+ 
+                <query name="getByEmpi">
+                  from com.krishagni.catissueplus.core.biospecimen.domain.Participant p
+                  where p.empi = :empi
                 </query>
 
                 <query name="getByLnameAndDob">

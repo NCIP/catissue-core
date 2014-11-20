@@ -30,6 +30,14 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 		ParticipantDao dao = daoFactory.getParticipantDao();
 		ParticipantDetail participant = req.getParticipantDetail();
 		
+		if (StringUtils.isNotBlank(participant.getEmpi())) {
+			Participant matched = dao.getByEmpi(participant.getEmpi());
+			if (matched != null) {
+				List<ParticipantDetail> result = ParticipantDetail.from(Collections.singletonList(matched));
+				return ParticipantMatchedEvent.ok("empi", result);
+			}
+		}
+		
 		if (StringUtils.isNotBlank(participant.getSsn())) {
 			Participant matched = dao.getBySsn(participant.getSsn());
 			if (matched != null) {

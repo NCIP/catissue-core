@@ -7,12 +7,16 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRespEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
@@ -65,7 +69,20 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		Collections.sort(result);
 		return AllCollectionProtocolsEvent.ok(result);
 	}
-
+	
+	@Override
+	@PlusTransactional
+	public CollectionProtocolRespEvent getCollectionProtocol(ReqCollectionProtocolEvent req) {
+		Long cpId = req.getCpId();
+		
+		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(cpId);
+		if (cp == null) {
+			return CollectionProtocolRespEvent.notFound(cpId);
+		}
+		
+		return CollectionProtocolRespEvent.ok(CollectionProtocolDetail.from(cp));
+	}
+	
 	@Override
 	@PlusTransactional
 	public RegisteredParticipantsEvent getRegisteredParticipants(ReqRegisteredParticipantsEvent req) {
@@ -123,4 +140,5 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	private Long getUserId(RequestEvent req) {
 		return req.getSessionDataBean().getUserId();
 	}
+
 }

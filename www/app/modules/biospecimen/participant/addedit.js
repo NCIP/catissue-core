@@ -43,6 +43,10 @@ angular.module('openspecimen')
         return true;
       }
 
+      if (participant.empi) {
+        return true;
+      }
+
       if (participant.ssn) {
         return true;
       }
@@ -54,26 +58,30 @@ angular.module('openspecimen')
       return false;
     };
  
-    $scope.ignoreAndCreateNew = function(wizard) {
-      $scope.matchedResults = undefined;
-      $scope.ignoreMatches = true; 
-      wizard.next(false);
-    };
-
  
     var handleMatchedResults = function() {
+      if (!$scope.showMatchingParticipants) {
+        return false;
+      }
+
       if (!$scope.selectedParticipant) {
         AlertService.display($scope, "Select Participant before moving forward", "danger");
         return false;
       }
 
-      $scope.cpr.participant = angular.extend({}, $scope.selectedParticipant);
-      angular.forEach($scope.cpr.participant.pmis, function(pmi) {
-        pmi.site = {name: pmi.siteName};
-      });
-
       $scope.matchedResults = undefined;
+      $scope.showMatchingParticipants = false;
       return true;
+    };
+
+    var getMatchingCriteria = function(participant) {
+      return {
+        lastName: participant.lastName,
+        birthDate: participant.birthDate,
+        empi: participant.empi,
+        ssn : formatSsn(participant.ssn),
+        pmis: formatPmis(participant.pmis)
+      };
     };
 
     $scope.validateBasicInfo = function() {
@@ -82,16 +90,14 @@ angular.module('openspecimen')
       }   
 
       var participant = $scope.cpr.participant;
-      if (participant.id || $scope.ignoreMatches || !isMatchingInfoPresent(participant)) {
+      if (participant.id || !isMatchingInfoPresent(participant)) {
         return true;
       }
 
-      var criteria = {
-        lastName: participant.lastName,
-        birthDate: participant.birthDate,
-        ssn : formatSsn(participant.ssn),
-        pmis: formatPmis(participant.pmis)
-      };
+      var criteria = getMatchingCriteria(participant);
+      if (angular.equals($scope.ignoredCrit, criteria)) {
+        return true;
+      }
 
       $scope.matchedResults = undefined;
       return ParticipantService.getMatchingParticipants(criteria).then(
@@ -102,21 +108,50 @@ angular.module('openspecimen')
           }
 
           if (result.data.matchedAttr == 'none') {
+            $scope.ignoredCrit = undefined;
             return true;
           }
 
           $scope.matchedResults = result.data;
+          var matchedCount = $scope.matchedResults.participants.length;
+          if (matchedCount == 1) {
+            AlertService.display($scope, "One matching participant found", "danger", false);
+          } else {
+            AlertService.display($scope, matchedCount + " matching participants found", "danger", false);
+          }
+
           return false;
         }
       );
     };
 
+    $scope.showMatches = function() {
+      $scope.showMatchingParticipants = true;
+      $scope.origParticipant = angular.copy($scope.cpr.participant);
+      AlertService.clear($scope);
+    };
+
     $scope.selectParticipant = function(participant) {
-      $scope.selectedParticipant = participant;
+      $scope.selectedParticipant = true;
+      $scope.cpr.participant = angular.extend({}, participant);
+      angular.forEach($scope.cpr.participant.pmis, function(pmi) {
+        pmi.site = {name: pmi.siteName};
+      });
     };
 
     $scope.lookupAgain = function() {
       $scope.matchedResults = undefined;
+      $scope.showMatchingParticipants = false;
+      $scope.cpr.participant = $scope.origParticipant;
+      $scope.origParticipant = undefined;
+      $scope.selectedParticipant = false;
+      $scope.ignoredCrit = undefined;
+    };
+
+    $scope.ignoreMatches = function() {
+      $scope.matchedResults = undefined;
+      $scope.showMatchingParticipants = false;
+      $scope.ignoredCrit = getMatchingCriteria($scope.origParticipant);
     };
 
     var formatSsn = function(ssn) {
@@ -135,7 +170,6 @@ angular.module('openspecimen')
 
       return pmis;
     };
-
 
     var handleRegResult = function(result) {
       if (result.status == 'ok') {

@@ -73,6 +73,8 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		setEthnicity(participant, details.getEthnicity(), oce);
 		setPmi(participant, details.getPmis(), oce);
 		
+		participant.setEmpi(details.getEmpi());
+		
 		oce.checkErrorAndThrow();
 		return participant;
 	}

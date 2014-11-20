@@ -14,6 +14,8 @@ public interface ParticipantDao extends Dao<Participant> {
 	
 	public Participant getBySsn(String ssn);
 	
+	public Participant getByEmpi(String empi);
+	
 	public List<Participant> getByLastNameAndBirthDate(String lname, Date dob);
 	
 	public List<Participant> getByPmis(List<ParticipantMedicalIdentifierNumberDetail> pmis);

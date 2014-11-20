@@ -1,14 +1,39 @@
 
 angular.module('openspecimen')
   .factory('AlertService', function($timeout) {
-    return {
-      display: function(scope, msg, type, fade) {
-        fade = (fade === undefined || fade === null) ? 5000 : fade;
-        scope.alert = {msg: msg, type: type};
+    var alertSvc = undefined;
+    alertSvc = {
+      display: function(scope, msg, type, timeout) {
+        scope.alert = {
+          msg: msg, 
+          type: type,
+          close: function() {
+            return alertSvc.closeAlert(this);
+          }
+        };
 
-        if (fade) {
-          $timeout(function() {scope.alert = undefined}, fade);
+        if (timeout === false) {
+          return;
         }
+
+        var that = scope.alert;
+        if (timeout === undefined || timeout === null) {
+          timeout = 5000;
+        }
+
+        $timeout(function() { alertSvc.closeAlert(scope, that); }, timeout);
+      },
+
+      closeAlert: function(scope, alert) {
+        if (scope.alert == alert) {
+          scope.alert = undefined;
+        }
+      },
+
+      clear: function(scope) {
+        scope.alert = undefined;
       }
     };
+
+    return alertSvc;
   });

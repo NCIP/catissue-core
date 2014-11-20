@@ -3,13 +3,16 @@
     <span> Register Participant </span>
     <a class="os-close" ng-click="cancel()">&times;</a>
   </div>
+
   <div class="os-modal-body">
-    <alert ng-if="alert" type="{{alert.type}}" class="os-alert">{{alert.msg}}</alert>
+    <alert ng-if="alert" type="{{alert.type}}" class="os-alert" close="alert.close()">
+      {{alert.msg}}.
+      <a ng-click="showMatches()" ng-if="matchedResults && !showMatchingParticipants">Show matches</a>
+    </alert>
 
     <div os-wizard="regWizard">
       <os-wizard-step on-finish="validateBasicInfo" title="Basic Info">
-        <div ng-include="'participant-basic-info.html'" ng-if="!matchedResults || matchedResults.matchedAttr == 'none'"></div>
-        <div ng-include="'matched-participants.html'" ng-if="matchedResults.matchedAttr && matchedResults.matchedAttr != 'none'"></div>
+        <div ng-include="'participant-basic-info.html'"></div>
       </os-wizard-step>
 
       <os-wizard-step on-finish="" title="Additional Info">
@@ -28,16 +31,12 @@
           ng-click="regWizard.previous(false)">
           Previous
         </button>
-        <button class="btn btn-primary" ng-if="matchedResults && matchedResults.matchedAttr == 'lnameAndDob'"
-          ng-click="ignoreAndCreateNew(regWizard)">
-          Ignore and Create New
-        </button>
         <button class="btn btn-primary" ng-if="!regWizard.isLastStep()" 
           ng-click="regWizard.next(false)">
           Next
         </button>
         <button class="btn btn-primary" ng-click="register()" ng-if="regWizard.isLastStep()">
-          Done
+          Register
         </button>
       </div>
     </div>
@@ -45,82 +44,95 @@
 </div>
 
 <script type="text/ng-template" id="participant-basic-info.html">
+  <div class="clearfix">
+    <div ng-include="'matched-participants.html'" ng-if="showMatchingParticipants" class="os-participant-matching col-xs-12">
+    </div>
+  </div>
+
   <form>
-    <div class="form-group clearfix">
-      <div class="col-xs-4">
-        <label class="control-label">Last Name</label>
-        <input type="text" ng-model="cpr.participant.lastName" class="form-control" placeholder="Last Name"/>
-      </div>
-      <div class="col-xs-4">
-        <label class="control-label">First Name</label>
-        <input type="text" ng-model="cpr.participant.firstName" class="form-control" placeholder="First Name"/>
-      </div>
-      <div class="col-xs-4">
-        <label class="control-label">Middle Name</label>
-        <input type="text" ng-model="cpr.participant.middleName" class="form-control" placeholder="Middle Name"/>
-      </div>
-    </div>
-
-    <div class="form-group clearfix">
-      <div class="col-xs-6">
-        <label class="control-label">Birth Date</label>
-        <input type="text" ng-model="cpr.participant.birthDate" class="form-control" 
-          datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true" 
-          placeholder="Birth Date"/>
+    <fieldset ng-disabled="cpr.participant.id">
+      <div class="form-group clearfix">
+        <div class="col-xs-4">
+          <label class="control-label">Last Name</label>
+          <input type="text" ng-model="cpr.participant.lastName" class="form-control" placeholder="Last Name"/>
+        </div>
+        <div class="col-xs-4">
+          <label class="control-label">First Name</label>
+          <input type="text" ng-model="cpr.participant.firstName" class="form-control" placeholder="First Name"/>
+        </div>
+        <div class="col-xs-4">
+          <label class="control-label">Middle Name</label>
+          <input type="text" ng-model="cpr.participant.middleName" class="form-control" placeholder="Middle Name"/>
+        </div>
       </div>
 
-      <div class="col-xs-6">
-        <label class="control-label">Social Security Number</label>
-        <input type="text" ng-model="cpr.participant.ssn" class="form-control" 
-          ng-model="participant.ssn" ui-mask="999-99-9999" placeholder="XXX-XX-XXXX">
-      </div>
-    </div>
+      <div class="form-group clearfix">
+        <div class="col-xs-4">
+          <label class="control-label">Birth Date</label>
+          <input type="text" ng-model="cpr.participant.birthDate" class="form-control" 
+            datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true" 
+            placeholder="Birth Date"/>
+        </div>
 
-    <div class="form-group clearfix">
-      <div class="col-xs-12 os-section-hdr">
-        <label>Medical Identifiers</label>
-      </div>
-    </div>
+        <div class="col-xs-4">
+          <label class="control-label">Social Security Number</label>
+          <input type="text" ng-model="cpr.participant.ssn" class="form-control" 
+            ui-mask="999-99-9999" placeholder="XXX-XX-XXXX">
+        </div>
 
-    <div class="form-group clearfix" ng-if="participant.pmis.length > 0">
-      <div class="col-xs-5">
-        <label class="control-label">Site</label>
+        <div class="col-xs-4">
+          <label class="control-label">Enterprise Master Patient Index</label>
+          <input type="text" ng-model="cpr.participant.empi" class="form-control" placeholder="EMPI"/>
+        </div>
       </div>
-      <div class="col-xs-5">
-        <label class="control-label">Medical Record Number</label>
+ 
+      <div class="form-group clearfix">
+        <div class="col-xs-12 os-section-hdr">
+          <label>Medical Identifiers</label>
+        </div>
       </div>
-    </div>
 
-    <div class="form-group clearfix" ng-repeat="pmi in cpr.participant.pmis">
-      <div class="col-xs-5">
-        <ui-select ng-model="pmi.site">
-          <ui-select-match placeholder="Select site">{{$select.selected.name}}</ui-select-match>
-          <ui-select-choices repeat="site in sites | filter: $select.search">
-            <span ng-bind-html="site.name | highlight: $select.search"></span>
-          </ui-select-choices>
-        </ui-select>
+      <div class="form-group clearfix" ng-if="participant.pmis.length > 0">
+        <div class="col-xs-5">
+          <label class="control-label">Site</label>
+        </div>
+        <div class="col-xs-5">
+          <label class="control-label">Medical Record Number</label>
+        </div>
       </div>
-      <div class="col-xs-5">
-        <input type="text" ng-model="pmi.mrn" class="form-control">
+
+      <div class="form-group clearfix" ng-repeat="pmi in cpr.participant.pmis">
+        <div class="col-xs-5">
+          <ui-select ng-model="pmi.site">
+            <ui-select-match placeholder="Select site">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="site in sites | filter: $select.search">
+              <span ng-bind-html="site.name | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+        <div class="col-xs-5">
+          <input type="text" ng-model="pmi.mrn" class="form-control">
+        </div>
+        <div class="col-xs-2">
+          <button class="btn btn-default" ng-click="removePmi($index)">
+            <span class="glyphicon glyphicon-trash"></span>
+          </button>
+        </div>
       </div>
-      <div class="col-xs-2">
-        <button class="btn btn-default" ng-click="removePmi($index)">
-          <span class="glyphicon glyphicon-trash"></span>
+
+      <div class="form-group">
+        <button class="btn os-btn-text os-btn-col" ng-click="addPmi()">
+          <span class="glyphicon glyphicon-plus"></span>
+          Add MRN
         </button>
       </div>
-    </div>
-
-    <div class="form-group">
-      <button class="btn os-btn-text os-btn-col" ng-click="addPmi()">
-        <span class="glyphicon glyphicon-plus"></span>
-        Add MRN
-      </button>
-    </div>
+    </fieldset>
   </form>
 </script>
 
 <script type="text/ng-template" id="matched-participants.html">
   <div ng-switch on="matchedResults.matchedAttr">
+    <span ng-switch-when="empi">Following Participant matched based on EMPI</span>
     <span ng-switch-when="ssn">Following Participant matched based on SSN</span>
     <span ng-switch-when="pmi">Following Participant matched based on medical identifiers</span>
     <span ng-switch-when="lnameAndDob">Following possible Participants matched based on last name and birth date</span>
@@ -137,7 +149,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="participant in matchedResults.participants" ng-class="{'info': selectedParticipant.id == participant.id}">
+      <tr ng-repeat="participant in matchedResults.participants" ng-class="{'info': cpr.participant.id == participant.id}">
         <td><input type="radio" name="selectedParticipant" ng-click="selectParticipant(participant)" value="{{participant.id}}"></td>
         <td>{{participant.firstName}}</td>
         <td>{{participant.lastName}}</td>
@@ -147,66 +159,76 @@
       </tr>
     </tbody>
   </table>
-  <button class="btn os-btn-text" ng-click="lookupAgain()">
-    <span class="glyphicon glyphicon-repeat"></span>
-    Lookup Again
-  </button>
+  <div class="form-group clearfix">
+    <div class="btn-group col-xs-12">
+      <button class="btn os-btn-text" ng-click="lookupAgain()">
+        <span class="glyphicon glyphicon-repeat"></span>
+        Lookup Again
+      </button>
+      <button class="btn os-btn-text" ng-click="ignoreMatches()" ng-if="matchedResults.matchedAttr == 'lnameAndDob'">
+        <span class="glyphicon glyphicon-remove"></span>
+        Ignore Matches
+      </button>
+    </div>
+  </div>
 </script>
 
 <script type="text/ng-template" id="participant-additional-info.html">
   <form>
-    <div class="form-group clearfix">
-      <div class="col-xs-6">
-        <label class="control-label">Gender</label>
-        <ui-select ng-model="cpr.participant.gender">
-          <ui-select-match placeholder="Select Gender">{{$select.selected}}</ui-select-match>
-          <ui-select-choices repeat="gender in gender_pvs | filter: $select.search">
-            <span ng-bind-html="gender | highlight: $select.search"></span>
-          </ui-select-choices>
-        </ui-select>
+    <fieldset ng-disabled="cpr.participant.id">
+      <div class="form-group clearfix">
+        <div class="col-xs-6">
+          <label class="control-label">Gender</label>
+          <ui-select ng-model="cpr.participant.gender">
+            <ui-select-match placeholder="Select Gender">{{$select.selected}}</ui-select-match>
+            <ui-select-choices repeat="gender in gender_pvs | filter: $select.search">
+              <span ng-bind-html="gender | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+
+        <div class="col-xs-6">
+          <label class="control-label">Ethnicity</label>
+          <ui-select ng-model="cpr.participant.ethnicity">
+            <ui-select-match placeholder="Select Ethnicity">{{$select.selected}}</ui-select-match>
+            <ui-select-choices repeat="ethnicity in ethnicity_pvs | filter: $select.search">
+              <span ng-bind-html="ethnicity | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
       </div>
 
-      <div class="col-xs-6">
-        <label class="control-label">Ethnicity</label>
-        <ui-select ng-model="cpr.participant.ethnicity">
-          <ui-select-match placeholder="Select Ethnicity">{{$select.selected}}</ui-select-match>
-          <ui-select-choices repeat="ethnicity in ethnicity_pvs | filter: $select.search">
-            <span ng-bind-html="ethnicity | highlight: $select.search"></span>
-          </ui-select-choices>
-        </ui-select>
-      </div>
-    </div>
+      <div class="form-group clearfix">
+        <div class="col-xs-6">
+          <label class="control-label">Vital Status</label>
+          <ui-select ng-model="cpr.participant.vitalStatus">
+            <ui-select-match placeholder="Select Vital Status">{{$select.selected}}</ui-select-match>
+            <ui-select-choices repeat="vitalStatus in vitalStatus_pvs | filter: $select.search">
+              <span ng-bind-html="vitalStatus | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
 
-    <div class="form-group clearfix">
-      <div class="col-xs-6">
-        <label class="control-label">Vital Status</label>
-        <ui-select ng-model="cpr.participant.vitalStatus">
-          <ui-select-match placeholder="Select Vital Status">{{$select.selected}}</ui-select-match>
-          <ui-select-choices repeat="vitalStatus in vitalStatus_pvs | filter: $select.search">
-            <span ng-bind-html="vitalStatus | highlight: $select.search"></span>
-          </ui-select-choices>
-        </ui-select>
+        <div class="col-xs-6">
+          <label class="control-label">Death Date</label>
+          <input type="text" ng-model="cpr.participant.deathDate" class="form-control" 
+            datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true" 
+            ng-disabled="participant.vitalStatus != 'Dead'" placeholder="Death Date"/>
+        </div>
       </div>
 
-      <div class="col-xs-6">
-        <label class="control-label">Death Date</label>
-        <input type="text" ng-model="cpr.participant.deathDate" class="form-control" 
-          datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true" 
-          ng-disabled="participant.vitalStatus != 'Dead'" placeholder="Death Date"/>
+      <div class="form-group clearfix">
+        <div class="col-xs-12">
+          <label class="control-label">Race</label>
+          <ui-select multiple ng-model="cpr.participant.race">
+            <ui-select-match placeholder="Select Race">{{$item}}</ui-select-match>
+            <ui-select-choices repeat="race in race_pvs | filter: $select.search">
+              <span ng-bind-html="race | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
       </div>
-    </div>
-
-    <div class="form-group clearfix">
-      <div class="col-xs-12">
-        <label class="control-label">Race</label>
-        <ui-select multiple ng-model="cpr.participant.race">
-          <ui-select-match placeholder="Select Race">{{$item}}</ui-select-match>
-          <ui-select-choices repeat="race in race_pvs | filter: $select.search">
-            <span ng-bind-html="race | highlight: $select.search"></span>
-          </ui-select-choices>
-        </ui-select>
-      </div>
-    </div>
+    </fieldset>
   </form>
 </script>
 

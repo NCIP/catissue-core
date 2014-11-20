@@ -89,6 +89,8 @@ public class Participant {
 	 * 'Unknown'.
 	 */
 	protected String vitalStatus;
+	
+	protected String empi;
 
 	protected Map<String, ParticipantMedicalIdentifier> pmiCollection = new HashMap<String, ParticipantMedicalIdentifier>();
 
@@ -203,6 +205,14 @@ public class Participant {
 
 	public void setVitalStatus(String vitalStatus) {
 		this.vitalStatus = vitalStatus;
+	}
+
+	public String getEmpi() {
+		return empi;
+	}
+
+	public void setEmpi(String empi) {
+		this.empi = empi;
 	}
 
 	public Map<String, ParticipantMedicalIdentifier> getPmiCollection() {

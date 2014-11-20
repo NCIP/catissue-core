@@ -17,6 +17,10 @@ angular.module('openspecimen')
           {params: params}).then(ApiUtil.processResp, ApiUtil.processResp);
       },
 
+      getCp: function(cpId) {
+        return $http.get(url() + '/' + cpId).then(ApiUtil.processResp, ApiUtil.processResp);
+      },
+
       getRegisteredParticipants: function(cpId, detailed) {
         var params = {includeStats: !detailed ? false : true};
         return $http.get(

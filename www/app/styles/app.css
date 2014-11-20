@@ -156,7 +156,7 @@ body {
   font-size: 20px;
 }
 
-.os-icon-btn {
+.os-icon-btn, a {
   cursor: pointer;
 }
 

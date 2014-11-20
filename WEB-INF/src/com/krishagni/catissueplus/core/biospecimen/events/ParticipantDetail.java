@@ -42,6 +42,8 @@ public class ParticipantDetail {
 	private String ssn;
 
 	private String activityStatus;
+	
+	private String empi;
 
 	private Long id;
 	
@@ -149,6 +151,14 @@ public class ParticipantDetail {
 		this.activityStatus = activityStatus;
 	}
 
+	public String getEmpi() {
+		return empi;
+	}
+
+	public void setEmpi(String empi) {
+		this.empi = empi;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -167,6 +177,7 @@ public class ParticipantDetail {
 		participantDetail.setDeathDate(participant.getDeathDate());
 		participantDetail.setEthnicity(participant.getEthnicity());
 		participantDetail.setGender(participant.getGender());
+		participantDetail.setEmpi(participant.getEmpi());
 		participantDetail.setId(participant.getId());
 		//TODO revisit 
 		List<ParticipantMedicalIdentifierNumberDetail> pmiColl = new ArrayList<ParticipantMedicalIdentifierNumberDetail>();
