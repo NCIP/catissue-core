@@ -106,7 +106,8 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 
 	@Override
 	public CollectionProtocol getCollectionProtocol(Long cpId) {
-		return (CollectionProtocol) sessionFactory.getCurrentSession().get(CollectionProtocol.class.getName(), cpId);
+		return (CollectionProtocol) sessionFactory.getCurrentSession()
+				.get(CollectionProtocol.class.getName(), cpId);
 	}
 	
 	private static final String FQN = CollectionProtocol.class.getName();

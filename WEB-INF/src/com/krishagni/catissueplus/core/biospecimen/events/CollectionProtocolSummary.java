@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.Date;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class CollectionProtocolSummary implements Comparable<CollectionProtocolSummary> {
@@ -79,5 +80,19 @@ public class CollectionProtocolSummary implements Comparable<CollectionProtocolS
 	@Override
 	public int compareTo(CollectionProtocolSummary cpSummary) {
 		return this.shortTitle.toUpperCase().compareTo(cpSummary.getShortTitle().toUpperCase());
+	}
+	
+	public static CollectionProtocolSummary from(CollectionProtocol cp) {
+		CollectionProtocolSummary result = new CollectionProtocolSummary();
+		copy(cp, result);
+		return result;		
+	}
+	
+	public static <T extends CollectionProtocolSummary> void copy(CollectionProtocol cp, T detail) {
+		detail.setId(cp.getId());
+		detail.setShortTitle(cp.getShortTitle());
+		detail.setTitle(cp.getTitle());
+		detail.setStartDate(cp.getStartDate());
+		detail.setPrincipalInvestigator(UserSummary.fromUser(cp.getPrincipalInvestigator()));
 	}
 }

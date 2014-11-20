@@ -1,3 +1,7 @@
-<div>
-  <h3>CP Detail</h3>
+
+<div ui-view ng-if="$state.current.name !== participant-list">
+  <h4>{{cp.title}}</h4>
+</div>
+
+<div ui-view ng-if="$state.current.name === participant-list">
 </div>

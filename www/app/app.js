@@ -12,23 +12,43 @@ angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.m
         abstract: true,
         templateUrl: 'modules/common/appmenu.html'
       })
+      .state('cps', {
+        url: '/cps',
+        abstract: true,
+        template: '<div ui-view></div>',
+        parent: 'signed-in'
+      })
       .state('cp-list', {
-        url: '/cps', 
+        url: '', 
         templateUrl: 'modules/biospecimen/cp/list.html',
         controller: 'CpListCtrl',
-        parent: 'signed-in'
+        parent: 'cps'
       })
       .state('cp-detail', {
-        url: '/cps/:cpId',
+        url: '/:cpId',
         templateUrl: 'modules/biospecimen/cp/detail.html',
-        controller: 'CpDetailCtrl',
-        parent: 'signed-in'
+        parent: 'cps',
+        resolve: {
+          cp: function($stateParams, CollectionProtocolService) {
+            return CollectionProtocolService.getCp($stateParams.cpId).then(
+              function(result) {
+                return result.data;
+              }
+            );
+          }
+        },
+        controller: function($scope, cp) {
+          $scope.cp = cp;
+        },
+        breadcrumb: {
+          title: '{{cp.title}}'
+        }
       })
       .state('participant-list', {
-        url: '/participants?cpId',
+        url: '/participants',
         templateUrl: 'modules/biospecimen/participant/list.html',
         controller: 'ParticipantListCtrl',
-        parent: 'signed-in'
+        parent: 'cp-detail'
       });
 
     $urlRouterProvider.otherwise('/');
