@@ -4,7 +4,7 @@ import edu.common.dynamicextensions.domain.nui.*;
 import com.krishagni.catissueplus.bulkoperator.export.BulkOperationSerializer;
 import com.krishagni.catissueplus.bulkoperator.metadata.Attribute;
 import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationClass;
-import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationMetaData;
+import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationMetadata;
 import com.krishagni.catissueplus.bulkoperator.metadata.HookingInformation;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class BOTemplateGenerator {
 	
 	private Container container;
 	
-	private BulkOperationMetaData metaData = new BulkOperationMetaData();
+	private BulkOperationMetadata metaData = new BulkOperationMetadata();
 
 	public static enum EntityType {
 		PARTICIPANT, SCG, SPECIMEN
@@ -37,7 +37,7 @@ public class BOTemplateGenerator {
 	}
 
 	
-	public BulkOperationMetaData generate() throws IOException {
+	public BulkOperationMetadata generate() throws IOException {
 		BulkOperationClass boClass  = getBoClass(container, container.getName());
 		boClass.setHookingInformation(getCustomFields());
         boClass.setBatchSize(10000);

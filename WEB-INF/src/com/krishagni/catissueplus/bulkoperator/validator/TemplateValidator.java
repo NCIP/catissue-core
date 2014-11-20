@@ -25,7 +25,7 @@ import com.krishagni.catissueplus.bulkoperator.metadata.AttributeDiscriminator;
 import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationClass;
 import com.krishagni.catissueplus.bulkoperator.metadata.HookingInformation;
 import com.krishagni.catissueplus.bulkoperator.processor.DynCategoryBulkOperationProcessor;
-import com.krishagni.catissueplus.bulkoperator.processor.StaticBulkOperationProcessor;
+import com.krishagni.catissueplus.bulkoperator.processor.StaticBulkObjectBuilder;
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationConstants;
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationException;
 import edu.wustl.common.exception.ErrorKey;
@@ -71,8 +71,8 @@ public class TemplateValidator {
 				if (BulkOperationConstants.ENTITY_TYPE
 						.equals(bulkOperationClass.getType())) {
 					validateBulkOperationClass(bulkOperationClass, columnNamesList, 0);
-					StaticBulkOperationProcessor staticProcessor = new StaticBulkOperationProcessor(
-							bulkOperationClass, null);
+					StaticBulkObjectBuilder staticProcessor = new StaticBulkObjectBuilder(
+							bulkOperationClass);
 					Object domainObject = bulkOperationClass.getClassObject()
 							.getConstructor().newInstance((Object[])null);
 					staticProcessor.processObject(domainObject,
@@ -81,7 +81,7 @@ public class TemplateValidator {
 				else if (BulkOperationConstants.CATEGORY_TYPE.equalsIgnoreCase(bulkOperationClass.getType())) {
 					HashMap<String, Object> dynExtObject = new HashMap<String, Object>();
 					DynCategoryBulkOperationProcessor deProcessor = new DynCategoryBulkOperationProcessor(
-							bulkOperationClass, null);
+							bulkOperationClass);
 					deProcessor.processObject(dynExtObject,
 							bulkOperationClass, csvReader,
 							"", true, 0);

@@ -8,20 +8,17 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import edu.common.dynamicextensions.ndao.JdbcDao;
-import edu.common.dynamicextensions.ndao.ResultExtractor;
-import com.krishagni.catissueplus.bulkoperator.bizlogic.BulkOperationBizLogic;
 import com.krishagni.catissueplus.bulkoperator.generatetemplate.BulkOperationTemplate;
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationConstants;
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationException;
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationUtility;
-import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.dao.query.generator.ColumnValueBean;
+
+import edu.common.dynamicextensions.ndao.JdbcDao;
+import edu.common.dynamicextensions.ndao.ResultExtractor;
 
 public class BulkOperationDao {
 	
-	private static final Logger logger = Logger.getLogger(BulkOperationBizLogic.class);
+	private static final Logger logger = Logger.getLogger(BulkOperationDao.class);
 
 	private JdbcDao jdbcDao = null;
 	

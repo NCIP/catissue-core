@@ -22,18 +22,18 @@ import org.xml.sax.InputSource;
 
 import com.krishagni.catissueplus.bulkoperator.metadata.Attribute;
 import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationClass;
-import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationMetaData;
+import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationMetadata;
 
 
 public class BulkOperationSerializer {
 	
-	private BulkOperationMetaData metaData = null;
+	private BulkOperationMetadata metaData = null;
 	
 	BulkOperationClass boClass = null;
 	
 	private StringBuilder xmlBuilder; 
 
-	public BulkOperationSerializer(BulkOperationMetaData metaData) throws IOException {
+	public BulkOperationSerializer(BulkOperationMetadata metaData) throws IOException {
 		this.metaData = metaData;
 		this.boClass = metaData.getBulkOperationClass().iterator().next();
 		xmlBuilder = new StringBuilder();
