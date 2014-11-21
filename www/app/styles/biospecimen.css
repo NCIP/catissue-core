@@ -1,5 +1,28 @@
 
+.os-participant-ids {
+  max-height: 275px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
 .os-participant-matching {
-  margin-bottom: 20px; 
-  border-bottom: 1px dashed #ccc;
+  border-top: 1px dashed #ccc;
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border: 1px solid #faebcc;
+  padding-left: 15px;
+}
+
+.os-participant-matching-msg {
+  padding: 5px 0px;
+}
+
+.os-participant-matching-tbl {
+  max-height: 100px;
+  overflow-y: auto;
+  margin-bottom: 5px;
+}
+
+.os-participant-matching .form-group {
+  margin-bottom: 5px;
 }
