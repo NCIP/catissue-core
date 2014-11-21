@@ -45,7 +45,7 @@ public class BulkOperationController {
 	@Autowired
 	private HttpServletRequest httpReq;
 
-	@Autowired
+	//@Autowired
 	private BulkOperationService boService;
 	
 	@RequestMapping(method = RequestMethod.GET)
