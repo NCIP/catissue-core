@@ -1,4 +1,14 @@
 
+.os-cards {
+  padding: 20px;
+}
+
+.os-cards:after {
+  content:'';
+  display: block;
+  clear: both;
+}
+
 .os-card {
   height: 180px;
   width: 350px;
