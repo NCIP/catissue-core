@@ -52,15 +52,7 @@
   </bean>
 
   <aop:aspectj-autoproxy/>
-  <context:annotation-config/>
-  <context:spring-configured/>
-  <context:load-time-weaver aspectj-weaving="on"/>
       
-  <bean id="cprBulkController" class="com.krishagni.catissueplus.core.bo.service.impl.CprBulkOperationController" scope="prototype" 
-    factory-method="aspectOf">
-    <property name="cprSvc" ref="cprSvc"/>
-  </bean>
-  
   <bean id="serviceInterceptor" class="com.krishagni.catissueplus.core.common.TransactionalInterceptor">
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
   </bean>

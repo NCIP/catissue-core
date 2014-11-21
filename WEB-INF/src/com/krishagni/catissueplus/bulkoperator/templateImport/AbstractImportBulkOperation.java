@@ -44,7 +44,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.krishagni.catissueplus.bulkoperator.csv.CsvReader;
 import com.krishagni.catissueplus.bulkoperator.csv.impl.CsvFileReader;
 import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationClass;
-import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationMetaData;
+import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationMetadata;
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationConstants;
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationException;
 import com.krishagni.catissueplus.bulkoperator.validator.TemplateValidator;
@@ -104,7 +104,7 @@ public abstract class AbstractImportBulkOperation
 			ErrorKey errorkey = ErrorKey.getErrorKey("bulk.error.incorrect.csv.file");
 			throw new BulkOperationException(errorkey, exp, "");
 		}
-		BulkOperationMetaData bulkOperationMetaData  = null;
+		BulkOperationMetadata bulkOperationMetaData  = null;
 		try
 		{
 			SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");

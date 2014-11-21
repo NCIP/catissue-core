@@ -19,6 +19,7 @@ body {
 }
 
 .os-navbar:after {
+  content: '';
   display: block;
   clear: both;
 }
@@ -50,6 +51,7 @@ body {
 }
 
 .os-navbar > ul:after {
+  content: '';
   display: block;
   clear: both;
 }
@@ -140,19 +142,26 @@ body {
   margin: 7px 0px;
 }
 
+.os-page-hdr {
+  padding: 20px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ccc;
+}
+
 .os-page-hdr:after {
   display: block;
-  content: " ";
+  content: '';
   clear: both;
 }
 
 .os-page-hdr h1, .os-page-hdr h2, .os-page-hdr h3, .os-page-hdr h4 {
   float: left;
+  margin: 0px;
 }
 
 .os-page-hdr .os-icon-btn {
   float: left;
-  margin: 18px 10px 10px;
+  margin-left: 10px;
   font-size: 20px;
 }
 
@@ -201,4 +210,22 @@ input.ng-dirty.ng-invalid {
 .os-btn-text {
   background: transparent;
   color: #428bca;
+}
+
+.os-lavatar {
+  border-radius: 100%;
+  background: #d5d5d5;
+  display: inline-block;
+  text-align: center;
+  color: #ffffff;
+}
+
+.os-lavatar-sm {
+  height: 32px;
+  width: 32px;
+}
+
+.os-lavatar-bg {
+  height: 64px;
+  width: 64px;
 }

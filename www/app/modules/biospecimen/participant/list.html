@@ -1,34 +1,36 @@
 <div>
   <alert ng-if="alert.msg" type="{{alert.type}}" class="os-alert">{{alert.msg}}</alert>
-  <os-breadcrumbs></os-breadcrumbs>
   <div class="os-page-hdr">
+    <os-breadcrumbs></os-breadcrumbs>
     <h3>Participants</h3>
     <a class="os-icon-btn" title="Click to register new Participant" ng-click="registerParticipant()">
       <span class="glyphicon glyphicon-plus"></span>
     </a>
   </div>
 
-  <div class="os-card" ng-repeat="cpr in cprList">
-    <h4>
-      <a title="Click to view/edit Participant details" href="#/participants/{{cpr.cprId}}">
-        <span ng-if="!cpr.participant.firstName && !cpr.participant.lastName">
-          N/A
-        </span>
-        <span ng-if="cpr.participant.firstName || cpr.participant.lastName">
-          {{cpr.participant.firstName}} {{cpr.participant.lastName}}
-        </span>
-      </a>
-    </h4>
-    <h5>{{cpr.ppid}}</h5>
-    <p>{{cpr.registrationDate | date: 'MMM dd, yyyy'}}</p>
-    <div class="stats">
-      <div class="stat col-xs-6" title="Count of Completed SCGs">
-        <span class="glyphicon glyphicon-list"></span>
-        <span>{{cpr.scgCount | number: 0}}</span>
-      </div>
-      <div class="stat col-xs-6" title="Count of Collected Specimens">
-        <span class="glyphicon glyphicon-record"></span>
-        <span>{{cpr.specimenCount | number: 0}}</span>
+  <div class="os-cards">
+    <div class="os-card" ng-repeat="cpr in cprList">
+      <h4>
+        <a title="Click to view/edit Participant details" href="#/participants/{{cpr.cprId}}">
+          <span ng-if="!cpr.participant.firstName && !cpr.participant.lastName">
+            N/A
+          </span>
+          <span ng-if="cpr.participant.firstName || cpr.participant.lastName">
+            {{cpr.participant.firstName}} {{cpr.participant.lastName}}
+          </span>
+        </a>
+      </h4>
+      <h5>{{cpr.ppid}}</h5>
+      <p>{{cpr.registrationDate | date: 'MMM dd, yyyy'}}</p>
+      <div class="stats">
+        <div class="stat col-xs-6" title="Count of Completed SCGs">
+          <span class="os-lavatar os-lavatar-sm">V</span>
+          <span>{{cpr.scgCount | number: 0}}</span>
+        </div>
+        <div class="stat col-xs-6" title="Count of Collected Specimens">
+          <span class="os-lavatar os-lavatar-sm">S</span>
+          <span>{{cpr.specimenCount | number: 0}}</span>
+        </div>
       </div>
     </div>
   </div>

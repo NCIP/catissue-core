@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class
+    name="com.krishagni.catissueplus.bulkoperator.domain.BulkOperation"
+    table="CATISSUE_BULK_OPERATION">
+
+    <id
+      name="id"
+      column="IDENTIFIER"
+      type="long">
+      <generator class="native">
+        <param name="sequence">CATISSUE_BULK_OPERATION_SEQ</param>
+      </generator>
+    </id>
+
+    <property
+      name="operationName"
+      type="string"
+      column="OPERATION"/>
+
+    <property
+      name="dropdownName"
+      type="string"
+      column="DROPDOWN_NAME"/>
+      
+    <property
+      name="csvTemplate"
+      type="string"
+      column="CSV_TEMPLATE"/>
+      
+    <property
+      name="xmlTemplate"
+      type="string"
+      column="XML_TEMPALTE"/>
+    
+    <query name="getBulkOperationByName">
+      from 
+        com.krishagni.catissueplus.bulkoperator.domain.BulkOperation bo 
+      where 
+        bo.name = :operationName
+    </query>
+    
+    <query name="getAllBulkOperations">
+      from 
+        com.krishagni.catissueplus.bulkoperator.domain.BulkOperation 
+    </query>
+  </class>
+</hibernate-mapping>

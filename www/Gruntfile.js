@@ -81,7 +81,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '.tmp/styles/',
-          src: '{,*/}*.css',
+          src: '**/*.css',
           dest: '.tmp/styles/'
         }]
       }
@@ -116,7 +116,7 @@ module.exports = function (grunt) {
     // Performs rewrites based on filerev and the useminPrepare configuration
     usemin: {
       html: ['<%= config.dist %>/**/*.html'],
-      css: ['<%= config.dist %>/styles/{,*/}*.css'],
+      css: ['<%= config.dist %>/styles/**/*.css'],
       options: {
         assetsDirs: ['<%= config.dist %>','<%= config.dist %>/images']
       }
@@ -153,7 +153,7 @@ module.exports = function (grunt) {
         expand: true,
         cwd: '<%= config.app %>/styles',
         dest: '.tmp/styles/',
-        src: '{,*/}*.css'
+        src: '**/*.css'
       }
     },
 

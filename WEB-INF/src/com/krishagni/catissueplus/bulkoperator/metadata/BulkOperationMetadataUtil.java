@@ -33,22 +33,22 @@ public class BulkOperationMetadataUtil
 	 */
 	private static final Logger logger = Logger.getCommonLogger(BulkOperationMetadataUtil.class);
 
-	public BulkOperationMetaData unmarshall(String bulkOperationMetaDataXmlFile,
+	public BulkOperationMetadata unmarshall(String bulkOperationMetaDataXmlFile,
 			String xmlMappingFile) throws BulkOperationException
 	{
-		BulkOperationMetaData bulkOperationMetaData = null;
+		BulkOperationMetadata bulkOperationMetaData = null;
 		try
 		{
 			// -- Load a mapping file
 			Mapping mapping = new Mapping();
 			mapping.loadMapping(xmlMappingFile);
 
-			Unmarshaller unmarshaller = new Unmarshaller(BulkOperationMetaData.class);
+			Unmarshaller unmarshaller = new Unmarshaller(BulkOperationMetadata.class);
 			unmarshaller.setMapping(mapping);
 			
 			// -- Read in the migration.xml using the mapping
 			FileReader fileReader = new FileReader(bulkOperationMetaDataXmlFile);
-			bulkOperationMetaData = (BulkOperationMetaData) unmarshaller.unmarshal(fileReader);
+			bulkOperationMetaData = (BulkOperationMetadata) unmarshaller.unmarshal(fileReader);
 			fileReader.close();
 		}
 		catch (MarshalException exp)
@@ -95,23 +95,23 @@ public class BulkOperationMetadataUtil
 		return bulkOperationMetaData;
 	}
 
-	public BulkOperationMetaData unmarshall(InputSource bulkOperationMetaDataXml,
+	public BulkOperationMetadata unmarshall(InputSource bulkOperationMetaDataXml,
 			InputSource xmlMappingFile) throws BulkOperationException
 	{
-		BulkOperationMetaData bulkOperationMetaData = null;
+		BulkOperationMetadata bulkOperationMetaData = null;
 		try
 		{
 			// -- Load a mapping file
 			Mapping mapping = new Mapping();
 			mapping.loadMapping(xmlMappingFile);
 
-			Unmarshaller unmarshaller = new Unmarshaller(BulkOperationMetaData.class);
+			Unmarshaller unmarshaller = new Unmarshaller(BulkOperationMetadata.class);
 			unmarshaller.setMapping(mapping);
 			//unmarshaller.setProperty("org.exolab.castor.xml.naming", "mixed");
 
 			// -- Read in the migration.xml using the mapping
 
-			bulkOperationMetaData = (BulkOperationMetaData) unmarshaller
+			bulkOperationMetaData = (BulkOperationMetadata) unmarshaller
 					.unmarshal(bulkOperationMetaDataXml);
 		}
 		catch (MarshalException exp)

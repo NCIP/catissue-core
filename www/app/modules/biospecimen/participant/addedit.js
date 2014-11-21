@@ -113,22 +113,14 @@ angular.module('openspecimen')
           }
 
           $scope.matchedResults = result.data;
-          var matchedCount = $scope.matchedResults.participants.length;
-          if (matchedCount == 1) {
-            AlertService.display($scope, "One matching participant found", "danger", false);
-          } else {
-            AlertService.display($scope, matchedCount + " matching participants found", "danger", false);
-          }
-
+          $scope.showMatchingParticipants = true;
+          $scope.origParticipant = angular.copy($scope.cpr.participant);
           return false;
         }
       );
     };
 
     $scope.showMatches = function() {
-      $scope.showMatchingParticipants = true;
-      $scope.origParticipant = angular.copy($scope.cpr.participant);
-      AlertService.clear($scope);
     };
 
     $scope.selectParticipant = function(participant) {
@@ -148,10 +140,11 @@ angular.module('openspecimen')
       $scope.ignoredCrit = undefined;
     };
 
-    $scope.ignoreMatches = function() {
+    $scope.ignoreMatches = function(wizard) {
       $scope.matchedResults = undefined;
       $scope.showMatchingParticipants = false;
       $scope.ignoredCrit = getMatchingCriteria($scope.origParticipant);
+      wizard.next(false);
     };
 
     var formatSsn = function(ssn) {

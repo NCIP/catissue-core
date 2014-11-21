@@ -19,7 +19,7 @@ import org.apache.commons.digester3.binder.DigesterLoader;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationMetaData;
+import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationMetadata;
 import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationMetadataUtil;
 import com.krishagni.catissueplus.bulkoperator.templateImport.XmlRulesModule;
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationException;
@@ -43,12 +43,12 @@ public class BulkOperator
 	/**
 	 * metadata.
 	 */
-	protected transient BulkOperationMetaData metadata;
+	protected transient BulkOperationMetadata metadata;
 
 	/**
 	 * @return the metadata
 	 */
-	public BulkOperationMetaData getMetadata()
+	public BulkOperationMetadata getMetadata()
 	{
 		return metadata;
 	}

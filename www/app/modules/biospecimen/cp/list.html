@@ -7,20 +7,22 @@
     </a>
   </div>
    
-  <div class="os-card" ng-repeat="cp in cpList" ng-click="showParticipants(cp)">
-    <h4 title="Click to view/edit Collection Protocol Details">
-      <a ng-click="$event.stopPropagation()" ui-sref="cp-detail({cpId: cp.id})">{{cp.title}}</a>
-    </h4>
-    <h5>{{cp.principalInvestigator.firstName}} {{cp.principalInvestigator.lastName}}</h5>
-    <p>{{cp.startDate | date: 'MMM dd, yyyy'}}</p>
-    <div class="stats">
-      <div class="stat col-xs-6" title="Count of Registered Participants">
-        <span class="glyphicon glyphicon-user"></span>
-        <span>{{cp.participantCount | number: 0}}</span>
-      </div>
-      <div class="stat col-xs-6" title="Count of Collected Specimens">
-        <span class="glyphicon glyphicon-record"></span>
-        <span>{{cp.specimenCount | number: 0}}</span>
+  <div class="os-cards">
+    <div class="os-card" ng-repeat="cp in cpList" ng-click="showParticipants(cp)">
+      <h4 title="Click to view/edit Collection Protocol Details">
+        <a ng-click="$event.stopPropagation()" ui-sref="cp-detail({cpId: cp.id})">{{cp.title}}</a>
+      </h4>
+      <h5>{{cp.principalInvestigator.firstName}} {{cp.principalInvestigator.lastName}}</h5>
+      <p>{{cp.startDate | date: 'MMM dd, yyyy'}}</p>
+      <div class="stats">
+        <div class="stat col-xs-6" title="Count of Registered Participants">
+          <span class="os-lavatar os-lavatar-sm">P</span>
+          <span>{{cp.participantCount | number: 0}}</span>
+        </div>
+        <div class="stat col-xs-6" title="Count of Collected Specimens">
+          <span class="os-lavatar os-lavatar-sm">S</span>
+          <span>{{cp.specimenCount | number: 0}}</span>
+        </div>
       </div>
     </div>
   </div>
