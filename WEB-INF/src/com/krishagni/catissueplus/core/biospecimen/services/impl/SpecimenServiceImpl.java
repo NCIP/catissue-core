@@ -19,14 +19,12 @@ import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimensByScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimensByScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -261,17 +259,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 	}
 	
-	@Override
-	@PlusTransactional
-	public SpecimensByScgEvent getSpecimensForScg(ReqSpecimensByScgEvent event) {
-		try {
-			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimensByScgId(event.getScgId());
-			return SpecimensByScgEvent.ok(SpecimenDetail.fromSpecimens(specimens));
-		} catch (Exception ex) {
-			return SpecimensByScgEvent.serverError(ex);
-		}
-	}
-
 	private void validateLabelBarcodeUnique(Specimen oldSpecimen, Specimen newSpecimen,
 			ObjectCreationException errorHandler) {
 		if (!isBlank(newSpecimen.getBarcode()) && !newSpecimen.getBarcode().equals(oldSpecimen.getBarcode())) {
@@ -284,35 +271,34 @@ public class SpecimenServiceImpl implements SpecimenService {
 	}
 
 	private void ensureUniqueLabel(String label, ObjectCreationException errorHandler) {
-		if (!daoFactory.getSpecimenDao().isLabelUnique(label)) {
+		if (daoFactory.getSpecimenDao().getSpecimenByLabel(label) != null) {
 			errorHandler.addError(SpecimenErrorCode.DUPLICATE_LABEL, LABEL);
 		}
 	}
 
 	private void ensureUniqueBarocde(String barcode, ObjectCreationException errorHandler) {
-		if (!daoFactory.getSpecimenDao().isBarcodeUnique(barcode)) {
+		if (daoFactory.getSpecimenDao().getSpecimenByBarcode(barcode) != null) {
 			errorHandler.addError(SpecimenErrorCode.DUPLICATE_BARCODE, BARCODE);
 		}
 	}
 
 	private void setLabel(String label, Specimen specimen, ObjectCreationException errorHandler) {
-		// TODO: Fix this
-//		String specimenLabelFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-//				.getCollectionProtocol().getSpecimenLabelFormat();
-//		if (isBlank(specimenLabelFormat)) {
-//			if (isBlank(label)) {
-//				errorHandler.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, LABEL);
-//				return;
-//			}
-//			specimen.setLabel(label);
-//		}
-//		else {
-//			if (!isBlank(label)) {
-//				errorHandler.addError(SpecimenErrorCode.AUTO_GENERATED_LABEL, LABEL);
-//				return;
-//			}
-//			specimen.setLabel(specimenLabelGenerator.generateLabel(specimenLabelFormat, specimen));
-//		}
+		String specimenLabelFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+				.getCollectionProtocol().getSpecimenLabelFormat();
+		if (isBlank(specimenLabelFormat)) {
+			if (isBlank(label)) {
+				errorHandler.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, LABEL);
+				return;
+			}
+			specimen.setLabel(label);
+		}
+		else {
+			if (!isBlank(label)) {
+				errorHandler.addError(SpecimenErrorCode.AUTO_GENERATED_LABEL, LABEL);
+				return;
+			}
+			specimen.setLabel(specimenLabelGenerator.generateLabel(specimenLabelFormat, specimen));
+		}
 	}
 
 	private void updateLabel(String label, Specimen specimen, Specimen oldSpecimen, ObjectCreationException errorHandler) {

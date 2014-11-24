@@ -18,7 +18,7 @@ L-->
 
 <pattern value="*/bulkOperationMetaData">
 	<object-create-rule
-		classname="com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationMetaData" />
+		classname="com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationMetadata" />
 	<set-properties-rule />
 </pattern>
 
@@ -30,7 +30,7 @@ L-->
 </pattern>
 
    <pattern value="*/BulkOperationMetadata">
-    <object-create-rule classname="com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationMetaData"/>
+    <object-create-rule classname="com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationMetadata"/>
 	<set-properties-rule/>	
   </pattern>
   <pattern value="*/BulkOperationClass">

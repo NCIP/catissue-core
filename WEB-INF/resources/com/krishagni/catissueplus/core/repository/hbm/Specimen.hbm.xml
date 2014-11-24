@@ -40,13 +40,6 @@
 		<property name="concentrationInMicrogramPerMicroliter" type="double"
 			column="CONCENTRATION" />
 
-		<set name="eventCollection" inverse="true" cascade="all">
-			<key column="SPECIMEN_ID">
-			</key>
-
-			<one-to-many class="edu.wustl.catissuecore.domain.SpecimenEventParameters" />
-		</set>
-
 		<set name="biohazardCollection" table="CATISSUE_SPECIMEN_BIOHZ_REL"
 			sort="unsorted">
 			<key column="SPECIMEN_ID">
@@ -66,7 +59,7 @@
 		</set>
 
 		<one-to-one name="specimenPosition"
-			class="edu.wustl.catissuecore.domain.SpecimenPosition" cascade="all"
+			class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenPosition" cascade="all"
 			property-ref="specimen" />
 
 		<property name="label" type="string" column="LABEL" />
@@ -94,40 +87,6 @@
 			column="SPECIMEN_COLLECTION_GROUP_ID" />
 
 		<many-to-one name="specimenRequirement"
-			class="edu.wustl.catissuecore.domain.SpecimenRequirement" column="REQ_SPECIMEN_ID" />
-
-		<query name="getSpecimenDetails">
-			select
-			sp.id,sp.label,sp.activityStatus,sp.specimenType,sp.specimenClass,sp.collectionStatus,
-			spr.specimenRequirementLabel from Specimen as sp left outer join
-			sp.specimenRequirement as spr where sp.parentSpecimen.id =
-			:parentSpecimenId and sp.activityStatus != 'Disabled' order by sp.id
-		</query>
-		<query name="getSpecimenIdByBarcode">
-			select sp.id from Specimen sp where
-			sp.barcode=:barcode
-		</query>
-		<query name="getSpecimenByLabel">
-			select sp from com.krishagni.catissueplus.core.biospecimen.domain.Specimen sp where sp.label=:label
-		</query>
-		<query name="getSpecimensByScgIds">
-			select sp from com.krishagni.catissueplus.core.biospecimen.domain.Specimen sp 
-			where sp.specimenCollectionGroup.id in (:scgIds) and sp.activityStatus = 'Active'
-		</query>
-		<sql-query name="getScgIdBySpecimenId">
-			<return-scalar column="scgId" type="long" />
-
-			select SPECIMEN_COLLECTION_GROUP_ID as scgId from CATISSUE_SPECIMEN
-			where IDENTIFIER = :specimenId
-		</sql-query>
-
-                <query name="getSpecimensByLabel">
-                  select 
-                    sp 
-                  from 
-                    com.krishagni.catissueplus.core.biospecimen.domain.Specimen sp 
-                  where 
-                    sp.label in (:labels)
-                </query>
+			class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement" column="REQ_SPECIMEN_ID" />
 	</class>
 </hibernate-mapping>

@@ -18,17 +18,13 @@ public interface CollectionProtocolRegistrationDao extends Dao<CollectionProtoco
 	
 	public CollectionProtocolRegistration getCprByPpId(Long cpId, String protocolParticipantIdentifier);
 
-	public boolean isBarcodeUnique(String barcode);
+	public CollectionProtocolRegistration getCprByBarcode(String barcode);
 
-	boolean isPpidUniqueForProtocol(Long cpId, String protocolParticipantIdentifier);
-	
 	public List<ParticipantSummary> getPhiParticipants(Long cpId, String searchString);
 
 	public ParticipantSummary getPhiParticipant(Long cpId, Long participantId);
 
 	public ParticipantSummary getParticipant(Long cpId, Long participantId);
-
-	public List<CollectionProtocolRegistration> getRegDetailsForParticipant(Long participantId);
 
 	public List<CollectionProtocolRegistration> getSubRegDetailForParticipantAndCp(Long participantId,Long cpId);
 }

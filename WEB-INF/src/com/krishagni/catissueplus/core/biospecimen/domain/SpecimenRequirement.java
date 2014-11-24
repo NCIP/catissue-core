@@ -50,6 +50,8 @@ public class SpecimenRequirement {
 	private String specimenClass;
 
 	private String specimenType;
+	
+	private SpecimenRequirement parentSpecimenRequirement;
 
 	private Set<Specimen> specimens = new HashSet<Specimen>();
 
@@ -124,7 +126,7 @@ public class SpecimenRequirement {
 	public void setReceiver(User receiver) {
 		this.receiver = receiver;
 	}
-
+	
 	public String getReceivedComments() {
 		return receivedComments;
 	}
@@ -230,6 +232,14 @@ public class SpecimenRequirement {
 		this.specimenType = specimenType;
 	}
 
+	public SpecimenRequirement getParentSpecimenRequirement() {
+		return parentSpecimenRequirement;
+	}
+
+	public void setParentSpecimenRequirement(SpecimenRequirement parentSpecimenRequirement) {
+		this.parentSpecimenRequirement = parentSpecimenRequirement;
+	}
+
 	public Set<Specimen> getSpecimens() {
 		return specimens;
 	}
@@ -237,6 +247,4 @@ public class SpecimenRequirement {
 	public void setSpecimens(Set<Specimen> specimens) {
 		this.specimens = specimens;
 	}
-	
-	
 }

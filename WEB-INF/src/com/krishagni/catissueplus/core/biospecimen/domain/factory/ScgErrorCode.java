@@ -14,7 +14,8 @@ public enum ScgErrorCode implements CatissueErrorCode {
 	DUPLICATE_NAME(1107,"specimen collection group with same name already exists."),
 	ERRORS(1008, "Please resolve the highlighted errors."),
 	INVALID_CPR_CPE(1109,"registraion and event point refering to different protocols."),
-	AUTO_GENERATED_LABEL(1110,"Please do not specify label,it is auto generated.")
+	AUTO_GENERATED_LABEL(1110,"Please do not specify label,it is auto generated."),
+	INVALID_REQIREMENT_CPE(1111, "Specimen Requirement-id and provided specimen collection group doesn't belong to same Collection Protocol Event.")
 	;
 
 	private int code;

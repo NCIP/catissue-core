@@ -12,6 +12,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
@@ -22,7 +23,6 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 
 public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGroupFactory {
 
@@ -40,7 +40,7 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 
 	private static final String CPR = "collection protocol registration";
 	
-	private static final String CP_SHORT_TITLE = "collection protocol short title";
+	private static final String CP_TITLE = "collection protocol title";
 	
 	private static final String PPID = "participant protocol id";
 	
@@ -130,63 +130,59 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 	}
 
 	private void setCpe(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
-		// TODO: Fix this
+		CollectionProtocolEvent cpe = null;
+		if (scgDetail.getCpeId() != null) {
+			cpe = daoFactory.getCollectionProtocolDao().getCpe(scgDetail.getCpeId());
+		} else if (scgDetail.getCollectionPointLabel() != null && scgDetail.getCpTitle() != null) {
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(scgDetail.getCpTitle());
+			if (cp == null) {
+				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CP_TITLE);
+				return;
+			}
+			
+			cpe = daoFactory.getCollectionProtocolDao().getCpeByCollectionPointLabel(cp.getId(), scgDetail.getCollectionPointLabel());
+			
+			if (cpe == null) {
+				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPL);
+				return;
+			}
+		} else {
+			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, "either collection-protocol-event id or (collection-point-label and cp-short-title) is mandatory for this operation" );
+			return;
+		}
 		
-//		CollectionProtocolEvent cpe = null;
-//		if (scgDetail.getCpeId() != null) {
-//			cpe = daoFactory.getCollectionProtocolDao().getCpe(scgDetail.getCpeId());
-//		} else if (scgDetail.getCollectionPointLabel() != null && scgDetail.getCpTitle() != null) {
-//			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCPByTitle(scgDetail.getCpTitle());
-//			if (cp == null) {
-//				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CP_SHORT_TITLE);
-//				return;
-//			}
-//			
-//			cpe = daoFactory.getCollectionProtocolDao().getCpeByCollectionPointLabel(cp.getId(), scgDetail.getCollectionPointLabel());
-//			
-//			if (cpe == null) {
-//				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPL);
-//				return;
-//			}
-//		} else {
-//			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, "either collection-protocol-event id or (collection-point-label and cp-short-title) is mandatory for this operation" );
-//			return;
-//		}
-//		
-//		if (cpe == null) {
-//			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPE);
-//			return;
-//		}
-//		scg.setCollectionProtocolEvent(cpe);
+		if (cpe == null) {
+			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPE);
+			return;
+		}
+		scg.setCollectionProtocolEvent(cpe);
 	}
 
 	private void setCpr(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
-		// TODO: Fix this
+		CollectionProtocolRegistration cpr = null;
+		if (scgDetail.getCprId() != null) {
+			cpr = daoFactory.getCprDao().getCpr(scgDetail.getCprId());
+		} else if (scgDetail.getPpid() != null && scgDetail.getCpTitle() != null) {
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(scgDetail.getCpTitle());
+			if (cp == null) {
+				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CP_TITLE);
+				return ;
+			}
+			
+			cpr = daoFactory.getCprDao().getCprByPpId(cp.getId(), scgDetail.getPpid());
+			if (cpr == null) {
+				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, PPID);
+				return ;
+			}
+		} else {
+			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, "Either collection-protocol-registration id or (ppid and cp-short-title is mandatory for this operation!)");
+			return;
+		}
 		
-//		CollectionProtocolRegistration cpr = null;
-//		if (scgDetail.getCprId() != null) {
-//			cpr = daoFactory.getCprDao().getCpr(scgDetail.getCprId());
-//		} else if (scgDetail.getPpid() != null && scgDetail.getCpTitle() != null) {
-//			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCPByTitle(scgDetail.getCpTitle());
-//			if (cp == null) {
-//				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CP_SHORT_TITLE);
-//				return ;
-//			}
-//			
-//			cpr = daoFactory.getCprDao().getCprByPpId(cp.getId(), scgDetail.getPpid());
-//			if (cpr == null) {
-//				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, PPID);
-//				return ;
-//			}
-//		} else {
-//			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, "Either collection-protocol-registration id or (ppid and cp-short-title is mandatory for this operation!)");
-//			return;
-//		}
-//		
-//		if (cpr == null) {
-//			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPR);
-//		}
-//		scg.setCollectionProtocolRegistration(cpr);
+		if (cpr == null) {
+			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPR);
+		}
+		scg.setCollectionProtocolRegistration(cpr);
 	}
 
 	private void setClinicalStatus(String clinicalStatus, SpecimenCollectionGroup scg,
@@ -216,11 +212,15 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 
 	private void setActivityStatus(String activityStatus, SpecimenCollectionGroup scg,
 			ObjectCreationException errorHandler) {
-		if (isValidPv(activityStatus, Status.ACTIVITY_STATUS.getStatus())) {
-			scg.setActivityStatus(activityStatus);
-			return;
+		if (isBlank(activityStatus)) {
+			scg.setActive();
+		} else {
+			if (isValidPv(activityStatus, Status.ACTIVITY_STATUS.getStatus())) {
+				scg.setActivityStatus(activityStatus);
+				return;
+			}
+			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, Status.ACTIVITY_STATUS.getStatus());
 		}
-		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, Status.ACTIVITY_STATUS.getStatus());
 	}
 
 	private void setClinicalDiagnosis(String clinicalDiagnosis, SpecimenCollectionGroup scg,

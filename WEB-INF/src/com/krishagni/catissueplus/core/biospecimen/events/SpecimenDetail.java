@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Biohazard;
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenPosition;
 
 public class SpecimenDetail {
 
@@ -65,6 +67,10 @@ public class SpecimenDetail {
 	private String pos2;
 
 	private Boolean enablePrintLabels = false;
+	
+	private CollectionEventParametersDetail collectionEvent;
+	
+	private ReceivedEventParametersDetail receivedEvent;
 
 	private List<ExternalIdentifierDetail> externalIdentifierDetails = new ArrayList<ExternalIdentifierDetail>();
 
@@ -277,7 +283,31 @@ public class SpecimenDetail {
 	public void setPos2(String pos2) {
 		this.pos2 = pos2;
 	}
+	
+	public Boolean isPrintLabelsEnabled() {
+		return enablePrintLabels;
+	}
+	
+	public void setEnablePrintLabels(Boolean enablePrintLabels) {
+		this.enablePrintLabels = enablePrintLabels;
+	}
 
+	public CollectionEventParametersDetail getCollectionEvent() {
+		return collectionEvent;
+	}
+
+	public void setCollectionEvent(CollectionEventParametersDetail collectionEvent) {
+		this.collectionEvent = collectionEvent;
+	}
+
+	public ReceivedEventParametersDetail getReceivedEvent() {
+		return receivedEvent;
+	}
+
+	public void setReceivedEvent(ReceivedEventParametersDetail receivedEvent) {
+		this.receivedEvent = receivedEvent;
+	}
+	
 	public List<ExternalIdentifierDetail> getExternalIdentifierDetails() {
 		return externalIdentifierDetails;
 	}
@@ -292,14 +322,6 @@ public class SpecimenDetail {
 
 	public void setBiohazardDetails(List<BiohazardDetail> biohazardDetails) {
 		this.biohazardDetails = biohazardDetails;
-	}
-
-	public Boolean isPrintLabelsEnabled() {
-		return enablePrintLabels;
-	}
-
-	public void setEnablePrintLabels(Boolean enablePrintLabels) {
-		this.enablePrintLabels = enablePrintLabels;
 	}
 
 	public static SpecimenDetail fromDomain(Specimen specimen) {
@@ -319,21 +341,36 @@ public class SpecimenDetail {
 		detail.setIsAvailable(specimen.getIsAvailable());
 		detail.setLabel(specimen.getLabel());
 		detail.setLineage(specimen.getLineage());
-		if (specimen.getParentSpecimen() != null) {
-			detail.setParentSpecimenId(specimen.getParentSpecimen().getId());
-			detail.setParentSpecimenLabel(specimen.getParentSpecimen().getLabel());
-		}
 		detail.setPathologicalStatus(specimen.getPathologicalStatus());
-		/*    if (specimen.getSpecimenPosition() != null) {
-		        detail.setPos1(specimen.getSpecimenPosition().getPositionDimensionOne().toString());
-		        detail.setPos2(specimen.getSpecimenPosition().getPositionDimensionTwo().toString());
-		    }*/
 		detail.setSpecimenClass(specimen.getSpecimenClass());
 		detail.setSpecimenType(specimen.getSpecimenType());
 		detail.setTissueSide(specimen.getTissueSide());
 		detail.setTissueSite(specimen.getTissueSite());
+
+		if (specimen.getParentSpecimen() != null) {
+			detail.setParentSpecimenId(specimen.getParentSpecimen().getId());
+			detail.setParentSpecimenLabel(specimen.getParentSpecimen().getLabel());
+		}
+		
 		if (specimen.getSpecimenCollectionGroup() != null) {
 			detail.setScgId(specimen.getSpecimenCollectionGroup().getId());
+			detail.setScgName(specimen.getSpecimenCollectionGroup().getName());
+		}
+		
+		if (specimen.getSpecimenRequirement() != null) {
+			detail.setRequirementId(specimen.getSpecimenRequirement().getId());
+		}
+		
+		if (specimen.getSpecimenPosition() != null) {
+			SpecimenPosition position = specimen.getSpecimenPosition(); 
+			detail.setPos1(position.getPositionDimensionOneString());
+			detail.setPos2(position.getPositionDimensionTwoString());
+			
+			if (position.getStorageContainer() != null) {
+				StorageContainer container = position.getStorageContainer();
+				detail.setContainerName(container.getName());
+				detail.setContainerId(container.getId());
+			}
 		}
 		return detail;
 	}

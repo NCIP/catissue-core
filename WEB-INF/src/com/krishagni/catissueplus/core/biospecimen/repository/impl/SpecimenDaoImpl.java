@@ -2,12 +2,10 @@
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -20,8 +18,6 @@ import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDao {
-
-
 	
 	@Override
 	public List<Specimen> getAllSpecimens(int startAt, int maxRecords, String... searchString) {
@@ -50,19 +46,17 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		return ((Number)criteria.uniqueResult()).longValue();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Long getScgId(Long specimenId) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SCG_ID_BY_SPECIMEN_ID);
-		query.setLong("specimenId", specimenId);
-
-		List<Long> rows = query.list();
-		if (rows != null && !rows.isEmpty()) {
-			return rows.iterator().next();
+		Specimen specimen = (Specimen) sessionFactory.getCurrentSession().get(Specimen.class, specimenId);
+		
+		if (specimen != null) {
+			if (specimen.getSpecimenCollectionGroup() != null) {
+				return specimen.getSpecimenCollectionGroup().getId();
+			}
 		}
-		else {
-			return null;
-		}
+		
+		return null;
 	}
 
 	@Override
@@ -73,24 +67,21 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	@SuppressWarnings("unchecked")
 	@Override
 	public Specimen getSpecimenByLabel(String label) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMEN_BY_LABEL);
-		query.setString("label", label);
-		List<Specimen> results = query.list();
-		return results.isEmpty()? null: results.get(0);
-	}
-	
-	@Override
-	public boolean isLabelUnique(String label) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMEN_BY_LABEL);
-		query.setString("label", label);
-		return query.list().isEmpty()?true:false;
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(Specimen.class);
+		query.add(Restrictions.eq("label", label));
+		List<Specimen> specimens = query.list();
+		
+		return specimens.isEmpty() ? null : specimens.iterator().next();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public boolean isBarcodeUnique(String barcode) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMEN_ID_BY_BARCODE);
-		query.setString("barcode", barcode);
-		return query.list().isEmpty()?true:false;
+	public Specimen getSpecimenByBarcode(String barcode) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(Specimen.class);
+		query.add(Restrictions.eq("barcode", barcode));
+		List<Specimen> specimens = query.list();
+		
+		return specimens.isEmpty() ? null : specimens.iterator().next();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -106,9 +97,9 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 			
 			specimens.addAll(
 				sessionFactory.getCurrentSession()
-					.getNamedQuery(GET_SPECIMENS_BY_LABEL)
-					.setParameterList("labels", params)
-					.list());					
+				.createCriteria(Specimen.class)
+				.add(Restrictions.in("label", params))
+				.list());
 		}
 		
 		return specimens;
@@ -141,23 +132,4 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		return result;		
 	}
 	
-	@Override
-	public List<Specimen> getSpecimensByScgId(Long scgId) {
-		return (List<Specimen>) sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMENS_BY_SCGIDS)
-		.setParameterList("scgIds", Collections.singletonList(scgId)).list();
-	}
-
-	private static final String FQN = Specimen.class.getName();
-
-	private static final String GET_SCG_ID_BY_SPECIMEN_ID = FQN + ".getScgIdBySpecimenId";
-
-	private static final String GET_SPECIMEN_ID_BY_BARCODE = FQN +".getSpecimenIdByBarcode";
-	
-	private static final String GET_SPECIMEN_BY_LABEL = FQN +".getSpecimenByLabel";
-	
-	private static final String GET_SPECIMENS_BY_LABEL = FQN + ".getSpecimensByLabel";
-
-	private static final String GET_SPECIMENS_BY_SCGIDS = FQN + ".getSpecimensByScgIds";
-
-
 }

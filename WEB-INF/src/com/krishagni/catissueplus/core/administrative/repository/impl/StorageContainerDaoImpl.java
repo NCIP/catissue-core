@@ -3,38 +3,34 @@ package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.List;
 
-import org.hibernate.Query;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
+import edu.wustl.catissuecore.util.global.Constants;
+
 public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> implements StorageContainerDao {
 	
-	private static final String FQN = StorageContainer.class.getName();
-
-	private static final String GET_CONTAINER_BY_BARCODE = FQN+".getContainerByBarcode";
-	
-	private static final String GET_CONTAINERS = FQN+".getContainers";
-
-	private static final String GET_CONTAINER_BY_NAME = FQN+".getContainerByName";
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public StorageContainer getStorageContainerByName(String name) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CONTAINER_BY_NAME);
-		query.setString("name", name);
-		List<StorageContainer> result = query.list();
-		if (!result.isEmpty()) {
-			return result.get(0);
-		}
-		return null;
+		List<StorageContainer> result = sessionFactory.getCurrentSession()
+				.createCriteria(StorageContainer.class)
+				.add(Restrictions.eq("name", name))
+				.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE))
+				.list();
+
+		return result.isEmpty() ? null : result.iterator().next();
 	}
 
 	@Override
 	public Boolean isUniqueContainerName(String name) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CONTAINER_BY_NAME);
-		query.setString("name", name);
+		Criteria query = sessionFactory.getCurrentSession()
+				.createCriteria(StorageContainer.class)
+				.add(Restrictions.eq("name", name));
 		return query.list().isEmpty() ? true : false;
 	}
 
@@ -45,17 +41,21 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 
 	@Override
 	public boolean isUniqueBarcode(String barcode) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CONTAINER_BY_BARCODE);
-		query.setString("barcode", barcode);
+		Criteria query = sessionFactory.getCurrentSession()
+				.createCriteria(StorageContainer.class)
+				.add(Restrictions.eq("barcode", barcode))
+				.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE));
 		return query.list().isEmpty() ? true : false;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<StorageContainer> getAllStorageContainers(int maxResults) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CONTAINERS);
-		query.setMaxResults(maxResults);
-		return query.list();
+		return sessionFactory.getCurrentSession()
+				.createCriteria(StorageContainer.class)
+				.setMaxResults(maxResults)
+				.list();
+		
 	}
 
 }

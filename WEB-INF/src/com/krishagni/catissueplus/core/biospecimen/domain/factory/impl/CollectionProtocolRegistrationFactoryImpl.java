@@ -1,6 +1,9 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
+import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
+import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
+
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -27,6 +30,7 @@ import com.krishagni.catissueplus.core.biospecimen.util.PpidGenerator;
 import com.krishagni.catissueplus.core.biospecimen.util.impl.PpidGeneratorImpl;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.KeyGenFactory;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 
 public class CollectionProtocolRegistrationFactoryImpl implements CollectionProtocolRegistrationFactory {
@@ -69,7 +73,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
 		cpr.setBarcode(detail.getBarcode());
 		setRegistrationDate(cpr, detail.getRegistrationDate());
-		setActivityStatus(cpr, detail.getActivityStatus());
+		setActivityStatus(cpr, detail.getActivityStatus(), oce);
 		setCollectionProtocol(cpr, detail, oce);
 		setConsents(cpr, detail, oce);
 		setPpid(cpr, detail.getPpid(), oce);
@@ -87,12 +91,19 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		cpr.setRegistrationDate(regDate);
 	}
 
-	private void setActivityStatus(CollectionProtocolRegistration registration, String activityStatus) {
-		if (StringUtils.isBlank(activityStatus)) {
+	private void setActivityStatus(CollectionProtocolRegistration registration, String activityStatus,
+			ObjectCreationException oce) {
+		if (isBlank(activityStatus)) {
 			registration.setActive();
-		} else {
-			registration.setActivityStatus(activityStatus);
 		}
+		else {
+			if (isValidPv(activityStatus, Status.ACTIVITY_STATUS.getStatus())) {
+				registration.setActivityStatus(activityStatus);
+				return;
+			}
+			oce.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, Status.ACTIVITY_STATUS.getStatus());
+		}
+
 	}
 
 	private void setCollectionProtocol(
@@ -121,7 +132,10 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	}
 
 	private void setPpid(CollectionProtocolRegistration cpr, String ppid, ObjectCreationException oce) {
-		// TODO: Requires little bit of refactoring
+		if (cpr.getCollectionProtocol() == null) {
+			return;
+		}
+		
 		String ppidFormat = cpr.getCollectionProtocol().getPpidFormat();
 
 		if (StringUtils.isBlank(ppid) && StringUtils.isBlank(ppidFormat)) {
@@ -142,6 +156,9 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			CollectionProtocolRegistration cpr, 
 			CollectionProtocolRegistrationDetail detail,
 			ObjectCreationException oce) {
+		if (cpr.getCollectionProtocol() == null) {
+			return;
+		}
 		
 		Collection<ConsentTier> consents = cpr.getCollectionProtocol().getConsentTier();
 		if (consents == null || consents.isEmpty()) {

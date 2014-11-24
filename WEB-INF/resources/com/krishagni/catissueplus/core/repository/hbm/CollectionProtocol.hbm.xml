@@ -16,79 +16,250 @@
       </generator>
     </id>
 
-    <property name="title" column="TITLE" unique="true"/>
+    <property 
+      name="title" 
+      column="TITLE" 
+      unique="true"/>
 
-    <property name="shortTitle" column="SHORT_TITLE"/>
+    <property 
+      name="shortTitle" 
+      column="SHORT_TITLE"/>
 
-    <property name="startDate" column="START_DATE"/>
+    <property 
+      name="startDate" 
+      column="START_DATE"/>
 
-    <property name="endDate" column="END_DATE"/>
+    <property 
+      name="endDate" 
+      column="END_DATE"/>
 
-    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+    <property 
+      name="activityStatus" 
+      column="ACTIVITY_STATUS"/>
 
-    <many-to-one name="principalInvestigator" cascade="none" column="PRINCIPAL_INVESTIGATOR_ID"/>
+    <many-to-one 
+      name="principalInvestigator" 
+      cascade="none" 
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      column="PRINCIPAL_INVESTIGATOR_ID"/>
 
-    <property name="irbIdentifier" column="IRB_IDENTIFIER"/>
+    <property
+      name="irbIdentifier"
+      type="string"
+      update="true"
+      insert="true"
+      column="IRB_IDENTIFIER"
+      length="255"/>
 
-    <property name="enrollment" column="ENROLLMENT"/>
+    <property
+      name="enrollment"
+      type="long"
+      update="true"
+      insert="true"
+      column="ENROLLMENT"
+      length="50"/>
 
-    <property name="descriptionURL" column="DESCRIPTION_URL"/>
+    <property
+      name="descriptionURL"
+      type="string"
+      update="true"
+      insert="true"
+      column="DESCRIPTION_URL"
+      length="255"/>
 
-    <property name="specimenLabelFormat" column="LABEL_FORMAT"/>
+    <property
+      name="specimenLabelFormat"
+      type="string"
+      update="true"
+      insert="true"
+      column="LABEL_FORMAT"
+      length="255"/>
 
-    <property name="derivativeLabelFormat" column="DERIV_LABEL_FORMAT"/>
+    <property
+      name="derivativeLabelFormat"
+      type="string"
+      update="true"
+      insert="true"
+      column="DERIV_LABEL_FORMAT"
+      length="255"/>
 
-    <property name="aliquotLabelFormat" column="ALIQUOT_LABEL_FORMAT"/>
+    <property
+      name="aliquotLabelFormat"
+      type="string"
+      update="true"
+      insert="true"
+      column="ALIQUOT_LABEL_FORMAT"
+      length="255"/>
 
-    <property name="ppidFormat" column="PPID_FORMAT"/>
+    <property
+      name="ppidFormat"
+      type="string"
+      update="true"
+      insert="true"
+      column="PPID_FORMAT"
+      length="255"/>
           
-    <property name="unsignedConsentDocumentURL" column="UNSIGNED_CONSENT_DOC_URL"/>
+    <property
+      name="unsignedConsentDocumentURL"
+      type="string"
+      update="true"
+      insert="true"
+      column="UNSIGNED_CONSENT_DOC_URL"
+      length="1000"/>
 
-    <set name="clinicalDiagnosis" table="CATISSUE_CLINICAL_DIAGNOSIS" inverse="true" cascade="all-delete-orphan">
-      <key column="COLLECTION_PROTOCOL_ID"/>
-      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ClinicalDiagnosis"/>
+    <set
+      name="clinicalDiagnosis"
+      table="CATISSUE_CLINICAL_DIAGNOSIS"
+      fetch="join" lazy="false"
+      inverse="false"
+      cascade="save-update,all-delete-orphan"
+      sort="unsorted">
+      <key
+          column="COLLECTION_PROTOCOL_ID"/>
+
+      <one-to-many
+        class="com.krishagni.catissueplus.core.biospecimen.domain.ClinicalDiagnosis"/>
     </set>
 
-    <set name="consentTier" table="CATISSUE_CONSENT_TIER" inverse="true" cascade="all-delete-orphan">
+    <set
+      name="consentTier"
+      table="CATISSUE_CONSENT_TIER"
+      fetch="join" lazy="false"
+      inverse="false"
+      cascade="all-delete-orphan">
       <key column="COLL_PROTOCOL_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier"/>
     </set>
 
-    <set name="coordinators" table="CATISSUE_COLL_COORDINATORS" inverse="false" cascade="none">
+    <set
+      name="coordinators"
+      table="CATISSUE_COLL_COORDINATORS"
+      fetch="join" lazy="false"
+      inverse="false"
+      cascade="none"
+      sort="unsorted">
+
       <key column="COLLECTION_PROTOCOL_ID"/>
-      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
+
+      <many-to-many
+          class="com.krishagni.catissueplus.core.administrative.domain.User"
+          column="USER_ID"/>
+
     </set>
 
-    <set name="assignedProtocolUsers" table="CATISSUE_USER_CP" inverse="false" cascade="none">
+    <set
+      name="assignedProtocolUsers"
+      table="CATISSUE_USER_CP"
+      fetch="join" lazy="false"
+      inverse="false"
+      cascade="none">
+
       <key column="COLLECTION_PROTOCOL_ID"/>
-      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
+
+      <many-to-many
+          class="com.krishagni.catissueplus.core.administrative.domain.User"
+          column="USER_ID"/>
     </set>
 
-    <set name="sites" table="CATISSUE_SITE_CP" inverse="false" cascade="none">
+    <set
+      name="sites"
+      table="CATISSUE_SITE_CP"
+      lazy="false" fetch="join"
+      inverse="false"
+      cascade="none"
+      sort="unsorted">
+
       <key column="COLLECTION_PROTOCOL_ID"/>
-      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.Site" column="SITE_ID"/>
+      <many-to-many
+          class="com.krishagni.catissueplus.core.administrative.domain.Site"
+          column="SITE_ID"/>
+
+    </set>
+    
+    <set
+      name="distributionProtocols"
+      table="CATISSUE_COLL_DISTRIBUTION_REL"
+      lazy="true"
+      inverse="false"
+      cascade="save-update"
+      sort="unsorted">
+
+      <key column="COLLECTION_PROTOCOL_ID"/>
+
+      <many-to-many
+        class="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol"
+        column="DISTRIBUTION_PROTOCOL_ID"/>
     </set>
 
-    <set name="childCollectionProtocols" table="CATISSUE_COLLECTION_PROTOCOL" inverse="true" cascade="save-update">
+    <set
+      name="childCollectionProtocols"
+      table="CATISSUE_COLLECTION_PROTOCOL"
+      fetch="join" lazy="false"
+      inverse="true"
+      cascade="save-update"
+      sort="unsorted">
+
       <key column="PARENT_CP_ID"/>
-      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol"/>
+
+      <one-to-many
+        class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol"/>
     </set>
 
-    <many-to-one name="parentCollectionProtocol" cascade="none" column="PARENT_CP_ID"/>
+    <many-to-one
+      name="parentCollectionProtocol"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol"
+      cascade="none"
+      update="true"
+      insert="true"
+      column="PARENT_CP_ID"/>
 
-    <property name="type" column="CP_TYPE"/>
+    <property
+      name="type"
+      type="string"
+      update="true"
+      insert="true"
+      column="CP_TYPE"
+      length="50"/>
 
-    <property name="sequenceNumber" column="SEQUENCE_NUMBER"/>
+    <property
+      name="sequenceNumber"
+      type="long"
+      update="true"
+      insert="true"
+      column="SEQUENCE_NUMBER"
+      length="30"/>
 
-    <property name="studyCalendarEventPoint" column="STUDY_CALENDAR_EVENT_POINT"/>
+    <property
+      name="studyCalendarEventPoint"
+      type="double"
+      update="true"
+      insert="true"
+      column="STUDY_CALENDAR_EVENT_POINT"
+      length="50"/>
 
-    <property name="aliquotInSameContainer" column="ALIQUOT_IN_SAME_CONTAINER"/>
+    <property
+      name="aliquotInSameContainer"
+      type="boolean"
+      update="true"
+      insert="true"
+      column="ALIQUOT_IN_SAME_CONTAINER"/>
 
-    <property name="consentsWaived" column="CONSENTS_WAIVED" />
+    <property
+      name="consentsWaived"
+      type="boolean"
+      update="true"
+      insert="true"
+      column="CONSENTS_WAIVED" />
 
-    <set name="collectionProtocolEvents" table="CATISSUE_COLL_PROT_EVENT" inverse="true" cascade="save-update">
+    <set
+      name="collectionProtocolEvents"
+      table="CATISSUE_COLL_PROT_EVENT"
+      inverse="true"
+      cascade="save-update">
+
       <key column="COLLECTION_PROTOCOL_ID"/>
-      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent"/>
+      <one-to-many
+        class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent"/>
     </set>
 
     <set name="cpSiteRoles" table="CATISSUE_CP_GROUP_ROLES" cascade="all-delete-orphan" inverse="true">

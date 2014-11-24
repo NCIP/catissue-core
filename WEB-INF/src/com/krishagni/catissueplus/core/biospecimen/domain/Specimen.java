@@ -11,10 +11,6 @@ import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
-import edu.wustl.catissuecore.domain.SpecimenEventParameters;
-import edu.wustl.catissuecore.domain.SpecimenPosition;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
-
 public class Specimen {
 
 	private Long id;
@@ -58,8 +54,6 @@ public class Specimen {
 	private SpecimenPosition specimenPosition;
 
 	private Specimen parentSpecimen;
-
-	private Set<SpecimenEventParameters> eventCollection = new HashSet<SpecimenEventParameters>();
 
 	private Set<Specimen> childCollection = new HashSet<Specimen>();
 
@@ -244,14 +238,6 @@ public class Specimen {
 
 	public void setParentSpecimen(Specimen parentSpecimen) {
 		this.parentSpecimen = parentSpecimen;
-	}
-
-	public Set<SpecimenEventParameters> getEventCollection() {
-		return eventCollection;
-	}
-
-	public void setEventCollection(Set<SpecimenEventParameters> specimenEventCollection) {
-		this.eventCollection = specimenEventCollection;
 	}
 
 	public Set<Specimen> getChildCollection() {

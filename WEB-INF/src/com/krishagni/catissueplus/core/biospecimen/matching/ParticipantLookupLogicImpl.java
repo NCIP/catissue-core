@@ -46,8 +46,8 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 			}
 		}
 		
-		if (participant.getPmis() != null) {
-			List<Participant> matched = dao.getByPmis(participant.getPmis());
+		if (participant.getMedicalIdentifierList() != null) {
+			List<Participant> matched = dao.getByPmis(participant.getMedicalIdentifierList());
 			if (matched != null && !matched.isEmpty()) {
 				return ParticipantMatchedEvent.ok("pmi", ParticipantDetail.from(matched));
 			}

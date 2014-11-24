@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -20,9 +19,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGrou
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
-
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 
 @Repository("specimenCollectionGroupDao")
 public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollectionGroup>
@@ -68,44 +64,28 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 	}
 
 	@Override
-	public boolean isNameUnique(String name) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SCG_ID_BY_NAME);
-		query.setString("name", name);
-		return query.list().isEmpty() ? true : false;
-	}
-	
-	@Override
 	@SuppressWarnings("unchecked")
 	public SpecimenCollectionGroup getScgByName(String name) {
-		List<SpecimenCollectionGroup> scgs = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_SCG_BY_NAME).setString("name", name).list();
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(SpecimenCollectionGroup.class);
+		query.add(Restrictions.eq("name", name));
+		List<SpecimenCollectionGroup> scgs = query.list();
 		
 		return scgs.size() > 0 ? scgs.get(0) : null;
 	}
 
 	@Override
-	public boolean isBarcodeUnique(String barcode) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SCG_ID_BY_BARCODE);
-		query.setString("barcode", barcode);
-		return query.list().isEmpty() ? true : false;
+	@SuppressWarnings("unchecked")
+	public SpecimenCollectionGroup getScgByBarcode(String barcode) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(SpecimenCollectionGroup.class);
+		query.add(Restrictions.eq("barcode", barcode));
+		List<SpecimenCollectionGroup> scgs = query.list();
+		
+		return scgs.size() > 0 ? scgs.get(0) : null;
 	}
 
 	@Override
 	public SpecimenCollectionGroup getscg(Long id) {
 		return (SpecimenCollectionGroup)sessionFactory.getCurrentSession().get(SpecimenCollectionGroup.class, id);
-	}
-	
-	@Override
-	@SuppressWarnings("unchecked")
-	public List<SpecimenRequirement> getSpecimenRequirments(Long scgId) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CPE_BY_SCG_ID);
-		query.setLong("scgId", scgId);
-		List<CollectionProtocolEvent> cpeList = query.list();
-		if(cpeList.isEmpty()){
-			return Collections.emptyList();
-		}
-		CollectionProtocolEvent cpe = (CollectionProtocolEvent) cpeList.get(0);
-		return new ArrayList<SpecimenRequirement>(cpe.getSpecimenRequirementCollection());
 	}
 	
 	private void addSearchConditions(Criteria criteria, String[] searchString) {
@@ -134,15 +114,4 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 		List<SpecimenCollectionGroup> result = criteria.list();
 		return result;		
 	}
-
-	private static final String FQN = SpecimenCollectionGroup.class.getName();
-
-	private static final String GET_SCG_ID_BY_BARCODE = FQN + ".getScgIdByBarcode";
-
-	private static final String GET_SCG_ID_BY_NAME = FQN + ".getScgIdByName";
-	
-	private static final String GET_SCG_BY_NAME = FQN + ".getScgByName";
-	
-	private static final String GET_CPE_BY_SCG_ID = FQN + ".getCpeByScgId";
-
 }
