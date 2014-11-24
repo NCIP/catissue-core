@@ -85,6 +85,11 @@ body {
 .os-navbar > ul > li.form-input:hover  {
   background: inherit;
 }
+
+.os-navbar-docked {
+  position: fixed;
+  top: 0px;
+}
  
 .os-footer {
   position: absolute;

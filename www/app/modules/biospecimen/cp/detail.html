@@ -1,6 +1,15 @@
 
 <div ui-view ng-if="$state.current.name !== participant-list">
-  <h4>{{cp.title}}</h4>
+  <div os-side-menu>
+    <ul>
+     <li><a href="#">Back</a></li>
+     <li><a href="#">Overview</a></li>
+     <li><a href="#">Consents</a></li>
+     <li><a href="#">Visits</a></li>
+   </ul>
+  </div>
+  <div style="padding-left: 80px;">
+  </div>
 </div>
 
 <div ui-view ng-if="$state.current.name === participant-list">

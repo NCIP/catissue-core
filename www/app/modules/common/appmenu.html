@@ -1,5 +1,5 @@
 <div>
-  <div class="os-navbar os-navbar-default">
+  <div class="os-navbar os-navbar-default os-navbar-docked">
     <a class="logo" href="#"><img src="images/os_logo.png"></img></a>
     <ul class="primary">
       <li><a href="#">Dashboard</a></li>
@@ -16,6 +16,8 @@
     </ul>
   </div>
 
-  <div ui-view></div>
+  <div os-content="os-navbar">
+    <div ui-view></div>
+  </div>
 </div>
 
