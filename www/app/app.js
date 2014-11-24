@@ -51,8 +51,8 @@ angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.m
         parent: 'cp-detail'
       })
       .state('institute-list', {
-        url: '/institution',
-        templateUrl: 'modules/administrative/institution/list.html',
+        url: '/institutes',
+        templateUrl: 'modules/administrative/institutes/list.html',
         controller: 'InstituteCtrl',
         parent: 'signed-in'
       });
@@ -71,7 +71,7 @@ angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.m
       'participants': '/rest/ng/participants',
       'users': '/rest/ng/users',
       'sites': '/rest/ng/sites',
-      'institutions': '/rest/ng/institutes'
+      'institutes': '/rest/ng/institutes'
     };
 
     uiSelectConfig.theme = 'bootstrap';

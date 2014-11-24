@@ -19,7 +19,9 @@ import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 
 public class InstituteFactoryImpl implements InstituteFactory {
 
-	private static final String INSTITUTE_NAME = "institute name";
+	private static final String INSTITUTE_NAME = "Institute name";
+	
+	private static final String DEPARTMENT_NAME = "Department name";
 	
 	private static final String DEPARTMENT_IDENTIFIER = "Department Identifier";
 
@@ -47,7 +49,11 @@ public class InstituteFactoryImpl implements InstituteFactory {
 		
 		Set<Department> departmentSet = new HashSet<Department>();
 		
-		for(DepartmentDetails deptDetail : departments) {			
+		for(DepartmentDetails deptDetail : departments) {
+			if (isBlank(deptDetail.getName())) {
+				exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, DEPARTMENT_NAME);
+				return;
+			}
 			if(deptDetail.getId() == null) {
 				Department department = new Department();
 				department.setName(deptDetail.getName());

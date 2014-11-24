@@ -229,3 +229,8 @@ input.ng-dirty.ng-invalid {
   height: 64px;
   width: 64px;
 }
+
+.os-btn-left {
+  float:left;
+  margin-left: 10px;
+}
