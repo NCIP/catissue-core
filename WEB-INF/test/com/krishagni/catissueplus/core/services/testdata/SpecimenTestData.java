@@ -6,12 +6,17 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+import com.krishagni.catissueplus.core.administrative.domain.Biohazard;
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.events.AliquotDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.BiohazardDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ExternalIdentifierDetail;
@@ -20,9 +25,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.StorageLocation;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
-import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.common.beans.SessionDataBean;
 
 public class SpecimenTestData {
@@ -101,6 +103,7 @@ public class SpecimenTestData {
 
 	private static CollectionProtocol getCp() {
 		CollectionProtocol cp =new CollectionProtocol();
+		//cp.setSpecimenLabelFormat("%PPI%_%YR_OF_COLL%_%PPI_YOC_UID%");
 		return cp;
 	}
 
@@ -125,7 +128,7 @@ public class SpecimenTestData {
 		detail.setAvailableQuantity(1.0);
 		detail.setBarcode("barcode");
 		detail.setCollectionStatus(Status.SPECIMEN_COLLECTION_STATUS_COLLECTED.getStatus());
-		detail.setComment("comment");
+		detail.setComment("cosetSpecimenRequirementmment");
 		detail.setContainerName("containerName");
 		detail.setCreatedOn(new Date());
 		detail.setInitialQuantity(1.0);
@@ -138,7 +141,9 @@ public class SpecimenTestData {
 		detail.setSpecimenType("Feces");
 		detail.setTissueSide("Not Specified");
 		detail.setTissueSite("Not Specified");
-
+		detail.setBiohazardDetails(getBioHazardList());
+		detail.setEnablePrintLabels(false);
+		
 		List<ExternalIdentifierDetail> identifierDetails = new ArrayList<ExternalIdentifierDetail>();
 		ExternalIdentifierDetail identifierDetail = new ExternalIdentifierDetail();
 		identifierDetail.setName("nnn");
@@ -147,6 +152,19 @@ public class SpecimenTestData {
 		detail.setExternalIdentifierDetails(identifierDetails);
 
 		return detail;
+	}
+	
+	private static List<BiohazardDetail> getBioHazardList() {
+		List<BiohazardDetail> bhzList = new ArrayList<BiohazardDetail>();
+		
+		for (Integer i=0; i<2; i++) {
+			BiohazardDetail bhz = new BiohazardDetail();
+			bhz.setId(i.longValue());
+			bhz.setType("new" + i.toString());
+			bhz.setName("default-" + i.toString());
+			bhzList.add(bhz);
+		}
+		return bhzList;
 	}
 
 	public static User getUser() {
@@ -200,6 +218,15 @@ public class SpecimenTestData {
 		event.setAliquotDetail(aliquotDetail);
 		return event;
 	}
+	
+	public static Biohazard getBiohazard(String name) {
+		Biohazard bhz = new Biohazard();
+		bhz.setActivityStatus("Active");
+		bhz.setId(1L);
+		bhz.setName(name);
+		bhz.setType("temp");
+		return bhz;
+	}
 
 	public static AliquotDetail getAliquotDetail() {
 		AliquotDetail aliquotDetail = new AliquotDetail();
@@ -223,6 +250,12 @@ public class SpecimenTestData {
 		AliquotDetail aliquotDetail = getAliquotWithFullContainer();
 		event.setAliquotDetail(aliquotDetail);
 		return event;
+	}
+	
+	public static SpecimenRequirement getSpecimenRequirement() {
+		SpecimenRequirement spr = new SpecimenRequirement();
+		spr.setId(1L);
+		return spr;
 	}
 
 	public static AliquotDetail getAliquotWithFullContainer() {

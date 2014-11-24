@@ -1,44 +1,57 @@
 
 package com.krishagni.catissueplus.core.services;
 
-import static org.junit.Assert.assertEquals;  
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
-import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolRegistrationFactoryImpl;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.ParticipantFactoryImpl;
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimenCollGroupsSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.BulkRegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateBulkRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantCreatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
-import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
+import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolRegistrationServiceImpl;
+import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
 import com.krishagni.catissueplus.core.services.testdata.CprTestData;
-
-import com.krishagni.catissueplus.core.administrative.domain.Site;
 
 public class CollectionProtocolRegTest {
 
@@ -59,12 +72,19 @@ public class CollectionProtocolRegTest {
 
 	@Mock
 	private ParticipantDao participantDao;
+	
+	@Mock
+	private ParticipantService participantService;
+	
+	@Mock
+	private PrivilegeService privilegeSvc;
+	
+	@Mock
+	private ParticipantFactory participantFactory;
 
 	private CollectionProtocolRegistrationService registrationSvc;
 
 	private CollectionProtocolRegistrationFactory registrationFactory;
-
-	private ParticipantFactory participantFactory;
 
 	private final String PPID = "participant protocol identifier";
 
@@ -83,31 +103,74 @@ public class CollectionProtocolRegTest {
 		((CollectionProtocolRegistrationServiceImpl) registrationSvc).setDaoFactory(daoFactory);
 		registrationFactory = new CollectionProtocolRegistrationFactoryImpl();
 		((CollectionProtocolRegistrationFactoryImpl) registrationFactory).setDaoFactory(daoFactory);
+		((CollectionProtocolRegistrationFactoryImpl) registrationFactory).setParticipantFactory(participantFactory);
+		
 		((CollectionProtocolRegistrationServiceImpl) registrationSvc).setRegistrationFactory(registrationFactory);
-		participantFactory = new ParticipantFactoryImpl();
-		((ParticipantFactoryImpl) participantFactory).setDaoFactory(daoFactory);
-
-		when(registrationDao.isPpidUniqueForProtocol(anyLong(), anyString())).thenReturn(true);
+		((CollectionProtocolRegistrationServiceImpl) registrationSvc).setParticipantService(participantService);
+		((CollectionProtocolRegistrationServiceImpl) registrationSvc).setPrivilegeSvc(privilegeSvc);
+		
 		when(userDao.getUser(anyString())).thenReturn(CprTestData.getUser());
-
+		when(privilegeSvc.hasPrivilege(anyLong(), anyLong(), anyString())).thenReturn(true);
 		when(participantDao.getParticipant(anyLong())).thenReturn(CprTestData.getParticipant());
 	}
 
 	@Test
 	public void testForSuccessfulRegistrationCreation() {
-
 		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(CprTestData.getCptoReturn());
-
+		when(participantDao.getParticipant(anyLong())).thenReturn(CprTestData.getParticipant());
+		when(registrationDao.getCprByPpId(anyLong(), anyString())).thenReturn(null);
+		when(registrationDao.getCprByBarcode(anyString())).thenReturn(null);
+		 
+		Mockito.doAnswer(new Answer<Void>() {
+            public Void answer(InvocationOnMock invocation) {
+                    return null;
+            }
+	    })
+	    .when(registrationDao)
+	    .saveOrUpdate((any(CollectionProtocolRegistration.class)));
+		
 		CreateRegistrationEvent reqEvent = CprTestData.getCprCreateEvent();
-
+		
 		RegistrationCreatedEvent response = registrationSvc.createRegistration(reqEvent);
 		assertNotNull("Response cannot be null", response);
 		CollectionProtocolRegistrationDetail actualResult = response.getCprDetail();
-//		assertEquals(EventStatus.OK, response.getStatus());
-//		assertNotNull(actualResult);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertNotNull(actualResult);
 
 	}
+	
+	@Test
+	public void testForSuccessfulCreateParticipantAndRegistration() {
+		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(CprTestData.getCptoReturn());
+		when(participantDao.getParticipant(anyLong())).thenReturn(CprTestData.getParticipant());
+		when(registrationDao.getCprByPpId(anyLong(), anyString())).thenReturn(null);
+		when(registrationDao.getCprByBarcode(anyString())).thenReturn(null);
+		ParticipantCreatedEvent event = new ParticipantCreatedEvent();
+		event.setParticipantDetail(CprTestData.getCprCreateEvent().getCprDetail().getParticipant());
+		event.setStatus(EventStatus.OK);
+		
+		when(participantService.createParticipant(any(CreateParticipantEvent.class))).thenReturn(event);
+		when(participantFactory.createParticipant(any(ParticipantDetail.class))).thenReturn(CprTestData.getParticipant());
+		
+		Mockito.doAnswer(new Answer<Void>() {
+            public Void answer(InvocationOnMock invocation) {
+                    return null;
+            }
+	    })
+	    .when(registrationDao)
+	    .saveOrUpdate((any(CollectionProtocolRegistration.class)));
+		
+		CreateRegistrationEvent reqEvent = CprTestData.getCprCreateEvent();
+		reqEvent.getCprDetail().getParticipant().setId(null);
+		
+		RegistrationCreatedEvent response = registrationSvc.createRegistration(reqEvent);
+		assertNotNull("Response cannot be null", response);
+		CollectionProtocolRegistrationDetail actualResult = response.getCprDetail();
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertNotNull(actualResult);
 
+	}
+	
 	@Test
 	public void testForCprCreationInvalidParticipant() {
 
@@ -118,36 +181,39 @@ public class CollectionProtocolRegTest {
 
 		RegistrationCreatedEvent response = registrationSvc.createRegistration(reqEvent);
 		assertNotNull("Response cannot be null", response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(1, response.getErroneousFields().length);
-//		assertEquals(ParticipantErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-//		assertNotNull("participant", response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertNotNull("participant", response.getErroneousFields()[0].getErrorMessage());
 
 	}
 
 	@Test
 	public void testForRegistrationDuplicatePpid() {
-		when(registrationDao.isPpidUniqueForProtocol(anyLong(), anyString())).thenReturn(false);
+		when(registrationDao.getCprByPpId(anyLong(), anyString())).thenReturn(new CollectionProtocolRegistration());
 		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(CprTestData.getCptoReturn());
 
 		CreateRegistrationEvent reqEvent = CprTestData.getCprCreateEventDuplicatePpid();
 
 		RegistrationCreatedEvent response = registrationSvc.createRegistration(reqEvent);
 		assertNotNull("Response cannot be null", response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(1, response.getErroneousFields().length);
-//		assertEquals(ParticipantErrorCode.DUPLICATE_PPID.message(), response.getErroneousFields()[0].getErrorMessage());
-//		assertEquals(PPID, response.getErroneousFields()[0].getFieldName());
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(PPID, response.getErroneousFields()[0].getFieldName());
 	}
 
 	@Test
 	public void testForRegistrationWithServerError() {
 		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(CprTestData.getCptoReturn());
-
-		doThrow(new RuntimeException()).when(registrationDao).saveOrUpdate(any(CollectionProtocolRegistration.class));
-
+		when(participantDao.getParticipant(anyLong())).thenReturn(CprTestData.getParticipant());
+		when(registrationDao.getCprByPpId(anyLong(), anyString())).thenReturn(null);
+		when(registrationDao.getCprByBarcode(anyString())).thenReturn(null);
+		 
+		
+		doThrow(new RuntimeException())
+	    .when(registrationDao)
+	    .saveOrUpdate((any(CollectionProtocolRegistration.class)));
+		
 		CreateRegistrationEvent reqEvent = CprTestData.getCprCreateEvent();
-
+		
 		RegistrationCreatedEvent response = registrationSvc.createRegistration(reqEvent);
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
@@ -156,31 +222,36 @@ public class CollectionProtocolRegTest {
 	@Test
 	public void testForSuccessfulRegistrationWithConsents() {
 		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(CprTestData.getCpToReturnWithConsents());
-
+		when(participantDao.getParticipant(anyLong())).thenReturn(CprTestData.getParticipant());
+		when(registrationDao.getCprByPpId(anyLong(), anyString())).thenReturn(null);
+		when(registrationDao.getCprByBarcode(anyString())).thenReturn(null);
+		 
+		
+		Mockito.doAnswer(new Answer<Void>() {
+            public Void answer(InvocationOnMock invocation) {
+                    return null;
+            }
+	    })
+	    .when(registrationDao)
+	    .saveOrUpdate((any(CollectionProtocolRegistration.class)));
+		
 		CreateRegistrationEvent reqEvent = CprTestData.getCprCreateEvent();
-
+		
 		RegistrationCreatedEvent response = registrationSvc.createRegistration(reqEvent);
 		assertNotNull("Response cannot be null", response);
-//		CollectionProtocolRegistrationDetail actualResult = response.getCprDetail();
-//
-//		assertEquals(EventStatus.OK, response.getStatus());
-//		assertNotNull(actualResult);
-
-	}
-
-	@Test
-	public void testForSuccessfulRegistrationWithEmptyConsents() {
-
-		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(CprTestData.getCpToReturnWithEmptyConsents());
-
-		CreateRegistrationEvent reqEvent = CprTestData.getCprCreateEvent();
-
-		RegistrationCreatedEvent response = registrationSvc.createRegistration(reqEvent);
-//		assertNotNull("Response cannot be null", response);
-//		CollectionProtocolRegistrationDetail actualResult = response.getCprDetail();
-//
-//		assertEquals(EventStatus.OK, response.getStatus());
-//		assertNotNull(actualResult);
+		CollectionProtocolRegistrationDetail actualResult = response.getCprDetail();
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(3, actualResult.getConsentDetails().getConsenTierStatements().size());
+		
+		int foundStatements = 0;
+		for (ConsentTierDetail ctd : actualResult.getConsentDetails().getConsenTierStatements()) {
+			if (ctd.getConsentStatment().equals("statement1") || ctd.getConsentStatment().equals("statement2") 
+					|| ctd.getConsentStatment().equals("statement3")) {
+				foundStatements++;
+			}
+		}
+		
+		assertEquals(3, foundStatements);
 	}
 
 	@Test
@@ -188,30 +259,12 @@ public class CollectionProtocolRegTest {
 		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(CprTestData.getCollectionProtocol());
 
 		CreateRegistrationEvent reqEvent = CprTestData.getCprCreateEventEmptyPpid();
+		reqEvent.getCprDetail().setPpid("");
 		RegistrationCreatedEvent response = registrationSvc.createRegistration(reqEvent);
-//		assertNotNull("Response cannot be null", response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(1, response.getErroneousFields().length);
-//		assertEquals(ParticipantErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-//		assertEquals(PPID, response.getErroneousFields()[0].getFieldName());
-
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(PPID, response.getErroneousFields()[0].getFieldName());
 	}
-
-	//	@Test
-	//	public void testRegistrationCreationNullCP() {
-	//		CreateRegistrationEvent reqEvent = new CreateRegistrationEvent();
-	//		reqEvent.setSessionDataBean(getSessionDataBean());
-	//		CollectionProtocolRegistrationDetail details = getRegistrationDetails(null);
-	//		details.setRegistrationDate(null);
-	//		details.setPpid("");
-	//		reqEvent.setCprDetail(details);
-	//
-	//		RegistrationCreatedEvent response = registrationSvc.createRegistration(reqEvent);
-	//		assertNotNull("Response cannot be null", response);
-	//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-	//		assertEquals(ParticipantErrorCode.MISSING_ATTR_VALUE.message() + " : collection protocol", response.getMessage());
-	//
-	//	}
 
 	@Test
 	public void testGetScgListServerError() {
@@ -234,15 +287,26 @@ public class CollectionProtocolRegTest {
 	@Test
 	public void testRegistrationCreationInvalidCP() {
 		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(null);
+		when(participantDao.getParticipant(anyLong())).thenReturn(CprTestData.getParticipant());
+		when(registrationDao.getCprByPpId(anyLong(), anyString())).thenReturn(null);
+		when(registrationDao.getCprByBarcode(anyString())).thenReturn(null);
+		 
+		Mockito.doAnswer(new Answer<Void>() {
+            public Void answer(InvocationOnMock invocation) {
+                    return null;
+            }
+	    })
+	    .when(registrationDao)
+	    .saveOrUpdate((any(CollectionProtocolRegistration.class)));
+		
 		CreateRegistrationEvent reqEvent = CprTestData.getCprCreateEvent();
-
+		
 		RegistrationCreatedEvent response = registrationSvc.createRegistration(reqEvent);
 		assertNotNull("Response cannot be null", response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(1, response.getErroneousFields().length);
-//		assertEquals(ParticipantErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-//		assertEquals("collection protocol", response.getErroneousFields()[0].getFieldName());
-
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals("Attribute value is invalid", response.getErroneousFields()[0].getErrorMessage());
+		assertEquals("collection protocol", response.getErroneousFields()[0].getFieldName());
 	}
 
 	@Test
@@ -282,4 +346,56 @@ public class CollectionProtocolRegTest {
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
 
+
+	@Test
+	public void testCreateBulkCpr() {
+		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(CprTestData.getCptoReturn());
+		when(participantDao.getParticipant(anyLong())).thenReturn(CprTestData.getParticipant());
+		when(registrationDao.getCprByPpId(anyLong(), anyString())).thenReturn(null);
+		when(registrationDao.getCprByBarcode(anyString())).thenReturn(null);
+		ParticipantCreatedEvent event = new ParticipantCreatedEvent();
+		event.setParticipantDetail(CprTestData.getCprCreateEvent().getCprDetail().getParticipant());
+		event.setStatus(EventStatus.OK);
+		when(privilegeSvc.hasPrivilege(anyLong(), anyLong(), anyString())).thenReturn(true);
+		when(participantService.createParticipant(any(CreateParticipantEvent.class))).thenReturn(event);
+		when(participantFactory.createParticipant(any(ParticipantDetail.class))).thenReturn(CprTestData.getParticipant());
+		
+		Mockito.doAnswer(new Answer<Void>() {
+            public Void answer(InvocationOnMock invocation) {
+                    return null;
+            }
+	    })
+	    .when(registrationDao)
+	    .saveOrUpdate((any(CollectionProtocolRegistration.class)));
+		
+		CreateBulkRegistrationEvent reqEvent = CprTestData.getCreateBulkRegEvent();
+		reqEvent.getParticipantDetails().setId(null);
+		
+		BulkRegistrationCreatedEvent response = registrationSvc.createBulkRegistration(reqEvent);
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+		
+		assertNotNull(response.getParticipantDetails());
+		assertNotNull(response.getParticipantDetails().getRegistrationDetails());
+		assertEquals(reqEvent.getParticipantDetails().getRegistrationDetails().size(), 
+				response.getParticipantDetails().getRegistrationDetails().size());
+		
+		verify(participantService, times(1)).createParticipant(any(Participant.class));
+	}
+	
+	private void printResponse(ResponseEvent resp) {
+	System.out.println("Message: " + resp.getMessage());
+	
+	if (resp.getErroneousFields() != null) {
+		for (ErroneousField field : resp.getErroneousFields()) {
+			System.out.println("Error Detail Field: " + field.getFieldName() + " Message: " + field.getErrorMessage());
+		}
+	}
+	
+	if (resp.getException() != null) {
+		resp.getException().printStackTrace();
+	}
+	
+	System.out.println("Operation Status: " + resp.getStatus());
+}
 }

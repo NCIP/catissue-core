@@ -4,6 +4,8 @@ import java.util.Date;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
@@ -13,8 +15,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.common.beans.SessionDataBean;
 
 
@@ -55,6 +55,13 @@ public class ScgTestData {
 		User user = new User();
 		return user;
 	}
+	
+    public static Site getSite(String string) {
+        Site site = new Site();
+        site.setName(string);
+        return site;
+    }
+    
 	public static CollectionProtocolEvent getCpe() {
 		CollectionProtocolEvent cpe = new CollectionProtocolEvent();
 		cpe.setCollectionProtocol(getCp(1l));
