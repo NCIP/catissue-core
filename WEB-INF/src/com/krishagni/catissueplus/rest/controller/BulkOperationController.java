@@ -19,18 +19,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.krishagni.catissueplus.bulkoperator.events.BulkImportRecordsEvent;
 import com.krishagni.catissueplus.bulkoperator.events.BulkOperationDetail;
 import com.krishagni.catissueplus.bulkoperator.events.BulkOperationsEvent;
 import com.krishagni.catissueplus.bulkoperator.events.BulkRecordsImportedEvent;
 import com.krishagni.catissueplus.bulkoperator.events.JobDetail;
 import com.krishagni.catissueplus.bulkoperator.events.JobsDetailEvent;
 import com.krishagni.catissueplus.bulkoperator.events.LogFileContentEvent;
-import com.krishagni.catissueplus.bulkoperator.events.ReqBulkOperationsEvent;
 import com.krishagni.catissueplus.bulkoperator.events.ReqJobsDetailEvent;
 import com.krishagni.catissueplus.bulkoperator.events.ReqLogFileContentEvent;
-import com.krishagni.catissueplus.bulkoperator.events.BulkImportRecordsEvent;
 import com.krishagni.catissueplus.bulkoperator.services.BulkOperationService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -39,25 +38,19 @@ import edu.wustl.common.beans.SessionDataBean;
 @RequestMapping("/bulk-operations")
 public class BulkOperationController {
 
-	//
-	// TODO: Changed name to make it small and crisp
-	//
 	@Autowired
 	private HttpServletRequest httpReq;
 
-	//@Autowired
+	@Autowired
 	private BulkOperationService boService;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<BulkOperationDetail> getOperations() {
-		ReqBulkOperationsEvent req = new ReqBulkOperationsEvent();
-		BulkOperationsEvent resp = boService.getBulkOperations(req);
+		RequestEvent req = new RequestEvent();
 		
-		//
-		// TODO: Changed this for better error handling
-		// 
+		BulkOperationsEvent resp = boService.getBulkOperations(req);		
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
@@ -84,13 +77,13 @@ public class BulkOperationController {
 		return resp.getJobs();
 	}
 	
-	//
-	// TODO: uploadFile changed to importRecords
-	//
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public Long importRecords(@RequestParam("name") String operationName, @RequestParam("csvFile") MultipartFile csvFile) throws IOException {
+	public String importRecords(
+			@RequestParam("name") String operationName, 
+			@RequestParam("csvFile") MultipartFile csvFile) 
+	throws IOException {
 		BulkImportRecordsEvent req = new BulkImportRecordsEvent();
 		req.setSessionDataBean(getSession());
 		req.setOperationName(operationName);
@@ -100,37 +93,34 @@ public class BulkOperationController {
 		req.setFileIn(fileIn);
 		
 		BulkRecordsImportedEvent resp = boService.bulkImportRecords(req);
-		
-		fileIn.delete();
-		if (resp.isSuccess()) {
+		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
 		
-		//
-		// TODO: I think this should be a proper job detail object
-		//
-		return resp.getJobId();
+		return resp.getUploadStatus();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/logs")
-    public void downloadLogFile(@PathVariable("id") Long jobId, HttpServletResponse httpServletResponse) {
+    public void downloadLogFile(@PathVariable("id") Long jobId, HttpServletResponse httpResp) {
 		ReqLogFileContentEvent req = new ReqLogFileContentEvent();
 		req.setJobId(jobId);
 		req.setSessionDataBean(getSession());
 		
 		LogFileContentEvent resp = boService.getLogFileContent(req);
 		
-		if (resp.getStatus() == EventStatus.OK) {
-			doDownload(resp, httpServletResponse);
-		}		
+		if (resp.isSuccess()) {
+			doDownload(resp, httpResp);
+		} else {
+			resp.raiseException();
+		}
 	}
 	
-	private void doDownload(LogFileContentEvent resp, HttpServletResponse httpServletResponse) {
+	private void doDownload(LogFileContentEvent resp, HttpServletResponse httpResp) {
 		try {
-			httpServletResponse.setContentType("application/download");
-			httpServletResponse.setHeader("Content-Disposition", "attachment;filename=\""	+ resp.getFileName() + "\";");
-			httpServletResponse.setContentLength(resp.getLogFileContents().length);
-			OutputStream outputStream = httpServletResponse.getOutputStream();
+			httpResp.setContentType("application/download");
+			httpResp.setHeader("Content-Disposition", "attachment;filename=\""	+ resp.getFileName() + "\";");
+			httpResp.setContentLength(resp.getLogFileContents().length);
+			OutputStream outputStream = httpResp.getOutputStream();
 			outputStream.write(resp.getLogFileContents());
 			outputStream.flush();
 		} catch (Exception e) {
@@ -139,7 +129,6 @@ public class BulkOperationController {
 	}
 	
 	private SessionDataBean getSession() {
-		return (SessionDataBean) httpReq.getSession().getAttribute(
-				Constants.SESSION_DATA);
+		return (SessionDataBean) httpReq.getSession().getAttribute(Constants.SESSION_DATA);
 	}
 }

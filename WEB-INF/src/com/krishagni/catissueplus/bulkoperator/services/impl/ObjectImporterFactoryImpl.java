@@ -5,17 +5,15 @@ import java.util.Map;
 import com.krishagni.catissueplus.bulkoperator.common.ObjectImporter;
 import com.krishagni.catissueplus.bulkoperator.services.ObjectImporterFactory;
 
-public class BulkOperationDispatcherImpl implements ObjectImporterFactory {
-	private Map<String, ObjectImporter> dispatcherMap;
+public class ObjectImporterFactoryImpl implements ObjectImporterFactory {
+	private Map<String, ObjectImporter> importersMap;
 	
-	public void setDispatcherMap(
-			Map<String, ObjectImporter> dispatcherMap) {
-		this.dispatcherMap = dispatcherMap;
+	public void setImportersMap(Map<String, ObjectImporter> dispatcherMap) {
+		this.importersMap = dispatcherMap;
 	}
 
 	@Override
 	public ObjectImporter getImporter(String simpleObjectName) {
-		return dispatcherMap.get(simpleObjectName);
+		return importersMap.get(simpleObjectName);
 	}
-
 }

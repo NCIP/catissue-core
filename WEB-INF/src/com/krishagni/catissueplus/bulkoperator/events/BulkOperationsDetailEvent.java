@@ -7,7 +7,7 @@ import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-public class BulkOperationsEvent extends ResponseEvent {
+public class BulkOperationsDetailEvent extends ResponseEvent {
 	private List<BulkOperationDetail> operations = new ArrayList<BulkOperationDetail>();
 
 	public List<BulkOperationDetail> getOperations() {
@@ -18,24 +18,24 @@ public class BulkOperationsEvent extends ResponseEvent {
 		this.operations = operations;
 	}
 	
-	public static BulkOperationsEvent ok(List<BulkOperationDetail> ops) {
-		BulkOperationsEvent resp = new BulkOperationsEvent();
+	public static BulkOperationsDetailEvent ok(List<BulkOperationDetail> ops) {
+		BulkOperationsDetailEvent resp = new BulkOperationsDetailEvent();
 		resp.setStatus(EventStatus.OK);
 		resp.setOperations(ops);
 		return resp;
 	}
 	
-	public static BulkOperationsEvent serverError(Throwable... t) {
+	public static BulkOperationsDetailEvent serverError(Throwable... t) {
 		Throwable t1 = t != null && t.length > 0 ? t[0] : null;
-		BulkOperationsEvent resp = new BulkOperationsEvent();
+		BulkOperationsDetailEvent resp = new BulkOperationsDetailEvent();
 		resp.setStatus(EventStatus.INTERNAL_SERVER_ERROR);
 		resp.setException(t1);
 		resp.setMessage(t1 != null ? t1.getMessage() : null);
 		return resp;
 	}
 	
-	public static BulkOperationsEvent invalidRequest(CatissueErrorCode error, Throwable t) {
-		BulkOperationsEvent resp = new BulkOperationsEvent();
+	public static BulkOperationsDetailEvent invalidRequest(CatissueErrorCode error, Throwable t) {
+		BulkOperationsDetailEvent resp = new BulkOperationsDetailEvent();
 		resp.setupResponseEvent(EventStatus.BAD_REQUEST, error, t);
 		return resp;
 	}

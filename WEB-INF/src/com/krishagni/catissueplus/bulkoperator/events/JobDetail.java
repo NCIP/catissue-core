@@ -34,9 +34,6 @@ public class JobDetail {
 		this.id = id;
 	}
 
-	//
-	// TODO: Changed these accessor and mutator methods from getJobName to getName etc
-	//
 	public String getName() {
 		return name;
 	}

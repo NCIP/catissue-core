@@ -5,21 +5,21 @@ import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class BulkRecordsImportedEvent extends ResponseEvent {
-	private Long jobId;
-
-	public Long getJobId() {
-		return jobId;
-	}
-
-	public void setJobId(Long jobId) {
-		this.jobId = jobId;
-	}
+	private String uploadStatus;
 	
-	public static BulkRecordsImportedEvent ok(Long jobId) {
-		BulkRecordsImportedEvent event = new BulkRecordsImportedEvent();
-		event.setJobId(jobId);
-		event.setStatus(EventStatus.OK);
-		return event;
+	public String getUploadStatus() {
+		return uploadStatus;
+	}
+
+	public void setUploadStatus(String uploadStatus) {
+		this.uploadStatus = uploadStatus;
+	}
+
+	public static BulkRecordsImportedEvent ok(String uploadStatus) {
+		BulkRecordsImportedEvent resp = new BulkRecordsImportedEvent();
+		resp.setUploadStatus(uploadStatus);
+		resp.setStatus(EventStatus.OK);
+		return resp;
 	}
 	
 	public static BulkRecordsImportedEvent serverError(Throwable... t) {

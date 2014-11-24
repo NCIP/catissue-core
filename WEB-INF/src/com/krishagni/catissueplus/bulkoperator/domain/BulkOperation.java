@@ -5,9 +5,6 @@ public class BulkOperation {
 	
 	private String operationName;
 	
-	//
-	// TODO: Changed from dropdownName to displayName
-	//
 	private String displayName;
 	
 	private String csvTemplate;

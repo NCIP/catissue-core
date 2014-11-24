@@ -4,74 +4,41 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-  <class
-    name="com.krishagni.catissueplus.bulkoperator.domain.BulkOperationJob"
-    table="JOB_DETAILS">
-
-    <id
-      name="id"
-      column="IDENTIFIER"
-      type="long"
-      length="30"
+  <class name="com.krishagni.catissueplus.bulkoperator.domain.BulkOperationJob" table="JOB_DETAILS">
+    <id name="id" column="IDENTIFIER">
       <generator class="native">
         <param name="sequence">JOB_DETAILS_SEQ</param>
       </generator>
     </id>
 
-    <property
-      name="status"
-      type="string"
-      column="JOB_STATUS"
-      length="255"/>
+    <property name="status" column="JOB_STATUS"/>
 
-    <property
-      name="logFile"
-      type="java.sql.Blob"
-      column="LOG_FILE"/>
+    <property name="logFile" type="java.sql.Blob" column="LOG_FILE"/>
 
-    <property
-      name="startTime"
-      type="timestamp"
-      column="START_TIME"/>
+    <property name="startTime" column="START_TIME"/>
 
     <many-to-one 
       name="startedBy" 
       class="com.krishagni.catissueplus.core.administrative.domain.User"
       column="JOB_STARTED_BY"/>
 
-    <property
-      name="name"
-      type="string"
-      column="JOB_NAME"/>
+    <property name="name" column="JOB_NAME"/>
 
-    <property
-      name="timeTaken"
-      type="long"
-      column="TIME_TAKEN"/>
+    <property name="timeTaken" column="TIME_TAKEN"/>
 
-    <property
-      name="failedRecordsCount"
-      type="long"
-      column="FAILED_RECORDS_COUNT"/>
+    <property name="failedRecordsCount" column="FAILED_RECORDS_COUNT"/>
 
-    <property
-      name="totalRecordsCount"
-      type="long"
-      column="TOTAL_RECORDS_COUNT"/>
+    <property name="totalRecordsCount" column="TOTAL_RECORDS_COUNT"/>
 
-    <property
-      name="processedRecords"
-      type="long"
-      column="CURRENT_RECORDS_PROCESSED"/>
+    <property name="processedRecords" column="CURRENT_RECORDS_PROCESSED"/>
         
-    <property
-      name="logFileName"
-      type="string"
-      column="LOG_FILE_NAME"/>
+    <property name="logFileName" column="LOG_FILE_NAME"/>
 
-    <query name="getAllBulkOperations">
+    <query name="getAllJobs">
       from 
         com.krishagni.catissueplus.bulkoperator.domain.BulkOperationJob 
+      order by
+        id desc	
     </query>
   </class>
 </hibernate-mapping>

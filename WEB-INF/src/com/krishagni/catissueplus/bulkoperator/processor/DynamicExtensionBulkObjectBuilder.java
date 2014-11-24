@@ -42,11 +42,6 @@ public class DynamicExtensionBulkObjectBuilder extends AbstractBulkObjectBuilder
 		Long recordEntryId=null;
 		try
 		{
-//			AbstractBulkOperationAppService bulkOprAppService = AbstractBulkOperationAppService.getInstance(
-//					serviceInformationObject.getServiceImplementorClassName(), true,
-//					serviceInformationObject.getUserName(), null);
-//			HashMap<String, Object> dynExtObject = new HashMap<String, Object>();
-//			processObject(dynExtObject, bulkOperationClass, csvReader, "", false, csvRowCounter);
 
 			HookingInformation hookingInformationFromTag=bulkOperationClass.getHookingInformation();
 			getinformationForHookingData(csvReader ,hookingInformationFromTag);
