@@ -52,7 +52,7 @@ angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.m
       })
       .state('institute-list', {
         url: '/institutes',
-        templateUrl: 'modules/administrative/institutes/list.html',
+        templateUrl: 'modules/administrative/institute/list.html',
         controller: 'InstituteCtrl',
         parent: 'signed-in'
       });

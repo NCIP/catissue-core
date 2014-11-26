@@ -15,6 +15,10 @@
         <div ng-include="'cp-consents.html'"></div>
       </os-wizard-step>
 
+      <os-wizard-step on-finish="" title="Add Events">
+        <div ng-include="'cp-events.html'"></div>
+      </os-wizard-step>
+      
       <div class="os-modal-footer">
         <button class="btn os-btn-text" ng-click="cancel()">
           Cancel
@@ -121,3 +125,113 @@
    </div>
   </form>
 </script>
+
+<script type="text/ng-template" id="cp-events.html">
+  <div class="row">
+    <div class="col-xs-3">
+      <div>
+        <os-tree opts="treeOpts"></os-tree>
+      </div>
+      <div>
+        <button class="btn btn-primary" ng-click="addEvents();">
+          Add Event
+        </button>
+      </div>
+      <div>
+        {{collectionProtocol}}
+      </div>
+    </div>
+
+    <div ng-if="currentView == 'home'">
+    </div>
+
+    <div class="col-xs-9" ng-if="currentView == 'specimen-requirement'">
+      <div ng-include="'specimen-requirement.html'"></div>
+    </div>
+
+    <div class="col-xs-9" ng-if="currentView == 'add-edit-event'" >
+      <form>
+        <div class="form-group clearfix">
+          <div class="col-xs-6">
+            <label class="control-label">Study Calendar Event Point </label>
+            <input type="text" class="form-control" ng-model="event.eventPoint" placeholder="Event Point" required>
+          </div>
+          <div class="col-xs-6">
+            <label class="control-label">Collection Point Label</label>
+            <input type="text" class="form-control" ng-model="event.pointLabel" placeholder="Collection Point Label" required>
+          </div>
+        </div>
+
+        <div class="form-group clearfix">
+          <div class="col-xs-6">
+            <label class="control-label">Clinical Diagnosis</label>
+            <ui-select ng-model="event.clinicalDiagnosis">
+              <ui-select-match placeholder="Select Clinical Diagnosis">{{$select.selected}}</ui-select-match>
+              <ui-select-choices repeat="clinicalDiagnosis in clinicalDiagnosis_pvs | filter: $select.search">
+                <span ng-bind-html=" clinicalDiagnosis| highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+
+          <div class="col-xs-6">
+            <label class="control-label">Clinical Status</label>
+            <ui-select ng-model="event.clinicalStatus">
+              <ui-select-match placeholder="Select Clinical Status">{{$select.selected}}</ui-select-match>
+              <ui-select-choices repeat="clinicalStatus in clinicalStatus_pvs | filter: $select.search">
+                <span ng-bind-html="clinicalStatus | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+
+        <div class="form-group clearfix">
+          <div class="col-xs-6">
+            <label class="control-label">Default Collection Site</label>
+            <ui-select ng-model="event.defaultSite">
+              <ui-select-match placeholder="Default Collection Site">{{$select.selected.name}}</ui-select-match>
+              <ui-select-choices repeat="site in sites | filter: $select.search">
+                <span ng-bind-html="site.name | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+
+        <div class="form-group clearfix">
+          <div class="pull-right">
+            <button class="btn btn-primary" ng-click="addSpecimenRequirements();" ng-if="event.type">
+                  Add Specimen Requirements
+            </button>
+            <button class="btn btn-primary" ng-click="saveOrUpdateEvents();">
+              <span ng-if="!event.type"> Add </span>
+              <span ng-if="event.type"> Update </span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="node-tmpl.html">
+  <div><a href="" ng-click="nodeChecked(node)"> {{node.val}} </a></div>
+</script>
+
+<script type="text/ng-template" id="specimen-requirement.html">
+  <form>
+    <div class="form-group clearfix">
+      <div class="col-xs-12">
+        <label class="control-label">Specimen Requirement Title </label>
+        <input type="text" class="form-control" placeholder="Specimen Requirement Title" required>
+      </div>
+    </div>
+    <div class="form-group clearfix">
+      <div class="pull-right">
+        <button class="btn btn-primary" on-click="saveSpecimenRequirement()">
+          Save
+        </button>
+      </div>
+    </div>
+  </form>
+</script>
+
+

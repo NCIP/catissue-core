@@ -1,0 +1,24 @@
+<div>
+  <alert ng-if="alert.msg" type="{{alert.type}}" class="os-alert">{{alert.msg}}</alert>
+  <div class="os-page-hdr">
+    <h3>Institutes</h3>
+    <a class="os-icon-btn" title="Click to add new Institute" ng-click="addEditInstitute()">
+      <span class="glyphicon glyphicon-plus"></span>
+    </a>
+  </div>
+  
+  <div class="os-cards"> 
+    <div class="os-card" ng-repeat="institute in instituteList">
+      <h4 title="Click to view/edit Institute Details">
+        <a ng-click="addEditInstitute(institute)"> {{institute.name}} </a>
+      </h4>
+      <h5>{{institute.activityStatus}}</h5>
+      <div class="stats">
+        <div class="stat col-xs-6" title="Count of Departments">
+          <span class="os-lavatar os-lavatar-sm">D</span>
+          <span>{{institute.departments.length | number: 0}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

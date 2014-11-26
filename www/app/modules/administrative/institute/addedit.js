@@ -8,27 +8,39 @@ angular.module('openspecimen')
     }
 
     var handleResult = function(result) {
-      if(result.status == 'ok') {
-        $modalInstance.close(result);
+      if (result.status == 'ok') {
+        $modalInstance.close('ok');
       } else if (result.status == 'user_error') {
         var errMsgs = result.data.errorMessages;
-        if(errMsgs.length > 0) {
+        if (errMsgs.length > 0) {
           var errMsg = errMsgs[0].attributeName + ": " + errMsgs[0].message;
           AlertService.display($scope, errMsg, 'danger');
         }
       }
     };
 
-    $scope.save = function(valid) {
-      if(valid) {
-        InstituteService.saveOrUpdateInstitute($scope.institute).then(handleResult);
-      } else {
-        AlertService.display($scope, 'There are some validation errors in form below. Please rectify them.', 'danger');
-      }
-    }
+    $scope.forms = {
+      instituteForm : {submitted: false}
+    };
 
-    $scope.deleteInstitute = function() {
-      InstituteService.deleteInstitute($scope.institute.id).then(handleResult);
+    $scope.setForm = function(form) {
+      $scope.forms[form.$name].form = form;
+    };
+
+    var validateForm = function(form) {
+      form.submitted = true;
+      if (!form.form.$valid) {
+        var err = 'There are some validation errors in form below. Please rectify them.';
+        AlertService.display($scope, err, 'danger');
+        return false;
+      }
+      return true;
+    };
+
+    $scope.save = function() {
+      if(validateForm($scope.forms.instituteForm)) {
+        InstituteService.saveOrUpdateInstitute($scope.institute).then(handleResult);
+      }
     }
 
     $scope.addDepartment = function() {

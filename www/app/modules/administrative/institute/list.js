@@ -12,7 +12,7 @@ angular.module('openspecimen')
 
     $scope.addEditInstitute = function(institute) {
       var modalInstance = $modal.open({
-        templateUrl: 'modules/administrative/institutes/addedit.html',
+        templateUrl: 'modules/administrative/institute/addedit.html',
         controller: 'InstituteAddEditCtrl',
         resolve: {
           institute: function() {
@@ -21,8 +21,7 @@ angular.module('openspecimen')
         }
       });
       modalInstance.result.then(function(result) {
-        var msg = (result.data == 'success') ? 'Institute Deleted Successfully' : 'Institute Saved Successfully';
-        AlertService.display($scope, msg, 'success');
+        AlertService.display($scope, 'Institute Saved Successfully', 'success');
         loadInstituteList();
       });
     }
