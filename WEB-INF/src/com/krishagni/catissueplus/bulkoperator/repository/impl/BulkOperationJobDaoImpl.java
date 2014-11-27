@@ -2,8 +2,6 @@ package com.krishagni.catissueplus.bulkoperator.repository.impl;
 
 import java.util.List;
 
-import org.hibernate.Query;
-
 import com.krishagni.catissueplus.bulkoperator.domain.BulkOperationJob;
 import com.krishagni.catissueplus.bulkoperator.repository.BulkOperationJobDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
@@ -18,10 +16,6 @@ public class BulkOperationJobDaoImpl extends AbstractDao<BulkOperationJob> imple
 		return (BulkOperationJob)sessionFactory.getCurrentSession().get(BulkOperationJob.class, jobId);
 	}
 
-	//
-	// TODO:
-	// Changed this and got rid of addLimits
-	//
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<BulkOperationJob> getJobs(int startAt, int maxRecords) {

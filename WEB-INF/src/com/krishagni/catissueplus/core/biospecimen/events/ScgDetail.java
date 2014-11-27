@@ -256,20 +256,35 @@ public class ScgDetail {
 		detail.setCollectionComments(scg.getCollectionComments());
 		detail.setCollectionContainer(scg.getCollectionContainer());
 		detail.setCollectionProcedure(scg.getCollectionProcedure());
-		detail.setCollectionSiteName(scg.getCollectionSite().getName());
 		detail.setCollectionStatus(scg.getCollectionStatus());
 		detail.setCollectionTimestamp(scg.getCollectionTimestamp());
-		detail.setCollectorName(scg.getCollector().getLastName() + ", " + scg.getCollector().getFirstName());
 		detail.setComment(scg.getComment());
-		detail.setCpeId(scg.getCollectionProtocolEvent().getId());
-		detail.setCprId(scg.getCollectionProtocolRegistration().getId());
 		detail.setId(scg.getId());
 		detail.setName(scg.getName());
 		detail.setReceivedComments(scg.getReceivedComments());
 		detail.setReceivedQuality(scg.getReceivedQuality());
 		detail.setReceivedTimestamp(scg.getReceivedTimestamp());
-		detail.setReceiverName(scg.getReceiver().getLastName() + ", " + scg.getReceiver().getFirstName());
 		detail.setSurgicalPathologyNumber(scg.getSurgicalPathologyNumber());
+
+		if (scg.getCollectionProtocolRegistration() != null) {
+			detail.setCprId(scg.getCollectionProtocolRegistration().getId());
+		}
+		
+		if (scg.getCollectionProtocolEvent() != null) {
+			detail.setCpeId(scg.getCollectionProtocolEvent().getId());
+		}		
+		
+		if (scg.getCollectionSite() != null) {
+			detail.setCollectionSiteName(scg.getCollectionSite().getName());
+		}
+		
+		if (scg.getCollector() != null) {
+			detail.setCollectorName(scg.getCollector().getLoginName());
+		}
+
+		if (scg.getReceiver() != null) {
+			detail.setReceiverName(scg.getReceiver().getLoginName());
+		}
 		
 		if (scg.getCollectionProtocolRegistration() != null) {
 			detail.setPpid(scg.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());

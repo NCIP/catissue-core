@@ -10,7 +10,7 @@
   <div class="os-cards">
     <div class="os-card" ng-repeat="cp in cpList" ng-click="showParticipants(cp)">
       <h4 title="Click to view/edit Collection Protocol Details">
-        <a ng-click="$event.stopPropagation()" ui-sref="cp-detail({cpId: cp.id})">{{cp.title}}</a>
+        <a ui-sref="cp-detail.overview({cpId: cp.id})">{{cp.title}}</a>
       </h4>
       <h5>{{cp.principalInvestigator.firstName}} {{cp.principalInvestigator.lastName}}</h5>
       <p>{{cp.startDate | date: 'MMM dd, yyyy'}}</p>

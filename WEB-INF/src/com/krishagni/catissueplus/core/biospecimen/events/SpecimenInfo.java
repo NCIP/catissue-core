@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.common.util.Status;
-
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 
 public class SpecimenInfo  implements Comparable<SpecimenInfo>{
 

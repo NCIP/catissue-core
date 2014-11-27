@@ -24,7 +24,6 @@ import com.krishagni.catissueplus.bulkoperator.metadata.Attribute;
 import com.krishagni.catissueplus.bulkoperator.metadata.AttributeDiscriminator;
 import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationClass;
 import com.krishagni.catissueplus.bulkoperator.metadata.HookingInformation;
-import com.krishagni.catissueplus.bulkoperator.processor.DynCategoryBulkOperationProcessor;
 import com.krishagni.catissueplus.bulkoperator.processor.StaticBulkObjectBuilder;
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationConstants;
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationException;
@@ -77,17 +76,6 @@ public class TemplateValidator {
 							.getConstructor().newInstance((Object[])null);
 					staticProcessor.processObject(domainObject,
 							bulkOperationClass, csvReader, "", true, 0);
-				}
-				else if (BulkOperationConstants.CATEGORY_TYPE.equalsIgnoreCase(bulkOperationClass.getType())) {
-					HashMap<String, Object> dynExtObject = new HashMap<String, Object>();
-					DynCategoryBulkOperationProcessor deProcessor = new DynCategoryBulkOperationProcessor(
-							bulkOperationClass);
-					deProcessor.processObject(dynExtObject,
-							bulkOperationClass, csvReader,
-							"", true, 0);
-					HookingInformation hookingInformationFromTag = bulkOperationClass.getHookingInformation();
-					validateHookingInformation(csvReader,
-							hookingInformationFromTag);
 				}
 			} catch (BulkOperationException bulkExp) {
 				logger.debug(bulkExp.getMessage(), bulkExp);

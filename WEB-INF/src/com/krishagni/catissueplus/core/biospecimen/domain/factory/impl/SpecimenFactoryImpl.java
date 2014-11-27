@@ -9,9 +9,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Biohazard;
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
@@ -24,8 +26,6 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
-import edu.wustl.catissuecore.domain.StorageContainer;
 
 public class SpecimenFactoryImpl implements SpecimenFactory {
 
@@ -56,6 +56,12 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	private static final String ALIQUOT = "Aliquot";
 
 	private static final String QTY_PER_ALIQUOT = "Quantity Per Aliquot";
+	
+	private static final String BIOHAZARD = "Biohazard";
+	
+	private static final String LINEAGE = "lineage";
+	
+	private static final String CONCENTRATION_NOT_APPLICABLE = "concentrationInMicrogramPerMicroliter (specimen-concentration) is applicable only for Molecular specimens";
 
 	private DaoFactory daoFactory;
 
@@ -68,6 +74,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		ObjectCreationException errorHandler = new ObjectCreationException();
 		Specimen specimen = new Specimen();
 		setScg(specimenDetail, specimen, errorHandler);
+		setLineage(specimenDetail.getLineage(), specimen, errorHandler);
+		setConcentration(specimenDetail.getConcentrationInMicrogramPerMicroliter(), specimenDetail.getSpecimenClass(), specimen, errorHandler);
 		setParentSpecimen(specimenDetail, specimen, errorHandler); //check for parent in this method
 		setActivityStatus(specimenDetail.getActivityStatus(), specimen, errorHandler);
 		setSpecimenRequirement(specimenDetail, specimen, errorHandler);
@@ -82,6 +90,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setContainerPositions(specimenDetail, specimen, errorHandler);
 		setBiohazardCollection(specimenDetail, specimen, errorHandler);
 		setExternalIdsCollection(specimenDetail, specimen, errorHandler);
+		setAvailable(specimenDetail.getIsAvailable(), specimen);
 		errorHandler.checkErrorAndThrow();
 		return specimen;
 	}
@@ -159,26 +168,37 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 
 	private void setSpecimenRequirement(SpecimenDetail specimenDetail, Specimen specimen,
 			ObjectCreationException errorHandler) {
-		// TODO: Fix this
+		if (specimenDetail.getRequirementId() == null) {
+			return;
+		}
+		SpecimenRequirement requirement = daoFactory.getCollectionProtocolDao().getSpecimenRequirement(
+				specimenDetail.getRequirementId());
+		if (requirement == null) {
+			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, SPECIMEN_REQUIREMENT);
+			return;
+		}
 		
-//		if (specimenDetail.getRequirementId() == null) {
-//			return;
-//		}
-//		SpecimenRequirement requirement = daoFactory.getCollectionProtocolDao().getSpecimenRequirement(
-//				specimenDetail.getRequirementId());
-//		if (requirement == null) {
-//			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, SPECIMEN_REQUIREMENT);
-//			return;
-//		}
-//		specimen.setSpecimenRequirement(requirement);
+		if (specimen.getSpecimenCollectionGroup() != null && requirement.getCollectionProtocolEvent() != null ) {
+			if (!specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getId().equals(
+					requirement.getCollectionProtocolEvent().getId())) {
+				errorHandler.addError(ScgErrorCode.INVALID_REQIREMENT_CPE, SPECIMEN_REQUIREMENT);
+				return;
+			}
+		}
+		
+		specimen.setSpecimenRequirement(requirement);
 	}
 
 	private void setActivityStatus(String activityStatus, Specimen specimen, ObjectCreationException errorHandler) {
-		if (isValidPv(activityStatus, Status.ACTIVITY_STATUS.toString())) {
-			specimen.setActivityStatus(activityStatus);
-			return;
+		if (isBlank(activityStatus)) {
+			specimen.setActive();
+		} else {
+			if (isValidPv(activityStatus, Status.ACTIVITY_STATUS.getStatus())) {
+				specimen.setActivityStatus(activityStatus);
+				return;
+			}
+			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, Status.ACTIVITY_STATUS.toString());
 		}
-		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, Status.ACTIVITY_STATUS.toString());
 	}
 
 	private void setTissueSite(String tissueSite, Specimen specimen, ObjectCreationException errorHandler) {
@@ -195,6 +215,23 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;
 		}
 		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, TISSUE_SIDE);
+	}
+	
+	private void setLineage(String lineage, Specimen specimen, ObjectCreationException errorHandler) {
+		if (isValidPv(lineage, LINEAGE)) {
+			specimen.setLineage(lineage);
+			return;
+		}
+		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, LINEAGE);
+	}
+	
+	private void setConcentration(Double concentration,	String specimenClass, Specimen specimen,
+			ObjectCreationException errorHandler) {
+		if ("Molecular".equalsIgnoreCase(specimenClass)) {
+			specimen.setConcentrationInMicrogramPerMicroliter(concentration);
+		} else if (concentration != null) {
+			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CONCENTRATION_NOT_APPLICABLE);
+		}
 	}
 
 	private void setPathologyStatus(String pathStatus, Specimen specimen, ObjectCreationException errorHandler) {
@@ -254,14 +291,24 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		//		ContainerUtil.checkAndAssignPositions(container,specimenDetail.getPos1(),specimenDetail.getPos2(),specimen);
 	}
 
-	private void setBiohazardCollection(SpecimenDetail specimenDetail, Specimen specimen,
-			ObjectCreationException errorHandler) {
+	private void setBiohazardCollection(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
 		if (specimenDetail.getBiohazardDetails() == null && specimenDetail.getBiohazardDetails().isEmpty()) {
 			return;
 		}
+		
 		for (BiohazardDetail detail : specimenDetail.getBiohazardDetails()) {
-			//TODO yet to handle Biohazard
+			Biohazard biohazard = daoFactory.getBiohazardDao().getBiohazard(detail.getName());
+			
+			if (biohazard == null) {
+				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, BIOHAZARD);
+				return;
+			}
+			specimen.getBiohazardCollection().add(biohazard);
 		}
+	}
+	
+	private void setAvailable(Boolean isAvailable, Specimen specimen) {
+		specimen.setIsAvailable(isAvailable);
 	}
 
 	private void setExternalIdsCollection(SpecimenDetail specimenDetail, Specimen specimen,
@@ -278,7 +325,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			ExternalIdentifier identifier = new ExternalIdentifier();
 			identifier.setName(extIdDetail.getName());
 			identifier.setValue(extIdDetail.getValue());
-			//			identifier.setSpecimen(specimen);
+			identifier.setSpecimen(specimen);
 			externalIdentifiers.add(identifier);
 		}
 		specimen.setExternalIdentifierCollection(externalIdentifiers);
@@ -316,7 +363,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		specimen.setAvailableQuantity(availableQuantity);
 		return aliquots;
 	}
-
+	
 	private void checkSpecimenAvailableQuantity(Specimen specimen, AliquotDetail aliquotDetail) {
 		Double specimenAvailableQty = specimen.getAvailableQuantity();
 		Double requireQty = aliquotDetail.getQuantityPerAliquot() * aliquotDetail.getNoOfAliquots();

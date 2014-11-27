@@ -1,7 +1,10 @@
 package com.krishagni.catissueplus.bulkoperator.services.impl;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import com.krishagni.catissueplus.bulkoperator.common.BulkImporterTask;
 import com.krishagni.catissueplus.bulkoperator.domain.BulkOperation;
 import com.krishagni.catissueplus.bulkoperator.domain.BulkOperationJob;
 import com.krishagni.catissueplus.bulkoperator.domain.factory.BulkOperationErrorCode;
@@ -12,26 +15,29 @@ import com.krishagni.catissueplus.bulkoperator.events.BulkRecordsImportedEvent;
 import com.krishagni.catissueplus.bulkoperator.events.JobDetail;
 import com.krishagni.catissueplus.bulkoperator.events.JobsDetailEvent;
 import com.krishagni.catissueplus.bulkoperator.events.LogFileContentEvent;
-import com.krishagni.catissueplus.bulkoperator.events.ReqBulkOperationsEvent;
 import com.krishagni.catissueplus.bulkoperator.events.ReqJobsDetailEvent;
 import com.krishagni.catissueplus.bulkoperator.events.ReqLogFileContentEvent;
 import com.krishagni.catissueplus.bulkoperator.repository.BulkOperationDao;
 import com.krishagni.catissueplus.bulkoperator.repository.BulkOperationJobDao;
-import com.krishagni.catissueplus.bulkoperator.services.BulkOperationManager;
 import com.krishagni.catissueplus.bulkoperator.services.BulkOperationService;
+import com.krishagni.catissueplus.bulkoperator.services.ObjectImporterFactory;
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationException;
+import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class BulkOperationServiceImpl implements BulkOperationService {
-	private BulkOperationManager bulkOperationManager;
-
 	private BulkOperationDao bulkOperationDao;
 	
 	private BulkOperationJobDao jobDao;
-
-	public void setBulkOperationManager(BulkOperationManager bulkOperationManager) {
-		this.bulkOperationManager = bulkOperationManager;
-	}
+	
+	private UserDao userDao;
+	
+	private ObjectImporterFactory importerFactory;
+	
+	private static final String IMPORT_STARTED_SUCCESSFULLY = "Import started successfully.";
+	
+	private static ExecutorService threadPool = Executors.newFixedThreadPool(5);
 
 	public void setBulkOperationDao(BulkOperationDao bulkOperationDao) {
 		this.bulkOperationDao = bulkOperationDao;
@@ -40,10 +46,18 @@ public class BulkOperationServiceImpl implements BulkOperationService {
 	public void setJobDao(BulkOperationJobDao jobDao) {
 		this.jobDao = jobDao;
 	}
+	
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
+	}
 
+	public void setImporterFactory(ObjectImporterFactory importerFactory) {
+		this.importerFactory = importerFactory;
+	}
+	
 	@Override
 	@PlusTransactional
-	public BulkOperationsEvent getBulkOperations(ReqBulkOperationsEvent req) {
+	public BulkOperationsEvent getBulkOperations(RequestEvent req) {
 		try {
 			List<BulkOperation> operations = bulkOperationDao.getBulkOperations();
 			return BulkOperationsEvent.ok(BulkOperationDetail.from(operations));
@@ -82,8 +96,12 @@ public class BulkOperationServiceImpl implements BulkOperationService {
 				return BulkRecordsImportedEvent.invalidRequest(BulkOperationErrorCode.INVALID_OPERATION_NAME, null);
 			}
 			
-			Long jobId = bulkOperationManager.importRecords(req.getSessionDataBean(), bulkOperation, req.getFileIn());
-			return BulkRecordsImportedEvent.ok(jobId);
+			BulkImporterTask bulkImporterTask = new BulkImporterTask(importerFactory, userDao, jobDao, 
+					bulkOperation, req.getSessionDataBean(), req.getFileIn());
+			bulkImporterTask.validateBulkOperation();
+			
+			threadPool.execute(bulkImporterTask);
+			return BulkRecordsImportedEvent.ok(IMPORT_STARTED_SUCCESSFULLY);
 		} catch (BulkOperationException be) {
 			return BulkRecordsImportedEvent.invalidRequest(BulkOperationErrorCode.INVALID_CSV_TEMPLATE, null);
 		} catch (Exception e) {
@@ -109,5 +127,4 @@ public class BulkOperationServiceImpl implements BulkOperationService {
 			return LogFileContentEvent.serverError(e);
 		}
 	}
-
 }

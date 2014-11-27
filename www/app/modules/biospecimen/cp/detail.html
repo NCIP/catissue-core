@@ -1,7 +1,12 @@
 
-<div ui-view ng-if="$state.current.name !== participant-list">
-  <h4>{{cp.title}}</h4>
-</div>
-
-<div ui-view ng-if="$state.current.name === participant-list">
+<div>
+  <div os-side-menu ng-if="state.name != 'participant-list'">
+    <ul>
+     <li ui-sref-active="active"><a ui-sref=".overview">Overview</a></li>
+     <li ui-sref-active="active"><a ui-sref=".consents">Consents</a></li>
+     <li ui-sref-active="active"><a ui-sref=".events">Events</a></li>
+   </ul>
+  </div>
+  <div ng-class="{'os-side-menu-page-content': state.name != 'participant-list'}" ui-view>
+  </div>
 </div>

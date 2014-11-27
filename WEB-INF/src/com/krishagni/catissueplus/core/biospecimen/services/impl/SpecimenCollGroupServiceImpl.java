@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.krishagni.catissueplus.core.barcodegenerator.BarcodeGenerator;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollectionGroupFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
@@ -27,7 +28,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.GetScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent.ObjectType;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
@@ -46,8 +46,6 @@ import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
 import com.krishagni.catissueplus.core.labelgenerator.LabelGenerator;
-
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 
 @Service(value = "specimenCollGroupService")
 public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
@@ -234,14 +232,16 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	}
 
 	private void ensureUniqueName(String name, ObjectCreationException errorHandler) {
-		if (!daoFactory.getScgDao().isNameUnique(name)) {
+		if (daoFactory.getScgDao().getScgByName(name) != null) {
 			errorHandler.addError(ScgErrorCode.DUPLICATE_NAME, NAME);
 		}
 	}
 
 	private void ensureUniqueBarcode(String barcode, ObjectCreationException errorHandler) {
-		if (!daoFactory.getScgDao().isBarcodeUnique(barcode)) {
-			errorHandler.addError(ScgErrorCode.DUPLICATE_BARCODE, BARCODE);
+		if (!isBlank(barcode)) {
+			if (daoFactory.getScgDao().getScgByBarcode(barcode) != null) {
+				errorHandler.addError(ScgErrorCode.DUPLICATE_BARCODE, BARCODE);
+			}
 		}
 	}
 
@@ -261,7 +261,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 		// TODO: get SCG Label Format
 		String scgLabelFormat = null;
 		if (isBlank(scgLabelFormat)) {
-			if (!scg.isCompleted() && isBlank(name)) {
+			if (isBlank(name)) {
 				errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, NAME);
 				return;
 			}
@@ -287,10 +287,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 		// TODO:get Barcode Format from CP.
 		String barcodeFormat = null;
 		if (isBlank(barcodeFormat)) {
-			if (isBlank(barcode)) {
-				scg.setBarcode(scgBarcodeGenerator.generateBarcode(DEFAULT_BARCODE_TOKEN, scg));
-			}
-			else {
+			if (!isBlank(barcode)) {
 				scg.setBarcode(barcode);
 			}
 		}
@@ -400,7 +397,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 
 		for (SpecimenRequirement requirement : requirementColl) {
 			if (!Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(requirement.getActivityStatus())) {
-				SpecimenRequirement parentSpecimenReq = (SpecimenRequirement) requirement.getParentSpecimen();
+				SpecimenRequirement parentSpecimenReq = (SpecimenRequirement) requirement.getParentSpecimenRequirement();
 
 				String parentKey = "-1";
 				if (parentSpecimenReq != null) {

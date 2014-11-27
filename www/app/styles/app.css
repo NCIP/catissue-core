@@ -85,6 +85,11 @@ body {
 .os-navbar > ul > li.form-input:hover  {
   background: inherit;
 }
+
+.os-navbar-docked {
+  position: fixed;
+  top: 0px;
+}
  
 .os-footer {
   position: absolute;
@@ -230,7 +235,142 @@ input.ng-dirty.ng-invalid {
   width: 64px;
 }
 
-.os-btn-left {
-  float:left;
-  margin-left: 10px;
+.os-items-group {
+  width: 100%;
+}
+
+.os-items-group:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.os-item {
+  float: left;
+  padding: 0px 15px;
+}
+
+h1.os-section-title, h2.os-section-title, h3.os-section-title,
+h4.os-section-title, h5.os-section-title, h6.os-section-title {
+  margin-top: 0px;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+h1.os-sub-section-title, h2.os-sub-section-title, h3.os-sub-section-title,
+h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
+  margin-top: 0px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.os-action-btns a {
+  text-decoration: none;
+}
+
+.os-action-btns-md {
+  font-size: 18px;
+}
+
+.os-key-values {
+  list-style-type: none;
+  margin: 0px 0px 20px 0px;
+  padding: 0;
+}
+
+.os-key-values:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.os-key-values .item {
+  margin: 2px 0px 0px 0px;
+  float: left;
+}
+
+.os-two-cols > .item {
+  width: 50%;
+}
+
+.os-key-values .item .key, .os-key-values .item .value {
+  word-wrap: break-word;
+  word-break: break-word;
+  padding: 2px 5px 2px 0px;
+  line-height: 24px;
+}
+
+.os-key-values .item .key {
+  color: #707070;
+  font-weight: normal;
+  width: 150px;
+  float: left;
+  clear: left;
+}
+
+.os-key-values .item .value {
+  padding: 0px 5px;
+  float: left;
+  width: 210px;
+}
+
+.os-activity-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.os-activity-list .os-activity {
+  margin-bottom: 15px;
+}
+
+.os-activity-list .os-activity .title {
+  font-size: 16px;
+}
+
+.os-activity-list .os-activity .info {
+  font-size: 12px;
+  color: #707070;
+}
+
+.os-btn-section-collapse {
+  float: left;
+  margin: -4px 0px 0px -15px;
+  color: #707070;
+}
+
+.os-btn-transparent {
+  background: none;
+  border: none;
+  padding: 0px;
+}
+
+.os-btn-transparent:focus {
+  outline: 0;
+}
+
+.os-section {
+  margin-bottom: 20px;
+}
+  
+.os-table-outer-border {
+  border-top: 2px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+.btn-xs.os-btn-icon {
+  padding: 0px 4px!important;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+  background-color: #428bca;
+  color: #ffffff;
+}
+
+.os-table-muted-hdr > thead > tr > th {
+  color: #707070;
+  font-size: 12px;
 }

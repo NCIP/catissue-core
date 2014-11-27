@@ -1,9 +1,11 @@
+
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.privileges.domain.CPSiteRole;
@@ -54,6 +56,8 @@ public class CollectionProtocol {
 	private Set<ClinicalDiagnosis> clinicalDiagnosis = new HashSet<ClinicalDiagnosis>();
 	
 	private Set<ConsentTier> consentTier = new HashSet<ConsentTier>();
+	
+	private Set<DistributionProtocol> distributionProtocols = new HashSet<DistributionProtocol>();
 	
 	private Set<User> coordinators = new HashSet<User>();
 	
@@ -252,6 +256,15 @@ public class CollectionProtocol {
 		this.consentTier = consentTier;
 	}
 
+	public Set<DistributionProtocol> getDistributionProtocols() {
+		return distributionProtocols;
+	}
+
+	public void setDistributionProtocols(
+			Set<DistributionProtocol> distributionProtocols) {
+		this.distributionProtocols = distributionProtocols;
+	}
+
 	public Set<User> getCoordinators() {
 		return coordinators;
 	}
@@ -280,7 +293,8 @@ public class CollectionProtocol {
 		return childCollectionProtocols;
 	}
 
-	public void setChildCollectionProtocols(Set<CollectionProtocol> childCollectionProtocols) {
+	public void setChildCollectionProtocols(
+			Set<CollectionProtocol> childCollectionProtocols) {
 		this.childCollectionProtocols = childCollectionProtocols;
 	}
 
@@ -288,7 +302,8 @@ public class CollectionProtocol {
 		return collectionProtocolEvents;
 	}
 
-	public void setCollectionProtocolEvents(Set<CollectionProtocolEvent> collectionProtocolEvents) {
+	public void setCollectionProtocolEvents(
+			Set<CollectionProtocolEvent> collectionProtocolEvents) {
 		this.collectionProtocolEvents = collectionProtocolEvents;
 	}
 
@@ -298,5 +313,6 @@ public class CollectionProtocol {
 
 	public void setCpSiteRoles(Set<CPSiteRole> cpSiteRoles) {
 		this.cpSiteRoles = cpSiteRoles;
-	}	
+	}
+	
 }

@@ -13,6 +13,8 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -110,9 +112,34 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 				.get(CollectionProtocol.class.getName(), cpId);
 	}
 	
+	@Override
+	public CollectionProtocolEvent getCpe(Long cpeId) {
+		return (CollectionProtocolEvent) sessionFactory.getCurrentSession()
+				.get(CollectionProtocolEvent.class.getName(), cpeId);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public CollectionProtocolEvent getCpeByCollectionPointLabel(Long cpId, String collectionPointLabel) {
+		List<CollectionProtocolEvent> cpeList = sessionFactory.getCurrentSession()
+				.createCriteria(CollectionProtocolEvent.class)
+				.add(Restrictions.eq("collectionProtocol.id", cpId))
+				.add(Restrictions.eq("collectionPointLabel", collectionPointLabel))
+				.list();
+		
+		return cpeList.isEmpty() ? null : cpeList.iterator().next();
+	}
+
+	@Override
+	public SpecimenRequirement getSpecimenRequirement(Long requirementId) {
+		return (SpecimenRequirement) sessionFactory.getCurrentSession()
+				.get(SpecimenRequirement.class, requirementId);
+	}
+	
 	private static final String FQN = CollectionProtocol.class.getName();
 	
 	private static final String GET_PARTICIPANT_N_SPECIMEN_CNT = FQN + ".getParticipantAndSpecimenCount";
+
 	
 //
 //	@Override

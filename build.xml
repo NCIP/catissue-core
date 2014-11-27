@@ -241,12 +241,6 @@
 				<include name="**/*.hbm.xml" />
 			</fileset>
 		</copy>
-		<copy todir="${target.dir}">
-			<fileset dir="${src.dir}">
-				<include name="META-INF"/>		
-				<include name="META-INF/*"/>
-			</fileset>
-		</copy>
 	</target>
 
 	<!-- Create the Applet JAR Begins-->

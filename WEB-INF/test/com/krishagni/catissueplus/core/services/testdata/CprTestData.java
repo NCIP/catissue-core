@@ -9,23 +9,26 @@ import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentResponseDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CprRegistrationDetails;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateBulkRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCollectionGroupInfo;
 
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.ConsentTier;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.common.beans.SessionDataBean;
 
 public class CprTestData {
@@ -52,17 +55,29 @@ public class CprTestData {
 		ConsentTier tier = new ConsentTier();
 		tier.setStatement("statement1");
 		tier.setId(1l);
-		Collection<ConsentTier> consentTierCollection = new HashSet<ConsentTier>();
+		
+		ConsentTier tier1 = new ConsentTier();
+		tier1.setStatement("statement2");
+		tier1.setId(2l);
+		
+		ConsentTier tier2 = new ConsentTier();
+		tier2.setStatement("statement3");
+		tier2.setId(3l);
+		
+		Set<ConsentTier> consentTierCollection = new HashSet<ConsentTier>();
 		consentTierCollection.add(tier);
-		protocol.setConsentTierCollection(consentTierCollection);
+		consentTierCollection.add(tier1);
+		consentTierCollection.add(tier2);
+		
+		protocol.setConsentTier(consentTierCollection);
 		return protocol;
 	}
 
 	public static CollectionProtocol getCpToReturnWithEmptyConsents() {
 		Long cpId = 1l;
 		CollectionProtocol protocol = getCollectionProtocol(cpId);
-		Collection<ConsentTier> consentTierCollection = new HashSet<ConsentTier>();
-		protocol.setConsentTierCollection(consentTierCollection);
+		Set<ConsentTier> consentTierCollection = new HashSet<ConsentTier>();
+		protocol.setConsentTier(consentTierCollection);
 		return protocol;
 	}
 
@@ -139,26 +154,36 @@ public class CprTestData {
 		registrationDetails.setRegistrationDate(new Date());
 		registrationDetails.setBarcode("barcode1");
 		registrationDetails.setPpid("cpr_ppi");
-		registrationDetails.setParticipantDetail(getParticipantDto());
-		registrationDetails.setResponseDetail(getConsentRespDetails(registrationDetails));
+		registrationDetails.setParticipant(getParticipantDto());
+		registrationDetails.setConsentDetails(getConsentRespDetails(registrationDetails));
 		return registrationDetails;
 	}
 
-	private static ConsentResponseDetail getConsentRespDetails(CollectionProtocolRegistrationDetail registrationDetails) {
-		ConsentResponseDetail responseDetails = new ConsentResponseDetail();
-		responseDetails.setConsentDate(new Date());
-		responseDetails.setConsentUrl("www.google.com");
+	private static ConsentDetail getConsentRespDetails(CollectionProtocolRegistrationDetail registrationDetails) {
+		ConsentDetail responseDetails = new ConsentDetail();
+		responseDetails.setConsentSignatureDate(new Date());
+		responseDetails.setConsentDocumentUrl("www.google.com");
 		responseDetails.setWitnessName("admin@admin.com");
-		responseDetails.setConsentTierList(getConsentTierList());
+		responseDetails.setConsenTierStatements(getConsentTierList());
 		return responseDetails;
 	}
 
 	private static List<ConsentTierDetail> getConsentTierList() {
-		ConsentTierDetail tierDetails = new ConsentTierDetail();
-		tierDetails.setConsentStatment("statement1");
-		tierDetails.setParticipantResponse("Yes");
+		ConsentTierDetail tierDetail0 = new ConsentTierDetail();
+		tierDetail0.setConsentStatment("statement1");
+		tierDetail0.setParticipantResponse("Yes");
+		
+		ConsentTierDetail tierDetail1 = new ConsentTierDetail();
+		tierDetail1.setConsentStatment("statement2");
+		tierDetail1.setParticipantResponse("No");
+		
+		ConsentTierDetail tierDetail2 = new ConsentTierDetail();
+		tierDetail2.setConsentStatment("statement3");
+		tierDetail2.setParticipantResponse("Not Specified");
 		List<ConsentTierDetail> list = new ArrayList<ConsentTierDetail>();
-		list.add(tierDetails);
+		list.add(tierDetail0);
+		list.add(tierDetail1);
+		list.add(tierDetail2);
 		return list;
 	}
 
@@ -183,8 +208,8 @@ public class CprTestData {
 		return sessionDataBean;
 	}
 
-	private static Collection getCpeCollection(CollectionProtocol protocol) {
-		Collection<CollectionProtocolEvent> cpes = new HashSet<CollectionProtocolEvent>();
+	private static Set getCpeCollection(CollectionProtocol protocol) {
+		Set<CollectionProtocolEvent> cpes = new HashSet<CollectionProtocolEvent>();
 		CollectionProtocolEvent event = new CollectionProtocolEvent();
 		event.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
 		event.setClinicalDiagnosis(NOT_SPECIFIED);
@@ -192,13 +217,13 @@ public class CprTestData {
 		event.setCollectionPointLabel("visit1");
 		event.setStudyCalendarEventPoint(0.0);
 		event.setCollectionProtocol(protocol);
-		event.setSpecimenRequirementCollection(getSpecimenRequirementColl(event));
+		event.setSpecimenRequirements(getSpecimenRequirementColl(event));
 		cpes.add(event);
 		return cpes;
 	}
 
-	private static Collection<SpecimenRequirement> getSpecimenRequirementColl(CollectionProtocolEvent event) {
-		Collection<SpecimenRequirement> requirements = new HashSet<SpecimenRequirement>();
+	private static Set<SpecimenRequirement> getSpecimenRequirementColl(CollectionProtocolEvent event) {
+		Set<SpecimenRequirement> requirements = new HashSet<SpecimenRequirement>();
 		SpecimenRequirement requirement = new SpecimenRequirement();
 		requirement.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
 		requirement.setCollectionComments("comments");
@@ -223,8 +248,8 @@ public class CprTestData {
 		return requirements;
 	}
 	
-	private static edu.wustl.catissuecore.domain.User getOldUser(Long userId) {
-		edu.wustl.catissuecore.domain.User user = new edu.wustl.catissuecore.domain.User();
+	private static User getOldUser(Long userId) {
+		User user = new User();
 		user.setId(userId);
 		user.setFirstName("firstName");
 		user.setLastName("lastName");
@@ -260,7 +285,7 @@ public class CprTestData {
 	public static CollectionProtocol getCptoReturn() {
 		Long cpId = 1l;
 		CollectionProtocol protocol = getCollectionProtocol(cpId);
-		protocol.setCollectionProtocolEventCollection(getCpeCollection(protocol));
+		protocol.setCollectionProtocolEvents(getCpeCollection(protocol));
 		return protocol;
 	}
 
@@ -269,6 +294,36 @@ public class CprTestData {
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		reqEvent.setCprDetail(getRegistrationDetails(1l));
 		return reqEvent;
+	}
+	
+	public static CreateBulkRegistrationEvent getCreateBulkRegEvent() {
+		CreateBulkRegistrationEvent req = new CreateBulkRegistrationEvent();
+		ParticipantRegistrationDetails regDetail = new ParticipantRegistrationDetails();
+		regDetail = getRegDetails();
+		regDetail.getRegistrationDetails().add(getCprRegistrationDetails());
+		regDetail.getRegistrationDetails().add(getCprRegistrationDetails());
+		req.setParticipantDetails(regDetail);
+		req.setSessionDataBean(getSessionDataBean());
+		return req;
+	}
+	
+	private static ParticipantRegistrationDetails getRegDetails() {
+		ParticipantRegistrationDetails reg = new ParticipantRegistrationDetails();
+		ParticipantDetail p = getParticipantDto();
+		reg.setFirstName(p.getFirstName());
+		reg.setLastName(p.getLastName());
+		reg.setMedicalIdentifierList(p.getMedicalIdentifierList());
+		return reg;
+	}
+	
+	public static CprRegistrationDetails getCprRegistrationDetails() {
+		CprRegistrationDetails cpr = new CprRegistrationDetails();
+		cpr.setCpId(1L);
+		cpr.setCprId(3L);
+		cpr.setPpId("default-test-ppid");
+		cpr.setRegistrationDate(new Date());
+		cpr.setConsentResponseDetail(getConsentRespDetails(null));
+		return cpr;
 	}
 
 	public static CreateRegistrationEvent getCprCreateEventDuplicatePpid() {

@@ -66,7 +66,7 @@
 			column="COLLECTION_PROTOCOL_REG_ID" />
 
 		<many-to-one name="collectionProtocolEvent"
-			class="edu.wustl.catissuecore.domain.CollectionProtocolEvent" column="COLLECTION_PROTOCOL_EVENT_ID" />
+			class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent" column="COLLECTION_PROTOCOL_EVENT_ID" />
 
 		<many-to-one name="collectionSite" class="com.krishagni.catissueplus.core.administrative.domain.Site"
 			column="SITE_ID" />
@@ -77,31 +77,5 @@
 			<one-to-many
 				class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen" />
 		</set>
-		
-		<query name="getScgById">
-              from com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup scg
-              where scg.id = :scgId
-        </query>
-        
-        <query name="getScgIdByBarcode">
-        	select scg.id from com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup scg
-              where scg.barcode = :barcode
-        </query>
-        
-        <query name="getScgIdByName">
-        	select scg.id from com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup scg
-              where scg.name = :name
-        </query>
-
-        <query name="getScgByName">
-        	select scg from com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup scg
-              where scg.name = :name
-        </query>
-                
-        <query name="getCpeByScgId">
-              select scg.collectionProtocolEvent from com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup scg
-              where scg.id = :scgId
-        </query>
-            
 	</class>
 </hibernate-mapping>

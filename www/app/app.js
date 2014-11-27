@@ -37,18 +37,77 @@ angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.m
             );
           }
         },
-        controller: function($scope, cp) {
+        controller: function($scope, $state, cp) {
           $scope.cp = cp;
         },
         breadcrumb: {
-          title: '{{cp.title}}'
+          title: '{{cp.title}}',
+          state: 'cp-detail.overview'
         }
+      })
+      .state('cp-detail.overview', {
+        url: '/overview',
+        templateUrl: 'modules/biospecimen/cp/overview.html',
+        parent: 'cp-detail'
+      })
+      .state('cp-detail.consents', {
+        url: '/consents',
+        templateUrl: 'modules/biospecimen/cp/consents.html',
+        parent: 'cp-detail'
+      })
+      .state('cp-detail.events', {
+        url: '/events',
+        templateUrl: 'modules/biospecimen/cp/events.html',
+        parent: 'cp-detail'
       })
       .state('participant-list', {
         url: '/participants',
         templateUrl: 'modules/biospecimen/participant/list.html',
         controller: 'ParticipantListCtrl',
         parent: 'cp-detail'
+      })
+      .state('participant-detail', {
+        url: '/participants/:cprId',
+        templateUrl: 'modules/biospecimen/participant/detail.html',
+        resolve: {
+          cpr: function($stateParams, CprService) {
+            return CprService.getRegistration($stateParams.cprId).then(
+              function(result) {
+                return result.data;
+              }
+            );   
+          }
+        },
+        controller: 'ParticipantDetailCtrl',
+        parent: 'signed-in'
+      })
+      .state('participant-detail.overview', {
+        url: '/overview',
+        templateUrl: 'modules/biospecimen/participant/overview.html',
+        controller: function() {
+        },
+        parent: 'participant-detail'
+      })
+      .state('participant-detail.consents', {
+        url: '/consents',
+        templateUrl: 'modules/biospecimen/participant/consents.html',
+        controller: function() {
+        },
+        parent: 'participant-detail'
+      })
+      .state('participant-detail.visits', {
+        url: '/visits',
+        templateUrl: 'modules/biospecimen/participant/visits.html',
+        controller: function() {
+        },
+        parent: 'participant-detail'
+      })
+      .state('participant-detail.annotations', {
+        url: '/annotations',
+        templateUrl: 'modules/biospecimen/participant/annotations.html',
+        controller: function() {
+        },
+        parent: 'participant-detail'
       })
       .state('institute-list', {
         url: '/institutes',
@@ -169,4 +228,9 @@ angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.m
     }
 
     ApiUtil.initialize();
+
+    $rootScope.$on('$stateChangeSuccess', 
+      function(event, toState, toParams, fromState, fromParams) { 
+        $rootScope.state = toState;
+      });
   });

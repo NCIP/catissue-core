@@ -10,9 +10,6 @@ public class BulkOperationDetail {
 	
 	private String operationName;
 	
-	//
-	// TODO: Changed this to displayName; changed corresponding accessor and mutator methods
-	//
 	private String displayName;
 	
 	private String csvTemplate;
@@ -39,8 +36,8 @@ public class BulkOperationDetail {
 		return displayName;
 	}
 
-	public void setDisplayName(String dropDownName) {
-		this.displayName = dropDownName;
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
 	public String getCsvTemplate() {

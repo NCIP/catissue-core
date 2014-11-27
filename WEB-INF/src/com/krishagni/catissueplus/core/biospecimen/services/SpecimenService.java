@@ -28,6 +28,4 @@ public interface SpecimenService {
 	public SpecimenUpdatedEvent patchSpecimen(PatchSpecimenEvent event);
 
 	public AliquotCreatedEvent createAliquot(CreateAliquotEvent event);
-
-	public SpecimensByScgEvent getSpecimensForScg(ReqSpecimensByScgEvent event);
 }

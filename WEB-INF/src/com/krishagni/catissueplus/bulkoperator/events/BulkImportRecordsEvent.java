@@ -7,9 +7,6 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 public class BulkImportRecordsEvent extends RequestEvent {
 	private String operationName;
 	
-	//
-	// TODO: Changed this from byte array to file
-	//
 	private File fileIn;
 
 	public String getOperationName() {

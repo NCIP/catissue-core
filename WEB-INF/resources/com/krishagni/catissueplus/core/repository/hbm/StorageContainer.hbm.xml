@@ -129,19 +129,5 @@
             class="com.krishagni.catissueplus.core.administrative.domain.User"
             cascade="none"
             column="CREATED_BY"/>
-
-	<query name="getContainers">
-		FROM com.krishagni.catissueplus.core.administrative.domain.StorageContainer 
-	</query>            
-
- 	<query name="getContainerByName">
-		SELECT container FROM com.krishagni.catissueplus.core.administrative.domain.StorageContainer container WHERE container.name = :name 
-		and container.activityStatus = 'Active'
-	</query>
-	
-	<query name="getContainerByBarcode">
-		SELECT container FROM com.krishagni.catissueplus.core.administrative.domain.StorageContainer container WHERE container.barcode = :barcode 
-		and container.activityStatus = 'Active'
-	</query>
    </class>
 </hibernate-mapping>

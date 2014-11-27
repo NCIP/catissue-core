@@ -7,9 +7,6 @@ import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-//
-// TODO: Changed name
-//
 public class BulkOperationsEvent extends ResponseEvent {
 	private List<BulkOperationDetail> operations = new ArrayList<BulkOperationDetail>();
 

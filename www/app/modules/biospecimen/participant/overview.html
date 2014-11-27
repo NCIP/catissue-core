@@ -1,0 +1,207 @@
+
+<div class="os-items-group">
+  <div class="os-item">
+    <h3 class="os-section-title"> {{cpr.participant.lastName}} {{cpr.participant.firstName}} </h3>
+  </div>
+
+  <div class="os-item os-action-btns os-action-btns-md">
+    <a><span class="glyphicon glyphicon-pencil"></span></a>
+  </div>
+</div>
+
+<div class="clearfix">
+  <div class="col-xs-8">
+    <ul class="os-key-values os-two-cols" os-inline-editors on-save="editCpr">
+      <li class="item">
+        <strong class="key">Birth Date:</strong>
+        <os-inline-edit editor="bdEditor" name="birthDate" class="value" value="cpr.participant.birthDate">
+          <span ng-if="bdEditor.isDisplayMode()">{{bdEditor.viewValue | date: 'MMM dd, yyyy'}}</span>
+          <input ng-if="bdEditor.isEditMode()" class="form-control" type="text" ng-model="bdEditor.editValue"
+            datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true">
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key">Medical Record Nos:</strong>
+        <span class="value" os-inline-edit>{{cpr.participant.pmis | showMrns}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key">Registration Date:</strong>
+        <os-inline-edit editor="rdEditor" name="regDate" class="value" value="cpr.registrationDate">
+          <span ng-if="rdEditor.isDisplayMode()">{{rdEditor.viewValue | date: 'MMM dd, yyyy'}}</span>
+          <input ng-if="rdEditor.isEditMode()" class="form-control" type="text" ng-model="rdEditor.editValue"
+            datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true">
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key">Protocol Identifier:</strong>
+        <os-inline-edit editor="ppidEditor" name="ppid" class="value" value="cpr.ppid">
+          <span ng-if="ppidEditor.isDisplayMode()">{{ppidEditor.viewValue}}</span>
+          <input ng-if="ppidEditor.isEditMode()" type="text" ng-model="ppidEditor.editValue" class="form-control" 
+            required placeholder="Participant Protocol ID">
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key">Social Security No:</strong>
+        <os-inline-edit editor="ssnEditor" name="ssn" class="value" value="cpr.participant.ssn">
+          <span ng-if="ssnEditor.isDisplayMode()">{{ssnEditor.viewValue}}</span>
+          <input ng-if="ssnEditor.isEditMode()" type="text" ng-model="ssnEditor.editValue" class="form-control" 
+              ui-mask="999-99-9999" placeholder="XXX-XX-XXXX">
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key">Gender:</strong>
+        <os-inline-edit editor="genderEditor" name="gender" class="value" value="cpr.participant.gender">
+          <span ng-if="genderEditor.isDisplayMode()">{{genderEditor.viewValue}}</span>
+          <div ng-if="genderEditor.isEditMode()">
+            <ui-select ng-model="genderEditor.editValue">
+              <ui-select-match placeholder="Select Gender">{{$select.selected}}</ui-select-match>
+              <ui-select-choices repeat="gender in gender_pvs | filter: $select.search">
+                <span ng-bind-html="gender | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key">Vital Status:</strong>
+        <os-inline-edit editor="vsEditor" name="vitalStatus" class="value" value="cpr.participant.vitalStatus">
+          <span ng-if="vsEditor.isDisplayMode()">{{vsEditor.viewValue}}</span>
+          <div ng-if="vsEditor.isEditMode()">
+            <ui-select ng-model="vsEditor.editValue">
+              <ui-select-match placeholder="Select Vital Status">{{$select.selected}}</ui-select-match>
+              <ui-select-choices repeat="vitalStatus in vitalStatus_pvs | filter: $select.search">
+                <span ng-bind-html="vitalStatus | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key">Race:</strong>
+        <os-inline-edit editor="raceEditor" name="race" class="value" value="cpr.participant.race">
+          <span ng-if="raceEditor.isDisplayMode()">{{raceEditor.viewValue.join(", ")}}</span>
+          <div ng-if="raceEditor.isEditMode()">
+            <ui-select multiple ng-model="raceEditor.editValue">
+              <ui-select-match placeholder="Select Race">{{$item}}</ui-select-match>
+              <ui-select-choices repeat="race in race_pvs | filter: $select.search">
+                <span ng-bind-html="race | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </os-inline-edit>
+      </li>
+    </ul>
+
+    <div class="os-section" ng-init="ovCollapsed=false">
+      <button class="os-btn-section-collapse os-btn-transparent" ng-click="ovCollapsed=!ovCollapsed">
+        <span ng-if="!ovCollapsed">&#9660;</span>
+        <span ng-if="ovCollapsed">&#9654;</span>
+      </button>
+      <h3 class="os-sub-section-title">Occurred Visits</h3>
+      <div collapse="ovCollapsed">
+        <table class="table table-hover os-table-muted-hdr os-table-outer-border">
+          <thead>
+            <tr>
+              <th class="col-xs-5">Visit</th>
+              <th class="col-xs-2">Collection Date</th>
+              <th class="col-xs-2">Specimens (A)</th>
+              <th class="col-xs-2">Specimens (C)</th>
+              <th class="col-xs-1">&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="visit in visits | filter: {status: 'Completed'}" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
+              <td><a>{{visit.name}} (T{{visit.eventPoint}})</a></td>
+              <td>{{visit.collectionDate | date: 'MMM dd, yyyy'}}</td>
+              <td>{{visit.anticipatedSpecimens}}</td>
+              <td>{{visit.collectedSpecimens}}</td>
+              <td>
+                <div class="btn-group" dropdown ng-if="showBtns">
+                  <button type="button" class="btn btn-xs btn-default os-btn-icon">
+                    <span class="fa fa-cog"></span>
+                  </button>
+                  <button type="button" class="btn btn-xs btn-default os-btn-icon dropdown-toggle">
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">View Visit</a></li>
+                    <li><a href="#">Edit Visit</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Collect Unplanned Specimens</a></li>
+                    <li><a href="#">Print Specimen Labels</a></li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="os-section" ng-init="avCollapsed=false">
+      <button class="os-btn-section-collapse os-btn-transparent" ng-click="avCollapsed=!avCollapsed">
+        <span ng-if="!avCollapsed">&#9660;</span>
+        <span ng-if="avCollapsed">&#9654;</span>
+      </button>
+      <h3 class="os-sub-section-title">Anticipated Visits</h3>
+      <div collapse="avCollapsed">
+        <table class="table table-hover os-table-outer-border">
+          <thead>
+            <tr>
+              <th class="col-xs-5">Visit</th>
+              <th class="col-xs-3">Collection Date (A)</th>
+              <th class="col-xs-3">Specimens (A)</th>
+              <th class="col-xs-1">&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="visit in visits | filter: {status: 'Pending'}" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
+              <td><a>{{visit.name}} (T{{visit.eventPoint}})</a></td>
+              <td>{{visit.anticipatedCollectionDate | date: 'MMM dd, yyyy'}}</td>
+              <td>{{visit.anticipatedSpecimens}}</td>
+              <td>
+                <div class="btn-group" ng-if="showBtns">
+                  <button type="button" class="btn btn-xs btn-default os-btn-icon">
+                    <span class="fa fa-sign-in"></span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-4">
+    <h3 class="os-sub-section-title"> Recent Activity </h3>
+    <ul class="os-activity-list">
+      <li class="os-activity">
+        <div class="title"><a>Specimen abc disposed</a></div>
+        <div class="info"><span>User 1 - an hour ago</span></div>
+      </li>
+      <li class="os-activity">
+        <div class="title"><a>Specimen xyz aliquoted into 4 specimens</a></div>
+        <div class="info"><span>User 1 - 5 hrs ago</span></div>
+      </li>
+      <li class="os-activity">
+        <div class="title"><a>Specimen xyz under visit SCG1 collected</a></div>
+        <div class="info"><span>User 1 - 10 hrs ago</span></div>
+      </li>
+      <li class="os-activity">
+        <div class="title"><a>Visit SCG1 completed</a></div>
+        <div class="info"><span> User 1 - 20 hrs ago</span></div>
+      </li>
+      <li class="os-activity">
+        <div class="title"><a>Consent Response Updated</a></div>
+        <div class="info"><span> User 1 - Nov 10, 2014 </span></div>
+      </li>
+    </ul>
+  </div>
+</div>

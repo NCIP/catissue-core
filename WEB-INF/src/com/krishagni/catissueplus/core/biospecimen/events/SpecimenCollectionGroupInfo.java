@@ -4,10 +4,9 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.common.util.Status;
-
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 
 public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectionGroupInfo> {
 

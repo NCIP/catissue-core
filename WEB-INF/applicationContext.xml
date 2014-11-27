@@ -101,6 +101,30 @@
 	<property name="scgLabelGenerator" ref="scgLabelGenerator"/>
 	<property name="scgBarcodeGenerator" ref="scgBarcodeGenerator"/>
   </bean>
+
+  <bean id="bulkOperationService" class="com.krishagni.catissueplus.bulkoperator.services.impl.BulkOperationServiceImpl">
+    <property name="bulkOperationDao" ref="bulkOperationDao"/>
+    <property name="jobDao" ref="bulkOperationJobDao"/>
+    <property name="userDao" ref="userDao"/>
+    <property name="importerFactory" ref="importerFactory"/>
+  </bean>
+
+  <bean id="importerFactory" class="com.krishagni.catissueplus.bulkoperator.services.impl.ObjectImporterFactoryImpl">
+    <property name="importersMap">
+      <map>
+        <entry key="ParticipantRegistrationDetails" value-ref="cprObjectImporter"/>
+        <entry key="ScgDetail" value-ref="scgObjectImporter"/>
+      </map>
+    </property>
+  </bean>
+  
+  <bean id="cprObjectImporter" class="com.krishagni.catissueplus.bulkoperator.services.impl.CprObjectImporter">
+	<property name="cprSvc" ref="cprSvc"/>
+  </bean>
+  
+  <bean id="scgObjectImporter" class="com.krishagni.catissueplus.bulkoperator.services.impl.ScgObjectImporter">
+	<property name="scgSvc" ref="specimenCollGroupService"/>
+  </bean>
   
   <bean id="cpSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
@@ -229,6 +253,14 @@
   </bean>
 
   <bean id="userDao" class="com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl">
+    <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
+  </bean>
+  
+  <bean id="bulkOperationDao" class="com.krishagni.catissueplus.bulkoperator.repository.impl.BulkOperationDaoImpl">
+    <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
+  </bean>
+  
+  <bean id="bulkOperationJobDao" class="com.krishagni.catissueplus.bulkoperator.repository.impl.BulkOperationJobDaoImpl">
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
   </bean>
   

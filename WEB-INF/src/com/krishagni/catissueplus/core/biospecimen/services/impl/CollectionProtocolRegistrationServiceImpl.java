@@ -14,13 +14,10 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErr
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimenCollGroupsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.BulkRegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CprRegistrationDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateBulkRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchRegistrationEvent;
@@ -32,15 +29,12 @@ import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEven
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
-import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.security.global.Permissions;
 
 @Service(value = "CollectionProtocolRegistrationServiceImpl")
@@ -93,7 +87,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			if (!privilegeSvc.hasPrivilege(req.getSessionDataBean().getUserId(), cpId, Permissions.REGISTRATION)){
 				return RegistrationCreatedEvent.accessDenied(Permissions.REGISTRATION, cpId);
 			}
-			
+
 			CollectionProtocolRegistration cpr = registrationFactory.createCpr(req.getCprDetail());
 			
 			ObjectCreationException oce = new ObjectCreationException();
@@ -271,13 +265,13 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		Long cpId = cpr.getCollectionProtocol().getId();
 		String ppid = cpr.getProtocolParticipantIdentifier();
 		
-		if (!daoFactory.getCprDao().isPpidUniqueForProtocol(cpId, ppid)) {
+		if (daoFactory.getCprDao().getCprByPpId(cpId, ppid) != null) {
 			oce.addError(ParticipantErrorCode.DUPLICATE_PPID, PPID);
 		}
 	}
 
 	private void ensureUniqueBarcode(String barcode, ObjectCreationException oce) {
-		if (!StringUtils.isBlank(barcode) && !daoFactory.getCprDao().isBarcodeUnique(barcode)) {
+		if (!StringUtils.isBlank(barcode) && daoFactory.getCprDao().getCprByBarcode(barcode) != null) {
 			oce.addError(ParticipantErrorCode.DUPLICATE_BARCODE, BARCODE);
 		}
 	}
