@@ -4,7 +4,7 @@ angular.module('openspecimen')
     return {
       restrict: "A",
       link: function(scope, element, attr) {
-        var elTop = element.position().top;
+        var elTop = 57;//element.position().top; // TODO:
         element.addClass('os-side-menu-wrapper')
           .css("height", $window.innerHeight - elTop);
 

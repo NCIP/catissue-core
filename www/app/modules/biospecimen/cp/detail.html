@@ -1,16 +1,12 @@
 
-<div ui-view ng-if="$state.current.name !== participant-list">
-  <div os-side-menu>
+<div>
+  <div os-side-menu ng-if="state.name != 'participant-list'">
     <ul>
-     <li><a href="#">Back</a></li>
-     <li><a href="#">Overview</a></li>
-     <li><a href="#">Consents</a></li>
-     <li><a href="#">Visits</a></li>
+     <li ui-sref-active="active"><a ui-sref=".overview">Overview</a></li>
+     <li ui-sref-active="active"><a ui-sref=".consents">Consents</a></li>
+     <li ui-sref-active="active"><a ui-sref=".events">Events</a></li>
    </ul>
   </div>
-  <div style="padding-left: 80px;">
+  <div ng-class="{'os-side-menu-page-content': state.name != 'participant-list'}" ui-view>
   </div>
-</div>
-
-<div ui-view ng-if="$state.current.name === participant-list">
 </div>

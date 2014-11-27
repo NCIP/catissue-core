@@ -7,7 +7,7 @@ angular.module('openspecimen')
       while (state && state.name !== '') {
         if (state.breadcrumb) {
           var title = $interpolate(state.breadcrumb.title)(state.locals.globals);
-          breadcrumbs.push({title: title, state: state.name});
+          breadcrumbs.push({title: title, state: state.breadcrumb.state || state.name});
         }
 
         state = state.parent;
