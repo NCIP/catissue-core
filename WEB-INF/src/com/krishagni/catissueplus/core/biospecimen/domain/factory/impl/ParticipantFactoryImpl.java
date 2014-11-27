@@ -71,7 +71,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		setGender(participant, details.getGender(), oce);
 		setRace(participant, details.getRace(), oce);
 		setEthnicity(participant, details.getEthnicity(), oce);
-		setPmi(participant, details.getMedicalIdentifierList(), oce);
+		setPmi(participant, details.getPmis(), oce);
 		
 		participant.setEmpi(details.getEmpi());
 		

@@ -33,7 +33,7 @@ public class ParticipantDetail {
 
 	private String vitalStatus;
 
-	private List<ParticipantMedicalIdentifierNumberDetail> medicalIdentifierList;
+	private List<ParticipantMedicalIdentifierNumberDetail> pmis;
 
 	private String sexGenotype;
 
@@ -111,12 +111,12 @@ public class ParticipantDetail {
 		this.vitalStatus = vitalStatus;
 	}
 
-	public List<ParticipantMedicalIdentifierNumberDetail> getMedicalIdentifierList() {
-		return medicalIdentifierList;
+	public List<ParticipantMedicalIdentifierNumberDetail> getPmis() {
+		return pmis;
 	}
 
-	public void setMedicalIdentifierList(List<ParticipantMedicalIdentifierNumberDetail> medicalIdentifierList) {
-		this.medicalIdentifierList = medicalIdentifierList;
+	public void setPmis(List<ParticipantMedicalIdentifierNumberDetail> pmis) {
+		this.pmis = pmis;
 	}
 
 	public String getSexGenotype() {
@@ -196,7 +196,7 @@ public class ParticipantDetail {
 		{
 			
 		}
-		participantDetail.setMedicalIdentifierList(pmiColl);
+		participantDetail.setPmis(pmiColl);
 		Set<String> raceSet = participant.getRaceColl();
 		Set<String> newRace = new HashSet<String>(); 
 		if(raceSet != null){
