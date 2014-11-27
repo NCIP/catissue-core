@@ -1,7 +1,8 @@
 <div>
+  <alert ng-if="alert.msg" type="{{alert.type}}" class="os-alert">{{alert.msg}}</alert>
   <div class="os-page-hdr">
     <h3>Collection Protocols</h3>
-    <a class="os-icon-btn" title="Click to add new Collection Protocol">
+    <a class="os-icon-btn" title="Click to add new Collection Protocol" ng-click="addCollectionProtocol()">
       <span class="glyphicon glyphicon-plus"></span>
     </a>
   </div>

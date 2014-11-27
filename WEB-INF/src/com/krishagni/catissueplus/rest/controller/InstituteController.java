@@ -44,8 +44,7 @@ public class InstituteController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public InstituteDetails createInstitute(
-			@RequestBody InstituteDetails instituteDetails) {
+	public InstituteDetails createInstitute(@RequestBody InstituteDetails instituteDetails) {
 		CreateInstituteEvent event = new CreateInstituteEvent();
 		event.setSessionDataBean(getSession());
 		event.setInstituteDetails(instituteDetails);
@@ -53,7 +52,7 @@ public class InstituteController {
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
-			return resp.getInstituteDetails();
+		return resp.getInstituteDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{instituteId}")
@@ -68,7 +67,7 @@ public class InstituteController {
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
-			return resp.getInstituteDetails();
+		return resp.getInstituteDetails();
 	}
 
 	@ResponseBody

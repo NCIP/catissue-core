@@ -1,6 +1,11 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -11,6 +16,8 @@ public class InstituteDetails {
 	private String name;
 
 	private String activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
+	
+	private List<DepartmentDetails> departments;
 
 	public Long getId() {
 		return id;
@@ -35,12 +42,21 @@ public class InstituteDetails {
 	public void setActivityStatus(String activityStatus) {
 		this.activityStatus = activityStatus;
 	}
+	
+	public List<DepartmentDetails> getDepartments(){
+		return departments;
+	}
+	
+	public void setDepartments(List<DepartmentDetails> departments){		
+		this.departments = departments;
+	}
 
 	public static InstituteDetails fromDomain(Institute institute) {
 		InstituteDetails instituteDetails = new InstituteDetails();
 		instituteDetails.setId(institute.getId());
 		instituteDetails.setName(institute.getName());
 		instituteDetails.setActivityStatus(institute.getActivityStatus());
+		instituteDetails.setDepartments(DepartmentDetails.fromDepartments(institute.getDepartmentCollection()));
 		return instituteDetails;
 	}
 
