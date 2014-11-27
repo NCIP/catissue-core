@@ -32,12 +32,6 @@ angular.module('openspecimen')
         return $http.post(
           url() + '/' + cpId + '/registered-participants', 
           cpr).then(ApiUtil.processResp, ApiUtil.processResp);
-      },
-
-      createCollectionProtocol: function(cp) {
-        return $http.post(
-          url(),
-          cp).then(ApiUtil.processResp, ApiUtil.processResp);
       }
     }
   });

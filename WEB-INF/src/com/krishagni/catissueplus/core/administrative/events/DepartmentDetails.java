@@ -1,10 +1,6 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -13,6 +9,8 @@ public class DepartmentDetails {
 	private Long id;
 
 	private String name;
+
+	private String instituteName;
 
 	private String activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
 
@@ -32,6 +30,14 @@ public class DepartmentDetails {
 		this.name = name;
 	}
 
+	public String getInstituteName() {
+		return instituteName;
+	}
+
+	public void setInstituteName(String instituteName) {
+		this.instituteName = instituteName;
+	}
+
 	public String getActivityStatus() {
 		return activityStatus;
 	}
@@ -40,20 +46,13 @@ public class DepartmentDetails {
 		this.activityStatus = activityStatus;
 	}
 
-	public static DepartmentDetails fromDepartment(Department department) {
+	public static DepartmentDetails fromDomain(Department department) {
 		DepartmentDetails details = new DepartmentDetails();
 		details.setId(department.getId());
 		details.setName(department.getName());
-		details.setActivityStatus(department.getActivityStatus());
+		//details.setInstituteName(department.getInstitute().getName());
+		//details.setActivityStatus(department.getActivityStatus());
 		return details;
-	}
-	
-	public static List<DepartmentDetails> fromDepartments(Set<Department> departments) {
-		List<DepartmentDetails> departmentsDetails = new ArrayList<DepartmentDetails>();
-		for(Department department : departments) {
-			departmentsDetails.add(fromDepartment(department));
-		}
-		return departmentsDetails;
 	}
 
 }

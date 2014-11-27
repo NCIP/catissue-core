@@ -6,7 +6,7 @@
 <hibernate-mapping auto-import="false">
     <class
         name="com.krishagni.catissueplus.core.administrative.domain.User"
-        table="OS_USER"
+        table="CATISSUE_USER"
         lazy="true">
 	
     	<cache usage="read-write" />
@@ -74,6 +74,9 @@
         <many-to-one
             name="department"
             class="com.krishagni.catissueplus.core.administrative.domain.Department"
+            cascade="none"
+            update="true"
+            insert="true"
             column="DEPARTMENT_ID"/>
 
         <many-to-one name="address" class="com.krishagni.catissueplus.core.administrative.domain.Address" column="ADDRESS_ID" cascade="all" not-null="true" />

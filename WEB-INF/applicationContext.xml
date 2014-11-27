@@ -315,17 +315,16 @@
 		<property name="daoFactory" ref="biospecimenDaoFactory" />
 	</bean>
 
-<!-- 	<bean id="departmentFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DepartmentFactoryImpl">
+	<bean id="departmentFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DepartmentFactoryImpl">
 		<property name="daoFactory" ref="biospecimenDaoFactory"/>
-	</bean> -->
+	</bean>
 
 	<bean id="deptSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.DepartmentServiceImpl">
 		<property name="daoFactory" ref="biospecimenDaoFactory"/>
-		<!-- <property name="departmentFactory" ref="departmentFact"/> -->
+		<property name="departmentFactory" ref="departmentFact"/>
 	</bean>
 
 	<bean id="instituteFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl">
-	  <property name="daoFactory" ref="biospecimenDaoFactory"/>
 	</bean>
 
 	<bean id="instSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.InstituteServiceImpl">
