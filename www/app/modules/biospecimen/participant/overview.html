@@ -1,7 +1,14 @@
 
 <div class="os-items-group">
   <div class="os-item">
-    <h3 class="os-section-title"> {{cpr.participant.lastName}} {{cpr.participant.firstName}} </h3>
+    <h3 class="os-section-title" ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)"> 
+      <span ng-switch-when="true">
+        {{cpr.participant.firstName}} {{cpr.participant.lastName}}
+      </span>
+      <span ng-switch-when="false">
+        N/A
+      </span>
+    </h3>
   </div>
 
   <div class="os-item os-action-btns os-action-btns-md">
@@ -13,50 +20,50 @@
   <div class="col-xs-8">
     <ul class="os-key-values os-two-cols" os-inline-editors on-save="editCpr">
       <li class="item">
-        <strong class="key">Birth Date:</strong>
-        <os-inline-edit editor="bdEditor" name="birthDate" class="value" value="cpr.participant.birthDate">
-          <span ng-if="bdEditor.isDisplayMode()">{{bdEditor.viewValue | date: 'MMM dd, yyyy'}}</span>
+        <strong class="key key-sm">Birth Date:</strong>
+        <os-inline-edit editor="bdEditor" name="birthDate" class="value value-md" value="cpr.participant.birthDate">
+          <span ng-if="bdEditor.isDisplayMode()">{{bdEditor.viewValue | date: 'MMM dd, yyyy' | osNoValue}}</span>
           <input ng-if="bdEditor.isEditMode()" class="form-control" type="text" ng-model="bdEditor.editValue"
             datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true">
         </os-inline-edit>
       </li>
 
       <li class="item">
-        <strong class="key">Medical Record Nos:</strong>
-        <span class="value" os-inline-edit>{{cpr.participant.pmis | showMrns}}</span>
+        <strong class="key key-sm">Medical Record Nos:</strong>
+        <span class="value value-md" os-inline-edit>{{cpr.participant.pmis | showMrns | osNoValue}}</span>
       </li>
 
       <li class="item">
-        <strong class="key">Registration Date:</strong>
-        <os-inline-edit editor="rdEditor" name="regDate" class="value" value="cpr.registrationDate">
-          <span ng-if="rdEditor.isDisplayMode()">{{rdEditor.viewValue | date: 'MMM dd, yyyy'}}</span>
+        <strong class="key key-sm">Registration Date:</strong>
+        <os-inline-edit editor="rdEditor" name="regDate" class="value value-md" value="cpr.registrationDate">
+          <span ng-if="rdEditor.isDisplayMode()">{{rdEditor.viewValue | date: 'MMM dd, yyyy' | osNoValue}}</span>
           <input ng-if="rdEditor.isEditMode()" class="form-control" type="text" ng-model="rdEditor.editValue"
             datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true">
         </os-inline-edit>
       </li>
 
       <li class="item">
-        <strong class="key">Protocol Identifier:</strong>
-        <os-inline-edit editor="ppidEditor" name="ppid" class="value" value="cpr.ppid">
-          <span ng-if="ppidEditor.isDisplayMode()">{{ppidEditor.viewValue}}</span>
+        <strong class="key key-sm">Protocol Identifier:</strong>
+        <os-inline-edit editor="ppidEditor" name="ppid" class="value value-md" value="cpr.ppid">
+          <span ng-if="ppidEditor.isDisplayMode()">{{ppidEditor.viewValue | osNoValue}}</span>
           <input ng-if="ppidEditor.isEditMode()" type="text" ng-model="ppidEditor.editValue" class="form-control" 
             required placeholder="Participant Protocol ID">
         </os-inline-edit>
       </li>
 
       <li class="item">
-        <strong class="key">Social Security No:</strong>
-        <os-inline-edit editor="ssnEditor" name="ssn" class="value" value="cpr.participant.ssn">
-          <span ng-if="ssnEditor.isDisplayMode()">{{ssnEditor.viewValue}}</span>
+        <strong class="key key-sm">Social Security No:</strong>
+        <os-inline-edit editor="ssnEditor" name="ssn" class="value value-md" value="cpr.participant.ssn">
+          <span ng-if="ssnEditor.isDisplayMode()">{{ssnEditor.viewValue | osNoValue}}</span>
           <input ng-if="ssnEditor.isEditMode()" type="text" ng-model="ssnEditor.editValue" class="form-control" 
               ui-mask="999-99-9999" placeholder="XXX-XX-XXXX">
         </os-inline-edit>
       </li>
 
       <li class="item">
-        <strong class="key">Gender:</strong>
-        <os-inline-edit editor="genderEditor" name="gender" class="value" value="cpr.participant.gender">
-          <span ng-if="genderEditor.isDisplayMode()">{{genderEditor.viewValue}}</span>
+        <strong class="key key-sm">Gender:</strong>
+        <os-inline-edit editor="genderEditor" name="gender" class="value value-md" value="cpr.participant.gender">
+          <span ng-if="genderEditor.isDisplayMode()">{{genderEditor.viewValue | osNoValue}}</span>
           <div ng-if="genderEditor.isEditMode()">
             <ui-select ng-model="genderEditor.editValue">
               <ui-select-match placeholder="Select Gender">{{$select.selected}}</ui-select-match>
@@ -69,9 +76,9 @@
       </li>
 
       <li class="item">
-        <strong class="key">Vital Status:</strong>
-        <os-inline-edit editor="vsEditor" name="vitalStatus" class="value" value="cpr.participant.vitalStatus">
-          <span ng-if="vsEditor.isDisplayMode()">{{vsEditor.viewValue}}</span>
+        <strong class="key key-sm">Vital Status:</strong>
+        <os-inline-edit editor="vsEditor" name="vitalStatus" class="value value-md" value="cpr.participant.vitalStatus">
+          <span ng-if="vsEditor.isDisplayMode()">{{vsEditor.viewValue | osNoValue}}</span>
           <div ng-if="vsEditor.isEditMode()">
             <ui-select ng-model="vsEditor.editValue">
               <ui-select-match placeholder="Select Vital Status">{{$select.selected}}</ui-select-match>
@@ -84,9 +91,9 @@
       </li>
 
       <li class="item">
-        <strong class="key">Race:</strong>
-        <os-inline-edit editor="raceEditor" name="race" class="value" value="cpr.participant.race">
-          <span ng-if="raceEditor.isDisplayMode()">{{raceEditor.viewValue.join(", ")}}</span>
+        <strong class="key key-sm">Race:</strong>
+        <os-inline-edit editor="raceEditor" name="race" class="value value-md" value="cpr.participant.race">
+          <span ng-if="raceEditor.isDisplayMode()">{{raceEditor.viewValue.join(", ") | osNoValue}}</span>
           <div ng-if="raceEditor.isEditMode()">
             <ui-select multiple ng-model="raceEditor.editValue">
               <ui-select-match placeholder="Select Race">{{$item}}</ui-select-match>
@@ -106,22 +113,29 @@
       </button>
       <h3 class="os-sub-section-title">Occurred Visits</h3>
       <div collapse="ovCollapsed">
-        <table class="table table-hover os-table-muted-hdr os-table-outer-border">
+        <span ng-if="occurredVisits.length == 0">None</span>
+        <table class="table table-hover os-table-muted-hdr os-table outer-border" ng-if="occurredVisits.length > 0">
           <thead>
             <tr>
               <th class="col-xs-5">Visit</th>
-              <th class="col-xs-2">Collection Date</th>
-              <th class="col-xs-2">Specimens (A)</th>
-              <th class="col-xs-2">Specimens (C)</th>
+              <th class="col-xs-2">Date</th>
+              <th class="col-xs-4">Collection Status</th>
               <th class="col-xs-1">&nbsp;</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="visit in visits | filter: {status: 'Completed'}" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
-              <td><a>{{visit.name}} (T{{visit.eventPoint}})</a></td>
-              <td>{{visit.collectionDate | date: 'MMM dd, yyyy'}}</td>
-              <td>{{visit.anticipatedSpecimens}}</td>
-              <td>{{visit.collectedSpecimens}}</td>
+            <tr ng-repeat="visit in occurredVisits" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
+              <td><a>T{{visit.calendarPoint}}: {{visit.label}}</a></td>
+              <td>{{visit.visitDate | date: 'MMM dd, yyyy'}}</td>
+              <td>
+                <progress class="progress-striped active" max="visit.totalSpecimens"
+                  bs-popover trigger="hover" placement="bottom" content-template="specimen-count.html">
+                  <bar value="visit.collectedSpecimens" type="success"><span><b> {{visit.collectedSpecimens}} </b> </span></bar>
+                  <bar value="visit.pendingSpecimens" type="warning"><span><b> {{visit.pendingSpecimens}} </b> </span></bar>
+                  <bar value="visit.uncollectedSpecimens" type="danger"><span><b> {{visit.uncollectedSpecimens}} </b> </span></bar>
+                  <bar value="visit.unplannedSpecimens" type="info"><span><b> {{visit.unplannedSpecimens}} </b> </span></bar>
+                </progress>
+              </td>
               <td>
                 <div class="btn-group" dropdown ng-if="showBtns">
                   <button type="button" class="btn btn-xs btn-default os-btn-icon">
@@ -134,6 +148,7 @@
                     <li><a href="#">View Visit</a></li>
                     <li><a href="#">Edit Visit</a></li>
                     <li class="divider"></li>
+                    <li><a href="#">Collect Planned Specimens</a></li>
                     <li><a href="#">Collect Unplanned Specimens</a></li>
                     <li><a href="#">Print Specimen Labels</a></li>
                   </ul>
@@ -152,19 +167,20 @@
       </button>
       <h3 class="os-sub-section-title">Anticipated Visits</h3>
       <div collapse="avCollapsed">
-        <table class="table table-hover os-table-outer-border">
+        <span ng-if="anticipatedVisits.length == 0">None</span>
+        <table class="table table-hover os-table-muted-hdr os-table outer-border" ng-if="anticipatedVisits.length > 0">
           <thead>
             <tr>
               <th class="col-xs-5">Visit</th>
-              <th class="col-xs-3">Collection Date (A)</th>
-              <th class="col-xs-3">Specimens (A)</th>
+              <th class="col-xs-3">Date</th>
+              <th class="col-xs-3">Anticipated Specimens</th>
               <th class="col-xs-1">&nbsp;</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="visit in visits | filter: {status: 'Pending'}" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
-              <td><a>{{visit.name}} (T{{visit.eventPoint}})</a></td>
-              <td>{{visit.anticipatedCollectionDate | date: 'MMM dd, yyyy'}}</td>
+            <tr ng-repeat="visit in anticipatedVisits" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
+              <td><a>T{{visit.calendarPoint}}: {{visit.label}}</a></td>
+              <td>{{visit.anticipatedVisitDate | date: 'MMM dd, yyyy'}}</td>
               <td>{{visit.anticipatedSpecimens}}</td>
               <td>
                 <div class="btn-group" ng-if="showBtns">
@@ -205,3 +221,55 @@
     </ul>
   </div>
 </div>
+
+<script id="specimen-count-1.html" type="text/ng-template">
+  <div>
+    <ul class="os-key-values">
+      <li class="item">
+        <strong class="key key-lg os-right-align">Collected Specimens:</strong>
+        <span class="value value-sm os-left-align">{{visit.collectedSpecimens}}</span>
+      </li>
+      <li class="item">
+        <strong class="key key-lg os-right-align">Pending Specimens:</strong>
+        <span class="value value-sm os-left-align">{{visit.pendingSpecimens}}</span>
+      </li>
+      <li class="item">
+        <strong class="key key-lg os-right-align">Uncollected Specimens:</strong>
+        <span class="value value-sm os-left-align">{{visit.uncollectedSpecimens}}</span>
+      </li>
+      <li class="item">
+        <strong class="key key-lg os-right-align">Unplanned Specimens:</strong>
+        <span class="value value-sm os-left-align">{{visit.unplannedSpecimens}}</span>
+      </li>
+    </ul>
+  </div>
+</script>
+
+<script id="specimen-count.html" type="text/ng-template">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Collection Status</th>
+        <th>Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Collected Specimens</td>
+        <td>{{visit.collectedSpecimens}}</td>
+      </tr>
+      <tr>
+        <td>Pending Specimens</td>
+        <td>{{visit.pendingSpecimens}}</td>
+      </tr>
+      <tr>
+        <td>Uncollected Specimens</td>
+        <td>{{visit.uncollectedSpecimens}}</td>
+      </tr>
+      <tr>
+        <td>Unplanned Specimens</td>
+        <td>{{visit.unplannedSpecimens}}</td>
+      </tr>
+    </tbody>
+  </table -->
+</script>

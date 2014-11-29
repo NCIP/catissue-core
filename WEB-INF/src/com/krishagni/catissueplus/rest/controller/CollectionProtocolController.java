@@ -125,27 +125,6 @@ public class CollectionProtocolController {
 //		return resp.getParticipantInfo();
 //	}
 //
-	@RequestMapping(method = RequestMethod.POST, value = "/{id}/registered-participants")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public CollectionProtocolRegistrationDetail register(
-			@PathVariable("id") Long cpId,
-			@RequestBody CollectionProtocolRegistrationDetail cprDetails) {
-		
-		cprDetails.setCpId(cpId);
-		
-		CreateRegistrationEvent req = new CreateRegistrationEvent();
-		req.setCpId(cpId);		
-		req.setCprDetail(cprDetails);
-		req.setSessionDataBean(getSession());
-		
-		RegistrationCreatedEvent resp = cprSvc.createRegistration(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getCprDetail();
-	}
 
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);

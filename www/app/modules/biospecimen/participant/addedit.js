@@ -2,7 +2,7 @@
 angular.module('openspecimen')
   .controller('ParticipantAddEditCtrl', function(
     $scope, $modalInstance, $stateParams, 
-    AlertService, CollectionProtocolService, ParticipantService,
+    AlertService, CprService, ParticipantService,
     SiteService, PvManager) {
 
     $scope.cpId = $stateParams.cpId;
@@ -166,21 +166,24 @@ angular.module('openspecimen')
 
     var handleRegResult = function(result) {
       if (result.status == 'ok') {
-        $modalInstance.close('ok');
+        $modalInstance.close(result.data);
       } else if (result.status == 'user_error') {
         var errMsgs = result.data.errorMessages;
         if (errMsgs.length > 0) {
           var errMsg = errMsgs[0].attributeName + ": " + errMsgs[0].message;
           AlertService.display($scope, errMsg, 'danger');
         }
+      } else {
+        AlertService.display($scope, 'Internal Server Error', 'danger');
       }
     };
 
     $scope.register = function() {
-      var req = angular.copy($scope.cpr);
-      req.participant.ssn = formatSsn(req.participant.ssn);
-      req.participant.pmis = formatPmis(req.participant.pmis);
-      CollectionProtocolService.registerParticipant($scope.cpId, req).then(handleRegResult);
+      var cpr = angular.copy($scope.cpr);
+      cpr.cpId = $scope.cpId;
+      cpr.participant.ssn = formatSsn(cpr.participant.ssn);
+      cpr.participant.pmis = formatPmis(cpr.participant.pmis);
+      CprService.registerParticipant(cpr).then(handleRegResult);
     };
 
     $scope.cancel = function() {

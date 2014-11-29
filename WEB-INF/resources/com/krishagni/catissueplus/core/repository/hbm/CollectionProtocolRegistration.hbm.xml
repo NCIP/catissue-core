@@ -78,6 +78,15 @@
         cpr.identifier
     </sql-query>
 
+    <query name="getCprByCpIdAndPpid">
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration cpr
+        join cpr.collectionProtocol cp
+      where
+        cp.id = :cpId and
+        cpr.protocolParticipantIdentifier = :ppid
+    </query>
+
 		        <query name="getParticipantsByCpId">
             select cpr.id, participant.id,  
             cpr.protocolParticipantIdentifier 

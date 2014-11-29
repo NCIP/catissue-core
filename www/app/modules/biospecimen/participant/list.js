@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .controller('ParticipantListCtrl', function($scope, $stateParams, $modal, AlertService, CollectionProtocolService) {
+  .controller('ParticipantListCtrl', function($scope, $state, $stateParams, $modal, AlertService, CollectionProtocolService) {
     $scope.cpId = $stateParams.cpId;
 
     var loadParticipants = function() {
@@ -28,7 +28,7 @@ angular.module('openspecimen')
       modalInstance.result.then(
         function(result) {
           AlertService.display($scope, 'Participant Registered', 'success');
-          loadParticipants();
+          $state.go('participant-detail.overview', {cprId: result.id});
         }
       );
     };

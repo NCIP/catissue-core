@@ -88,7 +88,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 			return AllCollectionGroupsDetailEvent.badRequest(msg, null);
 		}
 
-		List<SpecimenCollectionGroup> scgs = daoFactory.getScgDao().getAllScgs(
+		List<SpecimenCollectionGroup> scgs = daoFactory.getVisitsDao().getAllScgs(
 						req.getStartAt(), req.getMaxRecords(), 
 						req.getSearchString());
 		List<ScgDetail> result = new ArrayList<ScgDetail>();
@@ -98,7 +98,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 		
 		Long count = null;
 		if (req.isCountReq()) {
-			count = daoFactory.getScgDao().getScgsCount(req.getSearchString());
+			count = daoFactory.getVisitsDao().getScgsCount(req.getSearchString());
 		}
 
 			return AllCollectionGroupsDetailEvent.ok(result,count);
@@ -140,7 +140,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 			ensureUniqueBarcode(scg.getBarcode(), errorHandler);
 			ensureUniqueName(scg.getName(), errorHandler);
 			errorHandler.checkErrorAndThrow();
-			daoFactory.getScgDao().saveOrUpdate(scg);
+			daoFactory.getVisitsDao().saveOrUpdate(scg);
 			return ScgCreatedEvent.ok(ScgDetail.fromDomain(scg));
 		}
 		catch (ObjectCreationException oce) {
@@ -155,7 +155,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	@PlusTransactional
 	public ScgUpdatedEvent updateScg(UpdateScgEvent scgEvent) {
 		try {
-			SpecimenCollectionGroup oldScg = daoFactory.getScgDao().getscg(scgEvent.getId());
+			SpecimenCollectionGroup oldScg = daoFactory.getVisitsDao().getscg(scgEvent.getId());
 			if (oldScg == null) {
 				ScgUpdatedEvent.notFound(scgEvent.getId());
 			}
@@ -167,7 +167,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 			validateName(oldScg.getName(), scg.getName(), errorHandler);
 			errorHandler.checkErrorAndThrow();
 			oldScg.update(scg);
-			daoFactory.getScgDao().saveOrUpdate(oldScg);
+			daoFactory.getVisitsDao().saveOrUpdate(oldScg);
 			return ScgUpdatedEvent.ok(ScgDetail.fromDomain(oldScg));
 		}
 		catch (ObjectCreationException oce) {
@@ -182,7 +182,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	@PlusTransactional
 	public ScgUpdatedEvent patchScg(PatchScgEvent scgEvent) {
 		try {
-			SpecimenCollectionGroup oldScg = daoFactory.getScgDao().getscg(scgEvent.getId());
+			SpecimenCollectionGroup oldScg = daoFactory.getVisitsDao().getscg(scgEvent.getId());
 			if (oldScg == null) {
 				ScgUpdatedEvent.notFound(scgEvent.getId());
 			}
@@ -200,7 +200,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 			validateName(oldScg.getName(), scg.getName(), errorHandler);
 			errorHandler.checkErrorAndThrow();
 			oldScg.update(scg);
-			daoFactory.getScgDao().saveOrUpdate(oldScg);
+			daoFactory.getVisitsDao().saveOrUpdate(oldScg);
 			return ScgUpdatedEvent.ok(ScgDetail.fromDomain(scg));
 		}
 		catch (ObjectCreationException oce) {
@@ -214,13 +214,13 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	@Override
 	public ScgDeletedEvent delete(DeleteSpecimenGroupsEvent event) {
 		try {
-			SpecimenCollectionGroup scg = daoFactory.getScgDao().getscg(event.getId());
+			SpecimenCollectionGroup scg = daoFactory.getVisitsDao().getscg(event.getId());
 			if (scg == null) {
 				return ScgDeletedEvent.notFound(event.getId());
 			}
 			scg.delete(event.isIncludeChildren());
 
-			daoFactory.getScgDao().saveOrUpdate(scg);
+			daoFactory.getVisitsDao().saveOrUpdate(scg);
 			return ScgDeletedEvent.ok();
 		}
 		catch (CatissueException ce) {
@@ -232,14 +232,14 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	}
 
 	private void ensureUniqueName(String name, ObjectCreationException errorHandler) {
-		if (daoFactory.getScgDao().getScgByName(name) != null) {
+		if (daoFactory.getVisitsDao().getScgByName(name) != null) {
 			errorHandler.addError(ScgErrorCode.DUPLICATE_NAME, NAME);
 		}
 	}
 
 	private void ensureUniqueBarcode(String barcode, ObjectCreationException errorHandler) {
 		if (!isBlank(barcode)) {
-			if (daoFactory.getScgDao().getScgByBarcode(barcode) != null) {
+			if (daoFactory.getVisitsDao().getScgByBarcode(barcode) != null) {
 				errorHandler.addError(ScgErrorCode.DUPLICATE_BARCODE, BARCODE);
 			}
 		}
@@ -341,13 +341,13 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	@PlusTransactional
 	public ScgReportUpdatedEvent updateScgReport(UpdateScgReportEvent event) {
 		try {
-			SpecimenCollectionGroup oldScg = daoFactory.getScgDao().getscg(event.getId());
+			SpecimenCollectionGroup oldScg = daoFactory.getVisitsDao().getscg(event.getId());
 			if (oldScg == null) {
 				return ScgReportUpdatedEvent.notFound(event.getId());
 			}
 			SpecimenCollectionGroup scg = scgFactory.updateReports(oldScg, event.getDetail());
 			oldScg.updateReports(scg);
-			daoFactory.getScgDao().saveOrUpdate(oldScg);
+			daoFactory.getVisitsDao().saveOrUpdate(oldScg);
 			return ScgReportUpdatedEvent.ok(ScgReportDetail.fromDomain(oldScg));
 		}
 		catch (ObjectCreationException oce) {
@@ -361,7 +361,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	@Override
 	@PlusTransactional
 	public ScgReportUpdatedEvent getScgReport(GetScgReportEvent event) {
-		SpecimenCollectionGroup scg = daoFactory.getScgDao().getscg(event.getId());
+		SpecimenCollectionGroup scg = daoFactory.getVisitsDao().getscg(event.getId());
 		if (scg == null) {
 			return ScgReportUpdatedEvent.notFound(event.getId());
 		}

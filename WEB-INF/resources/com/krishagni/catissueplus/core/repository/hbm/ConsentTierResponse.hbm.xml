@@ -26,7 +26,7 @@
 
         <many-to-one
             name="consentTier"
-            class="edu.wustl.catissuecore.domain.ConsentTier"
+            class="com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier"
             column="CONSENT_TIER_ID"
         />
 

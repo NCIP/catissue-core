@@ -105,26 +105,26 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		}
 	}
 
-	@Override
-	@PlusTransactional
-	public ParticipantSummaryEvent getParticipant(ReqParticipantSummaryEvent event) {
-		try {
-			Long cpId = event.getCpId();
-			Long participantId = event.getParticipantId();
-			ParticipantSummary participant;
-			if(privilegeSvc.hasPrivilege(event.getSessionDataBean().getUserId(), cpId,Permissions.REGISTRATION)){
-				participant = daoFactory.getCprDao().getPhiParticipant(cpId, participantId);
-			}
-			else{
-				participant = daoFactory.getCprDao().getParticipant(cpId, participantId);
-			}
-			
-			return ParticipantSummaryEvent.ok(participant);
-		}
-		catch (CatissueException e) {
-			return ParticipantSummaryEvent.serverError(e);
-		}
-	}
+//	@Override
+//	@PlusTransactional
+//	public ParticipantSummaryEvent getParticipant(ReqParticipantSummaryEvent event) {
+//		try {
+//			Long cpId = event.getCpId();
+//			Long participantId = event.getParticipantId();
+//			ParticipantSummary participant;
+//			if(privilegeSvc.hasPrivilege(event.getSessionDataBean().getUserId(), cpId,Permissions.REGISTRATION)){
+//				participant = daoFactory.getCprDao().getPhiParticipant(cpId, participantId);
+//			}
+//			else{
+//				participant = daoFactory.getCprDao().getParticipant(cpId, participantId);
+//			}
+//			
+//			return ParticipantSummaryEvent.ok(participant);
+//		}
+//		catch (CatissueException e) {
+//			return ParticipantSummaryEvent.serverError(e);
+//		}
+//	}
 
 	@Override
 	@PlusTransactional

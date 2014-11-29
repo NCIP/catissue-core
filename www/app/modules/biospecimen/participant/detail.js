@@ -15,9 +15,21 @@ angular.module('openspecimen')
       return d.promise;
     }
 
-    CprService.getVisits(cpr.id).then(
+    CprService.getVisits(cpr.id, true).then(
       function(result) {
-        $scope.visits = result.data;
+        $scope.occurredVisits = [];
+        $scope.anticipatedVisits = [];
+
+        var visits = result.data;
+        angular.forEach(visits, function(visit) {
+          visit.pendingSpecimens = visit.anticipatedSpecimens - (visit.collectedSpecimens + visit.uncollectedSpecimens);
+          visit.totalSpecimens = visit.anticipatedSpecimens + visit.unplannedSpecimens;
+          if (visit.status === 'Complete') {
+            $scope.occurredVisits.push(visit);
+          } else if (visit.status === 'Pending' || !visit.status) {
+            $scope.anticipatedVisits.push(visit);
+          }
+        });
       }
     );
   });

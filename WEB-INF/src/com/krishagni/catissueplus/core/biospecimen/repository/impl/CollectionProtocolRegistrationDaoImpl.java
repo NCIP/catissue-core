@@ -21,7 +21,7 @@ import org.springframework.stereotype.Repository;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCollectionGroupInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
@@ -30,7 +30,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 
 @Repository("collectionProtocolRegistrationDao")
 public class CollectionProtocolRegistrationDaoImpl 
-	extends AbstractDao<CollectionProtocolRegistration>
+	extends AbstractDao<CollectionProtocolRegistration> 
 	implements CollectionProtocolRegistrationDao {
 
 	@SuppressWarnings("unchecked")
@@ -95,7 +95,7 @@ public class CollectionProtocolRegistrationDaoImpl
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<SpecimenCollectionGroupInfo> getScgList(Long cprId) {
+	public List<VisitSummary> getVisits(Long cprId) {
 
 //		CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) sessionFactory.getCurrentSession().get(
 //				CollectionProtocolRegistration.class, cprId);
@@ -169,14 +169,14 @@ public class CollectionProtocolRegistrationDaoImpl
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public CollectionProtocolRegistration getCprByPpId(Long cpId, String protocolParticipantIdentifier) {
+	public CollectionProtocolRegistration getCprByPpId(Long cpId, String ppid) {
 		List<CollectionProtocolRegistration> result = sessionFactory.getCurrentSession()
-				.createCriteria(CollectionProtocolRegistration.class)
-				.add(Restrictions.eq("collectionProtocol.id", cpId))
-				.add(Restrictions.eq("protocolParticipantIdentifier", protocolParticipantIdentifier))
-				.list();
+			.getNamedQuery(GET_BY_CP_ID_AND_PPID)
+			.setLong("cpId", cpId)
+			.setString("ppid", ppid)
+			.list();
 		
-		return result.isEmpty() ? null : result.iterator().next();
+		return result != null && !result.isEmpty() ? result.iterator().next() : null;
 	}
 
 	@Override
@@ -187,17 +187,6 @@ public class CollectionProtocolRegistrationDaoImpl
 //		
 //		List<Object[]> rows = query.list();
 //		return preparePhiParticipantInfo(rows.get(0));
-		return null;
-	}
-
-	@Override
-	public ParticipantSummary getParticipant(Long cpId, Long participantId) {
-//		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PARTICIPANT_BY_CP_PARTICIPANT_ID);
-//		query.setLong("cpId", cpId);
-//		query.setLong("participantId", participantId);
-//		
-//		List<Object[]> rows = query.list();
-//		return prepareParticipantInfo(rows.get(0));
 		return null;
 	}
 	
@@ -307,6 +296,8 @@ public class CollectionProtocolRegistrationDaoImpl
 	private static final String FQN = CollectionProtocolRegistration.class.getName();
 	
 	private static final String GET_SCG_AND_SPECIMEN_CNT = FQN + ".getScgAndSpecimenCount";
+	
+	private static final String GET_BY_CP_ID_AND_PPID = FQN + ".getCprByCpIdAndPpid";
 	
 //	private static final String GET_SUB_REGISTRATIONS_BY_PARTICIPANT_AND_CP_ID = FQN + ".getSubRegistrationByParticipantAndCPId";
 //	

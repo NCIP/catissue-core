@@ -168,17 +168,19 @@ public class ParticipantDetail {
 	}
 
 	public static ParticipantDetail fromDomain(Participant participant) {
-		ParticipantDetail participantDetail = new ParticipantDetail();
-		participantDetail.setFirstName(participant.getFirstName());
-		participantDetail.setLastName(participant.getLastName());
-		participantDetail.setMiddleName(participant.getMiddleName());
-		participantDetail.setActivityStatus(participant.getActivityStatus());
-		participantDetail.setBirthDate(participant.getBirthDate());
-		participantDetail.setDeathDate(participant.getDeathDate());
-		participantDetail.setEthnicity(participant.getEthnicity());
-		participantDetail.setGender(participant.getGender());
-		participantDetail.setEmpi(participant.getEmpi());
-		participantDetail.setId(participant.getId());
+		ParticipantDetail result = new ParticipantDetail();
+		
+		result.setFirstName(participant.getFirstName());
+		result.setLastName(participant.getLastName());
+		result.setMiddleName(participant.getMiddleName());
+		result.setActivityStatus(participant.getActivityStatus());
+		result.setBirthDate(participant.getBirthDate());
+		result.setDeathDate(participant.getDeathDate());
+		result.setEthnicity(participant.getEthnicity());
+		result.setGender(participant.getGender());
+		result.setEmpi(participant.getEmpi());
+		result.setId(participant.getId());
+		
 		//TODO revisit 
 		List<ParticipantMedicalIdentifierNumberDetail> pmiColl = new ArrayList<ParticipantMedicalIdentifierNumberDetail>();
 		try{
@@ -196,7 +198,7 @@ public class ParticipantDetail {
 		{
 			
 		}
-		participantDetail.setPmis(pmiColl);
+		result.setPmis(pmiColl);
 		Set<String> raceSet = participant.getRaceColl();
 		Set<String> newRace = new HashSet<String>(); 
 		if(raceSet != null){
@@ -205,11 +207,11 @@ public class ParticipantDetail {
 			}
 		}
 		
-		participantDetail.setRace(newRace);
-		participantDetail.setSexGenotype(participant.getSexGenotype());
-		participantDetail.setSsn(participant.getSocialSecurityNumber());
-		participantDetail.setVitalStatus(participant.getVitalStatus());
-		return participantDetail;
+		result.setRace(newRace);
+		result.setSexGenotype(participant.getSexGenotype());
+		result.setSsn(participant.getSocialSecurityNumber());
+		result.setVitalStatus(participant.getVitalStatus());
+		return result;
 	}
 	
 	public static List<ParticipantDetail> from(List<Participant> participants) {

@@ -130,13 +130,13 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		
 		if (specimenDetail.getScgId() == null) {
 			if (!isBlank(specimenDetail.getScgName())) {
-				scg = daoFactory.getScgDao().getScgByName(specimenDetail.getScgName());
+				scg = daoFactory.getVisitsDao().getScgByName(specimenDetail.getScgName());
 			} else {
 				errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, SCG);
 				return;
 			}
 		} else {
-			scg = daoFactory.getScgDao().getscg(specimenDetail.getScgId());
+			scg = daoFactory.getVisitsDao().getscg(specimenDetail.getScgId());
 		}
 		
 		if (scg == null) {

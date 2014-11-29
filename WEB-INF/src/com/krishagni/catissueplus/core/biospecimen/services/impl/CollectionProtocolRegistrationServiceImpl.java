@@ -11,7 +11,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegi
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimenCollGroupsSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.BulkRegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CprRegistrationDetails;
@@ -23,10 +23,13 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistratio
 import com.krishagni.catissueplus.core.biospecimen.events.PatchRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.RegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -67,16 +70,25 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	public void setParticipantService(ParticipantService participantService) {
 		this.participantService = participantService;
 	}
-
+	
 	@Override
 	@PlusTransactional
-	public AllSpecimenCollGroupsSummaryEvent getSpecimenCollGroupsList(ReqSpecimenCollGroupSummaryEvent req) {
-		try {
-			return AllSpecimenCollGroupsSummaryEvent.ok(daoFactory.getCprDao().getScgList(req.getCprId()));
+	public RegistrationEvent getRegistration(ReqRegistrationEvent req) {
+		RegistrationEvent resp = null;
+		
+		try {			
+			if (req.getCprId() != null) {
+				resp = getByCprId(req.getCprId());
+			} else if (req.getCpId() != null && req.getPpid() != null) {
+				resp = getByCpIdAndPpid(req.getCpId(), req.getPpid());
+			} else {
+				resp = RegistrationEvent.invalidRequest();
+			}			
+		} catch (Exception e) {
+			resp = RegistrationEvent.serverError(e);
 		}
-		catch (Exception e) {
-			return AllSpecimenCollGroupsSummaryEvent.serverError(e);
-		}
+		
+		return resp;
 	}
 
 	@Override
@@ -95,7 +107,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			ensureUniqueBarcode(cpr.getBarcode(), oce);
 			oce.checkErrorAndThrow();
 			
-			saveParticipant(cpr, req);
+			saveParticipant(cpr, req.getCprDetail().getParticipant());
 			daoFactory.getCprDao().saveOrUpdate(cpr);
 			return RegistrationCreatedEvent.ok(CollectionProtocolRegistrationDetail.fromDomain(cpr));
 		} catch (ObjectCreationException ce) {
@@ -104,7 +116,21 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			return RegistrationCreatedEvent.serverError(e);
 		}
 	}
-
+	
+	@Override
+	@PlusTransactional
+	public VisitsEvent getVisits(ReqVisitsEvent req) {
+		try {
+			VisitsListCriteria crit = new VisitsListCriteria()
+				.includeStat(req.isIncludeStats())
+				.cprId(req.getCprId());
+			
+			return VisitsEvent.ok(daoFactory.getVisitsDao().getVisits(crit));
+		} catch (Exception e) {
+			return VisitsEvent.serverError(e);
+		}
+	}
+	
 	@Override
 	@PlusTransactional
 	public BulkRegistrationCreatedEvent createBulkRegistration(CreateBulkRegistrationEvent req) {
@@ -224,8 +250,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 	}
 	
-	private void saveParticipant(CollectionProtocolRegistration cpr, CreateRegistrationEvent req) {
-		if (req.getCprDetail().getParticipant().getId() != null) {
+	private void saveParticipant(CollectionProtocolRegistration cpr, ParticipantDetail detail) {
+		if (detail.getId() != null) {
 			return; 
 		}
 		
@@ -305,5 +331,23 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		cprDetails.setRegistrationDate(cpr.getRegistrationDate());
 		cprDetails.setConsentDetails(cpr.getConsentResponseDetail());
 		return cprDetails;
+	}
+	
+	private RegistrationEvent getByCprId(Long cprId) {
+		CollectionProtocolRegistration cpr = daoFactory.getCprDao().getCpr(cprId);
+		if (cpr == null) {
+			return RegistrationEvent.notFound(cprId);
+		}
+		
+		return RegistrationEvent.ok(CollectionProtocolRegistrationDetail.fromDomain(cpr));
+	}
+	
+	private RegistrationEvent getByCpIdAndPpid(Long cpId, String ppid) {
+		CollectionProtocolRegistration cpr = daoFactory.getCprDao().getCprByPpId(cpId, ppid);
+		if (cpr == null) {
+			return RegistrationEvent.notFound(cpId, ppid);
+		}
+		
+		return RegistrationEvent.ok(CollectionProtocolRegistrationDetail.fromDomain(cpr));
 	}
 }

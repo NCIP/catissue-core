@@ -1,6 +1,13 @@
 'use strict';
 
-angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.mask', 'ui.select'])
+angular.module('openspecimen', [
+  'ngSanitize', 
+  'ui.router', 
+  'ui.bootstrap', 
+  'ui.mask', 
+  'ui.select',
+  'mgcrea.ngStrap.popover'])
+
   .config(function($stateProvider, $urlRouterProvider, $httpProvider, uiSelectConfig, ApiUrlsProvider) {
     $stateProvider
       .state('login', {
@@ -121,6 +128,7 @@ angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.m
     ApiUrlsProvider.urls = {
       'sessions': '/rest/ng/sessions',
       'collection-protocols': '/rest/ng/collection-protocols',
+      'cprs': '/rest/ng/collection-protocol-registrations',
       'participants': '/rest/ng/participants',
       'sites': '/rest/ng/sites'
     };

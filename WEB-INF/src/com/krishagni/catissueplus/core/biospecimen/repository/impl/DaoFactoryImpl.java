@@ -35,7 +35,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocol
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
-import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.VisitsDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
@@ -108,8 +108,8 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 
 	@Override
-	public SpecimenCollectionGroupDao getScgDao() {
-		SpecimenCollectionGroupDaoImpl dao = new SpecimenCollectionGroupDaoImpl();
+	public VisitsDao getVisitsDao() {
+		VisitsDaoImpl dao = new VisitsDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

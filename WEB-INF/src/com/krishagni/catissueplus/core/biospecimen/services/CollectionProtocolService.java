@@ -20,7 +20,7 @@ public interface CollectionProtocolService {
 
 	public RegisteredParticipantsEvent getRegisteredParticipants(ReqRegisteredParticipantsEvent req);
 
-	public ParticipantSummaryEvent getParticipant(ReqParticipantSummaryEvent event);
+	//public ParticipantSummaryEvent getParticipant(ReqParticipantSummaryEvent event);
 
 	public ChildCollectionProtocolsEvent getChildProtocols(ReqChildProtocolEvent req);
 

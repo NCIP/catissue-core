@@ -19,15 +19,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimenCollGroupsSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationPatchDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.RegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSummaryEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCollectionGroupInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
@@ -47,7 +51,7 @@ import edu.wustl.common.beans.SessionDataBean;
 public class CollectionProtocolRegistrationController {
 
 	@Autowired
-	private CollectionProtocolRegistrationService cprSvc; // TODO: This need to go way
+	private CollectionProtocolRegistrationService cprSvc;
 
 	@Autowired
 	private CollectionProtocolService cpSvc;
@@ -56,20 +60,59 @@ public class CollectionProtocolRegistrationController {
 	private FormService formSvc;
 
 	@Autowired
-	private HttpServletRequest httpServletRequest;
+	private HttpServletRequest httpReq;
+	
 
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/specimen-collection-groups")
+	@RequestMapping(method = RequestMethod.GET, value = "/{cprId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SpecimenCollectionGroupInfo> getScgList(@PathVariable("id") Long cprId) {
-		ReqSpecimenCollGroupSummaryEvent req = new ReqSpecimenCollGroupSummaryEvent();
+	public CollectionProtocolRegistrationDetail getRegistration(@PathVariable("cprId") Long cprId) {
+		ReqRegistrationEvent req = new ReqRegistrationEvent();
 		req.setCprId(cprId);
-		req.setSessionDataBean(getSession());
-		AllSpecimenCollGroupsSummaryEvent resp = cprSvc.getSpecimenCollGroupsList(req);
+		
+		RegistrationEvent resp = cprSvc.getRegistration(req);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
-		return resp.getScgList();
+		
+		return resp.getCpr();		
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public CollectionProtocolRegistrationDetail register(@RequestBody CollectionProtocolRegistrationDetail cprDetails) {				
+		CreateRegistrationEvent req = new CreateRegistrationEvent();
+		req.setCpId(cprDetails.getCpId());		
+		req.setCprDetail(cprDetails);
+		req.setSessionDataBean(getSession());
+		
+		RegistrationCreatedEvent resp = cprSvc.createRegistration(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		
+		return resp.getCprDetail();
+	}
+	
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/visits")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<VisitSummary> getVisits(
+			@PathVariable("id") Long cprId,
+			@RequestParam(value = "includeStats", required = false, defaultValue = "false") boolean includeStats) {
+		
+		ReqVisitsEvent req = new ReqVisitsEvent();
+		req.setCprId(cprId);
+		req.setIncludeStats(includeStats);
+		req.setSessionDataBean(getSession());
+				
+		VisitsEvent resp = cprSvc.getVisits(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		return resp.getVisits();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
@@ -151,6 +194,6 @@ public class CollectionProtocolRegistrationController {
 	}
 
 	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
+		return (SessionDataBean) httpReq.getSession().getAttribute(Constants.SESSION_DATA);
 	}
 }
