@@ -128,22 +128,7 @@ angular.module('openspecimen')
           }
         }
       },
-      template:
-        '<div class="os-inline-editable" ng-class="{\'inactive\': !enabled, \'active\': enabled}">' +
-          '<ng-transclude ng-if="!enabled"></ng-transclude>' + 
-          '<button ng-if="!enabled" class="btn" ng-click="edit()"><span class="glyphicon glyphicon-pencil"></span></button>' +
-          '<form ng-if="enabled" name="inlineForm">' +
-            '<fieldset ng-disabled="saving">' +
-              '<ng-transclude></ng-transclude>' +
-            '</fieldset>' +
-            '<div ng-if="saving" class="saving">' +
-              '<i ng-if="saving" class="fa fa-spin fa-cog"></i>' +
-            '</div>' +
-            '<div ng-if="enabled && !saving" class="action-btns">'  +
-              '<button ng-click="ok()" ng-disabled="inlineForm.$invalid"><span class="glyphicon glyphicon-ok"></span></button>' +
-              '<button ng-click="cancel()"><span class="glyphicon glyphicon-remove"></span></button>' +
-            '</div>' +
-          '</form>' + 
-        '</div>'
+
+      templateUrl: 'modules/common/inline-edit-template.html'
     };
   });

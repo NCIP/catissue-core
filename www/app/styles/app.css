@@ -198,6 +198,7 @@ body {
 
 input.ng-dirty.ng-invalid {
   border-color: #FA787E
+  box-shadow: none;
 }
  
 .os-btn-secondary {

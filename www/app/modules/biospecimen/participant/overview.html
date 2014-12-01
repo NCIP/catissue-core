@@ -128,7 +128,7 @@
               <td><a>T{{visit.calendarPoint}}: {{visit.label}}</a></td>
               <td>{{visit.visitDate | date: 'MMM dd, yyyy'}}</td>
               <td>
-                <progress class="progress-striped active" max="visit.totalSpecimens"
+                <progress class="progress" max="visit.totalSpecimens"
                   bs-popover trigger="hover" placement="bottom" content-template="specimen-count.html">
                   <bar value="visit.collectedSpecimens" type="success"><span><b> {{visit.collectedSpecimens}} </b> </span></bar>
                   <bar value="visit.pendingSpecimens" type="warning"><span><b> {{visit.pendingSpecimens}} </b> </span></bar>
@@ -195,6 +195,7 @@
       </div>
     </div>
   </div>
+
   <div class="col-xs-4">
     <h3 class="os-sub-section-title"> Recent Activity </h3>
     <ul class="os-activity-list">
@@ -222,29 +223,6 @@
   </div>
 </div>
 
-<script id="specimen-count-1.html" type="text/ng-template">
-  <div>
-    <ul class="os-key-values">
-      <li class="item">
-        <strong class="key key-lg os-right-align">Collected Specimens:</strong>
-        <span class="value value-sm os-left-align">{{visit.collectedSpecimens}}</span>
-      </li>
-      <li class="item">
-        <strong class="key key-lg os-right-align">Pending Specimens:</strong>
-        <span class="value value-sm os-left-align">{{visit.pendingSpecimens}}</span>
-      </li>
-      <li class="item">
-        <strong class="key key-lg os-right-align">Uncollected Specimens:</strong>
-        <span class="value value-sm os-left-align">{{visit.uncollectedSpecimens}}</span>
-      </li>
-      <li class="item">
-        <strong class="key key-lg os-right-align">Unplanned Specimens:</strong>
-        <span class="value value-sm os-left-align">{{visit.unplannedSpecimens}}</span>
-      </li>
-    </ul>
-  </div>
-</script>
-
 <script id="specimen-count.html" type="text/ng-template">
   <table class="table table-bordered">
     <thead>
@@ -255,21 +233,21 @@
     </thead>
     <tbody>
       <tr>
-        <td>Collected Specimens</td>
+        <td>Collected</td>
         <td>{{visit.collectedSpecimens}}</td>
       </tr>
       <tr>
-        <td>Pending Specimens</td>
+        <td>Pending</td>
         <td>{{visit.pendingSpecimens}}</td>
       </tr>
       <tr>
-        <td>Uncollected Specimens</td>
+        <td>Not Collected</td>
         <td>{{visit.uncollectedSpecimens}}</td>
       </tr>
       <tr>
-        <td>Unplanned Specimens</td>
+        <td>Unplanned</td>
         <td>{{visit.unplannedSpecimens}}</td>
       </tr>
     </tbody>
-  </table -->
+  </table>
 </script>
