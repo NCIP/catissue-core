@@ -251,6 +251,21 @@ public class SpecimenCollectionGroup {
 	public void setSpecimenCollection(Set<Specimen> specimenCollection) {
 		this.specimenCollection = specimenCollection;
 	}
+	
+	public Set<Specimen> getTopLevelSpecimens() {
+		Set<Specimen> specimens = new HashSet<Specimen>();
+		if (specimenCollection == null) {
+			return specimens;
+		}
+		
+		for (Specimen specimen : specimenCollection) {
+			if (specimen.getParentSpecimen() == null) {
+				specimens.add(specimen);
+			}
+		}
+		
+		return specimens;
+	}
 
 	public CollectionProtocolRegistration getCollectionProtocolRegistration() {
 		return collectionProtocolRegistration;

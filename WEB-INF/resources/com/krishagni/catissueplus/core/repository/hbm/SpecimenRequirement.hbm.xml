@@ -153,6 +153,15 @@
       update="true"
       column="PARENT_SPECIMEN_ID"
       lazy="false"/>
+
+    <set name="childSpecimenRequirements" table="CATISSUE_CP_REQ_SPECIMEN" 
+      inverse="true" cascade="all">
+      <cache usage="read-write" />
+      <key column="PARENT_SPECIMEN_ID"></key>
+
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement" />
+    </set>
+
       
     <set
       name="specimens"

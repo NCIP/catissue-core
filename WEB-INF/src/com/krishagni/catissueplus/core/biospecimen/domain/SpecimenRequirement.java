@@ -52,6 +52,8 @@ public class SpecimenRequirement {
 	private String specimenType;
 	
 	private SpecimenRequirement parentSpecimenRequirement;
+	
+	private Set<SpecimenRequirement> childSpecimenRequirements;
 
 	private Set<Specimen> specimens = new HashSet<Specimen>();
 
@@ -238,6 +240,14 @@ public class SpecimenRequirement {
 
 	public void setParentSpecimenRequirement(SpecimenRequirement parentSpecimenRequirement) {
 		this.parentSpecimenRequirement = parentSpecimenRequirement;
+	}
+
+	public Set<SpecimenRequirement> getChildSpecimenRequirements() {
+		return childSpecimenRequirements;
+	}
+
+	public void setChildSpecimenRequirements(Set<SpecimenRequirement> childSpecimenRequirements) {
+		this.childSpecimenRequirements = childSpecimenRequirements;
 	}
 
 	public Set<Specimen> getSpecimens() {

@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services;
 
+import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitSpecimensEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.BulkRegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateBulkRegistrationEvent;
@@ -21,7 +23,12 @@ public interface CollectionProtocolRegistrationService {
 	RegistrationCreatedEvent createRegistration(CreateRegistrationEvent req);
 	
 	VisitsEvent getVisits(ReqVisitsEvent req);
-
+	
+	VisitSpecimensEvent getSpecimens(ReqVisitSpecimensEvent req);
+	
+	//
+	// TODO: Requires review
+	// 
 	RegistrationDeletedEvent delete(DeleteRegistrationEvent event);
 
 	RegistrationUpdatedEvent updateRegistration(UpdateRegistrationEvent event);

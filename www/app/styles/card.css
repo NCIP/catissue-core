@@ -62,3 +62,16 @@
 .os-card .stats .stat .glyphicon {
   font-size: 20px;
 }
+
+.os-side-menu-page-content .os-card {
+  height: 165px;
+  width: 325px;
+}
+
+.os-side-menu-page-content .os-cards {
+  padding: 5px 15px;
+}
+
+.os-side-menu-page-content .os-card .stats {
+  width: 285px;
+}

@@ -114,9 +114,23 @@ public class CollectionProtocolEvent {
 		return specimenRequirements;
 	}
 
-	public void setSpecimenRequirements(
-			Set<SpecimenRequirement> specimenRequirements) {
+	public void setSpecimenRequirements(Set<SpecimenRequirement> specimenRequirements) {
 		this.specimenRequirements = specimenRequirements;
+	}
+	
+	public Set<SpecimenRequirement> getTopLevelAnticipatedSpecimens() {
+		Set<SpecimenRequirement> anticipated = new HashSet<SpecimenRequirement>();
+		if (specimenRequirements == null) {
+			return anticipated;
+		}
+		
+		for (SpecimenRequirement sr : specimenRequirements) {
+			if (sr.getParentSpecimenRequirement() == null) {
+				anticipated.add(sr);
+			}
+		}
+		
+		return anticipated;
 	}
 
 	public Set<SpecimenCollectionGroup> getSpecimenCollectionGroups() {

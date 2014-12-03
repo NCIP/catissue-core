@@ -83,6 +83,14 @@ angular.module('openspecimen', [
                 return result.data;
               }
             );   
+          },
+
+          visits: function($stateParams, CprService) {
+            return CprService.getVisits($stateParams.cprId, true).then(
+              function(result) {
+                return result.data;
+              }
+            );
           }
         },
         controller: 'ParticipantDetailCtrl',
@@ -105,9 +113,27 @@ angular.module('openspecimen', [
       .state('participant-detail.visits', {
         url: '/visits',
         templateUrl: 'modules/biospecimen/participant/visits.html',
-        controller: function() {
+        controller: function($scope, cpr, visits) {
+          $scope.cpr = cpr;
+          $scope.visits = visits;
         },
         parent: 'participant-detail'
+      })
+      .state('participant-detail.specimens', {
+        url: '/?eventId&visitId',
+        templateUrl: 'modules/biospecimen/participant/specimens.html',
+        resolve: {
+          specimens: function($stateParams, CprService) {
+            var visitDetail = {visitId: $stateParams.visitId, eventId: $stateParams.eventId};
+            return CprService.getVisitSpecimensTree($stateParams.cprId, visitDetail).then(
+              function(result) {
+                return result.data;
+              }
+            );
+          }
+        },
+        controller: 'ParticipantSpecimensTreeCtrl',
+        parent: 'participant-detail.visits'
       })
       .state('participant-detail.annotations', {
         url: '/annotations',

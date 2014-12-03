@@ -11,7 +11,9 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 public interface VisitsDao extends Dao<SpecimenCollectionGroup> {
 	
 	public List<VisitSummary> getVisits(VisitsListCriteria crit);
-
+	
+	public SpecimenCollectionGroup getVisit(Long visitId);
+	
 	//
 	// TODO: Requires review
 	//

@@ -26,3 +26,14 @@
 .os-participant-matching .form-group {
   margin-bottom: 5px;
 }
+
+.os-visits .list-group-item h5 {
+  color: #666;
+  font-weight: bold;
+}
+
+.os-visits .list-group-item.active h5 {
+  color: #fff;
+  font-weight: bold;
+}
+

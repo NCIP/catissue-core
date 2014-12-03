@@ -71,6 +71,13 @@ public class VisitsDaoImpl extends AbstractDao<SpecimenCollectionGroup> implemen
 		return visits;
 	}
 	
+	@Override
+	public SpecimenCollectionGroup getVisit(Long visitId) {
+		return (SpecimenCollectionGroup)sessionFactory.getCurrentSession()
+				.get(SpecimenCollectionGroup.class, visitId);
+	}
+	
+	
 	private String getVisitKey(Long scgId, Long cpeId) {
 		String key = "";
 		if (scgId != null) {

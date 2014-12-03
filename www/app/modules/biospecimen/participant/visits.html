@@ -1,2 +1,42 @@
 
-<h4 style="margin: 0px;"> Visits </h4>
+<div class="os-items-group">
+  <div class="os-item">
+    <h3 class="os-section-title" ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)"> 
+      <span ng-switch-when="true">
+        {{cpr.participant.firstName}} {{cpr.participant.lastName}}
+      </span>
+      <span ng-switch-when="false">
+        N/A
+      </span>
+    </h3>
+  </div>
+
+  <div class="os-item os-action-btns os-action-btns-md">
+    <a><span class="glyphicon glyphicon-pencil" ng-click="toggle = !toggle"></span></a>
+  </div>
+</div>
+
+<div class="clearfix">
+  <div class="col-xs-3">
+    <div class="os-visits list-group">
+      <div class="list-group-item os-section-hdr">
+        <span>Visits</span>
+      </div>
+      <a class="list-group-item" ng-repeat="visit in visits" 
+        ui-sref="participant-detail.specimens({visitId: visit.id, eventId: visit.eventId})"
+        ui-sref-active="active">
+        <h5 class="list-group-item-heading">T{{visit.calendarPoint}}: {{visit.label}}</h5>
+        <p class="list-group-item-text" ng-if="visit.status == 'Pending' || !visit.status">
+          Pending | {{visit.anticipatedVisitDate | date: 'MMM dd, yyyy'}}
+        </p>
+        <p class="list-group-item-text" ng-if="visit.status == 'Complete'">
+          Complete | {{visit.visitDate | date: 'MMM dd, yyyy'}}
+        </p>
+      </a>
+    </div>
+  </div>
+
+  <div class="col-xs-9">
+    <div ui-view></div>
+  </div>
+</div>

@@ -3,15 +3,26 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.BulkRegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CprRegistrationDetails;
@@ -26,8 +37,12 @@ import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEve
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitsEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
@@ -130,6 +145,26 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			return VisitsEvent.serverError(e);
 		}
 	}
+	
+	@Override
+	@PlusTransactional
+	public VisitSpecimensEvent getSpecimens(ReqVisitSpecimensEvent req) {
+		Long cprId   = req.getCprId(); 
+		Long eventId = req.getEventId();
+		Long visitId = req.getVisitId();
+		
+		try {
+			if (visitId != null) {
+				return getSpecimensByVisit(cprId, visitId);
+			} else if (eventId != null) {
+				return getAnticipatedSpecimens(cprId, eventId);
+			}
+			
+			return VisitSpecimensEvent.ok(cprId, eventId, visitId, Collections.<SpecimenSummary>emptyList());
+		} catch (Exception e) {
+			return VisitSpecimensEvent.serverError(cprId, eventId, visitId, e);
+		}
+	}	
 	
 	@Override
 	@PlusTransactional
@@ -350,4 +385,79 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		
 		return RegistrationEvent.ok(CollectionProtocolRegistrationDetail.fromDomain(cpr));
 	}
+	
+	private VisitSpecimensEvent getSpecimensByVisit(Long cprId, Long visitId) {
+		SpecimenCollectionGroup visit = daoFactory.getVisitsDao().getVisit(visitId);
+		if (visit == null) {
+			return VisitSpecimensEvent.notFound(cprId, null, visitId);
+		}
+		
+		Set<SpecimenRequirement> anticipatedSpecimens = visit.getCollectionProtocolEvent().getTopLevelAnticipatedSpecimens();
+		Set<Specimen> specimens = visit.getTopLevelSpecimens();
+
+		return VisitSpecimensEvent.ok(
+				cprId, null, visitId, 
+				getSpecimens(anticipatedSpecimens, specimens));
+	}
+	
+	private VisitSpecimensEvent getAnticipatedSpecimens(Long cprId, Long eventId) {
+		CollectionProtocolEvent cpe = daoFactory.getCollectionProtocolDao().getCpe(eventId);
+		if (cpe == null) {
+			return VisitSpecimensEvent.notFound(cprId, eventId, null);
+		}
+		
+		Set<SpecimenRequirement> anticipatedSpecimens = cpe.getTopLevelAnticipatedSpecimens();
+		return VisitSpecimensEvent.ok(
+				cprId, eventId, null, 
+				getSpecimens(anticipatedSpecimens, Collections.<Specimen>emptySet()));		
+	}
+	
+	private List<SpecimenSummary> getSpecimens(Collection<SpecimenRequirement> anticipated, Collection<Specimen> specimens) {		
+		List<SpecimenSummary> result = SpecimenSummary.from(specimens);
+		merge(anticipated, result, null, getReqSpecimenMap(result));
+
+		SpecimenSummary.sort(result);
+		return result;
+	}
+	
+	private Map<Long, SpecimenSummary> getReqSpecimenMap(List<SpecimenSummary> specimens) {
+		Map<Long, SpecimenSummary> reqSpecimenMap = new HashMap<Long, SpecimenSummary>();
+						
+		List<SpecimenSummary> remaining = new ArrayList<SpecimenSummary>();
+		remaining.addAll(specimens);
+		
+		while (!remaining.isEmpty()) {
+			SpecimenSummary specimen = remaining.remove(0);
+			Long srId = (specimen.getReqId() == null) ? -1 : specimen.getReqId();
+			reqSpecimenMap.put(srId, specimen);
+			
+			remaining.addAll(specimen.getChildren());
+		}
+		
+		return reqSpecimenMap;
+	}
+	
+	private void merge(
+			Collection<SpecimenRequirement> anticipatedSpecimens, 
+			List<SpecimenSummary> result, 
+			SpecimenSummary currentParent,
+			Map<Long, SpecimenSummary> reqSpecimenMap) {
+		
+		for (SpecimenRequirement anticipated : anticipatedSpecimens) {
+			SpecimenSummary specimen = reqSpecimenMap.get(anticipated.getId());
+			if (specimen != null) {
+				merge(anticipated.getChildSpecimenRequirements(), result, specimen, reqSpecimenMap);
+			} else {
+				specimen = SpecimenSummary.from(anticipated);
+				
+				if (currentParent == null) {
+					result.add(specimen);
+				} else if (specimen == null) {
+					currentParent.getChildren().add(specimen);
+				}				
+			}						
+		}
+	}
+	
+	
 }

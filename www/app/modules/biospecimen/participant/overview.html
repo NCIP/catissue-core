@@ -125,7 +125,11 @@
           </thead>
           <tbody>
             <tr ng-repeat="visit in occurredVisits" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
-              <td><a>T{{visit.calendarPoint}}: {{visit.label}}</a></td>
+              <td>
+                <a ui-sref="participant-detail.specimens({visitId: visit.id, eventId: visit.eventId})">
+                  T{{visit.calendarPoint}}: {{visit.label}}
+                </a>
+              </td>
               <td>{{visit.visitDate | date: 'MMM dd, yyyy'}}</td>
               <td>
                 <progress class="progress" max="visit.totalSpecimens"
@@ -179,7 +183,11 @@
           </thead>
           <tbody>
             <tr ng-repeat="visit in anticipatedVisits" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
-              <td><a>T{{visit.calendarPoint}}: {{visit.label}}</a></td>
+              <td>
+                <a ui-sref="participant-detail.specimens({visitId: visit.id, eventId: visit.eventId})">
+                  T{{visit.calendarPoint}}: {{visit.label}}
+                </a>
+              </td>
               <td>{{visit.anticipatedVisitDate | date: 'MMM dd, yyyy'}}</td>
               <td>{{visit.anticipatedSpecimens}}</td>
               <td>

@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitSpecimensEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationPatchDetail;
@@ -113,6 +116,28 @@ public class CollectionProtocolRegistrationController {
 			resp.raiseException();
 		}
 		return resp.getVisits();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/specimens")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public List<SpecimenSummary> getSpecimens(
+			@PathVariable("id") Long cprId,
+			@RequestParam(value = "eventId", required = false) Long eventId,
+			@RequestParam(value = "visitId", required = false) Long visitId) {
+		
+		ReqVisitSpecimensEvent req = new ReqVisitSpecimensEvent();
+		req.setCprId(cprId);
+		req.setEventId(eventId);
+		req.setVisitId(visitId);
+		req.setSessionDataBean(getSession());
+		
+		VisitSpecimensEvent resp = cprSvc.getSpecimens(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		
+		return resp.getSpecimens();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")

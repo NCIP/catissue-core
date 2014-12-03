@@ -1,0 +1,51 @@
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    Specimens
+  </div>
+  <div class="panel-body">
+    <table class="table os-table-fixed os-table-tree">
+      <thead>
+        <th class="col-xs-5">Label</th>
+        <th class="col-xs-2">Type</th>
+        <th class="col-xs-2">Pathology</th>
+        <th class="col-xs-2">Container</th>
+        <th class="col-xs-1">&nbsp;</th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="specimen in specimens | openedSpecimenNodes">
+          <td>
+            <div style="padding-left: {{specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16}}px">
+              <a ng-if="specimen.hasChildren && specimen.isOpened" 
+                 class="fa fa-chevron-circle-down"
+                 ng-click="closeSpecimenNode(specimen)">
+              </a>
+              <a ng-if="specimen.hasChildren && !specimen.isOpened" 
+                 class="fa fa-chevron-circle-right"
+                 ng-click="openSpecimenNode(specimen)">
+              </a>
+              <span class="fa fa-circle" 
+                    ng-class="{'os-status-collected': specimen.status == 'Collected',
+                               'os-status-pending': specimen.status == 'Pending' || !specimen.status}">
+              </span>
+              <a ng-if="specimen.label">{{specimen.label}}</a>
+              <a ng-if="!specimen.label">{{specimen.type}} ({{specimen.specimenClass}})</a>
+            </div>
+          </td>
+          <td>{{specimen.type}}</td>
+          <td>{{specimen.pathology}}</td>
+          <td ng-if="specimen.storageLocation.name">
+            <span>{{specimen.storageLocation.name}}</span>
+            <span ng-if="!!specimen.storageLocation.positionX && !!specimen.storageLocation.positionY">
+              : ({{specimen.storageLocation.positionX}}, {{specimen.storageLocation.positionY}})
+            </span>
+          </td>
+          <td ng-if="!specimen.storageLocation.name">
+            <span>Virtual</span>
+          </td>
+          <td>&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
