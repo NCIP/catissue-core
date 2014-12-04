@@ -6,16 +6,15 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.doAnswer;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -26,29 +25,21 @@ import com.krishagni.catissueplus.core.administrative.repository.PermissibleValu
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenFactoryImpl;
-import com.krishagni.catissueplus.core.biospecimen.events.AliquotCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.VisitsDao;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenServiceImpl;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
 import com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl;
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
-import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.services.testdata.PermissibleValueTestData;
 import com.krishagni.catissueplus.core.services.testdata.SpecimenTestData;
 
@@ -61,7 +52,7 @@ public class SpecimenTest {
 	private SpecimenDao specimenDao;
 
 	@Mock
-	private SpecimenCollectionGroupDao scgDao;
+	private VisitsDao visitsDao;
 
 	@Mock
 	private CollectionProtocolDao collectionProtocolDao;
@@ -96,7 +87,7 @@ public class SpecimenTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 
-		when(daoFactory.getScgDao()).thenReturn(scgDao);
+		when(daoFactory.getVisitsDao()).thenReturn(visitsDao);
 		when(daoFactory.getCollectionProtocolDao()).thenReturn(collectionProtocolDao);
 		when(daoFactory.getUserDao()).thenReturn(userDao);
 		when(daoFactory.getSpecimenDao()).thenReturn(specimenDao);
@@ -112,7 +103,7 @@ public class SpecimenTest {
 		
 		when(collectionProtocolDao.getSpecimenRequirement(anyLong())).thenReturn(SpecimenTestData.getRequirement());
 		when(userDao.getUser(anyString())).thenReturn(SpecimenTestData.getUser());
-		when(scgDao.getscg(anyLong())).thenReturn(SpecimenTestData.getScgToReturn());	
+		when(visitsDao.getscg(anyLong())).thenReturn(SpecimenTestData.getScgToReturn());	
 		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
 		
 		pvService = new PermissibleValueServiceImpl();
@@ -125,7 +116,7 @@ public class SpecimenTest {
 
 	@Test
 	public void testSuccessfullSpecimenCreation() {
-		doReturn(SpecimenTestData.getScgToReturn()).when(scgDao).getscg(anyLong()); 
+		doReturn(SpecimenTestData.getScgToReturn()).when(visitsDao).getscg(anyLong()); 
 		doReturn(SpecimenTestData.getSpecimenToReturn()).when(specimenDao).getSpecimen(anyLong());
 		doReturn(SpecimenTestData.getSpecimenRequirement()).when(collectionProtocolDao).getSpecimenRequirement(anyLong());
 		doReturn(SpecimenTestData.getContainerToReturn()).when(containerDao).getContainer(anyString());
@@ -151,7 +142,7 @@ public class SpecimenTest {
 	@Test
 	public void testSuccessfullSpecimenCreationFetchScgByName() {
 		String scgName = "default-name";
-		doReturn(SpecimenTestData.getScgToReturn()).when(scgDao).getScgByName(scgName); 
+		doReturn(SpecimenTestData.getScgToReturn()).when(visitsDao).getScgByName(scgName); 
 		doReturn(SpecimenTestData.getSpecimenToReturn()).when(specimenDao).getSpecimen(anyLong());
 		doReturn(SpecimenTestData.getSpecimenRequirement()).when(collectionProtocolDao).getSpecimenRequirement(anyLong());
 		doReturn(SpecimenTestData.getContainerToReturn()).when(containerDao).getContainer(anyString());
@@ -182,7 +173,7 @@ public class SpecimenTest {
 		Long parentSpecimenId = 100L;
 		String parentSpecimenLabel = "parent-specimen-label";
 		
-		doReturn(SpecimenTestData.getScgToReturn()).when(scgDao).getscg(anyLong()); 
+		doReturn(SpecimenTestData.getScgToReturn()).when(visitsDao).getscg(anyLong()); 
 		
 		Specimen parentSpecimen = SpecimenTestData.getSpecimenToReturn();
 		parentSpecimen.setId(parentSpecimenId);
@@ -221,7 +212,7 @@ public class SpecimenTest {
 		String parentSpecimenLabel = "parent-specimen-label";
 		String childSpecimenLabel = "child-specimen-label";
 		
-		doReturn(SpecimenTestData.getScgToReturn()).when(scgDao).getscg(anyLong()); 
+		doReturn(SpecimenTestData.getScgToReturn()).when(visitsDao).getscg(anyLong()); 
 		
 		Specimen parentSpecimen = SpecimenTestData.getSpecimenToReturn();
 		parentSpecimen.setId(parentSpecimenId);
@@ -257,7 +248,7 @@ public class SpecimenTest {
 	
 	@Test
 	public void testSpecimenScgNotFoundExpectBadRequest() {
-		doReturn(null).when(scgDao).getscg(anyLong()); 
+		doReturn(null).when(visitsDao).getscg(anyLong()); 
 		doReturn(SpecimenTestData.getSpecimenToReturn()).when(specimenDao).getSpecimen(anyLong());
 		doReturn(SpecimenTestData.getSpecimenRequirement()).when(collectionProtocolDao).getSpecimenRequirement(anyLong());
 		doReturn(SpecimenTestData.getContainerToReturn()).when(containerDao).getContainer(anyString());
@@ -285,7 +276,7 @@ public class SpecimenTest {
 	@Test
 	public void testSpecimenCreationInvalidParentSpecimenId() {
 		Long parentSpecimenId = 100L;
-		doReturn(SpecimenTestData.getScgToReturn()).when(scgDao).getscg(anyLong()); 
+		doReturn(SpecimenTestData.getScgToReturn()).when(visitsDao).getscg(anyLong()); 
 		
 		doReturn(null).when(specimenDao).getSpecimen(eq(parentSpecimenId));
 		
@@ -317,7 +308,7 @@ public class SpecimenTest {
 	
 	@Test
 	public void testCreateSpecimenInvalidSpecimenRequirementId() {
-		doReturn(SpecimenTestData.getScgToReturn()).when(scgDao).getscg(anyLong()); 
+		doReturn(SpecimenTestData.getScgToReturn()).when(visitsDao).getscg(anyLong()); 
 		doReturn(SpecimenTestData.getSpecimenToReturn()).when(specimenDao).getSpecimen(anyLong());
 		doReturn(null).when(collectionProtocolDao).getSpecimenRequirement(anyLong());
 		doReturn(SpecimenTestData.getContainerToReturn()).when(containerDao).getContainer(anyString());
@@ -344,7 +335,7 @@ public class SpecimenTest {
 	
 	@Test
 	public void testCreateSpecimenContainerNotFoundExpectBadRequest() {
-		doReturn(SpecimenTestData.getScgToReturn()).when(scgDao).getscg(anyLong()); 
+		doReturn(SpecimenTestData.getScgToReturn()).when(visitsDao).getscg(anyLong()); 
 		doReturn(SpecimenTestData.getSpecimenToReturn()).when(specimenDao).getSpecimen(anyLong());
 		doReturn(SpecimenTestData.getSpecimenRequirement()).when(collectionProtocolDao).getSpecimenRequirement(anyLong());
 		doReturn(null).when(containerDao).getContainer(anyString());
@@ -371,7 +362,7 @@ public class SpecimenTest {
 
 	@Test
 	public void testCreateSpecimenBiohzardNotFoundExpectBadRequest() {
-		doReturn(SpecimenTestData.getScgToReturn()).when(scgDao).getscg(anyLong()); 
+		doReturn(SpecimenTestData.getScgToReturn()).when(visitsDao).getscg(anyLong()); 
 		doReturn(SpecimenTestData.getSpecimenToReturn()).when(specimenDao).getSpecimen(anyLong());
 		doReturn(SpecimenTestData.getSpecimenRequirement()).when(collectionProtocolDao).getSpecimenRequirement(anyLong());
 		doReturn(SpecimenTestData.getContainerToReturn()).when(containerDao).getContainer(anyString());
@@ -398,7 +389,7 @@ public class SpecimenTest {
 	
 	@Test
 	public void testCreateSpecimenDuplicateLabelExpectBadRequest() {
-		doReturn(SpecimenTestData.getScgToReturn()).when(scgDao).getscg(anyLong()); 
+		doReturn(SpecimenTestData.getScgToReturn()).when(visitsDao).getscg(anyLong()); 
 		doReturn(SpecimenTestData.getSpecimenToReturn()).when(specimenDao).getSpecimen(anyLong());
 		doReturn(SpecimenTestData.getSpecimenRequirement()).when(collectionProtocolDao).getSpecimenRequirement(anyLong());
 		doReturn(SpecimenTestData.getContainerToReturn()).when(containerDao).getContainer(anyString());
@@ -425,7 +416,7 @@ public class SpecimenTest {
 	
 	@Test
 	public void testCreateSpecimenDuplicateBarcodeExpectBadRequest() {
-		doReturn(SpecimenTestData.getScgToReturn()).when(scgDao).getscg(anyLong()); 
+		doReturn(SpecimenTestData.getScgToReturn()).when(visitsDao).getscg(anyLong()); 
 		doReturn(SpecimenTestData.getSpecimenToReturn()).when(specimenDao).getSpecimen(anyLong());
 		doReturn(SpecimenTestData.getSpecimenRequirement()).when(collectionProtocolDao).getSpecimenRequirement(anyLong());
 		doReturn(SpecimenTestData.getContainerToReturn()).when(containerDao).getContainer(anyString());
@@ -452,7 +443,7 @@ public class SpecimenTest {
 	
 	@Test
 	public void testCreateSpecimenServerErrorOnSaveOrUpdateExpectServerError() {
-		doReturn(SpecimenTestData.getScgToReturn()).when(scgDao).getscg(anyLong()); 
+		doReturn(SpecimenTestData.getScgToReturn()).when(visitsDao).getscg(anyLong()); 
 		doReturn(SpecimenTestData.getSpecimenToReturn()).when(specimenDao).getSpecimen(anyLong());
 		doReturn(SpecimenTestData.getSpecimenRequirement()).when(collectionProtocolDao).getSpecimenRequirement(anyLong());
 		doReturn(SpecimenTestData.getContainerToReturn()).when(containerDao).getContainer(anyString());
@@ -473,7 +464,7 @@ public class SpecimenTest {
 	
 	@Test
 	public void testCreateSpecimenConcentrationNotApplicable() {
-		doReturn(SpecimenTestData.getScgToReturn()).when(scgDao).getscg(anyLong()); 
+		doReturn(SpecimenTestData.getScgToReturn()).when(visitsDao).getscg(anyLong()); 
 		doReturn(SpecimenTestData.getSpecimenToReturn()).when(specimenDao).getSpecimen(anyLong());
 		doReturn(SpecimenTestData.getSpecimenRequirement()).when(collectionProtocolDao).getSpecimenRequirement(anyLong());
 		doReturn(SpecimenTestData.getContainerToReturn()).when(containerDao).getContainer(anyString());

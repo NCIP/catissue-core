@@ -32,7 +32,6 @@ import com.krishagni.catissueplus.core.administrative.events.StorageContainerDis
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerGotEvent;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateStorageContainerEvent;
-import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
@@ -43,6 +42,7 @@ import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleV
 import com.krishagni.catissueplus.core.administrative.services.impl.StorageContainerServiceImpl;
 import com.krishagni.catissueplus.core.barcodegenerator.BarcodeGenerator;
 import com.krishagni.catissueplus.core.barcodegenerator.impl.StorageContainerBarcodeGenerator;
+import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
@@ -129,7 +129,7 @@ public class StorageContainerTest {
 		when(siteDao.getSite(anyString())).thenReturn(StorageContainerTestData.getSite());
 		when(userDao.getUserByLoginNameAndDomainName(anyString(), anyString())).thenReturn(
 				StorageContainerTestData.getUser(1l));
-		when(collectionProtocolDao.getCPByTitle(anyString())).thenReturn(StorageContainerTestData.getCp());
+		when(collectionProtocolDao.getCollectionProtocol(anyString())).thenReturn(StorageContainerTestData.getCp());
 		when(storageContainerDao.getStorageContainer(anyLong())).thenReturn(
 				StorageContainerTestData.getStorageContainer(1l));
 		when(storageContainerDao.getStorageContainerByName(anyString())).thenReturn(
@@ -186,7 +186,7 @@ public class StorageContainerTest {
 	@Test
 	public void testForSuccessfulStorageContainerCreationWithNullCp() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
-		when(collectionProtocolDao.getCPByTitle(anyString())).thenReturn(null);
+		when(collectionProtocolDao.getCollectionProtocol(anyString())).thenReturn(null);
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
@@ -283,7 +283,7 @@ public class StorageContainerTest {
 	@Test
 	public void testStorageContainerCreationWithInvalidCP() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
-		when(collectionProtocolDao.getCPByTitle(anyString())).thenReturn(null);
+		when(collectionProtocolDao.getCollectionProtocol(anyString())).thenReturn(null);
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
@@ -498,7 +498,7 @@ public class StorageContainerTest {
 
 	@Test
 	public void testPatchStorageContainerWithInvalidAttribute() {
-		when(collectionProtocolDao.getCPByTitle(anyString())).thenReturn(null);
+		when(collectionProtocolDao.getCollectionProtocol(anyString())).thenReturn(null);
 		PatchStorageContainerEvent reqEvent = StorageContainerTestData.getPatchData();
 		StorageContainerUpdatedEvent response = storageContainerService.patchStorageContainer(reqEvent);
 		assertNotNull("response cannot be null", response);
