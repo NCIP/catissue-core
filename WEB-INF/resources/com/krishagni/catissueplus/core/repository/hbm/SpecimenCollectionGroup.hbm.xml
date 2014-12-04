@@ -99,6 +99,8 @@
                       on scg.collection_protocol_event_id = cpe.identifier and scg.collection_protocol_reg_id = cpr.identifier
                   where
                     cpr.identifier = :cprId
+                  order by
+                    cpe.study_calendar_event_point
                 </sql-query>
 
                 <sql-query name="getVisitsCollectionStatus">
