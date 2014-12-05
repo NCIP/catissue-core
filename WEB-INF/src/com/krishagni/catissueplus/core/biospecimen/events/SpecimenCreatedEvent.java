@@ -6,10 +6,9 @@ import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class SpecimenCreatedEvent extends ResponseEvent {
-
 	private Long id;
 
-	private SpecimenDetail specimenDetail;
+	private SpecimenDetail specimen;
 
 	public Long getId() {
 		return id;
@@ -19,18 +18,18 @@ public class SpecimenCreatedEvent extends ResponseEvent {
 		this.id = id;
 	}
 
-	public SpecimenDetail getSpecimenDetail() {
-		return specimenDetail;
+	public SpecimenDetail getSpecimen() {
+		return specimen;
 	}
 
-	public void setSpecimenDetail(SpecimenDetail specimenDetail) {
-		this.specimenDetail = specimenDetail;
+	public void setSpecimen(SpecimenDetail specimen) {
+		this.specimen = specimen;
 	}
 
 	public static SpecimenCreatedEvent ok(SpecimenDetail detail) {
 		SpecimenCreatedEvent event = new SpecimenCreatedEvent();
 		event.setStatus(EventStatus.OK);
-		event.setSpecimenDetail(detail);
+		event.setSpecimen(detail);
 		return event;
 	}
 

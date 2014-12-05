@@ -7,15 +7,15 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class ScgUpdatedEvent extends ResponseEvent {
 
-	private ScgDetail detail;
+	private VisitDetail detail;
 
 	private Long scgId;
 
-	public ScgDetail getDetail() {
+	public VisitDetail getDetail() {
 		return detail;
 	}
 
-	public void setDetail(ScgDetail detail) {
+	public void setDetail(VisitDetail detail) {
 		this.detail = detail;
 	}
 
@@ -27,14 +27,14 @@ public class ScgUpdatedEvent extends ResponseEvent {
 		this.scgId = scgId;
 	}
 
-	public static ScgUpdatedEvent ok(ScgDetail detail) {
+	public static ScgUpdatedEvent ok(VisitDetail detail) {
 		ScgUpdatedEvent event = new ScgUpdatedEvent();
 		event.setStatus(EventStatus.OK);
 		event.setDetail(detail);
 		return event;
 	}
 
-	public static ScgUpdatedEvent notAuthorized(CreateScgEvent createScgEvent) {
+	public static ScgUpdatedEvent notAuthorized(AddVisitEvent createScgEvent) {
 		ScgUpdatedEvent event = new ScgUpdatedEvent();
 		event.setStatus(EventStatus.NOT_AUTHORIZED);
 		return event;

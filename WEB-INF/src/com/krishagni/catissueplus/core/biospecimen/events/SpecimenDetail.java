@@ -13,12 +13,11 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenPosition;
 
 public class SpecimenDetail {
-
 	private Long id;
 
-	private String tissueSite;
+	private String anatomicSite;
 
-	private String tissueSide;
+	private String laterality;
 
 	private String pathologicalStatus;
 
@@ -28,9 +27,9 @@ public class SpecimenDetail {
 
 	private String specimenClass;
 
-	private String specimenType;
+	private String type;
 
-	private Double concentrationInMicrogramPerMicroliter;
+	private Double concentration;
 
 	private String label;
 
@@ -48,9 +47,9 @@ public class SpecimenDetail {
 
 	private String collectionStatus;
 
-	private Long scgId;
+	private Long visitId;
 	
-	private String scgName;
+	private String visitName;
 
 	private Long requirementId;
 
@@ -84,20 +83,20 @@ public class SpecimenDetail {
 		this.id = id;
 	}
 
-	public String getTissueSite() {
-		return tissueSite;
+	public String getAnatomicSite() {
+		return anatomicSite;
 	}
 
-	public void setTissueSite(String tissueSite) {
-		this.tissueSite = tissueSite;
+	public void setAnatomicSite(String anatomicSite) {
+		this.anatomicSite = anatomicSite;
 	}
 
-	public String getTissueSide() {
-		return tissueSide;
+	public String getLaterality() {
+		return laterality;
 	}
 
-	public void setTissueSide(String tissueSide) {
-		this.tissueSide = tissueSide;
+	public void setLaterality(String laterality) {
+		this.laterality = laterality;
 	}
 
 	public String getPathologicalStatus() {
@@ -133,19 +132,19 @@ public class SpecimenDetail {
 	}
 
 	public String getSpecimenType() {
-		return specimenType;
+		return type;
 	}
 
 	public void setSpecimenType(String specimenType) {
-		this.specimenType = specimenType;
+		this.type = specimenType;
 	}
 
-	public Double getConcentrationInMicrogramPerMicroliter() {
-		return concentrationInMicrogramPerMicroliter;
+	public Double getConcentration() {
+		return concentration;
 	}
 
-	public void setConcentrationInMicrogramPerMicroliter(Double concentrationInMicrogramPerMicroliter) {
-		this.concentrationInMicrogramPerMicroliter = concentrationInMicrogramPerMicroliter;
+	public void setConcentration(Double concentration) {
+		this.concentration = concentration;
 	}
 
 	public String getLabel() {
@@ -212,20 +211,20 @@ public class SpecimenDetail {
 		this.collectionStatus = collectionStatus;
 	}
 
-	public Long getScgId() {
-		return scgId;
+	public Long getVisitId() {
+		return visitId;
 	}
 
-	public void setScgId(Long scgId) {
-		this.scgId = scgId;
+	public void setVisitId(Long visitId) {
+		this.visitId = visitId;
 	}
 
-	public String getScgName() {
-		return scgName;
+	public String getVisitName() {
+		return visitName;
 	}
 
-	public void setScgName(String scgName) {
-		this.scgName = scgName;
+	public void setVisitName(String visitName) {
+		this.visitName = visitName;
 	}
 
 	public Long getRequirementId() {
@@ -324,7 +323,7 @@ public class SpecimenDetail {
 		this.biohazardDetails = biohazardDetails;
 	}
 
-	public static SpecimenDetail fromDomain(Specimen specimen) {
+	public static SpecimenDetail from(Specimen specimen) {
 		SpecimenDetail detail = new SpecimenDetail();
 		detail.setActivityStatus(specimen.getActivityStatus());
 		detail.setAvailableQuantity(specimen.getAvailableQuantity());
@@ -333,7 +332,7 @@ public class SpecimenDetail {
 		detail.setCollectionStatus(specimen.getCollectionStatus());
 		detail.setComment(specimen.getComment());
 		detail.setLineage(specimen.getLineage());
-		detail.setConcentrationInMicrogramPerMicroliter(specimen.getConcentrationInMicrogramPerMicroliter());
+		detail.setConcentration(specimen.getConcentrationInMicrogramPerMicroliter());
 		detail.setCreatedOn(specimen.getCreatedOn());
 		detail.setExternalIdentifierDetails(getExternalIdentifierDetails(specimen.getExternalIdentifierCollection()));
 		detail.setId(specimen.getId());
@@ -344,8 +343,8 @@ public class SpecimenDetail {
 		detail.setPathologicalStatus(specimen.getPathologicalStatus());
 		detail.setSpecimenClass(specimen.getSpecimenClass());
 		detail.setSpecimenType(specimen.getSpecimenType());
-		detail.setTissueSide(specimen.getTissueSide());
-		detail.setTissueSite(specimen.getTissueSite());
+		detail.setLaterality(specimen.getTissueSide());
+		detail.setAnatomicSite(specimen.getTissueSite());
 
 		if (specimen.getParentSpecimen() != null) {
 			detail.setParentSpecimenId(specimen.getParentSpecimen().getId());
@@ -353,8 +352,8 @@ public class SpecimenDetail {
 		}
 		
 		if (specimen.getSpecimenCollectionGroup() != null) {
-			detail.setScgId(specimen.getSpecimenCollectionGroup().getId());
-			detail.setScgName(specimen.getSpecimenCollectionGroup().getName());
+			detail.setVisitId(specimen.getSpecimenCollectionGroup().getId());
+			detail.setVisitName(specimen.getSpecimenCollectionGroup().getName());
 		}
 		
 		if (specimen.getSpecimenRequirement() != null) {
@@ -379,7 +378,7 @@ public class SpecimenDetail {
 		List<SpecimenDetail> specimenDetails = new ArrayList<SpecimenDetail>();
 		
 		for (Specimen s : specimens) {
-			specimenDetails.add(fromDomain(s));
+			specimenDetails.add(from(s));
 		}
 		
 		return specimenDetails;

@@ -284,5 +284,16 @@
       group by 
         cp.identifier
     </sql-query>
+
+    <query name="getCpeByTitleAndEventLabel">
+      select
+        cpe
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
+        join cp.collectionProtocolEvents cpe
+      where
+        cp.id = :cpId and
+        cpe.collectionPointLabel = :label
+    </query>
   </class>
 </hibernate-mapping>

@@ -177,15 +177,15 @@ public class SpecimenController {
 	@ResponseBody
 	public SpecimenDetail createSpecimen(@RequestBody SpecimenDetail specimenDetail) {
 		CreateSpecimenEvent createSpecimenEvent = new CreateSpecimenEvent();
-		createSpecimenEvent.setSpecimenDetail(specimenDetail);
+		createSpecimenEvent.setSpecimen(specimenDetail);
 		createSpecimenEvent.setSessionDataBean(getSession());
-		createSpecimenEvent.setScgId(specimenDetail.getScgId());
+		createSpecimenEvent.setVisitId(specimenDetail.getVisitId());
 
 		SpecimenCreatedEvent response = specimenSvc.createSpecimen(createSpecimenEvent);
 		if (!response.isSuccess()) {
 			response.raiseException();
 		}
-		return response.getSpecimenDetail();
+		return response.getSpecimen();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")

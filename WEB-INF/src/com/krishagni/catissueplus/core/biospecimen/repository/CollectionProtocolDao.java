@@ -19,7 +19,7 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 
 	public CollectionProtocolEvent getCpe(Long cpeId);
 
-	public CollectionProtocolEvent getCpeByCollectionPointLabel(Long cpId, String collectionPointLabel);
+	public CollectionProtocolEvent getCpeByEventLabel(Long cpId, String eventLabel);
 
 	public SpecimenRequirement getSpecimenRequirement(Long requirementId);
 

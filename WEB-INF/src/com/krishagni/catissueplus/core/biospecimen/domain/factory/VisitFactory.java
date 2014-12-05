@@ -1,18 +1,12 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory;
 
-import java.util.Map;
-
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
-import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 
-public interface SpecimenCollectionGroupFactory {
-
-	public SpecimenCollectionGroup createScg(ScgDetail scgDetail);
-
-	public SpecimenCollectionGroup patch(SpecimenCollectionGroup oldScg, Map<String, Object> scgProps);
+public interface VisitFactory {
+	public SpecimenCollectionGroup createVisit(VisitDetail scgDetail);
 
 	public SpecimenCollectionGroup updateReports(SpecimenCollectionGroup oldScg, ScgReportDetail detail);
-
 }

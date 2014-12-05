@@ -5,24 +5,23 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class CreateSpecimenEvent extends RequestEvent {
 
-	private Long scgId;
+	private Long visitId;
 
-	private SpecimenDetail specimenDetail;
+	private SpecimenDetail specimen;
 
-	public Long getScgId() {
-		return scgId;
+	public Long getVisitId() {
+		return visitId;
 	}
 
-	public void setScgId(Long scgId) {
-		this.scgId = scgId;
+	public void setVisitId(Long visitId) {
+		this.visitId = visitId;
 	}
 
-	public SpecimenDetail getSpecimenDetail() {
-		return specimenDetail;
+	public SpecimenDetail getSpecimen() {
+		return specimen;
 	}
 
-	public void setSpecimenDetail(SpecimenDetail specimenDetail) {
-		this.specimenDetail = specimenDetail;
+	public void setSpecimen(SpecimenDetail specimen) {
+		this.specimen = specimen;
 	}
-
 }

@@ -97,7 +97,7 @@
 	
   <bean id="specimenCollGroupService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenCollGroupServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
-	<property name="scgFactory" ref="scgFactory"/>
+	<property name="visitFactory" ref="visitFactory"/>
 	<property name="scgLabelGenerator" ref="scgLabelGenerator"/>
 	<property name="scgBarcodeGenerator" ref="scgBarcodeGenerator"/>
   </bean>
@@ -144,7 +144,7 @@
 		<property name="daoFactory" ref="biospecimenDaoFactory" />
 	</bean>
   
-  <bean id="scgFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenCollectionGroupFactoryImpl">
+  <bean id="visitFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.VisitFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   <bean id="cprFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolRegistrationFactoryImpl">
@@ -162,6 +162,7 @@
   <bean id="cprSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolRegistrationServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="registrationFactory" ref="cprFactory"/>
+    <property name="visitFactory" ref="visitFactory"/>
     <property name="privilegeSvc" ref="privSvc"/>
     <property name="participantService" ref="participantSvc"/>
   </bean>
@@ -441,4 +442,5 @@
   <bean id="appCtxProvider" class="com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider">
   </bean>
 
+  <import resource="classpath*:com/krishagni/openspecimen/custom/*Context.xml"/>
  </beans>

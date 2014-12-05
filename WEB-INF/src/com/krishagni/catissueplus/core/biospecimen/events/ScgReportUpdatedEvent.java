@@ -34,7 +34,7 @@ public class ScgReportUpdatedEvent extends ResponseEvent {
 		return event;
 	}
 
-	public static ScgReportUpdatedEvent notAuthorized(CreateScgEvent createScgEvent) {
+	public static ScgReportUpdatedEvent notAuthorized(AddVisitEvent createScgEvent) {
 		ScgReportUpdatedEvent event = new ScgReportUpdatedEvent();
 		event.setStatus(EventStatus.NOT_AUTHORIZED);
 		return event;

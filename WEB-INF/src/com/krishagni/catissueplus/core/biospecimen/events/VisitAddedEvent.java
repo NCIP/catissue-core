@@ -5,48 +5,44 @@ import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 
-public class ScgCreatedEvent extends ResponseEvent{
-
-	private ScgDetail detail;
+public class VisitAddedEvent extends ResponseEvent {
+	private VisitDetail visit;
+		
+	public VisitDetail getVisit() {
+		return visit;
+	}
 	
-	
-	public ScgDetail getDetail() {
-		return detail;
+	public void setVisit(VisitDetail visit) {
+		this.visit = visit;
 	}
 
-	
-	public void setDetail(ScgDetail detail) {
-		this.detail = detail;
-	}
-
-	public static ScgCreatedEvent ok(ScgDetail detail) {
-		ScgCreatedEvent event = new ScgCreatedEvent();
+	public static VisitAddedEvent ok(VisitDetail visit) {
+		VisitAddedEvent event = new VisitAddedEvent();
 		event.setStatus(EventStatus.OK);
-		event.setDetail(detail);
+		event.setVisit(visit);
 		return event;
 	}
 
-	public static ScgCreatedEvent notAuthorized(CreateScgEvent createScgEvent) {
-		ScgCreatedEvent event = new ScgCreatedEvent();
+	public static VisitAddedEvent notAuthorized() {
+		VisitAddedEvent event = new VisitAddedEvent();
 		event.setStatus(EventStatus.NOT_AUTHORIZED);
 		return event;
 	}
 
-	public static ScgCreatedEvent invalidRequest(String message, ErroneousField... fields) {
-		ScgCreatedEvent resp = new ScgCreatedEvent();
+	public static VisitAddedEvent invalidRequest(String message, ErroneousField... fields) {
+		VisitAddedEvent resp = new VisitAddedEvent();
 		resp.setErroneousFields(fields);
 		resp.setStatus(EventStatus.BAD_REQUEST);
 		resp.setMessage(message);
 		return resp;
 	}
 
-	public static ScgCreatedEvent serverError(Throwable... t) {
+	public static VisitAddedEvent serverError(Throwable... t) {
 		Throwable t1 = t != null && t.length > 0 ? t[0] : null;
-		ScgCreatedEvent resp = new ScgCreatedEvent();
+		VisitAddedEvent resp = new VisitAddedEvent();
 		resp.setStatus(EventStatus.INTERNAL_SERVER_ERROR);
 		resp.setException(t1);
 		resp.setMessage(t1 != null ? t1.getMessage() : null);
 		return resp;
 	}
-
 }

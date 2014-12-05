@@ -120,14 +120,14 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public CollectionProtocolEvent getCpeByCollectionPointLabel(Long cpId, String collectionPointLabel) {
-		List<CollectionProtocolEvent> cpeList = sessionFactory.getCurrentSession()
-				.createCriteria(CollectionProtocolEvent.class)
-				.add(Restrictions.eq("collectionProtocol.id", cpId))
-				.add(Restrictions.eq("collectionPointLabel", collectionPointLabel))
+	public CollectionProtocolEvent getCpeByEventLabel(Long cpId, String label) {
+		List<CollectionProtocolEvent> events = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CPE_BY_CP_AND_LABEL)
+				.setLong("cpId", cpId)
+				.setString("label", label)
 				.list();
 		
-		return cpeList.isEmpty() ? null : cpeList.iterator().next();
+		return events != null && !events.isEmpty() ? events.iterator().next() : null;
 	}
 
 	@Override
@@ -139,6 +139,8 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	private static final String FQN = CollectionProtocol.class.getName();
 	
 	private static final String GET_PARTICIPANT_N_SPECIMEN_CNT = FQN + ".getParticipantAndSpecimenCount";
+	
+	private static final String GET_CPE_BY_CP_AND_LABEL = FQN + ".getCpeByTitleAndEventLabel";
 
 	
 //

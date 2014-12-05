@@ -3,7 +3,10 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 
-public class ScgReportDetail extends ScgDetail {
+//
+// TODO: Check why this is needed
+//
+public class ScgReportDetail extends VisitDetail {
 
 	private String identifiedReport;
 
@@ -31,13 +34,8 @@ public class ScgReportDetail extends ScgDetail {
 		detail.setBarcode(scg.getBarcode());
 		detail.setClinicalDiagnosis(scg.getClinicalDiagnosis());
 		detail.setClinicalStatus(scg.getClinicalStatus());
-		detail.setCollectionComments(scg.getCollectionComments());
-		detail.setCollectionContainer(scg.getCollectionContainer());
-		detail.setCollectionProcedure(scg.getCollectionProcedure());
-		detail.setCollectionSiteName(scg.getCollectionSite().getName());
-		detail.setCollectionStatus(scg.getCollectionStatus());
-		detail.setCollectionTimestamp(scg.getCollectionTimestamp());
-		detail.setCollectorName(scg.getCollector().getLastName() + ", " + scg.getCollector().getFirstName());
+		detail.setVisitSite(scg.getCollectionSite().getName());
+		detail.setVisitStatus(scg.getCollectionStatus());
 		detail.setComment(scg.getComment());
 		detail.setCpeId(scg.getCollectionProtocolEvent().getId());
 		detail.setCprId(scg.getCollectionProtocolRegistration().getId());
@@ -45,12 +43,7 @@ public class ScgReportDetail extends ScgDetail {
 		detail.setName(scg.getName());
 		detail.setIdentifiedReport(scg.getIdentifiedReport());
 		detail.setDeIdentifiedReport(scg.getDeIdentifiedReport());
-		detail.setReceivedComments(scg.getReceivedComments());
-		detail.setReceivedQuality(scg.getReceivedQuality());
-		detail.setReceivedTimestamp(scg.getReceivedTimestamp());
-		detail.setReceiverName(scg.getReceiver().getLastName() + ", " + scg.getReceiver().getFirstName());
 		detail.setSurgicalPathologyNumber(scg.getSurgicalPathologyNumber());
 		return detail;
 	}
-
 }

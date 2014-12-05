@@ -3,18 +3,18 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
-public class CreateScgEvent extends RequestEvent {
+public class AddVisitEvent extends RequestEvent {
 
-	private ScgDetail scgDetail;
+	private VisitDetail visit;
 
 	private Long cprId;
 
-	public ScgDetail getScgDetail() {
-		return scgDetail;
+	public VisitDetail getVisit() {
+		return visit;
 	}
 
-	public void setScgDetail(ScgDetail scgDetail) {
-		this.scgDetail = scgDetail;
+	public void setVisit(VisitDetail visit) {
+		this.visit = visit;
 	}
 
 	public Long getCprId() {
@@ -24,5 +24,4 @@ public class CreateScgEvent extends RequestEvent {
 	public void setCprId(Long cprId) {
 		this.cprId = cprId;
 	}
-
 }

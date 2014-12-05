@@ -7,7 +7,7 @@ public class UpdateScgEvent extends RequestEvent {
 
 	private Long id;
 
-	private ScgDetail scgDetail;
+	private VisitDetail scgDetail;
 
 	public Long getId() {
 		return id;
@@ -17,11 +17,11 @@ public class UpdateScgEvent extends RequestEvent {
 		this.id = id;
 	}
 
-	public ScgDetail getScgDetail() {
+	public VisitDetail getScgDetail() {
 		return scgDetail;
 	}
 
-	public void setScgDetail(ScgDetail scgDetail) {
+	public void setScgDetail(VisitDetail scgDetail) {
 		this.scgDetail = scgDetail;
 	}
 

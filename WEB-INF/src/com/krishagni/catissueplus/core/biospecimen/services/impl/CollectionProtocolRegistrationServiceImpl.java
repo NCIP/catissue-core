@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGrou
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
+import com.krishagni.catissueplus.core.biospecimen.events.AddVisitEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.BulkRegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CprRegistrationDetails;
@@ -41,6 +44,8 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitSpecimensEvent
 import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitAddedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitsEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -66,6 +71,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 
 	private CollectionProtocolRegistrationFactory registrationFactory;
 	
+	private VisitFactory visitFactory;
+	
 	private PrivilegeService privilegeSvc;
 	
 	private ParticipantService participantService;
@@ -82,6 +89,10 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		this.registrationFactory = registrationFactory;
 	}
 	
+	public void setVisitFactory(VisitFactory visitFactory) {
+		this.visitFactory = visitFactory;
+	}
+
 	public void setParticipantService(ParticipantService participantService) {
 		this.participantService = participantService;
 	}
@@ -164,7 +175,24 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		} catch (Exception e) {
 			return VisitSpecimensEvent.serverError(cprId, eventId, visitId, e);
 		}
-	}	
+	}
+	
+	@Override
+	@PlusTransactional
+	public VisitAddedEvent addVisit(AddVisitEvent req) {
+		try { // TODO: visit name
+			SpecimenCollectionGroup visit = visitFactory.createVisit(req.getVisit());
+			visit.setName(UUID.randomUUID().toString());
+
+			daoFactory.getVisitsDao().saveOrUpdate(visit);
+			return VisitAddedEvent.ok(VisitDetail.from(visit));			
+		} catch (ObjectCreationException oce) {
+			return VisitAddedEvent.invalidRequest(oce.getMessage(), oce.getErroneousFields());
+		} catch (Exception e) {
+			return VisitAddedEvent.serverError(e);
+		}
+	}
+		
 	
 	@Override
 	@PlusTransactional
@@ -458,6 +486,4 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			}						
 		}
 	}
-	
-	
 }

@@ -75,13 +75,13 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		Specimen specimen = new Specimen();
 		setScg(specimenDetail, specimen, errorHandler);
 		setLineage(specimenDetail.getLineage(), specimen, errorHandler);
-		setConcentration(specimenDetail.getConcentrationInMicrogramPerMicroliter(), specimenDetail.getSpecimenClass(), specimen, errorHandler);
+		setConcentration(specimenDetail.getConcentration(), specimenDetail.getSpecimenClass(), specimen, errorHandler);
 		setParentSpecimen(specimenDetail, specimen, errorHandler); //check for parent in this method
 		setActivityStatus(specimenDetail.getActivityStatus(), specimen, errorHandler);
 		setSpecimenRequirement(specimenDetail, specimen, errorHandler);
 		setCollectionStatus(specimenDetail.getCollectionStatus(), specimen, errorHandler);
-		setTissueSite(specimenDetail.getTissueSite(), specimen, errorHandler);
-		setTissueSide(specimenDetail.getTissueSide(), specimen, errorHandler);
+		setTissueSite(specimenDetail.getAnatomicSite(), specimen, errorHandler);
+		setTissueSide(specimenDetail.getLaterality(), specimen, errorHandler);
 		setPathologyStatus(specimenDetail.getPathologicalStatus(), specimen, errorHandler);
 		setQuantity(specimenDetail, specimen, errorHandler);
 		setClassAndType(specimenDetail, specimen, errorHandler);
@@ -128,15 +128,15 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	private void setScg(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
 		SpecimenCollectionGroup scg = null;
 		
-		if (specimenDetail.getScgId() == null) {
-			if (!isBlank(specimenDetail.getScgName())) {
-				scg = daoFactory.getVisitsDao().getScgByName(specimenDetail.getScgName());
+		if (specimenDetail.getVisitId() == null) {
+			if (!isBlank(specimenDetail.getVisitName())) {
+				scg = daoFactory.getVisitsDao().getScgByName(specimenDetail.getVisitName());
 			} else {
 				errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, SCG);
 				return;
 			}
 		} else {
-			scg = daoFactory.getVisitsDao().getscg(specimenDetail.getScgId());
+			scg = daoFactory.getVisitsDao().getscg(specimenDetail.getVisitId());
 		}
 		
 		if (scg == null) {

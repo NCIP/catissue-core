@@ -120,20 +120,20 @@ public class SpecimenServiceImpl implements SpecimenService {
 	@PlusTransactional
 	public SpecimenCreatedEvent createSpecimen(CreateSpecimenEvent event) {
 		try {
-			Specimen specimen = specimenFactory.createSpecimen(event.getSpecimenDetail());
+			Specimen specimen = specimenFactory.createSpecimen(event.getSpecimen());
 			ObjectCreationException errorHandler = new ObjectCreationException();
-			setLabel(event.getSpecimenDetail().getLabel(), specimen, errorHandler);
-			setBarcode(event.getSpecimenDetail().getBarcode(), specimen, errorHandler);
+			setLabel(event.getSpecimen().getLabel(), specimen, errorHandler);
+			setBarcode(event.getSpecimen().getBarcode(), specimen, errorHandler);
 			ensureUniqueBarocde(specimen.getBarcode(), errorHandler);
 			ensureUniqueLabel(specimen.getLabel(), errorHandler);
 			errorHandler.checkErrorAndThrow();
 			daoFactory.getSpecimenDao().saveOrUpdate(specimen);
-			if (event.getSpecimenDetail().isPrintLabelsEnabled()) {
+			if (event.getSpecimen().isPrintLabelsEnabled()) {
 				specLabelPrinterFact.printLabel(specimen, event.getSessionDataBean().getIpAddress(), event.getSessionDataBean()
 						.getUserName(), specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
 						.getCollectionProtocol().getShortTitle());
 			}
-			return SpecimenCreatedEvent.ok(SpecimenDetail.fromDomain(specimen));
+			return SpecimenCreatedEvent.ok(SpecimenDetail.from(specimen));
 		}
 		catch (ObjectCreationException oce) {
 			return SpecimenCreatedEvent.invalidRequest(ScgErrorCode.ERRORS.message(), oce.getErroneousFields());
@@ -160,7 +160,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			errorHandler.checkErrorAndThrow();
 			oldSpecimen.update(specimen);
 			daoFactory.getSpecimenDao().saveOrUpdate(oldSpecimen);
-			return SpecimenUpdatedEvent.ok(SpecimenDetail.fromDomain(specimen));
+			return SpecimenUpdatedEvent.ok(SpecimenDetail.from(specimen));
 		}
 		catch (ObjectCreationException oce) {
 			return SpecimenUpdatedEvent.invalidRequest(ScgErrorCode.ERRORS.message(), oce.getErroneousFields());
@@ -193,7 +193,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			errorHandler.checkErrorAndThrow();
 			oldSpecimen.update(specimen);
 			daoFactory.getSpecimenDao().saveOrUpdate(oldSpecimen);
-			return SpecimenUpdatedEvent.ok(SpecimenDetail.fromDomain(specimen));
+			return SpecimenUpdatedEvent.ok(SpecimenDetail.from(specimen));
 		}
 		catch (ObjectCreationException oce) {
 			return SpecimenUpdatedEvent.invalidRequest(ScgErrorCode.ERRORS.message(), oce.getErroneousFields());
@@ -247,7 +247,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 			List<SpecimenDetail> aliquotList = new ArrayList<SpecimenDetail>();
 			for (Specimen aliquot : aliquots) {
-				aliquotList.add(SpecimenDetail.fromDomain(aliquot));
+				aliquotList.add(SpecimenDetail.from(aliquot));
 			}
 			return AliquotCreatedEvent.ok(aliquotList);
 		}

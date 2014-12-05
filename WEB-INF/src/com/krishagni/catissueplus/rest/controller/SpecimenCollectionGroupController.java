@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionGroupsDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AddVisitEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.GetScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitAddedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgUpdatedEvent;
@@ -136,21 +136,21 @@ public class SpecimenCollectionGroupController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ScgDetail createSCG(@RequestBody ScgDetail scgDetail) {
-		CreateScgEvent createScgEvent = new CreateScgEvent();
-		createScgEvent.setScgDetail(scgDetail);
+	public VisitDetail createSCG(@RequestBody VisitDetail scgDetail) {
+		AddVisitEvent createScgEvent = new AddVisitEvent();
+		createScgEvent.setVisit(scgDetail);
 		createScgEvent.setSessionDataBean(getSession());
-		ScgCreatedEvent resp = specimenCollGroupService.createScg(createScgEvent);
+		VisitAddedEvent resp = specimenCollGroupService.createScg(createScgEvent);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
-			return resp.getDetail();
+			return resp.getVisit();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ScgDetail updateSCG(@PathVariable Long id, @RequestBody ScgDetail scgDetail) {
+	public VisitDetail updateSCG(@PathVariable Long id, @RequestBody VisitDetail scgDetail) {
 		UpdateScgEvent event = new UpdateScgEvent();
 		event.setId(id);
 		event.setScgDetail(scgDetail);

@@ -8,15 +8,15 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class AllCollectionGroupsDetailEvent extends ResponseEvent {
 
-	private List<ScgDetail> collectionGroupsDetail;
+	private List<VisitDetail> collectionGroupsDetail;
 
 	private Long count;
 
-	public List<ScgDetail> getCollectionGroupsDetail() {
+	public List<VisitDetail> getCollectionGroupsDetail() {
 		return collectionGroupsDetail;
 	}
 
-	public void setCollectionGroupsDetail(List<ScgDetail> collectionGroupsDetail) {
+	public void setCollectionGroupsDetail(List<VisitDetail> collectionGroupsDetail) {
 		this.collectionGroupsDetail = collectionGroupsDetail;
 	}
 
@@ -28,7 +28,7 @@ public class AllCollectionGroupsDetailEvent extends ResponseEvent {
 		this.count = count;
 	}
 	
-	public static AllCollectionGroupsDetailEvent ok(List<ScgDetail> scgsDetail, Long count) {
+	public static AllCollectionGroupsDetailEvent ok(List<VisitDetail> scgsDetail, Long count) {
 		AllCollectionGroupsDetailEvent event = new AllCollectionGroupsDetailEvent();
 		event.setCollectionGroupsDetail(scgsDetail);
 		event.setCount(count);
