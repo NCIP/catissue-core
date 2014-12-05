@@ -26,8 +26,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEven
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationDetails;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSummaryEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCollectionGroupInfo;
 
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -90,11 +88,11 @@ public class CprTestData {
 		return reqEvent;
 	}
 
-	public static ReqSpecimenCollGroupSummaryEvent getScgListEvent() {
-		ReqSpecimenCollGroupSummaryEvent event = new ReqSpecimenCollGroupSummaryEvent();
-		event.setCprId(1l);
-		return event;
-	}
+//	public static ReqSpecimenCollGroupSummaryEvent getScgListEvent() {
+//		ReqSpecimenCollGroupSummaryEvent event = new ReqSpecimenCollGroupSummaryEvent();
+//		event.setCprId(1l);
+//		return event;
+//	}
 
 	public static DeleteRegistrationEvent getCprDeleteEvent() {
 		DeleteRegistrationEvent event = new DeleteRegistrationEvent();
@@ -264,17 +262,17 @@ public class CprTestData {
 		return user;
 	}
 
-	public static List<SpecimenCollectionGroupInfo> getSCGSummaryList() {
-		List<SpecimenCollectionGroupInfo> groupsInfo = new ArrayList<SpecimenCollectionGroupInfo>();
-		SpecimenCollectionGroupInfo groupInfo = new SpecimenCollectionGroupInfo();
-		groupInfo.setCollectionStatus("Collected");
-		groupInfo.setName("test scg");
-		groupInfo.setReceivedDate(new Date());
-		groupInfo.setId(1l);
-		groupsInfo.add(groupInfo);
-
-		return groupsInfo;
-	}
+//	public static List<SpecimenCollectionGroupInfo> getSCGSummaryList() {
+//		List<SpecimenCollectionGroupInfo> groupsInfo = new ArrayList<SpecimenCollectionGroupInfo>();
+//		SpecimenCollectionGroupInfo groupInfo = new SpecimenCollectionGroupInfo();
+//		groupInfo.setCollectionStatus("Collected");
+//		groupInfo.setName("test scg");
+//		groupInfo.setReceivedDate(new Date());
+//		groupInfo.setId(1l);
+//		groupsInfo.add(groupInfo);
+//
+//		return groupsInfo;
+//	}
 
 	public static Participant getParticipant() {
 		Participant participant = new Participant();
@@ -312,7 +310,7 @@ public class CprTestData {
 		ParticipantDetail p = getParticipantDto();
 		reg.setFirstName(p.getFirstName());
 		reg.setLastName(p.getLastName());
-		reg.setMedicalIdentifierList(p.getMedicalIdentifierList());
+		reg.setPmis(p.getPmis());
 		return reg;
 	}
 	

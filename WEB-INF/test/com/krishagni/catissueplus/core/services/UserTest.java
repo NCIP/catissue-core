@@ -1,10 +1,9 @@
 
 package com.krishagni.catissueplus.core.services;
 
-import static org.junit.Assert.assertEquals; 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -19,7 +18,6 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.UserFactoryImpl;
-import com.krishagni.catissueplus.core.administrative.events.AllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.DisableUserEvent;
@@ -29,7 +27,6 @@ import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEv
 import com.krishagni.catissueplus.core.administrative.events.PasswordUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordValidatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqAllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserClosedEvent;
@@ -38,17 +35,17 @@ import com.krishagni.catissueplus.core.administrative.events.UserDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDisabledEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ValidatePasswordEvent;
-import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
+import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
 import com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl;
 import com.krishagni.catissueplus.core.auth.repository.DomainDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
 import com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl;
@@ -133,7 +130,7 @@ public class UserTest {
 		when(departmentDao.getDepartmentByName(anyString())).thenReturn(UserTestData.getDeparment("Chemical"));
 		when(daoFactory.getUserDao()).thenReturn(userDao);
 		when(siteDao.getSite(anyString())).thenReturn(UserTestData.getSite());
-		when(collectionProtocolDao.getCPByTitle(anyString())).thenReturn(UserTestData.getCp());
+		when(collectionProtocolDao.getCollectionProtocol(anyString())).thenReturn(UserTestData.getCp());
 		when(domainDao.isUniqueAuthDomainName(anyString())).thenReturn(Boolean.FALSE);
 		when(userDao.isUniqueEmailAddress(anyString())).thenReturn(Boolean.TRUE);
 		when(userDao.isUniqueLoginNameInDomain(anyString(), anyString())).thenReturn(Boolean.TRUE);
@@ -190,7 +187,7 @@ public class UserTest {
 	@Test
 	public void testForSuccessfulUserCreationWithNullCp() {
 		CreateUserEvent reqEvent = UserTestData.getCreateUserEventForUserCreation();
-		when(collectionProtocolDao.getCPByTitle(anyString())).thenReturn(null);
+		when(collectionProtocolDao.getCollectionProtocol(anyString())).thenReturn(null);
 		UserCreatedEvent response = userService.createUser(reqEvent);
 
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());

@@ -15,11 +15,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
+import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
@@ -104,7 +104,7 @@ public class SpecimenPrintRuleTest {
 				Boolean.TRUE);
 		when(daoFactory.getUserDao().getUserByLoginNameAndDomainName(anyString(), anyString())).thenReturn(
 				SpecimenPrintRuleTestData.getUser());
-		when(daoFactory.getCollectionProtocolDao().getCPByShortTitle(anyString())).thenReturn(
+		when(daoFactory.getCollectionProtocolDao().getCollectionProtocol(anyString())).thenReturn(
 				SpecimenPrintRuleTestData.getCP());
 	}
 

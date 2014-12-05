@@ -1,6 +1,6 @@
 package com.krishagni.catissueplus.core.services.testdata;
 
-import java.util.ArrayList;  
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
@@ -22,8 +24,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIden
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import com.krishagni.catissueplus.core.administrative.domain.Site;
 import edu.wustl.common.beans.SessionDataBean;
 
 
@@ -103,7 +103,7 @@ public class ParticipantTestData {
 		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		ParticipantDetail participantDto = getParticipantDetails();
-		participantDto.setPmiCollection(getMrnWithEmptyNumber());
+		participantDto.setPmis(getMrnWithEmptyNumber());
 		reqEvent.setParticipantDetail(participantDto);
 		return reqEvent;
 	}
@@ -315,7 +315,7 @@ public class ParticipantTestData {
 		medicalRecordNumberDetail.setSiteName("siteName");
 		List<ParticipantMedicalIdentifierNumberDetail> mrns = new ArrayList<ParticipantMedicalIdentifierNumberDetail>();
 		mrns.add(medicalRecordNumberDetail);
-		details.setPmiCollection(mrns);
+		details.setPmis(mrns);
 		return details;
 	}
 

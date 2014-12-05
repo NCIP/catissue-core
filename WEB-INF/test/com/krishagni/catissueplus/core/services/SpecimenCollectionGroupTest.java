@@ -3,13 +3,13 @@ package com.krishagni.catissueplus.core.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +30,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.VisitsDao;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
 import com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenCollGroupServiceImpl;
 import com.krishagni.catissueplus.core.common.CommonValidator;
@@ -48,7 +48,7 @@ public class SpecimenCollectionGroupTest {
 	private DaoFactory daoFactory;
 
 	@Mock
-	private SpecimenCollectionGroupDao scgDao;
+	private VisitsDao visitsDao;
 
 	@Mock
 	private CollectionProtocolDao collectionProtocolDao;
@@ -81,7 +81,7 @@ public class SpecimenCollectionGroupTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		when(daoFactory.getScgDao()).thenReturn(scgDao);
+		when(daoFactory.getVisitsDao()).thenReturn(visitsDao);
 		when(daoFactory.getCollectionProtocolDao()).thenReturn(collectionProtocolDao);
 		when(daoFactory.getCprDao()).thenReturn(cprDao);
 		when(daoFactory.getSiteDao()).thenReturn(siteDao);
@@ -107,8 +107,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(ScgTestData.getCpr(1L)).when(cprDao).getCpr(anyLong());
 		doReturn(ScgTestData.getSite("default-site")).when(siteDao).getSite(anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(anyString(), anyString());
-		doReturn(null).when(scgDao).getScgByName(anyString());
-		doReturn(null).when(scgDao).getScgByBarcode(anyString());
+		doReturn(null).when(visitsDao).getScgByName(anyString());
+		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		ScgCreatedEvent response = service.createScg(event);
@@ -124,8 +124,8 @@ public class SpecimenCollectionGroupTest {
 		
 		doReturn(ScgTestData.getSite("default-site")).when(siteDao).getSite(anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(anyString(), anyString());
-		doReturn(null).when(scgDao).getScgByName(anyString());
-		doReturn(null).when(scgDao).getScgByBarcode(anyString());
+		doReturn(null).when(visitsDao).getScgByName(anyString());
+		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		event.getScgDetail().setCprId(null);
@@ -145,8 +145,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(ScgTestData.getCpr(1L)).when(cprDao).getCpr(anyLong());
 		doReturn(ScgTestData.getSite("default-site")).when(siteDao).getSite(anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(anyString(), anyString());
-		doReturn(null).when(scgDao).getScgByName(anyString());
-		doReturn(null).when(scgDao).getScgByBarcode(anyString());
+		doReturn(null).when(visitsDao).getScgByName(anyString());
+		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		ScgCreatedEvent response = service.createScg(event);
@@ -162,8 +162,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(null).when(cprDao).getCpr(anyLong());
 		doReturn(ScgTestData.getSite("default-site")).when(siteDao).getSite(anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(anyString(), anyString());
-		doReturn(null).when(scgDao).getScgByName(anyString());
-		doReturn(null).when(scgDao).getScgByBarcode(anyString());
+		doReturn(null).when(visitsDao).getScgByName(anyString());
+		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		ScgCreatedEvent response = service.createScg(event);
@@ -181,8 +181,8 @@ public class SpecimenCollectionGroupTest {
 		
 		doReturn(ScgTestData.getSite("default-site")).when(siteDao).getSite(anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(anyString(), anyString());
-		doReturn(null).when(scgDao).getScgByName(anyString());
-		doReturn(null).when(scgDao).getScgByBarcode(anyString());
+		doReturn(null).when(visitsDao).getScgByName(anyString());
+		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		event.getScgDetail().setCprId(null);
@@ -205,8 +205,8 @@ public class SpecimenCollectionGroupTest {
 		
 		doReturn(ScgTestData.getSite("default-site")).when(siteDao).getSite(anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(anyString(), anyString());
-		doReturn(null).when(scgDao).getScgByName(anyString());
-		doReturn(null).when(scgDao).getScgByBarcode(anyString());
+		doReturn(null).when(visitsDao).getScgByName(anyString());
+		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		event.getScgDetail().setCprId(null);
@@ -229,8 +229,8 @@ public class SpecimenCollectionGroupTest {
 		
 		doReturn(ScgTestData.getSite("default-site")).when(siteDao).getSite(anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(anyString(), anyString());
-		doReturn(null).when(scgDao).getScgByName(anyString());
-		doReturn(null).when(scgDao).getScgByBarcode(anyString());
+		doReturn(null).when(visitsDao).getScgByName(anyString());
+		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		event.getScgDetail().setCprId(null);
@@ -253,8 +253,8 @@ public class SpecimenCollectionGroupTest {
 		
 		doReturn(ScgTestData.getSite("default-site")).when(siteDao).getSite(anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(anyString(), anyString());
-		doReturn(null).when(scgDao).getScgByName(anyString());
-		doReturn(null).when(scgDao).getScgByBarcode(anyString());
+		doReturn(null).when(visitsDao).getScgByName(anyString());
+		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		event.getScgDetail().setCprId(null);
@@ -275,8 +275,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(ScgTestData.getCpr(1L)).when(cprDao).getCpr(anyLong());
 		doReturn(null).when(siteDao).getSite(anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(anyString(), anyString());
-		doReturn(null).when(scgDao).getScgByName(anyString());
-		doReturn(null).when(scgDao).getScgByBarcode(anyString());
+		doReturn(null).when(visitsDao).getScgByName(anyString());
+		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		ScgCreatedEvent response = service.createScg(event);
@@ -295,8 +295,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(ScgTestData.getSite("default-site")).when(siteDao).getSite(anyString());
 		doReturn(null).when(userDao).getUserByLoginNameAndDomainName(eq(collectorName), anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(eq(receiverName), anyString());
-		doReturn(null).when(scgDao).getScgByName(anyString());
-		doReturn(null).when(scgDao).getScgByBarcode(anyString());
+		doReturn(null).when(visitsDao).getScgByName(anyString());
+		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		event.getScgDetail().setCollectorName(collectorName);
@@ -317,8 +317,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(ScgTestData.getSite("default-site")).when(siteDao).getSite(anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(eq(collectorName), anyString());
 		doReturn(null).when(userDao).getUserByLoginNameAndDomainName(eq(receiverName), anyString());
-		doReturn(null).when(scgDao).getScgByName(anyString());
-		doReturn(null).when(scgDao).getScgByBarcode(anyString());
+		doReturn(null).when(visitsDao).getScgByName(anyString());
+		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		event.getScgDetail().setCollectorName(collectorName);
@@ -337,8 +337,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(ScgTestData.getCpr(1L)).when(cprDao).getCpr(anyLong());
 		doReturn(ScgTestData.getSite("default-site")).when(siteDao).getSite(anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(anyString(), anyString());
-		doReturn(null).when(scgDao).getScgByName(anyString());
-		doReturn(null).when(scgDao).getScgByBarcode(anyString());
+		doReturn(null).when(visitsDao).getScgByName(anyString());
+		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		ScgCreatedEvent response = service.createScg(event);
@@ -353,8 +353,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(ScgTestData.getCpr(1L)).when(cprDao).getCpr(anyLong());
 		doReturn(ScgTestData.getSite("default-site")).when(siteDao).getSite(anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(anyString(), anyString());
-		doReturn(new SpecimenCollectionGroup()).when(scgDao).getScgByName(anyString());
-		doReturn(null).when(scgDao).getScgByBarcode(anyString());
+		doReturn(new SpecimenCollectionGroup()).when(visitsDao).getScgByName(anyString());
+		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		ScgCreatedEvent response = service.createScg(event);
@@ -369,8 +369,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(ScgTestData.getCpr(1L)).when(cprDao).getCpr(anyLong());
 		doReturn(ScgTestData.getSite("default-site")).when(siteDao).getSite(anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(anyString(), anyString());
-		doReturn(null).when(scgDao).getScgByName(anyString());
-		doReturn(new SpecimenCollectionGroup()).when(scgDao).getScgByBarcode(anyString());
+		doReturn(null).when(visitsDao).getScgByName(anyString());
+		doReturn(new SpecimenCollectionGroup()).when(visitsDao).getScgByBarcode(anyString());
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		ScgCreatedEvent response = service.createScg(event);
@@ -385,8 +385,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(ScgTestData.getCpr(1L)).when(cprDao).getCpr(anyLong());
 		doReturn(ScgTestData.getSite("default-site")).when(siteDao).getSite(anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(anyString(), anyString());
-		doReturn(null).when(scgDao).getScgByName(anyString());
-		doReturn(null).when(scgDao).getScgByBarcode(anyString());
+		doReturn(null).when(visitsDao).getScgByName(anyString());
+		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		event.getScgDetail().setName("");
@@ -402,10 +402,10 @@ public class SpecimenCollectionGroupTest {
 		doReturn(ScgTestData.getCpr(1L)).when(cprDao).getCpr(anyLong());
 		doReturn(ScgTestData.getSite("default-site")).when(siteDao).getSite(anyString());
 		doReturn(ScgTestData.getUser()).when(userDao).getUserByLoginNameAndDomainName(anyString(), anyString());
-		doReturn(null).when(scgDao).getScgByName(anyString());
-		doReturn(null).when(scgDao).getScgByBarcode(anyString());
+		doReturn(null).when(visitsDao).getScgByName(anyString());
+		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
-		doThrow(new RuntimeException()).when(scgDao).saveOrUpdate(any(SpecimenCollectionGroup.class));
+		doThrow(new RuntimeException()).when(visitsDao).saveOrUpdate(any(SpecimenCollectionGroup.class));
 		
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		ScgCreatedEvent response = service.createScg(event);

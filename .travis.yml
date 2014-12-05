@@ -1,0 +1,9 @@
+language: java
+script: ant runTestCases
+
+notifications:
+  email:
+    recipients:
+      - catissue@krishagni.com
+    on_success: always
+    on_failure: always
