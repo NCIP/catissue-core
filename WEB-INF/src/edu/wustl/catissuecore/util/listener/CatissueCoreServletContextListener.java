@@ -142,9 +142,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
             QuartzSchedulerJobUtil.scheduleQuartzSchedulerJob();
             //QueryDataExportService.initialize();
             
-            ExternalAppNotificationSchedular.scheduleExtAppNotifSchedulerJob();
-            ExternalAppFailNotificationSchedular.scheduleExtAppFailNotifSchedulerJob();
-
 			CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
 			
 			FormProperties.getInstance().setPostProcessor(new FormProcessor());

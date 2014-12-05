@@ -28,12 +28,12 @@ public class TransactionalInterceptor {
 		this.sessionFactory = sessionFactory;
 	}
 
-	@Pointcut("within(com.krishagni.catissueplus.service.impl.* || com.krishagni.catissueplus.core.*.services.impl.* || com.krishagni.catissueplus.core.*.*.services.impl.* || com.krishagni.catissueplus.bulkoperator.services.impl.*)")
-	public void anyPublicMethod() {
+	@Pointcut("execution(@com.krishagni.catissueplus.core.common.PlusTransactional * *(..))")
+	public void transactionalMethod() {
 	}
 
-	@Around("anyPublicMethod() && @annotation(plusTransactional)")
-	public Object startTransaction(ProceedingJoinPoint pjp, PlusTransactional plusTransactional) {
+	@Around("transactionalMethod()")
+	public Object startTransaction(ProceedingJoinPoint pjp) {
 		boolean isTransactionStarted = false;
 		boolean isSessionStarted = !ManagedSessionContext.hasBind(sessionFactory);
 
