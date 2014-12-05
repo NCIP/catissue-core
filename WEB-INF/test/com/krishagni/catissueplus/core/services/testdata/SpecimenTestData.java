@@ -34,8 +34,8 @@ public class SpecimenTestData {
 		SpecimenDetail detail = getSpecimenDetail();
 		detail.setLabel(null);
 		event.setSessionDataBean(getSessionDataBean());
-		event.setScgId(1l);
-		event.setSpecimenDetail(detail);
+		event.setVisitId(1l);
+		event.setSpecimen(detail);
 		return event;
 	}
 
@@ -45,7 +45,7 @@ public class SpecimenTestData {
 		detail.setParentSpecimenId(null);
 		detail.setLineage("Derived");
 		event.setSessionDataBean(getSessionDataBean());
-		event.setSpecimenDetail(detail);
+		event.setSpecimen(detail);
 		return event;
 	}
 
@@ -55,7 +55,7 @@ public class SpecimenTestData {
 		detail.setParentSpecimenId(1l);
 		detail.setLineage("Derived");
 		event.setSessionDataBean(getSessionDataBean());
-		event.setSpecimenDetail(detail);
+		event.setSpecimen(detail);
 		return event;
 	}
 
@@ -118,7 +118,7 @@ public class SpecimenTestData {
 	public static CreateSpecimenEvent getCreateSpecimenEvent() {
 		CreateSpecimenEvent event = new CreateSpecimenEvent();
 		event.setSessionDataBean(getSessionDataBean());
-		event.setSpecimenDetail(getSpecimenDetail());
+		event.setSpecimen(getSpecimenDetail());
 		return event;
 	}
 
@@ -136,11 +136,11 @@ public class SpecimenTestData {
 		detail.setLineage("New");
 		detail.setPathologicalStatus("Not Specified");
 		detail.setRequirementId(1l);
-		detail.setScgId(1l);
+		detail.setVisitId(1l);
 		detail.setSpecimenClass("Fluid");
 		detail.setSpecimenType("Feces");
-		detail.setTissueSide("Not Specified");
-		detail.setTissueSite("Not Specified");
+		detail.setLaterality("Not Specified");
+		detail.setAnatomicSite("Not Specified");
 		detail.setBiohazardDetails(getBioHazardList());
 		detail.setEnablePrintLabels(false);
 		
@@ -190,7 +190,7 @@ public class SpecimenTestData {
 //		detail.setScgId(null);
 		detail.setParentSpecimenId(1l);
 		event.setSessionDataBean(getSessionDataBean());
-		event.setSpecimenDetail(detail);
+		event.setSpecimen(detail);
 		return event;
 	}
 

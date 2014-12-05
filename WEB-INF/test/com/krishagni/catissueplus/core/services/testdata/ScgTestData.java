@@ -8,8 +8,8 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.AddVisitEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
@@ -22,8 +22,8 @@ public class ScgTestData {
 
 	public static final Object SCG_REPORTS = "scg reports";
 
-	public static CreateScgEvent getCreateScgEventServerErr() {
-		return getCreateScgEvent();
+	public static AddVisitEvent getAddVisitEventServerErr() {
+		return getAddVisitEvent();
 	}
 	
 	public static SpecimenCollectionGroup getScgToReturn() {
@@ -33,8 +33,6 @@ public class ScgTestData {
 		Site site = new Site();
 		site.setName("dsad");
 		scg.setCollectionSite(site);
-		scg.setCollector(new User());
-		scg.setReceiver(new User());
 		scg.setCollectionProtocolEvent(new CollectionProtocolEvent());
 		scg.setCollectionProtocolRegistration(new CollectionProtocolRegistration());
 		return scg;
@@ -47,7 +45,7 @@ public class ScgTestData {
 		UpdateScgEvent event = new UpdateScgEvent();
 		event.setId(1l);
 		event.setSessionDataBean(getSessionDataBean());
-		event.setScgDetail(getScgDetail(1l));
+		event.setScgDetail(getVisitDetail(1l));
 		return event;
 	}
 
@@ -83,36 +81,25 @@ public class ScgTestData {
 		return registrationDetails;
 	}
 
-	public static CreateScgEvent getCreateScgEvent() {
+	public static AddVisitEvent getAddVisitEvent() {
 		Long cprId = 1l;
-		CreateScgEvent event = new CreateScgEvent();
+		AddVisitEvent event = new AddVisitEvent();
 		event.setSessionDataBean(getSessionDataBean());
 		event.setCprId(cprId);
-		event.setScgDetail(getScgDetail(cprId));
+		event.setVisit(getVisitDetail(cprId));
 		return event;
 	}
 
-	private static ScgDetail getScgDetail(Long cprId) {
-		ScgDetail detail = new ScgDetail();
+	private static VisitDetail getVisitDetail(Long cprId) {
+		VisitDetail detail = new VisitDetail();
 		detail.setCprId(cprId);
 		detail.setCpeId(cprId);
 		detail.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 		detail.setBarcode("barcode");
 		detail.setClinicalDiagnosis("Not Specified");
 		detail.setClinicalStatus("Not Specified");
-		detail.setCollectionComments("collectionComments");
-		detail.setCollectionContainer("CPT");
-		detail.setCollectionProcedure("Lavage");
-		detail.setCollectionSiteName("Site");
-		detail.setCollectionStatus(Status.SCG_COLLECTION_STATUS_COMPLETED.getStatus());
-		detail.setCollectionTimestamp(new Date());
-		detail.setCollectorName("admin@admin.com");
 		detail.setComment("comment");
 		detail.setName("name");
-		detail.setReceivedComments("receivedComments");
-		detail.setReceivedQuality("Clotted");
-		detail.setReceivedTimestamp(new Date());
-		detail.setReceiverName("admin@admin.com");
 		detail.setSurgicalPathologyNumber("surgicalPathologyNumber");
 		return detail;
 	}

@@ -160,8 +160,8 @@ public class SpecimenTest {
 	    .saveOrUpdate((any(Specimen.class)));
 		
 		CreateSpecimenEvent event = SpecimenTestData.getCreateSpecimenEvent();
-		event.getSpecimenDetail().setScgId(null);
-		event.getSpecimenDetail().setScgName(scgName);
+		event.getSpecimen().setVisitId(null);
+		event.getSpecimen().setVisitName(scgName);
 		
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null", response);
@@ -196,14 +196,14 @@ public class SpecimenTest {
 	    .saveOrUpdate((any(Specimen.class)));
 		
 		CreateSpecimenEvent event = SpecimenTestData.getCreateSpecimenEvent();
-		event.getSpecimenDetail().setLineage("derived");
-		event.getSpecimenDetail().setParentSpecimenId(parentSpecimenId);
+		event.getSpecimen().setLineage("derived");
+		event.getSpecimen().setParentSpecimenId(parentSpecimenId);
 		
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
-		assertEquals(parentSpecimenId, response.getSpecimenDetail().getParentSpecimenId());
-		assertEquals(parentSpecimenLabel, response.getSpecimenDetail().getParentSpecimenLabel());
+		assertEquals(parentSpecimenId, response.getSpecimen().getParentSpecimenId());
+		assertEquals(parentSpecimenLabel, response.getSpecimen().getParentSpecimenLabel());
 	}
 	
 	@Test
@@ -235,15 +235,15 @@ public class SpecimenTest {
 	    .saveOrUpdate((any(Specimen.class)));
 		
 		CreateSpecimenEvent event = SpecimenTestData.getCreateSpecimenEvent();
-		event.getSpecimenDetail().setLineage("derived");
-		event.getSpecimenDetail().setParentSpecimenLabel(parentSpecimenLabel);
-		event.getSpecimenDetail().setLabel(childSpecimenLabel);
+		event.getSpecimen().setLineage("derived");
+		event.getSpecimen().setParentSpecimenLabel(parentSpecimenLabel);
+		event.getSpecimen().setLabel(childSpecimenLabel);
 		
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
-		assertEquals(parentSpecimenId, response.getSpecimenDetail().getParentSpecimenId());
-		assertEquals(parentSpecimenLabel, response.getSpecimenDetail().getParentSpecimenLabel());
+		assertEquals(parentSpecimenId, response.getSpecimen().getParentSpecimenId());
+		assertEquals(parentSpecimenLabel, response.getSpecimen().getParentSpecimenLabel());
 	}
 	
 	@Test
@@ -296,8 +296,8 @@ public class SpecimenTest {
 	    .saveOrUpdate((any(Specimen.class)));
 		
 		CreateSpecimenEvent event = SpecimenTestData.getCreateSpecimenEvent();
-		event.getSpecimenDetail().setLineage("derived");
-		event.getSpecimenDetail().setParentSpecimenId(parentSpecimenId);
+		event.getSpecimen().setLineage("derived");
+		event.getSpecimen().setParentSpecimenId(parentSpecimenId);
 		
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null",response);
@@ -482,8 +482,8 @@ public class SpecimenTest {
 	    .saveOrUpdate((any(Specimen.class)));
 		
 		CreateSpecimenEvent event = SpecimenTestData.getCreateSpecimenEvent();
-		event.getSpecimenDetail().setSpecimenClass("Cellular");
-		event.getSpecimenDetail().setConcentrationInMicrogramPerMicroliter(2.0);
+		event.getSpecimen().setSpecimenClass("Cellular");
+		event.getSpecimen().setConcentration(2.0);
 		
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null",response);

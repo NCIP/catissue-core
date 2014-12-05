@@ -23,10 +23,10 @@ import com.krishagni.catissueplus.core.administrative.services.PermissibleValueS
 import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollectionGroupFactory;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenCollectionGroupFactoryImpl;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.VisitFactoryImpl;
+import com.krishagni.catissueplus.core.biospecimen.events.AddVisitEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitAddedEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -69,7 +69,7 @@ public class SpecimenCollectionGroupTest {
 	private SpecimenCollGroupService service;
 
 	@Mock
-	private SpecimenCollectionGroupFactory factory;
+	private VisitFactory factory;
 	
 	@Mock
 	private CommonValidator commonValidator;
@@ -88,9 +88,9 @@ public class SpecimenCollectionGroupTest {
 		when(daoFactory.getUserDao()).thenReturn(userDao);
 		service = new SpecimenCollGroupServiceImpl();
 		((SpecimenCollGroupServiceImpl) service).setDaoFactory(daoFactory);
-		factory = new SpecimenCollectionGroupFactoryImpl();
-		((SpecimenCollectionGroupFactoryImpl)factory).setDaoFactory(daoFactory);
-		((SpecimenCollGroupServiceImpl) service).setScgFactory(factory);
+		factory = new VisitFactoryImpl();
+		((VisitFactoryImpl)factory).setDaoFactory(daoFactory);
+		((SpecimenCollGroupServiceImpl) service).setVisitFactory(factory);
 		pvService = new PermissibleValueServiceImpl();
 		
 		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
@@ -110,15 +110,15 @@ public class SpecimenCollectionGroupTest {
 		doReturn(null).when(visitsDao).getScgByName(anyString());
 		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		ScgCreatedEvent response = service.createScg(event);
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		VisitAddedEvent response = service.createScg(event);
 		assertNotNull("Response cannot be null",response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
 	
 	@Test
 	public void testSuccessfullScgCreationWithPPIDAndCollectionPointLabelAndCpTitle() {
-		doReturn(ScgTestData.getCpe()).when(collectionProtocolDao).getCpeByCollectionPointLabel(anyLong(), anyString());
+		doReturn(ScgTestData.getCpe()).when(collectionProtocolDao).getCpeByEventLabel(anyLong(), anyString());
 		doReturn(ScgTestData.getCpe().getCollectionProtocol()).when(collectionProtocolDao).getCollectionProtocol(anyString());
 		doReturn(ScgTestData.getCpr(1L)).when(cprDao).getCprByPpId(anyLong(), anyString());
 		
@@ -127,14 +127,14 @@ public class SpecimenCollectionGroupTest {
 		doReturn(null).when(visitsDao).getScgByName(anyString());
 		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		event.getScgDetail().setCprId(null);
-		event.getScgDetail().setCpeId(null);
-		event.getScgDetail().setPpid("default_default");
-		event.getScgDetail().setCpTitle("default_cp_title");
-		event.getScgDetail().setCollectionPointLabel("Visit1");
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		event.getVisit().setCprId(null);
+		event.getVisit().setCpeId(null);
+		event.getVisit().setPpid("default_default");
+		event.getVisit().setCpTitle("default_cp_title");
+		event.getVisit().setEventLabel("Visit1");
 		
-		ScgCreatedEvent response = service.createScg(event);
+		VisitAddedEvent response = service.createScg(event);
 		assertNotNull("Response cannot be null",response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
@@ -148,8 +148,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(null).when(visitsDao).getScgByName(anyString());
 		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		ScgCreatedEvent response = service.createScg(event);
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		VisitAddedEvent response = service.createScg(event);
 		assertNotNull("Response cannot be null",response);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals("collection protocol event" , response.getErroneousFields()[0].getFieldName());
@@ -165,8 +165,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(null).when(visitsDao).getScgByName(anyString());
 		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		ScgCreatedEvent response = service.createScg(event);
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		VisitAddedEvent response = service.createScg(event);
 		assertNotNull("Response cannot be null",response);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals("collection protocol registration" , response.getErroneousFields()[0].getFieldName());
@@ -175,7 +175,7 @@ public class SpecimenCollectionGroupTest {
 	
 	@Test
 	public void testInvalidCpTitleBadRequest() {
-		doReturn(ScgTestData.getCpe()).when(collectionProtocolDao).getCpeByCollectionPointLabel(anyLong(), anyString());
+		doReturn(ScgTestData.getCpe()).when(collectionProtocolDao).getCpeByEventLabel(anyLong(), anyString());
 		doReturn(null).when(collectionProtocolDao).getCollectionProtocol(anyString());
 		doReturn(ScgTestData.getCpr(1L)).when(cprDao).getCprByPpId(anyLong(), anyString());
 		
@@ -184,14 +184,14 @@ public class SpecimenCollectionGroupTest {
 		doReturn(null).when(visitsDao).getScgByName(anyString());
 		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		event.getScgDetail().setCprId(null);
-		event.getScgDetail().setCpeId(null);
-		event.getScgDetail().setPpid("default_default");
-		event.getScgDetail().setCpTitle("default_cp_title");
-		event.getScgDetail().setCollectionPointLabel("Visit1");
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		event.getVisit().setCprId(null);
+		event.getVisit().setCpeId(null);
+		event.getVisit().setPpid("default_default");
+		event.getVisit().setCpTitle("default_cp_title");
+		event.getVisit().setEventLabel("Visit1");
 		
-		ScgCreatedEvent response = service.createScg(event);
+		VisitAddedEvent response = service.createScg(event);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals("collection protocol title" , response.getErroneousFields()[0].getFieldName());
 		assertEquals(INVALID_ATTR_VALUE, response.getErroneousFields()[0].getErrorMessage());
@@ -199,7 +199,7 @@ public class SpecimenCollectionGroupTest {
 	
 	@Test
 	public void testInvalidCollectionPointLabelExpectBadRequest() {
-		doReturn(null).when(collectionProtocolDao).getCpeByCollectionPointLabel(anyLong(), anyString());
+		doReturn(null).when(collectionProtocolDao).getCpeByEventLabel(anyLong(), anyString());
 		doReturn(ScgTestData.getCpe().getCollectionProtocol()).when(collectionProtocolDao).getCollectionProtocol(anyString());
 		doReturn(ScgTestData.getCpr(1L)).when(cprDao).getCprByPpId(anyLong(), anyString());
 		
@@ -208,14 +208,14 @@ public class SpecimenCollectionGroupTest {
 		doReturn(null).when(visitsDao).getScgByName(anyString());
 		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		event.getScgDetail().setCprId(null);
-		event.getScgDetail().setCpeId(null);
-		event.getScgDetail().setPpid("default_default");
-		event.getScgDetail().setCpTitle("default_cp_title");
-		event.getScgDetail().setCollectionPointLabel("Visit1");
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		event.getVisit().setCprId(null);
+		event.getVisit().setCpeId(null);
+		event.getVisit().setPpid("default_default");
+		event.getVisit().setCpTitle("default_cp_title");
+		event.getVisit().setEventLabel("Visit1");
 		
-		ScgCreatedEvent response = service.createScg(event);
+		VisitAddedEvent response = service.createScg(event);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals("collection point label" , response.getErroneousFields()[0].getFieldName());
 		assertEquals(INVALID_ATTR_VALUE, response.getErroneousFields()[0].getErrorMessage());
@@ -223,7 +223,7 @@ public class SpecimenCollectionGroupTest {
 	
 	@Test
 	public void testScgCreationInvalidCpTitleExpectBadRequest() {
-		doReturn(ScgTestData.getCpe()).when(collectionProtocolDao).getCpeByCollectionPointLabel(anyLong(), anyString());
+		doReturn(ScgTestData.getCpe()).when(collectionProtocolDao).getCpeByEventLabel(anyLong(), anyString());
 		doReturn(null).when(collectionProtocolDao).getCollectionProtocol(anyString());
 		doReturn(ScgTestData.getCpr(1L)).when(cprDao).getCprByPpId(anyLong(), anyString());
 		
@@ -232,14 +232,14 @@ public class SpecimenCollectionGroupTest {
 		doReturn(null).when(visitsDao).getScgByName(anyString());
 		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		event.getScgDetail().setCprId(null);
-		event.getScgDetail().setCpeId(null);
-		event.getScgDetail().setPpid("default_default");
-		event.getScgDetail().setCpTitle("default_cp_title");
-		event.getScgDetail().setCollectionPointLabel("Visit1");
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		event.getVisit().setCprId(null);
+		event.getVisit().setCpeId(null);
+		event.getVisit().setPpid("default_default");
+		event.getVisit().setCpTitle("default_cp_title");
+		event.getVisit().setEventLabel("Visit1");
 		
-		ScgCreatedEvent response = service.createScg(event);
+		VisitAddedEvent response = service.createScg(event);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals("collection protocol title" , response.getErroneousFields()[0].getFieldName());
 		assertEquals(INVALID_ATTR_VALUE, response.getErroneousFields()[0].getErrorMessage());
@@ -247,7 +247,7 @@ public class SpecimenCollectionGroupTest {
 	
 	@Test
 	public void testScgCreationInvalidPPIDExpectBadRequest() {
-		doReturn(ScgTestData.getCpe()).when(collectionProtocolDao).getCpeByCollectionPointLabel(anyLong(), anyString());
+		doReturn(ScgTestData.getCpe()).when(collectionProtocolDao).getCpeByEventLabel(anyLong(), anyString());
 		doReturn(ScgTestData.getCpe().getCollectionProtocol()).when(collectionProtocolDao).getCollectionProtocol(anyString());
 		doReturn(null).when(cprDao).getCprByPpId(anyLong(), anyString());
 		
@@ -256,14 +256,14 @@ public class SpecimenCollectionGroupTest {
 		doReturn(null).when(visitsDao).getScgByName(anyString());
 		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		event.getScgDetail().setCprId(null);
-		event.getScgDetail().setCpeId(null);
-		event.getScgDetail().setPpid("default_default");
-		event.getScgDetail().setCpTitle("default_cp_title");
-		event.getScgDetail().setCollectionPointLabel("Visit1");
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		event.getVisit().setCprId(null);
+		event.getVisit().setCpeId(null);
+		event.getVisit().setPpid("default_default");
+		event.getVisit().setCpTitle("default_cp_title");
+		event.getVisit().setEventLabel("Visit1");
 		
-		ScgCreatedEvent response = service.createScg(event);
+		VisitAddedEvent response = service.createScg(event);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals("participant protocol id" , response.getErroneousFields()[0].getFieldName());
 		assertEquals(INVALID_ATTR_VALUE, response.getErroneousFields()[0].getErrorMessage());
@@ -278,8 +278,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(null).when(visitsDao).getScgByName(anyString());
 		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		ScgCreatedEvent response = service.createScg(event);
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		VisitAddedEvent response = service.createScg(event);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals("site name" , response.getErroneousFields()[0].getFieldName());
 		assertEquals(INVALID_ATTR_VALUE, response.getErroneousFields()[0].getErrorMessage());
@@ -298,10 +298,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(null).when(visitsDao).getScgByName(anyString());
 		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		event.getScgDetail().setCollectorName(collectorName);
-		event.getScgDetail().setReceiverName(receiverName);
-		ScgCreatedEvent response = service.createScg(event);
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		VisitAddedEvent response = service.createScg(event);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals("collector name" , response.getErroneousFields()[0].getFieldName());
 		assertEquals(INVALID_ATTR_VALUE, response.getErroneousFields()[0].getErrorMessage());
@@ -320,10 +318,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(null).when(visitsDao).getScgByName(anyString());
 		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		event.getScgDetail().setCollectorName(collectorName);
-		event.getScgDetail().setReceiverName(receiverName);
-		ScgCreatedEvent response = service.createScg(event);
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		VisitAddedEvent response = service.createScg(event);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals("receiver name" , response.getErroneousFields()[0].getFieldName());
 		assertEquals(INVALID_ATTR_VALUE, response.getErroneousFields()[0].getErrorMessage());
@@ -340,8 +336,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(null).when(visitsDao).getScgByName(anyString());
 		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		ScgCreatedEvent response = service.createScg(event);
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		VisitAddedEvent response = service.createScg(event);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals("registraion and event point refering to different protocols." , response.getErroneousFields()[0].getFieldName());
 		assertEquals("registraion and event point refering to different protocols." , response.getErroneousFields()[0].getErrorMessage());
@@ -356,8 +352,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(new SpecimenCollectionGroup()).when(visitsDao).getScgByName(anyString());
 		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		ScgCreatedEvent response = service.createScg(event);
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		VisitAddedEvent response = service.createScg(event);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals("name" , response.getErroneousFields()[0].getFieldName());
 		assertEquals("specimen collection group with same name already exists.", response.getErroneousFields()[0].getErrorMessage());
@@ -372,8 +368,8 @@ public class SpecimenCollectionGroupTest {
 		doReturn(null).when(visitsDao).getScgByName(anyString());
 		doReturn(new SpecimenCollectionGroup()).when(visitsDao).getScgByBarcode(anyString());
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		ScgCreatedEvent response = service.createScg(event);
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		VisitAddedEvent response = service.createScg(event);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals("barcode" , response.getErroneousFields()[0].getFieldName());
 		assertEquals("Specimen Collection Group with same barcode already exists.", response.getErroneousFields()[0].getErrorMessage());
@@ -388,9 +384,9 @@ public class SpecimenCollectionGroupTest {
 		doReturn(null).when(visitsDao).getScgByName(anyString());
 		doReturn(null).when(visitsDao).getScgByBarcode(anyString());
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		event.getScgDetail().setName("");
-		ScgCreatedEvent response = service.createScg(event);
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		event.getVisit().setName("");
+		VisitAddedEvent response = service.createScg(event);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals("name" , response.getErroneousFields()[0].getFieldName());
 		assertEquals("Required attribute is either empty or null", response.getErroneousFields()[0].getErrorMessage());
@@ -407,8 +403,8 @@ public class SpecimenCollectionGroupTest {
 		
 		doThrow(new RuntimeException()).when(visitsDao).saveOrUpdate(any(SpecimenCollectionGroup.class));
 		
-		CreateScgEvent event = ScgTestData.getCreateScgEvent();
-		ScgCreatedEvent response = service.createScg(event);
+		AddVisitEvent event = ScgTestData.getAddVisitEvent();
+		VisitAddedEvent response = service.createScg(event);
 		assertNotNull("Response cannot be null",response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
@@ -432,9 +428,9 @@ public class SpecimenCollectionGroupTest {
 //	@Test
 //	public void testScgCreateServerErr() {
 //		doThrow(new RuntimeException()).when(scgDao).saveOrUpdate(any(SpecimenCollectionGroup.class));
-//		CreateScgEvent event = ScgTestData.getCreateScgEventServerErr();
+//		AddVisitEvent event = ScgTestData.getAddVisitEventServerErr();
 //		
-//		ScgCreatedEvent response = service.createScg(event);
+//		VisitAddedEvent response = service.createScg(event);
 //		assertNotNull("Response cannot be null",response);
 //		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 //	}
@@ -442,9 +438,9 @@ public class SpecimenCollectionGroupTest {
 //	@Test
 //	public void testScgCreateDuplicateName() {
 //		when(scgDao.isNameUnique(anyString())).thenReturn(false);
-//		CreateScgEvent event = ScgTestData.getCreateScgEvent();
+//		AddVisitEvent event = ScgTestData.getAddVisitEvent();
 //		
-//		ScgCreatedEvent response = service.createScg(event);
+//		VisitAddedEvent response = service.createScg(event);
 //		assertNotNull("Response cannot be null",response);
 //		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 //		assertEquals(1, response.getErroneousFields().length);
@@ -455,9 +451,9 @@ public class SpecimenCollectionGroupTest {
 //	@Test
 //	public void testScgCreateDuplicateBarcode() {
 //		when(scgDao.isBarcodeUnique(anyString())).thenReturn(false);
-//		CreateScgEvent event = ScgTestData.getCreateScgEvent();
+//		AddVisitEvent event = ScgTestData.getAddVisitEvent();
 //		
-//		ScgCreatedEvent response = service.createScg(event);
+//		VisitAddedEvent response = service.createScg(event);
 //		assertNotNull("Response cannot be null",response);
 //		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 //		assertEquals(1, response.getErroneousFields().length);
