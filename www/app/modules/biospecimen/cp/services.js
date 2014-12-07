@@ -32,6 +32,11 @@ angular.module('openspecimen')
         return $http.post(
           url() + '/' + cpId + '/registered-participants', 
           cpr).then(ApiUtil.processResp, ApiUtil.processResp);
+      },
+
+      getClinicalDiagnoses: function(cpId) {
+        return $http.get(url() + '/' + cpId + '/clinical-diagnoses')
+                 .then(ApiUtil.processResp, ApiUtil.processResp);
       }
     }
   });

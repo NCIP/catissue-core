@@ -1,0 +1,199 @@
+
+<div>
+  <alert ng-if="alert.msg" type="{{alert.type}}" class="os-alert">{{alert.msg}}</alert>
+  <div class="os-page-hdr">
+    <os-breadcrumbs></os-breadcrumbs>
+    <h3>Patient and Specimen Details</h3>
+  </div>
+
+  <div class="container">
+    <form name="pspecimens" class="form-horizontal" novalidate>
+      <div class="os-section-hdr">
+        <span>Patient Details</span>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Patient ID</label>
+        <div class="col-xs-3">
+          <input name="ppid" type="text" ng-model="cpr.ppid" class="form-control" placeholder="Participant ID" required>
+          <div ng-if="isInteracted(pspecimens.ppid)" class="alert alert-danger os-form-err-msg" 
+            ng-messages="pspecimens.ppid.$error" ng-messages-include="modules/common/error-messages.html">
+          </div>
+        </div>
+
+        <label class="control-label col-xs-1">Gender</label>
+        <div class="col-xs-3">
+          <ui-select ng-model="cpr.participant.gender">
+            <ui-select-match placeholder="Select Gender">{{$select.selected}}</ui-select-match>
+            <ui-select-choices repeat="gender in gender_pvs | filter: $select.search">
+              <span ng-bind-html="gender | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Consent</label>
+        <div class="col-xs-3">
+          <div class="os-file-upload btn btn-default" ng-if="!consent.files">
+            <span>Choose Consent File</span>
+            <input type="file" files="consent.files" os-file-upload/>
+          </div>
+          <div ng-if="consent.filename" class="os-input-addon-grp">
+            <span class="form-control">{{consent.filename}}</span>
+            <button class="btn os-input-addon-right" ng-click="removeConsent()">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="os-section-hdr">
+        <span>Visit Details</span>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Date</label>
+        <div class="col-xs-3">
+          <input name="visitDate" type="text" ng-model="visit.visitDate" class="form-control" placeholder="Visit Date" required
+            datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="dt.isOpen" ng-focus="dt.isOpen=true"/>
+          <div ng-if="isInteracted(pspecimens.visitDate)" class="alert alert-danger os-form-err-msg" 
+            ng-messages="pspecimens.visitDate.$error" ng-messages-include="modules/common/error-messages.html">
+          </div>
+        </div>
+
+        <label class="control-label col-xs-1">Hospital</label>
+        <div class="col-xs-3">
+          <ui-select name="visitSite" ng-model="visit.visitSite" required>
+            <ui-select-match placeholder="Select Hospital">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="hospital in hospitals | filter: $select.search">
+              <span ng-bind-html="hospital.name | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+          <div ng-if="isInteracted(pspecimens.visitSite)" class="alert alert-danger os-form-err-msg" 
+            ng-messages="pspecimens.visitSite.$error" ng-messages-include="modules/common/error-messages.html">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Diagnosis</label>
+        <div class="col-xs-3">
+          <ui-select ng-model="visit.clinicalDiagnosis">
+            <ui-select-match placeholder="Select Diagnosis">{{$select.selected}}</ui-select-match>
+            <ui-select-choices repeat="diagnosis in diagnoses | filter: $select.search">
+              <span ng-bind-html="diagnosis | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+
+      <div class="os-section-hdr">
+        <span>Blood Details</span>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Label</label>
+        <div class="col-xs-3">
+          <input name="bloodLabel" type="text" ng-model="blood.label" class="form-control" placeholder="Label" required>
+          <div ng-if="isInteracted(pspecimens.bloodLabel)" class="alert alert-danger os-form-err-msg" 
+            ng-messages="pspecimens.bloodLabel.$error" ng-messages-include="modules/common/error-messages.html">
+          </div>
+        </div>
+
+        <label class="control-label col-xs-1">Barcode</label>
+        <div class="col-xs-3">
+          <input type="text" ng-model="blood.barcode" class="form-control" placeholder="Barcode"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Anatomic Site</label>
+        <div class="col-xs-3">
+          <ui-select name="bloodSite" ng-model="blood.anatomicSite" required>
+            <ui-select-match placeholder="Select Anatomic Site">{{$select.selected}}</ui-select-match>
+            <ui-select-choices repeat="anatomicSite in anatomicSite_pvs | filter: $select.search">
+              <span ng-bind-html="anatomicSite | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+          <div ng-if="isInteracted(pspecimens.bloodSite)" class="alert alert-danger os-form-err-msg" 
+            ng-messages="pspecimens.bloodSite.$error" ng-messages-include="modules/common/error-messages.html">
+          </div>
+        </div>
+
+        <label class="control-label col-xs-1">Quantity</label>
+        <div class="col-xs-3">
+          <input name="bloodQty" type="text" ng-model="blood.initialQuantity" class="form-control" placeholder="Quantity" required>
+          <div ng-if="isInteracted(pspecimens.bloodQty)" class="alert alert-danger os-form-err-msg" 
+            ng-messages="pspecimens.bloodQty.$error" ng-messages-include="modules/common/error-messages.html">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Comments</label>
+        <div class="col-xs-3">
+          <textarea ng-model="blood.comment" class="form-control" placeholder="Comments"/>
+        </div>
+      </div>
+
+      <div class="os-section-hdr">
+        <span>Frozen Tissue Details</span>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Label</label>
+        <div class="col-xs-3">
+          <input name="ftLabel" type="text" ng-model="frozenTissue.label" class="form-control" placeholder="Label" required>
+          <div ng-if="isInteracted(pspecimens.ftLabel)" class="alert alert-danger os-form-err-msg" 
+            ng-messages="pspecimens.ftLabel.$error" ng-messages-include="modules/common/error-messages.html">
+          </div>
+        </div>
+
+        <label class="control-label col-xs-1">Barcode</label>
+        <div class="col-xs-3">
+          <input type="text" ng-model="frozenTissue.barcode" class="form-control" placeholder="Barcode"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Anatomic Site</label>
+        <div class="col-xs-3">
+          <ui-select name="ftSite" ng-model="frozenTissue.anatomicSite" required>
+            <ui-select-match placeholder="Select Anatomic Site">{{$select.selected}}</ui-select-match>
+            <ui-select-choices repeat="anatomicSite in anatomicSite_pvs | filter: $select.search">
+              <span ng-bind-html="anatomicSite | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+          <div ng-if="isInteracted(pspecimens.ftSite)" class="alert alert-danger os-form-err-msg" 
+            ng-messages="pspecimens.ftSite.$error" ng-messages-include="modules/common/error-messages.html">
+          </div>
+        </div>
+
+        <label class="control-label col-xs-1">Quantity</label>
+        <div class="col-xs-3">
+          <input name="ftQty" type="text" ng-model="frozenTissue.initialQuantity" class="form-control" placeholder="Quantity" required>
+          <div ng-if="isInteracted(pspecimens.ftQty)" class="alert alert-danger os-form-err-msg" 
+            ng-messages="pspecimens.ftQty.$error" ng-messages-include="modules/common/error-messages.html">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Comments</label>
+        <div class="col-xs-3">
+          <textarea ng-model="frozenTissue.comment" class="form-control" placeholder="Comments"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-10">
+          <button type="submit" class="btn btn-primary" ng-click="collectSpecimens(pspecimens)">Save</button>
+          <button type="submit" class="btn btn-default">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+

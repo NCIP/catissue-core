@@ -1,12 +1,14 @@
 'use strict';
 
 angular.module('openspecimen', [
+  'ngMessages',
   'ngSanitize', 
   'ui.router', 
   'ui.bootstrap', 
   'ui.mask', 
   'ui.select',
-  'mgcrea.ngStrap.popover'])
+  'mgcrea.ngStrap.popover',
+  'angular-loading-bar'])
 
   .config(function($stateProvider, $urlRouterProvider, $httpProvider, uiSelectConfig, ApiUrlsProvider) {
     $stateProvider
@@ -71,6 +73,17 @@ angular.module('openspecimen', [
         url: '/participants',
         templateUrl: 'modules/biospecimen/participant/list.html',
         controller: 'ParticipantListCtrl',
+        parent: 'cp-detail'
+      })
+      .state('participant-new', {
+        url: '/new-participant',
+        templateProvider: function($stateParams, CpConfigSvc) {
+          var tmpl = CpConfigSvc.getRegParticipantTmpl($stateParams.cpId);
+          return '<div ng-include src="\'' + tmpl + '\'"></div>';
+        },
+        controllerProvider: function($stateParams, CpConfigSvc) {
+          return CpConfigSvc.getRegParticipantCtrl($stateParams.cpId);
+        },
         parent: 'cp-detail'
       })
       .state('participant-detail', {
@@ -156,7 +169,8 @@ angular.module('openspecimen', [
       'collection-protocols': '/rest/ng/collection-protocols',
       'cprs': '/rest/ng/collection-protocol-registrations',
       'participants': '/rest/ng/participants',
-      'sites': '/rest/ng/sites'
+      'sites': '/rest/ng/sites',
+      'form-files': '/rest/ng/form-files'
     };
 
     uiSelectConfig.theme = 'bootstrap';
@@ -236,7 +250,11 @@ angular.module('openspecimen', [
         urls    : that.urls,
 
         getUrl  : function(key) {
-          var url = this.urls[key];
+          var url = '';
+          if (key) {
+            url = this.urls[key];
+          }
+
           var prefix = "";
           if (this.hostname) {
             var protocol = this.secure ? 'https://' : 'http://';

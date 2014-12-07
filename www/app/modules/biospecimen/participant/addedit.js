@@ -1,5 +1,28 @@
 
 angular.module('openspecimen')
+  .controller('RegParticipantCtrl', function(
+    $state, $stateParams, $modal, AlertService) {
+    
+    var modalInstance = $modal.open({
+      templateUrl: 'modules/biospecimen/participant/addedit.html',
+      controller: 'ParticipantAddEditCtrl',
+      resolve: {
+        cpId: $stateParams.cpId
+      },
+      windowClass: 'os-modal-800'
+    });
+
+    modalInstance.result.then(
+      function(result) {
+        $state.go('participant-detail.overview', {cprId: result.id});
+      },
+
+      function() {
+        $state.go('participant-list');
+      }
+    );
+  })
+
   .controller('ParticipantAddEditCtrl', function(
     $scope, $modalInstance, $stateParams, 
     AlertService, CprService, ParticipantService,

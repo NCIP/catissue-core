@@ -151,6 +151,7 @@ body {
   padding: 20px;
   background: #f5f5f5;
   border-bottom: 1px solid #ccc;
+  margin-bottom: 20px;
 }
 
 .os-page-hdr:after {
@@ -185,10 +186,17 @@ body {
 
 .os-section-hdr {
   background: #f5f5f5;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+}
+
+.list-group .list-group-item.os-section-hdr {
+  margin-bottom: 0px;
+  border-bottom: none;
 }
 
 .os-section-hdr label {
-  margin: 5px 0px;
+  margin-bottom: 0px;
 }
 
 .os-alert {
@@ -430,4 +438,84 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 .os-table-tree a.fa-chevron-circle-down, .os-table-tree a.fa-chevron-circle-right {
   text-decoration: none;
   color: #707070;
+}
+
+.os-file-upload {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  text-align: left;
+  color: #999;
+}
+
+.os-file-upload > input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  padding: 20px;
+}
+
+.os-input-addon-grp {
+  position: relative;
+}
+
+.os-input-addon-right, .os-input-addon-left {
+  position: absolute;
+  top: 0px;
+  background: #eee;
+  color: #707070;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.os-input-addon-right {
+  right: 0px;
+}
+
+.os-input-addon-left {
+  left: 0px;
+}
+
+.os-form-err-msg.ng-inactive {
+  display: none;
+}
+
+.alert-danger.os-form-err-msg {
+  margin: 5px 0px 0px 0px;
+  padding: 7px 15px;
+  position: relative;
+}
+
+.alert-danger.os-form-err-msg:after {
+  position: absolute;
+  top: -10px;
+  content: "";
+  left: 20px;
+  border-style: solid;
+  border-color: transparent transparent #ebccd1;
+  border-width: 5px;
+}
+
+
+#loading-bar .bar {
+ /* background: #32B96C!important;*/ /* Green*/
+  background: red!important;
+  /*top: 57px!important;*/
+  height: 4px!important;
+}
+
+#loading-bar-spinner {
+  top: 67px!important;
+  display: none; /* For now disabled */
+}
+
+#loading-bar-spinner .spinner-icon {
+  top: 67px!important;
+  border-top-color: #32B96C!important;
+  border-left-color: #32B96C!important;
+  width: 20px;
+  height: 20px;
 }

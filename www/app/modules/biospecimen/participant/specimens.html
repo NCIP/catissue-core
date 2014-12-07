@@ -33,7 +33,7 @@
             </div>
           </td>
           <td>{{specimen.type}}</td>
-          <td>{{specimen.pathology}}</td>
+          <td>{{specimen.pathology | osNoValue}}</td>
           <td ng-if="specimen.storageLocation.name">
             <span>{{specimen.storageLocation.name}}</span>
             <span ng-if="!!specimen.storageLocation.positionX && !!specimen.storageLocation.positionY">
