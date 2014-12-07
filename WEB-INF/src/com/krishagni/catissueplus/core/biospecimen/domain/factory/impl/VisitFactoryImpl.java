@@ -201,9 +201,9 @@ public class VisitFactoryImpl implements VisitFactory {
 		Date regDate = cpr.getRegistrationDate();
 		Date visitDate = visitDetail.getVisitDate();
 		if (visitDate == null) {
-			visitDetail.setVisitDate(Calendar.getInstance().getTime());			
+			visit.setCollectionTimestamp(Calendar.getInstance().getTime());
 		} else if (visitDate.after(regDate) || visitDate.equals(regDate)) {
-			visitDetail.setVisitDate(visitDate);
+			visit.setCollectionTimestamp(visitDate);
 		} else {
 			oce.addError(ScgErrorCode.INVALID_VISIT_DATE, "visit date");
 		}		
