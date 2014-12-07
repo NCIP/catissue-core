@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,15 +16,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRespEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
@@ -108,39 +106,23 @@ public class CollectionProtocolController {
 		
 		return resp.getParticipants();
 	}
-
-//	@RequestMapping(method = RequestMethod.GET, value = "/{id}/participant")
-//	@ResponseStatus(HttpStatus.OK)
-//	@ResponseBody
-//	public ParticipantInfo getParticipant(@PathVariable("id") Long cpId,
-//			@RequestParam(value = "pId", required = true, defaultValue = "") String participantId) {
-//		ReqParticipantSummaryEvent event = new ReqParticipantSummaryEvent();
-//		event.setCpId(cpId);
-//		event.setParticipantId(StringUtils.isBlank(participantId) ? null : Long.valueOf(participantId));
-//		event.setSessionDataBean(getSession());
-//		ParticipantSummaryEvent resp = cpSvc.getParticipant(event);
-//		if (!resp.isSuccess()) {
-//			resp.raiseException();
-//		}
-//		return resp.getParticipantInfo();
-//	}
-//
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/clinical-diagnoses")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<String> getClinicalDiagnoses(@PathVariable("id") Long cpId) {
+		ReqClinicalDiagnosesEvent req = new ReqClinicalDiagnosesEvent();
+		req.setCpId(cpId);
+		
+		ClinicalDiagnosesEvent resp = cpSvc.getDiagnoses(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		
+		return resp.getDiagnoses();
+	}
 
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
-	}
-	
-	
-//	@RequestMapping(method = RequestMethod.GET, value="/{id}/childProtocols")
-//	@ResponseStatus(HttpStatus.OK)
-//	@ResponseBody
-//	public List<CollectionProtocolSummary> getChildProtocolsList(@PathVariable("id") Long id) {
-//		ReqChildProtocolEvent req = new ReqChildProtocolEvent();
-//		req.setSessionDataBean(getSession()); 
-//		req.setCpId(id);
-//
-//		ChildCollectionProtocolsEvent result = cpSvc.getChildProtocols(req);
-//		return result.getChildProtocols();
-//	}
-
+	}	
 }

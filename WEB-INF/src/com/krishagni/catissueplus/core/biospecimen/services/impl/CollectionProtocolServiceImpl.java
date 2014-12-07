@@ -7,8 +7,10 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.ClinicalDiagnosis;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRespEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
@@ -16,6 +18,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
@@ -105,6 +108,28 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		}
 	}
 
+	@Override
+	@PlusTransactional
+	public ClinicalDiagnosesEvent getDiagnoses(ReqClinicalDiagnosesEvent req) {
+		Long cpId = req.getCpId();
+		if (cpId == null) {
+			return ClinicalDiagnosesEvent.notFound();
+		}
+		
+		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(cpId);
+		if (cp == null) {
+			return ClinicalDiagnosesEvent.notFound();
+		}
+		
+		List<String> diagnoses = new ArrayList<String>();
+		for (ClinicalDiagnosis cd : cp.getClinicalDiagnosis()) {
+			diagnoses.add(cd.getName());
+		}
+		
+		return ClinicalDiagnosesEvent.ok(diagnoses);
+	}
+
+	
 //	@Override
 //	@PlusTransactional
 //	public ParticipantSummaryEvent getParticipant(ReqParticipantSummaryEvent event) {
