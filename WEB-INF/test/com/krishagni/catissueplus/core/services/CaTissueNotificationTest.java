@@ -115,7 +115,7 @@ public class CaTissueNotificationTest {
 
 	}
 
-	@Test
+	//@Test
 	public void testUpdateParticipantRegistration() {
 		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(CprTestData.getCptoReturn());
 		RegisterParticipantEvent event = CaTissueNotificationTestData.getRegisterParticipantEvent();
