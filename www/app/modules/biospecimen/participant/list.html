@@ -9,7 +9,7 @@
   </div>
 
   <div class="os-cards">
-    <div class="os-card" ng-repeat="cpr in cprList">
+    <div class="os-card" ng-repeat="cpr in cprList" ng-click="showParticipantOverview(cpr)">
       <h4>
         <a title="Click to view/edit Participant details" ui-sref="participant-detail.overview({cprId: cpr.cprId})">
           <span ng-if="!cpr.participant.firstName && !cpr.participant.lastName">

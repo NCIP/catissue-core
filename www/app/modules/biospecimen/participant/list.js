@@ -15,6 +15,10 @@ angular.module('openspecimen')
       );
     };
 
+    $scope.showParticipantOverview = function(cpr) {
+      $state.go('participant-detail.overview', {cprId: cpr.cprId});
+    };
+
     $scope.registerParticipant = function() {
       var modalInstance = $modal.open({
         templateUrl: 'modules/biospecimen/participant/addedit.html',
