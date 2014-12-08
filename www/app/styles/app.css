@@ -501,21 +501,16 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 
 #loading-bar .bar {
- /* background: #32B96C!important;*/ /* Green*/
-  background: red!important;
-  /*top: 57px!important;*/
-  height: 4px!important;
+  background: #b91f1f!important;
+  top: 57px!important;
+  height: 3px!important;
+}
+
+#loading-bar .peg {
+  box-shadow: 0 0 10px #b91f1f, 0 0 5px #b91f1f;
+  height: 3px!important;
 }
 
 #loading-bar-spinner {
-  top: 67px!important;
   display: none; /* For now disabled */
-}
-
-#loading-bar-spinner .spinner-icon {
-  top: 67px!important;
-  border-top-color: #32B96C!important;
-  border-left-color: #32B96C!important;
-  width: 20px;
-  height: 20px;
 }
