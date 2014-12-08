@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -75,7 +76,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 			projs.add(Projections.property("pi.lastName"));
 		}
 		
-		return query.list();
+		return query.addOrder(Order.asc("title")).list();
 	}
 	
 	private CollectionProtocolSummary getCp(Object[] fields, boolean includePi) {
