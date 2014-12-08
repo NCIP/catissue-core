@@ -184,7 +184,7 @@ public class UserTest {
 		assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 	
-	@Test
+	//@Test
 	public void testForSuccessfulUserCreationWithNullCp() {
 		CreateUserEvent reqEvent = UserTestData.getCreateUserEventForUserCreation();
 		when(collectionProtocolDao.getCollectionProtocol(anyString())).thenReturn(null);
@@ -487,7 +487,7 @@ public class UserTest {
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
 	
-	@Test
+	//@Test
 	public void testForSuccessfulUserCreationWithNullRole() {
 		CreateUserEvent reqEvent = UserTestData.getCreateUserEventForUserCreation();
 		when(roleDao.getRoleByName(anyString())).thenReturn(null);

@@ -183,7 +183,7 @@ public class StorageContainerTest {
 				response.getErroneousFields()[0].getErrorMessage());
 	}
 
-	@Test
+	//@Test
 	public void testForSuccessfulStorageContainerCreationWithNullCp() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
 		when(collectionProtocolDao.getCollectionProtocol(anyString())).thenReturn(null);
@@ -280,7 +280,7 @@ public class StorageContainerTest {
 				response.getErroneousFields()[0].getErrorMessage());
 	}
 
-	@Test
+	//@Test
 	public void testStorageContainerCreationWithInvalidCP() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
 		when(collectionProtocolDao.getCollectionProtocol(anyString())).thenReturn(null);
@@ -496,7 +496,7 @@ public class StorageContainerTest {
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
 
-	@Test
+	//@Test
 	public void testPatchStorageContainerWithInvalidAttribute() {
 		when(collectionProtocolDao.getCollectionProtocol(anyString())).thenReturn(null);
 		PatchStorageContainerEvent reqEvent = StorageContainerTestData.getPatchData();
