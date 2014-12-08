@@ -126,9 +126,16 @@ angular.module('openspecimen', [
       .state('participant-detail.visits', {
         url: '/visits',
         templateUrl: 'modules/biospecimen/participant/visits.html',
-        controller: function($scope, cpr, visits) {
+        controller: function($scope, $state, cpr, visits) {
           $scope.cpr = cpr;
           $scope.visits = visits;
+
+          if (visits && visits.length > 0) {
+            $state.go(
+              'participant-detail.specimens', 
+              {visitId: visits[0].id, eventId: visits[0].eventId}
+            );
+          }
         },
         parent: 'participant-detail'
       })
