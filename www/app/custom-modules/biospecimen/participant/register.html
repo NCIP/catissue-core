@@ -86,7 +86,7 @@
         <label class="control-label col-xs-2">Date</label>
         <div class="col-xs-3">
           <input name="visitDate" type="text" ng-model="visit.visitDate" class="form-control" placeholder="Visit Date" required
-            datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="dt.isOpen" ng-focus="dt.isOpen=true"/>
+            datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="dt.isOpen" ng-focus="dt.isOpen=true">
           <div ng-if="isInteracted(pspecimens.visitDate)" class="alert alert-danger os-form-err-msg" 
             ng-messages="pspecimens.visitDate.$error" ng-messages-include="modules/common/error-messages.html">
           </div>
@@ -168,7 +168,7 @@
 
         <label class="control-label col-xs-2">Comments</label>
         <div class="col-xs-3">
-          <textarea ng-model="blood.comment" class="form-control" placeholder="Comments"/>
+          <textarea ng-model="blood.comment" class="form-control" placeholder="Comments">
         </div>
       </div>
 
@@ -217,7 +217,7 @@
       <div class="form-group">
         <label class="control-label col-xs-2">Comments</label>
         <div class="col-xs-3">
-          <textarea ng-model="frozenTissue.comment" class="form-control" placeholder="Comments"/>
+          <textarea ng-model="frozenTissue.comment" class="form-control" placeholder="Comments">
         </div>
       </div>
 
@@ -230,5 +230,3 @@
     </form>
   </div>
 </div>
-
-

@@ -6223,7 +6223,7 @@ PUBLIC
 			<forward name="failure" path="/pages/blank.jsp" />
 		</action>
 
-		<action path="/v20" type="org.apache.struts.actions.ForwardAction" parameter="/v20.html"/>
+		<action path="/v20" type="org.apache.struts.actions.ForwardAction" parameter="/v20.jsp"/>
 	</action-mappings>
 
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />

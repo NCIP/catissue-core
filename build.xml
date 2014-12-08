@@ -363,7 +363,7 @@
 			<include name ="ApplicationResources.properties"/>
 			<replacefilter token="@@application.environment@@" value="${application.environment}"/>
 		</replace>
-                <copy file="${base.dir}/www/dist/index.html" tofile="${base.dir}/www/dist/v20.html" failonerror="false"/>
+                <copy file="${base.dir}/www/dist/index.html" tofile="${base.dir}/www/dist/v20.jsp" failonerror="false"/>
 
 		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml"
 			duplicate="preserve" manifest="${base.dir}/MANIFEST.MF" >
