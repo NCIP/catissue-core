@@ -24,9 +24,13 @@ angular.module('openspecimen')
           participant: {}
         };
 
+        $scope.patientSmokingHistory = { };
+
         $scope.visit = { };
 
         $scope.blood = { };
+
+        $scope.bloodExtn = { };
 
         $scope.frozenTissue = { };
  
@@ -69,8 +73,10 @@ angular.module('openspecimen')
 
         return {
           cpr: $scope.cpr,
+          patientSmokingHistory: $scope.patientSmokingHistory,
           visit: visit,
           blood: $scope.blood,
+          bloodExtn: $scope.bloodExtn,
           frozenTissue: $scope.frozenTissue
         };
       };

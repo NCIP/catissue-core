@@ -21,6 +21,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRe
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.de.services.FormService;
 import com.krishagni.openspecimen.custom.demo.events.CollectSpecimensEvent;
 import com.krishagni.openspecimen.custom.demo.events.SpecimenCollectionDetail;
 import com.krishagni.openspecimen.custom.demo.events.SpecimensCollectedEvent;
@@ -33,6 +34,8 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 	private CollectionProtocolRegistrationService cprSvc;
 	
 	private SpecimenService specimenSvc;
+	
+	private FormService formSvc;
 	
 	
 	@Override
@@ -47,10 +50,15 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(CP_TITLE);			
 			
 			//
-			// Step 1: Register participant to CP
+			// Step 1: Register participant to CP and its additional properties
 			//
+			
+			// Step 1.1: Register
 			CollectionProtocolRegistrationDetail cpr = register(cp, req);
 			result.setCpr(cpr);
+			
+			// Step 1.2: DE props - Smoking history
+			savePatientSmokingHistory(cp, cpr.getId(), req);
 						
 			//
 			// Step 2: Add visit
@@ -64,6 +72,9 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 			
 			// Step 3.1: Blood Specimen
 			result.setBlood(createBloodSpecimen(cp, visit, req));
+			
+			// Step 3.2: DE props - Ischemia Time
+			saveBloodSpecimenExtn(cp, result.getBlood().getId(), req);
 
 			// Step 3.2: Tissue Specimen
 			result.setFrozenTissue(createFrozenTissue(cp, visit, req));
@@ -100,6 +111,10 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 		return resp.getCprDetail();
 	}
 	
+	private void savePatientSmokingHistory(CollectionProtocol cp, Long cprId, CollectSpecimensEvent input) {
+		
+	}
+	
 	private VisitDetail addVisit(CollectionProtocol cp, Long cprId, CollectSpecimensEvent input) {
 		CollectionProtocolEvent cpe = cp.getCollectionProtocolEvents().iterator().next();
 		
@@ -125,6 +140,10 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 		CollectionProtocolEvent cpe = cp.getCollectionProtocolEvents().iterator().next(); 
 		SpecimenRequirement bloodReq = getByClassAndType(cpe.getSpecimenRequirements(), "Fluid", "Whole Blood");		
 		return createSpecimen(visit, bloodReq, input.getCollectionDetail().getBlood());
+	}
+	
+	private void saveBloodSpecimenExtn(CollectionProtocol cp, Long specimenId, CollectSpecimensEvent input) {
+		
 	}
 	
 	private SpecimenDetail createFrozenTissue(CollectionProtocol cp, VisitDetail visit, CollectSpecimensEvent input) {
@@ -187,6 +206,14 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 
 	public void setSpecimenSvc(SpecimenService specimenSvc) {
 		this.specimenSvc = specimenSvc;
+	}
+
+	public FormService getFormSvc() {
+		return formSvc;
+	}
+
+	public void setFormSvc(FormService formSvc) {
+		this.formSvc = formSvc;
 	}
 
 	private static final String CP_TITLE = "Advanced Specimen Collection";

@@ -48,6 +48,18 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <label class="control-label col-xs-2">Does patient smoke?</label>
+        <div class="col-xs-3">
+          <label class="radio-inline">
+            <input type="radio" name="patientSmokes" value="true" ng-model="patientSmokingHistory.patientSmokes"> Yes
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="patientSmokes" value="false" ng-model="patientSmokingHistory.patientSmokes"> No
+          </label>
+        </div>
+      </div>
+
       <div class="os-section-hdr">
         <span>Visit Details</span>
       </div>
@@ -131,7 +143,12 @@
       </div>
 
       <div class="form-group">
-        <label class="control-label col-xs-2">Comments</label>
+        <label class="control-label col-xs-2">Warm ischemia time</label>
+        <div class="col-xs-3">
+          <input type="text" ng-model="bloodExtn.warmIschemiaTime" class="form-control" placeholder="Warm Ischemia Time">
+        </div>
+
+        <label class="control-label col-xs-1">Comments</label>
         <div class="col-xs-3">
           <textarea ng-model="blood.comment" class="form-control" placeholder="Comments"/>
         </div>
