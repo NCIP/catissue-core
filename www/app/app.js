@@ -124,26 +124,15 @@ angular.module('openspecimen', [
         parent: 'participant-detail'
       })
       .state('participant-detail.visits', {
-        url: '/visits',
+        url: '/visits?eventId&visitId',
         templateUrl: 'modules/biospecimen/participant/visits.html',
-        controller: function($scope, $state, cpr, visits) {
-          $scope.cpr = cpr;
-          $scope.visits = visits;
-
-          if (visits && visits.length > 0) {
-            $state.go(
-              'participant-detail.specimens', 
-              {visitId: visits[0].id, eventId: visits[0].eventId}
-            );
-          }
-        },
-        parent: 'participant-detail'
-      })
-      .state('participant-detail.specimens', {
-        url: '/?eventId&visitId',
-        templateUrl: 'modules/biospecimen/participant/specimens.html',
+        controller: 'ParticipantVisitsTreeCtrl',
         resolve: {
           specimens: function($stateParams, CprService) {
+            if (!$stateParams.visitId && !$stateParams.eventId) {
+              return [];
+            }
+
             var visitDetail = {visitId: $stateParams.visitId, eventId: $stateParams.eventId};
             return CprService.getVisitSpecimensTree($stateParams.cprId, visitDetail).then(
               function(result) {
@@ -152,8 +141,7 @@ angular.module('openspecimen', [
             );
           }
         },
-        controller: 'ParticipantSpecimensTreeCtrl',
-        parent: 'participant-detail.visits'
+        parent: 'participant-detail'
       })
       .state('participant-detail.annotations', {
         url: '/annotations',
