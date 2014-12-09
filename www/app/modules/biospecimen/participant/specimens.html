@@ -43,14 +43,24 @@
           <td ng-if="!specimen.storageLocation.name">
             <span>Virtual</span>
           </td>
-          <td>
-            <div class="btn-group" ng-if="showBtns">
+          <td class="action">
+            <div class="btn-group" dropdown ng-if="showBtns">
               <button type="button" class="btn btn-xs btn-default os-btn-icon">
                 <span class="fa fa-cog"></span>
               </button>
-              <button type="button" class="btn btn-xs btn-default os-btn-icon">
+              <button type="button" class="btn btn-xs btn-default os-btn-icon dropdown-toggle">
                 <span class="caret"></span>
               </button>
+              <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li><a href="#">View Specimen</a></li>
+                <li><a href="#">Edit Specimen</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Create Aliquots</a></li>
+                <li><a href="#">Create Derivatives</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Add Event</a></li>
+                <li><a href="#">Dispose</a></li>
+              </ul>
             </div>
           </td>
         </tr>
