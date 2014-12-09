@@ -32,6 +32,12 @@ ul.os-side-menu > li a {
   text-align: center;
 }
 
+ul.os-side-menu > li a > .fa {
+  display: block;
+  font-size: 26px;
+  text-decoration: none;
+}
+
 ul.os-side-menu > li:hover {
   background: #e0e0e0;
 }
