@@ -26,7 +26,8 @@
               </a>
               <span class="fa fa-circle" 
                     ng-class="{'os-status-collected': specimen.status == 'Collected',
-                               'os-status-pending': specimen.status == 'Pending' || !specimen.status}">
+                               'os-status-pending': specimen.status == 'Pending' || !specimen.status,
+                               'os-status-not-collected': specimen.status == 'Not Collected'}">
               </span>
               <a ng-if="specimen.label">{{specimen.label}}</a>
               <a ng-if="!specimen.label">{{specimen.type}} ({{specimen.specimenClass}})</a>

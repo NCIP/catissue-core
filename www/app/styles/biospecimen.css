@@ -37,3 +37,17 @@
   font-weight: bold;
 }
 
+.fa.os-status-collected:before {
+  color: #5cb85c;
+  padding: 0px 4px;
+}
+
+.fa.os-status-pending:before {
+  color: #f0ad4e;
+  padding: 0px 4px;
+}
+
+.fa.os-status-not-collected:before {
+  color: #d9534f;
+  padding: 0px 4px;
+}
