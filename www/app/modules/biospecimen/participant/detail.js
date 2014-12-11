@@ -1,5 +1,5 @@
 
-angular.module('openspecimen')
+angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
   .controller('ParticipantDetailCtrl', function($scope, $q, cpr, visits, Visit, PvManager) {
     $scope.cpr = cpr;
 
@@ -9,7 +9,6 @@ angular.module('openspecimen')
     PvManager.loadPvs($scope, 'race');
 
     $scope.editCpr = function(property, value) {
-      //alert("Edit " + cpr.id + " for " + property + " with " + value); 
       var d = $q.defer();
       d.resolve({});
       return d.promise;

@@ -1,5 +1,5 @@
 
-angular.module('openspecimen')
+angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models'])
   .controller('RegParticipantCtrl', function(
     $state, $stateParams, $modal, AlertService) {
     

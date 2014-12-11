@@ -1,1 +1,7 @@
-angular.module('os.biospecimen', ['os.biospecimen.models']);
+angular.module('os.biospecimen', 
+  [
+    'os.biospecimen.models',
+    'os.biospecimen.participant',
+    'os.biospecimen.cp'
+  ]
+);

@@ -1,5 +1,5 @@
 
-angular.module('openspecimen')
+angular.module('os.biospecimen.participant.visits', ['os.biospecimen.models'])
   .controller('ParticipantVisitsTreeCtrl', function($scope, $state, $stateParams, cpr, visits, specimens, Specimen) {
     if (!$stateParams.visitId && !$stateParams.eventId && visits && visits.length > 0) {
       $state.go(

@@ -1,5 +1,5 @@
 
-angular.module('openspecimen')
+angular.module('os.biospecimen.participant.pmis', [])
   .filter('showMrns', function() {
     return function(pmis) {
       if (!pmis) {
