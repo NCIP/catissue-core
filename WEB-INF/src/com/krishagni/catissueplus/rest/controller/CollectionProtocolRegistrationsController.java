@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensEvent;
@@ -51,7 +54,7 @@ import edu.wustl.common.beans.SessionDataBean;
 
 @Controller
 @RequestMapping("/collection-protocol-registrations")
-public class CollectionProtocolRegistrationController {
+public class CollectionProtocolRegistrationsController {
 
 	@Autowired
 	private CollectionProtocolRegistrationService cprSvc;
@@ -64,6 +67,34 @@ public class CollectionProtocolRegistrationController {
 
 	@Autowired
 	private HttpServletRequest httpReq;
+	
+	
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<CprSummary> getRegistrations(
+			@RequestParam(value = "cpId", required = true) Long cpId,
+			@RequestParam(value = "query", required = false, defaultValue = "") String searchStr,
+			@RequestParam(value = "startAt", required = false, defaultValue = "0") int startAt,
+			@RequestParam(value = "maxRecs", required = false, defaultValue = "100") int maxRecs,
+			@RequestParam(value = "includeStats", required = false, defaultValue = "false") boolean includeStats) {
+		
+		ReqRegisteredParticipantsEvent req = new ReqRegisteredParticipantsEvent();
+		req.setCpId(cpId);
+		req.setSearchString(searchStr);
+		req.setSessionDataBean(getSession());
+		req.setStartAt(startAt);
+		req.setMaxResults(maxRecs);
+		req.setIncludeStats(includeStats);
+		
+		RegisteredParticipantsEvent resp = cpSvc.getRegisteredParticipants(req);		
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		
+		return resp.getParticipants();
+	}
+	
 	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{cprId}")
@@ -98,48 +129,7 @@ public class CollectionProtocolRegistrationController {
 		return resp.getCprDetail();
 	}
 	
-
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/visits")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public List<VisitSummary> getVisits(
-			@PathVariable("id") Long cprId,
-			@RequestParam(value = "includeStats", required = false, defaultValue = "false") boolean includeStats) {
-		
-		ReqVisitsEvent req = new ReqVisitsEvent();
-		req.setCprId(cprId);
-		req.setIncludeStats(includeStats);
-		req.setSessionDataBean(getSession());
-				
-		VisitsEvent resp = cprSvc.getVisits(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		return resp.getVisits();
-	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/specimens")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody	
-	public List<SpecimenSummary> getSpecimens(
-			@PathVariable("id") Long cprId,
-			@RequestParam(value = "eventId", required = false) Long eventId,
-			@RequestParam(value = "visitId", required = false) Long visitId) {
-		
-		ReqVisitSpecimensEvent req = new ReqVisitSpecimensEvent();
-		req.setCprId(cprId);
-		req.setEventId(eventId);
-		req.setVisitId(visitId);
-		req.setSessionDataBean(getSession());
-		
-		VisitSpecimensEvent resp = cprSvc.getSpecimens(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getSpecimens();
-	}
-
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

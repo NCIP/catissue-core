@@ -1,9 +1,7 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,20 +16,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionGroupsDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AddVisitEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.GetScgReportEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqAllScgEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitAddedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimensInfoEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitAddedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitsEvent;
+import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
@@ -46,8 +43,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
 @Controller
-@RequestMapping("/specimen-collection-groups")
-public class SpecimenCollectionGroupController {
+@RequestMapping("/visits")
+public class VisitsController {
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
@@ -56,49 +53,31 @@ public class SpecimenCollectionGroupController {
 	private SpecimenCollGroupService specimenCollGroupService;
 
 	@Autowired
-	private FormService formSvc;
-
-	@RequestMapping(method = RequestMethod.GET)
-	@ResponseBody
-	public Map<String, Object> getAllCollGroups(
-			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
-			@RequestParam(value = "max", required = false, defaultValue = "100") int max,
-			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq,
-			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString){
-		ReqAllScgEvent req = new ReqAllScgEvent();
-		req.setStartAt(start);
-		req.setMaxRecords(max);
-		req.setCountReq(countReq);
-		req.setSearchString(searchString);
-		req.setSessionDataBean(getSession());
-		AllCollectionGroupsDetailEvent resp = specimenCollGroupService.getAllCollectionGroups(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		Map<String, Object> result = new HashMap<String, Object>();
-		if (resp.getCount() != null) {
-			result.put("count", resp.getCount());
-		}
-		result.put("collectionGroups", resp.getCollectionGroupsDetail());
-		return result;	
-	}
+	private CollectionProtocolRegistrationService cprSvc;
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/specimens")
+	@Autowired
+	private FormService formSvc;
+	
+	
+	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SpecimenInfo> getSpecimensList(@PathVariable("id") Long id,
-			@RequestParam(value = "objectType", required = false, defaultValue = "") String objectType) {
-		ReqSpecimenSummaryEvent req = new ReqSpecimenSummaryEvent();
+	public List<VisitSummary> getVisits(
+			@RequestParam(value = "cprId", required = true) Long cprId,
+			@RequestParam(value = "includeStats", required = false, defaultValue = "false") boolean includeStats) {
+		
+		ReqVisitsEvent req = new ReqVisitsEvent();
+		req.setCprId(cprId);
+		req.setIncludeStats(includeStats);
 		req.setSessionDataBean(getSession());
-		req.setId(id);
-		req.setObjectType(objectType);
-		SpecimensInfoEvent resp = specimenCollGroupService.getSpecimensList(req);
+				
+		VisitsEvent resp = cprSvc.getVisits(req);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
-		return resp.getInfo(); 
+		return resp.getVisits();
 	}
-
+		
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

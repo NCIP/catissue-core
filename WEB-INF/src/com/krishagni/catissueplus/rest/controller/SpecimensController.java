@@ -2,9 +2,6 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,13 +24,15 @@ import com.krishagni.catissueplus.core.biospecimen.events.AliquotDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimensEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPatchDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensEvent;
+import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
@@ -52,11 +51,14 @@ import edu.wustl.common.beans.SessionDataBean;
 
 @Controller
 @RequestMapping("/specimens")
-public class SpecimenController {
+public class SpecimensController {
 
 	@Autowired
 	private SpecimenService specimenSvc;
-
+	
+	@Autowired
+	private CollectionProtocolRegistrationService cprSvc;
+	
 	@Autowired
 	private FormService formSvc;
 
@@ -67,35 +69,27 @@ public class SpecimenController {
 	private HttpServletRequest httpServletRequest;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	@ResponseBody
-	public Map<String, Object> getSpecimens(
-			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
-			@RequestParam(value = "max", required = false, defaultValue = "100") int max,
-			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq,
-			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString,
-			@RequestParam(value="label", required=false) String[] labels){
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public List<SpecimenSummary> getSpecimens(
+			@RequestParam(value = "cprId") Long cprId,
+			@RequestParam(value = "eventId", required = false) Long eventId,
+			@RequestParam(value = "visitId", required = false) Long visitId) {
 		
-			ReqSpecimensEvent req = new ReqSpecimensEvent();
-			req.setStartAt(start);
-			req.setMaxRecords(max);
-			req.setCountReq(countReq);
-			req.setSearchString(searchString);
-			req.setSessionDataBean(getSession());
-			
-			List<String> specimenLabels = (labels != null) ? new ArrayList(Arrays.asList(labels)) : null; 
-			req.setSpecimenLabels(specimenLabels);
-			SpecimensSummaryEvent resp = specimenSvc.getSpecimens(req);
-			if (!resp.isSuccess()) {
-				resp.raiseException();
-			}
-			Map<String, Object> result = new HashMap<String, Object>();
-			if (resp.getCount() != null) {
-				result.put("count", resp.getCount());
-			}
-			result.put("specimens", resp.getSpecimensSummary());
-			
-			return result;
+		ReqVisitSpecimensEvent req = new ReqVisitSpecimensEvent();
+		req.setCprId(cprId);
+		req.setEventId(eventId);
+		req.setVisitId(visitId);
+		req.setSessionDataBean(getSession());
+		
+		VisitSpecimensEvent resp = cprSvc.getSpecimens(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		
+		return resp.getSpecimens();
 	}
+
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)

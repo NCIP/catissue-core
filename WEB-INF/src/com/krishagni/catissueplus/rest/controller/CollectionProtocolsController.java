@@ -16,17 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRespEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
-import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 
 import edu.wustl.catissuecore.util.global.Constants;
@@ -34,13 +28,10 @@ import edu.wustl.common.beans.SessionDataBean;
 
 @Controller
 @RequestMapping("/collection-protocols")
-public class CollectionProtocolController {
+public class CollectionProtocolsController {
 
 	@Autowired
 	private CollectionProtocolService cpSvc;
-
-	@Autowired
-	private CollectionProtocolRegistrationService cprSvc;
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
@@ -48,7 +39,7 @@ public class CollectionProtocolController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<CollectionProtocolSummary> getCollectionProtocolList(
+	public List<CollectionProtocolSummary> getCollectionProtocols(
 			@RequestParam(value = "chkPrivilege", required = false, defaultValue = "true")  boolean chkPrivlege,
 			@RequestParam(value = "detailedList", required = false, defaultValue = "false") boolean detailedList) {
 		
@@ -80,48 +71,7 @@ public class CollectionProtocolController {
 				
 		return resp.getCp();
 	}	
-		
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/registered-participants")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public List<CprSummary> getRegisteredParticipants(
-			@PathVariable("id") Long cpId,
-			@RequestParam(value = "query", required = false, defaultValue = "") String searchStr,
-			@RequestParam(value = "startAt", required = false, defaultValue = "0") int startAt,
-			@RequestParam(value = "maxRecs", required = false, defaultValue = "100") int maxRecs,
-			@RequestParam(value = "includeStats", required = false, defaultValue = "false") boolean includeStats) {
-		
-		ReqRegisteredParticipantsEvent req = new ReqRegisteredParticipantsEvent();
-		req.setCpId(cpId);
-		req.setSearchString(searchStr);
-		req.setSessionDataBean(getSession());
-		req.setStartAt(startAt);
-		req.setMaxResults(maxRecs);
-		req.setIncludeStats(includeStats);
-		
-		RegisteredParticipantsEvent resp = cpSvc.getRegisteredParticipants(req);		
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getParticipants();
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/clinical-diagnoses")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public List<String> getClinicalDiagnoses(@PathVariable("id") Long cpId) {
-		ReqClinicalDiagnosesEvent req = new ReqClinicalDiagnosesEvent();
-		req.setCpId(cpId);
-		
-		ClinicalDiagnosesEvent resp = cpSvc.getDiagnoses(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getDiagnoses();
-	}
-
+			
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}	
