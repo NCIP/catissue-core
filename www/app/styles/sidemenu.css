@@ -23,6 +23,24 @@ ul.os-side-menu {
   bottom: auto;
 }
 
+ul.os-side-menu li {
+  border-top: 1px solid #fff;
+}
+
+ul.os-side-menu li:after {
+  border-top: 1px solid #ddd;
+  content: '';
+  display: block;
+}
+
+ul.os-side-menu li:first-child {
+  border-top: none;
+}
+
+ul.os-side-menu li:last-child {
+  border-bottom: 1px solid #fff;
+}
+
 ul.os-side-menu > li a {
   display: block;
   color: #232323;
@@ -48,7 +66,7 @@ ul.os-side-menu > li:hover a {
 
 ul.os-side-menu > li.active {
   color: rgb(66, 139, 202);
-  border-left: 5px solid rgb(66, 139, 202);
+  border-left: 4px solid rgb(66, 139, 202);
   padding-left: 0px;
 }
 
