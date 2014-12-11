@@ -25,33 +25,23 @@ angular.module('openspecimen')
 
   .controller('ParticipantAddEditCtrl', function(
     $scope, $modalInstance, $stateParams, 
-    AlertService, CprService, ParticipantService,
+    AlertService, CollectionProtocolRegistration, Participant,
     SiteService, PvManager) {
 
     $scope.cpId = $stateParams.cpId;
     $scope.pid = undefined;
 
-    $scope.cpr = {
-      participant: {
-        pmis: []
-      },
-      registrationDate: Date.now()
-    };
+    $scope.cpr = new CollectionProtocolRegistration({registrationDate: Date.now()});
 
-    $scope.addPmi = function() {
-      $scope.cpr.participant.pmis.push({mrn: '', site: ''});
-    };
-
-    $scope.removePmi = function(index) {
-      $scope.cpr.participant.pmis.splice(index, 1);
-    };
 
     SiteService.getSites().then(
       function(result) {
         if (result.status != "ok") {
           alert("Failed to load sites information");
         }
-        $scope.sites = result.data;
+        $scope.sites = result.data.map(function(site) {
+          return site.name;
+        });
       }
     );
 
@@ -61,27 +51,6 @@ angular.module('openspecimen')
     PvManager.loadPvs($scope, 'race');
 
 
-    var isMatchingInfoPresent = function(participant) { 
-      if (participant.lastName && participant.birthDate) {
-        return true;
-      }
-
-      if (participant.empi) {
-        return true;
-      }
-
-      if (participant.ssn) {
-        return true;
-      }
- 
-      if (participant.pmis && participant.pmis.length > 0) {
-        return true;
-      }
-
-      return false;
-    };
- 
- 
     var handleMatchedResults = function() {
       if (!$scope.showMatchingParticipants) {
         return false;
@@ -97,61 +66,40 @@ angular.module('openspecimen')
       return true;
     };
 
-    var getMatchingCriteria = function(participant) {
-      return {
-        lastName: participant.lastName,
-        birthDate: participant.birthDate,
-        empi: participant.empi,
-        ssn : formatSsn(participant.ssn),
-        pmis: formatPmis(participant.pmis)
-      };
-    };
-
     $scope.validateBasicInfo = function() {
       if ($scope.matchedResults) {
         return handleMatchedResults();
       }   
 
       var participant = $scope.cpr.participant;
-      if (participant.id || !isMatchingInfoPresent(participant)) {
+      if (participant.$id() || !participant.isMatchingInfoPresent()) {
         return true;
       }
 
-      var criteria = getMatchingCriteria(participant);
+      var criteria = participant.getMatchingCriteria();
       if (angular.equals($scope.ignoredCrit, criteria)) {
         return true;
       }
 
       $scope.matchedResults = undefined;
-      return ParticipantService.getMatchingParticipants(criteria).then(
+      return participant.getMatchingParticipants().then(
         function(result) {
-          if (result.status != 'ok') {
-            AlertService.display($scope, "Participant matching failed", "danger");
-            return false;
-          }
-
-          if (result.data.matchedAttr == 'none') {
+          if (result.matchedAttr == 'none') {
             $scope.ignoredCrit = undefined;
             return true;
           }
 
-          $scope.matchedResults = result.data;
+          $scope.matchedResults = result;
           $scope.showMatchingParticipants = true;
-          $scope.origParticipant = angular.copy($scope.cpr.participant);
+          $scope.origParticipant = $scope.cpr.participant;
           return false;
         }
       );
     };
 
-    $scope.showMatches = function() {
-    };
-
     $scope.selectParticipant = function(participant) {
       $scope.selectedParticipant = true;
-      $scope.cpr.participant = angular.extend({}, participant);
-      angular.forEach($scope.cpr.participant.pmis, function(pmi) {
-        pmi.site = {name: pmi.siteName};
-      });
+      $scope.cpr.participant = participant;
     };
 
     $scope.lookupAgain = function() {
@@ -166,47 +114,19 @@ angular.module('openspecimen')
     $scope.ignoreMatches = function(wizard) {
       $scope.matchedResults = undefined;
       $scope.showMatchingParticipants = false;
-      $scope.ignoredCrit = getMatchingCriteria($scope.origParticipant);
+      $scope.ignoredCrit = $scope.origParticipant.getMatchingCriteria();
       wizard.next(false);
-    };
-
-    var formatSsn = function(ssn) {
-      if (ssn && ssn.length > 0) {
-        ssn = [ssn.slice(0, 3), '-', ssn.slice(3, 5), '-', ssn.slice(5)].join('');
-      } 
-
-      return ssn;
-    };
-
-    var formatPmis = function(inputPmis) {
-      var pmis = [];
-      angular.forEach(inputPmis, function(pmi) {
-        pmis.push({siteName: pmi.site.name, mrn: pmi.mrn});
-      });
-
-      return pmis;
-    };
-
-    var handleRegResult = function(result) {
-      if (result.status == 'ok') {
-        $modalInstance.close(result.data);
-      } else if (result.status == 'user_error') {
-        var errMsgs = result.data.errorMessages;
-        if (errMsgs.length > 0) {
-          var errMsg = errMsgs[0].attributeName + ": " + errMsgs[0].message;
-          AlertService.display($scope, errMsg, 'danger');
-        }
-      } else {
-        AlertService.display($scope, 'Internal Server Error', 'danger');
-      }
     };
 
     $scope.register = function() {
       var cpr = angular.copy($scope.cpr);
       cpr.cpId = $scope.cpId;
-      cpr.participant.ssn = formatSsn(cpr.participant.ssn);
-      cpr.participant.pmis = formatPmis(cpr.participant.pmis);
-      CprService.registerParticipant(cpr).then(handleRegResult);
+      cpr.participant.ssn = cpr.participant.formatSsn();
+      cpr.$saveOrUpdate().then(
+        function(savedCpr) {
+          $modalInstance.close(savedCpr);
+        }
+      );
     };
 
     $scope.cancel = function() {

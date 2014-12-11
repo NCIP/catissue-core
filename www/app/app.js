@@ -1,6 +1,9 @@
 'use strict';
 
 angular.module('openspecimen', [
+  'os.common',
+  'os.biospecimen',
+
   'ngMessages',
   'ngSanitize', 
   'ui.router', 
@@ -38,12 +41,8 @@ angular.module('openspecimen', [
         templateUrl: 'modules/biospecimen/cp/detail.html',
         parent: 'cps',
         resolve: {
-          cp: function($stateParams, CollectionProtocolService) {
-            return CollectionProtocolService.getCp($stateParams.cpId).then(
-              function(result) {
-                return result.data;
-              }
-            );
+          cp: function($stateParams, CollectionProtocol) {
+            return CollectionProtocol.getById($stateParams.cpId);
           }
         },
         controller: function($scope, $state, cp) {
@@ -90,20 +89,12 @@ angular.module('openspecimen', [
         url: '/participants/:cprId',
         templateUrl: 'modules/biospecimen/participant/detail.html',
         resolve: {
-          cpr: function($stateParams, CprService) {
-            return CprService.getRegistration($stateParams.cprId).then(
-              function(result) {
-                return result.data;
-              }
-            );   
+          cpr: function($stateParams, CollectionProtocolRegistration) {
+            return CollectionProtocolRegistration.getById($stateParams.cprId);
           },
 
-          visits: function($stateParams, CprService) {
-            return CprService.getVisits($stateParams.cprId, true).then(
-              function(result) {
-                return result.data;
-              }
-            );
+          visits: function($stateParams, Visit) {
+            return Visit.listFor($stateParams.cprId, true);
           }
         },
         controller: 'ParticipantDetailCtrl',
@@ -128,17 +119,16 @@ angular.module('openspecimen', [
         templateUrl: 'modules/biospecimen/participant/visits.html',
         controller: 'ParticipantVisitsTreeCtrl',
         resolve: {
-          specimens: function($stateParams, CprService) {
+          specimens: function($stateParams, Specimen) {
             if (!$stateParams.visitId && !$stateParams.eventId) {
               return [];
             }
 
-            var visitDetail = {visitId: $stateParams.visitId, eventId: $stateParams.eventId};
-            return CprService.getVisitSpecimensTree($stateParams.cprId, visitDetail).then(
-              function(result) {
-                return result.data;
-              }
-            );
+            var visitDetail = {
+              visitId: $stateParams.visitId, 
+              eventId: $stateParams.eventId
+            };
+            return Specimen.listFor($stateParams.cprId, visitDetail);
           }
         },
         parent: 'participant-detail'
@@ -243,6 +233,16 @@ angular.module('openspecimen', [
         secure  : that.secure,
         app     : that.app,
         urls    : that.urls,
+
+        getBaseUrl: function() {
+          var prefix = '';
+          if (this.hostname) {
+            var protocol = this.secure ? 'https://' : 'http://';
+            prefix = protocol + this.hostname + ':' + this.port;
+          }
+
+          return prefix + this.app + '/rest/ng/';
+        },
 
         getUrl  : function(key) {
           var url = '';

@@ -1,17 +1,17 @@
 
 angular.module('openspecimen')
-  .controller('CpListCtrl', function($scope, $state, CollectionProtocolService) {
-    CollectionProtocolService.getCpList(true).then(
-      function(result) {
-        if (result.status == "ok") {
-          $scope.cpList = result.data;
-        } else {
-          alert("Failed to load cp list");
+  .controller('CpListCtrl', function($scope, $state, CollectionProtocol) {
+    function loadCollectionProtocols() {
+      CollectionProtocol.query({detailedList: true}).then(
+        function(cpList) {
+          $scope.cpList = cpList;
         }
-      }
-    );
+      );
+    };
 
     $scope.showParticipants = function(cp) {
       $state.go('participant-list', {cpId: cp.id});
     };
+
+    loadCollectionProtocols();
   });

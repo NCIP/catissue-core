@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .controller('ParticipantDetailCtrl', function($scope, $q, cpr, visits, CprService, PvManager) {
+  .controller('ParticipantDetailCtrl', function($scope, $q, cpr, visits, Visit, PvManager) {
     $scope.cpr = cpr;
 
     PvManager.loadPvs($scope, 'gender');
@@ -15,14 +15,6 @@ angular.module('openspecimen')
       return d.promise;
     }
 
-    $scope.occurredVisits = [];
-    $scope.anticipatedVisits = [];
-
-    angular.forEach(visits, function(visit) {
-      if (visit.status === 'Complete') {
-        $scope.occurredVisits.push(visit);
-      } else if (visit.status === 'Pending' || !visit.status) {
-        $scope.anticipatedVisits.push(visit);
-      }
-    });
+    $scope.occurredVisits = Visit.completedVisits(visits);
+    $scope.anticipatedVisits = Visit.anticipatedVisits(visits);
   });

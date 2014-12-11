@@ -103,10 +103,10 @@
 
         <div class="form-group clearfix" ng-repeat="pmi in cpr.participant.pmis">
           <div class="col-xs-5">
-            <ui-select ng-model="pmi.site">
-              <ui-select-match placeholder="Select site">{{$select.selected.name}}</ui-select-match>
+            <ui-select ng-model="pmi.siteName">
+              <ui-select-match placeholder="Select site">{{$select.selected}}</ui-select-match>
               <ui-select-choices repeat="site in sites | filter: $select.search">
-                <span ng-bind-html="site.name | highlight: $select.search"></span>
+                <span ng-bind-html="site | highlight: $select.search"></span>
               </ui-select-choices>
             </ui-select>
           </div>
@@ -114,14 +114,14 @@
             <input type="text" ng-model="pmi.mrn" class="form-control">
           </div>
           <div class="col-xs-2">
-            <button class="btn btn-default" ng-click="removePmi($index)">
+            <button class="btn btn-default" ng-click="cpr.participant.removePmi(pmi)">
               <span class="glyphicon glyphicon-trash"></span>
             </button>
           </div>
         </div>
 
         <div class="form-group">
-          <button class="btn os-btn-text os-btn-col" ng-click="addPmi()">
+          <button class="btn os-btn-text os-btn-col" ng-click="cpr.participant.addPmi(cpr.participant.newPmi())">
             <span class="glyphicon glyphicon-plus"></span>
             Add MRN
           </button>

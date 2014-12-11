@@ -2,7 +2,7 @@
 angular.module('openspecimen')
   .controller('CustomRegParticipantCtrl', 
     function($scope, $state, $stateParams, $http, 
-             CollectionProtocolService, PvManager, FileSvc, 
+             PvManager, FileSvc, 
              ApiUrls, ApiUtil, AlertService) {
 
       $scope.cpId = $stateParams.cpId
@@ -12,11 +12,7 @@ angular.module('openspecimen')
         PvManager.loadPvs($scope, 'anatomicSite');
         PvManager.loadSites($scope, 'hospitals');
 
-        CollectionProtocolService.getClinicalDiagnoses($scope.cpId).then(
-          function(result) {
-            $scope.diagnoses = result.data;
-          }
-        );
+        $scope.diagnoses = PvManager.getClinicalDiagnoses($scope.cpId);
       };
 
       function init() {

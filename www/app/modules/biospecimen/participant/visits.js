@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .controller('ParticipantVisitsTreeCtrl', function($scope, $state, $stateParams, cpr, visits, specimens) {
+  .controller('ParticipantVisitsTreeCtrl', function($scope, $state, $stateParams, cpr, visits, specimens, Specimen) {
     if (!$stateParams.visitId && !$stateParams.eventId && visits && visits.length > 0) {
       $state.go(
         'participant-detail.visits', 
@@ -9,31 +9,9 @@ angular.module('openspecimen')
       return;
     }
 
-    function flatten(specimens) {
-      var result = [];
-      flatten0(specimens, undefined, 0, result);
-      return result;
-    }
-
-    function flatten0(specimens, parent, depth, result) {
-      if (!specimens) {
-        return;
-      }
-
-      for (var i = 0; i < specimens.length; ++i) {
-        result.push(specimens[i]);
-        specimens[i].depth = depth;
-        specimens[i].parent = parent;
-        specimens[i].hasChildren = (!!specimens[i].children && specimens[i].children.length > 0);
-        if (specimens[i].hasChildren) {
-          flatten0(specimens[i].children, specimens[i], depth + 1, result);
-        }
-      }
-    };
-
     $scope.cpr = cpr;
     $scope.visits = visits;
-    $scope.specimens = flatten(specimens);
+    $scope.specimens = Specimen.flatten(specimens);
 
     $scope.openSpecimenNode = function(specimen) {
       specimen.isOpened = true;
