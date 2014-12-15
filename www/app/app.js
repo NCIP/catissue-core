@@ -146,7 +146,7 @@ angular.module('openspecimen', [
 
     $urlRouterProvider.otherwise('/');
 
-    //$httpProvider.interceptors.push('httpRespInterceptor');
+    $httpProvider.interceptors.push('httpRespInterceptor');
 
     ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
     ApiUrlsProvider.port = 9090;
@@ -163,27 +163,31 @@ angular.module('openspecimen', [
 
     uiSelectConfig.theme = 'bootstrap';
   })
-  .factory('httpRespInterceptor', function($q, $injector, $window) {
+  .factory('httpRespInterceptor', function($q, $injector, Alerts, $window) {
     return {
-      request: function(result) {
-        return result;
+      request: function(config) {
+        return config || $q.when(config);
       },
 
-      requestError: function(result) {
-        $q.reject(result);
+      requestError: function(rejection) {
+        $q.reject(rejection);
       },
 
-      response: function(result) {
-        return result;
+      response: function(response) {
+        return response || $q.when(response);
       },
 
-      responseError: function(result) {
-        if (result.status == 401) {
+      responseError: function(rejection) {
+        if (rejection.status == 401) {
           $window.localStorage['osAuthToken'] = '';
           $injector.get('$state').go('login'); // using injector to get rid of circular dependencies
+        } else if (rejection.status / 100 == 5) {
+          Alerts.error("Internal server error. Please contact system administrator");
+        } else if (rejection.status / 100 == 4) {
+          Alerts.error("Bad user action: " + rejection.data.message);
         }
 
-        $q.reject(result);
+        return $q.reject(rejection);
       }
     };
   })
