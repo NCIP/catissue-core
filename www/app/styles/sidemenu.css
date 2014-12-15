@@ -64,14 +64,10 @@ ul.os-side-menu > li:hover a {
   text-decoration: none;
 }
 
-ul.os-side-menu > li.active {
+ul.os-side-menu > li.active a {
   color: rgb(66, 139, 202);
   border-left: 4px solid rgb(66, 139, 202);
   padding-left: 0px;
-}
-
-ul.os-side-menu > li.active a {
-  color: rgb(66, 139, 202);
   text-decoration: none;
 }
 
