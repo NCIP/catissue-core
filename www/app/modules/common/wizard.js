@@ -118,7 +118,6 @@ angular.module('openspecimen')
         return {
           pre: function (scope, element, attrs, controller) {
             scope[attrs.osWizard] = controller;
-            // scope['dfTemplate'] = (attrs.dfTemplate == undefined ? 'df_std_wizard.html' : attrs.dfTemplate);
           },
 
           post: function (scope, element, attributes, controller) {
@@ -128,7 +127,15 @@ angular.module('openspecimen')
         }
       },
 
-      templateUrl: 'modules/common/wizard-template.html'
+      templateUrl: function(tElem, tAttrs) {
+        if (tAttrs.type == 'classic') {
+          return 'modules/common/classic-wizard-template.html';
+        } else if (tAttrs.type == 'vertical') {
+          return 'modules/common/vertical-wizard-template.html';
+        }
+
+        return 'modules/common/tube-wizard-template.html';
+      }
     };
   })
 
@@ -136,11 +143,12 @@ angular.module('openspecimen')
     return {
       restrict: 'E',
       require : '^osWizard',
-      template: '<div class="os-wizard-step-content" ng-transclude ng-show="selected"></div>',
+      template: '<div ng-transclude ng-show="selected"></div>',
       transclude: true,
       replace : true,
       scope : {
         title : '@',
+        desc  : '@',
         onFinish : '&'
       },
 

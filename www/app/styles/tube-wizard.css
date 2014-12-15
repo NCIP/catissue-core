@@ -1,0 +1,100 @@
+
+.os-tube-wizard-steps {
+  display: table;
+  margin: 0px auto 20px;
+}
+
+.os-tube-wizard-steps:after, .os-tube-wizard-step-titles:after, .os-tube-wizard-step-progs:after, .os-tube-wizard-step-prog > div:after {
+  content: ' ';
+  display: table;
+  clear: both;
+}
+
+.os-tube-wizard-step-title {
+  float: left;
+  width: 200px;
+  text-align: center;
+  color: #999999;
+}
+
+.os-tube-wizard-step-title.os-tube-wizard-step-selected {
+  font-weight: bold;
+  color: #232323;
+}
+
+.os-tube-wizard-step-title.os-tube-wizard-step-finished {
+  color: #232323;
+}
+
+.os-tube-wizard-step-prog {
+  float: left;
+}
+
+.os-tube-wizard-step-prog > div {
+  width: 20px;
+  height: 20px;
+  float: left;
+  border-radius: 50%;
+  border: 4px solid #edeff0;
+  background-color: #edeff0;
+  cursor: pointer;
+}
+
+.os-tube-wizard-step-prog.os-tube-wizard-step-selected > div, .os-tube-wizard-step-prog.os-tube-wizard-step-finished > div {
+  background-color: #3276b1;
+}
+
+.os-tube-wizard-step-prog.os-tube-wizard-last-step:after,
+.os-tube-wizard-step-prog.os-tube-wizard-first-step:before {
+  width: 90px;
+  height: 0px;
+  border: none; /* This is present to get rid of border added by .os-tube-wizard-step-prog */
+  border-bottom: 2px dashed #edeff0;
+  float: left;
+  content: ' ';
+  margin-top: 8px;
+  background-color: transparent;
+}
+
+.os-tube-wizard-step-prog:after {
+  width: 180px;
+  height: 8px;
+  float: left;
+  content: ' ';
+  margin-top: 6px;
+  background-color: #edeff0;
+  border: 2px solid #edeff0;
+}
+
+.os-tube-wizard-step-prog.os-tube-wizard-step-finished > div:after {
+  width: 20px;
+  height: 4px;
+  background-color: #3276b1;
+  margin-top: 4px;
+  position: absolute;
+}
+
+.os-tube-wizard-step-prog.os-tube-wizard-step-selected.os-tube-wizard-first-step > div:before,
+.os-tube-wizard-step-prog.os-tube-wizard-step-finished.os-tube-wizard-first-step > div:before {
+  content: ' ';
+  width: 0px;
+}
+
+.os-tube-wizard-step-prog.os-tube-wizard-step-selected > div:before,
+.os-tube-wizard-step-prog.os-tube-wizard-step-finished > div:before {
+  content: ' ';
+  width: 6px;
+  height: 4px;
+  background-color: #3276b1;
+  margin-top: 4px;
+  position: absolute;
+  margin-left: -6px;
+}
+
+.os-tube-wizard-step-prog.os-tube-wizard-step-finished:after {
+  background-color: #3276b1;
+}
+
+.os-tube-wizard .os-modal-footer {
+  margin: 10px -20px -10px -20px;
+}
