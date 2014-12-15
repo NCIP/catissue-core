@@ -1,6 +1,6 @@
 
 angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
-  .controller('ParticipantListCtrl', function($scope, $state, $stateParams, $modal, cp, CollectionProtocolRegistration, AlertService) {
+  .controller('ParticipantListCtrl', function($scope, $state, $stateParams, $modal, cp, CollectionProtocolRegistration) {
     $scope.cpId = $stateParams.cpId;
 
     var loadParticipants = function() {

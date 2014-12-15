@@ -199,7 +199,7 @@ body {
   margin-bottom: 0px;
 }
 
-.os-alert {
+.os-alert-container {
   text-align: center;
   z-index: 100;
   position: absolute;

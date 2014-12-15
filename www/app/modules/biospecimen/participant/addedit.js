@@ -2,7 +2,7 @@
 angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models'])
   .controller('ParticipantAddEditCtrl', function(
     $scope, $state, $stateParams, 
-    AlertService, CollectionProtocolRegistration, Participant,
+    CollectionProtocolRegistration, Participant,
     SiteService, PvManager) {
 
     function loadPvs() {

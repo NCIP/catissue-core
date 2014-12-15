@@ -17,6 +17,9 @@
   </div>
 
   <div os-content="os-navbar">
+    <div class="os-alert-container" ng-if="alerts.length > 0">
+      <alert type="{{alert.type}}" ng-repeat="alert in alerts">{{alert.text}}</alert>
+    </div>
     <div>
       <div ui-view></div>
     </div>

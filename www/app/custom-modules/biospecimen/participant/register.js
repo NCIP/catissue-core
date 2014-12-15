@@ -3,7 +3,7 @@ angular.module('openspecimen')
   .controller('CustomRegParticipantCtrl', 
     function($scope, $state, $stateParams, $http, 
              PvManager, FileSvc, 
-             ApiUrls, ApiUtil, AlertService) {
+             ApiUrls, ApiUtil, Alerts) {
 
       $scope.cpId = $stateParams.cpId
 
@@ -96,7 +96,7 @@ angular.module('openspecimen')
               return;
             }
 
-            AlertService.display($scope, "Error collecting specimens", "danger");
+            Alerts.error("Error collecting specimens");
           });
       };
 

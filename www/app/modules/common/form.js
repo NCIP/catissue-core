@@ -57,7 +57,7 @@ angular.module('os.common.form', [])
     };
   })
 
-  .directive('osFormSubmit', function() {
+  .directive('osFormSubmit', function(Alerts) {
     return {
       restrict: 'A',
   
@@ -74,6 +74,8 @@ angular.module('os.common.form', [])
           ctrl.formSubmitted(true);
           if (ctrl.isValidForm()) {
             scope.$eval(ngClick);
+          } else {
+            Alerts.error("There are validation errors as highlighted below. Please correct them");
           }
         });
       }

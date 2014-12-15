@@ -22,7 +22,10 @@ angular.module('openspecimen', [
       })
       .state('signed-in', {
         abstract: true,
-        templateUrl: 'modules/common/appmenu.html'
+        templateUrl: 'modules/common/appmenu.html',
+        controller: function($scope, Alerts) {
+          $scope.alerts = Alerts.messages;
+        }
       })
       .state('cps', {
         url: '/cps',
