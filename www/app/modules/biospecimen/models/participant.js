@@ -35,11 +35,22 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
       return Participant.formatSsn(this.ssn);
     };
 
+    Participant.prototype.getPmis = function() {
+      var pmis = []; 
+      angular.forEach(this.pmis, function(pmi) {
+        if (pmi.siteName && pmi.mrn) {
+          pmis.push(pmi);
+        }
+      });
+
+      return pmis;
+    };
+
     Participant.prototype.isMatchingInfoPresent = function() {
       return (this.lastName && this.birthDate) ||
              this.empi ||
              this.ssn ||
-             (!!this.pmis && this.pmis.length > 0);
+             this.getPmis().length > 0;
     };
 
     Participant.prototype.getMatchingCriteria = function() {
@@ -48,7 +59,7 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
         birthDate: this.birthDate,
         empi: this.empi,
         ssn : Participant.formatSsn(this.ssn),
-        pmis: this.pmis
+        pmis: this.getPmis()
       };
     };
 
@@ -65,6 +76,12 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
 
           return response;
         });
+    };
+
+    Participant.prototype.$saveProps = function() {
+      this.pmis = this.getPmis();
+      this.ssn = this.formatSsn();
+      return this;
     };
 
     return Participant;

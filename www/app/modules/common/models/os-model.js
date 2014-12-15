@@ -43,11 +43,11 @@ angular.module('os.common.models', [])
       };
 
       Model.prototype.$save = function () {
-        return $http.post(url, this).then(Model.modelRespTransform);
+        return $http.post(url, this.$saveProps()).then(Model.modelRespTransform);
       };
 
       Model.prototype.$update = function () {
-        return $http.put(url + this.$id(), this).then(Model.modelRespTransform);
+        return $http.put(url + this.$id(), this.$saveProps()).then(Model.modelRespTransform);
       };
 
       Model.prototype.$saveOrUpdate = function () {
@@ -56,6 +56,10 @@ angular.module('os.common.models', [])
 
       Model.prototype.$remove = function () {
         return $http['delete'](url + this.$id()).then(Model.modelRespTransform);
+      };
+
+      Model.prototype.$saveProps = function() { 
+        return this;
       };
 
       return Model;
