@@ -148,7 +148,7 @@ body {
 }
 
 .os-page-hdr {
-  padding: 20px;
+  padding: 10px 20px;
   background: #f5f5f5;
   border-bottom: 1px solid #ccc;
   margin-bottom: 20px;
@@ -507,4 +507,23 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 #loading-bar-spinner {
   display: none; /* For now disabled */
+}
+
+.os-panel-footer {
+  padding: 10px 15px;
+  background: #f5f5f5;
+  margin: 0px -15px -15px -15px;
+  border-top: 1px solid #ddd;
+}
+
+.os-panel-footer:after {
+  content: '';
+  clear: both;
+  display: block;
+}
+
+.os-divider {
+  width: 100%;
+  border-top: 1px solid #ddd;
+  margin-bottom: 20px;
 }

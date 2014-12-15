@@ -7,7 +7,7 @@ angular.module('openspecimen')
           return 'custom-modules/biospecimen/participant/register.html';
         }
 
-        return 'modules/common/blank.html';
+        return 'modules/biospecimen/participant/addedit.html';
       },
 
       getRegParticipantCtrl : function(cpId) {
@@ -15,7 +15,7 @@ angular.module('openspecimen')
           return 'CustomRegParticipantCtrl';
         }
 
-        return 'RegParticipantCtrl'
+        return 'ParticipantAddEditCtrl';
       }
     }
   });
