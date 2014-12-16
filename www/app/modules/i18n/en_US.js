@@ -8,7 +8,13 @@
   },
 
   "cp": {
-    "list": "Collection Protocols"
+    "list": "Collection Protocols",
+
+    "tooltip": {
+      "viewDetails": "Click to view/edit Collection Protocol details",
+      "regParticipantsCnt": "Count of Registered Participants",
+      "collectedSpecimensCnt": "Count of Collected Specimens"
+    }
   },
 
   "participant": {
