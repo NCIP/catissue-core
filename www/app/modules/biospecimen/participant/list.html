@@ -2,8 +2,8 @@
   <alert ng-if="alert.msg" type="{{alert.type}}" class="os-alert">{{alert.msg}}</alert>
   <div class="os-page-hdr">
     <os-breadcrumbs></os-breadcrumbs>
-    <h3>Participants</h3>
-    <a class="os-btn-icon" title="Click to register new Participant" ui-sref="participant-new">
+    <h3 translate="participant.list">Participants</h3>
+    <a class="os-btn-icon" title="{{'participant.tooltip.register' | translate}}" ui-sref="participant-new">
       <span class="glyphicon glyphicon-plus"></span>
     </a>
   </div>
@@ -11,8 +11,8 @@
   <div class="os-cards">
     <div class="os-card" ng-repeat="cpr in cprList" ng-click="showParticipantOverview(cpr)">
       <h4>
-        <a title="Click to view/edit Participant details" ui-sref="participant-detail.overview({cprId: cpr.cprId})">
-          <span ng-if="!cpr.participant.firstName && !cpr.participant.lastName">
+        <a title="{{'participant.tooltip.viewDetails' | translate}}" ui-sref="participant-detail.overview({cprId: cpr.cprId})">
+          <span ng-if="!cpr.participant.firstName && !cpr.participant.lastName" translate="common.na">
             N/A
           </span>
           <span ng-if="cpr.participant.firstName || cpr.participant.lastName">
@@ -23,11 +23,11 @@
       <h5>{{cpr.ppid}}</h5>
       <p>{{cpr.registrationDate | date: 'MMM dd, yyyy'}}</p>
       <div class="stats">
-        <div class="stat col-xs-6" title="Count of Completed SCGs">
+        <div class="stat col-xs-6" title="{{'participant.tooltip.completedVisitsCnt' | translate}}">
           <span class="os-lavatar os-lavatar-sm">V</span>
           <span>{{cpr.scgCount | number: 0}}</span>
         </div>
-        <div class="stat col-xs-6" title="Count of Collected Specimens">
+        <div class="stat col-xs-6" title="{{'participant.tooltip.collectedSpecimensCnt' | translate}}">
           <span class="os-lavatar os-lavatar-sm">S</span>
           <span>{{cpr.specimenCount | number: 0}}</span>
         </div>

@@ -11,9 +11,21 @@ angular.module('openspecimen', [
   'ui.mask', 
   'ui.select',
   'mgcrea.ngStrap.popover',
-  'angular-loading-bar'])
+  'angular-loading-bar',
+  'pascalprecht.translate'])
 
-  .config(function($stateProvider, $urlRouterProvider, $httpProvider, uiSelectConfig, ApiUrlsProvider) {
+  .config(function(
+    $stateProvider, $urlRouterProvider, 
+    $httpProvider, $translateProvider,
+    uiSelectConfig, ApiUrlsProvider) {
+
+    $translateProvider.useStaticFilesLoader({
+      prefix: 'modules/i18n/',
+      suffix: '.js'
+    });
+
+    $translateProvider.preferredLanguage('en_US');
+
     $stateProvider
       .state('login', {
         url: '/',

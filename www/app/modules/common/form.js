@@ -65,15 +65,13 @@ angular.module('os.common.form', [])
 
       priority: 1,
 
-      terminal: true,
-
       link: function(scope, element, attrs, ctrl) {
-        var ngClick = attrs.ngClick;
+        var onSubmit = attrs.osFormSubmit;
 
         element.bind('click', function() {
           ctrl.formSubmitted(true);
           if (ctrl.isValidForm()) {
-            scope.$eval(ngClick);
+            scope.$eval(onSubmit);
           } else {
             Alerts.error("There are validation errors as highlighted below. Please correct them");
           }

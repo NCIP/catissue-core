@@ -1,28 +1,28 @@
 <div>
   <div class="os-page-hdr">
     <os-breadcrumbs></os-breadcrumbs>
-    <h3>Register Participant</h3>
+    <h3 translate="participant.registerParticipant">Register Participant</h3>
   </div>
 
   <div class="container">
     <form name="pform" class="form-horizontal" os-form-validator="pform" validator="pformValidator" novalidate>
       <div ng-if="matchedResults.matchedAttr == 'none' || !matchedResults.matchedAttr">
         <div class="form-group">
-          <label class="col-xs-3 control-label">Registration Date</label>
+          <label class="col-xs-3 control-label" translate="participant.regDate">Registration Date</label>
           <div class="col-xs-6">
             <input type="text" name="regDate" ng-model="cpr.registrationDate" class="form-control" 
               datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="regDt.isOpen" ng-focus="regDt.isOpen=true"
-              required placeholder="Registration Date"/>
+              required placeholder="{{'participant.regDate' | translate}}"/>
 
             <div os-field-error field="pform.regDate"></div>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="col-xs-3 control-label">Participant Protocol ID</label>
+          <label class="col-xs-3 control-label" translate="participant.ppid">Participant Protocol ID</label>
           <div class="col-xs-6">
             <input type="text" name="ppid" ng-model="cpr.ppid" class="form-control" 
-              required placeholder="Participant Protocol ID">
+              required placeholder="{{'participant.ppid' | translate}}">
 
             <div os-field-error field="pform.ppid"></div>
           </div>
@@ -31,29 +31,32 @@
         <div class="os-divider"></div>
 
         <div class="form-group">
-          <label class="col-xs-3 control-label">Name</label>
+          <label class="col-xs-3 control-label" translate="participant.name">Name</label>
           <div class="col-xs-2">
-            <input type="text" ng-model="cpr.participant.lastName" class="form-control" placeholder="Last Name"/>
+            <input type="text" ng-model="cpr.participant.lastName" class="form-control" 
+              placeholder="{{'participant.lastName' | translate}}"/>
           </div>
           <div class="col-xs-2">
-            <input type="text" ng-model="cpr.participant.firstName" class="form-control" placeholder="First Name"/>
+            <input type="text" ng-model="cpr.participant.firstName" class="form-control" 
+              placeholder="{{'participant.firstName' | translate}}"/>
           </div>
           <div class="col-xs-2">
-            <input type="text" ng-model="cpr.participant.middleName" class="form-control" placeholder="Middle Name"/>
+            <input type="text" ng-model="cpr.participant.middleName" class="form-control" 
+              placeholder="{{'participant.middleName' | translate}}"/>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="col-xs-3 control-label">Birth Date</label>
+          <label class="col-xs-3 control-label" translate="participant.birthDate">Birth Date</label>
           <div class="col-xs-6">
             <input type="text" ng-model="cpr.participant.birthDate" class="form-control" 
               datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="birthDt.isOpen" ng-focus="birthDt.isOpen=true" 
-              placeholder="Birth Date"/>
+              placeholder="{{'participant.birthDate' | translate}}"/>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="col-xs-3 control-label">Social Security Number</label>
+          <label class="col-xs-3 control-label" translate="participant.ssn">Social Security Number</label>
           <div class="col-xs-6">
             <input type="text" ng-model="cpr.participant.ssn" class="form-control" 
               ui-mask="999-99-9999" placeholder="XXX-XX-XXXX">
@@ -61,15 +64,15 @@
         </div>
 
         <div class="form-group">
-          <label class="col-xs-3 control-label">Master Patient Index</label>
+          <label class="col-xs-3 control-label" translate="participant.mpi">Master Patient Index</label>
           <div class="col-xs-6">
-            <input type="text" ng-model="cpr.participant.empi" class="form-control" placeholder="EMPI"/>
+            <input type="text" ng-model="cpr.participant.empi" class="form-control" placeholder="{{'participant.mpi' | translate}}"/>
           </div>
         </div>
 
         <div ng-if="showAdvDemographics">
           <div class="form-group">
-            <label class="col-xs-3 control-label">Gender</label>
+            <label class="col-xs-3 control-label" translate="participant.gender">Gender</label>
             <div class="col-xs-9">
               <label class="radio-inline" ng-repeat="gender in gender_pvs">
                 <input type="radio" name="gender" ng-model="cpr.participant.gender" ng-value="gender"> {{gender}}
@@ -78,7 +81,7 @@
           </div>
 
           <div class="form-group">
-            <label class="col-xs-3 control-label">Ethnicity</label>
+            <label class="col-xs-3 control-label" translate="participant.ethnicity">Ethnicity</label>
             <div class="col-xs-9">
               <label class="radio-inline" ng-repeat="ethnicity in ethnicity_pvs">
                 <input type="radio" name="ethnicity" ng-model="cpr.participant.ethnicity" ng-value="ethnicity"> {{ethnicity}}
@@ -87,7 +90,7 @@
           </div>
 
           <div class="form-group">
-            <label class="col-xs-3 control-label">Vital Status</label>
+            <label class="col-xs-3 control-label" translate="participant.vitalStatus">Vital Status</label>
             <div class="col-xs-9">
               <label class="radio-inline" ng-repeat="vitalStatus in vitalStatus_pvs">
                 <input type="radio" name="vitalStatus" ng-model="cpr.participant.vitalStatus" ng-value="vitalStatus"> {{vitalStatus}}
@@ -96,19 +99,19 @@
           </div>
 
           <div class="form-group">
-            <label class="col-xs-3 control-label">Death Date</label>
+            <label class="col-xs-3 control-label" translate="participant.deathDate">Death Date</label>
             <div class="col-xs-6">
               <input type="text" ng-model="cpr.participant.deathDate" class="form-control" 
                 datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="deathDt.isOpen" ng-focus="deathDt.isOpen=true" 
-                ng-disabled="cpr.participant.vitalStatus != 'Dead'" placeholder="Death Date"/>
+                ng-disabled="cpr.participant.vitalStatus != 'Dead'" placeholder="{{'participant.deathDate' | translate}}"/>
             </div>
           </div>
 
           <div class="form-group">
-            <label class="col-xs-3 control-label">Race</label>
+            <label class="col-xs-3 control-label" translate="participant.race">Race</label>
             <div class="col-xs-6">
               <ui-select multiple ng-model="cpr.participant.race">
-                <ui-select-match placeholder="Select Race">{{$item}}</ui-select-match>
+                <ui-select-match placeholder="{{'participant.selectRace' | translate}}">{{$item}}</ui-select-match>
                 <ui-select-choices repeat="race in race_pvs | filter: $select.search">
                   <span ng-bind-html="race | highlight: $select.search"></span>
                 </ui-select-choices>
@@ -120,8 +123,8 @@
         <div class="form-group">
           <div class="col-xs-offset-3 col-xs-6">
             <a ng-click="showAdvDemographics = !showAdvDemographics">
-              <span ng-if="!showAdvDemographics">More Demographic Information</span>
-              <span ng-if="showAdvDemographics">Less Demographic Information</span>
+              <span ng-if="!showAdvDemographics" translate="participant.moreDemographics">More Demographic Information</span>
+              <span ng-if="showAdvDemographics" translate="participant.lessDemographics">Less Demographic Information</span>
             </a>
           </div>
         </div>
@@ -130,19 +133,19 @@
 
         <div class="form-group clearfix">
           <div class="col-xs-offset-3 col-xs-3">
-            <label class="control-label">Site</label>
+            <label class="control-label" translate="participant.site">Site</label>
           </div>
           <div class="col-xs-3">
-            <label class="control-label">Medical Record Number</label>
+            <label class="control-label" translate="participant.mrn">Medical Record Number</label>
           </div>
         </div>
 
         <div class="form-group clearfix" ng-repeat="pmi in cpr.participant.pmis">
           <ng-form name="pmiForm" os-form-validator="pmiForm" parent-validator="pformValidator"> 
-            <label class="col-xs-3 control-label">MRN #{{$index + 1}}</label>
-            <div class="col-xs-3">
+            <!-- label class="col-xs-3 control-label">MRN #{{$index + 1}}</label -->
+            <div class="col-xs-3 col-xs-offset-3">
               <ui-select name="siteName" ng-model="pmi.siteName" ng-click="addPmiIfLast($index)" ng-required="!!pmi.mrn">
-                <ui-select-match placeholder="Select site">{{$select.selected}}</ui-select-match>
+                <ui-select-match placeholder="{{'participant.selectSite' | translate}}">{{$select.selected}}</ui-select-match>
                 <ui-select-choices repeat="site in sites | filter: $select.search">
                   <span ng-bind-html="site | highlight: $select.search"></span>
                 </ui-select-choices>
@@ -169,10 +172,8 @@
         <div class="form-group">
           <div class="col-xs-offset-3 col-xs-6">
             <button class="btn btn-primary" ng-if="!matchedResults || matchedResults.matchedAttr == 'none'" 
-              os-form-submit ng-click="register()">
-              Register
-            </button>
-            <button class="btn os-btn-text" ng-click="$window.history.back();">Discard</button>
+              os-form-submit="register()" translate="participant.register"> Register </button>
+            <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.discard">Discard</button>
           </div>
         </div>
       </div>
@@ -187,10 +188,18 @@
 
 <script type="text/ng-template" id="matched-participants.html">
   <div ng-switch on="matchedResults.matchedAttr" class="alert alert-warning os-participant-matching-msg">
-    <span ng-switch-when="empi">Following Participant matched based on EMPI</span>
-    <span ng-switch-when="ssn">Following Participant matched based on SSN</span>
-    <span ng-switch-when="pmi">Following Participant matched based on medical identifiers</span>
-    <span ng-switch-when="lnameAndDob">Following possible Participants matched based on last name and birth date</span>
+    <span ng-switch-when="empi" translate="participant.matched_on_mpi">
+      Following Participant matched based on EMPI
+    </span>
+    <span ng-switch-when="ssn" translate="participant.matched_on_ssn">
+      Following Participant matched based on SSN
+    </span>
+    <span ng-switch-when="pmi" translate="participant.matched_on_pmi">
+      Following Participant matched based on medical identifiers
+    </span>
+    <span ng-switch-when="lnameAndDob" translate="participant.matched_on_lname_and_dob">
+      Following possible Participants matched based on last name and birth date
+    </span>
   </div>
 
   <div class="os-participant-matching-tbl">
@@ -198,11 +207,11 @@
       <thead>
         <tr>
           <th class="col-xs-1">&nbsp;</th>
-          <th class="col-xs-2">First Name</th>
-          <th class="col-xs-2">Last Name</th>
-          <th class="col-xs-2">Birth Date</th>
-          <th class="col-xs-2">SSN</th>
-          <th class="col-xs-3">Medical Identifiers</th>
+          <th class="col-xs-2" translate="participant.firstName">First Name</th>
+          <th class="col-xs-2" translate="participant.lastName">Last Name</th>
+          <th class="col-xs-2" translate="participant.birthDate">Birth Date</th>
+          <th class="col-xs-2" translate="participant.ssnAbbr">SSN</th>
+          <th class="col-xs-3" translate="participant.pmis">Medical Identifiers</th>
         </tr>
       </thead>
       <tbody>
@@ -219,14 +228,11 @@
   </div>
 
   <div>
-    <button class="btn btn-primary" ng-if="selectedParticipant" os-form-submit ng-click="registerUsingSelectedParticipant()">
-      Register Selected Participant
-    </button>
-    <button class="btn btn-primary" ng-if="matchedResults.matchedAttr == 'lnameAndDob'" os-form-submit ng-click="ignoreMatchesAndRegister()">
-      Ignore Matches and Register Participant
-    </button>
-    <button class="btn btn-warning" ng-if="matchedResults.matchedAttr" ng-click="lookupAgain()">
-      Lookup Again
-    </button>
+    <button class="btn btn-primary" ng-if="selectedParticipant" ng-click="registerUsingSelectedParticipant()" 
+      translate="participant.registerSelectedParticipant"> Register Selected Participant </button>
+    <button class="btn btn-primary" ng-if="matchedResults.matchedAttr == 'lnameAndDob'" ng-click="ignoreMatchesAndRegister()"
+      translate="participant.ignoreMatches"> Ignore Matches and Register Participant </button>
+    <button class="btn btn-warning" ng-if="matchedResults.matchedAttr" ng-click="lookupAgain()"
+      translate="participant.lookupAgain"> Lookup Again </button>
   </div>
 </script>
