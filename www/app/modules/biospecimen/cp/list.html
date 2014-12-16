@@ -8,17 +8,17 @@
    
   <div class="os-cards">
     <div class="os-card" ng-repeat="cp in cpList" ng-click="showParticipants(cp)">
-      <h4 title="{{'cp.tooltip.viewDetails' | translate}}">
+      <h4 title="{{'cp.tooltip.view_details' | translate}}">
         <a ui-sref="cp-detail.overview({cpId: cp.id})">{{cp.title}}</a>
       </h4>
       <h5>{{cp.principalInvestigator.firstName}} {{cp.principalInvestigator.lastName}}</h5>
       <p>{{cp.startDate | date: 'MMM dd, yyyy'}}</p>
       <div class="stats">
-        <div class="stat col-xs-6" title="{{'cp.tooltip.regParticipantsCnt' | translate}}">
+        <div class="stat col-xs-6" title="{{'cp.tooltip.reg_participants_count' | translate}}">
           <span class="os-lavatar os-lavatar-sm">P</span>
           <span>{{cp.participantCount | number: 0}}</span>
         </div>
-        <div class="stat col-xs-6" title="{{'cp.tooltip.collectedSpecimensCnt' | translate}}">
+        <div class="stat col-xs-6" title="{{'cp.tooltip.collected_specimens_count' | translate}}">
           <span class="os-lavatar os-lavatar-sm">S</span>
           <span>{{cp.specimenCount | number: 0}}</span>
         </div>

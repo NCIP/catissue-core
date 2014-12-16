@@ -20,7 +20,7 @@
   <div class="col-xs-8">
     <ul class="os-key-values os-two-cols" os-inline-editors on-save="editCpr">
       <li class="item">
-        <strong class="key key-sm" translate="participant.birthDate">Birth Date:</strong>
+        <strong class="key key-sm" translate="participant.birth_date">Birth Date:</strong>
         <os-inline-edit editor="bdEditor" name="birthDate" class="value value-md" value="cpr.participant.birthDate">
           <span ng-if="bdEditor.isDisplayMode()">{{bdEditor.viewValue | date: 'MMM dd, yyyy' | osNoValue}}</span>
           <input ng-if="bdEditor.isEditMode()" class="form-control" type="text" ng-model="bdEditor.editValue"
@@ -34,7 +34,7 @@
       </li>
 
       <li class="item">
-        <strong class="key key-sm" translate="participant.regDate">Registration Date:</strong>
+        <strong class="key key-sm" translate="participant.reg_date">Registration Date:</strong>
         <os-inline-edit editor="rdEditor" name="regDate" class="value value-md" value="cpr.registrationDate">
           <span ng-if="rdEditor.isDisplayMode()">{{rdEditor.viewValue | date: 'MMM dd, yyyy' | osNoValue}}</span>
           <input ng-if="rdEditor.isEditMode()" class="form-control" type="text" ng-model="rdEditor.editValue"
@@ -43,7 +43,7 @@
       </li>
 
       <li class="item">
-        <strong class="key key-sm" translate="participant.protocolId">Protocol Identifier:</strong>
+        <strong class="key key-sm" translate="participant.protocol_id">Protocol Identifier:</strong>
         <os-inline-edit editor="ppidEditor" name="ppid" class="value value-md" value="cpr.ppid">
           <span ng-if="ppidEditor.isDisplayMode()">{{ppidEditor.viewValue | osNoValue}}</span>
           <input ng-if="ppidEditor.isEditMode()" type="text" ng-model="ppidEditor.editValue" class="form-control" 
@@ -52,7 +52,7 @@
       </li>
 
       <li class="item">
-        <strong class="key key-sm" translate="participant.ssnAbbr">Social Security No:</strong>
+        <strong class="key key-sm" translate="participant.ssn_short">Social Security No:</strong>
         <os-inline-edit editor="ssnEditor" name="ssn" class="value value-md" value="cpr.participant.ssn">
           <span ng-if="ssnEditor.isDisplayMode()">{{ssnEditor.viewValue | osNoValue}}</span>
           <input ng-if="ssnEditor.isEditMode()" type="text" ng-model="ssnEditor.editValue" class="form-control" 
@@ -76,7 +76,7 @@
       </li>
 
       <li class="item">
-        <strong class="key key-sm" translate="participant.vitalStatus">Vital Status:</strong>
+        <strong class="key key-sm" translate="participant.vital_status">Vital Status:</strong>
         <os-inline-edit editor="vsEditor" name="vitalStatus" class="value value-md" value="cpr.participant.vitalStatus">
           <span ng-if="vsEditor.isDisplayMode()">{{vsEditor.viewValue | osNoValue}}</span>
           <div ng-if="vsEditor.isEditMode()">
@@ -111,7 +111,7 @@
         <span ng-if="!ovCollapsed">&#9660;</span>
         <span ng-if="ovCollapsed">&#9654;</span>
       </button>
-      <h3 class="os-sub-section-title" translate="visits.occurredVisits">Occurred Visits</h3>
+      <h3 class="os-sub-section-title" translate="visits.occurred_visits">Occurred Visits</h3>
       <div collapse="ovCollapsed">
         <span ng-if="occurredVisits.length == 0" translate="common.none">None</span>
         <table class="table table-hover os-table-muted-hdr os-table outer-border" ng-if="occurredVisits.length > 0">
@@ -119,7 +119,7 @@
             <tr>
               <th class="col-xs-5" translate="visits.title">Visit</th>
               <th class="col-xs-2" translate="common.date">Date</th>
-              <th class="col-xs-4" translate="visits.collectionStatus">Collection Status</th>
+              <th class="col-xs-4" translate="visits.collection_status">Collection Status</th>
               <th class="col-xs-1">&nbsp;</th>
             </tr>
           </thead>
@@ -149,12 +149,12 @@
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a href="#" translate="visits.viewVisit">View Visit</a></li>
-                    <li><a href="#" translate="visits.editVisit">Edit Visit</a></li>
+                    <li><a href="#" translate="visits.ctx_menu.view_visit">View Visit</a></li>
+                    <li><a href="#" translate="visits.ctx_menu.edit_visit">Edit Visit</a></li>
                     <li class="divider"></li>
-                    <li><a href="#" translate="visits.collectPlannedSpecimens">Collect Planned Specimens</a></li>
-                    <li><a href="#" translate="visits.collectUnplannedSpecimens">Collect Unplanned Specimens</a></li>
-                    <li><a href="#" translate="visits.printSpecimenLabels">Print Specimen Labels</a></li>
+                    <li><a href="#" translate="visits.ctx_menu.collect_planned_specimens">Collect Planned Specimens</a></li>
+                    <li><a href="#" translate="visits.ctx_menu.collect_unplanned_specimens">Collect Unplanned Specimens</a></li>
+                    <li><a href="#" translate="visits.ctx_menu.print_specimen_labels">Print Specimen Labels</a></li>
                   </ul>
                 </div>
               </td>
@@ -169,15 +169,15 @@
         <span ng-if="!avCollapsed">&#9660;</span>
         <span ng-if="avCollapsed">&#9654;</span>
       </button>
-      <h3 class="os-sub-section-title" translate="visits.anticipatedVisits">Anticipated Visits</h3>
+      <h3 class="os-sub-section-title" translate="visits.anticipated_visits">Anticipated Visits</h3>
       <div collapse="avCollapsed">
-        <span ng-if="anticipatedVisits.length == 0">None</span>
+        <span ng-if="anticipatedVisits.length == 0" translate="common.none">None</span>
         <table class="table table-hover os-table-muted-hdr os-table outer-border" ng-if="anticipatedVisits.length > 0">
           <thead>
             <tr>
               <th class="col-xs-5" translate="visits.title">Visit</th>
               <th class="col-xs-3" translate="common.date">Date</th>
-              <th class="col-xs-3" translate="visits.anticipatedSpecimens">Anticipated Specimens</th>
+              <th class="col-xs-3" translate="visits.anticipated_specimens">Anticipated Specimens</th>
               <th class="col-xs-1">&nbsp;</th>
             </tr>
           </thead>
@@ -235,7 +235,7 @@
   <table class="table table-bordered">
     <thead>
       <tr>
-        <th translate="visits.collectionStatus">Collection Status</th>
+        <th translate="visits.collection_status">Collection Status</th>
         <th translate="common.count">Count</th>
       </tr>
     </thead>
@@ -249,7 +249,7 @@
         <td>{{visit.pendingSpecimens}}</td>
       </tr>
       <tr>
-        <td translate="specimens.status.notCollected">Not Collected</td>
+        <td translate="specimens.status.not_collected">Not Collected</td>
         <td>{{visit.uncollectedSpecimens}}</td>
       </tr>
       <tr>

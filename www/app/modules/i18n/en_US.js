@@ -1,60 +1,65 @@
 {
   "common": {
-    "cancel": "Cancel",
     "count" : "Count",
-    "discard": "Discard",
     "date": "Date",
-    "na": "N/A"
+    "na": "N/A",
+
+    "buttons": {
+      "cancel": "Cancel",
+      "discard": "Discard"
+    }
   },
 
   "cp": {
     "list": "Collection Protocols",
 
     "tooltip": {
-      "viewDetails": "Click to view/edit Collection Protocol details",
-      "regParticipantsCnt": "Count of Registered Participants",
-      "collectedSpecimensCnt": "Count of Collected Specimens"
+      "view_details": "Click to view/edit Collection Protocol details",
+      "reg_participants_count": "Count of Registered Participants",
+      "collected_specimens_count": "Count of Collected Specimens"
     }
   },
 
   "participant": {
     "list": "Participants",
    
-    "regDate": "Registration Date",
+    "register_participant": "Register Participant",
+    "reg_date": "Registration Date",
     "ppid": "Participant Protocol ID",
     "name": "Name",
-    "firstName": "First Name",
-    "lastName": "Last Name",
-    "middleName": "Middle Name",
-    "birthDate": "Birth Date",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "middle_name": "Middle Name",
+    "birth_date": "Birth Date",
     "ssn": "Social Security Number", 
-    "ssnAbbr": "SSN",
+    "ssn_short": "SSN",
     "mpi": "Master Patient Index",
     "gender": "Gender",
-    "vitalStatus": "Vital Status",
+    "vital_status": "Vital Status",
     "ethnicity": "Ethnicity",
-    "deathDate": "Death Date",
+    "death_date": "Death Date",
     "race": "Race",
-    "selectRace": "Select Race",
-    "moreDemographics": "More Demographic Information",
-    "lessDemographics": "Less Demographic Information",
+    "select_race": "Select Race",
+    "more_demographics": "More Demographic Information",
+    "less_demographics": "Less Demographic Information",
     "mrn": "Medical Record Number",
-    "registerParticipant": "Register Participant",
-    "participants": "Participants",
+    "mrn_short": "MRN",
     "site": "Site",
-    "selectSite": "Select Site",
+    "select_site": "Select Site",
     "pmis": "Medical Identifiers",
-    "protocolId": "Protocol Identifier",
+    "protocol_id": "Protocol Identifier",
 
     "matched_on_mpi": "Following Participant matched based on EMPI",
     "matched_on_ssn": "Following Participant matched based on SSN",
     "matched_on_pmi": "Following Participant matched based on MRN",
     "matched_on_lname_and_dob": "Following possible Participants matched based on Last Name and Birth Date",
     
-    "register": "Register",
-    "registerSelectedParticipant": "Register Selected participant",
-    "ignoreMatches": "Ignore Matches and Register Participant",
-    "lookupAgain": "Lookup Again",
+    "buttons": {
+      "register": "Register",
+      "register_selected_participant": "Register Selected participant",
+      "ignore_matches": "Ignore Matches and Register Participant",
+      "lookup_again": "Lookup Again"
+    },
 
     "menu": {
       "overview": "Overview",
@@ -65,30 +70,32 @@
 
     "tooltip": {
       "register": "Click to register new Participant",
-      "viewDetails": "Click to view/edit Participant details",
-      "completedVisitsCnt": "Count of Completed Visits",
-      "collectedSpecimensCnt": "Count of Collected Specimens"
+      "view_details": "Click to view/edit Participant details",
+      "completed_visits_count": "Count of Completed Visits",
+      "collected_specimens_count": "Count of Collected Specimens"
     }
   },
 
   "visits": {
     "title": "Visit",
     "list": "Visits",
-    "occurredVisits": "Occurred Visits",
-    "collectionStatus": "Collection Status",
-    "anticipatedVisits": "Anticipated Visits",
-    "anticipatedSpecimens": "Anticipated Specimens",
+    "occurred_visits": "Occurred Visits",
+    "collection_status": "Collection Status",
+    "anticipated_visits": "Anticipated Visits",
+    "anticipated_specimens": "Anticipated Specimens",
 
     "status": {
       "pending": "Pending",
       "complete": "Complete"
     },
 
-    "viewVisit": "View Visit",
-    "editVisit": "Edit Visit",
-    "collectPlannedSpecimens": "Collect Planned Specimens",
-    "collectUnplannedSpecimens": "Collect Unplanned Specimens",
-    "printSpecimenLabels": "Print Specimen Labels"
+    "ctx_menu": {
+      "view_visit": "View Visit",
+      "edit_visit": "Edit Visit",
+      "collect_planned_specimens": "Collect Planned Specimens",
+      "collect_unplanned_specimens": "Collect Unplanned Specimens",
+      "print_specimen_labels": "Print Specimen Labels"
+    }
   },
 
   "specimens": {
@@ -96,9 +103,10 @@
     "list": "Specimens",
     "status": {
       "collected": "Collected",
-      "notCollected": "Not Collected",
+      "not_collected": "Not Collected",
       "pending": "Pending"
     },
+
     "unplanned": "Unplanned",
 
     "label": "Label",
@@ -106,11 +114,13 @@
     "pathology": "Pathology",
     "container": "Container",
 
-    "viewSpecimen": "View Specimen",
-    "editSpecimen": "Edit Specimen",
-    "createAliquots": "Create Aliquots",
-    "createDerivatives": "Create Derivatives",
-    "addEvent": "Add Event",
-    "dispose": "Dispose"
+    "ctx_menu": {
+      "view_specimen": "View Specimen",
+      "edit_specimen": "Edit Specimen",
+      "create_aliquots": "Create Aliquots",
+      "create_derivatives": "Create Derivatives",
+      "add_event": "Add Event",
+      "dispose": "Dispose"
+    }
   }
 }

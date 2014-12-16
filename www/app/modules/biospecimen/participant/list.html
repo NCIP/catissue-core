@@ -11,7 +11,7 @@
   <div class="os-cards">
     <div class="os-card" ng-repeat="cpr in cprList" ng-click="showParticipantOverview(cpr)">
       <h4>
-        <a title="{{'participant.tooltip.viewDetails' | translate}}" ui-sref="participant-detail.overview({cprId: cpr.cprId})">
+        <a title="{{'participant.tooltip.view_details' | translate}}" ui-sref="participant-detail.overview({cprId: cpr.cprId})">
           <span ng-if="!cpr.participant.firstName && !cpr.participant.lastName" translate="common.na">
             N/A
           </span>
@@ -23,11 +23,11 @@
       <h5>{{cpr.ppid}}</h5>
       <p>{{cpr.registrationDate | date: 'MMM dd, yyyy'}}</p>
       <div class="stats">
-        <div class="stat col-xs-6" title="{{'participant.tooltip.completedVisitsCnt' | translate}}">
+        <div class="stat col-xs-6" title="{{'participant.tooltip.completed_visits_count' | translate}}">
           <span class="os-lavatar os-lavatar-sm">V</span>
           <span>{{cpr.scgCount | number: 0}}</span>
         </div>
-        <div class="stat col-xs-6" title="{{'participant.tooltip.collectedSpecimensCnt' | translate}}">
+        <div class="stat col-xs-6" title="{{'participant.tooltip.collected_specimens_count' | translate}}">
           <span class="os-lavatar os-lavatar-sm">S</span>
           <span>{{cpr.specimenCount | number: 0}}</span>
         </div>
