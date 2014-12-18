@@ -230,6 +230,6 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			return;
 		}
 		
-		participant.setVitalStatus(sexGenotype);
+		participant.setSexGenotype(sexGenotype);
 	}
 }

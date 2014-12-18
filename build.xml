@@ -422,6 +422,35 @@
 				<exclude name="**/*jta.jar*" />
 				<exclude name="**/CVS*" />
 				<exclude name="**/WEB-INF/lib/jta.jar" />
+
+				<exclude name="**/WEB-INF/lib/bonecp-0.7.1.RELEASE.jar" />
+				<exclude name="**/WEB-INF/lib/dbunit-2.4.8.jar" />
+				<exclude name="**/WEB-INF/lib/dom4j-1.6.1.jar" />
+				<exclude name="**/WEB-INF/lib/guava-r08.jar" />
+				<exclude name="**/WEB-INF/lib/h2-1.3.166.jar" />
+				<exclude name="**/WEB-INF/lib/hibernate-commons-annotations-3.3.0.ga.jar" />
+				<exclude name="**/WEB-INF/lib/hibernate-core-3.3.2.GA.jar" />
+				<exclude name="**/WEB-INF/lib/hibernate-jpa-2.0-api-1.0.1.Final.jar" />
+				<exclude name="**/WEB-INF/lib/hibernate-validator-4.2.0.Final.jar" />
+				<exclude name="**/WEB-INF/lib/javassist-3.15.0-GA.jar" />
+				<exclude name="**/WEB-INF/lib/jcl-over-slf4j-1.6.1.jar" />
+				<exclude name="**/WEB-INF/lib/jta.jar" />
+				<exclude name="**/WEB-INF/lib/servlet-api-2.4.jar" />
+				<exclude name="**/WEB-INF/lib/slf4j-api-1.6.4.jar" />
+				<exclude name="**/WEB-INF/lib/slf4j-log4j12-1.6.4.jar" />
+				<exclude name="**/WEB-INF/lib/spring-aop-3.1.2.RELEASE.jar" />
+				<exclude name="**/WEB-INF/lib/spring-context-support-3.1.2.RELEASE.jar" />
+				<exclude name="**/WEB-INF/lib/spring-data-commons-core-1.4.0.RELEASE.jar" />
+				<exclude name="**/WEB-INF/lib/spring-data-jpa-1.2.0.RELEASE.jar" />
+				<exclude name="**/WEB-INF/lib/spring-expression-3.1.2.RELEASE.jar" />
+				<exclude name="**/WEB-INF/lib/spring-test-3.1.1.RELEASE.jar" />
+				<exclude name="**/WEB-INF/lib/spring-test-3.2.1.RELEASE.jar" />
+				<exclude name="**/WEB-INF/lib/usertype.core-3.0.0.CR3.jar" />
+				<exclude name="**/WEB-INF/lib/usertype.spi-3.0.0.CR3.jar" />
+				<exclude name="**/WEB-INF/lib/validation-api-1.0.0.GA.jar" />
+				<exclude name="**/WEB-INF/lib/jdom-1.1.1.jar" />
+				<exclude name="**/WEB-INF/lib/spring-test-dbunit-1.2.0-SNAPSHOT.jar" />
+				
 				<!--exclude name="**/*build*"/>
 				<exclude name="**/*log4j.jar*" />
 				<exclude name="**/*WEB-INF*"/>
@@ -1321,6 +1350,108 @@
 				<fail message="Wrong Java version! [${java.version}] Required version: ${java.required.version}"/>
 			</else>
 		</if -->
+	</target>
+
+	<target name="compile_integration_tests">
+		<if>
+			<equals arg1="true" arg2="${skip.dev.compile}"/>
+			<then>
+				<echo message="skipping development code compilation, compiling test code."/>
+			</then>
+			<else>
+				<antcall target="compile"/>
+			</else>
+		</if>
+
+		<javac destdir="${target.dir}" includes="**/*.java" includeAntRuntime="false" target="1.6">
+			<src path="./WEB-INF/integration-test"/>
+			<src path="./WEB-INF/src"/>
+
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>		
+	</target>
+	
+	<target name="run_integration_tests" depends="compile_integration_tests">
+		<copy todir="${target.dir}">
+			<fileset dir="${base.dir}/WEB-INF/integration-test">
+				<include name="*.xml" />
+				<include name="*.properties" />
+			</fileset>
+
+			<fileset dir="${base.dir}/WEB-INF">
+				<include name="bo-context.xml" />
+			</fileset>
+		</copy>
+		
+		<copy todir="${target.dir}/com/krishagni/core/tests">
+			<fileset dir="${base.dir}/WEB-INF/integration-test/database">
+				<include name="*.xml"/>
+			</fileset>
+		</copy> 
+		
+		<delete dir="${base.dir}/integration-test-results" failonerror="false"/>
+		<mkdir dir="${base.dir}/integration-test-results"/>
+
+		<delete dir="${base.dir}/integration-test-data" failonerror="false"/>
+		<mkdir dir="${base.dir}/integration-test-data"/>
+
+		<copy todir="${base.dir}/integration-test-data">
+			<fileset dir="${base.dir}/catissuecore-properties">
+				<include name="caTissueCore_Properties.xml"/>
+			</fileset>
+			<fileset dir="${base.dir}/WEB-INF/integration-test">
+				<include name="log4j.properties"/>
+			</fileset>
+		</copy>
+
+		<replace dir="${base.dir}/integration-test-data" propertyfile="${base.dir}/WEB-INF/integration-test/test.properties">
+			<include name ="caTissueCore_Properties.xml"/>
+			<include name ="log4j.properties"/>
+			<replacefilter token="@@appserver.home.dir@@" property="appserver.home.dir"/>
+		</replace>
+
+		<replace dir="${target.dir}" propertyfile="${base.dir}/WEB-INF/integration-test/test.properties">
+			<include name ="log4j.properties"/>
+			<include name ="hibernate.test.cfg.xml"/>
+			<replacefilter token="@@appserver.home.dir@@" property="appserver.home.dir"/>			
+			<replacefilter token="@@hibernate.dialect@@" property="hibernate.dialect"/>
+			<replacefilter token="@@db.driver@@" property="db.driver"/>
+			<replacefilter token="@@hibernate.show_sql@@" property="hibernate.show_sql"/>
+			<replacefilter token="@@hibernate.connection.url@@" property="hibernate.connection.url"/>
+			<replacefilter token="@@db.username@@" property="db.username"/>
+			<replacefilter token="@@db.password@@" property="db.password"/>
+			<replacefilter token="@@hibernate.hbm2ddl.auto@@" property="hibernate.hbm2ddl.auto"/>
+			<replacefilter token="@@hibernate.cache.provider_class@@" property="hibernate.cache.provider_class"/>
+			<replacefilter token="@@hibernate.cache.use_second_level_cache@@" property="hibernate.cache.use_second_level_cache"/>
+		</replace>
+		
+		<junit printsummary="yes" haltonfailure="no" failureproperty="test.failed">
+			<sysproperty key="app.propertiesFile" value="${base.dir}/integration-test-data/caTissueCore_Properties.xml"/>
+			<classpath>
+				<pathelement path="${target.dir}" />
+			</classpath>
+			
+			<classpath>
+				<fileset dir="${base.dir}/WEB-INF/lib">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+					
+			<formatter type="xml" />
+					
+			<batchtest todir="${base.dir}/integration-test-results">
+				<fileset dir="${base.dir}/WEB-INF/integration-test">
+					<include name="com/**/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+
+		<delete dir="${base.dir}/integration-test-data" failonerror="true"/>
+		<fail message="Test failure detected, check test results." if="test.failed" />
 	</target>
 
 	<target name="compileTestCases" depends="compile">

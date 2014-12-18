@@ -45,6 +45,8 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 
 	private final String CONSENT_WITNESS = "consent witness";
 	
+	private final String REGISTRATION_DATE = "registration date";
+	
 	private ParticipantFactory participantFactory;
 
 	private KeyGenFactory keyFactory;
@@ -72,7 +74,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		
 		CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
 		cpr.setBarcode(detail.getBarcode());
-		setRegistrationDate(cpr, detail.getRegistrationDate());
+		setRegistrationDate(cpr, detail.getRegistrationDate(), oce);
 		setActivityStatus(cpr, detail.getActivityStatus(), oce);
 		setCollectionProtocol(cpr, detail, oce);
 		setConsents(cpr, detail, oce);
@@ -83,9 +85,10 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		return cpr;
 	}
 	
-	private void setRegistrationDate(CollectionProtocolRegistration cpr, Date regDate) {
+	private void setRegistrationDate(CollectionProtocolRegistration cpr, Date regDate, ObjectCreationException oce) {
 		if (regDate == null) {
-			regDate = Calendar.getInstance().getTime();
+			oce.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, REGISTRATION_DATE);
+			return;
 		}
 		
 		cpr.setRegistrationDate(regDate);
@@ -125,6 +128,11 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		
 		if (protocol == null) {
 			oce.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROTOCOL);
+			return;
+		}
+		
+		if (!Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(protocol.getActivityStatus())) {
+			oce.addError(ParticipantErrorCode.DISABLED_CP, COLLECTION_PROTOCOL);
 			return;
 		}
 		
@@ -172,9 +180,14 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 				
 		setConsentSignDate(cpr, consentDetail);
 		setConsentWitness(cpr, consentDetail, oce);
-		setConsentResponses(cpr, consentDetail);			
+		setConsentResponses(cpr, consentDetail);
+		setConsentDocumentUrl(cpr, consentDetail.getConsentDocumentUrl());
 	}
 	
+	private void setConsentDocumentUrl(CollectionProtocolRegistration cpr, String consentDocumentUrl) {
+		cpr.setSignedConsentDocumentURL(consentDocumentUrl);
+	}
+
 	private void setConsentSignDate(CollectionProtocolRegistration cpr, ConsentDetail consentDetail) {
 		if (consentDetail.getConsentSignatureDate() != null) {
 			cpr.setConsentSignatureDate(consentDetail.getConsentSignatureDate());
