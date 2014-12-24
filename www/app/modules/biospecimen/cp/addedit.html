@@ -1,0 +1,187 @@
+
+<div>
+  <div class="os-page-hdr">
+    <h3 translate="cp.create_cp_title">Create Collection Protocol</h3>
+  </div>
+
+  <div class="container">
+    <form name="cpForm" os-form-validator="cpForm" validator="cpFormValidator" class="form-horizontal" novalidate>
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.title">Title</label>
+        <div class="col-xs-6">
+          <input type="text" name="title" ng-model="cp.title" 
+            class="form-control" placeholder="{{'cp.title' | translate}}" required>
+          <div os-field-error field="cpForm.title"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.short_title">Short Title</label>
+        <div class="col-xs-6">
+          <input type="text" name="shortTitle" ng-model="cp.shortTitle" 
+            class="form-control" placeholder="{{'cp.short_title' | translate}}" required>
+          <div os-field-error field="cpForm.shortTitle"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.pi">Principal Investigator</label>
+        <div class="col-xs-6">
+          <ui-select name="pi" ng-model="cp.principalInvestigator" required>
+            <ui-select-match placeholder="{{'cp.pi' | translate}}">
+              {{$select.selected.lastName}}, {{$select.selected.firstName}}
+            </ui-select-match>
+            <ui-select-choices repeat="user in piUsers" refresh="searchUsers('piUsers', $select.search)" refresh-delay="750">
+              <span ng-bind-html="user.lastName + ', ' + user.firstName | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+
+          <div os-field-error field="cpForm.pi"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.coordinators">Protocol Coordinators</label>
+        <div class="col-xs-6">
+          <ui-select multiple ng-model="cp.coordinators">
+            <ui-select-match placeholder="{{'cp.coordinators' | translate}}">
+              {{$item.lastName}}, {{$item.firstName}}
+            </ui-select-match>
+            <ui-select-choices repeat="user in coordinators" refresh="searchUsers('coordinators', $select.search)" refresh-delay="750">
+              <span ng-bind-html="user.lastName + ', ' + user.firstName | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="cp.start_date">Start Date</label>
+        <div class="col-xs-6">
+          <input type="text" name="startDate" ng-model="cp.startDate" class="form-control"
+            datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="startDt.isOpen" ng-focus="startDt.isOpen=true"
+            placeholder="{{'cp.start_date' | translate}}" required>
+          <div os-field-error field="cpForm.startDate"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="cp.consents_waived">Consents Waived</label>
+        <div class="col-xs-6">
+          <label class="radio-inline">
+            <input type="radio" name="consentsWaived" ng-model="cp.consentsWaived" value="true" ng-required="true"> 
+            <span translate="common.yes">Yes</span>
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="consentsWaived" ng-model="cp.consentsWaived" value="false" ng-required="true"> 
+            <span translate="common.no">No</span>
+          </label>
+          <div os-field-error field="cpForm.consentsWaived"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.ethics_approval_id">Ethics Approval ID</label>
+        <div class="col-xs-6">
+          <input type="text" ng-model="cp.irbId" class="form-control" placeholder="{{'cp.ethics_approval_id' | translate}}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.ppid_fmt">Protocol Identifier Format</label>
+        <div class="col-xs-2">
+          <input type="text" ng-model="ppidFmt.prefix" class="form-control" placeholder="{{'cp.ppid_prefix' | translate}}">
+        </div>
+        <div class="col-xs-2">
+          <input type="text" name="ppidDigits" ng-model="ppidFmt.digitsWidth" class="form-control" 
+            placeholder="{{'cp.ppid_digits' | translate}}" ng-pattern="/^([1-9]|[1][0-9])$/" 
+            ng-required="!!ppidFmt.prefix || !!ppidFmt.suffix">
+          <div os-field-error field="cpForm.ppidDigits"></div>
+        </div>
+        <div class="col-xs-2">
+          <input type="text" ng-model="ppidFmt.suffix" class="form-control" placeholder="{{'cp.ppid_suffix' | translate}}">
+        </div>
+        <div class="col-xs-2" ng-if="ppidFmt.samplePpid">
+          <span>{{ppidFmt.samplePpid}}</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.clinical_diagnoses">Clinical Diagnoses</label>
+        <div class="col-xs-6">
+          <ui-select multiple ng-model="cp.clinicalDiagnoses">
+            <ui-select-match placeholder="{{'cp.clinical_diagnoses' | translate}}">
+              {{$item}}
+            </ui-select-match>
+            <ui-select-choices repeat="cd in clinicalDiagnoses track by $index" 
+              refresh="searchClinicalDiagnoses($select.search)" refresh-delay="1000">
+              <span ng-bind-html="cd | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.anticipated_participants_cnt">Anticipated Participants Count</label>
+        <div class="col-xs-6">
+          <input type="text" ng-model="cp.anticipatedParticipantsCount" class="form-control" 
+            placeholder="{{'cp.anticipated_participants_cnt' | translate}}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.desc_url">Description URL</label>
+        <div class="col-xs-6">
+          <input type="text" ng-model="cp.descriptionUrl" class="form-control" placeholder="{{'cp.desc_url' | translate}}">
+        </div>
+      </div>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.specimen_label_fmt">Specimen Label Format</label>
+        <div class="col-xs-6">
+          <input type="text" ng-model="cp.specimenLabelFmt" class="form-control" placeholder="{{'cp.specimen_label_fmt' | translate}}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.derivative_label_fmt">Derivative Label Format</label>
+        <div class="col-xs-6">
+          <input type="text" ng-model="cp.derivativeLabelFmt" class="form-control" placeholder="{{'cp.derivative_label_fmt' | translate}}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.aliquot_label_fmt">Aliquot Label Format</label>
+        <div class="col-xs-6">
+          <input type="text" ng-model="cp.aliquotLabelFmt" class="form-control" placeholder="{{'cp.aliquot_label_fmt' | translate}}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="cp.store_all_aliquots_in_same_container">
+          Store all Aliquots in same Container
+        </label>
+        <div class="col-xs-6">
+          <label class="radio-inline">
+            <input type="radio" name="aliquotsInSameContainer" ng-model="cp.aliquotsInSameContainer" value="true"> 
+            <span translate="common.yes">Yes</span>
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="aliquotsInSameContainer" ng-model="cp.aliquotsInSameContainer" value="false">
+            <span translate="common.no">No</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6">
+          <button class="btn btn-primary" os-form-submit="createCp()" translate="common.buttons.create"> Create </button>
+          <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.buttons.discard">Discard</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

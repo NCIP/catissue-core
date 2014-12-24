@@ -12,7 +12,7 @@ angular.module('openspecimen')
         PvManager.loadPvs($scope, 'anatomicSite');
         PvManager.loadSites($scope, 'hospitals');
 
-        $scope.diagnoses = PvManager.getClinicalDiagnoses($scope.cpId);
+        $scope.diagnoses = PvManager.getClinicalDiagnoses({cpId: $scope.cpId});
       };
 
       function init() {

@@ -3,6 +3,7 @@
 angular.module('openspecimen', [
   'os.common',
   'os.biospecimen',
+  'os.administrative',
 
   'ngMessages',
   'ngSanitize', 
@@ -49,6 +50,12 @@ angular.module('openspecimen', [
         url: '', 
         templateUrl: 'modules/biospecimen/cp/list.html',
         controller: 'CpListCtrl',
+        parent: 'cps'
+      })
+      .state('cp-addedit', {
+        url: '/addedit?cpId',
+        templateUrl: 'modules/biospecimen/cp/addedit.html',
+        controller: 'CpAddEditCtrl',
         parent: 'cps'
       })
       .state('cp-detail', {

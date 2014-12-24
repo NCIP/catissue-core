@@ -21,7 +21,16 @@ angular.module('os.common.models', [])
       };
 
       Model.modelArrayRespTransform = function(response) {
-        return response.data.map(function(item) {
+        var collection = undefined;
+        if (response.data instanceof Array) {
+          collection = response.data;
+        } else if (response.data[modelName] instanceof Array) {
+          collection = response.data[modelName];
+        } else {
+          collection = [];
+        }
+
+        return collection.map(function(item) {
           return new Model(item);
         });
       };
@@ -30,8 +39,9 @@ angular.module('os.common.models', [])
         return response.date;
       };
 
-      Model.query = function(reqParams) {
-        return $http.get(url, {params: reqParams}).then(Model.modelArrayRespTransform);
+      Model.query = function(reqParams, transformer) {
+        var respTransformer = transformer || Model.modelArrayRespTransform;
+        return $http.get(url, {params: reqParams}).then(respTransformer);
       };
 
       Model.getById = function (id) {

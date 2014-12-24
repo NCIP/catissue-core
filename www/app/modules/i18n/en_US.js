@@ -3,8 +3,12 @@
     "count" : "Count",
     "date": "Date",
     "na": "N/A",
+    "yes": "Yes",
+    "no": "No",
+    "none": "None",
 
     "buttons": {
+      "create": "Create",
       "cancel": "Cancel",
       "discard": "Discard"
     }
@@ -12,6 +16,26 @@
 
   "cp": {
     "list": "Collection Protocols",
+    "create_cp_title": "Create Collection Protocol",
+    
+    "title": "Title",
+    "short_title": "Short Title",
+    "pi": "Principal Investigator",
+    "coordinators": "Protocol Coordinators",
+    "start_date": "Start Date",
+    "consents_waived": "Consents Waived",
+    "ethics_approval_id": "Ethics Approval ID",
+    "ppid_fmt": "Protocol Identifier Format",
+    "ppid_prefix": "Prefix",
+    "ppid_digits": "No. of digits",
+    "ppid_suffix": "Suffix",
+    "clinical_diagnoses": "Clinical Diagnoses",
+    "anticipated_participants_cnt": "Anticipated Participants Count",
+    "desc_url": "Description URL",
+    "specimen_label_fmt": "Specimen Label Format",
+    "derivative_label_fmt": "Derivative Label Format",
+    "aliquot_label_fmt": "Aliquot Label Format",
+    "store_all_aliquots_in_same_container": "Store all Aliquots in same Container",
 
     "tooltip": {
       "view_details": "Click to view/edit Collection Protocol details",

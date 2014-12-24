@@ -108,10 +108,10 @@ angular.module('openspecimen')
         );
       },
 
-      getClinicalDiagnoses: function(cpId, cb) {
+      getClinicalDiagnoses: function(params, cb) {
         var url = ApiUrls.getBaseUrl() + '/clinical-diagnoses';
         var diagnoses = [];
-        $http.get(url, {params: {cpId: cpId}}).then(
+        $http.get(url, {params: params}).then(
           function(result) {
             angular.forEach(result.data, function(diagnosis) {
               diagnoses.push(diagnosis);
