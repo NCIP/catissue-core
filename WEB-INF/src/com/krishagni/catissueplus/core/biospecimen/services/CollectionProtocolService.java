@@ -5,7 +5,9 @@ import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProt
 import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRespEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
@@ -23,6 +25,8 @@ public interface CollectionProtocolService {
 	public RegisteredParticipantsEvent getRegisteredParticipants(ReqRegisteredParticipantsEvent req);
 	
 	public ClinicalDiagnosesEvent getDiagnoses(ReqClinicalDiagnosesEvent req);
+
+	public CollectionProtocolCreatedEvent createCollectionProtocol(CreateCollectionProtocolEvent req);
 
 	//public ParticipantSummaryEvent getParticipant(ReqParticipantSummaryEvent event);
 

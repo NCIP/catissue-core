@@ -35,7 +35,7 @@ public class QueryFolderDetails extends QueryFolderSummary {
 		QueryFolderDetails fd = new QueryFolderDetails();
 		fd.setId(folder.getId());
 		fd.setName(folder.getName());
-		fd.setOwner(UserSummary.fromUser(folder.getOwner()));
+		fd.setOwner(UserSummary.from(folder.getOwner()));
 		fd.setQueries(fromSavedQueries(folder.getSavedQueries()));
 		fd.setSharedWith(fromUsers(folder.getSharedWith()));
 		fd.setSharedWithAll(folder.isSharedWithAll());
@@ -58,7 +58,7 @@ public class QueryFolderDetails extends QueryFolderSummary {
 	private static List<UserSummary> fromUsers(Set<User> users) {
 		List<UserSummary> result = new ArrayList<UserSummary>();
 		for (User user : users) {
-			result.add(UserSummary.fromUser(user));
+			result.add(UserSummary.from(user));
 		}
 
 		return result;

@@ -9,24 +9,26 @@ import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProt
 import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.ClinicalDiagnosis;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRespEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.privileges.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
@@ -35,20 +37,30 @@ import edu.wustl.security.global.Permissions;
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
 
+	private CollectionProtocolFactory cpFactory;
+
 	private DaoFactory daoFactory;
 
 	private PrivilegeService privilegeSvc;
+
+	public CollectionProtocolFactory getCpFactory() {
+		return cpFactory;
+	}
+
+	public void setCpFactory(CollectionProtocolFactory cpFactory) {
+		this.cpFactory = cpFactory;
+	}
 
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
 	}
 
-	public void setPrivilegeSvc(PrivilegeService privilegeSvc) {
-		this.privilegeSvc = privilegeSvc;
-	}
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+
+	public void setPrivilegeSvc(PrivilegeService privilegeSvc) {
+		this.privilegeSvc = privilegeSvc;
 	}
 
 	@Override
@@ -111,59 +123,71 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	@Override
 	@PlusTransactional
 	public ClinicalDiagnosesEvent getDiagnoses(ReqClinicalDiagnosesEvent req) {
-		Long cpId = req.getCpId();
-		if (cpId == null) {
-			return ClinicalDiagnosesEvent.notFound();
+		String searchTerm = req.getSearchTerm();
+		if (searchTerm != null) {
+			searchTerm = searchTerm.toLowerCase();
 		}
-		
+
+		Long cpId = req.getCpId();
+		if (cpId == null || cpId == -1) {
+			return ClinicalDiagnosesEvent.ok(getClinicalDiagnoses(searchTerm));
+		}
+
 		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(cpId);
 		if (cp == null) {
 			return ClinicalDiagnosesEvent.notFound();
 		}
-		
+
 		List<String> diagnoses = new ArrayList<String>();
 		for (ClinicalDiagnosis cd : cp.getClinicalDiagnosis()) {
-			diagnoses.add(cd.getName());
+			if (searchTerm == null || searchTerm.isEmpty()) {
+				diagnoses.add(cd.getName());
+			} else if (cd.getName().toLowerCase().contains(searchTerm)) {
+				diagnoses.add(cd.getName());
+			}
 		}
-		
+
 		return ClinicalDiagnosesEvent.ok(diagnoses);
 	}
-
 	
-//	@Override
-//	@PlusTransactional
-//	public ParticipantSummaryEvent getParticipant(ReqParticipantSummaryEvent event) {
-//		try {
-//			Long cpId = event.getCpId();
-//			Long participantId = event.getParticipantId();
-//			ParticipantSummary participant;
-//			if(privilegeSvc.hasPrivilege(event.getSessionDataBean().getUserId(), cpId,Permissions.REGISTRATION)){
-//				participant = daoFactory.getCprDao().getPhiParticipant(cpId, participantId);
-//			}
-//			else{
-//				participant = daoFactory.getCprDao().getParticipant(cpId, participantId);
-//			}
-//			
-//			return ParticipantSummaryEvent.ok(participant);
-//		}
-//		catch (CatissueException e) {
-//			return ParticipantSummaryEvent.serverError(e);
-//		}
-//	}
+	@Override
+	@PlusTransactional
+	public CollectionProtocolCreatedEvent createCollectionProtocol(CreateCollectionProtocolEvent req) {
+		try {
+			CollectionProtocol cp = cpFactory.createCollectionProtocol(req.getCp());
+
+			ObjectCreationException oce = new ObjectCreationException();
+			ensureUniqueTitle(cp.getTitle(), oce);
+			oce.checkErrorAndThrow();
+
+			daoFactory.getCollectionProtocolDao().saveOrUpdate(cp);
+			return CollectionProtocolCreatedEvent.ok(CollectionProtocolDetail.from(cp));
+		} catch (ObjectCreationException oce) {
+			return CollectionProtocolCreatedEvent.badRequest(oce);
+		} catch (Exception e) {
+			return CollectionProtocolCreatedEvent.serverError(e);
+		}
+	}
 
 	@Override
 	@PlusTransactional
 	public ChildCollectionProtocolsEvent getChildProtocols(ReqChildProtocolEvent req) {
-		// TODO: Fix this
 		return null;
-		
-//		Long cpId = req.getCpId();
-//		List<CollectionProtocolSummary> list = daoFactory.getCollectionProtocolDao().getChildProtocols(cpId);
-//		return ChildCollectionProtocolsEvent.ok(list);
 	}
 	
 	private Long getUserId(RequestEvent req) {
 		return req.getSessionDataBean().getUserId();
+	}
+
+	private List<String> getClinicalDiagnoses(String searchTerm) {
+		return daoFactory.getPermissibleValueDao().getAllValuesByAttribute("Clinical_Diagnosis_PID", searchTerm, 100);
+	}
+
+	private void ensureUniqueTitle(String title, ObjectCreationException oce) {
+		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);
+		if (cp != null) {
+			oce.addError(CpErrorCode.TITLE_NOT_UNIQUE, "title");
+		}
 	}
 
 }

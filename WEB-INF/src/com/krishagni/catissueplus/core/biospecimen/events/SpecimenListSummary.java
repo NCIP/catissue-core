@@ -38,7 +38,7 @@ public class SpecimenListSummary {
 		SpecimenListSummary listSummary = new SpecimenListSummary();
 		listSummary.setId(list.getId());
 		listSummary.setName(list.getName());
-		listSummary.setOwner(UserSummary.fromUser(list.getOwner()));
+		listSummary.setOwner(UserSummary.from(list.getOwner()));
 		return listSummary;
 	}
 }

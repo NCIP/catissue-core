@@ -26,9 +26,11 @@ public class ClinicalDiagnosesController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<String> getClinicalDiagnoses(
-			@RequestParam(value = "cpId", required = true) Long cpId) {
+			@RequestParam(value = "cpId", required = false, defaultValue = "-1") Long cpId,
+			@RequestParam(value = "searchTerm", required = false, defaultValue = "") String searchTerm) {
 		ReqClinicalDiagnosesEvent req = new ReqClinicalDiagnosesEvent();
 		req.setCpId(cpId);
+		req.setSearchTerm(searchTerm);
 		
 		ClinicalDiagnosesEvent resp = cpSvc.getDiagnoses(req);
 		if (!resp.isSuccess()) {

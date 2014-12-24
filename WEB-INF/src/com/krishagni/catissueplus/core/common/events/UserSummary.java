@@ -49,7 +49,7 @@ public class UserSummary {
 		this.loginName = loginName;
 	}
 
-	public static UserSummary fromUser(User user) {
+	public static UserSummary from(User user) {
 		UserSummary userSummary = new UserSummary();
 		userSummary.setId(user.getId());
 		userSummary.setFirstName(user.getFirstName());
@@ -58,12 +58,16 @@ public class UserSummary {
 		return userSummary;
 	}
 	
-	public static List<UserSummary> fromUsers(Collection<User> users) {
-		List<UserSummary> summaries = new ArrayList<UserSummary>();
+	public static List<UserSummary> from(Collection<User> users) {
+		List<UserSummary> result = new ArrayList<UserSummary>();
+		if (users == null) {
+			return result;
+		}
+
 		for (User user : users) {
-			summaries.add(UserSummary.fromUser(user));
+			result.add(UserSummary.from(user));
 		}
 		
-		return summaries;
+		return result;
 	}
 }

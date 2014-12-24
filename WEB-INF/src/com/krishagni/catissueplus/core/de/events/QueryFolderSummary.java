@@ -49,7 +49,7 @@ public class QueryFolderSummary {
 		QueryFolderSummary folderSummary = new QueryFolderSummary();
 		folderSummary.setId(queryFolder.getId());
 		folderSummary.setName(queryFolder.getName());
-		folderSummary.setOwner(UserSummary.fromUser(queryFolder.getOwner()));
+		folderSummary.setOwner(UserSummary.from(queryFolder.getOwner()));
 		folderSummary.setSharedWithAll(queryFolder.isSharedWithAll());
 		return folderSummary;
 	}

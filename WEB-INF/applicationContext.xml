@@ -126,7 +126,12 @@
 	<property name="scgSvc" ref="specimenCollGroupService"/>
   </bean>
   
+  <bean id="cpFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolFactoryImpl">
+    <property name="userDao" ref="userDao"/>
+  </bean>
+
   <bean id="cpSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
+    <property name="cpFactory" ref="cpFactory"/>
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="privilegeSvc" ref="privSvc"/>
   </bean>

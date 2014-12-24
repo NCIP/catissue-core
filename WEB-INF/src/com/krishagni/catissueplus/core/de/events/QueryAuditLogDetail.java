@@ -19,7 +19,7 @@ public class QueryAuditLogDetail extends QueryAuditLogSummary {
 		QueryAuditLogDetail detail = new QueryAuditLogDetail();
 		
 		detail.setId(auditLog.getId());
-		detail.setRunBy(UserSummary.fromUser(auditLog.getRunBy()));
+		detail.setRunBy(UserSummary.from(auditLog.getRunBy()));
 		detail.setTimeOfExecution(auditLog.getTimeOfExecution());
 		detail.setTimeToFinish(auditLog.getTimeToFinish());
 		detail.setRunType(auditLog.getRunType());

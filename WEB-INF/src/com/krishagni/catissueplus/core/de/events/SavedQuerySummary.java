@@ -81,8 +81,8 @@ public class SavedQuerySummary {
 		SavedQuerySummary querySummary = new SavedQuerySummary();
 		querySummary.setId(savedQuery.getId());
 		querySummary.setTitle(savedQuery.getTitle());
-		querySummary.setCreatedBy(UserSummary.fromUser(savedQuery.getCreatedBy()));
-		querySummary.setLastModifiedBy(UserSummary.fromUser(savedQuery.getLastUpdatedBy()));
+		querySummary.setCreatedBy(UserSummary.from(savedQuery.getCreatedBy()));
+		querySummary.setLastModifiedBy(UserSummary.from(savedQuery.getLastUpdatedBy()));
 		querySummary.setLastModifiedOn(savedQuery.getLastUpdated());
 		querySummary.setLastRunCount(savedQuery.getLastRunCount());		
 		return querySummary;

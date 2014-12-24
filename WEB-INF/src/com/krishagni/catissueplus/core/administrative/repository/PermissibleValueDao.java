@@ -19,6 +19,8 @@ public interface PermissibleValueDao extends Dao<PermissibleValue>{
 	public List<PermissibleValue> getAllPVsByAttribute (String attribute, String searchString, int maxResults);
 
 	public List<String> getAllValuesByAttribute(String attribute);
+	
+	public List<String> getAllValuesByAttribute(String attribute, String searchStr, int maxResults);
 
 	public Boolean isPvAvailable(String attribute, String parentValue, String value);
 

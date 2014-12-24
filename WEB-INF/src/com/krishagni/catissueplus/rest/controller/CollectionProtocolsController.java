@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,9 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRespEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
@@ -71,7 +74,23 @@ public class CollectionProtocolsController {
 				
 		return resp.getCp();
 	}	
-			
+
+	@RequestMapping(method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public CollectionProtocolDetail createCollectionProtocol(@RequestBody CollectionProtocolDetail cp) {
+		CreateCollectionProtocolEvent req = new CreateCollectionProtocolEvent();
+		req.setCp(cp);
+		req.setSessionDataBean(getSession());
+
+		CollectionProtocolCreatedEvent resp = cpSvc.createCollectionProtocol(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+
+		return resp.getCp();
+	}
+
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}	

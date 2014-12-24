@@ -93,6 +93,6 @@ public class CollectionProtocolSummary implements Comparable<CollectionProtocolS
 		detail.setShortTitle(cp.getShortTitle());
 		detail.setTitle(cp.getTitle());
 		detail.setStartDate(cp.getStartDate());
-		detail.setPrincipalInvestigator(UserSummary.fromUser(cp.getPrincipalInvestigator()));
+		detail.setPrincipalInvestigator(UserSummary.from(cp.getPrincipalInvestigator()));
 	}
 }

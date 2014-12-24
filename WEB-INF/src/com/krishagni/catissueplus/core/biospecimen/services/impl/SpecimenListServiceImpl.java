@@ -287,7 +287,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			daoFactory.getSpecimenListDao().saveOrUpdate(specimenList);			
 			List<UserSummary> result = new ArrayList<UserSummary>();
 			for (User user : specimenList.getSharedWith()) {
-				result.add(UserSummary.fromUser(user));
+				result.add(UserSummary.from(user));
 			}
 			
 			return SpecimenListSharedEvent.ok(listId, result);

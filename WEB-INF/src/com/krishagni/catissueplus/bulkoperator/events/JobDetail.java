@@ -108,7 +108,7 @@ public class JobDetail {
 		detail.setFailedRecordsCount(job.getFailedRecordsCount());
 		detail.setTotalRecordsCount(job.getTotalRecordsCount());
 		detail.setProcessedRecords(job.getProcessedRecords());
-		detail.setStartedBy(UserSummary.fromUser(job.getStartedBy()));
+		detail.setStartedBy(UserSummary.from(job.getStartedBy()));
 		return detail;
 	}
 	

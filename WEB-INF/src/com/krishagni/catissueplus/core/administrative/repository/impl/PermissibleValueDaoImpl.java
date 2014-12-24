@@ -3,7 +3,12 @@ package com.krishagni.catissueplus.core.administrative.repository.impl;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.PermissibleValue;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -50,19 +55,7 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 	@Override
 	@SuppressWarnings(value = {"unchecked"})
 	public List<PermissibleValue> getAllPVsByAttribute(String attribute, String searchString, int maxResult) {
-		boolean isSearchTermSpecified = !StringUtils.isBlank(searchString);
-   
-		String queryAttribute = GET_PVS_BY_NAME;
-		if (isSearchTermSpecified) {
-			queryAttribute = GET_PVS_BY_NAME_AND_SEARCH_TERM;
-		}
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(queryAttribute);
-		query.setMaxResults(maxResult);
-		query.setString("attribute", attribute);
-		if (isSearchTermSpecified) {
-			query.setString("searchTerm", searchString.toLowerCase() + "%");
-		}
-		return query.list();
+		return getAllByAttrAndSearchTerm(attribute, searchString, maxResult).list();	
 	}
 	
 	@Override
@@ -73,6 +66,14 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 		return query.list();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getAllValuesByAttribute(String attribute, String searchStr, int maxResults) {
+		return getAllByAttrAndSearchTerm(attribute, searchStr, maxResults)
+				.setProjection(Projections.projectionList().add(Projections.property("value")))
+				.list();
+	}
+		
 	@Override
 	@SuppressWarnings(value = {"unchecked"})
 	public Boolean isPvAvailable(String attribute, String parentValue, String value) {
@@ -82,6 +83,24 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 		query.setString("parentValue", parentValue);
 		List<User> result = query.list();
 		return result.isEmpty() ? false : true;
+	}
+	
+	
+	private Criteria getAllByAttrAndSearchTerm(String attr, String searchTerm, int maxResults) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class);
+		query.add(Restrictions.eq("attribute", attr));
+		
+		if (StringUtils.isNotEmpty(searchTerm)) {
+			query.add(Restrictions.ilike("value", searchTerm.trim(), MatchMode.ANYWHERE));
+		}
+		
+		if (maxResults <= 0 || maxResults > 100) {
+			maxResults = 100;
+		}
+		
+		query.setMaxResults(maxResults);
+		query.addOrder(Order.asc("value"));
+		return query;
 	}
 	
 	private static final String FQN = PermissibleValue.class.getName();
@@ -97,4 +116,5 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 	private static final String GET_PV_BY_NAME_VALUE_PARRENT = FQN + ".getPvByAttributeAndValueAndParent";
 	
 	private static final String GET_PVS_BY_NAME_AND_SEARCH_TERM = FQN+ ".getPVsByAttributeAndSearchTerm";
+
 }

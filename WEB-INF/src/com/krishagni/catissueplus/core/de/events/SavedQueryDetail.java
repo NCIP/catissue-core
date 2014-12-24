@@ -74,8 +74,8 @@ public class SavedQueryDetail extends SavedQuerySummary {
 		detail.setTitle(savedQuery.getTitle());
 		detail.setCpId(savedQuery.getCpId());
 		detail.setDrivingForm(savedQuery.getDrivingForm());		
-		detail.setCreatedBy( UserSummary.fromUser(savedQuery.getCreatedBy()));
-		detail.setLastModifiedBy(UserSummary.fromUser(savedQuery.getLastUpdatedBy()));
+		detail.setCreatedBy( UserSummary.from(savedQuery.getCreatedBy()));
+		detail.setLastModifiedBy(UserSummary.from(savedQuery.getLastUpdatedBy()));
 		detail.setLastModifiedOn(savedQuery.getLastUpdated());
 		detail.setLastRunCount(savedQuery.getLastRunCount());
 		detail.setFilters(savedQuery.getFilters());

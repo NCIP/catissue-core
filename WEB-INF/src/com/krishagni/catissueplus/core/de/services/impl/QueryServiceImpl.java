@@ -675,7 +675,7 @@ public class QueryServiceImpl implements QueryService {
 			daoFactory.getQueryFolderDao().saveOrUpdate(queryFolder);			
 			List<UserSummary> result = new ArrayList<UserSummary>();
 			for (User user : queryFolder.getSharedWith()) {
-				result.add(UserSummary.fromUser(user));
+				result.add(UserSummary.from(user));
 			}
 			
 			if (newUsers != null && !newUsers.isEmpty()) {
