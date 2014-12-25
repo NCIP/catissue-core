@@ -34,14 +34,6 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
       return result;
     };
 
-    $scope.searchUsers = function(prop, searchTerm) {
-      User.query({searchString: searchTerm}).then(
-        function(result) {
-          $scope[prop] = result;
-        }
-      );     
-    };
-
     $scope.searchClinicalDiagnoses = function(searchTerm) {
       $scope.clinicalDiagnoses = PvManager.getClinicalDiagnoses({searchTerm: searchTerm});
     };

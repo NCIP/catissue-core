@@ -27,15 +27,7 @@
       <div class="form-group">
         <label class="control-label col-xs-3" translate="cp.pi">Principal Investigator</label>
         <div class="col-xs-6">
-          <ui-select name="pi" ng-model="cp.principalInvestigator" required>
-            <ui-select-match placeholder="{{'cp.pi' | translate}}">
-              {{$select.selected.lastName}}, {{$select.selected.firstName}}
-            </ui-select-match>
-            <ui-select-choices repeat="user in piUsers" refresh="searchUsers('piUsers', $select.search)" refresh-delay="750">
-              <span ng-bind-html="user.lastName + ', ' + user.firstName | highlight: $select.search"></span>
-            </ui-select-choices>
-          </ui-select>
-
+          <os-users name="pi" ng-model="cp.principalInvestigator" placeholder="{{'cp.pi' | translate}}" required></os-users>
           <div os-field-error field="cpForm.pi"></div>
         </div>
       </div>
@@ -43,14 +35,7 @@
       <div class="form-group">
         <label class="control-label col-xs-3" translate="cp.coordinators">Protocol Coordinators</label>
         <div class="col-xs-6">
-          <ui-select multiple ng-model="cp.coordinators">
-            <ui-select-match placeholder="{{'cp.coordinators' | translate}}">
-              {{$item.lastName}}, {{$item.firstName}}
-            </ui-select-match>
-            <ui-select-choices repeat="user in coordinators" refresh="searchUsers('coordinators', $select.search)" refresh-delay="750">
-              <span ng-bind-html="user.lastName + ', ' + user.firstName | highlight: $select.search"></span>
-            </ui-select-choices>
-          </ui-select>
+          <os-users multiple ng-model="cp.coordinators" placeholder="{{'cp.coordinators' | translate}}"></os-users>
         </div>
       </div>
 
