@@ -2,9 +2,36 @@
 <div>
   <div os-side-menu ng-if="state.name.indexOf('cp-detail') != -1">
     <ul>
-     <li ui-sref-active="active"><a ui-sref=".overview">Overview</a></li>
-     <li ui-sref-active="active"><a ui-sref=".consents">Consents</a></li>
-     <li ui-sref-active="active"><a ui-sref=".events">Events</a></li>
+     <li ui-sref-active="active">
+       <a ui-sref=".overview">
+         <i class="fa fa-eye"></i>
+         <span translate="cp.menu.overview">Overview</span>
+       </a>
+     </li>
+     <li ui-sref-active="active">
+       <a ui-sref=".consents">
+         <i class="fa fa-pencil-square-o"></i>
+         <span translate="cp.menu.consents">Consents</span>
+       </a>
+     </li>
+     <li ui-sref-active="active">
+       <a ui-sref=".events">
+         <i class="fa fa-list-alt"></i>
+         <span translate="cp.menu.events">Events</span>
+       </a>
+     </li>
+     <li ui-sref-active="active">
+       <a ui-sref=".users">
+         <i class="fa fa-users"></i>
+         <span translate="cp.menu.users">Users</span>
+       </a>
+     </li>
+     <li ui-sref-active="active">
+       <a ui-sref=".dashboard">
+         <i class="fa fa-line-chart"></i>
+         <span translate="cp.menu.dashboard">Dashboard</span>
+       </a>
+     </li>
    </ul>
   </div>
   <div ng-class="{'os-side-menu-page-content': state.name.indexOf('cp-detail') != -1}" ui-view>

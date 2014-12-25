@@ -1,2 +1,91 @@
 
-<h4 style="margin: 0px;"> Overview </h4>
+<div class="os-items-group">
+  <div class="os-item">
+    <h3 class="os-section-title">
+      {{cp.title}}
+    </h3>
+  </div>
+
+  <div class="os-item os-action-btns os-action-btns-md">
+    <a><span class="glyphicon glyphicon-pencil"></span></a>
+  </div>
+</div>
+
+<div class="clearfix">
+  <div class="col-xs-8">
+    <ul class="os-key-values os-two-cols" os-inline-editors on-save="editCp">
+      <li class="item">
+        <strong class="key key-sm" translate="cp.short_title">Short Title:</strong>
+        <os-inline-edit editor="stEditor" name="shortTitle" class="value value-md" value="cp.shortTitle">
+          <span ng-if="stEditor.isDisplayMode()">{{stEditor.viewValue}}</span>
+          <input ng-if="stEditor.isEditMode()" class="form-control" type="text" ng-model="stEditor.editValue">
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="cp.pi">Principal Investigator</strong>
+        <os-inline-edit editor="piEditor" name="pi" class="value value-md" value="cp.principalInvestigator">
+          <span ng-if="piEditor.isDisplayMode()">{{piEditor.viewValue.lastName}}, {{piEditor.viewValue.firstName}}</span>
+          <os-users ng-model="piEditor.editValue"></os-users>
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="cp.start_date">Start Date:</strong>
+        <os-inline-edit editor="sdEditor" name="stDate" class="value value-md" value="cp.startDate">
+          <span ng-if="sdEditor.isDisplayMode()">{{sdEditor.viewValue | date: 'MMM dd, yyyy' | osNoValue}}</span>
+          <input ng-if="sdEditor.isEditMode()" class="form-control" type="text" ng-model="sdEditor.editValue"
+            datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true">
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="cp.consents_waived">Consents Waived:</strong>
+        <os-inline-edit editor="cwEditor" name="consentsWaived" class="value value-md" value="cp.consentsWaived">
+          <div ng-if="cwEditor.isDisplayMode()" ng-switch on="cwEditor.viewValue">
+            <span ng-switch-when="false" translate="common.no"></span>
+            <span ng-switch-when="true" translate="common.yes"></span>
+            <span ng-switch-default translate="common.not_specified"></span>
+          </div>
+
+          <div class="form-control" ng-if="cwEditor.isEditMode()">
+            <label class="radio-inline">
+              <input type="radio" name="consentsWaivedGrp" ng-model="cwEditor.editValue" value="true" ng-required="true"> 
+              <span translate="common.yes">Yes</span>
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="consentsWaivedGrp" ng-model="cwEditor.editValue" value="false" ng-required="true"> 
+              <span translate="common.no">No</span>
+            </label>
+          </div>
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="cp.desc_url">Description URL:</strong>
+        <os-inline-edit editor="urlEditor" name="descUrl" class="value value-md" value="cp.descriptionUrl">
+          <span ng-if="urlEditor.isDisplayMode()">{{urlEditor.viewValue | osNoValue}}</span>
+          <input ng-if="urlEditor.isEditMode()" type="text" ng-model="urlEditor.editValue" class="form-control" >
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="cp.ethics_approval_id">Ethics Approval ID:</strong>
+        <os-inline-edit editor="irbEditor" name="irbId" class="value value-md" value="cp.irbId">
+          <span ng-if="irbEditor.isDisplayMode()">{{irbEditor.viewValue | osNoValue}}</span>
+          <input ng-if="irbEditor.isEditMode()" type="text" ng-model="irbEditor.editValue" class="form-control" >
+        </os-inline-edit>
+      </li>
+    </ul>
+  </div>
+
+  <div class="col-xs-4">
+    <h3 class="os-sub-section-title"> Recent Activity </h3>
+    <ul class="os-activity-list">
+      <li class="os-activity">
+        <div class="title"><a>All recent activity on this CP will go here</a></div>
+        <div class="info"><span>User 1 - an hour ago</span></div>
+      </li>
+    </ul>
+  </div>
+</div>

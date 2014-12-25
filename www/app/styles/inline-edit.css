@@ -9,9 +9,16 @@
 }
 
 .os-key-values .item .value.os-inline-editable.active {
-  position: fixed;
-  margin-left: 150px;
+  position: absolute;
   z-index: 1;
+}
+
+.os-key-values.os-two-cols .item .value.os-inline-editable.active {
+  margin-left: 40%;
+}
+
+.os-key-values.os-one-col .item .value.os-inline-editable.active {
+  margin-left: 30%;
 }
 
 .os-inline-editable .form-control {

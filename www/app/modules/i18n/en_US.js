@@ -37,6 +37,14 @@
     "aliquot_label_fmt": "Aliquot Label Format",
     "store_all_aliquots_in_same_container": "Store all Aliquots in same Container",
 
+    "menu": {
+      "overview": "Overview",
+      "consents": "Consents",
+      "events": "Events",
+      "users": "Users",
+      "dashboard": "Dashboard"
+    },
+
     "tooltip": {
       "view_details": "Click to view/edit Collection Protocol details",
       "reg_participants_count": "Count of Registered Participants",

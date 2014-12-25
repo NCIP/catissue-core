@@ -67,9 +67,7 @@ angular.module('openspecimen', [
             return CollectionProtocol.getById($stateParams.cpId);
           }
         },
-        controller: function($scope, $state, cp) {
-          $scope.cp = cp;
-        },
+        controller: 'CpDetailCtrl',
         breadcrumb: {
           title: '{{cp.title}}',
           state: 'cp-detail.overview'
@@ -88,6 +86,16 @@ angular.module('openspecimen', [
       .state('cp-detail.events', {
         url: '/events',
         templateUrl: 'modules/biospecimen/cp/events.html',
+        parent: 'cp-detail'
+      })
+      .state('cp-detail.users', {
+        url: '/users',
+        templateUrl: 'modules/biospecimen/cp/users.html',
+        parent: 'cp-detail'
+      })
+      .state('cp-detail.dashboard', {
+        url: '/dashboard',
+        templateUrl: 'modules/biospecimen/cp/dashboard.html',
         parent: 'cp-detail'
       })
       .state('participant-list', {
