@@ -9,6 +9,7 @@ import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProt
 import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.ClinicalDiagnosis;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
@@ -17,11 +18,16 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCrea
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpRespEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -171,6 +177,62 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 	@Override
 	@PlusTransactional
+	public ConsentTiersEvent getConsentTiers(ReqConsentTiersEvent req) {
+		Long cpId = req.getCpId();
+
+		try {
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(cpId);
+			if (cp == null) {
+				return ConsentTiersEvent.notFound(cpId);
+			}
+
+			return ConsentTiersEvent.ok(cpId, ConsentTierDetail.from(cp.getConsentTier()));
+		} catch (Exception e) {
+			return ConsentTiersEvent.serverError(cpId, e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ConsentTierOpRespEvent updateConsentTier(ConsentTierOpEvent req) {
+		Long cpId = req.getCpId();
+		try {
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(cpId);
+			if (cp == null) {
+				return ConsentTierOpRespEvent.notFound(cpId);
+			}
+			
+			ConsentTierDetail input = req.getConsentTier();
+			ConsentTier resp = null;
+			
+			switch (req.getOp()) {
+				case ADD:
+					resp = cp.addConsentTier(input.toConsentTier());
+					break;
+					
+				case UPDATE:
+					resp = cp.updateConsentTier(input.toConsentTier());
+					break;
+					
+				case REMOVE:
+					resp = cp.removeConsentTier(input.getId());
+					break;			    
+			}
+			
+			if (resp != null) {
+				daoFactory.getCollectionProtocolDao().saveOrUpdate(cp, true);
+			}
+						
+			return ConsentTierOpRespEvent.ok(cpId, ConsentTierDetail.from(resp));
+		} catch (IllegalArgumentException iae) {
+			return ConsentTierOpRespEvent.badRequest(cpId, iae);
+		} catch (Exception e) {
+			return ConsentTierOpRespEvent.serverError(cpId, e);
+		}		
+	}	
+
+	@Override
+	@PlusTransactional
 	public ChildCollectionProtocolsEvent getChildProtocols(ReqChildProtocolEvent req) {
 		return null;
 	}
@@ -189,5 +251,4 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			oce.addError(CpErrorCode.TITLE_NOT_UNIQUE, "title");
 		}
 	}
-
 }

@@ -21,9 +21,15 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCrea
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent.OP;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpRespEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 
 import edu.wustl.catissuecore.util.global.Constants;
@@ -90,7 +96,68 @@ public class CollectionProtocolsController {
 
 		return resp.getCp();
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/consent-tiers")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<ConsentTierDetail> getConsentTiers(@PathVariable("id") Long cpId) {
+		ReqConsentTiersEvent req = new ReqConsentTiersEvent();
+		req.setCpId(cpId);
+		req.setSessionDataBean(getSession());
+		
+		ConsentTiersEvent resp = cpSvc.getConsentTiers(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		
+		return resp.getConsentTiers();
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value="/{id}/consent-tiers")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public ConsentTierDetail addConsentTier(@PathVariable("id") Long cpId, @RequestBody ConsentTierDetail consentTier) {
+		return performConsentTierOp(OP.ADD, cpId, consentTier);
+	}
 
+	@RequestMapping(method = RequestMethod.PUT, value="/{id}/consent-tiers/{tierId}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public ConsentTierDetail updateConsentTier(
+			@PathVariable("id") Long cpId,
+			@PathVariable("tierId") Long tierId,
+			@RequestBody ConsentTierDetail consentTier) {
+		
+		consentTier.setId(tierId);
+		return performConsentTierOp(OP.UPDATE, cpId, consentTier);
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}/consent-tiers/{tierId}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public ConsentTierDetail removeConsentTier(
+			@PathVariable("id") Long cpId,
+			@PathVariable("tierId") Long tierId) {
+		
+		ConsentTierDetail consentTier = new ConsentTierDetail();
+		consentTier.setId(tierId);
+		return performConsentTierOp(OP.REMOVE, cpId, consentTier);		
+	}
+	
+	private ConsentTierDetail performConsentTierOp(OP op, Long cpId, ConsentTierDetail consentTier) {
+		ConsentTierOpEvent req = new ConsentTierOpEvent();		
+		req.setConsentTier(consentTier);
+		req.setCpId(cpId);
+		req.setOp(op);
+		
+		ConsentTierOpRespEvent resp = cpSvc.updateConsentTier(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		
+		return resp.getConsentTier();		
+	}
+	
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}	

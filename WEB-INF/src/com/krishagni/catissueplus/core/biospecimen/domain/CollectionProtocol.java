@@ -315,4 +315,50 @@ public class CollectionProtocol {
 		this.cpSiteRoles = cpSiteRoles;
 	}
 	
+	
+	// new
+	
+	public ConsentTier addConsentTier(ConsentTier ct) {
+		if (ct.getId() != null) {
+			throw new IllegalArgumentException("Consent tier ID should be null for addConsentTier");
+		}
+		
+		ct.setCollectionProtocol(this);
+		consentTier.add(ct);
+		return ct;
+	}
+	
+	public ConsentTier updateConsentTier(ConsentTier ct) {
+		if (ct.getId() == null) {
+			throw new IllegalArgumentException("Non existing consent tier for update operation");
+		}
+
+		ConsentTier existing = getConsentTierById(ct.getId());
+		if (existing == null) {
+			throw new IllegalArgumentException("Non existing consent tier for update operation");
+		}
+		
+		existing.setStatement(ct.getStatement());
+		return ct;		
+	}
+	
+	public ConsentTier removeConsentTier(Long ctId) {		
+		ConsentTier ct = getConsentTierById(ctId);
+		if (ct == null) {
+			return null;
+		}
+		
+		consentTier.remove(ct);
+		return ct;
+	}	
+	
+	private ConsentTier getConsentTierById(Long ctId) {
+		for (ConsentTier ct : consentTier) {
+			if (ct.getId().equals(ctId)) {
+				return ct;
+			}
+		}
+		
+		return null;
+	}
 }
