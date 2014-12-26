@@ -293,7 +293,7 @@
         join cp.collectionProtocolEvents cpe
       where
         cp.id = :cpId and
-        cpe.collectionPointLabel = :label
+        cpe.eventLabel = :label
     </query>
   </class>
 </hibernate-mapping>

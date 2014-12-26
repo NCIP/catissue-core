@@ -186,7 +186,7 @@ public class VisitDetail {
 		detail.setCpTitle(cpr.getCollectionProtocol().getTitle());
 		
 		detail.setCpeId(visit.getCollectionProtocolEvent().getId());
-		detail.setEventLabel(visit.getCollectionProtocolEvent().getCollectionPointLabel());
+		detail.setEventLabel(visit.getCollectionProtocolEvent().getEventLabel());
 		detail.setVisitSite(visit.getCollectionSite().getName());		
 		
 		return detail;

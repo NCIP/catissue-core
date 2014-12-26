@@ -10,12 +10,14 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEven
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpRespEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTiersEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
 
 public interface CollectionProtocolService {
@@ -36,6 +38,12 @@ public interface CollectionProtocolService {
 	public ConsentTiersEvent getConsentTiers(ReqConsentTiersEvent req);
 
 	public ConsentTierOpRespEvent updateConsentTier(ConsentTierOpEvent req);
+	
+	//
+	// Events API
+	//
+	public CpeListEvent getProtocolEvents(ReqCpeListEvent req);
+	
 		
 	//public ParticipantSummaryEvent getParticipant(ReqParticipantSummaryEvent event);
 

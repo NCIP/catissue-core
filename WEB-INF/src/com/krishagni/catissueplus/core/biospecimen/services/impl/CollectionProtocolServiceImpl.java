@@ -17,17 +17,20 @@ import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpRespEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTiersEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -233,6 +236,25 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 	@Override
 	@PlusTransactional
+	public CpeListEvent getProtocolEvents(ReqCpeListEvent req) {
+		Long cpId = req.getCpId();
+		
+		try {
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(cpId);
+			if (cp == null) {
+				return CpeListEvent.notFound(cpId);
+			}
+			
+			return CpeListEvent.ok(
+					cpId, 
+					CollectionProtocolEventDetail.from(cp.getCollectionProtocolEvents()));
+		} catch (Exception e) {
+			return CpeListEvent.serverError(cpId, e);
+		}		
+	}
+	
+	@Override
+	@PlusTransactional
 	public ChildCollectionProtocolsEvent getChildProtocols(ReqChildProtocolEvent req) {
 		return null;
 	}
@@ -251,4 +273,5 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			oce.addError(CpErrorCode.TITLE_NOT_UNIQUE, "title");
 		}
 	}
+
 }

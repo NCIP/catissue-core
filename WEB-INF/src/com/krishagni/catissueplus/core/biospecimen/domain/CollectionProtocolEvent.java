@@ -8,24 +8,20 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 public class CollectionProtocolEvent {
 	private Long id;
 
-	private String collectionPointLabel;
+	private String eventLabel;
 
-	private Double studyCalendarEventPoint;
+	private Double eventPoint;
 
 	private CollectionProtocol collectionProtocol;
 	
-	private String labelFormat;
-	
 	private Site defaultSite;
-	
-	private String activityStatus;
-	
+
 	private String clinicalDiagnosis;
 	
 	private String clinicalStatus;
 	
-	private Site specimenCollectionSite;
-
+	private String activityStatus;
+	
 	private Set<SpecimenRequirement> specimenRequirements = new HashSet<SpecimenRequirement>();
 
 	private Set<SpecimenCollectionGroup> specimenCollectionGroups = new HashSet<SpecimenCollectionGroup>();
@@ -38,20 +34,20 @@ public class CollectionProtocolEvent {
 		this.id = id;
 	}
 
-	public String getCollectionPointLabel() {
-		return collectionPointLabel;
+	public String getEventLabel() {
+		return eventLabel;
 	}
 
-	public void setCollectionPointLabel(String collectionPointLabel) {
-		this.collectionPointLabel = collectionPointLabel;
+	public void setEventLabel(String eventLabel) {
+		this.eventLabel = eventLabel;
 	}
 
-	public Double getStudyCalendarEventPoint() {
-		return studyCalendarEventPoint;
+	public Double getEventPoint() {
+		return eventPoint;
 	}
 
-	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint) {
-		this.studyCalendarEventPoint = studyCalendarEventPoint;
+	public void setEventPoint(Double eventPoint) {
+		this.eventPoint = eventPoint;
 	}
 
 	public CollectionProtocol getCollectionProtocol() {
@@ -62,28 +58,12 @@ public class CollectionProtocolEvent {
 		this.collectionProtocol = collectionProtocol;
 	}
 
-	public String getLabelFormat() {
-		return labelFormat;
-	}
-
-	public void setLabelFormat(String labelFormat) {
-		this.labelFormat = labelFormat;
-	}
-
 	public Site getDefaultSite() {
 		return defaultSite;
 	}
 
 	public void setDefaultSite(Site defaultSite) {
 		this.defaultSite = defaultSite;
-	}
-
-	public String getActivityStatus() {
-		return activityStatus;
-	}
-
-	public void setActivityStatus(String activityStatus) {
-		this.activityStatus = activityStatus;
 	}
 
 	public String getClinicalDiagnosis() {
@@ -101,19 +81,19 @@ public class CollectionProtocolEvent {
 	public void setClinicalStatus(String clinicalStatus) {
 		this.clinicalStatus = clinicalStatus;
 	}
-
-	public Site getSpecimenCollectionSite() {
-		return specimenCollectionSite;
+	
+	public String getActivityStatus() {
+		return activityStatus;
 	}
 
-	public void setSpecimenCollectionSite(Site specimenCollectionSite) {
-		this.specimenCollectionSite = specimenCollectionSite;
+	public void setActivityStatus(String activityStatus) {
+		this.activityStatus = activityStatus;
 	}
 
 	public Set<SpecimenRequirement> getSpecimenRequirements() {
 		return specimenRequirements;
 	}
-
+	
 	public void setSpecimenRequirements(Set<SpecimenRequirement> specimenRequirements) {
 		this.specimenRequirements = specimenRequirements;
 	}
@@ -137,8 +117,7 @@ public class CollectionProtocolEvent {
 		return specimenCollectionGroups;
 	}
 
-	public void setSpecimenCollectionGroups(
-			Set<SpecimenCollectionGroup> specimenCollectionGroups) {
+	public void setSpecimenCollectionGroups(Set<SpecimenCollectionGroup> specimenCollectionGroups) {
 		this.specimenCollectionGroups = specimenCollectionGroups;
 	}
 }

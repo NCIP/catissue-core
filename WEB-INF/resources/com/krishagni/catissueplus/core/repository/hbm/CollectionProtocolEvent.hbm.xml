@@ -21,13 +21,13 @@
     </id>
 
     <property
-      name="collectionPointLabel"
+      name="eventLabel"
       type="string"
       column="COLLECTION_POINT_LABEL"
       length="255"/>
 
     <property
-      name="studyCalendarEventPoint"
+      name="eventPoint"
       type="double"
       column="STUDY_CALENDAR_EVENT_POINT"
       length="50"/>
@@ -39,12 +39,6 @@
       outer-join="auto"
       column="COLLECTION_PROTOCOL_ID"/>
 
-    <property
-      name="labelFormat"
-      type="string"
-      column="LABELFORMAT"
-      length="255"/>
- 
     <many-to-one
       name="defaultSite"
       class="com.krishagni.catissueplus.core.administrative.domain.Site"
@@ -70,13 +64,6 @@
       column="CLINICAL_STATUS"
       length="50"/>
       
-    <many-to-one
-      name="specimenCollectionSite"
-      class="com.krishagni.catissueplus.core.administrative.domain.Site"
-      cascade="none"
-      column="SITE_ID"  
-      lazy="false"/>
-   
     <set
       name="specimenRequirements"
       table="CATISSUE_CP_REQ_SPECIMEN"
