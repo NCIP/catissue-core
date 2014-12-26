@@ -120,4 +120,15 @@ public class CollectionProtocolEvent {
 	public void setSpecimenCollectionGroups(Set<SpecimenCollectionGroup> specimenCollectionGroups) {
 		this.specimenCollectionGroups = specimenCollectionGroups;
 	}
+	
+	// updates all but specimen requirements
+	public void update(CollectionProtocolEvent other) { 
+		setEventPoint(other.getEventPoint());
+		setEventLabel(other.getEventLabel());
+		setCollectionProtocol(other.getCollectionProtocol());
+		setDefaultSite(other.getDefaultSite());
+		setClinicalDiagnosis(getClinicalDiagnosis());
+		setClinicalStatus(getClinicalStatus());
+		setActivityStatus(getActivityStatus());
+	}
 }

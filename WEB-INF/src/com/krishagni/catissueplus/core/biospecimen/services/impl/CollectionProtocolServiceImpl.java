@@ -9,21 +9,26 @@ import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProt
 import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.ClinicalDiagnosis;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeFactory;
+import com.krishagni.catissueplus.core.biospecimen.events.AddCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpRespEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTiersEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CpeAddedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeListEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CpeUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
@@ -32,6 +37,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolE
 import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.UpdateCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
@@ -47,6 +53,8 @@ import edu.wustl.security.global.Permissions;
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
 
 	private CollectionProtocolFactory cpFactory;
+	
+	private CpeFactory cpeFactory;
 
 	private DaoFactory daoFactory;
 
@@ -58,6 +66,14 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 	public void setCpFactory(CollectionProtocolFactory cpFactory) {
 		this.cpFactory = cpFactory;
+	}
+
+	public CpeFactory getCpeFactory() {
+		return cpeFactory;
+	}
+
+	public void setCpeFactory(CpeFactory cpeFactory) {
+		this.cpeFactory = cpeFactory;
 	}
 
 	public DaoFactory getDaoFactory() {
@@ -96,15 +112,15 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	
 	@Override
 	@PlusTransactional
-	public CollectionProtocolEvent getCollectionProtocol(ReqCollectionProtocolEvent req) {
+	public CollectionProtocolDetailEvent getCollectionProtocol(ReqCollectionProtocolEvent req) {
 		Long cpId = req.getCpId();
 		
 		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(cpId);
 		if (cp == null) {
-			return CollectionProtocolEvent.notFound(cpId);
+			return CollectionProtocolDetailEvent.notFound(cpId);
 		}
 		
-		return CollectionProtocolEvent.ok(CollectionProtocolDetail.from(cp));
+		return CollectionProtocolDetailEvent.ok(CollectionProtocolDetail.from(cp));
 	}
 	
 	@Override
@@ -252,6 +268,44 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			return CpeListEvent.serverError(cpId, e);
 		}		
 	}
+	
+	@Override
+	@PlusTransactional
+	public CpeAddedEvent addEvent(AddCpeEvent req) {
+		try {
+			CollectionProtocolEvent cpe = cpeFactory.createCpe(req.getCpe());			
+			CollectionProtocol cp = cpe.getCollectionProtocol();
+			cp.addCpe(cpe);
+			
+			daoFactory.getCollectionProtocolDao().saveOrUpdate(cp, true);			
+			return CpeAddedEvent.ok(CollectionProtocolEventDetail.from(cpe));			
+		} catch (IllegalArgumentException iae) {
+			return CpeAddedEvent.badRequest(iae);
+		} catch (ObjectCreationException oce) {		
+			return CpeAddedEvent.badRequest(oce);
+		} catch (Exception e) {
+			return CpeAddedEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public CpeUpdatedEvent updateEvent(UpdateCpeEvent req) {
+		try {
+			CollectionProtocolEvent cpe = cpeFactory.createCpe(req.getCpe());			
+			CollectionProtocol cp = cpe.getCollectionProtocol();			
+			cp.updateCpe(cpe);
+						
+			return CpeUpdatedEvent.ok(CollectionProtocolEventDetail.from(cpe));			
+		} catch (IllegalArgumentException iae) {
+			return CpeUpdatedEvent.badRequest(iae);
+		} catch (ObjectCreationException oce) {		
+			return CpeUpdatedEvent.badRequest(oce);
+		} catch (Exception e) {
+			return CpeUpdatedEvent.serverError(e);
+		}
+	}
+	
 	
 	@Override
 	@PlusTransactional

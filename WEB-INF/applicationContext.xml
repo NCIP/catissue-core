@@ -130,8 +130,14 @@
     <property name="userDao" ref="userDao"/>
   </bean>
 
+  <bean id="cpeFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CpeFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+
+
   <bean id="cpSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
     <property name="cpFactory" ref="cpFactory"/>
+    <property name="cpeFactory" ref="cpeFactory"/>
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="privilegeSvc" ref="privSvc"/>
   </bean>

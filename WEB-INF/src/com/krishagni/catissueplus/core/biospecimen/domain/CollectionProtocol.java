@@ -319,10 +319,7 @@ public class CollectionProtocol {
 	// new
 	
 	public ConsentTier addConsentTier(ConsentTier ct) {
-		if (ct.getId() != null) {
-			throw new IllegalArgumentException("Consent tier ID should be null for addConsentTier");
-		}
-		
+		ct.setId(null);
 		ct.setCollectionProtocol(this);
 		consentTier.add(ct);
 		return ct;
@@ -351,6 +348,54 @@ public class CollectionProtocol {
 		consentTier.remove(ct);
 		return ct;
 	}	
+	
+	public void addCpe(CollectionProtocolEvent cpe) {
+		if (!isEventLabelUnique(cpe.getEventLabel(), null)) {
+			throw new IllegalArgumentException("Event label not unique");
+		}
+				
+		cpe.setId(null);
+		collectionProtocolEvents.add(cpe);
+	}
+	
+	public void updateCpe(CollectionProtocolEvent cpe) {
+		CollectionProtocolEvent existing = getCpe(cpe.getId());
+		if (existing == null) {
+			throw new IllegalArgumentException("Invalid event for update");
+		}
+		
+		if (!isEventLabelUnique(cpe.getEventLabel(), existing)) {
+			throw new IllegalArgumentException("Event label not unique");
+		}
+				
+		existing.update(cpe);
+	}
+	
+	public CollectionProtocolEvent getCpe(Long cpeId) {
+		for (CollectionProtocolEvent existing : collectionProtocolEvents) {
+			if (existing.getId().equals(cpeId)) {
+				return existing;
+			}
+		}
+		
+		return null;		
+	}
+
+	private boolean isEventLabelUnique(String eventLabel, CollectionProtocolEvent exclude) {
+		boolean unique = true;
+		for (CollectionProtocolEvent event : collectionProtocolEvents) {
+			if (exclude != null && event.getId().equals(exclude.getId())) {
+				continue;
+			}
+			
+			if (event.getEventLabel().equalsIgnoreCase(eventLabel)) {
+				unique = false;
+				break;
+			}
+		}
+		
+		return unique;
+	}
 	
 	private ConsentTier getConsentTierById(Long ctId) {
 		for (ConsentTier ct : consentTier) {

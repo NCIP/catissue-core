@@ -15,7 +15,15 @@ public enum CpErrorCode implements CatissueErrorCode {
 	
 	MISSING_CONSENTS_WAIVED(1005, "Consents waived is required attribute"),
 	
-	TITLE_NOT_UNIQUE(1006, "Title is not unique");
+	TITLE_NOT_UNIQUE(1006, "Title is not unique"),
+	
+	MISSING_EVENT_LABEL(1007, "Event label is required attribute"),
+	
+	INVALID_EVENT_POINT(1008, "Invalid event point attribute value"),
+	
+	INVALID_CP_TITLE(1009, "Invalid collection protocol title"),
+	
+	INVALID_SITE(1010, "Invalid site");
 	
 	private int code;
 

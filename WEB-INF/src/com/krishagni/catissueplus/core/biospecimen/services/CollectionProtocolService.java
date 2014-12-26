@@ -3,14 +3,17 @@ package com.krishagni.catissueplus.core.biospecimen.services;
 
 import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AddCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpRespEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTiersEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CpeAddedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeListEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CpeUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
@@ -19,12 +22,13 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolE
 import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.UpdateCpeEvent;
 
 public interface CollectionProtocolService {
 
 	public AllCollectionProtocolsEvent getAllProtocols(ReqAllCollectionProtocolsEvent req);
 	
-	public CollectionProtocolEvent getCollectionProtocol(ReqCollectionProtocolEvent req);
+	public CollectionProtocolDetailEvent getCollectionProtocol(ReqCollectionProtocolEvent req);
 
 	public RegisteredParticipantsEvent getRegisteredParticipants(ReqRegisteredParticipantsEvent req);
 	
@@ -43,6 +47,10 @@ public interface CollectionProtocolService {
 	// Events API
 	//
 	public CpeListEvent getProtocolEvents(ReqCpeListEvent req);
+	
+	public CpeAddedEvent addEvent(AddCpeEvent req);
+	
+	public CpeUpdatedEvent updateEvent(UpdateCpeEvent req);
 	
 		
 	//public ParticipantSummaryEvent getParticipant(ReqParticipantSummaryEvent event);
