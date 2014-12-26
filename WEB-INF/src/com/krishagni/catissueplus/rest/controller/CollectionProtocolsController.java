@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRespEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
@@ -67,7 +67,7 @@ public class CollectionProtocolsController {
 		req.setCpId(cpId);
 		req.setSessionDataBean(getSession());
 		
-		CollectionProtocolRespEvent resp = cpSvc.getCollectionProtocol(req);
+		CollectionProtocolEvent resp = cpSvc.getCollectionProtocol(req);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}

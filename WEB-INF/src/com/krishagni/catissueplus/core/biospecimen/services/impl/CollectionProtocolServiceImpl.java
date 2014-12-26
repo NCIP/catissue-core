@@ -15,7 +15,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocols
 import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRespEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
@@ -87,15 +87,15 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	
 	@Override
 	@PlusTransactional
-	public CollectionProtocolRespEvent getCollectionProtocol(ReqCollectionProtocolEvent req) {
+	public CollectionProtocolEvent getCollectionProtocol(ReqCollectionProtocolEvent req) {
 		Long cpId = req.getCpId();
 		
 		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(cpId);
 		if (cp == null) {
-			return CollectionProtocolRespEvent.notFound(cpId);
+			return CollectionProtocolEvent.notFound(cpId);
 		}
 		
-		return CollectionProtocolRespEvent.ok(CollectionProtocolDetail.from(cp));
+		return CollectionProtocolEvent.ok(CollectionProtocolDetail.from(cp));
 	}
 	
 	@Override
