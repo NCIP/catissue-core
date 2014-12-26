@@ -13,7 +13,7 @@ public class ConsentDetail {
 
 	private String witnessName;
 
-	private List<ConsentTierDetail> consenTierStatements = new ArrayList<ConsentTierDetail>();
+	private List<ConsentTierResponseDetail> consentTierResponses = new ArrayList<ConsentTierResponseDetail>();
 
 	public String getConsentDocumentUrl() {
 		return consentDocumentUrl;
@@ -39,12 +39,12 @@ public class ConsentDetail {
 		this.witnessName = witnessName;
 	}
 
-	public List<ConsentTierDetail> getConsenTierStatements() {
-		return consenTierStatements;
+	public List<ConsentTierResponseDetail> getConsentTierResponses() {
+		return consentTierResponses;
 	}
 
-	public void setConsenTierStatements(List<ConsentTierDetail> consenTierStatements) {
-		this.consenTierStatements = consenTierStatements;
+	public void setConsentTierResponses(List<ConsentTierResponseDetail> consenTierStatements) {
+		this.consentTierResponses = consenTierStatements;
 	}
 
 }

@@ -4,7 +4,6 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -23,7 +22,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErr
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierResponseDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.util.PpidGenerator;
@@ -216,7 +215,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			response.setConsentTier(consent);
 			response.setCpr(cpr);
 			
-			for (ConsentTierDetail userResp : consentDetail.getConsenTierStatements()) {
+			for (ConsentTierResponseDetail userResp : consentDetail.getConsentTierResponses()) {
 				if (consent.getStatement().equals(userResp.getConsentStatment())) {
 					response.setResponse(userResp.getParticipantResponse());
 					break;

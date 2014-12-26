@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-public class ConsentTierDetail {
+public class ConsentTierResponseDetail {
 
 	private String consentStatment;
 	
