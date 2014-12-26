@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierResponseDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
 
@@ -80,20 +80,20 @@ public class CprTestData {
 		detail.setConsentDocumentUrl("www.exampleurl.com");
 		detail.setConsentSignatureDate(getDate(31,1,2001));
 		
-		ConsentTierDetail ctd = new ConsentTierDetail();
+		ConsentTierResponseDetail ctd = new ConsentTierResponseDetail();
 		ctd.setConsentStatment("CONSENT1");
 		ctd.setParticipantResponse("yes");
-		detail.getConsenTierStatements().add(ctd);
+		detail.getConsentTierResponses().add(ctd);
 		
-		ctd = new ConsentTierDetail();
+		ctd = new ConsentTierResponseDetail();
 		ctd.setConsentStatment("CONSENT2");
 		ctd.setParticipantResponse("no");
-		detail.getConsenTierStatements().add(ctd);
+		detail.getConsentTierResponses().add(ctd);
 		
-		ctd = new ConsentTierDetail();
+		ctd = new ConsentTierResponseDetail();
 		ctd.setConsentStatment("CONSENT3");
 		ctd.setParticipantResponse("may be");
-		detail.getConsenTierStatements().add(ctd);
+		detail.getConsentTierResponses().add(ctd);
 		
 		return detail;
 	}
