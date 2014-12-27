@@ -8,6 +8,8 @@
     "none": "None",
 
     "buttons": {
+      "add": "Add",
+      "save": "Save",
       "create": "Create",
       "cancel": "Cancel",
       "discard": "Discard"
@@ -41,8 +43,14 @@
     "consent_tiers": "Consent Tiers", 
     "add_consent_tier": "Add Statement...",
 
+    "default_site": "Default Site",
+    "clinical_diagnosis": "Clinical Diagnosis",
+    "clinical_status": "Clinical Status",
+    
     "add_cpe": "Add Event...",
     "cpe_list": "Events",
+    "cpe_point": "Event Point",
+    "cpe_point_label": "Event Point Label",
 
     "menu": {
       "overview": "Overview",

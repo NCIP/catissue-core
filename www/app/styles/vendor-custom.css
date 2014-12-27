@@ -2,3 +2,8 @@
 .ui-select-bootstrap .ui-select-choices-row>a {
   white-space: normal!important;
 }
+
+.ui-select-bootstrap .form-control.ui-select-match {
+  height: auto!important;
+  white-space: normal!important;
+}

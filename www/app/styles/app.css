@@ -546,4 +546,19 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 .os-enable-on-hover:hover .os-action-btns {
   display: inline-block;
+  z-index: 2;
+}
+
+.os-quick-edit-overlay {
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  height: 100%; 
+  width: 100%; 
+  z-index: 10; 
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.os-quick-edit {
+  z-index: 15;
 }

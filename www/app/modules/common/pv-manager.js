@@ -6,6 +6,8 @@
  */
 angular.module('openspecimen')
   .factory('PvManager', function($http, $q, ApiUrls, ApiUtil, SiteService) {
+    var url = ApiUrls.getBaseUrl() + 'permissible-values/attribute=';
+
     var genders = [
       'Female Gender', 
       'Male Gender', 
@@ -70,8 +72,12 @@ angular.module('openspecimen')
       anatomicSite: anatomicSites
     };
 
+    var pvIdMap = {
+      'clinical-status': '2003988'
+    };
+
     return {
-      getPvs: function(attr) {
+      _getPvs: function(attr) {
         var deferred = $q.defer();
         var result = undefined;
         if (pvMap[attr]) {
@@ -84,8 +90,27 @@ angular.module('openspecimen')
         return deferred.promise;
       },
 
+      getPvs: function(attr, srchTerm) {
+        var pvId = pvIdMap[attr];
+        if (!pvId) {
+          return [];
+        }
+
+        var pvs = [];
+        $http.get(url + pvId, {params: {searchString: srchTerm}}).then(
+          function(result) {
+            angular.forEach(result.data, function(pv) {
+              pvs.push(pv.value);
+            });
+          }
+        );
+
+        return pvs;
+      },
+
+      /** loadPvs will be deprecated soon **/
       loadPvs: function(scope, attr) {
-        this.getPvs(attr).then(
+        this._getPvs(attr).then(
           function(result) {
             if (result.status != 'ok') {
               alert("Failed to load PVs of attribute: " + attr);
@@ -98,12 +123,16 @@ angular.module('openspecimen')
       },
 
       loadSites: function(scope, attr) {
-        SiteService.getSites().then(
+        return SiteService.getSites().then(
           function(result) {
             if (result.status != "ok") {
               alert("Failed to load sites information");
             }
-            scope[attr] = result.data;
+
+            if (attr) {
+              scope[attr] = result.data;
+            }
+            return result.data;
           }
         );
       },
