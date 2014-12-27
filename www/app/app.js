@@ -10,6 +10,7 @@ angular.module('openspecimen', [
   'ui.router', 
   'ui.bootstrap', 
   'ui.mask', 
+  'ui.keypress', 
   'ui.select',
   'mgcrea.ngStrap.popover',
   'angular-loading-bar',
@@ -81,7 +82,13 @@ angular.module('openspecimen', [
       .state('cp-detail.consents', {
         url: '/consents',
         templateUrl: 'modules/biospecimen/cp/consents.html',
-        parent: 'cp-detail'
+        parent: 'cp-detail',
+        resolve: {
+          consentTiers: function(cp) {
+            return cp.getConsentTiers();
+          }
+        },
+        controller: 'CpConsentsCtrl'
       })
       .state('cp-detail.events', {
         url: '/events',

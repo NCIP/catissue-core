@@ -1,2 +1,31 @@
 
-<h4 style="margin: 0px;"> Consents </h4>
+<div class="os-items-group">
+  <div class="os-item">
+    <h3 class="os-section-title">
+      {{cp.title}}
+    </h3>
+  </div>
+</div>
+
+<div class="clearfix">
+  <div class="col-xs-8">
+    <ul class="os-key-values os-one-col" os-inline-editors on-save="editCp">
+      <li class="item">
+        <strong class="key key-sm" translate="cp.unsigned_consent_url">Unsigned Consent Form URL</strong>
+        <os-inline-edit editor="fuEditor" name="consentFormUrl" class="value value-md" value="cp.unsignedConsentUrl">
+          <a ng-if="fuEditor.isDisplayMode()" ng-href="{{fuEditor.viewValue | osPrefixHttp}}" target="_blank">
+            {{fuEditor.viewValue | osNoValue}}
+          </a>
+          <input ng-if="fuEditor.isEditMode()" class="form-control" type="text" ng-model="fuEditor.editValue">
+        </os-inline-edit>
+      </li>
+    </ul>
+
+    <os-editable-item-list 
+      items="consents.tiers" text-attr="{{consents.stmtAttr}}"
+      list-title="{{'cp.consent_tiers' | translate}}" add-caption="{{'cp.add_consent_tier' | translate}}"
+      list-changed="listChanged">
+    </os-editable-item-list>
+  </div>
+</div>
+

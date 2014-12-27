@@ -37,6 +37,10 @@
     "aliquot_label_fmt": "Aliquot Label Format",
     "store_all_aliquots_in_same_container": "Store all Aliquots in same Container",
 
+    "unsigned_consent_url": "Unsigned Consent Form URL",
+    "consent_tiers": "Consent Tiers", 
+    "add_consent_tier": "Add Statement...",
+
     "menu": {
       "overview": "Overview",
       "consents": "Consents",

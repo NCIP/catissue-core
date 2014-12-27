@@ -230,6 +230,11 @@ input.ng-dirty.ng-invalid {
   color: #428bca;
 }
 
+.os-btn-text-secondary {
+  background: transparent;
+  color: #a6a6a6;
+}
+
 .os-lavatar {
   border-radius: 100%;
   background: #d5d5d5;
@@ -531,4 +536,14 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   width: 100%;
   border-top: 1px solid #ddd;
   margin-bottom: 20px;
+}
+
+.os-enable-on-hover .os-action-btns {
+  display: none;
+  position: absolute;
+  right: 0;
+}
+
+.os-enable-on-hover:hover .os-action-btns {
+  display: inline-block;
 }
