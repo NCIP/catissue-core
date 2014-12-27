@@ -235,14 +235,14 @@ public class SpecimenSummary {
 		
 		result.setId(null);	
 		result.setReqId(anticipated.getId());
-		result.setLabel(anticipated.getSpecimenRequirementLabel());
+		result.setLabel(anticipated.getName());
 		result.setBarcode(null);
 		result.setType(anticipated.getSpecimenType());
 		result.setSpecimenClass(anticipated.getSpecimenClass());
 		result.setLineage(anticipated.getLineage());
-		result.setTissueSite(anticipated.getTissueSite());
-		result.setTissueSide(anticipated.getTissueSide());
-		result.setPathology(anticipated.getPathologicalStatus());
+		result.setTissueSite(anticipated.getAnatomicSite());
+		result.setTissueSide(anticipated.getLaterality());
+		result.setPathology(anticipated.getPathologyStatus());
 	
 		StorageLocationSummary location = new StorageLocationSummary();
 		location.id = -1L;

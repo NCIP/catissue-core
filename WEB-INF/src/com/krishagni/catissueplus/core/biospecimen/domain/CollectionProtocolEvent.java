@@ -131,4 +131,8 @@ public class CollectionProtocolEvent {
 		setClinicalStatus(getClinicalStatus());
 		setActivityStatus(getActivityStatus());
 	}
+	
+	public void addSpecimenRequirement(SpecimenRequirement sr) {
+		specimenRequirements.add(sr);
+	}
 }

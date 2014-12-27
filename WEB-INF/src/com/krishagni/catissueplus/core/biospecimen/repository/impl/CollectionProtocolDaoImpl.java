@@ -132,6 +132,19 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	}
 
 	@Override
+	public void saveCpe(CollectionProtocolEvent cpe) {
+		saveCpe(cpe, false);		
+	}
+
+	@Override
+	public void saveCpe(CollectionProtocolEvent cpe, boolean flush) {
+		getSessionFactory().getCurrentSession().saveOrUpdate(cpe);
+		if (flush) {
+			getSessionFactory().getCurrentSession().flush();
+		}		
+	}
+	
+	@Override
 	public SpecimenRequirement getSpecimenRequirement(Long requirementId) {
 		return (SpecimenRequirement) sessionFactory.getCurrentSession()
 				.get(SpecimenRequirement.class, requirementId);

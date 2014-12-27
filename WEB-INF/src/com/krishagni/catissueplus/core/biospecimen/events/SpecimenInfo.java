@@ -132,7 +132,7 @@ public class SpecimenInfo  implements Comparable<SpecimenInfo>{
 		}
 
 		if (specimen.getSpecimenRequirement() != null) {
-			specimenInfo.setRequirementLabel(specimen.getSpecimenRequirement().getSpecimenRequirementLabel());
+			specimenInfo.setRequirementLabel(specimen.getSpecimenRequirement().getName());
 			specimenInfo.setCollectionContainer(specimen.getSpecimenRequirement().getCollectionContainer());
 			specimenInfo.setRequirementId(specimen.getSpecimenRequirement().getId());
 		}
@@ -162,7 +162,7 @@ public class SpecimenInfo  implements Comparable<SpecimenInfo>{
 		specimenInfo.setSpecimenClass(requirement.getSpecimenClass());
 		specimenInfo.setSpecimenType(requirement.getSpecimenType());
 		specimenInfo.setCollectionStatus(Status.SPECIMEN_COLLECTION_STATUS_PENDING.getStatus());
-		specimenInfo.setRequirementLabel(requirement.getSpecimenRequirementLabel());
+		specimenInfo.setRequirementLabel(requirement.getName());
 		specimenInfo.setCollectionContainer(requirement.getCollectionContainer());
 		specimenInfo.setInstanceType("requirement");
 

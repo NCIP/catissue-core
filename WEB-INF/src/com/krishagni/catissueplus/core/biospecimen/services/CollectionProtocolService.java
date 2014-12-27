@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.biospecimen.services;
 import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AddCpeEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AddSpecimenRequirementEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
@@ -22,6 +23,9 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolE
 import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenRequirementsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementAddedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateCpeEvent;
 
 public interface CollectionProtocolService {
@@ -51,6 +55,14 @@ public interface CollectionProtocolService {
 	public CpeAddedEvent addEvent(AddCpeEvent req);
 	
 	public CpeUpdatedEvent updateEvent(UpdateCpeEvent req);
+	
+	//
+	// Specimen Requirement API
+	//
+	public SpecimenRequirementsEvent getSpecimenRequirments(ReqSpecimenRequirementsEvent req);
+	
+	public SpecimenRequirementAddedEvent addSpecimenRequirement(AddSpecimenRequirementEvent req);
+	
 	
 		
 	//public ParticipantSummaryEvent getParticipant(ReqParticipantSummaryEvent event);

@@ -11,10 +11,13 @@ import com.krishagni.catissueplus.core.biospecimen.domain.ClinicalDiagnosis;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenRequirementFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.AddCpeEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AddSpecimenRequirementEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
@@ -37,6 +40,10 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolE
 import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenRequirementsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementAddedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -55,6 +62,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	private CollectionProtocolFactory cpFactory;
 	
 	private CpeFactory cpeFactory;
+	
+	private SpecimenRequirementFactory srFactory;
 
 	private DaoFactory daoFactory;
 
@@ -74,6 +83,14 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 	public void setCpeFactory(CpeFactory cpeFactory) {
 		this.cpeFactory = cpeFactory;
+	}
+	
+	public SpecimenRequirementFactory getSrFactory() {
+		return srFactory;
+	}
+
+	public void setSrFactory(SpecimenRequirementFactory srFactory) {
+		this.srFactory = srFactory;
 	}
 
 	public DaoFactory getDaoFactory() {
@@ -305,7 +322,42 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			return CpeUpdatedEvent.serverError(e);
 		}
 	}
+
+	@Override
+	@PlusTransactional
+	public SpecimenRequirementsEvent getSpecimenRequirments(ReqSpecimenRequirementsEvent req) {
+		Long cpeId = req.getCpeId();
+		try {
+			CollectionProtocolEvent cpe = daoFactory.getCollectionProtocolDao().getCpe(cpeId);
+			if (cpe == null) {
+				return SpecimenRequirementsEvent.notFound(cpeId);
+			}
+			
+			return SpecimenRequirementsEvent.ok(
+					cpeId, 
+					SpecimenRequirementDetail.from(cpe.getTopLevelAnticipatedSpecimens()));
+		} catch (Exception e) {
+			return SpecimenRequirementsEvent.serverError(cpeId, e);
+		}
+	}
+
 	
+	@Override
+	@PlusTransactional
+	public SpecimenRequirementAddedEvent addSpecimenRequirement(AddSpecimenRequirementEvent req) {
+		try {
+			SpecimenRequirement requirement = srFactory.createSpecimenRequirement(req.getRequirement());
+			CollectionProtocolEvent cpe = requirement.getCollectionProtocolEvent();
+
+			cpe.addSpecimenRequirement(requirement);
+			daoFactory.getCollectionProtocolDao().saveCpe(cpe, true);
+			return SpecimenRequirementAddedEvent.ok(SpecimenRequirementDetail.from(requirement));
+		} catch (ObjectCreationException oce) {
+			return SpecimenRequirementAddedEvent.badRequest(oce);
+		} catch (Exception e) {
+			return SpecimenRequirementAddedEvent.serverError(e);
+		}
+	}
 	
 	@Override
 	@PlusTransactional

@@ -35,6 +35,8 @@ public interface DaoFactory {
 	public SiteDao getSiteDao();
 
 	public SpecimenDao getSpecimenDao();
+	
+	public SpecimenRequirementDao getSpecimenRequirementDao();
 
 	public VisitsDao getVisitsDao();
 
