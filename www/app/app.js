@@ -91,9 +91,20 @@ angular.module('openspecimen', [
         controller: 'CpConsentsCtrl'
       })
       .state('cp-detail.events', {
-        url: '/events',
         templateUrl: 'modules/biospecimen/cp/events.html',
-        parent: 'cp-detail'
+        parent: 'cp-detail',
+        resolve: {
+          events: function($stateParams, cp, CollectionProtocolEvent) {
+            return CollectionProtocolEvent.listFor(cp.id);
+          }
+        },
+        controller: 'CpEventsCtrl'
+      })
+      .state('cp-detail.specimen-requirements', {
+        url: '/specimen-requirements?eventId',
+        template: '<div><span>{{eventId}}</span</div>',
+        parent: 'cp-detail.events',
+        controller: 'CpSpecimensCtrl'
       })
       .state('cp-detail.users', {
         url: '/users',

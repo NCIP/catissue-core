@@ -41,6 +41,9 @@
     "consent_tiers": "Consent Tiers", 
     "add_consent_tier": "Add Statement...",
 
+    "add_cpe": "Add Event...",
+    "cpe_list": "Events",
+
     "menu": {
       "overview": "Overview",
       "consents": "Consents",

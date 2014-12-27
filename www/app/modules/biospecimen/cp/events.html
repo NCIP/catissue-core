@@ -1,2 +1,43 @@
+<div class="os-items-group">
+  <div class="os-item">
+    <h3 class="os-section-title">
+      {{cp.title}}
+    </h3>
+  </div>
+</div>
 
-<h4 style="margin: 0px;"> Events </h4>
+<div class="clearfix">
+  <div class="col-xs-3">
+    <div class="list-group">
+      <div class="list-group-item os-section-hdr">
+        <span translate="cp.cpe_list">Events</span>
+      </div>
+
+      <ng-switch on="evt.id" ng-repeat="evt in events" class="os-cpe-item">
+        <div ng-switch-when="event.id" class="list-group-item">
+          Edit
+        </div>
+        <a ng-switch-default class="list-group-item os-enable-on-hover" 
+          ui-sref="cp-detail.specimen-requirements({eventId: evt.id})" ui-sref-active="active">
+          T{{evt.eventPoint}}: {{evt.eventLabel}} 
+          <p class="os-action-btns btn-group" style="padding-right: 4px;">
+            <button class="btn btn-xs btn-default">
+              <span class="fa fa-pencil"></span>
+            </button>
+            <button class="btn btn-xs btn-default">
+              <span class="fa fa-remove"></span>
+            </button>
+          </p>
+        </a>
+      </ng-switch>
+
+      <a class="list-group-item" translate="cp.add_cpe">
+        Add Event ...
+      </a>
+    </div>
+  </div>
+  <div class="col-xs-9">
+    <div ui-view></div>
+  </div>
+</div>
+
