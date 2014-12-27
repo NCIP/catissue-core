@@ -127,9 +127,9 @@ public class CollectionProtocolEvent {
 		setEventLabel(other.getEventLabel());
 		setCollectionProtocol(other.getCollectionProtocol());
 		setDefaultSite(other.getDefaultSite());
-		setClinicalDiagnosis(getClinicalDiagnosis());
-		setClinicalStatus(getClinicalStatus());
-		setActivityStatus(getActivityStatus());
+		setClinicalDiagnosis(other.getClinicalDiagnosis());
+		setClinicalStatus(other.getClinicalStatus());
+		setActivityStatus(other.getActivityStatus());
 	}
 	
 	public void addSpecimenRequirement(SpecimenRequirement sr) {
