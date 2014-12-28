@@ -73,6 +73,17 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 				.setProjection(Projections.projectionList().add(Projections.property("value")))
 				.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PermissibleValue> getAllPVsByParent(String attribute, String parentValue) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_PVS_BY_PARENT_VALUE)
+				.setString("attribute", attribute)
+				.setString("parentValue", parentValue)
+				.list();
+	}
+	
 		
 	@Override
 	@SuppressWarnings(value = {"unchecked"})
@@ -116,5 +127,8 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 	private static final String GET_PV_BY_NAME_VALUE_PARRENT = FQN + ".getPvByAttributeAndValueAndParent";
 	
 	private static final String GET_PVS_BY_NAME_AND_SEARCH_TERM = FQN+ ".getPVsByAttributeAndSearchTerm";
+	
+	private static final String GET_PVS_BY_PARENT_VALUE = FQN + ".getPvsByParentValue";
+
 
 }

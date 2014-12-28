@@ -9,6 +9,8 @@ public class GetAllPVsEvent extends RequestEvent {
 
 	private String searchString;
 	
+	private String parentValue;
+	
 	private int maxResult;
 
 	public String getAttribute() {
@@ -35,4 +37,11 @@ public class GetAllPVsEvent extends RequestEvent {
 		this.searchString = searchString;
 	}
 
+	public String getParentValue() {
+		return parentValue;
+	}
+
+	public void setParentValue(String parentValue) {
+		this.parentValue = parentValue;
+	}
 }

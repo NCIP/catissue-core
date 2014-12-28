@@ -110,8 +110,18 @@ public class PermissibleValueServiceImpl implements PermissibleValueService {
 	@Override
 	@PlusTransactional
 	public AllPvsEvent getPermissibleValues(GetAllPVsEvent event) {
-		List<PermissibleValue> permissibleValues = daoFactory.getPermissibleValueDao().getAllPVsByAttribute(
-				event.getAttribute(), event.getSearchString(), event.getMaxResult());
+		List<PermissibleValue> permissibleValues = null;
+		
+		if (!event.getParentValue().isEmpty()) {
+			permissibleValues = daoFactory.getPermissibleValueDao().getAllPVsByParent(
+					event.getAttribute(),
+					event.getParentValue());
+		} else {
+			permissibleValues = daoFactory.getPermissibleValueDao().getAllPVsByAttribute(
+					event.getAttribute(), 
+					event.getSearchString(), 
+					event.getMaxResult());
+		}
 		List<PvInfo> pvDetails = new ArrayList<PvInfo>();
 		for (PermissibleValue pv : permissibleValues) {
 			pvDetails.add(PvInfo.fromDomain(pv));

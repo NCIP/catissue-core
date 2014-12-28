@@ -16,6 +16,8 @@ public interface PermissibleValueDao extends Dao<PermissibleValue>{
 
 	public Boolean isUniqueConceptCode(String conceptCode);
 	
+	public List<PermissibleValue> getAllPVsByParent(String attribute, String parentValue);
+	
 	public List<PermissibleValue> getAllPVsByAttribute (String attribute, String searchString, int maxResults);
 
 	public List<String> getAllValuesByAttribute(String attribute);

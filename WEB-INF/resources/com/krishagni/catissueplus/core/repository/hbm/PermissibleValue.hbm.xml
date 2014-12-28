@@ -66,6 +66,16 @@
 		AND lower(pv.value) like :searchTerm
 	</query>
 
+        <query name="getPvsByParentValue">
+          select 
+            pv 
+          from 
+            com.krishagni.catissueplus.core.administrative.domain.PermissibleValue pv 
+          where 
+            pv.parent.attribute = :attribute and 
+            pv.parent.value = :parentValue
+        </query>
+
 	<query name="getPvByAttributeAndValueAndParent">
 		SELECT pv FROM com.krishagni.catissueplus.core.administrative.domain.PermissibleValue pv WHERE pv.attribute = :attribute 
 		AND pv.value = :value AND pv.parent.value = :parentValue

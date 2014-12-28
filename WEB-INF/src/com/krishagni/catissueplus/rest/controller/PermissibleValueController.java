@@ -88,10 +88,12 @@ public class PermissibleValueController {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public List<PvInfo> getPermissibleValue(@PathVariable String attribute,
+			@RequestParam(value = "parentValue", required = false, defaultValue = "") String parentValue,
 			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchStr,
 			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") String maxResults) {
 		GetAllPVsEvent event = new GetAllPVsEvent();
 		event.setAttribute(attribute);
+		event.setParentValue(parentValue);
 		event.setSearchString(searchStr);
 		event.setMaxResult(Integer.parseInt(maxResults));
 		event.setSessionDataBean(getSession());
