@@ -36,8 +36,6 @@ public class SpecimenRequirement {
 
 	private User receiver;
 
-	private String receivedQuality;
-
 	private CollectionProtocolEvent collectionProtocolEvent;
 
 	private String labelFormat;
@@ -168,14 +166,6 @@ public class SpecimenRequirement {
 
 	public void setReceiver(User receiver) {
 		this.receiver = receiver;
-	}
-
-	public String getReceivedQuality() {
-		return receivedQuality;
-	}
-
-	public void setReceivedQuality(String receivedQuality) {
-		this.receivedQuality = receivedQuality;
 	}
 
 	public CollectionProtocolEvent getCollectionProtocolEvent() {

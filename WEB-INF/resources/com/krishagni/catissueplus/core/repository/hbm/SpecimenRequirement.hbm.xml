@@ -103,12 +103,6 @@
       cascade="none"
       column="RECEIVER_ID"/>
 
-    <property
-      name="receivedQuality"
-      type="string"
-      column="RECEIVED_QUALITY"
-      length="50"/>
-
     <many-to-one
       name="collectionProtocolEvent"
       class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent"

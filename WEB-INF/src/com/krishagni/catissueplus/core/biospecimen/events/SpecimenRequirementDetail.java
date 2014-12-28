@@ -39,8 +39,6 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 	
 	private UserSummary receiver;
 	
-	private String receivedQuality;
-	
 	private String labelFmt;
 	
 	private Long eventId;
@@ -167,14 +165,6 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		this.receiver = receiver;
 	}
 
-	public String getReceivedQuality() {
-		return receivedQuality;
-	}
-
-	public void setReceivedQuality(String receivedQuality) {
-		this.receivedQuality = receivedQuality;
-	}
-
 	public String getLabelFmt() {
 		return labelFmt;
 	}
@@ -216,7 +206,6 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		detail.setCollectionProcedure(sr.getCollectionProcedure());
 		detail.setCollectionContainer(sr.getCollectionContainer());
 		detail.setReceiver(UserSummary.from(sr.getReceiver()));
-		detail.setReceivedQuality(sr.getReceivedQuality());
 		detail.setLabelFmt(sr.getLabelFormat());
 		detail.setEventId(sr.getCollectionProtocolEvent().getId());
 		detail.setChildren(from(sr.getChildSpecimenRequirements()));

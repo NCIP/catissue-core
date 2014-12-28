@@ -47,8 +47,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setCollector(detail, requirement, oce);
 		setCollectionProcedure(detail, requirement, oce);
 		setCollectionContainer(detail, requirement, oce);
-		setReceiver(detail, requirement, oce);
-		setReceivedQuality(detail, requirement, oce);
+		setReceiver(detail, requirement, oce);		
 		setCpe(detail, requirement, oce);
 		
 		// TODO:
@@ -105,6 +104,10 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 
 	private void setConcentration(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
+		if (detail.getAnatomicSite() == null || !detail.getAnatomicSite().equals("Molecular")) {
+			return;
+		}
+		
 		Double concentration = detail.getConcentration();
 		if (concentration == null || concentration < 0) {
 			oce.addError(null, "concentration");
@@ -134,12 +137,6 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		sr.setReceiver(ensureValidUser(detail.getReceiver(), "receiver", oce));
 	}
 
-	private void setReceivedQuality(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		String receivedQuality = ensureNotEmpty(detail.getReceivedQuality(), "receivedQuality", oce);
-		sr.setReceivedQuality(receivedQuality);
-		// TODO: check for valid collection container
-	}
-	
 	private void setCpe(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
 		Long eventId = detail.getEventId();
 		if (eventId == null) {
