@@ -65,7 +65,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 	
 	private void setSpecimenType(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		String specimenType = ensureNotEmpty(detail.getSpecimenType(), "specimenType", oce);		
+		String specimenType = ensureNotEmpty(detail.getType(), "specimenType", oce);		
 		sr.setSpecimenType(specimenType);
 		// TODO: Check whether type is valid for class;
 	}

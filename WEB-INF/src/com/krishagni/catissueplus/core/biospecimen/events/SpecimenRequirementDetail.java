@@ -2,12 +2,13 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
-public class SpecimenRequirementDetail {
+public class SpecimenRequirementDetail implements Comparable<SpecimenRequirementDetail>{
 	private Long id;
 	
 	private String name;
@@ -16,7 +17,7 @@ public class SpecimenRequirementDetail {
 	
 	private String specimenClass;
 	
-	private String specimenType;
+	private String type;
 	
 	private String anatomicSite;
 	
@@ -44,7 +45,7 @@ public class SpecimenRequirementDetail {
 	
 	private Long eventId;
 	
-	private List<SpecimenRequirementDetail> childRequirements;
+	private List<SpecimenRequirementDetail> children;
 
 	public Long getId() {
 		return id;
@@ -78,12 +79,12 @@ public class SpecimenRequirementDetail {
 		this.specimenClass = specimenClass;
 	}
 
-	public String getSpecimenType() {
-		return specimenType;
+	public String getType() {
+		return type;
 	}
 
-	public void setSpecimenType(String specimenType) {
-		this.specimenType = specimenType;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getAnatomicSite() {
@@ -190,12 +191,12 @@ public class SpecimenRequirementDetail {
 		this.eventId = eventId;
 	}
 
-	public List<SpecimenRequirementDetail> getChildRequirements() {
-		return childRequirements;
+	public List<SpecimenRequirementDetail> getChildren() {
+		return children;
 	}
 
-	public void setChildRequirements(List<SpecimenRequirementDetail> childRequirements) {
-		this.childRequirements = childRequirements;
+	public void setChildren(List<SpecimenRequirementDetail> children) {
+		this.children = children;
 	}
 		
 	public static SpecimenRequirementDetail from(SpecimenRequirement sr) {
@@ -204,7 +205,7 @@ public class SpecimenRequirementDetail {
 		detail.setName(sr.getName());
 		detail.setLineage(sr.getLineage());
 		detail.setSpecimenClass(sr.getSpecimenClass());
-		detail.setSpecimenType(sr.getSpecimenType());
+		detail.setType(sr.getSpecimenType());
 		detail.setAnatomicSite(sr.getAnatomicSite());
 		detail.setLaterality(sr.getLaterality());
 		detail.setPathologyStatus(sr.getPathologyStatus());
@@ -218,7 +219,7 @@ public class SpecimenRequirementDetail {
 		detail.setReceivedQuality(sr.getReceivedQuality());
 		detail.setLabelFmt(sr.getLabelFormat());
 		detail.setEventId(sr.getCollectionProtocolEvent().getId());
-		detail.setChildRequirements(from(sr.getChildSpecimenRequirements()));
+		detail.setChildren(from(sr.getChildSpecimenRequirements()));
 		
 		return detail;
 	}
@@ -233,6 +234,20 @@ public class SpecimenRequirementDetail {
 			result.add(from(sr));
 		}
 		
+		Collections.sort(result);
 		return result;
+	}
+
+	@Override
+	public int compareTo(SpecimenRequirementDetail other) {
+		if (type == null && other.type == null) {
+			if (id == null && other.id == null) {
+				return -1;
+			} else {
+				return id.compareTo(other.id);
+			}
+		} else {
+			return type.compareTo(other.type);
+		}
 	}
 }
