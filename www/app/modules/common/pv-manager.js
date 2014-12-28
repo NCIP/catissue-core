@@ -64,16 +64,29 @@ angular.module('openspecimen')
       'Not Specified'
     ];
 
+    var storageTypes = [
+      'Auto',
+      'Manual',
+      'Virtual'
+    ];
+
     var pvMap = {
       gender: genders, 
       ethnicity: ethnicity, 
       vitalStatus: vitalStatuses, 
       race: races,
-      anatomicSite: anatomicSites
+      anatomicSite: anatomicSites,
+      'storage-type': storageTypes
     };
 
     var pvIdMap = {
-      'clinical-status': '2003988'
+      'clinical-status': '2003988',
+      'specimen-class': '2003991',
+      'anatomic-site': 'Tissue_Site_PID',
+      'laterality': '2003992',
+      'pathology-status': '2003993',
+      'collection-procedure': '2003996',
+      'collection-container': '2003997'
     };
 
     return {
@@ -93,11 +106,29 @@ angular.module('openspecimen')
       getPvs: function(attr, srchTerm) {
         var pvId = pvIdMap[attr];
         if (!pvId) {
-          return [];
+          return pvMap[attr] || [];
         }
 
         var pvs = [];
         $http.get(url + pvId, {params: {searchString: srchTerm}}).then(
+          function(result) {
+            angular.forEach(result.data, function(pv) {
+              pvs.push(pv.value);
+            });
+          }
+        );
+
+        return pvs;
+      },
+
+      getPvsByParent: function(attr, parentVal) {
+        var pvId = pvIdMap[attr];
+        if (!pvId) {
+          return [];
+        }
+
+        var pvs = [];
+        $http.get(url + pvId, {params: {parentValue: parentVal}}).then(
           function(result) {
             angular.forEach(result.data, function(pv) {
               pvs.push(pv.value);

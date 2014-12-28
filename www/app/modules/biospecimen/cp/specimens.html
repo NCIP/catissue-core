@@ -1,9 +1,9 @@
 
-<div class="panel panel-default">
-  <div class="panel-heading" translate="srs.list">
+<div class="list-group" ng-if="!addSrMode">
+  <div class="list-group-item os-section-hdr" translate="srs.list">
     Specimen Requirements
   </div>
-  <div class="panel-body">
+  <div class="list-group-item" ng-if="specimenRequirements.length > 0">
     <table class="table os-table-fixed os-table-tree">
       <thead>
         <th class="col-xs-5" translate="srs.name">Name</th>
@@ -57,4 +57,11 @@
       </tbody>
     </table>
   </div>
+
+  <a class="list-group-item" ng-click="showAddSr()">
+    Add Specimen Requirement... 
+  </a>
+</div>
+
+<div ng-if="addSrMode" ng-include="'modules/biospecimen/cp/addedit-sr.html'">
 </div>
