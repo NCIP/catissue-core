@@ -1,0 +1,60 @@
+
+<div class="panel panel-default">
+  <div class="panel-heading" translate="srs.list">
+    Specimen Requirements
+  </div>
+  <div class="panel-body">
+    <table class="table os-table-fixed os-table-tree">
+      <thead>
+        <th class="col-xs-5" translate="srs.name">Name</th>
+        <th class="col-xs-2" translate="srs.type">Type</th>
+        <th class="col-xs-2" translate="srs.pathology">Pathology</th>
+        <th class="col-xs-2" translate="srs.storage_type">Storage Type</th>
+        <th class="col-xs-1">&nbsp;</th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="sr in specimenRequirements | openedSpecimenNodes" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
+          <td>
+            <div style="padding-left: {{sr.hasChildren ? sr.depth * 20 : sr.depth * 20 + 16}}px">
+              <a ng-if="sr.hasChildren && sr.isOpened" 
+                 class="fa fa-chevron-circle-down"
+                 ng-click="closeSpecimenNode(sr)">
+              </a>
+              <a ng-if="sr.hasChildren && !sr.isOpened" 
+                 class="fa fa-chevron-circle-right"
+                 ng-click="openSpecimenNode(sr)">
+              </a>
+              <span class="fa fa-circle" 
+                    ng-class="{'os-lineage-new': sr.lineage == 'New',
+                               'os-lineage-aliquot': sr.lineage == 'Aliquot',
+                               'os-lineage-derivative': sr.lineage == 'Derived'}">
+              </span>
+              <a ng-if="sr.name">{{sr.name}}</a>
+              <a ng-if="!sr.name">{{sr.type}} ({{sr.specimenClass}})</a>
+            </div>
+          </td>
+          <td>{{sr.type}}</td>
+          <td>{{sr.pathologyStatus | osNoValue}}</td>
+          <td>{{sr.storageType | osNoValue}}</td>
+          <td class="action">
+            <div class="btn-group" dropdown ng-if="showBtns">
+              <button type="button" class="btn btn-xs btn-default os-btn-icon">
+                <span class="fa fa-cog"></span>
+              </button>
+              <button type="button" class="btn btn-xs btn-default os-btn-icon dropdown-toggle">
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li><a href="#" translate="srs.ctx_menu.view_sr">View Requirement</a></li>
+                <li><a href="#" translate="srs.ctx_menu.edit_sr">Edit Requirement</a></li>
+                <li class="divider"></li>
+                <li><a href="#" translate="srs.ctx_menu.create_aliquots">Create Aliquots</a></li>
+                <li><a href="#" translate="srs.ctx_menu.create_derivatives">Create Derivatives</a></li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

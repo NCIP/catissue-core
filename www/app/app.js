@@ -102,8 +102,18 @@ angular.module('openspecimen', [
       })
       .state('cp-detail.specimen-requirements', {
         url: '/specimen-requirements?eventId',
-        template: '<div><span>{{eventId}}</span</div>',
+        templateUrl: 'modules/biospecimen/cp/specimens.html',
         parent: 'cp-detail.events',
+        resolve: {
+          specimenRequirements: function($stateParams, SpecimenRequirement) {
+            var eventId = $stateParams.eventId;
+            if (!eventId) {
+              return [];
+            }
+
+            return SpecimenRequirement.listFor(eventId);
+          }
+        },
         controller: 'CpSpecimensCtrl'
       })
       .state('cp-detail.users', {

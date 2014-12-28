@@ -169,5 +169,27 @@
       "add_event": "Add Event",
       "dispose": "Dispose"
     }
+  },
+
+  "srs": {
+    "title": "Specimen Requirement",
+    "list": "Specimen Requirements",
+    "lineage": {
+      "new": "New",
+      "aliquot": "Aliquot",
+      "derivative": "Derivative"
+    },
+
+    "name": "Name",
+    "type": "Type",
+    "pathology": "Pathology",
+    "storage_type": "Storage Type",
+
+    "ctx_menu": {
+      "view_sr": "View Requirement",
+      "edit_sr": "Edit Requirement",
+      "create_aliquots": "Create Aliquots",
+      "create_derivatives": "Create Derivatives"
+    }
   }
 }
