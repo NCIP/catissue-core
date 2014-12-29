@@ -562,3 +562,11 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 .os-quick-edit {
   z-index: 15;
 }
+
+.list-group-item .table {
+  margin-bottom: 0px;
+}
+
+.list-group-item .alert {
+  margin-bottom: 0px;
+}

@@ -47,6 +47,7 @@
     "clinical_diagnosis": "Clinical Diagnosis",
     "clinical_status": "Clinical Status",
     
+    "no_cpes": "There are no collection protocol events to show. Please create an event by clicking on Add Event...",
     "add_cpe": "Add Event...",
     "cpe_list": "Events",
     "cpe_point": "Event Point",
@@ -179,6 +180,8 @@
       "aliquot": "Aliquot",
       "derivative": "Derivative"
     },
+
+    "no_srs": "There are no specimen requirements to show. Create a new requirement by clicking Add Specimen Requirement ...",
 
     "name": "Name",
     "type": "Type",

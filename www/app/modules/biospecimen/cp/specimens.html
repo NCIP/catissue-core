@@ -3,6 +3,16 @@
   <div class="list-group-item os-section-hdr" translate="srs.list">
     Specimen Requirements
   </div>
+
+  <div class="list-group-item" ng-if="!specimenRequirements || specimenRequirements.length == 0">
+    <div class="alert alert-warning">
+      <span translate="srs.no_srs">
+        There are no specimen requirements to show. 
+        Create new requirement by clicking Add Specimen Requirement...
+      </span>
+    </div>
+  </div>
+
   <div class="list-group-item" ng-if="specimenRequirements.length > 0">
     <table class="table os-table-fixed os-table-tree">
       <thead>
