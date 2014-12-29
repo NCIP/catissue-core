@@ -17,10 +17,10 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models'])
         }
       );
 
-      PvManager.loadPvs($scope, 'gender');
-      PvManager.loadPvs($scope, 'ethnicity');
-      PvManager.loadPvs($scope, 'vitalStatus');
-      PvManager.loadPvs($scope, 'race');
+      $scope.genders = PvManager.getPvs('gender');
+      $scope.ethnicities = PvManager.getPvs('ethnicity');
+      $scope.vitalStatuses = PvManager.getPvs('vital-status');
+      $scope.races = PvManager.getPvs('race');
     };
 
     function init() {

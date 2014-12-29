@@ -80,13 +80,19 @@ angular.module('openspecimen')
     };
 
     var pvIdMap = {
-      'clinical-status': '2003988',
-      'specimen-class': '2003991',
-      'anatomic-site': 'Tissue_Site_PID',
-      'laterality': '2003992',
-      'pathology-status': '2003993',
+      'clinical-status'     : '2003988',
+      'gender'              : '2003989',
+      'genotype'            : '2003990',
+      'specimen-class'      : '2003991',
+      'laterality'          : '2003992',
+      'pathology-status'    : '2003993',
       'collection-procedure': '2003996',
-      'collection-container': '2003997'
+      'collection-container': '2003997',
+      'vital-status'        : '2004001',
+     
+      'ethnicity'           : 'Ethnicity_PID',
+      'race'                : 'Race_PID',
+      'anatomic-site'       : 'Tissue_Site_PID'
     };
 
     return {

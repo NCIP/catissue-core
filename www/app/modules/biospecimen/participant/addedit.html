@@ -74,7 +74,7 @@
           <div class="form-group">
             <label class="col-xs-3 control-label" translate="participant.gender">Gender</label>
             <div class="col-xs-9">
-              <label class="radio-inline" ng-repeat="gender in gender_pvs">
+              <label class="radio-inline" ng-repeat="gender in genders">
                 <input type="radio" name="gender" ng-model="cpr.participant.gender" ng-value="gender"> {{gender}}
               </label>
             </div>
@@ -83,7 +83,7 @@
           <div class="form-group">
             <label class="col-xs-3 control-label" translate="participant.ethnicity">Ethnicity</label>
             <div class="col-xs-9">
-              <label class="radio-inline" ng-repeat="ethnicity in ethnicity_pvs">
+              <label class="radio-inline" ng-repeat="ethnicity in ethnicities">
                 <input type="radio" name="ethnicity" ng-model="cpr.participant.ethnicity" ng-value="ethnicity"> {{ethnicity}}
               </label>
             </div>
@@ -92,7 +92,7 @@
           <div class="form-group">
             <label class="col-xs-3 control-label" translate="participant.vital_status">Vital Status</label>
             <div class="col-xs-9">
-              <label class="radio-inline" ng-repeat="vitalStatus in vitalStatus_pvs">
+              <label class="radio-inline" ng-repeat="vitalStatus in vitalStatuses">
                 <input type="radio" name="vitalStatus" ng-model="cpr.participant.vitalStatus" ng-value="vitalStatus"> {{vitalStatus}}
               </label>
             </div>
@@ -103,19 +103,14 @@
             <div class="col-xs-6">
               <input type="text" ng-model="cpr.participant.deathDate" class="form-control" 
                 datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="deathDt.isOpen" ng-focus="deathDt.isOpen=true" 
-                ng-disabled="cpr.participant.vitalStatus != 'Dead'" placeholder="{{'participant.deathDate' | translate}}"/>
+                ng-disabled="cpr.participant.vitalStatus != 'Dead'" placeholder="{{'participant.death_date' | translate}}"/>
             </div>
           </div>
 
           <div class="form-group">
             <label class="col-xs-3 control-label" translate="participant.race">Race</label>
             <div class="col-xs-6">
-              <ui-select multiple ng-model="cpr.participant.race">
-                <ui-select-match placeholder="{{'participant.select_race' | translate}}">{{$item}}</ui-select-match>
-                <ui-select-choices repeat="race in race_pvs | filter: $select.search">
-                  <span ng-bind-html="race | highlight: $select.search"></span>
-                </ui-select-choices>
-              </ui-select>
+              <os-select multiple ng-model="cpr.participant.race" list="races"></os-select>
             </div>
           </div>
         </div> <!-- End of Show Adv Demographics -->

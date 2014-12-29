@@ -1,12 +1,21 @@
 
 angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
   .controller('ParticipantDetailCtrl', function($scope, $q, cpr, visits, Visit, PvManager) {
-    $scope.cpr = cpr;
 
-    PvManager.loadPvs($scope, 'gender');
-    PvManager.loadPvs($scope, 'ethnicity');
-    PvManager.loadPvs($scope, 'vitalStatus');
-    PvManager.loadPvs($scope, 'race');
+    function loadPvs() {
+      $scope.genders = PvManager.getPvs('gender');
+      $scope.ethnicities = PvManager.getPvs('ethnicity');
+      $scope.vitalStatuses = PvManager.getPvs('vital-status');
+      $scope.races = PvManager.getPvs('race');
+    }
+
+    function init() {
+      $scope.cpr = cpr;
+      $scope.occurredVisits = Visit.completedVisits(visits);
+      $scope.anticipatedVisits = Visit.anticipatedVisits(visits);
+
+      loadPvs();
+    }
 
     $scope.editCpr = function(property, value) {
       var d = $q.defer();
@@ -14,6 +23,5 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
       return d.promise;
     }
 
-    $scope.occurredVisits = Visit.completedVisits(visits);
-    $scope.anticipatedVisits = Visit.anticipatedVisits(visits);
+    init();
   });

@@ -65,12 +65,7 @@
         <os-inline-edit editor="genderEditor" name="gender" class="value value-md" value="cpr.participant.gender">
           <span ng-if="genderEditor.isDisplayMode()">{{genderEditor.viewValue | osNoValue}}</span>
           <div ng-if="genderEditor.isEditMode()">
-            <ui-select ng-model="genderEditor.editValue">
-              <ui-select-match placeholder="Select Gender">{{$select.selected}}</ui-select-match>
-              <ui-select-choices repeat="gender in gender_pvs | filter: $select.search">
-                <span ng-bind-html="gender | highlight: $select.search"></span>
-              </ui-select-choices>
-            </ui-select>
+            <os-select ng-model="genderEditor.editValue" list="genders"></os-select>
           </div>
         </os-inline-edit>
       </li>
@@ -80,12 +75,7 @@
         <os-inline-edit editor="vsEditor" name="vitalStatus" class="value value-md" value="cpr.participant.vitalStatus">
           <span ng-if="vsEditor.isDisplayMode()">{{vsEditor.viewValue | osNoValue}}</span>
           <div ng-if="vsEditor.isEditMode()">
-            <ui-select ng-model="vsEditor.editValue">
-              <ui-select-match placeholder="Select Vital Status">{{$select.selected}}</ui-select-match>
-              <ui-select-choices repeat="vitalStatus in vitalStatus_pvs | filter: $select.search">
-                <span ng-bind-html="vitalStatus | highlight: $select.search"></span>
-              </ui-select-choices>
-            </ui-select>
+            <os-select ng-model="vsEditor.editValue" list="vitalStatuses"></os-select>
           </div>
         </os-inline-edit>
       </li>
@@ -95,12 +85,7 @@
         <os-inline-edit editor="raceEditor" name="race" class="value value-md" value="cpr.participant.race">
           <span ng-if="raceEditor.isDisplayMode()">{{raceEditor.viewValue.join(", ") | osNoValue}}</span>
           <div ng-if="raceEditor.isEditMode()">
-            <ui-select multiple ng-model="raceEditor.editValue">
-              <ui-select-match placeholder="Select Race">{{$item}}</ui-select-match>
-              <ui-select-choices repeat="race in race_pvs | filter: $select.search">
-                <span ng-bind-html="race | highlight: $select.search"></span>
-              </ui-select-choices>
-            </ui-select>
+            <os-select ng-model="raceEditor.editValue" list="races" multiple></os-select>
           </div>
         </os-inline-edit>
       </li>
