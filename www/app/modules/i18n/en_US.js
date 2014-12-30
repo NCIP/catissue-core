@@ -194,5 +194,25 @@
       "create_aliquots": "Create Aliquots",
       "create_derivatives": "Create Derivatives"
     }
+  },
+
+  "institutes": {
+    "list": "Institutes",
+    "create_institute": "Create Institute",
+    "name": "Name",
+    "department_name": "Department Name",
+    "departments": "Departments",
+
+    "tooltip": {
+      "view_details": "Click to view/edit Institute details",
+      "add": "Click to add new Institute",
+      "department_count": "Number of Departments",
+      "user_count": "Number of Users in Institute"
+    },
+
+    "menu": {
+      "overview": "Overview"
+    }
   }
+
 }

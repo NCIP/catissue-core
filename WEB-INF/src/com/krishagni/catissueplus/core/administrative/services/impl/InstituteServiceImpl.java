@@ -24,7 +24,7 @@ import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 
 public class InstituteServiceImpl implements InstituteService {
 
-	private static final String INSTITUTE_NAME = "institute name";
+	private static final String INSTITUTE_NAME = "Institute name";
 
 	private DaoFactory daoFactory;
 
@@ -42,18 +42,16 @@ public class InstituteServiceImpl implements InstituteService {
 	@PlusTransactional
 	public InstituteCreatedEvent createInstitute(CreateInstituteEvent event) {
 		try {
-			Institute institute = instituteFactory.createInstitute(event
-					.getInstituteDetails());
+			Institute institute = instituteFactory.createInstitute(event.getInstituteDetails());
+			
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
 			ensureUniqueInstituteName(institute.getName(), exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();
 
 			daoFactory.getInstituteDao().saveOrUpdate(institute);
-			return InstituteCreatedEvent.ok(InstituteDetails
-					.fromDomain(institute));
+			return InstituteCreatedEvent.ok(InstituteDetails.fromDomain(institute));
 		} catch (ObjectCreationException ce) {
-			return InstituteCreatedEvent.invalidRequest(
-					UserErrorCode.ERRORS.message(), ce.getErroneousFields());
+			return InstituteCreatedEvent.invalidRequest(UserErrorCode.ERRORS.message(), ce.getErroneousFields());
 		} catch (Exception e) {
 			return InstituteCreatedEvent.serverError(e);
 		}
@@ -64,28 +62,32 @@ public class InstituteServiceImpl implements InstituteService {
 	public InstituteUpdatedEvent updateInstitute(UpdateInstituteEvent event) {
 		try {
 			Institute oldInstitute;
+			
 			if (event.getName() != null) {
-				oldInstitute = daoFactory.getInstituteDao().getInstituteByName(
-						event.getName());
+				oldInstitute = daoFactory.getInstituteDao().getInstituteByName(event.getName());
 				if (oldInstitute == null) {
 					return InstituteUpdatedEvent.notFound(event.getName());
 				}
 			} else {
-				oldInstitute = daoFactory.getInstituteDao().getInstitute(
-						event.getId());
+				oldInstitute = daoFactory.getInstituteDao().getInstitute(event.getId());
 				if (oldInstitute == null) {
 					return InstituteUpdatedEvent.notFound(event.getId());
 				}
 			}
-			Institute institute = instituteFactory.createInstitute(event
-					.getInstituteDetails());
+			
+			Institute institute = instituteFactory.createInstitute(event.getInstituteDetails());
+			
+			ObjectCreationException exceptionHandler = new ObjectCreationException();
+			if(!(oldInstitute.getName().equals(institute.getName()))) {
+				ensureUniqueInstituteName(institute.getName(), exceptionHandler);
+			}
+			exceptionHandler.checkErrorAndThrow();
+
 			oldInstitute.update(institute);
 			daoFactory.getInstituteDao().saveOrUpdate(oldInstitute);
-			return InstituteUpdatedEvent.ok(InstituteDetails
-					.fromDomain(oldInstitute));
+			return InstituteUpdatedEvent.ok(InstituteDetails.fromDomain(oldInstitute));
 		} catch (ObjectCreationException ce) {
-			return InstituteUpdatedEvent.invalidRequest(
-					UserErrorCode.ERRORS.message(), ce.getErroneousFields());
+			return InstituteUpdatedEvent.invalidRequest(UserErrorCode.ERRORS.message(), ce.getErroneousFields());
 		} catch (Exception e) {
 			return InstituteUpdatedEvent.serverError(e);
 		}
@@ -148,14 +150,10 @@ public class InstituteServiceImpl implements InstituteService {
 		return GetAllInstitutesEvent.ok(details);
 	}
 
-	private void ensureUniqueInstituteName(String name,
-			ObjectCreationException exceptionHandler) {
-		Institute institute = daoFactory.getInstituteDao().getInstituteByName(
-				name);
-
+	private void ensureUniqueInstituteName(String name, ObjectCreationException exceptionHandler) {
+		Institute institute = daoFactory.getInstituteDao().getInstituteByName(name);
 		if (institute != null) {
-			exceptionHandler.addError(UserErrorCode.DUPLICATE_INSTITUTE_NAME,
-					INSTITUTE_NAME);
+			exceptionHandler.addError(UserErrorCode.DUPLICATE_INSTITUTE_NAME, INSTITUTE_NAME);
 		}
 	}
 }

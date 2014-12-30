@@ -1,0 +1,27 @@
+<div>
+  <div class="os-page-hdr">
+    <h3 translate="institutes.list">Institutes</h3>
+    <a class="os-btn-icon" title="{{'institutes.tooltip.add' | translate}}" ui-sref="institute-new">
+      <span class="glyphicon glyphicon-plus"></span>
+    </a>
+  </div>
+  
+  <div class="os-cards"> 
+    <div class="os-card" ng-repeat="institute in instituteList" ng-click="showInstituteOverview(institute)">
+      <h4>
+        <a title="{{'institutes.tooltip.view_details' | translate}}" ui-sref="institute-detail.overview({id: institute.id})"> {{institute.name}} </a>
+      </h4>
+      <h5>{{institute.activityStatus}}</h5>
+      <div class="stats">
+        <div class="stat col-xs-6" title="{{'institutes.tooltip.department_count' | translate}}">
+          <span class="os-lavatar os-lavatar-sm">D</span>
+          <span>{{institute.departments.length | number: 0}}</span>
+        </div>
+        <div class="stat col-xs-6" title="{{'institutes.tooltip.user_count' | translate}}">
+          <span class="os-lavatar os-lavatar-sm">U</span>
+          <span>{{(institute.userCount || 0) | number: 0}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

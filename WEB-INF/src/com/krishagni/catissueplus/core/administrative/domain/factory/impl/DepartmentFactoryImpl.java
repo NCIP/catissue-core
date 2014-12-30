@@ -1,4 +1,4 @@
-
+/*
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
@@ -63,3 +63,4 @@ public class DepartmentFactoryImpl implements DepartmentFactory {
 		department.setName(name);
 	}
 }
+*/

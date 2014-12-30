@@ -1,0 +1,22 @@
+
+<div class="os-items-group">
+  <div class="os-item">
+    <h3 class="os-section-title">{{institute.name}}</h3>
+  </div>
+
+  <div class="os-item os-action-btns os-action-btns-md">
+    <a><span class="glyphicon glyphicon-pencil"></span></a>
+  </div>
+</div>
+
+<div class="clearfix">
+  <div class="col-xs-8">
+    <ul class="os-key-values os-two-cols">
+      <li class="item">
+        <strong class="key key-sm" translate="institutes.departments">Departments</strong>
+        <span class="value value-md" os-inline-edit>{{institute.departments | showDepartments | osNoValue}}</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
