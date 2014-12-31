@@ -6,7 +6,7 @@
 <hibernate-mapping auto-import="false">
     <class
         name="com.krishagni.catissueplus.core.administrative.domain.User"
-        table="OS_USER"
+        table="CATISSUE_USER"
         lazy="true">
 	
     	<cache usage="read-write" />
