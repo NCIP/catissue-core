@@ -68,7 +68,16 @@ public class ParticipantServiceImpl implements ParticipantService {
 	@Override
 	@PlusTransactional
 	public ParticipantDetailEvent getParticipant(ReqParticipantDetailEvent event) {
+		Long participantId = event.getParticipantId();
+		if (participantId == null) {
+			return ParticipantDetailEvent.invalidRequest(ParticipantErrorCode.INVALID_ATTR_VALUE, "participant-id");
+		}
+		
 		Participant participant = daoFactory.getParticipantDao().getParticipant(event.getParticipantId());
+		if (participant == null) {
+			return ParticipantDetailEvent.notFound(participantId);
+		}
+		
 		return ParticipantDetailEvent.ok(ParticipantDetail.fromDomain(participant));
 	}
 

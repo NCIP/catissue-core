@@ -74,6 +74,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 			projs.add(Projections.property("pi.id"));
 			projs.add(Projections.property("pi.firstName"));
 			projs.add(Projections.property("pi.lastName"));
+			projs.add(Projections.property("pi.loginName"));
 		}
 		
 		return query.addOrder(Order.asc("title")).list();
@@ -91,6 +92,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 			user.setId((Long)fields[4]);
 			user.setFirstName((String)fields[5]);
 			user.setLastName((String)fields[6]);
+			user.setLoginName((String)fields[7]);
 			cp.setPrincipalInvestigator(user);
 		}
 		
@@ -105,12 +107,6 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 				.add(Restrictions.eq("title", cpTitle))
 				.list();
 		return cpList == null || cpList.isEmpty() ? null : cpList.iterator().next();
-	}
-
-	@Override
-	public CollectionProtocol getCollectionProtocol(Long cpId) {
-		return (CollectionProtocol) sessionFactory.getCurrentSession()
-				.get(CollectionProtocol.class.getName(), cpId);
 	}
 	
 	@Override
@@ -156,6 +152,10 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	
 	private static final String GET_CPE_BY_CP_AND_LABEL = FQN + ".getCpeByTitleAndEventLabel";
 
+	@Override
+	public Class getType() {
+		return CollectionProtocol.class;
+	}
 	
 //
 //	@Override

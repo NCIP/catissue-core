@@ -105,7 +105,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		CollectionProtocolRegistration cpr = null;
 		
 		if (visitDetail.getCprId() != null) {
-			cpr = daoFactory.getCprDao().getCpr(visitDetail.getCprId());
+			cpr = daoFactory.getCprDao().getById(visitDetail.getCprId());
 		} else if (visitDetail.getPpid() != null && visitDetail.getCpTitle() != null) {
 			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(visitDetail.getCpTitle());
 			if (cp == null) {

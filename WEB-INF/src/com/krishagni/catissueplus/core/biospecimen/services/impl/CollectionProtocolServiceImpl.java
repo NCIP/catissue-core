@@ -111,16 +111,17 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		List<CollectionProtocolSummary> cpList = daoFactory.getCollectionProtocolDao()
 				.getAllCollectionProtocols(req.isIncludePi(), req.isIncludeStats());
 		
-		
-		List<Long> allowedCpIds = privilegeSvc.getCpList(
-				getUserId(req), 
-				PrivilegeType.REGISTRATION.name(),req.isChkPrivileges());
+		//TODO: integrate privileges with rbac
+//		List<Long> allowedCpIds = privilegeSvc.getCpList(
+//				getUserId(req), 
+//				PrivilegeType.REGISTRATION.name(),req.isChkPrivileges());
 		
 		List<CollectionProtocolSummary> result = new ArrayList<CollectionProtocolSummary>();
 		for (CollectionProtocolSummary collectionProtocolSummary : cpList) {
-			if (allowedCpIds.contains(collectionProtocolSummary.getId())) {
+			//TODO: uncomment below lines once rbac is integrted with module
+//			if (allowedCpIds.contains(collectionProtocolSummary.getId())) {
 				result.add(collectionProtocolSummary);
-			}
+//			}
 		}
 		
 		Collections.sort(result);
@@ -132,7 +133,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	public CollectionProtocolDetailEvent getCollectionProtocol(ReqCollectionProtocolEvent req) {
 		Long cpId = req.getCpId();
 		
-		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(cpId);
+		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(cpId);
 		if (cp == null) {
 			return CollectionProtocolDetailEvent.notFound(cpId);
 		}
@@ -146,7 +147,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		try {
 			Long cpId = req.getCpId();
 			String searchStr = req.getSearchString();
-			boolean includePhi = privilegeSvc.hasPrivilege(getUserId(req), cpId, Permissions.REGISTRATION);
+
+			//TODO: Add rbac module below to use phi details
+			//boolean includePhi = privilegeSvc.hasPrivilege(getUserId(req), cpId, Permissions.REGISTRATION);
+			boolean includePhi = true;
 			
 			CprListCriteria listCrit = new CprListCriteria()
 				.cpId(cpId)
@@ -175,7 +179,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			return ClinicalDiagnosesEvent.ok(getClinicalDiagnoses(searchTerm));
 		}
 
-		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(cpId);
+		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(cpId);
 		if (cp == null) {
 			return ClinicalDiagnosesEvent.notFound();
 		}
@@ -217,7 +221,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		Long cpId = req.getCpId();
 
 		try {
-			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(cpId);
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(cpId);
 			if (cp == null) {
 				return ConsentTiersEvent.notFound(cpId);
 			}
@@ -233,7 +237,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	public ConsentTierOpRespEvent updateConsentTier(ConsentTierOpEvent req) {
 		Long cpId = req.getCpId();
 		try {
-			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(cpId);
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(cpId);
 			if (cp == null) {
 				return ConsentTierOpRespEvent.notFound(cpId);
 			}
@@ -273,7 +277,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		Long cpId = req.getCpId();
 		
 		try {
-			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(cpId);
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(cpId);
 			if (cp == null) {
 				return CpeListEvent.notFound(cpId);
 			}

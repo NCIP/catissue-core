@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -56,8 +57,7 @@ public class CollectionProtocolRegistrationDaoImpl
 			return cprs;
 		}
 		
-		List<Object[]> countRows = getScgAndSpecimenCounts(
-				cprCrit.cpId(), cprCrit.startAt(), cprCrit.maxResults());
+		List<Object[]> countRows = getScgAndSpecimenCounts(cprCrit);
 		for (Object[] row : countRows) {
 			CprSummary cpr = cprMap.get((Long)row[0]);
 			cpr.setScgCount((Long)row[1]);
@@ -162,12 +162,6 @@ public class CollectionProtocolRegistrationDaoImpl
 	}
 
 	@Override
-	public CollectionProtocolRegistration getCpr(Long cprId) {
-		return (CollectionProtocolRegistration) sessionFactory.getCurrentSession().get(
-				CollectionProtocolRegistration.class, cprId);
-	}
-
-	@Override
 	@SuppressWarnings("unchecked")
 	public CollectionProtocolRegistration getCprByPpId(Long cpId, String ppid) {
 		List<CollectionProtocolRegistration> result = sessionFactory.getCurrentSession()
@@ -221,6 +215,7 @@ public class CollectionProtocolRegistrationDaoImpl
 		
 		query.add(Restrictions.eq("cp.id", cprCrit.cpId()));
 		query.add(Restrictions.ne("activityStatus", "Disabled"));
+		query.add(Restrictions.ne("cp.activityStatus", "Disabled"));
 		query.add(Restrictions.ne("participant.activityStatus", "Disabled"));
 
 		query.addOrder(Order.asc("id"));
@@ -277,28 +272,44 @@ public class CollectionProtocolRegistrationDaoImpl
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<Object[]> getScgAndSpecimenCounts(Long cpId, int startAt, int maxResults) {
-		Query countQuery = getSessionFactory().getCurrentSession().getNamedQuery(GET_SCG_AND_SPECIMEN_CNT);
-		countQuery.setLong("cpId", cpId);
+	private List<Object[]> getScgAndSpecimenCounts(CprListCriteria cprCrit) {
+		Criteria countQuery = getCprListQuery(cprCrit)
+				.createAlias("scgCollection", "scg",
+						CriteriaSpecification.LEFT_JOIN, Restrictions.eq("scg.collectionStatus", "Complete"))
+				.createAlias("scgCollection.specimenCollection", "specimen",
+						CriteriaSpecification.LEFT_JOIN, Restrictions.eq("specimen.collectionStatus", "Collected"));
 		
-		if (startAt <= 0) {
-			startAt = 0;
-		}
-		
-		if (maxResults <= 0 || maxResults > 100) {
-			maxResults = 100;
-		}
-		
-		return countQuery.setFirstResult(startAt).setMaxResults(maxResults).list();
+		return countQuery.setProjection(Projections.projectionList()
+				.add(Projections.property("id"))
+				.add(Projections.countDistinct("scg.id"))
+				.add(Projections.countDistinct("specimen.id"))
+				.add(Projections.groupProperty("id")))
+				.list();
 	}
 	
+	@Override
+	public Long getRegistrationId(Long cpId, Long participantId) {
+		List<Long> result =  getSessionFactory().getCurrentSession()
+				.getNamedQuery(GET_REGISTRATION_ID)
+				.setLong("cpId", cpId)
+				.setLong("participantId", participantId)
+				.list();
+		
+		return result.isEmpty() ? null : result.iterator().next();
+	}
+	
+	@Override
+	public Class getType() {
+		return CollectionProtocolRegistration.class;
+	}
 	
 	private static final String FQN = CollectionProtocolRegistration.class.getName();
 	
-	private static final String GET_SCG_AND_SPECIMEN_CNT = FQN + ".getScgAndSpecimenCount";
-	
 	private static final String GET_BY_CP_ID_AND_PPID = FQN + ".getCprByCpIdAndPpid";
 	
+	private static final String GET_REGISTRATION_ID = FQN + ".getRegistrationId";
+
+	private static final String GET_CPR = FQN + ".getCpr";
 //	private static final String GET_SUB_REGISTRATIONS_BY_PARTICIPANT_AND_CP_ID = FQN + ".getSubRegistrationByParticipantAndCPId";
 //	
 //	private static final String GET_PARTICIPANT_BY_CP_PARTICIPANT_ID = FQN + ".getParticipantByCPAndParticipantId";
@@ -314,5 +325,7 @@ public class CollectionProtocolRegistrationDaoImpl
 //	private static final String GET_PHI_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM = FQN + ".getPhiParticipantsByCpIdAndSearchTerm";
 //
 //	private static final String GET_COLLECTION_GROUPSBY_CPR_ID = FQN + ".getCollectionGroupsByCprId";
+
+
 
 }
