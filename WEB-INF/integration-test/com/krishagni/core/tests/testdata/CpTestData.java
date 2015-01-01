@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqClinicalDiagnosesEvent;
@@ -91,6 +92,7 @@ public class CpTestData {
 		cp.setAliquotsInSameContainer(true);
 		cp.setActivityStatus("Active");
 		cp.setCoordinators(getCoordinators(2,3));
+		cp.setActivityStatus("Active");
 		return cp;
 	}
 	
@@ -100,4 +102,5 @@ public class CpTestData {
 		req.setCp(getCp());
 		return req;
 	}
+
 }
