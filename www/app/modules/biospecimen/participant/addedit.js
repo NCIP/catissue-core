@@ -1,17 +1,14 @@
 
-angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models'])
+angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('ParticipantAddEditCtrl', function(
     $scope, $state, $stateParams, 
     CollectionProtocolRegistration, Participant,
-    SiteService, PvManager) {
+    Site, PvManager) {
 
     function loadPvs() {
-      SiteService.getSites().then(
-        function(result) {
-          if (result.status != "ok") {
-            alert("Failed to load sites information");
-          }
-          $scope.sites = result.data.map(function(site) {
+      Site.list().then(
+        function(sites) {
+          $scope.sites = sites.map(function(site) {
             return site.name;
           });
         }

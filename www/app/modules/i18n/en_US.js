@@ -213,6 +213,26 @@
     "menu": {
       "overview": "Overview"
     }
+  },
+
+  "site": {
+    "list": "Sites",
+    "create_site": "Create Site",
+    "name": "Name",
+    "code": "Code",
+    "coordinators": "Coordinators",
+    "type": "Type",
+    "address": "Address",
+
+    "tooltip": {
+      "viewDetails": "Click to view/edit Site details",
+      "add": "Click to add new  Site",
+      "cp_count": "Count of Collection Protocols"
+    },
+
+    "menu": {
+      "overview": "Overview"
+    }
   }
 
 }
