@@ -1,5 +1,5 @@
 
-<div class="list-group" ng-if="!addSrMode">
+<div class="list-group" ng-if="view == 'list_sr' || view == 'addedit_aliquot'">
   <div class="list-group-item os-section-hdr" translate="srs.list">
     Specimen Requirements
   </div>
@@ -14,58 +14,66 @@
   </div>
 
   <div class="list-group-item" ng-if="specimenRequirements.length > 0">
-    <table class="table os-table-fixed os-table-tree">
-      <thead>
-        <th class="col-xs-5" translate="srs.name">Name</th>
-        <th class="col-xs-2" translate="srs.type">Type</th>
-        <th class="col-xs-2" translate="srs.pathology">Pathology</th>
-        <th class="col-xs-2" translate="srs.storage_type">Storage Type</th>
-        <th class="col-xs-1">&nbsp;</th>
-      </thead>
-      <tbody>
-        <tr ng-repeat="sr in specimenRequirements | openedSpecimenNodes" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
-          <td>
-            <div style="padding-left: {{sr.hasChildren ? sr.depth * 20 : sr.depth * 20 + 16}}px">
-              <a ng-if="sr.hasChildren && sr.isOpened" 
-                 class="fa fa-chevron-circle-down"
-                 ng-click="closeSpecimenNode(sr)">
-              </a>
-              <a ng-if="sr.hasChildren && !sr.isOpened" 
-                 class="fa fa-chevron-circle-right"
-                 ng-click="openSpecimenNode(sr)">
-              </a>
-              <span class="fa fa-circle" 
-                    ng-class="{'os-lineage-new': sr.lineage == 'New',
-                               'os-lineage-aliquot': sr.lineage == 'Aliquot',
-                               'os-lineage-derivative': sr.lineage == 'Derived'}">
-              </span>
-              <a ng-if="sr.name">{{sr.name}}</a>
-              <a ng-if="!sr.name">{{sr.type}} ({{sr.specimenClass}})</a>
+    <div class="os-table os-table-fixed os-table-tree">
+      <div class="os-table-head">
+        <div class="row">
+          <div class="col col-xs-5" translate="srs.name">Name</div>
+          <div class="col col-xs-2" translate="srs.type">Type</div>
+          <div class="col col-xs-2" translate="srs.pathology">Pathology</div>
+          <div class="col col-xs-2" translate="srs.storage_type">Storage Type</div>
+          <div class="col col-xs-1">&nbsp;</div>
+        </div>
+      </div>
+      <div class="os-table-body">
+        <div ng-class="{'os-inplace-form-edit-po': parentSr == sr}" ng-repeat="sr in specimenRequirements | openedSpecimenNodes" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
+          <div class="row title">
+            <div class="col col-xs-5 os-ellipsis">
+              <div style="padding-left: {{sr.hasChildren ? sr.depth * 20 : sr.depth * 20 + 16}}px">
+                <a ng-if="sr.hasChildren && sr.isOpened" 
+                   class="fa fa-chevron-circle-down"
+                   ng-click="closeSpecimenNode(sr)">
+                </a>
+                <a ng-if="sr.hasChildren && !sr.isOpened" 
+                   class="fa fa-chevron-circle-right"
+                   ng-click="openSpecimenNode(sr)">
+                </a>
+                <span class="fa fa-circle" 
+                      ng-class="{'os-lineage-new': sr.lineage == 'New',
+                                 'os-lineage-aliquot': sr.lineage == 'Aliquot',
+                                 'os-lineage-derivative': sr.lineage == 'Derived'}">
+                </span>
+                <a ng-if="sr.name">{{sr.name}}</a>
+                <a ng-if="!sr.name">{{sr.type}} ({{sr.specimenClass}})</a>
+              </div>
             </div>
-          </td>
-          <td>{{sr.type}}</td>
-          <td>{{sr.pathologyStatus | osNoValue}}</td>
-          <td>{{sr.storageType | osNoValue}}</td>
-          <td class="action">
-            <div class="btn-group" dropdown ng-if="showBtns">
-              <button type="button" class="btn btn-xs btn-default os-btn-icon">
-                <span class="fa fa-cog"></span>
-              </button>
-              <button type="button" class="btn btn-xs btn-default os-btn-icon dropdown-toggle">
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                <li><a href="#" translate="srs.ctx_menu.view_sr">View Requirement</a></li>
-                <li><a href="#" translate="srs.ctx_menu.edit_sr">Edit Requirement</a></li>
-                <li class="divider"></li>
-                <li><a href="#" translate="srs.ctx_menu.create_aliquots">Create Aliquots</a></li>
-                <li><a href="#" translate="srs.ctx_menu.create_derivatives">Create Derivatives</a></li>
-              </ul>
+            <div class="col col-xs-2 os-ellipsis">{{sr.type}}</div>
+            <div class="col col-xs-2 os-ellipsis">{{sr.pathologyStatus | osNoValue}}</div>
+            <div class="col col-xs-2 os-ellipsis">{{sr.storageType | osNoValue}}</div>
+            <div class="col col-xs-1 action">
+              <div class="btn-group" dropdown ng-if="showBtns">
+                <button type="button" class="btn btn-xs btn-default os-btn-icon">
+                  <span class="fa fa-cog"></span>
+                </button>
+                <button type="button" class="btn btn-xs btn-default os-btn-icon dropdown-toggle">
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                  <li><a href="#" translate="srs.ctx_menu.view_sr">View Requirement</a></li>
+                  <li><a href="#" translate="srs.ctx_menu.edit_sr">Edit Requirement</a></li>
+                  <li class="divider"></li>
+                  <li><a translate="srs.ctx_menu.create_aliquots" ng-click="showCreateAliquots(sr)">Create Aliquots</a></li>
+                  <li><a href="#" translate="srs.ctx_menu.create_derivatives">Create Derivatives</a></li>
+                </ul>
+              </div>
             </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </div>
+          <div class="row content" ng-if="parentSr == sr && view == 'addedit_aliquot'">
+            <div ng-include="'modules/biospecimen/cp/addedit-aliquot.html'" ng-if="view == 'addedit_aliquot'"> 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <a class="list-group-item" ng-click="showAddSr()">
@@ -73,5 +81,8 @@
   </a>
 </div>
 
-<div ng-if="addSrMode" ng-include="'modules/biospecimen/cp/addedit-sr.html'">
+<div ng-include="'modules/biospecimen/cp/addedit-sr.html'" ng-if="view == 'addedit_sr'"> 
 </div>
+
+<!-- div ng-include="'modules/biospecimen/cp/addedit-aliquot.html'" ng-if="view == 'addedit_aliquot'"> 
+</div -->

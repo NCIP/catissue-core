@@ -1,0 +1,48 @@
+<div>
+  <div> <!-- class="list-group-item" -->
+    <div>
+    <form name="aliquotForm" os-form-validator="aliquotForm" novalidate>
+      <div class="clearfix">
+        <div class="col-xs-3">
+          <div class="form-group">
+            <input name="count" ng-model="aliquot.count" 
+              os-md-input class="form-control" type="text" placeholder="Count of Aliquots"
+              required ng-pattern="/^[1-9][0-9]*$/">
+            <div os-field-error field="aliquotForm.count"></div>
+          </div>
+        </div>
+
+        <div class="col-xs-3">
+          <div class="form-group">
+            <input name="quantity" ng-model="aliquot.quantityPerAliquot" 
+              os-md-input class="form-control" type="text" placeholder="Quantity Per Aliquot"
+              required ng-pattern="/^[1-9][0-9]*$/">
+            <div os-field-error field="aliquotForm.quantity"></div>
+          </div>
+        </div>
+
+        <div class="col-xs-3">
+          <div class="form-group">
+            <os-select name="storageType" ng-model="aliquot.storageType" list="storageTypes"
+              os-md-input placeholder="Storage Type" required>
+            </os-select>
+            <div os-field-error field="aliquotForm.storageType"></div>
+          </div>
+        </div>
+
+        <div class="col-xs-3">
+          <div class="form-group">
+            <input ng-model="aliquot.labelFmt" os-md-input class="form-control" type="text" placeholder="Label Format">
+          </div>
+        </div>
+      </div>
+      <div class="form-group clearfix">
+        <div class="col-xs-12">
+          <button type="submit" class="btn btn-success" os-form-submit="createAliquots()">Create Aliquots</button>
+          <a class="btn os-btn-text-secondary" ng-click="revertEdit()">Cancel</a>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>

@@ -570,3 +570,32 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 .list-group-item .alert {
   margin-bottom: 0px;
 }
+
+.os-ellipsis {
+  overflow:hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/**
+ * Inplace form edit PO
+ */
+
+.os-inplace-form-edit-po {
+  border: 1px solid #ddd;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-radius: 4px;
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+  background-clip: padding-box;
+}
+
+.os-inplace-form-edit-po .title {
+  background: #edeff0;
+  border-bottom: 1px solid #ddd;
+}
+
+.os-inplace-form-edit-po .content {
+  padding: 9px 15px;
+}
+

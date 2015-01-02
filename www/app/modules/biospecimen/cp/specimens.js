@@ -17,7 +17,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
 
       $scope.specimenRequirements = Specimen.flatten(specimenRequirements);
 
-      $scope.addSrMode = false;
+      $scope.view = 'list_sr';
       $scope.sr = {};
     }
 
@@ -63,22 +63,42 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     };
 
     $scope.showAddSr = function() {
-      $scope.addSrMode = true;
+      $scope.view = 'addedit_sr';
       $scope.sr = new SpecimenRequirement({eventId: $scope.eventId});
       loadPvs();
     };
 
     $scope.revertEdit = function() {
-      $scope.addSrMode = false;
+      $scope.view = 'list_sr';
+      $scope.parentSr = null;
     };
 
     $scope.createSr = function() {
       $scope.sr.$saveOrUpdate().then(
         function(result) {
           addToSrList(result);
-          $scope.addSrMode = false;
+          $scope.view = 'list_sr';
         }
       );
+    };
+
+    ////////////////////////////////////////////////
+    //
+    //  Aliquot logic
+    //
+    ////////////////////////////////////////////////
+    $scope.showCreateAliquots = function(sr) {
+      $scope.parentSr = sr;
+      $scope.view = 'addedit_aliquot';
+      $scope.aliquot = {};
+      loadPvs();
+    };
+
+    $scope.createAliquots = function() {
+      alert(JSON.stringify($scope.aliquot));
+      $scope.aliquot = {};
+      $scope.parentSr = undefined;
+      $scope.view = 'list_sr';
     };
 
     init();

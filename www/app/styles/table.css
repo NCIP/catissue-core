@@ -1,0 +1,30 @@
+
+.os-table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+  display: table;
+}
+
+.os-table .row {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.os-table .os-table-head .row .col,
+.os-table .os-table-body .row .col {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+}
+
+.os-table .os-table-head .row .col {
+  vertical-align: bottom;
+  border-bottom: 2px solid #ddd;
+  font-weight: bold;
+}
+
+.os-table .os-table-head .row:first-child .col {
+  border-top: 0;
+}
