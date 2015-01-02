@@ -15,6 +15,7 @@ public class TestUtils {
 		System.out.println("Operation-Message: " + response.getMessage());
 		if (response.getErroneousFields() != null) {
 			for (ErroneousField error: response.getErroneousFields()) {
+				System.out.println("----------------------------ERROR----------------------------");
 				System.out.println("Error-Code: " + error.getErrorCode());
 				System.out.println("Error-Message: " + error.getErrorMessage());
 				System.out.println("Errored-Field: " + error.getFieldName());
@@ -27,16 +28,16 @@ public class TestUtils {
 		
 		for (ErroneousField ef: event.getErroneousFields()) {
 			if (ef.getErrorMessage().equals(errorCode.message())
-					&& ef.getErrorCode() == errorCode.code())
+					&& ef.getErrorCode() == errorCode.code()) {
 				
 				if (field != null) {
 					if (ef.getFieldName().equals(field)) {
 						return true;
-					}
-					
-					continue;
+					} 
+				} else {
+					return true;	
 				}
-				return true;
+			}
 		}
 		return false;
 	}

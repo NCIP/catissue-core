@@ -150,11 +150,11 @@ public class RbacServiceImpl implements RbacService {
 	public OperationSavedEvent saveOperation(SaveOperationEvent req) {
 		try {
 			OperationDetails detail = req.getOperation();
-			if (detail == null || StringUtils.isEmpty(detail.getName())) {
+			String operationName = detail.getName();
+			if (detail == null || StringUtils.isEmpty(operationName)) {
 				return OperationSavedEvent.badRequest(RbacErrorCode.INVALID_OPERATION_NAME, null);
 			}
-			
-			String operationName = detail.getName();
+		
 			Operation operation = daoFactory.getOperationDao().getOperationByName(operationName);			
 			if (operation == null) {
 				operation = new Operation();
@@ -300,15 +300,21 @@ public class RbacServiceImpl implements RbacService {
 			}
 			
 			Role newRole = createRole(req.getRole());
+			checkCycles(newRole);
 			
 			Role existing = daoFactory.getRoleDao().getRoleByName(roleName);						
 			if (existing == null) {
 				existing = newRole;
+				
+				for (Role childRole : existing.getChildRoles()) {
+					childRole.setParentRole(existing);
+				}
 			} else {
 				//TODO - find a solution about this hack
 				AbstractDao<?> dao = (AbstractDao<?>)daoFactory.getGroupDao();
 				Session session = dao.getSessionFactory().getCurrentSession();
 				
+				updateOrphanRoles(existing,newRole);
 				existing.updateRole(newRole, session);
 			}
 			
@@ -333,6 +339,7 @@ public class RbacServiceImpl implements RbacService {
 				return RoleDeletedEvent.badRequest(RbacErrorCode.ROLE_NOT_FOUND, null);
 			}
 			
+			adjustParentChildRelationForRoleDeletion(role);
 			daoFactory.getRoleDao().delete(role);
 			return RoleDeletedEvent.ok(RoleDetails.fromRole(role));
 		} catch (Exception e) {
@@ -503,8 +510,49 @@ public class RbacServiceImpl implements RbacService {
 		role.setName(details.getName());
 		role.setDescription(details.getDescription());
 		role.setAcl(getAcl(role, details.getAcl()));
+		role.setParentRole(getRole(details.getParentRoleName()));
+		
+		for (String childRole : details.getChildRoles()) {
+			role.getChildRoles().add(getRole(childRole));
+		}
+		return role;
+	}
+	
+	private void checkCycles(Role role) {
+		if (role.equals(role.getParentRole()) || role.getChildRoles().contains(role)) {
+			throw new IllegalArgumentException("Cycle detected in role hierarchy!");
+		}
+		
+		Role parentRole = role.getParentRole();
+		
+		for (Role childRole : role.getChildRoles()) {
+			if (parentRole.isDescendentOf(childRole)) {
+				throw new IllegalArgumentException("Cycle detected in role hierarchy!");
+			}
+		}
+	}
+	
+	private Role getRole(String roleName) {
+		if (roleName == null) {
+			return null;
+		}
+		
+		Role role = daoFactory.getRoleDao().getRoleByName(roleName);
+		
+		if (role == null) {
+			throw new IllegalArgumentException("Invalid role name");
+		}
 		
 		return role;
+	}
+	
+	private void updateOrphanRoles(Role existing, Role role) {
+		for (Role existingChild : existing.getChildRoles()) {
+			if (!role.getChildRoles().contains(existingChild)) {
+				existingChild.setParentRole(null);
+				daoFactory.getRoleDao().saveOrUpdate(existingChild);
+			}
+		}
 	}
 
 	private Set<RoleAccessControl> getAcl(Role role, List<RoleAccessControlDetails> acl) {
@@ -555,6 +603,25 @@ public class RbacServiceImpl implements RbacService {
 		sr.setDsoId(sd.getDsoId() == null ? -1L : sd.getDsoId());
 		sr.setRole(role);
 		return sr;
+	}
+
+	private void adjustParentChildRelationForRoleDeletion(Role role) {
+		Role parent = role.getParentRole();
+		Set<Role> childRoles = role.getChildRoles();
+		
+		for (Role childRole : childRoles) {
+			childRole.setParentRole(parent);
+		}
+		
+		if (parent != null) {
+			parent.getChildRoles().remove(role);
+			parent.getChildRoles().addAll(childRoles);
+			daoFactory.getRoleDao().saveOrUpdate(parent);
+		} else {
+			for (Role childRole : childRoles) {
+				daoFactory.getRoleDao().saveOrUpdate(childRole);
+			}
+		}
 	}
 	
 	private GroupRole createGroupRole(GroupRoleSummary gd) {

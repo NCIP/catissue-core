@@ -7,6 +7,8 @@ import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
@@ -79,7 +81,8 @@ public class VisitFactoryImpl implements VisitFactory {
 		
 		if (visitDetail.getCpeId() != null) {
 			cpe = daoFactory.getCollectionProtocolDao().getCpe(visitDetail.getCpeId());
-		} else if (visitDetail.getEventLabel() != null && visitDetail.getCpTitle() != null) {
+		} else if (!StringUtils.isEmpty(visitDetail.getEventLabel()) && 
+				!StringUtils.isEmpty(visitDetail.getCpTitle())) {
 			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(visitDetail.getCpTitle());
 			if (cp == null) {
 				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, CP_TITLE);

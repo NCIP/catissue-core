@@ -96,7 +96,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	private void setInitialQty(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
 		Double initialQty = detail.getInitialQty();
 		if (initialQty == null || initialQty < 0) {
-			oce.addError(null, "initialQty");
+			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "initialQty");
 			return;
 		}
 		
@@ -104,13 +104,13 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 
 	private void setConcentration(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		if (detail.getAnatomicSite() == null || !detail.getAnatomicSite().equals("Molecular")) {
+		if (detail.getAnatomicSite() == null || !detail.getSpecimenClass().equals("Molecular")) {
 			return;
 		}
 		
 		Double concentration = detail.getConcentration();
 		if (concentration == null || concentration < 0) {
-			oce.addError(null, "concentration");
+			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "concentration");
 			return;
 		}
 		
@@ -140,13 +140,13 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	private void setCpe(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
 		Long eventId = detail.getEventId();
 		if (eventId == null) {
-			oce.addError(null, "eventId");
+			oce.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, "eventId");
 			return;
 		}
 		
 		CollectionProtocolEvent cpe = daoFactory.getCollectionProtocolDao().getCpe(eventId);
 		if (cpe == null) {
-			oce.addError(null, "eventId");
+			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "eventId");
 		}
 		
 		sr.setCollectionProtocolEvent(cpe);
