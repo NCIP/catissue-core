@@ -65,8 +65,7 @@
         com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration cpr
       where
         cpr.collectionProtocol.id = :cpId and
-        cpr.protocolParticipantIdentifier = :ppid and
-        cpr.activityStatus = 'Active'
+        cpr.protocolParticipantIdentifier = :ppid
     </query>
     
     <sql-query name="getRegistrationId">

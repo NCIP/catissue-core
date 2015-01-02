@@ -21,8 +21,11 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpRespEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTiersEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.core.common.ApplicationContextConfigurer;
@@ -48,6 +51,9 @@ public class ConsentsTest {
 	private ApplicationContext ctx;
 	
 
+	/*
+	 * Update Consents API Tests
+	 */
 	@Test
 	@DatabaseSetup("ConsentsTest.addConsentsTest.initial.xml")
 	@DatabaseTearDown("ConsentsTest.generic.teardown.xml")
@@ -151,5 +157,52 @@ public class ConsentsTest {
 		
 		Assert.assertEquals(EventStatus.OK, resp.getStatus());
 		Assert.assertNull("Delete Consent Response was expected to be null!", resp.getConsentTier());		
+	}
+	
+	/*
+	 * Get Consents API Tests
+	 */
+	@Test
+	@DatabaseSetup("ConsentsTest.addConsentsTest.initial.xml")
+	@DatabaseTearDown("ConsentsTest.generic.teardown.xml")
+	public void getConsentsTest() {
+		ReqConsentTiersEvent req = ConsentsTestData.getReqConsentTiersEvent();
+		ConsentTiersEvent resp = cpSvc.getConsentTiers(req);
+		
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		Assert.assertEquals(new Integer(3), new Integer(resp.getConsentTiers().size()));
+		
+		for (ConsentTierDetail consent : resp.getConsentTiers()) {
+			String expectedStatement = "statement-" + consent.getId();
+			Assert.assertNotNull("ConsentId was not expected to be null!");
+			if (consent.getId() < 1L || consent.getId() > 3L) {
+				Assert.fail("Unexpected consent id found: " + consent.getId());
+			}
+			
+			Assert.assertEquals(expectedStatement, consent.getStatement());
+		}
+	}
+	
+	@Test
+	@DatabaseSetup("ConsentsTest.addConsentsTest.initial.xml")
+	@DatabaseTearDown("ConsentsTest.generic.teardown.xml")
+	public void addConsentsTestForNonExistingCp() {
+		ReqConsentTiersEvent req = ConsentsTestData.getReqConsentTiersEvent();
+		req.setCpId(-1L);
+		ConsentTiersEvent resp = cpSvc.getConsentTiers(req);
+		
+		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
+		Assert.assertEquals(req.getCpId(), resp.getCpId());
+	}
+	
+	@Test
+	@DatabaseSetup("ConsentsTest.getConsentsForDisabledCp.initial.xml")
+	@DatabaseTearDown("ConsentsTest.generic.teardown.xml")
+	public void getConsentsForDisabledCp() {
+		ReqConsentTiersEvent req = ConsentsTestData.getReqConsentTiersEvent();
+		ConsentTiersEvent resp = cpSvc.getConsentTiers(req);
+		
+		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
+		Assert.assertEquals(req.getCpId(), resp.getCpId());
 	}
 }

@@ -176,6 +176,8 @@ public class CollectionProtocolRegistrationTest {
 	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
 	public void registerParticipantToSameCp() {
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetail();
+		cpr.getParticipant().setId(1L);
+		cpr.setCpId(1L);
 		
 		CreateRegistrationEvent req = new CreateRegistrationEvent();
 		req.setCpId(1L);
@@ -186,7 +188,8 @@ public class CollectionProtocolRegistrationTest {
 		
 		TestUtils.recordResponse(resp);
 		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ParticipantErrorCode.ALREADY_REGISTERED, PARTICIPANT));
+		Assert.assertEquals("Error code participant already registered not found!",
+				true, TestUtils.isErrorCodePresent(resp, ParticipantErrorCode.ALREADY_REGISTERED, PARTICIPANT));
 	}
 	
 	@Test
@@ -517,7 +520,7 @@ public class CollectionProtocolRegistrationTest {
 		
 		TestUtils.recordResponse(resp);
 		Assert.assertEquals(false, resp.isSuccess());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ParticipantErrorCode.DISABLED_CP, COLLECTION_PROTOCOL));
+		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ParticipantErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROTOCOL));
 	}
 	
 	@Test
@@ -846,10 +849,9 @@ public class CollectionProtocolRegistrationTest {
 		RegistrationEvent resp = cprSvc.getRegistration(req);
 		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
-		Assert.assertEquals(req.getCpId(), resp.getCpId());
-		Assert.assertEquals(req.getPpid(), resp.getPpid());
-		Assert.assertNull(req.getCprId());
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		Assert.assertNotNull(resp.getCpr());
+		Assert.assertEquals(new Long(1) , resp.getCpr().getId());
 	}
 	
 	@Test
@@ -978,14 +980,17 @@ public class CollectionProtocolRegistrationTest {
 		AddVisitEvent req = CprTestData.getAddVisitEvent();
 		req.getVisit().setVisitSite(null);
 		req.getVisit().setCprId(null);
-		req.getVisit().setCpTitle("invalid-search-term");
+		req.getVisit().setCpTitle("invalid-serach-term");
+		req.getVisit().setPpid("invalid-search-term");
 		
 		VisitAddedEvent resp = cprSvc.addVisit(req);
 		
 		TestUtils.recordResponse(resp);
 		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.MISSING_ATTR_VALUE, SITE));
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, CP_TITLE));
+		Assert.assertEquals("Missing site name error was not found!", 
+				true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.MISSING_ATTR_VALUE, "site name"));
+		Assert.assertEquals("Invalid cp-title error was expected, but not found!", 
+				true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "collection protocol title"));
 	}
 	
 	@Test

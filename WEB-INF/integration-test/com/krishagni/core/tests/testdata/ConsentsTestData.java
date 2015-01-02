@@ -2,6 +2,7 @@ package com.krishagni.core.tests.testdata;
 
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent.OP;
 
 public class ConsentsTestData {
@@ -20,6 +21,13 @@ public class ConsentsTestData {
 		ConsentTierDetail req = new ConsentTierDetail();
 		req.setId(id);
 		req.setStatement(statement);
+		return req;
+	}
+	
+	public static ReqConsentTiersEvent getReqConsentTiersEvent() {
+		ReqConsentTiersEvent req = new ReqConsentTiersEvent();
+		req.setCpId(1L);
+		req.setSessionDataBean(CprTestData.getSessionDataBean());
 		return req;
 	}
 	
