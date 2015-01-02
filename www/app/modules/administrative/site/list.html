@@ -11,8 +11,8 @@
       <h4>
         <a title="{{'site.tooltip.viewDetails' | translate}}" ui-sref="site-detail.overview({siteId: site.id})"> {{site.name}} </a>
       </h4>
-      <h5>{{site.type}}</h5>
-
+      <h5 title="{{'site.type' | translate}}">{{site.type}}</h5>
+      <p title="{{'site.code' | translate}}">{{site.code || 'N/A'}}</p>
       <div class="stats">
         <div class="stat col-xs-6" title="{{'site.tooltip.cp_count' | translate}}">
           <span class="os-lavatar os-lavatar-sm">C</span>

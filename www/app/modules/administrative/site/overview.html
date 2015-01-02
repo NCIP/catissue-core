@@ -23,7 +23,10 @@
 
       <li class="item">
         <strong class="key key-sm" translate="site.coordinators">Coordinators</strong>
-        <span class="value value-md" os-inline-edit>{{site.coordinatorCollection | showCoordinators | osNoValue}}</span>
+        <os-inline-edit editor="coordinatorEditor" name="coordinator" class="value value-md" value="site.coordinatorCollection">
+          <span ng-if="coordinatorEditor.isDisplayMode()">{{coordinatorEditor.viewValue | showCoordinators | osNoValue}}</span>
+          <os-users ng-if="coordinatorEditor.isEditMode()" multiple ng-model="coordinatorEditor.editValue"></os-users>
+        </os-inline-edit>
       </li>
 
       <li class="item">
