@@ -1,7 +1,9 @@
 package com.krishagni.rbac.events;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.krishagni.rbac.domain.Role;
 import com.krishagni.rbac.domain.RoleAccessControl;
@@ -12,6 +14,10 @@ public class RoleDetails {
 	private String name;
 	
 	private String description;
+	
+	private String parentRoleName;
+	
+	private Set<String> childRoles = new HashSet<String>();
 	
 	private List<RoleAccessControlDetails> acl = new ArrayList<RoleAccessControlDetails>();
 	
@@ -39,6 +45,22 @@ public class RoleDetails {
 		this.description = description;
 	}
 	
+	public String getParentRoleName() {
+		return parentRoleName;
+	}
+
+	public void setParentRoleName(String parentRoleName) {
+		this.parentRoleName = parentRoleName;
+	}
+
+	public Set<String> getChildRoles() {
+		return childRoles;
+	}
+
+	public void setChildRoles(Set<String> childRoles) {
+		this.childRoles = childRoles;
+	}
+
 	public List<RoleAccessControlDetails> getAcl() {
 		return acl;
 	}
@@ -56,6 +78,14 @@ public class RoleDetails {
 		
 		for (RoleAccessControl rac : role.getAcl()) {
 			rs.getAcl().add(RoleAccessControlDetails.fromRoleAccessControl(rac));
+		}
+		
+		if (role.getParentRole() != null) {
+			rs.setParentRoleName(role.getParentRole().getName());
+		}
+		
+		for (Role childRole : role.getChildRoles()) {
+			rs.getChildRoles().add(childRole.getName());
 		}
 		
 		return rs;

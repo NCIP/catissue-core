@@ -26,6 +26,26 @@
       <one-to-many class="com.krishagni.rbac.domain.RoleAccessControl"/>
     </set>
     
+    <many-to-one
+      name="parentRole"
+      class="com.krishagni.rbac.domain.Role"
+      cascade="none"
+      column="PARENT_ROLE_ID"/>
+      
+    <set 
+      name="childRoles" 
+      table="RBAC_ROLES" 
+      inverse="true"
+      cascade="save-update">
+      
+      <key 
+        column="PARENT_ROLE_ID"/>
+      
+      <one-to-many
+		class="com.krishagni.rbac.domain.Role"/>
+    </set>
+      
+    
     <query name="getAllRoles">
       from com.krishagni.rbac.domain.Role
     </query>
