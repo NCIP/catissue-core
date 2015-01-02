@@ -2,47 +2,33 @@
 angular.module('openspecimen')
   .directive('osSelect', function() {
     return {
-      restrict: 'AE',
+      restrict: 'E',
+      compile: function(tElem, tAttrs) {
+        var uiSelect = angular.element('<ui-select></ui-select>')
+          .attr('ng-model', tAttrs.ngModel)
 
-      scope: {
-        ngModel: '=ngModel',
-        list: '=list',
-        placeholder: '@'
-      },
+        var uiSelectMatch = angular.element('<ui-select-match/>')
+          .attr('placeholder', tAttrs.placeholder);
+        
+        var uiSelectChoices = angular.element('<ui-select-choices/>')
+          .attr('repeat', "item in " + tAttrs.list)
+          .append('<span ng-bind-html="item | highlight: $select.search"></span>');
 
-      replace: true,
-
-      link: function(scope, element, attrs, ctrl) {
-        if (!scope.ngModel && angular.isDefined(attrs.multiple)) {
-          scope.ngModel = [];
+        if (angular.isDefined(tAttrs.multiple)) {
+          uiSelect.attr('multiple', '');
+          uiSelectMatch.append('{{$item}}');
+        } else {
+          uiSelectMatch.append('{{$select.selected}}');
         }
-      },
 
-      template: function(tElem, tAttrs) {
-        return angular.isDefined(tAttrs.multiple) ?
-              '<div>' +
-                '<ui-select multiple ng-model="$parent.ngModel">' +
-                  '<ui-select-match placeholder="{{$parent.placeholder}}">' +
-                    '{{$item}}' +
-                  '</ui-select-match>' +
-                  '<ui-select-choices repeat="item in $parent.list">' +
-                    '<span ng-bind-html="item | highlight: $select.search"></span>' +
-                  '</ui-select-choices>' +
-                '</ui-select>' +
-              '</div>'
+        uiSelect.append(uiSelectMatch).append(uiSelectChoices);
+        
+        var selectContainer = angular.element("<div/>")
+          .addClass("os-select-container")
+          .append(uiSelect);
 
-              :
-
-              '<div>' +
-                '<ui-select ng-model="$parent.ngModel">' +
-                  '<ui-select-match placeholder="{{$parent.placeholder}}">' +
-                    '{{$select.selected}}' +
-                  '</ui-select-match>' +
-                  '<ui-select-choices repeat="item in $parent.list">' +
-                    '<span ng-bind-html="item | highlight: $select.search"></span>' +
-                  '</ui-select-choices>' + 
-                '</ui-select>' +
-              '</div>';
+        tElem.replaceWith(selectContainer);
+        return angular.noop; 
       }
     };
   });
