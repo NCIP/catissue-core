@@ -7,10 +7,12 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.ClinicalDiagnosis;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
+import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
@@ -18,6 +20,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenRequirementFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.AddCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AddSpecimenRequirementEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AliquotsRequirementCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
@@ -32,7 +35,10 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeAddedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotsRequirementEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateDerivedSpecimenReqEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.DerivedSpecimenReqCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqClinicalDiagnosesEvent;
@@ -52,10 +58,7 @@ import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
-import com.krishagni.catissueplus.core.privileges.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
-
-import edu.wustl.security.global.Permissions;
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
 
@@ -344,7 +347,6 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			return SpecimenRequirementsEvent.serverError(cpeId, e);
 		}
 	}
-
 	
 	@Override
 	@PlusTransactional
@@ -362,7 +364,41 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			return SpecimenRequirementAddedEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public AliquotsRequirementCreatedEvent createAliquots(CreateAliquotsRequirementEvent req) {
+		try {
+			AliquotSpecimensRequirement requirement = req.getRequirement();
+			List<SpecimenRequirement> aliquots = srFactory.createAliquots(requirement);
+			
+			SpecimenRequirement parent = daoFactory.getSpecimenRequirementDao().getById(requirement.getParentSrId());
+			parent.addChildRequirements(aliquots);
+			
+			daoFactory.getSpecimenRequirementDao().saveOrUpdate(parent, true);
+			return AliquotsRequirementCreatedEvent.ok(SpecimenRequirementDetail.from(aliquots));
+		} catch (IllegalArgumentException iae) {
+			return AliquotsRequirementCreatedEvent.badRequest(iae);
+		} catch (Exception e) {
+			return AliquotsRequirementCreatedEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public DerivedSpecimenReqCreatedEvent createDerived(CreateDerivedSpecimenReqEvent req) {
+		try {
+			DerivedSpecimenRequirement requirement = req.getRequirement();
+			SpecimenRequirement derived = srFactory.createDerived(requirement);			
+			daoFactory.getSpecimenRequirementDao().saveOrUpdate(derived, true);
+			return DerivedSpecimenReqCreatedEvent.ok(SpecimenRequirementDetail.from(derived));
+		} catch (ObjectCreationException oce) {
+			return DerivedSpecimenReqCreatedEvent.badRequest(oce);
+		} catch (Exception e) {
+			return DerivedSpecimenReqCreatedEvent.serverError(e);
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ChildCollectionProtocolsEvent getChildProtocols(ReqChildProtocolEvent req) {

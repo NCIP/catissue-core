@@ -1,7 +1,10 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
@@ -44,7 +47,7 @@ public class SpecimenRequirement {
 			
 	private SpecimenRequirement parentSpecimenRequirement;
 	
-	private Set<SpecimenRequirement> childSpecimenRequirements;
+	private Set<SpecimenRequirement> childSpecimenRequirements = new HashSet<SpecimenRequirement>();
 
 	private Set<Specimen> specimens = new HashSet<Specimen>();
 
@@ -215,5 +218,41 @@ public class SpecimenRequirement {
 
 	public void setSpecimens(Set<Specimen> specimens) {
 		this.specimens = specimens;
+	}
+	
+	
+	private static final String[] EXCLUDE_COPY_PROPS = {
+		"id", 
+		"parentSpecimenRequirement",
+		"childSpecimenRequirements",
+		"specimens"		
+	};
+			
+	public SpecimenRequirement copy() {
+		SpecimenRequirement copy = new SpecimenRequirement();
+		BeanUtils.copyProperties(this, copy, EXCLUDE_COPY_PROPS); 
+		return copy;
+	}
+	
+	public void addChildRequirement(SpecimenRequirement childReq) {
+		childReq.setParentSpecimenRequirement(this);
+		childSpecimenRequirements.add(childReq);
+	}
+	
+	public void addChildRequirements(Collection<SpecimenRequirement> children) {
+		for (SpecimenRequirement childReq : children) {
+			addChildRequirement(childReq);
+		}
+	}
+	
+	public Double getQtyAfterAliquotsUse() {
+		Double available = initialQuantity;
+		for (SpecimenRequirement childReq : childSpecimenRequirements) {
+			if (childReq.getLineage().equals("Aliquot")) {
+				available -= childReq.getInitialQuantity();
+			}
+		}
+		
+		return available;
 	}
 }

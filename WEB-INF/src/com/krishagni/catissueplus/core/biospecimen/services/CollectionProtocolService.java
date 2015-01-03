@@ -5,6 +5,7 @@ import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProt
 import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AddCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AddSpecimenRequirementEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AliquotsRequirementCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
@@ -15,7 +16,10 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeAddedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotsRequirementEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateDerivedSpecimenReqEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.DerivedSpecimenReqCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqClinicalDiagnosesEvent;
@@ -63,8 +67,10 @@ public interface CollectionProtocolService {
 	
 	public SpecimenRequirementAddedEvent addSpecimenRequirement(AddSpecimenRequirementEvent req);
 	
+	public AliquotsRequirementCreatedEvent createAliquots(CreateAliquotsRequirementEvent req);
 	
-		
+	public DerivedSpecimenReqCreatedEvent createDerived(CreateDerivedSpecimenReqEvent req);
+			
 	//public ParticipantSummaryEvent getParticipant(ReqParticipantSummaryEvent event);
 
 	public ChildCollectionProtocolsEvent getChildProtocols(ReqChildProtocolEvent req);

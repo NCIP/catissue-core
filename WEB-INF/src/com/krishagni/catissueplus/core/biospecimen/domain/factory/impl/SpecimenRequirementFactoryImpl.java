@@ -1,9 +1,14 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenRequirementFactory;
@@ -56,17 +61,97 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		oce.checkErrorAndThrow();		
 		return requirement;
 	}
+
+	@Override
+	public SpecimenRequirement createDerived(DerivedSpecimenRequirement req) {
+		Long parentId = req.getParentSrId();
+		SpecimenRequirement parent = null;
+		if (parentId != null) {
+			parent = daoFactory.getSpecimenRequirementDao().getById(parentId);
+		}
+		
+		ObjectCreationException oce = new ObjectCreationException();
+		if (parent == null) {
+			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "parentSrId");
+			throw oce;
+		}
+		
+		SpecimenRequirement derived = parent.copy();
+		derived.setLineage("Derived");		
+		setSpecimenClass(req.getSpecimenClass(), derived, oce);
+		setSpecimenType(req.getType(), derived, oce);
+		setInitialQty(req.getQuantity(), derived, oce);
+		setStorageType(req.getStorageType(), derived, oce);
+		setConcentration(req.getConcentration(), derived, oce);
+		
+		if (StringUtils.isNotBlank(req.getLabelFmt())) {
+			derived.setLabelFormat(req.getLabelFmt());
+		}
+		
+		if (StringUtils.isNotBlank(req.getName())) {
+			derived.setName(req.getName());
+		}
+		
+		oce.checkErrorAndThrow();
+		
+		derived.setParentSpecimenRequirement(parent);
+		return derived;
+	}
+	
+	@Override
+	public List<SpecimenRequirement> createAliquots(AliquotSpecimensRequirement req) {
+		Long parentSrId = req.getParentSrId();
+		SpecimenRequirement parent = daoFactory.getSpecimenRequirementDao().getById(parentSrId);
+		
+		ObjectCreationException oce = new ObjectCreationException();
+		if (parent == null) {
+			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "parentSrId");
+			throw oce;
+		}
+						
+		Double total = req.getNoOfAliquots() * req.getQtyPerAliquot();
+		if (total > parent.getQtyAfterAliquotsUse()) {
+			oce.addError(SpecimenErrorCode.INSUFFICIENT_SPECIMEN_QTY, "count");
+		}
+		
+		List<SpecimenRequirement> aliquots = new ArrayList<SpecimenRequirement>();
+		for (int i = 0; i < req.getNoOfAliquots(); ++i) {
+			SpecimenRequirement aliquot = parent.copy();
+			aliquot.setLineage("Aliquot"); // TODO: have an enum			
+			setStorageType(req.getStorageType(), aliquot, oce);
+			
+			if (StringUtils.isNotBlank(req.getLabelFmt())) {
+				aliquot.setLabelFormat(req.getLabelFmt());
+			}
+			
+			aliquot.setInitialQuantity(req.getQtyPerAliquot());			
+			aliquot.setParentSpecimenRequirement(parent);
+			aliquots.add(aliquot);
+			
+			oce.checkErrorAndThrow(); // throw on first iteration of error occurrence
+		}
+				
+		return aliquots;
+	}
 	
 	private void setSpecimenClass(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		String specimenClass = ensureNotEmpty(detail.getSpecimenClass(), "specimenClass", oce);		
+		setSpecimenClass(detail.getSpecimenClass(), sr, oce);
+	}
+	
+	private void setSpecimenClass(String specimenClass, SpecimenRequirement sr, ObjectCreationException oce) {
+		ensureNotEmpty(specimenClass, "specimenClass", oce);		
 		sr.setSpecimenClass(specimenClass);		
 		// TODO: Check whether class is valid
 	}
 	
 	private void setSpecimenType(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		String specimenType = ensureNotEmpty(detail.getType(), "specimenType", oce);		
-		sr.setSpecimenType(specimenType);
-		// TODO: Check whether type is valid for class;
+		setSpecimenType(detail.getType(), sr, oce);
+	}
+	
+	private void setSpecimenType(String type, SpecimenRequirement sr, ObjectCreationException oce) {
+		ensureNotEmpty(type, "specimenType", oce);		
+		sr.setSpecimenType(type);
+		// TODO: Check whether type is valid for class;		
 	}
 	
 	private void setAnatomicSite(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
@@ -88,13 +173,21 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 	
 	private void setStorageType(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		String storageType = ensureNotEmpty(detail.getStorageType(), "storageType", oce);
+		setStorageType(detail.getStorageType(), sr, oce);
+		// TODO: check for valid storage type
+	}
+
+	private void setStorageType(String storageType, SpecimenRequirement sr, ObjectCreationException oce) {
+		ensureNotEmpty(storageType, "storageType", oce);
 		sr.setStorageType(storageType);
 		// TODO: check for valid storage type
 	}
 	
 	private void setInitialQty(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		Double initialQty = detail.getInitialQty();
+		setInitialQty(detail.getInitialQty(), sr, oce);
+	}
+		
+	private void setInitialQty(Double initialQty, SpecimenRequirement sr, ObjectCreationException oce) {
 		if (initialQty == null || initialQty < 0) {
 			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "initialQty");
 			return;
@@ -104,11 +197,14 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 
 	private void setConcentration(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		if (detail.getAnatomicSite() == null || !detail.getSpecimenClass().equals("Molecular")) {
+		setConcentration(detail.getConcentration(), sr, oce);
+	}
+	
+	private void setConcentration(Double concentration, SpecimenRequirement sr, ObjectCreationException oce) {
+		if (sr.getAnatomicSite() == null || !sr.getSpecimenClass().equals("Molecular")) {
 			return;
 		}
 		
-		Double concentration = detail.getConcentration();
 		if (concentration == null || concentration < 0) {
 			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "concentration");
 			return;
