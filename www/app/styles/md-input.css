@@ -37,9 +37,9 @@
 .os-md-input input:focus, 
 .os-md-input button.ui-select-match:focus, 
 .os-md-input .ui-select-match:hover {
-  border-bottom: 2px solid red!important;
+  border-bottom: 2px solid #66afe9!important;
   background: #fff!important;
-  border-color: red!important;
+  border-color: #66afe9!important;
 }
 
 .os-md-input input, 
@@ -57,6 +57,14 @@
   display: block;
 }
 
-/*.os-md-input .ui-select-bootstrap > .ui-select-match > .caret {
-  top: 70%;
-}*/
+.os-md-input .ui-select-bootstrap > .ui-select-match > .caret {
+  position: absolute;
+  bottom: 1px;
+  top: inherit;
+  right: -3px;
+  transform: rotate(-45deg);
+  border-top: 6px solid;
+  border-color: #000;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+}
