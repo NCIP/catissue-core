@@ -27,6 +27,19 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       $scope.specimenRequirements = Specimen.flatten(specimenRequirements);
     };
 
+    function addChildren(parent, children) {
+      if (!parent.children) {
+        parent.children = [];
+      }
+
+      angular.forEach(children, function(child) {
+        parent.children.push(child);
+      });
+
+      parent.children = $filter('orderBy')(parent.children, ['type', 'id']);
+      $scope.specimenRequirements = Specimen.flatten(specimenRequirements);
+    };
+
     var pvsLoaded = false;
     function loadPvs() {
       if (pvsLoaded) {
@@ -52,7 +65,11 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       $scope.collectionProcs = PvManager.getPvs('collection-procedure');
       $scope.collectionContainers = PvManager.getPvs('collection-container');
       pvsLoaded = true;
-    }
+    };
+
+    $scope.loadSpecimenTypes = function(specimenClass) {
+      $scope.specimenTypes = PvManager.getPvsByParent('specimen-class', specimenClass);
+    };
 
     $scope.openSpecimenNode = function(sr) {
       sr.isOpened = true;
@@ -95,10 +112,41 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     };
 
     $scope.createAliquots = function() {
-      alert(JSON.stringify($scope.aliquot));
-      $scope.aliquot = {};
-      $scope.parentSr = undefined;
-      $scope.view = 'list_sr';
+      $scope.parentSr.createAliquots($scope.aliquot).then(
+        function(aliquots) {
+          addChildren($scope.parentSr, aliquots);
+          $scope.parentSr.isOpened = true;
+
+          $scope.aliquot = {};
+          $scope.parentSr = undefined;
+          $scope.view = 'list_sr';
+        }
+      );
+    };
+
+    ////////////////////////////////////////////////
+    //
+    //  Derivative logic
+    //
+    ////////////////////////////////////////////////
+    $scope.showCreateDerived = function(sr) {
+      $scope.parentSr = sr;
+      $scope.view = 'addedit_derived';
+      $scope.derivative = {};
+      loadPvs();
+    };
+
+    $scope.createDerivative = function() {
+      $scope.parentSr.createDerived($scope.derivative).then(
+        function(derived) {
+          addChildren($scope.parentSr, [derived]);
+          $scope.parentSr.isOpened = true;
+
+          $scope.derivative = {};
+          $scope.parentSr = undefined;
+          $scope.view = 'list_sr';
+        }
+      );
     };
 
     init();

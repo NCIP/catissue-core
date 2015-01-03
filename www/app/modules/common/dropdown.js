@@ -1,6 +1,18 @@
 
 angular.module('openspecimen')
   .directive('osSelect', function() {
+    function linker(scope, element, attrs) {
+      var changeFn = undefined
+      if (attrs.onChange) {
+        changeFn = scope.$eval(attrs.onChange);
+        scope.$watch(attrs.ngModel, function(newVal, oldVal) {
+          if (newVal != oldVal) {
+            scope.$eval(attrs.onChange)(newVal);
+          }
+        });
+      }
+    }
+
     return {
       restrict: 'E',
       compile: function(tElem, tAttrs) {
@@ -28,7 +40,7 @@ angular.module('openspecimen')
           .append(uiSelect);
 
         tElem.replaceWith(selectContainer);
-        return angular.noop; 
+        return linker;
       }
     };
   });
