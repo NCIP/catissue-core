@@ -4,7 +4,7 @@
       <div class="col-xs-12">
         <ul class="os-key-values os-two-cols">
           <li class="item">
-            <strong class="key key-sm">Available Quantity:</strong>
+            <strong class="key key-sm" translate="srs.available_qty">Available Quantity:</strong>
             <span class="value value-md">{{parentSr.availableQty()}}</span>
           </li>
         </ul>
@@ -15,7 +15,7 @@
       <div class="col-xs-3">
         <div class="form-group">
           <input name="noOfAliquots" ng-model="aliquot.noOfAliquots" 
-            os-md-input class="form-control" type="text" placeholder="Count of Aliquots"
+            os-md-input class="form-control" type="text" placeholder="{{'srs.aliquot_cnt' | translate}}"
             required ng-pattern="/^[1-9][0-9]*$/">
           <div os-field-error field="aliquotForm.noOfAliquots"></div>
         </div>
@@ -24,7 +24,7 @@
       <div class="col-xs-3">
         <div class="form-group">
           <input name="qtyPerAliquot" ng-model="aliquot.qtyPerAliquot" 
-            os-md-input class="form-control" type="text" placeholder="Quantity Per Aliquot"
+            os-md-input class="form-control" type="text" placeholder="{{'srs.qty_per_aliquot' | translate}}"
             required ng-pattern="/^[1-9][0-9]*$/">
           <div os-field-error field="aliquotForm.qtyPerAliquot"></div>
         </div>
@@ -33,7 +33,7 @@
       <div class="col-xs-3">
         <div class="form-group">
           <os-select name="storageType" ng-model="aliquot.storageType" list="storageTypes"
-            os-md-input placeholder="Storage Type" required>
+            os-md-input placeholder="{{'srs.storage_type' | translate}}" required>
           </os-select>
           <div os-field-error field="aliquotForm.storageType"></div>
         </div>
@@ -41,15 +41,20 @@
 
       <div class="col-xs-3">
         <div class="form-group">
-          <input ng-model="aliquot.labelFmt" os-md-input class="form-control" type="text" placeholder="Label Format">
+          <input ng-model="aliquot.labelFmt" os-md-input class="form-control" type="text" placeholder="{{'srs.label_fmt' | translate}}">
         </div>
       </div>
     </div>
 
     <div class="form-group clearfix">
       <div class="col-xs-4">
-        <button type="submit" class="btn btn-success" os-form-submit="createAliquots()">Create Aliquots</button>
-        <a class="btn os-btn-text-secondary" ng-click="revertEdit()">Cancel</a>
+        <button type="submit" class="btn btn-success" 
+          os-form-submit="createAliquots()" translate="srs.buttons.create_aliquots">
+          Create Aliquots
+        </button>
+        <a class="btn os-btn-text-secondary" ng-click="revertEdit()" translate="common.buttons.cancel">
+          Cancel
+        </a>
       </div>
       <div class="col-xs-8" ng-if="!!errorCode">
         <alert type="danger">

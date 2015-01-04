@@ -1,75 +1,75 @@
 <div class="list-group">
   <div class="list-group-item os-section-hdr">
-    <span ng-if="!sr.id">New Specimen Requirement</span>
+    <span ng-if="!sr.id" translate="srs.new_sr">New Specimen Requirement</span>
   </div>
   <div class="list-group-item">
     <form class="form-horizontal" name="srForm" os-form-validator="srForm" novalidate>
       <div class="form-group">
-        <label class="control-label col-xs-4">Name</label>
+        <label class="control-label col-xs-4" translate="srs.name">Name</label>
         <div class="col-xs-8">
-          <input ng-model="sr.name" class="form-control" type="text" placeholder="Name">
+          <input ng-model="sr.name" class="form-control" type="text" placeholder="{{'srs.name' | translate}}">
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-xs-4">Specimen Class</label>
+        <label class="control-label col-xs-4" translate="srs.specimen_class">Specimen Class</label>
         <div class="col-xs-8">
           <os-select name="specimenClass" ng-model="sr.specimenClass" list="specimenClasses"
-            placeholder="Specimen Class" required>
+            placeholder="{{'srs.specimen_class' | translate}}" required>
           </os-select>
           <div os-field-error field="srForm.specimenClass"></div>
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-xs-4">Specimen Type</label>
+        <label class="control-label col-xs-4" translate="srs.specimen_type">Specimen Type</label>
         <div class="col-xs-8">
           <os-select name="specimenType" ng-model="sr.type" list="specimenTypes"
-            placeholder="Specimen Type" required>
+            placeholder="{{'srs.specimen_type' | translate}}" required>
           </os-select>
           <div os-field-error field="srForm.specimenType"></div>
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-xs-4">Anatomic Site</label>
+        <label class="control-label col-xs-4" translate="srs.anatomic_site">Anatomic Site</label>
         <div class="col-xs-8">
           <os-select name="anatomicSite" ng-model="sr.anatomicSite" list="anatomicSites"
-            placeholder="Anatomic Sites" required>
+            placeholder="{{'srs.anatomic_site' | translate}}" required>
           </os-select>
           <div os-field-error field="srForm.anatomicSite"></div>
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-xs-4">Laterality</label>
+        <label class="control-label col-xs-4" translate="srs.laterality">Laterality</label>
         <div class="col-xs-8">
           <os-select name="laterality" ng-model="sr.laterality" list="lateralities"
-            placeholder="Laterality" required>
+            placeholder="{{'srs.laterality' | translate}}" required>
           </os-select>
           <div os-field-error field="srForm.laterality"></div>
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-xs-4">Pathology Status</label>
+        <label class="control-label col-xs-4" translate="srs.pathology">Pathology Status</label>
         <div class="col-xs-8">
           <os-select name="pathologyStatus" ng-model="sr.pathologyStatus" list="pathologyStatuses"
-            placeholder="Pathology Status" required>
+            placeholder="{{'srs.pathology' | translate}}" required>
           </os-select>
           <div os-field-error field="srForm.pathologyStatus"></div>
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-xs-4">Storage Type</label>
+        <label class="control-label col-xs-4" translate="srs.storage_type">Storage Type</label>
         <div class="col-xs-8">
           <os-select name="storageType" ng-model="sr.storageType" list="storageTypes"
-            placeholder="Storage Type" required>
+            placeholder="{{'srs.storage_type' | translate}}" required>
           </os-select>
           <div os-field-error field="srForm.storageType"></div>
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-xs-4">Initial Quantity</label>
+        <label class="control-label col-xs-4" translate="srs.initial_qty">Initial Quantity</label>
         <div class="col-xs-8">
           <div class="input-group">
             <input name="initialQty" ng-model="sr.initialQty" class="form-control" type="text" 
-              placeholder="Initial Quantity" required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+              placeholder="{{'srs.initial_qty' | translate}}" required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
             <div class="input-group-addon" ng-switch on="sr.specimenClass">
               <span ng-switch-when="Cell">cells</span>
               <span ng-switch-when="Fluid">ml</span>
@@ -81,11 +81,11 @@
         </div>
       </div>
       <div class="form-group" ng-if="sr.specimenClass == 'Molecular'">
-        <label class="control-label col-xs-4">Concentration</label>
+        <label class="control-label col-xs-4" translate="srs.concentration">Concentration</label>
         <div class="col-xs-8">
           <div class="input-group">
             <input name="concentration" ng-model="sr.concentration" class="form-control" type="text" 
-              placeholder="Concentration" required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+              placeholder="{{'srs.concentration' | translate}}" required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
             <div class="input-group-addon">
               <span>&#181;g/&#181;l</span>
             </div>
@@ -95,49 +95,49 @@
       </div>
       <div class="os-divider"></div>
       <div class="form-group">
-        <label class="control-label col-xs-4">Collector</label>
+        <label class="control-label col-xs-4" translate="srs.collector">Collector</label>
         <div class="col-xs-8">
-          <os-users name="collector" ng-model="sr.collector" placeholder="Collector" required></os-users>
+          <os-users name="collector" ng-model="sr.collector" placeholder="{{'srs.collector' | translate}}" required></os-users>
           <div os-field-error field="srForm.collector"></div>
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-xs-4">Collection Container</label>
+        <label class="control-label col-xs-4" translate="srs.collection_container">Collection Container</label>
         <div class="col-xs-8">
           <os-select name="collectionContainer" ng-model="sr.collectionContainer" list="collectionContainers"
-            placeholder="Collection Container" required>
+            placeholder="{{'srs.collection_container' | translate}}" required>
           </os-select>
           <div os-field-error field="srForm.collectionContainer"></div>
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-xs-4">Collection Procedure</label>
+        <label class="control-label col-xs-4" translate="srs.collection_proc">Collection Procedure</label>
         <div class="col-xs-8">
           <os-select name="collectionProcedure" ng-model="sr.collectionProcedure" list="collectionProcs"
-            placeholder="Collection Procedure" required>
+            placeholder="{{'srs.collection_proc' | translate}}" required>
           </os-select>
           <div os-field-error field="srForm.collectionProcedure"></div>
         </div>
       </div>
       <div class="os-divider"></div>
       <div class="form-group">
-        <label class="control-label col-xs-4">Receiver</label>
+        <label class="control-label col-xs-4" translate="srs.receiver">Receiver</label>
         <div class="col-xs-8">
-          <os-users name="receiver" ng-model="sr.receiver" placeholder="Receiver" required></os-users>
+          <os-users name="receiver" ng-model="sr.receiver" placeholder="{{'srs.receiver' | translate}}" required></os-users>
           <div os-field-error field="srForm.receiver"></div>
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-xs-4">Label Format</label>
+        <label class="control-label col-xs-4" translate="srs.label_fmt">Label Format</label>
         <div class="col-xs-8">
-          <input class="form-control" type="text" placeholder="Label Format">
+          <input class="form-control" type="text" placeholder="{{'srs.label_fmt' | translate}}">
         </div>
       </div>
       <div class="os-divider"></div>
       <div class="form-group">
         <div class="col-xs-offset-4 col-xs-8">
-          <button type="submit" class="btn btn-success" os-form-submit="createSr()">Create</button>
-          <a class="btn os-btn-text-secondary" ng-click="revertEdit()">Cancel</a>
+          <button type="submit" class="btn btn-success" os-form-submit="createSr()" translate="common.buttons.create">Create</button>
+          <a class="btn os-btn-text-secondary" ng-click="revertEdit()" translate="common.buttons.cancel">Cancel</a>
         </div>
       </div>
     </form>

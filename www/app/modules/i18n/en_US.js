@@ -182,18 +182,43 @@
     },
 
     "no_srs": "There are no specimen requirements to show. Create a new requirement by clicking Add Specimen Requirement ...",
-    "insufficient_qty": "Insufficient parent requirement quantity to create aliquots",
+    "new_sr": "New Specimen Requirement",
 
     "name": "Name",
     "type": "Type",
     "pathology": "Pathology",
     "storage_type": "Storage Type",
-
+    "label_fmt": "Label Format",
+    "available_qty": "Available Quantity",
+    "aliquot_cnt": "Count of Aliquots",
+    "qty_per_aliquot": "Quantity per Aliquot",
+    "specimen_class": "Specimen Class",
+    "specimen_type": "Specimen Type",
+    "qty": "Quantity",
+    "concentration": "Concentration",
+    "anatomic_site": "Anatomic Site",
+    "laterality": "Laterality",
+    "initial_qty": "Initial Quantity",
+    "collector": "Collector",
+    "receiver": "Receiver",
+    "collection_container": "Collection Container",
+    "collection_proc": "Collection Procedure",
+    
     "ctx_menu": {
       "view_sr": "View Requirement",
       "edit_sr": "Edit Requirement",
       "create_aliquots": "Create Aliquots",
       "create_derivatives": "Create Derivatives"
+    },
+ 
+    "buttons": {
+      "create_aliquots": "Create Aliquots",
+      "create_derived": "Create Derived",
+      "add_sr": "Add Specimen Requirement..."
+    },
+
+    "errors": {
+      "insufficient_qty": "Insufficient parent requirement quantity to create aliquots"
     }
   },
 

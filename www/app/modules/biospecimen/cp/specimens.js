@@ -117,7 +117,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
 
     $scope.createAliquots = function() {
       if (!$scope.parentSr.hasSufficientQty($scope.aliquot)) {
-        $scope.errorCode = 'srs.insufficient_qty';
+        $scope.errorCode = 'srs.errors.insufficient_qty';
         $timeout(function() { $scope.errorCode = '' }, 3000);
         return;
       }
