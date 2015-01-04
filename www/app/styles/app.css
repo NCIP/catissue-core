@@ -561,6 +561,8 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 .os-quick-edit {
   z-index: 15;
+  position: relative;
+  background: #fff;
 }
 
 .list-group-item .table {
@@ -595,7 +597,15 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   border-bottom: 1px solid #ddd;
 }
 
+.os-inplace-form-edit-po .list-group-item .title {
+  margin: -10px -15px 9px -15px; 
+  padding: 10px 15px;
+}
+
 .os-inplace-form-edit-po .content {
   padding: 9px 15px;
 }
 
+.os-inplace-form-edit-po .content .alert {
+  padding: 6px 12px;
+}

@@ -47,12 +47,14 @@
     </div>
 
     <div class="form-group clearfix">
-      <div class="col-xs-5">
+      <div class="col-xs-4">
         <button type="submit" class="btn btn-success" os-form-submit="createAliquots()">Create Aliquots</button>
         <a class="btn os-btn-text-secondary" ng-click="revertEdit()">Cancel</a>
       </div>
-      <div class="col-xs-7">
-        <alert type="danger" ng-if="errorMsg">{{errorMsg}}</alert>
+      <div class="col-xs-8" ng-if="!!errorCode">
+        <alert type="danger">
+          {{errorCode | translate}}
+        </alert>
       </div>
     </div>
   </form>

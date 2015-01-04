@@ -182,6 +182,7 @@
     },
 
     "no_srs": "There are no specimen requirements to show. Create a new requirement by clicking Add Specimen Requirement ...",
+    "insufficient_qty": "Insufficient parent requirement quantity to create aliquots",
 
     "name": "Name",
     "type": "Type",

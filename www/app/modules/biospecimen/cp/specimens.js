@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
   .controller('CpSpecimensCtrl', function(
-    $scope, $state, $stateParams, $filter,
+    $scope, $state, $stateParams, $filter, $timeout,
     cp, events, specimenRequirements,
     Specimen, SpecimenRequirement, PvManager) {
 
@@ -19,6 +19,10 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
 
       $scope.view = 'list_sr';
       $scope.sr = {};
+      $scope.aliquot = {};
+      $scope.derivative = {};
+
+      $scope.errorCode = '';
     }
 
     function addToSrList(sr) {
@@ -112,6 +116,12 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     };
 
     $scope.createAliquots = function() {
+      if (!$scope.parentSr.hasSufficientQty($scope.aliquot)) {
+        $scope.errorCode = 'srs.insufficient_qty';
+        $timeout(function() { $scope.errorCode = '' }, 3000);
+        return;
+      }
+      
       $scope.parentSr.createAliquots($scope.aliquot).then(
         function(aliquots) {
           addChildren($scope.parentSr, aliquots);

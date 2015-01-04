@@ -66,6 +66,7 @@ angular.module('os.biospecimen.cp.events', ['os.biospecimen.models'])
     $scope.showEditEvent = function($event, evt) {
       $scope.event = angular.copy(evt);
       $scope.addMode = false;
+      loadSpecimenRequirements(evt);
       loadPvs();
     };
 
