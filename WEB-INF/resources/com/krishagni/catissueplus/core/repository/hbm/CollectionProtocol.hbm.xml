@@ -295,5 +295,13 @@
         cp.id = :cpId and
         cpe.eventLabel = :label
     </query>
+    
+    <query name="getCpByTitle">
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol
+      where
+        title = :title and 
+        activityStatus = 'Active'
+    </query>
   </class>
 </hibernate-mapping>
