@@ -15,7 +15,7 @@ angular.module('os.common.form', [])
         };
 
         this.isFormSubmitted = function() {
-          return this._formSubmitted;
+          return this._formSubmitted || (this._form != undefined && this._form.submitted);
         };
 
         this.setForm = function(form) {

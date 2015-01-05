@@ -1,0 +1,29 @@
+<div>
+  <div class="os-page-hdr">
+    <h3 translate="role.list">Roles</h3>
+    <a class="os-btn-icon" title="{{'role.tooltip.new_role' | translate}}" ui-sref="role-new">
+      <span class="glyphicon glyphicon-plus"></span>
+    </a>
+  </div>
+  <table st-table="roles" class="table table-striped">
+      <thead>
+        <tr>
+          <th class="control-label" title="{{role.name | translate}}">Name</th>
+          <th class="control-label" title="{{role.description | translate}}">Description</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="role in roles">
+          <td ui-sref="role-detail.overview(role)" title="{{'role.tooltip.view_details' |  translate}}"><a> {{role.name}} </a></td>
+          <td>{{role.description}}</td>
+          <td>
+            <div ng-click="showRoleOverview(role)">
+              <span class="glyphicon glyphicon-pencil"></span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+
+<div class="os-items-group">
+  <div class="os-item">
+    <h3 class="os-section-title"> 
+      <span>
+        {{user.lastName}} {{user.firstName}}
+      </span>
+    </h3>
+  </div>
+  
+  <div class="os-item os-action-btns os-action-btns-md">
+    <a><span class="glyphicon glyphicon-pencil"></span></a>
+  </div>
+  
+</div>
+
+<div class="clearfix">
+  <div class="col-xs-8">
+    <ul class="os-key-values os-two-cols" os-inline-editors on-save="editUser">
+      <li class="item">
+        <strong class="key key-sm" translate="user.last_name">Last Name</strong>
+        <os-inline-edit editor="lastNameEditor" name="lastName" class="value value-md" value="user.lastName">
+          <span ng-if="lastNameEditor.isDisplayMode()">{{lastNameEditor.viewValue | osNoValue}}</span>
+          <input ng-if="lastNameEditor.isEditMode()" type="text" ng-model="lastNameEditor.editValue" 
+            class="form-control" placeholder="{{'user.last_name' | translate}}">
+        </os-inline-edit>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="user.first_name">First Name</strong>
+        <os-inline-edit editor="firstNameEditor" name="firstName" class="value value-md" value="user.firstName">
+          <span ng-if="firstNameEditor.isDisplayMode()">{{firstNameEditor.viewValue | osNoValue}}</span>
+          <input ng-if="firstNameEditor.isEditMode()" type="text" ng-model="firstNameEditor.editValue" 
+            class="form-control" placeholder="{{'user.first_name' | translate}}">
+        </os-inline-edit>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="user.domain_name">Domain Name</strong>
+        <os-inline-edit editor="domainEditor" name="domain" class="value value-md" value="user.domainName">
+          <span ng-if="domainEditor.isDisplayMode()">{{domainEditor.viewValue | osNoValue}}</span>
+          <div ng-if="domainEditor.isEditMode()">
+            <ui-select ng-model="domainEditor.editValue">
+              <ui-select-match placeholder="{{'user.select_domain' | translate}}">
+                {{$select.selected}}
+              </ui-select-match>
+              <ui-select-choices repeat="domain in domains_pvs | filter: $select.search">
+                <span ng-bind-html="domain | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </os-inline-edit>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="user.login_name">Login Name</strong>
+        <os-inline-edit editor="loginNameEditor" name="loginName" class="value value-md" value="user.loginName">
+          <span ng-if="loginNameEditor.isDisplayMode()">{{loginNameEditor.viewValue | osNoValue}}</span>
+          <input ng-if="loginNameEditor.isEditMode()" type="text" ng-model="loginNameEditor.editValue" class="form-control" 
+            placeholder="{{'user.login_name' | translate}}">
+        </os-inline-edit>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="user.email_address">Email Address</strong>
+        <os-inline-edit editor="emailEditor" name="emailAddress" class="value value-md" value="user.emailAddress">
+          <span ng-if="emailEditor.isDisplayMode()">{{emailEditor.viewValue | osNoValue}}</span>
+          <input ng-if="emailEditor.isEditMode()" type="text" ng-model="emailEditor.editValue" class="form-control" 
+            placeholder="{{'user.email_address' | translate}}">
+        </os-inline-edit>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="user.institute">Institute</strong>
+        <os-inline-edit editor="instituteEditor" name="institute" class="value value-md" value="user.instituteName">
+          <span ng-if="instituteEditor.isDisplayMode()">{{instituteEditor.viewValue | osNoValue}}</span>
+          <div ng-if="instituteEditor.isEditMode()">
+            <ui-select ng-model="instituteEditor.editValue" ng-change="resetDepartmentName()" on-select="getDepartments($item.name,true)">
+              <ui-select-match placeholder="{{'user.select_institute' | translate}}">
+                {{$select.selected.name}}
+              </ui-select-match>
+              <ui-select-choices repeat="institute.name as institute in institutes | filter: $select.search">
+                <span ng-bind-html="institute.name | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </os-inline-edit>
+      </li>   
+      
+      <li class="item">
+        <strong class="key key-sm" translate="user.department"> Department</strong>
+        <os-inline-edit editor="deptEditor" name="department" class="value value-md" value="user.deptName">
+          <span ng-if="deptEditor.isDisplayMode()">{{deptEditor.viewValue | osNoValue}}</span>
+          <div ng-if="deptEditor.isEditMode()">
+            <ui-select ng-model="deptEditor.editValue">
+              <ui-select-match placeholder="{{'user.select_department' | translate}}">
+                {{$select.selected.name}}
+              </ui-select-match>
+              <ui-select-choices repeat="department.name as department in departments | filter: $select.search">
+                <span ng-bind-html="department.name | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </os-inline-edit>
+      </li>   
+    </ul>
+  </div>
+</div>  

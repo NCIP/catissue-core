@@ -197,6 +197,62 @@ angular.module('openspecimen', [
         controller: function() {
         },
         parent: 'participant-detail'
+      })
+      .state('user-list', {
+        url: '/users',
+        templateUrl: 'modules/administrative/user/list.html',
+        controller: 'UserListCtrl',
+        parent: 'signed-in'
+      })
+      .state('user-new', {
+        url: '/new-user',
+        templateUrl: 'modules/administrative/user/addedit.html',
+        controller: 'UserAddEditCtrl',
+        parent: 'signed-in'
+      })
+      .state('user-detail', {
+        url: '/users/:userId',
+        templateUrl: 'modules/administrative/user/detail.html',
+        resolve: {
+          user: function($stateParams , User) {
+            return User.getById($stateParams.userId);
+          }
+        },
+        controller: 'UserDetailCtrl',
+        parent: 'signed-in'
+      })
+      .state('user-detail.overview', {
+        url: '/overview',
+        templateUrl: 'modules/administrative/user/overview.html',
+        parent: 'user-detail'
+      })
+      .state('role-list', {
+        url: '/roles',
+        templateUrl: 'modules/administrative/role/list.html',
+        controller: 'RoleListCtrl',
+        parent: 'signed-in'
+      })
+      .state('role-new', {
+        url: '/new-role',
+        templateUrl: 'modules/administrative/role/addedit.html',
+        controller: 'RoleAddEditCtrl',
+        parent: 'signed-in'
+      })
+      .state('role-detail', {
+        url: '/roles/:roleId',
+        templateUrl: 'modules/administrative/role/detail.html',
+        resolve: {
+          role: function($stateParams , Role) {
+            return Role.getById($stateParams.roleId);
+          }
+        },
+        controller: 'RoleDetailCtrl',
+        parent: 'signed-in'
+      })
+      .state('role-detail.overview', {
+        url: '/overview',
+        templateUrl: 'modules/administrative/role/overview.html',
+        parent: 'role-detail'
       });
 
     $urlRouterProvider.otherwise('/');
@@ -204,7 +260,7 @@ angular.module('openspecimen', [
     $httpProvider.interceptors.push('httpRespInterceptor');
 
     ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 9090;
+    ApiUrlsProvider.port = 8080;
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
@@ -213,6 +269,8 @@ angular.module('openspecimen', [
       'cprs': '/rest/ng/collection-protocol-registrations',
       'participants': '/rest/ng/participants',
       'sites': '/rest/ng/sites',
+      'users':'/rest/ng/users',
+      'roles':'/rest/ng/roles',
       'form-files': '/rest/ng/form-files'
     };
 

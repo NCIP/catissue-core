@@ -63,7 +63,26 @@ angular.module('openspecimen')
       'EYE, BRAIN AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM',
       'Not Specified'
     ];
+    
+    var domains = [
+      'openspecimen',
+      'ldap'
+    ];
 
+    var resources = [
+      'user',
+      'collection protocol',
+      'site',
+      'institute'
+    ];
+
+    var privileges = [
+      'create',
+      'insert',
+      'update',
+      'delete'
+    ];
+    
     var storageTypes = [
       'Auto',
       'Manual',
@@ -76,6 +95,9 @@ angular.module('openspecimen')
       vitalStatus: vitalStatuses, 
       race: races,
       anatomicSite: anatomicSites,
+      domains:domains,
+      resources: resources,
+      privileges: privileges,
       'storage-type': storageTypes
     };
 

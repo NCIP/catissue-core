@@ -194,5 +194,67 @@
       "create_aliquots": "Create Aliquots",
       "create_derivatives": "Create Derivatives"
     }
+  },
+  
+  "user": {
+    "list": "Users",
+    "create_user_title": "Create User",
+    "name": "Name",
+    "last_name": "Last Name",
+    "first_name": "First Name",
+    "login_name": "Login Name",
+    "domain_name": "Domain Name",
+    "select_domain": "Select Domain",
+    "email_address": "Email Address",
+    "institute": "Institute",
+    "select_institute": "Select Institute",
+    "department": "Department",
+    "select_department": "Select Department",
+    "address": "Address",
+    "super_admin": "Super Administrator",
+    "login_details": "Login Details",
+    "site": "Site",
+    "cp": "Collection Protocol",
+    "role": "Role",
+    "select_site": "Select Site",
+    "select_cp": "Select Collection Protocol",
+    "select_role": "Select Role",
+    "add_permission":"Add Permission",
+    "profile": "Profile",
+    "permissions": "Permissions",
+    
+    "tooltip": {
+      "new_user": "Click to add new User",
+      "view_details": "Click to view/edit User details",
+      "email_address": "Email Address",
+      "institute_name": "Institute",
+      "cp_count": "Collection Protocol(s)",
+      "last_login": "Last logged date",
+      "user_since": "User since (years)"
+    },
+    
+    "menu": {
+      "overview": "Overview"
+    }    
+  },
+  
+  "role": {
+    "list": "Roles",
+    "create_role": "Create Role",
+    "name": "Name",
+    "description": "Description",
+    "resource": "Resource",
+    "privileges": "Privileges",
+    "select_resource": "Select Resource",
+    "select_privileges": "Select Privileges",
+    
+    "tooltip": {
+      "new_role": "Click to add new Role",
+      "view_details": "Click to view/edit Role details"
+    },
+    
+    "menu": {
+      "overview": "Overview"
+    } 
   }
 }
