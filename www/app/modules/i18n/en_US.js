@@ -239,6 +239,28 @@
     "menu": {
       "overview": "Overview"
     }
+  },
+  
+  "dp": {
+    "list": "Distribution Protocols",
+    "create_dp_title": "Create Distribution Protocol",
+    "title": "Title",
+    "short_title": "Short Title",
+    "pi": "Principal Investigator",
+    "start_date": "Start Date",
+    "irb_id": "IRB Id",
+    "description_url": "Description Url",
+        
+    "tooltip": {
+      "view_details": "Click to view/edit Distribution Protocol details",
+      "new_dp": "Click to add new Distribution Protocol",
+      "pending_count":"Pending to distribute specimens count",
+      "distributed_count":"Distributed specimens count"
+    },
+    
+    "menu": {
+      "overview": "Overview"
+    }
   }
 
 }

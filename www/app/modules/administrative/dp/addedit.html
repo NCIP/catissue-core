@@ -1,0 +1,64 @@
+
+<div>
+  <div class="os-page-hdr">
+    <h3 translate="dp.create_dp_title">Create Distribution Protocol</h3> 
+  </div>
+  
+  <div class="container">
+    <form name="dpForm" class="form-horizontal" os-form-validator="dpForm" validator="dpFormValidator" novalidate>
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="dp.title">Title</label>
+        <div class="col-xs-6">
+          <input type="text" name="title" ng-model="distributionProtocol.title"
+            class="form-control" placeholder="{{'dp.title' | translate}}" ng-maxlength="255" required/>
+          <div os-field-error field="dpForm.title"></div>
+        </div>
+      </div>
+     
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="dp.short_title">Short Title</label>
+        <div class="col-xs-3">
+          <input type="text" name="shortTitle" ng-model="distributionProtocol.shortTitle" 
+            class="form-control" placeholder="{{'dp.short_title' | translate}}" ng-maxlength="255" required/>
+          <div os-field-error field="dpForm.shortTitle"></div>
+        </div>
+      </div>
+       
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="dp.pi">Principle Investigator</label>
+        <div class="col-xs-6">
+          <os-users name="pi" ng-model="distributionProtocol.principalInvestigator" 
+            placeholder="{{'dp.pi' | translate}}" required></os-users>
+          <div os-field-error field="dpForm.pi"></div>
+        </div>
+      </div>
+     
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="dp.irb_id">IRB Id</label>
+        <div class="col-xs-6">
+          <input type="text" class="form-control" ng-model="distributionProtocol.irbId" 
+            placeholder="{{'dp.irb_id' | translate}}" ng-maxlength="255"/>
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="dp.start_date">Start Date</label>
+        <div class="col-xs-6">
+          <input type="text" name="startDate" ng-model="distributionProtocol.startDate" class="form-control" 
+            datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="dt.isOpen" ng-focus="dt.isOpen=true" 
+            placeholder="{{'dp.start_date' | translate}}" />   
+        </div>  
+      </div>
+     
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6">
+          <button class="btn btn-primary" os-form-submit="createDp()" translate="common.buttons.create">Create</button>
+          <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.buttons.discard">Discard</button>
+        </div>
+      </div>  
+         
+    </form>
+  </div>
+</div>
