@@ -118,12 +118,13 @@ public class ParticipantTest {
 		ReqParticipantDetailEvent req = ParticipantTestData.getReqParticipantDetailEvent();
 		ParticipantDetailEvent resp = participantSvc.getParticipant(req);
 		
-		Assert.assertEquals(true, resp.isSuccess());
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
 		Assert.assertEquals((Long)1L, resp.getParticipantDetail().getId());
+		
 	}
 	
 	@Test
-	public void getParticipantTestParticipantNotFound() {
+	public void getNonExistingParticipant() {
 		ReqParticipantDetailEvent req = ParticipantTestData.getReqParticipantDetailEvent();
 		ParticipantDetailEvent resp = participantSvc.getParticipant(req);
 		
@@ -140,6 +141,17 @@ public class ParticipantTest {
 		
 		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
 		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ParticipantErrorCode.INVALID_ATTR_VALUE, "participant-id"));
+	}
+	
+	@Test
+	@DatabaseSetup("ParticipantTest.getDisabledPaticipant.initial.xml")
+	@DatabaseTearDown("ParticipantTest.generic.teardown.xml")
+	public void getDisabledPaticipant() {
+		ReqParticipantDetailEvent req = ParticipantTestData.getReqParticipantDetailEvent();
+		ParticipantDetailEvent resp = participantSvc.getParticipant(req);
+		
+		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
+		Assert.assertEquals(req.getParticipantId(), resp.getParticipantId());
 	}
 	
 }

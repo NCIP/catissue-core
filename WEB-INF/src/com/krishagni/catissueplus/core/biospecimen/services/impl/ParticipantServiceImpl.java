@@ -73,7 +73,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 			return ParticipantDetailEvent.invalidRequest(ParticipantErrorCode.INVALID_ATTR_VALUE, "participant-id");
 		}
 		
-		Participant participant = daoFactory.getParticipantDao().getParticipant(event.getParticipantId());
+		Participant participant = daoFactory.getParticipantDao().getById(event.getParticipantId());
 		if (participant == null) {
 			return ParticipantDetailEvent.notFound(participantId);
 		}
@@ -117,7 +117,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	public ParticipantUpdatedEvent updateParticipant(UpdateParticipantEvent event) {
 		try {
 			Long participantId = event.getParticipantId();
-			Participant oldParticipant = daoFactory.getParticipantDao().getParticipant(participantId);
+			Participant oldParticipant = daoFactory.getParticipantDao().getById(participantId);
 			if (oldParticipant == null) {
 				return ParticipantUpdatedEvent.notFound(participantId);
 			}
@@ -175,7 +175,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	@PlusTransactional
 	public ParticipantDeletedEvent delete(DeleteParticipantEvent event) {
 		try {
-			Participant participant = daoFactory.getParticipantDao().getParticipant(event.getId());
+			Participant participant = daoFactory.getParticipantDao().getById(event.getId());
 			if (participant == null) {
 				return ParticipantDeletedEvent.notFound(event.getId());
 			}

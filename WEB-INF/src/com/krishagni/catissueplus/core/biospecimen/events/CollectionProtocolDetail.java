@@ -149,7 +149,8 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setDerivativeLabelFmt(cp.getDerivativeLabelFormat());
 		result.setAliquotLabelFmt(cp.getAliquotLabelFormat());
 		result.setAliquotsInSameContainer(cp.getAliquotInSameContainer());
-
+		result.setActivityStatus(cp.getActivityStatus());
+		
 		return result;
 	}
 }

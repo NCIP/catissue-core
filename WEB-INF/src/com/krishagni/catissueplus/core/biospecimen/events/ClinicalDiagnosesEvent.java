@@ -6,7 +6,17 @@ import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class ClinicalDiagnosesEvent extends ResponseEvent {
+	private Long cpId;
+	
 	private List<String> diagnoses; // Not a spell mistake. It is plural form of diagnosis
+
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
+	}
 
 	public List<String> getDiagnoses() {
 		return diagnoses;
@@ -23,9 +33,10 @@ public class ClinicalDiagnosesEvent extends ResponseEvent {
 		return resp;
 	}
 	
-	public static ClinicalDiagnosesEvent notFound() {
+	public static ClinicalDiagnosesEvent notFound(Long cpId) {
 		ClinicalDiagnosesEvent resp = new ClinicalDiagnosesEvent();
 		resp.setStatus(EventStatus.NOT_FOUND);
+		resp.setCpId(cpId);
 		return resp;
 	}
 }

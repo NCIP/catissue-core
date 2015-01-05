@@ -411,16 +411,40 @@ public class CollectionProtocolTest {
 		CollectionProtocolDetailEvent resp = cpSvc.getCollectionProtocol(req);
 		
 		Assert.assertEquals(true, resp.isSuccess());
-		CollectionProtocolDetail detail = resp.getCp();
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		CollectionProtocolDetail actual = resp.getCp();
 		
-		Assert.assertEquals("default-cp", detail.getTitle());
-		Assert.assertEquals("default-short-title", detail.getShortTitle());
+		Assert.assertNotNull(actual);
+		Assert.assertEquals(new Long(1), resp.getCp().getId());
+		Assert.assertEquals("Cp title mismatch", "title", actual.getTitle());
+		Assert.assertEquals("Cp short title mismatch", "short-title", actual.getShortTitle());
+		Assert.assertEquals("Start date mismatch", CprTestData.getDate(31,1,2000), actual.getStartDate());
+		Assert.assertEquals("Consent waived mismatch!", new Boolean(true), actual.getConsentsWaived());
+		Assert.assertEquals("Ppid format mismatch", "ppid-fmt", actual.getPpidFmt());
+		Assert.assertEquals("Specimen label format mismatch", "specimen-label-format", actual.getSpecimenLabelFmt());
+		Assert.assertEquals("Derivative format mismatch!", "derivative-format", actual.getDerivativeLabelFmt());
+		Assert.assertEquals("Aliquot format mismatch", "aliquot-format", actual.getAliquotLabelFmt());
+		Assert.assertEquals("Aliquot in same container mismatch", new Boolean(true), actual.getAliquotsInSameContainer());
+		Assert.assertEquals("ActivityStatus mismatch" , "Active" , actual.getActivityStatus());
 		
-		Assert.assertNotNull(resp.getCp().getPrincipalInvestigator());
-		UserSummary pi = resp.getCp().getPrincipalInvestigator();
-		Assert.assertEquals("ADMIN", pi.getFirstName());
-		Assert.assertEquals("ADMIN", pi.getLastName());
-		Assert.assertEquals("admin@admin.com", pi.getLoginName());
+		UserSummary pi = actual.getPrincipalInvestigator();
+		String firstName = "ADMIN" + pi.getId();
+		String lastName = "ADMIN" + pi.getId();
+		String loginName = "admin" + pi.getId() + "@admin.com";
+		Assert.assertEquals("PI firstName mismatch: ", firstName, pi.getFirstName());
+		Assert.assertEquals("PI lastname mismatch ", lastName, pi.getLastName());
+		Assert.assertEquals("loginname mismatch" , loginName, pi.getLoginName());
+		Assert.assertEquals("coordinator count mismatch", new Integer(2), new Integer(actual.getCoordinators().size()));
+		
+		for (UserSummary user : actual.getCoordinators()) {
+			firstName = "ADMIN" + user.getId();
+			lastName = "ADMIN" + user.getId();
+			loginName = "admin" + user.getId() + "@admin.com";
+			
+			Assert.assertEquals("coordinator firstname mismatch", firstName, user.getFirstName());
+			Assert.assertEquals("coordinator lastname mismatch", lastName, user.getLastName());
+			Assert.assertEquals("coordinator loginname mismatch", loginName, user.getLoginName());
+		}	
 	}
 	
 	@Test
@@ -429,6 +453,17 @@ public class CollectionProtocolTest {
 		CollectionProtocolDetailEvent resp = cpSvc.getCollectionProtocol(req);
 		
 		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
+	}
+	
+	@Test
+	@DatabaseSetup("CollectionProtocolTest.getDisabledCp.initial.xml")
+	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	public void getDisabledCp() {
+		ReqCollectionProtocolEvent req = CpTestData.getReqCollectionProtocolEvent();
+		CollectionProtocolDetailEvent resp = cpSvc.getCollectionProtocol(req);
+		
+		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
+		Assert.assertEquals(req.getCpId(), resp.getCpId());
 	}
 	
 	/*
@@ -441,11 +476,12 @@ public class CollectionProtocolTest {
 		ReqClinicalDiagnosesEvent req = CpTestData.getReqClinicalDiagnosesEvent();
 		ClinicalDiagnosesEvent resp = cpSvc.getDiagnoses(req);
 		
-		Assert.assertEquals(true, resp.isSuccess());
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Operation failed!", EventStatus.OK, resp.getStatus());
 		Assert.assertEquals((int)3, resp.getDiagnoses().size());
-		Assert.assertEquals(true, resp.getDiagnoses().contains("clinical-daignosis-1"));
-		Assert.assertEquals(true, resp.getDiagnoses().contains("clinical-daignosis-2"));
-		Assert.assertEquals(true, resp.getDiagnoses().contains("clinical-daignosis-3"));
+		Assert.assertEquals(true, resp.getDiagnoses().contains("One"));
+		Assert.assertEquals(true, resp.getDiagnoses().contains("Two"));
+		Assert.assertEquals(true, resp.getDiagnoses().contains("Three"));
 	}
 	
 	@Test
@@ -454,6 +490,17 @@ public class CollectionProtocolTest {
 		ClinicalDiagnosesEvent resp = cpSvc.getDiagnoses(req);
 		
 		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
+	}
+	
+	@Test
+	@DatabaseSetup("CollectionProtocolTest.getDisabledCp.initial.xml")
+	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	public void getDiagnosesForDisabledCp() {
+		ReqClinicalDiagnosesEvent req = CpTestData.getReqClinicalDiagnosesEvent();
+		ClinicalDiagnosesEvent resp = cpSvc.getDiagnoses(req);
+		
+		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
+		Assert.assertEquals(req.getCpId(), resp.getCpId());
 	}
 	
 	/*
@@ -496,7 +543,7 @@ public class CollectionProtocolTest {
 		Assert.assertEquals(firstName, pi.getFirstName());
 		Assert.assertEquals(lastName, pi.getLastName());
 		Assert.assertEquals(loginName, pi.getLoginName());
-		Assert.assertEquals(new Integer(2), new Integer(expected.getCoordinators().size()));
+		Assert.assertEquals(new Integer(2), new Integer(actual.getCoordinators().size()));
 		
 		for (UserSummary user : actual.getCoordinators()) {
 			firstName = "ADMIN" + user.getId();

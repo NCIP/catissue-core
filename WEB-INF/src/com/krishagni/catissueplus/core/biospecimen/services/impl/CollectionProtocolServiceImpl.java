@@ -184,7 +184,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(cpId);
 		if (cp == null) {
-			return ClinicalDiagnosesEvent.notFound();
+			return ClinicalDiagnosesEvent.notFound(cpId);
 		}
 
 		List<String> diagnoses = new ArrayList<String>();

@@ -243,7 +243,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		if (participantId == null) {
 			participant = participantFactory.createParticipant(participantDetail);
 		} else {
-			participant = daoFactory.getParticipantDao().getParticipant(participantId);
+			participant = daoFactory.getParticipantDao().getById(participantId);
 		}
 		
 		if (participant == null) {
