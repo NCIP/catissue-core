@@ -23,5 +23,9 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
       return d.promise;
     }
 
+    $scope.getMrnDisplayText = function(pmi) {
+      return pmi.mrn + " (" + pmi.siteName + ")";
+    }
+
     init();
   });

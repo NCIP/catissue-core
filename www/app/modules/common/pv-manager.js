@@ -5,7 +5,7 @@
  * 2. Cache the PVs so that frequent calls are not needed
  */
 angular.module('openspecimen')
-  .factory('PvManager', function($http, $q, ApiUrls, ApiUtil) {
+  .factory('PvManager', function($http, $q, ApiUrls, ApiUtil, Site) {
     var url = ApiUrls.getBaseUrl() + 'permissible-values/attribute=';
 
     var genders = [
@@ -158,6 +158,18 @@ angular.module('openspecimen')
             scope[attr + '_pvs'] = result.data;
           }
         );
+      },
+
+      getSites: function() {
+        var sites = [];
+        Site.list().then(
+          function(siteList) {
+            angular.forEach(siteList, function(site) {
+              sites.push(site.name);
+            });
+          }
+        );
+        return sites;
       },
 
       getClinicalDiagnoses: function(params, cb) {

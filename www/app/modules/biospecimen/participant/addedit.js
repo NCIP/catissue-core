@@ -6,14 +6,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
     Site, PvManager) {
 
     function loadPvs() {
-      Site.list().then(
-        function(sites) {
-          $scope.sites = sites.map(function(site) {
-            return site.name;
-          });
-        }
-      );
-
+      $scope.sites = PvManager.getSites();
       $scope.genders = PvManager.getPvs('gender');
       $scope.ethnicities = PvManager.getPvs('ethnicity');
       $scope.vitalStatuses = PvManager.getPvs('vital-status');

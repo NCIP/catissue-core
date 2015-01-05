@@ -225,8 +225,8 @@
     "address": "Address",
 
     "tooltip": {
-      "viewDetails": "Click to view/edit Site details",
-      "add": "Click to add new  Site",
+      "view_details": "Click to view/edit Site details",
+      "create_site": "Click to add new Site",
       "cp_count": "Count of Collection Protocols"
     },
 

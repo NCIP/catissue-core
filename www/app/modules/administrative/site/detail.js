@@ -12,5 +12,9 @@ angular.module('os.administrative.site.detail', ['os.administrative.models'])
       return d.promise;
     }
 
+    $scope.getCoordinatorDisplayText = function(coordinator) {
+      return coordinator.lastName + ' ' + coordinator.firstName;
+    }
+
     init();
   });
