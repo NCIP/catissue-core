@@ -401,22 +401,6 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   color: #ffffff;
 }
 
-.os-table-muted-hdr > thead > tr > th {
-  color: #707070;
-  font-size: 12px;
-}
-
-.os-table td .progress {
-  margin-bottom: 0px;
-}
-
-.os-table.outer-border {
-  border-top: 2px solid #ddd;
-  border-right: 1px solid #ddd;
-  border-left: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-}
-
 .os-left-align {
   text-align: left;
 }

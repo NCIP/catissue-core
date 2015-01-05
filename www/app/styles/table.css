@@ -21,10 +21,30 @@
 
 .os-table .os-table-head .row .col {
   vertical-align: bottom;
-  border-bottom: 2px solid #ddd;
+  border-bottom: 1px solid #ddd;
   font-weight: bold;
 }
 
 .os-table .os-table-head .row:first-child .col {
   border-top: 0;
+}
+
+.os-table-muted-hdr > .os-table-head > .row > .col {
+  color: #707070;
+  font-size: 12px;
+}
+
+.os-table-hover .os-table-body .row:hover {
+  background: #f7f7f7;
+}
+
+.os-table .col .progress {
+  margin-bottom: 0px;
+}
+
+.os-table.outer-border {
+  border-top: 2px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
