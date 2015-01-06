@@ -248,8 +248,8 @@
     "short_title": "Short Title",
     "pi": "Principal Investigator",
     "start_date": "Start Date",
-    "irb_id": "IRB Id",
-    "description_url": "Description Url",
+    "irb_id": "IRB ID",
+    "description_url": "Description URL",
         
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",
