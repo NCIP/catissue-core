@@ -1,5 +1,5 @@
 angular.module('openspecimen')
-  .filter('osFormatCollection', function() {
+  .filter('osArrayJoin', function() {
     return function(collection, fun) {
       var result = [];
       angular.forEach(collection, function(item) {
@@ -9,3 +9,5 @@ angular.module('openspecimen')
       return result.join(", ");
     }
   });
+
+

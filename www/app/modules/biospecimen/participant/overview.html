@@ -30,7 +30,7 @@
 
       <li class="item">
         <strong class="key key-sm" translate="participant.pmis">Medical Identifiers:</strong>
-        <span class="value value-md" os-inline-edit>{{cpr.participant.pmis | osFormatCollection:getMrnDisplayText | osNoValue}}</span>
+        <span class="value value-md" os-inline-edit>{{cpr.participant.pmis | osArrayJoin:getMrnDisplayText | osNoValue}}</span>
       </li>
 
       <li class="item">
