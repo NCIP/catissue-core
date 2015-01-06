@@ -15,9 +15,9 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimensInfoEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
 
-public interface SpecimenCollGroupService {
+public interface VisitService {
 
-	VisitAddedEvent createScg(AddVisitEvent scgEvent);
+	VisitAddedEvent addVisit(AddVisitEvent req);
 	
 	SpecimensInfoEvent getSpecimensList(ReqSpecimenSummaryEvent event);
 

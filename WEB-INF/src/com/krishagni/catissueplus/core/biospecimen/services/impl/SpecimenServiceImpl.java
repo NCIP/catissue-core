@@ -102,7 +102,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		
 		List<SpecimenSummary> result = new ArrayList<SpecimenSummary>();
 		for (Specimen specimen : specimens) {
-			Long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId();
+			Long cpId = specimen.getSpecimenCollectionGroup().getRegistration().getCollectionProtocol().getId();
 			if(privilegeSvc.hasPrivilege(req.getSessionDataBean().getUserId(), cpId, Permissions.SPECIMEN_PROCESSING)) {
 				result.add(SpecimenSummary.from(specimen));
 			}
@@ -130,7 +130,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			daoFactory.getSpecimenDao().saveOrUpdate(specimen);
 			if (event.getSpecimen().isPrintLabelsEnabled()) {
 				specLabelPrinterFact.printLabel(specimen, event.getSessionDataBean().getIpAddress(), event.getSessionDataBean()
-						.getUserName(), specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+						.getUserName(), specimen.getSpecimenCollectionGroup().getRegistration()
 						.getCollectionProtocol().getShortTitle());
 			}
 			return SpecimenCreatedEvent.ok(SpecimenDetail.from(specimen));
@@ -283,7 +283,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	}
 
 	private void setLabel(String label, Specimen specimen, ObjectCreationException errorHandler) {
-		String specimenLabelFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+		String specimenLabelFormat = specimen.getSpecimenCollectionGroup().getRegistration()
 				.getCollectionProtocol().getSpecimenLabelFormat();
 		if (isBlank(specimenLabelFormat)) {
 			if (isBlank(label)) {

@@ -7,7 +7,7 @@ import java.util.Set;
 import krishagni.catissueplus.util.CommonUtil;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.util.Status;
@@ -28,7 +28,7 @@ public class Site {
 
 	private Set<User> coordinatorCollection = new HashSet<User>();
 
-	private Set<SpecimenCollectionGroup> scgCollection = new HashSet<SpecimenCollectionGroup>();
+	private Set<Visit> scgCollection = new HashSet<Visit>();
 
 	private Set<StorageContainer> storageContainerCollection = new HashSet<StorageContainer>();
 
@@ -88,11 +88,11 @@ public class Site {
 		this.coordinatorCollection = coordinatorCollection;
 	}
 
-	public Set<SpecimenCollectionGroup> getScgCollection() {
+	public Set<Visit> getScgCollection() {
 		return scgCollection;
 	}
 
-	public void setScgCollection(Set<SpecimenCollectionGroup> scgCollection) {
+	public void setScgCollection(Set<Visit> scgCollection) {
 		this.scgCollection = scgCollection;
 	}
 

@@ -72,7 +72,7 @@
 			
             <key column="SITE_ID"/>
             <one-to-many
-                class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup"/>
+                class="com.krishagni.catissueplus.core.biospecimen.domain.Visit"/>
          </set>
       
       

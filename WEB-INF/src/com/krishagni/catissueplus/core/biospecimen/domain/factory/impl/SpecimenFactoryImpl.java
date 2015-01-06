@@ -12,7 +12,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Biohazard;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
@@ -126,7 +126,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 
 	private void setScg(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
-		SpecimenCollectionGroup scg = null;
+		Visit scg = null;
 		
 		if (specimenDetail.getVisitId() == null) {
 			if (!isBlank(specimenDetail.getVisitName())) {
@@ -179,7 +179,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		if (specimen.getSpecimenCollectionGroup() != null && requirement.getCollectionProtocolEvent() != null ) {
-			if (!specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getId().equals(
+			if (!specimen.getSpecimenCollectionGroup().getCpEvent().getId().equals(
 					requirement.getCollectionProtocolEvent().getId())) {
 				errorHandler.addError(ScgErrorCode.INVALID_REQIREMENT_CPE, SPECIMEN_REQUIREMENT);
 				return;

@@ -21,7 +21,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
@@ -29,7 +29,7 @@ import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 @Repository("visitsDao")
-public class VisitsDaoImpl extends AbstractDao<SpecimenCollectionGroup> implements VisitsDao {
+public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -72,9 +72,9 @@ public class VisitsDaoImpl extends AbstractDao<SpecimenCollectionGroup> implemen
 	}
 	
 	@Override
-	public SpecimenCollectionGroup getVisit(Long visitId) {
-		return (SpecimenCollectionGroup)sessionFactory.getCurrentSession()
-				.get(SpecimenCollectionGroup.class, visitId);
+	public Visit getVisit(Long visitId) {
+		return (Visit)sessionFactory.getCurrentSession()
+				.get(Visit.class, visitId);
 	}
 	
 	
@@ -135,7 +135,7 @@ public class VisitsDaoImpl extends AbstractDao<SpecimenCollectionGroup> implemen
 		}				
 	}
 		
-	private static final String FQN = SpecimenCollectionGroup.class.getName();
+	private static final String FQN = Visit.class.getName();
 	
 	private static final String GET_VISITS_SUMMARY_BY_CPR_ID = FQN + ".getVisitsSummaryByCprId";
 	
@@ -147,9 +147,9 @@ public class VisitsDaoImpl extends AbstractDao<SpecimenCollectionGroup> implemen
 	// TODO: Requires review
 	//
 	@Override
-	public List<SpecimenCollectionGroup> getAllScgs(int startAt, int maxRecords, String... searchString) {
+	public List<Visit> getAllScgs(int startAt, int maxRecords, String... searchString) {
 		Criteria criteria = sessionFactory.getCurrentSession()
-				.createCriteria(SpecimenCollectionGroup.class, "scg")
+				.createCriteria(Visit.class, "scg")
 				.add(Restrictions.or(
 						Restrictions.eq("scg.activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()),
 						Restrictions.eq("scg.activityStatus", Status.ACTIVITY_STATUS_CLOSED.getStatus())));
@@ -163,7 +163,7 @@ public class VisitsDaoImpl extends AbstractDao<SpecimenCollectionGroup> implemen
 	@Override
 	public Long getScgsCount(String... searchString) {
 		Criteria criteria = sessionFactory.getCurrentSession()
-				.createCriteria(SpecimenCollectionGroup.class, "scg")
+				.createCriteria(Visit.class, "scg")
 				.add(Restrictions.or(
 						Restrictions.eq("scg.activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()),
 						Restrictions.eq("scg.activityStatus", Status.ACTIVITY_STATUS_CLOSED.getStatus())))
@@ -175,38 +175,38 @@ public class VisitsDaoImpl extends AbstractDao<SpecimenCollectionGroup> implemen
 	
 	@Override
 	public List<Specimen> getSpecimensList(Long scgId) {
-		Object object = sessionFactory.getCurrentSession().get(SpecimenCollectionGroup.class.getName(), scgId);
+		Object object = sessionFactory.getCurrentSession().get(Visit.class.getName(), scgId);
 		if (object == null) {
 			return Collections.emptyList();
 		}
 
-		SpecimenCollectionGroup scg = (SpecimenCollectionGroup) object;
-		return new ArrayList<Specimen>(scg.getSpecimenCollection());
+		Visit scg = (Visit) object;
+		return new ArrayList<Specimen>(scg.getSpecimens());
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public SpecimenCollectionGroup getScgByName(String name) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(SpecimenCollectionGroup.class);
+	public Visit getScgByName(String name) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(Visit.class);
 		query.add(Restrictions.eq("name", name));
-		List<SpecimenCollectionGroup> scgs = query.list();
+		List<Visit> scgs = query.list();
 		
 		return scgs.size() > 0 ? scgs.get(0) : null;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public SpecimenCollectionGroup getScgByBarcode(String barcode) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(SpecimenCollectionGroup.class);
+	public Visit getScgByBarcode(String barcode) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(Visit.class);
 		query.add(Restrictions.eq("barcode", barcode));
-		List<SpecimenCollectionGroup> scgs = query.list();
+		List<Visit> scgs = query.list();
 		
 		return scgs.size() > 0 ? scgs.get(0) : null;
 	}
 
 	@Override
-	public SpecimenCollectionGroup getscg(Long id) {
-		return (SpecimenCollectionGroup)sessionFactory.getCurrentSession().get(SpecimenCollectionGroup.class, id);
+	public Visit getscg(Long id) {
+		return (Visit)sessionFactory.getCurrentSession().get(Visit.class, id);
 	}
 	
 	private void addSearchConditions(Criteria criteria, String[] searchString) {
@@ -231,8 +231,8 @@ public class VisitsDaoImpl extends AbstractDao<SpecimenCollectionGroup> implemen
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<SpecimenCollectionGroup> getScgs(Criteria criteria) {
-		List<SpecimenCollectionGroup> result = criteria.list();
+	private List<Visit> getScgs(Criteria criteria) {
+		List<Visit> result = criteria.list();
 		return result;		
 	}
 }

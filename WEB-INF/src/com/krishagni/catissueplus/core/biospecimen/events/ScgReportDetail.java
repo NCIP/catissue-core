@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 
 //
 // TODO: Check why this is needed
@@ -28,17 +28,16 @@ public class ScgReportDetail extends VisitDetail {
 		this.deIdentifiedReport = deIdentifiedReport;
 	}
 
-	public static ScgReportDetail fromDomain(SpecimenCollectionGroup scg) {
+	public static ScgReportDetail fromDomain(Visit scg) {
 		ScgReportDetail detail = new ScgReportDetail();
 		detail.setActivityStatus(scg.getActivityStatus());
-		detail.setBarcode(scg.getBarcode());
 		detail.setClinicalDiagnosis(scg.getClinicalDiagnosis());
 		detail.setClinicalStatus(scg.getClinicalStatus());
-		detail.setVisitSite(scg.getCollectionSite().getName());
-		detail.setVisitStatus(scg.getCollectionStatus());
-		detail.setComment(scg.getComment());
-		detail.setCpeId(scg.getCollectionProtocolEvent().getId());
-		detail.setCprId(scg.getCollectionProtocolRegistration().getId());
+		detail.setVisitSite(scg.getSite().getName());
+		detail.setVisitStatus(scg.getStatus());
+		detail.setComments(scg.getComments());
+		detail.setCpeId(scg.getCpEvent().getId());
+		detail.setCprId(scg.getRegistration().getId());
 		detail.setId(scg.getId());
 		detail.setName(scg.getName());
 		detail.setIdentifiedReport(scg.getIdentifiedReport());

@@ -47,7 +47,7 @@ public class Specimen {
 
 	private String collectionStatus;
 
-	private SpecimenCollectionGroup specimenCollectionGroup;
+	private Visit specimenCollectionGroup;
 
 	private SpecimenRequirement specimenRequirement;
 
@@ -208,11 +208,11 @@ public class Specimen {
 		this.collectionStatus = collectionStatus;
 	}
 
-	public SpecimenCollectionGroup getSpecimenCollectionGroup() {
+	public Visit getSpecimenCollectionGroup() {
 		return specimenCollectionGroup;
 	}
 
-	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup) {
+	public void setSpecimenCollectionGroup(Visit specimenCollectionGroup) {
 		this.specimenCollectionGroup = specimenCollectionGroup;
 	}
 

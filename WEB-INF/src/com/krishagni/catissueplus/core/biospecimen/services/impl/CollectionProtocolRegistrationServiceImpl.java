@@ -20,7 +20,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEven
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
@@ -184,7 +184,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@PlusTransactional
 	public VisitAddedEvent addVisit(AddVisitEvent req) {
 		try { // TODO: visit name
-			SpecimenCollectionGroup visit = visitFactory.createVisit(req.getVisit()); 
+			Visit visit = visitFactory.createVisit(req.getVisit()); 
 			visit.setName(UUID.randomUUID().toString()); 
 
 			daoFactory.getVisitsDao().saveOrUpdate(visit); 
@@ -432,12 +432,12 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	}
 	
 	private VisitSpecimensEvent getSpecimensByVisit(Long cprId, Long visitId) {
-		SpecimenCollectionGroup visit = daoFactory.getVisitsDao().getVisit(visitId);
+		Visit visit = daoFactory.getVisitsDao().getVisit(visitId);
 		if (visit == null) {
 			return VisitSpecimensEvent.notFound(cprId, null, visitId);
 		}
 		
-		Set<SpecimenRequirement> anticipatedSpecimens = visit.getCollectionProtocolEvent().getTopLevelAnticipatedSpecimens();
+		Set<SpecimenRequirement> anticipatedSpecimens = visit.getCpEvent().getTopLevelAnticipatedSpecimens();
 		Set<Specimen> specimens = visit.getTopLevelSpecimens();
 
 		return VisitSpecimensEvent.ok(

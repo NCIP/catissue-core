@@ -6,26 +6,26 @@ import com.krishagni.catissueplus.bulkoperator.events.ObjectImportedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AddVisitEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitAddedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
-import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
+import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 
-public class ScgObjectImporter implements ObjectImporter {
-	private SpecimenCollGroupService scgSvc;
+public class VisitObjectImporter implements ObjectImporter {
+	private VisitService visitService;
 	
-	public void setScgSvc(SpecimenCollGroupService scgSvc) {
-		this.scgSvc = scgSvc;
+	public void setVisitService(VisitService visitService) {
+		this.visitService = visitService;
 	}
 
 	@Override
 	public ObjectImportedEvent importObject(ImportObjectEvent req) {
 		if (!(req.getObject() instanceof VisitDetail)) {
-			throw new RuntimeException("ScgDetail object expected for this operation!");
+			throw new RuntimeException("VisitDetail object expected for this operation!");
 		}
 
 		AddVisitEvent request = new AddVisitEvent();
 		request.setVisit((VisitDetail)req.getObject());
 		request.setSessionDataBean(req.getSessionDataBean());
 		
-		VisitAddedEvent response = scgSvc.createScg(request);
+		VisitAddedEvent response = visitService.addVisit(request);
 		return ObjectImportedEvent.buildResponse(response, response.getVisit());
 	}
 }

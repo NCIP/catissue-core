@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
@@ -274,21 +273,23 @@ public class CollectionProtocolRegistrationDaoImpl
 	@SuppressWarnings("unchecked")
 	private List<Object[]> getScgAndSpecimenCounts(CprListCriteria cprCrit) {
 		Criteria countQuery = getCprListQuery(cprCrit)
-				.createAlias("scgCollection", "scg",
-						CriteriaSpecification.LEFT_JOIN, Restrictions.eq("scg.collectionStatus", "Complete"))
-				.createAlias("scgCollection.specimenCollection", "specimen",
+				.createAlias("scgCollection", "visit",
+						CriteriaSpecification.LEFT_JOIN, Restrictions.eq("visit.status", "Complete"))
+				.createAlias("visit.specimens", "specimen",
 						CriteriaSpecification.LEFT_JOIN, Restrictions.eq("specimen.collectionStatus", "Collected"));
 		
 		return countQuery.setProjection(Projections.projectionList()
 				.add(Projections.property("id"))
-				.add(Projections.countDistinct("scg.id"))
+				.add(Projections.countDistinct("visit.id"))
 				.add(Projections.countDistinct("specimen.id"))
 				.add(Projections.groupProperty("id")))
 				.list();
 	}
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	public Long getRegistrationId(Long cpId, Long participantId) {
+		
 		List<Long> result =  getSessionFactory().getCurrentSession()
 				.getNamedQuery(GET_REGISTRATION_ID)
 				.setLong("cpId", cpId)

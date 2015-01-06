@@ -15,7 +15,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
@@ -440,7 +440,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 
 		Criteria query = sessionFactory
 				.getCurrentSession()
-				.createCriteria(SpecimenCollectionGroup.class)
+				.createCriteria(Visit.class)
 				.createAlias("collectionProtocolRegistration", "cpr")
 				.createAlias("cpr.collectionProtocol", "cp")
 				.setProjection(

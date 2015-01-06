@@ -85,7 +85,7 @@
       sort="unsorted">
       <key column="COLLECTION_PROTOCOL_EVENT_ID"/>
 
-      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Visit"/>
     </set>
   </class>
 </hibernate-mapping>
