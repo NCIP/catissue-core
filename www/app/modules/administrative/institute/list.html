@@ -9,7 +9,7 @@
   <div class="os-cards"> 
     <div class="os-card" ng-repeat="institute in instituteList" ng-click="showInstituteOverview(institute)">
       <h4>
-        <a title="{{'institutes.tooltip.view_details' | translate}}" ui-sref="institute-detail.overview({id: institute.id})"> {{institute.name}} </a>
+        <a title="{{'institutes.tooltip.view_details' | translate}}" ui-sref="institute-detail.overview({instituteId: institute.id})"> {{institute.name}} </a>
       </h4>
       <div class="stats">
         <div class="stat col-xs-6" title="{{'institutes.tooltip.department_count' | translate}}">

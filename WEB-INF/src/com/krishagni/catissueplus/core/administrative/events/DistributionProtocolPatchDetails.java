@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.krishagni.catissueplus.core.common.events.UserSummary;
+
 public class DistributionProtocolPatchDetails {
 
-	private UserInfo principalInvestigator;
+	private UserSummary principalInvestigator;
 
 	private String title;
 
@@ -25,11 +27,11 @@ public class DistributionProtocolPatchDetails {
 
 	private List<String> modifiedAttributes = new ArrayList<String>();
 
-	public UserInfo getPrincipalInvestigator() {
+	public UserSummary getPrincipalInvestigator() {
 		return principalInvestigator;
 	}
 
-	public void setPrincipalInvestigator(UserInfo principalInvestigator) {
+	public void setPrincipalInvestigator(UserSummary principalInvestigator) {
 		this.principalInvestigator = principalInvestigator;
 	}
 

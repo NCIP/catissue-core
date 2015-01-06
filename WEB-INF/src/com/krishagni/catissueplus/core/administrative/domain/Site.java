@@ -18,14 +18,14 @@ public class Site {
 
 	private String name;
 
-	private String Type;
+	private String code; // TODO: Need to map in hbm
 
-	private Address address;
+	private String type;
 
 	private String activityStatus;
 
-	private String emailAddress;
-
+	private String address; // TODO: Need to map in hbm
+    
 	private Set<User> coordinatorCollection = new HashSet<User>();
 
 	private Set<Visit> scgCollection = new HashSet<Visit>();
@@ -48,16 +48,20 @@ public class Site {
 		this.name = name;
 	}
 
+	public String getCode() {
+		return this.code; 
+	}
+
+	public void setCode(String code) { 
+		this.code = code;
+	}
+
 	public String getType() {
-		return Type;
+		return type;
 	}
 
 	public void setType(String type) {
-		Type = type;
-	}
-
-	public Address getAddress() {
-		return address;
+		this.type = type;
 	}
 
 	public String getActivityStatus() {
@@ -68,17 +72,13 @@ public class Site {
 		this.activityStatus = activityStatus;
 	}
 
-	public String getEmailAddress() {
-		return emailAddress;
+	public String getAddress() { 
+		return address; 
 	}
 
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
+    public void setAddress(String address) { 
+    	this.address = address; 
+    }
 
 	public Set<User> getCoordinatorCollection() {
 		return coordinatorCollection;
@@ -113,19 +113,7 @@ public class Site {
 		}
 		this.setType(site.getType());
 		this.setActivityStatus(site.getActivityStatus());
-		this.setEmailAddress(site.getEmailAddress());
 		SetUpdater.<User> newInstance().update(this.getCoordinatorCollection(), site.getCoordinatorCollection());
-		updateAddressDetails(this.getAddress(), site.getAddress());
-	}
-
-	private void updateAddressDetails(Address oldAddress, Address address) {
-		oldAddress.setStreet(address.getStreet());
-		oldAddress.setCountry(address.getCountry());
-		oldAddress.setFaxNumber(address.getFaxNumber());
-		oldAddress.setPhoneNumber(address.getPhoneNumber());
-		oldAddress.setState(address.getState());
-		oldAddress.setCity(address.getCity());
-		oldAddress.setZipCode(address.getZipCode());
 	}
 
 	public void delete() {

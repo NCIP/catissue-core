@@ -2,25 +2,20 @@
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
-import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPositiveNumber;
-
 import java.util.Date;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
-import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchDetails;
-import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class DistributionProtocolFactoryImpl implements DistributionProtocolFactory {
-
-	private static final String START_DATE = "start date";
 
 	private static final String SHORT_TITLE = "short title";
 
@@ -29,8 +24,6 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 	private static final String TITLE = "title";
 
 	private static final String ACTIVITY_STATUS = "activity status";
-
-	private static final String ANTICIPANTED_SPECIMEN_COUNT = "anticipated specimen count";
 
 	private DaoFactory daoFactory;
 
@@ -44,11 +37,11 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		ObjectCreationException exceptionHandler = new ObjectCreationException();
 		setTitle(distributionProtocol, details.getTitle(), exceptionHandler);
 		setIbrId(distributionProtocol, details.getIrbId(), exceptionHandler);
-		setAnticipatedSpecimenCount(distributionProtocol, details.getAnticipatedSpecimenCount(), exceptionHandler);
+		setAnticipatedSpecimenCount(distributionProtocol, details.getAnticipatedSpecimenCount());
 		setPrincipalInvestigator(distributionProtocol, details.getPrincipalInvestigator(), exceptionHandler);
 		setShortTitle(distributionProtocol, details.getShortTitle(), exceptionHandler);
 		setDescriptionURL(distributionProtocol, details.getDescriptionUrl(), exceptionHandler);
-		setStartDate(distributionProtocol, details.getStartDate(), exceptionHandler);
+		setStartDate(distributionProtocol, details.getStartDate());
 		setActivityStatus(distributionProtocol, details.getActivityStatus(), exceptionHandler);
 		exceptionHandler.checkErrorAndThrow();
 		return distributionProtocol;
@@ -79,11 +72,11 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		}
 
 		if (details.isDistributionProtocolAnticipatedSpecimenCountModified()) {
-			setAnticipatedSpecimenCount(distributionProtocol, details.getAnticipatedSpecimenCount(), exceptionHandler);
+			setAnticipatedSpecimenCount(distributionProtocol, details.getAnticipatedSpecimenCount());
 		}
 
 		if (details.isDistributionProtocolStartDateModified()) {
-			setStartDate(distributionProtocol, details.getStartDate(), exceptionHandler);
+			setStartDate(distributionProtocol, details.getStartDate());
 		}
 
 		if (details.isDistributionProtocolActivityStatusModified()) {
@@ -93,12 +86,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		return distributionProtocol;
 	}
 
-	private void setStartDate(DistributionProtocol distributionProtocol, Date startDate,
-			ObjectCreationException exceptionHandler) {
-		if (startDate == null) {
-			exceptionHandler.addError(DistributionProtocolErrorCode.INVALID_ATTR_VALUE, START_DATE);
-			return;
-		}
+	private void setStartDate(DistributionProtocol distributionProtocol, Date startDate) {
 		distributionProtocol.setStartDate(startDate);
 	}
 
@@ -116,16 +104,10 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		distributionProtocol.setShortTitle(shortTitle);
 	}
 
-	private void setPrincipalInvestigator(DistributionProtocol distributionProtocol, UserInfo principalInvestigator,
+	private void setPrincipalInvestigator(DistributionProtocol distributionProtocol, UserSummary principalInvestigator,
 			ObjectCreationException exceptionHandler) {
 
-		if (isBlank(principalInvestigator.getLoginName())) {
-			exceptionHandler.addError(DistributionProtocolErrorCode.MISSING_ATTR_VALUE, PRINCIPLE_INVESTIGATOR);
-			return;
-		}
-
-		User pi = daoFactory.getUserDao().getUserByLoginNameAndDomainName(principalInvestigator.getLoginName(),
-				principalInvestigator.getDomainName());
+		User pi = daoFactory.getUserDao().getUser(principalInvestigator.getId());
 		if (pi == null) {
 			exceptionHandler.addError(DistributionProtocolErrorCode.INVALID_PRINCIPAL_INVESTIGATOR, PRINCIPLE_INVESTIGATOR);
 			return;
@@ -133,12 +115,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		distributionProtocol.setPrincipalInvestigator(pi);
 	}
 
-	private void setAnticipatedSpecimenCount(DistributionProtocol distributionProtocol, Long anticipatedSpecimenCount,
-			ObjectCreationException exceptionHandler) {
-		if (!isValidPositiveNumber(anticipatedSpecimenCount)) {
-			exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, ANTICIPANTED_SPECIMEN_COUNT);
-			return;
-		}
+	private void setAnticipatedSpecimenCount(DistributionProtocol distributionProtocol, Long anticipatedSpecimenCount) {
 		distributionProtocol.setAnticipatedSpecimenCount(anticipatedSpecimenCount);
 
 	}

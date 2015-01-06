@@ -71,6 +71,64 @@ angular.module('openspecimen', [
         },
         parent: 'institute-detail'
       })
+      .state('site-list', {
+        url: '/sites',
+        templateUrl: 'modules/administrative/site/list.html',
+        controller: 'SiteListCtrl',
+        parent: 'signed-in'
+      })
+      .state('site-new', {
+        url: '/new-site',
+        templateUrl: 'modules/administrative/site/addedit.html',
+        controller: 'SiteAddEditCtrl',
+        parent: 'signed-in'
+      })
+      .state('site-detail', {
+        url: '/sites/:siteId',
+        templateUrl: 'modules/administrative/site/detail.html',
+        resolve: {
+          site: function($stateParams, Site) {
+            return Site.getById($stateParams.siteId);
+          }
+        },
+        controller: 'SiteDetailCtrl',
+        parent: 'signed-in'
+      })
+      .state('site-detail.overview', {
+        url: '/overview',
+        templateUrl: 'modules/administrative/site/overview.html',
+        controller: function() {
+        },
+        parent: 'site-detail'
+      })
+      .state('dp-list', {
+        url: '/dps',
+        templateUrl: 'modules/administrative/dp/list.html',     
+        controller: 'DpListCtrl',
+        parent: 'signed-in'
+      })
+      .state('dp-new', {
+        url: '/new-dp',
+        templateUrl: 'modules/administrative/dp/addedit.html',
+        controller: 'DpAddEditCtrl',
+        parent: 'signed-in'
+      })
+      .state('dp-detail', {
+        url: '/dps/:dpId',
+        templateUrl: 'modules/administrative/dp/detail.html',
+        resolve: {
+          distributionProtocol: function($stateParams , DistributionProtocol) {
+            return DistributionProtocol.getById($stateParams.dpId);
+          }
+        },
+        controller: 'DpDetailCtrl',
+        parent: 'signed-in'
+      })
+      .state('dp-detail.overview', {
+        url: '/overview',
+        templateUrl: 'modules/administrative/dp/overview.html',
+        parent: 'dp-detail'
+      })
       .state('cps', {
         url: '/cps',
         abstract: true,
