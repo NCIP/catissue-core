@@ -1,22 +1,12 @@
 
-angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models'])
+angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('ParticipantAddEditCtrl', function(
     $scope, $state, $stateParams, 
     CollectionProtocolRegistration, Participant,
-    SiteService, PvManager) {
+    Site, PvManager) {
 
     function loadPvs() {
-      SiteService.getSites().then(
-        function(result) {
-          if (result.status != "ok") {
-            alert("Failed to load sites information");
-          }
-          $scope.sites = result.data.map(function(site) {
-            return site.name;
-          });
-        }
-      );
-
+      $scope.sites = PvManager.getSites();
       $scope.genders = PvManager.getPvs('gender');
       $scope.ethnicities = PvManager.getPvs('ethnicity');
       $scope.vitalStatuses = PvManager.getPvs('vital-status');

@@ -240,6 +240,26 @@
       "overview": "Overview"
     }
   },
+
+  "site": {
+    "list": "Sites",
+    "create_site": "Create Site",
+    "name": "Name",
+    "code": "Code",
+    "coordinators": "Coordinators",
+    "type": "Type",
+    "address": "Address",
+
+    "tooltip": {
+      "view_details": "Click to view/edit Site details",
+      "create_site": "Click to add new Site",
+      "cp_count": "Count of Collection Protocols"
+    },
+
+    "menu": {
+      "overview": "Overview"
+    }
+  },
   
   "dp": {
     "list": "Distribution Protocols",
