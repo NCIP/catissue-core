@@ -921,12 +921,12 @@ public class CollectionProtocolRegistrationTest {
 		TestUtils.recordResponse(resp);
 		Assert.assertEquals(true, resp.isSuccess());
 		Assert.assertNotNull(resp.getVisit());
-		Assert.assertEquals((Long)1L, resp.getVisit().getCpeId());
+		Assert.assertEquals((Long)1L, resp.getVisit().getEventId());
 		Assert.assertEquals((Long)1L, resp.getVisit().getCprId());
 		Assert.assertEquals("test-pathology", resp.getVisit().getSurgicalPathologyNumber());
 		Assert.assertEquals("test-daiagnosis", resp.getVisit().getClinicalDiagnosis());
-		Assert.assertEquals("Completed", resp.getVisit().getVisitStatus());
-		Assert.assertEquals("SITE1", resp.getVisit().getVisitSite());
+		Assert.assertEquals("Completed", resp.getVisit().getStatus());
+		Assert.assertEquals("SITE1", resp.getVisit().getSite());
 		Assert.assertEquals("Active", resp.getVisit().getActivityStatus());
 		Assert.assertEquals("test-status", resp.getVisit().getClinicalStatus());
 	}
@@ -967,7 +967,7 @@ public class CollectionProtocolRegistrationTest {
 	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
 	public void addVisitsMissingSiteName() {
 		AddVisitEvent req = CprTestData.getAddVisitEvent();
-		req.getVisit().setVisitSite(null);
+		req.getVisit().setSite(null);
 		req.getVisit().setCprId(null);
 		req.getVisit().setCpTitle("invalid-serach-term");
 		req.getVisit().setPpid("invalid-search-term");
@@ -988,7 +988,7 @@ public class CollectionProtocolRegistrationTest {
 	public void addVisitsTestInvalidPpid() {
 		AddVisitEvent req = CprTestData.getAddVisitEvent();
 		req.getVisit().setCprId(null);
-		req.getVisit().setCpeId(null);
+		req.getVisit().setEventId(null);
 		
 		req.getVisit().setCpTitle("default-cp");
 		req.getVisit().setPpid("invalid-ppid");

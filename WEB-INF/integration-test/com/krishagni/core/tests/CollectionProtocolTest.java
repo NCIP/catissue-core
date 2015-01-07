@@ -28,7 +28,6 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetailEvent;
@@ -38,7 +37,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtoc
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
@@ -461,43 +459,6 @@ public class CollectionProtocolTest {
 	public void getDisabledCp() {
 		ReqCollectionProtocolEvent req = CpTestData.getReqCollectionProtocolEvent();
 		CollectionProtocolDetailEvent resp = cpSvc.getCollectionProtocol(req);
-		
-		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
-		Assert.assertEquals(req.getCpId(), resp.getCpId());
-	}
-	
-	/*
-	 * Get Daignosis API
-	 */
-	@Test
-	@DatabaseSetup("CollectionProtocolTest.getCollectionProtocolTest.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
-	public void getClinicalDaignosis() {
-		ReqClinicalDiagnosesEvent req = CpTestData.getReqClinicalDiagnosesEvent();
-		ClinicalDiagnosesEvent resp = cpSvc.getDiagnoses(req);
-		
-		TestUtils.recordResponse(resp);
-		Assert.assertEquals("Operation failed!", EventStatus.OK, resp.getStatus());
-		Assert.assertEquals((int)3, resp.getDiagnoses().size());
-		Assert.assertEquals(true, resp.getDiagnoses().contains("One"));
-		Assert.assertEquals(true, resp.getDiagnoses().contains("Two"));
-		Assert.assertEquals(true, resp.getDiagnoses().contains("Three"));
-	}
-	
-	@Test
-	public void getClinicalDaignosisCpDoesntExists() {
-		ReqClinicalDiagnosesEvent req = CpTestData.getReqClinicalDiagnosesEvent();
-		ClinicalDiagnosesEvent resp = cpSvc.getDiagnoses(req);
-		
-		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
-	}
-	
-	@Test
-	@DatabaseSetup("CollectionProtocolTest.getDisabledCp.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
-	public void getDiagnosesForDisabledCp() {
-		ReqClinicalDiagnosesEvent req = CpTestData.getReqClinicalDiagnosesEvent();
-		ClinicalDiagnosesEvent resp = cpSvc.getDiagnoses(req);
 		
 		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
 		Assert.assertEquals(req.getCpId(), resp.getCpId());
