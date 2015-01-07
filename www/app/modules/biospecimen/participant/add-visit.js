@@ -5,7 +5,10 @@ angular.module('os.biospecimen.participant.addvisit', ['os.biospecimen.participa
       $scope.visitStatuses = PvManager.getPvs('visit-status');
       $scope.sites = PvManager.getSites();
       $scope.clinicalStatuses = PvManager.getPvs('clinical-status');
-      $scope.clinicalDiagnoses = PvManager.getPvs('clinical-diagnosis');
+
+      $scope.searchClinicalDiagnoses = function(searchTerm) {
+        $scope.clinicalDiagnoses = PvManager.getPvs('clinical-diagnosis', searchTerm);
+      };
     };
 
     function init() {

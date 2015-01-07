@@ -33,7 +33,8 @@
     <div class="clearfix">
       <div class="col-xs-4">
         <div class="form-group">
-          <os-select name="clinicalDiagnosis" ng-model="visit.clinicalDiagnosis" list="clinicalDiagnoses"
+          <os-select name="clinicalDiagnosis" ng-model="visit.clinicalDiagnosis" 
+            list="clinicalDiagnoses" refresh="searchClinicalDiagnoses"
             os-md-input placeholder="Clinical Diagnosis" required>
           </os-select>
           <div os-field-error field="visitForm.clinicalDiagnosis"></div>

@@ -33,6 +33,13 @@ angular.module('openspecimen')
           uiSelectMatch.append('{{$select.selected}}');
         }
 
+        if (angular.isDefined(tAttrs.refresh)) {
+          uiSelectChoices.attr({
+            'refresh': tAttrs.refresh + '($select.search)',
+            'refresh-delay': tAttrs.refreshDelay || 750
+          });
+        }
+            
         uiSelect.append(uiSelectMatch).append(uiSelectChoices);
         
         var selectContainer = angular.element("<div/>")
