@@ -4,18 +4,18 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
     
     var init = function() {
       $scope.role = new Role();
-      $scope.role.acl = [{}];
-      
-      PvManager.loadPvs($scope, 'resources');
-      PvManager.loadPvs($scope, 'privileges');
+      $scope.role.acl = []; 
+      $scope.role.addResource($scope.role.newResource($scope.role));
+      $scope.resources =  PvManager.getPvs('resources');
+      $scope.privileges = PvManager.getPvs('privileges');
     }
 
     $scope.addResource = function() {
-      $scope.role.acl.push({privileges: []});
+      $scope.role.addResource($scope.role.newResource($scope.role));
     };
   
     $scope.removeResource = function(index) {
-      $scope.role.acl.splice(index, 1);
+      $scope.role.removeResource(index);
     };
   
     $scope.createRole = function() {

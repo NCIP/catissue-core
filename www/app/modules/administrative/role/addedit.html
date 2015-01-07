@@ -36,17 +36,14 @@
     
       <div class="form-group clearfix" ng-repeat="acl in role.acl">
         <div class="col-xs-4 col-xs-offset-3">
-          <ui-select ng-model="acl.resourceName">
-            <ui-select-match placeholder="{{'role.select_resource' | translate}}">{{acl.resourceName}}</ui-select-match>
-            <ui-select-choices repeat="resource in resources_pvs | highlight: $select.search">
-              <span ng-bind-html="resource | highlight: $select.search"></span>
-            </ui-select-choices>
-          </ui-select>
+          <os-select ng-model="acl.resourceName" list="resources" name="resource" 
+            placeholder="{{'role.resource' | translate}}" required>
+          </os-select>
         </div>
        
         <div class="col-xs-4">
-          <os-select multiple ng-model="acl.privileges" list="privileges_pvs" 
-            placeholder="{{'role.select_privileges' | translate}}">
+          <os-select multiple ng-model="acl.privileges" list="privileges" name="privilege"
+            placeholder="{{'role.privileges' | translate}}">
           </os-select>
         </div>
              
@@ -62,7 +59,7 @@
           <a ng-click="addResource()">
             <span class="glyphicon glyphicon-plus"></span>
           </a>
-          <span> Add Resource </span>
+          <span>Add Resource</span>
         </div>
       </div>
       

@@ -214,7 +214,7 @@ angular.module('openspecimen', [
         url: '/users/:userId',
         templateUrl: 'modules/administrative/user/detail.html',
         resolve: {
-          user: function($stateParams , User) {
+          user: function($stateParams, User) {
             return User.getById($stateParams.userId);
           }
         },
@@ -242,7 +242,7 @@ angular.module('openspecimen', [
         url: '/roles/:roleId',
         templateUrl: 'modules/administrative/role/detail.html',
         resolve: {
-          role: function($stateParams , Role) {
+          role: function($stateParams, Role) {
             return Role.getById($stateParams.roleId);
           }
         },
@@ -269,8 +269,6 @@ angular.module('openspecimen', [
       'cprs': '/rest/ng/collection-protocol-registrations',
       'participants': '/rest/ng/participants',
       'sites': '/rest/ng/sites',
-      'users':'/rest/ng/users',
-      'roles':'/rest/ng/roles',
       'form-files': '/rest/ng/form-files'
     };
 

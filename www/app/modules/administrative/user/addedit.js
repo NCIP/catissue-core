@@ -4,19 +4,18 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
  
     var init = function() {
       $scope.user = new User();
-      $scope.user.userCPRoles = [{}];
-     
-      PvManager.loadPvs($scope, 'domains');
+      $scope.user.userCPRoles = [];
+      $scope.user.addPermission($scope.user.newPermission());
       
-      Institute.query().then(function(institutes) {
+      $scope.domains = PvManager.getPvs('domains');
+      
+      Institute.list().then(function(institutes) {
         $scope.institutes = institutes;
       });
          
-      Site.query().then(function(sites) {
-        $scope.sites = sites;
-        $scope.sites.splice(0,0,{"id": -1,"name": "All"});
-      });
-    
+      $scope.sites = PvManager.getSites();
+      $scope.sites.splice(0,0,"All");
+      
       CollectionProtocol.query().then(function(cps) {
         $scope.cps = cps;
         $scope.cps.splice(0,0,{"id": -1, "shortTitle": "All"});
@@ -42,23 +41,28 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
     };
       
     $scope.addPermission = function() { 
-      $scope.user.userCPRoles.push([]);
+      $scope.user.addPermission($scope.user.newPermission());
     };
     
-    $scope.removePermission = function(index) {
-      $scope.user.userCPRoles.splice(index, 1);
+    $scope.removePermission = function(index) {  
+      $scope.user.removePermission(index);
     };
     
     $scope.resetDepartmentName = function () {
       $scope.user.deptName = undefined;
     }
     
-    $scope.getDepartments = function(institute) {
-      Institute.getDepartments(institute).then(function(result) {
+    $scope.getDepartments = function(instituteName) {
+      Institute.getDepartments(instituteName).then(function(result) {
         $scope.departments = result;
       });
     };
 
+    $scope.updateCpList = function(item) {
+      var index = $scope.cps.indexOf(item);
+      $scope.cps.splice(index,1);
+    }
+    
     $scope.createUser = function() {    
       var user = angular.copy($scope.user);
       user.$saveOrUpdate().then(
@@ -67,7 +71,7 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
         }
       );
     };
-        
+     
     init();
 
   });

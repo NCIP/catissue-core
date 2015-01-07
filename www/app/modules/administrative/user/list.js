@@ -12,9 +12,5 @@ angular.module('os.administrative.user.list', ['os.administrative.models'])
       $state.go('user-detail.overview', {userId:user.id});
     };    
  
-    var today = new Date();
-    $scope.date = today.getDate() + "-" + (today.getMonth() + 1) + "-" + today.getFullYear() 
-      + "  " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    
     loadUsers();
   });

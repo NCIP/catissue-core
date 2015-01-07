@@ -2,13 +2,14 @@
 <div>
   <div class="os-page-hdr">
     <h3 translate="user.list">Users</h3>
-    <a class="os-btn-icon" title="{{'user.tooltip.new_user' | translate}}" ui-sref="user-new">
+    <a class="os-btn-icon" title="{{'user.tooltip.create_user' | translate}}" ui-sref="user-new">
       <span class="glyphicon glyphicon-plus"></span>
     </a>
   </div>
   
   <div class="os-cards">
-    <div class="os-card" ng-repeat="user in users | orderBy:'lastName'" ng-click="showUserOverview(user)">
+    <!--TODO get sorted list from backend -->
+    <div class="os-card" ng-repeat="user in users | orderBy:['lastName', 'firstName']" ng-click="showUserOverview(user)">
       <h4>
         <span class="glyphicon glyphicon-user"></span>
         <a title="{{'user.tooltip.view_details' | translate}}" ui-sref=".overview(user)">
@@ -16,7 +17,10 @@
         </a>
       </h4>
       <h5 title="{{'user.email_address' | translate}}">{{user.loginName}}</h5>
-      <p title="{{'user.tooltip.last_login' | translate}}">{{user.lastLogin || date }}<p>
+      
+      <!--TODO insert email address here after getting it from backend  -->
+      <p title="{{'user.tooltip.last_login' | translate}}">{{user.lastLogin}}<p> 
+      
       <div class="stats">
         <div class="stat col-xs-6" title="{{'user.tooltip.cp_count' | translate}}">
           <span class="os-lavatar os-lavatar-sm">CP</span>

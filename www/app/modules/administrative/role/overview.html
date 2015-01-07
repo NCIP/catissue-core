@@ -9,8 +9,7 @@
   
   <div class="os-item os-action-btns os-action-btns-md">
     <a><span class="glyphicon glyphicon-pencil"></span></a>
-  </div>
-  
+  </div>  
 </div>
 
 <div class="clearfix">
@@ -32,6 +31,11 @@
           <textarea ng-if="descriptionEditor.isEditMode()" type="text" ng-model="descriptionEditor.editValue" 
             class="form-control" placeholder="{{'role.description' | translate}}"></textarea>
         </os-inline-edit>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="role.resource">Resources</strong>
+        <span class="value value-md" os-inline-edit>{{role.acl | osArrayJoin:getResourceDisplayText | osNoValue}}</span>
       </li>
     </ul>  
   </div>

@@ -41,7 +41,7 @@
           <span ng-if="domainEditor.isDisplayMode()">{{domainEditor.viewValue | osNoValue}}</span>
           <div ng-if="domainEditor.isEditMode()">
             <ui-select ng-model="domainEditor.editValue">
-              <ui-select-match placeholder="{{'user.select_domain' | translate}}">
+              <ui-select-match placeholder="{{'user.domain_name' | translate}}">
                 {{$select.selected}}
               </ui-select-match>
               <ui-select-choices repeat="domain in domains_pvs | filter: $select.search">
@@ -72,36 +72,12 @@
       
       <li class="item">
         <strong class="key key-sm" translate="user.institute">Institute</strong>
-        <os-inline-edit editor="instituteEditor" name="institute" class="value value-md" value="user.instituteName">
-          <span ng-if="instituteEditor.isDisplayMode()">{{instituteEditor.viewValue | osNoValue}}</span>
-          <div ng-if="instituteEditor.isEditMode()">
-            <ui-select ng-model="instituteEditor.editValue" ng-change="resetDepartmentName()" on-select="getDepartments($item.name,true)">
-              <ui-select-match placeholder="{{'user.select_institute' | translate}}">
-                {{$select.selected.name}}
-              </ui-select-match>
-              <ui-select-choices repeat="institute.name as institute in institutes | filter: $select.search">
-                <span ng-bind-html="institute.name | highlight: $select.search"></span>
-              </ui-select-choices>
-            </ui-select>
-          </div>
-        </os-inline-edit>
+        <span>{{user.instituteName}}</span>
       </li>   
       
       <li class="item">
         <strong class="key key-sm" translate="user.department"> Department</strong>
-        <os-inline-edit editor="deptEditor" name="department" class="value value-md" value="user.deptName">
-          <span ng-if="deptEditor.isDisplayMode()">{{deptEditor.viewValue | osNoValue}}</span>
-          <div ng-if="deptEditor.isEditMode()">
-            <ui-select ng-model="deptEditor.editValue">
-              <ui-select-match placeholder="{{'user.select_department' | translate}}">
-                {{$select.selected.name}}
-              </ui-select-match>
-              <ui-select-choices repeat="department.name as department in departments | filter: $select.search">
-                <span ng-bind-html="department.name | highlight: $select.search"></span>
-              </ui-select-choices>
-            </ui-select>
-          </div>
-        </os-inline-edit>
+        <span>{{user.deptName}}</span>
       </li>   
     </ul>
   </div>
