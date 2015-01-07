@@ -5,7 +5,7 @@
   </div>
   
   <div os-wizard="userWizard">
-    <os-wizard-step on-finish="" title="{{'user.profile' | translate}}">
+    <os-wizard-step on-finish="validateProfile" title="{{'user.profile' | translate}}">
       <div ng-include="'user-add-edit.html'"></div>
     </os-wizard-step>
     <os-wizard-step title="{{'user.permissions' | translate}}">
