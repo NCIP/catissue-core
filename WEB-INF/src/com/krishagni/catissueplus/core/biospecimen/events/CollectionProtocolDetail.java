@@ -16,8 +16,6 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 
 	private String ppidFmt;
 
-	private List<String> clinicalDiagnoses;
-
 	private Long anticipatedParticipantsCount;
 
 	private String descriptionUrl;
@@ -62,14 +60,6 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 
 	public void setPpidFmt(String ppidFmt) {
 		this.ppidFmt = ppidFmt;
-	}
-
-	public List<String> getClinicalDiagnoses() {
-		return clinicalDiagnoses;
-	}
-
-	public void setClinicalDiagnoses(List<String> clinicalDiagnoses) {
-		this.clinicalDiagnoses = clinicalDiagnoses;
 	}
 
 	public Long getAnticipatedParticipantsCount() {
@@ -136,13 +126,6 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setConsentsWaived(cp.getConsentsWaived());
 		result.setIrbId(cp.getIrbIdentifier());
 		result.setPpidFmt(cp.getPpidFormat());
-
-		List<String> clinicalDiagnoses = new ArrayList<String>();
-		for (ClinicalDiagnosis cd : cp.getClinicalDiagnosis()) {
-			clinicalDiagnoses.add(cd.getName());
-		}
-		result.setClinicalDiagnoses(clinicalDiagnoses);
-
 		result.setAnticipatedParticipantsCount(cp.getEnrollment());
 		result.setDescriptionUrl(cp.getDescriptionURL());
 		result.setSpecimenLabelFmt(cp.getSpecimenLabelFormat());

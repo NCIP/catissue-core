@@ -7,7 +7,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.AddCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AddSpecimenRequirementEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AliquotsRequirementCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent;
@@ -22,7 +21,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.CreateDerivedSpecimenR
 import com.krishagni.catissueplus.core.biospecimen.events.DerivedSpecimenReqCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeListEvent;
@@ -40,8 +38,6 @@ public interface CollectionProtocolService {
 
 	public RegisteredParticipantsEvent getRegisteredParticipants(ReqRegisteredParticipantsEvent req);
 	
-	public ClinicalDiagnosesEvent getDiagnoses(ReqClinicalDiagnosesEvent req);
-
 	public CollectionProtocolCreatedEvent createCollectionProtocol(CreateCollectionProtocolEvent req);
 	
 	//

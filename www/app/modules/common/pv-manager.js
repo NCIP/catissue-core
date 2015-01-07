@@ -102,7 +102,8 @@ angular.module('openspecimen')
       'ethnicity'           : 'Ethnicity_PID',
       'race'                : 'Race_PID',
       'anatomic-site'       : 'Tissue_Site_PID',
-      'site-type'           : 'Site_Type_PID'
+      'site-type'           : 'Site_Type_PID',
+      'clinical-diagnosis'  : 'Clinical_Diagnosis_PID'
     };
 
     return {
@@ -180,24 +181,6 @@ angular.module('openspecimen')
         );
 
         return sites;
-      },
-
-      getClinicalDiagnoses: function(params, cb) {
-        var url = ApiUrls.getBaseUrl() + '/clinical-diagnoses';
-        var diagnoses = [];
-        $http.get(url, {params: params}).then(
-          function(result) {
-            angular.forEach(result.data, function(diagnosis) {
-              diagnoses.push(diagnosis);
-            });
-
-            if (typeof cb == 'function') {
-              cb(result.data);
-            }
-          }
-        );
-
-        return diagnoses;
       }
     };
   });

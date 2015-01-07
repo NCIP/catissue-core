@@ -8,7 +8,6 @@ import java.util.List;
 import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
-import com.krishagni.catissueplus.core.biospecimen.domain.ClinicalDiagnosis;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
@@ -22,7 +21,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.AddCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AddSpecimenRequirementEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AliquotsRequirementCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetailEvent;
@@ -41,7 +39,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.CreateDerivedSpecimenR
 import com.krishagni.catissueplus.core.biospecimen.events.DerivedSpecimenReqCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeListEvent;
@@ -169,36 +166,6 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		}
 	}
 
-	@Override
-	@PlusTransactional
-	public ClinicalDiagnosesEvent getDiagnoses(ReqClinicalDiagnosesEvent req) {
-		String searchTerm = req.getSearchTerm();
-		if (searchTerm != null) {
-			searchTerm = searchTerm.toLowerCase();
-		}
-
-		Long cpId = req.getCpId();
-		if (cpId == null || cpId == -1) {
-			return ClinicalDiagnosesEvent.ok(getClinicalDiagnoses(searchTerm));
-		}
-
-		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(cpId);
-		if (cp == null) {
-			return ClinicalDiagnosesEvent.notFound(cpId);
-		}
-
-		List<String> diagnoses = new ArrayList<String>();
-		for (ClinicalDiagnosis cd : cp.getClinicalDiagnosis()) {
-			if (searchTerm == null || searchTerm.isEmpty()) {
-				diagnoses.add(cd.getName());
-			} else if (cd.getName().toLowerCase().contains(searchTerm)) {
-				diagnoses.add(cd.getName());
-			}
-		}
-
-		return ClinicalDiagnosesEvent.ok(diagnoses);
-	}
-	
 	@Override
 	@PlusTransactional
 	public CollectionProtocolCreatedEvent createCollectionProtocol(CreateCollectionProtocolEvent req) {
@@ -407,10 +374,6 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	
 	private Long getUserId(RequestEvent req) {
 		return req.getSessionDataBean().getUserId();
-	}
-
-	private List<String> getClinicalDiagnoses(String searchTerm) {
-		return daoFactory.getPermissibleValueDao().getAllValuesByAttribute("Clinical_Diagnosis_PID", searchTerm, 100);
 	}
 
 	private void ensureUniqueTitle(String title, ObjectCreationException oce) {

@@ -3,14 +3,12 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
-import com.krishagni.catissueplus.core.biospecimen.domain.ClinicalDiagnosis;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
@@ -43,7 +41,6 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		cp.setStartDate(input.getStartDate());
 		setCoordinators(input, cp, oce);
 		setConsentsWaived(input, cp, oce);
-		setClinicalDiagnoses(input, cp, oce);
 
 		cp.setIrbIdentifier(input.getIrbId());
 		cp.setPpidFormat(input.getPpidFmt());
@@ -128,22 +125,6 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		}
 
 		result.setConsentsWaived(input.getConsentsWaived());
-	}
-
-	private void setClinicalDiagnoses(CollectionProtocolDetail input, CollectionProtocol result, ObjectCreationException oce) {
-		if (CollectionUtils.isEmpty(input.getClinicalDiagnoses())) {
-			return;
-		}
-
-		Set<ClinicalDiagnosis> clinicalDiagnoses = new HashSet<ClinicalDiagnosis>();
-		for (String cd : new HashSet<String>(input.getClinicalDiagnoses())) {
-			ClinicalDiagnosis clinicalDiagnosis = new ClinicalDiagnosis();
-			clinicalDiagnosis.setName(cd);
-			clinicalDiagnosis.setCollectionProtocol(result);
-			clinicalDiagnoses.add(clinicalDiagnosis);
-		}
-
-		result.setClinicalDiagnosis(clinicalDiagnoses);
 	}
 
 	private void setActivityStatus(CollectionProtocolDetail input, CollectionProtocol result, ObjectCreationException oce) {
