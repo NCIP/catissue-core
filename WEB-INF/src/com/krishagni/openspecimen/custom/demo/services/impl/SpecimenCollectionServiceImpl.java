@@ -119,10 +119,10 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 		CollectionProtocolEvent cpe = cp.getCollectionProtocolEvents().iterator().next();
 		
 		VisitDetail visit = input.getCollectionDetail().getVisit();
-		visit.setCpeId(cpe.getId());
+		visit.setEventId(cpe.getId());
 		visit.setCprId(cprId);
 		visit.setCpTitle(cp.getTitle());
-		visit.setVisitStatus("Complete"); // TODO: hard coded
+		visit.setStatus("Complete"); // TODO: hard coded
 		
 		AddVisitEvent req = new AddVisitEvent();
 		req.setVisit(visit);

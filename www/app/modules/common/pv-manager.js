@@ -64,10 +64,17 @@ angular.module('openspecimen')
       'Not Specified'
     ];
 
+    /** We need to have i18n keys for these as well **/
     var storageTypes = [
       'Auto',
       'Manual',
       'Virtual'
+    ];
+
+    var visitStatuses = [
+      'Complete',
+      'Incomplete',
+       'Pending'
     ];
 
     var pvMap = {
@@ -76,7 +83,9 @@ angular.module('openspecimen')
       vitalStatus: vitalStatuses, 
       race: races,
       anatomicSite: anatomicSites,
-      'storage-type': storageTypes
+
+      'storage-type': storageTypes,
+      'visit-status': visitStatuses
     };
 
     var pvIdMap = {
@@ -169,6 +178,7 @@ angular.module('openspecimen')
             });
           }
         );
+
         return sites;
       },
 
