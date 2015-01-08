@@ -7,3 +7,7 @@ notifications:
       - os-v20-devs@krishagni.com
     on_success: always
     on_failure: always
+
+branches:
+  only:
+    - OS_v20
