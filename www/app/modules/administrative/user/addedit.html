@@ -8,7 +8,7 @@
     <os-wizard-step on-finish="validateProfile" title="{{'user.profile' | translate}}">
       <div ng-include="'user-add-edit.html'"></div>
     </os-wizard-step>
-    <os-wizard-step title="{{'user.permissions' | translate}}">
+    <os-wizard-step on-finish="validatePermissions" title="{{'user.permissions' | translate}}">
       <div ng-include="'user-role.html'"></div>
     </os-wizard-step>
   </div>
@@ -55,7 +55,8 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="user.login_details">Login Details</label>
         <div class="col-xs-4">
-          <os-select ng-model="user.domainName" list="domains" name="domain" placeholder="{{'user.domain_name' | translate}}" required>
+          <os-select ng-model="user.domainName" list="domains" name="domain" 
+            placeholder="{{'user.domain_name' | translate}}" required>
           </os-select>
           <div os-field-error field="userForm.domain"></div>
         </div>
@@ -128,68 +129,79 @@
 </script>
 
 <script type="text/ng-template" id="user-role.html">
-  <div class="container">
-    <div class="form-group clearfix">
-      <div class="col-xs-3 col-xs-offset-2">
-        <label class="control-label" translate="user.site">Site</label>
+  <form name="userRoleForm" class="form-horizontal" os-form-validator="userRoleForm" validator="userRoleFormValidator" novalidate>
+    <div class="container">
+      <div class="form-group clearfix">
+        <div class="col-xs-3 col-xs-offset-2">
+          <label class="control-label" translate="user.site">Site</label>
+        </div>
+        <div class="col-xs-3">
+          <label class="control-label" translate="user.cp">Collection Protocol</label>
+        </div>
+        <div class="col-xs-3">
+          <label class="control-label" translate="user.role">Role</label>
+        </div>
       </div>
-      <div class="col-xs-3">
-        <label class="control-label" translate="user.cp">Collection Protocol</label>
-      </div>
-      <div class="col-xs-3">
-        <label class="control-label" translate="user.role">Role</label>
-      </div>
-    </div>
     
-    <div class="form-group clearfix" ng-repeat="userCPRole in user.userCPRoles">
-      <div class="col-xs-3 col-xs-offset-2">
-        <ui-select ng-model="userCPRole.site">
-          <ui-select-match placeholder="{{'user.site' | translate}}"> 
-            {{userCPRole.site}} 
-          </ui-select-match>
-          <ui-select-choices repeat="site in sites | filter: $select.search">
-            <span ng-bind-html="site | highlight: $select.search"></span>
-          </ui-select-choices>
-        </ui-select>
-      </div>
+      <div class="form-group clearfix" ng-repeat="userCPRole in user.userCPRoles">
+        <ng-form name="roleForm" os-form-validator="roleForm" parent-validator="userRoleFormValidator"> 
+          <div class="col-xs-3 col-xs-offset-2">
+            <ui-select name="siteName" ng-model="userCPRole.site" on-select="getCps($item)" 
+              ng-required="!!userCPRole.cp || !userCPRole.site">
+              <ui-select-match placeholder="{{'user.site' | translate}}"> 
+                {{userCPRole.site}}
+              </ui-select-match>
+              <ui-select-choices repeat="site in sites | filter: $select.search">
+                <span ng-bind-html="site | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+            <div os-field-error field="roleForm.siteName"></div>
+          </div>
        
-      <div class="col-xs-3">
-        <ui-select ng-model="userCPRole.cp" on-select="updateCpList($item)">
-          <ui-select-match placeholder="{{'user.cp' | translate}}"> 
-            {{userCPRole.cp}} 
-          </ui-select-match>
-          <ui-select-choices repeat="cp.shortTitle as cp in cps | filter: $select.search">
-            <span ng-bind-html="cp.shortTitle | highlight: $select.search"></span>
-          </ui-select-choices>
-        </ui-select>
-      </div>
+          <div class="col-xs-3">
+            <ui-select name="cpTitle" ng-model="userCPRole.cpTitle" ng-change="checkExistingUserCPRoles(userCPRole)"
+              ng-required="!!userCPRole.site || !userCPRole.cpTitle">
+              <ui-select-match placeholder="{{'user.cp' | translate}}"> 
+                {{userCPRole.cpTitle}} 
+              </ui-select-match>
+              <ui-select-choices repeat="cp in cps | filter: $select.search">
+                <span ng-bind-html="cp | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+            <div os-field-error field="roleForm.cpTitle"></div>
+          </div>
     
-      <div class="col-xs-3">
-        <ui-select ng-model="userCPRole.role">
-          <ui-select-match placeholder="{{'user.role' | translate}}"> 
-            {{userCPRole.role}} 
-          </ui-select-match>
-          <ui-select-choices repeat="role.name as role in roles | filter: $select.search ">
-            <span ng-bind-html="role.name | highlight: $select.search"></span>
-          </ui-select-choices>
-        </ui-select>
-      </div>
+          <div class="col-xs-3">
+            <ui-select name="role" ng-model="userCPRole.roleName" ng-required="!!userCPRole.cpTitle || !userCPRole.roleName">
+              <ui-select-match placeholder="{{'user.role' | translate}}"> 
+                {{userCPRole.roleName}} 
+              </ui-select-match>
+              <ui-select-choices repeat="role.name as role in roles | filter: $select.search ">
+                <span ng-bind-html="role.name | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+            <div os-field-error field="roleForm.role"></div>
+          </div>
      
-      <div class="col-xs-1">
-        <button class="btn btn-default" ng-click="removePermission($index)">	
-          <span class="glyphicon glyphicon-trash"></span>
-        </button>
+          <div class="col-xs-1">
+            <button class="btn btn-default" ng-click="removePermission(userCPRole)">	
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+          </div>
+        </ng-form>
       </div>
-    </div>  
+        
+      <div class="form-group clearfix">
+        <div class="col-xs-3 col-xs-offset-2">
+          <a ng-click="addPermission()">
+            <span class="glyphicon glyphicon-plus"></span>
+          </a>
+          <span translate="user.add_permission">Add Permission</span>
+        </div>
+      </div>
     
-    <div class="form-group clearfix">
-      <div class="col-xs-3 col-xs-offset-2">
-        <a ng-click="addPermission()">
-          <span class="glyphicon glyphicon-plus"></span>
-        </a>
-        <span translate="user.add_permission">Add Permission</span>
-      </div>
+      <div class="os-divider"></div>
     </div>
-    <div class="os-divider"></div>
-  </div>
+  </form>
+  <div ng-init="setForm(userRoleForm)"></div>
 </script>

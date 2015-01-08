@@ -4,7 +4,7 @@ angular.module('os.administrative.models.user', ['os.common.models'])
     var User = osModel('users');
     
     User.prototype.newPermission = function() {
-      return {site:'', cp:'', role:''};
+      return {site:'', cpTitle:'', roleName:''};
     }
     
     User.prototype.addPermission = function (userCPRole) {
