@@ -15,11 +15,6 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
       $scope.sites = PvManager.getSites();
       $scope.sites.splice(0,0,"All");
       
-      //CollectionProtocol.query().then(function(cps) {
-        //$scope.cps = cps;
-        //$scope.cps.splice(0,0,{"id": -1, "shortTitle": "All"});
-      //});
-    
       Role.list().then(function(roles) {
         $scope.roles = roles;
       });
@@ -107,9 +102,9 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
     }
         
     $scope.checkExistingUserCPRoles = function (newCPRole) {
-      if(newCPRole.cp == "All") {
+      if(newCPRole.cpTitle == "All") {
         for (var i= $scope.user.userCPRoles.length - 1; i >= 0; i--) {
-          if($scope.user.userCPRoles[i].site == newCPRole.site && $scope.user.userCPRoles[i].cp != "All") {
+          if($scope.user.userCPRoles[i].site == newCPRole.site && $scope.user.userCPRoles[i].cpTitle != "All") {
             var index = $scope.user.userCPRoles.indexOf($scope.user.userCPRoles[i]);
             $scope.user.userCPRoles.splice(index,1);
           }

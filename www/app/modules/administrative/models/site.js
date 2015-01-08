@@ -9,6 +9,7 @@ angular.module('os.administrative.models.site', ['os.common.models'])
     
     Site.getCps = function (siteName) {
       var d = $q.defer();
+      //TODO: will fix this with back-end change
       var cps = [{"id" : 1, "shortTitle": "AAAA"},{"id" : 2, "shortTitle": "AAA CP"}];
       d.resolve(cps);
       return d.promise;
