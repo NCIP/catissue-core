@@ -59,7 +59,7 @@ public class VisitFactoryImpl implements VisitFactory {
 	private void setCpe(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
 		CollectionProtocolEvent cpe = null;
 		
-		Long cpeId = visitDetail.getCpeId();
+		Long cpeId = visitDetail.getEventId();
 		String cpTitle = visitDetail.getCpTitle(), 
 			   eventLabel = visitDetail.getEventLabel();
 		
@@ -147,7 +147,7 @@ public class VisitFactoryImpl implements VisitFactory {
 	}
 	
 	private void setVisitStatus(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
-		String visitStatus = visitDetail.getVisitStatus();
+		String visitStatus = visitDetail.getStatus();
 		if (isValidPv(visitStatus, "visit-status")) {
 			visit.setStatus(visitStatus);
 			return;
@@ -177,7 +177,7 @@ public class VisitFactoryImpl implements VisitFactory {
 	}
 
 	private void setSite(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
-		String visitSite = visitDetail.getVisitSite();
+		String visitSite = visitDetail.getSite();
 		if (visit.isCompleted() && isBlank(visitSite)) {
 			oce.addError(ScgErrorCode.MISSING_ATTR_VALUE, "site");
 			return;

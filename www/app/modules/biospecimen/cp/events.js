@@ -13,20 +13,10 @@ angular.module('os.biospecimen.cp.events', ['os.biospecimen.models'])
       }
 
       $scope.clinicalStatuses = PvManager.getPvs('clinical-status');
-
-      PvManager.loadSites().then(
-        function(sites) {
-          $scope.sites = sites.map(
-            function(site) { 
-              return site.name; 
-            }
-          );
-        }
-      );
+      $scope.sites = PvManager.getSites();
 
       $scope.searchClinicalDiagnoses = function(searchTerm) {
-        var params = {cpId: cp.id, searchTerm: searchTerm};
-        $scope.clinicalDiagnoses = PvManager.getClinicalDiagnoses(params);
+        $scope.clinicalDiagnoses = PvManager.getPvs('clinical-diagnosis', searchTerm);
       };
 
       pvsLoaded = true;

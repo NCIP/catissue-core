@@ -249,8 +249,7 @@ angular.module('openspecimen', [
       .state('participant-detail.overview', {
         url: '/overview',
         templateUrl: 'modules/biospecimen/participant/overview.html',
-        controller: function() {
-        },
+        controller: 'ParticipantOverviewCtrl',
         parent: 'participant-detail'
       })
       .state('participant-detail.consents', {

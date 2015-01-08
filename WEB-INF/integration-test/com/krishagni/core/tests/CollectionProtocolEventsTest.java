@@ -22,9 +22,11 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeAddedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AddCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEventDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
@@ -60,6 +62,83 @@ public class CollectionProtocolEventsTest {
 	
 	private final String COLLECTION_PROTOCOL = "collectionProtocol";
 	
+	/* 
+	 * Get CollectionProtocolEvents API Tests 
+	 */
+	
+	@Test
+	@DatabaseSetup("CollectionProtocolEventsTest.getEventList.initial.xml")
+	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	public void getEvents() {
+		ReqCpeListEvent req = CpeTestData.getCpeList();
+		
+		CpeListEvent resp = cpSvc.getProtocolEvents(req);
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertNotNull(resp);
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());		
+		Assert.assertNotNull(resp.getEvents());
+		Assert.assertEquals((int)4, resp.getEvents().size());
+		
+		for (CollectionProtocolEventDetail event : resp.getEvents()) {			
+			Assert.assertNotNull("was not expected to be null", event.getId());
+			Assert.assertEquals("default-clinical-diagnosis", event.getClinicalDiagnosis());
+			Assert.assertEquals("default-clinical-status", event.getClinicalStatus());
+			Assert.assertEquals("cp1", event.getCollectionProtocol());
+			Assert.assertEquals("SITE1", event.getDefaultSite());
+			Assert.assertEquals("event-" + event.getId(), event.getEventLabel());
+			Assert.assertEquals(event.getId(), event.getEventPoint().doubleValue(), 0);
+		}
+	}
+	
+	@Test
+	public void getEventsForANonExistingCp() {
+		ReqCpeListEvent req = CpeTestData.getCpeList();
+		req.setCpId(11L);
+		
+		CpeListEvent resp = cpSvc.getProtocolEvents(req);
+		TestUtils.recordResponse(resp);
+
+		Assert.assertEquals("Events with given CP was not found in response.", EventStatus.NOT_FOUND, resp.getStatus());
+		Assert.assertEquals(req.getCpId(), resp.getCpId());
+	}
+	
+	@Test
+	@DatabaseSetup("CollectionProtocolEventsTest.getEventList.initial.xml")
+	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	public void getEventsForDisabledCp() {
+		ReqCpeListEvent req = CpeTestData.getCpeList();
+		req.setCpId(2L);
+		
+		CpeListEvent resp = cpSvc.getProtocolEvents(req);
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals("Events with disabled CP was not found in response.", EventStatus.NOT_FOUND, resp.getStatus());
+		Assert.assertNotNull(resp.getCpId());
+		Assert.assertEquals(req.getCpId(), resp.getCpId());
+		Assert.assertNull(resp.getEvents());
+	}
+	
+	@Test
+	@DatabaseSetup("CollectionProtocolEventsTest.getEventList.initial.xml")
+	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	public void getEventsForCpWithNoEvents() {
+		ReqCpeListEvent req = CpeTestData.getCpeList();
+		req.setCpId(3L);
+		
+		CpeListEvent resp = cpSvc.getProtocolEvents(req);
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		Assert.assertEquals(req.getCpId(), resp.getCpId());
+		Assert.assertNotNull(resp);
+		Assert.assertEquals((int)0, resp.getEvents().size());
+	}
+		
+	/* 
+	 * Add CollectionProtocolEvents API Tests 
+	 */
+	
 	@Test
 	@DatabaseSetup("CollectionProtocolEventsTest.addEvent.initial.xml")
 	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
@@ -75,6 +154,7 @@ public class CollectionProtocolEventsTest {
 		Assert.assertEquals(EventStatus.OK, resp.getStatus());
 		
 		CollectionProtocolEventDetail detail = resp.getCpe();
+		Assert.assertNotNull(detail.getId());
 		Assert.assertNotNull(detail);
 		Assert.assertEquals("default-cp", detail.getCollectionProtocol());
 		Assert.assertEquals("default-event-label", detail.getEventLabel());
@@ -97,12 +177,13 @@ public class CollectionProtocolEventsTest {
 
 		Assert.assertEquals(false, resp.isSuccess());
 		Assert.assertEquals("Duplicate event label was not found in response.", EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("Event label not unique", resp.getException().getMessage());
 	}
 	
 	@Test
 	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
 	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
-	public void addEventWithoutLabel() {
+	public void addEventWithoutEventLabel() {
 		AddCpeEvent req = CpeTestData.getAddCpeEvent();
 		req.getCpe().setEventLabel("");
 		
@@ -181,5 +262,134 @@ public class CollectionProtocolEventsTest {
 
 		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
 		Assert.assertEquals("Collection protocol was disabled in response.", true, TestUtils.isErrorCodePresent(resp, CpErrorCode.INVALID_CP_TITLE, COLLECTION_PROTOCOL));
-	}	
+	}
+	
+	/* 
+	 * Update CollectionProtocolEvents API Tests 
+	 */
+	
+	@Test
+	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
+	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@ExpectedDatabase(value="CollectionProtocolEventsTest.updateEvent.expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void updateEvent() {
+		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
+		
+		CpeUpdatedEvent resp = cpSvc.updateEvent(req);
+		TestUtils.recordResponse(resp);
+				
+		Assert.assertNotNull(resp);
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		
+		CollectionProtocolEventDetail detail = resp.getCpe();
+		Assert.assertNotNull(detail);
+		Assert.assertNotNull(detail.getId());
+		Assert.assertEquals("default-cp", detail.getCollectionProtocol());
+		Assert.assertEquals("updated-event-label", detail.getEventLabel());
+		Assert.assertEquals("updated-site", detail.getDefaultSite());
+		Assert.assertEquals(2, detail.getEventPoint().doubleValue(), 0);
+		Assert.assertEquals("updated-clinical-diagnosis", detail.getClinicalDiagnosis());
+		Assert.assertEquals("updated-clinical-status", detail.getClinicalStatus());
+		Assert.assertEquals("Active", detail.getActivityStatus()); 
+	}
+	
+	@Test
+	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
+	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	public void updateEventWithDuplicateEventLabel() {
+		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
+		req.getCpe().setEventLabel("duplicate-event-label");
+
+		CpeUpdatedEvent resp = cpSvc.updateEvent(req);
+		TestUtils.recordResponse(resp);
+
+		Assert.assertEquals(false, resp.isSuccess());
+		Assert.assertEquals("Duplicate event label was not found in response.", EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("Event label not unique", resp.getException().getMessage());
+	}
+	
+	@Test
+	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
+	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	public void updateEventWithoutEventLabel() {
+		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
+		req.getCpe().setEventLabel("");
+		
+		CpeUpdatedEvent resp = cpSvc.updateEvent(req);
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("Event label was null in the response.", true, TestUtils.isErrorCodePresent(resp,CpErrorCode.MISSING_EVENT_LABEL, EVENT_LABEL));
+	}
+	
+	@Test
+	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
+	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	public void updateEventWithInvalidSite() {
+		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
+		req.getCpe().setDefaultSite("invalid-site");
+		
+		CpeUpdatedEvent resp = cpSvc.updateEvent(req);
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("Invalid site was not found in response.", true, TestUtils.isErrorCodePresent(resp, CpErrorCode.INVALID_SITE, DEFAULT_SITE));
+	}
+	
+	@Test
+	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
+	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	public void updateEventWithInvalidEventPoint() {
+		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
+		req.getCpe().setEventPoint(-1.0);
+		
+		CpeUpdatedEvent resp = cpSvc.updateEvent(req);
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("Invalid event point was not found in response.", true, TestUtils.isErrorCodePresent(resp, CpErrorCode.INVALID_EVENT_POINT, EVENT_POINT));
+	}
+	
+	@Test
+	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
+	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	public void updateEventWithInvalidCP() {
+		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
+		req.getCpe().setCollectionProtocol("invalid-cp");
+		
+		CpeUpdatedEvent resp = cpSvc.updateEvent(req);
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("Invalid collection protocol was not found in response.", true, TestUtils.isErrorCodePresent(resp, CpErrorCode.INVALID_CP_TITLE, COLLECTION_PROTOCOL));
+	}
+	
+	@Test
+	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
+	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	public void updateEventWithoutCP() {
+		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
+		req.getCpe().setCollectionProtocol("");
+		
+		CpeUpdatedEvent resp = cpSvc.updateEvent(req);
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("Collection protocol was not found in response.", true, TestUtils.isErrorCodePresent(resp, CpErrorCode.INVALID_CP_TITLE, COLLECTION_PROTOCOL));
+	}
+	
+	@Test
+	@DatabaseSetup("CollectionProtocolEventsTest.addEventWithDisabledCP.initial.xml")
+	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	public void updateEventWithDisabledCP() {
+		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
+		req.getCpe().setCollectionProtocol("disabled-cp");
+
+		CpeUpdatedEvent resp = cpSvc.updateEvent(req);
+		TestUtils.recordResponse(resp);
+
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("Collection protocol was disabled in response.", true, TestUtils.isErrorCodePresent(resp, CpErrorCode.INVALID_CP_TITLE, COLLECTION_PROTOCOL));
+	}
 }

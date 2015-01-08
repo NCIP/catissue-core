@@ -76,14 +76,10 @@
 
     <div class="form-group clearfix">
       <div os-md-input ng-model="event.clinicalDiagnosis" placeholder="{{'cp.clinical_diagnosis' | translate}}">
-        <ui-select name="clinicalDiagnosis" ng-model="event.clinicalDiagnosis" required>
-          <ui-select-match placeholder="{{'cp.clinical_diagnosis' | translate}}">
-            {{$select.selected}}
-          </ui-select-match>
-          <ui-select-choices repeat="cd in clinicalDiagnoses" refresh="searchClinicalDiagnoses($select.search)" refresh-delay="750">
-            <span ng-bind-html="cd | highlight: $select.search"></span>
-          </ui-select-choices>
-        </ui-select>
+        <os-select name="clinicalDiagnosis" ng-model="event.clinicalDiagnosis" 
+          list="clinicalDiagnoses" refresh="searchClinicalDiagnoses"
+          os-md-input placeholder="{{'cp.clinical_diagnosis' | translate}}" required>
+        </os-select>
       </div>
       <div os-field-error field="eventForm.clinicalDiagnosis"></div>
     </div>

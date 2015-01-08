@@ -33,10 +33,10 @@ public class ScgReportDetail extends VisitDetail {
 		detail.setActivityStatus(scg.getActivityStatus());
 		detail.setClinicalDiagnosis(scg.getClinicalDiagnosis());
 		detail.setClinicalStatus(scg.getClinicalStatus());
-		detail.setVisitSite(scg.getSite().getName());
-		detail.setVisitStatus(scg.getStatus());
+		detail.setSite(scg.getSite().getName());
+		detail.setStatus(scg.getStatus());
 		detail.setComments(scg.getComments());
-		detail.setCpeId(scg.getCpEvent().getId());
+		detail.setEventId(scg.getCpEvent().getId());
 		detail.setCprId(scg.getRegistration().getId());
 		detail.setId(scg.getId());
 		detail.setName(scg.getName());

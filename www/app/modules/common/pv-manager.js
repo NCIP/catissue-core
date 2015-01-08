@@ -64,10 +64,17 @@ angular.module('openspecimen')
       'Not Specified'
     ];
 
+    /** We need to have i18n keys for these as well **/
     var storageTypes = [
       'Auto',
       'Manual',
       'Virtual'
+    ];
+
+    var visitStatuses = [
+      'Complete',
+      'Incomplete',
+       'Pending'
     ];
 
     var pvMap = {
@@ -76,7 +83,9 @@ angular.module('openspecimen')
       vitalStatus: vitalStatuses, 
       race: races,
       anatomicSite: anatomicSites,
-      'storage-type': storageTypes
+
+      'storage-type': storageTypes,
+      'visit-status': visitStatuses
     };
 
     var pvIdMap = {
@@ -93,7 +102,8 @@ angular.module('openspecimen')
       'ethnicity'           : 'Ethnicity_PID',
       'race'                : 'Race_PID',
       'anatomic-site'       : 'Tissue_Site_PID',
-      'site-type'           : 'Site_Type_PID'
+      'site-type'           : 'Site_Type_PID',
+      'clinical-diagnosis'  : 'Clinical_Diagnosis_PID'
     };
 
     return {
@@ -169,25 +179,8 @@ angular.module('openspecimen')
             });
           }
         );
+
         return sites;
-      },
-
-      getClinicalDiagnoses: function(params, cb) {
-        var url = ApiUrls.getBaseUrl() + '/clinical-diagnoses';
-        var diagnoses = [];
-        $http.get(url, {params: params}).then(
-          function(result) {
-            angular.forEach(result.data, function(diagnosis) {
-              diagnoses.push(diagnosis);
-            });
-
-            if (typeof cb == 'function') {
-              cb(result.data);
-            }
-          }
-        );
-
-        return diagnoses;
       }
     };
   });

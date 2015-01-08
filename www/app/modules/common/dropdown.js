@@ -23,7 +23,7 @@ angular.module('openspecimen')
           .attr('placeholder', tAttrs.placeholder);
         
         var uiSelectChoices = angular.element('<ui-select-choices/>')
-          .attr('repeat', "item in " + tAttrs.list)
+          .attr('repeat', "item in " + tAttrs.list + " | filter: $select.search")
           .append('<span ng-bind-html="item | highlight: $select.search"></span>');
 
         if (angular.isDefined(tAttrs.multiple)) {
@@ -33,6 +33,13 @@ angular.module('openspecimen')
           uiSelectMatch.append('{{$select.selected}}');
         }
 
+        if (angular.isDefined(tAttrs.refresh)) {
+          uiSelectChoices.attr({
+            'refresh': tAttrs.refresh + '($select.search)',
+            'refresh-delay': tAttrs.refreshDelay || 750
+          });
+        }
+            
         uiSelect.append(uiSelectMatch).append(uiSelectChoices);
         
         var selectContainer = angular.element("<div/>")

@@ -7,7 +7,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDeta
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -38,13 +37,6 @@ public class CpTestData {
 		return req;
 	}
 	
-	public static ReqClinicalDiagnosesEvent getReqClinicalDiagnosesEvent() {
-		ReqClinicalDiagnosesEvent req = new ReqClinicalDiagnosesEvent();
-		req.setCpId(1L);
-		req.setSessionDataBean(CprTestData.getSessionDataBean());
-		return req;
-	}
-	
 	public static UserSummary getUser(Long id, String firstName, String lastName, String loginName) {
 		UserSummary user = new UserSummary();
 		user.setId(id);
@@ -66,14 +58,6 @@ public class CpTestData {
 		return users;
 	}
 	
-	public static List<String> getClinicalDiagnoses() {
-		List<String> diagnoses = new ArrayList<String>();
-		diagnoses.add("One");
-		diagnoses.add("Two");
-		diagnoses.add("Three");
-		return diagnoses;
-	}
-	
 	public static CollectionProtocolDetail getCp() {
 		CollectionProtocolDetail cp = new CollectionProtocolDetail();
 		cp.setTitle("title");
@@ -83,7 +67,6 @@ public class CpTestData {
 		cp.setConsentsWaived(true);
 		cp.setIrbId("ASDF-0000");
 		cp.setPpidFmt("ppid-format");
-		cp.setClinicalDiagnoses(getClinicalDiagnoses());
 		cp.setAnticipatedParticipantsCount(100L);
 		cp.setDescriptionUrl("www.example.com");
 		cp.setSpecimenLabelFmt("specimen-label-format");

@@ -905,11 +905,11 @@ public class CollectionProtocolRegistrationTest {
 		Assert.assertNull(req.getCprId());
 	}
 	
+
 	/*
 	 * Add Visit API Tests
 	 */
-	
-	//@Test
+	@Test
 	@DatabaseSetup("CollectionProtocolRegistrationTest.addVisitsTest.initial.xml")
 	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
 	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.addVisitsTest.expected.xml", 
@@ -921,12 +921,12 @@ public class CollectionProtocolRegistrationTest {
 		TestUtils.recordResponse(resp);
 		Assert.assertEquals(true, resp.isSuccess());
 		Assert.assertNotNull(resp.getVisit());
-		Assert.assertEquals((Long)1L, resp.getVisit().getCpeId());
+		Assert.assertEquals((Long)1L, resp.getVisit().getEventId());
 		Assert.assertEquals((Long)1L, resp.getVisit().getCprId());
 		Assert.assertEquals("test-pathology", resp.getVisit().getSurgicalPathologyNumber());
 		Assert.assertEquals("test-daiagnosis", resp.getVisit().getClinicalDiagnosis());
-		Assert.assertEquals("Complete", resp.getVisit().getVisitStatus());
-		Assert.assertEquals("SITE1", resp.getVisit().getVisitSite());
+		Assert.assertEquals("Completed", resp.getVisit().getStatus());
+		Assert.assertEquals("SITE1", resp.getVisit().getSite());
 		Assert.assertEquals("Active", resp.getVisit().getActivityStatus());
 		Assert.assertEquals("test-status", resp.getVisit().getClinicalStatus());
 	}
@@ -934,34 +934,23 @@ public class CollectionProtocolRegistrationTest {
 	/*
 	 * This test Checks for the error: Cpr not found, Cpe not found, Site Not Found
 	 */
-	//@Test
+	@Test
 	public void addVisitsMissingCprCpeSite() {
 		AddVisitEvent req = CprTestData.getAddVisitEvent();
 		VisitAddedEvent resp = cprSvc.addVisit(req);
 		
 		TestUtils.recordResponse(resp);
 		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, CPE));
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, CPR));
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, SITE));
+		Assert.assertEquals("Invalid CPE Errorcode was not found!", true,
+				TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "cpeId"));
+		Assert.assertEquals("Invalid CPR Errorcode was not found!", true, 
+				TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "cprId"));
+		Assert.assertEquals("Invalid SITE Errorcode was not found!", true, 
+				TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "site"));
 		
 	}
 	
-	//@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.addVisitsTest.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	public void addVisitsVisitDatePriorToRegistrationDate() {
-		AddVisitEvent req = CprTestData.getAddVisitEvent();
-		req.getVisit().setVisitDate(CprTestData.getDate(11, 6, 2000));
-		
-		VisitAddedEvent resp = cprSvc.addVisit(req);
-		
-		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_VISIT_DATE, VISIT_DATE));
-	}
-	
-	//@Test
+	@Test
 	@DatabaseSetup("CollectionProtocolRegistrationTest.addVisitsInvalidCprCpe.initial.xml")
 	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
 	public void addVisitsInvalidCprCpe() {
@@ -970,15 +959,15 @@ public class CollectionProtocolRegistrationTest {
 		
 		TestUtils.recordResponse(resp);
 		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_CPR_CPE, CPR_CPE));
+		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_CPR_CPE, "cpr, cpe"));
 	}
 	
-	//@Test
+	@Test
 	@DatabaseSetup("CollectionProtocolRegistrationTest.addVisitsTest.initial.xml")
 	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
 	public void addVisitsMissingSiteName() {
 		AddVisitEvent req = CprTestData.getAddVisitEvent();
-		req.getVisit().setVisitSite(null);
+		req.getVisit().setSite(null);
 		req.getVisit().setCprId(null);
 		req.getVisit().setCpTitle("invalid-serach-term");
 		req.getVisit().setPpid("invalid-search-term");
@@ -988,18 +977,18 @@ public class CollectionProtocolRegistrationTest {
 		TestUtils.recordResponse(resp);
 		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
 		Assert.assertEquals("Missing site name error was not found!", 
-				true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.MISSING_ATTR_VALUE, "site name"));
+				true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.MISSING_ATTR_VALUE, "site"));
 		Assert.assertEquals("Invalid cp-title error was expected, but not found!", 
-				true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "collection protocol title"));
+				true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "collectionProtocol"));
 	}
 	
-	//@Test
+	@Test
 	@DatabaseSetup("CollectionProtocolRegistrationTest.addVisitsTest.initial.xml")
 	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
 	public void addVisitsTestInvalidPpid() {
 		AddVisitEvent req = CprTestData.getAddVisitEvent();
 		req.getVisit().setCprId(null);
-		req.getVisit().setCpeId(null);
+		req.getVisit().setEventId(null);
 		
 		req.getVisit().setCpTitle("default-cp");
 		req.getVisit().setPpid("invalid-ppid");
@@ -1008,8 +997,8 @@ public class CollectionProtocolRegistrationTest {
 		
 		TestUtils.recordResponse(resp);
 		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "participant protocol id"));
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, CPL));
+		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "ppid"));
+		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "eventLabel"));
 	}
 }
 

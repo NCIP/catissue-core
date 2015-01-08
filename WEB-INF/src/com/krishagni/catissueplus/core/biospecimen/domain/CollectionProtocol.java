@@ -53,8 +53,6 @@ public class CollectionProtocol {
 	
 	private Boolean consentsWaived;
 	
-	private Set<ClinicalDiagnosis> clinicalDiagnosis = new HashSet<ClinicalDiagnosis>();
-	
 	private Set<ConsentTier> consentTier = new HashSet<ConsentTier>();
 	
 	private Set<DistributionProtocol> distributionProtocols = new HashSet<DistributionProtocol>();
@@ -238,14 +236,6 @@ public class CollectionProtocol {
 
 	public void setConsentsWaived(Boolean consentsWaived) {
 		this.consentsWaived = consentsWaived;
-	}
-
-	public Set<ClinicalDiagnosis> getClinicalDiagnosis() {
-		return clinicalDiagnosis;
-	}
-
-	public void setClinicalDiagnosis(Set<ClinicalDiagnosis> clinicalDiagnosis) {
-		this.clinicalDiagnosis = clinicalDiagnosis;
 	}
 
 	public Set<ConsentTier> getConsentTier() {

@@ -1,0 +1,13 @@
+language: java
+script: ant run_integration_tests
+
+notifications:
+  email:
+    recipients:
+      - os-v20-devs@krishagni.com
+    on_success: always
+    on_failure: always
+
+branches:
+  only:
+    - OS_v20

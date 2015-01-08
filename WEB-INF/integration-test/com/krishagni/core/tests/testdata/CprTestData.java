@@ -142,11 +142,11 @@ public class CprTestData {
 		visit.setCprId(1L);
 		visit.setClinicalDiagnosis("test-daiagnosis");
 		visit.setClinicalStatus("test-status");
-		visit.setCpeId(1L);
+		visit.setEventId(1L);
 		visit.setSurgicalPathologyNumber("test-pathology");
 		visit.setVisitDate(getDate(21, 1, 2012));
-		visit.setVisitSite("SITE1");
-		visit.setVisitStatus("Completed");
+		visit.setSite("SITE1");
+		visit.setStatus("Completed");
 		return visit;
 	}
 	

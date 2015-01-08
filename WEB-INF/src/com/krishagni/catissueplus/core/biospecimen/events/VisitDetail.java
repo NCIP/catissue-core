@@ -9,7 +9,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 public class VisitDetail {
 	private Long cprId;
 
-	private Long cpeId;
+	private Long eventId;
 	
 	private String ppid;
 	
@@ -27,9 +27,9 @@ public class VisitDetail {
 
 	private String activityStatus;
 
-	private String visitSite;
+	private String site;
 
-	private String visitStatus;
+	private String status;
 
 	private String comments;
 
@@ -45,12 +45,12 @@ public class VisitDetail {
 		this.cprId = cprId;
 	}
 
-	public Long getCpeId() {
-		return cpeId;
+	public Long getEventId() {
+		return eventId;
 	}
 
-	public void setCpeId(Long cpeId) {
-		this.cpeId = cpeId;
+	public void setEventId(Long eventId) {
+		this.eventId = eventId;
 	}
 
 	public String getPpid() {
@@ -117,20 +117,20 @@ public class VisitDetail {
 		this.activityStatus = activityStatus;
 	}
 
-	public String getVisitSite() {
-		return visitSite;
+	public String getSite() {
+		return site;
 	}
 
-	public void setVisitSite(String visitSite) {
-		this.visitSite = visitSite;
+	public void setSite(String site) {
+		this.site = site;
 	}
 
-	public String getVisitStatus() {
-		return visitStatus;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setVisitStatus(String visitStatus) {
-		this.visitStatus = visitStatus;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public String getComments() {
@@ -162,7 +162,7 @@ public class VisitDetail {
 		detail.setActivityStatus(visit.getActivityStatus());
 		detail.setClinicalDiagnosis(visit.getClinicalDiagnosis());
 		detail.setClinicalStatus(visit.getClinicalStatus());
-		detail.setVisitStatus(visit.getStatus());
+		detail.setStatus(visit.getStatus());
 		detail.setComments(visit.getComments());
 		detail.setId(visit.getId());
 		detail.setName(visit.getName());
@@ -175,9 +175,9 @@ public class VisitDetail {
 		detail.setPpid(cpr.getProtocolParticipantIdentifier());
 		detail.setCpTitle(cpr.getCollectionProtocol().getTitle());
 		
-		detail.setCpeId(visit.getCpEvent().getId());
+		detail.setEventId(visit.getCpEvent().getId());
 		detail.setEventLabel(visit.getCpEvent().getEventLabel());
-		detail.setVisitSite(visit.getSite().getName());		
+		detail.setSite(visit.getSite().getName());		
 		
 		return detail;
 	}

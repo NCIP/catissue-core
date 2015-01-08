@@ -1,0 +1,82 @@
+<div ng-controller="AddVisitCtrl">
+  <form name="visitForm" os-form-validator="visitForm" novalidate>
+    <div class="clearfix">
+      <div class="col-xs-4">
+        <div class="form-group">
+          <div ng-model="visit.visitDate" placeholder="Visit Date" os-md-input>
+            <input name="visitDate" ng-model="visit.visitDate" class="form-control" type="text"
+               datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="regDt.isOpen" ng-focus="regDt.isOpen=true"
+               required placeholder="Visit Date">
+          </div>
+          <div os-field-error field="visitForm.visitDate"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-4">
+        <div class="form-group">
+          <os-select name="status" ng-model="visit.status" list="visitStatuses"
+            os-md-input placeholder="Visit Status" required>
+          <div os-field-error field="visitForm.visitStatus"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-4">
+        <div class="form-group">
+          <os-select name="site" ng-model="visit.site" list="sites"
+            os-md-input placeholder="Visit Site" required>
+          </os-select>
+          <div os-field-error field="visitForm.visitSite"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="clearfix">
+      <div class="col-xs-4">
+        <div class="form-group">
+          <os-select name="clinicalDiagnosis" ng-model="visit.clinicalDiagnosis" 
+            list="clinicalDiagnoses" refresh="searchClinicalDiagnoses"
+            os-md-input placeholder="Clinical Diagnosis" required>
+          </os-select>
+          <div os-field-error field="visitForm.clinicalDiagnosis"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-4">
+        <div class="form-group">
+          <os-select name="clinicalStatus" ng-model="visit.clinicalStatus" list="clinicalStatuses"
+            os-md-input placeholder="Clinical Status" required>
+          </os-select>
+          <div os-field-error field="visitForm.clinicalStatus"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-4">
+        <div class="form-group">
+          <input name="surgicalPathologyNo" ng-model="visit.surgicalPathologyNumber" 
+            os-md-input class="form-control" type="text" placeholder="Surgical Pathology Number">
+        </div>
+      </div>
+    </div>
+
+    <div class="clearfix">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <input name="comments" ng-model="visit.comments" 
+            os-md-input class="form-control" type="text" placeholder="Comments">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group clearfix">
+      <div class="col-xs-4">
+        <button type="submit" class="btn btn-success" 
+          os-form-submit="addVisit()">
+          Add Visit
+        </button>
+        <a class="btn os-btn-text-secondary" ng-click="revertEdit()" translate="common.buttons.cancel">
+          Cancel
+        </a>
+      </div>
+    </div>
+  </form>
+</div>
