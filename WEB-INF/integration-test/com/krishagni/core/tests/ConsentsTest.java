@@ -186,7 +186,7 @@ public class ConsentsTest {
 	@Test
 	@DatabaseSetup("ConsentsTest.addConsentsTest.initial.xml")
 	@DatabaseTearDown("ConsentsTest.generic.teardown.xml")
-	public void addConsentsTestForNonExistingCp() {
+	public void getConsentsTestForNonExistingCp() {
 		ReqConsentTiersEvent req = ConsentsTestData.getReqConsentTiersEvent();
 		req.setCpId(-1L);
 		ConsentTiersEvent resp = cpSvc.getConsentTiers(req);

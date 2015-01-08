@@ -1,5 +1,8 @@
 package com.krishagni.core.tests;
 
+import java.util.List;
+import java.util.Set;
+
 import javax.annotation.Resource;
 
 import junit.framework.Assert;
@@ -22,8 +25,10 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.MatchParticipantEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMatchedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
@@ -100,7 +105,7 @@ public class ParticipantTest {
 	public void matchParticpantByLnameAndDob() {
 		MatchParticipantEvent req = ParticipantTestData.getMatchParticipantEvent();
 		req.getParticipantDetail().setLastName("default_last_name");
-		req.getParticipantDetail().setBirthDate(CprTestData.getDate(21, 10, 2012));
+		req.getParticipantDetail().setBirthDate(CprTestData.getDate(21, 10, 2000));
 		ParticipantMatchedEvent resp = participantSvc.getMatchingParticipants(req);
 		
 		Assert.assertEquals(true, resp.isSuccess());
@@ -119,8 +124,37 @@ public class ParticipantTest {
 		ParticipantDetailEvent resp = participantSvc.getParticipant(req);
 		
 		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals((Long)1L, resp.getParticipantDetail().getId());
+		ParticipantDetail participant = resp.getParticipantDetail();
+		Assert.assertNotNull("Participant detail object should not be null!", participant );
+		Assert.assertEquals(new Long(1), participant.getId());
+		Assert.assertEquals("Firstname mismatch", "default_first_name", participant.getFirstName());
+		Assert.assertEquals("LastName mismatch", "default_last_name", participant.getLastName());
+		Assert.assertEquals("Birthdate mismatch", CprTestData.getDate(21,10,2000), participant.getBirthDate());
+		Assert.assertEquals("Deathdate mismatch", CprTestData.getDate(21,10,2012), participant.getDeathDate());
+		Assert.assertEquals("SSN mismatch", "333-22-4444", participant.getSsn());
+		Assert.assertEquals("Gender mismatch" , "MALE", participant.getGender());
+		Assert.assertEquals("Genotype mismatch" , "XX", participant.getSexGenotype());
+		Assert.assertEquals("Ethnicity mismatch" , "Hispanic or Latino", participant.getEthnicity());
+		Assert.assertEquals("Empi-id mismatch" , "dummy-empi-id", participant.getEmpi());
+		Assert.assertEquals("Vital status mismatch", "Dead" , participant.getVitalStatus());
 		
+		List<ParticipantMedicalIdentifierNumberDetail> pmis = participant.getPmis();
+		Assert.assertEquals("Pmi count mismatch" , new Integer(2), new Integer(pmis.size()));
+		
+		for (ParticipantMedicalIdentifierNumberDetail pmi : pmis) { 
+			if ("SITE1".equals(pmi.getSiteName())) {
+				Assert.assertEquals("Mrn mismatch" , "MRN1" , pmi.getMrn());
+			} else if ("SITE2".equals(pmi.getSiteName())) {
+				Assert.assertEquals("Mrn mismatch" , "MRN2" , pmi.getMrn());
+			} else {
+				Assert.fail("Site: " + pmi.getSiteName() + " was not expected.");
+			}
+		}
+		
+		Set<String> race = participant.getRace();
+		Assert.assertEquals(new Integer(2), new Integer(race.size()));
+		Assert.assertEquals("Race 'Asian' not found!", true, race.contains("Asian"));
+		Assert.assertEquals("Race 'Asian' not found!", true, race.contains("American Indian or Alaska Native"));
 	}
 	
 	@Test

@@ -344,7 +344,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			
 			daoFactory.getSpecimenRequirementDao().saveOrUpdate(parent, true);
 			return AliquotsRequirementCreatedEvent.ok(SpecimenRequirementDetail.from(aliquots));
-		} catch (IllegalArgumentException iae) {
+		} catch (ObjectCreationException iae) {
 			return AliquotsRequirementCreatedEvent.badRequest(iae);
 		} catch (Exception e) {
 			return AliquotsRequirementCreatedEvent.serverError(e);
