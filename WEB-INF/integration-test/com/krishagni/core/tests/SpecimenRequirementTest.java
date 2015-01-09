@@ -196,11 +196,11 @@ public class SpecimenRequirementTest {
 				new Integer(3), new Integer(resp.getSpecimenRequirements().size()));
 		
 		for (SpecimenRequirementDetail actual : resp.getSpecimenRequirements()) {
-			Assert.assertEquals("Right", actual.getAnatomicSite());
+			Assert.assertEquals("Right", actual.getLaterality());
 			Assert.assertEquals("default-container", actual.getCollectionContainer());
 			Assert.assertEquals("default-procedure", actual.getCollectionProcedure());
 			Assert.assertEquals("default-label-format", actual.getLabelFmt());
-			Assert.assertEquals("Head", actual.getLaterality());
+			Assert.assertEquals("Head", actual.getAnatomicSite());
 			//TODO: currently lineage is hard coded as new
 			Assert.assertEquals("New", actual.getLineage());
 			Assert.assertEquals("default-label", actual.getName());
@@ -276,11 +276,11 @@ public class SpecimenRequirementTest {
 				new Integer(resp.getAliquots().size()));
 		
 		for (SpecimenRequirementDetail actual : resp.getAliquots()) {
-			Assert.assertEquals("Anatomic Site mismatch","Right", actual.getAnatomicSite());
+			Assert.assertEquals("Laterality mismatch","Right", actual.getLaterality());
 			Assert.assertEquals("Collection container mismatch", "default-container", actual.getCollectionContainer());
 			Assert.assertEquals("Collection procedure mismatch","default-procedure", actual.getCollectionProcedure());
 			Assert.assertEquals("Label format mismatch", req.getRequirement().getLabelFmt(), actual.getLabelFmt());
-			Assert.assertEquals("Laterality mismatch" , "Head", actual.getLaterality());
+			Assert.assertEquals("Anatomic site mismatch" , "Head", actual.getAnatomicSite());
 			Assert.assertEquals("Lineage mismatch", "Aliquot", actual.getLineage());
 			Assert.assertEquals("label mismatch", "default-label", actual.getName());
 			Assert.assertEquals("Pathology status mismatch" , "Malignant", actual.getPathologyStatus());
@@ -381,11 +381,11 @@ public class SpecimenRequirementTest {
 				new Integer(resp.getAliquots().size()));
 		
 		for (SpecimenRequirementDetail actual : resp.getAliquots()) {
-			Assert.assertEquals("Anatomic Site mismatch","Right", actual.getAnatomicSite());
+			Assert.assertEquals("Laterality mismatch","Right", actual.getLaterality());
 			Assert.assertEquals("Collection container mismatch", "default-container", actual.getCollectionContainer());
 			Assert.assertEquals("Collection procedure mismatch","default-procedure", actual.getCollectionProcedure());
 			Assert.assertEquals("Label format mismatch", "default-label-format", actual.getLabelFmt());
-			Assert.assertEquals("Laterality mismatch" , "Head", actual.getLaterality());
+			Assert.assertEquals("Anatomic site mismatch" , "Head", actual.getAnatomicSite());
 			Assert.assertEquals("Lineage mismatch", "Aliquot", actual.getLineage());
 			Assert.assertEquals("label mismatch", "default-label", actual.getName());
 			Assert.assertEquals("Pathology status mismatch" , "Malignant", actual.getPathologyStatus());
