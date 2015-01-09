@@ -47,13 +47,13 @@
     <property
       name="anatomicSite"
       type="string"
-      column="TISSUE_SIDE"
+      column="TISSUE_SITE"
       length="50"/>
 
     <property
       name="laterality"
       type="string"
-      column="TISSUE_SITE"
+      column="TISSUE_SIDE"
       length="50"/>
       
     <property
