@@ -23,8 +23,8 @@ public class SpecimenRequirementTestData {
 		req.setLineage("New");
 		req.setSpecimenClass("Molecular");
 		req.setType("Plasma");
-		req.setAnatomicSite("Right");
-		req.setLaterality("Head");
+		req.setAnatomicSite("Head");
+		req.setLaterality("Right");
 		req.setPathologyStatus("Malignant");
 		req.setStorageType("default-storage");
 		req.setInitialQty(1.1);
