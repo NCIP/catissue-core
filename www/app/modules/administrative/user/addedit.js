@@ -1,31 +1,32 @@
 angular.module('os.administrative.user.addedit', ['os.administrative.models'])
   .controller('UserAddEditCtrl', function($scope, $state, $stateParams,
-    User, Institute, Site, CollectionProtocol, Role, PvManager, Alerts) {
+    User, Institute, Role, PvManager, Alerts) {
  
     var init = function() {
       $scope.user = new User();
       $scope.user.userCPRoles = [];
       $scope.user.addPermission($scope.user.newPermission());
+     
       $scope.domains = PvManager.getPvs('domains');
+      
+      $scope.sites = PvManager.getSites();
+      $scope.sites.splice(0,0,"All");
       
       Institute.list().then(function(institutes) {
         $scope.institutes = institutes;
       });
          
-      $scope.sites = PvManager.getSites();
-      $scope.sites.splice(0,0,"All");
-      
       Role.list().then(function(roles) {
         $scope.roles = roles;
       });
     }
     
     $scope.setForm = function(form) {
-      if(form.$name == "userRoleForm") {
-        $scope.userRoleForm = form;
+      if(form.$name == "userForm") {
+        $scope.userForm = form;
       }
       else {
-        $scope.userForm = form;
+        $scope.userRoleForm = form;
       }
     };
   
@@ -71,20 +72,21 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
       $scope.cps.push(cpShortTitle);
     }
     
-    $scope.addSite = function (siteName) {
-      $scope.sites.push(siteName);
-    }
-    
     $scope.getCps = function (siteName) {
       $scope.cps = [];
-      Site.getCps(siteName).then(function(cpList) {
-        angular.forEach(cpList, function(cp) {
-          $scope.cps.push(cp.shortTitle);
-        });
+      if (siteName == "All") {
         $scope.cps.splice(0,0,"All");
+      }
+      else {
+        Site.getCps(siteName).then(function(cpList) {
+          angular.forEach(cpList, function(cp) {
+            $scope.cps.push(cp.shortTitle);
+          });
+          $scope.cps.splice(0,0,"All");
      
-        $scope.updateCpList(siteName);
-      })
+          $scope.updateCpList(siteName);
+        })
+      }
     }
     
     $scope.updateCpList = function(siteName) {
@@ -126,5 +128,4 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
     };
      
     init();
-
   });
