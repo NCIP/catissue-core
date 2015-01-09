@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.user.detail', ['os.administrative.models'])
-  .controller('UserDetailCtrl', function($scope, $q, user, Institute, Site, CollectionProtocol, Role, PvManager) {
+  .controller('UserDetailCtrl', function($scope, $q, user, Institute, Role, PvManager) {
     $scope.user = user;
     
     PvManager.loadPvs($scope, 'domains');
@@ -11,10 +11,6 @@ angular.module('os.administrative.user.detail', ['os.administrative.models'])
       $scope.institutes = institutes;
     });
         
-    CollectionProtocol.query().then(function(cps) {
-      $scope.cps = cps;
-    });
-    
     $scope.editUser = function(property, value) {
       var d = $q.defer();
       d.resolve({});

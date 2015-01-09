@@ -8,7 +8,7 @@
   </div>
   
   <div class="os-cards">
-    <!--TODO get sorted list from backend -->
+    <!--TODO get sorted list from backend and remove orderBy-->
     <div class="os-card" ng-repeat="user in users | orderBy:['lastName', 'firstName']" ng-click="showUserOverview(user)">
       <h4>
         <span class="glyphicon glyphicon-user"></span>
