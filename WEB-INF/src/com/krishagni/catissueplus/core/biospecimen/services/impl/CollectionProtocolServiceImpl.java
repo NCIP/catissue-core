@@ -31,6 +31,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpRespEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeAddedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotsRequirementEvent;
@@ -41,6 +42,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipants
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenRequirementsEvent;
@@ -262,6 +264,23 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	
 	@Override
 	@PlusTransactional
+	public CpeEvent getProtocolEvent(ReqCpeEvent req) {
+		Long cpeId = req.getCpeId();
+		
+		try {
+			CollectionProtocolEvent cpe = daoFactory.getCollectionProtocolDao().getCpe(cpeId);
+			if (cpe == null) {
+				return CpeEvent.notFound(cpeId);
+			}
+			
+			return CpeEvent.ok(CollectionProtocolEventDetail.from(cpe));
+		} catch (Exception e) {
+			return CpeEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
 	public CpeAddedEvent addEvent(AddCpeEvent req) {
 		try {
 			CollectionProtocolEvent cpe = cpeFactory.createCpe(req.getCpe());			
@@ -382,5 +401,4 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			oce.addError(CpErrorCode.TITLE_NOT_UNIQUE, "title");
 		}
 	}
-
 }
