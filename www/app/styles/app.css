@@ -593,3 +593,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 .os-inplace-form-edit-po .content .alert {
   padding: 6px 12px;
 }
+
+.os-border {
+  border: 1px solid #ddd;
+}
