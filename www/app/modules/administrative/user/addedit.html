@@ -5,7 +5,7 @@
   </div>
   
   <div os-wizard="userWizard">
-    <os-wizard-step on-finish="validateProfile" title="{{'user.profile' | translate}}">
+    <os-wizard-step on-finish="" title="{{'user.profile' | translate}}">
       <div ng-include="'user-add-edit.html'"></div>
     </os-wizard-step>
     <os-wizard-step on-finish="validatePermissions" title="{{'user.permissions' | translate}}">
@@ -109,7 +109,7 @@
         <label class="col-xs-3 control-label" translate="user.super_admin">Super Administrator</label>
         <div class="col-xs-9">
           <label class="checkbox-inline">
-            <input type="checkbox" ng-model="user.isSuperAdmin"/> Yes
+            <input type="checkbox" ng-model="user.isSuperAdmin" ng-change=setSuperAdminRole() /> Yes
           </label>
         </div>
       </div>
@@ -136,7 +136,7 @@
           <label class="control-label" translate="user.site">Site</label>
         </div>
         <div class="col-xs-3">
-          <label class="control-label" translate="user.cp">Collection Protocol</label>
+          <label class="control-label" translate="user.cpTitle">Collection Protocol</label>
         </div>
         <div class="col-xs-3">
           <label class="control-label" translate="user.role">Role</label>
@@ -146,8 +146,8 @@
       <div class="form-group clearfix" ng-repeat="userCPRole in user.userCPRoles">
         <ng-form name="roleForm" os-form-validator="roleForm" parent-validator="userRoleFormValidator"> 
           <div class="col-xs-3 col-xs-offset-2">
-            <ui-select name="siteName" ng-model="userCPRole.site" on-select="getCps($item)" 
-              ng-required="!!userCPRole.cp || !userCPRole.site">
+            <ui-select name="siteName" ng-model="userCPRole.site" ng-change="getCps(userCPRole)" 
+              ng-required="!!userCPRole.cpTitle || !userCPRole.site">
               <ui-select-match placeholder="{{'user.site' | translate}}"> 
                 {{userCPRole.site}}
               </ui-select-match>
@@ -157,22 +157,25 @@
             </ui-select>
             <div os-field-error field="roleForm.siteName"></div>
           </div>
-       
+          
           <div class="col-xs-3">
             <ui-select name="cpTitle" ng-model="userCPRole.cpTitle" ng-change="checkExistingUserCPRoles(userCPRole)"
               ng-required="!!userCPRole.site || !userCPRole.cpTitle">
-              <ui-select-match placeholder="{{'user.cp' | translate}}"> 
+              <ui-select-match placeholder="{{'user.cpTitle' | translate}}"> 
                 {{userCPRole.cpTitle}} 
               </ui-select-match>
-              <ui-select-choices repeat="cp in cps | filter: $select.search">
-                <span ng-bind-html="cp | highlight: $select.search"></span>
+              <ui-select-choices 
+                repeat="cp.shortTitle as cp in siteCpMaps[userCPRole.site] | osGroupOptionsFilter:'cpTitle':
+                (user.userCPRoles | filter:{site:userCPRole.site}):userCPRole">
+                <span ng-bind-html="cp.shortTitle | highlight: $select.search"></span>
               </ui-select-choices>
             </ui-select>
             <div os-field-error field="roleForm.cpTitle"></div>
           </div>
     
           <div class="col-xs-3">
-            <ui-select name="role" ng-model="userCPRole.roleName" ng-required="!!userCPRole.cpTitle || !userCPRole.roleName">
+            <ui-select name="role" ng-model="userCPRole.roleName"
+              ng-required="!!userCPRole.cpTitle || !userCPRole.roleName">
               <ui-select-match placeholder="{{'user.role' | translate}}"> 
                 {{userCPRole.roleName}} 
               </ui-select-match>
@@ -192,7 +195,7 @@
       </div>
         
       <div class="form-group clearfix">
-        <div class="col-xs-3 col-xs-offset-2">
+        <div class="col-xs-3 col-xs-offset-2" ng-if="addMorePermissions">
           <a ng-click="addPermission()">
             <span class="glyphicon glyphicon-plus"></span>
           </a>
