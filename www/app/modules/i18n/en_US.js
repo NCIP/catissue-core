@@ -211,7 +211,7 @@
     "super_admin": "Super Administrator",
     "login_details": "Login Details",
     "site": "Site",
-    "cp": "Collection Protocol",
+    "cpTitle": "Collection Protocol",
     "role": "Role",
     "add_permission":"Add Permission",
     "profile": "Profile",

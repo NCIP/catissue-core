@@ -70,15 +70,21 @@ angular.module('openspecimen')
     ];
 
     var resources = [
-      'user',
       'collection protocol',
+      'institute',
+      'order',
+      'participant',
+      'shipment',
+      'specimen',
+      'specimen collection group',
       'site',
-      'institute'
+      'storage container',
+      'user'
     ];
 
     var privileges = [
       'create',
-      'insert',
+      'read',
       'update',
       'delete'
     ];

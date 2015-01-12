@@ -81,4 +81,22 @@
       </li>   
     </ul>
   </div>
+  <div class="col-xs-6">
+    <table st-table="user.userCPRoles" class="table">
+      <thead>
+        <tr>
+          <th class="control-label" title="{{user.site | translate}}">Site</th>
+          <th class="control-label" title="{{user.cpTitle | translate}}">Collection Protocol</th>
+          <th class="control-label" title="{{user.role | translate}}">Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="userCPRole in user.userCPRoles">
+          <td>{{userCPRole.site}}</td>
+          <td>{{userCPRole.cpTitle}}</td>
+          <td>{{userCPRole.roleName}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>  
