@@ -5,7 +5,7 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
     var init = function() {
       $scope.role = new Role();
       $scope.role.acl = []; 
-      $scope.role.addResource($scope.role.newResource($scope.role));
+      $scope.addResource();
       $scope.resources =  PvManager.getPvs('resources');
       $scope.privileges = PvManager.getPvs('privileges');
     }

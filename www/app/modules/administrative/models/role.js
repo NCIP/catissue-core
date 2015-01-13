@@ -41,7 +41,6 @@ angular.module('os.administrative.models.role', ['os.common.models'])
       this.acl.splice(index, 1);
     }
     
-    
     return Role;
   });
 

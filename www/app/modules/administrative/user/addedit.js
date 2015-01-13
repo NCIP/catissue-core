@@ -1,6 +1,6 @@
 angular.module('os.administrative.user.addedit', ['os.administrative.models'])
   .controller('UserAddEditCtrl', function($scope, $state, $stateParams,
-    User, Site, CollectionProtocol, Institute, Role, PvManager, Alerts) {
+    User, Site, Institute, Role, PvManager, Alerts) {
  
     var init = function() {
       $scope.user = new User();
@@ -20,6 +20,68 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
       Role.list().then(function(roles) {
         $scope.roles = roles;
       });
+    }
+    
+    $scope.setForm = function(form) {
+      if(form.$name == "userForm") {
+        $scope.userForm = form;
+      }
+      else {
+        $scope.userRoleForm = form;
+      }
+    };
+  
+    var validation = function(form) {
+      if(!form.$valid) {
+        Alerts.error("There are validation errors as highlighted below. Please correct them");
+        return false;
+      }
+      return true
+    }
+    
+    $scope.validateProfile = function() {
+      $scope.userForm.submitted = true;
+      var result = validation($scope.userForm)
+      return result;
+    };
+    
+    $scope.validatePermissions = function() {
+      $scope.userRoleForm.submitted = true;
+      var result = validation($scope.userRoleForm);
+      return result;
+    };
+      
+    $scope.addPermission = function() { 
+      $scope.user.addPermission($scope.user.newPermission());
+    };
+    
+    $scope.removePermission = function(userCPRole) {  
+      if(userCPRole.site == "All" && userCPRole.cpTitle == "All") {
+        $scope.addMorePermissions = true;
+      }
+      $scope.user.removePermission($scope.user.userCPRoles.indexOf(userCPRole));
+    };
+    
+    $scope.resetDepartmentName = function() {
+      $scope.user.deptName = undefined;
+    }
+    
+    $scope.getDepartments = function(instituteName) {
+      Institute.getDepartments(instituteName).then(function(result) {
+        $scope.departments = result;
+      });
+    };
+
+    $scope.setSuperAdminRole = function() {
+      if($scope.user.isSuperAdmin) {
+        $scope.user.userCPRoles[0] = {site:"All", cpTitle:"All", roleName:"Super Administrator"};
+        $scope.addMorePermissions = false;
+      }
+      else {
+        $scope.user.userCPRoles[0] = {site:'', cpTitle:'', roleName:''};
+        $scope.addMorePermissions = true;
+        $scope.userRoleForm.submitted = false;
+      }
     }
     
     $scope.getCps = function(newCPRole) {
@@ -60,74 +122,15 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
         }
       }
     }
-        
-    $scope.setForm = function(form) {
-      if(form.$name == "userForm") {
-        $scope.userForm = form;
-      }
-      else {
-        $scope.userRoleForm = form;
-      }
-    };
-  
-    $scope.validateProfile = function() {
-      $scope.userForm.submitted = true;
-      
-      if(!$scope.userForm.$valid) {
-        Alerts.error("There are validation errors as highlighted below. Please correct them");
-        return false;
-      }
-      return true;
-    };
-    
-    $scope.validatePermissions = function() {
-      $scope.userRoleForm.submitted = true;
-      
-      if(!$scope.userRoleForm.$valid) {
-        Alerts.error("There are validation errors as highlighted below. Please correct them");
-        return false;
-      }
-      return true;
-    };
-      
-    $scope.addPermission = function() { 
-      $scope.user.addPermission($scope.user.newPermission());
-    };
-    
-    $scope.removePermission = function(userCPRole) {  
-      if(userCPRole.site == "All" && userCPRole.cpTitle == "All") {
-        $scope.addMorePermissions = true;
-      }
-      $scope.user.removePermission($scope.user.userCPRoles.indexOf(userCPRole));
-    };
-    
-    $scope.resetDepartmentName = function() {
-      $scope.user.deptName = undefined;
-    }
-    
-    $scope.getDepartments = function(instituteName) {
-      Institute.getDepartments(instituteName).then(function(result) {
-        $scope.departments = result;
-      });
-    };
-
-    $scope.setSuperAdminRole = function() {
-      if($scope.user.isSuperAdmin) {
-        $scope.user.userCPRoles[0] = {site:"All", cpTitle:"All", roleName:"Super Administrator"};
-        $scope.addMorePermissions = false;
-      }
-      else {
-        $scope.user.userCPRoles[0] = {site:'', cpTitle:'', roleName:''};
-        $scope.addMorePermissions = true;
-        $scope.userRoleForm.submitted = false;
-      }
-    }
-            
+               
     $scope.createUser = function() {    
       if(!$scope.validatePermissions()) {
         return false;
       }
+      
       $scope.user.userCPRoles = [];//TODO remove it after completion of backend code
+      delete $scope.user.isSuperAdmin;//TODO remove it after completion of backend code
+      
       var user = angular.copy($scope.user);
       user.$saveOrUpdate().then(
         function(savedUser) {

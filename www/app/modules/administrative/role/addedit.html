@@ -35,23 +35,30 @@
       </div>
     
       <div class="form-group clearfix" ng-repeat="acl in role.acl">
-        <div class="col-xs-4 col-xs-offset-3">
-          <os-select ng-model="acl.resourceName" list="resources" name="resource" 
-            placeholder="{{'role.resource' | translate}}" required>
-          </os-select>
-        </div>
-       
-        <div class="col-xs-4">
-          <os-select multiple ng-model="acl.privileges" list="privileges" name="privilege"
-            placeholder="{{'role.privileges' | translate}}">
-          </os-select>
-        </div>
-             
-        <div class="col-xs-1">
-          <button class="btn btn-default" ng-click="removeResource($index)">	
-            <span class="glyphicon glyphicon-trash"></span>
-          </button>
-        </div>
+        <ng-form name="roleResourceForm" os-form-validator="roleResourceForm" parent-validator="roleFormValidator"> 
+          <div class="col-xs-4 col-xs-offset-3">
+            <ui-select name="resource" ng-model="acl.resourceName" required>
+              <ui-select-match placeholder="{{'role.resource' | translate}}">{{$select.selected}}</ui-select-match>
+              <ui-select-choices repeat="resource in resources | filter: $select.search">
+                <span ng-bind-html="resource | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+            <div os-field-error field="roleResourceForm.resource"></div>
+          </div>
+          
+          <div class="col-xs-4">
+            <os-select multiple ng-model="acl.privileges" list="privileges" name="privileges"
+              placeholder="{{'role.privileges' | translate}}" required>
+            </os-select>
+            <div os-field-error field="roleResourceForm.privileges"></div>
+          </div>
+           
+          <div class="col-xs-1">
+            <button class="btn btn-default" ng-click="removeResource($index)">	
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+          </div>
+        </ng-form>
       </div>  
     
       <div class="form-group clearfix">
