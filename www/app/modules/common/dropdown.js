@@ -27,7 +27,7 @@ angular.module('openspecimen')
           .append('<span ng-bind-html="item | highlight: $select.search"></span>');
 
         if (angular.isDefined(tAttrs.multiple)) {
-          uiSelect.attr('multiple', '');
+          uiSelect.attr('multiple', 'true');
           uiSelectMatch.append('{{$item}}');
         } else {
           uiSelectMatch.append('{{$select.selected}}');
