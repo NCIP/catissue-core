@@ -16,7 +16,8 @@ angular.module('openspecimen')
     return {
       restrict: 'E',
       compile: function(tElem, tAttrs) {
-        var uiSelect = angular.element('<ui-select></ui-select>')
+        var multiple = angular.isDefined(tAttrs.multiple);
+        var uiSelect = angular.element(multiple ? '<ui-select multiple/>' : '<ui-select/>')
           .attr('ng-model', tAttrs.ngModel)
 
         var uiSelectMatch = angular.element('<ui-select-match/>')
@@ -26,8 +27,7 @@ angular.module('openspecimen')
           .attr('repeat', "item in " + tAttrs.list + " | filter: $select.search")
           .append('<span ng-bind-html="item | highlight: $select.search"></span>');
 
-        if (angular.isDefined(tAttrs.multiple)) {
-          uiSelect.attr('multiple', 'true');
+        if (multiple) {
           uiSelectMatch.append('{{$item}}');
         } else {
           uiSelectMatch.append('{{$select.selected}}');
