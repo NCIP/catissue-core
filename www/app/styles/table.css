@@ -43,3 +43,41 @@
 .os-table .col .progress {
   margin-bottom: 0px;
 }
+
+.os-table-fixed {
+  table-layout: fixed;
+}
+
+.os-table-fixed td,
+.os-table-fixed .col {
+  text-overflow: ellipsis; 
+  overflow: hidden; 
+  white-space: nowrap;
+}
+
+.os-table-fixed td.action,
+.os-table-fixed .col.action {
+  overflow: visible;
+}	
+
+.os-table-tree a.fa-chevron-circle-down, 
+.os-table-tree a.fa-chevron-down, 
+.os-table-tree a.fa-caret-down, 
+.os-table-tree a.fa-chevron-circle-right,
+.os-table-tree a.fa-chevron-right,
+.os-table-tree a.fa-caret-right,
+.os-table-tree a.fa-minus-square-o, 
+.os-table-tree a.fa-plus-square-o {
+  text-decoration: none;
+  color: #707070;
+}
+
+.os-table .row.selected {
+  background: #ffc;
+}
+
+.os-table-fixed td .alert, 
+.os-table-fixed .col .alert {
+  padding: 4px 1px;
+  white-space: normal;
+}

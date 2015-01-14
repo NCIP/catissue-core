@@ -14,18 +14,17 @@
 
       <div class="col-xs-4">
         <div class="form-group">
-          <os-select name="status" ng-model="visit.status" list="visitStatuses"
-            os-md-input placeholder="Visit Status" required>
-          <div os-field-error field="visitForm.visitStatus"></div>
+          <os-select name="site" ng-model="visit.site" list="sites"
+            os-md-input placeholder="Visit Site" required>
+          </os-select>
+          <div os-field-error field="visitForm.visitSite"></div>
         </div>
       </div>
 
       <div class="col-xs-4">
         <div class="form-group">
-          <os-select name="site" ng-model="visit.site" list="sites"
-            os-md-input placeholder="Visit Site" required>
-          </os-select>
-          <div os-field-error field="visitForm.visitSite"></div>
+          <input name="surgicalPathologyNo" ng-model="visit.surgicalPathologyNumber" 
+            os-md-input class="form-control" type="text" placeholder="Surgical Pathology Number">
         </div>
       </div>
     </div>
@@ -47,13 +46,6 @@
             os-md-input placeholder="Clinical Status" required>
           </os-select>
           <div os-field-error field="visitForm.clinicalStatus"></div>
-        </div>
-      </div>
-
-      <div class="col-xs-4">
-        <div class="form-group">
-          <input name="surgicalPathologyNo" ng-model="visit.surgicalPathologyNumber" 
-            os-md-input class="form-control" type="text" placeholder="Surgical Pathology Number">
         </div>
       </div>
     </div>

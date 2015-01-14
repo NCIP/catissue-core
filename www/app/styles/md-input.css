@@ -54,6 +54,7 @@
   margin-top: 15px;
   outline: none;
   display: block;
+  width: 100%;
 }
 
 .os-md-input .ui-select-bootstrap > .ui-select-match > .caret {
@@ -67,3 +68,11 @@
   border-right: 6px solid transparent;
   border-left: 6px solid transparent;
 }
+
+.os-table.bulk-edit .os-md-input input,
+.os-table.bulk-edit .os-md-input .ui-select-match,
+.os-table.bulk-edit .os-md-input .ui-select-search {
+  margin-top: 0px;
+  height: 26px!important;
+}
+
