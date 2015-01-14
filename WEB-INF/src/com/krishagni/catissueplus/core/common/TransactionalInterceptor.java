@@ -49,7 +49,7 @@ public class TransactionalInterceptor {
 		Object object = null;
 		try {
 			object = pjp.proceed();
-			ResponseEvent resp = (ResponseEvent)object;
+			ResponseEvent resp = (object instanceof ResponseEvent) ? (ResponseEvent)object : null; 
 			if ((resp == null || resp.getStatus() == EventStatus.OK) && 
 				isTransactionStarted && 
 				tx != null) {				

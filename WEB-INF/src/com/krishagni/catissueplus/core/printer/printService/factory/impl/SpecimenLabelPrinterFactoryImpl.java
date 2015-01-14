@@ -178,12 +178,12 @@ public class SpecimenLabelPrinterFactoryImpl implements SpecimenLabelPrinterFact
 			stringBuilder.append(printRule.getPrinterName() + " = \"" + printRule.getPrinterName() + "\"" + NEWLINE);
 		}
 
-		String cpTitle = CommonUtilities.toString(specimen.getSpecimenCollectionGroup().getRegistration()
+		String cpTitle = CommonUtilities.toString(specimen.getVisit().getRegistration()
 				.getCollectionProtocol().getShortTitle());
 
 		stringBuilder.append(CP_TITLE + " = \"" + cpTitle + "\"" + NEWLINE);
 
-		String ppi = CommonUtilities.toString(specimen.getSpecimenCollectionGroup().getRegistration()
+		String ppi = CommonUtilities.toString(specimen.getVisit().getRegistration()
 				.getProtocolParticipantIdentifier());
 
 		if (ppi != null && !ppi.equals("")) {

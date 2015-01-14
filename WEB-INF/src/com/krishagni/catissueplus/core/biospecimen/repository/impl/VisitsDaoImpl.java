@@ -30,6 +30,11 @@ import com.krishagni.catissueplus.core.common.util.Status;
 
 @Repository("visitsDao")
 public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
+	
+	@Override
+	public Class getType() {
+		return Visit.class;
+	}
 
 	@Override
 	@SuppressWarnings("unchecked")

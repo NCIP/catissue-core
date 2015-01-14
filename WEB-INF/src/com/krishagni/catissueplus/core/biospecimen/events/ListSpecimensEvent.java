@@ -8,7 +8,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 public class ListSpecimensEvent extends ResponseEvent {
 	private Long listId;
 	
-	private List<SpecimenSummary> specimens;
+	private List<SpecimenDetail> specimens;
 
 	public Long getListId() {
 		return listId;
@@ -18,15 +18,15 @@ public class ListSpecimensEvent extends ResponseEvent {
 		this.listId = listId;
 	}
 
-	public List<SpecimenSummary> getSpecimens() {
+	public List<SpecimenDetail> getSpecimens() {
 		return specimens;
 	}
 
-	public void setSpecimens(List<SpecimenSummary> specimens) {
+	public void setSpecimens(List<SpecimenDetail> specimens) {
 		this.specimens = specimens;
 	}
 	
-	public static ListSpecimensEvent ok(List<SpecimenSummary> specimens) {
+	public static ListSpecimensEvent ok(List<SpecimenDetail> specimens) {
 		ListSpecimensEvent resp = new ListSpecimensEvent();
 		resp.setStatus(EventStatus.OK);
 		resp.setSpecimens(specimens);

@@ -238,4 +238,8 @@ public class Visit {
 		this.setIdentifiedReport(scg.getIdentifiedReport());
 		this.setDeIdentifiedReport(scg.getDeIdentifiedReport());
 	}	
+	
+	public void addSpecimen(Specimen specimen) {
+		specimens.add(specimen);
+	}
 }

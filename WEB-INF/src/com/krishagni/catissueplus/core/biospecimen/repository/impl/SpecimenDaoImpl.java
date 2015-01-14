@@ -9,6 +9,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -18,6 +19,10 @@ import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDao {
+	
+	public Class<?> getType() {
+		return Specimen.class;
+	}
 	
 	@Override
 	public List<Specimen> getAllSpecimens(int startAt, int maxRecords, String... searchString) {
@@ -51,8 +56,8 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		Specimen specimen = (Specimen) sessionFactory.getCurrentSession().get(Specimen.class, specimenId);
 		
 		if (specimen != null) {
-			if (specimen.getSpecimenCollectionGroup() != null) {
-				return specimen.getSpecimenCollectionGroup().getId();
+			if (specimen.getVisit() != null) {
+				return specimen.getVisit().getId();
 			}
 		}
 		
@@ -82,6 +87,20 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		List<Specimen> specimens = query.list();
 		
 		return specimens.isEmpty() ? null : specimens.iterator().next();
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public boolean doesSpecimenExistsByLabel(String label) {				 
+		List<Object> row = sessionFactory.getCurrentSession()
+				.createCriteria(Specimen.class)
+				.add(Restrictions.eq("label", label))
+				.setProjection(
+						Projections.projectionList()
+							.add(Projections.count("id")))
+				.list();
+		 
+		return ((Number)row.iterator().next()).intValue() > 0;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -131,5 +150,4 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		List<Specimen> result = criteria.list();
 		return result;		
 	}
-	
 }

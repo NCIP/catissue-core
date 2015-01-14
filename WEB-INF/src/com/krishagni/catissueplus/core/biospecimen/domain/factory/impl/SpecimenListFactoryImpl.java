@@ -13,7 +13,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenList;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenListErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenListFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -41,7 +41,7 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 		
 		List<String> labels = new ArrayList<String>();
 		if (!CollectionUtils.isEmpty(details.getSpecimens())) {
-			for (SpecimenSummary specimen : details.getSpecimens()) {
+			for (SpecimenDetail specimen : details.getSpecimens()) {
 				labels.add(specimen.getLabel());
 			}			
 		}

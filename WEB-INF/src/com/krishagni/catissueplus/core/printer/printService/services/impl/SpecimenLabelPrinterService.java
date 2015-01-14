@@ -43,7 +43,7 @@ public class SpecimenLabelPrinterService implements PrintService {
 				LabelPrintCreatedEvent.notFound();
 			}
 			specLabelPrinterFact.printLabel(specimen, event.getSessionDataBean().getIpAddress(), event.getSessionDataBean()
-					.getUserName(), specimen.getSpecimenCollectionGroup().getRegistration()
+					.getUserName(), specimen.getVisit().getRegistration()
 					.getCollectionProtocol().getShortTitle());
 			return LabelPrintCreatedEvent.ok();
 		}

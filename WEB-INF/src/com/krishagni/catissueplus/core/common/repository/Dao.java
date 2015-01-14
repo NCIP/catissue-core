@@ -11,4 +11,6 @@ public interface Dao<T> {
 	public T getById(Long id);
 	
 	public T getById(Long id, String activeCondition);
+	
+	public void flush();
 }

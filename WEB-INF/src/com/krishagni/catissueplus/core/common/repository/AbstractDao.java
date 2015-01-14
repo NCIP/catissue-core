@@ -26,7 +26,7 @@ public class AbstractDao<T> implements Dao<T> {
 	public void saveOrUpdate(T obj, boolean flush) {
 		sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		if (flush) {
-			sessionFactory.getCurrentSession().flush();
+			flush();
 		}
 	}
 
@@ -58,6 +58,10 @@ public class AbstractDao<T> implements Dao<T> {
 	
 	public Class getType() {
 		throw new UnsupportedOperationException("Override the dao method getType() to use getById()");
+	}
+	
+	public void flush() {
+		sessionFactory.getCurrentSession().flush();
 	}
 		 
 }

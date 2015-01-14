@@ -12,6 +12,17 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class Specimen {
+	public static final String NEW = "New";
+	
+	public static final String ALIQUOT = "Aliquot";
+	
+	public static final String DERIVED = "Derived";
+	
+	public static final String COLLECTED = "Collected";
+	
+	public static final String NOT_COLLECTED = "Not Collected";
+	
+	public static final String PENDING = "Pending";
 
 	private Long id;
 
@@ -47,7 +58,7 @@ public class Specimen {
 
 	private String collectionStatus;
 
-	private Visit specimenCollectionGroup;
+	private Visit visit;
 
 	private SpecimenRequirement specimenRequirement;
 
@@ -208,12 +219,12 @@ public class Specimen {
 		this.collectionStatus = collectionStatus;
 	}
 
-	public Visit getSpecimenCollectionGroup() {
-		return specimenCollectionGroup;
+	public Visit getVisit() {
+		return visit;
 	}
 
-	public void setSpecimenCollectionGroup(Visit specimenCollectionGroup) {
-		this.specimenCollectionGroup = specimenCollectionGroup;
+	public void setVisit(Visit visit) {
+		this.visit = visit;
 	}
 
 	public SpecimenRequirement getSpecimenRequirement() {
@@ -336,5 +347,27 @@ public class Specimen {
 			return false;
 		}
 		return true;
+	}
+	
+	public void addSpecimen(Specimen specimen) {
+		specimen.setParentSpecimen(this);
+		
+		if (specimen.getLineage().equals(DERIVED)) {
+			childCollection.add(specimen);
+			return;
+		}
+		
+		double qty = getInitialQuantity();
+		for (Specimen child : childCollection) {
+			if (child.getLineage().equals(ALIQUOT)) {
+				qty -= child.getInitialQuantity();
+			}
+		}
+		
+		if (qty < specimen.getInitialQuantity()) {
+			throw new IllegalArgumentException("Insufficient parent specimen quantity");
+		}
+		
+		childCollection.add(specimen);
 	}
 }
