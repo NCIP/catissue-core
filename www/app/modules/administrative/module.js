@@ -5,6 +5,7 @@ angular.module('os.administrative',
     'os.administrative.user',
     'os.administrative.institute',
     'os.administrative.site',
-    'os.administrative.dp'
+    'os.administrative.dp',
+    'os.administrative.container'
   ]
 );

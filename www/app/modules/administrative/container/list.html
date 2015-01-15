@@ -1,0 +1,28 @@
+<div>
+  <div class="os-page-hdr">
+    <h3 translate="container.list">Storage Containers</h3>
+    <a class="os-btn-icon" title="{{'container.tooltip.add' | translate}}" ui-sref="container-new">
+      <span class="glyphicon glyphicon-plus"></span>
+    </a>
+  </div>
+
+  <div class="os-cards">
+    <div class="os-card" ng-repeat="container in containerList" ng-click="showContainerOverview(container)">
+      <h4 title="{{'container.tooltip.view_details' | translate}}">
+        <a ui-sref="container-detail.overview({containerId: container.id})"> {{container.name}} </a>
+      </h4>
+      <h5 title="{{'container.parent_site' | translate}}" if="container.siteName != null">{{container.siteName}}</h5>
+      <h5 title="{{'container.parent_container' | translate}}" if="container.parentContainerName != null">{{container.parentContainerName}}</h5>
+      <div class="stats">
+        <div class="stat col-xs-6" title="{{'container.dimension' | translate}}">
+          <span class="os-lavatar os-lavatar-sm">D</span>
+          <span>10 X 10</span>
+        </div>
+        <div class="stat col-xs-6" title="{{'container.tooltip.count_free_locations' | translate}}">
+          <span class="os-lavatar os-lavatar-sm">F</span>
+          <span>12</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -232,8 +232,8 @@
     "tooltip": {
       "view_details": "Click to view/edit Institute details",
       "add": "Click to add new Institute",
-      "department_count": "Number of Departments",
-      "user_count": "Number of Users in Institute"
+      "department_count": "Count of Departments",
+      "user_count": "Count of Users in Institute"
     },
 
     "menu": {
@@ -278,6 +278,39 @@
       "distributed_count":"Distributed specimens count"
     },
     
+    "menu": {
+      "overview": "Overview"
+    }
+  },
+
+  "container": {
+    "list": "Storage Containers",
+    "name": "Name",
+    "barcode": "Barcode",
+    "create_container": "Create Storage Container",
+    "parent_container": "Parent Container",
+    "parent_site": "Parent Site",
+    "parent_location": "Parent Location",
+    "site": "Site",
+    "container": "Container",
+    "one": "One",
+    "two": "Two",
+    "dimension": "Dimension",
+    "dimension_one": "Dimension One",
+    "dimension_two": "Dimension Two",
+    "labeling_scheme": "Labeling Scheme",
+    "dim_one_labeling_scheme": "Dimension One Labeling Scheme",
+    "dim_two_labeling_scheme": "Dimension Two Labeling Scheme",
+    "temperature": "Temperature (Celsius)",
+    "collection_protocol": "Collection Protocol",
+    "specimen_types": "Specimen Types",
+
+    "tooltip": {
+      "view_details": "Click to view/edit Storage Container details",
+      "add": "Click to add new Storage Container",
+      "count_free_locations": "Count of free locations"
+    },
+
     "menu": {
       "overview": "Overview"
     }

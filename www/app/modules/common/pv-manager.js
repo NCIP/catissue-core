@@ -64,6 +64,14 @@ angular.module('openspecimen')
       'Not Specified'
     ];
 
+    var dimensionLabelScheme = [
+      'Numbers',
+      'Alphabates Upper Case',
+      'Aplhabates Lower Case',
+      'Roman Upper Case',
+      'Roman Lower Case'
+    ];
+
     /** We need to have i18n keys for these as well **/
     var storageTypes = [
       'Auto',
@@ -85,7 +93,8 @@ angular.module('openspecimen')
       anatomicSite: anatomicSites,
 
       'storage-type': storageTypes,
-      'visit-status': visitStatuses
+      'visit-status': visitStatuses,
+      'dimension-label-scheme': dimensionLabelScheme,
     };
 
     var pvIdMap = {

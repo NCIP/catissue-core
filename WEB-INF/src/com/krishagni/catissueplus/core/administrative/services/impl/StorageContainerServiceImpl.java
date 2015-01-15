@@ -218,7 +218,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 
 	private void setName(String name, StorageContainer container, ObjectCreationException exceptionHandler) {
 
-		String labelFormat = "CONTAINER_UID";
+		String labelFormat = "";
 		if (isBlank(labelFormat)) {
 			if (isBlank(name)) {
 				exceptionHandler.addError(StorageContainerErrorCode.MISSING_ATTR_VALUE, CONTAINER_NAME);
@@ -238,7 +238,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	private void updateName(String name, StorageContainer container, StorageContainer oldContainer,
 			ObjectCreationException exceptionHandler) {
 
-		String labelFormat = "CONTAINER_UID";
+		String labelFormat = null;
 		if (isBlank(labelFormat)) {
 			if (isBlank(name)) {
 				exceptionHandler.addError(StorageContainerErrorCode.MISSING_ATTR_VALUE, CONTAINER_NAME);
@@ -263,10 +263,10 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			container.setBarcode(barcode);
 		}
 		else {
-			if (!isBlank(container.getName())) {
+/*			if (!isBlank(container.getName())) {
 				exceptionHandler.addError(StorageContainerErrorCode.AUTO_GENERATED_BARCODE, BARCODE);
 				return;
-			}
+			}*/
 			container.setBarcode(containerBarcodeGenerator.generateBarcode(barcodeFormat, container));
 		}
 	}

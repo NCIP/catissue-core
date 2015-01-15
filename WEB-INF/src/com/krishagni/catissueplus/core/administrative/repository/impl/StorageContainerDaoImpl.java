@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.administrative.repository.impl;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
@@ -11,6 +12,7 @@ import com.krishagni.catissueplus.core.administrative.repository.StorageContaine
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import org.hibernate.transform.DistinctRootEntityResultTransformer;
 
 public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> implements StorageContainerDao {
 	
@@ -52,8 +54,10 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	@SuppressWarnings("unchecked")
 	public List<StorageContainer> getAllStorageContainers(int maxResults) {
 		return sessionFactory.getCurrentSession()
-				.createCriteria(StorageContainer.class)
+			 	.createCriteria(StorageContainer.class)
+                         	.setResultTransformer(DistinctRootEntityResultTransformer.INSTANCE)
 				.setMaxResults(maxResults)
+                              	.addOrder(Order.asc("name"))
 				.list();
 		
 	}

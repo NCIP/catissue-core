@@ -1,0 +1,99 @@
+<div class="os-items-group">
+  <div class="os-item">
+    <h3 class="os-section-title">
+      {{container.name}}
+    </h3>
+  </div>
+
+  <div class="os-item os-action-btns os-action-btns-md">
+    <a><span class="glyphicon glyphicon-pencil"></span></a>
+  </div>
+</div>
+<div class="clearfix">
+  <div class="col-xs-8">
+    <ul class="os-key-values os-two-cols" os-inline-editors on-save="editContainer">
+      <li class="item">
+        <strong class="key key-sm" translate="container.barcode">Barcode</strong>
+        <os-inline-edit editor="barcodeEditor" name="barcode" class="value value-md" value="container.barcode">
+          <span ng-if="barcodeEditor.isDisplayMode()">{{barcodeEditor.viewValue | osNoValue}}</span>
+          <input ng-if="barcodeEditor.isEditMode()" type="text" ng-model="barcodeEditor.editValue" class="form-control" ng-maxlength="255" required>
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="container.temperature">Temperature (In Celsius)</strong>
+        <os-inline-edit editor="temperatureEditor" name="temperature" class="value value-md" value="container.tempratureInCentigrade">
+          <span ng-if="temperatureEditor.isDisplayMode()">{{temperatureEditor.viewValue | osNoValue}}</span>
+          <input ng-if="temperatureEditor.isEditMode()" type="number" ng-model="temperatureEditor.editValue" class="form-control">
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="container.parent_site">Parent Site</strong>
+        <span class="value value-md" os-inline-edit>{{container.siteName | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="container.parent_container">Parent Container</strong>
+        <span class="value value-md" os-inline-edit>{{container.parentContainerName | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="container.dimension_one">Dimension One</strong>
+        <os-inline-edit editor="dimensionOneEditor" name="dimensionOne" class="value value-md" value="container.oneDimensionCapacity">
+          <span ng-if="dimensionOneEditor.isDisplayMode()">{{dimensionOneEditor.viewValue | osNoValue}}</span>
+          <input ng-if="dimensionOneEditor.isEditMode()" type="number" ng-model="dimensionOneEditor.editValue" class="form-control" required>
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="container.dimension_two">Dimension Two</strong>
+        <os-inline-edit editor="dimensionTwoEditor" name="temperature" class="value value-md" value="container.twoDimensionCapacity">
+          <span ng-if="dimensionTwoEditor.isDisplayMode()">{{dimensionTwoEditor.viewValue | osNoValue}}</span>
+          <input ng-if="dimensionTwoEditor.isEditMode()" type="number" ng-model="dimensionTwoEditor.editValue" class="form-control" required>
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="container.dim_one_labeling_scheme">Dimension One Label Scheme</strong>
+        <os-inline-edit editor="dimOneLabelSchemeEditor" name="site" class="value value-md" value="container.oneDimentionLabelingScheme">
+          <span ng-if="dimOneLabelSchemeEditor.isDisplayMode()">{{dimOneLabelSchemeEditor.viewValue | osNoValue}}</span>
+          <div ng-if="dimOneLabelSchemeEditor.isEditMode()">
+            <os-select ng-model="dimOneLabelSchemeEditor.editValue" list="dimensionLabelSchemes" required></os-select>
+          </div>
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="container.dim_two_labeling_scheme">Dimension Two Label Scheme</strong>
+        <os-inline-edit editor="dimTwoLabelSchemeEditor" name="site" class="value value-md" value="container.oneDimentionLabelingScheme">
+          <span ng-if="dimTwoLabelSchemeEditor.isDisplayMode()">{{dimTwoLabelSchemeEditor.viewValue | osNoValue}}</span>
+          <div ng-if="dimTwoLabelSchemeEditor.isEditMode()">
+            <os-select ng-model="dimTwoLabelSchemeEditor.editValue" list="dimensionLabelSchemes" required></os-select>
+          </div>
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="container.collection_protocol">Collection Protocols</strong>
+        <os-inline-edit editor="cpEditor" name="cp" class="value value-md" value="container.holdsCPTitles">
+          <span ng-if="cpEditor.isDisplayMode()">{{cpEditor.viewValue | osArrayJoin | osNoValue}}</span>
+          <div ng-if="cpEditor.isEditMode()">
+            <os-select ng-model="cpEditor.editValue" list="cps" multiple></os-select>
+          </div>
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="container.specimen_types">Specimen Types</strong>
+        <os-inline-edit editor="specimenTypeEditor" name="specimenTypes" class="value value-md" value="container.holdsSpecimenTypes">
+          <span ng-if="specimenTypeEditor.isDisplayMode()">{{specimenTypeEditor.viewValue | osArrayJoin | osNoValue}}</span>
+          <div ng-if="specimenTypeEditor.isEditMode()">
+            <os-specimen-type ng-model="specimenTypeEditor.editValue" placeholder="Specimen Types"></os-specimen-type>
+          </div>
+        </os-inline-edit>
+      </li>
+
+    </ul>
+  </div>
+</div>

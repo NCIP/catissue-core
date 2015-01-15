@@ -129,6 +129,36 @@ angular.module('openspecimen', [
         templateUrl: 'modules/administrative/dp/overview.html',
         parent: 'dp-detail'
       })
+      .state('container-list', {
+        url: '/containers',
+        templateUrl: 'modules/administrative/container/list.html',
+        controller: 'ContainerListCtrl',
+        parent: 'signed-in'
+      })
+      .state('container-new', {
+        url: '/new-container',
+        templateUrl: 'modules/administrative/container/addedit.html',
+        controller: 'ContainerAddEditCtrl',
+        parent: 'signed-in'
+      })
+      .state('container-detail', {
+        url: '/containers/:containerId',
+        templateUrl: 'modules/administrative/container/detail.html',
+        resolve: {
+          container: function($stateParams, Container) {
+            return Container.getById($stateParams.containerId);
+          }
+        },
+        controller: 'ContainerDetailCtrl',
+        parent: 'signed-in'
+      })
+      .state('container-detail.overview', {
+        url: '/overview',
+        templateUrl: 'modules/administrative/container/overview.html',
+        controller: function() {
+        },
+        parent: 'container-detail'
+      })
       .state('cps', {
         url: '/cps',
         abstract: true,
@@ -291,7 +321,7 @@ angular.module('openspecimen', [
     $httpProvider.interceptors.push('httpRespInterceptor');
 
     ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 9090;
+    ApiUrlsProvider.port = 8180;
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
