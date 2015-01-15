@@ -1389,7 +1389,7 @@
 		
 		<copy todir="${target.dir}/com/krishagni/core/tests">
 			<fileset dir="${base.dir}/WEB-INF/integration-test/database">
-				<include name="*.xml"/>
+				<include name="**/*"/>
 			</fileset>
 		</copy> 
 		

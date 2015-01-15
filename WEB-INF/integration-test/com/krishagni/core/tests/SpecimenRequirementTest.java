@@ -63,9 +63,9 @@ public class SpecimenRequirementTest {
 	 * Add Specimen Requirement Api Tests
 	 */
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.addSpecimenRequirementTest.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
-	@ExpectedDatabase(value="SpecimenRequirementTest.addSpecimenRequirementTest.expected.xml", 
+	@DatabaseSetup("specimen-requirement-test/add-sr-test-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-requirement-test/add-sr-test-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void addSpecimenRequirementTest() {
 		AddSpecimenRequirementEvent req = SpecimenRequirementTestData.getAddSpecimenRequirementEvent();
@@ -121,8 +121,8 @@ public class SpecimenRequirementTest {
 	}
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.addSpecimenRequirementTest.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
+	@DatabaseSetup("specimen-requirement-test/add-sr-test-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
 	public void addSpecimenRequirementInvalidAttributes() {
 		AddSpecimenRequirementEvent req = SpecimenRequirementTestData.getAddSpecimenRequirementEvent();
 		SpecimenRequirementDetail detail = new SpecimenRequirementDetail();
@@ -163,8 +163,8 @@ public class SpecimenRequirementTest {
 	}
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.addSpecimenRequirementTest.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
+	@DatabaseSetup("specimen-requirement-test/add-sr-test-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
 	public void addSpecimenRequirementMissingAttributes() {
 		AddSpecimenRequirementEvent req = SpecimenRequirementTestData.getAddSpecimenRequirementEvent();
 		SpecimenRequirementDetail detail = req.getRequirement();
@@ -187,8 +187,8 @@ public class SpecimenRequirementTest {
 	 * Get Specimen Requirement API Tests
 	 */
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.getSpecimenRequirementTest.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
+	@DatabaseSetup("specimen-requirement-test/get-specimen-requirement-test-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
 	public void getSpecimenRequirementTest() {
 		ReqSpecimenRequirementsEvent req = SpecimenRequirementTestData.getReqSpecimenRequirementsEvent();
 		SpecimenRequirementsEvent resp = cpSvc.getSpecimenRequirments(req);
@@ -251,8 +251,8 @@ public class SpecimenRequirementTest {
 	}
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.getSRForEventWithEmptySRList.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
+	@DatabaseSetup("specimen-requirement-test/get-sr-for-event-with-empty-sr-list-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
 	public void getSRForEventWithEmptySRList() {
 		ReqSpecimenRequirementsEvent req = SpecimenRequirementTestData.getReqSpecimenRequirementsEvent();
 		SpecimenRequirementsEvent resp = cpSvc.getSpecimenRequirments(req);
@@ -265,9 +265,9 @@ public class SpecimenRequirementTest {
 	 * Create Aliquot API Tests
 	 */
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.createSRAliquot.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
-	@ExpectedDatabase(value="SpecimenRequirementTest.createSRAliquot.expected.xml", 
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-requirement-test/create-sr-aliquot-expected.xml", 
 	assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void createSRAliquot() {
 		CreateAliquotsRequirementEvent req = SpecimenRequirementTestData.getCreateAliquotsRequirementEvent();
@@ -322,8 +322,8 @@ public class SpecimenRequirementTest {
 	}
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.createSRAliquot.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
 	public void createSRAliquotWithInSufficientInitialQuantity() {
 		CreateAliquotsRequirementEvent req = SpecimenRequirementTestData.getCreateAliquotsRequirementEvent();
 		req.getRequirement().setNoOfAliquots(200);
@@ -335,8 +335,8 @@ public class SpecimenRequirementTest {
 	}
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.createSRAliquotWithDisabledParentSR.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-with-disabled-parent-sr-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
 	public void createSRAliquotWithDisabledParentSR() {
 		CreateAliquotsRequirementEvent req = SpecimenRequirementTestData.getCreateAliquotsRequirementEvent();
 		AliquotsRequirementCreatedEvent resp = cpSvc.createAliquots(req);
@@ -383,9 +383,9 @@ public class SpecimenRequirementTest {
 	}
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.createSRAliquot.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
-	@ExpectedDatabase(value="SpecimenRequirementTest.createSRAliquotInheritParentSpecimenLabel.expected.xml", 
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-requirement-test/create-sr-aliquot-inherit-parent-specimen-label-expected.xml", 
 	assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void createSRAliquotInheritParentSpecimenLabel() {
 		CreateAliquotsRequirementEvent req = SpecimenRequirementTestData.getCreateAliquotsRequirementEvent();
@@ -441,8 +441,8 @@ public class SpecimenRequirementTest {
 	}
 		
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.createSRAliquot.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
 	public void createSRAliquotWithInInvalidInitialQuantity() {
 		CreateAliquotsRequirementEvent req = SpecimenRequirementTestData.getCreateAliquotsRequirementEvent();
 		req.getRequirement().setQtyPerAliquot(-0.1D);
@@ -454,8 +454,8 @@ public class SpecimenRequirementTest {
 	}
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.createSRAliquot.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
 	public void createSRAliquotWithInInvalidNumOfAliquots() {
 		CreateAliquotsRequirementEvent req = SpecimenRequirementTestData.getCreateAliquotsRequirementEvent();
 		req.getRequirement().setNoOfAliquots(0);
@@ -471,9 +471,9 @@ public class SpecimenRequirementTest {
 	 */
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.createSRAliquot.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
-	@ExpectedDatabase(value="SpecimenRequirementTest.createDerived.expected.xml", 
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-requirement-test/create-derived-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void createDerived() {
 		CreateDerivedSpecimenReqEvent req = SpecimenRequirementTestData.getCreateDerivedSpecimenReqEvent();
@@ -519,8 +519,8 @@ public class SpecimenRequirementTest {
 	}
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.createSRAliquot.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
 	public void createDerivedWithInvalidInitialQuantity() {
 		CreateDerivedSpecimenReqEvent req = SpecimenRequirementTestData.getCreateDerivedSpecimenReqEvent();
 		req.getRequirement().setQuantity(-0.5);
@@ -533,8 +533,8 @@ public class SpecimenRequirementTest {
 	}
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.createSRAliquotWithDisabledParentSR.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-with-disabled-parent-sr-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
 	public void createDerivedWithDisabledParentSR() {
 		CreateDerivedSpecimenReqEvent req = SpecimenRequirementTestData.getCreateDerivedSpecimenReqEvent();
 		DerivedSpecimenReqCreatedEvent resp = cpSvc.createDerived(req);
@@ -581,9 +581,9 @@ public class SpecimenRequirementTest {
 	}
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.createSRAliquot.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
-	@ExpectedDatabase(value="SpecimenRequirementTest.createDerivedWithInheritParentSpecimenLabel.expected.xml", 
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-requirement-test/create-derived-with-inherit-parent-specimen-label-expected.xml", 
 	assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void createDerivedWithoutParentSpecimenLabel() {
 		CreateDerivedSpecimenReqEvent req = SpecimenRequirementTestData.getCreateDerivedSpecimenReqEvent();
@@ -631,9 +631,9 @@ public class SpecimenRequirementTest {
 	}
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.createSRAliquot.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
-	@ExpectedDatabase(value="SpecimenRequirementTest.createDerivedWithInheritParentName.expected.xml", 
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-requirement-test/create-derived-with-inherit-parent-name-expected.xml", 
 	assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void createDerivedWithoutName() {
 		CreateDerivedSpecimenReqEvent req = SpecimenRequirementTestData.getCreateDerivedSpecimenReqEvent();
@@ -681,8 +681,8 @@ public class SpecimenRequirementTest {
 	}
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.createSRAliquot.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
 	public void createDerivedWithMissingAttributeValues() {
 		CreateDerivedSpecimenReqEvent req = SpecimenRequirementTestData.getCreateDerivedSpecimenReqEvent();
 		req.getRequirement().setSpecimenClass("");

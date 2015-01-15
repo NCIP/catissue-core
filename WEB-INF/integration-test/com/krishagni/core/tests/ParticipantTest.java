@@ -59,8 +59,8 @@ public class ParticipantTest {
 	 * Match Participant API Test 
 	 */
 	@Test
-	@DatabaseSetup("ParticipantTest.generic.initial.xml")
-	@DatabaseTearDown("ParticipantTest.generic.teardown.xml")
+	@DatabaseSetup("participant-test/generic-initial.xml")
+	@DatabaseTearDown("participant-test/generic-teardown.xml")
 	public void matchParticpantBySsn() {
 		MatchParticipantEvent req = ParticipantTestData.getMatchParticipantEvent();
 		req.getParticipantDetail().setSsn("333-22-4444");
@@ -72,8 +72,8 @@ public class ParticipantTest {
 	}
 	
 	@Test
-	@DatabaseSetup("ParticipantTest.generic.initial.xml")
-	@DatabaseTearDown("ParticipantTest.generic.teardown.xml")
+	@DatabaseSetup("participant-test/generic-initial.xml")
+	@DatabaseTearDown("participant-test/generic-teardown.xml")
 	public void matchParticpantByEmpi() {
 		MatchParticipantEvent req = ParticipantTestData.getMatchParticipantEvent();
 		req.getParticipantDetail().setEmpi("dummy-empi-id");
@@ -86,8 +86,8 @@ public class ParticipantTest {
 	}
 	
 	@Test
-	@DatabaseSetup("ParticipantTest.generic.initial.xml")
-	@DatabaseTearDown("ParticipantTest.generic.teardown.xml")
+	@DatabaseSetup("participant-test/generic-initial.xml")
+	@DatabaseTearDown("participant-test/generic-teardown.xml")
 	public void matchParticpantByPmi() {
 		MatchParticipantEvent req = ParticipantTestData.getMatchParticipantEvent();
 		req.getParticipantDetail().setPmis(ParticipantTestData.getPmi("SITE1", "MRN1"));
@@ -100,8 +100,8 @@ public class ParticipantTest {
 	}
 	
 	@Test
-	@DatabaseSetup("ParticipantTest.generic.initial.xml")
-	@DatabaseTearDown("ParticipantTest.generic.teardown.xml")
+	@DatabaseSetup("participant-test/generic-initial.xml")
+	@DatabaseTearDown("participant-test/generic-teardown.xml")
 	public void matchParticpantByLnameAndDob() {
 		MatchParticipantEvent req = ParticipantTestData.getMatchParticipantEvent();
 		req.getParticipantDetail().setLastName("default_last_name");
@@ -117,8 +117,8 @@ public class ParticipantTest {
 	 * Get Participant API Tests
 	 */
 	@Test
-	@DatabaseSetup("ParticipantTest.generic.initial.xml")
-	@DatabaseTearDown("ParticipantTest.generic.teardown.xml")
+	@DatabaseSetup("participant-test/generic-initial.xml")
+	@DatabaseTearDown("participant-test/generic-teardown.xml")
 	public void getParticipantTest() {
 		ReqParticipantDetailEvent req = ParticipantTestData.getReqParticipantDetailEvent();
 		ParticipantDetailEvent resp = participantSvc.getParticipant(req);
@@ -178,8 +178,8 @@ public class ParticipantTest {
 	}
 	
 	@Test
-	@DatabaseSetup("ParticipantTest.getDisabledPaticipant.initial.xml")
-	@DatabaseTearDown("ParticipantTest.generic.teardown.xml")
+	@DatabaseSetup("participant-test/get-disabled-paticipant-initial.xml")
+	@DatabaseTearDown("participant-test/generic-teardown.xml")
 	public void getDisabledPaticipant() {
 		ReqParticipantDetailEvent req = ParticipantTestData.getReqParticipantDetailEvent();
 		ParticipantDetailEvent resp = participantSvc.getParticipant(req);

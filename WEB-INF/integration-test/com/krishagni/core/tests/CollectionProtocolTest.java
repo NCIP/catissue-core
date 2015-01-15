@@ -69,8 +69,8 @@ public class CollectionProtocolTest {
 	 * Get All CP's tests
 	 */
 	@Test
-	@DatabaseSetup("CollectionProtocolTest.getAllCps.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/get-all-cps-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getAllCps() {
 		AllCollectionProtocolsEvent resp = cpSvc.getAllProtocols(CpTestData.getReqAllCollectionProtocolsEvent());
 		List<CollectionProtocolSummary> cpList = resp.getCpList();
@@ -103,8 +103,8 @@ public class CollectionProtocolTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolTest.getAllCps.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/get-all-cps-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getAllCpsWithoutStatsAndPi() {
 		ReqAllCollectionProtocolsEvent req = CpTestData.getReqAllCollectionProtocolsEvent();
 		req.setIncludePi(false);
@@ -132,8 +132,8 @@ public class CollectionProtocolTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolTest.getAllCps.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/get-all-cps-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getAllCpsWithoutStats() {
 		ReqAllCollectionProtocolsEvent req = CpTestData.getReqAllCollectionProtocolsEvent();
 		req.setIncludeStats(false);
@@ -164,8 +164,8 @@ public class CollectionProtocolTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolTest.getAllCps.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/get-all-cps-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getAllCpsWithoutPi() {
 		ReqAllCollectionProtocolsEvent req = CpTestData.getReqAllCollectionProtocolsEvent();
 		req.setIncludePi(false);
@@ -198,8 +198,8 @@ public class CollectionProtocolTest {
 	 * Get Registered Participants API Tests
 	 */
 	@Test
-	@DatabaseSetup("CollectionProtocolTest.getRegisteredParticipants.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/get-registered-participants-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getRegisteredParticipants() {
 		ReqRegisteredParticipantsEvent req = CpTestData.getReqRegisteredParticipantsEvent();
 		RegisteredParticipantsEvent resp = cpSvc.getRegisteredParticipants(req);
@@ -238,8 +238,8 @@ public class CollectionProtocolTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolTest.getRegisteredParticipants.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/get-registered-participants-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getRegisteredParticipantsWithoutStats() {
 		ReqRegisteredParticipantsEvent req = CpTestData.getReqRegisteredParticipantsEvent();
 		req.setIncludeStats(false);
@@ -269,8 +269,8 @@ public class CollectionProtocolTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolTest.getRegisteredParticipantsGivenSearchString.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/get-registered-participants-given-search-string-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getRegisteredParticipantsGivenSearchString() {
 		ReqRegisteredParticipantsEvent req = CpTestData.getReqRegisteredParticipantsEvent();
 		String pattern = "default-pattern";
@@ -325,8 +325,8 @@ public class CollectionProtocolTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolTest.getRegisteredParticipantsGivenSearchString.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/get-registered-participants-given-search-string-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getRegisteredParticipantsGivenSearchStringWithoutStat() {
 		ReqRegisteredParticipantsEvent req = CpTestData.getReqRegisteredParticipantsEvent();
 		String pattern = "default-pattern";
@@ -388,8 +388,8 @@ public class CollectionProtocolTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolTest.getRegisteredParticipantsForDisabledCp.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/get-registered-participants-for-disabled-cp-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getRegisteredParticipantsForDisabledCp() {
 		ReqRegisteredParticipantsEvent req = CpTestData.getReqRegisteredParticipantsEvent();
 		RegisteredParticipantsEvent resp = cpSvc.getRegisteredParticipants(req);
@@ -402,8 +402,8 @@ public class CollectionProtocolTest {
 	 * Get Collection Protocol API Tests
 	 */
 	@Test
-	@DatabaseSetup("CollectionProtocolTest.getCollectionProtocolTest.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/get-cp-test-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getCollectionProtocolTest() {
 		ReqCollectionProtocolEvent req = CpTestData.getReqCollectionProtocolEvent();
 		CollectionProtocolDetailEvent resp = cpSvc.getCollectionProtocol(req);
@@ -454,8 +454,8 @@ public class CollectionProtocolTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolTest.getDisabledCp.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/get-disabled-cp-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getDisabledCp() {
 		ReqCollectionProtocolEvent req = CpTestData.getReqCollectionProtocolEvent();
 		CollectionProtocolDetailEvent resp = cpSvc.getCollectionProtocol(req);
@@ -468,9 +468,9 @@ public class CollectionProtocolTest {
 	 *Create Collection Protocol API Tests  
 	 */
 	@Test
-	@DatabaseSetup("CollectionProtocolTest.createCpTest.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.createCpTest.expected.xml", 
+	@DatabaseSetup("cp-test/create-cp-test-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/create-cp-test-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void createCpTest() {
 		CreateCollectionProtocolEvent req = CpTestData.getCreateCollectionProtocolEvent();
@@ -518,8 +518,8 @@ public class CollectionProtocolTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolTest.createCpTest.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/create-cp-test-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void createCpTestWithInvalidPIAndCoordinators() {
 		CreateCollectionProtocolEvent req = CpTestData.getCreateCollectionProtocolEvent();
 		req.getCp().getPrincipalInvestigator().setId(-1L);
@@ -540,8 +540,8 @@ public class CollectionProtocolTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolTest.createCpTest.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/create-cp-test-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void createCpTestWithOutPi() {
 		CreateCollectionProtocolEvent req = CpTestData.getCreateCollectionProtocolEvent();
 		req.getCp().setPrincipalInvestigator(null);
@@ -553,8 +553,8 @@ public class CollectionProtocolTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolTest.createCpTestWithDuplicateTitle.initial.xml")
-	@DatabaseTearDown("CollectionProtocolTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/create-cp-test-with-duplicate-title-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void createCpTestWithDuplicateTitle() {
 		CreateCollectionProtocolEvent req = CpTestData.getCreateCollectionProtocolEvent();
 		req.getCp().setTitle("duplicate-title");

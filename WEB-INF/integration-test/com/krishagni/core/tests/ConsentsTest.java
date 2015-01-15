@@ -55,9 +55,9 @@ public class ConsentsTest {
 	 * Update Consents API Tests
 	 */
 	@Test
-	@DatabaseSetup("ConsentsTest.addConsentsTest.initial.xml")
-	@DatabaseTearDown("ConsentsTest.generic.teardown.xml")
-	@ExpectedDatabase(value="ConsentsTest.addConsentsTest.expected.xml", 
+	@DatabaseSetup("consents-test/add-consents-test-initial.xml")
+	@DatabaseTearDown("consents-test/generic-teardown.xml")
+	@ExpectedDatabase(value="consents-test/add-consents-test-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void addConsentsTest() {
 		ConsentTierOpEvent req = ConsentsTestData.getConsentTierOpEvent();
@@ -70,9 +70,9 @@ public class ConsentsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("ConsentsTest.addConsentsTest.initial.xml")
-	@DatabaseTearDown("ConsentsTest.generic.teardown.xml")
-	@ExpectedDatabase(value="ConsentsTest.updateConsentsTest.expected.xml", 
+	@DatabaseSetup("consents-test/add-consents-test-initial.xml")
+	@DatabaseTearDown("consents-test/generic-teardown.xml")
+	@ExpectedDatabase(value="consents-test/update-consents-test-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void updateConsentsTest() {
 		ConsentTierOpEvent req = ConsentsTestData.getConsentTierOpEvent();
@@ -88,9 +88,9 @@ public class ConsentsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("ConsentsTest.addConsentsTest.initial.xml")
-	@DatabaseTearDown("ConsentsTest.generic.teardown.xml")
-	@ExpectedDatabase(value="ConsentsTest.deleteConsentsTest.expected.xml", 
+	@DatabaseSetup("consents-test/add-consents-test-initial.xml")
+	@DatabaseTearDown("consents-test/generic-teardown.xml")
+	@ExpectedDatabase(value="consents-test/delete-consents-test-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void deleteConsentsTest() {
 		ConsentTierOpEvent req = ConsentsTestData.getConsentTierOpEvent();
@@ -104,8 +104,8 @@ public class ConsentsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("ConsentsTest.addConsentsTest.initial.xml")
-	@DatabaseTearDown("ConsentsTest.generic.teardown.xml")
+	@DatabaseSetup("consents-test/add-consents-test-initial.xml")
+	@DatabaseTearDown("consents-test/generic-teardown.xml")
 	public void addConsentWithInvalidCpid() {
 		ConsentTierOpEvent req = ConsentsTestData.getConsentTierOpEvent();
 		req.setCpId(-1L);
@@ -116,8 +116,8 @@ public class ConsentsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("ConsentsTest.addConsentsTest.initial.xml")
-	@DatabaseTearDown("ConsentsTest.generic.teardown.xml")
+	@DatabaseSetup("consents-test/add-consents-test-initial.xml")
+	@DatabaseTearDown("consents-test/generic-teardown.xml")
 	public void updateConsentsWithInvalidConsentId() {
 		ConsentTierOpEvent req = ConsentsTestData.getConsentTierOpEvent();
 		req.setOp(ConsentTierOpEvent.OP.UPDATE);
@@ -131,8 +131,8 @@ public class ConsentsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("ConsentsTest.addConsentsTest.initial.xml")
-	@DatabaseTearDown("ConsentsTest.generic.teardown.xml")
+	@DatabaseSetup("consents-test/add-consents-test-initial.xml")
+	@DatabaseTearDown("consents-test/generic-teardown.xml")
 	public void updateConsentsWithNullConsentId() {
 		ConsentTierOpEvent req = ConsentsTestData.getConsentTierOpEvent();
 		req.setOp(ConsentTierOpEvent.OP.UPDATE);
@@ -146,8 +146,8 @@ public class ConsentsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("ConsentsTest.addConsentsTest.initial.xml")
-	@DatabaseTearDown("ConsentsTest.generic.teardown.xml")
+	@DatabaseSetup("consents-test/add-consents-test-initial.xml")
+	@DatabaseTearDown("consents-test/generic-teardown.xml")
 	public void deleteConsentsTestWithInvalidConsentId() {
 		ConsentTierOpEvent req = ConsentsTestData.getConsentTierOpEvent();
 		req.setOp(ConsentTierOpEvent.OP.REMOVE);
@@ -163,8 +163,8 @@ public class ConsentsTest {
 	 * Get Consents API Tests
 	 */
 	@Test
-	@DatabaseSetup("ConsentsTest.addConsentsTest.initial.xml")
-	@DatabaseTearDown("ConsentsTest.generic.teardown.xml")
+	@DatabaseSetup("consents-test/add-consents-test-initial.xml")
+	@DatabaseTearDown("consents-test/generic-teardown.xml")
 	public void getConsentsTest() {
 		ReqConsentTiersEvent req = ConsentsTestData.getReqConsentTiersEvent();
 		ConsentTiersEvent resp = cpSvc.getConsentTiers(req);
@@ -184,8 +184,8 @@ public class ConsentsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("ConsentsTest.addConsentsTest.initial.xml")
-	@DatabaseTearDown("ConsentsTest.generic.teardown.xml")
+	@DatabaseSetup("consents-test/add-consents-test-initial.xml")
+	@DatabaseTearDown("consents-test/generic-teardown.xml")
 	public void getConsentsTestForNonExistingCp() {
 		ReqConsentTiersEvent req = ConsentsTestData.getReqConsentTiersEvent();
 		req.setCpId(-1L);
@@ -196,8 +196,8 @@ public class ConsentsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("ConsentsTest.getConsentsForDisabledCp.initial.xml")
-	@DatabaseTearDown("ConsentsTest.generic.teardown.xml")
+	@DatabaseSetup("consents-test/get-consents-for-disabled-cp-initial.xml")
+	@DatabaseTearDown("consents-test/generic-teardown.xml")
 	public void getConsentsForDisabledCp() {
 		ReqConsentTiersEvent req = ConsentsTestData.getReqConsentTiersEvent();
 		ConsentTiersEvent resp = cpSvc.getConsentTiers(req);
