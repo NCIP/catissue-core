@@ -89,7 +89,7 @@
         <os-inline-edit editor="specimenTypeEditor" name="specimenTypes" class="value value-md" value="container.holdsSpecimenTypes">
           <span ng-if="specimenTypeEditor.isDisplayMode()">{{specimenTypeEditor.viewValue | osArrayJoin | osNoValue}}</span>
           <div ng-if="specimenTypeEditor.isEditMode()">
-            <os-specimen-type ng-model="specimenTypeEditor.editValue" placeholder="Specimen Types"></os-specimen-type>
+            <os-specimen-type multiple ng-model="specimenTypeEditor.editValue" placeholder="Specimen Types"></os-specimen-type>
           </div>
         </os-inline-edit>
       </li>
