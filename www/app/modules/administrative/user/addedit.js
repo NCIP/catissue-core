@@ -4,22 +4,39 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
  
     var init = function() {
       $scope.user = new User();
-      $scope.addPermission();
       $scope.siteCpMaps = {};
+      $scope.user.superAdmin = false;
       $scope.addMorePermissions = true;
-     
+      $scope.addPermission();
+      loadPvs();
+    };
+    
+    function loadPvs() {
       $scope.domains = PvManager.getPvs('domains');
-      
       $scope.sites = PvManager.getSites();
       $scope.sites.splice(0, 0, "All");
       
-      Institute.list().then(function(institutes) {
-        $scope.institutes = institutes;
-      });
-         
-      Role.list().then(function(roles) {
-        $scope.roles = roles;
-      });
+      $scope.institutes = [];      
+      Institute.list().then(
+        function(instituteList) {
+          angular.forEach(instituteList,
+            function(institute) {
+              $scope.institutes.push(institute.name);
+            }
+          )
+        }
+      );
+  
+      $scope.roles = [];
+      Role.list().then(
+        function(roleList) {
+          angular.forEach(roleList,
+            function(role) {
+              $scope.roles.push(role.name);
+            }
+          )
+        }
+      );
     }
     
     $scope.setForm = function(form) {
@@ -61,54 +78,39 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
       }
       $scope.user.removePermission($scope.user.userCPRoles.indexOf(userCPRole));
     };
-    
-    $scope.resetDepartmentName = function() {
+   
+    $scope.loadDepartments = function(instituteName) {
       $scope.user.deptName = undefined;
-    }
-    
-    $scope.getDepartments = function(instituteName) {
-      Institute.getDepartments(instituteName).then(function(result) {
-        $scope.departments = result;
-      });
+      $scope.departments = [];
+      
+      Institute.getDepartments(instituteName).then(
+        function(deptList) {
+          angular.forEach(deptList,
+            function(department) {
+              $scope.departments.push(department.name);
+            }
+          )
+        }
+      );
     };
-
-    $scope.setSuperAdminRole = function() {
-      if($scope.user.isSuperAdmin) {
-        $scope.user.userCPRoles[0] = {site:"All", cpTitle:"All", roleName:"Super Administrator"};
-        $scope.addMorePermissions = false;
-      }
-      else {
-        $scope.user.userCPRoles[0] = {site:'', cpTitle:'', roleName:''};
-        $scope.addMorePermissions = true;
-        $scope.userRoleForm.submitted = false;
-      }
-    }
     
     $scope.getCps = function(newCPRole) {
       newCPRole.cpTitle = undefined;
-      $scope.addMorePermissions = true;
-      
       if($scope.siteCpMaps[newCPRole.site] == undefined && newCPRole.site == 'All') {
         $scope.siteCpMaps[newCPRole.site] = [{id: -1, shortTitle: 'All'}];
         $scope.addMorePermissions = false;
       }
-      else if($scope.siteCpMaps[newCPRole.site] == undefined) {
+      else {
         Site.getCps(newCPRole.site).then(function(cpList) {
           $scope.siteCpMaps[newCPRole.site] = cpList;
           $scope.addMorePermissions = true;
         });
       }
-      else if(newCPRole.site == 'All') {
-        $scope.addMorePermissions = false;
-      }
     }
     
-    $scope.checkExistingUserCPRoles = function(newCPRole) {
+    $scope.updateUserCPRoleList = function(newCPRole) {
       if(newCPRole.cpTitle == "All" && newCPRole.site == "All") {
-        for (var i= $scope.user.userCPRoles.length - 1; i >= 0; i--) {
-          var index = $scope.user.userCPRoles.indexOf($scope.user.userCPRoles[i]);
-          $scope.user.userCPRoles.splice(index,1);
-        }
+        $scope.user.userCPRoles = [];
         $scope.user.userCPRoles[0] = {site:newCPRole.site, cpTitle:newCPRole.cpTitle, roleName:newCPRole.roleName};
         $scope.addMorePermissions = false;
       }
@@ -116,16 +118,17 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
         var currCPRoleIndex = $scope.user.userCPRoles.indexOf(newCPRole);
         for(var i= $scope.user.userCPRoles.length - 1; i >= 0; i--) {
           if(i != currCPRoleIndex && newCPRole.site == $scope.user.userCPRoles[i].site) {
-            var index = $scope.user.userCPRoles.indexOf($scope.user.userCPRoles[i]);
-            $scope.user.userCPRoles.splice(index,1)
+            $scope.user.removePermission($scope.user.userCPRoles[i]); 
           }
         }
       }
     }
                
     $scope.createUser = function() {    
-      if(!$scope.validatePermissions()) {
-        return false;
+      if (!$scope.user.superAdmin) {
+        if(!$scope.validatePermissions()) {
+          return false;
+        }
       }
       
       $scope.user.userCPRoles = [];//TODO remove it after completion of backend code

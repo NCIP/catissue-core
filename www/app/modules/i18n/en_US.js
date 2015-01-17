@@ -12,7 +12,9 @@
       "save": "Save",
       "create": "Create",
       "cancel": "Cancel",
-      "discard": "Discard"
+      "discard": "Discard",
+      "next": "Next",
+      "previous": "Previous"
     }
   },
 
@@ -211,7 +213,7 @@
     "super_admin": "Super Administrator",
     "login_details": "Login Details",
     "site": "Site",
-    "cpTitle": "Collection Protocol",
+    "cp_title": "Collection Protocol",
     "role": "Role",
     "add_permission":"Add Permission",
     "profile": "Profile",
@@ -226,13 +228,7 @@
       "last_login": "Last logged date",
       "user_since": "User since (years)"
     },
-    
-    "button": {
-      "next": "Next",
-      "previous": "Previous"
-    },
-    
-    
+      
     "menu": {
       "overview": "Overview"
     }    

@@ -8,8 +8,7 @@
   </div>
   
   <div class="os-cards">
-    <!--TODO get sorted list from backend and remove orderBy-->
-    <div class="os-card" ng-repeat="user in users | orderBy:['lastName', 'firstName']" ng-click="showUserOverview(user)">
+    <div class="os-card" ng-repeat="user in users" ng-click="showUserOverview(user)">
       <h4>
         <span class="glyphicon glyphicon-user"></span>
         <a title="{{'user.tooltip.view_details' | translate}}" ui-sref=".overview(user)">
@@ -24,7 +23,7 @@
       <div class="stats">
         <div class="stat col-xs-6" title="{{'user.tooltip.cp_count' | translate}}">
           <span class="os-lavatar os-lavatar-sm">CP</span>
-          <span>{{(user.cps.length || 0 )| number: 0}}</span>
+          <span>{{(user.cpCount || 0 )| number: 0}}</span>
         </div>
         <div class="stat col-xs-6" title="{{'user.tooltip.user_since' | translate}}">
           <span class="os-lavatar os-lavatar-sm">Y</span>

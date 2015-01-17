@@ -15,16 +15,16 @@
   
   <div class="form-group">
     <div class="col-xs-offset-3 col-xs-6 ">
-      <button class="btn btn-primary" ng-if="!user.isSuperAdmin && !userWizard.isLastStep()" 
-        translate="user.button.next" ng-click="userWizard.next(false)">
+      <button class="btn btn-primary" ng-if="!user.superAdmin && !userWizard.isLastStep()" 
+        translate="common.buttons.next" ng-click="userWizard.next(false)">
         Next
       </button>
       <button class="btn os-btn-secondary" ng-if="!userWizard.isFirstStep()" 
-        translate="user.button.previous" ng-click="userWizard.previous(false)">
+        translate="common.buttons.previous" ng-click="userWizard.previous(false)">
         Previous
       </button>
       <button class="btn btn-primary" ng-click="createUser()" translate="common.buttons.create" 
-        ng-if="user.isSuperAdmin || userWizard.isLastStep()">
+        ng-if="user.superAdmin || userWizard.isLastStep()">
         Create 
       </button>
       <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.buttons.discard"> 
@@ -41,13 +41,13 @@
         <label class="col-xs-3 control-label" translate="user.name">Name</label>
         <div class="col-xs-4">
           <input type="text" name="lastName" ng-model="user.lastName" class="form-control" 
-            placeholder="{{'user.last_name' | translate}}" required/>
+            placeholder="{{'user.last_name' | translate}}" ng-maxlength="255" required/>
           <div os-field-error field="userForm.lastName"></div>
         </div>
         
         <div class="col-xs-4">
           <input type="text" name="firstName" ng-model="user.firstName" class="form-control" 
-            placeholder="{{'user.first_name' | translate}}" required/>
+            placeholder="{{'user.first_name' | translate}}" ng-maxlength="255" required/>
           <div os-field-error field="userForm.firstName"></div>
         </div>
       </div>
@@ -80,27 +80,17 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="user.institute">Institute</label>
         <div class="col-xs-4">
-          <ui-select ng-model="instituteName" name="institute" ng-change="resetDepartmentName()" 
-            on-select="getDepartments($item.name)" required>
-            <ui-select-match placeholder="{{'user.institute' | translate}}"> 
-              {{$select.selected.name}} 
-            </ui-select-match>
-            <ui-select-choices repeat="institute.name as institute in institutes | filter: $select.search">
-              <span ng-bind-html="institute.name | highlight: $select.search"></span>
-            </ui-select-choices>
-          </ui-select>
+          <os-select ng-model="user.instituteName" list="institutes" on-change="loadDepartments"
+            name="institute" placeholder="{{'user.institute' | translate}}" required>
+          </os-select>
           <div os-field-error field="userForm.institute"></div>
         </div>
         
         <div class="col-xs-4">
-          <ui-select name="department" ng-model="user.deptName" required>
-            <ui-select-match placeholder="{{'user.department' | translate}}"> 
-              {{$select.selected.name}} 
-            </ui-select-match>
-            <ui-select-choices repeat="department.name as department in departments | filter: $select.search">
-              <span ng-bind-html="department.name | highlight: $select.search"></span>
-            </ui-select-choices>
-          </ui-select>
+          <os-select ng-model="user.deptName" list="departments" name="department" 
+            placeholder="{{'user.department' | translate}}" required>
+          </os-select>
+          
           <div os-field-error field="userForm.department"></div>
         </div>
       </div>
@@ -109,7 +99,7 @@
         <label class="col-xs-3 control-label" translate="user.super_admin">Super Administrator</label>
         <div class="col-xs-9">
           <label class="checkbox-inline">
-            <input type="checkbox" ng-model="user.isSuperAdmin" ng-change=setSuperAdminRole() /> Yes
+            <input type="checkbox" ng-model="user.superAdmin" /> Yes
           </label>
         </div>
       </div>
@@ -117,7 +107,7 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="user.address">Address</label>
         <div class="col-xs-6">
-          <textarea rows="2" placeholder="{{'user.address' | translate}}" ng-model="" 
+          <textarea rows="2" placeholder="{{'user.address' | translate}}" ng-model="user.address" 
             class="form-control">
           </textarea>
         </div>
@@ -146,22 +136,16 @@
       <div class="form-group clearfix" ng-repeat="userCPRole in user.userCPRoles">
         <ng-form name="roleForm" os-form-validator="roleForm" parent-validator="userRoleFormValidator"> 
           <div class="col-xs-3 col-xs-offset-2">
-            <ui-select name="siteName" ng-model="userCPRole.site" ng-change="getCps(userCPRole)" 
-              ng-required="!!userCPRole.cpTitle || !userCPRole.site">
-              <ui-select-match placeholder="{{'user.site' | translate}}"> 
-                {{userCPRole.site}}
-              </ui-select-match>
-              <ui-select-choices repeat="site in sites | filter: $select.search">
-                <span ng-bind-html="site | highlight: $select.search"></span>
-              </ui-select-choices>
-            </ui-select>
+            <os-select ng-model="userCPRole.site" list="sites" name="siteName" on-change="getCps(userCPRole)"
+              placeholder="{{'user.site' | translate}}" required>
+            </os-select>
             <div os-field-error field="roleForm.siteName"></div>
           </div>
           
           <div class="col-xs-3">
-            <ui-select name="cpTitle" ng-model="userCPRole.cpTitle" ng-change="checkExistingUserCPRoles(userCPRole)"
+            <ui-select name="cpTitle" ng-model="userCPRole.cpTitle" ng-change="updateUserCPRoleList(userCPRole)"
               ng-required="!!userCPRole.site || !userCPRole.cpTitle">
-              <ui-select-match placeholder="{{'user.cpTitle' | translate}}">
+              <ui-select-match placeholder="{{'user.cp_title' | translate}}">
                 {{userCPRole.cpTitle}} 
               </ui-select-match>
               <ui-select-choices repeat="cp.shortTitle as cp in siteCpMaps[userCPRole.site] | 
@@ -174,14 +158,8 @@
           </div>
     
           <div class="col-xs-3">
-            <ui-select name="role" ng-model="userCPRole.roleName" ng-required="!!userCPRole.cpTitle || !userCPRole.roleName">
-              <ui-select-match placeholder="{{'user.role' | translate}}"> 
-                {{userCPRole.roleName}} 
-              </ui-select-match>
-              <ui-select-choices repeat="role.name as role in roles | filter: $select.search ">
-                <span ng-bind-html="role.name | highlight: $select.search"></span>
-              </ui-select-choices>
-            </ui-select>
+            <os-select ng-model="userCPRole.roleName" list="roles" name="role" placeholder="{{'user.role' | translate}}" required>
+            </os-select>
             <div os-field-error field="roleForm.role"></div>
           </div>
      

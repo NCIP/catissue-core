@@ -7,13 +7,19 @@ angular.module('os.administrative.user.detail', ['os.administrative.models'])
                                {site:'In Transit', cpTitle:'AAProtocol', roleName:'Administrator'},
                                {site:'In Transit', cpTitle:'AASP', roleName:'Custom'}];
                                
-    PvManager.loadPvs($scope, 'domains');
-  
+    $scope.domains = PvManager.getPvs('domains');
     $scope.sites = PvManager.getSites();
     
-    Institute.list().then(function(institutes) {
-      $scope.institutes = institutes;
-    });
+    $scope.institutes = [];      
+    Institute.list().then(
+      function(instituteList) {
+        angular.forEach(instituteList,
+          function(institute) {
+            $scope.institutes.push(institute.name);
+          }
+        )
+      }
+    );
         
     $scope.editUser = function(property, value) {
       var d = $q.defer();
