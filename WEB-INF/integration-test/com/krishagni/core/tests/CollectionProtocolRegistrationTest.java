@@ -28,7 +28,6 @@ import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.events.AddVisitEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierResponseDetail;
@@ -38,10 +37,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIden
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitAddedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitsEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.core.common.ApplicationContextConfigurer;
@@ -95,8 +90,6 @@ public class CollectionProtocolRegistrationTest {
 
 	private static final String CLINICAL_STATUS = "clinical status";
 
-	private static final String VISIT_STATUS = "Collection Status";
-
 	private static final String CPE = "No event identification";
 	
 	private static final String CPL = "collection point label";
@@ -111,7 +104,6 @@ public class CollectionProtocolRegistrationTest {
 
 	private static final String SCG_REPORTS = "scg reports";
 	
-	private static final String VISIT_DATE = "visit date";
 	
 	@After
 	public void after() {
@@ -124,9 +116,9 @@ public class CollectionProtocolRegistrationTest {
 	 * Register Participant API Tests
 	 */
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.registerParticipant.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.registerParticipant.expected.xml", 
+	@DatabaseSetup("cp-test/registration-test/register-participant-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/register-participant-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void registerParticipant() {
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetail();
@@ -172,8 +164,8 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.registerParticipantToSameCp.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/registration-test/register-participant-to-same-cp-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void registerParticipantToSameCp() {
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetail();
 		cpr.getParticipant().setId(1L);
@@ -193,9 +185,9 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.createAndRegisterParticipant.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.createAndRegisterParticipant.expected.xml", 
+	@DatabaseSetup("cp-test/registration-test/create-and-register-participant-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/create-and-register-participant-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void createAndRegisterParticipant() {
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetailForCreateAndRegisterParticipantWithPmi();
@@ -266,9 +258,9 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.generic.expected.xml", 
+	@DatabaseSetup("cp-test/registration-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/generic-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void registerParticipantDuplicatePPID() {		
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetail();
@@ -285,9 +277,9 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.generic.expected.xml", 
+	@DatabaseSetup("cp-test/registration-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/generic-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void registerParticipantInvalidParticipantId() {		
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetail();
@@ -305,9 +297,9 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.generic.expected.xml", 
+	@DatabaseSetup("cp-test/registration-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/generic-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void registerParticipantInvalidCpid() {		
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetail();
@@ -325,9 +317,9 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.generic.expected.xml", 
+	@DatabaseSetup("cp-test/registration-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/generic-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void registerParticipantEmptyPPID() {		
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetail();
@@ -344,9 +336,9 @@ public class CollectionProtocolRegistrationTest {
 	}
 
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.generic.expected.xml", 
+	@DatabaseSetup("cp-test/registration-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/generic-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void createAndRegisterParticipantDuplicateSSN() {
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetailForCreateAndRegisterParticipant();
@@ -365,9 +357,9 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.generic.expected.xml", 
+	@DatabaseSetup("cp-test/registration-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/generic-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void createAndRegisterParticipantInvalidSSNFormat() {
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetailForCreateAndRegisterParticipant();
@@ -385,9 +377,9 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.createAndRegisterDeadParticipant.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.createAndRegisterDeadParticipant.expected.xml", 
+	@DatabaseSetup("cp-test/registration-test/create-and-register-dead-participant-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/create-and-register-dead-participant-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void createAndRegisterDeadParticipant() {
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetailForCreateAndRegisterParticipantWithPmi();
@@ -460,9 +452,9 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.generic.expected.xml", 
+	@DatabaseSetup("cp-test/registration-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/generic-expected.xml",
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void createAndRegisterDeadParticipantDeathDatePriorToBirthDate() {
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetailForCreateAndRegisterParticipant();
@@ -483,9 +475,9 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.generic.expected.xml", 
+	@DatabaseSetup("cp-test/registration-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/generic-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void registerParticipantWithNoRegistrationDate() {
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetail();
@@ -504,9 +496,9 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.registerParticipantToDisabledCp.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.registerParticipantToDisabledCp.expected.xml", 
+	@DatabaseSetup("cp-test/registration-test/register-participant-to-disabled-cp-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/register-participant-to-disabled-cp-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void registerParticipantToDisabledCp() {
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetail();
@@ -524,9 +516,9 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.generic.expected.xml", 
+	@DatabaseSetup("cp-test/registration-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/generic-expected.xml",
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void registerParticipantWithInvalidBirthDate() {
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetailForCreateAndRegisterParticipant();
@@ -549,9 +541,9 @@ public class CollectionProtocolRegistrationTest {
 
 	//TODO: fix this when pvManager is back in place
 	////@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.generic.expected.xml", 
+	@DatabaseSetup("cp-test/registration-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/generic-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void registerParticipantWithInvalidParticipantDetails() {
 		String string = "asdf-invalid";
@@ -583,114 +575,11 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	/*
-	 * Get Visits API Tests
-	 */
-	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.getVisits.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	public void getVisits() {
-		ReqVisitsEvent req = CprTestData.getReqVisitsEvent();
-		VisitsEvent resp = cprSvc.getVisits(req);
-		
-		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals("Mismatch in Visist!", (int)6, resp.getVisits().size());
-		
-		for (VisitSummary visit : resp.getVisits()) {
-			Long visitId = visit.getId();
-			Assert.assertNotNull(visitId);
-			Assert.assertEquals(visitId, visit.getEventId());
-			Assert.assertEquals(new String("scg-"+ visitId), visit.getName());
-			Assert.assertEquals(new String("Visit"+ visitId), visit.getLabel());
-			Assert.assertEquals((int) (visit.getEventId().intValue() * 10) , visit.getCalendarPoint());
-			Assert.assertEquals("Complete", visit.getStatus());
-			
-			Date registrationDate = CprTestData.getDate(31,1,2001);
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(registrationDate);
-			cal.add(Calendar.DAY_OF_YEAR, visit.getCalendarPoint());
-			Assert.assertEquals(cal.getTime(), visit.getAnticipatedVisitDate());
-			
-			if (visitId < 5L) {
-				assertPlannedVisitsStats(visit);
-			} else {
-				assertUnplannedVisitsStats(visit);
-			}
-		}
-	}
-	
-	private void assertPlannedVisitsStats(VisitSummary visit) {
-		Assert.assertEquals((int)1, visit.getAnticipatedSpecimens());
-		Assert.assertEquals((int)1, visit.getCollectedSpecimens());
-		Assert.assertEquals((int)0, visit.getUncollectedSpecimens());
-		
-		Assert.assertEquals((int)0, visit.getUnplannedSpecimens());
-	}
-	
-	private void assertUnplannedVisitsStats(VisitSummary visit) {
-		Assert.assertEquals((int)0, visit.getAnticipatedSpecimens());
-		Assert.assertEquals((int)0, visit.getCollectedSpecimens());
-		Assert.assertEquals((int)0, visit.getUncollectedSpecimens());
-		
-		Assert.assertEquals((int)1, visit.getUnplannedSpecimens());
-	}
-	
-	@Test
-	public void getVisitsForNonExistingCpr() {
-		ReqVisitsEvent req = CprTestData.getReqVisitsEvent();
-		VisitsEvent resp = cprSvc.getVisits(req);
-		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals(new Integer(0), new Integer(resp.getVisits().size()));
-	}
-	
-	@Test 
-	@DatabaseSetup("CollectionProtocolRegistrationTest.getVisitsForInactiveCpr.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	public void getVisitsForInactiveCpr() {
-		ReqVisitsEvent req = CprTestData.getReqVisitsEvent();
-		VisitsEvent resp = cprSvc.getVisits(req);
-		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals(new Integer(0), new Integer(resp.getVisits().size()));
-	}
-	
-	//TODO: Check with VP whether disabled to be shown 
-	//@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.getVisitsSomeVisitsDisabled.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	public void getVisitsSomeVisitsDisabled() {
-		ReqVisitsEvent req = CprTestData.getReqVisitsEvent();
-		VisitsEvent resp = cprSvc.getVisits(req);
-		req.setIncludeStats(false);
-		
-		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals("Mismatch in Visist!", (int)6, resp.getVisits().size());
-		
-		for (VisitSummary visit : resp.getVisits()) {
-			Long visitId = visit.getId();
-			Assert.assertNotNull(visitId);
-			Assert.assertEquals(visitId, visit.getEventId());
-			Assert.assertEquals(new String("scg-"+ visitId), visit.getName());
-			Assert.assertEquals(new String("Visit"+ visitId), visit.getLabel());
-			Assert.assertEquals((int) (visit.getEventId().intValue() * 10) , visit.getCalendarPoint());
-			Assert.assertEquals("Complete", visit.getStatus());
-			
-			Date registrationDate = CprTestData.getDate(31,1,2001);
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(registrationDate);
-			cal.add(Calendar.DAY_OF_YEAR, visit.getCalendarPoint());
-			Assert.assertEquals(cal.getTime(), visit.getAnticipatedVisitDate());
-		}
-	}
-	
-	/*
 	 * Get Registraiton API Tests
 	 */
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.getRegistration.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/registration-test/get-registration-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void getRegistration() {
 		ReqRegistrationEvent req = CprTestData.getReqRegistrationEvent();
 		req.setCprId(1L);
@@ -741,8 +630,8 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.getRegistration.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/registration-test/get-registration-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void getRegistrationByPpid() {
 		ReqRegistrationEvent req = CprTestData.getReqRegistrationEvent();
 		req.setCpId(1L);
@@ -823,8 +712,8 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.getDisabledRegistration.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/registration-test/get-disabled-registration-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void getDisabledRegistration() {
 		ReqRegistrationEvent req = CprTestData.getReqRegistrationEvent();
 		req.setCprId(1L);
@@ -839,8 +728,8 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.getDisabledRegistration.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/registration-test/get-disabled-registration-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void getDisabledRegistrationByPpid() {
 		ReqRegistrationEvent req = CprTestData.getReqRegistrationEvent();
 		req.setCpId(1L);
@@ -855,8 +744,8 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.getRegistration.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/registration-test/get-registration-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void getRegistrationForNonExistingPpid() {
 		ReqRegistrationEvent req = CprTestData.getReqRegistrationEvent();
 		req.setCpId(1L);
@@ -871,8 +760,8 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.getRegistration.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/registration-test/get-registration-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void getRegistrationForNonExistingCpid() {
 		ReqRegistrationEvent req = CprTestData.getReqRegistrationEvent();
 		req.setCpId(-1L);
@@ -887,8 +776,8 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.getRegistrationCpidAndPpidMismatch.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/registration-test/get-registration-cpid-and-ppid-mismatch-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void getRegistrationCpidAndPpidMismatch() {
 		/*
 		 * ppid and cpid both are valid but they belong to different cp's
@@ -904,101 +793,4 @@ public class CollectionProtocolRegistrationTest {
 		Assert.assertEquals(req.getPpid(), resp.getPpid());
 		Assert.assertNull(req.getCprId());
 	}
-	
-
-	/*
-	 * Add Visit API Tests
-	 */
-	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.addVisitsTest.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolRegistrationTest.addVisitsTest.expected.xml", 
-		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
-	public void addVisitsTest() {
-		AddVisitEvent req = CprTestData.getAddVisitEvent();
-		VisitAddedEvent resp = cprSvc.addVisit(req);
-		
-		TestUtils.recordResponse(resp);
-		Assert.assertEquals(true, resp.isSuccess());
-		Assert.assertNotNull(resp.getVisit());
-		Assert.assertEquals((Long)1L, resp.getVisit().getEventId());
-		Assert.assertEquals((Long)1L, resp.getVisit().getCprId());
-		Assert.assertEquals("test-pathology", resp.getVisit().getSurgicalPathologyNumber());
-		Assert.assertEquals("test-daiagnosis", resp.getVisit().getClinicalDiagnosis());
-		Assert.assertEquals("Completed", resp.getVisit().getStatus());
-		Assert.assertEquals("SITE1", resp.getVisit().getSite());
-		Assert.assertEquals("Active", resp.getVisit().getActivityStatus());
-		Assert.assertEquals("test-status", resp.getVisit().getClinicalStatus());
-	}
-	
-	/*
-	 * This test Checks for the error: Cpr not found, Cpe not found, Site Not Found
-	 */
-	@Test
-	public void addVisitsMissingCprCpeSite() {
-		AddVisitEvent req = CprTestData.getAddVisitEvent();
-		VisitAddedEvent resp = cprSvc.addVisit(req);
-		
-		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals("Invalid CPE Errorcode was not found!", true,
-				TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "cpeId"));
-		Assert.assertEquals("Invalid CPR Errorcode was not found!", true, 
-				TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "cprId"));
-		Assert.assertEquals("Invalid SITE Errorcode was not found!", true, 
-				TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "site"));
-		
-	}
-	
-	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.addVisitsInvalidCprCpe.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	public void addVisitsInvalidCprCpe() {
-		AddVisitEvent req = CprTestData.getAddVisitEvent();
-		VisitAddedEvent resp = cprSvc.addVisit(req);
-		
-		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_CPR_CPE, "cpr, cpe"));
-	}
-	
-	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.addVisitsTest.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	public void addVisitsMissingSiteName() {
-		AddVisitEvent req = CprTestData.getAddVisitEvent();
-		req.getVisit().setSite(null);
-		req.getVisit().setCprId(null);
-		req.getVisit().setCpTitle("invalid-serach-term");
-		req.getVisit().setPpid("invalid-search-term");
-		
-		VisitAddedEvent resp = cprSvc.addVisit(req);
-		
-		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals("Missing site name error was not found!", 
-				true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.MISSING_ATTR_VALUE, "site"));
-		Assert.assertEquals("Invalid cp-title error was expected, but not found!", 
-				true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "collectionProtocol"));
-	}
-	
-	@Test
-	@DatabaseSetup("CollectionProtocolRegistrationTest.addVisitsTest.initial.xml")
-	@DatabaseTearDown("CollectionProtocolRegistrationTest.generic.teardown.xml")
-	public void addVisitsTestInvalidPpid() {
-		AddVisitEvent req = CprTestData.getAddVisitEvent();
-		req.getVisit().setCprId(null);
-		req.getVisit().setEventId(null);
-		
-		req.getVisit().setCpTitle("default-cp");
-		req.getVisit().setPpid("invalid-ppid");
-		req.getVisit().setEventLabel("invalid-cpl");
-		VisitAddedEvent resp = cprSvc.addVisit(req);
-		
-		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "ppid"));
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "eventLabel"));
-	}
 }
-

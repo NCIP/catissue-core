@@ -82,7 +82,7 @@
 		
 		<property name="tissueSite" type="string" column="TISSUE_SITE" />
 
-		<many-to-one name="specimenCollectionGroup"
+		<many-to-one name="visit"
 			class="com.krishagni.catissueplus.core.biospecimen.domain.Visit"
 			column="SPECIMEN_COLLECTION_GROUP_ID" />
 

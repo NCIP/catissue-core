@@ -143,7 +143,7 @@ angular.module('openspecimen')
     return {
       restrict: 'E',
       require : '^osWizard',
-      template: '<div ng-transclude ng-show="selected"></div>',
+      template: '<div ng-transclude class="step-content" ng-show="selected"></div>',
       transclude: true,
       replace : true,
       scope : {

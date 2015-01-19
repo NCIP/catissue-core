@@ -47,6 +47,10 @@ public class RestErrorController extends ResponseEntityExceptionHandler {
 		if(status != HttpStatus.INTERNAL_SERVER_ERROR){
 			ResponseEvent resp = ex.getResponse();
 			ErroneousField[] list = resp.getErroneousFields();
+			if (list == null) {
+				list = new ErroneousField[0];
+			}
+			
 			for (ErroneousField erroneousField : list) {
 				ErrorMessage message = new ErrorMessage();
 				message.setAttributeName(erroneousField.getFieldName());
@@ -55,6 +59,7 @@ public class RestErrorController extends ResponseEntityExceptionHandler {
 				message.setErrorUrl(errorURL+erroneousField.getErrorCode());
 				response.getErrorMessages().add(message);
 			}
+			
 			response.setMessage(ex.getMessage());
 		}
 		return response;

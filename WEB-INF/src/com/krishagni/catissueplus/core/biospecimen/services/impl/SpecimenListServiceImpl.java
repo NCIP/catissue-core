@@ -21,7 +21,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSharedEven
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenListEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -182,7 +182,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 				return ListSpecimensEvent.notAuthorized(listId);
 			}
 			
-			return ListSpecimensEvent.ok(SpecimenSummary.from(specimenList.getSpecimens()));
+			return ListSpecimensEvent.ok(SpecimenDetail.from(specimenList.getSpecimens()));
 		} catch (Exception e) {
 			String message = e.getMessage();
 			if (message == null) {
@@ -232,9 +232,9 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			
 			daoFactory.getSpecimenListDao().saveOrUpdate(specimenList);
 			
-			List<SpecimenSummary> result = new ArrayList<SpecimenSummary>();
+			List<SpecimenDetail> result = new ArrayList<SpecimenDetail>();
 			for (Specimen specimen : specimens) {
-				result.add(SpecimenSummary.from(specimen));
+				result.add(SpecimenDetail.from(specimen));
 			}
 			
 			return ListSpecimensUpdatedEvent.ok(listId, result);

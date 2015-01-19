@@ -66,3 +66,11 @@
   border-top-right-radius: 0px;
   margin-bottom: -1px;
 }
+
+.os-select-specimen-cb {
+  height: 16px;
+  margin-left: -8px;
+  margin-top: 4px;
+  margin-right: 8px;
+}
+

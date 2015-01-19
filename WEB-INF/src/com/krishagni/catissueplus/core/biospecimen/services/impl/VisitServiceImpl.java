@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
@@ -16,12 +15,10 @@ import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionGroupsDet
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenGroupsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.GetScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllScgEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimensInfoEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitAddedEvent;
@@ -72,31 +69,6 @@ public class VisitServiceImpl implements VisitService {
 			return AllCollectionGroupsDetailEvent.ok(result,count);
 	}
 	
-	@Override
-	@PlusTransactional
-	public SpecimensInfoEvent getSpecimensList(ReqSpecimenSummaryEvent req) {
-		// TODO: Fix this API
-		return null;
-//		try {
-//			List<Specimen> specimenList = new ArrayList<Specimen>();
-//			List<SpecimenRequirement> requirementList = new ArrayList<SpecimenRequirement>();
-//			if (ObjectType.CPE.getName().equals(req.getObjectType())) {
-//				requirementList = daoFactory.getCollectionProtocolDao().getSpecimenRequirments(req.getId());
-//
-//			}
-//			else {
-//				requirementList = daoFactory.getScgDao().getSpecimenRequirments(req.getId());
-//				specimenList = daoFactory.getScgDao().getSpecimensList(req.getId());
-//
-//			}
-//			return SpecimensInfoEvent.ok(getSpecimensList(specimenList, requirementList, req.getId()));
-//
-//		}
-//		catch (CatissueException e) {
-//			return SpecimensInfoEvent.serverError(e);
-//		}
-	}
-
 	@Override
 	@PlusTransactional
 	public VisitAddedEvent addVisit(AddVisitEvent req) {

@@ -28,7 +28,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSharedEven
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenListEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenListService;
@@ -117,7 +117,7 @@ public class SpecimenListsController {
 	@RequestMapping(method = RequestMethod.GET, value="/{listId}/specimens")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SpecimenSummary> getListSpecimens(@PathVariable("listId") Long listId) {
+	public List<SpecimenDetail> getListSpecimens(@PathVariable("listId") Long listId) {
 		ReqListSpecimensEvent req = new ReqListSpecimensEvent(listId);
 		req.setSessionDataBean(getSession());
 		
@@ -132,7 +132,7 @@ public class SpecimenListsController {
 	@RequestMapping(method = RequestMethod.PUT, value="/{listId}/specimens")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SpecimenSummary> updateListSpecimens(
+	public List<SpecimenDetail> updateListSpecimens(
 			@PathVariable("listId") Long listId,
 			@RequestParam(value = "operation", required = false, defaultValue = "UPDATE") String operation,
 			@RequestBody List<String> specimenLabels) {

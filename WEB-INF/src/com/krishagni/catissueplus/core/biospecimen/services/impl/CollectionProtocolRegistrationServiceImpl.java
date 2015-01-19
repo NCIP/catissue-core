@@ -42,7 +42,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEve
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitAddedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
@@ -174,7 +174,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				return getAnticipatedSpecimens(cprId, eventId);
 			}
 			
-			return VisitSpecimensEvent.ok(cprId, eventId, visitId, Collections.<SpecimenSummary>emptyList());
+			return VisitSpecimensEvent.ok(cprId, eventId, visitId, Collections.<SpecimenDetail>emptyList());
 		} catch (Exception e) {
 			return VisitSpecimensEvent.serverError(cprId, eventId, visitId, e);
 		}
@@ -457,22 +457,22 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				getSpecimens(anticipatedSpecimens, Collections.<Specimen>emptySet()));		
 	}
 	
-	private List<SpecimenSummary> getSpecimens(Collection<SpecimenRequirement> anticipated, Collection<Specimen> specimens) {		
-		List<SpecimenSummary> result = SpecimenSummary.from(specimens);
+	private List<SpecimenDetail> getSpecimens(Collection<SpecimenRequirement> anticipated, Collection<Specimen> specimens) {		
+		List<SpecimenDetail> result = SpecimenDetail.from(specimens);
 		merge(anticipated, result, null, getReqSpecimenMap(result));
 
-		SpecimenSummary.sort(result);
+		SpecimenDetail.sort(result);
 		return result;
 	}
 	
-	private Map<Long, SpecimenSummary> getReqSpecimenMap(List<SpecimenSummary> specimens) {
-		Map<Long, SpecimenSummary> reqSpecimenMap = new HashMap<Long, SpecimenSummary>();
+	private Map<Long, SpecimenDetail> getReqSpecimenMap(List<SpecimenDetail> specimens) {
+		Map<Long, SpecimenDetail> reqSpecimenMap = new HashMap<Long, SpecimenDetail>();
 						
-		List<SpecimenSummary> remaining = new ArrayList<SpecimenSummary>();
+		List<SpecimenDetail> remaining = new ArrayList<SpecimenDetail>();
 		remaining.addAll(specimens);
 		
 		while (!remaining.isEmpty()) {
-			SpecimenSummary specimen = remaining.remove(0);
+			SpecimenDetail specimen = remaining.remove(0);
 			Long srId = (specimen.getReqId() == null) ? -1 : specimen.getReqId();
 			reqSpecimenMap.put(srId, specimen);
 			
@@ -484,16 +484,16 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	
 	private void merge(
 			Collection<SpecimenRequirement> anticipatedSpecimens, 
-			List<SpecimenSummary> result, 
-			SpecimenSummary currentParent,
-			Map<Long, SpecimenSummary> reqSpecimenMap) {
+			List<SpecimenDetail> result, 
+			SpecimenDetail currentParent,
+			Map<Long, SpecimenDetail> reqSpecimenMap) {
 		
 		for (SpecimenRequirement anticipated : anticipatedSpecimens) {
-			SpecimenSummary specimen = reqSpecimenMap.get(anticipated.getId());
+			SpecimenDetail specimen = reqSpecimenMap.get(anticipated.getId());
 			if (specimen != null) {
 				merge(anticipated.getChildSpecimenRequirements(), result, specimen, reqSpecimenMap);
 			} else {
-				specimen = SpecimenSummary.from(anticipated);
+				specimen = SpecimenDetail.from(anticipated);
 				
 				if (currentParent == null) {
 					result.add(specimen);

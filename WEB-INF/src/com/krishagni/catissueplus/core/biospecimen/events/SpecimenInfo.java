@@ -1,77 +1,110 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenPosition;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
-import com.krishagni.catissueplus.core.common.util.Status;
 
-public class SpecimenInfo  implements Comparable<SpecimenInfo>{
-
+public class SpecimenInfo implements Comparable<SpecimenInfo> {
+	public static class StorageLocationSummary {
+		public Long id;
+		
+		public String name;
+		
+		public String positionX;
+		
+		public String positionY;
+	}
+	
 	private Long id;
-
+	
+	private Long cprId;
+	
+	private Long eventId;
+	
+	private Long visitId;
+	
+	private Long reqId;
+	
 	private String label;
+	
+	private String barcode;
 
-	private String requirementLabel;
-
-	private String specimenType;
-
+	private String type;
+	
 	private String specimenClass;
+		
+	private String lineage;
 
-	private String collectionContainer;
+	private String anatomicSite;
 
-	private String collectionStatus;
-
-	private String instanceType;
-
-	private Long requirementId;
-
-	private Long scgId;
-
+	private String laterality;
+	
+	private String status;
+	
+	private String reqLabel;
+	
+	private String pathology;
+	
+	private Double initialQty;
+	
+	private Double availableQty;
+	
 	private Long parentId;
-
-	private List<SpecimenInfo> children = new ArrayList<SpecimenInfo>();
-
-	public String getInstanceType() {
-		return instanceType;
-	}
-
-	public void setInstanceType(String type) {
-		this.instanceType = type;
-	}
-
-	public Long getRequirementId() {
-		return requirementId;
-	}
-
-	public void setRequirementId(Long requirementId) {
-		this.requirementId = requirementId;
-	}
-
-	public String getSpecimenClass() {
-		return specimenClass;
-	}
-
-	public void setSpecimenClass(String specimenClass) {
-		this.specimenClass = specimenClass;
-	}
-
-	public String getCollectionStatus() {
-		return collectionStatus;
-	}
-
-	public void setCollectionStatus(String collectionStatus) {
-		this.collectionStatus = collectionStatus;
-	}
-
+	
+	private String parentLabel;
+	
+	private StorageLocationSummary storageLocation;
+	
+	private String storageType;
+	
+	private String activityStatus;
+	
+	private Date createdOn;
+	
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getCprId() {
+		return cprId;
+	}
+
+	public void setCprId(Long cprId) {
+		this.cprId = cprId;
+	}
+
+	public Long getEventId() {
+		return eventId;
+	}
+
+	public void setEventId(Long eventId) {
+		this.eventId = eventId;
+	}
+
+	public Long getVisitId() {
+		return visitId;
+	}
+
+	public void setVisitId(Long visitId) {
+		this.visitId = visitId;
+	}
+
+	public Long getReqId() {
+		return reqId;
+	}
+
+	public void setReqId(Long reqId) {
+		this.reqId = reqId;
 	}
 
 	public String getLabel() {
@@ -82,69 +115,92 @@ public class SpecimenInfo  implements Comparable<SpecimenInfo>{
 		this.label = label;
 	}
 
-	public String getRequirementLabel() {
-		return requirementLabel;
+	public String getBarcode() {
+		return barcode;
 	}
 
-	public void setRequirementLabel(String requirementLabel) {
-		this.requirementLabel = requirementLabel;
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
 	}
 
-	public String getSpecimenType() {
-		return specimenType;
+	public String getType() {
+		return type;
 	}
 
-	public void setSpecimenType(String specimenType) {
-		this.specimenType = specimenType;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public String getCollectionContainer() {
-		return collectionContainer;
+	public String getSpecimenClass() {
+		return specimenClass;
 	}
 
-	public void setCollectionContainer(String collectionContainer) {
-		this.collectionContainer = collectionContainer;
+	public void setSpecimenClass(String specimenClass) {
+		this.specimenClass = specimenClass;
 	}
 
-	public List<SpecimenInfo> getChildren() {
-		return children;
+	public String getLineage() {
+		return lineage;
 	}
 
-	public void addChildren(SpecimenInfo specimenInfo) {
-		this.children.add(specimenInfo);
+	public void setLineage(String lineage) {
+		this.lineage = lineage;
 	}
 
-	public void setChildren(List<SpecimenInfo> specimenInfoList) {
-		this.children = specimenInfoList;
+	public String getAnatomicSite() {
+		return anatomicSite;
 	}
 
-	public static SpecimenInfo fromSpecimen(Specimen specimen) {
-		SpecimenInfo specimenInfo = new SpecimenInfo();
-		specimenInfo.setId(specimen.getId());
-		specimenInfo.setLabel(specimen.getLabel());
-		specimenInfo.setSpecimenClass(specimen.getSpecimenClass());
-		specimenInfo.setSpecimenType(specimen.getSpecimenType());
-		specimenInfo.setCollectionStatus(specimen.getCollectionStatus());
-		specimenInfo.setInstanceType("specimen");
-		specimenInfo.setScgId(specimen.getSpecimenCollectionGroup().getId());
-		if (specimen.getParentSpecimen() != null) {
-			specimenInfo.setParentId(specimen.getParentSpecimen().getId());
-		}
-
-		if (specimen.getSpecimenRequirement() != null) {
-			specimenInfo.setRequirementLabel(specimen.getSpecimenRequirement().getName());
-			specimenInfo.setCollectionContainer(specimen.getSpecimenRequirement().getCollectionContainer());
-			specimenInfo.setRequirementId(specimen.getSpecimenRequirement().getId());
-		}
-		return specimenInfo;
+	public void setAnatomicSite(String anatomicSite) {
+		this.anatomicSite = anatomicSite;
 	}
 
-	public Long getScgId() {
-		return scgId;
+	public String getLaterality() {
+		return laterality;
 	}
 
-	public void setScgId(Long scgId) {
-		this.scgId = scgId;
+	public void setLaterality(String laterality) {
+		this.laterality = laterality;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getReqLabel() {
+		return reqLabel;
+	}
+
+	public void setReqLabel(String reqLabel) {
+		this.reqLabel = reqLabel;
+	}
+
+	public String getPathology() {
+		return pathology;
+	}
+
+	public void setPathology(String pathology) {
+		this.pathology = pathology;
+	}
+
+	public Double getInitialQty() {
+		return initialQty;
+	}
+
+	public void setInitialQty(Double initialQty) {
+		this.initialQty = initialQty;
+	}
+
+	public Double getAvailableQty() {
+		return availableQty;
+	}
+
+	public void setAvailableQty(Double availableQty) {
+		this.availableQty = availableQty;
 	}
 
 	public Long getParentId() {
@@ -155,68 +211,120 @@ public class SpecimenInfo  implements Comparable<SpecimenInfo>{
 		this.parentId = parentId;
 	}
 
-	public static SpecimenInfo fromRequirement(SpecimenRequirement requirement) {
-		SpecimenInfo specimenInfo = new SpecimenInfo();
-		//		specimenInfo.setId(requirement.getId());
-		specimenInfo.setRequirementId(requirement.getId());
-		specimenInfo.setSpecimenClass(requirement.getSpecimenClass());
-		specimenInfo.setSpecimenType(requirement.getSpecimenType());
-		specimenInfo.setCollectionStatus(Status.SPECIMEN_COLLECTION_STATUS_PENDING.getStatus());
-		specimenInfo.setRequirementLabel(requirement.getName());
-		specimenInfo.setCollectionContainer(requirement.getCollectionContainer());
-		specimenInfo.setInstanceType("requirement");
-
-		return specimenInfo;
+	public String getParentLabel() {
+		return parentLabel;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-
-		if (obj instanceof SpecimenInfo) {
-			SpecimenInfo specimenInfo = (SpecimenInfo) obj;
-			if (specimenInfo.getId() == null && specimenInfo.getRequirementId() == null) {
-				return false;
-			}
-			else if(this.requirementId == null && specimenInfo.getRequirementId() == null)
-			{
-				return false;
-			}
-			else if(this.requirementId !=null && specimenInfo.getRequirementId() != null)
-			{
-				return this.requirementId.equals(specimenInfo.getRequirementId());
-			}
-//			else if ((this.id + "_" + this.requirementId)
-//					.equals(specimenInfo.getId() + "_" + specimenInfo.getRequirementId())) {
-//				return true;
-//			}
-		}
-		return true;
+	public void setParentLabel(String parentLabel) {
+		this.parentLabel = parentLabel;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((requirementId == null) ? 0 : requirementId.hashCode());
-		return result;
+	public StorageLocationSummary getStorageLocation() {
+		return storageLocation;
+	}
+
+	public void setStorageLocation(StorageLocationSummary storageLocation) {
+		this.storageLocation = storageLocation;
 	}
 	
-	@Override
-	public int compareTo(SpecimenInfo specimenInfo) {
-		if (requirementId != null && specimenInfo.getRequirementId() == null) {
-			return -1;
-		} else if (requirementId == null && specimenInfo.getRequirementId() != null) {
-			return 1;
-		} else if (requirementId != null && specimenInfo.getRequirementId() != null) {
-			return requirementId.compareTo(specimenInfo.getRequirementId());
-		} else {
-			return id.compareTo(specimenInfo.getId());
-		}		
+	public String getStorageType() {
+		return storageType;
 	}
+
+	public void setStorageType(String storageType) {
+		this.storageType = storageType;
+	}
+
+	public String getActivityStatus() {
+		return activityStatus;
+	}
+
+	public void setActivityStatus(String activityStatus) {
+		this.activityStatus = activityStatus;
+	}
+
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public static void fromTo(Specimen specimen, SpecimenInfo result) {
+		result.setId(specimen.getId());
+		
+		SpecimenRequirement sr= specimen.getSpecimenRequirement();
+		result.setReqId(sr != null ? sr.getId() : null);
+		result.setReqLabel(sr != null ? sr.getName() : null);
+		result.setLabel(specimen.getLabel());
+		result.setBarcode(specimen.getBarcode());
+		result.setType(specimen.getSpecimenType());
+		result.setSpecimenClass(specimen.getSpecimenClass());
+		result.setLineage(specimen.getLineage());
+		result.setAnatomicSite(specimen.getTissueSite());
+		result.setLaterality(specimen.getTissueSide());
+		result.setStatus(specimen.getCollectionStatus());
+		result.setPathology(specimen.getPathologicalStatus());
+		result.setInitialQty(specimen.getInitialQuantity());
+		result.setAvailableQty(specimen.getAvailableQuantity());
+		if (specimen.getParentSpecimen() != null) {
+			result.setParentId(specimen.getParentSpecimen().getId());
+			result.setParentLabel(specimen.getParentSpecimen().getLabel());
+		}
+	
+		StorageLocationSummary location = new StorageLocationSummary();
+		SpecimenPosition position = specimen.getSpecimenPosition();
+		if (position == null) {
+			location.id = -1L;
+		} else {
+			location.id = position.getStorageContainer().getId();
+			location.name = position.getStorageContainer().getName();
+			location.positionX = position.getPositionDimensionOneString();
+			location.positionY = position.getPositionDimensionTwoString();
+		}
+		result.setStorageLocation(location);		
+		result.setActivityStatus(specimen.getActivityStatus());
+		result.setCreatedOn(specimen.getCreatedOn());
+		result.setStorageType(sr != null ? sr.getStorageType() : null);
+	}	
+	
+	public static void fromTo(SpecimenRequirement anticipated, SpecimenInfo result) {
+		result.setId(null);	
+		result.setReqId(anticipated.getId());
+		result.setReqLabel(anticipated.getName());
+		result.setBarcode(null);
+		result.setType(anticipated.getSpecimenType());
+		result.setSpecimenClass(anticipated.getSpecimenClass());
+		result.setLineage(anticipated.getLineage());
+		result.setAnatomicSite(anticipated.getAnatomicSite());
+		result.setLaterality(anticipated.getLaterality());
+		result.setPathology(anticipated.getPathologyStatus());
+		result.setInitialQty(anticipated.getInitialQuantity());
+		result.setParentId(null);
+	
+		StorageLocationSummary location = new StorageLocationSummary();
+		result.setStorageLocation(location);
+		result.setStorageType(anticipated.getStorageType());
+	}	
+	
+	public static void sort(List<SpecimenDetail> specimens) {
+		Collections.sort(specimens, new Comparator<SpecimenDetail>() {
+			@Override
+			public int compare(SpecimenDetail specimen1, SpecimenDetail specimen2) {
+				return specimen1.getType().compareTo(specimen2.getType());
+			}
+		});
+		
+		for (SpecimenDetail specimen : specimens) {
+			if (specimen.getChildren() != null) {
+				sort(specimen.getChildren());
+			}
+		}
+	}
+
+	@Override
+	public int compareTo(SpecimenInfo other) {
+		return getType().compareTo(other.getType());
+	}	
 }

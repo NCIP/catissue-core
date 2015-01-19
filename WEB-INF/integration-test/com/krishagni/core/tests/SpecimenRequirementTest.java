@@ -23,6 +23,10 @@ import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.AddSpecimenRequirementEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AliquotsRequirementCreatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotsRequirementEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateDerivedSpecimenReqEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.DerivedSpecimenReqCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenRequirementsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementAddedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementDetail;
@@ -59,9 +63,9 @@ public class SpecimenRequirementTest {
 	 * Add Specimen Requirement Api Tests
 	 */
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.addSpecimenRequirementTest.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
-	@ExpectedDatabase(value="SpecimenRequirementTest.addSpecimenRequirementTest.expected.xml", 
+	@DatabaseSetup("specimen-requirement-test/add-sr-test-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-requirement-test/add-sr-test-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void addSpecimenRequirementTest() {
 		AddSpecimenRequirementEvent req = SpecimenRequirementTestData.getAddSpecimenRequirementEvent();
@@ -117,8 +121,8 @@ public class SpecimenRequirementTest {
 	}
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.addSpecimenRequirementTest.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
+	@DatabaseSetup("specimen-requirement-test/add-sr-test-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
 	public void addSpecimenRequirementInvalidAttributes() {
 		AddSpecimenRequirementEvent req = SpecimenRequirementTestData.getAddSpecimenRequirementEvent();
 		SpecimenRequirementDetail detail = new SpecimenRequirementDetail();
@@ -159,8 +163,8 @@ public class SpecimenRequirementTest {
 	}
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.addSpecimenRequirementTest.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
+	@DatabaseSetup("specimen-requirement-test/add-sr-test-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
 	public void addSpecimenRequirementMissingAttributes() {
 		AddSpecimenRequirementEvent req = SpecimenRequirementTestData.getAddSpecimenRequirementEvent();
 		SpecimenRequirementDetail detail = req.getRequirement();
@@ -183,21 +187,22 @@ public class SpecimenRequirementTest {
 	 * Get Specimen Requirement API Tests
 	 */
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.getSpecimenRequirementTest.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
+	@DatabaseSetup("specimen-requirement-test/get-specimen-requirement-test-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
 	public void getSpecimenRequirementTest() {
 		ReqSpecimenRequirementsEvent req = SpecimenRequirementTestData.getReqSpecimenRequirementsEvent();
 		SpecimenRequirementsEvent resp = cpSvc.getSpecimenRequirments(req);
 		
 		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals(new Integer(3), new Integer(resp.getSpecimenRequirements().size()));
+		Assert.assertEquals("Invalid number specimen requirements size", 
+				new Integer(3), new Integer(resp.getSpecimenRequirements().size()));
 		
 		for (SpecimenRequirementDetail actual : resp.getSpecimenRequirements()) {
-			Assert.assertEquals("Right", actual.getAnatomicSite());
+			Assert.assertEquals("Head", actual.getAnatomicSite());
 			Assert.assertEquals("default-container", actual.getCollectionContainer());
 			Assert.assertEquals("default-procedure", actual.getCollectionProcedure());
 			Assert.assertEquals("default-label-format", actual.getLabelFmt());
-			Assert.assertEquals("Head", actual.getLaterality());
+			Assert.assertEquals("Right", actual.getLaterality());
 			//TODO: currently lineage is hard coded as new
 			Assert.assertEquals("New", actual.getLineage());
 			Assert.assertEquals("default-label", actual.getName());
@@ -246,13 +251,452 @@ public class SpecimenRequirementTest {
 	}
 	
 	@Test
-	@DatabaseSetup("SpecimenRequirementTest.getSRForEventWithEmptySRList.initial.xml")
-	@DatabaseTearDown("SpecimenRequirementTest.generic.teardown.xml")
+	@DatabaseSetup("specimen-requirement-test/get-sr-for-event-with-empty-sr-list-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
 	public void getSRForEventWithEmptySRList() {
 		ReqSpecimenRequirementsEvent req = SpecimenRequirementTestData.getReqSpecimenRequirementsEvent();
 		SpecimenRequirementsEvent resp = cpSvc.getSpecimenRequirments(req);
 		
 		Assert.assertEquals(EventStatus.OK, resp.getStatus());
 		Assert.assertEquals(new Integer(0), new Integer(resp.getSpecimenRequirements().size()));
+	}
+	
+	/*
+	 * Create Aliquot API Tests
+	 */
+	@Test
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-requirement-test/create-sr-aliquot-expected.xml", 
+	assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void createSRAliquot() {
+		CreateAliquotsRequirementEvent req = SpecimenRequirementTestData.getCreateAliquotsRequirementEvent();
+		AliquotsRequirementCreatedEvent resp = cpSvc.createAliquots(req);
+		
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		Assert.assertEquals("Aliquot count mismatch!", new Integer(req.getRequirement().getNoOfAliquots()), 
+				new Integer(resp.getAliquots().size()));
+		
+		for (SpecimenRequirementDetail actual : resp.getAliquots()) {
+			Assert.assertEquals("Anatomic Site mismatch","Head", actual.getAnatomicSite());
+			Assert.assertEquals("Collection container mismatch", "default-container", actual.getCollectionContainer());
+			Assert.assertEquals("Collection procedure mismatch","default-procedure", actual.getCollectionProcedure());
+			Assert.assertEquals("Label format mismatch", req.getRequirement().getLabelFmt(), actual.getLabelFmt());
+			Assert.assertEquals("Laterality mismatch" , "Right", actual.getLaterality());
+			Assert.assertEquals("Lineage mismatch", "Aliquot", actual.getLineage());
+			Assert.assertEquals("label mismatch", "default-label", actual.getName());
+			Assert.assertEquals("Pathology status mismatch" , "Malignant", actual.getPathologyStatus());
+			Assert.assertEquals("Specimen class missmatch", "Molecular", actual.getSpecimenClass());
+			Assert.assertEquals("Storage type mismatch","Manual", actual.getStorageType());
+			Assert.assertEquals("type mismatch", "Plasma", actual.getType());
+			Assert.assertEquals("Concentration mismatch", new Double(0.5), actual.getConcentration());
+			Assert.assertEquals("Event id mismatch", new Long(1), actual.getEventId());
+			Assert.assertEquals("initial quantity mismatch" , new Double(0.1), actual.getInitialQty());
+			Assert.assertNotNull("Collector is null!", actual.getCollector());
+			Assert.assertNotNull("Receiver is null", actual.getReceiver());
+			Assert.assertEquals("Collector id mismatch", new Long(2), actual.getCollector().getId());
+			Assert.assertEquals("Receiver id mismatch" , new Long(3), actual.getReceiver().getId());
+			
+			Long collectorId = actual.getCollector().getId();
+			String firstName = "ADMIN" + collectorId;
+			String lastName = "ADMIN" + collectorId;
+			String loginName = "admin" + collectorId + "@admin.com";
+			
+			UserSummary collector = actual.getCollector();
+			Assert.assertEquals(firstName, collector.getFirstName());
+			Assert.assertEquals(lastName, collector.getLastName());
+			Assert.assertEquals(loginName, collector.getLoginName());
+			
+			
+			Long receiverId = actual.getReceiver().getId();
+			firstName = "ADMIN" + collectorId;
+			lastName = "ADMIN" + collectorId;
+			loginName = "admin" + collectorId + "@admin.com";
+			
+			UserSummary receiver = actual.getCollector();
+			Assert.assertEquals(firstName, receiver.getFirstName());
+			Assert.assertEquals(lastName, receiver.getLastName());
+			Assert.assertEquals(loginName, receiver.getLoginName());
+		}
+		
+	}
+	
+	@Test
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	public void createSRAliquotWithInSufficientInitialQuantity() {
+		CreateAliquotsRequirementEvent req = SpecimenRequirementTestData.getCreateAliquotsRequirementEvent();
+		req.getRequirement().setNoOfAliquots(200);
+		AliquotsRequirementCreatedEvent resp = cpSvc.createAliquots(req);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("The error insufficient initial quantity not found!", true,
+				TestUtils.isErrorCodePresent(resp, SpecimenErrorCode.INSUFFICIENT_SPECIMEN_QTY, "count"));
+	}
+	
+	@Test
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-with-disabled-parent-sr-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	public void createSRAliquotWithDisabledParentSR() {
+		CreateAliquotsRequirementEvent req = SpecimenRequirementTestData.getCreateAliquotsRequirementEvent();
+		AliquotsRequirementCreatedEvent resp = cpSvc.createAliquots(req);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("The error parent specimen requirement's activity status disabled not found!", true,
+				TestUtils.isErrorCodePresent(resp, SpecimenErrorCode.INVALID_ATTR_VALUE, "parentSrId"));
+	}
+	
+	@Test
+	public void createSRAliquotWithNonExistingParentSR() {
+		CreateAliquotsRequirementEvent req = SpecimenRequirementTestData.getCreateAliquotsRequirementEvent();
+		req.getRequirement().setParentSrId(111L);
+		
+		AliquotsRequirementCreatedEvent resp = cpSvc.createAliquots(req);
+
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("The error parent specimen requirement was found!", true,
+				TestUtils.isErrorCodePresent(resp, SpecimenErrorCode.INVALID_ATTR_VALUE, "parentSrId"));
+	}
+	
+	@Test
+	public void createSRAliquotWithInvalidParentSRId() {
+		CreateAliquotsRequirementEvent req = SpecimenRequirementTestData.getCreateAliquotsRequirementEvent();
+		req.getRequirement().setParentSrId(-1L);
+
+		AliquotsRequirementCreatedEvent resp = cpSvc.createAliquots(req);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("The error parent specimen requirement was not invalid!", true,
+				TestUtils.isErrorCodePresent(resp, SpecimenErrorCode.INVALID_ATTR_VALUE, "parentSrId"));
+	}
+	
+	@Test
+	public void createSRAliquotWithoutParentSRId() {
+		CreateAliquotsRequirementEvent req = SpecimenRequirementTestData.getCreateAliquotsRequirementEvent();
+		req.getRequirement().setParentSrId(null);
+
+		AliquotsRequirementCreatedEvent resp = cpSvc.createAliquots(req);
+
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("The error parent specimen requirement was not found!", true,
+				TestUtils.isErrorCodePresent(resp, SpecimenErrorCode.INVALID_ATTR_VALUE, "parentSrId"));
+	}
+	
+	@Test
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-requirement-test/create-sr-aliquot-inherit-parent-specimen-label-expected.xml", 
+	assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void createSRAliquotInheritParentSpecimenLabel() {
+		CreateAliquotsRequirementEvent req = SpecimenRequirementTestData.getCreateAliquotsRequirementEvent();
+		req.getRequirement().setLabelFmt(null);
+		AliquotsRequirementCreatedEvent resp = cpSvc.createAliquots(req);
+		
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		Assert.assertEquals("Aliquot count mismatch!", new Integer(req.getRequirement().getNoOfAliquots()), 
+				new Integer(resp.getAliquots().size()));
+		
+		for (SpecimenRequirementDetail actual : resp.getAliquots()) {
+			Assert.assertEquals("Anatomic Site mismatch","Head", actual.getAnatomicSite());
+			Assert.assertEquals("Collection container mismatch", "default-container", actual.getCollectionContainer());
+			Assert.assertEquals("Collection procedure mismatch","default-procedure", actual.getCollectionProcedure());
+			Assert.assertEquals("Label format mismatch", "default-label-format", actual.getLabelFmt());
+			Assert.assertEquals("Laterality mismatch" , "Right", actual.getLaterality());
+			Assert.assertEquals("Lineage mismatch", "Aliquot", actual.getLineage());
+			Assert.assertEquals("label mismatch", "default-label", actual.getName());
+			Assert.assertEquals("Pathology status mismatch" , "Malignant", actual.getPathologyStatus());
+			Assert.assertEquals("Specimen class missmatch", "Molecular", actual.getSpecimenClass());
+			Assert.assertEquals("Storage type mismatch","Manual", actual.getStorageType());
+			Assert.assertEquals("type mismatch", "Plasma", actual.getType());
+			Assert.assertEquals("Concentration mismatch", new Double(0.5), actual.getConcentration());
+			Assert.assertEquals("Event id mismatch", new Long(1), actual.getEventId());
+			Assert.assertEquals("initial quantity mismatch" , new Double(0.1), actual.getInitialQty());
+			Assert.assertNotNull("Collector is null!", actual.getCollector());
+			Assert.assertNotNull("Receiver is null", actual.getReceiver());
+			Assert.assertEquals("Collector id mismatch", new Long(2), actual.getCollector().getId());
+			Assert.assertEquals("Receiver id mismatch" , new Long(3), actual.getReceiver().getId());
+			
+			Long collectorId = actual.getCollector().getId();
+			String firstName = "ADMIN" + collectorId;
+			String lastName = "ADMIN" + collectorId;
+			String loginName = "admin" + collectorId + "@admin.com";
+			
+			UserSummary collector = actual.getCollector();
+			Assert.assertEquals(firstName, collector.getFirstName());
+			Assert.assertEquals(lastName, collector.getLastName());
+			Assert.assertEquals(loginName, collector.getLoginName());
+			
+			
+			Long receiverId = actual.getReceiver().getId();
+			firstName = "ADMIN" + collectorId;
+			lastName = "ADMIN" + collectorId;
+			loginName = "admin" + collectorId + "@admin.com";
+			
+			UserSummary receiver = actual.getCollector();
+			Assert.assertEquals(firstName, receiver.getFirstName());
+			Assert.assertEquals(lastName, receiver.getLastName());
+			Assert.assertEquals(loginName, receiver.getLoginName());
+		}
+		
+	}
+		
+	@Test
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	public void createSRAliquotWithInInvalidInitialQuantity() {
+		CreateAliquotsRequirementEvent req = SpecimenRequirementTestData.getCreateAliquotsRequirementEvent();
+		req.getRequirement().setQtyPerAliquot(-0.1D);
+		AliquotsRequirementCreatedEvent resp = cpSvc.createAliquots(req);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("The error invalid initial quantity for aliquots not found!", true,
+				TestUtils.isErrorCodePresent(resp, SpecimenErrorCode.INVALID_ATTR_VALUE, "qtyPerAliquot"));
+	}
+	
+	@Test
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	public void createSRAliquotWithInInvalidNumOfAliquots() {
+		CreateAliquotsRequirementEvent req = SpecimenRequirementTestData.getCreateAliquotsRequirementEvent();
+		req.getRequirement().setNoOfAliquots(0);
+		AliquotsRequirementCreatedEvent resp = cpSvc.createAliquots(req);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("The error insufficient initial quantity not found!", true,
+				TestUtils.isErrorCodePresent(resp, SpecimenErrorCode.INVALID_ATTR_VALUE, "noOfAliquots"));
+	}
+	
+	/*
+	 * Create Derived SR API Tests
+	 */
+	
+	@Test
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-requirement-test/create-derived-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void createDerived() {
+		CreateDerivedSpecimenReqEvent req = SpecimenRequirementTestData.getCreateDerivedSpecimenReqEvent();
+		DerivedSpecimenReqCreatedEvent resp = cpSvc.createDerived(req);
+		
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		Assert.assertNotNull(resp.getDerived());
+		
+		SpecimenRequirementDetail detail = resp.getDerived();
+
+		Assert.assertEquals("Anatomic Site mismatch", "Head", detail.getAnatomicSite());
+		Assert.assertEquals("Collection container mismatch", "default-container", detail.getCollectionContainer());
+		Assert.assertEquals("Collection procedure mismatch", "default-procedure", detail.getCollectionProcedure());
+		Assert.assertEquals("Label format mismatch", "derived-label-format", detail.getLabelFmt());
+		Assert.assertEquals("Laterality mismatch" , "Right", detail.getLaterality());
+		Assert.assertEquals("Lineage mismatch", "Derived", detail.getLineage());
+		Assert.assertEquals("Label mismatch", "derived-label", detail.getName());
+		Assert.assertEquals("Pathology status mismatch" , "Malignant", detail.getPathologyStatus());
+		Assert.assertEquals("Specimen class mismatch", "Molecular", detail.getSpecimenClass());
+		Assert.assertEquals("Storage type mismatch", "Manual", detail.getStorageType());
+		Assert.assertEquals("Type mismatch", "Saliva", detail.getType());		
+		Assert.assertEquals("Concentration mismatch", 0.1, detail.getConcentration(), 0);
+		Assert.assertEquals("Event id mismatch", new Long(1), detail.getEventId());
+		Assert.assertEquals("Initial quantity mismatch", 0.1, detail.getInitialQty(), 0);
+		
+		Assert.assertNotNull(detail.getCollector());
+		Long collectorId = detail.getCollector().getId();
+		String firstName = "ADMIN" + collectorId;
+		String lastName = "ADMIN" + collectorId;
+		String loginName = "admin" + collectorId + "@admin.com";
+		Assert.assertEquals(firstName, detail.getCollector().getFirstName());
+		Assert.assertEquals(lastName, detail.getCollector().getLastName());
+		Assert.assertEquals(loginName, detail.getCollector().getLoginName());
+		
+		Assert.assertNotNull(detail.getReceiver());
+		Long receiverId = detail.getReceiver().getId();
+		firstName = "ADMIN" + receiverId;
+		lastName = "ADMIN" + receiverId;
+		loginName = "admin" + receiverId + "@admin.com";
+		Assert.assertEquals(firstName, detail.getReceiver().getFirstName());
+		Assert.assertEquals(lastName, detail.getReceiver().getLastName());
+		Assert.assertEquals(loginName, detail.getReceiver().getLoginName());
+	}
+	
+	@Test
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	public void createDerivedWithInvalidInitialQuantity() {
+		CreateDerivedSpecimenReqEvent req = SpecimenRequirementTestData.getCreateDerivedSpecimenReqEvent();
+		req.getRequirement().setQuantity(-0.5);
+
+		DerivedSpecimenReqCreatedEvent resp = cpSvc.createDerived(req);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("The error initial quantity was valid!", true,
+				TestUtils.isErrorCodePresent(resp, SpecimenErrorCode.INVALID_ATTR_VALUE, "initialQty"));
+	}
+	
+	@Test
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-with-disabled-parent-sr-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	public void createDerivedWithDisabledParentSR() {
+		CreateDerivedSpecimenReqEvent req = SpecimenRequirementTestData.getCreateDerivedSpecimenReqEvent();
+		DerivedSpecimenReqCreatedEvent resp = cpSvc.createDerived(req);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("The error parent specimen requirement was not disabled!", true,
+				TestUtils.isErrorCodePresent(resp, SpecimenErrorCode.INVALID_ATTR_VALUE, "parentSrId"));
+	}
+	
+	@Test
+	public void createDerivedWithNonExistingParentSR() {
+		CreateDerivedSpecimenReqEvent req = SpecimenRequirementTestData.getCreateDerivedSpecimenReqEvent();
+		req.getRequirement().setParentSrId(111L);
+		
+		DerivedSpecimenReqCreatedEvent resp = cpSvc.createDerived(req);
+
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("The error parent specimen requirement was found!", true,
+				TestUtils.isErrorCodePresent(resp, SpecimenErrorCode.INVALID_ATTR_VALUE, "parentSrId"));
+	}
+	
+	@Test
+	public void createDerivedWithInvalidParentSRId() {
+		CreateDerivedSpecimenReqEvent req = SpecimenRequirementTestData.getCreateDerivedSpecimenReqEvent();
+		req.getRequirement().setParentSrId(-1L);
+		
+		DerivedSpecimenReqCreatedEvent resp = cpSvc.createDerived(req);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("The error parent specimen requirement was valid!", true,
+				TestUtils.isErrorCodePresent(resp, SpecimenErrorCode.INVALID_ATTR_VALUE, "parentSrId"));
+	}
+	
+	@Test
+	public void createDerivedWithoutParentSRId() {
+		CreateDerivedSpecimenReqEvent req = SpecimenRequirementTestData.getCreateDerivedSpecimenReqEvent();
+		req.getRequirement().setParentSrId(null);
+		
+		DerivedSpecimenReqCreatedEvent resp = cpSvc.createDerived(req);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("The error parent specimen requirement was found!", true,
+				TestUtils.isErrorCodePresent(resp, SpecimenErrorCode.INVALID_ATTR_VALUE, "parentSrId"));
+	}
+	
+	@Test
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-requirement-test/create-derived-with-inherit-parent-specimen-label-expected.xml", 
+	assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void createDerivedWithoutParentSpecimenLabel() {
+		CreateDerivedSpecimenReqEvent req = SpecimenRequirementTestData.getCreateDerivedSpecimenReqEvent();
+		req.getRequirement().setLabelFmt("");
+		
+		DerivedSpecimenReqCreatedEvent resp = cpSvc.createDerived(req);
+		
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		Assert.assertNotNull(resp.getDerived());
+		
+		SpecimenRequirementDetail detail = resp.getDerived();
+
+		Assert.assertEquals("Anatomic Site mismatch", "Head", detail.getAnatomicSite());
+		Assert.assertEquals("Collection container mismatch", "default-container", detail.getCollectionContainer());
+		Assert.assertEquals("Collection procedure mismatch", "default-procedure", detail.getCollectionProcedure());
+		Assert.assertEquals("Label format mismatch", "default-label-format", detail.getLabelFmt());
+		Assert.assertEquals("Laterality mismatch" , "Right", detail.getLaterality());
+		Assert.assertEquals("Lineage mismatch", "Derived", detail.getLineage());
+		Assert.assertEquals("Label mismatch", "derived-label", detail.getName());
+		Assert.assertEquals("Pathology status mismatch" , "Malignant", detail.getPathologyStatus());
+		Assert.assertEquals("Specimen class mismatch", "Molecular", detail.getSpecimenClass());
+		Assert.assertEquals("Storage type mismatch", "Manual", detail.getStorageType());
+		Assert.assertEquals("Type mismatch", "Saliva", detail.getType());		
+		Assert.assertEquals("Concentration mismatch", 0.1, detail.getConcentration(), 0);
+		Assert.assertEquals("Event id mismatch", new Long(1), detail.getEventId());
+		Assert.assertEquals("Initial quantity mismatch", 0.1, detail.getInitialQty(), 0);
+		
+		Assert.assertNotNull(detail.getCollector());
+		Long collectorId = detail.getCollector().getId();
+		String firstName = "ADMIN" + collectorId;
+		String lastName = "ADMIN" + collectorId;
+		String loginName = "admin" + collectorId + "@admin.com";
+		Assert.assertEquals(firstName, detail.getCollector().getFirstName());
+		Assert.assertEquals(lastName, detail.getCollector().getLastName());
+		Assert.assertEquals(loginName, detail.getCollector().getLoginName());
+		
+		Assert.assertNotNull(detail.getReceiver());
+		Long receiverId = detail.getReceiver().getId();
+		firstName = "ADMIN" + receiverId;
+		lastName = "ADMIN" + receiverId;
+		loginName = "admin" + receiverId + "@admin.com";
+		Assert.assertEquals(firstName, detail.getReceiver().getFirstName());
+		Assert.assertEquals(lastName, detail.getReceiver().getLastName());
+		Assert.assertEquals(loginName, detail.getReceiver().getLoginName());
+	}
+	
+	@Test
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-requirement-test/create-derived-with-inherit-parent-name-expected.xml", 
+	assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void createDerivedWithoutName() {
+		CreateDerivedSpecimenReqEvent req = SpecimenRequirementTestData.getCreateDerivedSpecimenReqEvent();
+		req.getRequirement().setName("");
+		
+		DerivedSpecimenReqCreatedEvent resp = cpSvc.createDerived(req);
+		
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		Assert.assertNotNull(resp.getDerived());
+		
+		SpecimenRequirementDetail detail = resp.getDerived();
+
+		Assert.assertEquals("Anatomic Site mismatch", "Head", detail.getAnatomicSite());
+		Assert.assertEquals("Collection container mismatch", "default-container", detail.getCollectionContainer());
+		Assert.assertEquals("Collection procedure mismatch", "default-procedure", detail.getCollectionProcedure());
+		Assert.assertEquals("Label format mismatch", "derived-label-format", detail.getLabelFmt());
+		Assert.assertEquals("Laterality mismatch" , "Right", detail.getLaterality());
+		Assert.assertEquals("Lineage mismatch", "Derived", detail.getLineage());
+		Assert.assertEquals("Label mismatch", "default-label", detail.getName());
+		Assert.assertEquals("Pathology status mismatch" , "Malignant", detail.getPathologyStatus());
+		Assert.assertEquals("Specimen class mismatch", "Molecular", detail.getSpecimenClass());
+		Assert.assertEquals("Storage type mismatch", "Manual", detail.getStorageType());
+		Assert.assertEquals("Type mismatch", "Saliva", detail.getType());		
+		Assert.assertEquals("Concentration mismatch", 0.1, detail.getConcentration(), 0);
+		Assert.assertEquals("Event id mismatch", new Long(1), detail.getEventId());
+		Assert.assertEquals("Initial quantity mismatch", 0.1, detail.getInitialQty(), 0);
+		
+		Assert.assertNotNull(detail.getCollector());
+		Long collectorId = detail.getCollector().getId();
+		String firstName = "ADMIN" + collectorId;
+		String lastName = "ADMIN" + collectorId;
+		String loginName = "admin" + collectorId + "@admin.com";
+		Assert.assertEquals(firstName, detail.getCollector().getFirstName());
+		Assert.assertEquals(lastName, detail.getCollector().getLastName());
+		Assert.assertEquals(loginName, detail.getCollector().getLoginName());
+		
+		Assert.assertNotNull(detail.getReceiver());
+		Long receiverId = detail.getReceiver().getId();
+		firstName = "ADMIN" + receiverId;
+		lastName = "ADMIN" + receiverId;
+		loginName = "admin" + receiverId + "@admin.com";
+		Assert.assertEquals(firstName, detail.getReceiver().getFirstName());
+		Assert.assertEquals(lastName, detail.getReceiver().getLastName());
+		Assert.assertEquals(loginName, detail.getReceiver().getLoginName());
+	}
+	
+	@Test
+	@DatabaseSetup("specimen-requirement-test/create-sr-aliquot-initial.xml")
+	@DatabaseTearDown("specimen-requirement-test/generic-teardown.xml")
+	public void createDerivedWithMissingAttributeValues() {
+		CreateDerivedSpecimenReqEvent req = SpecimenRequirementTestData.getCreateDerivedSpecimenReqEvent();
+		req.getRequirement().setSpecimenClass("");
+		req.getRequirement().setStorageType("");
+		req.getRequirement().setQuantity(null);
+		
+		DerivedSpecimenReqCreatedEvent resp = cpSvc.createDerived(req);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("The error speciemen class value was not null or empty!", true,
+				TestUtils.isErrorCodePresent(resp, SpecimenErrorCode.MISSING_ATTR_VALUE, "specimenClass"));
+		Assert.assertEquals("The error storage type value was not null or empty!", true,
+				TestUtils.isErrorCodePresent(resp, SpecimenErrorCode.MISSING_ATTR_VALUE, "storageType"));
+		Assert.assertEquals("The error initial quantity value was not invalid!", true,
+				TestUtils.isErrorCodePresent(resp, SpecimenErrorCode.INVALID_ATTR_VALUE, "initialQty"));
 	}
 }

@@ -255,4 +255,18 @@ public class SpecimenRequirement {
 		
 		return available;
 	}
+	
+	public Specimen getSpecimen() {
+		Specimen specimen = new Specimen();
+		specimen.setLineage(getLineage());
+		specimen.setSpecimenClass(getSpecimenClass());
+		specimen.setSpecimenType(getSpecimenType());
+		specimen.setTissueSite(getAnatomicSite());
+		specimen.setTissueSide(getLaterality());
+		specimen.setPathologicalStatus(getPathologyStatus());
+		specimen.setInitialQuantity(getInitialQuantity());
+		specimen.setConcentrationInMicrogramPerMicroliter(getConcentration());
+		specimen.setSpecimenRequirement(this);
+		return specimen;
+	}
 }

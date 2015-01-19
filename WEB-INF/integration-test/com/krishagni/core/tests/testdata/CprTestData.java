@@ -6,15 +6,13 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
-import com.krishagni.catissueplus.core.biospecimen.events.AddVisitEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierResponseDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
+
 
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -123,38 +121,9 @@ public class CprTestData {
 		return sessionDataBean;
 	}
 
-	public static ReqVisitsEvent getReqVisitsEvent() {
-		ReqVisitsEvent req = new ReqVisitsEvent();
-		req.setSessionDataBean(getSessionDataBean());
-		req.setCprId(1L);
-		req.setIncludeStats(true);
-		return req;
-	}
-	
 	public static ReqRegistrationEvent getReqRegistrationEvent() {
 		ReqRegistrationEvent req = new ReqRegistrationEvent();
 		req.setSessionDataBean(getSessionDataBean());
-		return req;
-	}
-	
-	public static VisitDetail getVisitDetail() {
-		VisitDetail visit = new VisitDetail();
-		visit.setCprId(1L);
-		visit.setClinicalDiagnosis("test-daiagnosis");
-		visit.setClinicalStatus("test-status");
-		visit.setEventId(1L);
-		visit.setSurgicalPathologyNumber("test-pathology");
-		visit.setVisitDate(getDate(21, 1, 2012));
-		visit.setSite("SITE1");
-		visit.setStatus("Completed");
-		return visit;
-	}
-	
-	public static AddVisitEvent getAddVisitEvent() {
-		AddVisitEvent req = new AddVisitEvent();
-		req.setSessionDataBean(getSessionDataBean());
-		req.setCprId(1L);
-		req.setVisit(getVisitDetail());
 		return req;
 	}
 }

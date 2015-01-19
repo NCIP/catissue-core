@@ -33,11 +33,20 @@ angular.module('openspecimen')
       };
     };
 
+    function linker(scope, element, attrs) {
+      scope.showLabel = false;
+      $timeout(onKeyUp(scope, element));
+      scope.$watch(attrs.ngModel, function(newVal) {
+        scope.value = newVal;
+        toggleLabel(scope, !!newVal);
+      });
+    };
+
     return {
       restrict: 'A',
       scope: true,
       compile: function(tElem, tAttrs) {
-        var el = angular.element('<div/>')
+        var inputDiv = angular.element('<div/>')
           .addClass('os-md-input');
 
         var label = angular.element('<label/>')
@@ -45,23 +54,32 @@ angular.module('openspecimen')
           .attr('ng-show', 'showLabel')
           .append(tAttrs.placeholder);
 
-        el.append(label);
-        el.append(tElem.clone().removeAttr('os-md-input'));
+        inputDiv.append(label);
+        inputDiv.append(tElem.clone().removeAttr('os-md-input').removeAttr('edit-when'));
         
         var next = tElem.next();
         if (angular.isDefined(next.hasAttribute) && next.hasAttribute('os-field-error')) {
-          el.append(next.clone());
+          inputDiv.append(next.clone());
         }
 
-        tElem.replaceWith(el);
-        return function(scope, element, attrs) {
-          scope.showLabel = false;
-          $timeout(onKeyUp(scope, element));
-          scope.$watch(attrs.ngModel, function(newVal) {
-            scope.value = newVal;
-            toggleLabel(scope, !!newVal);
-          });
-        };
+        var div = undefined;
+        if (tAttrs.editWhen) {
+          inputDiv.attr("ng-if", tAttrs.editWhen);
+
+          var valLabel = angular.element("<span></span>")
+            .attr("ng-if", "!(" + tAttrs.editWhen + ")")
+            .append("{{" + tAttrs.ngModel + "}}");
+
+         
+          div = angular.element("<div></div>")
+            .append(inputDiv)
+            .append(valLabel);
+        } else {
+          div = inputDiv;
+        }
+ 
+        tElem.replaceWith(div);
+        return linker;
       }
     };
   });

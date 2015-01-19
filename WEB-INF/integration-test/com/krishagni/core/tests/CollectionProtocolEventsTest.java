@@ -36,6 +36,7 @@ import com.krishagni.core.common.TestUtils;
 import com.krishagni.core.common.WebContextLoader;
 import com.krishagni.core.tests.testdata.CpeTestData;
 
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = WebContextLoader.class, classes = {ApplicationContextConfigurer.class})
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
@@ -67,8 +68,8 @@ public class CollectionProtocolEventsTest {
 	 */
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.getEventList.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/get-event-list-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void getEvents() {
 		ReqCpeListEvent req = CpeTestData.getCpeList();
 		
@@ -104,8 +105,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.getEventList.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/get-event-list-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void getEventsForDisabledCp() {
 		ReqCpeListEvent req = CpeTestData.getCpeList();
 		req.setCpId(2L);
@@ -120,8 +121,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.getEventList.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/get-event-list-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void getEventsForCpWithNoEvents() {
 		ReqCpeListEvent req = CpeTestData.getCpeList();
 		req.setCpId(3L);
@@ -140,9 +141,9 @@ public class CollectionProtocolEventsTest {
 	 */
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.addEvent.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolEventsTest.addEvent.expected.xml", 
+	@DatabaseSetup("cp-test/events-test/add-event-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/events-test/add-event-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void addEvent() {
 		AddCpeEvent req = CpeTestData.getAddCpeEvent();
@@ -166,8 +167,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void addEventWithDuplicateEventLabel() {
 		AddCpeEvent req = CpeTestData.getAddCpeEvent();
 		req.getCpe().setEventLabel("duplicate-event-label");
@@ -181,8 +182,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void addEventWithoutEventLabel() {
 		AddCpeEvent req = CpeTestData.getAddCpeEvent();
 		req.getCpe().setEventLabel("");
@@ -195,8 +196,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void addEventWithInvalidSite() {
 		AddCpeEvent req = CpeTestData.getAddCpeEvent();
 		req.getCpe().setDefaultSite("invalid-site");
@@ -209,8 +210,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void addEventWithInvalidEventPoint() {
 		AddCpeEvent req = CpeTestData.getAddCpeEvent();
 		req.getCpe().setEventPoint(-1.0);
@@ -223,8 +224,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void addEventWithInvalidCP() {
 		AddCpeEvent req = CpeTestData.getAddCpeEvent();
 		req.getCpe().setCollectionProtocol("invalid-cp");
@@ -237,8 +238,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void addEventWithoutCP() {
 		AddCpeEvent req = CpeTestData.getAddCpeEvent();
 		req.getCpe().setCollectionProtocol("");
@@ -251,8 +252,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.addEventWithDisabledCP.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/add-event-with-disabled-cp-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void addEventWithDisabledCP() {
 		AddCpeEvent req = CpeTestData.getAddCpeEvent();
 		req.getCpe().setCollectionProtocol("disabled-cp");
@@ -269,9 +270,9 @@ public class CollectionProtocolEventsTest {
 	 */
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
-	@ExpectedDatabase(value="CollectionProtocolEventsTest.updateEvent.expected.xml", 
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/events-test/update-event-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void updateEvent() {
 		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
@@ -295,8 +296,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void updateEventWithDuplicateEventLabel() {
 		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
 		req.getCpe().setEventLabel("duplicate-event-label");
@@ -310,8 +311,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void updateEventWithoutEventLabel() {
 		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
 		req.getCpe().setEventLabel("");
@@ -324,8 +325,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void updateEventWithInvalidSite() {
 		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
 		req.getCpe().setDefaultSite("invalid-site");
@@ -338,8 +339,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void updateEventWithInvalidEventPoint() {
 		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
 		req.getCpe().setEventPoint(-1.0);
@@ -352,8 +353,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void updateEventWithInvalidCP() {
 		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
 		req.getCpe().setCollectionProtocol("invalid-cp");
@@ -366,8 +367,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.generic.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void updateEventWithoutCP() {
 		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
 		req.getCpe().setCollectionProtocol("");
@@ -380,8 +381,8 @@ public class CollectionProtocolEventsTest {
 	}
 	
 	@Test
-	@DatabaseSetup("CollectionProtocolEventsTest.addEventWithDisabledCP.initial.xml")
-	@DatabaseTearDown("CollectionProtocolEventsTest.generic.teardown.xml")
+	@DatabaseSetup("cp-test/events-test/add-event-with-disabled-cp-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void updateEventWithDisabledCP() {
 		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
 		req.getCpe().setCollectionProtocol("disabled-cp");

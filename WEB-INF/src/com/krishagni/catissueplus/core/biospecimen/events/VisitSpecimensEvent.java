@@ -10,7 +10,7 @@ public class VisitSpecimensEvent extends ResponseEvent {
 	
 	private Long eventId;
 	
-	private List<SpecimenSummary> specimens;
+	private List<SpecimenDetail> specimens;
 
 	public Long getCprId() {
 		return cprId;
@@ -28,15 +28,15 @@ public class VisitSpecimensEvent extends ResponseEvent {
 		this.eventId = eventId;
 	}
 
-	public List<SpecimenSummary> getSpecimens() {
+	public List<SpecimenDetail> getSpecimens() {
 		return specimens;
 	}
 
-	public void setSpecimens(List<SpecimenSummary> specimens) {
+	public void setSpecimens(List<SpecimenDetail> specimens) {
 		this.specimens = specimens;
 	}
 	
-	public static VisitSpecimensEvent ok(Long cprId, Long eventId, Long visitId, List<SpecimenSummary> specimens) {
+	public static VisitSpecimensEvent ok(Long cprId, Long eventId, Long visitId, List<SpecimenDetail> specimens) {
 		VisitSpecimensEvent resp = new VisitSpecimensEvent();
 		resp.setCprId(cprId);
 		resp.setEventId(eventId);

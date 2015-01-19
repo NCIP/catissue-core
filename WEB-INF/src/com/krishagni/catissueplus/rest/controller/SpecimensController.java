@@ -1,13 +1,10 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -19,21 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.biospecimen.events.AliquotCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.AliquotDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPatchDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimensCollectedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
+import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
@@ -42,8 +33,6 @@ import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent.EntityType;
 import com.krishagni.catissueplus.core.de.services.FormService;
-import com.krishagni.catissueplus.core.printer.printService.events.CreateLabelPrintEvent;
-import com.krishagni.catissueplus.core.printer.printService.events.LabelPrintCreatedEvent;
 import com.krishagni.catissueplus.core.printer.printService.services.PrintService;
 
 import edu.wustl.catissuecore.util.global.Constants;
@@ -68,10 +57,24 @@ public class SpecimensController {
 	@Autowired
 	private HttpServletRequest httpServletRequest;
 	
+	@RequestMapping(method = RequestMethod.HEAD)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public Boolean doesSpecimenExists(@RequestParam(value = "label") String label) {
+		Boolean exists = specimenSvc.doesSpecimenExists(label);
+		if (!exists) {
+			ResponseEvent resp = new ResponseEvent();
+			resp.setStatus(EventStatus.NOT_FOUND);
+			resp.raiseException();
+		}
+		
+		return exists;
+	}
+	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
-	public List<SpecimenSummary> getSpecimens(
+	public List<SpecimenDetail> getSpecimens(
 			@RequestParam(value = "cprId") Long cprId,
 			@RequestParam(value = "eventId", required = false) Long eventId,
 			@RequestParam(value = "visitId", required = false) Long visitId) {
@@ -124,105 +127,21 @@ public class SpecimensController {
 		}
 		return resp.getFormRecords();
 	}
-
-	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public SpecimenDetail patchSpecimen(@PathVariable Long id, @RequestBody Map<String, Object> specimenProps) {
-		PatchSpecimenEvent event = new PatchSpecimenEvent();
-		SpecimenPatchDetail detail = new SpecimenPatchDetail();
-		try {
-			BeanUtils.populate(detail, specimenProps);
-		}
-		catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		event.setId(id);
-		event.setSessionDataBean(getSession());
-		event.setDetail(detail);
-		SpecimenUpdatedEvent response = specimenSvc.patchSpecimen(event);
-		if (!response.isSuccess()) {
-			response.raiseException();
-		}
-		return response.getSpecimenDetail();
-	}
-
-	@RequestMapping(method = RequestMethod.POST, value = "/{id}/aliquots")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public List<SpecimenDetail> createAliquot(@PathVariable Long id, @RequestBody AliquotDetail aliquotDetail) {
-		CreateAliquotEvent createAliquotEvent = new CreateAliquotEvent();
-		createAliquotEvent.setAliquotDetail(aliquotDetail);
-		createAliquotEvent.setSpecimenId(id);
-
-		AliquotCreatedEvent response = specimenSvc.createAliquot(createAliquotEvent);
-		if (!response.isSuccess()) {
-			response.raiseException();
-		}
-		return response.getAliquots();
-	}
-
+	
 	@RequestMapping(method = RequestMethod.POST)
-	@ResponseBody
-	public SpecimenDetail createSpecimen(@RequestBody SpecimenDetail specimenDetail) {
-		CreateSpecimenEvent createSpecimenEvent = new CreateSpecimenEvent();
-		createSpecimenEvent.setSpecimen(specimenDetail);
-		createSpecimenEvent.setSessionDataBean(getSession());
-		createSpecimenEvent.setVisitId(specimenDetail.getVisitId());
-
-		SpecimenCreatedEvent response = specimenSvc.createSpecimen(createSpecimenEvent);
-		if (!response.isSuccess()) {
-			response.raiseException();
-		}
-		return response.getSpecimen();
-	}
-
-	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public SpecimenDetail updateSpecimen(@PathVariable Long id, @RequestBody SpecimenDetail specimenDetail) {
-		UpdateSpecimenEvent event = new UpdateSpecimenEvent();
-		event.setId(id);
-		event.setSpecimenDetail(specimenDetail);
-		event.setSessionDataBean(getSession());
-		SpecimenUpdatedEvent response = specimenSvc.updateSpecimen(event);
-		if (!response.isSuccess()) {
-			response.raiseException();
-		}
-			return response.getSpecimenDetail();
-	}
-
-	@RequestMapping(method = RequestMethod.POST, value = "/labelPrint/{id}")
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public String printLabel(@PathVariable Long id) {
-		CreateLabelPrintEvent event = new CreateLabelPrintEvent();
-		event.setId(id);
-		event.setSessionDataBean(getSession());
-		LabelPrintCreatedEvent resp = specimenLabelPrintSvc.print(event);
+	@ResponseBody	
+	public List<SpecimenDetail> collectSpecimens(@RequestBody List<SpecimenDetail> specimens) {		
+		CollectSpecimensEvent req = new CollectSpecimensEvent();
+		req.setSessionDataBean(getSession());
+		req.setSpecimens(specimens);
+		
+		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
-			return resp.getMessage();
-	}
-
-	@RequestMapping(method = RequestMethod.POST, value = "/labelPrint/name={name}")
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public String printLabel(@PathVariable String name) {
-		CreateLabelPrintEvent event = new CreateLabelPrintEvent();
-		event.setName(name);
-		event.setSessionDataBean(getSession());
-		LabelPrintCreatedEvent resp = specimenLabelPrintSvc.print(event);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-			return resp.getMessage();
+		
+		return resp.getSpecimens();
 	}
 
 	private SessionDataBean getSession() {

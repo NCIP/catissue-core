@@ -1,6 +1,17 @@
 angular.module('os.biospecimen.models.specimen', ['os.common.models'])
   .factory('Specimen', function(osModel, $http) {
-    var Specimen = osModel('specimens');
+    var Specimen = osModel(
+      'specimens',
+      function(specimen) {
+        if (specimen.children) {
+          specimen.children = specimen.children.map(
+            function(child) {
+              return new Specimen(child);
+            }
+          );
+        }
+      }
+    );
  
     Specimen.listFor = function(cprId, visitDetail) {
       return Specimen.query(angular.extend({cprId: cprId}, visitDetail || {}));
@@ -24,6 +35,46 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models'])
       }
 
       return result;
+    };
+
+    Specimen.save = function(specimens) {
+      return $http.post(Specimen.url(), specimens).then(
+        function(result) {
+          return result.data;
+        }
+      );
+    };
+
+    Specimen.isUniqueLabel = function(label) {
+      return $http.head(Specimen.url(), {params: {label: label}}).then(
+        function(result) {
+          return false;
+        },
+
+        function(result) {
+          return true;
+        }
+      );
+    };
+
+    Specimen.prototype.hasSufficientQty = function() {
+      var qty = this.initialQty;
+      angular.forEach(this.children, function(child) {
+        if (child.lineage == 'Aliquot') {
+          qty -= child.initialQty;
+        }
+      });
+
+      return qty >= 0;
+    }
+
+    Specimen.prototype.rootSpecimen = function() {
+      var curr = this;
+      while (curr.parent) {
+        curr = curr.parent;
+      }
+
+      return curr;
     };
 
     return Specimen;
