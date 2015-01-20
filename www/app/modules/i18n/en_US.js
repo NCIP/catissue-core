@@ -304,6 +304,7 @@
     "temperature": "Temperature (Celsius)",
     "collection_protocol": "Collection Protocol",
     "specimen_types": "Specimen Types",
+    "all": "All",
 
     "tooltip": {
       "view_details": "Click to view/edit Storage Container details",

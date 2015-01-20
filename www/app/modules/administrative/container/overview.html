@@ -39,39 +39,13 @@
       </li>
 
       <li class="item">
-        <strong class="key key-sm" translate="container.dimension_one">Dimension One</strong>
-        <os-inline-edit editor="dimensionOneEditor" name="dimensionOne" class="value value-md" value="container.oneDimensionCapacity">
-          <span ng-if="dimensionOneEditor.isDisplayMode()">{{dimensionOneEditor.viewValue | osNoValue}}</span>
-          <input ng-if="dimensionOneEditor.isEditMode()" type="number" ng-model="dimensionOneEditor.editValue" class="form-control" required>
-        </os-inline-edit>
+        <strong class="key key-sm" translate="container.dimension">Dimension</strong>
+        <span class="value value-md" os-inline-edit>{{container.oneDimensionCapacity | osNoValue}} X {{container.twoDimensionCapacity | osNoValue}}</span>
       </li>
 
       <li class="item">
-        <strong class="key key-sm" translate="container.dimension_two">Dimension Two</strong>
-        <os-inline-edit editor="dimensionTwoEditor" name="temperature" class="value value-md" value="container.twoDimensionCapacity">
-          <span ng-if="dimensionTwoEditor.isDisplayMode()">{{dimensionTwoEditor.viewValue | osNoValue}}</span>
-          <input ng-if="dimensionTwoEditor.isEditMode()" type="number" ng-model="dimensionTwoEditor.editValue" class="form-control" required>
-        </os-inline-edit>
-      </li>
-
-      <li class="item">
-        <strong class="key key-sm" translate="container.dim_one_labeling_scheme">Dimension One Label Scheme</strong>
-        <os-inline-edit editor="dimOneLabelSchemeEditor" name="site" class="value value-md" value="container.oneDimentionLabelingScheme">
-          <span ng-if="dimOneLabelSchemeEditor.isDisplayMode()">{{dimOneLabelSchemeEditor.viewValue | osNoValue}}</span>
-          <div ng-if="dimOneLabelSchemeEditor.isEditMode()">
-            <os-select ng-model="dimOneLabelSchemeEditor.editValue" list="dimensionLabelSchemes" required></os-select>
-          </div>
-        </os-inline-edit>
-      </li>
-
-      <li class="item">
-        <strong class="key key-sm" translate="container.dim_two_labeling_scheme">Dimension Two Label Scheme</strong>
-        <os-inline-edit editor="dimTwoLabelSchemeEditor" name="site" class="value value-md" value="container.oneDimentionLabelingScheme">
-          <span ng-if="dimTwoLabelSchemeEditor.isDisplayMode()">{{dimTwoLabelSchemeEditor.viewValue | osNoValue}}</span>
-          <div ng-if="dimTwoLabelSchemeEditor.isEditMode()">
-            <os-select ng-model="dimTwoLabelSchemeEditor.editValue" list="dimensionLabelSchemes" required></os-select>
-          </div>
-        </os-inline-edit>
+        <strong class="key key-sm" translate="container.labeling_scheme">Dimension Labelling Scheme</strong>
+        <span class="value value-md" os-inline-edit>{{container.oneDimentionLabelingScheme | osNoValue}} X {{container.twoDimentionLabelingScheme | osNoValue}}</span>
       </li>
 
       <li class="item">

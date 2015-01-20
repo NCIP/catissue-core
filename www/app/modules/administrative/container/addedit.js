@@ -9,15 +9,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
 
     var loadPvs = function() {
       $scope.dimensionLabelSchemes = PvManager.getPvs('dimension-label-scheme');
-
-      Site.list().then(
-        function(siteList) {
-          $scope.sites = [];
-          angular.forEach(siteList, function(site) {
-            $scope.sites.push(site.name);
-          });
-        }
-      );
+      $scope.sites = PvManager.getSites();
 
       CollectionProtocol.query().then(
         function(cps) {
