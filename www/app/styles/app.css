@@ -58,12 +58,14 @@ body {
 
 .os-navbar > ul > li {
   float: left;
-  padding: 15px 15px;
+  line-height: 4;
   list-style-type: none;
+  position: relative;
 }
 
 .os-navbar > ul > li > a {
   text-decoration: none;
+  padding: 15px 15px;
 }
 
 .os-navbar-default > ul > li > a {
@@ -89,8 +91,46 @@ body {
 .os-navbar-docked {
   position: fixed;
   top: 0px;
+  z-index: 999;
 }
- 
+
+.os-navbar > ul > li > ul {
+  display: none;
+  background: #ffffff;
+  padding:0;
+  position: fixed;
+  border: solid 1px #ccc;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-top: 0;
+}
+
+.os-navbar > ul > li > ul > li {
+  list-style-type: none;
+  padding: 0px 10px;
+  color: #000;
+  font-weight: normal;
+  line-height: 2;
+}
+
+.os-navbar > ul > li > ul > li > a{
+  text-decoration: none;
+  color: #000;
+  display: block;
+}
+
+.os-navbar > ul > li:hover > ul {
+  display: block;
+}
+
+.os-navbar > ul > li > ul > li:hover {
+  background: #2d67a3;
+  color: #ffffff;
+}
+.os-navbar > ul > li > ul > li:hover a {
+  color: #ffffff;
+}
+
 .os-footer {
   position: absolute;
   left: 0px;
