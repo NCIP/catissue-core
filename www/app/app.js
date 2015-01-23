@@ -226,6 +226,12 @@ angular.module('openspecimen', [
         templateUrl: 'modules/administrative/user/overview.html',
         parent: 'user-detail'
       })
+      .state('user-detail.permissions', {
+        url: '/permissions',
+        templateUrl: 'modules/administrative/user/permissions.html',
+        controller: 'UserPermissionsCtrl',
+        parent: 'user-detail'
+      })
       .state('role-list', {
         url: '/roles',
         templateUrl: 'modules/administrative/role/list.html',
@@ -260,7 +266,7 @@ angular.module('openspecimen', [
     $httpProvider.interceptors.push('httpRespInterceptor');
 
     ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 8080;
+    ApiUrlsProvider.port = 8180;
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {

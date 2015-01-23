@@ -148,7 +148,7 @@ public class SiteDetails {
 		siteDto.setType(site.getType());
 		siteDto.setActivityStatus(site.getActivityStatus());
 		siteDto.setEmailAddress(site.getEmailAddress());
-		populateAddress(siteDto, site.getAddress());
+		//populateAddress(siteDto, site.getAddress());
 		siteDto.setCoordinatorCollection(getCoordinatorList(site.getCoordinatorCollection()));
 
 		return siteDto;

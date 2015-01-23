@@ -213,7 +213,7 @@
     "super_admin": "Super Administrator",
     "login_details": "Login Details",
     "site": "Site",
-    "cp_title": "Collection Protocol",
+    "cp": "Collection Protocol",
     "role": "Role",
     "add_permission":"Add Permission",
     "profile": "Profile",
@@ -251,4 +251,5 @@
       "overview": "Overview"
     } 
   }
+
 }

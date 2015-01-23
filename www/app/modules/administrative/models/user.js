@@ -4,7 +4,7 @@ angular.module('os.administrative.models.user', ['os.common.models'])
     var User = osModel('users');
     
     User.prototype.newPermission = function() {
-      return {site:'', cpTitle:'', roleName:''};
+      return {site:'', cp:'', roleName:''};
     }
     
     User.prototype.addPermission = function (userCPRole) {
@@ -15,8 +15,13 @@ angular.module('os.administrative.models.user', ['os.common.models'])
       this.userCPRoles.push(userCPRole);
     }
     
-    User.prototype.removePermission = function(index) {
-      this.userCPRoles.splice(index, 1);
+    User.prototype.removePermission = function(userCPRole) {
+      var idx = this.userCPRoles ? this.userCPRoles.indexOf(userCPRole) : -1;
+      if(idx != -1) {
+        this.userCPRoles.splice(idx, 1);
+      }
+
+      return idx;
     };
     
     return User;

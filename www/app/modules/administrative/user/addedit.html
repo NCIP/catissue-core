@@ -3,50 +3,19 @@
   <div class="os-page-hdr">
     <h3 translate="user.create_user">Create User</h3> 
   </div>
-  
-  <div os-wizard="userWizard">
-    <os-wizard-step on-finish="validateProfile" title="{{'user.profile' | translate}}">
-      <div ng-include="'user-add-edit.html'"></div>
-    </os-wizard-step>
-    <os-wizard-step on-finish="validatePermissions" title="{{'user.permissions' | translate}}">
-      <div ng-include="'user-role.html'"></div>
-    </os-wizard-step>
-  </div>
-  
-  <div class="form-group">
-    <div class="col-xs-offset-3 col-xs-6 ">
-      <button class="btn btn-primary" ng-if="!user.superAdmin && !userWizard.isLastStep()" 
-        translate="common.buttons.next" ng-click="userWizard.next(false)">
-        Next
-      </button>
-      <button class="btn os-btn-secondary" ng-if="!userWizard.isFirstStep()" 
-        translate="common.buttons.previous" ng-click="userWizard.previous(false)">
-        Previous
-      </button>
-      <button class="btn btn-primary" ng-click="createUser()" translate="common.buttons.create" 
-        ng-if="user.superAdmin || userWizard.isLastStep()">
-        Create 
-      </button>
-      <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.buttons.discard"> 
-        Discard 
-      </button>
-    </div>
-  </div>  
-</div>
 
-<script type="text/ng-template" id="user-add-edit.html"> 
-  <form name="userForm" class="form-horizontal" os-form-validator="userForm" validator="userFormValidator" novalidate>
-    <div class="container">
+  <div class="container">
+    <form name="userForm" class="form-horizontal" os-form-validator="userForm" validator="userFormValidator" novalidate>
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="user.name">Name</label>
         <div class="col-xs-4">
-          <input type="text" name="lastName" ng-model="user.lastName" class="form-control" 
+          <input type="text" name="lastName" ng-model="user.lastName" class="form-control"
             placeholder="{{'user.last_name' | translate}}" ng-maxlength="255" required/>
           <div os-field-error field="userForm.lastName"></div>
         </div>
         
         <div class="col-xs-4">
-          <input type="text" name="firstName" ng-model="user.firstName" class="form-control" 
+          <input type="text" name="firstName" ng-model="user.firstName" class="form-control"
             placeholder="{{'user.first_name' | translate}}" ng-maxlength="255" required/>
           <div os-field-error field="userForm.firstName"></div>
         </div>
@@ -55,14 +24,14 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="user.login_details">Login Details</label>
         <div class="col-xs-4">
-          <os-select ng-model="user.domainName" list="domains" name="domain" 
+          <os-select ng-model="user.domainName" list="domains" name="domain"
             placeholder="{{'user.domain_name' | translate}}" required>
           </os-select>
           <div os-field-error field="userForm.domain"></div>
         </div>
         
         <div class="col-xs-4">
-          <input type="text" name="loginName" class="form-control" ng-model="user.loginName" 
+          <input type="text" name="loginName" class="form-control" ng-model="user.loginName"
             placeholder="{{'user.login_name' | translate}}" ng-maxlength="255" required>
           <div os-field-error field="userForm.loginName"></div>
         </div>
@@ -71,7 +40,7 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="user.email_address">Email Address</label>
         <div class="col-xs-4">
-          <input type="email" name="email" class="form-control" ng-model="user.emailAddress" 
+          <input type="email" name="email" class="form-control" ng-model="user.emailAddress"
             placeholder="{{'user.email_address' | translate}}" ng-maxlength="255" required>
           <div os-field-error field="userForm.email"></div>
         </div>
@@ -87,10 +56,9 @@
         </div>
         
         <div class="col-xs-4">
-          <os-select ng-model="user.deptName" list="departments" name="department" 
+          <os-select ng-model="user.deptName" list="departments" name="department"
             placeholder="{{'user.department' | translate}}" required>
           </os-select>
-          
           <div os-field-error field="userForm.department"></div>
         </div>
       </div>
@@ -107,81 +75,19 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="user.address">Address</label>
         <div class="col-xs-6">
-          <textarea rows="2" placeholder="{{'user.address' | translate}}" ng-model="user.address" 
-            class="form-control">
+          <textarea rows="2" placeholder="{{'user.address' | translate}}" ng-model="user.address" class="form-control">
           </textarea>
         </div>
       </div>
-      <div class="os-divider"></div>
-    </div>
-  </form>
-  <div ng-init="setForm(userForm)"></div>
-</script>
 
-<script type="text/ng-template" id="user-role.html">
-  <form name="userRoleForm" class="form-horizontal" os-form-validator="userRoleForm" validator="userRoleFormValidator" novalidate>
-    <div class="container">
-      <div class="form-group clearfix">
-        <div class="col-xs-3 col-xs-offset-2">
-          <label class="control-label" translate="user.site">Site</label>
-        </div>
-        <div class="col-xs-3">
-          <label class="control-label" translate="user.cpTitle">Collection Protocol</label>
-        </div>
-        <div class="col-xs-3">
-          <label class="control-label" translate="user.role">Role</label>
-        </div>
-      </div>
-    
-      <div class="form-group clearfix" ng-repeat="userCPRole in user.userCPRoles">
-        <ng-form name="roleForm" os-form-validator="roleForm" parent-validator="userRoleFormValidator"> 
-          <div class="col-xs-3 col-xs-offset-2">
-            <os-select ng-model="userCPRole.site" list="sites" name="siteName" on-change="getCps(userCPRole)"
-              placeholder="{{'user.site' | translate}}" required>
-            </os-select>
-            <div os-field-error field="roleForm.siteName"></div>
-          </div>
-          
-          <div class="col-xs-3">
-            <ui-select name="cpTitle" ng-model="userCPRole.cpTitle" ng-change="updateUserCPRoleList(userCPRole)"
-              ng-required="!!userCPRole.site || !userCPRole.cpTitle">
-              <ui-select-match placeholder="{{'user.cp_title' | translate}}">
-                {{userCPRole.cpTitle}} 
-              </ui-select-match>
-              <ui-select-choices repeat="cp.shortTitle as cp in siteCpMaps[userCPRole.site] | 
-                 checkAll : 'cpTitle':(user.userCPRoles | filter:{site:userCPRole.site}):userCPRole | 
-                 osGroupOptions:'cpTitle': (user.userCPRoles | filter:{site:userCPRole.site}):userCPRole">
-                <span ng-bind-html="cp.shortTitle | highlight: $select.search"></span>
-              </ui-select-choices>
-            </ui-select>
-            <div os-field-error field="roleForm.cpTitle"></div>
-          </div>
-    
-          <div class="col-xs-3">
-            <os-select ng-model="userCPRole.roleName" list="roles" name="role" placeholder="{{'user.role' | translate}}" required>
-            </os-select>
-            <div os-field-error field="roleForm.role"></div>
-          </div>
-     
-          <div class="col-xs-1">
-            <button class="btn btn-default" ng-click="removePermission(userCPRole)">	
-              <span class="glyphicon glyphicon-trash"></span>
-            </button>
-          </div>
-        </ng-form>
-      </div>
-        
-      <div class="form-group clearfix">
-        <div class="col-xs-3 col-xs-offset-2" ng-if="addMorePermissions">
-          <a ng-click="addPermission()">
-            <span class="glyphicon glyphicon-plus"></span>
-          </a>
-          <span translate="user.add_permission">Add Permission</span>
-        </div>
-      </div>
-    
       <div class="os-divider"></div>
-    </div>
-  </form>
-  <div ng-init="setForm(userRoleForm)"></div>
-</script>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6">
+          <button class="btn btn-primary" os-form-submit="createUser()" translate="common.buttons.create"> Create </button>
+          <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.buttons.discard">Discard</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

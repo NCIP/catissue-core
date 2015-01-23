@@ -78,24 +78,33 @@
         <span class="value value-md" os-inline-eddit>{{user.deptName}}</span>
       </li>   
     </ul>
+
+
+    <div class="os-section" ng-init="perCollapsed=false">
+      <button class="os-btn-section-collapse os-btn-transparent" ng-click="perCollapsed=!perCollapsed">
+        <span ng-if="!perCollapsed">&#9660;</span>
+        <span ng-if="perCollapsed">&#9654;</span>
+      </button>
+      <h3 class="os-sub-section-title" translate="user.permissions">Permissions</h3>
+      <div collapse="perCollapsed">
+        <span ng-if="user.userCPRoles.length == 0" translate="common.none">None</span>
+        <table st-table="user.userCPRoles" class="table table-hover os-table-muted-hdr os-table outer-border" ng-if="user.userCPRoles.length > 0">
+          <thead>
+            <tr>
+              <th class="col-xs-4" translate="user.site">Site</th>
+              <th class="col-xs-4" translate="user.cp">Collection Protocol</th>
+              <th class="col-xs-4" translate="user.role">Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="userCPRole in user.userCPRoles">
+              <td>{{userCPRole.site}}</td>
+              <td>{{userCPRole.cp}}</td>
+              <td>{{userCPRole.roleName}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-  
-  <div class="col-xs-6">
-    <table st-table="user.userCPRoles" class="table">
-      <thead>
-        <tr>
-          <th class="control-label" translate="user.site">Site</th>
-          <th class="control-label" translate="user.cpTitle">Collection Protocol</th>
-          <th class="control-label" translate="user.role">Role</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="userCPRole in user.userCPRoles">
-          <td>{{userCPRole.site}}</td>
-          <td>{{userCPRole.cpTitle}}</td>
-          <td>{{userCPRole.roleName}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>  
+</div>
