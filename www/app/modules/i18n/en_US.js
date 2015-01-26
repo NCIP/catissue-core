@@ -218,6 +218,7 @@
     "add_permission":"Add Permission",
     "profile": "Profile",
     "permissions": "Permissions",
+    "all": "All",
     
     "tooltip": {
       "create_user": "Click to add new User",
