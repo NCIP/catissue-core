@@ -131,6 +131,20 @@ body {
   color: #ffffff;
 }
 
+.menu-dropdown:after {
+  border: 4px solid transparent;
+  border-top-color: #fff;
+  content: "";
+  height: 0;
+  margin-left: -11px;
+  margin-top: -2px;
+  opacity: 0.8;
+  left: 100%;
+  position: absolute;
+  top: 50%;
+  width: 0;
+}
+
 .os-footer {
   position: absolute;
   left: 0px;
