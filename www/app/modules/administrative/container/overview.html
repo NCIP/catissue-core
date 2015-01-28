@@ -16,7 +16,7 @@
         <strong class="key key-sm" translate="container.barcode">Barcode</strong>
         <os-inline-edit editor="barcodeEditor" name="barcode" class="value value-md" value="container.barcode">
           <span ng-if="barcodeEditor.isDisplayMode()">{{barcodeEditor.viewValue | osNoValue}}</span>
-          <input ng-if="barcodeEditor.isEditMode()" type="text" ng-model="barcodeEditor.editValue" class="form-control" ng-maxlength="255" required>
+          <input ng-if="barcodeEditor.isEditMode()" type="text" ng-model="barcodeEditor.editValue" class="form-control" ng-maxlength="255">
         </os-inline-edit>
       </li>
 
@@ -30,7 +30,7 @@
 
       <li class="item">
         <strong class="key key-sm" translate="container.parent_site">Parent Site</strong>
-        <span class="value value-md" os-inline-edit>{{container.siteName | osNoValue}}</span>
+        <span class="value value-md" os-inline-edit>{{container.siteName}}</span>
       </li>
 
       <li class="item">
@@ -40,12 +40,12 @@
 
       <li class="item">
         <strong class="key key-sm" translate="container.dimension">Dimension</strong>
-        <span class="value value-md" os-inline-edit>{{container.oneDimensionCapacity | osNoValue}} X {{container.twoDimensionCapacity | osNoValue}}</span>
+        <span class="value value-md" os-inline-edit>{{container.oneDimensionCapacity}} X {{container.twoDimensionCapacity}}</span>
       </li>
 
       <li class="item">
         <strong class="key key-sm" translate="container.labeling_scheme">Dimension Labelling Scheme</strong>
-        <span class="value value-md" os-inline-edit>{{container.oneDimentionLabelingScheme | osNoValue}} X {{container.twoDimentionLabelingScheme | osNoValue}}</span>
+        <span class="value value-md" os-inline-edit>{{container.oneDimentionLabelingScheme}} X {{container.twoDimentionLabelingScheme}}</span>
       </li>
 
       <li class="item">

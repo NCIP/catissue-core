@@ -19,7 +19,7 @@
         <label class="col-xs-3 control-label" translate="container.barcode">Barcode</label>
         <div class="col-xs-6">
           <input type="text" name="containerBarcode" ng-model="container.barcode" class="form-control"
-            required placeholder="{{'container.barcode' | translate}}" ng-maxlength="255">
+            placeholder="{{'container.barcode' | translate}}" ng-maxlength="255">
           <div os-field-error field="cform.containerBarcode"></div>
         </div>
       </div>
@@ -40,13 +40,13 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="container.dimension">Dimension</label>
         <div class="col-xs-3">
-          <input type="number" name="dimensionOne" ng-model="container.oneDimensionCapacity" class="form-control"
-            placeholder="{{'container.one' | translate}}" required>
+          <input type="text" name="dimensionOne" ng-model="container.oneDimensionCapacity" class="form-control"
+            placeholder="{{'container.one' | translate}}" ng-pattern="/^[0-9]*$/" required>
           <div os-field-error field="cform.dimensionOne"></div>
         </div>
         <div class="col-xs-3">
-          <input type="number" name="dimensionTwo" ng-model="container.twoDimensionCapacity" class="form-control"
-            placeholder="{{'container.two' | translate}}" required>
+          <input type="text" name="dimensionTwo" ng-model="container.twoDimensionCapacity" class="form-control"
+            placeholder="{{'container.two' | translate}}" ng-pattern="/^[0-9]*$/" required>
           <div os-field-error field="cform.dimensionTwo"></div>
         </div>
       </div>
@@ -68,8 +68,9 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="container.temperature">Temperature (Celsius)</label>
         <div class="col-xs-6">
-          <input type="number" ng-model="container.tempratureInCentigrade" class="form-control"
-            placeholder="{{'container.temperature' | translate}}">
+          <input type="text" name="temprature" ng-model="container.tempratureInCentigrade" class="form-control"
+            placeholder="{{'container.temperature' | translate}}" ng-pattern="/^[-]?[0-9]*$/">
+          <div os-field-error field="cform.temprature"></div>
         </div>
       </div>
 

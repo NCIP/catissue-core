@@ -193,11 +193,10 @@ angular.module('openspecimen')
       },
 
       getSpecimenTypes: function() {
-        var specimenTypes = [
-          {class:'Fluid', value:'All Fluid'}, {class:'Fluid', value:'Whole Blood'},
-          {class:'Fluid', value:'Serum'}, {class:'Molecule', value:'All Molecule'},
-          {class:'Molecule', value:'DNA'}
-        ];
+        var specimenTypes = {
+          Fluid : ['Whole Blood','Serum'],
+          Molecule :['DNA']
+        };
         return specimenTypes;
       }
 
