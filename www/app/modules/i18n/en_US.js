@@ -184,17 +184,104 @@
     },
 
     "no_srs": "There are no specimen requirements to show. Create a new requirement by clicking Add Specimen Requirement ...",
+    "new_sr": "New Specimen Requirement",
 
     "name": "Name",
     "type": "Type",
     "pathology": "Pathology",
     "storage_type": "Storage Type",
-
+    "label_fmt": "Label Format",
+    "available_qty": "Available Quantity",
+    "aliquot_cnt": "Count of Aliquots",
+    "qty_per_aliquot": "Quantity per Aliquot",
+    "specimen_class": "Specimen Class",
+    "specimen_type": "Specimen Type",
+    "qty": "Quantity",
+    "concentration": "Concentration",
+    "anatomic_site": "Anatomic Site",
+    "laterality": "Laterality",
+    "initial_qty": "Initial Quantity",
+    "collector": "Collector",
+    "receiver": "Receiver",
+    "collection_container": "Collection Container",
+    "collection_proc": "Collection Procedure",
+    
     "ctx_menu": {
       "view_sr": "View Requirement",
       "edit_sr": "Edit Requirement",
       "create_aliquots": "Create Aliquots",
       "create_derivatives": "Create Derivatives"
+    },
+ 
+    "buttons": {
+      "create_aliquots": "Create Aliquots",
+      "create_derived": "Create Derived",
+      "add_sr": "Add Specimen Requirement..."
+    },
+
+    "errors": {
+      "insufficient_qty": "Insufficient parent requirement quantity to create aliquots"
+    }
+  },
+
+  "institutes": {
+    "list": "Institutes",
+    "create_institute": "Create Institute",
+    "name": "Name",
+    "department_name": "Department Name",
+    "departments": "Departments",
+
+    "tooltip": {
+      "view_details": "Click to view/edit Institute details",
+      "add": "Click to add new Institute",
+      "department_count": "Number of Departments",
+      "user_count": "Number of Users in Institute"
+    },
+
+    "menu": {
+      "overview": "Overview"
+    }
+  },
+
+  "site": {
+    "list": "Sites",
+    "create_site": "Create Site",
+    "name": "Name",
+    "code": "Code",
+    "coordinators": "Coordinators",
+    "type": "Type",
+    "address": "Address",
+
+    "tooltip": {
+      "view_details": "Click to view/edit Site details",
+      "create_site": "Click to add new Site",
+      "cp_count": "Count of Collection Protocols"
+    },
+
+    "menu": {
+      "overview": "Overview"
+    }
+  },
+  
+  "dp": {
+    "list": "Distribution Protocols",
+    "create_dp_title": "Create Distribution Protocol",
+    "title": "Title",
+    "short_title": "Short Title",
+    "pi": "Principal Investigator",
+    "start_date": "Start Date",
+    "irb_id": "IRB ID",
+    "description_url": "Description URL",
+        
+    "tooltip": {
+      "view_details": "Click to view/edit Distribution Protocol details",
+      "new_dp": "Click to add new Distribution Protocol",
+      "pending_count":"Pending to distribute specimens count",
+      "distributed_count":"Distributed specimens count"
+    },
+    
+    "menu": {
+      "overview": "Overview"
     }
   },
   

@@ -68,7 +68,16 @@ public class ParticipantServiceImpl implements ParticipantService {
 	@Override
 	@PlusTransactional
 	public ParticipantDetailEvent getParticipant(ReqParticipantDetailEvent event) {
-		Participant participant = daoFactory.getParticipantDao().getParticipant(event.getParticipantId());
+		Long participantId = event.getParticipantId();
+		if (participantId == null) {
+			return ParticipantDetailEvent.invalidRequest(ParticipantErrorCode.INVALID_ATTR_VALUE, "participant-id");
+		}
+		
+		Participant participant = daoFactory.getParticipantDao().getById(event.getParticipantId());
+		if (participant == null) {
+			return ParticipantDetailEvent.notFound(participantId);
+		}
+		
 		return ParticipantDetailEvent.ok(ParticipantDetail.fromDomain(participant));
 	}
 
@@ -108,7 +117,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	public ParticipantUpdatedEvent updateParticipant(UpdateParticipantEvent event) {
 		try {
 			Long participantId = event.getParticipantId();
-			Participant oldParticipant = daoFactory.getParticipantDao().getParticipant(participantId);
+			Participant oldParticipant = daoFactory.getParticipantDao().getById(participantId);
 			if (oldParticipant == null) {
 				return ParticipantUpdatedEvent.notFound(participantId);
 			}
@@ -166,7 +175,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	@PlusTransactional
 	public ParticipantDeletedEvent delete(DeleteParticipantEvent event) {
 		try {
-			Participant participant = daoFactory.getParticipantDao().getParticipant(event.getId());
+			Participant participant = daoFactory.getParticipantDao().getById(event.getId());
 			if (participant == null) {
 				return ParticipantDeletedEvent.notFound(event.getId());
 			}

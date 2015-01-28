@@ -120,7 +120,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		if (cpId == null && StringUtils.isNotBlank(title)) {			
 			protocol = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);
 		} else if (cpId != null){
-			protocol = daoFactory.getCollectionProtocolDao().getCollectionProtocol(detail.getCpId());
+			protocol = daoFactory.getCollectionProtocolDao().getById(detail.getCpId());
 		} else {
 			oce.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, COLLECTION_PROTOCOL);
 		} 
@@ -243,7 +243,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		if (participantId == null) {
 			participant = participantFactory.createParticipant(participantDetail);
 		} else {
-			participant = daoFactory.getParticipantDao().getParticipant(participantId);
+			participant = daoFactory.getParticipantDao().getById(participantId);
 		}
 		
 		if (participant == null) {

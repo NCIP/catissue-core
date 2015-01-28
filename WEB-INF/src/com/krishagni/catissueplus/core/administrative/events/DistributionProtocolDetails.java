@@ -5,12 +5,13 @@ import java.util.Date;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class DistributionProtocolDetails {
 
 	private Long id;
 
-	private UserInfo principalInvestigator;
+	private UserSummary principalInvestigator;
 
 	private String title;
 
@@ -34,11 +35,11 @@ public class DistributionProtocolDetails {
 		this.id = id;
 	}
 
-	public UserInfo getPrincipalInvestigator() {
+	public UserSummary getPrincipalInvestigator() {
 		return principalInvestigator;
 	}
 
-	public void setPrincipalInvestigator(UserInfo principalInvestigator) {
+	public void setPrincipalInvestigator(UserSummary principalInvestigator) {
 		this.principalInvestigator = principalInvestigator;
 	}
 
@@ -113,14 +114,14 @@ public class DistributionProtocolDetails {
 		return details;
 	}
 
-	private static UserInfo getPrincipleInvestigatorInfo(User principleInvestigator) {
-		UserInfo piInfo = new UserInfo();
-		piInfo.setLoginName(principleInvestigator.getLoginName());
+	private static UserSummary getPrincipleInvestigatorInfo(User principleInvestigator) {
+		UserSummary pi = new UserSummary();
+		pi.setLoginName(principleInvestigator.getLoginName());
 		if (principleInvestigator.getAuthDomain() != null) {
-			piInfo.setDomainName(principleInvestigator.getAuthDomain().getName());
+			pi = UserSummary.from(principleInvestigator);
 		}
 
-		return piInfo;
+		return pi;
 	}
 
 }

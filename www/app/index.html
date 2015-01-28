@@ -33,6 +33,9 @@
     <link rel="stylesheet" href="styles/breadcrumbs.css">
     <link rel="stylesheet" href="styles/biospecimen.css">
     <link rel="stylesheet" href="styles/vendor-custom.css">
+    <link rel="stylesheet" href="styles/md-input.css">
+    <link rel="stylesheet" href="styles/table.css">
+    <link rel="stylesheet" href="styles/checkbox.css">
     <!-- endbuild -->
   </head>
   <body ng-app="openspecimen">
@@ -110,8 +113,10 @@
     <script src="modules/common/editable-items-list.js"></script>
     <script src="modules/common/focus.js"></script>
     <script src="modules/common/dropdown.js"></script>
+    <script src="modules/common/md-input.js"></script>
+    <script src="modules/common/auto-scroll.js"></script>
+    <script src="modules/common/checkbox.js"></script>
     <script src="modules/common/array-join.js"></script>
-
     <script src="modules/common/models/os-model.js"></script>
 
     <!-- Administrative module -->
@@ -121,8 +126,9 @@
     <script src="modules/administrative/models/module.js"></script>
     <script src="modules/administrative/models/user.js"></script>
     <script src="modules/administrative/models/role.js"></script>
-    <script src="modules/administrative/models/site.js"></script>
     <script src="modules/administrative/models/institute.js"></script>
+    <script src="modules/administrative/models/site.js"></script>
+    <script src="modules/administrative/models/dp.js"></script>
     
     <!-- User module -->
     <script src="modules/administrative/user/login.js"></script>
@@ -140,6 +146,25 @@
     <script src="modules/administrative/role/addedit.js"></script>
     <script src="modules/administrative/role/detail.js"></script>
     
+    <!-- Institute Module -->
+    <script src="modules/administrative/institute/module.js"></script>
+    <script src="modules/administrative/institute/list.js"></script>
+    <script src="modules/administrative/institute/addedit.js"></script>
+    <script src="modules/administrative/institute/detail.js"></script>
+    <script src="modules/administrative/institute/department.js"></script>
+    
+    <!-- Site Module -->
+    <script src="modules/administrative/site/module.js"></script>
+    <script src="modules/administrative/site/list.js"></script>
+    <script src="modules/administrative/site/addedit.js"></script>
+    <script src="modules/administrative/site/detail.js"></script>
+
+    <!-- Distribution Protocol module -->
+    <script src="modules/administrative/dp/module.js"></script>
+    <script src="modules/administrative/dp/list.js"></script>
+    <script src="modules/administrative/dp/addedit.js"></script>
+    <script src="modules/administrative/dp/detail.js"></script>
+
     <!-- Biospecimen module -->
     <script src="modules/biospecimen/module.js"></script>
 
@@ -166,12 +191,16 @@
     <script src="modules/biospecimen/participant/module.js"></script>
     <script src="modules/biospecimen/participant/list.js"></script>
     <script src="modules/biospecimen/participant/addedit.js"></script>
-    <script src="modules/biospecimen/participant/pmi.js"></script>
     <script src="modules/biospecimen/participant/detail.js"></script>
+    <script src="modules/biospecimen/participant/overview.js"></script>
     <script src="modules/biospecimen/participant/visits.js"></script>
+    <script src="modules/biospecimen/participant/add-visit.js"></script>
 
-    <script src="modules/site/services.js"></script>
-    
+    <!-- Common -->
+    <script src="modules/biospecimen/common/module.js"></script>
+    <script src="modules/biospecimen/common/specimen-qty-validate.js"></script>
+    <script src="modules/biospecimen/common/unique-specimen-label.js"></script>
+
     <script src="modules/biospecimen/cp/config.js"></script>
     <script src="custom-modules/biospecimen/participant/register.js"></script>
     <!-- endbuild -->

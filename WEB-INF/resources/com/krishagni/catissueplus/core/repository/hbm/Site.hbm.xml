@@ -42,14 +42,7 @@
             column="ACTIVITY_STATUS"
             length="50"
         />
-        
-         <property
-            name="emailAddress"
-            type="string"
-            column="EMAIL_ADDRESS"
-            length="255"
-         />
-            
+
         <set name="coordinatorCollection"  table="CATISSUE_SITE_COORDINATORS">
          <key column="SITE_ID"/>
          <many-to-many 
@@ -72,16 +65,9 @@
 			
             <key column="SITE_ID"/>
             <one-to-many
-                class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup"/>
+                class="com.krishagni.catissueplus.core.biospecimen.domain.Visit"/>
          </set>
-      
-      
-        <many-to-one name="address" 
-            class="com.krishagni.catissueplus.core.administrative.domain.Address" 
-            column="ADDRESS_ID" 
-            cascade="all" 
-            not-null="true" />
-          
+
     <query name="getSiteByName">
     	SELECT site FROM com.krishagni.catissueplus.core.administrative.domain.Site site WHERE site.name = :siteName
     </query>

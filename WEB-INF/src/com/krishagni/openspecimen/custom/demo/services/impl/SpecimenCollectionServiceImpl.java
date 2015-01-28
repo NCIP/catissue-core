@@ -119,10 +119,10 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 		CollectionProtocolEvent cpe = cp.getCollectionProtocolEvents().iterator().next();
 		
 		VisitDetail visit = input.getCollectionDetail().getVisit();
-		visit.setCpeId(cpe.getId());
+		visit.setEventId(cpe.getId());
 		visit.setCprId(cprId);
 		visit.setCpTitle(cp.getTitle());
-		visit.setVisitStatus("Complete"); // TODO: hard coded
+		visit.setStatus("Complete"); // TODO: hard coded
 		
 		AddVisitEvent req = new AddVisitEvent();
 		req.setVisit(visit);
@@ -165,11 +165,11 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 	private SpecimenDetail createSpecimen(VisitDetail visit, SpecimenRequirement sr, SpecimenDetail specimen) {
 		specimen.setVisitId(visit.getId());
 		specimen.setLineage("New");
-		specimen.setCollectionStatus("Collected");
+		specimen.setStatus("Collected");
 		specimen.setCreatedOn(Calendar.getInstance().getTime());
-		specimen.setRequirementId(sr.getId());
+		specimen.setReqId(sr.getId());
 		specimen.setSpecimenClass(sr.getSpecimenClass());
-		specimen.setSpecimenType(sr.getSpecimenType());
+		specimen.setType(sr.getSpecimenType());
 		
 		CreateSpecimenEvent req = new CreateSpecimenEvent();
 		req.setSpecimen(specimen);

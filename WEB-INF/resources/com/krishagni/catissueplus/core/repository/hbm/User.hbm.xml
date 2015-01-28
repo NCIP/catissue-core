@@ -74,9 +74,6 @@
         <many-to-one
             name="department"
             class="com.krishagni.catissueplus.core.administrative.domain.Department"
-            cascade="none"
-            update="true"
-            insert="true"
             column="DEPARTMENT_ID"/>
 
         <many-to-one name="address" class="com.krishagni.catissueplus.core.administrative.domain.Address" column="ADDRESS_ID" cascade="all" not-null="true" />

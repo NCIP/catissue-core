@@ -9,8 +9,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIden
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface ParticipantDao extends Dao<Participant> {
-
-	public Participant getParticipant(Long id);
 	
 	public Participant getBySsn(String ssn);
 	

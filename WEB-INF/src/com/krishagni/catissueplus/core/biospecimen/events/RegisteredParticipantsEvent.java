@@ -7,8 +7,17 @@ import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class RegisteredParticipantsEvent extends ResponseEvent {
-
+	private Long cpId;
+	
 	private List<CprSummary> registeredParticipants;
+
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
+	}
 
 	public List<CprSummary> getParticipants() {
 		return registeredParticipants;
@@ -33,5 +42,12 @@ public class RegisteredParticipantsEvent extends ResponseEvent {
 		resp.setException(t1);
 		resp.setMessage(t1 != null ? t1.getMessage() : null);
 		return resp;
+	}
+	
+	public static RegisteredParticipantsEvent notFound(Long cpId) {
+		RegisteredParticipantsEvent req = new RegisteredParticipantsEvent();
+		req.setStatus(EventStatus.NOT_FOUND);
+		req.setCpId(cpId);
+		return req;
 	}
 }

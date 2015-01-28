@@ -23,7 +23,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;

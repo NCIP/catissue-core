@@ -24,7 +24,7 @@ public class CollectionProtocolRegistration {
 
 	private CollectionProtocol collectionProtocol;
 
-	private Collection<SpecimenCollectionGroup> scgCollection;
+	private Collection<Visit> scgCollection;
 
 	private String activityStatus;
 
@@ -78,11 +78,11 @@ public class CollectionProtocolRegistration {
 		this.collectionProtocol = collectionProtocol;
 	}
 
-	public Collection<SpecimenCollectionGroup> getScgCollection() {
+	public Collection<Visit> getScgCollection() {
 		return scgCollection;
 	}
 
-	public void setScgCollection(Collection<SpecimenCollectionGroup> scgCollection) {
+	public void setScgCollection(Collection<Visit> scgCollection) {
 		this.scgCollection = scgCollection;
 	}
 
@@ -147,7 +147,7 @@ public class CollectionProtocolRegistration {
 
 	public void delete(boolean isIncludeChildren) {
 		if (isIncludeChildren) {
-			for (SpecimenCollectionGroup scg : this.scgCollection) {
+			for (Visit scg : this.scgCollection) {
 				scg.delete(isIncludeChildren);
 			}
 		}
@@ -160,13 +160,13 @@ public class CollectionProtocolRegistration {
 	}
 
 	private void checkActiveDependents() {
-		for (SpecimenCollectionGroup scg : this.getScgCollection()) {
+		for (Visit scg : this.getScgCollection()) {
 			if (scg.isActive()) {
 				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
 			}
 		}
 	}
-
+	
 	public void update(CollectionProtocolRegistration cpr) {
 		setProtocolParticipantIdentifier(cpr.getProtocolParticipantIdentifier());
 		setRegistrationDate(cpr.getRegistrationDate());

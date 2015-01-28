@@ -17,11 +17,6 @@ import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 public class ParticipantDaoImpl extends AbstractDao<Participant> implements ParticipantDao {
-
-	@Override
-	public Participant getParticipant(Long id) {
-		return (Participant) sessionFactory.getCurrentSession().get(Participant.class, id);
-	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
@@ -94,6 +89,11 @@ public class ParticipantDaoImpl extends AbstractDao<Participant> implements Part
 		query.setString("siteName", siteName);
 		query.setString("mrn", mrn);
 		return query.list().isEmpty() ? true : false;
+	}
+	
+	@Override
+	public Class getType() {
+		return Participant.class;
 	}
 
 	private static final String FQN = Participant.class.getName();

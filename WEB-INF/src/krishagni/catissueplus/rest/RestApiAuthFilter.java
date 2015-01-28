@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import javax.xml.bind.DatatypeConverter;
 
-import org.springframework.http.HttpStatus;
-
 import edu.wustl.auth.exception.AuthenticationException;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.CatissueException;
@@ -29,7 +27,6 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.domain.LoginCredentials;
 import edu.wustl.domain.LoginResult;
-import edu.wustl.processor.LoginProcessor;
 import edu.wustl.security.global.Roles;
 import edu.wustl.security.privilege.PrivilegeManager;
 

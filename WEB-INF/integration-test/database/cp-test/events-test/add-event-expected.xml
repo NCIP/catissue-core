@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <CATISSUE_USER IDENTIFIER="1" FIRST_NAME="ADMIN" LAST_NAME="ADMIN" LOGIN_NAME="admin@admin.com"  EMAIL_ADDRESS="admin@admin.com"/>
+  
+  <CATISSUE_COLLECTION_PROTOCOL IDENTIFIER="1" TITLE="default-cp" PRINCIPAL_INVESTIGATOR_ID="1" ACTIVITY_STATUS="Active"/>
+  
+  <CATISSUE_SITE IDENTIFIER="1" NAME="default-site" ACTIVITY_STATUS="Active" />
+  
+  <CATISSUE_COLL_PROT_EVENT CLINICAL_STATUS="default-clinical-status" COLLECTION_POINT_LABEL="default-event-label"
+    STUDY_CALENDAR_EVENT_POINT="1" COLLECTION_PROTOCOL_ID="1" DEFAULT_SITE_ID="1" CLINICAL_DIAGNOSIS="default-clinical-diagnosis"
+    ACTIVITY_STATUS="Active"/>
+</dataset>

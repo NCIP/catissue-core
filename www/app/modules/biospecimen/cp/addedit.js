@@ -6,7 +6,6 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
       $scope.cp = new CollectionProtocol();
       $scope.ppidFmt = {};
       $scope.coordinators = [];
-      $scope.clinicalDiagnoses = [];
 
       $scope.$watch('ppidFmt', function(newVal) {
         var sample = newVal.prefix || '';
@@ -32,10 +31,6 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
 
       result += ($scope.ppidFmt.suffix || '');
       return result;
-    };
-
-    $scope.searchClinicalDiagnoses = function(searchTerm) {
-      $scope.clinicalDiagnoses = PvManager.getClinicalDiagnoses({searchTerm: searchTerm});
     };
 
     $scope.createCp = function() {

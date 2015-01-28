@@ -24,7 +24,7 @@ public class CollectionProtocolEvent {
 	
 	private Set<SpecimenRequirement> specimenRequirements = new HashSet<SpecimenRequirement>();
 
-	private Set<SpecimenCollectionGroup> specimenCollectionGroups = new HashSet<SpecimenCollectionGroup>();
+	private Set<Visit> specimenCollectionGroups = new HashSet<Visit>();
 
 	public Long getId() {
 		return id;
@@ -113,11 +113,11 @@ public class CollectionProtocolEvent {
 		return anticipated;
 	}
 
-	public Set<SpecimenCollectionGroup> getSpecimenCollectionGroups() {
+	public Set<Visit> getSpecimenCollectionGroups() {
 		return specimenCollectionGroups;
 	}
 
-	public void setSpecimenCollectionGroups(Set<SpecimenCollectionGroup> specimenCollectionGroups) {
+	public void setSpecimenCollectionGroups(Set<Visit> specimenCollectionGroups) {
 		this.specimenCollectionGroups = specimenCollectionGroups;
 	}
 	

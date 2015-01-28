@@ -167,7 +167,7 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 		switch (objectType) {
 			case PARTICIPANT :
 				ParticipantDao dao = daoFactory.getParticipantDao();
-				object = dao.getParticipant(objectId);
+				object = dao.getById(objectId);
 				break;
 		}
 		return object;

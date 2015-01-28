@@ -58,3 +58,15 @@
   display: block;
   padding-bottom: 5px;
 }
+
+.os-vertical-wizard-content .panel-body {
+  padding: 0px;
+}
+
+.os-vertical-wizard-content .step-content {
+  padding: 15px;
+}
+
+.os-vertical-wizard-content .os-panel-footer {
+  margin: 0px;
+}

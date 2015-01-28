@@ -24,8 +24,9 @@ public final class Status {
 	
 	public static final Status SPECIMEN_COLLECTION_STATUS_PENDING = new Status("Pending", 6);
 	
-	public static final Status SCG_COLLECTION_STATUS_COMPLETED = new Status("Completed", 7);
-	public static final Status SCG_COLLECTION_STATUS_PENDING = new Status("Pending", 8);
+	public static final Status VISIT_STATUS_COMPLETED = new Status("Completed", 7);
+	
+	public static final Status VISIT_STATUS_PENDING = new Status("Pending", 8);
 
 	public String getStatus() {
 		return this.statusName;

@@ -30,7 +30,7 @@
 
       <li class="item">
         <strong class="key key-sm" translate="participant.pmis">Medical Identifiers:</strong>
-        <span class="value value-md" os-inline-edit>{{cpr.participant.pmis | showMrns | osNoValue}}</span>
+        <span class="value value-md" os-inline-edit>{{cpr.participant.pmis | osArrayJoin: pmiText | osNoValue}}</span>
       </li>
 
       <li class="item">
@@ -93,30 +93,32 @@
 
     <div class="os-section" ng-init="ovCollapsed=false">
       <button class="os-btn-section-collapse os-btn-transparent" ng-click="ovCollapsed=!ovCollapsed">
-        <span ng-if="!ovCollapsed">&#9660;</span>
-        <span ng-if="ovCollapsed">&#9654;</span>
+        <span ng-if="!ovCollapsed" class="fa fa-chevron-circle-down"></span>
+        <span ng-if="ovCollapsed" class="fa fa-chevron-circle-right"></span>
       </button>
       <h3 class="os-sub-section-title" translate="visits.occurred_visits">Occurred Visits</h3>
       <div collapse="ovCollapsed">
         <span ng-if="occurredVisits.length == 0" translate="common.none">None</span>
-        <table class="table table-hover os-table-muted-hdr os-table outer-border" ng-if="occurredVisits.length > 0">
-          <thead>
-            <tr>
-              <th class="col-xs-5" translate="visits.title">Visit</th>
-              <th class="col-xs-2" translate="common.date">Date</th>
-              <th class="col-xs-4" translate="visits.collection_status">Collection Status</th>
-              <th class="col-xs-1">&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="visit in occurredVisits" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
-              <td>
+        <div class="os-table os-table-muted-hdr os-border" ng-if="occurredVisits.length > 0">
+          <div class="os-table-head">
+            <div class="row">
+              <div class="col col-xs-5" translate="visits.title">Visit</div>
+              <div class="col col-xs-2" translate="common.date">Date</div>
+              <div class="col col-xs-4" translate="visits.collection_status">Collection Status</div>
+              <div class="col col-xs-1">&nbsp;</div>
+            </div>
+          </div>
+          <div class="os-table-body">
+            <div class="row" ng-repeat="visit in occurredVisits" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
+              <div class="col col-xs-5">
                 <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
                   T{{visit.calendarPoint}}: {{visit.label}}
                 </a>
-              </td>
-              <td>{{visit.visitDate | date: 'MMM dd, yyyy'}}</td>
-              <td>
+              </div>
+              <div class="col col-xs-2">
+                {{visit.visitDate | date: 'MMM dd, yyyy'}} 
+              </div>
+              <div class="col col-xs-4">
                 <progress class="progress" max="visit.totalSpecimens"
                   bs-popover trigger="hover" placement="bottom" content-template="specimen-count.html">
                   <bar value="visit.collectedSpecimens" type="success"><span><b> {{visit.collectedSpecimens}} </b> </span></bar>
@@ -124,8 +126,8 @@
                   <bar value="visit.uncollectedSpecimens" type="danger"><span><b> {{visit.uncollectedSpecimens}} </b> </span></bar>
                   <bar value="visit.unplannedSpecimens" type="info"><span><b> {{visit.unplannedSpecimens}} </b> </span></bar>
                 </progress>
-              </td>
-              <td>
+              </div>
+              <div class="col col-xs-1">
                 <div class="btn-group" dropdown ng-if="showBtns">
                   <button type="button" class="btn btn-xs btn-default os-btn-icon">
                     <span class="fa fa-cog"></span>
@@ -142,49 +144,56 @@
                     <li><a href="#" translate="visits.ctx_menu.print_specimen_labels">Print Specimen Labels</a></li>
                   </ul>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="os-section" ng-init="avCollapsed=false">
       <button class="os-btn-section-collapse os-btn-transparent" ng-click="avCollapsed=!avCollapsed">
-        <span ng-if="!avCollapsed">&#9660;</span>
-        <span ng-if="avCollapsed">&#9654;</span>
+        <span ng-if="!avCollapsed" class="fa fa-chevron-circle-down"></span>
+        <span ng-if="avCollapsed" class="fa fa-chevron-circle-right"></span>
       </button>
       <h3 class="os-sub-section-title" translate="visits.anticipated_visits">Anticipated Visits</h3>
       <div collapse="avCollapsed">
         <span ng-if="anticipatedVisits.length == 0" translate="common.none">None</span>
-        <table class="table table-hover os-table-muted-hdr os-table outer-border" ng-if="anticipatedVisits.length > 0">
-          <thead>
-            <tr>
-              <th class="col-xs-5" translate="visits.title">Visit</th>
-              <th class="col-xs-3" translate="common.date">Date</th>
-              <th class="col-xs-3" translate="visits.anticipated_specimens">Anticipated Specimens</th>
-              <th class="col-xs-1">&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="visit in anticipatedVisits" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
-              <td>
-                <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
-                  T{{visit.calendarPoint}}: {{visit.label}}
-                </a>
-              </td>
-              <td>{{visit.anticipatedVisitDate | date: 'MMM dd, yyyy'}}</td>
-              <td>{{visit.anticipatedSpecimens}}</td>
-              <td>
-                <div class="btn-group" ng-if="showBtns">
-                  <button type="button" class="btn btn-xs btn-default os-btn-icon">
-                    <span class="fa fa-sign-in"></span>
-                  </button>
+        <div class="os-table os-table-muted-hdr os-border" ng-if="anticipatedVisits.length > 0">
+          <div class="os-table-head">
+            <div class="row">
+              <div class="col col-xs-5" translate="visits.title">Visit</div>
+              <div class="col col-xs-3" translate="common.date">Date</div>
+              <div class="col col-xs-3" translate="visits.anticipated_specimens">Anticipated Specimens</div>
+              <div class="col col-xs-1">&nbsp;</div>
+            </div>
+          </div>
+          <div class="os-table-body">
+            <div ng-repeat="visit in anticipatedVisits"
+              ng-class="{'os-inplace-form-edit-po': addVisitIdx == $index}"
+              ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
+              <div class="row title">
+                <div class="col col-xs-5">
+                  <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
+                    T{{visit.calendarPoint}}: {{visit.label}}
+                  </a>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                <div class="col col-xs-3">{{visit.anticipatedVisitDate | date: 'MMM dd, yyyy'}}</div>
+                <div class="col col-xs-3">{{visit.anticipatedSpecimens}}</div>
+                <div class="col col-xs-1">
+                  <div class="btn-group" ng-if="showBtns">
+                    <button type="button" class="btn btn-xs btn-default os-btn-icon" ng-click="showAddVisit(visit, $index)">
+                      <span class="fa fa-plus"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="row content" ng-if="addVisitIdx == $index">
+                <div ng-include="'modules/biospecimen/participant/add-visit.html'"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

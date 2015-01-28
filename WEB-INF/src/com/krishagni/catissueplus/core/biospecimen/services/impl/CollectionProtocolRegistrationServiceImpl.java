@@ -20,7 +20,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEven
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
@@ -42,7 +42,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEve
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitAddedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
@@ -56,6 +56,7 @@ import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
 
 import edu.wustl.security.global.Permissions;
@@ -109,7 +110,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				resp = getByCpIdAndPpid(req.getCpId(), req.getPpid());
 			} else {
 				resp = RegistrationEvent.invalidRequest();
-			}			
+			}
 		} catch (Exception e) {
 			resp = RegistrationEvent.serverError(e);
 		}
@@ -130,6 +131,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			CollectionProtocolRegistration cpr = registrationFactory.createCpr(req.getCprDetail());
 			
 			ObjectCreationException oce = new ObjectCreationException();
+			ensureUniqueParticipantReg(cpr, oce);
 			ensureUniquePpid(cpr, oce);
 			ensureUniqueBarcode(cpr.getBarcode(), oce);
 			oce.checkErrorAndThrow();
@@ -172,7 +174,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				return getAnticipatedSpecimens(cprId, eventId);
 			}
 			
-			return VisitSpecimensEvent.ok(cprId, eventId, visitId, Collections.<SpecimenSummary>emptyList());
+			return VisitSpecimensEvent.ok(cprId, eventId, visitId, Collections.<SpecimenDetail>emptyList());
 		} catch (Exception e) {
 			return VisitSpecimensEvent.serverError(cprId, eventId, visitId, e);
 		}
@@ -182,10 +184,10 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@PlusTransactional
 	public VisitAddedEvent addVisit(AddVisitEvent req) {
 		try { // TODO: visit name
-			SpecimenCollectionGroup visit = visitFactory.createVisit(req.getVisit());
-			visit.setName(UUID.randomUUID().toString());
+			Visit visit = visitFactory.createVisit(req.getVisit()); 
+			visit.setName(UUID.randomUUID().toString()); 
 
-			daoFactory.getVisitsDao().saveOrUpdate(visit);
+			daoFactory.getVisitsDao().saveOrUpdate(visit); 
 			return VisitAddedEvent.ok(VisitDetail.from(visit));			
 		} catch (ObjectCreationException oce) {
 			return VisitAddedEvent.invalidRequest(oce.getMessage(), oce.getErroneousFields());
@@ -230,7 +232,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		try {
 			CollectionProtocolRegistration oldCpr = null;
 			if (event.getId() != null) {
-				oldCpr = daoFactory.getCprDao().getCpr(event.getId());
+				oldCpr = daoFactory.getCprDao().getById(event.getId());
 			}
 			else if (event.getCprDetail().getPpid() != null && event.getCprDetail().getCpId() != null) {
 				oldCpr = daoFactory.getCprDao().getCprByPpId(event.getCprDetail().getCpId(), event.getCprDetail().getPpid());
@@ -297,7 +299,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@PlusTransactional
 	public RegistrationDeletedEvent delete(DeleteRegistrationEvent event) {
 		try {
-			CollectionProtocolRegistration registration = daoFactory.getCprDao().getCpr(event.getId());
+			CollectionProtocolRegistration registration = daoFactory.getCprDao().getById(event.getId());
 			if (registration == null) {
 				return RegistrationDeletedEvent.notFound(event.getId());
 			}
@@ -350,6 +352,20 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, "collection protocol");
 		throw exception;
 	}
+	
+	private void ensureUniqueParticipantReg(CollectionProtocolRegistration cpr, ObjectCreationException oce) {
+		if (cpr.getParticipant() == null || cpr.getParticipant().getId() == null || 
+				cpr.getCollectionProtocol() == null) {
+			return ;
+		}
+		
+		Long participantId = cpr.getParticipant().getId();
+		Long cpId = cpr.getCollectionProtocol().getId();
+		
+		if (daoFactory.getCprDao().getRegistrationId(cpId, participantId) != null) {
+			oce.addError(ParticipantErrorCode.ALREADY_REGISTERED, "participant");
+		}
+	}
 
 	private void ensureUniquePpid(CollectionProtocolRegistration cpr, ObjectCreationException oce) {
 		Long cpId = cpr.getCollectionProtocol().getId();
@@ -398,7 +414,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	}
 	
 	private RegistrationEvent getByCprId(Long cprId) {
-		CollectionProtocolRegistration cpr = daoFactory.getCprDao().getCpr(cprId);
+		CollectionProtocolRegistration cpr = daoFactory.getCprDao().getById(cprId);
 		if (cpr == null) {
 			return RegistrationEvent.notFound(cprId);
 		}
@@ -416,12 +432,12 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	}
 	
 	private VisitSpecimensEvent getSpecimensByVisit(Long cprId, Long visitId) {
-		SpecimenCollectionGroup visit = daoFactory.getVisitsDao().getVisit(visitId);
+		Visit visit = daoFactory.getVisitsDao().getVisit(visitId);
 		if (visit == null) {
 			return VisitSpecimensEvent.notFound(cprId, null, visitId);
 		}
 		
-		Set<SpecimenRequirement> anticipatedSpecimens = visit.getCollectionProtocolEvent().getTopLevelAnticipatedSpecimens();
+		Set<SpecimenRequirement> anticipatedSpecimens = visit.getCpEvent().getTopLevelAnticipatedSpecimens();
 		Set<Specimen> specimens = visit.getTopLevelSpecimens();
 
 		return VisitSpecimensEvent.ok(
@@ -441,22 +457,22 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				getSpecimens(anticipatedSpecimens, Collections.<Specimen>emptySet()));		
 	}
 	
-	private List<SpecimenSummary> getSpecimens(Collection<SpecimenRequirement> anticipated, Collection<Specimen> specimens) {		
-		List<SpecimenSummary> result = SpecimenSummary.from(specimens);
+	private List<SpecimenDetail> getSpecimens(Collection<SpecimenRequirement> anticipated, Collection<Specimen> specimens) {		
+		List<SpecimenDetail> result = SpecimenDetail.from(specimens);
 		merge(anticipated, result, null, getReqSpecimenMap(result));
 
-		SpecimenSummary.sort(result);
+		SpecimenDetail.sort(result);
 		return result;
 	}
 	
-	private Map<Long, SpecimenSummary> getReqSpecimenMap(List<SpecimenSummary> specimens) {
-		Map<Long, SpecimenSummary> reqSpecimenMap = new HashMap<Long, SpecimenSummary>();
+	private Map<Long, SpecimenDetail> getReqSpecimenMap(List<SpecimenDetail> specimens) {
+		Map<Long, SpecimenDetail> reqSpecimenMap = new HashMap<Long, SpecimenDetail>();
 						
-		List<SpecimenSummary> remaining = new ArrayList<SpecimenSummary>();
+		List<SpecimenDetail> remaining = new ArrayList<SpecimenDetail>();
 		remaining.addAll(specimens);
 		
 		while (!remaining.isEmpty()) {
-			SpecimenSummary specimen = remaining.remove(0);
+			SpecimenDetail specimen = remaining.remove(0);
 			Long srId = (specimen.getReqId() == null) ? -1 : specimen.getReqId();
 			reqSpecimenMap.put(srId, specimen);
 			
@@ -468,16 +484,16 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	
 	private void merge(
 			Collection<SpecimenRequirement> anticipatedSpecimens, 
-			List<SpecimenSummary> result, 
-			SpecimenSummary currentParent,
-			Map<Long, SpecimenSummary> reqSpecimenMap) {
+			List<SpecimenDetail> result, 
+			SpecimenDetail currentParent,
+			Map<Long, SpecimenDetail> reqSpecimenMap) {
 		
 		for (SpecimenRequirement anticipated : anticipatedSpecimens) {
-			SpecimenSummary specimen = reqSpecimenMap.get(anticipated.getId());
+			SpecimenDetail specimen = reqSpecimenMap.get(anticipated.getId());
 			if (specimen != null) {
 				merge(anticipated.getChildSpecimenRequirements(), result, specimen, reqSpecimenMap);
 			} else {
-				specimen = SpecimenSummary.from(anticipated);
+				specimen = SpecimenDetail.from(anticipated);
 				
 				if (currentParent == null) {
 					result.add(specimen);

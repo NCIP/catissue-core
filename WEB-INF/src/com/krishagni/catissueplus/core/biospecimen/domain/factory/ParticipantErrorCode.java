@@ -15,7 +15,8 @@ public enum ParticipantErrorCode implements CatissueErrorCode {
 	DUPLICATE_PMI(1005,"Participant with the same mrn and site already exists."),
 	ERRORS(1009, "Please resolve the errors listed in error list."),
 	BAD_REQUEST(1009, "Bad Request"),
-	DISABLED_CP(1010, "collection-protocol is disabled!")
+	DISABLED_CP(1010, "collection-protocol is disabled!"),
+	ALREADY_REGISTERED(1011, "participant is already registered to collection protocol")
 	;
 
 	private int code;

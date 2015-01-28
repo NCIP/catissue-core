@@ -36,16 +36,23 @@
             </button>
           </p>
         </div>
-        <div ng-if="evt.id == event.id"> 
-          <div class="os-quick-edit-overlay"></div>
-          <div class="list-group-item os-quick-edit" ng-include="'event-add-edit.html'"></div>
+        <div ng-if="evt.id == event.id" class="os-inplace-form-edit-po"> 
+          <div class="list-group-item">
+            <div class="title">T{{evt.eventPoint}}: {{evt.eventLabel}}</div>
+            <div class="content" ng-include="'event-add-edit.html'"></div>
+          </div>
         </div>
       </div>
 
       <a class="list-group-item" translate="cp.add_cpe" ng-click="showAddEvent()" ng-if="!addMode">
         Add Event ...
       </a>
-      <div class="list-group-item" ng-include="'event-add-edit.html'" ng-if="addMode"></div>
+      <div ng-if="addMode" class="os-inplace-form-edit-po">
+        <div class="list-group-item">
+          <div class="title">New Event</div>
+          <div class="content" ng-include="'event-add-edit.html'"></div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="col-xs-9" ng-if="events.length > 0">
@@ -55,49 +62,40 @@
 
 <script type="text/ng-template" id="event-add-edit.html">
   <form name="eventForm" os-form-validator="eventForm" novalidate>
-    <div class="form-group">
-      <input autofocus type="text" class="form-control" placeholder="{{'cp.cpe_point' | translate}}" 
+    <div class="form-group clearfix">
+      <input os-md-input autofocus type="text" class="form-control" placeholder="{{'cp.cpe_point' | translate}}" 
         name="eventPoint" ng-model="event.eventPoint" required ng-pattern="/^[0-9]+$/">
       <div os-field-error field="eventForm.eventPoint"></div>
     </div>
-    <div class="form-group">
-      <input type="text" class="form-control" placeholder="{{'cp.cpe_point_label' | translate}}"
+
+    <div class="form-group clearfix">
+      <input os-md-input type="text" class="form-control" placeholder="{{'cp.cpe_point_label' | translate}}"
         name="eventLabel" ng-model="event.eventLabel" required>
       <div os-field-error field="eventForm.eventLabel"></div>
     </div>
-    <div class="form-group">
-      <ui-select name="clinicalDiagnosis" ng-model="event.clinicalDiagnosis" required>
-        <ui-select-match placeholder="{{'cp.clinical_diagnosis' | translate}}">
-          {{$select.selected}}
-        </ui-select-match>
-        <ui-select-choices repeat="cd in clinicalDiagnoses" refresh="searchClinicalDiagnoses($select.search)" refresh-delay="750">
-          <span ng-bind-html="cd | highlight: $select.search"></span>
-        </ui-select-choices>
-      </ui-select>
+
+    <div class="form-group clearfix">
+      <div os-md-input ng-model="event.clinicalDiagnosis" placeholder="{{'cp.clinical_diagnosis' | translate}}">
+        <os-select name="clinicalDiagnosis" ng-model="event.clinicalDiagnosis" 
+          list="clinicalDiagnoses" refresh="searchClinicalDiagnoses"
+          os-md-input placeholder="{{'cp.clinical_diagnosis' | translate}}" required>
+        </os-select>
+      </div>
       <div os-field-error field="eventForm.clinicalDiagnosis"></div>
     </div>
-    <div class="form-group">
-      <ui-select name="clinicalStatus" ng-model="event.clinicalStatus" required>
-        <ui-select-match placeholder="{{'cp.clinical_status' | translate}}">
-          {{$select.selected}}
-        </ui-select-match>
-        <ui-select-choices repeat="cs in clinicalStatuses">
-          <span ng-bind-html="cs | highlight: $select.search"></span>
-        </ui-select-choices>
-      </ui-select>
+
+    <div class="form-group clearfix">
+      <os-select os-md-input name="clinicalStatus" ng-model="event.clinicalStatus" list="clinicalStatuses" 
+        placeholder="{{'cp.clinical_status' | translate}}" required> </os-select>
       <div os-field-error field="eventForm.clinicalStatus"></div>
     </div>
-    <div class="form-group">
-      <ui-select ng-model="event.defaultSite">
-        <ui-select-match placeholder="{{'cp.default_site' | translate}}">
-          {{$select.selected}}
-        </ui-select-match>
-        <ui-select-choices repeat="site in sites">
-          <span ng-bind-html="site | highlight: $select.search"></span>
-        </ui-select-choices>
-      </ui-select>
+
+    <div class="form-group clearfix">
+      <os-select os-md-input name="defaultSite" ng-model="event.defaultSite" list="sites" 
+        placeholder="{{'cp.default_site' | translate}}" required> </os-select>
       <div os-field-error field="eventForm.defaultSite"></div>
     </div>
+
     <div class="form-group">
       <button type="submit" class="btn btn-success" os-form-submit="addEvent()" ng-if="!event.id" translate="common.buttons.add">
         Add

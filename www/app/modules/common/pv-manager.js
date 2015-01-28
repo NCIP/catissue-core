@@ -91,10 +91,17 @@ angular.module('openspecimen')
       'Delete'
     ];
     
+    /** We need to have i18n keys for these as well **/
     var storageTypes = [
       'Auto',
       'Manual',
       'Virtual'
+    ];
+
+    var visitStatuses = [
+      'Complete',
+      'Incomplete',
+       'Pending'
     ];
 
     var pvMap = {
@@ -106,7 +113,8 @@ angular.module('openspecimen')
       domains:domains,
       resources: resources,
       privileges: privileges,
-      'storage-type': storageTypes
+      'storage-type': storageTypes,
+      'visit-status': visitStatuses
     };
 
     var pvIdMap = {
@@ -119,10 +127,12 @@ angular.module('openspecimen')
       'collection-procedure': '2003996',
       'collection-container': '2003997',
       'vital-status'        : '2004001',
-     
+
       'ethnicity'           : 'Ethnicity_PID',
       'race'                : 'Race_PID',
-      'anatomic-site'       : 'Tissue_Site_PID'
+      'anatomic-site'       : 'Tissue_Site_PID',
+      'site-type'           : 'Site_Type_PID',
+      'clinical-diagnosis'  : 'Clinical_Diagnosis_PID'
     };
 
     return {

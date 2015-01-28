@@ -54,7 +54,7 @@ public class SpecimenEventsServiceImpl implements SpecimenEventService {
 			if(specimen == null) {
 				return SpecimenEventsSavedEvent.badRequest(new IllegalArgumentException("Specimen with label"+ specimenLabel+ "does not exist"));
 			}
-			Long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId();
+			Long cpId = specimen.getVisit().getRegistration().getCollectionProtocol().getId();
 			if(!privilegeSvc.hasPrivilege(req.getSessionDataBean().getUserId(), cpId, Permissions.SPECIMEN_PROCESSING)) {
 				return SpecimenEventsSavedEvent.notAuthorized(new IllegalAccessException("Does not have access for data entry on specimen" + specimenLabel));
 			}

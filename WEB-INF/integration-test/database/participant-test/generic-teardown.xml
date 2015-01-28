@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <CATISSUE_PARTICIPANT /> 
+  <CATISSUE_USER />
+  <CATISSUE_ADDRESS />
+  <CATISSUE_SITE />
+  <CATISSUE_PART_MEDICAL_ID />
+  <CATISSUE_RACE /> 
+</dataset>

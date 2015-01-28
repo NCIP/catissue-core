@@ -9,8 +9,8 @@ public class LabelTokenForPPI implements LabelToken<Specimen> {
 	private static final String EMPTY_PPI = "";
 
 	public String getTokenValue(Specimen specimen) {
-		if (specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getProtocolParticipantIdentifier() != null) {
-			return specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+		if (specimen.getVisit().getRegistration().getProtocolParticipantIdentifier() != null) {
+			return specimen.getVisit().getRegistration()
 					.getProtocolParticipantIdentifier();
 		}
 		return EMPTY_PPI;

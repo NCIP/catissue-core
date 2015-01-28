@@ -4,12 +4,12 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 import java.util.Date;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 
 public class VisitDetail {
 	private Long cprId;
 
-	private Long cpeId;
+	private Long eventId;
 	
 	private String ppid;
 	
@@ -27,13 +27,11 @@ public class VisitDetail {
 
 	private String activityStatus;
 
-	private String visitSite;
+	private String site;
 
-	private String visitStatus;
+	private String status;
 
-	private String barcode;
-
-	private String comment;
+	private String comments;
 
 	private String surgicalPathologyNumber;
 	
@@ -47,12 +45,12 @@ public class VisitDetail {
 		this.cprId = cprId;
 	}
 
-	public Long getCpeId() {
-		return cpeId;
+	public Long getEventId() {
+		return eventId;
 	}
 
-	public void setCpeId(Long cpeId) {
-		this.cpeId = cpeId;
+	public void setEventId(Long eventId) {
+		this.eventId = eventId;
 	}
 
 	public String getPpid() {
@@ -119,36 +117,28 @@ public class VisitDetail {
 		this.activityStatus = activityStatus;
 	}
 
-	public String getVisitSite() {
-		return visitSite;
+	public String getSite() {
+		return site;
 	}
 
-	public void setVisitSite(String visitSite) {
-		this.visitSite = visitSite;
+	public void setSite(String site) {
+		this.site = site;
 	}
 
-	public String getVisitStatus() {
-		return visitStatus;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setVisitStatus(String visitStatus) {
-		this.visitStatus = visitStatus;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
-	public String getBarcode() {
-		return barcode;
+	public String getComments() {
+		return comments;
 	}
 
-	public void setBarcode(String barcode) {
-		this.barcode = barcode;
-	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 
 	public String getSurgicalPathologyNumber() {
@@ -167,27 +157,27 @@ public class VisitDetail {
 		this.visitDate = visitDate;
 	}
 
-	public static VisitDetail from(SpecimenCollectionGroup visit) {
+	public static VisitDetail from(Visit visit) {
 		VisitDetail detail = new VisitDetail();
 		detail.setActivityStatus(visit.getActivityStatus());
-		detail.setBarcode(visit.getBarcode());
 		detail.setClinicalDiagnosis(visit.getClinicalDiagnosis());
 		detail.setClinicalStatus(visit.getClinicalStatus());
-		detail.setVisitStatus(visit.getCollectionStatus());
-		detail.setComment(visit.getComment());
+		detail.setStatus(visit.getStatus());
+		detail.setComments(visit.getComments());
 		detail.setId(visit.getId());
 		detail.setName(visit.getName());
 		detail.setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
+		detail.setVisitDate(visit.getVisitDate());
 
 		
-		CollectionProtocolRegistration cpr = visit.getCollectionProtocolRegistration();
+		CollectionProtocolRegistration cpr = visit.getRegistration();
 		detail.setCprId(cpr.getId());
 		detail.setPpid(cpr.getProtocolParticipantIdentifier());
 		detail.setCpTitle(cpr.getCollectionProtocol().getTitle());
 		
-		detail.setCpeId(visit.getCollectionProtocolEvent().getId());
-		detail.setEventLabel(visit.getCollectionProtocolEvent().getEventLabel());
-		detail.setVisitSite(visit.getCollectionSite().getName());		
+		detail.setEventId(visit.getCpEvent().getId());
+		detail.setEventLabel(visit.getCpEvent().getEventLabel());
+		detail.setSite(visit.getSite().getName());		
 		
 		return detail;
 	}

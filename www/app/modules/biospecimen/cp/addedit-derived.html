@@ -1,0 +1,78 @@
+<div>
+  <form name="derivativeForm" os-form-validator="derivativeForm" novalidate>
+    <div class="clearfix">
+      <div class="col-xs-3">
+        <div class="form-group">
+          <os-select name="specimenClass" on-change="loadSpecimenTypes(derivative.specimenClass)" 
+            ng-model="derivative.specimenClass" list="specimenClasses"
+            os-md-input placeholder="{{'srs.specimen_class' | translate}}" required>
+          </os-select>
+          <div os-field-error field="derivativeForm.specimenClass"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <os-select name="specimenType" ng-model="derivative.type" list="specimenTypes"
+            os-md-input placeholder="{{'srs.specimen_type' | translate}}" required>
+          </os-select>
+          <div os-field-error field="derivativeForm.specimenType"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <input name="quantity" ng-model="derivative.quantity" 
+            os-md-input class="form-control" type="text" placeholder="{{'srs.qty' | translate}}"
+            required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+          <div os-field-error field="derivativeForm.quantity"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3" ng-if="derivative.specimenClass == 'Molecular'">
+        <div class="form-group">
+          <input name="concentration" ng-model="derivative.concentration" 
+            os-md-input class="form-control" type="text" placeholder="{{'srs.concentration' | translate}}"
+            required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+          <div os-field-error field="derivativeForm.concentration"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="clearfix">
+      <div class="col-xs-3">
+        <div class="form-group">
+          <os-select name="storageType" ng-model="derivative.storageType" list="storageTypes"
+            os-md-input placeholder="{{'srs.storage_type' | translate}}" required>
+          </os-select>
+          <div os-field-error field="derivativeForm.storageType"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <input ng-model="derivative.name" os-md-input class="form-control" type="text" 
+            placeholder="{{'srs.name' | translate}}">
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="form-group">
+          <input ng-model="derivative.labelFmt" os-md-input class="form-control" type="text" 
+            placeholder="{{'srs.label_fmt' | translate}}">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group clearfix">
+      <div class="col-xs-12">
+        <button type="submit" class="btn btn-success" os-form-submit="createDerivative()"
+          translate="srs.buttons.create_derived">
+          Create Derived
+        </button>
+        <a class="btn os-btn-text-secondary" ng-click="revertEdit()" translate="common.buttons.cancel">
+          Cancel
+        </a>
+      </div>
+    </div>
+  </form>
+</div>

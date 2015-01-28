@@ -7,11 +7,13 @@ import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
@@ -24,26 +26,6 @@ public class VisitFactoryImpl implements VisitFactory {
 
 	private DaoFactory daoFactory;
 
-	private static final String CLINICAL_DIAGNOSIS = "clinical diagnosis";
-
-	private static final String CLINICAL_STATUS = "clinical status";
-
-	private static final String VISIT_STATUS = "Collection Status";
-
-	private static final String CPE = "No event identification";
-	
-	private static final String CPL = "collection point label";
-
-	private static final String CPR = "No Collection Protocol Registration Identification Specified";
-	
-	private static final String CP_TITLE = "collection protocol title";
-	
-	private static final String PPID = "participant protocol id";
-	
-	private static final String SITE = "site name";
-
-	private static final String CPR_CPE = "registraion and event point refering to different protocols.";
-
 	private static final String SCG_REPORTS = "scg reports";
 
 	public void setDaoFactory(DaoFactory daoFactory) {
@@ -51,125 +33,167 @@ public class VisitFactoryImpl implements VisitFactory {
 	}
 
 	@Override
-	public SpecimenCollectionGroup createVisit(VisitDetail visitDetail) {
+	public Visit createVisit(VisitDetail visitDetail) {
+		Visit visit = new Visit();
+		
 		ObjectCreationException oce = new ObjectCreationException();
-		
-		SpecimenCollectionGroup visit = new SpecimenCollectionGroup();
-		
-		setCpe(visit, visitDetail, oce);		
-		setCpr(visit, visitDetail, oce);
+				
+		setCpe(visitDetail, visit, oce);		
+		setCpr(visitDetail, visit, oce);
 		validateCprAndCpe(visit, oce);
 		
-		setVisitDate(visit, visitDetail, oce);
-		setVisitStatus(visit, visitDetail.getVisitStatus(), oce);
-		setClinicalDiagnosis(visit, visitDetail.getClinicalDiagnosis(), oce);
-		setClinicalStatus(visit, visitDetail.getClinicalStatus(), oce);
-		setSite(visit, visitDetail.getVisitSite(), oce);
-		setActivityStatus(visit, visitDetail.getActivityStatus(), oce);
+		setVisitDate(visitDetail, visit, oce);
+		setVisitStatus(visitDetail, visit, oce);
+		setClinicalDiagnosis(visitDetail, visit, oce);
+		setClinicalStatus(visitDetail, visit, oce);
+		setSite(visitDetail, visit, oce);
+		setActivityStatus(visitDetail, visit, oce);
 		
-		visit.setComment(visitDetail.getComment());
+		visit.setComments(visitDetail.getComments());
 		visit.setSurgicalPathologyNumber(visitDetail.getSurgicalPathologyNumber());
 		
 		oce.checkErrorAndThrow();
 		return visit;
 	}
 
-	private void setCpe(SpecimenCollectionGroup visit, VisitDetail visitDetail, ObjectCreationException oce) {
+	private void setCpe(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
 		CollectionProtocolEvent cpe = null;
 		
-		if (visitDetail.getCpeId() != null) {
-			cpe = daoFactory.getCollectionProtocolDao().getCpe(visitDetail.getCpeId());
-		} else if (visitDetail.getEventLabel() != null && visitDetail.getCpTitle() != null) {
-			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(visitDetail.getCpTitle());
+		Long cpeId = visitDetail.getEventId();
+		String cpTitle = visitDetail.getCpTitle(), 
+			   eventLabel = visitDetail.getEventLabel();
+		
+		if (cpeId != null) {
+			cpe = daoFactory.getCollectionProtocolDao().getCpe(cpeId);
+			if (cpe == null) {
+				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "cpeId");
+				return;
+			}
+
+		} else if (StringUtils.isNotBlank(cpTitle) && StringUtils.isNotBlank(eventLabel)) {			
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao()
+					.getCollectionProtocol(cpTitle);
+			
 			if (cp == null) {
-				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, CP_TITLE);
+				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "collectionProtocol");
 				return;
 			}
 			
-			cpe = daoFactory.getCollectionProtocolDao().getCpeByEventLabel(cp.getId(), visitDetail.getEventLabel());			
+			cpe = daoFactory.getCollectionProtocolDao()
+					.getCpeByEventLabel(cp.getId(), eventLabel);			
 			if (cpe == null) {
-				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPL);
+				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "eventLabel");
 				return;
 			}
 		}
-		
-		if (cpe == null) {
-			oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPE);
-			return;
-		}
-		
-		visit.setCollectionProtocolEvent(cpe);
+				
+		visit.setCpEvent(cpe);
 	}
 
-	private void setCpr(SpecimenCollectionGroup visit, VisitDetail visitDetail, ObjectCreationException oce) {
+	private void setCpr(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
 		CollectionProtocolRegistration cpr = null;
 		
 		if (visitDetail.getCprId() != null) {
-			cpr = daoFactory.getCprDao().getCpr(visitDetail.getCprId());
-		} else if (visitDetail.getPpid() != null && visitDetail.getCpTitle() != null) {
-			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(visitDetail.getCpTitle());
+			cpr = daoFactory.getCprDao().getById(visitDetail.getCprId());
+			if (cpr == null) {
+				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "cprId");
+			}
+			
+		} else if (visitDetail.getPpid() != null && visitDetail.getCpTitle() != null) {			
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao()
+					.getCollectionProtocol(visitDetail.getCpTitle());			
 			if (cp == null) {
-				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, CP_TITLE);
+				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "collectionProtocol");
 				return ;
 			}
 			
 			cpr = daoFactory.getCprDao().getCprByPpId(cp.getId(), visitDetail.getPpid());
 			if (cpr == null) {
-				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, PPID);
+				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "ppid");
 				return ;
 			}
 		} 
 		
-		if (cpr == null) {
-			oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPR);
-		}
 		
-		visit.setCollectionProtocolRegistration(cpr);
+		visit.setRegistration(cpr);
 	}
 
-	private void setVisitStatus(SpecimenCollectionGroup visit, String visitStatus, ObjectCreationException oce) {		
-		if (isValidPv(visitStatus, VISIT_STATUS)) {
-			visit.setCollectionStatus(visitStatus);
+	private void validateCprAndCpe(Visit visit, ObjectCreationException oce) {
+		CollectionProtocolRegistration cpr = visit.getRegistration();
+		CollectionProtocolEvent cpe = visit.getCpEvent();
+		
+		if (cpr == null || cpe == null) {
 			return;
 		}
 		
-		oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, VISIT_STATUS);
+		if (!cpr.getCollectionProtocol().getId().equals(cpe.getCollectionProtocol().getId())) {
+			oce.addError(ScgErrorCode.INVALID_CPR_CPE, "cpr, cpe");
+		}
 	}
 
-	private void setClinicalDiagnosis(SpecimenCollectionGroup visit, String clinicalDiagnosis, ObjectCreationException oce) {
-		if (isValidPv(clinicalDiagnosis, CLINICAL_DIAGNOSIS)) {
+	public void setVisitDate(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
+		CollectionProtocolRegistration cpr = visit.getRegistration();
+		if (cpr == null) {
+			return;
+		}
+		
+		Date regDate = cpr.getRegistrationDate();
+		Date visitDate = visitDetail.getVisitDate();
+		if (visitDate != null && (visitDate.after(regDate) || visitDate.equals(regDate))) {
+			visit.setVisitDate(visitDate);
+		} else {
+			visit.setVisitDate(Calendar.getInstance().getTime());
+		}
+	}
+	
+	private void setVisitStatus(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
+		String visitStatus = visitDetail.getStatus();
+		if (isValidPv(visitStatus, "visit-status")) {
+			visit.setStatus(visitStatus);
+			return;
+		}
+		
+		oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "visitStatus");
+	}
+
+	private void setClinicalDiagnosis(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
+		String clinicalDiagnosis = visitDetail.getClinicalDiagnosis();
+		if (isValidPv(clinicalDiagnosis, "clinical-diagnosis")) {
 			visit.setClinicalDiagnosis(clinicalDiagnosis);
 			return;
 		}
 		
-		oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, CLINICAL_DIAGNOSIS);
+		oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "clinicalDiagnosis");
 	}
 	
-	private void setClinicalStatus(SpecimenCollectionGroup visit, String clinicalStatus, ObjectCreationException oce) {
-		if (isValidPv(clinicalStatus, CLINICAL_STATUS)) {
+	private void setClinicalStatus(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
+		String clinicalStatus = visitDetail.getClinicalStatus();
+		if (isValidPv(clinicalStatus, "clinical-status")) {
 			visit.setClinicalStatus(clinicalStatus);
 			return;
 		}
 		
-		oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, CLINICAL_STATUS);
+		oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "clinicalStatus");
 	}
 
-	private void setSite(SpecimenCollectionGroup visit, String visitSite, ObjectCreationException oce) {
+	private void setSite(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
+		String visitSite = visitDetail.getSite();
 		if (visit.isCompleted() && isBlank(visitSite)) {
-			oce.addError(ScgErrorCode.MISSING_ATTR_VALUE, SITE);
+			oce.addError(ScgErrorCode.MISSING_ATTR_VALUE, "site");
 			return;
 		} else {
 			Site site = daoFactory.getSiteDao().getSite(visitSite);
 			if (site == null) {
-				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, SITE);
+				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "site");
 				return;
 			}
 			
-			visit.setCollectionSite(site);
+			visit.setSite(site);
 		}
 	}
 
-	private void setActivityStatus(SpecimenCollectionGroup visit, String status, ObjectCreationException oce) {
+	private void setActivityStatus(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
+		String status = visitDetail.getActivityStatus();
 		if (isBlank(status)) {
 			visit.setActive();
 		} else if (isValidPv(status, Status.ACTIVITY_STATUS.getStatus())) {
@@ -179,41 +203,11 @@ public class VisitFactoryImpl implements VisitFactory {
 		}
 	}
 
-	private void validateCprAndCpe(SpecimenCollectionGroup visit, ObjectCreationException oce) {
-		CollectionProtocolRegistration cpr = visit.getCollectionProtocolRegistration();
-		CollectionProtocolEvent cpe = visit.getCollectionProtocolEvent();
-		
-		if (cpr == null || cpe == null) {
-			return;
-		}
-		
-		if (!cpr.getCollectionProtocol().getId().equals(cpe.getCollectionProtocol().getId())) {
-			oce.addError(ScgErrorCode.INVALID_CPR_CPE, CPR_CPE);
-		}
-	}
-	
-	public void setVisitDate(SpecimenCollectionGroup visit, VisitDetail visitDetail, ObjectCreationException oce) {
-		CollectionProtocolRegistration cpr = visit.getCollectionProtocolRegistration();
-		if (cpr == null) {
-			return;
-		}
-		
-		Date regDate = cpr.getRegistrationDate();
-		Date visitDate = visitDetail.getVisitDate();
-		if (visitDate == null) {
-			visit.setCollectionTimestamp(Calendar.getInstance().getTime());
-		} else if (visitDate.after(regDate) || visitDate.equals(regDate)) {
-			visit.setCollectionTimestamp(visitDate);
-		} else {
-			oce.addError(ScgErrorCode.INVALID_VISIT_DATE, "visit date");
-		}		
-	}
-
 	//
 	// TODO: Below requires further review
 	//
 	@Override
-	public SpecimenCollectionGroup updateReports(SpecimenCollectionGroup oldScg, ScgReportDetail detail) {
+	public Visit updateReports(Visit oldScg, ScgReportDetail detail) {
 
 		ObjectCreationException errorHandler = new ObjectCreationException();
 		if (detail.getDeIdentifiedReport() == null && detail.getIdentifiedReport() == null) {

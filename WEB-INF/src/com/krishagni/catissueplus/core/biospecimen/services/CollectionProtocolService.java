@@ -5,22 +5,26 @@ import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProt
 import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AddCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AddSpecimenRequirementEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AliquotsRequirementCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpRespEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTiersEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeAddedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotsRequirementEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateDerivedSpecimenReqEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.DerivedSpecimenReqCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqClinicalDiagnosesEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenRequirementsEvent;
@@ -36,8 +40,6 @@ public interface CollectionProtocolService {
 
 	public RegisteredParticipantsEvent getRegisteredParticipants(ReqRegisteredParticipantsEvent req);
 	
-	public ClinicalDiagnosesEvent getDiagnoses(ReqClinicalDiagnosesEvent req);
-
 	public CollectionProtocolCreatedEvent createCollectionProtocol(CreateCollectionProtocolEvent req);
 	
 	//
@@ -52,6 +54,8 @@ public interface CollectionProtocolService {
 	//
 	public CpeListEvent getProtocolEvents(ReqCpeListEvent req);
 	
+	public CpeEvent getProtocolEvent(ReqCpeEvent req);
+	
 	public CpeAddedEvent addEvent(AddCpeEvent req);
 	
 	public CpeUpdatedEvent updateEvent(UpdateCpeEvent req);
@@ -63,8 +67,10 @@ public interface CollectionProtocolService {
 	
 	public SpecimenRequirementAddedEvent addSpecimenRequirement(AddSpecimenRequirementEvent req);
 	
+	public AliquotsRequirementCreatedEvent createAliquots(CreateAliquotsRequirementEvent req);
 	
-		
+	public DerivedSpecimenReqCreatedEvent createDerived(CreateDerivedSpecimenReqEvent req);
+			
 	//public ParticipantSummaryEvent getParticipant(ReqParticipantSummaryEvent event);
 
 	public ChildCollectionProtocolsEvent getChildProtocols(ReqChildProtocolEvent req);

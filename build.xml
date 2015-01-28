@@ -1376,7 +1376,7 @@
 	</target>
 	
 	<target name="run_integration_tests" depends="compile_integration_tests">
-		<copy todir="${target.dir}">
+		<copy todir="${target.dir}" overwrite="true">
 			<fileset dir="${base.dir}/WEB-INF/integration-test">
 				<include name="*.xml" />
 				<include name="*.properties" />
@@ -1389,17 +1389,17 @@
 		
 		<copy todir="${target.dir}/com/krishagni/core/tests">
 			<fileset dir="${base.dir}/WEB-INF/integration-test/database">
-				<include name="*.xml"/>
+				<include name="**/*"/>
 			</fileset>
 		</copy> 
 		
 		<delete dir="${base.dir}/integration-test-results" failonerror="false"/>
 		<mkdir dir="${base.dir}/integration-test-results"/>
 
-		<delete dir="${base.dir}/integration-test-data" failonerror="false"/>
-		<mkdir dir="${base.dir}/integration-test-data"/>
+		<delete dir="${base.dir}/application-test-files" failonerror="false"/>
+		<mkdir dir="${base.dir}/application-test-files"/>
 
-		<copy todir="${base.dir}/integration-test-data">
+		<copy todir="${base.dir}/application-test-files">
 			<fileset dir="${base.dir}/catissuecore-properties">
 				<include name="caTissueCore_Properties.xml"/>
 			</fileset>
@@ -1408,7 +1408,7 @@
 			</fileset>
 		</copy>
 
-		<replace dir="${base.dir}/integration-test-data" propertyfile="${base.dir}/WEB-INF/integration-test/test.properties">
+		<replace dir="${base.dir}/application-test-files" propertyfile="${base.dir}/WEB-INF/integration-test/test.properties">
 			<include name ="caTissueCore_Properties.xml"/>
 			<include name ="log4j.properties"/>
 			<replacefilter token="@@appserver.home.dir@@" property="appserver.home.dir"/>
@@ -1430,7 +1430,7 @@
 		</replace>
 		
 		<junit printsummary="yes" haltonfailure="no" failureproperty="test.failed">
-			<sysproperty key="app.propertiesFile" value="${base.dir}/integration-test-data/caTissueCore_Properties.xml"/>
+			<sysproperty key="app.propertiesFile" value="${base.dir}/application-test-files/caTissueCore_Properties.xml"/>
 			<classpath>
 				<pathelement path="${target.dir}" />
 			</classpath>
@@ -1450,7 +1450,6 @@
 			</batchtest>
 		</junit>
 
-		<delete dir="${base.dir}/integration-test-data" failonerror="true"/>
 		<fail message="Test failure detected, check test results." if="test.failed" />
 	</target>
 

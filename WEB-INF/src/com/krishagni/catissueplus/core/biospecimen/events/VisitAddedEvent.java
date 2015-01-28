@@ -4,10 +4,19 @@ import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-
 public class VisitAddedEvent extends ResponseEvent {
+	private Long cprId;
+	
 	private VisitDetail visit;
-		
+
+	public Long getCprId() {
+		return cprId;
+	}
+
+	public void setCprId(Long cprId) {
+		this.cprId = cprId;
+	}
+	
 	public VisitDetail getVisit() {
 		return visit;
 	}
@@ -17,16 +26,24 @@ public class VisitAddedEvent extends ResponseEvent {
 	}
 
 	public static VisitAddedEvent ok(VisitDetail visit) {
-		VisitAddedEvent event = new VisitAddedEvent();
-		event.setStatus(EventStatus.OK);
-		event.setVisit(visit);
-		return event;
+		VisitAddedEvent resp = new VisitAddedEvent();
+		resp.setStatus(EventStatus.OK);
+		resp.setVisit(visit);
+		resp.setCprId(visit.getCprId());
+		return resp;
 	}
-
+	
+	public static VisitAddedEvent notFound(Long cprId) {
+		VisitAddedEvent resp = new VisitAddedEvent();
+		resp.setStatus(EventStatus.NOT_FOUND);
+		resp.setCprId(cprId);
+		return resp;
+	}
+	
 	public static VisitAddedEvent notAuthorized() {
-		VisitAddedEvent event = new VisitAddedEvent();
-		event.setStatus(EventStatus.NOT_AUTHORIZED);
-		return event;
+		VisitAddedEvent resp = new VisitAddedEvent();
+		resp.setStatus(EventStatus.NOT_AUTHORIZED);
+		return resp;
 	}
 
 	public static VisitAddedEvent invalidRequest(String message, ErroneousField... fields) {

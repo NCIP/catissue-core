@@ -14,8 +14,6 @@ public interface CollectionProtocolRegistrationDao extends Dao<CollectionProtoco
 
 	public List<VisitSummary> getVisits(Long cprId);
 
-	public CollectionProtocolRegistration getCpr(Long cprId);
-		
 	public CollectionProtocolRegistration getCprByPpId(Long cpId, String protocolParticipantIdentifier);
 
 	public CollectionProtocolRegistration getCprByBarcode(String barcode);
@@ -24,5 +22,7 @@ public interface CollectionProtocolRegistrationDao extends Dao<CollectionProtoco
 
 	public ParticipantSummary getPhiParticipant(Long cpId, Long participantId);
 
-	public List<CollectionProtocolRegistration> getSubRegDetailForParticipantAndCp(Long participantId,Long cpId);
+	public List<CollectionProtocolRegistration> getSubRegDetailForParticipantAndCp(Long participantId, Long cpId);
+	
+	public Long getRegistrationId(Long cpId, Long participantId);
 }

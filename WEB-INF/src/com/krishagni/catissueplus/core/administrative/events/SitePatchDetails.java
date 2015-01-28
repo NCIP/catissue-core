@@ -4,11 +4,13 @@ package com.krishagni.catissueplus.core.administrative.events;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.krishagni.catissueplus.core.common.events.UserSummary;
+
 public class SitePatchDetails {
 
 	private String name;
 
-	private List<UserInfo> coordinatorCollection = new ArrayList<UserInfo>();
+	private List<UserSummary> coordinatorCollection = new ArrayList<UserSummary>();
 
 	private Long id;
 
@@ -42,11 +44,11 @@ public class SitePatchDetails {
 		this.name = name;
 	}
 
-	public List<UserInfo> getCoordinatorCollection() {
+	public List<UserSummary> getCoordinatorCollection() {
 		return coordinatorCollection;
 	}
 
-	public void setCoordinatorCollection(List<UserInfo> coordinatorCollection) {
+	public void setCoordinatorCollection(List<UserSummary> coordinatorCollection) {
 		this.coordinatorCollection = coordinatorCollection;
 	}
 

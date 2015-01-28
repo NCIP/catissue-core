@@ -8,7 +8,7 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 public class SpecimenListDetails extends SpecimenListSummary {
 	private List<UserSummary> sharedWith;
 	
-	private List<SpecimenSummary> specimens;
+	private List<SpecimenDetail> specimens;
 
 	public List<UserSummary> getSharedWith() {
 		return sharedWith;
@@ -18,11 +18,11 @@ public class SpecimenListDetails extends SpecimenListSummary {
 		this.sharedWith = sharedWith;
 	}
 
-	public List<SpecimenSummary> getSpecimens() {
+	public List<SpecimenDetail> getSpecimens() {
 		return specimens;
 	}
 
-	public void setSpecimens(List<SpecimenSummary> specimens) {
+	public void setSpecimens(List<SpecimenDetail> specimens) {
 		this.specimens = specimens;
 	}
 	
@@ -32,7 +32,7 @@ public class SpecimenListDetails extends SpecimenListSummary {
 		details.setName(list.getName());
 		details.setOwner(UserSummary.from(list.getOwner()));
 		details.setSharedWith(UserSummary.from(list.getSharedWith()));
-		details.setSpecimens(SpecimenSummary.from(list.getSpecimens()));
+		details.setSpecimens(SpecimenDetail.from(list.getSpecimens()));
 		return details;
 	}
 }

@@ -16,7 +16,7 @@
   </div>
 </div>
 
-<div class="clearfix">
+<div class="clearfix" ng-if="view == 'specimen_tree' || !view">
   <div class="col-xs-3">
     <div class="os-visits list-group">
       <div class="list-group-item os-section-hdr">
@@ -36,6 +36,10 @@
     </div>
   </div>
 
-  <div class="col-xs-9" ng-include src="'modules/biospecimen/participant/specimens.html'">
-  </div>
+  <div class="col-xs-9" ng-include src="'modules/biospecimen/participant/specimens.html'"></div>
+</div>
+
+<div class="col-xs-12" 
+  ng-include src="'modules/biospecimen/participant/collect-specimens.html'"
+  ng-if="view == 'collect_specimens'">
 </div>

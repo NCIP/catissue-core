@@ -29,7 +29,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitsEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
-import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
+import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
@@ -50,7 +50,7 @@ public class VisitsController {
 	private HttpServletRequest httpServletRequest;
 
 	@Autowired
-	private SpecimenCollGroupService specimenCollGroupService;
+	private VisitService visitService;
 
 	@Autowired
 	private CollectionProtocolRegistrationService cprSvc;
@@ -115,15 +115,18 @@ public class VisitsController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public VisitDetail createSCG(@RequestBody VisitDetail scgDetail) {
-		AddVisitEvent createScgEvent = new AddVisitEvent();
-		createScgEvent.setVisit(scgDetail);
-		createScgEvent.setSessionDataBean(getSession());
-		VisitAddedEvent resp = specimenCollGroupService.createScg(createScgEvent);
+	public VisitDetail addVisit(@RequestBody VisitDetail visit) {
+		AddVisitEvent req = new AddVisitEvent();
+		req.setCprId(visit.getCprId());
+		req.setVisit(visit);
+		req.setSessionDataBean(getSession());
+		
+		VisitAddedEvent resp = visitService.addVisit(req);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
-			return resp.getVisit();
+				
+		return resp.getVisit();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
@@ -134,7 +137,7 @@ public class VisitsController {
 		event.setId(id);
 		event.setScgDetail(scgDetail);
 		event.setSessionDataBean(getSession());
-		ScgUpdatedEvent resp = specimenCollGroupService.updateScg(event);
+		ScgUpdatedEvent resp = visitService.updateScg(event);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
@@ -149,7 +152,7 @@ public class VisitsController {
 		event.setId(id);
 		event.setDetail(reportDetail);
 		event.setSessionDataBean(getSession());
-		ScgReportUpdatedEvent resp = specimenCollGroupService.updateScgReport(event);
+		ScgReportUpdatedEvent resp = visitService.updateScgReport(event);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
@@ -163,7 +166,7 @@ public class VisitsController {
 		GetScgReportEvent event = new GetScgReportEvent();
 		event.setId(id);
 		event.setSessionDataBean(getSession());
-		ScgReportUpdatedEvent resp = specimenCollGroupService.getScgReport(event);
+		ScgReportUpdatedEvent resp = visitService.getScgReport(event);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}

@@ -79,22 +79,17 @@
     <property name="privilegeSvc" ref="privSvc"/>
   </bean>
 
-	<bean id="scgLabelGenerator" class="com.krishagni.catissueplus.core.labelgenerator.impl.SCGLabelGenerator">
-		<property name="tokenFactory" ref="tokenFactory" />
-	</bean>
+  <bean id="scgBarcodeGenerator" class="com.krishagni.catissueplus.core.barcodegenerator.impl.SpecimenBarcodeGenerator">
+    <property name="tokenFactory" ref="tokenFactory" />
+  </bean>
 	
+  <bean id="visitLabelGenerator" class="com.krishagni.catissueplus.core.labelgenerator.impl.SCGLabelGenerator">
+    <property name="tokenFactory" ref="tokenFactory" />
+  </bean>
 	
-	
-	<bean id="scgBarcodeGenerator" class="com.krishagni.catissueplus.core.barcodegenerator.impl.SpecimenBarcodeGenerator">
-		<property name="tokenFactory" ref="tokenFactory" />
-	</bean>
-	
-	
-  <bean id="specimenCollGroupService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenCollGroupServiceImpl">
+  <bean id="visitService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.VisitServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
-	<property name="visitFactory" ref="visitFactory"/>
-	<property name="scgLabelGenerator" ref="scgLabelGenerator"/>
-	<property name="scgBarcodeGenerator" ref="scgBarcodeGenerator"/>
+    <property name="visitFactory" ref="visitFactory"/>
   </bean>
 
   <bean id="bulkOperationService" class="com.krishagni.catissueplus.bulkoperator.services.impl.BulkOperationServiceImpl">
@@ -108,7 +103,7 @@
     <property name="importersMap">
       <map>
         <entry key="ParticipantRegistrationDetails" value-ref="cprObjectImporter"/>
-        <entry key="ScgDetail" value-ref="scgObjectImporter"/>
+        <entry key="VisitDetail" value-ref="visitObjectImporter"/>
       </map>
     </property>
   </bean>
@@ -117,11 +112,26 @@
 	<property name="cprSvc" ref="cprSvc"/>
   </bean>
   
-  <bean id="scgObjectImporter" class="com.krishagni.catissueplus.bulkoperator.services.impl.ScgObjectImporter">
-	<property name="scgSvc" ref="specimenCollGroupService"/>
+  <bean id="visitObjectImporter" class="com.krishagni.catissueplus.bulkoperator.services.impl.VisitObjectImporter">
+	<property name="visitService" ref="visitService"/>
   </bean>
   
+  <bean id="cpFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolFactoryImpl">
+    <property name="userDao" ref="userDao"/>
+  </bean>
+
+  <bean id="cpeFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CpeFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+
+  <bean id="srFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenRequirementFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+
   <bean id="cpSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
+    <property name="cpFactory" ref="cpFactory"/>
+    <property name="cpeFactory" ref="cpeFactory"/>
+    <property name="srFactory" ref="srFactory"/>
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="privilegeSvc" ref="privSvc"/>
   </bean>
@@ -311,16 +321,17 @@
 		<property name="daoFactory" ref="biospecimenDaoFactory" />
 	</bean>
 
-	<bean id="departmentFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DepartmentFactoryImpl">
+<!--	<bean id="departmentFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DepartmentFactoryImpl">
 		<property name="daoFactory" ref="biospecimenDaoFactory"/>
-	</bean>
+	</bean>-->
 
 	<bean id="deptSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.DepartmentServiceImpl">
 		<property name="daoFactory" ref="biospecimenDaoFactory"/>
-		<property name="departmentFactory" ref="departmentFact"/>
+	<!--	<property name="departmentFactory" ref="departmentFact"/> -->
 	</bean>
 
 	<bean id="instituteFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl">
+          <property name="daoFactory" ref="biospecimenDaoFactory"/>
 	</bean>
 
 	<bean id="instSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.InstituteServiceImpl">

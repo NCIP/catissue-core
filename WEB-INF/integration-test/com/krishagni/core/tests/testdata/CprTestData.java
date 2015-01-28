@@ -11,6 +11,8 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierResponseDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationEvent;
+
 
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -30,6 +32,7 @@ public class CprTestData {
 		p.setSexGenotype("XX");
 		p.setSsn("333-22-4444");
 		p.setEthnicity("Canadian");
+		p.setEmpi("default-empi-id");
 		return p;
 	}
 	
@@ -116,5 +119,11 @@ public class CprTestData {
 		sessionDataBean.setUserId(1L);
 		sessionDataBean.setUserName("admin@admin.com");
 		return sessionDataBean;
+	}
+
+	public static ReqRegistrationEvent getReqRegistrationEvent() {
+		ReqRegistrationEvent req = new ReqRegistrationEvent();
+		req.setSessionDataBean(getSessionDataBean());
+		return req;
 	}
 }

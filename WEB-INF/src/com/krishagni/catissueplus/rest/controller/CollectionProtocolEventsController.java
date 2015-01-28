@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.biospecimen.events.AddCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeAddedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CpeUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeListEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
@@ -44,6 +46,21 @@ public class CollectionProtocolEventsController {
 		}
 		
 		return resp.getEvents();		
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public CollectionProtocolEventDetail getEvent(@PathVariable("id") Long cpeId) {
+		ReqCpeEvent req = new ReqCpeEvent();
+		req.setCpeId(cpeId);
+		
+		CpeEvent resp = cpSvc.getProtocolEvent(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		
+		return resp.getCpe();
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
