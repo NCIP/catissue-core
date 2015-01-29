@@ -182,13 +182,13 @@ public class SpecimenServiceImpl implements SpecimenService {
 	}
 	
 	private Specimen collectSpecimen(SpecimenDetail detail, Specimen parent) {
-		detail.setStatus(Specimen.COLLECTED);
-		
 		Specimen specimen = specimenFactory.createSpecimen(detail);
 		
 		ObjectCreationException oce = new ObjectCreationException();
 		ensureUniqueLabel(specimen.getLabel(), oce);
 		ensureUniqueBarcode(specimen.getBarcode(), oce);
+		
+		oce.checkErrorAndThrow();
 		
 		if (parent == null) {
 			parent = specimen.getParentSpecimen();

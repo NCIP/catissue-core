@@ -49,6 +49,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		
 		specimen.setVisit(visit);
 		setLabel(detail, specimen, oce);
+		setBarcode(detail, specimen, oce);
 		setActivityStatus(detail, specimen, oce);
 		setLineage(detail, specimen, oce);
 		setParentSpecimen(detail, specimen, oce);
@@ -60,11 +61,19 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setSpecimenClass(detail, specimen, oce);
 		setSpecimenType(detail, specimen, oce);
 		setCreatedOn(detail, specimen, oce);
-
+		
 //		setContainerPositions(specimenDetail, specimen, errorHandler);
 		
 		oce.checkErrorAndThrow();
 		return specimen;
+	}
+
+	private void setBarcode(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
+		if(StringUtils.isBlank(detail.getBarcode())) {
+			return;
+		}
+
+		specimen.setBarcode(detail.getBarcode());
 	}
 
 	private void setActivityStatus(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
@@ -108,8 +117,9 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;
 		}
 		
-		if (!lineage.equals(Specimen.NEW) && lineage.equals(Specimen.ALIQUOT) && 
-				lineage.equals(Specimen.DERIVED)) {
+		if (!lineage.equals(Specimen.NEW) && 
+		    !lineage.equals(Specimen.ALIQUOT) && 
+		    !lineage.equals(Specimen.DERIVED)) {
 			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "lineage");
 			return;
 		}
@@ -153,8 +163,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	private void setCollectionStatus(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
 		String status = detail.getStatus();
 		if (StringUtils.isBlank(status)) {
-			oce.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, "status");
-			return;
+			status = Specimen.COLLECTED;
 		}
 		
 		if (!status.equals(Specimen.COLLECTED) && 
@@ -162,8 +171,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			!status.equals(Specimen.NOT_COLLECTED)) {
 			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "status");
 		}
-		
-		specimen.setCollectionStatus(detail.getStatus());
+
+		specimen.setCollectionStatus(status);
 	}
 	
 	private void setAnatomicSite(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
@@ -261,8 +270,12 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		} else {
 			specimen.setCreatedOn(detail.getCreatedOn());
 		}
-		
-		Date visitDate = specimen.getVisit().getVisitDate(); 
+
+		if (specimen.getVisit() == null) {
+			return;
+		}
+
+		Date visitDate = specimen.getVisit().getVisitDate();
 		if (visitDate.after(specimen.getCreatedOn())) {
 			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "createdOn");
 		}

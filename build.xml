@@ -1375,7 +1375,7 @@
 		</javac>		
 	</target>
 	
-	<target name="run_integration_tests" depends="compile_integration_tests">
+	<!--target name="run_integration_tests" depends="compile_integration_tests">
 		<copy todir="${target.dir}" overwrite="true">
 			<fileset dir="${base.dir}/WEB-INF/integration-test">
 				<include name="*.xml" />
@@ -1451,7 +1451,134 @@
 		</junit>
 
 		<fail message="Test failure detected, check test results." if="test.failed" />
+	</target-->
+	
+	<target name="instrument_test_classes" depends="compile_integration_tests">
+		<delete dir="./cobertura/instrumented" />
+		<delete dir="./Reports" />
+		<mkdir dir="./cobertura/instrumented" />
+		<!--
+			Instrument the application classes, writing the
+			instrumented classes into ${build.instrumented.dir}.
+		-->
+		<cobertura-instrument datafile="${base.dir}/cobertura.ser" todir="./cobertura/instrumented">
+			<!--
+		             The following line causes instrument to ignore any
+		             source line containing a reference to log4j, for the
+		             purposes of coverage reporting.
+		        -->
+			<ignore regex="org.apache.log4j.*" />
+
+			<fileset dir="./WEB-INF/classes">
+                <include name="com/krishagni/**/*.class" />
+				<exclude name="com/krishagni/**/controller/*.class" />
+				<exclude name="com/krishagni/**/*Controller.class" />
+				<exclude name="com/krishagni/**/**/*Test.class" />
+			</fileset>
+		</cobertura-instrument>
+
+		<echo>Copying instrumented class files to classes folder</echo>
+
+		<copy todir="${target.dir}">
+			<fileset dir="./cobertura/instrumented">
+				<include name="**/*.class" />
+			</fileset>
+		</copy>
 	</target>
+
+	<target name="run_integration_tests" depends="instrument_test_classes">
+		<copy todir="${target.dir}" overwrite="true">
+			<fileset dir="${base.dir}/WEB-INF/integration-test">
+				<include name="*.xml" />
+				<include name="*.properties" />
+			</fileset>
+			<fileset dir="${base.dir}/WEB-INF">
+				<include name="bo-context.xml" />
+			</fileset>
+		</copy>
+
+		<copy todir="${target.dir}/com/krishagni/core/tests">
+			<fileset dir="${base.dir}/WEB-INF/integration-test/database">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
+		<delete dir="${base.dir}/integration-test-results" failonerror="false" />
+		<mkdir dir="${base.dir}/integration-test-results" />
+
+		<delete dir="${base.dir}/application-test-files" failonerror="false" />
+		<mkdir dir="${base.dir}/application-test-files" />
+
+		<copy todir="${base.dir}/application-test-files">
+			<fileset dir="${base.dir}/catissuecore-properties">
+				<include name="caTissueCore_Properties.xml" />
+			</fileset>
+			<fileset dir="${base.dir}/WEB-INF/integration-test">
+				<include name="log4j.properties" />
+			</fileset>
+		</copy>
+
+		<replace dir="${base.dir}/application-test-files" propertyfile="${base.dir}/WEB-INF/integration-test/test.properties">
+			<include name="caTissueCore_Properties.xml" />
+			<include name="log4j.properties" />
+			<replacefilter token="@@appserver.home.dir@@" property="appserver.home.dir" />
+		</replace>
+
+		<replace dir="${target.dir}" propertyfile="${base.dir}/WEB-INF/integration-test/test.properties">
+			<include name="log4j.properties" />
+			<include name="hibernate.test.cfg.xml" />
+			<replacefilter token="@@appserver.home.dir@@" property="appserver.home.dir" />
+			<replacefilter token="@@hibernate.dialect@@" property="hibernate.dialect" />
+			<replacefilter token="@@db.driver@@" property="db.driver" />
+			<replacefilter token="@@hibernate.show_sql@@" property="hibernate.show_sql" />
+			<replacefilter token="@@hibernate.connection.url@@" property="hibernate.connection.url" />
+			<replacefilter token="@@db.username@@" property="db.username" />
+			<replacefilter token="@@db.password@@" property="db.password" />
+			<replacefilter token="@@hibernate.hbm2ddl.auto@@" property="hibernate.hbm2ddl.auto" />
+			<replacefilter token="@@hibernate.cache.provider_class@@" property="hibernate.cache.provider_class" />
+			<replacefilter token="@@hibernate.cache.use_second_level_cache@@" property="hibernate.cache.use_second_level_cache" />
+		</replace>
+
+		<junit printsummary="yes" haltonfailure="no" failureproperty="test.failed">
+			<sysproperty key="app.propertiesFile" value="${base.dir}/application-test-files/caTissueCore_Properties.xml" />
+			<classpath>
+				<pathelement path="${target.dir}" />
+			</classpath>
+			<classpath>
+				<fileset dir="${base.dir}/WEB-INF/lib">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+
+			<formatter type="xml" />
+
+			<batchtest todir="${base.dir}/integration-test-results">
+				<fileset dir="${base.dir}/WEB-INF/integration-test">
+					<include name="com/**/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+
+		<fail message="Test failure detected, check test results." if="test.failed" />
+	</target>
+
+
+	<target name="gen_integration_test_cobertura_report" depends="run_integration_tests">
+		<cobertura-report srcdir="./cobertura/cobertura.ser" destdir="${base.dir}/Reports/Coverage" format="html">
+			<fileset dir="${src.dir}">
+				<include name="**/*.java" />
+			</fileset>
+		</cobertura-report>
+		<cobertura-report srcdir="./cobertura/cobertura.ser" destdir="${base.dir}/Reports/Coverage" format="xml">
+			<fileset dir="${src.dir}">
+				<include name="**/*.java" />
+			</fileset>
+		</cobertura-report>
+		<delete file="${base.dir}/cobertura.ser" />
+	</target>
+
+	
+	<!-- target>  </target-->
 
 	<target name="compileTestCases" depends="compile">
 	        <javac destdir="${target.dir}" includes="**/*Test.java" includeAntRuntime="false" target="1.6">

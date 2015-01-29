@@ -208,6 +208,31 @@ public class CollectionProtocolEventsTest {
 		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
 		Assert.assertEquals("Invalid site was not found in response.", true, TestUtils.isErrorCodePresent(resp, CpErrorCode.INVALID_SITE, DEFAULT_SITE));
 	}
+
+	@Test
+	@DatabaseSetup("cp-test/events-test/add-event-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	public void addEventWithEmptySite() {
+		AddCpeEvent req = CpeTestData.getAddCpeEvent();
+		req.getCpe().setDefaultSite("");
+		
+		CpeAddedEvent resp = cpSvc.addEvent(req);
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertNotNull(resp);
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		
+		CollectionProtocolEventDetail detail = resp.getCpe();
+		Assert.assertNotNull(detail.getId());
+		Assert.assertNotNull(detail);
+		Assert.assertEquals("default-cp", detail.getCollectionProtocol());
+		Assert.assertEquals("default-event-label", detail.getEventLabel());
+		Assert.assertNull(detail.getDefaultSite());
+		Assert.assertEquals(1, detail.getEventPoint().doubleValue(), 0);
+		Assert.assertEquals("default-clinical-diagnosis", detail.getClinicalDiagnosis());
+		Assert.assertEquals("default-clinical-status", detail.getClinicalStatus());
+		Assert.assertEquals("Active", detail.getActivityStatus());
+	}
 	
 	@Test
 	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
@@ -221,6 +246,33 @@ public class CollectionProtocolEventsTest {
 		
 		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
 		Assert.assertEquals("Invalid event point was not found in response.", true, TestUtils.isErrorCodePresent(resp, CpErrorCode.INVALID_EVENT_POINT, EVENT_POINT));
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/events-test/add-event-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/events-test/add-event-with-null-event-point-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void addEventWithNullEventPoint() {
+		AddCpeEvent req = CpeTestData.getAddCpeEvent();
+		req.getCpe().setEventPoint(null);
+		
+		CpeAddedEvent resp = cpSvc.addEvent(req);
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertNotNull(resp);
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		
+		CollectionProtocolEventDetail detail = resp.getCpe();
+		Assert.assertNotNull(detail.getId());
+		Assert.assertNotNull(detail);
+		Assert.assertEquals("default-cp", detail.getCollectionProtocol());
+		Assert.assertEquals("default-event-label", detail.getEventLabel());
+		Assert.assertEquals("default-site", detail.getDefaultSite());
+		Assert.assertEquals(0, detail.getEventPoint().doubleValue(), 0);
+		Assert.assertEquals("default-clinical-diagnosis", detail.getClinicalDiagnosis());
+		Assert.assertEquals("default-clinical-status", detail.getClinicalStatus());
+		Assert.assertEquals("Active", detail.getActivityStatus());
 	}
 	
 	@Test
@@ -263,6 +315,33 @@ public class CollectionProtocolEventsTest {
 
 		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
 		Assert.assertEquals("Collection protocol was disabled in response.", true, TestUtils.isErrorCodePresent(resp, CpErrorCode.INVALID_CP_TITLE, COLLECTION_PROTOCOL));
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/events-test/add-event-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/events-test/add-event-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void addEventWithEmptyActivityStatus() {
+		AddCpeEvent req = CpeTestData.getAddCpeEvent();
+		req.getCpe().setActivityStatus("");
+		
+		CpeAddedEvent resp = cpSvc.addEvent(req);
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertNotNull(resp);
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		
+		CollectionProtocolEventDetail detail = resp.getCpe();
+		Assert.assertNotNull(detail.getId());
+		Assert.assertNotNull(detail);
+		Assert.assertEquals("default-cp", detail.getCollectionProtocol());
+		Assert.assertEquals("default-event-label", detail.getEventLabel());
+		Assert.assertEquals("default-site", detail.getDefaultSite());
+		Assert.assertEquals(1, detail.getEventPoint().doubleValue(), 0);
+		Assert.assertEquals("default-clinical-diagnosis", detail.getClinicalDiagnosis());
+		Assert.assertEquals("default-clinical-status", detail.getClinicalStatus());
+		Assert.assertEquals("Active", detail.getActivityStatus());
 	}
 	
 	/* 
@@ -341,6 +420,31 @@ public class CollectionProtocolEventsTest {
 	@Test
 	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
 	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	public void updateEventWithEmptySite() {
+		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
+		req.getCpe().setDefaultSite("");
+		
+		CpeUpdatedEvent resp = cpSvc.updateEvent(req);
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertNotNull(resp);
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		
+		CollectionProtocolEventDetail detail = resp.getCpe();
+		Assert.assertNotNull(detail);
+		Assert.assertNotNull(detail.getId());
+		Assert.assertEquals("default-cp", detail.getCollectionProtocol());
+		Assert.assertEquals("updated-event-label", detail.getEventLabel());
+		Assert.assertNull(detail.getDefaultSite());
+		Assert.assertEquals(2, detail.getEventPoint().doubleValue(), 0);
+		Assert.assertEquals("updated-clinical-diagnosis", detail.getClinicalDiagnosis());
+		Assert.assertEquals("updated-clinical-status", detail.getClinicalStatus());
+		Assert.assertEquals("Active", detail.getActivityStatus()); 
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
 	public void updateEventWithInvalidEventPoint() {
 		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
 		req.getCpe().setEventPoint(-1.0);
@@ -350,6 +454,33 @@ public class CollectionProtocolEventsTest {
 		
 		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
 		Assert.assertEquals("Invalid event point was not found in response.", true, TestUtils.isErrorCodePresent(resp, CpErrorCode.INVALID_EVENT_POINT, EVENT_POINT));
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/events-test/update-event-with-null-event-point-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void UpdateEventWithNullEventPoint() {
+		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
+		req.getCpe().setEventPoint(null);
+		
+		CpeUpdatedEvent resp = cpSvc.updateEvent(req);
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertNotNull(resp);
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		
+		CollectionProtocolEventDetail detail = resp.getCpe();
+		Assert.assertNotNull(detail);
+		Assert.assertNotNull(detail.getId());
+		Assert.assertEquals("default-cp", detail.getCollectionProtocol());
+		Assert.assertEquals("updated-event-label", detail.getEventLabel());
+		Assert.assertEquals("updated-site", detail.getDefaultSite());
+		Assert.assertEquals(0, detail.getEventPoint().doubleValue(), 0);
+		Assert.assertEquals("updated-clinical-diagnosis", detail.getClinicalDiagnosis());
+		Assert.assertEquals("updated-clinical-status", detail.getClinicalStatus());
+		Assert.assertEquals("Active", detail.getActivityStatus()); 
 	}
 	
 	@Test
@@ -392,5 +523,32 @@ public class CollectionProtocolEventsTest {
 
 		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
 		Assert.assertEquals("Collection protocol was disabled in response.", true, TestUtils.isErrorCodePresent(resp, CpErrorCode.INVALID_CP_TITLE, COLLECTION_PROTOCOL));
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/events-test/update-event-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void updateEventWithEmptyActivityStatus() {
+		UpdateCpeEvent req = CpeTestData.getUpdateCpeEvent();
+		req.getCpe().setActivityStatus("");
+		
+		CpeUpdatedEvent resp = cpSvc.updateEvent(req);
+		TestUtils.recordResponse(resp);
+				
+		Assert.assertNotNull(resp);
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		
+		CollectionProtocolEventDetail detail = resp.getCpe();
+		Assert.assertNotNull(detail);
+		Assert.assertNotNull(detail.getId());
+		Assert.assertEquals("default-cp", detail.getCollectionProtocol());
+		Assert.assertEquals("updated-event-label", detail.getEventLabel());
+		Assert.assertEquals("updated-site", detail.getDefaultSite());
+		Assert.assertEquals(2, detail.getEventPoint().doubleValue(), 0);
+		Assert.assertEquals("updated-clinical-diagnosis", detail.getClinicalDiagnosis());
+		Assert.assertEquals("updated-clinical-status", detail.getClinicalStatus());
+		Assert.assertEquals("Active", detail.getActivityStatus()); 
 	}
 }
