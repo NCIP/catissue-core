@@ -5,7 +5,7 @@ angular.module('os.administrative.container.specimenTypeDropdown', ['os.administ
       scope.spClassTypeMap = PvManager.getSpecimenTypes();
       var all = $translate.instant('container.all');
 
-      populateSpecimenTypeList = function() {
+      function populateSpecimenTypeList() {
         scope.specimenTypes = [];
         angular.forEach(scope.spClassTypeMap, function(spTypes, spClass) {
           scope.specimenTypes.push({class: spClass, type: all + ' ' + spClass, visible: true });
@@ -15,7 +15,7 @@ angular.module('os.administrative.container.specimenTypeDropdown', ['os.administ
         });
       }
 
-      setVisibility = function(spClass, visible) {
+      function setVisibility(spClass, visible) {
         angular.forEach(scope.specimenTypes, function(specimenType) {
           if (specimenType.class == spClass) {
             specimenType.visible = visible;
