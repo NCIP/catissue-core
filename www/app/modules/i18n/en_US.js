@@ -1,22 +1,4 @@
 {
-
-  "menu": {
-    "administration": "Administration",
-    "colllection_protocols": "Collection Protocols",
-    "orders": "Orders",
-    "containers": "Containers",
-    "search": "Search",
-    "settings": "Settings",
-
-    "admin_sub_menu": {
-      "user": "User",
-      "institute": "Institute",
-      "site": "Site",
-      "storage_container": "Storage Container",
-      "distribution_protocol": "Distribution Protocol"
-    }
-  },
-
   "common": {
     "count" : "Count",
     "date": "Date",
