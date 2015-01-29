@@ -15,10 +15,11 @@
           <span>{{user.lastName}} {{user.firstName}}</span>
         </a>
       </h4>
-      <h5 title="{{'user.email_address' | translate}}">{{user.loginName}}</h5>
-      
       <!--TODO insert email address here after getting it from backend  -->
-      <p title="{{'user.tooltip.last_login' | translate}}">{{user.lastLogin}}<p> 
+      <h5 title="{{'user.email_address' | translate}}">{{user.loginName}}</h5>
+
+      <!--TODO insert last login time here after getting it from backend  -->
+      <p title="{{'user.tooltip.last_login' | translate}}">{{user.lastLogin}}</p>
       
       <div class="stats">
         <div class="stat col-xs-6" title="{{'user.tooltip.cp_count' | translate}}">

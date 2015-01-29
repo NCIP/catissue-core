@@ -76,8 +76,6 @@
             class="com.krishagni.catissueplus.core.administrative.domain.Department"
             column="DEPARTMENT_ID"/>
 
-        <many-to-one name="address" class="com.krishagni.catissueplus.core.administrative.domain.Address" column="ADDRESS_ID" cascade="all" not-null="true" />
-
 		<many-to-one
             name="authDomain"
             class="com.krishagni.catissueplus.core.auth.domain.AuthDomain"

@@ -67,7 +67,7 @@
         <label class="col-xs-3 control-label" translate="user.super_admin">Super Administrator</label>
         <div class="col-xs-9">
           <label class="checkbox-inline">
-            <input type="checkbox" ng-model="user.superAdmin" /> Yes
+            <input type="checkbox" ng-model="user.superAdmin" /> <span translate="common.yes"></span>
           </label>
         </div>
       </div>
@@ -85,7 +85,7 @@
       <div class="form-group">
         <div class="col-xs-offset-3 col-xs-6">
           <button class="btn btn-primary" os-form-submit="createUser()" translate="common.buttons.create"> Create </button>
-          <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.buttons.discard">Discard</button>
+          <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.buttons.discard"> Discard </button>
         </div>
       </div>
     </form>

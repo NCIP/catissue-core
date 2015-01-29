@@ -18,34 +18,27 @@
       <li class="item">
         <strong class="key key-sm" translate="user.last_name">Last Name</strong>
         <os-inline-edit editor="lastNameEditor" name="lastName" class="value value-md" value="user.lastName">
-          <span ng-if="lastNameEditor.isDisplayMode()">{{lastNameEditor.viewValue | osNoValue}}</span>
+          <span ng-if="lastNameEditor.isDisplayMode()">{{lastNameEditor.viewValue}}</span>
           <input ng-if="lastNameEditor.isEditMode()" type="text" ng-model="lastNameEditor.editValue" 
-            class="form-control" placeholder="{{'user.last_name' | translate}}">
+            class="form-control" placeholder="{{'user.last_name' | translate}}" ng-maxlength="255" required>
         </os-inline-edit>
       </li>
       
       <li class="item">
         <strong class="key key-sm" translate="user.first_name">First Name</strong>
         <os-inline-edit editor="firstNameEditor" name="firstName" class="value value-md" value="user.firstName">
-          <span ng-if="firstNameEditor.isDisplayMode()">{{firstNameEditor.viewValue | osNoValue}}</span>
+          <span ng-if="firstNameEditor.isDisplayMode()">{{firstNameEditor.viewValue}}</span>
           <input ng-if="firstNameEditor.isEditMode()" type="text" ng-model="firstNameEditor.editValue" 
-            class="form-control" placeholder="{{'user.first_name' | translate}}">
+            class="form-control" placeholder="{{'user.first_name' | translate}}" ng-maxlength="255" required>
         </os-inline-edit>
       </li>
       
       <li class="item">
         <strong class="key key-sm" translate="user.domain_name">Domain Name</strong>
         <os-inline-edit editor="domainEditor" name="domain" class="value value-md" value="user.domainName">
-          <span ng-if="domainEditor.isDisplayMode()">{{domainEditor.viewValue | osNoValue}}</span>
+          <span ng-if="domainEditor.isDisplayMode()">{{domainEditor.viewValue}}</span>
           <div ng-if="domainEditor.isEditMode()">
-            <ui-select ng-model="domainEditor.editValue">
-              <ui-select-match placeholder="{{'user.domain_name' | translate}}">
-                {{$select.selected}}
-              </ui-select-match>
-              <ui-select-choices repeat="domain in domains_pvs | filter: $select.search">
-                <span ng-bind-html="domain | highlight: $select.search"></span>
-              </ui-select-choices>
-            </ui-select>
+            <os-select ng-model="domainEditor.editValue" list="domains" placeholder="{{'user.domain_name' | translate}}" required></os-select>
           </div>
         </os-inline-edit>
       </li>
@@ -53,18 +46,34 @@
       <li class="item">
         <strong class="key key-sm" translate="user.login_name">Login Name</strong>
         <os-inline-edit editor="loginNameEditor" name="loginName" class="value value-md" value="user.loginName">
-          <span ng-if="loginNameEditor.isDisplayMode()">{{loginNameEditor.viewValue | osNoValue}}</span>
+          <span ng-if="loginNameEditor.isDisplayMode()">{{loginNameEditor.viewValue}}</span>
           <input ng-if="loginNameEditor.isEditMode()" type="text" ng-model="loginNameEditor.editValue" class="form-control" 
-            placeholder="{{'user.login_name' | translate}}">
+            placeholder="{{'user.login_name' | translate}}" ng-maxlength="255" required>
         </os-inline-edit>
       </li>
       
       <li class="item">
         <strong class="key key-sm" translate="user.email_address">Email Address</strong>
         <os-inline-edit editor="emailEditor" name="emailAddress" class="value value-md" value="user.emailAddress">
-          <span ng-if="emailEditor.isDisplayMode()">{{emailEditor.viewValue | osNoValue}}</span>
-          <input ng-if="emailEditor.isEditMode()" type="text" ng-model="emailEditor.editValue" class="form-control" 
-            placeholder="{{'user.email_address' | translate}}">
+          <span ng-if="emailEditor.isDisplayMode()">{{emailEditor.viewValue}}</span>
+          <input ng-if="emailEditor.isEditMode()" type="email" ng-model="emailEditor.editValue" class="form-control"
+            placeholder="{{'user.email_address' | translate}}" ng-maxlength="255" required>
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="user.super_admin">Super Admin</strong>
+        <os-inline-edit editor="adminEditor" name="superAdmin" class="value value-md" value="user.superAdmin">
+          <div ng-if="adminEditor.isDisplayMode()" ng-switch on="adminEditor.viewValue">
+            <span ng-switch-when="false" translate="common.no"></span>
+            <span ng-switch-when="true" translate="common.yes"></span>
+            <span ng-switch-default translate="common.no"></span>
+          </div>
+          <div ng-if="adminEditor.isEditMode()" class="form-control">
+            <label class="checkbox-inline">
+              <input type="checkbox" ng-model="adminEditor.editValue"/> <span translate="common.yes"></span>
+            </label>
+          </div>
         </os-inline-edit>
       </li>
       
@@ -74,37 +83,18 @@
       </li>   
       
       <li class="item">
-        <strong class="key key-sm" translate="user.department"> Department</strong>
+        <strong class="key key-sm" translate="user.department">Department</strong>
         <span class="value value-md" os-inline-eddit>{{user.deptName}}</span>
-      </li>   
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="user.address">Address</strong>
+        <os-inline-edit editor="addressEditor" name="emailAddress" class="value value-md" value="user.address">
+          <span ng-if="addressEditor.isDisplayMode()">{{addressEditor.viewValue | osNoValue}}</span>
+          <textarea ng-if="addressEditor.isEditMode()"  rows="2"  ng-model="addressEditor.editValue" class="form-control"
+            placeholder="{{'user.address' | translate}}"></textarea>
+        </os-inline-edit>
+      </li>
     </ul>
-
-
-    <div class="os-section" ng-init="perCollapsed=false">
-      <button class="os-btn-section-collapse os-btn-transparent" ng-click="perCollapsed=!perCollapsed">
-        <span ng-if="!perCollapsed">&#9660;</span>
-        <span ng-if="perCollapsed">&#9654;</span>
-      </button>
-      <h3 class="os-sub-section-title" translate="user.permissions">Permissions</h3>
-      <div collapse="perCollapsed">
-        <span ng-if="user.userCPRoles.length == 0" translate="common.none">None</span>
-        <table st-table="user.userCPRoles" class="table table-hover os-table-muted-hdr os-table outer-border" ng-if="user.userCPRoles.length > 0">
-          <thead>
-            <tr>
-              <th class="col-xs-4" translate="user.site">Site</th>
-              <th class="col-xs-4" translate="user.cp">Collection Protocol</th>
-              <th class="col-xs-4" translate="user.role">Role</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="userCPRole in user.userCPRoles">
-              <td>{{userCPRole.site}}</td>
-              <td>{{userCPRole.cp}}</td>
-              <td>{{userCPRole.roleName}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
   </div>
 </div>

@@ -1,11 +1,11 @@
 angular.module('os.administrative.user.addedit', ['os.administrative.models'])
   .controller('UserAddEditCtrl', function($scope, $state, $stateParams,
-    User, Site, Institute, Role, PvManager, Alerts) {
+    User, Institute, PvManager) {
  
-    var init = function() {
+    function init() {
       $scope.user = new User();
       loadPvs();
-    };
+    }
     
     function loadPvs() {
       $scope.domains = PvManager.getPvs('domains');
@@ -13,40 +13,27 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
       Institute.list().then(
         function(instituteList) {
           $scope.institutes = [];
-          angular.forEach(instituteList,
-            function(institute) {
-              $scope.institutes.push(institute.name);
-            }
-          )
+          angular.forEach(instituteList, function(institute) {
+            $scope.institutes.push(institute.name);
+          });
         }
       );
+
     }
 
     $scope.loadDepartments = function(instituteName) {
       $scope.user.deptName = undefined;
       $scope.departments = [];
-      
       Institute.getDepartments(instituteName).then(
         function(deptList) {
-          angular.forEach(deptList,
-            function(department) {
-              $scope.departments.push(department.name);
-            }
-          )
+          angular.forEach(deptList, function(department) {
+            $scope.departments.push(department.name);
+          });
         }
       );
     };
     
     $scope.createUser = function() {
-      if (!$scope.user.superAdmin) {
-        if(!$scope.validatePermissions()) {
-          return false;
-        }
-      }
-      
-      $scope.user.userCPRoles = [];//TODO remove it after completion of backend code
-      delete $scope.user.isSuperAdmin;//TODO remove it after completion of backend code
-      
       var user = angular.copy($scope.user);
       user.$saveOrUpdate().then(
         function(savedUser) {

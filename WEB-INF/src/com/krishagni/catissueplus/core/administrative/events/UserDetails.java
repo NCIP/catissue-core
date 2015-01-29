@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import com.krishagni.catissueplus.core.administrative.domain.Address;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
@@ -33,23 +32,13 @@ public class UserDetails {
 
 	private String activityStatus;
 
+    private String instituteName;
+
 	private String deptName;
 
-	private String comments;
+    private Boolean superAdmin;
 
-	private String street;
-
-	private String city;
-
-	private String state;
-
-	private String country;
-
-	private String zipCode;
-
-	private String faxNumber;
-
-	private String phoneNumber;
+    private String address;
 
 	public Long getId() {
 		return id;
@@ -115,6 +104,10 @@ public class UserDetails {
 		this.activityStatus = activityStatus;
 	}
 
+    public String getInstituteName() { return instituteName; }
+
+    public void setInstituteName(String instituteName) { this.instituteName = instituteName; }
+
 	public String getDeptName() {
 		return deptName;
 	}
@@ -123,69 +116,13 @@ public class UserDetails {
 		this.deptName = deptName;
 	}
 
-	public String getComments() {
-		return comments;
-	}
+    public Boolean getSuperAdmin() { return superAdmin; }
 
-	public void setComments(String comments) {
-		this.comments = comments;
-	}
+    public void setSuperAdmin(Boolean superAdmin) { this.superAdmin = superAdmin; }
 
-	public String getStreet() {
-		return street;
-	}
+    public String getAddress() { return address;}
 
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public String getZipCode() {
-		return zipCode;
-	}
-
-	public void setZipCode(String zipCode) {
-		this.zipCode = zipCode;
-	}
-
-	public String getFaxNumber() {
-		return faxNumber;
-	}
-
-	public void setFaxNumber(String faxNumber) {
-		this.faxNumber = faxNumber;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
+    public void setAddress(String address) { this.address = address; }
 
 	public List<String> getUserSiteNames() {
 		return userSiteNames;
@@ -216,17 +153,13 @@ public class UserDetails {
 		userDto.setEmailAddress(user.getEmailAddress());
 		userDto.setId(user.getId());
 		userDto.setCreateDate(user.getCreateDate());
-		userDto.setComments(user.getComments());
 
 		if (user.getAuthDomain() != null) {
 			userDto.setDomainName(user.getAuthDomain().getName());
 		}
 		setUserCPRoles(userDto, user.getUserCPRoles());
 		setUserSiteNames(userDto, user.getUserSites());	
-		
-		if(user.getAddress() != null){ 
-			updateAddressDetails(userDto, user.getAddress());
-		}
+
 		return userDto;
 	}
 
@@ -236,16 +169,6 @@ public class UserDetails {
 			siteNames.add(site.getName());
 		}
 		userDto.setUserSiteNames(siteNames);
-	}
-
-	private static void updateAddressDetails(UserDetails userDto, Address address) {
-		userDto.setStreet(address.getStreet());
-		userDto.setCountry(address.getCountry());
-		userDto.setFaxNumber(address.getFaxNumber());
-		userDto.setPhoneNumber(address.getPhoneNumber());
-		userDto.setState(address.getState());
-		userDto.setCity(address.getCity());
-		userDto.setZipCode(address.getZipCode());
 	}
 
 	private static void setUserCPRoles(UserDetails userDto, Set<UserCPRole> userCPRoles) {
@@ -259,4 +182,5 @@ public class UserDetails {
 		}
 		userDto.setUserCPRoles(userCPRoleDetailsList);
 	}
+
 }

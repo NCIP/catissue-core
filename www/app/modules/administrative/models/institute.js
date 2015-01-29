@@ -1,5 +1,5 @@
 angular.module('os.administrative.models.institute', ['os.common.models'])
-  .factory('Institute', function(osModel, $http) {
+  .factory('Institute', function(osModel, $http, $q) {
     var Institute = osModel('institutes');
 
     Institute.list = function() {

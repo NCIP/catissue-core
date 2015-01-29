@@ -121,7 +121,7 @@ public class UserController {
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
-			return resp.getUserDetails();
+		return resp.getUserDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
