@@ -56,14 +56,23 @@ body {
   clear: both;
 }
 
-.os-navbar > ul > li {
+.os-navbar > ul.primary > li {
   float: left;
-  padding: 15px 15px;
+  line-height: 4;
   list-style-type: none;
+  position: relative;
 }
 
 .os-navbar > ul > li > a {
   text-decoration: none;
+  padding: 15px 15px;
+}
+
+.os-navbar > ul.secondary > li {
+  float: left;
+  padding: 15px 15px;
+  list-style-type: none;
+  position: relative;
 }
 
 .os-navbar-default > ul > li > a {
@@ -89,8 +98,60 @@ body {
 .os-navbar-docked {
   position: fixed;
   top: 0px;
+  z-index: 999;
 }
- 
+
+.os-navbar > ul > li > ul {
+  display: none;
+  background: #ffffff;
+  padding:0;
+  position: fixed;
+  border: solid 1px #ccc;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-top: 0;
+}
+
+.os-navbar > ul > li > ul > li {
+  list-style-type: none;
+  padding: 0px 10px;
+  color: #000;
+  font-weight: normal;
+  line-height: 2;
+}
+
+.os-navbar > ul > li > ul > li > a{
+  text-decoration: none;
+  color: #000;
+  display: block;
+}
+
+.os-navbar > ul > li:hover > ul {
+  display: block;
+}
+
+.os-navbar > ul > li > ul > li:hover {
+  background: #2d67a3;
+  color: #ffffff;
+}
+.os-navbar > ul > li > ul > li:hover a {
+  color: #ffffff;
+}
+
+.menu-dropdown:after {
+  border: 4px solid transparent;
+  border-top-color: #fff;
+  content: "";
+  height: 0;
+  margin-left: -11px;
+  margin-top: -2px;
+  opacity: 0.8;
+  left: 100%;
+  position: absolute;
+  top: 50%;
+  width: 0;
+}
+
 .os-footer {
   position: absolute;
   left: 0px;
