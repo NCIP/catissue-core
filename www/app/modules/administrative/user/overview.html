@@ -63,15 +63,22 @@
 
       <li class="item">
         <strong class="key key-sm" translate="user.super_admin">Super Admin</strong>
-        <os-inline-edit editor="adminEditor" name="superAdmin" class="value value-md" value="user.superAdmin">
+
+        <os-inline-edit editor="adminEditor" name="admin" class="value value-md" value="user.superAdmin">
           <div ng-if="adminEditor.isDisplayMode()" ng-switch on="adminEditor.viewValue">
             <span ng-switch-when="false" translate="common.no"></span>
             <span ng-switch-when="true" translate="common.yes"></span>
             <span ng-switch-default translate="common.no"></span>
+
           </div>
           <div ng-if="adminEditor.isEditMode()" class="form-control">
-            <label class="checkbox-inline">
-              <input type="checkbox" ng-model="adminEditor.editValue"/> <span translate="common.yes"></span>
+            <label class="radio-inline">
+              <input type="radio" name="adminGrp" ng-model="adminEditor.editValue" value="true">
+              <span translate="common.yes">Yes</span>
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="adminGrp" ng-model="adminEditor.editValue" value="false" checked>
+              <span translate="common.no">No</span>
             </label>
           </div>
         </os-inline-edit>
@@ -80,7 +87,7 @@
       <li class="item">
         <strong class="key key-sm" translate="user.institute">Institute</strong>
         <span class="value value-md" os-inline-eddit>{{user.instituteName}}</span>
-      </li>   
+      </li>
       
       <li class="item">
         <strong class="key key-sm" translate="user.department">Department</strong>
