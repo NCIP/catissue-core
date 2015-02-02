@@ -1,6 +1,6 @@
 
 angular.module('os.biospecimen.models.cp', ['os.common.models'])
-  .factory('CollectionProtocol', function(osModel, $http, $q) {
+  .factory('CollectionProtocol', function(osModel, $http) {
     var CollectionProtocol =
       osModel(
         'collection-protocols',
