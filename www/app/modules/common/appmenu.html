@@ -1,28 +1,37 @@
 <div>
-    <div class="os-navbar os-navbar-default os-navbar-docked">
-        <a class="logo" href="#"><img src="images/os_logo.png"></img></a>
-        <ul class="primary">
-            <li><a href="#">Dashboard</a></li>
-            <li><a ui-sref="cp-list">Collection Protocols</a></li>
-            <li><a href="#">Orders</a></li>
-            <li><a href="#">Containers</a></li>
-            <li><a href="#">Search</a></li>
-            <li><a href="#">Settings</a></li>
+  <div class="os-navbar os-navbar-default os-navbar-docked">
+    <a class="logo" href="#"><img src="images/os_logo.png"></img></a>
+    <ul class="primary">
+      <li class="os-menu-dropdown">
+        <a href="#" translate="menu.administration">Administration</a>
+        <ul>
+          <li><a ui-sref="user-list" translate="menu.admin_sub_menu.user">User</a></li>
+          <li><a ui-sref="institute-list" translate="menu.admin_sub_menu.institute">Institute</a></li>
+          <li><a ui-sref="site-list" translate="menu.admin_sub_menu.site">Site</a></li>
+          <li><a ui-sref="container-list" translate="menu.admin_sub_menu.storage_container">Storage Container</a></li>
+          <li><a ui-sref="dp-list" translate="menu.admin_sub_menu.distribution_protocol">Distribution Protocol</a></li>
         </ul>
-        <ul class="secondary">
-            <li class="form-input"><input type="text" class="form-control" placeholder="Quick Search"></li>
-            <li><span class="glyphicon glyphicon-bell"></span></li>
-            <li><span class="glyphicon glyphicon-user"></span></li>
-        </ul>
-    </div>
+      </li>
+      <li><a ui-sref="cp-list" translate="menu.collection_protocols">Collection Protocols</a></li>
+      <li><a href="#" translate="menu.orders">Orders</a></li>
+      <li><a href="#" translate="menu.containers">Containers</a></li>
+      <li><a href="#" translate="menu.search">Search</a></li>
+      <li><a href="#" translate="menu.settings">Settings</a></li>
+    </ul>
+    <ul class="secondary">
+      <li class="form-input"><input type="text" class="form-control" placeholder="Quick Search"></li>
+      <li><span class="glyphicon glyphicon-bell"></span></li>
+      <li><span class="glyphicon glyphicon-user"></span></li>
+    </ul>
+  </div>
 
-    <div os-content="os-navbar">
-        <div class="os-alert-container" ng-if="alerts.length > 0">
-            <alert type="{{alert.type}}" ng-repeat="alert in alerts">{{alert.text}}</alert>
-        </div>
-        <div>
-            <div ui-view></div>
-        </div>
+  <div os-content="os-navbar">
+    <div class="os-alert-container" ng-if="alerts.length > 0">
+      <alert type="{{alert.type}}" ng-repeat="alert in alerts">{{alert.text}}</alert>
     </div>
+    <div>
+      <div ui-view></div>
+    </div>
+  </div>
 </div>
 
