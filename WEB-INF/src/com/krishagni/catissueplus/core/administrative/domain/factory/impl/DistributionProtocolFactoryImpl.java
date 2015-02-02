@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
+
 import java.util.Date;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
@@ -14,6 +15,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class DistributionProtocolFactoryImpl implements DistributionProtocolFactory {
 
@@ -141,6 +143,8 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		if (!CommonValidator.isValidPv(activityStatus, ACTIVITY_STATUS)) {
 			exceptionHandler.addError(DistributionProtocolErrorCode.INVALID_ATTR_VALUE, ACTIVITY_STATUS);
 		}
+		
+		activityStatus = activityStatus == null ? Status.ACTIVITY_STATUS_ACTIVE.getStatus() : activityStatus;
 		distributionProtocol.setActivityStatus(activityStatus);
 	}
 }
