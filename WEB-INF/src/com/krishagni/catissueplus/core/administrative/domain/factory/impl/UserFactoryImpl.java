@@ -22,6 +22,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.privileges.domain.Role;
 import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
 
@@ -257,6 +258,7 @@ public class UserFactoryImpl implements UserFactory {
 	}
 
 	private void setActivityStatus(User user, String activityStatus, ObjectCreationException exceptionHandler) {
+        activityStatus = (activityStatus == null) ? Status.ACTIVITY_STATUS_ACTIVE.getStatus() : activityStatus;
 		user.setActivityStatus(activityStatus);
 	}
 

@@ -46,7 +46,7 @@ angular.module('os.administrative.models.institute', ['os.common.models'])
 
     Institute.getDepartments = function (instituteName) {
       var d = $q.defer();
-      var departments = [{"id" : 1, "name": "HBRC"}];
+      var departments = [{"id" : 1, "name": "d"}];
       d.resolve(departments);
       return d.promise;
     }
