@@ -34,7 +34,7 @@
     </query>
     
     <query name="getInstitutes">
-      FROM com.krishagni.catissueplus.core.administrative.domain.Institute 
+      FROM com.krishagni.catissueplus.core.administrative.domain.Institute order by name 
     </query>
   </class>
 </hibernate-mapping>

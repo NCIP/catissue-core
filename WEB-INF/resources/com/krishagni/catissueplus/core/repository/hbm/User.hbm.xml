@@ -164,7 +164,7 @@
     </query>
 
     <query name="getAllUsers">
-        from com.krishagni.catissueplus.core.administrative.domain.User where activityStatus != 'Disabled'
+        from com.krishagni.catissueplus.core.administrative.domain.User where activityStatus != 'Disabled' order by lastName, firstName
     </query>
    </class>
 </hibernate-mapping>

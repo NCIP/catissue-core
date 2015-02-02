@@ -70,7 +70,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			StorageContainer storageContainer = storageContainerFactory.createStorageContainer(event.getDetails());
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
 			setName(event.getDetails().getName(), storageContainer, exceptionHandler);
-			setBarcode(event.getDetails().getBarcode(), storageContainer, exceptionHandler);
+			//setBarcode(event.getDetails().getBarcode(), storageContainer, exceptionHandler);
 			ensureUniqueName(storageContainer.getName(), exceptionHandler);
 			ensureUniqueBarcode(storageContainer.getBarcode(), exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();
@@ -252,7 +252,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		}
 	}
 
-	private void setBarcode(String barcode, StorageContainer container, ObjectCreationException exceptionHandler) {
+	/*private void setBarcode(String barcode, StorageContainer container, ObjectCreationException exceptionHandler) {
 		//TODO: Get Barcode Format
 		String barcodeFormat = null;
 		if (isBlank(barcodeFormat)) {
@@ -263,13 +263,13 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			container.setBarcode(barcode);
 		}
 		else {
-/*			if (!isBlank(container.getName())) {
+		if (!isBlank(container.getName())) {
 				exceptionHandler.addError(StorageContainerErrorCode.AUTO_GENERATED_BARCODE, BARCODE);
 				return;
-			}*/
+			}
 			container.setBarcode(containerBarcodeGenerator.generateBarcode(barcodeFormat, container));
 		}
-	}
+	}*/
 
 	private void updateBarcode(String barcode, StorageContainer container, StorageContainer oldContainer,
 			ObjectCreationException exceptionHandler) {

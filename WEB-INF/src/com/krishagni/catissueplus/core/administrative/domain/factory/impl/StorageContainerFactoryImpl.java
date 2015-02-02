@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -53,6 +55,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		ObjectCreationException exceptionHandler = new ObjectCreationException();
 		StorageContainer storageContainer = new StorageContainer();
 		setComments(storageContainer, details.getComments());
+		setBarcode(storageContainer, details.getBarcode());
 		setActivityStatus(storageContainer, details.getActivityStatus(), exceptionHandler);
 		setSiteOrParent(storageContainer, details.getSiteName(), details.getParentContainerName(), exceptionHandler);
 		setCollectionProtocols(storageContainer, details.getHoldsCPTitles(), exceptionHandler);
@@ -180,6 +183,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 //		storageContainer.setHoldsCPs(collectionProtocols);
 	}
 
+
 	private void setCreatedByUser(StorageContainer storageContainer, UserInfo createdBy,
 			ObjectCreationException exceptionHandler) {
 		User user = daoFactory.getUserDao().getUserByLoginNameAndDomainName(createdBy.getLoginName(),
@@ -252,5 +256,10 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 
 	private void setTempratureInCentigrade(StorageContainer storageContainer, Double tempratureInCentigrade) {
 		storageContainer.setTempratureInCentigrade(tempratureInCentigrade);
+	}
+	
+	private void setBarcode(StorageContainer storageContainer, String barcode) {
+		barcode = StringUtils.isBlank(barcode) ? null : barcode;
+		storageContainer.setBarcode(barcode); 
 	}
 }

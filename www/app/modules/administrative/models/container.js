@@ -9,7 +9,7 @@ angular.module('os.administrative.models.container', ['os.common.models'])
 
     Container.listForSite = function(siteName) {
       // TODO : Write a REST API to get Containers by Site.
-      containerList = ['Box A', 'Box B', 'Box C'];
+      containerList = []; //['Box A', 'Box B', 'Box C'];
       var d = $q.defer();
       d.resolve(containerList);
       return d.promise;

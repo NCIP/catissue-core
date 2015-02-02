@@ -73,7 +73,7 @@
     </query>
     
      <query name="getAllSites">
-        from com.krishagni.catissueplus.core.administrative.domain.Site where activityStatus != 'Disabled'
+        from com.krishagni.catissueplus.core.administrative.domain.Site where activityStatus != 'Disabled' order by name
     </query>
     
  </class>

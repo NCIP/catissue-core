@@ -81,7 +81,7 @@
       </query>
       
       <query name="getAllDistributionProtocols">
-        from com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol where activityStatus != 'Disabled'
+        from com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol where activityStatus != 'Disabled' order by title 
       </query>
       
  </class>

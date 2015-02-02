@@ -65,7 +65,6 @@ angular.module('openspecimen')
     ];
     
     var domains = [
-      'openspecimen',
       'ldap'
     ];
 
