@@ -1,7 +1,7 @@
 {
   "menu": {
     "administration": "Administration",
-    "colllection_protocols": "Collection Protocols",
+    "collection_protocols": "Collection Protocols",
     "orders": "Orders",
     "containers": "Containers",
     "search": "Search",
