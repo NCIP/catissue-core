@@ -29,7 +29,9 @@
       "save": "Save",
       "create": "Create",
       "cancel": "Cancel",
-      "discard": "Discard"
+      "discard": "Discard",
+      "next": "Next",
+      "previous": "Previous"
     }
   },
 
@@ -300,6 +302,37 @@
     }
   },
 
+  "user": {
+    "list": "Users",
+    "create_user": "Create User",
+    "name": "Name",
+    "last_name": "Last Name",
+    "first_name": "First Name",
+    "login_name": "Login Name",
+    "domain_name": "Domain Name",
+    "email_address": "Email Address",
+    "institute": "Institute",
+    "department": "Department",
+    "address": "Address",
+    "super_admin": "Super Administrator",
+    "login_details": "Login Details",
+    "permissions": "Permissions",
+
+    "tooltip": {
+      "create_user": "Click to add new User",
+      "view_details": "Click to view/edit User details",
+      "email_address": "Email Address",
+      "institute_name": "Institute",
+      "cp_count": "Collection Protocol(s)",
+      "last_login": "Last logged date",
+      "user_since": "User since (years)"
+    },
+      
+    "menu": {
+      "overview": "Overview"
+    }    
+  },
+  
   "container": {
     "list": "Storage Containers",
     "name": "Name",

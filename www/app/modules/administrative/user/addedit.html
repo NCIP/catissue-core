@@ -1,0 +1,93 @@
+
+<div>
+  <div class="os-page-hdr">
+    <h3 translate="user.create_user">Create User</h3> 
+  </div>
+
+  <div class="container">
+    <form name="userForm" class="form-horizontal" os-form-validator="userForm" validator="userFormValidator" novalidate>
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="user.name">Name</label>
+        <div class="col-xs-4">
+          <input type="text" name="lastName" ng-model="user.lastName" class="form-control"
+            placeholder="{{'user.last_name' | translate}}" ng-maxlength="255" required/>
+          <div os-field-error field="userForm.lastName"></div>
+        </div>
+        
+        <div class="col-xs-4">
+          <input type="text" name="firstName" ng-model="user.firstName" class="form-control"
+            placeholder="{{'user.first_name' | translate}}" ng-maxlength="255" required/>
+          <div os-field-error field="userForm.firstName"></div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="user.login_details">Login Details</label>
+        <div class="col-xs-4">
+          <os-select ng-model="user.domainName" list="domains" name="domain"
+            placeholder="{{'user.domain_name' | translate}}" required>
+          </os-select>
+          <div os-field-error field="userForm.domain"></div>
+        </div>
+        
+        <div class="col-xs-4">
+          <input type="text" name="loginName" class="form-control" ng-model="user.loginName"
+            placeholder="{{'user.login_name' | translate}}" ng-maxlength="255" required>
+          <div os-field-error field="userForm.loginName"></div>
+        </div>
+      </div>
+       
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="user.email_address">Email Address</label>
+        <div class="col-xs-4">
+          <input type="email" name="email" class="form-control" ng-model="user.emailAddress"
+            placeholder="{{'user.email_address' | translate}}" ng-maxlength="255" required>
+          <div os-field-error field="userForm.email"></div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="user.institute">Institute</label>
+        <div class="col-xs-4">
+          <os-select ng-model="user.instituteName" list="institutes" on-change="loadDepartments"
+            name="institute" placeholder="{{'user.institute' | translate}}" required>
+          </os-select>
+          <div os-field-error field="userForm.institute"></div>
+        </div>
+        
+        <div class="col-xs-4">
+          <os-select ng-model="user.deptName" list="departments" name="department"
+            placeholder="{{'user.department' | translate}}" required>
+          </os-select>
+          <div os-field-error field="userForm.department"></div>
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="user.super_admin">Super Administrator</label>
+        <div class="col-xs-9">
+          <label class="checkbox-inline">
+            <input type="checkbox" ng-model="user.superAdmin" /> <span translate="common.yes"></span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="user.address">Address</label>
+        <div class="col-xs-6">
+          <textarea rows="2" placeholder="{{'user.address' | translate}}" ng-model="user.address" class="form-control">
+          </textarea>
+        </div>
+      </div>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6">
+          <button class="btn btn-primary" os-form-submit="createUser()" translate="common.buttons.create"> Create </button>
+          <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.buttons.discard"> Discard </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -63,6 +63,11 @@ angular.module('openspecimen')
       'EYE, BRAIN AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM',
       'Not Specified'
     ];
+    
+    var domains = [
+      'openspecimen',
+      'ldap'
+    ];
 
     var dimensionLabelScheme = [
       'Numbers',
@@ -91,7 +96,7 @@ angular.module('openspecimen')
       vitalStatus: vitalStatuses, 
       race: races,
       anatomicSite: anatomicSites,
-
+      domains:domains,
       'storage-type': storageTypes,
       'visit-status': visitStatuses,
       'dimension-label-scheme': dimensionLabelScheme,
@@ -188,7 +193,6 @@ angular.module('openspecimen')
             });
           }
         );
-
         return sites;
       },
 

@@ -1,5 +1,5 @@
 angular.module('os.administrative.models.institute', ['os.common.models'])
-  .factory('Institute', function(osModel, $http) {
+  .factory('Institute', function(osModel, $http, $q) {
     var Institute = osModel('institutes');
 
     Institute.list = function() {
@@ -44,5 +44,13 @@ angular.module('os.administrative.models.institute', ['os.common.models'])
       return this;
     }
 
+    Institute.getDepartments = function (instituteName) {
+      var d = $q.defer();
+      var departments = [{"id" : 1, "name": "d"}];
+      d.resolve(departments);
+      return d.promise;
+    }
+
     return Institute;
   });
+

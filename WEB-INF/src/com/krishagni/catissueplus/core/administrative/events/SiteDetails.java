@@ -88,7 +88,6 @@ public class SiteDetails {
 		siteDto.setType(site.getType());
 		siteDto.setActivityStatus(site.getActivityStatus());
 		siteDto.setCoordinatorCollection(getCoordinatorList(site.getCoordinatorCollection()));
-
 		return siteDto;
 	}
 

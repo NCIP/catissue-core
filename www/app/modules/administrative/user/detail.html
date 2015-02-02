@@ -1,0 +1,20 @@
+<div> 
+  <div os-side-menu>
+    <ul>
+      <li ui-sref-active="active">
+        <a ui-sref="user-detail.overview"> 
+          <i class="fa fa-eye"></i>
+          <span translate="user.menu.overview">Overview</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref=".permissions">
+          <i class="fa fa-users"></i>
+          <span>Permissions</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="os-side-menu-page-content" ui-view></div>
+</div>

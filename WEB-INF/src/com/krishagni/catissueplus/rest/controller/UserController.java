@@ -70,7 +70,7 @@ public class UserController {
 			@RequestParam(value = "max", required = false, defaultValue = "100") int max,
 			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq,
 			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString,
-			@RequestParam(value = "sortBy", required= false, defaultValue= "id") String[] sortBy){
+			@RequestParam(value = "sortBy", required= false, defaultValue= "lastName,firstName") String[] sortBy){
 		ReqAllUsersEvent req = new ReqAllUsersEvent();
 		req.setStartAt(start);
 		req.setMaxRecords(max);
@@ -121,7 +121,7 @@ public class UserController {
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
-			return resp.getUserDetails();
+		return resp.getUserDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")

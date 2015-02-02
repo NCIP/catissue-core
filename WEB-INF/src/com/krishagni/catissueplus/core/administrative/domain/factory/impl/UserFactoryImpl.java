@@ -22,6 +22,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.privileges.domain.Role;
 import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
 
@@ -57,14 +58,12 @@ public class UserFactoryImpl implements UserFactory {
 		ObjectCreationException exceptionHandler = new ObjectCreationException();
 
 		User user = new User();
-		setComments(user, details.getComments());
 		setUserSites(user, details.getUserSiteNames(), exceptionHandler);
 		setUserCPRoles(user, details.getUserCPRoles(), exceptionHandler);
 		setLoginName(user, details.getLoginName(), exceptionHandler);
 		setFirstName(user, details.getFirstName(), exceptionHandler);
 		setLastName(user, details.getLastName(), exceptionHandler);
 		setActivityStatus(user, details.getActivityStatus(), exceptionHandler);
-		setAddress(user, details, exceptionHandler);
 		setEmailAddress(user, details.getEmailAddress(), exceptionHandler);
 		setDepartment(user, details.getDeptName(), exceptionHandler);
 		setAuthDomain(user, details.getDomainName(), exceptionHandler);
@@ -227,18 +226,6 @@ public class UserFactoryImpl implements UserFactory {
 		user.setDepartment(department);
 	}
 
-	private void setAddress(User user, UserDetails details, ObjectCreationException exceptionHandler) {
-		Address address = new Address();
-		setStreet(address, details.getStreet());
-		setCountry(address, details.getCountry(), exceptionHandler);
-		setFaxNumber(address, details.getFaxNumber());
-		setPhoneNumber(address, details.getPhoneNumber());
-		setZipCode(address, details.getZipCode());
-		setState(address, details.getState());
-		setCity(address, details.getCity());
-		user.setAddress(address);
-	}
-
 	private void setCity(Address address, String city) {
 		address.setCity(address.getCity());
 	}
@@ -271,6 +258,7 @@ public class UserFactoryImpl implements UserFactory {
 	}
 
 	private void setActivityStatus(User user, String activityStatus, ObjectCreationException exceptionHandler) {
+        activityStatus = (activityStatus == null) ? Status.ACTIVITY_STATUS_ACTIVE.getStatus() : activityStatus;
 		user.setActivityStatus(activityStatus);
 	}
 

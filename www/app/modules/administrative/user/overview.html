@@ -1,0 +1,107 @@
+
+<div class="os-items-group">
+  <div class="os-item">
+    <h3 class="os-section-title"> 
+      <span>
+        {{user.lastName}} {{user.firstName}}
+      </span>
+    </h3>
+  </div>
+  <div class="os-item os-action-btns os-action-btns-md">
+    <a><span class="glyphicon glyphicon-pencil"></span></a>
+  </div>
+</div>
+
+<div class="clearfix">
+  <div class="col-xs-8">
+    <ul class="os-key-values os-two-cols" os-inline-editors on-save="editUser">
+      <li class="item">
+        <strong class="key key-sm" translate="user.last_name">Last Name</strong>
+        <os-inline-edit editor="lastNameEditor" name="lastName" class="value value-md" value="user.lastName">
+          <span ng-if="lastNameEditor.isDisplayMode()">{{lastNameEditor.viewValue}}</span>
+          <input ng-if="lastNameEditor.isEditMode()" type="text" ng-model="lastNameEditor.editValue" 
+            class="form-control" placeholder="{{'user.last_name' | translate}}" ng-maxlength="255" required>
+        </os-inline-edit>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="user.first_name">First Name</strong>
+        <os-inline-edit editor="firstNameEditor" name="firstName" class="value value-md" value="user.firstName">
+          <span ng-if="firstNameEditor.isDisplayMode()">{{firstNameEditor.viewValue}}</span>
+          <input ng-if="firstNameEditor.isEditMode()" type="text" ng-model="firstNameEditor.editValue" 
+            class="form-control" placeholder="{{'user.first_name' | translate}}" ng-maxlength="255" required>
+        </os-inline-edit>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="user.domain_name">Domain Name</strong>
+        <os-inline-edit editor="domainEditor" name="domain" class="value value-md" value="user.domainName">
+          <span ng-if="domainEditor.isDisplayMode()">{{domainEditor.viewValue}}</span>
+          <div ng-if="domainEditor.isEditMode()">
+            <os-select ng-model="domainEditor.editValue" list="domains" placeholder="{{'user.domain_name' | translate}}" required></os-select>
+          </div>
+        </os-inline-edit>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="user.login_name">Login Name</strong>
+        <os-inline-edit editor="loginNameEditor" name="loginName" class="value value-md" value="user.loginName">
+          <span ng-if="loginNameEditor.isDisplayMode()">{{loginNameEditor.viewValue}}</span>
+          <input ng-if="loginNameEditor.isEditMode()" type="text" ng-model="loginNameEditor.editValue" class="form-control" 
+            placeholder="{{'user.login_name' | translate}}" ng-maxlength="255" required>
+        </os-inline-edit>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="user.email_address">Email Address</strong>
+        <os-inline-edit editor="emailEditor" name="emailAddress" class="value value-md" value="user.emailAddress">
+          <span ng-if="emailEditor.isDisplayMode()">{{emailEditor.viewValue}}</span>
+          <input ng-if="emailEditor.isEditMode()" type="email" ng-model="emailEditor.editValue" class="form-control"
+            placeholder="{{'user.email_address' | translate}}" ng-maxlength="255" required>
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="user.super_admin">Super Admin</strong>
+
+        <os-inline-edit editor="adminEditor" name="admin" class="value value-md" value="user.superAdmin">
+          <div ng-if="adminEditor.isDisplayMode()" ng-switch on="adminEditor.viewValue">
+            <span ng-switch-when="false" translate="common.no"></span>
+            <span ng-switch-when="true" translate="common.yes"></span>
+            <span ng-switch-default translate="common.no"></span>
+
+          </div>
+          <div ng-if="adminEditor.isEditMode()" class="form-control">
+            <label class="radio-inline">
+              <input type="radio" name="adminGrp" ng-model="adminEditor.editValue" value="true">
+              <span translate="common.yes">Yes</span>
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="adminGrp" ng-model="adminEditor.editValue" value="false" checked>
+              <span translate="common.no">No</span>
+            </label>
+          </div>
+        </os-inline-edit>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="user.institute">Institute</strong>
+        <span class="value value-md" os-inline-eddit>{{user.instituteName}}</span>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="user.department">Department</strong>
+        <span class="value value-md" os-inline-eddit>{{user.deptName}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="user.address">Address</strong>
+        <os-inline-edit editor="addressEditor" name="emailAddress" class="value value-md" value="user.address">
+          <span ng-if="addressEditor.isDisplayMode()">{{addressEditor.viewValue | osNoValue}}</span>
+          <textarea ng-if="addressEditor.isEditMode()"  rows="2"  ng-model="addressEditor.editValue" class="form-control"
+            placeholder="{{'user.address' | translate}}"></textarea>
+        </os-inline-edit>
+      </li>
+    </ul>
+  </div>
+</div>
