@@ -16,7 +16,7 @@ angular.module('openspecimen')
       restrict: 'E',
       compile: function(tElem, tAttrs) {
         var multiple = angular.isDefined(tAttrs.multiple);
-        var uiSelect = angular.element(multiple ? '<ui-select multiple/>' : '<ui-select/>')
+        var uiSelect = angular.element(multiple ? '<ui-select multiple reset-search-input = true/>' : '<ui-select/>')
           .attr('ng-model', tAttrs.ngModel)
 
         var uiSelectMatch = angular.element('<ui-select-match/>')

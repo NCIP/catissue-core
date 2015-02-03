@@ -55,7 +55,7 @@ angular.module('os.administrative.container.specimenTypeDropdown', ['os.administ
 
       compile: function(tElem, tAttrs) {
         var multiple = angular.isDefined(tAttrs.multiple);
-        var uiSelect = angular.element(multiple ? '<ui-select multiple/>' : '<ui-select/>')
+        var uiSelect = angular.element(multiple ? '<ui-select multiple reset-search-input = true/>' : '<ui-select/>')
           .attr('ng-model', tAttrs.ngModel)
           .attr('on-select', 'onSelect($item)')
           .attr('on-remove', 'onRemove($item)')
