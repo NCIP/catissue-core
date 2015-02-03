@@ -9,15 +9,16 @@
   <div class="os-cards"> 
     <div class="os-card" ng-repeat="institute in instituteList" ng-click="showInstituteOverview(institute)">
       <h4>
+        <span class="fa fa-university"></span>
         <a title="{{'institutes.tooltip.view_details' | translate}}" ui-sref="institute-detail.overview({instituteId: institute.id})"> {{institute.name}} </a>
       </h4>
       <div class="stats">
         <div class="stat col-xs-6" title="{{'institutes.tooltip.department_count' | translate}}">
-          <span class="os-lavatar os-lavatar-sm">D</span>
+          <span class="fa fa-sitemap"></span>
           <span>{{institute.departments.length | number: 0}}</span>
         </div>
         <div class="stat col-xs-6" title="{{'institutes.tooltip.user_count' | translate}}">
-          <span class="os-lavatar os-lavatar-sm">U</span>
+          <span class="fa fa-user"></span>
           <span>{{(institute.userCount || 0) | number: 0}}</span>
         </div>
       </div>

@@ -10,7 +10,7 @@
   <div class="os-cards">
     <div class="os-card" ng-repeat="user in users" ng-click="showUserOverview(user)">
       <h4>
-        <span class="glyphicon glyphicon-user"></span>
+        <span class="fa fa-user"></span>
         <a title="{{'user.tooltip.view_details' | translate}}" ui-sref=".overview(user)">
           <span>{{user.lastName}} {{user.firstName}}</span>
         </a>
@@ -23,7 +23,7 @@
       
       <div class="stats">
         <div class="stat col-xs-6" title="{{'user.tooltip.cp_count' | translate}}">
-          <span class="os-lavatar os-lavatar-sm">CP</span>
+          <span class="fa fa-calendar"></span>
           <span>{{(user.cpCount || 0 )| number: 0}}</span>
         </div>
         <div class="stat col-xs-6" title="{{'user.tooltip.user_since' | translate}}">
