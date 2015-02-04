@@ -18,6 +18,22 @@ angular.module('os.administrative.user',
       .state('user-new', {
         url: '/new-user',
         templateUrl: 'modules/administrative/user/addedit.html',
+        resolve: {
+          user: function(User) {
+            return new User();
+          }
+        },
+        controller: 'UserAddEditCtrl',
+        parent: 'signed-in'
+      })
+      .state('user-edit', {
+        url: '/users/:userId/edit',
+        templateUrl: 'modules/administrative/user/addedit.html',
+        resolve: {
+          user: function($stateParams, User) {
+            return User.getById($stateParams.userId);
+          }
+        },
         controller: 'UserAddEditCtrl',
         parent: 'signed-in'
       })

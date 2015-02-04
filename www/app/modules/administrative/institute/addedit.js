@@ -1,9 +1,9 @@
 angular.module('os.administrative.institute.addedit',['os.administrative.models'])
-  .controller('InstituteAddEditCtrl', function($scope, $state, Institute) {
+  .controller('InstituteAddEditCtrl', function($scope, $state, institute, Institute) {
 
     var init = function() {
-      $scope.institute = new Institute();
-      $scope.institute.departments = [];
+      $scope.institute = institute; 
+      $scope.institute.departments = institute.departments || [];
       $scope.institute.addDepartment($scope.institute.newDepartment());
     }
 

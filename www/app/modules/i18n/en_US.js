@@ -27,6 +27,7 @@
     "buttons": {
       "add": "Add",
       "save": "Save",
+      "update": "Update",
       "create": "Create",
       "cancel": "Cancel",
       "discard": "Discard",
@@ -244,6 +245,7 @@
   "institutes": {
     "list": "Institutes",
     "create_institute": "Create Institute",
+    "update_institute": "Update Institute",
     "name": "Name",
     "department_name": "Department Name",
     "departments": "Departments",
@@ -263,6 +265,7 @@
   "site": {
     "list": "Sites",
     "create_site": "Create Site",
+    "update_site": "Update Site",
     "name": "Name",
     "code": "Code",
     "coordinators": "Coordinators",
@@ -283,6 +286,7 @@
   "dp": {
     "list": "Distribution Protocols",
     "create_dp_title": "Create Distribution Protocol",
+    "update_dp_title": "Update Distribution Protocol",
     "title": "Title",
     "short_title": "Short Title",
     "pi": "Principal Investigator",
@@ -305,6 +309,7 @@
   "user": {
     "list": "Users",
     "create_user": "Create User",
+    "update_user": "Update User",
     "name": "Name",
     "last_name": "Last Name",
     "first_name": "First Name",
@@ -338,6 +343,7 @@
     "name": "Name",
     "barcode": "Barcode",
     "create_container": "Create Storage Container",
+    "update_container": "Update Storage Container",
     "parent_container": "Parent Container",
     "parent_site": "Parent Site",
     "parent_location": "Parent Location",

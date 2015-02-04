@@ -19,6 +19,22 @@ angular.module('os.administrative.container',
       .state('container-new', {
         url: '/new-container',
         templateUrl: 'modules/administrative/container/addedit.html',
+        resolve: {
+          container: function(Container) {
+            return new Container();
+          } 
+        },
+        controller: 'ContainerAddEditCtrl',
+        parent: 'signed-in'
+      })
+      .state('container-edit', {
+        url: '/containers/:containerId/edit',
+        templateUrl: 'modules/administrative/container/addedit.html',
+        resolve: {
+          container: function($stateParams, Container) {
+            return Container.getById($stateParams.containerId);
+          }
+        },
         controller: 'ContainerAddEditCtrl',
         parent: 'signed-in'
       })

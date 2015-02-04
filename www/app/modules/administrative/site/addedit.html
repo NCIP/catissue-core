@@ -1,7 +1,10 @@
 
 <div>
   <div class="os-page-hdr">
-    <h3 translate="site.create_site">Create Site</h3>
+    <h3>
+      <span ng-if="!site.id" translate="site.create_site">Create Site</span>
+      <span ng-if="!!site.id" translate="site.update_site">Update Site</span>
+    </h3>
   </div>
 
   <div class="container">
@@ -49,7 +52,10 @@
 
       <div class="form-group">
         <div class="col-xs-offset-3 col-xs-6">
-          <button class="btn btn-primary" os-form-submit="save()" translate="common.buttons.create">Add</button>
+          <button class="btn btn-primary" os-form-submit="save()">
+            <span ng-if="!site.id" translate="common.buttons.create"> Create </span>
+            <span ng-if="!!site.id"  translate="common.buttons.update"> Update </span>
+          </button>
           <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.buttons.discard">Discard</button>
         </div>
       </div>

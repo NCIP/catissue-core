@@ -18,6 +18,22 @@ angular.module('os.administrative.site',
       .state('site-new', {
         url: '/new-site',
         templateUrl: 'modules/administrative/site/addedit.html',
+        resolve: {
+          site: function(Site) {
+            return new Site();
+          }
+        },
+        controller: 'SiteAddEditCtrl',
+        parent: 'signed-in'
+      })
+      .state('site-edit', {
+        url: '/sites/:siteId/edit',
+        templateUrl: 'modules/administrative/site/addedit.html',
+        resolve: {
+          site: function($stateParams, Site) {
+            return Site.getById($stateParams.siteId);
+          }
+        },
         controller: 'SiteAddEditCtrl',
         parent: 'signed-in'
       })

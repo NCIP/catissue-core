@@ -19,6 +19,22 @@ angular.module('os.administrative.institute',
       .state('institute-new', {
         url: '/new-institute',
         templateUrl: 'modules/administrative/institute/addedit.html',
+        resolve: {
+          institute: function(Institute) {
+            return new Institute();
+          }
+        },
+        controller: 'InstituteAddEditCtrl',
+        parent: 'signed-in'
+      })
+      .state('institute-edit', {
+        url: '/institutes/:instituteId/edit',
+        templateUrl: 'modules/administrative/institute/addedit.html',
+        resolve: {
+          institute: function($stateParams, Institute) {
+            return Institute.getById($stateParams.instituteId);
+          }
+        },
         controller: 'InstituteAddEditCtrl',
         parent: 'signed-in'
       })
