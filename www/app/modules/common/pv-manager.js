@@ -71,7 +71,7 @@ angular.module('openspecimen')
     var dimensionLabelScheme = [
       'Numbers',
       'Alphabates Upper Case',
-      'Aplhabates Lower Case',
+      'Alphabates Lower Case',
       'Roman Upper Case',
       'Roman Lower Case'
     ];
