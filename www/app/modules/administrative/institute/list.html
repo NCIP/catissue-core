@@ -1,6 +1,9 @@
 <div>
   <div class="os-page-hdr">
-    <h3 translate="institutes.list">Institutes</h3>
+    <h3>
+      <span class="fa fa-university"></span>
+      <span translate="institutes.list">Institutes</span>
+    </h3>
     <a class="os-btn-icon" title="{{'institutes.tooltip.add' | translate}}" ui-sref="institute-new">
       <span class="glyphicon glyphicon-plus"></span>
     </a>
@@ -13,11 +16,11 @@
       </h4>
       <div class="stats">
         <div class="stat col-xs-6" title="{{'institutes.tooltip.department_count' | translate}}">
-          <span class="os-lavatar os-lavatar-sm">D</span>
+          <span class="fa fa-sitemap"></span>
           <span>{{institute.departments.length | number: 0}}</span>
         </div>
         <div class="stat col-xs-6" title="{{'institutes.tooltip.user_count' | translate}}">
-          <span class="os-lavatar os-lavatar-sm">U</span>
+          <span class="fa fa-user"></span>
           <span>{{(institute.userCount || 0) | number: 0}}</span>
         </div>
       </div>

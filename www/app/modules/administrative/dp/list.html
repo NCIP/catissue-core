@@ -1,7 +1,10 @@
 
 <div>
   <div class="os-page-hdr">
-    <h3 translate="dp.list">Distribution Protocols</h3>
+    <h3>
+      <span class="fa fa-truck"></span>
+      <span translate="dp.list">Distribution Protocols</span>
+    </h3>
     <a class="os-btn-icon" title="{{'dp.tooltip.new_dp' | translate}}" ui-sref="dp-new">
       <span class="glyphicon glyphicon-plus"></span>
     </a>
@@ -25,15 +28,10 @@
 
       <div class="stats">
         <div class="stat col-xs-6" title="{{'dp.tooltip.distributed_count' | translate}}">
-          <span class="os-lavatar os-lavatar-sm">D</span>
+          <span class="fa fa-truck"></span>
           <span>{{(dp.distributedSpecimensCount || 0) | number: 0}}</span>
         </div>
-        <div class="stat col-xs-6" title="{{'dp.tooltip.pending_count' | translate}}">
-          <span class="os-lavatar os-lavatar-sm">P</span>
-          <span>{{(dp.pendingAndNewSpecimensCount || 0 )| number: 0}}</span>
-        </div>
       </div>
-
     </div>
   </div>
 </div>

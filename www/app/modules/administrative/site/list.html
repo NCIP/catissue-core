@@ -1,6 +1,9 @@
 <div>
   <div class="os-page-hdr">
-     <h3 translate="site.list">Sites</h3>
+     <h3>
+       <span class="fa fa-building"></span>
+       <span translate="site.list">Sites</span>
+     </h3>
      <a class="os-btn-icon" title="{{'site.tooltip.create_site' | translate}}" ui-sref="site-new">
        <span class="glyphicon glyphicon-plus"></span>
      </a>
@@ -15,7 +18,7 @@
       <p title="{{'site.code' | translate}}">{{site.code || 'N/A'}}</p>
       <div class="stats">
         <div class="stat col-xs-6" title="{{'site.tooltip.cp_count' | translate}}">
-          <span class="os-lavatar os-lavatar-sm">C</span>
+          <span class="fa fa-calendar"></span>
           <span>{{site.cpCount || 0 | number: 0}}</span>
         </div>
       </div>
