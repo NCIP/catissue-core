@@ -1,6 +1,9 @@
 <div>
   <div class="os-page-hdr">
-     <h3 translate="site.list">Sites</h3>
+     <h3>
+       <span class="fa fa-building"></span>
+       <span translate="site.list">Sites</span>
+     </h3>
      <a class="os-btn-icon" title="{{'site.tooltip.create_site' | translate}}" ui-sref="site-new">
        <span class="glyphicon glyphicon-plus"></span>
      </a>
@@ -9,7 +12,6 @@
   <div class="os-cards">
     <div class="os-card" ng-repeat="site in siteList" ng-click="showSiteOverview(site)">
       <h4>
-        <span class="fa fa-building"></span>
         <a title="{{'site.tooltip.view_details' | translate}}" ui-sref="site-detail.overview({siteId: site.id})"> {{site.name}} </a>
       </h4>
       <h5 title="{{'site.type' | translate}}">{{site.type}}</h5>

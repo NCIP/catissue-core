@@ -1,6 +1,9 @@
 <div>
   <div class="os-page-hdr">
-    <h3 translate="container.list">Storage Containers</h3>
+    <h3> 
+      <span class="fa fa fa-th"></span>
+      <span translate="container.list">Storage Containers</span>
+    </h3>
     <a class="os-btn-icon" title="{{'container.tooltip.add' | translate}}" ui-sref="container-new">
       <span class="glyphicon glyphicon-plus"></span>
     </a>
@@ -9,7 +12,6 @@
   <div class="os-cards">
     <div class="os-card" ng-repeat="container in containerList" ng-click="showContainerOverview(container)">
       <h4 title="{{'container.tooltip.view_details' | translate}}">
-        <span class="fa fa fa-th"></span>
         <a ui-sref="container-detail.overview({containerId: container.id})"> {{container.name}} </a>
       </h4>
       <h5 title="{{'container.parent_site' | translate}}" if="container.siteName != null">{{container.siteName}}</h5>
