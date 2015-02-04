@@ -19,34 +19,27 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 
 	private static final String GET_ALL_DPS = FQN + ".getAllDistributionProtocols";
 
-	@Override
-	public DistributionProtocol getDistributionProtocol(Long id) {
-		return (DistributionProtocol) sessionFactory.getCurrentSession().get(DistributionProtocol.class, id);
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<DistributionProtocol> getAllDistributionProtocol(int maxResults) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_DPS);
+	public List<DistributionProtocol> getAllDistributionProtocol(int startAt, int maxResults) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_DPS)
+				.setFirstResult(startAt <= 0 ? 0 : startAt);
+		
+		if (maxResults > 0 ) {
+			query.setMaxResults(maxResults);
+		}
 		return query.setMaxResults(maxResults).list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Boolean isUniqueTitle(String title) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_DISTRIBUTION_PROTOCOL_TITLE);
-		query.setString("title", title);
-		List<DistributionProtocol> list = query.list();
-		return list.isEmpty() ? true : false;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public Boolean isUniqueShortTitle(String shortTitle) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_DISTRIBUTION_PROTOCOL_SHORT_TITLE);
-		query.setString("shortTitle", shortTitle);
-		List<DistributionProtocol> list = query.list();
-		return list.isEmpty() ? true : false;
+	public DistributionProtocol getByShortTitle(String shortTitle) {
+		List<DistributionProtocol> result = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_DISTRIBUTION_PROTOCOL_SHORT_TITLE)
+				.setString("shortTitle", shortTitle)
+				.list();
+		
+		return result.isEmpty() ? null : result.iterator().next();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -56,5 +49,9 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		query.setString("title", title);
 		List<DistributionProtocol> list = query.list();
 		return list.isEmpty() ? null : list.get(0);
+	}
+	
+	public Class getType() {
+		return DistributionProtocol.class;
 	}
 }

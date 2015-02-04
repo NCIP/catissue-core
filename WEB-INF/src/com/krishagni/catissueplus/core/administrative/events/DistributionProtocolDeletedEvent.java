@@ -1,17 +1,24 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
+import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class DistributionProtocolDeletedEvent extends ResponseEvent {
-
+	private DistributionProtocolDetails details;
+	
 	private long id;
 
 	private String title;
+	
+	public DistributionProtocolDetails getDetails() {
+		return details;
+	}
 
-	private static final String SUCCESS = "success";
+	public void setDetails(DistributionProtocolDetails details) {
+		this.details = details;
+	}
 
 	public long getId() {
 		return id;
@@ -29,6 +36,14 @@ public class DistributionProtocolDeletedEvent extends ResponseEvent {
 		this.title = title;
 	}
 
+	public static DistributionProtocolDeletedEvent ok(DistributionProtocolDetails protocolDetails) {
+		DistributionProtocolDeletedEvent createdEvent = new DistributionProtocolDeletedEvent();
+		createdEvent.setDetails(protocolDetails);
+		createdEvent.setStatus(EventStatus.OK);
+
+		return createdEvent;
+	}
+	
 	public static DistributionProtocolDeletedEvent notFound(Long id) {
 		DistributionProtocolDeletedEvent resp = new DistributionProtocolDeletedEvent();
 		resp.setId(id);
@@ -43,6 +58,19 @@ public class DistributionProtocolDeletedEvent extends ResponseEvent {
 		return resp;
 	}
 
+
+	public static DistributionProtocolDeletedEvent badRequest(Exception e) {
+		DistributionProtocolDeletedEvent resp = new DistributionProtocolDeletedEvent();
+		resp.setStatus(EventStatus.BAD_REQUEST);
+		resp.setException(e);
+		resp.setMessage(e.getMessage());
+		
+		if (e instanceof ObjectCreationException) {
+			resp.setErroneousFields(((ObjectCreationException)e).getErroneousFields());
+		}
+		return resp;
+	}
+
 	public static DistributionProtocolDeletedEvent serverError(Throwable... t) {
 		Throwable t1 = t != null && t.length > 0 ? t[0] : null;
 		DistributionProtocolDeletedEvent resp = new DistributionProtocolDeletedEvent();
@@ -51,12 +79,4 @@ public class DistributionProtocolDeletedEvent extends ResponseEvent {
 		resp.setMessage(t1 != null ? t1.getMessage() : null);
 		return resp;
 	}
-
-	public static DistributionProtocolDeletedEvent ok() {
-		DistributionProtocolDeletedEvent event = new DistributionProtocolDeletedEvent();
-		event.setStatus(EventStatus.OK);
-		event.setMessage(SUCCESS);
-		return event;
-	}
-
 }

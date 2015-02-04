@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
 import com.krishagni.catissueplus.core.common.errors.ErroneousField;
+import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -25,11 +26,15 @@ public class DistributionProtocolCreatedEvent extends ResponseEvent {
 		return createdEvent;
 	}
 
-	public static DistributionProtocolCreatedEvent invalidRequest(String message, ErroneousField... erroneousField) {
+	public static DistributionProtocolCreatedEvent badRequest(Exception e) {
 		DistributionProtocolCreatedEvent resp = new DistributionProtocolCreatedEvent();
 		resp.setStatus(EventStatus.BAD_REQUEST);
-		resp.setMessage(message);
-		resp.setErroneousFields(erroneousField);
+		resp.setException(e);
+		resp.setMessage(e.getMessage());
+		
+		if (e instanceof ObjectCreationException) {
+			resp.setErroneousFields(((ObjectCreationException)e).getErroneousFields());
+		}
 		return resp;
 	}
 

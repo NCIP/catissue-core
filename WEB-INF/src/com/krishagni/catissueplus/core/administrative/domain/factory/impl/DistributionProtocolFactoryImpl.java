@@ -10,7 +10,6 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchDetails;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
@@ -36,55 +35,17 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 	@Override
 	public DistributionProtocol create(DistributionProtocolDetails details) {
 		DistributionProtocol distributionProtocol = new DistributionProtocol();
-		ObjectCreationException exceptionHandler = new ObjectCreationException();
-		setTitle(distributionProtocol, details.getTitle(), exceptionHandler);
-		setIbrId(distributionProtocol, details.getIrbId(), exceptionHandler);
-		setAnticipatedSpecimenCount(distributionProtocol, details.getAnticipatedSpecimenCount());
-		setPrincipalInvestigator(distributionProtocol, details.getPrincipalInvestigator(), exceptionHandler);
-		setShortTitle(distributionProtocol, details.getShortTitle(), exceptionHandler);
-		setDescriptionURL(distributionProtocol, details.getDescriptionUrl(), exceptionHandler);
+		ObjectCreationException oce = new ObjectCreationException();
+		
+		setTitle(distributionProtocol, details.getTitle(), oce);
+		setIbrId(distributionProtocol, details.getIrbId(), oce);
+		setPrincipalInvestigator(distributionProtocol, details.getPrincipalInvestigator(), oce);
+		setShortTitle(distributionProtocol, details.getShortTitle(), oce);
 		setStartDate(distributionProtocol, details.getStartDate());
-		setActivityStatus(distributionProtocol, details.getActivityStatus(), exceptionHandler);
-		exceptionHandler.checkErrorAndThrow();
-		return distributionProtocol;
-	}
-
-	@Override
-	public DistributionProtocol patch(DistributionProtocol distributionProtocol, DistributionProtocolPatchDetails details) {
-		ObjectCreationException exceptionHandler = new ObjectCreationException();
-
-		if (details.isDistributionProtocolTitleModified()) {
-			setTitle(distributionProtocol, details.getTitle(), exceptionHandler);
-		}
-
-		if (details.isDistributionProtocolPrincipalInvestigatorModified()) {
-			setPrincipalInvestigator(distributionProtocol, details.getPrincipalInvestigator(), exceptionHandler);
-		}
-
-		if (details.isDistributionProtocolIrbIdModified()) {
-			setIbrId(distributionProtocol, details.getIrbId(), exceptionHandler);
-		}
-
-		if (details.isDistributionProtocolShortTitleModified()) {
-			setShortTitle(distributionProtocol, details.getShortTitle(), exceptionHandler);
-		}
-
-		if (details.isDistributionProtocolDescriptionUrlModified()) {
-			setDescriptionURL(distributionProtocol, details.getDescriptionUrl(), exceptionHandler);
-		}
-
-		if (details.isDistributionProtocolAnticipatedSpecimenCountModified()) {
-			setAnticipatedSpecimenCount(distributionProtocol, details.getAnticipatedSpecimenCount());
-		}
-
-		if (details.isDistributionProtocolStartDateModified()) {
-			setStartDate(distributionProtocol, details.getStartDate());
-		}
-
-		if (details.isDistributionProtocolActivityStatusModified()) {
-			setActivityStatus(distributionProtocol, details.getActivityStatus(), exceptionHandler);
-		}
-		exceptionHandler.checkErrorAndThrow();
+		setActivityStatus(distributionProtocol, details.getActivityStatus(), oce);
+		
+		oce.checkErrorAndThrow();
+		
 		return distributionProtocol;
 	}
 
@@ -92,46 +53,36 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		distributionProtocol.setStartDate(startDate);
 	}
 
-	private void setDescriptionURL(DistributionProtocol distributionProtocol, String descriptionURL,
-			ObjectCreationException exceptionHandler) {
-		distributionProtocol.setDescriptionUrl(descriptionURL);
-	}
-
 	private void setShortTitle(DistributionProtocol distributionProtocol, String shortTitle,
-			ObjectCreationException exceptionHandler) {
+			ObjectCreationException oce) {
 		if (isBlank(shortTitle)) {
-			exceptionHandler.addError(DistributionProtocolErrorCode.MISSING_ATTR_VALUE, SHORT_TITLE);
+			oce.addError(DistributionProtocolErrorCode.MISSING_ATTR_VALUE, SHORT_TITLE);
 			return;
 		}
 		distributionProtocol.setShortTitle(shortTitle);
 	}
 
 	private void setPrincipalInvestigator(DistributionProtocol distributionProtocol, UserSummary principalInvestigator,
-			ObjectCreationException exceptionHandler) {
+			ObjectCreationException oce) {
 
 		User pi = daoFactory.getUserDao().getUser(principalInvestigator.getId());
 		if (pi == null) {
-			exceptionHandler.addError(DistributionProtocolErrorCode.INVALID_PRINCIPAL_INVESTIGATOR, PRINCIPLE_INVESTIGATOR);
+			oce.addError(DistributionProtocolErrorCode.INVALID_PRINCIPAL_INVESTIGATOR, PRINCIPLE_INVESTIGATOR);
 			return;
 		}
 		distributionProtocol.setPrincipalInvestigator(pi);
 	}
 
-	private void setAnticipatedSpecimenCount(DistributionProtocol distributionProtocol, Long anticipatedSpecimenCount) {
-		distributionProtocol.setAnticipatedSpecimenCount(anticipatedSpecimenCount);
-
-	}
-
 	private void setIbrId(DistributionProtocol distributionProtocol, String irbId,
-			ObjectCreationException exceptionHandler) {
+			ObjectCreationException oce) {
 		distributionProtocol.setIrbId(irbId);
 
 	}
 
 	private void setTitle(DistributionProtocol distributionProtocol, String title,
-			ObjectCreationException exceptionHandler) {
+			ObjectCreationException oce) {
 		if (isBlank(title)) {
-			exceptionHandler.addError(DistributionProtocolErrorCode.MISSING_ATTR_VALUE, TITLE);
+			oce.addError(DistributionProtocolErrorCode.MISSING_ATTR_VALUE, TITLE);
 			return;
 		}
 		distributionProtocol.setTitle(title);
@@ -139,9 +90,9 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 	}
 
 	private void setActivityStatus(DistributionProtocol distributionProtocol, String activityStatus,
-			ObjectCreationException exceptionHandler) {
+			ObjectCreationException oce) {
 		if (!CommonValidator.isValidPv(activityStatus, ACTIVITY_STATUS)) {
-			exceptionHandler.addError(DistributionProtocolErrorCode.INVALID_ATTR_VALUE, ACTIVITY_STATUS);
+			oce.addError(DistributionProtocolErrorCode.INVALID_ATTR_VALUE, ACTIVITY_STATUS);
 		}
 		
 		activityStatus = activityStatus == null ? Status.ACTIVITY_STATUS_ACTIVE.getStatus() : activityStatus;

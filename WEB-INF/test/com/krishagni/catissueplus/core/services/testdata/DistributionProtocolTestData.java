@@ -20,7 +20,7 @@ import com.krishagni.catissueplus.core.administrative.events.CreateDistributionP
 import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchDetails;
-import com.krishagni.catissueplus.core.administrative.events.GetDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.ReqAllDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
@@ -406,14 +406,14 @@ public class DistributionProtocolTestData {
 		return event;
 	}
 
-	public static GetDistributionProtocolEvent getDistributionProtocolEvent() {
-		GetDistributionProtocolEvent event = new GetDistributionProtocolEvent();
+	public static ReqDistributionProtocolEvent getDistributionProtocolEvent() {
+		ReqDistributionProtocolEvent event = new ReqDistributionProtocolEvent();
 		event.setId(1L);
 		return event;
 	}
 
-	public static GetDistributionProtocolEvent getDistributionProtocolEventForName() {
-		GetDistributionProtocolEvent event = new GetDistributionProtocolEvent();
+	public static ReqDistributionProtocolEvent getDistributionProtocolEventForName() {
+		ReqDistributionProtocolEvent event = new ReqDistributionProtocolEvent();
 		event.setTitle("CP Title");
 		return event;
 	}

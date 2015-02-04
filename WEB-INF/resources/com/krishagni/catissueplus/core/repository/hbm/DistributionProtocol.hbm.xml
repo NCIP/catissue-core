@@ -53,18 +53,6 @@
             type="date"
             column="START_DATE"
             length="50" />
-    
-     <property
-            name="descriptionUrl"
-            type="string"
-            column="DESCRIPTION_URL"
-            length="255" />
-        
-      <property
-            name="anticipatedSpecimenCount"
-            type="long"
-            column="ANTICIPATED_SPECIMEN_COUNT"
-            length="30" />
             
      <property
             name="activityStatus"
@@ -73,11 +61,21 @@
             length="30" />
       
       <query name="getDistributionProtocolByTitle">
-      	Select distributionProtocol FROM com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol distributionProtocol where distributionProtocol.title=:title 
+      	select 
+      	  distributionProtocol 
+      	from 
+      	  com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol distributionProtocol 
+      	where 
+      	  distributionProtocol.title=:title 
       </query>
       
        <query name="getDistributionProtocolByShortTitle">
-      	Select distributionProtocol FROM com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol distributionProtocol where distributionProtocol.shortTitle=:shortTitle 
+      	select 
+      	  distributionProtocol 
+      	from 
+      	  com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol distributionProtocol 
+      	where 
+      	  distributionProtocol.shortTitle=:shortTitle 
       </query>
       
       <query name="getAllDistributionProtocols">

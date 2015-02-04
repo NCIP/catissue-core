@@ -27,8 +27,8 @@ import com.krishagni.catissueplus.core.administrative.events.DistributionProtoco
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.GetDistributionProtocolEvent;
-import com.krishagni.catissueplus.core.administrative.events.GotDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetailEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.ReqAllDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
@@ -792,16 +792,16 @@ public class DistributionProtocolTest {
 	public void testGetSiteById() {
 		when(distributionProtocolDao.getDistributionProtocol(anyLong())).thenReturn(
 				DistributionProtocolTestData.getDistributionProtocolToReturn());
-		GetDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDistributionProtocolEvent();
-		GotDistributionProtocolEvent response = distributionProtocolSvc.getDistributionProtocol(reqEvent);
+		ReqDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDistributionProtocolEvent();
+		DistributionProtocolDetailEvent response = distributionProtocolSvc.getDistributionProtocol(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
 
 	@Test
 	public void testGetDPWithWrongId() {
 		when(distributionProtocolDao.getDistributionProtocol(anyLong())).thenReturn(null);
-		GetDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDistributionProtocolEvent();
-		GotDistributionProtocolEvent response = distributionProtocolSvc.getDistributionProtocol(reqEvent);
+		ReqDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDistributionProtocolEvent();
+		DistributionProtocolDetailEvent response = distributionProtocolSvc.getDistributionProtocol(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 		assertNotNull(response.getId());
 	}
@@ -810,8 +810,8 @@ public class DistributionProtocolTest {
 	public void testGetDPByTitle() {
 		when(distributionProtocolDao.getDistributionProtocol(anyString())).thenReturn(
 				DistributionProtocolTestData.getDistributionProtocolToReturn());
-		GetDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDistributionProtocolEventForName();
-		GotDistributionProtocolEvent response = distributionProtocolSvc.getDistributionProtocol(reqEvent);
+		ReqDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDistributionProtocolEventForName();
+		DistributionProtocolDetailEvent response = distributionProtocolSvc.getDistributionProtocol(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
 		assertNotNull(response.getDetails());
 	}
@@ -819,8 +819,8 @@ public class DistributionProtocolTest {
 	@Test
 	public void testGetDPWithWrongTitle() {
 		when(distributionProtocolDao.getDistributionProtocol(anyString())).thenReturn(null);
-		GetDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDistributionProtocolEventForName();
-		GotDistributionProtocolEvent response = distributionProtocolSvc.getDistributionProtocol(reqEvent);
+		ReqDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDistributionProtocolEventForName();
+		DistributionProtocolDetailEvent response = distributionProtocolSvc.getDistributionProtocol(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 		assertNotNull(response.getTitle());
 	}
