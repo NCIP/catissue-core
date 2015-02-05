@@ -1,9 +1,9 @@
 
 angular.module('os.administrative.dp.addedit', ['os.administrative.models'])
-  .controller('DpAddEditCtrl', function($scope, $state, DistributionProtocol) {
+  .controller('DpAddEditCtrl', function($scope, $state, distributionProtocol, DistributionProtocol) {
     
     var init = function() {
-      $scope.distributionProtocol = new DistributionProtocol();
+      $scope.distributionProtocol = distributionProtocol;
     }
     
     $scope.createDp = function() {

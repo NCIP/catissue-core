@@ -58,10 +58,6 @@
 
 		</set>
 
-		<one-to-one name="specimenPosition"
-			class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenPosition" cascade="all"
-			property-ref="specimen" />
-
 		<property name="label" type="string" column="LABEL" />
 
 		<property name="isAvailable" type="boolean" column="AVAILABLE" />

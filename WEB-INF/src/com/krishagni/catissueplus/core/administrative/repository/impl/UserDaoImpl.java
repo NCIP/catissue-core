@@ -22,10 +22,15 @@ import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
-
+	
+	@Override
+	public Class<?> getType() {
+		return User.class;
+	}
+	
 	@Override
 	public User getUser(Long id) {
-		return (User) sessionFactory.getCurrentSession().get(User.class, id);
+		return super.getById(id);
 	}
 
 	@SuppressWarnings("unchecked")

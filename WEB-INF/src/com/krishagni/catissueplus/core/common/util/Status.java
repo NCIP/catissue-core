@@ -35,4 +35,10 @@ public final class Status {
 	public int getStatusNo() {
 		return statusNo;
 	}
+	
+	public static boolean isValidActivityStatus(String status) {
+		return status.equals(ACTIVITY_STATUS_ACTIVE.statusName) || 
+				status.equals(ACTIVITY_STATUS_DISABLED.statusName) ||
+				status.equals(ACTIVITY_STATUS_CLOSED.statusName);
+	}
 }

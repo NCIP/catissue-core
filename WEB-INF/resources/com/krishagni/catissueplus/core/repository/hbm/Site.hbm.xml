@@ -52,7 +52,7 @@
         
        <set
             name="storageContainerCollection"
-            table="CATISSUE_STORAGE_CONTAINERS">
+            table="OS_STORAGE_CONTAINERS">
 			      
             <key column="SITE_ID"/>
             <one-to-many

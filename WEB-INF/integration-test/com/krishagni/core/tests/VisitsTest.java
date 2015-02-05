@@ -106,6 +106,22 @@ public class VisitsTest {
 	}
 	
 	@Test
+	@DatabaseSetup("cp-test/visits-test/add-visits-test-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void addVisitsInvalidCpTitle() {
+		AddVisitEvent req = VisitsTestData.getAddVisitEvent();
+		req.getVisit().setEventId(null);
+		req.getVisit().setCpTitle("invalid-title");
+		req.getVisit().setEventLabel("invalid-label");
+		VisitAddedEvent resp = cprSvc.addVisit(req);
+		
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "collectionProtocol"));
+	}
+	
+	@Test
 	@DatabaseSetup("cp-test/visits-test/add-visits-invalid-cpr-cpe-initial.xml")
 	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void addVisitsInvalidCprCpe() {

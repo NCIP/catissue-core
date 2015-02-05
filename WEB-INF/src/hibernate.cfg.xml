@@ -179,6 +179,8 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/KeyGenerator.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Biohazard.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/StorageContainer.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/StorageContainerStats.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/StorageContainerPosition.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/DistributionProtocol.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenPrintRule.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Equipment.hbm.xml" />
@@ -188,7 +190,6 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConsentTier.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocolEvent.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenRequirement.hbm.xml"/>
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AbstractPosition.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperationJob.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperation.hbm.xml" />
 

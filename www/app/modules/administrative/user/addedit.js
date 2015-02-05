@@ -1,9 +1,9 @@
 angular.module('os.administrative.user.addedit', ['os.administrative.models'])
   .controller('UserAddEditCtrl', function($scope, $state, $stateParams,
-    User, Institute, PvManager) {
+    user, User, Institute, PvManager) {
  
     function init() {
-      $scope.user = new User();
+      $scope.user = user;
       loadPvs();
     }
     

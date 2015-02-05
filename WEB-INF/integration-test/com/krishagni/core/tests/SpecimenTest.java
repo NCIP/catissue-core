@@ -33,7 +33,7 @@ import com.krishagni.core.common.ApplicationContextConfigurer;
 import com.krishagni.core.common.TestUtils;
 import com.krishagni.core.common.WebContextLoader;
 
-import com.krishagni.core.tests.testdata.SpecimenServiceTestData;
+import com.krishagni.core.tests.testdata.SpecimenTestData;
 import com.krishagni.core.tests.testdata.CprTestData;
 
 
@@ -45,7 +45,7 @@ import com.krishagni.core.tests.testdata.CprTestData;
     DbUnitTestExecutionListener.class })
 
 @WebAppConfiguration
-public class SpecimenServiceTest {
+public class SpecimenTest {
 	@Resource 
 	private WebApplicationContext webApplicationContext;
 	
@@ -60,12 +60,12 @@ public class SpecimenServiceTest {
 	 */
 	
 	@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
-	@ExpectedDatabase(value="specimen-test/specimen-service-test/collect-specimens-expected.xml", 
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimens() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
 		//TestUtils.recordResponse(resp);
@@ -84,10 +84,10 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithEmptyLabel() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setLabel(null);
 
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
@@ -98,10 +98,10 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidSR() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setReqId(-1L);
 	
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
@@ -112,10 +112,10 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidVisit() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setVisitId(-1L);
 	
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
@@ -126,10 +126,10 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-with-duplicate-values.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-with-duplicate-label.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithDuplicateLabel() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setLabel("duplicate-label");
 	
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
@@ -140,10 +140,10 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidLineage() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setLineage("Invalid-Lineage");
 	
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
@@ -154,10 +154,10 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-with-duplicate-values.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-with-duplicate-label.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithDuplicateBarcode() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setBarcode("duplicate-barcode");
 
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
@@ -168,10 +168,10 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test                       
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidInitialQuantity() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setInitialQty(-1.0);
 	
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
@@ -182,12 +182,12 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test                       
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
-	@ExpectedDatabase(value="specimen-test/specimen-service-test/collect-specimens-expected.xml", 
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithoutInitialQuantity() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setInitialQty(null);
 	
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
@@ -204,10 +204,10 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test                       
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithoutInitialQuantityAndReqId() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setReqId(null);
 		req.getSpecimens().get(0).setInitialQty(null);
 	
@@ -219,12 +219,12 @@ public class SpecimenServiceTest {
 	}
 
 	@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
-	@ExpectedDatabase(value="specimen-test/specimen-service-test/collect-specimens-expected.xml", 
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithEmptyActivityStatus() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setActivityStatus("");
 
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
@@ -241,10 +241,10 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-with-mismatch-visit-id.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-with-mismatch-visit-id.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithMismatchCpEventId() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 	
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
 		
@@ -254,10 +254,10 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
-	public void collectSpecimensWithEmptyVisitId() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
+	public void collectSpecimensWithNullVisitId() {
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setVisitId(null);
 	
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
@@ -268,12 +268,12 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
-	@ExpectedDatabase(value="specimen-test/specimen-service-test/collect-specimens-expected.xml", 
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithoutLineage() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setLineage(null);
 	
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
@@ -290,10 +290,10 @@ public class SpecimenServiceTest {
 	}
 
 	@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithDerivedLineageAndParentId() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setLineage("Derived");
 		req.getSpecimens().get(0).setParentId(1L);
 	
@@ -317,10 +317,10 @@ public class SpecimenServiceTest {
 	}
 
 	@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithDerivedLineageAndParentLabel() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setLineage("Derived");
 		req.getSpecimens().get(0).setParentLabel("parent-spm");
 	
@@ -344,12 +344,12 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
-	@ExpectedDatabase(value="specimen-test/specimen-service-test/collect-specimens-expected.xml", 
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
-	public void collectSpecimensWithEmptyReqId() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+	public void collectAdhocSpecimen() {
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setReqId(null);
 	
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
@@ -369,10 +369,10 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithNullCollectionStatus() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setStatus(null);
 	
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
@@ -391,10 +391,10 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test                       
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidCollectionStatus() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setStatus("invalid-status");
 	
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
@@ -405,12 +405,12 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test                       
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
-	@ExpectedDatabase(value="specimen-test/specimen-service-test/collect-specimens-expected.xml", 
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithoutAnatomicSite() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setAnatomicSite(null);
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
 		
@@ -427,12 +427,12 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test                       
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
-	@ExpectedDatabase(value="specimen-test/specimen-service-test/collect-specimens-expected.xml", 
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithoutLaterality() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setLaterality(null);
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
 		
@@ -449,12 +449,12 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test                       
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
-	@ExpectedDatabase(value="specimen-test/specimen-service-test/collect-specimens-expected.xml", 
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithoutPathologyStatus() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setPathology(null);
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
 		
@@ -471,12 +471,12 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test                       
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
-	@ExpectedDatabase(value="specimen-test/specimen-service-test/collect-specimens-expected.xml", 
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithoutSpecimenClass() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setSpecimenClass(null);
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
 		
@@ -493,12 +493,12 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test                       
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
-	@ExpectedDatabase(value="specimen-test/specimen-service-test/collect-specimens-expected.xml", 
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithoutSpecimenType() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setType(null);
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
 		
@@ -515,10 +515,10 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test                       
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithoutCreatedDate() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setCreatedOn(null);
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
 		
@@ -538,10 +538,10 @@ public class SpecimenServiceTest {
 	}
 	
 	@Test                       
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidCreatedDate() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setCreatedOn(CprTestData.getDate(21, 1, 2000));
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
 		
@@ -553,10 +553,10 @@ public class SpecimenServiceTest {
 	
 	// TODO :: Implement after isValidPv implements.
 	//@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidActivityStatus() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setActivityStatus("Invalid-Activity-Status");
 
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
@@ -565,10 +565,10 @@ public class SpecimenServiceTest {
 	
 	// TODO :: Implement after isValidPv implements.
 	//@Test                       
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidAnatomicSite() {
-		CollectSpecimensEvent req = SpecimenServiceTestData.collectSpecimenListEvent();
+		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
 		req.getSpecimens().get(0).setAnatomicSite("invalid-anatomic-site");
 		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
 		
@@ -583,32 +583,32 @@ public class SpecimenServiceTest {
 	
 	// TODO :: Implement after isValidPv() implements.
 	//@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidLaterality() {
 		
 	}
 	
 	// TODO :: Implement after isValidPv() implements.
 	//@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidPathologicalStatus() {
 		
 	}
 	
 	// TODO :: Implement after isValidPv() implements.
 	//@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidSpecimenClass() {
 		
 	}
 	
 	// TODO :: Implement after isValidPv() implements.
 	//@Test
-	@DatabaseSetup("specimen-test/specimen-service-test/collect-specimens-initial.xml")
-	@DatabaseTearDown("specimen-test/specimen-service-test/collect-specimens-teardown.xml")
+	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
+	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidSpecimenType() {
 			
 	}
@@ -618,6 +618,7 @@ public class SpecimenServiceTest {
 		Assert.assertEquals("Anatomic site mismatch", "Head", detail.getAnatomicSite());
 		Assert.assertEquals("Initial quantity mismatch", new Double(0.5), detail.getInitialQty());
 		Assert.assertEquals("Specimen label mismatch", "spm" + (index+1), detail.getLabel());
+		Assert.assertEquals("Barcode mismatch", "barcode-" + (index+1), detail.getBarcode());
 		Assert.assertEquals("Laterality mismatch", "Right", detail.getLaterality());
 		Assert.assertEquals("Pathology status mismatch", "Metastatic", detail.getPathology());
 		Assert.assertEquals("Specimen class mismatch", "Molecular", detail.getSpecimenClass());
@@ -638,6 +639,7 @@ public class SpecimenServiceTest {
 			Assert.assertEquals("Initial quantity mismatch", new Double(0.5), child.getInitialQty());
 			Assert.assertEquals("Specimen label mismatch", childSpecimenLabel, child.getLabel());
 			Assert.assertEquals("Laterality mismatch", "Right", child.getLaterality());
+			Assert.assertEquals("Barcode mismatch", childSpecimenBarcode, child.getBarcode());
 			Assert.assertEquals("Pathology status mismatch", "Metastatic", child.getPathology());
 			Assert.assertEquals("Lineage mismatch", "New", child.getLineage());
 			Assert.assertEquals("Specimen class mismatch", "Molecular", child.getSpecimenClass());

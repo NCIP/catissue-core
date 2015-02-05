@@ -4,7 +4,7 @@
       <span class="fa fa-th"></span>
       <span translate="container.list">Storage Containers</span>
     </h3>
-    <a class="os-btn-icon" title="{{'container.tooltip.add' | translate}}" ui-sref="container-new">
+    <a class="os-btn-icon" title="{{'container.tooltip.add' | translate}}" ui-sref="container-addedit">
       <span class="glyphicon glyphicon-plus"></span>
     </a>
   </div>
@@ -14,16 +14,22 @@
       <h4 title="{{'container.tooltip.view_details' | translate}}">
         <a ui-sref="container-detail.overview({containerId: container.id})"> {{container.name}} </a>
       </h4>
-      <h5 title="{{'container.parent_site' | translate}}" if="container.siteName != null">{{container.siteName}}</h5>
-      <h5 title="{{'container.parent_container' | translate}}" if="container.parentContainerName != null">{{container.parentContainerName}}</h5>
+      <h5>
+        <span title="{{'container.parent_site' | translate}}">
+          {{container.siteName}}
+        </span>
+        <span title="{{'container.parent_container' | translate}}" ng-if="container.parentContainerName">
+          | {{container.parentContainerName}}
+        </span>
+      </h5>
       <div class="stats">
         <div class="stat col-xs-6" title="{{'container.dimension' | translate}}">
           <span class="fa fa-arrows-alt"></span>
-          <span>10 X 10</span>
+          <span>{{container.dimensionOneCapacity}} X {{container.dimensionTwoCapacity}}</span>
         </div>
         <div class="stat col-xs-6" title="{{'container.tooltip.count_free_locations' | translate}}">
           <span class="fa fa-table"></span>
-          <span>12</span>
+          <span>{{container.freePositions}}</span>
         </div>
       </div>
     </div>

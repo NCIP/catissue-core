@@ -1,8 +1,8 @@
 angular.module('os.administrative.container.addedit', ['os.administrative.models'])
-  .controller('ContainerAddEditCtrl', function($scope, $state, Site, Container, CollectionProtocol, PvManager){
+  .controller('ContainerAddEditCtrl', function($scope, $state, container, Site, Container, CollectionProtocol, PvManager){
 
     var init = function() {
-      $scope.container = new Container();
+      $scope.container = container;
       $scope.cps = [];
       loadPvs();
     }

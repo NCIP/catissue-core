@@ -1,44 +1,44 @@
-
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
+import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class StorageContainerCreatedEvent extends ResponseEvent {
+	private StorageContainerDetail container;
 
-	private StorageContainerDetails storageContainerDetails;
-
-	public StorageContainerDetails getStorageContainerDetails() {
-		return storageContainerDetails;
+	public StorageContainerDetail getContainer() {
+		return container;
 	}
 
-	public void setStorageContainerDetails(StorageContainerDetails storageContainerDetails) {
-		this.storageContainerDetails = storageContainerDetails;
+	public void setContainer(StorageContainerDetail container) {
+		this.container = container;
 	}
-
-	public static StorageContainerCreatedEvent ok(StorageContainerDetails details) {
-		StorageContainerCreatedEvent event = new StorageContainerCreatedEvent();
-		event.setStorageContainerDetails(details);
-		event.setStatus(EventStatus.OK);
-		return event;
+	
+	public static StorageContainerCreatedEvent ok(StorageContainerDetail detail) {
+		StorageContainerCreatedEvent result = new StorageContainerCreatedEvent();
+		result.setContainer(detail);
+		result.setStatus(EventStatus.OK);
+		return result;
 	}
-
-	public static StorageContainerCreatedEvent invalidRequest(String message, ErroneousField... erroneousField) {
-		StorageContainerCreatedEvent resp = new StorageContainerCreatedEvent();
-		resp.setStatus(EventStatus.BAD_REQUEST);
-		resp.setMessage(message);
-		resp.setErroneousFields(erroneousField);
-		return resp;
+	
+	public static StorageContainerCreatedEvent badRequest(Exception e) {
+		StorageContainerCreatedEvent result = new StorageContainerCreatedEvent();
+		result.setStatus(EventStatus.BAD_REQUEST);
+		result.setException(e);
+				
+		if (e instanceof ObjectCreationException) {
+			ObjectCreationException oce = (ObjectCreationException)e;
+			result.setErroneousFields(oce.getErroneousFields());
+		}
+		
+		return result;
 	}
-
-	public static StorageContainerCreatedEvent serverError(Throwable... t) {
-		Throwable t1 = t != null && t.length > 0 ? t[0] : null;
-		StorageContainerCreatedEvent resp = new StorageContainerCreatedEvent();
-		resp.setStatus(EventStatus.INTERNAL_SERVER_ERROR);
-		resp.setException(t1);
-		resp.setMessage(t1 != null ? t1.getMessage() : null);
-		return resp;
+	
+	public static StorageContainerCreatedEvent serverError(Exception e) {
+		StorageContainerCreatedEvent result = new StorageContainerCreatedEvent();
+		result.setStatus(EventStatus.INTERNAL_SERVER_ERROR);
+		result.setException(e);
+		return result;
 	}
-
 }

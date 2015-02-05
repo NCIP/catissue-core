@@ -2,8 +2,8 @@
 package com.krishagni.catissueplus.core.administrative.domain.factory;
 
 public enum ContainerLabelSchemeType {
-	NUMBERS(0, "Numbers"), ALPHABETS_UPPER(1, "ALPHABETS_UPPER"), ALPHABETS_LOWER(2, "ALPHABETS_LOWER"), ROMAN_UPPER(3,
-			"ROMAN_UPPER"), ROMAN_LOWER(4, "ROMAN_LOWER");
+	NUMBERS(0, "Numbers"), ALPHABETS_UPPER(1, "Alphabates Upper Case"), ALPHABETS_LOWER(2, "Alphabates Lower Case"), ROMAN_UPPER(3,
+			"Roman Upper Case"), ROMAN_LOWER(4, "Roman Lower Case");
 
 	public String value;
 

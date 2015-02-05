@@ -16,9 +16,17 @@ angular.module('os.administrative.container',
         controller: 'ContainerListCtrl',
         parent: 'signed-in'
       })
-      .state('container-new', {
-        url: '/new-container',
+      .state('container-addedit', {
+        url: '/container-addedit/:containerId',
         templateUrl: 'modules/administrative/container/addedit.html',
+        resolve: {
+          container: function($stateParams, Container) {
+            if ($stateParams.containerId) {
+              return Container.getById($stateParams.containerId);
+            }
+            return new Container();
+          } 
+        },
         controller: 'ContainerAddEditCtrl',
         parent: 'signed-in'
       })

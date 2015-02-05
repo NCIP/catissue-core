@@ -207,7 +207,7 @@ public class User {
 			userCP.setUser(this);
 		}
 		SetUpdater.<UserCPRole> newInstance().update(this.getUserCPRoles(), user.getUserCPRoles());
-		updateAddressDetails(this.getAddress(), user.getAddress());
+		//updateAddressDetails(this.getAddress(), user.getAddress());
 	}
 
 	private void updateAddressDetails(Address oldAddress, Address address) {

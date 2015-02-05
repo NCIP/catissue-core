@@ -1,15 +1,16 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class StorageContainerSummary {
-
 	private Long id;
 
 	private String name;
@@ -22,7 +23,13 @@ public class StorageContainerSummary {
 
 	private String parentContainerName;
 
-	private UserInfo createdBy;
+	private UserSummary createdBy;
+	
+	private int dimensionOneCapacity;
+	
+	private int dimensionTwoCapacity;
+	
+	private int freePositions;
 
 	public Long getId() {
 		return id;
@@ -72,28 +79,73 @@ public class StorageContainerSummary {
 		this.parentContainerName = parentContainerName;
 	}
 
-	public UserInfo getCreatedBy() {
+	public UserSummary getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(UserInfo createdBy) {
+	public void setCreatedBy(UserSummary createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public static StorageContainerSummary fromDomain(
-			StorageContainer storageContainer) {
-		StorageContainerSummary details = new StorageContainerSummary();
-		details.setId(storageContainer.getId());
-		details.setActivityStatus(storageContainer.getActivityStatus());
-		details.setBarcode(storageContainer.getBarcode());
-		details.setCreatedBy(getUserInfo(storageContainer.getCreatedBy()));
-		details.setName(storageContainer.getName());
-		if (storageContainer.getParentContainer() != null) {
-			details.setParentContainerName(storageContainer
-					.getParentContainer().getName());
+	public int getDimensionOneCapacity() {
+		return dimensionOneCapacity;
+	}
+
+	public void setDimensionOneCapacity(int dimensionOneCapacity) {
+		this.dimensionOneCapacity = dimensionOneCapacity;
+	}
+
+	public int getDimensionTwoCapacity() {
+		return dimensionTwoCapacity;
+	}
+
+	public void setDimensionTwoCapacity(int dimensionTwoCapacity) {
+		this.dimensionTwoCapacity = dimensionTwoCapacity;
+	}
+
+	public int getFreePositions() {
+		return freePositions;
+	}
+
+	public void setFreePositions(int freePositions) {
+		this.freePositions = freePositions;
+	}
+
+	protected static void transform(StorageContainer container, StorageContainerSummary result) {
+		result.setId(container.getId());
+		result.setName(container.getName());
+		result.setBarcode(container.getBarcode());		
+		result.setActivityStatus(container.getActivityStatus());
+		result.setCreatedBy(UserSummary.from(container.getCreatedBy()));
+		
+		result.setSiteName(container.getSite().getName());
+		if (container.getParentContainer() != null) {
+			result.setParentContainerName(container.getParentContainer().getName());
 		}
-		details.setSiteName(storageContainer.getSite().getName());
-		return details;
+		
+		result.setDimensionOneCapacity(container.getDimensionOneCapacity());
+		result.setDimensionTwoCapacity(container.getDimensionTwoCapacity());
+		result.setFreePositions(container.freePositionsCount());		
+	}
+	
+	public static StorageContainerSummary from(StorageContainer container) {
+		StorageContainerSummary result = new StorageContainerSummary();
+		transform(container, result);		
+		return result;
+	}
+	
+	public static List<StorageContainerSummary> from(Collection<StorageContainer> containers) {
+		List<StorageContainerSummary> result = new ArrayList<StorageContainerSummary>();
+		
+		if (CollectionUtils.isEmpty(containers)) {
+			return result;
+		}
+		
+		for (StorageContainer container : containers) {
+			result.add(from(container));
+		}
+		
+		return result;
 	}
 
 	private static UserInfo getUserInfo(User user) {

@@ -481,6 +481,29 @@ public class CollectionProtocolTest {
 		
 		TestUtils.recordResponse(resp);
 		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		AssertCpDetail(expected, actual);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/create-cp-test-initial.xml")
+	@DatabaseTearDown("cp-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/create-cp-test-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void createCpWithEmptyActivityStatus() {
+		CreateCollectionProtocolEvent req = CpTestData.getCreateCollectionProtocolEvent();
+		req.getCp().setActivityStatus("");
+		CollectionProtocolCreatedEvent resp = cpSvc.createCollectionProtocol(req);
+		
+		CollectionProtocolDetail expected = req.getCp();
+		CollectionProtocolDetail actual = resp.getCp();
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		AssertCpDetail(expected, actual);
+	}
+	
+	public void AssertCpDetail(CollectionProtocolDetail expected, CollectionProtocolDetail actual) {
+		
 		Assert.assertNotNull(actual);
 		Assert.assertNotNull(actual.getId());
 		Assert.assertEquals(expected.getTitle(), actual.getTitle());
@@ -493,9 +516,7 @@ public class CollectionProtocolTest {
 		Assert.assertEquals(expected.getDerivativeLabelFmt(), actual.getDerivativeLabelFmt());
 		Assert.assertEquals(expected.getAliquotLabelFmt(), actual.getAliquotLabelFmt());
 		Assert.assertEquals(expected.getAliquotsInSameContainer(), actual.getAliquotsInSameContainer());
-		//TODO: Uncomment below once the dev code is fixed.
-		//default Activity Status is not set while creating collection protoc
-		//Assert.assertEquals("Active" , actual.getActivityStatus());
+		Assert.assertEquals("Active" , actual.getActivityStatus());
 		
 		UserSummary pi = actual.getPrincipalInvestigator();
 		String firstName = "ADMIN" + pi.getId();

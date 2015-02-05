@@ -1,7 +1,10 @@
 
 <div>
   <div class="os-page-hdr">
-    <h3 translate="dp.create_dp_title">Create Distribution Protocol</h3> 
+    <h3>
+      <span ng-if="!distributionProtocol.id" translate="dp.create_dp_title">Create Distribution Protocol</span>
+      <span ng-if="!!distributionProtocol.id" translate="dp.update_dp_title">Update Distribution Protocol</span>
+    </h3> 
   </div>
   
   <div class="container">
@@ -54,8 +57,11 @@
 
       <div class="form-group">
         <div class="col-xs-offset-3 col-xs-6">
-          <button class="btn btn-primary" os-form-submit="createDp()" translate="common.buttons.create">Create</button>
-          <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.buttons.discard">Discard</button>
+          <button class="btn btn-primary" os-form-submit="createDp()">
+            <span ng-if="!distributionProtocol.id"  translate="common.buttons.create"> Create </span>
+            <span ng-if="!!distributionProtocol.id" translate="common.buttons.update"> Update </span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">Discard</button>
         </div>
       </div>  
          

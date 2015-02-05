@@ -7,7 +7,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.core.tests.testdata.CprTestData;
 
-public class SpecimenServiceTestData {
+public class SpecimenTestData {
 	public static SpecimenDetail getSpecimenInfo() {
 		SpecimenDetail detail = new SpecimenDetail();
 		detail.setActivityStatus("Active");

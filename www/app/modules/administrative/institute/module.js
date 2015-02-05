@@ -16,9 +16,28 @@ angular.module('os.administrative.institute',
         controller: 'InstituteListCtrl',
         parent: 'signed-in'
       })
-      .state('institute-new', {
-        url: '/new-institute',
+      .state('institute-addedit', {
+        url: '/institute-addedit/:instituteId',
         templateUrl: 'modules/administrative/institute/addedit.html',
+        resolve: {
+          institute: function($stateParams, Institute) {
+            if ($stateParams.instituteId) {
+              return Institute.getById($stateParams.instituteId);
+            }
+            return new Institute();
+          }
+        },
+        controller: 'InstituteAddEditCtrl',
+        parent: 'signed-in'
+      })
+      .state('institute-edit', {
+        url: '/institutes/:instituteId/edit',
+        templateUrl: 'modules/administrative/institute/addedit.html',
+        resolve: {
+          institute: function($stateParams, Institute) {
+            return Institute.getById($stateParams.instituteId);
+          }
+        },
         controller: 'InstituteAddEditCtrl',
         parent: 'signed-in'
       })

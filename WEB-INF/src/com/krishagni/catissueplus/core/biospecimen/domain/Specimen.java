@@ -370,4 +370,8 @@ public class Specimen {
 		
 		childCollection.add(specimen);
 	}
+	
+	public CollectionProtocol getCollectionProtocol() {
+		return visit.getCollectionProtocol();
+	}
 }

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.StorageContainerStats" table="OS_STORAGE_CONT_STATS_VIEW" mutable="false">
+    <id name="id" column="CONTAINER_ID" type="long">
+      <generator class="foreign">
+        <param name="property">container</param>
+      </generator>
+    </id>
+
+    <property name="freePositions" column="FREE_POSITIONS"/>
+
+    <one-to-one
+      name="container"
+      class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer"
+      constrained="true"/>
+  </class>
+</hibernate-mapping>
