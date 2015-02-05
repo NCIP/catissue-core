@@ -15,23 +15,15 @@ angular.module('os.administrative.site',
         controller: 'SiteListCtrl',
         parent: 'signed-in'
       })
-      .state('site-new', {
-        url: '/new-site',
-        templateUrl: 'modules/administrative/site/addedit.html',
-        resolve: {
-          site: function(Site) {
-            return new Site();
-          }
-        },
-        controller: 'SiteAddEditCtrl',
-        parent: 'signed-in'
-      })
-      .state('site-edit', {
-        url: '/sites/:siteId/edit',
+      .state('site-addedit', {
+        url: '/site-addedit/:siteId',
         templateUrl: 'modules/administrative/site/addedit.html',
         resolve: {
           site: function($stateParams, Site) {
-            return Site.getById($stateParams.siteId);
+            if ($stateParams.siteId) {
+              return Site.getById($stateParams.siteId);
+            }
+            return new Site();
           }
         },
         controller: 'SiteAddEditCtrl',

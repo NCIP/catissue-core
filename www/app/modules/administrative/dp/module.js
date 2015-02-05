@@ -14,23 +14,15 @@ angular.module('os.administrative.dp',
         controller: 'DpListCtrl',
         parent: 'signed-in'
       })
-      .state('dp-new', {
-        url: '/new-dp',
-        templateUrl: 'modules/administrative/dp/addedit.html',
-        resolve: {
-          distributionProtocol: function(DistributionProtocol) {
-            return new DistributionProtocol();
-          }
-        },
-        controller: 'DpAddEditCtrl',
-        parent: 'signed-in'
-      })
-      .state('dp-edit', {
-        url: '/dps/:dpId/edit',
+      .state('dp-addedit', {
+        url: '/dp-addedit/:dpId',
         templateUrl: 'modules/administrative/dp/addedit.html',
         resolve: {
           distributionProtocol: function($stateParams , DistributionProtocol) {
-            return DistributionProtocol.getById($stateParams.dpId);
+            if ($stateParams.dpId) {
+              return DistributionProtocol.getById($stateParams.dpId);
+            }
+            return new DistributionProtocol();
           }
         },
         controller: 'DpAddEditCtrl',

@@ -1,5 +1,5 @@
 angular.module('os.administrative.container.addedit', ['os.administrative.models'])
-  .controller('ContainerAddEditCtrl', function($scope, $state, Site, container, Container, CollectionProtocol, PvManager){
+  .controller('ContainerAddEditCtrl', function($scope, $state, container, Site, Container, CollectionProtocol, PvManager){
 
     var init = function() {
       $scope.container = container;

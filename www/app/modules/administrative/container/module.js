@@ -16,24 +16,16 @@ angular.module('os.administrative.container',
         controller: 'ContainerListCtrl',
         parent: 'signed-in'
       })
-      .state('container-new', {
-        url: '/new-container',
-        templateUrl: 'modules/administrative/container/addedit.html',
-        resolve: {
-          container: function(Container) {
-            return new Container();
-          } 
-        },
-        controller: 'ContainerAddEditCtrl',
-        parent: 'signed-in'
-      })
-      .state('container-edit', {
-        url: '/containers/:containerId/edit',
+      .state('container-addedit', {
+        url: '/container-addedit/:containerId',
         templateUrl: 'modules/administrative/container/addedit.html',
         resolve: {
           container: function($stateParams, Container) {
-            return Container.getById($stateParams.containerId);
-          }
+            if ($stateParams.containerId) {
+              return Container.getById($stateParams.containerId);
+            }
+            return new Container();
+          } 
         },
         controller: 'ContainerAddEditCtrl',
         parent: 'signed-in'

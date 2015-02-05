@@ -15,23 +15,15 @@ angular.module('os.administrative.user',
         controller: 'UserListCtrl',
         parent: 'signed-in'
       })
-      .state('user-new', {
-        url: '/new-user',
-        templateUrl: 'modules/administrative/user/addedit.html',
-        resolve: {
-          user: function(User) {
-            return new User();
-          }
-        },
-        controller: 'UserAddEditCtrl',
-        parent: 'signed-in'
-      })
-      .state('user-edit', {
-        url: '/users/:userId/edit',
+      .state('user-addedit', {
+        url: '/user-addedit/:userId',
         templateUrl: 'modules/administrative/user/addedit.html',
         resolve: {
           user: function($stateParams, User) {
-            return User.getById($stateParams.userId);
+            if ($stateParams.userId) { 
+              return User.getById($stateParams.userId);
+            }
+            return new User();
           }
         },
         controller: 'UserAddEditCtrl',
