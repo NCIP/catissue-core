@@ -115,6 +115,7 @@ public class CollectionProtocolRegistrationTest {
 	/*
 	 * Register Participant API Tests
 	 */
+	
 	@Test
 	@DatabaseSetup("cp-test/registration-test/register-participant-initial.xml")
 	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
@@ -136,31 +137,29 @@ public class CollectionProtocolRegistrationTest {
 		Assert.assertEquals(EventStatus.OK, resp.getStatus());
 		
 		CollectionProtocolRegistrationDetail detail = resp.getCprDetail();
-		Assert.assertNotNull(detail);
-		Assert.assertNotNull(detail.getParticipant());
-		Assert.assertEquals(true, resp.getCprDetail().getId() > new Long(0));
-		Assert.assertEquals(cpr.getPpid(), detail.getPpid());
 		Assert.assertEquals(cpr.getCpId(), detail.getCpId());
-		Assert.assertEquals("default-cp", detail.getCpTitle());
-		Assert.assertNotNull(detail.getConsentDetails());
-		Assert.assertNotNull(detail.getConsentDetails().getConsentTierResponses());
-		Assert.assertEquals((int)3, detail.getConsentDetails().getConsentTierResponses().size());
+		assertRegistrationCreatedEventDetail(detail, cpr);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/registration-test/register-participant-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void registerParticipantWithNullParticipant() {
+		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetail();
+		cpr.setParticipant(null);
 		
-		for (ConsentTierResponseDetail statement : detail.getConsentDetails().getConsentTierResponses()) {
-			String consent = statement.getConsentStatment();
-			String response = statement.getParticipantResponse();
-			
-			if ("CONSENT1".equals(consent)) {
-				Assert.assertEquals("yes", response);
-			} else if ("CONSENT2".equals(consent) ) {
-				Assert.assertEquals("no", response);
-			} else if ("CONSENT3".equals(consent)) {
-				Assert.assertEquals("may be", response);
-			} else {
-				Assert.fail("The consent: " + consent + " was not expected in this test");
-			}
-		}
+		CreateRegistrationEvent req = new CreateRegistrationEvent();
+		req.setCpId(1L);
+		req.setCprDetail(cpr);
+		req.setSessionDataBean(CprTestData.getSessionDataBean());
 		
+		RegistrationCreatedEvent resp = cprSvc.createRegistration(req);
+		
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals("Error code participant not found!",
+				true, TestUtils.isErrorCodePresent(resp, ParticipantErrorCode.INVALID_ATTR_VALUE, PARTICIPANT));
 	}
 	
 	@Test
@@ -199,36 +198,14 @@ public class CollectionProtocolRegistrationTest {
 		
 		RegistrationCreatedEvent resp = cprSvc.createRegistration(req);
 		
+		TestUtils.recordResponse(resp);
 		
 		Assert.assertNotNull(resp);
-		TestUtils.recordResponse(resp);
 		Assert.assertEquals(EventStatus.OK, resp.getStatus());
 		
 		CollectionProtocolRegistrationDetail detail = resp.getCprDetail();
-		Assert.assertNotNull(detail);
-		Assert.assertNotNull(detail.getParticipant());
-		Assert.assertEquals(true, resp.getCprDetail().getId() > new Long(0));
-		Assert.assertEquals(cpr.getPpid(), detail.getPpid());
 		Assert.assertEquals(cpr.getCpId(), detail.getCpId());
-		Assert.assertEquals("default-cp", detail.getCpTitle());
-		Assert.assertNotNull(detail.getConsentDetails());
-		Assert.assertNotNull(detail.getConsentDetails().getConsentTierResponses());
-		Assert.assertEquals((int)3, detail.getConsentDetails().getConsentTierResponses().size());
-		
-		for (ConsentTierResponseDetail statement : detail.getConsentDetails().getConsentTierResponses()) {
-			String consent = statement.getConsentStatment();
-			String response = statement.getParticipantResponse();
-			
-			if ("CONSENT1".equals(consent)) {
-				Assert.assertEquals("yes", response);
-			} else if ("CONSENT2".equals(consent) ) {
-				Assert.assertEquals("no", response);
-			} else if ("CONSENT3".equals(consent)) {
-				Assert.assertEquals("may be", response);
-			} else {
-				Assert.fail("The consent: " + consent + " was not expected in this test");
-			}
-		}
+		assertRegistrationCreatedEventDetail(detail, cpr);
 		
 		ParticipantDetail participant = detail.getParticipant();
 		Assert.assertEquals(true, (new Long(0) < participant.getId()));
@@ -317,6 +294,52 @@ public class CollectionProtocolRegistrationTest {
 	}
 	
 	@Test
+	@DatabaseSetup("cp-test/registration-test/register-participant-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/registration-test/register-participant-expected.xml",
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED) 
+	public void registerParticipantWithCpTitle() {		
+		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetail();
+		cpr.setCpId(null);
+		cpr.setCpTitle("default-cp");
+		
+		CreateRegistrationEvent req = new CreateRegistrationEvent();
+		req.setCprDetail(cpr);
+		req.setSessionDataBean(CprTestData.getSessionDataBean());
+		
+		RegistrationCreatedEvent resp = cprSvc.createRegistration(req);
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertNotNull(resp);
+		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		
+		CollectionProtocolRegistrationDetail detail = resp.getCprDetail();
+		Assert.assertEquals(new Long(1), detail.getCpId());
+		assertRegistrationCreatedEventDetail(detail, cpr);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/registration-test/register-participant-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void registerParticipantWithNullCpIdAndTitle() {		
+		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetail();
+		cpr.setCpId(null);
+		cpr.setCpTitle(null);
+		
+		CreateRegistrationEvent req = new CreateRegistrationEvent();
+		req.setCprDetail(cpr);
+		req.setSessionDataBean(CprTestData.getSessionDataBean());
+		
+		RegistrationCreatedEvent resp = cprSvc.createRegistration(req);
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertNotNull(resp);
+		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
+		Assert.assertEquals(false, resp.isSuccess());
+		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ParticipantErrorCode.MISSING_ATTR_VALUE, COLLECTION_PROTOCOL));
+	}
+	
+	@Test
 	@DatabaseSetup("cp-test/registration-test/generic-initial.xml")
 	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	@ExpectedDatabase(value="cp-test/registration-test/generic-expected.xml", 
@@ -324,6 +347,7 @@ public class CollectionProtocolRegistrationTest {
 	public void registerParticipantEmptyPPID() {		
 		CollectionProtocolRegistrationDetail cpr = CprTestData.getCprDetail();
 		cpr.setPpid(null);
+
 		CreateRegistrationEvent req = new CreateRegistrationEvent();
 		req.setCprDetail(cpr);
 		req.setSessionDataBean(CprTestData.getSessionDataBean());
@@ -393,36 +417,15 @@ public class CollectionProtocolRegistrationTest {
 		
 		RegistrationCreatedEvent resp = cprSvc.createRegistration(req);
 		
-		Assert.assertNotNull(resp);
 		TestUtils.recordResponse(resp);
+		
+		Assert.assertNotNull(resp);
 		Assert.assertEquals(EventStatus.OK, resp.getStatus());
 		
 		CollectionProtocolRegistrationDetail detail = resp.getCprDetail();
-		Assert.assertNotNull(detail);
-		Assert.assertNotNull(detail.getParticipant());
-		Assert.assertEquals(true, resp.getCprDetail().getId() > new Long(0));
-		Assert.assertEquals(cpr.getPpid(), detail.getPpid());
 		Assert.assertEquals(cpr.getCpId(), detail.getCpId());
-		Assert.assertEquals("default-cp", detail.getCpTitle());
-		Assert.assertNotNull(detail.getConsentDetails());
-		Assert.assertNotNull(detail.getConsentDetails().getConsentTierResponses());
-		Assert.assertEquals((int)3, detail.getConsentDetails().getConsentTierResponses().size());
-		
-		for (ConsentTierResponseDetail statement : detail.getConsentDetails().getConsentTierResponses()) {
-			String consent = statement.getConsentStatment();
-			String response = statement.getParticipantResponse();
-			
-			if ("CONSENT1".equals(consent)) {
-				Assert.assertEquals("yes", response);
-			} else if ("CONSENT2".equals(consent) ) {
-				Assert.assertEquals("no", response);
-			} else if ("CONSENT3".equals(consent)) {
-				Assert.assertEquals("may be", response);
-			} else {
-				Assert.fail("The consent: " + consent + " was not expected in this test");
-			}
-		}
-		
+		assertRegistrationCreatedEventDetail(detail, cpr);
+
 		ParticipantDetail participant = detail.getParticipant();
 		Assert.assertEquals(true, (new Long(0) < participant.getId()));
 		Assert.assertEquals("default_first_name", participant.getFirstName());
@@ -538,7 +541,7 @@ public class CollectionProtocolRegistrationTest {
 		Assert.assertEquals(false, resp.isSuccess());
 		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ParticipantErrorCode.CONSTRAINT_VIOLATION, BIRTH_DATE));
 	}
-
+	
 	//TODO: fix this when pvManager is back in place
 	////@Test
 	@DatabaseSetup("cp-test/registration-test/generic-initial.xml")
@@ -574,6 +577,33 @@ public class CollectionProtocolRegistrationTest {
 		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ParticipantErrorCode.CONSTRAINT_VIOLATION, ETHNICITY));
 	}
 	
+	public void assertRegistrationCreatedEventDetail (CollectionProtocolRegistrationDetail detail, CollectionProtocolRegistrationDetail cpr) {
+		Assert.assertNotNull("Error: Detail found null", detail);
+		Assert.assertNotNull("Error: Participants found null", detail.getParticipant());
+		Assert.assertEquals("Error: Invalid id", true, detail.getId() > new Long(0));
+		Assert.assertEquals("Error: Ppid mismatch" ,cpr.getPpid(), detail.getPpid());
+		Assert.assertEquals("Error: CpTitle mismatch", "default-cp", detail.getCpTitle());
+		Assert.assertNotNull("Error: Consent details found null", detail.getConsentDetails());
+		Assert.assertNotNull("Error: Consent tier response found null", detail.getConsentDetails().getConsentTierResponses());
+		Assert.assertEquals("Error: Consent tier response count mismatch", (int)3, detail.getConsentDetails().getConsentTierResponses().size());
+		
+		for (ConsentTierResponseDetail statement : detail.getConsentDetails().getConsentTierResponses()) {
+			String consent = statement.getConsentStatment();
+			String response = statement.getParticipantResponse();
+			
+			if ("CONSENT1".equals(consent)) {
+				Assert.assertEquals("yes", response);
+			} else if ("CONSENT2".equals(consent) ) {
+				Assert.assertEquals("no", response);
+			} else if ("CONSENT3".equals(consent)) {
+				Assert.assertEquals("may be", response);
+			} else {
+				Assert.fail("The consent: " + consent + " was not expected in this test");
+			}
+		}
+	}
+	
+	
 	/*
 	 * Get Registraiton API Tests
 	 */
@@ -589,44 +619,8 @@ public class CollectionProtocolRegistrationTest {
 		TestUtils.recordResponse(resp);
 		
 		Assert.assertEquals(true, resp.isSuccess());
-		CollectionProtocolRegistrationDetail cpr = resp.getCpr();
-		Assert.assertNotNull(cpr);
-		Assert.assertNotNull(cpr.getConsentDetails());
-		Assert.assertNotNull(cpr.getParticipant());
-		Assert.assertNotNull(cpr.getParticipant().getRace());
 		
-		Assert.assertEquals(new Long(1), cpr.getId());
-		Assert.assertEquals(new Long(1), cpr.getCpId());
-		Assert.assertEquals("default-cp", cpr.getCpTitle());
-		Assert.assertEquals("default-gen-ppid-1", cpr.getPpid());
-		Assert.assertEquals("www.exampleurl.com", cpr.getConsentDetails().getConsentDocumentUrl());
-		Assert.assertEquals((int)3, cpr.getConsentDetails().getConsentTierResponses().size());
-		Assert.assertEquals("admin@admin.com", cpr.getConsentDetails().getWitnessName());
-		Assert.assertEquals(CprTestData.getDate(31,1,2001), cpr.getRegistrationDate());
-		Assert.assertEquals("Active", cpr.getActivityStatus());
-		
-		for (ConsentTierResponseDetail statement : cpr.getConsentDetails().getConsentTierResponses()) {
-			String consent = statement.getConsentStatment();
-			String response = statement.getParticipantResponse();
-			
-			if ("CONSENT1".equals(consent)) {
-				Assert.assertEquals("yes", response);
-			} else if ("CONSENT2".equals(consent) ) {
-				Assert.assertEquals("no", response);
-			} else if ("CONSENT3".equals(consent)) {
-				Assert.assertEquals("may be", response);
-			} else {
-				Assert.fail("The consent: " + consent + " was not expected in this test");
-			}
-		}
-		
-		ParticipantDetail participant = resp.getCpr().getParticipant();		
-		Assert.assertEquals("Falero", participant.getLastName());
-		Assert.assertEquals("Guava", participant.getFirstName());
-		Assert.assertEquals((int)1, participant.getRace().size());
-		Assert.assertEquals("Asian", participant.getRace().iterator().next());
-		Assert.assertEquals(CprTestData.getDate(21,10,2012), participant.getBirthDate());
-		Assert.assertEquals("Active" , participant.getActivityStatus());
+		AssertCprDetail(resp);
 	}
 	
 	@Test
@@ -642,21 +636,26 @@ public class CollectionProtocolRegistrationTest {
 		TestUtils.recordResponse(resp);
 		
 		Assert.assertEquals(true, resp.isSuccess());
-		CollectionProtocolRegistrationDetail cpr = resp.getCpr();
-		Assert.assertNotNull(cpr);
-		Assert.assertNotNull(cpr.getConsentDetails());
-		Assert.assertNotNull(cpr.getParticipant());
-		Assert.assertNotNull(cpr.getParticipant().getRace());
 		
-		Assert.assertEquals(new Long(1), cpr.getId());
-		Assert.assertEquals(new Long(1), cpr.getCpId());
-		Assert.assertEquals("default-cp", cpr.getCpTitle());
-		Assert.assertEquals("default-gen-ppid-1", cpr.getPpid());
-		Assert.assertEquals("www.exampleurl.com", cpr.getConsentDetails().getConsentDocumentUrl());
-		Assert.assertEquals((int)3, cpr.getConsentDetails().getConsentTierResponses().size());
-		Assert.assertEquals("admin@admin.com", cpr.getConsentDetails().getWitnessName());
-		Assert.assertEquals(CprTestData.getDate(31,1,2001), cpr.getRegistrationDate());
-		Assert.assertEquals("Active", cpr.getActivityStatus());
+		AssertCprDetail(resp);
+	}
+	
+	public void AssertCprDetail(RegistrationEvent resp) {
+		CollectionProtocolRegistrationDetail cpr = resp.getCpr();
+		Assert.assertNotNull("Error: Collection protocol registration detail found null", cpr);
+		Assert.assertNotNull("Error: Consent details found null", cpr.getConsentDetails());
+		Assert.assertNotNull("Error: Participants found null", cpr.getParticipant());
+		Assert.assertNotNull("Error: Race found null", cpr.getParticipant().getRace());
+		
+		Assert.assertEquals("Error: CprId mismatch", new Long(1), cpr.getId());
+		Assert.assertEquals("Error: CpId mismatch", new Long(1), cpr.getCpId());
+		Assert.assertEquals("Error: Cp title mismatch", "default-cp", cpr.getCpTitle());
+		Assert.assertEquals("Error: Ppid mismatch", "default-gen-ppid-1", cpr.getPpid());
+		Assert.assertEquals("Error: Comsent document url mismatch", "www.exampleurl.com", cpr.getConsentDetails().getConsentDocumentUrl());
+		Assert.assertEquals("Error: Consent tier response count mismatch", (int)3, cpr.getConsentDetails().getConsentTierResponses().size());
+		Assert.assertEquals("Error: Witness name mismatch", "admin@admin.com", cpr.getConsentDetails().getWitnessName());
+		Assert.assertEquals("Error: Registration date mismatch", CprTestData.getDate(31,1,2001), cpr.getRegistrationDate());
+		Assert.assertEquals("Error: Activity status mismatch", "Active", cpr.getActivityStatus());
 		
 		for (ConsentTierResponseDetail statement : cpr.getConsentDetails().getConsentTierResponses()) {
 			String consent = statement.getConsentStatment();
@@ -674,12 +673,12 @@ public class CollectionProtocolRegistrationTest {
 		}
 		
 		ParticipantDetail participant = resp.getCpr().getParticipant();		
-		Assert.assertEquals("Falero", participant.getLastName());
-		Assert.assertEquals("Guava", participant.getFirstName());
-		Assert.assertEquals((int)1, participant.getRace().size());
+		Assert.assertEquals("Error: Participant's last name mismatch", "Falero", participant.getLastName());
+		Assert.assertEquals("Error: Participant's first name mismatch", "Guava", participant.getFirstName());
+		Assert.assertEquals("Error: Participant's race count mismatch", (int)1, participant.getRace().size());
 		Assert.assertEquals("Asian", participant.getRace().iterator().next());
-		Assert.assertEquals(CprTestData.getDate(21,10,2012), participant.getBirthDate());
-		Assert.assertEquals("Active" , participant.getActivityStatus());
+		Assert.assertEquals("Error: Birthdate mismatch", CprTestData.getDate(21,10,2012), participant.getBirthDate());
+		Assert.assertEquals("Error: Participant's activity status mismatch", "Active" , participant.getActivityStatus());
 	}
 	
 	@Test
