@@ -1029,6 +1029,17 @@
       <antcall target="migrate_specimen_events"/>
     </target>
 
+    <target name="upgrade_db_os_v2.0">
+      <updateDatabase 
+        changeLogFile="${base.dir}/SQL/liquibase_xml/db-os-changelog-2.0.xml" 
+        driver="${final.database.driver}" 
+        url="${final.database.url}" 
+        username="${database.username}" 
+        password="${database.password}" 
+        dropFirst="false" 
+        classpathref="liquibaseClasspath" />
+    </target>
+
        <target name="upgrade_de_db">
            <delete dir="${temp.dir}/dynamicextensions" failonerror="no"/>
            <mkdir dir="${temp.dir}/dynamicextensions"/>

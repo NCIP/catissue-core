@@ -15,7 +15,7 @@ public abstract class AbstractListCriteria<T extends ListCriteria<T>> implements
 		
 	@Override
 	public int startAt() {
-		return startAt;
+		return startAt <= 0 ? 0 : startAt;
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public abstract class AbstractListCriteria<T extends ListCriteria<T>> implements
 
 	@Override
 	public int maxResults() {		
-		return maxResults;
+		return maxResults <= 0 ? 100 : maxResults;
 	}
 
 	@Override

@@ -289,5 +289,13 @@
         title = :title and 
         activityStatus = 'Active'
     </query>
+
+    <query name="getCpsByShortTitle">
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol
+      where
+        shortTitle in (:shortTitles) and 
+        activityStatus = 'Active'
+    </query>
   </class>
 </hibernate-mapping>

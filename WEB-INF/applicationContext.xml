@@ -373,15 +373,13 @@
 		<property name="tokenFactory" ref="tokenFactory" />
 	</bean>
 	
-	<bean id="storageContainerFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.StorageContainerFactoryImpl">
+	<bean id="storageContainerFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.StorageContainerFactoryImpl">
 		<property name="daoFactory" ref="biospecimenDaoFactory"/>
 	</bean>
 
 	<bean id="storageContainerSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.StorageContainerServiceImpl">
 		<property name="daoFactory" ref="biospecimenDaoFactory"/>
-		<property name="storageContainerFactory" ref="storageContainerFact"/>
-		<property name="containerLabelGenerator" ref="containerLabelGenerator"/>
-		<property name="containerBarcodeGenerator" ref="containerBarcodeGenerator"/>
+		<property name="containerFactory" ref="storageContainerFactory"/>
 	</bean>
 	
 	<bean id="bucketPool" class="com.krishagni.catissueplus.core.common.util.BucketPool">

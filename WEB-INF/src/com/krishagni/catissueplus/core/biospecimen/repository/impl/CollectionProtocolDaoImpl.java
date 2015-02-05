@@ -2,6 +2,8 @@
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -110,6 +112,21 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	}
 	
 	@Override
+	public CollectionProtocol getCpByShortTitle(String shortTitle) {
+		List<CollectionProtocol> cpList = getCpsByShortTitle(Collections.singleton(shortTitle));
+		return cpList == null || cpList.isEmpty() ? null : cpList.iterator().next();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CollectionProtocol> getCpsByShortTitle(Collection<String> shortTitles) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CPS_BY_SHORT_TITLE)
+				.setParameterList("shortTitles", shortTitles)
+				.list();
+	}
+	
+	@Override
 	public CollectionProtocolEvent getCpe(Long cpeId) {
 		return (CollectionProtocolEvent) sessionFactory.getCurrentSession()
 				.get(CollectionProtocolEvent.class.getName(), cpeId);
@@ -153,11 +170,14 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	private static final String GET_CPE_BY_CP_AND_LABEL = FQN + ".getCpeByTitleAndEventLabel";
 	
 	private static final String GET_CP_BY_TITLE = FQN + ".getCpByTitle";
+	
+	private static final String GET_CPS_BY_SHORT_TITLE = FQN + ".getCpsByShortTitle";
 
 	@Override
 	public Class getType() {
 		return CollectionProtocol.class;
 	}
+
 	
 //
 //	@Override

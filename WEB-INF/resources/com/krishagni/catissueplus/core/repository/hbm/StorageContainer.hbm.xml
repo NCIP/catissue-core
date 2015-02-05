@@ -4,130 +4,80 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false">
-	<class
-    	name="com.krishagni.catissueplus.core.administrative.domain.StorageContainer"
-        table="CATISSUE_STORAGE_CONTAINERS"
-        lazy="true">
-	
-    	<cache usage="read-write" />
+  <class name="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" table="OS_STORAGE_CONTAINERS">
 
-        <id
-       		name="id"
-            column="IDENTIFIER"
-            type="long"
-            length="30"
-            unsaved-value="null">
-            <generator class="native">
-                <param name="sequence">CATISSUE_STOR_CONTAINER_SEQ</param>
-            </generator>
-        </id>
+    <id name="id" column="IDENTIFIER" type="long" unsaved-value="null">
+      <generator class="native">
+        <param name="sequence">OS_STORAGE_CONTAINERS_SEQ</param>
+      </generator>
+    </id>
 
-        <property
-            name="name"
-            type="string"
-            column="NAME"
-            length="255"/>
+    <property name="name" column="NAME"/>
 
-        <property
-            name="barcode"
-            type="string"
-            column="BARCODE"
-            length="255"/>
+    <property name="barcode" column="BARCODE"/>
 
-        <property
-            name="comments"
-            column="COMMENTS"
-            length="2000"
-            type="string"/>
+    <property name="temperature" column="TEMPERATURE"/>
 
-        <property
-        	name="tempratureInCentigrade"
-        	column="TEMPERATURE"
-			length="30"
-			type="double"/>
-			
-		<property
-		    name="oneDimensionCapacity"
-    		column="ONE_DIMENSION_CAPACITY"
-    		length="16"
-    		type="int" />
-    		
-    	<property
-            name="oneDimentionLabelingScheme"
-            column="ONE_DIMENSION_LABELLING_SCHEME"
-            length="16"
-            type="string"/>
+    <property name="dimensionOneCapacity" column="DIMENSION_ONE_CAPACITY"/>
+
+    <property name="dimensionTwoCapacity" column="DIMENSION_TWO_CAPACITY"/>
+
+    <property name="dimensionOneLabelingScheme" column="DIMENSION_ONE_LABELING_SCHEME"/>
+
+    <property name="dimensionTwoLabelingScheme" column="DIMENSION_TWO_LABELING_SCHEME"/>
+
+    <many-to-one
+      name="site"
+      class="com.krishagni.catissueplus.core.administrative.domain.Site"
+      column="SITE_ID"/>
+
+    <many-to-one
+      name="parentContainer"
+      class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer"
+      column="PARENT_CONTAINER_ID"/>
+
+    <many-to-one
+      name="createdBy"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      column="CREATED_BY"/>
+
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+
+    <property name="comments" column="COMMENTS"/>
+
+    <set name="childContainers" table="OS_STORAGE_CONTAINERS" inverse="true">
+      <key column="PARENT_CONTAINER_ID"/>
+      <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" />
+    </set>
+
+    <set name="allowedSpecimenClasses" table="OS_STOR_CONT_SPEC_CLASSES" cascade="all-delete-orphan">
+      <key column="STORAGE_CONTAINER_ID"/>
+      <element column="SPECIMEN_CLASS" type="string"/>
+    </set>
+
+    <set name="allowedSpecimenTypes" table="OS_STOR_CONT_SPEC_TYPES" cascade="all-delete-orphan">
+      <key column="STORAGE_CONTAINER_ID"/>
+      <element column="SPECIMEN_TYPE" type="string"/>
+    </set>
             
-        <property
-            name="twoDimentionLabelingScheme"
-            column="TWO_DIMENSION_LABELLING_SCHEME"
-            length="16"
-            type="string"/>
+    <set name="allowedCps" table="OS_STOR_CONTAINER_CPS" cascade="all-delete-orphan">
+      <key column="STORAGE_CONTAINER_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol" column="CP_ID"/>
+    </set>
 
-		<property
-    		name="twoDimensionCapacity"
-    		column="TWO_DIMENSION_CAPACITY"
-    		length="16"
-    		type="int"/>
+    <one-to-one
+      name="position"
+      class="com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition"
+      property-ref="occupyingContainer"
+      cascade="save-update"/>
 
-        <property
-            name="activityStatus"
-            type="string"
-            column="ACTIVITY_STATUS"
-            length="50"/>
+    <set name="occupiedPositions" table="OS_CONTAINER_POSITIONS" cascade="all-delete-orphan" batch-size="100" inverse="true">
+      <key column="STORAGE_CONTAINER_ID" not-null="true"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition"/>
+    </set>
 
-        <many-to-one
-            name="site"
-            class="com.krishagni.catissueplus.core.administrative.domain.Site"
-            column="SITE_ID"/>
-            
-        <set
-            name="childContainers"
-            table="CATISSUE_STORAGE_CONTAINERS">
-
-        	<cache usage="read-write"/>
-            <key column="PARENT_CONTAINER_ID"/>
-            <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" />
-
-        </set>
-            
-        <many-to-one
-            name="parentContainer"
-            class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer"
-            column="PARENT_CONTAINER_ID"/>
-
-		<set
-            name="holdsCPs"
-            table="CATISSUE_CONTAINER_CPS"
-            inverse="false"
-            cascade="save-update">
-
-            <key column="CONTAINER_ID"/>
-            <many-to-many
-                class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol"
-                column="CP_ID"/>
-        </set>
-	
-         <set
-            name="holdsSpecimenTypes"
-            cascade="save-update"
-            fetch="join"
-            inverse="false"
-            sort="unsorted"
-            table="CAT_STOR_CONT_SPEC_TYPES" >
-
-            <cache usage="read-write" />
-            <key column="STORAGE_CONTAINER_ID" />
-            <element
-                column="SPECIMEN_TYPE"
-                length="50"
-                type="string" />
-         </set>
-         
-         <many-to-one
-            name="createdBy"
-            class="com.krishagni.catissueplus.core.administrative.domain.User"
-            cascade="none"
-            column="CREATED_BY"/>
-   </class>
+    <one-to-one
+      name="stats"
+      class="com.krishagni.catissueplus.core.administrative.domain.StorageContainerStats"/>
+  </class>
 </hibernate-mapping>

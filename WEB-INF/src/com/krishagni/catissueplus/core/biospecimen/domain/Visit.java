@@ -242,4 +242,8 @@ public class Visit {
 	public void addSpecimen(Specimen specimen) {
 		specimens.add(specimen);
 	}
+	
+	public CollectionProtocol getCollectionProtocol() {
+		return registration.getCollectionProtocol();
+	}
 }

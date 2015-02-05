@@ -1,22 +1,15 @@
-
 package com.krishagni.catissueplus.core.administrative.events;
 
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class CreateStorageContainerEvent extends RequestEvent {
+	private StorageContainerDetail container;
 
-	private StorageContainerDetails details;
-	
-	public CreateStorageContainerEvent(StorageContainerDetails details) {
-		setDetails(details);
+	public StorageContainerDetail getContainer() {
+		return container;
 	}
 
-	public StorageContainerDetails getDetails() {
-		return details;
+	public void setContainer(StorageContainerDetail container) {
+		this.container = container;
 	}
-
-	public void setDetails(StorageContainerDetails details) {
-		this.details = details;
-	}
-
 }

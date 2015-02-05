@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <property name="boolean.type" value="boolean" dbms="mysql" />
+  <property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
+  <property name="int.type" value="bigint" dbms="mysql" />
+  <property name="int.type" value="number(19,0)" dbms="oracle" />
+
+  <property name="smallint.type" value="smallint" dbms="mysql" />
+  <property name="smallint.type" value="number(5,0)" dbms="oracle" />
+
+  <property name="text.type" value="varchar" dbms="mysql" />
+  <property name="text.type" value="varchar2" dbms="oracle" />
+
+  <property name="double.type" value="double"/>
+
+  <property name="autoIncrement" value="true" dbms="mysql"/>
+  <property name="autoIncrement" value="false" dbms="oracle"/>
+
+  <changeSet author="vpawar" id="Simplified storage containers" failOnError="true">
+    <createTable tableName="OS_STORAGE_CONTAINERS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(64)">
+        <constraints unique="true" nullable="false" />
+      </column>
+     
+      <column name="BARCODE" type="${text.type}(64)">
+        <constraints unique="true" />
+      </column>
+
+      <column name="TEMPERATURE" type="${double.type}">
+      </column>
+     
+      <column name="DIMENSION_ONE_CAPACITY" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+     
+      <column name="DIMENSION_TWO_CAPACITY" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+     
+      <column name="DIMENSION_ONE_LABELING_SCHEME" type="${text.type}(64)" defaultValue="Numbers">
+      </column>
+     
+      <column name="DIMENSION_TWO_LABELING_SCHEME" type="${text.type}(64)" defaultValue="Numbers">
+      </column>
+
+      <column name="SITE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="PARENT_CONTAINER_ID" type="${int.type}">
+      </column>
+
+      <column name="CREATED_BY" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+     
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)">
+      </column>
+
+      <column name="POSITION_ID" type="${int.type}">
+      </column>
+
+      <column name="COMMENTS" type="${text.type}(255)">
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK to container site">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ST_CONT_SITE_ID"
+      baseTableName="OS_STORAGE_CONTAINERS"
+      baseColumnNames="SITE_ID"
+      referencedTableName="CATISSUE_SITE"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK to container's parent container">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ST_CONT_PARENT_CONT"
+      baseTableName="OS_STORAGE_CONTAINERS"
+      baseColumnNames="PARENT_CONTAINER_ID"
+      referencedTableName="OS_STORAGE_CONTAINERS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK to container creator">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ST_CONT_CREATED_BY"
+      baseTableName="OS_STORAGE_CONTAINERS"
+      baseColumnNames="CREATED_BY"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Containers table sequence">
+    <createSequence 
+      sequenceName="OS_STORAGE_CONTAINERS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Allowed specimen classes in container">
+    <createTable tableName="OS_STOR_CONT_SPEC_CLASSES">
+      <column name="STORAGE_CONTAINER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SPECIMEN_CLASS" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK to container in allowed specimen classes">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ST_CONT_SC_CONT_ID"
+      baseTableName="OS_STOR_CONT_SPEC_CLASSES"
+      baseColumnNames="STORAGE_CONTAINER_ID"
+      referencedTableName="OS_STORAGE_CONTAINERS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Allowed specimen types in container">
+    <createTable tableName="OS_STOR_CONT_SPEC_TYPES">
+      <column name="STORAGE_CONTAINER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SPECIMEN_TYPE" type="${text.type}(128)">
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK to container in allowed specimen types">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ST_CONT_ST_CONT_ID"
+      baseTableName="OS_STOR_CONT_SPEC_TYPES"
+      baseColumnNames="STORAGE_CONTAINER_ID"
+      referencedTableName="OS_STORAGE_CONTAINERS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Allowed CP specimens in container">
+    <createTable tableName="OS_STOR_CONTAINER_CPS">
+      <column name="STORAGE_CONTAINER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CP_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK to container in allowed CP specimens">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ST_CONT_CPS_CONT_ID"
+      baseTableName="OS_STOR_CONTAINER_CPS"
+      baseColumnNames="STORAGE_CONTAINER_ID"
+      referencedTableName="OS_STORAGE_CONTAINERS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK to CP in allowed CP specimens">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ST_CONT_CPS_CP_ID"
+      baseTableName="OS_STOR_CONTAINER_CPS"
+      baseColumnNames="CP_ID"
+      referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <!-- changeSet author="vpawar" id="Container position occupancy table">
+    <createTable tableName="OS_CONTAINER_POSITIONS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="POS_ONE" type="${smallint.type}">
+        <constraints nullable="false"/>
+      </column>
+     
+      <column name="POS_TWO" type="${smallint.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="POS_ONE_STR" type="${text.type}(8)">
+        <constraints nullable="false"/>
+      </column>
+     
+      <column name="POS_TWO_STR" type="${text.type}(8)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="STORAGE_CONTAINER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="OCCUPYING_SPECIMEN_ID" type="${int.type}">
+      </column>
+
+      <column name="OCCUPYING_CONTAINER_ID" type="${int.type}">
+      </column>
+    </createTable>
+  </changeSet -->
+
+  <changeSet author="vpawar" id="Add FK to container in container occupancy table">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_POS_ST_CONTS_CONT_ID"
+      baseTableName="OS_CONTAINER_POSITIONS"
+      baseColumnNames="STORAGE_CONTAINER_ID"
+      referencedTableName="OS_STORAGE_CONTAINERS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Containers occupancy table sequence">
+    <createSequence 
+      sequenceName="OS_CONTAINER_POSITIONS_SEQ"
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK to occupying specimen id in container occupancy table">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_POS_ST_CONTS_OSPID"
+      baseTableName="OS_CONTAINER_POSITIONS"
+      baseColumnNames="OCCUPYING_SPECIMEN_ID"
+      referencedTableName="CATISSUE_SPECIMEN"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK to occupying container id in container occupancy table">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_POS_ST_CONTS_OCPID"
+      baseTableName="OS_CONTAINER_POSITIONS"
+      baseColumnNames="OCCUPYING_CONTAINER_ID"
+      referencedTableName="OS_STORAGE_CONTAINERS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Unique constraint on specimen id in container occupancy table">
+    <addUniqueConstraint 
+      tableName="OS_CONTAINER_POSITIONS"
+      columnNames="OCCUPYING_SPECIMEN_ID"
+      constraintName="OS_POS_ST_CONTS_OSPID_UQ"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Unique constraint on container id in container occupancy table">
+    <addUniqueConstraint 
+      tableName="OS_CONTAINER_POSITIONS"
+      columnNames="OCCUPYING_CONTAINER_ID"
+      constraintName="OS_POS_ST_CONTS_OCPID_UQ"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Storage container stats view" runOnChange="true">
+    <sql> 
+      create or replace view OS_STORAGE_CONT_STATS_VIEW as (
+        select 
+          s.identifier as container_id, s.name as container_name, 
+          s.dimension_one_capacity * s.dimension_two_capacity - count(p.identifier) as free_positions
+        from 
+          os_storage_containers s 
+          left join os_container_positions p on p.storage_container_id = s.identifier 
+        group by 
+          s.identifier, s.name, s.dimension_one_capacity, s.dimension_two_capacity
+      )
+    </sql>
+  </changeSet>
+</databaseChangeLog>

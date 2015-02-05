@@ -8,13 +8,45 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
+import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 import edu.wustl.catissuecore.util.global.Constants;
-import org.hibernate.transform.DistinctRootEntityResultTransformer;
 
 public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> implements StorageContainerDao {
+
+	@Override
+	public Class<?> getType() {
+		return StorageContainer.class;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<StorageContainer> getStorageContainers(StorageContainerListCriteria listCrit) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(StorageContainer.class)
+				.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE))
+				.addOrder(Order.asc("name"))
+				.setFirstResult(listCrit.startAt())
+				.setMaxResults(listCrit.maxResults());
+		
+		if (listCrit.onlyFreeContainers()) {
+			query.createAlias("stats", "stats");
+			query.add(Restrictions.gt("stats.freePositions", 0));
+		}
+		
+		
+		if (listCrit.parentContainerId() != null) {
+			query.createAlias("parentContainer", "pc");
+			query.add(Restrictions.eq("pc.id", listCrit.parentContainerId()));
+		} else {
+			query.add(Restrictions.isNull("parentContainer"));
+		}
+		
+		return query.list();
+	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
@@ -27,13 +59,16 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 
 		return result.isEmpty() ? null : result.iterator().next();
 	}
-
-	@Override
-	public Boolean isUniqueContainerName(String name) {
-		Criteria query = sessionFactory.getCurrentSession()
+	
+	@SuppressWarnings("unchecked")
+	public StorageContainer getStorageContainerByBarcode(String barcode) {		
+		List<StorageContainer> result = sessionFactory.getCurrentSession()
 				.createCriteria(StorageContainer.class)
-				.add(Restrictions.eq("name", name));
-		return query.list().isEmpty() ? true : false;
+				.add(Restrictions.eq("barcode", barcode))
+				.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
+				.list();
+
+		return result.isEmpty() ? null : result.iterator().next();		
 	}
 
 	@Override
@@ -42,24 +77,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	}
 
 	@Override
-	public boolean isUniqueBarcode(String barcode) {
-		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(StorageContainer.class)
-				.add(Restrictions.eq("barcode", barcode))
-				.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE));
-		return query.list().isEmpty() ? true : false;
+	public void delete(StorageContainerPosition position) {
+		sessionFactory.getCurrentSession().delete(position);		
 	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public List<StorageContainer> getAllStorageContainers(int maxResults) {
-		return sessionFactory.getCurrentSession()
-			 	.createCriteria(StorageContainer.class)
-                         	.setResultTransformer(DistinctRootEntityResultTransformer.INSTANCE)
-				.setMaxResults(maxResults)
-                              	.addOrder(Order.asc("name"))
-				.list();
-		
-	}
-
 }
