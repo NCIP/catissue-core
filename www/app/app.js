@@ -177,4 +177,8 @@ angular.module('openspecimen', [
       function(event, toState, toParams, fromState, fromParams) { 
         $rootScope.state = toState;
       });
+
+    $rootScope.back = function() {
+      $window.history.back();
+    }
   });

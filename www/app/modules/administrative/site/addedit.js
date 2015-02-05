@@ -1,8 +1,8 @@
 angular.module('os.administrative.site.addedit', ['os.administrative.models'])
-  .controller('SiteAddEditCtrl', function($scope, $state, Site, PvManager) {
+  .controller('SiteAddEditCtrl', function($scope, $state, site, Site, PvManager) {
 
   var init = function() {
-    $scope.site = new Site();
+    $scope.site = site;
     $scope.siteTypes = PvManager.getPvs('site-type');
   }
 

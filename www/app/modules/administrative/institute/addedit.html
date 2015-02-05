@@ -1,6 +1,9 @@
 <div>
   <div class="os-page-hdr">
-    <h3 translate="institutes.create_institute">Create Institute</h3>
+    <h3> 
+      <span ng-if="!institute.id" translate="institutes.create_institute"> Create Institute </span>
+      <span ng-if="!!institute.id" translate="institutes.update_institute"> Update Institute </span>
+    </h3>
   </div>
 
   <div class="container">
@@ -45,8 +48,11 @@
 
       <div class="form-group">
         <div class="col-xs-offset-3 col-xs-6">
-          <button class="btn btn-primary" os-form-submit="save()" translate="common.buttons.create">Add</button>
-          <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.buttons.discard">Discard</button>
+          <button class="btn btn-primary" os-form-submit="save()">
+            <span ng-if="!institute.id"  translate="common.buttons.create"> Create </span>
+            <span ng-if="!!institute.id" translate="common.buttons.update"> Update </span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">Discard</button>
         </div>
       </div>
     </form>

@@ -15,9 +15,17 @@ angular.module('os.administrative.site',
         controller: 'SiteListCtrl',
         parent: 'signed-in'
       })
-      .state('site-new', {
-        url: '/new-site',
+      .state('site-addedit', {
+        url: '/site-addedit/:siteId',
         templateUrl: 'modules/administrative/site/addedit.html',
+        resolve: {
+          site: function($stateParams, Site) {
+            if ($stateParams.siteId) {
+              return Site.getById($stateParams.siteId);
+            }
+            return new Site();
+          }
+        },
         controller: 'SiteAddEditCtrl',
         parent: 'signed-in'
       })

@@ -58,7 +58,6 @@ public class InstituteFactoryImpl implements InstituteFactory {
 					exceptionHandler.addError(UserErrorCode.NOT_FOUND, DEPARTMENT_IDENTIFIER);
 				}
 				department.setName(deptDetail.getName());
-				department.setInstitute(institute);
 				departmentSet.add(department);
 			}				
 		}

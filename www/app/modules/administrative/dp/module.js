@@ -14,9 +14,17 @@ angular.module('os.administrative.dp',
         controller: 'DpListCtrl',
         parent: 'signed-in'
       })
-      .state('dp-new', {
-        url: '/new-dp',
+      .state('dp-addedit', {
+        url: '/dp-addedit/:dpId',
         templateUrl: 'modules/administrative/dp/addedit.html',
+        resolve: {
+          distributionProtocol: function($stateParams , DistributionProtocol) {
+            if ($stateParams.dpId) {
+              return DistributionProtocol.getById($stateParams.dpId);
+            }
+            return new DistributionProtocol();
+          }
+        },
         controller: 'DpAddEditCtrl',
         parent: 'signed-in'
       })

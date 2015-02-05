@@ -1,7 +1,10 @@
 
 <div>
   <div class="os-page-hdr">
-    <h3 translate="user.create_user">Create User</h3> 
+    <h3>
+      <span ng-if="!user.id" translate="user.create_user">Create User</span>
+      <span ng-if="!!user.id" translate="user.update_user">Update User</span>
+    </h3> 
   </div>
 
   <div class="container">
@@ -84,8 +87,11 @@
 
       <div class="form-group">
         <div class="col-xs-offset-3 col-xs-6">
-          <button class="btn btn-primary" os-form-submit="createUser()" translate="common.buttons.create"> Create </button>
-          <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.buttons.discard"> Discard </button>
+          <button class="btn btn-primary" os-form-submit="createUser()"> 
+            <span ng-if="!user.id" translate="common.buttons.create"> Create </span> 
+            <span ng-if="!!user.id" translate="common.buttons.update"> Update </span> 
+          </button>
+          <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard"> Discard </button>
         </div>
       </div>
     </form>
