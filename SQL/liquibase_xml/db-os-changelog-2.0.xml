@@ -178,7 +178,7 @@
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
 
-  <!-- changeSet author="vpawar" id="Container position occupancy table">
+  <changeSet author="vpawar" id="Container position occupancy table">
     <createTable tableName="OS_CONTAINER_POSITIONS">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
         <constraints primaryKey="true" nullable="false"/>
@@ -210,7 +210,7 @@
       <column name="OCCUPYING_CONTAINER_ID" type="${int.type}">
       </column>
     </createTable>
-  </changeSet -->
+  </changeSet>
 
   <changeSet author="vpawar" id="Add FK to container in container occupancy table">
     <addForeignKeyConstraint
