@@ -110,7 +110,7 @@ public class StorageContainerDetail extends StorageContainerSummary {
 		
 		Set<String> cpNames = new HashSet<String>();
 		for (CollectionProtocol cp : container.getAllowedCps()) {
-			cpNames.add(cp.getTitle());
+			cpNames.add(cp.getShortTitle());
 		}
 		result.setAllowedCollectionProtocols(cpNames);
 		
