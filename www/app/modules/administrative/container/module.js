@@ -24,7 +24,8 @@ angular.module('os.administrative.container',
             if ($stateParams.containerId) {
               return Container.getById($stateParams.containerId);
             }
-            return new Container();
+
+            return new Container({allowedCollectionProtocols: [], allowedSpecimenClasses: [], allowedSpecimenTypes: []});
           } 
         },
         controller: 'ContainerAddEditCtrl',

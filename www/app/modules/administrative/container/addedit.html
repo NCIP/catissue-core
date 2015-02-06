@@ -12,18 +12,18 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="container.name">Name</label>
         <div class="col-xs-6">
-          <input type="text" name="containerName" ng-model="container.name" class="form-control"
+          <input type="text" name="name" ng-model="container.name" class="form-control"
             required placeholder="{{'container.name' | translate}}" ng-maxlength="255">
-          <div os-field-error field="cform.containerName"></div>
+          <div os-field-error field="cform.name"></div>
         </div>
       </div>
 
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="container.barcode">Barcode</label>
         <div class="col-xs-6">
-          <input type="text" name="containerBarcode" ng-model="container.barcode" class="form-control"
+          <input type="text" name="barcode" ng-model="container.barcode" class="form-control"
             placeholder="{{'container.barcode' | translate}}" ng-maxlength="255">
-          <div os-field-error field="cform.containerBarcode"></div>
+          <div os-field-error field="cform.barcode"></div>
         </div>
       </div>
 
@@ -31,49 +31,53 @@
         <label class="col-xs-3 control-label" translate="container.parent_location">Parent Location</label>
         <div class="col-xs-3">
           <os-select ng-model="container.siteName" list="sites" placeholder="{{'container.site' | translate}}"
-            name="parentSite" on-change="loadContainers" required></os-select>
+            name="parentSite" on-change="loadContainers" required>
+          </os-select>
           <div os-field-error field="cform.parentSite"></div>
         </div>
         <div class="col-xs-3">
           <os-select ng-model="container.parentContainerName" list="containers"
-            placeholder="{{'container.container' | translate}}" name="parentContainer"></os-select>
+            placeholder="{{'container.container' | translate}}" name="parentContainerName">
+          </os-select>
         </div>
       </div>
 
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="container.dimension">Dimension</label>
         <div class="col-xs-3">
-          <input type="text" name="dimensionOne" ng-model="container.oneDimensionCapacity" class="form-control"
-            placeholder="{{'container.one' | translate}}" ng-pattern="/^[0-9]*$/" required>
-          <div os-field-error field="cform.dimensionOne"></div>
+          <input type="text" name="dimensionOneCapacity" ng-model="container.dimensionOneCapacity" class="form-control"
+            placeholder="{{'container.horizontal_dimension' | translate}}" ng-pattern="/^[0-9]*$/" required>
+          <div os-field-error field="cform.dimensionOneCapacity"></div>
         </div>
         <div class="col-xs-3">
-          <input type="text" name="dimensionTwo" ng-model="container.twoDimensionCapacity" class="form-control"
-            placeholder="{{'container.two' | translate}}" ng-pattern="/^[0-9]*$/" required>
-          <div os-field-error field="cform.dimensionTwo"></div>
+          <input type="text" name="dimensionTwoCapacity" ng-model="container.dimensionTwoCapacity" class="form-control"
+            placeholder="{{'container.vertical_dimension' | translate}}" ng-pattern="/^[0-9]*$/" required>
+          <div os-field-error field="cform.dimensionTwoCapacity"></div>
         </div>
       </div>
 
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="container.labeling_scheme">Labeling Scheme</label>
         <div class="col-xs-3">
-          <os-select ng-model="container.oneDimentionLabelingScheme" list="dimensionLabelSchemes"
-            name="dimensionOneLabelScheme" placeholder="{{'container.dim_one_labeling_scheme' | translate}}" required></os-select>
-          <div os-field-error field="cform.dimensionOneLabelScheme"></div>
+          <os-select ng-model="container.dimensionOneLabelingScheme" list="positionLabelingSchemes"
+            name="dimensionOneLabelingScheme" placeholder="{{'container.horizontal_labeling_scheme' | translate}}" required>
+          </os-select>
+          <div os-field-error field="cform.dimensionOneLabelingScheme"></div>
         </div>
         <div class="col-xs-3">
-          <os-select ng-model="container.twoDimentionLabelingScheme" list="dimensionLabelSchemes"
-            name="dimensionTwoLabelScheme" placeholder="{{'container.dim_two_labeling_scheme' | translate}}" required></os-select>
-          <div os-field-error field="cform.dimensionTwoLabelScheme"></div>
+          <os-select ng-model="container.dimensionTwoLabelingScheme" list="positionLabelingSchemes"
+            name="dimensionTwoLabelingScheme" placeholder="{{'container.vertical_labeling_scheme' | translate}}" required>
+          </os-select>
+          <div os-field-error field="cform.dimensionTwoLabelingScheme"></div>
         </div>
       </div>
 
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="container.temperature">Temperature (Celsius)</label>
         <div class="col-xs-6">
-          <input type="text" name="temprature" ng-model="container.tempratureInCentigrade" class="form-control"
+          <input type="text" name="temperature" ng-model="container.temperature" class="form-control"
             placeholder="{{'container.temperature' | translate}}" ng-pattern="/^[-]?[0-9]*$/">
-          <div os-field-error field="cform.temprature"></div>
+          <div os-field-error field="cform.temperature"></div>
         </div>
       </div>
 
@@ -82,17 +86,24 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="container.collection_protocol">Collection Protocol</label>
         <div class="col-xs-6">
-          <os-select multiple ng-model="container.holdsCPTitles" list="cps"></os-select>
+          <os-select multiple ng-model="container.allowedCollectionProtocols" list="cps" 
+            placeholder="{{container.collection_protocol | translate}}"> 
+          </os-select>
         </div>
       </div>
 
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="container.specimen_types">Specimen Types</label>
         <div class="col-xs-6">
-          <os-specimen-type multiple ng-model="container.holdsSpecimenTypes" placeholder="Specimen Types"></os-specimen-type>
+          <os-group-selector 
+            placeholder="{{container.specimen_types | translate}}"
+            opts="specimenTypeSelectorOpts" 
+            selected-categories="container.allowedSpecimenClasses" 
+            selected-category-items="container.allowedSpecimenTypes">
+          </os-group-selector>
         </div>
       </div>
-
+ 
       <div class="os-divider"></div>
 
       <div class="form-group">
@@ -104,7 +115,6 @@
           <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">Discard</button>
         </div>
       </div>
-
     </form>
   </div>
 </div>
