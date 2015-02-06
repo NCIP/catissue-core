@@ -4,8 +4,7 @@ angular.module('os.administrative.container',
     'ui.router',
     'os.administrative.container.list',
     'os.administrative.container.addedit',
-    'os.administrative.container.detail',
-    'os.administrative.container.specimenTypeDropdown'
+    'os.administrative.container.detail'
   ])
 
   .config(function($stateProvider) {
