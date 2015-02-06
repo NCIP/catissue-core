@@ -275,4 +275,13 @@
       )
     </sql>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Rename facility_id column to code of site table">
+    <renameColumn columnDataType="${text.type}(50)" newColumnName="CODE" oldColumnName="FACILITY_ID" tableName="CATISSUE_SITE"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Add unique constraint on code column of catissue_site">
+    <addUniqueConstraint constraintName="CATISSUE_SITE_CODE_UQ" tableName="CATISSUE_SITE" columnNames="CODE"/>
+  </changeSet>
+
 </databaseChangeLog>

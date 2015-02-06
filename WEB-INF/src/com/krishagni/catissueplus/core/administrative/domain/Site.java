@@ -111,6 +111,8 @@ public class Site {
 		else {
 			this.setName(site.getName());
 		}
+		
+		this.setCode(site.getCode());
 		this.setType(site.getType());
 		this.setActivityStatus(site.getActivityStatus());
 		SetUpdater.<User> newInstance().update(this.getCoordinatorCollection(), site.getCoordinatorCollection());

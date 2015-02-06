@@ -85,6 +85,7 @@ public class SiteDetails {
 		SiteDetails siteDto = new SiteDetails();
 		siteDto.setId(site.getId());
 		siteDto.setName(site.getName());
+		siteDto.setCode(site.getCode());
 		siteDto.setType(site.getType());
 		siteDto.setActivityStatus(site.getActivityStatus());
 		siteDto.setCoordinatorCollection(getCoordinatorList(site.getCoordinatorCollection()));

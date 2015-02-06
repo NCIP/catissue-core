@@ -30,6 +30,8 @@ import com.krishagni.catissueplus.core.common.util.Status;
 public class SiteServiceImpl implements SiteService {
 
 	private static final String SITE_NAME = "site name";
+	
+	private static final String SITE_CODE = "site code";
 
 	private SiteFactory siteFactory;
 
@@ -83,6 +85,7 @@ public class SiteServiceImpl implements SiteService {
 			Site site = siteFactory.createSite(createSiteEvent.getSiteDetails());
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
 			ensureUniqueSiteName(site.getName(), exceptionHandler);
+			ensureUniqueSiteCode(null, site.getCode(), exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();
 
 			daoFactory.getSiteDao().saveOrUpdate(site);
@@ -120,6 +123,7 @@ public class SiteServiceImpl implements SiteService {
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
 			Site site = siteFactory.createSite(updateEvent.getSiteDetails());
 			checkSiteName(oldSite.getName(), site.getName(), exceptionHandler);
+			ensureUniqueSiteCode(oldSite.getCode(), site.getCode(), exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();
 			oldSite.update(site);
 			daoFactory.getSiteDao().saveOrUpdate(oldSite);
@@ -217,6 +221,16 @@ public class SiteServiceImpl implements SiteService {
 	private void ensureUniqueSiteName(String name, ObjectCreationException exceptionHandler) {
 		if (!daoFactory.getSiteDao().isUniqueSiteName(name)) {
 			exceptionHandler.addError(SiteErrorCode.DUPLICATE_SITE_NAME, SITE_NAME);
+		}
+	}
+	
+	private void ensureUniqueSiteCode(String oldCode, String newCode, ObjectCreationException exceptionHandler) {
+		if (newCode == null || (newCode.equals(oldCode))) {
+			return;
+		}
+		
+		if (!daoFactory.getSiteDao().isUniqueSiteCode(newCode)) {
+			exceptionHandler.addError(SiteErrorCode.DUPLICATE_SITE_CODE, SITE_CODE);
 		}
 	}
 
