@@ -61,7 +61,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 				.anyLevelContainers(req.isAnyLevelContainers());
 			
 			List<StorageContainer> containers = daoFactory.getStorageContainerDao().getStorageContainers(listCrit); 
-			return StorageContainersEvent.ok(StorageContainerSummary.from(containers));
+			return StorageContainersEvent.ok(StorageContainerSummary.from(containers, req.isAnyLevelContainers()));
 		} catch (Exception e) {
 			return StorageContainersEvent.serverError(e);
 		}

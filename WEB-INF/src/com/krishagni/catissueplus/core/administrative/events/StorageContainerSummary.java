@@ -30,6 +30,8 @@ public class StorageContainerSummary {
 	private int dimensionTwoCapacity;
 	
 	private int freePositions;
+	
+	private List<StorageContainerSummary> childContainers;
 
 	public Long getId() {
 		return id;
@@ -111,6 +113,14 @@ public class StorageContainerSummary {
 		this.freePositions = freePositions;
 	}
 
+	public List<StorageContainerSummary> getChildContainers() {
+		return childContainers;
+	}
+
+	public void setChildContainers(List<StorageContainerSummary> childContainers) {
+		this.childContainers = childContainers;
+	}
+
 	protected static void transform(StorageContainer container, StorageContainerSummary result) {
 		result.setId(container.getId());
 		result.setName(container.getName());
@@ -129,12 +139,23 @@ public class StorageContainerSummary {
 	}
 	
 	public static StorageContainerSummary from(StorageContainer container) {
+		return from(container, false);
+	}
+	
+	public static StorageContainerSummary from(StorageContainer container, boolean includeChildren) {
 		StorageContainerSummary result = new StorageContainerSummary();
-		transform(container, result);		
+		transform(container, result);
+		if (includeChildren) {
+			result.setChildContainers(from(container.getChildContainers(), includeChildren));
+		}
 		return result;
 	}
 	
 	public static List<StorageContainerSummary> from(Collection<StorageContainer> containers) {
+		return from(containers, false);
+	}
+	
+	public static List<StorageContainerSummary> from(Collection<StorageContainer> containers, boolean includeChildren) {
 		List<StorageContainerSummary> result = new ArrayList<StorageContainerSummary>();
 		
 		if (CollectionUtils.isEmpty(containers)) {
@@ -142,7 +163,7 @@ public class StorageContainerSummary {
 		}
 		
 		for (StorageContainer container : containers) {
-			result.add(from(container));
+			result.add(from(container, includeChildren));
 		}
 		
 		return result;

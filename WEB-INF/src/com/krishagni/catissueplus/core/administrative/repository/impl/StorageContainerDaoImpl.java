@@ -51,7 +51,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 		if (listCrit.parentContainerId() != null) {
 			query.createAlias("parentContainer", "pc");
 			query.add(Restrictions.eq("pc.id", listCrit.parentContainerId()));
-		} else if (!listCrit.anyLevelContainers()) {
+		} else {
 			query.add(Restrictions.isNull("parentContainer"));
 		}
 		
