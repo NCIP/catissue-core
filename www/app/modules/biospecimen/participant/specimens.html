@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="os-table-body">
-        <div class="row" ng-repeat="specimen in specimens | openedSpecimenNodes" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false"
+        <div class="row" ng-repeat="specimen in specimens | openedTreeNodes" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false"
           ng-class="{'selected': specimen.selected}" ng-click="toggleSelection(specimen)">
           <div class="col col-xs-5">
             <div class="clearfix">

@@ -4,7 +4,8 @@ angular.module('os.administrative.container',
     'ui.router',
     'os.administrative.container.list',
     'os.administrative.container.addedit',
-    'os.administrative.container.detail'
+    'os.administrative.container.detail',
+    'os.administrative.container.overview'
   ])
 
   .config(function($stateProvider) {
@@ -44,8 +45,12 @@ angular.module('os.administrative.container',
       .state('container-detail.overview', {
         url: '/overview',
         templateUrl: 'modules/administrative/container/overview.html',
-        controller: function() {
+        resolve: {
+          childContainers: function($stateParams, Container) {
+            return Container.listChildContainers($stateParams.containerId);
+          }
         },
+        controller: 'ContainerOverviewCtrl',
         parent: 'container-detail'
       })
   });

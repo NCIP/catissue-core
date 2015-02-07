@@ -13,7 +13,7 @@
 </div>
 
 <div class="clearfix">
-  <div class="col-xs-8">
+  <div class="col-xs-9">
     <ul class="os-key-values os-one-col" os-inline-editors on-save="editContainer">
       <li class="item">
         <strong class="key key-sm" translate="container.barcode">Barcode</strong>
@@ -65,5 +65,54 @@
         </div>
       </li>
     </ul>
+
+    <div class="os-section" ng-init="ccCollapsed=false">
+      <button class="os-btn-section-collapse os-btn-transparent" ng-click="ccCollapsed=!ccCollapsed">
+        <span ng-if="!ccCollapsed" class="fa fa-chevron-circle-down"></span>
+        <span ng-if="ccCollapsed" class="fa fa-chevron-circle-right"></span>
+      </button>
+      <h3 class="os-sub-section-title" translate="container.child_containers">
+        Child Containers
+      </h3>
+      <div collapse="ccCollapsed">
+        <div ng-include src="'containers-hierarchy.html'"></div>
+      </div>
+    </div>
   </div>
 </div>
+
+<script type="text/ng-template" id="containers-hierarchy.html">
+  <span ng-if="!childContainers || childContainers.length == 0" translate="common.none"> </span>
+  <div class="os-table os-table-fixed os-table-tree os-border os-table-muted-hdr" ng-if="childContainers.length > 0">
+    <div class="os-table-head">
+      <div class="row">
+        <div class="col col-xs-5" translate="container.name">Name</div>
+        <div class="col col-xs-3" translate="container.dimension">Dimension</div>
+        <div class="col col-xs-3" translate="container.free_locations">Free Locations</div>
+        <div class="col col-xs-1">&nbsp;</div>
+      </div>
+    </div>
+    <div class="os-table-body">
+      <div class="row" ng-repeat="container in childContainers | openedTreeNodes">
+        <div class="col col-xs-5">
+          <div style="padding-left: {{container.hasChildren ? container.depth * 16 : container.depth * 16 + 16}}px">
+            <a ng-if="container.hasChildren" class="fa" 
+              ng-class="{'fa-chevron-circle-down': container.isOpened, 'fa-chevron-circle-right': !container.isOpened}"
+              ng-click="container.isOpened=!container.isOpened">
+            </a>
+            <a ui-sref="container-detail.overview({containerId: container.id})">
+              {{container.name}}
+            </a>
+          </div>
+        </div>
+        <div class="col col-xs-3">
+          <span>{{container.dimensionOneCapacity}} x {{container.dimensionTwoCapacity}}</span>
+        </div>
+        <div class="col col-xs-3">
+          <span>{{container.freePositions}}</span>
+        </div>
+        <div class="col col-xs-1">&nbsp;</div>
+      </div>
+    </div>
+  </div>
+</script>

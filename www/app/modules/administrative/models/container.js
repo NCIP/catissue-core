@@ -15,5 +15,13 @@ angular.module('os.administrative.models.container', ['os.common.models'])
       return d.promise;
     }
 
+    Container.listChildContainers = function(containerId) {
+      return Container.query({parentContainerId: containerId, anyLevelContainers: true});
+    }
+
+    Container.flatten = function(containers) {
+      return Container._flatten(containers, 'childContainers');
+    }
+
     return Container;
   });

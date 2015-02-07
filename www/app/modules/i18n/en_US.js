@@ -361,6 +361,8 @@
     "collection_protocol": "Collection Protocol",
     "specimen_types": "Specimen Types",
     "all": "All",
+    "child_containers": "Child Containers",
+    "free_locations": "Free Locations",
 
     "tooltip": {
       "view_details": "Click to view/edit Storage Container details",
