@@ -14,7 +14,7 @@
 
 <div class="clearfix">
   <div class="col-xs-8">
-    <ul class="os-key-values os-two-cols" os-inline-editors on-save="editContainer">
+    <ul class="os-key-values os-one-col" os-inline-editors on-save="editContainer">
       <li class="item">
         <strong class="key key-sm" translate="container.barcode">Barcode</strong>
         <os-inline-edit editor="barcodeEditor" name="barcode" class="value value-md" value="container.barcode">
@@ -33,44 +33,37 @@
 
       <li class="item">
         <strong class="key key-sm" translate="container.parent_site">Parent Site</strong>
-        <span class="value value-md" os-inline-edit>{{container.siteName}}</span>
+        <span class="value value-md">{{container.siteName}}</span>
       </li>
 
       <li class="item">
         <strong class="key key-sm" translate="container.parent_container">Parent Container</strong>
-        <span class="value value-md" os-inline-edit>{{container.parentContainerName | osNoValue}}</span>
+        <span class="value value-md">{{container.parentContainerName | osNoValue}}</span>
       </li>
 
       <li class="item">
         <strong class="key key-sm" translate="container.dimension">Dimension</strong>
-        <span class="value value-md" os-inline-edit>{{container.dimensionOneCapacity}} X {{container.dimensionTwoCapacity}}</span>
+        <span class="value value-md">{{container.dimensionOneCapacity}} x {{container.dimensionTwoCapacity}}</span>
       </li>
 
       <li class="item">
         <strong class="key key-sm" translate="container.labeling_scheme">Dimension Labelling Scheme</strong>
-        <span class="value value-md" os-inline-edit>{{container.dimensionOneLabelingScheme}} X {{container.dimensionTwoLabelingScheme}}</span>
+        <span class="value value-md">{{container.dimensionOneLabelingScheme}} x {{container.dimensionTwoLabelingScheme}}</span>
       </li>
 
       <li class="item">
         <strong class="key key-sm" translate="container.collection_protocol">Collection Protocols</strong>
-        <os-inline-edit editor="cpEditor" name="cp" class="value value-md" value="container.allowedCollectionProtocols">
-          <span ng-if="cpEditor.isDisplayMode()">{{cpEditor.viewValue | osArrayJoin | osNoValue}}</span>
-          <div ng-if="cpEditor.isEditMode()">
-            <os-select ng-model="cpEditor.editValue" list="cps" multiple></os-select>
-          </div>
-        </os-inline-edit>
+        <span class="value value-md">{{container.allowedCollectionProtocols | osArrayJoin | osNoValue}}</span>
       </li>
 
       <li class="item">
         <strong class="key key-sm" translate="container.specimen_types">Specimen Types</strong>
-        <os-inline-edit editor="specimenTypeEditor" name="specimenTypes" class="value value-md" value="container.allowedSpecimenTypes">
-          <span ng-if="specimenTypeEditor.isDisplayMode()">{{specimenTypeEditor.viewValue | osArrayJoin | osNoValue}}</span>
-          <div ng-if="specimenTypeEditor.isEditMode()">
-            <os-specimen-type multiple ng-model="specimenTypeEditor.editValue" placeholder="Specimen Types"></os-specimen-type>
-          </div>
-        </os-inline-edit>
+        <div class="value value-md">
+          <span>{{container.allowedSpecimenClasses | osArrayJoin | osNoValue}}</span>
+          <span ng-if="container.allowedSpecimenClasses.length > 0 && container.allowedSpecimenTypes.length > 0">,&nbsp;</span>
+          <span>{{container.allowedSpecimenTypes | osArrayJoin | osNoValue}}</span>
+        </div>
       </li>
-
     </ul>
   </div>
 </div>
