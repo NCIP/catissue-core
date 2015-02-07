@@ -3,7 +3,9 @@ package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
@@ -32,16 +34,24 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 				.setFirstResult(listCrit.startAt())
 				.setMaxResults(listCrit.maxResults());
 		
+		if (StringUtils.isNotBlank(listCrit.query())) {
+			query.add(Restrictions.ilike("name", listCrit.query(), MatchMode.ANYWHERE));
+		}
+		
 		if (listCrit.onlyFreeContainers()) {
 			query.createAlias("stats", "stats");
 			query.add(Restrictions.gt("stats.freePositions", 0));
 		}
 		
-		
+		if (StringUtils.isNotBlank(listCrit.siteName())) {
+			query.createAlias("site", "site");
+			query.add(Restrictions.eq("site.name", listCrit.siteName()));
+		}
+				
 		if (listCrit.parentContainerId() != null) {
 			query.createAlias("parentContainer", "pc");
 			query.add(Restrictions.eq("pc.id", listCrit.parentContainerId()));
-		} else {
+		} else if (!listCrit.anyLevelContainers()) {
 			query.add(Restrictions.isNull("parentContainer"));
 		}
 		

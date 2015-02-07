@@ -8,6 +8,10 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 	
 	private Long parentContainerId;
 	
+	private String siteName;
+	
+	private boolean anyLevelContainers;
+	
 	@Override
 	public StorageContainerListCriteria self() {
 		return this;
@@ -28,6 +32,24 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 	
 	public StorageContainerListCriteria parentContainerId(Long parentContainerId) {
 		this.parentContainerId = parentContainerId;
+		return self();
+	}
+	
+	public String siteName() {
+		return siteName;
+	}
+	
+	public StorageContainerListCriteria siteName(String siteName) {
+		this.siteName = siteName;
+		return self();
+	}
+	
+	public boolean anyLevelContainers() {
+		return anyLevelContainers;
+	}
+	
+	public StorageContainerListCriteria anyLevelContainers(boolean anyLevelContainers) {
+		this.anyLevelContainers = anyLevelContainers;
 		return self();
 	}
 }
