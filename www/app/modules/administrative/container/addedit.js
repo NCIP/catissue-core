@@ -54,9 +54,14 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     }
 
     $scope.loadContainers = function(siteName) {
-      Container.listForSite(siteName).then(function(containerList) {
-        $scope.containers = containerList;
-      });
+      Container.listForSite(siteName, true, true).then(
+        function(result) {
+          $scope.containers = [];
+          angular.forEach(result, function(container) {
+            $scope.containers.push(container.name);
+          });
+        }
+      );
     };
 
     $scope.save = function() {

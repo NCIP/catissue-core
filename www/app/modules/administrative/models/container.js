@@ -7,12 +7,13 @@ angular.module('os.administrative.models.container', ['os.common.models'])
       return Container.query();
     };
 
-    Container.listForSite = function(siteName) {
-      // TODO : Write a REST API to get Containers by Site.
-      containerList = []; //['Box A', 'Box B', 'Box C'];
-      var d = $q.defer();
-      d.resolve(containerList);
-      return d.promise;
+    Container.listForSite = function(siteName, onlyFreeContainers, flatten) {
+      var params = {
+        site: siteName,
+        onlyFreeContainers: !!onlyFreeContainers,
+        flatten: !flatten
+      };
+      return Container.query(params);
     };
 
     Container.flatten = function(containers) {
