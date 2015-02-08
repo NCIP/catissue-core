@@ -6,6 +6,7 @@ angular.module('os.administrative.container',
     'os.administrative.container.addedit',
     'os.administrative.container.detail',
     'os.administrative.container.overview',
+    'os.administrative.container.util',
     'os.administrative.container.map'
   ])
 
@@ -18,7 +19,7 @@ angular.module('os.administrative.container',
         parent: 'signed-in'
       })
       .state('container-addedit', {
-        url: '/container-addedit/:containerId',
+        url: '/container-addedit/:containerId?posOne&posTwo&parentContainerId&parentContainerName',
         templateUrl: 'modules/administrative/container/addedit.html',
         resolve: {
           container: function($stateParams, Container) {
@@ -62,9 +63,17 @@ angular.module('os.administrative.container',
             return container.getOccupiedPositions();
           }
         },
-        controller: function($scope, container, occupancyMap) {
+        controller: function($scope, $state, container, occupancyMap) {
           $scope.container = container;
           $scope.occupancyMap = occupancyMap;
+          $scope.addContainer = function(posOne, posTwo) {
+            var params = {
+              posOne: posOne, posTwo: posTwo,
+              parentContainerName: container.name,
+              parentContainerId: container.id
+            };
+            $state.go('container-addedit', params);
+          }
         },
         parent: 'container-detail'
       });

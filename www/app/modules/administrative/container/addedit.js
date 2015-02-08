@@ -1,5 +1,7 @@
 angular.module('os.administrative.container.addedit', ['os.administrative.models'])
-  .controller('ContainerAddEditCtrl', function($scope, $state, container, Site, Container, CollectionProtocol, PvManager){
+  .controller('ContainerAddEditCtrl', function(
+    $scope, $state, $stateParams, container, 
+    Site, Container, CollectionProtocol, PvManager){
 
     function init() {
       $scope.container = container;
@@ -13,6 +15,17 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
         categoryAttr: 'class',
         valueAttr: 'type'
       };
+
+      if ($stateParams.parentContainerName && $stateParams.parentContainerId &&
+          $stateParams.posOne && $stateParams.posTwo) {
+        //
+        // This happens when user adds container from container map
+        //
+
+        $scope.locationSelected = true;
+        container.position = {posOne: $stateParams.posOne, posTwo: $stateParams.posTwo};
+        container.parentContainerName = $stateParams.parentContainerName;
+      }
     };
 
     function loadPvs() {
@@ -51,7 +64,11 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
       container.createdBy = {id: 1}; // TODO: Handle this in server side.
       container.$saveOrUpdate().then(
         function(result) {
-          $state.go('container-detail.overview', {containerId: result.id});
+          if (!$scope.locationSelected) {
+            $state.go('container-detail.overview', {containerId: result.id});
+          } else {
+            $state.go('container-detail.locations', {containerId: $stateParams.parentContainerId});
+          }
         }
       );
     };

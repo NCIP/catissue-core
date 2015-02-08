@@ -731,3 +731,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 .os-col-100 {
   width: 100%;
 }
+
+.os-pointer-cursor {
+  cursor: pointer;
+}
