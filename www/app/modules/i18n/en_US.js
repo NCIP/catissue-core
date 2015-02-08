@@ -371,7 +371,8 @@
     },
 
     "menu": {
-      "overview": "Overview"
+      "overview": "Overview",
+      "locations": "Locations"
     }
   }
 }

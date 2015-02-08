@@ -5,7 +5,8 @@ angular.module('os.administrative.container',
     'os.administrative.container.list',
     'os.administrative.container.addedit',
     'os.administrative.container.detail',
-    'os.administrative.container.overview'
+    'os.administrative.container.overview',
+    'os.administrative.container.map'
   ])
 
   .config(function($stateProvider) {
@@ -46,11 +47,25 @@ angular.module('os.administrative.container',
         url: '/overview',
         templateUrl: 'modules/administrative/container/overview.html',
         resolve: {
-          childContainers: function($stateParams, Container) {
-            return Container.listChildContainers($stateParams.containerId);
+          childContainers: function(container) {
+            return container.getChildContainers(true); 
           }
         },
         controller: 'ContainerOverviewCtrl',
         parent: 'container-detail'
       })
+      .state('container-detail.locations', {
+        url: '/locations',
+        templateUrl: 'modules/administrative/container/locations.html',
+        resolve: {
+          occupancyMap: function(container) {
+            return container.getOccupiedPositions();
+          }
+        },
+        controller: function($scope, container, occupancyMap) {
+          $scope.container = container;
+          $scope.occupancyMap = occupancyMap;
+        },
+        parent: 'container-detail'
+      });
   });

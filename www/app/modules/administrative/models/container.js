@@ -1,11 +1,11 @@
 
 angular.module('os.administrative.models.container', ['os.common.models'])
-  .factory('Container', function(osModel, $q) {
+  .factory('Container', function(osModel, $q, $http) {
     var Container = new osModel('storage-containers');
 
     Container.list = function() {
       return Container.query();
-    }
+    };
 
     Container.listForSite = function(siteName) {
       // TODO : Write a REST API to get Containers by Site.
@@ -13,15 +13,23 @@ angular.module('os.administrative.models.container', ['os.common.models'])
       var d = $q.defer();
       d.resolve(containerList);
       return d.promise;
-    }
-
-    Container.listChildContainers = function(containerId) {
-      return Container.query({parentContainerId: containerId, anyLevelContainers: true});
-    }
+    };
 
     Container.flatten = function(containers) {
       return Container._flatten(containers, 'childContainers');
-    }
+    };
+
+    Container.prototype.getChildContainers = function(anyLevel) {
+      return Container.query({parentContainerId: this.$id(), anyLevelContainers: anyLevel});
+    };
+
+    Container.prototype.getOccupiedPositions = function() {
+      return $http.get(Container.url() + '/' + this.$id() + '/occupied-positions').then(
+        function(result) {
+          return result.data;
+        }
+      );
+    };
 
     return Container;
   });
