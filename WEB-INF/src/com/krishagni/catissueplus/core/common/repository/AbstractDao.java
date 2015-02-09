@@ -42,7 +42,7 @@ public class AbstractDao<T> implements Dao<T> {
 	
 	@SuppressWarnings("unchecked")
 	public T getById(Long id, String activeCondition) {
-		String hql = "from " + getType().getName() + " where identifier = :id";
+		String hql = "from " + getType().getName() + " t0 where t0.id = :id";
 		
 		if (activeCondition != null) {
 			hql += " and " + activeCondition;

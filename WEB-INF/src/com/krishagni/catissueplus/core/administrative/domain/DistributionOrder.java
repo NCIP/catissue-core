@@ -1,23 +1,23 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
 public class DistributionOrder extends Order {
-	public enum DistributionStatus {
+	public enum DistributionAction {
 		DISTRIBUTED,
 		DISTRIBUTED_AND_CLOSED 
 	};
 	
-	private DistributionStatus distributionStatus;
+	private DistributionAction distributionAction;
 	
 	private DistributionProtocol distributionProtocol;
 	
 	private User distributor;
 
-	public DistributionStatus getDistributionStatus() {
-		return distributionStatus;
+	public DistributionAction getDistributionAction() {
+		return distributionAction;
 	}
 
-	public void setDistributionStatus(DistributionStatus distributionStatus) {
-		this.distributionStatus = distributionStatus;
+	public void setDistributionAction(DistributionAction distributionAction) {
+		this.distributionAction = distributionAction;
 	}
 
 	public DistributionProtocol getDistributionProtocol() {
@@ -34,5 +34,15 @@ public class DistributionOrder extends Order {
 
 	public void setDistributor(User distributor) {
 		this.distributor = distributor;
+	}
+	
+	public void update(DistributionOrder other) {
+		setName(other.name);
+		setRequester(other.requester);
+		setDistributor(other.distributor);
+		setActivityStatus(other.activityStatus);
+		setDistributionProtocol(other.distributionProtocol);
+		setRequestedDate(other.requestedDate);
+		
 	}
 }

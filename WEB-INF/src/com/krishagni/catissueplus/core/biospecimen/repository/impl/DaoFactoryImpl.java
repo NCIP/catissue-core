@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import com.krishagni.catissueplus.core.administrative.repository.BiohazardDao;
 import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
+import com.krishagni.catissueplus.core.administrative.repository.DistributionOrderDao;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.EquipmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.ImageDao;
@@ -17,6 +18,7 @@ import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.repository.impl.BiohazardDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.ContainerDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.DepartmentDaoImpl;
+import com.krishagni.catissueplus.core.administrative.repository.impl.DistributionOrderDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.DistributionProtocolDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.EquipmentDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.ImageDaoImpl;
@@ -35,10 +37,10 @@ import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocol
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
-import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenRequirementDao;
-import com.krishagni.catissueplus.core.biospecimen.repository.VisitsDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenRequirementDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.VisitsDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.repository.KeyGeneratorDao;
 import com.krishagni.catissueplus.core.common.repository.impl.KeyGeneratorDaoImpl;
@@ -272,6 +274,13 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public ImageDao getImageDao() {
 		ImageDaoImpl dao = new ImageDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public DistributionOrderDao getDistributionOrderDao() {
+		DistributionOrderDaoImpl dao = new DistributionOrderDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

@@ -5,17 +5,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Order {
-	private Long id;
+	protected Long id;
 	
-	private String name;
+	protected String name;
 	
-	private User requestor;
+	protected User requester;
 	
-	private Date requestedDate;
+	protected Date requestedDate;
 	
-	private Set<OrderItem> orderItems = new HashSet<OrderItem>();
+	protected Set<OrderItem> orderItems = new HashSet<OrderItem>();
 
-	private String activityStatus;
+	protected String activityStatus;
 
 	public Long getId() {
 		return id;
@@ -33,12 +33,12 @@ public class Order {
 		this.name = name;
 	}
 
-	public User getRequestor() {
-		return requestor;
+	public User getRequester() {
+		return requester;
 	}
 
-	public void setRequestor(User requestor) {
-		this.requestor = requestor;
+	public void setRequester(User requester) {
+		this.requester = requester;
 	}
 
 	public Date getRequestedDate() {
