@@ -10,10 +10,20 @@ angular.module('os.administrative.models.container', ['os.common.models'])
     Container.listForSite = function(siteName, onlyFreeContainers, flatten) {
       var params = {
         site: siteName,
-        onlyFreeContainers: !!onlyFreeContainers,
-        flatten: !flatten
+        anyLevelContainers: true,
+        onlyFreeContainers: !!onlyFreeContainers
       };
-      return Container.query(params);
+
+      var ret = Container.query(params);
+      if (flatten == true) {
+        ret = ret.then(
+          function(containers) {
+            return Container._flatten(containers, 'childContainers');
+          }
+        );
+      }
+        
+      return ret;
     };
 
     Container.flatten = function(containers) {
