@@ -25,7 +25,7 @@
 
       <li class="item">
         <strong class="key key-sm" translate="container.temperature">Temperature (In Celsius)</strong>
-        <os-inline-edit editor="temperatureEditor" name="temperature" class="value value-md" value="container.tempratureInCentigrade">
+        <os-inline-edit editor="temperatureEditor" name="temperature" class="value value-md" value="container.temperature">
           <span ng-if="temperatureEditor.isDisplayMode()">{{temperatureEditor.viewValue | osNoValue}}</span>
           <input ng-if="temperatureEditor.isEditMode()" type="number" ng-model="temperatureEditor.editValue" class="form-control">
         </os-inline-edit>
