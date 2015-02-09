@@ -3,7 +3,7 @@ package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.Date;
 
-public class Password {
+public class Password implements Comparable<Password> {
 
 	private Long id;
 
@@ -43,6 +43,11 @@ public class Password {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	@Override
+	public int compareTo(Password password) {
+		return this.updateDate.compareTo(password.getUpdateDate());
 	}
 
 }

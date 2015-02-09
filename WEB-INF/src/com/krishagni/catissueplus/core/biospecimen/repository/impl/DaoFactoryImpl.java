@@ -8,7 +8,6 @@ import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.EquipmentDao;
-import com.krishagni.catissueplus.core.administrative.repository.ForgotPasswordTokenDao;
 import com.krishagni.catissueplus.core.administrative.repository.ImageDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
@@ -20,7 +19,6 @@ import com.krishagni.catissueplus.core.administrative.repository.impl.ContainerD
 import com.krishagni.catissueplus.core.administrative.repository.impl.DepartmentDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.DistributionProtocolDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.EquipmentDaoImpl;
-import com.krishagni.catissueplus.core.administrative.repository.impl.ForgotPasswordTokenDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.ImageDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.InstituteDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.PermissibleValueDaoImpl;
@@ -127,13 +125,6 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public UserDao getUserDao() {
 		UserDaoImpl dao = new UserDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
-	
-	@Override
-	public ForgotPasswordTokenDao getForgotPasswordTokenDao() {
-		ForgotPasswordTokenDaoImpl dao = new ForgotPasswordTokenDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

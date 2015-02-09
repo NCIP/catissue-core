@@ -5,14 +5,14 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ForgotPasswordEvent extends RequestEvent {
 
-	private String name;
+	private String loginName;
 
-	public String getName() {
-		return name;
+	public String getLoginName() {
+		return loginName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
 	}
 
 }

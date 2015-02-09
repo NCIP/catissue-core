@@ -4,17 +4,11 @@ package com.krishagni.catissueplus.core.administrative.domain;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
@@ -23,7 +17,6 @@ import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
 
-@Configurable
 public class User extends BaseEntity {
 
 	private String lastName;
@@ -52,9 +45,6 @@ public class User extends BaseEntity {
 
 	private Set<Password> passwordCollection = new HashSet<Password>();
 	
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
-
 	public String getLastName() {
 		return lastName;
 	}
@@ -165,14 +155,6 @@ public class User extends BaseEntity {
 		this.userCPRoles = userCPRoles;
 	}
 
-	public BCryptPasswordEncoder getPasswordEncoder() {
-		return passwordEncoder;
-	}
-
-	public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
-		this.passwordEncoder = passwordEncoder;
-	}
-
 	private final String LOGIN_NAME = "login name";
 
 	private final String LDAP = "ldap";
@@ -217,7 +199,7 @@ public class User extends BaseEntity {
 		Password password = new Password();
 		password.setUpdateDate(new Date());
 		password.setUser(this);
-		password.setPassword(passwordEncoder.encode(newPassword));
+		password.setPassword(newPassword);
 
 		this.passwordCollection.add(password);
 	}
@@ -228,20 +210,6 @@ public class User extends BaseEntity {
 		Matcher mat = pattern.matcher(password);
 		result = mat.matches();
 		return result;
-	}
-
-	public boolean validateOldPassword(String oldPassword) {
-		Set<Password> passwords = this.passwordCollection;
-		if (!passwords.isEmpty()) {
-			List<Password> passList = new ArrayList<Password>(passwords);
-			Password lastPassword = passList.get(0);
-			
-			if (passwordEncoder.matches(oldPassword, lastPassword.getPassword())){
-				return true;
-			}
-		}
-		
-		return false;
 	}
 
 	public void delete() {

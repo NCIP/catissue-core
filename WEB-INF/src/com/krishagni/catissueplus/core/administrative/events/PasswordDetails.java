@@ -10,7 +10,7 @@ public class PasswordDetails {
 
 	private String newPassword;
 	
-	private String forgotPasswordToken;
+	private String resetPasswordToken;
 
 	public Long getUserId() {
 		return userId;
@@ -44,12 +44,12 @@ public class PasswordDetails {
 		this.newPassword = newPassword;
 	}
 
-	public String getForgotPasswordToken() {
-		return forgotPasswordToken;
+	public String getResetPasswordToken() {
+		return resetPasswordToken;
 	}
 
-	public void setForgotPasswordToken(String forgotPasswordToken) {
-		this.forgotPasswordToken = forgotPasswordToken;
+	public void setResetPasswordToken(String resetPasswordToken) {
+		this.resetPasswordToken = resetPasswordToken;
 	}
 
 }

@@ -201,22 +201,27 @@ public class UserController {
 			return resp.getMessage();
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/{loginName}/password")
+	@RequestMapping(method = RequestMethod.POST, value = "/update-password")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public String resetPassword(@PathVariable String loginName,
-			@RequestBody PasswordDetails passwordDetails) {
-		passwordDetails.setLoginName(loginName);
+	public String changePassword(@RequestBody PasswordDetails passwordDetails) {
 		UpdatePasswordEvent event = new UpdatePasswordEvent(passwordDetails);
 		
-		PasswordUpdatedEvent resp = null;
-		if (passwordDetails.getForgotPasswordToken() == null) {
-			resp = userService.changePassword(event);
+		PasswordUpdatedEvent resp = userService.changePassword(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		else {
-			resp = userService.resetPassword(event);
-		}
-
+		
+		return resp.getMessage();
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/reset-password")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public String resetPassword(@RequestBody PasswordDetails passwordDetails) {
+		UpdatePasswordEvent event = new UpdatePasswordEvent(passwordDetails);
+		
+		PasswordUpdatedEvent resp = userService.resetPassword(event);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
@@ -224,12 +229,13 @@ public class UserController {
 		return resp.getMessage();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/{loginName}/forgotPassword")
+	@RequestMapping(method = RequestMethod.POST, value = "/forgot-password-token")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public String forgotPassword(@PathVariable String loginName) {
+	public String forgotPassword(@RequestBody HashMap<String, String>  data) {
 		ForgotPasswordEvent event = new ForgotPasswordEvent();
-		event.setName(loginName);
+		event.setLoginName(data.get("loginName"));
+		
 		PasswordForgottenEvent resp = userService.forgotPassword(event);
 		if (!resp.isSuccess()) {
 			resp.raiseException();

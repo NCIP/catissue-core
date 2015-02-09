@@ -287,12 +287,8 @@
     <addUniqueConstraint constraintName="CATISSUE_SITE_CODE_UQ" tableName="CATISSUE_SITE" columnNames="CODE"/>
   </changeSet>
 
-  <changeSet author="vlonuste" id="OS forgot password token table">
+  <changeSet author="vlonuste" id="OS forgot password tokens table">
     <createTable tableName="OS_FORGOT_PASSWORD_TOKENS">
-      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
-        <constraints primaryKey="true"/>
-      </column>
-
       <column name="USER_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
@@ -307,9 +303,9 @@
     </createTable>
   </changeSet>
 
-  <changeSet author="vlonushte" id="FK on forgot password token table">
+  <changeSet author="vlonushte" id="FK on user of forgot password token">
     <addForeignKeyConstraint 
-      constraintName="FK_FORGOT_PASS_TOKENS_USER_ID_OS_USER_ID"
+      constraintName="FK_FGTP_TOKENS_USER_ID_USER_ID"
       baseTableName="OS_FORGOT_PASSWORD_TOKENS"
       baseColumnNames="USER_ID"
       referencedTableName="CATISSUE_USER"

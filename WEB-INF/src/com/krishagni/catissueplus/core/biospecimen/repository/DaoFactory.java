@@ -6,7 +6,6 @@ import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.EquipmentDao;
-import com.krishagni.catissueplus.core.administrative.repository.ForgotPasswordTokenDao;
 import com.krishagni.catissueplus.core.administrative.repository.ImageDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
@@ -45,8 +44,6 @@ public interface DaoFactory {
 
 	public UserDao getUserDao();
 	
-	public ForgotPasswordTokenDao getForgotPasswordTokenDao();
-
 	public ContainerDao getContainerDao();
 
 	public AuditDao getAuditDao();

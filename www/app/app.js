@@ -29,20 +29,30 @@ angular.module('openspecimen', [
     $translateProvider.preferredLanguage('en_US');
 
     $stateProvider
+      .state('default', {
+        abstract: true,
+        templateUrl: 'modules/common/default.html',
+        controller: function($scope, Alerts) {
+          $scope.alerts = Alerts.messages;
+        }
+      })
       .state('login', {
         url: '/',
-        templateUrl: 'modules/user/signin.html',
-        controller: 'LoginCtrl'
+        templateUrl: 'modules/administrative/user/signin.html',
+        controller: 'LoginCtrl',
+        parent: 'default'
       })
       .state('forgot-password', {
-        url: '/forgotPassword',
+        url: '/forgot-password',
         templateUrl: 'modules/administrative/user/forgot-password.html',
-        controller: 'ForgotPasswordCtrl'
+        controller: 'ForgotPasswordCtrl',
+        parent: 'default'
       })
       .state('reset-password', {
-        url: '/resetPassword/:userId/:forgotPasswordToken',
+        url: '/reset-password',
         templateUrl: 'modules/administrative/user/reset-password.html',
-        controller: 'ResetPasswordCtrl'
+        controller: 'ResetPasswordCtrl',
+        parent: 'default'
       })
       .state('signed-in', {
         abstract: true,

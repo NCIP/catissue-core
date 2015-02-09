@@ -3,11 +3,15 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
+import com.krishagni.catissueplus.core.administrative.domain.Password;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
@@ -31,6 +35,7 @@ import com.krishagni.catissueplus.core.administrative.events.UserDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDisabledEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ValidatePasswordEvent;
+import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -193,17 +198,11 @@ public class UserServiceImpl implements UserService {
 				return PasswordUpdatedEvent.notFound();
 			}
 			
-			user.setPasswordEncoder(passwordEncoder);
-			if (!user.validateOldPassword(detail.getOldPassword())) {
+			if (!validateOldPassword(user, detail.getOldPassword())) {
 				reportError(UserErrorCode.INVALID_ATTR_VALUE, "old password");
 			}
 			
-			if (!User.isValidPasswordPattern(detail.getNewPassword())) {
-				reportError(UserErrorCode.INVALID_ATTR_VALUE, "new password");
-			}
-
-			user.addPassword(detail.getNewPassword());
-			daoFactory.getUserDao().saveOrUpdate(user);
+			setUserPassword(user, detail.getNewPassword());
 			return PasswordUpdatedEvent.ok();
 		}
 		catch (CatissueException ce) {
@@ -218,8 +217,13 @@ public class UserServiceImpl implements UserService {
 	@PlusTransactional
 	public PasswordUpdatedEvent resetPassword(UpdatePasswordEvent event) {
 		try {
+			UserDao dao = daoFactory.getUserDao();
 			PasswordDetails detail = event.getPasswordDetails();
-			ForgotPasswordToken token = daoFactory.getForgotPasswordTokenDao().findByToken(detail.getForgotPasswordToken());
+			if (StringUtils.isEmpty(detail.getResetPasswordToken())) {
+				reportError(UserErrorCode.INVALID_ATTR_VALUE, "Reset password token");
+			}
+			
+			ForgotPasswordToken token = dao.getTokenByToken(detail.getResetPasswordToken());
 			if (token == null) {
 				return PasswordUpdatedEvent.notFound();
 			}
@@ -230,17 +234,12 @@ public class UserServiceImpl implements UserService {
 			}
 			
 			if (token.hasExpired()) {
-				daoFactory.getForgotPasswordTokenDao().delete(token);
+				dao.deleteForgotPasswordToken(token);
 				return PasswordUpdatedEvent.notFound();
 			}
 			
-			if (!User.isValidPasswordPattern(detail.getNewPassword())) {
-				reportError(UserErrorCode.INVALID_ATTR_VALUE, "New Password");
-			}
-			
-			user.setPasswordEncoder(passwordEncoder);
-			user.addPassword(detail.getNewPassword());
-			daoFactory.getForgotPasswordTokenDao().delete(token);
+			setUserPassword(user, detail.getNewPassword());
+			dao.deleteForgotPasswordToken(token);
 			return PasswordUpdatedEvent.ok();
 		}
 		catch (CatissueException ce) {
@@ -255,19 +254,19 @@ public class UserServiceImpl implements UserService {
 	@PlusTransactional
 	public PasswordForgottenEvent forgotPassword(ForgotPasswordEvent event) {
 		try {
-			String loginName = event.getName();
-			User user = daoFactory.getUserDao().getUserByLoginNameAndDomainName(loginName, CATISSUE);
+			UserDao dao = daoFactory.getUserDao();
+			User user = dao.getUserByLoginNameAndDomainName(event.getLoginName(), CATISSUE);
 			if (user == null) {
 				return PasswordForgottenEvent.notFound();
 			}
 			
-			ForgotPasswordToken oldToken = daoFactory.getForgotPasswordTokenDao().findByUser(user.getId());
+			ForgotPasswordToken oldToken = dao.getTokenByUser(user.getId());
 			if (oldToken != null) {
-				daoFactory.getForgotPasswordTokenDao().delete(oldToken);
+				dao.deleteForgotPasswordToken(oldToken);
 			}
 			
 			ForgotPasswordToken token = new ForgotPasswordToken(user);
-			daoFactory.getForgotPasswordTokenDao().saveOrUpdate(token);
+			dao.saveForgotPasswordToken(token);
 			emailSender.sendForgotPasswordEmail(user);
 			return PasswordForgottenEvent.ok();
 		}
@@ -335,6 +334,25 @@ public class UserServiceImpl implements UserService {
 		if (!oldUser.getEmailAddress().equals(newUser.getEmailAddress())) {
 			ensureUniqueEmailAddress(newUser.getEmailAddress(), exceptionHandler);
 		}
+	}
+	
+	private void setUserPassword(User user, String newPassword) {
+		if (!User.isValidPasswordPattern(newPassword)) {
+			reportError(UserErrorCode.INVALID_ATTR_VALUE, "New Password");
+		}
+		
+		user.addPassword(passwordEncoder.encode(newPassword));
+	}
+	
+	public boolean validateOldPassword(User user, String oldPassword) {
+		List<Password> passwords = new ArrayList<Password>(user.getPasswordCollection());
+		Collections.sort(passwords);
+		
+		if (!passwords.isEmpty()) {
+			return passwordEncoder.matches(oldPassword, passwords.get(passwords.size() - 1).getPassword());
+		}
+		
+		return false;
 	}
 
 }
