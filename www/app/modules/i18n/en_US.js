@@ -3,17 +3,13 @@
     "administration": "Administration",
     "collection_protocols": "Collection Protocols",
     "orders": "Orders",
-    "containers": "Containers",
     "search": "Search",
     "settings": "Settings",
-
-    "admin_sub_menu": {
-      "user": "User",
-      "institute": "Institute",
-      "site": "Site",
-      "storage_container": "Storage Container",
-      "distribution_protocol": "Distribution Protocol"
-    }
+    "users": "Users",
+    "institutes": "Institutes",
+    "sites": "Sites",
+    "storage_containers": "Storage Containers",
+    "distribution_protocols": "Distribution Protocols"
   },
 
   "common": {
