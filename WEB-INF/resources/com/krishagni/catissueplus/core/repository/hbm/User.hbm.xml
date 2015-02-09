@@ -128,14 +128,6 @@
             insert="true"
             column="STATUS_COMMENT"
             length="2000"/>
-            
-        <property
-            name="passwordToken"
-            type="string"
-            update="true"	
-            insert="true"
-            column="FORGOT_PASSWORD_TOKEN"
-            length="200"/>
 
 	<query name="getUserByEmailAddress">
 		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.emailAddress = :emailAddress

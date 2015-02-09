@@ -7,12 +7,8 @@ public class UpdatePasswordEvent extends RequestEvent {
 
 	private PasswordDetails passwordDetails;
 
-	private String passwordToken;
-
-	public UpdatePasswordEvent(PasswordDetails passwordDetails, String token, Long userId) {
+	public UpdatePasswordEvent(PasswordDetails passwordDetails) {
 		setPasswordDetails(passwordDetails);
-		this.passwordDetails.setUserId(userId);
-		this.passwordToken = token;
 	}
 
 	public PasswordDetails getPasswordDetails() {
@@ -22,13 +18,4 @@ public class UpdatePasswordEvent extends RequestEvent {
 	public void setPasswordDetails(PasswordDetails passwordDetails) {
 		this.passwordDetails = passwordDetails;
 	}
-
-	public String getPasswordToken() {
-		return passwordToken;
-	}
-
-	public void setPasswordToken(String passwordToken) {
-		this.passwordToken = passwordToken;
-	}
-
 }

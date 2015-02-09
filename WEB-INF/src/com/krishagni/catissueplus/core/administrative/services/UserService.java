@@ -30,7 +30,7 @@ public interface UserService {
 
 	public UserClosedEvent closeUser(CloseUserEvent event);
 
-	public PasswordUpdatedEvent setPassword(UpdatePasswordEvent updatePasswordEvent);
+	public PasswordUpdatedEvent resetPassword(UpdatePasswordEvent updatePasswordEvent);
 
 	public PasswordUpdatedEvent changePassword(UpdatePasswordEvent updatePasswordEvent);
 

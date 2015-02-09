@@ -1,9 +1,13 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.util.List;
-import java.util.UUID;
+import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
+import java.util.List;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
@@ -13,6 +17,7 @@ import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.DisableUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.GetUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordValidatedEvent;
@@ -40,14 +45,16 @@ public class UserServiceImpl implements UserService {
 	private DaoFactory daoFactory;
 
 	private UserFactory userFactory;
+	
+	private BCryptPasswordEncoder passwordEncoder;
+	
+	private EmailSender emailSender;
 
 	private final String LOGIN_NAME = "login name";
 
 	private final String EMAIL_ADDRESS = "email address";
 
 	private final String CATISSUE = "catissue";
-
-	private EmailSender emailSender;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -61,10 +68,13 @@ public class UserServiceImpl implements UserService {
 		this.emailSender = emailSender;
 	}
 
+	public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
+
 	@Override
 	@PlusTransactional
 	public AllUsersEvent getAllUsers(ReqAllUsersEvent req) {
-
 		
 		if (req.getStartAt() < 0 || req.getMaxRecords() <= 0) {
 			String msg = SavedQueryErrorCode.INVALID_PAGINATION_FILTER.message();
@@ -93,7 +103,6 @@ public class UserServiceImpl implements UserService {
 			ensureUniqueEmailAddress(user.getEmailAddress(), exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();
 
-			user.setPasswordToken(user, event.getUserDetails().getDomainName());
 			daoFactory.getUserDao().saveOrUpdate(user);
 			emailSender.sendUserCreatedEmail(user);
 			return UserCreatedEvent.ok(UserDetails.fromDomain(user));
@@ -178,13 +187,22 @@ public class UserServiceImpl implements UserService {
 	@PlusTransactional
 	public PasswordUpdatedEvent changePassword(UpdatePasswordEvent event) {
 		try {
-			Long userId = event.getPasswordDetails().getUserId();
-			User user = daoFactory.getUserDao().getUserByIdAndDomainName(userId, CATISSUE);
+			PasswordDetails detail = event.getPasswordDetails();
+			User user = daoFactory.getUserDao().getUserByLoginNameAndDomainName(detail.getLoginName(), CATISSUE);
 			if (user == null) {
 				return PasswordUpdatedEvent.notFound();
 			}
+			
+			user.setPasswordEncoder(passwordEncoder);
+			if (!user.validateOldPassword(detail.getOldPassword())) {
+				reportError(UserErrorCode.INVALID_ATTR_VALUE, "old password");
+			}
+			
+			if (!User.isValidPasswordPattern(detail.getNewPassword())) {
+				reportError(UserErrorCode.INVALID_ATTR_VALUE, "new password");
+			}
 
-			user.changePassword(event.getPasswordDetails());
+			user.addPassword(detail.getNewPassword());
 			daoFactory.getUserDao().saveOrUpdate(user);
 			return PasswordUpdatedEvent.ok();
 		}
@@ -198,15 +216,31 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@PlusTransactional
-	public PasswordUpdatedEvent setPassword(UpdatePasswordEvent event) {
+	public PasswordUpdatedEvent resetPassword(UpdatePasswordEvent event) {
 		try {
-			Long userId = event.getPasswordDetails().getUserId();
-			User user = daoFactory.getUserDao().getUserByIdAndDomainName(userId, CATISSUE);
-			if (user == null) {
+			PasswordDetails detail = event.getPasswordDetails();
+			ForgotPasswordToken token = daoFactory.getForgotPasswordTokenDao().findByToken(detail.getForgotPasswordToken());
+			if (token == null) {
 				return PasswordUpdatedEvent.notFound();
 			}
-			user.setPassword(event.getPasswordDetails(), event.getPasswordToken());
-			daoFactory.getUserDao().saveOrUpdate(user);
+			
+			User user = token.getUser();
+			if (!user.getLoginName().equals(detail.getLoginName())) {
+				reportError(UserErrorCode.INVALID_ATTR_VALUE, "Login Name");
+			}
+			
+			if (token.hasExpired()) {
+				daoFactory.getForgotPasswordTokenDao().delete(token);
+				return PasswordUpdatedEvent.notFound();
+			}
+			
+			if (!User.isValidPasswordPattern(detail.getNewPassword())) {
+				reportError(UserErrorCode.INVALID_ATTR_VALUE, "New Password");
+			}
+			
+			user.setPasswordEncoder(passwordEncoder);
+			user.addPassword(detail.getNewPassword());
+			daoFactory.getForgotPasswordTokenDao().delete(token);
 			return PasswordUpdatedEvent.ok();
 		}
 		catch (CatissueException ce) {
@@ -226,8 +260,14 @@ public class UserServiceImpl implements UserService {
 			if (user == null) {
 				return PasswordForgottenEvent.notFound();
 			}
-			user.setPasswordToken(UUID.randomUUID().toString());
-			daoFactory.getUserDao().saveOrUpdate(user);
+			
+			ForgotPasswordToken oldToken = daoFactory.getForgotPasswordTokenDao().findByUser(user.getId());
+			if (oldToken != null) {
+				daoFactory.getForgotPasswordTokenDao().delete(oldToken);
+			}
+			
+			ForgotPasswordToken token = new ForgotPasswordToken(user);
+			daoFactory.getForgotPasswordTokenDao().saveOrUpdate(token);
 			emailSender.sendForgotPasswordEmail(user);
 			return PasswordForgottenEvent.ok();
 		}

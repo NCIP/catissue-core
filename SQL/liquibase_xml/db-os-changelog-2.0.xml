@@ -22,6 +22,9 @@
   <property name="autoIncrement" value="true" dbms="mysql"/>
   <property name="autoIncrement" value="false" dbms="oracle"/>
 
+  <property name="timestamp.type" value="timestamp" dbms="mysql" />
+  <property name="timestamp.type" value="timestamp" dbms="oracle" />
+
   <changeSet author="vpawar" id="Simplified storage containers" failOnError="true">
     <createTable tableName="OS_STORAGE_CONTAINERS">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
@@ -282,6 +285,35 @@
 
   <changeSet author="vlonushte" id="Add unique constraint on code column of catissue_site">
     <addUniqueConstraint constraintName="CATISSUE_SITE_CODE_UQ" tableName="CATISSUE_SITE" columnNames="CODE"/>
+  </changeSet>
+
+  <changeSet author="vlonuste" id="OS forgot password token table">
+    <createTable tableName="OS_FORGOT_PASSWORD_TOKENS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true"/>
+      </column>
+
+      <column name="USER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="TOKEN" type="${text.type}(64)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="CREATED_DATE" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="FK on forgot password token table">
+    <addForeignKeyConstraint 
+      constraintName="FK_FORGOT_PASS_TOKENS_USER_ID_OS_USER_ID"
+      baseTableName="OS_FORGOT_PASSWORD_TOKENS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
   </changeSet>
 
 </databaseChangeLog>

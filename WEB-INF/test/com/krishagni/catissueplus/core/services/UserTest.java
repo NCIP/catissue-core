@@ -460,7 +460,7 @@ public class UserTest {
 		when(userDao.getUserByIdAndDomainName(anyLong(),anyString())).thenReturn(UserTestData.getUserWithCatissueDomain(1L));
 		UpdatePasswordEvent reqEvent = UserTestData.getUpdatePasswordEventForBlankNewPass();
 
-		PasswordUpdatedEvent response = userService.setPassword(reqEvent);
+		PasswordUpdatedEvent response = userService.resetPassword(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(), response.getMessage());
@@ -513,7 +513,7 @@ public class UserTest {
 	public void testForPasswordSetWithInvalidUser() {
 		when(userDao.getUserByIdAndDomainName(anyLong(),anyString())).thenReturn(null);
 		UpdatePasswordEvent reqEvent = UserTestData.getUpdatePasswordEvent();
-		PasswordUpdatedEvent response = userService.setPassword(reqEvent);
+		PasswordUpdatedEvent response = userService.resetPassword(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
 
@@ -531,7 +531,7 @@ public class UserTest {
 		when(userDao.getUserByIdAndDomainName(anyLong(),anyString())).thenReturn(UserTestData.getUserWithCatissueDomain(1L));
 		when(userDao.getOldPasswords(anyLong())).thenReturn(UserTestData.getOldPasswordList());
 		UpdatePasswordEvent reqEvent = UserTestData.getUpdatePasswordEventWithBlankToken();
-		PasswordUpdatedEvent response = userService.setPassword(reqEvent);
+		PasswordUpdatedEvent response = userService.resetPassword(reqEvent);
 		assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(), response.getMessage());
 	}
 	
@@ -551,7 +551,7 @@ public class UserTest {
 		when(userDao.getUserByIdAndDomainName(anyLong(),anyString())).thenReturn(UserTestData.getUserWithCatissueDomain(1L));
 		UpdatePasswordEvent reqEvent = UserTestData.getUpdatePasswordEventForDiffTokens();
 
-		PasswordUpdatedEvent response = userService.setPassword(reqEvent);
+		PasswordUpdatedEvent response = userService.resetPassword(reqEvent);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(), response.getMessage());
 	}
@@ -562,7 +562,7 @@ public class UserTest {
 		UpdatePasswordEvent reqEvent = UserTestData.getUpdatePasswordEvent();
 
 		doThrow(new RuntimeException()).when(userDao).saveOrUpdate(any(User.class));
-		PasswordUpdatedEvent response = userService.setPassword(reqEvent);
+		PasswordUpdatedEvent response = userService.resetPassword(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}

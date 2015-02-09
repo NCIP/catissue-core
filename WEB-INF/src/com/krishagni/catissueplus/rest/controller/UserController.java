@@ -45,7 +45,6 @@ import com.krishagni.catissueplus.core.administrative.events.UserPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ValidatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
-import com.krishagni.catissueplus.core.auth.domain.factory.PasswordActionType;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -202,29 +201,30 @@ public class UserController {
 			return resp.getMessage();
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/password")
+	@RequestMapping(method = RequestMethod.POST, value = "/{loginName}/password")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public String setPassword(@PathVariable Long id,
-			@RequestParam(value = "token", required = false, defaultValue = "") String token,
-			@RequestParam(value = "type", required = false, defaultValue = "") String type,
+	public String resetPassword(@PathVariable String loginName,
 			@RequestBody PasswordDetails passwordDetails) {
-		UpdatePasswordEvent event = new UpdatePasswordEvent(passwordDetails, token, id);
+		passwordDetails.setLoginName(loginName);
+		UpdatePasswordEvent event = new UpdatePasswordEvent(passwordDetails);
+		
 		PasswordUpdatedEvent resp = null;
-		if (PasswordActionType.CHANGE.value().equalsIgnoreCase(type)) {
+		if (passwordDetails.getForgotPasswordToken() == null) {
 			resp = userService.changePassword(event);
 		}
 		else {
-			resp = userService.setPassword(event);
+			resp = userService.resetPassword(event);
 		}
 
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
-			return resp.getMessage();
+		
+		return resp.getMessage();
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/{loginName}/forgotPassword")
+	@RequestMapping(method = RequestMethod.GET, value = "/{loginName}/forgotPassword")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public String forgotPassword(@PathVariable String loginName) {
@@ -234,7 +234,8 @@ public class UserController {
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
-			return resp.getMessage();
+		
+		return resp.getMessage();
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/validatePassword/{password}")

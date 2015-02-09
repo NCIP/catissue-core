@@ -9,24 +9,22 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
-import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
 
-import edu.wustl.common.util.XMLPropertyHandler;
-
-public class User {
-
-	private Long id;
+@Configurable
+public class User extends BaseEntity {
 
 	private String lastName;
 
@@ -53,16 +51,9 @@ public class User {
 	private String comments;
 
 	private Set<Password> passwordCollection = new HashSet<Password>();
-
-	private String passwordToken;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	public String getLastName() {
 		return lastName;
@@ -166,14 +157,6 @@ public class User {
 		this.passwordCollection = passwordCollection;
 	}
 
-	public String getPasswordToken() {
-		return passwordToken;
-	}
-
-	public void setPasswordToken(String passwordToken) {
-		this.passwordToken = passwordToken;
-	}
-
 	public Set<UserCPRole> getUserCPRoles() {
 		return userCPRoles;
 	}
@@ -182,9 +165,19 @@ public class User {
 		this.userCPRoles = userCPRoles;
 	}
 
+	public BCryptPasswordEncoder getPasswordEncoder() {
+		return passwordEncoder;
+	}
+
+	public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
+
 	private final String LOGIN_NAME = "login name";
 
 	private final String LDAP = "ldap";
+	
+	private final static String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})";
 
 	public void close() {
 		this.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
@@ -220,76 +213,14 @@ public class User {
 		oldAddress.setZipCode(address.getZipCode());
 	}
 
-	@Override
-	public int hashCode() {
-		return 31 * 1 + ((id == null) ? 0 : id.hashCode());
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-
-		if (obj == null) {
-			return false;
-		}
-
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-
-		User other = (User) obj;
-		if (id == null) {
-			if (other.id != null) {
-				return false;
-			}
-		}
-		else if (!id.equals(other.id)) {
-			return false;
-		}
-		return true;
-	}
-
-	private final static String CATISSUE = "catissue";
-
-	private final static String OLD_PASSWORD = "old password";
-
-	private final static String PASSWORD_TOKEN = "password token";
-
-	private static final String PASSWORD = "password";
-
-	public void changePassword(PasswordDetails passwordDetails) {
-		validateOldPassword(passwordDetails.getOldPassword());
-		updatePassword(passwordDetails.getNewPassword());
-	}
-
-	public void setPassword(PasswordDetails passwordDetails, String token) {
-		validatePasswordToken(token);
-		updatePassword(passwordDetails.getNewPassword());
-	}
-
-	private void updatePassword(String newPassword) {
+	public void addPassword(String newPassword) {
 		Password password = new Password();
-		if (isBlank(newPassword) || !isValidPasswordPattern(newPassword)) {
-			reportError(UserErrorCode.INVALID_ATTR_VALUE, PASSWORD);
-		}
 		password.setUpdateDate(new Date());
 		password.setUser(this);
-		this.setPasswordToken(null);
-		password.setPassword(BCrypt.hashpw(newPassword,
-				BCrypt.gensalt(Integer.parseInt(XMLPropertyHandler.getValue("bcrypt.salt.windings")))));
+		password.setPassword(passwordEncoder.encode(newPassword));
 
 		this.passwordCollection.add(password);
 	}
-
-	public void setPasswordToken(User user, String domainName) {
-		if (CATISSUE.equalsIgnoreCase(domainName)) {
-			user.setPasswordToken(UUID.randomUUID().toString());
-		}
-	}
-
-	private final static String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})";
 
 	public static boolean isValidPasswordPattern(String password) {
 		boolean result = false;
@@ -299,30 +230,18 @@ public class User {
 		return result;
 	}
 
-	private void validateOldPassword(String oldPassword) {
-		if (isBlank(oldPassword)) {
-			reportError(UserErrorCode.INVALID_ATTR_VALUE, OLD_PASSWORD);
-		}
-
+	public boolean validateOldPassword(String oldPassword) {
 		Set<Password> passwords = this.passwordCollection;
 		if (!passwords.isEmpty()) {
 			List<Password> passList = new ArrayList<Password>(passwords);
 			Password lastPassword = passList.get(0);
-
-			if (!BCrypt.checkpw(oldPassword, lastPassword.getPassword())) {
-				reportError(UserErrorCode.INVALID_ATTR_VALUE, OLD_PASSWORD);
+			
+			if (passwordEncoder.matches(oldPassword, lastPassword.getPassword())){
+				return true;
 			}
 		}
-	}
-
-	private void validatePasswordToken(String token) {
-		if (isBlank(token)) {
-			reportError(UserErrorCode.INVALID_ATTR_VALUE, PASSWORD_TOKEN);
-		}
-
-		if (!this.getPasswordToken().equals(token)) {
-			reportError(UserErrorCode.INVALID_ATTR_VALUE, PASSWORD_TOKEN);
-		}
+		
+		return false;
 	}
 
 	public void delete() {

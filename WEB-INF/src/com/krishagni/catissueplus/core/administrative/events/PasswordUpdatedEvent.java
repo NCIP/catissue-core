@@ -15,6 +15,12 @@ public class PasswordUpdatedEvent extends ResponseEvent {
 		return event;
 	}
 
+	public static PasswordUpdatedEvent notFound() {
+		PasswordUpdatedEvent resp = new PasswordUpdatedEvent();
+		resp.setStatus(EventStatus.NOT_FOUND);
+		return resp;
+	}
+	
 	public static PasswordUpdatedEvent invalidRequest(String message) {
 		PasswordUpdatedEvent resp = new PasswordUpdatedEvent();
 		resp.setStatus(EventStatus.BAD_REQUEST);
@@ -31,9 +37,4 @@ public class PasswordUpdatedEvent extends ResponseEvent {
 		return resp;
 	}
 
-	public static PasswordUpdatedEvent notFound() {
-		PasswordUpdatedEvent resp = new PasswordUpdatedEvent();
-		resp.setStatus(EventStatus.NOT_FOUND);
-		return resp;
-	}
 }

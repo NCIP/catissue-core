@@ -19,6 +19,8 @@
            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
   <bean class="com.krishagni.catissueplus.core.common.RestErrorController" /> 
+  
+  <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
   <!-- Beans for caCORE starts -->
   <bean id="remoteService" class="gov.nih.nci.system.comm.server.ApplicationServiceServerImpl" />
@@ -193,6 +195,7 @@
   <bean id="userSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="userFactory" ref="userFact"/>
+    <property name="passwordEncoder" ref="passwordEncoder"/>
     <property name="emailSender" ref="eSender"/>
   </bean>
 
