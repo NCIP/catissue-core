@@ -2,9 +2,14 @@ package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.List;
 
-import org.hibernate.Query;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
+import com.krishagni.catissueplus.core.administrative.repository.DistributionListCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionOrderDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
@@ -12,8 +17,6 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 	public static final String FQN  = DistributionOrder.class.getName();
 	
 	public static final String GET_DO_BY_NAME = FQN + ".getDistributionOrderByName";
-	
-	public static final String GET_ALL_DO = FQN + ".getAllDistributionOrders";
 	
 	@Override
 	@SuppressWarnings("unchecked")
@@ -26,15 +29,21 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 	}
 	
 	@Override
-	public List<DistributionOrder> getDistributionOrders(int startAt, int maxResults) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_DO)
-				.setFirstResult(startAt <= 0 ? 0 : startAt);
+	@SuppressWarnings("unchecked")
+	public List<DistributionOrder> getDistributionOrders(DistributionListCriteria criteria) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(DistributionOrder.class)
+				.setFirstResult(criteria.startAt() < 0 ? 0 : criteria.startAt())
+				.setMaxResults(criteria.maxResults() < 0 || criteria.maxResults() > 100 ? 100 : criteria.maxResults())
+				.add(Restrictions.ne("activityStatus", "Disabled"));
 		
-		if (maxResults > 0 ) {
-			query.setMaxResults(maxResults);
+		String searchTerm = criteria.query();
+		if (!StringUtils.isBlank(searchTerm)) {
+			Junction searchCrit = Restrictions.disjunction()
+					.add(Restrictions.ilike("name", searchTerm, MatchMode.ANYWHERE));
+			query.add(searchCrit);
 		}
-		return query.setMaxResults(maxResults).list();
 		
+		return query.list();
 	}	
 	
 	@Override

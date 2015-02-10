@@ -3,13 +3,13 @@ package com.krishagni.catissueplus.core.administrative.events;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class CreateDistributionOrderEvent extends RequestEvent {
-	private DistributionOrderDetail detail;
+	private DistributionOrderDetail order;
 
-	public DistributionOrderDetail getDetail() {
-		return detail;
+	public DistributionOrderDetail getOrder() {
+		return order;
 	}
 
-	public void setDetail(DistributionOrderDetail detail) {
-		this.detail = detail;
+	public void setOrder(DistributionOrderDetail detail) {
+		this.order = detail;
 	}
 }

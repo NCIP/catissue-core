@@ -8,5 +8,5 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 public interface DistributionOrderDao extends Dao<DistributionOrder> {
 	public DistributionOrder getDistributionOrder(String name);
 	
-	public List<DistributionOrder> getDistributionOrders(int startAt, int maxRecords);
+	public List<DistributionOrder> getDistributionOrders(DistributionListCriteria criteria);
 }

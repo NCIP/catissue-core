@@ -13,7 +13,7 @@ public class DistributionOrderDetail {
 	
 	private String name;
 	
-	private String distributionProtocolTitle;
+	private Long distributionProtocolId;
 	
 	private UserSummary requester;
 	
@@ -43,12 +43,12 @@ public class DistributionOrderDetail {
 		this.name = name;
 	}
 
-	public String getDistributionProtocolTitle() {
-		return distributionProtocolTitle;
+	public Long getDistributionProtocolId() {
+		return distributionProtocolId;
 	}
 
-	public void setDistributionProtocolTitle(String distributionProtocolTitle) {
-		this.distributionProtocolTitle = distributionProtocolTitle;
+	public void setDistributionProtocolId(Long distributionProtocolId) {
+		this.distributionProtocolId = distributionProtocolId;
 	}
 
 	public UserSummary getRequester() {
@@ -98,12 +98,12 @@ public class DistributionOrderDetail {
 	public void setOrderItems(List<OrderItemDetail> orderItems) {
 		this.orderItems = orderItems;
 	}
-	
+
 	public static DistributionOrderDetail from(DistributionOrder distributionOrder) {
 		DistributionOrderDetail detail = new DistributionOrderDetail();
 		detail.setActivityStatus(distributionOrder.getActivityStatus());
 		detail.setDistributionAction(distributionOrder.getDistributionAction());
-		detail.setDistributionProtocolTitle(distributionOrder.getDistributionProtocol().getTitle());
+		detail.setDistributionProtocolId(distributionOrder.getDistributionProtocol().getId());
 		detail.setId(distributionOrder.getId());
 		detail.setName(distributionOrder.getName());
 		detail.setRequestedDate(distributionOrder.getRequestedDate());

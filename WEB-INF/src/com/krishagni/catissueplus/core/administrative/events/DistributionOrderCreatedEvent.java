@@ -5,19 +5,19 @@ import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class DistributionOrderCreatedEvent extends ResponseEvent {
-	private DistributionOrderDetail detail;
+	private DistributionOrderDetail order;
 
-	public DistributionOrderDetail getDetail() {
-		return detail;
+	public DistributionOrderDetail getOrder() {
+		return order;
 	}
 
-	public void setDetail(DistributionOrderDetail detail) {
-		this.detail = detail;
+	public void setOrder(DistributionOrderDetail detail) {
+		this.order = detail;
 	}
 	
 	public static DistributionOrderCreatedEvent ok(DistributionOrderDetail distributionOrder) {
 		DistributionOrderCreatedEvent resp = new DistributionOrderCreatedEvent();
-		resp.setDetail(distributionOrder);
+		resp.setOrder(distributionOrder);
 		resp.setStatus(EventStatus.OK);
 		return resp;
 	}
