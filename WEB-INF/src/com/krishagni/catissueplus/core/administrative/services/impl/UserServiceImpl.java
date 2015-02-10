@@ -267,7 +267,7 @@ public class UserServiceImpl implements UserService {
 			
 			ForgotPasswordToken token = new ForgotPasswordToken(user);
 			dao.saveForgotPasswordToken(token);
-			emailSender.sendForgotPasswordEmail(user);
+			emailSender.sendForgotPasswordEmail(user, token.getToken());
 			return PasswordForgottenEvent.ok();
 		}
 		catch (Exception e) {

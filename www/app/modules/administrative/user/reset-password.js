@@ -8,7 +8,9 @@ angular.module('openspecimen')
     var onResetPassword = function(result) {
       if (result.status == 'ok') {
         $scope.response.status = result.status;
-        $scope.response.message = "Password has been set." 
+        $translate('user.reset_password.success_msg').then(function(msg) {
+          $scope.response.message = msg;
+        })
       } else {
         $scope.response.status = result.status;
       }   
