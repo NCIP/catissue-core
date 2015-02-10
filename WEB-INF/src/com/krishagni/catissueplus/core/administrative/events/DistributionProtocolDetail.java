@@ -94,13 +94,7 @@ public class DistributionProtocolDetail {
 	}
 
 	private static UserSummary getPrincipleInvestigatorInfo(User principleInvestigator) {
-		UserSummary pi = new UserSummary();
-		pi.setLoginName(principleInvestigator.getLoginName());
-		if (principleInvestigator.getAuthDomain() != null) {
-			pi = UserSummary.from(principleInvestigator);
-		}
-
-		return pi;
+		return UserSummary.from(principleInvestigator);
 	}
 	
 	public static List<DistributionProtocolDetail> from(List<DistributionProtocol> distributionProtocols) {

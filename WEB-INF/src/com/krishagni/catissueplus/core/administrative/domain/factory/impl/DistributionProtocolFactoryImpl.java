@@ -68,8 +68,11 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 	}
 
 	private void setPrincipalInvestigator(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, ObjectCreationException oce) {
-
-		User pi = daoFactory.getUserDao().getUser(detail.getPrincipalInvestigator().getId());
+		User pi = null;
+		if(detail.getPrincipalInvestigator() != null) {
+			pi = daoFactory.getUserDao().getUser(detail.getPrincipalInvestigator().getId());
+		}
+		
 		if (pi == null) {
 			oce.addError(DistributionProtocolErrorCode.INVALID_PRINCIPAL_INVESTIGATOR, PRINCIPLE_INVESTIGATOR);
 			return;
