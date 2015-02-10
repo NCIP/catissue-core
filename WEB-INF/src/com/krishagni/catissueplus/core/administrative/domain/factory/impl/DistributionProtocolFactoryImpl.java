@@ -1,19 +1,16 @@
 
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
-
-import java.util.Date;
+import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
-import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class DistributionProtocolFactoryImpl implements DistributionProtocolFactory {
@@ -33,39 +30,46 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 	}
 
 	@Override
-	public DistributionProtocol create(DistributionProtocolDetails details) {
+	public DistributionProtocol createDistributionProtocol(DistributionProtocolDetail detail) {
 		DistributionProtocol distributionProtocol = new DistributionProtocol();
 		ObjectCreationException oce = new ObjectCreationException();
 		
-		setTitle(distributionProtocol, details.getTitle(), oce);
-		setIbrId(distributionProtocol, details.getIrbId(), oce);
-		setPrincipalInvestigator(distributionProtocol, details.getPrincipalInvestigator(), oce);
-		setShortTitle(distributionProtocol, details.getShortTitle(), oce);
-		setStartDate(distributionProtocol, details.getStartDate());
-		setActivityStatus(distributionProtocol, details.getActivityStatus(), oce);
+		distributionProtocol.setId(detail.getId());
+		setTitle(detail, distributionProtocol, oce);
+		setShortTitle(detail, distributionProtocol, oce);
+		setPrincipalInvestigator(detail, distributionProtocol, oce);
+		setIbrId(detail, distributionProtocol, oce);
+		setStartDate(detail, distributionProtocol);
+		setActivityStatus(detail, distributionProtocol, oce);
 		
 		oce.checkErrorAndThrow();
-		
 		return distributionProtocol;
 	}
+	
+	private void setTitle(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, ObjectCreationException oce) {
+		if (StringUtils.isBlank(detail.getTitle())) {
+			oce.addError(DistributionProtocolErrorCode.MISSING_ATTR_VALUE, TITLE);
+			return;
+		}
+		distributionProtocol.setTitle(detail.getTitle());
 
-	private void setStartDate(DistributionProtocol distributionProtocol, Date startDate) {
-		distributionProtocol.setStartDate(startDate);
 	}
 
-	private void setShortTitle(DistributionProtocol distributionProtocol, String shortTitle,
-			ObjectCreationException oce) {
-		if (isBlank(shortTitle)) {
+	private void setShortTitle(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, ObjectCreationException oce) {
+		if (StringUtils.isBlank(detail.getShortTitle())) {
 			oce.addError(DistributionProtocolErrorCode.MISSING_ATTR_VALUE, SHORT_TITLE);
 			return;
 		}
-		distributionProtocol.setShortTitle(shortTitle);
+		distributionProtocol.setShortTitle(detail.getShortTitle());
+	}
+	
+	private void setStartDate(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol) {
+		distributionProtocol.setStartDate(detail.getStartDate());
 	}
 
-	private void setPrincipalInvestigator(DistributionProtocol distributionProtocol, UserSummary principalInvestigator,
-			ObjectCreationException oce) {
+	private void setPrincipalInvestigator(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, ObjectCreationException oce) {
 
-		User pi = daoFactory.getUserDao().getUser(principalInvestigator.getId());
+		User pi = daoFactory.getUserDao().getUser(detail.getPrincipalInvestigator().getId());
 		if (pi == null) {
 			oce.addError(DistributionProtocolErrorCode.INVALID_PRINCIPAL_INVESTIGATOR, PRINCIPLE_INVESTIGATOR);
 			return;
@@ -73,29 +77,17 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		distributionProtocol.setPrincipalInvestigator(pi);
 	}
 
-	private void setIbrId(DistributionProtocol distributionProtocol, String irbId,
-			ObjectCreationException oce) {
-		distributionProtocol.setIrbId(irbId);
-
+	private void setIbrId(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, ObjectCreationException oce) {
+		distributionProtocol.setIrbId(detail.getIrbId());
 	}
 
-	private void setTitle(DistributionProtocol distributionProtocol, String title,
-			ObjectCreationException oce) {
-		if (isBlank(title)) {
-			oce.addError(DistributionProtocolErrorCode.MISSING_ATTR_VALUE, TITLE);
-			return;
-		}
-		distributionProtocol.setTitle(title);
-
-	}
-
-	private void setActivityStatus(DistributionProtocol distributionProtocol, String activityStatus,
-			ObjectCreationException oce) {
+	private void setActivityStatus(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, ObjectCreationException oce) {
+		String activityStatus = detail.getActivityStatus();
 		if (!CommonValidator.isValidPv(activityStatus, ACTIVITY_STATUS)) {
 			oce.addError(DistributionProtocolErrorCode.INVALID_ATTR_VALUE, ACTIVITY_STATUS);
 		}
 		
-		activityStatus = activityStatus == null ? Status.ACTIVITY_STATUS_ACTIVE.getStatus() : activityStatus;
+		activityStatus = StringUtils.isBlank(activityStatus) ? Status.ACTIVITY_STATUS_ACTIVE.getStatus() : activityStatus;
 		distributionProtocol.setActivityStatus(activityStatus);
 	}
 }

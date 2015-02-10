@@ -4,83 +4,48 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false">
-  <class
-	name="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol"
-	table="OS_DISTRIBUTION_PROTOCOL">
-	
-	<cache usage="read-write"/>
-	
-	<id
-		name="id"
-		column="IDENTIFIER"
-		type="long"
-		length="30"
-		unsaved-value="null">
-		
-	 	<generator class="native">
-	 		<param name="sequence">OS_DISTRIBUTION_PROTOCOL_SEQ</param>
-        </generator>
-        	
+  <class name="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol" table="CATISSUE_DISTRIBUTION_PROTOCOL">
+    <id name="id" column="IDENTIFIER" type="long" unsaved-value="null">
+      <generator class="native">
+        <param name="sequence">CATISSUE_DISTRI_PROT_SEQ</param>
+      </generator>	
     </id>
     
     <many-to-one
-    	name="principalInvestigator"
-    	class="com.krishagni.catissueplus.core.administrative.domain.User"
-    	column="PRINCIPAL_INVESTIGATOR_ID"/>
+      name="principalInvestigator"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      column="PRINCIPAL_INVESTIGATOR_ID"/>
     
-     <property
-            name="title"
-            type="string"
-            column="TITLE"
-            length="255"
-            not-null="true"
-            unique="true"/>
+    <property name="title" column="TITLE"/>
       
-      <property
-            name="shortTitle"
-            type="string"
-            column="SHORT_TITLE"
-            length="255" />
+    <property name="shortTitle"  column="SHORT_TITLE"/>
         
-     <property
-            name="irbId"
-            type="string"
-            column="IRB_IDENTIFIER"
-            length="255" />
+    <property name="irbId" column="IRB_IDENTIFIER"/>
         
-     <property
-            name="startDate"
-            type="date"
-            column="START_DATE"
-            length="50" />
+    <property name="startDate" column="START_DATE"/>
             
-     <property
-            name="activityStatus"
-            type="string"
-            column="ACTIVITY_STATUS"
-            length="30" />
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
       
-      <query name="getDistributionProtocolByTitle">
-      	select 
-      	  distributionProtocol 
-      	from 
-      	  com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol distributionProtocol 
-      	where 
-      	  distributionProtocol.title=:title 
-      </query>
+    <query name="getDistributionProtocolByTitle">
+      from 
+        com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol 
+      where 
+        title=:title 
+    </query>
       
-       <query name="getDistributionProtocolByShortTitle">
-      	select 
-      	  distributionProtocol 
-      	from 
-      	  com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol distributionProtocol 
-      	where 
-      	  distributionProtocol.shortTitle=:shortTitle 
-      </query>
+    <query name="getDistributionProtocolByShortTitle">
+      from 
+        com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol 
+      where 
+        shortTitle=:shortTitle 
+    </query>
       
-      <query name="getAllDistributionProtocols">
-        from com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol where activityStatus != 'Disabled' order by title 
-      </query>
-      
- </class>
+    <query name="getAllDistributionProtocols">
+      from 
+        com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol 
+      where 
+        activityStatus != 'Disabled' 
+      order by title 
+    </query>
+  </class>
 </hibernate-mapping>

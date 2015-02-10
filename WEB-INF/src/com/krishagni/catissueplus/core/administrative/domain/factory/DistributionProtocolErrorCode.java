@@ -11,7 +11,9 @@ public enum DistributionProtocolErrorCode implements CatissueErrorCode {
 	DUPLICATE_PROTOCOL_TITLE(2203, "Distribution Protocol with the same title already exists."), 
 	DUPLICATE_PROTOCOL_SHORT_TITLE(2204,"Distribution Protocol with the same short title already exists."), 
 	INVALID_PRINCIPAL_INVESTIGATOR(2205,"Principal Investigator value is invalid"), 
-	BAD_REQUEST(2206, "Bad Request");
+	BAD_REQUEST(2206, "Bad Request"),
+	NOT_UNIQUE(2207, "Property value is not unique")
+	;
 
 	private int code;
 

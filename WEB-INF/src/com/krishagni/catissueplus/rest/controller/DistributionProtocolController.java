@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.administrative.events.AllDistributionProtocolsEvent;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetailEvent;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqAllDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqDistributionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.ReqDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
@@ -44,15 +44,16 @@ public class DistributionProtocolController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<DistributionProtocolDetails> getAllDistributionProtocols(
+	public List<DistributionProtocolDetail> getAllDistributionProtocols(
+			@RequestParam(value = "query", required = false, defaultValue = "") String searchStr,
 			@RequestParam(value = "startAt", required = false, defaultValue = "0") int startAt,
 			@RequestParam(value = "maxResults", required = false, defaultValue = "100") int maxResults) {
-		ReqAllDistributionProtocolEvent req = new ReqAllDistributionProtocolEvent();
-		
+		ReqDistributionProtocolsEvent req = new ReqDistributionProtocolsEvent();
 		req.setStartAt(startAt);
 		req.setMaxResults(maxResults);
-		AllDistributionProtocolsEvent resp = distributionProtocolSvc.getAllDistributionProtocols(req);
+		req.setSearchString(searchStr);
 		
+		DistributionProtocolsEvent resp = distributionProtocolSvc.getDistributionProtocols(req);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
@@ -63,67 +64,67 @@ public class DistributionProtocolController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public DistributionProtocolDetails getDistributionProtocol(@PathVariable Long id) {
-		ReqDistributionProtocolEvent event = new ReqDistributionProtocolEvent();
-		event.setId(id);
-		DistributionProtocolDetailEvent resp = distributionProtocolSvc.getDistributionProtocol(event);
+	public DistributionProtocolDetail getDistributionProtocol(@PathVariable Long id) {
+		ReqDistributionProtocolEvent req = new ReqDistributionProtocolEvent();
+		req.setId(id);
 		
+		DistributionProtocolDetailEvent resp = distributionProtocolSvc.getDistributionProtocol(req);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
 		
-		return resp.getDetails();
+		return resp.getProtocol();
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public DistributionProtocolDetails createDistributionProtocol(
-			@RequestBody DistributionProtocolDetails distributionProtocolDetails) {
-		CreateDistributionProtocolEvent event = new CreateDistributionProtocolEvent();
-		event.setDistributionProtocolDetails(distributionProtocolDetails);
-		event.setSessionDataBean(getSession());
-		DistributionProtocolCreatedEvent resp = distributionProtocolSvc.createDistributionProtocol(event);
+	public DistributionProtocolDetail createDistributionProtocol(
+			@RequestBody DistributionProtocolDetail distributionProtocolDetails) {
+		CreateDistributionProtocolEvent req = new CreateDistributionProtocolEvent();
+		req.setProtocol(distributionProtocolDetails);
+		req.setSessionDataBean(getSession());
 		
+		DistributionProtocolCreatedEvent resp = distributionProtocolSvc.createDistributionProtocol(req);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
 		
-		return resp.getDetails();
+		return resp.getProtocol();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public DistributionProtocolDetails updateDistributionProtocol(@PathVariable Long id,
-			@RequestBody DistributionProtocolDetails details) {
-		UpdateDistributionProtocolEvent event = new UpdateDistributionProtocolEvent();
-		event.setId(id);
-		event.setDetails(details);
-		event.setSessionDataBean(getSession());
-		DistributionProtocolUpdatedEvent resp = distributionProtocolSvc.updateDistributionProtocol(event);
-		
+	public DistributionProtocolDetail updateDistributionProtocol(@PathVariable Long id,
+			@RequestBody DistributionProtocolDetail details) {
+		UpdateDistributionProtocolEvent req = new UpdateDistributionProtocolEvent();
+		req.setId(id);
+		req.setProtocol(details);
+		req.setSessionDataBean(getSession());
+
+		DistributionProtocolUpdatedEvent resp = distributionProtocolSvc.updateDistributionProtocol(req);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
 		
-		return resp.getDetails();
+		return resp.getProtocol();
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public DistributionProtocolDetails deleteDistributionProtocol(@PathVariable Long id) {
-		DeleteDistributionProtocolEvent event = new DeleteDistributionProtocolEvent();
-		event.setId(id);
-		event.setSessionDataBean(getSession());
-		DistributionProtocolDeletedEvent resp = distributionProtocolSvc.deleteDistributionProtocol(event);
-		
+	public DistributionProtocolDetail deleteDistributionProtocol(@PathVariable Long id) {
+		DeleteDistributionProtocolEvent req = new DeleteDistributionProtocolEvent();
+		req.setId(id);
+		req.setSessionDataBean(getSession());
+	
+		DistributionProtocolDeletedEvent resp = distributionProtocolSvc.deleteDistributionProtocol(req);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
 		
-		return resp.getDetails();
+		return resp.getProtocol();
 	}
 
 	private SessionDataBean getSession() {

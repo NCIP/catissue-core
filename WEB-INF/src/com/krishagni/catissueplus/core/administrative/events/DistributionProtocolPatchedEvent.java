@@ -7,17 +7,17 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class DistributionProtocolPatchedEvent extends ResponseEvent {
 
-	private DistributionProtocolDetails details = new DistributionProtocolDetails();
+	private DistributionProtocolDetail details = new DistributionProtocolDetail();
 
 	private long id;
 
 	private String title;
 
-	public DistributionProtocolDetails getDetails() {
+	public DistributionProtocolDetail getDetails() {
 		return details;
 	}
 
-	public void setDetails(DistributionProtocolDetails details) {
+	public void setDetails(DistributionProtocolDetail details) {
 		this.details = details;
 	}
 
@@ -60,7 +60,7 @@ public class DistributionProtocolPatchedEvent extends ResponseEvent {
 		return resp;
 	}
 
-	public static DistributionProtocolPatchedEvent ok(DistributionProtocolDetails details) {
+	public static DistributionProtocolPatchedEvent ok(DistributionProtocolDetail details) {
 		DistributionProtocolPatchedEvent event = new DistributionProtocolPatchedEvent();
 		event.setDetails(details);
 		event.setStatus(EventStatus.OK);

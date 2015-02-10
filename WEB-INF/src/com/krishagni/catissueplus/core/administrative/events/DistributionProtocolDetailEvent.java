@@ -10,7 +10,7 @@ public class DistributionProtocolDetailEvent extends ResponseEvent {
 
 	private String title;
 
-	private DistributionProtocolDetails details;
+	private DistributionProtocolDetail protocol;
 
 	public Long getId() {
 		return id;
@@ -28,12 +28,12 @@ public class DistributionProtocolDetailEvent extends ResponseEvent {
 		this.title = title;
 	}
 
-	public DistributionProtocolDetails getDetails() {
-		return details;
+	public DistributionProtocolDetail getProtocol() {
+		return protocol;
 	}
 
-	public void setDetails(DistributionProtocolDetails details) {
-		this.details = details;
+	public void setProtocol(DistributionProtocolDetail details) {
+		this.protocol = details;
 	}
 
 	public static DistributionProtocolDetailEvent notFound(Long id) {
@@ -50,9 +50,9 @@ public class DistributionProtocolDetailEvent extends ResponseEvent {
 		return resp;
 	}
 
-	public static DistributionProtocolDetailEvent ok(DistributionProtocolDetails details) {
+	public static DistributionProtocolDetailEvent ok(DistributionProtocolDetail details) {
 		DistributionProtocolDetailEvent event = new DistributionProtocolDetailEvent();
-		event.setDetails(details);
+		event.setProtocol(details);
 		event.setStatus(EventStatus.OK);
 		return event;
 	}

@@ -1,27 +1,26 @@
 
 package com.krishagni.catissueplus.core.administrative.services;
 
-import com.krishagni.catissueplus.core.administrative.events.AllDistributionProtocolsEvent;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetailEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqAllDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqDistributionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.ReqDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
 
 public interface DistributionProtocolService {
 
-	public DistributionProtocolCreatedEvent createDistributionProtocol(CreateDistributionProtocolEvent event);
-
-	public DistributionProtocolUpdatedEvent updateDistributionProtocol(UpdateDistributionProtocolEvent reqEvent);
-
-	public DistributionProtocolDetailEvent getDistributionProtocol(ReqDistributionProtocolEvent event);
+	public DistributionProtocolsEvent getDistributionProtocols(ReqDistributionProtocolsEvent req);
 	
-	public DistributionProtocolDeletedEvent deleteDistributionProtocol(DeleteDistributionProtocolEvent event);
+	public DistributionProtocolDetailEvent getDistributionProtocol(ReqDistributionProtocolEvent req);
+	
+	public DistributionProtocolCreatedEvent createDistributionProtocol(CreateDistributionProtocolEvent req);
 
-	public AllDistributionProtocolsEvent getAllDistributionProtocols(ReqAllDistributionProtocolEvent reqEvent);
-
+	public DistributionProtocolUpdatedEvent updateDistributionProtocol(UpdateDistributionProtocolEvent req);
+	
+	public DistributionProtocolDeletedEvent deleteDistributionProtocol(DeleteDistributionProtocolEvent req);
 }

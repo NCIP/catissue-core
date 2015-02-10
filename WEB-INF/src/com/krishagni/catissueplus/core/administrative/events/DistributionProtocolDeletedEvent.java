@@ -6,18 +6,18 @@ import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class DistributionProtocolDeletedEvent extends ResponseEvent {
-	private DistributionProtocolDetails details;
+	private DistributionProtocolDetail protocol;
 	
 	private long id;
 
 	private String title;
 	
-	public DistributionProtocolDetails getDetails() {
-		return details;
+	public DistributionProtocolDetail getProtocol() {
+		return protocol;
 	}
 
-	public void setDetails(DistributionProtocolDetails details) {
-		this.details = details;
+	public void setProtocol(DistributionProtocolDetail details) {
+		this.protocol = details;
 	}
 
 	public long getId() {
@@ -36,9 +36,9 @@ public class DistributionProtocolDeletedEvent extends ResponseEvent {
 		this.title = title;
 	}
 
-	public static DistributionProtocolDeletedEvent ok(DistributionProtocolDetails protocolDetails) {
+	public static DistributionProtocolDeletedEvent ok(DistributionProtocolDetail protocolDetails) {
 		DistributionProtocolDeletedEvent createdEvent = new DistributionProtocolDeletedEvent();
-		createdEvent.setDetails(protocolDetails);
+		createdEvent.setProtocol(protocolDetails);
 		createdEvent.setStatus(EventStatus.OK);
 
 		return createdEvent;

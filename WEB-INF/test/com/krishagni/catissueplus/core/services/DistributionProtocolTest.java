@@ -19,18 +19,18 @@ import com.krishagni.catissueplus.core.administrative.domain.DistributionProtoco
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionProtocolFactoryImpl;
-import com.krishagni.catissueplus.core.administrative.events.AllDistributionProtocolsEvent;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDeletedEvent;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ReqDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetailEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchDistributionProtocolEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqAllDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqDistributionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
@@ -114,8 +114,8 @@ public class DistributionProtocolTest {
 
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
-		DistributionProtocolDetails details = response.getDetails();
-		assertEquals(event.getDistributionProtocolDetails().getTitle(), details.getTitle());
+		DistributionProtocolDetail details = response.getProtocol();
+		assertEquals(event.getProtocol().getTitle(), details.getTitle());
 	}
 
 	@Test
@@ -277,8 +277,8 @@ public class DistributionProtocolTest {
 		DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(reqEvent);
 
 		assertEquals(EventStatus.OK, response.getStatus());
-		DistributionProtocolDetails createdDistributionProtocol = response.getDetails();
-		assertEquals(reqEvent.getDetails().getTitle(), createdDistributionProtocol.getTitle());
+		DistributionProtocolDetail createdDistributionProtocol = response.getProtocol();
+		assertEquals(reqEvent.getProtocol().getTitle(), createdDistributionProtocol.getTitle());
 
 	}
 
@@ -292,8 +292,8 @@ public class DistributionProtocolTest {
 
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
-		DistributionProtocolDetails details = response.getDetails();
-		assertEquals(event.getDetails().getTitle(), details.getTitle());
+		DistributionProtocolDetail details = response.getProtocol();
+		assertEquals(event.getProtocol().getTitle(), details.getTitle());
 	}
 
 	@Test
@@ -502,7 +502,7 @@ public class DistributionProtocolTest {
 		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(reqEvent);
 
 		assertEquals(EventStatus.OK, response.getStatus());
-		DistributionProtocolDetails createdDistributionProtocol = response.getDetails();
+		DistributionProtocolDetail createdDistributionProtocol = response.getDetails();
 		assertEquals(reqEvent.getDetails().getTitle(), createdDistributionProtocol.getTitle());
 
 	}
@@ -782,8 +782,8 @@ public class DistributionProtocolTest {
 	public void testGetAllDPs() {
 		when(distributionProtocolDao.getAllDistributionProtocol(eq(1000)))
 				.thenReturn(DistributionProtocolTestData.getDPs());
-		ReqAllDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getAllDistributionProtocolEvent();
-		AllDistributionProtocolsEvent response = distributionProtocolSvc.getAllDistributionProtocols(reqEvent);
+		ReqDistributionProtocolsEvent reqEvent = DistributionProtocolTestData.getAllDistributionProtocolEvent();
+		DistributionProtocolsEvent response = distributionProtocolSvc.getDistributionProtocols(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
 		assertEquals(2, response.getProtocols().size());
 	}
@@ -813,7 +813,7 @@ public class DistributionProtocolTest {
 		ReqDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDistributionProtocolEventForName();
 		DistributionProtocolDetailEvent response = distributionProtocolSvc.getDistributionProtocol(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
-		assertNotNull(response.getDetails());
+		assertNotNull(response.getProtocol());
 	}
 
 	@Test

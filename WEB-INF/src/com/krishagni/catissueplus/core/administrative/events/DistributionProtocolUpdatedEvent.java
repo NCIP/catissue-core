@@ -1,14 +1,13 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class DistributionProtocolUpdatedEvent extends ResponseEvent {
 
-	private DistributionProtocolDetails details;
+	private DistributionProtocolDetail protocol;
 
 	private Long id;
 
@@ -30,12 +29,12 @@ public class DistributionProtocolUpdatedEvent extends ResponseEvent {
 		this.title = title;
 	}
 
-	public DistributionProtocolDetails getDetails() {
-		return details;
+	public DistributionProtocolDetail getProtocol() {
+		return protocol;
 	}
 
-	public void setDetails(DistributionProtocolDetails details) {
-		this.details = details;
+	public void setProtocol(DistributionProtocolDetail details) {
+		this.protocol = details;
 	}
 
 	public static DistributionProtocolUpdatedEvent notFound(Long id) {
@@ -61,9 +60,9 @@ public class DistributionProtocolUpdatedEvent extends ResponseEvent {
 		return resp;
 	}
 
-	public static DistributionProtocolUpdatedEvent ok(DistributionProtocolDetails details) {
+	public static DistributionProtocolUpdatedEvent ok(DistributionProtocolDetail details) {
 		DistributionProtocolUpdatedEvent event = new DistributionProtocolUpdatedEvent();
-		event.setDetails(details);
+		event.setProtocol(details);
 		event.setStatus(EventStatus.OK);
 
 		return event;

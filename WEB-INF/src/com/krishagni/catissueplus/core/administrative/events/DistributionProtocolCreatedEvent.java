@@ -1,26 +1,25 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class DistributionProtocolCreatedEvent extends ResponseEvent {
 
-	private DistributionProtocolDetails details;
+	private DistributionProtocolDetail protocol;
 
-	public DistributionProtocolDetails getDetails() {
-		return details;
+	public DistributionProtocolDetail getProtocol() {
+		return protocol;
 	}
 
-	public void setDetails(DistributionProtocolDetails details) {
-		this.details = details;
+	public void setProtocol(DistributionProtocolDetail details) {
+		this.protocol = details;
 	}
 
-	public static DistributionProtocolCreatedEvent ok(DistributionProtocolDetails protocolDetails) {
+	public static DistributionProtocolCreatedEvent ok(DistributionProtocolDetail protocolDetails) {
 		DistributionProtocolCreatedEvent createdEvent = new DistributionProtocolCreatedEvent();
-		createdEvent.setDetails(protocolDetails);
+		createdEvent.setProtocol(protocolDetails);
 		createdEvent.setStatus(EventStatus.OK);
 
 		return createdEvent;
