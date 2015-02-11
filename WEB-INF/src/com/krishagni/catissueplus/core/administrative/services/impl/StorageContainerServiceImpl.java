@@ -55,10 +55,13 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 				.startAt(req.getStartAt())
 				.maxResults(req.getMaxRecords())
 				.onlyFreeContainers(req.isOnlyFreeContainers())
-				.parentContainerId(req.getParentContainerId());
+				.parentContainerId(req.getParentContainerId())
+				.siteName(req.getSiteName())
+				.query(req.getName())
+				.anyLevelContainers(req.isAnyLevelContainers());
 			
 			List<StorageContainer> containers = daoFactory.getStorageContainerDao().getStorageContainers(listCrit); 
-			return StorageContainersEvent.ok(StorageContainerSummary.from(containers));
+			return StorageContainersEvent.ok(StorageContainerSummary.from(containers, req.isAnyLevelContainers()));
 		} catch (Exception e) {
 			return StorageContainersEvent.serverError(e);
 		}

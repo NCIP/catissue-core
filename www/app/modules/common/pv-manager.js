@@ -68,10 +68,10 @@ angular.module('openspecimen')
       'ldap'
     ];
 
-    var dimensionLabelScheme = [
+    var positionLabelingSchemes = [
       'Numbers',
-      'Alphabates Upper Case',
-      'Alphabates Lower Case',
+      'Alphabets Upper Case',
+      'Alphabets Lower Case',
       'Roman Upper Case',
       'Roman Lower Case'
     ];
@@ -98,7 +98,7 @@ angular.module('openspecimen')
       domains:domains,
       'storage-type': storageTypes,
       'visit-status': visitStatuses,
-      'dimension-label-scheme': dimensionLabelScheme,
+      'container-position-labeling-schemes': positionLabelingSchemes,
     };
 
     var pvIdMap = {

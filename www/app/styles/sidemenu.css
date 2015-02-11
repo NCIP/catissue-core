@@ -1,15 +1,43 @@
 
 .os-side-menu-wrapper {
   position: absolute;
-  width: 100px;
+  width: 30px;
   padding: 0px;
   margin: 0px;
   background: #f5f5f5;
 }
 
+.os-side-menu-wrapper.os-show-side-menu {
+  width: 100px!important;
+  z-index: 10;
+}
+
 .os-side-menu-wrapper.docked {
   position: fixed;
   top: 0px;
+}
+
+.os-side-menu-show-btn, .os-side-menu-close-btn {
+  padding: 5px 7px;
+  background: #f5f5f5;
+  color: #777777;
+  font-weight: bold;
+  font-size: 20px;
+  outline: none;
+  border: none;
+}
+
+.os-side-menu-close-btn {
+  display: none;
+  margin-left: 100px;
+}
+
+.os-show-side-menu .os-side-menu-show-btn {
+  display: none;
+}
+
+.os-show-side-menu .os-side-menu-close-btn {
+  display: inline-block;
 }
 
 ul.os-side-menu {
@@ -21,6 +49,11 @@ ul.os-side-menu {
   list-style-type: none;
   top: 0px;
   bottom: auto;
+  display: none;
+}
+
+.os-show-side-menu ul.os-side-menu {
+  display: block!important;
 }
 
 ul.os-side-menu li {
@@ -76,5 +109,5 @@ ul.os-side-menu > li.active a {
 }
 
 .os-side-menu-page-content {
-  padding: 15px 20px 0px 120px;
+  padding: 15px 20px 0px 40px;
 }

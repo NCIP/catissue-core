@@ -1,0 +1,15 @@
+<div class="os-items-group">
+  <div class="os-item">
+    <h3 class="os-section-title">
+      {{container.name}} <span translate="container.menu.locations">Locations</span>
+    </h3>
+  </div>
+</div>
+
+<div style="width: 100%; padding-left: 15px;">
+  <os-container-map 
+    container="container" 
+    occupancy-map="occupancyMap"
+    on-add-event="addContainer">
+  </os-container-map>
+</div>

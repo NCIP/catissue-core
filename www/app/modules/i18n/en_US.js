@@ -3,17 +3,13 @@
     "administration": "Administration",
     "collection_protocols": "Collection Protocols",
     "orders": "Orders",
-    "containers": "Containers",
     "search": "Search",
     "settings": "Settings",
-
-    "admin_sub_menu": {
-      "user": "User",
-      "institute": "Institute",
-      "site": "Site",
-      "storage_container": "Storage Container",
-      "distribution_protocol": "Distribution Protocol"
-    }
+    "users": "Users",
+    "institutes": "Institutes",
+    "sites": "Sites",
+    "storage_containers": "Storage Containers",
+    "distribution_protocols": "Distribution Protocols"
   },
 
   "common": {
@@ -352,15 +348,17 @@
     "one": "One",
     "two": "Two",
     "dimension": "Dimension",
-    "dimension_one": "Dimension One",
-    "dimension_two": "Dimension Two",
+    "horizontal_dimension": "Horizontal",
+    "vertical_dimension": "Vertical",
     "labeling_scheme": "Labeling Scheme",
-    "dim_one_labeling_scheme": "Dimension One Labeling Scheme",
-    "dim_two_labeling_scheme": "Dimension Two Labeling Scheme",
+    "horizontal_labeling_scheme": "Horizontal Labeling Scheme",
+    "vertical_labeling_scheme": "Vertical Labeling Scheme",
     "temperature": "Temperature (Celsius)",
     "collection_protocol": "Collection Protocol",
     "specimen_types": "Specimen Types",
     "all": "All",
+    "child_containers": "Child Containers",
+    "free_locations": "Free Locations",
 
     "tooltip": {
       "view_details": "Click to view/edit Storage Container details",
@@ -369,7 +367,8 @@
     },
 
     "menu": {
-      "overview": "Overview"
+      "overview": "Overview",
+      "locations": "Locations"
     }
   }
 }

@@ -13,8 +13,8 @@
 </div>
 
 <div class="clearfix">
-  <div class="col-xs-8">
-    <ul class="os-key-values os-two-cols" os-inline-editors on-save="editContainer">
+  <div class="col-xs-9">
+    <ul class="os-key-values os-one-col" os-inline-editors on-save="editContainer">
       <li class="item">
         <strong class="key key-sm" translate="container.barcode">Barcode</strong>
         <os-inline-edit editor="barcodeEditor" name="barcode" class="value value-md" value="container.barcode">
@@ -25,7 +25,7 @@
 
       <li class="item">
         <strong class="key key-sm" translate="container.temperature">Temperature (In Celsius)</strong>
-        <os-inline-edit editor="temperatureEditor" name="temperature" class="value value-md" value="container.tempratureInCentigrade">
+        <os-inline-edit editor="temperatureEditor" name="temperature" class="value value-md" value="container.temperature">
           <span ng-if="temperatureEditor.isDisplayMode()">{{temperatureEditor.viewValue | osNoValue}}</span>
           <input ng-if="temperatureEditor.isEditMode()" type="number" ng-model="temperatureEditor.editValue" class="form-control">
         </os-inline-edit>
@@ -33,44 +33,86 @@
 
       <li class="item">
         <strong class="key key-sm" translate="container.parent_site">Parent Site</strong>
-        <span class="value value-md" os-inline-edit>{{container.siteName}}</span>
+        <span class="value value-md">{{container.siteName}}</span>
       </li>
 
       <li class="item">
         <strong class="key key-sm" translate="container.parent_container">Parent Container</strong>
-        <span class="value value-md" os-inline-edit>{{container.parentContainerName | osNoValue}}</span>
+        <span class="value value-md">{{container.parentContainerName | osNoValue}}</span>
       </li>
 
       <li class="item">
         <strong class="key key-sm" translate="container.dimension">Dimension</strong>
-        <span class="value value-md" os-inline-edit>{{container.dimensionOneCapacity}} X {{container.dimensionTwoCapacity}}</span>
+        <span class="value value-md">{{container.dimensionOneCapacity}} x {{container.dimensionTwoCapacity}}</span>
       </li>
 
       <li class="item">
         <strong class="key key-sm" translate="container.labeling_scheme">Dimension Labelling Scheme</strong>
-        <span class="value value-md" os-inline-edit>{{container.dimensionOneLabelingScheme}} X {{container.dimensionTwoLabelingScheme}}</span>
+        <span class="value value-md">{{container.dimensionOneLabelingScheme}} x {{container.dimensionTwoLabelingScheme}}</span>
       </li>
 
       <li class="item">
         <strong class="key key-sm" translate="container.collection_protocol">Collection Protocols</strong>
-        <os-inline-edit editor="cpEditor" name="cp" class="value value-md" value="container.allowedCollectionProtocols">
-          <span ng-if="cpEditor.isDisplayMode()">{{cpEditor.viewValue | osArrayJoin | osNoValue}}</span>
-          <div ng-if="cpEditor.isEditMode()">
-            <os-select ng-model="cpEditor.editValue" list="cps" multiple></os-select>
-          </div>
-        </os-inline-edit>
+        <span class="value value-md">{{container.allowedCollectionProtocols | osArrayJoin | osNoValue}}</span>
       </li>
 
       <li class="item">
         <strong class="key key-sm" translate="container.specimen_types">Specimen Types</strong>
-        <os-inline-edit editor="specimenTypeEditor" name="specimenTypes" class="value value-md" value="container.allowedSpecimenTypes">
-          <span ng-if="specimenTypeEditor.isDisplayMode()">{{specimenTypeEditor.viewValue | osArrayJoin | osNoValue}}</span>
-          <div ng-if="specimenTypeEditor.isEditMode()">
-            <os-specimen-type multiple ng-model="specimenTypeEditor.editValue" placeholder="Specimen Types"></os-specimen-type>
-          </div>
-        </os-inline-edit>
+        <div class="value value-md">
+          <span>{{container.allowedSpecimenClasses | osArrayJoin | osNoValue}}</span>
+          <span ng-if="container.allowedSpecimenClasses.length > 0 && container.allowedSpecimenTypes.length > 0">,&nbsp;</span>
+          <span>{{container.allowedSpecimenTypes | osArrayJoin | osNoValue}}</span>
+        </div>
       </li>
-
     </ul>
+
+    <div class="os-section" ng-init="ccCollapsed=false">
+      <button class="os-btn-section-collapse os-btn-transparent" ng-click="ccCollapsed=!ccCollapsed">
+        <span ng-if="!ccCollapsed" class="fa fa-chevron-circle-down"></span>
+        <span ng-if="ccCollapsed" class="fa fa-chevron-circle-right"></span>
+      </button>
+      <h3 class="os-sub-section-title" translate="container.child_containers">
+        Child Containers
+      </h3>
+      <div collapse="ccCollapsed">
+        <div ng-include src="'containers-hierarchy.html'"></div>
+      </div>
+    </div>
   </div>
 </div>
+
+<script type="text/ng-template" id="containers-hierarchy.html">
+  <span ng-if="!childContainers || childContainers.length == 0" translate="common.none"> </span>
+  <div class="os-table os-table-fixed os-table-tree os-border os-table-muted-hdr" ng-if="childContainers.length > 0">
+    <div class="os-table-head">
+      <div class="row">
+        <div class="col col-xs-5" translate="container.name">Name</div>
+        <div class="col col-xs-3" translate="container.dimension">Dimension</div>
+        <div class="col col-xs-3" translate="container.free_locations">Free Locations</div>
+        <div class="col col-xs-1">&nbsp;</div>
+      </div>
+    </div>
+    <div class="os-table-body">
+      <div class="row" ng-repeat="container in childContainers | openedTreeNodes">
+        <div class="col col-xs-5">
+          <div style="padding-left: {{container.hasChildren ? container.depth * 16 : container.depth * 16 + 16}}px">
+            <a ng-if="container.hasChildren" class="fa" 
+              ng-class="{'fa-chevron-circle-down': container.isOpened, 'fa-chevron-circle-right': !container.isOpened}"
+              ng-click="container.isOpened=!container.isOpened">
+            </a>
+            <a ui-sref="container-detail.overview({containerId: container.id})">
+              {{container.name}}
+            </a>
+          </div>
+        </div>
+        <div class="col col-xs-3">
+          <span>{{container.dimensionOneCapacity}} x {{container.dimensionTwoCapacity}}</span>
+        </div>
+        <div class="col col-xs-3">
+          <span>{{container.freePositions}}</span>
+        </div>
+        <div class="col col-xs-1">&nbsp;</div>
+      </div>
+    </div>
+  </div>
+</script>

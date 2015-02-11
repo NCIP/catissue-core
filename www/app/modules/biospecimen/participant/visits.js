@@ -190,38 +190,4 @@ angular.module('os.biospecimen.participant.visits', ['os.biospecimen.models'])
 
       return false;
     }
-  })
-  .filter('openedSpecimenNodes', function() {
-    var showSpecimen = function(specimen) {
-      if (specimen.depth == 0) {
-        return true;
-      }
-
-      var show = true;
-      while (!!specimen.parent) {
-        if (!specimen.parent.isOpened) {
-          show = false;
-          break;
-        }
-
-        specimen = specimen.parent;
-      }
-
-      return show;
-    };
-
-    return function(input) {
-      if (!input) {
-        return [];
-      }
-
-      var result = [];
-      angular.forEach(input, function(specimen) {
-        if (showSpecimen(specimen)) {
-          result.push(specimen);
-        }
-      });
-
-      return result;
-    };
   });

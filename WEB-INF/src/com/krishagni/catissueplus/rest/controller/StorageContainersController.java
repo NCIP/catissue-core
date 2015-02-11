@@ -47,6 +47,12 @@ public class StorageContainersController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<StorageContainerSummary> getStorageContainers(
+			@RequestParam(value = "name", required = false) 
+			String name,
+			
+			@RequestParam(value = "site", required = false)
+			String siteName,
+			
 			@RequestParam(value = "onlyFreeContainers", required = false, defaultValue = "false")
 			boolean onlyFreeContainers,
 			
@@ -57,15 +63,21 @@ public class StorageContainersController {
 			int maxRecords,
 			
 			@RequestParam(value = "parentContainerId", required = false)
-			Long parentContainerId
+			Long parentContainerId,
+			
+			@RequestParam(value = "anyLevelContainers", required = false, defaultValue = "false")
+			boolean anyLevelContainers
 			) {
 		
 		ReqStorageContainersEvent req = new ReqStorageContainersEvent();
+		req.setName(name);
+		req.setSiteName(siteName);		
 		req.setOnlyFreeContainers(onlyFreeContainers);
 		req.setStartAt(startAt);
 		req.setMaxRecords(maxRecords);
 		req.setSessionDataBean(getSession());
 		req.setParentContainerId(parentContainerId);
+		req.setAnyLevelContainers(anyLevelContainers);
 		
 		StorageContainersEvent resp = storageContainerSvc.getStorageContainers(req);
 		if (!resp.isSuccess()) {

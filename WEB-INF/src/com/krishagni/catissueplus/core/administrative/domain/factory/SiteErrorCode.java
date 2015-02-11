@@ -9,7 +9,8 @@ public enum SiteErrorCode implements CatissueErrorCode {
 	ERRORS(1402, "Please resolve the errors listed in error list."), 
 	BAD_REQUEST(1403, "Bad Request"), 
 	MISSING_ATTR_VALUE(1404, "Required attribute is either empty or null"), 
-	ACTIVE_CHILDREN_FOUND(1405, "Cannot be deleted, Active childrens found.");
+	ACTIVE_CHILDREN_FOUND(1405, "Cannot be deleted, Active childrens found."),
+	DUPLICATE_SITE_CODE(1406, "Site with the same code is already present in the system.");
 
 	private int code;
 

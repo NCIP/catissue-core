@@ -48,6 +48,26 @@ angular.module('os.common.models', [])
         return $http.get(url + id).then(Model.modelRespTransform);
       };
 
+      Model._flatten = function(entities, childrenPropName, parent, depth) {
+        var result = [];
+        if (!entities) {
+          return result;
+        }
+
+        depth = depth || 0;
+        angular.forEach(entities, function(entity) {
+          result.push(entity);
+          entity.depth = depth || 0;
+          entity.parent = parent;
+          entity.hasChildren = (!!entity[childrenPropName] && entity[childrenPropName].length > 0);
+          if (entity.hasChildren) {
+            result = result.concat(Model._flatten(entity[childrenPropName], childrenPropName, entity, depth + 1));
+          }
+        });
+
+        return result;
+      };
+
       Model.prototype.$id = function () {
         return this.id;
       };

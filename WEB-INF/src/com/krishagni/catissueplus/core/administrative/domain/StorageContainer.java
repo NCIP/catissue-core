@@ -11,11 +11,12 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-public class StorageContainer {
+public class StorageContainer extends BaseEntity {
 	public static final String NUMBER_LABELING_SCHEME = "Numbers";
 	
 	public static final String UPPER_CASE_ALPHA_LABELING_SCHEME = "Alphabets Upper Case";
@@ -26,8 +27,6 @@ public class StorageContainer {
 	
 	public static final String LOWER_CASE_ROMAN_LABELING_SCHEME = "Roman Lower Case";
 	
-	private Long id;
-
 	private String name;
 
 	private String barcode;
@@ -67,15 +66,10 @@ public class StorageContainer {
 	
 	private Set<StorageContainerPosition> occupiedPositions = new HashSet<StorageContainerPosition>();
 	
+	//
+	// query capabilities
+	//
 	private StorageContainerStats stats;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;

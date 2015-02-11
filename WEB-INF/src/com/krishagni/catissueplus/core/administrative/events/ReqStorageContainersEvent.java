@@ -3,6 +3,10 @@ package com.krishagni.catissueplus.core.administrative.events;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ReqStorageContainersEvent extends RequestEvent {
+	private String name;
+	
+	private String siteName;
+	
 	private boolean onlyFreeContainers;
 	
 	private int startAt;
@@ -10,6 +14,24 @@ public class ReqStorageContainersEvent extends RequestEvent {
 	private int maxRecords;
 	
 	private Long parentContainerId;
+	
+	private boolean anyLevelContainers;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
+	}
 
 	public boolean isOnlyFreeContainers() {
 		return onlyFreeContainers;
@@ -41,5 +63,13 @@ public class ReqStorageContainersEvent extends RequestEvent {
 
 	public void setParentContainerId(Long parentContainerId) {
 		this.parentContainerId = parentContainerId;
+	}
+
+	public boolean isAnyLevelContainers() {
+		return anyLevelContainers;
+	}
+
+	public void setAnyLevelContainers(boolean anyLevelContainers) {
+		this.anyLevelContainers = anyLevelContainers;
 	}
 }

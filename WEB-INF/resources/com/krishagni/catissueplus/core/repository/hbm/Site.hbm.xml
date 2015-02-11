@@ -30,13 +30,18 @@
             unique="true"/>
             
         <property
+            name="code"
+            column="CODE"
+            unique="true"/>
+            
+        <property
             name="type"
             type="string"
             column="TYPE"
             length="50"
         />
         
-         <property
+        <property
             name="activityStatus"
             type="string"
             column="ACTIVITY_STATUS"
@@ -70,6 +75,10 @@
 
     <query name="getSiteByName">
     	SELECT site FROM com.krishagni.catissueplus.core.administrative.domain.Site site WHERE site.name = :siteName
+    </query>
+    
+    <query name="getSiteByCode">
+        from com.krishagni.catissueplus.core.administrative.domain.Site site where site.code = :siteCode
     </query>
     
      <query name="getAllSites">
