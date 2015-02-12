@@ -1,12 +1,4 @@
-<div class="os-home">
-  <div class="os-navbar os-navbar-default">
-    <a class="logo" href="#"><img src="images/os_logo.png"></img></a>
-    <ul class="menu">
-      <li class="form-input"><button class="btn btn-primary">Sign Up</button></li>
-      <li><a href="#">Features</a></li>
-    </ul>
-  </div>
-
+<div>
   <div class="os-custom-banner">
     <div style="height: 100px;"></div>
     <h3>Sign in to continue to OpenSpecimen</h3>
@@ -16,7 +8,7 @@
     <img class="os-rounded-img" src="images/profile-user.png" />
     <form ng-submit="login()">
       <div class="os-group-controls">
-        <input type="text"     class="form-control" ng-model="loginData.loginId" placeholder="Username">
+        <input type="text" class="form-control" ng-model="loginData.loginId" placeholder="Username">
         <input type="password" class="form-control" ng-model="loginData.password" placeholder="Password">
       </div>
       <span class="os-error-msg" ng-if="loginError">The username or password you entered is incorrect</span>

@@ -29,10 +29,15 @@ angular.module('openspecimen', [
     $translateProvider.preferredLanguage('en_US');
 
     $stateProvider
+      .state('home', {
+        abstract: true,
+        templateUrl: 'modules/common/home.html'
+      })
       .state('login', {
         url: '/',
         templateUrl: 'modules/user/signin.html',
-        controller: 'LoginCtrl'
+        controller: 'LoginCtrl',
+        parent: 'home'
       })
       .state('signed-in', {
         abstract: true,
@@ -40,6 +45,23 @@ angular.module('openspecimen', [
         controller: function($scope, Alerts) {
           $scope.alerts = Alerts.messages;
         }
+      })
+      .state('sign-up', {
+        url: '/signup',
+        templateUrl: 'modules/user/signup.html',
+        resolve: {
+          user: function(User) {
+            return new User();
+          }
+        },
+        controller: 'UserAddEditCtrl',
+        parent: 'home'
+
+      })
+      .state('signed-up', {
+        url: '/signup-success',
+        templateUrl: 'modules/user/signup-success.html',
+        parent: 'home'
       });
 
     $urlRouterProvider.otherwise('/');

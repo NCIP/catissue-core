@@ -319,6 +319,10 @@
     "login_details": "Login Details",
     "permissions": "Permissions",
 
+    "create_account": "Create your OpenSpecimen Account",
+    "signup": "Sign up",
+    "signed_up": "Your membership request has been received. Please wait for an approval email from OpenSpecimen Administrator. Thank you.",
+
     "tooltip": {
       "create_user": "Click to add new User",
       "view_details": "Click to view/edit User details",

@@ -41,6 +41,16 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
         }
       );
     };
+
+    $scope.signup = function() {
+      var user = angular.copy($scope.user);
+      user.activityStatus = "Pending";
+      user.$save().then(
+        function(savedUser) {
+          $state.go('signed-up');
+        }
+      );
+    };
      
     init();
   });

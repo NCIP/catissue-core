@@ -690,3 +690,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 .os-pointer-cursor {
   cursor: pointer;
 }
+
+.os-margin-10 {
+  margin: 10%;
+}
