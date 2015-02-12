@@ -185,7 +185,7 @@ public class UserServiceImpl implements UserService {
 				return ResponseEvent.userError(UserErrorCode.INVALID_PASSWD_TOKEN);
 			}
 			
-			ForgotPasswordToken token = dao.getTokenByToken(detail.getResetPasswordToken());
+			ForgotPasswordToken token = dao.getFpToken(detail.getResetPasswordToken());
 			if (token == null) {
 				return ResponseEvent.userError(UserErrorCode.INVALID_PASSWD_TOKEN);
 			}
@@ -196,12 +196,12 @@ public class UserServiceImpl implements UserService {
 			}
 			
 			if (token.hasExpired()) {
-				dao.deleteForgotPasswordToken(token);
+				dao.deleteFpToken(token);
 				return ResponseEvent.userError(UserErrorCode.INVALID_PASSWD_TOKEN);
 			}
 			
 			setUserPassword(user, detail.getNewPassword());
-			dao.deleteForgotPasswordToken(token);
+			dao.deleteFpToken(token);
 			return ResponseEvent.response(true);
 		}catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -221,13 +221,13 @@ public class UserServiceImpl implements UserService {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
-			ForgotPasswordToken oldToken = dao.getTokenByUser(user.getId());
+			ForgotPasswordToken oldToken = dao.getFpTokenByUser(user.getId());
 			if (oldToken != null) {
-				dao.deleteForgotPasswordToken(oldToken);
+				dao.deleteFpToken(oldToken);
 			}
 			
 			ForgotPasswordToken token = new ForgotPasswordToken(user);
-			dao.saveForgotPasswordToken(token);
+			dao.saveFpToken(token);
 			emailSender.sendForgotPasswordEmail(user, token.getToken());
 			return ResponseEvent.response(true);
 		} catch (Exception e) {
@@ -278,7 +278,7 @@ public class UserServiceImpl implements UserService {
 		user.addPassword(passwordEncoder.encode(newPassword));
 	}
 	
-	public boolean validateOldPassword(User user, String oldPassword) {
+	private boolean validateOldPassword(User user, String oldPassword) {
 		if (StringUtils.isBlank(oldPassword)) {
 			throw OpenSpecimenException.userError(UserErrorCode.OLD_PASSWD_NOT_SPECIFIED);
 		}

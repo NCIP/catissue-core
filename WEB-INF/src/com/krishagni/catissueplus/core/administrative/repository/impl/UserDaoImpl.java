@@ -11,7 +11,6 @@ import org.hibernate.Query;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
@@ -23,25 +22,6 @@ import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
-	private static final String FQN = User.class.getName();
-
-	private static final String GET_USER_BY_ID_AND_DOMAIN = FQN + ".getUserByIdAndDomain";
-	
-	private static final String GET_USER_BY_EMAIL_ADDRESS = FQN + ".getUserByEmailAddress";
-	
-	private static final String GET_USER_BY_LOGIN_NAME_AND_DOMAIN = FQN + ".getUser";
-
-	private static final String GET_OLD_PASSWORD_BY_USER_ID = Password.class.getName() + ".getOldPasswordByUserId";
-
-	private static final String GET_USERS_BY_ID = FQN + ".getUsersById";
-	
-	private static final String GET_ACTIVE_USER = FQN+ ".getActiveUser";
-
-	private static final String Token_FQN = ForgotPasswordToken.class.getName();
-	
-	private static final String GET_TOKEN_BY_USER = Token_FQN + ".getTokenByUser";
-	
-	private static final String GET_TOKEN_BY_TOKEN = Token_FQN + ".getTokenByToken";
 	
 	@Override
 	public Class<?> getType() {
@@ -157,19 +137,19 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 	
 	@Override
-	public void saveForgotPasswordToken(ForgotPasswordToken token) {
+	public void saveFpToken(ForgotPasswordToken token) {
 		sessionFactory.getCurrentSession().saveOrUpdate(token);
 	};
 	
 	@Override
-	public void deleteForgotPasswordToken(ForgotPasswordToken token) {
+	public void deleteFpToken(ForgotPasswordToken token) {
 		sessionFactory.getCurrentSession().delete(token);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public ForgotPasswordToken getTokenByUser(Long userId) {
+	public ForgotPasswordToken getFpTokenByUser(Long userId) {
 		List<ForgotPasswordToken> result = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_TOKEN_BY_USER)
+				.getNamedQuery(GET_FP_TOKEN_BY_USER)
 				.setLong("userId", userId)
 				.list();
 		
@@ -177,9 +157,9 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public ForgotPasswordToken getTokenByToken(String token) {
+	public ForgotPasswordToken getFpToken(String token) {
 		List<ForgotPasswordToken> result = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_TOKEN_BY_TOKEN)
+				.getNamedQuery(GET_FP_TOKEN)
 				.setString("token", token)
 				.list();
 		
@@ -239,4 +219,23 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		return userSummary;		
 	}
 
+	private static final String FQN = User.class.getName();
+
+	private static final String GET_USER_BY_ID_AND_DOMAIN = FQN + ".getUserByIdAndDomain";
+	
+	private static final String GET_USER_BY_EMAIL_ADDRESS = FQN + ".getUserByEmailAddress";
+	
+	private static final String GET_USER_BY_LOGIN_NAME_AND_DOMAIN = FQN + ".getUser";
+
+	private static final String GET_OLD_PASSWORD_BY_USER_ID = Password.class.getName() + ".getOldPasswordByUserId";
+
+	private static final String GET_USERS_BY_ID = FQN + ".getUsersById";
+	
+	private static final String GET_ACTIVE_USER = FQN+ ".getActiveUser";
+
+	private static final String TOKEN_FQN = ForgotPasswordToken.class.getName();
+	
+	private static final String GET_FP_TOKEN_BY_USER = TOKEN_FQN + ".getFpTokenByUser";
+	
+	private static final String GET_FP_TOKEN = TOKEN_FQN + ".getFpToken";
 }

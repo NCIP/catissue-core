@@ -32,11 +32,11 @@ public interface UserDao extends Dao<User> {
 
 	Long getUsersCount(String ... searchString);
 	
-	public void saveForgotPasswordToken(ForgotPasswordToken token);
+	public void saveFpToken(ForgotPasswordToken token);
 	
-	public void deleteForgotPasswordToken(ForgotPasswordToken token);
+	public void deleteFpToken(ForgotPasswordToken token);
 	
-	public ForgotPasswordToken getTokenByUser(Long userId);
+	public ForgotPasswordToken getFpTokenByUser(Long userId);
 	
-	public ForgotPasswordToken getTokenByToken(String token);
+	public ForgotPasswordToken getFpToken(String token);
 }

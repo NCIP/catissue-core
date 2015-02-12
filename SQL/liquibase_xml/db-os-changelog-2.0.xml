@@ -290,7 +290,7 @@
   <changeSet author="vlonuste" id="OS forgot password tokens table">
     <createTable tableName="OS_FORGOT_PASSWORD_TOKENS">
       <column name="USER_ID" type="${int.type}">
-        <constraints nullable="false"/>
+        <constraints primaryKey="true" nullable="false"/>
       </column>
 
       <column name="TOKEN" type="${text.type}(64)">
@@ -305,7 +305,7 @@
 
   <changeSet author="vlonushte" id="FK on user of forgot password token">
     <addForeignKeyConstraint 
-      constraintName="FK_FGTP_TOKENS_USER_ID_USER_ID"
+      constraintName="FK_FG_TOKENS_USER_ID"
       baseTableName="OS_FORGOT_PASSWORD_TOKENS"
       baseColumnNames="USER_ID"
       referencedTableName="CATISSUE_USER"

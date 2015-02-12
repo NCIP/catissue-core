@@ -319,6 +319,9 @@
     "super_admin": "Super Administrator",
     "login_details": "Login Details",
     "permissions": "Permissions",
+    "login_name": "Login Name",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
 
     "tooltip": {
       "create_user": "Click to add new User",
@@ -329,31 +332,27 @@
       "last_login": "Last logged date",
       "user_since": "User since (years)"
     },
-
-    "forgot_password": {
-      "title": "Forgot Password",
-      "email_button": "Email Reset Password Link",
-      "login_name": "Login Name",
-      "sign_in_link": "Return to sign in page",
-      "success_msg": "An email has been sent.",
-      "error_msg": "We couldn't find a user associated with {{loginName}}"
-    },
-
-    "reset_password": {
-      "title": "Reset Password",
-      "password_expired_title": "Your link has expired",
-      "password_expired_msg": "We'll be happy to send you another one when you're ready.",
-      "forgot_password_link": "Reset My Password",
-      "login_name": "Login Name",
-      "password": "Password",
-      "confirm_password": "Confirm Password",
-      "reset_button": "Reset Password",
-      "success_msg": "Password has been set"
-    },
       
     "menu": {
       "overview": "Overview"
     }    
+  },
+
+  "forgot_password": {
+    "title": "Forgot Password",
+    "email_reset_password_link": "Email Reset Password Link",
+    "return_to_signin": "Return to sign in page",
+    "reset_email_sent": "An email has been sent.",
+    "invalid_login_name": "We couldn't find a user associated with {{loginName}}"
+  },
+
+  "reset_password": {
+    "title": "Reset Password",
+    "reset_passwd_link_expired": "Your link has expired",
+    "send_another_link": "We'll be happy to send you another one when you're ready.",
+    "reset_my_password": "Reset My Password",
+    "reset_password": "Reset Password",
+    "password_updated": "Password has been set"
   },
   
   "container": {

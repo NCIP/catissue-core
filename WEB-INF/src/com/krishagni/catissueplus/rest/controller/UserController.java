@@ -1,8 +1,8 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -153,7 +153,7 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.POST, value = "/forgot-password-token")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Boolean forgotPassword(@RequestBody HashMap<String, String>  data) {
+	public Boolean forgotPassword(@RequestBody Map<String, String>  data) {
 		RequestEvent<String> req = new RequestEvent<String>(getSession(), data.get("loginName"));
 		ResponseEvent<Boolean> resp = userService.forgotPassword(req);
 		resp.throwErrorIfUnsuccessful();
