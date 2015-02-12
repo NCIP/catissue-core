@@ -1,47 +1,35 @@
 
 package com.krishagni.catissueplus.core.administrative.services;
 
-import com.krishagni.catissueplus.core.administrative.events.AllUsersEvent;
-import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.DisableUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
-import com.krishagni.catissueplus.core.administrative.events.GetUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEvent;
-import com.krishagni.catissueplus.core.administrative.events.PasswordUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.PasswordValidatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.PatchUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqAllUsersEvent;
-import com.krishagni.catissueplus.core.administrative.events.UpdatePasswordEvent;
-import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.UserClosedEvent;
-import com.krishagni.catissueplus.core.administrative.events.UserCreatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.UserDisabledEvent;
-import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.ValidatePasswordEvent;
+import java.util.List;
+
+import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
+import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
+import com.krishagni.catissueplus.core.administrative.events.UserDetail;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public interface UserService {
 
-	public AllUsersEvent getAllUsers(ReqAllUsersEvent req);
+	public ResponseEvent<List<UserSummary>> getAllUsers(RequestEvent<ListUserCriteria> req);
 
-	public UserCreatedEvent createUser(CreateUserEvent event);
+	public ResponseEvent<UserDetail> createUser(RequestEvent<UserDetail> req);
 
-	public UserUpdatedEvent updateUser(UpdateUserEvent event);
+	public ResponseEvent<UserDetail> updateUser(RequestEvent<UserDetail> event);
 
-	public UserClosedEvent closeUser(CloseUserEvent event);
+	public ResponseEvent<UserDetail> closeUser(RequestEvent<Long> req);
 
-	public PasswordUpdatedEvent setPassword(UpdatePasswordEvent updatePasswordEvent);
+	public ResponseEvent<Boolean> setPassword(RequestEvent<PasswordDetails> req);
 
-	public PasswordUpdatedEvent changePassword(UpdatePasswordEvent updatePasswordEvent);
+	public ResponseEvent<Boolean> changePassword(RequestEvent<PasswordDetails> req);
 
-	public PasswordForgottenEvent forgotPassword(ForgotPasswordEvent forgotPasswordEvent);
+	public ResponseEvent<Boolean> forgotPassword(RequestEvent<String> req);
 
-	public PasswordValidatedEvent validatePassword(ValidatePasswordEvent event);
+	public ResponseEvent<Boolean> validatePassword(RequestEvent<String> req);
 
-	public UserUpdatedEvent patchUser(PatchUserEvent event);
+	public ResponseEvent<UserDetail> getUser(RequestEvent<Long> userId);
 
-	public GetUserEvent getUser(Long userId);
-
-	public UserDisabledEvent deleteUser(DisableUserEvent event);
+	public ResponseEvent<UserDetail> deleteUser(RequestEvent<Long> userId);
 
 }

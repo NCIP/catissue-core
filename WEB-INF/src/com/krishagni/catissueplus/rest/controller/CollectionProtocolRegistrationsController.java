@@ -1,13 +1,10 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -19,34 +16,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationPatchDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.PatchRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.RegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
+import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
-import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
-import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
-import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent.EntityType;
+import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
 import edu.wustl.catissuecore.util.global.Constants;
@@ -78,21 +60,17 @@ public class CollectionProtocolRegistrationsController {
 			@RequestParam(value = "startAt", required = false, defaultValue = "0") int startAt,
 			@RequestParam(value = "maxRecs", required = false, defaultValue = "100") int maxRecs,
 			@RequestParam(value = "includeStats", required = false, defaultValue = "false") boolean includeStats) {
+
+		CprListCriteria crit = new CprListCriteria()
+			.cpId(cpId)
+			.query(searchStr)
+			.startAt(startAt)
+			.maxResults(maxRecs)
+			.includeStat(includeStats);
 		
-		ReqRegisteredParticipantsEvent req = new ReqRegisteredParticipantsEvent();
-		req.setCpId(cpId);
-		req.setSearchString(searchStr);
-		req.setSessionDataBean(getSession());
-		req.setStartAt(startAt);
-		req.setMaxResults(maxRecs);
-		req.setIncludeStats(includeStats);
-		
-		RegisteredParticipantsEvent resp = cpSvc.getRegisteredParticipants(req);		
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getParticipants();
+		ResponseEvent<List<CprSummary>> resp = cpSvc.getRegisteredParticipants(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
 	
@@ -101,32 +79,21 @@ public class CollectionProtocolRegistrationsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public CollectionProtocolRegistrationDetail getRegistration(@PathVariable("cprId") Long cprId) {
-		ReqRegistrationEvent req = new ReqRegistrationEvent();
-		req.setCprId(cprId);
+		RegistrationQueryCriteria crit = new RegistrationQueryCriteria();
+		crit.setCprId(cprId);
 		
-		RegistrationEvent resp = cprSvc.getRegistration(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getCpr();		
+		ResponseEvent<CollectionProtocolRegistrationDetail> resp = cprSvc.getRegistration(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public CollectionProtocolRegistrationDetail register(@RequestBody CollectionProtocolRegistrationDetail cprDetails) {				
-		CreateRegistrationEvent req = new CreateRegistrationEvent();
-		req.setCpId(cprDetails.getCpId());		
-		req.setCprDetail(cprDetails);
-		req.setSessionDataBean(getSession());
-		
-		RegistrationCreatedEvent resp = cprSvc.createRegistration(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getCprDetail();
+	public CollectionProtocolRegistrationDetail register(@RequestBody CollectionProtocolRegistrationDetail cprDetail) {				
+		ResponseEvent<CollectionProtocolRegistrationDetail> resp = cprSvc.createRegistration(getRequest(cprDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
 	
@@ -134,16 +101,13 @@ public class CollectionProtocolRegistrationsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<FormCtxtSummary> getForms(@PathVariable("id") Long cprId) {
-		ReqEntityFormsEvent req = new ReqEntityFormsEvent();
-		req.setEntityId(cprId);
-		req.setEntityType(EntityType.COLLECTION_PROTOCOL_REGISTRATION);
-		req.setSessionDataBean(getSession());
-
-		EntityFormsEvent resp = formSvc.getEntityForms(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-			return resp.getForms();
+		ListEntityFormsOp opDetail = new ListEntityFormsOp();
+		opDetail.setEntityId(cprId);
+		opDetail.setEntityType(EntityType.COLLECTION_PROTOCOL_REGISTRATION);
+		
+		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(getRequest(opDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms/{formCtxtId}/records")
@@ -152,62 +116,20 @@ public class CollectionProtocolRegistrationsController {
 	public List<FormRecordSummary> getFormRecords(@PathVariable("id") Long cprId,
 			@PathVariable("formCtxtId") Long formCtxtId) {
 
-		ReqEntityFormRecordsEvent req = new ReqEntityFormRecordsEvent();
-		req.setEntityId(cprId);
-		req.setFormCtxtId(formCtxtId);
-		req.setSessionDataBean(getSession());
+		GetEntityFormRecordsOp opDetail = new GetEntityFormRecordsOp();
+		opDetail.setEntityId(cprId);
+		opDetail.setFormCtxtId(formCtxtId);
 
-		EntityFormRecordsEvent resp = formSvc.getEntityFormRecords(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-			return resp.getFormRecords();
+
+		ResponseEvent<List<FormRecordSummary>> resp = formSvc.getEntityFormRecords(getRequest(opDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public Long delete(@PathVariable Long id,
-			@RequestParam(value = "includeChildren", required = false, defaultValue = "false") String includeChildren) {
-		DeleteRegistrationEvent event = new DeleteRegistrationEvent();
-		event.setSessionDataBean(getSession());
-		event.setId(id);
-		event.setIncludeChildren(Boolean.valueOf(includeChildren));
-		RegistrationDeletedEvent resp = cprSvc.delete(event);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-			return resp.getId();
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return new RequestEvent<T>(getSession(), payload);
 	}
-
-	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public CollectionProtocolRegistrationDetail patchRegistration(@PathVariable Long id,
-			@RequestBody Map<String, Object> regProps) {
-		PatchRegistrationEvent event = new PatchRegistrationEvent();
-		CollectionProtocolRegistrationPatchDetail detail = new CollectionProtocolRegistrationPatchDetail();
-		try {
-			BeanUtils.populate(detail, regProps);
-		}
-		catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		event.setId(id);
-		event.setSessionDataBean(getSession());
-		event.setCollectionProtocolRegistrationDetail(detail);
-		RegistrationUpdatedEvent resp = cprSvc.patchRegistration(event);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-			return resp.getCprDetail();
-	}
-
+	
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpReq.getSession().getAttribute(Constants.SESSION_DATA);
 	}

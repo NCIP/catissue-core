@@ -1,8 +1,7 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
-import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,18 +12,19 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
-import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.common.SetUpdater;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
-import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
 
 import edu.wustl.common.util.XMLPropertyHandler;
 
 public class User {
+	private final static String DEFAULT_DOMAIN = "catissue";
 
 	private Long id;
 
@@ -35,8 +35,6 @@ public class User {
 	private AuthDomain authDomain;
 
 	private Set<Site> userSites = new HashSet<Site>();
-
-	private Set<UserCPRole> userCPRoles = new HashSet<UserCPRole>();
 
 	private String emailAddress;
 
@@ -102,8 +100,9 @@ public class User {
 
 	public void setAuthDomain(AuthDomain authDomain) {
 		if (this.getAuthDomain() != null && !this.getAuthDomain().getId().equals(authDomain.getId())) {
-			reportError(UserErrorCode.CHANGE_IN_DOMAIN, LDAP);
+			throw OpenSpecimenException.userError(DOMAIN_CHANGE_NOT_ALLOWED);
 		}
+		
 		this.authDomain = authDomain;
 	}
 
@@ -112,9 +111,10 @@ public class User {
 	}
 
 	public void setLoginName(String loginName) {
-		if (!isBlank(this.getLoginName()) && !this.getLoginName().equals(loginName)) {
-			reportError(UserErrorCode.CHANGE_IN_LOGIN_NAME, LOGIN_NAME);
+		if (StringUtils.isNotBlank(this.getLoginName()) && !this.getLoginName().equals(loginName)) {
+			throw OpenSpecimenException.userError(LOGIN_NAME_CHANGE_NOT_ALLOWED);
 		}
+
 		this.loginName = loginName;
 	}
 
@@ -174,18 +174,6 @@ public class User {
 		this.passwordToken = passwordToken;
 	}
 
-	public Set<UserCPRole> getUserCPRoles() {
-		return userCPRoles;
-	}
-
-	public void setUserCPRoles(Set<UserCPRole> userCPRoles) {
-		this.userCPRoles = userCPRoles;
-	}
-
-	private final String LOGIN_NAME = "login name";
-
-	private final String LDAP = "ldap";
-
 	public void close() {
 		this.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
 	}
@@ -203,10 +191,6 @@ public class User {
 		this.setComments(user.getComments());
 		SetUpdater.<Site> newInstance().update(this.getUserSites(), user.getUserSites());
 
-		for (UserCPRole userCP : user.getUserCPRoles()) {
-			userCP.setUser(this);
-		}
-		SetUpdater.<UserCPRole> newInstance().update(this.getUserCPRoles(), user.getUserCPRoles());
 		//updateAddressDetails(this.getAddress(), user.getAddress());
 	}
 
@@ -251,14 +235,6 @@ public class User {
 		return true;
 	}
 
-	private final static String CATISSUE = "catissue";
-
-	private final static String OLD_PASSWORD = "old password";
-
-	private final static String PASSWORD_TOKEN = "password token";
-
-	private static final String PASSWORD = "password";
-
 	public void changePassword(PasswordDetails passwordDetails) {
 		validateOldPassword(passwordDetails.getOldPassword());
 		updatePassword(passwordDetails.getNewPassword());
@@ -271,8 +247,8 @@ public class User {
 
 	private void updatePassword(String newPassword) {
 		Password password = new Password();
-		if (isBlank(newPassword) || !isValidPasswordPattern(newPassword)) {
-			reportError(UserErrorCode.INVALID_ATTR_VALUE, PASSWORD);
+		if (StringUtils.isBlank(newPassword) || !isValidPasswordPattern(newPassword)) {
+			throw OpenSpecimenException.userError(PASSWD_VIOLATES_RULES);
 		}
 		password.setUpdateDate(new Date());
 		password.setUser(this);
@@ -284,7 +260,7 @@ public class User {
 	}
 
 	public void setPasswordToken(User user, String domainName) {
-		if (CATISSUE.equalsIgnoreCase(domainName)) {
+		if (DEFAULT_DOMAIN.equalsIgnoreCase(domainName)) {
 			user.setPasswordToken(UUID.randomUUID().toString());
 		}
 	}
@@ -300,8 +276,8 @@ public class User {
 	}
 
 	private void validateOldPassword(String oldPassword) {
-		if (isBlank(oldPassword)) {
-			reportError(UserErrorCode.INVALID_ATTR_VALUE, OLD_PASSWORD);
+		if (StringUtils.isBlank(oldPassword)) {
+			throw OpenSpecimenException.userError(OLD_PASSWD_NOT_SPECIFIED);
 		}
 
 		Set<Password> passwords = this.passwordCollection;
@@ -310,18 +286,14 @@ public class User {
 			Password lastPassword = passList.get(0);
 
 			if (!BCrypt.checkpw(oldPassword, lastPassword.getPassword())) {
-				reportError(UserErrorCode.INVALID_ATTR_VALUE, OLD_PASSWORD);
+				throw OpenSpecimenException.userError(INVALID_OLD_PASSWD);
 			}
 		}
 	}
 
 	private void validatePasswordToken(String token) {
-		if (isBlank(token)) {
-			reportError(UserErrorCode.INVALID_ATTR_VALUE, PASSWORD_TOKEN);
-		}
-
-		if (!this.getPasswordToken().equals(token)) {
-			reportError(UserErrorCode.INVALID_ATTR_VALUE, PASSWORD_TOKEN);
+		if (StringUtils.isBlank(token) || !this.getPasswordToken().equals(token)) {
+			throw OpenSpecimenException.userError(INVALID_PASSWD_TOKEN);
 		}
 	}
 

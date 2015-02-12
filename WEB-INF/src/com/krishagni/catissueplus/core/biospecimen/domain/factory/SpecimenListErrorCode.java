@@ -1,39 +1,24 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory;
 
-import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 
-public enum SpecimenListErrorCode implements CatissueErrorCode {
-	INVALID_USER_ID(1400, "Invalid userid provided in request!"),
+public enum SpecimenListErrorCode implements ErrorCode {
+	NOT_FOUND,
 	
-	INVALID_LIST_NAME(1401, "Invalid specimen list name"),
+	ACCESS_NOT_ALLOWED,
 	
-	INVALID_SPECIMEN_LABELS(1402, "Invalid specimen labels"),
+	NAME_REQUIRED,
 	
-	LIST_ID_REQUIRED(1403, "Specimen List ID is required"),
+	OWNER_REQUIRED,
 	
-	LIST_NOT_FOUND(1404, "Specimen List Not Found"),
+	OWNER_NOT_FOUND,
 	
-	NOT_UPDATE_AUTHORIZED(1405, "User not authorized to modify the list");
+	INVALID_LABELS,
 	
-	private int code;
-	
-	private String message;
-	
-	private SpecimenListErrorCode(int code, String message) {
-		this.code = code;
-		this.message = message;
-	}
+	INVALID_USERS_LIST;
 
 	@Override
-	public int code() {
-		// TODO Auto-generated method stub
-		return 0;
+	public String code() {
+		return "SPECIMEN_LIST_" + this.name();
 	}
-
-	@Override
-	public String message() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

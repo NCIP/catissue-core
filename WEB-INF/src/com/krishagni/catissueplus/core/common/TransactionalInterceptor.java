@@ -10,9 +10,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.context.ManagedSessionContext;
 
-import com.krishagni.catissueplus.core.common.errors.CatissueException;
-import com.krishagni.catissueplus.core.common.errors.ErrorCodeEnum;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 import edu.wustl.common.util.logger.Logger;
@@ -50,7 +48,7 @@ public class TransactionalInterceptor {
 		try {
 			object = pjp.proceed();
 			ResponseEvent resp = (object instanceof ResponseEvent) ? (ResponseEvent)object : null; 
-			if ((resp == null || resp.getStatus() == EventStatus.OK) && 
+			if ((resp == null || resp.isSuccessful()) && 
 				isTransactionStarted && 
 				tx != null) {				
 				tx.commit();
@@ -64,7 +62,7 @@ public class TransactionalInterceptor {
 				tx.rollback();
 				LOGGER.info("Error thrown, transaction rolled back.");
 			}
-			throw new CatissueException(ErrorCodeEnum.QUERY_EXECUTION_ERROR);
+			throw OpenSpecimenException.serverError(e);
 		}
 		finally {
 			

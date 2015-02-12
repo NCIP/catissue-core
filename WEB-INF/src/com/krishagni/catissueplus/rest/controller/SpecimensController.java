@@ -16,24 +16,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.biospecimen.events.CollectSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitSpecimensEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimensCollectedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
-import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
-import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
-import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent.EntityType;
+import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
 import com.krishagni.catissueplus.core.de.services.FormService;
-import com.krishagni.catissueplus.core.printer.printService.services.PrintService;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -52,9 +48,6 @@ public class SpecimensController {
 	private FormService formSvc;
 
 	@Autowired
-	private PrintService specimenLabelPrintSvc;
-
-	@Autowired
 	private HttpServletRequest httpServletRequest;
 	
 	@RequestMapping(method = RequestMethod.HEAD)
@@ -63,9 +56,7 @@ public class SpecimensController {
 	public Boolean doesSpecimenExists(@RequestParam(value = "label") String label) {
 		Boolean exists = specimenSvc.doesSpecimenExists(label);
 		if (!exists) {
-			ResponseEvent resp = new ResponseEvent();
-			resp.setStatus(EventStatus.NOT_FOUND);
-			resp.raiseException();
+			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND);
 		}
 		
 		return exists;
@@ -79,18 +70,14 @@ public class SpecimensController {
 			@RequestParam(value = "eventId", required = false) Long eventId,
 			@RequestParam(value = "visitId", required = false) Long visitId) {
 		
-		ReqVisitSpecimensEvent req = new ReqVisitSpecimensEvent();
-		req.setCprId(cprId);
-		req.setEventId(eventId);
-		req.setVisitId(visitId);
-		req.setSessionDataBean(getSession());
+		VisitSpecimensQueryCriteria crit = new VisitSpecimensQueryCriteria();
+		crit.setCprId(cprId);
+		crit.setEventId(eventId);
+		crit.setVisitId(visitId);
 		
-		VisitSpecimensEvent resp = cprSvc.getSpecimens(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getSpecimens();
+		ResponseEvent<List<SpecimenDetail>> resp = cprSvc.getSpecimens(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 
 
@@ -98,16 +85,14 @@ public class SpecimensController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<FormCtxtSummary> getForms(@PathVariable("id") Long specimenId) {
-		ReqEntityFormsEvent req = new ReqEntityFormsEvent();
-		req.setEntityId(specimenId);
-		req.setEntityType(EntityType.SPECIMEN);
-		req.setSessionDataBean(getSession());
+		ListEntityFormsOp opDetail = new ListEntityFormsOp();
+		opDetail.setEntityId(specimenId);
+		opDetail.setEntityType(EntityType.SPECIMEN);
+		
 
-		EntityFormsEvent resp = formSvc.getEntityForms(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		return resp.getForms();
+		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(getRequest(opDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms/{formCtxtId}/records")
@@ -116,32 +101,26 @@ public class SpecimensController {
 	public List<FormRecordSummary> getFormRecords(@PathVariable("id") Long specimenId,
 			@PathVariable("formCtxtId") Long formCtxtId) {
 
-		ReqEntityFormRecordsEvent req = new ReqEntityFormRecordsEvent();
-		req.setEntityId(specimenId);
-		req.setFormCtxtId(formCtxtId);
-		req.setSessionDataBean(getSession());
-
-		EntityFormRecordsEvent resp = formSvc.getEntityFormRecords(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		return resp.getFormRecords();
+		GetEntityFormRecordsOp opDetail = new GetEntityFormRecordsOp();
+		opDetail.setEntityId(specimenId);
+		opDetail.setFormCtxtId(formCtxtId);
+		
+		ResponseEvent<List<FormRecordSummary>> resp = formSvc.getEntityFormRecords(getRequest(opDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public List<SpecimenDetail> collectSpecimens(@RequestBody List<SpecimenDetail> specimens) {		
-		CollectSpecimensEvent req = new CollectSpecimensEvent();
-		req.setSessionDataBean(getSession());
-		req.setSpecimens(specimens);
-		
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getSpecimens();
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(specimens));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return new RequestEvent<T>(getSession(), payload);
 	}
 
 	private SessionDataBean getSession() {

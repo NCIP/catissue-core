@@ -1,11 +1,10 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
-
 import java.util.Set;
 
-import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.common.SetUpdater;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class Institute {
@@ -60,10 +59,9 @@ public class Institute {
 
 	public void delete() {
 		if (!this.getDepartmentCollection().isEmpty()) {
-			reportError(UserErrorCode.REFERENCED_ATTRIBUTE, INSTITUTE);
+			throw OpenSpecimenException.userError(InstituteErrorCode.REF_ENTITY_FOUND);
 		}
+		
 		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
-
-	private static final String INSTITUTE = "institute";
 }

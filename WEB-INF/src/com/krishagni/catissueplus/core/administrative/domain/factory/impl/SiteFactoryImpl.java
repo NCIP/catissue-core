@@ -1,8 +1,6 @@
 
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,21 +11,18 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
-import com.krishagni.catissueplus.core.administrative.events.SiteDetails;
-import com.krishagni.catissueplus.core.administrative.events.SitePatchDetails;
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
+import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SiteFactoryImpl implements SiteFactory {
 
-	private static final String SITE_NAME = "site name";
-
 	private static final String SITE_TYPE = "site type";
-
-	private static final String USER_NAME = "user name";
 
 	private DaoFactory daoFactory;
 
@@ -36,26 +31,28 @@ public class SiteFactoryImpl implements SiteFactory {
 	}
 
 	@Override
-	public Site createSite(SiteDetails details) {
+	public Site createSite(SiteDetail details) {
 		Site site = new Site();
-		
-		ObjectCreationException exceptionHandler = new ObjectCreationException();
-		setName(site, details.getName(), exceptionHandler);
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+				
+		setName(site, details.getName(), ose);
 		setCode(site, details.getCode());
-		setCoordinatorCollection(site, details.getCoordinatorCollection(), exceptionHandler);
-		setType(site, details.getType(), exceptionHandler);
+		setCoordinatorCollection(site, details.getCoordinatorCollection(), ose);
+		setType(site, details.getType(), ose);
 		setAddress(site, details.getAddress());
-		setActivityStatus(site, details.getActivityStatus(), exceptionHandler);
-		exceptionHandler.checkErrorAndThrow();
+		setActivityStatus(site, details.getActivityStatus(), ose);
+		
+		ose.checkAndThrow();
 		return site;
 	}
 	
 
-	private void setName(Site site, String siteName, ObjectCreationException exceptionHandler) {
-		if (isBlank(siteName)) {
-			exceptionHandler.addError(SiteErrorCode.MISSING_ATTR_VALUE, SITE_NAME);
+	private void setName(Site site, String siteName, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(siteName)) {
+			ose.addError(SiteErrorCode.NAME_REQUIRED);
 			return;
 		}
+		
 		site.setName(siteName);
 	}
 	
@@ -64,7 +61,7 @@ public class SiteFactoryImpl implements SiteFactory {
 		site.setCode(code);
 	}
 
-	private void setActivityStatus(Site site, String activityStatus, ObjectCreationException exceptionHandler) {
+	private void setActivityStatus(Site site, String activityStatus, OpenSpecimenException ose) {
         if (StringUtils.isBlank(activityStatus)) {
             site.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
             return;
@@ -73,60 +70,36 @@ public class SiteFactoryImpl implements SiteFactory {
         site.setActivityStatus(activityStatus);
 	}
 
-	private void setCoordinatorCollection(Site site, List<UserSummary> coordinatorCollection,
-			ObjectCreationException exceptionHandler) {
+	private void setCoordinatorCollection(Site site, List<UserSummary> coordinatorCollection, OpenSpecimenException ose) {		
 		Set<User> userCollection = new HashSet<User>();
+		
 		for (UserSummary userSummary : coordinatorCollection) {
-
-			User user = daoFactory.getUserDao().getUser(userSummary.getId());
+			User user = daoFactory.getUserDao().getUser(userSummary.getId());			
 			if (user == null) {
-				exceptionHandler.addError(SiteErrorCode.INVALID_ATTR_VALUE, USER_NAME);
+				ose.addError(UserErrorCode.NOT_FOUND);
 				return;
 			}
+			
 			userCollection.add(user);
 		}
 
 		site.setCoordinatorCollection(userCollection);
 	}
 	
-
-	private void setType(Site site, String siteType, ObjectCreationException exceptionHandler) {
-
-		if (isBlank(siteType)) {
-			exceptionHandler.addError(SiteErrorCode.MISSING_ATTR_VALUE, SITE_TYPE);
+	private void setType(Site site, String siteType, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(siteType)) {
+			ose.addError(SiteErrorCode.TYPE_REQUIRED);
 			return;
 		}
+		
 		if (!CommonValidator.isValidPv(siteType, SITE_TYPE)) {
-			exceptionHandler.addError(SiteErrorCode.INVALID_ATTR_VALUE, SITE_TYPE);
+			ose.addError(SiteErrorCode.INVALID_TYPE);
 		}
+		
 		site.setType(siteType);
 	}
 
 	private void setAddress(Site site, String address) {
 		site.setAddress(address);
 	}
-
-	@Override
-	public Site patchSite(Site site, SitePatchDetails details) {
-		ObjectCreationException exceptionHandler = new ObjectCreationException();
-		if (details.isSiteNameModified()) {
-			setName(site, details.getName(), exceptionHandler);
-		}
-
-		if (details.isSiteTypeModified()) {
-			setType(site, details.getType(), exceptionHandler);
-		}
-
-		if (details.isCoordinatorCollectionModified()) {
-			setCoordinatorCollection(site, details.getCoordinatorCollection(), exceptionHandler);
-		}
-
-		if (details.isActivityStatusModified()) {
-			setActivityStatus(site, details.getActivityStatus(), exceptionHandler);
-		}
-
-		exceptionHandler.checkErrorAndThrow();
-		return site;
-	}
-
 }

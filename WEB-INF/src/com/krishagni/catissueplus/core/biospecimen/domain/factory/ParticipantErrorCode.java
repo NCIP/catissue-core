@@ -1,39 +1,36 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory;
 
-import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 
-public enum ParticipantErrorCode implements CatissueErrorCode {
+public enum ParticipantErrorCode implements ErrorCode {
+	NOT_FOUND,
+	
+	INVALID_DEATH_DATE,
+	
+	INVALID_BIRTH_DATE,
+	
+	INVALID_RACE,
+	
+	INVALID_ETHNICITY,
+	
+	INVALID_GENOTYPE,
+	
+	INVALID_SSN,
+	
+	DUP_SSN,
+	
+	INVALID_VITAL_STATUS,
+	
+	INVALID_GENDER,
+	
+	MRN_REQUIRED,
+	
+	DUP_MRN,
+	
+	REF_ENTITY_FOUND;
 
-	MISSING_ATTR_VALUE(1000, "Required attribute is either empty or null"), 
-	INVALID_ATTR_VALUE(1001,"Attribute value is invalid"), 
-	CONSTRAINT_VIOLATION(1002, "Attribute violates one or more constraints"),
-	DUPLICATE_PPID(1003, "Same protocol participant identifier is already exists with this collection protocol."),
-	DUPLICATE_BARCODE(1004, "Registration is already present with same barcode."),
-	ACTIVE_CHILDREN_FOUND(1005, "Cannot be deleted, Active childrens found."),
-	DUPLICATE_SSN(1005,"Participant with the same social security number is already exists."),
-	DUPLICATE_PMI(1005,"Participant with the same mrn and site already exists."),
-	ERRORS(1009, "Please resolve the errors listed in error list."),
-	BAD_REQUEST(1009, "Bad Request"),
-	DISABLED_CP(1010, "collection-protocol is disabled!"),
-	ALREADY_REGISTERED(1011, "participant is already registered to collection protocol")
-	;
-
-	private int code;
-
-	private String message;
-
-	private ParticipantErrorCode(int code, String message) {
-		this.code = code;
-		this.message = message;
+	public String code() {
+		return "PARTICIPANT_" + this.name();
 	}
-
-	public int code() {
-		return code;
-	}
-
-	public String message() {
-		return message;
-	}
-
 }

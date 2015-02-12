@@ -8,30 +8,18 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenList;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenListErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenListFactory;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenListEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ListSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ListSpecimensUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqListSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenListDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ShareSpecimenListEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSharedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ShareSpecimenListOp;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenListEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensOp;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenListService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
-import com.krishagni.catissueplus.core.de.domain.QueryFolder;
-import com.krishagni.catissueplus.core.de.events.QueryFolderSharedEvent;
 
 public class SpecimenListServiceImpl implements SpecimenListService {
 	
@@ -57,7 +45,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 
 	@Override
 	@PlusTransactional
-	public SpecimenListsEvent getUserSpecimenLists(RequestEvent req) {
+	public ResponseEvent<List<SpecimenListSummary>> getUserSpecimenLists(RequestEvent<?> req) {
 		try {
 			Long userId = req.getSessionDataBean().getUserId();			
 			List<SpecimenList> specimenLists = daoFactory.getSpecimenListDao().getUserSpecimenLists(userId);
@@ -67,47 +55,38 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 				result.add(SpecimenListSummary.fromSpecimenList(specimenList));
 			}
 			
-			return SpecimenListsEvent.ok(result);
+			return ResponseEvent.response(result);
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			
-			return SpecimenListsEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public SpecimenListDetailEvent getSpecimenList(ReqSpecimenListDetailEvent req) {
+	public ResponseEvent<SpecimenListDetails> getSpecimenList(RequestEvent<Long> req) {
 		try {
-			Long listId = req.getListId();
+			Long listId = req.getPayload();
 			SpecimenList specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);
 			if (specimenList == null) {
-				return SpecimenListDetailEvent.notFound(listId);
+				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
 			if (!req.getSessionDataBean().isAdmin() && !specimenList.canUserAccess(userId)) {
-				return SpecimenListDetailEvent.notAuthorized(listId);
+				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
-			return SpecimenListDetailEvent.ok(SpecimenListDetails.from(specimenList));			
+			return ResponseEvent.response(SpecimenListDetails.from(specimenList));			
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return SpecimenListDetailEvent.serverError(message, e);			
+			return ResponseEvent.serverError(e);			
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public SpecimenListCreatedEvent createSpecimenList(CreateSpecimenListEvent req) {
+	public ResponseEvent<SpecimenListDetails> createSpecimenList(RequestEvent<SpecimenListDetails> req) {
 		try {
-			SpecimenListDetails listDetails = req.getListDetails();
+			SpecimenListDetails listDetails = req.getPayload();
 			
 			UserSummary owner = new UserSummary();
 			owner.setId(req.getSessionDataBean().getUserId());
@@ -115,36 +94,32 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			
 			SpecimenList specimenList = specimenListFactory.createSpecimenList(listDetails);	
 			daoFactory.getSpecimenListDao().saveOrUpdate(specimenList);
-			return SpecimenListCreatedEvent.ok(SpecimenListDetails.from(specimenList));
-		} catch (ObjectCreationException oce) {
-			return SpecimenListCreatedEvent.badRequest(oce);
+			return ResponseEvent.response(SpecimenListDetails.from(specimenList));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return SpecimenListCreatedEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public SpecimenListUpdatedEvent updateSpecimenList(UpdateSpecimenListEvent req) {
+	public ResponseEvent<SpecimenListDetails> updateSpecimenList(RequestEvent<SpecimenListDetails> req) {
 		try {
-			SpecimenListDetails listDetails = req.getListDetails();
+			SpecimenListDetails listDetails = req.getPayload();
 			Long listId = listDetails.getId();
 			if (listId == null) {
-				return SpecimenListUpdatedEvent.badRequest(SpecimenListErrorCode.LIST_ID_REQUIRED);
+				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
 			}
 						
 			SpecimenList existing = daoFactory.getSpecimenListDao().getSpecimenList(listId);
 			if (existing == null) {
-				return SpecimenListUpdatedEvent.badRequest(SpecimenListErrorCode.LIST_NOT_FOUND);
+				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
 			if (!req.getSessionDataBean().isAdmin() && !existing.getOwner().getId().equals(userId)) {
-				return SpecimenListUpdatedEvent.badRequest(SpecimenListErrorCode.NOT_UPDATE_AUTHORIZED);
+				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
 			UserSummary owner = new UserSummary();
@@ -155,60 +130,56 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			existing.update(specimenList);
 			
 			daoFactory.getSpecimenListDao().saveOrUpdate(specimenList);
-			return SpecimenListUpdatedEvent.ok(SpecimenListDetails.from(specimenList));			
-		} catch (ObjectCreationException oce) {
-			return SpecimenListUpdatedEvent.badRequest(oce);
-		} catch (Exception e) {		
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return SpecimenListUpdatedEvent.serverError(message, e);
+			return ResponseEvent.response(SpecimenListDetails.from(specimenList));			
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public ListSpecimensEvent getListSpecimens(ReqListSpecimensEvent req) {
+	public ResponseEvent<List<SpecimenDetail>> getListSpecimens(RequestEvent<Long> req) {
 		try {
-			Long listId = req.getListId();
+			Long listId = req.getPayload();
 			SpecimenList specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);			
 			if (specimenList == null) {
-				return ListSpecimensEvent.notFound(listId);
+				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
 			if (!req.getSessionDataBean().isAdmin() && !specimenList.canUserAccess(userId)) {
-				return ListSpecimensEvent.notAuthorized(listId);
+				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
-			return ListSpecimensEvent.ok(SpecimenDetail.from(specimenList.getSpecimens()));
+			return ResponseEvent.response(SpecimenDetail.from(specimenList.getSpecimens()));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return ListSpecimensEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public ListSpecimensUpdatedEvent updateListSpecimens(UpdateListSpecimensEvent req) {
+	public ResponseEvent<List<SpecimenDetail>>  updateListSpecimens(RequestEvent<UpdateListSpecimensOp> req) {
 		try {
-			Long listId = req.getListId();
+			UpdateListSpecimensOp opDetail = req.getPayload();
+			
+			Long listId = opDetail.getListId();
 			SpecimenList specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);			
 			if (specimenList == null) {
-				return ListSpecimensUpdatedEvent.notFound(listId);
+				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
 			if (!req.getSessionDataBean().isAdmin() && !specimenList.getOwner().getId().equals(userId)) {
-				return ListSpecimensUpdatedEvent.notAuthorized(listId);
+				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
 			List<Specimen> specimens = null;
-			List<String> labels = req.getSpecimens();
+			List<String> labels = opDetail.getSpecimens();
 			
 			if (labels == null || labels.isEmpty()) {
 				specimens = new ArrayList<Specimen>();
@@ -216,7 +187,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 				specimens = daoFactory.getSpecimenDao().getSpecimensByLabel(labels);
 			}
 			
-			switch (req.getOp()) {
+			switch (opDetail.getOp()) {
 				case ADD:
 					specimenList.addSpecimens(specimens);
 					break;
@@ -237,40 +208,40 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 				result.add(SpecimenDetail.from(specimen));
 			}
 			
-			return ListSpecimensUpdatedEvent.ok(listId, result);
+			return ResponseEvent.response(result);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return ListSpecimensUpdatedEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public SpecimenListSharedEvent shareSpecimenList(ShareSpecimenListEvent req) {
+	public ResponseEvent<List<UserSummary>> shareSpecimenList(RequestEvent<ShareSpecimenListOp> req) {
 		try {
-			Long listId = req.getListId();
+			ShareSpecimenListOp opDetail = req.getPayload();
+			
+			Long listId = opDetail.getListId();
 			SpecimenList specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);
 			if (specimenList == null) {
-				return SpecimenListSharedEvent.notFound(listId);
+				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
 			if (!req.getSessionDataBean().isAdmin() && !specimenList.getOwner().getId().equals(userId)) {
-				return SpecimenListSharedEvent.notAuthorized(listId);
+				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
 			List<User> users = null;
-			List<Long> userIds = req.getUserIds();
+			List<Long> userIds = opDetail.getUserIds();
 			if (userIds == null || userIds.isEmpty()) {
 				users = new ArrayList<User>();
 			} else {
 				users = daoFactory.getUserDao().getUsersById(userIds);
 			}
 			
-			switch (req.getOp()) {
+			switch (opDetail.getOp()) {
 				case ADD:
 					specimenList.addSharedUsers(users);
 					break;
@@ -290,13 +261,11 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 				result.add(UserSummary.from(user));
 			}
 			
-			return SpecimenListSharedEvent.ok(listId, result);
+			return ResponseEvent.response(result);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return SpecimenListSharedEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 }

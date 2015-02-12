@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenList;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenListErrorCode;
@@ -15,7 +16,8 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenListFa
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class SpecimenListFactoryImpl implements SpecimenListFactory {
@@ -32,12 +34,12 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 
 	@Override
 	public SpecimenList createSpecimenList(SpecimenListDetails details) {
-		ObjectCreationException oce = new ObjectCreationException();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		SpecimenList specimenList = new SpecimenList();
 		
 		Long userId = details.getOwner() != null ? details.getOwner().getId() : null;
-		setOwner(specimenList, userId , oce);
-		setName(specimenList, details.getName(), oce);
+		setOwner(specimenList, userId , ose);
+		setName(specimenList, details.getName(), ose);
 		
 		List<String> labels = new ArrayList<String>();
 		if (!CollectionUtils.isEmpty(details.getSpecimens())) {
@@ -45,7 +47,7 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 				labels.add(specimen.getLabel());
 			}			
 		}
-		setSpecimens(specimenList, labels, oce);
+		setSpecimens(specimenList, labels, ose);
 		
 		List<Long> sharedUsers = new ArrayList<Long>();		
 		if (!CollectionUtils.isEmpty(details.getSharedWith())) {
@@ -56,41 +58,38 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 				sharedUsers.add(user.getId());
 			}			
 		}
-		setSharedUsers(specimenList, sharedUsers, oce);
-		
-		if (oce.hasErrors()) {
-			throw oce;
-		}
-				
+		setSharedUsers(specimenList, sharedUsers, ose);
+
+		ose.checkAndThrow();
 		return specimenList;
 	}
 	
-	private void setOwner(SpecimenList specimenList, Long userId, ObjectCreationException oce) {
+	private void setOwner(SpecimenList specimenList, Long userId, OpenSpecimenException ose) {
 		if (userId == null) {
-			oce.addError(SpecimenListErrorCode.INVALID_USER_ID, "user-id");			
+			ose.addError(SpecimenListErrorCode.OWNER_REQUIRED);			
 		} else {
 			User user = daoFactory.getUserDao().getUser(userId);
 			if (user == null) {
-				oce.addError(SpecimenListErrorCode.INVALID_USER_ID, "user-id");
+				ose.addError(SpecimenListErrorCode.OWNER_NOT_FOUND);
 			} else {
 				specimenList.setOwner(user);
 			}						
 		}
 	}
 	
-	private void setName(SpecimenList list, String name, ObjectCreationException oce) {
+	private void setName(SpecimenList list, String name, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(name)) {
-			oce.addError(SpecimenListErrorCode.INVALID_LIST_NAME, "specimen-list-name");
+			ose.addError(SpecimenListErrorCode.NAME_REQUIRED);
 		} else {
 			list.setName(name);
 		}		
 	}
 	
-	private void setSpecimens(SpecimenList list, List<String> labels, ObjectCreationException oce) {
+	private void setSpecimens(SpecimenList list, List<String> labels, OpenSpecimenException ose) {
 		if (labels != null && !labels.isEmpty()) {
 			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimensByLabel(labels);
 			if (specimens.size() != labels.size()) {
-				oce.addError(SpecimenListErrorCode.INVALID_SPECIMEN_LABELS, "specimen-labels");
+				ose.addError(SpecimenListErrorCode.INVALID_LABELS);
 			} else {
 				list.setSpecimens(new HashSet<Specimen>(specimens));
 			}			
@@ -99,11 +98,11 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 		}
 	}
 	
-	private void setSharedUsers(SpecimenList specimenList, List<Long> userIds, ObjectCreationException oce) {
+	private void setSharedUsers(SpecimenList specimenList, List<Long> userIds, OpenSpecimenException ose) {
 		if (userIds != null && !userIds.isEmpty()) {
 			List<User> sharedUsers = daoFactory.getUserDao().getUsersById(userIds);
 			if (sharedUsers.size() != userIds.size()) {
-				oce.addError(SpecimenListErrorCode.INVALID_USER_ID, "user-ids");
+				ose.addError(SpecimenListErrorCode.INVALID_USERS_LIST);
 			} else {
 				specimenList.setSharedWith(new HashSet<User>(sharedUsers));
 			}

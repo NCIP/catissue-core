@@ -1,64 +1,46 @@
 package com.krishagni.catissueplus.core.de.services;
 
-import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 
-public enum SavedQueryErrorCode implements CatissueErrorCode {
-	QUERY_NOT_FOUND(1300, "Mentioned query-id not found!"),
+public enum SavedQueryErrorCode implements ErrorCode {
+	NOT_FOUND,
 	
-	QUERY_ID_FOUND(1301, "Query-id should not be passed in create query event"),
+	INVALID_PAGINATION_FILTER,
 	
-	INVALID_PAGINATION_FILTER(1302, "Invalid pagination filter"),
+	ID_REQUIRED,
 	
-	QUERY_ID_REQUIRED(1303,"Query-id is required for this operaiton."),
+	TITLE_REQUIRED,
 	
-	QUERY_TITLE_NULL(1304, "Query title cannot be null for save/update"),
+	FOLDER_NAME_REQUIRED,
 	
-	FOLDER_ID_FOUND(1305, "Folderid should not be passed in create folder request"),
+	FOLDER_NOT_FOUND,
 	
-	INVALID_FOLDER_NAME(1306, "Folder-name provided in reqeust is either null or empty"),
+	OP_NOT_ALLOWED,
 	
-	FOLDER_ID_REQUIRED(1307, "Folder id is required for this folder operation"),
+	USER_NOT_FOUND,
 	
-	USER_NOT_AUTHORISED(1308, "Current user is not authorised to perform this action"),
+	QUERIES_NOT_ACCESSIBLE, 
 	
-	USER_ID_REQUIRED(1310, "Userid not found in request"),
+	INVALID_SOURCE_DESTINATION_FOLDERS,
 	
-	QUERIES_NOT_ACCESSIBLE(1311, "Some of the queries in request doesn't belong to current user."), 
+	INVALID_SHARE_ACCESS_DETAILS, 
 	
-	INVALID_USER_ID(1312, "Invalid userid provided in request!"),
+	USERS_NOT_ACTIVE,
 	
-	INVALID_SOURCE_DESTINATION_FOLDERS(1313, "Source/Destination folders provided are invalid."),
+	SRC_DEST_FOLDERS_REQUIRED,
 	
-	INVALID_SHARE_ACCESS_DETAILS(1314, "Invalid share access details provided."), 
+	QUERIES_NOT_PART_OF_FOLDER,
 	
-	USERS_NOT_ACTIVE(1315, "Provided users are not in active state"),
+	SOURCE_FOLDER_NOT_FOUND,
 	
-	SRC_DEST_FOLDERS_REQUIRED(1316, "Destination and Source folders are required for this operation."),
+	DESTINATION_FOLDER_NOT_FOUND,
 	
-	FOLDER_DOESNT_EXISTS(1317, "Given folder doesn't exist!"),
+	MALFORMED,
 	
-	QUERIES_NOT_PART_OF_FOLDER(1318, "Some of the queires do not belong to given folder"),
-	
-	INVALID_SOURCE_FOLDER(1319, "Source folder is invalid."),
-	
-	INVALID_DESTINATION_FOLDER(1320, "Destination folder is invalid.");
-	
-	private int code;
-
-	private String message;
-
-	private SavedQueryErrorCode(int code, String message) {
-		this.code = code;
-		this.message = message;
-	}
+	EXPORT_DATA_FILE_NOT_FOUND;
 	
 	@Override
-	public int code() {
-		return code;
-	}
-
-	@Override
-	public String message() {
-		return message;
+	public String code() {
+		return "QUERY_" + this.name();
 	}
 }

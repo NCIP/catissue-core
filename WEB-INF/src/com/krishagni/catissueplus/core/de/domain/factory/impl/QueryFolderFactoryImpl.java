@@ -8,8 +8,10 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.de.domain.QueryFolder;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
@@ -42,18 +44,18 @@ public class QueryFolderFactoryImpl implements QueryFolderFactory {
 
 	@Override
 	public QueryFolder createQueryFolder(QueryFolderDetails details) {
-		ObjectCreationException oce = new ObjectCreationException();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		QueryFolder queryFolder = new QueryFolder();
 		
 		Long userId = details.getOwner() != null ? details.getOwner().getId() : null;
-		setOwner(queryFolder, userId , oce);
-		setName(queryFolder, details.getName(), oce);
+		setOwner(queryFolder, userId , ose);
+		setName(queryFolder, details.getName(), ose);
 		
 		List<Long> queryIds = new ArrayList<Long>();
 		for (SavedQuerySummary query : details.getQueries()) {
 			queryIds.add(query.getId());
 		}
-		setQueries(queryFolder, queryIds, oce);
+		setQueries(queryFolder, queryIds, ose);
 		
 		queryFolder.setSharedWithAll(details.isSharedWithAll());		
 		List<Long> sharedUsers = new ArrayList<Long>();		
@@ -65,41 +67,38 @@ public class QueryFolderFactoryImpl implements QueryFolderFactory {
 				sharedUsers.add(user.getId());
 			}			
 		}
-		setSharedUsers(queryFolder, sharedUsers, oce);
-		
-		if (oce.hasErrors()) {
-			throw oce;
-		}
-				
+		setSharedUsers(queryFolder, sharedUsers, ose);
+
+		ose.checkAndThrow();
 		return queryFolder;
 	}
 	
-	private void setOwner(QueryFolder folder, Long userId, ObjectCreationException oce) {
+	private void setOwner(QueryFolder folder, Long userId, OpenSpecimenException ose) {
 		if (userId == null) {
-			oce.addError(SavedQueryErrorCode.INVALID_USER_ID, "user-id");			
+			ose.addError(UserErrorCode.NOT_FOUND);			
 		} else {
 			User user = userDao.getUser(userId);
 			if (user == null) {
-				oce.addError(SavedQueryErrorCode.INVALID_USER_ID, "user-id");
+				ose.addError(UserErrorCode.NOT_FOUND);
 			} else {
 				folder.setOwner(user);
 			}						
 		}		
 	}
 	
-	private void setName(QueryFolder folder, String name, ObjectCreationException oce) {
+	private void setName(QueryFolder folder, String name, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(name)) {
-			oce.addError(SavedQueryErrorCode.INVALID_FOLDER_NAME, "query-folder-name");
+			ose.addError(SavedQueryErrorCode.FOLDER_NAME_REQUIRED);
 		} else {
 			folder.setName(name);
 		}		
 	}
 	
-	private void setQueries(QueryFolder folder, List<Long> queryIds, ObjectCreationException oce) {
+	private void setQueries(QueryFolder folder, List<Long> queryIds, OpenSpecimenException ose) {
 		if (queryIds != null && !queryIds.isEmpty()) {
 			List<SavedQuery> queries = daoFactory.getSavedQueryDao().getQueriesByIds(queryIds);
 			if (queries.size() != queryIds.size()) {
-				oce.addError(SavedQueryErrorCode.QUERIES_NOT_ACCESSIBLE, "query-ids");
+				ose.addError(SavedQueryErrorCode.QUERIES_NOT_ACCESSIBLE);
 			} else {
 				folder.setSavedQueries(new HashSet<SavedQuery>(queries));
 			}			
@@ -108,11 +107,11 @@ public class QueryFolderFactoryImpl implements QueryFolderFactory {
 		}
 	}
 	
-	private void setSharedUsers(QueryFolder folder, List<Long> userIds, ObjectCreationException oce) {
+	private void setSharedUsers(QueryFolder folder, List<Long> userIds, OpenSpecimenException ose) {
 		if (userIds != null && !userIds.isEmpty()) {
 			List<User> sharedUsers = userDao.getUsersById(userIds);
 			if (sharedUsers.size() != userIds.size()) {
-				oce.addError(SavedQueryErrorCode.INVALID_SHARE_ACCESS_DETAILS, "user-ids");
+				ose.addError(SavedQueryErrorCode.INVALID_SHARE_ACCESS_DETAILS);
 			} else {
 				folder.setSharedWith(new HashSet<User>(sharedUsers));
 			}

@@ -1,14 +1,12 @@
 package com.krishagni.catissueplus.bulkoperator.services.impl;
 
 import com.krishagni.catissueplus.bulkoperator.common.ObjectImporter;
-import com.krishagni.catissueplus.bulkoperator.events.ImportObjectEvent;
-import com.krishagni.catissueplus.bulkoperator.events.ObjectImportedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.AddVisitEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitAddedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-public class VisitObjectImporter implements ObjectImporter {
+public class VisitObjectImporter implements ObjectImporter<VisitDetail> {
 	private VisitService visitService;
 	
 	public void setVisitService(VisitService visitService) {
@@ -16,16 +14,7 @@ public class VisitObjectImporter implements ObjectImporter {
 	}
 
 	@Override
-	public ObjectImportedEvent importObject(ImportObjectEvent req) {
-		if (!(req.getObject() instanceof VisitDetail)) {
-			throw new RuntimeException("VisitDetail object expected for this operation!");
-		}
-
-		AddVisitEvent request = new AddVisitEvent();
-		request.setVisit((VisitDetail)req.getObject());
-		request.setSessionDataBean(req.getSessionDataBean());
-		
-		VisitAddedEvent response = visitService.addVisit(request);
-		return ObjectImportedEvent.buildResponse(response, response.getVisit());
+	public ResponseEvent<VisitDetail> importObject(RequestEvent<VisitDetail> req) {
+		return visitService.addVisit(req);
 	}
 }

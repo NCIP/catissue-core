@@ -3,15 +3,11 @@ package com.krishagni.catissueplus.rest.controller;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.krishagni.catissueplus.core.de.domain.SelectField;
-import com.krishagni.catissueplus.core.de.events.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +23,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.de.domain.SelectField;
+import com.krishagni.catissueplus.core.de.events.ListQueryAuditLogsCriteria;
+import com.krishagni.catissueplus.core.de.events.ListSavedQueriesCriteria;
+import com.krishagni.catissueplus.core.de.events.QueryAuditLogSummary;
+import com.krishagni.catissueplus.core.de.events.SavedQueriesList;
+import com.krishagni.catissueplus.core.de.events.SavedQueryDetail;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
@@ -47,64 +50,46 @@ public class SavedQueriesController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public Map<String, Object> getSavedQueries(
-			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
-			@RequestParam(value = "max", required = false, defaultValue = "25") int max,
-			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq,
-			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString) {
-		ReqSavedQueriesSummaryEvent req = new ReqSavedQueriesSummaryEvent();
-		req.setStartAt(start);
-		req.setMaxRecords(max);
-		req.setCountReq(countReq);
-		req.setSearchString(searchString);
-		req.setSessionDataBean(getSession());
+	public SavedQueriesList getSavedQueries(
+			@RequestParam(value = "start", required = false, defaultValue = "0") 
+			int start,
+			
+			@RequestParam(value = "max", required = false, defaultValue = "25") 
+			int max,
+			
+			@RequestParam(value = "countReq", required = false, defaultValue = "false") 
+			boolean countReq,
+			
+			@RequestParam(value = "searchString", required = false, defaultValue = "") 
+			String searchString) {
 		
-		SavedQueriesSummaryEvent resp = querySvc.getSavedQueries(req);
-		if (resp.getStatus() != EventStatus.OK) {
-			return null;
-		}
+		ListSavedQueriesCriteria crit = new ListSavedQueriesCriteria()
+			.startAt(start)
+			.maxResults(max)
+			.countReq(countReq)
+			.query(searchString);
 		
-		Map<String, Object> result = new HashMap<String, Object>();
-		if (resp.getCount() != null) {
-			result.put("count", resp.getCount());
-		}
-		result.put("queries", resp.getSavedQueries());
-		return result;		
+		return response(querySvc.getSavedQueries(getRequest(crit)));		
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SavedQueryDetail getQueryDetails(@PathVariable("id") Long queryId) {
-		ReqSavedQueryDetailEvent req = new ReqSavedQueryDetailEvent();
-		req.setQueryId(queryId);
-		
-		SavedQueryDetailEvent resp = querySvc.getSavedQuery(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getSavedQueryDetail();
-		}
-		
-		return null;
+		return response(querySvc.getSavedQuery(getRequest(queryId)));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/definition-file")
 	@ResponseStatus(HttpStatus.OK)	
 	public void getQueryDefFile(@PathVariable("id") Long queryId, HttpServletResponse response) {
-		ReqQueryDefEvent req = new ReqQueryDefEvent();
-		req.setQueryId(queryId);
-		req.setSessionDataBean(getSession());
-		
-		QueryDefEvent resp = querySvc.getQueryDef(req);
-		if (resp.getStatus() != EventStatus.OK) {
-			return;
-		}
-		
+		String queryDef = response(querySvc.getQueryDef(getRequest(queryId)));
+
 		response.setContentType("application/json");
 		response.setHeader("Content-Disposition", "attachment;filename=QueryDef_" + queryId + ".json");
 			
 		InputStream in = null;
 		try {
-			in = new ByteArrayInputStream(resp.getQueryDef().getBytes());
+			in = new ByteArrayInputStream(queryDef.getBytes());
 			IoUtil.copy(in, response.getOutputStream());
 		} catch (IOException e) {
 			throw new RuntimeException("Error sending file", e);
@@ -129,16 +114,7 @@ public class SavedQueriesController {
 	public SavedQueryDetail saveQuery(@RequestBody SavedQueryDetail detail) {
 		curateSavedQueryDetail(detail);
 		
-		SaveQueryEvent req = new SaveQueryEvent();
-		req.setSavedQueryDetail(detail);
-		req.setSessionDataBean(getSession());
-		
-		QuerySavedEvent resp = querySvc.saveQuery(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getSavedQueryDetail();
-		}
-		
-		return null;
+		return response(querySvc.saveQuery(getRequest(detail)));
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
@@ -147,53 +123,35 @@ public class SavedQueriesController {
 	public SavedQueryDetail updateQuery(@RequestBody SavedQueryDetail detail) {
 		curateSavedQueryDetail(detail);
 		
-		UpdateQueryEvent req = new UpdateQueryEvent();
-		req.setSavedQueryDetail(detail);
-		req.setSessionDataBean(getSession());
-		
-		QueryUpdatedEvent resp = querySvc.updateQuery(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getSavedQueryDetail();
-		}
-		
-		return null;
+		return response(querySvc.updateQuery(getRequest(detail)));
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public Long deleteQuery(@PathVariable("id") Long id) {
-		DeleteQueryEvent req = new DeleteQueryEvent();
-		req.setQueryId(id);
-		req.setSessionDataBean(getSession());
-
-		QueryDeletedEvent resp = querySvc.deleteQuery(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getQueryId();
-		}
-
-		return null;
+		return response(querySvc.deleteQuery(getRequest(id)));
 	}
 
 	@RequestMapping(method = RequestMethod.GET,  value = "/{id}/audit-logs")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<QueryAuditLogSummary> getQueryAuditLogs(
-			@PathVariable("id") Long savedQueryId,
-			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
-			@RequestParam(value = "max", required = false, defaultValue = "25") int max) {
-		ReqQueryAuditLogsEvent req = new ReqQueryAuditLogsEvent();
-		req.setStartAt(start);
-		req.setMaxRecords(max);
-		req.setSavedQueryId(savedQueryId);
-		req.setSessionDataBean(getSession());
+			@PathVariable("id") 
+			Long savedQueryId,
+			
+			@RequestParam(value = "start", required = false, defaultValue = "0") 
+			int start,
+			
+			@RequestParam(value = "max", required = false, defaultValue = "25") 
+			int max) {
 		
-		QueryAuditLogsEvent resp = querySvc.getAuditLogs(req);
-		if(resp.getStatus() != EventStatus.OK) {
-			return null;			
-		}
+		ListQueryAuditLogsCriteria crit = new ListQueryAuditLogsCriteria()
+			.startAt(start)
+			.maxResults(max)
+			.savedQueryId(savedQueryId);
 		
-		return resp.getAuditLogs();
+		return response(querySvc.getAuditLogs(getRequest(crit))).getAuditLogs();
 	}
 	
 	private SessionDataBean getSession() {
@@ -230,4 +188,13 @@ public class SavedQueriesController {
 	throws Exception {
 		return new ObjectMapper().readValue(json, SelectField.class);
 	}
+	
+	private <T> T response(ResponseEvent<T> resp) {
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return new RequestEvent<T>(getSession(), payload);				
+	}		
 }

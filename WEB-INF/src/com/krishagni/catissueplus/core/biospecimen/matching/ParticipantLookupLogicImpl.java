@@ -7,9 +7,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.biospecimen.events.MatchParticipantEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipants;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMatchedEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
 
@@ -26,15 +25,14 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 	}
 
 	@Override
-	public ParticipantMatchedEvent getMatchingParticipants(MatchParticipantEvent req) {
+	public MatchedParticipants getMatchingParticipants(ParticipantDetail participant) {
 		ParticipantDao dao = daoFactory.getParticipantDao();
-		ParticipantDetail participant = req.getParticipantDetail();
-		
+				
 		if (StringUtils.isNotBlank(participant.getEmpi())) {
 			Participant matched = dao.getByEmpi(participant.getEmpi());
 			if (matched != null) {
 				List<ParticipantDetail> result = ParticipantDetail.from(Collections.singletonList(matched));
-				return ParticipantMatchedEvent.ok("empi", result);
+				return new MatchedParticipants("empi", result);
 			}
 		}
 		
@@ -42,24 +40,24 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 			Participant matched = dao.getBySsn(participant.getSsn());
 			if (matched != null) {
 				List<ParticipantDetail> result = ParticipantDetail.from(Collections.singletonList(matched));
-				return ParticipantMatchedEvent.ok("ssn", result);
+				return new MatchedParticipants("ssn", result);
 			}
 		}
 		
 		if (participant.getPmis() != null) {
 			List<Participant> matched = dao.getByPmis(participant.getPmis());
 			if (matched != null && !matched.isEmpty()) {
-				return ParticipantMatchedEvent.ok("pmi", ParticipantDetail.from(matched));
+				return new MatchedParticipants("pmi", ParticipantDetail.from(matched));
 			}
 		}
 		
 		if (StringUtils.isNotBlank(participant.getLastName()) && participant.getBirthDate() != null) {
 			List<Participant> matched = dao.getByLastNameAndBirthDate(participant.getLastName(), participant.getBirthDate());
 			if (matched != null && !matched.isEmpty()) {
-				return ParticipantMatchedEvent.ok("lnameAndDob", ParticipantDetail.from(matched));
+				return new MatchedParticipants("lnameAndDob", ParticipantDetail.from(matched));
 			}
 		}
 		
-		return ParticipantMatchedEvent.ok("none", Collections.<ParticipantDetail>emptyList());		
+		return new MatchedParticipants("none", Collections.<ParticipantDetail>emptyList());		
 	}
 }

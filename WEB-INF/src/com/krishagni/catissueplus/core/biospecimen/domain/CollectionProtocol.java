@@ -8,7 +8,9 @@ import java.util.Set;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.privileges.domain.CPSiteRole;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class CollectionProtocol {
 	private Long id;
@@ -67,8 +69,6 @@ public class CollectionProtocol {
 
 	private Set<CollectionProtocolEvent> collectionProtocolEvents = new HashSet<CollectionProtocolEvent>();
 	
-	private Set<CPSiteRole> cpSiteRoles = new HashSet<CPSiteRole>();
-
 	public Long getId() {
 		return id;
 	}
@@ -297,15 +297,6 @@ public class CollectionProtocol {
 		this.collectionProtocolEvents = collectionProtocolEvents;
 	}
 
-	public Set<CPSiteRole> getCpSiteRoles() {
-		return cpSiteRoles;
-	}
-
-	public void setCpSiteRoles(Set<CPSiteRole> cpSiteRoles) {
-		this.cpSiteRoles = cpSiteRoles;
-	}
-	
-	
 	// new
 	
 	public ConsentTier addConsentTier(ConsentTier ct) {
@@ -317,12 +308,12 @@ public class CollectionProtocol {
 	
 	public ConsentTier updateConsentTier(ConsentTier ct) {
 		if (ct.getId() == null) {
-			throw new IllegalArgumentException("Non existing consent tier for update operation");
+			throw OpenSpecimenException.userError(CpErrorCode.CONSENT_TIER_NOT_FOUND);
 		}
 
 		ConsentTier existing = getConsentTierById(ct.getId());
 		if (existing == null) {
-			throw new IllegalArgumentException("Non existing consent tier for update operation");
+			throw OpenSpecimenException.userError(CpErrorCode.CONSENT_TIER_NOT_FOUND);
 		}
 		
 		existing.setStatement(ct.getStatement());
@@ -341,7 +332,7 @@ public class CollectionProtocol {
 	
 	public void addCpe(CollectionProtocolEvent cpe) {
 		if (!isEventLabelUnique(cpe.getEventLabel(), null)) {
-			throw new IllegalArgumentException("Event label not unique");
+			throw OpenSpecimenException.userError(CpeErrorCode.LABEL_NOT_FOUND);
 		}
 				
 		cpe.setId(null);
@@ -351,11 +342,11 @@ public class CollectionProtocol {
 	public void updateCpe(CollectionProtocolEvent cpe) {
 		CollectionProtocolEvent existing = getCpe(cpe.getId());
 		if (existing == null) {
-			throw new IllegalArgumentException("Invalid event for update");
+			throw OpenSpecimenException.userError(CpeErrorCode.NOT_FOUND);
 		}
 		
 		if (!isEventLabelUnique(cpe.getEventLabel(), existing)) {
-			throw new IllegalArgumentException("Event label not unique");
+			throw OpenSpecimenException.userError(CpeErrorCode.LABEL_NOT_FOUND);
 		}
 				
 		existing.update(cpe);

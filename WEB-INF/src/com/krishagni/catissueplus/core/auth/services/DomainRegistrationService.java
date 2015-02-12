@@ -1,15 +1,17 @@
 
 package com.krishagni.catissueplus.core.auth.services;
 
-import com.krishagni.catissueplus.core.auth.events.AllDomainsEvent;
-import com.krishagni.catissueplus.core.auth.events.DomainRegisteredEvent;
-import com.krishagni.catissueplus.core.auth.events.RegisterDomainEvent;
-import com.krishagni.catissueplus.core.auth.events.ReqAllAuthDomainEvent;
+import java.util.List;
+
+import com.krishagni.catissueplus.core.auth.events.DomainDetail;
+import com.krishagni.catissueplus.core.auth.events.ListAuthDomainCriteria;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public interface DomainRegistrationService {
 
-	public DomainRegisteredEvent registerDomain(RegisterDomainEvent event);
+	public ResponseEvent<DomainDetail> registerDomain(RequestEvent<DomainDetail> req);
 
-	public AllDomainsEvent getAllDomains(ReqAllAuthDomainEvent req);
+	public ResponseEvent<List<DomainDetail>> getDomains(RequestEvent<ListAuthDomainCriteria> req);
 
 }

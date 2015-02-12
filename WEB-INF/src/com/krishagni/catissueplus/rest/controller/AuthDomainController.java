@@ -15,13 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.auth.events.AllDomainsEvent;
-import com.krishagni.catissueplus.core.auth.events.DomainDetails;
-import com.krishagni.catissueplus.core.auth.events.DomainRegisteredEvent;
-import com.krishagni.catissueplus.core.auth.events.RegisterDomainEvent;
-import com.krishagni.catissueplus.core.auth.events.ReqAllAuthDomainEvent;
+import com.krishagni.catissueplus.core.auth.events.DomainDetail;
+import com.krishagni.catissueplus.core.auth.events.ListAuthDomainCriteria;
 import com.krishagni.catissueplus.core.auth.services.DomainRegistrationService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 @Controller
 @RequestMapping("/auth-domains")
@@ -36,26 +34,26 @@ public class AuthDomainController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<DomainDetails> getAllDomainDetails(
-			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") String maxResults) {
-		ReqAllAuthDomainEvent req = new ReqAllAuthDomainEvent();
-		req.setMaxResults(Integer.parseInt(maxResults));
-		AllDomainsEvent resp = domainRegService.getAllDomains(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDomains();
-		}
-		return null;
+	public List<DomainDetail> getAuthDomains(
+			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") 
+			int maxResults) {
+		
+		ListAuthDomainCriteria crit = new ListAuthDomainCriteria().maxResults(maxResults);
+		RequestEvent<ListAuthDomainCriteria> req = new RequestEvent<ListAuthDomainCriteria>(null, crit);
+		ResponseEvent<List<DomainDetail>> resp = domainRegService.getDomains(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public DomainDetails registerDomain(@RequestBody DomainDetails domainDetails) {
-		DomainRegisteredEvent resp = domainRegService.registerDomain(new RegisterDomainEvent(domainDetails));
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDomainDetails();
-		}
-		return null;
+	public DomainDetail registerDomain(@RequestBody DomainDetail domainDetail) {
+		RequestEvent<DomainDetail> req = new RequestEvent<DomainDetail>(null, domainDetail);
+		ResponseEvent<DomainDetail> resp = domainRegService.registerDomain(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
 	}
-
 }
