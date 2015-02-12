@@ -322,6 +322,7 @@
     "create_account": "Create your OpenSpecimen Account",
     "signup": "Sign up",
     "signed_up": "Your membership request has been received. Please wait for an approval email from OpenSpecimen Administrator. Thank you.",
+    "return_to_signin": "Return to Sign in",
 
     "tooltip": {
       "create_user": "Click to add new User",
