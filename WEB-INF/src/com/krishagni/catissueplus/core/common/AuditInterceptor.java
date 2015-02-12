@@ -3,24 +3,14 @@ package com.krishagni.catissueplus.core.common;
 
 import java.util.Date;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.context.ManagedSessionContext;
 
-import com.krishagni.catissueplus.core.audit.repository.AuditDao;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.Audit.Operation;
-import com.krishagni.catissueplus.core.common.errors.CatissueException;
-import com.krishagni.catissueplus.core.common.errors.ErrorCodeEnum;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -56,7 +46,7 @@ public class AuditInterceptor {
 		catch (Throwable e) {
 			LOGGER.error(e.getCause(), e);
 			LOGGER.error(e.getMessage(), e);
-			throw new CatissueException(ErrorCodeEnum.AUDIT_ERROR);
+			throw new OpenSpecimenException(e);
 		}
 
 		finally {

@@ -28,8 +28,7 @@ public interface UserDao extends Dao<User> {
 	
 	User getActiveUser(String loginId, String domainName);
 
-	List<UserSummary> getAllUsers(int startAt, int maxRecords,
-			List<String> sortBy, String ... searchString);
+	List<UserSummary> getUsers(int startAt, int maxRecords, String ... searchString);
 
 	Long getUsersCount(String ... searchString);
 	

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.auth.events.LoginDetails;
+import com.krishagni.catissueplus.core.auth.events.LoginDetail;
 import com.krishagni.catissueplus.core.auth.services.UserAuthenticationService;
 
 import edu.wustl.auth.exception.AuthenticationException;
@@ -41,9 +41,9 @@ public class AuthenticationController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public Map<String, String> authenticateUser(@RequestBody LoginDetails loginDetails) 
+	public Map<String, String> authenticateUser(@RequestBody LoginDetail loginDetail) 
 	throws Exception {
-		User user = authenticate(httpReq, loginDetails.getLoginId(), loginDetails.getPassword());
+		User user = authenticate(httpReq, loginDetail.getLoginId(), loginDetail.getPassword());
 		if (user == null) {
 			return null;
 		}

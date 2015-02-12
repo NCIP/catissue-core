@@ -16,21 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent.OP;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpRespEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentTiersEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
+import com.krishagni.catissueplus.core.biospecimen.events.ListCpCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -49,68 +43,46 @@ public class CollectionProtocolsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<CollectionProtocolSummary> getCollectionProtocols(
-			@RequestParam(value = "chkPrivilege", required = false, defaultValue = "true")  boolean chkPrivlege,
-			@RequestParam(value = "detailedList", required = false, defaultValue = "false") boolean detailedList) {
+			@RequestParam(value = "chkPrivilege", required = false, defaultValue = "true")  
+			boolean chkPrivlege,
+			
+			@RequestParam(value = "detailedList", required = false, defaultValue = "false") 
+			boolean detailedList) {
 		
-		ReqAllCollectionProtocolsEvent req = new ReqAllCollectionProtocolsEvent();
-		req.setSessionDataBean(getSession());
-		req.setChkPrivileges(chkPrivlege);
-		req.setIncludePi(detailedList);
-		req.setIncludeStats(detailedList);
+		ListCpCriteria crit = new ListCpCriteria()
+			.includePi(detailedList)
+			.includeStat(detailedList);
 
-		AllCollectionProtocolsEvent resp = cpSvc.getAllProtocols(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		return resp.getCpList();
+		ResponseEvent<List<CollectionProtocolSummary>> resp = cpSvc.getProtocols(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();		
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public  CollectionProtocolDetail getCollectionProtocol(@PathVariable("id") Long cpId) {
-		ReqCollectionProtocolEvent req = new ReqCollectionProtocolEvent();
-		req.setCpId(cpId);
-		req.setSessionDataBean(getSession());
-		
-		CollectionProtocolDetailEvent resp = cpSvc.getCollectionProtocol(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-				
-		return resp.getCp();
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.getCollectionProtocol(getRequest(cpId));
+		resp.throwErrorIfUnsuccessful();		
+		return resp.getPayload();
 	}	
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public CollectionProtocolDetail createCollectionProtocol(@RequestBody CollectionProtocolDetail cp) {
-		CreateCollectionProtocolEvent req = new CreateCollectionProtocolEvent();
-		req.setCp(cp);
-		req.setSessionDataBean(getSession());
-
-		CollectionProtocolCreatedEvent resp = cpSvc.createCollectionProtocol(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-
-		return resp.getCp();
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.createCollectionProtocol(getRequest(cp));
+		resp.throwErrorIfUnsuccessful();		
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/consent-tiers")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<ConsentTierDetail> getConsentTiers(@PathVariable("id") Long cpId) {
-		ReqConsentTiersEvent req = new ReqConsentTiersEvent();
-		req.setCpId(cpId);
-		req.setSessionDataBean(getSession());
-		
-		ConsentTiersEvent resp = cpSvc.getConsentTiers(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getConsentTiers();
+		ResponseEvent<List<ConsentTierDetail>> resp = cpSvc.getConsentTiers(getRequest(cpId));
+		resp.throwErrorIfUnsuccessful();		
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/{id}/consent-tiers")
@@ -145,17 +117,18 @@ public class CollectionProtocolsController {
 	}
 	
 	private ConsentTierDetail performConsentTierOp(OP op, Long cpId, ConsentTierDetail consentTier) {
-		ConsentTierOpEvent req = new ConsentTierOpEvent();		
+		ConsentTierOp req = new ConsentTierOp();		
 		req.setConsentTier(consentTier);
 		req.setCpId(cpId);
 		req.setOp(op);
 		
-		ConsentTierOpRespEvent resp = cpSvc.updateConsentTier(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getConsentTier();		
+		ResponseEvent<ConsentTierDetail> resp = cpSvc.updateConsentTier(getRequest(req));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return new RequestEvent<T>(getSession(), payload);
 	}
 	
 	private SessionDataBean getSession() {

@@ -1,30 +1,22 @@
 
 package com.krishagni.catissueplus.core.administrative.services;
 
-import com.krishagni.catissueplus.core.administrative.events.AllSitesEvent;
-import com.krishagni.catissueplus.core.administrative.events.CreateSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.DeleteSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.GetSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.PatchSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqAllSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.SiteCreatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.SiteDeletedEvent;
-import com.krishagni.catissueplus.core.administrative.events.SiteGotEvent;
-import com.krishagni.catissueplus.core.administrative.events.SiteUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
+import java.util.List;
+
+import com.krishagni.catissueplus.core.administrative.events.ListSiteCriteria;
+import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
+import com.krishagni.catissueplus.core.administrative.events.SiteQueryCriteria;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public interface SiteService {
+	public ResponseEvent<List<SiteDetail>> getSites(RequestEvent<ListSiteCriteria> req);
 
-	public SiteCreatedEvent createSite(CreateSiteEvent reqEvent);
+	public ResponseEvent<SiteDetail> getSite(RequestEvent<SiteQueryCriteria> req);
 
-	public SiteUpdatedEvent updateSite(UpdateSiteEvent reqEvent);
+	public ResponseEvent<SiteDetail> createSite(RequestEvent<SiteDetail> req);
 
-	public SiteUpdatedEvent patchSite(PatchSiteEvent event);
+	public ResponseEvent<SiteDetail> updateSite(RequestEvent<SiteDetail> req);
 
-	public SiteDeletedEvent deleteSite(DeleteSiteEvent reqEvent);
-
-	public AllSitesEvent getAllSites(ReqAllSiteEvent req);
-
-	public SiteGotEvent getSite(GetSiteEvent event);
-
+	public ResponseEvent<SiteDetail> deleteSite(RequestEvent<SiteQueryCriteria> req);
 }

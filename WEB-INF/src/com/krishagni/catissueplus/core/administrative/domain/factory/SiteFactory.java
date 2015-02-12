@@ -2,13 +2,8 @@
 package com.krishagni.catissueplus.core.administrative.domain.factory;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
-import com.krishagni.catissueplus.core.administrative.events.SiteDetails;
-import com.krishagni.catissueplus.core.administrative.events.SitePatchDetails;
+import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 
 public interface SiteFactory {
-
-	public Site createSite(SiteDetails details);
-
-	public Site patchSite(Site site, SitePatchDetails siteDetails);
-
+	public Site createSite(SiteDetail details);
 }

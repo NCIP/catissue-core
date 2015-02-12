@@ -1,25 +1,22 @@
 package com.krishagni.catissueplus.core.administrative.services;
 
-import com.krishagni.catissueplus.core.administrative.events.CreateInstituteEvent;
-import com.krishagni.catissueplus.core.administrative.events.DisableInstituteEvent;
-import com.krishagni.catissueplus.core.administrative.events.GetAllInstitutesEvent;
-import com.krishagni.catissueplus.core.administrative.events.GetInstituteEvent;
-import com.krishagni.catissueplus.core.administrative.events.InstituteCreatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.InstituteDisabledEvent;
-import com.krishagni.catissueplus.core.administrative.events.InstituteGotEvent;
-import com.krishagni.catissueplus.core.administrative.events.InstituteUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqAllInstitutesEvent;
-import com.krishagni.catissueplus.core.administrative.events.UpdateInstituteEvent;
+import java.util.List;
+
+import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
+import com.krishagni.catissueplus.core.administrative.events.InstituteQueryCriteria;
+import com.krishagni.catissueplus.core.administrative.events.ListInstitutesCriteria;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public interface InstituteService {
 
-	public InstituteCreatedEvent createInstitute(CreateInstituteEvent event);
+	public ResponseEvent<InstituteDetail> getInstitute(RequestEvent<InstituteQueryCriteria> req);
 
-	public InstituteUpdatedEvent updateInstitute(UpdateInstituteEvent event);
+	public ResponseEvent<List<InstituteDetail>> getInstitutes(RequestEvent<ListInstitutesCriteria> event);
+	
+	public ResponseEvent<InstituteDetail> createInstitute(RequestEvent<InstituteDetail> req);
 
-	public InstituteDisabledEvent deleteInstitute(DisableInstituteEvent event);
+	public ResponseEvent<InstituteDetail> updateInstitute(RequestEvent<InstituteDetail> req);
 
-	public InstituteGotEvent getInstitute(GetInstituteEvent event);
-
-	public GetAllInstitutesEvent getInstitutes(ReqAllInstitutesEvent event);
+	public ResponseEvent<InstituteDetail> deleteInstitute(RequestEvent<InstituteQueryCriteria> req);
 }

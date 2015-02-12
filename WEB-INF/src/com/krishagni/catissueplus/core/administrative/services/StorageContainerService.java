@@ -1,24 +1,22 @@
 package com.krishagni.catissueplus.core.administrative.services;
 
-import com.krishagni.catissueplus.core.administrative.events.ContainerOccupiedPositionsEvent;
-import com.krishagni.catissueplus.core.administrative.events.CreateStorageContainerEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqContainerOccupiedPositionsEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqStorageContainerEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqStorageContainersEvent;
-import com.krishagni.catissueplus.core.administrative.events.StorageContainerCreatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.StorageContainerEvent;
-import com.krishagni.catissueplus.core.administrative.events.StorageContainerUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.StorageContainersEvent;
-import com.krishagni.catissueplus.core.administrative.events.UpdateStorageContainerEvent;
+import java.util.List;
+
+import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
+import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
+import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
+import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public interface StorageContainerService {
-	public StorageContainersEvent getStorageContainers(ReqStorageContainersEvent req);
+	public ResponseEvent<List<StorageContainerSummary>> getStorageContainers(RequestEvent<StorageContainerListCriteria> req);
 	
-	public StorageContainerEvent getStorageContainer(ReqStorageContainerEvent req);
+	public ResponseEvent<StorageContainerDetail> getStorageContainer(RequestEvent<Long> req);
 	
-	public ContainerOccupiedPositionsEvent getOccupiedPositions(ReqContainerOccupiedPositionsEvent req);
+	public ResponseEvent<List<StorageContainerPositionDetail>> getOccupiedPositions(RequestEvent<Long> req);
 	
-	public StorageContainerCreatedEvent createStorageContainer(CreateStorageContainerEvent req);
+	public ResponseEvent<StorageContainerDetail> createStorageContainer(RequestEvent<StorageContainerDetail> req);
 	
-	public StorageContainerUpdatedEvent updateStorageContainer(UpdateStorageContainerEvent req);
+	public ResponseEvent<StorageContainerDetail> updateStorageContainer(RequestEvent<StorageContainerDetail> req);
 }

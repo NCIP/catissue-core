@@ -8,16 +8,12 @@ import org.springframework.context.ApplicationContext;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
-import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
-import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.RemoveFormContextEvent;
-import com.krishagni.catissueplus.core.de.events.FormContextRemovedEvent;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
-import com.krishagni.catissueplus.core.de.events.FormContextsAddedEvent;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
-import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent.FormType;
+import com.krishagni.catissueplus.core.de.events.FormType;
+import com.krishagni.catissueplus.core.de.events.RemoveFormContextOp;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
 import edu.common.dynamicextensions.nutility.FormPostProcessor;
@@ -30,23 +26,20 @@ public class FormProcessor implements FormPostProcessor {
 		ApplicationContext appCtx = OpenSpecimenAppCtxProvider.getAppCtx();
 		FormService formSvc = (FormService) appCtx.getBean("formSvc");
 
-		FormContextDetail ctxt = new FormContextDetail();
 		CollectionProtocolSummary cp = new CollectionProtocolSummary();
 		cp.setId(-1L);
 		
-		AddFormContextsEvent req = new AddFormContextsEvent();
+		FormContextDetail ctxt = new FormContextDetail();				
 		ctxt.setCollectionProtocol(cp);
 		ctxt.setFormId(containerId);
 		ctxt.setLevel("Query");
 		ctxt.setMultiRecord(false); 
 		ctxt.setSortOrder(sortOrder);
 		
-		req.setFormContexts(Collections.singletonList(ctxt));
-		FormContextsAddedEvent resp = formSvc.addFormContexts(req);
-		
-		if (resp.getStatus() != EventStatus.OK) {
-			throw new RuntimeException("Exception occurred in processing of the form with id : " + containerId);
-		}
+		RequestEvent<List<FormContextDetail>> req = new RequestEvent<List<FormContextDetail>>();
+		req.setPayload(Collections.singletonList(ctxt));
+		ResponseEvent<List<FormContextDetail>> resp = formSvc.addFormContexts(req);
+		resp.throwErrorIfUnsuccessful();		
 	}
 
 	@Override
@@ -54,17 +47,15 @@ public class FormProcessor implements FormPostProcessor {
 		ApplicationContext appCtx = OpenSpecimenAppCtxProvider.getAppCtx();
 		FormService formSvc = (FormService) appCtx.getBean("formSvc");
 		
-		ReqAllFormsSummaryEvent req = new ReqAllFormsSummaryEvent();
-		req.setFormType(FormType.QUERY_FORMS);
-		
-		AllFormsSummaryEvent resp = formSvc.getForms(req);
+		FormType type = FormType.QUERY_FORMS;
+		RequestEvent<FormType> req = new RequestEvent<FormType>();
+		req.setPayload(type);
+				
+		ResponseEvent<List<FormSummary>> resp = formSvc.getForms(req);
+		resp.throwErrorIfUnsuccessful();
 
-		if (resp.getStatus() != EventStatus.OK) {
-			throw new RuntimeException("Could not load query forms!");
-		}
-		
 		List<Long> queryForms = new ArrayList<Long>();
-		for (FormSummary form: resp.getForms()) {
+		for (FormSummary form: resp.getPayload()) {
 			queryForms.add(form.getFormId());
 		}
 		
@@ -76,14 +67,14 @@ public class FormProcessor implements FormPostProcessor {
 		ApplicationContext appCtx = OpenSpecimenAppCtxProvider.getAppCtx();
 		FormService formSvc = (FormService) appCtx.getBean("formSvc");
 		
-		RemoveFormContextEvent req = new RemoveFormContextEvent();
-		req.setFormId(formId);
-		req.setFormType(RemoveFormContextEvent.FormType.QUERY_FORMS);
+		RemoveFormContextOp opDetail = new RemoveFormContextOp();
+		opDetail.setFormId(formId);
+		opDetail.setFormType(FormType.QUERY_FORMS);
 		
-		FormContextRemovedEvent resp = formSvc.removeFormContext(req);
-		
-		if (resp.getStatus() != EventStatus.OK) {
-			throw new RuntimeException("Could not delete the form: " + formId);
-		}
+		RequestEvent<RemoveFormContextOp> req = new RequestEvent<RemoveFormContextOp>();
+		req.setPayload(opDetail);
+				
+		ResponseEvent<Boolean> resp = formSvc.removeFormContext(req);
+		resp.throwErrorIfUnsuccessful();		
 	}
 }

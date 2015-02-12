@@ -127,8 +127,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 
 	@Override
-	public List<UserSummary> getAllUsers(int startAt, int maxRecords, List<String> sortBy,
-			String ... searchString) {
+	public List<UserSummary> getUsers(int startAt, int maxRecords, String ... searchString) {
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(User.class, "u")
 				.add(Restrictions.or(
@@ -139,14 +138,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		addSearchConditions(criteria, searchString);
 		addProjectionFields(criteria);
 		
-		for(String sort : sortBy ){
-			if(sort.startsWith("-")){
-				criteria.addOrder(Property.forName(sort.substring(1)).desc());
-			} else {
-				criteria.addOrder(Property.forName(sort).asc());
-			}
-		}
-
 		addLimits(criteria, startAt, maxRecords);
 		return getUsers(criteria);
 	}

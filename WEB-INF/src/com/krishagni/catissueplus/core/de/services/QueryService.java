@@ -1,53 +1,59 @@
 package com.krishagni.catissueplus.core.de.services;
 
+import java.io.File;
+import java.util.List;
+
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.de.events.*;
 
 public interface QueryService {	
-	public SavedQueriesSummaryEvent getSavedQueries(ReqSavedQueriesSummaryEvent req);
+	public ResponseEvent<SavedQueriesList> getSavedQueries(RequestEvent<ListSavedQueriesCriteria> req);
 	
-	public SavedQueryDetailEvent getSavedQuery(ReqSavedQueryDetailEvent req);
+	public ResponseEvent<SavedQueryDetail> getSavedQuery(RequestEvent<Long> req);
 	
-	public QuerySavedEvent saveQuery(SaveQueryEvent req);
+	public ResponseEvent<SavedQueryDetail> saveQuery(RequestEvent<SavedQueryDetail> req);
 			
-	public QueryUpdatedEvent updateQuery(UpdateQueryEvent req);
+	public ResponseEvent<SavedQueryDetail> updateQuery(RequestEvent<SavedQueryDetail> req);
 
-	public QueryDeletedEvent deleteQuery(DeleteQueryEvent req);
+	public ResponseEvent<Long> deleteQuery(RequestEvent<Long> req);
 	
-	public QueryExecutedEvent executeQuery(ExecuteQueryEvent req);
+	public ResponseEvent<QueryExecResult> executeQuery(RequestEvent<ExecuteQueryEventOp> req);
 	
-	public QueryDataExportedEvent exportQueryData(ExportQueryDataEvent req);
+	public ResponseEvent<QueryDataExportResult> exportQueryData(RequestEvent<ExecuteQueryEventOp> req);
 	
-	public ExportDataFileEvent getExportDataFile(ReqExportDataFileEvent req);
+	public ResponseEvent<File> getExportDataFile(RequestEvent<String> req);
 	
 	//
 	// folder related APIs
 	//
 	
-	public QueryFoldersEvent getUserFolders(ReqQueryFoldersEvent req);
+	public ResponseEvent<List<QueryFolderSummary>> getUserFolders(RequestEvent<?> req);
 	
-	public QueryFolderDetailEvent getFolder(ReqQueryFolderDetailEvent req);
+	public ResponseEvent<QueryFolderDetails> getFolder(RequestEvent<Long> req);
 	
-	public QueryFolderCreatedEvent createFolder(CreateQueryFolderEvent req);
+	public ResponseEvent<QueryFolderDetails> createFolder(RequestEvent<QueryFolderDetails> req);
 	
-	public QueryFolderUpdatedEvent updateFolder(UpdateQueryFolderEvent req);
+	public ResponseEvent<QueryFolderDetails> updateFolder(RequestEvent<QueryFolderDetails> req);
 	
-	public QueryFolderDeletedEvent deleteFolder(DeleteQueryFolderEvent req);
+	public ResponseEvent<Long> deleteFolder(RequestEvent<Long> req);
 	
-	public FolderQueriesEvent getFolderQueries(ReqFolderQueriesEvent req);
+	public ResponseEvent<SavedQueriesList> getFolderQueries(RequestEvent<ListFolderQueriesCriteria> req);
 	
-	public FolderQueriesUpdatedEvent updateFolderQueries(UpdateFolderQueriesEvent req);
+	public ResponseEvent<List<SavedQuerySummary>> updateFolderQueries(RequestEvent<UpdateFolderQueriesOp> req);
 	
-	public QueryFolderSharedEvent shareFolder(ShareQueryFolderEvent req);
+	public ResponseEvent<List<UserSummary>> shareFolder(RequestEvent<ShareQueryFolderOp> req);
 	
 	//
 	// query audit logs related APIs
 	//	
-	public QueryAuditLogsEvent getAuditLogs(ReqQueryAuditLogsEvent req);
+	public ResponseEvent<QueryAuditLogsList> getAuditLogs(RequestEvent<ListQueryAuditLogsCriteria> req);
 	
-	public QueryAuditLogEvent getAuditLog(ReqQueryAuditLogEvent req);
+	public ResponseEvent<QueryAuditLogDetail> getAuditLog(RequestEvent<Long> req);
 	
 	//
 	// query export APIs
 	//
-	public QueryDefEvent getQueryDef(ReqQueryDefEvent req);
+	public ResponseEvent<String> getQueryDef(RequestEvent<Long> req);
 }

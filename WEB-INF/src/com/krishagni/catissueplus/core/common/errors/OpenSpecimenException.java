@@ -1,41 +1,68 @@
 
 package com.krishagni.catissueplus.core.common.errors;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 public class OpenSpecimenException extends RuntimeException {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1473557909717365251L;
+	
+	private ErrorType errorType = ErrorType.NONE;
 
-	private ResponseEvent response;
-
-	private List<ErroneousField> fields = new ArrayList<ErroneousField>();
-
-	public OpenSpecimenException(ResponseEvent response) {
-		this.response = response;
+	private Set<ErrorCode> errors = new HashSet<ErrorCode>();
+	
+	private Throwable exception;
+	
+	public OpenSpecimenException(ErrorType type, Set<ErrorCode> errors) {
+		this.errorType = type;
+		this.errors = errors;
 	}
-
-	public ResponseEvent getResponse() {
-		return response;
+	
+	public OpenSpecimenException(ErrorType type, ErrorCode error) {
+		this.errorType = type;
+		errors.add(error);
 	}
-
-	public void setResponse(ResponseEvent response) {
-		this.response = response;
+	
+	public OpenSpecimenException(ErrorType type) {
+		this.errorType = type;
 	}
-
-	public String getMessage() {
-		StringBuilder str = new StringBuilder();
-		for (ErroneousField field : fields) {
-			str.append(field.getFieldName() + ":" + field.getErrorMessage()).append("\n");
+	
+	public OpenSpecimenException(Throwable exception) {
+		this.errorType = ErrorType.SYSTEM_ERROR;
+		this.exception = exception;
+	}
+	
+	public ErrorType getErrorType() {
+		return errorType;
+	}
+	
+	public Set<ErrorCode> getErrors() {
+		return errors;
+	}
+	
+	public Throwable getException() {
+		return exception;
+	}
+	
+	public void addError(ErrorCode error) {
+		this.errors.add(error);
+	}
+	
+	public boolean hasAnyErrors() {
+		return !this.errors.isEmpty() || exception != null;
+	}
+	
+	public void checkAndThrow() {
+		if (hasAnyErrors()) {
+			throw this;
 		}
-
-		return str.toString();
 	}
-
+	
+	public static OpenSpecimenException userError(ErrorCode error) {		
+		return new OpenSpecimenException(ErrorType.USER_ERROR, error);
+	}
+	
+	public static OpenSpecimenException serverError(Throwable e) {
+		return new OpenSpecimenException(e);
+	}
 }

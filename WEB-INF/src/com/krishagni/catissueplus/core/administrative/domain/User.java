@@ -1,8 +1,7 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
-import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.*;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -10,14 +9,16 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.SetUpdater;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
-import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
 
 public class User extends BaseEntity {
+	private final static String DEFAULT_DOMAIN = "catissue";
 
 	private String lastName;
 
@@ -26,8 +27,6 @@ public class User extends BaseEntity {
 	private AuthDomain authDomain;
 
 	private Set<Site> userSites = new HashSet<Site>();
-
-	private Set<UserCPRole> userCPRoles = new HashSet<UserCPRole>();
 
 	private String emailAddress;
 
@@ -83,8 +82,9 @@ public class User extends BaseEntity {
 
 	public void setAuthDomain(AuthDomain authDomain) {
 		if (this.getAuthDomain() != null && !this.getAuthDomain().getId().equals(authDomain.getId())) {
-			reportError(UserErrorCode.CHANGE_IN_DOMAIN, LDAP);
+			throw OpenSpecimenException.userError(DOMAIN_CHANGE_NOT_ALLOWED);
 		}
+		
 		this.authDomain = authDomain;
 	}
 
@@ -93,9 +93,10 @@ public class User extends BaseEntity {
 	}
 
 	public void setLoginName(String loginName) {
-		if (!isBlank(this.getLoginName()) && !this.getLoginName().equals(loginName)) {
-			reportError(UserErrorCode.CHANGE_IN_LOGIN_NAME, LOGIN_NAME);
+		if (StringUtils.isNotBlank(this.getLoginName()) && !this.getLoginName().equals(loginName)) {
+			throw OpenSpecimenException.userError(LOGIN_NAME_CHANGE_NOT_ALLOWED);
 		}
+
 		this.loginName = loginName;
 	}
 
@@ -147,20 +148,6 @@ public class User extends BaseEntity {
 		this.passwordCollection = passwordCollection;
 	}
 
-	public Set<UserCPRole> getUserCPRoles() {
-		return userCPRoles;
-	}
-
-	public void setUserCPRoles(Set<UserCPRole> userCPRoles) {
-		this.userCPRoles = userCPRoles;
-	}
-
-	private final String LOGIN_NAME = "login name";
-
-	private final String LDAP = "ldap";
-	
-	private final static String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})";
-
 	public void close() {
 		this.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
 	}
@@ -178,10 +165,6 @@ public class User extends BaseEntity {
 		this.setComments(user.getComments());
 		SetUpdater.<Site> newInstance().update(this.getUserSites(), user.getUserSites());
 
-		for (UserCPRole userCP : user.getUserCPRoles()) {
-			userCP.setUser(this);
-		}
-		SetUpdater.<UserCPRole> newInstance().update(this.getUserCPRoles(), user.getUserCPRoles());
 		//updateAddressDetails(this.getAddress(), user.getAddress());
 	}
 
@@ -203,6 +186,8 @@ public class User extends BaseEntity {
 
 		this.passwordCollection.add(password);
 	}
+
+	private final static String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})";
 
 	public static boolean isValidPasswordPattern(String password) {
 		boolean result = false;

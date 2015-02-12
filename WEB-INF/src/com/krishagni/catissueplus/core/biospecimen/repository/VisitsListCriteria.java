@@ -1,6 +1,6 @@
 package com.krishagni.catissueplus.core.biospecimen.repository;
 
-import com.krishagni.catissueplus.core.common.repository.impl.AbstractListCriteria;
+import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 
 public class VisitsListCriteria extends AbstractListCriteria<VisitsListCriteria> {
 	private Long cprId;

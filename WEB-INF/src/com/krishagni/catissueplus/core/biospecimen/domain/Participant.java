@@ -1,23 +1,17 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
-
-import javax.swing.text.DateFormatter;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.common.MapUpdater;
 import com.krishagni.catissueplus.core.common.SetUpdater;
-import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
@@ -294,7 +288,7 @@ public class Participant {
 	private void checkActiveDependents() {
 		for (CollectionProtocolRegistration cpr : this.cprCollection.values()) {
 			if (cpr.isActive()) {
-				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
+				throw OpenSpecimenException.userError(ParticipantErrorCode.REF_ENTITY_FOUND);
 			}
 		}
 	}

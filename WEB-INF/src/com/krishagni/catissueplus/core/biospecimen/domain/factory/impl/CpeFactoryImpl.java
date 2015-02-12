@@ -3,13 +3,16 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class CpeFactoryImpl implements CpeFactory {
@@ -25,72 +28,72 @@ public class CpeFactoryImpl implements CpeFactory {
 
 	@Override
 	public CollectionProtocolEvent createCpe(CollectionProtocolEventDetail detail) {
-		ObjectCreationException oce = new ObjectCreationException();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		CollectionProtocolEvent cpe = new CollectionProtocolEvent();
 				
 		cpe.setId(detail.getId());
-		setEventLabel(detail, cpe, oce);
-		setEventPoint(detail, cpe, oce);
-		setCp(detail, cpe, oce);
-		setDefaultSite(detail, cpe, oce);
-		setActivityStatus(detail, cpe, oce);
+		setEventLabel(detail, cpe, ose);
+		setEventPoint(detail, cpe, ose);
+		setCp(detail, cpe, ose);
+		setDefaultSite(detail, cpe, ose);
+		setActivityStatus(detail, cpe, ose);
 		cpe.setClinicalDiagnosis(detail.getClinicalDiagnosis());
 		cpe.setClinicalStatus(detail.getClinicalStatus());
 		
-		oce.checkErrorAndThrow();
+		ose.checkAndThrow();
 		return cpe;
 	}
 	
-	public void setEventLabel(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, ObjectCreationException oce) {
+	public void setEventLabel(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(detail.getEventLabel())) {
-			oce.addError(CpErrorCode.MISSING_EVENT_LABEL, "eventLabel"); // event label
+			ose.addError(CpeErrorCode.LABEL_REQUIRED);
 			return;
 		}
 		
 		cpe.setEventLabel(detail.getEventLabel());
 	}
 	
-	public void setEventPoint(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, ObjectCreationException oce) {
+	public void setEventPoint(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, OpenSpecimenException ose) {
 		Double eventPoint = detail.getEventPoint();
 		if (eventPoint == null) {
 			eventPoint = 0d;
 		}
 		
 		if (eventPoint < 0) {
-			oce.addError(CpErrorCode.INVALID_EVENT_POINT, "eventPoint");
+			ose.addError(CpeErrorCode.INVALID_POINT);
 			return;
 		}
 		
 		cpe.setEventPoint(eventPoint);
 	}
 	
-	public void setCp(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, ObjectCreationException oce) {
+	public void setCp(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, OpenSpecimenException ose) {
 		CollectionProtocol cp = daoFactory.getCollectionProtocolDao()
 				.getCollectionProtocol(detail.getCollectionProtocol());
 		if (cp == null) {
-			oce.addError(CpErrorCode.INVALID_CP_TITLE, "collectionProtocol");
+			ose.addError(CpErrorCode.NOT_FOUND);
 			return;
 		}
 		
 		cpe.setCollectionProtocol(cp);		
 	}
 	
-	public void setDefaultSite(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, ObjectCreationException oce) {
+	public void setDefaultSite(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(detail.getDefaultSite())) {
 			return;
 		}
 		
 		Site site = daoFactory.getSiteDao().getSite(detail.getDefaultSite());
 		if (site == null) {
-			oce.addError(CpErrorCode.INVALID_SITE, "defaultSite");
+			ose.addError(SiteErrorCode.NOT_FOUND);
 			return;
 		}
 		
 		cpe.setDefaultSite(site);
 	}
 	
-	public void setActivityStatus(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, ObjectCreationException oce) {
+	public void setActivityStatus(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, OpenSpecimenException ose) {
 		String activityStatus = detail.getActivityStatus();
 		if (StringUtils.isBlank(activityStatus)) {
 			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();

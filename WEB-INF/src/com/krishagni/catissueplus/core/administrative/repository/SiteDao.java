@@ -16,6 +16,6 @@ public interface SiteDao extends Dao<Site> {
 	
 	public Boolean isUniqueSiteCode(String siteCode);
 
-	public List<Site> getAllSites(int maxResults);
+	public List<Site> getSites(int maxResults);
 
 }

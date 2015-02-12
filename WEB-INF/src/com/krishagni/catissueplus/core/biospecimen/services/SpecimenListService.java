@@ -1,32 +1,28 @@
 package com.krishagni.catissueplus.core.biospecimen.services;
 
-import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenListEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ListSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ListSpecimensUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqListSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenListDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ShareSpecimenListEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSharedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenListEvent;
+import java.util.List;
+
+import com.krishagni.catissueplus.core.biospecimen.events.ShareSpecimenListOp;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensOp;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public interface SpecimenListService {
-	public SpecimenListsEvent getUserSpecimenLists(RequestEvent req);
+	public ResponseEvent<List<SpecimenListSummary>> getUserSpecimenLists(RequestEvent<?> req);
 	
-	public SpecimenListDetailEvent getSpecimenList(ReqSpecimenListDetailEvent req);
+	public ResponseEvent<SpecimenListDetails> getSpecimenList(RequestEvent<Long> req);
 	
-	public SpecimenListCreatedEvent createSpecimenList(CreateSpecimenListEvent req);
+	public ResponseEvent<SpecimenListDetails> createSpecimenList(RequestEvent<SpecimenListDetails> req);
 	
-	public SpecimenListUpdatedEvent updateSpecimenList(UpdateSpecimenListEvent req);
+	public ResponseEvent<SpecimenListDetails> updateSpecimenList(RequestEvent<SpecimenListDetails> req);
 	
-	public ListSpecimensEvent getListSpecimens(ReqListSpecimensEvent req);
+	public ResponseEvent<List<SpecimenDetail>> getListSpecimens(RequestEvent<Long> req);
 	
-	public ListSpecimensUpdatedEvent updateListSpecimens(UpdateListSpecimensEvent req);
+	public ResponseEvent<List<SpecimenDetail>>  updateListSpecimens(RequestEvent<UpdateListSpecimensOp> req);
 	
-	public SpecimenListSharedEvent shareSpecimenList(ShareSpecimenListEvent req);
+	public ResponseEvent<List<UserSummary>> shareSpecimenList(RequestEvent<ShareSpecimenListOp> req);
 }

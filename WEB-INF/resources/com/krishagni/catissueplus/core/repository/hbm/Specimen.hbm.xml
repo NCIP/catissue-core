@@ -40,15 +40,6 @@
 		<property name="concentrationInMicrogramPerMicroliter" type="double"
 			column="CONCENTRATION" />
 
-		<set name="biohazardCollection" table="CATISSUE_SPECIMEN_BIOHZ_REL"
-			sort="unsorted">
-			<key column="SPECIMEN_ID">
-			</key>
-
-			<many-to-many class="com.krishagni.catissueplus.core.administrative.domain.Biohazard"
-				column="BIOHAZARD_ID" />
-
-		</set>
 		<set name="externalIdentifierCollection" table="CATISSUE_EXTERNAL_IDENTIFIER"
 			inverse="false" cascade="all-delete-orphan">
 			<key column="SPECIMEN_ID">

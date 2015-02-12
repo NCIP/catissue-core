@@ -1,15 +1,16 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services;
 
-import com.krishagni.catissueplus.core.biospecimen.events.CollectSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimensCollectedEvent;
+import java.util.List;
+
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public interface SpecimenService {
-	public SpecimenCreatedEvent createSpecimen(CreateSpecimenEvent req);
+	public ResponseEvent<SpecimenDetail> createSpecimen(RequestEvent<SpecimenDetail> req);
 	
-	public SpecimensCollectedEvent collectSpecimens(CollectSpecimensEvent req);
+	public ResponseEvent<List<SpecimenDetail>> collectSpecimens(RequestEvent<List<SpecimenDetail>> req);
 	
 	public boolean doesSpecimenExists(String label);
 }

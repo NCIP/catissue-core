@@ -5,9 +5,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.krishagni.catissueplus.core.administrative.domain.Biohazard;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
-import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
@@ -67,8 +66,6 @@ public class Specimen {
 	private Specimen parentSpecimen;
 
 	private Set<Specimen> childCollection = new HashSet<Specimen>();
-
-	private Set<Biohazard> biohazardCollection = new HashSet<Biohazard>();
 
 	private Set<ExternalIdentifier> externalIdentifierCollection = new HashSet<ExternalIdentifier>();
 
@@ -259,14 +256,6 @@ public class Specimen {
 		this.childCollection = childSpecimenCollection;
 	}
 
-	public Set<Biohazard> getBiohazardCollection() {
-		return biohazardCollection;
-	}
-
-	public void setBiohazardCollection(Set<Biohazard> biohazardCollection) {
-		this.biohazardCollection = biohazardCollection;
-	}
-
 	public Set<ExternalIdentifier> getExternalIdentifierCollection() {
 		return externalIdentifierCollection;
 	}
@@ -309,7 +298,7 @@ public class Specimen {
 	private void checkActiveDependents() {
 		for (Specimen specimen : this.getChildCollection()) {
 			if (specimen.isActive()) {
-				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
+				throw OpenSpecimenException.userError(SpecimenErrorCode.REF_ENTITY_FOUND);
 			}
 		}
 	}

@@ -12,7 +12,7 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 
-	public List<CollectionProtocolSummary> getAllCollectionProtocols(boolean includePi, boolean includeStats);
+	public List<CollectionProtocolSummary> getCollectionProtocols(boolean includePi, boolean includeStats);
 
 	public CollectionProtocol getCollectionProtocol(String title);
 	

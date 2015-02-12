@@ -18,13 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.common.events.EventStatus;
-import com.krishagni.catissueplus.core.de.events.ExecuteQueryEvent;
-import com.krishagni.catissueplus.core.de.events.ExportDataFileEvent;
-import com.krishagni.catissueplus.core.de.events.ExportQueryDataEvent;
-import com.krishagni.catissueplus.core.de.events.QueryDataExportedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryExecutedEvent;
-import com.krishagni.catissueplus.core.de.events.ReqExportDataFileEvent;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.de.events.ExecuteQueryEventOp;
+import com.krishagni.catissueplus.core.de.events.QueryDataExportResult;
+import com.krishagni.catissueplus.core.de.events.QueryExecResult;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
@@ -44,17 +42,15 @@ public class QueryController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
-	public QueryExecutedEvent executeQuery(@RequestBody ExecuteQueryEvent req) {
-		req.setSessionDataBean(getSession());
-		return querySvc.executeQuery(req);
+	public QueryExecResult executeQuery(@RequestBody ExecuteQueryEventOp opDetail) {
+		return response(querySvc.executeQuery(getRequest(opDetail)));
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/export")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public QueryDataExportedEvent exportQueryData(@RequestBody ExportQueryDataEvent req) {
-		req.setSessionDataBean(getSession());
-		return querySvc.exportQueryData(req);
+	public QueryDataExportResult exportQueryData(@RequestBody ExecuteQueryEventOp opDetail) {
+		return response(querySvc.exportQueryData(getRequest(opDetail)));
 	}	
 	
 	@RequestMapping(method = RequestMethod.GET, value="/export")
@@ -63,15 +59,8 @@ public class QueryController {
 			@RequestParam(value="fileId", required=true) String fileId,
 			HttpServletResponse response) {
 		
-		ReqExportDataFileEvent req = new ReqExportDataFileEvent();
-		req.setFileId(fileId);
-		
-		ExportDataFileEvent resp = querySvc.getExportDataFile(req);
-		if (resp.getStatus() != EventStatus.OK) {
-			return;
-		}
-		
-		File file = resp.getFile();
+		File file = response(querySvc.getExportDataFile(getRequest(fileId)));
+
 		response.setContentType("text/csv;");
 		response.setHeader("Content-Disposition", "attachment;filename=QueryResults.csv");
 			
@@ -87,8 +76,16 @@ public class QueryController {
 	}
 	
 	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(
-				Constants.SESSION_DATA);
+		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
+	}
+	
+	private <T> T response(ResponseEvent<T> resp) {
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return new RequestEvent<T>(getSession(), payload);				
 	}
 }
 																																																																																																																																						

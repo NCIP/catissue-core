@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.openspecimen.custom.demo.events.CollectSpecimensEvent;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.openspecimen.custom.demo.events.SpecimenCollectionDetail;
-import com.krishagni.openspecimen.custom.demo.events.SpecimensCollectedEvent;
 import com.krishagni.openspecimen.custom.demo.services.SpecimenCollectionService;
 
 import edu.wustl.catissuecore.util.global.Constants;
@@ -33,16 +33,10 @@ public class SpecimenCollectionController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SpecimenCollectionDetail collectSpecimens(@RequestBody SpecimenCollectionDetail input) {
-		CollectSpecimensEvent req = new CollectSpecimensEvent();
-		req.setCollectionDetail(input);
-		req.setSessionDataBean(getSession());
-		
-		SpecimensCollectedEvent resp = specimenCollectionSvc.collect(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getCollectionDetails();
+		RequestEvent<SpecimenCollectionDetail> req = new RequestEvent<SpecimenCollectionDetail>(getSession(), input);	
+		ResponseEvent<SpecimenCollectionDetail> resp = specimenCollectionSvc.collect(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
 	private SessionDataBean getSession() {

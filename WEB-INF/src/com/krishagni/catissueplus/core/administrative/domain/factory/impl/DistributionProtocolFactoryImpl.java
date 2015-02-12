@@ -1,29 +1,24 @@
 
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
-
 import java.util.Date;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchDetails;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class DistributionProtocolFactoryImpl implements DistributionProtocolFactory {
-
-	private static final String SHORT_TITLE = "short title";
-
-	private static final String PRINCIPLE_INVESTIGATOR = "principle investigator";
-
-	private static final String TITLE = "title";
 
 	private static final String ACTIVITY_STATUS = "activity status";
 
@@ -34,57 +29,20 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 	}
 
 	@Override
-	public DistributionProtocol create(DistributionProtocolDetails details) {
+	public DistributionProtocol create(DistributionProtocolDetail details) {
 		DistributionProtocol distributionProtocol = new DistributionProtocol();
-		ObjectCreationException exceptionHandler = new ObjectCreationException();
-		setTitle(distributionProtocol, details.getTitle(), exceptionHandler);
-		setIbrId(distributionProtocol, details.getIrbId(), exceptionHandler);
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		
+		setTitle(distributionProtocol, details.getTitle(), ose);
+		setIbrId(distributionProtocol, details.getIrbId(), ose);
 		setAnticipatedSpecimenCount(distributionProtocol, details.getAnticipatedSpecimenCount());
-		setPrincipalInvestigator(distributionProtocol, details.getPrincipalInvestigator(), exceptionHandler);
-		setShortTitle(distributionProtocol, details.getShortTitle(), exceptionHandler);
-		setDescriptionURL(distributionProtocol, details.getDescriptionUrl(), exceptionHandler);
+		setPrincipalInvestigator(distributionProtocol, details.getPrincipalInvestigator(), ose);
+		setShortTitle(distributionProtocol, details.getShortTitle(), ose);
+		setDescriptionURL(distributionProtocol, details.getDescriptionUrl(), ose);
 		setStartDate(distributionProtocol, details.getStartDate());
-		setActivityStatus(distributionProtocol, details.getActivityStatus(), exceptionHandler);
-		exceptionHandler.checkErrorAndThrow();
-		return distributionProtocol;
-	}
-
-	@Override
-	public DistributionProtocol patch(DistributionProtocol distributionProtocol, DistributionProtocolPatchDetails details) {
-		ObjectCreationException exceptionHandler = new ObjectCreationException();
-
-		if (details.isDistributionProtocolTitleModified()) {
-			setTitle(distributionProtocol, details.getTitle(), exceptionHandler);
-		}
-
-		if (details.isDistributionProtocolPrincipalInvestigatorModified()) {
-			setPrincipalInvestigator(distributionProtocol, details.getPrincipalInvestigator(), exceptionHandler);
-		}
-
-		if (details.isDistributionProtocolIrbIdModified()) {
-			setIbrId(distributionProtocol, details.getIrbId(), exceptionHandler);
-		}
-
-		if (details.isDistributionProtocolShortTitleModified()) {
-			setShortTitle(distributionProtocol, details.getShortTitle(), exceptionHandler);
-		}
-
-		if (details.isDistributionProtocolDescriptionUrlModified()) {
-			setDescriptionURL(distributionProtocol, details.getDescriptionUrl(), exceptionHandler);
-		}
-
-		if (details.isDistributionProtocolAnticipatedSpecimenCountModified()) {
-			setAnticipatedSpecimenCount(distributionProtocol, details.getAnticipatedSpecimenCount());
-		}
-
-		if (details.isDistributionProtocolStartDateModified()) {
-			setStartDate(distributionProtocol, details.getStartDate());
-		}
-
-		if (details.isDistributionProtocolActivityStatusModified()) {
-			setActivityStatus(distributionProtocol, details.getActivityStatus(), exceptionHandler);
-		}
-		exceptionHandler.checkErrorAndThrow();
+		setActivityStatus(distributionProtocol, details.getActivityStatus(), ose);
+		
+		ose.checkAndThrow();		
 		return distributionProtocol;
 	}
 
@@ -92,28 +50,26 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		distributionProtocol.setStartDate(startDate);
 	}
 
-	private void setDescriptionURL(DistributionProtocol distributionProtocol, String descriptionURL,
-			ObjectCreationException exceptionHandler) {
+	private void setDescriptionURL(DistributionProtocol distributionProtocol, String descriptionURL, OpenSpecimenException ose) {
 		distributionProtocol.setDescriptionUrl(descriptionURL);
 	}
 
-	private void setShortTitle(DistributionProtocol distributionProtocol, String shortTitle,
-			ObjectCreationException exceptionHandler) {
-		if (isBlank(shortTitle)) {
-			exceptionHandler.addError(DistributionProtocolErrorCode.MISSING_ATTR_VALUE, SHORT_TITLE);
+	private void setShortTitle(DistributionProtocol distributionProtocol, String shortTitle, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(shortTitle)) {
+			ose.addError(DistributionProtocolErrorCode.SHORT_TITLE_REQUIRED);
 			return;
 		}
+		
 		distributionProtocol.setShortTitle(shortTitle);
 	}
 
-	private void setPrincipalInvestigator(DistributionProtocol distributionProtocol, UserSummary principalInvestigator,
-			ObjectCreationException exceptionHandler) {
-
+	private void setPrincipalInvestigator(DistributionProtocol distributionProtocol, UserSummary principalInvestigator, OpenSpecimenException ose) {
 		User pi = daoFactory.getUserDao().getUser(principalInvestigator.getId());
 		if (pi == null) {
-			exceptionHandler.addError(DistributionProtocolErrorCode.INVALID_PRINCIPAL_INVESTIGATOR, PRINCIPLE_INVESTIGATOR);
+			ose.addError(DistributionProtocolErrorCode.PI_NOT_FOUND);
 			return;
 		}
+		
 		distributionProtocol.setPrincipalInvestigator(pi);
 	}
 
@@ -122,26 +78,23 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 
 	}
 
-	private void setIbrId(DistributionProtocol distributionProtocol, String irbId,
-			ObjectCreationException exceptionHandler) {
+	private void setIbrId(DistributionProtocol distributionProtocol, String irbId, OpenSpecimenException ose) {
 		distributionProtocol.setIrbId(irbId);
 
 	}
 
-	private void setTitle(DistributionProtocol distributionProtocol, String title,
-			ObjectCreationException exceptionHandler) {
-		if (isBlank(title)) {
-			exceptionHandler.addError(DistributionProtocolErrorCode.MISSING_ATTR_VALUE, TITLE);
+	private void setTitle(DistributionProtocol distributionProtocol, String title,	OpenSpecimenException ose) {
+		if (StringUtils.isBlank(title)) {
+			ose.addError(DistributionProtocolErrorCode.TITLE_REQUIRED);
 			return;
 		}
+		
 		distributionProtocol.setTitle(title);
-
 	}
 
-	private void setActivityStatus(DistributionProtocol distributionProtocol, String activityStatus,
-			ObjectCreationException exceptionHandler) {
+	private void setActivityStatus(DistributionProtocol distributionProtocol, String activityStatus, OpenSpecimenException ose) {
 		if (!CommonValidator.isValidPv(activityStatus, ACTIVITY_STATUS)) {
-			exceptionHandler.addError(DistributionProtocolErrorCode.INVALID_ATTR_VALUE, ACTIVITY_STATUS);
+			ose.addError(ActivityStatusErrorCode.INVALID);
 		}
 		
 		activityStatus = activityStatus == null ? Status.ACTIVITY_STATUS_ACTIVE.getStatus() : activityStatus;

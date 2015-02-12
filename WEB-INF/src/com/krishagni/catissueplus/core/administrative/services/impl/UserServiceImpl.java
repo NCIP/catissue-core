@@ -1,8 +1,6 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,35 +13,19 @@ import com.krishagni.catissueplus.core.administrative.domain.Password;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
-import com.krishagni.catissueplus.core.administrative.events.AllUsersEvent;
-import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.DisableUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
-import com.krishagni.catissueplus.core.administrative.events.GetUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
-import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEvent;
-import com.krishagni.catissueplus.core.administrative.events.PasswordUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.PasswordValidatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.PatchUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqAllUsersEvent;
-import com.krishagni.catissueplus.core.administrative.events.UpdatePasswordEvent;
-import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.UserClosedEvent;
-import com.krishagni.catissueplus.core.administrative.events.UserCreatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.UserDetails;
-import com.krishagni.catissueplus.core.administrative.events.UserDisabledEvent;
-import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.ValidatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
+import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
+import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.email.EmailSender;
-import com.krishagni.catissueplus.core.common.errors.CatissueException;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
-import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
 
 public class UserServiceImpl implements UserService {
 
@@ -54,10 +36,6 @@ public class UserServiceImpl implements UserService {
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	private EmailSender emailSender;
-
-	private final String LOGIN_NAME = "login name";
-
-	private final String EMAIL_ADDRESS = "email address";
 
 	private final String CATISSUE = "catissue";
 
@@ -79,185 +57,168 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@PlusTransactional
-	public AllUsersEvent getAllUsers(ReqAllUsersEvent req) {
-		
-		if (req.getStartAt() < 0 || req.getMaxRecords() <= 0) {
-			String msg = SavedQueryErrorCode.INVALID_PAGINATION_FILTER.message();
-			return AllUsersEvent.badRequest(msg, null);
-		}
-
-		List<UserSummary> users = daoFactory.getUserDao().getAllUsers(
-						req.getStartAt(), req.getMaxRecords(),
-						req.getSortBy(), req.getSearchString());
-		
-		Long count = null;
-		if (req.isCountReq()) {
-			count = daoFactory.getUserDao().getUsersCount(req.getSearchString());
-		}
-
-		return AllUsersEvent.ok(users,count);
+	public ResponseEvent<List<UserSummary>> getAllUsers(RequestEvent<ListUserCriteria> req) {
+		ListUserCriteria crit = req.getPayload();		
+		List<UserSummary> users = daoFactory.getUserDao().getUsers(crit.startAt(), crit.maxResults(), crit.query());		
+		return ResponseEvent.response(users);
 	}
 
 	@Override
 	@PlusTransactional
-	public UserCreatedEvent createUser(CreateUserEvent event) {
+	public ResponseEvent<UserDetail> createUser(RequestEvent<UserDetail> req) {
 		try {
-			User user = userFactory.createUser(event.getUserDetails());
-			ObjectCreationException exceptionHandler = new ObjectCreationException();
-			ensureUniqueLoginNameInDomain(user.getLoginName(), user.getAuthDomain().getName(), exceptionHandler);
-			ensureUniqueEmailAddress(user.getEmailAddress(), exceptionHandler);
-			exceptionHandler.checkErrorAndThrow();
+			UserDetail detail = req.getPayload();
+			User user = userFactory.createUser(detail);
+			
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueLoginNameInDomain(user.getLoginName(), user.getAuthDomain().getName(), ose);
+			ensureUniqueEmailAddress(user.getEmailAddress(), ose);
+			ose.checkAndThrow();
 
+			//user.setPasswordToken(user, detail.getDomainName());
 			daoFactory.getUserDao().saveOrUpdate(user);
 			emailSender.sendUserCreatedEmail(user);
-			return UserCreatedEvent.ok(UserDetails.fromDomain(user));
-		}
-		catch (ObjectCreationException ce) {
-			return UserCreatedEvent.invalidRequest(UserErrorCode.ERRORS.message(), ce.getErroneousFields());
-		}
-		catch (Exception e) {
-			return UserCreatedEvent.serverError(e);
+			return ResponseEvent.response(UserDetail.fromDomain(user));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public UserUpdatedEvent updateUser(UpdateUserEvent event) {
+	public ResponseEvent<UserDetail> updateUser(RequestEvent<UserDetail> req) {
 		try {
-			Long userId = event.getUserDetails().getId();
+			UserDetail detail = req.getPayload();
+			Long userId = detail.getId();
+			
 			User oldUser = daoFactory.getUserDao().getUser(userId);
 			if (oldUser == null) {
-				return UserUpdatedEvent.notFound(userId);
+				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
-			User user = userFactory.createUser(event.getUserDetails());
+			
+			User user = userFactory.createUser(detail);
 
-			ObjectCreationException exceptionHandler = new ObjectCreationException();
-			validateChangeInUniqueEmail(oldUser, user, exceptionHandler);
-			exceptionHandler.checkErrorAndThrow();
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			validateChangeInUniqueEmail(oldUser, user, ose);
+			ose.checkAndThrow();
 
 			oldUser.update(user);
 			daoFactory.getUserDao().saveOrUpdate(oldUser);
-			return UserUpdatedEvent.ok(UserDetails.fromDomain(oldUser));
-		}
-		catch (ObjectCreationException ce) {
-			return UserUpdatedEvent.invalidRequest(UserErrorCode.ERRORS.message(), ce.getErroneousFields());
-		}
-		catch (Exception e) {
-			return UserUpdatedEvent.serverError(e);
+			return ResponseEvent.response(UserDetail.fromDomain(oldUser));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public UserClosedEvent closeUser(CloseUserEvent event) {
+	public ResponseEvent<UserDetail> closeUser(RequestEvent<Long> req) {
 		try {
-			User oldUser = daoFactory.getUserDao().getUser(event.getId());
+			Long userId = req.getPayload();
+			User oldUser = daoFactory.getUserDao().getUser(userId);
 			if (oldUser == null) {
-				return UserClosedEvent.notFound(event.getId());
+				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
+			
 			oldUser.close();
 			daoFactory.getUserDao().saveOrUpdate(oldUser);
-			return UserClosedEvent.ok();
-		}
-		catch (Exception e) {
-			return UserClosedEvent.serverError(e);
+			return ResponseEvent.response(UserDetail.fromDomain(oldUser));
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public UserDisabledEvent deleteUser(DisableUserEvent event) {
+	public ResponseEvent<UserDetail> deleteUser(RequestEvent<Long> req) {
 		try {
-			User user =  null;
-			if(event.getName() != null) {	
-				user =	daoFactory.getUserDao().getUserByLoginNameAndDomainName(event.getName(), CATISSUE);
-				if (user == null) {
-					return UserDisabledEvent.notFound(event.getName());
-				}
-			}else {
-				user =	daoFactory.getUserDao().getUser(event.getId());
+			Long userId = req.getPayload();
+			User user =  daoFactory.getUserDao().getUser(userId);
+			
 			if (user == null) {
-				return UserDisabledEvent.notFound(event.getId());
-			}}
+				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
+			}
+			
 			user.delete();
 			daoFactory.getUserDao().saveOrUpdate(user);
-			return UserDisabledEvent.ok();
-		}
-		catch (Exception e) {
-			return UserDisabledEvent.serverError(e);
+			return ResponseEvent.response(UserDetail.fromDomain(user));
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public PasswordUpdatedEvent changePassword(UpdatePasswordEvent event) {
+	public ResponseEvent<Boolean> changePassword(RequestEvent<PasswordDetails> req) {
 		try {
-			PasswordDetails detail = event.getPasswordDetails();
-			User user = daoFactory.getUserDao().getUserByLoginNameAndDomainName(detail.getLoginName(), CATISSUE);
+			PasswordDetails detail = req.getPayload();
+			User user = daoFactory.getUserDao().getUserByIdAndDomainName(detail.getUserId(), CATISSUE);
 			if (user == null) {
-				return PasswordUpdatedEvent.notFound();
+				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
 			if (!validateOldPassword(user, detail.getOldPassword())) {
-				reportError(UserErrorCode.INVALID_ATTR_VALUE, "old password");
+				return ResponseEvent.userError(UserErrorCode.INVALID_OLD_PASSWD);
 			}
 			
 			setUserPassword(user, detail.getNewPassword());
-			return PasswordUpdatedEvent.ok();
-		}
-		catch (CatissueException ce) {
-			return PasswordUpdatedEvent.invalidRequest(ce.getMessage());
-		}
-		catch (Exception e) {
-			return PasswordUpdatedEvent.serverError(e);
+			daoFactory.getUserDao().saveOrUpdate(user);
+			return ResponseEvent.response(true);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public PasswordUpdatedEvent resetPassword(UpdatePasswordEvent event) {
+	public ResponseEvent<Boolean> resetPassword(RequestEvent<PasswordDetails> req) {
 		try {
 			UserDao dao = daoFactory.getUserDao();
-			PasswordDetails detail = event.getPasswordDetails();
+			PasswordDetails detail = req.getPayload();
 			if (StringUtils.isEmpty(detail.getResetPasswordToken())) {
-				reportError(UserErrorCode.INVALID_ATTR_VALUE, "Reset password token");
+				return ResponseEvent.userError(UserErrorCode.INVALID_PASSWD_TOKEN);
 			}
 			
 			ForgotPasswordToken token = dao.getTokenByToken(detail.getResetPasswordToken());
 			if (token == null) {
-				return PasswordUpdatedEvent.notFound();
+				return ResponseEvent.userError(UserErrorCode.INVALID_PASSWD_TOKEN);
 			}
 			
 			User user = token.getUser();
 			if (!user.getLoginName().equals(detail.getLoginName())) {
-				reportError(UserErrorCode.INVALID_ATTR_VALUE, "Login Name");
+				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
 			if (token.hasExpired()) {
 				dao.deleteForgotPasswordToken(token);
-				return PasswordUpdatedEvent.notFound();
+				return ResponseEvent.userError(UserErrorCode.INVALID_PASSWD_TOKEN);
 			}
 			
 			setUserPassword(user, detail.getNewPassword());
 			dao.deleteForgotPasswordToken(token);
-			return PasswordUpdatedEvent.ok();
-		}
-		catch (CatissueException ce) {
-			return PasswordUpdatedEvent.invalidRequest(ce.getMessage());
-		}
-		catch (Exception e) {
-			return PasswordUpdatedEvent.serverError(e);
+			return ResponseEvent.response(true);
+		}catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public PasswordForgottenEvent forgotPassword(ForgotPasswordEvent event) {
+	public ResponseEvent<Boolean> forgotPassword(RequestEvent<String> req) {
 		try {
 			UserDao dao = daoFactory.getUserDao();
-			User user = dao.getUserByLoginNameAndDomainName(event.getLoginName(), CATISSUE);
+			String loginName = req.getPayload();
+			User user = dao.getUserByLoginNameAndDomainName(loginName, CATISSUE);
 			if (user == null) {
-				return PasswordForgottenEvent.notFound();
+				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
 			ForgotPasswordToken oldToken = dao.getTokenByUser(user.getId());
@@ -268,83 +229,60 @@ public class UserServiceImpl implements UserService {
 			ForgotPasswordToken token = new ForgotPasswordToken(user);
 			dao.saveForgotPasswordToken(token);
 			emailSender.sendForgotPasswordEmail(user, token.getToken());
-			return PasswordForgottenEvent.ok();
-		}
-		catch (Exception e) {
-			return PasswordForgottenEvent.serverError(e);
+			return ResponseEvent.response(true);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 	
 	@Override
 	@PlusTransactional
-	public GetUserEvent getUser(Long userId) {
-		User user = daoFactory.getUserDao().getUser(userId);
-		UserDetails userDetails = UserDetails.fromDomain(user);
-		return GetUserEvent.ok(userDetails);
+	public ResponseEvent<UserDetail> getUser(RequestEvent<Long> req) {
+		User user = daoFactory.getUserDao().getUser(req.getPayload());
+		if (user == null) {
+			ResponseEvent.userError(UserErrorCode.NOT_FOUND);
+		}
+		
+		return ResponseEvent.response(UserDetail.fromDomain(user));
 	}
 
 	@Override
-	public PasswordValidatedEvent validatePassword(ValidatePasswordEvent event) {
-		Boolean isValid = User.isValidPasswordPattern(event.getPassword());
-		return PasswordValidatedEvent.ok(isValid);
+	public ResponseEvent<Boolean> validatePassword(RequestEvent<String> req) {
+		return ResponseEvent.response(User.isValidPasswordPattern(req.getPayload()));
 	}
 
-	@Override
-	@PlusTransactional
-	public UserUpdatedEvent patchUser(PatchUserEvent event) {
-		try {
-			Long userId = event.getUserId();
-			User oldUser = daoFactory.getUserDao().getUser(userId);
-			if (oldUser == null) {
-				return UserUpdatedEvent.notFound(userId);
-			}
-			User user = userFactory.patchUser(oldUser, event.getUserDetails());
-
-			if (event.getUserDetails().isEmailAddressModified()) {
-				ObjectCreationException exceptionHandler = new ObjectCreationException();
-				ensureUniqueEmailAddress(user.getEmailAddress(), exceptionHandler);
-				exceptionHandler.checkErrorAndThrow();
-			}
-
-			daoFactory.getUserDao().saveOrUpdate(user);
-			return UserUpdatedEvent.ok(UserDetails.fromDomain(user));
-		}
-		catch (ObjectCreationException ce) {
-			return UserUpdatedEvent.invalidRequest(UserErrorCode.ERRORS.message(), ce.getErroneousFields());
-		}
-		catch (Exception e) {
-			return UserUpdatedEvent.serverError(e);
-		}
-	}
-
-	private void ensureUniqueEmailAddress(String emailAddress, ObjectCreationException exceptionHandler) {
+	private void ensureUniqueEmailAddress(String emailAddress, OpenSpecimenException ose) {
 		if (!daoFactory.getUserDao().isUniqueEmailAddress(emailAddress)) {
-			exceptionHandler.addError(UserErrorCode.DUPLICATE_EMAIL, EMAIL_ADDRESS);
+			ose.addError(UserErrorCode.DUP_EMAIL);
 		}
 	}
 
 	private void ensureUniqueLoginNameInDomain(String loginName, String domainName,
-			ObjectCreationException exceptionHandler) {
+			OpenSpecimenException ose) {
 		if (!daoFactory.getUserDao().isUniqueLoginNameInDomain(loginName, domainName)) {
-			exceptionHandler.addError(UserErrorCode.DUPLICATE_LOGIN_NAME, LOGIN_NAME);
+			ose.addError(UserErrorCode.DUP_LOGIN_NAME);
 		}
 	}
 
-	private void validateChangeInUniqueEmail(User oldUser, User newUser, ObjectCreationException exceptionHandler) {
+	private void validateChangeInUniqueEmail(User oldUser, User newUser, OpenSpecimenException ose) {
 		if (!oldUser.getEmailAddress().equals(newUser.getEmailAddress())) {
-			ensureUniqueEmailAddress(newUser.getEmailAddress(), exceptionHandler);
+			ensureUniqueEmailAddress(newUser.getEmailAddress(), ose);
 		}
 	}
 	
 	private void setUserPassword(User user, String newPassword) {
-		if (!User.isValidPasswordPattern(newPassword)) {
-			reportError(UserErrorCode.INVALID_ATTR_VALUE, "New Password");
+		if (StringUtils.isBlank(newPassword) || !User.isValidPasswordPattern(newPassword)) {
+			throw OpenSpecimenException.userError(UserErrorCode.PASSWD_VIOLATES_RULES);
 		}
 		
 		user.addPassword(passwordEncoder.encode(newPassword));
 	}
 	
 	public boolean validateOldPassword(User user, String oldPassword) {
+		if (StringUtils.isBlank(oldPassword)) {
+			throw OpenSpecimenException.userError(UserErrorCode.OLD_PASSWD_NOT_SPECIFIED);
+		}
+		
 		List<Password> passwords = new ArrayList<Password>(user.getPasswordCollection());
 		Collections.sort(passwords);
 		
@@ -354,5 +292,4 @@ public class UserServiceImpl implements UserService {
 		
 		return false;
 	}
-
 }

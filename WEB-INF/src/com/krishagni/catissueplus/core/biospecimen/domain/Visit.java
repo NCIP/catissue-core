@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
-import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
@@ -214,7 +214,7 @@ public class Visit {
 	private void checkActiveDependents() {
 		for (Specimen specimen : this.specimens) {
 			if (specimen.isActive()) {
-				throw new CatissueException(ScgErrorCode.ACTIVE_CHILDREN_FOUND);
+				throw OpenSpecimenException.userError(VisitErrorCode.REF_ENTITY_FOUND);
 			}
 		}
 	}

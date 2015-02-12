@@ -69,3 +69,25 @@
 .os-container-map .slot-occupied {
   background: #f5f5f5;
 }
+
+
+/** Scroll bar **/
+.os-container-map-wrapper::-webkit-scrollbar {
+  height:12px;
+  width:12px
+}
+
+.os-container-map-wrapper::-webkit-scrollbar-thumb:vertical,
+.os-container-map-wrapper::-webkit-scrollbar-thumb:horizontal {
+  background: #d0d0d0;
+}
+
+.os-container-map-wrapper::-webkit-scrollbar-track:hover {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+}
+
+.os-container-map-wrapper::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+

@@ -1,9 +1,7 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.krishagni.catissueplus.core.biospecimen.domain.ClinicalDiagnosis;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
