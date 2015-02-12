@@ -41,6 +41,8 @@ public class User extends BaseEntity {
 	private Address address;
 
 	private String comments;
+	
+	private String password;
 
 	private Set<Password> passwordCollection = new HashSet<Password>();
 	
@@ -140,6 +142,14 @@ public class User extends BaseEntity {
 		this.comments = comments;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public Set<Password> getPasswordCollection() {
 		return passwordCollection;
 	}
@@ -179,11 +189,12 @@ public class User extends BaseEntity {
 	}
 
 	public void addPassword(String newPassword) {
+		this.password = newPassword;
+		
 		Password password = new Password();
 		password.setUpdateDate(new Date());
 		password.setUser(this);
 		password.setPassword(newPassword);
-
 		this.passwordCollection.add(password);
 	}
 

@@ -312,4 +312,10 @@
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
 
+  <changeSet author="vlonushte" id="Adding password column to user table">
+    <addColumn tableName="CATISSUE_USER">
+      <column name="password" type="${text.type}(64)"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

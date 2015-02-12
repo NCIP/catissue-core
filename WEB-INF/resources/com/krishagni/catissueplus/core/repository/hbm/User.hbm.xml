@@ -76,7 +76,7 @@
             class="com.krishagni.catissueplus.core.administrative.domain.Department"
             column="DEPARTMENT_ID"/>
 
-		<many-to-one
+        <many-to-one
             name="authDomain"
             class="com.krishagni.catissueplus.core.auth.domain.AuthDomain"
             property-ref="name"
@@ -85,7 +85,7 @@
             insert="true"
             column="DOMAIN_NAME" />
 
-         <set
+        <set
             name="userSites"
             table="CATISSUE_SITE_USERS"
             inverse="false"
@@ -95,9 +95,13 @@
             <many-to-many
                 class="com.krishagni.catissueplus.core.administrative.domain.Site"
                 column="SITE_ID"/>
-         </set>
+        </set>
 	
-		<set
+        <property 
+            name="password" 
+            column="PASSWORD"/>
+	    
+        <set
             name="passwordCollection"
             table="CATISSUE_PASSWORD"
             inverse="true"
@@ -105,10 +109,9 @@
             order-by="identifier desc"
             >
 
-        	<cache usage="read-write"/>
+            <cache usage="read-write"/>
             <key column="USER_ID"/>
             <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.Password" />
-
         </set>
 		
         <property
@@ -143,10 +146,10 @@
 
 	<query name="getUsersById">
 		from com.krishagni.catissueplus.core.administrative.domain.User where id in (:userIds) AND activityStatus != 'Disabled'
-    </query>
+        </query>
 
-    <query name="getAllUsers">
-        from com.krishagni.catissueplus.core.administrative.domain.User where activityStatus != 'Disabled' order by lastName, firstName
-    </query>
+        <query name="getAllUsers">
+		from com.krishagni.catissueplus.core.administrative.domain.User where activityStatus != 'Disabled' order by lastName, firstName
+        </query>
    </class>
 </hibernate-mapping>

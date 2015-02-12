@@ -1,15 +1,12 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
-import com.krishagni.catissueplus.core.administrative.domain.Password;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
@@ -283,13 +280,6 @@ public class UserServiceImpl implements UserService {
 			throw OpenSpecimenException.userError(UserErrorCode.OLD_PASSWD_NOT_SPECIFIED);
 		}
 		
-		List<Password> passwords = new ArrayList<Password>(user.getPasswordCollection());
-		Collections.sort(passwords);
-		
-		if (!passwords.isEmpty()) {
-			return passwordEncoder.matches(oldPassword, passwords.get(passwords.size() - 1).getPassword());
-		}
-		
-		return false;
+		return passwordEncoder.matches(oldPassword, user.getPassword());
 	}
 }
