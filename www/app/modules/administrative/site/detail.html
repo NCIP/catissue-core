@@ -1,5 +1,16 @@
 
 <div>
+  <div os-page-header>
+    <h3>
+      <a ui-sref="site-list" translate="site.list">Sites</a>
+      <span class="fa fa-angle-right"></span>
+      <span>{{site.name}}</span>
+    </h3>
+    <button class="os-round-btn" title="{{'site.tooltip.create_site' | translate}}" ui-sref="site-addedit({siteId: site.id})">
+      <span class="fa fa-pencil"></span>
+    </button>
+  </div>
+
   <div os-side-menu>
     <ul>
       <li ui-sref-active="active">

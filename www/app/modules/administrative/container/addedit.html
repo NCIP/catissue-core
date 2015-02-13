@@ -1,9 +1,11 @@
 
 <div>
-  <div class="os-page-hdr">
-    <h3>
+  <div os-page-header>
+    <h3> 
+      <a ui-sref="container-list" translate="container.list">Storage Containers</a>
+      <span class="fa fa-angle-right"></span>
       <span ng-if="!container.id" translate="container.create_container">Create Container</span>
-      <span ng-if="!!container.id" translate="container.update_container">Update Container</span>
+      <span ng-if="!!container.id">{{container.name}}</span>
     </h3>
   </div>
 

@@ -1,10 +1,11 @@
 <div>
-  <div class="os-page-hdr">
-    <os-breadcrumbs></os-breadcrumbs>
-    <h3 translate="participant.register_participant">Register Participant</h3>
+  <div os-page-header>
+    <h3> 
+      <span translate="participant.register_participant">Register Participant</span>
+    </h3>
   </div>
 
-  <div class="container">
+  <div class="container os-margin-top">
     <form name="pform" class="form-horizontal" os-form-validator="pform" validator="pformValidator" novalidate>
       <div ng-if="matchedResults.matchedAttr == 'none' || !matchedResults.matchedAttr">
         <div class="form-group">
