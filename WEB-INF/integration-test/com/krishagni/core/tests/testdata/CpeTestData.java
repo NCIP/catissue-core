@@ -1,8 +1,5 @@
 package com.krishagni.core.tests.testdata;
 
-import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeListEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.AddCpeEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateCpeEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEventDetail;
 
 public class CpeTestData {
@@ -29,23 +26,5 @@ public class CpeTestData {
 		detail.setClinicalStatus("updated-clinical-status");
 		detail.setActivityStatus("Active");
 		return detail;
-	}
-	
-	public static ReqCpeListEvent getCpeList() {
-		ReqCpeListEvent req = new ReqCpeListEvent();
-		req.setCpId(1L);
-		return req;
-	}
-	
-	public static AddCpeEvent getAddCpeEvent() {
-		AddCpeEvent req = new AddCpeEvent();
-		req.setCpe(getcpEventDetail());
-		return req;
-	}
-	
-	public static UpdateCpeEvent getUpdateCpeEvent() {
-		UpdateCpeEvent req = new UpdateCpeEvent();
-		req.setCpe(getCpeUpdateDetail());
-		return req;
 	}
 }

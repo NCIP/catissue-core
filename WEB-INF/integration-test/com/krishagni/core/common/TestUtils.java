@@ -2,43 +2,58 @@ package com.krishagni.core.common;
 
 import org.junit.Assert;
 
-import com.google.gson.Gson;
-import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class TestUtils {
 
 	public static void recordResponse(ResponseEvent response) {
-		System.out.println("Operation-Status: " +  response.getStatus());
-		System.out.println("Operation-Message: " + response.getMessage());
-		if (response.getErroneousFields() != null) {
-			for (ErroneousField error: response.getErroneousFields()) {
+		System.out.println("Operation-successful?: " +  response.isSuccessful());
+		
+		if (response.getError() != null) {
+			System.out.println("Errortype: " + response.getError().getErrorType());
+			
+			for (ErrorCode error: response.getError().getErrors()) {
 				System.out.println("----------------------------ERROR----------------------------");
-				System.out.println("Error-Code: " + error.getErrorCode());
-				System.out.println("Error-Message: " + error.getErrorMessage());
-				System.out.println("Errored-Field: " + error.getFieldName());
+				System.out.println("Error-Code: " + error.code());
 			}
 		}
 	}
 	
-	public static boolean isErrorCodePresent(ResponseEvent event, CatissueErrorCode errorCode, String field) {
-		Assert.assertNotNull("Error fields not expected to be null!", event.getErroneousFields());
+	public static boolean isErrorCodePresent(ResponseEvent event, ErrorCode error, ErrorType errorType) {
+		if (event.isSuccessful()) {
+			return false;
+		}
 		
-		for (ErroneousField ef: event.getErroneousFields()) {
-			if (ef.getErrorMessage().equals(errorCode.message())
-					&& ef.getErrorCode() == errorCode.code()) {
-				
-				if (field != null) {
-					if (ef.getFieldName().equals(field)) {
-						return true;
-					} 
-				} else {
-					return true;	
-				}
+		if (!event.getError().getErrorType().equals(errorType)) {
+			System.out.println("Error type mismatch: expected: " + errorType + " actual: " + event.getError().getErrorType());
+			return false;
+		}
+		
+		for (ErrorCode e : event.getError().getErrors()) {
+			if (e.code().equals(error.code())) {
+				return true;
 			}
 		}
 		return false;
+	}
+	
+	public static void checkErrorCode(ResponseEvent resp, ErrorCode code, ErrorType type) {
+		if(isErrorCodePresent(resp, code, type) == false) {
+			String msg = "Is successful: [" + resp.isSuccessful() + "] "; 
+			
+			if (resp.getError() != null) {
+				msg += " Errortype: [" + resp.getError().getErrorType() + "] " ;
+				
+				if (resp.getError().getErrors() != null) {
+					for (ErrorCode e : resp.getError().getErrors()) {
+						msg += " Found Error: [" + e.code() + "] "; 
+					}
+				}
+			}
+			Assert.fail("The errorcode was not found in response: [" + code.code() + "] type: [" + type + "] Actual Response: " + msg);
+		}
 	}
 }

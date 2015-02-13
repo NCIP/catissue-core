@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 
 import junit.framework.Assert;
 
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,25 +25,21 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ListCpCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
+import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.core.common.ApplicationContextConfigurer;
 import com.krishagni.core.common.TestUtils;
 import com.krishagni.core.common.WebContextLoader;
+import com.krishagni.core.tests.testdata.CommonUtils;
 import com.krishagni.core.tests.testdata.CpTestData;
 import com.krishagni.core.tests.testdata.CprTestData;
 
@@ -65,6 +60,10 @@ public class CollectionProtocolTest {
 	@Autowired
 	private ApplicationContext ctx;
 	
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return CommonUtils.getRequest(payload);
+	}
+	
 	/*
 	 * Get All CP's tests
 	 */
@@ -72,8 +71,12 @@ public class CollectionProtocolTest {
 	@DatabaseSetup("cp-test/get-all-cps-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getAllCps() {
-		AllCollectionProtocolsEvent resp = cpSvc.getAllProtocols(CpTestData.getReqAllCollectionProtocolsEvent());
-		List<CollectionProtocolSummary> cpList = resp.getCpList();
+		ListCpCriteria input = new ListCpCriteria();
+		input.includePi(true);
+		input.includeStat(true);
+		
+		ResponseEvent<List<CollectionProtocolSummary>> resp = cpSvc.getProtocols(getRequest(input));
+		List<CollectionProtocolSummary> cpList = resp.getPayload();
 		
 		Assert.assertEquals(new Integer(2), new Integer(cpList.size()));
 		
@@ -83,7 +86,7 @@ public class CollectionProtocolTest {
 			
 			Assert.assertEquals(title, summary.getTitle());
 			Assert.assertEquals(shortTitle, summary.getShortTitle());
-			Assert.assertEquals(CprTestData.getDate(31, 10, 2000), summary.getStartDate());
+			Assert.assertEquals(CommonUtils.getDate(31, 10, 2000), summary.getStartDate());
 			
 			UserSummary pi = summary.getPrincipalInvestigator();
 			Assert.assertNotNull(pi);
@@ -106,12 +109,12 @@ public class CollectionProtocolTest {
 	@DatabaseSetup("cp-test/get-all-cps-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getAllCpsWithoutStatsAndPi() {
-		ReqAllCollectionProtocolsEvent req = CpTestData.getReqAllCollectionProtocolsEvent();
-		req.setIncludePi(false);
-		req.setIncludeStats(false);
+		ListCpCriteria input = new ListCpCriteria();
+		input.includePi(false);
+		input.includeStat(false);
 		
-		AllCollectionProtocolsEvent resp = cpSvc.getAllProtocols(req);
-		List<CollectionProtocolSummary> cpList = resp.getCpList();
+		ResponseEvent<List<CollectionProtocolSummary>> resp = cpSvc.getProtocols(getRequest(input));
+		List<CollectionProtocolSummary> cpList = resp.getPayload();
 		
 		Assert.assertEquals(new Integer(2), new Integer(cpList.size()));
 		
@@ -121,7 +124,7 @@ public class CollectionProtocolTest {
 			
 			Assert.assertEquals(title, summary.getTitle());
 			Assert.assertEquals(shortTitle, summary.getShortTitle());
-			Assert.assertEquals(CprTestData.getDate(31, 10, 2000), summary.getStartDate());
+			Assert.assertEquals(CommonUtils.getDate(31, 10, 2000), summary.getStartDate());
 			
 			System.out.println("Participant Count; " + summary.getParticipantCount() + " Specimen Count: " + summary.getSpecimenCount());
 			
@@ -135,11 +138,12 @@ public class CollectionProtocolTest {
 	@DatabaseSetup("cp-test/get-all-cps-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getAllCpsWithoutStats() {
-		ReqAllCollectionProtocolsEvent req = CpTestData.getReqAllCollectionProtocolsEvent();
-		req.setIncludeStats(false);
+		ListCpCriteria input = new ListCpCriteria();
+		input.includePi(true);
+		input.includeStat(false);
 		
-		AllCollectionProtocolsEvent resp = cpSvc.getAllProtocols(req);
-		List<CollectionProtocolSummary> cpList = resp.getCpList();
+		ResponseEvent<List<CollectionProtocolSummary>> resp = cpSvc.getProtocols(getRequest(input));
+		List<CollectionProtocolSummary> cpList = resp.getPayload();
 		
 		Assert.assertEquals(new Integer(2), new Integer(cpList.size()));
 		
@@ -149,7 +153,7 @@ public class CollectionProtocolTest {
 			
 			Assert.assertEquals(title, summary.getTitle());
 			Assert.assertEquals(shortTitle, summary.getShortTitle());
-			Assert.assertEquals(CprTestData.getDate(31, 10, 2000), summary.getStartDate());
+			Assert.assertEquals(CommonUtils.getDate(31, 10, 2000), summary.getStartDate());
 			
 			UserSummary pi = summary.getPrincipalInvestigator();
 			Assert.assertNotNull(pi);
@@ -167,11 +171,12 @@ public class CollectionProtocolTest {
 	@DatabaseSetup("cp-test/get-all-cps-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getAllCpsWithoutPi() {
-		ReqAllCollectionProtocolsEvent req = CpTestData.getReqAllCollectionProtocolsEvent();
-		req.setIncludePi(false);
+		ListCpCriteria input = new ListCpCriteria();
+		input.includePi(false);
+		input.includeStat(true);
 		
-		AllCollectionProtocolsEvent resp = cpSvc.getAllProtocols(req);
-		List<CollectionProtocolSummary> cpList = resp.getCpList();
+		ResponseEvent<List<CollectionProtocolSummary>> resp = cpSvc.getProtocols(getRequest(input));
+		List<CollectionProtocolSummary> cpList = resp.getPayload();
 		
 		Assert.assertEquals(new Integer(2), new Integer(cpList.size()));
 		
@@ -181,7 +186,7 @@ public class CollectionProtocolTest {
 			
 			Assert.assertEquals(title, summary.getTitle());
 			Assert.assertEquals(shortTitle, summary.getShortTitle());
-			Assert.assertEquals(CprTestData.getDate(31, 10, 2000), summary.getStartDate());
+			Assert.assertEquals(CommonUtils.getDate(31, 10, 2000), summary.getStartDate());
 			Assert.assertNull(summary.getPrincipalInvestigator());
 			
 			if (summary.getId().equals(new Long(1))) {
@@ -201,12 +206,18 @@ public class CollectionProtocolTest {
 	@DatabaseSetup("cp-test/get-registered-participants-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getRegisteredParticipants() {
-		ReqRegisteredParticipantsEvent req = CpTestData.getReqRegisteredParticipantsEvent();
-		RegisteredParticipantsEvent resp = cpSvc.getRegisteredParticipants(req);
+		CprListCriteria input = new CprListCriteria();
+		input.cpId(1L);
+		input.includeStat(true);
+		input.startAt(0);
+		input.maxResults(100);
+		input.includePhi(true);
 		
-		List<CprSummary> registeredParticipants = resp.getParticipants();
+		ResponseEvent<List<CprSummary>> resp = cpSvc.getRegisteredParticipants(getRequest(input));
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		List<CprSummary> registeredParticipants = resp.getPayload();
+		
+		Assert.assertEquals(true, resp.isSuccessful());
 		Assert.assertEquals(new Integer(3), new Integer(registeredParticipants.size()));
 		
 		for (CprSummary summary : registeredParticipants) {
@@ -219,7 +230,7 @@ public class CollectionProtocolTest {
 			Assert.assertEquals(firstName, participant.getFirstName());
 			Assert.assertEquals(lastName, participant.getLastName());
 			
-			Assert.assertEquals(CprTestData.getDate(31,1,2001), summary.getRegistrationDate());
+			Assert.assertEquals(CommonUtils.getDate(31,1,2001), summary.getRegistrationDate());
 			Assert.assertEquals(new String("ppid-" + summary.getCprId()), summary.getPpid());
 			
 			if (summary.getCprId().equals(new Long(1))) {
@@ -241,13 +252,18 @@ public class CollectionProtocolTest {
 	@DatabaseSetup("cp-test/get-registered-participants-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getRegisteredParticipantsWithoutStats() {
-		ReqRegisteredParticipantsEvent req = CpTestData.getReqRegisteredParticipantsEvent();
-		req.setIncludeStats(false);
-		RegisteredParticipantsEvent resp = cpSvc.getRegisteredParticipants(req);
+		CprListCriteria input = new CprListCriteria();
+		input.cpId(1L);
+		input.includeStat(false);
+		input.startAt(0);
+		input.maxResults(100);
+		input.includePhi(true);
 		
-		List<CprSummary> registeredParticipants = resp.getParticipants();
+		ResponseEvent<List<CprSummary>> resp = cpSvc.getRegisteredParticipants(getRequest(input));
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		List<CprSummary> registeredParticipants = resp.getPayload();
+		
+		Assert.assertEquals(true, resp.isSuccessful());
 		Assert.assertEquals(new Integer(3), new Integer(registeredParticipants.size()));
 		
 		for (CprSummary summary : registeredParticipants) {
@@ -260,7 +276,7 @@ public class CollectionProtocolTest {
 			Assert.assertEquals(firstName, participant.getFirstName());
 			Assert.assertEquals(lastName, participant.getLastName());
 			
-			Assert.assertEquals(CprTestData.getDate(31,1,2001), summary.getRegistrationDate());
+			Assert.assertEquals(CommonUtils.getDate(31,1,2001), summary.getRegistrationDate());
 			Assert.assertEquals(new String("ppid-" + summary.getCprId()), summary.getPpid());
 			
 			Assert.assertNull("Specimen Count was supposed to be null!", summary.getSpecimenCount());
@@ -272,14 +288,20 @@ public class CollectionProtocolTest {
 	@DatabaseSetup("cp-test/get-registered-participants-given-search-string-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getRegisteredParticipantsGivenSearchString() {
-		ReqRegisteredParticipantsEvent req = CpTestData.getReqRegisteredParticipantsEvent();
 		String pattern = "default-pattern";
-		req.setSearchString(pattern);
-		RegisteredParticipantsEvent resp = cpSvc.getRegisteredParticipants(req);
+		CprListCriteria input = new CprListCriteria();
+		input.cpId(1L);
+		input.includeStat(true);
+		input.startAt(0);
+		input.maxResults(100);
+		input.includePhi(true);
+		input.query(pattern);
 		
-		List<CprSummary> registeredParticipants = resp.getParticipants();
+		ResponseEvent<List<CprSummary>> resp = cpSvc.getRegisteredParticipants(getRequest(input));
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		List<CprSummary> registeredParticipants = resp.getPayload();
+		
+		Assert.assertEquals(true, resp.isSuccessful());
 		Assert.assertEquals(new Integer(3), new Integer(registeredParticipants.size()));
 		
 		for (CprSummary summary : registeredParticipants) {
@@ -290,7 +312,7 @@ public class CollectionProtocolTest {
 			String firstName = "first_name_" + pid + "_pad";
 			String lastName = "last_name_" + pid + "_pad";
 			String expectedPpid = new String("ppid-" + summary.getCprId()); 
-			Assert.assertEquals(CprTestData.getDate(31,1,2001), summary.getRegistrationDate());
+			Assert.assertEquals(CommonUtils.getDate(31,1,2001), summary.getRegistrationDate());
 			
 			if (summary.getCprId().equals(new Long(1))) {
 				
@@ -328,15 +350,20 @@ public class CollectionProtocolTest {
 	@DatabaseSetup("cp-test/get-registered-participants-given-search-string-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getRegisteredParticipantsGivenSearchStringWithoutStat() {
-		ReqRegisteredParticipantsEvent req = CpTestData.getReqRegisteredParticipantsEvent();
 		String pattern = "default-pattern";
-		req.setSearchString(pattern);
-		req.setIncludeStats(false);
-		RegisteredParticipantsEvent resp = cpSvc.getRegisteredParticipants(req);
+		CprListCriteria input = new CprListCriteria();
+		input.cpId(1L);
+		input.includeStat(false);
+		input.startAt(0);
+		input.maxResults(100);
+		input.includePhi(true);
+		input.query(pattern);
 		
-		List<CprSummary> registeredParticipants = resp.getParticipants();
+		ResponseEvent<List<CprSummary>> resp = cpSvc.getRegisteredParticipants(getRequest(input));
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		List<CprSummary> registeredParticipants = resp.getPayload();
+		
+		Assert.assertEquals(true, resp.isSuccessful());
 		Assert.assertEquals(new Integer(3), new Integer(registeredParticipants.size()));
 		
 		for (CprSummary summary : registeredParticipants) {
@@ -347,7 +374,7 @@ public class CollectionProtocolTest {
 			String firstName = "first_name_" + pid + "_pad";
 			String lastName = "last_name_" + pid + "_pad";
 			String expectedPpid = new String("ppid-" + summary.getCprId()); 
-			Assert.assertEquals(CprTestData.getDate(31,1,2001), summary.getRegistrationDate());
+			Assert.assertEquals(CommonUtils.getDate(31,1,2001), summary.getRegistrationDate());
 			
 			Assert.assertNull(summary.getSpecimenCount());
 			Assert.assertNull(summary.getScgCount());
@@ -380,22 +407,34 @@ public class CollectionProtocolTest {
 	
 	@Test
 	public void getRegisteredParticipantForANonExistingCp() {
-		ReqRegisteredParticipantsEvent req = CpTestData.getReqRegisteredParticipantsEvent();
-		RegisteredParticipantsEvent resp = cpSvc.getRegisteredParticipants(req);
+		CprListCriteria input = new CprListCriteria();
+		input.cpId(1L);
+		input.includeStat(true);
+		input.startAt(0);
+		input.maxResults(100);
+		input.includePhi(true);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals(new Integer(0), new Integer(resp.getParticipants().size()));
+		ResponseEvent<List<CprSummary>> resp = cpSvc.getRegisteredParticipants(getRequest(input));
+		
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertEquals(new Integer(0), new Integer(resp.getPayload().size()));
 	}
 	
 	@Test
 	@DatabaseSetup("cp-test/get-registered-participants-for-disabled-cp-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getRegisteredParticipantsForDisabledCp() {
-		ReqRegisteredParticipantsEvent req = CpTestData.getReqRegisteredParticipantsEvent();
-		RegisteredParticipantsEvent resp = cpSvc.getRegisteredParticipants(req);
+		CprListCriteria input = new CprListCriteria();
+		input.cpId(1L);
+		input.includeStat(true);
+		input.startAt(0);
+		input.maxResults(100);
+		input.includePhi(true);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals(new Integer(0), new Integer(resp.getParticipants().size()));
+		ResponseEvent<List<CprSummary>> resp = cpSvc.getRegisteredParticipants(getRequest(input));
+		
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertEquals(new Integer(0), new Integer(resp.getPayload().size()));
 	}
 	
 	/*
@@ -405,18 +444,15 @@ public class CollectionProtocolTest {
 	@DatabaseSetup("cp-test/get-cp-test-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getCollectionProtocolTest() {
-		ReqCollectionProtocolEvent req = CpTestData.getReqCollectionProtocolEvent();
-		CollectionProtocolDetailEvent resp = cpSvc.getCollectionProtocol(req);
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.getCollectionProtocol(getRequest(1L));
 		
-		Assert.assertEquals(true, resp.isSuccess());
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		CollectionProtocolDetail actual = resp.getCp();
-		
+		Assert.assertEquals(true, resp.isSuccessful());
+		CollectionProtocolDetail actual = resp.getPayload();
 		Assert.assertNotNull(actual);
-		Assert.assertEquals(new Long(1), resp.getCp().getId());
+		Assert.assertEquals(new Long(1), resp.getPayload().getId());
 		Assert.assertEquals("Cp title mismatch", "title", actual.getTitle());
 		Assert.assertEquals("Cp short title mismatch", "short-title", actual.getShortTitle());
-		Assert.assertEquals("Start date mismatch", CprTestData.getDate(31,1,2000), actual.getStartDate());
+		Assert.assertEquals("Start date mismatch", CommonUtils.getDate(31,1,2000), actual.getStartDate());
 		Assert.assertEquals("Consent waived mismatch!", new Boolean(true), actual.getConsentsWaived());
 		Assert.assertEquals("Ppid format mismatch", "ppid-fmt", actual.getPpidFmt());
 		Assert.assertEquals("Specimen label format mismatch", "specimen-label-format", actual.getSpecimenLabelFmt());
@@ -447,21 +483,17 @@ public class CollectionProtocolTest {
 	
 	@Test
 	public void getCollectionProtocolThatDoesntExists() {
-		ReqCollectionProtocolEvent req = CpTestData.getReqCollectionProtocolEvent();
-		CollectionProtocolDetailEvent resp = cpSvc.getCollectionProtocol(req);
-		
-		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.getCollectionProtocol(getRequest(1L));
+		TestUtils.checkErrorCode(resp, CpErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("cp-test/get-disabled-cp-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getDisabledCp() {
-		ReqCollectionProtocolEvent req = CpTestData.getReqCollectionProtocolEvent();
-		CollectionProtocolDetailEvent resp = cpSvc.getCollectionProtocol(req);
-		
-		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
-		Assert.assertEquals(req.getCpId(), resp.getCpId());
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.getCollectionProtocol(getRequest(1L));
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CpErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	
 	/*
@@ -473,14 +505,14 @@ public class CollectionProtocolTest {
 	@ExpectedDatabase(value="cp-test/registration-test/create-cp-test-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void createCpTest() {
-		CreateCollectionProtocolEvent req = CpTestData.getCreateCollectionProtocolEvent();
-		CollectionProtocolCreatedEvent resp = cpSvc.createCollectionProtocol(req);
+		CollectionProtocolDetail input = CpTestData.getCp();
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.createCollectionProtocol(getRequest(input));
 		
-		CollectionProtocolDetail expected = req.getCp();
-		CollectionProtocolDetail actual = resp.getCp();
+		CollectionProtocolDetail expected = input;
+		CollectionProtocolDetail actual = resp.getPayload();
 		
 		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		Assert.assertEquals(true, resp.isSuccessful());
 		AssertCpDetail(expected, actual);
 	}
 	
@@ -490,15 +522,15 @@ public class CollectionProtocolTest {
 	@ExpectedDatabase(value="cp-test/registration-test/create-cp-test-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void createCpWithEmptyActivityStatus() {
-		CreateCollectionProtocolEvent req = CpTestData.getCreateCollectionProtocolEvent();
-		req.getCp().setActivityStatus("");
-		CollectionProtocolCreatedEvent resp = cpSvc.createCollectionProtocol(req);
+		CollectionProtocolDetail input = CpTestData.getCp();
+		input.setActivityStatus("");
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.createCollectionProtocol(getRequest(input));
 		
-		CollectionProtocolDetail expected = req.getCp();
-		CollectionProtocolDetail actual = resp.getCp();
+		CollectionProtocolDetail expected = input;
+		CollectionProtocolDetail actual = resp.getPayload();
 		
 		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
+		Assert.assertEquals(true, resp.isSuccessful());
 		AssertCpDetail(expected, actual);
 	}
 	
@@ -508,7 +540,7 @@ public class CollectionProtocolTest {
 		Assert.assertNotNull(actual.getId());
 		Assert.assertEquals(expected.getTitle(), actual.getTitle());
 		Assert.assertEquals(expected.getShortTitle(), actual.getShortTitle());
-		Assert.assertEquals(CprTestData.getDate(31,1,2000), actual.getStartDate());
+		Assert.assertEquals(CommonUtils.getDate(31,1,2000), actual.getStartDate());
 		Assert.assertEquals(expected.getStartDate(), actual.getStartDate());
 		Assert.assertEquals(expected.getConsentsWaived(), actual.getConsentsWaived());
 		Assert.assertEquals(expected.getPpidFmt(), actual.getPpidFmt());
@@ -542,48 +574,49 @@ public class CollectionProtocolTest {
 	@DatabaseSetup("cp-test/create-cp-test-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void createCpTestWithInvalidPIAndCoordinators() {
-		CreateCollectionProtocolEvent req = CpTestData.getCreateCollectionProtocolEvent();
-		req.getCp().getPrincipalInvestigator().setId(-1L);
-		req.getCp().getCoordinators().add(CpTestData.getUser(-1L, "", "", ""));
-		req.getCp().setTitle("");
-		req.getCp().setShortTitle(null);
-		req.getCp().setConsentsWaived(null);
+		CollectionProtocolDetail input = CpTestData.getCp();
+		input.getPrincipalInvestigator().setId(-1L);
+		input.getCoordinators().add(CpTestData.getUser(-1L, "", "", ""));
+		input.setTitle("");
+		input.setShortTitle(null);
+		input.setConsentsWaived(null);
 		
-		CollectionProtocolCreatedEvent resp = cpSvc.createCollectionProtocol(req);
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.createCollectionProtocol(getRequest(input));
 		
 		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, CpErrorCode.INVALID_PI, "principalInvestigator"));
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, CpErrorCode.INVALID_COORDINATORS, "coordinators"));
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, CpErrorCode.MISSING_TITLE, "title"));
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, CpErrorCode.MISSING_SHORT_TITLE, "shortTitle"));
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, CpErrorCode.MISSING_CONSENTS_WAIVED, "consentsWaived"));
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CpErrorCode.PI_NOT_FOUND, ErrorType.USER_ERROR);
+		TestUtils.checkErrorCode(resp, CpErrorCode.INVALID_COORDINATORS, ErrorType.USER_ERROR);
+		TestUtils.checkErrorCode(resp, CpErrorCode.TITLE_REQUIRED, ErrorType.USER_ERROR);
+		TestUtils.checkErrorCode(resp, CpErrorCode.SHORT_TITLE_REQUIRED, ErrorType.USER_ERROR);
+		TestUtils.checkErrorCode(resp, CpErrorCode.CONSENTS_WAIVED_REQUIRED, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("cp-test/create-cp-test-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void createCpTestWithOutPi() {
-		CreateCollectionProtocolEvent req = CpTestData.getCreateCollectionProtocolEvent();
-		req.getCp().setPrincipalInvestigator(null);
-		CollectionProtocolCreatedEvent resp = cpSvc.createCollectionProtocol(req);
+		CollectionProtocolDetail input = CpTestData.getCp();
+		input.setPrincipalInvestigator(null);
+
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.createCollectionProtocol(getRequest(input));
 		
 		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, CpErrorCode.MISSING_PI, "principalInvestigator"));
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CpErrorCode.PI_REQUIRED, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("cp-test/create-cp-test-with-duplicate-title-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void createCpTestWithDuplicateTitle() {
-		CreateCollectionProtocolEvent req = CpTestData.getCreateCollectionProtocolEvent();
-		req.getCp().setTitle("duplicate-title");
+		CollectionProtocolDetail input = CpTestData.getCp();
+		input.setTitle("duplicate-title");
 		
-		CollectionProtocolCreatedEvent resp = cpSvc.createCollectionProtocol(req);
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.createCollectionProtocol(getRequest(input));
 		
 		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, CpErrorCode.TITLE_NOT_UNIQUE, "title"));
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CpErrorCode.DUP_TITLE, ErrorType.USER_ERROR);
 	}
 }
