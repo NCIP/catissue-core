@@ -1,5 +1,7 @@
 package com.krishagni.core.tests;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.junit.Assert;
@@ -21,15 +23,18 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpRespEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentTiersEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.core.common.ApplicationContextConfigurer;
+import com.krishagni.core.common.TestUtils;
 import com.krishagni.core.common.WebContextLoader;
+import com.krishagni.core.tests.testdata.CommonUtils;
 import com.krishagni.core.tests.testdata.ConsentsTestData;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -51,6 +56,10 @@ public class ConsentsTest {
 	private ApplicationContext ctx;
 	
 
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return CommonUtils.getRequest(payload);
+	}
+	
 	/*
 	 * Update Consents API Tests
 	 */
@@ -60,13 +69,13 @@ public class ConsentsTest {
 	@ExpectedDatabase(value="consents-test/add-consents-test-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void addConsentsTest() {
-		ConsentTierOpEvent req = ConsentsTestData.getConsentTierOpEvent();
-		ConsentTierOpRespEvent resp = cpSvc.updateConsentTier(req);
+		ConsentTierOp input = ConsentsTestData.getConsentTierOp();
+		ResponseEvent<ConsentTierDetail> resp = cpSvc.updateConsentTier(getRequest(input));
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertNotNull("Consentier was not expected to be null!", req.getConsentTier());
-		Assert.assertEquals(req.getConsentTier().getStatement(), resp.getConsentTier().getStatement());
-		Assert.assertNotNull("Consentier id was not expected to be null" , resp.getConsentTier().getId());
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull("Consentier was not expected to be null!", resp.getPayload());
+		Assert.assertEquals(input.getConsentTier().getStatement(), resp.getPayload().getStatement());
+		Assert.assertNotNull("Consentier id was not expected to be null" , resp.getPayload().getId());
 	}
 	
 	@Test
@@ -75,16 +84,16 @@ public class ConsentsTest {
 	@ExpectedDatabase(value="consents-test/update-consents-test-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void updateConsentsTest() {
-		ConsentTierOpEvent req = ConsentsTestData.getConsentTierOpEvent();
-		req.setOp(ConsentTierOpEvent.OP.UPDATE);
-		req.getConsentTier().setId(2L);
-		req.getConsentTier().setStatement("updated-consent");
+		ConsentTierOp input = ConsentsTestData.getConsentTierOp();
+		input.setOp(OP.UPDATE);
+		input.getConsentTier().setId(2L);
+		input.getConsentTier().setStatement("updated-consent");
 		
-		ConsentTierOpRespEvent resp = cpSvc.updateConsentTier(req);
+		ResponseEvent<ConsentTierDetail> resp = cpSvc.updateConsentTier(getRequest(input));
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertNotNull("Consentier was not expected to be null!", req.getConsentTier());
-		Assert.assertEquals(req.getConsentTier().getStatement(), resp.getConsentTier().getStatement());		
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull("Consentier was not expected to be null!", resp.getPayload());
+		Assert.assertEquals(input.getConsentTier().getStatement(), resp.getPayload().getStatement());		
 	}
 	
 	@Test
@@ -93,70 +102,70 @@ public class ConsentsTest {
 	@ExpectedDatabase(value="consents-test/delete-consents-test-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void deleteConsentsTest() {
-		ConsentTierOpEvent req = ConsentsTestData.getConsentTierOpEvent();
-		req.setOp(ConsentTierOpEvent.OP.REMOVE);
-		req.getConsentTier().setId(2L);
+		ConsentTierOp input = ConsentsTestData.getConsentTierOp();
+		input.setOp(OP.REMOVE);
+		input.getConsentTier().setId(2L);
 		
-		ConsentTierOpRespEvent resp = cpSvc.updateConsentTier(req);
+		ResponseEvent<ConsentTierDetail> resp = cpSvc.updateConsentTier(getRequest(input));
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertNotNull("Consentier was not expected to be null!", req.getConsentTier());		
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull("Consentier was not expected to be null!", resp.getPayload());		
 	}
 	
 	@Test
 	@DatabaseSetup("consents-test/add-consents-test-initial.xml")
 	@DatabaseTearDown("consents-test/generic-teardown.xml")
 	public void addConsentWithInvalidCpid() {
-		ConsentTierOpEvent req = ConsentsTestData.getConsentTierOpEvent();
-		req.setCpId(-1L);
-		ConsentTierOpRespEvent resp = cpSvc.updateConsentTier(req);
+		ConsentTierOp input = ConsentsTestData.getConsentTierOp();
+		input.setCpId(-1L);
 		
-		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
-		Assert.assertEquals(req.getCpId(), resp.getCpId());
+		ResponseEvent<ConsentTierDetail> resp = cpSvc.updateConsentTier(getRequest(input));
+		
+		TestUtils.checkErrorCode(resp, CpErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("consents-test/add-consents-test-initial.xml")
 	@DatabaseTearDown("consents-test/generic-teardown.xml")
 	public void updateConsentsWithInvalidConsentId() {
-		ConsentTierOpEvent req = ConsentsTestData.getConsentTierOpEvent();
-		req.setOp(ConsentTierOpEvent.OP.UPDATE);
-		req.getConsentTier().setId(-1L);
-		req.getConsentTier().setStatement("updated-consent");
+		ConsentTierOp input = ConsentsTestData.getConsentTierOp();
+		input.setOp(OP.UPDATE);
+		input.getConsentTier().setId(-1L);
+		input.getConsentTier().setStatement("updated-consent");
 		
-		ConsentTierOpRespEvent resp = cpSvc.updateConsentTier(req);
+		ResponseEvent<ConsentTierDetail> resp = cpSvc.updateConsentTier(getRequest(input));
 		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals("Non existing consent tier for update operation", resp.getException().getMessage());		
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CpErrorCode.CONSENT_TIER_NOT_FOUND, ErrorType.USER_ERROR);		
 	}
-	
+
 	@Test
 	@DatabaseSetup("consents-test/add-consents-test-initial.xml")
 	@DatabaseTearDown("consents-test/generic-teardown.xml")
 	public void updateConsentsWithNullConsentId() {
-		ConsentTierOpEvent req = ConsentsTestData.getConsentTierOpEvent();
-		req.setOp(ConsentTierOpEvent.OP.UPDATE);
-		req.getConsentTier().setId(null);
-		req.getConsentTier().setStatement("updated-consent");
+		ConsentTierOp input = ConsentsTestData.getConsentTierOp();
+		input.setOp(OP.UPDATE);
+		input.getConsentTier().setId(null);
+		input.getConsentTier().setStatement("updated-consent");
 		
-		ConsentTierOpRespEvent resp = cpSvc.updateConsentTier(req);
+		ResponseEvent<ConsentTierDetail> resp = cpSvc.updateConsentTier(getRequest(input));
 		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals("Non existing consent tier for update operation", resp.getException().getMessage());		
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CpErrorCode.CONSENT_TIER_NOT_FOUND, ErrorType.USER_ERROR);		
 	}
 	
 	@Test
 	@DatabaseSetup("consents-test/add-consents-test-initial.xml")
 	@DatabaseTearDown("consents-test/generic-teardown.xml")
 	public void deleteConsentsTestWithInvalidConsentId() {
-		ConsentTierOpEvent req = ConsentsTestData.getConsentTierOpEvent();
-		req.setOp(ConsentTierOpEvent.OP.REMOVE);
-		req.getConsentTier().setId(-1L);
+		ConsentTierOp input = ConsentsTestData.getConsentTierOp();
+		input.setOp(OP.REMOVE);
+		input.getConsentTier().setId(-1L);
 		
-		ConsentTierOpRespEvent resp = cpSvc.updateConsentTier(req);
+		ResponseEvent<ConsentTierDetail> resp = cpSvc.updateConsentTier(getRequest(input));
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertNull("Delete Consent Response was expected to be null!", resp.getConsentTier());		
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNull("Delete Consent Response was expected to be null!", resp.getPayload());		
 	}
 	
 	/*
@@ -166,13 +175,12 @@ public class ConsentsTest {
 	@DatabaseSetup("consents-test/add-consents-test-initial.xml")
 	@DatabaseTearDown("consents-test/generic-teardown.xml")
 	public void getConsentsTest() {
-		ReqConsentTiersEvent req = ConsentsTestData.getReqConsentTiersEvent();
-		ConsentTiersEvent resp = cpSvc.getConsentTiers(req);
+		ResponseEvent<List<ConsentTierDetail>> resp = cpSvc.getConsentTiers(getRequest(1L));
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals(new Integer(3), new Integer(resp.getConsentTiers().size()));
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertEquals(new Integer(3), new Integer(resp.getPayload().size()));
 		
-		for (ConsentTierDetail consent : resp.getConsentTiers()) {
+		for (ConsentTierDetail consent : resp.getPayload()) {
 			String expectedStatement = "statement-" + consent.getId();
 			Assert.assertNotNull("ConsentId was not expected to be null!");
 			if (consent.getId() < 1L || consent.getId() > 3L) {
@@ -187,22 +195,17 @@ public class ConsentsTest {
 	@DatabaseSetup("consents-test/add-consents-test-initial.xml")
 	@DatabaseTearDown("consents-test/generic-teardown.xml")
 	public void getConsentsTestForNonExistingCp() {
-		ReqConsentTiersEvent req = ConsentsTestData.getReqConsentTiersEvent();
-		req.setCpId(-1L);
-		ConsentTiersEvent resp = cpSvc.getConsentTiers(req);
-		
-		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
-		Assert.assertEquals(req.getCpId(), resp.getCpId());
+		ResponseEvent<List<ConsentTierDetail>> resp  = cpSvc.getConsentTiers(getRequest(-1L));
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CpErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("consents-test/get-consents-for-disabled-cp-initial.xml")
 	@DatabaseTearDown("consents-test/generic-teardown.xml")
 	public void getConsentsForDisabledCp() {
-		ReqConsentTiersEvent req = ConsentsTestData.getReqConsentTiersEvent();
-		ConsentTiersEvent resp = cpSvc.getConsentTiers(req);
-		
-		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
-		Assert.assertEquals(req.getCpId(), resp.getCpId());
+		ResponseEvent<List<ConsentTierDetail>> resp = cpSvc.getConsentTiers(getRequest(1L));
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CpErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 }
