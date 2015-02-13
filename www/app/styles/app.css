@@ -170,6 +170,9 @@ body {
   height: 64px;
   color: #666666;
   display: flex;
+  position: absolute;
+  top: 57px;
+  width: 100%;
 }
 
 .os-page-hdr a {
@@ -218,6 +221,14 @@ body {
 
 .os-page-hdr + .container {
   margin-top: 20px;
+}
+
+.os-page-hdr + .os-cards {
+  position: absolute;
+  top: 121px;
+  bottom: 0px;
+  height: auto;
+  overflow-y: auto;
 }
 
 .os-btn-icon, a {

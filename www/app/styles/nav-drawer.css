@@ -3,7 +3,6 @@
   height: auto;
   top: 57px;
   bottom: 0;
-  overflow: auto;
 }
 
 .os-nav-drawer {
@@ -11,7 +10,7 @@
   border-right: 1px solid #ddd;
   left: 0;
   width: 265px;
-  z-index: 2;
+  z-index: 5;
   transform: translate(-265px, 0);
   transition: all 0.25s ease-in-out 0s;
 }
@@ -34,6 +33,16 @@
 .os-nav-drawer ul.os-menu-items {
   list-style: none;
   padding: 0;
+  overflow-y: auto;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  height: auto;
+  width: 100%;
+}
+
+.os-nav-drawer .os-page-hdr ~ ul.os-menu-items {
+  top: 64px;
 }
 
 .os-nav-drawer .os-menu-items > li {
@@ -60,4 +69,6 @@
 
 .os-nav-drawer .os-page-hdr { 
   margin-bottom: 0px;
+  position: relative;
+  top: 0px;
 }
