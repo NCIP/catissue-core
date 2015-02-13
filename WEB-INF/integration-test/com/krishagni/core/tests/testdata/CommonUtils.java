@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -30,5 +31,14 @@ public class CommonUtils {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public static UserSummary getUser(Long id, String firstName, String lastName, String loginName) {
+		UserSummary user = new UserSummary();
+		user.setId(id);
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setLoginName(loginName);
+		return user;
 	}
 }

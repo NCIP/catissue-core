@@ -576,7 +576,7 @@ public class CollectionProtocolTest {
 	public void createCpTestWithInvalidPIAndCoordinators() {
 		CollectionProtocolDetail input = CpTestData.getCp();
 		input.getPrincipalInvestigator().setId(-1L);
-		input.getCoordinators().add(CpTestData.getUser(-1L, "", "", ""));
+		input.getCoordinators().add(CommonUtils.getUser(-1L, "", "", ""));
 		input.setTitle("");
 		input.setShortTitle(null);
 		input.setConsentsWaived(null);
