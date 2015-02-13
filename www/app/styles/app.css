@@ -220,7 +220,13 @@ body {
 }
 
 .os-page-hdr + .container {
-  margin-top: 20px;
+  padding-top: 20px;
+  position: absolute;
+  top: 121px;
+  bottom: 0px;
+  height: auto;
+  width: 100%;
+  overflow: auto;
 }
 
 .os-page-hdr + .os-cards {
