@@ -1,9 +1,11 @@
 
 <div>
-  <div class="os-page-hdr">
+  <div os-page-header>
     <h3>
+      <a ui-sref="site-list" translate="site.list">Sites</a>
+      <span class="fa fa-angle-right"></span>
       <span ng-if="!site.id" translate="site.create_site">Create Site</span>
-      <span ng-if="!!site.id" translate="site.update_site">Update Site</span>
+      <span ng-if="!!site.id">{{site.name}}</span>
     </h3>
   </div>
 

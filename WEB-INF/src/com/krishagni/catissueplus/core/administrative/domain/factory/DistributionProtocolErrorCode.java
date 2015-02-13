@@ -1,36 +1,22 @@
-
 package com.krishagni.catissueplus.core.administrative.domain.factory;
 
-import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 
-public enum DistributionProtocolErrorCode implements CatissueErrorCode {
+public enum DistributionProtocolErrorCode implements ErrorCode {
+	SHORT_TITLE_REQUIRED,
 
-	MISSING_ATTR_VALUE(2200, "Required attribute is either empty or null"), 
-	INVALID_ATTR_VALUE(2201,"Attribute value is invalid."), 
-	ERRORS(2202, "Please resolve the errors listed in error list."), 
-	DUPLICATE_PROTOCOL_TITLE(2203, "Distribution Protocol with the same title already exists."), 
-	DUPLICATE_PROTOCOL_SHORT_TITLE(2204,"Distribution Protocol with the same short title already exists."), 
-	INVALID_PRINCIPAL_INVESTIGATOR(2205,"Principal Investigator value is invalid"), 
-	BAD_REQUEST(2206, "Bad Request"),
-	NOT_UNIQUE(2207, "Property value is not unique")
-	;
+	DUP_SHORT_TITLE,
 
-	private int code;
+	TITLE_REQUIRED,
 
-	private String message;
+	DUP_TITLE,
 
-	private DistributionProtocolErrorCode(int code, String message) {
-		this.code = code;
-		this.message = message;
-	}
+	NOT_FOUND,
+
+	PI_NOT_FOUND;
 
 	@Override
-	public int code() {
-		return code;
-	}
-
-	@Override
-	public String message() {
-		return message;
+	public String code() {
+		return "DP_" + this.name();
 	}
 }

@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
@@ -21,7 +22,9 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFac
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class ParticipantFactoryImpl implements ParticipantFactory {
@@ -32,25 +35,15 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		this.daoFactory = daoFactory;
 	}
 
-	private final String SSN = "social security number";
-
 	private final String RACE = "race";
 
 	private final String ETHNICITY = "ethnicity";
 
 	private final String VITAL_STATUS = "vital status";
 
-	private final String BIRTH_DATE = "birth date";
-
-	private final String DEATH_DATE = "death date";
-
 	private final String GENDER = "gender";
 
 	private final String SEX_GENOTYPE = "sexGenotype";
-
-	private final String MEDICAL_RECORD_NUMBER = "medical record number";
-
-	private final String SITE = "site";
 
 	private final String VITAL_STATUS_DEATH = "Death";
 	
@@ -58,47 +51,47 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	@Override
 	public Participant createParticipant(ParticipantDetail details) {
-		ObjectCreationException oce = new ObjectCreationException();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		Participant participant = new Participant();		
-		setSsn(participant, details.getSsn(), oce);
+		setSsn(participant, details.getSsn(), ose);
 		setName(participant, details);
-		setVitalStatus(participant, details.getVitalStatus(), oce);
-		setBirthDate(participant, details.getBirthDate(), oce);
-		setDeathDate(participant, details.getDeathDate(), oce);
-		setActivityStatus(participant, details.getActivityStatus(), oce);
-		setSexGenotype(participant, details.getSexGenotype(), oce);
-		setGender(participant, details.getGender(), oce);
-		setRace(participant, details.getRace(), oce);
-		setEthnicity(participant, details.getEthnicity(), oce);
-		setPmi(participant, details.getPmis(), oce);
+		setVitalStatus(participant, details.getVitalStatus(), ose);
+		setBirthDate(participant, details.getBirthDate(), ose);
+		setDeathDate(participant, details.getDeathDate(), ose);
+		setActivityStatus(participant, details.getActivityStatus(), ose);
+		setSexGenotype(participant, details.getSexGenotype(), ose);
+		setGender(participant, details.getGender(), ose);
+		setRace(participant, details.getRace(), ose);
+		setEthnicity(participant, details.getEthnicity(), ose);
+		setPmi(participant, details.getPmis(), ose);
 		
 		participant.setEmpi(details.getEmpi());
 		
-		oce.checkErrorAndThrow();
+		ose.checkAndThrow();
 		return participant;
 	}
 
-	private void setDeathDate(Participant participant, Date deathDate, ObjectCreationException exception) {
+	private void setDeathDate(Participant participant, Date deathDate, OpenSpecimenException exception) {
 		if (deathDate == null) {
 			return;
 		}
 		
 		if (!VITAL_STATUS_DEATH.equals(participant.getVitalStatus()) || 
 				(participant.getBirthDate() != null && deathDate.before(participant.getBirthDate()))) {
-			exception.addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, DEATH_DATE);
+			exception.addError(ParticipantErrorCode.INVALID_DEATH_DATE);
 		}
 		
 		participant.setDeathDate(deathDate);
 	}
 
-	private void setBirthDate(Participant participant, Date birthDate, ObjectCreationException exception) {
+	private void setBirthDate(Participant participant, Date birthDate, OpenSpecimenException exception) {
 		if (birthDate == null) {
 			return;
 		}
 		
 		if (birthDate.after(Calendar.getInstance().getTime())) {
-			exception.addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, BIRTH_DATE);
+			exception.addError(ParticipantErrorCode.INVALID_BIRTH_DATE);
 			return;
 		}
 		
@@ -111,7 +104,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		participant.setLastName(detail.getLastName());
 	}
 
-	private void setSsn(Participant participant, String ssn, ObjectCreationException oce) {
+	private void setSsn(Participant participant, String ssn, OpenSpecimenException oce) {
 		if (StringUtils.isBlank(ssn)) {
 			return;
 		}
@@ -119,11 +112,11 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		if (isSsnValid(ssn)) {
 			participant.setSocialSecurityNumber(ssn);
 		} else {
-			oce.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, SSN);
+			oce.addError(ParticipantErrorCode.INVALID_SSN);
 		}
 	}
 
-	private void setActivityStatus(Participant participant, String activityStatus, ObjectCreationException oce) {
+	private void setActivityStatus(Participant participant, String activityStatus, OpenSpecimenException oce) {
 		if (StringUtils.isBlank(activityStatus)) {
 			participant.setActive();
 			return;
@@ -134,44 +127,44 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			return;
 		}
 		
-		oce.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, Status.ACTIVITY_STATUS.toString());
+		oce.addError(ActivityStatusErrorCode.INVALID);
 	}
 
-	private void setVitalStatus(Participant participant, String vitalStatus, ObjectCreationException oce) {
+	private void setVitalStatus(Participant participant, String vitalStatus, OpenSpecimenException oce) {
 		if (!StringUtils.isBlank(vitalStatus) && !isValidPv(vitalStatus, VITAL_STATUS)) {
-			oce.addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, VITAL_STATUS);
+			oce.addError(ParticipantErrorCode.INVALID_VITAL_STATUS);
 			return;
 		}
 		
 		participant.setVitalStatus(vitalStatus);
 	}
 
-	private void setGender(Participant participant, String gender, ObjectCreationException oce) {
+	private void setGender(Participant participant, String gender, OpenSpecimenException oce) {
 		if (!StringUtils.isBlank(gender) && !isValidPv(gender, GENDER)) {
-			oce.addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, GENDER);
+			oce.addError(ParticipantErrorCode.INVALID_GENDER);
 			return;
 		}
 		
 		participant.setGender(gender);
 	}
 
-	private void setRace(Participant participant, Set<String> raceList, ObjectCreationException oce) {
+	private void setRace(Participant participant, Set<String> raceList, OpenSpecimenException oce) {
 		if (raceList == null || raceList.isEmpty()) {
 			return;
 		}
 
 		String[] races = raceList.toArray(new String[raceList.size()]);
 		if (!isValidPv(races, RACE)) {
-			oce.addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, RACE);
+			oce.addError(ParticipantErrorCode.INVALID_RACE);
 			return;
 		}
 		
 		participant.setRaceColl(raceList);
 	}
 
-	private void setEthnicity(Participant participant, String ethnicity, ObjectCreationException oce) {
+	private void setEthnicity(Participant participant, String ethnicity, OpenSpecimenException oce) {
 		if (!StringUtils.isBlank(ethnicity) && !isValidPv(ethnicity, ETHNICITY)) {
-			oce.addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, ETHNICITY);
+			oce.addError(ParticipantErrorCode.INVALID_ETHNICITY);
 			return;
 		}
 		
@@ -181,7 +174,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	private void setPmi(
 			Participant participant, 
 			List<ParticipantMedicalIdentifierNumberDetail> pmis,
-			ObjectCreationException oce) {
+			OpenSpecimenException oce) {
 		
 		if (pmis == null || pmis.isEmpty()) {
 			return;
@@ -198,15 +191,15 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		participant.setPmiCollection(map);
 	}
 
-	private ParticipantMedicalIdentifier getPmi(ParticipantMedicalIdentifierNumberDetail pmiDetail, ObjectCreationException oce) {
+	private ParticipantMedicalIdentifier getPmi(ParticipantMedicalIdentifierNumberDetail pmiDetail, OpenSpecimenException oce) {
 		Site site = daoFactory.getSiteDao().getSite(pmiDetail.getSiteName());		
 		if (site == null) {
-			oce.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, SITE);
+			oce.addError(SiteErrorCode.NOT_FOUND);
 			return null;
 		}
 		
 		if (StringUtils.isBlank(pmiDetail.getMrn())) {
-			oce.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, MEDICAL_RECORD_NUMBER);
+			oce.addError(ParticipantErrorCode.MRN_REQUIRED);
 			return null;
 		}
 		
@@ -224,9 +217,9 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		}
 	}
 
-	private void setSexGenotype(Participant participant, String sexGenotype, ObjectCreationException oce) {
+	private void setSexGenotype(Participant participant, String sexGenotype, OpenSpecimenException oce) {
 		if (!StringUtils.isBlank(sexGenotype) && !isValidPv(sexGenotype, SEX_GENOTYPE)) {
-			oce.addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, SEX_GENOTYPE);
+			oce.addError(ParticipantErrorCode.INVALID_GENOTYPE);
 			return;
 		}
 		

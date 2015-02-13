@@ -1,30 +1,15 @@
 
 package com.krishagni.catissueplus.core.administrative.services;
 
-import com.krishagni.catissueplus.core.administrative.events.AddPvEvent;
-import com.krishagni.catissueplus.core.administrative.events.AllPvsEvent;
-import com.krishagni.catissueplus.core.administrative.events.DeletePvEvent;
-import com.krishagni.catissueplus.core.administrative.events.EditPvEvent;
-import com.krishagni.catissueplus.core.administrative.events.GetAllPVsEvent;
-import com.krishagni.catissueplus.core.administrative.events.PvAddedEvent;
-import com.krishagni.catissueplus.core.administrative.events.PvDeletedEvent;
-import com.krishagni.catissueplus.core.administrative.events.PvEditedEvent;
-import com.krishagni.catissueplus.core.administrative.events.ValidatePvEvent;
+import java.util.List;
+
+import com.krishagni.catissueplus.core.administrative.events.ListPvCriteria;
+import com.krishagni.catissueplus.core.administrative.events.PvInfo;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public interface PermissibleValueService {
-
-	PvAddedEvent createPermissibleValue(AddPvEvent event);
-
-	PvEditedEvent updatePermissibleValue(EditPvEvent event);
-
-	PvDeletedEvent deletePermissibleValue(DeletePvEvent event);
+	ResponseEvent<List<PvInfo>> getPermissibleValues(RequestEvent<ListPvCriteria> req);
 	
-	AllPvsEvent getPermissibleValues(GetAllPVsEvent event);
-	
-	Boolean validate(ValidatePvEvent event);
-
-	/*AllPvsEvent updatePvs(UploadFileEvent event);
-
-	AllPvsEvent insertPvs(UploadFileEvent event);
-*/
+	Boolean validate(String attr, List<String> values, String ... parentAttr);
 }

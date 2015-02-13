@@ -2,14 +2,14 @@
 package com.krishagni.catissueplus.core.common;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import com.krishagni.catissueplus.core.administrative.events.AllPvsEvent;
-import com.krishagni.catissueplus.core.administrative.events.GetAllPVsEvent;
+import com.krishagni.catissueplus.core.administrative.events.ListPvCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PvInfo;
-import com.krishagni.catissueplus.core.administrative.events.ValidatePvEvent;
 import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class PermissibleValuesManagerImpl implements PermissibleValuesManager {
 
@@ -26,38 +26,26 @@ public class PermissibleValuesManagerImpl implements PermissibleValuesManager {
 
 	@Override
 	public List<PvInfo> getPermissibleValueList(String attribute) {
-		GetAllPVsEvent event = new GetAllPVsEvent();
-		event.setAttribute(attribute);
-		AllPvsEvent resp = permissibleValueSvc.getPermissibleValues(event);
-
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getPvs();
-		}
-		return null;
+		ListPvCriteria crit = new ListPvCriteria().attribute(attribute);
+		RequestEvent<ListPvCriteria> req = new RequestEvent<ListPvCriteria>(null, crit);
+		ResponseEvent<List<PvInfo>> resp = permissibleValueSvc.getPermissibleValues(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
 	}
+	
 	@Override
 	public boolean validate(String attribute, String value) {
-		ValidatePvEvent event = new ValidatePvEvent();
-		event.setAttribute(attribute);
-		if(value != null && !value.isEmpty()) { 
-			event.setValues(Arrays.asList(value));
-		}
-
-		return permissibleValueSvc.validate(event);
+		return permissibleValueSvc.validate(attribute, Collections.singletonList(value));
 	}
+	
 	@Override
-	public boolean validate(String attribute, String[] valuesArray) {
-		ValidatePvEvent event = new ValidatePvEvent();
-		event.setAttribute(attribute);
-		event.setValues(Arrays.asList(valuesArray));
-		return permissibleValueSvc.validate(event);
+	public boolean validate(String attribute, String[] values) {
+		return permissibleValueSvc.validate(attribute, Arrays.asList(values));
 	}
 
 	@Override
 	public boolean validate(String attribute, String parentValue, String value) {
-		ValidatePvEvent event = new ValidatePvEvent();
-		event.setAttribute(attribute);
-		event.setValues(Arrays.asList(value));
-		return permissibleValueSvc.validate(event);
+		return permissibleValueSvc.validate(attribute, Collections.singletonList(value), parentValue);
 	}
 }

@@ -216,6 +216,7 @@
 	<!-- Compile all files, generated and hand-written -->
 	<target name="compile" depends="init">
 		<javac destdir="${target.dir}" includes="**/*.*" includeAntRuntime="false" debug="yes" target="1.6">
+			 <compilerarg line="-Xmaxerrs 10000" />
 			<src path="${src.dir}" />
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -239,6 +240,7 @@
 			</fileset>
 			<fileset dir="${resources.dir}">
 				<include name="**/*.hbm.xml" />
+                                <include name="errors/*.properties"/>
 			</fileset>
 		</copy>
 	</target>

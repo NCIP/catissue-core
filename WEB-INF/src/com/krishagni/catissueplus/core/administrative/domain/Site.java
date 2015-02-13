@@ -6,11 +6,12 @@ import java.util.Set;
 
 import krishagni.catissueplus.util.CommonUtil;
 
-import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.SetUpdater;
-import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
+
+import static com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode.*;
 
 public class Site {
 
@@ -119,13 +120,10 @@ public class Site {
 	}
 
 	public void delete() {
-
-		if (!this.getScgCollection().isEmpty()) {
-			throw new CatissueException(SiteErrorCode.ACTIVE_CHILDREN_FOUND);
+		if (!this.getScgCollection().isEmpty() || !this.getStorageContainerCollection().isEmpty()) {
+			throw OpenSpecimenException.userError(REF_ENTITY_FOUND);
 		}
-		if (!this.getStorageContainerCollection().isEmpty()) {
-			throw new CatissueException(SiteErrorCode.ACTIVE_CHILDREN_FOUND);
-		}
+		
 		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 }

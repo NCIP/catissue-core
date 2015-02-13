@@ -29,7 +29,7 @@
    <property name="targetMethod"><value>getInstance</value></property>
   </bean>
 
-  <bean id="biospecimenDaoFactory" class="com.krishagni.catissueplus.core.biospecimen.repository.impl.DaoFactoryImpl">
+<bean id="biospecimenDaoFactory" class="com.krishagni.catissueplus.core.biospecimen.repository.impl.DaoFactoryImpl">
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
   </bean>
 
@@ -37,10 +37,6 @@
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
   </bean>
 
-  <bean id="rbacDaoFactory" class="com.krishagni.rbac.repository.impl.DaoFactoryImpl">
-    <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
-  </bean>
-    
   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
     <!-- one of the properties available; the maximum file size in bytes, 100mb -->
     <property name="maxUploadSize" value="100000000"/>
@@ -76,17 +72,20 @@
   </bean>
   <bean id="collectionProtocolService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
-    <property name="privilegeSvc" ref="privSvc"/>
   </bean>
 
-  <bean id="scgBarcodeGenerator" class="com.krishagni.catissueplus.core.barcodegenerator.impl.SpecimenBarcodeGenerator">
-    <property name="tokenFactory" ref="tokenFactory" />
-  </bean>
+	
+	
+	
+	<bean id="scgBarcodeGenerator" class="com.krishagni.catissueplus.core.barcodegenerator.impl.SpecimenBarcodeGenerator">
+		<property name="tokenFactory" ref="tokenFactory" />
+	</bean>
+	
 	
   <bean id="visitLabelGenerator" class="com.krishagni.catissueplus.core.labelgenerator.impl.SCGLabelGenerator">
     <property name="tokenFactory" ref="tokenFactory" />
   </bean>
-	
+
   <bean id="visitService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.VisitServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="visitFactory" ref="visitFactory"/>
@@ -133,7 +132,6 @@
     <property name="cpeFactory" ref="cpeFactory"/>
     <property name="srFactory" ref="srFactory"/>
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
-    <property name="privilegeSvc" ref="privSvc"/>
   </bean>
   
  <bean id="keyFactory" class="com.krishagni.catissueplus.core.keygenerator.factory.impl.KeyGenFactoryImpl">
@@ -152,11 +150,13 @@
   <bean id="visitFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.VisitFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
+
   <bean id="cprFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolRegistrationFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="participantFactory" ref="participantFactory"/>
     <property name="keyFactory" ref="keyFactory"/>
   </bean>
+
   <bean id="participantSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.ParticipantServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="participantFactory" ref="participantFactory"/>
@@ -168,7 +168,6 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="registrationFactory" ref="cprFactory"/>
     <property name="visitFactory" ref="visitFactory"/>
-    <property name="privilegeSvc" ref="privSvc"/>
     <property name="participantService" ref="participantSvc"/>
   </bean>
 
@@ -190,19 +189,6 @@
     <property name="ldapFactory" ref="ldapFact"/>
   </bean>
   
-  <bean id="privSvc" class="com.krishagni.catissueplus.core.privileges.services.impl.PrivilegeServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>
-  
-  <bean id="roleFact" class="com.krishagni.catissueplus.core.privileges.domain.factory.impl.RoleFactoryImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>
-  
-  <bean id="roleSvc" class="com.krishagni.catissueplus.core.privileges.services.impl.RoleServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-    <property name="roleFactory" ref="roleFact"/>
-  </bean>
- 
   <bean id="ldapFact" class="com.krishagni.catissueplus.core.auth.domain.factory.impl.LdapFactoryImpl">
   </bean>
 
@@ -230,8 +216,6 @@
     <property name="specimenFactory" ref="specimenFactory"/>
     <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
     <property name="specimenBarcodeGenerator" ref="specimenBarcodeGenerator"/>
-  	<property name="specLabelPrinterFact" ref="specimenLabelPrinterFact"/>
-  	<property name="privilegeSvc" ref="privSvc"/>
   </bean>
 
   <bean id="specimenListFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenListFactoryImpl">
@@ -255,7 +239,6 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="formDao" ref="formDao"/>
     <property name="formSvc" ref="formSvc"/>
-    <property name="privilegeSvc" ref="privSvc"/>
   </bean>
 
   <bean id="userDao" class="com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl">
@@ -279,25 +262,8 @@
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="userDao" ref="userDao"/>
     <property name="queryFolderFactory" ref="queryFolderFactory"/>
-    <property name="privilegeSvc" ref="privSvc"/>
   </bean>
 
-  <bean id="rbacSvc" class="com.krishagni.rbac.service.impl.RbacServiceImpl">
-    <property name="daoFactory" ref="rbacDaoFactory"/>
-  </bean>
-
-  <bean id="auditFactory" class="com.krishagni.catissueplus.core.audit.domain.factory.impl.AuditFactoryImpl">
-  </bean>
-  
-  <bean id="auditService" class="com.krishagni.catissueplus.core.audit.services.impl.AuditServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-    <property name="auditFactory" ref="auditFactory"/>
-  </bean>
-  
-   <bean id="auditReportSvc" class="com.krishagni.catissueplus.core.audit.services.impl.AuditReportServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>
-  
   <bean id="extAppNotificationService" class="com.krishagni.catissueplus.core.notification.services.impl.ExternalAppNotificationServiceImpl">
 		<property name="daoFactory" ref="biospecimenDaoFactory" />
   </bean>
@@ -325,11 +291,6 @@
 		<property name="daoFactory" ref="biospecimenDaoFactory"/>
 	</bean>-->
 
-	<bean id="deptSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.DepartmentServiceImpl">
-		<property name="daoFactory" ref="biospecimenDaoFactory"/>
-	<!--	<property name="departmentFactory" ref="departmentFact"/> -->
-	</bean>
-
 	<bean id="instituteFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl">
           <property name="daoFactory" ref="biospecimenDaoFactory"/>
 	</bean>
@@ -345,13 +306,6 @@
 	<bean id="siteService" class="com.krishagni.catissueplus.core.administrative.services.impl.SiteServiceImpl">
         <property name="daoFactory" ref="biospecimenDaoFactory"/>
         <property name="siteFactory" ref="siteFactory" />
-	</bean>
-	
-	<bean id="biohazardFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.BiohazardFactoryImpl">
-	</bean>
-	<bean id="biohazardService" class="com.krishagni.catissueplus.core.administrative.services.impl.BiohazardServiceImpl">
-        <property name="daoFactory" ref="biospecimenDaoFactory"/>
-        <property name="biohazardFactory" ref="biohazardFactory" />
 	</bean>
 	
 	<bean id="containerLabelGenerator" class="com.krishagni.catissueplus.core.labelgenerator.impl.StorageContainerLabelGenerator">
@@ -396,52 +350,8 @@
         <property name="daoFactory" ref="biospecimenDaoFactory"/>
 	</bean>
 	
-	<bean id="specimenPrintRuleFactory" class="com.krishagni.catissueplus.core.printer.printRule.domain.factory.impl.SpecimenPrintRuleFactoryImpl">
-		<property name="daoFactory" ref="biospecimenDaoFactory"/>
-	</bean>
-	
-	<bean id="specimenLabelPrinterFact" class="com.krishagni.catissueplus.core.printer.printService.factory.impl.SpecimenLabelPrinterFactoryImpl">
-		<property name="daoFactory" ref="biospecimenDaoFactory"/>
-		<property name="tokenFactory" ref="tokenFactory"></property>
-	</bean>
-
-	<bean id="specimenPrinterSvc" class="com.krishagni.catissueplus.core.printer.printService.services.impl.SpecimenLabelPrinterService">
-		<property name="daoFactory" ref="biospecimenDaoFactory"/>
-		<property name="specLabelPrinterFact" ref="specimenLabelPrinterFact"/>
-	</bean>
-	
-	
-	<bean id="specimenPrintRuleSvc" class="com.krishagni.catissueplus.core.printer.printRule.services.impl.SpecimenPrintRuleServiceImpl">
-		<property name="daoFactory" ref="biospecimenDaoFactory"/>
-		<property name="specimenPrintRuleFactory" ref="specimenPrintRuleFactory"/>
-	</bean>
-	
-	
-	<bean id="equipmentFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.EquipmentFactoryImpl">
-		<property name="daoFactory" ref="biospecimenDaoFactory"/>
-	</bean>
-
-	<bean id="equipmentService" class="com.krishagni.catissueplus.core.administrative.services.impl.EquipmentServiceImpl">
-        <property name="daoFactory" ref="biospecimenDaoFactory"/>
-        <property name="equipmentFactory" ref="equipmentFactory" />
-	</bean>
-	
-	<bean id="imageFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.ImageFactoryImpl">
-		<property name="daoFactory" ref="biospecimenDaoFactory"/>
-	</bean>
-
-	<bean id="imageService" class="com.krishagni.catissueplus.core.administrative.services.impl.ImageServiceImpl">
-        <property name="daoFactory" ref="biospecimenDaoFactory"/>
-        <property name="imageFactory" ref="imageFactory" />
-	</bean>
-	
-	<bean id="permissibleValueFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.PermissibleValueFactoryImpl">
-               <property name="daoFactory" ref="biospecimenDaoFactory"/>
-       </bean>
-       
        <bean id="permissibleValueSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl">
                <property name="daoFactory" ref="biospecimenDaoFactory"/>
-               <property name="pvFactory" ref="permissibleValueFact"/>
     </bean>
        
     <bean id="pvMangeerSvc" class="com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl">
@@ -452,8 +362,13 @@
        <property name="pvManager" ref="pvMangeerSvc"/>
   </bean>
 
+  <bean id="resourceBundle" class="org.springframework.context.support.ResourceBundleMessageSource">
+    <property name="basename" value="errors"/>
+  </bean>
+
   <bean id="appCtxProvider" class="com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider">
   </bean>
 
   <import resource="classpath*:com/krishagni/openspecimen/custom/*Context.xml"/>
  </beans>
+

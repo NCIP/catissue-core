@@ -6,5 +6,5 @@ import com.krishagni.catissueplus.core.administrative.events.DistributionProtoco
 
 public interface DistributionProtocolFactory {
 	public DistributionProtocol createDistributionProtocol(DistributionProtocolDetail distributionProtocolDetail);
-
+	
 }

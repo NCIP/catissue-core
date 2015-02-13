@@ -3,34 +3,24 @@ package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import org.hibernate.SessionFactory;
 
-import com.krishagni.catissueplus.core.administrative.repository.BiohazardDao;
 import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
-import com.krishagni.catissueplus.core.administrative.repository.DistributionOrderDao;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
-import com.krishagni.catissueplus.core.administrative.repository.EquipmentDao;
-import com.krishagni.catissueplus.core.administrative.repository.ImageDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
-import com.krishagni.catissueplus.core.administrative.repository.impl.BiohazardDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.ContainerDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.DepartmentDaoImpl;
-import com.krishagni.catissueplus.core.administrative.repository.impl.DistributionOrderDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.DistributionProtocolDaoImpl;
-import com.krishagni.catissueplus.core.administrative.repository.impl.EquipmentDaoImpl;
-import com.krishagni.catissueplus.core.administrative.repository.impl.ImageDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.InstituteDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.PermissibleValueDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.SiteDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.StorageContainerDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl;
 import com.krishagni.catissueplus.core.audit.repository.AuditDao;
-import com.krishagni.catissueplus.core.audit.repository.AuditReportDao;
 import com.krishagni.catissueplus.core.audit.repository.impl.AuditDaoImpl;
-import com.krishagni.catissueplus.core.audit.repository.impl.AuditReportDaoImpl;
 import com.krishagni.catissueplus.core.auth.repository.DomainDao;
 import com.krishagni.catissueplus.core.auth.repository.impl.DomainDaoImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
@@ -50,14 +40,6 @@ import com.krishagni.catissueplus.core.notification.repository.ExternalApplicati
 import com.krishagni.catissueplus.core.notification.repository.impl.CPStudyMappingDaoImpl;
 import com.krishagni.catissueplus.core.notification.repository.impl.ExternalAppNotificationDaoImpl;
 import com.krishagni.catissueplus.core.notification.repository.impl.ExternalApplicationDaoImpl;
-import com.krishagni.catissueplus.core.printer.printRule.repository.SpecimenPrintRuleDao;
-import com.krishagni.catissueplus.core.printer.printRule.repository.impl.SpecimenPrintRuleDaoImpl;
-import com.krishagni.catissueplus.core.privileges.repository.PrivilegeDao;
-import com.krishagni.catissueplus.core.privileges.repository.RoleDao;
-import com.krishagni.catissueplus.core.privileges.repository.UserCPRoleDao;
-import com.krishagni.catissueplus.core.privileges.repository.impl.PrivilegeDaoImpl;
-import com.krishagni.catissueplus.core.privileges.repository.impl.RoleDaoImpl;
-import com.krishagni.catissueplus.core.privileges.repository.impl.UserCPRoleDaoImpl;
 
 public class DaoFactoryImpl implements DaoFactory {
 
@@ -132,27 +114,6 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 
 	@Override
-	public DepartmentDao getDepartmentDao() {
-		DepartmentDaoImpl dao = new DepartmentDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
-
-	@Override
-	public AuditDao getAuditDao() {
-		AuditDaoImpl dao = new AuditDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
-
-	@Override
-	public AuditReportDao getAuditReportDao() {
-		AuditReportDaoImpl dao = new AuditReportDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
-
-	@Override
 	public ContainerDao getContainerDao() {
 		ContainerDaoImpl dao = new ContainerDaoImpl();
 		setSessionFactory(dao);
@@ -188,27 +149,6 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 
 	@Override
-	public RoleDao getRoleDao() {
-		RoleDaoImpl dao = new RoleDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
-
-	@Override
-	public PrivilegeDao getPrivilegeDao() {
-		PrivilegeDaoImpl dao = new PrivilegeDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
-
-	@Override
-	public UserCPRoleDao getCPUserRoleDao() {
-		UserCPRoleDaoImpl dao = new UserCPRoleDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
-
-	@Override
 	public KeyGeneratorDao getKeyGeneratorDao() {
 		KeyGeneratorDaoImpl dao = new KeyGeneratorDaoImpl();
 		setSessionFactory(dao);
@@ -218,13 +158,6 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public InstituteDao getInstituteDao() {
 		InstituteDaoImpl dao = new InstituteDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
-
-	@Override
-	public BiohazardDao getBiohazardDao() {
-		BiohazardDaoImpl dao = new BiohazardDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}
@@ -244,13 +177,6 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 
 	@Override
-	public SpecimenPrintRuleDao getSpecimenPrintRuleDao() {
-		SpecimenPrintRuleDaoImpl dao = new SpecimenPrintRuleDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
-
-	@Override
 	public SpecimenListDao getSpecimenListDao() {
 		SpecimenListDaoImpl dao = new SpecimenListDaoImpl();
 		setSessionFactory(dao);
@@ -265,22 +191,15 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 
 	@Override
-	public EquipmentDao getEquipmentDao() {
-		EquipmentDaoImpl dao = new EquipmentDaoImpl();
+	public DepartmentDao getDepartmentDao() {
+		DepartmentDaoImpl dao = new DepartmentDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}
-
+	
 	@Override
-	public ImageDao getImageDao() {
-		ImageDaoImpl dao = new ImageDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
-
-	@Override
-	public DistributionOrderDao getDistributionOrderDao() {
-		DistributionOrderDaoImpl dao = new DistributionOrderDaoImpl();
+	public AuditDao getAuditDao() {
+		AuditDaoImpl dao = new AuditDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

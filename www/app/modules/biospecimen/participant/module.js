@@ -13,13 +13,13 @@ angular.module('os.biospecimen.participant',
   .config(function($stateProvider) {
     $stateProvider
       .state('participant-list', {
-        url: '/participants',
+        url: '/participants?cpId',
         templateUrl: 'modules/biospecimen/participant/list.html',
         controller: 'ParticipantListCtrl',
-        parent: 'cp-detail'
+        parent: 'signed-in'
       })
       .state('participant-new', {
-        url: '/new-participant',
+        url: '/new-participant?cpId',
         templateProvider: function($stateParams, CpConfigSvc) {
           var tmpl = CpConfigSvc.getRegParticipantTmpl($stateParams.cpId);
           return '<div ng-include src="\'' + tmpl + '\'"></div>';
@@ -27,7 +27,7 @@ angular.module('os.biospecimen.participant',
         controllerProvider: function($stateParams, CpConfigSvc) {
           return CpConfigSvc.getRegParticipantCtrl($stateParams.cpId);
         },
-        parent: 'cp-detail'
+        parent: 'signed-in'
       })
       .state('participant-detail', {
         url: '/participants/:cprId',

@@ -1,9 +1,10 @@
 package com.krishagni.core.tests;
 
-import javax.annotation.Resource;
-
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,18 +25,23 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.events.AddVisitEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitAddedEvent;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitsEvent;
+import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
-
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.core.common.ApplicationContextConfigurer;
 import com.krishagni.core.common.TestUtils;
 import com.krishagni.core.common.WebContextLoader;
+import com.krishagni.core.tests.testdata.CommonUtils;
+import com.krishagni.core.tests.testdata.CpeTestData;
 import com.krishagni.core.tests.testdata.CprTestData;
 import com.krishagni.core.tests.testdata.VisitsTestData;
 
@@ -56,11 +62,11 @@ public class VisitsTest {
 	
 	@Autowired
 	private ApplicationContext ctx;
-	
-	private static final String VISIT_DATE = "visit date";
-	
-	private static final String VISIT_STATUS = "Collection Status";
 
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return CommonUtils.getRequest(payload);
+	}
+	
 	/*
 	 * Add Visit API Tests
 	 */
@@ -70,20 +76,20 @@ public class VisitsTest {
 	@ExpectedDatabase(value="cp-test/visits-test/add-visits-test-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void addVisitsTest() {
-		AddVisitEvent req = VisitsTestData.getAddVisitEvent();
-		VisitAddedEvent resp = cprSvc.addVisit(req);
+		VisitDetail input = VisitsTestData.getVisitDetail();
+		ResponseEvent<VisitDetail> resp = cprSvc.addVisit(getRequest(input));
 		
 		TestUtils.recordResponse(resp);
-		Assert.assertEquals(true, resp.isSuccess());
-		Assert.assertNotNull(resp.getVisit());
-		Assert.assertEquals((Long)1L, resp.getVisit().getEventId());
-		Assert.assertEquals((Long)1L, resp.getVisit().getCprId());
-		Assert.assertEquals("test-pathology", resp.getVisit().getSurgicalPathologyNumber());
-		Assert.assertEquals("test-daiagnosis", resp.getVisit().getClinicalDiagnosis());
-		Assert.assertEquals("Completed", resp.getVisit().getStatus());
-		Assert.assertEquals("SITE1", resp.getVisit().getSite());
-		Assert.assertEquals("Active", resp.getVisit().getActivityStatus());
-		Assert.assertEquals("test-status", resp.getVisit().getClinicalStatus());
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull(resp.getPayload());
+		Assert.assertEquals((Long)1L, resp.getPayload().getEventId());
+		Assert.assertEquals((Long)1L, resp.getPayload().getCprId());
+		Assert.assertEquals("test-pathology", resp.getPayload().getSurgicalPathologyNumber());
+		Assert.assertEquals("test-daiagnosis", resp.getPayload().getClinicalDiagnosis());
+		Assert.assertEquals("Completed", resp.getPayload().getStatus());
+		Assert.assertEquals("SITE1", resp.getPayload().getSite());
+		Assert.assertEquals("Active", resp.getPayload().getActivityStatus());
+		Assert.assertEquals("test-status", resp.getPayload().getClinicalStatus());
 	}
 	
 	/*
@@ -91,85 +97,79 @@ public class VisitsTest {
 	 */
 	@Test
 	public void addVisitsMissingCprCpeSite() {
-		AddVisitEvent req = VisitsTestData.getAddVisitEvent();
-		VisitAddedEvent resp = cprSvc.addVisit(req);
+		VisitDetail input = VisitsTestData.getVisitDetail();
+		ResponseEvent<VisitDetail> resp = cprSvc.addVisit(getRequest(input));
 		
 		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals("Invalid CPE Errorcode was not found!", true,
-				TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "cpeId"));
-		Assert.assertEquals("Invalid CPR Errorcode was not found!", true, 
-				TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "cprId"));
-		Assert.assertEquals("Invalid SITE Errorcode was not found!", true, 
-				TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "site"));
-		
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CpeErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+		TestUtils.checkErrorCode(resp, CprErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+		TestUtils.checkErrorCode(resp, SiteErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("cp-test/visits-test/add-visits-test-initial.xml")
 	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void addVisitsInvalidCpTitle() {
-		AddVisitEvent req = VisitsTestData.getAddVisitEvent();
-		req.getVisit().setEventId(null);
-		req.getVisit().setCpTitle("invalid-title");
-		req.getVisit().setEventLabel("invalid-label");
-		VisitAddedEvent resp = cprSvc.addVisit(req);
+		VisitDetail input = VisitsTestData.getVisitDetail();
+		input.setEventId(null);
+		input.setCpTitle("invalid-title");
+		input.setEventLabel("invalid-label");
+		ResponseEvent<VisitDetail> resp = cprSvc.addVisit(getRequest(input));
 		
 		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "collectionProtocol"));
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CpErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("cp-test/visits-test/add-visits-invalid-cpr-cpe-initial.xml")
 	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void addVisitsInvalidCprCpe() {
-		AddVisitEvent req = VisitsTestData.getAddVisitEvent();
-		VisitAddedEvent resp = cprSvc.addVisit(req);
+		VisitDetail input = VisitsTestData.getVisitDetail();
+		ResponseEvent<VisitDetail> resp = cprSvc.addVisit(getRequest(input));
 		
 		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_CPR_CPE, "cpr, cpe"));
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CprErrorCode.INVALID_CPE, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("cp-test/visits-test/add-visits-test-initial.xml")
 	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void addVisitsMissingSiteName() {
-		AddVisitEvent req = VisitsTestData.getAddVisitEvent();
-		req.getVisit().setSite(null);
-		req.getVisit().setCprId(null);
-		req.getVisit().setCpTitle("invalid-serach-term");
-		req.getVisit().setPpid("invalid-search-term");
+		VisitDetail input = VisitsTestData.getVisitDetail();
+		input.setSite(null);
+		input.setCprId(null);
+		input.setCpTitle("invalid-serach-term");
+		input.setPpid("invalid-search-term");
 		
-		VisitAddedEvent resp = cprSvc.addVisit(req);
+		ResponseEvent<VisitDetail> resp = cprSvc.addVisit(getRequest(input));
 		
 		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals("Missing site name error was not found!", 
-				true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.MISSING_ATTR_VALUE, "site"));
-		Assert.assertEquals("Invalid cp-title error was expected, but not found!", 
-				true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "collectionProtocol"));
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, VisitErrorCode.SITE_REQUIRED, ErrorType.USER_ERROR);
+		TestUtils.checkErrorCode(resp, CpErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("cp-test/visits-test/add-visits-test-initial.xml")
 	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void addVisitsTestInvalidPpid() {
-		AddVisitEvent req = VisitsTestData.getAddVisitEvent();
-		req.getVisit().setCprId(null);
-		req.getVisit().setEventId(null);
+		VisitDetail input = VisitsTestData.getVisitDetail();
+		input.setCprId(null);
+		input.setEventId(null);
 		
-		req.getVisit().setCpTitle("default-cp");
-		req.getVisit().setPpid("invalid-ppid");
-		req.getVisit().setEventLabel("invalid-cpl");
-		VisitAddedEvent resp = cprSvc.addVisit(req);
+		input.setCpTitle("default-cp");
+		input.setPpid("invalid-ppid");
+		input.setEventLabel("invalid-cpl");
+		ResponseEvent<VisitDetail> resp = cprSvc.addVisit(getRequest(input));
 		
 		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "ppid"));
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ScgErrorCode.INVALID_ATTR_VALUE, "eventLabel"));
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CprErrorCode.INVALID_CP_AND_PPID, ErrorType.USER_ERROR);
+		TestUtils.checkErrorCode(resp, CpeErrorCode.LABEL_NOT_FOUND, ErrorType.USER_ERROR);
 	}
 
 	/*
@@ -179,14 +179,17 @@ public class VisitsTest {
 	@DatabaseSetup("cp-test/visits-test/get-visits-initial.xml")
 	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void getVisits() {
-		ReqVisitsEvent req = VisitsTestData.getReqVisitsEvent();
-		VisitsEvent resp = cprSvc.getVisits(req);
+		VisitsListCriteria input = new VisitsListCriteria();
+		input.cprId(1L);
+		input.includeStat(true);
+		
+		ResponseEvent<List<VisitSummary>> resp = cprSvc.getVisits(getRequest(input));
 		
 		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals("Mismatch in Visist!", (int)6, resp.getVisits().size());
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertEquals("Mismatch in Visist!", (int)6, resp.getPayload().size());
 		
-		for (VisitSummary visit : resp.getVisits()) {
+		for (VisitSummary visit : resp.getPayload()) {
 			Long visitId = visit.getId();
 			Assert.assertNotNull(visitId);
 			Assert.assertEquals(visitId, visit.getEventId());
@@ -195,7 +198,7 @@ public class VisitsTest {
 			Assert.assertEquals((int) (visit.getEventId().intValue() * 10) , visit.getCalendarPoint());
 			Assert.assertEquals("Complete", visit.getStatus());
 			
-			Date registrationDate = CprTestData.getDate(31,1,2001);
+			Date registrationDate = CommonUtils.getDate(31,1,2001);
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(registrationDate);
 			cal.add(Calendar.DAY_OF_YEAR, visit.getCalendarPoint());
@@ -227,22 +230,28 @@ public class VisitsTest {
 	
 	@Test
 	public void getVisitsForNonExistingCpr() {
-		ReqVisitsEvent req = VisitsTestData.getReqVisitsEvent();
-		VisitsEvent resp = cprSvc.getVisits(req);
+		VisitsListCriteria input = new VisitsListCriteria();
+		input.cprId(1L);
+		input.includeStat(true);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals(new Integer(0), new Integer(resp.getVisits().size()));
+		ResponseEvent<List<VisitSummary>> resp = cprSvc.getVisits(getRequest(input));
+		
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertEquals(new Integer(0), new Integer(resp.getPayload().size()));
 	}
 	
 	@Test 
 	@DatabaseSetup("cp-test/visits-test/get-visits-for-inactive-cpr-initial.xml")
 	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void getVisitsForInactiveCpr() {
-		ReqVisitsEvent req = VisitsTestData.getReqVisitsEvent();
-		VisitsEvent resp = cprSvc.getVisits(req);
+		VisitsListCriteria input = new VisitsListCriteria();
+		input.cprId(1L);
+		input.includeStat(true);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals(new Integer(0), new Integer(resp.getVisits().size()));
+		ResponseEvent<List<VisitSummary>> resp = cprSvc.getVisits(getRequest(input));
+		
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertEquals(new Integer(0), new Integer(resp.getPayload().size()));
 	}
 	
 	//TODO: Check with VP whether disabled to be shown 
@@ -250,15 +259,19 @@ public class VisitsTest {
 	@DatabaseSetup("cp-test/visits-test/get-visits-some-visits-disabled-initial.xml")
 	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
 	public void getVisitsSomeVisitsDisabled() {
-		ReqVisitsEvent req = VisitsTestData.getReqVisitsEvent();
-		VisitsEvent resp = cprSvc.getVisits(req);
-		req.setIncludeStats(false);
+		VisitsListCriteria input = new VisitsListCriteria();
+		input.cprId(1L);
+		input.includeStat(true);
+		
+		ResponseEvent<List<VisitSummary>> resp = cprSvc.getVisits(getRequest(input));
+		
+		//req.setIncludeStats(false);
 		
 		TestUtils.recordResponse(resp);
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals("Mismatch in Visist!", (int)6, resp.getVisits().size());
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertEquals("Mismatch in Visist!", (int)6, resp.getPayload().size());
 		
-		for (VisitSummary visit : resp.getVisits()) {
+		for (VisitSummary visit : resp.getPayload()) {
 			Long visitId = visit.getId();
 			Assert.assertNotNull(visitId);
 			Assert.assertEquals(visitId, visit.getEventId());
@@ -267,7 +280,7 @@ public class VisitsTest {
 			Assert.assertEquals((int) (visit.getEventId().intValue() * 10) , visit.getCalendarPoint());
 			Assert.assertEquals("Complete", visit.getStatus());
 			
-			Date registrationDate = CprTestData.getDate(31,1,2001);
+			Date registrationDate = CommonUtils.getDate(31,1,2001);
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(registrationDate);
 			cal.add(Calendar.DAY_OF_YEAR, visit.getCalendarPoint());

@@ -18,14 +18,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
-import com.krishagni.catissueplus.core.biospecimen.events.SaveSpecimenEventsDataEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenEventsSavedEvent;
-import com.krishagni.catissueplus.core.biospecimen.services.SpecimenEventService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
-import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
+import com.krishagni.catissueplus.core.biospecimen.services.SpecimenEventsService;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
-import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent.EntityType;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
 import edu.common.dynamicextensions.napi.FormData;
@@ -40,7 +38,7 @@ public class SpecimenEventsController {
 	private HttpServletRequest httpServletRequest;
 
 	@Autowired
-	private SpecimenEventService specimenEventsSvc;
+	private SpecimenEventsService specimenEventsSvc;
 
 	@Autowired
 	private FormService formSvc;
@@ -49,17 +47,14 @@ public class SpecimenEventsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<FormCtxtSummary> getForms(@PathVariable("id") Long specimenId) {
-		ReqEntityFormsEvent req = new ReqEntityFormsEvent();
-		req.setEntityId(specimenId);
-		req.setEntityType(EntityType.SPECIMEN_EVENT);
-		req.setSessionDataBean(getSession());
+		ListEntityFormsOp opDetail = new ListEntityFormsOp();
+		opDetail.setEntityId(specimenId);
+		opDetail.setEntityType(EntityType.SPECIMEN_EVENT);
+		
 
-		EntityFormsEvent resp = formSvc.getEntityForms(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getForms();
-		}
-
-		return null;
+		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(getRequest(opDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "{id}/data")
@@ -83,24 +78,22 @@ public class SpecimenEventsController {
 			formDataList.add(formData);
 		}
 
-		SaveSpecimenEventsDataEvent event = new SaveSpecimenEventsDataEvent();
-		event.setFormId(formId);
-		event.setFormDataList(formDataList);
-		event.setSessionDataBean(getSession());
-
-		SpecimenEventsSavedEvent resp = specimenEventsSvc.saveSpecimenEvents(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			List<String> savedFormData = new ArrayList<String>();
-			for (FormData formData : resp.getFormDataList()) {
-				savedFormData.add(formData.toJson());
-			}
-			return savedFormData.toString();
+		ResponseEvent<List<FormData>> resp = specimenEventsSvc.saveSpecimenEvents(getRequest(formDataList));
+		resp.throwErrorIfUnsuccessful();
+		
+		List<String> savedFormData = new ArrayList<String>();
+		for (FormData formData : resp.getPayload()) {
+			savedFormData.add(formData.toJson());
 		}
 		
-		return null;
+		return savedFormData.toString();
 	}
 	
 
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return new RequestEvent<T>(getSession(), payload);
+	}
+	
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(
 				Constants.SESSION_DATA);

@@ -1,8 +1,10 @@
 <div>
-  <div class="os-page-hdr">
-    <h3> 
+  <div os-page-header>
+    <h3>
+      <a ui-sref="institute-list" translate="institutes.list">Institutes</a>
+      <span class="fa fa-angle-right"></span>
       <span ng-if="!institute.id" translate="institutes.create_institute"> Create Institute </span>
-      <span ng-if="!!institute.id" translate="institutes.update_institute"> Update Institute </span>
+      <span ng-if="!!institute.id">{{institute.name}}</span>
     </h3>
   </div>
 

@@ -18,7 +18,7 @@
     <property name="hibernate.current_session_context_class">thread</property>
 
 	    
-    	<!--Consent Tracking Suite-->
+	<!--Consent Tracking Suite-->
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTier.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTierResponse.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTierStatus.hbm.xml"/>
@@ -146,7 +146,6 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/User.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Address.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Password.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Audit.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExternalApplication.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExtAppNotificationStatus.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocolStudyMapping.hbm.xml" />
@@ -159,21 +158,14 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthDomain.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthProvider.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExternalIdentifier.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Audit.hbm.xml" />
 		
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CPSiteRole.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/UserCPRole.hbm.xml" />		
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Role.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Privilege.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Institute.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/KeyGenerator.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Biohazard.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/StorageContainer.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/StorageContainerStats.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/StorageContainerPosition.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/DistributionProtocol.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenPrintRule.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Equipment.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Image.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/PermissibleValue.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ClinicalDiagnosis.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConsentTier.hbm.xml"/>
@@ -184,7 +176,7 @@
 		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperationJob.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperation.hbm.xml" />
 
-		<mapping resource="com/krishagni/rbac/resources/Group.hbm.xml"/>
+		<!-- mapping resource="com/krishagni/rbac/resources/Group.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/GroupRole.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/Operation.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/Permission.hbm.xml"/>
@@ -193,7 +185,8 @@
 		<mapping resource="com/krishagni/rbac/resources/ResourceInstanceOp.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/RoleAccessControl.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/Subject.hbm.xml"/>
-		<mapping resource="com/krishagni/rbac/resources/SubjectRole.hbm.xml"/>
+		<mapping resource="com/krishagni/rbac/resources/SubjectRole.hbm.xml"/ -->
 		
-  </session-factory>
+    </session-factory>
+
 </hibernate-configuration>

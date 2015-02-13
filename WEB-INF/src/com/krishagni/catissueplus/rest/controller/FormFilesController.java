@@ -4,9 +4,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -18,15 +18,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.FileDetail;
-import com.krishagni.catissueplus.core.de.events.FileDetailEvent;
-import com.krishagni.catissueplus.core.de.events.FileUploadedEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFileDetailEvent;
-import com.krishagni.catissueplus.core.de.events.UploadFileEvent;
+import com.krishagni.catissueplus.core.de.events.GetFileDetailOp;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
 
 @Controller
 @RequestMapping("/form-files")
@@ -34,19 +34,16 @@ public class FormFilesController {
 	@Autowired
 	private FormService formSvc;
 	
+	@Autowired
+	private HttpServletRequest httpServletRequest;
+	
 	@RequestMapping(method = RequestMethod.POST,  produces="text/plain")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public String uploadFile(@PathVariable("file") MultipartFile file) {
-		UploadFileEvent req = new UploadFileEvent();
-		req.setFile(file);
-		
-		FileUploadedEvent resp = formSvc.uploadFile(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return new Gson().toJson(resp.getFile());
-		}
-
-		return null;
+		ResponseEvent<FileDetail> resp = formSvc.uploadFile(getRequestEvent(file));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload().getFilename();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
@@ -57,17 +54,15 @@ public class FormFilesController {
 			@RequestParam(value="ctrlName", required=true) String ctrlName,
 			HttpServletResponse response) {
 		
-		ReqFileDetailEvent req = new ReqFileDetailEvent();
+		GetFileDetailOp req = new GetFileDetailOp();
 		req.setFormId(formId);
 		req.setRecordId(recordId);
 		req.setCtrlName(ctrlName);
 		
-		FileDetailEvent resp = formSvc.getFileDetail(req);
-		if (resp.getStatus() != EventStatus.OK) {
-			return;
-		}
-		
-		FileDetail file = resp.getFileDetail();
+		ResponseEvent<FileDetail> resp = formSvc.getFileDetail(getRequestEvent(req));
+		resp.throwErrorIfUnsuccessful();
+
+		FileDetail file = resp.getPayload();
 		response.setContentType(file.getContentType());
 		response.setHeader("Content-Disposition", "attachment;filename=" + file.getFilename());
 			
@@ -81,4 +76,13 @@ public class FormFilesController {
 			IoUtil.close(in);
 		}
 	}
+	
+	private <T> RequestEvent<T> getRequestEvent(T payload) {
+		return new RequestEvent<T>(getSession(), payload);				
+	}
+	
+	private SessionDataBean getSession() {
+		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
+	}
+	
 }

@@ -1,28 +1,22 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.util.List;
+
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolsEvent;
-import com.krishagni.catissueplus.core.administrative.events.CreateDistributionProtocolEvent;
-import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolCreatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDeletedEvent;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetailEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqDistributionProtocolsEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqDistributionProtocolEvent;
-import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class DistributionProtocolServiceImpl implements DistributionProtocolService {
-
 	private DaoFactory daoFactory;
 
 	private DistributionProtocolFactory distributionProtocolFactory;
@@ -37,98 +31,103 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	
 	@Override
 	@PlusTransactional
-	public DistributionProtocolsEvent getDistributionProtocols(ReqDistributionProtocolsEvent req) {
-		DpListCriteria criteria = new DpListCriteria()
-				.query(req.getSearchString())
-				.startAt(req.getStartAt())
-				.maxResults(req.getMaxResults());
-
-		return DistributionProtocolsEvent.ok(
-				DistributionProtocolDetail.from(daoFactory.getDistributionProtocolDao().getDistributionProtocols(criteria)));
+	public ResponseEvent<List<DistributionProtocolDetail>> getDistributionProtocols(RequestEvent<DpListCriteria> req) {
+		try {
+			return ResponseEvent.response(
+					DistributionProtocolDetail.from(daoFactory.getDistributionProtocolDao()
+							.getDistributionProtocols(req.getPayload())));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
 	}
 	
 	@Override
 	@PlusTransactional
-	public DistributionProtocolDetailEvent getDistributionProtocol(ReqDistributionProtocolEvent req) {
-		Long protocolId = req.getId();
-		DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(protocolId);
-		if (existing == null) {
-			return DistributionProtocolDetailEvent.notFound(protocolId);
+	public ResponseEvent<DistributionProtocolDetail> getDistributionProtocol(RequestEvent<Long> req) {
+		try {
+			Long protocolId = req.getPayload();
+			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(protocolId);
+			if (existing == null) {
+				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(DistributionProtocolDetail.from(existing));
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
-		
-		return DistributionProtocolDetailEvent.ok(DistributionProtocolDetail.from(existing));
 	}
 
 	@Override
 	@PlusTransactional
-	public DistributionProtocolCreatedEvent createDistributionProtocol(CreateDistributionProtocolEvent req) {
+	public ResponseEvent<DistributionProtocolDetail> createDistributionProtocol(RequestEvent<DistributionProtocolDetail> req) {
 		try {
-			DistributionProtocol distributionProtocol = distributionProtocolFactory.createDistributionProtocol(req.getProtocol());
+			DistributionProtocol distributionProtocol = distributionProtocolFactory.createDistributionProtocol(req.getPayload());
 			ensureUniqueConstraints(distributionProtocol);
 			
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(distributionProtocol);
-			return DistributionProtocolCreatedEvent.ok(DistributionProtocolDetail.from(distributionProtocol));
-		} catch (ObjectCreationException oce) {
-			return DistributionProtocolCreatedEvent.badRequest(oce);
+			return ResponseEvent.response(DistributionProtocolDetail.from(distributionProtocol));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			return DistributionProtocolCreatedEvent.serverError(e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public DistributionProtocolUpdatedEvent updateDistributionProtocol(UpdateDistributionProtocolEvent req) {
+	public ResponseEvent<DistributionProtocolDetail> updateDistributionProtocol(RequestEvent<DistributionProtocolDetail> req) {
 		try {
-			Long protocolId = req.getId();
+			Long protocolId = req.getPayload().getId();
 			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(protocolId);
 			if (existing == null) {
-				return DistributionProtocolUpdatedEvent.notFound(protocolId);
+				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
 			}
 		
-			req.getProtocol().setId(req.getId());
-			DistributionProtocol distributionProtocol = distributionProtocolFactory.createDistributionProtocol(req.getProtocol());
+			DistributionProtocol distributionProtocol = distributionProtocolFactory.createDistributionProtocol(req.getPayload());
 			ensureUniqueConstraints(distributionProtocol);
 			
 			existing.update(distributionProtocol);
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(existing);
-			return DistributionProtocolUpdatedEvent.ok(DistributionProtocolDetail.from(existing));
-		} catch (ObjectCreationException oce) {
-			return DistributionProtocolUpdatedEvent.badRequest(oce);
+			return ResponseEvent.response(DistributionProtocolDetail.from(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception ex) {
-			return DistributionProtocolUpdatedEvent.serverError(ex);
+			return ResponseEvent.serverError(ex);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public DistributionProtocolDeletedEvent deleteDistributionProtocol(DeleteDistributionProtocolEvent req) {
+	public ResponseEvent<DistributionProtocolDetail> deleteDistributionProtocol(RequestEvent<Long> req) {
 		try {
-			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(req.getId());
+			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(req.getPayload());
 			if (existing == null) {
-				return DistributionProtocolDeletedEvent.notFound(req.getId());
+				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
 			}
 
 			existing.delete();
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(existing);
-			return DistributionProtocolDeletedEvent.ok(DistributionProtocolDetail.from(existing));
+			return ResponseEvent.response(DistributionProtocolDetail.from(existing));
 		}
 		catch (Exception e) {
-			return DistributionProtocolDeletedEvent.serverError(e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 	
 	private void ensureUniqueConstraints(DistributionProtocol distributionProtocol) {
-		ObjectCreationException oce = new ObjectCreationException();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		if (!isUniqueTitle(distributionProtocol)) {
-			oce.addError(DistributionProtocolErrorCode.NOT_UNIQUE, "title");
+			ose.addError(DistributionProtocolErrorCode.DUP_TITLE);
 		}
 		
 		if (!isUniqueShortTitle(distributionProtocol)) {
-			oce.addError(DistributionProtocolErrorCode.NOT_UNIQUE, "short-title");
+			ose.addError(DistributionProtocolErrorCode.DUP_SHORT_TITLE);
 		}
 		
-		oce.checkErrorAndThrow();
+		ose.checkAndThrow();
 	}
 	
 	private boolean isUniqueTitle(DistributionProtocol distributionProtocol) {
@@ -143,7 +142,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			return false;
 		}
 	}
-	
+
 	private boolean isUniqueShortTitle(DistributionProtocol distributionProtocol) {
 		DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getByShortTitle(distributionProtocol.getShortTitle());
 		if (existing == null) {

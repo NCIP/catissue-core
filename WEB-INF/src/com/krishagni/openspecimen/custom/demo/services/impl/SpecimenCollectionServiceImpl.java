@@ -7,25 +7,21 @@ import java.util.Set;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
-import com.krishagni.catissueplus.core.biospecimen.events.AddVisitEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitAddedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.services.FormService;
-import com.krishagni.openspecimen.custom.demo.events.CollectSpecimensEvent;
 import com.krishagni.openspecimen.custom.demo.events.SpecimenCollectionDetail;
-import com.krishagni.openspecimen.custom.demo.events.SpecimensCollectedEvent;
 import com.krishagni.openspecimen.custom.demo.services.SpecimenCollectionService;
+
+import edu.wustl.common.beans.SessionDataBean;
 
 public class SpecimenCollectionServiceImpl implements SpecimenCollectionService {
 	
@@ -40,7 +36,7 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 	
 	@Override
 	@PlusTransactional
-	public SpecimensCollectedEvent collect(CollectSpecimensEvent req) {
+	public ResponseEvent<SpecimenCollectionDetail> collect(RequestEvent<SpecimenCollectionDetail> req) {
 		try {
 			SpecimenCollectionDetail result = new SpecimenCollectionDetail(); 
 			
@@ -54,16 +50,16 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 			//
 			
 			// Step 1.1: Register
-			CollectionProtocolRegistrationDetail cpr = register(cp, req);
+			CollectionProtocolRegistrationDetail cpr = register(cp, req.getSessionDataBean(), req.getPayload());
 			result.setCpr(cpr);
 			
 			// Step 1.2: DE props - Smoking history
-			savePatientSmokingHistory(cp, cpr.getId(), req);
+			savePatientSmokingHistory(cp, cpr.getId(), req.getSessionDataBean(), req.getPayload());
 						
 			//
 			// Step 2: Add visit
 			//
-			VisitDetail visit = addVisit(cp, cpr.getId(), req);
+			VisitDetail visit = addVisit(cp, cpr.getId(), req.getSessionDataBean(), req.getPayload());
 			result.setVisit(visit);
 			
 			//
@@ -71,85 +67,74 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 			//
 			
 			// Step 3.1: Blood Specimen
-			result.setBlood(createBloodSpecimen(cp, visit, req));
+			result.setBlood(createBloodSpecimen(cp, visit, req.getSessionDataBean(), req.getPayload()));
 			
 			// Step 3.2: DE props - Ischemia Time
-			saveBloodSpecimenExtn(cp, result.getBlood().getId(), req);
+			saveBloodSpecimenExtn(cp, result.getBlood().getId(), req.getSessionDataBean(), req.getPayload());
 
 			// Step 3.2: Tissue Specimen
-			result.setFrozenTissue(createFrozenTissue(cp, visit, req));
+			result.setFrozenTissue(createFrozenTissue(cp, visit, req.getSessionDataBean(), req.getPayload()));
 			
-			return SpecimensCollectedEvent.ok(result);			
-		} catch (ObjectCreationException oce) {
-			return SpecimensCollectedEvent.badRequest(oce);
+			return ResponseEvent.response(result);			
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			return SpecimensCollectedEvent.serverError(e);
+			return ResponseEvent.serverError(e);
 		}		
 	}
 	
-	private CollectionProtocolRegistrationDetail register(CollectionProtocol cp, CollectSpecimensEvent input) {
+	private CollectionProtocolRegistrationDetail register(CollectionProtocol cp, SessionDataBean sdb, SpecimenCollectionDetail input) {
 		Date regDate = Calendar.getInstance().getTime();
 		
-		VisitDetail visit = input.getCollectionDetail().getVisit();
+		VisitDetail visit = input.getVisit();
 		if (visit.getVisitDate() != null) {
 			regDate = visit.getVisitDate();
 		}
 
-		CollectionProtocolRegistrationDetail cpr = input.getCollectionDetail().getCpr();
+		CollectionProtocolRegistrationDetail cpr = input.getCpr();
 		cpr.setCpId(cp.getId());
 		cpr.setRegistrationDate(regDate);			
 			
-		CreateRegistrationEvent req = new CreateRegistrationEvent();
-		req.setCprDetail(cpr);
-		req.setSessionDataBean(input.getSessionDataBean());
-			
-		RegistrationCreatedEvent resp = cprSvc.createRegistration(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();	
-		}
+		RequestEvent<CollectionProtocolRegistrationDetail> req = new RequestEvent<CollectionProtocolRegistrationDetail>(sdb, cpr);
+		ResponseEvent<CollectionProtocolRegistrationDetail> resp = cprSvc.createRegistration(req);
+		resp.throwErrorIfUnsuccessful();
 		
-		return resp.getCprDetail();
+		return resp.getPayload();
 	}
 	
-	private void savePatientSmokingHistory(CollectionProtocol cp, Long cprId, CollectSpecimensEvent input) {
+	private void savePatientSmokingHistory(CollectionProtocol cp, Long cprId, SessionDataBean sdb, SpecimenCollectionDetail input) {
 		
 	}
 	
-	private VisitDetail addVisit(CollectionProtocol cp, Long cprId, CollectSpecimensEvent input) {
+	private VisitDetail addVisit(CollectionProtocol cp, Long cprId, SessionDataBean sdb, SpecimenCollectionDetail input) {
 		CollectionProtocolEvent cpe = cp.getCollectionProtocolEvents().iterator().next();
 		
-		VisitDetail visit = input.getCollectionDetail().getVisit();
+		VisitDetail visit = input.getVisit();
 		visit.setEventId(cpe.getId());
 		visit.setCprId(cprId);
 		visit.setCpTitle(cp.getTitle());
 		visit.setStatus("Complete"); // TODO: hard coded
 		
-		AddVisitEvent req = new AddVisitEvent();
-		req.setVisit(visit);
-		req.setSessionDataBean(input.getSessionDataBean());
-		
-		VisitAddedEvent resp = cprSvc.addVisit(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getVisit();
+		RequestEvent<VisitDetail> req = new RequestEvent<VisitDetail>(sdb, visit);
+		ResponseEvent<VisitDetail> resp = cprSvc.addVisit(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
-	private SpecimenDetail createBloodSpecimen(CollectionProtocol cp, VisitDetail visit, CollectSpecimensEvent input) {
+	private SpecimenDetail createBloodSpecimen(CollectionProtocol cp, VisitDetail visit, SessionDataBean sdb, SpecimenCollectionDetail input) {
 		CollectionProtocolEvent cpe = cp.getCollectionProtocolEvents().iterator().next(); 
 		SpecimenRequirement bloodReq = getByClassAndType(cpe.getSpecimenRequirements(), "Fluid", "Whole Blood");		
-		return createSpecimen(visit, bloodReq, input.getCollectionDetail().getBlood());
+		return createSpecimen(visit, bloodReq, sdb,input.getBlood());
 	}
 	
-	private void saveBloodSpecimenExtn(CollectionProtocol cp, Long specimenId, CollectSpecimensEvent input) {
+	private void saveBloodSpecimenExtn(CollectionProtocol cp, Long specimenId, SessionDataBean sdb, SpecimenCollectionDetail input) {
 		
 	}
 	
-	private SpecimenDetail createFrozenTissue(CollectionProtocol cp, VisitDetail visit, CollectSpecimensEvent input) {
+	private SpecimenDetail createFrozenTissue(CollectionProtocol cp, VisitDetail visit, SessionDataBean sdb, SpecimenCollectionDetail input) {
 		CollectionProtocolEvent cpe = cp.getCollectionProtocolEvents().iterator().next();
 		SpecimenRequirement frozenTissueReq = getByClassAndType(cpe.getSpecimenRequirements(), "Tissue", "Frozen Tissue");
-		return createSpecimen(visit, frozenTissueReq, input.getCollectionDetail().getFrozenTissue());
+		return createSpecimen(visit, frozenTissueReq, sdb, input.getFrozenTissue());
 	}
 	
 	private SpecimenRequirement getByClassAndType(Set<SpecimenRequirement> srs, String klass, String type) {
@@ -162,7 +147,7 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 		return null;		
 	}
 	
-	private SpecimenDetail createSpecimen(VisitDetail visit, SpecimenRequirement sr, SpecimenDetail specimen) {
+	private SpecimenDetail createSpecimen(VisitDetail visit, SpecimenRequirement sr, SessionDataBean sdb, SpecimenDetail specimen) {
 		specimen.setVisitId(visit.getId());
 		specimen.setLineage("New");
 		specimen.setStatus("Collected");
@@ -171,16 +156,10 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 		specimen.setSpecimenClass(sr.getSpecimenClass());
 		specimen.setType(sr.getSpecimenType());
 		
-		CreateSpecimenEvent req = new CreateSpecimenEvent();
-		req.setSpecimen(specimen);
-		req.setVisitId(visit.getId());
-		
-		SpecimenCreatedEvent resp = specimenSvc.createSpecimen(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getSpecimen();
+		RequestEvent<SpecimenDetail> req = new RequestEvent<SpecimenDetail>(sdb, specimen);
+		ResponseEvent<SpecimenDetail> resp = specimenSvc.createSpecimen(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
 	public DaoFactory getDaoFactory() {

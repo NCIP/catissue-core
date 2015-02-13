@@ -1,35 +1,46 @@
 
 package com.krishagni.catissueplus.core.administrative.domain.factory;
 
-import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 
-public enum StorageContainerErrorCode implements CatissueErrorCode {
+public enum StorageContainerErrorCode implements ErrorCode {
+	NOT_FOUND,
+	
+	NAME_REQUIRED,
+	
+	DUP_NAME,
+	
+	DUP_BARCODE,
+	
+	INVALID_DIMENSION_CAPACITY,
+	
+	INVALID_DIMENSION_LABELING_SCHEME,
+	
+	REQUIRED_SITE_OR_PARENT_CONT,
+	
+	INVALID_SITE_AND_PARENT_CONT,
+	
+	NO_FREE_SPACE,
+	
+	CANNOT_SHRINK_CONTAINER,
+	
+	PARENT_CONT_NOT_FOUND,
+	
+	RESTRICTIVE_SPECIMEN_CLASS_AND_TYPE,
+	
+	RESTRICTIVE_CP,
+	
+	INVALID_NUMBER_POSITION,
+	
+	INVALID_ALPHA_POSITION,
+	
+	INVALID_ROMAN_POSITION,
+	
+	REF_ENTITY_FOUND;
 
-	MISSING_ATTR_VALUE(1800, "Required attribute is either empty or null."), 
-	INVALID_ATTR_VALUE(1801, "Attribute value is invalid."), 
-	AUTO_GENERATED_LABEL(1802, "Please do not specify label,it is auto generated."), 
-	AUTO_GENERATED_BARCODE(1803, "Please do not specify barcode,it is auto generated."), 
-	ERRORS(1811, "Please resolve the highlighted errors."), 
-	BAD_REQUEST(1815, "Bad Request"), 
-	NOT_UNIQUE(1818, "Property value is not unique"), 
-	NO_FREE_SPACE(1819, "No free space in parent container"),
-	REFERENCED_ATTRIBUTE(1820,"Container having child containers");
-
-	private int code;
-
-	private String message;
-
-	private StorageContainerErrorCode(int code, String message) {
-		this.code = code;
-		this.message = message;
-	}
-
-	public int code() {
-		return code;
-	}
-
-	public String message() {
-		return message;
+	@Override
+	public String code() {
+		return "STORAGE_CONTAINER_" + this.name();
 	}
 
 }

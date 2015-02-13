@@ -51,7 +51,7 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Site> getAllSites(int maxResults) {
+	public List<Site> getSites(int maxResults) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_SITES);
 		query.setMaxResults(maxResults);
 		return query.list();

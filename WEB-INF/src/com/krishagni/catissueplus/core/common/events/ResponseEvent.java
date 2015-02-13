@@ -1,79 +1,62 @@
 
 package com.krishagni.catissueplus.core.common.events;
 
-import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
-public class ResponseEvent {
+public class ResponseEvent<T> {
 
-	private EventStatus status;
-
-	private String message;
-
-	private Throwable exception;
-
-	private ErroneousField[] erroneousFields;
-
-	public EventStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(EventStatus status) {
-		this.status = status;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public Throwable getException() {
-		return exception;
-	}
-
-	public ErroneousField[] getErroneousFields() {
-		return erroneousFields;
-	}
-
-	public void setErroneousFields(ErroneousField[] erroneousFields) {
-		this.erroneousFields = erroneousFields;
-	}
-
-	public void setException(Throwable exception) {
-		this.exception = exception;
+	private T payload;
+	
+	private OpenSpecimenException error; 
+	
+	public ResponseEvent(T payload) {
+		this.payload = payload;
 	}
 	
-	public boolean isSuccess(){
-		return status == EventStatus.OK; 
+	public ResponseEvent(OpenSpecimenException error) {
+		this.error = error;
+	}
+
+	public T getPayload() {
+		return payload;
+	}
+
+	public void setPayload(T payload) {
+		this.payload = payload;
+	}
+
+	public OpenSpecimenException getError() {
+		return error;
+	}
+
+	public void setError(OpenSpecimenException error) {
+		this.error = error;
 	}
 	
-	public void raiseException(){
-		throw new OpenSpecimenException(this);
+	public void throwErrorIfUnsuccessful() {
+		if (error != null) {
+			throw error;
+		}
 	}
 	
-    public void setupResponseEvent(EventStatus status, CatissueErrorCode errorCode, Throwable t) {
-        setStatus(status);
-
-        String message = null;
-        if (errorCode != null) {
-                message = errorCode.message();
-        }
-
-        if (message == null && t != null) {
-                message = t.getMessage();
-        }
-        setMessage(message);
-        setException(t);
-
-        if (t instanceof ObjectCreationException) {
-                ObjectCreationException oce = (ObjectCreationException)t;
-                setErroneousFields(oce.getErroneousFields());
-        }
-    }
-
+	public boolean isSuccessful() {
+		return error == null;
+	}
+	
+	public static <P> ResponseEvent<P> response(P payload) {
+		return new ResponseEvent<P>(payload);
+	}
+	
+	public static <P> ResponseEvent<P> error(OpenSpecimenException error) {
+		return new ResponseEvent<P>(error);
+	}
+	
+	public static <P> ResponseEvent<P> userError(ErrorCode error) {
+		return new ResponseEvent<P>(OpenSpecimenException.userError(error));
+	}
+	
+	public static <P> ResponseEvent<P> serverError(Exception e) {
+		return new ResponseEvent<P>(OpenSpecimenException.serverError(e));
+	}
 }

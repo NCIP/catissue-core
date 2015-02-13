@@ -11,9 +11,13 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
@@ -28,15 +32,15 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 
 	@Override
 	public Specimen createSpecimen(SpecimenDetail detail) {
-		ObjectCreationException oce = new ObjectCreationException();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
-		SpecimenRequirement sr = getSpecimenRequirement(detail, oce);
-		Visit visit = getVisit(detail, oce);
+		SpecimenRequirement sr = getSpecimenRequirement(detail, ose);
+		Visit visit = getVisit(detail, ose);
 		
 		if (sr != null && visit != null) {
 			if (!sr.getCollectionProtocolEvent().getId().equals(visit.getCpEvent().getId())) {
-				oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "visitId");
-				throw oce;
+				ose.addError(SpecimenErrorCode.INVALID_VISIT);
+				throw ose;
 			}			
 		}
 		
@@ -48,27 +52,27 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		specimen.setVisit(visit);
-		setLabel(detail, specimen, oce);
-		setBarcode(detail, specimen, oce);
-		setActivityStatus(detail, specimen, oce);
-		setLineage(detail, specimen, oce);
-		setParentSpecimen(detail, specimen, oce);
-		setCollectionStatus(detail, specimen, oce);
-		setAnatomicSite(detail, specimen, oce);
-		setLaterality(detail, specimen, oce);
-		setPathologicalStatus(detail, specimen, oce);
-		setQuantity(detail, specimen, oce);
-		setSpecimenClass(detail, specimen, oce);
-		setSpecimenType(detail, specimen, oce);
-		setCreatedOn(detail, specimen, oce);
+		setLabel(detail, specimen, ose);
+		setBarcode(detail, specimen, ose);
+		setActivityStatus(detail, specimen, ose);
+		setLineage(detail, specimen, ose);
+		setParentSpecimen(detail, specimen, ose);
+		setCollectionStatus(detail, specimen, ose);
+		setAnatomicSite(detail, specimen, ose);
+		setLaterality(detail, specimen, ose);
+		setPathologicalStatus(detail, specimen, ose);
+		setQuantity(detail, specimen, ose);
+		setSpecimenClass(detail, specimen, ose);
+		setSpecimenType(detail, specimen, ose);
+		setCreatedOn(detail, specimen, ose);
 		
 //		setContainerPositions(specimenDetail, specimen, errorHandler);
 		
-		oce.checkErrorAndThrow();
+		ose.checkAndThrow();
 		return specimen;
 	}
 
-	private void setBarcode(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
+	private void setBarcode(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		if(StringUtils.isBlank(detail.getBarcode())) {
 			return;
 		}
@@ -76,42 +80,42 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		specimen.setBarcode(detail.getBarcode());
 	}
 
-	private void setActivityStatus(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
+	private void setActivityStatus(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(detail.getActivityStatus())) {
 			specimen.setActive();
 		} else if (isValidPv(detail.getActivityStatus(), Status.ACTIVITY_STATUS.getStatus())) {
 			specimen.setActivityStatus(detail.getActivityStatus());
 		} else {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, Status.ACTIVITY_STATUS.toString());
+			ose.addError(ActivityStatusErrorCode.INVALID);
 		}
 	}
 	
-	private void setLabel(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
+	private void setLabel(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(detail.getLabel())) {
-			oce.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, "label");
+			ose.addError(SpecimenErrorCode.LABEL_REQUIRED);
 			return;
 		}
 		
 		specimen.setLabel(detail.getLabel());
 	}
 
-	private Visit getVisit(SpecimenDetail detail, ObjectCreationException oce) {
+	private Visit getVisit(SpecimenDetail detail, OpenSpecimenException ose) {
 		Long visitId = detail.getVisitId();
 		if (visitId == null) {
-			oce.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, "visitId");
+			ose.addError(SpecimenErrorCode.VISIT_REQUIRED);
 			return null;
 		}
 		
 		Visit visit = daoFactory.getVisitsDao().getById(visitId);
 		if (visit == null) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "visitId");
+			ose.addError(VisitErrorCode.NOT_FOUND);
 			return null;
 		}
 		
 		return visit;
 	}
 	
-	private void setLineage(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
+	private void setLineage(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		String lineage = detail.getLineage();
 		if (lineage == null && specimen.getSpecimenRequirement() != null) {
 			return;
@@ -120,14 +124,14 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		if (!lineage.equals(Specimen.NEW) && 
 		    !lineage.equals(Specimen.ALIQUOT) && 
 		    !lineage.equals(Specimen.DERIVED)) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "lineage");
+			ose.addError(SpecimenErrorCode.INVALID_LINEAGE);
 			return;
 		}
 		
 		specimen.setLineage(lineage);
 	}
 	
-	private void setParentSpecimen(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
+	private void setParentSpecimen(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		if (specimen.getLineage().equals(Specimen.NEW)) {
 			return;
 		}
@@ -145,7 +149,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		specimen.setParentSpecimen(parent);
 	}
 	
-	private SpecimenRequirement getSpecimenRequirement(SpecimenDetail detail, ObjectCreationException oce) {
+	private SpecimenRequirement getSpecimenRequirement(SpecimenDetail detail, OpenSpecimenException ose) {
 		Long reqId = detail.getReqId();
 		if (reqId == null) {
 			return null;
@@ -153,14 +157,14 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		
 		SpecimenRequirement sr = daoFactory.getSpecimenRequirementDao().getById(reqId);
 		if (sr == null) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "reqId");
+			ose.addError(SrErrorCode.NOT_FOUND);
 			return null;
 		}
 		
 		return sr;
 	}
 	
-	private void setCollectionStatus(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
+	private void setCollectionStatus(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		String status = detail.getStatus();
 		if (StringUtils.isBlank(status)) {
 			status = Specimen.COLLECTED;
@@ -169,102 +173,102 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		if (!status.equals(Specimen.COLLECTED) && 
 			!status.equals(Specimen.PENDING) && 
 			!status.equals(Specimen.NOT_COLLECTED)) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "status");
+			ose.addError(SpecimenErrorCode.INVALID_COLL_STATUS);
 		}
 
 		specimen.setCollectionStatus(status);
 	}
 	
-	private void setAnatomicSite(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
+	private void setAnatomicSite(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		String anatomicSite = detail.getAnatomicSite();
 		if (anatomicSite == null && specimen.getSpecimenRequirement() != null) {
 			return;
 		}
 		
 		if (!isValidPv(anatomicSite, "anatomic-site")) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "anatomicSite");
+			ose.addError(SpecimenErrorCode.INVALID_ANATOMIC_SITE);
 			return;
 		}
 		
 		specimen.setTissueSite(anatomicSite);		
 	}
 
-	private void setLaterality(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {		
+	private void setLaterality(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {		
 		String laterality = detail.getLaterality();
 		if (laterality == null && specimen.getSpecimenRequirement() != null) {
 			return;
 		}
 		
 		if (!isValidPv(laterality, "laterality")) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "laterality");
+			ose.addError(SpecimenErrorCode.INVALID_LATERALITY);
 			return;
 		}
 		
 		specimen.setTissueSide(laterality);
 	}
 	
-	private void setPathologicalStatus(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
+	private void setPathologicalStatus(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		String pathology = detail.getPathology();
 		if (pathology == null && specimen.getSpecimenRequirement() != null) {
 			return;
 		}
 		
 		if (!isValidPv(detail.getPathology(), "pathological-status")) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "pathology");
+			ose.addError(SpecimenErrorCode.INVALID_PATHOLOGY_STATUS);
 			return;
 		}
 		
 		specimen.setPathologicalStatus(detail.getPathology());
 	}
 	
-	private void setQuantity(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
+	private void setQuantity(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		Double qty = detail.getInitialQty();
 		if (qty == null && specimen.getSpecimenRequirement() != null) {
 			return;
 		}
 		
 		if (qty == null) {
-			oce.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, "initialQty");
+			ose.addError(SpecimenErrorCode.INVALID_QTY);
 			return;
 		}
 		
 		if (qty <= 0) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "initialQty");
+			ose.addError(SpecimenErrorCode.INVALID_QTY);
 			return;
 		}
 		
 		specimen.setInitialQuantity(qty);
 	}
 	
-	private void setSpecimenClass(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
+	private void setSpecimenClass(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		String specimenClass = detail.getSpecimenClass();
 		if (specimenClass == null && specimen.getSpecimenRequirement() != null) {
 			return;
 		}
 		
 		if (!isValidPv(specimenClass, "specimen-class")) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "specimen-class");
+			ose.addError(SpecimenErrorCode.INVALID_SPECIMEN_CLASS);
 			return;
 		}
 		
 		specimen.setSpecimenClass(specimenClass);		
 	}
 	
-	private void setSpecimenType(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
+	private void setSpecimenType(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		String type = detail.getType();
 		if (type == null && specimen.getSpecimenRequirement() != null) {
 			return;
 		}
 		
 		if (!isValidPv(specimen.getSpecimenClass(), type, "specimen-type")) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "specimen-type");
+			ose.addError(SpecimenErrorCode.INVALID_SPECIMEN_TYPE);
 			return;
 		}
 		
 		specimen.setSpecimenType(type);		
 	}
 	
-	private void setCreatedOn(SpecimenDetail detail, Specimen specimen, ObjectCreationException oce) {
+	private void setCreatedOn(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		if (detail.getCreatedOn() == null) {
 			specimen.setCreatedOn(Calendar.getInstance().getTime());
 		} else {
@@ -277,7 +281,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 
 		Date visitDate = specimen.getVisit().getVisitDate();
 		if (visitDate.after(specimen.getCreatedOn())) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "createdOn");
+			ose.addError(SpecimenErrorCode.INVALID_CREATION_DATE);
 		}
 	}	
 }

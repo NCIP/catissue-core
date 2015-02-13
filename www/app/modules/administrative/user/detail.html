@@ -1,4 +1,15 @@
 <div> 
+  <div os-page-header>
+    <h3>
+      <a ui-sref="user-list" translate="user.list">Users</a>
+      <span class="fa fa-angle-right"></span>
+      <span>{{user.lastName}} {{user.firstName}}</span>
+    </h3>
+    <button class="os-round-btn" title="{{'user.tooltip.create_user' | translate}}" ui-sref="user-addedit({userId: user.id})">
+      <span class="fa fa-pencil"></span>
+    </button>
+  </div>
+    
   <div os-side-menu>
     <ul>
       <li ui-sref-active="active">

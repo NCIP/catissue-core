@@ -1,18 +1,14 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
-
 import java.util.HashSet;
 import java.util.Set;
 
-import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class Department {
-
-	private static final String DEPARTMENT = "department";
-
 	private Long id;
 
 	private String name;
@@ -71,8 +67,9 @@ public class Department {
 
 	public void delete() {
 		if (!this.getUserCollection().isEmpty()) {
-			reportError(UserErrorCode.REFERENCED_ATTRIBUTE, DEPARTMENT);
+			throw OpenSpecimenException.userError(InstituteErrorCode.DEPT_REF_ENTITY_FOUND);
 		}
+		
 		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 

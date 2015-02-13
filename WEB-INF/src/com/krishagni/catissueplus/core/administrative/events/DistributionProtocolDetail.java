@@ -81,7 +81,6 @@ public class DistributionProtocolDetail {
 	}
 
 	public static DistributionProtocolDetail from(DistributionProtocol distributionProtocol) {
-
 		DistributionProtocolDetail details = new DistributionProtocolDetail();
 		details.setShortTitle(distributionProtocol.getShortTitle());
 		details.setId(distributionProtocol.getId());
@@ -106,5 +105,4 @@ public class DistributionProtocolDetail {
 		
 		return list;
 	}
-
 }

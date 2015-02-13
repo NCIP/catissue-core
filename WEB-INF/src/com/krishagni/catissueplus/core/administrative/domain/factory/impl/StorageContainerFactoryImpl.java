@@ -11,13 +11,19 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class StorageContainerFactoryImpl implements StorageContainerFactory {
@@ -34,68 +40,68 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	@Override
 	public StorageContainer createStorageContainer(StorageContainerDetail detail) {
 		StorageContainer container = new StorageContainer();
-		ObjectCreationException oce = new ObjectCreationException();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		container.setId(detail.getId());
-		setName(detail, container, oce);
-		setBarcode(detail, container, oce);
-		setTemperature(detail, container, oce);
-		setCapacity(detail, container, oce);
-		setLabelingSchemes(detail, container, oce);
-		setSiteAndParentContainer(detail, container, oce);
-		setPosition(detail, container, oce);
-		setCreatedBy(detail, container, oce);
-		setActivityStatus(detail, container, oce);
-		setComments(detail, container, oce);
-		setAllowedSpecimenClasses(detail, container, oce);
-		setAllowedSpecimenTypes(detail, container, oce);
-		setAllowedCps(detail, container, oce);
+		setName(detail, container, ose);
+		setBarcode(detail, container, ose);
+		setTemperature(detail, container, ose);
+		setCapacity(detail, container, ose);
+		setLabelingSchemes(detail, container, ose);
+		setSiteAndParentContainer(detail, container, ose);
+		setPosition(detail, container, ose);
+		setCreatedBy(detail, container, ose);
+		setActivityStatus(detail, container, ose);
+		setComments(detail, container, ose);
+		setAllowedSpecimenClasses(detail, container, ose);
+		setAllowedSpecimenTypes(detail, container, ose);
+		setAllowedCps(detail, container, ose);
 		
-		oce.checkErrorAndThrow();
+		ose.checkAndThrow();
 		return container;
 	}
 	
-	private void setName(StorageContainerDetail detail, StorageContainer container, ObjectCreationException oce) {
+	private void setName(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		String name = detail.getName();
 		if (StringUtils.isBlank(name)) {
-			oce.addError(StorageContainerErrorCode.MISSING_ATTR_VALUE, "name");
+			ose.addError(StorageContainerErrorCode.NAME_REQUIRED);
 			return;
 		}
 		
 		container.setName(name);
 	}
 	
-	private void setBarcode(StorageContainerDetail detail, StorageContainer container, ObjectCreationException oce) {
+	private void setBarcode(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		container.setBarcode(detail.getBarcode());
 	}
 	
-	private void setTemperature(StorageContainerDetail detail, StorageContainer container, ObjectCreationException oce) {
+	private void setTemperature(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		container.setTemperature(detail.getTemperature());
 	}
 	
-	private void setCapacity(StorageContainerDetail detail, StorageContainer container, ObjectCreationException oce) {
+	private void setCapacity(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		int dimensionOneCapacity = detail.getDimensionOneCapacity();		
 		if (dimensionOneCapacity <= 0) {
-			oce.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, "dimensionOneCapacity");			
+			ose.addError(StorageContainerErrorCode.INVALID_DIMENSION_CAPACITY);			
 		}
 		
 		int dimensionTwoCapacity = detail.getDimensionTwoCapacity();
 		if (dimensionTwoCapacity <= 0) {
-			oce.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, "dimensionTwoCapacity");
+			ose.addError(StorageContainerErrorCode.INVALID_DIMENSION_CAPACITY);
 		}
 		
 		container.setDimensionOneCapacity(dimensionOneCapacity);
 		container.setDimensionTwoCapacity(dimensionTwoCapacity);		
 	}
 	
-	private void setLabelingSchemes(StorageContainerDetail detail, StorageContainer container, ObjectCreationException oce) {
+	private void setLabelingSchemes(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		String dimensionOneLabelingScheme = detail.getDimensionOneLabelingScheme();
 		if (StringUtils.isBlank(dimensionOneLabelingScheme)) {
 			dimensionOneLabelingScheme = StorageContainer.NUMBER_LABELING_SCHEME;
 		}
 		
 		if (!StorageContainer.isValidScheme(dimensionOneLabelingScheme)) {
-			oce.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, "dimensionOneLabelingScheme");
+			ose.addError(StorageContainerErrorCode.INVALID_DIMENSION_LABELING_SCHEME);
 		}
 		
 		container.setDimensionOneLabelingScheme(dimensionOneLabelingScheme);
@@ -106,29 +112,29 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		}
 		
 		if (!StorageContainer.isValidScheme(dimensionTwoLabelingScheme)) {
-			oce.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, "dimensionTwoLabelingScheme");
+			ose.addError(StorageContainerErrorCode.INVALID_DIMENSION_LABELING_SCHEME);
 		}
 		
 		container.setDimensionTwoLabelingScheme(dimensionTwoLabelingScheme);
 	}
 		
-	private void setSiteAndParentContainer(StorageContainerDetail detail, StorageContainer container, ObjectCreationException oce) {
-		Site site = setSite(detail, container, oce);
-		StorageContainer parentContainer = setParentContainer(detail, container, oce);
+	private void setSiteAndParentContainer(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
+		Site site = setSite(detail, container, ose);
+		StorageContainer parentContainer = setParentContainer(detail, container, ose);
 		
 		if (site == null && parentContainer == null) {
-			oce.addError(StorageContainerErrorCode.MISSING_ATTR_VALUE, "siteName or parentContainerName");
+			ose.addError(StorageContainerErrorCode.REQUIRED_SITE_OR_PARENT_CONT);
 			return;
 		}
 		
 		if (site == null) {
 			container.setSite(parentContainer.getSite());
 		} else if (parentContainer != null && !parentContainer.getSite().getId().equals(site.getId())) {
-			oce.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, "parentContainerName");
+			ose.addError(StorageContainerErrorCode.INVALID_SITE_AND_PARENT_CONT);
 		}
 	}
 	
-	private Site setSite(StorageContainerDetail detail, StorageContainer container, ObjectCreationException oce) {
+	private Site setSite(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		String siteName = detail.getSiteName();
 		if (StringUtils.isBlank(siteName)) {
 			return null;
@@ -136,14 +142,14 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 				
 		Site site = daoFactory.getSiteDao().getSite(siteName);
 		if (site == null) {
-			oce.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, "siteName");			
+			ose.addError(SiteErrorCode.NOT_FOUND);			
 		}
 			
 		container.setSite(site);
 		return site;		
 	}
 	
-	private StorageContainer setParentContainer(StorageContainerDetail detail, StorageContainer container, ObjectCreationException oce) {		
+	private StorageContainer setParentContainer(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {		
 		String parentName = detail.getParentContainerName();
 		if (StringUtils.isBlank(parentName)) {
 			return null;
@@ -151,14 +157,14 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		
 		StorageContainer parentContainer = daoFactory.getStorageContainerDao().getStorageContainerByName(parentName);
 		if (parentContainer == null) {
-			oce.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, "parentContainerName");
+			ose.addError(StorageContainerErrorCode.PARENT_CONT_NOT_FOUND);
 		}
 			
 		container.setParentContainer(parentContainer);
 		return parentContainer;
 	}
 	
-	private void setPosition(StorageContainerDetail detail, StorageContainer container, ObjectCreationException oce) {
+	private void setPosition(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		StorageContainer parentContainer = container.getParentContainer();
 		String posOne = null, posTwo = null;
 
@@ -176,12 +182,12 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 			if (parentContainer.canContainerOccupyPosition(container.getId(), posOne, posTwo)) {
 				position = parentContainer.createPosition(posOne, posTwo);
 			} else {
-				oce.addError(StorageContainerErrorCode.NO_FREE_SPACE, "position");
+				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE);
 			}
 		} else {
 			position = parentContainer.nextAvailablePosition();
 			if (position == null) {
-				oce.addError(StorageContainerErrorCode.NO_FREE_SPACE, "parentContainerName");
+				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE);
 			} 
 		} 
 		
@@ -191,7 +197,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		}
 	}
 	
-	private void setCreatedBy(StorageContainerDetail detail, StorageContainer container, ObjectCreationException oce) {
+	private void setCreatedBy(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		if (detail.getCreatedBy() == null) {
 			return;
 		}
@@ -203,60 +209,60 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 				
 		User user = daoFactory.getUserDao().getById(userId);
 		if (user == null) {
-			oce.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, "createdBy.id");
+			ose.addError(UserErrorCode.NOT_FOUND);
 			return;
 		}
 		
 		container.setCreatedBy(user);
 	}
 	
-	private void setActivityStatus(StorageContainerDetail detail, StorageContainer container, ObjectCreationException oce) {
+	private void setActivityStatus(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		String activityStatus = detail.getActivityStatus();
 		if (activityStatus == null) {
 			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
 		}
 		
 		if (!Status.isValidActivityStatus(activityStatus)) {
-			oce.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, "activityStatus");
+			ose.addError(ActivityStatusErrorCode.INVALID);
 			return;
 		}
 		
 		container.setActivityStatus(activityStatus);
 	}
 	
-	private void setComments(StorageContainerDetail detail, StorageContainer container, ObjectCreationException oce) {
+	private void setComments(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		container.setComments(detail.getComments());
 	}	
 	
-	private void setAllowedSpecimenClasses(StorageContainerDetail detail, StorageContainer container, ObjectCreationException oce) {
+	private void setAllowedSpecimenClasses(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		Set<String> allowedSpecimenClasses = detail.getAllowedSpecimenClasses();
 		if (CollectionUtils.isEmpty(allowedSpecimenClasses)) {
 			return;
 		}
 		
 		if (!CommonValidator.isValidPv(allowedSpecimenClasses.toArray(new String[0]), "specimen-class")) {
-			oce.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, "allowedSpecimenClasses");
+			ose.addError(SpecimenErrorCode.INVALID_SPECIMEN_CLASS);
 			return;
 		}
 		
 		container.setAllowedSpecimenClasses(allowedSpecimenClasses);
 	}
 	
-	private void setAllowedSpecimenTypes(StorageContainerDetail detail, StorageContainer container, ObjectCreationException oce) {
+	private void setAllowedSpecimenTypes(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		Set<String> allowedSpecimenTypes = detail.getAllowedSpecimenTypes();
 		if (CollectionUtils.isEmpty(allowedSpecimenTypes)) {
 			return;
 		}
 		
 		if (!CommonValidator.isValidPv(allowedSpecimenTypes.toArray(new String[0]), "specimen-type")) {
-			oce.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, "allowedSpecimenTypes");
+			ose.addError(SpecimenErrorCode.INVALID_SPECIMEN_TYPE);
 			return;
 		}
 		
 		container.setAllowedSpecimenTypes(allowedSpecimenTypes);
 	}
 	
-	private void setAllowedCps(StorageContainerDetail detail, StorageContainer container, ObjectCreationException oce) {
+	private void setAllowedCps(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		Set<String> allowedCps = detail.getAllowedCollectionProtocols();
 		if (CollectionUtils.isEmpty(allowedCps)) {
 			return;
@@ -264,7 +270,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 
 		List<CollectionProtocol> cps = daoFactory.getCollectionProtocolDao().getCpsByShortTitle(allowedCps);
 		if (cps.size() != allowedCps.size()) {
-			oce.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, "allowedCps");
+			ose.addError(CpErrorCode.NOT_FOUND);
 			return;
 		}
 		

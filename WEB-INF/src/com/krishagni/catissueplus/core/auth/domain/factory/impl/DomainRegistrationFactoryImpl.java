@@ -1,30 +1,21 @@
 
 package com.krishagni.catissueplus.core.auth.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
-import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
-
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.auth.domain.AuthProvider;
-import com.krishagni.catissueplus.core.auth.domain.factory.AuthErrorCode;
+import com.krishagni.catissueplus.core.auth.domain.factory.AuthProviderErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
 import com.krishagni.catissueplus.core.auth.domain.factory.DomainRegistrationFactory;
 import com.krishagni.catissueplus.core.auth.domain.factory.LdapFactory;
-import com.krishagni.catissueplus.core.auth.events.DomainDetails;
+import com.krishagni.catissueplus.core.auth.events.DomainDetail;
 import com.krishagni.catissueplus.core.auth.services.AuthenticationService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class DomainRegistrationFactoryImpl implements DomainRegistrationFactory {
-
-	private static final String AUTH_PROVIDER = "auth provider";
-
-	private static final String AUTH_TYPE = "auth type";
-
-	private final String IMPL_CLASS = "impl class";
-
-	private final String DOMAIN_NAME = "domain name";
 
 	@Autowired
 	private LdapFactory ldapFactory;
@@ -41,7 +32,7 @@ public class DomainRegistrationFactoryImpl implements DomainRegistrationFactory 
 	}
 
 	@Override
-	public AuthDomain getAuthDomain(DomainDetails domainDetails) {
+	public AuthDomain getAuthDomain(DomainDetail domainDetails) {
 		AuthDomain authDomain = new AuthDomain();
 		setDomainName(domainDetails.getName(), authDomain);
 		validateAuthType(domainDetails.getAuthType());
@@ -49,7 +40,7 @@ public class DomainRegistrationFactoryImpl implements DomainRegistrationFactory 
 		AuthProvider authProvider = daoFactory.getDomainDao().getAuthProviderByType(domainDetails.getAuthType());
 		if (domainDetails.getAuthType().equals(AuthenticationType.LDAP.value())) {
 			if (authProvider == null) {
-				reportError(AuthErrorCode.INVALID_ATTR_VALUE, AUTH_PROVIDER);
+				throw OpenSpecimenException.userError(AuthProviderErrorCode.LDAP_NOT_FOUND);
 			}
 			authDomain.setLdap(ldapFactory.getLdap(domainDetails, authDomain));
 		}
@@ -65,11 +56,11 @@ public class DomainRegistrationFactoryImpl implements DomainRegistrationFactory 
 
 	private void validateAuthType(String authType) {
 		if(!AuthenticationType.isValidAuthType(authType)){
-			reportError(AuthErrorCode.INVALID_ATTR_VALUE, AUTH_TYPE);
+			throw OpenSpecimenException.userError(AuthProviderErrorCode.INVALID_TYPE);
 		}
 	}
 
-	private AuthProvider getNewAuthProvider(DomainDetails domainDetails) {
+	private AuthProvider getNewAuthProvider(DomainDetail domainDetails) {
 		AuthProvider authProvider = new AuthProvider();
 		authProvider.setAuthType(domainDetails.getName());
 		authProvider.setImplClass(domainDetails.getImplClass());
@@ -77,16 +68,18 @@ public class DomainRegistrationFactoryImpl implements DomainRegistrationFactory 
 	}
 
 	private void setDomainName(String domainName, AuthDomain authDomain) {
-		if (isBlank(domainName)) {
-			reportError(AuthErrorCode.INVALID_ATTR_VALUE, DOMAIN_NAME);
+		if (StringUtils.isBlank(domainName)) {
+			throw OpenSpecimenException.userError(AuthProviderErrorCode.DOMAIN_NOT_SPECIFIED);
 		}
+		
 		authDomain.setName(domainName);
 	}
 
 	private void validateImplClass(String implClass) {
-		if (isBlank(implClass)) {
-			reportError(AuthErrorCode.INVALID_ATTR_VALUE, IMPL_CLASS);
+		if (StringUtils.isBlank(implClass)) {
+			throw OpenSpecimenException.userError(AuthProviderErrorCode.IMPL_NOT_SPECIFIED);
 		}
+		
 		isValidImplClass(implClass);
 	}
 
@@ -95,10 +88,8 @@ public class DomainRegistrationFactoryImpl implements DomainRegistrationFactory 
 		try {
 			Class authImplClass = (Class) Class.forName(implClass);
 			return (AuthenticationService) authImplClass.newInstance();
+		} catch (Exception e) {
+			throw OpenSpecimenException.userError(AuthProviderErrorCode.IMPL_LOADING_FAILED);
 		}
-		catch (Exception e) {
-			reportError(AuthErrorCode.INVALID_ATTR_VALUE, IMPL_CLASS);
-		}
-		return null;
 	}
 }

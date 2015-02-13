@@ -9,30 +9,19 @@ import krishagni.catissueplus.util.CommonUtil;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
-import com.krishagni.catissueplus.core.administrative.events.AllSitesEvent;
-import com.krishagni.catissueplus.core.administrative.events.CreateSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.DeleteSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.GetSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.PatchSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqAllSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.SiteCreatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.SiteDeletedEvent;
-import com.krishagni.catissueplus.core.administrative.events.SiteDetails;
-import com.krishagni.catissueplus.core.administrative.events.SiteGotEvent;
-import com.krishagni.catissueplus.core.administrative.events.SiteUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
+import com.krishagni.catissueplus.core.administrative.events.ListSiteCriteria;
+import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
+import com.krishagni.catissueplus.core.administrative.events.SiteQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.services.SiteService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SiteServiceImpl implements SiteService {
-
-	private static final String SITE_NAME = "site name";
-	
-	private static final String SITE_CODE = "site code";
-
 	private SiteFactory siteFactory;
 
 	private DaoFactory daoFactory;
@@ -46,162 +35,115 @@ public class SiteServiceImpl implements SiteService {
 	}
 
 	@Override
-	@PlusTransactional
-	public SiteGotEvent getSite(GetSiteEvent event) {
-		Site site;
-
-		if (event.getId() != null) {
-			site = daoFactory.getSiteDao().getSite(event.getId());
-			if (site == null) {
-				return SiteGotEvent.notFound(event.getId());
-			}
-		}
-		else {
-			site = daoFactory.getSiteDao().getSite(event.getName());
-			if (site == null) {
-				return SiteGotEvent.notFound(event.getName());
-			}
-		}
-		SiteDetails siteDetails = SiteDetails.fromDomain(site);
-		return SiteGotEvent.ok(siteDetails);
-	}
-
-	@Override
-	@PlusTransactional
-	public AllSitesEvent getAllSites(ReqAllSiteEvent req) {
-		List<Site> sites = daoFactory.getSiteDao().getAllSites(req.getMaxResults());
-		List<SiteDetails> result = new ArrayList<SiteDetails>();
-
+	@PlusTransactional	
+	public ResponseEvent<List<SiteDetail>> getSites(RequestEvent<ListSiteCriteria> req) {
+		List<Site> sites = daoFactory.getSiteDao().getSites(req.getPayload().maxResults());
+		
+		List<SiteDetail> result = new ArrayList<SiteDetail>();
 		for (Site site : sites) {
-			result.add(SiteDetails.fromDomain(site));
+			result.add(SiteDetail.fromDomain(site));
 		}
-		return AllSitesEvent.ok(result);
+		
+		return ResponseEvent.response(result);
 	}
 
 	@Override
-	@PlusTransactional
-	public SiteCreatedEvent createSite(CreateSiteEvent createSiteEvent) {
-		try {
-			Site site = siteFactory.createSite(createSiteEvent.getSiteDetails());
-			ObjectCreationException exceptionHandler = new ObjectCreationException();
-			ensureUniqueSiteName(site.getName(), exceptionHandler);
-			ensureUniqueSiteCode(null, site.getCode(), exceptionHandler);
-			exceptionHandler.checkErrorAndThrow();
+	@PlusTransactional		
+	public ResponseEvent<SiteDetail> getSite(RequestEvent<SiteQueryCriteria> req) {
+		SiteQueryCriteria crit = req.getPayload();
+		Site site = null;
+		
+		if (crit.getId() != null) {
+			site = daoFactory.getSiteDao().getSite(crit.getId());
+		} else if (crit.getName() != null) {
+			site = daoFactory.getSiteDao().getSite(crit.getName());
+		}
+		
+		if (site == null) {
+			return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
+		}
+		
+		return ResponseEvent.response(SiteDetail.fromDomain(site));
+	}
+
+	@Override
+	@PlusTransactional	
+	public ResponseEvent<SiteDetail> createSite(RequestEvent<SiteDetail> req) {
+		try {	
+			Site site = siteFactory.createSite(req.getPayload());
+			
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueSiteName(site.getName(), ose);
+			ensureUniqueSiteCode(null, site.getCode(), ose);
+			ose.checkAndThrow();
 
 			daoFactory.getSiteDao().saveOrUpdate(site);
-			return SiteCreatedEvent.ok(SiteDetails.fromDomain(site));
-		}
-		catch (ObjectCreationException ex) {
-			return SiteCreatedEvent.invalidRequest(ex.getMessage(), ex.getErroneousFields());
-		}
-		catch (Exception e) {
-			return SiteCreatedEvent.serverError(e);
+			return ResponseEvent.response(SiteDetail.fromDomain(site));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
-	@PlusTransactional
-	public SiteUpdatedEvent updateSite(UpdateSiteEvent updateEvent) {
+	@PlusTransactional		
+	public ResponseEvent<SiteDetail> updateSite(RequestEvent<SiteDetail> req) {
 		try {
-			Site oldSite = null;
+			Site existing = null;
+			SiteDetail detail = req.getPayload();
 
-			if (updateEvent.getSiteDetails().getId() != null) {
-				Long siteId = updateEvent.getSiteDetails().getId();
-				oldSite = daoFactory.getSiteDao().getSite(siteId);
-				if (oldSite == null) {
-					return SiteUpdatedEvent.notFound(siteId);
-				}
+			if (detail.getId() != null) {
+				existing = daoFactory.getSiteDao().getSite(detail.getId());
+			} else if (detail.getName() != null) {
+				existing = daoFactory.getSiteDao().getSite(detail.getName());
 			}
-			else {
-				String siteName = updateEvent.getSiteName();
-				oldSite = daoFactory.getSiteDao().getSite(siteName);
-				if (oldSite == null) {
-					return SiteUpdatedEvent.notFound(siteName);
-				}
+			
+			if (existing == null) {
+				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 			}
 
-			ObjectCreationException exceptionHandler = new ObjectCreationException();
-			Site site = siteFactory.createSite(updateEvent.getSiteDetails());
-			checkSiteName(oldSite.getName(), site.getName(), exceptionHandler);
-			ensureUniqueSiteCode(oldSite.getCode(), site.getCode(), exceptionHandler);
-			exceptionHandler.checkErrorAndThrow();
-			oldSite.update(site);
-			daoFactory.getSiteDao().saveOrUpdate(oldSite);
-			return SiteUpdatedEvent.ok(SiteDetails.fromDomain(oldSite));
-		}
-		catch (ObjectCreationException ce) {
-			return SiteUpdatedEvent.invalidRequest(SiteErrorCode.ERRORS.message(), ce.getErroneousFields());
-		}
-		catch (Exception e) {
-			return SiteUpdatedEvent.serverError(e);
-		}
+			Site site = siteFactory.createSite(detail);
+			
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);						
+			checkSiteName(existing.getName(), site.getName(), ose);
+			ensureUniqueSiteCode(existing.getCode(), site.getCode(), ose);			
+			ose.checkAndThrow();
+			
+			existing.update(site);
+			daoFactory.getSiteDao().saveOrUpdate(existing);
+			return ResponseEvent.response(SiteDetail.fromDomain(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}		
 	}
 
 	@Override
-	@PlusTransactional
-	public SiteUpdatedEvent patchSite(PatchSiteEvent event) {
+	@PlusTransactional	
+	public ResponseEvent<SiteDetail> deleteSite(RequestEvent<SiteQueryCriteria> req) {
 		try {
-			Site oldSite;
+			Site existing = null;
+			SiteQueryCriteria crit = req.getPayload();
 
-			if (event.getSiteId() != null) {
-				Long siteId = event.getSiteId();
-				oldSite = daoFactory.getSiteDao().getSite(siteId);
-				if (oldSite == null) {
-					return SiteUpdatedEvent.notFound(siteId);
-				}
+			if (crit.getId() != null) {
+				existing = daoFactory.getSiteDao().getSite(crit.getId());
+			} else if (crit.getName() != null) {
+				existing = daoFactory.getSiteDao().getSite(crit.getName());
 			}
-			else {
-				String siteName = event.getSiteName();
-				oldSite = daoFactory.getSiteDao().getSite(siteName);
-				if (oldSite == null) {
-					return SiteUpdatedEvent.notFound(siteName);
-				}
+			
+			if (existing == null) {
+				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 			}
-
-			Site site = siteFactory.patchSite(oldSite, event.getDetails());
-			ObjectCreationException exceptionHandler = new ObjectCreationException();
-			checkSiteName(site.getName(), event.getSiteName(), exceptionHandler);
-
-			if (event.getDetails().isActivityStatusModified()) {
-				checkActivityStatus(site);
-			}
-
-			exceptionHandler.checkErrorAndThrow();
-
-			daoFactory.getSiteDao().saveOrUpdate(site);
-			return SiteUpdatedEvent.ok(SiteDetails.fromDomain(site));
-		}
-		catch (ObjectCreationException exception) {
-			return SiteUpdatedEvent.invalidRequest(SiteErrorCode.ERRORS.message(), exception.getErroneousFields());
-		}
-		catch (Exception e) {
-			return SiteUpdatedEvent.serverError(e);
-		}
-	}
-
-	@Override
-	@PlusTransactional
-	public SiteDeletedEvent deleteSite(DeleteSiteEvent event) {
-		try {
-			Site site;
-			if (event.getId() != null) {
-				site = daoFactory.getSiteDao().getSite(event.getId());
-				if (site == null) {
-					return SiteDeletedEvent.notFound(event.getId());
-				}
-			}
-			else {
-				site = daoFactory.getSiteDao().getSite(event.getName());
-				if (site == null) {
-					return SiteDeletedEvent.notFound(event.getName());
-				}
-			}
-			site.delete();
-			daoFactory.getSiteDao().saveOrUpdate(site);
-			return SiteDeletedEvent.ok();
-		}
-		catch (Exception e) {
-			return SiteDeletedEvent.serverError(e);
+						
+			existing.delete();
+			daoFactory.getSiteDao().saveOrUpdate(existing);
+			return ResponseEvent.response(SiteDetail.fromDomain(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 
@@ -211,27 +153,25 @@ public class SiteServiceImpl implements SiteService {
 		}
 	}
 
-	private void checkSiteName(String oldName, String newName, ObjectCreationException exceptionHandler) {
-		if (!(oldName.equals(newName))) {
-			ensureUniqueSiteName(newName, exceptionHandler);
+	private void checkSiteName(String oldName, String newName, OpenSpecimenException ose) {
+		if (!oldName.equals(newName)) {
+			ensureUniqueSiteName(newName, ose);
 		}
-
 	}
 
-	private void ensureUniqueSiteName(String name, ObjectCreationException exceptionHandler) {
+	private void ensureUniqueSiteName(String name, OpenSpecimenException ose) {
 		if (!daoFactory.getSiteDao().isUniqueSiteName(name)) {
-			exceptionHandler.addError(SiteErrorCode.DUPLICATE_SITE_NAME, SITE_NAME);
+			ose.addError(SiteErrorCode.DUP_SITE_NAME);
 		}
 	}
 	
-	private void ensureUniqueSiteCode(String oldCode, String newCode, ObjectCreationException exceptionHandler) {
-		if (newCode == null || (newCode.equals(oldCode))) {
+	private void ensureUniqueSiteCode(String oldCode, String newCode, OpenSpecimenException ose) {
+		if (newCode == null || newCode.equals(oldCode)) {
 			return;
 		}
 		
 		if (!daoFactory.getSiteDao().isUniqueSiteCode(newCode)) {
-			exceptionHandler.addError(SiteErrorCode.DUPLICATE_SITE_CODE, SITE_CODE);
+			ose.addError(SiteErrorCode.DUP_SITE_CODE);
 		}
 	}
-
 }

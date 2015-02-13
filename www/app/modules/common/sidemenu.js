@@ -5,8 +5,8 @@ angular.module('openspecimen')
       restrict: "A",
       link: function(scope, element, attr) {
         var elTop = 57;//element.position().top; // TODO:
-        element.addClass('os-side-menu-wrapper')
-          .css("height", $window.innerHeight - elTop);
+        element.addClass('os-side-menu-wrapper');
+          //.css("height", $window.innerHeight - elTop);
 
         var open = $("<button/>")
           .addClass("btn btn-xs os-side-menu-show-btn")
@@ -21,7 +21,7 @@ angular.module('openspecimen')
 
         var ul = element.find('ul').addClass('os-side-menu');
 
-        var win = angular.element($window);
+        /*var win = angular.element($window);
         var docked = false;
         win.bind('scroll', function() { 
           var scrollTop = win.scrollTop();
@@ -37,7 +37,7 @@ angular.module('openspecimen')
           if (!docked) {
             element.css("height", $window.innerHeight - elTop + scrollTop);
           }
-        });
+        });*/
 
         element.mouseenter(function() {
           element.addClass("os-show-side-menu");

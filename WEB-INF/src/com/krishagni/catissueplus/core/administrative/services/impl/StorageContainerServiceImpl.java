@@ -7,24 +7,17 @@ import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
-import com.krishagni.catissueplus.core.administrative.events.ContainerOccupiedPositionsEvent;
-import com.krishagni.catissueplus.core.administrative.events.CreateStorageContainerEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqContainerOccupiedPositionsEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqStorageContainerEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqStorageContainersEvent;
-import com.krishagni.catissueplus.core.administrative.events.StorageContainerCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
-import com.krishagni.catissueplus.core.administrative.events.StorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
-import com.krishagni.catissueplus.core.administrative.events.StorageContainerUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.StorageContainersEvent;
-import com.krishagni.catissueplus.core.administrative.events.UpdateStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class StorageContainerServiceImpl implements StorageContainerService {
 	private DaoFactory daoFactory;
@@ -49,87 +42,85 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 
 	@Override
 	@PlusTransactional
-	public StorageContainersEvent getStorageContainers(ReqStorageContainersEvent req) {
-		try {
-			StorageContainerListCriteria listCrit = new StorageContainerListCriteria()
-				.startAt(req.getStartAt())
-				.maxResults(req.getMaxRecords())
-				.onlyFreeContainers(req.isOnlyFreeContainers())
-				.parentContainerId(req.getParentContainerId())
-				.siteName(req.getSiteName())
-				.query(req.getName())
-				.anyLevelContainers(req.isAnyLevelContainers());
-			
-			List<StorageContainer> containers = daoFactory.getStorageContainerDao().getStorageContainers(listCrit); 
-			return StorageContainersEvent.ok(StorageContainerSummary.from(containers, req.isAnyLevelContainers()));
+	public ResponseEvent<List<StorageContainerSummary>> getStorageContainers(RequestEvent<StorageContainerListCriteria> req) {
+		try {			
+			List<StorageContainer> containers = daoFactory.getStorageContainerDao().getStorageContainers(req.getPayload());
+			List<StorageContainerSummary> result = StorageContainerSummary.from(containers, req.getPayload().anyLevelContainers());
+			return ResponseEvent.response(result);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			return StorageContainersEvent.serverError(e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 	
 	@Override
 	@PlusTransactional
-	public StorageContainerEvent getStorageContainer(ReqStorageContainerEvent req) {
+	public ResponseEvent<StorageContainerDetail> getStorageContainer(RequestEvent<Long> req) {
 		try {
-			Long containerId = req.getContainerId();
+			Long containerId = req.getPayload();
 			
 			StorageContainer container = daoFactory.getStorageContainerDao().getById(containerId);			
 			if (container == null) {
-				return StorageContainerEvent.notFound(containerId);
+				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
 			}
 			
-			return StorageContainerEvent.ok(StorageContainerDetail.from(container));			
+			return ResponseEvent.response(StorageContainerDetail.from(container));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			return StorageContainerEvent.serverError(e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 	
 	@Override
 	@PlusTransactional
-	public ContainerOccupiedPositionsEvent getOccupiedPositions(ReqContainerOccupiedPositionsEvent req) {
+	public ResponseEvent<List<StorageContainerPositionDetail>> getOccupiedPositions(RequestEvent<Long> req) {
 		try {
-			Long containerId = req.getContainerId();
+			Long containerId = req.getPayload();
 			
 			StorageContainer container = daoFactory.getStorageContainerDao().getById(containerId);
 			if (container == null) {
-				return ContainerOccupiedPositionsEvent.notFound();
+				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
 			}
 			
 			Set<StorageContainerPosition> positions = container.getOccupiedPositions();
-			return ContainerOccupiedPositionsEvent.ok(StorageContainerPositionDetail.from(positions));
+			return ResponseEvent.response(StorageContainerPositionDetail.from(positions));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			return ContainerOccupiedPositionsEvent.serverError(e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 	
 	@Override
 	@PlusTransactional
-	public StorageContainerCreatedEvent createStorageContainer(CreateStorageContainerEvent req) {
+	public ResponseEvent<StorageContainerDetail> createStorageContainer(RequestEvent<StorageContainerDetail> req) {
 		try {
-			StorageContainerDetail input = req.getContainer();
+			StorageContainerDetail input = req.getPayload();
 			
 			StorageContainer container = containerFactory.createStorageContainer(input);
 			ensureUniqueConstraints(container);
 			
 			daoFactory.getStorageContainerDao().saveOrUpdate(container, true);
-			return StorageContainerCreatedEvent.ok(StorageContainerDetail.from(container));
-		} catch (ObjectCreationException oce) {
-			return StorageContainerCreatedEvent.badRequest(oce);
+			return ResponseEvent.response(StorageContainerDetail.from(container));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			return StorageContainerCreatedEvent.serverError(e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 	
 	@Override
 	@PlusTransactional
-	public StorageContainerUpdatedEvent updateStorageContainer(UpdateStorageContainerEvent req) {
+	public ResponseEvent<StorageContainerDetail> updateStorageContainer(RequestEvent<StorageContainerDetail> req) {
 		try {
-			StorageContainerDetail input = req.getContainer();
+			StorageContainerDetail input = req.getPayload();
 			
 			Long id = input.getId();
 			StorageContainer existing = daoFactory.getStorageContainerDao().getById(id);
 			if (existing == null) {
-				return StorageContainerUpdatedEvent.notFound(id);
+				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
 			}
 						
 			StorageContainer container = containerFactory.createStorageContainer(input);
@@ -137,28 +128,26 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			
 			existing.update(container);			
 			daoFactory.getStorageContainerDao().saveOrUpdate(existing, true);
-			return StorageContainerUpdatedEvent.ok(StorageContainerDetail.from(existing));			
-		} catch (ObjectCreationException oce) {
-			return StorageContainerUpdatedEvent.badRequest(oce);
-		} catch (IllegalArgumentException iae) {
-			return StorageContainerUpdatedEvent.badRequest(iae);
+			return ResponseEvent.response(StorageContainerDetail.from(existing));			
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			return StorageContainerUpdatedEvent.serverError(e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 		
 	private void ensureUniqueConstraints(StorageContainer container) {
-		ObjectCreationException oce = new ObjectCreationException();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		if (!isUniqueName(container)) {
-			oce.addError(StorageContainerErrorCode.NOT_UNIQUE, "name");
+			ose.addError(StorageContainerErrorCode.DUP_NAME);
 		}
 		
 		if (!isUniqueBarcode(container)) {
-			oce.addError(StorageContainerErrorCode.NOT_UNIQUE, "barcode");
+			ose.addError(StorageContainerErrorCode.DUP_BARCODE);
 		}
 		
-		oce.checkErrorAndThrow();		
+		ose.checkAndThrow();		
 	}
 	
 	private boolean isUniqueName(StorageContainer container) {

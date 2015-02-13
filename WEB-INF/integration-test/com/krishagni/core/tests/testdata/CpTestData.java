@@ -4,55 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEventDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class CpTestData {
-
-	public static ReqRegisteredParticipantsEvent getReqRegisteredParticipantsEvent() {
-		ReqRegisteredParticipantsEvent req = new ReqRegisteredParticipantsEvent();
-		req.setSessionDataBean(CprTestData.getSessionDataBean());
-		req.setCpId(1L);
-		req.setIncludeStats(true);
-		req.setStartAt(0);
-		req.setMaxResults(100);
-		return req;
-	}
-	
-	public static ReqAllCollectionProtocolsEvent getReqAllCollectionProtocolsEvent() {
-		ReqAllCollectionProtocolsEvent req = new ReqAllCollectionProtocolsEvent();
-		req.setIncludePi(true);
-		req.setIncludeStats(true);
-		return req;
-	}
-	
-	public static ReqCollectionProtocolEvent getReqCollectionProtocolEvent() {
-		ReqCollectionProtocolEvent req = new ReqCollectionProtocolEvent();
-		req.setCpId(1L);
-		req.setSessionDataBean(CprTestData.getSessionDataBean());
-		return req;
-	}
-	
-	public static UserSummary getUser(Long id, String firstName, String lastName, String loginName) {
-		UserSummary user = new UserSummary();
-		user.setId(id);
-		user.setFirstName(firstName);
-		user.setLastName(lastName);
-		user.setLoginName(loginName);
-		return user;
-	}
-	
 	public static List<UserSummary> getCoordinators(Integer... ids) {
 		List<UserSummary> users = new ArrayList<UserSummary>();
 		for (Integer i : ids) {
 			String firstName = "firstName" + i;
 			String lastName = "lastName" + i;
 			String loginName = "login" + i + "@login.com";
-			users.add(getUser(i.longValue(),firstName, lastName, loginName ));
+			users.add(CommonUtils.getUser(i.longValue(),firstName, lastName, loginName ));
 		}
 		
 		return users;
@@ -62,8 +23,8 @@ public class CpTestData {
 		CollectionProtocolDetail cp = new CollectionProtocolDetail();
 		cp.setTitle("title");
 		cp.setShortTitle("short-title");
-		cp.setStartDate(CprTestData.getDate(31,1,2000));
-		cp.setPrincipalInvestigator(getUser(1L, "firstName" , "lastName" , "login@login.com"));
+		cp.setStartDate(CommonUtils.getDate(31,1,2000));
+		cp.setPrincipalInvestigator(CommonUtils.getUser(1L, "firstName" , "lastName" , "login@login.com"));
 		cp.setConsentsWaived(true);
 		cp.setIrbId("ASDF-0000");
 		cp.setPpidFmt("ppid-format");
@@ -78,12 +39,4 @@ public class CpTestData {
 		cp.setActivityStatus("Active");
 		return cp;
 	}
-	
-	public static CreateCollectionProtocolEvent getCreateCollectionProtocolEvent() {
-		CreateCollectionProtocolEvent req = new CreateCollectionProtocolEvent();
-		req.setSessionDataBean(CprTestData.getSessionDataBean());
-		req.setCp(getCp());
-		return req;
-	}
-
 }

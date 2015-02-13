@@ -2,6 +2,8 @@ package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -15,16 +17,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
-import com.krishagni.catissueplus.core.biospecimen.events.AddSpecimenRequirementEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.AliquotsRequirementCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotsRequirementEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateDerivedSpecimenReqEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.DerivedSpecimenReqCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenRequirementsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementAddedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementsEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
 
 @Controller
 @RequestMapping("specimen-requirements")
@@ -32,37 +31,29 @@ public class SpecimenRequirementsController {
 
 	@Autowired
 	private CollectionProtocolService cpSvc;
+	
+	@Autowired
+	private HttpServletRequest httpServletRequest;		
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<SpecimenRequirementDetail> getRequirements(
-			@RequestParam(value = "eventId", required = true) Long eventId) {
+			@RequestParam(value = "eventId", required = true) 
+			Long eventId) {
 		
-		ReqSpecimenRequirementsEvent req = new ReqSpecimenRequirementsEvent();
-		req.setCpeId(eventId);
-		
-		SpecimenRequirementsEvent resp = cpSvc.getSpecimenRequirments(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getSpecimenRequirements();
+		ResponseEvent<List<SpecimenRequirementDetail>> resp = cpSvc.getSpecimenRequirments(getRequest(eventId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SpecimenRequirementDetail addRequirement(@RequestBody SpecimenRequirementDetail requirement) {
-		AddSpecimenRequirementEvent req = new AddSpecimenRequirementEvent();
-		req.setRequirement(requirement);
-		
-		SpecimenRequirementAddedEvent resp = cpSvc.addSpecimenRequirement(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getRequirement();
+		ResponseEvent<SpecimenRequirementDetail> resp = cpSvc.addSpecimenRequirement(getRequest(requirement));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();		
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/{id}/aliquots")
@@ -73,15 +64,9 @@ public class SpecimenRequirementsController {
 			@RequestBody AliquotSpecimensRequirement requirement) {
 		
 		requirement.setParentSrId(parentSrId);
-		CreateAliquotsRequirementEvent req = new CreateAliquotsRequirementEvent();
-		req.setRequirement(requirement);
-		
-		AliquotsRequirementCreatedEvent resp = cpSvc.createAliquots(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getAliquots();		
+		ResponseEvent<List<SpecimenRequirementDetail>> resp = cpSvc.createAliquots(getRequest(requirement));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();		
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value="/{id}/derived")
@@ -92,14 +77,16 @@ public class SpecimenRequirementsController {
 			@RequestBody DerivedSpecimenRequirement requirement) {
 		
 		requirement.setParentSrId(parentSrId);
-		CreateDerivedSpecimenReqEvent req = new CreateDerivedSpecimenReqEvent();
-		req.setRequirement(requirement);
-		
-		DerivedSpecimenReqCreatedEvent resp = cpSvc.createDerived(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getDerived();
+		ResponseEvent<SpecimenRequirementDetail> resp = cpSvc.createDerived(getRequest(requirement));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();		
 	}	
+	
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return new RequestEvent<T>(getSession(), payload);
+	}
+	
+	private SessionDataBean getSession() {
+		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
+	}		
 }

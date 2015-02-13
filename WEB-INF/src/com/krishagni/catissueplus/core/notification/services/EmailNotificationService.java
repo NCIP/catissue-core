@@ -1,10 +1,10 @@
 
 package com.krishagni.catissueplus.core.notification.services;
 
-import com.krishagni.catissueplus.core.notification.events.FailedNotificationReportEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public interface EmailNotificationService {
 
-	public FailedNotificationReportEvent sendFailedNotificationReport();
+	public ResponseEvent<Boolean> sendFailedNotificationReport();
 
 }

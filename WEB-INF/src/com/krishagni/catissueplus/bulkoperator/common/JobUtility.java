@@ -11,9 +11,9 @@ import org.hibernate.Hibernate;
 import com.krishagni.catissueplus.bulkoperator.domain.BulkOperationJob;
 import com.krishagni.catissueplus.bulkoperator.repository.BulkOperationJobDao;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class JobUtility {
 
@@ -22,12 +22,9 @@ public class JobUtility {
 			BulkOperationJob job = new BulkOperationJob();
 			job.setName(operationName);
 			
-			User user = userDao.getUser(userId);
-			
+			User user = userDao.getUser(userId);			
 			if (user == null) {
-				ObjectCreationException oce = new ObjectCreationException();
-				oce.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, "user-id");
-				throw oce;
+				throw OpenSpecimenException.userError(UserErrorCode.NOT_FOUND);
 			}
 			
 			job.setStartedBy(user);

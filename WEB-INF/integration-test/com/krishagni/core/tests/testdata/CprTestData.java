@@ -1,8 +1,6 @@
 package com.krishagni.core.tests.testdata;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -11,10 +9,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierResponseDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationEvent;
-
-
-import edu.wustl.common.beans.SessionDataBean;
 
 public class CprTestData {
 	public static ParticipantDetail getParticipant() {
@@ -22,7 +16,7 @@ public class CprTestData {
 		p.setFirstName("default_first_name");
 		p.setLastName("default_last_name");
 		p.setMiddleName("default_middle_name");
-		p.setBirthDate(getDate(21,10,2012));
+		p.setBirthDate(CommonUtils.getDate(21,10,2012));
 		p.setGender("MALE");
 		p.setRace(new HashSet<String>());
 		p.getRace().add("Asian");
@@ -59,7 +53,7 @@ public class CprTestData {
 		cpr.getParticipant().setId(1L);
 		cpr.setPpid("default-gen-ppid");
 		cpr.setCpId(1L);
-		cpr.setRegistrationDate(getDate(31,1,2001));
+		cpr.setRegistrationDate(CommonUtils.getDate(31,1,2001));
 		cpr.setConsentDetails(getConsentDetail());
 		return cpr;
 	}
@@ -81,7 +75,7 @@ public class CprTestData {
 		ConsentDetail detail = new ConsentDetail();
 		detail.setWitnessName("admin@admin.com");
 		detail.setConsentDocumentUrl("www.exampleurl.com");
-		detail.setConsentSignatureDate(getDate(31,1,2001));
+		detail.setConsentSignatureDate(CommonUtils.getDate(31,1,2001));
 		
 		ConsentTierResponseDetail ctd = new ConsentTierResponseDetail();
 		ctd.setConsentStatment("CONSENT1");
@@ -99,31 +93,5 @@ public class CprTestData {
 		detail.getConsentTierResponses().add(ctd);
 		
 		return detail;
-	}
-	
-	public static Date getDate(int day, int month, int year) {
-		try {
-			return new SimpleDateFormat("yyyy-MM-dd").parse(year + "-" + month + "-" + day);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	public static SessionDataBean getSessionDataBean() {
-		SessionDataBean sessionDataBean = new SessionDataBean();
-		sessionDataBean.setAdmin(true);
-		sessionDataBean.setCsmUserId("1");
-		sessionDataBean.setFirstName("admin");
-		sessionDataBean.setIpAddress("127.0.0.1");
-		sessionDataBean.setLastName("admin");
-		sessionDataBean.setUserId(1L);
-		sessionDataBean.setUserName("admin@admin.com");
-		return sessionDataBean;
-	}
-
-	public static ReqRegistrationEvent getReqRegistrationEvent() {
-		ReqRegistrationEvent req = new ReqRegistrationEvent();
-		req.setSessionDataBean(getSessionDataBean());
-		return req;
 	}
 }

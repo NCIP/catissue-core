@@ -13,7 +13,7 @@ import javax.naming.directory.SearchResult;
 import javax.naming.ldap.InitialLdapContext;
 
 import com.krishagni.catissueplus.core.auth.domain.Ldap;
-import com.krishagni.catissueplus.core.auth.events.LoginDetails;
+import com.krishagni.catissueplus.core.auth.events.LoginDetail;
 
 public class LdapAuthenticationManager {
 
@@ -27,7 +27,7 @@ public class LdapAuthenticationManager {
 		ctx.close();
 	}
 
-	public static void authenticate(LoginDetails loginDetails, Ldap ldap) throws NamingException {
+	public static void authenticate(LoginDetail loginDetails, Ldap ldap) throws NamingException {
 		Hashtable<Object, Object> env = getLdapEnvObj(ldap);
 		DirContext ctx = new InitialDirContext(env);
 		SearchResult searchResult = searchUser(loginDetails.getLoginId(), ldap, new String[0], ctx);

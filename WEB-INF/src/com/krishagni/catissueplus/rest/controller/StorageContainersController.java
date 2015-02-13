@@ -15,20 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.administrative.events.ContainerOccupiedPositionsEvent;
-import com.krishagni.catissueplus.core.administrative.events.CreateStorageContainerEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqContainerOccupiedPositionsEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqStorageContainerEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqStorageContainersEvent;
-import com.krishagni.catissueplus.core.administrative.events.StorageContainerCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
-import com.krishagni.catissueplus.core.administrative.events.StorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
-import com.krishagni.catissueplus.core.administrative.events.StorageContainerUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.StorageContainersEvent;
-import com.krishagni.catissueplus.core.administrative.events.UpdateStorageContainerEvent;
+import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -69,70 +62,53 @@ public class StorageContainersController {
 			boolean anyLevelContainers
 			) {
 		
-		ReqStorageContainersEvent req = new ReqStorageContainersEvent();
-		req.setName(name);
-		req.setSiteName(siteName);		
-		req.setOnlyFreeContainers(onlyFreeContainers);
-		req.setStartAt(startAt);
-		req.setMaxRecords(maxRecords);
-		req.setSessionDataBean(getSession());
-		req.setParentContainerId(parentContainerId);
-		req.setAnyLevelContainers(anyLevelContainers);
+		StorageContainerListCriteria crit = new StorageContainerListCriteria()
+			.query(name)
+			.siteName(siteName)
+			.onlyFreeContainers(onlyFreeContainers)
+			.startAt(startAt)
+			.maxResults(maxRecords)
+			.parentContainerId(parentContainerId)
+			.anyLevelContainers(anyLevelContainers);
+					
+		RequestEvent<StorageContainerListCriteria> req = new RequestEvent<StorageContainerListCriteria>(getSession(), crit);
+		ResponseEvent<List<StorageContainerSummary>> resp = storageContainerSvc.getStorageContainers(req);
+		resp.throwErrorIfUnsuccessful();
 		
-		StorageContainersEvent resp = storageContainerSvc.getStorageContainers(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getContainers();
+		return resp.getPayload();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value="{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public StorageContainerDetail getStorageContainer(@PathVariable("id") Long containerId) {
-		ReqStorageContainerEvent req = new ReqStorageContainerEvent();
-		req.setContainerId(containerId);
-		req.setSessionDataBean(getSession());
+		RequestEvent<Long> req = new RequestEvent<Long>(getSession(), containerId);
+		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.getStorageContainer(req);
+		resp.throwErrorIfUnsuccessful();
 		
-		StorageContainerEvent resp = storageContainerSvc.getStorageContainer(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getContainer();
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="{id}/occupied-positions")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<StorageContainerPositionDetail> getStorageContainerOccupiedPositions(@PathVariable("id") Long containerId) {
-		ReqContainerOccupiedPositionsEvent req = new ReqContainerOccupiedPositionsEvent();
-		req.setContainerId(containerId);
-		req.setSessionDataBean(getSession());
+		RequestEvent<Long> req = new RequestEvent<Long>(getSession(), containerId);
+		ResponseEvent<List<StorageContainerPositionDetail>> resp = storageContainerSvc.getOccupiedPositions(req);
+		resp.throwErrorIfUnsuccessful();
 		
-		ContainerOccupiedPositionsEvent resp = storageContainerSvc.getOccupiedPositions(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getOccupiedPositions();
+		return resp.getPayload();
 	}
 		
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public StorageContainerDetail createStorageContainer(@RequestBody StorageContainerDetail detail) {
-		CreateStorageContainerEvent req = new CreateStorageContainerEvent();
-		req.setContainer(detail);
-		req.setSessionDataBean(getSession());
+		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(getSession(), detail);
+		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.createStorageContainer(req);
+		resp.throwErrorIfUnsuccessful();
 		
-		StorageContainerCreatedEvent resp = storageContainerSvc.createStorageContainer(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getContainer();
+		return resp.getPayload();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value="{id}")
@@ -147,16 +123,11 @@ public class StorageContainersController {
 		
 		detail.setId(containerId);
 		
-		UpdateStorageContainerEvent req = new UpdateStorageContainerEvent();
-		req.setContainer(detail);
-		req.setSessionDataBean(getSession());
+		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(getSession(), detail);
+		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.updateStorageContainer(req);
+		resp.throwErrorIfUnsuccessful();
 		
-		StorageContainerUpdatedEvent resp = storageContainerSvc.updateStorageContainer(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		
-		return resp.getContainer();
+		return resp.getPayload();
 	}
 	
 	private SessionDataBean getSession() {

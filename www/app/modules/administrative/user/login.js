@@ -13,7 +13,7 @@ angular.module('openspecimen')
       saveToken: function(token) {
         $window.localStorage['osAuthToken'] = token;
         $http.defaults.headers.common['X-OS-API-TOKEN'] = token;
-        //$cookieStore.put('JSESSIONID', token);
+        $http.defaults.withCredentials = true;
       },
 
       removeToken: function(token) {

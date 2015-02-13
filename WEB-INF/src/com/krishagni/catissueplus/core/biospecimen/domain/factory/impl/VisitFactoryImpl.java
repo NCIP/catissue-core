@@ -1,7 +1,6 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 
 import java.util.Calendar;
@@ -10,23 +9,26 @@ import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
-import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class VisitFactoryImpl implements VisitFactory {
 
 	private DaoFactory daoFactory;
-
-	private static final String SCG_REPORTS = "scg reports";
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -36,27 +38,27 @@ public class VisitFactoryImpl implements VisitFactory {
 	public Visit createVisit(VisitDetail visitDetail) {
 		Visit visit = new Visit();
 		
-		ObjectCreationException oce = new ObjectCreationException();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 				
-		setCpe(visitDetail, visit, oce);		
-		setCpr(visitDetail, visit, oce);
-		validateCprAndCpe(visit, oce);
+		setCpe(visitDetail, visit, ose);		
+		setCpr(visitDetail, visit, ose);
+		validateCprAndCpe(visit, ose);
 		
-		setVisitDate(visitDetail, visit, oce);
-		setVisitStatus(visitDetail, visit, oce);
-		setClinicalDiagnosis(visitDetail, visit, oce);
-		setClinicalStatus(visitDetail, visit, oce);
-		setSite(visitDetail, visit, oce);
-		setActivityStatus(visitDetail, visit, oce);
+		setVisitDate(visitDetail, visit, ose);
+		setVisitStatus(visitDetail, visit, ose);
+		setClinicalDiagnosis(visitDetail, visit, ose);
+		setClinicalStatus(visitDetail, visit, ose);
+		setSite(visitDetail, visit, ose);
+		setActivityStatus(visitDetail, visit, ose);
 		
 		visit.setComments(visitDetail.getComments());
 		visit.setSurgicalPathologyNumber(visitDetail.getSurgicalPathologyNumber());
 		
-		oce.checkErrorAndThrow();
+		ose.checkAndThrow();
 		return visit;
 	}
 
-	private void setCpe(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
+	private void setCpe(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		CollectionProtocolEvent cpe = null;
 		
 		Long cpeId = visitDetail.getEventId();
@@ -66,7 +68,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		if (cpeId != null) {
 			cpe = daoFactory.getCollectionProtocolDao().getCpe(cpeId);
 			if (cpe == null) {
-				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "cpeId");
+				ose.addError(CpeErrorCode.NOT_FOUND);
 				return;
 			}
 
@@ -75,14 +77,14 @@ public class VisitFactoryImpl implements VisitFactory {
 					.getCollectionProtocol(cpTitle);
 			
 			if (cp == null) {
-				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "collectionProtocol");
+				ose.addError(CpErrorCode.NOT_FOUND);
 				return;
 			}
 			
 			cpe = daoFactory.getCollectionProtocolDao()
 					.getCpeByEventLabel(cp.getId(), eventLabel);			
 			if (cpe == null) {
-				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "eventLabel");
+				ose.addError(CpeErrorCode.LABEL_NOT_FOUND);
 				return;
 			}
 		}
@@ -90,26 +92,26 @@ public class VisitFactoryImpl implements VisitFactory {
 		visit.setCpEvent(cpe);
 	}
 
-	private void setCpr(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
+	private void setCpr(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		CollectionProtocolRegistration cpr = null;
 		
 		if (visitDetail.getCprId() != null) {
 			cpr = daoFactory.getCprDao().getById(visitDetail.getCprId());
 			if (cpr == null) {
-				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "cprId");
-			}
-			
+				ose.addError(CprErrorCode.NOT_FOUND);
+				return;
+			}			
 		} else if (visitDetail.getPpid() != null && visitDetail.getCpTitle() != null) {			
 			CollectionProtocol cp = daoFactory.getCollectionProtocolDao()
 					.getCollectionProtocol(visitDetail.getCpTitle());			
 			if (cp == null) {
-				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "collectionProtocol");
+				ose.addError(CpErrorCode.NOT_FOUND);
 				return ;
 			}
 			
 			cpr = daoFactory.getCprDao().getCprByPpId(cp.getId(), visitDetail.getPpid());
 			if (cpr == null) {
-				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "ppid");
+				ose.addError(CprErrorCode.INVALID_CP_AND_PPID);
 				return ;
 			}
 		} 
@@ -118,7 +120,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		visit.setRegistration(cpr);
 	}
 
-	private void validateCprAndCpe(Visit visit, ObjectCreationException oce) {
+	private void validateCprAndCpe(Visit visit, OpenSpecimenException ose) {
 		CollectionProtocolRegistration cpr = visit.getRegistration();
 		CollectionProtocolEvent cpe = visit.getCpEvent();
 		
@@ -127,11 +129,11 @@ public class VisitFactoryImpl implements VisitFactory {
 		}
 		
 		if (!cpr.getCollectionProtocol().getId().equals(cpe.getCollectionProtocol().getId())) {
-			oce.addError(ScgErrorCode.INVALID_CPR_CPE, "cpr, cpe");
+			ose.addError(CprErrorCode.INVALID_CPE);
 		}
 	}
 
-	public void setVisitDate(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
+	public void setVisitDate(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		CollectionProtocolRegistration cpr = visit.getRegistration();
 		if (cpr == null) {
 			return;
@@ -146,45 +148,45 @@ public class VisitFactoryImpl implements VisitFactory {
 		}
 	}
 	
-	private void setVisitStatus(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
+	private void setVisitStatus(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String visitStatus = visitDetail.getStatus();
 		if (isValidPv(visitStatus, "visit-status")) {
 			visit.setStatus(visitStatus);
 			return;
 		}
 		
-		oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "visitStatus");
+		ose.addError(VisitErrorCode.INVALID_STATUS);
 	}
 
-	private void setClinicalDiagnosis(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
+	private void setClinicalDiagnosis(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String clinicalDiagnosis = visitDetail.getClinicalDiagnosis();
 		if (isValidPv(clinicalDiagnosis, "clinical-diagnosis")) {
 			visit.setClinicalDiagnosis(clinicalDiagnosis);
 			return;
 		}
 		
-		oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "clinicalDiagnosis");
+		ose.addError(VisitErrorCode.INVALID_CLINICAL_DIAGNOSIS);
 	}
 	
-	private void setClinicalStatus(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
+	private void setClinicalStatus(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String clinicalStatus = visitDetail.getClinicalStatus();
 		if (isValidPv(clinicalStatus, "clinical-status")) {
 			visit.setClinicalStatus(clinicalStatus);
 			return;
 		}
 		
-		oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "clinicalStatus");
+		ose.addError(VisitErrorCode.INVALID_CLINICAL_STATUS);
 	}
 
-	private void setSite(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
+	private void setSite(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String visitSite = visitDetail.getSite();
-		if (visit.isCompleted() && isBlank(visitSite)) {
-			oce.addError(ScgErrorCode.MISSING_ATTR_VALUE, "site");
+		if (visit.isCompleted() && StringUtils.isBlank(visitSite)) {
+			ose.addError(VisitErrorCode.SITE_REQUIRED);
 			return;
 		} else {
 			Site site = daoFactory.getSiteDao().getSite(visitSite);
 			if (site == null) {
-				oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, "site");
+				ose.addError(SiteErrorCode.NOT_FOUND);
 				return;
 			}
 			
@@ -192,36 +194,14 @@ public class VisitFactoryImpl implements VisitFactory {
 		}
 	}
 
-	private void setActivityStatus(VisitDetail visitDetail, Visit visit, ObjectCreationException oce) {
+	private void setActivityStatus(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String status = visitDetail.getActivityStatus();
-		if (isBlank(status)) {
+		if (StringUtils.isBlank(status)) {
 			visit.setActive();
 		} else if (isValidPv(status, Status.ACTIVITY_STATUS.getStatus())) {
 			visit.setActivityStatus(status);
 		} else { 
-			oce.addError(ScgErrorCode.INVALID_ATTR_VALUE, Status.ACTIVITY_STATUS.getStatus());
+			ose.addError(ActivityStatusErrorCode.INVALID);
 		}
-	}
-
-	//
-	// TODO: Below requires further review
-	//
-	@Override
-	public Visit updateReports(Visit oldScg, ScgReportDetail detail) {
-
-		ObjectCreationException errorHandler = new ObjectCreationException();
-		if (detail.getDeIdentifiedReport() == null && detail.getIdentifiedReport() == null) {
-			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, SCG_REPORTS);
-		}
-
-		if (detail.getDeIdentifiedReport() != null) {
-			oldScg.setDeIdentifiedReport(detail.getDeIdentifiedReport());
-		}
-
-		if (detail.getIdentifiedReport() != null) {
-			oldScg.setIdentifiedReport(detail.getIdentifiedReport());
-		}
-		errorHandler.checkErrorAndThrow();
-		return oldScg;
 	}
 }
