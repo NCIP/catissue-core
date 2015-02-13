@@ -1,9 +1,7 @@
 {
   "menu": {
-    "administration": "Administration",
+    "navigate_to": "Navigate To",
     "collection_protocols": "Collection Protocols",
-    "orders": "Orders",
-    "search": "Search",
     "settings": "Settings",
     "users": "Users",
     "institutes": "Institutes",

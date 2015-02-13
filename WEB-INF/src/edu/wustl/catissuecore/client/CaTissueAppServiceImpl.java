@@ -11,8 +11,8 @@ import com.krishagni.catissueplus.bulkoperator.appservice.AbstractBulkOperationA
 import com.krishagni.catissueplus.bulkoperator.metadata.HookingInformation;
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationException;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
-import com.krishagni.catissueplus.core.de.events.AddRecordEntryEvent;
-import com.krishagni.catissueplus.core.de.events.RecordEntryEventAdded;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.de.events.AddRecordEntryOp;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
 import edu.common.dynamicextensions.domain.nui.Container;
@@ -183,13 +183,13 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService {
 		FormService formSvc = (FormService) caTissueContext.getBean("formSvc");
 		Map<String,Object> recIntegrationInfo = recEntryInfo.getDataHookingInformation();
 
-		AddRecordEntryEvent req = new AddRecordEntryEvent();
-		req.setSessionDataBean(recEntryInfo.getSessionDataBean());
-		req.setRecIntegrationInfo(recIntegrationInfo);
-		req.setContainerId(containerId);
-		req.setRecordId(recordId);
-
-		RecordEntryEventAdded resp = formSvc.addRecordEntry(req);
+		AddRecordEntryOp opDetail = new AddRecordEntryOp();
+		opDetail.setRecIntegrationInfo(recIntegrationInfo);
+		opDetail.setContainerId(containerId);
+		opDetail.setRecordId(recordId);
+		
+		RequestEvent<AddRecordEntryOp> req = new RequestEvent<AddRecordEntryOp>(recEntryInfo.getSessionDataBean(), opDetail);
+		formSvc.addRecordEntry(req);
 
 		return null;
 	}

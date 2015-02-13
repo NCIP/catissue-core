@@ -4,28 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
+import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteFactory;
-import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
-import com.krishagni.catissueplus.core.administrative.events.CreateInstituteEvent;
-import com.krishagni.catissueplus.core.administrative.events.DisableInstituteEvent;
-import com.krishagni.catissueplus.core.administrative.events.GetAllInstitutesEvent;
-import com.krishagni.catissueplus.core.administrative.events.GetInstituteEvent;
-import com.krishagni.catissueplus.core.administrative.events.InstituteCreatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.InstituteDetails;
-import com.krishagni.catissueplus.core.administrative.events.InstituteDisabledEvent;
-import com.krishagni.catissueplus.core.administrative.events.InstituteGotEvent;
-import com.krishagni.catissueplus.core.administrative.events.InstituteUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqAllInstitutesEvent;
-import com.krishagni.catissueplus.core.administrative.events.UpdateInstituteEvent;
+import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
+import com.krishagni.catissueplus.core.administrative.events.InstituteQueryCriteria;
+import com.krishagni.catissueplus.core.administrative.events.ListInstitutesCriteria;
 import com.krishagni.catissueplus.core.administrative.services.InstituteService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class InstituteServiceImpl implements InstituteService {
-
-	private static final String INSTITUTE_NAME = "Institute name";
-
 	private DaoFactory daoFactory;
 
 	private InstituteFactory instituteFactory;
@@ -37,123 +29,129 @@ public class InstituteServiceImpl implements InstituteService {
 	public void setInstituteFactory(InstituteFactory instituteFactory) {
 		this.instituteFactory = instituteFactory;
 	}
+		
+	@Override
+	@PlusTransactional
+	public ResponseEvent<InstituteDetail> getInstitute(RequestEvent<InstituteQueryCriteria> req) {
+		try {
+			InstituteQueryCriteria crit = req.getPayload();
+			
+			Institute institute = null;
+			if (crit.getName() != null) {
+				institute = daoFactory.getInstituteDao().getInstituteByName(crit.getName());
+			} else if (crit.getId() != null) {
+				institute = daoFactory.getInstituteDao().getInstitute(crit.getId());
+			}
+			
+			if (institute == null) {
+				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(InstituteDetail.fromDomain(institute));
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<InstituteDetail>> getInstitutes(RequestEvent<ListInstitutesCriteria> req) {
+		List<Institute> list = daoFactory.getInstituteDao().getAllInstitutes(req.getPayload().maxResults());
+		
+		List<InstituteDetail> details = new ArrayList<InstituteDetail>();
+		for (Institute institute : list) {
+			details.add(InstituteDetail.fromDomain(institute));
+		}
+		
+		return ResponseEvent.response(details);
+	}
 
 	@Override
 	@PlusTransactional
-	public InstituteCreatedEvent createInstitute(CreateInstituteEvent event) {
+	public ResponseEvent<InstituteDetail> createInstitute(RequestEvent<InstituteDetail> req) {
 		try {
-			Institute institute = instituteFactory.createInstitute(event.getInstituteDetails());
+			Institute institute = instituteFactory.createInstitute(req.getPayload());
 			
-			ObjectCreationException exceptionHandler = new ObjectCreationException();
-			ensureUniqueInstituteName(institute.getName(), exceptionHandler);
-			exceptionHandler.checkErrorAndThrow();
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueInstituteName(institute.getName(), ose);
+			ose.checkAndThrow();
 
 			daoFactory.getInstituteDao().saveOrUpdate(institute);
-			return InstituteCreatedEvent.ok(InstituteDetails.fromDomain(institute));
-		} catch (ObjectCreationException ce) {
-			return InstituteCreatedEvent.invalidRequest(UserErrorCode.ERRORS.message(), ce.getErroneousFields());
+			return ResponseEvent.response(InstituteDetail.fromDomain(institute));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			return InstituteCreatedEvent.serverError(e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public InstituteUpdatedEvent updateInstitute(UpdateInstituteEvent event) {
+	public ResponseEvent<InstituteDetail> updateInstitute(RequestEvent<InstituteDetail> req) {
 		try {
-			Institute oldInstitute;
+			Institute existing = null;
+			InstituteDetail detail = req.getPayload();
 			
-			if (event.getName() != null) {
-				oldInstitute = daoFactory.getInstituteDao().getInstituteByName(event.getName());
-				if (oldInstitute == null) {
-					return InstituteUpdatedEvent.notFound(event.getName());
-				}
+			if (detail.getName() != null) {
+				existing = daoFactory.getInstituteDao().getInstituteByName(detail.getName());
 			} else {
-				oldInstitute = daoFactory.getInstituteDao().getInstitute(event.getId());
-				if (oldInstitute == null) {
-					return InstituteUpdatedEvent.notFound(event.getId());
-				}
+				existing = daoFactory.getInstituteDao().getInstitute(detail.getId());
 			}
 			
-			Institute institute = instituteFactory.createInstitute(event.getInstituteDetails());
+			if (existing == null) {
+				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND);
+			}
 			
-			ObjectCreationException exceptionHandler = new ObjectCreationException();
-			if(!(oldInstitute.getName().equals(institute.getName()))) {
-				ensureUniqueInstituteName(institute.getName(), exceptionHandler);
+			Institute institute = instituteFactory.createInstitute(detail);
+			
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			if (!existing.getName().equals(institute.getName())) {
+				ensureUniqueInstituteName(institute.getName(), ose);
 			}
-			exceptionHandler.checkErrorAndThrow();
-
-			oldInstitute.update(institute);
-			daoFactory.getInstituteDao().saveOrUpdate(oldInstitute);
-			return InstituteUpdatedEvent.ok(InstituteDetails.fromDomain(oldInstitute));
-		} catch (ObjectCreationException ce) {
-			return InstituteUpdatedEvent.invalidRequest(UserErrorCode.ERRORS.message(), ce.getErroneousFields());
+			
+			ose.checkAndThrow();
+			
+			existing.update(institute);
+			daoFactory.getInstituteDao().saveOrUpdate(existing);
+			return ResponseEvent.response(InstituteDetail.fromDomain(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			return InstituteUpdatedEvent.serverError(e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public InstituteDisabledEvent deleteInstitute(DisableInstituteEvent event) {
+	public ResponseEvent<InstituteDetail> deleteInstitute(RequestEvent<InstituteQueryCriteria> req) {
 		try {
-			Institute institute = null;
-			if (event.getName() != null) {
-				institute = daoFactory.getInstituteDao().getInstituteByName(event.getName());
-				if (institute == null) {
-					return InstituteDisabledEvent.notFound(event.getName());
-				}
-			} else {
-				institute = daoFactory.getInstituteDao().getInstitute(event.getId());
-				if (institute == null) {
-					return InstituteDisabledEvent.notFound(event.getId());
-				}
+			InstituteQueryCriteria crit = req.getPayload();
+			
+			Institute existing = null;						
+			if (crit.getName() != null) {
+				existing = daoFactory.getInstituteDao().getInstituteByName(crit.getName());
+			} else if (crit.getId() != null) {
+				existing = daoFactory.getInstituteDao().getInstitute(crit.getId());
 			}
-			institute.delete();
-			daoFactory.getInstituteDao().saveOrUpdate(institute);
-			return InstituteDisabledEvent.ok();
-		} catch (Exception e) {
-			return InstituteDisabledEvent.serverError(e);
-		}
-	}
-
-	@Override
-	@PlusTransactional
-	public InstituteGotEvent getInstitute(GetInstituteEvent event) {
-		try {
-			Institute institute = null;
-			if (event.getName() != null) {
-				institute = daoFactory.getInstituteDao().getInstituteByName(event.getName());
-				if (institute == null) {
-					return InstituteGotEvent.notFound(event.getName());
-				}
-			} else {
-				institute = daoFactory.getInstituteDao().getInstitute(event.getInstId());
-				if (institute == null) {
-					return InstituteGotEvent.notFound(event.getInstId());
-				}
+			
+			if (existing == null) {
+				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND);
 			}
-			return InstituteGotEvent.ok(InstituteDetails.fromDomain(institute));
+			
+			existing.delete();
+			daoFactory.getInstituteDao().saveOrUpdate(existing);
+			return ResponseEvent.response(InstituteDetail.fromDomain(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			return InstituteGotEvent.serverError(e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 
-	@Override
-	@PlusTransactional
-	public GetAllInstitutesEvent getInstitutes(ReqAllInstitutesEvent event) {
-		List<Institute> instList = daoFactory.getInstituteDao().getAllInstitutes(event.getMaxResults());
-		List<InstituteDetails> details = new ArrayList<InstituteDetails>();
-		for (Institute institute : instList) {
-			details.add(InstituteDetails.fromDomain(institute));
-		}
-		return GetAllInstitutesEvent.ok(details);
-	}
-
-	private void ensureUniqueInstituteName(String name, ObjectCreationException exceptionHandler) {
+	private void ensureUniqueInstituteName(String name, OpenSpecimenException ose) {
 		Institute institute = daoFactory.getInstituteDao().getInstituteByName(name);
 		if (institute != null) {
-			exceptionHandler.addError(UserErrorCode.DUPLICATE_INSTITUTE_NAME, INSTITUTE_NAME);
+			ose.addError(InstituteErrorCode.DUP_NAME);
 		}
 	}
 }

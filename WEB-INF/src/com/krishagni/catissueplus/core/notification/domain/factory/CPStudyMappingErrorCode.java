@@ -1,32 +1,19 @@
 
 package com.krishagni.catissueplus.core.notification.domain.factory;
 
-import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 
-public enum CPStudyMappingErrorCode implements CatissueErrorCode {
+public enum CPStudyMappingErrorCode implements ErrorCode {
 
-	STUDY_NOT_MAPPED_WITH_CP(1500, "Study is not associated with collection protocol in caTissue"),
-	PPID_NULL(1501,"Protocol  participant Identifier is null"),
-	ERRORS(1502, "Please resolve errors in list");
-
-	private int code;
-
-	private String message;
-
-	private CPStudyMappingErrorCode(int code, String message) {
-
-		this.code = code;
-		this.message = message;
-	}
+	STUDY_NOT_MAPPED_WITH_CP,
+	
+	PPID_NULL,
+	
+	ERRORS;
 
 	@Override
-	public int code() {
-		return code;
-	}
-
-	@Override
-	public String message() {
-		return message;
+	public String code() {
+		return "CP_STUDY_MAPPING_" + this.name();
 	}
 
 }

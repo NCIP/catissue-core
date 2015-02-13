@@ -3,9 +3,8 @@ package com.krishagni.core.tests.testdata;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.krishagni.catissueplus.core.biospecimen.events.CollectSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
-import com.krishagni.core.tests.testdata.CprTestData;
+import com.krishagni.core.tests.testdata.CommonUtils;
 
 public class SpecimenTestData {
 	public static SpecimenDetail getSpecimenInfo() {
@@ -27,7 +26,7 @@ public class SpecimenTestData {
 		detail.setType("DNA");
 		detail.setVisitId(1L);
 		detail.setParentId(1L);
-		detail.setCreatedOn(CprTestData.getDate(21, 1, 2012));
+		detail.setCreatedOn(CommonUtils.getDate(21, 1, 2012));
 		
 		return detail;
 	}
@@ -58,13 +57,5 @@ public class SpecimenTestData {
 			childrens.add(obj);
 		}
 		return childrens;
-	}
-	
-	public static CollectSpecimensEvent collectSpecimenListEvent() {
-		CollectSpecimensEvent detail = new CollectSpecimensEvent();
-		detail.setSpecimens(getSpecimenList());
-		detail.setSessionDataBean(CprTestData.getSessionDataBean());
-		
-		return detail;
 	}
 }

@@ -19,8 +19,6 @@ import com.krishagni.catissueplus.bulkoperator.csv.impl.CsvFileReader;
 import com.krishagni.catissueplus.bulkoperator.csv.impl.CsvFileWriter;
 import com.krishagni.catissueplus.bulkoperator.domain.BulkOperation;
 import com.krishagni.catissueplus.bulkoperator.domain.BulkOperationJob;
-import com.krishagni.catissueplus.bulkoperator.events.ImportObjectEvent;
-import com.krishagni.catissueplus.bulkoperator.events.ObjectImportedEvent;
 import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationClass;
 import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationMetadata;
 import com.krishagni.catissueplus.bulkoperator.processor.BulkObjectBuilder;
@@ -33,8 +31,8 @@ import com.krishagni.catissueplus.bulkoperator.util.BulkOperationException;
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationUtility;
 import com.krishagni.catissueplus.bulkoperator.validator.TemplateValidator;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 import edu.wustl.common.beans.SessionDataBean;
@@ -317,24 +315,20 @@ public class BulkImporterTask implements Runnable {
 			throw new RuntimeException("Object of class " + processedObject.getClass().getName() + " is not registered!");
 		}
 		
-		ObjectImportedEvent resp = objectImporter.importObject(new ImportObjectEvent(processedObject, sdb));		
-		if (resp != null && resp.getStatus() != EventStatus.OK) {
+		RequestEvent<Object> req = new RequestEvent<Object>();
+		req.setSessionDataBean(sdb);
+		req.setPayload(processedObject);
+		
+		ResponseEvent<Object> resp = objectImporter.importObject(req);
+		if (!resp.isSuccessful()) {
 			String message = buildImportFailureMessage(resp);
 			throw new RuntimeException(message);
 		}
 		
-		return resp.getObject();
+		return resp.getPayload();
 	}
 	
-	private String buildImportFailureMessage(ObjectImportedEvent res) {
-		if (res.getErroneousFields() != null && res.getErroneousFields().length > 0) {
-			String message = res.getMessage() + " ";
-			for (ErroneousField error : res.getErroneousFields()) {
-				message += "[detail: " +  error.getErrorMessage() + ", field: " + error.getFieldName() + "], ";
-			}
-			
-			return message;
-		} 
-		return res.getMessage();
+	private String buildImportFailureMessage(ResponseEvent<Object> resp) {
+		return "ERROR";
 	}
 }

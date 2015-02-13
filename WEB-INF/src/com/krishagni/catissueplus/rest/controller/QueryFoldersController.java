@@ -1,8 +1,6 @@
 package com.krishagni.catissueplus.rest.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,28 +15,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
-import com.krishagni.catissueplus.core.de.events.CreateQueryFolderEvent;
-import com.krishagni.catissueplus.core.de.events.DeleteQueryFolderEvent;
-import com.krishagni.catissueplus.core.de.events.FolderQueriesEvent;
-import com.krishagni.catissueplus.core.de.events.FolderQueriesUpdatedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFolderCreatedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFolderDeletedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFolderDetailEvent;
+import com.krishagni.catissueplus.core.de.events.ListFolderQueriesCriteria;
 import com.krishagni.catissueplus.core.de.events.QueryFolderDetails;
-import com.krishagni.catissueplus.core.de.events.QueryFolderSharedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFolderSummary;
-import com.krishagni.catissueplus.core.de.events.QueryFolderUpdatedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFoldersEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFolderQueriesEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryFolderDetailEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryFoldersEvent;
+import com.krishagni.catissueplus.core.de.events.SavedQueriesList;
 import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
-import com.krishagni.catissueplus.core.de.events.ShareQueryFolderEvent;
-import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesEvent;
-import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesEvent.Operation;
-import com.krishagni.catissueplus.core.de.events.UpdateQueryFolderEvent;
+import com.krishagni.catissueplus.core.de.events.ShareQueryFolderOp;
+import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesOp;
+import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesOp.Operation;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 
 import edu.wustl.catissuecore.util.global.Constants;
@@ -57,152 +44,120 @@ public class QueryFoldersController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<QueryFolderSummary> getFoldersForUser(){
-		ReqQueryFoldersEvent req = new ReqQueryFoldersEvent();
-		req.setSessionDataBean(getSession());
-		QueryFoldersEvent resp = querySvc.getUserFolders(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getFolders();
-		}
-		
-		return null;
+	public List<QueryFolderSummary> getFoldersForUser() {
+		return response(querySvc.getUserFolders(getRequest(null)));
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/{folderId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public QueryFolderDetails getFolder(@PathVariable Long folderId) {
-		ReqQueryFolderDetailEvent req = new ReqQueryFolderDetailEvent();
-		req.setFolderId(folderId);
-		req.setSessionDataBean(getSession());
-		
-		QueryFolderDetailEvent resp = querySvc.getFolder(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
-		}
-		
-		return null;
+		return response(querySvc.getFolder(getRequest(folderId)));
 	}
 		
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public QueryFolderDetails createFolder(@RequestBody QueryFolderDetails folderDetails) {
-		CreateQueryFolderEvent req = new CreateQueryFolderEvent();
-		req.setFolderDetails(folderDetails);
-		req.setSessionDataBean(getSession());
-		
-		QueryFolderCreatedEvent resp = querySvc.createFolder(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getFolderDetails();
-		}
-		
-		return null;
+		return response(querySvc.createFolder(getRequest(folderDetails)));
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value="/{folderId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public QueryFolderDetails updateFolder(@PathVariable Long folderId, @RequestBody QueryFolderDetails folderDetails) {
-		UpdateQueryFolderEvent req = new UpdateQueryFolderEvent();
-		
 		folderDetails.setId(folderId);
-		req.setFolderDetails(folderDetails);
-		req.setSessionDataBean(getSession());
 		
-		QueryFolderUpdatedEvent resp = querySvc.updateFolder(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getFolderDetails();
-		}
-		
-		return null;
+		return response(querySvc.updateFolder(getRequest(folderDetails)));
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value="/{folderId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public Long deleteFolder(@PathVariable Long folderId) {
-		DeleteQueryFolderEvent req = new DeleteQueryFolderEvent(folderId);
-		req.setSessionDataBean(getSession());
-		
-		QueryFolderDeletedEvent resp = querySvc.deleteFolder(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getFolderId();
-		}
-		
-		return null;
+		return response(querySvc.deleteFolder(getRequest(folderId)));
 	}
 			
 	@RequestMapping(method = RequestMethod.GET, value="/{folderId}/saved-queries")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public Map<String, Object> getFolderQueries(@PathVariable("folderId") Long folderId,
-			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
-			@RequestParam(value = "max", required = false, defaultValue = "25") int max,
-			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq,
-			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString) {
-		ReqFolderQueriesEvent req = new ReqFolderQueriesEvent(folderId);
-		req.setStartAt(start);
-		req.setMaxRecords(max);
-		req.setSearchString(searchString);
-		req.setSessionDataBean(getSession());
-		req.setCountReq(countReq);
+	public SavedQueriesList getFolderQueries(
+			@PathVariable("folderId") 
+			Long folderId,
+			
+			@RequestParam(value = "start", required = false, defaultValue = "0") 
+			int start,
+			
+			@RequestParam(value = "max", required = false, defaultValue = "25") 
+			int max,
+			
+			@RequestParam(value = "countReq", required = false, defaultValue = "false") 
+			boolean countReq,
+			
+			@RequestParam(value = "searchString", required = false, defaultValue = "") 
+			String searchString) {
 		
-		FolderQueriesEvent resp = querySvc.getFolderQueries(req);
-		if (resp.getStatus() != EventStatus.OK) {
-			return null;
-		}
+		ListFolderQueriesCriteria crit = new ListFolderQueriesCriteria()
+			.folderId(folderId)
+			.startAt(start)
+			.maxResults(max)
+			.query(searchString)
+			.countReq(countReq);
 		
-		Map<String, Object> result = new HashMap<String, Object>();
-		if (resp.getCount() != null) {
-			result.put("count", resp.getCount());
-		}
-		
-		result.put("queries", resp.getSavedQueries());		
-		return result;
+		return response(querySvc.getFolderQueries(getRequest(crit)));
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value="/{folderId}/saved-queries")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<SavedQuerySummary> updateFolderQueries(
-			@PathVariable("folderId") Long folderId,
-			@RequestParam(value = "operation", required = false, defaultValue = "UPDATE") String operation,
-			@RequestBody List<Long> queries) {
-		UpdateFolderQueriesEvent req = new UpdateFolderQueriesEvent();
-		req.setFolderId(folderId);
-		req.setQueries(queries);
-		req.setOp(Operation.valueOf(operation));
-		req.setSessionDataBean(getSession());
+			@PathVariable("folderId") 
+			Long folderId,
+			
+			@RequestParam(value = "operation", required = false, defaultValue = "UPDATE") 
+			String operation,
+			
+			@RequestBody 
+			List<Long> queries) {
 		
-		FolderQueriesUpdatedEvent resp = querySvc.updateFolderQueries(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getQueries();
-		}
+		UpdateFolderQueriesOp opDetail = new UpdateFolderQueriesOp();
+		opDetail.setFolderId(folderId);
+		opDetail.setQueries(queries);
+		opDetail.setOp(Operation.valueOf(operation));
 		
-		return null;
+		return response(querySvc.updateFolderQueries(getRequest(opDetail)));
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value="/{folderId}/users")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<UserSummary> shareFolder(
-			@PathVariable("folderId") Long folderId,
-			@RequestParam(value = "operation", required = false, defaultValue = "UPDATE") String operation,
-			@RequestBody List<Long> userIds){
-		ShareQueryFolderEvent req = new ShareQueryFolderEvent();
-		req.setFolderId(folderId);
-		req.setUserIds(userIds);
-		req.setSessionDataBean(getSession());
+			@PathVariable("folderId") 
+			Long folderId,
+			
+			@RequestParam(value = "operation", required = false, defaultValue = "UPDATE") 
+			String operation,
+			
+			@RequestBody List<Long> 
+			userIds) {
 		
-		QueryFolderSharedEvent resp = querySvc.shareFolder(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getUsers();
-		}
+		ShareQueryFolderOp opDetail = new ShareQueryFolderOp();
+		opDetail.setFolderId(folderId);
+		opDetail.setUserIds(userIds);
 		
-		return null;
+		return response(querySvc.shareFolder(getRequest(opDetail)));
 	}
-		
+	
+	private <T> T response(ResponseEvent<T> resp) {
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return new RequestEvent<T>(getSession(), payload);				
+	}
+	
+	
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}

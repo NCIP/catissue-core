@@ -6,17 +6,13 @@ import java.util.concurrent.Executors;
 
 import com.krishagni.catissueplus.bulkoperator.common.BulkImporterTask;
 import com.krishagni.catissueplus.bulkoperator.domain.BulkOperation;
+import com.krishagni.catissueplus.bulkoperator.domain.BulkOperationErrorCode;
 import com.krishagni.catissueplus.bulkoperator.domain.BulkOperationJob;
-import com.krishagni.catissueplus.bulkoperator.domain.factory.BulkOperationErrorCode;
-import com.krishagni.catissueplus.bulkoperator.events.BulkImportRecordsEvent;
 import com.krishagni.catissueplus.bulkoperator.events.BulkOperationDetail;
-import com.krishagni.catissueplus.bulkoperator.events.BulkOperationsEvent;
-import com.krishagni.catissueplus.bulkoperator.events.BulkRecordsImportedEvent;
+import com.krishagni.catissueplus.bulkoperator.events.ImportRecordsOpDetail;
 import com.krishagni.catissueplus.bulkoperator.events.JobDetail;
-import com.krishagni.catissueplus.bulkoperator.events.JobsDetailEvent;
-import com.krishagni.catissueplus.bulkoperator.events.LogFileContentEvent;
-import com.krishagni.catissueplus.bulkoperator.events.ReqJobsDetailEvent;
-import com.krishagni.catissueplus.bulkoperator.events.ReqLogFileContentEvent;
+import com.krishagni.catissueplus.bulkoperator.events.ListJobsCriteria;
+import com.krishagni.catissueplus.bulkoperator.events.LogFileContent;
 import com.krishagni.catissueplus.bulkoperator.repository.BulkOperationDao;
 import com.krishagni.catissueplus.bulkoperator.repository.BulkOperationJobDao;
 import com.krishagni.catissueplus.bulkoperator.services.BulkOperationService;
@@ -24,7 +20,9 @@ import com.krishagni.catissueplus.bulkoperator.services.ObjectImporterFactory;
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationException;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class BulkOperationServiceImpl implements BulkOperationService {
 	private BulkOperationDao bulkOperationDao;
@@ -57,74 +55,88 @@ public class BulkOperationServiceImpl implements BulkOperationService {
 	
 	@Override
 	@PlusTransactional
-	public BulkOperationsEvent getBulkOperations(RequestEvent req) {
+	public ResponseEvent<List<BulkOperationDetail>> getBulkOperations(RequestEvent<?> req) {
 		try {
 			List<BulkOperation> operations = bulkOperationDao.getBulkOperations();
-			return BulkOperationsEvent.ok(BulkOperationDetail.from(operations));
+			return ResponseEvent.response(BulkOperationDetail.from(operations));
 		} catch (Exception e) {
-			return BulkOperationsEvent.serverError(e);
+			return ResponseEvent.error(new OpenSpecimenException(e));
 		}
 	}
 	
 	@Override
 	@PlusTransactional
-	public JobsDetailEvent getJobs(ReqJobsDetailEvent req) {
+	public ResponseEvent<List<JobDetail>> getJobs(RequestEvent<ListJobsCriteria> req) {
 		try {
-			int startAt = req.getStartAt();
+			ListJobsCriteria crit = req.getPayload();
+			
+			int startAt = crit.startAt();
 			if (startAt < 0) {
 				startAt = 0;
 			}
 			
-			int maxRecs = req.getMaxRecords();
+			int maxRecs = crit.maxResults();
 			if (maxRecs <= 0) {
 				maxRecs = 50;
 			}
 			
 			List<BulkOperationJob> jobs = jobDao.getJobs(startAt, maxRecs);
-			return JobsDetailEvent.ok(JobDetail.from(jobs));
+			return ResponseEvent.response(JobDetail.from(jobs));
 		} catch (Exception e) {
-			return JobsDetailEvent.serverError(e);
+			return ResponseEvent.error(new OpenSpecimenException(e));
 		}
 	}
 	
 	@Override
 	@PlusTransactional
-	public BulkRecordsImportedEvent bulkImportRecords(BulkImportRecordsEvent req) {
+	public ResponseEvent<String> bulkImportRecords(RequestEvent<ImportRecordsOpDetail> req) {
 		try {
-			BulkOperation bulkOperation = bulkOperationDao.getBulkOperation(req.getOperationName());
+			ImportRecordsOpDetail opDetail = req.getPayload(); 
+			
+			BulkOperation bulkOperation = bulkOperationDao.getBulkOperation(opDetail.getOperationName());
 			if (bulkOperation == null) {
-				return BulkRecordsImportedEvent.invalidRequest(BulkOperationErrorCode.INVALID_OPERATION_NAME, null);
+				return ResponseEvent.userError(BulkOperationErrorCode.INVALID_OP_NAME);
 			}
 			
-			BulkImporterTask bulkImporterTask = new BulkImporterTask(importerFactory, userDao, jobDao, 
-					bulkOperation, req.getSessionDataBean(), req.getFileIn());
+			BulkImporterTask bulkImporterTask = new BulkImporterTask(
+					importerFactory, 
+					userDao, 
+					jobDao, 
+					bulkOperation, 
+					req.getSessionDataBean(), 
+					opDetail.getFileIn());
 			bulkImporterTask.validateBulkOperation();
 			
 			threadPool.execute(bulkImporterTask);
-			return BulkRecordsImportedEvent.ok(IMPORT_STARTED_SUCCESSFULLY);
+			return ResponseEvent.response(IMPORT_STARTED_SUCCESSFULLY);
 		} catch (BulkOperationException be) {
-			return BulkRecordsImportedEvent.invalidRequest(BulkOperationErrorCode.INVALID_CSV_TEMPLATE, null);
+			return ResponseEvent.userError(BulkOperationErrorCode.INVALID_CSV_TEMPLATE);
 		} catch (Exception e) {
-			return BulkRecordsImportedEvent.serverError(e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public LogFileContentEvent getLogFileContent(ReqLogFileContentEvent req) {
+	public ResponseEvent<LogFileContent> getLogFileContent(RequestEvent<Long> req) {
 		try {
-			if (req.getJobId() == null) {
-				return LogFileContentEvent.invalidRequest(BulkOperationErrorCode.MISSING_JOB_ID, null);
+			Long jobId = req.getPayload();
+			
+			if (jobId == null) {
+				return ResponseEvent.userError(BulkOperationErrorCode.REQUIRED_JOB_ID);
 			}
 			
-			BulkOperationJob job = jobDao.getJob(req.getJobId());
+			BulkOperationJob job = jobDao.getJob(jobId);
 			if (job == null) {
-				return LogFileContentEvent.invalidRequest(BulkOperationErrorCode.INVALID_JOB_DETAILS, null);
+				return ResponseEvent.userError(BulkOperationErrorCode.INVALID_JOB_ID);
 			}
 			
-			return LogFileContentEvent.ok(job.getLogFileBytes(), job.getLogFileName()); 
+			LogFileContent fileContent = new LogFileContent();
+			fileContent.setFileName(job.getLogFileName());
+			fileContent.setLogFileContents(job.getLogFileBytes());			
+			return ResponseEvent.response(fileContent); 
 		} catch (Exception e) {
-			return LogFileContentEvent.serverError(e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 }

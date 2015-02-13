@@ -10,11 +10,14 @@ import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequir
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenRequirementFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -33,7 +36,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	@Override
 	public SpecimenRequirement createSpecimenRequirement(SpecimenRequirementDetail detail) {
 		SpecimenRequirement requirement = new SpecimenRequirement();
-		ObjectCreationException oce = new ObjectCreationException();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
 	
 		requirement.setId(detail.getId());
@@ -41,24 +44,24 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		requirement.setLineage("New"); // TODO:
 		requirement.setLabelFormat(detail.getLabelFmt());
 		
-		setSpecimenClass(detail, requirement, oce);
-		setSpecimenType(detail, requirement, oce);
-		setAnatomicSite(detail, requirement, oce);
-		setLaterality(detail, requirement, oce);
-		setPathologyStatus(detail, requirement, oce);
-		setStorageType(detail, requirement, oce);
-		setInitialQty(detail, requirement, oce);
-		setConcentration(detail, requirement, oce);
-		setCollector(detail, requirement, oce);
-		setCollectionProcedure(detail, requirement, oce);
-		setCollectionContainer(detail, requirement, oce);
-		setReceiver(detail, requirement, oce);		
-		setCpe(detail, requirement, oce);
+		setSpecimenClass(detail, requirement, ose);
+		setSpecimenType(detail, requirement, ose);
+		setAnatomicSite(detail, requirement, ose);
+		setLaterality(detail, requirement, ose);
+		setPathologyStatus(detail, requirement, ose);
+		setStorageType(detail, requirement, ose);
+		setInitialQty(detail, requirement, ose);
+		setConcentration(detail, requirement, ose);
+		setCollector(detail, requirement, ose);
+		setCollectionProsedure(detail, requirement, ose);
+		setCollectionContainer(detail, requirement, ose);
+		setReceiver(detail, requirement, ose);		
+		setCpe(detail, requirement, ose);
 		
 		// TODO:
 		requirement.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 
-		oce.checkErrorAndThrow();		
+		ose.checkAndThrow();		
 		return requirement;
 	}
 
@@ -70,19 +73,19 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			parent = daoFactory.getSpecimenRequirementDao().getById(parentId);
 		}
 		
-		ObjectCreationException oce = new ObjectCreationException();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		if (parent == null) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "parentSrId");
-			throw oce;
+			ose.addError(SrErrorCode.PARENT_NOT_FOUND);
+			throw ose;
 		}
 		
 		SpecimenRequirement derived = parent.copy();
 		derived.setLineage("Derived");
-		setSpecimenClass(req.getSpecimenClass(), derived, oce);
-		setSpecimenType(req.getType(), derived, oce);
-		setInitialQty(req.getQuantity(), derived, oce);
-		setStorageType(req.getStorageType(), derived, oce);
-		setConcentration(req.getConcentration(), derived, oce);
+		setSpecimenClass(req.getSpecimenClass(), derived, ose);
+		setSpecimenType(req.getType(), derived, ose);
+		setInitialQty(req.getQuantity(), derived, ose);
+		setStorageType(req.getStorageType(), derived, ose);
+		setConcentration(req.getConcentration(), derived, ose);
 		
 		if (StringUtils.isNotBlank(req.getLabelFmt())) {
 			derived.setLabelFormat(req.getLabelFmt());
@@ -92,7 +95,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			derived.setName(req.getName());
 		}
 		
-		oce.checkErrorAndThrow();
+		ose.checkAndThrow();
 		
 		derived.setParentSpecimenRequirement(parent);
 		return derived;
@@ -107,32 +110,32 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			parent = daoFactory.getSpecimenRequirementDao().getById(parentSrId);
 		}
 		
-		ObjectCreationException oce = new ObjectCreationException();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		if (parent == null) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "parentSrId");
-			throw oce;
+			ose.addError(SrErrorCode.PARENT_NOT_FOUND);
+			throw ose;
 		}
 		
 		if (req.getNoOfAliquots() == null || req.getNoOfAliquots() < 1L) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "noOfAliquots");
-			throw oce;
+			ose.addError(SrErrorCode.INVALID_ALIQUOT_CNT);
+			throw ose;
 		}
 		
 		if (req.getQtyPerAliquot() == null || req.getQtyPerAliquot() <= 0L) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "qtyPerAliquot");
-			throw oce;
+			ose.addError(SrErrorCode.INVALID_QTY);
+			throw ose;
 		}
 						
 		Double total = req.getNoOfAliquots() * req.getQtyPerAliquot();
 		if (total > parent.getQtyAfterAliquotsUse()) {
-			oce.addError(SpecimenErrorCode.INSUFFICIENT_SPECIMEN_QTY, "count");
+			ose.addError(SrErrorCode.INSUFFICIENT_QTY);
 		}
 		
 		List<SpecimenRequirement> aliquots = new ArrayList<SpecimenRequirement>();
 		for (int i = 0; i < req.getNoOfAliquots(); ++i) {
 			SpecimenRequirement aliquot = parent.copy();
 			aliquot.setLineage("Aliquot"); // TODO: have an enum			
-			setStorageType(req.getStorageType(), aliquot, oce);
+			setStorageType(req.getStorageType(), aliquot, ose);
 			
 			if (StringUtils.isNotBlank(req.getLabelFmt())) {
 				aliquot.setLabelFormat(req.getLabelFmt());
@@ -142,145 +145,145 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			aliquot.setParentSpecimenRequirement(parent);
 			aliquots.add(aliquot);
 			
-			oce.checkErrorAndThrow(); // throw on first iteration of error occurrence
+			ose.checkAndThrow();
 		}
 				
 		return aliquots;
 	}
 	
-	private void setSpecimenClass(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		setSpecimenClass(detail.getSpecimenClass(), sr, oce);
+	private void setSpecimenClass(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		setSpecimenClass(detail.getSpecimenClass(), sr, ose);
 	}
 	
-	private void setSpecimenClass(String specimenClass, SpecimenRequirement sr, ObjectCreationException oce) {
-		ensureNotEmpty(specimenClass, "specimenClass", oce);
+	private void setSpecimenClass(String specimenClass, SpecimenRequirement sr, OpenSpecimenException ose) {
+		ensureNotEmpty(specimenClass, SrErrorCode.SPECIMEN_CLASS_REQUIRED, ose);
 		sr.setSpecimenClass(specimenClass);
 		// TODO: Check whether class is valid
 		
 	}
 	
-	private void setSpecimenType(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		setSpecimenType(detail.getType(), sr, oce);
+	private void setSpecimenType(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		setSpecimenType(detail.getType(), sr, ose);
 	}
 	
-	private void setSpecimenType(String type, SpecimenRequirement sr, ObjectCreationException oce) {
-		ensureNotEmpty(type, "specimenType", oce);		
+	private void setSpecimenType(String type, SpecimenRequirement sr, OpenSpecimenException ose) {
+		ensureNotEmpty(type, SrErrorCode.SPECIMEN_TYPE_REQUIRED, ose);		
 		sr.setSpecimenType(type);
 		// TODO: Check whether type is valid for class;		
 	}
 	
-	private void setAnatomicSite(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		String anatomicSite = ensureNotEmpty(detail.getAnatomicSite(), "anatomicSite", oce);
+	private void setAnatomicSite(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		String anatomicSite = ensureNotEmpty(detail.getAnatomicSite(), SrErrorCode.ANATOMIC_SITE_REQUIRED, ose);
 		sr.setAnatomicSite(anatomicSite);
 		// TODO: check for valid site value
 	}
 	
-	private void setLaterality(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		String laterality = ensureNotEmpty(detail.getLaterality(), "laterality", oce);
+	private void setLaterality(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		String laterality = ensureNotEmpty(detail.getLaterality(), SrErrorCode.LATERALITY_REQUIRED, ose);
 		sr.setLaterality(laterality);
 		// TODO: check for valid laterality value
 	}
 	
-	private void setPathologyStatus(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		String pathologyStatus = ensureNotEmpty(detail.getPathologyStatus(), "pathologyStatus", oce);
+	private void setPathologyStatus(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		String pathologyStatus = ensureNotEmpty(detail.getPathologyStatus(), SrErrorCode.PATHOLOGY_STATUS_REQUIRED, ose);
 		sr.setPathologyStatus(pathologyStatus);
 		// TODO: check for valid pathology status
 	}
 	
-	private void setStorageType(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		setStorageType(detail.getStorageType(), sr, oce);
+	private void setStorageType(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		setStorageType(detail.getStorageType(), sr, ose);
 		// TODO: check for valid storage type
 	}
 
-	private void setStorageType(String storageType, SpecimenRequirement sr, ObjectCreationException oce) {
-		ensureNotEmpty(storageType, "storageType", oce);
+	private void setStorageType(String storageType, SpecimenRequirement sr, OpenSpecimenException ose) {
+		ensureNotEmpty(storageType, SrErrorCode.STORAGE_TYPE_REQUIRED, ose);
 		sr.setStorageType(storageType);
 		// TODO: check for valid storage type
 	}
 	
-	private void setInitialQty(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		setInitialQty(detail.getInitialQty(), sr, oce);
+	private void setInitialQty(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		setInitialQty(detail.getInitialQty(), sr, ose);
 	}
 		
-	private void setInitialQty(Double initialQty, SpecimenRequirement sr, ObjectCreationException oce) {
+	private void setInitialQty(Double initialQty, SpecimenRequirement sr, OpenSpecimenException ose) {
 		if (initialQty == null || initialQty < 0) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "initialQty");
+			ose.addError(SrErrorCode.INVALID_QTY);
 			return;
 		}
 		
 		sr.setInitialQuantity(initialQty);
 	}
 
-	private void setConcentration(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		setConcentration(detail.getConcentration(), sr, oce);
+	private void setConcentration(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		setConcentration(detail.getConcentration(), sr, ose);
 	}
 	
-	private void setConcentration(Double concentration, SpecimenRequirement sr, ObjectCreationException oce) {
+	private void setConcentration(Double concentration, SpecimenRequirement sr, OpenSpecimenException ose) {
 		if (sr.getAnatomicSite() == null || !"Molecular".equals(sr.getSpecimenClass())) { 
 			return;
 		}
 		
 		if (concentration == null || concentration < 0) { 
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "concentration");
+			ose.addError(SrErrorCode.CONCENTRATION_REQUIRED);
 			return;
 		}
 		
 		sr.setConcentration(concentration);
 	}
 	
-	private void setCollector(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		sr.setCollector(ensureValidUser(detail.getCollector(), "collector", oce));
+	private void setCollector(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		sr.setCollector(ensureValidUser(detail.getCollector(), SrErrorCode.COLLECTOR_REQUIRED, SrErrorCode.COLLECTOR_NOT_FOUND, ose));
 	}
 
-	private void setCollectionProcedure(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		String collProc = ensureNotEmpty(detail.getCollectionProcedure(), "collectionProcedure", oce);
+	private void setCollectionProsedure(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		String collProc = ensureNotEmpty(detail.getCollectionProcedure(), SrErrorCode.COLL_PROC_REQUIRED, ose);
 		sr.setCollectionProcedure(collProc);
 		// TODO: check for valid collection proc
 	}
 
-	private void setCollectionContainer(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		String collContainer = ensureNotEmpty(detail.getCollectionContainer(), "collectionContainer", oce);
+	private void setCollectionContainer(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		String collContainer = ensureNotEmpty(detail.getCollectionContainer(), SrErrorCode.COLL_CONT_REQUIRED, ose);
 		sr.setCollectionContainer(collContainer);
 		// TODO: check for valid collection container
 	}
 
-	private void setReceiver(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
-		sr.setReceiver(ensureValidUser(detail.getReceiver(), "receiver", oce));
+	private void setReceiver(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		sr.setReceiver(ensureValidUser(detail.getReceiver(), SrErrorCode.RECEIVER_REQUIRED, SrErrorCode.RECEIVER_NOT_FOUND, ose));
 	}
 
-	private void setCpe(SpecimenRequirementDetail detail, SpecimenRequirement sr, ObjectCreationException oce) {
+	private void setCpe(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
 		Long eventId = detail.getEventId();
 		if (eventId == null) {
-			oce.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, "eventId");
+			ose.addError(SrErrorCode.CPE_REQUIRED);
 			return;
 		}
 		
 		CollectionProtocolEvent cpe = daoFactory.getCollectionProtocolDao().getCpe(eventId);
 		if (cpe == null) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, "eventId");
+			ose.addError(CpeErrorCode.NOT_FOUND);
 		}
 		
 		sr.setCollectionProtocolEvent(cpe);
 	}
 		
-	private String ensureNotEmpty(String value, String field, ObjectCreationException oce) {
-		if (StringUtils.isEmpty(value)) {
-			oce.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, field);
+	private String ensureNotEmpty(String value, ErrorCode required, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(value)) {
+			ose.addError(required);
 			return null;
 		}
 		
 		return value;
 	}
 	
-	private User ensureValidUser(UserSummary userSummary, String field, ObjectCreationException oce) {
+	private User ensureValidUser(UserSummary userSummary, ErrorCode required, ErrorCode notFound, OpenSpecimenException ose) {
 		if (userSummary == null || userSummary.getId() == null) {
-			oce.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, field);
+			ose.addError(required);
 			return null;
 		}
 		
 		User user = daoFactory.getUserDao().getUser(userSummary.getId());
 		if (user == null) {
-			oce.addError(SpecimenErrorCode.INVALID_ATTR_VALUE, field);
+			ose.addError(notFound);
 		}
 		
 		return user;		

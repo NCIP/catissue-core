@@ -13,7 +13,8 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -32,15 +33,15 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	public CollectionProtocol createCollectionProtocol(CollectionProtocolDetail input) {
 		CollectionProtocol cp = new CollectionProtocol();
 
-		ObjectCreationException oce = new ObjectCreationException();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
 		cp.setId(input.getId());
-		setTitle(input, cp, oce);
-		setShortTitle(input, cp, oce);
-		setPrincipalInvestigator(input, cp, oce);
+		setTitle(input, cp, ose);
+		setShortTitle(input, cp, ose);
+		setPrincipalInvestigator(input, cp, ose);
 		cp.setStartDate(input.getStartDate());
-		setCoordinators(input, cp, oce);
-		setConsentsWaived(input, cp, oce);
+		setCoordinators(input, cp, ose);
+		setConsentsWaived(input, cp, ose);
 
 		cp.setIrbIdentifier(input.getIrbId());
 		cp.setPpidFormat(input.getPpidFmt());
@@ -51,48 +52,48 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		cp.setAliquotLabelFormat(input.getAliquotLabelFmt());
 		cp.setAliquotInSameContainer(input.getAliquotsInSameContainer());
 
-		setActivityStatus(input, cp, oce);
+		setActivityStatus(input, cp, ose);
 
-		oce.checkErrorAndThrow();
+		ose.checkAndThrow();
 		return cp;
 	}
 
-	private void setTitle(CollectionProtocolDetail input, CollectionProtocol result, ObjectCreationException oce) {
+	private void setTitle(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(input.getTitle())) {
-			oce.addError(CpErrorCode.MISSING_TITLE, "title");
+			ose.addError(CpErrorCode.TITLE_REQUIRED);
 			return;
 		}
 
 		result.setTitle(input.getTitle());
 	}
 	
-	private void setShortTitle(CollectionProtocolDetail input, CollectionProtocol result, ObjectCreationException oce) {
+	private void setShortTitle(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(input.getShortTitle())) {
-			oce.addError(CpErrorCode.MISSING_SHORT_TITLE, "shortTitle");
+			ose.addError(CpErrorCode.SHORT_TITLE_REQUIRED);
 			return;
 		}
 
 		result.setShortTitle(input.getShortTitle());
 	}
 
-	private void setPrincipalInvestigator(CollectionProtocolDetail input, CollectionProtocol result, ObjectCreationException oce) {
+	private void setPrincipalInvestigator(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		UserSummary user = input.getPrincipalInvestigator();
 		Long piId = user != null ? user.getId() : null;
 		if (piId == null) {
-			oce.addError(CpErrorCode.MISSING_PI, "principalInvestigator");
+			ose.addError(CpErrorCode.PI_REQUIRED);
 			return;
 		}
 
 		User pi = userDao.getUser(piId);
 		if (pi == null) {
-			oce.addError(CpErrorCode.INVALID_PI, "principalInvestigator");
+			ose.addError(CpErrorCode.PI_NOT_FOUND);
 			return;
 		}
 
 		result.setPrincipalInvestigator(pi);
 	}
 
-	private void setCoordinators(CollectionProtocolDetail input, CollectionProtocol result, ObjectCreationException oce) {		
+	private void setCoordinators(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {		
 		List<Long> userIds = new ArrayList<Long>();
 
 		List<UserSummary> users = input.getCoordinators();
@@ -102,7 +103,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 
 		for (UserSummary user : users) {
 			if (user.getId() == null) {
-				oce.addError(CpErrorCode.INVALID_COORDINATORS, "coordinators");
+				ose.addError(CpErrorCode.INVALID_COORDINATORS);
 				return;
 			}
 
@@ -111,23 +112,23 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 
 		List<User> coordinators = userDao.getUsersById(userIds);
 		if (coordinators.size() != userIds.size()) {
-			oce.addError(CpErrorCode.INVALID_COORDINATORS, "coordinators");
+			ose.addError(CpErrorCode.INVALID_COORDINATORS);
 			return;
 		}
 
 		result.setCoordinators(new HashSet<User>(coordinators));
 	}
 
-	private void setConsentsWaived(CollectionProtocolDetail input, CollectionProtocol result, ObjectCreationException oce) {
+	private void setConsentsWaived(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		if (input.getConsentsWaived() == null) {
-			oce.addError(CpErrorCode.MISSING_CONSENTS_WAIVED, "consentsWaived");
+			ose.addError(CpErrorCode.CONSENTS_WAIVED_REQUIRED);
 			return;
 		}
 
 		result.setConsentsWaived(input.getConsentsWaived());
 	}
 
-	private void setActivityStatus(CollectionProtocolDetail input, CollectionProtocol result, ObjectCreationException oce) {
+	private void setActivityStatus(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(input.getActivityStatus())) {
 			result.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 			return;

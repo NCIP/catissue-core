@@ -15,25 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenListEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ListSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ListSpecimensUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqListSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenListDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ShareSpecimenListEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSharedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ShareSpecimenListOp;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenListEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensOp;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenListService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 import edu.wustl.catissuecore.util.global.Constants;
@@ -53,64 +42,36 @@ public class SpecimenListsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<SpecimenListSummary> getSpecimenListsForUser(){
-		RequestEvent req = new RequestEvent();
-		req.setSessionDataBean(getSession());
-		SpecimenListsEvent resp = specimenListSvc.getUserSpecimenLists(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getLists();
-		}
-		
-		return null;
+		ResponseEvent<List<SpecimenListSummary>> resp = specimenListSvc.getUserSpecimenLists(getRequest(null));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/{listId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SpecimenListDetails getSpecimenList(@PathVariable Long listId) {
-		ReqSpecimenListDetailEvent req = new ReqSpecimenListDetailEvent();
-		req.setListId(listId);
-		req.setSessionDataBean(getSession());
-		
-		SpecimenListDetailEvent resp = specimenListSvc.getSpecimenList(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
-		}
-		
-		return null;
+		ResponseEvent<SpecimenListDetails> resp = specimenListSvc.getSpecimenList(getRequest(listId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 		
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SpecimenListDetails createSpecimenList(@RequestBody SpecimenListDetails details) {
-		CreateSpecimenListEvent req = new CreateSpecimenListEvent();
-		req.setListDetails(details);
-		req.setSessionDataBean(getSession());
-		
-		SpecimenListCreatedEvent resp = specimenListSvc.createSpecimenList(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getListDetails();
-		}
-		
-		return null;
+		ResponseEvent<SpecimenListDetails> resp = specimenListSvc.createSpecimenList(getRequest(details));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value="/{listId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SpecimenListDetails updateSpecimenList(@PathVariable Long listId, @RequestBody SpecimenListDetails details) {
-		UpdateSpecimenListEvent req = new UpdateSpecimenListEvent();
-		
-		details.setId(listId);
-		req.setListDetails(details);
-		req.setSessionDataBean(getSession());
-		
-		SpecimenListUpdatedEvent resp = specimenListSvc.updateSpecimenList(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getListDetails();
-		}
-		
-		return null;
+		ResponseEvent<SpecimenListDetails> resp = specimenListSvc.updateSpecimenList(getRequest(details));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
 			
@@ -118,15 +79,9 @@ public class SpecimenListsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<SpecimenDetail> getListSpecimens(@PathVariable("listId") Long listId) {
-		ReqListSpecimensEvent req = new ReqListSpecimensEvent(listId);
-		req.setSessionDataBean(getSession());
-		
-		ListSpecimensEvent resp = specimenListSvc.getListSpecimens(req);
-		if (resp.getStatus() != EventStatus.OK) {
-			return null;
-		}
-		
-		return resp.getSpecimens();
+		ResponseEvent<List<SpecimenDetail>> resp = specimenListSvc.getListSpecimens(getRequest(listId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value="/{listId}/specimens")
@@ -137,18 +92,15 @@ public class SpecimenListsController {
 			@RequestParam(value = "operation", required = false, defaultValue = "UPDATE") String operation,
 			@RequestBody List<String> specimenLabels) {
 		
-		UpdateListSpecimensEvent req = new UpdateListSpecimensEvent();
-		req.setListId(listId);
-		req.setSpecimens(specimenLabels);
-		req.setOp(com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensEvent.Operation.valueOf(operation));
-		req.setSessionDataBean(getSession());
-
-		ListSpecimensUpdatedEvent resp = specimenListSvc.updateListSpecimens(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getSpecimens();
-		}
+		UpdateListSpecimensOp opDetail = new UpdateListSpecimensOp();
+		opDetail.setListId(listId);
+		opDetail.setSpecimens(specimenLabels);
+		opDetail.setOp(com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensOp.Operation.valueOf(operation));
 		
-		return null;
+
+		ResponseEvent<List<SpecimenDetail>> resp = specimenListSvc.updateListSpecimens(getRequest(opDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value="/{listId}/users")
@@ -158,20 +110,21 @@ public class SpecimenListsController {
 			@PathVariable("listId") Long listId,
 			@RequestParam(value = "operation", required = false, defaultValue = "UPDATE") String operation,
 			@RequestBody List<Long> userIds) {
-		ShareSpecimenListEvent req = new ShareSpecimenListEvent();
-		req.setListId(listId);
-		req.setOp(com.krishagni.catissueplus.core.biospecimen.events.ShareSpecimenListEvent.Operation.valueOf(operation));
-		req.setUserIds(userIds);
-		req.setSessionDataBean(getSession());
+
+		ShareSpecimenListOp opDetail = new ShareSpecimenListOp();
+		opDetail.setListId(listId);
+		opDetail.setOp(com.krishagni.catissueplus.core.biospecimen.events.ShareSpecimenListOp.Operation.valueOf(operation));
+		opDetail.setUserIds(userIds);
 		
-		SpecimenListSharedEvent resp = specimenListSvc.shareSpecimenList(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getUsers();
-		}
-		
-		return null;
+		ResponseEvent<List<UserSummary>> resp = specimenListSvc.shareSpecimenList(getRequest(opDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 		
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return new RequestEvent<T>(getSession(), payload);
+	}
+ 
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}

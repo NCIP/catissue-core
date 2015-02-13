@@ -19,17 +19,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.krishagni.catissueplus.bulkoperator.events.BulkImportRecordsEvent;
 import com.krishagni.catissueplus.bulkoperator.events.BulkOperationDetail;
-import com.krishagni.catissueplus.bulkoperator.events.BulkOperationsEvent;
-import com.krishagni.catissueplus.bulkoperator.events.BulkRecordsImportedEvent;
+import com.krishagni.catissueplus.bulkoperator.events.ImportRecordsOpDetail;
 import com.krishagni.catissueplus.bulkoperator.events.JobDetail;
-import com.krishagni.catissueplus.bulkoperator.events.JobsDetailEvent;
-import com.krishagni.catissueplus.bulkoperator.events.LogFileContentEvent;
-import com.krishagni.catissueplus.bulkoperator.events.ReqJobsDetailEvent;
-import com.krishagni.catissueplus.bulkoperator.events.ReqLogFileContentEvent;
+import com.krishagni.catissueplus.bulkoperator.events.ListJobsCriteria;
+import com.krishagni.catissueplus.bulkoperator.events.LogFileContent;
 import com.krishagni.catissueplus.bulkoperator.services.BulkOperationService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -48,14 +45,13 @@ public class BulkOperationController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<BulkOperationDetail> getOperations() {
-		RequestEvent req = new RequestEvent();
+		RequestEvent<?> req = new RequestEvent<Object>();
+		req.setSessionDataBean(getSession());
 		
-		BulkOperationsEvent resp = boService.getBulkOperations(req);		
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
+		ResponseEvent<List<BulkOperationDetail>> resp = boService.getBulkOperations(req);
+		resp.throwErrorIfUnsuccessful();
 		
-		return resp.getOperations();
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/jobs")
@@ -64,17 +60,16 @@ public class BulkOperationController {
 	public List<JobDetail> getJobs(
 			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
 			@RequestParam(value = "max", required = false, defaultValue = "50") int max) {
-		ReqJobsDetailEvent req = new ReqJobsDetailEvent();
-		req.setMaxRecords(max);
-		req.setStartAt(start);
-		req.setSessionDataBean(getSession());
 		
-		JobsDetailEvent resp = boService.getJobs(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
+		ListJobsCriteria listCrit = new ListJobsCriteria()
+			.startAt(start)
+			.maxResults(max);
 		
-		return resp.getJobs();
+		RequestEvent<ListJobsCriteria> req = new RequestEvent<ListJobsCriteria>(getSession(), listCrit);				
+		ResponseEvent<List<JobDetail>> resp = boService.getJobs(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
@@ -84,38 +79,32 @@ public class BulkOperationController {
 			@RequestParam("name") String operationName, 
 			@RequestParam("csvFile") MultipartFile csvFile) 
 	throws IOException {
-		BulkImportRecordsEvent req = new BulkImportRecordsEvent();
-		req.setSessionDataBean(getSession());
-		req.setOperationName(operationName);
-		
+
 		File fileIn = File.createTempFile("bo-input-", ".csv");		
 		csvFile.transferTo(fileIn);
-		req.setFileIn(fileIn);
 		
-		BulkRecordsImportedEvent resp = boService.bulkImportRecords(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
+		ImportRecordsOpDetail detail = new ImportRecordsOpDetail();
+		detail.setOperationName(operationName);
+		detail.setFileIn(fileIn);
 		
-		return resp.getUploadStatus();
+		RequestEvent<ImportRecordsOpDetail> req = new RequestEvent<ImportRecordsOpDetail>(getSession(), detail);		
+		ResponseEvent<String> resp = boService.bulkImportRecords(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/logs")
     public void downloadLogFile(@PathVariable("id") Long jobId, HttpServletResponse httpResp) {
-		ReqLogFileContentEvent req = new ReqLogFileContentEvent();
-		req.setJobId(jobId);
-		req.setSessionDataBean(getSession());
-		
-		LogFileContentEvent resp = boService.getLogFileContent(req);
-		
-		if (resp.isSuccess()) {
-			doDownload(resp, httpResp);
-		} else {
-			resp.raiseException();
-		}
+
+		RequestEvent<Long> req = new RequestEvent<Long>(getSession(), jobId);
+		ResponseEvent<LogFileContent> resp = boService.getLogFileContent(req);
+		resp.throwErrorIfUnsuccessful();
+
+		sendFile(resp.getPayload(), httpResp);
 	}
 	
-	private void doDownload(LogFileContentEvent resp, HttpServletResponse httpResp) {
+	private void sendFile(LogFileContent resp, HttpServletResponse httpResp) {
 		try {
 			httpResp.setContentType("application/download");
 			httpResp.setHeader("Content-Disposition", "attachment;filename=\""	+ resp.getFileName() + "\";");

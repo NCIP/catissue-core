@@ -1,6 +1,7 @@
 package com.krishagni.core.tests;
 
 import java.util.Date;
+import java.util.List;
 import java.text.SimpleDateFormat;
 import javax.annotation.Resource;
 
@@ -24,17 +25,19 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectSpecimensEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimensCollectedEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.core.common.ApplicationContextConfigurer;
 import com.krishagni.core.common.TestUtils;
 import com.krishagni.core.common.WebContextLoader;
 
 import com.krishagni.core.tests.testdata.SpecimenTestData;
-import com.krishagni.core.tests.testdata.CprTestData;
+import com.krishagni.core.tests.testdata.CommonUtils;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -55,6 +58,10 @@ public class SpecimenTest {
 	@Autowired 
 	private ApplicationContext ctx;
 
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return CommonUtils.getRequest(payload);
+	}
+	
 	/*
 	 *  collectSpecimens API test
 	 */
@@ -65,21 +72,19 @@ public class SpecimenTest {
 	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimens() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(SpecimenTestData.getSpecimenList()));
 		
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
-		//TestUtils.recordResponse(resp);
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals(true, resp.isSuccessful());
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals("Invalid number: count of specimens", 
-				new Integer(2), new Integer(resp.getSpecimens().size()));
+		Assert.assertEquals("Invalid number: count of specimens", new Integer(2), new Integer(resp.getPayload().size()));
 		
-		for (SpecimenDetail detail : resp.getSpecimens()) {
+		for (SpecimenDetail detail : resp.getPayload()) {
 			Assert.assertEquals("Storage type mismatch", "default-storage", detail.getStorageType());
 			Assert.assertEquals("Lineage mismatch", "New", detail.getLineage());
 			Assert.assertNull("Parent id mismatch", detail.getParentId());
 			Assert.assertNull("Parent label mismatch", detail.getParentLabel());
-			AssertSpecimenDetails(detail, resp.getSpecimens().indexOf(detail));
+			AssertSpecimenDetails(detail, resp.getPayload().indexOf(detail));
 		}
 	}
 	
@@ -87,98 +92,105 @@ public class SpecimenTest {
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithEmptyLabel() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setLabel(null);
-
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setLabel(null);
 		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertNull(resp.getSpecimens());
-		Assert.assertEquals("label:Required attribute is either empty or null\n", resp.getException().getMessage());
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(false, resp.isSuccessful());
+		Assert.assertNull(resp.getPayload());
+		TestUtils.checkErrorCode(resp, SpecimenErrorCode.LABEL_REQUIRED, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidSR() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setReqId(-1L);
-	
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setReqId(-1L);
 		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertNull(resp.getSpecimens());
-		Assert.assertEquals("reqId:Attribute value is invalid\n", resp.getException().getMessage());
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(false, resp.isSuccessful());
+		Assert.assertNull(resp.getPayload());
+		TestUtils.checkErrorCode(resp, SrErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidVisit() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setVisitId(-1L);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setVisitId(-1L);
 	
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertNull(resp.getSpecimens());
-		Assert.assertEquals("visitId:Attribute value is invalid\n", resp.getException().getMessage());
+		Assert.assertEquals(false, resp.isSuccessful());
+		Assert.assertNull(resp.getPayload());
+		TestUtils.checkErrorCode(resp, VisitErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("specimen-test/collect-specimens-with-duplicate-label.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithDuplicateLabel() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setLabel("duplicate-label");
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setLabel("duplicate-label");
 	
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertNull(resp.getSpecimens());
-		Assert.assertEquals("label:specimen collection group with same already exists.\n", resp.getException().getMessage());
+		Assert.assertEquals(false, resp.isSuccessful());
+		Assert.assertNull(resp.getPayload());
+		TestUtils.checkErrorCode(resp, SpecimenErrorCode.DUP_LABEL, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidLineage() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setLineage("Invalid-Lineage");
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setLineage("Invalid-Lineage");
 	
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertNull(resp.getSpecimens());
-		Assert.assertEquals("lineage:Attribute value is invalid\n", resp.getException().getMessage());
+		Assert.assertEquals(false, resp.isSuccessful());
+		Assert.assertNull(resp.getPayload());
+		TestUtils.checkErrorCode(resp, SpecimenErrorCode.INVALID_LINEAGE, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("specimen-test/collect-specimens-with-duplicate-label.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithDuplicateBarcode() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setBarcode("duplicate-barcode");
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setBarcode("duplicate-barcode");
 
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertNull(resp.getSpecimens());
-		Assert.assertEquals("barcode:Registration is already present with same barcode.\n", resp.getException().getMessage());
+		Assert.assertEquals(false, resp.isSuccessful());
+		Assert.assertNull(resp.getPayload());
+		TestUtils.checkErrorCode(resp, SpecimenErrorCode.DUP_BARCODE, ErrorType.USER_ERROR);
 	}
 	
 	@Test                       
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidInitialQuantity() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setInitialQty(-1.0);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setInitialQty(-1.0);
 	
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertNull(resp.getSpecimens());
-		Assert.assertEquals("initialQty:Attribute value is invalid\n", resp.getException().getMessage());
+		Assert.assertEquals(false, resp.isSuccessful());
+		Assert.assertNull(resp.getPayload());
+		TestUtils.checkErrorCode(resp, SpecimenErrorCode.INVALID_QTY, ErrorType.USER_ERROR);
 	}
 	
 	@Test                       
@@ -187,19 +199,21 @@ public class SpecimenTest {
 	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithoutInitialQuantity() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setInitialQty(null);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setInitialQty(null);
 	
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals((int)2, resp.getSpecimens().size());
-		for (SpecimenDetail detail : resp.getSpecimens()) {
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull(resp.getPayload());
+		Assert.assertEquals((int)2, resp.getPayload().size());
+		for (SpecimenDetail detail : resp.getPayload()) {
 			Assert.assertEquals("Storage type mismatch", "default-storage", detail.getStorageType());
 			Assert.assertEquals("Lineage mismatch", "New", detail.getLineage());
 			Assert.assertNull("Parent id mismatch", detail.getParentId());
 			Assert.assertNull("Parent label mismatch", detail.getParentLabel());
-			AssertSpecimenDetails(detail, resp.getSpecimens().indexOf(detail));
+			AssertSpecimenDetails(detail, resp.getPayload().indexOf(detail));
 		}
 	}
 	
@@ -207,15 +221,16 @@ public class SpecimenTest {
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithoutInitialQuantityAndReqId() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setReqId(null);
-		req.getSpecimens().get(0).setInitialQty(null);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setReqId(null);
+		input.get(0).setInitialQty(null);
 	
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertNull(resp.getSpecimens());
-		Assert.assertEquals("initialQty:Required attribute is either empty or null\n", resp.getException().getMessage());
+		Assert.assertEquals(false, resp.isSuccessful());
+		Assert.assertNull(resp.getPayload());
+		TestUtils.checkErrorCode(resp, SpecimenErrorCode.INVALID_QTY, ErrorType.USER_ERROR);
 	}
 
 	@Test
@@ -224,19 +239,21 @@ public class SpecimenTest {
 	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithEmptyActivityStatus() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setActivityStatus("");
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setActivityStatus("");
 
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals((int)2, resp.getSpecimens().size());
-		for (SpecimenDetail detail : resp.getSpecimens()) {
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull(resp.getPayload());
+		Assert.assertEquals((int)2, resp.getPayload().size());
+		for (SpecimenDetail detail : resp.getPayload()) {
 			Assert.assertEquals("Storage type mismatch", "default-storage", detail.getStorageType());
 			Assert.assertEquals("Lineage mismatch", "New", detail.getLineage());
 			Assert.assertNull("Parent id mismatch", detail.getParentId());
 			Assert.assertNull("Parent label mismatch", detail.getParentLabel());
-			AssertSpecimenDetails(detail, resp.getSpecimens().indexOf(detail));
+			AssertSpecimenDetails(detail, resp.getPayload().indexOf(detail));
 		}
 	}
 	
@@ -244,27 +261,27 @@ public class SpecimenTest {
 	@DatabaseSetup("specimen-test/collect-specimens-with-mismatch-visit-id.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithMismatchCpEventId() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-	
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(SpecimenTestData.getSpecimenList()));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertNull(resp.getSpecimens());
-		Assert.assertEquals("visitId:Attribute value is invalid\n", resp.getException().getMessage());
+		Assert.assertEquals(false, resp.isSuccessful());
+		Assert.assertNull(resp.getPayload());
+		TestUtils.checkErrorCode(resp, SpecimenErrorCode.INVALID_VISIT, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithNullVisitId() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setVisitId(null);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setVisitId(null);
 	
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertNull(resp.getSpecimens());
-		Assert.assertEquals("visitId:Required attribute is either empty or null\n", resp.getException().getMessage());
+		Assert.assertEquals(false, resp.isSuccessful());
+		Assert.assertNull(resp.getPayload());
+		TestUtils.checkErrorCode(resp, SpecimenErrorCode.VISIT_REQUIRED, ErrorType.USER_ERROR);
 	}
 	
 	@Test
@@ -273,19 +290,21 @@ public class SpecimenTest {
 	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithoutLineage() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setLineage(null);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setLineage(null);
 	
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals((int)2, resp.getSpecimens().size());
-		for (SpecimenDetail detail : resp.getSpecimens()) {
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull(resp.getPayload());
+		Assert.assertEquals((int)2, resp.getPayload().size());
+		for (SpecimenDetail detail : resp.getPayload()) {
 			Assert.assertEquals("Storage type mismatch", "default-storage", detail.getStorageType());
 			Assert.assertEquals("Lineage mismatch", "New", detail.getLineage());
 			Assert.assertNull("Parent id mismatch", detail.getParentId());
 			Assert.assertNull("Parent label mismatch", detail.getParentLabel());
-			AssertSpecimenDetails(detail, resp.getSpecimens().indexOf(detail));
+			AssertSpecimenDetails(detail, resp.getPayload().indexOf(detail));
 		}
 	}
 
@@ -293,26 +312,28 @@ public class SpecimenTest {
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithDerivedLineageAndParentId() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setLineage("Derived");
-		req.getSpecimens().get(0).setParentId(1L);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setLineage("Derived");
+		input.get(0).setParentId(1L);
 	
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals((int)2, resp.getSpecimens().size());
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull(resp.getPayload());
+		Assert.assertEquals((int)2, resp.getPayload().size());
 		
-		Assert.assertEquals("Derived", resp.getSpecimens().get(0).getLineage());
-		Assert.assertEquals(new Long(1), resp.getSpecimens().get(0).getParentId());
-		Assert.assertEquals("parent-spm", resp.getSpecimens().get(0).getParentLabel());
+		Assert.assertEquals("Derived", resp.getPayload().get(0).getLineage());
+		Assert.assertEquals(new Long(1), resp.getPayload().get(0).getParentId());
+		Assert.assertEquals("parent-spm", resp.getPayload().get(0).getParentLabel());
 		
-		Assert.assertEquals("New", resp.getSpecimens().get(1).getLineage());
-		Assert.assertNull(resp.getSpecimens().get(1).getParentId());
-		Assert.assertNull(resp.getSpecimens().get(1).getParentLabel());
+		Assert.assertEquals("New", resp.getPayload().get(1).getLineage());
+		Assert.assertNull(resp.getPayload().get(1).getParentId());
+		Assert.assertNull(resp.getPayload().get(1).getParentLabel());
 		
-		for (SpecimenDetail detail : resp.getSpecimens()) {
+		for (SpecimenDetail detail : resp.getPayload()) {
 			Assert.assertEquals("Storage type mismatch", "default-storage", detail.getStorageType());
-			AssertSpecimenDetails(detail, resp.getSpecimens().indexOf(detail));
+			AssertSpecimenDetails(detail, resp.getPayload().indexOf(detail));
 		}
 	}
 
@@ -320,26 +341,28 @@ public class SpecimenTest {
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithDerivedLineageAndParentLabel() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setLineage("Derived");
-		req.getSpecimens().get(0).setParentLabel("parent-spm");
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setLineage("Derived");
+		input.get(0).setParentLabel("parent-spm");
 	
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals((int)2, resp.getSpecimens().size());
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull(resp.getPayload());
+		Assert.assertEquals((int)2, resp.getPayload().size());
 		
-		Assert.assertEquals("Derived", resp.getSpecimens().get(0).getLineage());
-		Assert.assertEquals(new Long(1), resp.getSpecimens().get(0).getParentId());
-		Assert.assertEquals("parent-spm", resp.getSpecimens().get(0).getParentLabel());
+		Assert.assertEquals("Derived", resp.getPayload().get(0).getLineage());
+		Assert.assertEquals(new Long(1), resp.getPayload().get(0).getParentId());
+		Assert.assertEquals("parent-spm", resp.getPayload().get(0).getParentLabel());
 		
-		Assert.assertEquals("New", resp.getSpecimens().get(1).getLineage());
-		Assert.assertNull(resp.getSpecimens().get(1).getParentId());
-		Assert.assertNull(resp.getSpecimens().get(1).getParentLabel());
+		Assert.assertEquals("New", resp.getPayload().get(1).getLineage());
+		Assert.assertNull(resp.getPayload().get(1).getParentId());
+		Assert.assertNull(resp.getPayload().get(1).getParentLabel());
 		
-		for (SpecimenDetail detail : resp.getSpecimens()) {
+		for (SpecimenDetail detail : resp.getPayload()) {
 			Assert.assertEquals("Storage type mismatch", "default-storage", detail.getStorageType());
-			AssertSpecimenDetails(detail, resp.getSpecimens().indexOf(detail));
+			AssertSpecimenDetails(detail, resp.getPayload().indexOf(detail));
 		}
 	}
 	
@@ -349,22 +372,24 @@ public class SpecimenTest {
 	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectAdhocSpecimen() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setReqId(null);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setReqId(null);
 	
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals((int)2, resp.getSpecimens().size());
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull(resp.getPayload());
+		Assert.assertEquals((int)2, resp.getPayload().size());
 		
-		Assert.assertNull(resp.getSpecimens().get(0).getStorageType());
-		Assert.assertEquals("default-storage", resp.getSpecimens().get(1).getStorageType());
+		Assert.assertNull(resp.getPayload().get(0).getStorageType());
+		Assert.assertEquals("default-storage", resp.getPayload().get(1).getStorageType());
 		
-		for (SpecimenDetail detail : resp.getSpecimens()) {
+		for (SpecimenDetail detail : resp.getPayload()) {
 			Assert.assertEquals("Lineage mismatch", "New", detail.getLineage());
 			Assert.assertNull("Parent id mismatch", detail.getParentId());
 			Assert.assertNull("Parent label mismatch", detail.getParentLabel());
-			AssertSpecimenDetails(detail, resp.getSpecimens().indexOf(detail));
+			AssertSpecimenDetails(detail, resp.getPayload().indexOf(detail));
 		}
 	}
 	
@@ -372,21 +397,22 @@ public class SpecimenTest {
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithNullCollectionStatus() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setStatus(null);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setStatus(null);
 	
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals("Invalid number: count of specimens", 
-				new Integer(2), new Integer(resp.getSpecimens().size()));
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull(resp.getPayload());
+		Assert.assertEquals((int)2, resp.getPayload().size());
 		
-		for (SpecimenDetail detail : resp.getSpecimens()) {
+		for (SpecimenDetail detail : resp.getPayload()) {
 			Assert.assertEquals("Storage type mismatch", "default-storage", detail.getStorageType());
 			Assert.assertEquals("Lineage mismatch", "New", detail.getLineage());
 			Assert.assertNull("Parent id mismatch", detail.getParentId());
 			Assert.assertNull("Parent label mismatch", detail.getParentLabel());
-			AssertSpecimenDetails(detail, resp.getSpecimens().indexOf(detail));
+			AssertSpecimenDetails(detail, resp.getPayload().indexOf(detail));
 		}
 	}
 	
@@ -394,14 +420,15 @@ public class SpecimenTest {
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidCollectionStatus() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setStatus("invalid-status");
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setStatus("invalid-status");
 	
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertNull(resp.getSpecimens());
-		Assert.assertEquals("status:Attribute value is invalid\n", resp.getException().getMessage());
+		Assert.assertEquals(false, resp.isSuccessful());
+		Assert.assertNull(resp.getPayload());
+		TestUtils.checkErrorCode(resp, SpecimenErrorCode.INVALID_COLL_STATUS, ErrorType.USER_ERROR);
 	}
 	
 	@Test                       
@@ -410,19 +437,22 @@ public class SpecimenTest {
 	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithoutAnatomicSite() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setAnatomicSite(null);
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setAnatomicSite(null);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals((int)2, resp.getSpecimens().size());
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		for (SpecimenDetail detail : resp.getSpecimens()) {
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull(resp.getPayload());
+		Assert.assertEquals((int)2, resp.getPayload().size());
+		
+		for (SpecimenDetail detail : resp.getPayload()) {
 			Assert.assertEquals("Storage type mismatch", "default-storage", detail.getStorageType());
 			Assert.assertEquals("Lineage mismatch", "New", detail.getLineage());
 			Assert.assertNull("Parent id mismatch", detail.getParentId());
 			Assert.assertNull("Parent label mismatch", detail.getParentLabel());
-			AssertSpecimenDetails(detail, resp.getSpecimens().indexOf(detail));
+			AssertSpecimenDetails(detail, resp.getPayload().indexOf(detail));
 		}
 	}
 	
@@ -432,19 +462,22 @@ public class SpecimenTest {
 	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithoutLaterality() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setLaterality(null);
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setLaterality(null);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals((int)2, resp.getSpecimens().size());
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		for (SpecimenDetail detail : resp.getSpecimens()) {
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull(resp.getPayload());
+		Assert.assertEquals((int)2, resp.getPayload().size());
+		
+		for (SpecimenDetail detail : resp.getPayload()) {
 			Assert.assertEquals("Storage type mismatch", "default-storage", detail.getStorageType());
 			Assert.assertEquals("Lineage mismatch", "New", detail.getLineage());
 			Assert.assertNull("Parent id mismatch", detail.getParentId());
 			Assert.assertNull("Parent label mismatch", detail.getParentLabel());
-			AssertSpecimenDetails(detail, resp.getSpecimens().indexOf(detail));
+			AssertSpecimenDetails(detail, resp.getPayload().indexOf(detail));
 		}
 	}
 	
@@ -454,19 +487,22 @@ public class SpecimenTest {
 	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithoutPathologyStatus() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setPathology(null);
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setPathology(null);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals((int)2, resp.getSpecimens().size());
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		for (SpecimenDetail detail : resp.getSpecimens()) {
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull(resp.getPayload());
+		Assert.assertEquals((int)2, resp.getPayload().size());
+		
+		for (SpecimenDetail detail : resp.getPayload()) {
 			Assert.assertEquals("Storage type mismatch", "default-storage", detail.getStorageType());
 			Assert.assertEquals("Lineage mismatch", "New", detail.getLineage());
 			Assert.assertNull("Parent id mismatch", detail.getParentId());
 			Assert.assertNull("Parent label mismatch", detail.getParentLabel());
-			AssertSpecimenDetails(detail, resp.getSpecimens().indexOf(detail));
+			AssertSpecimenDetails(detail, resp.getPayload().indexOf(detail));
 		}
 	}
 	
@@ -476,19 +512,22 @@ public class SpecimenTest {
 	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithoutSpecimenClass() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setSpecimenClass(null);
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setSpecimenClass(null);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals((int)2, resp.getSpecimens().size());
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		for (SpecimenDetail detail : resp.getSpecimens()) {
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull(resp.getPayload());
+		Assert.assertEquals((int)2, resp.getPayload().size());
+		
+		for (SpecimenDetail detail : resp.getPayload()) {
 			Assert.assertEquals("Storage type mismatch", "default-storage", detail.getStorageType());
 			Assert.assertEquals("Lineage mismatch", "New", detail.getLineage());
 			Assert.assertNull("Parent id mismatch", detail.getParentId());
 			Assert.assertNull("Parent label mismatch", detail.getParentLabel());
-			AssertSpecimenDetails(detail, resp.getSpecimens().indexOf(detail));
+			AssertSpecimenDetails(detail, resp.getPayload().indexOf(detail));
 		}
 	}
 	
@@ -498,19 +537,22 @@ public class SpecimenTest {
 	@ExpectedDatabase(value="specimen-test/collect-specimens-expected.xml", 
 		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void collectSpecimensWithoutSpecimenType() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setType(null);
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setType(null);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals((int)2, resp.getSpecimens().size());
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		for (SpecimenDetail detail : resp.getSpecimens()) {
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull(resp.getPayload());
+		Assert.assertEquals((int)2, resp.getPayload().size());
+		
+		for (SpecimenDetail detail : resp.getPayload()) {
 			Assert.assertEquals("Storage type mismatch", "default-storage", detail.getStorageType());
 			Assert.assertEquals("Lineage mismatch", "New", detail.getLineage());
 			Assert.assertNull("Parent id mismatch", detail.getParentId());
 			Assert.assertNull("Parent label mismatch", detail.getParentLabel());
-			AssertSpecimenDetails(detail, resp.getSpecimens().indexOf(detail));
+			AssertSpecimenDetails(detail, resp.getPayload().indexOf(detail));
 		}
 	}
 	
@@ -518,22 +560,25 @@ public class SpecimenTest {
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithoutCreatedDate() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setCreatedOn(null);
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setCreatedOn(null);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		Assert.assertEquals((int)2, resp.getSpecimens().size());
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertNotNull(resp.getPayload());
+		Assert.assertEquals((int)2, resp.getPayload().size());
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Assert.assertEquals(formatter.format(new Date()), formatter.format(resp.getSpecimens().get(0).getCreatedOn()));
+		Assert.assertEquals(formatter.format(new Date()), formatter.format(resp.getPayload().get(0).getCreatedOn()));
 		
-		for (SpecimenDetail detail : resp.getSpecimens()) {
+		for (SpecimenDetail detail : resp.getPayload()) {
 			Assert.assertEquals("Storage type mismatch", "default-storage", detail.getStorageType());
 			Assert.assertEquals("Lineage mismatch", "New", detail.getLineage());
 			Assert.assertNull("Parent id mismatch", detail.getParentId());
 			Assert.assertNull("Parent label mismatch", detail.getParentLabel());
-			AssertSpecimenDetails(detail, resp.getSpecimens().indexOf(detail));
+			AssertSpecimenDetails(detail, resp.getPayload().indexOf(detail));
 		}
 	}
 	
@@ -541,13 +586,15 @@ public class SpecimenTest {
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidCreatedDate() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setCreatedOn(CprTestData.getDate(21, 1, 2000));
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setCreatedOn(CommonUtils.getDate(21, 1, 2000));
 		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertNull(resp.getSpecimens());
-		Assert.assertEquals("createdOn:Attribute value is invalid\n", resp.getException().getMessage());
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(false, resp.isSuccessful());
+		Assert.assertNull(resp.getPayload());
+		TestUtils.checkErrorCode(resp, SpecimenErrorCode.INVALID_CREATION_DATE, ErrorType.USER_ERROR);
 	}
 
 	
@@ -556,10 +603,11 @@ public class SpecimenTest {
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidActivityStatus() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setActivityStatus("Invalid-Activity-Status");
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setActivityStatus("Invalid-Activity-Status");
 
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
 	}
 	
@@ -568,17 +616,12 @@ public class SpecimenTest {
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidAnatomicSite() {
-		CollectSpecimensEvent req = SpecimenTestData.collectSpecimenListEvent();
-		req.getSpecimens().get(0).setAnatomicSite("invalid-anatomic-site");
-		SpecimensCollectedEvent resp = specimenSvc.collectSpecimens(req);
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setAnatomicSite("invalid-anatomic-site");
 		
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
 		TestUtils.recordResponse(resp);
-		System.out.println("Status :  " + resp.getStatus());
-		System.out.println("Err Msg:  " + resp.getException().getMessage());
-		System.out.println("Err Fld:  " + resp.getErroneousFields());
-
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertNull(resp.getSpecimens());
+		
 	}
 	
 	// TODO :: Implement after isValidPv() implements.
@@ -586,6 +629,11 @@ public class SpecimenTest {
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidLaterality() {
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setLaterality("invalid-laterality");
+		
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
 	}
 	
@@ -594,6 +642,11 @@ public class SpecimenTest {
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidPathologicalStatus() {
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setPathology("invalid-pathology");
+		
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
 	}
 	
@@ -602,6 +655,11 @@ public class SpecimenTest {
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidSpecimenClass() {
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setSpecimenClass("invalid=specimenClass");
+		
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
 	}
 	
@@ -610,7 +668,12 @@ public class SpecimenTest {
 	@DatabaseSetup("specimen-test/collect-specimens-initial.xml")
 	@DatabaseTearDown("specimen-test/generic-teardown.xml")
 	public void collectSpecimensWithInvalidSpecimenType() {
-			
+		List<SpecimenDetail> input = SpecimenTestData.getSpecimenList();
+		input.get(0).setType("invalid-type");
+		
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(input));
+		TestUtils.recordResponse(resp);
+		
 	}
 	
 	public void AssertSpecimenDetails(SpecimenDetail detail, int index) {

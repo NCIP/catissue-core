@@ -35,8 +35,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import com.krishagni.catissueplus.core.privileges.PrivilegeType;
-
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
@@ -52,7 +50,6 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.dto.ParticipantDTO;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -63,7 +60,6 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.participant.utility.ParticipantManagerUtility;
@@ -159,7 +155,8 @@ public class ParticipantAction extends CatissueBaseAction
 			participantForm.setCpId(Long.valueOf(cpid));
 		}
 		SessionDataBean sessionBean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
-			if(cpid != null && !AppUtility.hasPrivilegeToView(CollectionProtocol.class.getName(), Long.valueOf(cpid), sessionBean, PrivilegeType.REGISTRATION.toString()))
+		boolean hasPrivilege = true; //AppUtility.hasPrivilegeToView(CollectionProtocol.class.getName(), Long.valueOf(cpid), sessionBean, PrivilegeType.REGISTRATION.toString())
+			if(cpid != null && !hasPrivilege)
 		{
 				ActionErrors errors = new ActionErrors();
 				ActionError error = new ActionError("access.view.action.denied", "");

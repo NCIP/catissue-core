@@ -248,11 +248,6 @@
         class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent"/>
     </set>
 
-    <set name="cpSiteRoles" table="CATISSUE_CP_GROUP_ROLES" cascade="all-delete-orphan" inverse="true">
-      <key column="CP_ID"/>
-      <one-to-many class="com.krishagni.catissueplus.core.privileges.domain.CPSiteRole"/>
-    </set>
-         
     <sql-query name="getParticipantAndSpecimenCount">
       <return-scalar column="cpId" type="long"/>
       <return-scalar column="participantCnt" type="long"/>

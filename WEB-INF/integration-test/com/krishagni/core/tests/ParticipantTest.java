@@ -24,18 +24,17 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.events.MatchParticipantEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipants;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMatchedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.core.common.ApplicationContextConfigurer;
 import com.krishagni.core.common.TestUtils;
 import com.krishagni.core.common.WebContextLoader;
-import com.krishagni.core.tests.testdata.CprTestData;
+import com.krishagni.core.tests.testdata.CommonUtils;
 import com.krishagni.core.tests.testdata.ParticipantTestData;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -55,62 +54,73 @@ public class ParticipantTest {
 	@Autowired
 	private ApplicationContext ctx;
 	
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return CommonUtils.getRequest(payload);
+	}
+	
 	/*
 	 * Match Participant API Test 
 	 */
+	
 	@Test
 	@DatabaseSetup("participant-test/generic-initial.xml")
 	@DatabaseTearDown("participant-test/generic-teardown.xml")
 	public void matchParticpantBySsn() {
-		MatchParticipantEvent req = ParticipantTestData.getMatchParticipantEvent();
-		req.getParticipantDetail().setSsn("333-22-4444");
-		ParticipantMatchedEvent resp = participantSvc.getMatchingParticipants(req);
+		ParticipantDetail input = ParticipantTestData.getParticipant();
+		input.setSsn("333-22-4444");
 		
-		Assert.assertEquals(true, resp.isSuccess());
-		Assert.assertEquals("ssn", resp.getMatchedAttr());
-		Assert.assertEquals((Long)1L, resp.getParticipants().get(0).getId());
+		ResponseEvent<MatchedParticipants> resp = participantSvc.getMatchingParticipants(getRequest(input));
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertEquals("ssn", resp.getPayload().getMatchedAttr());
+		Assert.assertEquals((Long)1L, resp.getPayload().getParticipants().get(0).getId());
 	}
 	
 	@Test
 	@DatabaseSetup("participant-test/generic-initial.xml")
 	@DatabaseTearDown("participant-test/generic-teardown.xml")
 	public void matchParticpantByEmpi() {
-		MatchParticipantEvent req = ParticipantTestData.getMatchParticipantEvent();
-		req.getParticipantDetail().setEmpi("dummy-empi-id");
+		ParticipantDetail input = ParticipantTestData.getParticipant();
+		input.setEmpi("dummy-empi-id");
 		
-		ParticipantMatchedEvent resp = participantSvc.getMatchingParticipants(req);
+		ResponseEvent<MatchedParticipants> resp = participantSvc.getMatchingParticipants(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(true, resp.isSuccess());
-		Assert.assertEquals("empi", resp.getMatchedAttr());
-		Assert.assertEquals((Long)1L, resp.getParticipants().get(0).getId());
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertEquals("empi", resp.getPayload().getMatchedAttr());
+		Assert.assertEquals((Long)1L, resp.getPayload().getParticipants().get(0).getId());
 	}
 	
 	@Test
 	@DatabaseSetup("participant-test/generic-initial.xml")
 	@DatabaseTearDown("participant-test/generic-teardown.xml")
 	public void matchParticpantByPmi() {
-		MatchParticipantEvent req = ParticipantTestData.getMatchParticipantEvent();
-		req.getParticipantDetail().setPmis(ParticipantTestData.getPmi("SITE1", "MRN1"));
+		ParticipantDetail input = ParticipantTestData.getParticipant();
+		input.setPmis(ParticipantTestData.getPmi("SITE1", "MRN1"));
 		
-		ParticipantMatchedEvent resp = participantSvc.getMatchingParticipants(req);
+		ResponseEvent<MatchedParticipants> resp = participantSvc.getMatchingParticipants(getRequest(input));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(true, resp.isSuccess());
-		Assert.assertEquals("pmi", resp.getMatchedAttr());
-		Assert.assertEquals((Long)1L, resp.getParticipants().get(0).getId());
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertEquals("pmi", resp.getPayload().getMatchedAttr());
+		Assert.assertEquals((Long)1L, resp.getPayload().getParticipants().get(0).getId());
 	}
 	
 	@Test
 	@DatabaseSetup("participant-test/generic-initial.xml")
 	@DatabaseTearDown("participant-test/generic-teardown.xml")
 	public void matchParticpantByLnameAndDob() {
-		MatchParticipantEvent req = ParticipantTestData.getMatchParticipantEvent();
-		req.getParticipantDetail().setLastName("default_last_name");
-		req.getParticipantDetail().setBirthDate(CprTestData.getDate(21, 10, 2000));
-		ParticipantMatchedEvent resp = participantSvc.getMatchingParticipants(req);
+		ParticipantDetail input = ParticipantTestData.getParticipant();
+		input.setLastName("default_last_name");
+		input.setBirthDate(CommonUtils.getDate(21, 10, 2000));
 		
-		Assert.assertEquals(true, resp.isSuccess());
-		Assert.assertEquals("lnameAndDob", resp.getMatchedAttr());
-		Assert.assertEquals((Long)1L, resp.getParticipants().get(0).getId());
+		ResponseEvent<MatchedParticipants> resp = participantSvc.getMatchingParticipants(getRequest(input));
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertEquals("lnameAndDob", resp.getPayload().getMatchedAttr());
+		Assert.assertEquals((Long)1L, resp.getPayload().getParticipants().get(0).getId());
 	}
 	
 	/*
@@ -120,17 +130,17 @@ public class ParticipantTest {
 	@DatabaseSetup("participant-test/generic-initial.xml")
 	@DatabaseTearDown("participant-test/generic-teardown.xml")
 	public void getParticipantTest() {
-		ReqParticipantDetailEvent req = ParticipantTestData.getReqParticipantDetailEvent();
-		ParticipantDetailEvent resp = participantSvc.getParticipant(req);
+		ResponseEvent<ParticipantDetail> resp = participantSvc.getParticipant(getRequest(1L));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.OK, resp.getStatus());
-		ParticipantDetail participant = resp.getParticipantDetail();
+		Assert.assertEquals(true, resp.isSuccessful());
+		ParticipantDetail participant = resp.getPayload();
 		Assert.assertNotNull("Participant detail object should not be null!", participant );
 		Assert.assertEquals(new Long(1), participant.getId());
 		Assert.assertEquals("Firstname mismatch", "default_first_name", participant.getFirstName());
 		Assert.assertEquals("LastName mismatch", "default_last_name", participant.getLastName());
-		Assert.assertEquals("Birthdate mismatch", CprTestData.getDate(21,10,2000), participant.getBirthDate());
-		Assert.assertEquals("Deathdate mismatch", CprTestData.getDate(21,10,2012), participant.getDeathDate());
+		Assert.assertEquals("Birthdate mismatch", CommonUtils.getDate(21,10,2000), participant.getBirthDate());
+		Assert.assertEquals("Deathdate mismatch", CommonUtils.getDate(21,10,2012), participant.getDeathDate());
 		Assert.assertEquals("SSN mismatch", "333-22-4444", participant.getSsn());
 		Assert.assertEquals("Gender mismatch" , "MALE", participant.getGender());
 		Assert.assertEquals("Genotype mismatch" , "XX", participant.getSexGenotype());
@@ -159,33 +169,30 @@ public class ParticipantTest {
 	
 	@Test
 	public void getNonExistingParticipant() {
-		ReqParticipantDetailEvent req = ParticipantTestData.getReqParticipantDetailEvent();
-		ParticipantDetailEvent resp = participantSvc.getParticipant(req);
+		ResponseEvent<ParticipantDetail> resp = participantSvc.getParticipant(getRequest(1L));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
-		Assert.assertEquals((Long)1L, resp.getParticipantId());
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, ParticipantErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	
 	@Test
-	public void getParticipantTestNullParticipantId() {
-		ReqParticipantDetailEvent req = ParticipantTestData.getReqParticipantDetailEvent();
-		req.setParticipantId(null);
+	public void getParticipantTestInvalidParticipantId() {
+		ResponseEvent<ParticipantDetail> resp = participantSvc.getParticipant(getRequest(-1L));
+		TestUtils.recordResponse(resp);
 		
-		ParticipantDetailEvent resp = participantSvc.getParticipant(req);
-		
-		Assert.assertEquals(EventStatus.BAD_REQUEST, resp.getStatus());
-		Assert.assertEquals(true, TestUtils.isErrorCodePresent(resp, ParticipantErrorCode.INVALID_ATTR_VALUE, "participant-id"));
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, ParticipantErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	
 	@Test
 	@DatabaseSetup("participant-test/get-disabled-paticipant-initial.xml")
 	@DatabaseTearDown("participant-test/generic-teardown.xml")
 	public void getDisabledPaticipant() {
-		ReqParticipantDetailEvent req = ParticipantTestData.getReqParticipantDetailEvent();
-		ParticipantDetailEvent resp = participantSvc.getParticipant(req);
+		ResponseEvent<ParticipantDetail> resp = participantSvc.getParticipant(getRequest(1L));
+		TestUtils.recordResponse(resp);
 		
-		Assert.assertEquals(EventStatus.NOT_FOUND, resp.getStatus());
-		Assert.assertEquals(req.getParticipantId(), resp.getParticipantId());
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, ParticipantErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
-	
 }

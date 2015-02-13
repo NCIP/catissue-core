@@ -1,78 +1,58 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services;
 
-import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.AddCpeEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.AddSpecimenRequirementEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.AliquotsRequirementCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOpRespEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentTiersEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CpeAddedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CpeEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CpeListEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CpeUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotsRequirementEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateCollectionProtocolEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateDerivedSpecimenReqEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.DerivedSpecimenReqCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqCollectionProtocolEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentTiersEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqCpeListEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenRequirementsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementAddedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateCpeEvent;
+import java.util.List;
+
+import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
+import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEventDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp;
+import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.ListCpCriteria;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementDetail;
+import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public interface CollectionProtocolService {
 
-	public AllCollectionProtocolsEvent getAllProtocols(ReqAllCollectionProtocolsEvent req);
+	public ResponseEvent<List<CollectionProtocolSummary>> getProtocols(RequestEvent<ListCpCriteria> req);
 	
-	public CollectionProtocolDetailEvent getCollectionProtocol(ReqCollectionProtocolEvent req);
+	public ResponseEvent<CollectionProtocolDetail> getCollectionProtocol(RequestEvent<Long> req);
 
-	public RegisteredParticipantsEvent getRegisteredParticipants(ReqRegisteredParticipantsEvent req);
+	public ResponseEvent<List<CprSummary>> getRegisteredParticipants(RequestEvent<CprListCriteria> req);
 	
-	public CollectionProtocolCreatedEvent createCollectionProtocol(CreateCollectionProtocolEvent req);
+	public ResponseEvent<CollectionProtocolDetail> createCollectionProtocol(RequestEvent<CollectionProtocolDetail> req);
 	
 	//
 	// Consent Tier APIs
 	//
-	public ConsentTiersEvent getConsentTiers(ReqConsentTiersEvent req);
+	public ResponseEvent<List<ConsentTierDetail>> getConsentTiers(RequestEvent<Long> req);
 
-	public ConsentTierOpRespEvent updateConsentTier(ConsentTierOpEvent req);
+	public ResponseEvent<ConsentTierDetail> updateConsentTier(RequestEvent<ConsentTierOp> req);
 	
 	//
 	// Events API
 	//
-	public CpeListEvent getProtocolEvents(ReqCpeListEvent req);
+	public ResponseEvent<List<CollectionProtocolEventDetail>> getProtocolEvents(RequestEvent<Long> req);
 	
-	public CpeEvent getProtocolEvent(ReqCpeEvent req);
+	public ResponseEvent<CollectionProtocolEventDetail> getProtocolEvent(RequestEvent<Long> req);
 	
-	public CpeAddedEvent addEvent(AddCpeEvent req);
+	public ResponseEvent<CollectionProtocolEventDetail> addEvent(RequestEvent<CollectionProtocolEventDetail> req);
 	
-	public CpeUpdatedEvent updateEvent(UpdateCpeEvent req);
+	public ResponseEvent<CollectionProtocolEventDetail> updateEvent(RequestEvent<CollectionProtocolEventDetail> req);
 	
 	//
 	// Specimen Requirement API
 	//
-	public SpecimenRequirementsEvent getSpecimenRequirments(ReqSpecimenRequirementsEvent req);
+	public ResponseEvent<List<SpecimenRequirementDetail>> getSpecimenRequirments(RequestEvent<Long> req);
 	
-	public SpecimenRequirementAddedEvent addSpecimenRequirement(AddSpecimenRequirementEvent req);
+	public ResponseEvent<SpecimenRequirementDetail> addSpecimenRequirement(RequestEvent<SpecimenRequirementDetail> req);
 	
-	public AliquotsRequirementCreatedEvent createAliquots(CreateAliquotsRequirementEvent req);
+	public ResponseEvent<List<SpecimenRequirementDetail>> createAliquots(RequestEvent<AliquotSpecimensRequirement> req);
 	
-	public DerivedSpecimenReqCreatedEvent createDerived(CreateDerivedSpecimenReqEvent req);
-			
-	//public ParticipantSummaryEvent getParticipant(ReqParticipantSummaryEvent event);
-
-	public ChildCollectionProtocolsEvent getChildProtocols(ReqChildProtocolEvent req);
-
+	public ResponseEvent<SpecimenRequirementDetail> createDerived(RequestEvent<DerivedSpecimenRequirement> req);			
 }

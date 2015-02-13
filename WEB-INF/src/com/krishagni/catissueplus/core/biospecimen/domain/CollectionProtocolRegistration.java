@@ -8,7 +8,7 @@ import java.util.Set;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.common.SetUpdater;
-import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
@@ -162,7 +162,7 @@ public class CollectionProtocolRegistration {
 	private void checkActiveDependents() {
 		for (Visit scg : this.getScgCollection()) {
 			if (scg.isActive()) {
-				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
+				throw OpenSpecimenException.userError(ParticipantErrorCode.REF_ENTITY_FOUND);
 			}
 		}
 	}

@@ -23,34 +23,19 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
-import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
-import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
-import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
-import com.krishagni.catissueplus.core.de.events.BulkFormDataSavedEvent;
-import com.krishagni.catissueplus.core.de.events.DeleteFormEvent;
-import com.krishagni.catissueplus.core.de.events.FormDeletedEvent;
-import com.krishagni.catissueplus.core.de.events.SaveBulkFormDataEvent;
-import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
-import com.krishagni.catissueplus.core.de.events.FormContextsAddedEvent;
-import com.krishagni.catissueplus.core.de.events.FormContextsEvent;
-import com.krishagni.catissueplus.core.de.events.FormDataEvent;
-import com.krishagni.catissueplus.core.de.events.FormDefinitionEvent;
+import com.krishagni.catissueplus.core.de.events.FormDataDetail;
 import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
-import com.krishagni.catissueplus.core.de.events.FormFieldsEvent;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
-import com.krishagni.catissueplus.core.de.events.RecordEntriesDeletedEvent;
-import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent.FormType;
-import com.krishagni.catissueplus.core.de.events.ReqFormContextsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFormDataEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFormDefinitionEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFormFieldsEvent;
-import com.krishagni.catissueplus.core.de.events.SaveFormDataEvent;
+import com.krishagni.catissueplus.core.de.events.FormType;
+import com.krishagni.catissueplus.core.de.events.GenerateBoTemplateOp;
+import com.krishagni.catissueplus.core.de.events.GetFormDataOp;
+import com.krishagni.catissueplus.core.de.events.ListFormFields;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
+import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.nutility.ContainerJsonSerializer;
 import edu.common.dynamicextensions.nutility.ContainerSerializer;
@@ -72,49 +57,39 @@ public class FormsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<FormSummary> getAllFormsSummary(
-			@RequestParam(value="formType", required=false, defaultValue="dataEntry") String formType) {
-		ReqAllFormsSummaryEvent req = new ReqAllFormsSummaryEvent();
-		req.setFormType(formType.equals("query") ? FormType.QUERY_FORMS : formType.equals("specimenEvent") ? FormType.SPECIMEN_EVENT_FORMS :
-				FormType.DATA_ENTRY_FORMS);
-		
-		AllFormsSummaryEvent resp = formSvc.getForms(req);		
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getForms();
+			@RequestParam(value="formType", required=false, defaultValue="dataEntry") 
+			String formType) {
+		FormType type = FormType.DATA_ENTRY_FORMS;
+		if (formType.equals("query")) {
+			type = FormType.QUERY_FORMS;
+		} else if (formType.equals("specimenEvent")) {
+			type = FormType.SPECIMEN_EVENT_FORMS;
 		}
 		
-		// TODO: Return appropriate error codes
-		return null;
+		ResponseEvent<List<FormSummary>> resp = formSvc.getForms(getRequestEvent(type));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value="{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public Long deleteForm(@PathVariable("id") Long formId) {
-		DeleteFormEvent req = new DeleteFormEvent();
-		req.setSessionDataBean(getSession());
-		req.setFormId(formId);
-		
-		FormDeletedEvent resp = formSvc.deleteForm(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getFormId();
-		}
-		
-		return null;
+	public Boolean deleteForm(@PathVariable("id") Long formId) {
+		ResponseEvent<Boolean> resp = formSvc.deleteForm(getRequestEvent(formId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value="{id}/definition")
 	@ResponseStatus(HttpStatus.OK)
 	public void getFormDefinition(@PathVariable("id") Long formId, Writer writer) 
 	throws IOException {
-		ReqFormDefinitionEvent req = new ReqFormDefinitionEvent();
-		req.setFormId(formId);
+		ResponseEvent<Container> resp = formSvc.getFormDefinition(getRequestEvent(formId));		
+		resp.throwErrorIfUnsuccessful();
 		
-		FormDefinitionEvent resp = formSvc.getFormDefinition(req);		
-		if (resp.getStatus() == EventStatus.OK) {
-			ContainerSerializer serializer = new ContainerJsonSerializer(resp.getFormDef(), writer);
-			serializer.serialize();
-			writer.flush();
-		}		
+		ContainerSerializer serializer = new ContainerJsonSerializer(resp.getPayload(), writer);
+		serializer.serialize();
+		writer.flush();		
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="{id}/fields")
@@ -125,34 +100,28 @@ public class FormsController {
 			@RequestParam(value="prefixParentCaption", required=false, defaultValue="false") boolean prefixParentCaption,
 			@RequestParam(value="cpId", required=false, defaultValue="-1") Long cpId,
 			@RequestParam(value="extendedFields", required=false, defaultValue="false") boolean extendedFields) {
-		ReqFormFieldsEvent req = new ReqFormFieldsEvent();
-		req.setFormId(formId);
-		req.setPrefixParentFormCaption(prefixParentCaption);
-		req.setCpId(cpId);
-		req.setExtendedFields(extendedFields);
+		ListFormFields crit = new ListFormFields();
+		crit.setFormId(formId);
+		crit.setPrefixParentFormCaption(prefixParentCaption);
+		crit.setCpId(cpId);
+		crit.setExtendedFields(extendedFields);
 		
-		FormFieldsEvent resp = formSvc.getFormFields(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getFields();
-		}
-		
-		return null;
+		ResponseEvent<List<FormFieldSummary>> resp = formSvc.getFormFields(getRequestEvent(crit));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 		
 	@RequestMapping(method = RequestMethod.GET, value="{id}/data/{recordId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public String getFormData(@PathVariable("id") Long formId, @PathVariable("recordId") Long recordId) {
-		ReqFormDataEvent req = new ReqFormDataEvent();
-		req.setFormId(formId);
-		req.setRecordId(recordId);
+		GetFormDataOp op = new GetFormDataOp();
+		op.setFormId(formId);
+		op.setRecordId(recordId);
 		
-		FormDataEvent resp = formSvc.getFormData(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getFormData().toJson();
-		}
-		
-		return null;
+		ResponseEvent<FormDataDetail> resp = formSvc.getFormData(getRequestEvent(op));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload().getFormData().toJson();
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="{id}/data")
@@ -175,15 +144,9 @@ public class FormsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<FormContextDetail> getFormContexts(@PathVariable("id") Long formId) {
-		ReqFormContextsEvent req = new ReqFormContextsEvent();
-		req.setFormId(formId);
-		
-		FormContextsEvent resp = formSvc.getFormContexts(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getFormCtxts();
-		}
-		
-		return null;
+		ResponseEvent<List<FormContextDetail>> resp = formSvc.getFormContexts(getRequestEvent(formId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value="{id}/contexts")
@@ -194,43 +157,28 @@ public class FormsController {
 			formCtxt.setFormId(formId);
 		}
 		
-		AddFormContextsEvent req = new AddFormContextsEvent();
-		req.setFormContexts(formCtxts);
-		
-		FormContextsAddedEvent resp = formSvc.addFormContexts(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			BOTemplateGenerationEvent boReq = new BOTemplateGenerationEvent();
-			boReq.setFormId(formCtxts.get(0).getFormId());
+		ResponseEvent<List<FormContextDetail>> resp = formSvc.addFormContexts(getRequestEvent(formCtxts));
+		resp.throwErrorIfUnsuccessful();
 
-			for (FormContextDetail ctxt : formCtxts) {
-				boReq.setFormId(ctxt.getFormId());
-				boReq.addEntityLevel(ctxt.getLevel());
-			}
+		GenerateBoTemplateOp boReq = new GenerateBoTemplateOp();
+		boReq.setFormId(formCtxts.get(0).getFormId());
 
-			BOTemplateGeneratedEvent boResp = formSvc.genereateBoTemplate(boReq);
-            if (boResp.getStatus() != EventStatus.NOT_FOUND) {
-				resp.setMessage("Error in generating BO templates");
-			}
-			return resp.getFormCtxts();				
+		for (FormContextDetail ctxt : formCtxts) {
+			boReq.setFormId(ctxt.getFormId());
+			boReq.addEntityLevel(ctxt.getLevel());
 		}
-		
-		return null;
+
+		ResponseEvent<?> boResp = formSvc.genereateBoTemplate(getRequestEvent(boReq));
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value="{id}/data")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<Long> deleteRecords(@PathVariable("id") Long formId, @RequestBody List<Long> recIds) {
-		
-		DeleteRecordEntriesEvent delRecEntry = new DeleteRecordEntriesEvent();
-		delRecEntry.setFormId(formId);
-		delRecEntry.setRecordIds(recIds);
-		RecordEntriesDeletedEvent resp = formSvc.deleteRecords(delRecEntry);
-
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDeletedRecIds();
-		}
-		return null;
+	public List<Long> deleteRecords(@PathVariable("id") Long formId, @RequestBody List<Long> recIds) {		
+		ResponseEvent<List<Long>> resp = formSvc.deleteRecords(getRequestEvent(recIds));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 
 	private String saveOrUpdateFormData(Long formId, String formDataJson) {
@@ -248,20 +196,12 @@ public class FormsController {
 			return bulkSaveFormData(formId, formDataJson);
 		} else {
 			FormData formData = FormData.fromJson(formDataJson, formId);
+			FormDataDetail saveOp = FormDataDetail.ok(formId, formData.getRecordId(), formData);
 
-			SaveFormDataEvent req = new SaveFormDataEvent();
-			req.setFormData(formData);
-			req.setFormId(formId);
-			req.setSessionDataBean(getSession());
-			req.setRecordId(formData.getRecordId());
-
-			FormDataEvent resp = formSvc.saveFormData(req);
-			if (resp.getStatus() == EventStatus.OK) {
-				return resp.getFormData().toJson();
-			}
+			ResponseEvent<FormDataDetail> resp = formSvc.saveFormData(getRequestEvent(saveOp));
+			resp.throwErrorIfUnsuccessful();
+			return resp.getPayload().getFormData().toJson();
 		}
-
-		return null;		
 	}
 	
 	private String bulkSaveFormData(Long formId, String formDataJsonArray) {
@@ -275,23 +215,20 @@ public class FormsController {
   			formDataList.add(formData);
   		}
 				
-  		SaveBulkFormDataEvent event = new SaveBulkFormDataEvent();
-  		event.setFormId(formId);
-  		event.setFormDataList(formDataList);
-  		event.setSessionDataBean(getSession());
-  
-  		BulkFormDataSavedEvent bulkFormData = formSvc.saveBulkFormData(event);
-  		if (bulkFormData.getStatus() == EventStatus.OK) {
-  			List<String> savedFormData = new ArrayList<String>();
-  			for (FormData formData : bulkFormData.getFormDataList()) {
-  				savedFormData.add(formData.toJson());
-  			}
-  			return new Gson().toJson(savedFormData);
+  		ResponseEvent<List<FormData>> resp = formSvc.saveBulkFormData(getRequestEvent(formDataList));
+  		resp.throwErrorIfUnsuccessful();
+  		
+  		List<String> savedFormData = new ArrayList<String>();
+  		for (FormData formData : resp.getPayload()) {
+  			savedFormData.add(formData.toJson());
   		}
+  		return new Gson().toJson(savedFormData);
+  	}
   
-  		return null;
+	private <T> RequestEvent<T> getRequestEvent(T payload) {
+		return new RequestEvent<T>(getSession(), payload);				
 	}
-		
+	
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}

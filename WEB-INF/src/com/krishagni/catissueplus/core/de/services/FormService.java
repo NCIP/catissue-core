@@ -1,73 +1,63 @@
 package com.krishagni.catissueplus.core.de.services;
 
-import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
-import com.krishagni.catissueplus.core.de.events.AddRecordEntryEvent;
-import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
-import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
-import com.krishagni.catissueplus.core.de.events.BulkFormDataSavedEvent;
-import com.krishagni.catissueplus.core.de.events.DeleteFormEvent;
-import com.krishagni.catissueplus.core.de.events.FormDeletedEvent;
-import com.krishagni.catissueplus.core.de.events.SaveBulkFormDataEvent;
-import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
-import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
-import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
-import com.krishagni.catissueplus.core.de.events.FileDetailEvent;
-import com.krishagni.catissueplus.core.de.events.FileUploadedEvent;
-import com.krishagni.catissueplus.core.de.events.FormContextRemovedEvent;
-import com.krishagni.catissueplus.core.de.events.FormContextsAddedEvent;
-import com.krishagni.catissueplus.core.de.events.FormContextsEvent;
-import com.krishagni.catissueplus.core.de.events.FormDataEvent;
-import com.krishagni.catissueplus.core.de.events.FormDefinitionEvent;
-import com.krishagni.catissueplus.core.de.events.FormFieldsEvent;
-import com.krishagni.catissueplus.core.de.events.RecordEntriesDeletedEvent;
-import com.krishagni.catissueplus.core.de.events.RecordEntryEventAdded;
-import com.krishagni.catissueplus.core.de.events.RemoveFormContextEvent;
-import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFileDetailEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFormContextsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFormDataEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFormDefinitionEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFormFieldsEvent;
-import com.krishagni.catissueplus.core.de.events.SaveFormDataEvent;
-import com.krishagni.catissueplus.core.de.events.UploadFileEvent;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.de.events.AddRecordEntryOp;
+import com.krishagni.catissueplus.core.de.events.FileDetail;
+import com.krishagni.catissueplus.core.de.events.FormContextDetail;
+import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
+import com.krishagni.catissueplus.core.de.events.FormDataDetail;
+import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
+import com.krishagni.catissueplus.core.de.events.FormSummary;
+import com.krishagni.catissueplus.core.de.events.FormType;
+import com.krishagni.catissueplus.core.de.events.GenerateBoTemplateOp;
+import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
+import com.krishagni.catissueplus.core.de.events.GetFileDetailOp;
+import com.krishagni.catissueplus.core.de.events.GetFormDataOp;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
+import com.krishagni.catissueplus.core.de.events.ListFormFields;
+import com.krishagni.catissueplus.core.de.events.RemoveFormContextOp;
+
+import edu.common.dynamicextensions.domain.nui.Container;
+import edu.common.dynamicextensions.napi.FormData;
 
 public interface FormService {
-	public AllFormsSummaryEvent getForms(ReqAllFormsSummaryEvent req);
+	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<FormType> req);
 	
-	public FormDefinitionEvent getFormDefinition(ReqFormDefinitionEvent req);
+	public ResponseEvent<Container> getFormDefinition(RequestEvent<Long> req);
 	
-	public FormDeletedEvent deleteForm(DeleteFormEvent req);
+	public ResponseEvent<Boolean> deleteForm(RequestEvent<Long> req);
 	
-	public FormFieldsEvent getFormFields(ReqFormFieldsEvent req);
+	public ResponseEvent<List<FormFieldSummary>> getFormFields(RequestEvent<ListFormFields> req);
 	
-	public FormContextsEvent getFormContexts(ReqFormContextsEvent req);
+	public ResponseEvent<List<FormContextDetail>> getFormContexts(RequestEvent<Long> req);
 	
-	public FormContextsAddedEvent addFormContexts(AddFormContextsEvent req);
+	public ResponseEvent<List<FormContextDetail>> addFormContexts(RequestEvent<List<FormContextDetail>> req);
 	
-	public FormContextRemovedEvent removeFormContext(RemoveFormContextEvent req);
+	public ResponseEvent<Boolean> removeFormContext(RequestEvent<RemoveFormContextOp> req);
 	
-	public EntityFormsEvent getEntityForms(ReqEntityFormsEvent req);
+	public ResponseEvent<List<FormCtxtSummary>> getEntityForms(RequestEvent<ListEntityFormsOp> req);
 	
-	public EntityFormRecordsEvent getEntityFormRecords(ReqEntityFormRecordsEvent req);
+	public ResponseEvent<List<FormRecordSummary>> getEntityFormRecords(RequestEvent<GetEntityFormRecordsOp> req);
 	
-	public FormDataEvent getFormData(ReqFormDataEvent req);
+	public ResponseEvent<FormDataDetail> getFormData(RequestEvent<GetFormDataOp> req);
 	
-	public FormDataEvent saveFormData(SaveFormDataEvent req);
+	public ResponseEvent<FormDataDetail> saveFormData(RequestEvent<FormDataDetail> req);
 	
-	public BulkFormDataSavedEvent saveBulkFormData(SaveBulkFormDataEvent req);
+	public ResponseEvent<List<FormData>> saveBulkFormData(RequestEvent<List<FormData>> req);
 
-	public FileDetailEvent getFileDetail(ReqFileDetailEvent req);
+	public ResponseEvent<FileDetail> getFileDetail(RequestEvent<GetFileDetailOp> req);
 
-	public FileUploadedEvent uploadFile(UploadFileEvent req);
+	public ResponseEvent<FileDetail> uploadFile(RequestEvent<MultipartFile> req);
 
-	public RecordEntriesDeletedEvent deleteRecords(DeleteRecordEntriesEvent delRecEntry);
+	public ResponseEvent<List<Long>> deleteRecords(RequestEvent<List<Long>> delRecEntry);
 
-	public RecordEntryEventAdded addRecordEntry(AddRecordEntryEvent req);
+	public ResponseEvent<Long> addRecordEntry(RequestEvent<AddRecordEntryOp> req);
 
-	public BOTemplateGeneratedEvent genereateBoTemplate(BOTemplateGenerationEvent boReq);
-
-	
+	public ResponseEvent<List<Long>> genereateBoTemplate(RequestEvent<GenerateBoTemplateOp> boReq);
 }

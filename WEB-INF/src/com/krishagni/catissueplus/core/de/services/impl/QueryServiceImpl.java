@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,7 +30,9 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.email.EmailHandler;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.de.domain.AqlBuilder;
@@ -37,57 +40,27 @@ import com.krishagni.catissueplus.core.de.domain.QueryAuditLog;
 import com.krishagni.catissueplus.core.de.domain.QueryFolder;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 import com.krishagni.catissueplus.core.de.domain.factory.QueryFolderFactory;
-import com.krishagni.catissueplus.core.de.events.CreateQueryFolderEvent;
-import com.krishagni.catissueplus.core.de.events.DeleteQueryEvent;
-import com.krishagni.catissueplus.core.de.events.DeleteQueryFolderEvent;
-import com.krishagni.catissueplus.core.de.events.ExecuteQueryEvent;
-import com.krishagni.catissueplus.core.de.events.ExportDataFileEvent;
-import com.krishagni.catissueplus.core.de.events.ExportQueryDataEvent;
-import com.krishagni.catissueplus.core.de.events.FolderQueriesEvent;
-import com.krishagni.catissueplus.core.de.events.FolderQueriesUpdatedEvent;
+import com.krishagni.catissueplus.core.de.events.ExecuteQueryEventOp;
+import com.krishagni.catissueplus.core.de.events.ListFolderQueriesCriteria;
+import com.krishagni.catissueplus.core.de.events.ListQueryAuditLogsCriteria;
+import com.krishagni.catissueplus.core.de.events.ListSavedQueriesCriteria;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogDetail;
-import com.krishagni.catissueplus.core.de.events.QueryAuditLogEvent;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogSummary;
-import com.krishagni.catissueplus.core.de.events.QueryAuditLogsEvent;
-import com.krishagni.catissueplus.core.de.events.QueryDataExportedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryDefEvent;
-import com.krishagni.catissueplus.core.de.events.QueryDeletedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryExecutedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFolderCreatedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFolderDeletedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFolderDetailEvent;
+import com.krishagni.catissueplus.core.de.events.QueryAuditLogsList;
+import com.krishagni.catissueplus.core.de.events.QueryDataExportResult;
+import com.krishagni.catissueplus.core.de.events.QueryExecResult;
 import com.krishagni.catissueplus.core.de.events.QueryFolderDetails;
-import com.krishagni.catissueplus.core.de.events.QueryFolderSharedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFolderSummary;
-import com.krishagni.catissueplus.core.de.events.QueryFolderUpdatedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFoldersEvent;
-import com.krishagni.catissueplus.core.de.events.QuerySavedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryUpdatedEvent;
-import com.krishagni.catissueplus.core.de.events.ReqExportDataFileEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFolderQueriesEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryDefEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryFolderDetailEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryFoldersEvent;
-import com.krishagni.catissueplus.core.de.events.ReqSavedQueriesSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.ReqSavedQueryDetailEvent;
-import com.krishagni.catissueplus.core.de.events.SaveQueryEvent;
-import com.krishagni.catissueplus.core.de.events.SavedQueriesSummaryEvent;
+import com.krishagni.catissueplus.core.de.events.SavedQueriesList;
 import com.krishagni.catissueplus.core.de.events.SavedQueryDetail;
-import com.krishagni.catissueplus.core.de.events.SavedQueryDetailEvent;
 import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
-import com.krishagni.catissueplus.core.de.events.ShareQueryFolderEvent;
-import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesEvent;
-import com.krishagni.catissueplus.core.de.events.UpdateQueryEvent;
-import com.krishagni.catissueplus.core.de.events.UpdateQueryFolderEvent;
+import com.krishagni.catissueplus.core.de.events.ShareQueryFolderOp;
+import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesOp;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 import com.krishagni.catissueplus.core.de.repository.QueryAuditLogDao;
 import com.krishagni.catissueplus.core.de.repository.SavedQueryDao;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
-import com.krishagni.catissueplus.core.privileges.PrivilegeType;
-import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
 
 import edu.common.dynamicextensions.query.Query;
 import edu.common.dynamicextensions.query.QueryParserException;
@@ -124,8 +97,6 @@ public class QueryServiceImpl implements QueryService {
 	
 	private QueryFolderFactory queryFolderFactory;
 	
-	private PrivilegeService privilegeSvc;
-	
 	static {
 		initExportFileCleaner();
 	}
@@ -155,92 +126,72 @@ public class QueryServiceImpl implements QueryService {
 		this.queryFolderFactory = queryFolderFactory;
 	}
 
-	public PrivilegeService getPrivilegeSvc() {
-		return privilegeSvc;
-	}
-
-	public void setPrivilegeSvc(PrivilegeService privilegeSvc) {
-		this.privilegeSvc = privilegeSvc;
-	}
-
 	@Override
 	@PlusTransactional
-	public SavedQueriesSummaryEvent getSavedQueries(ReqSavedQueriesSummaryEvent req) {
+	public ResponseEvent<SavedQueriesList> getSavedQueries(RequestEvent<ListSavedQueriesCriteria> req) {
 		try {
-			if (req.getStartAt() < 0 || req.getMaxRecords() <= 0) {
-				String msg = SavedQueryErrorCode.INVALID_PAGINATION_FILTER.message();
-				return SavedQueriesSummaryEvent.badRequest(msg, null);
+			ListSavedQueriesCriteria crit = req.getPayload();
+			
+			if (crit.startAt() < 0 || crit.maxResults() <= 0) {
+				return ResponseEvent.userError(SavedQueryErrorCode.INVALID_PAGINATION_FILTER);
 			}
 
 			Long userId = req.getSessionDataBean().getUserId();
 			List<SavedQuerySummary> queries = daoFactory.getSavedQueryDao().getQueries(
 							userId, 
-							req.getStartAt(), req.getMaxRecords(), 
-							req.getSearchString());
+							crit.startAt(),
+							crit.maxResults(),
+							crit.query());
 			
 			Long count = null;
-			if (req.isCountReq()) {
-				count = daoFactory.getSavedQueryDao().getQueriesCount(userId, req.getSearchString());
+			if (crit.countReq()) {
+				count = daoFactory.getSavedQueryDao().getQueriesCount(userId, crit.query());
 			}
 			
-			return SavedQueriesSummaryEvent.ok(queries, count);
+			return ResponseEvent.response(SavedQueriesList.create(queries, count));
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return SavedQueriesSummaryEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public SavedQueryDetailEvent getSavedQuery(ReqSavedQueryDetailEvent req) {
+	public ResponseEvent<SavedQueryDetail> getSavedQuery(RequestEvent<Long> req) {
 		try {
-			SavedQuery savedQuery = daoFactory.getSavedQueryDao().getQuery(req.getQueryId());
-			return SavedQueryDetailEvent.ok(SavedQueryDetail.fromSavedQuery(savedQuery));
+			SavedQuery savedQuery = daoFactory.getSavedQueryDao().getQuery(req.getPayload());
+			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(savedQuery));
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return SavedQueryDetailEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public QuerySavedEvent saveQuery(SaveQueryEvent req) {
+	public ResponseEvent<SavedQueryDetail> saveQuery(RequestEvent<SavedQueryDetail> req) {
 		try {
-			SavedQueryDetail queryDetail = req.getSavedQueryDetail();
-			if (queryDetail.getId() != null) {
-				return QuerySavedEvent.badRequest(SavedQueryErrorCode.QUERY_ID_FOUND.message(), null);
-			}
+			SavedQueryDetail queryDetail = req.getPayload();
+			queryDetail.setId(null);
 
 			Query.createQuery().wideRows(true).ic(true)
 					.dateFormat(dateFormat).timeFormat(timeFormat)
 					.compile(cprForm, getAql(queryDetail));
 			SavedQuery savedQuery = getSavedQuery(req.getSessionDataBean(), queryDetail);
 			daoFactory.getSavedQueryDao().saveOrUpdate(savedQuery);
-			return QuerySavedEvent.ok(SavedQueryDetail.fromSavedQuery(savedQuery));
+			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(savedQuery));
 		} catch (QueryParserException qpe) {
-			return QuerySavedEvent.badRequest(qpe.getMessage(), qpe);
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (IllegalArgumentException iae) {
-			return QuerySavedEvent.badRequest(iae.getMessage(), iae);		
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);		
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return QuerySavedEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}	
 	}
 
 	@Override
 	@PlusTransactional
-	public QueryUpdatedEvent updateQuery(UpdateQueryEvent req) {
+	public ResponseEvent<SavedQueryDetail> updateQuery(RequestEvent<SavedQueryDetail> req) {
 		try {
-			SavedQueryDetail queryDetail = req.getSavedQueryDetail();
+			SavedQueryDetail queryDetail = req.getPayload();
 
 			Query.createQuery().wideRows(true).ic(true)
 					.dateFormat(dateFormat).timeFormat(timeFormat)
@@ -250,60 +201,57 @@ public class QueryServiceImpl implements QueryService {
 			existing.update(savedQuery);
 
 			daoFactory.getSavedQueryDao().saveOrUpdate(existing);	
-			return QueryUpdatedEvent.ok(SavedQueryDetail.fromSavedQuery(existing));
+			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(savedQuery));
 		} catch (QueryParserException qpe) {
-			return QueryUpdatedEvent.badRequest(qpe.getMessage(), qpe);
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (IllegalArgumentException iae) {
-			return QueryUpdatedEvent.badRequest(iae.getMessage(), iae);
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return QueryUpdatedEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public QueryDeletedEvent deleteQuery(DeleteQueryEvent req) {
+	public ResponseEvent<Long> deleteQuery(RequestEvent<Long> req) {
 		try {
-			Long queryId = req.getQueryId();
+			Long queryId = req.getPayload();
 			SavedQuery query = daoFactory.getSavedQueryDao().getQuery(queryId);
 			if (query == null) {
-				return QueryDeletedEvent.notFound(queryId);
+				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
 			}
 
 			boolean isAdmin = req.getSessionDataBean().isAdmin();
 			Long userId = req.getSessionDataBean().getUserId();
 			if (!isAdmin && !query.getCreatedBy().getId().equals(userId)) {
-				return QueryDeletedEvent.notAuthorized(queryId);
+				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 
 			query.setDeletedOn(Calendar.getInstance().getTime());
 			daoFactory.getSavedQueryDao().saveOrUpdate(query);
-			return QueryDeletedEvent.ok(queryId);
+			return ResponseEvent.response(queryId);
 		} catch (Exception e) {
-			return QueryDeletedEvent.serverError(e.getMessage(), e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public QueryExecutedEvent executeQuery(ExecuteQueryEvent req) {
+	public ResponseEvent<QueryExecResult> executeQuery(RequestEvent<ExecuteQueryEventOp> req) {
 		QueryResultData queryResult = null;
 		
 		try {
+			ExecuteQueryEventOp opDetail = req.getPayload();
 			SessionDataBean sdb = req.getSessionDataBean();
-			boolean countQuery = req.getRunType().equals("Count");
+			boolean countQuery = opDetail.getRunType().equals("Count");
 			
 			Query query = Query.createQuery()
-					.wideRows(req.isWideRows()).ic(true)
+					.wideRows(opDetail.isWideRows()).ic(true)
 					.dateFormat(dateFormat).timeFormat(timeFormat);
 			query.compile(
 					cprForm, 
-					getAqlWithCpIdInSelect(sdb, countQuery, req.getAql()), 
-					getRestriction(sdb, req.getCpId()));
+					getAqlWithCpIdInSelect(sdb, countQuery, opDetail.getAql()), 
+					getRestriction(sdb, opDetail.getCpId()));
 			
 			QueryResponse resp = query.getData();
 			insertAuditLog(req, resp);
@@ -312,25 +260,21 @@ public class QueryServiceImpl implements QueryService {
 			queryResult.setScreener(new QueryResultScreenerImpl(sdb, countQuery));
 			
 			Integer[] indices = null;
-			if (req.getIndexOf() != null && !req.getIndexOf().isEmpty()) {
-				indices = queryResult.getColumnIndices(req.getIndexOf());
+			if (opDetail.getIndexOf() != null && !opDetail.getIndexOf().isEmpty()) {
+				indices = queryResult.getColumnIndices(opDetail.getIndexOf());
 			}
 			
-			return QueryExecutedEvent.ok(
+			return ResponseEvent.response(QueryExecResult.create(
 					queryResult.getColumnLabels(), queryResult.getStringifiedRows(), 
-					queryResult.getDbRowsCount(), indices);
+					queryResult.getDbRowsCount(), indices));
 		} catch (QueryParserException qpe) {
-			return QueryExecutedEvent.badRequest(qpe.getMessage(), qpe);
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (IllegalArgumentException iae) {
-			return QueryExecutedEvent.badRequest(iae.getMessage(), iae);
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (IllegalAccessError iae) {
-			return QueryExecutedEvent.notAuthorized(iae.getMessage(), iae);
+			return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return QueryExecutedEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		} finally {
 			if (queryResult != null) {
 				try {
@@ -344,54 +288,55 @@ public class QueryServiceImpl implements QueryService {
 
 	@Override
 	@PlusTransactional
-	public QueryDataExportedEvent exportQueryData(ExportQueryDataEvent req) {
+	public ResponseEvent<QueryDataExportResult> exportQueryData(RequestEvent<ExecuteQueryEventOp> req) {
 		try {
+			ExecuteQueryEventOp opDetail = req.getPayload();
 			SessionDataBean sdb = req.getSessionDataBean();
-			boolean countQuery = req.getRunType().equals("Count");
+			boolean countQuery = opDetail.getRunType().equals("Count");
 			
 			
 			Query query = Query.createQuery();
-			query.wideRows(req.isWideRows())
+			query.wideRows(opDetail.isWideRows())
 				.ic(true)
 				.dateFormat(dateFormat).timeFormat(timeFormat)
 				.compile(
 						cprForm, 
-						getAqlWithCpIdInSelect(sdb, countQuery, req.getAql()), 
-						getRestriction(sdb, req.getCpId()));
+						getAqlWithCpIdInSelect(sdb, countQuery, opDetail.getAql()), 
+						getRestriction(sdb, opDetail.getCpId()));
 			
 			String filename = UUID.randomUUID().toString();
 			boolean completed = exportData(filename, query, req);
-			return QueryDataExportedEvent.ok(filename, completed);
+			return ResponseEvent.response(QueryDataExportResult.create(filename, completed));
 		} catch (QueryParserException qpe) {
-			return QueryDataExportedEvent.badRequest(qpe.getMessage(), qpe);		
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);		
 		} catch (IllegalArgumentException iae) {
-			return QueryDataExportedEvent.badRequest(iae.getMessage(), iae);
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (IllegalAccessError iae) {
-			return QueryDataExportedEvent.notAuthorized(iae.getMessage(), iae);
+			return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 		} catch (Exception e) {
-			return QueryDataExportedEvent.serverError("Error exporting data", e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 	
 	@Override
-	public ExportDataFileEvent getExportDataFile(ReqExportDataFileEvent req) {
-		String fileId = req.getFileId();
+	public ResponseEvent<File> getExportDataFile(RequestEvent<String> req) {
+		String fileId = req.getPayload();
 		try {
 			String path = EXPORT_DATA_DIR + File.separator + fileId;
 			File f = new File(path);
 			if (f.exists()) {
-				return ExportDataFileEvent.ok(fileId, f);
+				return ResponseEvent.response(f);
 			} else {
-				return ExportDataFileEvent.notFound(fileId);
+				return ResponseEvent.userError(SavedQueryErrorCode.EXPORT_DATA_FILE_NOT_FOUND);
 			}
 		} catch (Exception e) {
-			return ExportDataFileEvent.serverError(fileId, e.getMessage(), e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 		
 	@Override
 	@PlusTransactional
-	public QueryFoldersEvent getUserFolders(ReqQueryFoldersEvent req) {
+	public ResponseEvent<List<QueryFolderSummary>> getUserFolders(RequestEvent<?> req) {
 		try {
 			Long userId = req.getSessionDataBean().getUserId();			
 			List<QueryFolder> queryFolders = daoFactory.getQueryFolderDao().getUserFolders(userId);
@@ -401,47 +346,39 @@ public class QueryServiceImpl implements QueryService {
 				result.add(QueryFolderSummary.fromQueryFolder(folder));
 			}
 			
-			return QueryFoldersEvent.ok(result);
+			return ResponseEvent.response(result);
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return QueryFoldersEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 	
 	@Override
 	@PlusTransactional
-	public QueryFolderDetailEvent getFolder(ReqQueryFolderDetailEvent req) {
+	public ResponseEvent<QueryFolderDetails> getFolder(RequestEvent<Long> req) {
 		try {
-			Long folderId = req.getFolderId();
+			Long folderId = req.getPayload();
 			QueryFolder folder = daoFactory.getQueryFolderDao().getQueryFolder(folderId);
 			if (folder == null) {
-				return QueryFolderDetailEvent.notFound(folderId);
+				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
 			if (!req.getSessionDataBean().isAdmin() && !folder.canUserAccess(userId)) {
-				return QueryFolderDetailEvent.notAuthorized(folderId);
+				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
-			return QueryFolderDetailEvent.ok(QueryFolderDetails.fromQueryFolder(folder));			
+			return ResponseEvent.response(QueryFolderDetails.fromQueryFolder(folder));			
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return QueryFolderDetailEvent.serverError(message, e);			
+			return ResponseEvent.serverError(e);			
 		}
 	}	
 	
 	
 	@Override
 	@PlusTransactional
-	public QueryFolderCreatedEvent createFolder(CreateQueryFolderEvent req) {
+	public ResponseEvent<QueryFolderDetails> createFolder(RequestEvent<QueryFolderDetails> req) {
 		try {
-			QueryFolderDetails folderDetails = req.getFolderDetails();
+			QueryFolderDetails folderDetails = req.getPayload();
 			
 			UserSummary owner = new UserSummary();
 			owner.setId(req.getSessionDataBean().getUserId());
@@ -454,36 +391,32 @@ public class QueryServiceImpl implements QueryService {
 			if (!queryFolder.getSharedWith().isEmpty()) {
 				sendFolderSharedEmail(queryFolder.getOwner(), queryFolder, queryFolder.getSharedWith());
 			}			
-			return QueryFolderCreatedEvent.ok(QueryFolderDetails.fromQueryFolder(queryFolder));
-		} catch (ObjectCreationException oce) {
-			return QueryFolderCreatedEvent.badRequest(oce);
+			return ResponseEvent.response(QueryFolderDetails.fromQueryFolder(queryFolder));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return QueryFolderCreatedEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public QueryFolderUpdatedEvent updateFolder(UpdateQueryFolderEvent req) {
+	public ResponseEvent<QueryFolderDetails> updateFolder(RequestEvent<QueryFolderDetails> req) {
 		try {
-			QueryFolderDetails folderDetails = req.getFolderDetails();
+			QueryFolderDetails folderDetails = req.getPayload();
 			Long folderId = folderDetails.getId();
 			if (folderId == null) {
-				return QueryFolderUpdatedEvent.badRequest(SavedQueryErrorCode.FOLDER_ID_REQUIRED);
+				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 						
 			QueryFolder existing = daoFactory.getQueryFolderDao().getQueryFolder(folderId);
 			if (existing == null) {
-				return QueryFolderUpdatedEvent.badRequest(SavedQueryErrorCode.FOLDER_DOESNT_EXISTS);
+				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
 			if (!req.getSessionDataBean().isAdmin() && !existing.getOwner().getId().equals(userId)) {
-				return QueryFolderUpdatedEvent.badRequest(SavedQueryErrorCode.USER_NOT_AUTHORISED);
+				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
 			UserSummary owner = new UserSummary();
@@ -501,101 +434,92 @@ public class QueryServiceImpl implements QueryService {
 				User user = userDao.getUser(userId);
 				sendFolderSharedEmail(user, queryFolder, newUsers);
 			}
-			return QueryFolderUpdatedEvent.ok(QueryFolderDetails.fromQueryFolder(existing));			
-		} catch (ObjectCreationException oce) {
-			return QueryFolderUpdatedEvent.badRequest(oce);
-		} catch (Exception e) {		
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return QueryFolderUpdatedEvent.serverError(message, e);
+			return ResponseEvent.response(QueryFolderDetails.fromQueryFolder(existing));			
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public QueryFolderDeletedEvent deleteFolder(DeleteQueryFolderEvent req) {
+	public ResponseEvent<Long> deleteFolder(RequestEvent<Long> req) {
 		try {
-			Long folderId = req.getFolderId();
+			Long folderId = req.getPayload();
 			if (folderId == null) {
-				return QueryFolderDeletedEvent.notFound(folderId);
+				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 
 			QueryFolder existing = daoFactory.getQueryFolderDao().getQueryFolder(folderId);
 			if (existing == null) {
-				return QueryFolderDeletedEvent.notFound(folderId);								
+				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);								
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
 			if (!req.getSessionDataBean().isAdmin() && !existing.getOwner().getId().equals(userId)) {
-				return QueryFolderDeletedEvent.notAuthorized(folderId);
+				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
 			daoFactory.getQueryFolderDao().deleteFolder(existing);
-			return QueryFolderDeletedEvent.ok(folderId);
+			return ResponseEvent.response(folderId);
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return QueryFolderDeletedEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 	
 	@Override
 	@PlusTransactional
-	public FolderQueriesEvent getFolderQueries(ReqFolderQueriesEvent req) {
+	public ResponseEvent<SavedQueriesList> getFolderQueries(RequestEvent<ListFolderQueriesCriteria> req) {
 		try {
-			Long folderId = req.getFolderId();
+			ListFolderQueriesCriteria crit = req.getPayload();
+			Long folderId = crit.folderId();
 			QueryFolder folder = daoFactory.getQueryFolderDao().getQueryFolder(folderId);			
 			if (folder == null) {
-				return FolderQueriesEvent.notFound(folderId);
+				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
 			if (!req.getSessionDataBean().isAdmin() && !folder.canUserAccess(userId)) {
-				return FolderQueriesEvent.notAuthorized(folderId);
+				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
 			List<SavedQuerySummary> queries = daoFactory.getSavedQueryDao().getQueriesByFolderId(
 					folderId, 
-					req.getStartAt(), 
-					req.getMaxRecords(),
-					req.getSearchString());
+					crit.startAt(),
+					crit.maxResults(),
+					crit.query());
 			
 			Long count = null;
-			if (req.isCountReq()) {
-				count = daoFactory.getSavedQueryDao().getQueriesCountByFolderId(folderId, req.getSearchString());
+			if (crit.countReq()) {
+				count = daoFactory.getSavedQueryDao().getQueriesCountByFolderId(folderId, crit.query());
 			}
 			
-			return FolderQueriesEvent.ok(queries, count);
+			return ResponseEvent.response(SavedQueriesList.create(queries, count));
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return FolderQueriesEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 	
 	@Override
 	@PlusTransactional
-	public FolderQueriesUpdatedEvent updateFolderQueries(UpdateFolderQueriesEvent req) {
+	public ResponseEvent<List<SavedQuerySummary>> updateFolderQueries(RequestEvent<UpdateFolderQueriesOp> req) {
 		try {
-			Long folderId = req.getFolderId();
+			UpdateFolderQueriesOp opDetail = req.getPayload();
+			
+			Long folderId = opDetail.getFolderId();
 			QueryFolder queryFolder = daoFactory.getQueryFolderDao().getQueryFolder(folderId);			
 			if (queryFolder == null) {
-				return FolderQueriesUpdatedEvent.notFound(folderId);
+				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
 			if (!req.getSessionDataBean().isAdmin() && !queryFolder.getOwner().getId().equals(userId)) {
-				return FolderQueriesUpdatedEvent.notAuthorized(folderId);
+				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
 			List<SavedQuery> savedQueries = null;
-			List<Long> queryIds = req.getQueries();
+			List<Long> queryIds = opDetail.getQueries();
 			
 			if (queryIds == null || queryIds.isEmpty()) {
 				savedQueries = new ArrayList<SavedQuery>();
@@ -603,7 +527,7 @@ public class QueryServiceImpl implements QueryService {
 				savedQueries = daoFactory.getSavedQueryDao().getQueriesByIds(queryIds);
 			}
 			
-			switch (req.getOp()) {
+			switch (opDetail.getOp()) {
 				case ADD:
 					queryFolder.addQueries(savedQueries);
 					break;
@@ -623,34 +547,32 @@ public class QueryServiceImpl implements QueryService {
 				result.add(SavedQuerySummary.fromSavedQuery(query));
 			}
 			
-			return FolderQueriesUpdatedEvent.ok(folderId, result);
+			return ResponseEvent.response(result);
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return FolderQueriesUpdatedEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 	
 	@Override
 	@PlusTransactional
-	public QueryFolderSharedEvent shareFolder(ShareQueryFolderEvent req) {
+	public ResponseEvent<List<UserSummary>> shareFolder(RequestEvent<ShareQueryFolderOp> req) {
 		try {
-			Long folderId = req.getFolderId();
+			ShareQueryFolderOp opDetail = req.getPayload();
+			
+			Long folderId = opDetail.getFolderId();
 			QueryFolder queryFolder = daoFactory.getQueryFolderDao().getQueryFolder(folderId);
 			if (queryFolder == null) {
-				return QueryFolderSharedEvent.notFound(folderId);
+				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
 			if (!req.getSessionDataBean().isAdmin() && !queryFolder.getOwner().getId().equals(userId)) {
-				return QueryFolderSharedEvent.notAuthorized(folderId);
+				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
 			
 			List<User> users = null;
-			List<Long> userIds = req.getUserIds();
+			List<Long> userIds = opDetail.getUserIds();
 			if (userIds == null || userIds.isEmpty()) {
 				users = new ArrayList<User>();
 			} else {
@@ -658,7 +580,7 @@ public class QueryServiceImpl implements QueryService {
 			}
 			
 			Collection<User> newUsers = null; 
-			switch (req.getOp()) {
+			switch (opDetail.getOp()) {
 				case ADD:
 					newUsers = queryFolder.addSharedUsers(users);
 					break;
@@ -683,39 +605,36 @@ public class QueryServiceImpl implements QueryService {
 				sendFolderSharedEmail(user, queryFolder, newUsers);
 			}
 			
-			return QueryFolderSharedEvent.ok(folderId, result);
+			return ResponseEvent.response(result);
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-			return QueryFolderSharedEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 	
     @Override
     @PlusTransactional
-    public QueryAuditLogsEvent getAuditLogs(ReqQueryAuditLogsEvent req){
+    public ResponseEvent<QueryAuditLogsList> getAuditLogs(RequestEvent<ListQueryAuditLogsCriteria> req){
 		try {
 			SessionDataBean session = req.getSessionDataBean();			
 			Long userId = session.getUserId();
 			
-			Long savedQueryId = req.getSavedQueryId();
-			int startAt = req.getStartAt() < 0 ? 0 : req.getStartAt();
-			int maxRecs = req.getMaxRecords() < 0 ? 0 : req.getMaxRecords();
+			ListQueryAuditLogsCriteria crit = req.getPayload();
+			Long savedQueryId = crit.savedQueryId();
+			int startAt = crit.startAt() < 0 ? 0 : crit.startAt();
+			int maxRecs = crit.maxResults() < 0 ? 0 : crit.maxResults();
 
 			QueryAuditLogDao logDao = daoFactory.getQueryAuditLogDao();
 			List<QueryAuditLogSummary> auditLogs = null;
 			Long count = null;
 			if (savedQueryId == null || savedQueryId == -1) {
 				if (!session.isAdmin()) {
-					return QueryAuditLogsEvent.forbidden();
+					return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 				}
 				
-				switch (req.getType()) {
+				switch (crit.type()) {
 					case ALL:
 						auditLogs = logDao.getAuditLogs(startAt, maxRecs);
-						if (req.isCountReq()) {
+						if (crit.countReq()) {
 							count = logDao.getAuditLogsCount();
 						}
 						break;
@@ -726,7 +645,7 @@ public class QueryServiceImpl implements QueryService {
 						Date intervalSt = cal.getTime();						
 						Date intervalEnd = Calendar.getInstance().getTime();
 						auditLogs = logDao.getAuditLogs(intervalSt, intervalEnd, startAt, maxRecs);
-						if (req.isCountReq()) {
+						if (crit.countReq()) {
 							count = logDao.getAuditLogsCount(intervalSt, intervalEnd);
 						}						
 						break;
@@ -736,61 +655,46 @@ public class QueryServiceImpl implements QueryService {
 				auditLogs = logDao.getAuditLogs(savedQueryId, userId, startAt, maxRecs);
 			}
 			
-			return QueryAuditLogsEvent.ok(auditLogs, count);
+			return ResponseEvent.response(QueryAuditLogsList.create(auditLogs, count));
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-
-			return QueryAuditLogsEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
     }
     
     @Override
     @PlusTransactional
-    public QueryAuditLogEvent getAuditLog(ReqQueryAuditLogEvent req) {
+    public ResponseEvent<QueryAuditLogDetail> getAuditLog(RequestEvent<Long> req) {
 		try {
-			Long auditLogId = req.getAuditLogId();
+			Long auditLogId = req.getPayload();
 			QueryAuditLog queryAuditLog = daoFactory.getQueryAuditLogDao().getAuditLog(auditLogId);
-			return QueryAuditLogEvent.ok(QueryAuditLogDetail.from(queryAuditLog));
+			return ResponseEvent.response(QueryAuditLogDetail.from(queryAuditLog));
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";
-			}
-
-			return QueryAuditLogEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
     }
     
 	@Override
 	@PlusTransactional
-	public QueryDefEvent getQueryDef(ReqQueryDefEvent req) {
+	public ResponseEvent<String> getQueryDef(RequestEvent<Long> req) {
 		try {
 			SavedQueryDao queryDao = daoFactory.getSavedQueryDao();
 			
-			Long queryId = req.getQueryId();			
+			Long queryId = req.getPayload();			
 			SavedQuery query = queryDao.getQuery(queryId);			
 			if (query == null) {
-				return QueryDefEvent.notFound(queryId);
+				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
 			if (!query.getCreatedBy().getId().equals(userId) && 
 					!queryDao.isQuerySharedWithUser(queryId, userId)) {
-				return QueryDefEvent.forbidden(queryId);
+				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
 			String queryDef = query.getQueryDefJson(true);
-			return QueryDefEvent.ok(queryId, queryDef);			
+			return ResponseEvent.response(queryDef);			
 		} catch (Exception e) {
-			String message = e.getMessage();
-			if (message == null) {
-				message = "Internal Server Error";				
-			}
-			
-			return QueryDefEvent.serverError(message, e);
+			return ResponseEvent.serverError(e);
 		}
 	}
          
@@ -822,7 +726,7 @@ public class QueryServiceImpl implements QueryService {
 				queryDetail.getQueryExpression());
 	}
 	
-	private boolean exportData(final String filename, final Query query, final ExportQueryDataEvent req) 
+	private boolean exportData(final String filename, final Query query, final RequestEvent<ExecuteQueryEventOp> req) 
 	throws ExecutionException, InterruptedException, CancellationException {
 		Future<Boolean> result = exportThreadPool.submit(new Callable<Boolean>() {
 			@Override
@@ -851,7 +755,7 @@ public class QueryServiceImpl implements QueryService {
 					User user = userDao.getUser(req.getSessionDataBean().getUserId());
 					
 					SavedQuery savedQuery = null;
-					Long queryId = req.getSavedQueryId();
+					Long queryId = req.getPayload().getSavedQueryId();
 					if (queryId != null) {
 						savedQuery = daoFactory.getSavedQueryDao().getQuery(queryId);
 					}					
@@ -875,7 +779,7 @@ public class QueryServiceImpl implements QueryService {
 				return cpForm + ".id = " + cpId;
 			}
 		} else {
-			List<Long> cpIds = privilegeSvc.getCpList(sdb.getUserId(), PrivilegeType.READ.value());
+			List<Long> cpIds = Collections.emptyList(); //privilegeSvc.getCpList(sdb.getUserId(), PrivilegeType.READ.value());
 			if (cpIds == null || cpIds.isEmpty()) {
 				throw new IllegalAccessError("User does not have access to any CP");
 			}
@@ -950,16 +854,16 @@ public class QueryServiceImpl implements QueryService {
 		return dir;
 	}
 
-	private void insertAuditLog(ExecuteQueryEvent req, QueryResponse resp) {
+	private void insertAuditLog(RequestEvent<ExecuteQueryEventOp> req, QueryResponse resp) {
 		User user = new User();
 		user.setId(req.getSessionDataBean().getUserId());
 
 		QueryAuditLog auditLog = new QueryAuditLog();
-		auditLog.setQueryId(req.getSavedQueryId());
+		auditLog.setQueryId(req.getPayload().getSavedQueryId());
 		auditLog.setRunBy(user);
 		auditLog.setTimeOfExecution(resp.getTimeOfExecution());
 		auditLog.setTimeToFinish(resp.getExecutionTime());
-		auditLog.setRunType(req.getRunType());
+		auditLog.setRunType(req.getPayload().getRunType());
 		auditLog.setSql(resp.getSql());
 		daoFactory.getQueryAuditLogDao().saveOrUpdate(auditLog);
 	}
@@ -1011,7 +915,7 @@ public class QueryServiceImpl implements QueryService {
 			
 			Boolean phiAccess = phiAccessMap.get(cpId);
 			if (phiAccess == null) {
-				phiAccess = privilegeSvc.hasPrivilege(sdb.getUserId(), cpId, PrivilegeType.PHI_ACCESS.value());
+				phiAccess = true; //privilegeSvc.hasPrivilege(sdb.getUserId(), cpId, PrivilegeType.PHI_ACCESS.value());
 				phiAccess = phiAccess != null && phiAccess.equals(true);
 				phiAccessMap.put(cpId, phiAccess);
 			}

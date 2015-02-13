@@ -1,9 +1,11 @@
 
 <div>
-  <div class="os-page-hdr">
+  <div os-page-header>
     <h3>
+      <a ui-sref="user.list" translate="user.list">Users</a>
+      <span class="fa fa-angle-right"></span>
       <span ng-if="!user.id" translate="user.create_user">Create User</span>
-      <span ng-if="!!user.id" translate="user.update_user">Update User</span>
+      <span ng-if="!!user.id">{{user.lastName}} {{user.firstName}}</span>
     </h3> 
   </div>
 

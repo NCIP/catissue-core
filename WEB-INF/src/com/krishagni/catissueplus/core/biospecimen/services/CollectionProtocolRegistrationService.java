@@ -1,43 +1,34 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services;
 
-import com.krishagni.catissueplus.core.biospecimen.events.AddVisitEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitAddedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.BulkRegistrationCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateBulkRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.PatchRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.RegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqVisitsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEvent;
+import java.util.List;
+
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationsList;
+import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCriteria;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
+import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public interface CollectionProtocolRegistrationService {
-	RegistrationEvent getRegistration(ReqRegistrationEvent req);
+	ResponseEvent<CollectionProtocolRegistrationDetail> getRegistration(RequestEvent<RegistrationQueryCriteria> req);
 	
-	RegistrationCreatedEvent createRegistration(CreateRegistrationEvent req);
+	ResponseEvent<CollectionProtocolRegistrationDetail> createRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req);
 	
-	VisitsEvent getVisits(ReqVisitsEvent req);
+	ResponseEvent<List<VisitSummary>> getVisits(RequestEvent<VisitsListCriteria> req);
 	
-	VisitSpecimensEvent getSpecimens(ReqVisitSpecimensEvent req);
+	ResponseEvent<List<SpecimenDetail>> getSpecimens(RequestEvent<VisitSpecimensQueryCriteria> req);
 	
-	VisitAddedEvent addVisit(AddVisitEvent req);
+	ResponseEvent<VisitDetail> addVisit(RequestEvent<VisitDetail> req);
 	
 	//
 	// TODO: Requires review
 	// 
-	RegistrationDeletedEvent delete(DeleteRegistrationEvent event);
+	ResponseEvent<CollectionProtocolRegistrationDetail> updateRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req);
 
-	RegistrationUpdatedEvent updateRegistration(UpdateRegistrationEvent event);
-
-	RegistrationUpdatedEvent patchRegistration(PatchRegistrationEvent event);
-	
-	BulkRegistrationCreatedEvent createBulkRegistration(CreateBulkRegistrationEvent req);
+	ResponseEvent<ParticipantRegistrationsList> createBulkRegistration(RequestEvent<ParticipantRegistrationsList> req);
 }

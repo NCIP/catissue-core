@@ -1,49 +1,31 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
-import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.DeleteParticipantEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.MatchParticipantEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDeletedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipants;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMatchedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.PatchParticipantEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SubRegistrationDetailsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.RegistrationInfo;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSubRegistrationDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.matching.ParticipantLookupLogic;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
-import com.krishagni.catissueplus.core.common.errors.CatissueException;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class ParticipantServiceImpl implements ParticipantService {
 
 	//TODO: Handle privileges
 	private DaoFactory daoFactory;
-
-	private final String SSN = "social security number";
-
-	private static final String PMI = "participant medical identifier";
 
 	/**
 	 * Participant factory to create/update and perform all validations on participant details 
@@ -67,179 +49,122 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	@Override
 	@PlusTransactional
-	public ParticipantDetailEvent getParticipant(ReqParticipantDetailEvent event) {
-		Long participantId = event.getParticipantId();
-		if (participantId == null) {
-			return ParticipantDetailEvent.invalidRequest(ParticipantErrorCode.INVALID_ATTR_VALUE, "participant-id");
-		}
-		
-		Participant participant = daoFactory.getParticipantDao().getById(event.getParticipantId());
+	public ResponseEvent<ParticipantDetail> getParticipant(RequestEvent<Long> req) {
+		Long participantId = req.getPayload();
+
+		Participant participant = daoFactory.getParticipantDao().getById(participantId);
 		if (participant == null) {
-			return ParticipantDetailEvent.notFound(participantId);
+			return ResponseEvent.userError(ParticipantErrorCode.NOT_FOUND);
 		}
 		
-		return ParticipantDetailEvent.ok(ParticipantDetail.fromDomain(participant));
+		return ResponseEvent.response(ParticipantDetail.fromDomain(participant));
 	}
 
 	@Override
-//	@Audit(operation=Operation.INSERT,object=ParticipantServiceImpl.class)
 	@PlusTransactional
-	public ParticipantCreatedEvent createParticipant(CreateParticipantEvent event) {
+	public ResponseEvent<ParticipantDetail> createParticipant(RequestEvent<ParticipantDetail> req) {
 		try {
-			Participant participant = participantFactory.createParticipant(event.getParticipantDetail());
+			Participant participant = participantFactory.createParticipant(req.getPayload());
 			createParticipant(participant);
-			return ParticipantCreatedEvent.ok(ParticipantDetail.fromDomain(participant));
-		} catch (ObjectCreationException ce) {
-			return ParticipantCreatedEvent.invalidRequest(ParticipantErrorCode.ERRORS.message(), ce.getErroneousFields());
+			return ResponseEvent.response(ParticipantDetail.fromDomain(participant));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
-			return ParticipantCreatedEvent.serverError(e);
+			return ResponseEvent.serverError(e);
 		}
 	}
 	
-//	@PlusTransactional
 	public void createParticipant(Participant participant) {
-		ObjectCreationException oce = new ObjectCreationException();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
-		ensureUniqueSsn(participant.getSocialSecurityNumber(), oce);
-		ensureUniquePMI(participant.getPmiCollection(), oce);
+		ensureUniqueSsn(participant.getSocialSecurityNumber(), ose);
+		ensureUniquePMI(participant.getPmiCollection(), ose);
 		
-		oce.checkErrorAndThrow();
+		ose.checkAndThrow();
 		daoFactory.getParticipantDao().saveOrUpdate(participant);
 	}
 
-	/* 
-	 * This will update the participant details.
-	 * @see com.krishagni.catissueplus.core.services.ParticipantService#updateParticipant(com.krishagni.catissueplus.core.events.participants.UpdateParticipantEvent)
-	 */
 	@Override
-//	@Audit(operation=Operation.INSERT,object=ParticipantServiceImpl.class)
 	@PlusTransactional
-	public ParticipantUpdatedEvent updateParticipant(UpdateParticipantEvent event) {
+	public ResponseEvent<ParticipantDetail> updateParticipant(RequestEvent<ParticipantDetail> req) {
 		try {
-			Long participantId = event.getParticipantId();
-			Participant oldParticipant = daoFactory.getParticipantDao().getById(participantId);
-			if (oldParticipant == null) {
-				return ParticipantUpdatedEvent.notFound(participantId);
+			Long participantId = req.getPayload().getId();
+			Participant existing = daoFactory.getParticipantDao().getById(participantId);
+			if (existing == null) {
+				return ResponseEvent.userError(ParticipantErrorCode.NOT_FOUND);
 			}
-			Participant participant = participantFactory.createParticipant(event.getParticipantDetail());
-			ObjectCreationException errorHandler = new ObjectCreationException();
-			validateSsn(oldParticipant.getSocialSecurityNumber(), participant.getSocialSecurityNumber(), errorHandler);
-//			ensureUniquePMI(participant.getPmiCollection(), errorHandler);
-			checkForUniquePMI(oldParticipant.getPmiCollection(), participant.getPmiCollection(), errorHandler);
-			errorHandler.checkErrorAndThrow();
+			
+			Participant participant = participantFactory.createParticipant(req.getPayload());
+			
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			validateSsn(existing.getSocialSecurityNumber(), participant.getSocialSecurityNumber(), ose);
+			checkForUniquePMI(existing.getPmiCollection(), participant.getPmiCollection(), ose);
+			ose.checkAndThrow();
 
-			oldParticipant.update(participant);
-			daoFactory.getParticipantDao().saveOrUpdate(oldParticipant);
-			return ParticipantUpdatedEvent.ok(ParticipantDetail.fromDomain(oldParticipant));
-		}
-		catch (ObjectCreationException ce) {
-			return ParticipantUpdatedEvent.invalidRequest(ParticipantErrorCode.ERRORS.message(), ce.getErroneousFields());
-		}
-		catch (Exception e) {
-			return ParticipantUpdatedEvent.serverError(e);
+			existing.update(participant);
+			daoFactory.getParticipantDao().saveOrUpdate(existing);
+			return ResponseEvent.response(ParticipantDetail.fromDomain(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 	
 	@Override
 	@PlusTransactional
-	public ParticipantUpdatedEvent patchParticipant(PatchParticipantEvent event) {
-//		try {
-//			Long participantId = event.getId();
-//			Participant oldParticipant = daoFactory.getParticipantDao().getParticipant(participantId);
-//			if (oldParticipant == null) {
-//				return ParticipantUpdatedEvent.notFound(participantId);
-//			}
-//			Map<String, ParticipantMedicalIdentifier> oldPmiCollection = oldParticipant.getPmiCollection();
-//			Participant participant = participantFactory.patchParticipant(oldParticipant, event.getParticipantDetail());
-//			
-//			ObjectCreationException errorHandler = new ObjectCreationException();;
-//			validateSsn(oldParticipant.getSocialSecurityNumber(), participant.getSocialSecurityNumber(), errorHandler);
-//			checkForUniquePMI(oldPmiCollection, participant.getPmiCollection(), errorHandler);
-////			ensureUniquePMI(participant.getPmiCollection(), errorHandler);
-//			errorHandler.checkErrorAndThrow();
-//			
-//			oldParticipant.update(participant);
-//			daoFactory.getParticipantDao().saveOrUpdate(oldParticipant);
-//			return ParticipantUpdatedEvent.ok(ParticipantDetail.fromDomain(oldParticipant));
-//		}
-//		catch (ObjectCreationException ce) {
-//			return ParticipantUpdatedEvent.invalidRequest(ParticipantErrorCode.ERRORS.message(), ce.getErroneousFields());
-//		}
-//		catch (Exception e) {
-//			return ParticipantUpdatedEvent.serverError(e);
-//		}
-		return null;
-	}
-
-	@Override
-	@PlusTransactional
-	public ParticipantDeletedEvent delete(DeleteParticipantEvent event) {
+	public ResponseEvent<ParticipantDetail> delete(RequestEvent<Long> req) {
 		try {
-			Participant participant = daoFactory.getParticipantDao().getById(event.getId());
+			Long participantId = req.getPayload();
+			Participant participant = daoFactory.getParticipantDao().getById(participantId);
 			if (participant == null) {
-				return ParticipantDeletedEvent.notFound(event.getId());
+				return ResponseEvent.userError(ParticipantErrorCode.NOT_FOUND);
 			}
-			participant.delete(event.isIncludeChildren());
+			
+			participant.delete(true);
 			daoFactory.getParticipantDao().saveOrUpdate(participant);
-			return ParticipantDeletedEvent.ok();
-		}
-		catch (CatissueException ce) {
-			return ParticipantDeletedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
-		}
-		catch (Exception e) {
-			return ParticipantDeletedEvent.serverError(e);
+			return ResponseEvent.response(ParticipantDetail.fromDomain(participant));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public ParticipantMatchedEvent getMatchingParticipants(MatchParticipantEvent req) {
-		return participantLookupLogic.getMatchingParticipants(req); 
+	public ResponseEvent<MatchedParticipants> getMatchingParticipants(RequestEvent<ParticipantDetail> req) {
+		return ResponseEvent.response(participantLookupLogic.getMatchingParticipants(req.getPayload())); 
 	}
 	
-	@Override
-	@PlusTransactional
-	public SubRegistrationDetailsEvent getSubRegistrationDetails(ReqSubRegistrationDetailEvent event) {
-		List<RegistrationInfo> registrationsInfo = new ArrayList<RegistrationInfo>();
-		
-		List<CollectionProtocolRegistration> registrations = new ArrayList<CollectionProtocolRegistration>();
-		registrations = daoFactory.getCprDao().getSubRegDetailForParticipantAndCp(event.getParticipantId(),event.getCpId());
-		for (CollectionProtocolRegistration cpr : registrations) {
-			registrationsInfo.add(RegistrationInfo.fromDomain(cpr));
-		}
-		return SubRegistrationDetailsEvent.ok(registrationsInfo);
-	}
-	
-	private void validateSsn(String oldSsn, String newSsn, ObjectCreationException errorHandler) {
-		if ((isBlank(oldSsn) && !isBlank(newSsn))) {
-			ensureUniqueSsn(newSsn, errorHandler);
-		}
-		else if (!isBlank(oldSsn) && !isBlank(newSsn) && !oldSsn.equals(newSsn)) {
-			ensureUniqueSsn(newSsn, errorHandler);
+	private void validateSsn(String oldSsn, String newSsn, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(oldSsn) && !StringUtils.isBlank(newSsn)) {
+			ensureUniqueSsn(newSsn, ose);
+		} else if (!StringUtils.isBlank(oldSsn) && !StringUtils.isBlank(newSsn) && !oldSsn.equals(newSsn)) {
+			ensureUniqueSsn(newSsn, ose);
 		}
 	}
 
-	private void ensureUniqueSsn(String ssn, ObjectCreationException errorHandler) {
+	private void ensureUniqueSsn(String ssn, OpenSpecimenException ose) {
 		if (!daoFactory.getParticipantDao().isSsnUnique(ssn)) {
-			errorHandler.addError(ParticipantErrorCode.DUPLICATE_SSN, SSN);
+			ose.addError(ParticipantErrorCode.DUP_SSN);
 		}
 	}
 
-	private void ensureUniquePMI(Map<String, ParticipantMedicalIdentifier> pmiCollection,
-			ObjectCreationException errorHandler) {
+	private void ensureUniquePMI(Map<String, ParticipantMedicalIdentifier> pmiCollection, OpenSpecimenException ose) {
 		//TODO: need to handle for update
 		for (Entry<String, ParticipantMedicalIdentifier> entry : pmiCollection.entrySet()) {
 			String siteName = entry.getKey();
 			String mrn = entry.getValue().getMedicalRecordNumber();
 			if (!daoFactory.getParticipantDao().isPmiUnique(siteName, mrn)) {
-				errorHandler.addError(ParticipantErrorCode.DUPLICATE_PMI, PMI);
+				ose.addError(ParticipantErrorCode.DUP_MRN);
 			}
 
 		}
 	}
 	
 	private void checkForUniquePMI(Map<String, ParticipantMedicalIdentifier> oldPmiCollection,
-					Map<String, ParticipantMedicalIdentifier> newPmiCollection, ObjectCreationException errorHandler) {
+					Map<String, ParticipantMedicalIdentifier> newPmiCollection, OpenSpecimenException ose) {
 		Map<String,ParticipantMedicalIdentifier> map = new HashMap<String, ParticipantMedicalIdentifier>();
 					for (Entry<String, ParticipantMedicalIdentifier> entry : newPmiCollection.entrySet()) {
 						{
@@ -255,7 +180,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 						}
 					}
 					if (!map.isEmpty()) {
-						ensureUniquePMI(map, errorHandler);
+						ensureUniquePMI(map, ose);
 				}
 			}
 

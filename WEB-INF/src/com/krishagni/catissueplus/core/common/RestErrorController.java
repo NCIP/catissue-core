@@ -1,5 +1,11 @@
 package com.krishagni.catissueplus.core.common;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,76 +15,77 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
-import com.krishagni.catissueplus.core.common.errors.ErrorMessage;
-import com.krishagni.catissueplus.core.common.errors.ErrorResponse;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
-import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.rest.ErrorMessage;
 
 @ControllerAdvice
 public class RestErrorController extends ResponseEntityExceptionHandler {
+	
+	@Autowired
+    private ResourceBundleMessageSource resourceBundle;
+	
+	private static final String INTERNAL_ERROR = "internal_error";
 
 	public RestErrorController() {
-    super();
-}
-	
-	@ExceptionHandler(value = {OpenSpecimenException.class,ObjectCreationException.class})
-  public ResponseEntity<Object> handleOtherException(RuntimeException ex, WebRequest request) {
+		super();
+	}
 
-		OpenSpecimenException excep = (OpenSpecimenException)ex;  
-		System.out.println("handleOtherException - Catching: " + excep.getClass().getSimpleName());
+	@ExceptionHandler(value = {Exception.class})
+	public ResponseEntity<Object> handleOtherException(Exception exception, WebRequest request) {
+
+		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+		List<ErrorMessage> errorMsgs = new ArrayList<ErrorMessage>();
 		
-		HttpStatus status = getStatus(excep.getResponse().getStatus());
-		ErrorResponse bodyOfResponse = populateResponseBody(excep,status);
-		
+		if (exception instanceof OpenSpecimenException) {
+			OpenSpecimenException ose = (OpenSpecimenException)exception;
+			status = getHttpStatus(ose.getErrorType());
+			
+			if (ose.getException() != null) {
+				ose.getException().printStackTrace();
+				errorMsgs.add(getMessage(INTERNAL_ERROR));
+			} else {
+				for (ErrorCode error : ose.getErrors()) {
+					errorMsgs.add(getMessage(error));
+				}
+			}						
+		} else {
+			exception.printStackTrace();
+			errorMsgs.add(getMessage(INTERNAL_ERROR));
+		}
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-	
-  return handleExceptionInternal(excep, bodyOfResponse, headers, status, request);
-  }
-
-	private ErrorResponse populateResponseBody(OpenSpecimenException ex, HttpStatus status) {
 		
-		String errorURL = "";//"http://localhost:8180/errorcode:";
-		ErrorResponse response = new ErrorResponse();
-		response.setStatus(status);
-		if(status != HttpStatus.INTERNAL_SERVER_ERROR){
-			ResponseEvent resp = ex.getResponse();
-			ErroneousField[] list = resp.getErroneousFields();
-			if (list == null) {
-				list = new ErroneousField[0];
-			}
-			
-			for (ErroneousField erroneousField : list) {
-				ErrorMessage message = new ErrorMessage();
-				message.setAttributeName(erroneousField.getFieldName());
-				message.setErrorCode(erroneousField.getErrorCode());
-				message.setMessage(erroneousField.getErrorMessage());
-				message.setErrorUrl(errorURL+erroneousField.getErrorCode());
-				response.getErrorMessages().add(message);
-			}
-			
-			response.setMessage(ex.getMessage());
-		}
-		return response;
+		return handleExceptionInternal(exception, errorMsgs, headers, status, request);
 	}
 
-	private HttpStatus getStatus(EventStatus status) {
-		switch(status){
-			case BAD_REQUEST:
-				return HttpStatus.BAD_REQUEST;
-			case NOT_FOUND:
-				return HttpStatus.NOT_FOUND;
-			case INTERNAL_SERVER_ERROR:
+	private HttpStatus getHttpStatus(ErrorType type) {
+		switch (type) {
+			case SYSTEM_ERROR:
 				return HttpStatus.INTERNAL_SERVER_ERROR;
-			case NOT_AUTHENTICATED:
-				return HttpStatus.UNAUTHORIZED;
-			case NOT_AUTHORIZED:
-				return HttpStatus.FORBIDDEN;
 				
+			case USER_ERROR:
+				return HttpStatus.BAD_REQUEST;
+				
+			case UNKNOWN_ERROR:
+				return HttpStatus.INTERNAL_SERVER_ERROR;
+				
+			case NONE:
+				return HttpStatus.OK;
+				
+			default:
+				throw new RuntimeException("Unknown error type: " + type);
 		}
-		return null;
 	}
+	
+	private ErrorMessage getMessage(ErrorCode error) {
+		return getMessage(error.code());
+	}
+	
+	private ErrorMessage getMessage(String code) {
+		String message = resourceBundle.getMessage(code, null, Locale.getDefault());
+		return new ErrorMessage(code, message);
+	}	
 }

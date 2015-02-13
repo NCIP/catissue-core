@@ -1,31 +1,26 @@
 
 package com.krishagni.catissueplus.core.auth.services.impl;
 
-import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
-import com.krishagni.catissueplus.core.auth.domain.factory.AuthErrorCode;
+import com.krishagni.catissueplus.core.auth.domain.factory.AuthProviderErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.factory.DomainRegistrationFactory;
-import com.krishagni.catissueplus.core.auth.events.AllDomainsEvent;
-import com.krishagni.catissueplus.core.auth.events.DomainDetails;
-import com.krishagni.catissueplus.core.auth.events.DomainRegisteredEvent;
-import com.krishagni.catissueplus.core.auth.events.RegisterDomainEvent;
-import com.krishagni.catissueplus.core.auth.events.ReqAllAuthDomainEvent;
+import com.krishagni.catissueplus.core.auth.events.DomainDetail;
+import com.krishagni.catissueplus.core.auth.events.ListAuthDomainCriteria;
 import com.krishagni.catissueplus.core.auth.services.DomainRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
-import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class DomainRegistrationServiceImpl implements DomainRegistrationService {
 
 	private DaoFactory daoFactory;
 
 	private DomainRegistrationFactory domainRegFactory;
-
-	private final String DOMAIN_NAME = "domain name";
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -36,40 +31,38 @@ public class DomainRegistrationServiceImpl implements DomainRegistrationService 
 	}
 
 	@Override
-	@PlusTransactional
-	public AllDomainsEvent getAllDomains(ReqAllAuthDomainEvent req) {
-		List<AuthDomain> authDomains = daoFactory.getDomainDao().getAllAuthDomains(req.getMaxResults());
+	@PlusTransactional	
+	public ResponseEvent<List<DomainDetail>> getDomains(RequestEvent<ListAuthDomainCriteria> req) {
+		List<AuthDomain> authDomains = daoFactory.getDomainDao().getAllAuthDomains(req.getPayload().maxResults());
 
-		List<DomainDetails> result = new ArrayList<DomainDetails>();
-
+		List<DomainDetail> result = new ArrayList<DomainDetail>();
 		for (AuthDomain domain : authDomains) {
-			result.add(DomainDetails.fromDomain(domain));
+			result.add(DomainDetail.fromDomain(domain));
 		}
-		return AllDomainsEvent.ok(result);
+		
+		return ResponseEvent.response(result);
 	}
 
 	@Override
 	@PlusTransactional
-	public DomainRegisteredEvent registerDomain(RegisterDomainEvent event) {
+	public ResponseEvent<DomainDetail> registerDomain(RequestEvent<DomainDetail> req) {
 		try {
-			DomainDetails details = event.getDomainDetails();
-			AuthDomain authDomain = domainRegFactory.getAuthDomain(details);
+			DomainDetail detail = req.getPayload();			
+			AuthDomain authDomain = domainRegFactory.getAuthDomain(detail);
+			
 			ensureUniqueDomainName(authDomain.getName());
 			daoFactory.getDomainDao().saveOrUpdate(authDomain);
-			return DomainRegisteredEvent.ok(DomainDetails.fromDomain(authDomain));
-		}
-		catch (ObjectCreationException ce) {
-			return DomainRegisteredEvent.invalidRequest(AuthErrorCode.ERRORS.message(), ce.getErroneousFields());
-		}
-		catch (Exception e) {
-			return DomainRegisteredEvent.serverError(e);
+			return ResponseEvent.response(DomainDetail.fromDomain(authDomain));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 
 	private void ensureUniqueDomainName(String domainName) {
 		if (!daoFactory.getDomainDao().isUniqueAuthDomainName(domainName)) {
-			reportError(AuthErrorCode.INVALID_ATTR_VALUE, DOMAIN_NAME);
+			throw OpenSpecimenException.userError(AuthProviderErrorCode.DUP_DOMAIN_NAME);
 		}
 	}
-
 }

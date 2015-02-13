@@ -8,6 +8,8 @@ public class PasswordDetails {
 	protected String oldPassword;
 
 	protected String newPassword;
+	
+	private String passwordToken;
 
 	public Long getUserId() {
 		return userId;
@@ -31,6 +33,14 @@ public class PasswordDetails {
 
 	public void setNewPassword(String newPassword) {
 		this.newPassword = newPassword;
+	}
+
+	public String getPasswordToken() {
+		return passwordToken;
+	}
+
+	public void setPasswordToken(String passwordToken) {
+		this.passwordToken = passwordToken;
 	}
 
 }

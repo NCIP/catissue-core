@@ -85,16 +85,6 @@
             insert="true"
             column="DOMAIN_NAME" />
 
-      	<set
-            name="userCPRoles"
-            table="CATISSUE_CP_USER_ROLES"
-            cascade="all-delete-orphan"
-            inverse="false">
-            <key column="USER_ID"/>
-            <one-to-many
-                class="com.krishagni.catissueplus.core.privileges.domain.UserCPRole"/>
-         </set>
-        
          <set
             name="userSites"
             table="CATISSUE_SITE_USERS"

@@ -11,9 +11,11 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class StorageContainer extends BaseEntity {
@@ -251,14 +253,10 @@ public class StorageContainer extends BaseEntity {
 	}
 	
 	public boolean areValidPositions(String posOne, String posTwo) {
-		try {
-			int posOneOrdinal = converters.get(dimensionOneLabelingScheme).toOrdinal(posOne);
-			int posTwoOrdinal = converters.get(dimensionTwoLabelingScheme).toOrdinal(posTwo);
+		int posOneOrdinal = converters.get(dimensionOneLabelingScheme).toOrdinal(posOne);
+		int posTwoOrdinal = converters.get(dimensionTwoLabelingScheme).toOrdinal(posTwo);
 			
-			return areValidPositions(posOneOrdinal, posTwoOrdinal);
-		} catch (IllegalArgumentException iae) {
-			return false;
-		}
+		return areValidPositions(posOneOrdinal, posTwoOrdinal);
 	}
 	
 	public boolean areValidPositions(int posOne, int posTwo) {
@@ -267,13 +265,9 @@ public class StorageContainer extends BaseEntity {
 	}
 	
 	public StorageContainerPosition createPosition(String posOne, String posTwo) {
-		try {
-			int posOneOrdinal = converters.get(dimensionOneLabelingScheme).toOrdinal(posOne);
-			int posTwoOrdinal = converters.get(dimensionTwoLabelingScheme).toOrdinal(posTwo);
-			return createPosition(posOneOrdinal, posOne, posTwoOrdinal, posTwo);
-		} catch (IllegalArgumentException iae) {
-			throw iae;
-		} 
+		int posOneOrdinal = converters.get(dimensionOneLabelingScheme).toOrdinal(posOne);
+		int posTwoOrdinal = converters.get(dimensionTwoLabelingScheme).toOrdinal(posTwo);
+		return createPosition(posOneOrdinal, posOne, posTwoOrdinal, posTwo);
 	}
 	
 	public void removePosition(StorageContainerPosition position) {
@@ -370,7 +364,7 @@ public class StorageContainer extends BaseEntity {
 	private void updateCapacity(int newDimensionOneCapacity, int newDimensionTwoCapacity) {
 		if (newDimensionOneCapacity < dimensionOneCapacity || newDimensionTwoCapacity < dimensionTwoCapacity) {
 			if (arePositionsOccupiedBeyondCapacity(newDimensionOneCapacity, newDimensionTwoCapacity)) {
-				throw new IllegalArgumentException("Positions occupied beyond new capacity specification");
+				throw OpenSpecimenException.userError(StorageContainerErrorCode.CANNOT_SHRINK_CONTAINER);
 			}
 		}
 		
@@ -431,7 +425,7 @@ public class StorageContainer extends BaseEntity {
 			//
 			// existing status was active and container has some specimens stored in hierarchy
 			//
-			throw new IllegalArgumentException("Container has some specimens stored.");
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.REF_ENTITY_FOUND);
 		}
 
 		List<StorageContainer> containers = new ArrayList<StorageContainer>();
@@ -459,7 +453,7 @@ public class StorageContainer extends BaseEntity {
 		
 		if (!removedClasses.isEmpty() || !removedTypes.isEmpty()) {
 			if (doesSpecimensViolateClassAndTypes(newSpecimenClasses, newSpecimenTypes)) {
-				throw new IllegalArgumentException("New specimen class and type too restrictive");
+				throw OpenSpecimenException.userError(StorageContainerErrorCode.RESTRICTIVE_SPECIMEN_CLASS_AND_TYPE);
 			}
 		}
 		
@@ -472,7 +466,7 @@ public class StorageContainer extends BaseEntity {
 	
 	private void updateAllowedCps(Set<CollectionProtocol> newCps) {
 		if (doesSpecimensViolateCp(newCps)) {
-			throw new IllegalArgumentException("New collection protocols too restrictive");
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.RESTRICTIVE_CP);
 		}
 		
 		allowedCps.clear();
@@ -588,7 +582,7 @@ public class StorageContainer extends BaseEntity {
 		@Override
 		public String fromOrdinal(Integer pos) {
 			if (pos == null || pos < 0) {
-				throw new IllegalArgumentException("Number can't be less than 1");
+				throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_NUMBER_POSITION);
 			}
 			
 			return pos.toString();
@@ -598,6 +592,8 @@ public class StorageContainer extends BaseEntity {
 	
 	private class RomanSchemeOrdinalConverter implements SchemeOrdinalConverter {
 		private final Map<String, Integer> romanLiterals = new HashMap<String, Integer>() {
+			private static final long serialVersionUID = 685666506457371647L;
+
 			{
 				put("m", 1000);
 				put("cm", 900);
@@ -632,14 +628,14 @@ public class StorageContainer extends BaseEntity {
 				if (idx == len - 1) {
 					Integer val = romanLiterals.get(pos.substring(idx, idx + 1));
 					if (val == null) {
-						throw new IllegalArgumentException("Invalid roman number: " + pos);
+						throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_ROMAN_POSITION);
 					}
 					result += val;
 				} else {
 					Integer current = romanLiterals.get(pos.substring(idx, idx + 1));
 					Integer ahead = romanLiterals.get(pos.substring(idx + 1, idx + 2));
 					if (current == null || ahead == null) {
-						throw new IllegalArgumentException("Invalid roman number: " + pos);
+						throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_ROMAN_POSITION);
 					}
 					
 					if (current < ahead) {
@@ -656,7 +652,7 @@ public class StorageContainer extends BaseEntity {
 		@Override
 		public String fromOrdinal(Integer pos) {
 			if (pos == null || pos <= 0) {
-				throw new IllegalArgumentException("Number can't be lesser than 1");
+				throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_NUMBER_POSITION);
 			}
 			
 			StringBuilder result = new StringBuilder();			
@@ -690,7 +686,7 @@ public class StorageContainer extends BaseEntity {
 			pos = pos.toLowerCase();
 			
 			if (!StringUtils.isAlpha(pos)) {
-				throw new IllegalArgumentException("Invalid alpha string: " + pos);
+				throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_ALPHA_POSITION);
 			}
 			
 			int len = pos.length();
@@ -709,7 +705,7 @@ public class StorageContainer extends BaseEntity {
 		@Override
 		public String fromOrdinal(Integer pos) {
 			if (pos == null || pos <= 0) {
-				throw new IllegalArgumentException("Number can't be lesser than 1");
+				throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_NUMBER_POSITION);
 			}
 			
 			StringBuilder result = new StringBuilder();			

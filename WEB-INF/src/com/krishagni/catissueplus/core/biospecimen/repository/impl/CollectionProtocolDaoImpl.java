@@ -29,7 +29,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<CollectionProtocolSummary> getAllCollectionProtocols(boolean includePi, boolean includeStats) {
+	public List<CollectionProtocolSummary> getCollectionProtocols(boolean includePi, boolean includeStats) {
 		List<CollectionProtocolSummary> cpList = new ArrayList<CollectionProtocolSummary>();
 		Map<Long, CollectionProtocolSummary> cpMap = new HashMap<Long, CollectionProtocolSummary>();
 		
