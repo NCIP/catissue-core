@@ -1,4 +1,15 @@
 <div> 
+  <div os-page-header>
+    <h3>
+      <a ui-sref="dp-list" translate="dp.list">Distribution Protocols</a>
+      <span class="fa fa-angle-right"></span>
+      <span>{{distributionProtocol.shortTitle}}</span>
+    </h3>
+    <button class="os-round-btn" title="{{'dp.tooltip.new_dp' | translate}}" ui-sref="dp-addedit({dpId: distributionProtocol.id})">
+      <span class="fa fa-pencil"></span>
+    </button>
+  </div>
+
   <div os-side-menu>
     <ul>
       <li ui-sref-active="active">

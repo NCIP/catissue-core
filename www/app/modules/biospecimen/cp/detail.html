@@ -1,5 +1,17 @@
 
 <div>
+
+  <div os-page-header>
+    <h3>
+      <a ui-sref="cp-list" translate="menu.collection_protocols"></a>
+      <span class="fa fa-angle-right"></span>
+      <span> {{cp.title}} </span>
+    </h3>
+    <button class="os-round-btn" ui-sref="cp-addedit">
+      <span class="fa fa-pencil"></span>
+    </button>
+  </div>
+
   <div os-side-menu ng-if="state.name.indexOf('cp-detail') != -1">
     <ul>
      <li ui-sref-active="active">
@@ -34,6 +46,7 @@
      </li>
    </ul>
   </div>
+
   <div ng-class="{'os-side-menu-page-content': state.name.indexOf('cp-detail') != -1}" ui-view>
   </div>
 </div>

@@ -1,15 +1,14 @@
 
 <div>
-  <div class="os-page-hdr">
+  <div os-page-header>
     <h3>
-      <span class="fa fa-user"></span>
       <span translate="user.list">Users</span>
     </h3>
-    <a class="os-btn-icon" title="{{'user.tooltip.create_user' | translate}}" ui-sref="user-addedit">
-      <span class="glyphicon glyphicon-plus"></span>
-    </a>
+    <button class="os-round-btn" title="{{'user.tooltip.create_user' | translate}}" ui-sref="user-addedit">
+      <span class="fa fa-plus"></span>
+    </button>
   </div>
-  
+    
   <div class="os-cards">
     <div class="os-card" ng-repeat="user in users" ng-click="showUserOverview(user)">
       <h4>

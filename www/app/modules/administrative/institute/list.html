@@ -1,18 +1,20 @@
 <div>
-  <div class="os-page-hdr">
+  <div os-page-header>
     <h3>
-      <span class="fa fa-university"></span>
       <span translate="institutes.list">Institutes</span>
     </h3>
-    <a class="os-btn-icon" title="{{'institutes.tooltip.add' | translate}}" ui-sref="institute-addedit">
-      <span class="glyphicon glyphicon-plus"></span>
-    </a>
+    <button class="os-round-btn" title="{{'institutes.tooltip.add' | translate}}" ui-sref="institute-addedit">
+      <span class="fa fa-plus"></span>
+    </button>
   </div>
   
   <div class="os-cards"> 
     <div class="os-card" ng-repeat="institute in instituteList" ng-click="showInstituteOverview(institute)">
       <h4>
-        <a title="{{'institutes.tooltip.view_details' | translate}}" ui-sref="institute-detail.overview({instituteId: institute.id})"> {{institute.name}} </a>
+        <a title="{{'institutes.tooltip.view_details' | translate}}" 
+          ui-sref="institute-detail.overview({instituteId: institute.id})"> 
+          {{institute.name}} 
+        </a>
       </h4>
       <div class="stats">
         <div class="stat col-xs-6" title="{{'institutes.tooltip.department_count' | translate}}">

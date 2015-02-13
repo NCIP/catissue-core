@@ -1,11 +1,14 @@
 <div>
   <alert ng-if="alert.msg" type="{{alert.type}}" class="os-alert">{{alert.msg}}</alert>
-  <div class="os-page-hdr">
-    <os-breadcrumbs></os-breadcrumbs>
-    <h3 translate="participant.list">Participants</h3>
-    <a class="os-btn-icon" title="{{'participant.tooltip.register' | translate}}" ui-sref="participant-new">
-      <span class="glyphicon glyphicon-plus"></span>
-    </a>
+  <div os-page-header>
+    <h3>
+      <a ui-sref="cp-detail.overview({cpId: cp.id})"> {{cp.title}} </a>
+      <span class="fa fa-angle-right"> </span> 
+      <span translate="participant.list">Participants</span>
+    </h3>
+    <div class="os-round-btn" title="{{'participant.tooltip.register' | translate}}" ui-sref="participant-new({cpId: cp.id})">
+      <span class="fa fa-plus"></span>
+    </div>
   </div>
 
   <div class="os-cards">
