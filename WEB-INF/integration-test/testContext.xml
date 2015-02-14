@@ -341,14 +341,14 @@
         <property name="distributionProtocolFactory" ref="distributionProtocolFactory" />
 	</bean>
 	
-	<bean id="distributionOrderService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionOrderServiceImpl">
+	<!-- <bean id="distributionOrderService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionOrderServiceImpl">
         <property name="daoFactory" ref="biospecimenDaoFactory"/>
         <property name="distributionFactory" ref="distributionFactory" />
 	</bean>
 	
 	<bean id="distributionFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionOrderFactoryImpl">
         <property name="daoFactory" ref="biospecimenDaoFactory"/>
-	</bean>
+	</bean> -->
 	
        <bean id="permissibleValueSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl">
                <property name="daoFactory" ref="biospecimenDaoFactory"/>
