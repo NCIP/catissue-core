@@ -1,4 +1,5 @@
-<div>
+
+<div ng-if="!signedUp">
   <div class="os-custom-banner">
     <h3 translate="user.create_account">Create your OpenSpecimen Account</h3>
   </div>
@@ -79,6 +80,20 @@
         </div>
       </div>
     </form>
+  </div>
+</div>
+
+<div class="panel panel-default os-margin-10" ng-if="signedUp">
+  <div class="panel-body">
+    <p>
+      <strong translate="user.signed_up">
+        Your membership request has been received. Please wait for an approval email from OpenSpecimen Administrator.
+        Thank you.
+      </strong>
+    </p>
+    <p>
+      <a ui-sref="login" translate="user.return_to_signin">Return to Sign in</a>
+    </p>
   </div>
 </div>
 

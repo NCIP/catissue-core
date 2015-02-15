@@ -11,4 +11,8 @@ public class EmailSender {
 	public Boolean sendForgotPasswordEmail(final User user) {
 		return EmailHandler.sendForgotPasswordEmail(user);		
 	}
+	
+	public void sendUserSignupEmail(final User user) {
+		EmailHandler.sendUserSignupEmail(user);
+	}
 }

@@ -19,6 +19,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserServiceImpl implements UserService {
 
@@ -55,15 +56,7 @@ public class UserServiceImpl implements UserService {
 	public ResponseEvent<UserDetail> createUser(RequestEvent<UserDetail> req) {
 		try {
 			UserDetail detail = req.getPayload();
-			User user = userFactory.createUser(detail);
-			
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureUniqueLoginNameInDomain(user.getLoginName(), user.getAuthDomain().getName(), ose);
-			ensureUniqueEmailAddress(user.getEmailAddress(), ose);
-			ose.checkAndThrow();
-
-			user.setPasswordToken(user, detail.getDomainName());
-			daoFactory.getUserDao().saveOrUpdate(user);
+			User user = createUser(detail);
 			emailSender.sendUserCreatedEmail(user);
 			return ResponseEvent.response(UserDetail.fromDomain(user));
 		} catch (OpenSpecimenException ose) {
@@ -71,6 +64,37 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<UserDetail> signupUser(RequestEvent<UserDetail> req) {
+		try {
+			UserDetail detail = req.getPayload();
+			detail.setActivityStatus(Status.ACTIVITY_STATUS_PENDING.getStatus());
+			
+			User user = createUser(detail);
+			emailSender.sendUserSignupEmail(user);
+			
+			return ResponseEvent.response(UserDetail.fromDomain(user));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	private User createUser(UserDetail detail) {
+		User user = userFactory.createUser(detail);
+		
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		ensureUniqueLoginNameInDomain(user.getLoginName(), user.getAuthDomain().getName(), ose);
+		ensureUniqueEmailAddress(user.getEmailAddress(), ose);
+		ose.checkAndThrow();
+
+		user.setPasswordToken(user, detail.getDomainName());
+		daoFactory.getUserDao().saveOrUpdate(user);
+		return user;
 	}
 
 	@Override

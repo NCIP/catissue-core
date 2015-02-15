@@ -18,6 +18,8 @@ public interface UserService {
 
 	public ResponseEvent<UserDetail> updateUser(RequestEvent<UserDetail> event);
 
+	public ResponseEvent<UserDetail> signupUser(RequestEvent<UserDetail> req);
+
 	public ResponseEvent<UserDetail> closeUser(RequestEvent<Long> req);
 
 	public ResponseEvent<Boolean> setPassword(RequestEvent<PasswordDetails> req);
@@ -31,5 +33,6 @@ public interface UserService {
 	public ResponseEvent<UserDetail> getUser(RequestEvent<Long> userId);
 
 	public ResponseEvent<UserDetail> deleteUser(RequestEvent<Long> userId);
+
 
 }

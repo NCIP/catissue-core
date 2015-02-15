@@ -1,4 +1,3 @@
-
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
@@ -30,8 +29,6 @@ import edu.wustl.common.beans.SessionDataBean;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-
-	private static String PATCH_USER = "patch user";
 
 	@Autowired
 	private UserService userService;
@@ -86,6 +83,17 @@ public class UserController {
 	public UserDetail createUser(@RequestBody UserDetail userDetails) {
 		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(getSession(), userDetails);
 		ResponseEvent<UserDetail> resp = userService.createUser(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/sign-up")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public UserDetail signupUser(@RequestBody UserDetail detail) {
+		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(getSession(), detail);
+		ResponseEvent<UserDetail> resp = userService.signupUser(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

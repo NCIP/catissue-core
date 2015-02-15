@@ -56,12 +56,6 @@ angular.module('openspecimen', [
         },
         controller: 'UserAddEditCtrl',
         parent: 'home'
-
-      })
-      .state('signed-up', {
-        url: '/signup-success',
-        templateUrl: 'modules/user/signup-success.html',
-        parent: 'home'
       });
 
     $urlRouterProvider.otherwise('/');
@@ -69,7 +63,7 @@ angular.module('openspecimen', [
     $httpProvider.interceptors.push('httpRespInterceptor');
 
     ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 9090;
+    ApiUrlsProvider.port = 8180;
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {

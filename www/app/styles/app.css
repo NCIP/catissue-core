@@ -93,7 +93,8 @@ body {
   padding: 8px 15px;
 }
 
-.os-navbar > ul > li.form-input > button {
+.os-navbar > ul > li.form-input > a.btn {
+  padding: 6px 12px!important;
   font-weight: bold;
 }
 

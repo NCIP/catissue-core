@@ -14,6 +14,8 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 public class EmailHandler {
 
 	private static String USER_CREATED_EMAIL_TMPL = "user.createdTemplate";
+	
+	private static String USER_SIGNUP_EMAIL_TMPL = "user.signupTemplate";
 
 	private static String FORGOT_PASSWORD_EMAIL_TMPL = "user.forgotPasswordTemplate";
 	
@@ -31,6 +33,20 @@ public class EmailHandler {
 		contextMap.put("appUrl", CommonServiceLocator.getInstance().getAppURL()); //TODO need remove and co-ordinate with new code
 		return EmailClient.getInstance().sendEmail(USER_CREATED_EMAIL_TMPL, new String[]{user.getEmailAddress()},
 				new String[]{adminEmailAddress}, null, contextMap, null);
+	}
+	
+	public static void sendUserSignupEmail(final User user) {
+		Map<String, Object> contextMap = new HashMap<String, Object>();
+		contextMap.put("user", user);
+		contextMap.put("appUrl", CommonServiceLocator.getInstance().getAppURL()); //TODO need remove and co-ordinate with new code
+		
+		EmailClient.getInstance().sendEmail(
+				USER_SIGNUP_EMAIL_TMPL,
+				new String[]{user.getEmailAddress()},
+				new String[]{adminEmailAddress},
+				null,
+				contextMap, 
+				null);
 	}
 
 	public static Boolean sendForgotPasswordEmail(final User user) {
