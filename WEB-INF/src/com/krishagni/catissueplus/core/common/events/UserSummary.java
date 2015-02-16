@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
+@JsonFilter("withoutId")
 public class UserSummary {
 
 	private Long id;
@@ -16,6 +18,8 @@ public class UserSummary {
 	private String lastName;
 
 	private String loginName;
+	
+	private String domain;
 
 	public Long getId() {
 		return id;
@@ -49,12 +53,21 @@ public class UserSummary {
 		this.loginName = loginName;
 	}
 
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+
 	public static UserSummary from(User user) {
 		UserSummary userSummary = new UserSummary();
 		userSummary.setId(user.getId());
 		userSummary.setFirstName(user.getFirstName());
 		userSummary.setLastName(user.getLastName());
 		userSummary.setLoginName(user.getLoginName());
+		userSummary.setDomain(user.getAuthDomain().getName());
 		return userSummary;
 	}
 	

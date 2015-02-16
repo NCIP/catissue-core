@@ -1,9 +1,13 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,17 +19,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
+import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.ListCpCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
+import edu.common.dynamicextensions.nutility.IoUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -62,11 +74,58 @@ public class CollectionProtocolsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public  CollectionProtocolDetail getCollectionProtocol(@PathVariable("id") Long cpId) {
-		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.getCollectionProtocol(getRequest(cpId));
+		CpQueryCriteria crit = new CpQueryCriteria();
+		crit.setId(cpId);
+		
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.getCollectionProtocol(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();		
 		return resp.getPayload();
 	}	
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/definition")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public void getCpDefFile(@PathVariable("id") Long cpId, HttpServletResponse response) 
+	throws JsonProcessingException {
+		CpQueryCriteria crit = new CpQueryCriteria();
+		crit.setId(cpId);
+		crit.setFullObject(true);
+		
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.getCollectionProtocol(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		
+		CollectionProtocolDetail cp = resp.getPayload();
+		ObjectMapper mapper = new ObjectMapper();
+		FilterProvider filters = new SimpleFilterProvider().addFilter("withoutId", SimpleBeanPropertyFilter.serializeAllExcept("id"));		
+		String def = mapper.writer(filters).withDefaultPrettyPrinter().writeValueAsString(cp);
+		
+		response.setContentType("application/json");
+		response.setHeader("Content-Disposition", "attachment;filename=CpDef_" + cpId + ".json");
+			
+		InputStream in = null;
+		try {
+			in = new ByteArrayInputStream(def.getBytes());
+			IoUtil.copy(in, response.getOutputStream());
+		} catch (IOException e) {
+			throw new RuntimeException("Error sending file", e);
+		} finally {
+			IoUtil.close(in);
+		}				
+	}
 
+	@RequestMapping(method = RequestMethod.POST, value="/definition")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody		
+	public CollectionProtocolDetail importCpDef(@PathVariable("file") MultipartFile file) 
+	throws IOException {
+		CollectionProtocolDetail cp = new ObjectMapper().readValue(file.getBytes(), CollectionProtocolDetail.class);
+		RequestEvent<CollectionProtocolDetail> req = new RequestEvent<CollectionProtocolDetail>(getSession(), cp);
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.importCollectionProtocol(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

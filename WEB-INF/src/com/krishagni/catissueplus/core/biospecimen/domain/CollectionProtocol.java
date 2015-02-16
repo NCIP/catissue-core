@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
@@ -43,30 +42,16 @@ public class CollectionProtocol {
 	
 	private String unsignedConsentDocumentURL;
 	
-	private CollectionProtocol parentCollectionProtocol;
-	
-	private String type;
-	
-	private Long sequenceNumber;
-	
-	private Double studyCalendarEventPoint;
-	
 	private Boolean aliquotInSameContainer;
 	
 	private Boolean consentsWaived;
 	
 	private Set<ConsentTier> consentTier = new HashSet<ConsentTier>();
 	
-	private Set<DistributionProtocol> distributionProtocols = new HashSet<DistributionProtocol>();
-	
 	private Set<User> coordinators = new HashSet<User>();
-	
-	private Set<User> assignedProtocolUsers = new HashSet<User>();
 	
 	private Set<Site> sites = new HashSet<Site>();
 	
-	private Set<CollectionProtocol> childCollectionProtocols = new HashSet<CollectionProtocol>();
-
 	private Set<CollectionProtocolEvent> collectionProtocolEvents = new HashSet<CollectionProtocolEvent>();
 	
 	public Long getId() {
@@ -189,39 +174,6 @@ public class CollectionProtocol {
 		this.unsignedConsentDocumentURL = unsignedConsentDocumentURL;
 	}
 
-	public CollectionProtocol getParentCollectionProtocol() {
-		return parentCollectionProtocol;
-	}
-
-	public void setParentCollectionProtocol(
-			CollectionProtocol parentCollectionProtocol) {
-		this.parentCollectionProtocol = parentCollectionProtocol;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public Long getSequenceNumber() {
-		return sequenceNumber;
-	}
-
-	public void setSequenceNumber(Long sequenceNumber) {
-		this.sequenceNumber = sequenceNumber;
-	}
-
-	public Double getStudyCalendarEventPoint() {
-		return studyCalendarEventPoint;
-	}
-
-	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint) {
-		this.studyCalendarEventPoint = studyCalendarEventPoint;
-	}
-
 	public Boolean getAliquotInSameContainer() {
 		return aliquotInSameContainer;
 	}
@@ -246,29 +198,12 @@ public class CollectionProtocol {
 		this.consentTier = consentTier;
 	}
 
-	public Set<DistributionProtocol> getDistributionProtocols() {
-		return distributionProtocols;
-	}
-
-	public void setDistributionProtocols(
-			Set<DistributionProtocol> distributionProtocols) {
-		this.distributionProtocols = distributionProtocols;
-	}
-
 	public Set<User> getCoordinators() {
 		return coordinators;
 	}
 
 	public void setCoordinators(Set<User> coordinators) {
 		this.coordinators = coordinators;
-	}
-
-	public Set<User> getAssignedProtocolUsers() {
-		return assignedProtocolUsers;
-	}
-
-	public void setAssignedProtocolUsers(Set<User> assignedProtocolUsers) {
-		this.assignedProtocolUsers = assignedProtocolUsers;
 	}
 
 	public Set<Site> getSites() {
@@ -279,26 +214,15 @@ public class CollectionProtocol {
 		this.sites = sites;
 	}
 
-	public Set<CollectionProtocol> getChildCollectionProtocols() {
-		return childCollectionProtocols;
-	}
-
-	public void setChildCollectionProtocols(
-			Set<CollectionProtocol> childCollectionProtocols) {
-		this.childCollectionProtocols = childCollectionProtocols;
-	}
-
 	public Set<CollectionProtocolEvent> getCollectionProtocolEvents() {
 		return collectionProtocolEvents;
 	}
 
-	public void setCollectionProtocolEvents(
-			Set<CollectionProtocolEvent> collectionProtocolEvents) {
+	public void setCollectionProtocolEvents(Set<CollectionProtocolEvent> collectionProtocolEvents) {
 		this.collectionProtocolEvents = collectionProtocolEvents;
 	}
 
-	// new
-	
+	// new	
 	public ConsentTier addConsentTier(ConsentTier ct) {
 		ct.setId(null);
 		ct.setCollectionProtocol(this);
