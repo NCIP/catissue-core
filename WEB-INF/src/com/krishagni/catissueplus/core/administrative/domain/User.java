@@ -18,15 +18,16 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class User extends BaseEntity {
-	private final static String DEFAULT_DOMAIN = "catissue";
-
+	
+	private final static String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})";
+	
 	private String lastName;
 
 	private String firstName;
 
 	private AuthDomain authDomain;
 
-	private Set<Site> userSites = new HashSet<Site>();
+	private Set<Site> sites = new HashSet<Site>();
 
 	private String emailAddress;
 
@@ -44,7 +45,7 @@ public class User extends BaseEntity {
 	
 	private String password;
 
-	private Set<Password> passwordCollection = new HashSet<Password>();
+	private Set<Password> passwords = new HashSet<Password>();
 	
 	public String getLastName() {
 		return lastName;
@@ -74,12 +75,12 @@ public class User extends BaseEntity {
 		return authDomain;
 	}
 
-	public Set<Site> getUserSites() {
-		return userSites;
+	public Set<Site> getSites() {
+		return sites;
 	}
 
-	public void setUserSites(Set<Site> userSites) {
-		this.userSites = userSites;
+	public void setSites(Set<Site> sites) {
+		this.sites = sites;
 	}
 
 	public void setAuthDomain(AuthDomain authDomain) {
@@ -150,42 +151,23 @@ public class User extends BaseEntity {
 		this.password = password;
 	}
 
-	public Set<Password> getPasswordCollection() {
-		return passwordCollection;
+	public Set<Password> getPasswords() {
+		return passwords;
 	}
 
-	public void setPasswordCollection(Set<Password> passwordCollection) {
-		this.passwordCollection = passwordCollection;
-	}
-
-	public void close() {
-		this.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
+	public void setPasswords(Set<Password> passwords) {
+		this.passwords = passwords;
 	}
 
 	public void update(User user) {
 		this.setFirstName(user.getFirstName());
 		this.setLastName(user.getLastName());
 		this.setActivityStatus(user.getActivityStatus());
-		this.setAuthDomain(user.getAuthDomain());
 		this.setAddress(user.getAddress());
-		this.setLoginName(user.getLoginName());
-		this.setCreateDate(user.getCreateDate());
 		this.setDepartment(user.getDepartment());
 		this.setEmailAddress(user.getEmailAddress());
 		this.setComments(user.getComments());
-		SetUpdater.<Site> newInstance().update(this.getUserSites(), user.getUserSites());
-
-		//updateAddressDetails(this.getAddress(), user.getAddress());
-	}
-
-	private void updateAddressDetails(Address oldAddress, Address address) {
-		oldAddress.setStreet(address.getStreet());
-		oldAddress.setCountry(address.getCountry());
-		oldAddress.setFaxNumber(address.getFaxNumber());
-		oldAddress.setPhoneNumber(address.getPhoneNumber());
-		oldAddress.setState(address.getState());
-		oldAddress.setCity(address.getCity());
-		oldAddress.setZipCode(address.getZipCode());
+		SetUpdater.<Site> newInstance().update(this.getSites(), user.getSites());
 	}
 
 	public void addPassword(String newPassword) {
@@ -195,10 +177,8 @@ public class User extends BaseEntity {
 		password.setUpdateDate(new Date());
 		password.setUser(this);
 		password.setPassword(newPassword);
-		this.passwordCollection.add(password);
+		this.passwords.add(password);
 	}
-
-	private final static String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})";
 
 	public static boolean isValidPasswordPattern(String password) {
 		boolean result = false;
@@ -208,8 +188,12 @@ public class User extends BaseEntity {
 		return result;
 	}
 
-	public void delete() {
-		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+	public void delete(boolean isClosed) { 
+		if (isClosed) {
+			this.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
+		} else {
+			this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+		}
 	}
-
+	
 }

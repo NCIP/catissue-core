@@ -36,24 +36,6 @@ angular.module('openspecimen', [
           $scope.alerts = Alerts.messages;
         }
       })
-      .state('login', {
-        url: '/',
-        templateUrl: 'modules/administrative/user/signin.html',
-        controller: 'LoginCtrl',
-        parent: 'default'
-      })
-      .state('forgot-password', {
-        url: '/forgot-password',
-        templateUrl: 'modules/administrative/user/forgot-password.html',
-        controller: 'ForgotPasswordCtrl',
-        parent: 'default'
-      })
-      .state('reset-password', {
-        url: '/reset-password',
-        templateUrl: 'modules/administrative/user/reset-password.html',
-        controller: 'ResetPasswordCtrl',
-        parent: 'default'
-      })
       .state('signed-in', {
         abstract: true,
         templateUrl: 'modules/common/appmenu.html',

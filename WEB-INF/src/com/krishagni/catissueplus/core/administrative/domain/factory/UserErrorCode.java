@@ -33,7 +33,9 @@ public enum UserErrorCode implements ErrorCode {
 	
 	DOMAIN_NOT_FOUND,
 	
-	NOT_FOUND;
+	NOT_FOUND,
+	
+	DEPT_REQUIRED;
 	
 	public String code() {
 		return "USER_" + this.name();

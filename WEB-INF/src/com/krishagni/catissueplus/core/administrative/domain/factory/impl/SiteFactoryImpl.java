@@ -74,7 +74,7 @@ public class SiteFactoryImpl implements SiteFactory {
 		Set<User> userCollection = new HashSet<User>();
 		
 		for (UserSummary userSummary : coordinatorCollection) {
-			User user = daoFactory.getUserDao().getUser(userSummary.getId());			
+			User user = daoFactory.getUserDao().getById(userSummary.getId());			
 			if (user == null) {
 				ose.addError(UserErrorCode.NOT_FOUND);
 				return;

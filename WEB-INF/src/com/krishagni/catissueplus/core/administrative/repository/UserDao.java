@@ -5,33 +5,24 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface UserDao extends Dao<User> {
 	
-	User getUser(String witnessName);
-
-	User getUser(Long userId);
+	public User getUser(String loginName, String domain);
 	
-	User getUserByIdAndDomainName(Long userId, String domainName);
-
-	Boolean isUniqueEmailAddress(String emailAddress);
-
-	List<String> getOldPasswords(Long id);
-
-	Boolean isUniqueLoginNameInDomain(String loginName, String domainName);
+	public User getUserByEmailAddress(String emailAddress);
 	
-	User getUserByLoginNameAndDomainName(String loginName, String domainName);
-
-	List<User> getUsersById(List<Long> userIds);
+	public Boolean isUniqueLoginName(String loginName, String domainName);
 	
-	User getActiveUser(String loginId, String domainName);
-
-	List<UserSummary> getUsers(int startAt, int maxRecords, String ... searchString);
-
-	Long getUsersCount(String ... searchString);
+	public Boolean isUniqueEmailAddress(String emailAddress);
 	
+	public List<User> getUsersByIds(List<Long> userIds);
+	
+	public List<UserSummary> getUsers(ListUserCriteria criteria);
+
 	public void saveFpToken(ForgotPasswordToken token);
 	
 	public void deleteFpToken(ForgotPasswordToken token);

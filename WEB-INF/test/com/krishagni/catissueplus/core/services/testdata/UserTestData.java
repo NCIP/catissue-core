@@ -115,7 +115,7 @@ public class UserTestData {
 		user.setDepartment(new Department());
 		user.setAddress(getAddress());
 		user.setAuthDomain(getAuthDomain(id));
-		user.setUserSites(new HashSet<Site>());
+		user.setSites(new HashSet<Site>());
 		user.setUserCPRoles(new HashSet<UserCPRole>());
 		Long ide = user.getId(); //for coverage
 		return user;
@@ -159,7 +159,7 @@ public class UserTestData {
 		details.setEmailAddress("sci@sci.com");
 		details.setLoginName("admin@admin.com");
 		details.setDomainName("MyLdap");
-		details.setUserSiteNames(getSites());
+		details.setSitesName(getSites());
 		details.setUserCPRoles(getUserCpRolesDetails());
 
 		UpdateUserEvent reqEvent = new UpdateUserEvent(details, 1L);
@@ -221,7 +221,7 @@ public class UserTestData {
 		details.setLoginName("admin@admin.com");
 		details.setDomainName("myLdap");
 		details.setCountry("India");
-		details.setUserSiteNames(getSites());
+		details.setSitesName(getSites());
 		details.setUserCPRoles(getUserCpRolesDetails());
 		return details;
 	}
@@ -252,7 +252,7 @@ public class UserTestData {
 	public static CreateUserEvent getCreateUserEventWithNullSite() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
 		UserDetails details = getUserDetails();
-		details.setUserSiteNames(null);
+		details.setSitesName(null);
 		reqEvent.setUserDetails(details);
 		return reqEvent;
 	}
@@ -422,13 +422,13 @@ public class UserTestData {
 		user.setPasswordToken("e5412f93-a1c5-4ede-b66d-b32302cd4018");
 		user.setDepartment(new Department());
 		user.setAddress(new Address());
-		user.setPasswordCollection(getPasswordCollection());
+		user.setPasswords(getPasswordCollection());
 		AuthDomain authDomain = new AuthDomain();
 		AuthProvider authProvider = new AuthProvider();
 		authProvider.setAuthType("catissue");
 		authProvider.setImplClass("com.krishagni.catissueplus.core.auth.services.impl.LdapAuthServiceImpl");
 		authDomain.setName("catissue");
-		user.getPasswordCollection(); //for coverage
+		user.getPasswords(); //for coverage
 		user.setAuthDomain(authDomain);
 		return user;
 	}
@@ -521,7 +521,7 @@ public class UserTestData {
 	public static CreateUserEvent getCreateUserEventForUserCreationWithoutPrev() {
 		CreateUserEvent event = getCreateUserEvent();
 		event.getUserDetails().setUserCPRoles(new ArrayList<UserCPRoleDetails>());
-		event.getUserDetails().setUserSiteNames(new ArrayList<String>());
+		event.getUserDetails().setSitesName(new ArrayList<String>());
 		return event;
 	}
 

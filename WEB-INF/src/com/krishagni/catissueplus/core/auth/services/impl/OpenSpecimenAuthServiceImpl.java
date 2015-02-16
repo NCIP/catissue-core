@@ -22,7 +22,7 @@ public class OpenSpecimenAuthServiceImpl extends AbstractAuthProvider {
 
 	@Override
 	public void authenticate(LoginDetail loginDetails) {
-		User user = super.getDaoFactory().getUserDao().getActiveUser(loginDetails.getLoginId(), loginDetails.getDomainName());
+		User user = super.getDaoFactory().getUserDao().getUser(loginDetails.getLoginId(), loginDetails.getDomainName());
 		
 		if (user == null || !passwordEncoder.matches(loginDetails.getPassword(), user.getPassword())) {
 			throw OpenSpecimenException.userError(AuthErrorCode.INVALID_CREDENTIALS);

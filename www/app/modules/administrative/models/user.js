@@ -7,8 +7,8 @@ angular.module('os.administrative.models.user', ['os.common.models'])
       return $http.post(User.url() + 'forgot-password-token', user).then(ApiUtil.processResp);
     }
 
-    User.resetPassword = function(passowrdDetail) {
-      return $http.post(User.url() + "reset-password", passowrdDetail).then(ApiUtil.processResp);
+    User.resetPassword = function(passwordDetail) {
+      return $http.post(User.url() + "reset-password", passwordDetail).then(ApiUtil.processResp);
     }
 
     return User;

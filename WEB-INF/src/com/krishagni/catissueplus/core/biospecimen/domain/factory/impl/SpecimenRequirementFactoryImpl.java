@@ -281,7 +281,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			return null;
 		}
 		
-		User user = daoFactory.getUserDao().getUser(userSummary.getId());
+		User user = daoFactory.getUserDao().getById(userSummary.getId());
 		if (user == null) {
 			ose.addError(notFound);
 		}

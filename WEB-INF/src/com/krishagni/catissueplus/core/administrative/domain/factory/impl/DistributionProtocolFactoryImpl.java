@@ -64,7 +64,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 	}
 
 	private void setPrincipalInvestigator(DistributionProtocol distributionProtocol, UserSummary principalInvestigator, OpenSpecimenException ose) {
-		User pi = daoFactory.getUserDao().getUser(principalInvestigator.getId());
+		User pi = daoFactory.getUserDao().getById(principalInvestigator.getId());
 		if (pi == null) {
 			ose.addError(DistributionProtocolErrorCode.PI_NOT_FOUND);
 			return;

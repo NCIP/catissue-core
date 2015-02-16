@@ -4,152 +4,53 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false">
-    <class
-        name="com.krishagni.catissueplus.core.administrative.domain.User"
-        table="CATISSUE_USER"
-        lazy="true">
+  <class
+    name="com.krishagni.catissueplus.core.administrative.domain.User"
+    table="CATISSUE_USER">
 	
-    	<cache usage="read-write" />
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">CATISSUE_USER_SEQ</param>
+      </generator>
+    </id>
 
-        <id
-            name="id"
-            column="IDENTIFIER"
-            type="long"
-            length="30"
-            unsaved-value="null">
-            <generator class="native">
-                <param name="sequence">CATISSUE_USER_SEQ</param>
-            </generator>
-        </id>
+    <property name="emailAddress" column="EMAIL_ADDRESS" unique="true"/>
 
-        <property
-            name="emailAddress"
-            type="string"
-            update="true"
-            insert="true"
-            column="EMAIL_ADDRESS"
-            length="255"/>
+    <property name="firstName"  column="FIRST_NAME"/>
 
-        <property
-            name="firstName"
-            type="string"
-            update="true"
-            insert="true"
-            column="FIRST_NAME"
-            length="255"/>
+    <property name="lastName" column="LAST_NAME"/>
 
-        <property
-            name="lastName"
-            type="string"
-            update="true"
-            insert="true"
-            column="LAST_NAME"
-            length="255"/>
+    <property name="loginName" column="LOGIN_NAME" not-null="true"/>
 
-        <property
-            name="loginName"
-            type="string"
-            update="true"
-            insert="true"
-            column="LOGIN_NAME"
-            length="255"
-            not-null="true"	
-            unique="true"/>
+    <property name="createDate" column="START_DATE"/>
 
-        <property
-            name="createDate"
-            type="date"
-            update="true"
-            insert="true"
-            column="START_DATE"/>
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
 
-        <property
-            name="activityStatus"
-            type="string"
-            update="true"
-            insert="true"
-            column="ACTIVITY_STATUS"
-            length="50"/>
+    <many-to-one name="department" column="DEPARTMENT_ID"/>
 
-        <many-to-one
-            name="department"
-            class="com.krishagni.catissueplus.core.administrative.domain.Department"
-            column="DEPARTMENT_ID"/>
+    <many-to-one name="authDomain" column="DOMAIN_NAME" property-ref="name"/>
 
-        <many-to-one
-            name="authDomain"
-            class="com.krishagni.catissueplus.core.auth.domain.AuthDomain"
-            property-ref="name"
-            cascade="none"
-            update="true"
-            insert="true"
-            column="DOMAIN_NAME" />
-
-        <set
-            name="userSites"
-            table="CATISSUE_SITE_USERS"
-            inverse="false"
-            cascade="save-update">
-
-            <key column="USER_ID"/>
-            <many-to-many
-                class="com.krishagni.catissueplus.core.administrative.domain.Site"
-                column="SITE_ID"/>
-        </set>
+    <set name="sites" table="CATISSUE_SITE_USERS" inverse="false" cascade="save-update">
+      <key column="USER_ID" not-null="true"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.Site" column="SITE_ID"/>
+    </set>
 	
-        <property 
-            name="password" 
-            column="PASSWORD"/>
+    <property name="password" column="PASSWORD"/>
 	    
-        <set
-            name="passwordCollection"
-            table="CATISSUE_PASSWORD"
-            inverse="true"
-            cascade="save-update"
-            order-by="identifier desc"
-            >
-
-            <cache usage="read-write"/>
-            <key column="USER_ID"/>
-            <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.Password" />
-        </set>
+    <set name="passwords" inverse="true" cascade="save-update">
+      <key column="USER_ID"/>
+      <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.Password" />
+    </set>
 		
-        <property
-            name="comments"
-            type="string"
-            update="true"	
-            insert="true"
-            column="STATUS_COMMENT"
-            length="2000"/>
-
-	<query name="getUserByEmailAddress">
-		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.emailAddress = :emailAddress
-	</query>
-	
-	<query name="getUserByIdAndDomain">
-		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.id = :userId 
-		AND user.authDomain.name = :domainName 
-		AND user.activityStatus != 'Disabled' 
-	</query>
-	
-	<query name="getUser">
-		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.loginName = :loginName 
-		AND user.authDomain.name = :domainName  
-		AND user.activityStatus != 'Disabled' 
-	</query>
-	
-	<query name="getActiveUser">
-		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.loginName = :loginName 
-		AND user.authDomain.name = :domainName  
-		AND user.activityStatus = 'Active' 
-	</query>
-
-	<query name="getUsersById">
-		from com.krishagni.catissueplus.core.administrative.domain.User where id in (:userIds) AND activityStatus != 'Disabled'
-        </query>
-
-        <query name="getAllUsers">
-		from com.krishagni.catissueplus.core.administrative.domain.User where activityStatus != 'Disabled' order by lastName, firstName
-        </query>
-   </class>
+    <property name="comments" column="STATUS_COMMENT"/>
+    
+    <query name="getUsersByIds">
+      from 
+        com.krishagni.catissueplus.core.administrative.domain.User 
+      where 
+        id in (:userIds) 
+        and activityStatus != 'Disabled'
+    </query>
+    
+  </class>
 </hibernate-mapping>

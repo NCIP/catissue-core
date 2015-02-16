@@ -32,8 +32,6 @@ import edu.wustl.common.beans.SessionDataBean;
 @RequestMapping("/users")
 public class UserController {
 
-	private static String PATCH_USER = "patch user";
-
 	@Autowired
 	private UserService userService;
 
@@ -43,7 +41,7 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<UserSummary> getAllUsers(
+	public List<UserSummary> getUsers(
 			@RequestParam(value = "start", required = false, defaultValue = "0") 
 			int start,
 			
@@ -59,7 +57,7 @@ public class UserController {
 			.query(searchString);
 		
 		RequestEvent<ListUserCriteria> req = new RequestEvent<ListUserCriteria>(getSession(), crit);
-		ResponseEvent<List<UserSummary>> resp = userService.getAllUsers(req);
+		ResponseEvent<List<UserSummary>> resp = userService.getUsers(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();		
@@ -105,28 +103,17 @@ public class UserController {
 		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "close/{id}")
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public UserDetail closeUser(@PathVariable Long id) {
-		RequestEvent<Long> req = new RequestEvent<Long>(getSession(), id);
-		ResponseEvent<UserDetail> resp = userService.closeUser(req);
-		resp.throwErrorIfUnsuccessful();
-		
-		return resp.getPayload();
-	}
-
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public UserDetail disableUser(@PathVariable Long id) {
+	public UserDetail disableUser(@PathVariable Long id,
+			@RequestParam(value = "isClosed", required = false, defaultValue = "false") String isClosed) {
 		RequestEvent<Long> req = new RequestEvent<Long>(getSession(), id);
-		ResponseEvent<UserDetail> resp = userService.deleteUser(req);
+		ResponseEvent<UserDetail> resp = userService.deleteUser(req, Boolean.getBoolean(isClosed));
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
 	}
-
 
 	@RequestMapping(method = RequestMethod.POST, value = "/update-password")
 	@ResponseBody
@@ -156,17 +143,6 @@ public class UserController {
 	public Boolean forgotPassword(@RequestBody Map<String, String>  data) {
 		RequestEvent<String> req = new RequestEvent<String>(getSession(), data.get("loginName"));
 		ResponseEvent<Boolean> resp = userService.forgotPassword(req);
-		resp.throwErrorIfUnsuccessful();
-		
-		return resp.getPayload();
-	}
-
-	@RequestMapping(method = RequestMethod.POST, value = "/validatePassword/{password}")
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public Boolean validatePassword(@PathVariable String password) {
-		RequestEvent<String> req = new RequestEvent<String>(getSession(), password);
-		ResponseEvent<Boolean> resp = userService.validatePassword(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

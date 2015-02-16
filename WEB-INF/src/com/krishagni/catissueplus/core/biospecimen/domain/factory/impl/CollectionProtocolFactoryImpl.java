@@ -84,7 +84,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 			return;
 		}
 
-		User pi = userDao.getUser(piId);
+		User pi = userDao.getById(piId);
 		if (pi == null) {
 			ose.addError(CpErrorCode.PI_NOT_FOUND);
 			return;
@@ -110,7 +110,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 			userIds.add(user.getId());
 		}
 
-		List<User> coordinators = userDao.getUsersById(userIds);
+		List<User> coordinators = userDao.getUsersByIds(userIds);
 		if (coordinators.size() != userIds.size()) {
 			ose.addError(CpErrorCode.INVALID_COORDINATORS);
 			return;

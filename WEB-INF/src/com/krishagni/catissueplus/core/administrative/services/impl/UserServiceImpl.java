@@ -23,8 +23,10 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserServiceImpl implements UserService {
+	private static final String CATISSUE = "catissue";
 
 	private DaoFactory daoFactory;
 
@@ -33,8 +35,6 @@ public class UserServiceImpl implements UserService {
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	private EmailSender emailSender;
-
-	private final String CATISSUE = "catissue";
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -54,12 +54,24 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<UserSummary>> getAllUsers(RequestEvent<ListUserCriteria> req) {
+	public ResponseEvent<List<UserSummary>> getUsers(RequestEvent<ListUserCriteria> req) {
 		ListUserCriteria crit = req.getPayload();		
-		List<UserSummary> users = daoFactory.getUserDao().getUsers(crit.startAt(), crit.maxResults(), crit.query());		
+		List<UserSummary> users = daoFactory.getUserDao().getUsers(crit);		
 		return ResponseEvent.response(users);
 	}
 
+	@Override
+	@PlusTransactional
+	public ResponseEvent<UserDetail> getUser(RequestEvent<Long> req) {
+		User user = daoFactory.getUserDao().getById(req.getPayload());
+		if (user == null) {
+			ResponseEvent.userError(UserErrorCode.NOT_FOUND);
+		}
+		
+		return ResponseEvent.response(UserDetail.from(user));
+	}
+
+	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<UserDetail> createUser(RequestEvent<UserDetail> req) {
@@ -72,10 +84,9 @@ public class UserServiceImpl implements UserService {
 			ensureUniqueEmailAddress(user.getEmailAddress(), ose);
 			ose.checkAndThrow();
 
-			//user.setPasswordToken(user, detail.getDomainName());
 			daoFactory.getUserDao().saveOrUpdate(user);
 			emailSender.sendUserCreatedEmail(user);
-			return ResponseEvent.response(UserDetail.fromDomain(user));
+			return ResponseEvent.response(UserDetail.from(user));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -90,7 +101,7 @@ public class UserServiceImpl implements UserService {
 			UserDetail detail = req.getPayload();
 			Long userId = detail.getId();
 			
-			User oldUser = daoFactory.getUserDao().getUser(userId);
+			User oldUser = daoFactory.getUserDao().getById(userId);
 			if (oldUser == null) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
@@ -102,8 +113,7 @@ public class UserServiceImpl implements UserService {
 			ose.checkAndThrow();
 
 			oldUser.update(user);
-			daoFactory.getUserDao().saveOrUpdate(oldUser);
-			return ResponseEvent.response(UserDetail.fromDomain(oldUser));
+			return ResponseEvent.response(UserDetail.from(oldUser));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -113,36 +123,17 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<UserDetail> closeUser(RequestEvent<Long> req) {
+	public ResponseEvent<UserDetail> deleteUser(RequestEvent<Long> req, boolean isClosed) {
 		try {
 			Long userId = req.getPayload();
-			User oldUser = daoFactory.getUserDao().getUser(userId);
-			if (oldUser == null) {
-				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
-			}
-			
-			oldUser.close();
-			daoFactory.getUserDao().saveOrUpdate(oldUser);
-			return ResponseEvent.response(UserDetail.fromDomain(oldUser));
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
-	}
-
-	@Override
-	@PlusTransactional
-	public ResponseEvent<UserDetail> deleteUser(RequestEvent<Long> req) {
-		try {
-			Long userId = req.getPayload();
-			User user =  daoFactory.getUserDao().getUser(userId);
+			User user =  daoFactory.getUserDao().getById(userId);
 			
 			if (user == null) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
-			user.delete();
-			daoFactory.getUserDao().saveOrUpdate(user);
-			return ResponseEvent.response(UserDetail.fromDomain(user));
+			user.delete(isClosed);			
+			return ResponseEvent.response(UserDetail.from(user));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -153,12 +144,12 @@ public class UserServiceImpl implements UserService {
 	public ResponseEvent<Boolean> changePassword(RequestEvent<PasswordDetails> req) {
 		try {
 			PasswordDetails detail = req.getPayload();
-			User user = daoFactory.getUserDao().getUserByIdAndDomainName(detail.getUserId(), CATISSUE);
+			User user = daoFactory.getUserDao().getById(detail.getUserId());
 			if (user == null) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
-			if (!validateOldPassword(user, detail.getOldPassword())) {
+			if (!isValidateOldPassword(user, detail.getOldPassword())) {
 				return ResponseEvent.userError(UserErrorCode.INVALID_OLD_PASSWD);
 			}
 			
@@ -213,8 +204,8 @@ public class UserServiceImpl implements UserService {
 		try {
 			UserDao dao = daoFactory.getUserDao();
 			String loginName = req.getPayload();
-			User user = dao.getUserByLoginNameAndDomainName(loginName, CATISSUE);
-			if (user == null) {
+			User user = dao.getUser(loginName, CATISSUE);
+			if (user == null || !user.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus())) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
@@ -232,22 +223,6 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
-	@Override
-	@PlusTransactional
-	public ResponseEvent<UserDetail> getUser(RequestEvent<Long> req) {
-		User user = daoFactory.getUserDao().getUser(req.getPayload());
-		if (user == null) {
-			ResponseEvent.userError(UserErrorCode.NOT_FOUND);
-		}
-		
-		return ResponseEvent.response(UserDetail.fromDomain(user));
-	}
-
-	@Override
-	public ResponseEvent<Boolean> validatePassword(RequestEvent<String> req) {
-		return ResponseEvent.response(User.isValidPasswordPattern(req.getPayload()));
-	}
-
 	private void ensureUniqueEmailAddress(String emailAddress, OpenSpecimenException ose) {
 		if (!daoFactory.getUserDao().isUniqueEmailAddress(emailAddress)) {
 			ose.addError(UserErrorCode.DUP_EMAIL);
@@ -256,7 +231,7 @@ public class UserServiceImpl implements UserService {
 
 	private void ensureUniqueLoginNameInDomain(String loginName, String domainName,
 			OpenSpecimenException ose) {
-		if (!daoFactory.getUserDao().isUniqueLoginNameInDomain(loginName, domainName)) {
+		if (!daoFactory.getUserDao().isUniqueLoginName(loginName, domainName)) {
 			ose.addError(UserErrorCode.DUP_LOGIN_NAME);
 		}
 	}
@@ -275,7 +250,7 @@ public class UserServiceImpl implements UserService {
 		user.addPassword(passwordEncoder.encode(newPassword));
 	}
 	
-	private boolean validateOldPassword(User user, String oldPassword) {
+	private boolean isValidateOldPassword(User user, String oldPassword) {
 		if (StringUtils.isBlank(oldPassword)) {
 			throw OpenSpecimenException.userError(UserErrorCode.OLD_PASSWD_NOT_SPECIFIED);
 		}

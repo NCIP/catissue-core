@@ -22,7 +22,7 @@ public class JobUtility {
 			BulkOperationJob job = new BulkOperationJob();
 			job.setName(operationName);
 			
-			User user = userDao.getUser(userId);			
+			User user = userDao.getById(userId);			
 			if (user == null) {
 				throw OpenSpecimenException.userError(UserErrorCode.NOT_FOUND);
 			}

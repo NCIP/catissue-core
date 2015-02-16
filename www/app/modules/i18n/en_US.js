@@ -342,14 +342,14 @@
     "title": "Forgot Password",
     "email_reset_password_link": "Email Reset Password Link",
     "return_to_signin": "Return to sign in page",
-    "reset_email_sent": "An email has been sent.",
+    "reset_email_sent": "An email containing link to reset password has been sent to your email id. Please click to reset password.",
     "invalid_login_name": "We couldn't find a user associated with {{loginName}}"
   },
 
   "reset_password": {
     "title": "Reset Password",
-    "reset_passwd_link_expired": "Your link has expired",
-    "send_another_link": "We'll be happy to send you another one when you're ready.",
+    "link_expired_title": "Your link has expired",
+    "link_expired_content": "We'll be happy to send you another one when you're ready.",
     "reset_my_password": "Reset My Password",
     "reset_password": "Reset Password",
     "password_updated": "Password has been set"

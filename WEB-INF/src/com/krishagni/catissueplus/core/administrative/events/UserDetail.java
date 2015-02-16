@@ -23,9 +23,7 @@ public class UserDetail {
 
 	private String loginName;
 
-	private List<String> userSiteNames = new ArrayList<String>();
-
-//	private List<UserCPRoleDetails> userCPRoles = new ArrayList<UserCPRoleDetails>();
+	private List<String> sitesName = new ArrayList<String>();
 
 	private Date createDate;
 
@@ -103,9 +101,13 @@ public class UserDetail {
 		this.activityStatus = activityStatus;
 	}
 
-    public String getInstituteName() { return instituteName; }
+    public String getInstituteName() { 
+    	return instituteName; 
+    }
 
-    public void setInstituteName(String instituteName) { this.instituteName = instituteName; }
+    public void setInstituteName(String instituteName) { 
+    	this.instituteName = instituteName; 
+    }
 
 	public String getDeptName() {
 		return deptName;
@@ -115,57 +117,51 @@ public class UserDetail {
 		this.deptName = deptName;
 	}
 
-    public Boolean getSuperAdmin() { return superAdmin; }
+    public Boolean getSuperAdmin() { 
+    	return superAdmin; 
+    }
 
-    public void setSuperAdmin(Boolean superAdmin) { this.superAdmin = superAdmin; }
+    public void setSuperAdmin(Boolean superAdmin) { 
+    	this.superAdmin = superAdmin; 
+    }
 
-    public String getAddress() { return address;}
+    public String getAddress() { 
+    	return address;
+    }
 
-    public void setAddress(String address) { this.address = address; }
+    public void setAddress(String address) { 
+    	this.address = address; 
+    }
 
-	public List<String> getUserSiteNames() {
-		return userSiteNames;
+	public List<String> getSitesName() {
+		return sitesName;
 	}
 
-	public void setUserSiteNames(List<String> userSiteNames) {
-		this.userSiteNames = userSiteNames;
+	public void setSitesName(List<String> sitesName) {
+		this.sitesName = sitesName;
 	}
 
-//	public List<UserCPRoleDetails> getUserCPRoles() {
-//		return userCPRoles;
-//	}
-//
-//	public void setUserCPRoles(List<UserCPRoleDetails> userCPRoles) {
-//		this.userCPRoles = userCPRoles;
-//	}
-
-	public static UserDetail fromDomain(User user) {
+	public static UserDetail from(User user) {
 		UserDetail userDto = new UserDetail();
+		userDto.setId(user.getId());
 		userDto.setLoginName(user.getLoginName());
 		userDto.setFirstName(user.getFirstName());
 		userDto.setLastName(user.getLastName());
-
-		if (user.getDepartment() != null) {
-			userDto.setDeptName(user.getDepartment().getName());
-		}
+		userDto.setCreateDate(user.getCreateDate());
 		userDto.setActivityStatus(user.getActivityStatus());
 		userDto.setEmailAddress(user.getEmailAddress());
-		userDto.setId(user.getId());
-		userDto.setCreateDate(user.getCreateDate());
-
-		if (user.getAuthDomain() != null) {
-			userDto.setDomainName(user.getAuthDomain().getName());
-		}
-		setUserSiteNames(userDto, user.getUserSites());	
+		userDto.setDomainName(user.getAuthDomain().getName());
+		userDto.setDeptName(user.getDepartment().getName());
+		setUserSiteNames(userDto, user.getSites());	
 
 		return userDto;
 	}
 
-	private static void setUserSiteNames(UserDetail userDto, Set<Site> userSites) {
+	private static void setUserSiteNames(UserDetail userDto, Set<Site> sites) {
 		List<String> siteNames = new ArrayList<String>();
-		for (Site site : userSites) {
+		for (Site site : sites) {
 			siteNames.add(site.getName());
 		}
-		userDto.setUserSiteNames(siteNames);
+		userDto.setSitesName(siteNames);
 	}
 }
