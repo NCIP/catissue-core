@@ -2,9 +2,14 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
+@JsonFilter("withoutId")
+@JsonInclude(Include.NON_NULL)
 public class CollectionProtocolDetail extends CollectionProtocolSummary {
 	private List<UserSummary> coordinators;
 
@@ -27,7 +32,14 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 	private Boolean aliquotsInSameContainer;
 
 	private String activityStatus;
-
+	
+	//
+	// mostly used for export and import of CP
+	// 
+	private List<ConsentTierDetail> consents;
+	
+	private List<CollectionProtocolEventDetail> events;
+	
 	public List<UserSummary> getCoordinators() {
 		return coordinators;
 	}
@@ -116,7 +128,27 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		this.activityStatus = activityStatus;
 	}
 
+	public List<ConsentTierDetail> getConsents() {
+		return consents;
+	}
+
+	public void setConsents(List<ConsentTierDetail> consents) {
+		this.consents = consents;
+	}
+
+	public List<CollectionProtocolEventDetail> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<CollectionProtocolEventDetail> events) {
+		this.events = events;
+	}
+
 	public static CollectionProtocolDetail from(CollectionProtocol cp) {
+		return from(cp, false);
+	}
+	
+	public static CollectionProtocolDetail from(CollectionProtocol cp, boolean fullObject) {
 		CollectionProtocolDetail result = new CollectionProtocolDetail();
 		CollectionProtocolSummary.copy(cp, result);
 		result.setCoordinators(UserSummary.from(cp.getCoordinators()));
@@ -131,6 +163,11 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setAliquotLabelFmt(cp.getAliquotLabelFormat());
 		result.setAliquotsInSameContainer(cp.getAliquotInSameContainer());
 		result.setActivityStatus(cp.getActivityStatus());
+		
+		if (fullObject) {
+			result.setConsents(ConsentTierDetail.from(cp.getConsentTier()));
+			result.setEvents(CollectionProtocolEventDetail.from(cp.getCollectionProtocolEvents(), true));
+		}
 		
 		return result;
 	}

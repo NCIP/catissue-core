@@ -5,9 +5,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
+import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
+@JsonFilter("withoutId")
 public class SpecimenRequirementDetail implements Comparable<SpecimenRequirementDetail>{
 	private Long id;
 	
@@ -188,7 +192,45 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 	public void setChildren(List<SpecimenRequirementDetail> children) {
 		this.children = children;
 	}
+
+	@Override
+	public int compareTo(SpecimenRequirementDetail other) {
+		if (type == null && other.type == null) {
+			if (id == null && other.id == null) {
+				return -1;
+			} else {
+				return id.compareTo(other.id);
+			}
+		} else {
+			return type.compareTo(other.type);
+		}
+	}
+	
+	public AliquotSpecimensRequirement toAliquotRequirement(Long parentSrId, int noOfAliquots) {
+		AliquotSpecimensRequirement req = new AliquotSpecimensRequirement();
+		req.setNoOfAliquots(noOfAliquots);
+		req.setLabelFmt(getLabelFmt());
+		req.setParentSrId(parentSrId);
+		req.setQtyPerAliquot(getInitialQty());
+		req.setStorageType(getStorageType());
 		
+		return req;		
+	}
+	
+	public DerivedSpecimenRequirement toDerivedRequirement(Long parentSrId) {
+		DerivedSpecimenRequirement req = new DerivedSpecimenRequirement();
+		req.setConcentration(getConcentration());
+		req.setLabelFmt(getLabelFmt());
+		req.setName(getName());
+		req.setParentSrId(parentSrId);
+		req.setQuantity(getInitialQty());
+		req.setSpecimenClass(getSpecimenClass());
+		req.setStorageType(getStorageType());
+		req.setType(getType());
+		
+		return req;
+	}
+	
 	public static SpecimenRequirementDetail from(SpecimenRequirement sr) {
 		SpecimenRequirementDetail detail = new SpecimenRequirementDetail();
 		detail.setId(sr.getId());
@@ -225,18 +267,5 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		
 		Collections.sort(result);
 		return result;
-	}
-
-	@Override
-	public int compareTo(SpecimenRequirementDetail other) {
-		if (type == null && other.type == null) {
-			if (id == null && other.id == null) {
-				return -1;
-			} else {
-				return id.compareTo(other.id);
-			}
-		} else {
-			return type.compareTo(other.type);
-		}
-	}
+	}	
 }
