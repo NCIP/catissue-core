@@ -106,10 +106,10 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public UserDetail disableUser(@PathVariable Long id,
+	public Map<String, List> disableUser(@PathVariable Long id,
 			@RequestParam(value = "isClosed", required = false, defaultValue = "false") String isClosed) {
 		RequestEvent<Long> req = new RequestEvent<Long>(getSession(), id);
-		ResponseEvent<UserDetail> resp = userService.deleteUser(req, Boolean.getBoolean(isClosed));
+		ResponseEvent<Map<String, List>> resp = userService.deleteUser(req, Boolean.getBoolean(isClosed));
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

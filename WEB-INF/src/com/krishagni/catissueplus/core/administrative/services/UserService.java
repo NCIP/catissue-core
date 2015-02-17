@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.administrative.services;
 
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
@@ -25,5 +26,5 @@ public interface UserService {
 
 	public ResponseEvent<Boolean> forgotPassword(RequestEvent<String> req);
 
-	public ResponseEvent<UserDetail> deleteUser(RequestEvent<Long> userId, boolean isClosed);
+	public ResponseEvent<Map<String, List>> deleteUser(RequestEvent<Long> userId, boolean isClosed);
 }

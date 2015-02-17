@@ -1,18 +1,25 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.administrative.events.DepartmentDetails;
 import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
+import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
@@ -124,7 +131,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<UserDetail> deleteUser(RequestEvent<Long> req, boolean isClosed) {
+	public ResponseEvent<Map<String, List>> deleteUser(RequestEvent<Long> req, boolean isClosed) {
 		try {
 			Long userId = req.getPayload();
 			User user =  daoFactory.getUserDao().getById(userId);
@@ -133,8 +140,12 @@ public class UserServiceImpl implements UserService {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
+			if (!isClosed && (!user.getSites().isEmpty() || user.getDepartment() != null)) {
+				return ResponseEvent.response(getDependencies(user));
+			}
+			
 			user.delete(isClosed);			
-			return ResponseEvent.response(UserDetail.from(user));
+			return ResponseEvent.response(Collections.<String, List>emptyMap());
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -222,6 +233,24 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
+	}
+	
+	private Map<String, List> getDependencies(User user) {
+		List<SiteDetail> sites = new ArrayList<SiteDetail>();
+		for (Site site: user.getSites()) {
+			sites.add(SiteDetail.fromDomain(site));
+		}
+		
+		List<DepartmentDetails> departments = new ArrayList<DepartmentDetails>();
+		if (user.getDepartment() != null) {
+			departments.add(DepartmentDetails.fromDepartment(user.getDepartment()));
+		}
+		
+		Map<String, List> dependencies = new HashMap<>();
+		dependencies.put("sites", sites);
+		dependencies.put("departments", departments);
+		
+		return dependencies;
 	}
 	
 	private void ensureUniqueEmail(User existingUser, User newUser, OpenSpecimenException ose) {
