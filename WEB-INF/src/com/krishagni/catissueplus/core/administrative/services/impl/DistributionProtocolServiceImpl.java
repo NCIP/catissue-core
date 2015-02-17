@@ -80,7 +80,15 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	public ResponseEvent<DistributionProtocolDetail> updateDistributionProtocol(RequestEvent<DistributionProtocolDetail> req) {
 		try {
 			Long protocolId = req.getPayload().getId();
-			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(protocolId);
+			String title = req.getPayload().getTitle();
+			
+			DistributionProtocol existing = null;
+			if (protocolId != null) {
+				existing = daoFactory.getDistributionProtocolDao().getById(protocolId);
+			} else {
+				existing = daoFactory.getDistributionProtocolDao().getDistributionProtocol(title);
+			}
+			
 			if (existing == null) {
 				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
 			}
