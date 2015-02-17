@@ -4,7 +4,7 @@ angular.module('os.administrative.models.user', ['os.common.models'])
     var User = osModel('users');
 
     User.sendPasswordResetLink = function(user) {
-      return $http.post(User.url() + 'forgot-password-token', user).then(ApiUtil.processResp);
+      return $http.post(User.url() + 'forgot-password', user).then(ApiUtil.processResp);
     }
 
     User.resetPassword = function(passwordDetail) {

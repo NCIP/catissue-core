@@ -15,6 +15,7 @@ import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
+import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.email.EmailSender;
@@ -26,7 +27,7 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserServiceImpl implements UserService {
-	private static final String CATISSUE = "catissue";
+	private static final String DEFAULT_AUTH_DOMAIN = AuthenticationType.CATISSUE.value();
 
 	private DaoFactory daoFactory;
 
@@ -101,19 +102,19 @@ public class UserServiceImpl implements UserService {
 			UserDetail detail = req.getPayload();
 			Long userId = detail.getId();
 			
-			User oldUser = daoFactory.getUserDao().getById(userId);
-			if (oldUser == null) {
+			User existingUser = daoFactory.getUserDao().getById(userId);
+			if (existingUser == null) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
 			User user = userFactory.createUser(detail);
 
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			validateChangeInUniqueEmail(oldUser, user, ose);
+			ensureUniqueEmail(existingUser, user, ose);
 			ose.checkAndThrow();
 
-			oldUser.update(user);
-			return ResponseEvent.response(UserDetail.from(oldUser));
+			existingUser.update(user);
+			return ResponseEvent.response(UserDetail.from(existingUser));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -204,7 +205,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			UserDao dao = daoFactory.getUserDao();
 			String loginName = req.getPayload();
-			User user = dao.getUser(loginName, CATISSUE);
+			User user = dao.getUser(loginName, DEFAULT_AUTH_DOMAIN);
 			if (user == null || !user.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus())) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
@@ -223,6 +224,12 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
+	private void ensureUniqueEmail(User existingUser, User newUser, OpenSpecimenException ose) {
+		if (!existingUser.getEmailAddress().equals(newUser.getEmailAddress())) {
+			ensureUniqueEmailAddress(newUser.getEmailAddress(), ose);
+		}
+	}
+	
 	private void ensureUniqueEmailAddress(String emailAddress, OpenSpecimenException ose) {
 		if (!daoFactory.getUserDao().isUniqueEmailAddress(emailAddress)) {
 			ose.addError(UserErrorCode.DUP_EMAIL);
@@ -233,12 +240,6 @@ public class UserServiceImpl implements UserService {
 			OpenSpecimenException ose) {
 		if (!daoFactory.getUserDao().isUniqueLoginName(loginName, domainName)) {
 			ose.addError(UserErrorCode.DUP_LOGIN_NAME);
-		}
-	}
-
-	private void validateChangeInUniqueEmail(User oldUser, User newUser, OpenSpecimenException ose) {
-		if (!oldUser.getEmailAddress().equals(newUser.getEmailAddress())) {
-			ensureUniqueEmailAddress(newUser.getEmailAddress(), ose);
 		}
 	}
 	

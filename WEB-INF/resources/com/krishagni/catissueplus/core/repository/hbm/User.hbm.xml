@@ -22,7 +22,7 @@
 
     <property name="loginName" column="LOGIN_NAME" not-null="true"/>
 
-    <property name="createDate" column="START_DATE"/>
+    <property name="creationDate" column="START_DATE"/>
 
     <property name="activityStatus" column="ACTIVITY_STATUS"/>
 

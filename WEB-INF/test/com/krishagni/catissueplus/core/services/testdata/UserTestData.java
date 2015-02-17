@@ -159,7 +159,7 @@ public class UserTestData {
 		details.setEmailAddress("sci@sci.com");
 		details.setLoginName("admin@admin.com");
 		details.setDomainName("MyLdap");
-		details.setSitesName(getSites());
+		details.setSiteNames(getSites());
 		details.setUserCPRoles(getUserCpRolesDetails());
 
 		UpdateUserEvent reqEvent = new UpdateUserEvent(details, 1L);
@@ -221,7 +221,7 @@ public class UserTestData {
 		details.setLoginName("admin@admin.com");
 		details.setDomainName("myLdap");
 		details.setCountry("India");
-		details.setSitesName(getSites());
+		details.setSiteNames(getSites());
 		details.setUserCPRoles(getUserCpRolesDetails());
 		return details;
 	}
@@ -252,7 +252,7 @@ public class UserTestData {
 	public static CreateUserEvent getCreateUserEventWithNullSite() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
 		UserDetails details = getUserDetails();
-		details.setSitesName(null);
+		details.setSiteNames(null);
 		reqEvent.setUserDetails(details);
 		return reqEvent;
 	}
@@ -443,10 +443,10 @@ public class UserTestData {
 		Password pass = new Password();
 		pass.setId(1l);
 		pass.setPassword(password);
-		pass.setUpdateDate(new Date());
+		pass.setUpdationDate(new Date());
 		pass.setUser(getUser(1l));
 		Long id = pass.getId(); //For coverage
-		Date date =  pass.getUpdateDate();
+		Date date =  pass.getUpdationDate();
 		User user =pass.getUser();
 		return pass;
 	}
@@ -521,7 +521,7 @@ public class UserTestData {
 	public static CreateUserEvent getCreateUserEventForUserCreationWithoutPrev() {
 		CreateUserEvent event = getCreateUserEvent();
 		event.getUserDetails().setUserCPRoles(new ArrayList<UserCPRoleDetails>());
-		event.getUserDetails().setSitesName(new ArrayList<String>());
+		event.getUserDetails().setSiteNames(new ArrayList<String>());
 		return event;
 	}
 

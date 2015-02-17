@@ -10,6 +10,9 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface UserDao extends Dao<User> {
+	public List<UserSummary> getUsers(ListUserCriteria criteria);
+	
+	public List<User> getUsersByIds(List<Long> userIds);
 	
 	public User getUser(String loginName, String domain);
 	
@@ -19,15 +22,12 @@ public interface UserDao extends Dao<User> {
 	
 	public Boolean isUniqueEmailAddress(String emailAddress);
 	
-	public List<User> getUsersByIds(List<Long> userIds);
+	public ForgotPasswordToken getFpToken(String token);
 	
-	public List<UserSummary> getUsers(ListUserCriteria criteria);
-
+	public ForgotPasswordToken getFpTokenByUser(Long userId);
+	
 	public void saveFpToken(ForgotPasswordToken token);
 	
 	public void deleteFpToken(ForgotPasswordToken token);
 	
-	public ForgotPasswordToken getFpTokenByUser(Long userId);
-	
-	public ForgotPasswordToken getFpToken(String token);
 }

@@ -23,19 +23,19 @@ public class UserDetail {
 
 	private String loginName;
 
-	private List<String> sitesName = new ArrayList<String>();
+	private List<String> siteNames = new ArrayList<String>();
 
 	private Date createDate;
 
 	private String activityStatus;
 
-    private String instituteName;
+	private String instituteName;
 
 	private String deptName;
 
-    private Boolean superAdmin;
+	private Boolean superAdmin;
 
-    private String address;
+	private String address;
 
 	public Long getId() {
 		return id;
@@ -101,13 +101,13 @@ public class UserDetail {
 		this.activityStatus = activityStatus;
 	}
 
-    public String getInstituteName() { 
-    	return instituteName; 
-    }
+	public String getInstituteName() {
+		return instituteName;
+	}
 
-    public void setInstituteName(String instituteName) { 
-    	this.instituteName = instituteName; 
-    }
+	public void setInstituteName(String instituteName) {
+		this.instituteName = instituteName;
+	}
 
 	public String getDeptName() {
 		return deptName;
@@ -117,28 +117,28 @@ public class UserDetail {
 		this.deptName = deptName;
 	}
 
-    public Boolean getSuperAdmin() { 
-    	return superAdmin; 
-    }
-
-    public void setSuperAdmin(Boolean superAdmin) { 
-    	this.superAdmin = superAdmin; 
-    }
-
-    public String getAddress() { 
-    	return address;
-    }
-
-    public void setAddress(String address) { 
-    	this.address = address; 
-    }
-
-	public List<String> getSitesName() {
-		return sitesName;
+	public Boolean getSuperAdmin() {
+		return superAdmin;
 	}
 
-	public void setSitesName(List<String> sitesName) {
-		this.sitesName = sitesName;
+	public void setSuperAdmin(Boolean superAdmin) {
+		this.superAdmin = superAdmin;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public List<String> getSiteNames() {
+		return siteNames;
+	}
+
+	public void setSiteNames(List<String> sitesName) {
+		this.siteNames = sitesName;
 	}
 
 	public static UserDetail from(User user) {
@@ -147,7 +147,7 @@ public class UserDetail {
 		userDto.setLoginName(user.getLoginName());
 		userDto.setFirstName(user.getFirstName());
 		userDto.setLastName(user.getLastName());
-		userDto.setCreateDate(user.getCreateDate());
+		userDto.setCreateDate(user.getCreationDate());
 		userDto.setActivityStatus(user.getActivityStatus());
 		userDto.setEmailAddress(user.getEmailAddress());
 		userDto.setDomainName(user.getAuthDomain().getName());
@@ -162,6 +162,6 @@ public class UserDetail {
 		for (Site site : sites) {
 			siteNames.add(site.getName());
 		}
-		userDto.setSitesName(siteNames);
+		userDto.setSiteNames(siteNames);
 	}
 }

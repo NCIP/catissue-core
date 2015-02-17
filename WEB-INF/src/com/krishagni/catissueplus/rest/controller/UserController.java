@@ -137,7 +137,7 @@ public class UserController {
 		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/forgot-password-token")
+	@RequestMapping(method = RequestMethod.POST, value = "/forgot-password")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public Boolean forgotPassword(@RequestBody Map<String, String>  data) {

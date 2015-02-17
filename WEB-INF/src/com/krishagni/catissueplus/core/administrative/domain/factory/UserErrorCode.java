@@ -35,7 +35,8 @@ public enum UserErrorCode implements ErrorCode {
 	
 	NOT_FOUND,
 	
-	DEPT_REQUIRED;
+	DEPT_REQUIRED,
+	DELETE_STATUS_CHANGE_NOT_ALLOWED;
 	
 	public String code() {
 		return "USER_" + this.name();

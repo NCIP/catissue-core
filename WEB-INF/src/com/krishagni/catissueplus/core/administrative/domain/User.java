@@ -6,14 +6,13 @@ import static com.krishagni.catissueplus.core.administrative.domain.factory.User
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
-import com.krishagni.catissueplus.core.common.SetUpdater;
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -33,7 +32,7 @@ public class User extends BaseEntity {
 
 	private String loginName;
 
-	private Date createDate;
+	private Date creationDate;
 
 	private String activityStatus;
 
@@ -84,6 +83,10 @@ public class User extends BaseEntity {
 	}
 
 	public void setAuthDomain(AuthDomain authDomain) {
+		if (authDomain == null || StringUtils.isEmpty(authDomain.getName())) {
+			throw OpenSpecimenException.userError(DOMAIN_NAME_REQUIRED);
+		}
+		
 		if (this.getAuthDomain() != null && !this.getAuthDomain().getId().equals(authDomain.getId())) {
 			throw OpenSpecimenException.userError(DOMAIN_CHANGE_NOT_ALLOWED);
 		}
@@ -96,6 +99,10 @@ public class User extends BaseEntity {
 	}
 
 	public void setLoginName(String loginName) {
+		if (StringUtils.isBlank(loginName)) {
+			throw OpenSpecimenException.userError(LOGIN_NAME_REQUIRED);
+		}
+		
 		if (StringUtils.isNotBlank(this.getLoginName()) && !this.getLoginName().equals(loginName)) {
 			throw OpenSpecimenException.userError(LOGIN_NAME_CHANGE_NOT_ALLOWED);
 		}
@@ -103,12 +110,12 @@ public class User extends BaseEntity {
 		this.loginName = loginName;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
+	public Date getCreationDate() {
+		return creationDate;
 	}
 
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
+	public void setCreationDate(Date createDate) {
+		this.creationDate = createDate;
 	}
 
 	public String getActivityStatus() {
@@ -167,25 +174,22 @@ public class User extends BaseEntity {
 		this.setDepartment(user.getDepartment());
 		this.setEmailAddress(user.getEmailAddress());
 		this.setComments(user.getComments());
-		SetUpdater.<Site> newInstance().update(this.getSites(), user.getSites());
+		CollectionUpdater.update(this.getSites(), user.getSites());
 	}
 
+	// TODO: Add password pattern validation here 
 	public void addPassword(String newPassword) {
 		this.password = newPassword;
 		
 		Password password = new Password();
-		password.setUpdateDate(new Date());
+		password.setUpdationDate(new Date());
 		password.setUser(this);
 		password.setPassword(newPassword);
 		this.passwords.add(password);
 	}
 
 	public static boolean isValidPasswordPattern(String password) {
-		boolean result = false;
-		Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
-		Matcher mat = pattern.matcher(password);
-		result = mat.matches();
-		return result;
+		return Pattern.matches(PASSWORD_PATTERN, password);
 	}
 
 	public void delete(boolean isClosed) { 
