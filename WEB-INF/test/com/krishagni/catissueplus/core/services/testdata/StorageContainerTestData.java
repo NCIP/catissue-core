@@ -121,38 +121,38 @@ public class StorageContainerTestData {
 
 	public static CreateStorageContainerEvent getCreateStorageContainerEventWithName() {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
-		event.getDetails().setName("Container1");
+		event.getProtocol().setName("Container1");
 		return event;
 	}
 
 	public static CreateStorageContainerEvent getCreateStorageContainerEventForNullSite() {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
-		event.getDetails().setParentContainerName(null);
+		event.getProtocol().setParentContainerName(null);
 		return event;
 	}
 
 	public static CreateStorageContainerEvent getCreateStorageContainerEventWithoutCpRestrict() {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
-		event.getDetails().setHoldsCPTitles(new HashSet<String>());
+		event.getProtocol().setHoldsCPTitles(new HashSet<String>());
 		return event;
 	}
 
 	public static CreateStorageContainerEvent getCreateStorageContainerEventWithWrongOneDimensionLabel() {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
-		event.getDetails().setOneDimentionLabelingScheme("Roman");
+		event.getProtocol().setOneDimentionLabelingScheme("Roman");
 		return event;
 	}
 
 	public static CreateStorageContainerEvent getCreateStorageContainerEventWithWrongTwoDimensionLabel() {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
-		event.getDetails().setTwoDimentionLabelingScheme("Alphbets");
+		event.getProtocol().setTwoDimentionLabelingScheme("Alphbets");
 		return event;
 	}
 
 	public static CreateStorageContainerEvent getCreateStorageContainerEventWithNullSiteNameAndParent() {
 		CreateStorageContainerEvent event = getCreateStorageContainerEvent();
-		event.getDetails().setSiteName(null);
-		event.getDetails().setParentContainerName(null);
+		event.getProtocol().setSiteName(null);
+		event.getProtocol().setParentContainerName(null);
 		return event;
 	}
 
@@ -216,14 +216,14 @@ public class StorageContainerTestData {
 
 	public static UpdateStorageContainerEvent getUpdateStorageContainerEvent() {
 		UpdateStorageContainerEvent event = new UpdateStorageContainerEvent(getStorageContainerDetails(), 1l);
-		event.getDetails().setName("Container1");
+		event.getProtocol().setName("Container1");
 		return event;
 	}
 
 	public static UpdateStorageContainerEvent getUpdateStorageContainerEventWithNullBarcode() {
 		UpdateStorageContainerEvent event = new UpdateStorageContainerEvent(getStorageContainerDetails(), 1l);
-		event.getDetails().setName("Container1");
-		event.getDetails().setBarcode(null);
+		event.getProtocol().setName("Container1");
+		event.getProtocol().setBarcode(null);
 		return event;
 	}
 
@@ -302,57 +302,57 @@ public class StorageContainerTestData {
 
 	public static CreateStorageContainerEvent getCreateStorageContainerEventForOneDimentionCapacity() {
 		CreateStorageContainerEvent event = getCreateStorageContainerEvent();
-		event.getDetails().setOneDimensionCapacity(null);
+		event.getProtocol().setOneDimensionCapacity(null);
 		return event;
 	}
 
 	public static CreateStorageContainerEvent getCreateStorageContainerEventForTwoDimentionCapacity() {
 		CreateStorageContainerEvent event = getCreateStorageContainerEvent();
-		event.getDetails().setTwoDimensionCapacity(-1);
+		event.getProtocol().setTwoDimensionCapacity(-1);
 		return event;
 	}
 
 	public static UpdateStorageContainerEvent getUpdateStorageContainerEventWithChangeInName() {
 		UpdateStorageContainerEvent event = getUpdateStorageContainerEvent();
-		event.getDetails().setName("Dsda");
-		event.getDetails().setBarcode("sda434-434");
+		event.getProtocol().setName("Dsda");
+		event.getProtocol().setBarcode("sda434-434");
 		return event;
 	}
 
 	public static UpdateStorageContainerEvent getUpdateStorageContainerEventForTwoDimentionCapacity() {
 		UpdateStorageContainerEvent event = getUpdateStorageContainerEvent();
-		event.getDetails().setTwoDimensionCapacity(-1);
+		event.getProtocol().setTwoDimensionCapacity(-1);
 		return event;
 	}
 
 	public static CreateStorageContainerEvent getCreateStorageContainerEventWithEmptyName() {
 		CreateStorageContainerEvent event = getCreateStorageContainerEvent();
-		event.getDetails().setName("");
+		event.getProtocol().setName("");
 		return event;
 	}
 
 	public static CreateStorageContainerEvent getUpdateStorageContainerEventForNullTwoDimentionCapacity() {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
-		event.getDetails().setTwoDimentionLabelingScheme(null);
+		event.getProtocol().setTwoDimentionLabelingScheme(null);
 		return event;
 	}
 
 	public static CreateStorageContainerEvent getUpdateStorageContainerEventForNullOneDimentionCapacity() {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
-		event.getDetails().setOneDimentionLabelingScheme(null);
+		event.getProtocol().setOneDimentionLabelingScheme(null);
 		return event;
 	}
 
 	public static CreateStorageContainerEvent getCreateStorageContainerEventForNullBarcode() {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
-		event.getDetails().setBarcode(null);
+		event.getProtocol().setBarcode(null);
 		return event;
 	}
 
 	public static CreateStorageContainerEvent getCreateStorageContainerEventForNullBarcodeAndName() {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
-		event.getDetails().setBarcode(null);
-		event.getDetails().setName(null);
+		event.getProtocol().setBarcode(null);
+		event.getProtocol().setName(null);
 		return event;
 	}
 

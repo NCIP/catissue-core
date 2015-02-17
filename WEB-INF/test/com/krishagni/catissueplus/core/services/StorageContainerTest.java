@@ -146,7 +146,7 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 		StorageContainerDetails createdStorageContainerDto = response.getStorageContainerDetails();
-		assertEquals(reqEvent.getDetails().getBarcode(), createdStorageContainerDto.getBarcode());
+		assertEquals(reqEvent.getProtocol().getBarcode(), createdStorageContainerDto.getBarcode());
 	}
 
 	@Test
@@ -163,13 +163,13 @@ public class StorageContainerTest {
 	@Test
 	public void testForSuccessfulStorageContainerCreationWithNullParent() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
-		reqEvent.getDetails().setParentContainerName(null);
+		reqEvent.getProtocol().setParentContainerName(null);
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 		StorageContainerDetails createdStorageContainerDto = response.getStorageContainerDetails();
-		assertEquals(reqEvent.getDetails().getId(), createdStorageContainerDto.getId());
+		assertEquals(reqEvent.getProtocol().getId(), createdStorageContainerDto.getId());
 	}
 
 	@Test
@@ -202,7 +202,7 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 		StorageContainerDetails createdStorageContainerDto = response.getStorageContainerDetails();
-		assertEquals(reqEvent.getDetails().getId(), createdStorageContainerDto.getId());
+		assertEquals(reqEvent.getProtocol().getId(), createdStorageContainerDto.getId());
 	}
 
 	@Test
@@ -214,7 +214,7 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 		StorageContainerDetails createdStorageContainerDto = response.getStorageContainerDetails();
-		assertEquals(reqEvent.getDetails().getId(), createdStorageContainerDto.getId());
+		assertEquals(reqEvent.getProtocol().getId(), createdStorageContainerDto.getId());
 	}
 
 	@Test
@@ -226,7 +226,7 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 		StorageContainerDetails createdStorageContainerDto = response.getStorageContainerDetails();
-		assertEquals(reqEvent.getDetails().getId(), createdStorageContainerDto.getId());
+		assertEquals(reqEvent.getProtocol().getId(), createdStorageContainerDto.getId());
 	}
 
 	@Test
@@ -399,7 +399,7 @@ public class StorageContainerTest {
 		StorageContainerUpdatedEvent response = storageContainerService.updateStorageContainer(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
 		StorageContainerDetails createdStorageContainer = response.getStorageContainerDetails();
-		assertEquals(reqEvent.getDetails().getBarcode(), createdStorageContainer.getBarcode());
+		assertEquals(reqEvent.getProtocol().getBarcode(), createdStorageContainer.getBarcode());
 		assertNotNull(createdStorageContainer.getSiteName());
 	}
 
@@ -407,7 +407,7 @@ public class StorageContainerTest {
 	public void testForUpdateStorageContainerErrorAutoGenLabel() {
 		UpdateStorageContainerEvent reqEvent = StorageContainerTestData.getUpdateStorageContainerEvent();
 		// update name with new as name is auto generated it throws error 
-		reqEvent.getDetails().setName("con1");
+		reqEvent.getProtocol().setName("con1");
 		StorageContainerUpdatedEvent response = storageContainerService.updateStorageContainer(reqEvent);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(StorageContainerErrorCode.AUTO_GENERATED_LABEL.message(),

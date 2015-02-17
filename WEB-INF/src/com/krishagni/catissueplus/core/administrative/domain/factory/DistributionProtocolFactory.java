@@ -5,5 +5,6 @@ import com.krishagni.catissueplus.core.administrative.domain.DistributionProtoco
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 
 public interface DistributionProtocolFactory {
-	public DistributionProtocol create(DistributionProtocolDetail distributionProtocolDetails);
+	public DistributionProtocol createDistributionProtocol(DistributionProtocolDetail distributionProtocolDetail);
+	
 }

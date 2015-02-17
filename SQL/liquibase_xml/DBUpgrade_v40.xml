@@ -3066,7 +3066,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                referencedColumnNames="IDENTIFIER" />
     </changeSet --> 
     
-   <changeSet author="ajaysamgir" id="table for distribution_protocol" failOnError="true">
+   <!-- changeSet author="ajaysamgir" id="table for distribution_protocol" failOnError="true">
        <createTable tableName="OS_DISTRIBUTION_PROTOCOL">
     	 
     	 <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
@@ -3123,7 +3123,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
          select OS_DISTRIBUTION_PROTOCOL_SEQ.nextVal,PRINCIPAL_INVESTIGATOR_ID, TITLE, SHORT_TITLE, IRB_IDENTIFIER, START_DATE, DESCRIPTION_URL, ACTIVITY_STATUS from CATISSUE_DISTRIBUTION_PROTOCOL 
  		</sql>
  		
-    </changeSet>
+    </changeSet-->
      
      <changeSet author="dpatil" id="new specimen print rule table" failOnError="true">
 	   <createTable tableName="OS_SPECIMEN_PRINT_RULE">

@@ -36,7 +36,9 @@ public enum StorageContainerErrorCode implements ErrorCode {
 	
 	INVALID_ROMAN_POSITION,
 	
-	REF_ENTITY_FOUND;
+	REF_ENTITY_FOUND,
+	
+	HIERARCHY_CONTAINS_CYCLE;
 
 	@Override
 	public String code() {

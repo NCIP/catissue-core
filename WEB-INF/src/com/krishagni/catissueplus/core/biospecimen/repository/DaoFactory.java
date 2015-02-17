@@ -16,6 +16,7 @@ import com.krishagni.catissueplus.core.notification.repository.CPStudyMappingDao
 import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalApplicationDao;
 
+
 public interface DaoFactory {
 
 	public CollectionProtocolDao getCollectionProtocolDao();
@@ -59,5 +60,4 @@ public interface DaoFactory {
 	public DepartmentDao getDepartmentDao();
 	
 	public AuditDao getAuditDao();
-
 }
