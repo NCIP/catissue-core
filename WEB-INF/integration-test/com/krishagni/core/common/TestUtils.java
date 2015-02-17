@@ -1,14 +1,54 @@
 package com.krishagni.core.common;
 
-import org.junit.Assert;
+import java.io.File;
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.operation.DatabaseOperation;
+import org.junit.Assert;
+import org.springframework.context.ApplicationContext;
+
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class TestUtils {
 
+	private static boolean setupCompleted = false;
+	
+	public static void setupCommonItems(ApplicationContext ctx) {
+		if (setupCompleted == false) {
+			uploadCommonDatabaseItems(ctx);
+			setupCompleted = true;
+		}
+		
+		System.out.println("Common items have been already uploaded, skipping the input!");
+	}
+	
+	private static void uploadCommonDatabaseItems(ApplicationContext ctx) {
+		try {
+			
+			Connection connection = DriverManager.getConnection("jdbc:h2:mem:datajpa", "sa", "");
+			IDatabaseConnection con = new DatabaseConnection(connection);
+			
+			//File file = new File("./com/krishagni/core/tests/storage-container-test/create-sc-initial.xml");
+			File file = new File("/home/ibrahim/code/test/os/WEB-INF/classes/com/krishagni/core/tests/storage-container-test/create-sc-initial.xml");
+			
+			if (file.exists() == false) {
+				throw new RuntimeException("file not found!");
+			}
+			FlatXmlDataSet dataSet = new FlatXmlDataSet(new FileInputStream(file));
+			DatabaseOperation.CLEAN_INSERT.execute(con, dataSet);
+			con.close();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	public static void recordResponse(ResponseEvent response) {
 		System.out.println("Operation-successful?: " +  response.isSuccessful());
 		
