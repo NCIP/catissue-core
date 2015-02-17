@@ -10,7 +10,7 @@ angular.module('openspecimen')
 
         element.addClass('os-page-hdr').prepend(btn).removeAttr('os-page-header');
         element.find(":header").addClass("os-title");
-        $compile(element)(scope);
+        $compile(btn)(scope);
       }
     };
   });

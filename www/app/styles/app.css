@@ -180,7 +180,7 @@ body {
   color: #666666;
 }
   
-.os-page-hdr .os-nav-button {
+.os-page-hdr .os-nav-button, .os-page-hdr .os-options-button {
   margin-right: 24px; 
   color: #666666;
   background: transparent;
@@ -188,7 +188,8 @@ body {
   outline: none;
 }
 
-.os-page-hdr .os-nav-button .fa {
+.os-page-hdr .os-nav-button .fa,
+.os-page-hdr .os-options-button .fa {
   font-size: 24px;
 }
 
@@ -219,6 +220,11 @@ body {
   cursor: pointer;
 }
 
+.os-page-hdr .os-round-btn + .dropdown-menu {
+  top: inherit;
+  left: inherit;
+}
+
 .os-page-hdr + .container {
   padding-top: 20px;
   position: absolute;
@@ -235,6 +241,15 @@ body {
   bottom: 0px;
   height: auto;
   overflow-y: auto;
+}
+
+.os-page-hdr .more-options {
+  position: absolute;
+  right: 0px;
+}
+
+.os-page-hdr .more-options .dropdown-menu-right {
+  margin-right: 24px;
 }
 
 .os-btn-icon, a {

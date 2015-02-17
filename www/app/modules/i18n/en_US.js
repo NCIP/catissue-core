@@ -23,6 +23,7 @@
       "save": "Save",
       "update": "Update",
       "create": "Create",
+      "import": "Import",
       "cancel": "Cancel",
       "discard": "Discard",
       "next": "Next",
@@ -33,6 +34,9 @@
   "cp": {
     "list": "Collection Protocols",
     "create_cp_title": "Create Collection Protocol",
+    "import_cp_title": "Import Collection Protocol",
+
+    "cp_def_file": "Collection Protocol Definition File",
     
     "title": "Title",
     "short_title": "Short Title",
@@ -67,12 +71,17 @@
     "cpe_point": "Event Point",
     "cpe_point_label": "Event Point Label",
 
-    "menu": {
+    "tab": {
       "overview": "Overview",
       "consents": "Consents",
       "events": "Events",
       "users": "Users",
       "dashboard": "Dashboard"
+    },
+
+    "menu_options": {
+      "remove": "Remove",
+      "export": "Export"
     },
 
     "tooltip": {

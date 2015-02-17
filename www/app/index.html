@@ -14,14 +14,11 @@
     <link rel="stylesheet" href="bower_components/bootstrap-datepicker/css/datepicker3.css" />
     <link rel="stylesheet" href="bower_components/bootstrap-timepicker/css/bootstrap-timepicker.min.css" />
     <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
-    <link rel="stylesheet" href="bower_components/blueimp-file-upload/css/jquery.fileupload.css" />
-    <link rel="stylesheet" href="bower_components/blueimp-file-upload/css/jquery.fileupload-ui.css" />
-    <link rel="stylesheet" href="bower_components/blueimp-file-upload/css/jquery.fileupload-noscript.css" />
-    <link rel="stylesheet" href="bower_components/blueimp-file-upload/css/jquery.fileupload-ui-noscript.css" />
     <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
     <link rel="stylesheet" href="bower_components/angular-motion/dist/angular-motion.css" />
     <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
     <!-- endbower -->
+    <link rel="stylesheet" href="bower_components/blueimp-file-upload/css/jquery.fileupload.css" />
     <!-- endbuild -->
     <!-- build:css(.tmp) css/app.css -->
     <link rel="stylesheet" href="styles/app.css">
@@ -63,27 +60,6 @@
     <script src="bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <script src="bower_components/autotype/index.js"></script>
     <script src="bower_components/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
-    <script src="bower_components/blueimp-tmpl/js/tmpl.js"></script>
-    <script src="bower_components/blueimp-load-image/js/load-image.js"></script>
-    <script src="bower_components/blueimp-load-image/js/load-image-ios.js"></script>
-    <script src="bower_components/blueimp-load-image/js/load-image-orientation.js"></script>
-    <script src="bower_components/blueimp-load-image/js/load-image-meta.js"></script>
-    <script src="bower_components/blueimp-load-image/js/load-image-exif.js"></script>
-    <script src="bower_components/blueimp-load-image/js/load-image-exif-map.js"></script>
-    <script src="bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.js"></script>
-    <script src="bower_components/blueimp-file-upload/js/cors/jquery.postmessage-transport.js"></script>
-    <script src="bower_components/blueimp-file-upload/js/cors/jquery.xdr-transport.js"></script>
-    <script src="bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
-    <script src="bower_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
-    <script src="bower_components/blueimp-file-upload/js/jquery.fileupload-process.js"></script>
-    <script src="bower_components/blueimp-file-upload/js/jquery.fileupload-validate.js"></script>
-    <script src="bower_components/blueimp-file-upload/js/jquery.fileupload-image.js"></script>
-    <script src="bower_components/blueimp-file-upload/js/jquery.fileupload-audio.js"></script>
-    <script src="bower_components/blueimp-file-upload/js/jquery.fileupload-video.js"></script>
-    <script src="bower_components/blueimp-file-upload/js/jquery.fileupload-ui.js"></script>
-    <script src="bower_components/blueimp-file-upload/js/jquery.fileupload-jquery-ui.js"></script>
-    <script src="bower_components/blueimp-file-upload/js/jquery.fileupload-angular.js"></script>
-    <script src="bower_components/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angular-ui-utils/ui-utils.js"></script>
     <script src="bower_components/angular-ui-select/dist/select.js"></script>
@@ -95,6 +71,8 @@
     <script src="bower_components/angular-translate/angular-translate.js"></script>
     <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
     <!-- endbower -->
+    <script src="external_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
+    <script src="external_components/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -189,6 +167,7 @@
     <script src="modules/biospecimen/cp/module.js"></script>
     <script src="modules/biospecimen/cp/list.js"></script>
     <script src="modules/biospecimen/cp/addedit.js"></script>
+    <script src="modules/biospecimen/cp/import.js"></script>
     <script src="modules/biospecimen/cp/detail.js"></script>
     <script src="modules/biospecimen/cp/consents.js"></script>
     <script src="modules/biospecimen/cp/events.js"></script>
