@@ -3,7 +3,7 @@ package com.krishagni.catissueplus.core.administrative.domain;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
-import com.krishagni.catissueplus.core.common.SetUpdater;
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -51,7 +51,7 @@ public class Institute {
 	
 	public void update(Institute institute) {
 		setName(institute.getName());
-		SetUpdater.<Department> newInstance().update(this.getDepartmentCollection(), institute.getDepartmentCollection());
+		CollectionUpdater.update(this.getDepartmentCollection(), institute.getDepartmentCollection());
 		for (Department department : this.getDepartmentCollection()) {
 			department.setInstitute(this);
 		}

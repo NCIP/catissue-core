@@ -34,7 +34,7 @@ public interface DaoFactory {
 	public VisitsDao getVisitsDao();
 
 	public UserDao getUserDao();
-
+	
 	public ContainerDao getContainerDao();
 
 	public ExternalAppNotificationDao getExternalAppNotificationDao();

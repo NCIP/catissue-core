@@ -1,24 +1,17 @@
 
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Department;
-import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
-import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
-import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
@@ -31,83 +24,34 @@ public class UserFactoryImpl implements UserFactory {
 		this.daoFactory = daoFactory;
 	}
 
-	public User createUser(UserDetail details) {
-		User user = new User();
+	public User createUser(UserDetail detail) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
-		setUserSites(user, details.getUserSiteNames(), ose);
-//		setUserCPRoles(user, details.getUserCPRoles(), ose);
-		setLoginName(user, details.getLoginName(), ose);
-		setFirstName(user, details.getFirstName(), ose);
-		setLastName(user, details.getLastName(), ose);
-		setActivityStatus(user, details.getActivityStatus(), ose);
-		setEmailAddress(user, details.getEmailAddress(), ose);
-		setDepartment(user, details.getDeptName(), ose);
-		setAuthDomain(user, details.getDomainName(), ose);
+		User user = new User();
+		setFirstName(detail, user, ose);
+		setLastName(detail, user, ose);
+		setLoginName(detail, user, ose);
+		setActivityStatus(detail, user, ose);
+		setEmailAddress(detail, user, ose);
+		setDepartment(detail, user, ose);
+		setAuthDomain(detail, user, ose);
 
 		ose.checkAndThrow();
 		return user;
 	}
-
-//	private void setUserCPRoles(User user, List<UserCPRoleDetails> userCPRoleDetails,
-//			OpenSpecimenException ose) {
-//		// TODO: Fix this
-//		
-////		if (userCPRoleDetails.isEmpty()) {
-////			return;
-////		}
-////
-////		Set<UserCPRole> userCpRoles = new HashSet<UserCPRole>();
-////		for (UserCPRoleDetails ucrDetails : userCPRoleDetails) {
-////			UserCPRole userCpRole = new UserCPRole();
-////			CollectionProtocol collectionProtocol = daoFactory.getCollectionProtocolDao().getCPByTitle(
-////					ucrDetails.getCpTitle());
-////			if (collectionProtocol == null) {
-////				ose.addError(UserErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROTOCOL);
-////				return;
-////			}
-////			userCpRole.setCollectionProtocol(collectionProtocol);
-////			userCpRole.setUser(user);
-////
-////			Role role = daoFactory.getRoleDao().getRoleByName(ucrDetails.getRoleName());
-////			if (role == null) {
-////				ose.addError(UserErrorCode.INVALID_ATTR_VALUE, ROLE);
-////				return;
-////			}
-////			userCpRole.setId(ucrDetails.getId());
-////			userCpRole.setRole(role);
-////			userCpRoles.add(userCpRole);
-////		}
-////		SetUpdater.<UserCPRole> newInstance().update(user.getUserCPRoles(), userCpRoles);
-//	}
-
-	private void setUserSites(User user, List<String> userSiteNames, OpenSpecimenException ose) {
-		if (userSiteNames.isEmpty()) {
-			return;
-		}
-		Set<Site> userSites = new HashSet<Site>();
-		for (String siteName : userSiteNames) {
-			Site site = daoFactory.getSiteDao().getSite(siteName);
-			if (site == null) {
-				ose.addError(SiteErrorCode.NOT_FOUND);
-				return;
-			}
-
-			userSites.add(site);
-		}
-		SetUpdater.<Site> newInstance().update(user.getUserSites(), userSites);
-	}
-
-	private void setFirstName(User user, String firstName, OpenSpecimenException ose) {
+	
+	private void setFirstName(UserDetail detail, User user, OpenSpecimenException ose) {
+		String firstName = detail.getFirstName();
 		if (StringUtils.isBlank(firstName)) {
 			ose.addError(UserErrorCode.FIRST_NAME_REQUIRED);
-			return; 
+			return;
 		}
 		
 		user.setFirstName(firstName);
 	}
-
-	private void setLastName(User user, String lastName, OpenSpecimenException ose) {
+	
+	private void setLastName(UserDetail detail, User user, OpenSpecimenException ose) {
+		String lastName = detail.getLastName();
 		if (StringUtils.isBlank(lastName)) {
 			ose.addError(UserErrorCode.LAST_NAME_REQUIRED);
 			return;
@@ -116,7 +60,8 @@ public class UserFactoryImpl implements UserFactory {
 		user.setLastName(lastName);
 	}
 
-	private void setLoginName(User user, String loginName, OpenSpecimenException ose) {
+	private void setLoginName(UserDetail detail, User user, OpenSpecimenException ose) {
+		String loginName = detail.getLoginName();
 		if (StringUtils.isBlank(loginName)) {
 			ose.addError(UserErrorCode.LOGIN_NAME_REQUIRED);
 			return;
@@ -125,7 +70,13 @@ public class UserFactoryImpl implements UserFactory {
 		user.setLoginName(loginName);
 	}
 
-	private void setDepartment(User user, String departmentName, OpenSpecimenException ose) {
+	private void setDepartment(UserDetail detail, User user, OpenSpecimenException ose) {
+		String departmentName = detail.getDeptName();
+		if (StringUtils.isBlank(departmentName)) {
+			ose.addError(UserErrorCode.DEPT_REQUIRED);
+			return;
+		}
+		
 		Department department = daoFactory.getDepartmentDao().getDepartmentByName(departmentName);
 		if (department == null) {
 			ose.addError(InstituteErrorCode.DEPT_NOT_FOUND);
@@ -135,17 +86,22 @@ public class UserFactoryImpl implements UserFactory {
 		user.setDepartment(department);
 	}
 
-	private void setActivityStatus(User user, String activityStatus, OpenSpecimenException ose) {
-        activityStatus = (activityStatus == null) ? Status.ACTIVITY_STATUS_ACTIVE.getStatus() : activityStatus;
+	private void setActivityStatus(UserDetail detail, User user, OpenSpecimenException ose) {
+		String activityStatus = detail.getActivityStatus();
+		if (activityStatus == null) {
+			activityStatus =  Status.ACTIVITY_STATUS_ACTIVE.getStatus();
+		}
+		
+		if (activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED.getStatus()) || 
+				activityStatus.equals(Status.ACTIVITY_STATUS_DISABLED)) {
+			ose.addError(UserErrorCode.STATUS_CHANGE_NOT_ALLOWED);
+			return;
+		}
 		user.setActivityStatus(activityStatus);
 	}
 
-	private void setEmailAddress(User user, String email, OpenSpecimenException ose) {
-		if (StringUtils.isBlank(email)) {
-			ose.addError(UserErrorCode.EMAIL_REQUIRED);
-			return;
-		}
-
+	private void setEmailAddress(UserDetail detail, User user, OpenSpecimenException ose) {
+		String email = detail.getEmailAddress();
 		if (!CommonValidator.isEmailValid(email)) {
 			ose.addError(UserErrorCode.INVALID_EMAIL);
 			return;
@@ -154,7 +110,8 @@ public class UserFactoryImpl implements UserFactory {
 		user.setEmailAddress(email);
 	}
 
-	private void setAuthDomain(User user, String domainName, OpenSpecimenException ose) {
+	private void setAuthDomain(UserDetail detail, User user, OpenSpecimenException ose) {
+		String domainName = detail.getDomainName();
 		if (StringUtils.isBlank(domainName)) {
 			ose.addError(UserErrorCode.DOMAIN_NAME_REQUIRED);
 			return;

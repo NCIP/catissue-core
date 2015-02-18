@@ -238,7 +238,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			if (userIds == null || userIds.isEmpty()) {
 				users = new ArrayList<User>();
 			} else {
-				users = daoFactory.getUserDao().getUsersById(userIds);
+				users = daoFactory.getUserDao().getUsersByIds(userIds);
 			}
 			
 			switch (opDetail.getOp()) {

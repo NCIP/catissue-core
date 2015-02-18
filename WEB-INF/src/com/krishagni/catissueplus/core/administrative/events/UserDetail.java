@@ -23,21 +23,19 @@ public class UserDetail {
 
 	private String loginName;
 
-	private List<String> userSiteNames = new ArrayList<String>();
+	private List<String> siteNames = new ArrayList<String>();
 
-//	private List<UserCPRoleDetails> userCPRoles = new ArrayList<UserCPRoleDetails>();
-
-	private Date createDate;
+	private Date creationDate;
 
 	private String activityStatus;
 
-    private String instituteName;
+	private String instituteName;
 
 	private String deptName;
 
-    private Boolean superAdmin;
+	private Boolean superAdmin;
 
-    private String address;
+	private String address;
 
 	public Long getId() {
 		return id;
@@ -87,12 +85,12 @@ public class UserDetail {
 		this.loginName = loginName;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
+	public Date getCreationDate() {
+		return creationDate;
 	}
 
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 
 	public String getActivityStatus() {
@@ -103,9 +101,13 @@ public class UserDetail {
 		this.activityStatus = activityStatus;
 	}
 
-    public String getInstituteName() { return instituteName; }
+	public String getInstituteName() {
+		return instituteName;
+	}
 
-    public void setInstituteName(String instituteName) { this.instituteName = instituteName; }
+	public void setInstituteName(String instituteName) {
+		this.instituteName = instituteName;
+	}
 
 	public String getDeptName() {
 		return deptName;
@@ -115,57 +117,51 @@ public class UserDetail {
 		this.deptName = deptName;
 	}
 
-    public Boolean getSuperAdmin() { return superAdmin; }
-
-    public void setSuperAdmin(Boolean superAdmin) { this.superAdmin = superAdmin; }
-
-    public String getAddress() { return address;}
-
-    public void setAddress(String address) { this.address = address; }
-
-	public List<String> getUserSiteNames() {
-		return userSiteNames;
+	public Boolean getSuperAdmin() {
+		return superAdmin;
 	}
 
-	public void setUserSiteNames(List<String> userSiteNames) {
-		this.userSiteNames = userSiteNames;
+	public void setSuperAdmin(Boolean superAdmin) {
+		this.superAdmin = superAdmin;
 	}
 
-//	public List<UserCPRoleDetails> getUserCPRoles() {
-//		return userCPRoles;
-//	}
-//
-//	public void setUserCPRoles(List<UserCPRoleDetails> userCPRoles) {
-//		this.userCPRoles = userCPRoles;
-//	}
+	public String getAddress() {
+		return address;
+	}
 
-	public static UserDetail fromDomain(User user) {
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public List<String> getSiteNames() {
+		return siteNames;
+	}
+
+	public void setSiteNames(List<String> sitesName) {
+		this.siteNames = sitesName;
+	}
+
+	public static UserDetail from(User user) {
 		UserDetail userDto = new UserDetail();
+		userDto.setId(user.getId());
 		userDto.setLoginName(user.getLoginName());
 		userDto.setFirstName(user.getFirstName());
 		userDto.setLastName(user.getLastName());
-
-		if (user.getDepartment() != null) {
-			userDto.setDeptName(user.getDepartment().getName());
-		}
+		userDto.setCreationDate(user.getCreationDate());
 		userDto.setActivityStatus(user.getActivityStatus());
 		userDto.setEmailAddress(user.getEmailAddress());
-		userDto.setId(user.getId());
-		userDto.setCreateDate(user.getCreateDate());
-
-		if (user.getAuthDomain() != null) {
-			userDto.setDomainName(user.getAuthDomain().getName());
-		}
-		setUserSiteNames(userDto, user.getUserSites());	
+		userDto.setDomainName(user.getAuthDomain().getName());
+		userDto.setDeptName(user.getDepartment().getName());
+		setUserSiteNames(userDto, user.getSites());	
 
 		return userDto;
 	}
 
-	private static void setUserSiteNames(UserDetail userDto, Set<Site> userSites) {
+	private static void setUserSiteNames(UserDetail userDto, Set<Site> sites) {
 		List<String> siteNames = new ArrayList<String>();
-		for (Site site : userSites) {
+		for (Site site : sites) {
 			siteNames.add(site.getName());
 		}
-		userDto.setUserSiteNames(siteNames);
+		userDto.setSiteNames(siteNames);
 	}
 }

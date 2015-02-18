@@ -94,7 +94,7 @@ public class StorageContainerTestData {
 		user.setPasswordToken("e5412f93-a1c5-4ede-b66d-b32302cd4018");
 		user.setDepartment(new Department());
 		user.setAddress(new Address());
-		user.setUserSites(new HashSet<Site>());
+		user.setSites(new HashSet<Site>());
 		user.setUserCPRoles(new HashSet<UserCPRole>());
 		return user;
 	}

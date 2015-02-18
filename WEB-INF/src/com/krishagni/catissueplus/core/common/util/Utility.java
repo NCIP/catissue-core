@@ -31,4 +31,16 @@ public class Utility {
 		}
 		return maxParticipants;
 	}
+	
+	public static Long numberToLong(Object number) {
+		if (number == null) {
+			return null;
+		}
+
+		if (!(number instanceof Number)) {
+			throw new IllegalArgumentException("Input object is not a number");
+		}
+
+		return ((Number)number).longValue();
+	}
 }

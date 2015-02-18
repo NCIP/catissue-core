@@ -155,6 +155,7 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConsentTierResponse.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Department.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/User.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ForgotPasswordToken.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Address.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Password.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExternalApplication.hbm.xml" />

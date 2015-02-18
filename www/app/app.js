@@ -29,10 +29,12 @@ angular.module('openspecimen', [
     $translateProvider.preferredLanguage('en_US');
 
     $stateProvider
-      .state('login', {
-        url: '/',
-        templateUrl: 'modules/user/signin.html',
-        controller: 'LoginCtrl'
+      .state('default', {
+        abstract: true,
+        templateUrl: 'modules/common/default.html',
+        controller: function($scope, Alerts) {
+          $scope.alerts = Alerts.messages;
+        }
       })
       .state('signed-in', {
         abstract: true,
@@ -83,6 +85,8 @@ angular.module('openspecimen', [
           Alerts.error("Internal server error. Please contact system administrator");
         } else if (rejection.status / 100 == 4) {
           Alerts.error("Bad user action: " + rejection.data.message);
+        } else {
+          return rejection;
         }
 
         return $q.reject(rejection);
@@ -99,6 +103,10 @@ angular.module('openspecimen', [
           response.status = "user_error";
         } else if (result.status / 100 == 5) {
           response.status = "server_error";
+        } else if (result.status / 1 == 404) {
+          response.status = "not_found";
+        } else {
+          response.status = "user_error";
         }
 
         response.data = result.data;
