@@ -8,7 +8,9 @@
       <li><a href="#">Features</a></li>
     </ul>
   </div>
-
+  <div class="os-alert-container" ng-if="alerts.length > 0">
+    <alert type="{{alert.type}}" ng-repeat="alert in alerts">{{alert.text}}</alert>
+  </div>
   <div ui-view></div>
 </div>
 

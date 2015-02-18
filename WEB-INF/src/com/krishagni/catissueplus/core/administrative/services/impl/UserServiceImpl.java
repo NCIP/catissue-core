@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 	public ResponseEvent<UserDetail> createUser(RequestEvent<UserDetail> req) {
 		try {
 			UserDetail detail = req.getPayload();
-			User user = createUser(detail);
+			User user = createUser(detail, false);
 			emailSender.sendUserCreatedEmail(user);
 			return ResponseEvent.response(UserDetail.fromDomain(user));
 		} catch (OpenSpecimenException ose) {
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
 			UserDetail detail = req.getPayload();
 			detail.setActivityStatus(Status.ACTIVITY_STATUS_PENDING.getStatus());
 			
-			User user = createUser(detail);
+			User user = createUser(detail, true);
 			emailSender.sendUserSignupEmail(user);
 			
 			return ResponseEvent.response(UserDetail.fromDomain(user));
@@ -84,19 +84,6 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
-	private User createUser(UserDetail detail) {
-		User user = userFactory.createUser(detail);
-		
-		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		ensureUniqueLoginNameInDomain(user.getLoginName(), user.getAuthDomain().getName(), ose);
-		ensureUniqueEmailAddress(user.getEmailAddress(), ose);
-		ose.checkAndThrow();
-
-		user.setPasswordToken(user, detail.getDomainName());
-		daoFactory.getUserDao().saveOrUpdate(user);
-		return user;
-	}
-
 	@Override
 	@PlusTransactional
 	public ResponseEvent<UserDetail> updateUser(RequestEvent<UserDetail> req) {
@@ -236,6 +223,22 @@ public class UserServiceImpl implements UserService {
 	public ResponseEvent<Boolean> validatePassword(RequestEvent<String> req) {
 		return ResponseEvent.response(User.isValidPasswordPattern(req.getPayload()));
 	}
+	
+	private User createUser(UserDetail detail, Boolean isSignupReq) {
+		User user = userFactory.createUser(detail);
+		
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		ensureUniqueLoginNameInDomain(user.getLoginName(), user.getAuthDomain().getName(), ose);
+		ensureUniqueEmailAddress(user.getEmailAddress(), ose);
+		ose.checkAndThrow();
+		
+		if (!isSignupReq) {
+		  user.generatePasswordToken();
+		}
+		
+		daoFactory.getUserDao().saveOrUpdate(user);
+		return user;
+	}
 
 	private void ensureUniqueEmailAddress(String emailAddress, OpenSpecimenException ose) {
 		if (!daoFactory.getUserDao().isUniqueEmailAddress(emailAddress)) {
@@ -255,4 +258,6 @@ public class UserServiceImpl implements UserService {
 			ensureUniqueEmailAddress(newUser.getEmailAddress(), ose);
 		}
 	}
+	
+	
 }

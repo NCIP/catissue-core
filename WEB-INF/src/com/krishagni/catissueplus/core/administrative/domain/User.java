@@ -1,7 +1,12 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.*;
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.DOMAIN_CHANGE_NOT_ALLOWED;
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.INVALID_OLD_PASSWD;
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.INVALID_PASSWD_TOKEN;
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.LOGIN_NAME_CHANGE_NOT_ALLOWED;
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.OLD_PASSWD_NOT_SPECIFIED;
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.PASSWD_VIOLATES_RULES;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -259,9 +264,9 @@ public class User {
 		this.passwordCollection.add(password);
 	}
 
-	public void setPasswordToken(User user, String domainName) {
-		if (DEFAULT_DOMAIN.equalsIgnoreCase(domainName)) {
-			user.setPasswordToken(UUID.randomUUID().toString());
+	public void generatePasswordToken() {
+		if (DEFAULT_DOMAIN.equalsIgnoreCase(this.getAuthDomain().getName())) {
+			this.setPasswordToken(UUID.randomUUID().toString());
 		}
 	}
 
