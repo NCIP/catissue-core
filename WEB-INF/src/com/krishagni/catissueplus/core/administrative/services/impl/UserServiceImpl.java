@@ -140,7 +140,8 @@ public class UserServiceImpl implements UserService {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
-			if (!isClosed && (!user.getSites().isEmpty() || user.getDepartment() != null)) {
+			//TODO: Revisit and check other depedencies like cp, dp, AQ
+			if (!isClosed && !user.getSites().isEmpty()) {
 				return ResponseEvent.response(getDependencies(user));
 			}
 			
@@ -241,14 +242,8 @@ public class UserServiceImpl implements UserService {
 			sites.add(SiteDetail.fromDomain(site));
 		}
 		
-		List<DepartmentDetails> departments = new ArrayList<DepartmentDetails>();
-		if (user.getDepartment() != null) {
-			departments.add(DepartmentDetails.fromDepartment(user.getDepartment()));
-		}
-		
 		Map<String, List> dependencies = new HashMap<String, List>();
 		dependencies.put("sites", sites);
-		dependencies.put("departments", departments);
 		
 		return dependencies;
 	}
