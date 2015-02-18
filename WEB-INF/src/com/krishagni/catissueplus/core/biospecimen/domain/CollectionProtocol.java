@@ -255,8 +255,9 @@ public class CollectionProtocol {
 	}	
 	
 	public void addCpe(CollectionProtocolEvent cpe) {
-		if (!isEventLabelUnique(cpe.getEventLabel(), null)) {
-			throw OpenSpecimenException.userError(CpeErrorCode.LABEL_NOT_FOUND);
+		CollectionProtocolEvent existing = getCpe(cpe.getEventLabel());
+		if (existing != null) {
+			throw OpenSpecimenException.userError(CpeErrorCode.DUP_LABEL);
 		}
 				
 		cpe.setId(null);
@@ -268,11 +269,12 @@ public class CollectionProtocol {
 		if (existing == null) {
 			throw OpenSpecimenException.userError(CpeErrorCode.NOT_FOUND);
 		}
-		
-		if (!isEventLabelUnique(cpe.getEventLabel(), existing)) {
-			throw OpenSpecimenException.userError(CpeErrorCode.LABEL_NOT_FOUND);
+
+		CollectionProtocolEvent sameLabelEvent = getCpe(cpe.getEventLabel());
+		if (sameLabelEvent != null && !sameLabelEvent.getId().equals(existing.getId())) {
+			throw OpenSpecimenException.userError(CpeErrorCode.DUP_LABEL);
 		}
-				
+
 		existing.update(cpe);
 	}
 	
@@ -285,23 +287,17 @@ public class CollectionProtocol {
 		
 		return null;		
 	}
-
-	private boolean isEventLabelUnique(String eventLabel, CollectionProtocolEvent exclude) {
-		boolean unique = true;
-		for (CollectionProtocolEvent event : collectionProtocolEvents) {
-			if (exclude != null && event.getId().equals(exclude.getId())) {
-				continue;
-			}
-			
-			if (event.getEventLabel().equalsIgnoreCase(eventLabel)) {
-				unique = false;
-				break;
+	
+	public CollectionProtocolEvent getCpe(String eventLabel) {
+		for (CollectionProtocolEvent existing : collectionProtocolEvents) {
+			if (existing.getEventLabel().equalsIgnoreCase(eventLabel)) {
+				return existing;
 			}
 		}
 		
-		return unique;
+		return null;
 	}
-	
+
 	private ConsentTier getConsentTierById(Long ctId) {
 		for (ConsentTier ct : consentTier) {
 			if (ct.getId().equals(ctId)) {

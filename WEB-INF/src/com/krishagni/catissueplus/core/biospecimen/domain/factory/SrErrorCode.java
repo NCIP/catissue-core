@@ -39,7 +39,9 @@ public enum SrErrorCode implements ErrorCode {
 	
 	RECEIVER_NOT_FOUND,
 	
-	CPE_REQUIRED
+	CPE_REQUIRED,
+	
+	ONLY_TOP_LEVEL_COPY_ALLOWED
 	
 	;
 

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
@@ -19,16 +20,19 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenRequirementFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
+import com.krishagni.catissueplus.core.biospecimen.events.CopyCpeOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ListCpCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementDetail;
+import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
@@ -295,7 +299,42 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			return ResponseEvent.serverError(e);
 		}
 	}
-
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<CollectionProtocolEventDetail> copyEvent(RequestEvent<CopyCpeOpDetail> req) {
+		try {
+			CollectionProtocolDao cpDao = daoFactory.getCollectionProtocolDao();
+			
+			CopyCpeOpDetail opDetail = req.getPayload();
+			String cpTitle = opDetail.getCollectionProtocol();
+			String eventLabel = opDetail.getEventLabel();
+			
+			CollectionProtocolEvent existing = null;
+			if (opDetail.getEventId() != null) {
+				existing = cpDao.getCpe(opDetail.getEventId());
+			} else if (!StringUtils.isBlank(eventLabel) && !StringUtils.isBlank(cpTitle)) {
+				existing = cpDao.getCpeByEventLabel(cpTitle, eventLabel);
+			}
+			
+			if (existing == null) {
+				throw OpenSpecimenException.userError(CpeErrorCode.NOT_FOUND);
+			}
+			
+			CollectionProtocol cp = existing.getCollectionProtocol();
+			CollectionProtocolEvent cpe = cpeFactory.createCpeCopy(opDetail.getCpe(), existing);
+			existing.copySpecimenRequirementsTo(cpe);			
+			
+			cp.addCpe(cpe);			
+			cpDao.saveOrUpdate(cp, true);			
+			return ResponseEvent.response(CollectionProtocolEventDetail.from(cpe));			
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenRequirementDetail>> getSpecimenRequirments(RequestEvent<Long> req) {
@@ -362,7 +401,28 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			return ResponseEvent.serverError(e);
 		}
 	}
-
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SpecimenRequirementDetail> copySpecimenRequirement(RequestEvent<Long> req) {
+		try {
+			Long srId = req.getPayload();
+			
+			SpecimenRequirement sr = daoFactory.getSpecimenRequirementDao().getById(srId);
+			if (sr == null) {
+				throw OpenSpecimenException.userError(SrErrorCode.NOT_FOUND);
+			}
+			
+			SpecimenRequirement copy = sr.deepCopy(null);
+			daoFactory.getSpecimenRequirementDao().saveOrUpdate(copy, true);
+			return ResponseEvent.response(SpecimenRequirementDetail.from(copy));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
 	private void ensureUniqueTitle(String title, OpenSpecimenException ose) {
 		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);
 		if (cp != null) {

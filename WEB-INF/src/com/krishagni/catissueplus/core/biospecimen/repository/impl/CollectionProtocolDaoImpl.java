@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
@@ -143,6 +144,18 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		
 		return events != null && !events.isEmpty() ? events.iterator().next() : null;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public CollectionProtocolEvent getCpeByEventLabel(String title, String label) {
+		List<CollectionProtocolEvent> events = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CPY_BY_CP_TITLE_AND_LABEL)
+				.setString("title", title)
+				.setString("label", label)
+				.list();
+		
+		return CollectionUtils.isEmpty(events) ? null : events.iterator().next();
+	}
 
 	@Override
 	public void saveCpe(CollectionProtocolEvent cpe) {
@@ -172,7 +185,9 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	
 	private static final String GET_PARTICIPANT_N_SPECIMEN_CNT = FQN + ".getParticipantAndSpecimenCount";
 	
-	private static final String GET_CPE_BY_CP_AND_LABEL = FQN + ".getCpeByTitleAndEventLabel";
+	private static final String GET_CPE_BY_CP_AND_LABEL = FQN + ".getCpeByCpIdAndEventLabel";
+	
+	private static final String GET_CPY_BY_CP_TITLE_AND_LABEL = FQN + ".getCpeByTitleAndEventLabel";
 	
 	private static final String GET_CP_BY_TITLE = FQN + ".getCpByTitle";
 	

@@ -80,8 +80,19 @@ public class SpecimenRequirementsController {
 		ResponseEvent<SpecimenRequirementDetail> resp = cpSvc.createDerived(getRequest(requirement));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();		
-	}	
+	}
 	
+	@RequestMapping(method = RequestMethod.POST, value="/{id}/copy")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SpecimenRequirementDetail copySr(
+			@PathVariable("id") Long srId) {
+		
+		ResponseEvent<SpecimenRequirementDetail> resp = cpSvc.copySpecimenRequirement(getRequest(srId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+		
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(getSession(), payload);
 	}

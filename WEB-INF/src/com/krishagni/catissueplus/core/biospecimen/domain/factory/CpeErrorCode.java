@@ -5,6 +5,8 @@ import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 public enum CpeErrorCode implements ErrorCode {
 	NOT_FOUND,
 	
+	DUP_LABEL,
+	
 	LABEL_NOT_FOUND,
 	
 	LABEL_REQUIRED,

@@ -134,5 +134,14 @@ public class CollectionProtocolEvent {
 	
 	public void addSpecimenRequirement(SpecimenRequirement sr) {
 		specimenRequirements.add(sr);
+		sr.setCollectionProtocolEvent(this);		
+	}
+	
+	public void copySpecimenRequirementsTo(CollectionProtocolEvent cpe) {
+		for (SpecimenRequirement sr : specimenRequirements) {
+			if (sr.getParentSpecimenRequirement() == null) {
+				cpe.addSpecimenRequirement(sr.deepCopy(cpe));
+			}			
+		}		
 	}
 }

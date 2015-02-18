@@ -87,7 +87,7 @@
         cp.identifier
     </sql-query>
 
-    <query name="getCpeByTitleAndEventLabel">
+    <query name="getCpeByCpIdAndEventLabel">
       select
         cpe
       from
@@ -95,6 +95,17 @@
         join cp.collectionProtocolEvents cpe
       where
         cp.id = :cpId and
+        cpe.eventLabel = :label
+    </query>
+    
+    <query name="getCpeByTitleAndEventLabel">
+      select
+        cpe
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
+        join cp.collectionProtocolEvents cpe
+      where
+        cp.title = :title and
         cpe.eventLabel = :label
     </query>
     

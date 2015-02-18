@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEventDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CopyCpeOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -75,6 +76,22 @@ public class CollectionProtocolEventsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}	
+
+	@RequestMapping(method = RequestMethod.POST, value="/{eventId}/copy")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public CollectionProtocolEventDetail copyEvent(
+			@PathVariable("eventId") Long eventId,
+			@RequestBody CollectionProtocolEventDetail event) {
+		
+		CopyCpeOpDetail opDetail = new CopyCpeOpDetail();
+		opDetail.setCpe(event);
+		opDetail.setEventId(eventId);
+		
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.copyEvent(getRequest(opDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();		
+	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(getSession(), payload);
