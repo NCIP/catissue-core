@@ -246,7 +246,7 @@ public class UserServiceImpl implements UserService {
 			departments.add(DepartmentDetails.fromDepartment(user.getDepartment()));
 		}
 		
-		Map<String, List> dependencies = new HashMap<>();
+		Map<String, List> dependencies = new HashMap<String, List>();
 		dependencies.put("sites", sites);
 		dependencies.put("departments", departments);
 		
