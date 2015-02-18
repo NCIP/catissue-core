@@ -25,7 +25,7 @@ public class UserDetail {
 
 	private List<String> siteNames = new ArrayList<String>();
 
-	private Date createDate;
+	private Date creationDate;
 
 	private String activityStatus;
 
@@ -85,12 +85,12 @@ public class UserDetail {
 		this.loginName = loginName;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
+	public Date getCreationDate() {
+		return creationDate;
 	}
 
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 
 	public String getActivityStatus() {
@@ -147,7 +147,7 @@ public class UserDetail {
 		userDto.setLoginName(user.getLoginName());
 		userDto.setFirstName(user.getFirstName());
 		userDto.setLastName(user.getLastName());
-		userDto.setCreateDate(user.getCreationDate());
+		userDto.setCreationDate(user.getCreationDate());
 		userDto.setActivityStatus(user.getActivityStatus());
 		userDto.setEmailAddress(user.getEmailAddress());
 		userDto.setDomainName(user.getAuthDomain().getName());

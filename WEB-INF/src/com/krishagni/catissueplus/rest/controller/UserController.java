@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.events.DeleteUserOp;
 import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
@@ -107,9 +108,10 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public Map<String, List> disableUser(@PathVariable Long id,
-			@RequestParam(value = "isClosed", required = false, defaultValue = "false") String isClosed) {
-		RequestEvent<Long> req = new RequestEvent<Long>(getSession(), id);
-		ResponseEvent<Map<String, List>> resp = userService.deleteUser(req, Boolean.getBoolean(isClosed));
+			@RequestParam(value = "close", required = false, defaultValue = "false") boolean close) {
+		DeleteUserOp deleteUserOp = new DeleteUserOp(id, close);
+		RequestEvent<DeleteUserOp> req = new RequestEvent<DeleteUserOp>(getSession(), deleteUserOp);
+		ResponseEvent<Map<String, List>> resp = userService.deleteUser(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

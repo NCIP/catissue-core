@@ -33,14 +33,14 @@ public class Utility {
 	}
 	
 	public static Long numberToLong(Object number) {
-        if (number == null) {
-                return null;
-        }
+		if (number == null) {
+			return null;
+		}
 
-        if (!(number instanceof Number)) {
-                throw new IllegalArgumentException("Input object is not a number");
-        }
+		if (!(number instanceof Number)) {
+			throw new IllegalArgumentException("Input object is not a number");
+		}
 
-        return ((Number)number).longValue();
-	 }
+		return ((Number)number).longValue();
+	}
 }

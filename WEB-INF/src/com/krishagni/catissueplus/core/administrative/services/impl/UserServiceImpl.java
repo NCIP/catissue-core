@@ -16,7 +16,7 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
-import com.krishagni.catissueplus.core.administrative.events.DepartmentDetails;
+import com.krishagni.catissueplus.core.administrative.events.DeleteUserOp;
 import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
@@ -131,21 +131,22 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Map<String, List>> deleteUser(RequestEvent<Long> req, boolean isClosed) {
+	public ResponseEvent<Map<String, List>> deleteUser(RequestEvent<DeleteUserOp> req) {
 		try {
-			Long userId = req.getPayload();
-			User user =  daoFactory.getUserDao().getById(userId);
+			DeleteUserOp deleteUserOp = req.getPayload();
+			boolean close = deleteUserOp.isClose();
+			User user =  daoFactory.getUserDao().getById(deleteUserOp.getId());
 			
 			if (user == null) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
 			//TODO: Revisit and check other depedencies like cp, dp, AQ
-			if (!isClosed && !user.getSites().isEmpty()) {
+			if (!close && !user.getSites().isEmpty()) {
 				return ResponseEvent.response(getDependencies(user));
 			}
 			
-			user.delete(isClosed);			
+			user.delete(close);
 			return ResponseEvent.response(Collections.<String, List>emptyMap());
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);

@@ -12,13 +12,12 @@ import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
-import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class User extends BaseEntity {
 	
-	private final static String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})";
+	private final static Pattern pattern = Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})");
 	
 	private String lastName;
 
@@ -83,7 +82,7 @@ public class User extends BaseEntity {
 	}
 
 	public void setAuthDomain(AuthDomain authDomain) {
-		if (authDomain == null || StringUtils.isEmpty(authDomain.getName())) {
+		if (authDomain == null || StringUtils.isBlank(authDomain.getName())) {
 			throw OpenSpecimenException.userError(DOMAIN_NAME_REQUIRED);
 		}
 		
@@ -174,7 +173,6 @@ public class User extends BaseEntity {
 		this.setDepartment(user.getDepartment());
 		this.setEmailAddress(user.getEmailAddress());
 		this.setComments(user.getComments());
-		CollectionUpdater.update(this.getSites(), user.getSites());
 	}
 
 	// TODO: Add password pattern validation here 
@@ -189,7 +187,7 @@ public class User extends BaseEntity {
 	}
 
 	public static boolean isValidPasswordPattern(String password) {
-		return Pattern.matches(PASSWORD_PATTERN, password);
+		return pattern.matcher(password).matches();
 	}
 
 	public void delete(boolean isClosed) { 

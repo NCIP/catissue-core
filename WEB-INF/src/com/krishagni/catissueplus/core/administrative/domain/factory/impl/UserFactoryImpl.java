@@ -88,11 +88,13 @@ public class UserFactoryImpl implements UserFactory {
 
 	private void setActivityStatus(UserDetail detail, User user, OpenSpecimenException ose) {
 		String activityStatus = detail.getActivityStatus();
-		activityStatus = (activityStatus == null) ? Status.ACTIVITY_STATUS_ACTIVE.getStatus() : activityStatus;
+		if (activityStatus == null) {
+			activityStatus =  Status.ACTIVITY_STATUS_ACTIVE.getStatus();
+		}
 		
 		if (activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED.getStatus()) || 
 				activityStatus.equals(Status.ACTIVITY_STATUS_DISABLED)) {
-			ose.addError(UserErrorCode.DELETE_STATUS_CHANGE_NOT_ALLOWED);
+			ose.addError(UserErrorCode.STATUS_CHANGE_NOT_ALLOWED);
 			return;
 		}
 		user.setActivityStatus(activityStatus);

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
@@ -148,14 +149,11 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 			return;
 		}
 		
-		Disjunction srchCond = Restrictions.disjunction();
+		Criterion srchCond = Restrictions.disjunction()
+				.add(Restrictions.ilike("u.firstName", searchString, MatchMode.ANYWHERE))
+				.add(Restrictions.ilike("u.lastName", searchString, MatchMode.ANYWHERE))
+				.add(Restrictions.ilike("u.loginName", searchString, MatchMode.ANYWHERE));
 		
-		srchCond.add(Restrictions.or(
-				Restrictions.or(
-				Restrictions.ilike("u.firstName", searchString, MatchMode.ANYWHERE),
-				Restrictions.ilike("u.lastName", searchString, MatchMode.ANYWHERE)),
-				Restrictions.ilike("u.loginName", searchString, MatchMode.ANYWHERE)
-				));
 		criteria.add(srchCond);
 	}
 
