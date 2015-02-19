@@ -24,6 +24,7 @@ angular.module('openspecimen')
 
           scope.addMode = true;
           scope.newItem.text = '';
+          scope.editItemIdx = undefined;
         };
 
         scope.addItem = function() {
@@ -72,6 +73,7 @@ angular.module('openspecimen')
           }
 
           scope.addMode = false;
+          scope.editItemIdx = undefined;
 
           var item = scope.items[idx];
           scope.items.splice(idx, 1);
