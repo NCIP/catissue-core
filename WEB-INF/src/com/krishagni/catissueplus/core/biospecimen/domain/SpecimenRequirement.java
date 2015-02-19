@@ -220,6 +220,14 @@ public class SpecimenRequirement {
 	public void setSpecimens(Set<Specimen> specimens) {
 		this.specimens = specimens;
 	}
+	
+	public boolean isAliquot() {
+		return getLineage().equals(Specimen.ALIQUOT);
+	}
+	
+	public boolean isDerivative() {
+		return getLineage().equals(Specimen.DERIVED);
+	}
 				
 	public SpecimenRequirement copy() {
 		SpecimenRequirement copy = new SpecimenRequirement();
@@ -228,15 +236,17 @@ public class SpecimenRequirement {
 	}
 	
 	public SpecimenRequirement deepCopy(CollectionProtocolEvent cpe) {
-		if (this.parentSpecimenRequirement != null) {
-			throw OpenSpecimenException.userError(SrErrorCode.ONLY_TOP_LEVEL_COPY_ALLOWED);
-		}
-		
 		if (cpe == null) {
 			cpe = this.getCollectionProtocolEvent();
 		}
 		
-		return deepCopy(cpe, null);
+		if (isAliquot()) {
+			if (this.getInitialQuantity() > this.parentSpecimenRequirement.getQtyAfterAliquotsUse()) {
+				throw OpenSpecimenException.userError(SrErrorCode.INSUFFICIENT_QTY);
+			}
+		}
+				
+		return deepCopy(cpe, parentSpecimenRequirement);
 	}
 		
 	public void addChildRequirement(SpecimenRequirement childReq) {
@@ -253,7 +263,7 @@ public class SpecimenRequirement {
 	public Double getQtyAfterAliquotsUse() {
 		Double available = initialQuantity;
 		for (SpecimenRequirement childReq : childSpecimenRequirements) {
-			if (childReq.getLineage().equals("Aliquot")) {
+			if (childReq.isAliquot()) {
 				available -= childReq.getInitialQuantity();
 			}
 		}

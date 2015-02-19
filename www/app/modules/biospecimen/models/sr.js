@@ -17,6 +17,14 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
       return Sr.query({eventId: cpeId});
     };
 
+    Sr.prototype.isAliquot = function() {
+      return this.lineage == 'Aliquot';
+    };
+
+    Sr.prototype.isDerivative = function() {
+      return this.lineage == 'Derived';
+    };
+
     Sr.prototype.copy = function() {
       return $http.post(Sr.url() + this.$id() + '/copy').then(Sr.modelRespTransform);
     };

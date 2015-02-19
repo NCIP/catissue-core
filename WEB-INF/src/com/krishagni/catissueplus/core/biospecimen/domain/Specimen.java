@@ -354,7 +354,7 @@ public class Specimen {
 		}
 		
 		if (qty < specimen.getInitialQuantity()) {
-			throw new IllegalArgumentException("Insufficient parent specimen quantity");
+			throw OpenSpecimenException.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
 		}
 		
 		childCollection.add(specimen);
