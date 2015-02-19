@@ -156,7 +156,7 @@ public class CollectionProtocolEventsTest {
 
 		Assert.assertEquals(false, resp.isSuccessful());
 		//TODO: invalid label below, please fix it asap
-		TestUtils.checkErrorCode(resp, CpeErrorCode.LABEL_NOT_FOUND, ErrorType.USER_ERROR);
+		TestUtils.checkErrorCode(resp, CpeErrorCode.DUP_LABEL, ErrorType.USER_ERROR);
 	}
 	
 	@Test
@@ -364,7 +364,7 @@ public class CollectionProtocolEventsTest {
 
 		Assert.assertEquals(false, resp.isSuccessful());
 		//TODO: invalid errorcode below please fix this ASAP
-		TestUtils.checkErrorCode(resp, CpeErrorCode.LABEL_NOT_FOUND, ErrorType.USER_ERROR);
+		TestUtils.checkErrorCode(resp, CpeErrorCode.DUP_LABEL, ErrorType.USER_ERROR);
 	}
 
 	@Test

@@ -129,8 +129,8 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			SpecimenList specimenList = specimenListFactory.createSpecimenList(listDetails);
 			existing.update(specimenList);
 			
-			daoFactory.getSpecimenListDao().saveOrUpdate(specimenList);
-			return ResponseEvent.response(SpecimenListDetails.from(specimenList));			
+			daoFactory.getSpecimenListDao().saveOrUpdate(existing);
+			return ResponseEvent.response(SpecimenListDetails.from(existing));			
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -204,7 +204,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			daoFactory.getSpecimenListDao().saveOrUpdate(specimenList);
 			
 			List<SpecimenDetail> result = new ArrayList<SpecimenDetail>();
-			for (Specimen specimen : specimens) {
+			for (Specimen specimen : specimenList.getSpecimens()) {
 				result.add(SpecimenDetail.from(specimen));
 			}
 			

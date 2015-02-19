@@ -20,6 +20,8 @@
 
   <bean class="com.krishagni.catissueplus.core.common.RestErrorController" /> 
 
+  <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+  
   <!-- Beans for caCORE starts -->
   <!-- bean id="remoteService" class="gov.nih.nci.system.comm.server.ApplicationServiceServerImpl" /-->
   <!-- Bean added for caCORE ends -->
@@ -34,6 +36,10 @@
   </bean>
 
   <bean id="deDaoFactory" class="com.krishagni.catissueplus.core.de.repository.impl.DaoFactoryImpl">
+    <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
+  </bean>
+  
+  <bean id="rbacDaoFactory" class="com.krishagni.rbac.repository.impl.DaoFactoryImpl">
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
   </bean>
 
@@ -74,13 +80,13 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 
+  <bean id="rbacSvc" class="com.krishagni.rbac.service.impl.RbacServiceImpl">
+    <property name="daoFactory" ref="rbacDaoFactory"/>
+  </bean>
 	
-	
-	
-	<bean id="scgBarcodeGenerator" class="com.krishagni.catissueplus.core.barcodegenerator.impl.SpecimenBarcodeGenerator">
-		<property name="tokenFactory" ref="tokenFactory" />
-	</bean>
-	
+  <bean id="scgBarcodeGenerator" class="com.krishagni.catissueplus.core.barcodegenerator.impl.SpecimenBarcodeGenerator">
+    <property name="tokenFactory" ref="tokenFactory" />
+  </bean>
 	
   <bean id="visitLabelGenerator" class="com.krishagni.catissueplus.core.labelgenerator.impl.SCGLabelGenerator">
     <property name="tokenFactory" ref="tokenFactory" />
@@ -181,6 +187,7 @@
   <bean id="userSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="userFactory" ref="userFact"/>
+    <property name="passwordEncoder" ref="passwordEncoder"/>
     <property name="emailSender" ref="eSender"/>
   </bean>
 
@@ -363,7 +370,7 @@
   </bean>
 
   <bean id="resourceBundle" class="org.springframework.context.support.ResourceBundleMessageSource">
-    <property name="basename" value="errors"/>
+    <property name="basename" value="errors/messages"/>
   </bean>
 
   <bean id="appCtxProvider" class="com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider">

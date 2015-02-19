@@ -587,7 +587,6 @@ public class CollectionProtocolTest {
 		TestUtils.recordResponse(resp);
 		Assert.assertEquals(false, resp.isSuccessful());
 		TestUtils.checkErrorCode(resp, CpErrorCode.PI_NOT_FOUND, ErrorType.USER_ERROR);
-		TestUtils.checkErrorCode(resp, CpErrorCode.INVALID_COORDINATORS, ErrorType.USER_ERROR);
 		TestUtils.checkErrorCode(resp, CpErrorCode.TITLE_REQUIRED, ErrorType.USER_ERROR);
 		TestUtils.checkErrorCode(resp, CpErrorCode.SHORT_TITLE_REQUIRED, ErrorType.USER_ERROR);
 		TestUtils.checkErrorCode(resp, CpErrorCode.CONSENTS_WAIVED_REQUIRED, ErrorType.USER_ERROR);

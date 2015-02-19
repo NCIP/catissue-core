@@ -79,10 +79,9 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	private void setPrincipalInvestigator(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		UserSummary user = input.getPrincipalInvestigator();		
 		User pi = null;
-		
-		if (user.getId() != null) {
+		if (user != null && user.getId() != null) {
 			pi = userDao.getById(user.getId());
-		} else if (user.getLoginName() != null && user.getDomain() != null) {
+		} else if (user != null && user.getLoginName() != null && user.getDomain() != null) {
 			pi = userDao.getUser(user.getLoginName(), user.getDomain());
 		} else {			
 			ose.addError(CpErrorCode.PI_REQUIRED);
