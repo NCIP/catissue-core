@@ -15,8 +15,6 @@
 
     <property name="name" column="NAME"/>
             
-    <property name="activityStatus" column="ACTIVITY_STATUS"/>
-            
     <many-to-one
       name="institute"
       class="com.krishagni.catissueplus.core.administrative.domain.Institute"

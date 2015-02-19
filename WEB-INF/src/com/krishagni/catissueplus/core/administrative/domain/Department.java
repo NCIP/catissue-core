@@ -11,8 +11,6 @@ public class Department extends BaseEntity {
 
 	private Institute institute;
 
-	private String activityStatus;
-
 	private Set<User> userCollection = new HashSet<User>();
 
 	public String getName() {
@@ -29,14 +27,6 @@ public class Department extends BaseEntity {
 
 	public void setInstitute(Institute institute) {
 		this.institute = institute;
-	}
-
-	public String getActivityStatus() {
-		return activityStatus;
-	}
-
-	public void setActivityStatus(String activityStatus) {
-		this.activityStatus = activityStatus;
 	}
 
 	public Set<User> getUserCollection() {

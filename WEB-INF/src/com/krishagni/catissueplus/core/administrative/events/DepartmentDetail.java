@@ -13,8 +13,6 @@ public class DepartmentDetail {
 
 	private String name;
 
-	private String activityStatus;
-
 	public Long getId() {
 		return id;
 	}
@@ -31,19 +29,10 @@ public class DepartmentDetail {
 		this.name = name;
 	}
 
-	public String getActivityStatus() {
-		return activityStatus;
-	}
-
-	public void setActivityStatus(String activityStatus) {
-		this.activityStatus = activityStatus;
-	}
-
 	public static DepartmentDetail from(Department department) {
 		DepartmentDetail details = new DepartmentDetail();
 		details.setId(department.getId());
 		details.setName(department.getName());
-		details.setActivityStatus(department.getActivityStatus());
 		return details;
 	}
 	
