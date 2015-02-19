@@ -17,6 +17,10 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
       return Sr.query({eventId: cpeId});
     };
 
+    Sr.prototype.copy = function() {
+      return $http.post(Sr.url() + this.$id() + '/copy').then(Sr.modelRespTransform);
+    };
+
     Sr.prototype.createAliquots = function(requirement) {
       var url = Sr.url();
       return $http.post(url + this.$id() + '/aliquots', requirement)

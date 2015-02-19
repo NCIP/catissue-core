@@ -243,13 +243,43 @@ body {
   overflow-y: auto;
 }
 
-.os-page-hdr .more-options {
+.os-page-hdr .os-more-options {
   position: absolute;
   right: 0px;
 }
 
-.os-page-hdr .more-options .dropdown-menu-right {
+.os-page-hdr .os-more-options .dropdown-menu-right {
   margin-right: 24px;
+}
+
+.os-more-options {
+  position: absolute;
+  cursor: pointer;
+}
+
+.list-group-item .os-more-options {
+  top: 7px;
+  right: 0px;
+  width: 40px;
+  text-align: center;
+}
+
+.list-group-item .os-more-options .dropdown-toggle {
+  font-size: 20px;
+  color: #777777;
+}
+
+.list-group-item.active .os-more-options .dropdown-toggle {
+  color: white;
+}
+
+.os-more-options .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+  background-color: #e5e5e5;
+  color: #333;
+}
+
+.os-more-options .dropdown-menu > li > a > .fa {
+  padding: 6px 12px 6px 0px;
 }
 
 .os-btn-icon, a {

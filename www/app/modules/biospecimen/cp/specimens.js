@@ -14,6 +14,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       $scope.cp = cp;
       $scope.events = events;
       $scope.eventId = $stateParams.eventId;
+      $scope.selectEvent({id: $stateParams.eventId});
 
       $scope.specimenRequirements = Specimen.flatten(specimenRequirements);
 
@@ -155,6 +156,14 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
           $scope.derivative = {};
           $scope.parentSr = undefined;
           $scope.view = 'list_sr';
+        }
+      );
+    };
+
+    $scope.copyRequirement = function(sr) {
+      sr.copy().then(
+        function(result) {
+          addToSrList(result);
         }
       );
     };
