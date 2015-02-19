@@ -377,7 +377,7 @@
   </bean>
 
   <bean id="resourceBundle" class="org.springframework.context.support.ResourceBundleMessageSource">
-    <property name="basename" value="errors"/>
+    <property name="basename" value="errors/messages"/>
   </bean>
 
   <bean id="appCtxProvider" class="com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider">
