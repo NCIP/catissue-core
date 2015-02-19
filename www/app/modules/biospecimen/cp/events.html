@@ -60,7 +60,10 @@
       </a>
       <div ng-if="mode == 'add' || mode == 'copy'" class="os-inplace-form-edit-po">
         <div class="list-group-item">
-          <div class="title">New Event</div>
+          <div class="title">
+            <span ng-if="mode == 'add'">New Event</span>
+            <span ng-if="mode == 'copy'">Copy Event</span>
+          </div>
           <div class="content" ng-include="'event-add-edit.html'"></div>
         </div>
       </div>
