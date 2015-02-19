@@ -68,7 +68,7 @@
     "default_site": "Default Site",
     "clinical_diagnosis": "Clinical Diagnosis",
     "clinical_status": "Clinical Status",
-    
+
     "no_cpes": "There are no collection protocol events to show. Please create an event by clicking on Add Event...",
     "add_cpe": "Add Event...",
     "cpe_list": "Events",
@@ -332,6 +332,18 @@
     "login_name": "Login Name",
     "password": "Password",
     "confirm_password": "Confirm Password",
+
+    "role": {
+       "roles": "Roles",
+       "new_role": "New Role",
+       "add_role": "Add Role...",
+       "update_role": "Update Role",
+       "site": "Site",
+       "cp": "Collection Protocol",
+       "role": "Role",
+       "no_roles": "There are no roles to show. Add a new role by clicking Add Role...",
+       "all": "All Current & Future"
+    },
 
     "tooltip": {
       "create_user": "Click to add new User",
