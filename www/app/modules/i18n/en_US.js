@@ -18,6 +18,8 @@
     "no": "No",
     "none": "None",
     "form_validation_error": "There are validation errors as highlighted below. Please correct them",
+    "server_error": "Internal Server Error. Please report this problem to system administrator",
+    "ui_error": "UI Error. Please report this problem to system administrator",
 
     "buttons": {
       "add": "Add",

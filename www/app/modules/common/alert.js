@@ -4,11 +4,11 @@ angular.module('openspecimen')
     return {
       messages: [],
 
-      add: function(code, type, timeout) {
+      add: function(text, type, timeout) {
         var self = this;
 
         var msg = {
-          text: $translate.instant(code), 
+          text: text,
           type: type, 
           timeout: timeout,
           close: function() {
@@ -29,12 +29,20 @@ angular.module('openspecimen')
         $timeout(function() { self.remove(msg); }, timeout);
       },
 
-      success: function(text, timeout) {
-        this.add(text, 'success', timeout);
+      success: function(code, timeout) {
+        this.add($translate.instant(code), 'success', timeout);
       },
 
-      error: function(text, timeout) {
-        this.add(text, 'danger', timeout);
+      error: function(code, timeout) {
+        this.add($translate.instant(code), 'danger', timeout);
+      },
+
+      errorText: function(text, timeout) {
+        var msg = text;
+        if (text instanceof Array) {
+          msg = text.join(", ");
+        }
+        this.add(msg, 'danger', timeout);
       },
 
       remove: function(msg) {
