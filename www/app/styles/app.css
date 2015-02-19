@@ -308,6 +308,7 @@ body {
   width:100%;
   border-radius: 0px;
   left: 0;
+  top: 57px;
 }
 
 input.ng-dirty.ng-invalid {

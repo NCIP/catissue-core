@@ -17,6 +17,7 @@
     "yes": "Yes",
     "no": "No",
     "none": "None",
+    "form_validation_error": "There are validation errors as highlighted below. Please correct them",
 
     "buttons": {
       "add": "Add",

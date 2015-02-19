@@ -1,14 +1,14 @@
 
 angular.module('openspecimen')
-  .factory('Alerts', function($timeout) {
+  .factory('Alerts', function($timeout, $translate) {
     return {
       messages: [],
 
-      add: function(text, type, timeout) {
+      add: function(code, type, timeout) {
         var self = this;
 
         var msg = {
-          text: text, 
+          text: $translate.instant(code), 
           type: type, 
           timeout: timeout,
           close: function() {
