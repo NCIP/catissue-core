@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
-import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder.DistributionAction;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class DistributionOrderDetail {
@@ -13,7 +12,7 @@ public class DistributionOrderDetail {
 	
 	private String name;
 	
-	private Long distributionProtocolId;
+	private DistributionProtocolDetail distributionProtocol;
 	
 	private UserSummary requester;
 	
@@ -21,10 +20,8 @@ public class DistributionOrderDetail {
 	
 	private Date requestedDate;
 	
-	private DistributionAction distributionAction;
+	private String status;
 	
-	private String activityStatus;
-
 	private List<OrderItemDetail> orderItems = new ArrayList<OrderItemDetail>();
 
 	public Long getId() {
@@ -43,12 +40,13 @@ public class DistributionOrderDetail {
 		this.name = name;
 	}
 
-	public Long getDistributionProtocolId() {
-		return distributionProtocolId;
+	public DistributionProtocolDetail getDistributionProtocol() {
+		return distributionProtocol;
 	}
 
-	public void setDistributionProtocolId(Long distributionProtocolId) {
-		this.distributionProtocolId = distributionProtocolId;
+	public void setDistributionProtocol(
+			DistributionProtocolDetail distributionProtocol) {
+		this.distributionProtocol = distributionProtocol;
 	}
 
 	public UserSummary getRequester() {
@@ -75,20 +73,12 @@ public class DistributionOrderDetail {
 		this.requestedDate = requestedDate;
 	}
 
-	public DistributionAction getDistributionAction() {
-		return distributionAction;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setDistributionAction(DistributionAction distributionAction) {
-		this.distributionAction = distributionAction;
-	}
-
-	public String getActivityStatus() {
-		return activityStatus;
-	}
-
-	public void setActivityStatus(String activityStatus) {
-		this.activityStatus = activityStatus;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public List<OrderItemDetail> getOrderItems() {
@@ -101,13 +91,14 @@ public class DistributionOrderDetail {
 
 	public static DistributionOrderDetail from(DistributionOrder distributionOrder) {
 		DistributionOrderDetail detail = new DistributionOrderDetail();
-		detail.setActivityStatus(distributionOrder.getActivityStatus());
-		detail.setDistributionAction(distributionOrder.getDistributionAction());
-		detail.setDistributionProtocolId(distributionOrder.getDistributionProtocol().getId());
+		detail.setStatus(distributionOrder.getStatus());
 		detail.setId(distributionOrder.getId());
 		detail.setName(distributionOrder.getName());
 		detail.setRequestedDate(distributionOrder.getRequestedDate());
 		detail.setOrderItems(OrderItemDetail.from(distributionOrder.getOrderItems()));
+		if (distributionOrder.getDistributionProtocol() != null) {
+			detail.setDistributionProtocol(DistributionProtocolDetail.from(distributionOrder.getDistributionProtocol()));
+		}
 		
 		if (distributionOrder.getDistributor() != null ) {
 			detail.setDistributor(UserSummary.from(distributionOrder.getDistributor()));

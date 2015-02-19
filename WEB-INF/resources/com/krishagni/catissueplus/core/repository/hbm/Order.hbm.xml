@@ -6,7 +6,7 @@
 <hibernate-mapping auto-import="false">
   <class
     name="com.krishagni.catissueplus.core.administrative.domain.Order"
-    table="CATISSUE_ORDER">
+    table="OS_ORDERS">
 	
     <id
       name="id"
@@ -39,7 +39,7 @@
       column="REQUESTED_DATE"/>
       
     <property
-      name="activityStatus"
+      name="status"
       type="string"
       column="STATUS"
       length="255"/> 
@@ -58,14 +58,10 @@
     
     <joined-subclass
       name="com.krishagni.catissueplus.core.administrative.domain.DistributionOrder"
-      table="OS_DISTRIBUTION_ORDER">
+      table="OS_DISTRIBUTION_ORDERS">
       
       <key column="IDENTIFIER"/>
       
-      <property
-        name="distributionAction"
-        column="DISTRIBUTION_ACTION"/>
-        
       <many-to-one 
         name="distributionProtocol" 
         cascade="none" 

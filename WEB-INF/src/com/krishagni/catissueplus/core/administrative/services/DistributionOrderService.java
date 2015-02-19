@@ -1,20 +1,18 @@
-//package com.krishagni.catissueplus.core.administrative.services;
-//
-//import com.krishagni.catissueplus.core.administrative.events.CreateDistributionOrderEvent;
-//import com.krishagni.catissueplus.core.administrative.events.DistributionOrderCreatedEvent;
-//import com.krishagni.catissueplus.core.administrative.events.DistributionOrderEvent;
-//import com.krishagni.catissueplus.core.administrative.events.DistributionOrderUpdatedEvent;
-//import com.krishagni.catissueplus.core.administrative.events.DistributionOrdersEvent;
-//import com.krishagni.catissueplus.core.administrative.events.ReqDistributionOrderEvent;
-//import com.krishagni.catissueplus.core.administrative.events.ReqDistributionOrdersEvent;
-//import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionOrderEvent;
-//
-//public interface DistributionOrderService {
-//	public DistributionOrdersEvent getDistributionOrders(ReqDistributionOrdersEvent req);
-//	
-//	public DistributionOrderEvent getDistributionOrder(ReqDistributionOrderEvent req);
-//	
-//	public DistributionOrderCreatedEvent createDistribution(CreateDistributionOrderEvent req);
-//	
-//	public DistributionOrderUpdatedEvent updateDistribution(UpdateDistributionOrderEvent req);
-//}
+package com.krishagni.catissueplus.core.administrative.services;
+
+import java.util.List;
+
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+
+public interface DistributionOrderService {
+	public ResponseEvent<List<DistributionOrderDetail>> getDistributionOrders(RequestEvent<DistributionOrderListCriteria> req);
+	
+	public ResponseEvent<DistributionOrderDetail> getDistributionOrder(RequestEvent<Long> req);
+	
+	public ResponseEvent<DistributionOrderDetail> createDistribution(RequestEvent<DistributionOrderDetail> req);
+	
+	public ResponseEvent<DistributionOrderDetail> updateDistribution(RequestEvent<DistributionOrderDetail> req);
+}

@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 
 import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
+import com.krishagni.catissueplus.core.administrative.repository.DistributionOrderDao;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
@@ -13,6 +14,7 @@ import com.krishagni.catissueplus.core.administrative.repository.StorageContaine
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.repository.impl.ContainerDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.DepartmentDaoImpl;
+import com.krishagni.catissueplus.core.administrative.repository.impl.DistributionOrderDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.DistributionProtocolDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.InstituteDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.PermissibleValueDaoImpl;
@@ -200,6 +202,13 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public AuditDao getAuditDao() {
 		AuditDaoImpl dao = new AuditDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+	
+	@Override
+	public DistributionOrderDao getDistributionOrderDao() {
+		DistributionOrderDaoImpl dao = new DistributionOrderDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

@@ -250,6 +250,12 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 	public void setCreatedOn(Date createdOn) {
 		this.createdOn = createdOn;
 	}
+	
+	public static SpecimenInfo from(Specimen specimen) {
+		SpecimenInfo info = new SpecimenInfo();
+		fromTo(specimen,info);
+		return info;
+	}
 
 	public static void fromTo(Specimen specimen, SpecimenInfo result) {
 		result.setId(specimen.getId());

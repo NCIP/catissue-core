@@ -1,24 +1,9 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
 public class DistributionOrder extends Order {
-	public enum DistributionAction {
-		DISTRIBUTED,
-		DISTRIBUTED_AND_CLOSED 
-	};
-	
-	private DistributionAction distributionAction;
-	
 	private DistributionProtocol distributionProtocol;
 	
 	private User distributor;
-
-	public DistributionAction getDistributionAction() {
-		return distributionAction;
-	}
-
-	public void setDistributionAction(DistributionAction distributionAction) {
-		this.distributionAction = distributionAction;
-	}
 
 	public DistributionProtocol getDistributionProtocol() {
 		return distributionProtocol;
@@ -36,13 +21,22 @@ public class DistributionOrder extends Order {
 		this.distributor = distributor;
 	}
 	
+	public static boolean isDistributionStatusValid(String status) {
+		if (PENDING.equals(status) || 
+				DISTRIBUTED.equals(status) || 
+				DISTRIBUTED_AND_CLOSED.equals(status)) {
+			return true;
+		}
+		
+		return false;
+	}
+
 	public void update(DistributionOrder other) {
 		setName(other.name);
 		setRequester(other.requester);
 		setDistributor(other.distributor);
-		setActivityStatus(other.activityStatus);
+		setStatus(other.status);
 		setDistributionProtocol(other.distributionProtocol);
 		setRequestedDate(other.requestedDate);
-		
 	}
 }

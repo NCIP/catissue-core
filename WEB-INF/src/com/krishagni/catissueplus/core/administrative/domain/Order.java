@@ -5,6 +5,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Order {
+	public static String PENDING = "Pending";
+
+	public static String DISTRIBUTED = "Distributed";
+	
+	public static String DISTRIBUTED_AND_CLOSED = "Distributed And Closed";
+	
 	protected Long id;
 	
 	protected String name;
@@ -15,7 +21,7 @@ public class Order {
 	
 	protected Set<OrderItem> orderItems = new HashSet<OrderItem>();
 
-	protected String activityStatus;
+	protected String status;
 
 	public Long getId() {
 		return id;
@@ -57,12 +63,11 @@ public class Order {
 		this.orderItems = orderItems;
 	}
 
-	public String getActivityStatus() {
-		return activityStatus;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setActivityStatus(String activityStatus) {
-		this.activityStatus = activityStatus;
+	public void setStatus(String status) {
+		this.status = status;
 	}
-
 }
