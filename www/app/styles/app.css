@@ -273,15 +273,6 @@ body {
   color: white;
 }
 
-.os-more-options .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
-  background-color: #e5e5e5;
-  color: #333;
-}
-
-.os-more-options .dropdown-menu > li > a > .fa {
-  padding: 6px 12px 6px 0px;
-}
-
 .os-btn-icon, a {
   cursor: pointer;
 }
