@@ -42,15 +42,15 @@ import com.krishagni.rbac.events.DeleteResourceEvent;
 import com.krishagni.rbac.events.DeleteRoleEvent;
 import com.krishagni.rbac.events.ListAllEvent;
 import com.krishagni.rbac.events.OperationDeletedEvent;
-import com.krishagni.rbac.events.OperationDetails;
+import com.krishagni.rbac.events.OperationDetail;
 import com.krishagni.rbac.events.OperationSavedEvent;
 import com.krishagni.rbac.events.PermissionAddedEvent;
 import com.krishagni.rbac.events.PermissionDeletedEvent;
-import com.krishagni.rbac.events.PermissionDetails;
+import com.krishagni.rbac.events.PermissionDetail;
 import com.krishagni.rbac.events.ReqAllGroupRolesEvent;
 import com.krishagni.rbac.events.ReqAllSubjectRolesEvent;
 import com.krishagni.rbac.events.ResourceDeletedEvent;
-import com.krishagni.rbac.events.ResourceDetails;
+import com.krishagni.rbac.events.ResourceDetail;
 import com.krishagni.rbac.events.ResourceSavedEvent;
 import com.krishagni.rbac.events.RoleDeletedEvent;
 import com.krishagni.rbac.events.RoleSavedEvent;
@@ -113,7 +113,7 @@ public class RbacTest {
 	@Test
 	public void createResourceTest() {
 		SaveResourceEvent req = new SaveResourceEvent();
-		ResourceDetails rd = new ResourceDetails();
+		ResourceDetail rd = new ResourceDetail();
 		rd.setName("default");
 		req.setResource(rd);
 		final Long resourceId = new Long(1);
@@ -140,7 +140,7 @@ public class RbacTest {
 	@Test
 	public void createResourceTestNullNameExpectBadRequest() {
 		SaveResourceEvent req = new SaveResourceEvent();
-		ResourceDetails rd = new ResourceDetails();
+		ResourceDetail rd = new ResourceDetail();
 		rd.setName(null);
 		req.setResource(rd);
 		final Long resourceId = new Long(1);
@@ -166,7 +166,7 @@ public class RbacTest {
 	@Test
 	public void createResourceTestEmptyNameExpectBadRequest() {
 		SaveResourceEvent req = new SaveResourceEvent();
-		ResourceDetails rd = new ResourceDetails();
+		ResourceDetail rd = new ResourceDetail();
 		rd.setName("");
 		req.setResource(rd);
 		final Long resourceId = new Long(1);
@@ -215,7 +215,7 @@ public class RbacTest {
 	@Test
 	public void createResourceTestRuntimeExceptionExpectNullResponse() {
 		SaveResourceEvent req = new SaveResourceEvent();
-		ResourceDetails rd = new ResourceDetails();
+		ResourceDetail rd = new ResourceDetail();
 		rd.setName("default");
 		req.setResource(rd);
 		
@@ -248,9 +248,9 @@ public class RbacTest {
 		resources.add(r1);
 		resources.add(r2);
 		
-		doReturn(resources).when(resourceDao).getAllResources();
+		doReturn(resources).when(resourceDao).getResources();
 		
-		AllResourcesEvent res = rbacSvc.getAllResources(new ListAllEvent());
+		AllResourcesEvent res = rbacSvc.getResources(new ListAllEvent());
 		
 		assertEquals(EventStatus.OK, res.getStatus());
 		assertEquals(resourceId, res.getResources().get(0).getId());
@@ -260,9 +260,9 @@ public class RbacTest {
 	@Test
 	public void getAllResourcesRuntimeExceptionExpectServerError() {
 		String errmsg = "Some mysql exception";
-		doThrow(new RuntimeException(errmsg)).when(resourceDao).getAllResources();
+		doThrow(new RuntimeException(errmsg)).when(resourceDao).getResources();
 		
-		AllResourcesEvent res = rbacSvc.getAllResources(new ListAllEvent());
+		AllResourcesEvent res = rbacSvc.getResources(new ListAllEvent());
 		
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, res.getStatus());
 		assertEquals(errmsg, res.getMessage());
@@ -316,7 +316,7 @@ public class RbacTest {
 	@Test
 	public void createOperationTest() {
 		SaveOperationEvent req = new SaveOperationEvent();
-		OperationDetails rd = new OperationDetails();
+		OperationDetail rd = new OperationDetail();
 		rd.setName("default");
 		req.setOperation(rd);
 		final Long operationId = new Long(1);
@@ -343,7 +343,7 @@ public class RbacTest {
 	@Test
 	public void createOperationTestNullNameExpectBadRequest() {
 		SaveOperationEvent req = new SaveOperationEvent();
-		OperationDetails rd = new OperationDetails();
+		OperationDetail rd = new OperationDetail();
 		rd.setName(null);
 		req.setOperation(rd);
 
@@ -356,7 +356,7 @@ public class RbacTest {
 	@Test
 	public void createOperationTestEmptyNameExpectBadRequest() {
 		SaveOperationEvent req = new SaveOperationEvent();
-		OperationDetails rd = new OperationDetails();
+		OperationDetail rd = new OperationDetail();
 		rd.setName("");
 		req.setOperation(rd);
 		final Long operationId = new Long(1);
@@ -405,7 +405,7 @@ public class RbacTest {
 	@Test
 	public void createOperationTestRuntimeExceptionExpectNullResponse() {
 		SaveOperationEvent req = new SaveOperationEvent();
-		OperationDetails rd = new OperationDetails();
+		OperationDetail rd = new OperationDetail();
 		rd.setName("default");
 		req.setOperation(rd);
 		
@@ -438,7 +438,7 @@ public class RbacTest {
 		operations.add(r1);
 		operations.add(r2);
 		
-		doReturn(operations).when(operationDao).getAllOperations();
+		doReturn(operations).when(operationDao).getOperations();
 		
 		AllOperationsEvent res = rbacSvc.getAllOperations(new ListAllEvent());
 		
@@ -450,7 +450,7 @@ public class RbacTest {
 	@Test
 	public void getAllOperationsRuntimeExceptionExpectServerError() {
 		String errmsg = "Some mysql exception";
-		doThrow(new RuntimeException(errmsg)).when(operationDao).getAllOperations();
+		doThrow(new RuntimeException(errmsg)).when(operationDao).getOperations();
 		
 		AllOperationsEvent res = rbacSvc.getAllOperations(new ListAllEvent());
 		
@@ -529,7 +529,7 @@ public class RbacTest {
 		permissions.add(p1);
 		permissions.add(p2);
 		
-		doReturn(permissions).when(permissionDao).getAllPermissions();
+		doReturn(permissions).when(permissionDao).getPermissions();
 		
 		AllPermissionsEvent res = rbacSvc.getAllPermissions(new ListAllEvent());
 		
@@ -541,7 +541,7 @@ public class RbacTest {
 	@Test
 	public void getAllPermissionsTestRuntimeExceptionExpectInternalError() {
 		String msg = "Some mysql error";
-		doThrow(new RuntimeException(msg)).when(permissionDao).getAllPermissions();
+		doThrow(new RuntimeException(msg)).when(permissionDao).getPermissions();
 		
 		AllPermissionsEvent res = rbacSvc.getAllPermissions(new ListAllEvent());
 		
@@ -580,7 +580,7 @@ public class RbacTest {
 		.saveOrUpdate((any(Permission.class)));
 		
 		AddPermissionEvent req = new AddPermissionEvent();
-		PermissionDetails pds = new PermissionDetails();
+		PermissionDetail pds = new PermissionDetail();
 		pds.setOperationName(o1.getName());
 		pds.setResourceName(r1.getName());
 		req.setPermission(pds);
@@ -593,7 +593,7 @@ public class RbacTest {
 	@Test
 	public void createPermissionTestResourceNameEmptyExpectBadRequest() {
 		AddPermissionEvent req = new AddPermissionEvent();
-		PermissionDetails pds = new PermissionDetails();
+		PermissionDetail pds = new PermissionDetail();
 		pds.setOperationName("default");
 		pds.setResourceName("");
 		req.setPermission(pds);
@@ -606,7 +606,7 @@ public class RbacTest {
 	@Test
 	public void createPermissionTestOperationNameEmptyExpectBadRequest() {
 		AddPermissionEvent req = new AddPermissionEvent();
-		PermissionDetails pds = new PermissionDetails();
+		PermissionDetail pds = new PermissionDetail();
 		pds.setOperationName("");
 		pds.setResourceName("default");
 		req.setPermission(pds);
@@ -634,7 +634,7 @@ public class RbacTest {
 		doReturn(null).when(resourceDao).getResourceByName(any(String.class));
 		
 		AddPermissionEvent req = new AddPermissionEvent();
-		PermissionDetails pds = new PermissionDetails();
+		PermissionDetail pds = new PermissionDetail();
 		pds.setOperationName(o1.getName());
 		pds.setResourceName(r1.getName());
 		req.setPermission(pds);
@@ -663,7 +663,7 @@ public class RbacTest {
 		doReturn(null).when(operationDao).getOperationByName(any(String.class));
 		
 		AddPermissionEvent req = new AddPermissionEvent();
-		PermissionDetails pds = new PermissionDetails();
+		PermissionDetail pds = new PermissionDetail();
 		pds.setOperationName(o1.getName());
 		pds.setResourceName(r1.getName());
 		req.setPermission(pds);
@@ -694,7 +694,7 @@ public class RbacTest {
 		doReturn(p1).when(permissionDao).getPermission(r1.getName(), o1.getName());
 		
 		AddPermissionEvent req = new AddPermissionEvent();
-		PermissionDetails pds = new PermissionDetails();
+		PermissionDetail pds = new PermissionDetail();
 		pds.setOperationName(o1.getName());
 		pds.setResourceName(r1.getName());
 		req.setPermission(pds);
@@ -730,7 +730,7 @@ public class RbacTest {
 		.saveOrUpdate((any(Permission.class)));
 		
 		AddPermissionEvent req = new AddPermissionEvent();
-		PermissionDetails pds = new PermissionDetails();
+		PermissionDetail pds = new PermissionDetail();
 		pds.setOperationName(o1.getName());
 		pds.setResourceName(r1.getName());
 		req.setPermission(pds);
@@ -759,7 +759,7 @@ public class RbacTest {
 		doReturn(p1).when(permissionDao).getPermission(r1.getName(), o1.getName());
 		
 		DeletePermissionEvent req = new DeletePermissionEvent();
-		PermissionDetails pd = new PermissionDetails();
+		PermissionDetail pd = new PermissionDetail();
 		pd.setResourceName(r1.getName());
 		pd.setOperationName(o1.getName());
 		
@@ -798,7 +798,7 @@ public class RbacTest {
 		doReturn(p1).when(permissionDao).getPermission(r1.getName(), o1.getName());
 		
 		DeletePermissionEvent req = new DeletePermissionEvent();
-		PermissionDetails pd = new PermissionDetails();
+		PermissionDetail pd = new PermissionDetail();
 		pd.setResourceName(r1.getName());
 		pd.setOperationName("");
 		
@@ -829,7 +829,7 @@ public class RbacTest {
 		doReturn(p1).when(permissionDao).getPermission(r1.getName(), o1.getName());
 		
 		DeletePermissionEvent req = new DeletePermissionEvent();
-		PermissionDetails pd = new PermissionDetails();
+		PermissionDetail pd = new PermissionDetail();
 		pd.setResourceName("");
 		pd.setOperationName(o1.getName());
 		
@@ -861,7 +861,7 @@ public class RbacTest {
 		doReturn(null).when(permissionDao).getPermission(r1.getName(), o1.getName());
 		
 		DeletePermissionEvent req = new DeletePermissionEvent();
-		PermissionDetails pd = new PermissionDetails();
+		PermissionDetail pd = new PermissionDetail();
 		pd.setResourceName(r1.getName());
 		pd.setOperationName(o1.getName());
 		
@@ -893,7 +893,7 @@ public class RbacTest {
 		rs.add(r1);
 		rs.add(r2);
 		
-		doReturn(rs).when(roleDao).getAllRoles();
+		doReturn(rs).when(roleDao).getRoles();
 		
 		AllRolesEvent res = rbacSvc.getAllRoles(new ListAllEvent());
 		
@@ -905,7 +905,7 @@ public class RbacTest {
 	@Test
 	public void getAllRolesTestRuntimeExceptionExpectInternalServerError() {
 		String msg = "Some sql error";
-		doThrow(new RuntimeException(msg)).when(roleDao).getAllRoles();
+		doThrow(new RuntimeException(msg)).when(roleDao).getRoles();
 		
 		AllRolesEvent res = rbacSvc.getAllRoles(new ListAllEvent());
 		
