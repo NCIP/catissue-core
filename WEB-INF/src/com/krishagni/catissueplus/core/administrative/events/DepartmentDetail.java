@@ -6,15 +6,14 @@ import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Department;
-import com.krishagni.catissueplus.core.common.util.Status;
 
-public class DepartmentDetails {
+public class DepartmentDetail {
 
 	private Long id;
 
 	private String name;
 
-	private String activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
+	private String activityStatus;
 
 	public Long getId() {
 		return id;
@@ -40,18 +39,18 @@ public class DepartmentDetails {
 		this.activityStatus = activityStatus;
 	}
 
-	public static DepartmentDetails fromDepartment(Department department) {
-		DepartmentDetails details = new DepartmentDetails();
+	public static DepartmentDetail from(Department department) {
+		DepartmentDetail details = new DepartmentDetail();
 		details.setId(department.getId());
 		details.setName(department.getName());
 		details.setActivityStatus(department.getActivityStatus());
 		return details;
 	}
 	
-	public static List<DepartmentDetails> fromDepartments(Set<Department> departments) {
-		List<DepartmentDetails> departmentsDetails = new ArrayList<DepartmentDetails>();
+	public static List<DepartmentDetail> from(Set<Department> departments) {
+		List<DepartmentDetail> departmentsDetails = new ArrayList<DepartmentDetail>();
 		for(Department department : departments) {
-			departmentsDetails.add(fromDepartment(department));
+			departmentsDetails.add(from(department));
 		}
 		return departmentsDetails;
 	}

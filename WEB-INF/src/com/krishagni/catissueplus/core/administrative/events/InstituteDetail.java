@@ -1,10 +1,12 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
-import com.krishagni.catissueplus.core.common.util.Status;
 
 public class InstituteDetail {
 
@@ -12,9 +14,9 @@ public class InstituteDetail {
 
 	private String name;
 
-	private String activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
+	private String activityStatus;
 	
-	private List<DepartmentDetails> departments;
+	private List<DepartmentDetail> departments;
 
 	public Long getId() {
 		return id;
@@ -40,21 +42,36 @@ public class InstituteDetail {
 		this.activityStatus = activityStatus;
 	}
 	
-	public List<DepartmentDetails> getDepartments(){
+	public List<DepartmentDetail> getDepartments(){
 		return departments;
 	}
 	
-	public void setDepartments(List<DepartmentDetails> departments){		
+	public void setDepartments(List<DepartmentDetail> departments){		
 		this.departments = departments;
 	}
 
-	public static InstituteDetail fromDomain(Institute institute) {
-		InstituteDetail instituteDetails = new InstituteDetail();
-		instituteDetails.setId(institute.getId());
-		instituteDetails.setName(institute.getName());
-		instituteDetails.setActivityStatus(institute.getActivityStatus());
-		instituteDetails.setDepartments(DepartmentDetails.fromDepartments(institute.getDepartmentCollection()));
-		return instituteDetails;
+	public static InstituteDetail from(Institute institute) {
+		InstituteDetail detail = new InstituteDetail();
+		detail.setId(institute.getId());
+		detail.setName(institute.getName());
+		detail.setActivityStatus(institute.getActivityStatus());
+		detail.setDepartments(DepartmentDetail.from(institute.getDepartments()));
+		return detail;
 	}
+	
+	public static List<InstituteDetail> from(List<Institute> institutes) {
+		List<InstituteDetail> result = new ArrayList<InstituteDetail>();
+		
+		if (CollectionUtils.isEmpty(institutes)) {
+			return result;
+		}
+		
+		for (Institute institute : institutes) {
+			result.add(from(institute));
+		}
+		
+		return result;
+	}
+
 
 }

@@ -1,7 +1,12 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.*;
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.DOMAIN_CHANGE_NOT_ALLOWED;
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.INVALID_OLD_PASSWD;
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.INVALID_PASSWD_TOKEN;
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.LOGIN_NAME_CHANGE_NOT_ALLOWED;
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.OLD_PASSWD_NOT_SPECIFIED;
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.PASSWD_VIOLATES_RULES;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
-import com.krishagni.catissueplus.core.common.SetUpdater;
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -189,7 +194,7 @@ public class User {
 		this.setDepartment(user.getDepartment());
 		this.setEmailAddress(user.getEmailAddress());
 		this.setComments(user.getComments());
-		SetUpdater.<Site> newInstance().update(this.getUserSites(), user.getUserSites());
+		CollectionUpdater.update(this.getUserSites(), user.getUserSites());
 
 		//updateAddressDetails(this.getAddress(), user.getAddress());
 	}

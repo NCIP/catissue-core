@@ -42,7 +42,7 @@ public class UserFactoryImpl implements UserFactory {
 		setLastName(user, details.getLastName(), ose);
 		setActivityStatus(user, details.getActivityStatus(), ose);
 		setEmailAddress(user, details.getEmailAddress(), ose);
-		setDepartment(user, details.getDeptName(), ose);
+		setDepartment(details, user, ose);
 		setAuthDomain(user, details.getDomainName(), ose);
 
 		ose.checkAndThrow();
@@ -125,8 +125,9 @@ public class UserFactoryImpl implements UserFactory {
 		user.setLoginName(loginName);
 	}
 
-	private void setDepartment(User user, String departmentName, OpenSpecimenException ose) {
-		Department department = daoFactory.getDepartmentDao().getDepartmentByName(departmentName);
+	private void setDepartment(UserDetail detail, User user, OpenSpecimenException ose) {
+		Department department = daoFactory.getInstituteDao()
+				.getDeptByNameAndInstitute(detail.getDeptName(), detail.getInstituteName());
 		if (department == null) {
 			ose.addError(InstituteErrorCode.DEPT_NOT_FOUND);
 			return;

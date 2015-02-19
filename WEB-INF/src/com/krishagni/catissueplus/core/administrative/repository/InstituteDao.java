@@ -2,16 +2,17 @@ package com.krishagni.catissueplus.core.administrative.repository;
 
 import java.util.List;
 
+import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
 
 public interface InstituteDao extends Dao<Institute> {
+	public List<Institute> getInstitutes(InstituteListCriteria listCrit);
 	
 	public Institute getInstituteByName(String name);
 
-	public Institute getInstitute(Long instituteId);
+	public Department getDepartment(Long id);
 
-	public List<Institute> getAllInstitutes(int maxResults);
-
+	public Department getDeptByNameAndInstitute(String name, String instituteName);
 }
