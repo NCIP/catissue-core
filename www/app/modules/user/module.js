@@ -3,7 +3,7 @@ angular.module('openspecimen')
   .config(function($stateProvider) {
     $stateProvider
       .state('login', {
-        url: '/',
+        url: '/?logout',
         templateUrl: 'modules/user/signin.html',
         controller: 'LoginCtrl',
         parent: 'default'

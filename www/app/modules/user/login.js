@@ -10,22 +10,38 @@ angular.module('openspecimen')
         return $http.post(url(), loginData).then(ApiUtil.processResp);
       },
 
+      logout: function() {
+        return $http.delete(url()).then(ApiUtil.processResp);
+      },
+
       saveToken: function(token) {
         $window.localStorage['osAuthToken'] = token;
         $http.defaults.headers.common['X-OS-API-TOKEN'] = token;
         $http.defaults.withCredentials = true;
       },
 
-      removeToken: function(token) {
+      removeToken: function() {
         delete $window.localStorage['osAuthToken'];
         delete $http.defaults.headers.common['X-OS-API-TOKEN'];
       }
     }
   })
-  .controller('LoginCtrl', function($scope, $rootScope, $state, AuthService) {
-    $scope.loginData = {};
+  .controller('LoginCtrl', function($scope, $rootScope, $state, $http, $location, AuthService) {
 
-    var onLogin = function(result) {
+    function init() {
+      $scope.loginData = {domainName: 'openspecimen'};
+      
+      if ($location.search().logout) {
+        $scope.logout();
+        return;
+      }
+ 
+      if ($http.defaults.headers.common['X-OS-API-TOKEN']) {
+        $state.go('cp-list');
+      }
+    }
+
+    function onLogin(result) {
       $scope.loginError = false;
 
       if (result.status == "ok" && result.data) {
@@ -45,7 +61,17 @@ angular.module('openspecimen')
       }
     };
 
+    function onLogout() {
+      AuthService.removeToken();
+    }
+
     $scope.login = function() {
       AuthService.authenticate($scope.loginData).then(onLogin);
     }
+
+    $scope.logout = function() {
+      AuthService.logout().then(onLogout); 
+    }
+
+    init();
   });

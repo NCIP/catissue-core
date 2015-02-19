@@ -4,88 +4,39 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false">
-    <class
-        name="com.krishagni.catissueplus.core.auth.domain.Ldap"
-        table="CATISSUE_LDAP_DETAILS"
-		lazy="true">
+  <class
+    name="com.krishagni.catissueplus.core.auth.domain.Ldap"
+    table="CATISSUE_LDAP_DETAILS">
     
-    	<cache usage="read-write" />
-		
-		<id name="domainId" type="long">
-			<column name="DOMAIN_ID" />
-			<generator class="foreign">
-				<param name="property">authDomain</param>
-			</generator>
-		</id>
-		<one-to-one name="authDomain" class="com.krishagni.catissueplus.core.auth.domain.AuthDomain"
-			constrained="true"></one-to-one>
+    <id name="domainId" column="DOMAIN_ID">
+      <generator class="foreign">
+        <param name="property">authDomain</param>
+      </generator>
+    </id>
+	
+    <one-to-one name="authDomain" constrained="true"/>
 
-        <property
-            name="host"
-            type="string"
-            column="HOST"
-            length="255"/>
+    <property name="host" column="HOST"/>
             
-        <property
-            name="port"
-            type="long"
-            column="PORT"
-            length="19"/>
+    <property name="port" column="PORT"/>
         
-        <property
-            name="bindUser"
-            type="string"
-            column="BIND_USER"
-            length="255"/>
+    <property name="bindUser" column="BIND_USER"/>
         
-        <property
-            name="bindPassword"
-            type="string"
-            column="BIND_PASSWORD"
-            length="255"/>
+    <property name="bindPassword" column="BIND_PASSWORD"/>
             
-        <property
-            name="idField"
-            type="string"
-            column="ID_FIELD"
-            length="50"/>
+    <property name="idField" column="ID_FIELD"/>
 
-		<property
-            name="directoryContext"
-            type="string"
-            column="DIRECTORY_CONTEXT"
-            length="255"/>
+    <property name="directoryContext" column="DIRECTORY_CONTEXT"/>
 
-		<property
-            name="surnameField"
-            type="string"
-            column="SURNAME_FIELD"
-            length="255"/>
+    <property name="surnameField" column="SURNAME_FIELD"/>
 		
-		<property
-            name="givenNameField"
-            type="string"
-            column="GIVEN_NAME_FIELD"
-            length="255"/>
+    <property name="givenNameField" column="GIVEN_NAME_FIELD"/>
             
-   		<property
-            name="searchBaseDir"
-            type="string"
-            column="SEARCH_BASE_DIR"
-            length="255"/>
+    <property name="searchBaseDir" column="SEARCH_BASE_DIR"/>
             
-    	<property
-            name="filterString"
-            type="string"
-            column="FILTER_STRING"
-            length="255"/>
+    <property name="filterString" column="FILTER_STRING"/>
             
-    	<property
-            name="emailField"
-            type="string"
-            column="EMAIL_FIELD"
-            length="255"/>
+    <property name="emailField" column="EMAIL_FIELD"/>
             
- </class>
-
+  </class>
 </hibernate-mapping>

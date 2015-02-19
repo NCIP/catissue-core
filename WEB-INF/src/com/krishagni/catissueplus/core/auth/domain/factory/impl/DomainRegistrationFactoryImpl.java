@@ -32,55 +32,50 @@ public class DomainRegistrationFactoryImpl implements DomainRegistrationFactory 
 	}
 
 	@Override
-	public AuthDomain getAuthDomain(DomainDetail domainDetails) {
+	public AuthDomain getAuthDomain(DomainDetail detail) {
 		AuthDomain authDomain = new AuthDomain();
-		setDomainName(domainDetails.getName(), authDomain);
-		validateAuthType(domainDetails.getAuthType());
-		
-		AuthProvider authProvider = daoFactory.getDomainDao().getAuthProviderByType(domainDetails.getAuthType());
-		if (domainDetails.getAuthType().equals(AuthenticationType.LDAP.value())) {
-			if (authProvider == null) {
-				throw OpenSpecimenException.userError(AuthProviderErrorCode.LDAP_NOT_FOUND);
-			}
-			authDomain.setLdap(ldapFactory.getLdap(domainDetails, authDomain));
-		}
-		else if (domainDetails.getAuthType().equals(AuthenticationType.CUSTOM.value())) {
-			validateImplClass(domainDetails.getImplClass());
-			if (authProvider == null) {
-				authProvider = getNewAuthProvider(domainDetails);
-			}
-		}
-		authDomain.setAuthProvider(authProvider);
+		setDomainName(detail, authDomain);
+		setAuthProvider(detail, authDomain);
 		return authDomain;
 	}
-
-	private void validateAuthType(String authType) {
-		if(!AuthenticationType.isValidAuthType(authType)){
-			throw OpenSpecimenException.userError(AuthProviderErrorCode.INVALID_TYPE);
-		}
-	}
-
-	private AuthProvider getNewAuthProvider(DomainDetail domainDetails) {
-		AuthProvider authProvider = new AuthProvider();
-		authProvider.setAuthType(domainDetails.getName());
-		authProvider.setImplClass(domainDetails.getImplClass());
-		return authProvider;
-	}
-
-	private void setDomainName(String domainName, AuthDomain authDomain) {
+	
+	private void setDomainName(DomainDetail detail, AuthDomain authDomain) {
+		String domainName = detail.getName();
 		if (StringUtils.isBlank(domainName)) {
 			throw OpenSpecimenException.userError(AuthProviderErrorCode.DOMAIN_NOT_SPECIFIED);
 		}
 		
 		authDomain.setName(domainName);
 	}
+	
+	private void setAuthProvider(DomainDetail detail, AuthDomain authDomain) {
+		AuthenticationType authType = getAuthenticationType(detail.getAuthType());
+		
+		AuthProvider authProvider = daoFactory.getDomainDao().getAuthProviderByType(detail.getAuthType());
+		if (AuthenticationType.LDAP == authType) {
+			if (authProvider == null) {
+				throw OpenSpecimenException.userError(AuthProviderErrorCode.LDAP_NOT_FOUND);
+			}
+			authDomain.setLdap(ldapFactory.getLdap(detail, authDomain));
+			
+		} else if (AuthenticationType.CUSTOM == authType && authProvider == null) {
+			authProvider = getNewAuthProvider(detail);
+		}
+		
+		authDomain.setAuthProvider(authProvider);
+	}
 
-	private void validateImplClass(String implClass) {
+	private AuthProvider getNewAuthProvider(DomainDetail detail) {
+		String implClass = detail.getImplClass();
 		if (StringUtils.isBlank(implClass)) {
 			throw OpenSpecimenException.userError(AuthProviderErrorCode.IMPL_NOT_SPECIFIED);
 		}
-		
 		isValidImplClass(implClass);
+		
+		AuthProvider authProvider = new AuthProvider();
+		authProvider.setAuthType(detail.getName());
+		authProvider.setImplClass(implClass);
+		return authProvider;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -90,6 +85,14 @@ public class DomainRegistrationFactoryImpl implements DomainRegistrationFactory 
 			return (AuthenticationService) authImplClass.newInstance();
 		} catch (Exception e) {
 			throw OpenSpecimenException.userError(AuthProviderErrorCode.IMPL_LOADING_FAILED);
+		}
+	}
+	
+	private AuthenticationType getAuthenticationType(String authType) {
+		try {
+			return AuthenticationType.valueOf(authType.toUpperCase());
+		} catch(IllegalArgumentException e) {
+			throw OpenSpecimenException.userError(AuthProviderErrorCode.INVALID_TYPE);
 		}
 	}
 }

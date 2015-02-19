@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
@@ -34,7 +36,7 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserServiceImpl implements UserService {
-	private static final String DEFAULT_AUTH_DOMAIN = AuthenticationType.CATISSUE.value();
+	private static final String DEFAULT_AUTH_DOMAIN = AuthenticationType.OPENSPECIMEN.name().toLowerCase();
 
 	private DaoFactory daoFactory;
 
@@ -66,6 +68,11 @@ public class UserServiceImpl implements UserService {
 		ListUserCriteria crit = req.getPayload();		
 		List<UserSummary> users = daoFactory.getUserDao().getUsers(crit);		
 		return ResponseEvent.response(users);
+	}
+	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return daoFactory.getUserDao().getUser(username, DEFAULT_AUTH_DOMAIN);
 	}
 
 	@Override
@@ -283,4 +290,5 @@ public class UserServiceImpl implements UserService {
 		
 		return passwordEncoder.matches(oldPassword, user.getPassword());
 	}
+	
 }

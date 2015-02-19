@@ -4,47 +4,29 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false">
-    <class
-        name="com.krishagni.catissueplus.core.auth.domain.AuthDomain"
-        table="CATISSUE_AUTH_DOMAINS"
-        lazy="true">
+  <class
+    name="com.krishagni.catissueplus.core.auth.domain.AuthDomain"
+    table="CATISSUE_AUTH_DOMAINS">
 	
-    	<cache usage="read-write" />
-        <id
-            name="id"
-            column="IDENTIFIER"
-            type="long"
-            length="30"
-            unsaved-value="null">
-            <generator class="native">
-                <param name="sequence">CATISSUE_AUTH_DOMAIN_SEQ</param>
-            </generator>
-        </id>
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">CATISSUE_AUTH_DOMAIN_SEQ</param>
+      </generator>
+    </id>
 
-		<many-to-one
-            name="authProvider"
-         	property-ref="authType"
-            class="com.krishagni.catissueplus.core.auth.domain.AuthProvider"
-            cascade="all"
-            update="true"
-            insert="true"
-            column="AUTH_TYPE" lazy="false"/>
+    <many-to-one name="authProvider" property-ref="authType" column="AUTH_TYPE"/>
 	
-        <property
-            name="name"
-            type="string"
-            column="DOMAIN_NAME"
-            length="255"/>    
+    <property name="name" column="DOMAIN_NAME"/>    
         
-        <one-to-one name="ldap" class="com.krishagni.catissueplus.core.auth.domain.Ldap"
-			cascade="save-update"></one-to-one>
+    <one-to-one name="ldap" cascade="save-update"/>
 
-	<query name="getDomainByName">
-		SELECT domain FROM com.krishagni.catissueplus.core.auth.domain.AuthDomain domain WHERE domain.name = :domainName
-	</query>
-	
-	<query name="getAllDomains">
-        FROM com.krishagni.catissueplus.core.auth.domain.AuthDomain
+    <query name="getDomainByName">
+      from com.krishagni.catissueplus.core.auth.domain.AuthDomain where name = :domainName
     </query>
+	
+    <query name="getAllDomains">
+      from com.krishagni.catissueplus.core.auth.domain.AuthDomain
+    </query>
+    
    </class>
 </hibernate-mapping>

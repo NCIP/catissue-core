@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
+import com.krishagni.catissueplus.core.auth.services.UserAuthenticationService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -35,6 +37,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserAuthenticationService userAuthService;
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
@@ -149,6 +154,22 @@ public class UserController {
 		
 		return resp.getPayload();
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/current-user")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public Map<String, Object> getCurrentUser() {
+		ResponseEvent<UserSummary> resp = userAuthService.getCurrentLoggedInUser();
+		resp.throwErrorIfUnsuccessful();
+		
+		UserSummary detail = resp.getPayload();
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("firstName", detail.getFirstName());
+		result.put("lastName", detail.getLastName());
+		result.put("loginName", detail.getLoginName());
+		
+		return result;
+ 	}
 
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);

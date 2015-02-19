@@ -7,7 +7,7 @@ public class UserInfo {
 
 	private String loginName;
 
-	private String domainName = AuthenticationType.CATISSUE.value();
+	private String domainName = AuthenticationType.OPENSPECIMEN.name().toLowerCase();
 
 	public String getLoginName() {
 		return loginName;

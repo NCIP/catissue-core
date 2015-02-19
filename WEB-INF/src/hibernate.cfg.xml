@@ -169,6 +169,7 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocol.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthDomain.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthProvider.hbm.xml" />
+                <mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthToken.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExternalIdentifier.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Audit.hbm.xml" />
 		

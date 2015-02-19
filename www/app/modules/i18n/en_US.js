@@ -362,6 +362,7 @@
     "link_expired_content": "We'll be happy to send you another one when you're ready.",
     "reset_my_password": "Reset My Password",
     "reset_password": "Reset Password",
+    "return_to_signin": "Return to sign in page",
     "password_updated": "Password has been set"
   },
   

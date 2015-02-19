@@ -318,4 +318,49 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="vlonushte" id="OS Auth Tokens table">
+    <createTable tableName="OS_AUTH_TOKENS">
+      <column name="TOKEN" type="${text.type}(64)">
+        <constraints primaryKey="true"/>
+      </column>
+
+      <column name="USER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="EXPIRES_ON" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="IP_ADDRESS" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Add openspecimen domain and auth provider" dbms="mysql">
+    <sql>
+      insert into CATISSUE_AUTH_PROVIDERS(IDENTIFIER, AUTH_TYPE, IMPL_CLASS) 
+      values(default, 'openspecimen', 'com.krishagni.catissueplus.core.auth.services.impl.OpenSpecimenAuthServiceImpl');
+
+      insert into CATISSUE_AUTH_DOMAINS(IDENTIFIER, DOMAIN_NAME, AUTH_TYPE)
+      values(default, 'openspecimen', 'openspecimen');
+
+      update CATISSUE_USER set DOMAIN_NAME = 'openspecimen' where DOMAIN_NAME = 'catissue';
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Add openspecimen domain and auth provider" dbms="oracle">
+    <sql>
+      insert into CATISSUE_AUTH_PROVIDERS(IDENTIFIER, AUTH_TYPE, IMPL_CLASS) 
+      values(CATISSUE_AUTH_PROVIDER_SEQ.nextval, 'openspecimen', 'com.krishagni.catissueplus.core.auth.services.impl.OpenSpecimenAuthServiceImpl');
+
+      insert into CATISSUE_AUTH_DOMAINS(IDENTIFIER, DOMAIN_NAME, AUTH_TYPE)
+      values(CATISSUE_AUTH_DOMAIN_SEQ.nextval, 'openspecimen', 'openspecimen');
+
+      update catissue_user set DOMAIN_NAME = 'openspecimen' where DOMAIN_NAME = 'catissue';
+    </sql>
+
+  </changeSet>
+
 </databaseChangeLog>

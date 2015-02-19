@@ -1,22 +1,22 @@
 
 package com.krishagni.catissueplus.core.auth.events;
 
-import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
-
 public class LoginDetail {
 
-	private String loginId;
+	private String loginName;
 
 	private String password;
 
-	private String domainName = AuthenticationType.CATISSUE.value();
+	private String domainName;
+	
+	private String ipAddress;
 
-	public String getLoginId() {
-		return loginId;
+	public String getLoginName() {
+		return loginName;
 	}
 
-	public void setLoginId(String loginId) {
-		this.loginId = loginId;
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
 	}
 
 	public String getPassword() {
@@ -33,6 +33,14 @@ public class LoginDetail {
 
 	public void setDomainName(String domainName) {
 		this.domainName = domainName;
+	}
+
+	public String getIpAddress() {
+		return ipAddress;
+	}
+
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
 	}
 
 }

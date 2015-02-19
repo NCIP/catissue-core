@@ -1,31 +1,30 @@
 
 package com.krishagni.catissueplus.core.auth.services.impl;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 
-import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.auth.domain.AuthErrorCode;
-import com.krishagni.catissueplus.core.auth.events.LoginDetail;
+import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class OpenSpecimenAuthServiceImpl extends AbstractAuthProvider {
-	
-	private BCryptPasswordEncoder passwordEncoder;
-	
-	public BCryptPasswordEncoder getPasswordEncoder() {
-		return passwordEncoder;
-	}
-
-	public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
-		this.passwordEncoder = passwordEncoder;
-	}
 
 	@Override
-	public void authenticate(LoginDetail loginDetails) {
-		User user = super.getDaoFactory().getUserDao().getUser(loginDetails.getLoginId(), loginDetails.getDomainName());
+	public void authenticate(String username, String password) {
+		try{
+			AuthenticationManager authManager = getAuthManager();
+			UsernamePasswordAuthenticationToken authenticationToken =
+				new UsernamePasswordAuthenticationToken(username, password);
 		
-		if (user == null || !passwordEncoder.matches(loginDetails.getPassword(), user.getPassword())) {
+			authManager.authenticate(authenticationToken);
+		} catch(AuthenticationException e) {
 			throw OpenSpecimenException.userError(AuthErrorCode.INVALID_CREDENTIALS);
 		}
+	}
+	
+	private AuthenticationManager getAuthManager() {
+		return (AuthenticationManager) OpenSpecimenAppCtxProvider.getAppCtx().getBean("authenticationManager");
 	}
 }
