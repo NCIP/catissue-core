@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class 
+    name="com.krishagni.rbac.domain.Resource" 
+    table="RBAC_RESOURCES">
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">RBAC_RESOURCES_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="name" column="NAME"/>
+    
+    <query name="getResourceByName">
+      from Resource r where r.name =:name
+    </query>
+    
+    <query name="getAllResources">
+      from Resource
+    </query>
+  </class> 
+</hibernate-mapping>

@@ -47,7 +47,7 @@ public class RoleTestData {
 
 	public static CreateRoleEvent getCreateRoleEventWithEmptyRoleName() {
 		CreateRoleEvent event = getCreateRoleEvent();
-		RoleDetails details = event.getRoleDetails();
+		RoleDetail details = event.getRoleDetails();
 		details.setName(null);
 		event.setRoleDetails(details);
 		return event;
@@ -56,7 +56,7 @@ public class RoleTestData {
 	public static CreateRoleEvent getCreateRoleEvent() {
 		CreateRoleEvent event = new CreateRoleEvent();
 		event.setSessionDataBean(getSessionDataBean());
-		RoleDetails details = new RoleDetails();
+		RoleDetail details = new RoleDetail();
 		details.setName("My Role");
 		details.setPrivilegeNames(getPrivilegeNames());
 		event.setRoleDetails(details);
@@ -86,7 +86,7 @@ public class RoleTestData {
 	public static UpdateRoleEvent getUpdateRoleEvent() {
 		UpdateRoleEvent event = new UpdateRoleEvent();
 		event.setSessionDataBean(getSessionDataBean());
-		RoleDetails details = new RoleDetails();
+		RoleDetail details = new RoleDetail();
 		details.setName("My Role");
 		details.setPrivilegeNames(getPrivilegeNames());
 		event.setRoleDetails(details);
