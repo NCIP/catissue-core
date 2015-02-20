@@ -31,7 +31,7 @@
       from
         com.krishagni.catissueplus.core.administrative.domain.Institute institute 
       where
-        institute.name = :name 
+        institute.name = :name and institute.activityStatus != 'Disabled' 
     </query>
     
   </class>

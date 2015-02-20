@@ -5,11 +5,11 @@
 
 <hibernate-mapping auto-import="false">
   <class name="com.krishagni.catissueplus.core.administrative.domain.Department" 
-    table="OS_DEPARTMENT">
+    table="OS_DEPARTMENTS">
     
     <id name="id" column="IDENTIFIER">
       <generator class="native">
-        <param name="sequence">OS_DEPARTMENT_SEQ</param>
+        <param name="sequence">OS_DEPARTMENTS_SEQ</param>
       </generator>
     </id>
 
@@ -21,11 +21,25 @@
       column="INSTITUTE_ID"/>
         
     <set
-      name="userCollection"
+      name="users"
       table="CATISSUE_USER">
       <key column="DEPARTMENT_ID"/>
       <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.User" />
     </set>
+    
+    <query name="getDepartment">
+      from 
+        com.krishagni.catissueplus.core.administrative.domain.Department department 
+      where
+        department.id = :id and department.institute.id = :instituteId 
+    </query>
+	
+    <query name="getDeptByNameAndInstitute">
+      from 
+        com.krishagni.catissueplus.core.administrative.domain.Department department 
+      where
+        department.name = :deptName and department.institute.name = :instituteName  
+    </query>    
     
   </class>
 </hibernate-mapping>

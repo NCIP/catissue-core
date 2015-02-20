@@ -12,7 +12,7 @@ public interface InstituteDao extends Dao<Institute> {
 	
 	public Institute getInstituteByName(String name);
 
-	public Department getDepartment(Long id);
+	public Department getDepartment(Long id, Long instituteId);
 
-	public Department getDeptByNameAndInstitute(String name, String instituteName);
+	public Department getDeptByNameAndInstitute(String deptName, String instituteName);
 }

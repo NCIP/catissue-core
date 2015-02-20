@@ -105,10 +105,10 @@ public class InstitutesController {
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public Map<String, List> deleteInstitute(@PathVariable Long id,
-			@RequestParam(value="isClosed", required=false, defaultValue="false") boolean isClosed) {
+			@RequestParam(value="close", required=false, defaultValue="false") boolean close) {
 		DeleteInstituteOp deleteInstOp = new DeleteInstituteOp();
 		deleteInstOp.setId(id);
-		deleteInstOp.setIsClosed(isClosed);
+		deleteInstOp.setClose(close);
 		RequestEvent<DeleteInstituteOp> req = new RequestEvent<DeleteInstituteOp>(getSession(), deleteInstOp);
 		ResponseEvent<Map<String,List>> resp = instituteSvc.deleteInstitute(req);
 		

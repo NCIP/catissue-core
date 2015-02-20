@@ -21,14 +21,22 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
 
     }
 
-    $scope.loadDepartments = function(instituteName) {
-      $scope.user.deptName = undefined;
-      $scope.departments = [];
-      Institute.getDepartments(instituteName).then(
-        function(deptList) {
-          angular.forEach(deptList, function(department) {
-            $scope.departments.push(department.name);
-          });
+    $scope.loadDepartments = function(instituteName, unsetDept) {
+      Institute.getByName(instituteName).then(
+        function(institutes) {
+          $scope.departments = [];
+          if (institutes.length == 1) {
+            angular.forEach(institutes[0].departments, function(department) {
+              $scope.departments.push(department.name);
+            });
+          }
+
+          //This is trick to unset department on selecting institute
+          if ($scope.departments.indexOf($scope.user.departmentName) == -1) {
+            $scope.user.departmentName = undefined;
+          }
+
+          console.log($scope.departments);
         }
       );
     };
@@ -41,6 +49,8 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
         }
       );
     };
+
+
      
     init();
   });

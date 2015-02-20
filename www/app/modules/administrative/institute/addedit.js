@@ -14,9 +14,18 @@ angular.module('os.administrative.institute.addedit',['os.administrative.models'
     }
 
     $scope.removeDepartment = function(department) {
-      $scope.institute.removeDepartment(department);
-      if($scope.institute.departments.length == 0) {
-        $scope.institute.addDepartment($scope.institute.newDepartment());
+      var institute = $scope.institute;
+     
+      if (department == undefined) {
+        department = institute.departments[institute.departments.length - 1];
+        if (!(department.name == undefined || department.name == "")) {
+          return;
+        }
+      }
+
+      institute.removeDepartment(department);
+      if (institute.departments.length == 0) {
+        institute.addDepartment($scope.institute.newDepartment());
       }
     }
 

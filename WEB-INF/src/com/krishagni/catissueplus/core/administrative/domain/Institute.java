@@ -3,26 +3,16 @@ package com.krishagni.catissueplus.core.administrative.domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-public class Institute {
-
-	private Long id;
-
+public class Institute extends BaseEntity {
 	private String name;
 
 	private String activityStatus;
 
 	private Set<Department> departments = new HashSet<Department>();
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;

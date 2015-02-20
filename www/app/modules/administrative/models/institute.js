@@ -44,11 +44,8 @@ angular.module('os.administrative.models.institute', ['os.common.models'])
       return this;
     }
 
-    Institute.getDepartments = function (instituteName) {
-      var d = $q.defer();
-      var departments = [{"id" : 1, "name": "d"}];
-      d.resolve(departments);
-      return d.promise;
+    Institute.getByName = function (instituteName) {
+      return Institute.query({name:instituteName});
     }
 
     return Institute;

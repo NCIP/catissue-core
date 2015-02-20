@@ -4,7 +4,7 @@ public class DeleteInstituteOp {
 	
 	private Long id;
 	
-	private Boolean isClosed;
+	private boolean close;
 
 	public Long getId() {
 		return id;
@@ -14,12 +14,12 @@ public class DeleteInstituteOp {
 		this.id = id;
 	}
 
-	public Boolean getIsClosed() {
-		return isClosed;
+	public boolean isClose() {
+		return close;
 	}
 
-	public void setIsClosed(Boolean isClosed) {
-		this.isClosed = isClosed;
+	public void setClose(boolean close) {
+		this.close = close;
 	}
-	
+
 }

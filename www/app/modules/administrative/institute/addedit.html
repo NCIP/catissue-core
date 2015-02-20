@@ -50,7 +50,7 @@
 
       <div class="form-group">
         <div class="col-xs-offset-3 col-xs-6">
-          <button class="btn btn-primary" os-form-submit="save()">
+          <button class="btn btn-primary" os-form-submit="save()" ng-click="removeDepartment()">
             <span ng-if="!institute.id"  translate="common.buttons.create"> Create </span>
             <span ng-if="!!institute.id" translate="common.buttons.update"> Update </span>
           </button>

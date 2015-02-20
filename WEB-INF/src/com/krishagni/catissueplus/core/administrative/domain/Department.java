@@ -11,7 +11,7 @@ public class Department extends BaseEntity {
 
 	private Institute institute;
 
-	private Set<User> userCollection = new HashSet<User>();
+	private Set<User> users = new HashSet<User>();
 
 	public String getName() {
 		return name;
@@ -29,12 +29,12 @@ public class Department extends BaseEntity {
 		this.institute = institute;
 	}
 
-	public Set<User> getUserCollection() {
-		return userCollection;
+	public Set<User> getUsers() {
+		return users;
 	}
 
-	public void setUserCollection(Set<User> userCollection) {
-		this.userCollection = userCollection;
+	public void setUsers(Set<User> userCollection) {
+		this.users = userCollection;
 	}
 
 }

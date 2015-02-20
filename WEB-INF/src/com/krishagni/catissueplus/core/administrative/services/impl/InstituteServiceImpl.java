@@ -88,7 +88,7 @@ public class InstituteServiceImpl implements InstituteService {
 			ensureUniqueInstituteName(institute.getName(), ose);
 			ose.checkAndThrow();
 
-			daoFactory.getInstituteDao().saveOrUpdate(institute);
+			daoFactory.getInstituteDao().saveOrUpdate(institute, true);
 			return ResponseEvent.response(InstituteDetail.from(institute));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -104,7 +104,6 @@ public class InstituteServiceImpl implements InstituteService {
 			InstituteDetail detail = req.getPayload();
 			
 			Institute existing = daoFactory.getInstituteDao().getById(detail.getId());
-			
 			if (existing == null) {
 				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND);
 			}
@@ -130,25 +129,13 @@ public class InstituteServiceImpl implements InstituteService {
 		}
 	}
 
-	private void checkRemovedDeptRefs(Institute existing, Institute institute,
-			OpenSpecimenException ose) {
-		Set<Department> removedDepartments = new HashSet<Department>(existing.getDepartments());
-		removedDepartments.removeAll(institute.getDepartments());
-		
-		for (Department department : removedDepartments) {
-			if (CollectionUtils.isNotEmpty(department.getUserCollection())) {
-				ose.addError(InstituteErrorCode.DEPT_REF_ENTITY_FOUND);
-			}
-		}
-	}
-
 	@Override
 	@PlusTransactional
 	public ResponseEvent<Map<String, List>> deleteInstitute(RequestEvent<DeleteInstituteOp> req) {
 		try {
-			DeleteInstituteOp deleteEvent = req.getPayload();
-			Long instituteId = deleteEvent.getId();
-			Boolean isClosed = deleteEvent.getIsClosed();
+			DeleteInstituteOp deleteOp = req.getPayload();
+			Long instituteId = deleteOp.getId();
+			Boolean isClosed = deleteOp.isClose();
 			Institute institute = null;						
 			if (instituteId != null) {
 				institute = daoFactory.getInstituteDao().getById(instituteId);
@@ -165,7 +152,7 @@ public class InstituteServiceImpl implements InstituteService {
 				}
 			}
 			
-			institute.delete(deleteEvent.getIsClosed());
+			institute.delete(deleteOp.isClose());
 			daoFactory.getInstituteDao().saveOrUpdate(institute);
 			return ResponseEvent.response(Collections.<String, List>emptyMap());
 		} catch (OpenSpecimenException ose) {
@@ -175,11 +162,18 @@ public class InstituteServiceImpl implements InstituteService {
 		}
 	}
 	
+	private void ensureUniqueInstituteName(String name, OpenSpecimenException ose) {
+		Institute institute = daoFactory.getInstituteDao().getInstituteByName(name);
+		if (institute != null) {
+			ose.addError(InstituteErrorCode.DUP_NAME);
+		}
+	}
+	
 	private Map<String, List> getDependencies(Institute institute) {
 		List<User> users = new ArrayList<User>();
 		for(Department department : institute.getDepartments()) {
-			if (CollectionUtils.isNotEmpty(department.getUserCollection())) {
-				users.addAll(department.getUserCollection());
+			if (CollectionUtils.isNotEmpty(department.getUsers())) {
+				users.addAll(department.getUsers());
 			}
 		}
 		
@@ -190,11 +184,16 @@ public class InstituteServiceImpl implements InstituteService {
 		
 		return depedencies;
 	}
-
-	private void ensureUniqueInstituteName(String name, OpenSpecimenException ose) {
-		Institute institute = daoFactory.getInstituteDao().getInstituteByName(name);
-		if (institute != null) {
-			ose.addError(InstituteErrorCode.DUP_NAME);
+	
+	private void checkRemovedDeptRefs(Institute existing, Institute institute,
+			OpenSpecimenException ose) {
+		Set<Department> removedDepartments = new HashSet<Department>(existing.getDepartments());
+		removedDepartments.removeAll(institute.getDepartments());
+		
+		for (Department department : removedDepartments) {
+			if (CollectionUtils.isNotEmpty(department.getUsers())) {
+				ose.addError(InstituteErrorCode.DEPT_REF_ENTITY_FOUND);
+			}
 		}
 	}
 }
