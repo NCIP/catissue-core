@@ -23,20 +23,18 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
 
     $scope.loadDepartments = function(instituteName, unsetDept) {
       Institute.getByName(instituteName).then(
-        function(institutes) {
+        function(institute) {
           $scope.departments = [];
-          if (institutes.length == 1) {
-            angular.forEach(institutes[0].departments, function(department) {
+          if (institute) {
+            angular.forEach(institute.departments, function(department) {
               $scope.departments.push(department.name);
             });
           }
 
           //This is trick to unset department on selecting institute
-          if ($scope.departments.indexOf($scope.user.departmentName) == -1) {
-            $scope.user.departmentName = undefined;
+          if ($scope.departments.indexOf($scope.user.deptName) == -1) {
+            $scope.user.deptName = undefined;
           }
-
-          console.log($scope.departments);
         }
       );
     };

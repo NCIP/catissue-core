@@ -282,6 +282,10 @@
   <changeSet author="vlonushte" id="Rename facility_id column to code of site table">
     <renameColumn columnDataType="${text.type}(50)" newColumnName="CODE" oldColumnName="FACILITY_ID" tableName="CATISSUE_SITE"/>
   </changeSet>
+  
+  <changeSet author="vlonushte" id="Add unique constraint on code column of catissue_site">
+    <addUniqueConstraint constraintName="CATISSUE_SITE_CODE_UQ" tableName="CATISSUE_SITE" columnNames="CODE"/>
+  </changeSet>  
    
   <changeSet author="vinod" id="Department table">
     <createTable tableName="OS_DEPARTMENTS">
@@ -301,14 +305,14 @@
   
   <changeSet author="vgaikwad" id="Add FK to institute id">
     <addForeignKeyConstraint
-      constraintName="FK_OS_DEPT_SITE_ID"
+      constraintName="FK_OS_DEPT_INSTITUTE_ID"
       baseTableName="OS_DEPARTMENTS"
       baseColumnNames="INSTITUTE_ID"
       referencedTableName="CATISSUE_INSTITUTION"
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
   
-  <changeSet author="vgaikwad" id="Departments table sequence">
+  <changeSet author="vgaikwad" id="Departments table sequence" dbms="oracle">
     <createSequence 
       sequenceName="OS_DEPARTMENTS_SEQ"
       incrementBy="1" 
