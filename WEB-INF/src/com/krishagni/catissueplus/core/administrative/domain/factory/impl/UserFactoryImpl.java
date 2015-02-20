@@ -77,7 +77,8 @@ public class UserFactoryImpl implements UserFactory {
 			return;
 		}
 		
-		Department department = daoFactory.getDepartmentDao().getDepartmentByName(departmentName);
+		Department department = daoFactory.getInstituteDao()
+				.getDeptByNameAndInstitute(detail.getDeptName(), detail.getInstituteName());
 		if (department == null) {
 			ose.addError(InstituteErrorCode.DEPT_NOT_FOUND);
 			return;

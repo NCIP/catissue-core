@@ -152,6 +152,7 @@ public class UserDetail {
 		userDto.setEmailAddress(user.getEmailAddress());
 		userDto.setDomainName(user.getAuthDomain().getName());
 		userDto.setDeptName(user.getDepartment().getName());
+		userDto.setInstituteName(user.getDepartment().getInstitute().getName());
 		setUserSiteNames(userDto, user.getSites());	
 
 		return userDto;

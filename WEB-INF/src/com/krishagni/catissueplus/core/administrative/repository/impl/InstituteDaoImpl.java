@@ -2,40 +2,87 @@ package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.List;
 
-import org.hibernate.Query;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
+import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
+import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
+import edu.wustl.catissuecore.util.global.Constants;
+
 public class InstituteDaoImpl extends AbstractDao<Institute> implements InstituteDao {
-
+	
 	@Override
-	@SuppressWarnings("unchecked")
-	public Institute getInstituteByName(String name) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_INSTITUTE_BY_NAME);
-		query.setString("name", name);
-		List<Institute> instituteList = query.list();
-		return !instituteList.isEmpty() ? instituteList.get(0) : null;
-	}
-
-	@Override
-	public Institute getInstitute(Long id) {
-		return (Institute) sessionFactory.getCurrentSession().get(Institute.class, id);
+	public Class<?> getType() {
+		return Institute.class;
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Institute> getAllInstitutes(int maxResults) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_INSTITUTES);
-		query.setMaxResults(maxResults);
+	public List<Institute> getInstitutes(InstituteListCriteria listCrit) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(Institute.class)
+			.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE))
+			.addOrder(Order.asc("name"))
+			.setFirstResult(listCrit.startAt())
+			.setMaxResults(listCrit.maxResults());
+				
+		if (StringUtils.isNotBlank(listCrit.query())) {
+			query.add(Restrictions.ilike("name", listCrit.query(), MatchMode.ANYWHERE));
+		}
+
 		return query.list();
 	}
 	
-	private static final String FQN = Institute.class.getName();
+	@Override
+	@SuppressWarnings("unchecked")
+	public Institute getInstituteByName(String name) {
+		List<Institute> result = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_INSTITUTE_BY_NAME)
+				.setString("name", name)
+				.list();
+		
+		return CollectionUtils.isEmpty(result) ? null : result.get(0);
+	}
 
-	private static final String GET_INSTITUTE_BY_NAME = FQN + ".getInstituteByName";
+	@Override
+	@SuppressWarnings(value = {"unchecked"})
+	public Department getDepartment(Long id, Long instituteId ) {
+		List<Department> result = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_DEPARTMENT)
+				.setLong("id", id)
+				.setLong("instituteId", instituteId)
+				.list();
+		
+		return CollectionUtils.isEmpty(result) ? null : result.get(0);
+	}
 	
-	private static final String GET_INSTITUTES = FQN + ".getInstitutes";
-
+	@Override
+	@SuppressWarnings(value = {"unchecked"})
+	public Department getDeptByNameAndInstitute(String deptName, String instituteName) {
+		List<Department> results  = sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_DEPT_BY_NAME_AND_INSTITUTE)
+			.setString("deptName", deptName)
+			.setString("instituteName", instituteName)
+			.list();
+		
+		return results.isEmpty() ? null : results.get(0);
+	}
+	
+	private static final String INSTITUTE_FQN = Institute.class.getName();
+	
+	private static final String DEPARTMENT_FQN = Department.class.getName();
+	
+	private static final String GET_INSTITUTE_BY_NAME = INSTITUTE_FQN + ".getInstituteByName";
+	
+	private static final String GET_DEPARTMENT = DEPARTMENT_FQN + ".getDepartment";
+	
+	private static final String GET_DEPT_BY_NAME_AND_INSTITUTE = DEPARTMENT_FQN + ".getDeptByNameAndInstitute";
+	
 }

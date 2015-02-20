@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import static com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode.REF_ENTITY_FOUND;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,8 +12,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
-
-import static com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode.*;
 
 public class Site {
 

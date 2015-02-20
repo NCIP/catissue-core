@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,9 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.events.DeleteInstituteOp;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteQueryCriteria;
-import com.krishagni.catissueplus.core.administrative.events.ListInstitutesCriteria;
+import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.InstituteService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -34,12 +36,52 @@ public class InstitutesController {
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
+	
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List<InstituteDetail> getInstitutes(
+			@RequestParam(value = "startAt", required = false, defaultValue = "0")
+			int startAt,
+			
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100") 
+			int maxResults,
+			
+			@RequestParam(value = "name", required = false)
+			String name
+			) {
+		
+		InstituteListCriteria crit  = new InstituteListCriteria()
+				.query(name)
+				.startAt(startAt)
+				.maxResults(maxResults);
+		
+		RequestEvent<InstituteListCriteria> req = new RequestEvent<InstituteListCriteria>(getSession(), crit);
+		ResponseEvent<List<InstituteDetail>> resp = instituteSvc.getInstitutes(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public InstituteDetail getInstitute(@PathVariable Long id) {
+		InstituteQueryCriteria crit = new InstituteQueryCriteria(); 
+		crit.setId(id);
+		
+		RequestEvent<InstituteQueryCriteria> req = new RequestEvent<InstituteQueryCriteria>(getSession(), crit);		
+		ResponseEvent<InstituteDetail> resp = instituteSvc.getInstitute(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public InstituteDetail createInstitute(@RequestBody InstituteDetail instituteDetail) {
-		RequestEvent<InstituteDetail> req = new RequestEvent<InstituteDetail>(getSession(), instituteDetail);		
+	public InstituteDetail createInstitute(@RequestBody InstituteDetail detail) {
+		RequestEvent<InstituteDetail> req = new RequestEvent<InstituteDetail>(getSession(), detail);		
 		ResponseEvent<InstituteDetail> resp = instituteSvc.createInstitute(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -62,43 +104,14 @@ public class InstitutesController {
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public InstituteDetail deleteInstitute(@PathVariable Long id) {
-		InstituteQueryCriteria crit = new InstituteQueryCriteria();
-		crit.setId(id);
+	public Map<String, List> deleteInstitute(@PathVariable Long id,
+			@RequestParam(value="close", required=false, defaultValue="false") boolean close) {
+		DeleteInstituteOp deleteInstOp = new DeleteInstituteOp();
+		deleteInstOp.setId(id);
+		deleteInstOp.setClose(close);
+		RequestEvent<DeleteInstituteOp> req = new RequestEvent<DeleteInstituteOp>(getSession(), deleteInstOp);
+		ResponseEvent<Map<String,List>> resp = instituteSvc.deleteInstitute(req);
 		
-		RequestEvent<InstituteQueryCriteria> req = new RequestEvent<InstituteQueryCriteria>(getSession(), crit);
-		ResponseEvent<InstituteDetail> resp = instituteSvc.deleteInstitute(req);
-		resp.throwErrorIfUnsuccessful();
-		
-		return resp.getPayload();
-	}
-
-	@RequestMapping(method = RequestMethod.GET)
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public List<InstituteDetail> getInstitutes(
-			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") 
-			int maxResults) {
-		
-		ListInstitutesCriteria crit  = new ListInstitutesCriteria().maxResults(maxResults);
-		RequestEvent<ListInstitutesCriteria> req = new RequestEvent<ListInstitutesCriteria>(getSession(), crit);
-		
-		ResponseEvent<List<InstituteDetail>> resp = instituteSvc.getInstitutes(req);
-		resp.throwErrorIfUnsuccessful();
-		
-		return resp.getPayload();
-	}
-
-	@RequestMapping(method = RequestMethod.GET, value="/{id}")
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public InstituteDetail getInstitute(@PathVariable Long id) {
-		InstituteQueryCriteria crit = new InstituteQueryCriteria();
-		crit.setId(id);
-		
-		RequestEvent<InstituteQueryCriteria> req = new RequestEvent<InstituteQueryCriteria>(getSession(), crit);
-		
-		ResponseEvent<InstituteDetail> resp = instituteSvc.getInstitute(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
