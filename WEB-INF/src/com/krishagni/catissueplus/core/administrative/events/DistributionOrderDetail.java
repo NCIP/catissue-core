@@ -16,13 +16,15 @@ public class DistributionOrderDetail {
 	
 	private UserSummary requester;
 	
+	private Date creationDate;
+	
 	private UserSummary distributor;
 	
-	private Date requestedDate;
+	private Date executionDate;
 	
 	private String status;
 	
-	private List<OrderItemDetail> orderItems = new ArrayList<OrderItemDetail>();
+	private List<DistributionOrderItemDetail> orderItems = new ArrayList<DistributionOrderItemDetail>();
 
 	public Long getId() {
 		return id;
@@ -57,6 +59,14 @@ public class DistributionOrderDetail {
 		this.requester = requester;
 	}
 
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
 	public UserSummary getDistributor() {
 		return distributor;
 	}
@@ -65,12 +75,12 @@ public class DistributionOrderDetail {
 		this.distributor = distributor;
 	}
 
-	public Date getRequestedDate() {
-		return requestedDate;
+	public Date getExecutionDate() {
+		return executionDate;
 	}
 
-	public void setRequestedDate(Date requestedDate) {
-		this.requestedDate = requestedDate;
+	public void setExecutionDate(Date executionDate) {
+		this.executionDate = executionDate;
 	}
 
 	public String getStatus() {
@@ -81,11 +91,11 @@ public class DistributionOrderDetail {
 		this.status = status;
 	}
 
-	public List<OrderItemDetail> getOrderItems() {
+	public List<DistributionOrderItemDetail> getOrderItems() {
 		return orderItems;
 	}
 
-	public void setOrderItems(List<OrderItemDetail> orderItems) {
+	public void setOrderItems(List<DistributionOrderItemDetail> orderItems) {
 		this.orderItems = orderItems;
 	}
 
@@ -94,18 +104,13 @@ public class DistributionOrderDetail {
 		detail.setStatus(distributionOrder.getStatus());
 		detail.setId(distributionOrder.getId());
 		detail.setName(distributionOrder.getName());
-		detail.setRequestedDate(distributionOrder.getRequestedDate());
-		detail.setOrderItems(OrderItemDetail.from(distributionOrder.getOrderItems()));
-		if (distributionOrder.getDistributionProtocol() != null) {
-			detail.setDistributionProtocol(DistributionProtocolDetail.from(distributionOrder.getDistributionProtocol()));
-		}
-		
+		detail.setCreationDate(distributionOrder.getCreationDate());
+		detail.setExecutionDate(distributionOrder.getExecutionDate());
+		detail.setOrderItems(DistributionOrderItemDetail.from(distributionOrder.getOrderItems()));
+		detail.setDistributionProtocol(DistributionProtocolDetail.from(distributionOrder.getDistributionProtocol()));
+		detail.setRequester(UserSummary.from(distributionOrder.getRequester()));
 		if (distributionOrder.getDistributor() != null ) {
 			detail.setDistributor(UserSummary.from(distributionOrder.getDistributor()));
-		}
-		
-		if (distributionOrder.getRequester() != null ) {
-			detail.setRequester(UserSummary.from(distributionOrder.getRequester()));
 		}
 		
 		return detail;

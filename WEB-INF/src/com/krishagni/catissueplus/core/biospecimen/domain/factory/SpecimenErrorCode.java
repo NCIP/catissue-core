@@ -56,7 +56,9 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	OP_NOT_ALLOWED,
 	
-	REF_ENTITY_FOUND;
+	REF_ENTITY_FOUND,
+	
+	NOT_AVAILABLE;
 
 	public String code() {
 		return "SPECIMEN_" + this.name();

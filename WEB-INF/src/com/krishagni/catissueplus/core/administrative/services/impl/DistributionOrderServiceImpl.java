@@ -3,13 +3,12 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
-import com.krishagni.catissueplus.core.administrative.domain.OrderItem;
+import com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderFactory;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
-import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -65,7 +64,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			DistributionOrder distributionOrder = distributionFactory.createDistributionOrder(detail);
 			ensureUniqueConstraints(distributionOrder);
 			
-			distributeSpecimens(distributionOrder, detail);
+			distributeSpecimens(distributionOrder, null);
 			daoFactory.getDistributionOrderDao().saveOrUpdate(distributionOrder);
 			return ResponseEvent.response(DistributionOrderDetail.from(distributionOrder));
 		} catch (OpenSpecimenException ose) {
@@ -89,12 +88,10 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			DistributionOrder distributionOrder = distributionFactory.createDistributionOrder(detail);
 			ensureUniqueConstraints(distributionOrder);
 
-			if (DistributionOrder.PENDING.equals(existing.getStatus())) {
-				distributeSpecimens(distributionOrder, detail);
-			}
+			distributeSpecimens(distributionOrder, existing.getStatus());
 			existing.update(distributionOrder);
 			daoFactory.getDistributionOrderDao().saveOrUpdate(existing);
-			return ResponseEvent.response(DistributionOrderDetail.from(distributionOrder));
+			return ResponseEvent.response(DistributionOrderDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -102,47 +99,23 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 		}
 	}
 	
-	private void distributeSpecimens(DistributionOrder distributionOrder,	DistributionOrderDetail detail) {
-		if (DistributionOrder.PENDING.equals(detail.getStatus())) {
+	private void distributeSpecimens(DistributionOrder distributionOrder, String previousState) {
+		if (distributionOrder.isPending() || DistributionOrder.DISTRIBUTED.equals(previousState) ||
+				DistributionOrder.DISTRIBUTED_AND_CLOSED.equals(previousState)) {
 			/*
-			 *  If the order is in pending state it should not be distributed
+			 *  Under two cases specimen's cant be distributed
+			 *  1. If order is pending
+			 *  2. If specimen have been distributed already
 			 */
 			return;
 		}
 		
-		for (OrderItem orderItem : distributionOrder.getOrderItems()) {
-			Specimen specimen = orderItem.getSpecimen();
-			Double avbQuantity = specimen.getAvailableQuantity() - orderItem.getQuantity();
-			
-			specimen.setAvailableQuantity(avbQuantity);
-			if (avbQuantity == 0) {
-				specimen.setIsAvailable(false);
-				virutalizeSpecimen(specimen);
-			}
-			
-			insertDistributedEvent(orderItem);
-			if (DistributionOrder.DISTRIBUTED_AND_CLOSED.equals(detail.getStatus())) {
-				specimen.setIsAvailable(false);
-				specimen.setAvailableQuantity(0.0D);
-				insertDisposalEvent(orderItem);
-				virutalizeSpecimen(specimen);
-			} 
-			daoFactory.getSpecimenDao().saveOrUpdate(specimen);			
+		boolean closeAfterDistribution = distributionOrder.closeAfterDistribution();
+		for (DistributionOrderItem orderItem : distributionOrder.getOrderItems()) {
+			orderItem.distribute(closeAfterDistribution);
 		}
 	}
-	
-	private void virutalizeSpecimen(Specimen specimen) {
-		// TODO: virutalize the specimen once the link b/w specimen and StorageContainerPosition is fromed
-	}
-
-	private void insertDisposalEvent(OrderItem orderItem) {
-		// TODO: make proper API call when API's are ready
-	}
-
-	private void insertDistributedEvent(OrderItem orderItem) {
-		// TODO: make proper API call when API's are ready
-	}
-	
+		
 	private void ensureUniqueConstraints(DistributionOrder distribution) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		

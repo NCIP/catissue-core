@@ -9,7 +9,13 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 	
 	NAME_REQUIRED, 
 	
-	INVALID_STATUS;
+	INVALID_STATUS, 
+	
+	INVALID_CREATION_DATE,
+	
+	INVALID_EXECUTION_DATE, 
+	
+	INVALID_DISTRIB_QUANTITY;
 
 	@Override
 	public String code() {

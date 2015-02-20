@@ -34,14 +34,9 @@ public class DistributionOrderController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<DistributionOrderDetail> getDistributionOrders(
-			@RequestParam(value = "query", required = false, defaultValue = "") 
-			String searchStr,
-			
-			@RequestParam(value = "start", required = false, defaultValue = "0") 
-			int start,
-			
-			@RequestParam(value = "max", required = false, defaultValue = "50") 
-			int max) {
+			@RequestParam(value = "query", required = false, defaultValue = "") String searchStr,
+			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
+			@RequestParam(value = "max", required = false, defaultValue = "50") int max) {
 		DistributionOrderListCriteria criteria = new DistributionOrderListCriteria()
 			.query(searchStr)
 			.startAt(start)

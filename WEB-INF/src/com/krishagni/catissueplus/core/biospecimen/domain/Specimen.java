@@ -307,6 +307,35 @@ public class Specimen {
 
 	}
 
+	public void distribute(Double quantity, boolean closeAfterDistribution) {
+		if (isAvailable.equals(false) || !isCollected()) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_AVAILABLE);
+		}
+		
+		if (availableQuantity < quantity) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
+		}
+		
+		availableQuantity = availableQuantity - quantity;
+		addDistributionEvent();
+		if (availableQuantity == 0 || closeAfterDistribution) {
+			isAvailable = false;
+			virtualize();
+			addDisposalEvent();
+		}
+	}
+	
+	public void addDistributionEvent() {
+		//TODO: need to add the feature.
+	}
+	
+	public void addDisposalEvent() {
+		//TODO: need to add the feaure.
+	}
+	
+	public void virtualize() {
+		//TODO: need to add the feature.
+	}
 	
 	@Override
 	public int hashCode() {
