@@ -158,6 +158,14 @@
     "collection_status": "Collection Status",
     "anticipated_visits": "Anticipated Visits",
     "anticipated_specimens": "Anticipated Specimens",
+    "visit_status": "Status",
+    "name": "Name",
+    "visit_date": "Visit Date",
+    "anticipated_visit_date": "Anticipated Visit Date",
+    "visit_site": "Visit Site",
+    "clinical_diagnosis": "Clinical Diagnosis",
+    "clinical_status": "Clinical Status",
+    "surgical_path_no": "Surgical Pathology No.",
 
     "status": {
       "pending": "Pending",
@@ -165,17 +173,24 @@
     },
 
     "ctx_menu": {
+      "add_visit": "Add Visit",
       "view_visit": "View Visit",
       "edit_visit": "Edit Visit",
       "collect_planned_specimens": "Collect Planned Specimens",
       "collect_unplanned_specimens": "Collect Unplanned Specimens",
       "print_specimen_labels": "Print Specimen Labels"
+    },
+
+    "menu": {
+      "overview": "Overview",
+      "extensions": "Extensions"
     }
   },
 
   "specimens": {
     "title": "Specimen",
     "list": "Specimens",
+    "anticipated_list": "Anticipated Specimens",
     "status": {
       "collected": "Collected",
       "not_collected": "Not Collected",
@@ -184,10 +199,21 @@
 
     "unplanned": "Unplanned",
 
+    "lineage": "Lineage",
     "label": "Label",
     "type": "Type",
     "pathology": "Pathology",
     "container": "Container",
+    "collection_status": "Collection Status",
+    "class": "Class",
+    "anatomic_site": "Anatomic Site",
+    "laterality": "Laterality",
+    "initial_qty": "Initial Quantity",
+    "available_qty": "Available Quantity",
+    "parent_specimen": "Parent Specimen",
+    "storage_location": "Storage Location",
+    "virtually_located": "Virtual",
+    "no_specimens_to_show": "No Specimens to Show",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",
@@ -196,6 +222,11 @@
       "create_derivatives": "Create Derivatives",
       "add_event": "Add Event",
       "dispose": "Dispose"
+    },
+
+    "menu": {
+      "overview": "Overview",
+      "extensions": "Extensions"
     }
   },
 

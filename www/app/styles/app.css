@@ -272,14 +272,30 @@ body {
   text-align: center;
 }
 
-.list-group-item .os-more-options .dropdown-toggle {
-  font-size: 20px;
+.list-group-item .os-more-options .dropdown-toggle, 
+.list-group-item .os-more-options > .fa {
+  font-size: 18px;
   color: #777777;
 }
 
-.list-group-item.active .os-more-options .dropdown-toggle {
+.list-group-item.active .os-more-options .dropdown-toggle, 
+.list-group-item.active .os-more-options > .fa {
   color: white;
 }
+
+.os-table-body .os-more-options {
+  position: relative;
+  text-align: center;
+}
+
+.os-table-body .os-more-options .dropdown-toggle {
+  font-size: 18px;
+  color: #777777;
+  background: transparent;
+  border: 0px;
+  margin-top: -4px;
+}
+
 
 .os-btn-icon, a {
   cursor: pointer;
@@ -429,11 +445,15 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 }
 
 .os-key-values .item .key, .os-key-values .item .value {
-  word-wrap: break-word;
-  word-break: break-word;
+  /*word-wrap: break-word;
+  word-break: break-word;*/
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   padding: 2px 5px 2px 5px;
   line-height: 24px;
   float: left;
+
 }
 
 .os-key-values .item .key {

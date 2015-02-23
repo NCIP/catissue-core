@@ -8,6 +8,8 @@ angular.module('os.biospecimen.participant',
     'os.biospecimen.participant.visits',
     'os.biospecimen.participant.addedit',
     'os.biospecimen.participant.addvisit',
+    'os.biospecimen.visit',
+    'os.biospecimen.specimen'
   ])
 
   .config(function($stateProvider) {
@@ -29,20 +31,29 @@ angular.module('os.biospecimen.participant',
         },
         parent: 'signed-in'
       })
-      .state('participant-detail', {
+      .state('participant-root', {
         url: '/participants/:cprId',
-        templateUrl: 'modules/biospecimen/participant/detail.html',
+        template: '<div ui-view></div>',
         resolve: {
           cpr: function($stateParams, CollectionProtocolRegistration) {
             return CollectionProtocolRegistration.getById($stateParams.cprId);
-          },
-
+          }
+        },
+        controller: function() {
+        },
+        parent: 'signed-in',
+        abstract: true
+      })
+      .state('participant-detail', {
+        url: '/detail',
+        templateUrl: 'modules/biospecimen/participant/detail.html',
+        resolve: {
           visits: function($stateParams, Visit) {
             return Visit.listFor($stateParams.cprId, true);
           }
         },
         controller: 'ParticipantDetailCtrl',
-        parent: 'signed-in'
+        parent: 'participant-root'
       })
       .state('participant-detail.overview', {
         url: '/overview',
@@ -58,7 +69,7 @@ angular.module('os.biospecimen.participant',
         parent: 'participant-detail'
       })
       .state('participant-detail.visits', {
-        url: '/visits?eventId&visitId',
+        url: '/visits-summary?eventId&visitId',
         templateUrl: 'modules/biospecimen/participant/visits.html',
         controller: 'ParticipantVisitsTreeCtrl',
         resolve: {
@@ -79,7 +90,9 @@ angular.module('os.biospecimen.participant',
       .state('participant-detail.annotations', {
         url: '/annotations',
         templateUrl: 'modules/biospecimen/participant/annotations.html',
-        controller: function() {
+        controller: function(cpr, $scope) {
+          $scope.objectId = cpr.id;
+          $scope.entityType = 'Participant';
         },
         parent: 'participant-detail'
       });

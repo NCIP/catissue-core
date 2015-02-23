@@ -1,0 +1,54 @@
+<div> 
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li> 
+        <a ui-sref="cp-detail.overview({cpId: cpr.cpId})">
+          {{cpr.cpTitle}}
+        </a> 
+      </li>
+      <li>
+        <a ui-sref="participant-detail.overview({cprId: cpr.id})">
+          <ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)">
+            <span ng-switch-when="true"> {{cpr.participant.firstName}} {{cpr.participant.lastName}} </span>
+            <span ng-switch-when="false" translate="common.na"> N/A </span>
+          </ng-switch>
+          <span>({{cpr.ppid}})</span>
+        </a>
+      </li>
+      <li>
+        <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
+          T{{visit.eventPoint}}: {{visit.eventLabel}}
+        </a>
+      </li>
+    </ul>
+  
+    <h3 ng-switch on="!!specimen.label">
+      <span ng-switch-when="true">{{specimen.label}}</span>
+      <span ng-switch-default>{{specimen.type}} ({{specimen.specimenClass}})</span>
+    </h3>
+
+    <button class="os-round-btn">
+      <span class="fa fa-pencil"></span>
+    </button>
+  </div>
+
+  <div os-side-menu>
+    <ul>
+      <li ui-sref-active="active">
+        <a ui-sref=".overview"> 
+          <i class="fa fa-eye"></i>
+          <span translate="specimens.menu.overview">Overview</span>
+        </a>
+      </li>
+      <li ui-sref-active="active" ng-if="!!specimen.id">
+        <a ui-sref=".annotations">
+          <i class="fa fa-files-o"></i>
+          <span translate="specimens.menu.extensions">Extensions</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="os-side-menu-page-content" ui-view></div>
+</div>
+

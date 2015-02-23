@@ -25,6 +25,12 @@ angular.module('os.biospecimen.participant.visits', ['os.biospecimen.models'])
       }
     }
 
+    $scope.showVisitDetail = function(event, visitId, eventId) {
+      event.preventDefault();
+      event.stopPropagation();
+      $state.go('visit-detail.overview', {visitId: visitId, eventId: eventId});
+    };
+
     $scope.specimens = Specimen.flatten(specimens);
     $scope.view = $stateParams.view;
     $scope.storageTypes = PvManager.getPvs('storage-type');
