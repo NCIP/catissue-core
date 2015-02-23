@@ -8,9 +8,9 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.dependency.SiteDependencyChecker;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
-import com.krishagni.catissueplus.core.administrative.domain.factory.impl.SiteDependencyChecker;
 import com.krishagni.catissueplus.core.administrative.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.SiteQueryCriteria;
