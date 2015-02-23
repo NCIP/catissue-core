@@ -14,6 +14,8 @@ public class DistributionOrder {
 	
 	private DistributionProtocol distributionProtocol;
 	
+	private Site distributionSite;
+	
 	private User requester;
 	
 	private Date creationDate;
@@ -50,6 +52,14 @@ public class DistributionOrder {
 
 	public void setDistributionProtocol(DistributionProtocol distributionProtocol) {
 		this.distributionProtocol = distributionProtocol;
+	}
+
+	public Site getDistributionSite() {
+		return distributionSite;
+	}
+
+	public void setDistributionSite(Site distributionSite) {
+		this.distributionSite = distributionSite;
 	}
 
 	public User getRequester() {
@@ -107,7 +117,7 @@ public class DistributionOrder {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
 	public void update(DistributionOrder other) {
 		setName(other.name);
 		setRequester(other.requester);
@@ -115,6 +125,7 @@ public class DistributionOrder {
 		updateStatus(other);
 		setDistributionProtocol(other.distributionProtocol);
 		setCreationDate(other.creationDate);
+		setDistributionSite(other.distributionSite);
 		setExecutionDate(other.executionDate);
 		updateOrderItems(other.orderItems);
 	}

@@ -57,4 +57,9 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 		return query.list();
 
 	}
+	
+	@Override
+	public Class getType() {
+		return Site.class;
+	}
 }

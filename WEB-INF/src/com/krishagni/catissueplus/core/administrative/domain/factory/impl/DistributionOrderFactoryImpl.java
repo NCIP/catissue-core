@@ -10,10 +10,12 @@ import org.apache.commons.lang.StringUtils;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderItemDetail;
@@ -42,6 +44,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		setDistributionProtocol(detail, distributionOrder, ose);
 		setOrderItems(detail, distributionOrder, ose);
 		setRequester(detail, distributionOrder, ose);
+		setDistributionSite(detail, distributionOrder, ose);
 		setDistributionDate(detail, distributionOrder, ose);
 		setDistributor(detail, distributionOrder, ose);
 		setStatus(detail, distributionOrder,  ose);
@@ -73,6 +76,30 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		distributionOrder.setDistributionProtocol(distributionProtocol);
 	}
 
+	private void setDistributionSite(DistributionOrderDetail detail, DistributionOrder order, OpenSpecimenException ose) {
+		Long siteId = null;
+		String siteName = null;
+		
+		if (detail.getDistributionSite() != null) {
+			siteId = detail.getDistributionSite().getId();
+			siteName = detail.getDistributionSite().getName();
+		}
+		
+		Site site = null;
+		if (siteId != null) {
+			site = daoFactory.getSiteDao().getById(siteId);
+		} else if (!StringUtils.isBlank(siteName)) {
+			site = daoFactory.getSiteDao().getSite(siteName);
+		}
+		
+		if (site == null) {
+			ose.addError(SiteErrorCode.NOT_FOUND);
+			return;
+		}
+		
+		order.setDistributionSite(site);
+	}
+	
 	private void setName(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {
 		String name = detail.getName();
 		if (StringUtils.isBlank(name)) {

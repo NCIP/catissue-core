@@ -30,6 +30,8 @@
     <property name="executionDate" column="EXECUTION_DATE"/>
       
     <property name="status" column="STATUS"/> 
+    
+    <property name="orderType" column="ORDER_TYPE"/>
 
     <set
       name="orderItems"
@@ -40,6 +42,12 @@
       <key column="ORDER_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem"/>
     </set>     
+    
+    <many-to-one 
+      name="distributionSite" 
+      cascade="none" 
+      class="com.krishagni.catissueplus.core.administrative.domain.Site"
+      column="SITE_ID"/>
     
     <many-to-one 
       name="distributionProtocol" 

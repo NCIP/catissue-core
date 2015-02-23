@@ -14,6 +14,8 @@ public class DistributionOrderDetail {
 	
 	private DistributionProtocolDetail distributionProtocol;
 	
+	private SiteDetail distributionSite;
+	
 	private UserSummary requester;
 	
 	private Date creationDate;
@@ -49,6 +51,14 @@ public class DistributionOrderDetail {
 	public void setDistributionProtocol(
 			DistributionProtocolDetail distributionProtocol) {
 		this.distributionProtocol = distributionProtocol;
+	}
+
+	public SiteDetail getDistributionSite() {
+		return distributionSite;
+	}
+
+	public void setDistributionSite(SiteDetail distributionSite) {
+		this.distributionSite = distributionSite;
 	}
 
 	public UserSummary getRequester() {
@@ -99,18 +109,19 @@ public class DistributionOrderDetail {
 		this.orderItems = orderItems;
 	}
 
-	public static DistributionOrderDetail from(DistributionOrder distributionOrder) {
+	public static DistributionOrderDetail from(DistributionOrder order) {
 		DistributionOrderDetail detail = new DistributionOrderDetail();
-		detail.setStatus(distributionOrder.getStatus());
-		detail.setId(distributionOrder.getId());
-		detail.setName(distributionOrder.getName());
-		detail.setCreationDate(distributionOrder.getCreationDate());
-		detail.setExecutionDate(distributionOrder.getExecutionDate());
-		detail.setOrderItems(DistributionOrderItemDetail.from(distributionOrder.getOrderItems()));
-		detail.setDistributionProtocol(DistributionProtocolDetail.from(distributionOrder.getDistributionProtocol()));
-		detail.setRequester(UserSummary.from(distributionOrder.getRequester()));
-		if (distributionOrder.getDistributor() != null ) {
-			detail.setDistributor(UserSummary.from(distributionOrder.getDistributor()));
+		detail.setStatus(order.getStatus());
+		detail.setId(order.getId());
+		detail.setName(order.getName());
+		detail.setCreationDate(order.getCreationDate());
+		detail.setExecutionDate(order.getExecutionDate());
+		detail.setOrderItems(DistributionOrderItemDetail.from(order.getOrderItems()));
+		detail.setDistributionProtocol(DistributionProtocolDetail.from(order.getDistributionProtocol()));
+		detail.setRequester(UserSummary.from(order.getRequester()));
+		detail.setDistributionSite(SiteDetail.fromDomain(order.getDistributionSite()));
+		if (order.getDistributor() != null ) {
+			detail.setDistributor(UserSummary.from(order.getDistributor()));
 		}
 		
 		return detail;
