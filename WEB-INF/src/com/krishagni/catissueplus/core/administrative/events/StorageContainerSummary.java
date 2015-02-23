@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
-import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class StorageContainerSummary {
@@ -168,13 +167,5 @@ public class StorageContainerSummary {
 		
 		return result;
 	}
-
-	private static UserInfo getUserInfo(User user) {
-		UserInfo userInfo = new UserInfo();
-		userInfo.setLoginName(user.getLoginName());
-		if (user.getAuthDomain() != null) {
-			userInfo.setDomainName(user.getAuthDomain().getName());
-		}
-		return userInfo;
-	}
+	
 }

@@ -72,7 +72,7 @@ public class AuthDaoImpl extends AbstractDao<AuthDomain> implements AuthDao {
 	
 	@Override
 	public void deleteAuthToken(String key) {
-		String deleteHql = "delete from " + AuthToken.class.getSimpleName() + " where token = :key";
+		String deleteHql = "delete from " + AuthToken.class.getName() + " where token = :key";
 		sessionFactory.getCurrentSession()
 				.createQuery(deleteHql)
 				.setString("key", key)

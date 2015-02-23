@@ -1,13 +1,11 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
-
 public class UserInfo {
 
 	private String loginName;
 
-	private String domainName = AuthenticationType.OPENSPECIMEN.name().toLowerCase();
+	private String domainName;
 
 	public String getLoginName() {
 		return loginName;
