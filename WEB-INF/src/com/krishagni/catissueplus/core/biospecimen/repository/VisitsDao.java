@@ -12,14 +12,14 @@ public interface VisitsDao extends Dao<Visit> {
 	
 	public List<VisitSummary> getVisits(VisitsListCriteria crit);
 	
-	public Visit getVisit(Long visitId);
+	public Visit getVisitByName(String name);
 	
 	//
 	// TODO: Requires review
 	//
 	public List<Specimen> getSpecimensList(Long scgId);
 
-	public Visit getScgByName(String name);
+	
 
 	public Visit getScgByBarcode(String barcode);
 

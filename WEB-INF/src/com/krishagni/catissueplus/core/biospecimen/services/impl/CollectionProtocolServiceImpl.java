@@ -353,6 +353,23 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	
 	@Override
 	@PlusTransactional
+	public ResponseEvent<SpecimenRequirementDetail> getSpecimenRequirement(RequestEvent<Long> req) {
+		Long reqId = req.getPayload();
+		try {
+			SpecimenRequirement sr = daoFactory.getSpecimenRequirementDao().getById(reqId);
+			if (sr == null) {
+				return ResponseEvent.userError(SrErrorCode.NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(SpecimenRequirementDetail.from(sr));				
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	
+	@Override
+	@PlusTransactional
 	public ResponseEvent<SpecimenRequirementDetail> addSpecimenRequirement(RequestEvent<SpecimenRequirementDetail> req) {
 		try {
 			SpecimenRequirement requirement = srFactory.createSpecimenRequirement(req.getPayload());

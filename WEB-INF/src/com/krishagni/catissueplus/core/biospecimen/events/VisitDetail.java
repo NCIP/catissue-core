@@ -14,6 +14,8 @@ public class VisitDetail {
 	private String ppid;
 	
 	private String eventLabel;
+
+	private Double eventPoint;
 	
 	private String cpTitle;
 
@@ -67,6 +69,14 @@ public class VisitDetail {
 
 	public void setEventLabel(String eventLabel) {
 		this.eventLabel = eventLabel;
+	}
+
+	public Double getEventPoint() {
+		return eventPoint;
+	}
+
+	public void setEventPoint(Double eventPoint) {
+		this.eventPoint = eventPoint;
 	}
 
 	public String getCpTitle() {
@@ -168,6 +178,7 @@ public class VisitDetail {
 		detail.setName(visit.getName());
 		detail.setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 		detail.setVisitDate(visit.getVisitDate());
+		detail.setSite(visit.getSite().getName());		
 
 		
 		CollectionProtocolRegistration cpr = visit.getRegistration();
@@ -177,8 +188,7 @@ public class VisitDetail {
 		
 		detail.setEventId(visit.getCpEvent().getId());
 		detail.setEventLabel(visit.getCpEvent().getEventLabel());
-		detail.setSite(visit.getSite().getName());		
-		
+		detail.setEventPoint(visit.getCpEvent().getEventPoint());
 		return detail;
 	}
 }

@@ -22,6 +22,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCri
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
@@ -54,12 +55,7 @@ public class SpecimensController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public Boolean doesSpecimenExists(@RequestParam(value = "label") String label) {
-		Boolean exists = specimenSvc.doesSpecimenExists(label);
-		if (!exists) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND);
-		}
-		
-		return exists;
+		return specimenSvc.doesSpecimenExists(label);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
@@ -76,6 +72,17 @@ public class SpecimensController {
 		crit.setVisitId(visitId);
 		
 		ResponseEvent<List<SpecimenDetail>> resp = cprSvc.getSpecimens(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SpecimenDetail getSpecimen(@PathVariable("id") Long id) {
+		EntityQueryCriteria crit = new EntityQueryCriteria(id);
+		
+		ResponseEvent<SpecimenDetail> resp = specimenSvc.getSpecimen(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

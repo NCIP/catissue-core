@@ -77,11 +77,15 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 	}
 	
 	@Override
-	public Visit getVisit(Long visitId) {
-		return (Visit)sessionFactory.getCurrentSession()
-				.get(Visit.class, visitId);
-	}
-	
+	@SuppressWarnings("unchecked")
+	public Visit getVisitByName(String name) {
+		List<Visit> visits = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_VISIT_BY_NAME)
+                                .setString("name", name)
+				.list();
+		
+		return !visits.isEmpty() ? visits.iterator().next() : null;
+	}	
 	
 	private String getVisitKey(Long scgId, Long cpeId) {
 		String key = "";
@@ -148,6 +152,8 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 	
 	private static final String GET_VISITS_UNPLANNED_SPECIMENS_STAT = FQN + ".getVisitsUnplannedSpecimenCount";
 
+	private static final String GET_VISIT_BY_NAME = FQN + ".getVisitByName";
+
 	//
 	// TODO: Requires review
 	//
@@ -189,15 +195,6 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 		return new ArrayList<Specimen>(scg.getSpecimens());
 	}
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public Visit getScgByName(String name) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(Visit.class);
-		query.add(Restrictions.eq("name", name));
-		List<Visit> scgs = query.list();
-		
-		return scgs.size() > 0 ? scgs.get(0) : null;
-	}
 
 	@Override
 	@SuppressWarnings("unchecked")
