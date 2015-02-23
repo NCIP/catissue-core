@@ -5,13 +5,13 @@ import java.util.Date;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
 public class AuthToken {
-    private String token;
-
-    private User user;
-
-    private Date expiresOn;
-
-    private String ipAddress;
+	private String token;
+	
+	private User user;
+	
+	private Date expiresOn;
+	
+	private String ipAddress;
 
 	public String getToken() {
 		return token;

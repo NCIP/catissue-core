@@ -1,20 +1,25 @@
 
 package com.krishagni.catissueplus.core.auth.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 
 import com.krishagni.catissueplus.core.auth.domain.AuthErrorCode;
-import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
+import com.krishagni.catissueplus.core.auth.services.AuthenticationService;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
-public class OpenSpecimenAuthServiceImpl extends AbstractAuthProvider {
+@Configurable
+public class OpenSpecimenAuthServiceImpl implements AuthenticationService {
+	
+	@Autowired
+	private AuthenticationManager authManager;
 
 	@Override
 	public void authenticate(String username, String password) {
 		try{
-			AuthenticationManager authManager = getAuthManager();
 			UsernamePasswordAuthenticationToken authenticationToken =
 				new UsernamePasswordAuthenticationToken(username, password);
 		
@@ -22,9 +27,5 @@ public class OpenSpecimenAuthServiceImpl extends AbstractAuthProvider {
 		} catch(AuthenticationException e) {
 			throw OpenSpecimenException.userError(AuthErrorCode.INVALID_CREDENTIALS);
 		}
-	}
-	
-	private AuthenticationManager getAuthManager() {
-		return (AuthenticationManager) OpenSpecimenAppCtxProvider.getAppCtx().getBean("authenticationManager");
 	}
 }

@@ -1,8 +1,8 @@
 package com.krishagni.catissueplus.rest.filter;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,13 +12,17 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.HttpHeaders;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.GenericFilterBean;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.auth.events.LoginDetail;
+import com.krishagni.catissueplus.core.auth.events.TokenDetail;
 import com.krishagni.catissueplus.core.auth.services.UserAuthenticationService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -29,8 +33,12 @@ import edu.wustl.common.beans.SessionDataBean;
 public class AuthTokenFilter extends GenericFilterBean {
 	private static final String OS_AUTH_TOKEN_HDR = "X-OS-API-TOKEN";
 	
+	private static final String BASIC_AUTH = "Basic ";
+	
+	private static final String DEFAULT_AUTH_DOMAIN = "openspecimen";
+	
 	private UserAuthenticationService authService;
-
+	
 	private Map<String, List<String>> excludeUrls;
 	
 	public UserAuthenticationService getAuthService() {
@@ -79,25 +87,30 @@ public class AuthTokenFilter extends GenericFilterBean {
 				return;
 			}
 		}
-		
-		String authToken = httpReq.getHeader(OS_AUTH_TOKEN_HDR);
 
-		if (authToken == null) {
-			httpResp.sendError(HttpServletResponse.SC_UNAUTHORIZED,	"Missing api token from API request");
+		User userDetails = null;
+		String authToken = httpReq.getHeader(OS_AUTH_TOKEN_HDR);
+		if (authToken != null) {
+			TokenDetail tokenDetail = new TokenDetail();
+			tokenDetail.setToken(authToken);
+			tokenDetail.setIpAddress(httpReq.getRemoteAddr());
+			
+			SessionDataBean sdb = (SessionDataBean) httpReq.getSession().getAttribute(Constants.SESSION_DATA);
+			RequestEvent<TokenDetail> atReq = new RequestEvent<TokenDetail>(sdb, tokenDetail);
+			
+			ResponseEvent<User> atResp = authService.validateToken(atReq);
+			if (atResp.isSuccessful()) {
+				userDetails = atResp.getPayload();
+			}
+		} else if(httpReq.getHeader(HttpHeaders.AUTHORIZATION) != null) {
+			userDetails = doBasicAuthentication(httpReq, httpResp);
+		}
+		
+		if (userDetails == null) {
+			sendRequireAuthResp(httpResp);
 			return;
 		}
 		
-		Map<String, Object> tokenDetail = new HashMap<String, Object>();
-		tokenDetail.put("token", authToken);
-		tokenDetail.put("IpAddress", httpReq.getRemoteAddr());
-		
-		SessionDataBean sdb = (SessionDataBean) httpReq.getSession().getAttribute(Constants.SESSION_DATA);
-		RequestEvent<Map<String, Object>> atReq = new RequestEvent<Map<String, Object>>(sdb, tokenDetail);
-		
-		ResponseEvent<User> atResp = authService.validateToken(atReq);
-		atResp.throwErrorIfUnsuccessful();
-		
-		User userDetails = atResp.getPayload();
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, authToken, userDetails.getAuthorities());
 		token.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpReq));
 		SecurityContextHolder.getContext().setAuthentication(token);
@@ -105,4 +118,39 @@ public class AuthTokenFilter extends GenericFilterBean {
 		SecurityContextHolder.clearContext();
 	}
 	
+	private User doBasicAuthentication(HttpServletRequest httpReq, HttpServletResponse httpResp) throws UnsupportedEncodingException {
+		String header = httpReq.getHeader(HttpHeaders.AUTHORIZATION);
+		if (header == null || !header.startsWith(BASIC_AUTH)) {
+			return null;
+		}
+
+		byte[] base64Token = header.substring(BASIC_AUTH.length()).getBytes();
+		String[] parts = new String(Base64.decode(base64Token)).split(":");
+		if (parts.length != 2) {
+			return null;
+		}
+
+		LoginDetail detail = new LoginDetail();
+		detail.setLoginName(parts[0]);
+		detail.setPassword(parts[1]);
+		detail.setIpAddress(httpReq.getRemoteAddr());
+		detail.setDomainName(DEFAULT_AUTH_DOMAIN);
+
+		SessionDataBean sdb = (SessionDataBean) httpReq.getSession().getAttribute(Constants.SESSION_DATA);
+		RequestEvent<LoginDetail> req = new RequestEvent<LoginDetail>(sdb, detail);
+		ResponseEvent<Map<String, Object>> resp = authService.authenticateUser(req);
+		if (resp.isSuccessful()) {
+			httpResp.setHeader(OS_AUTH_TOKEN_HDR, (String)resp.getPayload().get("token"));
+			return (User)resp.getPayload().get("user");
+		}
+
+		return null;
+	}
+
+	private void sendRequireAuthResp(HttpServletResponse httpResp) throws IOException {
+		httpResp.setHeader(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"OpenSpecimen\"");
+		httpResp.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+				"You must supply valid credentials to access the OpenSpecimen REST API");
+	}
+
 }

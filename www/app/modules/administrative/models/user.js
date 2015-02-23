@@ -12,7 +12,7 @@ angular.module('os.administrative.models.user', ['os.common.models'])
     }
 
     User.getCurrentUser = function() {
-      return $http.get(User.url() + 'current-user').then(function(result) {return result.data;});
+      return $http.get(User.url() + 'current-user').then(User.modelRespTransform);
     }
 
     return User;

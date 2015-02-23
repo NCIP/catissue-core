@@ -2,7 +2,6 @@
 package com.krishagni.catissueplus.core.auth.events;
 
 public class LoginDetail {
-
 	private String loginName;
 
 	private String password;

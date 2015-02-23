@@ -20,7 +20,9 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class User extends BaseEntity implements UserDetails {
-	
+
+	private static final long serialVersionUID = 1L;
+
 	private final static Pattern pattern = Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})");
 	
 	private String lastName;
@@ -198,7 +200,7 @@ public class User extends BaseEntity implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return this.activityStatus.equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
 
 	public void update(User user) {

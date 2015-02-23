@@ -3,7 +3,7 @@
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping auto-import="false">
   <class
     name="com.krishagni.catissueplus.core.auth.domain.AuthToken"
     table="OS_AUTH_TOKENS">
@@ -17,11 +17,11 @@
     <property name="ipAddress" not-null="true" column="IP_ADDRESS"/>
 
     <query name="getByKey">
-        from AuthToken t where t.token = :token
+        from com.krishagni.catissueplus.core.auth.domain.AuthToken t where t.token = :token
     </query>
 
     <query name="getTokensOlderThan">
-        from AuthToken t where t.expiresOn &lt; :expiresOn
+        from com.krishagni.catissueplus.core.auth.domain.AuthToken t where t.expiresOn &lt; :expiresOn
     </query>
   </class>
 </hibernate-mapping>

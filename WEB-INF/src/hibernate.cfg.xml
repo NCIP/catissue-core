@@ -7,14 +7,14 @@
 
     <session-factory>
 
-    	<property name="show_sql">false</property>
-    	<property name="dialect">edu.wustl.catissuecore.hibernate.dialect.MySqlCustomDialect</property>
-	    <property name="connection.datasource">java:/catissuecore</property>
+	<property name="show_sql">false</property>
+	<property name="dialect">edu.wustl.catissuecore.hibernate.dialect.MySqlCustomDialect</property>
+	<property name="connection.datasource">java:/catissuecore</property>
         <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
-		<property name="transaction.manager_lookup_class">org.hibernate.transaction.JBossTransactionManagerLookup</property>
+	<property name="transaction.manager_lookup_class">org.hibernate.transaction.JBossTransactionManagerLookup</property>
     	<property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
-		<property name="hibernate.jdbc.batch_size">0</property>
-		<property name="hibernate.current_session_context_class">thread</property>
+	<property name="hibernate.jdbc.batch_size">0</property>
+	<property name="hibernate.current_session_context_class">thread</property>
 
   <!--
      	<property name="show_sql">false</property>
@@ -29,14 +29,14 @@
 	    <property name="connection.username">root</property>
 	    <property name="connection.password">root</property> -->
 	    
-    	<!--Consent Tracking Suite-->
+		<!--Consent Tracking Suite-->
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTier.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTierResponse.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTierStatus.hbm.xml"/>
 		<!--Consent Tracking Suite-->
 
 		<!-- caTIES Suite-->
-    	<mapping resource="edu/wustl/catissuecore/hbm/Concept.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Concept.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ConceptReferent.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ConceptReferentClassification.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/PathologyReportReviewParameter.hbm.xml"/>
@@ -48,8 +48,8 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/SurgicalPathologyReport.hbm.xml"/>
 		<!-- caTIES Suite-->
 
-        <!-- List of all Mapping files -->
-        <mapping resource="edu/wustl/catissuecore/hbm/Address.hbm.xml"/>
+		<!-- List of all Mapping files -->
+		<mapping resource="edu/wustl/catissuecore/hbm/Address.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AuditEvent.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AuditEventDetails.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AuditEventLog.hbm.xml"/>
@@ -69,7 +69,7 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/ReportedProblem.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Site.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenRequirement.hbm.xml"/>
-        <mapping resource="edu/wustl/catissuecore/hbm/Specimen.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Specimen.hbm.xml"/>
 		
 		<mapping resource="edu/wustl/catissuecore/hbm/CollectionProtocolEvent.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenCollectionGroup.hbm.xml"/>
@@ -169,7 +169,8 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocol.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthDomain.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthProvider.hbm.xml" />
-                <mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthToken.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthToken.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/LoginAuditLog.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExternalIdentifier.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Audit.hbm.xml" />
 		

@@ -33,7 +33,7 @@ public class DomainRegistrationServiceImpl implements DomainRegistrationService 
 	@Override
 	@PlusTransactional	
 	public ResponseEvent<List<DomainDetail>> getDomains(RequestEvent<ListAuthDomainCriteria> req) {
-		List<AuthDomain> authDomains = daoFactory.getDomainDao().getAllAuthDomains(req.getPayload().maxResults());
+		List<AuthDomain> authDomains = daoFactory.getAuthDao().getAuthDomains(req.getPayload().maxResults());
 
 		List<DomainDetail> result = new ArrayList<DomainDetail>();
 		for (AuthDomain domain : authDomains) {
@@ -51,7 +51,7 @@ public class DomainRegistrationServiceImpl implements DomainRegistrationService 
 			AuthDomain authDomain = domainRegFactory.getAuthDomain(detail);
 			
 			ensureUniqueDomainName(authDomain.getName());
-			daoFactory.getDomainDao().saveOrUpdate(authDomain);
+			daoFactory.getAuthDao().saveOrUpdate(authDomain);
 			return ResponseEvent.response(DomainDetail.fromDomain(authDomain));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -61,7 +61,7 @@ public class DomainRegistrationServiceImpl implements DomainRegistrationService 
 	}
 
 	private void ensureUniqueDomainName(String domainName) {
-		if (!daoFactory.getDomainDao().isUniqueAuthDomainName(domainName)) {
+		if (!daoFactory.getAuthDao().isUniqueAuthDomainName(domainName)) {
 			throw OpenSpecimenException.userError(AuthProviderErrorCode.DUP_DOMAIN_NAME);
 		}
 	}

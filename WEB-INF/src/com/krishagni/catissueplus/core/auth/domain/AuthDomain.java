@@ -14,8 +14,6 @@ public class AuthDomain {
 
 	private AuthProvider authProvider;
 
-	private Ldap ldap;
-
 	public Long getId() {
 		return id;
 	}
@@ -38,14 +36,6 @@ public class AuthDomain {
 
 	public AuthProvider getAuthProvider() {
 		return authProvider;
-	}
-
-	public Ldap getLdap() {
-		return ldap;
-	}
-
-	public void setLdap(Ldap ldap) {
-		this.ldap = ldap;
 	}
 
 	public AuthenticationService getAuthProviderInstance() {

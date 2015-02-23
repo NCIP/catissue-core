@@ -39,7 +39,7 @@ angular.module('openspecimen', [
       .state('signed-in', {
         abstract: true,
         templateUrl: 'modules/common/appmenu.html',
-        controller: 'signedInCtrl'
+        controller: 'SignedInCtrl'
       });
 
     $urlRouterProvider.otherwise('/');

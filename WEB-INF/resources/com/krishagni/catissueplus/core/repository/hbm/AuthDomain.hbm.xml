@@ -18,15 +18,13 @@
 	
     <property name="name" column="DOMAIN_NAME"/>    
         
-    <one-to-one name="ldap" cascade="save-update"/>
-
     <query name="getDomainByName">
       from com.krishagni.catissueplus.core.auth.domain.AuthDomain where name = :domainName
     </query>
 	
-    <query name="getAllDomains">
+    <query name="getAuthDomains">
       from com.krishagni.catissueplus.core.auth.domain.AuthDomain
     </query>
     
-   </class>
+  </class>
 </hibernate-mapping>

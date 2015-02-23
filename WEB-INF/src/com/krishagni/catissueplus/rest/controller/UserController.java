@@ -1,7 +1,6 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -158,17 +157,11 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET, value = "/current-user")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String, Object> getCurrentUser() {
+	public UserSummary getCurrentUser() {
 		ResponseEvent<UserSummary> resp = userAuthService.getCurrentLoggedInUser();
 		resp.throwErrorIfUnsuccessful();
 		
-		UserSummary detail = resp.getPayload();
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("firstName", detail.getFirstName());
-		result.put("lastName", detail.getLastName());
-		result.put("loginName", detail.getLoginName());
-		
-		return result;
+		return resp.getPayload();
  	}
 
 	private SessionDataBean getSession() {

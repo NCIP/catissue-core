@@ -43,7 +43,7 @@ import com.krishagni.catissueplus.core.administrative.services.PermissibleValueS
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
 import com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl;
-import com.krishagni.catissueplus.core.auth.repository.DomainDao;
+import com.krishagni.catissueplus.core.auth.repository.AuthDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
@@ -64,7 +64,7 @@ public class UserTest {
 	UserDao userDao;
 
 	@Mock
-	DomainDao domainDao;
+	AuthDao domainDao;
 
 	@Mock
 	DepartmentDao departmentDao;
@@ -113,7 +113,7 @@ public class UserTest {
 
 		
 		when(daoFactory.getUserDao()).thenReturn(userDao);
-		when(daoFactory.getDomainDao()).thenReturn(domainDao);
+		when(daoFactory.getAuthDao()).thenReturn(domainDao);
 		when(daoFactory.getSiteDao()).thenReturn(siteDao);
 		when(daoFactory.getRoleDao()).thenReturn(roleDao);
 		when(daoFactory.getCollectionProtocolDao()).thenReturn(collectionProtocolDao);

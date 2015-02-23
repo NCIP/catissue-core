@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.auth.events.LoginDetail;
 import com.krishagni.catissueplus.core.auth.services.UserAuthenticationService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -44,8 +46,17 @@ public class AuthenticationController {
 		RequestEvent<LoginDetail> req = new RequestEvent<LoginDetail>(getSession(), loginDetail);
 		ResponseEvent<Map<String, Object>> resp = userAuthService.authenticateUser(req);
 		resp.throwErrorIfUnsuccessful();
+		
+		User user = (User) resp.getPayload().get("user");
+		Map<String, Object> detail = new HashMap<String, Object>();
+		detail.put("id", user.getId());
+		detail.put("firstName", user.getFirstName());
+		detail.put("lastName", user.getLastName());
+		detail.put("loginName", user.getLoginName());
+		detail.put("token", (String)resp.getPayload().get("token"));
+		
 
-		return resp.getPayload();
+		return detail;
 	}
 	
 	@RequestMapping(method=RequestMethod.DELETE)
@@ -54,7 +65,6 @@ public class AuthenticationController {
 	public Map<String, String> delete(HttpServletResponse httpResp) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		RequestEvent<String> req = new RequestEvent<String>(getSession(), (String)auth.getCredentials());
-		
 		ResponseEvent<String> resp = userAuthService.removeToken(req);
 		resp.throwErrorIfUnsuccessful();
 

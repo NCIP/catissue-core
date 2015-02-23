@@ -24,7 +24,6 @@ import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
-import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.email.EmailSender;
@@ -36,7 +35,7 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserServiceImpl implements UserService {
-	private static final String DEFAULT_AUTH_DOMAIN = AuthenticationType.OPENSPECIMEN.name().toLowerCase();
+	private static final String DEFAULT_AUTH_DOMAIN = "openspecimen";
 
 	private DaoFactory daoFactory;
 

@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.auth.events;
 
+import java.util.Map;
+
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 
 public class DomainDetail {
@@ -12,8 +14,16 @@ public class DomainDetail {
 	private String implClass;
 
 	private String authType;
+	
+	private Map<String, String> authProviderProps;
 
-	private LdapDetail ldapDetails;
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -39,31 +49,22 @@ public class DomainDetail {
 		this.authType = authType;
 	}
 
-	public LdapDetail getLdapDetails() {
-		return ldapDetails;
+	public Map<String, String> getAuthProviderProps() {
+		return authProviderProps;
 	}
 
-	public void setLdapDetails(LdapDetail ldapDetails) {
-		this.ldapDetails = ldapDetails;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+	public void setAuthProviderProps(Map<String, String> authProviderProps) {
+		this.authProviderProps = authProviderProps;
 	}
 
 	public static DomainDetail fromDomain(AuthDomain authDomain) {
-		DomainDetail details = new DomainDetail();
-		details.setId(authDomain.getId());
-		details.setName(authDomain.getName());
-		details.setAuthType(authDomain.getAuthProvider().getAuthType());
-		details.setImplClass(details.getImplClass());
-		if (authDomain.getLdap() != null) {
-			details.setLdapDetails(LdapDetail.fromDomain(authDomain.getLdap()));
-		}
-		return details;
+		DomainDetail detail = new DomainDetail();
+		detail.setId(authDomain.getId());
+		detail.setName(authDomain.getName());
+		detail.setAuthType(authDomain.getAuthProvider().getAuthType());
+		detail.setImplClass(detail.getImplClass());
+		detail.setAuthProviderProps(authDomain.getAuthProvider().getProps());
+		
+		return detail;
 	}
 }

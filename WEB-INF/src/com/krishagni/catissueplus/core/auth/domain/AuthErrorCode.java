@@ -5,6 +5,8 @@ import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 public enum AuthErrorCode implements ErrorCode {
 	INVALID_CREDENTIALS,
 	
+	USER_LOCKED,
+	
 	INVALID_TOKEN,
 	
 	TOKEN_EXPIRED,

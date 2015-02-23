@@ -360,7 +360,74 @@
 
       update catissue_user set DOMAIN_NAME = 'openspecimen' where DOMAIN_NAME = 'catissue';
     </sql>
+  </changeSet>
+  
+  <changeSet author="vlonushte" id="OS Auth provider props table">
+    <createTable tableName="OS_AUTH_PROVIDER_PROPS">
+      <column name="AUTH_PROVIDER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
 
+      <column name="NAME" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="VALUE" type="${text.type}(64)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
   </changeSet>
 
+  <changeSet author="vlonushte" id="FK on auth provider of auth provider props">
+    <addForeignKeyConstraint 
+      constraintName="FK_AP_PROPS_AP_ID"
+      baseTableName="OS_AUTH_PROVIDER_PROPS"
+      baseColumnNames="AUTH_PROVIDER_ID"
+      referencedTableName="CATISSUE_AUTH_PROVIDERS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="OS Login Audit Logs table">
+    <createTable tableName="OS_LOGIN_AUDIT_LOGS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="USER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="IP_ADDRESS" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="LOGIN_TIME" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="LOGOUT_TIME" type="${timestamp.type}">
+      </column>
+
+      <column name="IS_LOGIN_SUCCESSFUL" type="${boolean.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Login audit logs table sequence">
+    <createSequence 
+      sequenceName="OS_LOGIN_AUDIT_LOGS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="vlonushte" id="FK on user of login audit log">
+    <addForeignKeyConstraint 
+      constraintName="FK_LOGIN_AUDIT_LOGS_USER_ID"
+      baseTableName="OS_LOGIN_AUDIT_LOGS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
 </databaseChangeLog>

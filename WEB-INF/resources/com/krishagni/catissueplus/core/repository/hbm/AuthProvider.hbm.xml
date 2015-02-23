@@ -15,6 +15,12 @@
     </id>
 	        
     <property name="authType" column="AUTH_TYPE"/>
+    
+    <map name="props" table="OS_AUTH_PROVIDER_PROPS" lazy="false">
+      <key column="AUTH_PROVIDER_ID"/>
+      <map-key column="NAME" type="string"/>
+      <element column="VALUE" type="string" not-null="true"/>
+    </map>
             
     <property name="implClass" column="IMPL_CLASS"/>
             
