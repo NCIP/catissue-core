@@ -1,8 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +10,7 @@ import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
-import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.domain.dependency.InstituteDependencyChecker;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteFactory;
 import com.krishagni.catissueplus.core.administrative.events.DeleteEntityOp;
@@ -31,6 +29,8 @@ public class InstituteServiceImpl implements InstituteService {
 	private DaoFactory daoFactory;
 
 	private InstituteFactory instituteFactory;
+	
+	private InstituteDependencyChecker instituteDependencyChecker;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -38,6 +38,10 @@ public class InstituteServiceImpl implements InstituteService {
 
 	public void setInstituteFactory(InstituteFactory instituteFactory) {
 		this.instituteFactory = instituteFactory;
+	}
+	
+	public void setInstituteDependencyChecker(InstituteDependencyChecker dependencyChecker) {
+		this.instituteDependencyChecker = dependencyChecker;
 	}
 	
 	@Override
@@ -146,7 +150,7 @@ public class InstituteServiceImpl implements InstituteService {
 			}
 			
 			if (!isClosed) {
-				Map<String, List> dependencies = getDependencies(institute);
+				Map<String, List> dependencies = instituteDependencyChecker.getDependencies(institute);
 				if (!dependencies.isEmpty()) {
 					return ResponseEvent.response(dependencies);
 				}
@@ -167,22 +171,6 @@ public class InstituteServiceImpl implements InstituteService {
 		if (institute != null) {
 			ose.addError(InstituteErrorCode.DUP_NAME);
 		}
-	}
-	
-	private Map<String, List> getDependencies(Institute institute) {
-		List<User> users = new ArrayList<User>();
-		for(Department department : institute.getDepartments()) {
-			if (CollectionUtils.isNotEmpty(department.getUsers())) {
-				users.addAll(department.getUsers());
-			}
-		}
-		
-		Map<String, List> depedencies = new HashMap<String, List>();
-		if (CollectionUtils.isNotEmpty(users)) {
-			depedencies.put("Users", users); 
-		}
-		
-		return depedencies;
 	}
 	
 	private void checkRemovedDeptRefs(Institute existing, Institute institute,
