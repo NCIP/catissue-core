@@ -17,6 +17,10 @@ public interface ListCriteria<T extends ListCriteria<T>> {
 	
 	public T query(String query);
 	
+	public boolean exactMatch();
+	
+	public T exactMatch(boolean exactMatch);
+	
 	public boolean includeStat();
 	
 	public T includeStat(boolean includeStat);

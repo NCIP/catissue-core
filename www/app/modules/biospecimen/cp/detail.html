@@ -1,10 +1,9 @@
 <div>
   <div os-page-header>
-    <h3>
-      <a ui-sref="cp-list" translate="menu.collection_protocols"></a>
-      <span class="fa fa-angle-right"></span>
-      <span> {{cp.title}} </span>
-    </h3>
+    <ul os-breadcrumbs>
+      <li> <a ui-sref="cp-list" translate="menu.collection_protocols"></a> </li>
+    </ul>
+    <h3>{{cp.title}}</h3>
     <button class="os-round-btn" ui-sref="cp-addedit">
       <span class="fa fa-pencil"></span>
     </button>

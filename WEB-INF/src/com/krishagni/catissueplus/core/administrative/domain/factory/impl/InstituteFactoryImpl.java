@@ -52,7 +52,7 @@ public class InstituteFactoryImpl implements InstituteFactory {
 		
 		for (DepartmentDetail deptDetail : detail.getDepartments()) {
 			Department department = null;
-			if (deptDetail.getId() != null) {	
+			if (deptDetail.getId() != null && detail.getId() != null) {	
 				department = daoFactory.getInstituteDao().getDepartment(deptDetail.getId(), detail.getId());
 				if(department == null) {
 					ose.addError(InstituteErrorCode.DEPT_NOT_FOUND);

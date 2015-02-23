@@ -18,7 +18,7 @@ angular.module('os.administrative.institute.addedit',['os.administrative.models'
      
       if (department == undefined) {
         department = institute.departments[institute.departments.length - 1];
-        if (!(department.name == undefined || department.name == "")) {
+        if (department && !!department.name) {
           return;
         }
       }

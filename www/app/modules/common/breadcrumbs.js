@@ -1,31 +1,36 @@
-
 angular.module('openspecimen')
-  .directive("osBreadcrumbs", function($state, $interpolate) {
-    function generateBreadcrumbs(state) {
-      var breadcrumbs = [];
-
-      while (state && state.name !== '') {
-        if (state.breadcrumb) {
-          var title = $interpolate(state.breadcrumb.title)(state.locals.globals);
-          breadcrumbs.push({title: title, state: state.breadcrumb.state || state.name});
-        }
-
-        state = state.parent;
-      }
-
-      return breadcrumbs.reverse();
+  .directive('osBreadcrumbs', function($compile) {
+    function ellipsis() {
+      return angular.element('<li/>')
+        .append(angular.element('<a/>').append('...'));
     };
 
     return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'modules/common/breadcrumbs-template.html',
-      link: function(scope) {
-        scope.breadcrumbs = generateBreadcrumbs($state.$current);
-        scope.$on('$stateChangeSuccess', function() {
-          scope.breadcrumbs = generateBreadcrumbs($state.$current);
+      restrict: 'A',
+      link: function(scope, element, attr) {
+        element.addClass('os-breadcrumbs');
+
+        var items = element.find('li');
+        if (items.length <= 2) {
+          return;
+        }
+
+        var collapsed = ellipsis().addClass('collapsed');
+        element.prepend(collapsed);
+        for (var i = 0; i < items.length - 2; i++) {
+          angular.element(items[i]).addClass('show-on-hover');
+        }
+
+        collapsed.on('mouseenter', function() {
+          element.addClass('hover');
         });
+
+        element.on('mouseleave', function() {
+          element.removeClass('hover');
+        });
+
+        //element.removeAttr('os-breadcrumbs');
+        //$compile(element)(scope);
       }
-    };
-  }
-);
+    }
+  });

@@ -10,8 +10,10 @@ public abstract class AbstractListCriteria<T extends ListCriteria<T>> implements
 	
 	private String query;
 	
+	private boolean exactMatch;
+	
 	private boolean includeStat;
-		
+	
 	@Override
 	public int startAt() {
 		return startAt <= 0 ? 0 : startAt;
@@ -53,6 +55,17 @@ public abstract class AbstractListCriteria<T extends ListCriteria<T>> implements
 	@Override
 	public T query(String query) {
 		this.query = query;
+		return self();
+	}
+	
+	@Override
+	public boolean exactMatch() {
+		return exactMatch;
+	}
+	
+	@Override
+	public T exactMatch(boolean exactMatch) {
+		this.exactMatch = exactMatch;
 		return self();
 	}
 	

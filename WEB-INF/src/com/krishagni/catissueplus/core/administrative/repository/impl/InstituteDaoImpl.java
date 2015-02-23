@@ -34,7 +34,8 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 			.setMaxResults(listCrit.maxResults());
 				
 		if (StringUtils.isNotBlank(listCrit.query())) {
-			query.add(Restrictions.ilike("name", listCrit.query(), MatchMode.ANYWHERE));
+			MatchMode matchMode = listCrit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;  
+			query.add(Restrictions.ilike("name", listCrit.query(), matchMode));
 		}
 
 		return query.list();

@@ -310,7 +310,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	}
 	
 	private List<SpecimenDetail> getSpecimensByVisit(Long cprId, Long visitId) {
-		Visit visit = daoFactory.getVisitsDao().getVisit(visitId);
+		Visit visit = daoFactory.getVisitsDao().getById(visitId);
 		if (visit == null) {
 			throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND);
 		}

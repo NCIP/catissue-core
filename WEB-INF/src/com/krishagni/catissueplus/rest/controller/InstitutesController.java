@@ -48,11 +48,15 @@ public class InstitutesController {
 			int maxResults,
 			
 			@RequestParam(value = "name", required = false)
-			String name
+			String name,
+			
+			@RequestParam(value = "exactMatch", required = false, defaultValue = "false")
+			boolean exactMatch
 			) {
 		
 		InstituteListCriteria crit  = new InstituteListCriteria()
 				.query(name)
+				.exactMatch(exactMatch)
 				.startAt(startAt)
 				.maxResults(maxResults);
 		

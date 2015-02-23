@@ -3369,7 +3369,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
         </addColumn>
     </changeSet>
    
-    <changeSet author="dpatil" id="migrate user table for open specimen" failOnError="true">
+ <!--    <changeSet author="dpatil" id="migrate user table for open specimen" failOnError="true">
        <sql>
             create table os_user as select * from catissue_user
        </sql>
@@ -3392,7 +3392,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
     </sql>
     </changeSet>
 
-    <!--<changeSet author="dpatil" id="data migration for inst in new department" failOnError="true" dbms="oracle" >
+    <changeSet author="dpatil" id="data migration for inst in new department" failOnError="true" dbms="oracle" >
       <sql splitStatements="false" endDelimiter="$">
         create or replace  
             PROCEDURE MIGRATE_INSTITUTE_PROC 
@@ -3409,7 +3409,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             END MIGRATE_INSTITUTE_PROC;
     </sql>
     <sql>call MIGRATE_INSTITUTE_PROC();</sql>   
-    </changeSet> -->
+    </changeSet>
 
     <changeSet author="dpatil" id="add unique constraints columns in os_department table" failOnError="true">
           <addUniqueConstraint constraintName="OS_DEPT_INSTID_UNIQUE_KEY"
@@ -3471,7 +3471,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             referencedTableName="CATISSUE_INSTITUTION"
             referencedColumnNames="IDENTIFIER" />
    </changeSet>
-
+ -->
   <changeSet id="CREATE USER_VIEW" author="mibrahim" failOnError="true" runOnChange="true">
     <sql>
       CREATE OR REPLACE VIEW USER_VIEW AS (
