@@ -79,6 +79,12 @@ public class CpeFactoryImpl implements CpeFactory {
 			cpe.setClinicalStatus(existing.getClinicalStatus());
 		}
 		
+		if (!StringUtils.isBlank(detail.getActivityStatus())) {
+			setActivityStatus(detail, cpe, ose);
+                } else {
+                        cpe.setActivityStatus(existing.getActivityStatus());
+                }
+		
 		ose.checkAndThrow();		
 		return cpe;
 	}
