@@ -3,7 +3,7 @@ package com.krishagni.catissueplus.core.administrative.services;
 import java.util.List;
 import java.util.Map;
 
-import com.krishagni.catissueplus.core.administrative.events.DeleteInstituteOp;
+import com.krishagni.catissueplus.core.administrative.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
@@ -20,5 +20,5 @@ public interface InstituteService {
 
 	public ResponseEvent<InstituteDetail> updateInstitute(RequestEvent<InstituteDetail> req);
 
-	public ResponseEvent<Map<String, List>> deleteInstitute(RequestEvent<DeleteInstituteOp> req);
+	public ResponseEvent<Map<String, List>> deleteInstitute(RequestEvent<DeleteEntityOp> req);
 }

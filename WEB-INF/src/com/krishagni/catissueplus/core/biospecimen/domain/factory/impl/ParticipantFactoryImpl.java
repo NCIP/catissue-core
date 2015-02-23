@@ -192,7 +192,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	private ParticipantMedicalIdentifier getPmi(ParticipantMedicalIdentifierNumberDetail pmiDetail, OpenSpecimenException oce) {
-		Site site = daoFactory.getSiteDao().getSite(pmiDetail.getSiteName());		
+		Site site = daoFactory.getSiteDao().getSiteByName(pmiDetail.getSiteName());		
 		if (site == null) {
 			oce.addError(SiteErrorCode.NOT_FOUND);
 			return null;

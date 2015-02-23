@@ -184,7 +184,7 @@ public class VisitFactoryImpl implements VisitFactory {
 			ose.addError(VisitErrorCode.SITE_REQUIRED);
 			return;
 		} else {
-			Site site = daoFactory.getSiteDao().getSite(visitSite);
+			Site site = daoFactory.getSiteDao().getSiteByName(visitSite);
 			if (site == null) {
 				ose.addError(SiteErrorCode.NOT_FOUND);
 				return;

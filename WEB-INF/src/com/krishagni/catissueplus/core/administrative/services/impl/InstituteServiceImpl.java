@@ -15,7 +15,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteFactory;
-import com.krishagni.catissueplus.core.administrative.events.DeleteInstituteOp;
+import com.krishagni.catissueplus.core.administrative.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
@@ -131,9 +131,9 @@ public class InstituteServiceImpl implements InstituteService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Map<String, List>> deleteInstitute(RequestEvent<DeleteInstituteOp> req) {
+	public ResponseEvent<Map<String, List>> deleteInstitute(RequestEvent<DeleteEntityOp> req) {
 		try {
-			DeleteInstituteOp deleteOp = req.getPayload();
+			DeleteEntityOp deleteOp = req.getPayload();
 			Long instituteId = deleteOp.getId();
 			Boolean isClosed = deleteOp.isClose();
 			Institute institute = null;						

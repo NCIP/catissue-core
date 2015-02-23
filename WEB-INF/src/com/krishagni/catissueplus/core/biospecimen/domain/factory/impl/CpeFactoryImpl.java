@@ -123,7 +123,7 @@ public class CpeFactoryImpl implements CpeFactory {
 			return;
 		}
 		
-		Site site = daoFactory.getSiteDao().getSite(detail.getDefaultSite());
+		Site site = daoFactory.getSiteDao().getSiteByName(detail.getDefaultSite());
 		if (site == null) {
 			ose.addError(SiteErrorCode.NOT_FOUND);
 			return;

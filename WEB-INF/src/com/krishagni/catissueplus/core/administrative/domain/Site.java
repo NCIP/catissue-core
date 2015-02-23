@@ -1,16 +1,11 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import static com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode.REF_ENTITY_FOUND;
-
 import java.util.HashSet;
 import java.util.Set;
 
-import krishagni.catissueplus.util.CommonUtil;
-
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
-import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class Site {
@@ -19,19 +14,19 @@ public class Site {
 
 	private String name;
 
-	private String code; // TODO: Need to map in hbm
+	private String code;
 
 	private String type;
 
 	private String activityStatus;
 
-	private String address; // TODO: Need to map in hbm
+	private String address;
     
-	private Set<User> coordinatorCollection = new HashSet<User>();
+	private Set<User> coordinators = new HashSet<User>();
 
 	private Set<Visit> scgCollection = new HashSet<Visit>();
 
-	private Set<StorageContainer> storageContainerCollection = new HashSet<StorageContainer>();
+	private Set<StorageContainer> storageContainers = new HashSet<StorageContainer>();
 
 	public Long getId() {
 		return id;
@@ -81,12 +76,12 @@ public class Site {
     	this.address = address; 
     }
 
-	public Set<User> getCoordinatorCollection() {
-		return coordinatorCollection;
+	public Set<User> getCoordinators() {
+		return coordinators;
 	}
 
-	public void setCoordinatorCollection(Set<User> coordinatorCollection) {
-		this.coordinatorCollection = coordinatorCollection;
+	public void setCoordinators(Set<User> coordinatorCollection) {
+		this.coordinators = coordinatorCollection;
 	}
 
 	public Set<Visit> getScgCollection() {
@@ -97,33 +92,26 @@ public class Site {
 		this.scgCollection = scgCollection;
 	}
 
-	public Set<StorageContainer> getStorageContainerCollection() {
-		return storageContainerCollection;
+	public Set<StorageContainer> getStorageContainers() {
+		return storageContainers;
 	}
 
-	public void setStorageContainerCollection(Set<StorageContainer> storageContainerCollection) {
-		this.storageContainerCollection = storageContainerCollection;
+	public void setStorageContainers(Set<StorageContainer> storageContainerCollection) {
+		this.storageContainers = storageContainerCollection;
 	}
 
-	public void update(Site site) {
-		if (site.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
-			this.setName(CommonUtil.appendTimestamp(site.getName()));
-		}
-		else {
-			this.setName(site.getName());
-		}
-		
-		this.setCode(site.getCode());
-		this.setType(site.getType());
-		this.setActivityStatus(site.getActivityStatus());
-		CollectionUpdater.update(this.getCoordinatorCollection(), site.getCoordinatorCollection());
+	public void update(Site other) {
+		setName(other.getName());
+		setCode(other.getCode());
+		setType(other.getType());
+		setActivityStatus(other.getActivityStatus());
+		CollectionUpdater.update(this.getCoordinators(), other.getCoordinators());
 	}
 
-	public void delete() {
-		if (!this.getScgCollection().isEmpty() || !this.getStorageContainerCollection().isEmpty()) {
-			throw OpenSpecimenException.userError(REF_ENTITY_FOUND);
-		}
-		
-		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+	public void delete(boolean close) {
+		String activityStatus = close ? Status.ACTIVITY_STATUS_CLOSED.getStatus()  
+				: Status.ACTIVITY_STATUS_DISABLED.getStatus();
+		this.setActivityStatus(activityStatus);
 	}
+
 }

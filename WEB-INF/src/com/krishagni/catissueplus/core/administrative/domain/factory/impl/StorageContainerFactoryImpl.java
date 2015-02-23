@@ -140,7 +140,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 			return null;
 		}
 				
-		Site site = daoFactory.getSiteDao().getSite(siteName);
+		Site site = daoFactory.getSiteDao().getSiteByName(siteName);
 		if (site == null) {
 			ose.addError(SiteErrorCode.NOT_FOUND);			
 		}

@@ -1,6 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
-public class DeleteInstituteOp {
+public class DeleteEntityOp {
 	
 	private Long id;
 	

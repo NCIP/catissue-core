@@ -313,13 +313,18 @@
 		<property name="daoFactory" ref="biospecimenDaoFactory"/>
 		<property name="instituteFactory" ref="instituteFact"/>
 	</bean>
+	
 	<bean id="siteFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.SiteFactoryImpl">
-        <property name="daoFactory" ref="biospecimenDaoFactory"/>       
+          <property name="daoFactory" ref="biospecimenDaoFactory"/>       
+	</bean>
+	
+	<bean id="siteDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.SiteDependencyChecker">
 	</bean>
     
 	<bean id="siteService" class="com.krishagni.catissueplus.core.administrative.services.impl.SiteServiceImpl">
-        <property name="daoFactory" ref="biospecimenDaoFactory"/>
-        <property name="siteFactory" ref="siteFactory" />
+          <property name="daoFactory" ref="biospecimenDaoFactory"/>
+          <property name="siteFactory" ref="siteFactory" />
+          <property name="siteDependencyChecker" ref="siteDependencyChecker" />
 	</bean>
 	
 	<bean id="containerLabelGenerator" class="com.krishagni.catissueplus.core.labelgenerator.impl.StorageContainerLabelGenerator">
