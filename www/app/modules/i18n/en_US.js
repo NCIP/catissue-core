@@ -444,5 +444,25 @@
       "overview": "Overview",
       "locations": "Locations"
     }
+  },
+
+  "extensions": {
+    "no_extensions": "No extensions to show",
+    "list": "Extensions",
+
+    "name": "Name",
+    "creator": "Creator",
+    "last_updated": "Last Updated",
+    "record_count": "Records",
+    "multiRecord": "Multirecord",
+
+    "no_records": "No extension records to show",
+    "record_id": "Record #",
+    "last_updated_by": "Last Updated By",
+    
+    "edit_record": "Edit Record",
+    "new_record": "Create New Record",
+
+    "record_saved": "Extension record saved successfully"
   }
 }

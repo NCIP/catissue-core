@@ -209,6 +209,13 @@ body {
   margin-right: 24px;
 }
 
+button.btn.os-round-btn {
+  height: 24px;
+  width: 24px;
+  border-radius: 100%; 
+  padding: 0px;
+}
+
 .os-page-hdr .os-round-btn {
   cursor: pointer;
   height: 24px;

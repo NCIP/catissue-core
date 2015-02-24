@@ -54,9 +54,6 @@ angular.module('openspecimen', [
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
       'sessions': '/rest/ng/sessions',
-      'collection-protocols': '/rest/ng/collection-protocols',
-      'cprs': '/rest/ng/collection-protocol-registrations',
-      'participants': '/rest/ng/participants',
       'sites': '/rest/ng/sites',
       'form-files': '/rest/ng/form-files'
     };
@@ -160,7 +157,7 @@ angular.module('openspecimen', [
           return prefix + this.app + '/rest/ng/';
         },
 
-        getUrl  : function(key) {
+        getUrl: function(key) {
           var url = '';
           if (key) {
             url = this.urls[key];
