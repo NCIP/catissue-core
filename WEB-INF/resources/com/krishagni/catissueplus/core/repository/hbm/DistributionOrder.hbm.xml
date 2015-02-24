@@ -4,14 +4,9 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false">
-  <class
-    name="com.krishagni.catissueplus.core.administrative.domain.DistributionOrder"
-    table="OS_ORDERS">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.DistributionOrder" table="OS_ORDERS">
 	
-    <id
-      name="id"
-      column="IDENTIFIER"
-      unsaved-value="null">
+    <id name="id" column="IDENTIFIER">
       <generator class="native">
         <param name="sequence">OS_ORDERS_SEQ</param>
       </generator>
@@ -29,10 +24,17 @@
     
     <property name="executionDate" column="EXECUTION_DATE"/>
       
-    <property name="status" column="STATUS"/> 
+    <property name="status" column="STATUS" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.DistributionOrder$DistributionStatus</param>
+        <param name="type">12</param>
+      </type>
+    </property> 
     
     <property name="orderType" column="ORDER_TYPE"/>
-
+    
+    <property name="activityStatus" column="ACTIVITY_STATUS" />
+    
     <set
       name="orderItems"
       table="OS_ORDER_ITEMS"
@@ -44,7 +46,7 @@
     </set>     
     
     <many-to-one 
-      name="distributionSite" 
+      name="site" 
       cascade="none" 
       class="com.krishagni.catissueplus.core.administrative.domain.Site"
       column="SITE_ID"/>

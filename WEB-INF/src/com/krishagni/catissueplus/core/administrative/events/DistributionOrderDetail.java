@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
+import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder.DistributionStatus;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class DistributionOrderDetail {
@@ -14,7 +15,7 @@ public class DistributionOrderDetail {
 	
 	private DistributionProtocolDetail distributionProtocol;
 	
-	private SiteDetail distributionSite;
+	private SiteDetail site;
 	
 	private UserSummary requester;
 	
@@ -24,9 +25,11 @@ public class DistributionOrderDetail {
 	
 	private Date executionDate;
 	
-	private String status;
+	private DistributionStatus status;
 	
 	private List<DistributionOrderItemDetail> orderItems = new ArrayList<DistributionOrderItemDetail>();
+	
+	private String activityStatus;
 
 	public Long getId() {
 		return id;
@@ -53,12 +56,12 @@ public class DistributionOrderDetail {
 		this.distributionProtocol = distributionProtocol;
 	}
 
-	public SiteDetail getDistributionSite() {
-		return distributionSite;
+	public SiteDetail getSite() {
+		return site;
 	}
 
-	public void setDistributionSite(SiteDetail distributionSite) {
-		this.distributionSite = distributionSite;
+	public void setSite(SiteDetail distributionSite) {
+		this.site = distributionSite;
 	}
 
 	public UserSummary getRequester() {
@@ -93,11 +96,11 @@ public class DistributionOrderDetail {
 		this.executionDate = executionDate;
 	}
 
-	public String getStatus() {
+	public DistributionStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(DistributionStatus status) {
 		this.status = status;
 	}
 
@@ -107,6 +110,14 @@ public class DistributionOrderDetail {
 
 	public void setOrderItems(List<DistributionOrderItemDetail> orderItems) {
 		this.orderItems = orderItems;
+	}
+
+	public String getActivityStatus() {
+		return activityStatus;
+	}
+
+	public void setActivityStatus(String activityStatus) {
+		this.activityStatus = activityStatus;
 	}
 
 	public static DistributionOrderDetail from(DistributionOrder order) {
@@ -119,7 +130,8 @@ public class DistributionOrderDetail {
 		detail.setOrderItems(DistributionOrderItemDetail.from(order.getOrderItems()));
 		detail.setDistributionProtocol(DistributionProtocolDetail.from(order.getDistributionProtocol()));
 		detail.setRequester(UserSummary.from(order.getRequester()));
-		detail.setDistributionSite(SiteDetail.fromDomain(order.getDistributionSite()));
+		detail.setSite(SiteDetail.fromDomain(order.getSite()));
+		detail.setActivityStatus(order.getActivityStatus());
 		if (order.getDistributor() != null ) {
 			detail.setDistributor(UserSummary.from(order.getDistributor()));
 		}

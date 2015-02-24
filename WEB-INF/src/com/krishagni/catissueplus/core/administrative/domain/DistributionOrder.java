@@ -5,16 +5,22 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
-public class DistributionOrder {
-	private Long id;
+public class DistributionOrder extends BaseEntity {
+	public enum DistributionStatus { 
+		PENDING,
+		DISTRIBUTED,
+		DISTRIBUTED_AND_CLOSED
+	}
 	
 	private String name;
 	
 	private DistributionProtocol distributionProtocol;
 	
-	private Site distributionSite;
+	private Site site;
 	
 	private User requester;
 	
@@ -28,16 +34,10 @@ public class DistributionOrder {
 	
 	private Set<DistributionOrderItem> orderItems = new HashSet<DistributionOrderItem>();
 	
-	private String status;
+	private DistributionStatus status;
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
+	private String activityStatus;
+	
 	public String getName() {
 		return name;
 	}
@@ -54,12 +54,12 @@ public class DistributionOrder {
 		this.distributionProtocol = distributionProtocol;
 	}
 
-	public Site getDistributionSite() {
-		return distributionSite;
+	public Site getSite() {
+		return site;
 	}
 
-	public void setDistributionSite(Site distributionSite) {
-		this.distributionSite = distributionSite;
+	public void setSite(Site distributionSite) {
+		this.site = distributionSite;
 	}
 
 	public User getRequester() {
@@ -110,76 +110,72 @@ public class DistributionOrder {
 		this.orderItems = orderItems;
 	}
 
-	public String getStatus() {
+	public DistributionStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(DistributionStatus status) {
 		this.status = status;
+	}
+
+	public String getActivityStatus() {
+		return activityStatus;
+	}
+
+	public void setActivityStatus(String activityStatus) {
+		this.activityStatus = activityStatus;
 	}
 
 	public void update(DistributionOrder other) {
 		setName(other.name);
 		setRequester(other.requester);
 		setDistributor(other.distributor);
+		updateOrderItems(other);
+		updateDistribution(other);
 		updateStatus(other);
 		setDistributionProtocol(other.distributionProtocol);
 		setCreationDate(other.creationDate);
-		setDistributionSite(other.distributionSite);
+		setSite(other.site);
 		setExecutionDate(other.executionDate);
-		updateOrderItems(other.orderItems);
 	}
 	
-	public void updateStatus(DistributionOrder other) {
-		if (isOrderDistributed() && other.isPending()) {
-			/*
-			 * Once an order is distributed it can't be set to pending state again
-			 * as the specimens would have been already distributed.
-			 */
-			throw OpenSpecimenException.userError(DistributionOrderErrorCode.INVALID_STATUS);
+	public void distribute() {
+		if (!DistributionStatus.PENDING.equals(status)) {
+			for (DistributionOrderItem orderItem : getOrderItems()) {
+				orderItem.distribute();
+			}
 		}
-		
-		setStatus(other.status);
 	}
 	
-	private void updateOrderItems(Set<DistributionOrderItem> newItems) {
-		orderItems.clear();
-		
-		for (DistributionOrderItem item : newItems) {
+	private void updateOrderItems(DistributionOrder other) {
+		CollectionUpdater.update(orderItems, other.orderItems);
+
+		for (DistributionOrderItem item : getOrderItems()) {
 			item.setOrder(this);
 		}
-		orderItems.addAll(newItems);
+		
 	}
 	
-	public boolean isPending() {
-		return PENDING.equals(status);
+	private void updateDistribution(DistributionOrder other) {
+		if (DistributionStatus.PENDING.equals(status) && other.isOrderDistributed()) {
+			
+			for (DistributionOrderItem orderItem : getOrderItems()) {
+				orderItem.distribute();
+			}
+		}
+	}
+	
+	private void updateStatus(DistributionOrder other) {
+		if (status.equals(other.status) || 
+				(DistributionStatus.PENDING.equals(status) && other.isOrderDistributed())) {
+			setStatus(other.status);
+		} else { 
+			throw OpenSpecimenException.userError(DistributionOrderErrorCode.STATUS_CHANGE_NOT_ALLOWED);
+		}
 	}
 	
 	public boolean isOrderDistributed() {
-		if (DISTRIBUTED.equals(status) || DISTRIBUTED_AND_CLOSED.equals(status)) {
-			return true;
-		}
-		
-		return false;
+		return (DistributionStatus.DISTRIBUTED.equals(status) || 
+				DistributionStatus.DISTRIBUTED_AND_CLOSED.equals(status));
 	}
-	
-	public boolean closeAfterDistribution() {
-		return DISTRIBUTED_AND_CLOSED.equals(status);
-	}
-	
-	public static boolean isDistributionStatusValid(String status) {
-		if (PENDING.equals(status) || 
-				DISTRIBUTED.equals(status) || 
-				DISTRIBUTED_AND_CLOSED.equals(status)) {
-			return true;
-		}
-		
-		return false;
-	}
-	
-	public static String PENDING = "Pending";
-
-	public static String DISTRIBUTED = "Distributed";
-	
-	public static String DISTRIBUTED_AND_CLOSED = "Distributed And Closed";
 }

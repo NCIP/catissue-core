@@ -13,10 +13,6 @@ import com.krishagni.catissueplus.core.administrative.repository.DistributionOrd
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> implements DistributionOrderDao {
-	public static final String FQN  = DistributionOrder.class.getName();
-	
-	public static final String GET_DIST_ORD_BY_NAME = FQN + ".getDistributionOrderByName";
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<DistributionOrder> getDistributionOrders(DistributionOrderListCriteria criteria) {
@@ -34,11 +30,6 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 	}
 	
 	@Override
-	public DistributionOrder getDistributionOrder(Long id) {
-		return (DistributionOrder)sessionFactory.getCurrentSession().get(DistributionOrder.class, id);
-	}
-	
-	@Override
 	@SuppressWarnings("unchecked")
 	public DistributionOrder getDistributionOrder(String name) {
 		List<DistributionOrder> result = sessionFactory.getCurrentSession()
@@ -48,4 +39,14 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 				
 		return result.isEmpty() ? null : result.iterator().next();
 	}
+	
+	@Override
+	public Class getType() {
+		return DistributionOrder.class;
+	}
+	
+	public static final String FQN  = DistributionOrder.class.getName();
+	
+	public static final String GET_DIST_ORD_BY_NAME = FQN + ".getDistributionOrderByName";
+
 }

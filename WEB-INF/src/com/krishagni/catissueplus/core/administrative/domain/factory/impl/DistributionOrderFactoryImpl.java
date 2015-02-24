@@ -23,9 +23,11 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 	private DaoFactory daoFactory;
@@ -48,9 +50,20 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		setDistributionDate(detail, distributionOrder, ose);
 		setDistributor(detail, distributionOrder, ose);
 		setStatus(detail, distributionOrder,  ose);
+		setActivityStatus(detail, distributionOrder, ose);
 		
 		ose.checkAndThrow();
 		return distributionOrder;
+	}
+	
+	private void setName(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {
+		String name = detail.getName();
+		if (StringUtils.isBlank(name)) {
+			ose.addError(DistributionOrderErrorCode.NAME_REQUIRED);
+			return;
+		}
+		
+		distributionOrder.setName(name);
 	}
 
 	private void setDistributionProtocol(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {
@@ -64,7 +77,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		
 		if (distributionProtocolId != null) {
 			distributionProtocol = daoFactory.getDistributionProtocolDao().getById(distributionProtocolId);
-		} else if (!StringUtils.isBlank(distributionProtocolTitle)) {
+		} else if (StringUtils.isNotBlank(distributionProtocolTitle)) {
 			distributionProtocol = daoFactory.getDistributionProtocolDao().getDistributionProtocol(distributionProtocolTitle);
 		}
 		
@@ -75,39 +88,19 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		
 		distributionOrder.setDistributionProtocol(distributionProtocol);
 	}
-
-	private void setDistributionSite(DistributionOrderDetail detail, DistributionOrder order, OpenSpecimenException ose) {
-		Long siteId = null;
-		String siteName = null;
-		
-		if (detail.getDistributionSite() != null) {
-			siteId = detail.getDistributionSite().getId();
-			siteName = detail.getDistributionSite().getName();
-		}
-		
-		Site site = null;
-		if (siteId != null) {
-			site = daoFactory.getSiteDao().getById(siteId);
-		} else if (!StringUtils.isBlank(siteName)) {
-			site = daoFactory.getSiteDao().getSite(siteName);
-		}
-		
-		if (site == null) {
-			ose.addError(SiteErrorCode.NOT_FOUND);
-			return;
-		}
-		
-		order.setDistributionSite(site);
-	}
 	
-	private void setName(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {
-		String name = detail.getName();
-		if (StringUtils.isBlank(name)) {
-			ose.addError(DistributionOrderErrorCode.NAME_REQUIRED);
-			return;
+	private void setOrderItems(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {
+		Set<DistributionOrderItem> items = new HashSet<DistributionOrderItem>();
+		
+		for (DistributionOrderItemDetail oid : detail.getOrderItems()) {
+			DistributionOrderItem item = getOrderItem(oid, distributionOrder, ose);
+			
+			if (item != null) {
+				items.add(item);
+			}
 		}
 		
-		distributionOrder.setName(name);
+		distributionOrder.setOrderItems(items);
 	}
 	
 	private void setRequester(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {
@@ -119,6 +112,52 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		
 		distributionOrder.setRequester(requester);
 	}
+
+	private void setDistributionSite(DistributionOrderDetail detail, DistributionOrder order, OpenSpecimenException ose) {
+		Long siteId = null;
+		String siteName = null;
+		
+		if (detail.getSite() != null) {
+			siteId = detail.getSite().getId();
+			siteName = detail.getSite().getName();
+		}
+		
+		Site site = null;
+		if (siteId != null) {
+			site = daoFactory.getSiteDao().getById(siteId);
+		} else if (StringUtils.isNotBlank(siteName)) {
+			site = daoFactory.getSiteDao().getSite(siteName);
+		}
+		
+		if (site == null) {
+			ose.addError(SiteErrorCode.NOT_FOUND);
+			return;
+		}
+		
+		order.setSite(site);
+	}
+	
+	private void setDistributionDate(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {
+		Date creationDate = detail.getCreationDate();
+		if (creationDate == null) {
+			creationDate = Calendar.getInstance().getTime();
+		} else if (creationDate.after(Calendar.getInstance().getTime())) {
+			ose.addError(DistributionOrderErrorCode.INVALID_CREATION_DATE);
+			return;
+		}
+
+		distributionOrder.setCreationDate(creationDate);
+		
+		Date executionDate = detail.getExecutionDate();
+		if (executionDate == null) {
+			executionDate = Calendar.getInstance().getTime();
+		} else if (executionDate.after(Calendar.getInstance().getTime())) {
+			ose.addError(DistributionOrderErrorCode.INVALID_EXECUTION_DATE);
+			return;
+		}
+		
+		distributionOrder.setExecutionDate(executionDate);
+	}
 	
 	private void setDistributor(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {
 		User distributor = getUser(detail.getDistributor());
@@ -128,6 +167,28 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		}
 		
 		distributionOrder.setDistributor(distributor);
+	}
+	
+	private void setStatus(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {		
+		if (detail.getStatus() == null) {
+			ose.addError(DistributionOrderErrorCode.INVALID_STATUS);
+		}
+		
+		distributionOrder.setStatus(detail.getStatus());
+	}
+	
+	private void setActivityStatus(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {
+		String activityStatus = detail.getActivityStatus();
+		if (StringUtils.isBlank(activityStatus)) {
+			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
+		}
+		
+		if (!Status.isValidActivityStatus(activityStatus)) {
+			ose.addError(ActivityStatusErrorCode.INVALID);
+			return;
+		}
+		
+		distributionOrder.setActivityStatus(activityStatus);
 	}
 	
 	private User getUser(UserSummary userSummary) {
@@ -144,60 +205,11 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		
 		if (userId != null) {
 			user = daoFactory.getUserDao().getById(userSummary.getId());
-		} else if (!StringUtils.isBlank(loginName) && !StringUtils.isBlank(domain)) {
-			user = daoFactory.getUserDao().getUserByLoginNameAndDomainName(userSummary.getLoginName(), userSummary.getDomain());
+		} else if (StringUtils.isNotBlank(loginName) && StringUtils.isNotBlank(domain)) {
+			user = daoFactory.getUserDao().getUser(userSummary.getLoginName(), userSummary.getDomain());
 		}
 		
 		return user;
-	}
-	
-	private void setDistributionDate(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {
-		Date creationDate = detail.getCreationDate();
-		if (creationDate == null) {
-			creationDate = Calendar.getInstance().getTime();
-		} else if (creationDate.after(Calendar.getInstance().getTime())) {
-			ose.addError(DistributionOrderErrorCode.INVALID_CREATION_DATE);
-			return;
-		}
-		
-		distributionOrder.setCreationDate(creationDate);
-		if (DistributionOrder.PENDING.equals(detail.getExecutionDate())) {
-			return;
-		}
-		
-		Date executionDate = detail.getExecutionDate();
-		if (executionDate == null) {
-			executionDate = Calendar.getInstance().getTime();
-		} else if (executionDate.after(Calendar.getInstance().getTime())) {
-			ose.addError(DistributionOrderErrorCode.INVALID_EXECUTION_DATE);
-			return;
-		}
-		
-		distributionOrder.setExecutionDate(executionDate);
-	}
-	
-	private void setStatus(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {
-		String status = detail.getStatus();
-		if (!DistributionOrder.isDistributionStatusValid(status)) {
-			ose.addError(DistributionOrderErrorCode.INVALID_STATUS);
-			return;
-		}
-		
-		distributionOrder.setStatus(status);
-	}
-	
-	private void setOrderItems(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {
-		Set<DistributionOrderItem> items = new HashSet<DistributionOrderItem>();
-		
-		for (DistributionOrderItemDetail oid : detail.getOrderItems()) {
-			DistributionOrderItem item = getOrderItem(oid, distributionOrder, ose);
-			
-			if (item != null) {
-				items.add(item);
-			}
-		}
-		
-		distributionOrder.setOrderItems(items);
 	}
 	
 	private DistributionOrderItem getOrderItem(DistributionOrderItemDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {
@@ -231,7 +243,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		
 		if (specimenId != null) {
 			specimen = daoFactory.getSpecimenDao().getById(info.getId());
-		} else if (!StringUtils.isBlank(specimenLabel)) {
+		} else if (StringUtils.isNotBlank(specimenLabel)) {
 			specimen = daoFactory.getSpecimenDao().getSpecimenByLabel(info.getLabel());
 		}
 		

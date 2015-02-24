@@ -308,7 +308,7 @@ public class Specimen {
 	}
 
 	public void distribute(Double quantity, boolean closeAfterDistribution) {
-		if (isAvailable.equals(false) || !isCollected()) {
+		if (!isAvailable || !isCollected()) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_AVAILABLE);
 		}
 		
@@ -383,7 +383,7 @@ public class Specimen {
 		}
 		
 		if (qty < specimen.getInitialQuantity()) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
+			throw new IllegalArgumentException("Insufficient parent specimen quantity");
 		}
 		
 		childCollection.add(specimen);

@@ -9,7 +9,5 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 public interface DistributionOrderDao extends Dao<DistributionOrder> {
 	public List<DistributionOrder> getDistributionOrders(DistributionOrderListCriteria criteria);
 	
-	public DistributionOrder getDistributionOrder(Long id);
-	
 	public DistributionOrder getDistributionOrder(String name);
 }

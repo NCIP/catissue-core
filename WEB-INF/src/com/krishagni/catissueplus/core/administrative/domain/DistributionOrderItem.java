@@ -1,23 +1,15 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder.DistributionStatus;
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 
-public class DistributionOrderItem {
-	private Long id;
-	
+public class DistributionOrderItem extends BaseEntity {
 	private DistributionOrder order;
 	
 	private Double quantity;
 	
 	private Specimen specimen;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public DistributionOrder getOrder() {
 		return order;
@@ -43,7 +35,8 @@ public class DistributionOrderItem {
 		this.specimen = specimen;
 	}
 	
-	public void distribute(boolean closeAfterDistribution) {
+	public void distribute() {
+		boolean closeAfterDistribution = getOrder().getStatus().equals(DistributionStatus.DISTRIBUTED_AND_CLOSED);
 		specimen.distribute(quantity, closeAfterDistribution);
 	}
 }
