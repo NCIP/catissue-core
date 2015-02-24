@@ -1,0 +1,54 @@
+
+<div class="clearfix">
+  <div class="col-xs-8">
+    <ul class="os-key-values os-two-cols" os-inline-editors on-save="editRole">
+      <li class="item">
+        <strong class="key key-sm" translate="role.name">Name</strong>
+        <os-inline-edit editor="nameEditor" name="name" class="value value-md" value="role.name">
+          <span ng-if="nameEditor.isDisplayMode()">{{nameEditor.viewValue | osNoValue}}</span>
+          <input ng-if="nameEditor.isEditMode()" type="text" ng-model="nameEditor.editValue" 
+            class="form-control" placeholder="{{'role.name' | translate}}">
+        </os-inline-edit>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="role.description">Description</strong>
+        <os-inline-edit editor="descriptionEditor" name="description" class="value value-md" value="role.description">
+          <span ng-if="descriptionEditor.isDisplayMode()">{{descriptionEditor.viewValue | osNoValue}}</span>
+          <textarea ng-if="descriptionEditor.isEditMode()" type="text" ng-model="descriptionEditor.editValue" 
+            class="form-control" placeholder="{{'role.description' | translate}}"></textarea>
+        </os-inline-edit>
+      </li>
+    </ul>
+
+    <div class="os-section" ng-init="rsCollapsed=false">
+      <button class="os-btn-section-collapse os-btn-transparent" ng-click="rsCollapsed=!rsCollapsed">
+        <span ng-if="!rsCollapsed" class="fa fa-chevron-circle-down"></span>
+        <span ng-if="rsCollapsed" class="fa fa-chevron-circle-right"></span>
+      </button>
+
+      <h3 class="os-sub-section-title" translate="role.resources">Resources</h3>
+
+      <div collapse="rsCollapsed">
+        <span ng-if="role.acls.length == 0" translate="common.none">None</span>
+        <div class="os-table os-table-muted-hdr os-border" ng-if="role.acls.length > 0">
+          <div class="os-table-head">
+            <div class="row">
+              <div class="col col-xs-6" translate="role.resource">resource</div>
+              <div class="col col-xs-6" translate="role.permission">Permission</div>
+            </div>
+          </div>
+          <div class="os-table-body">
+            <div ng-repeat="acl in role.acls">
+              <div class="row title">
+                <div class="col col-xs-6">{{acl.resource}}</div>
+                <div class="col col-xs-6">{{acl.permissions|osArrayJoin}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

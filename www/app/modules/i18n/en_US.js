@@ -7,7 +7,8 @@
     "institutes": "Institutes",
     "sites": "Sites",
     "storage_containers": "Storage Containers",
-    "distribution_protocols": "Distribution Protocols"
+    "distribution_protocols": "Distribution Protocols",
+    "roles": "Roles"
   },
 
   "common": {
@@ -443,6 +444,26 @@
     "menu": {
       "overview": "Overview",
       "locations": "Locations"
+    }
+  },
+
+  "role": {
+    "role": "Role",
+    "list": "Roles",
+    "name": "Name",
+    "description": "Description",
+    "create_role": "Create Role",
+    "resource": "Resource",
+    "permission": "Permission",
+    "resources": "Resources",
+
+    "menu": {
+      "overview": "Overview"
+    },
+
+    "tooltip": {
+      "view_details": "Click to view/edit Role",
+      "add": "Click to add new Role"
     }
   }
 }

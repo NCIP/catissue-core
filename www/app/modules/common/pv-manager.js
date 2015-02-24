@@ -89,6 +89,20 @@ angular.module('openspecimen')
        'Pending'
     ];
 
+    var permissions = [
+      'Create',
+      'Read',
+      'Update',
+      'Delete'
+    ];
+
+    var resources = [
+      'User',
+      'Institute',
+      'Site',
+      'Collection Protocol',
+    ];
+
     var pvMap = {
       gender: genders, 
       ethnicity: ethnicity, 
@@ -99,6 +113,8 @@ angular.module('openspecimen')
       'storage-type': storageTypes,
       'visit-status': visitStatuses,
       'container-position-labeling-schemes': positionLabelingSchemes,
+      'permissions': permissions,
+      'resources': resources
     };
 
     var pvIdMap = {

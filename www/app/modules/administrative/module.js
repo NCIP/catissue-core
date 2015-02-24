@@ -6,6 +6,7 @@ angular.module('os.administrative',
     'os.administrative.institute',
     'os.administrative.site',
     'os.administrative.dp',
-    'os.administrative.container'
+    'os.administrative.container',
+    'os.administrative.role'
   ]
 );
