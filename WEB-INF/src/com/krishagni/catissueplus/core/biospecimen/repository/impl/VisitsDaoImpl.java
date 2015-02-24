@@ -52,14 +52,14 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 			visit.setId((Long)row[0]);
 			visit.setEventId((Long)row[1]);
 			visit.setName((String)row[2]);
-			visit.setLabel((String)row[3]);
-			visit.setCalendarPoint((Integer)row[4]);
+			visit.setEventLabel((String)row[3]);
+			visit.setEventPoint((Integer)row[4]);
 			visit.setStatus((String)row[5]);
 			visit.setVisitDate((Date)row[6]);
 			
 			Calendar cal = Calendar.getInstance();
 			cal.setTime((Date)row[7]);
-			cal.add(Calendar.DAY_OF_YEAR, visit.getCalendarPoint());
+			cal.add(Calendar.DAY_OF_YEAR, visit.getEventPoint());
 			visit.setAnticipatedVisitDate(cal.getTime());
 			
 			visits.add(visit);
