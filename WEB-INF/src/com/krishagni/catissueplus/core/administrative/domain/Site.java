@@ -1,17 +1,17 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import static com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode.REF_ENTITY_FOUND;
+
 import java.util.HashSet;
 import java.util.Set;
 
 import krishagni.catissueplus.util.CommonUtil;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
-import com.krishagni.catissueplus.core.common.SetUpdater;
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
-
-import static com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode.*;
 
 public class Site {
 
@@ -116,7 +116,7 @@ public class Site {
 		this.setCode(site.getCode());
 		this.setType(site.getType());
 		this.setActivityStatus(site.getActivityStatus());
-		SetUpdater.<User> newInstance().update(this.getCoordinatorCollection(), site.getCoordinatorCollection());
+		CollectionUpdater.update(this.getCoordinatorCollection(), site.getCoordinatorCollection());
 	}
 
 	public void delete() {

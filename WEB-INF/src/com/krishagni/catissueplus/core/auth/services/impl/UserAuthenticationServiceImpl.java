@@ -1,7 +1,6 @@
 
 package com.krishagni.catissueplus.core.auth.services.impl;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -30,11 +29,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 		try {
 			LoginDetail loginDetail = req.getPayload();
 			
-			checkEmptyLoginNamePassword(loginDetail);
-			
-			User user = daoFactory.getUserDao().getUserByLoginNameAndDomainName(
-					loginDetail.getLoginId(),
-					loginDetail.getDomainName());
+			User user = daoFactory.getUserDao().getUser(loginDetail.getLoginId(),loginDetail.getDomainName());
 			
 			if (user == null) {
 				throw OpenSpecimenException.userError(AuthErrorCode.INVALID_CREDENTIALS);
@@ -49,10 +44,5 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 			return ResponseEvent.serverError(e);
 		}
 	}
-
-	private void checkEmptyLoginNamePassword(LoginDetail loginDetail) {
-		if (StringUtils.isBlank(loginDetail.getPassword()) || StringUtils.isBlank(loginDetail.getLoginId())) {
-			throw OpenSpecimenException.userError(AuthErrorCode.INVALID_CREDENTIALS);
-		}
-	}
+	
 }

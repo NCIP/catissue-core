@@ -1,29 +1,18 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
-import com.krishagni.catissueplus.core.common.SetUpdater;
-import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-public class Institute {
-
-	private Long id;
-
+public class Institute extends BaseEntity {
 	private String name;
 
 	private String activityStatus;
 
-	private Set<Department> departmentCollection;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	private Set<Department> departments = new HashSet<Department>();
 
 	public String getName() {
 		return name;
@@ -41,27 +30,30 @@ public class Institute {
 		this.activityStatus = activityStatus;
 	}
 
-	public Set<Department> getDepartmentCollection() {
-		return departmentCollection;
+	public Set<Department> getDepartments() {
+		return departments;
 	}
 
-	public void setDepartmentCollection(Set<Department> departmentCollection) {
-		this.departmentCollection = departmentCollection;
+	public void setDepartments(Set<Department> departments) {
+		this.departments = departments;
 	}
 	
-	public void update(Institute institute) {
-		setName(institute.getName());
-		SetUpdater.<Department> newInstance().update(this.getDepartmentCollection(), institute.getDepartmentCollection());
-		for (Department department : this.getDepartmentCollection()) {
+	public void update(Institute other) {		
+		setName(other.getName());
+		
+		CollectionUpdater.update(this.getDepartments(), other.getDepartments());
+		for (Department department : this.getDepartments()) {
 			department.setInstitute(this);
 		}
+		
+		setActivityStatus(other.getActivityStatus());
 	}
 
-	public void delete() {
-		if (!this.getDepartmentCollection().isEmpty()) {
-			throw OpenSpecimenException.userError(InstituteErrorCode.REF_ENTITY_FOUND);
+	public void delete(Boolean close) {
+		if (close) {
+			this.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
+		} else {
+			this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 		}
-		
-		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 }

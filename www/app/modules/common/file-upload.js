@@ -24,7 +24,7 @@ angular.module('openspecimen')
            transformRequest: angular.identity, 
            headers: {'Content-Type': undefined}
           }
-        ).then(ApiUtil.processResp, ApiUtil.processResp);
+        ).then(ApiUtil.processResp);
       }
     };
   });

@@ -189,7 +189,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			return;
 		}
 		
-		User witness = daoFactory.getUserDao().getUser(witnessEmailId);
+		User witness = daoFactory.getUserDao().getUserByEmailAddress(witnessEmailId);
 		if (witness == null) {
 			ose.addError(CprErrorCode.CONSENT_WITNESS_NOT_FOUND);
 		}

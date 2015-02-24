@@ -77,7 +77,7 @@ public class QueryFolderFactoryImpl implements QueryFolderFactory {
 		if (userId == null) {
 			ose.addError(UserErrorCode.NOT_FOUND);			
 		} else {
-			User user = userDao.getUser(userId);
+			User user = userDao.getById(userId);
 			if (user == null) {
 				ose.addError(UserErrorCode.NOT_FOUND);
 			} else {
@@ -109,7 +109,7 @@ public class QueryFolderFactoryImpl implements QueryFolderFactory {
 	
 	private void setSharedUsers(QueryFolder folder, List<Long> userIds, OpenSpecimenException ose) {
 		if (userIds != null && !userIds.isEmpty()) {
-			List<User> sharedUsers = userDao.getUsersById(userIds);
+			List<User> sharedUsers = userDao.getUsersByIds(userIds);
 			if (sharedUsers.size() != userIds.size()) {
 				ose.addError(SavedQueryErrorCode.INVALID_SHARE_ACCESS_DETAILS);
 			} else {

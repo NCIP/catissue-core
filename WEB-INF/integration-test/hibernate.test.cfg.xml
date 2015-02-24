@@ -144,6 +144,7 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConsentTierResponse.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Department.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/User.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ForgotPasswordToken.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Address.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Password.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExternalApplication.hbm.xml" />
@@ -176,7 +177,7 @@
 		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperationJob.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperation.hbm.xml" />
 
-		<!-- mapping resource="com/krishagni/rbac/resources/Group.hbm.xml"/>
+		<mapping resource="com/krishagni/rbac/resources/Group.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/GroupRole.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/Operation.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/Permission.hbm.xml"/>
@@ -185,7 +186,7 @@
 		<mapping resource="com/krishagni/rbac/resources/ResourceInstanceOp.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/RoleAccessControl.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/Subject.hbm.xml"/>
-		<mapping resource="com/krishagni/rbac/resources/SubjectRole.hbm.xml"/ -->
+		<mapping resource="com/krishagni/rbac/resources/SubjectRole.hbm.xml"/>
 		
     </session-factory>
 

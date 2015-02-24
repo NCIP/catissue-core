@@ -1,0 +1,54 @@
+
+<div class="clearfix">
+  <div class="col-xs-8">
+    <ul class="os-key-values os-two-cols">
+      <li class="item">
+        <strong class="key key-sm" translate="visits.name">Name</strong>
+        <span class="value value-md">{{visit.name | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="visits.visit_status">Status</strong>
+        <ng-switch on="visit.status && visit.status == 'Complete'">
+          <span class="value value-md os-status-collected" ng-switch-when="true">{{'visits.status.complete' | translate}}</span>
+          <span class="value value-md os-status-pending" ng-switch-default>{{'visits.status.pending' | translate}}</span>
+        </ng-switch>
+      </li>
+
+      <li class="item" ng-if="visit.id">
+        <strong class="key key-sm" translate="visits.visit_date">Visit Date</strong>
+        <span class="value value-md">{{visit.visitDate | date: 'MMM dd, yyyy'}}</span>
+      </li>
+ 
+      <li class="item" ng-if="!visit.id">
+        <strong class="key key-sm" translate="visits.anticipated_visit_date">Anticipated Visit Date</strong>
+        <span class="value value-md">{{visit.anticipatedVisitDate | date: 'MMM dd, yyyy'}}</span>
+      </li>
+ 
+      <li class="item">
+        <strong class="key key-sm" translate="visits.visit_site">Site</strong>
+        <span class="value value-md">{{visit.site | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="visits.clinical_diagnosis">Clinical Diagnosis</strong>
+        <span class="value value-md">{{visit.clinicalDiagnosis | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="visits.clinical_status">Clinical Status</strong>
+        <span class="value value-md">{{visit.clinicalStatus | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="visits.surgical_path_no">Surgical Pathology No.</strong>
+        <span class="value value-md">{{visit.surgicalPathologyNumber | osNoValue}}</span>
+      </li>
+    </ul>
+
+    <os-specimen-tree visit="visit" specimens="specimens"></div>
+  </div>
+
+  <div class="col-xs-4">
+  </div>
+</div>

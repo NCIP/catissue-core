@@ -79,16 +79,14 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	private void setPrincipalInvestigator(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		UserSummary user = input.getPrincipalInvestigator();		
 		User pi = null;
-		
-		if (user.getId() != null) {
-			pi = userDao.getUser(user.getId());
-		} else if (user.getLoginName() != null && user.getDomain() != null) {
-			pi = userDao.getUserByLoginNameAndDomainName(user.getLoginName(), user.getDomain());
+		if (user != null && user.getId() != null) {
+			pi = userDao.getById(user.getId());
+		} else if (user != null && user.getLoginName() != null && user.getDomain() != null) {
+			pi = userDao.getUser(user.getLoginName(), user.getDomain());
 		} else {			
 			ose.addError(CpErrorCode.PI_REQUIRED);
 			return;
 		}
-				
 		if (pi == null) {
 			ose.addError(CpErrorCode.PI_NOT_FOUND);
 			return;
@@ -108,9 +106,9 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 			User coordinator = null;
 			
 			if (user.getId() != null) {
-				coordinator = userDao.getUser(user.getId());
+				coordinator = userDao.getById(user.getId());
 			} else if (user.getLoginName() != null && user.getDomain() != null) {
-				coordinator = userDao.getUserByLoginNameAndDomainName(user.getLoginName(), user.getDomain());
+				coordinator = userDao.getUser(user.getLoginName(), user.getDomain());
 			} else {
 				ose.addError(CpErrorCode.INVALID_COORDINATORS);
 				return;

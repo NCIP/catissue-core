@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class 
+    name="com.krishagni.rbac.domain.Permission" 
+    table="RBAC_PERMISSIONS">
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">RBAC_PERMISSIONS_SEQ</param>
+      </generator>
+    </id>
+    
+    <many-to-one 
+      name="resource" 
+      class="com.krishagni.rbac.domain.Resource"
+      column="RESOURCE_ID" />
+
+    <many-to-one 
+      name="operation" 
+      class="com.krishagni.rbac.domain.Operation"
+      column="OPERATION_ID" />
+			
+    <query name="getPermissionByResourceAndOperation">
+      from Permission p where p.resource.name = :resourceName and p.operation.name = :operationName  
+    </query>	
+    
+    <query name="getAllPermissions">
+      from Permission  
+    </query>	
+  </class> 
+</hibernate-mapping>

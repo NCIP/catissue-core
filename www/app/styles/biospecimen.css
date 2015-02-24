@@ -74,3 +74,18 @@
   margin-right: 8px;
 }
 
+.os-key-values .value.os-status-collected, 
+.os-key-values .value.os-status-pending {
+  width: initial!important;
+  border-radius: 4px;
+  font-weight: bold;
+  color: white;
+}
+
+.os-key-values .value.os-status-collected {
+  background: #5cb85c;
+}
+
+.os-key-values .value.os-status-pending {
+  background: #f0ad4e;
+}

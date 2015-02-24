@@ -5,4 +5,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEven
 
 public interface CpeFactory {
 	public CollectionProtocolEvent createCpe(CollectionProtocolEventDetail cpe);
+	
+	public CollectionProtocolEvent createCpeCopy(CollectionProtocolEventDetail cpe, CollectionProtocolEvent existing);
 }

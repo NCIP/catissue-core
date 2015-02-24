@@ -4,6 +4,7 @@ angular.module('os.biospecimen.cp',
     'ui.router',
     'os.biospecimen.cp.list',
     'os.biospecimen.cp.addedit',
+    'os.biospecimen.cp.import',
     'os.biospecimen.cp.detail',
     'os.biospecimen.cp.consents',
     'os.biospecimen.cp.events',
@@ -28,6 +29,12 @@ angular.module('os.biospecimen.cp',
         url: '/addedit?cpId',
         templateUrl: 'modules/biospecimen/cp/addedit.html',
         controller: 'CpAddEditCtrl',
+        parent: 'cps'
+      })
+      .state('cp-import', {
+        url: '/import',
+        templateUrl: 'modules/biospecimen/cp/import.html',
+        controller: 'CpImportCtrl',
         parent: 'cps'
       })
       .state('cp-detail', {

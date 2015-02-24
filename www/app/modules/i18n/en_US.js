@@ -17,22 +17,30 @@
     "yes": "Yes",
     "no": "No",
     "none": "None",
+    "form_validation_error": "There are validation errors as highlighted below. Please correct them",
+    "server_error": "Internal Server Error. Please report this problem to system administrator",
+    "ui_error": "UI Error. Please report this problem to system administrator",
 
     "buttons": {
       "add": "Add",
       "save": "Save",
       "update": "Update",
       "create": "Create",
+      "import": "Import",
       "cancel": "Cancel",
       "discard": "Discard",
       "next": "Next",
-      "previous": "Previous"
+      "previous": "Previous",
+      "ok": "Ok"
     }
   },
 
   "cp": {
     "list": "Collection Protocols",
     "create_cp_title": "Create Collection Protocol",
+    "import_cp_title": "Import Collection Protocol",
+
+    "cp_def_file": "Collection Protocol Definition File",
     
     "title": "Title",
     "short_title": "Short Title",
@@ -60,19 +68,24 @@
     "default_site": "Default Site",
     "clinical_diagnosis": "Clinical Diagnosis",
     "clinical_status": "Clinical Status",
-    
+
     "no_cpes": "There are no collection protocol events to show. Please create an event by clicking on Add Event...",
     "add_cpe": "Add Event...",
     "cpe_list": "Events",
     "cpe_point": "Event Point",
     "cpe_point_label": "Event Point Label",
 
-    "menu": {
+    "tab": {
       "overview": "Overview",
       "consents": "Consents",
       "events": "Events",
       "users": "Users",
       "dashboard": "Dashboard"
+    },
+
+    "menu_options": {
+      "remove": "Remove",
+      "export": "Export"
     },
 
     "tooltip": {
@@ -145,6 +158,14 @@
     "collection_status": "Collection Status",
     "anticipated_visits": "Anticipated Visits",
     "anticipated_specimens": "Anticipated Specimens",
+    "visit_status": "Status",
+    "name": "Name",
+    "visit_date": "Visit Date",
+    "anticipated_visit_date": "Anticipated Visit Date",
+    "visit_site": "Visit Site",
+    "clinical_diagnosis": "Clinical Diagnosis",
+    "clinical_status": "Clinical Status",
+    "surgical_path_no": "Surgical Pathology No.",
 
     "status": {
       "pending": "Pending",
@@ -152,17 +173,24 @@
     },
 
     "ctx_menu": {
+      "add_visit": "Add Visit",
       "view_visit": "View Visit",
       "edit_visit": "Edit Visit",
       "collect_planned_specimens": "Collect Planned Specimens",
       "collect_unplanned_specimens": "Collect Unplanned Specimens",
       "print_specimen_labels": "Print Specimen Labels"
+    },
+
+    "menu": {
+      "overview": "Overview",
+      "extensions": "Extensions"
     }
   },
 
   "specimens": {
     "title": "Specimen",
     "list": "Specimens",
+    "anticipated_list": "Anticipated Specimens",
     "status": {
       "collected": "Collected",
       "not_collected": "Not Collected",
@@ -171,10 +199,21 @@
 
     "unplanned": "Unplanned",
 
+    "lineage": "Lineage",
     "label": "Label",
     "type": "Type",
     "pathology": "Pathology",
     "container": "Container",
+    "collection_status": "Collection Status",
+    "class": "Class",
+    "anatomic_site": "Anatomic Site",
+    "laterality": "Laterality",
+    "initial_qty": "Initial Quantity",
+    "available_qty": "Available Quantity",
+    "parent_specimen": "Parent Specimen",
+    "storage_location": "Storage Location",
+    "virtually_located": "Virtual",
+    "no_specimens_to_show": "No Specimens to Show",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",
@@ -183,6 +222,11 @@
       "create_derivatives": "Create Derivatives",
       "add_event": "Add Event",
       "dispose": "Dispose"
+    },
+
+    "menu": {
+      "overview": "Overview",
+      "extensions": "Extensions"
     }
   },
 
@@ -316,6 +360,20 @@
     "super_admin": "Super Administrator",
     "login_details": "Login Details",
     "permissions": "Permissions",
+    "login_name": "Login Name",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+
+    "role": {
+       "new_role": "New Role",
+       "add_role": "Add Role...",
+       "update_role": "Update Role",
+       "site": "Site",
+       "cp": "Collection Protocol",
+       "role": "Role",
+       "no_roles": "There are no roles to show. Add a new role by clicking Add Role...",
+       "all": "All Current & Future"
+    },
 
     "tooltip": {
       "create_user": "Click to add new User",
@@ -328,8 +386,26 @@
     },
       
     "menu": {
-      "overview": "Overview"
+      "overview": "Overview",
+      "roles": "Roles"
     }    
+  },
+
+  "forgot_password": {
+    "title": "Forgot Password",
+    "email_reset_password_link": "Email Reset Password Link",
+    "return_to_signin": "Return to sign in page",
+    "reset_email_sent": "An email containing link to reset password has been sent to your email id. Please click to reset password.",
+    "invalid_login_name": "We couldn't find a user associated with {{loginName}}"
+  },
+
+  "reset_password": {
+    "title": "Reset Password",
+    "link_expired_title": "Your link has expired",
+    "link_expired_content": "We'll be happy to send you another one when you're ready.",
+    "reset_my_password": "Reset My Password",
+    "reset_password": "Reset Password",
+    "password_updated": "Password has been set"
   },
   
   "container": {

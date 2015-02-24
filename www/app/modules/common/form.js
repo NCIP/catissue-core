@@ -73,7 +73,7 @@ angular.module('os.common.form', [])
           if (ctrl.isValidForm()) {
             scope.$eval(onSubmit);
           } else {
-            Alerts.error("There are validation errors as highlighted below. Please correct them");
+            Alerts.error("common.form_validation_error");
           }
         });
       }

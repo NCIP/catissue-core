@@ -27,4 +27,28 @@ public class CpeTestData {
 		detail.setActivityStatus("Active");
 		return detail;
 	}
+	
+	public static CollectionProtocolEventDetail getCpeCopyDetail() {
+		CollectionProtocolEventDetail detail = new CollectionProtocolEventDetail();
+		detail.setEventLabel("copy-event-label");
+		detail.setEventPoint(1.0);
+		detail.setCollectionProtocol("default-cp");
+		detail.setDefaultSite("default-site");
+		detail.setClinicalDiagnosis("default-clinical-diagnosis");
+		detail.setClinicalStatus("default-clinical-status");
+		detail.setActivityStatus("Active");
+		return detail;
+	}
+
+	public static CollectionProtocolEventDetail getCpeCopyDetailWithNullAndEmptyFields() {
+		CollectionProtocolEventDetail detail = new CollectionProtocolEventDetail();
+		detail.setEventLabel("copy-event-label");
+		detail.setEventPoint(null);
+		detail.setCollectionProtocol("");
+		detail.setDefaultSite("");
+		detail.setClinicalDiagnosis("");
+		detail.setClinicalStatus("");
+		detail.setActivityStatus("");
+		return detail;
+	}
 }

@@ -29,10 +29,12 @@ angular.module('openspecimen', [
     $translateProvider.preferredLanguage('en_US');
 
     $stateProvider
-      .state('login', {
-        url: '/',
-        templateUrl: 'modules/user/signin.html',
-        controller: 'LoginCtrl'
+      .state('default', {
+        abstract: true,
+        templateUrl: 'modules/common/default.html',
+        controller: function($scope, Alerts) {
+          $scope.alerts = Alerts.messages;
+        }
       })
       .state('signed-in', {
         abstract: true,
@@ -80,10 +82,19 @@ angular.module('openspecimen', [
           $window.localStorage['osAuthToken'] = '';
           $injector.get('$state').go('login'); // using injector to get rid of circular dependencies
         } else if (rejection.status / 100 == 5) {
-          Alerts.error("Internal server error. Please contact system administrator");
+          Alerts.error("common.server_error");
         } else if (rejection.status / 100 == 4) {
-          Alerts.error("Bad user action: " + rejection.data.message);
-        }
+          var errMsgs = [];
+
+          if (rejection.data instanceof Array) {
+            angular.forEach(rejection.data, function(err) {
+              errMsgs.push(err.code + ": " + err.message);
+            });
+            Alerts.errorText(errMsgs);
+          } else {
+            Alerts.error('common.ui_error');
+          }
+        } 
 
         return $q.reject(rejection);
       }

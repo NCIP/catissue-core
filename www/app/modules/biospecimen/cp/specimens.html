@@ -52,19 +52,47 @@
             <div class="col col-xs-2 os-ellipsis">{{sr.pathologyStatus | osNoValue}}</div>
             <div class="col col-xs-2 os-ellipsis">{{sr.storageType | osNoValue}}</div>
             <div class="col col-xs-1 action">
-              <div class="btn-group" dropdown ng-if="showBtns && view == 'list_sr'">
-                <button type="button" class="btn btn-xs btn-default os-btn-icon">
-                  <span class="fa fa-cog"></span>
-                </button>
-                <button type="button" class="btn btn-xs btn-default os-btn-icon dropdown-toggle">
-                  <span class="caret"></span>
-                </button>
+              <div class="os-more-options" dropdown ng-if="view == 'list_sr'">
+                <div class="dropdown-toggle">
+                  <span class="fa fa-ellipsis-v"></span>
+                </div>
+
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                  <li><a href="#" translate="srs.ctx_menu.view_sr">View Requirement</a></li>
-                  <li><a href="#" translate="srs.ctx_menu.edit_sr">Edit Requirement</a></li>
+                  <li>
+                    <a href="#">
+                      <i class="fa fa-eye"></i>
+                      <span translate="srs.ctx_menu.view_sr">View Requirement</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <i class="fa fa-pencil"></i>
+                      <span translate="srs.ctx_menu.edit_sr">Edit Requirement</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a ng-click="copyRequirement(sr)">
+                      <i class="fa fa-copy"></i>
+                      <span>Copy Requirement</span>
+                    </a>
+                  </li>
                   <li class="divider"></li>
-                  <li><a translate="srs.ctx_menu.create_aliquots" ng-click="showCreateAliquots(sr)">Create Aliquots</a></li>
-                  <li><a translate="srs.ctx_menu.create_derivatives" ng-click="showCreateDerived(sr)">Create Derivatives</a></li>
+                  <li>
+                    <a ng-click="showCreateAliquots(sr)">
+                      <i class="fa fa-share-alt"></i>
+                      <span translate="srs.ctx_menu.create_aliquots">
+                        Create Aliquots
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a ng-click="showCreateDerived(sr)">
+                      <i class="fa fa-flask"></i>
+                      <span translate="srs.ctx_menu.create_derivatives">
+                        Create Derivatives
+                      </span>
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>

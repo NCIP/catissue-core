@@ -1,19 +1,13 @@
-
 <div> 
   <div os-page-header>
-    <h3>
-      <a ui-sref="participant-list({cpId: cpr.cpId})">Participants</a>
+    <ul os-breadcrumbs>
+      <li> <a ui-sref="cp-detail.overview({cpId: cpr.cpId})">{{cpr.cpTitle}}</a> </li>
+      <li> <a ui-sref="participant-list({cpId: cpr.cpId})">Participants</a> </li>
+    </ul>
 
-      <span class="fa fa-angle-right"></span>
-
-      <ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)"> 
-        <span ng-switch-when="true">
-          {{cpr.participant.firstName}} {{cpr.participant.lastName}}
-        </span>
-        <span ng-switch-when="false" translate="common.na">
-          N/A
-        </span>
-      </ng-switch>
+    <h3 ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)"> 
+      <span ng-switch-when="true"> {{cpr.participant.firstName}} {{cpr.participant.lastName}} </span>
+      <span ng-switch-when="false" translate="common.na"> N/A </span>
     </h3>
 
     <button class="os-round-btn" ui-sref="participant-new({cpId: cpr.cpId})">

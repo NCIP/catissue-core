@@ -16,6 +16,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.labelgenerator.LabelGenerator;
@@ -44,6 +45,29 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 	public void setSpecimenBarcodeGenerator(BarcodeGenerator<Specimen> specimenBarcodeGenerator) {
 		this.specimenBarcodeGenerator = specimenBarcodeGenerator;
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SpecimenDetail> getSpecimen(RequestEvent<EntityQueryCriteria> req) {
+		try {
+			EntityQueryCriteria crit = req.getPayload();
+			
+			Specimen specimen = null;
+			if (crit.getId() != null) {
+				specimen = daoFactory.getSpecimenDao().getById(crit.getId());
+			} else if (crit.getName() != null) {
+				specimen = daoFactory.getSpecimenDao().getSpecimenByLabel(crit.getName());
+			}
+			
+			if (specimen == null) {
+				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(SpecimenDetail.from(specimen));			
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
 	}
 	
 	//

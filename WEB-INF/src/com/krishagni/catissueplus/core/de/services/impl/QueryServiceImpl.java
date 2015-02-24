@@ -431,7 +431,7 @@ public class QueryServiceImpl implements QueryService {
 			daoFactory.getQueryFolderDao().saveOrUpdate(existing);
 			
 			if (!newUsers.isEmpty()) {
-				User user = userDao.getUser(userId);
+				User user = userDao.getById(userId);
 				sendFolderSharedEmail(user, queryFolder, newUsers);
 			}
 			return ResponseEvent.response(QueryFolderDetails.fromQueryFolder(existing));			
@@ -576,7 +576,7 @@ public class QueryServiceImpl implements QueryService {
 			if (userIds == null || userIds.isEmpty()) {
 				users = new ArrayList<User>();
 			} else {
-				users = userDao.getUsersById(userIds);
+				users = userDao.getUsersByIds(userIds);
 			}
 			
 			Collection<User> newUsers = null; 
@@ -601,7 +601,7 @@ public class QueryServiceImpl implements QueryService {
 			}
 			
 			if (newUsers != null && !newUsers.isEmpty()) {
-				User user = userDao.getUser(userId);
+				User user = userDao.getById(userId);
 				sendFolderSharedEmail(user, queryFolder, newUsers);
 			}
 			
@@ -752,7 +752,7 @@ public class QueryServiceImpl implements QueryService {
 			
 			private void sendEmail() {
 				try {
-					User user = userDao.getUser(req.getSessionDataBean().getUserId());
+					User user = userDao.getById(req.getSessionDataBean().getUserId());
 					
 					SavedQuery savedQuery = null;
 					Long queryId = req.getPayload().getSavedQueryId();

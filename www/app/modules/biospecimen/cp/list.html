@@ -1,9 +1,25 @@
 <div>
   <div os-page-header>
     <h3 translate="cp.list">Collection Protocols</h3>
-    <button class="os-round-btn" title="Click to add new Collection Protocol" ui-sref="cp-addedit">
-      <span class="fa fa-plus"></span>
-    </button>
+    <div dropdown>
+      <button class="os-round-btn dropdown-toggle" title="Click to add new Collection Protocol" ui-sref="cp-addedit">
+        <span class="fa fa-plus"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a ui-sref="cp-addedit">
+            <i class="fa fa-plus"></i>
+            <span translate="common.buttons.create">Create</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="cp-import">
+            <i class="fa fa-upload"></i>
+            <span translate="common.buttons.import">Import</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
    
   <div class="os-cards">

@@ -191,13 +191,6 @@ public class DaoFactoryImpl implements DaoFactory {
 		setSessionFactory(dao);
 		return dao;
 	}
-
-	@Override
-	public DepartmentDao getDepartmentDao() {
-		DepartmentDaoImpl dao = new DepartmentDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
 	
 	@Override
 	public AuditDao getAuditDao() {

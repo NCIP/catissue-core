@@ -9,7 +9,7 @@ public class Password {
 
 	private String password;
 
-	private Date updateDate;
+	private Date updationDate;
 
 	private User user;
 
@@ -29,16 +29,16 @@ public class Password {
 		this.password = password;
 	}
 
-	public Date getUpdateDate() {
-		return updateDate;
+	public Date getUpdationDate() {
+		return updationDate;
 	}
 
 	public User getUser() {
 		return user;
 	}
 
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
+	public void setUpdationDate(Date updationDate) {
+		this.updationDate = updationDate;
 	}
 
 	public void setUser(User user) {

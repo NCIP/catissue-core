@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.MapUpdater;
-import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
@@ -242,7 +242,7 @@ public class Participant {
 	}
 
 	private void updateRace(Set<String> raceColl) {
-		SetUpdater.<String> newInstance().update(this.raceColl, raceColl);
+		CollectionUpdater.update(this.raceColl, raceColl);
 	}
 
 	private void updatePmi(Participant participant) {

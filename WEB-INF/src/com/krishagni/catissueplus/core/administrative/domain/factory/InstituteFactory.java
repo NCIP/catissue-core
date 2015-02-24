@@ -5,8 +5,6 @@ import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 
 
 public interface InstituteFactory {
-
 	public Institute createInstitute(InstituteDetail details);
-		
 }
 	

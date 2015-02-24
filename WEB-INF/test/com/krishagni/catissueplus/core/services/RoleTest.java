@@ -111,7 +111,7 @@ public class RoleTest {
 
 		RoleUpdatedEvent response = roleService.updateRole(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
-		RoleDetails createdRole = response.getRoleDetails();
+		RoleDetail createdRole = response.getRoleDetails();
 		assertEquals(reqEvent.getRoleDetails().getName(), createdRole.getName());
 	}
 
@@ -126,8 +126,8 @@ public class RoleTest {
 
 	@Test
 	public void testGetAllRoles() {
-		when(roleDao.getAllRoles()).thenReturn(RoleTestData.getRoles());
-		List<RoleDetails> roleDetails = roleService.getAllRoles();
+		when(roleDao.getRoles()).thenReturn(RoleTestData.getRoles());
+		List<RoleDetail> roleDetails = roleService.getRoles();
 		assertNotNull("response cannot be null", roleDetails);
 	}
 	

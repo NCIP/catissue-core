@@ -28,14 +28,14 @@ angular.module('os.administrative.models.institute', ['os.common.models'])
     };
 
     Institute.prototype.$saveProps = function() {
-      var DepartmentNames = {};
+      var departmentNames = {};
 
       this.departments = this.departments.filter(
         function(department) {
-          if(department.name in DepartmentNames) {
+          if(department.name in departmentNames) {
             return false;
           } else {
-            DepartmentNames[department.name] = true;
+            departmentNames[department.name] = true;
             return true;
           }
         }
@@ -44,11 +44,11 @@ angular.module('os.administrative.models.institute', ['os.common.models'])
       return this;
     }
 
-    Institute.getDepartments = function (instituteName) {
-      var d = $q.defer();
-      var departments = [{"id" : 1, "name": "d"}];
-      d.resolve(departments);
-      return d.promise;
+    Institute.getByName = function (instituteName) {
+      return Institute.query({name : instituteName, exactMatch : true})
+        .then(function(result) {
+          return result ? result[0] : null;
+        });
     }
 
     return Institute;

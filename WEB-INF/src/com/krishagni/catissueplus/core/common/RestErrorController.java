@@ -85,7 +85,7 @@ public class RestErrorController extends ResponseEntityExceptionHandler {
 	}
 	
 	private ErrorMessage getMessage(String code) {
-		String message = resourceBundle.getMessage(code, null, Locale.getDefault());
+		String message = resourceBundle.getMessage(code.toLowerCase(), null, Locale.getDefault());
 		return new ErrorMessage(code, message);
 	}	
 }

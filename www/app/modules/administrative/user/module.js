@@ -5,6 +5,7 @@ angular.module('os.administrative.user',
     'os.administrative.user.list',
     'os.administrative.user.addedit',
     'os.administrative.user.detail',
+    'os.administrative.user.roles'
   ])
 
   .config(function($stateProvider) {
@@ -43,6 +44,17 @@ angular.module('os.administrative.user',
       .state('user-detail.overview', {
         url: '/overview',
         templateUrl: 'modules/administrative/user/overview.html',
+        parent: 'user-detail'
+      })
+      .state('user-detail.roles', {
+        url: '/roles',
+        templateUrl: 'modules/administrative/user/roles.html',
+        resolve: {
+          userRoles: function(user) {
+            return user.getRoles();
+          }
+        },
+        controller: 'UserRolesCtrl',
         parent: 'user-detail'
       })
   });

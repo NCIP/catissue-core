@@ -4,28 +4,14 @@ package com.krishagni.catissueplus.core.administrative.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
-import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
-import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
-public class Department {
-	private Long id;
-
+public class Department extends BaseEntity {
 	private String name;
 
 	private Institute institute;
 
-	private String activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
-
-	private Set<User> userCollection = new HashSet<User>();
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	private Set<User> users = new HashSet<User>();
 
 	public String getName() {
 		return name;
@@ -43,34 +29,12 @@ public class Department {
 		this.institute = institute;
 	}
 
-	public String getActivityStatus() {
-		return activityStatus;
+	public Set<User> getUsers() {
+		return users;
 	}
 
-	public void setActivityStatus(String activityStatus) {
-		this.activityStatus = activityStatus;
-	}
-
-	public Set<User> getUserCollection() {
-		return userCollection;
-	}
-
-	public void setUserCollection(Set<User> userCollection) {
-		this.userCollection = userCollection;
-	}
-
-	public void update(Department department) {
-		this.setName(department.getName());
-		this.setInstitute(department.getInstitute());
-		setActivityStatus(department.getActivityStatus());
-	}
-
-	public void delete() {
-		if (!this.getUserCollection().isEmpty()) {
-			throw OpenSpecimenException.userError(InstituteErrorCode.DEPT_REF_ENTITY_FOUND);
-		}
-		
-		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+	public void setUsers(Set<User> userCollection) {
+		this.users = userCollection;
 	}
 
 }

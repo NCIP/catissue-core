@@ -46,10 +46,11 @@ public class DistributionProtocolController {
 			
 			@RequestParam(value = "maxResults", required = false, defaultValue = "100") 
 			int maxResults) {
-		DpListCriteria criteria = new DpListCriteria();
-		criteria.startAt(startAt);
-		criteria.maxResults(maxResults);
-		criteria.query(searchStr);
+		
+		DpListCriteria criteria = new DpListCriteria()
+			.startAt(startAt)
+			.maxResults(maxResults)
+			.query(searchStr);
 		
 		ResponseEvent<List<DistributionProtocolDetail>> resp = dpSvc.getDistributionProtocols(getRequest(criteria));
 		resp.throwErrorIfUnsuccessful();
