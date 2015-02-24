@@ -56,7 +56,12 @@ public class SpecimensController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public Boolean doesSpecimenExists(@RequestParam(value = "label") String label) {
-		return specimenSvc.doesSpecimenExists(label);
+		ResponseEvent<Boolean> resp = specimenSvc.doesSpecimenExists(getRequest(label));
+		if (resp.getPayload() == true) {
+			return true;
+		}
+		
+		throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)

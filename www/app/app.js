@@ -88,7 +88,7 @@ angular.module('openspecimen', [
               errMsgs.push(err.code + ": " + err.message);
             });
             Alerts.errorText(errMsgs);
-          } else {
+          } else if (rejection.config.method != 'HEAD') {
             Alerts.error('common.ui_error');
           }
         } 

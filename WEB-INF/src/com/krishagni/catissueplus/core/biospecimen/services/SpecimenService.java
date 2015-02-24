@@ -15,5 +15,5 @@ public interface SpecimenService {
 	
 	public ResponseEvent<List<SpecimenDetail>> collectSpecimens(RequestEvent<List<SpecimenDetail>> req);
 	
-	public boolean doesSpecimenExists(String label);
+	public ResponseEvent<Boolean> doesSpecimenExists(RequestEvent<String> label);
 }

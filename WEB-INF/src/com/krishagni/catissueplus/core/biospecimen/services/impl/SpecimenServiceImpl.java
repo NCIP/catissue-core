@@ -116,8 +116,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 	
 	@Override
 	@PlusTransactional
-	public boolean doesSpecimenExists(String label) {
-		return daoFactory.getSpecimenDao().doesSpecimenExistsByLabel(label);
+	public ResponseEvent<Boolean> doesSpecimenExists(RequestEvent<String> req) {
+		return ResponseEvent.response(daoFactory.getSpecimenDao().doesSpecimenExistsByLabel(req.getPayload()));
 	}
 	
 	private void ensureUniqueLabel(String label, OpenSpecimenException ose) {
