@@ -20,6 +20,11 @@
           T{{visit.eventPoint}}: {{visit.eventLabel}}
         </a>
       </li>
+      <li ng-if="!!specimen">
+        <a ui-sref="specimen-detail.overview({specimenId: specimen.id, srId: specimen.reqId})">
+          {{specimen.label}}
+        </a>
+      </li>
       <li> 
         <a ui-sref="{{statePrefix}}records({formId: formOpts.formId, formCtxId: formOpts.formCtxtId})">
           {{formOpts.formDef.caption}}

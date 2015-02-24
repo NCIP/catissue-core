@@ -1,5 +1,5 @@
-angular.module('os.biospecimen.models.specimen', ['os.common.models'])
-  .factory('Specimen', function(osModel, $http, SpecimenRequirement) {
+angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospecimen.models.form'])
+  .factory('Specimen', function(osModel, $http, SpecimenRequirement, Form) {
     var Specimen = osModel(
       'specimens',
       function(specimen) {
@@ -83,6 +83,14 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models'])
       }
 
       return curr;
+    };
+
+    Specimen.prototype.getForms = function() {
+      return Form.listFor(Specimen.url(), this.$id());
+    };
+
+    Specimen.prototype.getRecords = function(formCtxId) {
+      return Form.listRecords(Specimen.url(), this.$id(), formCtxId);
     };
 
     function toSpecimenAttrs(sr) {
