@@ -645,4 +645,154 @@ public class SpecimenRequirementTest {
 		Assert.assertEquals(lastName, detail.getReceiver().getLastName());
 		Assert.assertEquals(loginName, detail.getReceiver().getLoginName());
 	}
+	
+	@Test
+	@DatabaseSetup("specimen-test/specimen-requirement-test/copy-sr-test-initial.xml")
+	@DatabaseTearDown("specimen-test/specimen-requirement-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-test/specimen-requirement-test/copy-sr-test-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void copySpecimenRequirementTest() {
+		ResponseEvent<SpecimenRequirementDetail> resp = cpSvc.copySpecimenRequirement(getRequest(1L));
+		TestUtils.recordResponse(resp);
+
+		Assert.assertEquals(true, resp.isSuccessful());
+		SpecimenRequirementDetail expected = SpecimenRequirementTestData.getSpecimenRequirementDetail();
+		SpecimenRequirementDetail actual = resp.getPayload();
+		
+		Assert.assertNotNull("Specimen requirement detail was not expected to be null!",actual);
+		Assert.assertNotNull(actual.getId());
+		
+		Assert.assertEquals(expected.getAnatomicSite(), actual.getAnatomicSite());
+		Assert.assertEquals(expected.getCollectionContainer(), actual.getCollectionContainer());
+		Assert.assertEquals(expected.getCollectionProcedure(), actual.getCollectionProcedure());
+		Assert.assertEquals(expected.getLabelFmt(), actual.getLabelFmt());
+		Assert.assertEquals(expected.getLaterality(), actual.getLaterality());
+		Assert.assertEquals(expected.getLineage(), actual.getLineage());
+		Assert.assertEquals(expected.getName(), actual.getName());
+		Assert.assertEquals(expected.getPathologyStatus(), actual.getPathologyStatus());
+		Assert.assertEquals(expected.getSpecimenClass(), actual.getSpecimenClass());
+		Assert.assertEquals(expected.getStorageType(), actual.getStorageType());
+		Assert.assertEquals(expected.getType(), actual.getType());
+		Assert.assertEquals(expected.getConcentration(), actual.getConcentration());
+		Assert.assertEquals(expected.getEventId(), actual.getEventId());
+		Assert.assertEquals(expected.getInitialQty(), actual.getInitialQty());
+		Assert.assertNotNull(actual.getCollector());
+		Assert.assertNotNull(actual.getReceiver());
+		Assert.assertEquals(new Long(2), actual.getCollector().getId());
+		Assert.assertEquals(new Long(3), actual.getReceiver().getId());
+		
+		Long collectorId = actual.getCollector().getId();
+		String firstName = "ADMIN" + collectorId;
+		String lastName = "ADMIN" + collectorId;
+		String loginName = "admin" + collectorId + "@admin.com";
+		
+		UserSummary collector = actual.getCollector();
+		Assert.assertEquals(firstName, collector.getFirstName());
+		Assert.assertEquals(lastName, collector.getLastName());
+		Assert.assertEquals(loginName, collector.getLoginName());
+		
+		
+		Long receiverId = actual.getReceiver().getId();
+		firstName = "ADMIN" + collectorId;
+		lastName = "ADMIN" + collectorId;
+		loginName = "admin" + collectorId + "@admin.com";
+		
+		UserSummary receiver = actual.getCollector();
+		Assert.assertEquals(firstName, receiver.getFirstName());
+		Assert.assertEquals(lastName, receiver.getLastName());
+		Assert.assertEquals(loginName, receiver.getLoginName());
+	}
+	
+	@Test
+	@DatabaseSetup("specimen-test/specimen-requirement-test/copy-sr-with-child-test-initial.xml")
+	@DatabaseTearDown("specimen-test/specimen-requirement-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-test/specimen-requirement-test/copy-sr-with-child-test-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void copySpecimenRequirementWithChildTest() {
+		ResponseEvent<SpecimenRequirementDetail> resp = cpSvc.copySpecimenRequirement(getRequest(1L));
+		TestUtils.recordResponse(resp);
+
+		Assert.assertEquals(true, resp.isSuccessful());
+		SpecimenRequirementDetail expected = SpecimenRequirementTestData.getSpecimenRequirementDetail();
+		SpecimenRequirementDetail actual = resp.getPayload();
+		
+		Assert.assertNotNull("Specimen requirement detail was not expected to be null!",actual);
+		Assert.assertNotNull(actual.getId());
+		
+		Assert.assertEquals(expected.getAnatomicSite(), actual.getAnatomicSite());
+		Assert.assertEquals(expected.getCollectionContainer(), actual.getCollectionContainer());
+		Assert.assertEquals(expected.getCollectionProcedure(), actual.getCollectionProcedure());
+		Assert.assertEquals(expected.getLabelFmt(), actual.getLabelFmt());
+		Assert.assertEquals(expected.getLaterality(), actual.getLaterality());
+		Assert.assertEquals(expected.getLineage(), actual.getLineage());
+		Assert.assertEquals(expected.getName(), actual.getName());
+		Assert.assertEquals(expected.getPathologyStatus(), actual.getPathologyStatus());
+		Assert.assertEquals(expected.getSpecimenClass(), actual.getSpecimenClass());
+		Assert.assertEquals(expected.getStorageType(), actual.getStorageType());
+		Assert.assertEquals(expected.getType(), actual.getType());
+		Assert.assertEquals(expected.getConcentration(), actual.getConcentration());
+		Assert.assertEquals(expected.getEventId(), actual.getEventId());
+		Assert.assertEquals(expected.getInitialQty(), actual.getInitialQty());
+		Assert.assertNotNull(actual.getCollector());
+		Assert.assertNotNull(actual.getReceiver());
+		Assert.assertEquals(new Long(2), actual.getCollector().getId());
+		Assert.assertEquals(new Long(3), actual.getReceiver().getId());
+		
+		Long collectorId = actual.getCollector().getId();
+		String firstName = "ADMIN" + collectorId;
+		String lastName = "ADMIN" + collectorId;
+		String loginName = "admin" + collectorId + "@admin.com";
+		
+		UserSummary collector = actual.getCollector();
+		Assert.assertEquals(firstName, collector.getFirstName());
+		Assert.assertEquals(lastName, collector.getLastName());
+		Assert.assertEquals(loginName, collector.getLoginName());
+		
+		
+		Long receiverId = actual.getReceiver().getId();
+		firstName = "ADMIN" + collectorId;
+		lastName = "ADMIN" + collectorId;
+		loginName = "admin" + collectorId + "@admin.com";
+		
+		UserSummary receiver = actual.getCollector();
+		Assert.assertEquals(firstName, receiver.getFirstName());
+		Assert.assertEquals(lastName, receiver.getLastName());
+		Assert.assertEquals(loginName, receiver.getLoginName());
+	}
+	
+	@Test
+	public void copySRWithInvalidId() {
+		
+		ResponseEvent<SpecimenRequirementDetail> resp = cpSvc.copySpecimenRequirement(getRequest(-1L));
+		TestUtils.recordResponse(resp);
+
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, SrErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("specimen-test/specimen-requirement-test/copy-sr-aliquot-test-initial.xml")
+	@DatabaseTearDown("specimen-test/specimen-requirement-test/generic-teardown.xml")
+	@ExpectedDatabase(value="specimen-test/specimen-requirement-test/copy-sr-aliquot-test-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void copySRWithAliquotLineage() {
+		
+		ResponseEvent<SpecimenRequirementDetail> resp = cpSvc.copySpecimenRequirement(getRequest(2L));
+		TestUtils.recordResponse(resp);
+
+		Assert.assertEquals(true, resp.isSuccessful());
+		Assert.assertEquals("Aliquot", resp.getPayload().getLineage());
+	}
+	
+	@Test
+	@DatabaseSetup("specimen-test/specimen-requirement-test/copy-sr-aliquot-initial-quantity-low-test-initial.xml")
+	@DatabaseTearDown("specimen-test/specimen-requirement-test/generic-teardown.xml")
+	public void copySRWithAliquotLineageAndInvalidInitialQuantity() {
+		
+		ResponseEvent<SpecimenRequirementDetail> resp = cpSvc.copySpecimenRequirement(getRequest(3L));
+		TestUtils.recordResponse(resp);
+
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, SrErrorCode.INSUFFICIENT_QTY, ErrorType.USER_ERROR);
+	}
 }
