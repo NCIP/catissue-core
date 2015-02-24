@@ -27,6 +27,11 @@ import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
 import com.krishagni.catissueplus.core.de.repository.FormDao;
 
 public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao {
+	
+	@Override
+	public Class getType() {
+		return FormContextBean.class;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -212,6 +217,25 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		
 		return formRecords;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public FormSummary getFormByContext(Long formCtxtId) {
+		List<Object[]> rows = sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_FORM_BY_CTXT)
+			.setLong("formCtxtId", formCtxtId)
+			.list();
+		
+		if (rows.isEmpty()) {
+			return null;
+		}
+		
+		Object[] row = rows.iterator().next();
+		FormSummary result = new FormSummary();
+		result.setFormId((Long)row[0]);
+		result.setCaption((String)row[1]);
+		return result;		
+	}
 		
 	@SuppressWarnings("unchecked")
 	@Override
@@ -287,10 +311,18 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			form.setFormCtxtId((Long)row[0]);
 			form.setFormId(formId);
 			form.setFormCaption((String)row[2]);
-			form.setMultiRecord((Boolean)row[4]);
-			form.setSysForm((Boolean)row[5]);
-			form.setNoOfRecords((Integer)row[6]);
+			form.setCreationTime((Date)row[4]);
+			form.setModificationTime((Date)row[5]);
 			
+			UserSummary user = new UserSummary();
+			user.setId((Long)row[6]);
+			user.setFirstName((String)row[7]);
+			user.setLastName((String)row[8]);
+			form.setCreatedBy(user);
+			
+			form.setMultiRecord((Boolean)row[9]);
+			form.setSysForm((Boolean)row[10]);
+			form.setNoOfRecords((Integer)row[11]);			
 			formsMap.put(formId, form);
 		}
 		
@@ -491,6 +523,8 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	private static final String GET_SPECIMEN_EVENT_FORMS = FQN + ".getSpecimenEventForms";
 	
 	private static final String GET_SCG_FORMS = FQN + ".getScgForms";
+	
+	private static final String GET_FORM_BY_CTXT = FQN + ".getFormByCtxt";
 	
 	private static final String GET_FORM_RECORDS = FQN + ".getFormRecords";
 	

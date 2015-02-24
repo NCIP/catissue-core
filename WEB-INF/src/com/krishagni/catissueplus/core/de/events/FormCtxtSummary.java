@@ -1,5 +1,9 @@
 package com.krishagni.catissueplus.core.de.events;
 
+import java.util.Date;
+
+import com.krishagni.catissueplus.core.common.events.UserSummary;
+
 public class FormCtxtSummary {
 	private Long formCtxtId;
 	
@@ -12,7 +16,13 @@ public class FormCtxtSummary {
 	private boolean multiRecord;
 	
 	private boolean sysForm;
-
+	
+	private UserSummary createdBy;
+	
+	private Date creationTime;
+	
+	private Date modificationTime;
+	
 	public Long getFormCtxtId() {
 		return formCtxtId;
 	}
@@ -59,5 +69,29 @@ public class FormCtxtSummary {
 
 	public void setSysForm(boolean sysForm) {
 		this.sysForm = sysForm;
+	}
+
+	public UserSummary getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(UserSummary createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Date getCreationTime() {
+		return creationTime;
+	}
+
+	public void setCreationTime(Date creationTime) {
+		this.creationTime = creationTime;
+	}
+
+	public Date getModificationTime() {
+		return modificationTime;
+	}
+
+	public void setModificationTime(Date modificationTime) {
+		this.modificationTime = modificationTime;
 	}
 }

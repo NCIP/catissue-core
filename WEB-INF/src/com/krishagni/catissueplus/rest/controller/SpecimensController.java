@@ -25,6 +25,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
@@ -105,14 +106,14 @@ public class SpecimensController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms/{formCtxtId}/records")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<FormRecordSummary> getFormRecords(@PathVariable("id") Long specimenId,
+	public EntityFormRecords getFormRecords(@PathVariable("id") Long specimenId,
 			@PathVariable("formCtxtId") Long formCtxtId) {
 
 		GetEntityFormRecordsOp opDetail = new GetEntityFormRecordsOp();
 		opDetail.setEntityId(specimenId);
 		opDetail.setFormCtxtId(formCtxtId);
 		
-		ResponseEvent<List<FormRecordSummary>> resp = formSvc.getEntityFormRecords(getRequest(opDetail));
+		ResponseEvent<EntityFormRecords> resp = formSvc.getEntityFormRecords(getRequest(opDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

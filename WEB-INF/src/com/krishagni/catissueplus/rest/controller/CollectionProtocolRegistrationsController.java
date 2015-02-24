@@ -24,6 +24,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRe
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
@@ -66,7 +67,8 @@ public class CollectionProtocolRegistrationsController {
 			.query(searchStr)
 			.startAt(startAt)
 			.maxResults(maxRecs)
-			.includeStat(includeStats);
+			.includeStat(includeStats)
+			.includePhi(true);
 		
 		ResponseEvent<List<CprSummary>> resp = cpSvc.getRegisteredParticipants(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
@@ -113,7 +115,7 @@ public class CollectionProtocolRegistrationsController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms/{formCtxtId}/records")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<FormRecordSummary> getFormRecords(@PathVariable("id") Long cprId,
+	public EntityFormRecords getFormRecords(@PathVariable("id") Long cprId,
 			@PathVariable("formCtxtId") Long formCtxtId) {
 
 		GetEntityFormRecordsOp opDetail = new GetEntityFormRecordsOp();
@@ -121,7 +123,7 @@ public class CollectionProtocolRegistrationsController {
 		opDetail.setFormCtxtId(formCtxtId);
 
 
-		ResponseEvent<List<FormRecordSummary>> resp = formSvc.getEntityFormRecords(getRequest(opDetail));
+		ResponseEvent<EntityFormRecords> resp = formSvc.getEntityFormRecords(getRequest(opDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
