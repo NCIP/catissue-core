@@ -11,5 +11,27 @@ angular.module('os.biospecimen.models.form', ['os.common.models'])
       );
     };
 
+    Form.listFor = function(url, objectId) {
+      var result = [];
+      $http.get(url + objectId + '/forms').then(
+        function(resp) {
+          Form._lazyCollectionInit(resp.data, result);
+        }
+      );
+
+      return result;
+    };
+
+    Form.listRecords = function(url, objectId, formCtxtId) {
+      var result = {records: []};
+      $http.get(url + objectId + '/forms/' + formCtxtId + '/records').then(
+        function(resp) {
+          angular.extend(result, resp.data);
+        }
+      );
+
+      return result;
+    };
+
     return Form;
   });

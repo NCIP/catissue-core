@@ -15,6 +15,11 @@
           <span>({{cpr.ppid}})</span>
         </a>
       </li>
+      <li ng-if="!!visit">
+        <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
+          T{{visit.eventPoint}}: {{visit.eventLabel}}
+        </a>
+      </li>
       <li> 
         <a ui-sref="{{statePrefix}}records({formId: formOpts.formId, formCtxId: formOpts.formCtxtId})">
           {{formOpts.formDef.caption}}
