@@ -8,6 +8,7 @@ angular.module('os.biospecimen.participant',
     'os.biospecimen.participant.visits',
     'os.biospecimen.participant.addedit',
     'os.biospecimen.participant.addvisit',
+    'os.biospecimen.participant.collect-specimens',
     'os.biospecimen.visit',
     'os.biospecimen.specimen',
     'os.biospecimen.extensions.list',
@@ -93,6 +94,12 @@ angular.module('os.biospecimen.participant',
           }
         },
         parent: 'participant-detail'
+      })
+      .state('participant-detail.collect-specimens', {
+        url: '/collect-specimens?visitId',
+        templateUrl: 'modules/biospecimen/participant/collect-specimens.html',
+        controller: 'CollectSpecimensCtrl',
+        parent: 'participant-root'
       })
       .state('participant-detail.extensions', {
         url: '/extensions',

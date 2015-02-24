@@ -1,6 +1,10 @@
 
-angular.module('os.biospecimen.participant.specimen-tree', ['os.biospecimen.models'])
-  .directive('osSpecimenTree', function() {
+angular.module('os.biospecimen.participant.specimen-tree', 
+  [
+    'os.biospecimen.models', 
+    'os.biospecimen.participant.collect-specimens'
+  ])
+  .directive('osSpecimenTree', function(CollectSpecimensSvc) {
     function toggleAllSelected(selection, specimens, specimen) {
       if (!specimen.selected) {
         selection.all = false;
@@ -102,6 +106,21 @@ angular.module('os.biospecimen.participant.specimen-tree', ['os.biospecimen.mode
           toggleAllSelected(scope.selection, scope.specimens, specimen);
 
           scope.selection.any = specimen.selected ? true : isAnySelected(scope.specimens);
+        };
+
+        scope.collectSpecimens = function() {
+          var specimensToCollect = [];
+          angular.forEach(scope.specimens, function(specimen) {
+            if (specimen.selected) {
+              specimen.isOpened = true;
+              specimensToCollect.push(specimen);
+            } else if (isAnyChildSpecimenSelected(specimen)) {
+              specimen.isOpened = true;
+              specimensToCollect.push(specimen);
+            }
+          });
+
+          CollectSpecimensSvc.collect(scope.visit, specimensToCollect);
         };
       }
     }
