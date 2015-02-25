@@ -543,7 +543,7 @@ public class QueryServiceImpl implements QueryService {
 			
 			daoFactory.getQueryFolderDao().saveOrUpdate(queryFolder);			
 			List<SavedQuerySummary> result = new ArrayList<SavedQuerySummary>();
-			for (SavedQuery query : savedQueries) {
+			for (SavedQuery query : queryFolder.getSavedQueries()) {
 				result.add(SavedQuerySummary.fromSavedQuery(query));
 			}
 			
