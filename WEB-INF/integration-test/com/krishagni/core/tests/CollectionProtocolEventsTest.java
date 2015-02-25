@@ -115,7 +115,41 @@ public class CollectionProtocolEventsTest {
 		Assert.assertEquals(true, resp.isSuccessful());
 		Assert.assertEquals((int)0, resp.getPayload().size());
 	}
+	/* 
+	 * Get CollectionProtocolEvent API Tests 
+	 */
+	@Test
+	@DatabaseSetup("cp-test/events-test/get-event-list-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	public void getEvent() {
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.getProtocolEvent(getRequest(1L));
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertNotNull(resp);
+		Assert.assertEquals(true, resp.isSuccessful());		
+		Assert.assertNotNull(resp.getPayload());
+				
+		CollectionProtocolEventDetail event = resp.getPayload();
+		Assert.assertNotNull("was not expected to be null", event.getId());
+		Assert.assertEquals("default-clinical-diagnosis", event.getClinicalDiagnosis());
+		Assert.assertEquals("default-clinical-status", event.getClinicalStatus());
+		Assert.assertEquals("cp1", event.getCollectionProtocol());
+		Assert.assertEquals("SITE1", event.getDefaultSite());
+		Assert.assertEquals("event-" + event.getId(), event.getEventLabel());
+		Assert.assertEquals(event.getId(), event.getEventPoint().doubleValue(), 0);
+		
+	}
 	
+	@Test
+	@DatabaseSetup("cp-test/events-test/get-event-list-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	public void getEventWithInvalidCPE() {
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.getProtocolEvent(getRequest(-1L));
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CpeErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+	}
 	
 	/* 
 	 * Add CollectionProtocolEvents API Tests 
@@ -530,6 +564,10 @@ public class CollectionProtocolEventsTest {
 		Assert.assertEquals("updated-clinical-status", detail.getClinicalStatus());
 		Assert.assertEquals("Active", detail.getActivityStatus()); 
 	}
+	
+	/* 
+	 * Copy CollectionProtocolEvents API Tests 
+	 */
 	
 	@Test
 	@DatabaseSetup("cp-test/events-test/copy-event-initial.xml")
