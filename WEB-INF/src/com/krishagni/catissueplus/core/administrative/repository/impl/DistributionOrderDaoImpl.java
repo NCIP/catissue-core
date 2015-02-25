@@ -11,6 +11,9 @@ import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionOrderDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+import com.krishagni.catissueplus.core.common.util.Status;
+
+import edu.wustl.catissuecore.util.global.Constants;
 
 public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> implements DistributionOrderDao {
 	@Override
@@ -18,6 +21,7 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 	public List<DistributionOrder> getDistributionOrders(DistributionOrderListCriteria criteria) {
 		Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(DistributionOrder.class)
+				.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
 				.setFirstResult(criteria.startAt() < 0 ? 0 : criteria.startAt())
 				.setMaxResults(criteria.maxResults() < 0 || criteria.maxResults() > 100 ? 100 : criteria.maxResults());
 		

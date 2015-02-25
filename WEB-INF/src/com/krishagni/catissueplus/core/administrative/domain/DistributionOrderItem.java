@@ -1,6 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder.DistributionStatus;
+import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder.Status;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 
@@ -36,7 +36,10 @@ public class DistributionOrderItem extends BaseEntity {
 	}
 	
 	public void distribute() {
-		boolean closeAfterDistribution = getOrder().getStatus().equals(DistributionStatus.DISTRIBUTED_AND_CLOSED);
-		specimen.distribute(quantity, closeAfterDistribution);
+		specimen.distribute(quantity, false);
+	}
+	
+	public void distributeAndClose() {
+		specimen.distribute(quantity, true);
 	}
 }

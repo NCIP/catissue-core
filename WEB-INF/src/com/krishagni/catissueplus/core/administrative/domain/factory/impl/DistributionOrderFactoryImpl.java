@@ -37,7 +37,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 	}
 
 	@Override
-	public DistributionOrder createDistributionOrder(DistributionOrderDetail detail) {
+	public DistributionOrder createDistributionOrder(DistributionOrderDetail detail, DistributionOrder.Status status) {
 		DistributionOrder distributionOrder = new DistributionOrder();
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
@@ -49,7 +49,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		setDistributionSite(detail, distributionOrder, ose);
 		setDistributionDate(detail, distributionOrder, ose);
 		setDistributor(detail, distributionOrder, ose);
-		setStatus(detail, distributionOrder,  ose);
+		setStatus(detail, status, distributionOrder,  ose);
 		setActivityStatus(detail, distributionOrder, ose);
 		
 		ose.checkAndThrow();
@@ -91,13 +91,20 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 	
 	private void setOrderItems(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {
 		Set<DistributionOrderItem> items = new HashSet<DistributionOrderItem>();
+		Set<Long> specimens = new HashSet<Long>();
 		
 		for (DistributionOrderItemDetail oid : detail.getOrderItems()) {
 			DistributionOrderItem item = getOrderItem(oid, distributionOrder, ose);
-			
+
 			if (item != null) {
 				items.add(item);
+				specimens.add(item.getSpecimen().getId());
 			}
+		}
+		
+		if (specimens.size() < detail.getOrderItems().size()) {
+			ose.addError(DistributionOrderErrorCode.DUPLICATE_SPECIMEN);
+			return;
 		}
 		
 		distributionOrder.setOrderItems(items);
@@ -169,12 +176,25 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		distributionOrder.setDistributor(distributor);
 	}
 	
-	private void setStatus(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {		
+	private void setStatus(DistributionOrderDetail detail, DistributionOrder.Status initialStatus, DistributionOrder distributionOrder, OpenSpecimenException ose) {		
+		if (initialStatus != null) {
+			distributionOrder.setStatus(initialStatus);
+			return;
+		}
+		
 		if (detail.getStatus() == null) {
 			ose.addError(DistributionOrderErrorCode.INVALID_STATUS);
 		}
 		
-		distributionOrder.setStatus(detail.getStatus());
+		DistributionOrder.Status status = null;
+		try {
+			status = DistributionOrder.Status.valueOf(detail.getStatus());
+		} catch (IllegalArgumentException ile) {
+			ose.addError(DistributionOrderErrorCode.INVALID_STATUS);
+			return;
+		}
+		
+		distributionOrder.setStatus(status);
 	}
 	
 	private void setActivityStatus(DistributionOrderDetail detail, DistributionOrder distributionOrder, OpenSpecimenException ose) {
@@ -220,7 +240,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		} 
 
 		if (detail.getQuantity() == null || detail.getQuantity() <= 0) {
-			ose.addError(DistributionOrderErrorCode.INVALID_DISTRIB_QUANTITY);
+			ose.addError(DistributionOrderErrorCode.INVALID_QUANTITY);
 			return null;
 		}
 		

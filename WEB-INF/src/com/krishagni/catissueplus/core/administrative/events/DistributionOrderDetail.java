@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
-import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder.DistributionStatus;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class DistributionOrderDetail {
@@ -25,7 +24,7 @@ public class DistributionOrderDetail {
 	
 	private Date executionDate;
 	
-	private DistributionStatus status;
+	private String status;
 	
 	private List<DistributionOrderItemDetail> orderItems = new ArrayList<DistributionOrderItemDetail>();
 	
@@ -96,11 +95,11 @@ public class DistributionOrderDetail {
 		this.executionDate = executionDate;
 	}
 
-	public DistributionStatus getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(DistributionStatus status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
@@ -122,7 +121,7 @@ public class DistributionOrderDetail {
 
 	public static DistributionOrderDetail from(DistributionOrder order) {
 		DistributionOrderDetail detail = new DistributionOrderDetail();
-		detail.setStatus(order.getStatus());
+		detail.setStatus(order.getStatus().toString());
 		detail.setId(order.getId());
 		detail.setName(order.getName());
 		detail.setCreationDate(order.getCreationDate());

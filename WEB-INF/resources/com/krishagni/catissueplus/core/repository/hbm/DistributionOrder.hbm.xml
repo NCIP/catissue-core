@@ -26,7 +26,7 @@
       
     <property name="status" column="STATUS" not-null="true">
       <type name="org.hibernate.type.EnumType">
-        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.DistributionOrder$DistributionStatus</param>
+        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.DistributionOrder$Status</param>
         <param name="type">12</param>
       </type>
     </property> 
@@ -67,7 +67,7 @@
       from 
         com.krishagni.catissueplus.core.administrative.domain.DistributionOrder
       where 
-        name = :name
+        name = :name and activityStatus = 'Active'
     </query>
   </class>
 </hibernate-mapping>

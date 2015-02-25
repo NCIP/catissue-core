@@ -19,19 +19,19 @@
            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
   <bean class="com.krishagni.catissueplus.core.common.RestErrorController" /> 
-
-  <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
   
+  <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
   <!-- Beans for caCORE starts -->
   <!-- bean id="remoteService" class="gov.nih.nci.system.comm.server.ApplicationServiceServerImpl" /-->
   <!-- Bean added for caCORE ends -->
-  
+ 
   <bean id="sessionFactoryBuilder" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
    <property name="targetClass"><value>com.krishagni.core.common.SessionBuilder</value></property>
    <property name="targetMethod"><value>getInstance</value></property>
   </bean>
 
-<bean id="biospecimenDaoFactory" class="com.krishagni.catissueplus.core.biospecimen.repository.impl.DaoFactoryImpl">
+  <bean id="biospecimenDaoFactory" class="com.krishagni.catissueplus.core.biospecimen.repository.impl.DaoFactoryImpl">
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
   </bean>
 
@@ -80,13 +80,15 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 
-  <bean id="rbacSvc" class="com.krishagni.rbac.service.impl.RbacServiceImpl">
+    <bean id="rbacSvc" class="com.krishagni.rbac.service.impl.RbacServiceImpl">
     <property name="daoFactory" ref="rbacDaoFactory"/>
-  </bean>
+    </bean>
 	
-  <bean id="scgBarcodeGenerator" class="com.krishagni.catissueplus.core.barcodegenerator.impl.SpecimenBarcodeGenerator">
-    <property name="tokenFactory" ref="tokenFactory" />
-  </bean>
+	
+	<bean id="scgBarcodeGenerator" class="com.krishagni.catissueplus.core.barcodegenerator.impl.SpecimenBarcodeGenerator">
+		<property name="tokenFactory" ref="tokenFactory" />
+	</bean>
+	
 	
   <bean id="visitLabelGenerator" class="com.krishagni.catissueplus.core.labelgenerator.impl.SCGLabelGenerator">
     <property name="tokenFactory" ref="tokenFactory" />
@@ -234,6 +236,15 @@
     <property name="specimenListFactory" ref="specimenListFactory"/>
   </bean>
   
+  <bean id="distributionOrderFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionOrderFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+  
+  <bean id="distributionOrderSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionOrderServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="distributionFactory" ref="distributionOrderFactory"/>
+  </bean>
+  
   <bean id="formDao" class="com.krishagni.catissueplus.core.de.repository.impl.FormDaoImpl">
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/> 
   </bean>
@@ -348,16 +359,16 @@
         <property name="distributionProtocolFactory" ref="distributionProtocolFactory" />
 	</bean>
 	
-	<!-- <bean id="distributionOrderService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionOrderServiceImpl">
+	<!-- bean id="distributionOrderService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionOrderServiceImpl">
         <property name="daoFactory" ref="biospecimenDaoFactory"/>
         <property name="distributionFactory" ref="distributionFactory" />
 	</bean>
 	
 	<bean id="distributionFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionOrderFactoryImpl">
         <property name="daoFactory" ref="biospecimenDaoFactory"/>
-	</bean> -->
+	</bean-->
 	
-       <bean id="permissibleValueSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl">
+    <bean id="permissibleValueSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl">
                <property name="daoFactory" ref="biospecimenDaoFactory"/>
     </bean>
        
@@ -378,4 +389,3 @@
 
   <import resource="classpath*:com/krishagni/openspecimen/custom/*Context.xml"/>
  </beans>
-

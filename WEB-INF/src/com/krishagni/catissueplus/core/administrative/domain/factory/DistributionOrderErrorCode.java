@@ -15,9 +15,13 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 	
 	INVALID_EXECUTION_DATE, 
 	
-	INVALID_DISTRIB_QUANTITY,
+	INVALID_QUANTITY,
 	
-	STATUS_CHANGE_NOT_ALLOWED;
+	STATUS_CHANGE_NOT_ALLOWED, 
+	
+	ALREADY_DISTRIBUTED,
+	
+	DUPLICATE_SPECIMEN;
 
 	@Override
 	public String code() {

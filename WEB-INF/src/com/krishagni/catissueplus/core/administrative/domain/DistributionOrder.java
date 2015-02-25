@@ -10,7 +10,7 @@ import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class DistributionOrder extends BaseEntity {
-	public enum DistributionStatus { 
+	public enum Status { 
 		PENDING,
 		DISTRIBUTED,
 		DISTRIBUTED_AND_CLOSED
@@ -34,7 +34,7 @@ public class DistributionOrder extends BaseEntity {
 	
 	private Set<DistributionOrderItem> orderItems = new HashSet<DistributionOrderItem>();
 	
-	private DistributionStatus status;
+	private Status status;
 	
 	private String activityStatus;
 	
@@ -110,11 +110,11 @@ public class DistributionOrder extends BaseEntity {
 		this.orderItems = orderItems;
 	}
 
-	public DistributionStatus getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(DistributionStatus status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 
@@ -127,55 +127,72 @@ public class DistributionOrder extends BaseEntity {
 	}
 
 	public void update(DistributionOrder other) {
+		
 		setName(other.name);
 		setRequester(other.requester);
 		setDistributor(other.distributor);
 		updateOrderItems(other);
-		updateDistribution(other);
-		updateStatus(other);
 		setDistributionProtocol(other.distributionProtocol);
+		updateStatus(other);
 		setCreationDate(other.creationDate);
 		setSite(other.site);
 		setExecutionDate(other.executionDate);
 	}
 	
 	public void distribute() {
-		if (!DistributionStatus.PENDING.equals(status)) {
-			for (DistributionOrderItem orderItem : getOrderItems()) {
-				orderItem.distribute();
-			}
+		if (isOrderDistributed()) {
+			throw OpenSpecimenException.userError(DistributionOrderErrorCode.ALREADY_DISTRIBUTED);
 		}
+		
+		for (DistributionOrderItem orderItem : getOrderItems()) {
+			orderItem.distribute();
+		}
+		
+		setStatus(Status.DISTRIBUTED);
+	}
+	
+	public void distributeAndClose() {
+		if (isOrderDistributed()) {
+			throw OpenSpecimenException.userError(DistributionOrderErrorCode.ALREADY_DISTRIBUTED);
+		}
+		
+		for (DistributionOrderItem orderItem : getOrderItems()) {
+			orderItem.distributeAndClose();
+		}
+		
+		setStatus(Status.DISTRIBUTED_AND_CLOSED);
 	}
 	
 	private void updateOrderItems(DistributionOrder other) {
+		if (isOrderDistributed()) {
+			/*
+			 * Order items can't be modified once the order is distributed.
+			 */
+			return;
+		}
+		
 		CollectionUpdater.update(orderItems, other.orderItems);
-
+		
 		for (DistributionOrderItem item : getOrderItems()) {
 			item.setOrder(this);
 		}
 		
 	}
 	
-	private void updateDistribution(DistributionOrder other) {
-		if (DistributionStatus.PENDING.equals(status) && other.isOrderDistributed()) {
-			
-			for (DistributionOrderItem orderItem : getOrderItems()) {
-				orderItem.distribute();
-			}
-		}
-	}
-	
 	private void updateStatus(DistributionOrder other) {
-		if (status.equals(other.status) || 
-				(DistributionStatus.PENDING.equals(status) && other.isOrderDistributed())) {
+		if (status.equals(other.status)) {
+			return;
+		}
+		
+		if (status.equals(Status.PENDING) && other.isOrderDistributed()) {
 			setStatus(other.status);
-		} else { 
+		} else {
 			throw OpenSpecimenException.userError(DistributionOrderErrorCode.STATUS_CHANGE_NOT_ALLOWED);
 		}
 	}
 	
 	public boolean isOrderDistributed() {
-		return (DistributionStatus.DISTRIBUTED.equals(status) || 
-				DistributionStatus.DISTRIBUTED_AND_CLOSED.equals(status));
+		return (Status.DISTRIBUTED.equals(status) || 
+				Status.DISTRIBUTED_AND_CLOSED.equals(status));
 	}
 }

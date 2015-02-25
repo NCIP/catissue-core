@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
+import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder.Status;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderFactory;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
@@ -60,10 +61,14 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 	public ResponseEvent<DistributionOrderDetail> createDistribution(RequestEvent<DistributionOrderDetail> req) {
 		try {
 			DistributionOrderDetail detail = req.getPayload();
-			DistributionOrder distributionOrder = distributionFactory.createDistributionOrder(detail);
+			DistributionOrder distributionOrder = distributionFactory.createDistributionOrder(detail, Status.PENDING);
 			ensureUniqueConstraints(distributionOrder);
 			
-			distributionOrder.distribute();
+			if (detail.getStatus().equals(Status.DISTRIBUTED)) {
+				distributionOrder.distribute();
+			} else if (detail.getStatus().equals(Status.DISTRIBUTED_AND_CLOSED)) {
+				distributionOrder.distributeAndClose();
+			}
 			daoFactory.getDistributionOrderDao().saveOrUpdate(distributionOrder);
 			return ResponseEvent.response(DistributionOrderDetail.from(distributionOrder));
 		} catch (OpenSpecimenException ose) {
@@ -84,11 +89,17 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 				return ResponseEvent.userError(DistributionOrderErrorCode.NOT_FOUND);
 			}
 			
-			DistributionOrder distributionOrder = distributionFactory.createDistributionOrder(detail);
+			DistributionOrder distributionOrder = distributionFactory.createDistributionOrder(detail, Status.PENDING);
 			if (!existing.getName().equals(distributionOrder.getName())) {
 				ensureUniqueConstraints(distributionOrder);
 			}
 
+			if (existing.getStatus().equals(Status.PENDING) && detail.getStatus().equals(Status.DISTRIBUTED.toString())) {
+				distributionOrder.distribute();
+			} else if (existing.getStatus().equals(Status.PENDING) && detail.getStatus().equals(Status.DISTRIBUTED_AND_CLOSED.toString())) {
+				distributionOrder.distributeAndClose();
+			}
+			
 			existing.update(distributionOrder);
 			daoFactory.getDistributionOrderDao().saveOrUpdate(existing);
 			return ResponseEvent.response(DistributionOrderDetail.from(existing));
