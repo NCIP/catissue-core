@@ -72,7 +72,7 @@
     "no_cpes": "There are no collection protocol events to show. Please create an event by clicking on Add Event...",
     "add_cpe": "Add Event...",
     "cpe_list": "Events",
-    "cpe_point": "Event Point",
+    "cpe_point": "Event Point (in Days)",
     "cpe_point_label": "Event Point Label",
 
     "tab": {
