@@ -13,6 +13,17 @@ public class CommonUtils {
 		return new RequestEvent<T>(getSession(), payload);
 	}
 	
+	public static <T> RequestEvent<T> getUnauthRequest(T payload) {
+		return new RequestEvent<T>(getUnauthSession(), payload);
+	}
+	
+	public static SessionDataBean getUnauthSession() {
+		SessionDataBean sessionDataBean = getSession();
+		sessionDataBean.setUserId(2L);
+		sessionDataBean.setAdmin(false);
+		return sessionDataBean;
+	}
+	
 	public static SessionDataBean getSession() {
 		SessionDataBean sessionDataBean = new SessionDataBean();
 		sessionDataBean.setAdmin(true);
