@@ -15,7 +15,7 @@
         <ul class="dropdown-menu dropdown-menu-right" role="menu">
           <li><a>{{currentUser.lastName + ' ' + currentUser.firstName}}</a></li>
           <li class="divider"></li>
-          <li><a ng-click="logout()">Log Out</a></li>
+          <li><a ui-sref="login({logout:true})">Log Out</a></li>
         </ul>
       </li>
       <li>

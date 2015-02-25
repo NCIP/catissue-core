@@ -14,9 +14,5 @@ angular.module('openspecimen')
        })
      }
 
-     $scope.logout = function() {
-       $state.go('login', {logout: true});
-     }
-
      init();
   })

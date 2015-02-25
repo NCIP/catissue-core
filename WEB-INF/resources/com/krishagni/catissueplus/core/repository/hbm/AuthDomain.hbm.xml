@@ -6,11 +6,11 @@
 <hibernate-mapping auto-import="false">
   <class
     name="com.krishagni.catissueplus.core.auth.domain.AuthDomain"
-    table="CATISSUE_AUTH_DOMAINS">
+    table="OS_AUTH_DOMAINS">
 	
     <id name="id" column="IDENTIFIER">
       <generator class="native">
-        <param name="sequence">CATISSUE_AUTH_DOMAIN_SEQ</param>
+        <param name="sequence">OS_AUTH_DOMAINS_SEQ</param>
       </generator>
     </id>
 

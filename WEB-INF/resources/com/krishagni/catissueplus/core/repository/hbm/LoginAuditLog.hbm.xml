@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping auto-import="false">
+<hibernate-mapping>
   <class
     name="com.krishagni.catissueplus.core.auth.domain.LoginAuditLog"
     table="OS_LOGIN_AUDIT_LOGS">
@@ -25,13 +25,7 @@
     <property name="loginSuccessful" column="IS_LOGIN_SUCCESSFUL"/>
     
     <query name="getLogsByUserId">
-      from 
-        com.krishagni.catissueplus.core.auth.domain.LoginAuditLog 
-      where 
-        user.id = :userId 
-        and ipAddress = :ipAddress
-      order by 
-        id desc
+      from LoginAuditLog where user.id = :userId order by id desc
     </query>
   </class>
 </hibernate-mapping>

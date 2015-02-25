@@ -21,15 +21,6 @@ body {
   flex-wrap: nowrap;
 }
 
-.os-navbar-right {
-  float: right !important;
-}
-
-.os-navbar-right .dropdown-menu {
-  right: 0;
-  left: auto;
-}
-
 .os-navbar:after {
   content: '';
   display: block;

@@ -4,9 +4,13 @@ package com.krishagni.catissueplus.core.auth.domain;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.krishagni.catissueplus.core.auth.domain.factory.AuthProviderErrorCode;
 import com.krishagni.catissueplus.core.auth.services.AuthenticationService;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class AuthDomain {
+	
+	public static Map<String, Object> authImplMap = new HashMap<String, Object>();
 
 	private Long id;
 
@@ -42,8 +46,6 @@ public class AuthDomain {
 		return getAuthProviderInstance(this.getAuthProvider().getImplClass());
 	}
 
-	public static Map<String, Object> authImplMap = new HashMap<String, Object>();
-
 	@SuppressWarnings("rawtypes")
 	private AuthenticationService getAuthProviderInstance(String implClassName) {
 		try {
@@ -55,7 +57,7 @@ public class AuthDomain {
 			return (AuthenticationService) authImplClass.newInstance();
 		}
 		catch (final Exception e) {
-			throw new RuntimeException(e.getMessage());
+			throw OpenSpecimenException.userError(AuthProviderErrorCode.INVALID_AUTH_IMPL);
 		}
 	}
 }

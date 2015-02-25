@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.auth.events.DomainDetail;
+import com.krishagni.catissueplus.core.auth.events.AuthDomainDetail;
 import com.krishagni.catissueplus.core.auth.events.ListAuthDomainCriteria;
 import com.krishagni.catissueplus.core.auth.services.DomainRegistrationService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -34,13 +34,13 @@ public class AuthDomainController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<DomainDetail> getAuthDomains(
+	public List<AuthDomainDetail> getAuthDomains(
 			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") 
 			int maxResults) {
 		
 		ListAuthDomainCriteria crit = new ListAuthDomainCriteria().maxResults(maxResults);
 		RequestEvent<ListAuthDomainCriteria> req = new RequestEvent<ListAuthDomainCriteria>(null, crit);
-		ResponseEvent<List<DomainDetail>> resp = domainRegService.getDomains(req);
+		ResponseEvent<List<AuthDomainDetail>> resp = domainRegService.getDomains(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
@@ -49,9 +49,9 @@ public class AuthDomainController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public DomainDetail registerDomain(@RequestBody DomainDetail domainDetail) {
-		RequestEvent<DomainDetail> req = new RequestEvent<DomainDetail>(null, domainDetail);
-		ResponseEvent<DomainDetail> resp = domainRegService.registerDomain(req);
+	public AuthDomainDetail registerDomain(@RequestBody AuthDomainDetail domainDetail) {
+		RequestEvent<AuthDomainDetail> req = new RequestEvent<AuthDomainDetail>(null, domainDetail);
+		ResponseEvent<AuthDomainDetail> resp = domainRegService.registerDomain(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

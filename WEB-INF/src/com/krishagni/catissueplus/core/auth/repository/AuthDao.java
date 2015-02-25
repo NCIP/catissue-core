@@ -23,9 +23,9 @@ public interface AuthDao extends Dao<AuthDomain> {
 	
 	public void saveAuthToken(AuthToken token);
 	
-	public void deleteAuthToken(String key);
+	public void deleteAuthToken(AuthToken token);
 	
-	public List<LoginAuditLog> getLoginAuditLogsByUser(Long userId, String ipAddress, int maxResults);
+	public List<LoginAuditLog> getLoginAuditLogsByUser(Long userId, int maxResults);
 	
 	public void saveLoginAuditLog(LoginAuditLog log);
 

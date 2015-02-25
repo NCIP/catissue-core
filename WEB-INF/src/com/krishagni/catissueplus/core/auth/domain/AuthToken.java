@@ -12,6 +12,8 @@ public class AuthToken {
 	private Date expiresOn;
 	
 	private String ipAddress;
+	
+	private LoginAuditLog loginAuditLog;
 
 	public String getToken() {
 		return token;
@@ -43,6 +45,14 @@ public class AuthToken {
 
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
+	}
+
+	public LoginAuditLog getLoginAuditLog() {
+		return loginAuditLog;
+	}
+
+	public void setLoginAuditLog(LoginAuditLog loginAuditLog) {
+		this.loginAuditLog = loginAuditLog;
 	}
     
 }

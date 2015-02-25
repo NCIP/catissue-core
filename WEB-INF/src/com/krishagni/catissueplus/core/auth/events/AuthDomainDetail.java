@@ -1,11 +1,13 @@
 
 package com.krishagni.catissueplus.core.auth.events;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 
-public class DomainDetail {
+public class AuthDomainDetail {
 
 	private Long id;
 
@@ -57,8 +59,8 @@ public class DomainDetail {
 		this.authProviderProps = authProviderProps;
 	}
 
-	public static DomainDetail fromDomain(AuthDomain authDomain) {
-		DomainDetail detail = new DomainDetail();
+	public static AuthDomainDetail from(AuthDomain authDomain) {
+		AuthDomainDetail detail = new AuthDomainDetail();
 		detail.setId(authDomain.getId());
 		detail.setName(authDomain.getName());
 		detail.setAuthType(authDomain.getAuthProvider().getAuthType());
@@ -66,5 +68,14 @@ public class DomainDetail {
 		detail.setAuthProviderProps(authDomain.getAuthProvider().getProps());
 		
 		return detail;
+	}
+	
+	public static List<AuthDomainDetail> form(List<AuthDomain> authDomains) {
+		List<AuthDomainDetail> result = new ArrayList<AuthDomainDetail>();
+		for (AuthDomain domain: authDomains) {
+			result.add(from(domain));
+		}
+		
+		return result;
 	}
 }

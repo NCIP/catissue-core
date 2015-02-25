@@ -71,21 +71,16 @@ public class AuthDaoImpl extends AbstractDao<AuthDomain> implements AuthDao {
 	}
 	
 	@Override
-	public void deleteAuthToken(String key) {
-		String deleteHql = "delete from " + AuthToken.class.getName() + " where token = :key";
-		sessionFactory.getCurrentSession()
-				.createQuery(deleteHql)
-				.setString("key", key)
-				.executeUpdate();
+	public void deleteAuthToken(AuthToken token) {
+		sessionFactory.getCurrentSession().delete(token);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<LoginAuditLog> getLoginAuditLogsByUser(Long userId, String ipAddress, int maxResults) {
+	public List<LoginAuditLog> getLoginAuditLogsByUser(Long userId, int maxResults) {
 		return sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_LOGIN_AUDIT_LOGS_BY_USER_ID)
 				.setLong("userId", userId)
-				.setString("ipAddress", ipAddress)
 				.setMaxResults(maxResults)
 				.list();
 	}

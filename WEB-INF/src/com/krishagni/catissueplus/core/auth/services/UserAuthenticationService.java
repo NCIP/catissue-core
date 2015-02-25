@@ -10,7 +10,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public interface UserAuthenticationService {	
-	public ResponseEvent<Map<String, Object>> authenticateUser(RequestEvent<LoginDetail> req);
+	public ResponseEvent<Map<String, Object>> authenticateUser(RequestEvent<LoginDetail> req, boolean doNotGenerateToken);
 	
 	public ResponseEvent<User> validateToken(RequestEvent<TokenDetail> req);
 	

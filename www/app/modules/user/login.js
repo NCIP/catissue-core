@@ -23,13 +23,14 @@ angular.module('openspecimen')
       removeToken: function() {
         delete $window.localStorage['osAuthToken'];
         delete $http.defaults.headers.common['X-OS-API-TOKEN'];
+        delete $http.defaults.headers.common['Authorization'];
       }
     }
   })
   .controller('LoginCtrl', function($scope, $rootScope, $state, $http, $location, AuthService) {
 
     function init() {
-      $scope.loginData = {domainName: 'openspecimen'};
+      $scope.loginData = {domainName: 'ldap'};
       
       if ($location.search().logout) {
         $scope.logout();
@@ -61,16 +62,15 @@ angular.module('openspecimen')
       }
     };
 
-    function onLogout() {
-      AuthService.removeToken();
-    }
-
     $scope.login = function() {
       AuthService.authenticate($scope.loginData).then(onLogin);
     }
 
     $scope.logout = function() {
-      AuthService.logout().then(onLogout); 
+      if ($http.defaults.headers.common['X-OS-API-TOKEN']) {
+        AuthService.logout();
+        AuthService.removeToken();
+      }
     }
 
     init();

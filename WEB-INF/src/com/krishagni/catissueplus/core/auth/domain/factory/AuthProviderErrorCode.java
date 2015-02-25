@@ -18,7 +18,7 @@ public enum AuthProviderErrorCode implements ErrorCode {
 	
 	IMPL_NOT_SPECIFIED,
 	
-	IMPL_LOADING_FAILED,
+	INVALID_AUTH_IMPL,
 	
 	LDAP_CONFIG_NOT_SPECIFIED,
 	

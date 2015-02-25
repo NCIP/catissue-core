@@ -18,7 +18,7 @@ public class OpenSpecimenAuthServiceImpl implements AuthenticationService {
 	private AuthenticationManager authManager;
 
 	@Override
-	public void authenticate(String username, String password) {
+	public void authenticate(String username, String password, String domainName) {
 		try{
 			UsernamePasswordAuthenticationToken authenticationToken =
 				new UsernamePasswordAuthenticationToken(username, password);

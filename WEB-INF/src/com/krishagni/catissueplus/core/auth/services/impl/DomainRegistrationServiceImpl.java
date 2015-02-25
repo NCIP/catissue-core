@@ -7,7 +7,7 @@ import java.util.List;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthProviderErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.factory.DomainRegistrationFactory;
-import com.krishagni.catissueplus.core.auth.events.DomainDetail;
+import com.krishagni.catissueplus.core.auth.events.AuthDomainDetail;
 import com.krishagni.catissueplus.core.auth.events.ListAuthDomainCriteria;
 import com.krishagni.catissueplus.core.auth.services.DomainRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -32,27 +32,21 @@ public class DomainRegistrationServiceImpl implements DomainRegistrationService 
 
 	@Override
 	@PlusTransactional	
-	public ResponseEvent<List<DomainDetail>> getDomains(RequestEvent<ListAuthDomainCriteria> req) {
+	public ResponseEvent<List<AuthDomainDetail>> getDomains(RequestEvent<ListAuthDomainCriteria> req) {
 		List<AuthDomain> authDomains = daoFactory.getAuthDao().getAuthDomains(req.getPayload().maxResults());
-
-		List<DomainDetail> result = new ArrayList<DomainDetail>();
-		for (AuthDomain domain : authDomains) {
-			result.add(DomainDetail.fromDomain(domain));
-		}
-		
-		return ResponseEvent.response(result);
+		return ResponseEvent.response(AuthDomainDetail.form(authDomains));
 	}
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<DomainDetail> registerDomain(RequestEvent<DomainDetail> req) {
+	public ResponseEvent<AuthDomainDetail> registerDomain(RequestEvent<AuthDomainDetail> req) {
 		try {
-			DomainDetail detail = req.getPayload();			
+			AuthDomainDetail detail = req.getPayload();			
 			AuthDomain authDomain = domainRegFactory.getAuthDomain(detail);
 			
 			ensureUniqueDomainName(authDomain.getName());
 			daoFactory.getAuthDao().saveOrUpdate(authDomain);
-			return ResponseEvent.response(DomainDetail.fromDomain(authDomain));
+			return ResponseEvent.response(AuthDomainDetail.from(authDomain));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

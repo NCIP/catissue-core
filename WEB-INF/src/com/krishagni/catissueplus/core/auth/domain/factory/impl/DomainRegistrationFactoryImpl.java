@@ -8,7 +8,7 @@ import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.auth.domain.AuthProvider;
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthProviderErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.factory.DomainRegistrationFactory;
-import com.krishagni.catissueplus.core.auth.events.DomainDetail;
+import com.krishagni.catissueplus.core.auth.events.AuthDomainDetail;
 import com.krishagni.catissueplus.core.auth.services.AuthenticationService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -23,14 +23,14 @@ public class DomainRegistrationFactoryImpl implements DomainRegistrationFactory 
 	}
 	
 	@Override
-	public AuthDomain getAuthDomain(DomainDetail detail) {
+	public AuthDomain getAuthDomain(AuthDomainDetail detail) {
 		AuthDomain authDomain = new AuthDomain();
 		setDomainName(detail, authDomain);
 		setAuthProvider(detail, authDomain);
 		return authDomain;
 	}
 	
-	private void setDomainName(DomainDetail detail, AuthDomain authDomain) {
+	private void setDomainName(AuthDomainDetail detail, AuthDomain authDomain) {
 		String domainName = detail.getName();
 		if (StringUtils.isBlank(domainName)) {
 			throw OpenSpecimenException.userError(AuthProviderErrorCode.DOMAIN_NOT_SPECIFIED);
@@ -39,8 +39,13 @@ public class DomainRegistrationFactoryImpl implements DomainRegistrationFactory 
 		authDomain.setName(domainName);
 	}
 	
-	private void setAuthProvider(DomainDetail detail, AuthDomain authDomain) {
-		AuthProvider authProvider = daoFactory.getAuthDao().getAuthProviderByType(detail.getAuthType());
+	private void setAuthProvider(AuthDomainDetail detail, AuthDomain authDomain) {
+		String authType = detail.getAuthType();
+		if (StringUtils.isBlank(authType)) {
+			throw OpenSpecimenException.userError(AuthProviderErrorCode.TYPE_NOT_SPECIFIED);
+		}
+		
+		AuthProvider authProvider = daoFactory.getAuthDao().getAuthProviderByType(authType);
 		if (authProvider == null) {
 			authProvider = getNewAuthProvider(detail);
 		}
@@ -48,7 +53,7 @@ public class DomainRegistrationFactoryImpl implements DomainRegistrationFactory 
 		authDomain.setAuthProvider(authProvider);
 	}
 
-	private AuthProvider getNewAuthProvider(DomainDetail detail) {
+	private AuthProvider getNewAuthProvider(AuthDomainDetail detail) {
 		String implClass = detail.getImplClass();
 		if (StringUtils.isBlank(implClass)) {
 			throw OpenSpecimenException.userError(AuthProviderErrorCode.IMPL_NOT_SPECIFIED);
@@ -69,7 +74,7 @@ public class DomainRegistrationFactoryImpl implements DomainRegistrationFactory 
 			Class authImplClass = (Class) Class.forName(implClass);
 			return (AuthenticationService) authImplClass.newInstance();
 		} catch (Exception e) {
-			throw OpenSpecimenException.userError(AuthProviderErrorCode.IMPL_LOADING_FAILED);
+			throw OpenSpecimenException.userError(AuthProviderErrorCode.INVALID_AUTH_IMPL);
 		}
 	}
 	

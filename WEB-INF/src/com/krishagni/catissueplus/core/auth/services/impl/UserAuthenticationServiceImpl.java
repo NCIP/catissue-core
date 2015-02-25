@@ -41,44 +41,55 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Map<String, Object>> authenticateUser(RequestEvent<LoginDetail> req) {
+	public ResponseEvent<Map<String, Object>> authenticateUser(RequestEvent<LoginDetail> req, boolean doNotGenerateToken) {
 		LoginDetail loginDetail = req.getPayload();
-		User user = daoFactory.getUserDao().getUser(loginDetail.getLoginName(), loginDetail.getDomainName());
+		User user = null;
 		try {
+			user = daoFactory.getUserDao().getUser(loginDetail.getLoginName(), loginDetail.getDomainName());
+			
 			if (user == null) {
 				throw OpenSpecimenException.userError(AuthErrorCode.INVALID_CREDENTIALS);
 			}
 			
 			if (user.getActivityStatus().equals(Status.ACTIVITY_STATUS_LOCKED.getStatus())) {
-				return ResponseEvent.error(OpenSpecimenException.userError(AuthErrorCode.USER_LOCKED));
+				throw OpenSpecimenException.userError(AuthErrorCode.USER_LOCKED);
+			}
+			
+			if (!user.isEnabled()) {
+				throw OpenSpecimenException.userError(AuthErrorCode.INVALID_CREDENTIALS);
 			}
 			
 			AuthenticationService authService = user.getAuthDomain().getAuthProviderInstance();
-			authService.authenticate(loginDetail.getLoginName(), loginDetail.getPassword());
-
-			String token = UUID.randomUUID().toString();
-			Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.HOUR, 8); // valid for 8 hrs
-
-			AuthToken authToken = new AuthToken();
-			authToken.setExpiresOn(cal.getTime());
-			authToken.setIpAddress(loginDetail.getIpAddress());
-			authToken.setToken(token);
-			authToken.setUser(user);
-
-			daoFactory.getAuthDao().saveAuthToken(authToken);
-
-			String userToken = token + ":" + cal.getTime().getTime();
-
+			authService.authenticate(loginDetail.getLoginName(), loginDetail.getPassword(), loginDetail.getDomainName());
+			
+			LoginAuditLog loginAuditLog = insertLoginAudit(user, loginDetail.getIpAddress(), true);
 			Map<String, Object> authDetail = new HashMap<String, Object>();
 			authDetail.put("user", user);
-			authDetail.put("token", encodeToken(userToken));
+ 
+			if (!doNotGenerateToken) {
+				String token = UUID.randomUUID().toString();
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.HOUR, 8); // valid for 8 hrs
+
+				AuthToken authToken = new AuthToken();
+				authToken.setExpiresOn(cal.getTime());
+				authToken.setIpAddress(loginDetail.getIpAddress());
+				authToken.setToken(token);
+				authToken.setUser(user);
+				authToken.setLoginAuditLog(loginAuditLog);
+
+				daoFactory.getAuthDao().saveAuthToken(authToken);
+
+				String userToken = token + ":" + cal.getTime().getTime();
+				authDetail.put("token", encodeToken(userToken));
+			}
 			
-			createAndSaveLoginAuditLog(user, loginDetail.getIpAddress(), true);
 			return ResponseEvent.response(authDetail);
 		} catch (OpenSpecimenException ose) {
-			createAndSaveLoginAuditLog(user, loginDetail.getIpAddress(), false);
-			checkFailedLoginAttempt(user, loginDetail.getIpAddress());
+			if (user != null && user.isEnabled()) {
+				insertLoginAudit(user, loginDetail.getIpAddress(), false);
+				checkFailedLoginAttempt(user, loginDetail.getIpAddress());
+			}
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
@@ -107,12 +118,13 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 			}
 
 			if (authToken.getExpiresOn().getTime() < System.currentTimeMillis()) {
+				daoFactory.getAuthDao().deleteAuthToken(authToken);
 				throw OpenSpecimenException.userError(AuthErrorCode.TOKEN_EXPIRED);
 			}
 
 			String ipAddress = tokenDetail.getIpAddress();
 			if (!authToken.getIpAddress().equals(ipAddress)) {
-				throw OpenSpecimenException.userError(AuthErrorCode.IP_ADDRESS_CHANGED);
+				return ResponseEvent.error(OpenSpecimenException.userError(AuthErrorCode.IP_ADDRESS_CHANGED));
 			}
 
 			User user = authToken.getUser();
@@ -142,19 +154,17 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 		String[] parts = userToken.split(":");
 		try {
 			AuthToken token = daoFactory.getAuthDao().getAuthTokenByKey(parts[0]);
-			LoginAuditLog loginAuditLog = daoFactory.getAuthDao()
-					.getLoginAuditLogsByUser(token.getUser().getId(), token.getIpAddress(), 1)
-					.get(0);
+			LoginAuditLog loginAuditLog = token.getLoginAuditLog();
 			loginAuditLog.setLogoutTime(Calendar.getInstance().getTime());
-
-			daoFactory.getAuthDao().deleteAuthToken(parts[0]);
+			
+			daoFactory.getAuthDao().deleteAuthToken(token);
 			return ResponseEvent.response("Success");
-		} catch (Exception e) {
+		} catch (Exception e) {	
 			return ResponseEvent.serverError(e);
 		}
 	}
 	
-	private void createAndSaveLoginAuditLog(User user, String ipAddress, boolean loginSuccessful) {
+	private LoginAuditLog insertLoginAudit(User user, String ipAddress, boolean loginSuccessful) {
 		LoginAuditLog loginAuditLog = new LoginAuditLog();
 		loginAuditLog.setUser(user);
 		loginAuditLog.setIpAddress(ipAddress);
@@ -163,11 +173,12 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 		loginAuditLog.setLoginSuccessful(loginSuccessful); 
 		
 		daoFactory.getAuthDao().saveLoginAuditLog(loginAuditLog);
+		return loginAuditLog;
 	}
 	
 	private void checkFailedLoginAttempt(User user, String ipAddress) {
 		List<LoginAuditLog> logs =
-				daoFactory.getAuthDao().getLoginAuditLogsByUser(user.getId(), ipAddress, LOGIN_FAILED_ATTEMPT);
+				daoFactory.getAuthDao().getLoginAuditLogsByUser(user.getId(), LOGIN_FAILED_ATTEMPT);
 		if (logs.size() < LOGIN_FAILED_ATTEMPT) {
 			return;
 		}

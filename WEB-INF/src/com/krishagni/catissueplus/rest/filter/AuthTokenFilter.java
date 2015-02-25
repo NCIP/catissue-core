@@ -102,7 +102,9 @@ public class AuthTokenFilter extends GenericFilterBean {
 			if (atResp.isSuccessful()) {
 				userDetails = atResp.getPayload();
 			}
-		} else if(httpReq.getHeader(HttpHeaders.AUTHORIZATION) != null) {
+		} 
+		
+		if(userDetails == null && httpReq.getHeader(HttpHeaders.AUTHORIZATION) != null) {
 			userDetails = doBasicAuthentication(httpReq, httpResp);
 		}
 		
@@ -138,9 +140,8 @@ public class AuthTokenFilter extends GenericFilterBean {
 
 		SessionDataBean sdb = (SessionDataBean) httpReq.getSession().getAttribute(Constants.SESSION_DATA);
 		RequestEvent<LoginDetail> req = new RequestEvent<LoginDetail>(sdb, detail);
-		ResponseEvent<Map<String, Object>> resp = authService.authenticateUser(req);
+		ResponseEvent<Map<String, Object>> resp = authService.authenticateUser(req, true);
 		if (resp.isSuccessful()) {
-			httpResp.setHeader(OS_AUTH_TOKEN_HDR, (String)resp.getPayload().get("token"));
 			return (User)resp.getPayload().get("user");
 		}
 
