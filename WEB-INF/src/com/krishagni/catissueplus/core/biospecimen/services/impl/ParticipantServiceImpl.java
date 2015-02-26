@@ -57,7 +57,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 			return ResponseEvent.userError(ParticipantErrorCode.NOT_FOUND);
 		}
 		
-		return ResponseEvent.response(ParticipantDetail.fromDomain(participant));
+		return ResponseEvent.response(ParticipantDetail.from(participant));
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 		try {
 			Participant participant = participantFactory.createParticipant(req.getPayload());
 			createParticipant(participant);
-			return ResponseEvent.response(ParticipantDetail.fromDomain(participant));
+			return ResponseEvent.response(ParticipantDetail.from(participant));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -103,7 +103,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 			existing.update(participant);
 			daoFactory.getParticipantDao().saveOrUpdate(existing);
-			return ResponseEvent.response(ParticipantDetail.fromDomain(existing));
+			return ResponseEvent.response(ParticipantDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -123,7 +123,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 			
 			participant.delete(true);
 			daoFactory.getParticipantDao().saveOrUpdate(participant);
-			return ResponseEvent.response(ParticipantDetail.fromDomain(participant));
+			return ResponseEvent.response(ParticipantDetail.from(participant));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

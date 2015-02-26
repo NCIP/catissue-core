@@ -13,10 +13,9 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class CollectionProtocolRegistration {
-
 	private Long id;
 
-	private String protocolParticipantIdentifier;
+	private String ppid;
 
 	private Date registrationDate;
 
@@ -24,17 +23,17 @@ public class CollectionProtocolRegistration {
 
 	private CollectionProtocol collectionProtocol;
 
-	private Collection<Visit> scgCollection;
+	private Collection<Visit> visits;
 
 	private String activityStatus;
 
-	private String signedConsentDocumentURL;
+	private String signedConsentDocumentUrl;
 
-	private Date consentSignatureDate;
+	private Date consentSignDate;
 
 	private User consentWitness;
 
-	private Set<ConsentTierResponse> consentResponseCollection;
+	private Set<ConsentTierResponse> consentResponses;
 
 	private String barcode;
 
@@ -46,12 +45,12 @@ public class CollectionProtocolRegistration {
 		this.id = id;
 	}
 
-	public String getProtocolParticipantIdentifier() {
-		return protocolParticipantIdentifier;
+	public String getPpid() {
+		return ppid;
 	}
 
-	public void setProtocolParticipantIdentifier(String protocolParticipantIdentifier) {
-		this.protocolParticipantIdentifier = protocolParticipantIdentifier;
+	public void setPpid(String ppid) {
+		this.ppid = ppid;
 	}
 
 	public Date getRegistrationDate() {
@@ -78,12 +77,12 @@ public class CollectionProtocolRegistration {
 		this.collectionProtocol = collectionProtocol;
 	}
 
-	public Collection<Visit> getScgCollection() {
-		return scgCollection;
+	public Collection<Visit> getVisits() {
+		return visits;
 	}
 
-	public void setScgCollection(Collection<Visit> scgCollection) {
-		this.scgCollection = scgCollection;
+	public void setVisits(Collection<Visit> visits) {
+		this.visits = visits;
 	}
 
 	public String getActivityStatus() {
@@ -94,23 +93,24 @@ public class CollectionProtocolRegistration {
 		if (Status.ACTIVITY_STATUS_DISABLED.equals(activityStatus)) {
 			delete(false);
 		}
+		
 		this.activityStatus = activityStatus;
 	}
 
-	public String getSignedConsentDocumentURL() {
-		return signedConsentDocumentURL;
+	public String getSignedConsentDocumentUrl() {
+		return signedConsentDocumentUrl;
 	}
 
-	public void setSignedConsentDocumentURL(String signedConsentDocumentURL) {
-		this.signedConsentDocumentURL = signedConsentDocumentURL;
+	public void setSignedConsentDocumentUrl(String signedConsentDocumentUrl) {
+		this.signedConsentDocumentUrl = signedConsentDocumentUrl;
 	}
 
-	public Date getConsentSignatureDate() {
-		return consentSignatureDate;
+	public Date getConsentSignDate() {
+		return consentSignDate;
 	}
 
-	public void setConsentSignatureDate(Date consentSignatureDate) {
-		this.consentSignatureDate = consentSignatureDate;
+	public void setConsentSignDate(Date consentSignDate) {
+		this.consentSignDate = consentSignDate;
 	}
 
 	public User getConsentWitness() {
@@ -121,12 +121,12 @@ public class CollectionProtocolRegistration {
 		this.consentWitness = consentWitness;
 	}
 
-	public Set<ConsentTierResponse> getConsentResponseCollection() {
-		return consentResponseCollection;
+	public Set<ConsentTierResponse> getConsentResponses() {
+		return consentResponses;
 	}
 
-	public void setConsentResponseCollection(Set<ConsentTierResponse> consentTierResponseCollection) {
-		this.consentResponseCollection = consentTierResponseCollection;
+	public void setConsentResponses(Set<ConsentTierResponse> consentResponses) {
+		this.consentResponses = consentResponses;
 	}
 
 	public String getBarcode() {
@@ -147,39 +147,38 @@ public class CollectionProtocolRegistration {
 
 	public void delete(boolean isIncludeChildren) {
 		if (isIncludeChildren) {
-			for (Visit scg : this.scgCollection) {
-				scg.delete(isIncludeChildren);
+			for (Visit visit : this.visits) {
+				visit.delete(isIncludeChildren);
 			}
-		}
-		else {
+		} else {
 			checkActiveDependents();
 		}
 		this.barcode = Utility.getDisabledValue(this.barcode);
-		this.protocolParticipantIdentifier = Utility.getDisabledValue(this.protocolParticipantIdentifier);
+		this.ppid = Utility.getDisabledValue(this.ppid);
 		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 	}
 
 	private void checkActiveDependents() {
-		for (Visit scg : this.getScgCollection()) {
-			if (scg.isActive()) {
+		for (Visit visit : this.getVisits()) {
+			if (visit.isActive()) {
 				throw OpenSpecimenException.userError(ParticipantErrorCode.REF_ENTITY_FOUND);
 			}
 		}
 	}
 	
 	public void update(CollectionProtocolRegistration cpr) {
-		setProtocolParticipantIdentifier(cpr.getProtocolParticipantIdentifier());
+		setPpid(cpr.getPpid());
 		setRegistrationDate(cpr.getRegistrationDate());
 		setActivityStatus(cpr.getActivityStatus());
-		setSignedConsentDocumentURL(cpr.getSignedConsentDocumentURL());
-		setConsentSignatureDate(cpr.getConsentSignatureDate());
+		setSignedConsentDocumentUrl(cpr.getSignedConsentDocumentUrl());
+		setConsentSignDate(cpr.getConsentSignDate());
 		setConsentWitness(cpr.getConsentWitness());
 		setBarcode(cpr.getBarcode());
-		setconsents(cpr.getConsentResponseCollection());
+		setconsents(cpr.getConsentResponses());
 	}
 
 	private void setconsents(Set<ConsentTierResponse> consentResponseCollection) {
-		CollectionUpdater.update(this.consentResponseCollection, consentResponseCollection);
+		CollectionUpdater.update(this.consentResponses, consentResponseCollection);
 	}
 
 }

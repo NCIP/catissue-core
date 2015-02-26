@@ -129,27 +129,27 @@ public class CollectionProtocolRegistrationDetail {
 		this.modifiedAttributes = modifiedAttributes;
 	}
 
-	public static CollectionProtocolRegistrationDetail fromDomain(CollectionProtocolRegistration cpr) {		 
+	public static CollectionProtocolRegistrationDetail from(CollectionProtocolRegistration cpr) {		 
 		CollectionProtocolRegistrationDetail detail = new CollectionProtocolRegistrationDetail();
 		
-		detail.setParticipant(ParticipantDetail.fromDomain(cpr.getParticipant()));
+		detail.setParticipant(ParticipantDetail.from(cpr.getParticipant()));
 		detail.setId(cpr.getId());
 		detail.setCpId(cpr.getCollectionProtocol().getId());
 		detail.setActivityStatus(cpr.getActivityStatus());
 		detail.setCpTitle(cpr.getCollectionProtocol().getTitle());
 		detail.setBarcode(cpr.getBarcode());
-		detail.setPpid(cpr.getProtocolParticipantIdentifier());
+		detail.setPpid(cpr.getPpid());
 		detail.setRegistrationDate(cpr.getRegistrationDate());
 		
 		ConsentDetail consent = new ConsentDetail();
-		consent.setConsentDocumentUrl(cpr.getSignedConsentDocumentURL());
-		consent.setConsentSignatureDate(cpr.getConsentSignatureDate());
+		consent.setConsentDocumentUrl(cpr.getSignedConsentDocumentUrl());
+		consent.setConsentSignatureDate(cpr.getConsentSignDate());
 		if (cpr.getConsentWitness() != null) {
 			consent.setWitnessName(cpr.getConsentWitness().getEmailAddress());
 		}
 		
-		if (cpr.getConsentResponseCollection() != null) {
-			for (ConsentTierResponse response : cpr.getConsentResponseCollection()) {
+		if (cpr.getConsentResponses() != null) {
+			for (ConsentTierResponse response : cpr.getConsentResponses()) {
 				ConsentTierResponseDetail stmt = new ConsentTierResponseDetail();
 				if (response.getConsentTier() != null) {
 					stmt.setConsentStatment(response.getConsentTier().getStatement());
@@ -168,7 +168,7 @@ public class CollectionProtocolRegistrationDetail {
 		List<CollectionProtocolRegistrationDetail> cprs = new ArrayList<CollectionProtocolRegistrationDetail>();
 		
 		for (CollectionProtocolRegistration cpr : cprList) {
-			cprs.add(fromDomain(cpr));
+			cprs.add(from(cpr));
 		}
 		
 		return cprs;

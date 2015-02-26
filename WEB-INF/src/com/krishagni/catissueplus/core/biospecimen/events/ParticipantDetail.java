@@ -167,7 +167,7 @@ public class ParticipantDetail {
 		this.id = id;
 	}
 
-	public static ParticipantDetail fromDomain(Participant participant) {
+	public static ParticipantDetail from(Participant participant) {
 		ParticipantDetail result = new ParticipantDetail();
 		
 		result.setFirstName(participant.getFirstName());
@@ -217,7 +217,7 @@ public class ParticipantDetail {
 	public static List<ParticipantDetail> from(List<Participant> participants) {
 		List<ParticipantDetail> result = new ArrayList<ParticipantDetail>();
 		for (Participant participant : participants) {
-			result.add(ParticipantDetail.fromDomain(participant));
+			result.add(ParticipantDetail.from(participant));
 		}
 		
 		return result;

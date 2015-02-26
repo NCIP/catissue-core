@@ -143,9 +143,9 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 					cpr.getCollectionProtocol().getId().toString(), CollectionProtocol.class.getName());
 
 			PpidGenerator generator = new PpidGeneratorImpl();
-			cpr.setProtocolParticipantIdentifier(generator.generatePpid(ppidFormat, value));
+			cpr.setPpid(generator.generatePpid(ppidFormat, value));
 		} else {
-			cpr.setProtocolParticipantIdentifier(ppid);
+			cpr.setPpid(ppid);
 		}
 	}
 
@@ -174,12 +174,12 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	}
 	
 	private void setConsentDocumentUrl(CollectionProtocolRegistration cpr, String consentDocumentUrl) {
-		cpr.setSignedConsentDocumentURL(consentDocumentUrl);
+		cpr.setSignedConsentDocumentUrl(consentDocumentUrl);
 	}
 
 	private void setConsentSignDate(CollectionProtocolRegistration cpr, ConsentDetail consentDetail) {
 		if (consentDetail.getConsentSignatureDate() != null) {
-			cpr.setConsentSignatureDate(consentDetail.getConsentSignatureDate());
+			cpr.setConsentSignDate(consentDetail.getConsentSignatureDate());
 		}				
 	}
 	
@@ -216,7 +216,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			consentResponses.add(response);
 		}
 		
-		cpr.setConsentResponseCollection(consentResponses);		
+		cpr.setConsentResponses(consentResponses);		
 	}
 
 	private void setParticipant(
