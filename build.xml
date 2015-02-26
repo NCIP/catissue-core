@@ -214,7 +214,7 @@
 	</target>
 
 	<!-- Compile all files, generated and hand-written -->
-	<target name="compile" depends="init">
+<!--	<target name="compile" depends="init">
 		<javac destdir="${target.dir}" includes="**/*.*" includeAntRuntime="false" debug="yes" target="1.6">
 			 <compilerarg line="-Xmaxerrs 10000" />
 			<src path="${src.dir}" />
@@ -243,8 +243,58 @@
                                 <include name="errors/*.properties"/>
 			</fileset>
 		</copy>
-	</target>
-
+	</target> -->
+	
+	<target name="compile" depends="init">
+          <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties">
+	    <classpath>
+	       <pathelement location="${lib.dir}/aspectjtools-1.6.6.jar"/>
+	    </classpath>
+	  </taskdef>
+	 	
+	  <iajc destDir="${target.dir}" source="1.6" target="1.6" verbose="true" showWeaveInfo="true">
+            <inpath>
+	      <pathelement location="${target.dir}"/> 
+	      <pathelement location="${lib.dir}/aspectjrt-1.5.0.jar"/>
+	    </inpath>
+	 	
+	    <aspectPath>
+	      <pathelement location="${lib.dir}/spring-aspects-2.5.0.jar"/>	
+	    </aspectPath>
+	 	
+	    <sourceroots>
+	      <pathelement location="${src.dir}"/>
+	    </sourceroots>
+	 	
+	    <classpath>
+	      <fileset dir="${lib.dir}">
+	        <include name="*.jar" />
+	        <exclude name="dynamicextensions-legacy.jar"/>
+	      </fileset>
+	      <fileset dir="./lib">
+	        <include name="j2ee.jar" />
+	      </fileset>
+	      <pathelement location="${ant.home}/lib/ant.jar"/>
+	    </classpath>
+	  	
+	    <classpath refid="cobertura.classpath" />
+	 </iajc>
+	 	
+	 <copy todir="${target.dir}" overwrite="true">
+	   <fileset dir="${src.dir}" >
+	     <include name="**/*.properties" />
+	     <include name="**/*.xml" />
+	     <include name="**/*.hbm.xml" />
+	     <include name="**/*.ser" />
+	     <include name="**/*.vm" />
+	   </fileset>
+	   <fileset dir="${resources.dir}">
+	     <include name="**/*.hbm.xml" />
+	     <include name="errors/*.properties"/>
+	   </fileset>
+        </copy>
+      </target>
+	
 	<!-- Create the Applet JAR Begins-->
 	<target name="build_applet_jar" depends="compile">
 		<delete>

@@ -4,10 +4,10 @@ package com.krishagni.catissueplus.core.administrative.services;
 import java.util.List;
 import java.util.Map;
 
-import com.krishagni.catissueplus.core.administrative.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.SiteQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.SiteListCriteria;
+import com.krishagni.catissueplus.core.common.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 

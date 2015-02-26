@@ -1,15 +1,16 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.administrative.domain.Site;
-import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.common.events.UserSummary;
-
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+
+import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class SiteDetail {
 
@@ -90,11 +91,11 @@ public class SiteDetail {
 		siteDto.setCode(site.getCode());
 		siteDto.setType(site.getType());
 		siteDto.setActivityStatus(site.getActivityStatus());
-		siteDto.setCoordinators(getCoordinatorList(site.getCoordinators()));
+		siteDto.setCoordinators(UserSummary.from(site.getCoordinators()));
 		return siteDto;
 	}
 	
-	public static List<SiteDetail> from(List<Site> sites) {
+	public static List<SiteDetail> from(Collection<Site> sites) {
 		List<SiteDetail> result = new ArrayList<SiteDetail>();
 		
 		if (CollectionUtils.isEmpty(sites)) {
@@ -106,19 +107,6 @@ public class SiteDetail {
 		}
 		
 		return result;
-	}
-
-	private static List<UserSummary> getCoordinatorList(Set<User> coordinators) {
-		List<UserSummary> users = new ArrayList<UserSummary>();
-		for (User user : coordinators) {
-			UserSummary userSummary = new UserSummary();
-			userSummary.setId(user.getId());
-			userSummary.setFirstName(user.getFirstName());
-			userSummary.setLastName(user.getLastName());
-			userSummary.setLoginName(user.getLoginName());
-			users.add(userSummary);
-		}
-		return users;
 	}
 
 }

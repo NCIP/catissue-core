@@ -9,7 +9,6 @@ import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
-import com.krishagni.catissueplus.core.administrative.domain.factory.EntityDependencyChecker;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
@@ -20,14 +19,14 @@ public class SiteDependencyChecker implements EntityDependencyChecker<Site> {
 	public Map<String, List> getDependencies(Site site) {
 		Map<String, List> depedencies = new HashMap<String, List>();
 		
-		Set<Visit> scgCollection = site.getScgCollection();
-		if (CollectionUtils.isNotEmpty(scgCollection)) {
-			depedencies.put("SCGs", VisitDetail.from(scgCollection));
+		Set<Visit> visits = site.getVisits();
+		if (CollectionUtils.isNotEmpty(visits)) {
+			depedencies.put("visits", VisitDetail.from(visits));
 		}
 		
 		Set<StorageContainer> storageContainers = site.getStorageContainers();
 		if (CollectionUtils.isNotEmpty(storageContainers)) {
-			depedencies.put("Storage Containers", StorageContainerDetail.from(storageContainers));
+			depedencies.put("storageContainers", StorageContainerDetail.from(storageContainers));
 		}
 		
 		//TODO: Check for site contains any CP or not. 

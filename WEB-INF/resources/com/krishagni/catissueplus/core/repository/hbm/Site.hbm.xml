@@ -19,7 +19,7 @@
             
     <property name="type" column="TYPE"/>
             
-	<property name="activityStatus" column="ACTIVITY_STATUS"/>
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
 
     <set name="coordinators"  table="CATISSUE_SITE_COORDINATORS">
       <key column="SITE_ID"/>
@@ -31,7 +31,7 @@
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer"/>
     </set>
          
-    <set name="scgCollection" table="CATISSUE_SPECIMEN_COLL_GROUP">
+    <set name="visits" table="CATISSUE_SPECIMEN_COLL_GROUP">
       <key column="SITE_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Visit"/>
     </set>

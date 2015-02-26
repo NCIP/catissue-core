@@ -8,17 +8,18 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.dependency.InstituteDependencyChecker;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteFactory;
-import com.krishagni.catissueplus.core.administrative.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.InstituteService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -30,18 +31,12 @@ public class InstituteServiceImpl implements InstituteService {
 
 	private InstituteFactory instituteFactory;
 	
-	private InstituteDependencyChecker instituteDependencyChecker;
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 
 	public void setInstituteFactory(InstituteFactory instituteFactory) {
 		this.instituteFactory = instituteFactory;
-	}
-	
-	public void setInstituteDependencyChecker(InstituteDependencyChecker dependencyChecker) {
-		this.instituteDependencyChecker = dependencyChecker;
 	}
 	
 	@Override
@@ -139,7 +134,6 @@ public class InstituteServiceImpl implements InstituteService {
 		try {
 			DeleteEntityOp deleteOp = req.getPayload();
 			Long instituteId = deleteOp.getId();
-			Boolean isClosed = deleteOp.isClose();
 			Institute institute = null;						
 			if (instituteId != null) {
 				institute = daoFactory.getInstituteDao().getById(instituteId);
@@ -149,14 +143,11 @@ public class InstituteServiceImpl implements InstituteService {
 				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND);
 			}
 			
-			if (!isClosed) {
-				Map<String, List> dependencies = instituteDependencyChecker.getDependencies(institute);
-				if (!dependencies.isEmpty()) {
-					return ResponseEvent.response(dependencies);
-				}
+			Map<String, List> dependencies = institute.delete(deleteOp.isClose());
+			if (!dependencies.isEmpty()) {
+				return ResponseEvent.response(dependencies);
 			}
 			
-			institute.delete(deleteOp.isClose());
 			daoFactory.getInstituteDao().saveOrUpdate(institute);
 			return ResponseEvent.response(Collections.<String, List>emptyMap());
 		} catch (OpenSpecimenException ose) {

@@ -8,29 +8,25 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
-import com.krishagni.catissueplus.core.administrative.domain.dependency.SiteDependencyChecker;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
-import com.krishagni.catissueplus.core.administrative.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.SiteQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.SiteListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.SiteService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
-import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SiteServiceImpl implements SiteService {
 	private SiteFactory siteFactory;
 
 	private DaoFactory daoFactory;
 	
-	private SiteDependencyChecker siteDependencyChecker;
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -39,10 +35,6 @@ public class SiteServiceImpl implements SiteService {
 		this.siteFactory = siteFactory;
 	}
 	
-	public void setSiteDependencyChecker(SiteDependencyChecker siteDependencyCheker) {
-		this.siteDependencyChecker = siteDependencyCheker;
-	}
-
 	@Override
 	@PlusTransactional	
 	public ResponseEvent<List<SiteDetail>> getSites(RequestEvent<SiteListCriteria> req) {
@@ -82,7 +74,7 @@ public class SiteServiceImpl implements SiteService {
 			Site site = siteFactory.createSite(req.getPayload());
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureUniqueConstraint(site, ose);
+			ensureUniqueConstraint(site, null, ose);
 			ose.checkAndThrow();
 			
 			daoFactory.getSiteDao().saveOrUpdate(site, true);
@@ -109,17 +101,7 @@ public class SiteServiceImpl implements SiteService {
 			Site site = siteFactory.createSite(detail);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureUniqueConstraint(site, ose);
-			
-			if (!existing.getActivityStatus().equals(site.getActivityStatus()) &&
-				 site.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
-				// If Activity Status is changed and status is Disabled then check site dependencies 
-				Map<String, List> dependencies = siteDependencyChecker.getDependencies(site);
-				if (!dependencies.isEmpty()) {
-					ose.addError(SiteErrorCode.REF_ENTITY_FOUND);
-				}
-			}
-			
+			ensureUniqueConstraint(site, existing, ose);
 			ose.checkAndThrow();
 			
 			existing.update(site);
@@ -144,15 +126,11 @@ public class SiteServiceImpl implements SiteService {
 				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 			}
 			
-			boolean close = deleteOp.isClose();
-			if (!close) {
-				Map<String, List> dependencies = siteDependencyChecker.getDependencies(site);
-				if (!dependencies.isEmpty()) {
-					return ResponseEvent.response(dependencies);
-				}
+			Map<String, List> dependencies = site.delete(deleteOp.isClose());
+			if (!dependencies.isEmpty()) {
+				return ResponseEvent.response(dependencies);
 			}
 			
-			site.delete(close);
 			daoFactory.getSiteDao().saveOrUpdate(site);
 			return ResponseEvent.response(Collections.<String, List>emptyMap());
 		} catch (OpenSpecimenException ose) {
@@ -162,45 +140,40 @@ public class SiteServiceImpl implements SiteService {
 		}
 	}
 
-	private void ensureUniqueConstraint(Site site, OpenSpecimenException ose) {
-		if (!isUniqueName(site)) {
-			ose.addError(SiteErrorCode.DUP_SITE_NAME);
+	private void ensureUniqueConstraint(Site newSite, Site existingSite, OpenSpecimenException ose) {
+		if (!isUniqueName(newSite, existingSite)) {
+			ose.addError(SiteErrorCode.DUP_NAME);
 		}
 		
-		if(!isUniqueCode(site)) {
-			ose.addError(SiteErrorCode.DUP_SITE_CODE);
+		if(!isUniqueCode(newSite, existingSite)) {
+			ose.addError(SiteErrorCode.DUP_CODE);
 		}
 	}
 
-	private boolean isUniqueName(Site site) {
-		Site existing = daoFactory.getSiteDao().getSiteByName(site.getName());
-		if (existing == null) {
-			return true; // no site by this name
-		} else if (site.getId() == null) {
-			return false; // a different site by this name exists 
-		} else if (existing.getId().equals(site.getId())) {
-			return true; // same site
-		} else {
-			return false;
-		}
-	}
-	
-	private boolean isUniqueCode(Site site) {
-		String code = site.getCode();
-		if (StringUtils.isBlank(code)) {
+	private boolean isUniqueName(Site newSite, Site existingSite) {
+		if (existingSite != null && newSite.getName().equals(existingSite.getName())) {
 			return true;
 		}
 		
-		Site existing = daoFactory.getSiteDao().getSiteByCode(site.getCode());
-		if (existing == null) {
-			return true; // no site by this name
-		} else if (site.getId() == null) {
-			return false; // a different site by this name exists 
-		} else if (existing.getId().equals(site.getId())) {
-			return true; // same site
-		} else {
-			return false;
+		Site site = daoFactory.getSiteDao().getSiteByName(newSite.getName());
+		if (site != null) {
+			return false; 
+		} 
+		
+		return true;
+	}
+	
+	private boolean isUniqueCode(Site newSite, Site existingSite) {
+		if (StringUtils.isBlank(newSite.getCode()) ||
+	              existingSite != null && newSite.getCode().equals(existingSite.getCode())) {
+			return true;
 		}
-
+		
+		Site site = daoFactory.getSiteDao().getSiteByCode(newSite.getCode());
+		if (site != null) {
+			return false; 
+		}
+		
+		return true;
 	}
 }
