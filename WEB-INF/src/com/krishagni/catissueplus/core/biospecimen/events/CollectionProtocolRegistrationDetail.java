@@ -27,8 +27,6 @@ public class CollectionProtocolRegistrationDetail {
 
 	private ConsentDetail consentDetails;
 	
-	private List<String> modifiedAttributes = new ArrayList<String>();
-
 	public Long getId() {
 		return id;
 	}
@@ -99,34 +97,6 @@ public class CollectionProtocolRegistrationDetail {
 
 	public void setConsentDetails(ConsentDetail consentDetails) {
 		this.consentDetails = consentDetails;
-	}
-
-	public Boolean isPpidModified() {
-		return modifiedAttributes.contains("ppid");
-	}
-
-	public Boolean isBarcodeModified() {
-		return modifiedAttributes.contains("barcode");
-	}
-
-	public Boolean isActivityStatusModified() {
-		return modifiedAttributes.contains("activityStatus");
-	}
-
-	public Boolean isRegistrationDateModified() {
-		return modifiedAttributes.contains("registrationDate");
-	}
-
-	public Boolean isParticipantModified() {
-		return modifiedAttributes.contains("participantDetail");
-	}
-	
-	public void modifyParticipant() {
-		modifiedAttributes.add("participantDetail");
-	}
-
-	public void setModifiedAttributes(List<String> modifiedAttributes) {
-		this.modifiedAttributes = modifiedAttributes;
 	}
 
 	public static CollectionProtocolRegistrationDetail from(CollectionProtocolRegistration cpr) {		 
