@@ -10,6 +10,7 @@ angular.module('os.biospecimen.models.cpr',
         'collection-protocol-registrations',
         function(cpr) {
           cpr.participant = new Participant(cpr.participant);
+          cpr.registrationDate = new Date(cpr.registrationDate).toISOString();
         }
       );
  
@@ -28,6 +29,11 @@ angular.module('os.biospecimen.models.cpr',
 
     CollectionProtocolRegistration.prototype.getRecords = function(formCtxId) {
       return Form.listRecords(CollectionProtocolRegistration.url(), this.$id(), formCtxId);
+    };
+
+    CollectionProtocolRegistration.prototype.$saveProps = function() {
+      this.participant = this.participant.$saveProps();
+      return this;
     };
 
     return CollectionProtocolRegistration;

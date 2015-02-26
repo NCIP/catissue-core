@@ -24,8 +24,28 @@ angular.module('os.biospecimen.participant',
         controller: 'ParticipantListCtrl',
         parent: 'signed-in'
       })
-      .state('participant-new', {
-        url: '/new-participant?cpId',
+      .state('participant-root', {
+        url: '/participants/:cprId',
+        template: '<div ui-view></div>',
+        resolve: {
+          cpr: function($stateParams, CollectionProtocolRegistration) {
+            if (!!$stateParams.cprId && $stateParams.cprId > 0) {
+              return CollectionProtocolRegistration.getById($stateParams.cprId);
+            } 
+
+            return new CollectionProtocolRegistration({registrationDate: new Date()});
+          }
+        },
+        controller: function($scope, cpr) {
+          $scope.cpr = $scope.object = cpr;
+          $scope.entityType = 'Participant';
+          $scope.extnState = 'participant-detail.extensions.'
+        },
+        parent: 'signed-in',
+        abstract: true
+      })
+      .state('participant-addedit', {
+        url: '/addedit-participant?cpId',
         templateProvider: function($stateParams, CpConfigSvc) {
           var tmpl = CpConfigSvc.getRegParticipantTmpl($stateParams.cpId);
           return '<div ng-include src="\'' + tmpl + '\'"></div>';
@@ -33,24 +53,9 @@ angular.module('os.biospecimen.participant',
         controllerProvider: function($stateParams, CpConfigSvc) {
           return CpConfigSvc.getRegParticipantCtrl($stateParams.cpId);
         },
-        parent: 'signed-in'
-      })
-      .state('participant-root', {
-        url: '/participants/:cprId',
-        template: '<div ui-view></div>',
         resolve: {
-          cpr: function($stateParams, CollectionProtocolRegistration) {
-            return CollectionProtocolRegistration.getById($stateParams.cprId);
-          }
         },
-        controller: function($scope, cpr) {
-          $scope.cpr = cpr;
-          $scope.object = cpr;
-          $scope.entityType = 'Participant';
-          $scope.extnState = 'participant-detail.extensions.'
-        },
-        parent: 'signed-in',
-        abstract: true
+        parent: 'participant-root'
       })
       .state('participant-detail', {
         url: '/detail',
