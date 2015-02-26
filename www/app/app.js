@@ -188,5 +188,9 @@ angular.module('openspecimen', [
 
     $rootScope.back = function() {
       $window.history.back();
-    }
+    };
+
+    $rootScope.global = {
+      dateFmt: 'MMM dd, yyyy'
+    };
   });
