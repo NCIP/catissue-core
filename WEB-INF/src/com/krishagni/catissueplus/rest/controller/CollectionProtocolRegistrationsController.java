@@ -26,7 +26,6 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
-import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
@@ -98,6 +97,20 @@ public class CollectionProtocolRegistrationsController {
 		return resp.getPayload();
 	}
 	
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public CollectionProtocolRegistrationDetail updateRegistration(
+			@PathVariable("id")
+			Long cprId,
+			
+			@RequestBody 
+			CollectionProtocolRegistrationDetail cprDetail) {
+		
+		ResponseEvent<CollectionProtocolRegistrationDetail> resp = cprSvc.updateRegistration(getRequest(cprDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)

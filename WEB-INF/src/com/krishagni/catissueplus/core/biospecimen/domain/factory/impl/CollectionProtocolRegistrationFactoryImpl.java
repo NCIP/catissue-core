@@ -1,10 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
-
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,7 +33,6 @@ import com.krishagni.catissueplus.core.common.util.Status;
 
 
 public class CollectionProtocolRegistrationFactoryImpl implements CollectionProtocolRegistrationFactory {
-
 	private DaoFactory daoFactory;
 
 	private final String CONSENT_RESP_NOT_SPECIFIED = "Not Specified";
@@ -57,51 +53,47 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		this.daoFactory = daoFactory;
 	}
 
-	/**
-	 * This method validate and populates collection protocol registration with the given details.
-	 * @param detail
-	 * @returns instance of CollectionProtocolRegistration
-	 */
 	@Override
 	public CollectionProtocolRegistration createCpr(CollectionProtocolRegistrationDetail detail) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
 		cpr.setBarcode(detail.getBarcode());
-		setRegistrationDate(cpr, detail.getRegistrationDate(), ose);
-		setActivityStatus(cpr, detail.getActivityStatus(), ose);
-		setCollectionProtocol(cpr, detail, ose);
-		setConsents(cpr, detail, ose);
-		setPpid(cpr, detail.getPpid(), ose);
-		setParticipant(cpr, detail.getParticipant(), ose);
+		setRegDate(detail, cpr, ose);
+		setActivityStatus(detail, cpr, ose);
+		setCollectionProtocol(detail, cpr, ose);
+		setConsents(detail, cpr, ose);
+		setPpid(detail, cpr, ose);
+		setParticipant(detail, cpr, ose);
 		
 		ose.checkAndThrow();
 		return cpr;
 	}
 	
-	private void setRegistrationDate(CollectionProtocolRegistration cpr, Date regDate, OpenSpecimenException ose) {
-		if (regDate == null) {
+	private void setRegDate(CollectionProtocolRegistrationDetail detail, CollectionProtocolRegistration cpr, OpenSpecimenException ose) {
+		if (detail.getRegistrationDate() == null) {
 			ose.addError(CprErrorCode.REG_DATE_REQUIRED);
 			return;
 		}
 		
-		cpr.setRegistrationDate(regDate);
+		cpr.setRegistrationDate(detail.getRegistrationDate());
 	}
 
-	private void setActivityStatus(CollectionProtocolRegistration registration, String activityStatus, OpenSpecimenException ose) {
+	private void setActivityStatus(CollectionProtocolRegistrationDetail detail, CollectionProtocolRegistration cpr, OpenSpecimenException ose) {
+		String activityStatus = detail.getActivityStatus();
+		
 		if (StringUtils.isBlank(activityStatus)) {
-			registration.setActive();
-		} else if (isValidPv(activityStatus, Status.ACTIVITY_STATUS.getStatus())) {
-			registration.setActivityStatus(activityStatus);
+			cpr.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+		} else if (Status.isValidActivityStatus(activityStatus)) {
+			cpr.setActivityStatus(activityStatus);
 		} else {
 			ose.addError(ActivityStatusErrorCode.INVALID);
 		}
-
 	}
 
 	private void setCollectionProtocol(
-			CollectionProtocolRegistration cpr, 
-			CollectionProtocolRegistrationDetail detail, 
+			CollectionProtocolRegistrationDetail detail,
+			CollectionProtocolRegistration cpr, 			 
 			OpenSpecimenException ose) {
 				
 		Long cpId = detail.getCpId();
@@ -114,6 +106,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			protocol = daoFactory.getCollectionProtocolDao().getById(detail.getCpId());
 		} else {
 			ose.addError(CprErrorCode.CP_REQUIRED);
+			return;
 		} 
 		
 		if (protocol == null) {
@@ -129,13 +122,18 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		cpr.setCollectionProtocol(protocol);
 	}
 
-	private void setPpid(CollectionProtocolRegistration cpr, String ppid, OpenSpecimenException ose) {
+	private void setPpid(
+			CollectionProtocolRegistrationDetail detail,
+			CollectionProtocolRegistration cpr, 
+			OpenSpecimenException ose) {
+		
 		if (cpr.getCollectionProtocol() == null) {
 			return;
 		}
 		
 		String ppidFormat = cpr.getCollectionProtocol().getPpidFormat();
-
+		String ppid = detail.getPpid();
+		
 		if (StringUtils.isBlank(ppid) && StringUtils.isBlank(ppidFormat)) {
 			ose.addError(CprErrorCode.PPID_REQUIRED);
 		} else if (StringUtils.isBlank(ppid)) {
@@ -150,8 +148,8 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	}
 
 	private void setConsents(
-			CollectionProtocolRegistration cpr, 
 			CollectionProtocolRegistrationDetail detail,
+			CollectionProtocolRegistration cpr, 
 			OpenSpecimenException ose) {
 		if (cpr.getCollectionProtocol() == null) {
 			return;
@@ -220,10 +218,11 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	}
 
 	private void setParticipant(
+			CollectionProtocolRegistrationDetail detail,
 			CollectionProtocolRegistration cpr,
-			ParticipantDetail participantDetail, 
 			OpenSpecimenException ose) {
 		
+		ParticipantDetail participantDetail = detail.getParticipant();
 		if (participantDetail == null) {
 			ose.addError(CprErrorCode.PARTICIPANT_DETAIL_REQUIRED);
 			return;
@@ -232,13 +231,21 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		Long participantId = participantDetail.getId();
 		Participant participant;
 		if (participantId == null) {
-			participant = participantFactory.createParticipant(participantDetail);
+			participant = participantFactory.createParticipant(participantDetail);			
+			if (participant == null) {
+				ose.addError(CprErrorCode.PARTICIPANT_DETAIL_REQUIRED);
+			}
 		} else {
 			participant = daoFactory.getParticipantDao().getById(participantId);
+			if (participant == null) {
+				ose.addError(ParticipantErrorCode.NOT_FOUND);
+			} else {
+				participant = participantFactory.createParticipant(participant, participantDetail);
+			}			
 		}
 		
 		if (participant == null) {
-			ose.addError(ParticipantErrorCode.NOT_FOUND);
+			return;
 		}
 		
 		cpr.setParticipant(participant);

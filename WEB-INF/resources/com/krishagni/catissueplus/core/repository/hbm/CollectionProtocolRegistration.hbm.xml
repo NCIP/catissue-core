@@ -34,7 +34,6 @@
     <many-to-one 
       name="participant"
       class="com.krishagni.catissueplus.core.biospecimen.domain.Participant"
-      cascade="save-update" 
       column="PARTICIPANT_ID" />
 
     <many-to-one 
@@ -42,12 +41,12 @@
       class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol" 
       column="COLLECTION_PROTOCOL_ID" />
 
-    <set name="consentResponses" table="CATISSUE_CONSENT_TIER_RESPONSE" inverse="true" cascade="save-update">
+    <set name="consentResponses" table="CATISSUE_CONSENT_TIER_RESPONSE" inverse="true" cascade="all-delete-orphan">
       <key column="COLL_PROT_REG_ID" />
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse" />
     </set>
 
-    <set name="visits" table="CATISSUE_SPECIMEN_COLL_GROUP" cascade="save-update">
+    <set name="visits" table="CATISSUE_SPECIMEN_COLL_GROUP" inverse="true" cascade="all-delete-orphan">
       <key column="COLLECTION_PROTOCOL_REG_ID" />
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Visit" />
     </set>

@@ -174,11 +174,15 @@ public class CollectionProtocolRegistration {
 		setConsentSignDate(cpr.getConsentSignDate());
 		setConsentWitness(cpr.getConsentWitness());
 		setBarcode(cpr.getBarcode());
-		setconsents(cpr.getConsentResponses());
+		setConsents(cpr.getConsentResponses());
+		setParticipant(cpr.getParticipant());
 	}
 
-	private void setconsents(Set<ConsentTierResponse> consentResponseCollection) {
-		CollectionUpdater.update(this.consentResponses, consentResponseCollection);
+	private void setConsents(Set<ConsentTierResponse> consentResponses) {
+		CollectionUpdater.update(this.consentResponses, consentResponses);
+		for (ConsentTierResponse resp : this.consentResponses) {
+			resp.setCpr(this);
+		}
 	}
 
 }

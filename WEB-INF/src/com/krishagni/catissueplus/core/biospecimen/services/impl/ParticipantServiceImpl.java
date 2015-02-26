@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -13,6 +14,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErr
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipants;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.PmiDetail;
 import com.krishagni.catissueplus.core.biospecimen.matching.ParticipantLookupLogic;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
@@ -82,6 +84,30 @@ public class ParticipantServiceImpl implements ParticipantService {
 		
 		ose.checkAndThrow();
 		daoFactory.getParticipantDao().saveOrUpdate(participant);
+	}
+	
+	public void updateParticipant(Participant existing, Participant newParticipant) {
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		
+		String existingSsn = existing.getSocialSecurityNumber();
+		String newSsn = newParticipant.getSocialSecurityNumber();
+		if (StringUtils.isNotBlank(newSsn) && !newSsn.equals(existingSsn)) {
+			ensureUniqueSsn(newSsn, ose);
+		}
+		
+		List<PmiDetail> pmis = PmiDetail.from(newParticipant.getPmiCollection().values());
+		List<Long> participantIds = daoFactory.getParticipantDao().getParticipantIdsByPmis(pmis);
+		for (Long participantId : participantIds) {
+			if (!participantId.equals(existing.getId())) {
+				ose.addError(ParticipantErrorCode.DUP_MRN);
+				break;
+			}
+		}
+		
+		ose.checkAndThrow();
+		
+		existing.update(newParticipant);
+		daoFactory.getParticipantDao().saveOrUpdate(existing, true);			
 	}
 
 	@Override

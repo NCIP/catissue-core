@@ -97,13 +97,49 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			
 			ensureUniqueParticipantReg(cpr, ose);
-			ensureUniquePpid(cpr, ose);
-			ensureUniqueBarcode(cpr.getBarcode(), ose);
+			ensureUniquePpid(null, cpr, ose);
+			ensureUniqueBarcode(null, cpr, ose);
 			ose.checkAndThrow();
 			
-			saveParticipant(cpr, cprDetail.getParticipant());
+			saveParticipant(null, cpr);
 			daoFactory.getCprDao().saveOrUpdate(cpr);
 			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(cpr));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<CollectionProtocolRegistrationDetail> updateRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req) {
+		try {
+			CollectionProtocolRegistrationDetail detail = req.getPayload();
+			
+			CollectionProtocolRegistration existing = null;
+			if (detail.getId() != null) {
+				existing = daoFactory.getCprDao().getById(detail.getId());
+			} else if (detail.getCpId() != null && StringUtils.isNotBlank(detail.getPpid())) {
+				existing = daoFactory.getCprDao().getCprByPpId(detail.getCpId(), detail.getPpid());
+			}
+			
+			if (existing == null) {
+				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
+			}
+			
+			CollectionProtocolRegistration cpr = cprFactory.createCpr(detail);
+			
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniquePpid(existing, cpr, ose);
+			ensureUniqueBarcode(existing, cpr, ose);
+			ose.checkAndThrow();
+			
+			saveParticipant(existing, cpr);
+			existing.update(cpr);
+			
+			daoFactory.getCprDao().saveOrUpdate(existing);
+			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -184,49 +220,31 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			return ResponseEvent.serverError(e);
 		}
 	}
-
-	@Override
-	@PlusTransactional
-	public ResponseEvent<CollectionProtocolRegistrationDetail> updateRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req) {
-		try {
-			CollectionProtocolRegistrationDetail cprDetail = req.getPayload();
-			
-			CollectionProtocolRegistration oldCpr = null;
-			if (cprDetail.getId() != null) {
-				oldCpr = daoFactory.getCprDao().getById(cprDetail.getId());
-			} else if (cprDetail.getPpid() != null && cprDetail.getCpId() != null) {
-				oldCpr = daoFactory.getCprDao().getCprByPpId(cprDetail.getCpId(), cprDetail.getPpid());
+	
+	private void saveParticipant(CollectionProtocolRegistration existing, CollectionProtocolRegistration cpr) {		
+		Participant existingParticipant = null;
+		Participant participant = cpr.getParticipant();
+		
+		if (existing == null) { 
+			// new registration
+			if (participant.getId() != null) { 
+				// existing participant
+				existingParticipant = daoFactory.getParticipantDao().getById(participant.getId());
+			} else {
+				// new participant
 			}
-
-			if (oldCpr == null) {
-				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
-			}
-			
-			CollectionProtocolRegistration cpr = cprFactory.createCpr(cprDetail);
-
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			validatePpid(oldCpr, cpr, ose);
-			validateBarcode(oldCpr.getBarcode(), cpr.getBarcode(), ose);
-			ose.checkAndThrow();
-			
-			oldCpr.update(cpr);
-			daoFactory.getCprDao().saveOrUpdate(cpr);
-			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(cpr));
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
-	}
-
-	private void saveParticipant(CollectionProtocolRegistration cpr, ParticipantDetail detail) {
-		if (detail.getId() != null) {
-			return; 
+		} else { 
+			// existing reg, therefore it has to be existing participant
+			existingParticipant = existing.getParticipant();
 		}
 		
-		Participant participant = cpr.getParticipant();
-		participantService.createParticipant(participant);
-		cpr.setParticipant(participant);
+		if (existingParticipant != null) {
+			participantService.updateParticipant(existingParticipant, participant);
+			cpr.setParticipant(existingParticipant);
+		} else {
+			participantService.createParticipant(participant);
+			cpr.setParticipant(participant);
+		}
 	}
 	
 	//
@@ -245,33 +263,31 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 	}
 
-	private void ensureUniquePpid(CollectionProtocolRegistration cpr, OpenSpecimenException ose) {
-		Long cpId = cpr.getCollectionProtocol().getId();
-		String ppid = cpr.getPpid();
+	private void ensureUniquePpid(CollectionProtocolRegistration existing, CollectionProtocolRegistration cpr, OpenSpecimenException ose) {
+		if (existing != null && existing.getPpid().equals(cpr.getPpid())) { // ppid has not changed
+			return;
+		}
 		
+		Long cpId = cpr.getCollectionProtocol().getId();
+		String ppid = cpr.getPpid();		
 		if (daoFactory.getCprDao().getCprByPpId(cpId, ppid) != null) {
 			ose.addError(CprErrorCode.DUP_PPID);
 		}
 	}
 
-	private void ensureUniqueBarcode(String barcode, OpenSpecimenException ose) {
-		if (StringUtils.isNotBlank(barcode) && daoFactory.getCprDao().getCprByBarcode(barcode) != null) {
+	private void ensureUniqueBarcode(CollectionProtocolRegistration existing, CollectionProtocolRegistration cpr, OpenSpecimenException ose) {
+		if (existing != null && 
+			StringUtils.isNotBlank(existing.getBarcode()) && 
+			existing.getBarcode().equals(cpr.getBarcode())) { // barcode has not changed
+			return;
+		}
+		
+		if (StringUtils.isBlank(cpr.getBarcode())) {
+			return;
+		}
+		
+		if (daoFactory.getCprDao().getCprByBarcode(cpr.getBarcode()) != null) {
 			ose.addError(CprErrorCode.DUP_BARCODE);
-		}
-	}
-
-	private void validatePpid(CollectionProtocolRegistration oldCpr, CollectionProtocolRegistration cpr,
-			OpenSpecimenException ose) {
-		String oldPpid = oldCpr.getPpid();
-		String newPpid = cpr.getPpid();
-		if (!oldPpid.equals(newPpid)) {
-			ensureUniquePpid(cpr, ose);
-		}
-	}
-
-	private void validateBarcode(String oldBarcode, String newBarcode, OpenSpecimenException ose) {
-		if (!StringUtils.isBlank(newBarcode) && !newBarcode.equals(oldBarcode)) {
-			ensureUniqueBarcode(newBarcode, ose);
 		}
 	}
 

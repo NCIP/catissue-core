@@ -10,7 +10,6 @@ import java.util.Set;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
-import com.krishagni.catissueplus.core.common.MapUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
@@ -240,14 +239,35 @@ public class Participant {
 		updateRace(participant.getRaceColl());
 		updatePmi(participant);
 	}
-
+	
 	private void updateRace(Set<String> raceColl) {
 		CollectionUpdater.update(this.raceColl, raceColl);
 	}
 
 	private void updatePmi(Participant participant) {
-		MapUpdater.<String, ParticipantMedicalIdentifier> newInstance().update(this.pmiCollection,
-				participant.getPmiCollection());
+		for (ParticipantMedicalIdentifier pmi : participant.getPmiCollection().values()) {
+			ParticipantMedicalIdentifier existing = this.pmiCollection.get(pmi.getSite().getName());
+			if (existing == null) {
+				ParticipantMedicalIdentifier newPmi = new ParticipantMedicalIdentifier();
+				newPmi.setParticipant(this);
+				newPmi.setSite(pmi.getSite());
+				newPmi.setMedicalRecordNumber(pmi.getMedicalRecordNumber());
+				
+				this.pmiCollection.put(pmi.getSite().getName(), newPmi);
+			} else {
+				existing.setMedicalRecordNumber(pmi.getMedicalRecordNumber());
+			}
+		}
+		
+		Iterator<Map.Entry<String, ParticipantMedicalIdentifier>> iter = pmiCollection.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<String, ParticipantMedicalIdentifier> existing = iter.next();
+			if (participant.getPmiCollection().containsKey(existing.getKey())) {
+				continue;
+			}
+			
+			iter.remove();
+		}
 	}
 
 	public void updateActivityStatus(String activityStatus) {
