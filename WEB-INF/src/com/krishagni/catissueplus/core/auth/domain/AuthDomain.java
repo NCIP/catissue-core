@@ -9,8 +9,7 @@ import com.krishagni.catissueplus.core.auth.services.AuthenticationService;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class AuthDomain {
-	
-	public static Map<String, Object> authImplMap = new HashMap<String, Object>();
+	private static Map<String, AuthenticationService> authProviderMap = new HashMap<String, AuthenticationService>();
 
 	private Long id;
 
@@ -43,18 +42,20 @@ public class AuthDomain {
 	}
 
 	public AuthenticationService getAuthProviderInstance() {
-		return getAuthProviderInstance(this.getAuthProvider().getImplClass());
+		return getAuthProviderInstance(this.getAuthProvider());
 	}
 
 	@SuppressWarnings("rawtypes")
-	private AuthenticationService getAuthProviderInstance(String implClassName) {
+	private AuthenticationService getAuthProviderInstance(AuthProvider authProvider) {
 		try {
-			Class authImplClass = (Class) authImplMap.get(implClassName);
-			if (authImplClass == null) {
-				authImplClass = (Class) Class.forName(implClassName);
-				authImplMap.put(implClassName, authImplClass);
+			AuthenticationService authService = authProviderMap.get(authProvider.getAuthType());
+			if (authService == null) {
+				Class authImplClass = (Class) Class.forName(authProvider.getImplClass());
+				authService = ((AuthenticationService) authImplClass.newInstance()).init(authProvider.getProps());
+				authProviderMap.put(authProvider.getAuthType(), authService);
 			}
-			return (AuthenticationService) authImplClass.newInstance();
+			
+			return authService;
 		}
 		catch (final Exception e) {
 			throw OpenSpecimenException.userError(AuthProviderErrorCode.INVALID_AUTH_IMPL);

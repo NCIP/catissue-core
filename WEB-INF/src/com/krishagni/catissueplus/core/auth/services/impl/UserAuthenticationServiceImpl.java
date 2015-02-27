@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.Hibernate;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.codec.Base64;
@@ -32,7 +32,6 @@ import com.krishagni.catissueplus.core.common.util.Status;
 public class UserAuthenticationServiceImpl implements UserAuthenticationService {
 	private static final int LOGIN_FAILED_ATTEMPT = 5;
 
-	@Autowired
 	private DaoFactory daoFactory;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
@@ -41,7 +40,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Map<String, Object>> authenticateUser(RequestEvent<LoginDetail> req, boolean doNotGenerateToken) {
+	public ResponseEvent<Map<String, Object>> authenticateUser(RequestEvent<LoginDetail> req) {
 		LoginDetail loginDetail = req.getPayload();
 		User user = null;
 		try {
@@ -60,13 +59,13 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 			}
 			
 			AuthenticationService authService = user.getAuthDomain().getAuthProviderInstance();
-			authService.authenticate(loginDetail.getLoginName(), loginDetail.getPassword(), loginDetail.getDomainName());
+			authService.authenticate(loginDetail.getLoginName(), loginDetail.getPassword());
 			
 			LoginAuditLog loginAuditLog = insertLoginAudit(user, loginDetail.getIpAddress(), true);
 			Map<String, Object> authDetail = new HashMap<String, Object>();
 			authDetail.put("user", user);
  
-			if (!doNotGenerateToken) {
+			if (!loginDetail.isDoNotGenerateToken()) {
 				String token = UUID.randomUUID().toString();
 				Calendar cal = Calendar.getInstance();
 				cal.add(Calendar.HOUR, 8); // valid for 8 hrs
@@ -90,7 +89,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 				insertLoginAudit(user, loginDetail.getIpAddress(), false);
 				checkFailedLoginAttempt(user, loginDetail.getIpAddress());
 			}
-			return ResponseEvent.error(ose);
+			return ResponseEvent.error(ose, true);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -124,7 +123,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
 			String ipAddress = tokenDetail.getIpAddress();
 			if (!authToken.getIpAddress().equals(ipAddress)) {
-				return ResponseEvent.error(OpenSpecimenException.userError(AuthErrorCode.IP_ADDRESS_CHANGED));
+				throw OpenSpecimenException.userError(AuthErrorCode.IP_ADDRESS_CHANGED);
 			}
 
 			User user = authToken.getUser();
@@ -162,6 +161,13 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 		} catch (Exception e) {	
 			return ResponseEvent.serverError(e);
 		}
+	}
+	
+	@Scheduled(cron="0 0 12 ? * *")
+	@PlusTransactional
+	public void deleteExpiredTokens() {
+		System.err.println("Deleteing expired auth tokens");
+		daoFactory.getAuthDao().deleteExpiredAuthToken(Calendar.getInstance().getTime());
 	}
 	
 	private LoginAuditLog insertLoginAudit(User user, String ipAddress, boolean loginSuccessful) {

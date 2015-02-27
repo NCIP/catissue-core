@@ -137,10 +137,11 @@ public class AuthTokenFilter extends GenericFilterBean {
 		detail.setPassword(parts[1]);
 		detail.setIpAddress(httpReq.getRemoteAddr());
 		detail.setDomainName(DEFAULT_AUTH_DOMAIN);
+		detail.setDoNotGenerateToken(true);
 
 		SessionDataBean sdb = (SessionDataBean) httpReq.getSession().getAttribute(Constants.SESSION_DATA);
 		RequestEvent<LoginDetail> req = new RequestEvent<LoginDetail>(sdb, detail);
-		ResponseEvent<Map<String, Object>> resp = authService.authenticateUser(req, true);
+		ResponseEvent<Map<String, Object>> resp = authService.authenticateUser(req);
 		if (resp.isSuccessful()) {
 			return (User)resp.getPayload().get("user");
 		}

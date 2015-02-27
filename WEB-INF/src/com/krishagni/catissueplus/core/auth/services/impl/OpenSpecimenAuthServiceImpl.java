@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.auth.services.impl;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,9 +18,14 @@ public class OpenSpecimenAuthServiceImpl implements AuthenticationService {
 	
 	@Autowired
 	private AuthenticationManager authManager;
+	
+	@Override
+	public AuthenticationService init(Map<String, String> props) {
+		return this;
+	}
 
 	@Override
-	public void authenticate(String username, String password, String domainName) {
+	public void authenticate(String username, String password) {
 		try{
 			UsernamePasswordAuthenticationToken authenticationToken =
 				new UsernamePasswordAuthenticationToken(username, password);
@@ -28,4 +35,5 @@ public class OpenSpecimenAuthServiceImpl implements AuthenticationService {
 			throw OpenSpecimenException.userError(AuthErrorCode.INVALID_CREDENTIALS);
 		}
 	}
+
 }

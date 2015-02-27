@@ -11,7 +11,9 @@ angular.module('openspecimen')
       },
 
       logout: function() {
-        return $http.delete(url()).then(ApiUtil.processResp);
+        var q = $http.delete(url());
+        this.removeToken();
+        return q.then(ApiUtil.processResp);
       },
 
       saveToken: function(token) {
@@ -30,7 +32,7 @@ angular.module('openspecimen')
   .controller('LoginCtrl', function($scope, $rootScope, $state, $http, $location, AuthService) {
 
     function init() {
-      $scope.loginData = {domainName: 'ldap'};
+      $scope.loginData = {domainName: 'openspecimen'};
       
       if ($location.search().logout) {
         $scope.logout();
@@ -69,7 +71,6 @@ angular.module('openspecimen')
     $scope.logout = function() {
       if ($http.defaults.headers.common['X-OS-API-TOKEN']) {
         AuthService.logout();
-        AuthService.removeToken();
       }
     }
 

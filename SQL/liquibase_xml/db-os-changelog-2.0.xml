@@ -332,7 +332,7 @@
       </column>
 
       <column name="AUTH_TYPE" type="${text.type}(64)">
-        <constraints unique="true" nullable="false" />
+        <constraints nullable="false" />
       </column>
     </createTable>
   </changeSet>

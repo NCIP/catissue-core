@@ -9,6 +9,8 @@ public class LoginDetail {
 	private String domainName;
 	
 	private String ipAddress;
+	
+	private boolean doNotGenerateToken;
 
 	public String getLoginName() {
 		return loginName;
@@ -40,6 +42,14 @@ public class LoginDetail {
 
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
+	}
+
+	public boolean isDoNotGenerateToken() {
+		return doNotGenerateToken;
+	}
+
+	public void setDoNotGenerateToken(boolean doNotGenerateToken) {
+		this.doNotGenerateToken = doNotGenerateToken;
 	}
 
 }

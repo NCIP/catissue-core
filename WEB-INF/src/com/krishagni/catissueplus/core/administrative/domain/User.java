@@ -3,27 +3,37 @@ package com.krishagni.catissueplus.core.administrative.domain;
 
 import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
+@Configurable
 public class User extends BaseEntity implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
 	private final static Pattern pattern = Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})");
+	
+	private static final int LAST_X_PASSWD_NOT_SAME = 5;
 	
 	private String lastName;
 
@@ -48,8 +58,11 @@ public class User extends BaseEntity implements UserDetails {
 	private String comments;
 	
 	private String password;
-
+	
 	private Set<Password> passwords = new HashSet<Password>();
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	public String getLastName() {
 		return lastName;
@@ -212,28 +225,59 @@ public class User extends BaseEntity implements UserDetails {
 		this.setEmailAddress(user.getEmailAddress());
 		this.setComments(user.getComments());
 	}
-
-	// TODO: Add password pattern validation here 
-	public void addPassword(String newPassword) {
-		this.password = newPassword;
+	
+	public void changePassword(String newPassword) {
+		if (StringUtils.isBlank(newPassword) || !isValidPasswordPattern(newPassword)) {
+			throw OpenSpecimenException.userError(UserErrorCode.PASSWD_VIOLATES_RULES);
+		}
+		
+		if (isSameAsLastXPassword(newPassword)) {
+			throw OpenSpecimenException.userError(UserErrorCode.PASSWD_NOT_SAME_AS_LAST_X_PASSWD);
+		}
+		
+		this.password = passwordEncoder.encode(newPassword);
 		
 		Password password = new Password();
 		password.setUpdationDate(new Date());
 		password.setUser(this);
-		password.setPassword(newPassword);
+		password.setPassword(this.password);
 		this.passwords.add(password);
 	}
-
-	public static boolean isValidPasswordPattern(String password) {
-		return pattern.matcher(password).matches();
-	}
-
+	
 	public void delete(boolean isClosed) { 
 		if (isClosed) {
 			this.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
 		} else {
 			this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 		}
+	}
+	
+	public boolean isValidOldPassword(String oldPassword) {
+		if (StringUtils.isBlank(oldPassword)) {
+			throw OpenSpecimenException.userError(UserErrorCode.OLD_PASSWD_NOT_SPECIFIED);
+		}
+		
+		return passwordEncoder.matches(oldPassword, this.getPassword());
+	}
+	
+	private boolean isValidPasswordPattern(String password) {
+		return pattern.matcher(password).matches();
+	}
+	
+	private boolean isSameAsLastXPassword(String newPassword) {
+		List<Password> passwords = new ArrayList<Password>(this.getPasswords());
+		Collections.sort(passwords);
+		
+		for (int i = 0; i < passwords.size(); i++) {
+			if (i == LAST_X_PASSWD_NOT_SAME) {
+				break;
+			}
+			
+			if(passwordEncoder.matches(newPassword, passwords.get(i).getPassword())) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

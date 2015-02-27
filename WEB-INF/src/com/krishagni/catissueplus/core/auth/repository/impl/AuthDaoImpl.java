@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.auth.repository.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
@@ -83,6 +84,15 @@ public class AuthDaoImpl extends AbstractDao<AuthDomain> implements AuthDao {
 				.setLong("userId", userId)
 				.setMaxResults(maxResults)
 				.list();
+	}
+	
+	@Override
+	public void deleteExpiredAuthToken(Date expiresOn) {
+		String deleteHql = "delete from " + AuthToken.class.getName() + " t where t.expiresOn < :expiresOn";
+		sessionFactory.getCurrentSession()
+			.createQuery(deleteHql)
+			.setDate("expiresOn", expiresOn)
+			.executeUpdate();
 	}
 	
 	@Override

@@ -18,8 +18,6 @@
   
   <context:component-scan base-package="com.krishagni.catissueplus"/>
   <context:component-scan base-package="edu.wustl.dynamicextensions.formdesigner"/>
-  <context:spring-configured/> 
-  <context:load-time-weaver aspectj-weaving="autodetect"/>
 
   <bean class="com.krishagni.catissueplus.core.common.RestErrorController" />
 </beans>

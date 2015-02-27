@@ -8,6 +8,8 @@ public class ResponseEvent<T> {
 
 	private T payload;
 	
+	private boolean commitTx;
+	
 	private OpenSpecimenException error; 
 	
 	public ResponseEvent(T payload) {
@@ -16,6 +18,11 @@ public class ResponseEvent<T> {
 	
 	public ResponseEvent(OpenSpecimenException error) {
 		this.error = error;
+	}
+	
+	public ResponseEvent(OpenSpecimenException error, boolean commitTx) {
+		this.error = error;
+		this.commitTx = commitTx;
 	}
 
 	public T getPayload() {
@@ -34,6 +41,14 @@ public class ResponseEvent<T> {
 		this.error = error;
 	}
 	
+	public boolean isCommitTx() {
+		return commitTx;
+	}
+
+	public void setCommitTx(boolean commitTx) {
+		this.commitTx = commitTx;
+	}
+
 	public void throwErrorIfUnsuccessful() {
 		if (error != null) {
 			throw error;
@@ -50,6 +65,10 @@ public class ResponseEvent<T> {
 	
 	public static <P> ResponseEvent<P> error(OpenSpecimenException error) {
 		return new ResponseEvent<P>(error);
+	}
+	
+	public static <P> ResponseEvent<P> error(OpenSpecimenException error, boolean commitTx) {
+		return new ResponseEvent<P>(error, commitTx);
 	}
 	
 	public static <P> ResponseEvent<P> userError(ErrorCode error) {

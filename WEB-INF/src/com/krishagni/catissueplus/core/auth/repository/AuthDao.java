@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.auth.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
@@ -22,6 +23,8 @@ public interface AuthDao extends Dao<AuthDomain> {
 	public AuthToken getAuthTokenByKey(String key);
 	
 	public void saveAuthToken(AuthToken token);
+	
+	public void deleteExpiredAuthToken(Date expiresOn);
 	
 	public void deleteAuthToken(AuthToken token);
 	
