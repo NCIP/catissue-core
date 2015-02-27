@@ -20,10 +20,13 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
         function(event) {
           event.eventId = event.id;
           event.site = event.defaultSite;
+          event.cpTitle = event.collectionProtocol;
          
           delete event.id;
           delete event.defaultSite;
-
+          delete event.collectionProtocol;
+          delete event.specimenRequirements;
+          
           if (typeof regDate == 'string') {
             regDate = Date.parse(regDate);
           } else if (regDate instanceof Date) {

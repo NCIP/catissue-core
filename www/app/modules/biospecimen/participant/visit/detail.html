@@ -24,8 +24,9 @@
 
     <h3>T{{visit.eventPoint}}: {{visit.eventLabel}}</h3>
 
-    <button class="os-round-btn">
-      <span class="fa fa-pencil"></span>
+    <button class="os-round-btn" ng-switch on="!!visit.id" ui-sref="visit-addedit">
+      <span ng-switch-when="true" class="fa fa-pencil"></span>
+      <span ng-switch-default class="fa fa-plus"></span>
     </button>
   </div>
 

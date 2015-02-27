@@ -2,7 +2,8 @@
 angular.module('os.biospecimen.visit', [ 
     'ui.router',
     'os.biospecimen.participant.specimen-tree',
-    'os.biospecimen.extensions'
+    'os.biospecimen.extensions',
+    'os.biospecimen.visit.addedit'
   ])
   .config(function($stateProvider) {
     $stateProvider
@@ -27,6 +28,12 @@ angular.module('os.biospecimen.visit', [
         },
         abstract: true,
         parent: 'participant-root'
+      })
+      .state('visit-addedit', {
+        url: '/addedit-visit',
+        templateUrl: 'modules/biospecimen/participant/visit/addedit.html',
+        controller: 'AddEditVisitCtrl',
+        parent: 'visit-root'
       })
       .state('visit-detail', {
         url: '/detail',
