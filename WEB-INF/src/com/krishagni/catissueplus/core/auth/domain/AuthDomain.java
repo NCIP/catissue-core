@@ -1,8 +1,11 @@
 
 package com.krishagni.catissueplus.core.auth.domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthProviderErrorCode;
 import com.krishagni.catissueplus.core.auth.services.AuthenticationService;
@@ -43,6 +46,21 @@ public class AuthDomain {
 
 	public AuthenticationService getAuthProviderInstance() {
 		return getAuthProviderInstance(this.getAuthProvider());
+	}
+	
+	public void update(AuthDomain domain) {
+		Map<String, String> newProps = domain.getAuthProvider().getProps();
+		Map<String, String> oldProps = this.authProvider.getProps();
+		List<String> oldNames = new ArrayList<String>(oldProps.keySet());
+		
+		for (Map.Entry<String, String> entry: newProps.entrySet()) {
+			oldNames.remove(entry.getKey());
+			oldProps.put(entry.getKey(), entry.getValue());
+		}
+		
+		for (String name: oldNames) {
+			oldProps.remove(name);
+		}
 	}
 
 	@SuppressWarnings("rawtypes")

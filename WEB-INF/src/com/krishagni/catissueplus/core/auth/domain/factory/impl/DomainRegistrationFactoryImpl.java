@@ -23,7 +23,7 @@ public class DomainRegistrationFactoryImpl implements DomainRegistrationFactory 
 	}
 	
 	@Override
-	public AuthDomain getAuthDomain(AuthDomainDetail detail) {
+	public AuthDomain createDomain(AuthDomainDetail detail) {
 		AuthDomain authDomain = new AuthDomain();
 		setDomainName(detail, authDomain);
 		setAuthProvider(detail, authDomain);
@@ -45,11 +45,7 @@ public class DomainRegistrationFactoryImpl implements DomainRegistrationFactory 
 			throw OpenSpecimenException.userError(AuthProviderErrorCode.TYPE_NOT_SPECIFIED);
 		}
 		
-		AuthProvider authProvider = daoFactory.getAuthDao().getAuthProviderByType(authType);
-		if (authProvider == null) {
-			authProvider = getNewAuthProvider(detail);
-		}
-		
+		AuthProvider authProvider = getNewAuthProvider(detail);
 		authDomain.setAuthProvider(authProvider);
 	}
 

@@ -64,7 +64,7 @@ public class AuthDomainDetail {
 		detail.setId(authDomain.getId());
 		detail.setName(authDomain.getName());
 		detail.setAuthType(authDomain.getAuthProvider().getAuthType());
-		detail.setImplClass(detail.getImplClass());
+		detail.setImplClass(authDomain.getAuthProvider().getImplClass());
 		detail.setAuthProviderProps(authDomain.getAuthProvider().getProps());
 		
 		return detail;

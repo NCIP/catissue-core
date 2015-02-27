@@ -6,6 +6,6 @@ import com.krishagni.catissueplus.core.auth.events.AuthDomainDetail;
 
 public interface DomainRegistrationFactory {
 
-	AuthDomain getAuthDomain(AuthDomainDetail domainDetails);
+	AuthDomain createDomain(AuthDomainDetail domainDetails);
 
 }

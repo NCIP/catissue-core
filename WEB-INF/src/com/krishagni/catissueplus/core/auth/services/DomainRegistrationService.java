@@ -10,8 +10,10 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public interface DomainRegistrationService {
 
-	public ResponseEvent<AuthDomainDetail> registerDomain(RequestEvent<AuthDomainDetail> req);
-
 	public ResponseEvent<List<AuthDomainDetail>> getDomains(RequestEvent<ListAuthDomainCriteria> req);
+	
+	public ResponseEvent<AuthDomainDetail> registerDomain(RequestEvent<AuthDomainDetail> req);
+	
+	public ResponseEvent<AuthDomainDetail> updateDomain(RequestEvent<AuthDomainDetail> req);
 
 }
