@@ -1,7 +1,8 @@
 <div>
   <div os-page-header>
-    <h3> 
-      <span translate="participant.register_participant">Register Participant</span>
+    <h3 ng-switch on="!!cpr.id"> 
+      <span ng-switch-when="true" translate="participant.edit_participant">Edit Participant</span>
+      <span ng-switch-default translate="participant.register_participant">Register Participant</span>
     </h3>
   </div>
 
@@ -168,8 +169,11 @@
         <div class="form-group">
           <div class="col-xs-offset-3 col-xs-6">
             <button class="btn btn-primary" ng-if="!matchedResults || matchedResults.matchedAttr == 'none'" 
-              os-form-submit="register()" translate="participant.buttons.register"> Register </button>
-            <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.buttons.discard">Discard</button>
+              os-form-submit="register()" ng-switch on="!!cpr.id">
+              <span ng-switch-when="true" translate="participant.buttons.update_registration"> Update </span>
+              <span ng-switch-default translate="participant.buttons.register"> Register </span>
+            </button>
+            <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">Discard</button>
           </div>
         </div>
       </div>

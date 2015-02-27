@@ -99,6 +99,7 @@
     "list": "Participants",
    
     "register_participant": "Register Participant",
+    "edit_participant": "Edit Participant",
     "reg_date": "Registration Date",
     "ppid": "Participant Protocol ID",
     "name": "Name",
@@ -131,6 +132,7 @@
     
     "buttons": {
       "register": "Register",
+      "update_registration": "Update",
       "register_selected_participant": "Register Selected participant",
       "ignore_matches": "Ignore Matches and Register Participant",
       "lookup_again": "Lookup Again"
