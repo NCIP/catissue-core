@@ -92,6 +92,31 @@ public class SpecimensController {
 		return resp.getPayload();
 	}
 
+	@RequestMapping(method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public SpecimenDetail createSpecimen(@RequestBody SpecimenDetail detail) {
+		ResponseEvent<SpecimenDetail> resp = specimenSvc.createSpecimen(getRequest(detail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public SpecimenDetail updateSpecimen(
+			@PathVariable("id") 
+			Long specimenId, 
+			
+			@RequestBody 
+			SpecimenDetail detail) {
+		
+		detail.setId(specimenId);
+		
+		ResponseEvent<SpecimenDetail> resp = specimenSvc.updateSpecimen(getRequest(detail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)
@@ -122,7 +147,7 @@ public class SpecimensController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST, value="/collect")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public List<SpecimenDetail> collectSpecimens(@RequestBody List<SpecimenDetail> specimens) {		

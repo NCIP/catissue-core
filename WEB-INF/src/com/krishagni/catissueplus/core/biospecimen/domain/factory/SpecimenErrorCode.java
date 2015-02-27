@@ -36,6 +36,8 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	INSUFFICIENT_QTY,
 	
+	PARENT_REQUIRED,
+	
 	SPECIMEN_CLASS_REQUIRED,
 	
 	SPECIMEN_TYPE_REQUIRED,

@@ -55,6 +55,8 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 	
 	private Double availableQty;
 	
+	private Boolean available;
+	
 	private Long parentId;
 	
 	private String parentLabel;
@@ -203,6 +205,14 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 		this.availableQty = availableQty;
 	}
 
+	public Boolean getAvailable() {
+		return available;
+	}
+
+	public void setAvailable(Boolean available) {
+		this.available = available;
+	}
+
 	public Long getParentId() {
 		return parentId;
 	}
@@ -268,6 +278,7 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 		result.setPathology(specimen.getPathologicalStatus());
 		result.setInitialQty(specimen.getInitialQuantity());
 		result.setAvailableQty(specimen.getAvailableQuantity());
+		result.setAvailable(specimen.getIsAvailable());
 		if (specimen.getParentSpecimen() != null) {
 			result.setParentId(specimen.getParentSpecimen().getId());
 			result.setParentLabel(specimen.getParentSpecimen().getLabel());

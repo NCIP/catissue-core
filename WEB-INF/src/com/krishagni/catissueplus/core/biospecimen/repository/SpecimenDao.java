@@ -12,13 +12,11 @@ public interface SpecimenDao extends Dao<Specimen> {
 
 	public Specimen getSpecimen(Long id);
 	
-	public Specimen getSpecimenByLabel(String label);
+	public Specimen getByLabel(String label);
 
-	public Specimen getSpecimenByBarcode(String barcode);
+	public Specimen getByBarcode(String barcode);
 	
-	public boolean doesSpecimenExistsByLabel(String label);
-	
-	public List<Specimen> getSpecimensByLabel(List<String> labels);
+	public List<Specimen> getByLabels(List<String> labels);
 
 	public List<Specimen> getAllSpecimens(int startAt, int maxRecords, String... searchString);
 
