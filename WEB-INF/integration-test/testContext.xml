@@ -172,7 +172,7 @@
   
   <bean id="cprSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolRegistrationServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
-    <property name="registrationFactory" ref="cprFactory"/>
+    <property name="cprFactory" ref="cprFactory"/>
     <property name="visitFactory" ref="visitFactory"/>
     <property name="participantService" ref="participantSvc"/>
   </bean>
