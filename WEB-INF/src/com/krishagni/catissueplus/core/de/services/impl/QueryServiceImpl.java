@@ -159,6 +159,10 @@ public class QueryServiceImpl implements QueryService {
 	public ResponseEvent<SavedQueryDetail> getSavedQuery(RequestEvent<Long> req) {
 		try {
 			SavedQuery savedQuery = daoFactory.getSavedQueryDao().getQuery(req.getPayload());
+			if (savedQuery == null) {
+				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
+			}
+			
 			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(savedQuery));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
