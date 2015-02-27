@@ -26,7 +26,6 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
-import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
@@ -78,7 +77,27 @@ public class VisitsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public VisitDetail addVisit(@RequestBody VisitDetail visit) {
+		ResponseEvent<VisitDetail> resp = visitService.addVisit(getRequest(visit));
+		resp.throwErrorIfUnsuccessful();				
+		return resp.getPayload();
+	}
 
+	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public VisitDetail updateVisit(@PathVariable("id") Long visitId, @RequestBody VisitDetail visit) {
+		visit.setId(visitId);
+		
+		ResponseEvent<VisitDetail> resp = visitService.updateVisit(getRequest(visit));
+		resp.throwErrorIfUnsuccessful();				
+		return resp.getPayload();
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -108,15 +127,6 @@ public class VisitsController {
 
 		ResponseEvent<EntityFormRecords> resp = formSvc.getEntityFormRecords(getRequest(opDetail));
 		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
-	}
-
-	@RequestMapping(method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public VisitDetail addVisit(@RequestBody VisitDetail visit) {
-		ResponseEvent<VisitDetail> resp = visitService.addVisit(getRequest(visit));
-		resp.throwErrorIfUnsuccessful();				
 		return resp.getPayload();
 	}
 

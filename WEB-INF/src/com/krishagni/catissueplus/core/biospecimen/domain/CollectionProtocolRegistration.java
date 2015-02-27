@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
@@ -90,10 +92,18 @@ public class CollectionProtocolRegistration {
 	}
 
 	public void setActivityStatus(String activityStatus) {
-		if (Status.ACTIVITY_STATUS_DISABLED.equals(activityStatus)) {
-			delete(false);
+		if (this.activityStatus != null && this.activityStatus.equals(activityStatus)) {
+			return;
 		}
 		
+		if (StringUtils.isBlank(activityStatus)) {
+			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
+		}
+		
+		if (this.activityStatus != null && Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
+			delete();
+		}		
+
 		this.activityStatus = activityStatus;
 	}
 
@@ -145,14 +155,8 @@ public class CollectionProtocolRegistration {
 		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
 
-	public void delete(boolean isIncludeChildren) {
-		if (isIncludeChildren) {
-			for (Visit visit : this.visits) {
-				visit.delete(isIncludeChildren);
-			}
-		} else {
-			checkActiveDependents();
-		}
+	public void delete() {
+		checkActiveDependents();
 		this.barcode = Utility.getDisabledValue(this.barcode);
 		this.ppid = Utility.getDisabledValue(this.ppid);
 		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();

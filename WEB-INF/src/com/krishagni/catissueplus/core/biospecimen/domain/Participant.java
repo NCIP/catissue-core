@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -177,10 +179,18 @@ public class Participant {
 	}
 
 	public void setActivityStatus(String activityStatus) {
-		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
-			delete(false);
+		if (this.activityStatus != null && this.activityStatus.equals(activityStatus)) {
+			return;
 		}
 		
+		if (StringUtils.isBlank(activityStatus)) {
+			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
+		}
+		
+		if (this.activityStatus != null && Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
+			delete();
+		}		
+
 		this.activityStatus = activityStatus;
 	}
 
@@ -282,17 +292,10 @@ public class Participant {
 		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.activityStatus);
 	}
 
-	public void delete(boolean isIncludeChildren) {
-		if (isIncludeChildren) {
-			Map<String, CollectionProtocolRegistration> registrationCollection = this.cprCollection;
-			for (CollectionProtocolRegistration cpr : registrationCollection.values()) {
-				cpr.delete(isIncludeChildren);
-			}
-		}
-		else {
-			checkActiveDependents();
-		}
-		updateMrn();
+	public void delete() {
+		checkActiveDependents();
+
+		updateMrn();		
 		this.socialSecurityNumber = Utility.getDisabledValue(this.socialSecurityNumber);
 		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 	}

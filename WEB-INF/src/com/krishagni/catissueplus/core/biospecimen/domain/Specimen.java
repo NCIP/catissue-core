@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
@@ -154,19 +156,20 @@ public class Specimen {
 	}
 
 	public void setActivityStatus(String activityStatus) {
-		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
-			delete(false);
+		if (this.activityStatus != null && this.activityStatus.equals(activityStatus)) {
+			return;
 		}
+		
+		if (StringUtils.isBlank(activityStatus)) {
+			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
+		}
+		
+		if (this.activityStatus != null && Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
+			delete();
+		}		
+
 		this.activityStatus = activityStatus;
 	}
-
-	//	public void setActivityStatus(String activityStatus,boolean isToIncludeChildren) {
-	//		if(Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus))
-	//		{
-	//			delete(isToIncludeChildren);
-	//		}
-	//		this.activityStatus = activityStatus;
-	//	}
 
 	public Boolean getIsAvailable() {
 		return isAvailable;
@@ -276,15 +279,9 @@ public class Specimen {
 		return Status.SPECIMEN_COLLECTION_STATUS_COLLECTED.getStatus().equals(this.collectionStatus);
 	}
 
-	public void delete(boolean isIncludeChildren) {
-		if (isIncludeChildren) {
-			for (Specimen specimen : this.getChildCollection()) {
-				specimen.delete(isIncludeChildren);
-			}
-		}
-		else {
-			checkActiveDependents();
-		}
+	public void delete() {
+		checkActiveDependents();
+		
 		if (this.specimenPosition != null) {
 			//			this.specimenPosition.setSpecimen(null);
 			this.setSpecimenPosition(null);
@@ -362,5 +359,11 @@ public class Specimen {
 	
 	public CollectionProtocol getCollectionProtocol() {
 		return visit.getCollectionProtocol();
+	}
+	
+	public void setPending() {
+		// 1. check whether this specimen is distributed
+		// 2. If yes, throw an error
+		// 3. yes, set to pending, vacate the position
 	}
 }

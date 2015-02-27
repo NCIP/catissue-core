@@ -147,7 +147,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 				return ResponseEvent.userError(ParticipantErrorCode.NOT_FOUND);
 			}
 			
-			participant.delete(true);
+			participant.delete();
 			daoFactory.getParticipantDao().saveOrUpdate(participant);
 			return ResponseEvent.response(ParticipantDetail.from(participant));
 		} catch (OpenSpecimenException ose) {
