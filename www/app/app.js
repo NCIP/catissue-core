@@ -75,7 +75,9 @@ angular.module('openspecimen', [
       },
 
       responseError: function(rejection) {
-        if (rejection.status == 401) {
+        if (rejection.status == 0) {
+          Alerts.error("common.server_connect_error");
+        } else if (rejection.status == 401) {
           $window.localStorage['osAuthToken'] = '';
           $injector.get('$state').go('login'); // using injector to get rid of circular dependencies
         } else if (rejection.status / 100 == 5) {
