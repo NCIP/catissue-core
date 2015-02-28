@@ -87,7 +87,7 @@ angular.module('openspecimen', [
 
           if (rejection.data instanceof Array) {
             angular.forEach(rejection.data, function(err) {
-              errMsgs.push(err.code + ": " + err.message);
+              errMsgs.push(err.message + "(" + err.code + ")");
             });
             Alerts.errorText(errMsgs);
           } else if (rejection.config.method != 'HEAD') {

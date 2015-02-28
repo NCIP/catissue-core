@@ -85,8 +85,12 @@ angular.module('openspecimen')
 
     var visitStatuses = [
       'Complete',
-      'Incomplete',
-       'Pending'
+      'Pending'
+    ];
+
+    var specimenStatuses = [
+      'Collected',
+      'Pending'
     ];
 
     var pvMap = {
@@ -98,6 +102,7 @@ angular.module('openspecimen')
       domains:domains,
       'storage-type': storageTypes,
       'visit-status': visitStatuses,
+      'specimen-status': specimenStatuses,
       'container-position-labeling-schemes': positionLabelingSchemes,
     };
 

@@ -93,6 +93,12 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       return Form.listRecords(Specimen.url(), this.$id(), formCtxId);
     };
 
+    Specimen.prototype.$saveProps = function() {
+      delete this.concentration;
+      delete this.children;
+      return this;
+    };
+
     function toSpecimenAttrs(sr) {
       sr.reqId = sr.id;
       sr.reqLabel = sr.name;

@@ -42,22 +42,31 @@
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label">Visit Date</label>
+        <label class="col-xs-3 control-label">Date of Visit</label>
         <div class="col-xs-6">
           <input type="text" name="date" ng-model="currVisit.visitDate" class="form-control" 
             datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="visitDt.isOpen" ng-focus="visitDt.isOpen=true"
-            required placeholder="Visit Date"/>
+            required placeholder="Date of Visit"/>
 
           <div os-field-error field="vform.date"></div>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label">Visit Site</label>
+        <label class="col-xs-3 control-label">Site of Visit</label>
         <div class="col-xs-6">
           <os-select name="site" ng-model="currVisit.site" list="sites" 
-            required placeholder="Visit Site"> </os-select>
+            required placeholder="Site of Visit"> </os-select>
           <div os-field-error field="vform.site"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label">Status</label>
+        <div class="col-xs-6">
+          <os-select name="status" ng-model="currVisit.status" list="visitStatuses"
+            required placeholder="Status of Visit"/>
+          <div os-field-error field="sform.status"></div>
         </div>
       </div>
 

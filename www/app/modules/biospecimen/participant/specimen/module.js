@@ -1,5 +1,9 @@
 
-angular.module('os.biospecimen.specimen', ['ui.router'])
+angular.module('os.biospecimen.specimen', 
+  [
+    'ui.router',
+    'os.biospecimen.specimen.addedit'
+  ])
   .config(function($stateProvider) {
     $stateProvider
       .state('specimen-root', {
@@ -13,7 +17,7 @@ angular.module('os.biospecimen.specimen', ['ui.router'])
               return Specimen.getAnticipatedSpecimen($stateParams.srId);
             }
  
-            return null;
+            return new Specimen({lineage: 'New', visitId: $stateParams.visitId});
           }
         },
         controller: function($scope, specimen) {
@@ -24,11 +28,15 @@ angular.module('os.biospecimen.specimen', ['ui.router'])
         abstract: true,
         parent: 'visit-root'
       })
+      .state('specimen-addedit', {
+        url: '/addedit-specimen',
+        templateUrl: 'modules/biospecimen/participant/specimen/addedit.html',
+        controller: 'AddEditSpecimenCtrl',
+        parent: 'specimen-root'
+      })
       .state('specimen-detail', {
         url: '/detail',
         templateUrl: 'modules/biospecimen/participant/specimen/detail.html',
-        resolve: {
-        },
         controller: function($scope, cpr, visit, specimen, Specimen) {
           $scope.cpr = cpr;
           $scope.visit = visit;

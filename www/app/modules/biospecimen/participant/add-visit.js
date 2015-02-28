@@ -24,7 +24,7 @@ angular.module('os.biospecimen.participant.addvisit', ['os.biospecimen.participa
           $scope.visit.clinicalDiagnosis = cpe.clinicalDiagnosis;
           $scope.visit.clinicalStatus = cpe.clinicalStatus;
           $scope.visit.site = cpe.defaultSite;
-          $scope.visit.visitDate = new Date($scope.visitToAdd.anticipatedVisitDate);
+          $scope.visit.visitDate = new Date($scope.visitToAdd.anticipatedVisitDate).toISOString();
           $scope.visit.status = 'Complete';
         }
       );

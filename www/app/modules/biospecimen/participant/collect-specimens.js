@@ -76,12 +76,13 @@ angular.module('os.biospecimen.participant.collect-specimens', ['os.biospecimen.
     function getSpecimensToSave(uiSpecimens, visited) {
       var result = [];
       angular.forEach(uiSpecimens, function(specimen) {
-        if (visited.indexOf(specimen) > 0) {
+        if (specimen.status == 'Collected' || !specimen.selected || visited.indexOf(specimen) > 0) {
           return;
         }
 
         visited.push(specimen);
         result.push({
+          id: specimen.id,
           initialQty: specimen.initialQty,
           label: specimen.label,
           reqId: specimen.reqId,

@@ -27,8 +27,10 @@
       <span ng-switch-default>{{specimen.type}} ({{specimen.specimenClass}})</span>
     </h3>
 
-    <button class="os-round-btn">
-      <span class="fa fa-pencil"></span>
+    <button class="os-round-btn" ui-sref="specimen-addedit" 
+      ng-switch on="specimen.status == 'Collected'" ng-if="!!visit.id">
+      <span ng-switch-when="true" class="fa fa-pencil"></span>
+      <span ng-switch-default class="fa fa-plus"></span>
     </button>
   </div>
 
