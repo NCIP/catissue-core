@@ -14,6 +14,8 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	VISIT_REQUIRED,
 	
+	VISIT_NOT_COMPLETED,
+	
 	LABEL_REQUIRED,
 	
 	DUP_LABEL,
@@ -58,6 +60,18 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	OP_NOT_ALLOWED,
 	
+	INIT_QTY_LT_ALIQUOT_QTY,
+	
+	ALIQUOT_QTY_GT_PARENT_QTY,
+	
+	PARENT_INIT_QTY_LT_ALIQUOT_QTY,
+	
+	PARENT_AVBL_QTY_GT_ACTUAL,
+	
+	AVBL_QTY_GT_INIT_QTY,
+	
+	AVBL_QTY_GT_ACTUAL,
+			
 	REF_ENTITY_FOUND;
 
 	public String code() {

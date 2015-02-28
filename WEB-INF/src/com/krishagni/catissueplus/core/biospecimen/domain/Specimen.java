@@ -75,7 +75,7 @@ public class Specimen extends BaseEntity {
 
 	public void setTissueSite(String tissueSite) {
 		if (StringUtils.isNotBlank(this.tissueSite) && !this.tissueSite.equals(tissueSite)) {
-			for (Specimen child : childCollection) {
+			for (Specimen child : getChildCollection()) {
 				child.setTissueSite(tissueSite);
 			}
 		}
@@ -89,7 +89,7 @@ public class Specimen extends BaseEntity {
 
 	public void setTissueSide(String tissueSide) {
 		if (StringUtils.isNotBlank(this.tissueSide) && !this.tissueSide.equals(tissueSide)) {
-			for (Specimen child : childCollection) {
+			for (Specimen child : getChildCollection()) {
 				child.setTissueSide(tissueSide);
 			}
 		}
@@ -103,7 +103,7 @@ public class Specimen extends BaseEntity {
 
 	public void setPathologicalStatus(String pathologicalStatus) {
 		if (StringUtils.isNotBlank(this.pathologicalStatus) && !this.pathologicalStatus.equals(pathologicalStatus)) {
-			for (Specimen child : childCollection) {
+			for (Specimen child : getChildCollection()) {
 				child.setPathologicalStatus(pathologicalStatus);
 			}
 		}
@@ -124,24 +124,36 @@ public class Specimen extends BaseEntity {
 	}
 
 	public void setInitialQuantity(Double initialQuantity) {
-		if (this.initialQuantity != null && !this.initialQuantity.equals(initialQuantity)) {
-			if (isAliquot() && this.initialQuantity > parentSpecimen.getInitialQuantity()) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.INVALID_QTY);
-			}
-			
-			double childAliquotQty = 0.0;
-			for (Specimen child : childCollection) {
-				if (child.isAliquot()) {
-					childAliquotQty += child.getInitialQuantity();
-				}
-			}
-			
-			if (this.initialQuantity < childAliquotQty) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.INVALID_QTY);
-			}			
+		if (this.initialQuantity == null || this.initialQuantity.equals(initialQuantity)) {
+			this.initialQuantity = initialQuantity;
+			return;
 		}
 		
-		this.initialQuantity = initialQuantity;
+		//
+		// Check 1: Ensure sum of all aliquot quantities is 
+		// less than or equals initial quantity
+		//
+		double childAliquotQty = getAliquotQuantity();
+		if (initialQuantity < childAliquotQty) { 
+			throw OpenSpecimenException.userError(SpecimenErrorCode.INIT_QTY_LT_ALIQUOT_QTY);
+		}
+
+		if (isAliquot()) {
+			//
+			// Check 2: Ensure initial quantity is less than parent specimen quantity
+			//
+			if (initialQuantity > parentSpecimen.getInitialQuantity()) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.ALIQUOT_QTY_GT_PARENT_QTY);
+			}
+			
+			//
+			// Check 3: Ensure increasing aliquot quantity maintains parent 
+			// quantity constraint 
+			//
+			parentSpecimen.ensureAliquotQtyIncOk(initialQuantity - this.initialQuantity);
+		}
+		
+		this.initialQuantity = initialQuantity;		
 	}
 
 	public String getSpecimenClass() {
@@ -150,7 +162,7 @@ public class Specimen extends BaseEntity {
 
 	public void setSpecimenClass(String specimenClass) {
 		if (StringUtils.isNotBlank(this.specimenClass) && !this.specimenClass.equals(specimenClass)) {
-			for (Specimen child : childCollection) {
+			for (Specimen child : getChildCollection()) {
 				if (child.isAliquot()) {
 					child.setSpecimenClass(specimenClass);
 				}				
@@ -166,7 +178,7 @@ public class Specimen extends BaseEntity {
 
 	public void setSpecimenType(String specimenType) {
 		if (StringUtils.isNotBlank(this.specimenType) && !this.specimenType.equals(specimenType)) {
-			for (Specimen child : childCollection) {
+			for (Specimen child : getChildCollection()) {
 				if (child.isAliquot()) {
 					child.setSpecimenType(specimenType);
 				}				
@@ -248,11 +260,25 @@ public class Specimen extends BaseEntity {
 		return availableQuantity;
 	}
 
-	public void setAvailableQuantity(Double availableQuantity) {
-		if (this.availableQuantity != null && !this.availableQuantity.equals(availableQuantity)) {
-			if (availableQuantity > initialQuantity) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.INVALID_QTY); // check
-			}
+	public void setAvailableQuantity(Double availableQuantity) { 
+		if (this.availableQuantity == null || this.availableQuantity.equals(availableQuantity)) {
+			this.availableQuantity = availableQuantity;
+			return;
+		}
+
+		//
+		// Check 1: Available quantity can't be more than initial collected quantity
+		//
+		if (availableQuantity > initialQuantity) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.AVBL_QTY_GT_INIT_QTY); 
+		}
+		
+		//
+		// Check 2: Available quantity <= initial quantity - sumof aliquot initial quantities
+		//
+		double actAvblQty = initialQuantity - getAliquotQuantity();
+		if (availableQuantity > actAvblQty) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.AVBL_QTY_GT_ACTUAL);
 		}
 		
 		this.availableQuantity = availableQuantity;
@@ -270,9 +296,11 @@ public class Specimen extends BaseEntity {
 				this.isAvailable = false;
 				this.availableQuantity = 0.0d;
 				this.specimenPosition = null;
-				for (Specimen child : childCollection) {
+				for (Specimen child : getChildCollection()) {
 					child.setCollectionStatus(collectionStatus);
 				}
+			} else if (isCollected() && !getVisit().isCompleted()) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.VISIT_NOT_COMPLETED);
 			}
 		}
 		
@@ -369,8 +397,8 @@ public class Specimen extends BaseEntity {
 	}
 
 	public void update(Specimen specimen) {
-		setLabel(getLabel());
-		setBarcode(getBarcode());
+		setLabel(specimen.getLabel());
+		setBarcode(specimen.getBarcode());
 
 		if (isAliquot()) {
 			setSpecimenClass(parentSpecimen.getSpecimenClass());
@@ -391,13 +419,13 @@ public class Specimen extends BaseEntity {
 		}
 		
 		setInitialQuantity(specimen.getInitialQuantity());		
-		setAvailableQuantity(getAvailableQuantity());
-		setIsAvailable(getIsAvailable());
+		setAvailableQuantity(specimen.getAvailableQuantity());
+		setIsAvailable(specimen.getIsAvailable());
 				
-		setSpecimenPosition(getSpecimenPosition());				
-		setComment(getComment());
-		setCollectionStatus(getCollectionStatus());
-		setActivityStatus(getActivityStatus());		
+		setSpecimenPosition(specimen.getSpecimenPosition());				
+		setComment(specimen.getComment());
+		setCollectionStatus(specimen.getCollectionStatus());
+		setActivityStatus(specimen.getActivityStatus());		
 	}
 	
 	public void addSpecimen(Specimen specimen) {
@@ -409,7 +437,7 @@ public class Specimen extends BaseEntity {
 		}
 		
 		double qty = getInitialQuantity();
-		for (Specimen child : childCollection) {
+		for (Specimen child : getChildCollection()) {
 			if (child.getLineage().equals(ALIQUOT)) {
 				qty -= child.getInitialQuantity();
 			}
@@ -428,5 +456,34 @@ public class Specimen extends BaseEntity {
 	
 	public void setPending() {
 		setCollectionStatus(PENDING);
+	}
+	
+	private double getAliquotQuantity() {
+		double aliquotQty = 0.0;
+		for (Specimen child : getChildCollection()) {
+			if (child.isAliquot() && child.isCollected()) {
+				aliquotQty += child.getInitialQuantity();
+			}
+		}
+		
+		return aliquotQty;		
+	}
+	
+	private void ensureAliquotQtyIncOk(double increase) {
+		if (increase <= 0) {
+			return;
+		}
+		
+		double newAliquotQty = getAliquotQuantity() + increase;
+		double initialQty = getInitialQuantity(); 
+		if (initialQty < newAliquotQty) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_INIT_QTY_LT_ALIQUOT_QTY);
+		}
+		
+		double availableQty = getAvailableQuantity();
+		double newAvailableQty = initialQty - newAliquotQty;
+		if (availableQty > newAvailableQty) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_AVBL_QTY_GT_ACTUAL);
+		}
 	}
 }

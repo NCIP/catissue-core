@@ -388,7 +388,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				
 				if (currentParent == null) {
 					result.add(specimen);
-				} else if (specimen == null) {
+				} else {
+					specimen.setParentId(currentParent.getId());
 					currentParent.getChildren().add(specimen);
 				}				
 			}						
