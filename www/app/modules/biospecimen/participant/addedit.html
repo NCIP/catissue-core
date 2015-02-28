@@ -1,7 +1,8 @@
 <div>
   <div os-page-header>
-    <h3> 
-      <span translate="participant.register_participant">Register Participant</span>
+    <h3 ng-switch on="!!cpr.id"> 
+      <span ng-switch-when="true" translate="participant.edit_participant">Edit Participant</span>
+      <span ng-switch-default translate="participant.register_participant">Register Participant</span>
     </h3>
   </div>
 
@@ -12,7 +13,7 @@
           <label class="col-xs-3 control-label" translate="participant.reg_date">Registration Date</label>
           <div class="col-xs-6">
             <input type="text" name="regDate" ng-model="cpr.registrationDate" class="form-control" 
-              datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="regDt.isOpen" ng-focus="regDt.isOpen=true"
+              datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="regDt.isOpen" ng-focus="regDt.isOpen=true"
               required placeholder="{{'participant.regDate' | translate}}"/>
 
             <div os-field-error field="pform.regDate"></div>
@@ -51,7 +52,7 @@
           <label class="col-xs-3 control-label" translate="participant.birth_date">Birth Date</label>
           <div class="col-xs-6">
             <input type="text" ng-model="cpr.participant.birthDate" class="form-control" 
-              datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="birthDt.isOpen" ng-focus="birthDt.isOpen=true" 
+              datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="birthDt.isOpen" ng-focus="birthDt.isOpen=true" 
               placeholder="{{'participant.birth_date' | translate}}"/>
           </div>
         </div>
@@ -103,7 +104,7 @@
             <label class="col-xs-3 control-label" translate="participant.death_date">Death Date</label>
             <div class="col-xs-6">
               <input type="text" ng-model="cpr.participant.deathDate" class="form-control" 
-                datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="deathDt.isOpen" ng-focus="deathDt.isOpen=true" 
+                datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="deathDt.isOpen" ng-focus="deathDt.isOpen=true" 
                 ng-disabled="cpr.participant.vitalStatus != 'Dead'" placeholder="{{'participant.death_date' | translate}}"/>
             </div>
           </div>
@@ -111,7 +112,7 @@
           <div class="form-group">
             <label class="col-xs-3 control-label" translate="participant.race">Race</label>
             <div class="col-xs-6">
-              <os-select multiple ng-model="cpr.participant.race" list="races"></os-select>
+              <os-select multiple ng-model="cpr.participant.races" list="races"></os-select>
             </div>
           </div>
         </div> <!-- End of Show Adv Demographics -->
@@ -168,8 +169,11 @@
         <div class="form-group">
           <div class="col-xs-offset-3 col-xs-6">
             <button class="btn btn-primary" ng-if="!matchedResults || matchedResults.matchedAttr == 'none'" 
-              os-form-submit="register()" translate="participant.buttons.register"> Register </button>
-            <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.buttons.discard">Discard</button>
+              os-form-submit="register()" ng-switch on="!!cpr.id">
+              <span ng-switch-when="true" translate="participant.buttons.update_registration"> Update </span>
+              <span ng-switch-default translate="participant.buttons.register"> Register </span>
+            </button>
+            <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">Discard</button>
           </div>
         </div>
       </div>
@@ -217,7 +221,7 @@
           <td>{{participant.lastName}}</td>
           <td>{{participant.birthDate}}</td>
           <td>{{participant.ssn}}</td>
-          <td>{{participant.pmis | showMrns}}</td>
+          <td>{{participant.pmis | osArrayJoin: pmiText | osNoValue}}</td>
         </tr>
       </tbody>
     </table>

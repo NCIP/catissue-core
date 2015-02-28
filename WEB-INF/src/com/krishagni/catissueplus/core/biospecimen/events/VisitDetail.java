@@ -183,7 +183,7 @@ public class VisitDetail {
 		
 		CollectionProtocolRegistration cpr = visit.getRegistration();
 		detail.setCprId(cpr.getId());
-		detail.setPpid(cpr.getProtocolParticipantIdentifier());
+		detail.setPpid(cpr.getPpid());
 		detail.setCpTitle(cpr.getCollectionProtocol().getTitle());
 		
 		detail.setEventId(visit.getCpEvent().getId());

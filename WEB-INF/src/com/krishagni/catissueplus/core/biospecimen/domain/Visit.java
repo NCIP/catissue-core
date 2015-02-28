@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -12,7 +14,9 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class Visit {
-	private final String COLLECTION_STATUS_PENDING = "Pending";
+	public static final String VISIT_STATUS_PENDING = "Pending";
+	
+	public static final String VISIT_STATUS_COMPLETED = "Complete";
 
 	private Long id;
 
@@ -89,9 +93,18 @@ public class Visit {
 	}
 
 	public void setActivityStatus(String activityStatus) {
-		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
-			delete(false);
+		if (this.activityStatus != null && this.activityStatus.equals(activityStatus)) {
+			return;
 		}
+		
+		if (StringUtils.isBlank(activityStatus)) {
+			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
+		}
+		
+		if (this.activityStatus != null && Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
+			delete();
+		}		
+
 		this.activityStatus = activityStatus;
 	}
 
@@ -108,6 +121,20 @@ public class Visit {
 	}
 
 	public void setStatus(String status) {
+		if (this.status != null && this.status.equals(status)) {
+			return;
+		}
+		
+		if (StringUtils.isBlank(status)) {
+			throw OpenSpecimenException.userError(VisitErrorCode.INVALID_STATUS);
+		}
+		
+		if (this.status != null && VISIT_STATUS_PENDING.equals(status)) {
+			for (Specimen specimen : specimens) {
+				specimen.setPending();
+			}
+		}
+		
 		this.status = status;
 	}
 
@@ -186,37 +213,18 @@ public class Visit {
 		this.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
 
-	public void setCollectionStatusPending() {
-		this.setStatus(COLLECTION_STATUS_PENDING);
-	}
-
 	public boolean isActive() {
 		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.activityStatus);
 	}
 
 	public boolean isCompleted() {
-		return Status.VISIT_STATUS_COMPLETED.getStatus().equals(this.status);
+		return Visit.VISIT_STATUS_COMPLETED.equals(this.status);
 	}
 
-	public void delete(boolean isIncludeChildren) {
-		if (isIncludeChildren) {
-			for (Specimen specimen : this.specimens) {
-				specimen.delete(isIncludeChildren);
-			}
-		}
-		else {
-			checkActiveDependents();
-		}
+	public void delete() {
+		checkActiveDependents();
 		this.name = Utility.getDisabledValue(name);
 		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
-	}
-
-	private void checkActiveDependents() {
-		for (Specimen specimen : this.specimens) {
-			if (specimen.isActive()) {
-				throw OpenSpecimenException.userError(VisitErrorCode.REF_ENTITY_FOUND);
-			}
-		}
 	}
 
 	public void update(Visit visit) {
@@ -230,7 +238,7 @@ public class Visit {
 		setIdentifiedReport(visit.getIdentifiedReport());
 		setDeIdentifiedReport(visit.getDeIdentifiedReport());
 		setComments(visit.getComments());
-		setName(visit.getName());
+		setName(visit.getName());		
 		setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 	}
 
@@ -246,4 +254,12 @@ public class Visit {
 	public CollectionProtocol getCollectionProtocol() {
 		return registration.getCollectionProtocol();
 	}
+	
+	private void checkActiveDependents() {
+		for (Specimen specimen : this.specimens) {
+			if (specimen.isActive()) {
+				throw OpenSpecimenException.userError(VisitErrorCode.REF_ENTITY_FOUND);
+			}
+		}
+	}	
 }

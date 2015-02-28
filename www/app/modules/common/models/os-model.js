@@ -48,6 +48,12 @@ angular.module('os.common.models', [])
         return $http.get(url + id).then(Model.modelRespTransform);
       };
 
+      Model._lazyCollectionInit = function(source, dest) {
+        angular.forEach(source, function(item) {
+          dest.push(item);
+        });
+      };
+
       Model._flatten = function(entities, childrenPropName, parent, depth) {
         var result = [];
         if (!entities) {

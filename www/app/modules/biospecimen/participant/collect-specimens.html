@@ -1,9 +1,31 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <span>T{{visit.calendarPoint}}: {{visit.label}} / </span>
-    <span translate="specimens.list">Specimens</span>
+<div> 
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li> 
+        <a ui-sref="cp-detail.overview({cpId: cpr.cpId})">
+          {{cpr.cpTitle}}
+        </a> 
+      </li>
+      <li>
+        <a ui-sref="participant-detail.overview({cprId: cpr.id})">
+          <ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)">
+            <span ng-switch-when="true"> {{cpr.participant.firstName}} {{cpr.participant.lastName}} </span>
+            <span ng-switch-when="false" translate="common.na"> N/A </span>
+          </ng-switch>
+          <span>({{cpr.ppid}})</span>
+        </a>
+      </li>
+      <li>
+        <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
+          T{{visit.eventPoint}}: {{visit.eventLabel}}
+        </a>
+      </li>
+    </ul>
+
+    <h3>Specimens</h3>
   </div>
-  <div class="panel-body">
+
+  <div class="container">
     <form name="collectionForm" os-form-validator="collectionForm" novalidate os-specimen-qty-validators>
       <table class="os-table os-table-fixed os-table-tree bulk-edit">
         <thead class="os-table-head">
@@ -18,7 +40,7 @@
           </tr>
         </thead>
         <tbody class="os-table-body">
-          <tr class="row" ng-repeat="specimen in specimensToCollect | openedTreeNodes" ng-form="sform">
+          <tr class="row" ng-repeat="specimen in specimens | openedTreeNodes" ng-form="sform">
             <td class="col os-col-30">
               <div style="padding-left: {{specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16}}px">
                 <a ng-if="specimen.hasChildren && specimen.isOpened" 

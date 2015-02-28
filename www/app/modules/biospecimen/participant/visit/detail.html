@@ -24,8 +24,9 @@
 
     <h3>T{{visit.eventPoint}}: {{visit.eventLabel}}</h3>
 
-    <button class="os-round-btn">
-      <span class="fa fa-pencil"></span>
+    <button class="os-round-btn" ng-switch on="!!visit.id" ui-sref="visit-addedit">
+      <span ng-switch-when="true" class="fa fa-pencil"></span>
+      <span ng-switch-default class="fa fa-plus"></span>
     </button>
   </div>
 
@@ -34,13 +35,13 @@
       <li ui-sref-active="active">
         <a ui-sref=".overview"> 
           <i class="fa fa-eye"></i>
-          <span translate="visits.menu.overview">Overview</span>
+          <span class="os-title" translate="visits.menu.overview">Overview</span>
         </a>
       </li>
       <li ui-sref-active="active" ng-if="!!visit.id">
-        <a ui-sref=".annotations">
+        <a ui-sref=".extensions.list">
           <i class="fa fa-files-o"></i>
-          <span translate="visits.menu.extensions">Extensions</span>
+          <span class="os-title" translate="visits.menu.extensions">Extensions</span>
         </a>
       </li>
     </ul>

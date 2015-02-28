@@ -33,7 +33,7 @@ public class ParticipantPatchDetail {
 
 	private String vitalStatus;
 
-	private List<ParticipantMedicalIdentifierNumberDetail> pmiCollection;
+	private List<PmiDetail> pmiCollection;
 
 	private String sexGenotype;
 
@@ -148,11 +148,11 @@ public class ParticipantPatchDetail {
 		this.vitalStatus = vitalStatus;
 	}
 
-	public List<ParticipantMedicalIdentifierNumberDetail> getPmiCollection() {
+	public List<PmiDetail> getPmiCollection() {
 		return pmiCollection;
 	}
 
-	public void setPmiCollection(List<ParticipantMedicalIdentifierNumberDetail> pmiCollection) {
+	public void setPmiCollection(List<PmiDetail> pmiCollection) {
 		this.pmiCollection = pmiCollection;
 	}
 
@@ -217,10 +217,10 @@ public class ParticipantPatchDetail {
 		participantDetail.setId(participant.getId());
 		//TODO revisit
 		Map<String, ParticipantMedicalIdentifier> pmi = participant.getPmiCollection();
-		List<ParticipantMedicalIdentifierNumberDetail> pmiColl = new ArrayList<ParticipantMedicalIdentifierNumberDetail>();
+		List<PmiDetail> pmiColl = new ArrayList<PmiDetail>();
 		if (pmi != null) {
 			for (ParticipantMedicalIdentifier participantMedicalIdentifier : pmi.values()) {
-				ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail = new ParticipantMedicalIdentifierNumberDetail();
+				PmiDetail medicalRecordNumberDetail = new PmiDetail();
 				medicalRecordNumberDetail.setMrn(participantMedicalIdentifier.getMedicalRecordNumber());
 				medicalRecordNumberDetail.setSiteName(participantMedicalIdentifier.getSite().getName());
 				pmiColl.add(medicalRecordNumberDetail);

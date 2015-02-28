@@ -31,7 +31,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErr
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierResponseDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.PmiDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -143,8 +143,8 @@ public class CollectionProtocolRegistrationTest {
 		Assert.assertEquals("default_middle_name", participant.getMiddleName());
 		Assert.assertEquals(CommonUtils.getDate(21, 10, 2012), participant.getBirthDate());
 		Assert.assertEquals("MALE", participant.getGender());
-		Assert.assertEquals((int)1, participant.getRace().size());
-		Assert.assertEquals("Asian", participant.getRace().iterator().next());
+		Assert.assertEquals((int)1, participant.getRaces().size());
+		Assert.assertEquals("Asian", participant.getRaces().iterator().next());
 		Assert.assertEquals("Alive", participant.getVitalStatus());
 		Assert.assertEquals("XX", participant.getSexGenotype());
 		Assert.assertEquals("333-22-4444", participant.getSsn());
@@ -152,7 +152,7 @@ public class CollectionProtocolRegistrationTest {
 		Assert.assertEquals("default-empi-id", participant.getEmpi());
 		Assert.assertEquals((int)2, participant.getPmis().size());
 		
-		for (ParticipantMedicalIdentifierNumberDetail pmi : participant.getPmis()) {
+		for (PmiDetail pmi : participant.getPmis()) {
 			if (pmi.getMrn().equals("PMI1")) {
 				Assert.assertEquals("SITE1", pmi.getSiteName());		
 			} else if (pmi.getMrn().equals("PMI2")) {
@@ -325,8 +325,8 @@ public class CollectionProtocolRegistrationTest {
 		Assert.assertEquals(CommonUtils.getDate(21, 10, 2012), participant.getBirthDate());
 		Assert.assertEquals(CommonUtils.getDate(21, 10, 2013), participant.getDeathDate());
 		Assert.assertEquals("MALE", participant.getGender());
-		Assert.assertEquals((int)1, participant.getRace().size());
-		Assert.assertEquals("Asian", participant.getRace().iterator().next());
+		Assert.assertEquals((int)1, participant.getRaces().size());
+		Assert.assertEquals("Asian", participant.getRaces().iterator().next());
 		Assert.assertEquals("Death", participant.getVitalStatus());
 		Assert.assertEquals("XX", participant.getSexGenotype());
 		Assert.assertEquals("333-22-4444", participant.getSsn());
@@ -334,7 +334,7 @@ public class CollectionProtocolRegistrationTest {
 		Assert.assertEquals("default-empi-id", participant.getEmpi());
 		Assert.assertEquals((int)2, participant.getPmis().size());
 		
-		for (ParticipantMedicalIdentifierNumberDetail pmi : participant.getPmis()) {
+		for (PmiDetail pmi : participant.getPmis()) {
 			if (pmi.getMrn().equals("PMI1")) {
 				Assert.assertEquals("SITE1", pmi.getSiteName());		
 			} else if (pmi.getMrn().equals("PMI2")) {
@@ -422,8 +422,8 @@ public class CollectionProtocolRegistrationTest {
 	public void registerParticipantWithInvalidParticipantDetails() {
 		String string = "asdf-invalid";
 		CollectionProtocolRegistrationDetail input = CprTestData.getCprDetailForCreateAndRegisterParticipant();
-		input.getParticipant().getRace().clear();
-		input.getParticipant().getRace().add(string);
+		input.getParticipant().getRaces().clear();
+		input.getParticipant().getRaces().add(string);
 		input.getParticipant().setGender(string);
 		input.getParticipant().setEthnicity(string);
 		input.getParticipant().setSexGenotype(string);
@@ -506,7 +506,7 @@ public class CollectionProtocolRegistrationTest {
 		Assert.assertNotNull("Error: Collection protocol registration detail found null", cpr);
 		Assert.assertNotNull("Error: Consent details found null", cpr.getConsentDetails());
 		Assert.assertNotNull("Error: Participants found null", cpr.getParticipant());
-		Assert.assertNotNull("Error: Race found null", cpr.getParticipant().getRace());
+		Assert.assertNotNull("Error: Race found null", cpr.getParticipant().getRaces());
 		
 		Assert.assertEquals("Error: CprId mismatch", new Long(1), cpr.getId());
 		Assert.assertEquals("Error: CpId mismatch", new Long(1), cpr.getCpId());
@@ -536,8 +536,8 @@ public class CollectionProtocolRegistrationTest {
 		ParticipantDetail participant = cpr.getParticipant();		
 		Assert.assertEquals("Error: Participant's last name mismatch", "Falero", participant.getLastName());
 		Assert.assertEquals("Error: Participant's first name mismatch", "Guava", participant.getFirstName());
-		Assert.assertEquals("Error: Participant's race count mismatch", (int)1, participant.getRace().size());
-		Assert.assertEquals("Asian", participant.getRace().iterator().next());
+		Assert.assertEquals("Error: Participant's race count mismatch", (int)1, participant.getRaces().size());
+		Assert.assertEquals("Asian", participant.getRaces().iterator().next());
 		Assert.assertEquals("Error: Birthdate mismatch", CommonUtils.getDate(21,10,2012), participant.getBirthDate());
 		Assert.assertEquals("Error: Participant's activity status mismatch", "Active" , participant.getActivityStatus());
 	}

@@ -51,7 +51,7 @@ public class RegistrationInfo {
 		RegistrationInfo info = new RegistrationInfo();
 		info.setCpId(cpr.getCollectionProtocol().getId());
 		info.setId(cpr.getId());
-		info.setPpId(cpr.getProtocolParticipantIdentifier());
+		info.setPpId(cpr.getPpid());
 		info.setRegistrationDate(cpr.getRegistrationDate());
 		return info;
 	}

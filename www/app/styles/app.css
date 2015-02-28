@@ -190,7 +190,7 @@ body {
   border: none;
   outline: none;
   margin-top: -20px;
-  margin-right: 18px;
+  margin-right: 24px; 
   margin-left: -10px;
 }
 
@@ -207,6 +207,13 @@ body {
 .os-page-hdr .os-title {
   margin: 0px;
   margin-right: 24px;
+}
+
+button.btn.os-round-btn {
+  height: 24px;
+  width: 24px;
+  border-radius: 100%; 
+  padding: 0px;
 }
 
 .os-page-hdr .os-round-btn {

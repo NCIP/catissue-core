@@ -9,7 +9,6 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -71,7 +70,7 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Specimen getSpecimenByLabel(String label) {
+	public Specimen getByLabel(String label) {
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(Specimen.class);
 		query.add(Restrictions.eq("label", label));
 		List<Specimen> specimens = query.list();
@@ -81,7 +80,7 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Specimen getSpecimenByBarcode(String barcode) {
+	public Specimen getByBarcode(String barcode) {
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(Specimen.class);
 		query.add(Restrictions.eq("barcode", barcode));
 		List<Specimen> specimens = query.list();
@@ -89,23 +88,9 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		return specimens.isEmpty() ? null : specimens.iterator().next();
 	}
 	
-	@Override
-	@SuppressWarnings("unchecked")
-	public boolean doesSpecimenExistsByLabel(String label) {				 
-		List<Object> row = sessionFactory.getCurrentSession()
-				.createCriteria(Specimen.class)
-				.add(Restrictions.eq("label", label))
-				.setProjection(
-						Projections.projectionList()
-							.add(Projections.count("id")))
-				.list();
-		 
-		return ((Number)row.iterator().next()).intValue() > 0;
-	}
-	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Specimen> getSpecimensByLabel(List<String> labels) {
+	public List<Specimen> getByLabels(List<String> labels) {
 		List<Specimen> specimens = new ArrayList<Specimen>();
 		
 		int i = 0;

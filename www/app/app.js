@@ -54,9 +54,6 @@ angular.module('openspecimen', [
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
       'sessions': '/rest/ng/sessions',
-      'collection-protocols': '/rest/ng/collection-protocols',
-      'cprs': '/rest/ng/collection-protocol-registrations',
-      'participants': '/rest/ng/participants',
       'sites': '/rest/ng/sites',
       'form-files': '/rest/ng/form-files'
     };
@@ -78,7 +75,9 @@ angular.module('openspecimen', [
       },
 
       responseError: function(rejection) {
-        if (rejection.status == 401) {
+        if (rejection.status == 0) {
+          Alerts.error("common.server_connect_error");
+        } else if (rejection.status == 401) {
           $window.localStorage['osAuthToken'] = '';
           $injector.get('$state').go('login'); // using injector to get rid of circular dependencies
         } else if (rejection.status / 100 == 5) {
@@ -91,7 +90,7 @@ angular.module('openspecimen', [
               errMsgs.push(err.code + ": " + err.message);
             });
             Alerts.errorText(errMsgs);
-          } else {
+          } else if (rejection.config.method != 'HEAD') {
             Alerts.error('common.ui_error');
           }
         } 
@@ -160,7 +159,7 @@ angular.module('openspecimen', [
           return prefix + this.app + '/rest/ng/';
         },
 
-        getUrl  : function(key) {
+        getUrl: function(key) {
           var url = '';
           if (key) {
             url = this.urls[key];
@@ -191,5 +190,9 @@ angular.module('openspecimen', [
 
     $rootScope.back = function() {
       $window.history.back();
-    }
+    };
+
+    $rootScope.global = {
+      dateFmt: 'MMM dd, yyyy'
+    };
   });

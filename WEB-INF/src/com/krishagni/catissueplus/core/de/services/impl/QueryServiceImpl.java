@@ -159,6 +159,10 @@ public class QueryServiceImpl implements QueryService {
 	public ResponseEvent<SavedQueryDetail> getSavedQuery(RequestEvent<Long> req) {
 		try {
 			SavedQuery savedQuery = daoFactory.getSavedQueryDao().getQuery(req.getPayload());
+			if (savedQuery == null) {
+				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
+			}
+			
 			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(savedQuery));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
@@ -543,7 +547,7 @@ public class QueryServiceImpl implements QueryService {
 			
 			daoFactory.getQueryFolderDao().saveOrUpdate(queryFolder);			
 			List<SavedQuerySummary> result = new ArrayList<SavedQuerySummary>();
-			for (SavedQuery query : savedQueries) {
+			for (SavedQuery query : queryFolder.getSavedQueries()) {
 				result.add(SavedQuerySummary.fromSavedQuery(query));
 			}
 			

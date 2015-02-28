@@ -1,7 +1,9 @@
 
 angular.module('os.biospecimen.visit', [ 
     'ui.router',
-    'os.biospecimen.participant.specimen-tree'
+    'os.biospecimen.participant.specimen-tree',
+    'os.biospecimen.extensions',
+    'os.biospecimen.visit.addedit'
   ])
   .config(function($stateProvider) {
     $stateProvider
@@ -19,8 +21,19 @@ angular.module('os.biospecimen.visit', [
             return null;           
           }
         },
+        controller: function($scope, cpr, visit) {
+          $scope.visit = $scope.object = visit;
+          $scope.entityType = 'SpecimenCollectionGroup';
+          $scope.extnState = 'visit-detail.extensions.'
+        },
         abstract: true,
         parent: 'participant-root'
+      })
+      .state('visit-addedit', {
+        url: '/addedit-visit',
+        templateUrl: 'modules/biospecimen/participant/visit/addedit.html',
+        controller: 'AddEditVisitCtrl',
+        parent: 'visit-root'
       })
       .state('visit-detail', {
         url: '/detail',
@@ -48,13 +61,35 @@ angular.module('os.biospecimen.visit', [
         },
         parent: 'visit-detail'
       })
-      .state('visit-detail.annotations', {
-        url: '/annotations',
-        templateUrl: 'modules/biospecimen/participant/annotations.html',
-        controller: function(cpr, $scope) {
-          $scope.objectId = cpr.id;
-          $scope.entityType = 'Visit';
+      .state('visit-detail.extensions', {
+        url: '/extensions',
+        template: '<div ui-view></div>',
+        controller: function() {
         },
+        abstract: true,
         parent: 'visit-detail'
+      })
+      .state('visit-detail.extensions.list', {
+        url: '/list',
+        templateUrl: 'modules/biospecimen/extensions/list.html',
+        controller: 'FormsListCtrl',
+        parent: 'visit-detail.extensions'
+      })
+      .state('visit-detail.extensions.records', {
+        url: '/:formId/records?formCtxId',
+        templateUrl: 'modules/biospecimen/extensions/records.html',
+        controller: 'FormRecordsCtrl',
+        parent: 'visit-detail.extensions'
+      })
+      .state('visit-detail.extensions.addedit', {
+        url: '/extensions/:formId/addedit/?recordId&formCtxId',
+        templateUrl: 'modules/biospecimen/extensions/addedit.html',
+        resolve: {
+          formDef: function($stateParams, Form) {
+            return Form.getDefinition($stateParams.formId);
+          }
+        },
+        controller: 'FormRecordAddEditCtrl',
+        parent: 'visit-root'
       });
   });

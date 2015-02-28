@@ -21,6 +21,7 @@
     "form_validation_error": "There are validation errors as highlighted below. Please correct them",
     "server_error": "Internal Server Error. Please report this problem to system administrator",
     "ui_error": "UI Error. Please report this problem to system administrator",
+    "server_connect_error": "Unable to connect server",
 
     "buttons": {
       "add": "Add",
@@ -73,7 +74,7 @@
     "no_cpes": "There are no collection protocol events to show. Please create an event by clicking on Add Event...",
     "add_cpe": "Add Event...",
     "cpe_list": "Events",
-    "cpe_point": "Event Point",
+    "cpe_point": "Event Point (in Days)",
     "cpe_point_label": "Event Point Label",
 
     "tab": {
@@ -100,6 +101,7 @@
     "list": "Participants",
    
     "register_participant": "Register Participant",
+    "edit_participant": "Edit Participant",
     "reg_date": "Registration Date",
     "ppid": "Participant Protocol ID",
     "name": "Name",
@@ -132,6 +134,7 @@
     
     "buttons": {
       "register": "Register",
+      "update_registration": "Update",
       "register_selected_participant": "Register Selected participant",
       "ignore_matches": "Ignore Matches and Register Participant",
       "lookup_again": "Lookup Again"
@@ -465,5 +468,25 @@
       "view_details": "Click to view/edit Role",
       "add": "Click to add new Role"
     }
+  },
+  
+  "extensions": {
+    "no_extensions": "No extensions to show",
+    "list": "Extensions",
+
+    "name": "Name",
+    "creator": "Creator",
+    "last_updated": "Last Updated",
+    "record_count": "Records",
+    "multiRecord": "Multirecord",
+
+    "no_records": "No extension records to show",
+    "record_id": "Record #",
+    "last_updated_by": "Last Updated By",
+    
+    "edit_record": "Edit Record",
+    "new_record": "Create New Record",
+
+    "record_saved": "Extension record saved successfully"
   }
 }

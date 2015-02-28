@@ -65,7 +65,7 @@
 
       <li class="item">
         <strong class="key key-sm" translate="participant.race">Race:</strong>
-        <os-inline-edit editor="raceEditor" name="race" class="value value-md" value="cpr.participant.race">
+        <os-inline-edit editor="raceEditor" name="race" class="value value-md" value="cpr.participant.races">
           <span ng-if="raceEditor.isDisplayMode()">{{raceEditor.viewValue.join(", ") | osNoValue}}</span>
           <div ng-if="raceEditor.isEditMode()">
             <os-select ng-model="raceEditor.editValue" list="races" multiple></os-select>
@@ -95,7 +95,7 @@
             <div class="row" ng-repeat="visit in occurredVisits">
               <div class="col col-xs-5">
                 <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
-                  T{{visit.calendarPoint}}: {{visit.label}}
+                  T{{visit.eventPoint}}: {{visit.eventLabel}}
                 </a>
               </div>
               <div class="col col-xs-2">
@@ -167,7 +167,7 @@
               <div class="row title">
                 <div class="col col-xs-5">
                   <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
-                    T{{visit.calendarPoint}}: {{visit.label}}
+                    T{{visit.eventPoint}}: {{visit.eventLabel}}
                   </a>
                 </div>
                 <div class="col col-xs-3">{{visit.anticipatedVisitDate | date: 'MMM dd, yyyy'}}</div>

@@ -10,6 +10,7 @@ angular.module('openspecimen')
       var title = angular.element('<h3/>')
         .addClass('os-title')
         .css('margin', 0)
+        .css('margin-top', '-11px')
         .append('Navigate To');
 
       div.append(navBtn).append(title);

@@ -235,18 +235,27 @@
             <return-scalar column="formId" type="long"/>
             <return-scalar column="formCaption" type="string"/>
             <return-scalar column="cpId" type="long"/>
+            <return-scalar column="creationTime" type="timestamp"/>
+            <return-scalar column="modificationTime" type="timestamp"/>
+            <return-scalar column="userId" type="long"/>
+            <return-scalar column="userFirstName" type="string"/>
+            <return-scalar column="userLastName" type="string"/>
             <return-scalar column="multirecord" type="boolean"/>
             <return-scalar column="sysForm" type="boolean"/>
             <return-scalar column="recordCnt" type="integer"/>
             
             select
               fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId,
+              c.create_time as creationTime,
+              case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
+              u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName,
               fc.is_multirecord as multirecord, fc.is_sys_form as sysForm,	
               count(r.identifier) as recordCnt
             from
               catissue_form_context fc
               left join catissue_coll_prot_reg reg on reg.collection_protocol_id = fc.cp_id
               inner join dyextn_containers c on c.identifier = fc.container_id
+              inner join catissue_user u on u.identifier = c.created_by
               left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :cprId and r.activity_status = 'ACTIVE'
             where
               c.deleted_on is null and fc.entity_type = 'Participant' and (reg.identifier = :cprId or fc.cp_id = -1)
@@ -259,6 +268,11 @@
             <return-scalar column="formId" type="long"/>
             <return-scalar column="formCaption" type="string"/>
             <return-scalar column="cpId" type="long"/>
+            <return-scalar column="creationTime" type="timestamp"/>
+            <return-scalar column="modificationTime" type="timestamp"/>
+            <return-scalar column="userId" type="long"/>
+            <return-scalar column="userFirstName" type="string"/>
+            <return-scalar column="userLastName" type="string"/>
             <return-scalar column="multirecord" type="boolean"/>
             <return-scalar column="sysForm" type="boolean"/>
             <return-scalar column="recordCnt" type="integer"/>
@@ -266,6 +280,9 @@
 
             select
               fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId,
+              c.create_time as creationTime,
+              case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
+              u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName,
               fc.is_multirecord as multirecord, fc.is_sys_form as sysForm,	
               count(r.identifier) as recordCnt
             from
@@ -276,7 +293,9 @@
                 inner join catissue_specimen specimen on specimen.specimen_collection_group_id = scg.identifier) 
             	on reg.collection_protocol_id = fc.cp_id
               inner join dyextn_containers c on c.identifier = fc.container_id
-              left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :specimenId and r.activity_status = 'ACTIVE'
+              inner join catissue_user u on u.identifier = c.created_by
+              left join catissue_form_record_entry r 
+                on r.form_ctxt_id = fc.identifier and r.object_id = :specimenId and r.activity_status = 'ACTIVE'
             where
               c.deleted_on is null and fc.entity_type = 'Specimen' and (specimen.identifier = :specimenId or fc.cp_id = -1)
             group by
@@ -288,12 +307,20 @@
             <return-scalar column="formId" type="long"/>
             <return-scalar column="formCaption" type="string"/>
             <return-scalar column="cpId" type="long"/>
+            <return-scalar column="creationTime" type="timestamp"/>
+            <return-scalar column="modificationTime" type="timestamp"/>
+            <return-scalar column="userId" type="long"/>
+            <return-scalar column="userFirstName" type="string"/>
+            <return-scalar column="userLastName" type="string"/>
             <return-scalar column="multirecord" type="boolean"/>
             <return-scalar column="sysForm" type="boolean"/>
             <return-scalar column="recordCnt" type="integer"/>
 
             select
               fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId,
+              c.create_time as creationTime,
+              case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
+              u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName,
               fc.is_multirecord as multirecord, fc.is_sys_form as sysForm, 	
               count(r.identifier) as recordCnt
             from
@@ -304,7 +331,9 @@
                 inner join catissue_specimen specimen on specimen.specimen_collection_group_id = scg.identifier)
                 on reg.collection_protocol_id = fc.cp_id
               inner join dyextn_containers c on c.identifier = fc.container_id
-              left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :specimenId and r.activity_status = 'ACTIVE'
+              inner join catissue_user u on u.identifier = c.created_by
+              left join catissue_form_record_entry r 
+                on r.form_ctxt_id = fc.identifier and r.object_id = :specimenId and r.activity_status = 'ACTIVE'
             where
               c.deleted_on is null and fc.entity_type = 'SpecimenEvent' and (specimen.identifier = :specimenId or fc.cp_id = -1)
             group by
@@ -319,12 +348,20 @@
             <return-scalar column="formId" type="long"/>
             <return-scalar column="formCaption" type="string"/>
             <return-scalar column="cpId" type="long"/>
+            <return-scalar column="creationTime" type="timestamp"/>
+            <return-scalar column="modificationTime" type="timestamp"/>
+            <return-scalar column="userId" type="long"/>
+            <return-scalar column="userFirstName" type="string"/>
+            <return-scalar column="userLastName" type="string"/>
             <return-scalar column="multirecord" type="boolean"/>
             <return-scalar column="sysForm" type="boolean"/>
             <return-scalar column="recordCnt" type="integer"/>
 
             select
               fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId,
+              c.create_time as creationTime,
+              case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
+              u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName,
               fc.is_multirecord as multirecord, fc.is_sys_form as sysForm, 
               count(r.identifier) as recordCnt
             from
@@ -332,14 +369,29 @@
               left join (
                 catissue_coll_prot_reg reg
                 inner join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = reg.identifier)
-              on reg.collection_protocol_id = fc.cp_id
+                on reg.collection_protocol_id = fc.cp_id
               inner join dyextn_containers c on c.identifier = fc.container_id
-              left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :scgId and r.activity_status = 'ACTIVE'
+              inner join catissue_user u on u.identifier = c.created_by
+              left join catissue_form_record_entry r 
+                on r.form_ctxt_id = fc.identifier and r.object_id = :scgId and r.activity_status = 'ACTIVE'
             where
               c.deleted_on is null and fc.entity_type = 'SpecimenCollectionGroup' and (scg.identifier = :scgId or fc.cp_id = -1)
             group by
               fc.identifier, fc.container_id, c.caption , fc.cp_id, fc.is_multirecord
         </sql-query>
+
+        <sql-query name="getFormByCtxt">
+          <return-scalar column="formId" type="long"/>
+          <return-scalar column="formCaption" type="string"/>
+
+          select
+            c.identifier as formId, c.caption as formCaption
+          from
+            dyextn_containers c
+            inner join catissue_form_context fc on fc.container_id = c.identifier
+          where
+            c.deleted_on is null and fc.deleted_on is null and fc.identifier = :formCtxtId
+        </sql-query> 
 
         <sql-query name="getFormRecords">
             <return-scalar column="id" type="long"/>

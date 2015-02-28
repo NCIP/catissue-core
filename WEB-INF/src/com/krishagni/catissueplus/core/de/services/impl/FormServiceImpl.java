@@ -20,6 +20,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.domain.FormErrorCode;
 import com.krishagni.catissueplus.core.de.events.AddRecordEntryOp;
+import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
 import com.krishagni.catissueplus.core.de.events.FileDetail;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
@@ -252,10 +253,19 @@ public class FormServiceImpl implements FormService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<FormRecordSummary>> getEntityFormRecords(RequestEvent<GetEntityFormRecordsOp> req) {
+	public ResponseEvent<EntityFormRecords> getEntityFormRecords(RequestEvent<GetEntityFormRecordsOp> req) {
 		GetEntityFormRecordsOp opDetail = req.getPayload();
+		
+		FormSummary form = formDao.getFormByContext(opDetail.getFormCtxtId());
 		List<FormRecordSummary> formRecs = formDao.getFormRecords(opDetail.getFormCtxtId(), opDetail.getEntityId());
-		return ResponseEvent.response(formRecs);
+		
+		EntityFormRecords result = new EntityFormRecords();
+		result.setFormId(form.getFormId());
+		result.setFormCaption(form.getCaption());
+		result.setFormCtxtId(opDetail.getFormCtxtId());
+		result.setRecords(formRecs);
+		
+		return ResponseEvent.response(result);
 	}
 
 	@Override
