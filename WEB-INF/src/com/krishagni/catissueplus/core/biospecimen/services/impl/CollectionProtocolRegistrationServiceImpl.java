@@ -335,7 +335,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		Set<SpecimenRequirement> anticipatedSpecimens = visit.getCpEvent().getTopLevelAnticipatedSpecimens();
 		Set<Specimen> specimens = visit.getTopLevelSpecimens();
 
-		return getSpecimens(anticipatedSpecimens, specimens);
+		return SpecimenDetail.getSpecimens(anticipatedSpecimens, specimens);
 	}
 	
 	private List<SpecimenDetail> getAnticipatedSpecimens(Long cprId, Long eventId) {
@@ -345,54 +345,6 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 		
 		Set<SpecimenRequirement> anticipatedSpecimens = cpe.getTopLevelAnticipatedSpecimens();
-		return getSpecimens(anticipatedSpecimens, Collections.<Specimen>emptySet());		
-	}
-	
-	private List<SpecimenDetail> getSpecimens(Collection<SpecimenRequirement> anticipated, Collection<Specimen> specimens) {		
-		List<SpecimenDetail> result = SpecimenDetail.from(specimens);
-		merge(anticipated, result, null, getReqSpecimenMap(result));
-
-		SpecimenDetail.sort(result);
-		return result;
-	}
-	
-	private Map<Long, SpecimenDetail> getReqSpecimenMap(List<SpecimenDetail> specimens) {
-		Map<Long, SpecimenDetail> reqSpecimenMap = new HashMap<Long, SpecimenDetail>();
-						
-		List<SpecimenDetail> remaining = new ArrayList<SpecimenDetail>();
-		remaining.addAll(specimens);
-		
-		while (!remaining.isEmpty()) {
-			SpecimenDetail specimen = remaining.remove(0);
-			Long srId = (specimen.getReqId() == null) ? -1 : specimen.getReqId();
-			reqSpecimenMap.put(srId, specimen);
-			
-			remaining.addAll(specimen.getChildren());
-		}
-		
-		return reqSpecimenMap;
-	}
-	
-	private void merge(
-			Collection<SpecimenRequirement> anticipatedSpecimens, 
-			List<SpecimenDetail> result, 
-			SpecimenDetail currentParent,
-			Map<Long, SpecimenDetail> reqSpecimenMap) {
-		
-		for (SpecimenRequirement anticipated : anticipatedSpecimens) {
-			SpecimenDetail specimen = reqSpecimenMap.get(anticipated.getId());
-			if (specimen != null) {
-				merge(anticipated.getChildSpecimenRequirements(), result, specimen, reqSpecimenMap);
-			} else {
-				specimen = SpecimenDetail.from(anticipated);
-				
-				if (currentParent == null) {
-					result.add(specimen);
-				} else {
-					specimen.setParentId(currentParent.getId());
-					currentParent.getChildren().add(specimen);
-				}				
-			}						
-		}
-	}
+		return SpecimenDetail.getSpecimens(anticipatedSpecimens, Collections.<Specimen>emptySet());		
+	}	
 }

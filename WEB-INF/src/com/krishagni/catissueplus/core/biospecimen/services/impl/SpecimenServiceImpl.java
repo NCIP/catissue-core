@@ -84,6 +84,14 @@ public class SpecimenServiceImpl implements SpecimenService {
 			}
 			
 			ose.checkAndThrow();			
+			
+			if (specimen.getParentSpecimen() != null) {
+				specimen.getParentSpecimen().getChildCollection().add(specimen);
+			}
+			
+			specimen.decAliquotedQtyFromParent();
+			specimen.checkQtyConstraints();
+			
 			daoFactory.getSpecimenDao().saveOrUpdate(specimen);
 			return ResponseEvent.response(SpecimenDetail.from(specimen));
 		} catch (OpenSpecimenException ose) {
@@ -240,6 +248,9 @@ public class SpecimenServiceImpl implements SpecimenService {
 			}
 		}
 		
+		specimen.decAliquotedQtyFromParent();		
+		specimen.checkQtyConstraints();
+				
 		return specimen;
 	}
 

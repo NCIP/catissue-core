@@ -1,8 +1,9 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
+import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
+
 import java.util.Calendar;
-import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -19,8 +20,6 @@ import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
-
-import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 
 public class SpecimenFactoryImpl implements SpecimenFactory {
 
@@ -157,7 +156,11 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			parent = daoFactory.getSpecimenDao().getByLabel(parentLabel);
 		} else if (parentId != null) {
 			parent = daoFactory.getSpecimenDao().getById(parentId);
-		} else {			
+		} else if (specimen.getVisit() != null && specimen.getSpecimenRequirement() != null) {
+			Long visitId = specimen.getVisit().getId();
+			Long srId = specimen.getSpecimenRequirement().getId();
+			parent = daoFactory.getSpecimenDao().getParentSpecimenByVisitAndSr(visitId, srId);
+		} else {
 			parentSpecified = false;
 		}
 		
@@ -377,13 +380,14 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			specimen.setCreatedOn(detail.getCreatedOn());
 		}
 
-		if (specimen.getVisit() == null) {
-			return;
-		}
-
-		Date visitDate = specimen.getVisit().getVisitDate();
-		if (visitDate.after(specimen.getCreatedOn())) {
-			ose.addError(SpecimenErrorCode.INVALID_CREATION_DATE);
-		}
+		// TODO: Whether create date can be before visit
+//		if (specimen.getVisit() == null) {
+//			return;
+//		}
+//
+//		Date visitDate = specimen.getVisit().getVisitDate();
+//		if (visitDate.after(specimen.getCreatedOn())) {
+//			ose.addError(SpecimenErrorCode.INVALID_CREATION_DATE);
+//		}
 	}	
 }

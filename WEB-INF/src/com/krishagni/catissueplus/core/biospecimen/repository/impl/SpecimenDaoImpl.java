@@ -71,13 +71,24 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	@SuppressWarnings("unchecked")
 	@Override
 	public Specimen getByLabel(String label) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(Specimen.class);
-		query.add(Restrictions.eq("label", label));
-		List<Specimen> specimens = query.list();
-		
+		List<Specimen> specimens = sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_BY_LABEL)
+			.setString("label", label)
+			.list();
 		return specimens.isEmpty() ? null : specimens.iterator().next();
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Specimen getParentSpecimenByVisitAndSr(Long visitId, Long srId) {
+		List<Specimen> specimens = sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_PARENT_BY_VISIT_AND_SR)
+			.setLong("visitId", visitId)
+			.setLong("srId", srId)
+			.list();
+		return specimens.isEmpty() ? null : specimens.iterator().next();
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Specimen getByBarcode(String barcode) {
@@ -135,4 +146,11 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		List<Specimen> result = criteria.list();
 		return result;		
 	}
+	
+	private static final String FQN = Specimen.class.getName();
+	
+	private static final String GET_BY_LABEL = FQN + ".getByLabel";
+	
+	private static final String GET_PARENT_BY_VISIT_AND_SR = FQN + ".getParentByVisitAndReq";
+
 }

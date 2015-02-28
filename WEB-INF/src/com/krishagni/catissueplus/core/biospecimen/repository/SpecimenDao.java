@@ -17,6 +17,8 @@ public interface SpecimenDao extends Dao<Specimen> {
 	public Specimen getByBarcode(String barcode);
 	
 	public List<Specimen> getByLabels(List<String> labels);
+	
+	public Specimen getParentSpecimenByVisitAndSr(Long visitId, Long srId);
 
 	public List<Specimen> getAllSpecimens(int startAt, int maxRecords, String... searchString);
 
