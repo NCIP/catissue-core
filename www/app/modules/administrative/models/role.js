@@ -28,10 +28,10 @@ angular.module('os.administrative.models.role', ['os.common.models'])
     };
 
     Role.prototype.newResource = function() {
-      return {resource:'', permissions: ''};
+      return {resource:'', permissions: []};
     }
 
-    Role.prototype.addResource = function (resource) {
+    Role.prototype.addResource = function(resource) {
       if (!this.acls) {
         this.acls = [];
       }
@@ -39,17 +39,16 @@ angular.module('os.administrative.models.role', ['os.common.models'])
       this.acls.push(resource);
     }
 
-    Role.prototype.removeResource = function (index) {
+    Role.prototype.removeResource = function(index) {
       this.acls.splice(index, 1);
     }
 
     Role.prototype.getAcls = function() {
       var acls = [];
-      console.log(acls);
       angular.forEach(this.acls, function(acl) {
-         if (acl.resource && acl.permissions) {
-           acls.push(acl);
-         }
+        if (acl.resource && acl.permissions) {
+          acls.push(acl);
+        }
       });
       return acls;
     };

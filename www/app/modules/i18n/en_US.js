@@ -457,8 +457,12 @@
     "description": "Description",
     "create_role": "Create Role",
     "resource": "Resource",
-    "permission": "Permission",
+    "permission": "Permissions",
     "resources": "Resources",
+    "read_permission": "Read",
+    "create_permission": "Create",
+    "update_permission": "Update",
+    "delete_permission": "Delete",
 
     "menu": {
       "overview": "Overview"

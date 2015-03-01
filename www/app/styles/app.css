@@ -717,6 +717,49 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   border: 1px solid #ddd;
 }
 
+.os-checkbox-btn {
+  float: left;
+}
+
+.os-checkbox-btn .os-round-icon {
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  border: 1px solid #ccc;
+  border-radius: 100%;
+  background: #f2f2f2;
+  padding: 1px;
+  color: #ccc;
+  text-align: center;
+}
+
+.os-checkbox-btn input {
+  visibility: hidden;
+}
+
+.os-checkbox-btn label {
+  padding-right: 25px;
+}
+
+.os-checkbox-btn input:checked + .os-round-icon {
+  background-color: #428bca;
+  border-color: #428bca;
+  color: #fff;
+}
+
+.os-round-icon {
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  border: 1px solid #ccc;
+  border-radius: 100%;
+  background: #428bca;
+  padding: 1px;
+  color: white;
+  text-align: center;
+  margin-right: 5px;
+}
+
 .panel-heading {
   position: relative;
 }

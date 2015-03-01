@@ -48,12 +48,47 @@
           </div>
 
           <div class="col-xs-4">
-            <os-select multiple ng-model="acl.permissions" list="permissions" name="permissions"
-              placeholder="{{'role.permission' | translate}}">
-            </os-select>
-            <div os-field-error field="roleResourceForm.permissions"></div>
-          </div>
+            <div class="os-checkbox-btn">
+              <label class="checkbox" title="{{'role.create_permission' | translate}}">
+                <input type="checkbox" ng-checked="acl.permissions.indexOf(permissions.create) > -1"
+                  ng-click="togglePermission(acl, 'Create')">
+                  <div class="os-round-icon">
+                    <span class="fa fa-plus"></span>
+                  </div>
+              </label>
+            </div>
 
+            <div class="os-checkbox-btn">
+              <label class="checkbox" title="{{'role.read_permission' | translate}}">
+                <input type="checkbox" ng-checked="acl.permissions.indexOf(permissions.read) > -1"
+                  ng-click="togglePermission(acl, 'Read')" ng-disabled="acl.permissions.indexOf('Create') > -1">
+                <div class="os-round-icon">
+                  <span class="fa fa-eye"></span>
+                </div>
+              </label>
+            </div>
+
+            <div class="os-checkbox-btn">
+              <label class="checkbox" title="{{'role.update_permission' | translate}}">
+                <input type="checkbox" ng-checked="acl.permissions.indexOf(permissions.update) > -1"
+                  ng-click="togglePermission(acl, 'Update')" ng-disabled="acl.permissions.indexOf('Create') > -1">
+                <div class="os-round-icon">
+                  <span class="fa fa-pencil"></span>
+                </div>
+              </label>
+            </div>
+
+            <div class="os-checkbox-btn">
+              <label class="checkbox" title="{{'role.delete_permission' | translate}}">
+                <input type="checkbox" ng-checked="acl.permissions.indexOf(permissions.delete) > -1"
+                  ng-click="togglePermission(acl, 'Delete')">
+                <div class="os-round-icon">
+                  <span class="fa fa-trash"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+         
           <div class="col-xs-1">
             <button class="btn btn-default" ng-click="removeResource($index)">
               <span class="glyphicon glyphicon-trash"></span>
@@ -82,3 +117,4 @@
     </form>
   </div>
 </div>
+
