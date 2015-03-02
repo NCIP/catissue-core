@@ -166,7 +166,6 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	@Scheduled(cron="0 0 12 ? * *")
 	@PlusTransactional
 	public void deleteExpiredTokens() {
-		System.err.println("Deleteing expired auth tokens");
 		daoFactory.getAuthDao().deleteExpiredAuthToken(Calendar.getInstance().getTime());
 	}
 	

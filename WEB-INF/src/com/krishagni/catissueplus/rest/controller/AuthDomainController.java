@@ -50,8 +50,7 @@ public class AuthDomainController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public AuthDomainDetail registerDomain(@PathVariable Long id, @RequestBody AuthDomainDetail domainDetail) {
-		domainDetail.setId(id);
+	public AuthDomainDetail registerDomain(@RequestBody AuthDomainDetail domainDetail) {
 		RequestEvent<AuthDomainDetail> req = new RequestEvent<AuthDomainDetail>(null, domainDetail);
 		ResponseEvent<AuthDomainDetail> resp = domainRegService.registerDomain(req);
 		resp.throwErrorIfUnsuccessful();
@@ -62,7 +61,8 @@ public class AuthDomainController {
 	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public AuthDomainDetail updaterDomain(@RequestBody AuthDomainDetail domainDetail) {
+	public AuthDomainDetail updaterDomain(@PathVariable Long id, @RequestBody AuthDomainDetail domainDetail) {
+		domainDetail.setId(id);
 		RequestEvent<AuthDomainDetail> req = new RequestEvent<AuthDomainDetail>(null, domainDetail);
 		ResponseEvent<AuthDomainDetail> resp = domainRegService.updateDomain(req);
 		resp.throwErrorIfUnsuccessful();

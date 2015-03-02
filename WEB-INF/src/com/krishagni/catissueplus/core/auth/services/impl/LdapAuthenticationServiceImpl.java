@@ -16,20 +16,8 @@ public class LdapAuthenticationServiceImpl implements AuthenticationService {
 	
 	private LdapAuthenticationProvider provider;
 	
-	@Override
-	public AuthenticationService init(Map<String, String> props) {
-		DefaultSpringSecurityContextSource contextSource = new DefaultSpringSecurityContextSource(props.get("url"));
-		contextSource.setUserDn(props.get("userDn"));
-		contextSource.setPassword(props.get("password"));
-		
-		contextSource.afterPropertiesSet();
-		
-		BindAuthenticator authenticator = new BindAuthenticator(contextSource);
-		String[] patterns = props.get("userDnPatterns").split(";");
-		authenticator.setUserDnPatterns(patterns);
-		
-		provider = new LdapAuthenticationProvider(authenticator);
-		return this;
+	public LdapAuthenticationServiceImpl(Map<String, String> props) {
+		provider = getProvider(props);
 	}
 	
 	@Override
@@ -42,6 +30,20 @@ public class LdapAuthenticationServiceImpl implements AuthenticationService {
 		} catch (AuthenticationException e) {
 			throw OpenSpecimenException.userError(AuthErrorCode.INVALID_CREDENTIALS);
 		}
+	}	
+	
+	private LdapAuthenticationProvider getProvider(Map<String, String> props) {
+		DefaultSpringSecurityContextSource contextSource = new DefaultSpringSecurityContextSource(props.get("url"));
+		contextSource.setUserDn(props.get("userDn"));
+		contextSource.setPassword(props.get("password"));
+		
+		contextSource.afterPropertiesSet();
+		
+		BindAuthenticator authenticator = new BindAuthenticator(contextSource);
+		String[] patterns = props.get("userDnPatterns").split(";");
+		authenticator.setUserDnPatterns(patterns);
+		
+		return new LdapAuthenticationProvider(authenticator);
 	}
 
 }

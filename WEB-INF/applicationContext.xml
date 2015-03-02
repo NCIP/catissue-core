@@ -400,8 +400,9 @@
       </map>
     </property>
   </bean>
-
-  <task:annotation-driven />
+  
+  <task:scheduler id="taskScheduler" pool-size="1"/>
+  <task:annotation-driven scheduler="taskScheduler"/>
   <context:annotation-config />
   <context:spring-configured/> 
   

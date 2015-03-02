@@ -63,13 +63,15 @@ public class AuthDomain {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private AuthenticationService getAuthProviderInstance(AuthProvider authProvider) {
 		try {
 			AuthenticationService authService = authProviderMap.get(authProvider.getAuthType());
 			if (authService == null) {
 				Class authImplClass = (Class) Class.forName(authProvider.getImplClass());
-				authService = ((AuthenticationService) authImplClass.newInstance()).init(authProvider.getProps());
+				authService = (AuthenticationService) authImplClass
+							.getConstructor(Map.class)
+							.newInstance(authProvider.getProps());
 				authProviderMap.put(authProvider.getAuthType(), authService);
 			}
 			

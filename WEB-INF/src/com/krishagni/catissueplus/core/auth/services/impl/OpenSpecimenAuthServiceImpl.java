@@ -19,9 +19,8 @@ public class OpenSpecimenAuthServiceImpl implements AuthenticationService {
 	@Autowired
 	private AuthenticationManager authManager;
 	
-	@Override
-	public AuthenticationService init(Map<String, String> props) {
-		return this;
+	public OpenSpecimenAuthServiceImpl(Map<String, String> props) {
+		
 	}
 
 	@Override

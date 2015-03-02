@@ -57,15 +57,15 @@ public class DomainRegistrationServiceImpl implements DomainRegistrationService 
 	public ResponseEvent<AuthDomainDetail> updateDomain(RequestEvent<AuthDomainDetail> req) {
 		try {
 			AuthDomainDetail detail = req.getPayload();
-			AuthDomain existDomain = daoFactory.getAuthDao().getAuthDomainByName(detail.getName());
-			if (existDomain == null) {
+			AuthDomain existingDomain = daoFactory.getAuthDao().getAuthDomainByName(detail.getName());
+			if (existingDomain == null) {
 				throw OpenSpecimenException.userError(AuthProviderErrorCode.DOMAIN_NOT_FOUND); 
 			}
 			
 			AuthDomain authDomain = domainRegFactory.createDomain(detail);
-			existDomain.update(authDomain);
+			existingDomain.update(authDomain);
 			
-			return  ResponseEvent.response(AuthDomainDetail.from(existDomain));
+			return  ResponseEvent.response(AuthDomainDetail.from(existingDomain));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

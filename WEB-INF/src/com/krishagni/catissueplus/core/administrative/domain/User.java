@@ -33,7 +33,7 @@ public class User extends BaseEntity implements UserDetails {
 
 	private final static Pattern pattern = Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})");
 	
-	private static final int LAST_X_PASSWD_NOT_SAME = 5;
+	private static final int PASSWDS_TO_EXAMINE = 5;
 	
 	private String lastName;
 
@@ -231,8 +231,8 @@ public class User extends BaseEntity implements UserDetails {
 			throw OpenSpecimenException.userError(UserErrorCode.PASSWD_VIOLATES_RULES);
 		}
 		
-		if (isSameAsLastXPassword(newPassword)) {
-			throw OpenSpecimenException.userError(UserErrorCode.PASSWD_NOT_SAME_AS_LAST_X_PASSWD);
+		if (isSameAsLastNPassword(newPassword)) {
+			throw OpenSpecimenException.userError(UserErrorCode.PASSWD_SAME_AS_LAST_N);
 		}
 		
 		this.password = passwordEncoder.encode(newPassword);
@@ -264,20 +264,24 @@ public class User extends BaseEntity implements UserDetails {
 		return pattern.matcher(password).matches();
 	}
 	
-	private boolean isSameAsLastXPassword(String newPassword) {
+	private boolean isSameAsLastNPassword(String newPassword) {
+		boolean isSameAsLastN = false;
 		List<Password> passwords = new ArrayList<Password>(this.getPasswords());
 		Collections.sort(passwords);
 		
-		for (int i = 0; i < passwords.size(); i++) {
-			if (i == LAST_X_PASSWD_NOT_SAME) {
+		int examined = 0;
+		for (Password passwd: passwords) {
+			if (examined == PASSWDS_TO_EXAMINE) {
 				break;
 			}
 			
-			if(passwordEncoder.matches(newPassword, passwords.get(i).getPassword())) {
-				return true;
+			if(passwordEncoder.matches(newPassword, passwd.getPassword())) {
+				isSameAsLastN = true;
+				break;
 			}
+			++examined;
 		}
-		return false;
+		return isSameAsLastN;
 	}
 	
 }
