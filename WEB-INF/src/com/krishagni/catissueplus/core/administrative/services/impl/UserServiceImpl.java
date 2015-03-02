@@ -25,12 +25,12 @@ import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
-import com.krishagni.catissueplus.core.common.email.EmailSender;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.service.EmailHandler;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserServiceImpl implements UserService {
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
 	private UserFactory userFactory;
 	
-	private EmailSender emailSender;
+	private EmailHandler emailHandler;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -50,8 +50,8 @@ public class UserServiceImpl implements UserService {
 		this.userFactory = userFactory;
 	}
 
-	public void setEmailSender(EmailSender emailSender) {
-		this.emailSender = emailSender;
+	public void setEmailHandler(EmailHandler emailHandler) {
+		this.emailHandler = emailHandler;
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
 			ose.checkAndThrow();
 
 			daoFactory.getUserDao().saveOrUpdate(user);
-			emailSender.sendUserCreatedEmail(user);
+			//emailSender.sendUserCreatedEmail(user);
 			return ResponseEvent.response(UserDetail.from(user));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -168,6 +168,7 @@ public class UserServiceImpl implements UserService {
 			
 			user.changePassword(detail.getNewPassword());
 			daoFactory.getUserDao().saveOrUpdate(user);
+			emailHandler.sendChangedPasswordEmail(user);
 			return ResponseEvent.response(true);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -203,6 +204,7 @@ public class UserServiceImpl implements UserService {
 			
 			user.changePassword(detail.getNewPassword());
 			dao.deleteFpToken(token);
+			emailHandler.sendChangedPasswordEmail(user);
 			return ResponseEvent.response(true);
 		}catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -229,7 +231,7 @@ public class UserServiceImpl implements UserService {
 			
 			ForgotPasswordToken token = new ForgotPasswordToken(user);
 			dao.saveFpToken(token);
-			emailSender.sendForgotPasswordEmail(user, token.getToken());
+			emailHandler.sendForgotPasswordEmail(user, token.getToken());
 			return ResponseEvent.response(true);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
