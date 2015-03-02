@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.administrative.events.DeleteInstituteOp;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.InstituteService;
+import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -110,10 +110,10 @@ public class InstitutesController {
 	@ResponseStatus(HttpStatus.OK)
 	public Map<String, List> deleteInstitute(@PathVariable Long id,
 			@RequestParam(value="close", required=false, defaultValue="false") boolean close) {
-		DeleteInstituteOp deleteInstOp = new DeleteInstituteOp();
+		DeleteEntityOp deleteInstOp = new DeleteEntityOp();
 		deleteInstOp.setId(id);
 		deleteInstOp.setClose(close);
-		RequestEvent<DeleteInstituteOp> req = new RequestEvent<DeleteInstituteOp>(getSession(), deleteInstOp);
+		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(getSession(), deleteInstOp);
 		ResponseEvent<Map<String,List>> resp = instituteSvc.deleteInstitute(req);
 		
 		resp.throwErrorIfUnsuccessful();

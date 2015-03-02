@@ -46,9 +46,9 @@
 	<property name="flex.dir" value="${base.dir}/WEB-INF/flex" />
 	<!-- flex related properties finish -->
 	<taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties">
-		<classpath>
-			<pathelement location="${lib.dir}/aspectjtools-1.6.6.jar"/>
-		</classpath>
+          <classpath>
+	    <pathelement location="${lib.dir}/aspectjtools-1.6.6.jar"/>
+	  </classpath>
 	</taskdef>
 	<path id="app.classpath">
 		<fileset dir="${lib.dir}">

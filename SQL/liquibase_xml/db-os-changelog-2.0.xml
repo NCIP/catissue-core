@@ -353,6 +353,12 @@
       <column name="password" type="${text.type}(64)"/>
     </addColumn>
   </changeSet>
+  
+  <changeSet author="vgaikwad" id="Drop foreign key department id from CATISSUE_USER">
+    <dropForeignKeyConstraint
+      baseTableName="CATISSUE_USER"
+      constraintName="FKB025CFC7F30C2528"/>
+  </changeSet>
 
   <changeSet author="vlonushte" id="OS auth domains table">
     <createTable tableName="OS_AUTH_DOMAINS">

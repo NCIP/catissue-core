@@ -239,7 +239,7 @@ public class UserServiceImpl implements UserService {
 	private Map<String, List> getDependencies(User user) {
 		List<SiteDetail> sites = new ArrayList<SiteDetail>();
 		for (Site site: user.getSites()) {
-			sites.add(SiteDetail.fromDomain(site));
+			sites.add(SiteDetail.from(site));
 		}
 		
 		Map<String, List> dependencies = new HashMap<String, List>();

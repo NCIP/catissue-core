@@ -1,7 +1,12 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
@@ -190,5 +195,19 @@ public class VisitDetail {
 		detail.setEventLabel(visit.getCpEvent().getEventLabel());
 		detail.setEventPoint(visit.getCpEvent().getEventPoint());
 		return detail;
+	}
+	
+	public static List<VisitDetail> from(Collection<Visit> visits) {
+		List<VisitDetail> result = new ArrayList<VisitDetail>();
+		
+		if (CollectionUtils.isEmpty(visits)) {
+			return result;
+		}
+		
+		for (Visit visit : visits) {
+			result.add(from(visit));
+		}
+		
+		return result;
 	}
 }

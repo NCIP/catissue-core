@@ -1,31 +1,32 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-import krishagni.catissueplus.util.CommonUtil;
+import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
-import com.krishagni.catissueplus.core.administrative.events.ListSiteCriteria;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.SiteQueryCriteria;
+import com.krishagni.catissueplus.core.administrative.repository.SiteListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.SiteService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
-import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SiteServiceImpl implements SiteService {
 	private SiteFactory siteFactory;
 
 	private DaoFactory daoFactory;
-
+	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -33,18 +34,18 @@ public class SiteServiceImpl implements SiteService {
 	public void setSiteFactory(SiteFactory siteFactory) {
 		this.siteFactory = siteFactory;
 	}
-
+	
 	@Override
 	@PlusTransactional	
-	public ResponseEvent<List<SiteDetail>> getSites(RequestEvent<ListSiteCriteria> req) {
-		List<Site> sites = daoFactory.getSiteDao().getSites(req.getPayload().maxResults());
-		
-		List<SiteDetail> result = new ArrayList<SiteDetail>();
-		for (Site site : sites) {
-			result.add(SiteDetail.fromDomain(site));
+	public ResponseEvent<List<SiteDetail>> getSites(RequestEvent<SiteListCriteria> req) {
+		try {
+			List<Site> sites = daoFactory.getSiteDao().getSites(req.getPayload());
+			return ResponseEvent.response(SiteDetail.from(sites));
+		} catch(OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch(Exception ex) {
+			return ResponseEvent.serverError(ex);
 		}
-		
-		return ResponseEvent.response(result);
 	}
 
 	@Override
@@ -54,16 +55,16 @@ public class SiteServiceImpl implements SiteService {
 		Site site = null;
 		
 		if (crit.getId() != null) {
-			site = daoFactory.getSiteDao().getSite(crit.getId());
+			site = daoFactory.getSiteDao().getById(crit.getId());
 		} else if (crit.getName() != null) {
-			site = daoFactory.getSiteDao().getSite(crit.getName());
+			site = daoFactory.getSiteDao().getSiteByName(crit.getName());
 		}
 		
 		if (site == null) {
 			return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 		}
 		
-		return ResponseEvent.response(SiteDetail.fromDomain(site));
+		return ResponseEvent.response(SiteDetail.from(site));
 	}
 
 	@Override
@@ -73,12 +74,12 @@ public class SiteServiceImpl implements SiteService {
 			Site site = siteFactory.createSite(req.getPayload());
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureUniqueSiteName(site.getName(), ose);
-			ensureUniqueSiteCode(null, site.getCode(), ose);
+			ensureUniqueConstraint(site, null, ose);
 			ose.checkAndThrow();
-
-			daoFactory.getSiteDao().saveOrUpdate(site);
-			return ResponseEvent.response(SiteDetail.fromDomain(site));
+			
+			daoFactory.getSiteDao().saveOrUpdate(site, true);
+			
+			return ResponseEvent.response(SiteDetail.from(site));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -90,29 +91,23 @@ public class SiteServiceImpl implements SiteService {
 	@PlusTransactional		
 	public ResponseEvent<SiteDetail> updateSite(RequestEvent<SiteDetail> req) {
 		try {
-			Site existing = null;
 			SiteDetail detail = req.getPayload();
 
-			if (detail.getId() != null) {
-				existing = daoFactory.getSiteDao().getSite(detail.getId());
-			} else if (detail.getName() != null) {
-				existing = daoFactory.getSiteDao().getSite(detail.getName());
-			}
-			
+			Site existing = daoFactory.getSiteDao().getById(detail.getId());
 			if (existing == null) {
 				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 			}
 
 			Site site = siteFactory.createSite(detail);
 			
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);						
-			checkSiteName(existing.getName(), site.getName(), ose);
-			ensureUniqueSiteCode(existing.getCode(), site.getCode(), ose);			
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueConstraint(site, existing, ose);
 			ose.checkAndThrow();
 			
 			existing.update(site);
 			daoFactory.getSiteDao().saveOrUpdate(existing);
-			return ResponseEvent.response(SiteDetail.fromDomain(existing));
+			
+			return ResponseEvent.response(SiteDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -122,24 +117,22 @@ public class SiteServiceImpl implements SiteService {
 
 	@Override
 	@PlusTransactional	
-	public ResponseEvent<SiteDetail> deleteSite(RequestEvent<SiteQueryCriteria> req) {
+	public ResponseEvent<Map<String, List>> deleteSite(RequestEvent<DeleteEntityOp> req) {
 		try {
-			Site existing = null;
-			SiteQueryCriteria crit = req.getPayload();
+			DeleteEntityOp deleteOp = req.getPayload();
 
-			if (crit.getId() != null) {
-				existing = daoFactory.getSiteDao().getSite(crit.getId());
-			} else if (crit.getName() != null) {
-				existing = daoFactory.getSiteDao().getSite(crit.getName());
-			}
-			
-			if (existing == null) {
+			Site site = daoFactory.getSiteDao().getById(deleteOp.getId());
+			if (site == null) {
 				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 			}
-						
-			existing.delete();
-			daoFactory.getSiteDao().saveOrUpdate(existing);
-			return ResponseEvent.response(SiteDetail.fromDomain(existing));
+			
+			Map<String, List> dependencies = site.delete(deleteOp.isClose());
+			if (!dependencies.isEmpty()) {
+				return ResponseEvent.response(dependencies);
+			}
+			
+			daoFactory.getSiteDao().saveOrUpdate(site);
+			return ResponseEvent.response(Collections.<String, List>emptyMap());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -147,31 +140,40 @@ public class SiteServiceImpl implements SiteService {
 		}
 	}
 
-	private void checkActivityStatus(Site site) {
-		if (site.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
-			site.setName(CommonUtil.appendTimestamp(site.getName()));
-		}
-	}
-
-	private void checkSiteName(String oldName, String newName, OpenSpecimenException ose) {
-		if (!oldName.equals(newName)) {
-			ensureUniqueSiteName(newName, ose);
-		}
-	}
-
-	private void ensureUniqueSiteName(String name, OpenSpecimenException ose) {
-		if (!daoFactory.getSiteDao().isUniqueSiteName(name)) {
-			ose.addError(SiteErrorCode.DUP_SITE_NAME);
-		}
-	}
-	
-	private void ensureUniqueSiteCode(String oldCode, String newCode, OpenSpecimenException ose) {
-		if (newCode == null || newCode.equals(oldCode)) {
-			return;
+	private void ensureUniqueConstraint(Site newSite, Site existingSite, OpenSpecimenException ose) {
+		if (!isUniqueName(newSite, existingSite)) {
+			ose.addError(SiteErrorCode.DUP_NAME);
 		}
 		
-		if (!daoFactory.getSiteDao().isUniqueSiteCode(newCode)) {
-			ose.addError(SiteErrorCode.DUP_SITE_CODE);
+		if(!isUniqueCode(newSite, existingSite)) {
+			ose.addError(SiteErrorCode.DUP_CODE);
 		}
+	}
+
+	private boolean isUniqueName(Site newSite, Site existingSite) {
+		if (existingSite != null && newSite.getName().equals(existingSite.getName())) {
+			return true;
+		}
+		
+		Site site = daoFactory.getSiteDao().getSiteByName(newSite.getName());
+		if (site != null) {
+			return false; 
+		} 
+		
+		return true;
+	}
+	
+	private boolean isUniqueCode(Site newSite, Site existingSite) {
+		if (StringUtils.isBlank(newSite.getCode()) ||
+	              existingSite != null && newSite.getCode().equals(existingSite.getCode())) {
+			return true;
+		}
+		
+		Site site = daoFactory.getSiteDao().getSiteByCode(newSite.getCode());
+		if (site != null) {
+			return false; 
+		}
+		
+		return true;
 	}
 }

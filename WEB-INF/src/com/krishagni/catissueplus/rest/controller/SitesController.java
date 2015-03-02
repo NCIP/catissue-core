@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,10 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.administrative.events.ListSiteCriteria;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.SiteQueryCriteria;
+import com.krishagni.catissueplus.core.administrative.repository.SiteListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.SiteService;
+import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -35,6 +37,37 @@ public class SitesController {
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
+	
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<SiteDetail> getSites(
+			@RequestParam(value = "name", required= false)
+			String name,
+			
+			@RequestParam(value = "exactMatch", required= false, defaultValue = "false")
+			boolean exactMatch,
+			
+			@RequestParam(value = "startAt", required = false, defaultValue = "0")
+			int startAt,
+			
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100") 
+			int maxResults
+			) {
+		
+		SiteListCriteria crit = new SiteListCriteria()
+			.query(name)
+			.exactMatch(exactMatch)
+			.startAt(startAt)
+			.maxResults(maxResults);
+		
+		RequestEvent<SiteListCriteria> req = new RequestEvent<SiteListCriteria>(getSession(), crit);
+		ResponseEvent<List<SiteDetail>> resp = siteService.getSites(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
@@ -50,21 +83,6 @@ public class SitesController {
 		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public List<SiteDetail> getSites(
-			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") 
-			int maxResults) {
-		
-		ListSiteCriteria crit = new ListSiteCriteria().maxResults(maxResults);		
-		
-		RequestEvent<ListSiteCriteria> req = new RequestEvent<ListSiteCriteria>(getSession(), crit);
-		ResponseEvent<List<SiteDetail>> resp = siteService.getSites(req);
-		resp.throwErrorIfUnsuccessful();
-		
-		return resp.getPayload();
-	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
@@ -88,27 +106,17 @@ public class SitesController {
 		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/{name}")
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public SiteDetail updateSite(@PathVariable String name, @RequestBody SiteDetail siteDetail) {
-		siteDetail.setName(name);
-		
-		RequestEvent<SiteDetail> req = new RequestEvent<SiteDetail>(getSession(), siteDetail);
-		ResponseEvent<SiteDetail> resp = siteService.updateSite(req);
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
-	}
-
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public SiteDetail deleteSite(@PathVariable Long id) {
-		SiteQueryCriteria crit = new SiteQueryCriteria();
-		crit.setId(id);
+	public Map<String, List> deleteSite(@PathVariable Long id, 
+			@RequestParam(value="close", required=false, defaultValue="false") boolean close) {
+		DeleteEntityOp deleteOp = new DeleteEntityOp();
+		deleteOp.setId(id);
+		deleteOp.setClose(close);
 		
-		RequestEvent<SiteQueryCriteria> req = new RequestEvent<SiteQueryCriteria>(getSession(), crit);
-		ResponseEvent<SiteDetail> resp = siteService.deleteSite(req);
+		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(getSession(), deleteOp);
+		ResponseEvent<Map<String, List>> resp = siteService.deleteSite(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

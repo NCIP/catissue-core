@@ -297,9 +297,8 @@
     <property name="daoFactory" ref="biospecimenDaoFactory" />
   </bean>
 
-<!--	<bean id="departmentFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DepartmentFactoryImpl">
-		<property name="daoFactory" ref="biospecimenDaoFactory"/>
-	</bean>-->
+  <bean id="instituteDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.InstituteDependencyChecker">
+  </bean>	
 
   <bean id="instituteFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
@@ -308,6 +307,9 @@
   <bean id="instSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.InstituteServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="instituteFactory" ref="instituteFact"/>
+  </bean>
+  
+  <bean id="siteDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.SiteDependencyChecker">
   </bean>
 
   <bean id="siteFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.SiteFactoryImpl">
@@ -407,4 +409,4 @@
   <context:spring-configured/> 
   
   <import resource="classpath*:com/krishagni/openspecimen/custom/*Context.xml"/>
- </beans>
+ </beans>	
