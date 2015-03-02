@@ -64,9 +64,10 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			DistributionOrder distributionOrder = distributionFactory.createDistributionOrder(detail, Status.PENDING);
 			ensureUniqueConstraints(distributionOrder);
 			
-			if (detail.getStatus().equals(Status.DISTRIBUTED)) {
+			Status inputStatus = Status.valueOf(detail.getStatus());
+			if (inputStatus == Status.DISTRIBUTED) {
 				distributionOrder.distribute();
-			} else if (detail.getStatus().equals(Status.DISTRIBUTED_AND_CLOSED)) {
+			} else if (inputStatus == Status.DISTRIBUTED_AND_CLOSED) {
 				distributionOrder.distributeAndClose();
 			}
 			daoFactory.getDistributionOrderDao().saveOrUpdate(distributionOrder);
@@ -89,17 +90,11 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 				return ResponseEvent.userError(DistributionOrderErrorCode.NOT_FOUND);
 			}
 			
-			DistributionOrder distributionOrder = distributionFactory.createDistributionOrder(detail, Status.PENDING);
+			DistributionOrder distributionOrder = distributionFactory.createDistributionOrder(detail, null);
 			if (!existing.getName().equals(distributionOrder.getName())) {
 				ensureUniqueConstraints(distributionOrder);
 			}
 
-			if (existing.getStatus().equals(Status.PENDING) && detail.getStatus().equals(Status.DISTRIBUTED.toString())) {
-				distributionOrder.distribute();
-			} else if (existing.getStatus().equals(Status.PENDING) && detail.getStatus().equals(Status.DISTRIBUTED_AND_CLOSED.toString())) {
-				distributionOrder.distributeAndClose();
-			}
-			
 			existing.update(distributionOrder);
 			daoFactory.getDistributionOrderDao().saveOrUpdate(existing);
 			return ResponseEvent.response(DistributionOrderDetail.from(existing));

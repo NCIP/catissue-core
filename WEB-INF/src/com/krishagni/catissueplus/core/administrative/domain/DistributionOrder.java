@@ -132,6 +132,7 @@ public class DistributionOrder extends BaseEntity {
 		setRequester(other.requester);
 		setDistributor(other.distributor);
 		updateOrderItems(other);
+		updateDistribution(other);
 		setDistributionProtocol(other.distributionProtocol);
 		updateStatus(other);
 		setCreationDate(other.creationDate);
@@ -179,12 +180,20 @@ public class DistributionOrder extends BaseEntity {
 		
 	}
 	
+	private void updateDistribution(DistributionOrder other) {
+		if (status == Status.PENDING && other.status == Status.DISTRIBUTED) {
+			distribute();
+		} else if (status == Status.PENDING && other.status == Status.DISTRIBUTED_AND_CLOSED) {
+			distributeAndClose();
+		}
+	}
+	
 	private void updateStatus(DistributionOrder other) {
-		if (status.equals(other.status)) {
+		if (status == other.status) {
 			return;
 		}
 		
-		if (status.equals(Status.PENDING) && other.isOrderDistributed()) {
+		if (status == Status.PENDING && other.isOrderDistributed()) {
 			setStatus(other.status);
 		} else {
 			throw OpenSpecimenException.userError(DistributionOrderErrorCode.STATUS_CHANGE_NOT_ALLOWED);
@@ -192,7 +201,7 @@ public class DistributionOrder extends BaseEntity {
 	}
 	
 	public boolean isOrderDistributed() {
-		return (Status.DISTRIBUTED.equals(status) || 
-				Status.DISTRIBUTED_AND_CLOSED.equals(status));
+		return (Status.DISTRIBUTED == status || 
+				Status.DISTRIBUTED_AND_CLOSED == status);
 	}
 }

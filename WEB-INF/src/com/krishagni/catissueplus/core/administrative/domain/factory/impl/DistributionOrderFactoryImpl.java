@@ -103,7 +103,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		}
 		
 		if (specimens.size() < detail.getOrderItems().size()) {
-			ose.addError(DistributionOrderErrorCode.DUPLICATE_SPECIMEN);
+			ose.addError(DistributionOrderErrorCode.DUPLICATE_SPECIMENS);
 			return;
 		}
 		

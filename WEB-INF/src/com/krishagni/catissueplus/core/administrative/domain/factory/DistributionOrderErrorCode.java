@@ -21,7 +21,7 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 	
 	ALREADY_DISTRIBUTED,
 	
-	DUPLICATE_SPECIMEN;
+	DUPLICATE_SPECIMENS;
 
 	@Override
 	public String code() {

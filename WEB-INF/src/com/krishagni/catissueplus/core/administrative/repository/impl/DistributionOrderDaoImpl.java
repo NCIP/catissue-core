@@ -13,8 +13,6 @@ import com.krishagni.catissueplus.core.administrative.repository.DistributionOrd
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-import edu.wustl.catissuecore.util.global.Constants;
-
 public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> implements DistributionOrderDao {
 	@Override
 	@SuppressWarnings("unchecked")
