@@ -1,4 +1,4 @@
-package com.krishagni.catissueplus.core.common;
+package com.krishagni.catissueplus.core.common.events;
 
 public class DeleteEntityOp {
 	

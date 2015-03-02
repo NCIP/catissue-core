@@ -19,14 +19,14 @@ import com.krishagni.catissueplus.core.common.util.Status;
 @Configurable
 public class Institute extends BaseEntity {
 	
-	@Autowired
-	private InstituteDependencyChecker instituteDependencyChecker;
-	
 	private String name;
 
 	private String activityStatus;
 
 	private Set<Department> departments = new HashSet<Department>();
+
+	@Autowired
+	private InstituteDependencyChecker dependencyChecker;
 	
 	public String getName() {
 		return name;
@@ -65,7 +65,7 @@ public class Institute extends BaseEntity {
 
 	public Map<String,List> delete(Boolean close) {
 		if (!close) {
-			Map<String, List> dependencies = instituteDependencyChecker.getDependencies(this);
+			Map<String, List> dependencies = dependencyChecker.getDependencies(this);
 			if (!dependencies.isEmpty()) {
 				return dependencies;
 			}
@@ -84,7 +84,7 @@ public class Institute extends BaseEntity {
 		}
 		
 		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(newActivityStatus)) {
-			Map<String, List> dependencies = instituteDependencyChecker.getDependencies(this);
+			Map<String, List> dependencies = dependencyChecker.getDependencies(this);
 			if (!dependencies.isEmpty()) {
 				throw new OpenSpecimenException(ErrorType.USER_ERROR, InstituteErrorCode.REF_ENTITY_FOUND);
 			}

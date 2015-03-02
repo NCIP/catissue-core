@@ -7,7 +7,7 @@ import java.util.Map;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.SiteQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.SiteListCriteria;
-import com.krishagni.catissueplus.core.common.DeleteEntityOp;
+import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 

@@ -6,7 +6,7 @@ import java.util.Map;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
-import com.krishagni.catissueplus.core.common.DeleteEntityOp;
+import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 

@@ -20,9 +20,6 @@ import com.krishagni.catissueplus.core.common.util.Status;
 @Configurable
 public class Site {
 
-	@Autowired
-	private SiteDependencyChecker siteDependencyChecker;
-	
 	private Long id;
 
 	private String name;
@@ -40,7 +37,10 @@ public class Site {
 	private Set<Visit> visits = new HashSet<Visit>();
 
 	private Set<StorageContainer> storageContainers = new HashSet<StorageContainer>();
-	
+
+	@Autowired
+	private SiteDependencyChecker dependencyChecker;
+
 	public Long getId() {
 		return id;
 	}
@@ -85,9 +85,9 @@ public class Site {
 		return address; 
 	}
 
-    public void setAddress(String address) { 
-    	this.address = address; 
-    }
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
 	public Set<User> getCoordinators() {
 		return coordinators;
@@ -118,13 +118,12 @@ public class Site {
 		setCode(other.getCode());
 		setType(other.getType());
 		updateActivityStatus(other.getActivityStatus());
-		setActivityStatus(other.getActivityStatus());
 		CollectionUpdater.update(this.getCoordinators(), other.getCoordinators());
 	}
 
 	public Map<String, List> delete(boolean close) {
 		if (!close) {
-			Map<String, List> dependencies = siteDependencyChecker.getDependencies(this);
+			Map<String, List> dependencies = dependencyChecker.getDependencies(this);
 			if (!dependencies.isEmpty()) {
 				return dependencies;
 			}
@@ -143,11 +142,13 @@ public class Site {
 		}
 		
 		if (newActivityStatus.equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
-			Map<String, List> dependencies = siteDependencyChecker.getDependencies(this);
+			Map<String, List> dependencies = dependencyChecker.getDependencies(this);
 			if (!dependencies.isEmpty()) {
 				OpenSpecimenException.userError(SiteErrorCode.REF_ENTITY_FOUND);
 			}
 		}
+		
+		this.setActivityStatus(newActivityStatus);
 	}
 
 }
