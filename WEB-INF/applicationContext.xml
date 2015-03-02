@@ -250,6 +250,15 @@
     <property name="distributionFactory" ref="distributionOrderFactory"/>
   </bean>
   
+  <bean id="scheduledJobFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.ScheduledJobFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+  
+  <bean id="scheduledJobSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.ScheduledJobServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="jobFactory" ref="scheduledJobFactory"/>
+  </bean>
+  
   <bean id="formDao" class="com.krishagni.catissueplus.core.de.repository.impl.FormDaoImpl">
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/> 
   </bean>

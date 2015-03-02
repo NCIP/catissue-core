@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.ScheduledJobInstance" table="OS_SCHEDULED_JOB_INSTANCES">
+
+    <id name="id" column="IDENTIFIER" type="long" unsaved-value="null">
+      <generator class="native">
+        <param name="sequence">OS_SCHEDULED_JOB_INSTANCES_SEQ</param>
+      </generator>
+    </id>
+
+    <many-to-one
+      name="scheduledJob"
+      class="com.krishagni.catissueplus.core.administrative.domain.ScheduledJob"
+      column="SCHEDULED_JOB_ID"/>
+      
+    <property name="status" column="STATUS" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.ScheduledJobInstance$Status</param>
+        <param name="type">12</param>
+      </type>
+    </property>
+      
+    <property name="logFilePath" column="LOG_FILE_PATH"/>
+
+    <property name="message" column="MESSAGE"/>
+  </class>
+</hibernate-mapping>
