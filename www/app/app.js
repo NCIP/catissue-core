@@ -39,9 +39,7 @@ angular.module('openspecimen', [
       .state('signed-in', {
         abstract: true,
         templateUrl: 'modules/common/appmenu.html',
-        controller: function($scope, Alerts) {
-          $scope.alerts = Alerts.messages;
-        }
+        controller: 'SignedInCtrl'
       });
 
     $urlRouterProvider.otherwise('/');
@@ -78,7 +76,8 @@ angular.module('openspecimen', [
         if (rejection.status == 0) {
           Alerts.error("common.server_connect_error");
         } else if (rejection.status == 401) {
-          $window.localStorage['osAuthToken'] = '';
+          delete $window.localStorage['osAuthToken'];
+          delete $injector.get("$http").defaults.headers.common['X-OS-API-TOKEN'];
           $injector.get('$state').go('login'); // using injector to get rid of circular dependencies
         } else if (rejection.status / 100 == 5) {
           Alerts.error("common.server_error");

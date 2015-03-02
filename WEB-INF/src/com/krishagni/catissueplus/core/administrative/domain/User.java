@@ -3,21 +3,37 @@ package com.krishagni.catissueplus.core.administrative.domain;
 
 import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-public class User extends BaseEntity {
-	
+@Configurable
+public class User extends BaseEntity implements UserDetails {
+
+	private static final long serialVersionUID = 1L;
+
 	private final static Pattern pattern = Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})");
+	
+	private static final int PASSWDS_TO_EXAMINE = 5;
 	
 	private String lastName;
 
@@ -42,8 +58,11 @@ public class User extends BaseEntity {
 	private String comments;
 	
 	private String password;
-
+	
 	private Set<Password> passwords = new HashSet<Password>();
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	public String getLastName() {
 		return lastName;
@@ -164,6 +183,38 @@ public class User extends BaseEntity {
 	public void setPasswords(Set<Password> passwords) {
 		this.passwords = passwords;
 	}
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+		authorities.add(new SimpleGrantedAuthority("user"));
+		return authorities;
+	}
+
+	@Override
+	public String getUsername() {
+		return loginName;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return this.activityStatus.equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+	}
 
 	public void update(User user) {
 		this.setFirstName(user.getFirstName());
@@ -174,28 +225,63 @@ public class User extends BaseEntity {
 		this.setEmailAddress(user.getEmailAddress());
 		this.setComments(user.getComments());
 	}
-
-	// TODO: Add password pattern validation here 
-	public void addPassword(String newPassword) {
-		this.password = newPassword;
+	
+	public void changePassword(String newPassword) {
+		if (StringUtils.isBlank(newPassword) || !isValidPasswordPattern(newPassword)) {
+			throw OpenSpecimenException.userError(UserErrorCode.PASSWD_VIOLATES_RULES);
+		}
+		
+		if (isSameAsLastNPassword(newPassword)) {
+			throw OpenSpecimenException.userError(UserErrorCode.PASSWD_SAME_AS_LAST_N);
+		}
+		
+		this.password = passwordEncoder.encode(newPassword);
 		
 		Password password = new Password();
 		password.setUpdationDate(new Date());
 		password.setUser(this);
-		password.setPassword(newPassword);
+		password.setPassword(this.password);
 		this.passwords.add(password);
 	}
-
-	public static boolean isValidPasswordPattern(String password) {
-		return pattern.matcher(password).matches();
-	}
-
+	
 	public void delete(boolean isClosed) { 
 		if (isClosed) {
 			this.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
 		} else {
 			this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 		}
+	}
+	
+	public boolean isValidOldPassword(String oldPassword) {
+		if (StringUtils.isBlank(oldPassword)) {
+			throw OpenSpecimenException.userError(UserErrorCode.OLD_PASSWD_NOT_SPECIFIED);
+		}
+		
+		return passwordEncoder.matches(oldPassword, this.getPassword());
+	}
+	
+	private boolean isValidPasswordPattern(String password) {
+		return pattern.matcher(password).matches();
+	}
+	
+	private boolean isSameAsLastNPassword(String newPassword) {
+		boolean isSameAsLastN = false;
+		List<Password> passwords = new ArrayList<Password>(this.getPasswords());
+		Collections.sort(passwords);
+		
+		int examined = 0;
+		for (Password passwd: passwords) {
+			if (examined == PASSWDS_TO_EXAMINE) {
+				break;
+			}
+			
+			if(passwordEncoder.matches(newPassword, passwd.getPassword())) {
+				isSameAsLastN = true;
+				break;
+			}
+			++examined;
+		}
+		return isSameAsLastN;
 	}
 	
 }

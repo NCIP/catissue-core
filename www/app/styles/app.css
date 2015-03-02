@@ -65,10 +65,6 @@ body {
   padding: 15px 5px;
 }
 
-.os-navbar .menu .dropdown-menu.dropdown-menu-right {
-  right: 110px;
-}
-
 .os-navbar-default {
   background: #205081;
   border-bottom: 1px solid #2e3d54;

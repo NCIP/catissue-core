@@ -22,6 +22,7 @@ import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
+import com.krishagni.catissueplus.core.auth.services.UserAuthenticationService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -35,6 +36,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserAuthenticationService userAuthService;
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
@@ -149,6 +153,16 @@ public class UserController {
 		
 		return resp.getPayload();
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/current-user")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public UserSummary getCurrentUser() {
+		ResponseEvent<UserSummary> resp = userAuthService.getCurrentLoggedInUser();
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+ 	}
 
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);

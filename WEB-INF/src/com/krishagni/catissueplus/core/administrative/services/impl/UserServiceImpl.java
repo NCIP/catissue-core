@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
@@ -22,7 +23,6 @@ import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
-import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.email.EmailSender;
@@ -34,13 +34,11 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserServiceImpl implements UserService {
-	private static final String DEFAULT_AUTH_DOMAIN = AuthenticationType.CATISSUE.value();
-
+	private static final String DEFAULT_AUTH_DOMAIN = "openspecimen";
+	
 	private DaoFactory daoFactory;
 
 	private UserFactory userFactory;
-	
-	private BCryptPasswordEncoder passwordEncoder;
 	
 	private EmailSender emailSender;
 
@@ -56,16 +54,17 @@ public class UserServiceImpl implements UserService {
 		this.emailSender = emailSender;
 	}
 
-	public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
-		this.passwordEncoder = passwordEncoder;
-	}
-
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<UserSummary>> getUsers(RequestEvent<ListUserCriteria> req) {
 		ListUserCriteria crit = req.getPayload();		
 		List<UserSummary> users = daoFactory.getUserDao().getUsers(crit);		
 		return ResponseEvent.response(users);
+	}
+	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return daoFactory.getUserDao().getUser(username, DEFAULT_AUTH_DOMAIN);
 	}
 
 	@Override
@@ -163,11 +162,11 @@ public class UserServiceImpl implements UserService {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
-			if (!isValidateOldPassword(user, detail.getOldPassword())) {
+			if (!user.isValidOldPassword(detail.getOldPassword())) {
 				return ResponseEvent.userError(UserErrorCode.INVALID_OLD_PASSWD);
 			}
 			
-			setUserPassword(user, detail.getNewPassword());
+			user.changePassword(detail.getNewPassword());
 			daoFactory.getUserDao().saveOrUpdate(user);
 			return ResponseEvent.response(true);
 		} catch (OpenSpecimenException ose) {
@@ -202,7 +201,7 @@ public class UserServiceImpl implements UserService {
 				return ResponseEvent.userError(UserErrorCode.INVALID_PASSWD_TOKEN);
 			}
 			
-			setUserPassword(user, detail.getNewPassword());
+			user.changePassword(detail.getNewPassword());
 			dao.deleteFpToken(token);
 			return ResponseEvent.response(true);
 		}catch (OpenSpecimenException ose) {
@@ -268,19 +267,4 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
-	private void setUserPassword(User user, String newPassword) {
-		if (StringUtils.isBlank(newPassword) || !User.isValidPasswordPattern(newPassword)) {
-			throw OpenSpecimenException.userError(UserErrorCode.PASSWD_VIOLATES_RULES);
-		}
-		
-		user.addPassword(passwordEncoder.encode(newPassword));
-	}
-	
-	private boolean isValidateOldPassword(User user, String oldPassword) {
-		if (StringUtils.isBlank(oldPassword)) {
-			throw OpenSpecimenException.userError(UserErrorCode.OLD_PASSWD_NOT_SPECIFIED);
-		}
-		
-		return passwordEncoder.matches(oldPassword, user.getPassword());
-	}
 }

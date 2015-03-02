@@ -118,7 +118,7 @@ public class UserFactoryImpl implements UserFactory {
 			return;
 		}
 
-		AuthDomain authDomain = daoFactory.getDomainDao().getAuthDomainByName(domainName);
+		AuthDomain authDomain = daoFactory.getAuthDao().getAuthDomainByName(domainName);
 		if (authDomain == null) {
 			ose.addError(UserErrorCode.DOMAIN_NOT_FOUND);
 			return;

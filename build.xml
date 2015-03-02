@@ -45,6 +45,11 @@
 	<property name="FLEX_APP_ROOT" value="flexclient"/>
 	<property name="flex.dir" value="${base.dir}/WEB-INF/flex" />
 	<!-- flex related properties finish -->
+	<taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties">
+		<classpath>
+			<pathelement location="${lib.dir}/aspectjtools-1.6.6.jar"/>
+		</classpath>
+	</taskdef>
 	<path id="app.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
@@ -216,7 +221,7 @@
 	<!-- Compile all files, generated and hand-written -->
 	<target name="compile" depends="init">
 		<javac destdir="${target.dir}" includes="**/*.*" includeAntRuntime="false" debug="yes" target="1.6">
-			 <compilerarg line="-Xmaxerrs 10000" />
+			<compilerarg line="-Xmaxerrs 10000" />
 			<src path="${src.dir}" />
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -230,6 +235,42 @@
 			</classpath>
 			<classpath refid="cobertura.classpath" />
 		</javac>
+		<copy todir="${target.dir}" overwrite="true">
+			<fileset dir="${src.dir}" >
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+				<include name="**/*.hbm.xml" />
+				<include name="**/*.ser" />
+				<include name="**/*.vm" />
+			</fileset>
+			<fileset dir="${resources.dir}">
+				<include name="**/*.hbm.xml" />
+                                <include name="errors/*.properties"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="aspect.compile" depends="init">
+		<iajc destDir="${target.dir}" source="1.6" target="1.6" verbose="true" includes="**/*.*" showWeaveInfo="true">
+			<sourceroots>
+				<pathelement location="${src.dir}"/>
+			</sourceroots>
+                        <aspectpath>
+				<pathelement location="${lib.dir}/spring-aspects-2.5.0.jar"/>
+			</aspectpath>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+					<exclude name="dynamicextensions-legacy.jar"/>
+				</fileset>
+				<fileset dir="./lib">
+					<include name="j2ee.jar" />
+				</fileset>
+				<pathelement location="${ant.home}/lib/ant.jar"/>
+				<pathelement location="${lib.dir}/aspectjrt-1.5.0.jar"/>
+			</classpath>
+			<classpath refid="cobertura.classpath" />
+		</iajc>
 		<copy todir="${target.dir}" overwrite="true">
 			<fileset dir="${src.dir}" >
 				<include name="**/*.properties" />
@@ -313,7 +354,7 @@
 	<!-- Create the Applet JAR Ends-->
 
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
-	<target name="build_war" depends="init, compile, unpack_cacore_war,replace_database_type,
+	<target name="build_war" depends="init, aspect.compile, unpack_cacore_war,replace_database_type,
 		common_build_war,build_client_jar">
 
 	</target>

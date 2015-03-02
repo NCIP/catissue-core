@@ -6,10 +6,9 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 <web-app>
 	<display-name>caTISSUE Core</display-name>
 
-	<description>
-
-    </description>
-    <context-param>
+	<description></description>
+	
+    	<context-param>
 		<param-name>applicationproperties</param-name>
 		<param-value>ApplicationResources.properties</param-value>
 	</context-param>
@@ -79,26 +78,36 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<filter-class>krishagni.catissueplus.rest.RestApiAuthFilter</filter-class>
 	</filter>
 	<filter>
-         <filter-name>ThrottlingFilter</filter-name>
-         <filter-class>krishagni.catissueplus.filter.ThrottlingFilter</filter-class>
-         <init-param>
-             <param-name>error-page</param-name>
-             <param-value>/openspecimen/RedirectHome.do</param-value>
-         </init-param>
-     </filter>
+		<filter-name>ThrottlingFilter</filter-name>
+		<filter-class>krishagni.catissueplus.filter.ThrottlingFilter</filter-class>
+		<init-param>
+			<param-name>error-page</param-name>
+			<param-value>/openspecimen/RedirectHome.do</param-value>
+		</init-param>
+	</filter>
 	
 <!--  filter definition ends  -->
 <!--  filter mapping starts --> 
-<filter-mapping>
-		<filter-name>RestApiAuthFilter</filter-name>
-		<url-pattern>/rest/*</url-pattern>
-		
-	</filter-mapping>
+	<filter>
+		<filter-name>authTokenFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
 	<filter-mapping>
+		<filter-name>authTokenFilter</filter-name>
+		<url-pattern>/rest/ng/*</url-pattern>
+	</filter-mapping>
+
+    <!--filter-mapping>
+	<filter-name>RestApiAuthFilter</filter-name>
+	<url-pattern>/rest/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
         <filter-name>RestApiAuthFilter</filter-name>
         <url-pattern>/rest/ng/*</url-pattern>
-        
-    </filter-mapping>
+    </filter-mapping-->
+
 	<filter-mapping>
 		<filter-name>FlexComponentFilter</filter-name>
 		<url-pattern>/flexclient/*</url-pattern>
@@ -171,14 +180,14 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<url-pattern>/BulkEmpiGeneration.do</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
-         <filter-name>ThrottlingFilter</filter-name>
-         <url-pattern>/Login.do</url-pattern>
-     </filter-mapping>
+		<filter-name>ThrottlingFilter</filter-name>
+		<url-pattern>/Login.do</url-pattern>
+	</filter-mapping>
 
- <filter-mapping>
-         <filter-name>ThrottlingFilter</filter-name>
-         <url-pattern>/Login.do</url-pattern>
-     </filter-mapping>
+	<filter-mapping>
+		<filter-name>ThrottlingFilter</filter-name>
+		<url-pattern>/Login.do</url-pattern>
+	</filter-mapping>
 
 
 <!-- filter mapping ends -->
@@ -190,8 +199,8 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<listener-class>edu.wustl.catissuecore.util.listener.CatissueCoreSessionListener</listener-class>
 	</listener>
 	<listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 <!-- listener definition starts -->
 <!-- servlet configuration starts -->
 	<servlet>
@@ -217,53 +226,53 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<servlet-class>edu.wustl.common.struts.ResponseServlet</servlet-class>
 	</servlet>
 	
-		<servlet>
-     <servlet-name>ContainerExportServlet</servlet-name>
-     <servlet-class>edu.wustl.catissuecore.action.ContainerExportServlet</servlet-class>
-   </servlet>
-   <servlet>
-     <servlet-name>LoadGridServlet</servlet-name>
-     <servlet-class>edu.wustl.catissuecore.action.LoadGridServlet</servlet-class>
-   </servlet>
+	<servlet>
+		<servlet-name>ContainerExportServlet</servlet-name>
+		<servlet-class>edu.wustl.catissuecore.action.ContainerExportServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>LoadGridServlet</servlet-name>
+		<servlet-class>edu.wustl.catissuecore.action.LoadGridServlet</servlet-class>
+	</servlet>
    
-    <servlet>
-     <servlet-name>TransferSpecimenAliquots</servlet-name>
-     <servlet-class>krishagni.catissueplus.mobile.servlet.TransferSpecimenAliquots</servlet-class>
-   </servlet>
+	<servlet>
+		<servlet-name>TransferSpecimenAliquots</servlet-name>
+		<servlet-class>krishagni.catissueplus.mobile.servlet.TransferSpecimenAliquots</servlet-class>
+	</servlet>
    
-    <servlet>
-     <servlet-name>AppLogin</servlet-name>
-     <servlet-class>krishagni.catissueplus.mobile.servlet.Login</servlet-class>
-   </servlet>
-      <servlet>
-     <servlet-name>CatissueMobileAppCommonServlet</servlet-name>
-     <servlet-class>krishagni.catissueplus.mobile.servlet.CatissueMobileAppCommonServlet</servlet-class>
-   </servlet>
+	<servlet>
+		<servlet-name>AppLogin</servlet-name>
+		<servlet-class>krishagni.catissueplus.mobile.servlet.Login</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>CatissueMobileAppCommonServlet</servlet-name>
+		<servlet-class>krishagni.catissueplus.mobile.servlet.CatissueMobileAppCommonServlet</servlet-class>
+	</servlet>
     
-    <servlet>
-     <servlet-name>ViewSpecimenDetail</servlet-name>
-     <servlet-class>krishagni.catissueplus.mobile.servlet.ViewSpecimenDetail</servlet-class>
-   </servlet>
+	<servlet>
+		<servlet-name>ViewSpecimenDetail</servlet-name>
+		<servlet-class>krishagni.catissueplus.mobile.servlet.ViewSpecimenDetail</servlet-class>
+	</servlet>
   
-    <servlet>
-     <servlet-name>CreateAliquot</servlet-name>
-     <servlet-class>krishagni.catissueplus.mobile.servlet.CreateAliquot</servlet-class>
-   </servlet>
+	<servlet>
+		<servlet-name>CreateAliquot</servlet-name>
+		<servlet-class>krishagni.catissueplus.mobile.servlet.CreateAliquot</servlet-class>
+	</servlet>
    
-   <servlet>
-     <servlet-name>StorageContainerDetail</servlet-name>
-     <servlet-class>krishagni.catissueplus.mobile.servlet.StorageContainerDetail</servlet-class>
-   </servlet>
+	<servlet>
+		<servlet-name>StorageContainerDetail</servlet-name>
+		<servlet-class>krishagni.catissueplus.mobile.servlet.StorageContainerDetail</servlet-class>
+	</servlet>
    
-     <servlet>
-     <servlet-name>DisplayAction</servlet-name>
-     <servlet-class>krishagni.catissueplus.mobile.servlet.DisplayAction</servlet-class>
-   </servlet>
+	<servlet>
+		<servlet-name>DisplayAction</servlet-name>
+		<servlet-class>krishagni.catissueplus.mobile.servlet.DisplayAction</servlet-class>
+	</servlet>
    
-     <servlet>
-     <servlet-name>AppLogout</servlet-name>
-     <servlet-class>krishagni.catissueplus.mobile.servlet.Logout</servlet-class>
-   </servlet>
+	<servlet>
+		<servlet-name>AppLogout</servlet-name>
+		<servlet-class>krishagni.catissueplus.mobile.servlet.Logout</servlet-class>
+	</servlet>
 	
 	<servlet>
 		<servlet-name>httpinvoker</servlet-name>
@@ -360,35 +369,29 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<servlet-class>edu.wustl.query.action.ImportQueryServlet</servlet-class>
 	</servlet>
 	<servlet>
-    <servlet-name>restApi</servlet-name>
-    <servlet-class>
-      org.springframework.web.servlet.DispatcherServlet
-    </servlet-class>
+		<servlet-name>restApi</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/applicationContext.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 
-    <init-param>
-      <param-name>contextConfigLocation</param-name>
-      <param-value>/WEB-INF/applicationContext.xml</param-value>
-    </init-param>
-    
-    <load-on-startup>1</load-on-startup>
-  </servlet>
+	<servlet>
+		<servlet-name>CreateFormAction</servlet-name>
+		<servlet-class>edu.common.dynamicextensions.nui.action.CreateFormAction</servlet-class>
+	</servlet>
 
+	<servlet>
+		<servlet-name>CreateAQFormAction</servlet-name>
+        	<servlet-class>edu.common.dynamicextensions.nui.action.CreateAQFormAction</servlet-class>
+	</servlet>
 
-        <servlet>
-          <servlet-name>CreateFormAction</servlet-name>
-          <servlet-class>edu.common.dynamicextensions.nui.action.CreateFormAction</servlet-class>
-        </servlet>
-
-        <servlet>
-          <servlet-name>CreateAQFormAction</servlet-name>
-          <servlet-class>edu.common.dynamicextensions.nui.action.CreateAQFormAction</servlet-class>
-        </servlet>
-
- 	    <servlet>
-          <servlet-name>ExportFormAction</servlet-name>
-          <servlet-class>edu.common.dynamicextensions.nui.action.ExportFormAction</servlet-class>
-        </servlet>
-
+	<servlet>
+		<servlet-name>ExportFormAction</servlet-name>
+		<servlet-class>edu.common.dynamicextensions.nui.action.ExportFormAction</servlet-class>
+	</servlet>
 
 	<servlet>
 		<servlet-name>CSD</servlet-name>
@@ -398,32 +401,32 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 			<param-value>edu.wustl.dynamicextensions.formdesigner.resource.Resources</param-value>
 		</init-param>
 	</servlet>
-<servlet>
-<servlet-name>caTissue REST Service</servlet-name>
-<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-<init-param>
-<param-name>com.sun.jersey.config.property.packages</param-name>
-<param-value>krishagni.catissueplus.rest</param-value>
-</init-param>
-<init-param>
-        <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-        <param-value>true</param-value>
-    </init-param>
+	<servlet>
+		<servlet-name>caTissue REST Service</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>krishagni.catissueplus.rest</param-value>
+		</init-param>
+		<init-param>
+        		<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+        		<param-value>true</param-value>
+    		</init-param>
 <!--
 <init-param>
 <param-name>com.sun.jersey.spi.container.ResourceFilters</param-name>
 <param-value>krishagni.catissueplus.rest.imaging.RestAuthFilterFactory</param-value>
 </init-param>
 -->
-<load-on-startup>1</load-on-startup>
-</servlet>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 	
 <!-- servlet configuration ends -->
 <!-- servlet mapping starts -->
-<servlet-mapping>
-<servlet-name>caTissue REST Service</servlet-name>
-<url-pattern>/rest/*</url-pattern>
-</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>caTissue REST Service</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>CSD</servlet-name>
 		<url-pattern>/csdApi/*</url-pattern>
@@ -445,10 +448,10 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
         </servlet-mapping>
         
 
-<servlet-mapping>
-<servlet-name>restApi</servlet-name>
-<url-pattern>/rest/ng/*</url-pattern>
-</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>restApi</servlet-name>
+		<url-pattern>/rest/ng/*</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		 <servlet-name>ContainerExportServlet</servlet-name>
 		 <url-pattern>/ContainerExportServlet</url-pattern>
@@ -462,41 +465,41 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	     <servlet-name>LoadGridServlet</servlet-name>
 	     <url-pattern>/LoadGridServlet</url-pattern>
   	</servlet-mapping>
-	  <servlet-mapping>
- <servlet-name>TransferSpecimenAliquots</servlet-name>
- <url-pattern>/TransferSpecimenAliquots</url-pattern>
- </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>TransferSpecimenAliquots</servlet-name>
+		<url-pattern>/TransferSpecimenAliquots</url-pattern>
+	</servlet-mapping>
  
-  <servlet-mapping>
- <servlet-name>CatissueMobileAppCommonServlet</servlet-name>
- <url-pattern>/CatissueMobileAppCommonServlet</url-pattern>
- </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CatissueMobileAppCommonServlet</servlet-name>
+		<url-pattern>/CatissueMobileAppCommonServlet</url-pattern>
+	</servlet-mapping>
  
-   <servlet-mapping>
- <servlet-name>CreateAliquot</servlet-name>
- <url-pattern>/CreateAliquot</url-pattern>
- </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CreateAliquot</servlet-name>
+		<url-pattern>/CreateAliquot</url-pattern>
+	</servlet-mapping>
  
-     <servlet-mapping>
- <servlet-name>StorageContainerDetail</servlet-name>
- <url-pattern>/StorageContainerDetail</url-pattern>
- </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>StorageContainerDetail</servlet-name>
+		<url-pattern>/StorageContainerDetail</url-pattern>
+	</servlet-mapping>
  
  
-  <servlet-mapping>
- <servlet-name>AppLogin</servlet-name>
- <url-pattern>/AppLogin</url-pattern>
- </servlet-mapping>
+	<servlet-mapping>
+		 <servlet-name>AppLogin</servlet-name>
+		 <url-pattern>/AppLogin</url-pattern>
+	 </servlet-mapping>
  
-   <servlet-mapping>
-     <servlet-name>ViewSpecimenDetail</servlet-name>
-     <url-pattern>/ViewSpecimenDetail</url-pattern>
- </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ViewSpecimenDetail</servlet-name>
+		<url-pattern>/ViewSpecimenDetail</url-pattern>
+	</servlet-mapping>
  
- <servlet-mapping>
- <servlet-name>AppLogout</servlet-name>
- <url-pattern>/AppLogout</url-pattern>
- </servlet-mapping>
+	 <servlet-mapping>
+		 <servlet-name>AppLogout</servlet-name>
+ 		<url-pattern>/AppLogout</url-pattern>
+ 	</servlet-mapping>
  
 	<servlet-mapping>
 		<servlet-name>action</servlet-name>
@@ -628,7 +631,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	</taglib>
 <!-- tag library configuration ends -->
 <!-- env entry starts -->
-<env-entry>
+	<env-entry>
 		<env-entry-name>DataSource</env-entry-name>
 		<env-entry-value>java:/catissuecore</env-entry-value>
 		<env-entry-type>java.lang.String</env-entry-type>

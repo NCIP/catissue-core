@@ -50,6 +50,10 @@ angular.module('os.administrative.models.user', ['os.common.models'])
       return $http.post(User.url() + "reset-password", passwordDetail).then(ApiUtil.processResp);
     }
 
+    User.getCurrentUser = function() {
+      return $http.get(User.url() + 'current-user').then(User.modelRespTransform);
+    }
+
     return User;
   });
 

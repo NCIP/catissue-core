@@ -15,6 +15,8 @@ public enum UserErrorCode implements ErrorCode {
 	
 	PASSWD_VIOLATES_RULES,
 	
+	PASSWD_SAME_AS_LAST_N,
+	
 	DOMAIN_CHANGE_NOT_ALLOWED,
 	
 	FIRST_NAME_REQUIRED,

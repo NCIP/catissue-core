@@ -1,13 +1,12 @@
 
 package com.krishagni.catissueplus.core.auth.services.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthProviderErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.factory.DomainRegistrationFactory;
-import com.krishagni.catissueplus.core.auth.events.DomainDetail;
+import com.krishagni.catissueplus.core.auth.events.AuthDomainDetail;
 import com.krishagni.catissueplus.core.auth.events.ListAuthDomainCriteria;
 import com.krishagni.catissueplus.core.auth.services.DomainRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -32,36 +31,51 @@ public class DomainRegistrationServiceImpl implements DomainRegistrationService 
 
 	@Override
 	@PlusTransactional	
-	public ResponseEvent<List<DomainDetail>> getDomains(RequestEvent<ListAuthDomainCriteria> req) {
-		List<AuthDomain> authDomains = daoFactory.getDomainDao().getAllAuthDomains(req.getPayload().maxResults());
-
-		List<DomainDetail> result = new ArrayList<DomainDetail>();
-		for (AuthDomain domain : authDomains) {
-			result.add(DomainDetail.fromDomain(domain));
-		}
-		
-		return ResponseEvent.response(result);
+	public ResponseEvent<List<AuthDomainDetail>> getDomains(RequestEvent<ListAuthDomainCriteria> req) {
+		List<AuthDomain> authDomains = daoFactory.getAuthDao().getAuthDomains(req.getPayload().maxResults());
+		return ResponseEvent.response(AuthDomainDetail.form(authDomains));
 	}
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<DomainDetail> registerDomain(RequestEvent<DomainDetail> req) {
+	public ResponseEvent<AuthDomainDetail> registerDomain(RequestEvent<AuthDomainDetail> req) {
 		try {
-			DomainDetail detail = req.getPayload();			
-			AuthDomain authDomain = domainRegFactory.getAuthDomain(detail);
+			AuthDomainDetail detail = req.getPayload();			
+			AuthDomain authDomain = domainRegFactory.createDomain(detail);
 			
 			ensureUniqueDomainName(authDomain.getName());
-			daoFactory.getDomainDao().saveOrUpdate(authDomain);
-			return ResponseEvent.response(DomainDetail.fromDomain(authDomain));
+			daoFactory.getAuthDao().saveOrUpdate(authDomain);
+			return ResponseEvent.response(AuthDomainDetail.from(authDomain));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
+	
+	@PlusTransactional
+	public ResponseEvent<AuthDomainDetail> updateDomain(RequestEvent<AuthDomainDetail> req) {
+		try {
+			AuthDomainDetail detail = req.getPayload();
+			AuthDomain existingDomain = daoFactory.getAuthDao().getAuthDomainByName(detail.getName());
+			if (existingDomain == null) {
+				throw OpenSpecimenException.userError(AuthProviderErrorCode.DOMAIN_NOT_FOUND); 
+			}
+			
+			AuthDomain authDomain = domainRegFactory.createDomain(detail);
+			existingDomain.update(authDomain);
+			
+			return  ResponseEvent.response(AuthDomainDetail.from(existingDomain));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
 
 	private void ensureUniqueDomainName(String domainName) {
-		if (!daoFactory.getDomainDao().isUniqueAuthDomainName(domainName)) {
+		if (!daoFactory.getAuthDao().isUniqueAuthDomainName(domainName)) {
 			throw OpenSpecimenException.userError(AuthProviderErrorCode.DUP_DOMAIN_NAME);
 		}
 	}
