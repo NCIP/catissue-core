@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.common.email;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -47,16 +48,24 @@ public class EmailHandler {
 				new String[]{adminEmailAddress}, null, contextMap, null);
 	}
 	
-	public static void sendQueryDataExportedEmail(User user, SavedQuery query, String filename) {
+	public static void sendQueryDataExportedEmail(User user, SavedQuery query, String filename, Set<String> additionalRecipients) {
 		Map<String, Object> vars = new HashMap<String, Object>();
 		vars.put("user", user);
 		vars.put("query", query);
 		vars.put("filename", filename);
 		vars.put("appUrl", CommonServiceLocator.getInstance().getAppURL());
 		
+		String [] recipients = new String[1 + additionalRecipients.size()];
+		recipients[0] = user.getEmailAddress();
+		int index = 1;
+		for (String recipient : additionalRecipients) {
+			recipients[index] = recipient;
+			index++;
+		}
+		
 		EmailClient.getInstance().sendEmail(
 				QUERY_DATA_EXPORTED_EMAIL_TMPL, 
-				new String[] {user.getEmailAddress()}, 
+				recipients, 
 				new String[] {adminEmailAddress}, 
 				null, 
 				vars, 

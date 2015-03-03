@@ -759,12 +759,16 @@ public class QueryServiceImpl implements QueryService {
 					if (queryId != null) {
 						savedQuery = daoFactory.getSavedQueryDao().getQuery(queryId);
 					}					
-					EmailHandler.sendQueryDataExportedEmail(user, savedQuery, filename);					
+					EmailHandler.sendQueryDataExportedEmail(user, savedQuery, filename, req.getPayload().getAdditionalRecipients());					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}				
 			}
 		});
+		
+		if (req.getPayload().isForceUseEmail()) {
+			return false;
+		}
 		
 		try {
 			return result.get(ONLINE_EXPORT_TIMEOUT_SECS, TimeUnit.SECONDS);

@@ -17,6 +17,8 @@ public class SavedQueryDetail extends SavedQuerySummary {
 
 	private Object[] selectList;
 	
+	private String aql;
+	
 	private ReportSpec reporting;
 
 	public Long getCpId() {
@@ -59,6 +61,14 @@ public class SavedQueryDetail extends SavedQuerySummary {
 		this.selectList = selectList;
 	}
 	
+	public String getAql() {
+		return aql;
+	}
+
+	public void setAql(String aql) {
+		this.aql = aql;
+	}
+
 	public ReportSpec getReporting() {
 		return reporting;
 	}
@@ -82,6 +92,8 @@ public class SavedQueryDetail extends SavedQuerySummary {
 		detail.setQueryExpression(savedQuery.getQueryExpression());
 		detail.setSelectList(savedQuery.getSelectList());
 		detail.setReporting(savedQuery.getReporting());
+		detail.setAql(savedQuery.getAql());
+		
 		return detail;
 	}	
 }
