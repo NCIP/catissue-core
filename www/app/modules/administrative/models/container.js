@@ -4,7 +4,7 @@ angular.module('os.administrative.models.container', ['os.common.models'])
     var Container = new osModel('storage-containers');
 
     Container.list = function() {
-      return Container.query();
+      return Container.query({topLevelContainers: true});
     };
 
     Container.listForSite = function(siteName, onlyFreeContainers, flatten) {
@@ -31,7 +31,7 @@ angular.module('os.administrative.models.container', ['os.common.models'])
     };
 
     Container.prototype.getChildContainers = function(anyLevel) {
-      return Container.query({parentContainerId: this.$id(), anyLevelContainers: anyLevel});
+      return Container.query({parentContainerId: this.$id(), includeChildren: true});
     };
 
     Container.prototype.getOccupiedPositions = function() {

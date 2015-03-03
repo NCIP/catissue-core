@@ -34,9 +34,12 @@
               <span>Name</span>
             </th>
             <th class="col os-col-15" translate="specimens.type">Type</th>
-            <th class="col os-col-15" translate="specimens.label">Label</th>
-            <th class="col os-col-15">Quantity</th>
-            <th class="col os-col-25" translate="specimens.container">Container</th>
+            <th class="col os-col-10" translate="specimens.label">Label</th>
+            <th class="col os-col-10">Quantity</th>
+            <th class="col os-col-35">
+              <span>Location</span>
+              <a ng-click="applyFirstLocationToAll()"style="font-weight:normal">(Apply First Location To All)</a>
+            </th>
           </tr>
         </thead>
         <tbody class="os-table-body">
@@ -61,23 +64,23 @@
               </div>
             </td>
             <td class="col os-col-15">{{specimen.type}}</td>
-            <td class="col os-col-15">
+            <td class="col os-col-10">
               <input type="text" os-md-input edit-when="specimen.status != 'Collected'"
                 name="label" ng-model="specimen.label" required 
                 ng-model-options="{updateOn: 'blur'}" os-unique-specimen-label>
               <div os-field-error field="sform.label"></div>
             </td>
-            <td class="col os-col-15">
+            <td class="col os-col-10">
               <input type="text" os-md-input edit-when="specimen.status != 'Collected'"
                 name="qty" ng-model="specimen.initialQty" required
                 ng-model-options="{allowInvalid: 'true'}"
                 os-specimen-qty-validate="{specimen: specimen, idx: $index}">
               <div os-field-error field="sform.qty"></div>
             </td>
-            <td class="col os-col-25">
-              <os-select os-md-input edit-when="specimen.status != 'Collected'"
-                ng-model="specimen.storageType" list="storageTypes">
-              </os-select>
+            <td class="col os-col-35" style="overflow: visible;">
+              <os-specimen-position os-md-input edit-when="specimen.status != 'Collected'"
+                specimen="specimen" cp-id="cpr.cpId">
+              </os-specimen-position>
             </td>
           </tr>
           <tr class="row">
