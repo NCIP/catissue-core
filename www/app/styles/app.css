@@ -727,12 +727,22 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   font-weight: bold;
   color: white;
   background: #428bca;
-  padding: 2px;
+  padding: 3px 5px;
 }
 
 .os-permission-checkbox {
   text-align: center;
   margin-top: 11px;
+}
+
+.os-permission-checkbox .os-checkbox input[type="checkbox"] ~ span.box {
+  height: 13px;
+  width: 13px;
+}
+
+.os-permission-checkbox .os-checkbox input[type="checkbox"]:checked ~ span.tick {
+  height: 7px;
+  width: 13px;
 }
 
 .panel-heading {
