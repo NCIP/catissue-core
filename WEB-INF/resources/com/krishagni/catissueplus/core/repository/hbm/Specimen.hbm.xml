@@ -5,89 +5,88 @@
 
 <hibernate-mapping auto-import="false">
   <class name="com.krishagni.catissueplus.core.biospecimen.domain.Specimen" table="CATISSUE_SPECIMEN">
-		<id name="id" column="IDENTIFIER" type="long">
-			<generator class="native">
-				<param name="sequence">CATISSUE_SPECIMEN_SEQ</param>
-			</generator>
-		</id>
+    <id name="id" column="IDENTIFIER" type="long">
+      <generator class="native">
+        <param name="sequence">CATISSUE_SPECIMEN_SEQ</param>
+      </generator>
+    </id>
 
-		<many-to-one name="parentSpecimen"
-			class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
-			column="PARENT_SPECIMEN_ID" />
+    <property name="initialQuantity" column="INITIAL_QUANTITY" />
 
-		<set name="childCollection" table="CATISSUE_SPECIMEN" inverse="true" cascade="all">
-			<key column="PARENT_SPECIMEN_ID"/>
-			<one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"/>
-		</set>
+    <property name="pathologicalStatus" column="PATHOLOGICAL_STATUS" />
 
-		<property name="initialQuantity" type="double" column="INITIAL_QUANTITY" />
+    <property name="lineage" column="LINEAGE" />
 
-		<property name="pathologicalStatus" type="string"
-			column="PATHOLOGICAL_STATUS" />
+    <property name="specimenClass" column="SPECIMEN_CLASS" />
 
-		<property name="lineage" type="string" column="LINEAGE" />
+    <property name="specimenType" column="SPECIMEN_TYPE" />
 
-		<property name="specimenClass" type="string" column="SPECIMEN_CLASS" />
+    <property name="label" column="LABEL" />
 
-		<property name="specimenType" type="string" column="SPECIMEN_TYPE" />
+    <property name="isAvailable" column="AVAILABLE" />
 
-		<property name="concentrationInMicrogramPerMicroliter" type="double"
-			column="CONCENTRATION" />
+    <property name="comment" column="COMMENTS" />
 
-		<set name="externalIdentifierCollection" table="CATISSUE_EXTERNAL_IDENTIFIER"
-			inverse="false" cascade="all-delete-orphan">
-			<key column="SPECIMEN_ID">
-			</key>
+    <property name="activityStatus" column="ACTIVITY_STATUS" />
 
-			<one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier" />
+    <property name="collectionStatus" column="COLLECTION_STATUS" />
 
-		</set>
+    <property name="barcode" column="BARCODE" />
 
-		<property name="label" type="string" column="LABEL" />
+    <property name="createdOn" column="CREATED_ON_DATE" />
 
-		<property name="isAvailable" type="boolean" column="AVAILABLE" />
+    <property name="availableQuantity" column="AVAILABLE_QUANTITY" />
 
-		<property name="comment" type="string" column="COMMENTS" />
-
-		<property name="activityStatus" type="string" column="ACTIVITY_STATUS" />
-
-		<property name="collectionStatus" type="string" column="COLLECTION_STATUS" />
-
-		<property name="barcode" type="string" column="BARCODE" />
-
-		<property name="createdOn" type="date" column="CREATED_ON_DATE" />
-
-		<property name="availableQuantity" type="double" column="AVAILABLE_QUANTITY" />
-
-		<property name="tissueSide" type="string" column="TISSUE_SIDE" />
+    <property name="tissueSide" type="string" column="TISSUE_SIDE" />
 		
-		<property name="tissueSite" type="string" column="TISSUE_SITE" />
+    <property name="tissueSite" type="string" column="TISSUE_SITE" />
 
-		<many-to-one name="visit"
-			class="com.krishagni.catissueplus.core.biospecimen.domain.Visit"
-			column="SPECIMEN_COLLECTION_GROUP_ID" />
+    <one-to-one
+      name="position"
+      class="com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition"
+      property-ref="occupyingSpecimen"
+      cascade="save-update"/>
 
-		<many-to-one name="specimenRequirement"
-			class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement" column="REQ_SPECIMEN_ID" />
+    <many-to-one name="parentSpecimen"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
+      column="PARENT_SPECIMEN_ID" />
 
-		<query name="getByLabel">
-                  from 
-		    com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
-                  where
-		    s.label = :label
-		</query>
+    <set name="childCollection" table="CATISSUE_SPECIMEN" inverse="true" cascade="all">
+      <key column="PARENT_SPECIMEN_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"/>
+    </set>
 
-		<query name="getParentByVisitAndReq">
-                  select
-		    s
-		  from
-		    com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
-                    join s.visit v
-                    join s.specimenRequirement sr
-                    join sr.childSpecimenRequirements csr
-                  where
-                    v.id = :visitId and
-                    csr.id = :srId
-		</query>
-	</class>
+    <many-to-one name="visit"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.Visit"
+      column="SPECIMEN_COLLECTION_GROUP_ID" />
+
+    <many-to-one name="specimenRequirement"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement" 
+      column="REQ_SPECIMEN_ID" />
+
+    <set name="externalIdentifierCollection" table="CATISSUE_EXTERNAL_IDENTIFIER" inverse="true" cascade="all-delete-orphan">
+      <key column="SPECIMEN_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier" />
+    </set>
+
+    <query name="getByLabel">
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
+      where
+        s.label = :label
+    </query>
+
+    <query name="getParentByVisitAndReq">
+      select
+        s
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
+        join s.visit v
+        join s.specimenRequirement sr
+        join sr.childSpecimenRequirements csr
+      where
+        v.id = :visitId and
+        csr.id = :srId
+    </query>
+  </class>
 </hibernate-mapping>

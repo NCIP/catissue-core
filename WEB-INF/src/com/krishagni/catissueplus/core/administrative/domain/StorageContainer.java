@@ -281,6 +281,11 @@ public class StorageContainer extends BaseEntity {
 		}		
 	}
 	
+	public void addPosition(StorageContainerPosition position) {
+		position.setContainer(this);
+		occupiedPositions.add(position);
+	}
+	
 	public StorageContainerPosition nextAvailablePosition() {
 		Set<Integer> occupiedPositionOrdinals = occupiedPositionsOrdinals();
 		
@@ -305,6 +310,19 @@ public class StorageContainer extends BaseEntity {
 	public boolean canContainerOccupyPosition(Long containerId, String posOne, String posTwo) {
 		return canOccupyPosition(false, containerId, posOne, posTwo);
 	}
+	
+	public boolean canContain(Specimen specimen) {
+		if (!allowedSpecimenTypes.contains(specimen.getSpecimenType()) && 
+				!allowedSpecimenClasses.contains(specimen.getSpecimenClass())) {
+			return false;
+		}
+		
+		if (!allowedCps.isEmpty() && !allowedCps.contains(specimen.getVisit().getCollectionProtocol())) {			
+			return false;
+		}
+		
+		return true;
+	}
 
 	public static boolean isValidScheme(String scheme) {
 		if (StringUtils.isBlank(scheme)) {
@@ -317,7 +335,7 @@ public class StorageContainer extends BaseEntity {
 				scheme.equals(UPPER_CASE_ROMAN_LABELING_SCHEME) ||
 				scheme.equals(LOWER_CASE_ROMAN_LABELING_SCHEME);
 	}
-	
+		
 	private StorageContainerPosition createPosition(int posOneOrdinal, String posOne, int posTwoOrdinal, String posTwo) {
 		StorageContainerPosition position = new StorageContainerPosition();
 		position.setPosOneOrdinal(posOneOrdinal);

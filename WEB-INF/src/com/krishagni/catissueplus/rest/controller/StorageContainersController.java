@@ -58,8 +58,20 @@ public class StorageContainersController {
 			@RequestParam(value = "parentContainerId", required = false)
 			Long parentContainerId,
 			
-			@RequestParam(value = "anyLevelContainers", required = false, defaultValue = "false")
-			boolean anyLevelContainers
+			@RequestParam(value = "includeChildren", required = false, defaultValue = "false")
+			boolean includeChildren,
+			
+			@RequestParam(value = "topLevelContainers", required = false, defaultValue = "false")
+			boolean topLevelContainers,
+			
+			@RequestParam(value = "specimenClass", required = false)
+			String specimenClass,
+			
+			@RequestParam(value = "specimenType", required = false)
+			String specimenType,
+			
+			@RequestParam(value = "cpId", required = false)
+			Long cpId
 			) {
 		
 		StorageContainerListCriteria crit = new StorageContainerListCriteria()
@@ -69,7 +81,11 @@ public class StorageContainersController {
 			.startAt(startAt)
 			.maxResults(maxRecords)
 			.parentContainerId(parentContainerId)
-			.anyLevelContainers(anyLevelContainers);
+			.includeChildren(includeChildren)
+			.topLevelContainers(topLevelContainers)
+			.specimenClass(specimenClass)
+			.specimenType(specimenType)
+			.cpId(cpId);
 					
 		RequestEvent<StorageContainerListCriteria> req = new RequestEvent<StorageContainerListCriteria>(getSession(), crit);
 		ResponseEvent<List<StorageContainerSummary>> resp = storageContainerSvc.getStorageContainers(req);

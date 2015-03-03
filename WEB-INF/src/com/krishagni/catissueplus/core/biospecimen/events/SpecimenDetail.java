@@ -26,9 +26,7 @@ public class SpecimenDetail extends SpecimenInfo {
 	
 	public static SpecimenDetail from(Specimen specimen) {
 		SpecimenDetail result = new SpecimenDetail();
-
 		SpecimenInfo.fromTo(specimen, result);
-		//result.setChildren(from(specimen.getChildCollection()));
 		
 		SpecimenRequirement sr = specimen.getSpecimenRequirement();
 		Collection<Specimen> children = specimen.getChildCollection();

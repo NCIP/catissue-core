@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
@@ -61,7 +62,7 @@ public class Specimen extends BaseEntity {
 
 	private SpecimenRequirement specimenRequirement;
 
-	private SpecimenPosition specimenPosition;
+	private StorageContainerPosition position;
 
 	private Specimen parentSpecimen;
 
@@ -241,18 +242,22 @@ public class Specimen extends BaseEntity {
 
 	public void setCollectionStatus(String collectionStatus) {
 		if (this.collectionStatus != null && !this.collectionStatus.equals(collectionStatus)) {
-			if (!isCollected()) {
+			if (isCollected()) { // COLLECTED -> PENDING
 				// TODO: check whether this is distributed
+				// Should initial quantity get added over here?				
+				isAvailable = false;
+				availableQuantity = 0.0d;
+				if (position != null) {
+					position.vacate();
+				}
 				
-				this.isAvailable = false;
-				this.availableQuantity = 0.0d;
-				this.specimenPosition = null;
+				position = null;
 				for (Specimen child : getChildCollection()) {
 					child.setCollectionStatus(collectionStatus);
 				}
-			} else if (!getVisit().isCompleted()) {
+			} else if (!getVisit().isCompleted()) { // PENDING -> COLLECTED
 				throw OpenSpecimenException.userError(SpecimenErrorCode.VISIT_NOT_COMPLETED);
-			} else {
+			} else { // PENDING -> COLLECTED
 				decAliquotedQtyFromParent(); 
 			}
 		}
@@ -276,12 +281,12 @@ public class Specimen extends BaseEntity {
 		this.specimenRequirement = specimenRequirement;
 	}
 
-	public SpecimenPosition getSpecimenPosition() {
-		return specimenPosition;
+	public StorageContainerPosition getPosition() {
+		return position;
 	}
 
-	public void setSpecimenPosition(SpecimenPosition specimenPosition) {
-		this.specimenPosition = specimenPosition;
+	public void setPosition(StorageContainerPosition position) {
+		this.position = position;
 	}
 
 	public Specimen getParentSpecimen() {
@@ -331,9 +336,9 @@ public class Specimen extends BaseEntity {
 	public void delete() {
 		checkActiveDependents();
 		
-		if (this.specimenPosition != null) {
+		if (this.position != null) {
 			//this.specimenPosition.setSpecimen(null);
-			this.setSpecimenPosition(null);
+			this.setPosition(null);
 		}
 
 		this.barcode = Utility.getDisabledValue(barcode);
@@ -376,9 +381,9 @@ public class Specimen extends BaseEntity {
 		setAvailableQuantity(specimen.getAvailableQuantity());
 		setIsAvailable(specimen.getIsAvailable());
 				
-		setSpecimenPosition(specimen.getSpecimenPosition());				
 		setComment(specimen.getComment());		
 		setActivityStatus(specimen.getActivityStatus());
+		updatePosition(specimen.getPosition());
 		
 		checkQtyConstraints();
 	}
@@ -442,6 +447,14 @@ public class Specimen extends BaseEntity {
 			parentSpecimen.setAvailableQuantity(parentSpecimen.getAvailableQuantity() - initialQuantity); 
 		}
 	}
+	
+	public void occupyPosition() {
+		if (position == null) {
+			return;
+		}
+				
+		position.occupy();
+	}
 			
 	private double getAliquotQuantity() {
 		double aliquotQty = 0.0;
@@ -465,6 +478,20 @@ public class Specimen extends BaseEntity {
 		double actAvailableQty = initialQty - aliquotQty;
 		if (getAvailableQuantity() > actAvailableQty) {
 			throw OpenSpecimenException.userError(avblQtyGtAct);
+		}
+	}
+	
+	private void updatePosition(StorageContainerPosition newPosition) {
+		if (position != null) {
+			if (newPosition != null) {
+				position.update(newPosition);
+			} else {
+				position.vacate();
+				position = null;
+			}			
+		} else if (newPosition != null) {
+			newPosition.occupy();
+			setPosition(newPosition);
 		}
 	}
 }

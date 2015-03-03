@@ -45,7 +45,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	public ResponseEvent<List<StorageContainerSummary>> getStorageContainers(RequestEvent<StorageContainerListCriteria> req) {
 		try {			
 			List<StorageContainer> containers = daoFactory.getStorageContainerDao().getStorageContainers(req.getPayload());
-			List<StorageContainerSummary> result = StorageContainerSummary.from(containers, req.getPayload().anyLevelContainers());
+			List<StorageContainerSummary> result = StorageContainerSummary.from(containers, req.getPayload().includeChildren());
 			return ResponseEvent.response(result);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
