@@ -4,7 +4,11 @@ public class ScheduledJobsMonitor implements Runnable {
 	
 	@Override
 	public void run() {
-		ScheduledTaskManager.Refresh();
+		try {
+			ScheduledTaskManager.checkJobsStatus();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -66,7 +66,7 @@ public class ScheduledTaskManager {
 	}
 	
 	public static void cancelJob(Long jobId) {
-		ScheduledFuture future = queuedTasks.get(jobId);
+		ScheduledFuture future = queuedTasks.remove(jobId);
 		
 		try {
 			future.cancel(false);
@@ -84,6 +84,7 @@ public class ScheduledTaskManager {
 		req.setPayload(new ScheduledJobListCriteria());
 		ResponseEvent<List<ScheduledJobDetail>> resp = jobSvc.getScheduledJobs(req);
 		resp.throwErrorIfUnsuccessful();
+		
 		for (ScheduledJobDetail detail : resp.getPayload()) {
 			if (!detail.isExpired()) {
 				registerJob(detail);
@@ -91,7 +92,7 @@ public class ScheduledTaskManager {
 		}
 	}
 	
-	public static void Refresh() {
+	public static void checkJobsStatus() {
 		Set<Long> erroredJobs = new HashSet<Long>();
 		
 		for (Map.Entry<Long, ScheduledFuture> entry : queuedTasks.entrySet()) {
