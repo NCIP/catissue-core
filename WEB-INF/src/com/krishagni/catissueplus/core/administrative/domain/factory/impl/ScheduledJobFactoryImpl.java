@@ -1,9 +1,5 @@
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJob;

@@ -20,8 +20,6 @@ public class ScheduledJobDetail {
 	
 	private Date endDate;
 	
-	private Date lastRunOn;
-	
 	private Date nextRunOn;
 	
 	private String activityStatus;
@@ -76,14 +74,6 @@ public class ScheduledJobDetail {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
-	}
-
-	public Date getLastRunOn() {
-		return lastRunOn;
-	}
-
-	public void setLastRunOn(Date lastRunOn) {
-		this.lastRunOn = lastRunOn;
 	}
 
 	public Date getNextRunOn() {
@@ -152,6 +142,7 @@ public class ScheduledJobDetail {
 
 	public static ScheduledJobDetail from(ScheduledJob job) {
 		ScheduledJobDetail detail = new ScheduledJobDetail();
+	
 		detail.setId(job.getId());
 		detail.setName(job.getName());
 		detail.setCreatedBy(UserSummary.from(job.getCreatedBy()));
@@ -160,12 +151,15 @@ public class ScheduledJobDetail {
 		detail.setType(job.getType());
 		detail.setCommand(job.getCommand());
 		detail.setComments(job.getComments());
-		detail.setLastRunOn(job.getLastRunOn());
 		detail.setNextRunOn(job.getNextRunOn());
 		detail.setStartDate(job.getStartDate());
 		detail.setEndDate(job.getEndDate());
-		detail.setRecipients(job.getRecipients());
 		detail.setExpired(job.isExpired());
+		
+		Set<String> recipients = job.getRecipients();
+		for (String recipient : recipients) {
+			detail.recipients.add(recipient);
+		}
 		
 		return detail;
 	}

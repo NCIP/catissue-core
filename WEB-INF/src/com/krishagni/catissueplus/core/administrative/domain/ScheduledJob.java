@@ -14,6 +14,7 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 public class ScheduledJob extends BaseEntity {
 	public enum RepeatSchedule { 
 		ONCE,
+		MINUTELY,
 		HOURLY,
 		DAILY,
 		WEEKLY,
@@ -28,8 +29,6 @@ public class ScheduledJob extends BaseEntity {
 	private Date startDate;
 	
 	private Date endDate;
-	
-	private Date lastRunOn;
 	
 	private String activityStatus;
 	
@@ -73,14 +72,6 @@ public class ScheduledJob extends BaseEntity {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
-	}
-
-	public Date getLastRunOn() {
-		return lastRunOn;
-	}
-
-	public void setLastRunOn(Date lastRunOn) {
-		this.lastRunOn = lastRunOn;
 	}
 
 	public String getActivityStatus() {
@@ -138,7 +129,7 @@ public class ScheduledJob extends BaseEntity {
 			return true;
 		}
 		
-		if (repeatSchedule == RepeatSchedule.ONCE && getNextRunOn().after(startDate)) { 
+		if (repeatSchedule == RepeatSchedule.ONCE && currentDate.after(startDate)) { 
 			return true;
 		}
 		
@@ -158,6 +149,8 @@ public class ScheduledJob extends BaseEntity {
 			return getNextMonthlyOccurence();
 		} else if (repeatSchedule == RepeatSchedule.YEARLY) {
 			return getNextYearlyOccurence();
+		} else if (repeatSchedule == RepeatSchedule.MINUTELY) {
+			return getNextMinutelyOccurence();
 		}
 		
 		throw OpenSpecimenException.userError(ScheduledJobErrorCode.INVALID_REPEAT_SCHEDULE);
@@ -166,6 +159,13 @@ public class ScheduledJob extends BaseEntity {
 	public void delete() {
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 		name = Utility.getDisabledValue(name);
+	}
+	
+	private Date getNextMinutelyOccurence() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.add(Calendar.MINUTE, 1);
+		return calendar.getTime();
 	}
 	
 	private Date getNextHourlyOccurence() {

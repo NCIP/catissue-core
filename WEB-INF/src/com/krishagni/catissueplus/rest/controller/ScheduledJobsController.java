@@ -67,13 +67,11 @@ public class ScheduledJobsController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ScheduledJobDetail updateScheduledJob(@PathVariable("id") Long jobId, 
-			@RequestBody ScheduledJobDetail detail) {
-		detail.setId(jobId);
-		ResponseEvent<ScheduledJobDetail> resp = jobSvc.createScheduledJob(getRequest(detail));
+	public ScheduledJobDetail deleteScheduledJob(@PathVariable("id") Long jobId) {
+		ResponseEvent<ScheduledJobDetail> resp = jobSvc.deleteScheduledJob(getRequest(jobId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

@@ -23,8 +23,6 @@
 
     <property name="endDate" column="END_DATE"/>
     
-    <property name="lastRunOn" column="LAST_RUN_ON"/>
-    
     <property name="activityStatus" column="ACTIVITY_STATUS"/>
 
     <property name="repeatSchedule" column="REPEAT_SCHEDULE" not-null="true">

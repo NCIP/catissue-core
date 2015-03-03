@@ -1,7 +1,5 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.events.ScheduledJobDetail;
@@ -26,16 +24,16 @@ public class SystemTaskRunner implements ScheduledTask {
 		Long jobInstanceId = jobInstance.getId();
 		executeProcess(jobDetail, jobInstanceId);
 		
-		String dropFilePath = getDropFilePath(jobInstanceId);
-		sendEmail(jobDetail.getRecipients(), dropFilePath);
+		//TODO: implement when new email service is in place
+	//	String dropFilePath = getDropFilePath(jobInstanceId);
+	//	sendEmail(jobDetail.getRecipients(), dropFilePath);
 	}
 	
 	private void executeProcess(ScheduledJobDetail jobDetail, Long jobInstanceId) {
-		List<String> params = new ArrayList<String>();
-		params.add(jobDetail.getCommand());
-		params.add(jobInstanceId.toString());
+		String command = new String(jobDetail.getCommand());
+		command += " " + jobInstanceId.toString();
 		try {
-			Process process = new ProcessBuilder(params).start();
+			Process process = Runtime.getRuntime().exec(command);
 			process.waitFor();
 		} catch (Exception e) {
 			throw new RuntimeException(e);

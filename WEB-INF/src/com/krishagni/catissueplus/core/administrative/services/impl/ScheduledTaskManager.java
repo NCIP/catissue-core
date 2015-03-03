@@ -35,12 +35,17 @@ public class ScheduledTaskManager {
 	
 	static {
 		taskTypeMap.put("system", SystemTaskRunner.class.getName());
+		taskTypeMap.put("query" , QueryTaskRunner.class.getName());
+		
 		jobSvc = OpenSpecimenAppCtxProvider.getAppCtx().getBean(ScheduledJobService.class);
-		periodInMinutes.put("HOURLY" , 60L);
-		periodInMinutes.put("DAILY"  , 60L * 24L);
-		periodInMinutes.put("MONTHLY", 60L * 24L * 30L);
-		periodInMinutes.put("WEEKLY" , 60L * 24L * 7L);
-		periodInMinutes.put("YEARLY" , 60L * 24L * 365L);
+		
+		//TODO: remove minutely after the demo is over.
+		periodInMinutes.put("MINUTELY",  1L);
+		periodInMinutes.put("HOURLY"  ,  60L);
+		periodInMinutes.put("DAILY"   ,  60L * 24L);
+		periodInMinutes.put("MONTHLY" ,  60L * 24L * 30L);
+		periodInMinutes.put("WEEKLY"  ,  60L * 24L * 7L);
+		periodInMinutes.put("YEARLY"  ,  60L * 24L * 365L);
 		
 		/*
 		 * Monitors the scheduled threads and re-schedules broken ones.
@@ -108,12 +113,18 @@ public class ScheduledTaskManager {
 		if (erroredJobs.size() > 0) {
 			for (Long jobId : erroredJobs) {
 				queuedTasks.remove(jobId);
+				reportBrokenJob(jobId);
 			}
 			
 			loadJobs();
 		}
 	}
 	
+	private static void reportBrokenJob(Long jobId) {
+		//TODO: Implement when new email refactoring is checked-in.
+		
+	}
+
 	private static ScheduledTask getTask(ScheduledJobDetail detail) {
 		try {
 			String className = taskTypeMap.get(detail.getType());
