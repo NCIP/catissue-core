@@ -2,9 +2,9 @@
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
 <hibernate-mapping auto-import="false">
-	<class name="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
-		table="CATISSUE_SPECIMEN" lazy="true">
+  <class name="com.krishagni.catissueplus.core.biospecimen.domain.Specimen" table="CATISSUE_SPECIMEN">
 		<id name="id" column="IDENTIFIER" type="long">
 			<generator class="native">
 				<param name="sequence">CATISSUE_SPECIMEN_SEQ</param>
@@ -15,15 +15,9 @@
 			class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
 			column="PARENT_SPECIMEN_ID" />
 
-		<set name="childCollection" table="CATISSUE_SPECIMEN" inverse="true"
-			cascade="all">
-			<cache usage="read-write" />
-			<key column="PARENT_SPECIMEN_ID">
-			</key>
-
-			<one-to-many
-				class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen" />
-
+		<set name="childCollection" table="CATISSUE_SPECIMEN" inverse="true" cascade="all">
+			<key column="PARENT_SPECIMEN_ID"/>
+			<one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"/>
 		</set>
 
 		<property name="initialQuantity" type="double" column="INITIAL_QUANTITY" />
@@ -75,5 +69,25 @@
 
 		<many-to-one name="specimenRequirement"
 			class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement" column="REQ_SPECIMEN_ID" />
+
+		<query name="getByLabel">
+                  from 
+		    com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
+                  where
+		    s.label = :label
+		</query>
+
+		<query name="getParentByVisitAndReq">
+                  select
+		    s
+		  from
+		    com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
+                    join s.visit v
+                    join s.specimenRequirement sr
+                    join sr.childSpecimenRequirements csr
+                  where
+                    v.id = :visitId and
+                    csr.id = :srId
+		</query>
 	</class>
 </hibernate-mapping>

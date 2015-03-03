@@ -18,12 +18,18 @@ angular.module('os.biospecimen.participant.visits', ['os.biospecimen.models'])
     $scope.errorCode = '';
     $scope.visit = {};
     for (var i = 0; i < visits.length; ++i) {
-      if (($stateParams.visitId && visits[i].id == $stateParams.visitId) && 
-          visits[i].eventId == $stateParams.eventId) {
+      if ((!!$stateParams.visitId && $stateParams.visitId == visits[i].id) ||
+          (!!$stateParams.eventId && $stateParams.eventId == visits[i].eventId)) {
         $scope.visit = visits[i];
         break;
-      }
+      } 
     }
+
+    $scope.showVisitDetail = function(event, visitId, eventId) {
+      event.preventDefault();
+      event.stopPropagation();
+      $state.go('visit-detail.overview', {visitId: visitId, eventId: eventId});
+    };
 
     $scope.specimens = Specimen.flatten(specimens);
     $scope.view = $stateParams.view;

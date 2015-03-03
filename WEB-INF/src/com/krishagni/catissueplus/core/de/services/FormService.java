@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.AddRecordEntryOp;
+import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
 import com.krishagni.catissueplus.core.de.events.FileDetail;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
@@ -43,7 +44,7 @@ public interface FormService {
 	
 	public ResponseEvent<List<FormCtxtSummary>> getEntityForms(RequestEvent<ListEntityFormsOp> req);
 	
-	public ResponseEvent<List<FormRecordSummary>> getEntityFormRecords(RequestEvent<GetEntityFormRecordsOp> req);
+	public ResponseEvent<EntityFormRecords> getEntityFormRecords(RequestEvent<GetEntityFormRecordsOp> req);
 	
 	public ResponseEvent<FormDataDetail> getFormData(RequestEvent<GetFormDataOp> req);
 	

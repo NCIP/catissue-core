@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -357,7 +358,7 @@ public class StorageContainer extends BaseEntity {
 		} else if (isSpecimenEntity) {
 			return pos.getOccupyingSpecimen() != null && pos.getOccupyingSpecimen().getId().equals(entityId); 
 		} else {
-			return pos.getOccupyingContainer() != null && pos.getOccupyingContainer().getName().equals(entityId);
+			return pos.getOccupyingContainer() != null && pos.getOccupyingContainer().getId().equals(entityId);
 		}
 	}
 	
@@ -406,6 +407,9 @@ public class StorageContainer extends BaseEntity {
 		} else {
 			parentContainer = otherParentContainer;
 			site = otherParentContainer.getSite();
+			if (cycleExistsInHierarchy(otherParentContainer)) {
+				throw OpenSpecimenException.userError(StorageContainerErrorCode.HIERARCHY_CONTAINS_CYCLE);
+			}
 			
 			if (position != null) {
 				position.update(otherPos);
@@ -551,6 +555,37 @@ public class StorageContainer extends BaseEntity {
 		return result;
 	}
 	
+	private boolean cycleExistsInHierarchy(StorageContainer parentContainer) {
+		if (parentContainer != null && id.equals(parentContainer.getId())) {
+			return true;
+		}
+		
+		for (StorageContainer child : getChildContainers()) {
+			if (parentContainer.isDescendentOf(child)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private boolean isDescendentOf(StorageContainer other) {
+		if (id == null || other == null || other.getId() == null) {
+			return false;
+		}
+		
+		StorageContainer container = this;
+		while (container != null) {
+			if (other.getId().equals(container.getId())) {
+				return true;
+			}
+			
+			container = container.getParentContainer();
+		}
+		
+		return false;
+	}
+	
 	private Map<String, SchemeOrdinalConverter> converters = new HashMap<String, SchemeOrdinalConverter>() {
 		private static final long serialVersionUID = -1198152629671796530L;
 
@@ -591,7 +626,7 @@ public class StorageContainer extends BaseEntity {
 	
 	
 	private class RomanSchemeOrdinalConverter implements SchemeOrdinalConverter {
-		private final Map<String, Integer> romanLiterals = new HashMap<String, Integer>() {
+		private final Map<String, Integer> romanLiterals = new LinkedHashMap<String, Integer>() {
 			private static final long serialVersionUID = 685666506457371647L;
 
 			{

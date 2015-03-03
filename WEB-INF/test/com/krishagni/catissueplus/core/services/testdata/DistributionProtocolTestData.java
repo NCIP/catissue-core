@@ -18,11 +18,11 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CreateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchDetails;
-import com.krishagni.catissueplus.core.administrative.events.GetDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchDistributionProtocolEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqAllDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqDistributionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
@@ -83,22 +83,22 @@ public class DistributionProtocolTestData {
 	public static CreateDistributionProtocolEvent getCreateDistributionProtocolEvent() {
 		CreateDistributionProtocolEvent event = new CreateDistributionProtocolEvent();
 		event.setSessionDataBean(getSessionDataBean());
-		DistributionProtocolDetails details = getDistributionProtocolDetails();
-		event.setDistributionProtocolDetails(details);
+		DistributionProtocolDetail details = getDistributionProtocolDetails();
+		event.setProtocol(details);
 		return event;
 	}
 
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithTitle() {
 		UpdateDistributionProtocolEvent event = new UpdateDistributionProtocolEvent();
 		event.setSessionDataBean(getSessionDataBean());
-		DistributionProtocolDetails details = getDistributionProtocolDetails();
-		event.setDetails(details);
+		DistributionProtocolDetail details = getDistributionProtocolDetails();
+		event.setProtocol(details);
 		event.setTitle("asds");
 		return event;
 	}
 
-	private static DistributionProtocolDetails getDistributionProtocolDetails() {
-		DistributionProtocolDetails details = new DistributionProtocolDetails();
+	private static DistributionProtocolDetail getDistributionProtocolDetails() {
+		DistributionProtocolDetail details = new DistributionProtocolDetail();
 		details.setIrbId("IRB333");
 		details.setPrincipalInvestigator(getPrincipalInvestigator());
 		details.setDescriptionUrl("www.simpleurl.com");
@@ -144,7 +144,7 @@ public class DistributionProtocolTestData {
 
 	public static CreateDistributionProtocolEvent getCreateDistributionProtocolEventWithEmptyInvestigatorName() {
 		CreateDistributionProtocolEvent event = getCreateDistributionProtocolEvent();
-		event.getDistributionProtocolDetails().setPrincipalInvestigator(getEmptyPrincipalInvestigator());
+		event.getProtocol().setPrincipalInvestigator(getEmptyPrincipalInvestigator());
 		return event;
 	}
 
@@ -157,33 +157,33 @@ public class DistributionProtocolTestData {
 
 	public static CreateDistributionProtocolEvent getCreateDistributionProtocolEventEmptyTitle() {
 		CreateDistributionProtocolEvent event = getCreateDistributionProtocolEvent();
-		event.getDistributionProtocolDetails().setTitle("");
+		event.getProtocol().setTitle("");
 		return event;
 	}
 
 	public static CreateDistributionProtocolEvent getCreateDistributionProtocolEventEmptyShortTitle() {
 		CreateDistributionProtocolEvent event = getCreateDistributionProtocolEvent();
-		event.getDistributionProtocolDetails().setShortTitle("");
+		event.getProtocol().setShortTitle("");
 		return event;
 	}
 
 	public static CreateDistributionProtocolEvent getCreateDistributionProtocolEventWithNullStartDate() {
 		CreateDistributionProtocolEvent event = getCreateDistributionProtocolEvent();
-		event.getDistributionProtocolDetails().setStartDate(null);
+		event.getProtocol().setStartDate(null);
 		return event;
 	}
 
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEvent() {
 		UpdateDistributionProtocolEvent event = new UpdateDistributionProtocolEvent();
-		DistributionProtocolDetails details = getDistributionProtocolDetails();
-		event.setDetails(details);
+		DistributionProtocolDetail details = getDistributionProtocolDetails();
+		event.setProtocol(details);
 		event.setId(1L);
 		return event;
 	}
 
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithInvalidInvestigator() {
 		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
-		event.getDetails().setPrincipalInvestigator(getInvalidPrincipalInvestigator());
+		event.getProtocol().setPrincipalInvestigator(getInvalidPrincipalInvestigator());
 		return event;
 	}
 
@@ -195,19 +195,19 @@ public class DistributionProtocolTestData {
 
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithEmptyInvestigatorName() {
 		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
-		event.getDetails().setPrincipalInvestigator(getEmptyPrincipalInvestigator());
+		event.getProtocol().setPrincipalInvestigator(getEmptyPrincipalInvestigator());
 		return event;
 	}
 
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventEmptyTitle() {
 		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
-		event.getDetails().setTitle("");
+		event.getProtocol().setTitle("");
 		return event;
 	}
 
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventEmptyShortTitle() {
 		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
-		event.getDetails().setShortTitle("");
+		event.getProtocol().setShortTitle("");
 		return event;
 	}
 
@@ -265,9 +265,9 @@ public class DistributionProtocolTestData {
 
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventNullDate() {
 		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
-		event.getDetails().setTitle("DPProtocol");
-		event.getDetails().setShortTitle("DPP");
-		event.getDetails().setStartDate(null);
+		event.getProtocol().setTitle("DPProtocol");
+		event.getProtocol().setShortTitle("DPP");
+		event.getProtocol().setStartDate(null);
 		return event;
 	}
 
@@ -279,13 +279,13 @@ public class DistributionProtocolTestData {
 
 	public static CreateDistributionProtocolEvent getCreateDistributionProtocolEventEmptyIrbId() {
 		CreateDistributionProtocolEvent event = getCreateDistributionProtocolEvent();
-		event.getDistributionProtocolDetails().setIrbId("");
+		event.getProtocol().setIrbId("");
 		return event;
 	}
 
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithEmptyIrbId() {
 		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
-		event.getDetails().setIrbId("");
+		event.getProtocol().setIrbId("");
 		return event;
 	}
 
@@ -297,13 +297,13 @@ public class DistributionProtocolTestData {
 
 	public static CreateDistributionProtocolEvent getCreateDistributionProtocolEventWithInvalidActivityStatus() {
 		CreateDistributionProtocolEvent event = getCreateDistributionProtocolEvent();
-		event.getDistributionProtocolDetails().setActivityStatus("unActive");
+		event.getProtocol().setActivityStatus("unActive");
 		return event;
 	}
 
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithInvalidActivityStatus() {
 		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
-		event.getDetails().setActivityStatus("unActive");
+		event.getProtocol().setActivityStatus("unActive");
 		return event;
 	}
 
@@ -322,13 +322,13 @@ public class DistributionProtocolTestData {
 
 	public static CreateDistributionProtocolEvent getCreateDistributionProtocolEventWithNegativeAnticipatedSpecimenCountNumber() {
 		CreateDistributionProtocolEvent event = getCreateDistributionProtocolEvent();
-		event.getDistributionProtocolDetails().setAnticipatedSpecimenCount(-2L);
+		event.getProtocol().setAnticipatedSpecimenCount(-2L);
 		return event;
 	}
 
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithNegativeAnticipatedSpecimenCountNumber() {
 		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
-		event.getDetails().setAnticipatedSpecimenCount(-2L);
+		event.getProtocol().setAnticipatedSpecimenCount(-2L);
 		return event;
 	}
 
@@ -371,13 +371,13 @@ public class DistributionProtocolTestData {
 
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithDisableActivityStatus() {
 		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
-		event.getDetails().setActivityStatus("Disabled");
+		event.getProtocol().setActivityStatus("Disabled");
 		return event;
 	}
 
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithoutDisableActivityStatus() {
 		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
-		event.getDetails().setActivityStatus("Active");
+		event.getProtocol().setActivityStatus("Active");
 		return event;
 	}
 
@@ -400,20 +400,20 @@ public class DistributionProtocolTestData {
 		return distributionProtocols;
 	}
 
-	public static ReqAllDistributionProtocolEvent getAllDistributionProtocolEvent() {
-		ReqAllDistributionProtocolEvent event = new ReqAllDistributionProtocolEvent();
+	public static ReqDistributionProtocolsEvent getAllDistributionProtocolEvent() {
+		ReqDistributionProtocolsEvent event = new ReqDistributionProtocolsEvent();
 		event.setMaxResults(1000);
 		return event;
 	}
 
-	public static GetDistributionProtocolEvent getDistributionProtocolEvent() {
-		GetDistributionProtocolEvent event = new GetDistributionProtocolEvent();
+	public static ReqDistributionProtocolEvent getDistributionProtocolEvent() {
+		ReqDistributionProtocolEvent event = new ReqDistributionProtocolEvent();
 		event.setId(1L);
 		return event;
 	}
 
-	public static GetDistributionProtocolEvent getDistributionProtocolEventForName() {
-		GetDistributionProtocolEvent event = new GetDistributionProtocolEvent();
+	public static ReqDistributionProtocolEvent getDistributionProtocolEventForName() {
+		ReqDistributionProtocolEvent event = new ReqDistributionProtocolEvent();
 		event.setTitle("CP Title");
 		return event;
 	}

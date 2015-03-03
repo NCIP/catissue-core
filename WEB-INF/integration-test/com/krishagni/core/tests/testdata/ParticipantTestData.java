@@ -3,7 +3,7 @@ package com.krishagni.core.tests.testdata;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.PmiDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -17,8 +17,8 @@ public class ParticipantTestData {
 		return participant;
 	}
 	
-	public static List<ParticipantMedicalIdentifierNumberDetail> getPmi(String siteName, String mrn) {
-		ParticipantMedicalIdentifierNumberDetail pmi = new ParticipantMedicalIdentifierNumberDetail();
+	public static List<PmiDetail> getPmi(String siteName, String mrn) {
+		PmiDetail pmi = new PmiDetail();
 		pmi.setMrn(mrn);
 		pmi.setSiteName(siteName);
 		return Collections.singletonList(pmi);

@@ -21,10 +21,11 @@ import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
+import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
-import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
@@ -65,7 +66,38 @@ public class VisitsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public VisitDetail getVisit(@PathVariable("id") Long visitId) {
+		EntityQueryCriteria crit = new EntityQueryCriteria(visitId);
 		
+		ResponseEvent<VisitDetail> resp = visitService.getVisit(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public VisitDetail addVisit(@RequestBody VisitDetail visit) {
+		ResponseEvent<VisitDetail> resp = visitService.addVisit(getRequest(visit));
+		resp.throwErrorIfUnsuccessful();				
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public VisitDetail updateVisit(@PathVariable("id") Long visitId, @RequestBody VisitDetail visit) {
+		visit.setId(visitId);
+		
+		ResponseEvent<VisitDetail> resp = visitService.updateVisit(getRequest(visit));
+		resp.throwErrorIfUnsuccessful();				
+		return resp.getPayload();
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -82,7 +114,7 @@ public class VisitsController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms/{formCtxtId}/records")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<FormRecordSummary> getFormRecords(
+	public EntityFormRecords getFormRecords(
 			@PathVariable("id") 
 			Long visitId,
 			
@@ -93,17 +125,8 @@ public class VisitsController {
 		opDetail.setEntityId(visitId);
 		opDetail.setFormCtxtId(formCtxtId);
 
-		ResponseEvent<List<FormRecordSummary>> resp = formSvc.getEntityFormRecords(getRequest(opDetail));
+		ResponseEvent<EntityFormRecords> resp = formSvc.getEntityFormRecords(getRequest(opDetail));
 		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
-	}
-
-	@RequestMapping(method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public VisitDetail addVisit(@RequestBody VisitDetail visit) {
-		ResponseEvent<VisitDetail> resp = visitService.addVisit(getRequest(visit));
-		resp.throwErrorIfUnsuccessful();				
 		return resp.getPayload();
 	}
 

@@ -8,8 +8,8 @@ public class EmailSender {
 		return EmailHandler.sendUserCreatedEmail(user);		
 	}
 	
-	public Boolean sendForgotPasswordEmail(final User user) {
-		return EmailHandler.sendForgotPasswordEmail(user);		
+	public Boolean sendForgotPasswordEmail(final User user, final String token) {
+		return EmailHandler.sendForgotPasswordEmail(user, token);
 	}
 	
 	public void sendUserSignupEmail(final User user) {

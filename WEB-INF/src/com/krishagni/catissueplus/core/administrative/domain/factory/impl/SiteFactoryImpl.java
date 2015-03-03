@@ -2,7 +2,6 @@
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -15,14 +14,13 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCo
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
+import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SiteFactoryImpl implements SiteFactory {
-
-	private static final String SITE_TYPE = "site type";
 
 	private DaoFactory daoFactory;
 
@@ -31,75 +29,83 @@ public class SiteFactoryImpl implements SiteFactory {
 	}
 
 	@Override
-	public Site createSite(SiteDetail details) {
+	public Site createSite(SiteDetail detail) {
 		Site site = new Site();
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-				
-		setName(site, details.getName(), ose);
-		setCode(site, details.getCode());
-		setCoordinatorCollection(site, details.getCoordinatorCollection(), ose);
-		setType(site, details.getType(), ose);
-		setAddress(site, details.getAddress());
-		setActivityStatus(site, details.getActivityStatus(), ose);
+
+		site.setId(detail.getId());
+		setName(detail, site, ose);
+		setCode(detail, site);
+		setCoordinators(detail, site, ose);
+		setType(detail, site, ose);
+		setAddress(detail, site);
+		setActivityStatus(detail, site, ose);
 		
 		ose.checkAndThrow();
 		return site;
 	}
 	
 
-	private void setName(Site site, String siteName, OpenSpecimenException ose) {
-		if (StringUtils.isBlank(siteName)) {
+	private void setName(SiteDetail detail, Site site, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(detail.getName())) {
 			ose.addError(SiteErrorCode.NAME_REQUIRED);
 			return;
 		}
 		
-		site.setName(siteName);
+		site.setName(detail.getName());
 	}
 	
-	
-	private void setCode(Site site, String code) {
-		site.setCode(code);
+	private void setCode(SiteDetail detail, Site site) {
+		site.setCode(detail.getCode());
 	}
 
-	private void setActivityStatus(Site site, String activityStatus, OpenSpecimenException ose) {
-        if (StringUtils.isBlank(activityStatus)) {
-            site.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
-            return;
-        }
 
-        site.setActivityStatus(activityStatus);
-	}
-
-	private void setCoordinatorCollection(Site site, List<UserSummary> coordinatorCollection, OpenSpecimenException ose) {		
-		Set<User> userCollection = new HashSet<User>();
+	private void setCoordinators(SiteDetail detail, Site site, OpenSpecimenException ose) {		
+		Set<User> result = new HashSet<User>();
 		
-		for (UserSummary userSummary : coordinatorCollection) {
-			User user = daoFactory.getUserDao().getUser(userSummary.getId());			
+		for (UserSummary userSummary : detail.getCoordinators()) {
+			User user = daoFactory.getUserDao().getById(userSummary.getId());			
 			if (user == null) {
 				ose.addError(UserErrorCode.NOT_FOUND);
 				return;
 			}
 			
-			userCollection.add(user);
+			result.add(user);
 		}
 
-		site.setCoordinatorCollection(userCollection);
+		site.setCoordinators(result);
 	}
 	
-	private void setType(Site site, String siteType, OpenSpecimenException ose) {
+	private void setType(SiteDetail detail, Site site, OpenSpecimenException ose) {
+		String siteType = detail.getType();
 		if (StringUtils.isBlank(siteType)) {
 			ose.addError(SiteErrorCode.TYPE_REQUIRED);
 			return;
 		}
 		
-		if (!CommonValidator.isValidPv(siteType, SITE_TYPE)) {
+		if (!CommonValidator.isValidPv(siteType, "site type")) {
 			ose.addError(SiteErrorCode.INVALID_TYPE);
 		}
 		
 		site.setType(siteType);
 	}
 
-	private void setAddress(Site site, String address) {
-		site.setAddress(address);
+	private void setAddress(SiteDetail detail, Site site) {
+		site.setAddress(detail.getAddress());
+	}
+	
+	private void setActivityStatus(SiteDetail detail, Site site, OpenSpecimenException ose) {
+		String activityStatus = detail.getActivityStatus();
+		if (StringUtils.isBlank(activityStatus)) {
+			site.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+			return;
+		}
+		
+		if (!Status.isValidActivityStatus(activityStatus)) {
+			ose.addError(ActivityStatusErrorCode.INVALID);
+			return;
+		}
+		
+		site.setActivityStatus(activityStatus);
 	}
 }

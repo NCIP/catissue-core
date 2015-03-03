@@ -1,5 +1,5 @@
-angular.module('os.biospecimen.models.specimen', ['os.common.models'])
-  .factory('Specimen', function(osModel, $http) {
+angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospecimen.models.form'])
+  .factory('Specimen', function(osModel, $http, SpecimenRequirement, Form) {
     var Specimen = osModel(
       'specimens',
       function(specimen) {
@@ -38,7 +38,7 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models'])
     };
 
     Specimen.save = function(specimens) {
-      return $http.post(Specimen.url(), specimens).then(
+      return $http.post(Specimen.url() + 'collect', specimens).then(
         function(result) {
           return result.data;
         }
@@ -53,6 +53,14 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models'])
 
         function(result) {
           return true;
+        }
+      );
+    };
+
+    Specimen.getAnticipatedSpecimen = function(srId) {
+      return SpecimenRequirement.getById(srId).then(
+        function(sr) {
+          return new Specimen(toSpecimenAttrs(sr));
         }
       );
     };
@@ -75,6 +83,43 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models'])
       }
 
       return curr;
+    };
+
+    Specimen.prototype.getForms = function() {
+      return Form.listFor(Specimen.url(), this.$id());
+    };
+
+    Specimen.prototype.getRecords = function(formCtxId) {
+      return Form.listRecords(Specimen.url(), this.$id(), formCtxId);
+    };
+
+    Specimen.prototype.$saveProps = function() {
+      delete this.concentration;
+      delete this.children;
+      return this;
+    };
+
+    function toSpecimenAttrs(sr) {
+      sr.reqId = sr.id;
+      sr.reqLabel = sr.name;
+      sr.pathology = sr.pathologyStatus;
+          
+      var attrs = ['id', 'name', 'pathologyStatus', 
+                   'collector', 'collectionProcedure', 'collectionContainer', 
+                   'receiver', 'labelFmt'];
+      attrs.forEach(function(attr) {
+        delete sr[attr];
+      });
+
+      if (sr.children) {
+        sr.children = sr.children.map(
+          function(childSr) {
+            return toSpecimenAttrs(childSr);
+          }
+        );
+      }
+
+      return sr;
     };
 
     return Specimen;

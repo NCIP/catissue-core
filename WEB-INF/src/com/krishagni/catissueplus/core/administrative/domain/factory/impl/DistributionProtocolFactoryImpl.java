@@ -1,8 +1,6 @@
 
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
-import java.util.Date;
-
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
@@ -15,7 +13,6 @@ import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
-import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class DistributionProtocolFactoryImpl implements DistributionProtocolFactory {
@@ -29,42 +26,49 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 	}
 
 	@Override
-	public DistributionProtocol create(DistributionProtocolDetail details) {
+	public DistributionProtocol createDistributionProtocol(DistributionProtocolDetail detail) {
 		DistributionProtocol distributionProtocol = new DistributionProtocol();
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
-		setTitle(distributionProtocol, details.getTitle(), ose);
-		setIbrId(distributionProtocol, details.getIrbId(), ose);
-		setAnticipatedSpecimenCount(distributionProtocol, details.getAnticipatedSpecimenCount());
-		setPrincipalInvestigator(distributionProtocol, details.getPrincipalInvestigator(), ose);
-		setShortTitle(distributionProtocol, details.getShortTitle(), ose);
-		setDescriptionURL(distributionProtocol, details.getDescriptionUrl(), ose);
-		setStartDate(distributionProtocol, details.getStartDate());
-		setActivityStatus(distributionProtocol, details.getActivityStatus(), ose);
+		distributionProtocol.setId(detail.getId());
+		setTitle(detail, distributionProtocol, ose);
+		setShortTitle(detail, distributionProtocol, ose);
+		setPrincipalInvestigator(detail, distributionProtocol, ose);
+		setIbrId(detail, distributionProtocol, ose);
+		setStartDate(detail, distributionProtocol);
+		setActivityStatus(detail, distributionProtocol, ose);
 		
-		ose.checkAndThrow();		
+		ose.checkAndThrow();
 		return distributionProtocol;
 	}
+	
+	private void setTitle(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(detail.getTitle())) {
+			ose.addError(DistributionProtocolErrorCode.TITLE_REQUIRED);
+			return;
+		}
+		distributionProtocol.setTitle(detail.getTitle());
 
-	private void setStartDate(DistributionProtocol distributionProtocol, Date startDate) {
-		distributionProtocol.setStartDate(startDate);
 	}
 
-	private void setDescriptionURL(DistributionProtocol distributionProtocol, String descriptionURL, OpenSpecimenException ose) {
-		distributionProtocol.setDescriptionUrl(descriptionURL);
-	}
-
-	private void setShortTitle(DistributionProtocol distributionProtocol, String shortTitle, OpenSpecimenException ose) {
-		if (StringUtils.isBlank(shortTitle)) {
+	private void setShortTitle(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(detail.getShortTitle())) {
 			ose.addError(DistributionProtocolErrorCode.SHORT_TITLE_REQUIRED);
 			return;
 		}
-		
-		distributionProtocol.setShortTitle(shortTitle);
+		distributionProtocol.setShortTitle(detail.getShortTitle());
+	}
+	
+	private void setStartDate(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol) {
+		distributionProtocol.setStartDate(detail.getStartDate());
 	}
 
-	private void setPrincipalInvestigator(DistributionProtocol distributionProtocol, UserSummary principalInvestigator, OpenSpecimenException ose) {
-		User pi = daoFactory.getUserDao().getUser(principalInvestigator.getId());
+	private void setPrincipalInvestigator(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
+		User pi = null;
+		if(detail.getPrincipalInvestigator() != null) {
+			pi = daoFactory.getUserDao().getById(detail.getPrincipalInvestigator().getId());
+		}
+		
 		if (pi == null) {
 			ose.addError(DistributionProtocolErrorCode.PI_NOT_FOUND);
 			return;
@@ -73,31 +77,17 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		distributionProtocol.setPrincipalInvestigator(pi);
 	}
 
-	private void setAnticipatedSpecimenCount(DistributionProtocol distributionProtocol, Long anticipatedSpecimenCount) {
-		distributionProtocol.setAnticipatedSpecimenCount(anticipatedSpecimenCount);
-
+	private void setIbrId(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
+		distributionProtocol.setIrbId(detail.getIrbId());
 	}
 
-	private void setIbrId(DistributionProtocol distributionProtocol, String irbId, OpenSpecimenException ose) {
-		distributionProtocol.setIrbId(irbId);
-
-	}
-
-	private void setTitle(DistributionProtocol distributionProtocol, String title,	OpenSpecimenException ose) {
-		if (StringUtils.isBlank(title)) {
-			ose.addError(DistributionProtocolErrorCode.TITLE_REQUIRED);
-			return;
-		}
-		
-		distributionProtocol.setTitle(title);
-	}
-
-	private void setActivityStatus(DistributionProtocol distributionProtocol, String activityStatus, OpenSpecimenException ose) {
+	private void setActivityStatus(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
+		String activityStatus = detail.getActivityStatus();
 		if (!CommonValidator.isValidPv(activityStatus, ACTIVITY_STATUS)) {
 			ose.addError(ActivityStatusErrorCode.INVALID);
 		}
 		
-		activityStatus = activityStatus == null ? Status.ACTIVITY_STATUS_ACTIVE.getStatus() : activityStatus;
+		activityStatus = StringUtils.isBlank(activityStatus) ? Status.ACTIVITY_STATUS_ACTIVE.getStatus() : activityStatus;
 		distributionProtocol.setActivityStatus(activityStatus);
 	}
 }

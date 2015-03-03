@@ -7,6 +7,8 @@ import java.util.Set;
 import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class SpecimenRequirement {
 	private Long id;
@@ -175,8 +177,7 @@ public class SpecimenRequirement {
 		return collectionProtocolEvent;
 	}
 
-	public void setCollectionProtocolEvent(
-			CollectionProtocolEvent collectionProtocolEvent) {
+	public void setCollectionProtocolEvent(CollectionProtocolEvent collectionProtocolEvent) {
 		this.collectionProtocolEvent = collectionProtocolEvent;
 	}
 
@@ -220,20 +221,34 @@ public class SpecimenRequirement {
 		this.specimens = specimens;
 	}
 	
+	public boolean isAliquot() {
+		return getLineage().equals(Specimen.ALIQUOT);
+	}
 	
-	private static final String[] EXCLUDE_COPY_PROPS = {
-		"id", 
-		"parentSpecimenRequirement",
-		"childSpecimenRequirements",
-		"specimens"		
-	};
-			
+	public boolean isDerivative() {
+		return getLineage().equals(Specimen.DERIVED);
+	}
+				
 	public SpecimenRequirement copy() {
 		SpecimenRequirement copy = new SpecimenRequirement();
 		BeanUtils.copyProperties(this, copy, EXCLUDE_COPY_PROPS); 
 		return copy;
 	}
 	
+	public SpecimenRequirement deepCopy(CollectionProtocolEvent cpe) {
+		if (cpe == null) {
+			cpe = this.getCollectionProtocolEvent();
+		}
+		
+		if (isAliquot()) {
+			if (this.getInitialQuantity() > this.parentSpecimenRequirement.getQtyAfterAliquotsUse()) {
+				throw OpenSpecimenException.userError(SrErrorCode.INSUFFICIENT_QTY);
+			}
+		}
+				
+		return deepCopy(cpe, parentSpecimenRequirement);
+	}
+		
 	public void addChildRequirement(SpecimenRequirement childReq) {
 		childReq.setParentSpecimenRequirement(this);
 		childSpecimenRequirements.add(childReq);
@@ -248,7 +263,7 @@ public class SpecimenRequirement {
 	public Double getQtyAfterAliquotsUse() {
 		Double available = initialQuantity;
 		for (SpecimenRequirement childReq : childSpecimenRequirements) {
-			if (childReq.getLineage().equals("Aliquot")) {
+			if (childReq.isAliquot()) {
 				available -= childReq.getInitialQuantity();
 			}
 		}
@@ -269,4 +284,25 @@ public class SpecimenRequirement {
 		specimen.setSpecimenRequirement(this);
 		return specimen;
 	}
+		
+	private SpecimenRequirement deepCopy(CollectionProtocolEvent cpe, SpecimenRequirement parent) {
+		SpecimenRequirement result = copy();
+		result.setCollectionProtocolEvent(cpe);
+		result.setParentSpecimenRequirement(parent);
+		
+		Set<SpecimenRequirement> childSrs = new HashSet<SpecimenRequirement>();
+		for (SpecimenRequirement childSr : childSpecimenRequirements) {
+			childSrs.add(childSr.deepCopy(cpe, result));
+		}
+		
+		result.setChildSpecimenRequirements(childSrs);
+		return result;
+	}
+	
+	private static final String[] EXCLUDE_COPY_PROPS = {
+		"id", 
+		"parentSpecimenRequirement",
+		"childSpecimenRequirements",
+		"specimens"		
+	};
 }

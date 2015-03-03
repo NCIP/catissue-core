@@ -3,7 +3,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
   .controller('CpSpecimensCtrl', function(
     $scope, $state, $stateParams, $filter, $timeout,
     cp, events, specimenRequirements,
-    Specimen, SpecimenRequirement, PvManager) {
+    Specimen, SpecimenRequirement, PvManager, Alerts) {
 
     if (!$stateParams.eventId && !!events && events.length > 0) {
       $state.go('cp-detail.specimen-requirements', {eventId: events[0].id});
@@ -14,6 +14,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       $scope.cp = cp;
       $scope.events = events;
       $scope.eventId = $stateParams.eventId;
+      $scope.selectEvent({id: $stateParams.eventId});
 
       $scope.specimenRequirements = Specimen.flatten(specimenRequirements);
 
@@ -155,6 +156,24 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
           $scope.derivative = {};
           $scope.parentSr = undefined;
           $scope.view = 'list_sr';
+        }
+      );
+    };
+
+    $scope.copyRequirement = function(sr) {
+      var aliquotReq = {noOfAliquots: 1, qtyPerAliquot: sr.initialQty};
+      if (sr.isAliquot() && !sr.parent.hasSufficientQty(aliquotReq)) {
+        Alerts.error('srs.errors.insufficient_qty');
+        return;
+      }
+      
+      sr.copy().then(
+        function(result) {
+          if (sr.parent) {
+            addChildren(sr.parent, [result]);
+          } else {
+            addToSrList(result);
+          }
         }
       );
     };

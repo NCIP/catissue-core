@@ -1,5 +1,5 @@
-angular.module('os.biospecimen.models.visit', ['os.common.models'])
-  .factory('Visit', function(osModel, $http) {
+angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecimen.models.form'])
+  .factory('Visit', function(osModel, $http, CollectionProtocolEvent, Form) {
     var Visit = osModel('visits');
  
     function enrich(visits) {
@@ -13,6 +13,30 @@ angular.module('os.biospecimen.models.visit', ['os.common.models'])
 
     Visit.listFor = function(cprId, includeStats) {
       return Visit.query({cprId: cprId, includeStats: !!includeStats}).then(enrich);
+    };
+
+    Visit.getAnticipatedVisit = function(eventId, regDate) {
+      return CollectionProtocolEvent.getById(eventId).then(
+        function(event) {
+          event.eventId = event.id;
+          event.site = event.defaultSite;
+          event.cpTitle = event.collectionProtocol;
+         
+          delete event.id;
+          delete event.defaultSite;
+          delete event.collectionProtocol;
+          delete event.specimenRequirements;
+          
+          if (typeof regDate == 'string') {
+            regDate = Date.parse(regDate);
+          } else if (regDate instanceof Date) {
+            regDate = regDate.getTime();
+          }
+
+          event.anticipatedVisitDate = event.eventPoint * 24 * 60 * 60 * 1000 + regDate;
+          return new Visit(event);
+        }
+      );
     };
 
     function visitFilter(visits, filterfn) {
@@ -32,6 +56,14 @@ angular.module('os.biospecimen.models.visit', ['os.common.models'])
 
     Visit.anticipatedVisits = function(visits) {
       return visitFilter(visits, function(visit) { return !visit.status || visit.status == 'Pending'; });
+    };
+
+    Visit.prototype.getForms = function() {
+      return Form.listFor(Visit.url(), this.$id());
+    };
+    
+    Visit.prototype.getRecords = function(formCtxId) {
+      return Form.listRecords(Visit.url(), this.$id(), formCtxId);
     };
 
     return Visit;

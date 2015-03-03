@@ -1,3 +1,4 @@
+
 <div>
   <div class="os-custom-banner">
     <div style="height: 100px;"></div>
@@ -8,19 +9,15 @@
     <img class="os-rounded-img" src="images/profile-user.png" />
     <form ng-submit="login()">
       <div class="os-group-controls">
-        <input type="text" class="form-control" ng-model="loginData.loginId" placeholder="Username">
+        <input type="text"     class="form-control" ng-model="loginData.loginName" placeholder="Login Name">
         <input type="password" class="form-control" ng-model="loginData.password" placeholder="Password">
       </div>
       <span class="os-error-msg" ng-if="loginError">The username or password you entered is incorrect</span>
       <button type="submit" class="btn btn-block btn-primary">Sign in</button>
       <div style="padding-top: 5px;">
-        <a href="#/resetPassword" class="df-link-primary-sm">Forgot password?</a>
+        <a ui-sref="forgot-password">Forgot password?</a>
       </div>
     </form>
-  </div>
-
-  <div class="os-footer">
-    <span>OpenSpecimen is an open source biobanking software developed by Krishagni Solutions on top of NCI caTissue. For more details visit <a href="http://www.openspecimen.org">www.openspecimen.org</a> or mail us at <a href="mailto:support@krishagni.com">support@krishagni.com</a></span>
   </div>
 </div>
 

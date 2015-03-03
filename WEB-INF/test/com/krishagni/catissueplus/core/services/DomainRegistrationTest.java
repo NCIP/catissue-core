@@ -22,7 +22,7 @@ import com.krishagni.catissueplus.core.auth.domain.factory.impl.LdapFactoryImpl;
 import com.krishagni.catissueplus.core.auth.events.DomainRegisteredEvent;
 import com.krishagni.catissueplus.core.auth.events.LdapDetails;
 import com.krishagni.catissueplus.core.auth.events.RegisterDomainEvent;
-import com.krishagni.catissueplus.core.auth.repository.DomainDao;
+import com.krishagni.catissueplus.core.auth.repository.AuthDao;
 import com.krishagni.catissueplus.core.auth.services.DomainRegistrationService;
 import com.krishagni.catissueplus.core.auth.services.impl.DomainRegistrationServiceImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -35,7 +35,7 @@ public class DomainRegistrationTest {
 	private DaoFactory daoFactory;
 
 	@Mock
-	DomainDao domainDao;
+	AuthDao domainDao;
 
 	private DomainRegistrationService domainRegService;
 
@@ -44,7 +44,7 @@ public class DomainRegistrationTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		when(daoFactory.getDomainDao()).thenReturn(domainDao);
+		when(daoFactory.getAuthDao()).thenReturn(domainDao);
 		domainRegService = new DomainRegistrationServiceImpl();
 		((DomainRegistrationServiceImpl) domainRegService).setDaoFactory(daoFactory);
 

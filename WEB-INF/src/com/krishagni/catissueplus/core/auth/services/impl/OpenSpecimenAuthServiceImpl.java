@@ -1,30 +1,37 @@
 
 package com.krishagni.catissueplus.core.auth.services.impl;
 
-import java.util.ArrayList;
+import java.util.Map;
 
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 
-import com.krishagni.catissueplus.core.administrative.domain.Password;
-import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.auth.domain.AuthErrorCode;
-import com.krishagni.catissueplus.core.auth.events.LoginDetail;
+import com.krishagni.catissueplus.core.auth.services.AuthenticationService;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
-public class OpenSpecimenAuthServiceImpl extends AbstractAuthProvider {
+@Configurable
+public class OpenSpecimenAuthServiceImpl implements AuthenticationService {
+	
+	@Autowired
+	private AuthenticationManager authManager;
+	
+	public OpenSpecimenAuthServiceImpl(Map<String, String> props) {
+		
+	}
+
 	@Override
-	public void authenticate(LoginDetail loginDetails) {
-		User user = super.getDaoFactory().getUserDao().getActiveUser(loginDetails.getLoginId(), loginDetails.getDomainName());
+	public void authenticate(String username, String password) {
+		try{
+			UsernamePasswordAuthenticationToken authenticationToken =
+				new UsernamePasswordAuthenticationToken(username, password);
 		
-		if (user == null) {
+			authManager.authenticate(authenticationToken);
+		} catch(AuthenticationException e) {
 			throw OpenSpecimenException.userError(AuthErrorCode.INVALID_CREDENTIALS);
-		}
-		
-		if (!user.getPasswordCollection().isEmpty()) {
-			Password lastPassword = new ArrayList<Password>(user.getPasswordCollection()).get(user.getPasswordCollection().size() -1);
-			if (!BCrypt.checkpw(loginDetails.getPassword(), lastPassword.getPassword())) {
-				throw OpenSpecimenException.userError(AuthErrorCode.INVALID_CREDENTIALS);
-			}
 		}
 	}
 

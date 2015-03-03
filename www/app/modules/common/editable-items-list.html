@@ -4,18 +4,18 @@
       <span>{{listTitle}}</span>
     </div>
 
-    <div class="list-group-item clearfix os-enable-on-hover" ng-repeat="item in items track by $index">
+    <div class="list-group-item clearfix" ng-repeat="item in items track by $index">
       <div ng-if="$index != editItemIdx">
         <div class="col-xs-10" style="padding: 0px; word-wrap: break-word;">
           <span>{{item[textAttr]}}</span>
         </div>
-        <div class="col-xs-2 os-action-btns">
+        <div class="col-xs-2">
           <div class="btn-group pull-right">
             <button class="btn btn-xs btn-default" ng-click="openForEdit($index)">
               <span class="fa fa-pencil"></span>
             </button>
             <button class="btn btn-xs btn-default" ng-click="removeItem($index)">
-              <span class="fa fa-remove"></span>
+              <span class="fa fa-trash"></span>
             </button>
           </div>
         </div>

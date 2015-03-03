@@ -1,14 +1,15 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class DistributionProtocolDetail {
-
 	private Long id;
 
 	private UserSummary principalInvestigator;
@@ -20,10 +21,6 @@ public class DistributionProtocolDetail {
 	private String irbId;
 
 	private Date startDate;
-
-	private Long anticipatedSpecimenCount;
-
-	private String descriptionUrl;
 
 	private String activityStatus;
 
@@ -59,14 +56,6 @@ public class DistributionProtocolDetail {
 		this.shortTitle = shortTitle;
 	}
 
-	public Long getAnticipatedSpecimenCount() {
-		return anticipatedSpecimenCount;
-	}
-
-	public void setAnticipatedSpecimenCount(Long anticipatedSpecimenCount) {
-		this.anticipatedSpecimenCount = anticipatedSpecimenCount;
-	}
-
 	public String getIrbId() {
 		return irbId;
 	}
@@ -83,14 +72,6 @@ public class DistributionProtocolDetail {
 		this.startDate = startDate;
 	}
 
-	public String getDescriptionUrl() {
-		return descriptionUrl;
-	}
-
-	public void setDescriptionUrl(String descriptionURL) {
-		this.descriptionUrl = descriptionURL;
-	}
-
 	public String getActivityStatus() {
 		return activityStatus;
 	}
@@ -99,29 +80,29 @@ public class DistributionProtocolDetail {
 		this.activityStatus = activityStatus;
 	}
 
-	public static DistributionProtocolDetail fromDomain(DistributionProtocol distributionProtocol) {
-
+	public static DistributionProtocolDetail from(DistributionProtocol distributionProtocol) {
 		DistributionProtocolDetail details = new DistributionProtocolDetail();
 		details.setShortTitle(distributionProtocol.getShortTitle());
 		details.setId(distributionProtocol.getId());
 		details.setTitle(distributionProtocol.getTitle());
 		details.setIrbId(distributionProtocol.getIrbId());
 		details.setStartDate(distributionProtocol.getStartDate());
-		details.setAnticipatedSpecimenCount(distributionProtocol.getAnticipatedSpecimenCount());
-		details.setDescriptionUrl(distributionProtocol.getDescriptionUrl());
 		details.setPrincipalInvestigator(getPrincipleInvestigatorInfo(distributionProtocol.getPrincipalInvestigator()));
 		details.setActivityStatus(distributionProtocol.getActivityStatus());
 		return details;
 	}
 
 	private static UserSummary getPrincipleInvestigatorInfo(User principleInvestigator) {
-		UserSummary pi = new UserSummary();
-		pi.setLoginName(principleInvestigator.getLoginName());
-		if (principleInvestigator.getAuthDomain() != null) {
-			pi = UserSummary.from(principleInvestigator);
-		}
-
-		return pi;
+		return UserSummary.from(principleInvestigator);
 	}
-
+	
+	public static List<DistributionProtocolDetail> from(List<DistributionProtocol> distributionProtocols) {
+		List<DistributionProtocolDetail> list = new ArrayList<DistributionProtocolDetail>();
+		
+		for (DistributionProtocol dp : distributionProtocols) {
+			list.add(from(dp));
+		}
+		
+		return list;
+	}
 }

@@ -45,6 +45,50 @@ public class CpeFactoryImpl implements CpeFactory {
 		return cpe;
 	}
 	
+	@Override
+	public CollectionProtocolEvent createCpeCopy(CollectionProtocolEventDetail detail, CollectionProtocolEvent existing) {
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+
+		CollectionProtocolEvent cpe = new CollectionProtocolEvent();
+
+		setEventLabel(detail, cpe, ose);
+		
+		if (detail.getEventPoint() != null) {
+			setEventPoint(detail, cpe, ose);
+		} else {
+			cpe.setEventPoint(existing.getEventPoint());
+		}
+		
+		cpe.setCollectionProtocol(existing.getCollectionProtocol());
+		
+		if (!StringUtils.isBlank(detail.getDefaultSite())) {
+			setDefaultSite(detail, cpe, ose);
+		} else {
+			cpe.setDefaultSite(existing.getDefaultSite());
+		}
+		
+		if (!StringUtils.isBlank(detail.getClinicalDiagnosis())) {
+			cpe.setClinicalDiagnosis(detail.getClinicalDiagnosis());
+		} else {
+			cpe.setClinicalDiagnosis(existing.getClinicalDiagnosis());
+		}
+		
+		if (!StringUtils.isBlank(detail.getClinicalStatus())) {
+			cpe.setClinicalStatus(detail.getClinicalStatus());
+		} else {
+			cpe.setClinicalStatus(existing.getClinicalStatus());
+		}
+		
+		if (!StringUtils.isBlank(detail.getActivityStatus())) {
+			setActivityStatus(detail, cpe, ose);
+                } else {
+                        cpe.setActivityStatus(existing.getActivityStatus());
+                }
+		
+		ose.checkAndThrow();		
+		return cpe;
+	}
+	
 	public void setEventLabel(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(detail.getEventLabel())) {
 			ose.addError(CpeErrorCode.LABEL_REQUIRED);
@@ -71,6 +115,7 @@ public class CpeFactoryImpl implements CpeFactory {
 	public void setCp(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, OpenSpecimenException ose) {
 		CollectionProtocol cp = daoFactory.getCollectionProtocolDao()
 				.getCollectionProtocol(detail.getCollectionProtocol());
+		
 		if (cp == null) {
 			ose.addError(CpErrorCode.NOT_FOUND);
 			return;
@@ -84,7 +129,7 @@ public class CpeFactoryImpl implements CpeFactory {
 			return;
 		}
 		
-		Site site = daoFactory.getSiteDao().getSite(detail.getDefaultSite());
+		Site site = daoFactory.getSiteDao().getSiteByName(detail.getDefaultSite());
 		if (site == null) {
 			ose.addError(SiteErrorCode.NOT_FOUND);
 			return;

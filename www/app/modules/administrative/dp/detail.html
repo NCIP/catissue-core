@@ -1,10 +1,9 @@
 <div> 
   <div os-page-header>
-    <h3>
-      <a ui-sref="dp-list" translate="dp.list">Distribution Protocols</a>
-      <span class="fa fa-angle-right"></span>
-      <span>{{distributionProtocol.shortTitle}}</span>
-    </h3>
+    <ul os-breadcrumbs>
+      <li><a ui-sref="dp-list" translate="dp.list">Distribution Protocols</a></li>
+    </ul>
+    <h3>{{distributionProtocol.shortTitle}}</h3>
     <button class="os-round-btn" title="{{'dp.tooltip.new_dp' | translate}}" ui-sref="dp-addedit({dpId: distributionProtocol.id})">
       <span class="fa fa-pencil"></span>
     </button>
@@ -15,7 +14,7 @@
       <li ui-sref-active="active">
         <a ui-sref="dp-detail.overview"> 
           <i class="fa fa-eye"></i>
-          <span translate="dp.menu.overview">Overview</span>
+          <span class="os-title" translate="dp.menu.overview">Overview</span>
         </a>
       </li>
     </ul>

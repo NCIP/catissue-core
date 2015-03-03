@@ -21,10 +21,6 @@ public class DistributionProtocol {
 
 	private Date startDate;
 
-	private String descriptionUrl;
-
-	private Long anticipatedSpecimenCount;
-
 	private String activityStatus;
 
 	public Long getId() {
@@ -75,22 +71,6 @@ public class DistributionProtocol {
 		this.startDate = startDate;
 	}
 
-	public String getDescriptionUrl() {
-		return descriptionUrl;
-	}
-
-	public void setDescriptionUrl(String descriptionURL) {
-		this.descriptionUrl = descriptionURL;
-	}
-
-	public Long getAnticipatedSpecimenCount() {
-		return anticipatedSpecimenCount;
-	}
-
-	public void setAnticipatedSpecimenCount(Long anticipatedSpecimenCount) {
-		this.anticipatedSpecimenCount = anticipatedSpecimenCount;
-	}
-
 	public String getActivityStatus() {
 		return activityStatus;
 	}
@@ -109,9 +89,7 @@ public class DistributionProtocol {
 			this.setTitle(distributionProtocol.getTitle());
 		}
 		this.setIrbId(distributionProtocol.getIrbId());
-		this.setAnticipatedSpecimenCount(distributionProtocol.getAnticipatedSpecimenCount());
 		this.setPrincipalInvestigator(distributionProtocol.getPrincipalInvestigator());
-		this.setDescriptionUrl(distributionProtocol.getDescriptionUrl());
 		this.setStartDate(distributionProtocol.getStartDate());
 		this.setActivityStatus(distributionProtocol.getActivityStatus());
 	}
@@ -119,6 +97,8 @@ public class DistributionProtocol {
 	public void delete() {
 		//need to check whether its referenced by any order
 		//
+		this.setShortTitle(CommonUtil.appendTimestamp(getShortTitle()));
+		this.setTitle(CommonUtil.appendTimestamp(getTitle()));
 		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 }

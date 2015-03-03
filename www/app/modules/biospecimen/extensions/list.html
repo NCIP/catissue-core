@@ -1,0 +1,49 @@
+
+<div ng-if="!forms || forms.length ==0">
+  <span translate="extensions.no_extensions">No Extensions</span>
+</div>
+
+<div class="os-table os-table-fixed" ng-if="forms && forms.length > 0">
+  <div class="os-table-head">
+    <div class="row">
+      <div class="col col-xs-5"> 
+        <span translate="extensions.name">Name</span>
+      </div>
+      <div class="col col-xs-1">
+        <span>&nbsp;</span>
+      </div>
+      <div class="col col-xs-2">
+        <span translate="extensions.creator">Creator</span> 
+      </div>
+      <div class="col col-xs-2">
+        <span translate="extensions.last_updated">Last Updated</span>
+      </div>
+      <div class="col col-xs-2">
+        <span translate="extensions.record_count">Records</span>
+      </div>
+    </div>
+  </div>
+  <div class="os-table-body">
+    <div class="row" ng-repeat="form in forms">
+      <div class="col col-xs-5">
+        <a ui-sref="{{extnState}}records({formId: form.formId, formCtxId: form.formCtxtId})">
+          {{form.formCaption}}
+        </a>
+      </div>
+      <div class="col col-xs-1">
+        <span ng-if="form.multiRecord" class="os-extn-multi-rec-badge" translate="extensions.multiRecord">
+          Multirecord
+        </span>
+      </div>
+      <div class="col col-xs-2">
+        <span>{{form.createdBy.lastName}} {{form.createdBy.firstName}}</span>
+      </div>
+      <div class="col col-xs-2">
+        <span>{{form.modificationTime | date: 'MMM dd, yyyy'}}</span>
+      </div>
+      <div class="col col-xs-2">
+        <span>{{form.noOfRecords}}</span>
+      </div>
+    </div>
+  </div>
+</div>

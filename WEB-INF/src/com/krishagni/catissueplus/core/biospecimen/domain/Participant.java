@@ -8,9 +8,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
-import com.krishagni.catissueplus.core.common.MapUpdater;
-import com.krishagni.catissueplus.core.common.SetUpdater;
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
@@ -178,10 +179,18 @@ public class Participant {
 	}
 
 	public void setActivityStatus(String activityStatus) {
-		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
-			delete(false);
+		if (this.activityStatus != null && this.activityStatus.equals(activityStatus)) {
+			return;
 		}
 		
+		if (StringUtils.isBlank(activityStatus)) {
+			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
+		}
+		
+		if (this.activityStatus != null && Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
+			delete();
+		}		
+
 		this.activityStatus = activityStatus;
 	}
 
@@ -240,14 +249,35 @@ public class Participant {
 		updateRace(participant.getRaceColl());
 		updatePmi(participant);
 	}
-
+	
 	private void updateRace(Set<String> raceColl) {
-		SetUpdater.<String> newInstance().update(this.raceColl, raceColl);
+		CollectionUpdater.update(this.raceColl, raceColl);
 	}
 
 	private void updatePmi(Participant participant) {
-		MapUpdater.<String, ParticipantMedicalIdentifier> newInstance().update(this.pmiCollection,
-				participant.getPmiCollection());
+		for (ParticipantMedicalIdentifier pmi : participant.getPmiCollection().values()) {
+			ParticipantMedicalIdentifier existing = this.pmiCollection.get(pmi.getSite().getName());
+			if (existing == null) {
+				ParticipantMedicalIdentifier newPmi = new ParticipantMedicalIdentifier();
+				newPmi.setParticipant(this);
+				newPmi.setSite(pmi.getSite());
+				newPmi.setMedicalRecordNumber(pmi.getMedicalRecordNumber());
+				
+				this.pmiCollection.put(pmi.getSite().getName(), newPmi);
+			} else {
+				existing.setMedicalRecordNumber(pmi.getMedicalRecordNumber());
+			}
+		}
+		
+		Iterator<Map.Entry<String, ParticipantMedicalIdentifier>> iter = pmiCollection.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<String, ParticipantMedicalIdentifier> existing = iter.next();
+			if (participant.getPmiCollection().containsKey(existing.getKey())) {
+				continue;
+			}
+			
+			iter.remove();
+		}
 	}
 
 	public void updateActivityStatus(String activityStatus) {
@@ -262,17 +292,10 @@ public class Participant {
 		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.activityStatus);
 	}
 
-	public void delete(boolean isIncludeChildren) {
-		if (isIncludeChildren) {
-			Map<String, CollectionProtocolRegistration> registrationCollection = this.cprCollection;
-			for (CollectionProtocolRegistration cpr : registrationCollection.values()) {
-				cpr.delete(isIncludeChildren);
-			}
-		}
-		else {
-			checkActiveDependents();
-		}
-		updateMrn();
+	public void delete() {
+		checkActiveDependents();
+
+		updateMrn();		
 		this.socialSecurityNumber = Utility.getDisabledValue(this.socialSecurityNumber);
 		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 	}

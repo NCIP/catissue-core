@@ -3,7 +3,6 @@ package com.krishagni.catissueplus.core.biospecimen.repository;
 
 import java.util.List;
 
-import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.common.repository.Dao;
@@ -12,20 +11,5 @@ public interface VisitsDao extends Dao<Visit> {
 	
 	public List<VisitSummary> getVisits(VisitsListCriteria crit);
 	
-	public Visit getVisit(Long visitId);
-	
-	//
-	// TODO: Requires review
-	//
-	public List<Specimen> getSpecimensList(Long scgId);
-
-	public Visit getScgByName(String name);
-
-	public Visit getScgByBarcode(String barcode);
-
-	public Visit getscg(Long scgId);
-
-	public List<Visit> getAllScgs(int startAt, int maxRecords, String... searchString);
-
-	public Long getScgsCount(String... searchString);
+	public Visit getByName(String name);	
 }

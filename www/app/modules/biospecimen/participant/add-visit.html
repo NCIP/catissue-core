@@ -5,7 +5,7 @@
         <div class="form-group">
           <div ng-model="visit.visitDate" placeholder="Visit Date" os-md-input>
             <input name="visitDate" ng-model="visit.visitDate" class="form-control" type="text"
-               datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="regDt.isOpen" ng-focus="regDt.isOpen=true"
+               datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="regDt.isOpen" ng-focus="regDt.isOpen=true"
                required placeholder="Visit Date">
           </div>
           <div os-field-error field="visitForm.visitDate"></div>
@@ -65,7 +65,7 @@
           os-form-submit="addVisit()">
           Add Visit
         </button>
-        <a class="btn os-btn-text-secondary" ng-click="revertEdit()" translate="common.buttons.cancel">
+        <a class="btn os-btn-text-secondary" ng-click="revertAddVisit()" translate="common.buttons.cancel">
           Cancel
         </a>
       </div>

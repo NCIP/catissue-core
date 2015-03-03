@@ -24,23 +24,11 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 
 	public CollectionProtocolEvent getCpeByEventLabel(Long cpId, String eventLabel);
 	
+	public CollectionProtocolEvent getCpeByEventLabel(String title, String label);
+	
 	public void saveCpe(CollectionProtocolEvent cpe);
 	
 	public void saveCpe(CollectionProtocolEvent cpe, boolean flush);
 
-	public SpecimenRequirement getSpecimenRequirement(Long requirementId);
-	
-//	public com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol getCPByTitle(String title);
-//	
-//	public com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol getCPByShortTitle(String shortTitle);
-//
-//	public CollectionProtocol getCpByShortTitle(String shortTitle);
-//	
-//	public CollectionProtocol getCpByTitle(String shortTitle);
-//	
-//	public List<SpecimenRequirement> getSpecimenRequirments(Long cpeId);
-//
-//	public List<CollectionProtocolSummary> getChildProtocols(Long cpId);
-//	
-
+	public SpecimenRequirement getSpecimenRequirement(Long requirementId);	
 }

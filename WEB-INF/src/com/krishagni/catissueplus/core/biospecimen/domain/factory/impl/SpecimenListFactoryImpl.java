@@ -68,7 +68,7 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 		if (userId == null) {
 			ose.addError(SpecimenListErrorCode.OWNER_REQUIRED);			
 		} else {
-			User user = daoFactory.getUserDao().getUser(userId);
+			User user = daoFactory.getUserDao().getById(userId);
 			if (user == null) {
 				ose.addError(SpecimenListErrorCode.OWNER_NOT_FOUND);
 			} else {
@@ -87,7 +87,7 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 	
 	private void setSpecimens(SpecimenList list, List<String> labels, OpenSpecimenException ose) {
 		if (labels != null && !labels.isEmpty()) {
-			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimensByLabel(labels);
+			List<Specimen> specimens = daoFactory.getSpecimenDao().getByLabels(labels);
 			if (specimens.size() != labels.size()) {
 				ose.addError(SpecimenListErrorCode.INVALID_LABELS);
 			} else {
@@ -100,7 +100,7 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 	
 	private void setSharedUsers(SpecimenList specimenList, List<Long> userIds, OpenSpecimenException ose) {
 		if (userIds != null && !userIds.isEmpty()) {
-			List<User> sharedUsers = daoFactory.getUserDao().getUsersById(userIds);
+			List<User> sharedUsers = daoFactory.getUserDao().getUsersByIds(userIds);
 			if (sharedUsers.size() != userIds.size()) {
 				ose.addError(SpecimenListErrorCode.INVALID_USERS_LIST);
 			} else {

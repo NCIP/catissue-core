@@ -8,14 +8,10 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface DistributionProtocolDao extends Dao<DistributionProtocol> {
 
-	public DistributionProtocol getDistributionProtocol(Long id);
-
-	public Boolean isUniqueTitle(String title);
-
-	public Boolean isUniqueShortTitle(String shortTitle);
+	public DistributionProtocol getByShortTitle(String shortTitle);
 
 	public DistributionProtocol getDistributionProtocol(String title);
 
-	public List<DistributionProtocol> getAllDistributionProtocol(int maxResults);
+	public List<DistributionProtocol> getDistributionProtocols(DpListCriteria criteria);
 
 }

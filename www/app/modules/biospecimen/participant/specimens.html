@@ -9,7 +9,10 @@
     </div>
   </div>
   <div class="panel-body">
-    <div class="os-table os-table-fixed os-table-tree">
+    <div ng-if="!specimens || specimens.length == 0">
+      <span translate="specimens.no_specimens_to_show">No Specimens to Show</span>
+    </div>
+    <div class="os-table os-table-fixed os-table-tree" ng-if="specimens && specimens.length > 0">
       <div class="os-table-head">
         <div class="row">
           <div class="col col-xs-5">
@@ -52,8 +55,12 @@
                                'os-status-pending': specimen.status == 'Pending' || !specimen.status,
                                'os-status-not-collected': specimen.status == 'Not Collected'}">
                   </span>
-                  <a ng-if="specimen.label">{{specimen.label}}</a>
-                  <a ng-if="!specimen.label">{{specimen.type}} ({{specimen.specimenClass}})</a>
+                  <a ng-switch on="!!specimen.label" 
+                     ui-sref="specimen-detail.overview(
+                                {eventId: visit.eventId, visitId: visit.id, specimenId: specimen.id, srId: specimen.reqId})">
+                    <span ng-switch-when="true">{{specimen.label}}</span>
+                    <span ng-switch-default>{{specimen.type}} ({{specimen.specimenClass}})</span>
+                  </a>
                 </div>
               </div>
             </div>
@@ -70,22 +77,50 @@
             <span>Virtual</span>
           </div>
           <div class="col col-xs-1 action">
-            <div class="btn-group" dropdown ng-if="showBtns && !selection.any">
-              <button type="button" class="btn btn-xs btn-default os-btn-icon">
-                <span class="fa fa-cog"></span>
-              </button>
-              <button type="button" class="btn btn-xs btn-default os-btn-icon dropdown-toggle">
-                <span class="caret"></span>
+            <div class="os-more-options" dropdown ng-if="!selection.any">
+              <button type="button" class="dropdown-toggle">
+                <span class="fa fa-ellipsis-v"></span>
               </button>
               <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                <li><a href="#" translate="specimens.ctx_menu.view_specimen">View Specimen</a></li>
-                <li><a href="#" translate="specimens.ctx_menu.edit_specimen">Edit Specimen</a></li>
+                <li>
+                  <a ui-sref="specimen-detail.overview(
+                                {eventId: visit.eventId, visitId: visit.id, specimenId: specimen.id, srId: specimen.reqId})">
+                    <i class="fa fa-eye"></i>
+                    <span translate="specimens.ctx_menu.view_specimen">View Specimen</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa fa-pencil"></i>
+                    <span translate="specimens.ctx_menu.edit_specimen">Edit Specimen</span>
+                  </a>
+                </li>
                 <li class="divider"></li>
-                <li><a href="#" translate="specimens.ctx_menu.create_aliquots">Create Aliquots</a></li>
-                <li><a href="#" translate="specimens.ctx_menu.create_derivatives">Create Derivatives</a></li>
+                <li>
+                  <a href="#">
+                    <i class="fa fa-share-alt"></i>
+                    <span translate="specimens.ctx_menu.create_aliquots">Create Aliquots</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa fa-flask"></i>
+                    <span translate="specimens.ctx_menu.create_derivatives">Create Derivatives</span>
+                  </a>
+                </li>
                 <li class="divider"></li>
-                <li><a href="#" translate="specimens.ctx_menu.add_event">Add Event</a></li>
-                <li><a href="#" translate="specimens.ctx_menu.dispose">Dispose</a></li>
+                <li>
+                  <a href="#">
+                    <i class="fa fa-cogs"></i>
+                    <span translate="specimens.ctx_menu.add_event">Add Event</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa fa-trash"></i>
+                    <span translate="specimens.ctx_menu.dispose">Dispose</span>
+                  </a>
+                </li>
               </ul>
             </div>
           </div>

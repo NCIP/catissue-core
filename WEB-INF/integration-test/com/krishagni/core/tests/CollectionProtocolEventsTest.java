@@ -27,6 +27,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCo
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEventDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CopyCpeOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -114,7 +115,41 @@ public class CollectionProtocolEventsTest {
 		Assert.assertEquals(true, resp.isSuccessful());
 		Assert.assertEquals((int)0, resp.getPayload().size());
 	}
+	/* 
+	 * Get CollectionProtocolEvent API Tests 
+	 */
+	@Test
+	@DatabaseSetup("cp-test/events-test/get-event-list-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	public void getEvent() {
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.getProtocolEvent(getRequest(1L));
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertNotNull(resp);
+		Assert.assertEquals(true, resp.isSuccessful());		
+		Assert.assertNotNull(resp.getPayload());
+				
+		CollectionProtocolEventDetail event = resp.getPayload();
+		Assert.assertNotNull("was not expected to be null", event.getId());
+		Assert.assertEquals("default-clinical-diagnosis", event.getClinicalDiagnosis());
+		Assert.assertEquals("default-clinical-status", event.getClinicalStatus());
+		Assert.assertEquals("cp1", event.getCollectionProtocol());
+		Assert.assertEquals("SITE1", event.getDefaultSite());
+		Assert.assertEquals("event-" + event.getId(), event.getEventLabel());
+		Assert.assertEquals(event.getId(), event.getEventPoint().doubleValue(), 0);
+		
+	}
 	
+	@Test
+	@DatabaseSetup("cp-test/events-test/get-event-list-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	public void getEventWithInvalidCPE() {
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.getProtocolEvent(getRequest(-1L));
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CpeErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+	}
 	
 	/* 
 	 * Add CollectionProtocolEvents API Tests 
@@ -156,7 +191,7 @@ public class CollectionProtocolEventsTest {
 
 		Assert.assertEquals(false, resp.isSuccessful());
 		//TODO: invalid label below, please fix it asap
-		TestUtils.checkErrorCode(resp, CpeErrorCode.LABEL_NOT_FOUND, ErrorType.USER_ERROR);
+		TestUtils.checkErrorCode(resp, CpeErrorCode.DUP_LABEL, ErrorType.USER_ERROR);
 	}
 	
 	@Test
@@ -364,7 +399,7 @@ public class CollectionProtocolEventsTest {
 
 		Assert.assertEquals(false, resp.isSuccessful());
 		//TODO: invalid errorcode below please fix this ASAP
-		TestUtils.checkErrorCode(resp, CpeErrorCode.LABEL_NOT_FOUND, ErrorType.USER_ERROR);
+		TestUtils.checkErrorCode(resp, CpeErrorCode.DUP_LABEL, ErrorType.USER_ERROR);
 	}
 
 	@Test
@@ -528,5 +563,195 @@ public class CollectionProtocolEventsTest {
 		Assert.assertEquals("updated-clinical-diagnosis", detail.getClinicalDiagnosis());
 		Assert.assertEquals("updated-clinical-status", detail.getClinicalStatus());
 		Assert.assertEquals("Active", detail.getActivityStatus()); 
+	}
+	
+	/* 
+	 * Copy CollectionProtocolEvents API Tests 
+	 */
+	
+	@Test
+	@DatabaseSetup("cp-test/events-test/copy-event-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/events-test/copy-event-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void copyEvent() {
+		CopyCpeOpDetail input = new CopyCpeOpDetail();
+		input.setCpe(CpeTestData.getCpeCopyDetail());
+		input.setEventId(1L);
+		
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.copyEvent(getRequest(input));
+		TestUtils.recordResponse(resp);
+		Assert.assertNotNull(resp);
+		Assert.assertEquals(true, resp.isSuccessful());
+		
+		CollectionProtocolEventDetail detail = resp.getPayload();
+		Assert.assertNotNull(detail.getId());
+		Assert.assertEquals("default-cp", detail.getCollectionProtocol());
+		Assert.assertEquals("copy-event-label", detail.getEventLabel());
+		Assert.assertEquals("default-clinical-status",detail.getClinicalStatus());
+		Assert.assertEquals("default-clinical-diagnosis", detail.getClinicalDiagnosis());
+		Assert.assertEquals("default-site", detail.getDefaultSite());
+		Assert.assertEquals(1.0, detail.getEventPoint().doubleValue(),0);
+		Assert.assertEquals("Active", detail.getActivityStatus());
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/events-test/copy-event-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	public void copyEventWithNullEventId() {
+		CopyCpeOpDetail input = new CopyCpeOpDetail();
+		input.setCpe(CpeTestData.getCpeCopyDetail());
+		input.setEventId(null);
+		
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.copyEvent(getRequest(input));
+		TestUtils.recordResponse(resp);
+
+		Assert.assertEquals(false, resp.isSuccessful());
+		
+		TestUtils.checkErrorCode(resp, CpeErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/events-test/copy-event-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	public void copyEventWithNullEventIdAndEmptyLabel() {
+		CopyCpeOpDetail input = new CopyCpeOpDetail();
+		CollectionProtocolEventDetail detail = CpeTestData.getCpeCopyDetail();
+		input.setEventLabel("");
+		input.setCollectionProtocol("default-cp");
+		input.setCpe(detail);
+		input.setEventId(null);
+		
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.copyEvent(getRequest(input));
+		TestUtils.recordResponse(resp);
+
+		Assert.assertEquals(false, resp.isSuccessful());
+		
+		TestUtils.checkErrorCode(resp, CpeErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/events-test/copy-event-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	public void copyEventWithNullEventIdAndEmptyCpTitle() {
+		CopyCpeOpDetail input = new CopyCpeOpDetail();
+		CollectionProtocolEventDetail detail = CpeTestData.getCpeCopyDetail();
+		input.setCpe(detail);
+		input.setEventId(null);
+		input.setCollectionProtocol("");
+		input.setEventLabel("default-event-label");
+		
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.copyEvent(getRequest(input));
+		TestUtils.recordResponse(resp);
+
+		Assert.assertEquals(false, resp.isSuccessful());
+		
+		TestUtils.checkErrorCode(resp, CpeErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/events-test/copy-event-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	public void copyEventWithEventLabelAndCP() {
+		CopyCpeOpDetail input = new CopyCpeOpDetail();
+		CollectionProtocolEventDetail detail = CpeTestData.getCpeCopyDetail();
+		
+		input.setCpe(detail);
+		input.setEventId(null);
+		input.setCollectionProtocol("default-cp");
+		input.setEventLabel("default-event-label");
+		
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.copyEvent(getRequest(input));
+		TestUtils.recordResponse(resp);
+
+		Assert.assertEquals(true, resp.isSuccessful());
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/events-test/copy-event-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	public void copyEventWithDuplicateLabel() {
+		CopyCpeOpDetail input = new CopyCpeOpDetail();
+		CollectionProtocolEventDetail detail = CpeTestData.getcpEventDetail();
+		input.setCpe(detail);
+		input.setEventId(1L);
+		
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.copyEvent(getRequest(input));
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CpeErrorCode.DUP_LABEL, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	public void copyEventWithEmptyEventLabel() {
+		CopyCpeOpDetail input = new CopyCpeOpDetail();
+		CollectionProtocolEventDetail detail = CpeTestData.getCpeCopyDetail();
+		detail.setEventLabel("");
+		input.setEventId(1L);
+		input.setCpe(detail);
+		
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.copyEvent(getRequest(input));
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CpeErrorCode.LABEL_REQUIRED, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	public void copyEventWithInvalidEventPoint() {
+		CopyCpeOpDetail input = new CopyCpeOpDetail();
+		CollectionProtocolEventDetail detail = CpeTestData.getCpeCopyDetail();
+		detail.setEventPoint(-1.0);
+		input.setEventId(1L);
+		input.setCpe(detail);
+		
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.copyEvent(getRequest(input));
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, CpeErrorCode.INVALID_POINT, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/events-test/generic-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	public void copyEventWithInvalidSite() {
+		CopyCpeOpDetail input = new CopyCpeOpDetail();
+		CollectionProtocolEventDetail detail = CpeTestData.getCpeCopyDetail();
+		detail.setDefaultSite("invalid-site");
+		input.setEventId(1L);
+		input.setCpe(detail);
+		
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.copyEvent(getRequest(input));
+		TestUtils.recordResponse(resp);
+		
+		Assert.assertEquals(false, resp.isSuccessful());
+		TestUtils.checkErrorCode(resp, SiteErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/events-test/copy-event-initial.xml")
+	@DatabaseTearDown("cp-test/events-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/events-test/copy-event-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void copyEventWithNullAndEmptyCpeFields() {
+		CopyCpeOpDetail input = new CopyCpeOpDetail();
+		input.setCpe(CpeTestData.getCpeCopyDetailWithNullAndEmptyFields());
+		input.setEventId(1L);
+		
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.copyEvent(getRequest(input));
+		TestUtils.recordResponse(resp);
+		Assert.assertNotNull(resp);
+		Assert.assertEquals(true, resp.isSuccessful());
+		
+		CollectionProtocolEventDetail detail = resp.getPayload();
+		Assert.assertNotNull(detail.getId());
+		Assert.assertEquals("default-cp", detail.getCollectionProtocol());
+		Assert.assertEquals("copy-event-label", detail.getEventLabel());
 	}
 }

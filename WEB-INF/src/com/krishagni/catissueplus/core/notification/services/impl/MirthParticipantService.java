@@ -70,7 +70,7 @@ public class MirthParticipantService implements CrudService {
 			CollectionProtocolRegistration cpr = entry.getValue();
 			Date regDate = cpr.getRegistrationDate();
 			subject.setEnrollmentDate(regDate);
-			subject.setLabel(cpr.getProtocolParticipantIdentifier().toString());
+			subject.setLabel(cpr.getPpid().toString());
 			Long cpId = cpr.getCollectionProtocol().getId();
 			ApplicationContext appCtx = OpenSpecimenAppCtxProvider.getAppCtx();
 			MirthApplicationService mirthAppSvc = (MirthApplicationService) appCtx.getBean("mirthAppService");

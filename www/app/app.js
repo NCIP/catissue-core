@@ -29,33 +29,17 @@ angular.module('openspecimen', [
     $translateProvider.preferredLanguage('en_US');
 
     $stateProvider
-      .state('home', {
+      .state('default', {
         abstract: true,
-        templateUrl: 'modules/common/home.html'
-      })
-      .state('login', {
-        url: '/',
-        templateUrl: 'modules/user/signin.html',
-        controller: 'LoginCtrl',
-        parent: 'home'
-      })
-      .state('signed-in', {
-        abstract: true,
-        templateUrl: 'modules/common/appmenu.html',
+        templateUrl: 'modules/common/default.html',
         controller: function($scope, Alerts) {
           $scope.alerts = Alerts.messages;
         }
       })
-      .state('sign-up', {
-        url: '/signup',
-        templateUrl: 'modules/user/signup.html',
-        resolve: {
-          user: function(User) {
-            return new User();
-          }
-        },
-        controller: 'UserAddEditCtrl',
-        parent: 'home'
+      .state('signed-in', {
+        abstract: true,
+        templateUrl: 'modules/common/appmenu.html',
+        controller: 'SignedInCtrl'
       });
 
     $urlRouterProvider.otherwise('/');
@@ -63,14 +47,11 @@ angular.module('openspecimen', [
     $httpProvider.interceptors.push('httpRespInterceptor');
 
     ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 8180;
+    ApiUrlsProvider.port = 9090;
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
       'sessions': '/rest/ng/sessions',
-      'collection-protocols': '/rest/ng/collection-protocols',
-      'cprs': '/rest/ng/collection-protocol-registrations',
-      'participants': '/rest/ng/participants',
       'sites': '/rest/ng/sites',
       'form-files': '/rest/ng/form-files'
     };
@@ -92,14 +73,26 @@ angular.module('openspecimen', [
       },
 
       responseError: function(rejection) {
-        if (rejection.status == 401) {
-          $window.localStorage['osAuthToken'] = '';
+        if (rejection.status == 0) {
+          Alerts.error("common.server_connect_error");
+        } else if (rejection.status == 401) {
+          delete $window.localStorage['osAuthToken'];
+          delete $injector.get("$http").defaults.headers.common['X-OS-API-TOKEN'];
           $injector.get('$state').go('login'); // using injector to get rid of circular dependencies
         } else if (rejection.status / 100 == 5) {
-          Alerts.error("Internal server error. Please contact system administrator");
+          Alerts.error("common.server_error");
         } else if (rejection.status / 100 == 4) {
-          Alerts.error("Bad user action: " + rejection.data.message);
-        }
+          var errMsgs = [];
+
+          if (rejection.data instanceof Array) {
+            angular.forEach(rejection.data, function(err) {
+              errMsgs.push(err.message + "(" + err.code + ")");
+            });
+            Alerts.errorText(errMsgs);
+          } else if (rejection.config.method != 'HEAD') {
+            Alerts.error('common.ui_error');
+          }
+        } 
 
         return $q.reject(rejection);
       }
@@ -165,7 +158,7 @@ angular.module('openspecimen', [
           return prefix + this.app + '/rest/ng/';
         },
 
-        getUrl  : function(key) {
+        getUrl: function(key) {
           var url = '';
           if (key) {
             url = this.urls[key];
@@ -196,5 +189,9 @@ angular.module('openspecimen', [
 
     $rootScope.back = function() {
       $window.history.back();
-    }
+    };
+
+    $rootScope.global = {
+      dateFmt: 'MMM dd, yyyy'
+    };
   });

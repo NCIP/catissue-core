@@ -19,4 +19,6 @@ public interface ParticipantService {
 	public ResponseEvent<ParticipantDetail>  delete(RequestEvent<Long> req);
 
 	public void createParticipant(Participant participant);
+	
+	public void updateParticipant(Participant existing, Participant newParticipant);
 }

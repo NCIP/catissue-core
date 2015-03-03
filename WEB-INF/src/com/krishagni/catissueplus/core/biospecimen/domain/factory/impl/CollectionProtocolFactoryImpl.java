@@ -1,8 +1,8 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -77,14 +77,16 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	}
 
 	private void setPrincipalInvestigator(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
-		UserSummary user = input.getPrincipalInvestigator();
-		Long piId = user != null ? user.getId() : null;
-		if (piId == null) {
+		UserSummary user = input.getPrincipalInvestigator();		
+		User pi = null;
+		if (user != null && user.getId() != null) {
+			pi = userDao.getById(user.getId());
+		} else if (user != null && user.getLoginName() != null && user.getDomain() != null) {
+			pi = userDao.getUser(user.getLoginName(), user.getDomain());
+		} else {			
 			ose.addError(CpErrorCode.PI_REQUIRED);
 			return;
 		}
-
-		User pi = userDao.getUser(piId);
 		if (pi == null) {
 			ose.addError(CpErrorCode.PI_NOT_FOUND);
 			return;
@@ -94,29 +96,28 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	}
 
 	private void setCoordinators(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {		
-		List<Long> userIds = new ArrayList<Long>();
-
 		List<UserSummary> users = input.getCoordinators();
 		if (CollectionUtils.isEmpty(users)) {
 			return;
 		}
-
+		
+		Set<User> coordinators = new HashSet<User>();		
 		for (UserSummary user : users) {
-			if (user.getId() == null) {
+			User coordinator = null;
+			
+			if (user.getId() != null) {
+				coordinator = userDao.getById(user.getId());
+			} else if (user.getLoginName() != null && user.getDomain() != null) {
+				coordinator = userDao.getUser(user.getLoginName(), user.getDomain());
+			} else {
 				ose.addError(CpErrorCode.INVALID_COORDINATORS);
 				return;
 			}
-
-			userIds.add(user.getId());
+			
+			coordinators.add(coordinator);
 		}
 
-		List<User> coordinators = userDao.getUsersById(userIds);
-		if (coordinators.size() != userIds.size()) {
-			ose.addError(CpErrorCode.INVALID_COORDINATORS);
-			return;
-		}
-
-		result.setCoordinators(new HashSet<User>(coordinators));
+		result.setCoordinators(coordinators);
 	}
 
 	private void setConsentsWaived(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {

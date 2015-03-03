@@ -65,10 +65,6 @@ body {
   padding: 15px 5px;
 }
 
-.os-navbar .menu .dropdown-menu.dropdown-menu-right {
-  right: 110px;
-}
-
 .os-navbar-default {
   background: #205081;
   border-bottom: 1px solid #2e3d54;
@@ -79,6 +75,10 @@ body {
 .os-navbar > ul > li > a {
   text-decoration: none;
   padding: 15px 15px;
+}
+
+.os-navbar > ul > li > a.btn {
+  padding: 6px 12px;
 }
 
 .os-navbar-default > ul > li > a {
@@ -165,7 +165,7 @@ body {
 }
 
 .os-page-hdr {
-  padding: 20px 20px;
+  padding: 30px 20px 10px 20px;
   background: #f5f5f5;
   border-bottom: 1px solid #ccc;
   height: 64px;
@@ -176,20 +176,32 @@ body {
   width: 100%;
 }
 
+.os-page-hdr.no-breadcrumbs {
+  padding-top: 18px;
+}
+
 .os-page-hdr a {
   text-decoration: none;
   color: #666666;
 }
   
-.os-page-hdr .os-nav-button {
-  margin-right: 24px; 
+.os-page-hdr .os-nav-button, .os-page-hdr .os-options-button {
   color: #666666;
   background: transparent;
   border: none;
   outline: none;
+  margin-top: -20px;
+  margin-right: 24px; 
+  margin-left: -10px;
 }
 
-.os-page-hdr .os-nav-button .fa {
+.os-page-hdr.no-breadcrumbs .os-nav-button,
+.os-page-hdr.no-breadcrumbs .os-options-button {
+  margin-top: -8px;
+}
+
+.os-page-hdr .os-nav-button .fa,
+.os-page-hdr .os-options-button .fa {
   font-size: 24px;
 }
 
@@ -198,26 +210,34 @@ body {
   margin-right: 24px;
 }
 
+button.btn.os-round-btn {
+  height: 24px;
+  width: 24px;
+  border-radius: 100%; 
+  padding: 0px;
+}
+
 .os-page-hdr .os-round-btn {
   cursor: pointer;
-  height: 30px;
-  width: 30px;
+  height: 24px;
+  width: 24px;
   border: 1px solid #428bca; 
   border-radius: 100%;
   position: relative;
-  margin-top: -3px;
   background: #428bca;
 }
 
 .os-page-hdr .os-round-btn > span {
-  position: absolute;
-  top: 7px;
-  left: 8px; 
   color: white;
 }
 
 .os-page-hdr .os-round-btn:hover {
   cursor: pointer;
+}
+
+.os-page-hdr .os-round-btn + .dropdown-menu {
+  top: inherit;
+  left: inherit;
 }
 
 .os-page-hdr + .container {
@@ -237,6 +257,53 @@ body {
   height: auto;
   overflow-y: auto;
 }
+
+.os-page-hdr .os-more-options {
+  position: absolute;
+  right: 0px;
+  top: 25px;
+}
+
+.os-page-hdr .os-more-options .dropdown-menu-right {
+  margin-right: 24px;
+}
+
+.os-more-options {
+  position: absolute;
+  cursor: pointer;
+}
+
+.list-group-item .os-more-options {
+  top: 7px;
+  right: 0px;
+  width: 40px;
+  text-align: center;
+}
+
+.list-group-item .os-more-options .dropdown-toggle, 
+.list-group-item .os-more-options > .fa {
+  font-size: 18px;
+  color: #777777;
+}
+
+.list-group-item.active .os-more-options .dropdown-toggle, 
+.list-group-item.active .os-more-options > .fa {
+  color: white;
+}
+
+.os-table-body .os-more-options {
+  position: relative;
+  text-align: center;
+}
+
+.os-table-body .os-more-options .dropdown-toggle {
+  font-size: 18px;
+  color: #777777;
+  background: transparent;
+  border: 0px;
+  margin-top: -4px;
+}
+
 
 .os-btn-icon, a {
   cursor: pointer;
@@ -273,6 +340,7 @@ body {
   width:100%;
   border-radius: 0px;
   left: 0;
+  top: 57px;
 }
 
 input.ng-dirty.ng-invalid {
@@ -385,11 +453,15 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 }
 
 .os-key-values .item .key, .os-key-values .item .value {
-  word-wrap: break-word;
-  word-break: break-word;
+  /*word-wrap: break-word;
+  word-break: break-word;*/
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   padding: 2px 5px 2px 5px;
   line-height: 24px;
   float: left;
+
 }
 
 .os-key-values .item .key {

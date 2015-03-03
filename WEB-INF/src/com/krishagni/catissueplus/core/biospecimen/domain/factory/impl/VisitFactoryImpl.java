@@ -40,6 +40,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 				
+		visit.setName(visitDetail.getName());
 		setCpe(visitDetail, visit, ose);		
 		setCpr(visitDetail, visit, ose);
 		validateCprAndCpe(visit, ose);
@@ -71,7 +72,6 @@ public class VisitFactoryImpl implements VisitFactory {
 				ose.addError(CpeErrorCode.NOT_FOUND);
 				return;
 			}
-
 		} else if (StringUtils.isNotBlank(cpTitle) && StringUtils.isNotBlank(eventLabel)) {			
 			CollectionProtocol cp = daoFactory.getCollectionProtocolDao()
 					.getCollectionProtocol(cpTitle);
@@ -141,11 +141,16 @@ public class VisitFactoryImpl implements VisitFactory {
 		
 		Date regDate = cpr.getRegistrationDate();
 		Date visitDate = visitDetail.getVisitDate();
-		if (visitDate != null && (visitDate.after(regDate) || visitDate.equals(regDate))) {
-			visit.setVisitDate(visitDate);
-		} else {
-			visit.setVisitDate(Calendar.getInstance().getTime());
+		if (visitDate == null) {
+			visitDate = Calendar.getInstance().getTime();
 		}
+			
+		if (visitDate.before(regDate)) {
+			ose.addError(VisitErrorCode.INVALID_VISIT_DATE);
+			return;
+		}
+		
+		visit.setVisitDate(visitDate);
 	}
 	
 	private void setVisitStatus(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
@@ -184,7 +189,7 @@ public class VisitFactoryImpl implements VisitFactory {
 			ose.addError(VisitErrorCode.SITE_REQUIRED);
 			return;
 		} else {
-			Site site = daoFactory.getSiteDao().getSite(visitSite);
+			Site site = daoFactory.getSiteDao().getSiteByName(visitSite);
 			if (site == null) {
 				ose.addError(SiteErrorCode.NOT_FOUND);
 				return;

@@ -194,14 +194,14 @@ public class VisitsTest {
 			Assert.assertNotNull(visitId);
 			Assert.assertEquals(visitId, visit.getEventId());
 			Assert.assertEquals(new String("scg-"+ visitId), visit.getName());
-			Assert.assertEquals(new String("Visit"+ visitId), visit.getLabel());
-			Assert.assertEquals((int) (visit.getEventId().intValue() * 10) , visit.getCalendarPoint());
+			Assert.assertEquals(new String("Visit"+ visitId), visit.getEventLabel());
+			Assert.assertEquals((int) (visit.getEventId().intValue() * 10) , visit.getEventPoint());
 			Assert.assertEquals("Complete", visit.getStatus());
 			
 			Date registrationDate = CommonUtils.getDate(31,1,2001);
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(registrationDate);
-			cal.add(Calendar.DAY_OF_YEAR, visit.getCalendarPoint());
+			cal.add(Calendar.DAY_OF_YEAR, visit.getEventPoint());
 			Assert.assertEquals(cal.getTime(), visit.getAnticipatedVisitDate());
 			
 			if (visitId < 5L) {
@@ -276,14 +276,14 @@ public class VisitsTest {
 			Assert.assertNotNull(visitId);
 			Assert.assertEquals(visitId, visit.getEventId());
 			Assert.assertEquals(new String("scg-"+ visitId), visit.getName());
-			Assert.assertEquals(new String("Visit"+ visitId), visit.getLabel());
-			Assert.assertEquals((int) (visit.getEventId().intValue() * 10) , visit.getCalendarPoint());
+			Assert.assertEquals(new String("Visit"+ visitId), visit.getEventLabel());
+			Assert.assertEquals((int) (visit.getEventId().intValue() * 10) , visit.getEventPoint());
 			Assert.assertEquals("Complete", visit.getStatus());
 			
 			Date registrationDate = CommonUtils.getDate(31,1,2001);
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(registrationDate);
-			cal.add(Calendar.DAY_OF_YEAR, visit.getCalendarPoint());
+			cal.add(Calendar.DAY_OF_YEAR, visit.getEventPoint());
 			Assert.assertEquals(cal.getTime(), visit.getAnticipatedVisitDate());
 		}
 	}

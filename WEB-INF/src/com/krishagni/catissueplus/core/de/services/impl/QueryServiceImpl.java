@@ -159,6 +159,10 @@ public class QueryServiceImpl implements QueryService {
 	public ResponseEvent<SavedQueryDetail> getSavedQuery(RequestEvent<Long> req) {
 		try {
 			SavedQuery savedQuery = daoFactory.getSavedQueryDao().getQuery(req.getPayload());
+			if (savedQuery == null) {
+				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
+			}
+			
 			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(savedQuery));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
@@ -431,7 +435,7 @@ public class QueryServiceImpl implements QueryService {
 			daoFactory.getQueryFolderDao().saveOrUpdate(existing);
 			
 			if (!newUsers.isEmpty()) {
-				User user = userDao.getUser(userId);
+				User user = userDao.getById(userId);
 				sendFolderSharedEmail(user, queryFolder, newUsers);
 			}
 			return ResponseEvent.response(QueryFolderDetails.fromQueryFolder(existing));			
@@ -543,7 +547,7 @@ public class QueryServiceImpl implements QueryService {
 			
 			daoFactory.getQueryFolderDao().saveOrUpdate(queryFolder);			
 			List<SavedQuerySummary> result = new ArrayList<SavedQuerySummary>();
-			for (SavedQuery query : savedQueries) {
+			for (SavedQuery query : queryFolder.getSavedQueries()) {
 				result.add(SavedQuerySummary.fromSavedQuery(query));
 			}
 			
@@ -576,7 +580,7 @@ public class QueryServiceImpl implements QueryService {
 			if (userIds == null || userIds.isEmpty()) {
 				users = new ArrayList<User>();
 			} else {
-				users = userDao.getUsersById(userIds);
+				users = userDao.getUsersByIds(userIds);
 			}
 			
 			Collection<User> newUsers = null; 
@@ -601,7 +605,7 @@ public class QueryServiceImpl implements QueryService {
 			}
 			
 			if (newUsers != null && !newUsers.isEmpty()) {
-				User user = userDao.getUser(userId);
+				User user = userDao.getById(userId);
 				sendFolderSharedEmail(user, queryFolder, newUsers);
 			}
 			
@@ -752,7 +756,7 @@ public class QueryServiceImpl implements QueryService {
 			
 			private void sendEmail() {
 				try {
-					User user = userDao.getUser(req.getSessionDataBean().getUserId());
+					User user = userDao.getById(req.getSessionDataBean().getUserId());
 					
 					SavedQuery savedQuery = null;
 					Long queryId = req.getPayload().getSavedQueryId();

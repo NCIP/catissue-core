@@ -4,6 +4,11 @@ package com.krishagni.catissueplus.core.common.email;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.de.domain.QueryFolder;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
@@ -49,10 +54,11 @@ public class EmailHandler {
 				null);
 	}
 
-	public static Boolean sendForgotPasswordEmail(final User user) {
+	public static Boolean sendForgotPasswordEmail(final User user, final String token) {
 		Map<String, Object> contextMap = new HashMap<String, Object>();
 		contextMap.put("user", user);
-		contextMap.put("appUrl", CommonServiceLocator.getInstance().getAppURL()); //TODO need remove and co-ordinate with new code
+		contextMap.put("token", token);
+		contextMap.put("appUrl", getAppUrl()); //TODO need remove and co-ordinate with new code
 		return EmailClient.getInstance().sendEmail(FORGOT_PASSWORD_EMAIL_TMPL, new String[]{user.getEmailAddress()},
 				new String[]{adminEmailAddress}, null, contextMap, null);
 	}
@@ -86,6 +92,11 @@ public class EmailHandler {
 				new String[] {adminEmailAddress}, 
 				null, 
 				vars, 
-				folder.getName());		
+				folder.getName());
+	}
+	
+	private static String getAppUrl() {
+		HttpServletRequest request=((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+		return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 	}
 }

@@ -8,6 +8,8 @@ public class ResponseEvent<T> {
 
 	private T payload;
 	
+	private boolean forceTxCommitEnabled;
+	
 	private OpenSpecimenException error; 
 	
 	public ResponseEvent(T payload) {
@@ -16,6 +18,11 @@ public class ResponseEvent<T> {
 	
 	public ResponseEvent(OpenSpecimenException error) {
 		this.error = error;
+	}
+	
+	public ResponseEvent(OpenSpecimenException error, boolean forceTxCommitEnabled) {
+		this.error = error;
+		this.forceTxCommitEnabled = forceTxCommitEnabled;
 	}
 
 	public T getPayload() {
@@ -34,6 +41,14 @@ public class ResponseEvent<T> {
 		this.error = error;
 	}
 	
+	public boolean isForceTxCommitEnabled() {
+		return forceTxCommitEnabled;
+	}
+
+	public void setForceTxCommitEnabled(boolean forceTxCommitEnabled) {
+		this.forceTxCommitEnabled = forceTxCommitEnabled;
+	}
+
 	public void throwErrorIfUnsuccessful() {
 		if (error != null) {
 			throw error;
@@ -50,6 +65,10 @@ public class ResponseEvent<T> {
 	
 	public static <P> ResponseEvent<P> error(OpenSpecimenException error) {
 		return new ResponseEvent<P>(error);
+	}
+	
+	public static <P> ResponseEvent<P> error(OpenSpecimenException error, boolean forceTxCommitEnabled) {
+		return new ResponseEvent<P>(error, forceTxCommitEnabled);
 	}
 	
 	public static <P> ResponseEvent<P> userError(ErrorCode error) {

@@ -14,14 +14,14 @@ import com.krishagni.rbac.domain.Role;
 import com.krishagni.rbac.domain.RoleAccessControl;
 import com.krishagni.rbac.domain.Subject;
 import com.krishagni.rbac.domain.SubjectRole;
-import com.krishagni.rbac.events.RoleDetails;
-import com.krishagni.rbac.events.SubjectDetails;
+import com.krishagni.rbac.events.RoleDetail;
+import com.krishagni.rbac.events.SubjectDetail;
 
 
 public class RbacTestData {
 
-	public static RoleDetails getRoleDetails(Long id, String name) {
-		return RoleDetails.fromRole(getRole(id,name));
+	public static RoleDetail getRoleDetails(Long id, String name) {
+		return RoleDetail.from(getRole(id,name));
 	}
 	
 	public static Role getRole(Long id, String name) {
@@ -69,8 +69,8 @@ public class RbacTestData {
 		return sb;
 	}
 	
-	public static SubjectDetails getSubjectDetails(Long id) {
-		return SubjectDetails.fromSubject(getSubject(id));
+	public static SubjectDetail getSubjectDetails(Long id) {
+		return SubjectDetail.from(getSubject(id));
 	}
 	
 	public static SubjectRole getSubjectRole(Long dsoId, String roleName) {

@@ -7,6 +7,8 @@ angular.module('os.biospecimen.cp.events', ['os.biospecimen.models'])
 
     var pvsLoaded = false;
 
+    var copyFrom = undefined;
+
     function loadPvs() {
       if (pvsLoaded) {
         return;
@@ -25,7 +27,7 @@ angular.module('os.biospecimen.cp.events', ['os.biospecimen.models'])
     function init() {
       $scope.cp = cp;
       $scope.events = events;
-      $scope.addMode = false;
+      $scope.mode = undefined;
          
       $scope.clinicalStatuses = [];
       $scope.clinicalDiagnoses = [];
@@ -44,32 +46,51 @@ angular.module('os.biospecimen.cp.events', ['os.biospecimen.models'])
     };
 
     $scope.selectEvent = function(event) { 
-      $scope.selected = event;
+      loadSpecimenRequirements(event);
     };
 
     $scope.showAddEvent = function() {
       $scope.event = new CollectionProtocolEvent({collectionProtocol: cp.title});
-      $scope.addMode = true;
+      $scope.mode = 'add';
       loadPvs();
     };
 
-    $scope.showEditEvent = function($event, evt) {
+    $scope.showEditEvent = function(evt) {
       $scope.event = angular.copy(evt);
-      $scope.addMode = false;
+      $scope.mode = undefined;
       loadSpecimenRequirements(evt);
       loadPvs();
     };
 
+    $scope.showCopyEvent = function(evt) {
+      $scope.event = angular.copy(evt);
+
+      copyFrom = $scope.event.id;
+      delete $scope.event.eventLabel;
+      delete $scope.event.id;
+
+      $scope.mode = 'copy';
+      loadPvs();
+    };
+
     $scope.revertEdit = function() {
-      $scope.addMode = false;
+      $scope.mode = undefined;
       $scope.event = {};
     };
 
     $scope.addEvent = function() {
-      $scope.event.$saveOrUpdate().then(
+      var ret = undefined;
+      if ($scope.mode == 'add') {
+        ret = $scope.event.$saveOrUpdate();
+      } else {
+        ret = $scope.event.copy(copyFrom);
+      }
+
+      ret.then(
         function(result) {
           $scope.events.push(result);
-          $scope.addMode = false;
+          $scope.event = {};
+          $scope.mode = undefined;
           loadSpecimenRequirements(result);
         }
       );

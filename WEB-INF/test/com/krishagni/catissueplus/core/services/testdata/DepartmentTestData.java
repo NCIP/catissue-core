@@ -96,7 +96,7 @@ public class DepartmentTestData {
 
 	public static Department getDepartmentForDisable(long id) {
 		Department department = getDepartment(id);
-		department.setUserCollection(getUserCollection());
+		department.setUsers(getUserCollection());
 		return department;
 	}
 

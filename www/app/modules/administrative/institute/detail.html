@@ -1,11 +1,10 @@
 
 <div>
   <div os-page-header>
-    <h3>
-      <a ui-sref="institute-list" translate="institutes.list">Institutes</a>
-      <span class="fa fa-angle-right"></span>
-      <span>{{institute.name}}</span>
-    </h3>
+    <ul os-breadcrumbs>
+      <li><a ui-sref="institute-list" translate="institutes.list">Institutes</a></li>
+    </ul>
+    <h3>{{institute.name}}</h3>
     <button class="os-round-btn" ui-sref="institute-addedit({instituteId: institute.id})">
       <span class="fa fa-pencil"></span>
     </button>
@@ -16,7 +15,7 @@
       <li ui-sref-active="active">
         <a ui-sref=".overview">
           <i class="fa fa-eye"></i>
-          <span translate="institutes.menu.overview">Overview</span>
+          <span class="os-title" translate="institutes.menu.overview">Overview</span>
         </a>
       </li>
     </ul>

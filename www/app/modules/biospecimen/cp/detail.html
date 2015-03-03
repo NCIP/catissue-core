@@ -1,15 +1,32 @@
-
 <div>
-
   <div os-page-header>
-    <h3>
-      <a ui-sref="cp-list" translate="menu.collection_protocols"></a>
-      <span class="fa fa-angle-right"></span>
-      <span> {{cp.title}} </span>
-    </h3>
+    <ul os-breadcrumbs>
+      <li> <a ui-sref="cp-list" translate="menu.collection_protocols"></a> </li>
+    </ul>
+    <h3>{{cp.title}}</h3>
     <button class="os-round-btn" ui-sref="cp-addedit">
       <span class="fa fa-pencil"></span>
     </button>
+
+    <div class="os-more-options" dropdown>
+      <button class="os-options-button dropdown-toggle" >
+        <span class="fa fa-ellipsis-v"></span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right">
+        <li>
+          <a>
+            <i class="fa fa-trash"></i>
+            <span translate="cp.menu_options.remove">Remove</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{downloadUri}}" target="_blank">
+            <i class="fa fa-download"></i>
+            <span translate="cp.menu_options.export">Export</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div os-side-menu ng-if="state.name.indexOf('cp-detail') != -1">
@@ -17,31 +34,31 @@
      <li ui-sref-active="active">
        <a ui-sref=".overview">
          <i class="fa fa-eye"></i>
-         <span translate="cp.menu.overview">Overview</span>
+         <span class="os-title" translate="cp.tab.overview">Overview</span>
        </a>
      </li>
      <li ui-sref-active="active">
        <a ui-sref=".consents">
          <i class="fa fa-pencil-square-o"></i>
-         <span translate="cp.menu.consents">Consents</span>
+         <span class="os-title" translate="cp.tab.consents">Consents</span>
        </a>
      </li>
      <li ui-sref-active="active">
        <a ui-sref=".specimen-requirements">
          <i class="fa fa-list-alt"></i>
-         <span translate="cp.menu.events">Events</span>
+         <span class="os-title" translate="cp.tab.events">Events</span>
        </a>
      </li>
      <li ui-sref-active="active">
        <a ui-sref=".users">
          <i class="fa fa-users"></i>
-         <span translate="cp.menu.users">Users</span>
+         <span class="os-title" translate="cp.tab.users">Users</span>
        </a>
      </li>
      <li ui-sref-active="active">
        <a ui-sref=".dashboard">
          <i class="fa fa-line-chart"></i>
-         <span translate="cp.menu.dashboard">Dashboard</span>
+         <span class="os-title" translate="cp.tab.dashboard">Dashboard</span>
        </a>
      </li>
    </ul>

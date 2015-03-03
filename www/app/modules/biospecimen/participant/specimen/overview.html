@@ -1,0 +1,100 @@
+
+<div class="clearfix">
+  <div class="col-xs-8">
+    <ul class="os-key-values os-two-cols">
+      <li class="item">
+        <strong class="key key-sm" translate="specimens.lineage">Lineage</strong>
+        <span class="value value-md">{{specimen.lineage | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="specimens.collection_status">Status</strong>
+        <ng-switch on="specimen.status">
+          <span ng-switch-when="Collected" class="value value-md os-status-collected">Collected</span>
+          <span ng-switch-default class="value value-md os-status-pending">Pending</span>
+        </ng-switch>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="specimens.class">Specimen Class</strong>
+        <span class="value value-md">{{specimen.specimenClass | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="specimens.type">Specimen Type</strong>
+        <span class="value value-md">{{specimen.type | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="specimens.anatomic_site">Anatomic Site</strong>
+        <span class="value value-md">{{specimen.anatomicSite | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="specimens.laterality">Laterality</strong>
+        <span class="value value-md">{{specimen.laterality | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="specimens.initial_qty">Initial Quantity</strong>
+        <span class="value value-md">
+          {{specimen.initialQty}}
+          <ng-switch on="specimen.specimenClass">
+            <span ng-switch-when="Cell">cells</span>
+            <span ng-switch-when="Fluid">ml</span>
+            <span ng-switch-when="Molecular">&#181;g</span>
+            <span ng-switch-when="Tissue">gm</span>
+          </ng-switch>
+        </span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="specimens.available_qty">Available Quantity</strong>
+        <span class="value value-md">
+          {{specimen.availableQty | osNoValue}}
+          <ng-switch on="specimen.specimenClass" ng-if="!!specimen.availableQty">
+            <span ng-switch-when="Cell">cells</span>
+            <span ng-switch-when="Fluid">ml</span>
+            <span ng-switch-when="Molecular">&#181;g</span>
+            <span ng-switch-when="Tissue">gm</span>
+          </ng-switch>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="specimens.parent_specimen">Parent Specimen</strong>
+        <ng-switch on="!!specimen.parentId">
+          <span class="value value-md" ng-switch-when="true">
+            <a ui-sref="specimen-detail.overview(
+                         {eventId: visit.eventId, visitId: visit.id, specimenId: specimen.parentId, srId: specimen.reqId})">
+              {{specimen.parentLabel}}
+            </a>
+          </span>
+          <span class="value value-md" ng-switch-default>None</span>
+        </ng-switch>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="specimens.pathology">Pathology Status</strong>
+        <span class="value value-md">{{specimen.pathology}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="specimens.storage_location">Storage Location</strong>
+        <ng-switch on="!!specimen.storageLocation.id && specimen.storageLocation.id != -1">
+          <span class="value value-md" ng-switch-when="true">
+            {{specimen.storageLocation.name}} 
+              ({{specimen.storageLocation.positionX}} x {{specimen.storageLocation.positionY}})
+          </span>
+          <span class="value value-md" ng-switch-default translate="specimens.virtually_located"> 
+            Virtual 
+          </span>
+        </ng-switch>
+      </li>
+    </ul>
+
+    <os-specimen-tree visit="visit" specimens="childSpecimens"></os-specimen-tree>
+  </div>
+
+  <div class="col-xs-4">
+  </div>
+</div>

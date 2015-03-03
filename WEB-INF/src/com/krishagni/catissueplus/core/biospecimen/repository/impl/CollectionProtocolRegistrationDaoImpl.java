@@ -16,23 +16,23 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
-import edu.wustl.catissuecore.util.global.Constants;
-
-@Repository("collectionProtocolRegistrationDao")
 public class CollectionProtocolRegistrationDaoImpl 
 	extends AbstractDao<CollectionProtocolRegistration> 
 	implements CollectionProtocolRegistrationDao {
-
+	
+	@Override
+	public Class<CollectionProtocolRegistration> getType() {
+		return CollectionProtocolRegistration.class;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<CprSummary> getCprList(CprListCriteria cprCrit) {
@@ -66,89 +66,6 @@ public class CollectionProtocolRegistrationDaoImpl
 		return cprs;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ParticipantSummary> getPhiParticipants(Long cpId, String searchString) {
-//		boolean isSearchTermSpecified = !StringUtils.isBlank(searchString);
-//
-//		String queryName = GET_PHI_PARTICIPANTS_BY_CP_ID;
-//		if (isSearchTermSpecified) {
-//			queryName = GET_PHI_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM;
-//		}
-//		
-//		Query query = sessionFactory.getCurrentSession().getNamedQuery(queryName);
-//		query.setLong("cpId", cpId);
-//		if (isSearchTermSpecified) {
-//			query.setString("searchTerm", "%" + searchString.toLowerCase() + "%");
-//		}
-//		query.setMaxResults(Utility.getMaxParticipantCnt());
-//		List<ParticipantSummary> result = new ArrayList<ParticipantSummary>();
-//		List<Object[]> rows = query.list();
-//		for (Object[] row : rows) {
-//			result.add(preparePhiParticipantInfo(row));
-//		}
-//
-//		return result;
-		return null;
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public List<VisitSummary> getVisits(Long cprId) {
-
-//		CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) sessionFactory.getCurrentSession().get(
-//				CollectionProtocolRegistration.class, cprId);
-//		Set<SpecimenCollectionGroupInfo> scgsInfo = new HashSet<SpecimenCollectionGroupInfo>();
-//		Collection<SpecimenCollectionGroup> groups = cpr.getScgCollection();
-//		for (SpecimenCollectionGroup specimenCollectionGroup : groups) {
-//			if(!Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(specimenCollectionGroup.getActivityStatus())){
-//			scgsInfo.add(SpecimenCollectionGroupInfo.fromScg(specimenCollectionGroup, cpr.getRegistrationDate()));
-//			}
-//		}
-//		Collection<CollectionProtocolEvent> cpes = cpr.getCollectionProtocol().getCollectionProtocolEventCollection();
-//		for (CollectionProtocolEvent collectionProtocolEvent : cpes) {
-//			if(!Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(collectionProtocolEvent.getActivityStatus())){
-//			scgsInfo.add(SpecimenCollectionGroupInfo.fromCpe(collectionProtocolEvent, cpr.getRegistrationDate()));
-//			}
-//		}
-		return null;
-
-		//				" ";
-		//				"scg.collectionProtocolEvent cpe " +
-		//				"where cpr.id=:cprId";
-		//		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_COLLECTION_GROUPSBY_CPR_ID);
-		//		Query query = sessionFactory.getCurrentSession().createQuery(hhhh);
-		//		
-		//		query.setLong("cprId", cprId);
-		////		query.setLong("cprId2", cprId);
-		//		List<Object[]> results = query.list();
-		//		
-		//Query query1 = sessionFactory.getCurrentSession().createQuery(hql3);
-		//		
-		//		query.setLong("cprId", cprId);
-		//		List<Object[]> results1 = query.list();
-		//
-		////		List<SpecimenCollectionGroupInfo> scgs = new ArrayList<SpecimenCollectionGroupInfo>();
-		//		for (Object[] object : results) {
-		//			SpecimenCollectionGroupInfo scg = new SpecimenCollectionGroupInfo();
-		//			scg.setId(object[0]==null?0l:Long.valueOf(object[0].toString()));
-		//			scg.setName(object[1] == null ? "" : object[1].toString());
-		//			scg.setCollectionStatus(object[2]==null?"pending":object[2].toString());
-		//			if (object[3] != null) {
-		//				scg.setReceivedDate((Date) object[7]);
-		//			}
-		//			scg.setEventPoint(Double.parseDouble(object[5].toString()));
-		//			scg.setCollectionPointLabel(object[6].toString());
-		////			scg.setRegistrationDate((Date) object[7]);
-		//			scgs.add(scg);
-		//		}
-//		List<SpecimenCollectionGroupInfo> list = new ArrayList<SpecimenCollectionGroupInfo>(scgsInfo);
-//		if (list != null) {
-//			Collections.sort(list);
-//		}
-//		return list;
-	}
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public CollectionProtocolRegistration getCprByBarcode(String barcode) {
@@ -173,39 +90,17 @@ public class CollectionProtocolRegistrationDaoImpl
 	}
 
 	@Override
-	public ParticipantSummary getPhiParticipant(Long cpId, Long participantId) {
-//		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PHI_PARTICIPANT_BY_CP_PARTICIPANT_ID);
-//		query.setLong("cpId", cpId);
-//		query.setLong("participantId", participantId);
-//		
-//		List<Object[]> rows = query.list();
-//		return preparePhiParticipantInfo(rows.get(0));
-		return null;
-	}
-	
-	@Override
 	@SuppressWarnings("unchecked")
-	public List<CollectionProtocolRegistration> getSubRegDetailForParticipantAndCp(Long participantId, Long cpId) {
-		return getSessionFactory().getCurrentSession()
-				.createCriteria(CollectionProtocolRegistration.class, "cpr")
-				.createAlias("collectionProtocol", "cp")
-				.createAlias("participant", "participant")
-				.add(Restrictions.eq("cp.parentCollectionProtocol.id", cpId))
-				.add(Restrictions.eq("participant.id", participantId))
-				.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE))
+	public Long getRegistrationId(Long cpId, Long participantId) {		
+		List<Long> result =  getSessionFactory().getCurrentSession()
+				.getNamedQuery(GET_REGISTRATION_ID)
+				.setLong("cpId", cpId)
+				.setLong("participantId", participantId)
 				.list();
+		
+		return result.isEmpty() ? null : result.iterator().next();
 	}
 	
-//	private ParticipantSummary preparePhiParticipantInfo(Object[] row) {
-//		ParticipantSummary participant = prepareParticipantInfo(row);
-//		if(row[3] != null){
-//			participant.setFirstName((String) row[3]);
-//		}
-//		if(row[4] != null){
-//			participant.setLastName((String) row[4]);
-//		}
-//		return participant;
-//	}
 	
 	private Criteria getCprListQuery(CprListCriteria cprCrit) {
 		Criteria query = getSessionFactory().getCurrentSession().createCriteria(CollectionProtocolRegistration.class);
@@ -228,7 +123,7 @@ public class CollectionProtocolRegistrationDaoImpl
 		}
 		
 		Junction searchCrit = Restrictions.disjunction()
-					.add(Restrictions.ilike("protocolParticipantIdentifier", searchTerm, MatchMode.ANYWHERE));			
+					.add(Restrictions.ilike("ppid", searchTerm, MatchMode.ANYWHERE));			
 		if (cprCrit.includePhi()) {				
 			searchCrit.add(Restrictions.ilike("participant.firstName", searchTerm, MatchMode.ANYWHERE));
 			searchCrit.add(Restrictions.ilike("participant.lastName", searchTerm, MatchMode.ANYWHERE));
@@ -241,7 +136,7 @@ public class CollectionProtocolRegistrationDaoImpl
 	private ProjectionList getCprSummaryFields(CprListCriteria cprCrit) {
 		ProjectionList projs = Projections.projectionList()
 				.add(Projections.property("id"))
-				.add(Projections.property("protocolParticipantIdentifier"))
+				.add(Projections.property("ppid"))
 				.add(Projections.property("registrationDate"))
 				.add(Projections.property("participant.id"));
 		
@@ -273,7 +168,7 @@ public class CollectionProtocolRegistrationDaoImpl
 	@SuppressWarnings("unchecked")
 	private List<Object[]> getScgAndSpecimenCounts(CprListCriteria cprCrit) {
 		Criteria countQuery = getCprListQuery(cprCrit)
-				.createAlias("scgCollection", "visit",
+				.createAlias("visits", "visit",
 						CriteriaSpecification.LEFT_JOIN, Restrictions.eq("visit.status", "Complete"))
 				.createAlias("visit.specimens", "specimen",
 						CriteriaSpecification.LEFT_JOIN, Restrictions.eq("specimen.collectionStatus", "Collected"));
@@ -286,47 +181,9 @@ public class CollectionProtocolRegistrationDaoImpl
 				.list();
 	}
 	
-	@Override
-	@SuppressWarnings("unchecked")
-	public Long getRegistrationId(Long cpId, Long participantId) {
-		
-		List<Long> result =  getSessionFactory().getCurrentSession()
-				.getNamedQuery(GET_REGISTRATION_ID)
-				.setLong("cpId", cpId)
-				.setLong("participantId", participantId)
-				.list();
-		
-		return result.isEmpty() ? null : result.iterator().next();
-	}
-	
-	@Override
-	public Class getType() {
-		return CollectionProtocolRegistration.class;
-	}
-	
 	private static final String FQN = CollectionProtocolRegistration.class.getName();
 	
 	private static final String GET_BY_CP_ID_AND_PPID = FQN + ".getCprByCpIdAndPpid";
 	
 	private static final String GET_REGISTRATION_ID = FQN + ".getRegistrationId";
-
-	private static final String GET_CPR = FQN + ".getCpr";
-//	private static final String GET_SUB_REGISTRATIONS_BY_PARTICIPANT_AND_CP_ID = FQN + ".getSubRegistrationByParticipantAndCPId";
-//	
-//	private static final String GET_PARTICIPANT_BY_CP_PARTICIPANT_ID = FQN + ".getParticipantByCPAndParticipantId";
-//	
-//	private static final String GET_PHI_PARTICIPANT_BY_CP_PARTICIPANT_ID = FQN + ".getPhiParticipantByCPAndParticipantId";
-//
-//	private static final String GET_PARTICIPANTS_BY_CP_ID = FQN + ".getParticipantsByCpId";
-//
-//	private static final String GET_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM = FQN + ".getParticipantsByCpIdAndSearchTerm";
-//	
-//	private static final String GET_PHI_PARTICIPANTS_BY_CP_ID = FQN + ".getPhiParticipantsByCpId";
-//
-//	private static final String GET_PHI_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM = FQN + ".getPhiParticipantsByCpIdAndSearchTerm";
-//
-//	private static final String GET_COLLECTION_GROUPSBY_CPR_ID = FQN + ".getCollectionGroupsByCprId";
-
-
-
 }

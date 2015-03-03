@@ -1,11 +1,10 @@
 
 <div>
   <div os-page-header>
-    <h3>
-      <a ui-sref="site-list" translate="site.list">Sites</a>
-      <span class="fa fa-angle-right"></span>
-      <span>{{site.name}}</span>
-    </h3>
+    <ul os-breadcrumbs>
+      <li><a ui-sref="site-list" translate="site.list">Sites</a></li>
+    </ul>
+    <h3>{{site.name}}</h3>
     <button class="os-round-btn" title="{{'site.tooltip.create_site' | translate}}" ui-sref="site-addedit({siteId: site.id})">
       <span class="fa fa-pencil"></span>
     </button>
@@ -16,7 +15,7 @@
       <li ui-sref-active="active">
         <a ui-sref=".overview">
           <i class="fa fa-eye"></i>
-          <span translate="site.menu.overview">Overview</span>
+          <span class="os-title" translate="site.menu.overview">Overview</span>
         </a>
       </li>
     </ul>

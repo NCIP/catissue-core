@@ -4,7 +4,6 @@ package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 import org.hibernate.SessionFactory;
 
 import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
-import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
@@ -12,7 +11,6 @@ import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.repository.impl.ContainerDaoImpl;
-import com.krishagni.catissueplus.core.administrative.repository.impl.DepartmentDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.DistributionProtocolDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.InstituteDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.PermissibleValueDaoImpl;
@@ -21,8 +19,8 @@ import com.krishagni.catissueplus.core.administrative.repository.impl.StorageCon
 import com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl;
 import com.krishagni.catissueplus.core.audit.repository.AuditDao;
 import com.krishagni.catissueplus.core.audit.repository.impl.AuditDaoImpl;
-import com.krishagni.catissueplus.core.auth.repository.DomainDao;
-import com.krishagni.catissueplus.core.auth.repository.impl.DomainDaoImpl;
+import com.krishagni.catissueplus.core.auth.repository.AuthDao;
+import com.krishagni.catissueplus.core.auth.repository.impl.AuthDaoImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -135,8 +133,8 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 
 	@Override
-	public DomainDao getDomainDao() {
-		DomainDaoImpl dao = new DomainDaoImpl();
+	public AuthDao getAuthDao() {
+		AuthDaoImpl dao = new AuthDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}
@@ -189,13 +187,6 @@ public class DaoFactoryImpl implements DaoFactory {
 		setSessionFactory(dao);
 		return dao;
 	}
-
-	@Override
-	public DepartmentDao getDepartmentDao() {
-		DepartmentDaoImpl dao = new DepartmentDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
 	
 	@Override
 	public AuditDao getAuditDao() {
@@ -203,4 +194,5 @@ public class DaoFactoryImpl implements DaoFactory {
 		setSessionFactory(dao);
 		return dao;
 	}
+	
 }
