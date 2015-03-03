@@ -459,10 +459,10 @@
     "resource": "Resource",
     "permission": "Permissions",
     "resources": "Resources",
-    "read_permission": "Read",
-    "create_permission": "Create",
-    "update_permission": "Update",
-    "delete_permission": "Delete",
+    "read": "Read",
+    "create": "Create",
+    "update": "Update",
+    "delete": "Delete",
 
     "menu": {
       "overview": "Overview"

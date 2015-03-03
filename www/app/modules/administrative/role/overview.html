@@ -22,9 +22,7 @@
     </ul>
 
     <div class="os-section">
-
       <h3 class="os-sub-section-title" translate="role.resources">Resources</h3>
-
       <div>
         <span ng-if="role.acls.length == 0" translate="common.none">None</span>
         <div class="os-table os-table-muted-hdr os-border" ng-if="role.acls.length > 0">
@@ -40,26 +38,33 @@
                 <div class="col col-xs-6">{{acl.resource}}</div>
 
                 <div class="col col-xs-6">
-                  <div class="os-round-icon pull-left" ng-if="acl.permissions.indexOf(permissions.create) != -1">
-                    <span class="fa fa-plus" title="{{'role.create_permission' | translate}}"></span>
-                  </div>
-                  <div class="os-round-icon pull-left" ng-if="acl.permissions.indexOf(permissions.read) != -1">
-                    <span class="fa fa-eye" title="{{'role.read_permission' | translate}}"></span>
-                  </div>
-                  <div class="os-round-icon pull-left" ng-if="acl.permissions.indexOf(permissions.update) != -1">
-                    <span class="fa fa-pencil" title="{{'role.update_permission' | translate}}"></span>
-                  </div>
-                  <div class="os-round-icon pull-left" ng-if="acl.permissions.indexOf(permissions.delete) != -1">
-                    <span class="fa fa-trash" title="{{'role.delete_permission' | translate}}"></span>
+                  <div ng-repeat="permission in acl.permissions" class="os-permission">
+                    <div class="os-status" ng-if="permission == permissions.read">
+                      <span class="fa fa-eye"></span>
+                      <span translate="role.read">Read</span>
+                    </div>
+
+                    <div class="os-status" ng-if="permission == permissions.create">
+                      <span class="fa fa-plus"></span>
+                      <span class="os-status" translate="role.create">Create</span>
+                    </div>
+
+                    <div class="os-status" ng-if="permission == permissions.update">
+                      <span class="fa fa-pencil"></span>
+                      <span class="os-status" translate="role.update">Update</span>
+                    </div>
+
+                    <div class="os-status" ng-if="permission == permissions.delete">
+                      <span class="fa fa-trash"></span>
+                      <span class="os-status" translate="role.delete">Delete</span>
+                    </div>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
