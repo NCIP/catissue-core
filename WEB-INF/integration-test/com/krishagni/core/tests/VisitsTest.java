@@ -34,6 +34,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
+import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -59,6 +60,7 @@ public class VisitsTest {
 	
 	@Autowired
 	private CollectionProtocolRegistrationService cprSvc;
+	private VisitService visitService;
 	
 	@Autowired
 	private ApplicationContext ctx;
@@ -149,7 +151,7 @@ public class VisitsTest {
 		
 		TestUtils.recordResponse(resp);
 		Assert.assertEquals(false, resp.isSuccessful());
-		TestUtils.checkErrorCode(resp, VisitErrorCode.SITE_REQUIRED, ErrorType.USER_ERROR);
+		TestUtils.checkErrorCode(resp, SiteErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 		TestUtils.checkErrorCode(resp, CpErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	

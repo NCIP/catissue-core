@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <CATISSUE_AUTH_DOMAINS IDENTIFIER="1" DOMAIN_NAME="default"/>
+  <OS_AUTH_DOMAINS IDENTIFIER="1" DOMAIN_NAME="default"/>
   <CATISSUE_PARTICIPANT IDENTIFIER="1" LAST_NAME="default_last_name" FIRST_NAME="default_first_name"    
     MIDDLE_NAME="default_middle_name"  BIRTH_DATE="2012-10-21" DEATH_DATE="2012-10-21"
     GENDER="MALE" ACTIVITY_STATUS="Active"/>

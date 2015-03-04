@@ -11,7 +11,7 @@ public class SpecimenTestData {
 		SpecimenDetail detail = new SpecimenDetail();
 		detail.setActivityStatus("Active");
 		detail.setAnatomicSite("Head");
-		detail.setAvailableQty(1.0);
+		detail.setAvailableQty(0.1);
 		detail.setEventId(1L);
 		detail.setInitialQty(0.5);
 		detail.setLabel("default-label");
