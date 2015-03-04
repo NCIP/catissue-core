@@ -43,4 +43,8 @@ public class Utility {
 
 		return ((Number)number).longValue();
 	}
+	
+	public static String getAppUrl() {
+		return XMLPropertyHandler.getValue("application.url");
+	}
 }

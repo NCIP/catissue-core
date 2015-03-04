@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.MessagingException;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,17 +32,21 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
-import com.krishagni.catissueplus.core.common.service.EmailHandler;
+import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserServiceImpl implements UserService {
 	private static final String DEFAULT_AUTH_DOMAIN = "openspecimen";
 	
+	private static final String FORGOT_PASSWORD_EMAIL_TMPL = "users_forgot_password_link"; 
+	
+	private static final String PASSWD_CHANGED_EMAIL_TMPL = "users_passwd_changed";
+	
 	private DaoFactory daoFactory;
 
 	private UserFactory userFactory;
 	
-	private EmailHandler emailHandler;
+	private EmailService emailService;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -49,9 +55,9 @@ public class UserServiceImpl implements UserService {
 	public void setUserFactory(UserFactory userFactory) {
 		this.userFactory = userFactory;
 	}
-
-	public void setEmailHandler(EmailHandler emailHandler) {
-		this.emailHandler = emailHandler;
+	
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
 	}
 
 	@Override
@@ -168,7 +174,7 @@ public class UserServiceImpl implements UserService {
 			
 			user.changePassword(detail.getNewPassword());
 			daoFactory.getUserDao().saveOrUpdate(user);
-			emailHandler.sendChangedPasswordEmail(user);
+			sendPasswdChangedEmail(user);
 			return ResponseEvent.response(true);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -204,7 +210,7 @@ public class UserServiceImpl implements UserService {
 			
 			user.changePassword(detail.getNewPassword());
 			dao.deleteFpToken(token);
-			emailHandler.sendChangedPasswordEmail(user);
+			sendPasswdChangedEmail(user);
 			return ResponseEvent.response(true);
 		}catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -231,7 +237,7 @@ public class UserServiceImpl implements UserService {
 			
 			ForgotPasswordToken token = new ForgotPasswordToken(user);
 			dao.saveFpToken(token);
-			emailHandler.sendForgotPasswordEmail(user, token.getToken());
+			sendForgotPasswordLinkEmail(user, token.getToken());
 			return ResponseEvent.response(true);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
@@ -248,6 +254,22 @@ public class UserServiceImpl implements UserService {
 		dependencies.put("sites", sites);
 		
 		return dependencies;
+	}
+	
+	private void sendForgotPasswordLinkEmail(User user, String token) throws MessagingException {
+		Map<String, String> props = new HashMap<String, String>();
+		props.put("loginName", user.getLoginName());
+		props.put("token", token);
+		
+		emailService.sendEmail(FORGOT_PASSWORD_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
+	}
+	
+	private void sendPasswdChangedEmail(User user) throws MessagingException {
+		Map<String, String> props = new HashMap<String, String>();
+		props.put("lastName", user.getLastName());
+		props.put("firstName", user.getFirstName());
+		
+		emailService.sendEmail(PASSWD_CHANGED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	}
 	
 	private void ensureUniqueEmail(User existingUser, User newUser, OpenSpecimenException ose) {

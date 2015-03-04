@@ -787,6 +787,7 @@
 			<replacefilter token="@@CdmsURL@@" value="${clinportal.url}" />
 			<replacefilter token="@@CdmsKeyStorePath@@" value="" />
 			<replacefilter token="@@appserver.home.dir@@" value="${jboss.home.dir}" />
+			<replacefilter token="@@application.url@@" value="${Application.url}" />
 
 			<replacefilter token="@@use.email.commonpackage.config@@" value="${use.email.commonpackage.config}" />
 			<replacefilter token="@@email.sendEmailTo.emailAddress@@" value="${email.sendEmailTo.emailAddress}" />

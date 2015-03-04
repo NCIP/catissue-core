@@ -195,7 +195,7 @@
   <bean id="userSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="userFactory" ref="userFact"/>
-    <property name="emailHandler" ref="emailHandler"/>
+    <property name="emailService" ref="emailService"/>
   </bean>
 
   <bean id="domainFact" class="com.krishagni.catissueplus.core.auth.domain.factory.impl.DomainRegistrationFactoryImpl">
@@ -408,16 +408,13 @@
   </bean>
 
   <bean id="templateService" class="com.krishagni.catissueplus.core.common.service.impl.TemplateServiceImpl">
-        <property name="velocityEngine" ref="velocityEngine"/>
+    <property name="velocityEngine" ref="velocityEngine"/>
   </bean>
 
   <bean id="emailService" class="com.krishagni.catissueplus.core.common.service.impl.EmailServiceImpl">
     <property name="taskExecutor" ref="taskExecutor"/>
-  </bean>
-
-  <bean id="emailHandler" class="com.krishagni.catissueplus.core.common.service.impl.EmailHandlerImpl">
-    <property name="emailService" ref="emailService"/>
     <property name="templateService" ref="templateService"/>
+    <property name="resourceBundle" ref="resourceBundle"/>
   </bean>
 
   <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
