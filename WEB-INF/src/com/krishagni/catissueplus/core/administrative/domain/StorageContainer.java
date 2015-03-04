@@ -312,16 +312,23 @@ public class StorageContainer extends BaseEntity {
 	}
 	
 	public boolean canContain(Specimen specimen) {
-		if (!allowedSpecimenTypes.contains(specimen.getSpecimenType()) && 
-				!allowedSpecimenClasses.contains(specimen.getSpecimenClass())) {
+		return canContainSpecimen(
+				specimen.getVisit().getCollectionProtocol(), 
+				specimen.getSpecimenClass(), 
+				specimen.getSpecimenType()); 
+	}
+	
+	public boolean canContainSpecimen(CollectionProtocol cp, String specimenClass, String specimenType) {
+		if (!allowedSpecimenTypes.contains(specimenType) && 
+				!allowedSpecimenClasses.contains(specimenClass)) {
 			return false;
 		}
 		
-		if (!allowedCps.isEmpty() && !allowedCps.contains(specimen.getVisit().getCollectionProtocol())) {			
+		if (!allowedCps.isEmpty() && !allowedCps.contains(cp)) {			
 			return false;
 		}
 		
-		return true;
+		return true; 
 	}
 
 	public static boolean isValidScheme(String scheme) {
