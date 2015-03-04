@@ -14,7 +14,8 @@
   </div>
 
   <div class="os-col-10">
-    <button class="btn btn-default" ng-click="openPositionSelector()"> 
+    <button class="btn btn-default" ng-click="openPositionSelector()"
+      ng-disabled="!specimen.specimenClass || !specimen.type || !cpId"> 
       <span class="fa fa-search"></span>
     </button>
   </div>

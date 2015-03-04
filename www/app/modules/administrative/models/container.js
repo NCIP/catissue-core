@@ -42,5 +42,18 @@ angular.module('os.administrative.models.container', ['os.common.models'])
       );
     };
 
+    Container.prototype.isSpecimenAllowed = function(cpId, specimenClass, specimenType) {
+      var params = {cpId: cpId, specimenClass: specimenClass, specimenType: specimenType};
+      return $http.head(Container.url() + '/' + this.$id(), {params: params}).then(
+        function(result) {
+          return true;
+        },
+
+        function(err) {
+          return false;
+        }
+      );
+    };
+
     return Container;
   });

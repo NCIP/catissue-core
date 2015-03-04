@@ -821,3 +821,12 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   max-height: 450px;
   overflow: auto;
 }
+
+.os-modal-alert {
+  position: absolute;
+  margin-top: -10px;
+  margin-left: -20px;
+  width: 100%;
+  border-radius: 0;
+  text-align: center;
+}

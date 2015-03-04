@@ -1,13 +1,33 @@
 
 angular.module('os.biospecimen.participant.specimen-position')
   .controller('SpecimenPositionSelectorCtrl', 
-    function($scope, $modalInstance, $timeout, specimen, Container) {
+    function($scope, $modalInstance, $timeout, $q, specimen, cpId, Container) {
+      function showErrorMsg(code) {
+        $scope.errorCode = code;
+        $timeout(function() {$scope.errorCode = undefined;}, 5000);
+      }
+
       function addChildPlaceholders(containers) {
         angular.forEach(containers, function(container) {
           container.childContainers = [{id: -1, name: 'Loading ...'}];
           container.childContainersLoaded = false;
         });
       }
+
+      function isAllowed(container, cpId, specimen) {
+        if (typeof container.allowed == 'undefined') {
+          return container.isSpecimenAllowed(cpId, specimen.specimenClass, specimen.type).then(
+            function(allowed) {
+              container.allowed = allowed;
+              return allowed;
+            }
+          );
+        } else {
+          var def = $q.defer();
+          def.resolve(container.allowed);
+          return def.promise;
+        }
+      };
 
       function init() {
         $scope.selectedContainer = undefined;
@@ -41,14 +61,29 @@ angular.module('os.biospecimen.participant.specimen-position')
 
       $scope.getOccupancyMap = function() {
         if (!$scope.selectedContainer) {
+          showErrorMsg('container.no_container_selected');
           return false;
         }
 
-        return Container.getById($scope.selectedContainer.id).then(
-          function(container) {
-            angular.extend($scope.selectedContainer, container);
-            $scope.showGrid = true;
-            return true;
+        return isAllowed($scope.selectedContainer, cpId, specimen).then(
+          function(allowed) {
+            if (!allowed) {
+              showErrorMsg('container.cannot_hold_specimen');
+              return false;
+            }
+         
+            if ($scope.selectedContainer.occupiedPositions) {
+              $scope.showGrid = true;
+              return $scope.selectedContainer;
+            }
+
+            return Container.getById($scope.selectedContainer.id).then(
+              function(container) {
+                angular.extend($scope.selectedContainer, container);
+                $scope.showGrid = true;
+                return true;
+              }
+            );
           }
         );
       };
@@ -82,7 +117,15 @@ angular.module('os.biospecimen.participant.specimen-position')
         if (!$scope.selectedContainer) {
           $scope.cancel();
         } else {
-          $modalInstance.close($scope.selectedPos);
+          isAllowed($scope.selectedContainer, cpId, specimen).then(
+            function(allowed) {
+              if (allowed) {
+                $modalInstance.close($scope.selectedPos);
+              } else {
+                showErrorMsg('container.cannot_hold_specimen');
+              }
+            }
+          );
         }
       };
              

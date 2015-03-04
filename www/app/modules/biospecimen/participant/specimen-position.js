@@ -35,6 +35,10 @@ angular.module('os.biospecimen.participant.specimen-position', ['os.administrati
           resolve: {
             specimen: function() {
               return scope.specimen
+            },
+
+            cpId: function() {
+              return scope.cpId;
             }
           }
         });

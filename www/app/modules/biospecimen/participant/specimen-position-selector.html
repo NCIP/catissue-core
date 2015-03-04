@@ -6,6 +6,9 @@
 
 
   <div class="os-modal-body">
+    <div class="os-modal-alert" ng-if="errorCode">
+      <alert type="danger">{{errorCode | translate}}</alert>
+    </div>
     <div os-wizard="selectPositionWizard">
       <os-wizard-step title="Select Container" on-finish="getOccupancyMap">
         <div class="os-select-container-tab" ng-include src="'container-tree.html'"></div>
