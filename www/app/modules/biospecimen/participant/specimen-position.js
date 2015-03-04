@@ -1,6 +1,6 @@
 
 angular.module('os.biospecimen.participant.specimen-position', ['os.administrative.models'])
-  .directive('osSpecimenPosition', function(Container) {
+  .directive('osSpecimenPosition', function($modal, $timeout, Container) {
     function loadContainers(name, scope) {
       var params = {
         name: name, 
@@ -26,6 +26,27 @@ angular.module('os.biospecimen.participant.specimen-position', ['os.administrati
 
       scope.onContainerChange = function() {
         specimen.storageLocation = {name: specimen.storageLocation.name};
+      };
+
+      scope.openPositionSelector = function() {
+        var modalInstance = $modal.open({
+          templateUrl: 'modules/biospecimen/participant/specimen-position-selector.html',
+          controller: 'SpecimenPositionSelectorCtrl',
+          resolve: {
+            specimen: function() {
+              return scope.specimen
+            }
+          }
+        });
+
+        modalInstance.result.then(
+          function(position) {
+            angular.extend(scope.specimen.storageLocation, position);
+            $timeout(function() {
+              angular.extend(scope.specimen.storageLocation, position);
+            });
+          }
+        );
       };
 
       scope.searchContainer = function(name) {

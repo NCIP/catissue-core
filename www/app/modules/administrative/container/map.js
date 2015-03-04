@@ -118,4 +118,50 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
 
       template: '<div class="os-container-map-wrapper"></div>'
     };
+  })
+
+  .directive('osContainerPositionSelector', function($timeout, ContainerUtil) {
+    function renderGrid(element, container, selectedPos) {
+      return new openspecimen.ui.container.ContainerPositionSelector({
+        parentEl: element,
+        container: container,
+        inputPos: selectedPos,
+        containerUtil: ContainerUtil,
+        onSelect: function(position) {
+          $timeout(function() {
+            selectedPos.positionX = position.posX;
+            selectedPos.positionY = position.posY;
+          });
+        }
+      }).render();
+    };
+
+    return {
+      restrict: 'E',
+
+      scope: {
+        container: '=',
+        selectedPos: '='
+      },
+
+      link: function(scope, element, attrs) {
+        var grid = undefined;
+        scope.$watch('container', function(newVal, oldVal) {
+          if (grid && newVal == oldVal) {
+            return;
+          }
+
+          if (grid) {
+            grid.destroy();
+            grid = undefined;
+          }
+
+          if (!scope.container) {
+            return;
+          }
+
+          grid = renderGrid(element, scope.container, scope.selectedPos);
+        });
+      }
+    };
   });

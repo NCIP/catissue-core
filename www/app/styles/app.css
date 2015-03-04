@@ -808,3 +808,16 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 .os-pointer-cursor {
   cursor: pointer;
 }
+
+
+/* Container selector modal */
+.os-select-container-cb {
+  height: 13px;
+  margin-top: 4px;
+  margin-right: 8px;
+}
+
+.os-select-container-tab {
+  max-height: 450px;
+  overflow: auto;
+}
