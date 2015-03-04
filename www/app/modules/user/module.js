@@ -21,7 +21,7 @@ angular.module('openspecimen')
         parent: 'default'
       })
       .state('sign-up', {
-        url: '/signup',
+        url: '/sign-up',
         templateUrl: 'modules/user/signup.html',
         resolve: {
           user: function(User) {

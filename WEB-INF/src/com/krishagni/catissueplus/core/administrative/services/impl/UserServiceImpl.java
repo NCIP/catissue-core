@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 	public ResponseEvent<UserDetail> getUser(RequestEvent<Long> req) {
 		User user = daoFactory.getUserDao().getById(req.getPayload());
 		if (user == null) {
-			ResponseEvent.userError(UserErrorCode.NOT_FOUND);
+			return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 		}
 		
 		return ResponseEvent.response(UserDetail.from(user));
@@ -81,34 +81,16 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<UserDetail> createUser(RequestEvent<UserDetail> req) {
-		try {
-			UserDetail detail = req.getPayload();
-			User user = createUser(detail, false);
-			emailSender.sendUserCreatedEmail(user);
-			return ResponseEvent.response(UserDetail.from(user));
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
+		UserDetail detail = req.getPayload();
+		return createUser(detail, false);
 	}
 	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<UserDetail> signupUser(RequestEvent<UserDetail> req) {
-		try {
-			UserDetail detail = req.getPayload();
-			detail.setActivityStatus(Status.ACTIVITY_STATUS_PENDING.getStatus());
-			
-			User user = createUser(detail, true);
-			emailSender.sendUserSignupEmail(user);
-			
-			return ResponseEvent.response(UserDetail.from(user));
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
+		UserDetail detail = req.getPayload();
+		detail.setActivityStatus(Status.ACTIVITY_STATUS_PENDING.getStatus());
+		return createUser(detail, true);
 	}
 	
 	@Override
@@ -208,7 +190,7 @@ public class UserServiceImpl implements UserService {
 			
 			if (token.hasExpired()) {
 				dao.deleteFpToken(token);
-				return ResponseEvent.userError(UserErrorCode.INVALID_PASSWD_TOKEN);
+				return ResponseEvent.userError(UserErrorCode.INVALID_PASSWD_TOKEN, true);
 			}
 			
 			user.changePassword(detail.getNewPassword());
@@ -258,16 +240,27 @@ public class UserServiceImpl implements UserService {
 		return dependencies;
 	}
 	
-	private User createUser(UserDetail detail, Boolean isSignupReq) {
-		User user = userFactory.createUser(detail);
+	private ResponseEvent<UserDetail> createUser(UserDetail detail, Boolean isSignupReq) {
+		try {
+			User user = userFactory.createUser(detail);
 		
-		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		ensureUniqueLoginNameInDomain(user.getLoginName(), user.getAuthDomain().getName(), ose);
-		ensureUniqueEmailAddress(user.getEmailAddress(), ose);
-		ose.checkAndThrow();
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueLoginNameInDomain(user.getLoginName(), user.getAuthDomain().getName(), ose);
+			ensureUniqueEmailAddress(user.getEmailAddress(), ose);
+			ose.checkAndThrow();
 		
-		daoFactory.getUserDao().saveOrUpdate(user);
-		return user;
+			daoFactory.getUserDao().saveOrUpdate(user);
+			if (isSignupReq) {
+				emailSender.sendUserSignupEmail(user);
+			} else {
+				emailSender.sendUserSignupEmail(user);
+			}
+			return ResponseEvent.response(UserDetail.from(user));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
 	}
 	
 	private void ensureUniqueEmail(User existingUser, User newUser, OpenSpecimenException ose) {
