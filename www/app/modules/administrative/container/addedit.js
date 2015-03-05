@@ -40,17 +40,15 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
         }
       );
 
-      // Will go away 
-      $scope.specimenTypes = [
-        {class: 'Molecular', type: 'RNA, poly-A enriched'},
-        {class: 'Molecular', type: 'RNA, nuclear'},
-        {class: 'Cell', type: 'Frozen Cell Pellet'},
-        {class: 'Cell', type: 'Fixed Cell Block'},
-        {class: 'Fluid', type: 'Whole Bone Marrow'},
-        {class: 'Fluid', type: 'Saliva'},
-        {class: 'Tissue', type: 'Fixed Tissue'},
-        {class: 'Tissue', type: 'Frozen Tissue'}
-      ];
+      
+      $scope.specimenTypes = PvManager.getPvsByParent(
+        'specimen-class', 
+        undefined, 
+        true,
+        function(pv) { 
+          return {class: pv.parentValue, type: pv.value}; 
+        }
+      );
     }
 
     $scope.loadContainers = function(siteName) {

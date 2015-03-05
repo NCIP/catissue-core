@@ -6,38 +6,7 @@
  */
 angular.module('openspecimen')
   .factory('PvManager', function($http, $q, ApiUrls, ApiUtil, Site) {
-    var url = ApiUrls.getBaseUrl() + 'permissible-values/attribute=';
-
-    var genders = [
-      'Female Gender', 
-      'Male Gender', 
-      'Unknown', 
-      'Unspecified'
-    ];
-
-    var ethnicity = [
-      'Hispanic or Latino', 
-      'Not Hispanic or Latino', 
-      'Not Reported', 
-      'Unknown'
-    ];
-
-    var vitalStatuses = [
-      'Alive', 
-      'Dead', 
-      'Unknown', 
-      'Unspecified'
-    ];
-
-    var races = [
-      'White', 
-      'Black or African American', 
-      'American Indian or Alaska Native',
-      'Asian', 
-      'Native Hawaiian or Other Pacific Islander', 
-      'Not Reported',
-      'Unknown'
-    ];
+    var url = ApiUrls.getBaseUrl() + 'permissible-values';
 
     var anatomicSites = [
       'DIGESTIVE ORGANS',
@@ -95,10 +64,6 @@ angular.module('openspecimen')
     ];
 
     var pvMap = {
-      gender: genders, 
-      ethnicity: ethnicity, 
-      vitalStatus: vitalStatuses, 
-      race: races,
       anatomicSite: anatomicSites,
       domains:domains,
       'storage-type': storageTypes,
@@ -125,6 +90,21 @@ angular.module('openspecimen')
       'clinical-diagnosis'  : 'Clinical_Diagnosis_PID'
     };
 
+    function valueOf(input) {
+      return input.value;
+    };
+
+    function parentAndValue(input) {
+      return {parent: input.parentValue, value: input.value};
+    };
+
+    function populateResults(pvs, transformfn, incParentVal, result) {
+      transformfn = transformfn || (incParentVal ? parentAndVal : valueOf);
+      angular.forEach(pvs, function(pv) {
+        result.push(transformfn(pv));
+      });
+    }
+
     return {
       _getPvs: function(attr) {
         var deferred = $q.defer();
@@ -139,36 +119,38 @@ angular.module('openspecimen')
         return deferred.promise;
       },
 
-      getPvs: function(attr, srchTerm) {
+      getPvs: function(attr, srchTerm, transformfn) {
         var pvId = pvIdMap[attr];
         if (!pvId) {
           return pvMap[attr] || [];
         }
 
         var pvs = [];
-        $http.get(url + pvId, {params: {searchString: srchTerm}}).then(
+        $http.get(url, {params: {attribute: pvId, searchString: srchTerm}}).then(
           function(result) {
-            angular.forEach(result.data, function(pv) {
-              pvs.push(pv.value);
-            });
+            populateResults(result.data, transformfn, null, pvs);
           }
         );
 
         return pvs;
       },
 
-      getPvsByParent: function(attr, parentVal) {
-        var pvId = pvIdMap[attr];
+      getPvsByParent: function(parentAttr, parentVal, incParentVal, transformfn) {
+        var pvId = pvIdMap[parentAttr];
         if (!pvId) {
           return [];
         }
 
+        var params = {
+          parentAttribute: pvId, 
+          parentValue: parentVal,  
+          includeParentValue: incParentVal
+        };
+
         var pvs = [];
-        $http.get(url + pvId, {params: {parentValue: parentVal}}).then(
+        $http.get(url, {params: params}).then(
           function(result) {
-            angular.forEach(result.data, function(pv) {
-              pvs.push(pv.value);
-            });
+            populateResults(result.data, transformfn, incParentVal, pvs);
           }
         );
 
@@ -199,15 +181,6 @@ angular.module('openspecimen')
           }
         );
         return sites;
-      },
-
-      getSpecimenTypes: function() {
-        var specimenTypes = {
-          Fluid : ['Whole Blood','Serum'],
-          Molecule :['DNA']
-        };
-        return specimenTypes;
       }
-
     };
   });

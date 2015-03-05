@@ -120,14 +120,10 @@ angular.module('openspecimen', [
           if (!token) {
             return;
           }
-
-          //token = JSON.parse(token);
         }
 
         $http.defaults.headers.common['X-OS-API-TOKEN'] = token;
         $http.defaults.withCredentials = true;
-        //$cookieStore.put('JESSIONID', token);
-        //$http.defaults.headers.common['Cookie'] = 'JSESSIONID=' + token;
       }
     };
   })
