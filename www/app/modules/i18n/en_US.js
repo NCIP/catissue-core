@@ -380,6 +380,8 @@
 
     "create_account": "Create your OpenSpecimen Account",
     "signup": "Sign up",
+    "already_have_an_openspecimen_id": "Already have an OpenSpecimen ID?",
+    "sign_in_here": "Sign In here",
     "signed_up": "Your membership request has been received. Please wait for an approval email from OpenSpecimen Administrator. Thank you.",
     "return_to_signin": "Return to Sign in",
 
