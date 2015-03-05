@@ -21,8 +21,6 @@ public interface UserService extends UserDetailsService {
 
 	public ResponseEvent<UserDetail> createUser(RequestEvent<UserDetail> req);
 
-	public ResponseEvent<UserDetail> signupUser(RequestEvent<UserDetail> req);
-
 	public ResponseEvent<UserDetail> updateUser(RequestEvent<UserDetail> req);
 
 	public ResponseEvent<Boolean> resetPassword(RequestEvent<PasswordDetails> req);

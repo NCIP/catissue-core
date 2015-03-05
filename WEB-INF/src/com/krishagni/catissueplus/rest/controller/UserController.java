@@ -76,13 +76,6 @@ public class UserController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/signed-in-user")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public UserDetail getSignedInUser() {
-		return getUser(getSession().getUserId());
-	}
-	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -99,7 +92,7 @@ public class UserController {
 	@ResponseBody
 	public UserDetail signupUser(@RequestBody UserDetail detail) {
 		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(getSession(), detail);
-		ResponseEvent<UserDetail> resp = userService.signupUser(req);
+		ResponseEvent<UserDetail> resp = userService.createUser(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

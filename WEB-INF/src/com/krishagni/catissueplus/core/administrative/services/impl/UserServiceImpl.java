@@ -32,6 +32,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class UserServiceImpl implements UserService {
 	private static final String DEFAULT_AUTH_DOMAIN = "openspecimen";
@@ -81,16 +82,32 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<UserDetail> createUser(RequestEvent<UserDetail> req) {
-		UserDetail detail = req.getPayload();
-		return createUser(detail, false);
-	}
-	
-	@Override
-	@PlusTransactional
-	public ResponseEvent<UserDetail> signupUser(RequestEvent<UserDetail> req) {
-		UserDetail detail = req.getPayload();
-		detail.setActivityStatus(Status.ACTIVITY_STATUS_PENDING.getStatus());
-		return createUser(detail, true);
+		try {
+			boolean isSignupReq = (Utility.getCurrentUser() == null);
+			
+			UserDetail detail = req.getPayload();
+			if(isSignupReq) {
+				detail.setActivityStatus(Status.ACTIVITY_STATUS_PENDING.getStatus());
+			}
+			User user = userFactory.createUser(detail);
+		
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueLoginNameInDomain(user.getLoginName(), user.getAuthDomain().getName(), ose);
+			ensureUniqueEmailAddress(user.getEmailAddress(), ose);
+			ose.checkAndThrow();
+		
+			daoFactory.getUserDao().saveOrUpdate(user);
+			if (isSignupReq) {
+				emailSender.sendUserSignupEmail(user);
+			} else {
+				emailSender.sendUserCreatedEmail(user);
+			}
+			return ResponseEvent.response(UserDetail.from(user));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
 	}
 	
 	@Override
@@ -238,29 +255,6 @@ public class UserServiceImpl implements UserService {
 		dependencies.put("sites", sites);
 		
 		return dependencies;
-	}
-	
-	private ResponseEvent<UserDetail> createUser(UserDetail detail, Boolean isSignupReq) {
-		try {
-			User user = userFactory.createUser(detail);
-		
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureUniqueLoginNameInDomain(user.getLoginName(), user.getAuthDomain().getName(), ose);
-			ensureUniqueEmailAddress(user.getEmailAddress(), ose);
-			ose.checkAndThrow();
-		
-			daoFactory.getUserDao().saveOrUpdate(user);
-			if (isSignupReq) {
-				emailSender.sendUserSignupEmail(user);
-			} else {
-				emailSender.sendUserSignupEmail(user);
-			}
-			return ResponseEvent.response(UserDetail.from(user));
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
 	}
 	
 	private void ensureUniqueEmail(User existingUser, User newUser, OpenSpecimenException ose) {

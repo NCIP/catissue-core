@@ -4,6 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import com.krishagni.catissueplus.core.administrative.domain.User;
 
 import edu.wustl.common.util.XMLPropertyHandler;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
@@ -42,5 +46,14 @@ public class Utility {
 		}
 
 		return ((Number)number).longValue();
+	}
+	
+	public static User getCurrentUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth == null) {
+			return null;
+		}
+		
+		return (User)auth.getPrincipal();
 	}
 }
