@@ -74,7 +74,7 @@ public class InstituteFactoryImpl implements InstituteFactory {
 	
 	private void setActivityStatus(InstituteDetail detail, Institute institute, OpenSpecimenException ose) {
 		String activityStatus = detail.getActivityStatus();
-		if (activityStatus == null) {
+		if (StringUtils.isBlank(activityStatus)) {
 			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
 		}
 		
