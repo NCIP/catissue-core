@@ -220,7 +220,7 @@ public class InstituteTest {
 	@DatabaseTearDown("institute-test/generic-teardown.xml")
 	@ExpectedDatabase(value="institute-test/update-institute-expected.xml",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
-	public void updateInstitute() {
+	public void updateInstituteTest() {
 		ResponseEvent<InstituteDetail> resp = instituteSvc.updateInstitute(
 				getRequest(InstituteTestData.getUpdateInstituteDetail()));
 		Assert.assertNotNull("Error: Response was found null", resp);
@@ -246,7 +246,7 @@ public class InstituteTest {
 	@DatabaseTearDown("institute-test/generic-teardown.xml")
 	@ExpectedDatabase(value="institute-test/update-institute-not-change-name-expected.xml",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
-	public void updateInstituteWithoutChangingInstituteName() {
+	public void updateInstituteTestWithoutChangingInstituteName() {
 		InstituteDetail input = InstituteTestData.getUpdateInstituteDetail();
 		input.setName("default-institute");
 		ResponseEvent<InstituteDetail> resp = instituteSvc.updateInstitute(
@@ -330,7 +330,7 @@ public class InstituteTest {
 	@DatabaseTearDown("institute-test/generic-teardown.xml")
 	@ExpectedDatabase(value="institute-test/update-institute-with-dependencies-expected.xml",
 			assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
-	public void updateInstituteTestButWithUpdateDepenadacyDepartment() {
+	public void updateInstituteTestWithUpdatedDepartmentWhichHaveDepenadacy() {
 		InstituteDetail input = InstituteTestData.getUpdateInstituteDetail();
 		
 		ResponseEvent<InstituteDetail> resp = instituteSvc.updateInstitute(getRequest(input));
@@ -383,7 +383,7 @@ public class InstituteTest {
 	//@Test TODO: Need to fixes user mapping related issues
 	@DatabaseSetup("institute-test/update-institute-with-dependencies-for-remove-initial.xml")
 	@DatabaseTearDown("institute-test/generic-teardown.xml")
-	public void updateInstituteTestWithRomoveDependencies() {
+	public void updateInstituteTestWithRomoveDepartmentsWhichHaveDependencies() {
 		InstituteDetail input = InstituteTestData.getUpdateInstituteDetail();
 		
 		ResponseEvent<InstituteDetail> resp = instituteSvc.updateInstitute(getRequest(input));
@@ -398,7 +398,7 @@ public class InstituteTest {
 	@Test
 	@DatabaseSetup("institute-test/update-institute-initial.xml")
 	@DatabaseTearDown("institute-test/generic-teardown.xml")
-	public void updateInstituteWithDuplicateInstituteName() {
+	public void updateInstituteWithInavalidId() {
 		InstituteDetail input = InstituteTestData.getUpdateInstituteDetail();
 		input.setId(-1L);
 		ResponseEvent<InstituteDetail> resp = instituteSvc.updateInstitute(getRequest(input));
@@ -425,7 +425,7 @@ public class InstituteTest {
 	@Test
 	@DatabaseSetup("institute-test/update-institute-initial.xml")
 	@DatabaseTearDown("institute-test/generic-teardown.xml")
-	public void updateInstituteWithExistInstituteName() {
+	public void updateInstituteWithDuplicateInstituteName() {
 		InstituteDetail input = InstituteTestData.getUpdateInstituteDetail();
 		input.setName("duplicate-institute");
 		ResponseEvent<InstituteDetail> resp = instituteSvc.updateInstitute(getRequest(input));
