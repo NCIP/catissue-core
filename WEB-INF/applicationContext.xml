@@ -397,7 +397,11 @@
             <value>/sessions</value>
             <value>/reset-password</value>
             <value>/forgot-password</value>
+            <value>/sign-up</value>
           </list>
+        </entry>
+        <entry key="GET">
+          <value>/institutes/</value>
         </entry>
       </map>
     </property>

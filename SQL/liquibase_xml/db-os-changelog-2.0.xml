@@ -360,6 +360,16 @@
       constraintName="FKB025CFC7F30C2528"/>
   </changeSet>
 
+  <changeSet author="vlonushte" id="Drop foreign key and institution id column from CATISSUE_USER">
+    <dropForeignKeyConstraint
+      baseTableName="CATISSUE_USER"
+      constraintName="FKB025CFC71792AD22"/>
+
+    <dropColumn
+      columnName="INSTITUTION_ID"
+      tableName="CATISSUE_USER"/>
+  </changeSet>
+
   <changeSet author="vlonushte" id="OS auth domains table">
     <createTable tableName="OS_AUTH_DOMAINS">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
