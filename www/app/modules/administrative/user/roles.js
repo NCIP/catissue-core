@@ -155,7 +155,7 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
         })
       });
 
-      sortedUserRoles = userRolesList.sort(function(role1, role2) {
+      var sortedUserRoles = userRolesList.sort(function(role1, role2) {
         return role1.id - role2.id;
       });
 
