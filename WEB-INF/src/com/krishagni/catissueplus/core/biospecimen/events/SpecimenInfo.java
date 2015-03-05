@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenPosition;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
@@ -285,14 +286,14 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 		}
 	
 		StorageLocationSummary location = new StorageLocationSummary();
-		SpecimenPosition position = specimen.getSpecimenPosition();
+		StorageContainerPosition position = specimen.getPosition();
 		if (position == null) {
 			location.id = -1L;
 		} else {
-			location.id = position.getStorageContainer().getId();
-			location.name = position.getStorageContainer().getName();
-			location.positionX = position.getPositionDimensionOneString();
-			location.positionY = position.getPositionDimensionTwoString();
+			location.id = position.getContainer().getId();
+			location.name = position.getContainer().getName();
+			location.positionX = position.getPosOne();
+			location.positionY = position.getPosTwo();
 		}
 		result.setStorageLocation(location);		
 		result.setActivityStatus(specimen.getActivityStatus());

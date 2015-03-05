@@ -1,0 +1,94 @@
+<div>
+  <div class="os-modal-header">
+    <span>Specimen Position Selector</span>
+    <div class="os-close" ng-click="cancel()">&times;</div>
+  </div>
+
+
+  <div class="os-modal-body">
+    <div class="os-modal-alert" ng-if="errorCode">
+      <alert type="danger">{{errorCode | translate}}</alert>
+    </div>
+    <div os-wizard="selectPositionWizard">
+      <os-wizard-step title="Select Container" on-finish="getOccupancyMap">
+        <div class="os-select-container-tab" ng-include src="'container-tree.html'"></div>
+      </os-wizard-step>
+      <os-wizard-step title="Select Position">
+        <div ng-if="showGrid" class="os-container-pos-selector-wrapper">
+          <os-container-position-selector container="selectedContainer" selected-pos="selectedPos">
+          </os-container-position-selector>
+        </div>
+        <div>
+          <span>Selected Position: </span>
+          <span ng-if="!!selectedPos.positionX">({{selectedPos.positionX}}, {{selectedPos.positionY}})</span>
+          <span ng-if="!selectedPos.positionX">None</span>
+        </div>
+      </os-wizard-step>
+
+      <div class="os-modal-footer">
+        <button class="btn os-btn-text" ng-click="cancel()"> Cancel </button>
+        <button class="btn os-btn-secondary" ng-if="!selectPositionWizard.isFirstStep()" 
+          ng-click="selectPositionWizard.previous(false)">
+          Previous
+        </button>
+        <button class="btn btn-primary" ng-if="!selectPositionWizard.isLastStep()" 
+          ng-click="selectPositionWizard.next(false)">
+          Next
+        </button>
+        <button class="btn btn-primary" ng-click="ok()">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="container-tree.html">
+  <div class="os-table os-table-fixed os-table-tree os-border os-table-muted-hdr">
+    <div class="os-table-head">
+      <div class="row">
+        <div class="col col-xs-6">
+          <div class="clearfix">
+            <div class="pull-left os-select-container-cb" style="visibility: hidden;">
+              <os-checkbox style="visibility: none;"></os-checkbox>
+            </div>
+            <div class="pull-left" translate="container.name">
+              Name
+            </div>
+          </div>
+        </div>
+        <div class="col col-xs-3" translate="container.dimension">Dimension</div>
+        <div class="col col-xs-3" translate="container.free_locations">Free Locations</div>
+      </div>
+    </div>
+    <div class="os-table-body">
+      <div class="row" ng-repeat="container in containers | openedTreeNodes" ng-class="{'selected': container.selected}">
+        <div class="col col-xs-6">
+          <div class="clearfix">
+            <div class="pull-left os-select-container-cb">
+              <os-checkbox ng-change="toggleSelectedContainer(container)" ng-model="container.selected"></os-checkbox>
+            </div>
+
+            <div class="pull-left">
+              <div style="padding-left: {{container.hasChildren ? container.depth * 16 : container.depth * 16 + 16}}px">
+                <a ng-if="container.hasChildren" class="fa" 
+                  ng-class="{'fa-chevron-circle-down': container.isOpened, 'fa-chevron-circle-right': !container.isOpened}"
+                  ng-click="container.isOpened=!container.isOpened; loadChildren(container, $index)">
+                </a>
+                <span>
+                  {{container.name}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col col-xs-3">
+          <span>{{container.dimensionOneCapacity}} x {{container.dimensionTwoCapacity}}</span>
+        </div>
+        <div class="col col-xs-3">
+          <span>{{container.freePositions}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>

@@ -30,4 +30,5 @@ public interface UserService extends UserDetailsService {
 	public ResponseEvent<Boolean> forgotPassword(RequestEvent<String> req);
 
 	public ResponseEvent<Map<String, List>> deleteUser(RequestEvent<DeleteUserOp> req);
+
 }

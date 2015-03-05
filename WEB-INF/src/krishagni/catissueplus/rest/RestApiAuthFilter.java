@@ -5,6 +5,8 @@
 package krishagni.catissueplus.rest;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -42,8 +44,8 @@ public class RestApiAuthFilter implements Filter
 
 	private static final String BASIC_AUTH = "Basic ";
 	
-	private static final String AUTH_API = "/sessions";
-
+	private static final List<String> allowAnyApis = Arrays.asList("/sessions", "/sign-up", "/institutes");
+	
 	@Override
 	public void destroy()
 	{
@@ -70,7 +72,7 @@ public class RestApiAuthFilter implements Filter
 		if (httpReq.getSession(false) == null ||
 				httpReq.getSession(false).getAttribute(Constants.SESSION_DATA) == null)
 		{
-			if (httpReq.getRequestURI().contains(AUTH_API)) {
+			if (allowAny(httpReq)) {
 				chain.doFilter(req, resp);
 				return;
 			}
@@ -142,6 +144,20 @@ public class RestApiAuthFilter implements Filter
 		}
 
 		chain.doFilter(req, resp);
+	}
+	
+	private boolean allowAny(HttpServletRequest httpReq) {
+		boolean allowAny = false;
+		String requestURI = httpReq.getRequestURI();
+		
+		for (String url : allowAnyApis) {
+			allowAny = requestURI.contains(url);
+			if (allowAny) {
+				break;
+			}
+		}
+		
+		return allowAny;
 	}
 
 	private SessionDataBean setSessionDataBean(final User validUser,

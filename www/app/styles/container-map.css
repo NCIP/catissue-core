@@ -91,3 +91,39 @@
   background: #ffffff;
 }
 
+/** Container position control **/
+.os-container-pos-selector-wrapper {
+  max-height: 410px;
+  width: 550px;
+  margin-bottom: 20px;
+  overflow: auto;
+}
+
+.os-container-pos {
+  min-width: 40px;
+  text-align: center;
+}
+
+td.os-container-pos {
+  cursor: pointer;
+}
+
+.os-circle {
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+  background: #5cb85c;
+  border-radius: 100%;
+}
+
+td.os-container-pos.occupied > .os-circle {
+  background: #d9534f!important;
+}
+
+td.os-container-pos.occupied {
+  cursor: auto!important;
+}
+
+td.os-container-pos.selected {
+  background: #d5d5d5;
+}

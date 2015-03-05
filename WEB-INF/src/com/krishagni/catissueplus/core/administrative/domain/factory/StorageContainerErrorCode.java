@@ -38,7 +38,11 @@ public enum StorageContainerErrorCode implements ErrorCode {
 	
 	REF_ENTITY_FOUND,
 	
-	HIERARCHY_CONTAINS_CYCLE;
+	HIERARCHY_CONTAINS_CYCLE,
+	
+	CANNOT_HOLD_SPECIMEN,
+	
+	INVALID_POSITIONS;
 
 	@Override
 	public String code() {

@@ -91,6 +91,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			
 			specimen.decAliquotedQtyFromParent();
 			specimen.checkQtyConstraints();
+			specimen.occupyPosition();
 			
 			daoFactory.getSpecimenDao().saveOrUpdate(specimen);
 			return ResponseEvent.response(SpecimenDetail.from(specimen));
@@ -232,16 +233,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 		
 		ose.checkAndThrow();
 		
-		if (parent == null) {
-			parent = specimen.getParentSpecimen();
-		}
-		
-		if (parent == null) {
-			specimen.getVisit().addSpecimen(specimen);
-		} else {
-			parent.addSpecimen(specimen);
-		}
-		
 		if (detail.getChildren() != null) {
 			for (SpecimenDetail child : detail.getChildren()) {
 				collectSpecimen(child, specimen);
@@ -250,7 +241,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 		
 		specimen.decAliquotedQtyFromParent();		
 		specimen.checkQtyConstraints();
-				
+		specimen.occupyPosition();
+		daoFactory.getSpecimenDao().saveOrUpdate(specimen, true);				
 		return specimen;
 	}
 

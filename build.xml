@@ -1405,16 +1405,25 @@
 			</else>
 		</if>
 
-		<javac destdir="${target.dir}" includes="**/*.java" includeAntRuntime="false" target="1.6">
-			<src path="./WEB-INF/integration-test"/>
-			<src path="./WEB-INF/src"/>
+		<iajc source="1.6" verbose="true" destdir="${target.dir}" includes="**/*.java" target="1.6" showWeaveInfo="true">
+			<!--src path="./WEB-INF/integration-test"/>
+			<src path="./WEB-INF/src"/-->
 
+			<sourceroots> 
+				<pathelement location="./WEB-INF/integration-test"/> 
+				<pathelement location="./WEB-INF/src"/>
+			</sourceroots> 
+			<aspectpath> 
+				<pathelement location="${lib.dir}/spring-aspects-2.5.0.jar"/> 
+			</aspectpath>
+			
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar"/>
 				</fileset>
+				<pathelement location="${lib.dir}/aspectjrt-1.5.0.jar"/>
 			</classpath>
-		</javac>		
+		</iajc>		
 	</target>
 	
 	<target name="instrument_test_classes">
@@ -1549,6 +1558,11 @@
 					<batchtest todir="${base.dir}/integration-test-results">
 						<fileset dir="${base.dir}/WEB-INF/integration-test">
 							<include name="com/**/*Test.java" />
+							<exclude name="com/**/CollectionProtocolRegistrationTest.java" />
+							<exclude name="com/**/QueryFoldersTest.java" />
+							<exclude name="com/**/SavedQueryTest.java" />
+							<exclude name="com/**/SpecimenTest.java" />
+							<exclude name="com/**/StorageContainerTest.java" />
 						</fileset>
 					</batchtest>
 				</junit>

@@ -1,0 +1,36 @@
+Dear $user.lastName, $user.firstName <br><br>
+  Your registration is now pending for approval by System Administrators. Your registration details are as follows:<br> 
+
+<table> 
+  <tr>
+    <td> Login Name : </td>
+    <td> $user.loginName </td>
+  </tr>
+  	
+  <tr>	
+    <td> Last Name : </td> 
+    <td> $user.lastName </td>
+  </tr>
+  
+  <tr>
+     <td> First Name : </td>
+     <td> $user.firstName </td>
+  </tr>
+  
+  <tr>
+    <td> Email Address : </td>
+    <td> $user.emailAddress </td>
+  </tr>
+  
+  <tr>
+     <td> Institute : </td>
+     <td> $user.department.institute.name </td>
+  </tr>
+  
+  <tr>
+     <td> Department : </td>
+     <td> $user.department.name </td>
+  </tr>
+</table>
+<br>
+$footer

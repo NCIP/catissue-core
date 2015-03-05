@@ -1,5 +1,9 @@
 
-angular.module('os.biospecimen.participant.collect-specimens', ['os.biospecimen.models'])
+angular.module('os.biospecimen.participant.collect-specimens', 
+  [ 
+    'os.biospecimen.models',
+    'os.biospecimen.participant.specimen-position'
+  ])
   .factory('CollectSpecimensSvc', function($state) {
     var data = {};
     return {
@@ -23,11 +27,19 @@ angular.module('os.biospecimen.participant.collect-specimens', ['os.biospecimen.
       }
     };
   })
-  .controller('CollectSpecimensCtrl', function($scope, Specimen, PvManager, CollectSpecimensSvc) {
+  .controller('CollectSpecimensCtrl', function($scope, Specimen, PvManager, CollectSpecimensSvc, Container) {
     function init() {
       $scope.specimens = CollectSpecimensSvc.getSpecimens();
       $scope.visit = CollectSpecimensSvc.getVisit();
       $scope.storageTypes = PvManager.getPvs('storage-type');
+    };
+
+    $scope.applyFirstLocationToAll = function() {
+      for (var i = 1; i < $scope.specimens.length; i++) {
+        $scope.specimens[i].storageLocation = {
+          name: $scope.specimens[0].storageLocation.name
+        };
+      }
     };
 
     $scope.openSpecimenNode = function(specimen) {
@@ -87,6 +99,7 @@ angular.module('os.biospecimen.participant.collect-specimens', ['os.biospecimen.
           label: specimen.label,
           reqId: specimen.reqId,
           visitId: $scope.visit.id,
+          storageLocation: specimen.storageLocation,
           children: getSpecimensToSave(specimen.children, visited)
         });  
       });

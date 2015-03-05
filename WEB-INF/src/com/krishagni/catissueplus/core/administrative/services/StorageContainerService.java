@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.administrative.services;
 
 import java.util.List;
 
+import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
@@ -19,4 +20,6 @@ public interface StorageContainerService {
 	public ResponseEvent<StorageContainerDetail> createStorageContainer(RequestEvent<StorageContainerDetail> req);
 	
 	public ResponseEvent<StorageContainerDetail> updateStorageContainer(RequestEvent<StorageContainerDetail> req);
+	
+	public ResponseEvent<Boolean> isAllowed(RequestEvent<PositionTenantDetail> req);
 }

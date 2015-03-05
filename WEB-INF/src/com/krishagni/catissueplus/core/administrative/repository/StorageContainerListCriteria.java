@@ -10,7 +10,15 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 	
 	private String siteName;
 	
-	private boolean anyLevelContainers;
+	private boolean includeChildren;
+	
+	private boolean topLevelContainers;
+	
+	private String specimenClass;
+	
+	private String specimenType;
+	
+	private Long cpId;
 	
 	@Override
 	public StorageContainerListCriteria self() {
@@ -44,12 +52,48 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 		return self();
 	}
 	
-	public boolean anyLevelContainers() {
-		return anyLevelContainers;
+	public boolean includeChildren() {
+		return includeChildren;
 	}
 	
-	public StorageContainerListCriteria anyLevelContainers(boolean anyLevelContainers) {
-		this.anyLevelContainers = anyLevelContainers;
+	public StorageContainerListCriteria includeChildren(boolean includeChildren) {
+		this.includeChildren = includeChildren;
 		return self();
 	}
+	
+	public boolean topLevelContainers() {
+		return topLevelContainers;
+	}
+	
+	public StorageContainerListCriteria topLevelContainers(boolean topLevelContainers) {
+		this.topLevelContainers = topLevelContainers;
+		return self();
+	}
+	
+	public String specimenClass() {
+		return specimenClass;
+	}
+	
+	public StorageContainerListCriteria specimenClass(String specimenClass) {
+		this.specimenClass = specimenClass;
+		return self();
+	}
+	
+	public String specimenType() {
+		return specimenType;
+	}
+	
+	public StorageContainerListCriteria specimenType(String specimenType) {
+		this.specimenType = specimenType;
+		return self();
+	}
+	
+	public Long cpId() {
+		return cpId;
+	}
+	
+	public StorageContainerListCriteria cpId(Long cpId) {
+		this.cpId = cpId;
+		return self();
+	}	
 }

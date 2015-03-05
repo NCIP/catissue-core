@@ -20,6 +20,17 @@ angular.module('openspecimen')
         controller: 'ResetPasswordCtrl',
         parent: 'default'
       })
+      .state('sign-up', {
+        url: '/sign-up',
+        templateUrl: 'modules/user/signup.html',
+        resolve: {
+          user: function(User) {
+            return new User();
+          }
+        },
+        controller: 'UserAddEditCtrl',
+        parent: 'default'
+      });
   });
 
 

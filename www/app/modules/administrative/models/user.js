@@ -54,6 +54,10 @@ angular.module('os.administrative.models.user', ['os.common.models'])
       return $http.get(User.url() + 'current-user').then(User.modelRespTransform);
     }
 
+    User.signup = function(user) {
+      return $http.post(User.url() + 'sign-up', user).then(ApiUtil.processResp);
+    }
+
     return User;
   });
 

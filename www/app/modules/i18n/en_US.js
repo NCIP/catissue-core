@@ -378,6 +378,13 @@
        "all": "All Current & Future"
     },
 
+    "create_account": "Create your OpenSpecimen Account",
+    "signup": "Sign up",
+    "already_have_an_openspecimen_id": "Already have an OpenSpecimen ID?",
+    "sign_in_here": "Sign In here",
+    "signed_up": "Your membership request has been received. Please wait for an approval email from OpenSpecimen Administrator. Thank you.",
+    "return_to_signin": "Return to Sign in",
+
     "tooltip": {
       "create_user": "Click to add new User",
       "view_details": "Click to view/edit User details",
@@ -437,6 +444,8 @@
     "all": "All",
     "child_containers": "Child Containers",
     "free_locations": "Free Locations",
+    "no_container_selected": "Please select a container",
+    "cannot_hold_specimen": "Selected container cannot hold specimen for which position is being selected",
 
     "tooltip": {
       "view_details": "Click to view/edit Storage Container details",

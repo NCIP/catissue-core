@@ -18,17 +18,19 @@ public final class Status {
 
 	public static final Status ACTIVITY_STATUS_CLOSED = new Status("Closed", 3);
 	
-	public static final Status ACTIVITY_STATUS_LOCKED = new Status("Locked", 4);
+	public static final Status ACTIVITY_STATUS_PENDING = new Status("Pending", 4);
 
-	public static final Status ACTIVITY_STATUS = new Status("activityStatus", 5);
+	public static final Status ACTIVITY_STATUS_LOCKED = new Status("Locked", 5);
+
+	public static final Status ACTIVITY_STATUS = new Status("activityStatus", 6);
 	
-	public static final Status SPECIMEN_COLLECTION_STATUS_COLLECTED = new Status("Collected", 6);
+	public static final Status SPECIMEN_COLLECTION_STATUS_COLLECTED = new Status("Collected", 7);
 	
-	public static final Status SPECIMEN_COLLECTION_STATUS_PENDING = new Status("Pending", 7);
+	public static final Status SPECIMEN_COLLECTION_STATUS_PENDING = new Status("Pending", 8);
 	
-	public static final Status VISIT_STATUS_COMPLETED = new Status("Completed", 8);
+	public static final Status VISIT_STATUS_COMPLETED = new Status("Completed", 9);
 	
-	public static final Status VISIT_STATUS_PENDING = new Status("Pending", 9);
+	public static final Status VISIT_STATUS_PENDING = new Status("Pending", 10);
 
 	public String getStatus() {
 		return this.statusName;

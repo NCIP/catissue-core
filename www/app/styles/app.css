@@ -77,6 +77,10 @@ body {
   padding: 15px 15px;
 }
 
+.os-navbar > ul > li > a.btn {
+  padding: 6px 12px;
+}
+
 .os-navbar-default > ul > li > a {
   color: #fff;
 }
@@ -89,7 +93,8 @@ body {
   padding: 8px 15px;
 }
 
-.os-navbar > ul > li.form-input > button {
+.os-navbar > ul > li.form-input > a.btn {
+  padding: 6px 12px!important;
   font-weight: bold;
 }
 
@@ -129,6 +134,34 @@ body {
   width: 354px;
   border-radius: 2px;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.os-sign-up-box {
+  margin-top: 50px;
+  width: 600px;
+  padding: 0px;
+  border-radius: 6px;
+}
+
+.os-sign-up-box .os-header {
+  color: #666666;
+  text-align: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  border-radius: 6px 6px 0 0;
+}
+
+.os-sign-up-box .os-body {
+  padding: 15px 25px 20px;
+}
+
+.os-sign-up-box .os-body .link {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.os-sign-up-box .os-body .btn-primary {
+  margin-top: 20px;
 }
 
 .os-center-box .os-rounded-img {
@@ -807,4 +840,29 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 .os-pointer-cursor {
   cursor: pointer;
+}
+
+/* Container selector modal */
+.os-select-container-cb {
+  height: 13px;
+  margin-top: 4px;
+  margin-right: 8px;
+}
+
+.os-select-container-tab {
+  max-height: 450px;
+  overflow: auto;
+}
+
+.os-modal-alert {
+  position: absolute;
+  margin-top: -10px;
+  margin-left: -20px;
+  width: 100%;
+  border-radius: 0;
+  text-align: center;
+}
+
+.os-margin-10 {
+  margin: 10%;
 }

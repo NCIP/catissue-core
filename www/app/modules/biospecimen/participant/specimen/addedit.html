@@ -96,6 +96,13 @@
       </div>
 
       <div class="form-group">
+        <label class="col-xs-3 control-label">Location</label>
+        <div class="col-xs-6">
+          <os-specimen-position specimen="currSpecimen" cp-id="cpr.cpId"></os-specimen-position>
+        </div>
+      </div>
+
+      <div class="form-group">
         <label class="col-xs-3 control-label">Collection Status</label>
         <div class="col-xs-6">
           <os-select name="collectionStatus" ng-model="currSpecimen.status" list="collectionStatuses"

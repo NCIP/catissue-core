@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
+import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -58,8 +61,20 @@ public class StorageContainersController {
 			@RequestParam(value = "parentContainerId", required = false)
 			Long parentContainerId,
 			
-			@RequestParam(value = "anyLevelContainers", required = false, defaultValue = "false")
-			boolean anyLevelContainers
+			@RequestParam(value = "includeChildren", required = false, defaultValue = "false")
+			boolean includeChildren,
+			
+			@RequestParam(value = "topLevelContainers", required = false, defaultValue = "false")
+			boolean topLevelContainers,
+			
+			@RequestParam(value = "specimenClass", required = false)
+			String specimenClass,
+			
+			@RequestParam(value = "specimenType", required = false)
+			String specimenType,
+			
+			@RequestParam(value = "cpId", required = false)
+			Long cpId
 			) {
 		
 		StorageContainerListCriteria crit = new StorageContainerListCriteria()
@@ -69,7 +84,11 @@ public class StorageContainersController {
 			.startAt(startAt)
 			.maxResults(maxRecords)
 			.parentContainerId(parentContainerId)
-			.anyLevelContainers(anyLevelContainers);
+			.includeChildren(includeChildren)
+			.topLevelContainers(topLevelContainers)
+			.specimenClass(specimenClass)
+			.specimenType(specimenType)
+			.cpId(cpId);
 					
 		RequestEvent<StorageContainerListCriteria> req = new RequestEvent<StorageContainerListCriteria>(getSession(), crit);
 		ResponseEvent<List<StorageContainerSummary>> resp = storageContainerSvc.getStorageContainers(req);
@@ -78,6 +97,34 @@ public class StorageContainersController {
 		return resp.getPayload();
 	}
 
+	@RequestMapping(method = RequestMethod.HEAD, value="{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public Boolean isTenantAllowed(
+			@PathVariable("id") 
+			Long containerId,
+			
+			@RequestParam(value = "cpId", required = true) 
+			Long cpId,
+			
+			@RequestParam(value = "specimenType", required = true)
+			String specimenType,
+			
+			@RequestParam(value = "specimenClass", required = true)
+			String specimenClass) {
+		
+		PositionTenantDetail detail = new PositionTenantDetail();
+		detail.setContainerId(containerId);
+		detail.setCpId(cpId);
+		detail.setSpecimenClass(specimenClass);
+		detail.setSpecimenType(specimenType);
+		
+		RequestEvent<PositionTenantDetail> req = new RequestEvent<PositionTenantDetail>(getSession(), detail);
+		ResponseEvent<Boolean> resp = storageContainerSvc.isAllowed(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+			
 	@RequestMapping(method = RequestMethod.GET, value="{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

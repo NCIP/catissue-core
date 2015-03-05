@@ -7,6 +7,9 @@ import java.util.Calendar;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
+import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
@@ -15,6 +18,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactor
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -50,6 +54,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			specimen = new Specimen();
 		}
 		
+		specimen.setId(detail.getId());
 		specimen.setVisit(visit);
 		setLineage(detail, specimen, ose);
 		setParentSpecimen(detail, parent, specimen, ose);
@@ -73,8 +78,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			specimen.setSpecimenRequirement(null);
 		}
 		
-//		setContainerPositions(specimenDetail, specimen, errorHandler);
-		
+		setSpecimenPosition(detail, specimen, ose);
+
 		ose.checkAndThrow();
 		return specimen;
 	}
@@ -390,4 +395,45 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 //			ose.addError(SpecimenErrorCode.INVALID_CREATION_DATE);
 //		}
 	}	
+	
+	private void setSpecimenPosition(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
+		StorageContainer container = null;
+
+		StorageLocationSummary location = detail.getStorageLocation();
+		if (location.id != null) {
+			container = daoFactory.getStorageContainerDao().getById(location.id);			
+		} else if (StringUtils.isNotBlank(location.name)) {
+			container = daoFactory.getStorageContainerDao().getStorageContainerByName(location.name);
+		} else {
+			return;
+		}
+		
+		if (container == null) {
+			ose.addError(StorageContainerErrorCode.NOT_FOUND);			
+		}
+		
+		if (!container.canContain(specimen)) {
+			ose.addError(StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN);			
+		}
+		
+		StorageContainerPosition position = null;
+		String posOne = location.positionX, posTwo = location.positionY;
+		if (StringUtils.isNotBlank(posOne) && StringUtils.isNotBlank(posTwo)) {
+			if (container.canSpecimenOccupyPosition(specimen.getId(), posOne, posTwo)) {
+				position = container.createPosition(posOne, posTwo);
+			} else {
+				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE);
+			}
+		} else {
+			position = container.nextAvailablePosition();
+			if (position == null) {
+				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE);
+			} 
+		} 
+		
+		if (position != null) {
+			position.setOccupyingSpecimen(specimen);
+			specimen.setPosition(position);
+		}
+	}
 }

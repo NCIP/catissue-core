@@ -10,9 +10,9 @@ public class LabelTokenForSpecimenContainerPositionTwo implements LabelToken<Spe
 
 	@Override
 	public String getTokenValue(Specimen specimen) {
-		if (specimen.getSpecimenPosition().getPositionDimensionTwoString() != null) {
-			return specimen.getSpecimenPosition().getPositionDimensionTwoString();
-		}
+//		if (specimen.getSpecimenPosition().getPositionDimensionTwoString() != null) {
+//			return specimen.getSpecimenPosition().getPositionDimensionTwoString();
+//		}
 		return EMPTY_POSITION;
 	}
 

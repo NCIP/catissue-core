@@ -3,15 +3,19 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
+import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -45,7 +49,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	public ResponseEvent<List<StorageContainerSummary>> getStorageContainers(RequestEvent<StorageContainerListCriteria> req) {
 		try {			
 			List<StorageContainer> containers = daoFactory.getStorageContainerDao().getStorageContainers(req.getPayload());
-			List<StorageContainerSummary> result = StorageContainerSummary.from(containers, req.getPayload().anyLevelContainers());
+			List<StorageContainerSummary> result = StorageContainerSummary.from(containers, req.getPayload().includeChildren());
 			return ResponseEvent.response(result);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -135,7 +139,39 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-		
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Boolean> isAllowed(RequestEvent<PositionTenantDetail> req) {
+		try {
+			PositionTenantDetail detail = req.getPayload();
+			StorageContainer container = null;
+			
+			if (detail.getContainerId() != null) {
+				container = daoFactory.getStorageContainerDao().getById(detail.getContainerId());
+			} else if (StringUtils.isNotBlank(detail.getContainerName())) {
+				container = daoFactory.getStorageContainerDao().getStorageContainerByName(detail.getContainerName());
+			}
+			
+			if (container == null) {
+				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
+			}
+			
+			CollectionProtocol cp = new CollectionProtocol();
+			cp.setId(detail.getCpId());
+			boolean isAllowed = container.canContainSpecimen(
+					cp, detail.getSpecimenClass(), detail.getSpecimenType());
+
+			if (!isAllowed) {
+				return ResponseEvent.userError(StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN);
+			} else {
+				return ResponseEvent.response(isAllowed);
+			}
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+			
 	private void ensureUniqueConstraints(StorageContainer container) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
