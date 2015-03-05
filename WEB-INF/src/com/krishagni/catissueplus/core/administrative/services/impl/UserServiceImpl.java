@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.MessagingException;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -256,7 +254,7 @@ public class UserServiceImpl implements UserService {
 		return dependencies;
 	}
 	
-	private void sendForgotPasswordLinkEmail(User user, String token) throws MessagingException {
+	private void sendForgotPasswordLinkEmail(User user, String token) {
 		Map<String, String> props = new HashMap<String, String>();
 		props.put("loginName", user.getLoginName());
 		props.put("token", token);
@@ -264,7 +262,7 @@ public class UserServiceImpl implements UserService {
 		emailService.sendEmail(FORGOT_PASSWORD_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	}
 	
-	private void sendPasswdChangedEmail(User user) throws MessagingException {
+	private void sendPasswdChangedEmail(User user) {
 		Map<String, String> props = new HashMap<String, String>();
 		props.put("lastName", user.getLastName());
 		props.put("firstName", user.getFirstName());
