@@ -62,7 +62,7 @@ public class PermissibleValueFactoryImpl implements PermissibleValueFactory {
 			return;			
 		}
 		
-		PermissibleValue parentPv = daoFactory.getPermissibleValueDao().getPermissibleValue(parentId);
+		PermissibleValue parentPv = daoFactory.getPermissibleValueDao().getById(parentId);
 		if (parentPv == null) {
 			ose.addError(PvErrorCode.PARENT_ATTR_NOT_FOUND);
 			return;

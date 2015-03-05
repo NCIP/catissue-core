@@ -1,12 +1,11 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.PermissibleValue;
 import com.krishagni.catissueplus.core.administrative.events.ListPvCriteria;
-import com.krishagni.catissueplus.core.administrative.events.PvInfo;
+import com.krishagni.catissueplus.core.administrative.events.PvDetail;
 import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -22,28 +21,10 @@ public class PermissibleValueServiceImpl implements PermissibleValueService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<PvInfo>> getPermissibleValues(RequestEvent<ListPvCriteria> req) {
-		ListPvCriteria crit = req.getPayload();
-		
-		List<PermissibleValue> permissibleValues = null;
-		
-		if (!crit.parentValue().isEmpty()) {
-			permissibleValues = daoFactory.getPermissibleValueDao().getAllPVsByParent(
-					crit.attribute(),
-					crit.parentValue());
-		} else {
-			permissibleValues = daoFactory.getPermissibleValueDao().getAllPVsByAttribute(
-					crit.attribute(), 
-					crit.query(),
-					crit.maxResults());
-		}
-		
-		List<PvInfo> pvDetails = new ArrayList<PvInfo>();
-		for (PermissibleValue pv : permissibleValues) {
-			pvDetails.add(PvInfo.fromDomain(pv));
-		}
-		
-		return ResponseEvent.response(pvDetails);
+	public ResponseEvent<List<PvDetail>> getPermissibleValues(RequestEvent<ListPvCriteria> req) {
+		ListPvCriteria crit = req.getPayload();		
+		List<PermissibleValue> pvs = daoFactory.getPermissibleValueDao().getPvs(crit);
+ 		return ResponseEvent.response(PvDetail.from(pvs, crit.includeParentValue()));
 	}
 
 	@Override
