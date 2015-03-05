@@ -20,13 +20,9 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
-import edu.wustl.common.util.XMLPropertyHandler;
-
 public class SystemTaskRunner implements ScheduledTask {
 
 	private ScheduledJobService jobSvc;
-	
-	private static final String EXPORT_DATA_DIR = getExportDataDir();
 	
 	@Override
 	public void doJob(ScheduledJobDetail jobDetail) throws Exception {
@@ -61,7 +57,7 @@ public class SystemTaskRunner implements ScheduledTask {
 		txn.commit();
 		
 		String filename = UUID.randomUUID().toString();
-		String path = EXPORT_DATA_DIR + File.separator + filename;
+		String path = ScheduledTaskManager.EXPORT_DATA_DIR + filename;
 
 		try {
 			String subject = detail.getName();
@@ -115,21 +111,5 @@ public class SystemTaskRunner implements ScheduledTask {
 		resp.throwErrorIfUnsuccessful();
 		instance = resp.getPayload();
 		return instance;
-	}
-	
-	private static String getExportDataDir() {
-		String dir = new StringBuilder(XMLPropertyHandler.getValue("appserver.home.dir")).append(File.separator)
-			.append("os-data").append(File.separator)
-			.append("query-exported-data").append(File.separator)
-			.toString();
-		
-		File dirFile = new File(dir);
-		if (!dirFile.exists()) {
-			if (!dirFile.mkdirs()) {
-				throw new RuntimeException("Error couldn't create directory for exporting query data");
-			}
-		}
-		
-		return dir;
 	}
 }

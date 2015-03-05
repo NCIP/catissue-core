@@ -87,7 +87,7 @@ public class QueryServiceImpl implements QueryService {
 	
 	private static final int ONLINE_EXPORT_TIMEOUT_SECS = 30;
 	
-	private static final String EXPORT_DATA_DIR = getExportDataDir();
+	public static final String EXPORT_DATA_DIR = getExportDataDir();
 	
 	private static ExecutorService exportThreadPool = Executors.newFixedThreadPool(EXPORT_THREAD_POOL_SIZE);
 		

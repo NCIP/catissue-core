@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +23,8 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
+import edu.wustl.common.util.XMLPropertyHandler;
+
 public class ScheduledTaskManager {
 	private static ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5);
 	
@@ -32,6 +35,8 @@ public class ScheduledTaskManager {
 	private static Map<String, Long> periodInMinutes = new HashMap<String, Long>();
 	
 	private static ScheduledJobService jobSvc;
+	
+	public static final String EXPORT_DATA_DIR = getExportDataDir();
 	
 	static {
 		taskTypeMap.put("system", SystemTaskRunner.class.getName());
@@ -48,10 +53,12 @@ public class ScheduledTaskManager {
 		periodInMinutes.put("YEARLY"  ,  60L * 24L * 365L);
 		
 		/*
-		 * Monitors the scheduled threads and re-schedules broken ones.
-		 * Looks up every 30 minutes
+		 * 1. Monitors the scheduled threads and re-schedules broken ones.
+		 *    Looks up every 30 minutes (ScheduledJobsMonitor).
+		 * 2. Cleans the export file that are older than 30 days (FilesBacklogCleaner).
 		 */
 		executorService.scheduleAtFixedRate(new ScheduledJobsMonitor(), 2, 30, TimeUnit.MINUTES);
+		executorService.scheduleAtFixedRate(new FilesBacklogCleaner(), 2, 60 * 24, TimeUnit.MINUTES);
 	}
 	
 	public static void registerJob(ScheduledJobDetail detail) {
@@ -143,5 +150,21 @@ public class ScheduledTaskManager {
 	
 	private static Long getPeriodInMinutes(ScheduledJobDetail detail) {
 		return periodInMinutes.get(detail.getRepeatSchedule());
+	}
+	
+	private static String getExportDataDir() {
+		String dir = new StringBuilder(XMLPropertyHandler.getValue("appserver.home.dir")).append(File.separator)
+			.append("os-data").append(File.separator)
+			.append("scheduled-jobs-exported-data").append(File.separator)
+			.toString();
+		
+		File dirFile = new File(dir);
+		if (!dirFile.exists()) {
+			if (!dirFile.mkdirs()) {
+				throw new RuntimeException("Error couldn't create directory for exporting scheduled jobs data");
+			}
+		}
+		
+		return dir;
 	}
 }
