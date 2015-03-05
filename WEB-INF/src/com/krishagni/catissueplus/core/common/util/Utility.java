@@ -43,4 +43,5 @@ public class Utility {
 
 		return ((Number)number).longValue();
 	}
+	
 }

@@ -4,6 +4,7 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
  
     function init() {
       $scope.user = user;
+      $scope.signedUp = false;
       loadPvs();
     }
     
@@ -48,7 +49,16 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
       );
     };
 
-
+    $scope.signup = function() {
+      var user = angular.copy($scope.user);
+      User.signup(user).then(
+        function(resp) {
+          if (resp.status == 'ok') {
+            $scope.signedUp = true;
+          }
+        }
+      )
+    };
      
     init();
   });

@@ -31,6 +31,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserServiceImpl implements UserService {
@@ -72,27 +73,35 @@ public class UserServiceImpl implements UserService {
 	public ResponseEvent<UserDetail> getUser(RequestEvent<Long> req) {
 		User user = daoFactory.getUserDao().getById(req.getPayload());
 		if (user == null) {
-			ResponseEvent.userError(UserErrorCode.NOT_FOUND);
+			return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 		}
 		
 		return ResponseEvent.response(UserDetail.from(user));
 	}
-
 	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<UserDetail> createUser(RequestEvent<UserDetail> req) {
 		try {
-			UserDetail detail = req.getPayload();
-			User user = userFactory.createUser(detail);
+			boolean isSignupReq = (AuthUtil.getCurrentUser() == null);
 			
+			UserDetail detail = req.getPayload();
+			if(isSignupReq) {
+				detail.setActivityStatus(Status.ACTIVITY_STATUS_PENDING.getStatus());
+			}
+			User user = userFactory.createUser(detail);
+		
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueLoginNameInDomain(user.getLoginName(), user.getAuthDomain().getName(), ose);
 			ensureUniqueEmailAddress(user.getEmailAddress(), ose);
 			ose.checkAndThrow();
-
+		
 			daoFactory.getUserDao().saveOrUpdate(user);
-			emailSender.sendUserCreatedEmail(user);
+			if (isSignupReq) {
+				emailSender.sendUserSignupEmail(user);
+			} else {
+				emailSender.sendUserCreatedEmail(user);
+			}
 			return ResponseEvent.response(UserDetail.from(user));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -100,7 +109,7 @@ public class UserServiceImpl implements UserService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-
+	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<UserDetail> updateUser(RequestEvent<UserDetail> req) {
@@ -198,7 +207,7 @@ public class UserServiceImpl implements UserService {
 			
 			if (token.hasExpired()) {
 				dao.deleteFpToken(token);
-				return ResponseEvent.userError(UserErrorCode.INVALID_PASSWD_TOKEN);
+				return ResponseEvent.userError(UserErrorCode.INVALID_PASSWD_TOKEN, true);
 			}
 			
 			user.changePassword(detail.getNewPassword());
@@ -253,7 +262,7 @@ public class UserServiceImpl implements UserService {
 			ensureUniqueEmailAddress(newUser.getEmailAddress(), ose);
 		}
 	}
-	
+
 	private void ensureUniqueEmailAddress(String emailAddress, OpenSpecimenException ose) {
 		if (!daoFactory.getUserDao().isUniqueEmailAddress(emailAddress)) {
 			ose.addError(UserErrorCode.DUP_EMAIL);

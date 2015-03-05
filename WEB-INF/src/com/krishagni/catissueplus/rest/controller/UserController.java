@@ -1,4 +1,3 @@
-
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
@@ -77,18 +76,22 @@ public class UserController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/signed-in-user")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public UserDetail getSignedInUser() {
-		return getUser(getSession().getUserId());
-	}
-	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public UserDetail createUser(@RequestBody UserDetail userDetails) {
 		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(getSession(), userDetails);
+		ResponseEvent<UserDetail> resp = userService.createUser(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/sign-up")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public UserDetail signupUser(@RequestBody UserDetail detail) {
+		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(getSession(), detail);
 		ResponseEvent<UserDetail> resp = userService.createUser(req);
 		resp.throwErrorIfUnsuccessful();
 		
