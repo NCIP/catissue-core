@@ -1,0 +1,17 @@
+Hello $user.lastName, $user.firstName<br>
+<br>
+<br>
+$jobName has failed with internal error. Job will be rescheduled by the system on next interval. 
+<br>
+Please contact admin for more details.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+$footer	
+	 

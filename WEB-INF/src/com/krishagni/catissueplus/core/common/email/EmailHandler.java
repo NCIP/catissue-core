@@ -26,6 +26,10 @@ public class EmailHandler {
 	private static String QUERY_DATA_EXPORTED_EMAIL_TMPL = "query.exportData";
 	
 	private static String SHARE_QUERY_FOLDER_EMAIL_TMPL = "query.shareQueryFolder";
+	
+	private static String JOB_COMPLETED_EMAIL_TMPL = "job.completed";
+	
+	private static String JOB_FAILED_EMAIL_TMPL = "job.failed";
 
 	private static final String KEY_EMAIL_ADMIN_EMAIL_ADDRESS = "email.administrative.emailAddress";
 
@@ -86,6 +90,32 @@ public class EmailHandler {
 				null, 
 				vars, 
 				folder.getName());
+	}
+	
+	public static void sendJobCompletedEmail(User user, String filename, Set<String> additionalRecipients, String jobName, String subject, boolean isSuccessful) {
+		Map<String, Object> vars = new HashMap<String, Object>();
+		vars.put("user", user);
+		vars.put("filename", filename);
+		vars.put("appUrl", CommonServiceLocator.getInstance().getAppURL());
+		vars.put("jobName", jobName);
+		
+		String [] recipients = new String[1 + additionalRecipients.size()];
+		recipients[0] = user.getEmailAddress();
+		int index = 1;
+		for (String recipient : additionalRecipients) {
+			recipients[index] = recipient;
+			index++;
+		}
+
+		String template = isSuccessful ? JOB_COMPLETED_EMAIL_TMPL : JOB_FAILED_EMAIL_TMPL;
+		
+		EmailClient.getInstance().sendEmail(
+				template, 
+				recipients, 
+				new String[] {adminEmailAddress}, 
+				null, 
+				vars, 
+				subject);
 	}
 	
 	private static String getAppUrl() {
