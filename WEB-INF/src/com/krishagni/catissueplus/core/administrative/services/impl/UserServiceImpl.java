@@ -31,8 +31,8 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
-import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class UserServiceImpl implements UserService {
 	private static final String DEFAULT_AUTH_DOMAIN = "openspecimen";
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
 	@PlusTransactional
 	public ResponseEvent<UserDetail> createUser(RequestEvent<UserDetail> req) {
 		try {
-			boolean isSignupReq = (Utility.getCurrentUser() == null);
+			boolean isSignupReq = (AuthUtil.getCurrentUser() == null);
 			
 			UserDetail detail = req.getPayload();
 			if(isSignupReq) {
