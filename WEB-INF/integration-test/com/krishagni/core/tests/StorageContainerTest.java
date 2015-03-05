@@ -1075,6 +1075,7 @@ public class StorageContainerTest {
 	@DatabaseTearDown("storage-container-test/generic-teardown.xml")
 	public void getStorageContainers() {
 		StorageContainerListCriteria input = new StorageContainerListCriteria();
+		input.topLevelContainers(true);
 		ResponseEvent<List<StorageContainerSummary>> resp = scSvc.getStorageContainers(getRequest(input));
 		
 		TestUtils.recordResponse(resp);
