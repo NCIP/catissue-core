@@ -18,7 +18,7 @@ public class TemplateServiceImpl implements TemplateService {
 		this.velocityEngine = velocityEngine;
 	}
 
-	public String render(String templateName, Map<String, String> properties) {
+	public String render(String templateName, Map<String, Object> properties) {
 		return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, templateName, properties);
 	}
 }

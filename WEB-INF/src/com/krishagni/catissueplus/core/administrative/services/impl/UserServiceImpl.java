@@ -41,6 +41,14 @@ public class UserServiceImpl implements UserService {
 	
 	private static final String PASSWD_CHANGED_EMAIL_TMPL = "users_passwd_changed";
 	
+	private static final String SIGNED_UP_EMAIL_TMPL = "users_signed_up";
+	
+	private static final String REQUEST_APPROVED_EMAIL_TMPL = "users_request_approved";
+	
+	private static final String NEW_USER_REQUEST_EMAIL_TMPL = "users_new_user_request";
+	
+	private static final String USER_CREATED_EMAIL_TMPL = "users_created";
+	
 	private DaoFactory daoFactory;
 
 	private UserFactory userFactory;
@@ -101,6 +109,11 @@ public class UserServiceImpl implements UserService {
 			ose.checkAndThrow();
 		
 			daoFactory.getUserDao().saveOrUpdate(user);
+			if (isSignupReq) {
+				sendUserSignupEmail(user);
+			} else {
+				sendUserCreatedEmail(user);
+			}
 			return ResponseEvent.response(UserDetail.from(user));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -259,7 +272,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	private void sendForgotPasswordLinkEmail(User user, String token) {
-		Map<String, String> props = new HashMap<String, String>();
+		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("loginName", user.getLoginName());
 		props.put("token", token);
 		
@@ -267,11 +280,45 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	private void sendPasswdChangedEmail(User user) {
-		Map<String, String> props = new HashMap<String, String>();
+		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("lastName", user.getLastName());
 		props.put("firstName", user.getFirstName());
 		
 		emailService.sendEmail(PASSWD_CHANGED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
+	} 
+	
+	private void sendUserCreatedEmail(User user) {
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("lastName", user.getLastName());
+		props.put("firstName", user.getFirstName());
+		
+		emailService.sendEmail(USER_CREATED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
+	}
+	
+	private void sendUserSignupEmail(User user) {
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("lastName", user.getLastName());
+		props.put("firstName", user.getFirstName());
+		
+		emailService.sendEmail(SIGNED_UP_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
+	}
+	
+	//TODO: Mail send to admin after new user sign up, pending because there is no user role feature implemented
+	private void sendNewUserRequestEmail(User user) {
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("newUser", user);
+		
+		String [] params = new String[] {user.getFirstName(), user.getLastName()};
+		emailService.sendEmail(NEW_USER_REQUEST_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props, params);
+	}
+	
+	//TODO: When user status updated pending to Active then call this method
+	private void sendUserRequestApprovedEmail(User user) {
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("lastName", user.getLastName());
+		props.put("firstName", user.getFirstName());
+		
+		emailService.sendEmail(REQUEST_APPROVED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	}
 	
 	private void ensureUniqueEmail(User existingUser, User newUser, OpenSpecimenException ose) {

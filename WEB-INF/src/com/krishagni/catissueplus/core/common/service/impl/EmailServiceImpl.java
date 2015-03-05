@@ -93,15 +93,15 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	@Override
-	public boolean sendEmail(String emailTmplKey, String[] to, Map<String, String> props) {
-		return sendEmail(emailTmplKey, to, null, props);
+	public boolean sendEmail(String emailTmplKey, String[] to, Map<String, Object> props, String ...subjParams) {
+		return sendEmail(emailTmplKey, to, null, props, subjParams);
 	}
 	
 	@Override
-	public boolean sendEmail(String emailTmplKey, String[] to, File[] attachments, Map<String, String> props) {
+	public boolean sendEmail(String emailTmplKey, String[] to, File[] attachments, Map<String, Object> props, String ...subjParams) {
 		props.put("template", getEmailTmpl(emailTmplKey));
 		props.put("appUrl", Utility.getAppUrl());
-		String subject = getSubject(emailTmplKey);
+		String subject = getSubject(emailTmplKey, subjParams);
 		String content = templateService.render(BASE_TMPL, props);
 		
 		Email email = new Email();
@@ -147,12 +147,12 @@ public class EmailServiceImpl implements EmailService {
 		}
 	}
 	
-	private String getSubject(String emailTmplKey) {
+	private String getSubject(String emailTmplKey, String ...subjParams) {
 		if (subjectPrefix == null) {
 			subjectPrefix = resourceBundle.getMessage("email_subject_prefix", null, Locale.getDefault());
 		}
 		
-		return subjectPrefix + resourceBundle.getMessage(emailTmplKey.toLowerCase() + "_subj", null, Locale.getDefault());
+		return subjectPrefix + resourceBundle.getMessage(emailTmplKey.toLowerCase() + "_subj", subjParams, Locale.getDefault());
 	}
 	
 	private String getEmailTmpl(String emailTmplKey) {

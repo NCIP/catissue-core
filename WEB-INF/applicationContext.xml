@@ -188,9 +188,6 @@
   <bean id="userFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.UserFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
-  
-  <bean id="eSender" class="com.krishagni.catissueplus.core.common.email.EmailSender">
-  </bean>
 
   <bean id="userSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
@@ -272,6 +269,7 @@
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="userDao" ref="userDao"/>
     <property name="queryFolderFactory" ref="queryFolderFactory"/>
+    <property name="emailService" ref="emailService"/>
   </bean>
 
   <bean id="extAppNotificationService" class="com.krishagni.catissueplus.core.notification.services.impl.ExternalAppNotificationServiceImpl">
@@ -295,6 +293,7 @@
   <bean id="emailNotificationSvc"
     class="com.krishagni.catissueplus.core.notification.services.impl.EmailNotificationServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory" />
+    <property name="emailService" ref="emailService"/>
   </bean>
 
   <bean id="instituteDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.InstituteDependencyChecker">

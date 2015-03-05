@@ -29,13 +29,14 @@ import org.hibernate.Transaction;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
-import com.krishagni.catissueplus.core.common.email.EmailHandler;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.domain.AqlBuilder;
 import com.krishagni.catissueplus.core.de.domain.QueryAuditLog;
 import com.krishagni.catissueplus.core.de.domain.QueryFolder;
@@ -79,6 +80,10 @@ public class QueryServiceImpl implements QueryService {
 	private static final String cpForm = "CollectionProtocol";
 
 	private static final String cprForm = "Participant";
+	
+	private static String QUERY_DATA_EXPORTED_EMAIL_TMPL = "query_export_data";
+	
+	private static String SHARE_QUERY_FOLDER_EMAIL_TMPL = "query_share_query_folder";
 
 	private static final String dateFormat = CommonServiceLocator.getInstance().getDatePattern();
 
@@ -97,6 +102,8 @@ public class QueryServiceImpl implements QueryService {
 	private UserDao userDao;
 	
 	private QueryFolderFactory queryFolderFactory;
+	
+	private EmailService emailService;
 	
 	static {
 		initExportFileCleaner();
@@ -117,7 +124,6 @@ public class QueryServiceImpl implements QueryService {
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
 	}
-	
 
 	public QueryFolderFactory getQueryFolderFactory() {
 		return queryFolderFactory;
@@ -125,6 +131,14 @@ public class QueryServiceImpl implements QueryService {
 
 	public void setQueryFolderFactory(QueryFolderFactory queryFolderFactory) {
 		this.queryFolderFactory = queryFolderFactory;
+	}
+
+	public EmailService getEmailService() {
+		return emailService;
+	}
+
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
 	}
 
 	@Override
@@ -764,7 +778,7 @@ public class QueryServiceImpl implements QueryService {
 					if (queryId != null) {
 						savedQuery = daoFactory.getSavedQueryDao().getQuery(queryId);
 					}					
-					EmailHandler.sendQueryDataExportedEmail(user, savedQuery, filename);					
+					sendQueryDataExportedEmail(user, savedQuery, filename);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}				
@@ -983,9 +997,26 @@ public class QueryServiceImpl implements QueryService {
 				TimeUnit.MILLISECONDS);						
 	}
 	
+	private void sendQueryDataExportedEmail(User user, SavedQuery query, String filename) {
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("user", user);
+		props.put("query", query);
+		props.put("filename", filename);
+		props.put("appUrl", Utility.getAppUrl());
+		
+		String title = query != null ? query.getTitle() : "Unsaved query";
+		emailService.sendEmail(QUERY_DATA_EXPORTED_EMAIL_TMPL, new String[] {user.getEmailAddress()}, props, title);
+	}
+	
 	private void sendFolderSharedEmail(User user, QueryFolder folder, Collection<User> sharedUsers) {
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("user", user);
+		props.put("folder", folder);
+		props.put("appUrl", Utility.getAppUrl());
+		
 		for (User sharedWith : sharedUsers) {
-			EmailHandler.sendQueryFolderSharedEmail(user, folder, sharedWith);
+			props.put("sharedWith", sharedWith);
+			emailService.sendEmail(SHARE_QUERY_FOLDER_EMAIL_TMPL, new String[] {sharedWith.getEmailAddress()}, props);
 		}		
 	}
 }
