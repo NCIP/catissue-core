@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>      
+  <CATISSUE_INSTITUTION  NAME="default-institute5" ACTIVITY_STATUS="Active" />
+  <CATISSUE_INSTITUTION  NAME="default-institute4" ACTIVITY_STATUS="Active" />
+  <CATISSUE_INSTITUTION  NAME="default-institute3" ACTIVITY_STATUS="Active" />
+  <CATISSUE_INSTITUTION  NAME="default-institute2" ACTIVITY_STATUS="Closed" />
+  <CATISSUE_INSTITUTION  NAME="default-institute1" ACTIVITY_STATUS="Active" />
+  
+  <OS_DEPARTMENTS IDENTIFIER="5" NAME="default-department5" INSTITUTE_ID="5"/>
+  <OS_DEPARTMENTS IDENTIFIER="4" NAME="default-department4" INSTITUTE_ID="4"/>
+  <OS_DEPARTMENTS IDENTIFIER="3" NAME="default-department3" INSTITUTE_ID="3"/>
+  <OS_DEPARTMENTS IDENTIFIER="2" NAME="default-department2" INSTITUTE_ID="2"/>
+  <OS_DEPARTMENTS IDENTIFIER="1" NAME="default-department1" INSTITUTE_ID="1"/>
+</dataset>
