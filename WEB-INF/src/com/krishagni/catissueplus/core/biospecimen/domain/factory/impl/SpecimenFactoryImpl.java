@@ -403,7 +403,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		if (location.id != null) {
 			container = daoFactory.getStorageContainerDao().getById(location.id);			
 		} else if (StringUtils.isNotBlank(location.name)) {
-			container = daoFactory.getStorageContainerDao().getStorageContainerByName(location.name);
+			container = daoFactory.getStorageContainerDao().getByName(location.name);
 		} else {
 			return;
 		}

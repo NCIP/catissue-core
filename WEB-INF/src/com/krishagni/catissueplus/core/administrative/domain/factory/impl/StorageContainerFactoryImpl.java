@@ -155,7 +155,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 			return null;
 		}
 		
-		StorageContainer parentContainer = daoFactory.getStorageContainerDao().getStorageContainerByName(parentName);
+		StorageContainer parentContainer = daoFactory.getStorageContainerDao().getByName(parentName);
 		if (parentContainer == null) {
 			ose.addError(StorageContainerErrorCode.PARENT_CONT_NOT_FOUND);
 		}

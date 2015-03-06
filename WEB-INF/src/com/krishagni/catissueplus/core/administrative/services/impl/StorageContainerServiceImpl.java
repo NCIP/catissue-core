@@ -9,6 +9,7 @@ import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
+import com.krishagni.catissueplus.core.administrative.events.ContainerQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
@@ -60,11 +61,17 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<StorageContainerDetail> getStorageContainer(RequestEvent<Long> req) {
+	public ResponseEvent<StorageContainerDetail> getStorageContainer(RequestEvent<ContainerQueryCriteria> req) {
 		try {
-			Long containerId = req.getPayload();
+			ContainerQueryCriteria crit = req.getPayload();
 			
-			StorageContainer container = daoFactory.getStorageContainerDao().getById(containerId);			
+			StorageContainer container = null;
+			if (crit.getId() != null) {
+				container = daoFactory.getStorageContainerDao().getById(crit.getId());
+			} else if (StringUtils.isNotBlank(crit.getName())) {
+				container = daoFactory.getStorageContainerDao().getByName(crit.getName());
+			}
+						
 			if (container == null) {
 				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
 			}
@@ -150,7 +157,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			if (detail.getContainerId() != null) {
 				container = daoFactory.getStorageContainerDao().getById(detail.getContainerId());
 			} else if (StringUtils.isNotBlank(detail.getContainerName())) {
-				container = daoFactory.getStorageContainerDao().getStorageContainerByName(detail.getContainerName());
+				container = daoFactory.getStorageContainerDao().getByName(detail.getContainerName());
 			}
 			
 			if (container == null) {
@@ -187,7 +194,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	}
 	
 	private boolean isUniqueName(StorageContainer container) {
-		StorageContainer existing = daoFactory.getStorageContainerDao().getStorageContainerByName(container.getName());
+		StorageContainer existing = daoFactory.getStorageContainerDao().getByName(container.getName());
 		if (existing == null) {
 			return true; // no container by this name
 		} else if (container.getId() == null) {
@@ -205,7 +212,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			return true;
 		}
 		
-		StorageContainer existing = daoFactory.getStorageContainerDao().getStorageContainerByBarcode(barcode);
+		StorageContainer existing = daoFactory.getStorageContainerDao().getByBarcode(barcode);
 		if (existing == null) {
 			return true;
 		} else if (container.getId() == null) {

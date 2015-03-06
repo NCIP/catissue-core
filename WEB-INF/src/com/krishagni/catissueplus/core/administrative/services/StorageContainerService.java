@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.administrative.services;
 
 import java.util.List;
 
+import com.krishagni.catissueplus.core.administrative.events.ContainerQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
@@ -13,7 +14,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 public interface StorageContainerService {
 	public ResponseEvent<List<StorageContainerSummary>> getStorageContainers(RequestEvent<StorageContainerListCriteria> req);
 	
-	public ResponseEvent<StorageContainerDetail> getStorageContainer(RequestEvent<Long> req);
+	public ResponseEvent<StorageContainerDetail> getStorageContainer(RequestEvent<ContainerQueryCriteria> req);
 	
 	public ResponseEvent<List<StorageContainerPositionDetail>> getOccupiedPositions(RequestEvent<Long> req);
 	

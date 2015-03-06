@@ -58,7 +58,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public StorageContainer getStorageContainerByName(String name) {
+	public StorageContainer getByName(String name) {
 		List<StorageContainer> result = sessionFactory.getCurrentSession()
 				.createCriteria(StorageContainer.class)
 				.add(Restrictions.eq("name", name))
@@ -69,7 +69,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	}
 	
 	@SuppressWarnings("unchecked")
-	public StorageContainer getStorageContainerByBarcode(String barcode) {		
+	public StorageContainer getByBarcode(String barcode) {		
 		List<StorageContainer> result = sessionFactory.getCurrentSession()
 				.createCriteria(StorageContainer.class)
 				.add(Restrictions.eq("barcode", barcode))
@@ -77,11 +77,6 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 				.list();
 
 		return result.isEmpty() ? null : result.iterator().next();		
-	}
-
-	@Override
-	public StorageContainer getStorageContainer(Long id) {
-		return (StorageContainer) sessionFactory.getCurrentSession().get(StorageContainer.class, id);
 	}
 
 	@Override

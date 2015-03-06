@@ -15,14 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
+import com.krishagni.catissueplus.core.administrative.events.ContainerQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
-import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -129,11 +128,14 @@ public class StorageContainersController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public StorageContainerDetail getStorageContainer(@PathVariable("id") Long containerId) {
-		RequestEvent<Long> req = new RequestEvent<Long>(getSession(), containerId);
-		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.getStorageContainer(req);
-		resp.throwErrorIfUnsuccessful();
-		
-		return resp.getPayload();
+		return getContainer(new ContainerQueryCriteria(containerId));
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/byname/{name}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public StorageContainerDetail getStorageContainer(@PathVariable("name") String name) {
+		return getContainer(new ContainerQueryCriteria(name));
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="{id}/occupied-positions")
@@ -175,6 +177,14 @@ public class StorageContainersController {
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
+	}
+	
+	private StorageContainerDetail getContainer(ContainerQueryCriteria crit) {
+		RequestEvent<ContainerQueryCriteria> req = new RequestEvent<ContainerQueryCriteria>(getSession(), crit);
+		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.getStorageContainer(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();		
 	}
 	
 	private SessionDataBean getSession() {
