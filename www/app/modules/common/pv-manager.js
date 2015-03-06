@@ -98,78 +98,86 @@ angular.module('openspecimen')
       return {parent: input.parentValue, value: input.value};
     };
 
-    function populateResults(pvs, transformfn, incParentVal, result) {
-      transformfn = transformfn || (incParentVal ? parentAndVal : valueOf);
-      angular.forEach(pvs, function(pv) {
-        result.push(transformfn(pv));
-      });
-    }
+    function transform(pvs, transformfn, incParentVal, result) {
+      transformfn = transformfn || (incParentVal ? parentAndValue : valueOf);
+      return pvs.map(function(pv) { return transformfn(pv); });
+    };
+
+    function insertInto(input, output) {
+      Array.prototype.splice.apply(output, [0, 0].concat(input));
+    };
+
+    function loadPvs(attr, srchTerm, transformFn) {
+      var pvId = pvIdMap[attr];
+      if (!pvId) {
+        return _getPvs(attr);
+      }
+
+      $http.get(url, {params: {attribute: pvId, searchString: srchTerm}}).then(
+        function(result) {
+          return transform(result.data, transformFn, null);
+        }
+      );
+    };
+
+    function loadPvsByParent(parentAttr, parentVal, incParentVal, transformFn) {
+      var pvId = pvIdMap[parentAttr];
+      if (!pvId) {
+        return [];
+      }
+
+      var params = {
+        parentAttribute: pvId, 
+        parentValue: parentVal,  
+        includeParentValue: incParentVal
+      };
+
+      return $http.get(url, {params: params}).then(
+        function(result) {
+          return transform(result.data, transformFn, incParentVal);
+        }
+      );
+    };
+
+    function  _getPvs(attr) {
+      var deferred = $q.defer();
+      var result = undefined;
+      if (pvMap[attr]) {
+        result = pvMap[attr];
+      } else {
+        result = [];
+      }
+
+      deferred.resolve(result);
+      return deferred.promise;
+    };
 
     return {
-      _getPvs: function(attr) {
-        var deferred = $q.defer();
-        var result = undefined;
-        if (pvMap[attr]) {
-          result = {status: 'ok', data: pvMap[attr]};
-        } else {
-          result = {status: 'error'};
-        }
-
-        deferred.resolve(result);
-        return deferred.promise;
+      getPvs: function(attr, srchTerm, transformFn) {
+        var pvs = [];
+        loadPvs(attr, srchTerm, transformFn).then(
+          function(result) {
+            insertInto(result, pvs);
+          }
+        );    
+        return pvs;
       },
 
-      getPvs: function(attr, srchTerm, transformfn) {
-        var pvId = pvIdMap[attr];
-        if (!pvId) {
-          return pvMap[attr] || [];
-        }
+      loadPvs: loadPvs,
 
+      getPvsByParent: function(parentAttr, parentVal, incParentVal, transformFn) {
         var pvs = [];
-        $http.get(url, {params: {attribute: pvId, searchString: srchTerm}}).then(
+
+        loadPvsByParent(parentAttr, parentVal, incParentVal, transformFn).then(
           function(result) {
-            populateResults(result.data, transformfn, null, pvs);
+            insertInto(result, pvs);
           }
         );
 
         return pvs;
       },
 
-      getPvsByParent: function(parentAttr, parentVal, incParentVal, transformfn) {
-        var pvId = pvIdMap[parentAttr];
-        if (!pvId) {
-          return [];
-        }
-
-        var params = {
-          parentAttribute: pvId, 
-          parentValue: parentVal,  
-          includeParentValue: incParentVal
-        };
-
-        var pvs = [];
-        $http.get(url, {params: params}).then(
-          function(result) {
-            populateResults(result.data, transformfn, incParentVal, pvs);
-          }
-        );
-
-        return pvs;
-      },
-
-      /** loadPvs will be deprecated soon **/
-      loadPvs: function(scope, attr) {
-        this._getPvs(attr).then(
-          function(result) {
-            if (result.status != 'ok') {
-              alert("Failed to load PVs of attribute: " + attr);
-              return;
-            }
-
-            scope[attr + '_pvs'] = result.data;
-          }
-        );
-      },
+      loadPvsByParent: loadPvsByParent,
 
       getSites: function() {
         var sites = [];

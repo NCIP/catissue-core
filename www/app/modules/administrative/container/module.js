@@ -68,6 +68,7 @@ angular.module('os.administrative.container',
           $scope.occupancyMap = occupancyMap;
           $scope.addContainer = function(posOne, posTwo) {
             var params = {
+              containerId: '',
               posOne: posOne, posTwo: posTwo,
               parentContainerName: container.name,
               parentContainerId: container.id

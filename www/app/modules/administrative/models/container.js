@@ -30,6 +30,14 @@ angular.module('os.administrative.models.container', ['os.common.models'])
       return Container._flatten(containers, 'childContainers');
     };
 
+    Container.getByName = function(name) {
+      return $http.get(Container.url() + '/byname/' + name).then(
+        function(result) {
+          return new Container(result.data);
+        }
+      );
+    };
+
     Container.prototype.getChildContainers = function(anyLevel) {
       return Container.query({parentContainerId: this.$id(), includeChildren: true});
     };
