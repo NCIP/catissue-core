@@ -4,12 +4,10 @@ package com.krishagni.catissueplus.core.administrative.events;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
-import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class SiteDetail {

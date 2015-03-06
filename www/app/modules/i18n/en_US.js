@@ -316,11 +316,18 @@
     "tooltip": {
       "view_details": "Click to view/edit Site details",
       "create_site": "Click to add new Site",
-      "cp_count": "Count of Collection Protocols"
+      "cp_count": "Count of Collection Protocols",
+      "search": "Click to search Site"
     },
 
     "menu": {
       "overview": "Overview"
+    },
+
+    "filter": {
+      "filters": "Filters",
+      "name": "Type the name",
+      "type": "Select type"
     }
   },
   
@@ -471,4 +478,5 @@
 
     "record_saved": "Extension record saved successfully"
   }
+
 }

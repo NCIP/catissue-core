@@ -205,6 +205,11 @@ body {
   margin-right: 24px;
 }
 
+.os-page-hdr .os-item-right {
+  align-self: start;
+  margin-left: auto;
+}
+
 button.btn.os-round-btn {
   height: 24px;
   width: 24px;
@@ -830,3 +835,5 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   border-radius: 0;
   text-align: center;
 }
+
+

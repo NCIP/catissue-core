@@ -1,0 +1,54 @@
+.os-search-drawer, .os-search-drawer-overlay {
+  position: absolute;
+  height: auto;
+  top: 57px;
+  bottom: 0;
+  right:0
+}
+
+.os-search-drawer {
+  background: #f5f5f5;
+  border-left: 1px solid #ddd;
+  right: 0;
+  width: 300px;
+  z-index: 5;
+  margin-top: 64px;
+  transform: scaleX(0.00001);
+  transform-origin:100% 50%;
+  transition: all 0.25s ease-in-out 0s;
+}
+
+.os-search-drawer.active {
+  transform: scaleX(1);
+}
+
+.os-search-drawer .search-container {
+  margin: 15px;
+}
+  
+.os-filter-title {
+  color:#666666!important;
+}
+
+.os-search-drawer .search-container {
+  margin: 15px;
+}
+
+.os-filter-title {
+  color: #666666!important;
+  margin: 15px;
+}
+
+.os-search-drawer .control-label {
+  color: #666666!important;
+}
+
+.os-search-drawer input {
+  background: #f5f5f5;
+  margin-top: 5px;
+}
+
+.os-search-drawer button {
+  background: #f5f5f5;
+  margin-top: 5px!important;
+}
