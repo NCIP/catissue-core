@@ -44,6 +44,8 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		container.setId(detail.getId());
+		container.setStoreSpecimenEnabled(detail.isStoreSpecimensEnabled());
+		
 		setName(detail, container, ose);
 		setBarcode(detail, container, ose);
 		setTemperature(detail, container, ose);

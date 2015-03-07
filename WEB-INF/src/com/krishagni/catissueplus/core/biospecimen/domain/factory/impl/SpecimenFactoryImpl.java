@@ -400,7 +400,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		StorageContainer container = null;
 
 		StorageLocationSummary location = detail.getStorageLocation();
-		if (location.id != null) {
+		if (location.id != null && location.id != -1) {
 			container = daoFactory.getStorageContainerDao().getById(location.id);			
 		} else if (StringUtils.isNotBlank(location.name)) {
 			container = daoFactory.getStorageContainerDao().getByName(location.name);
@@ -409,7 +409,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		if (container == null) {
-			ose.addError(StorageContainerErrorCode.NOT_FOUND);			
+			ose.addError(StorageContainerErrorCode.NOT_FOUND);
+			return;
 		}
 		
 		if (!container.canContain(specimen)) {

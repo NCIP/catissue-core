@@ -94,7 +94,9 @@
 /** Container position control **/
 .os-container-pos-selector-wrapper {
   max-height: 410px;
-  width: 550px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 20px;
   overflow: auto;
 }

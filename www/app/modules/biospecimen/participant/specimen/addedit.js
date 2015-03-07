@@ -30,6 +30,10 @@ angular.module('os.biospecimen.specimen.addedit', [])
         currSpecimen.status = 'Collected';
         currSpecimen.availableQty = currSpecimen.initialQty;
       }
+
+      if (!currSpecimen.storageLocation) {
+        currSpecimen.storageLocation = {};
+      }
     }
 
     $scope.saveSpecimen = function() {
