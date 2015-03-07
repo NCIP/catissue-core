@@ -101,6 +101,8 @@ public class EmailServiceImpl implements EmailService {
 	public boolean sendEmail(String emailTmplKey, String[] to, File[] attachments, Map<String, Object> props, String ...subjParams) {
 		props.put("template", getEmailTmpl(emailTmplKey));
 		props.put("appUrl", Utility.getAppUrl());
+		props.put("adminEmailAddress", adminEmailAddress);
+		props.put("adminPhone", "1234567890");//TODO: will be replaced by property file
 		String subject = getSubject(emailTmplKey, subjParams);
 		String content = templateService.render(BASE_TMPL, props);
 		

@@ -34,6 +34,8 @@ import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
+import edu.wustl.common.util.XMLPropertyHandler;
+
 public class UserServiceImpl implements UserService {
 	private static final String DEFAULT_AUTH_DOMAIN = "openspecimen";
 	
@@ -48,6 +50,8 @@ public class UserServiceImpl implements UserService {
 	private static final String NEW_USER_REQUEST_EMAIL_TMPL = "users_new_user_request";
 	
 	private static final String USER_CREATED_EMAIL_TMPL = "users_created";
+	
+	private static final String adminEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
 	
 	private DaoFactory daoFactory;
 
@@ -111,6 +115,7 @@ public class UserServiceImpl implements UserService {
 			daoFactory.getUserDao().saveOrUpdate(user);
 			if (isSignupReq) {
 				sendUserSignupEmail(user);
+				sendNewUserRequestEmail(user);
 			} else {
 				sendUserCreatedEmail(user);
 			}
@@ -145,6 +150,30 @@ public class UserServiceImpl implements UserService {
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<String> approveUserRequest(RequestEvent<Long> req) {
+		try {
+			Long id = req.getPayload();
+			User user =  daoFactory.getUserDao().getById(id);
+			if (user == null) {
+				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
+			}
+			
+			user.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+			ForgotPasswordToken token = null;
+			if (user.getAuthDomain().getName().equals(DEFAULT_AUTH_DOMAIN)) {
+				token = new ForgotPasswordToken(user);
+				daoFactory.getUserDao().saveFpToken(token);
+			}
+			
+			sendUserRequestApprovedEmail(user, token);
+			return ResponseEvent.response("Success");
+		} catch(Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
@@ -273,7 +302,7 @@ public class UserServiceImpl implements UserService {
 	
 	private void sendForgotPasswordLinkEmail(User user, String token) {
 		Map<String, Object> props = new HashMap<String, Object>();
-		props.put("loginName", user.getLoginName());
+		props.put("user", user);
 		props.put("token", token);
 		
 		emailService.sendEmail(FORGOT_PASSWORD_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
@@ -289,8 +318,7 @@ public class UserServiceImpl implements UserService {
 	
 	private void sendUserCreatedEmail(User user) {
 		Map<String, Object> props = new HashMap<String, Object>();
-		props.put("lastName", user.getLastName());
-		props.put("firstName", user.getFirstName());
+		props.put("user", user);
 		
 		emailService.sendEmail(USER_CREATED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	}
@@ -303,20 +331,20 @@ public class UserServiceImpl implements UserService {
 		emailService.sendEmail(SIGNED_UP_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	}
 	
-	//TODO: Mail send to admin after new user sign up, pending because there is no user role feature implemented
 	private void sendNewUserRequestEmail(User user) {
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("newUser", user);
+		props.put("admin", user); //TODO:replace with admin 
 		
 		String [] params = new String[] {user.getFirstName(), user.getLastName()};
-		emailService.sendEmail(NEW_USER_REQUEST_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props, params);
+		emailService.sendEmail(NEW_USER_REQUEST_EMAIL_TMPL, new String[]{adminEmailAddress}, props, params);
 	}
 	
-	//TODO: When user status updated pending to Active then call this method
-	private void sendUserRequestApprovedEmail(User user) {
+	private void sendUserRequestApprovedEmail(User user, ForgotPasswordToken token) {
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("lastName", user.getLastName());
 		props.put("firstName", user.getFirstName());
+		props.put("token", token);
 		
 		emailService.sendEmail(REQUEST_APPROVED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	}

@@ -10,7 +10,9 @@
     </tr>
     <tr>
       <td style="font-size: 12px;font-family: arial,sans-serif;color: #777777;border:none; text-align: center;">
-       <p style="margin:10px 0 0 0"> OpenSpecimen | $adminEmailAddress | $adminPhone </p>
+       <p style="margin:10px 0 0 0"> 
+         <a href="http://www.openspecimen.org/">OpenSpecimen</a> | $adminEmailAddress | $adminPhone 
+       </p>
       </td>
     </tr>
   </tbody>
