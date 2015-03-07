@@ -32,6 +32,8 @@ public class StorageContainerSummary {
 	
 	private int freePositions;
 	
+	private boolean storeSpecimensEnabled;
+	
 	private List<StorageContainerSummary> childContainers;
 
 	public Long getId() {
@@ -122,6 +124,14 @@ public class StorageContainerSummary {
 		this.freePositions = freePositions;
 	}
 
+	public boolean isStoreSpecimensEnabled() {
+		return storeSpecimensEnabled;
+	}
+
+	public void setStoreSpecimensEnabled(boolean storeSpecimensEnabled) {
+		this.storeSpecimensEnabled = storeSpecimensEnabled;
+	}
+
 	public List<StorageContainerSummary> getChildContainers() {
 		return childContainers;
 	}
@@ -145,7 +155,8 @@ public class StorageContainerSummary {
 		
 		result.setDimensionOneCapacity(container.getDimensionOneCapacity());
 		result.setDimensionTwoCapacity(container.getDimensionTwoCapacity());
-		result.setFreePositions(container.freePositionsCount());		
+		result.setFreePositions(container.freePositionsCount());
+		result.setStoreSpecimensEnabled(container.isStoreSpecimenEnabled());
 	}
 	
 	public static StorageContainerSummary from(StorageContainer container) {

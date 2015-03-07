@@ -14,9 +14,13 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 	
 	private boolean topLevelContainers;
 	
+	private Boolean storeSpecimensEnabled;
+	
 	private String specimenClass;
 	
 	private String specimenType;
+	
+	private boolean hierarchical;
 	
 	private Long cpId;
 	
@@ -70,6 +74,15 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 		return self();
 	}
 	
+	public Boolean storeSpecimensEnabled() {
+		return storeSpecimensEnabled;
+	}
+	
+	public StorageContainerListCriteria storeSpecimensEnabled(Boolean storeSpecimensEnabled) {
+		this.storeSpecimensEnabled = storeSpecimensEnabled;
+		return self();
+	}
+	
 	public String specimenClass() {
 		return specimenClass;
 	}
@@ -85,6 +98,15 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 	
 	public StorageContainerListCriteria specimenType(String specimenType) {
 		this.specimenType = specimenType;
+		return self();
+	}
+	
+	public boolean hierarchical() {
+		return hierarchical;
+	}
+	
+	public StorageContainerListCriteria hierarchical(boolean hierarchical) {
+		this.hierarchical = hierarchical;
 		return self();
 	}
 	

@@ -109,7 +109,7 @@ angular.module('openspecimen')
         return _getPvs(attr);
       }
 
-      $http.get(url, {params: {attribute: pvId, searchString: srchTerm}}).then(
+      return $http.get(url, {params: {attribute: pvId, searchString: srchTerm}}).then(
         function(result) {
           return transform(result.data, transformFn, null);
         }

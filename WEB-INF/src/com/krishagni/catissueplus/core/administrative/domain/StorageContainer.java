@@ -331,6 +331,7 @@ public class StorageContainer extends BaseEntity {
 		setComments(other.comments);
 		updateAllowedSpecimenClassAndTypes(other.allowedSpecimenClasses, other.allowedSpecimenTypes);
 		updateAllowedCps(other.allowedCps);
+		updateStoreSpecimenEnabled(other.storeSpecimenEnabled);
 		
 		validateRestrictions();
 	}
@@ -698,6 +699,10 @@ public class StorageContainer extends BaseEntity {
 			desc.getCompAllowedCps().clear();
 			desc.getCompAllowedCps().addAll(desc.computeAllowedCps());
 		}
+	}
+	
+	private void updateStoreSpecimenEnabled(boolean newStoreSpecimenEnabled) {
+		this.storeSpecimenEnabled = newStoreSpecimenEnabled;
 	}
 		
 	private boolean arePositionsOccupiedBeyondCapacity(int dimensionOneCapacity, int dimensionTwoCapacity) {

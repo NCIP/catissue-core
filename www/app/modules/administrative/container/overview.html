@@ -22,9 +22,11 @@
         <span class="value value-md">{{container.siteName}}</span>
       </li>
 
-      <li class="item">
+      <li class="item" ng-if="!!container.parentContainerId">
         <strong class="key key-sm" translate="container.parent_container">Parent Container</strong>
-        <span class="value value-md">{{container.parentContainerName | osNoValue}}</span>
+        <a class="value value-md" ui-sref="container-detail.overview({containerId: container.parentContainerId})">
+          {{container.parentContainerName}}
+        </a>
       </li>
 
       <li class="item">
@@ -38,8 +40,19 @@
       </li>
 
       <li class="item">
+        <strong class="key key-sm" translate="container.stores_specimens">Stores Specimens</strong>
+        <span class="value value-md" ng-switch on="container.storeSpecimensEnabled">
+          <span ng-switch-when="true" translate="common.yes">Yes</span>
+          <span ng-switch-default translate="common.no">No</span>
+        </span>
+      </li>
+
+      <li class="item">
         <strong class="key key-sm" translate="container.collection_protocol">Collection Protocols</strong>
-        <span class="value value-md">{{container.calcAllowedCollectionProtocols | osArrayJoin | osNoValue}}</span>
+        <span class="value value-md" ng-switch on="container.calcAllowedCollectionProtocols.length > 0">
+          <span ng-switch-when="true">{{container.calcAllowedCollectionProtocols | osArrayJoin}}</span>
+          <span ng-switch-default translate="container.all">All</span>
+        </span>
       </li>
 
       <li class="item">

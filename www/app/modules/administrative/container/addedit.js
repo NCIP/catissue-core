@@ -144,7 +144,6 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
                    allowedTypes.indexOf(specimenType.value) >= 0;
         }
       );
-      alert(filtered);
       Util.assign($scope.specimenTypes, filtered);
     };
 

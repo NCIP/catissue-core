@@ -7,7 +7,8 @@ angular.module('os.biospecimen.participant.specimen-position', ['os.administrati
         onlyFreeContainers: true,
         cpId: scope.cpId,
         specimenClass: scope.specimen.specimenClass,
-        specimenType: scope.specimen.type
+        specimenType: scope.specimen.type,
+        storeSpecimensEnabled: true,
       };
 
       return Container.query(params).then(
@@ -32,6 +33,7 @@ angular.module('os.biospecimen.participant.specimen-position', ['os.administrati
         var modalInstance = $modal.open({
           templateUrl: 'modules/biospecimen/participant/specimen-position-selector.html',
           controller: 'SpecimenPositionSelectorCtrl',
+          size: 'lg',
           resolve: {
             specimen: function() {
               return scope.specimen

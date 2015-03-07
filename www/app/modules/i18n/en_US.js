@@ -32,7 +32,9 @@
       "discard": "Discard",
       "next": "Next",
       "previous": "Previous",
-      "ok": "Ok"
+      "ok": "Ok",
+      "select": "Select",
+      "unselect": "Unselect"
     }
   },
 
@@ -446,6 +448,7 @@
     "free_locations": "Free Locations",
     "no_container_selected": "Please select a container",
     "cannot_hold_specimen": "Selected container cannot hold specimen for which position is being selected",
+    "stores_specimens": "Stores Specimens",
 
     "tooltip": {
       "view_details": "Click to view/edit Storage Container details",

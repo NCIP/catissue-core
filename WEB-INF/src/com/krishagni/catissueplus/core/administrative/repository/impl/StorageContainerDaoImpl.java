@@ -28,32 +28,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<StorageContainer> getStorageContainers(StorageContainerListCriteria listCrit) {
-		StringBuilder from = new StringBuilder("select c from ").append(getType().getName()).append(" c");
-		StringBuilder where = new StringBuilder("where c.activityStatus = :activityStatus");
-		
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus());
-		
-		addNameRestriction(listCrit, from, where, params);
-		addFreeContainersRestriction(listCrit, from, where);
-		addSiteRestriction(listCrit, from, where, params);
-		addParentRestriction(listCrit, from, where, params);
-		addSpecimenRestriction(listCrit, from, where, params);
-		addCpRestriction(listCrit, from, where, params);
-		
-		String hql = new StringBuilder(from).append(" ").append(where)
-			.append(" order by c.name asc")
-			.toString();
-		
-		Query query = sessionFactory.getCurrentSession().createQuery(hql)
-				.setFirstResult(listCrit.startAt())
-				.setMaxResults(listCrit.maxResults());
-		
-		for (Map.Entry<String, Object> param : params.entrySet()) {
-			query.setParameter(param.getKey(), param.getValue());
-		}
-		
-		return query.list();
+		return new ListQueryBuilder(listCrit).query().list();
 	}
 	
 	@Override
@@ -84,134 +59,175 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 		sessionFactory.getCurrentSession().delete(position);		
 	}
 	
-	private void addNameRestriction(
-			StorageContainerListCriteria crit, 
-			StringBuilder from, 
-			StringBuilder where, 
-			Map<String, Object> params) {
-		
-		if (StringUtils.isBlank(crit.query())) {
-			return;
-		}
-		
-		if (where.length() != 0) {
-			where.append(" and ");			
-		}
-		
-		where.append("upper(c.name) like :name");
-		params.put("name", "%" + crit.query().toUpperCase() + "%");
-	}
 	
-	private void addFreeContainersRestriction(
-			StorageContainerListCriteria crit, 
-			StringBuilder from, 
-			StringBuilder where) {
+	private class ListQueryBuilder {
+		private StorageContainerListCriteria crit;
 		
-		if (!crit.onlyFreeContainers()) {
-			return;
-		}
+		private StringBuilder from = new StringBuilder();
 		
-		from.append(" join c.stats stats");
+		private StringBuilder where = new StringBuilder();
+		
+		private Map<String, Object> params = new HashMap<String, Object>();
+		
+		public ListQueryBuilder(StorageContainerListCriteria crit) {
+			this.crit = crit;
 				
-		if (where.length() != 0) {
-			where.append(" and ");			
+			
+			if (crit.hierarchical()) {
+				from = new StringBuilder("select distinct c from ").append(getType().getName()).append(" c")
+						.append(" join c.descendentContainers dc");
+				where = new StringBuilder("where dc.activityStatus = :activityStatus");
+			} else {
+				from = new StringBuilder("select c from ").append(getType().getName()).append(" c");
+				where = new StringBuilder("where c.activityStatus = :activityStatus");						
+			}
+			
+			params.put("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 		}
 		
-		where.append("stats.freePositions > 0");
-	}
-	
-	private void addSiteRestriction(
-			StorageContainerListCriteria crit, 
-			StringBuilder from, 
-			StringBuilder where, 
-			Map<String, Object> params) {
-		
-		if (StringUtils.isBlank(crit.siteName())) {
-			return;
+		public Query query() {						
+			addNameRestriction();		
+			addSiteRestriction();
+					
+			addFreeContainersRestriction();
+			addSpecimenRestriction();
+			addCpRestriction();
+			addStoreSpecimenRestriction();
+			
+			addParentRestriction();
+			
+			String hql = new StringBuilder(from).append(" ").append(where)
+					.append(" order by c.name asc")
+					.toString();
+			
+			Query query = sessionFactory.getCurrentSession().createQuery(hql)
+					.setFirstResult(crit.startAt())
+					.setMaxResults(crit.maxResults());
+			
+			for (Map.Entry<String, Object> param : params.entrySet()) {
+				query.setParameter(param.getKey(), param.getValue());
+			}
+			
+			return query;
 		}
 		
-		from.append(" join c.site site");
-		
-		if (where.length() != 0) {
-			where.append(" and ");
+		private void addAnd() {
+			if (where.length() != 0) {
+				where.append(" and ");
+			}
 		}
 		
-		where.append("site.name = :siteName");
-		params.put("siteName", crit.siteName());
-	}
-	
-	private void addParentRestriction(
-			StorageContainerListCriteria crit, 
-			StringBuilder from, 
-			StringBuilder where, 
-			Map<String, Object> params) {
-		
-		if (!crit.topLevelContainers() && crit.parentContainerId() == null) {
-			return;
-		}
-		
-		if (crit.topLevelContainers()) {
-			from.append(" left join c.parentContainer pc");			
-		} else if (crit.parentContainerId() != null) {
-			from.append(" join c.parentContainer pc");
-		} 
-		
-		if (where.length() != 0) {
-			where.append(" and ");
-		}
-		
-		Long parentId = crit.parentContainerId();
-		if (parentId == null) {
-			where.append("pc is null");
-		} else {
-			where.append("pc.id = :parentId");
-			params.put("parentId", parentId);						
-		}
-	}
-	
-	private void addSpecimenRestriction(
-			StorageContainerListCriteria crit, 
-			StringBuilder from, 
-			StringBuilder where, 
-			Map<String, Object> params) {
-		
-		String specimenClass = crit.specimenClass(), specimenType = crit.specimenType();
-		
-		if (StringUtils.isBlank(specimenClass) && StringUtils.isBlank(specimenType)) {
-			return;
-		}
-		
-		if (where.length() != 0) {
-			where.append(" and ");
+		private void addNameRestriction() {			
+			if (StringUtils.isBlank(crit.query())) {
+				return;
+			}
+			
+			addAnd();
+			where.append("upper(c.name) like :name");
+			params.put("name", "%" + crit.query().toUpperCase() + "%");
 		}
 
-		where.append("(:specimenClass in elements(c.allowedSpecimenClasses)")
-			.append(" or ")
-			.append(":specimenType in elements(c.allowedSpecimenTypes)")
-			.append(")");
-		
-		params.put("specimenClass", specimenClass);
-		params.put("specimenType", specimenType);
-	}
-	
-	private void addCpRestriction(
-			StorageContainerListCriteria crit, 
-			StringBuilder from, 
-			StringBuilder where, 
-			Map<String, Object> params) {
-		
-		Long cpId = crit.cpId();
-		if (cpId == null || cpId == -1) {
-			return;
+		private void addFreeContainersRestriction() {			
+			if (!crit.onlyFreeContainers()) {
+				return;
+			}
+			
+			if (crit.hierarchical()) {
+				from.append(" join dc.stats stats");
+			} else {
+				from.append(" join c.stats stats");
+			}
+			
+			addAnd();
+			where.append("stats.freePositions > 0");
+		}
+
+		private void addSiteRestriction() {			
+			if (StringUtils.isBlank(crit.siteName())) {
+				return;
+			}
+			
+			from.append(" join c.site site");
+
+			addAnd();
+			where.append("site.name = :siteName");
+			params.put("siteName", crit.siteName());
+		}
+
+		private void addParentRestriction() {			
+			if (!crit.topLevelContainers() && crit.parentContainerId() == null) {
+				return;
+			}
+			
+			if (crit.topLevelContainers()) {
+				from.append(" left join c.parentContainer pc");			
+			} else if (crit.parentContainerId() != null) {
+				from.append(" join c.parentContainer pc");
+			} 
+
+			addAnd();
+			Long parentId = crit.parentContainerId();
+			if (parentId == null) {
+				where.append("pc is null");
+			} else {
+				where.append("pc.id = :parentId");
+				params.put("parentId", parentId);						
+			}
+		}
+
+		private void addSpecimenRestriction() {			
+			String specimenClass = crit.specimenClass(), specimenType = crit.specimenType();			
+			if (StringUtils.isBlank(specimenClass) && StringUtils.isBlank(specimenType)) {
+				return;
+			}
+			
+			addAnd();
+			if (crit.hierarchical()) {
+				where.append("(:specimenClass in elements(dc.compAllowedSpecimenClasses)")
+				.append(" or ")
+				.append(":specimenType in elements(dc.compAllowedSpecimenTypes)")
+				.append(")");				
+			} else {
+				where.append("(:specimenClass in elements(c.compAllowedSpecimenClasses)")
+				.append(" or ")
+				.append(":specimenType in elements(c.compAllowedSpecimenTypes)")
+				.append(")");				
+			}
+			
+			params.put("specimenClass", specimenClass);
+			params.put("specimenType", specimenType);
 		}
 		
-		from.append(" left join c.allowedCps cp");
+		private void addCpRestriction() {			
+			Long cpId = crit.cpId();
+			if (cpId == null || cpId == -1) {
+				return;
+			}
+			
+			if (crit.hierarchical()) {
+				from.append(" left join dc.compAllowedCps cp");
+			} else {
+				from.append(" left join c.compAllowedCps cp");
+			}
+			
+			addAnd();
+			where.append("(cp is null or cp.id = :cpId)");
+			params.put("cpId", cpId);
+		}	
 		
-		if (where.length() != 0) {
-			where.append(" and ");
+		private void addStoreSpecimenRestriction() {			
+			if (crit.storeSpecimensEnabled() == null) {
+				return;
+			}
+
+			addAnd();
+			if (crit.hierarchical()) {
+				where.append("dc.storeSpecimenEnabled = :storeSpecimenEnabled");
+			} else {
+				where.append("c.storeSpecimenEnabled = :storeSpecimenEnabled");
+			}
+			
+			params.put("storeSpecimenEnabled", crit.storeSpecimensEnabled());
 		}
-		
-		where.append("(cp is null or cp.id = :cpId)");
-		params.put("cpId", cpId);
 	}	
 }

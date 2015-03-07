@@ -73,7 +73,13 @@ public class StorageContainersController {
 			String specimenType,
 			
 			@RequestParam(value = "cpId", required = false)
-			Long cpId
+			Long cpId,
+			
+			@RequestParam(value = "storeSpecimensEnabled", required = false)
+			Boolean storeSpecimensEnabled,
+			
+			@RequestParam(value = "hierarchical", required = false, defaultValue = "false")
+			boolean hierarchical
 			) {
 		
 		StorageContainerListCriteria crit = new StorageContainerListCriteria()
@@ -87,7 +93,9 @@ public class StorageContainersController {
 			.topLevelContainers(topLevelContainers)
 			.specimenClass(specimenClass)
 			.specimenType(specimenType)
-			.cpId(cpId);
+			.cpId(cpId)
+			.storeSpecimensEnabled(storeSpecimensEnabled)
+			.hierarchical(hierarchical);
 					
 		RequestEvent<StorageContainerListCriteria> req = new RequestEvent<StorageContainerListCriteria>(getSession(), crit);
 		ResponseEvent<List<StorageContainerSummary>> resp = storageContainerSvc.getStorageContainers(req);
