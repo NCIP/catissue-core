@@ -39,15 +39,24 @@
 
       <li class="item">
         <strong class="key key-sm" translate="container.collection_protocol">Collection Protocols</strong>
-        <span class="value value-md">{{container.allowedCollectionProtocols | osArrayJoin | osNoValue}}</span>
+        <span class="value value-md">{{container.calcAllowedCollectionProtocols | osArrayJoin | osNoValue}}</span>
       </li>
 
       <li class="item">
         <strong class="key key-sm" translate="container.specimen_types">Specimen Types</strong>
         <div class="value value-md">
-          <span>{{container.allowedSpecimenClasses | osArrayJoin | osNoValue}}</span>
-          <span ng-if="container.allowedSpecimenClasses.length > 0 && container.allowedSpecimenTypes.length > 0">,&nbsp;</span>
-          <span>{{container.allowedSpecimenTypes | osArrayJoin | osNoValue}}</span>
+          <span ng-if="container.calcAllowedSpecimenClasses.length > 0">
+            {{container.calcAllowedSpecimenClasses | osArrayJoin}}
+          </span>
+          <span ng-if="container.calcAllowedSpecimenClasses.length > 0 && container.calcAllowedSpecimenTypes.length > 0">
+            ,
+          </span>
+          <span ng-if="container.calcAllowedSpecimenTypes.length > 0">
+            {{container.calcAllowedSpecimenTypes | osArrayJoin}}
+          </span>
+          <span ng-if="container.calcAllowedSpecimenClasses.length == 0 && container.calcAllowedSpecimenTypes.length == 0">
+            {{'' | osNoValue}}
+          </span>
         </div>
       </li>
     </ul>

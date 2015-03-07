@@ -446,14 +446,14 @@
 			</then>
 		</if>
 		
-		<if>
+		<!-- if>
 			<not>
 				<equals arg1="" arg2="${institute.logo.path}" />
 			</not>
 			<then>
 				<copy file="${institute.logo.path}" todir="${temp.dir}/catissuecore/images" overwrite="true" />
 			</then>
-		</if>
+		</if -->
 		
 		
 		
@@ -1396,7 +1396,7 @@
 	<target name="deploy_app_catissue" description="Target for fresh deployment of caTissue application">
 			<antcall target="pre_initialization" />
 			<antcall target="db_configuration" />
-			<antcall target="integrate_advanced_query"/>
+			<!-- antcall target="integrate_advanced_query"/ -->
 		
 			<antcall target="app_configuration"/>
 			<antcall target="de_integrate_app" />
@@ -4615,7 +4615,7 @@
 			</then>
 			</elseif>
 			</if>
-		<antcall target="insert_dashboard_queries" />
+		<!-- antcall target="insert_dashboard_queries" / -->
 		 	<antcall target="jboss_configuration" />
 		</target>
 
