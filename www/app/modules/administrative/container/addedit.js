@@ -1,6 +1,6 @@
 angular.module('os.administrative.container.addedit', ['os.administrative.models'])
   .controller('ContainerAddEditCtrl', function(
-    $scope, $state, $stateParams, container, 
+    $scope, $state, $stateParams, $q, container, 
     Site, Container, CollectionProtocol, PvManager, Util) {
 
 
@@ -92,7 +92,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     };
      
     function restrictCps(parentContainer) {
-      var parentCps = parentContainer.allowedCollectionProtocols;
+      var parentCps = parentContainer.calcAllowedCollectionProtocols;
       if (parentCps.length > 0) {
         $scope.cps = parentCps;
       } else if (!allCps) { // CPs have not been loaded
@@ -100,6 +100,8 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
       } else {
         $scope.cps = allCps;
       }
+
+      $scope.container.allowedCollectionProtocols = allowedCps; 
     };
 
     function loadAllCps() {
@@ -122,7 +124,6 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
       if (allSpecimenTypes) {
         filterSpecimenTypes(parentContainer);
       } else {
-        allSpecimenTypes = [];
         loadAllSpecimenTypes().then(
           function() { 
             filterSpecimenTypes(parentContainer); 
@@ -132,9 +133,10 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     };
 
     function filterSpecimenTypes(parentContainer) {
-      var allowedClasses = parentContainer.allowedSpecimenClasses;
-      var allowedTypes = parentContainer.allowedSpecimenTypes;
+      var allowedClasses = parentContainer.calcAllowedSpecimenClasses;
+      var allowedTypes = parentContainer.calcAllowedSpecimenTypes;
       $scope.specimenTypeSelectorOpts.allowAll = allowedClasses;
+
 
       var filtered = allSpecimenTypes.filter(
         function(specimenType) {
@@ -147,11 +149,12 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
 
     function loadAllSpecimenTypes() {
       if (allSpecimenTypes) {
-        return;
+        var d = $q.defer();
+        d.resolve(allSpecimenTypes);
+        return d.promise;
       }
 
-      allSpecimenTypes = [];
-      PvManager.loadPvsByParent('specimen-class', undefined, true).then(
+      return PvManager.loadPvsByParent('specimen-class', undefined, true).then(
         function(specimenTypes) {
           allSpecimenTypes = specimenTypes;
           Util.assign($scope.specimenTypes, specimenTypes);

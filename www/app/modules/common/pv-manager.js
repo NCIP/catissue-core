@@ -5,7 +5,7 @@
  * 2. Cache the PVs so that frequent calls are not needed
  */
 angular.module('openspecimen')
-  .factory('PvManager', function($http, $q, ApiUrls, ApiUtil, Site) {
+  .factory('PvManager', function($http, $q, ApiUrls, ApiUtil, Site, Util) {
     var url = ApiUrls.getBaseUrl() + 'permissible-values';
 
     var anatomicSites = [
@@ -103,10 +103,6 @@ angular.module('openspecimen')
       return pvs.map(function(pv) { return transformfn(pv); });
     };
 
-    function insertInto(input, output) {
-      Array.prototype.splice.apply(output, [0, 0].concat(input));
-    };
-
     function loadPvs(attr, srchTerm, transformFn) {
       var pvId = pvIdMap[attr];
       if (!pvId) {
@@ -147,7 +143,6 @@ angular.module('openspecimen')
       } else {
         result = [];
       }
-
       deferred.resolve(result);
       return deferred.promise;
     };
@@ -157,7 +152,7 @@ angular.module('openspecimen')
         var pvs = [];
         loadPvs(attr, srchTerm, transformFn).then(
           function(result) {
-            insertInto(result, pvs);
+            Util.unshiftAll(pvs, result);
           }
         );    
         return pvs;
@@ -170,7 +165,7 @@ angular.module('openspecimen')
 
         loadPvsByParent(parentAttr, parentVal, incParentVal, transformFn).then(
           function(result) {
-            insertInto(result, pvs);
+            Util.unshiftAll(pvs, result);
           }
         );
 
