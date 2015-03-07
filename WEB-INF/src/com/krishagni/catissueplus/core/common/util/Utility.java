@@ -2,7 +2,9 @@ package com.krishagni.catissueplus.core.common.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -44,4 +46,11 @@ public class Utility {
 		return ((Number)number).longValue();
 	}
 	
+	public static boolean isEmptyOrSuperset(Set<?> leftOperand, Set<?> rightOperand) {
+		if (CollectionUtils.isEmpty(leftOperand)) {
+			return true;
+		}
+		
+		return leftOperand.containsAll(rightOperand);		
+	}	
 }

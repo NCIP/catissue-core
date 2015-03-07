@@ -26,6 +26,8 @@
 
     <property name="dimensionTwoLabelingScheme" column="DIMENSION_TWO_LABELING_SCHEME"/>
 
+    <property name="storeSpecimenEnabled" column="STORE_SPECIMENS"/>
+
     <many-to-one
       name="site"
       class="com.krishagni.catissueplus.core.administrative.domain.Site"
@@ -50,6 +52,16 @@
       <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" />
     </set>
 
+    <set name="ancestorContainers" table="OS_CONTAINERS_HIERARCHY">
+      <key column="DESCENDENT_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" column="ANCESTOR_ID"/>
+    </set>
+
+    <set name="descendentContainers" table="OS_CONTAINERS_HIERARCHY">
+      <key column="ANCESTOR_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" column="DESCENDENT_ID"/>
+    </set>
+
     <set name="allowedSpecimenClasses" table="OS_STOR_CONT_SPEC_CLASSES" cascade="all-delete-orphan">
       <key column="STORAGE_CONTAINER_ID"/>
       <element column="SPECIMEN_CLASS" type="string"/>
@@ -61,6 +73,21 @@
     </set>
             
     <set name="allowedCps" table="OS_STOR_CONTAINER_CPS" inverse="false">
+      <key column="STORAGE_CONTAINER_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol" column="CP_ID"/>
+    </set>
+
+    <set name="compAllowedSpecimenClasses" table="OS_STOR_CONT_COMP_SPEC_CLASSES" cascade="all-delete-orphan">
+      <key column="STORAGE_CONTAINER_ID"/>
+      <element column="SPECIMEN_CLASS" type="string"/>
+    </set>
+
+    <set name="compAllowedSpecimenTypes" table="OS_STOR_CONT_COMP_SPEC_TYPES" cascade="all-delete-orphan">
+      <key column="STORAGE_CONTAINER_ID"/>
+      <element column="SPECIMEN_TYPE" type="string"/>
+    </set>
+            
+    <set name="compAllowedCps" table="OS_STOR_CONTAINER_COMP_CPS" inverse="false">
       <key column="STORAGE_CONTAINER_ID"/>
       <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol" column="CP_ID"/>
     </set>

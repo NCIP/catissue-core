@@ -581,4 +581,116 @@
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
 
+  <changeSet author="vpawar" id="Containers hierarchy table">
+    <createTable tableName="OS_CONTAINERS_HIERARCHY">
+      <column name="ANCESTOR_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="DESCENDENT_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on containers hierarchy ancestor">
+    <addForeignKeyConstraint 
+      constraintName="FK_OS_CONT_HIERARCHY_AID"
+      baseTableName="OS_CONTAINERS_HIERARCHY"
+      baseColumnNames="ANCESTOR_ID"
+      referencedTableName="OS_STORAGE_CONTAINERS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on containers hierarchy descendent">
+    <addForeignKeyConstraint 
+      constraintName="FK_OS_CONT_HIERARCHY_DID"
+      baseTableName="OS_CONTAINERS_HIERARCHY"
+      baseColumnNames="DESCENDENT_ID"
+      referencedTableName="OS_STORAGE_CONTAINERS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK container hierarchy unique constraint">
+    <addUniqueConstraint 
+      tableName="OS_CONTAINERS_HIERARCHY"
+      columnNames="ANCESTOR_ID,DESCENDENT_ID"
+      constraintName="CONTAINER_REL_UQ"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Computed allowed specimen classes in container">
+    <createTable tableName="OS_STOR_CONT_COMP_SPEC_CLASSES">
+      <column name="STORAGE_CONTAINER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SPECIMEN_CLASS" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK to container in computed allowed specimen classes">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ST_CONT_CSC_CONT_ID"
+      baseTableName="OS_STOR_CONT_COMP_SPEC_CLASSES"
+      baseColumnNames="STORAGE_CONTAINER_ID"
+      referencedTableName="OS_STORAGE_CONTAINERS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Computed allowed specimen types in container">
+    <createTable tableName="OS_STOR_CONT_COMP_SPEC_TYPES">
+      <column name="STORAGE_CONTAINER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SPECIMEN_TYPE" type="${text.type}(128)">
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK to container in computed allowed specimen types">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ST_CONT_CST_CONT_ID"
+      baseTableName="OS_STOR_CONT_COMP_SPEC_TYPES"
+      baseColumnNames="STORAGE_CONTAINER_ID"
+      referencedTableName="OS_STORAGE_CONTAINERS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Computed allowed CP specimens in container">
+    <createTable tableName="OS_STOR_CONTAINER_COMP_CPS">
+      <column name="STORAGE_CONTAINER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CP_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK to container in computed allowed CP specimens">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ST_CONT_CCPS_CONT_ID"
+      baseTableName="OS_STOR_CONTAINER_COMP_CPS"
+      baseColumnNames="STORAGE_CONTAINER_ID"
+      referencedTableName="OS_STORAGE_CONTAINERS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK to CP in computed allowed CP specimens">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ST_CONT_CCPS_CP_ID"
+      baseTableName="OS_STOR_CONTAINER_COMP_CPS"
+      baseColumnNames="CP_ID"
+      referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Added field to indicate whether container can store specimens">
+    <addColumn tableName="OS_STORAGE_CONTAINERS">
+      <column name="STORE_SPECIMENS" type="${boolean.type}" defaultValueBoolean="0">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

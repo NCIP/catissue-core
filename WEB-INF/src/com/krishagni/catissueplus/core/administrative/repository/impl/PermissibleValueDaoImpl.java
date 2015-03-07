@@ -1,11 +1,15 @@
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.PermissibleValue;
@@ -15,6 +19,11 @@ import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 
 public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> implements PermissibleValueDao {
+
+	@Override
+	public PermissibleValue getById(Long id) {
+		return (PermissibleValue) sessionFactory.getCurrentSession().get(PermissibleValue.class, id);
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -43,9 +52,26 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 			.addOrder(Order.asc("value"))
 			.list();
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	@Override
-	public PermissibleValue getById(Long id) {
-		return (PermissibleValue) sessionFactory.getCurrentSession().get(PermissibleValue.class, id);
+	public List<String> getSpecimenClasses() {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class)
+				.add(Restrictions.eq("attribute", "2003991"));
+		return query.setProjection(Projections.property("value")).list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getSpecimenTypes(Collection<String> specimenClasses) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class)
+				.createAlias("parent", "ppv")
+				.add(Restrictions.eq("ppv.attribute", "2003991"));
+		
+		if (CollectionUtils.isNotEmpty(specimenClasses)) {
+			query.add(Restrictions.in("ppv.value", specimenClasses));
+		}
+		
+		return query.setProjection(Projections.property("value")).list();
+	}	
 }

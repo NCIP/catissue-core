@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,11 +16,17 @@ public class StorageContainerDetail extends StorageContainerSummary {
 	
 	private String comments;
 	
-	private Set<String> allowedSpecimenClasses = new HashSet<String>(); 
+	private Set<String> allowedSpecimenClasses = new HashSet<String>();
+	
+	private Set<String> calcAllowedSpecimenClasses = new HashSet<String>();
 	
 	private Set<String> allowedSpecimenTypes = new HashSet<String>();
+	
+	private Set<String> calcAllowedSpecimenTypes = new HashSet<String>();
 
 	private Set<String> allowedCollectionProtocols = new HashSet<String>();
+	
+	private Set<String> calcAllowedCollectionProtocols = new HashSet<String>();
 	
 	private StorageContainerPositionDetail position;
 	
@@ -69,8 +76,24 @@ public class StorageContainerDetail extends StorageContainerSummary {
 		return allowedSpecimenTypes;
 	}
 
+	public Set<String> getCalcAllowedSpecimenClasses() {
+		return calcAllowedSpecimenClasses;
+	}
+
+	public void setCalcAllowedSpecimenClasses(Set<String> calcAllowedSpecimenClasses) {
+		this.calcAllowedSpecimenClasses = calcAllowedSpecimenClasses;
+	}
+	
 	public void setAllowedSpecimenTypes(Set<String> allowedSpecimenTypes) {
 		this.allowedSpecimenTypes = allowedSpecimenTypes;
+	}
+
+	public Set<String> getCalcAllowedSpecimenTypes() {
+		return calcAllowedSpecimenTypes;
+	}
+
+	public void setCalcAllowedSpecimenTypes(Set<String> calcAllowedSpecimenTypes) {
+		this.calcAllowedSpecimenTypes = calcAllowedSpecimenTypes;
 	}
 
 	public Set<String> getAllowedCollectionProtocols() {
@@ -79,6 +102,15 @@ public class StorageContainerDetail extends StorageContainerSummary {
 
 	public void setAllowedCollectionProtocols(Set<String> allowedCollectionProtocols) {
 		this.allowedCollectionProtocols = allowedCollectionProtocols;
+	}
+
+	public Set<String> getCalcAllowedCollectionProtocols() {
+		return calcAllowedCollectionProtocols;
+	}
+
+	public void setCalcAllowedCollectionProtocols(
+			Set<String> calcAllowedCollectionProtocols) {
+		this.calcAllowedCollectionProtocols = calcAllowedCollectionProtocols;
 	}
 
 	public StorageContainerPositionDetail getPosition() {
@@ -106,16 +138,23 @@ public class StorageContainerDetail extends StorageContainerSummary {
 		result.setDimensionTwoLabelingScheme(container.getDimensionTwoLabelingScheme());
 		result.setComments(container.getComments());
 		result.setAllowedSpecimenClasses(new HashSet<String>(container.getAllowedSpecimenClasses()));
+		result.setCalcAllowedSpecimenClasses(new HashSet<String>(container.getCompAllowedSpecimenClasses()));		
 		result.setAllowedSpecimenTypes(new HashSet<String>(container.getAllowedSpecimenTypes()));
+		result.setCalcAllowedSpecimenTypes(new HashSet<String>(container.getCompAllowedSpecimenTypes()));
 		
-		Set<String> cpNames = new HashSet<String>();
-		for (CollectionProtocol cp : container.getAllowedCps()) {
-			cpNames.add(cp.getShortTitle());
-		}
-		result.setAllowedCollectionProtocols(cpNames);
+		result.setAllowedCollectionProtocols(getCpNames(container.getAllowedCps()));		
+		result.setCalcAllowedCollectionProtocols(getCpNames(container.getCompAllowedCps()));
 		
 		result.setPosition(StorageContainerPositionDetail.from(container.getPosition()));
 		result.setOccupiedPositions(container.occupiedPositionsOrdinals());
 		return result;
+	}
+	
+	private static Set<String> getCpNames(Collection<CollectionProtocol> cps) {
+		Set<String> cpNames = new HashSet<String>();
+		for (CollectionProtocol cp : cps) {
+			cpNames.add(cp.getShortTitle());
+		}
+		return cpNames;
 	}
 }

@@ -20,6 +20,8 @@ public class StorageContainerSummary {
 
 	private String siteName;
 
+	private Long parentContainerId;
+	
 	private String parentContainerName;
 
 	private UserSummary createdBy;
@@ -70,6 +72,14 @@ public class StorageContainerSummary {
 
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;
+	}
+
+	public Long getParentContainerId() {
+		return parentContainerId;
+	}
+
+	public void setParentContainerId(Long parentContainerId) {
+		this.parentContainerId = parentContainerId;
 	}
 
 	public String getParentContainerName() {
@@ -129,6 +139,7 @@ public class StorageContainerSummary {
 		
 		result.setSiteName(container.getSite().getName());
 		if (container.getParentContainer() != null) {
+			result.setParentContainerId(container.getParentContainer().getId());
 			result.setParentContainerName(container.getParentContainer().getName());
 		}
 		

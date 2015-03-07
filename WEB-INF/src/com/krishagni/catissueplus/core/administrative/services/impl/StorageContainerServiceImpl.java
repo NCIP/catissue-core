@@ -112,6 +112,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			
 			StorageContainer container = containerFactory.createStorageContainer(input);
 			ensureUniqueConstraints(container);
+			container.validateRestrictions();
 			
 			daoFactory.getStorageContainerDao().saveOrUpdate(container, true);
 			return ResponseEvent.response(StorageContainerDetail.from(container));
@@ -166,8 +167,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			
 			CollectionProtocol cp = new CollectionProtocol();
 			cp.setId(detail.getCpId());
-			boolean isAllowed = container.canContainSpecimen(
-					cp, detail.getSpecimenClass(), detail.getSpecimenType());
+			boolean isAllowed = container.canContainSpecimen(cp, detail.getSpecimenClass(), detail.getSpecimenType());
 
 			if (!isAllowed) {
 				return ResponseEvent.userError(StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN);

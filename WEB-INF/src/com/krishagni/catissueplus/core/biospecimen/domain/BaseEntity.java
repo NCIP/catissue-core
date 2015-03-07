@@ -16,7 +16,7 @@ public class BaseEntity {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		return prime + ((id == null) ? 0 : id.hashCode());
+		return prime + ((getId() == null) ? 0 : getId().hashCode());
 	}
 
 	@Override
@@ -31,6 +31,6 @@ public class BaseEntity {
 		}
 
 		BaseEntity other = (BaseEntity) obj;
-		return id != null ? id.equals(other.getId()) : false;
+		return getId() != null ? getId().equals(other.getId()) : false;
 	}
 }

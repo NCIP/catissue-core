@@ -24,5 +24,16 @@
       name="parent"
       class="com.krishagni.catissueplus.core.administrative.domain.PermissibleValue"
       column="PARENT_IDENTIFIER"/>
+
+    <query name="getSpecimenTypes">
+      select
+        pv.value
+      from
+        com.krishagni.catissueplus.core.administrative.domain.PermissibleValue pv
+        join pv.parent ppv
+      where
+        ppv.attribute = '2003991' and
+        ppv.value in (:specimenClasses)
+    </query>
   </class>
 </hibernate-mapping>

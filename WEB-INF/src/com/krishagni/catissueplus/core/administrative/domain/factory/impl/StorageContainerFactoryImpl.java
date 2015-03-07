@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -56,6 +57,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		setAllowedSpecimenClasses(detail, container, ose);
 		setAllowedSpecimenTypes(detail, container, ose);
 		setAllowedCps(detail, container, ose);
+		setComputedRestrictions(container);
 		
 		ose.checkAndThrow();
 		return container;
@@ -236,45 +238,44 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	
 	private void setAllowedSpecimenClasses(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		Set<String> allowedSpecimenClasses = detail.getAllowedSpecimenClasses();
-		if (CollectionUtils.isEmpty(allowedSpecimenClasses)) {
-			return;
-		}
 		
 		if (!CommonValidator.isValidPv(allowedSpecimenClasses.toArray(new String[0]), "specimen-class")) {
 			ose.addError(SpecimenErrorCode.INVALID_SPECIMEN_CLASS);
 			return;
 		}
-		
-		container.setAllowedSpecimenClasses(allowedSpecimenClasses);
+						
+		container.setAllowedSpecimenClasses(allowedSpecimenClasses);		
 	}
 	
 	private void setAllowedSpecimenTypes(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		Set<String> allowedSpecimenTypes = detail.getAllowedSpecimenTypes();
-		if (CollectionUtils.isEmpty(allowedSpecimenTypes)) {
-			return;
-		}
 		
 		if (!CommonValidator.isValidPv(allowedSpecimenTypes.toArray(new String[0]), "specimen-type")) {
 			ose.addError(SpecimenErrorCode.INVALID_SPECIMEN_TYPE);
 			return;
 		}
-		
-		container.setAllowedSpecimenTypes(allowedSpecimenTypes);
+						
+		container.setAllowedSpecimenTypes(allowedSpecimenTypes);		
 	}
 	
 	private void setAllowedCps(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		Set<String> allowedCps = detail.getAllowedCollectionProtocols();
-		if (CollectionUtils.isEmpty(allowedCps)) {
-			return;
-		}
-
-		List<CollectionProtocol> cps = daoFactory.getCollectionProtocolDao().getCpsByShortTitle(allowedCps);
-		if (cps.size() != allowedCps.size()) {
-			ose.addError(CpErrorCode.NOT_FOUND);
-			return;
+		
+		List<CollectionProtocol> cps = new ArrayList<CollectionProtocol>();		
+		if (!CollectionUtils.isEmpty(allowedCps)) {
+			cps = daoFactory.getCollectionProtocolDao().getCpsByShortTitle(allowedCps);
+			if (cps.size() != allowedCps.size()) {
+				ose.addError(CpErrorCode.NOT_FOUND);
+				return;
+			}			
 		}
 		
-		container.setAllowedCps(new HashSet<CollectionProtocol>(cps));
+		container.setAllowedCps(new HashSet<CollectionProtocol>(cps));		
 	}
 	
+	private void setComputedRestrictions(StorageContainer container) {
+		container.setCompAllowedSpecimenClasses(container.computeAllowedSpecimenClasses());
+		container.setCompAllowedSpecimenTypes(container.computeAllowedSpecimenTypes());
+		container.setCompAllowedCps(container.computeAllowedCps());
+	}
 }
