@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml">
-
-	<mx:Label text="* Receiver" height="25"/>
-	<mx:Label text="* Date" height="25"/>
-	<mx:Label text="* Time" height="25"/>
-	<mx:Label text="* Quality" height="25"/>
-	<mx:Label text="Comments" height="25"/>
-</mx:VBox>

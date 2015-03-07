@@ -102,7 +102,7 @@
 
         <property
             name="reportText"
-            type="gov.nih.nci.common.util.StringClobType"
+            type="string"
             update="true"
             insert="true"
             column="REPORT_TEXT"

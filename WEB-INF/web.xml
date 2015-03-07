@@ -98,16 +98,6 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<url-pattern>/rest/ng/*</url-pattern>
 	</filter-mapping>
 
-    <!--filter-mapping>
-	<filter-name>RestApiAuthFilter</filter-name>
-	<url-pattern>/rest/*</url-pattern>
-    </filter-mapping>
-
-    <filter-mapping>
-        <filter-name>RestApiAuthFilter</filter-name>
-        <url-pattern>/rest/ng/*</url-pattern>
-    </filter-mapping-->
-
 	<filter-mapping>
 		<filter-name>FlexComponentFilter</filter-name>
 		<url-pattern>/flexclient/*</url-pattern>
@@ -283,86 +273,13 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	</servlet>
 	
 	<servlet>
-		<servlet-name>sdkstartup</servlet-name>
-		<servlet-class>
-			gov.nih.nci.common.util.WebStartupUtil
-		</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet>
 		<servlet-name>AxisServlet</servlet-name>
 		<display-name>Apache-Axis Servlet</display-name>
 		<servlet-class>org.apache.axis.transport.http.AxisServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>GetXML</servlet-name>
-		<servlet-class>gov.nih.nci.system.proxy.HTTPQuery</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>GetHTML</servlet-name>
-		<servlet-class>gov.nih.nci.system.proxy.HTTPQuery</servlet-class>
-	</servlet>
-	<servlet>
 		<servlet-name>Happy</servlet-name>
 		<jsp-file>/Happy.jsp</jsp-file>
-	</servlet>
-	<servlet>
-		<servlet-name>MessageBrokerServlet</servlet-name>
-		<display-name>MessageBrokerServlet</display-name>
-		<servlet-class>flex.messaging.MessageBrokerServlet</servlet-class>
-		<init-param>
-			<param-name>services.configuration.file</param-name>
-			<param-value>/WEB-INF/flex/services-config.xml</param-value>
-		</init-param>
-		<init-param>
-			<param-name>flex.write.path</param-name>
-			<param-value>/WEB-INF/flex</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet>
-		<servlet-name>FlexMxmlServlet</servlet-name>
-		<display-name>MXML Processor</display-name>
-		<description>Servlet wrapper for the Mxml Compiler</description>
-		<servlet-class>flex.bootstrap.BootstrapServlet</servlet-class>
-		<init-param>
-			<param-name>servlet.class</param-name>
-			<param-value>flex.webtier.server.j2ee.MxmlServlet</param-value>
-		</init-param>
-		<init-param>
-			<param-name>webtier.configuration.file</param-name>
-			<param-value>/WEB-INF/flex/flex-webtier-config.xml</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet>
-		<servlet-name>FlexSwfServlet</servlet-name>
-		<display-name>SWF Retriever</display-name>
-		<servlet-class>flex.bootstrap.BootstrapServlet</servlet-class>
-		<init-param>
-			<param-name>servlet.class</param-name>
-			<param-value>flex.webtier.server.j2ee.SwfServlet</param-value>
-		</init-param>
-		<!-- SwfServlet must be initialized after MxmlServlet -->
-		<load-on-startup>2</load-on-startup>
-	</servlet>
-	<servlet>
-		<servlet-name>FlexForbiddenServlet</servlet-name>
-		<display-name>Prevents access to *.as/*.swc files</display-name>
-		<servlet-class>flex.bootstrap.BootstrapServlet</servlet-class>
-		<init-param>
-			<param-name>servlet.class</param-name>
-			<param-value>flex.webtier.server.j2ee.ForbiddenServlet</param-value>
-		</init-param>
-	</servlet>
-	<servlet>
-		<servlet-name>FlexInternalServlet</servlet-name>
-		<servlet-class>flex.bootstrap.BootstrapServlet</servlet-class>
-		<init-param>
-			<param-name>servlet.class</param-name>
-			<param-value>flex.webtier.server.j2ee.filemanager.FileManagerServlet</param-value>
-		</init-param>
-		<load-on-startup>10</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>ImportQuery</servlet-name>
@@ -412,12 +329,6 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
         		<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
         		<param-value>true</param-value>
     		</init-param>
-<!--
-<init-param>
-<param-name>com.sun.jersey.spi.container.ResourceFilters</param-name>
-<param-value>krishagni.catissueplus.rest.imaging.RestAuthFilterFactory</param-value>
-</init-param>
--->
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
@@ -514,10 +425,6 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<url-pattern>/http/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>sdkstartup</servlet-name>
-		<url-pattern>/server/HTTPServer</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
 		<servlet-name>AxisServlet</servlet-name>
 		<url-pattern>/ws/AxisServlet</url-pattern>
 	</servlet-mapping>
@@ -530,40 +437,8 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<url-pattern>/ws/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>GetXML</servlet-name>
-		<url-pattern>/GetXML</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>GetHTML</servlet-name>
-		<url-pattern>/GetHTML</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
 		<servlet-name>Happy</servlet-name>
 		<url-pattern>/Happy</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>MessageBrokerServlet</servlet-name>
-		<url-pattern>/messagebroker/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>FlexMxmlServlet</servlet-name>
-		<url-pattern>*.mxml</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>FlexSwfServlet</servlet-name>
-		<url-pattern>*.swf</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>FlexForbiddenServlet</servlet-name>
-		<url-pattern>*.as</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>FlexForbiddenServlet</servlet-name>
-		<url-pattern>*.swc</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>FlexInternalServlet</servlet-name>
-		<url-pattern>/flex-internal/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ImportQuery</servlet-name>

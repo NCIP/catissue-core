@@ -196,8 +196,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	{
 		//edu.wustl.query.util.global.Utility.setReadDeniedAndEntitySqlMap();
 		this.addDefaultProtectionGroupsToMap();
-		final QueryBizLogic bLogic = new QueryBizLogic();
-		bLogic.initializeQueryData();
+//		final QueryBizLogic bLogic = new QueryBizLogic();
+//		bLogic.initializeQueryData();
 		this.createAliasAndPageOfMap();
 		LabelAndBarcodeGeneratorInitializer.init();
 		this.initialiseVariablesForEdinburgh();
@@ -298,8 +298,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		fileName.append(appHome).append(File.separator)
 				.append(ApplicationProperties.getValue("application.version.file"));
 		final CVSTagReader cvsTagReader = new CVSTagReader();
-		final String cvsTag = cvsTagReader.readTag(fileName.toString());
-		Variables.applicationCvsTag = cvsTag;
+//		final String cvsTag = cvsTagReader.readTag(fileName.toString());
+		Variables.applicationCvsTag = "";
 		logger.info("========================================================");
 		logger.info("Application Information");
 		logger.info("Name: " + CommonServiceLocator.getInstance().getAppName());
@@ -462,7 +462,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	}
 	private void initializeParticipantConfig() throws Exception
 	{
-		ParticipantAttributeDisplayInfoUtility.initializeParticipantConfigObject();
+//		ParticipantAttributeDisplayInfoUtility.initializeParticipantConfigObject();
 	}
 
 	/** This method reads the file containing default dashboard items and system level dashboard items.
