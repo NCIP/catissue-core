@@ -437,6 +437,10 @@ public class StorageContainer extends BaseEntity {
 	}
 	
 	public boolean canContainSpecimen(CollectionProtocol cp, String specimenClass, String specimenType) {
+		if (!isStoreSpecimenEnabled()) {
+			return false;
+		}
+		
 		if (!getCompAllowedSpecimenClasses().contains(specimenClass) && 
 				!getCompAllowedSpecimenTypes().contains(specimenType)) {
 			return false;						
