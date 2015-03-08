@@ -7,8 +7,7 @@ openspecimen.ui.container.ContainerPositionSelector = function(opts) {
 
   var Utility = opts.containerUtil;
   var container = opts.container;
-
-  this.selectedPos = $.extend({}, opts.inputPos);
+  var selectedPos = $.extend({}, opts.inputPos);
 
   function getGridHead() {
     var thead = $("<thead/>");
@@ -57,7 +56,7 @@ openspecimen.ui.container.ContainerPositionSelector = function(opts) {
 
         td.append($("<span/>").addClass("os-circle"));
 
-        if (this.selectedPos && this.selectedPos.posX == posX && this.selectedPos.posY == posY) {
+        if (selectedPos && selectedPos.posX == posX && selectedPos.posY == posY) {
           td.addClass("selected");
         }
 
@@ -96,7 +95,7 @@ openspecimen.ui.container.ContainerPositionSelector = function(opts) {
       .append(getGridBody()); 
 
     opts.parentEl.append(table);
-    listenForSelections(table, this.selectedPos); 
+    listenForSelections(table, selectedPos); 
     return this;
   };
 
@@ -106,6 +105,6 @@ openspecimen.ui.container.ContainerPositionSelector = function(opts) {
   };
 
   this.getSelectedPos = function() {
-    return this.selectedPos;
+    return selectedPos;
   };
 };
