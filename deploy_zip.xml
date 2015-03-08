@@ -12,7 +12,6 @@
 
     <property environment="env" />
     <import file="./modules/caTissue/conf/build-properties.xml"/>
-    <propertyfile file="${basedir}/modules/caTissue/conf/allTokens.properties"/>
     <property name="base.dir" value="." />
     <property name="temp.dir" value="./temp" />
     <property name="camodel.dir" value="${base.dir}/ca_model" />
@@ -34,27 +33,7 @@
     <property name="mssqlserver.dialect.string" value="org.hibernate.dialect.SQLServerDialect" />
     
     <!--Vivek:define require dir and properties for BO-->
-    <property name="bulkoperation.csv.dir" value="${base.dir}/modules/bulk_operations_upload" />
     <property name="bulkoperation.parameters.csv.file" value="load_bulkoperations_list.csv" />
-    <property name="default.reports.parameter.file" value="${base.dir}/modules/report_scripts/load_reports.csv" />
-    <property name="bo.csv.dir" value="${base.dir}/modules/bulk_operations_upload/csv"/>
-    <property name="bo.xml.dir" value="${base.dir}/modules/bulk_operations_upload/xml"/>
-    
-    <!--Vivek:define require dir and properties for inserting dashboard queries-->
-    <property name="dashboard.csv.dir" value="${base.dir}/modules/insert_dashboard_queries" />
-    <if>
-                <equals arg1="mysql" arg2="${database.type}" />
-                <then>
-                    <property name="dashboard.parameters.csv.file" value="dashboard_sqls_mysql.csv" />
-                </then>
-
-                <elseif>
-                    <equals arg1="oracle" arg2="${database.type}" />
-                    <then>
-                        <property name="dashboard.parameters.csv.file" value="dashboard_sqls_oracle.csv" />
-                    </then>
-                </elseif>
-            </if>
     
     <property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver" />
     <property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver" />
@@ -85,7 +64,6 @@
 
     <property name="tempcacore.dir" value="${base.dir}/temp_deaudit_related_files" />
     <property name="export.dir" value="${tempcacore.dir}/temp_exported_xmi" />
-    <!-- property name="cacaore.deployables" value="${cacore.deployable.location}" /-->
 
     <property name="csm.database.type" value="${database.type}"/>
     <property name="csm.database.host" value="${database.host}"/>
@@ -421,13 +399,9 @@
         <antcall target="configure_log4j" />
         <antcall target="configure_appResources" />
 
-        <!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
-
         <antcall target="configure_contactus" />
         <copy file="${base.dir}/modules/caTissue/conf/catissuecore-ds.xml" todir="${temp.dir}" overwrite="true" />
 
-        <copy file="${temp.dir}/catissuecore/WEB-INF/classes/DAOConfig.xml" todir="${temp.dir}" />
-        <copy file="${base.dir}/modules/caTissue/conf/login-config.xml" todir="${temp.dir}" overwrite="true" />
         <copy file="${base.dir}/modules/caTissue/conf/properties-service.xml" todir="${temp.dir}" overwrite="true" />
         <if>
             <not>
@@ -473,10 +447,6 @@
             <replacefilter token="&lt;session-timeout>30&lt;/session-timeout>" value="&lt;session-timeout>${session.timeout}&lt;/session-timeout>" />
         </replace>
 
-        <!--<replace file="${temp.dir}/catissuecore/WEB-INF/classes/remoteService.xml">
-            <replacefilter token="@@server.port@@" value="${jboss.server.port}"/>
-        </replace>-->
-
     </target>
 
 
@@ -503,21 +473,9 @@
             <replacefilter token="@@dialect@@" value="${mysql.dialect.h3.string}" />
         </replace>
 
-        <replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
-            <include name="catissuecore-ds.xml" />
-            <include name="login-config.xml" />
-            <replacefilter token="@@databaseurl@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
-            <replacefilter token="@@username@@" value="${database.username}" />
-            <replacefilter token="@@pasword@@" value="${database.password}" />
-            <replacefilter token="@@databasedriver@@" value="${mysql.driver.string}" />
-        </replace>
-
         <replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
             <replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
         </replace>
-        <!--replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
-            <replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
-        </replace-->
 
         <replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml">
             <replacefilter token="${oracle.dao.prop.filename}" value="${mysql.dao.prop.filename}" />
@@ -531,10 +489,6 @@
             <replacefilter token="${oracle.dao.datasource.prop.filename}" value="${mysql.dao.datasource.prop.filename}" />
         </replace>
 
-        <!--replace file="${temp.dir}/dynamicExtensionsjar/DynamicExtensionsHibernate.cfg.xml">
-            <replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
-            <replacefilter token="${dynamicextensions.datasource}" value="${catissue.datasource}" />
-        </replace-->
 
     </target>
 
@@ -552,16 +506,6 @@
         <replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties">
             <include name="orm1.cfg.xml" />
             <replacefilter token="@@dialect@@" value="${oracle.dialect.h3.string}" />
-        </replace>
-
-        <!-- Configuring Data Source File-->
-        <replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
-            <include name="catissuecore-ds.xml" />
-            <include name="login-config.xml" />
-            <replacefilter token="@@databaseurl@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-            <replacefilter token="@@username@@" value="${database.username}" />
-            <replacefilter token="@@pasword@@" value="${database.password}" />
-            <replacefilter token="@@databasedriver@@" value="${oracle.driver.string}" />
         </replace>
 
         <replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
@@ -613,16 +557,7 @@
     <target name="build_war" description="Buid New WAR File">
         <echo message="Creating New Web Application Archieve File..." />
         <delete file="${temp.dir}/catissuecore.war" />
-    <!--    <delete file="${temp.dir}/caTissuePrintWebService.war" />  -->
         <delete file="${temp.dir}/dynamicExtensions.jar" />
-
-<!--
-        <jar destfile="${temp.dir}/dynamicExtensions.jar" basedir="${temp.dir}/dynamicExtensionsjar" />
-
-        <copy file="${temp.dir}/dynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
-        <copy file="${temp.dir}/dynamicExtensions.jar" todir="${temp.dir}/catissuecore/Applet" overwrite="true" />
-        <copy file="${temp.dir}/dynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/Applet" overwrite="true" />
--->
 
         <antcall target="copydeletedjars">
             <param name="delPath" value="${temp.dir}/catissuecore/WEB-INF/lib"/>
@@ -641,7 +576,6 @@
                 <exclude name="**/*.sql" />
                 <exclude name="**/CVS*" />
                 <exclude name="**/jta.jar" />
-                <exclude name="**/pages/subMenu/**" />
     <!--excluded for jboss-5.1.0.GA upgrade-->              
                     <exclude name="**/WEB-INF/lib/xalan.jar" />
                     <exclude name="**/WEB-INF/lib/xbean.jar" />
@@ -663,12 +597,6 @@
             </fileset>
         </war>
 
-        <!--copy file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/dynamicExtensions/WEB-INF/classes" overwrite="true" />
-        <war destfile="${temp.dir}/caTissuePrintWebService.war" webxml="${temp.dir}/caTissuePrintWebService/WEB-INF/web.xml">
-                    <fileset dir="${temp.dir}/caTissuePrintWebService">
-                        <include name="**/**/**.*" />
-                    </fileset>
-        </war>  -->
     </target>
 
 
@@ -687,7 +615,6 @@
             <include name="commons-fileupload.jar" />
             <include name="commons-lang-2.1.jar" />
             <include name="commons-logging-1.0.4.jar" />
-            <!--<include name="dom4*.jar" />-->
             <include name="ehcache-1.2.3.jar" />
             <include name="freemarker.jar" />
             <include name="jakarta-oro.jar" />
@@ -718,11 +645,8 @@
             <include name="mysql-connector-java-3.1.13-bin.jar"/>
             <include name="oracleDriver.jar"/>
             <include name="boot.jar" />
-            <!--<include name="c3p0-0.9.0.jar" />-->
             <include name="catissuecore-client.jar" />
             <include name="experiment-client.jar" />
-            <!-- include name="jboss-client.jar" /
-            <include name="junit-4.1.jar" />-->
             <include name="mockobjects-core-0.09.jar" />
             <include name="mysql-connector-java-5.0.8-bin.jar" />
             <include name="ojdbc14.jar" />
@@ -755,13 +679,6 @@
 
     <target name="copy_files" description="copy Configuration Files to JBOSS Directory">
         <echo message="Copying caTissue Suite Application Components..." />
-        <!--Copying caTissueCdmsIntegration.properties file-->
-        <copy todir="${temp.dir}/catissuecore-properties" overwrite="true">
-            <fileset dir="${base.dir}/modules/caTissue/conf">
-                <include name="caTissueCdmsIntegration.properties" />
-            </fileset>
-            <fileset file="${dashboard.items.file}" />
-        </copy>
         <property name="help.desk.number" value="${contact.number}" />
                         <if>
                                 <equals arg1="" arg2="${contact.number}" />
@@ -862,12 +779,6 @@
 				</else>
 		</if>
 		
-		<replace file="${temp.dir}/catissuecore-properties/caTissueCdmsIntegration.properties">
-			<replacefilter token="@@CdmsURL@@" value="${clinportal.url}" />
-			<replacefilter token="@@CdmsKeyStorePath@@" value="" />
-		</replace>
-		
-
         <antcall target="Configure_Printservice"/>
         <copy todir="${jboss.server.url}/catissuecore-properties" overwrite="true">
             <fileset dir="${temp.dir}/catissuecore-properties">
@@ -887,9 +798,6 @@
             	<globmapper from="catissuecore.war" to="openspecimen.war"/>
         </copy>
     	
-
-        <copy file="${basedir}/modules/caTissue/conf/performance.properties" todir="${rel.jboss.home}/server/default/conf" overwrite="true"/>
-
         <replace dir="${jboss.server.url}/catissuecore-properties">
             <include name="ApplicationSecurityConfig.xml" />
             <replacefilter token="@@hibernate-config-file@@" value="${jboss.server.url}/catissuecore-properties/catissuecore.hibernate.cfg.xml" />
@@ -919,12 +827,6 @@
                 <include name="wsdl4j.jar" />
                 <include name="jboss-common-client.jar" />
            </fileset>
-        </copy>
-        <!--Copying mapping.xml and bulkOperation.properties file-->
-        <copy todir="${jboss.server.url}/catissuecore-properties" overwrite="true">
-            <fileset dir="${base.dir}/modules/bulk_operations/conf">
-                <include name="bulkOperation.properties" />
-            </fileset>
         </copy>
         
     </target>
@@ -1063,7 +965,6 @@
     <target name="pre_initialization" description="initialisation prior to deploying application">
         <antcall target="clean_server" />
         <antcall target="assert" />
-        <!--<delete dir="${temp.dir}" />-->
         <antcall target="init" />
         <antcall target="configure_war" />
         <antcall target="adopter_configuration" />
@@ -1303,12 +1204,6 @@
         <tstamp>
             <format property="before_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
         </tstamp>
-        <!--echo>before cacore: ${before_cacore}</echo>
-        <antcall target="generate.cacore.for.xmi" />
-        <tstamp>
-            <format property="after_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
-        </tstamp-->
-        <echo>after cacore: ${after_cacore}</echo>
         <antcall target="de_integrate_app" />
         <antcall target="build_war" />
         <antcall target="jboss_configuration" />
@@ -1529,11 +1424,6 @@
 
     <!--Target for deployment with jboss config-->
     <target name="config_jboss_files" description="Target for deployment with jboss config">
-        <copy todir="${jboss.server.url}/conf" overwrite="true">
-            <fileset dir="${temp.dir}">
-                <include name="login-config.xml" />
-            </fileset>
-        </copy>
 
         <replace dir="${temp.dir}">
             <include name="properties-service.xml" />
@@ -1542,7 +1432,6 @@
             <replacefilter token="@@app-dynamicuixml-file@@" value="${jboss.server.url}/catissuecore-properties/dynamicUI.xml" />
             <replacefilter token="@@auth-properties-file@@" value="${jboss.server.url}/catissuecore-properties/IDPAuthentication.xml" />
             <replacefilter token="@@bulk-operation-properties-file@@" value="${jboss.server.url}/catissuecore-properties/bulkOperation.properties" />
-            <replacefilter token="@@catissue-cdms-integration-properties-file@@" value="${jboss.server.url}/catissuecore-properties/caTissueCdmsIntegration.properties" />
             <replacefilter token="@@custom-report-script-dir@@" value="${custom-report.script.dir}" />
             <replacefilter token="@@custom-generated-report-dir@@" value="${custom-report.report.dir}" />
         </replace>
@@ -1575,7 +1464,6 @@
                 <echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
             </else>
         </if>
-        <!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
         <antcall target="firstUser" />
 
         <!-- shippingtracking db -->
@@ -1586,26 +1474,6 @@
         </tstamp>
         <echo>before DE_Starts: ${time}</echo>
 
-        <!-- <antcall target="upgrade_metadata_for_constraintproperties"/>  -->
-        <!--antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" /-->
-        <!-- <antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />  -->
-        <!--antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" />
-        <antcall target="upgrade_db_from_DE_1.4.0.1_to_DE_1.4.0.2" />
-        <antcall target="upgrade_db_from_DE_1.4.0_to_DE_1.4.2"/>
-        <antcall target="upgrade_de_integration_restructure_metadata"/>
-
-        <antcall target="update_metadata_for_tagged_values"/>
-        <antcall target="upgrade_DB_for_cacore"/>
-        <antcall target="insertCuratedPathForRecordEntry"/>
-        <antcall target="upgrade_query_metadata_for_1.2"/>
-        <tstamp>
-            <format property="DEtime" pattern="MM/dd/yyyy hh:mm:ss aa"/>
-        </tstamp>
-        <echo>After DE_Starts: ${DEtime}</echo>
-        <antcall target="insertPaths"/>
-        <tstamp>
-            <format property="pathtime" pattern="MM/dd/yyyy hh:mm:ss aa"/>
-        </tstamp!-->
         <echo>After Insert paths: ${pathtime}</echo>
         <antcall target="liquibase_upgrade_target"/>
         <antcall target="upgrade_db_from_plusv20_plusv2.1"/>
@@ -1619,8 +1487,6 @@
     	<antcall target="upgrade_db_os_v1.1" />
         <antcall target="deleteFiles"/>
 
-        <!--<delete dir="${de.temp.dir}" />
-        <delete dir="${temp.dir}" />-->
     </target>
 
     <!--MySQL Database Creation -->
@@ -1635,10 +1501,6 @@
             <transaction src="${mysql.sql.dir}/csm_catissuecore.sql" />
             <transaction src="${common.sql.dir}/insert_default_data.sql" />
             <transaction src="${common.sql.dir}/indexes.sql" />
-           <!-- <transaction src="${mysql.sql.dir}/dynamicextension.sql" />
-            <transaction src="${mysql.sql.dir}/query/metadata_schema_script.sql" />
-            <transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
-            <transaction src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>-->
             <transaction>commit;</transaction>
             <classpath>
                 <fileset dir="${lib.dir}">
@@ -1651,39 +1513,11 @@
         <antcall target="add_labelsql_tables_for_cp_dashboard"/>
         <antcall target="integrate_bulk_operation_mysql" />
 
-        <!--<antcall target="unzip_aq_installable" />
-        <ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
-            <property name="database.type" value="${database.type}" />
-            <property name="database.driver" value="com.mysql.jdbc.Driver" />
-            <property name="database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
-            <property name="database.username" value="${database.username}" />
-            <property name="database.password" value="${database.password}" />
-            <property name="lib.dir" value="${root.lib.dir}" />
-        </ant>-->
 
         <unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 
         <antcall  target="Export_Clinical_diagnosis_mysql"/>
-        <!--<antcall target="CAModel_import_data" />
-        <antcall target="temp_update_metadata_for_clob_support_mysql" />
-        <antcall target="insert_entity_group_metadata_mysql" />
-        <antcall target="upgrade_db_demodel_mysql" />
-        <sql driver="${mysql.driver.string}"
-        url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
-            <transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/Upgrade_DE_Schema.sql" />
-            <transaction>commit;</transaction>
-            <classpath>
-                <fileset dir="${lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
-            </classpath>
-        </sql>-->
 
-        <!--antcall target="upgrade_metadata_for_constraintproperties"/-->
-        <!--antcall target="update_metadata_for_model_changes">
-             <param name="isUpgrade" value="false"/>
-        </antcall>
-        <antcall target="update_metadata_for_CA_model_changes" /-->
         <sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
             <transaction src="${dbupgrade.sql.dir}/Common/DBUpgrade_v1.1p2_to_v1.1p4_indexes.sql" />
             <transaction>commit;</transaction>
@@ -1694,19 +1528,8 @@
             </classpath>
         </sql>
         <echo message="Upgrading MySQL Database." />
-            <!--<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
-                <transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_QueryMetadata.sql" />
-                <transaction>commit;</transaction>
-                    <classpath>
-                        <fileset dir="${lib.dir}">
-                            <include name="*.jar" />
-                        </fileset>
-                    </classpath>
-            </sql>-->
-        <!--antcall target="update_metadata_for_model_changes_mysql_post_P5" /-->
         <antcall target="upgrade_db_from_v1.2.3_to_1.2.4_mysql"/>
         <antcall target="upgrade_db_for_empi_id__mysql"/>
-        <!--<delete dir="${temp.dir}" />-->
     </target>
 
     <target name="insert_entity_group_metadata_mysql" description="insert entity group metadata for mysql">
@@ -1767,7 +1590,6 @@
         <echo message="Initializing Oracle Database for caTissue Suite v1.1.p5. Application..." />
         <sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
             <transaction src="${oracle.sql.dir}/catissuecore.sql" />
-<!--            <transaction src="${dbupgrade.sql.dir}/Oracle/DEIntegrationRestructure.sql" />-->
             <transaction src="${oracle.sql.dir}/InitDB_CreateTable.sql" />
             <transaction src="${common.sql.dir}/initDB_Insert_Common.sql" />
             <transaction src="${oracle.sql.dir}/AlterTable.sql" />
@@ -1775,10 +1597,6 @@
             <transaction src="${oracle.sql.dir}/CSM_Create_Oracle.sql" />
             <transaction src="${oracle.sql.dir}/insert_default_data.sql" />
             <transaction src="${common.sql.dir}/indexes.sql" />
-            <!--<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
-            <transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
-            <transaction src="${oracle.sql.dir}/query/metadata_schema_script.sql" />
-            <transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />  -->
             <transaction>commit;</transaction>
             <classpath>
                 <fileset dir="${lib.dir}">
@@ -1792,18 +1610,6 @@
 
         <antcall target="integrate_bulk_operation_oracle"/>
 
-        <!--<antcall target="unzip_aq_installable" />
-        <ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
-            <property name="database.type" value="${database.type}" />
-            <property name="database.driver" value="${oracle.driver.string}" />
-            <property name="database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-            <property name="database.username" value="${database.username}" />
-            <property name="database.password" value="${database.password}" />
-            <property name="rdbms" value="oracle" />
-            <property name="lib.dir" value="${lib.dir}" />
-        </ant>
-
-        <antcall target="insertQueryMetadata" />-->
     	<antcall  target="Export_Clinical_diagnosis_oracle"/>
 
         <sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/" delimitertype="row">
@@ -1826,26 +1632,7 @@
             </classpath>
         </sql>
 
-        <!--<antcall target="temp_update_metadata_for_clob_support_oracle" />
-        <antcall target="insert_entity_group_metadata_oracle" />
-        <antcall target="upgrade_db_demodel_oracle" />
-        <sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
-            <transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/Upgrade_DE_Schema.sql" />
-            <transaction>commit;</transaction>
-            <classpath>
-                <fileset dir="${lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
-            </classpath>
-        </sql>-->
 
-        <!--antcall target="upgrade_metadata_for_constraintproperties"/-->
-        <!--antcall target="update_metadata_for_model_changes" >
-             <param name="isUpgrade" value="false"/>
-        </antcall>
-        <antcall target="update_metadata_for_CA_model_changes" />
-        <antcall target="alter_CA_model_Tables" />
-        <antcall target="reset_sequences" />-->
         <sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
             <transaction src="${dbupgrade.sql.dir}/Common/DBUpgrade_v1.1p2_to_v1.1p4_indexes.sql" />
             <transaction>commit;</transaction>
@@ -1856,19 +1643,8 @@
             </classpath>
         </sql>
         <echo message="Upgrading Oracle Database p5 to p5.1" />
-        <!--<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
-            <transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_QueryMetadata.sql" />
-            <transaction>commit;</transaction>
-            <classpath>
-                <fileset dir="${lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
-            </classpath>
-        </sql>
-        <antcall target="update_metadata_for_model_changes_oracle_post_P5" /-->
         <antcall target="upgrade_db_from_v1.2.3_to_1.2.4_oracle"/>
         <antcall target="upgrade_db_for_empi_id_oracle"/>
-        <!--<delete dir="${temp.dir}" />-->
     </target>
 
     <target name="reset_sequences" description="Resetting the sequences...">
@@ -1962,7 +1738,6 @@
         <sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
             <transaction src="${oracle.sql.dir}/query/enableCons.sql" />
             <transaction src="${oracle.sql.dir}/query/UpdateTable.sql" />
-            <!-- <transaction src="${oracle.sql.dir}/query/csm_oracle.sql" /> -->
             <transaction>commit;</transaction>
             <classpath>
                 <fileset dir="${lib.dir}">
@@ -1985,61 +1760,10 @@
         <!--Target for Application and Database Upgrade from Suite 2.0 to Plus 2.1-->
         <target name="upgrade_Plus_2.0" depends="assert, upgrade_db_from_plusv20_plusv2.1,update_protection_element,upgrade_app" description="Target for Application and Database Upgrade from Suitev1.2  to Plusv2.0">
         </target>
-    <!--Target for Application and Database Upgrade from caTissueCore v1.2.2  to Suite 1.1-->
-    <!--<target name="upgrade_all_from_core_1.2.2" depends="core_1.2.2_upgrade_check">
-        <antcall target="upgrade_app" />
-        <antcall target="upgrade_db_from_core_1.2.2_to_suite_1.1" />
-    </target>
-    -->
 
     <!--Target for Application Upgrade from Suite p5.1 to Suite 1.2.1-->
     <target name="upgrade_app" depends="deploy_app" description="this target urgrades the catissue application only from the current version.">
     </target>
-<!--
-    <target name="upgrade_db">
-        <antcall target="upgrade_from_Suite1.0_to_1.1" />
-        <antcall target="upgrade_clinicalDiagnosis_values"/>
-        <antcall  target="Export_Clinical_diagnosis"/>
-        <antcall target="update_metadata_for_model_changes" />
-        <antcall target="update_metadata_for_CA_model_changes" />
-        <antcall target="runMigration" />
-        <antcall target="create_category">
-            <param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/smoking.csv"/>
-        </antcall>
-        <antcall target="create_category">
-            <param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/radiation.csv"/>
-        </antcall>
-        <antcall target="create_category">
-            <param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/chemotherapy.csv"/>
-        </antcall>
-        <antcall target="create_category">
-            <param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/alcohol.csv"/>
-        </antcall>
-        <antcall target="import_permissible_values">
-            <param name="permissibleValuesFile" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/LOINC_PV.csv"/>
-        </antcall>
-        <antcall target="show_hide_forms">
-        </antcall>
-        <antcall target="show_hide_forms_based_on_CPs">
-        </antcall>
-    </target>
--->
-    <!--<target name="show_hide_forms" description="set the values for show_hide_forms">
-        <if>
-            <equals arg1="${show.hide.forms}" arg2="true" />
-            <then>
-                <echo message="Value of show_hide_forms is set to true" />
-                <antcall target="Associate_forms">
-                    <param name="entitiesFormsCSVFile" value="${base.dir}/modules/dynamic_extensions/conf/Show_Hide_Forms.csv"/>
-                </antcall>
-                <echo message="Associated selected Forms..." />
-            </then>
-            <else>
-                <echo message="Value of show_hide_forms is set to false" />
-            </else>
-        </if>
-    </target>-->
-
 
     <!--Target for Database Upgrade from suite v1.2 to plus2.0-->
     <target name="upgrade_db_from_suitev1.2_to_plus20" description="Upgrading Database from Suite v1.2 to Plus2.0">
@@ -2049,7 +1773,6 @@
         <antcall target="upgrade_db_v1.2.4 to v1.2.5"/>
         <antcall target="liquibase_upgrade_target"/>
         <antcall target="add_labelsql_tables_for_cp_dashboard"/>
-        <antcall target="insert_dashboard_queries"/>
         <antcall target="upgrade_db_from_v1.0_to_v2.0"/>
         <antcall target="alter_bulk_operation_table"/>
         <if>
@@ -2069,25 +1792,7 @@
         </if>
     </target>
     <target name="upgrade_db_from_v1.0_to_v2.0">
-           <!-- <antcall target="unzip_aq_installable" />
-            <echo message="upgrading database with URL ${final.database.url} username=${database.username} password=${database.password}" />
-            <upgradations for colums in query and query_parameterized_query table>
-            <updateDatabase
-                changeLogFile="${temp.dir}/AdvanceQuery/db/db-upgrade/liquibase_xml/query_Suite1.3_to_Suite1.4.xml"
-                driver="${final.database.driver}" url="${final.database.url}"
-                username="${database.username}" password="${database.password}"
-                dropFirst="false" classpathref="liquibaseClasspath" />-->
     </target>
-    <!--Target for Database Upgrade from Suite 1.2.3 to Suite 1.2.1-->
-        <!--target name="upgrade_db_from_1.2_to_plusv2.0" description="Upgrading Database from suite v1.2 to plus v2.0">
-            <echo message="Upgrading Database v1.2.3 to v1.2.4" />
-            <antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/>
-            <antcall target="upgrade_db_v1.2.4 to v1.2.5"/>
-            <antcall target="liquibase_upgrade_target"/>
-            <antcall target="liquibase_aqupgrade_target" />
-            <antcall target="add_labelsql_tables_for_cp_dashboard"/>
-            <antcall target="upgrade_db_v1.2.4 to v1.2.5"/>
-        </target-->
     
     <target name="upgrade_db" description="Upgrading Database to plus 3.0">
                 <echo message="Upgrading Database from ${from.version} to plus3.0" />
@@ -2197,7 +1902,6 @@
             <elseif>
               <equals arg1="oracle" arg2="${database.type}" />
                  <then>
-                    <!--<antcall target="update_sequences" />-->
                     <antcall target="upgrade_oracle_from_v1.1_p1_to_v1.1p2" />
                  </then>
              </elseif>
@@ -2279,7 +1983,6 @@
     <target name="upgrade_db_from_p4_to_p5" description="Target for Database Upgrade from caTissue p4 to p5">
         <echo message="Upgrading Database v1.1p4 to v1.1p5" />
         <antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0"/>
-        <!-- <antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />  -->
         <antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0"/>
         <antcall target="update_metadata_for_tagged_values"/>
         <if>
@@ -2389,7 +2092,6 @@
                 </fileset>
             </classpath>
         </sql>
-        <!--antcall target="upgrade_metadata_for_constraintproperties" /-->
     </target>
 
     <!-- Upgrading from Suite1.1 p4 to p5 - MySQL -->
@@ -2486,7 +2188,6 @@
 
     <!-- DE Metadata Upgradation -->
     <target name="update_metadata_for_model_changes" description="DE Metadata Upgradation">
-        <!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
         <delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
         <antcall target="replacecfgfiles"></antcall>
         <if>
@@ -2510,7 +2211,6 @@
                 <echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
             </else>
         </if>
-        <!--<delete dir="${temp.dir}" />-->
     </target>
 
     <!-- DE Metadata Upgradation -->
@@ -2576,7 +2276,6 @@
 
     <target name="update_metadata_for_model_changes_mysql_post_P5" description="Updating DE Metadata for model changes (mysql).....">
         <echo message="Updating DE Metadata for model changes (mysql) post P5....." />
-        <!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
         <delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
         <java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateQueryMetadata"  fork="true" maxmemory="512m" failonerror="true">
             <classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
@@ -2624,7 +2323,6 @@
 
     <target name="update_metadata_for_model_changes_oracle_post_P5" description="Updating DE Metadata for model changes (oracle).....">
             <echo message="Updating DE Metadata for model changes (oracle) post P5....." />
-                <!--<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
                 <delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
             <java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateQueryMetadata"  fork="true" maxmemory="512m" failonerror="true">
                 <classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
@@ -2649,7 +2347,6 @@
     <!-- Start : DE Integration Restructure for p5 -->
 
     <target name="insertCuratedPathForRecordEntry">
-        <!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
         <antcall target="replacecfgfiles"/>
         <copy file="${base.dir}/modules/caTissue/conf/catissuecore-properties/log4j.properties" todir="${base.dir}" overwrite="true"/>
         <java classname="edu.wustl.catissuecore.querysuite.metadata.AddCuratedPathsForRecordEntry" fork="true" maxmemory="1024M" failonerror="false">
@@ -2661,12 +2358,10 @@
                 </fileset>
             </classpath>
         </java>
-        <!--<delete dir="${temp.dir}" />-->
         <delete file="${base.dir}/log4j.properties" />
     </target>
 
     <target name="upgrade_de_integration_restructure_metadata" description="Start : DE Integration Restructure for p5 ">
-        <!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
         <if>
             <equals arg1="mysql" arg2="${database.type}" />
             <then>
@@ -2679,7 +2374,6 @@
                 </then>
             </elseif>
         </if>
-        <!--<delete dir="${temp.dir}" />-->
     </target>
 
     <target name="upgrade_de_integration_restructure_metadata_mysql" description="Updating DE integration metadata (mysql).....">
@@ -2756,7 +2450,6 @@
 
     <target name="upgrade_de_integration_restructure_data" depends="" description="Updating data as per restructured DE integration.....">
 
-        <!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />-->
         <antcall target="commondbconfig" />
         <echo message="Updating data as per restructured DE integration....." />
         <if>
@@ -2774,7 +2467,6 @@
                 <echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
             </else>
         </if>
-        <!--<delete dir="${temp.dir}" />-->
     </target>
 
     <target name="upgrade_de_integration_restructure_data_mysql" description="upgrade DE integrationrestructure data for mysql">
@@ -2839,7 +2531,6 @@
 
     <target name="Export_Clinical_diagnosis_mysql" description="Exporting data of Clinical diagnosis ... for Mysql">
         <echo message="Exporting data of Clinical diagnosis ..." />
-        <!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
         <java classname="edu.wustl.common.util.impexp.AutomateImport" fork="true">
             <classpath refid="temp.classpath" />
             <arg value="${database.host}"/>
@@ -2853,12 +2544,10 @@
             <arg value="${basedir}/SQL/Permissible_values/dumpFileColumnInfo.txt"/>
             <arg value="${basedir}/SQL/Permissible_values/"/>
         </java>
-        <!--<delete dir="${temp.dir}" />-->
     </target>
 
     <target name="Export_Clinical_diagnosis_oracle" description="Exporting data of Clinical diagnosis ... for Oracle">
         <echo message="Exporting data of Clinical diagnosis ..." />
-        <!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
         <java classname="edu.wustl.common.util.impexp.AutomateImport" fork="true">
             <classpath refid="temp.classpath" />
             <arg value="${database.host}"/>
@@ -2874,13 +2563,11 @@
             <arg value="${basedir}/SQL/Permissible_values/"/>
             <arg value="${oracle.tns.name}"/>
         </java>
-        <!--<delete dir="${temp.dir}" />-->
     </target>
 
 
     <!--Data import for CAModel -->
     <target name="CAModel_import_data" description="Importing CA model data">
-        <!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
         <delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
         <if>
             <equals arg1="mysql" arg2="${database.type}" />
@@ -2897,7 +2584,6 @@
                 <echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
             </else>
         </if>
-        <!--<delete dir="${temp.dir}" />-->
     </target>
 
     <target name="CAModel_import_data_mysql" description="Importing CA models data for caTISSUE Suite Application to MySQL Database ..">
@@ -4258,216 +3944,6 @@
         </move>
     </target>
 
-    
-    <loadfile property="file" srcFile="${bulkoperation.csv.dir}/${bulkoperation.parameters.csv.file}"/> 
-    <target name="load_bulk_operator_templates">    
-        <echo message="---------------------------------------" />
-        <echo message="Loading Bulk Operator Templates in bulk" />
-        <echo message="---------------------------------------" />      
-        
-        <for param="line" list="${file}" delimiter="${line.separator}">
-            <sequential>
-                <propertyregex property="arg1"
-                    input="@{line}"
-                    regexp="(.*?),(.*?),(.*?\.csv),(.*?\.xml)"
-                    select="\1"
-                    casesensitive="false" 
-                    override = "true"/>
-                <propertyregex property="arg2"
-                    input="@{line}"
-                    regexp="(.*?),(.*?),(.*?\.csv),(.*?\.xml)"
-                    select="\2"
-                    casesensitive="false" 
-                    override = "true"/>
-                <propertyregex property="arg3"
-                    input="@{line}"
-                    regexp="(.*?),(.*?),(.*?\.csv),(.*?\.xml)"
-                    select="\3"
-                    casesensitive="false" 
-                    override = "true"/>
-                <propertyregex property="arg4"
-                    input="@{line}"
-                    regexp="(.*?),(.*?),(.*?\.csv),(.*?\.xml)"
-                    select="\4"
-                    casesensitive="false" 
-                    override = "true"/>                 
-                
-                <antcall target="add_bulk_operation_template">
-                    <param name="operationName" value="${arg1}"/>
-                    <param name="dropdownName" value="${arg2}"/>
-                    <param name="csvFile" value="${bo.csv.dir}/${arg3}"/>
-                    <param name="xmlFile" value="${bo.xml.dir}/${arg4}"/>
-                </antcall>
-            </sequential>
-        </for>
-        
-        <echo message="---------------------------------------------------" />
-        <echo message="Finished Loading of Bulk Operator Templates in bulk" />
-        <echo message="---------------------------------------------------" />      
-
-    </target>
-
-    <loadfile property="report_file" srcFile="${default.reports.parameter.file}"/> 
-    <target name="load_default_reports">    
-        <for param="line" list="${report_file}" delimiter="${line.separator}">
-            <sequential>
-                <propertyregex property="arg1"
-                    input="@{line}"
-                    regexp="(.*?),(.*?),(.*?),(.*?),(.+)"
-                    select="\1"
-                    casesensitive="false" 
-                    override = "true"/>
-                <propertyregex property="arg2"
-                    input="@{line}"
-                    regexp="(.*?),(.*?),(.*?),(.*?),(.+)"
-                    select="\2"
-                    casesensitive="false" 
-                    override = "true"/>
-                <propertyregex property="arg3"
-                    input="@{line}"
-                    regexp="(.*?),(.*?),(.*?),(.*?),(.+)"
-                    select="\3"
-                    casesensitive="false" 
-                    override = "true"/>
-                <propertyregex property="arg4"
-                    input="@{line}"
-                    regexp="(.*?),(.*?),(.*?),(.*?),(.+)"
-                    select="\4"
-                    casesensitive="false" 
-                    override = "true"/>
-                <propertyregex property="arg5"
-                    input="@{line}"
-                    regexp="(.*?),(.*?),(.*?),(.*?),(.+)"
-                    select="\5"
-                    casesensitive="false" 
-                    override = "true"/>
-                <if>    
-                    <equals arg1="mysql" arg2="${database.type}" />
-                        <then>
-                            <echo message="${arg4}${arg5}" />
-                            <sql driver="${mysql.driver.string}" 
-                            url="jdbc:mysql://${database.host}:${database.port}/${database.name}" 
-                            userid="${database.username}" 
-                            password="${database.password}" onerror="continue">
-                            <classpath>
-                                <fileset dir="${lib.dir}">
-                                    <include name="*.jar" />
-                                </fileset>
-                            </classpath>
-                            insert into report_details(CS_ID,REPORT_GENERATOR,REPORT_TYPE,REPORT_NAME,USER_ID) values(${arg1},'${arg2}','${arg3}','${arg4}',${arg5});
-                            </sql>  
-                        </then>
-                        
-                    <elseif >
-                    <equals arg1="oracle" arg2="${database.type}" />
-                        <then>                  
-                            <sql driver="${oracle.driver.string}"
-                            url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-                            userid="${database.username}"
-                            password="${database.password}"
-                            rdbms="oracle" onerror="continue">
-                            <classpath>
-                                <fileset dir="${lib.dir}">
-                                    <include name="*.jar" />
-                                </fileset>
-                            </classpath>
-                            insert into labelsql values(REPORT_DETAILS_SEQ.NEXTVAL,${arg1},'${arg2}','${arg3}','${arg4}',${arg5});
-                            </sql>
-                        </then>
-                    </elseif>
-              </if>
-            </sequential>
-        </for>
-        <copy todir="${custom-report.script.dir}" overwrite="true">
-            <fileset dir="${basedir}/modules/report_scripts">
-                <exclude name="load_reports.csv" />
-            </fileset>
-        </copy>
-    </target>   
-    <!--Vivek: target to insert dashboard queries-->
-    <loadfile property="query_file" srcFile="${dashboard.csv.dir}/${dashboard.parameters.csv.file}"/> 
-    <target name="insert_dashboard_queries">    
-        <echo message="------------------------------" />
-        <echo message="Inserting dashboard queries..." />
-        <echo message="------------------------------" />
-        <for param="line" list="${query_file}" delimiter="${line.separator}">
-            <sequential>
-                        <propertyregex property="arg1"
-                            input="@{line}"
-                            regexp="(.+?),(.+)"
-                            select="\1"
-                            casesensitive="false" 
-                            override = "true"/>
-                        <propertyregex property="arg2"
-                            input="@{line}"
-                            regexp="(.+?),(.+)"
-                            select="\2"
-                            casesensitive="false" 
-                            override = "true"/>
-                <if>    
-                    <equals arg1="mysql" arg2="${database.type}" />
-                        <then>
-                            <sql driver="${mysql.driver.string}" 
-                            url="jdbc:mysql://${database.host}:${database.port}/${database.name}" 
-                            userid="${database.username}" 
-                            password="${database.password}" onerror="continue">
-                            <classpath>
-                                <fileset dir="${lib.dir}">
-                                    <include name="*.jar" />
-                                </fileset>
-                            </classpath>
-                            insert into labelsql values(NULL,'${arg1}',${arg2});
-                            </sql>  
-                        	<sql driver="${mysql.driver.string}" 
-                            url="jdbc:mysql://${database.host}:${database.port}/${database.name}" 
-                            userid="${database.username}" 
-                            password="${database.password}" onerror="continue">
-                            <classpath>
-                                <fileset dir="${lib.dir}">
-                                    <include name="*.jar" />
-                                </fileset>
-                            </classpath>
-                        		 update labelsql set QUERY = ${arg2} where LABEL = '${arg1}';
-                            </sql> 
-                        </then>
-                        
-                    <elseif >
-                    <equals arg1="oracle" arg2="${database.type}" />
-                        <then>                  
-                            <sql driver="${oracle.driver.string}"
-                            url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-                            userid="${database.username}"
-                            password="${database.password}"
-                            rdbms="oracle" onerror="continue">
-                            <classpath>
-                                <fileset dir="${lib.dir}">
-                                    <include name="*.jar" />
-                                </fileset>
-                            </classpath>
-                            insert into labelsql values(LABELSQL_IDENTIFIER_SEQ.NEXTVAL,'${arg1}',${arg2});
-                            </sql>
-                        	<sql driver="${oracle.driver.string}"
-                            url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-                            userid="${database.username}"
-                            password="${database.password}"
-                            rdbms="oracle" onerror="continue">
-                            <classpath>
-                                <fileset dir="${lib.dir}">
-                                    <include name="*.jar" />
-                                </fileset>
-                            </classpath>
-                        		update labelsql set QUERY = ${arg2} where LABEL = '${arg1}';
-                            </sql>
-                        </then>
-                    </elseif>
-                </if>       
-            </sequential>
-        </for>
-        <echo message="---------------------------------------" />
-        <echo message="Inserting dashboard queries finished..." />
-        <echo message="---------------------------------------" />
-    </target>
-    
     <property name="operationName" value="" />
     <property name="csvFile" value="" />
     <property name="url" value="" />
@@ -4933,53 +4409,10 @@
 
     <!--Target call for both fresh deployment of caTissue-->
     <target name="deploy_app" depends="deploy_app_catissue">
-        <if>
-            <equals arg1="mysql" arg2="${csm.database.type}" />
-        <then>
-                <antcall target="mysql_csm_config_with_idp"/>
-        </then>
-        <elseif>
-                <equals arg1="oracle" arg2="${csm.database.type}" />
-        <then>
-                <antcall target="oracle_csm_config_with_idp"/>
-        </then>
-        </elseif>
-        </if>
-        <antcall target="insert_dashboard_queries" />
         <antcall target="jboss_configuration" />
         <antcall target="deleteFiles" />
     </target>
 
-     <target name="mysql_csm_config_with_idp" >
-        <copy file="${base.dir}/modules/identity_provider_support/conf/idp_catissuecore-ds.xml" tofile="${temp.dir}/catissuecore-ds.xml" overwrite="true"/>
-        <copy file="${base.dir}/modules/identity_provider_support/conf/idp_login-config.xml" tofile="${temp.dir}/login-config.xml" overwrite="true"/>
-        <copy file="${base.dir}/modules/identity_provider_support/conf/idp_upt.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/upt.hibernate.cfg.xml" overwrite="true"/>
-        <copy file="${base.dir}/modules/identity_provider_support/conf/idp_catissuecore.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/catissuecore.hibernate.cfg.xml" overwrite="true"/>
-        <replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
-            <include name="catissuecore-ds.xml" />
-            <include name="login-config.xml" />
-            <replacefilter token="@@CSMdatabaseurl@@" value="jdbc:mysql://${csm.database.host}:${csm.database.port}/${csm.database.name}"/>
-            <replacefilter token="@@CSMusername@@" value="${csm.database.username}"/>
-            <replacefilter token="@@CSMpasword@@" value="${csm.database.password}"/>
-        </replace>
-
-        <antcall target="mysql_config" />
-    </target>
-
-    <target name="oracle_csm_config_with_idp">
-        <copy file="${base.dir}/modules/identity_provider_support/conf/idp_catissuecore-ds.xml" tofile="${temp.dir}/catissuecore-ds.xml" overwrite="true"/>
-        <copy file="${base.dir}/modules/identity_provider_support/conf/idp_login-config.xml" tofile="${temp.dir}/login-config.xml" overwrite="true"/>
-        <copy file="${base.dir}/modules/identity_provider_support/conf/idp_upt.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/upt.hibernate.cfg.xml" overwrite="true"/>
-        <copy file="${base.dir}/modules/identity_provider_support/conf/idp_catissuecore.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/catissuecore.hibernate.cfg.xml" overwrite="true"/>
-        <replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
-                    <include name="catissuecore-ds.xml" />
-                    <include name="login-config.xml" />
-                <replacefilter token="@@CSMdatabaseurl@@" value="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}"/>
-                <replacefilter token="@@CSMusername@@" value="${csm.database.username}"/>
-                <replacefilter token="@@CSMpasword@@" value="${csm.database.password}"/>
-        </replace>
-        <antcall target="oracle_config" />
-    </target>
 
     <!-- Upgrade tasks for all P releases -->
     <target name="upgrade_p5.1" description="Upgrading Database from v1.1.p5.1 to v1.2">
@@ -5192,12 +4625,12 @@
                 <copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernate.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
                     -->     
                 <echo message="Copying caTissue Suite Application Components..." />
-                    <!--Copying caTissueCdmsIntegration.properties file-->
+                    <!--Copying caTissueCdmsIntegration.properties file
                     <copy todir="${temp.dir}/catissuecore-properties" overwrite="true">
                         <fileset dir="${basedir}/modules/caTissue/conf/catissuecore-properties">
                             <include name="caTissueCore_Properties.xml" />
                         </fileset>
-                    </copy>
+                    </copy>-->
                     <replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
                         <replacefilter token="@@CiderWMQEnabled@@" value="${cider.integration.enabled}" />
                                     <replacefilter token="@@CiderWMQServerName@@" value="${cider.wmq.server.name}" />
