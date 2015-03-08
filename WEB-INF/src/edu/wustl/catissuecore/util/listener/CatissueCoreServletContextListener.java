@@ -16,7 +16,6 @@ import javax.sql.DataSource;
 
 import krishagni.catissueplus.csd.CatissueUserContextProviderImpl;
 import krishagni.catissueplus.util.FormProcessor;
-import krishagni.catissueplus.util.QuartzSchedulerJobUtil;
 
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationUtility;
 import com.krishagni.catissueplus.core.de.ui.UserControlFactory;
@@ -26,9 +25,7 @@ import edu.common.dynamicextensions.domain.nui.factory.ControlManager;
 import edu.common.dynamicextensions.nutility.BOUtil;
 import edu.common.dynamicextensions.nutility.DEApp;
 import edu.common.dynamicextensions.nutility.FormProperties;
-import edu.common.dynamicextensions.query.PathConfig;
 import edu.wustl.catissuecore.action.bulkOperations.BOTemplateUpdater;
-import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.exception.ErrorKey;
@@ -200,9 +197,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		try
 		{
 			BulkOperationUtility.changeBulkOperationStatusToFailed();
-			SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
-			executerImpl.shutdown();
-
 		}
 		catch (final DAOException e)
 		{

@@ -1,453 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<!DOCTYPE hibernate-mapping PUBLIC
-    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<hibernate-mapping>
-
-    <class
-        name="edu.wustl.catissuecore.domain.Container"
-        dynamic-insert="false"
-        dynamic-update="false"
-        lazy="true"
-        table="CATISSUE_CONTAINER" >
-
-        <cache usage="read-write" />
-
-        <id
-            name="id"
-            column="IDENTIFIER"
-            length="30"
-            type="long"
-            unsaved-value="null" >
-
-            <generator class="native" >
-
-                <param name="sequence" >
-CATISSUE_CONTAINER_SEQ
-                </param>
-            </generator>
-        </id>
-
-        <property
-            name="activityStatus"
-            column="ACTIVITY_STATUS"
-            insert="true"
-            length="50"
-            type="string"
-            update="true" />
-
-        <one-to-one
-            name="locatedAtPosition"
-            cascade="save-update"
-            class="edu.wustl.catissuecore.domain.ContainerPosition"
-            constrained="false"
-            outer-join="auto"
-            property-ref="occupiedContainer" />
-
-        <set
-            name="occupiedPositions"
-            cascade="delete-orphan"
-            inverse="true"
-            lazy="true"
-            sort="unsorted"
-            table="CATISSUE_CONTAINER_POSITION" >
-
-            <cache usage="read-write" />
-
-            <key column="PARENT_CONTAINER_ID" />
-
-            <one-to-many class="edu.wustl.catissuecore.domain.ContainerPosition" />
-        </set>
-
-        <property
-            name="barcode"
-            column="BARCODE"
-            insert="true"
-            length="255"
-            type="string"
-            update="true" />
-
-        <many-to-one
-            name="capacity"
-            cascade="none"
-            class="edu.wustl.catissuecore.domain.Capacity"
-            column="CAPACITY_ID"
-            insert="true"
-            outer-join="auto"
-            update="true" />
-
-        <property
-            name="comment"
-            column="COMMENTS"
-            insert="true"
-            length="2000"
-            type="string"
-            update="true" />
-
-        <property
-            name="full"
-            column="CONT_FULL"
-            insert="true"
-            type="boolean"
-            update="true" />
-
-        <property
-            name="name"
-            column="NAME"
-            insert="true"
-            length="255"
-            type="string"
-            update="true" />
-
-        <!--
-            To add non XDoclet property mappings, create a file named
-                hibernate-properties-Container.xml
-            containing the additional properties and place it in your merge dir.
-        -->
-
-        <joined-subclass
-            name="edu.wustl.catissuecore.domain.SpecimenArray"
-            dynamic-insert="false"
-            dynamic-update="false"
-            lazy="true"
-            table="CATISSUE_SPECIMEN_ARRAY" >
-
-            <key column="IDENTIFIER" />
-
-            <set
-                name="newSpecimenArrayOrderItemCollection"
-                cascade="none"
-                inverse="false"
-                lazy="true"
-                sort="unsorted"
-                table="CATISSUE_NEW_SP_AR_ORDER_ITEM" >
-
-                <cache usage="read-write" />
-
-                <key column="SPECIMEN_ARRAY_ID" />
-
-                <one-to-many class="edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem" />
-            </set>
-
-            <many-to-one
-                name="createdBy"
-                cascade="none"
-                class="edu.wustl.catissuecore.domain.User"
-                column="CREATED_BY_ID"
-                insert="true"
-                lazy="false"
-                outer-join="auto"
-                update="true" />
-
-            <set
-                name="specimenArrayContentCollection"
-                cascade="none"
-                inverse="false"
-                lazy="true"
-                sort="unsorted"
-                table="CATISSUE_SPECI_ARRAY_CONTENT" >
-
-                <cache usage="read-write" />
-
-                <key column="SPECIMEN_ARRAY_ID" />
-
-                <one-to-many class="edu.wustl.catissuecore.domain.SpecimenArrayContent" />
-            </set>
-
-            <many-to-one
-                name="specimenArrayType"
-                cascade="none"
-                class="edu.wustl.catissuecore.domain.SpecimenArrayType"
-                column="SPECIMEN_ARRAY_TYPE_ID"
-                insert="true"
-                lazy="false"
-                outer-join="auto"
-                update="true" />
-
-            <property
-                name="available"
-                column="AVAILABLE"
-                insert="true"
-                type="boolean"
-                update="true" />
-        </joined-subclass>
-
-        <joined-subclass
-            name="edu.wustl.catissuecore.domain.StorageContainer"
-            dynamic-insert="false"
-            dynamic-update="false"
-            lazy="true"
-            table="CATISSUE_STORAGE_CONTAINER" >
-
-            <key column="IDENTIFIER" />
-
-            <set
-                name="specimenPositionCollection"
-                cascade="none"
-                inverse="true"
-                lazy="true"
-                sort="unsorted"
-                table="CATISSUE_SPECIMEN_POSITION" >
-
-                <cache usage="read-write" />
-
-                <key column="CONTAINER_ID" />
-
-                <one-to-many class="edu.wustl.catissuecore.domain.SpecimenPosition" />
-            </set>
-
-            <set
-                name="collectionProtocolCollection"
-                cascade="none"
-                fetch="join"
-                inverse="false"
-                lazy="false"
-                sort="unsorted"
-                table="CATISSUE_ST_CONT_COLL_PROT_REL" >
-
-                <cache usage="read-write" />
-
-                <key column="STORAGE_CONTAINER_ID" />
-
-                <many-to-many
-                    class="edu.wustl.catissuecore.domain.CollectionProtocol"
-                    column="COLLECTION_PROTOCOL_ID"
-                    outer-join="auto" />
-            </set>
-
-            <set
-                name="holdsSpecimenClassCollection"
-                cascade="save-update"
-                fetch="join"
-                inverse="false"
-                lazy="false"
-                sort="unsorted"
-                table="CATISSUE_STOR_CONT_SPEC_CLASS" >
-
-                <cache usage="read-write" />
-
-                <key column="STORAGE_CONTAINER_ID" />
-
-                <element
-                    column="SPECIMEN_CLASS"
-                    length="50"
-                    type="string" />
-            </set>
-
-            <set
-                name="holdsSpecimenTypeCollection"
-                cascade="save-update"
-                fetch="join"
-                inverse="false"
-                lazy="false"
-                sort="unsorted"
-                table="CATISSUE_STOR_CONT_SPEC_TYPE" >
-
-                <cache usage="read-write" />
-
-                <key column="STORAGE_CONTAINER_ID" />
-
-                <element
-                    column="SPECIMEN_TYPE"
-                    length="50"
-                    type="string" />
-            </set>
-
-            <set
-                name="holdsStorageTypeCollection"
-                cascade="none"
-                fetch="join"
-                inverse="false"
-                lazy="false"
-                sort="unsorted"
-                table="CATISSUE_ST_CONT_ST_TYPE_REL" >
-
-                <cache usage="read-write" />
-
-                <key column="STORAGE_CONTAINER_ID" />
-
-                <many-to-many
-                    class="edu.wustl.catissuecore.domain.StorageType"
-                    column="STORAGE_TYPE_ID"
-                    lazy="false"
-                    outer-join="auto" />
-            </set>
-
-            <set
-                name="holdsSpecimenArrayTypeCollection"
-                cascade="none"
-                fetch="join"
-                inverse="false"
-                lazy="false"
-                sort="unsorted"
-                table="CATISSUE_CONT_HOLDS_SPARRTYPE" >
-
-                <cache usage="read-write" />
-
-                <key column="STORAGE_CONTAINER_ID" />
-
-                <many-to-many
-                    class="edu.wustl.catissuecore.domain.SpecimenArrayType"
-                    column="SPECIMEN_ARRAY_TYPE_ID"
-                    outer-join="auto" />
-            </set>
-
-            <many-to-one
-                name="site"
-                cascade="none"
-                class="edu.wustl.catissuecore.domain.Site"
-                column="SITE_ID"
-                insert="true"
-                lazy="false"
-                outer-join="auto"
-                update="true" />
-
-            <property
-                name="tempratureInCentigrade"
-                column="TEMPERATURE"
-                insert="true"
-                length="30"
-                type="double"
-                update="true" />
-
-            <property
-                name="oneDimensionLabellingScheme"
-                column="one_Dimension_Labelling_Scheme"
-                insert="true"
-                length="30"
-                type="string"
-                update="true" />
-
-            <property
-                name="twoDimensionLabellingScheme"
-                column="two_Dimension_Labelling_Scheme"
-                insert="true"
-                length="30"
-                type="string"
-                update="true" />
-
-            <many-to-one
-                name="storageType"
-                cascade="none"
-                class="edu.wustl.catissuecore.domain.StorageType"
-                column="STORAGE_TYPE_ID"
-                insert="true"
-                lazy="false"
-                outer-join="auto"
-                update="true" />
-        </joined-subclass>
-    </class>
-
-    <query name="getAllSiteName" >
-        select distinct(site.name) from edu.wustl.catissuecore.domain.StorageContainer st join st.site site
-    </query>
-
-    <query name="getSiteIdFromContainerName" >
-        select site.id from edu.wustl.catissuecore.domain.StorageContainer st join st.site site where st.id = ?
-    </query>
-
-    <query name="getStorageContainerLabellingSchemesByName" >
-SELECT oneDimensionLabellingScheme,twoDimensionLabellingScheme FROM edu.wustl.catissuecore.domain.StorageContainer ST WHERE ST.name= ?
-    </query>
-
-    <query name="getStorageContainerLabellingSchemesById" >
-SELECT oneDimensionLabellingScheme,twoDimensionLabellingScheme FROM edu.wustl.catissuecore.domain.StorageContainer ST WHERE ST.id= ?
-    </query>
-
-    <query name="getStorageContainerIdByContainerName" >
-Select ST.id from edu.wustl.catissuecore.domain.StorageContainer ST WHERE ST.name= ?
-    </query>
-
-    <query name="getStorageContainerDetailsByContainerName" >
-SELECT STCONT.id, STCONT.oneDimensionLabellingScheme, STCONT.twoDimensionLabellingScheme, 
-STCONT.storageType.oneDimensionLabel, STCONT.storageType.twoDimensionLabel, STCONT.capacity.oneDimensionCapacity, STCONT.capacity.twoDimensionCapacity 
-FROM edu.wustl.catissuecore.domain.StorageContainer STCONT WHERE STCONT.name= ?
-    </query>
-
-    <query name="updateSiteOfChildContainer" >
-UPDATE edu.wustl.catissuecore.domain.StorageContainer container SET container.site = ? WHERE container.name = ?
-    </query>
-
-    <query name="isPositionAvailable" >
-    select id from  edu.wustl.catissuecore.domain.SpecimenPosition specPos where specPos.storageContainer.name=? and specPos.positionDimensionOne=? and specPos.positionDimensionTwo=?
-    </query>
-
-    <query name="isPositionAvailableContainer" >
-    select id from  edu.wustl.catissuecore.domain.ContainerPosition contPos where contPos.parentContainer.name=? and contPos.positionDimensionOne=? and contPos.positionDimensionTwo=?
-    </query>
-
-    <query name="getStorageContainerIdByName" >
-    SELECT id FROM edu.wustl.catissuecore.domain.StorageContainer ST WHERE ST.name= ?
-    </query>
-
-    <query name="getCapacityByName" >
-     SELECT capacity FROM edu.wustl.catissuecore.domain.StorageContainer ST WHERE ST.name= ?
-    </query>
-
-    <query name="getAllocatedSpecimenPosition" >
-    SELECT positionDimensionOne,positionDimensionTwo from edu.wustl.catissuecore.domain.SpecimenPosition where storageContainer.name=?
-    </query>
-
-    <query name="getAllocatedContainerPosition" >
-    SELECT positionDimensionOne,positionDimensionTwo from edu.wustl.catissuecore.domain.ContainerPosition where parentContainer.name=?
-    </query>
-
-    <query name="getAssignedSpecimenCount" >
-	select count(*) from SpecimenPosition specPos where specPos.storageContainer.id=?
-    </query>
-
-    <query name="getChildContainerCount" >
-    select count(*) from ContainerPosition cntPos, StorageContainer container where cntPos.occupiedContainer.id=container.id and cntPos.parentContainer.id=?
-    </query>
-
-    <query name="getContainerCapacityCount" >
-    select cont.capacity.oneDimensionCapacity*cont.capacity.twoDimensionCapacity from StorageContainer cont where cont.id = ?
-    </query>
-
-    <query name="getStorageTypeCapacityFromContainerId" >
-	select st.capacity from StorageContainer cont, StorageType st where size(st.holdsSpecimenClassCollection)>0 and size(st.holdsSpecimenTypeCollection)>0 and cont.storageType.id=st.id and cont.id=?
-    </query>
-
-    <query name="getChildContainerIds" >
-	select cntPos.occupiedContainer.id from ContainerPosition cntPos, StorageContainer container where cntPos.occupiedContainer.id=container.id and cntPos.parentContainer.id=?
-    </query>
-
-    <query name="getIdOfAllContainers" >
-    select cont.id from Container cont where cont.activityStatus!='Disabled' 
-    </query>
-
-    <query name="getIdOfParentStorageContainers" >
-	select cont.id from Container cont where cont.activityStatus!='Disabled' and not exists (select cntPos.occupiedContainer.id from ContainerPosition cntPos where cont.id = cntPos.occupiedContainer.id) 
-    </query>
-
-    <query name="getContainerNameById" >
-    SELECT name FROM edu.wustl.catissuecore.domain.StorageContainer ST WHERE ST.id= ?
-    </query>
-
-    <query name="getParentStorageContainersDetailsBySiteName" >
-	 select cont.id,cont.name from StorageContainer cont join cont.site site left join cont.locatedAtPosition as locatedAtPosition where cont.activityStatus!='Disabled' and site.name=? and locatedAtPosition is null
-    </query>
-
-    <query name="getCPIdsbyContainerID" >
-select cp.id from edu.wustl.catissuecore.domain.StorageContainer as con left outer join  con.collectionProtocolCollection as cp where con.id = ?    </query>
-
-    <sql-query name="insertIntoStorContSpecCountsTable" >
-	INSERT INTO catissue_stor_cont_utilization(STORAGE_CONTAINER_ID, STORED_SPECIMEN_COUNT, CONT_DATE, UTILIZATION_PERCENTAGE,TOTAL_CAPACITY,SITE_ID) VALUES(?,?,?,?,?,?) 
-    </sql-query>
-
-    <sql-query name="getStorContSpecCountDataById" >
-	select spec.CONT_DATE,spec.STORED_SPECIMEN_COUNT,spec.UTILIZATION_PERCENTAGE from catissue_stor_cont_utilization spec where spec.STORAGE_CONTAINER_ID=?
-	 order by spec.CONT_DATE, spec.STORAGE_CONTAINER_ID asc    </sql-query>
-
-    <sql-query name="getUtilizationCountsOfContainerById" >
-	select spec.UTILIZATION_PERCENTAGE,spec.STORED_SPECIMEN_COUNT,spec.total_capacity from catissue_stor_cont_utilization spec where spec.STORAGE_CONTAINER_ID=? and spec.CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization where STORAGE_CONTAINER_ID= ?)    </sql-query>
-
-    <sql-query name="getSiteUtilizationOracle" >
-    select * from (  select total_count,total_capacity,site_name,((total_count*100)/total_capacity) persent_utilization from ( select SUM(STORED_SPECIMEN_COUNT) total_count,SUM(total_capacity) total_capacity,site.name site_name from catissue_stor_cont_utilization    left join catissue_container st_container on st_container.identifier = catissue_stor_cont_utilization.storage_container_id    left join catissue_container_position pos on pos.container_id = st_container.identifier left join catissue_site site on site.identifier = site_id where pos.container_id is null and CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization) group by (site.name)) t1 order by persent_utilization desc ) where ROWNUM BETWEEN 0 AND ?
-    </sql-query>
-    
-    <sql-query name="getSiteUtilizationMysql">
-    select total_count,total_capacity,site_name,((total_count*100)/total_capacity) persent_utilization from ( select SUM(STORED_SPECIMEN_COUNT) total_count,SUM(total_capacity) total_capacity,site.name site_name from catissue_stor_cont_utilization  left join catissue_container st_container on st_container.identifier = catissue_stor_cont_utilization.storage_container_id  left join catissue_container_position pos on pos.container_id = st_container.identifier  left join catissue_site site on site.identifier = site_id where pos.container_id is null and CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization) group by (site.name)) t1 order by persent_utilization desc limit 0,?
-    </sql-query>
-
-</hibernate-mapping>

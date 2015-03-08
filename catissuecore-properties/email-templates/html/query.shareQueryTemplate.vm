@@ -1,5 +1,0 @@
-Hello $sharedUser.lastName, $sharedUser.firstName<br>
-<br>
-A query by title "$sharedQuery.name" has been shared to you by $user.lastName, $user.firstName. You can now access the query after you login to OpenSpecimen.<br>
-<br>
-$footer

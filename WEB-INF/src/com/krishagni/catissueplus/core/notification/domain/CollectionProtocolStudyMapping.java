@@ -1,7 +1,8 @@
 
 package com.krishagni.catissueplus.core.notification.domain;
 
-import edu.wustl.catissuecore.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+
 
 public class CollectionProtocolStudyMapping {
 

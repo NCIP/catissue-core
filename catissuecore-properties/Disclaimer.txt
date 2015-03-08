@@ -1,5 +1,0 @@
-This site is maintained by Washington University School of Medicine and is protected by various provisions under Title 18 of the U.S. Code. Violators of Title 18 are subject to criminal prosecution in a federal court.
-
-For site security purposes, as well as to ensure that this service remains available to all authorized users, all users must register in the system and be approved prior to gaining access to non-aggregate data. Data visibility is limited to approved user roles as well as assigned access privileges as defined.  
-
-The caTissue Suite system has incorporated functionality to create audit tables used to monitor traffic through the system and to identify unauthorized attempts to upload or change information or otherwise cause damage.

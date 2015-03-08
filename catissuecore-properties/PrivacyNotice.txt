@@ -1,5 +1,0 @@
-All information entered into the caTissue Suite system is for research purposes only and should not be viewed or disclosed to unauthorized individuals.
-
-The Privacy Act of 1974, 5 U.S.C. 552a, prohibits disclosure of information contained in a system of records without the express written consent of the Participant to whom the record pertains.
-
-caTissue Suite complies with Section 164.310 of the Health Information Portability and Accountability Act (HIPAA) which specified the physical safeguards that are required for protection of Electronic Protected Health Information (EPHI) from unauthorized disclosure, modification, or destruction.

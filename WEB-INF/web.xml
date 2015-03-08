@@ -26,13 +26,6 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<param-name>resourcebundleclass</param-name>
 		<param-value>ApplicationResources</param-value>
 	</context-param>
-	<!-- filter definition -->
-	<filter>
-		<filter-name>RestApiAuthFilter</filter-name>
-		<filter-class>krishagni.catissueplus.rest.RestApiAuthFilter</filter-class>
-	</filter>
-	
-<!--  filter definition ends  -->
 <!--  filter mapping starts --> 
 	<filter>
 		<filter-name>authTokenFilter</filter-name>

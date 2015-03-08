@@ -56,8 +56,6 @@
     <property name="oracle.dao.datasource.prop.filename" value="OracleDataSourceDAOProperties.xml"/>
     <property name="mysql.dao.datasource.prop.filename" value="MysqlDataSourceDAOProperties.xml"/>
     <property name="db2.driver.string" value="com.ibm.db2.jcc.DB2Driver" />
-    <property name="custom-report.script.dir" value="${rel.jboss.home}/server/default/custom-reports/scripts" />
-    <property name="custom-report.report.dir" value="${rel.jboss.home}/server/default/custom-reports/reports" />
     
     <var name="databaseurl" value="" />
     <import file="./modules/dynamic_extensions/conf/DEDeploy.xml" />
@@ -387,11 +385,6 @@
         <copy todir="${temp.dir}/catissuecore-properties" overwrite="true">
             <fileset dir="${base.dir}/modules/caTissue/conf/catissuecore-properties" />
         </copy>
-        <echo message="Copying email-templates to WEB-INF/classes" />   
-        <copy todir="${temp.dir}/catissuecore/WEB-INF/classes/email-templates">
-            <fileset dir="${temp.dir}/catissuecore-properties/email-templates"/>
-        </copy>
-        <delete dir="${temp.dir}/catissuecore-properties/email-templates"/>
 
         <antcall target="configure_log4j" />
         <antcall target="configure_appResources" />
@@ -408,18 +401,6 @@
                 <copy file="${theam.css.path}" tofile="${temp.dir}/catissuecore/css/login-theam.css" overwrite="true" />
             </then>
         </if>
-        
-        <if>
-            <not>
-                <equals arg1="" arg2="${institute.logo.path}" />
-            </not>
-            <then>
-                <copy file="${institute.logo.path}" todir="${temp.dir}/catissuecore/images" overwrite="true" />
-            </then>
-        </if>
-        
-        
-        
         
     </target>
     <target name="configure_appResources" description="Configure ApplicationResources.properties">
@@ -450,9 +431,6 @@
     <!--Modify Adopter's Institution images, URL of Institution website and Contact Us, Privacy Notice, Disclaimer, Accessibility Text Files-->
     <target name="adopter_configuration" description="Modify Adopter's Institution images, URL of Institution website and Contact Us, Privacy Notice, Disclaimer, Accessibility Text Files">
         <echo message="Updating Site Images" />
-        <copy todir="${temp.dir}/images" overwrite="true">
-            <fileset dir="${base.dir}/modules/caTissue/images" />
-        </copy>
     </target>
 
     <!--Modify Configuration For MySQL-->
@@ -751,7 +729,6 @@
 			<replacefilter token="@@usermanual@@" value="${user.manual}" />
 
 					</replace>
-					<replace file="${temp.dir}/catissuecore-properties/help_links.xml" token="@@usermanual@@" value="${user.manual}" />
 		<!-- Add values to properties if EMPI feature is enabled-->
 		<if>
 			<equals arg1="true" arg2="${empi.enabled}" />
@@ -1429,8 +1406,6 @@
             <replacefilter token="@@app-dynamicuixml-file@@" value="${jboss.server.url}/catissuecore-properties/dynamicUI.xml" />
             <replacefilter token="@@auth-properties-file@@" value="${jboss.server.url}/catissuecore-properties/IDPAuthentication.xml" />
             <replacefilter token="@@bulk-operation-properties-file@@" value="${jboss.server.url}/catissuecore-properties/bulkOperation.properties" />
-            <replacefilter token="@@custom-report-script-dir@@" value="${custom-report.script.dir}" />
-            <replacefilter token="@@custom-generated-report-dir@@" value="${custom-report.report.dir}" />
         </replace>
 
         <copy todir="${jboss.server.url}/deploy" overwrite="true">
@@ -1439,8 +1414,6 @@
             </fileset>
         </copy>
         
-        <mkdir dir="${custom-report.script.dir}"/>
-        <mkdir dir="${custom-report.report.dir}"/>
         <delete file="${jboss.server.url}/lib/hibernate2.jar" />
     </target>
 
