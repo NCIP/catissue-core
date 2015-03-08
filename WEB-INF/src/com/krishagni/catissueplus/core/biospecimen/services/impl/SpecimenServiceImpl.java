@@ -75,25 +75,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	public ResponseEvent<SpecimenDetail> createSpecimen(RequestEvent<SpecimenDetail> req) {
 		try {
 			SpecimenDetail detail = req.getPayload();
-			Specimen specimen = specimenFactory.createSpecimen(detail, null);
-			
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureUniqueLabel(specimen.getLabel(), ose);
-			if (StringUtils.isNotBlank(specimen.getBarcode())) {
-				ensureUniqueBarcode(specimen.getBarcode(), ose);
-			}
-			
-			ose.checkAndThrow();			
-			
-			if (specimen.getParentSpecimen() != null) {
-				specimen.getParentSpecimen().getChildCollection().add(specimen);
-			}
-			
-			specimen.decAliquotedQtyFromParent();
-			specimen.checkQtyConstraints();
-			specimen.occupyPosition();
-			
-			daoFactory.getSpecimenDao().saveOrUpdate(specimen);
+			Specimen specimen = saveOrUpdate(detail, null, null);
 			return ResponseEvent.response(SpecimenDetail.from(specimen));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -118,21 +100,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 			if (existing == null) {
 				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND);
 			}
-						
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			Specimen specimen = specimenFactory.createSpecimen(detail, null);			
-			if (!existing.getLabel().equals(specimen.getLabel())) {
-				ensureUniqueLabel(specimen.getLabel(), ose);
-			}
 			
-			String barcode = specimen.getBarcode();
-			if (StringUtils.isNotBlank(barcode) && !barcode.equals(existing.getBarcode())) {
-				ensureUniqueBarcode(barcode, ose);
-			}
-			
-			ose.checkAndThrow();
-			existing.update(specimen);
-			daoFactory.getSpecimenDao().saveOrUpdate(existing);
+			saveOrUpdate(detail, existing, null);
 			return ResponseEvent.response(SpecimenDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -225,24 +194,51 @@ public class SpecimenServiceImpl implements SpecimenService {
 	}
 	
 	private Specimen collectSpecimen(SpecimenDetail detail, Specimen parent) {
-		Specimen specimen = specimenFactory.createSpecimen(detail, parent);
-		
-		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		ensureUniqueLabel(specimen.getLabel(), ose);
-		ensureUniqueBarcode(specimen.getBarcode(), ose);
-		
-		ose.checkAndThrow();
-		
-		if (detail.getChildren() != null) {
-			for (SpecimenDetail child : detail.getChildren()) {
-				collectSpecimen(child, specimen);
+		Specimen existing = null;
+		if (detail.getId() != null) {
+			existing = daoFactory.getSpecimenDao().getById(detail.getId());
+			if (existing == null) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND);
 			}
 		}
 		
-		specimen.decAliquotedQtyFromParent();		
-		specimen.checkQtyConstraints();
-		specimen.occupyPosition();
-		daoFactory.getSpecimenDao().saveOrUpdate(specimen, true);				
+		Specimen specimen = saveOrUpdate(detail, existing, parent);
+		if (detail.getChildren() != null) {
+			for (SpecimenDetail childDetail : detail.getChildren()) {
+				collectSpecimen(childDetail, specimen);
+			}
+		}
+		
+		return specimen;
+	}
+	
+	private Specimen saveOrUpdate(SpecimenDetail detail, Specimen existing, Specimen parent) {
+		Specimen specimen = specimenFactory.createSpecimen(detail, parent);
+
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		if (existing == null || !existing.getLabel().equals(specimen.getLabel())) {
+			ensureUniqueLabel(specimen.getLabel(), ose);
+		}
+
+		String barcode = specimen.getBarcode();
+		if (StringUtils.isNotBlank(barcode) &&
+			(existing == null || !barcode.equals(existing.getBarcode()))) {
+			ensureUniqueBarcode(specimen.getBarcode(), ose);
+		}
+
+		ose.checkAndThrow();
+
+		if (existing != null) {
+			existing.update(specimen);
+			specimen = existing;
+		} else if (specimen.getParentSpecimen() != null) {
+			specimen.getParentSpecimen().addSpecimen(specimen);
+		} else {
+			specimen.checkQtyConstraints(); // TODO: Should we be calling this at all?
+			specimen.occupyPosition();
+		}
+
+		daoFactory.getSpecimenDao().saveOrUpdate(specimen);
 		return specimen;
 	}
 

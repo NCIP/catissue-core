@@ -389,25 +389,14 @@ public class Specimen extends BaseEntity {
 	}
 	
 	public void addSpecimen(Specimen specimen) {
-		specimen.setParentSpecimen(this);
-		
-		if (specimen.getLineage().equals(DERIVED)) {
-			childCollection.add(specimen);
-			return;
+		specimen.setParentSpecimen(this);				
+		if (specimen.isAliquot()) {
+			specimen.decAliquotedQtyFromParent();		
+			specimen.checkQtyConstraints();		
 		}
 		
-		double qty = getInitialQuantity();
-		for (Specimen child : getChildCollection()) {
-			if (child.getLineage().equals(ALIQUOT)) {
-				qty -= child.getInitialQuantity();
-			}
-		}
-		
-		if (qty < specimen.getInitialQuantity()) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
-		}
-		
-		childCollection.add(specimen);
+		specimen.occupyPosition();		
+		getChildCollection().add(specimen);
 	}
 	
 	public CollectionProtocol getCollectionProtocol() {
@@ -467,6 +456,13 @@ public class Specimen extends BaseEntity {
 		return aliquotQty;		
 	}
 	
+	/**
+	 * Ensures following constraints are adhered
+	 * 1. Specimen initial quantity is greater than or equals to sum of
+	 *    all immediate aliquot child specimens
+	 * 2. Specimen available quantity is less than 
+	 *    initial - sum of all immediate aliquot child specimens initial quantity
+	 */
 	private void ensureAliquotQtyOk(SpecimenErrorCode initGtAliquotQty, SpecimenErrorCode avblQtyGtAct) {		
 		double initialQty = getInitialQuantity();
 		double aliquotQty = getAliquotQuantity();
