@@ -4,7 +4,7 @@
     <ul class="os-key-values os-two-cols">
       <li class="item">
         <strong class="key key-sm" translate="institutes.departments">Departments</strong>
-        <span class="value value-md" os-inline-edit>{{institute.departments | showDepartments | osNoValue}}</span>
+        <span class="value value-md" os-inline-edit>{{institute.departments | osArrayJoin:getDepartmentText | osNoValue}}</span>
       </li>
     </ul>
   </div>
