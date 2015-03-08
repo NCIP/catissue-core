@@ -405,9 +405,6 @@
 			<fileset dir="${base.dir}/WEB-INF/resources/ng-email-templates"/>
 		</copy>
 		
-		<copy todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true">
-					<fileset dir="${base.dir}/custom_impl_lib" />
-		</copy>
 		<antcall target="configure_log4j" />
 		<antcall target="configure_appResources" />
 
