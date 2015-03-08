@@ -219,6 +219,8 @@
     "storage_location": "Storage Location",
     "virtually_located": "Virtual",
     "no_specimens_to_show": "No Specimens to Show",
+    "aliquot_cnt": "Count of Aliquots",
+    "qty_per_aliquot": "Quantity per Aliquot",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",
@@ -232,6 +234,15 @@
     "menu": {
       "overview": "Overview",
       "extensions": "Extensions"
+    },
+
+    "buttons": {
+      "collect_aliquots": "Collect Aliquots",
+      "collect_derivatives": "Collect Derivatives"
+    },
+
+    "errors": {
+      "insufficient_qty": "Insufficient parent specimen quantity to create aliquots"
     }
   },
 

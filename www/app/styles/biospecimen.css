@@ -89,3 +89,11 @@
 .os-key-values .value.os-status-pending {
   background: #f0ad4e;
 }
+
+.os-table.os-spmn-hide-options .os-select-specimen-cb {
+  visibility: hidden;
+}
+
+.os-table.os-spmn-hide-options .os-more-options {
+  visibility: hidden;
+}

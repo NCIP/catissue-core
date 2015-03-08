@@ -4,7 +4,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
     'os.biospecimen.models', 
     'os.biospecimen.participant.collect-specimens'
   ])
-  .directive('osSpecimenTree', function(CollectSpecimensSvc) {
+  .directive('osSpecimenTree', function(CollectSpecimensSvc, Specimen, Alerts) {
     function toggleAllSelected(selection, specimens, specimen) {
       if (!specimen.selected) {
         selection.all = false;
@@ -83,6 +83,9 @@ angular.module('os.biospecimen.participant.specimen-tree',
       templateUrl: 'modules/biospecimen/participant/specimens.html',
 
       link: function(scope, element, attrs) {
+        scope.view = 'list';
+        scope.parentSpecimen = undefined;
+
         scope.openSpecimenNode = function(specimen) {
           specimen.isOpened = true;
         };
@@ -122,6 +125,58 @@ angular.module('os.biospecimen.participant.specimen-tree',
 
           CollectSpecimensSvc.collect(scope.visit, specimensToCollect);
         };
+
+        scope.showCreateAliquots = function(specimen) {
+          scope.view = 'create_aliquots';      
+          scope.parentSpecimen = specimen;
+          scope.aliquotSpec = {};
+        };
+
+        scope.collectAliquots = function() {
+          var spec = scope.aliquotSpec;
+          var parent = scope.parentSpecimen;
+
+          if (!!spec.qtyPerAliquot && !!spec.noOfAliquots) {
+            var requiredQty = spec.qtyPerAliquot * spec.noOfAliquots;
+            if (requiredQty > parent.availableQty) {
+              Alerts.error("specimens.errors.insufficient_qty");
+              return;
+            }
+          } else if (!!spec.qtyPerAliquot) {
+            spec.noOfAliquots = Math.floor(parent.availableQty / spec.qtyPerAliquot);
+          } else if (!!spec.noOfAliquots) {
+            spec.qtyPerAliquot = Math.round(parent.availableQty / spec.noOfAliquots * 10000) / 10000;
+          }
+
+          var aliquot = angular.extend(new Specimen(parent), {
+            id: undefined, 
+            reqId: undefined, 
+            label: '',
+            lineage: 'Aliquot', 
+            parentId: parent.id,
+            initialQty: spec.qtyPerAliquot,
+            storageLocation: {name: '', positionX:'', positionY: ''},
+            status: 'Pending', 
+            selected: true
+          });
+
+          var aliquots = [];
+          for (var i = 0; i < spec.noOfAliquots; ++i) {
+            aliquots.push(angular.copy(aliquot));
+          }
+
+          CollectSpecimensSvc.collect(scope.visit, aliquots);
+        };
+
+        scope.showCreateDerivatives = function(specimen) {
+          scope.view = 'create_derivatives';      
+          scope.parentSpecimen = specimen;
+        };
+
+        scope.revertEdit = function() {
+          scope.view = 'list';
+          scope.parentSpecimen = undefined;
+        }
       }
     }
   });

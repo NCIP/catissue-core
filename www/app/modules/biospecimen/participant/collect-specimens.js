@@ -87,24 +87,50 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
     function getSpecimensToSave(uiSpecimens, visited) {
       var result = [];
-      angular.forEach(uiSpecimens, function(specimen) {
-        if (specimen.status == 'Collected' || !specimen.selected || visited.indexOf(specimen) > 0) {
+      angular.forEach(uiSpecimens, function(uiSpecimen) {
+        if (uiSpecimen.status == 'Collected' || // when specimen is already collected
+            !uiSpecimen.selected ||  // when specimen is not selected on ui
+            visited.indexOf(uiSpecimen) > 0) { // when specimen is already visited
           return;
         }
 
-        visited.push(specimen);
-        result.push({
-          id: specimen.id,
-          initialQty: specimen.initialQty,
-          label: specimen.label,
-          reqId: specimen.reqId,
-          visitId: $scope.visit.id,
-          storageLocation: specimen.storageLocation,
-          children: getSpecimensToSave(specimen.children, visited)
-        });  
+        visited.push(uiSpecimen);
+
+        var specimen = getSpecimenToSave(uiSpecimen);
+        specimen.children = getSpecimensToSave(uiSpecimen.children, visited);
+        result.push(specimen);
+        return result;
       });
 
       return result;
+    };
+
+    function getSpecimenToSave(uiSpecimen) {
+      var specimen = {
+        id: uiSpecimen.id,
+        initialQty: uiSpecimen.initialQty,
+        label: uiSpecimen.label,
+        reqId: uiSpecimen.reqId,
+        visitId: $scope.visit.id,
+        storageLocation: uiSpecimen.storageLocation,
+        parentId: uiSpecimen.parentId,
+        lineage: uiSpecimen.lineage
+      };
+
+      if (!!specimen.reqId || specimen.lineage == 'Aliquot') {
+        return specimen;
+      }
+
+      if (uiSpecimen.lineage == 'Derived') {
+        specimen.specimenClass = uiSpecimen.specimenClass;
+        specimen.type = uiSpecimen.type;
+        specimen.pathology = uiSpecimen.pathology;
+        return specimen;
+      }
+
+      specimen.anatomicSite = uiSpecimen.anatomicSite;
+      specimen.laterality = uiSpecimen.laterality;
+      return specimen;
     };
 
     init();

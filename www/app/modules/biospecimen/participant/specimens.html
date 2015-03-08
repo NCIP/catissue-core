@@ -12,7 +12,8 @@
     <div ng-if="!specimens || specimens.length == 0">
       <span translate="specimens.no_specimens_to_show">No Specimens to Show</span>
     </div>
-    <div class="os-table os-table-fixed os-table-tree" ng-if="specimens && specimens.length > 0">
+    <div class="os-table os-table-fixed os-table-tree" ng-class="{'os-spmn-hide-options': view != 'list'}"
+      ng-if="specimens && specimens.length > 0">
       <div class="os-table-head">
         <div class="row">
           <div class="col col-xs-5">
@@ -32,100 +33,165 @@
         </div>
       </div>
       <div class="os-table-body">
-        <div class="row" ng-repeat="specimen in specimens | openedTreeNodes" ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false"
-          ng-class="{'selected': specimen.selected}" ng-click="toggleSelection(specimen)">
-          <div class="col col-xs-5">
-            <div class="clearfix">
-              <div class="pull-left os-select-specimen-cb">
-                <os-checkbox ng-change="toggleSpecimenSelect(specimen)" ng-model="specimen.selected"></os-checkbox>
-              </div>
+        <div ng-class="{'os-inplace-form-edit-po': parentSpecimen == specimen}"
+          ng-repeat="specimen in specimens | openedTreeNodes">        
 
-              <div class="pull-left">
-                <div style="padding-left: {{specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16}}px">
-                  <a ng-if="specimen.hasChildren && specimen.isOpened" 
-                     class="fa fa-chevron-circle-down"
-                     ng-click="closeSpecimenNode(specimen)">
-                  </a>
-                  <a ng-if="specimen.hasChildren && !specimen.isOpened" 
-                     class="fa fa-chevron-circle-right"
-                     ng-click="openSpecimenNode(specimen)">
-                  </a>
-                  <span class="fa fa-circle" 
-                    ng-class="{'os-status-collected': specimen.status == 'Collected',
-                               'os-status-pending': specimen.status == 'Pending' || !specimen.status,
-                               'os-status-not-collected': specimen.status == 'Not Collected'}">
-                  </span>
-                  <a ng-switch on="!!specimen.label" 
-                     ui-sref="specimen-detail.overview(
-                                {eventId: visit.eventId, visitId: visit.id, specimenId: specimen.id, srId: specimen.reqId})">
-                    <span ng-switch-when="true">{{specimen.label}}</span>
-                    <span ng-switch-default>{{specimen.type}} ({{specimen.specimenClass}})</span>
-                  </a>
+          <div class="row title" ng-class="{'selected': specimen.selected}">
+            <div class="col col-xs-5">
+              <div class="clearfix">
+                <div class="pull-left os-select-specimen-cb">
+                  <os-checkbox ng-change="toggleSpecimenSelect(specimen)" ng-model="specimen.selected"></os-checkbox>
+                </div>
+
+                <div class="pull-left">
+                  <div style="padding-left: {{specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16}}px">
+                    <a ng-if="specimen.hasChildren && specimen.isOpened" 
+                       class="fa fa-chevron-circle-down"
+                       ng-click="closeSpecimenNode(specimen)">
+                    </a>
+                    <a ng-if="specimen.hasChildren && !specimen.isOpened" 
+                       class="fa fa-chevron-circle-right"
+                       ng-click="openSpecimenNode(specimen)">
+                    </a>
+                    <span class="fa fa-circle" 
+                      ng-class="{'os-status-collected': specimen.status == 'Collected',
+                                 'os-status-pending': specimen.status == 'Pending' || !specimen.status,
+                                 'os-status-not-collected': specimen.status == 'Not Collected'}">
+                    </span>
+                    <a ng-switch on="!!specimen.label" 
+                       ui-sref="specimen-detail.overview(
+                                  {eventId: visit.eventId, visitId: visit.id, specimenId: specimen.id, srId: specimen.reqId})">
+                      <span ng-switch-when="true">{{specimen.label}}</span>
+                      <span ng-switch-default>{{specimen.type}} ({{specimen.specimenClass}})</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="col col-xs-2">{{specimen.type}}</div>
-          <div class="col col-xs-2">{{specimen.pathology | osNoValue}}</div>
-          <div class="col col-xs-2" ng-if="specimen.storageLocation.name">
-            <span>{{specimen.storageLocation.name}}</span>
-            <span ng-if="!!specimen.storageLocation.positionX && !!specimen.storageLocation.positionY">
-              : ({{specimen.storageLocation.positionX}}, {{specimen.storageLocation.positionY}})
-            </span>
-          </div>
-          <div class="col col-xs-2" ng-if="!specimen.storageLocation.name">
-            <span>Virtual</span>
-          </div>
-          <div class="col col-xs-1 action">
-            <div class="os-more-options" dropdown ng-if="!selection.any">
-              <button type="button" class="dropdown-toggle">
-                <span class="fa fa-ellipsis-v"></span>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                <li>
-                  <a ui-sref="specimen-detail.overview(
-                                {eventId: visit.eventId, visitId: visit.id, specimenId: specimen.id, srId: specimen.reqId})">
-                    <i class="fa fa-eye"></i>
-                    <span translate="specimens.ctx_menu.view_specimen">View Specimen</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <i class="fa fa-pencil"></i>
-                    <span translate="specimens.ctx_menu.edit_specimen">Edit Specimen</span>
-                  </a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                  <a href="#">
-                    <i class="fa fa-share-alt"></i>
-                    <span translate="specimens.ctx_menu.create_aliquots">Create Aliquots</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <i class="fa fa-flask"></i>
-                    <span translate="specimens.ctx_menu.create_derivatives">Create Derivatives</span>
-                  </a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                  <a href="#">
-                    <i class="fa fa-cogs"></i>
-                    <span translate="specimens.ctx_menu.add_event">Add Event</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <i class="fa fa-trash"></i>
-                    <span translate="specimens.ctx_menu.dispose">Dispose</span>
-                  </a>
-                </li>
-              </ul>
+            <div class="col col-xs-2">{{specimen.type}}</div>
+            <div class="col col-xs-2">{{specimen.pathology | osNoValue}}</div>
+            <div class="col col-xs-2" ng-if="specimen.storageLocation.name">
+              <span>{{specimen.storageLocation.name}}</span>
+              <span ng-if="!!specimen.storageLocation.positionX && !!specimen.storageLocation.positionY">
+                : ({{specimen.storageLocation.positionX}}, {{specimen.storageLocation.positionY}})
+              </span>
+            </div>
+            <div class="col col-xs-2" ng-if="!specimen.storageLocation.name">
+              <span>Virtual</span>
+            </div>
+            <div class="col col-xs-1 action">
+              <div class="os-more-options" dropdown ng-if="!selection.any">
+                <button type="button" class="dropdown-toggle">
+                  <span class="fa fa-ellipsis-v"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                  <li>
+                    <a ui-sref="specimen-detail.overview(
+                                  {eventId: visit.eventId, visitId: visit.id, specimenId: specimen.id, srId: specimen.reqId})">
+                      <i class="fa fa-eye"></i>
+                      <span translate="specimens.ctx_menu.view_specimen">View Specimen</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <i class="fa fa-pencil"></i>
+                      <span translate="specimens.ctx_menu.edit_specimen">Edit Specimen</span>
+                    </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a ng-click="showCreateAliquots(specimen)">
+                      <i class="fa fa-share-alt"></i>
+                      <span translate="specimens.ctx_menu.create_aliquots">Create Aliquots</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a ng-click="showCreateDerivatives(specimen)">
+                      <i class="fa fa-flask"></i>
+                      <span translate="specimens.ctx_menu.create_derivatives">Create Derivatives</span>
+                    </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="#">
+                      <i class="fa fa-cogs"></i>
+                      <span translate="specimens.ctx_menu.add_event">Add Event</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <i class="fa fa-trash"></i>
+                      <span translate="specimens.ctx_menu.dispose">Dispose</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
+
+          <div class="row content" ng-if="parentSpecimen == specimen && view != 'list'">
+            <div ng-if="view == 'create_aliquots'" ng-include="'aliquot_specs.html'"> </div>
+            <div ng-if="view == 'create_derivatives'" ng-include="'derivative_specs.html'"> </div>
+          </div>
+
+        </div> 
       </div>
     </div>
   </div>
 </div>
+
+<script type="text/ng-template" id="aliquot_specs.html">
+  <div>
+    <form name="aliquotForm" os-form-validator="aliquotForm" novalidate>
+      <div class="clearfix">
+        <div class="col-xs-12">
+          <ul class="os-key-values os-two-cols">
+            <li class="item">
+              <strong class="key key-sm" translate="specimens.available_qty">Available Quantity:</strong>
+              <span class="value value-md">{{parentSpecimen.availableQty}}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="clearfix">
+        <div class="col-xs-3">
+          <div class="form-group">
+            <input name="noOfAliquots" ng-model="aliquotSpec.noOfAliquots" 
+              os-md-input class="form-control" type="text" placeholder="{{'specimens.aliquot_cnt' | translate}}"
+              ng-required="!aliquotSpec.qtyPerAliquot" ng-pattern="/^[1-9][0-9]*$/">
+            <div os-field-error field="aliquotForm.noOfAliquots"></div>
+          </div>
+        </div>
+
+        <div class="col-xs-3">
+          <div class="form-group">
+            <input name="qtyPerAliquot" ng-model="aliquotSpec.qtyPerAliquot" 
+              os-md-input class="form-control" type="text" placeholder="{{'specimens.qty_per_aliquot' | translate}}"
+              ng-required="!aliquotSpec.noOfAliquots" ng-pattern="/^[1-9][0-9]*$/">
+            <div os-field-error field="aliquotForm.qtyPerAliquot"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-success" 
+            os-form-submit="collectAliquots()" translate="specimens.buttons.collect_aliquots">
+            Collect Aliquots
+          </button>
+          <a class="btn os-btn-text-secondary" ng-click="revertEdit()" translate="common.buttons.cancel">
+            Cancel
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+</script>
+
+<script type="text/ng-template" id="derivative_specs.html">
+  <div class="form-group">This awesome feature is under construction. For now relax and have cup of coffee</div>
+  <div class="form-group">
+    <button class="btn btn-success" ng-click="revertEdit()">Ok</button>
+  </div>
+</script>
