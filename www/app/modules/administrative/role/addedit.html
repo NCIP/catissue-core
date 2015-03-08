@@ -37,13 +37,13 @@
           <div class="col-xs-3">
             <label class="control-label" translate="role.read">Read</label>
           </div>
-          <div class="col-xs-3 os-text-center">
+          <div class="col-xs-3">
             <label class="control-label" translate="role.create">Create</label>
           </div>
-          <div class="col-xs-3 os-text-center">
+          <div class="col-xs-3">
             <label class="control-label" translate="role.update">Update</label>
           </div>
-          <div class="col-xs-3 os-text-center">
+          <div class="col-xs-3">
             <label class="control-label" translate="role.delete">Delete</label>
           </div>
         </div>
@@ -53,40 +53,15 @@
         <ng-form name="roleResourceForm" os-form-validator="roleResourceForm" parent-validator="roleFormValidator">
           <div class="col-xs-3 col-xs-offset-3">
             <os-select ng-model="acl.resource" list="resources" placeholder="{{'role.resource' | translate}}"
-              name="resource">
+              name="resource" required>
             </os-select>
             <div os-field-error field="roleResourceForm.resource"></div>
           </div>
 
           <div class="col-xs-3">
-            <div class="os-permission-checkbox col-xs-3">
-              <os-checkbox ng-change="togglePermission(acl, permissions.read)"
-                ng-model="p.read"
-                ng-checked="acl.permissions.indexOf(permissions.read) > -1"
-                ng-disabled="acl.permissions.indexOf(permissions.create) > -1">
-              </os-checkbox>
-            </div>
-
-            <div class="os-permission-checkbox col-xs-3">
-              <os-checkbox ng-change="togglePermission(acl, permissions.create)"
-                ng-model="p.create"
-                ng-checked="checkPermission(acl, permissions.create, p.create)">
-              </os-checkbox>
-            </div>
-
-            <div class="os-permission-checkbox col-xs-3">
-              <os-checkbox ng-change="togglePermission(acl, permissions.update)"
-                ng-model="p.update"
-                ng-checked="acl.permissions.indexOf(permissions.update) > -1"
-                ng-disabled="acl.permissions.indexOf(permissions.create) > -1">
-              </os-checkbox>
-            </div>
-
-            <div class="os-permission-checkbox col-xs-3">
-              <os-checkbox ng-change="togglePermission(acl, permissions.delete)"
-                ng-model="p.delete"
-                ng-checked="acl.permissions.indexOf(permissions.delete) > -1">
-              </os-checkbox>
+            <div class="os-permission-checkbox col-xs-3" ng-repeat="permission in acl.permissions">
+              <os-checkbox ng-model="permission.selected" ng-change="setPermissions(permission, acl.permissions)"
+                ng-disabled="isDisable(permission, acl.permissions)"></os-checkbox>
             </div>
           </div>
 
@@ -103,7 +78,7 @@
           <a ng-click="addResource()">
             <span class="glyphicon glyphicon-plus"></span>
           </a>
-          <span>Add Resource</span>
+          <span translate="role.add_resource">Add Resource</span>
         </div>
       </div>
 

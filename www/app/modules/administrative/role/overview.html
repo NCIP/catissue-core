@@ -39,22 +39,22 @@
 
                 <div class="col col-xs-6">
                   <div ng-repeat="permission in acl.permissions" class="os-permission">
-                    <div class="os-status" ng-if="permission == permissions.read">
+                    <div class="os-status" ng-if="permission == 'Read'">
                       <span class="fa fa-eye"></span>
                       <span translate="role.read">Read</span>
                     </div>
 
-                    <div class="os-status" ng-if="permission == permissions.create">
+                    <div class="os-status" ng-if="permission == 'Create'">
                       <span class="fa fa-plus"></span>
                       <span translate="role.create">Create</span>
                     </div>
 
-                    <div class="os-status" ng-if="permission == permissions.update">
+                    <div class="os-status" ng-if="permission == 'Update'">
                       <span class="fa fa-pencil"></span>
                       <span translate="role.update">Update</span>
                     </div>
 
-                    <div class="os-status" ng-if="permission == permissions.delete">
+                    <div class="os-status" ng-if="permission == 'Delete'">
                       <span class="fa fa-trash"></span>
                       <span translate="role.delete">Delete</span>
                     </div>

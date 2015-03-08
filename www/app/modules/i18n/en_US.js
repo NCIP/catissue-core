@@ -463,6 +463,7 @@
     "create": "Create",
     "update": "Update",
     "delete": "Delete",
+    "add_resource": "Add Resource",
 
     "menu": {
       "overview": "Overview"

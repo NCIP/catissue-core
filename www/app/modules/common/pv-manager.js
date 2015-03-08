@@ -89,12 +89,12 @@ angular.module('openspecimen')
        'Pending'
     ];
 
-    var permissions = {
-      create: 'Create',
-      read: 'Read',
-      update: 'Update',
-      delete: 'Delete'
-    };
+    var permissions = [
+      'Read',
+      'Create',
+      'Update',
+      'Delete'
+    ];
 
     var resources = [
       'User',

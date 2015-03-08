@@ -723,10 +723,9 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 }
 
 .os-permission .os-status {
-  border-radius: 4px;
   font-weight: bold;
   color: white;
-  background: #428bca;
+  background: #ab9364;
   padding: 3px 5px;
 }
 
@@ -839,8 +838,4 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 .os-pointer-cursor {
   cursor: pointer;
-}
-
-.os-text-center {
-  text-align: center;
 }
