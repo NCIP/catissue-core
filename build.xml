@@ -94,7 +94,7 @@
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
-	<taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
+	<!-- taskdef classpathref="cobertura.classpath" resource="tasks.properties"/ -->
 
 	<!-- sub tasks -->
 	<target name="init" description="initialize">
@@ -354,7 +354,7 @@
 	<!-- Create the Applet JAR Ends-->
 
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
-	<target name="build_war" depends="init, aspect.compile, unpack_cacore_war,replace_database_type,
+	<target name="build_war" depends="init, aspect.compile,
 		common_build_war,build_client_jar">
 
 	</target>
@@ -506,94 +506,6 @@
 				<exclude name="**/caTISSUECore caCORE Client/**"/-->
 			</fileset>
 			<!-- Excluding unwanted jars -->
-
-			<!-- change for csm related war -->
-			<fileset dir="${temp.dir}/catissuecorecsm">
-				<include name="**/WEB-INF/**"  />
-				<include name="**/images/**" />
-				<include name="**/log/**" />
-				<include name="**/*" />
-
-				<exclude name="**/WEB-INF/web.xml" />
-				<exclude name="**/WEB-INF/classes/edu/wustl/catissuecore/domain/**" />
-				<exclude name="**/WEB-INF/lib/activation.jar"/>
-				<exclude name="**/WEB-INF/lib/ant.jar"/>
-				<exclude name="**/WEB-INF/lib/antlr-2.7.6.jar"/>
-				<exclude name="**/WEB-INF/lib/ant-testutil.jar"/>
-				<!--exclude name="**/WEB-INF/lib/asm.jar"/-->
-				<exclude name="**/WEB-INF/lib/asm-attrs.jar"/>
-				<exclude name="**/WEB-INF/lib/axis.jar"/>
-				<exclude name="**/WEB-INF/lib/axis-ant.jar"/>
-				<exclude name="**/WEB-INF/lib/backport-util-concurrent-3.0.jar"/>
-				<!--exclude name="**/WEB-INF/lib/boot.jar"/>
-				<exclude name="**/WEB-INF/lib/c3p0-0.9.0.jar"/>
-				<exclude name="**/WEB-INF/lib/castor-1.0.2.jar"/-->
-				<exclude name="**/WEB-INF/lib/cglib-2.1.3.jar"/>
-				<!--exclude name="**/WEB-INF/lib/clm.jar"/-->
-				<exclude name="**/WEB-INF/lib/codegen.jar"/>
-				<exclude name="**/WEB-INF/lib/commons-beanutils.jar"/>
-				<exclude name="**/WEB-INF/lib/commons-collections-3.1.jar"/>
-				<exclude name="**/WEB-INF/lib/commons-collections-3.2.jar"/>
-				<exclude name="**/WEB-INF/lib/commons-dbcp-1.2.1.jar"/>
-				<exclude name="**/WEB-INF/lib/commons-discovery-0.2.jar"/>
-				<exclude name="**/WEB-INF/lib/commons-lang-2.1.jar"/>
-				<exclude name="**/WEB-INF/lib/commons-pool-1.3.jar"/>
-				<exclude name="**/WEB-INF/lib/csmapi.jar"/>
-				<exclude name="**/WEB-INF/lib/datafile.jar"/>
-				<exclude name="**/WEB-INF/lib/db2java.jar"/>
-				<exclude name="**/WEB-INF/lib/dom4j-1.6.1.jar"/>
-				<exclude name="**/WEB-INF/lib/dtsrpcclient.jar"/>
-				<exclude name="**/WEB-INF/lib/freemarker.jar"/>
-				<exclude name="**/WEB-INF/lib/freemarker-2.3.4.jar"/>
-				<exclude name="**/WEB-INF/lib/hibernate3.jar"/>
-				<exclude name="**/WEB-INF/lib/jakarta-oro-2.0.8.jar"/>
-				<exclude name="**/WEB-INF/lib/jalopy-1.0b11.jar"/>
-				<exclude name="**/WEB-INF/lib/jalopy-ant-0.6.2.jar"/>
-				<!--exclude name="**/WEB-INF/lib/jaxen-core.jar"/>
-				<exclude name="**/WEB-INF/lib/jaxen-jdom.jar"/>
-				<exclude name="**/WEB-INF/lib/jaxrpc.jar"/>
-				<exclude name="**/WEB-INF/lib/jboss-client.jar"/>
-				<exclude name="**/WEB-INF/lib/jdom.jar"/-->
-				<exclude name="**/WEB-INF/lib/jdtcore.jar"/>
-				<exclude name="**/WEB-INF/lib/jetc-task.jar"/>
-				<!--exclude name="**/WEB-INF/lib/jmi.jar"/-->
-				<exclude name="**/WEB-INF/lib/jmiutils.jar"/>
-				<exclude name="**/WEB-INF/lib/jta.jar"/>
-				<exclude name="**/WEB-INF/lib/junit-3.8.1.jar"/>
-				<exclude name="**/WEB-INF/lib/mail.jar"/>
-				<exclude name="**/WEB-INF/lib/mdrant.jar"/>
-				<exclude name="**/WEB-INF/lib/mdrapi.jar"/>
-				<exclude name="**/WEB-INF/lib/Metaphrase.jar"/>
-				<exclude name="**/WEB-INF/lib/mof.jar"/>
-				<exclude name="**/WEB-INF/lib/mysql-connector-java-3.1.13-bin.jar"/>
-				<exclude name="**/WEB-INF/lib/nbmdr.jar"/>
-				<exclude name="**/WEB-INF/lib/ognl-2.6.7.jar"/>
-				<exclude name="**/WEB-INF/lib/ojdbc14.jar"/>
-				<exclude name="**/WEB-INF/lib/openide-util.jar"/>
-				<exclude name="**/WEB-INF/lib/osgi.jar"/>
-				<exclude name="**/WEB-INF/lib/p6spy.jar"/>
-				<exclude name="**/WEB-INF/lib/resources.jar"/>
-				<exclude name="**/WEB-INF/lib/retrotranslator-runtime-1.2.0.jar"/>
-				<exclude name="**/WEB-INF/lib/retrotranslator-transformer-1.2.0.jar"/>
-				<exclude name="**/WEB-INF/lib/runtime.jar"/>
-				<exclude name="**/WEB-INF/lib/saaj.jar"/>
-				<!--exclude name="**/WEB-INF/lib/saxpath.jar"/-->
-				<exclude name="**/WEB-INF/lib/serializer.jar"/>
-				<exclude name="**/WEB-INF/lib/struts2-api-j4-2.0.5.jar"/>
-				<exclude name="**/WEB-INF/lib/struts2-core-j4-2.0.5.jar"/>
-				<exclude name="**/WEB-INF/lib/uml-1.3.jar"/>
-				<exclude name="**/WEB-INF/lib/uuid-key-generator.jar"/>
-				<exclude name="**/WEB-INF/lib/wsdl4j-1.5.1.jar"/>
-				<exclude name="**/WEB-INF/lib/xalan.jar"/>
-				<exclude name="**/WEB-INF/lib/xercesImpl.jar"/>
-				<exclude name="**/WEB-INF/lib/xml-apis.jar"/>
-				<exclude name="**/WEB-INF/lib/xmlrpc-2.0.jar"/>
-				<exclude name="**/WEB-INF/lib/xwork-j4-2.0.0.jar"/>
-				<exclude name="**/META-INF/**" />
-				<exclude name="Happy.jsp" />
-				<exclude name="Criteria.jsp" />
-				<exclude name="**/WEB-INF/classes/ApplicationSecurityConfig.xml"/>
-			</fileset>
 		</war>
 
 	</target>

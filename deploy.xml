@@ -406,7 +406,6 @@
 		<echo message="Initializing installation..." />
 
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-		<unwar src="${base.dir}/caTissuePrintWebService.war" dest="${temp.dir}/caTissuePrintWebService" />
 		<unjar src="${temp.dir}/catissuecore/WEB-INF/lib/DynamicExtensions.jar" dest="${temp.dir}/dynamicExtensionsjar" />
 		<unzip src="${base.dir}/dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
 		<copy todir="${temp.dir}/catissuecore-properties" overwrite="true">
@@ -433,7 +432,6 @@
 		<antcall target="configure_contactus" />
 		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true" />
 
-		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DAOConfig.xml" todir="${temp.dir}" />
 		<!--Kapil V 1.0.1 Changes-->
 		<copy file="login-config.xml" todir="${temp.dir}" overwrite="true" />
 		<copy file="properties-service.xml" todir="${temp.dir}" overwrite="true" />
@@ -902,11 +900,6 @@
 					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@empiEnabled@@" value="false" />
 				</else>
 		</if>
-		<replace file="${temp.dir}/catissuecore-properties/caTissueCdmsIntegration.properties">
-			<replacefilter token="@@CdmsURL@@" value="${clinportal.url}" />
-			<replacefilter token="@@CdmsKeyStorePath@@" value="" />
-		</replace>
-		<antcall target="Configure_Printservice"/>
 		<copy todir="${jboss.server.url}/catissuecore-properties" overwrite="true">
 			<fileset dir="${temp.dir}/catissuecore-properties">
 				<include name="**/*" />
@@ -924,8 +917,6 @@
 			<fileset dir="${temp.dir}"/>
 				<globmapper from="catissuecore.war" to="openspecimen.war"/>
 		</copy>
-
-		<copy file="performance.properties" todir="${rel.jboss.home}/server/default/conf" overwrite="true"/>
 
 		<replace dir="${jboss.server.url}/catissuecore-properties">
 			<include name="ApplicationSecurityConfig.xml" />
@@ -4603,54 +4594,10 @@
 
 	<!--Target call for both fresh deployment of caTissue-->
 	<target name="deploy_app" depends="deploy_app_catissue">
-			<if>
-				<equals arg1="mysql" arg2="${csm.database.type}" />
-			<then>
-					<antcall target="mysql_csm_config_with_idp"/>
-			</then>
-			<elseif>
-					<equals arg1="oracle" arg2="${csm.database.type}" />
-			<then>
-					<antcall target="oracle_csm_config_with_idp"/>
-			</then>
-			</elseif>
-			</if>
 		<!-- antcall target="insert_dashboard_queries" / -->
 		 	<antcall target="jboss_configuration" />
 		</target>
 
-
-		 <target name="mysql_csm_config_with_idp" >
-		  	<copy file="${base.dir}/idp/idp_catissuecore-ds.xml" tofile="${temp.dir}/catissuecore-ds.xml" overwrite="true"/>
-			<copy file="${base.dir}/idp/idp_login-config.xml" tofile="${temp.dir}/login-config.xml" overwrite="true"/>
-			<copy file="${base.dir}/idp/idp_upt.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/upt.hibernate.cfg.xml" overwrite="true"/>
-			<copy file="${base.dir}/idp/idp_catissuecore.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/catissuecore.hibernate.cfg.xml" overwrite="true"/>
-			<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
-				<include name="catissuecore-ds.xml" />
-				<include name="login-config.xml" />
-				<replacefilter token="@@CSMdatabaseurl@@" value="jdbc:mysql://${csm.database.host}:${csm.database.port}/${csm.database.name}"/>
-
-				<replacefilter token="@@CSMusername@@" value="${csm.database.username}"/>
-				<replacefilter token="@@CSMpasword@@" value="${csm.database.password}"/>
-			</replace>
-
-		 	<antcall target="mysql_config" />
-		</target>
-
-		<target name="oracle_csm_config_with_idp">
-			<copy file="${base.dir}/idp/idp_catissuecore-ds.xml" tofile="${temp.dir}/catissuecore-ds.xml" overwrite="true"/>
-			<copy file="${base.dir}/idp/idp_login-config.xml" tofile="${temp.dir}/login-config.xml" overwrite="true"/>
-			<copy file="${base.dir}/idp/idp_upt.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/upt.hibernate.cfg.xml" overwrite="true"/>
-			<copy file="${base.dir}/idp/idp_catissuecore.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/catissuecore.hibernate.cfg.xml" overwrite="true"/>
-			<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
-						<include name="catissuecore-ds.xml" />
-						<include name="login-config.xml" />
-					<replacefilter token="@@CSMdatabaseurl@@" value="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}"/>
-					<replacefilter token="@@CSMusername@@" value="${csm.database.username}"/>
-					<replacefilter token="@@CSMpasword@@" value="${csm.database.password}"/>
-			</replace>
-			<antcall target="oracle_config" />
-		</target>
 
 	<!-- Upgrade tasks for all P releases -->
 		<target name="upgrade_p5.1" description="Upgrading Database from v1.1.p5.1 to v1.2">
@@ -4937,92 +4884,6 @@
 		<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
 	</target>
 	
-	<!-- this task insert the dashboard labelsql queries to labelSql table in database -->
-	<loadfile property="query_file" srcFile="${dashboard.csv.dir}/${dashboard.parameters.csv.file}" /> 
-		<target name="insert_dashboard_queries" >	
-			<echo message="------------------------------" />
-			<echo message="Inserting dashboard queries..." />
-			<echo message="------------------------------" />
-			<for param="line" list="${query_file}" delimiter="${line.separator}">
-				<sequential>
-							<propertyregex property="arg1"
-								input="@{line}"
-								regexp="(.+?),(.+)"
-								select="\1"
-								casesensitive="false" 
-								override = "true"/>
-							<propertyregex property="arg2"
-								input="@{line}"
-								regexp="(.+?),(.+)"
-								select="\2"
-								casesensitive="false" 
-								override = "true"/>
-					<if>	
-						<equals arg1="mysql" arg2="${database.type}" />
-							<then>
-								
-								<sql driver="${mysql.driver.string}" 
-								url="jdbc:mysql://${database.host}:${database.port}/${database.name}" 
-								userid="${database.username}" 
-								password="${database.password}" onerror="continue"> 
-								<classpath>
-									<fileset dir="${lib.dir}">
-										<include name="*.jar" />
-									</fileset>
-								</classpath>
-								insert into labelsql values(NULL,'${arg1}',${arg2});
-								</sql>
-								<sql driver="${mysql.driver.string}" 
-                                url="jdbc:mysql://${database.host}:${database.port}/${database.name}" 
-                                userid="${database.username}" 
-                                password="${database.password}" onerror="continue"> 
-                                <classpath>
-                                    <fileset dir="${lib.dir}">
-                                        <include name="*.jar" />
-                                    </fileset>
-                                </classpath>
-                                update labelsql set QUERY = ${arg2} where LABEL = '${arg1}';   
-                                </sql>
-							</then>
-							
-						<elseif >
-						<equals arg1="oracle" arg2="${database.type}" />
-							<then>	
-								
-								<sql driver="${oracle.driver.string}"
-								url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-								userid="${database.username}"
-								password="${database.password}"
-								rdbms="oracle" onerror="continue">
-								<classpath>
-									<fileset dir="${lib.dir}">
-										<include name="*.jar" />
-									</fileset>
-								</classpath>
-								insert into labelsql values(LABELSQL_IDENTIFIER_SEQ.NEXTVAL,'${arg1}',${arg2});
-								</sql>
-								<sql driver="${oracle.driver.string}"
-                                url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-                                userid="${database.username}"
-                                password="${database.password}"
-                                rdbms="oracle" onerror="continue">
-                                <classpath>
-                                    <fileset dir="${lib.dir}">
-                                        <include name="*.jar" />
-                                    </fileset>
-                                </classpath>
-                                    update labelsql set QUERY = ${arg2} where LABEL = '${arg1}';
-                                </sql>
-							</then>
-						</elseif>
-					</if>		
-				</sequential>
-			</for>
-			<echo message="---------------------------------------" />
-			<echo message="Inserting dashboard queries finished..." />
-			<echo message="---------------------------------------" />
-		</target>
-
 	<target name="migrate_forms">
           <unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
           <antcall target="setupClassExecutionEnvironment"/>
