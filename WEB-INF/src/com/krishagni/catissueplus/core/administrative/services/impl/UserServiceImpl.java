@@ -156,7 +156,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<String> approveUserRequest(RequestEvent<Long> req) {
+	public ResponseEvent<UserDetail> activateUser(RequestEvent<Long> req) {
 		try {
 			Long id = req.getPayload();
 			User user =  daoFactory.getUserDao().getById(id);
@@ -172,7 +172,7 @@ public class UserServiceImpl implements UserService {
 			}
 			
 			sendUserRequestApprovedEmail(user, token);
-			return ResponseEvent.response("Success");
+			return ResponseEvent.response(UserDetail.from(user));
 		} catch(Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -310,8 +310,7 @@ public class UserServiceImpl implements UserService {
 	
 	private void sendPasswdChangedEmail(User user) {
 		Map<String, Object> props = new HashMap<String, Object>();
-		props.put("lastName", user.getLastName());
-		props.put("firstName", user.getFirstName());
+		props.put("user", user);
 		
 		emailService.sendEmail(PASSWD_CHANGED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	} 
@@ -325,25 +324,24 @@ public class UserServiceImpl implements UserService {
 	
 	private void sendUserSignupEmail(User user) {
 		Map<String, Object> props = new HashMap<String, Object>();
-		props.put("lastName", user.getLastName());
-		props.put("firstName", user.getFirstName());
+		props.put("user", user);
 		
 		emailService.sendEmail(SIGNED_UP_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	}
 	
 	private void sendNewUserRequestEmail(User user) {
+		String [] subjParams = new String[] {user.getFirstName(), user.getLastName()};
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("newUser", user);
 		props.put("admin", user); //TODO:replace with admin 
+		props.put("$subject", subjParams);
 		
-		String [] params = new String[] {user.getFirstName(), user.getLastName()};
-		emailService.sendEmail(NEW_USER_REQUEST_EMAIL_TMPL, new String[]{adminEmailAddress}, props, params);
+		emailService.sendEmail(NEW_USER_REQUEST_EMAIL_TMPL, new String[]{adminEmailAddress}, props);
 	}
 	
 	private void sendUserRequestApprovedEmail(User user, ForgotPasswordToken token) {
 		Map<String, Object> props = new HashMap<String, Object>();
-		props.put("lastName", user.getLastName());
-		props.put("firstName", user.getFirstName());
+		props.put("user", user);
 		props.put("token", token);
 		
 		emailService.sendEmail(REQUEST_APPROVED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);

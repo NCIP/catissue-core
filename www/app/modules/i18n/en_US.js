@@ -366,6 +366,10 @@
     "login_name": "Login Name",
     "password": "Password",
     "confirm_password": "Confirm Password",
+    "approve_user": "Approve User",
+    "reject_user": "Reject User",
+    "request_pending": "Following are details of user whose approval is pending",
+    "user_request_approved": "User request approved successfully",
 
     "role": {
        "new_role": "New Role",

@@ -93,17 +93,17 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	@Override
-	public boolean sendEmail(String emailTmplKey, String[] to, Map<String, Object> props, String ...subjParams) {
-		return sendEmail(emailTmplKey, to, null, props, subjParams);
+	public boolean sendEmail(String emailTmplKey, String[] to, Map<String, Object> props) {
+		return sendEmail(emailTmplKey, to, null, props);
 	}
 	
 	@Override
-	public boolean sendEmail(String emailTmplKey, String[] to, File[] attachments, Map<String, Object> props, String ...subjParams) {
+	public boolean sendEmail(String emailTmplKey, String[] to, File[] attachments, Map<String, Object> props) {
 		props.put("template", getEmailTmpl(emailTmplKey));
 		props.put("appUrl", Utility.getAppUrl());
 		props.put("adminEmailAddress", adminEmailAddress);
 		props.put("adminPhone", "1234567890");//TODO: will be replaced by property file
-		String subject = getSubject(emailTmplKey, subjParams);
+		String subject = getSubject(emailTmplKey, (String[]) props.get("$subject"));
 		String content = templateService.render(BASE_TMPL, props);
 		
 		Email email = new Email();
@@ -149,7 +149,7 @@ public class EmailServiceImpl implements EmailService {
 		}
 	}
 	
-	private String getSubject(String emailTmplKey, String ...subjParams) {
+	private String getSubject(String emailTmplKey, String[] subjParams) {
 		if (subjectPrefix == null) {
 			subjectPrefix = resourceBundle.getMessage("email_subject_prefix", null, Locale.getDefault());
 		}

@@ -998,14 +998,15 @@ public class QueryServiceImpl implements QueryService {
 	}
 	
 	private void sendQueryDataExportedEmail(User user, SavedQuery query, String filename) {
+		String title = query != null ? query.getTitle() : "Unsaved query";
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("user", user);
 		props.put("query", query);
 		props.put("filename", filename);
 		props.put("appUrl", Utility.getAppUrl());
+		props.put("$subject", new String[] {title});
 		
-		String title = query != null ? query.getTitle() : "Unsaved query";
-		emailService.sendEmail(QUERY_DATA_EXPORTED_EMAIL_TMPL, new String[] {user.getEmailAddress()}, props, title);
+		emailService.sendEmail(QUERY_DATA_EXPORTED_EMAIL_TMPL, new String[] {user.getEmailAddress()}, props);
 	}
 	
 	private void sendFolderSharedEmail(User user, QueryFolder folder, Collection<User> sharedUsers) {

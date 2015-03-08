@@ -23,7 +23,7 @@ public interface UserService extends UserDetailsService {
 
 	public ResponseEvent<UserDetail> updateUser(RequestEvent<UserDetail> req);
 
-	public ResponseEvent<String> approveUserRequest(RequestEvent<Long> req);
+	public ResponseEvent<UserDetail> activateUser(RequestEvent<Long> req);
 	
 	public ResponseEvent<Boolean> resetPassword(RequestEvent<PasswordDetails> req);
 

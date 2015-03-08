@@ -111,12 +111,12 @@ public class UserController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value = "/approval-requests/{id}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/activity-status")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public String approveUserRequest(@PathVariable Long id) {
+	public UserDetail activateUser(@PathVariable Long id) {
 		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
-		ResponseEvent<String> resp = userService.approveUserRequest(req);
+		ResponseEvent<UserDetail> resp = userService.activateUser(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
