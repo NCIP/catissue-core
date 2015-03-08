@@ -110,16 +110,16 @@ td.os-container-pos {
   cursor: pointer;
 }
 
-.os-circle {
+td.os-container-pos .os-circle {
   display: inline-block;
   height: 14px;
   width: 14px;
-  background: #5cb85c;
+  background: #a0a0a0;
   border-radius: 100%;
 }
 
 td.os-container-pos.occupied > .os-circle {
-  background: #d9534f!important;
+  background: #5cb85c!important;
 }
 
 td.os-container-pos.occupied {
