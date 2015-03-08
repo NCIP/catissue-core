@@ -34,7 +34,7 @@
     </tr>
     <tr>
       <td>
-        #parse("ng-email-templates/html/footer.vm")
+        #parse( $footer )
       </td>
     <tr>
   </tbody>

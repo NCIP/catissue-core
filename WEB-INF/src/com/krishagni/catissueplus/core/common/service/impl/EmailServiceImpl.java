@@ -25,9 +25,13 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 
 public class EmailServiceImpl implements EmailService {
-	private static final String BASE_TMPL = "ng-email-templates/html/baseTemplate.vm";
+	private static final String locale = Locale.getDefault().toString();
 	
-	private static final String TEMPLATE_SOURCE = "ng-email-templates/html/";
+	private static final String TEMPLATE_SOURCE = "email-templates/" + locale;
+	
+	private static final String BASE_TMPL = TEMPLATE_SOURCE + "/baseTemplate.vm";
+	
+	private static final String FOOTER_TMPL = TEMPLATE_SOURCE + "/footer.vm";
 	
 	private static String adminEmailAddress;
 	
@@ -72,7 +76,7 @@ public class EmailServiceImpl implements EmailService {
 			
 			JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 			mailSender.setUsername(fromAddress);
-			mailSender.setPassword(fromPassword); 
+			mailSender.setPassword(fromPassword);
 			mailSender.setHost(host);
 			
 			if (StringUtils.isNotBlank(port)) {
@@ -100,6 +104,7 @@ public class EmailServiceImpl implements EmailService {
 	@Override
 	public boolean sendEmail(String emailTmplKey, String[] to, File[] attachments, Map<String, Object> props) {
 		props.put("template", getEmailTmpl(emailTmplKey));
+		props.put("footer", FOOTER_TMPL);
 		props.put("appUrl", Utility.getAppUrl());
 		props.put("adminEmailAddress", adminEmailAddress);
 		props.put("adminPhone", "1234567890");//TODO: will be replaced by property file
@@ -158,7 +163,7 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	private String getEmailTmpl(String emailTmplKey) {
-		return TEMPLATE_SOURCE + emailTmplKey + ".vm";
+		return TEMPLATE_SOURCE + "/" + emailTmplKey + ".vm";
 	}
 	
 	private class SendMailTask implements Runnable {
