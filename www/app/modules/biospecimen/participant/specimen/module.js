@@ -42,7 +42,7 @@ angular.module('os.biospecimen.specimen',
           $scope.visit = visit;
           $scope.specimen = specimen;
 
-          $scope.childSpecimens = Specimen.flatten($scope.specimen.children);
+          $scope.childSpecimens = $scope.specimen.children; 
           // 'SpecimenDetailCtrl'
         },
         parent: 'specimen-root'

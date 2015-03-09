@@ -66,6 +66,8 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 	
 	private String storageType;
 	
+	private String collectionContainer;
+	
 	private String activityStatus;
 	
 	private Date createdOn;
@@ -246,6 +248,14 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 		this.storageType = storageType;
 	}
 
+	public String getCollectionContainer() {
+		return collectionContainer;
+	}
+
+	public void setCollectionContainer(String collectionContainer) {
+		this.collectionContainer = collectionContainer;
+	}
+
 	public String getActivityStatus() {
 		return activityStatus;
 	}
@@ -314,6 +324,7 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 		result.setPathology(anticipated.getPathologyStatus());
 		result.setInitialQty(anticipated.getInitialQuantity());
 		result.setParentId(null);
+		result.setCollectionContainer(anticipated.getCollectionContainer());
 	
 		StorageLocationSummary location = new StorageLocationSummary();
 		result.setStorageLocation(location);

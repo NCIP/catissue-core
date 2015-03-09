@@ -26,25 +26,24 @@
   </div>
 
   <div class="container">
-    <form name="collectionForm" os-form-validator="collectionForm" novalidate os-specimen-qty-validators>
+    <form name="collectionForm" os-form-validator="collectionForm" novalidate>
       <table class="os-table os-table-fixed os-table-tree bulk-edit">
         <thead class="os-table-head">
           <tr class="row">
-            <th class="col os-col-30">
-              <span>Name</span>
-            </th>
-            <th class="col os-col-15" translate="specimens.type">Type</th>
+            <th class="col os-col-40" translate="specimens.description">Description</th>
             <th class="col os-col-10" translate="specimens.label">Label</th>
-            <th class="col os-col-10">Quantity</th>
+            <th class="col os-col-10" translate="specimens.qty">Quantity</th>
             <th class="col os-col-35">
-              <span>Location</span>
-              <a ng-click="applyFirstLocationToAll()"style="font-weight:normal">(Apply First Location To All)</a>
+              <span translate="specimens.location">Location</span>
+              <a ng-click="applyFirstLocationToAll()"style="font-weight:normal">
+                (<span translate="specimens.apply_first_loc_to_all">Apply First Location To All</span>)
+              </a>
             </th>
           </tr>
         </thead>
         <tbody class="os-table-body">
           <tr class="row" ng-repeat="specimen in specimens | openedTreeNodes" ng-form="sform">
-            <td class="col os-col-30">
+            <td class="col os-col-40">
               <div style="padding-left: {{specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16}}px">
                 <a ng-if="specimen.hasChildren && specimen.isOpened" 
                   class="fa fa-chevron-circle-down"
@@ -59,11 +58,9 @@
                              'os-status-pending': specimen.status == 'Pending' || !specimen.status,
                              'os-status-not-collected': specimen.status == 'Not Collected'}">
                 </span>
-                <a ng-if="specimen.reqLabel">{{specimen.reqLabel}}</a>
-                <a ng-if="!specimen.reqLabel">{{specimen.type}} ({{specimen.specimenClass}})</a>
+                <os-specimen-desc specimen="specimen"></os-specimen-desc>
               </div>
             </td>
-            <td class="col os-col-15">{{specimen.type}}</td>
             <td class="col os-col-10">
               <input type="text" os-md-input edit-when="specimen.status != 'Collected'"
                 name="label" ng-model="specimen.label" required 
@@ -72,9 +69,7 @@
             </td>
             <td class="col os-col-10">
               <input type="text" os-md-input edit-when="specimen.status != 'Collected'"
-                name="qty" ng-model="specimen.initialQty" required
-                ng-model-options="{allowInvalid: 'true'}"
-                os-specimen-qty-validate="{specimen: specimen, idx: $index}">
+                name="qty" ng-model="specimen.initialQty" required ng-model-options="{allowInvalid: 'true'}">
               <div os-field-error field="sform.qty"></div>
             </td>
             <td class="col os-col-35" style="overflow: visible;">
@@ -84,17 +79,12 @@
             </td>
           </tr>
           <tr class="row">
-            <td class="col">
+            <td class="col" colspan="4">
               <button class="btn btn-primary" 
                 ng-disabled="collectionForm.$invalid || collectionForm.$pending"
-                os-form-submit="saveSpecimens()">
+                os-form-submit="saveSpecimens()" translate="common.buttons.save">
                 Save
               </button>
-            </td>
-            <td class="col" colspan="4">
-              <alert type = "danger" ng-if="!!errorCode">
-                {{errorCode}}
-              </alert>
             </td>
           </tr>
         </tbody>

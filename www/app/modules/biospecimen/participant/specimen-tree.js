@@ -4,7 +4,17 @@ angular.module('os.biospecimen.participant.specimen-tree',
     'os.biospecimen.models', 
     'os.biospecimen.participant.collect-specimens'
   ])
-  .directive('osSpecimenTree', function(CollectSpecimensSvc, Specimen, Alerts) {
+  .directive('osSpecimenTree', function(CollectSpecimensSvc, Specimen, Alerts, PvManager) {
+
+    function loadSpecimenClasses(scope) {
+      if (scope.classesLoaded) {
+        return;
+      }
+
+      scope.specimenClasses = PvManager.getPvs('specimen-class');
+      scope.classesLoaded = true;
+    }
+
     function toggleAllSelected(selection, specimens, specimen) {
       if (!specimen.selected) {
         selection.all = false;
@@ -76,13 +86,15 @@ angular.module('os.biospecimen.participant.specimen-tree',
       restrict: 'E',
 
       scope: {
+        cpId: '@',
         visit: '=',
-        specimens: '='
+        specimenTree: '=specimens'
       },
 
       templateUrl: 'modules/biospecimen/participant/specimens.html',
 
       link: function(scope, element, attrs) {
+        scope.specimens = Specimen.flatten(scope.specimenTree);
         scope.view = 'list';
         scope.parentSpecimen = undefined;
 
@@ -148,6 +160,10 @@ angular.module('os.biospecimen.participant.specimen-tree',
             spec.qtyPerAliquot = Math.round(parent.availableQty / spec.noOfAliquots * 10000) / 10000;
           }
 
+          parent.isOpened = parent.hasChildren = true;
+          parent.hasChildren = true;
+          parent.depth = 0;
+
           var aliquot = angular.extend(new Specimen(parent), {
             id: undefined, 
             reqId: undefined, 
@@ -157,7 +173,12 @@ angular.module('os.biospecimen.participant.specimen-tree',
             initialQty: spec.qtyPerAliquot,
             storageLocation: {name: '', positionX:'', positionY: ''},
             status: 'Pending', 
-            selected: true
+
+            selected: true,
+            parent: parent,
+            depth: 1,
+            isOpened: true,
+            hasChildren: false
           });
 
           var aliquots = [];
@@ -165,12 +186,53 @@ angular.module('os.biospecimen.participant.specimen-tree',
             aliquots.push(angular.copy(aliquot));
           }
 
+          parent.children = aliquots;
+          aliquots.unshift(parent);
           CollectSpecimensSvc.collect(scope.visit, aliquots);
         };
 
-        scope.showCreateDerivatives = function(specimen) {
+        scope.loadSpecimenTypes = function(specimenClass, notclear) {
+          if (!notclear) {
+            scope.derivative.type = '';
+          }
+
+          if (!specimenClass) {
+            scope.specimenTypes = [];
+            return;
+          }
+
+          if (!scope.specimenClasses[specimenClass]) {
+            scope.specimenClasses[specimenClass] = 
+              PvManager.getPvsByParent('specimen-class', specimenClass);
+          }
+
+          scope.specimenTypes = scope.specimenClasses[specimenClass];
+        };
+
+        scope.showCreateDerivative = function(specimen) {
           scope.view = 'create_derivatives';      
           scope.parentSpecimen = specimen;
+          scope.derivative = new Specimen({
+            parentId: scope.parentSpecimen.id, 
+            lineage: 'Derived',
+            storageLocation: {},
+            status: 'Collected',
+            visitId: scope.visit.id,
+            pathology: scope.parentSpecimen.pathology
+          });
+
+          loadSpecimenClasses(scope);
+        };
+
+        scope.createDerivative = function() {
+          scope.derivative.$saveOrUpdate().then(
+            function(result) {
+              scope.parentSpecimen.children.push(result);
+              scope.parentSpecimen.isOpened = true;
+              scope.specimens = Specimen.flatten(scope.specimenTree);
+              scope.revertEdit();
+            }
+          );
         };
 
         scope.revertEdit = function() {

@@ -12,23 +12,22 @@
     <div ng-if="!specimens || specimens.length == 0">
       <span translate="specimens.no_specimens_to_show">No Specimens to Show</span>
     </div>
-    <div class="os-table os-table-fixed os-table-tree" ng-class="{'os-spmn-hide-options': view != 'list'}"
+    <div class="os-table os-table-fixed os-table-tree" ng-class="{'os-spmn-hide-options': view != 'list' || !visit.id}"
       ng-if="specimens && specimens.length > 0">
       <div class="os-table-head">
         <div class="row">
-          <div class="col col-xs-5">
+          <div class="col col-xs-6">
             <div class="clearfix">
               <div class="pull-left os-select-specimen-cb">
                 <os-checkbox ng-model="selection.all" ng-change="toggleAllSpecimenSelect()"></os-checkbox>
               </div>
               <div class="pull-left" style="padding-left: 40px;">
-                <span translate="specimens.label"> Label </span>
+                <span translate="specimens.description"> Description </span>
               </div>
             </div>
           </div>
-          <div class="col col-xs-2" translate="specimens.type">Type</div>
-          <div class="col col-xs-2" translate="specimens.pathology">Pathology</div>
-          <div class="col col-xs-2" translate="specimens.container">Container</div>
+          <div class="col col-xs-2" translate="specimens.label">Label</div>
+          <div class="col col-xs-3" translate="specimens.location">Container</div>
           <div class="col col-xs-1">&nbsp;</div>
         </div>
       </div>
@@ -37,13 +36,13 @@
           ng-repeat="specimen in specimens | openedTreeNodes">        
 
           <div class="row title" ng-class="{'selected': specimen.selected}">
-            <div class="col col-xs-5">
+            <div class="col col-xs-6">
               <div class="clearfix">
-                <div class="pull-left os-select-specimen-cb">
+                <div class="os-select-specimen-cb"> 
                   <os-checkbox ng-change="toggleSpecimenSelect(specimen)" ng-model="specimen.selected"></os-checkbox>
                 </div>
 
-                <div class="pull-left">
+                <div style="margin-left: 12px;">
                   <div style="padding-left: {{specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16}}px">
                     <a ng-if="specimen.hasChildren && specimen.isOpened" 
                        class="fa fa-chevron-circle-down"
@@ -58,25 +57,28 @@
                                  'os-status-pending': specimen.status == 'Pending' || !specimen.status,
                                  'os-status-not-collected': specimen.status == 'Not Collected'}">
                     </span>
-                    <a ng-switch on="!!specimen.label" 
-                       ui-sref="specimen-detail.overview(
+                    <a ui-sref="specimen-detail.overview(
                                   {eventId: visit.eventId, visitId: visit.id, specimenId: specimen.id, srId: specimen.reqId})">
-                      <span ng-switch-when="true">{{specimen.label}}</span>
-                      <span ng-switch-default>{{specimen.type}} ({{specimen.specimenClass}})</span>
+                      <os-specimen-desc specimen="specimen"></os-specimen-desc>
                     </a>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col col-xs-2">{{specimen.type}}</div>
-            <div class="col col-xs-2">{{specimen.pathology | osNoValue}}</div>
-            <div class="col col-xs-2" ng-if="specimen.storageLocation.name">
+            <div class="col col-xs-2" ng-switch on="!!specimen.label">
+              <span ng-switch-when="true">{{specimen.label}}</span>
+              <span ng-switch-default>
+                <span ng-if="!!specimen.reqLabel">{{specimen.reqLabel}}</span>
+                <span ng-if="!specimen.reqLabel" translate="pvs.not_specified"></span>
+              </span>
+            </div>
+            <div class="col col-xs-3" ng-if="specimen.storageLocation.name">
               <span>{{specimen.storageLocation.name}}</span>
               <span ng-if="!!specimen.storageLocation.positionX && !!specimen.storageLocation.positionY">
                 : ({{specimen.storageLocation.positionX}}, {{specimen.storageLocation.positionY}})
               </span>
             </div>
-            <div class="col col-xs-2" ng-if="!specimen.storageLocation.name">
+            <div class="col col-xs-3" ng-if="!specimen.storageLocation.name">
               <span>Virtual</span>
             </div>
             <div class="col col-xs-1 action">
@@ -106,9 +108,9 @@
                     </a>
                   </li>
                   <li>
-                    <a ng-click="showCreateDerivatives(specimen)">
+                    <a ng-click="showCreateDerivative(specimen)">
                       <i class="fa fa-flask"></i>
-                      <span translate="specimens.ctx_menu.create_derivatives">Create Derivatives</span>
+                      <span translate="specimens.ctx_menu.create_derivative">Create Derivative</span>
                     </a>
                   </li>
                   <li class="divider"></li>
@@ -140,6 +142,7 @@
   </div>
 </div>
 
+<!-- Aliquot Creation Form -->
 <script type="text/ng-template" id="aliquot_specs.html">
   <div>
     <form name="aliquotForm" os-form-validator="aliquotForm" novalidate>
@@ -189,9 +192,67 @@
   </div>
 </script>
 
+<!-- Derivative Creation Form -->
 <script type="text/ng-template" id="derivative_specs.html">
-  <div class="form-group">This awesome feature is under construction. For now relax and have cup of coffee</div>
-  <div class="form-group">
-    <button class="btn btn-success" ng-click="revertEdit()">Ok</button>
+  <div>
+    <form name="derivativeForm" os-form-validator="derivativeForm" novalidate>
+      <div class="clearfix">
+        <div class="col-xs-3">
+          <div class="form-group">
+            <os-select name="specimenClass" on-change="loadSpecimenTypes(derivative.specimenClass)" 
+              ng-model="derivative.specimenClass" list="specimenClasses"
+              os-md-input placeholder="{{'specimens.class' | translate}}" required>
+            </os-select>
+            <div os-field-error field="derivativeForm.specimenClass"></div>
+          </div>
+        </div>
+
+        <div class="col-xs-4">
+          <div class="form-group">
+            <os-select name="specimenType" ng-model="derivative.type" list="specimenTypes"
+              os-md-input placeholder="{{'specimens.type' | translate}}" required>
+            </os-select>
+            <div os-field-error field="derivativeForm.specimenType"></div>
+          </div>
+        </div>
+  
+        <div class="col-xs-3">
+          <div class="form-group">
+            <input name="label" ng-model="derivative.label" os-md-input class="form-control"
+              type="text" placeholder="{{'specimens.label' | translate}}" required>
+            <div os-field-error field="derivativeForm.label"></div>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="clearfix">
+        <div class="col-xs-3">
+          <div class="form-group">
+            <input name="quantity" ng-model="derivative.initialQty" os-md-input class="form-control" 
+              type="text" placeholder="{{'specimens.qty' | translate}}" required 
+              ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+            <div os-field-error field="derivativeForm.quantity"></div>
+          </div>
+        </div>
+
+        <div class="col-xs-7">
+          <div class="form-group">
+            <os-specimen-position os-md-input specimen="derivative" cp-id="cpId"></os-specimen-position>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-xs-12">
+          <button type="submit" class="btn btn-success" os-form-submit="createDerivative()"
+            translate="specimens.buttons.create_derivative">
+            Create Derivative
+          </button>
+          <a class="btn os-btn-text-secondary" ng-click="revertEdit()" translate="common.buttons.cancel">
+            Cancel
+          </a>
+        </div>
+      </div>
+    </form>
   </div>
 </script>

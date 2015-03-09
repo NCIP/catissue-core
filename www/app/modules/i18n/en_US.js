@@ -38,6 +38,10 @@
     }
   },
 
+  "pvs": {
+    "not_specified": "Not Specified"
+   },
+
   "cp": {
     "list": "Collection Protocols",
     "create_cp_title": "Create Collection Protocol",
@@ -221,12 +225,20 @@
     "no_specimens_to_show": "No Specimens to Show",
     "aliquot_cnt": "Count of Aliquots",
     "qty_per_aliquot": "Quantity per Aliquot",
+    "qty": "Quantity",
+    "aliquot": "Aliquot",
+    "derived": "Derived",
+    "from": "from",
+    "collected_in": "collected in",
+    "description": "Description",
+    "location": "Location",
+    "apply_first_loc_to_all": "Copy First Location To All",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",
       "edit_specimen": "Edit Specimen",
       "create_aliquots": "Create Aliquots",
-      "create_derivatives": "Create Derivatives",
+      "create_derivative": "Create Derivative",
       "add_event": "Add Event",
       "dispose": "Dispose"
     },
@@ -238,10 +250,11 @@
 
     "buttons": {
       "collect_aliquots": "Collect Aliquots",
-      "collect_derivatives": "Collect Derivatives"
+      "create_derivative": "Create Derivative"
     },
 
     "errors": {
+      "duplicate_labels": "One or more specimens using same label",
       "insufficient_qty": "Insufficient parent specimen quantity to create aliquots"
     }
   },

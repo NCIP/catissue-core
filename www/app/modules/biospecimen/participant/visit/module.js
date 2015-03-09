@@ -47,7 +47,7 @@ angular.module('os.biospecimen.visit', [
         controller: function($scope, cpr, visit, specimens, Specimen) {
           $scope.cpr = cpr;
           $scope.visit = visit;
-          $scope.specimens = Specimen.flatten(specimens);
+          $scope.specimens = specimens;
 
           // 'VisitDetailCtrl'
         },

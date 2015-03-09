@@ -90,6 +90,7 @@ angular.module('os.biospecimen.participant.specimen-position', ['os.administrati
         if (tAttrs.hasOwnProperty('osMdInput')) {
           var select = tElem.find('os-select');
           var input = tElem.find('input');
+          var button = tElem.find('button');
 
           select.attr('os-md-input', '');
           input.attr('os-md-input', '');
@@ -97,6 +98,7 @@ angular.module('os.biospecimen.participant.specimen-position', ['os.administrati
           if (tAttrs.hasOwnProperty('editWhen')) {
             select.attr('edit-when', tAttrs.editWhen);
             input.attr('edit-when', tAttrs.editWhen);
+            button.attr('ng-if', tAttrs.editWhen);
           }
 
           tElem.find('button').addClass('btn-xs');
