@@ -34,35 +34,37 @@
           </div>
           <div class="os-table-body">
             <div ng-repeat="acl in role.acls">
-              <div class="row title">
+              <div class="row">
                 <div class="col col-xs-6">{{acl.resource}}</div>
-
                 <div class="col col-xs-6">
-                  <div ng-repeat="permission in acl.permissions" class="os-permission">
-                    <div class="os-status" ng-if="permission == 'Read'">
-                      <span class="fa fa-eye"></span>
-                      <span translate="role.read">Read</span>
-                    </div>
+                  <div class="os-permissions" ng-repeat="permission in acl.permissions">
+                    <div class="os-status" ng-switch on="permission">
+                      <div ng-switch-when="Read">
+                        <span class="fa fa-eye"></span>
+                        <span translate="role.read">Read</span>
+                      </div>
 
-                    <div class="os-status" ng-if="permission == 'Create'">
-                      <span class="fa fa-plus"></span>
-                      <span translate="role.create">Create</span>
-                    </div>
+                      <div ng-switch-when="Create">
+                        <span class="fa fa-plus"></span>
+                        <span translate="role.create">Create</span>
+                      </div>
 
-                    <div class="os-status" ng-if="permission == 'Update'">
-                      <span class="fa fa-pencil"></span>
-                      <span translate="role.update">Update</span>
-                    </div>
+                      <div ng-switch-when="Update">
+                        <span class="fa fa-pencil"></span>
+                        <span translate="role.update">Update</span>
+                      </div>
 
-                    <div class="os-status" ng-if="permission == 'Delete'">
-                      <span class="fa fa-trash"></span>
-                      <span translate="role.delete">Delete</span>
+                      <div ng-switch-when="Delete">
+                        <span class="fa fa-trash"></span>
+                        <span translate="role.delete">Delete</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>

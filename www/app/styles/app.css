@@ -717,33 +717,6 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   border: 1px solid #ddd;
 }
 
-.os-permission {
-  float: left;
-  margin-right: 5px;
-}
-
-.os-permission .os-status {
-  font-weight: bold;
-  color: white;
-  background: #ab9364;
-  padding: 3px 5px;
-}
-
-.os-permission-checkbox {
-  text-align: center;
-  margin-top: 11px;
-}
-
-.os-permission-checkbox .os-checkbox input[type="checkbox"] ~ span.box {
-  height: 13px;
-  width: 13px;
-}
-
-.os-permission-checkbox .os-checkbox input[type="checkbox"]:checked ~ span.tick {
-  height: 7px;
-  width: 13px;
-}
-
 .panel-heading {
   position: relative;
 }

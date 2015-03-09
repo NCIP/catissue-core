@@ -27,13 +27,7 @@ angular.module('os.administrative.models.role', ['os.common.models'])
       );
     };
 
-    Role.prototype.newResource = function(permissionPvs) {
-      var permissions = permissionPvs.map(
-        function(permission) {
-          return {name: permission, selected: false};
-        }
-      );
-
+    Role.prototype.newResource = function(permissions) {
       return {resource:'', permissions: permissions};
     }
 
@@ -48,7 +42,12 @@ angular.module('os.administrative.models.role', ['os.common.models'])
       this.acls.splice(index, 1);
     }
 
-    Role.prototype.getAcls = function() {
+    Role.prototype.$saveProps = function() {
+      this.acls = getAcls();
+      return this;
+    };
+
+    function getAcls() {
       var acls = [];
       angular.forEach(this.acls, function(acl) {
         var permissions = [];
@@ -63,12 +62,34 @@ angular.module('os.administrative.models.role', ['os.common.models'])
       });
       return acls;
     };
-
-    Role.prototype.$saveProps = function() {
-      this.acls = this.getAcls();
-      return this;
-    };
    
     return Role;
-  });
+  })
+  .factory('Permission', function(osModel) {
+    var Permission = osModel('permissions');
+
+    Permission.list = function() {
+      var permissions = ['Create', 'Read', 'Update', 'Delete'];
+      return permissions;
+    }
+
+    Permission.getOrderedPermissions = function() {
+      var permissions = ['Read', 'Create', 'Update', 'Delete'];
+      return permissions;
+    }
+
+    return Permission;
+  })
+  .factory('Resource', function(osModel) {
+    var Resource = osModel('resources');
+
+    Resource.list = function() {
+      var resources = ['User', 'Institute', 'Collection Protocol', 'Site'];
+      return resources;
+    }
+
+    return Resource;
+  })
+
+
 

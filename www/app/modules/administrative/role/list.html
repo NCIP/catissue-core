@@ -3,7 +3,7 @@
     <h3>
       <span translate="role.list">Roles</span>
     </h3>
-    <button class="os-round-btn" title="{{'role.tooltip.add' | translate}}" ui-sref="role-addedit">
+    <button class="os-round-btn" title="{{'role.tooltip.add' | translate}}" ui-sref="role-addedit({roleId:''})">
       <span class="fa fa-plus"></span>
     </button>
   </div>
@@ -17,7 +17,7 @@
       </div>
       <div class="os-table-body">
         <div ng-repeat="role in roles">
-          <div class="row title os-pointer-cursor" ng-click="showRoleOverview(role)"
+          <div class="row os-pointer-cursor" ng-click="showRoleOverview(role)"
              title="{{'role.tooltip.view_details' | translate}}">
             <div class="col col-xs-6">{{role.name}}</div>
             <div class="col col-xs-6">{{role.description}}</div>

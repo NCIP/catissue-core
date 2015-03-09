@@ -1,47 +1,34 @@
 
 angular.module('os.administrative.role.addedit', ['os.administrative.models'])
-  .controller('RoleAddEditCtrl', function($scope, $state, $filter, role, PvManager) {
+  .controller('RoleAddEditCtrl', function(
+    $scope, $state, $filter, role,
+    Permission, Resource) {
     
     var init = function() {
       $scope.role = role;
       loadPvs();
-      populateUIModel($scope.role);
+      getSelectedPermissions($scope.role);
       if (!role.acls) {
         $scope.addResource();
       }
     }
 
     function loadPvs() {
-       $scope.resources =  PvManager.getPvs('resources');
-       var permissionPvs = PvManager.getPvs('permissions');
-       $scope.permissionPvs = orderPermissionPvs(permissionPvs);
+       $scope.resources =  Resource.list();
+       var permissionsOrder =  Permission.getOrderedPermissions();
+       var unsortedPermissions = Permission.list();
+       $scope.sortedPermissions = [];
+       angular.forEach(unsortedPermissions, function(permission) {
+         $scope.sortedPermissions[permissionsOrder.indexOf(permission)] = {name: permission, selected: false};
+       });
     }
 
-    // Set Order of Permission Pvs as Read, Create, Update, Delete to show on UI
-    function orderPermissionPvs(permissionPvs) {
-      var permissions = [];
-      if (permissionPvs.indexOf('Read') != -1) {
-        permissions.push('Read');
-      }
-      if (permissionPvs.indexOf('Create') != -1) {
-        permissions.push('Create');
-      }
-      if (permissionPvs.indexOf('Update') != -1) {
-        permissions.push('Update');
-      }
-      if (permissionPvs.indexOf('Delete') != -1) {
-        permissions.push('Delete');
-      }
-
-      return permissions;
-    }
-
-    function populateUIModel(role) {
+    function getSelectedPermissions(role) {
       angular.forEach(role.acls, function(acl) {
-        var permissions = $scope.permissionPvs.map(
+        var permissions = $scope.sortedPermissions.map(
           function(permission) {
-            var selected = acl.permissions.indexOf(permission) != -1;
-            return {name: permission, selected: selected};
+            var selected = acl.permissions.indexOf(permission.name) != -1;
+            return {name: permission.name, selected: selected};
           }
         );
         acl.permissions = permissions;
@@ -49,7 +36,7 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
     }
 
     $scope.addResource = function() {
-      $scope.role.addResource($scope.role.newResource($scope.permissionPvs));
+      $scope.role.addResource($scope.role.newResource(angular.copy($scope.sortedPermissions)));
     };
 
     $scope.removeResource = function(index) {
@@ -59,7 +46,7 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
       }
     };
   
-    $scope.createRole = function() {
+    $scope.saveRole = function() {
       var role = angular.copy($scope.role);
       role.$saveOrUpdate().then(
         function(savedRole) {
@@ -70,21 +57,25 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
     };
 
     $scope.setPermissions = function(permission, permissions) {
-      if (permission.name == 'Create') {
-        angular.forEach(permissions, function(p) {
-          if (p.name == 'Read' || p.name == 'Update') {
-            p.selected = permission.selected;
-          }
-        });
+      if (permission.name != 'Create') {
+        return;
       }
+
+      angular.forEach(permissions, function(p) {
+        if (p.name == 'Read' || p.name == 'Update') {
+          p.selected = permission.selected;
+        }
+      });
     }
 
-    $scope.isDisable = function(permission, permissions) {
-      if (permission == 'Read' || permission.name == 'Update') {
-        for (var i = 0 ; i < permissions.length; i++) {
-          if (permissions[i].name == 'Create') {
-            return permissions[i].selected;
-          }
+    $scope.isDisabled = function(permission, permissions) {
+      if (permission.name != 'Read' && permission.name != 'Update') {
+        return;
+      }
+
+      for (var i = 0 ; i < permissions.length; i++) {
+        if (permissions[i].name == 'Create') {
+          return permissions[i].selected;
         }
       }
     }

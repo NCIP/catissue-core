@@ -59,9 +59,9 @@
           </div>
 
           <div class="col-xs-3">
-            <div class="os-permission-checkbox col-xs-3" ng-repeat="permission in acl.permissions">
+            <div class="os-permissions-checkbox col-xs-3" ng-repeat="permission in acl.permissions">
               <os-checkbox ng-model="permission.selected" ng-change="setPermissions(permission, acl.permissions)"
-                ng-disabled="isDisable(permission, acl.permissions)"></os-checkbox>
+                ng-disabled="isDisabled(permission, acl.permissions)"></os-checkbox>
             </div>
           </div>
 
@@ -86,7 +86,7 @@
 
       <div class="form-group">
         <div class="col-xs-offset-3 col-xs-6">
-          <button class="btn btn-primary" os-form-submit="createRole()" translate="common.buttons.create">Create</button>
+          <button class="btn btn-primary" os-form-submit="saveRole()" translate="common.buttons.create">Create</button>
           <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">Discard</button>
         </div>
       </div>
