@@ -1,5 +1,5 @@
 angular.module('os.administrative.site.list', ['os.administrative.models'])
-  .controller('SiteListCtrl', function($scope, $state, Site) {
+  .controller('SiteListCtrl', function($scope, $state, Site, PvManager) {
 
     var loadSites = function() {
       Site.list().then(
@@ -12,6 +12,14 @@ angular.module('os.administrative.site.list', ['os.administrative.models'])
     $scope.showSiteOverview = function(site) {
       $state.go('site-detail.overview', {siteId: site.id});
     };
+
+    $scope.filter = function(site) {
+      Site.list(site).then(
+        function(siteList) {
+          $scope.siteList = siteList;
+        }
+      );
+    }
 
     loadSites();
   });

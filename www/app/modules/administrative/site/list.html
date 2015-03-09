@@ -7,7 +7,7 @@
       <span class="fa fa-plus"></span>
     </button>
 
-    <button class="os-round-btn os-item-right os-search-button" title="{{'site.tooltip.search' | translate}}">
+    <button os-search-button class="os-round-btn os-item-right" title="{{'site.tooltip.search' | translate}}">
       <span class="fa fa-search"></span>
     </button>
   </div>
@@ -28,22 +28,13 @@
     </div>
   </div>
 
-  <div os-search-drawer>
-    <h3 class="os-filter-title" translate="site.filter.filters"> Filters </h3>
-    <div class="os-divider"></div>
-    <div class="search-container">
-      <form>
-        <div class="form-group">
-          <label class="control-label" translate="site.name">Name</label>
-          <input os-md-input type="text" name="siteName" class="form-control" placeholder="{{'site.filter.name' | translate}}">
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" translate="site.type">Type</label>
-          <os-select os-md-input ng-model="type" list="siteTypes" placeholder="{{'site.filter.type' | translate}}" name="type"></os-select>
-        </div>
-      </form>
+  <div os-filter-drawer>
+    <div class="filter-container">
+      <div class="form-group">
+        <label class="control-label" translate="site.name">Name</label>
+        <input os-md-input type="text" name="siteName" ng-model="site.name"
+          ng-change="filter(site)" class="form-control" placeholder="{{'site.filter.name' | translate}}">
+      </div>
     </div>
   </div>
-
 </div>

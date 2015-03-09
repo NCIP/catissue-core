@@ -256,6 +256,7 @@ button.btn.os-round-btn {
   bottom: 0px;
   height: auto;
   overflow-y: auto;
+  transition: width 0.25s ease-in-out 0s;
 }
 
 .os-page-hdr .os-more-options {
