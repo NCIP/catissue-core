@@ -17,6 +17,8 @@ public class CollectionProtocolSummary implements Comparable<CollectionProtocolS
 	
 	private Date startDate;
 	
+	private Date endDate;
+	
 	private Long participantCount;
 	
 	private Long specimenCount;
@@ -61,6 +63,14 @@ public class CollectionProtocolSummary implements Comparable<CollectionProtocolS
 		this.startDate = startDate;
 	}
 
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
 	public Long getParticipantCount() {
 		return participantCount;
 	}
@@ -93,6 +103,7 @@ public class CollectionProtocolSummary implements Comparable<CollectionProtocolS
 		detail.setShortTitle(cp.getShortTitle());
 		detail.setTitle(cp.getTitle());
 		detail.setStartDate(cp.getStartDate());
+		detail.setEndDate(cp.getEndDate());
 		detail.setPrincipalInvestigator(UserSummary.from(cp.getPrincipalInvestigator()));
 	}
 }

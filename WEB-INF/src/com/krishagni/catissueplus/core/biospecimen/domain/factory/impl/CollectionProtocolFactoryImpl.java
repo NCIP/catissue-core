@@ -40,6 +40,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		setShortTitle(input, cp, ose);
 		setPrincipalInvestigator(input, cp, ose);
 		cp.setStartDate(input.getStartDate());
+		cp.setEndDate(input.getEndDate());
 		setCoordinators(input, cp, ose);
 
 		cp.setIrbIdentifier(input.getIrbId());
