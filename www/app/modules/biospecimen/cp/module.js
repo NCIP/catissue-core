@@ -93,16 +93,6 @@ angular.module('os.biospecimen.cp',
           }
         },
         controller: 'CpSpecimensCtrl'
-      })
-      .state('cp-detail.users', {
-        url: '/users',
-        templateUrl: 'modules/biospecimen/cp/users.html',
-        parent: 'cp-detail'
-      })
-      .state('cp-detail.dashboard', {
-        url: '/dashboard',
-        templateUrl: 'modules/biospecimen/cp/dashboard.html',
-        parent: 'cp-detail'
       });
   });
   
