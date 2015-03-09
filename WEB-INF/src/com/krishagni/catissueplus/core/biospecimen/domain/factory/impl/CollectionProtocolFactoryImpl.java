@@ -41,7 +41,6 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		setPrincipalInvestigator(input, cp, ose);
 		cp.setStartDate(input.getStartDate());
 		setCoordinators(input, cp, ose);
-		setConsentsWaived(input, cp, ose);
 
 		cp.setIrbIdentifier(input.getIrbId());
 		cp.setPpidFormat(input.getPpidFmt());
@@ -50,7 +49,6 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		cp.setSpecimenLabelFormat(input.getSpecimenLabelFmt());
 		cp.setDerivativeLabelFormat(input.getDerivativeLabelFmt());
 		cp.setAliquotLabelFormat(input.getAliquotLabelFmt());
-		cp.setAliquotInSameContainer(input.getAliquotsInSameContainer());
 
 		setActivityStatus(input, cp, ose);
 
@@ -119,16 +117,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 
 		result.setCoordinators(coordinators);
 	}
-
-	private void setConsentsWaived(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
-		if (input.getConsentsWaived() == null) {
-			ose.addError(CpErrorCode.CONSENTS_WAIVED_REQUIRED);
-			return;
-		}
-
-		result.setConsentsWaived(input.getConsentsWaived());
-	}
-
+	
 	private void setActivityStatus(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(input.getActivityStatus())) {
 			result.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());

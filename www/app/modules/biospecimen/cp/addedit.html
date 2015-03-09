@@ -50,21 +50,6 @@
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="cp.consents_waived">Consents Waived</label>
-        <div class="col-xs-6">
-          <label class="radio-inline">
-            <input type="radio" name="consentsWaived" ng-model="cp.consentsWaived" value="true" ng-required="true"> 
-            <span translate="common.yes">Yes</span>
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="consentsWaived" ng-model="cp.consentsWaived" value="false" ng-required="true"> 
-            <span translate="common.no">No</span>
-          </label>
-          <div os-field-error field="cpForm.consentsWaived"></div>
-        </div>
-      </div>
-
-      <div class="form-group">
         <label class="control-label col-xs-3" translate="cp.ethics_approval_id">Ethics Approval ID</label>
         <div class="col-xs-6">
           <input type="text" ng-model="cp.irbId" class="form-control" placeholder="{{'cp.ethics_approval_id' | translate}}">
@@ -125,22 +110,6 @@
         <label class="control-label col-xs-3" translate="cp.aliquot_label_fmt">Aliquot Label Format</label>
         <div class="col-xs-6">
           <input type="text" ng-model="cp.aliquotLabelFmt" class="form-control" placeholder="{{'cp.aliquot_label_fmt' | translate}}">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="cp.store_all_aliquots_in_same_container">
-          Store all Aliquots in same Container
-        </label>
-        <div class="col-xs-6">
-          <label class="radio-inline">
-            <input type="radio" name="aliquotsInSameContainer" ng-model="cp.aliquotsInSameContainer" value="true"> 
-            <span translate="common.yes">Yes</span>
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="aliquotsInSameContainer" ng-model="cp.aliquotsInSameContainer" value="false">
-            <span translate="common.no">No</span>
-          </label>
         </div>
       </div>
 

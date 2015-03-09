@@ -153,7 +153,6 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		CollectionProtocolSummary.copy(cp, result);
 		result.setCoordinators(UserSummary.from(cp.getCoordinators()));
 
-		result.setConsentsWaived(cp.getConsentsWaived());
 		result.setIrbId(cp.getIrbIdentifier());
 		result.setPpidFmt(cp.getPpidFormat());
 		result.setAnticipatedParticipantsCount(cp.getEnrollment());
@@ -161,7 +160,6 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setSpecimenLabelFmt(cp.getSpecimenLabelFormat());
 		result.setDerivativeLabelFmt(cp.getDerivativeLabelFormat());
 		result.setAliquotLabelFmt(cp.getAliquotLabelFormat());
-		result.setAliquotsInSameContainer(cp.getAliquotInSameContainer());
 		result.setActivityStatus(cp.getActivityStatus());
 		
 		if (fullObject) {

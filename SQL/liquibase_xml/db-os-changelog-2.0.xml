@@ -693,4 +693,17 @@
       </column>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Drop aliquot in same container column from collection_protocol">
+    <dropColumn
+      columnName="ALIQUOT_IN_SAME_CONTAINER"
+      tableName="CATISSUE_COLLECTION_PROTOCOL"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop consents waived column from collection_protocol">
+    <dropColumn
+      columnName="CONSENTS_WAIVED"
+      tableName="CATISSUE_COLLECTION_PROTOCOL"/>
+  </changeSet>
+
 </databaseChangeLog>

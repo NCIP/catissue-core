@@ -59,10 +59,6 @@
       <key column="COLLECTION_PROTOCOL_ID"/>
       <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.Site" column="SITE_ID"/>
     </set>
-    
-    <property name="aliquotInSameContainer" column="ALIQUOT_IN_SAME_CONTAINER"/>
-
-    <property name="consentsWaived" column="CONSENTS_WAIVED" />
 
     <set name="collectionProtocolEvents" table="CATISSUE_COLL_PROT_EVENT" inverse="true" cascade="save-update">
       <key column="COLLECTION_PROTOCOL_ID"/>

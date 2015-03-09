@@ -40,10 +40,6 @@ public class CollectionProtocol extends BaseEntity {
 	
 	private String unsignedConsentDocumentURL;
 	
-	private Boolean aliquotInSameContainer;
-	
-	private Boolean consentsWaived;
-	
 	private Set<ConsentTier> consentTier = new HashSet<ConsentTier>();
 	
 	private Set<User> coordinators = new HashSet<User>();
@@ -162,22 +158,6 @@ public class CollectionProtocol extends BaseEntity {
 
 	public void setUnsignedConsentDocumentURL(String unsignedConsentDocumentURL) {
 		this.unsignedConsentDocumentURL = unsignedConsentDocumentURL;
-	}
-
-	public Boolean getAliquotInSameContainer() {
-		return aliquotInSameContainer;
-	}
-
-	public void setAliquotInSameContainer(Boolean aliquotInSameContainer) {
-		this.aliquotInSameContainer = aliquotInSameContainer;
-	}
-
-	public Boolean getConsentsWaived() {
-		return consentsWaived;
-	}
-
-	public void setConsentsWaived(Boolean consentsWaived) {
-		this.consentsWaived = consentsWaived;
 	}
 
 	public Set<ConsentTier> getConsentTier() {
