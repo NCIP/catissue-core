@@ -1,5 +1,5 @@
 angular.module('os.administrative.site.list', ['os.administrative.models'])
-  .controller('SiteListCtrl', function($scope, $state, Site, PvManager) {
+  .controller('SiteListCtrl', function($scope, $state, Site) {
 
     var loadSites = function() {
       Site.list().then(
