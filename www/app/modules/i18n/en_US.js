@@ -325,7 +325,7 @@
     },
 
     "filter": {
-      "filters": "Filters",
+      "filters": "Site Filters",
       "name": "Type the name",
       "type": "Select type"
     }

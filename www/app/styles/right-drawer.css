@@ -1,4 +1,4 @@
-.os-filter-drawer {
+.os-right-drawer {
   position: absolute;
   height: auto;
   background: #f5f5f5;
@@ -12,32 +12,37 @@
   transition: all 0.25s ease-in-out 0s;
 }
 
-.os-filter-drawer.active {
+.os-right-drawer.active {
   transform: scaleX(1);
 }
 
-.os-filter-drawer .filter-container {
-  margin: 15px;
+.os-right-drawer .os-head {
+  margin-left: 15px;
 }
-  
-.os-filter-title {
-  color:#666666!important;
+
+.os-right-drawer .os-body {
   margin: 15px;
 }
 
-.os-filter-drawer .control-label {
+.os-right-drawer .os-title {
+  color:#666666!important;
+}
+
+.os-right-drawer .control-label {
   color: #666666!important;
 }
 
-.os-filter-drawer input {
+.os-right-drawer input {
   background: #f5f5f5;
   margin-top: 5px;
 }
 
-.os-filter-drawer input:focus {
+.os-right-drawer input:focus {
   background: #f5f5f5!important;
 }
 
-.os-filter-drawer .os-md-input-label {
+.os-right-drawer .os-md-input-label {
   opacity: 0;
 }
+
+

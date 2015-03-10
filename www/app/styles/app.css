@@ -180,13 +180,15 @@ body {
   color: #666666;
 }
   
-.os-page-hdr .os-nav-button, .os-page-hdr .os-options-button {
+.os-page-hdr .os-nav-button,
+.os-page-hdr .os-options-button,
+.os-search-button {
   color: #666666;
   background: transparent;
   border: none;
   outline: none;
   margin-top: -20px;
-  margin-right: 24px; 
+  margin-right: 24px;
   margin-left: -10px;
 }
 
@@ -200,14 +202,13 @@ body {
   font-size: 24px;
 }
 
+.os-page-hdr .os-search-button .fa {
+  font-size: 18px;
+}
+
 .os-page-hdr .os-title {
   margin: 0px;
   margin-right: 24px;
-}
-
-.os-page-hdr .os-item-right {
-  align-self: start;
-  margin-left: auto;
 }
 
 button.btn.os-round-btn {

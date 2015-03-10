@@ -1,6 +1,11 @@
 angular.module('os.administrative.site.list', ['os.administrative.models'])
   .controller('SiteListCtrl', function($scope, $state, Site) {
 
+    function init() {
+      $scope.siteFilterOpts = {};
+      loadSites();
+    }
+
     var loadSites = function() {
       Site.list().then(
         function(siteList) {
@@ -13,13 +18,13 @@ angular.module('os.administrative.site.list', ['os.administrative.models'])
       $state.go('site-detail.overview', {siteId: site.id});
     };
 
-    $scope.filter = function(site) {
-      Site.list(site).then(
+    $scope.filter = function(siteFilterOpts) {
+      Site.list(siteFilterOpts).then(
         function(siteList) {
           $scope.siteList = siteList;
         }
       );
     }
 
-    loadSites();
+    init();
   });

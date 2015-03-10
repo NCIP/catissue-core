@@ -3,13 +3,15 @@
     <h3>
       <span translate="site.list">Sites</span>
     </h3>
+
     <button class="os-round-btn" title="{{'site.tooltip.create_site' | translate}}" ui-sref="site-addedit">
       <span class="fa fa-plus"></span>
     </button>
-
-    <button os-search-button class="os-round-btn os-item-right" title="{{'site.tooltip.search' | translate}}">
-      <span class="fa fa-search"></span>
-    </button>
+    <div class="os-more-options">
+      <button os-right-drawer-toggle class="os-search-button" title="{{'site.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+      </button>
+    </div>
   </div>
 
   <div class="os-cards">
@@ -28,12 +30,17 @@
     </div>
   </div>
 
-  <div os-filter-drawer>
-    <div class="filter-container">
+  <div os-right-drawer>
+    <div class="os-head">
+      <h3 class="os-title" translate="site.filter.filters">Site Filter</h3>
+    </div>
+
+    <div class="os-body">
       <div class="form-group">
         <label class="control-label" translate="site.name">Name</label>
-        <input os-md-input type="text" name="siteName" ng-model="site.name"
-          ng-change="filter(site)" class="form-control" placeholder="{{'site.filter.name' | translate}}">
+        <input os-md-input type="text" ng-model="siteFilterOpts.name"
+          ng-model-options="{debounce: 500}" ng-change="filter(siteFilterOpts)"
+          class="form-control" placeholder="{{'site.filter.name' | translate}}">
       </div>
     </div>
   </div>
