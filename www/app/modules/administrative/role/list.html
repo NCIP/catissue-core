@@ -1,0 +1,30 @@
+<div>
+  <div os-page-header>
+    <h3>
+      <span translate="role.list">Roles</span>
+    </h3>
+    <button class="os-round-btn" title="{{'role.tooltip.add' | translate}}" ui-sref="role-addedit({roleId:''})">
+      <span class="fa fa-plus"></span>
+    </button>
+  </div>
+  <div class="container">
+    <div class="os-table os-table-muted-hdr os-border">
+      <div class="os-table-head">
+        <div class="row">
+          <div class="col col-xs-6" translate="role.name">Name</div>
+          <div class="col col-xs-6" translate="role.description">Description</div>
+        </div>
+      </div>
+      <div class="os-table-body">
+        <div ng-repeat="role in roles">
+          <div class="row os-pointer-cursor" ng-click="showRoleOverview(role)"
+             title="{{'role.tooltip.view_details' | translate}}">
+            <div class="col col-xs-6">{{role.name}}</div>
+            <div class="col col-xs-6">{{role.description}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

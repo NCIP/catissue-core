@@ -7,7 +7,8 @@
     "institutes": "Institutes",
     "sites": "Sites",
     "storage_containers": "Storage Containers",
-    "distribution_protocols": "Distribution Protocols"
+    "distribution_protocols": "Distribution Protocols",
+    "roles": "Roles"
   },
 
   "common": {
@@ -486,6 +487,31 @@
     }
   },
 
+  "role": {
+    "role": "Role",
+    "list": "Roles",
+    "name": "Name",
+    "description": "Description",
+    "create_role": "Create Role",
+    "resource": "Resource",
+    "permission": "Permissions",
+    "resources": "Resources",
+    "read": "Read",
+    "create": "Create",
+    "update": "Update",
+    "delete": "Delete",
+    "add_resource": "Add Resource",
+
+    "menu": {
+      "overview": "Overview"
+    },
+
+    "tooltip": {
+      "view_details": "Click to view/edit Role",
+      "add": "Click to add new Role"
+    }
+  },
+  
   "extensions": {
     "no_extensions": "No extensions to show",
     "list": "Extensions",

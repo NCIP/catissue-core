@@ -63,6 +63,20 @@ angular.module('openspecimen')
       'Pending'
     ];
 
+    var permissions = [
+      'Read',
+      'Create',
+      'Update',
+      'Delete'
+    ];
+
+    var resources = [
+      'User',
+      'Institute',
+      'Site',
+      'Collection Protocol',
+    ];
+
     var pvMap = {
       anatomicSite: anatomicSites,
       domains:domains,
@@ -70,6 +84,8 @@ angular.module('openspecimen')
       'visit-status': visitStatuses,
       'specimen-status': specimenStatuses,
       'container-position-labeling-schemes': positionLabelingSchemes,
+      'permissions': permissions,
+      'resources': resources
     };
 
     var pvIdMap = {

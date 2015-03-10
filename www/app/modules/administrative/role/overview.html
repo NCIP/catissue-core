@@ -1,0 +1,72 @@
+
+<div class="clearfix">
+  <div class="col-xs-8">
+    <ul class="os-key-values os-one-col" os-inline-editors on-save="editRole">
+      <li class="item">
+        <strong class="key key-sm" translate="role.name">Name</strong>
+        <os-inline-edit editor="nameEditor" name="name" class="value value-md" value="role.name">
+          <span ng-if="nameEditor.isDisplayMode()">{{nameEditor.viewValue | osNoValue}}</span>
+          <input ng-if="nameEditor.isEditMode()" type="text" ng-model="nameEditor.editValue" 
+            class="form-control" placeholder="{{'role.name' | translate}}">
+        </os-inline-edit>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="role.description">Description</strong>
+        <os-inline-edit editor="descriptionEditor" name="description" class="value value-md" value="role.description">
+          <span ng-if="descriptionEditor.isDisplayMode()">{{descriptionEditor.viewValue | osNoValue}}</span>
+          <textarea ng-if="descriptionEditor.isEditMode()" type="text" ng-model="descriptionEditor.editValue" 
+            class="form-control" placeholder="{{'role.description' | translate}}"></textarea>
+        </os-inline-edit>
+      </li>
+    </ul>
+
+    <div class="os-section">
+      <h3 class="os-sub-section-title" translate="role.resources">Resources</h3>
+      <div>
+        <span ng-if="role.acls.length == 0" translate="common.none">None</span>
+        <div class="os-table os-table-muted-hdr os-border" ng-if="role.acls.length > 0">
+          <div class="os-table-head">
+            <div class="row">
+              <div class="col col-xs-6" translate="role.resource">resource</div>
+              <div class="col col-xs-6" translate="role.permission">Permission</div>
+            </div>
+          </div>
+          <div class="os-table-body">
+            <div ng-repeat="acl in role.acls">
+              <div class="row">
+                <div class="col col-xs-6">{{acl.resource}}</div>
+                <div class="col col-xs-6">
+                  <div class="os-permissions" ng-repeat="permission in acl.permissions">
+                    <div class="os-status" ng-switch on="permission">
+                      <div ng-switch-when="Read">
+                        <span class="fa fa-eye"></span>
+                        <span translate="role.read">Read</span>
+                      </div>
+
+                      <div ng-switch-when="Create">
+                        <span class="fa fa-plus"></span>
+                        <span translate="role.create">Create</span>
+                      </div>
+
+                      <div ng-switch-when="Update">
+                        <span class="fa fa-pencil"></span>
+                        <span translate="role.update">Update</span>
+                      </div>
+
+                      <div ng-switch-when="Delete">
+                        <span class="fa fa-trash"></span>
+                        <span translate="role.delete">Delete</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
