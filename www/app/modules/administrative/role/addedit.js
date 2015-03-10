@@ -19,7 +19,7 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
        var unsortedPermissions = Permission.list();
        $scope.sortedPermissions = [];
        angular.forEach(unsortedPermissions, function(permission) {
-         $scope.sortedPermissions[permissionsOrder.indexOf(permission)] = {name: permission, selected: false};
+         $scope.sortedPermissions[permissionsOrder.indexOf(permission)] = {name: permission, selected: false, disabled:false};
        });
     }
 
@@ -28,7 +28,12 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
         var permissions = $scope.sortedPermissions.map(
           function(permission) {
             var selected = acl.permissions.indexOf(permission.name) != -1;
-            return {name: permission.name, selected: selected};
+            var disabled = false;
+            if (permission.name == 'Read' || permission.name == 'Update') {
+              disabled = acl.permissions.indexOf('Create') != -1;
+            }
+
+            return {name: permission.name, selected: selected, disabled:disabled}
           }
         );
         acl.permissions = permissions;
@@ -64,20 +69,9 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
       angular.forEach(permissions, function(p) {
         if (p.name == 'Read' || p.name == 'Update') {
           p.selected = permission.selected;
+          p.disabled = true;
         }
       });
-    }
-
-    $scope.isDisabled = function(permission, permissions) {
-      if (permission.name != 'Read' && permission.name != 'Update') {
-        return;
-      }
-
-      for (var i = 0 ; i < permissions.length; i++) {
-        if (permissions[i].name == 'Create') {
-          return permissions[i].selected;
-        }
-      }
     }
 
     init();

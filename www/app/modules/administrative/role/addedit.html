@@ -62,7 +62,7 @@
           <div class="col-xs-3">
             <div class="os-permissions-checkbox col-xs-3" ng-repeat="permission in acl.permissions">
               <os-checkbox ng-model="permission.selected" ng-change="setPermissions(permission, acl.permissions)"
-                ng-disabled="isDisabled(permission, acl.permissions)"></os-checkbox>
+                ng-disabled="permission.disabled"></os-checkbox>
             </div>
           </div>
 
