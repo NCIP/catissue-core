@@ -69,7 +69,7 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
       angular.forEach(permissions, function(p) {
         if (p.name == 'Read' || p.name == 'Update') {
           p.selected = permission.selected;
-          p.disabled = true;
+          p.disabled = permission.selected;
         }
       });
     }
