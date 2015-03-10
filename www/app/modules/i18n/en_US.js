@@ -296,7 +296,7 @@
       "add": "Click to add new Institute",
       "department_count": "Count of Departments",
       "user_count": "Count of Users in Institute",
-      "search": "Click to search Institute"
+      "search": "Click to search Institutes"
     },
 
     "menu": {
@@ -324,7 +324,7 @@
       "view_details": "Click to view/edit Site details",
       "create_site": "Click to add new Site",
       "cp_count": "Count of Collection Protocols",
-      "search": "Click to search Site"
+      "search": "Click to search Sites"
     },
 
     "menu": {
@@ -352,12 +352,18 @@
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",
       "new_dp": "Click to add new Distribution Protocol",
-      "pending_count":"Pending to distribute specimens count",
-      "distributed_count":"Distributed specimens count"
+      "pending_count": "Pending to distribute specimens count",
+      "distributed_count": "Distributed specimens count",
+      "search": "Click to search Distribution Protocols"
     },
     
     "menu": {
       "overview": "Overview"
+    },
+
+    "filter": {
+      "filter_title": "Distribution Protocol Filter",
+      "title": "Type the title"
     }
   },
 
@@ -458,7 +464,7 @@
       "view_details": "Click to view/edit Storage Container details",
       "add": "Click to add new Storage Container",
       "count_free_locations": "Count of free locations",
-      "search": "Click to search Storage Container"
+      "search": "Click to search Storage Containers"
     },
 
     "menu": {

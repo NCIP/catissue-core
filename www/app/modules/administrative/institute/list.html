@@ -3,7 +3,7 @@
     <h3>
       <span translate="institutes.list">Institutes</span>
     </h3>
-    <button class="os-round-btn" title="{{'institutes.tooltip.add' | translate}}" ui-sref="institute-addedit">
+    <button class="os-round-btn" title="{{'institutes.tooltip.add' | translate}}" ui-sref="institute-addedit({instituteId: ''})">
       <span class="fa fa-plus"></span>
     </button>
     <div class="os-more-options">
@@ -18,7 +18,7 @@
       <h4>
         <a title="{{'institutes.tooltip.view_details' | translate}}" 
           ui-sref="institute-detail.overview({instituteId: institute.id})"> 
-          {{institute.name}} 
+          {{institute.name}}
         </a>
       </h4>
       <div class="stats">

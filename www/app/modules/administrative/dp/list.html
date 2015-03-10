@@ -4,9 +4,14 @@
     <h3>
       <span translate="dp.list">Distribution Protocols</span>
     </h3>
-    <button class="os-round-btn" title="{{'dp.tooltip.new_dp' | translate}}" ui-sref="dp-addedit">
+    <button class="os-round-btn" title="{{'dp.tooltip.new_dp' | translate}}" ui-sref="dp-addedit({dpId: ''})">
       <span class="fa fa-plus"></span>
     </button>
+    <div class="os-more-options">
+      <button os-right-drawer-toggle class="os-search-button" title="{{'dp.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+      </button>
+    </div>
   </div>
   
   <div class="os-cards">
@@ -33,4 +38,20 @@
       </div>
     </div>
   </div>
+
+  <div os-right-drawer>
+    <div class="os-head">
+      <h3 class="os-title" translate="dp.filter.filter_title">Distribution Protocol Filter</h3>
+    </div>
+
+    <div class="os-body">
+      <div class="form-group">
+        <label class="control-label" translate="dp.title">Title</label>
+        <input os-md-input type="text" ng-model="dpFilterOpts.query"
+          ng-model-options="{debounce: 500}" ng-change="filter(dpFilterOpts)"
+          class="form-control" placeholder="{{'dp.filter.title' | translate}}">
+      </div>
+    </div>
+  </div>
+
 </div>
