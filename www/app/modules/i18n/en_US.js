@@ -457,12 +457,18 @@
     "tooltip": {
       "view_details": "Click to view/edit Storage Container details",
       "add": "Click to add new Storage Container",
-      "count_free_locations": "Count of free locations"
+      "count_free_locations": "Count of free locations",
+      "search": "Click to search Storage Container"
     },
 
     "menu": {
       "overview": "Overview",
       "locations": "Locations"
+    },
+
+    "filter": {
+      "title": "Storage Container Filter",
+      "name": "Enter the name"
     }
   },
 
