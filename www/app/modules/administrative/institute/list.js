@@ -1,6 +1,11 @@
 angular.module('os.administrative.institute.list', ['os.administrative.models'])
   .controller('InstituteListCtrl', function($scope, $state, Institute) {
 
+    function init() {
+      $scope.insFilterOpts = {};
+      loadInstitutes();
+    }
+
     var loadInstitutes = function() {
       Institute.list().then(
         function(instituteList) {
@@ -13,5 +18,13 @@ angular.module('os.administrative.institute.list', ['os.administrative.models'])
       $state.go('institute-detail.overview', {instituteId: institute.id});
     };
 
-    loadInstitutes();
+    $scope.filter = function(insFilterOpts) {
+      Institute.list(insFilterOpts).then(
+        function(instituteList) {
+          $scope.instituteList = instituteList;
+        }
+      );
+    }
+
+    init();
   });

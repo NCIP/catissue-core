@@ -182,7 +182,7 @@ body {
   
 .os-page-hdr .os-nav-button,
 .os-page-hdr .os-options-button,
-.os-search-button {
+.os-page-hdr .os-search-button {
   color: #666666;
   background: transparent;
   border: none;
@@ -198,12 +198,9 @@ body {
 }
 
 .os-page-hdr .os-nav-button .fa,
-.os-page-hdr .os-options-button .fa {
-  font-size: 24px;
-}
-
+.os-page-hdr .os-options-button .fa,
 .os-page-hdr .os-search-button .fa {
-  font-size: 18px;
+  font-size: 24px;
 }
 
 .os-page-hdr .os-title {

@@ -295,12 +295,19 @@
       "view_details": "Click to view/edit Institute details",
       "add": "Click to add new Institute",
       "department_count": "Count of Departments",
-      "user_count": "Count of Users in Institute"
+      "user_count": "Count of Users in Institute",
+      "search": "Click to search Institute"
     },
 
     "menu": {
       "overview": "Overview"
+    },
+
+    "filter": {
+      "title": "Institute Filter",
+      "name": "Type the name"
     }
+
   },
 
   "site": {
