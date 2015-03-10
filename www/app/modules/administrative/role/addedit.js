@@ -19,7 +19,7 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
        var unsortedPermissions = Permission.list();
        $scope.sortedPermissions = [];
        angular.forEach(unsortedPermissions, function(permission) {
-         $scope.sortedPermissions[permissionsOrder.indexOf(permission)] = {name: permission, selected: false, disabled:false};
+         $scope.sortedPermissions[permissionsOrder.indexOf(permission)] = {name: permission, selected: false, disabled: false};
        });
     }
 
@@ -33,7 +33,7 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
               disabled = acl.permissions.indexOf('Create') != -1;
             }
 
-            return {name: permission.name, selected: selected, disabled:disabled}
+            return {name: permission.name, selected: selected, disabled: disabled}
           }
         );
         acl.permissions = permissions;
