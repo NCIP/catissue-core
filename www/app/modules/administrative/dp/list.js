@@ -25,5 +25,5 @@ angular.module('os.administrative.dp.list', ['os.administrative.models'])
       )
     }
    
-    loadDps();
+    init();
   });
