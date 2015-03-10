@@ -1,12 +1,12 @@
 
 angular.module('os.common.models', [])
   .factory('osModel', function(ApiUrls, $http, $q) {
-    function ModelFactory(modelName, initCb) {
+    function ModelFactory(modelName, initCb, defaultSrc) {
       var url = ApiUrls.getBaseUrl() + modelName + '/';
-      
+      defaultSrc = defaultSrc || {};
     
       var Model = function(data) {
-        angular.extend(this, data);
+        angular.extend(this, defaultSrc, data);
         if (typeof initCb == 'function') {
           initCb(this);
         }

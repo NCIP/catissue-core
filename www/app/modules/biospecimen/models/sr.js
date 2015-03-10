@@ -1,5 +1,6 @@
 angular.module('os.biospecimen.models.sr', ['os.common.models'])
   .factory('SpecimenRequirement', function(osModel, $http) {
+    var defaultValue = "Not Specified";
     var Sr = osModel(
       'specimen-requirements',
       function(sr) {
@@ -10,6 +11,13 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
         sr.children = sr.children.map(function(child) {
             return new Sr(child);
         });
+      }, 
+      {
+        anatomicSite: defaultValue,
+        laterality: defaultValue,
+        pathologyStatus: defaultValue,
+        collectionContainer: defaultValue,
+        collectionProcedure: defaultValue
       }
     );
  
