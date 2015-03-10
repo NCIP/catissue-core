@@ -25,7 +25,7 @@
         <div class="form-group">
           <input name="qtyPerAliquot" ng-model="aliquot.qtyPerAliquot" 
             os-md-input class="form-control" type="text" placeholder="{{'srs.qty_per_aliquot' | translate}}"
-            ng-pattern="/^[1-9][0-9]*$/">
+            ng-pattern="/^[0-9]+(\.([0-9]{1,2}))?$/" ng-model-options="{allowInvalid: 'true'}">
           <div os-field-error field="aliquotForm.qtyPerAliquot"></div>
         </div>
       </div>

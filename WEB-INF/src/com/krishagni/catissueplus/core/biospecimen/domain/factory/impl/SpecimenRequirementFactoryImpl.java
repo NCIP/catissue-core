@@ -121,14 +121,16 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			throw ose;
 		}
 		
-		if (req.getQtyPerAliquot() == null || req.getQtyPerAliquot() <= 0L) {
-			ose.addError(SrErrorCode.INVALID_QTY);
-			throw ose;
-		}
-						
-		Double total = req.getNoOfAliquots() * req.getQtyPerAliquot();
-		if (total > parent.getQtyAfterAliquotsUse()) {
-			ose.addError(SrErrorCode.INSUFFICIENT_QTY);
+		if (req.getQtyPerAliquot() != null) {
+			if (req.getQtyPerAliquot() <= 0L) {
+				ose.addError(SrErrorCode.INVALID_QTY);
+				throw ose;
+			}
+			
+			Double total = req.getNoOfAliquots() * req.getQtyPerAliquot();
+			if (total > parent.getQtyAfterAliquotsUse()) {
+				ose.addError(SrErrorCode.INSUFFICIENT_QTY);
+			}
 		}
 		
 		List<SpecimenRequirement> aliquots = new ArrayList<SpecimenRequirement>();
@@ -147,7 +149,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			
 			ose.checkAndThrow();
 		}
-				
+
 		return aliquots;
 	}
 	
