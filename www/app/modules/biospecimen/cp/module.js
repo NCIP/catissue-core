@@ -26,8 +26,16 @@ angular.module('os.biospecimen.cp',
         parent: 'cps'
       })
       .state('cp-addedit', {
-        url: '/addedit?cpId',
+        url: '/addedit/:cpId',
         templateUrl: 'modules/biospecimen/cp/addedit.html',
+        resolve: {
+          cp: function($stateParams, CollectionProtocol) {
+            if ($stateParams.cpId) {
+              return CollectionProtocol.getById($stateParams.cpId);
+            }
+            return new CollectionProtocol();
+          }
+        },
         controller: 'CpAddEditCtrl',
         parent: 'cps'
       })

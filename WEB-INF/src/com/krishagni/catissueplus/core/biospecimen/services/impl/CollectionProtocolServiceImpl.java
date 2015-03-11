@@ -155,6 +155,31 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	
 	@Override
 	@PlusTransactional
+	public ResponseEvent<CollectionProtocolDetail> updateCollectionProtocol(RequestEvent<CollectionProtocolDetail> req) {
+		try {
+			CollectionProtocolDetail detail = req.getPayload();
+			CollectionProtocol existingCp = daoFactory.getCollectionProtocolDao().getById(detail.getId());
+			if (existingCp == null) {
+				return ResponseEvent.userError(CpErrorCode.NOT_FOUND);
+			}
+
+			CollectionProtocol cp = cpFactory.createCollectionProtocol(detail);
+			
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueTitle(existingCp, cp, ose);
+			ose.checkAndThrow();
+			
+			existingCp.update(cp);
+			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
 	public ResponseEvent<CollectionProtocolDetail> importCollectionProtocol(RequestEvent<CollectionProtocolDetail> req) {
 		try {
 			SessionDataBean sdb = req.getSessionDataBean();
@@ -437,6 +462,12 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	private void ensureUniqueTitle(CollectionProtocol existingCp, CollectionProtocol cp, OpenSpecimenException ose) {
+		if (!existingCp.getTitle().equals(cp.getTitle())) {
+			ensureUniqueTitle(cp.getTitle(), ose);
 		}
 	}
 	

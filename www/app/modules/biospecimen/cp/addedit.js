@@ -1,9 +1,9 @@
 
 angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.administrative.models'])
-  .controller('CpAddEditCtrl', function($scope, $state, CollectionProtocol, PvManager, User) {
+  .controller('CpAddEditCtrl', function($scope, $state, cp, PvManager, User) {
   
     function init() {
-      $scope.cp = new CollectionProtocol();
+      $scope.cp = cp;
       $scope.ppidFmt = {};
       $scope.coordinators = [];
 
