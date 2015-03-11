@@ -40,8 +40,6 @@ import com.krishagni.core.common.WebContextLoader;
 import com.krishagni.core.tests.testdata.CommonUtils;
 import com.krishagni.core.tests.testdata.InstituteTestData;
 
-import edu.wustl.catissuecore.domain.User;
-
 import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
