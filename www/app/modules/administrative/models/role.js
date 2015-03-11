@@ -84,7 +84,18 @@ angular.module('os.administrative.models.role', ['os.common.models'])
     var Resource = osModel('resources');
 
     Resource.list = function() {
-      var resources = ['User', 'Institute', 'Collection Protocol', 'Site'];
+      var resources = [
+        'Collection Protocol', 
+        'Distribution Protocol', 
+        'Institute', 
+        'Order',
+        'Participant (PHI)',
+        'Visit',
+        'Specimen',
+        'Site',
+        'Storage Container',
+        'User' 
+      ];
       return resources;
     }
 
