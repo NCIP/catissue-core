@@ -103,9 +103,20 @@ angular.module('os.biospecimen.participant',
         parent: 'participant-detail'
       })
       .state('participant-detail.collect-specimens', {
-        url: '/collect-specimens?visitId',
+        url: '/collect-specimens?visitId&eventId',
         templateUrl: 'modules/biospecimen/participant/collect-specimens.html',
         controller: 'CollectSpecimensCtrl',
+        resolve: {
+          visit: function($stateParams, cpr, Visit) {
+            if (!!$stateParams.visitId) {
+              return Visit.getById($stateParams.visitId);
+            } else if (!!$stateParams.eventId) {
+              return Visit.getAnticipatedVisit($stateParams.eventId, cpr.registrationDate);
+            }
+
+            return null;
+          }
+        },
         parent: 'participant-root'
       })
       .state('participant-detail.extensions', {

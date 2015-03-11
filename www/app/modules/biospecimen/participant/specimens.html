@@ -2,7 +2,7 @@
   <div class="panel-heading">
     <span translate="specimens.list">Specimens</span>
     <div class="btn-group os-action-btns" ng-if="selection.any">
-      <button class="btn btn-default" ng-click="collectSpecimens()" ng-if="visit.id">
+      <button class="btn btn-default" ng-click="collectSpecimens()">
         <span class="fa fa-plus"></span>
         Collect
       </button>
@@ -12,7 +12,7 @@
     <div ng-if="!specimens || specimens.length == 0">
       <span translate="specimens.no_specimens_to_show">No Specimens to Show</span>
     </div>
-    <div class="os-table os-table-fixed os-table-tree" ng-class="{'os-spmn-hide-options': view != 'list' || !visit.id}"
+    <div class="os-table os-table-fixed os-table-tree" ng-class="{'os-spmn-hide-options': view != 'list'}"
       ng-if="specimens && specimens.length > 0">
       <div class="os-table-head">
         <div class="row">
@@ -55,7 +55,7 @@
                     <span class="fa fa-circle" 
                       ng-class="{'os-status-collected': specimen.status == 'Collected',
                                  'os-status-pending': specimen.status == 'Pending' || !specimen.status,
-                                 'os-status-not-collected': specimen.status == 'Not Collected'}">
+                                 'os-status-not-collected': specimen.status == 'Missed Collection'}">
                     </span>
                     <a ui-sref="specimen-detail.overview(
                                   {eventId: visit.eventId, visitId: visit.id, specimenId: specimen.id, srId: specimen.reqId})">

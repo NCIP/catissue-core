@@ -90,13 +90,13 @@
       <return-scalar column="event_id" type="long"/>
       <return-scalar column="anticipated" type="int"/>
       <return-scalar column="collected" type="int"/>
-      <return-scalar column="uncollected" type="int"/>
+      <return-scalar column="missed" type="int"/>
  
       select
         scg.identifier as id, cpe.identifier as event_id,
         count(sp_rq.identifier) as anticipated,
         count(case when s.collection_status = 'Collected' then s.identifier else null end) as collected,
-        count(case when s.collection_status = 'Not Collected' then s.identifier else null end) as uncollected
+        count(case when s.collection_status = 'Missed Collection' then s.identifier else null end) as missed
       from
         catissue_coll_prot_event cpe
         inner join catissue_cp_req_specimen sp_rq 

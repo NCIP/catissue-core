@@ -56,6 +56,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		
 		specimen.setId(detail.getId());
 		specimen.setVisit(visit);
+		
+		setCollectionStatus(detail, specimen, ose);
 		setLineage(detail, specimen, ose);
 		setParentSpecimen(detail, parent, specimen, ose);
 				
@@ -70,8 +72,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setSpecimenClass(detail, specimen, ose);
 		setSpecimenType(detail, specimen, ose);
 		setCreatedOn(detail, specimen, ose);
-		setCollectionStatus(detail, specimen, ose);
-		
+				
 		if (sr != null && 
 				(!sr.getSpecimenClass().equals(specimen.getSpecimenClass()) ||
 					!sr.getSpecimenType().equals(specimen.getSpecimenType()))) {
@@ -103,7 +104,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setLabel(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		if (StringUtils.isBlank(detail.getLabel())) {
+		if (StringUtils.isBlank(detail.getLabel()) && specimen.isCollected()) {
 			ose.addError(SpecimenErrorCode.LABEL_REQUIRED);
 			return;
 		}
@@ -199,7 +200,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		
 		if (!status.equals(Specimen.COLLECTED) && 
 			!status.equals(Specimen.PENDING) && 
-			!status.equals(Specimen.NOT_COLLECTED)) {
+			!status.equals(Specimen.MISSED_COLLECTION)) {
 			ose.addError(SpecimenErrorCode.INVALID_COLL_STATUS);
 		}
 
@@ -293,15 +294,18 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;
 		}
 		
-		if (qty == null) {
+		if (!specimen.isCollected()) { 
+			//
+			// Do not need quantity when specimen is not collected
+			//
+			return;
+		}
+		
+		if (qty == null || qty <= 0) {
 			ose.addError(SpecimenErrorCode.INVALID_QTY);
 			return;
 		}
 		
-		if (qty <= 0) {
-			ose.addError(SpecimenErrorCode.INVALID_QTY);
-			return;
-		}
 		
 		specimen.setInitialQuantity(qty);
 						
@@ -400,13 +404,19 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		StorageContainer container = null;
 
 		StorageLocationSummary location = detail.getStorageLocation();
-		if (location.id != null && location.id != -1) {
-			container = daoFactory.getStorageContainerDao().getById(location.id);			
-		} else if (StringUtils.isNotBlank(location.name)) {
-			container = daoFactory.getStorageContainerDao().getByName(location.name);
-		} else {
+		if (isVirtual(location) || !specimen.isCollected()) {
+			//
+			// When specimen location is virtual or specimen is 
+			// not collected - pending / missed collection
+			//
 			return;
 		}
+		
+		if (location.id != null && location.id != -1) {
+			container = daoFactory.getStorageContainerDao().getById(location.id);			
+		} else {
+			container = daoFactory.getStorageContainerDao().getByName(location.name);
+		} 
 		
 		if (container == null) {
 			ose.addError(StorageContainerErrorCode.NOT_FOUND);
@@ -436,5 +446,21 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			position.setOccupyingSpecimen(specimen);
 			specimen.setPosition(position);
 		}
+	}
+	
+	private boolean isVirtual(StorageLocationSummary location) {
+		if (location == null) {
+			return true;
+		}
+		
+		if (location.id != null && location.id != -1) {
+			return false;
+		}
+		
+		if (StringUtils.isNotBlank(location.name)) {
+			return false;			
+		}
+		
+		return true;
 	}
 }

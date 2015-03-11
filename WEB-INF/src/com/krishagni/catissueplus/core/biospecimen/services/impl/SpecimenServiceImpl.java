@@ -216,8 +216,11 @@ public class SpecimenServiceImpl implements SpecimenService {
 		Specimen specimen = specimenFactory.createSpecimen(detail, parent);
 
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		if (existing == null || !existing.getLabel().equals(specimen.getLabel())) {
-			ensureUniqueLabel(specimen.getLabel(), ose);
+		if (existing == null || // no specimen before 
+			StringUtils.isBlank(existing.getLabel()) || // no label was specified before 
+			!existing.getLabel().equals(specimen.getLabel())) { // new label differs from existing
+			
+			ensureUniqueLabel(specimen.getLabel(), ose); // check for label uniqueness
 		}
 
 		String barcode = specimen.getBarcode();

@@ -76,6 +76,7 @@
 }
 
 .os-key-values .value.os-status-collected, 
+.os-key-values .value.os-status-not-collected, 
 .os-key-values .value.os-status-pending {
   width: initial!important;
   border-radius: 4px;
@@ -91,6 +92,10 @@
   background: #f0ad4e;
 }
 
+.os-key-values .value.os-status-not-collected {
+  background: #d9534f;
+}
+
 .os-table.os-spmn-hide-options .os-select-specimen-cb {
   visibility: hidden;
 }
@@ -104,4 +109,42 @@
   white-space: initial;
   vertical-align: top;
   padding-right: 32px;
+}
+
+.os-specimen-position > div {
+  padding-left: 0px;
+  padding-right: 10px;
+}
+
+.os-time-no-wheels tbody tr:first-child,
+.os-time-no-wheels tbody tr:last-child {
+  display: none;
+}
+
+.os-table .os-table-body .row .col .btn-xs {
+  border: 0px;
+}
+
+.os-table .os-md-input-label {
+  display: none;
+}
+
+.os-spmn-coll-detail label {
+  color: #666666;
+}
+
+.os-spmn-coll-detail .input {
+  margin-top: -17px;
+}
+
+.os-spmn-coll-detail .form-group {
+  margin-bottom: 30px;
+}
+
+.os-spmn-coll-detail .os-md-input.read {
+  margin-top: 7px;
+}
+
+.os-spmn-coll-detail .input, .os-spmn-coll-detail .read {
+  padding-left: 0px;
 }

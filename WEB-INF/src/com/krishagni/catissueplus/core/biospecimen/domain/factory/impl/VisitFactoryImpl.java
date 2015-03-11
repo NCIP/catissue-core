@@ -40,6 +40,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 				
+		visit.setId(visitDetail.getId());
 		visit.setName(visitDetail.getName());
 		setCpe(visitDetail, visit, ose);		
 		setCpr(visitDetail, visit, ose);
@@ -128,7 +129,7 @@ public class VisitFactoryImpl implements VisitFactory {
 			return;
 		}
 		
-		if (!cpr.getCollectionProtocol().getId().equals(cpe.getCollectionProtocol().getId())) {
+		if (!cpr.getCollectionProtocol().equals(cpe.getCollectionProtocol())) {
 			ose.addError(CprErrorCode.INVALID_CPE);
 		}
 	}

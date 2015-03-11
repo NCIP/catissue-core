@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
@@ -8,8 +9,11 @@ import org.apache.commons.lang.StringUtils;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -22,6 +26,8 @@ public class VisitServiceImpl implements VisitService {
 	private DaoFactory daoFactory;
 
 	private VisitFactory visitFactory;
+	
+	private SpecimenService specimenSvc;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -29,6 +35,10 @@ public class VisitServiceImpl implements VisitService {
 
 	public void setVisitFactory(VisitFactory visitFactory) {
 		this.visitFactory = visitFactory;
+	}
+	
+	public void setSpecimenSvc(SpecimenService specimenSvc) {
+		this.specimenSvc = specimenSvc;
 	}
 
 	@Override
@@ -50,13 +60,10 @@ public class VisitServiceImpl implements VisitService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<VisitDetail> addVisit(RequestEvent<VisitDetail> req) {
+	public ResponseEvent<VisitDetail> addOrUpdateVisit(RequestEvent<VisitDetail> req) {
 		try {
-			Visit visit = visitFactory.createVisit(req.getPayload());
-			setName(null, visit);
-
-			daoFactory.getVisitsDao().saveOrUpdate(visit);
-			return ResponseEvent.response(VisitDetail.from(visit));
+			VisitDetail respPayload = saveOrUpdateVisit(req.getPayload());
+			return ResponseEvent.response(respPayload);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception ex) {
@@ -65,35 +72,63 @@ public class VisitServiceImpl implements VisitService {
 	}
 
 	@Override
-	@PlusTransactional	
-	public ResponseEvent<VisitDetail> updateVisit(RequestEvent<VisitDetail> req) {
+	@PlusTransactional
+	public ResponseEvent<VisitSpecimenDetail> collectVisitAndSpecimens(
+			RequestEvent<VisitSpecimenDetail> req) {
+		
 		try {
-			VisitDetail detail = req.getPayload();
-
-			Visit existing = getVisit(detail.getId(), detail.getName());			
-			if (existing == null) {
-				return ResponseEvent.userError(VisitErrorCode.NOT_FOUND);
-			}
+			VisitDetail visit = saveOrUpdateVisit(req.getPayload().getVisit());			
 			
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			List<SpecimenDetail> specimens = req.getPayload().getSpecimens();
+			setVisitId(visit.getId(), specimens);
+						
+			RequestEvent<List<SpecimenDetail>> collectSpecimensReq =
+					new RequestEvent<List<SpecimenDetail>>(req.getSessionDataBean(), specimens);
+			ResponseEvent<List<SpecimenDetail>> collectSpecimensResp =
+					specimenSvc.collectSpecimens(collectSpecimensReq);
+			collectSpecimensResp.throwErrorIfUnsuccessful();
 			
-			Visit visit = visitFactory.createVisit(detail);			
-			setName(existing, visit);			
-			if (!existing.getName().equals(visit.getName())) {
-				ensureUniqueVisitName(visit.getName(), ose);
-			}
-			
-			ose.checkAndThrow();
-			existing.update(visit);
-			daoFactory.getVisitsDao().saveOrUpdate(existing);
-			return ResponseEvent.response(VisitDetail.from(existing));
+			VisitSpecimenDetail resp = new VisitSpecimenDetail();
+			resp.setVisit(visit);
+			resp.setSpecimens(collectSpecimensResp.getPayload());
+			return ResponseEvent.response(resp);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
-
+	
+	private VisitDetail saveOrUpdateVisit(VisitDetail input) {		
+		Visit existing = null;
+		
+		if (input.getId() != null || StringUtils.isNotEmpty(input.getName())) {
+			existing = getVisit(input.getId(), input.getName());
+			if (existing == null) {
+				throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND);
+			}			
+		}
+							
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		
+		Visit visit = visitFactory.createVisit(input);			
+		setName(existing, visit);
+		
+		if (existing == null || !existing.getName().equals(visit.getName())) {
+			ensureUniqueVisitName(visit.getName(), ose);
+		}
+		
+		ose.checkAndThrow();
+		if (existing != null) {
+			existing.update(visit);
+		} else {
+			existing = visit;
+		}
+		
+		daoFactory.getVisitsDao().saveOrUpdate(existing);
+		return VisitDetail.from(existing);		
+	}
+	
 	private Visit getVisit(Long visitId, String visitName) {
 		Visit visit = null;
 		
@@ -122,5 +157,12 @@ public class VisitServiceImpl implements VisitService {
 		if (daoFactory.getVisitsDao().getByName(visitName) != null) {
 			ose.addError(VisitErrorCode.DUP_NAME);
 		}		
+	}
+	
+	private void setVisitId(Long visitId, List<SpecimenDetail> specimens) {
+		for (SpecimenDetail specimen : specimens) {
+			specimen.setVisitId(visitId);
+			setVisitId(visitId, specimen.getChildren());
+		}
 	}
 }

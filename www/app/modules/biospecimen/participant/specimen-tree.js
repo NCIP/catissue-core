@@ -4,7 +4,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
     'os.biospecimen.models', 
     'os.biospecimen.participant.collect-specimens'
   ])
-  .directive('osSpecimenTree', function(CollectSpecimensSvc, Specimen, Alerts, PvManager) {
+  .directive('osSpecimenTree', function($state, $stateParams, CollectSpecimensSvc, Specimen, Alerts, PvManager) {
 
     function loadSpecimenClasses(scope) {
       if (scope.classesLoaded) {
@@ -82,6 +82,10 @@ angular.module('os.biospecimen.participant.specimen-tree',
       return false;
     };
 
+    function getState() {
+      return {state: $state.current, params: $stateParams};
+    }
+
     return {
       restrict: 'E',
 
@@ -135,7 +139,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
             }
           });
 
-          CollectSpecimensSvc.collect(scope.visit, specimensToCollect);
+          CollectSpecimensSvc.collect(getState(), scope.visit, specimensToCollect);
         };
 
         scope.showCreateAliquots = function(specimen) {
@@ -188,7 +192,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
 
           parent.children = aliquots;
           aliquots.unshift(parent);
-          CollectSpecimensSvc.collect(scope.visit, aliquots);
+          CollectSpecimensSvc.collect(getState(), scope.visit, aliquots, parent);
         };
 
         scope.loadSpecimenTypes = function(specimenClass, notclear) {

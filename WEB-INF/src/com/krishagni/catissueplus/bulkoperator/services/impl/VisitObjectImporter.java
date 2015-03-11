@@ -15,6 +15,6 @@ public class VisitObjectImporter implements ObjectImporter<VisitDetail> {
 
 	@Override
 	public ResponseEvent<VisitDetail> importObject(RequestEvent<VisitDetail> req) {
-		return visitService.addVisit(req);
+		return visitService.addOrUpdateVisit(req);
 	}
 }

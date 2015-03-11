@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
@@ -82,7 +83,7 @@ public class VisitsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public VisitDetail addVisit(@RequestBody VisitDetail visit) {
-		ResponseEvent<VisitDetail> resp = visitService.addVisit(getRequest(visit));
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(visit));
 		resp.throwErrorIfUnsuccessful();				
 		return resp.getPayload();
 	}
@@ -93,8 +94,18 @@ public class VisitsController {
 	public VisitDetail updateVisit(@PathVariable("id") Long visitId, @RequestBody VisitDetail visit) {
 		visit.setId(visitId);
 		
-		ResponseEvent<VisitDetail> resp = visitService.updateVisit(getRequest(visit));
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(visit));
 		resp.throwErrorIfUnsuccessful();				
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value="/collect")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public VisitSpecimenDetail collectVisitAndSpecimens(@RequestBody VisitSpecimenDetail detail) {
+		RequestEvent<VisitSpecimenDetail> req = getRequest(detail);
+		ResponseEvent<VisitSpecimenDetail> resp = visitService.collectVisitAndSpecimens(req);
+		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 	

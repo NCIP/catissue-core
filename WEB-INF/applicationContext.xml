@@ -100,6 +100,7 @@
   <bean id="visitService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.VisitServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="visitFactory" ref="visitFactory"/>
+    <property name="specimenSvc" ref="specimenSvc"/>
   </bean>
 
   <bean id="bulkOperationService" class="com.krishagni.catissueplus.bulkoperator.services.impl.BulkOperationServiceImpl">

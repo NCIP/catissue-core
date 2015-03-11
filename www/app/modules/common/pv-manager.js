@@ -60,6 +60,7 @@ angular.module('openspecimen')
 
     var specimenStatuses = [
       'Collected',
+      'Missed Collection',
       'Pending'
     ];
 

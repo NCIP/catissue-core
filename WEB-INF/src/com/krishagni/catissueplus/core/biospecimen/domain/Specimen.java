@@ -22,7 +22,7 @@ public class Specimen extends BaseEntity {
 	
 	public static final String COLLECTED = "Collected";
 	
-	public static final String NOT_COLLECTED = "Not Collected";
+	public static final String MISSED_COLLECTION = "Missed Collection";
 	
 	public static final String PENDING = "Pending";
 
@@ -439,6 +439,12 @@ public class Specimen extends BaseEntity {
 	
 	public void occupyPosition() {
 		if (position == null) {
+			return;
+		}
+		
+		if (!isCollected()) { 
+			// Un-collected (pending/missed collection) specimens can't occupy space
+			position = null;
 			return;
 		}
 				

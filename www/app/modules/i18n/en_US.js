@@ -35,7 +35,8 @@
       "previous": "Previous",
       "ok": "Ok",
       "select": "Select",
-      "unselect": "Unselect"
+      "unselect": "Unselect",
+      "submit": "Submit"
     }
   },
 
@@ -203,7 +204,7 @@
     "anticipated_list": "Anticipated Specimens",
     "status": {
       "collected": "Collected",
-      "not_collected": "Not Collected",
+      "not_collected": "Missed Collection",
       "pending": "Pending"
     },
 
