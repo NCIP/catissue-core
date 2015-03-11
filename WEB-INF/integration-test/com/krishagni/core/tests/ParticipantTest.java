@@ -26,7 +26,7 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipants;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.PmiDetail;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -148,10 +148,10 @@ public class ParticipantTest {
 		Assert.assertEquals("Empi-id mismatch" , "dummy-empi-id", participant.getEmpi());
 		Assert.assertEquals("Vital status mismatch", "Dead" , participant.getVitalStatus());
 		
-		List<ParticipantMedicalIdentifierNumberDetail> pmis = participant.getPmis();
+		List<PmiDetail> pmis = participant.getPmis();
 		Assert.assertEquals("Pmi count mismatch" , new Integer(2), new Integer(pmis.size()));
 		
-		for (ParticipantMedicalIdentifierNumberDetail pmi : pmis) { 
+		for (PmiDetail pmi : pmis) { 
 			if ("SITE1".equals(pmi.getSiteName())) {
 				Assert.assertEquals("Mrn mismatch" , "MRN1" , pmi.getMrn());
 			} else if ("SITE2".equals(pmi.getSiteName())) {
@@ -161,7 +161,7 @@ public class ParticipantTest {
 			}
 		}
 		
-		Set<String> race = participant.getRace();
+		Set<String> race = participant.getRaces();
 		Assert.assertEquals(new Integer(2), new Integer(race.size()));
 		Assert.assertEquals("Race 'Asian' not found!", true, race.contains("Asian"));
 		Assert.assertEquals("Race 'Asian' not found!", true, race.contains("American Indian or Alaska Native"));

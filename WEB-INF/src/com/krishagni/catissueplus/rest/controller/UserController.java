@@ -1,4 +1,3 @@
-
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
@@ -22,6 +21,7 @@ import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
+import com.krishagni.catissueplus.core.auth.services.UserAuthenticationService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -35,6 +35,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserAuthenticationService userAuthService;
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
@@ -73,18 +76,22 @@ public class UserController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/signed-in-user")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public UserDetail getSignedInUser() {
-		return getUser(getSession().getUserId());
-	}
-	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public UserDetail createUser(@RequestBody UserDetail userDetails) {
 		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(getSession(), userDetails);
+		ResponseEvent<UserDetail> resp = userService.createUser(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/sign-up")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public UserDetail signupUser(@RequestBody UserDetail detail) {
+		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(getSession(), detail);
 		ResponseEvent<UserDetail> resp = userService.createUser(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -149,6 +156,16 @@ public class UserController {
 		
 		return resp.getPayload();
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/current-user")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public UserSummary getCurrentUser() {
+		ResponseEvent<UserSummary> resp = userAuthService.getCurrentLoggedInUser();
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+ 	}
 
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);

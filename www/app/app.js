@@ -39,9 +39,7 @@ angular.module('openspecimen', [
       .state('signed-in', {
         abstract: true,
         templateUrl: 'modules/common/appmenu.html',
-        controller: function($scope, Alerts) {
-          $scope.alerts = Alerts.messages;
-        }
+        controller: 'SignedInCtrl'
       });
 
     $urlRouterProvider.otherwise('/');
@@ -54,9 +52,6 @@ angular.module('openspecimen', [
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
       'sessions': '/rest/ng/sessions',
-      'collection-protocols': '/rest/ng/collection-protocols',
-      'cprs': '/rest/ng/collection-protocol-registrations',
-      'participants': '/rest/ng/participants',
       'sites': '/rest/ng/sites',
       'form-files': '/rest/ng/form-files'
     };
@@ -78,8 +73,11 @@ angular.module('openspecimen', [
       },
 
       responseError: function(rejection) {
-        if (rejection.status == 401) {
-          $window.localStorage['osAuthToken'] = '';
+        if (rejection.status == 0) {
+          Alerts.error("common.server_connect_error");
+        } else if (rejection.status == 401) {
+          delete $window.localStorage['osAuthToken'];
+          delete $injector.get("$http").defaults.headers.common['X-OS-API-TOKEN'];
           $injector.get('$state').go('login'); // using injector to get rid of circular dependencies
         } else if (rejection.status / 100 == 5) {
           Alerts.error("common.server_error");
@@ -88,10 +86,10 @@ angular.module('openspecimen', [
 
           if (rejection.data instanceof Array) {
             angular.forEach(rejection.data, function(err) {
-              errMsgs.push(err.code + ": " + err.message);
+              errMsgs.push(err.message + "(" + err.code + ")");
             });
             Alerts.errorText(errMsgs);
-          } else {
+          } else if (rejection.config.method != 'HEAD') {
             Alerts.error('common.ui_error');
           }
         } 
@@ -122,14 +120,10 @@ angular.module('openspecimen', [
           if (!token) {
             return;
           }
-
-          //token = JSON.parse(token);
         }
 
         $http.defaults.headers.common['X-OS-API-TOKEN'] = token;
         $http.defaults.withCredentials = true;
-        //$cookieStore.put('JESSIONID', token);
-        //$http.defaults.headers.common['Cookie'] = 'JSESSIONID=' + token;
       }
     };
   })
@@ -160,7 +154,7 @@ angular.module('openspecimen', [
           return prefix + this.app + '/rest/ng/';
         },
 
-        getUrl  : function(key) {
+        getUrl: function(key) {
           var url = '';
           if (key) {
             url = this.urls[key];
@@ -191,5 +185,9 @@ angular.module('openspecimen', [
 
     $rootScope.back = function() {
       $window.history.back();
-    }
+    };
+
+    $rootScope.global = {
+      dateFmt: 'MMM dd, yyyy'
+    };
   });

@@ -280,6 +280,7 @@ public class SpecimenRequirement {
 		specimen.setTissueSide(getLaterality());
 		specimen.setPathologicalStatus(getPathologyStatus());
 		specimen.setInitialQuantity(getInitialQuantity());
+		specimen.setAvailableQuantity(getInitialQuantity());
 		specimen.setConcentrationInMicrogramPerMicroliter(getConcentration());
 		specimen.setSpecimenRequirement(this);
 		return specimen;

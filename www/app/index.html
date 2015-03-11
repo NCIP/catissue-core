@@ -18,7 +18,10 @@
     <link rel="stylesheet" href="bower_components/angular-motion/dist/angular-motion.css" />
     <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
     <!-- endbower -->
-    <link rel="stylesheet" href="bower_components/blueimp-file-upload/css/jquery.fileupload.css" />
+    <link rel="stylesheet" href="external_components/blueimp-file-upload/css/jquery.fileupload.css" />
+    <link rel="stylesheet" href="external_components/select2/css/select2.css"></script>
+    <link rel="stylesheet" href="external_components/select2/css/select2-bootstrap.css"></script>
+    <link rel="stylesheet" href="external_components/de/css/de.css"></script>
     <!-- endbuild -->
     <!-- build:css(.tmp) css/app.css -->
     <link rel="stylesheet" href="styles/app.css">
@@ -35,6 +38,8 @@
     <link rel="stylesheet" href="styles/checkbox.css">
     <link rel="stylesheet" href="styles/container-map.css">
     <link rel="stylesheet" href="styles/nav-drawer.css">
+    <link rel="stylesheet" href="styles/extensions.css">
+    <link rel="stylesheet" href="styles/roles.css">
     <!-- endbuild -->
   </head>
   <body ng-app="openspecimen">
@@ -73,6 +78,8 @@
     <!-- endbower -->
     <script src="external_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
     <script src="external_components/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
+    <script src="external_components/de/js/de-form.js"></script>
+    <script src="external_components/select2/select2.min.js"></script>
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -104,6 +111,7 @@
     <script src="modules/common/group-selector.js"></script>
     <script src="modules/common/opened-tree-nodes.js"></script>
     <script src="modules/common/match.js"></script>
+    <script src="modules/common/util.js"></script>
 
     <!-- Administrative module -->
     <script src="modules/administrative/module.js"></script>
@@ -119,6 +127,7 @@
 
     <!-- User module -->
     <script src="modules/user/login.js"></script>
+    <script src="modules/user/signed-in.js"></script>
     <script src="modules/user/forgot-password.js"></script>
     <script src="modules/user/reset-password.js"></script>
     <script src="modules/administrative/user/list.js"></script>
@@ -133,8 +142,7 @@
     <script src="modules/administrative/institute/list.js"></script>
     <script src="modules/administrative/institute/addedit.js"></script>
     <script src="modules/administrative/institute/detail.js"></script>
-    <script src="modules/administrative/institute/department.js"></script>
-    
+
     <!-- Site Module -->
     <script src="modules/administrative/site/module.js"></script>
     <script src="modules/administrative/site/list.js"></script>
@@ -153,8 +161,15 @@
     <script src="modules/administrative/container/addedit.js"></script>
     <script src="modules/administrative/container/detail.js"></script>
     <script src="modules/administrative/container/overview.js"></script>
+    <script src="modules/administrative/container/position-selector.js"></script>
     <script src="modules/administrative/container/map.js"></script>
     <script src="modules/administrative/container/util.js"></script>
+
+    <!-- Role Module -->
+    <script src="modules/administrative/role/module.js"></script>
+    <script src="modules/administrative/role/list.js"></script>
+    <script src="modules/administrative/role/addedit.js"></script>
+    <script src="modules/administrative/role/detail.js"></script>
 
     <!-- Biospecimen module -->
     <script src="modules/biospecimen/module.js"></script>
@@ -168,6 +183,14 @@
     <script src="modules/biospecimen/models/cpr.js"></script>
     <script src="modules/biospecimen/models/visit.js"></script>
     <script src="modules/biospecimen/models/specimen.js"></script>
+    <script src="modules/biospecimen/models/form.js"></script>
+
+    <!-- Extensions -->
+    <script src="modules/biospecimen/extensions/module.js"></script>
+    <script src="modules/biospecimen/extensions/form.js"></script>
+    <script src="modules/biospecimen/extensions/list.js"></script>
+    <script src="modules/biospecimen/extensions/records.js"></script>
+    <script src="modules/biospecimen/extensions/addedit.js"></script>
 
     <!-- CP module -->
     <script src="modules/biospecimen/cp/module.js"></script>
@@ -188,11 +211,18 @@
     <script src="modules/biospecimen/participant/visits.js"></script>
     <script src="modules/biospecimen/participant/add-visit.js"></script>
     <script src="modules/biospecimen/participant/specimen-tree.js"></script>
+    <script src="modules/biospecimen/participant/specimen-desc.js"></script>
+    <script src="modules/biospecimen/participant/collect-specimens.js"></script>
+    <script src="modules/biospecimen/participant/specimen-position.js"></script>
+    <script src="modules/biospecimen/participant/specimen-position-selector.js"></script>
 
+    <!-- Visit detail module -->
     <script src="modules/biospecimen/participant/visit/module.js"></script>
+    <script src="modules/biospecimen/participant/visit/addedit.js"></script>
 
     <!-- Specimen detail module -->
     <script src="modules/biospecimen/participant/specimen/module.js"></script>
+    <script src="modules/biospecimen/participant/specimen/addedit.js"></script>
 
     <!-- Common -->
     <script src="modules/biospecimen/common/module.js"></script>
@@ -201,6 +231,7 @@
 
     <script src="modules/biospecimen/cp/config.js"></script>
     <script src="custom-modules/biospecimen/participant/register.js"></script>
+
     <!-- endbuild -->
   </body>
 </html>

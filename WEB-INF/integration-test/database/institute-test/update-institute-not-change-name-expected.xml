@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <CATISSUE_INSTITUTION  IDENTIFIER="1" NAME="default-institute" ACTIVITY_STATUS="Active" />
+  <CATISSUE_INSTITUTION  IDENTIFIER="2" NAME="duplicate-institute" ACTIVITY_STATUS="Active" />
+  
+  <OS_DEPARTMENTS IDENTIFIER="1" NAME="updated-department" INSTITUTE_ID="1"/>
+  <OS_DEPARTMENTS IDENTIFIER="2" NAME="default-department" INSTITUTE_ID="2"/>
+</dataset>

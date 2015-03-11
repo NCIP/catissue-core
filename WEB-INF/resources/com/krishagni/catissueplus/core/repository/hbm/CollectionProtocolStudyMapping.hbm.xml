@@ -17,7 +17,7 @@
 		<property name="studyId" type="string" column="STUDY_ID" />
 
 		<many-to-one name="collectionProtocol"
-			class="edu.wustl.catissuecore.domain.CollectionProtocol" column="CP_ID" />
+			class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol" column="CP_ID" />
 
 		<many-to-one name="externalApplication"
 			class="com.krishagni.catissueplus.core.notification.domain.ExternalApplication"

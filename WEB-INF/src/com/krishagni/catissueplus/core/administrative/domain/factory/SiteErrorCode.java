@@ -12,9 +12,9 @@ public enum SiteErrorCode implements ErrorCode {
 	
 	INVALID_TYPE,
 	
-	DUP_SITE_NAME,
+	DUP_NAME,
 	
-	DUP_SITE_CODE,
+	DUP_CODE,
 	
 	REF_ENTITY_FOUND;
 	

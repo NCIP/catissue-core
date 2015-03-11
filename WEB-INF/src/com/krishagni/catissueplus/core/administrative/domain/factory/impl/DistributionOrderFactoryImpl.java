@@ -133,7 +133,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		if (siteId != null) {
 			site = daoFactory.getSiteDao().getById(siteId);
 		} else if (StringUtils.isNotBlank(siteName)) {
-			site = daoFactory.getSiteDao().getSite(siteName);
+			site = daoFactory.getSiteDao().getSiteByName(siteName);
 		}
 		
 		if (site == null) {
@@ -264,7 +264,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		if (specimenId != null) {
 			specimen = daoFactory.getSpecimenDao().getById(info.getId());
 		} else if (StringUtils.isNotBlank(specimenLabel)) {
-			specimen = daoFactory.getSpecimenDao().getSpecimenByLabel(info.getLabel());
+			specimen = daoFactory.getSpecimenDao().getByLabel(info.getLabel());
 		}
 		
 		return specimen;

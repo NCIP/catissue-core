@@ -7,7 +7,8 @@
     "institutes": "Institutes",
     "sites": "Sites",
     "storage_containers": "Storage Containers",
-    "distribution_protocols": "Distribution Protocols"
+    "distribution_protocols": "Distribution Protocols",
+    "roles": "Roles"
   },
 
   "common": {
@@ -20,6 +21,7 @@
     "form_validation_error": "There are validation errors as highlighted below. Please correct them",
     "server_error": "Internal Server Error. Please report this problem to system administrator",
     "ui_error": "UI Error. Please report this problem to system administrator",
+    "server_connect_error": "Unable to connect server",
 
     "buttons": {
       "add": "Add",
@@ -31,9 +33,15 @@
       "discard": "Discard",
       "next": "Next",
       "previous": "Previous",
-      "ok": "Ok"
+      "ok": "Ok",
+      "select": "Select",
+      "unselect": "Unselect"
     }
   },
+
+  "pvs": {
+    "not_specified": "Not Specified"
+   },
 
   "cp": {
     "list": "Collection Protocols",
@@ -72,7 +80,7 @@
     "no_cpes": "There are no collection protocol events to show. Please create an event by clicking on Add Event...",
     "add_cpe": "Add Event...",
     "cpe_list": "Events",
-    "cpe_point": "Event Point",
+    "cpe_point": "Event Point (in Days)",
     "cpe_point_label": "Event Point Label",
 
     "tab": {
@@ -99,6 +107,7 @@
     "list": "Participants",
    
     "register_participant": "Register Participant",
+    "edit_participant": "Edit Participant",
     "reg_date": "Registration Date",
     "ppid": "Participant Protocol ID",
     "name": "Name",
@@ -131,6 +140,7 @@
     
     "buttons": {
       "register": "Register",
+      "update_registration": "Update",
       "register_selected_participant": "Register Selected participant",
       "ignore_matches": "Ignore Matches and Register Participant",
       "lookup_again": "Lookup Again"
@@ -214,12 +224,22 @@
     "storage_location": "Storage Location",
     "virtually_located": "Virtual",
     "no_specimens_to_show": "No Specimens to Show",
+    "aliquot_cnt": "Count of Aliquots",
+    "qty_per_aliquot": "Quantity per Aliquot",
+    "qty": "Quantity",
+    "aliquot": "Aliquot",
+    "derived": "Derived",
+    "from": "from",
+    "collected_in": "collected in",
+    "description": "Description",
+    "location": "Location",
+    "apply_first_loc_to_all": "Copy First Location To All",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",
       "edit_specimen": "Edit Specimen",
       "create_aliquots": "Create Aliquots",
-      "create_derivatives": "Create Derivatives",
+      "create_derivative": "Create Derivative",
       "add_event": "Add Event",
       "dispose": "Dispose"
     },
@@ -227,6 +247,16 @@
     "menu": {
       "overview": "Overview",
       "extensions": "Extensions"
+    },
+
+    "buttons": {
+      "collect_aliquots": "Collect Aliquots",
+      "create_derivative": "Create Derivative"
+    },
+
+    "errors": {
+      "duplicate_labels": "One or more specimens using same label",
+      "insufficient_qty": "Insufficient parent specimen quantity to create aliquots"
     }
   },
 
@@ -375,6 +405,13 @@
        "all": "All Current & Future"
     },
 
+    "create_account": "Create your OpenSpecimen Account",
+    "signup": "Sign up",
+    "already_have_an_openspecimen_id": "Already have an OpenSpecimen ID?",
+    "sign_in_here": "Sign In here",
+    "signed_up": "Your membership request has been received. Please wait for an approval email from OpenSpecimen Administrator. Thank you.",
+    "return_to_signin": "Return to Sign in",
+
     "tooltip": {
       "create_user": "Click to add new User",
       "view_details": "Click to view/edit User details",
@@ -405,6 +442,7 @@
     "link_expired_content": "We'll be happy to send you another one when you're ready.",
     "reset_my_password": "Reset My Password",
     "reset_password": "Reset Password",
+    "return_to_signin": "Return to sign in page",
     "password_updated": "Password has been set"
   },
   
@@ -433,6 +471,9 @@
     "all": "All",
     "child_containers": "Child Containers",
     "free_locations": "Free Locations",
+    "no_container_selected": "Please select a container",
+    "cannot_hold_specimen": "Selected container cannot hold specimen for which position is being selected",
+    "stores_specimens": "Stores Specimens",
 
     "tooltip": {
       "view_details": "Click to view/edit Storage Container details",
@@ -444,5 +485,50 @@
       "overview": "Overview",
       "locations": "Locations"
     }
+  },
+
+  "role": {
+    "role": "Role",
+    "list": "Roles",
+    "name": "Name",
+    "description": "Description",
+    "create_role": "Create Role",
+    "resource": "Resource",
+    "permission": "Permissions",
+    "resources": "Resources",
+    "read": "Read",
+    "create": "Create",
+    "update": "Update",
+    "delete": "Delete",
+    "add_resource": "Add Resource",
+
+    "menu": {
+      "overview": "Overview"
+    },
+
+    "tooltip": {
+      "view_details": "Click to view/edit Role",
+      "add": "Click to add new Role"
+    }
+  },
+  
+  "extensions": {
+    "no_extensions": "No extensions to show",
+    "list": "Extensions",
+
+    "name": "Name",
+    "creator": "Creator",
+    "last_updated": "Last Updated",
+    "record_count": "Records",
+    "multiRecord": "Multirecord",
+
+    "no_records": "No extension records to show",
+    "record_id": "Record #",
+    "last_updated_by": "Last Updated By",
+    
+    "edit_record": "Edit Record",
+    "new_record": "Create New Record",
+
+    "record_saved": "Extension record saved successfully"
   }
 }

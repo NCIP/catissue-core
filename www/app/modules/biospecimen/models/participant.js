@@ -3,7 +3,7 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
     var Participant = osModel('participants');
  
     Participant.formatSsn = function(ssn) {
-      if (ssn && ssn.length > 0) {
+      if (!!ssn && ssn.indexOf('-') == -1) {
         ssn = [ssn.slice(0, 3), '-', ssn.slice(3, 5), '-', ssn.slice(5)].join('');
       }
 
@@ -79,7 +79,8 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
     };
 
     Participant.prototype.$saveProps = function() {
-      this.pmis = this.getPmis();
+      var pmis = this.getPmis();
+      this.pmis = pmis.length == 0 ? undefined : pmis;
       this.ssn = this.formatSsn();
       return this;
     };

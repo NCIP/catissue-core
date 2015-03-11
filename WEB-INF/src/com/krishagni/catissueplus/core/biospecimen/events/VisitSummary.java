@@ -10,9 +10,9 @@ public class VisitSummary implements Comparable<VisitSummary> {
 
 	private String name;
 	
-	private String label;
+	private String eventLabel;
 	
-	private int calendarPoint;
+	private int eventPoint;
 	
 	private String status;
 	
@@ -52,20 +52,20 @@ public class VisitSummary implements Comparable<VisitSummary> {
 		this.name = name;
 	}
 
-	public String getLabel() {
-		return label;
+	public String getEventLabel() {
+		return eventLabel;
 	}
 
-	public void setLabel(String label) {
-		this.label = label;
+	public void setEventLabel(String eventLabel) {
+		this.eventLabel = eventLabel;
 	}
 
-	public int getCalendarPoint() {
-		return calendarPoint;
+	public int getEventPoint() {
+		return eventPoint;
 	}
 
-	public void setCalendarPoint(int calendarPoint) {
-		this.calendarPoint = calendarPoint;
+	public void setEventPoint(int eventPoint) {
+		this.eventPoint = eventPoint;
 	}
 
 	public String getStatus() {

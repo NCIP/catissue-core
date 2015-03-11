@@ -1,10 +1,13 @@
 
 angular.module('openspecimen')
   .directive('osGroupSelector', function($timeout) {
-    function flattenMap(inputMap) {
+    function flattenMap(inputMap, allowAll) {
       var result = [];
       angular.forEach(inputMap, function(category) {
-        result.push(category.all);
+        if (!allowAll || allowAll.indexOf(category.all.category) >= 0) {
+          result.push(category.all);
+        }
+
         if (!category.all.selected) {
           result = result.concat(category.items);
         }
@@ -45,7 +48,7 @@ angular.module('openspecimen')
     
       scope.selectedItems = selectedItems;
       scope.itemsMap = itemsMap;
-      scope.itemsList = flattenMap(itemsMap);
+      scope.itemsList = flattenMap(itemsMap, opts.allowAll);
     };
 
     function linker(scope, element, attrs) {
@@ -83,7 +86,7 @@ angular.module('openspecimen')
             }
           }
 
-          scope.itemsList = flattenMap(scope.itemsMap);
+          scope.itemsList = flattenMap(scope.itemsMap, scope.opts.allowAll);
         }, 0); 
       };
 
@@ -100,7 +103,7 @@ angular.module('openspecimen')
             modelItems.splice(modelItems.indexOf(item.category), 1);
           }
 
-          scope.itemsList = flattenMap(scope.itemsMap);
+          scope.itemsList = flattenMap(scope.itemsMap, scope.opts.allowAll);
         }, 0);
       };
     };

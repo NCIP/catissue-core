@@ -34,6 +34,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
+import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -59,6 +60,7 @@ public class VisitsTest {
 	
 	@Autowired
 	private CollectionProtocolRegistrationService cprSvc;
+	private VisitService visitService;
 	
 	@Autowired
 	private ApplicationContext ctx;
@@ -149,7 +151,7 @@ public class VisitsTest {
 		
 		TestUtils.recordResponse(resp);
 		Assert.assertEquals(false, resp.isSuccessful());
-		TestUtils.checkErrorCode(resp, VisitErrorCode.SITE_REQUIRED, ErrorType.USER_ERROR);
+		TestUtils.checkErrorCode(resp, SiteErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 		TestUtils.checkErrorCode(resp, CpErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	
@@ -194,14 +196,14 @@ public class VisitsTest {
 			Assert.assertNotNull(visitId);
 			Assert.assertEquals(visitId, visit.getEventId());
 			Assert.assertEquals(new String("scg-"+ visitId), visit.getName());
-			Assert.assertEquals(new String("Visit"+ visitId), visit.getLabel());
-			Assert.assertEquals((int) (visit.getEventId().intValue() * 10) , visit.getCalendarPoint());
+			Assert.assertEquals(new String("Visit"+ visitId), visit.getEventLabel());
+			Assert.assertEquals((int) (visit.getEventId().intValue() * 10) , visit.getEventPoint());
 			Assert.assertEquals("Complete", visit.getStatus());
 			
 			Date registrationDate = CommonUtils.getDate(31,1,2001);
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(registrationDate);
-			cal.add(Calendar.DAY_OF_YEAR, visit.getCalendarPoint());
+			cal.add(Calendar.DAY_OF_YEAR, visit.getEventPoint());
 			Assert.assertEquals(cal.getTime(), visit.getAnticipatedVisitDate());
 			
 			if (visitId < 5L) {
@@ -276,14 +278,14 @@ public class VisitsTest {
 			Assert.assertNotNull(visitId);
 			Assert.assertEquals(visitId, visit.getEventId());
 			Assert.assertEquals(new String("scg-"+ visitId), visit.getName());
-			Assert.assertEquals(new String("Visit"+ visitId), visit.getLabel());
-			Assert.assertEquals((int) (visit.getEventId().intValue() * 10) , visit.getCalendarPoint());
+			Assert.assertEquals(new String("Visit"+ visitId), visit.getEventLabel());
+			Assert.assertEquals((int) (visit.getEventId().intValue() * 10) , visit.getEventPoint());
 			Assert.assertEquals("Complete", visit.getStatus());
 			
 			Date registrationDate = CommonUtils.getDate(31,1,2001);
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(registrationDate);
-			cal.add(Calendar.DAY_OF_YEAR, visit.getCalendarPoint());
+			cal.add(Calendar.DAY_OF_YEAR, visit.getEventPoint());
 			Assert.assertEquals(cal.getTime(), visit.getAnticipatedVisitDate());
 		}
 	}

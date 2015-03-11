@@ -8,7 +8,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegi
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierResponseDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.PmiDetail;
 
 public class CprTestData {
 	public static ParticipantDetail getParticipant() {
@@ -18,8 +18,8 @@ public class CprTestData {
 		p.setMiddleName("default_middle_name");
 		p.setBirthDate(CommonUtils.getDate(21,10,2012));
 		p.setGender("MALE");
-		p.setRace(new HashSet<String>());
-		p.getRace().add("Asian");
+		p.setRaces(new HashSet<String>());
+		p.getRaces().add("Asian");
 		p.setActivityStatus("Active");
 		p.setPmis(populatePmis());
 		p.setVitalStatus("Alive");
@@ -30,15 +30,15 @@ public class CprTestData {
 		return p;
 	}
 	
-	private static List<ParticipantMedicalIdentifierNumberDetail> populatePmis() {
-		List<ParticipantMedicalIdentifierNumberDetail> pmis = new ArrayList<ParticipantMedicalIdentifierNumberDetail>();
+	private static List<PmiDetail> populatePmis() {
+		List<PmiDetail> pmis = new ArrayList<PmiDetail>();
 		
-		ParticipantMedicalIdentifierNumberDetail pmi1 = new ParticipantMedicalIdentifierNumberDetail();
+		PmiDetail pmi1 = new PmiDetail();
 		pmi1.setSiteName("SITE1");
 		pmi1.setMrn("PMI1");
 		pmis.add(pmi1);
 		
-		ParticipantMedicalIdentifierNumberDetail pmi2 = new ParticipantMedicalIdentifierNumberDetail();
+		PmiDetail pmi2 = new PmiDetail();
 		pmi2.setSiteName("SITE2");
 		pmi2.setMrn("PMI2");
 		pmis.add(pmi2);

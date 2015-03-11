@@ -67,7 +67,7 @@ public class SpecimenListTest {
 	}
 	
 	/*
-	 *  collectSpecimens API test
+	 *  createSpecimensList API test
 	 */
 	
 	@Test

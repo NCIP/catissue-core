@@ -153,11 +153,12 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SavedQuery.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/QueryAuditLog.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/QueryFolder.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Ldap.hbm.xml" />		
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Site.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocol.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthDomain.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthProvider.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthToken.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/LoginAuditLog.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExternalIdentifier.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Audit.hbm.xml" />
 		

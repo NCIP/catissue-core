@@ -3,6 +3,7 @@ package com.krishagni.core.tests.testdata;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.core.tests.testdata.CommonUtils;
 
@@ -11,7 +12,7 @@ public class SpecimenTestData {
 		SpecimenDetail detail = new SpecimenDetail();
 		detail.setActivityStatus("Active");
 		detail.setAnatomicSite("Head");
-		detail.setAvailableQty(1.0);
+		detail.setAvailableQty(0.1);
 		detail.setEventId(1L);
 		detail.setInitialQty(0.5);
 		detail.setLabel("default-label");
@@ -54,6 +55,8 @@ public class SpecimenTestData {
 			SpecimenDetail obj = getSpecimenInfo();
 			obj.setLabel(parentLabel + "Child-" + (i+1));
 			obj.setBarcode(parentLabel + "-barcode-" + (i+1));
+			obj.setParentLabel(parentLabel);
+			obj.setLineage(Specimen.DERIVED);
 			childrens.add(obj);
 		}
 		return childrens;

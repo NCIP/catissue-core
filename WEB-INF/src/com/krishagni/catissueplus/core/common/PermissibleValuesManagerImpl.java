@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.events.ListPvCriteria;
-import com.krishagni.catissueplus.core.administrative.events.PvInfo;
+import com.krishagni.catissueplus.core.administrative.events.PvDetail;
 import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -25,10 +25,10 @@ public class PermissibleValuesManagerImpl implements PermissibleValuesManager {
 	}
 
 	@Override
-	public List<PvInfo> getPermissibleValueList(String attribute) {
+	public List<PvDetail> getPermissibleValueList(String attribute) {
 		ListPvCriteria crit = new ListPvCriteria().attribute(attribute);
 		RequestEvent<ListPvCriteria> req = new RequestEvent<ListPvCriteria>(null, crit);
-		ResponseEvent<List<PvInfo>> resp = permissibleValueSvc.getPermissibleValues(req);
+		ResponseEvent<List<PvDetail>> resp = permissibleValueSvc.getPermissibleValues(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

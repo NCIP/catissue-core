@@ -19,7 +19,7 @@
             
     <set 
       name="departments"
-      table="OS_DEPARTMENT" 
+      table="OS_DEPARTMENTS" 
       inverse="true" 
       cascade="all-delete-orphan">
       

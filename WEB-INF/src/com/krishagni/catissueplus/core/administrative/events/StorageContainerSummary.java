@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
-import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class StorageContainerSummary {
@@ -21,6 +20,8 @@ public class StorageContainerSummary {
 
 	private String siteName;
 
+	private Long parentContainerId;
+	
 	private String parentContainerName;
 
 	private UserSummary createdBy;
@@ -30,6 +31,8 @@ public class StorageContainerSummary {
 	private int dimensionTwoCapacity;
 	
 	private int freePositions;
+	
+	private boolean storeSpecimensEnabled;
 	
 	private List<StorageContainerSummary> childContainers;
 
@@ -73,6 +76,14 @@ public class StorageContainerSummary {
 		this.siteName = siteName;
 	}
 
+	public Long getParentContainerId() {
+		return parentContainerId;
+	}
+
+	public void setParentContainerId(Long parentContainerId) {
+		this.parentContainerId = parentContainerId;
+	}
+
 	public String getParentContainerName() {
 		return parentContainerName;
 	}
@@ -113,6 +124,14 @@ public class StorageContainerSummary {
 		this.freePositions = freePositions;
 	}
 
+	public boolean isStoreSpecimensEnabled() {
+		return storeSpecimensEnabled;
+	}
+
+	public void setStoreSpecimensEnabled(boolean storeSpecimensEnabled) {
+		this.storeSpecimensEnabled = storeSpecimensEnabled;
+	}
+
 	public List<StorageContainerSummary> getChildContainers() {
 		return childContainers;
 	}
@@ -130,12 +149,14 @@ public class StorageContainerSummary {
 		
 		result.setSiteName(container.getSite().getName());
 		if (container.getParentContainer() != null) {
+			result.setParentContainerId(container.getParentContainer().getId());
 			result.setParentContainerName(container.getParentContainer().getName());
 		}
 		
 		result.setDimensionOneCapacity(container.getDimensionOneCapacity());
 		result.setDimensionTwoCapacity(container.getDimensionTwoCapacity());
-		result.setFreePositions(container.freePositionsCount());		
+		result.setFreePositions(container.freePositionsCount());
+		result.setStoreSpecimensEnabled(container.isStoreSpecimenEnabled());
 	}
 	
 	public static StorageContainerSummary from(StorageContainer container) {
@@ -168,13 +189,5 @@ public class StorageContainerSummary {
 		
 		return result;
 	}
-
-	private static UserInfo getUserInfo(User user) {
-		UserInfo userInfo = new UserInfo();
-		userInfo.setLoginName(user.getLoginName());
-		if (user.getAuthDomain() != null) {
-			userInfo.setDomainName(user.getAuthDomain().getName());
-		}
-		return userInfo;
-	}
+	
 }

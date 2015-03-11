@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('ParticipantAddEditCtrl', function(
-    $scope, $state, $stateParams, 
+    $scope, $state, $stateParams, cpr,
     CollectionProtocolRegistration, Participant,
     Site, PvManager) {
 
@@ -17,7 +17,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       $scope.cpId = $stateParams.cpId;
       $scope.pid = undefined;
 
-      $scope.cpr = new CollectionProtocolRegistration({registrationDate: new Date()});
+      $scope.cpr = cpr;
       $scope.cpr.participant.addPmi($scope.cpr.participant.newPmi());
       
       loadPvs();
@@ -32,6 +32,10 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
         }
       );
     };
+
+    $scope.pmiText = function(pmi) {
+      return pmi.mrn + " (" + pmi.siteName + ")";
+    }
 
     $scope.addPmiIfLast = function(idx) {
       var participant = $scope.cpr.participant;
@@ -79,7 +83,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
     };
 
     $scope.registerUsingSelectedParticipant = function() {
-      $scope.cpr.participant = $scope.selectedParticipant;
+      $scope.cpr.participant = new Participant({id: $scope.selectedParticipant.$id()});
       registerParticipant();
     };
 

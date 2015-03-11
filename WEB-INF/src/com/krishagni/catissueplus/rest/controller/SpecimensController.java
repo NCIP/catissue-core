@@ -25,8 +25,8 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
-import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
@@ -55,7 +55,12 @@ public class SpecimensController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public Boolean doesSpecimenExists(@RequestParam(value = "label") String label) {
-		return specimenSvc.doesSpecimenExists(label);
+		ResponseEvent<Boolean> resp = specimenSvc.doesSpecimenExists(getRequest(label));
+		if (resp.getPayload() == true) {
+			return true;
+		}
+		
+		throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
@@ -87,6 +92,31 @@ public class SpecimensController {
 		return resp.getPayload();
 	}
 
+	@RequestMapping(method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public SpecimenDetail createSpecimen(@RequestBody SpecimenDetail detail) {
+		ResponseEvent<SpecimenDetail> resp = specimenSvc.createSpecimen(getRequest(detail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public SpecimenDetail updateSpecimen(
+			@PathVariable("id") 
+			Long specimenId, 
+			
+			@RequestBody 
+			SpecimenDetail detail) {
+		
+		detail.setId(specimenId);
+		
+		ResponseEvent<SpecimenDetail> resp = specimenSvc.updateSpecimen(getRequest(detail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)
@@ -105,19 +135,19 @@ public class SpecimensController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms/{formCtxtId}/records")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<FormRecordSummary> getFormRecords(@PathVariable("id") Long specimenId,
+	public EntityFormRecords getFormRecords(@PathVariable("id") Long specimenId,
 			@PathVariable("formCtxtId") Long formCtxtId) {
 
 		GetEntityFormRecordsOp opDetail = new GetEntityFormRecordsOp();
 		opDetail.setEntityId(specimenId);
 		opDetail.setFormCtxtId(formCtxtId);
 		
-		ResponseEvent<List<FormRecordSummary>> resp = formSvc.getEntityFormRecords(getRequest(opDetail));
+		ResponseEvent<EntityFormRecords> resp = formSvc.getEntityFormRecords(getRequest(opDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST, value="/collect")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public List<SpecimenDetail> collectSpecimens(@RequestBody List<SpecimenDetail> specimens) {		

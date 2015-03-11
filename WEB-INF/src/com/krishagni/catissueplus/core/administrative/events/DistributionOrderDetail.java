@@ -129,7 +129,7 @@ public class DistributionOrderDetail {
 		detail.setOrderItems(DistributionOrderItemDetail.from(order.getOrderItems()));
 		detail.setDistributionProtocol(DistributionProtocolDetail.from(order.getDistributionProtocol()));
 		detail.setRequester(UserSummary.from(order.getRequester()));
-		detail.setSite(SiteDetail.fromDomain(order.getSite()));
+		detail.setSite(SiteDetail.from(order.getSite()));
 		detail.setActivityStatus(order.getActivityStatus());
 		if (order.getDistributor() != null ) {
 			detail.setDistributor(UserSummary.from(order.getDistributor()));

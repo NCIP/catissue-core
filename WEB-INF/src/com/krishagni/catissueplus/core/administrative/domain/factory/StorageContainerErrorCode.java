@@ -25,10 +25,8 @@ public enum StorageContainerErrorCode implements ErrorCode {
 	CANNOT_SHRINK_CONTAINER,
 	
 	PARENT_CONT_NOT_FOUND,
-	
-	RESTRICTIVE_SPECIMEN_CLASS_AND_TYPE,
-	
-	RESTRICTIVE_CP,
+
+	VIOLATES_RESTRICTIONS,
 	
 	INVALID_NUMBER_POSITION,
 	
@@ -38,7 +36,11 @@ public enum StorageContainerErrorCode implements ErrorCode {
 	
 	REF_ENTITY_FOUND,
 	
-	HIERARCHY_CONTAINS_CYCLE;
+	HIERARCHY_CONTAINS_CYCLE,
+	
+	CANNOT_HOLD_SPECIMEN,
+	
+	INVALID_POSITIONS;
 
 	@Override
 	public String code() {

@@ -1967,7 +1967,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 	  referencedColumnNames="IDENTIFIER"
 	  constraintName="FK_SAVED_QUERIES_UPDATED_BY"/>
     </changeSet>
-
+<!--
  <changeSet author="dpatil" id="inserting CATISSUE_AUTH_DOMAINS table" failOnError="true">
         <createTable tableName="CATISSUE_AUTH_DOMAINS">
             <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
@@ -2052,7 +2052,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 		<column name="DOMAIN_NAME" type="${text.type}(255)" defaultValue="catissue"/>
 	</addColumn>
     </changeSet>
-    
+
     <changeSet author="dpatil" id="inserting CATISSUE AUTH_PROVIDERS table" failOnError="true">
         
 	<createTable tableName="CATISSUE_AUTH_PROVIDERS">
@@ -2090,7 +2090,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             ordered="true" />
 	
     </changeSet>  	  	   
-
+    -->
     <changeSet author="vpawar" id="table for query folders" failOnError="true">
       <createTable tableName="CATISSUE_QUERY_FOLDERS">
         <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">

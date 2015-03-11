@@ -86,6 +86,34 @@ public class StorageContainerPosition {
 	}
 	
 	public void update(StorageContainerPosition other) {
-		BeanUtils.copyProperties(other, this, new String[] {"id"});
+		//
+		// Ideally when container changes, we should first remove it from old container
+		// map and then add to new container map. However this creates problem because
+		// Hibernates does all inserts first, followed by updates and then delete
+		// So added position in new container is deleted by remove from old container 
+		// Therefore the hack is to only the new position and not remove it from old
+		// container
+		//
+		
+		boolean isContainerChanged = !getContainer().equals(other.getContainer());
+		BeanUtils.copyProperties(other, this, POS_UPDATE_IGN_PROPS);
+		
+		if (isContainerChanged) { // The old position is not freed because hibernate deletes it 
+			occupy();
+		}
 	}
+	
+	public void occupy() {
+		container.addPosition(this);
+	}
+	
+	public void vacate() {
+		container.removePosition(this);
+	}
+	
+	private static final String[] POS_UPDATE_IGN_PROPS = new String[] {
+		"id", 
+		"occupyingSpecimen", 
+		"occupyingContainer"
+	};
 }

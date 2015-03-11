@@ -8,19 +8,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.hibernate.LazyInitializationException;
-
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 
+@JsonIgnoreProperties({"modifiedAttrs"})
 public class ParticipantDetail {
-
-	List<String> modifiedAttributes = new ArrayList<String>();
-
+	private Long id;
+	
 	private String firstName;
 
 	private String lastName;
-
+	
 	private String middleName;
 
 	private Date birthDate;
@@ -29,11 +28,11 @@ public class ParticipantDetail {
 
 	private String gender;
 
-	private Set<String> race;
+	private Set<String> races;
 
 	private String vitalStatus;
 
-	private List<ParticipantMedicalIdentifierNumberDetail> pmis;
+	private List<PmiDetail> pmis;
 
 	private String sexGenotype;
 
@@ -44,120 +43,8 @@ public class ParticipantDetail {
 	private String activityStatus;
 	
 	private String empi;
-
-	private Long id;
 	
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getMiddleName() {
-		return middleName;
-	}
-
-	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
-	}
-
-	public Date getBirthDate() {
-		return birthDate;
-	}
-
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
-	}
-
-	public Date getDeathDate() {
-		return deathDate;
-	}
-
-	public void setDeathDate(Date deathDate) {
-		this.deathDate = deathDate;
-	}
-
-	public String getGender() {
-		return gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-	public Set<String> getRace() {
-		return race;
-	}
-
-	public void setRace(Set<String> race) {
-		this.race = race;
-	}
-
-	public String getVitalStatus() {
-		return vitalStatus;
-	}
-
-	public void setVitalStatus(String vitalStatus) {
-		this.vitalStatus = vitalStatus;
-	}
-
-	public List<ParticipantMedicalIdentifierNumberDetail> getPmis() {
-		return pmis;
-	}
-
-	public void setPmis(List<ParticipantMedicalIdentifierNumberDetail> pmis) {
-		this.pmis = pmis;
-	}
-
-	public String getSexGenotype() {
-		return sexGenotype;
-	}
-
-	public void setSexGenotype(String sexGenotype) {
-		this.sexGenotype = sexGenotype;
-	}
-
-	public String getEthnicity() {
-		return ethnicity;
-	}
-
-	public void setEthnicity(String ethnicity) {
-		this.ethnicity = ethnicity;
-	}
-
-	public String getSsn() {
-		return ssn;
-	}
-
-	public void setSsn(String ssn) {
-		this.ssn = ssn;
-	}
-
-	public String getActivityStatus() {
-		return activityStatus;
-	}
-
-	public void setActivityStatus(String activityStatus) {
-		this.activityStatus = activityStatus;
-	}
-
-	public String getEmpi() {
-		return empi;
-	}
-
-	public void setEmpi(String empi) {
-		this.empi = empi;
-	}
+	private Set<String> modifiedAttrs = new HashSet<String>();
 
 	public Long getId() {
 		return id;
@@ -166,8 +53,138 @@ public class ParticipantDetail {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	public String getFirstName() {
+		return firstName;
+	}
 
-	public static ParticipantDetail fromDomain(Participant participant) {
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+		modifiedAttrs.add("firstName");
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+		modifiedAttrs.add("lastName");
+	}
+
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+		modifiedAttrs.add("middleName");
+	}
+
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+		modifiedAttrs.add("birthDate");
+	}
+
+	public Date getDeathDate() {
+		return deathDate;
+	}
+
+	public void setDeathDate(Date deathDate) {
+		this.deathDate = deathDate;
+		modifiedAttrs.add("deathDate");
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+		modifiedAttrs.add("gender");
+	}
+
+	public Set<String> getRaces() {
+		return races;
+	}
+
+	public void setRaces(Set<String> races) {
+		this.races = races;
+		modifiedAttrs.add("races");
+	}
+
+	public String getVitalStatus() {
+		return vitalStatus;
+	}
+
+	public void setVitalStatus(String vitalStatus) {
+		this.vitalStatus = vitalStatus;
+		modifiedAttrs.add("vitalStatus");
+	}
+
+	public List<PmiDetail> getPmis() {
+		return pmis;
+	}
+
+	public void setPmis(List<PmiDetail> pmis) {
+		this.pmis = pmis;
+		modifiedAttrs.add("pmis");
+	}
+
+	public String getSexGenotype() {
+		return sexGenotype;
+	}
+
+	public void setSexGenotype(String sexGenotype) {
+		this.sexGenotype = sexGenotype;
+		modifiedAttrs.add("genotype");
+	}
+
+	public String getEthnicity() {
+		return ethnicity;
+	}
+
+	public void setEthnicity(String ethnicity) {
+		this.ethnicity = ethnicity;
+		modifiedAttrs.add("ethnicity");
+	}
+
+	public String getSsn() {
+		return ssn;
+	}
+
+	public void setSsn(String ssn) {
+		this.ssn = ssn;
+		modifiedAttrs.add("ssn");
+	}
+
+	public String getActivityStatus() {
+		return activityStatus;
+	}
+
+	public void setActivityStatus(String activityStatus) {
+		this.activityStatus = activityStatus;
+		modifiedAttrs.add("activityStatus");
+	}
+
+	public String getEmpi() {
+		return empi;
+	}
+
+	public void setEmpi(String empi) {
+		this.empi = empi;
+		modifiedAttrs.add("empi");
+	}
+	
+	public Set<String> getModifiedAttrs() {
+		return modifiedAttrs;
+	}
+
+	public static ParticipantDetail from(Participant participant) {
 		ParticipantDetail result = new ParticipantDetail();
 		
 		result.setFirstName(participant.getFirstName());
@@ -182,32 +199,19 @@ public class ParticipantDetail {
 		result.setId(participant.getId());
 		
 		//TODO revisit 
-		List<ParticipantMedicalIdentifierNumberDetail> pmiColl = new ArrayList<ParticipantMedicalIdentifierNumberDetail>();
-		try{
-		Map<String, ParticipantMedicalIdentifier> pmi = participant.getPmiCollection();
+		List<PmiDetail> pmiDetails = new ArrayList<PmiDetail>();
+		Map<String, ParticipantMedicalIdentifier> pmiMap = participant.getPmiCollection();
+		if (pmiMap != null) {
+			for (ParticipantMedicalIdentifier pmi : pmiMap.values()) {
+				PmiDetail pmiDetail = new PmiDetail();
+				pmiDetail.setMrn(pmi.getMedicalRecordNumber());
+				pmiDetail.setSiteName(pmi.getSite().getName());
+				pmiDetails.add(pmiDetail);
+			}				
+		}			
+		result.setPmis(pmiDetails);
 		
-		if (pmi != null) {
-			for (ParticipantMedicalIdentifier participantMedicalIdentifier : pmi.values()) {
-				ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail = new ParticipantMedicalIdentifierNumberDetail();
-				medicalRecordNumberDetail.setMrn(participantMedicalIdentifier.getMedicalRecordNumber());
-				medicalRecordNumberDetail.setSiteName(participantMedicalIdentifier.getSite().getName());
-				pmiColl.add(medicalRecordNumberDetail);
-			}
-		}
-		}catch(LazyInitializationException e)
-		{
-			
-		}
-		result.setPmis(pmiColl);
-		Set<String> raceSet = participant.getRaceColl();
-		Set<String> newRace = new HashSet<String>(); 
-		if(raceSet != null){
-			for (String race : raceSet) {
-				newRace.add(race);
-			}
-		}
-		
-		result.setRace(newRace);
+		result.setRaces(new HashSet<String>(participant.getRaceColl()));
 		result.setSexGenotype(participant.getSexGenotype());
 		result.setSsn(participant.getSocialSecurityNumber());
 		result.setVitalStatus(participant.getVitalStatus());
@@ -217,7 +221,7 @@ public class ParticipantDetail {
 	public static List<ParticipantDetail> from(List<Participant> participants) {
 		List<ParticipantDetail> result = new ArrayList<ParticipantDetail>();
 		for (Participant participant : participants) {
-			result.add(ParticipantDetail.fromDomain(participant));
+			result.add(ParticipantDetail.from(participant));
 		}
 		
 		return result;

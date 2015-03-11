@@ -1,5 +1,5 @@
-angular.module('os.biospecimen.models.specimen', ['os.common.models'])
-  .factory('Specimen', function(osModel, $http, SpecimenRequirement) {
+angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospecimen.models.form'])
+  .factory('Specimen', function(osModel, $http, SpecimenRequirement, Form) {
     var Specimen = osModel(
       'specimens',
       function(specimen) {
@@ -38,7 +38,7 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models'])
     };
 
     Specimen.save = function(specimens) {
-      return $http.post(Specimen.url(), specimens).then(
+      return $http.post(Specimen.url() + 'collect', specimens).then(
         function(result) {
           return result.data;
         }
@@ -48,7 +48,7 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models'])
     Specimen.isUniqueLabel = function(label) {
       return $http.head(Specimen.url(), {params: {label: label}}).then(
         function(result) {
-          return result;
+          return false;
         },
 
         function(result) {
@@ -83,6 +83,21 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models'])
       }
 
       return curr;
+    };
+
+    Specimen.prototype.getForms = function() {
+      return Form.listFor(Specimen.url(), this.$id());
+    };
+
+    Specimen.prototype.getRecords = function(formCtxId) {
+      return Form.listRecords(Specimen.url(), this.$id(), formCtxId);
+    };
+
+    Specimen.prototype.$saveProps = function() {
+      var props = ['concentration', 'children', 'depth', 'hasChildren', 'isOpened'];
+      var that = this;
+      props.forEach(function(prop) { delete that[prop]; });
+      return this;
     };
 
     function toSpecimenAttrs(sr) {

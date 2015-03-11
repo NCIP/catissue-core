@@ -1,20 +1,24 @@
 
 package com.krishagni.catissueplus.core.auth.domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.krishagni.catissueplus.core.auth.domain.factory.AuthProviderErrorCode;
 import com.krishagni.catissueplus.core.auth.services.AuthenticationService;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class AuthDomain {
+	private static Map<String, AuthenticationService> authProviderMap = new HashMap<String, AuthenticationService>();
 
 	private Long id;
 
 	private String name;
 
 	private AuthProvider authProvider;
-
-	private Ldap ldap;
 
 	public Long getId() {
 		return id;
@@ -40,32 +44,41 @@ public class AuthDomain {
 		return authProvider;
 	}
 
-	public Ldap getLdap() {
-		return ldap;
-	}
-
-	public void setLdap(Ldap ldap) {
-		this.ldap = ldap;
-	}
-
 	public AuthenticationService getAuthProviderInstance() {
-		return getAuthProviderInstance(this.getAuthProvider().getImplClass());
+		return getAuthProviderInstance(this.getAuthProvider());
+	}
+	
+	public void update(AuthDomain domain) {
+		Map<String, String> newProps = domain.getAuthProvider().getProps();
+		Map<String, String> oldProps = this.authProvider.getProps();
+		List<String> oldNames = new ArrayList<String>(oldProps.keySet());
+		
+		for (Map.Entry<String, String> entry: newProps.entrySet()) {
+			oldNames.remove(entry.getKey());
+			oldProps.put(entry.getKey(), entry.getValue());
+		}
+		
+		for (String name: oldNames) {
+			oldProps.remove(name);
+		}
 	}
 
-	public static Map<String, Object> authImplMap = new HashMap<String, Object>();
-
-	@SuppressWarnings("rawtypes")
-	private AuthenticationService getAuthProviderInstance(String implClassName) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private AuthenticationService getAuthProviderInstance(AuthProvider authProvider) {
 		try {
-			Class authImplClass = (Class) authImplMap.get(implClassName);
-			if (authImplClass == null) {
-				authImplClass = (Class) Class.forName(implClassName);
-				authImplMap.put(implClassName, authImplClass);
+			AuthenticationService authService = authProviderMap.get(authProvider.getAuthType());
+			if (authService == null) {
+				Class authImplClass = (Class) Class.forName(authProvider.getImplClass());
+				authService = (AuthenticationService) authImplClass
+							.getConstructor(Map.class)
+							.newInstance(authProvider.getProps());
+				authProviderMap.put(authProvider.getAuthType(), authService);
 			}
-			return (AuthenticationService) authImplClass.newInstance();
+			
+			return authService;
 		}
 		catch (final Exception e) {
-			throw new RuntimeException(e.getMessage());
+			throw OpenSpecimenException.userError(AuthProviderErrorCode.INVALID_AUTH_IMPL);
 		}
 	}
 }

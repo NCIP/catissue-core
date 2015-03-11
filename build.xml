@@ -25,7 +25,6 @@
 	<property name="applet.dir" value="${base.dir}/Applet" />
 	<property name="dagviewapplet.dir" value="${applet.dir}/DagViewApplet" />
 	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm" />
-	<property name="extra_lib.dir" value="${base.dir}/extra_lib" />
 	<property name="generateforce" value="true" />
 	<property name="junit.jar" value="${lib.dir}/junit-4.1.jar" />
 	<property name="cobertura.dir" value="${target.dir}/reports/coverage" />
@@ -38,13 +37,17 @@
 	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect"/>
 	<property name="mysql.dialect.h3.string" value="edu.wustl.catissuecore.hibernate.dialect.MySqlCustomDialect"/>
 	<property name="project.src.domain" value="${base.dir}/WEB-INF/src/edu/wustl/catissuecore/domain/"/>
-	<property name="custom.impl.lib.dir" value="${base.dir}/custom_impl_lib" />
 
 	<!-- flex related properties -->
 	<property name="FLEX_HOME" value="E:/Flex SDK 2"/>
 	<property name="FLEX_APP_ROOT" value="flexclient"/>
 	<property name="flex.dir" value="${base.dir}/WEB-INF/flex" />
 	<!-- flex related properties finish -->
+	<taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties">
+          <classpath>
+	    <pathelement location="${lib.dir}/aspectjtools-1.6.6.jar"/>
+	  </classpath>
+	</taskdef>
 	<path id="app.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
@@ -53,15 +56,6 @@
 
 	<path id="xdoclet.classpath">
 		<path refid="app.classpath" />
-		<pathelement location="${extra_lib.dir}/commons-net-1.2.2.jar" />
-		<pathelement location="${extra_lib.dir}/hibernate-tools.jar" />
-		<pathelement location="${extra_lib.dir}/servlet-api.jar" />
-		<pathelement location="${extra_lib.dir}/xdoclet-1.2.jar" />
-		<pathelement location="${extra_lib.dir}/xdoclet-hibernate-module-1.2.jar" />
-		<pathelement location="${extra_lib.dir}/xdoclet-xdoclet-module-1.2.jar" />
-		<pathelement location="${extra_lib.dir}/xerces.jar" />
-		<pathelement location="${extra_lib.dir}/xjavadoc-1.0.2.jar" />
-		<pathelement location="${extra_lib.dir}/xsdlib.jar" />
 	</path>
 
 	<path id="junit.classpath">
@@ -83,14 +77,6 @@
 
 
 
-	<path id="cobertura.classpath">
-		<fileset dir="${cobertura.lib}">
-			<include name="cobertura.jar" />
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-	<taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
-
 	<!-- sub tasks -->
 	<target name="init" description="initialize">
 		<!-- Create the time stamp -->
@@ -103,11 +89,6 @@
 		<mkdir dir="${temp.dir}"/>
 		<antcall target="check.java.version">
 		</antcall>
-		<copy todir="${base.dir}/custom_impl_lib" overwrite="true">
-			<fileset file="Default_label_barcode_gen.jar" />
-			<fileset file="label_barcode_gen_client.jar" />
-			<fileset file="WEB-INF/lib/IDPAuthenticationManager0_0.jar" />
-		</copy>
 	</target>
 
 	<target name="Catissue_Cdms_Client_Integration" description="Creates a caTissue CDMS integration jar">
@@ -216,7 +197,7 @@
 	<!-- Compile all files, generated and hand-written -->
 	<target name="compile" depends="init">
 		<javac destdir="${target.dir}" includes="**/*.*" includeAntRuntime="false" debug="yes" target="1.6">
-			 <compilerarg line="-Xmaxerrs 10000" />
+			<compilerarg line="-Xmaxerrs 10000" />
 			<src path="${src.dir}" />
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -230,6 +211,42 @@
 			</classpath>
 			<classpath refid="cobertura.classpath" />
 		</javac>
+		<copy todir="${target.dir}" overwrite="true">
+			<fileset dir="${src.dir}" >
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+				<include name="**/*.hbm.xml" />
+				<include name="**/*.ser" />
+				<include name="**/*.vm" />
+			</fileset>
+			<fileset dir="${resources.dir}">
+				<include name="**/*.hbm.xml" />
+                                <include name="errors/*.properties"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="aspect.compile" depends="init">
+		<iajc destDir="${target.dir}" source="1.6" target="1.6" verbose="true" includes="**/*.*" showWeaveInfo="true">
+			<sourceroots>
+				<pathelement location="${src.dir}"/>
+			</sourceroots>
+                        <aspectpath>
+				<pathelement location="${lib.dir}/spring-aspects-2.5.0.jar"/>
+			</aspectpath>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+					<exclude name="dynamicextensions-legacy.jar"/>
+				</fileset>
+				<fileset dir="./lib">
+					<include name="j2ee.jar" />
+				</fileset>
+				<pathelement location="${ant.home}/lib/ant.jar"/>
+				<pathelement location="${lib.dir}/aspectjrt-1.5.0.jar"/>
+			</classpath>
+			<classpath refid="cobertura.classpath" />
+		</iajc>
 		<copy todir="${target.dir}" overwrite="true">
 			<fileset dir="${src.dir}" >
 				<include name="**/*.properties" />
@@ -313,14 +330,13 @@
 	<!-- Create the Applet JAR Ends-->
 
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
-	<target name="build_war" depends="init, compile, unpack_cacore_war,replace_database_type,
-		common_build_war,build_client_jar">
+	<target name="build_war" depends="init, aspect.compile,common_build_war,build_client_jar">
 
 	</target>
 	<!-- Create war file for installable zip file.Please us this target when creating installable zip.
 		Note: database type is not replaced
 	-->
-	<target name="installable_build_war" depends="init, compile, unpack_cacore_war,common_build_war,build_client_jar">
+	<target name="installable_build_war" depends="init, compile, common_build_war,build_client_jar">
 	</target>
 
 	<!-- build catissuecore war file which is common to above both targets -->
@@ -375,38 +391,21 @@
                         </fileset>
 
 			<fileset dir="${base.dir}">
-				<!--include name="Applet/**" / -->
 				<include name="ngweb/**"/>
 				<include name="css/**" />
 				<include name="images/**" />
 				<include name="jss/**" />
-				<include name="javascripts/**" />
 				<include name="deploytempCatissuecore/AdvanceQuery/dhtml/**"/>
-				<include name="dhtml_comp/**" />
-				<include name="newDhtmlx/**" />
-				<include name="dhtmlx_suite/**" />
-				<include name="dhtmlxSuite_v35/**" />
-				<include name="pages/**" />
-				<include name="flexclient/**" />
-				<include name="runtime/**" />
 				<include name="WEB-INF/**" />
-				<!--include name="WEB-INF/lib/antlr-4.1-complete.jar" /-->
-				<include name="CDEConfig.xml" />
-				<include name="CDEConfig.xsd" />
-				<include name="client-config.wsdd" />
-				<include name="Applet/**" />
-				<include name="ApplicationVersionInfo.txt" />
 				<include name="caTissue_Suite_User_Manual.pdf" />
 				<include name="caTissue_Suite_User_Manual.doc" />
 				<include name="caTissueSuite_v1_2_Technical_Guide.doc" />
 				<include name="caTissueSuiteV11_UML.zip" />
 				<include name="**/WEB-INF/classes/**/cdms/CdmsIntegratorImpl.class" />
-				<include name="ParticipantConfigXMLTemplateRules.xml" />
 				<include name="**/WEB-INF/classes/META-INF/aop.xml" />
 				<exclude name="**/WEB-INF/classes/**/namegenerator/*"/>
 				<exclude name="**/WEB-INF/classes/**/cdms/*"/>
 
-				<exclude name="**/pages/subMenu/**" />
 				<exclude name="**/log4j.properties" />
 				<exclude name="**/WEB-INF/src*/**" />
 				<exclude name="**/WEB-INF/lib/*.zip" />
@@ -414,10 +413,7 @@
 				<exclude name="**/WEB-INF/lib/junit-4.11.jar" />
 				<exclude name="**/WEB-INF/lib/mockito-all-1.9.5.jar" />	
 				<exclude name="**/WEB-INF/lib/cobertura.jar"/>
-				<!--exclude name="**/WEB-INF/lib/asm-3.0.jar"/-->
-				<!-- exclude name="**/WEB-INF/lib/ant*.jar" / -->
 				<exclude name="**/WEB-INF/lib/junit*.jar" />
-				<!--<exclude name="**/WEB-INF/lib/dom4*.jar" />-->
 				<exclude name="**/*servlet.jar*" />
 				
 				<exclude name="**/*hibernate2.jar*" />
@@ -453,106 +449,9 @@
 				<exclude name="**/WEB-INF/lib/jdom-1.1.1.jar" />
 				<exclude name="**/WEB-INF/lib/spring-test-dbunit-1.2.0-SNAPSHOT.jar" />
 				
-				<!--exclude name="**/*build*"/>
-				<exclude name="**/*log4j.jar*" />
-				<exclude name="**/*WEB-INF*"/>
-				<exclude name="**/.*"/>
-				<exclude name="**/*.sql"/>
-				<exclude name="**/catissuecorecsm.war"/>
-				<exclude name="**/catissuecore.war"/>
-				<exclude name="**/caTissue_Core_Installable.zip"/>
-				<exclude name="**/caTissue_Core_Installable/**"/>
-				<exclude name="**/caTISSUECore caCORE Client/**"/-->
 			</fileset>
 			<!-- Excluding unwanted jars -->
 
-			<!-- change for csm related war -->
-			<fileset dir="${temp.dir}/catissuecorecsm">
-				<include name="**/WEB-INF/**"  />
-				<include name="**/images/**" />
-				<include name="**/log/**" />
-				<include name="**/*" />
-
-				<exclude name="**/WEB-INF/web.xml" />
-				<exclude name="**/WEB-INF/classes/edu/wustl/catissuecore/domain/**" />
-				<exclude name="**/WEB-INF/lib/activation.jar"/>
-				<exclude name="**/WEB-INF/lib/ant.jar"/>
-				<exclude name="**/WEB-INF/lib/antlr-2.7.6.jar"/>
-				<exclude name="**/WEB-INF/lib/ant-testutil.jar"/>
-				<!--exclude name="**/WEB-INF/lib/asm.jar"/-->
-				<exclude name="**/WEB-INF/lib/asm-attrs.jar"/>
-				<exclude name="**/WEB-INF/lib/axis.jar"/>
-				<exclude name="**/WEB-INF/lib/axis-ant.jar"/>
-				<exclude name="**/WEB-INF/lib/backport-util-concurrent-3.0.jar"/>
-				<!--exclude name="**/WEB-INF/lib/boot.jar"/>
-				<exclude name="**/WEB-INF/lib/c3p0-0.9.0.jar"/>
-				<exclude name="**/WEB-INF/lib/castor-1.0.2.jar"/-->
-				<exclude name="**/WEB-INF/lib/cglib-2.1.3.jar"/>
-				<!--exclude name="**/WEB-INF/lib/clm.jar"/-->
-				<exclude name="**/WEB-INF/lib/codegen.jar"/>
-				<exclude name="**/WEB-INF/lib/commons-beanutils.jar"/>
-				<exclude name="**/WEB-INF/lib/commons-collections-3.1.jar"/>
-				<exclude name="**/WEB-INF/lib/commons-collections-3.2.jar"/>
-				<exclude name="**/WEB-INF/lib/commons-dbcp-1.2.1.jar"/>
-				<exclude name="**/WEB-INF/lib/commons-discovery-0.2.jar"/>
-				<exclude name="**/WEB-INF/lib/commons-lang-2.1.jar"/>
-				<exclude name="**/WEB-INF/lib/commons-pool-1.3.jar"/>
-				<exclude name="**/WEB-INF/lib/csmapi.jar"/>
-				<exclude name="**/WEB-INF/lib/datafile.jar"/>
-				<exclude name="**/WEB-INF/lib/db2java.jar"/>
-				<exclude name="**/WEB-INF/lib/dom4j-1.6.1.jar"/>
-				<exclude name="**/WEB-INF/lib/dtsrpcclient.jar"/>
-				<exclude name="**/WEB-INF/lib/freemarker.jar"/>
-				<exclude name="**/WEB-INF/lib/freemarker-2.3.4.jar"/>
-				<exclude name="**/WEB-INF/lib/hibernate3.jar"/>
-				<exclude name="**/WEB-INF/lib/jakarta-oro-2.0.8.jar"/>
-				<exclude name="**/WEB-INF/lib/jalopy-1.0b11.jar"/>
-				<exclude name="**/WEB-INF/lib/jalopy-ant-0.6.2.jar"/>
-				<!--exclude name="**/WEB-INF/lib/jaxen-core.jar"/>
-				<exclude name="**/WEB-INF/lib/jaxen-jdom.jar"/>
-				<exclude name="**/WEB-INF/lib/jaxrpc.jar"/>
-				<exclude name="**/WEB-INF/lib/jboss-client.jar"/>
-				<exclude name="**/WEB-INF/lib/jdom.jar"/-->
-				<exclude name="**/WEB-INF/lib/jdtcore.jar"/>
-				<exclude name="**/WEB-INF/lib/jetc-task.jar"/>
-				<!--exclude name="**/WEB-INF/lib/jmi.jar"/-->
-				<exclude name="**/WEB-INF/lib/jmiutils.jar"/>
-				<exclude name="**/WEB-INF/lib/jta.jar"/>
-				<exclude name="**/WEB-INF/lib/junit-3.8.1.jar"/>
-				<exclude name="**/WEB-INF/lib/mail.jar"/>
-				<exclude name="**/WEB-INF/lib/mdrant.jar"/>
-				<exclude name="**/WEB-INF/lib/mdrapi.jar"/>
-				<exclude name="**/WEB-INF/lib/Metaphrase.jar"/>
-				<exclude name="**/WEB-INF/lib/mof.jar"/>
-				<exclude name="**/WEB-INF/lib/mysql-connector-java-3.1.13-bin.jar"/>
-				<exclude name="**/WEB-INF/lib/nbmdr.jar"/>
-				<exclude name="**/WEB-INF/lib/ognl-2.6.7.jar"/>
-				<exclude name="**/WEB-INF/lib/ojdbc14.jar"/>
-				<exclude name="**/WEB-INF/lib/openide-util.jar"/>
-				<exclude name="**/WEB-INF/lib/osgi.jar"/>
-				<exclude name="**/WEB-INF/lib/p6spy.jar"/>
-				<exclude name="**/WEB-INF/lib/resources.jar"/>
-				<exclude name="**/WEB-INF/lib/retrotranslator-runtime-1.2.0.jar"/>
-				<exclude name="**/WEB-INF/lib/retrotranslator-transformer-1.2.0.jar"/>
-				<exclude name="**/WEB-INF/lib/runtime.jar"/>
-				<exclude name="**/WEB-INF/lib/saaj.jar"/>
-				<!--exclude name="**/WEB-INF/lib/saxpath.jar"/-->
-				<exclude name="**/WEB-INF/lib/serializer.jar"/>
-				<exclude name="**/WEB-INF/lib/struts2-api-j4-2.0.5.jar"/>
-				<exclude name="**/WEB-INF/lib/struts2-core-j4-2.0.5.jar"/>
-				<exclude name="**/WEB-INF/lib/uml-1.3.jar"/>
-				<exclude name="**/WEB-INF/lib/uuid-key-generator.jar"/>
-				<exclude name="**/WEB-INF/lib/wsdl4j-1.5.1.jar"/>
-				<exclude name="**/WEB-INF/lib/xalan.jar"/>
-				<exclude name="**/WEB-INF/lib/xercesImpl.jar"/>
-				<exclude name="**/WEB-INF/lib/xml-apis.jar"/>
-				<exclude name="**/WEB-INF/lib/xmlrpc-2.0.jar"/>
-				<exclude name="**/WEB-INF/lib/xwork-j4-2.0.0.jar"/>
-				<exclude name="**/META-INF/**" />
-				<exclude name="Happy.jsp" />
-				<exclude name="Criteria.jsp" />
-				<exclude name="**/WEB-INF/classes/ApplicationSecurityConfig.xml"/>
-			</fileset>
 		</war>
 
 	</target>
@@ -634,9 +533,6 @@
 		<!-- Not required to copy csm war file -->
 
 
-		<copy file="catissuecore.war" todir="${jboss.server.url}/deploy" />
-		<!-- <copy file="dynamicExtensions.war" todir="${jboss.server.url}/deploy" /> -->
-		<copy file="caTissuePrintWebService.war" todir="${jboss.server.url}/deploy" />
 		<sleep seconds="2" />
 	</target>
 
@@ -708,7 +604,7 @@
 		<delete dir="${zip.dir}" />
 		<mkdir dir="${zip.dir}" />
 
-		<copy file="README.txt" todir="${zip.dir}" overwrite="true" />
+		<copy file="README.md" todir="${zip.dir}" overwrite="true" />
 
 		<copy todir="${zip.dir}/modules/bulk_operations/lib" overwrite="true">
 			<fileset file="${base.dir}/WEB-INF/lib/DynamicExtensions*.jar" />
@@ -727,37 +623,11 @@
 			<fileset file="${base.dir}/WEB-INF/lib/commons-beanutils*.jar" />
 		</copy>
 		
-		<copy file="BulkOperations/conf/log4j.properties" todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true" />
-		<copy todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true">
-			<fileset dir="${base.dir}/BulkOperations/conf/">
-				<include name="*.xml" />
-			</fileset>
-		</copy>
-
-		<!--Vivek: <copy dir="bulk_operations_upload" todir="${zip.dir}/modules/" overwrite="true" />-->
-		<copy todir="${zip.dir}/modules/bulk_operations_upload" overwrite="true">
-			<fileset dir="${base.dir}/bulk_operations_upload" />
-		</copy>
-
 		<copy todir="${zip.dir}" overwrite="true">
 			<fileset dir="${base.dir}" includes="aq-forms/**"/>
 			<fileset dir="${base.dir}" includes="aq-queries/**"/>
 			<fileset dir="${base.dir}" includes="spe-forms/**"/>
 		</copy>
-
-		<copy todir="${zip.dir}/modules/report_scripts" overwrite="true">
-			<fileset dir="${base.dir}/report_scripts" />
-		</copy>
-
-		<!--Vivek: <copy dir="insert_dashboard_queries" todir="${zip.dir}/modules/" overwrite="true" />-->
-		<copy todir="${zip.dir}/modules/insert_dashboard_queries" overwrite="true">
-			<fileset dir="${base.dir}/insert_dashboard_queries" />
-		</copy>
-		<!-- Rinku: Add Default and system dashboard item file to zip -->
-		<copy todir="${zip.dir}" overwrite="true">
-			<fileset file="${base.dir}/Default_cp_And_System_dashboard.csv" />
-		</copy>
-		
 
 		<copy todir="${zip.dir}/modules/caTissue/images" overwrite="true">
 			<fileset file="${base.dir}/images/defauleLogo.png" />
@@ -771,7 +641,7 @@
 		</copy>
 		<copy file="catissuecore.war" todir="${zip.dir}/modules/caTissue/lib" overwrite="true" />
 		<copy todir="${zip.dir}/modules/caTissue/lib" overwrite="true">
-			<fileset file="${base.dir}/extra_lib/ant-contrib.jar" />
+			<fileset file="${base.dir}/lib/ant-contrib.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/mysql-connector-java-5.0.8-bin.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/ojdbc14.jar" />
 			<fileset file="${base.dir}/lib/dom4j-1.6.jar" />
@@ -792,28 +662,14 @@
 		<copy todir="${zip.dir}/modules/caTissue/conf/catissuecore-properties/ng-email-templates" overwrite="true">
 			<fileset dir="${base.dir}/WEB-INF/resources/ng-email-templates"/>
 		</copy>
-		<copy file="allTokens.properties" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="build-properties.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
-		<copy file="mail.txt" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
 		<copy file="deploy_zip.xml" todir="${zip.dir}" overwrite="true" />
 		<rename src="${zip.dir}/deploy_zip.xml" dest="${zip.dir}/build.xml"/>
 		<copy file="performance.properties" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
-		<copy file="login-config.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="properties-service.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
-		<copy file="taggedvalues.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
-		<copy file="caTissueCdmsIntegration.properties" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" 
-		/>
 		<copy file="catissuecore-ds.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
-		<copy file="Sample-login-config.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
-		<copy file="Sample-properties-service.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
-
-		<copy todir="${zip.dir}/modules/custom_impl_lib" overwrite="true">
-			<fileset file="Default_label_barcode_gen.jar" />
-			<fileset file="label_barcode_gen_client.jar" />
-			<fileset file="${base.dir}/WEB-INF/lib/IDPAuthenticationManager0_0.jar" />
-		</copy>
 
 		<copy file="dynamicextensions.zip" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 		<copy file="${base.dir}/WEB-INF/lib/DynamicExtensions.jar"
@@ -821,17 +677,10 @@
 		<copy file="DEDeploy_zip.xml" todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true" />
 		<rename src="${zip.dir}/modules/dynamic_extensions/conf/DEDeploy_zip.xml" dest="${zip.dir}/modules/dynamic_extensions/conf/DEDeploy.xml"/>
 
-		<copy todir="${zip.dir}/modules/identity_provider_support/conf" overwrite="true">
-			<fileset dir="${base.dir}/idp" />
-		</copy>
-
 		<copy file="printservice_module.jar" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
 		<copy file="printservice_client.jar" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
 		<copy file="${base.dir}/WEB-INF/lib/PrintCatissueCore_Client.jar"
 			todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
-		<copy file="caTissuePrintWebService.war" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
-
-		<copy file="taggedvalues.xml" todir="${zip.dir}/modules/query/conf" overwrite="true" />
 
 		<copy todir="${zip.dir}/SQL" overwrite="true">
 			<fileset dir="${base.dir}/SQL" >
@@ -991,7 +840,7 @@
 		build_war_cobertura_post_compilation">
 	</target>
 
-	<target name="build_war_cobertura_post_compilation" depends="unpack_cacore_war,replace_database_type,
+	<target name="build_war_cobertura_post_compilation" depends="
 		common_build_war,build_client_jar">
 	</target>
 
@@ -1054,55 +903,6 @@
 				</fileset>
 			</classpath>
 		</javac>
-	</target>
-
-	<!-- unpack caCORE war into temp folder -->
-	<target name="unpack_cacore_war" depends ="clean_temp_dir_csmwar">
-		<unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/catissuecorecsm"/>
-		<delete file="${temp.dir}/catissuecorecsm/WEB-INF/lib/jboss-common-jdbc-wrapper.jar" />
-		<!--
-		<if>
-			<equals arg1="mysql" arg2="${database.type}"/>
-			<then>
-				<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties">
-					<include name ="orm1.cfg.xml"/>
-					<replacefilter token="@@dialect@@" value="${mysql.dialect.h3.string}"/>
-				</replace>
-			</then>
-		</if>
-
-		<if>
-				<equals arg1="oracle" arg2="${database.type}"/>
-				<then>
-					<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties">
-						<include name ="orm1.cfg.xml"/>
-						<replacefilter token="@@dialect@@" value="${oracle.dialect.h3.string}"/>
-					</replace>
-				</then>
-		</if>
-		-->
-	</target>
-
-	<target name="replace_database_type">
-		<if>
-			<equals arg1="mysql" arg2="${database.type}"/>
-			<then>
-				<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties">
-					<include name ="orm1.cfg.xml"/>
-					<replacefilter token="@@dialect@@" value="${mysql.dialect.h3.string}"/>
-				</replace>
-			</then>
-		</if>
-
-		<if>
-			<equals arg1="oracle" arg2="${database.type}"/>
-			<then>
-				<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties">
-					<include name ="orm1.cfg.xml"/>
-					<replacefilter token="@@dialect@@" value="${oracle.dialect.h3.string}"/>
-				</replace>
-			</then>
-		</if>
 	</target>
 
 	<!-- build catissuecore client jar to content latest domain classes & put inside client lib folder-->
@@ -1288,37 +1088,6 @@
 		</java>
 	</target>
 
-	<!-- flex related targets -->
-	<taskdef resource="flexTasks.tasks" classpath="${basedir}/extra_lib/flexTasks.jar" />
-
-	<target name="compile_dag_flex">
-		<mxmlc file="${FLEX_APP_ROOT}/dag/Dag.mxml" keep-generated-actionscript="true">
-			<load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
-			<source-path path-element="${FLEX_HOME}/frameworks"/>
-		</mxmlc>
-	</target>
-
-	<target name="compile_multiplespecimen_flex">
-		<mxmlc file="${FLEX_APP_ROOT}/multiplespecimen/MultipleSpecimen.mxml" keep-generated-actionscript="false">
-			<load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
-
-			<source-path path-element="${FLEX_HOME}/frameworks"/>
-			<compiler.library-path dir="${flex.dir}" append="true">
-				<include name="libs" />
-			</compiler.library-path>
-
-		</mxmlc>
-	</target>
-	<target name="compile_layout_flex">
-		<mxmlc file="${FLEX_APP_ROOT}/biospecimen/Layout.mxml"  keep-generated-actionscript="false">
-			<load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
-			<compiler.library-path dir="${flex.dir}" append="true">
-				<include name="libs/AutoComplete.swc" />
-			</compiler.library-path>
-		</mxmlc>
-	</target>
-	<!-- flex related target finish -->
-
 	<!-- shippingtracking - start -->
 	<target name="build_client_jar_for_st">
 		<jar taskname="buildClientJar" jarfile="${temp.dir}/catissuecore.jar">
@@ -1365,16 +1134,25 @@
 			</else>
 		</if>
 
-		<javac destdir="${target.dir}" includes="**/*.java" includeAntRuntime="false" target="1.6">
-			<src path="./WEB-INF/integration-test"/>
-			<src path="./WEB-INF/src"/>
+		<iajc source="1.6" verbose="true" destdir="${target.dir}" includes="**/*.java" target="1.6" showWeaveInfo="true">
+			<!--src path="./WEB-INF/integration-test"/>
+			<src path="./WEB-INF/src"/-->
 
+			<sourceroots> 
+				<pathelement location="./WEB-INF/integration-test"/> 
+				<pathelement location="./WEB-INF/src"/>
+			</sourceroots> 
+			<aspectpath> 
+				<pathelement location="${lib.dir}/spring-aspects-2.5.0.jar"/> 
+			</aspectpath>
+			
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar"/>
 				</fileset>
+				<pathelement location="${lib.dir}/aspectjrt-1.5.0.jar"/>
 			</classpath>
-		</javac>		
+		</iajc>		
 	</target>
 	
 	<target name="instrument_test_classes">
@@ -1509,6 +1287,11 @@
 					<batchtest todir="${base.dir}/integration-test-results">
 						<fileset dir="${base.dir}/WEB-INF/integration-test">
 							<include name="com/**/*Test.java" />
+							<exclude name="com/**/CollectionProtocolRegistrationTest.java" />
+							<exclude name="com/**/QueryFoldersTest.java" />
+							<exclude name="com/**/SavedQueryTest.java" />
+							<exclude name="com/**/SpecimenTest.java" />
+							<exclude name="com/**/StorageContainerTest.java" />
 						</fileset>
 					</batchtest>
 				</junit>

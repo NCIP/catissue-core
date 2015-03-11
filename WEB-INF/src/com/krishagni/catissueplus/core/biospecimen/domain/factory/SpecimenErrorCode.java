@@ -14,6 +14,8 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	VISIT_REQUIRED,
 	
+	VISIT_NOT_COMPLETED,
+	
 	LABEL_REQUIRED,
 	
 	DUP_LABEL,
@@ -35,6 +37,8 @@ public enum SpecimenErrorCode implements ErrorCode {
 	INVALID_QTY,
 	
 	INSUFFICIENT_QTY,
+	
+	PARENT_REQUIRED,
 	
 	SPECIMEN_CLASS_REQUIRED,
 	
@@ -58,8 +62,20 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	REF_ENTITY_FOUND,
 	
-	NOT_AVAILABLE;
+	NOT_AVAILABLE,
 
+	INIT_QTY_LT_ALIQUOT_QTY,
+	
+	ALIQUOT_QTY_GT_PARENT_QTY,
+	
+	PARENT_INIT_QTY_LT_ALIQUOT_QTY,
+	
+	PARENT_AVBL_QTY_GT_ACTUAL,
+	
+	AVBL_QTY_GT_INIT_QTY,
+	
+	AVBL_QTY_GT_ACTUAL;
+			
 	public String code() {
 		return "SPECIMEN_" + this.name();
 	}

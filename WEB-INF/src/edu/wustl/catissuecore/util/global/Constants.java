@@ -12,12 +12,6 @@ package edu.wustl.catissuecore.util.global;
 
 import java.util.Locale;
 
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenArray;
-import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 
@@ -4795,36 +4789,7 @@ public class Constants
 	/** The Constant SPECIMEN_ANTICOPATED. */
 	public static final String SPECIMEN_ANTICOPATED = "Anticipated";
 
-	//Shopping cart constants.
-	/** The Constant SPECIMEN_ARRAY_CLASS_NAME. */
-	public static final String SPECIMEN_ARRAY_CLASS_NAME = SpecimenArray.class.getName();
-
-	/** The Constant IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME. */
-	public static final String IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME = IdentifiedSurgicalPathologyReport.class
-			.getName();
-
 	/** The Constant DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME. */
-	public static final String DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME = DeidentifiedSurgicalPathologyReport.class
-			.getName();
-
-	/** The Constant SURGICAL_PATHALOGY_REPORT_CLASS_NAME. */
-	public static final String SURGICAL_PATHALOGY_REPORT_CLASS_NAME = SurgicalPathologyReport.class
-			.getName();
-
-	/** The Constant SPECIMEN_NAME. */
-	public static final String SPECIMEN_NAME = Specimen.class.getName();
-
-	//Shopping cart constants for Shipping And Tracking
-	/** The Constant STORAGE_CONTAINER_CLASS_NAME. */
-	public static final String STORAGE_CONTAINER_CLASS_NAME = StorageContainer.class.getName();
-
-	/** The Constant specimenNameArray. */
-	public static final String[] specimenNameArray = {SPECIMEN_NAME};
-
-	/** The Constant entityNameArray. */
-	public static final String[] entityNameArray = {SPECIMEN_NAME, SPECIMEN_ARRAY_CLASS_NAME,
-			IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
-			DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME, SURGICAL_PATHALOGY_REPORT_CLASS_NAME};
 
 	/** The Constant IDENTIFIED_REPORT_ID. */
 	public static final String IDENTIFIED_REPORT_ID = "identifiedReportId";

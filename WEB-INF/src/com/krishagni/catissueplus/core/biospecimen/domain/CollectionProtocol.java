@@ -11,9 +11,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
-public class CollectionProtocol {
-	private Long id;
-
+public class CollectionProtocol extends BaseEntity {
 	private String title;
 
 	private String shortTitle;
@@ -54,14 +52,6 @@ public class CollectionProtocol {
 	
 	private Set<CollectionProtocolEvent> collectionProtocolEvents = new HashSet<CollectionProtocolEvent>();
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public String getTitle() {
 		return title;
 	}

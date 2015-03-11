@@ -1,37 +1,45 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import static com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode.REF_ENTITY_FOUND;
-
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import krishagni.catissueplus.util.CommonUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
+import com.krishagni.catissueplus.core.administrative.domain.dependency.SiteDependencyChecker;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
+@Configurable
 public class Site {
 
 	private Long id;
 
 	private String name;
 
-	private String code; // TODO: Need to map in hbm
+	private String code;
 
 	private String type;
 
 	private String activityStatus;
 
-	private String address; // TODO: Need to map in hbm
+	private String address;
     
-	private Set<User> coordinatorCollection = new HashSet<User>();
+	private Set<User> coordinators = new HashSet<User>();
 
-	private Set<Visit> scgCollection = new HashSet<Visit>();
+	private Set<Visit> visits = new HashSet<Visit>();
 
-	private Set<StorageContainer> storageContainerCollection = new HashSet<StorageContainer>();
+	private Set<StorageContainer> storageContainers = new HashSet<StorageContainer>();
+
+	@Autowired
+	private SiteDependencyChecker dependencyChecker;
 
 	public Long getId() {
 		return id;
@@ -77,53 +85,70 @@ public class Site {
 		return address; 
 	}
 
-    public void setAddress(String address) { 
-    	this.address = address; 
-    }
-
-	public Set<User> getCoordinatorCollection() {
-		return coordinatorCollection;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
-	public void setCoordinatorCollection(Set<User> coordinatorCollection) {
-		this.coordinatorCollection = coordinatorCollection;
+	public Set<User> getCoordinators() {
+		return coordinators;
 	}
 
-	public Set<Visit> getScgCollection() {
-		return scgCollection;
+	public void setCoordinators(Set<User> coordinators) {
+		this.coordinators = coordinators;
 	}
 
-	public void setScgCollection(Set<Visit> scgCollection) {
-		this.scgCollection = scgCollection;
+	public Set<Visit> getVisits() {
+		return visits;
 	}
 
-	public Set<StorageContainer> getStorageContainerCollection() {
-		return storageContainerCollection;
+	public void setVisits(Set<Visit> visits) {
+		this.visits = visits;
 	}
 
-	public void setStorageContainerCollection(Set<StorageContainer> storageContainerCollection) {
-		this.storageContainerCollection = storageContainerCollection;
+	public Set<StorageContainer> getStorageContainers() {
+		return storageContainers;
 	}
 
-	public void update(Site site) {
-		if (site.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
-			this.setName(CommonUtil.appendTimestamp(site.getName()));
-		}
-		else {
-			this.setName(site.getName());
-		}
-		
-		this.setCode(site.getCode());
-		this.setType(site.getType());
-		this.setActivityStatus(site.getActivityStatus());
-		CollectionUpdater.update(this.getCoordinatorCollection(), site.getCoordinatorCollection());
+	public void setStorageContainers(Set<StorageContainer> storageContainers) {
+		this.storageContainers = storageContainers;
 	}
 
-	public void delete() {
-		if (!this.getScgCollection().isEmpty() || !this.getStorageContainerCollection().isEmpty()) {
-			throw OpenSpecimenException.userError(REF_ENTITY_FOUND);
+	public void update(Site other) {
+		setName(other.getName());
+		setCode(other.getCode());
+		setType(other.getType());
+		updateActivityStatus(other.getActivityStatus());
+		CollectionUpdater.update(this.getCoordinators(), other.getCoordinators());
+	}
+
+	public Map<String, List> delete(boolean close) {
+		if (!close) {
+			Map<String, List> dependencies = dependencyChecker.getDependencies(this);
+			if (!dependencies.isEmpty()) {
+				return dependencies;
+			}
 		}
 		
-		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+		String activityStatus = close ? Status.ACTIVITY_STATUS_CLOSED.getStatus()  
+				: Status.ACTIVITY_STATUS_DISABLED.getStatus();
+		this.setActivityStatus(activityStatus);
+		
+		return Collections.<String, List>emptyMap();
 	}
+	
+	private void updateActivityStatus(String newActivityStatus) {
+		if (activityStatus.equals(newActivityStatus)) {
+			return;
+		}
+		
+		if (newActivityStatus.equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
+			Map<String, List> dependencies = dependencyChecker.getDependencies(this);
+			if (!dependencies.isEmpty()) {
+				OpenSpecimenException.userError(SiteErrorCode.REF_ENTITY_FOUND);
+			}
+		}
+		
+		this.setActivityStatus(newActivityStatus);
+	}
+
 }

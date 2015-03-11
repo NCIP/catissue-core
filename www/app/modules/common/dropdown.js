@@ -34,7 +34,7 @@ angular.module('openspecimen')
 
         if (angular.isDefined(tAttrs.refresh)) {
           uiSelectChoices.attr({
-            'refresh': tAttrs.refresh + '($select.search)',
+            'refresh': tAttrs.refresh + '($select.search, ' + tAttrs.refreshArgs + ')',
             'refresh-delay': tAttrs.refreshDelay || 750
           });
         }

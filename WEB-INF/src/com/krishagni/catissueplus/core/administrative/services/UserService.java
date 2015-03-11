@@ -4,6 +4,8 @@ package com.krishagni.catissueplus.core.administrative.services;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import com.krishagni.catissueplus.core.administrative.events.DeleteUserOp;
 import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
@@ -12,7 +14,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 	public ResponseEvent<List<UserSummary>> getUsers(RequestEvent<ListUserCriteria> req);
 	
 	public ResponseEvent<UserDetail> getUser(RequestEvent<Long> req);
@@ -28,4 +30,5 @@ public interface UserService {
 	public ResponseEvent<Boolean> forgotPassword(RequestEvent<String> req);
 
 	public ResponseEvent<Map<String, List>> deleteUser(RequestEvent<DeleteUserOp> req);
+
 }

@@ -8,10 +8,15 @@
       </button>
     </div>
     <ul class="menu">
-      <li>
-        <a>
+      <li class="dropdown">
+        <a class="dropdown-toggle">
           <span class="fa fa-user"></span>
         </a>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+          <li><a>{{currentUser.lastName + ' ' + currentUser.firstName}}</a></li>
+          <li class="divider"></li>
+          <li><a ui-sref="login({logout:true})">Log Out</a></li>
+        </ul>
       </li>
       <li>
         <a>
@@ -32,6 +37,7 @@
           <li><a ui-sref="dp-list" translate="menu.distribution_protocols">Distribution Protocols</a></li>
           <li><a ui-sref="institute-list" translate="menu.institutes">Institutes</a></li>
           <li><a ui-sref="user-list" translate="menu.users">Users</a></li>
+          <li><a ui-sref="role-list" translate="menu.roles">Roles</a></li>
           <li><a ui-sref="site-list" translate="menu.sites">Sites</a></li>
           <li><a ui-sref="container-list" translate="menu.storage_containers">Storage Containers</a></li>
           <li><a href="#" translate="menu.settings">Settings</a></li>

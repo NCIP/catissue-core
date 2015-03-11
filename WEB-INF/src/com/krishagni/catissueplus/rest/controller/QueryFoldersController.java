@@ -144,6 +144,7 @@ public class QueryFoldersController {
 		ShareQueryFolderOp opDetail = new ShareQueryFolderOp();
 		opDetail.setFolderId(folderId);
 		opDetail.setUserIds(userIds);
+		opDetail.setOp(ShareQueryFolderOp.Operation.valueOf(operation));
 		
 		return response(querySvc.shareFolder(getRequest(opDetail)));
 	}

@@ -91,3 +91,41 @@
   background: #ffffff;
 }
 
+/** Container position control **/
+.os-container-pos-selector-wrapper {
+  max-height: 410px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  overflow: auto;
+}
+
+.os-container-pos {
+  min-width: 40px;
+  text-align: center;
+}
+
+td.os-container-pos {
+  cursor: pointer;
+}
+
+td.os-container-pos .os-circle {
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+  background: #a0a0a0;
+  border-radius: 100%;
+}
+
+td.os-container-pos.occupied > .os-circle {
+  background: #5cb85c!important;
+}
+
+td.os-container-pos.occupied {
+  cursor: auto!important;
+}
+
+td.os-container-pos.selected {
+  background: #d5d5d5;
+}

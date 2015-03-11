@@ -4,8 +4,7 @@ angular.module('os.administrative.institute',
     'ui.router',
     'os.administrative.institute.list',
     'os.administrative.institute.addedit',
-    'os.administrative.institute.detail',
-    'os.administrative.institute.departments'
+    'os.administrative.institute.detail'
   ])
 
   .config(function($stateProvider) {

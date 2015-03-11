@@ -9,10 +9,12 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.PmiDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
@@ -50,30 +52,27 @@ public class ParticipantDaoImpl extends AbstractDao<Participant> implements Part
 
 	@Override
 	@SuppressWarnings("unchecked")	
-	public List<Participant> getByPmis(List<ParticipantMedicalIdentifierNumberDetail> pmis) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(Participant.class)
-				.createAlias("pmiCollection", "pmi")
-				.createAlias("pmi.site", "site");
-		
-		Disjunction junction = Restrictions.disjunction();
-		boolean added = false;
-		for (ParticipantMedicalIdentifierNumberDetail pmi : pmis) {
-			if (StringUtils.isBlank(pmi.getSiteName()) || StringUtils.isBlank(pmi.getMrn())) {
-				continue;
-			}
-			
-			junction.add(
-					Restrictions.and(
-							Restrictions.eq("pmi.medicalRecordNumber", pmi.getMrn()),
-							Restrictions.eq("site.name", pmi.getSiteName())));
-			added = true;
-		}
-		
-		if (!added) {
+	public List<Participant> getByPmis(List<PmiDetail> pmis) {
+		Criteria query = getByPmisQuery(pmis);
+		if (query == null) {
 			return Collections.emptyList();
 		}
 		
-		return query.add(junction).list();						
+		return query.list();
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Long> getParticipantIdsByPmis(List<PmiDetail> pmis) {
+		Criteria query = getByPmisQuery(pmis);
+		if (query == null) {
+			return Collections.emptyList();
+		}
+		
+		ProjectionList projs = Projections.projectionList()
+				.add(Projections.property("id"));
+		query.setProjection(projs);
+		return query.list();
 	}
 	
 	@Override
@@ -94,6 +93,35 @@ public class ParticipantDaoImpl extends AbstractDao<Participant> implements Part
 	@Override
 	public Class getType() {
 		return Participant.class;
+	}
+	
+	private Criteria getByPmisQuery(List<PmiDetail> pmis) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(Participant.class)
+				.createAlias("pmiCollection", "pmi")
+				.createAlias("pmi.site", "site");
+		
+		Disjunction junction = Restrictions.disjunction();
+		
+		boolean added = false;
+		for (PmiDetail pmi : pmis) {
+			if (StringUtils.isBlank(pmi.getSiteName()) || StringUtils.isBlank(pmi.getMrn())) {
+				continue;
+			}
+			
+			junction.add(
+					Restrictions.and(
+							Restrictions.eq("pmi.medicalRecordNumber", pmi.getMrn()),
+							Restrictions.eq("site.name", pmi.getSiteName())));
+			
+			added = true;
+		}
+		
+		if (!added) {
+			return null;
+		}
+		
+		return query.add(junction);						
+		
 	}
 
 	private static final String FQN = Participant.class.getName();

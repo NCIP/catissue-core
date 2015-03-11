@@ -72,6 +72,7 @@
   margin-left: -8px;
   margin-top: 4px;
   margin-right: 8px;
+  position: absolute;
 }
 
 .os-key-values .value.os-status-collected, 
@@ -88,4 +89,19 @@
 
 .os-key-values .value.os-status-pending {
   background: #f0ad4e;
+}
+
+.os-table.os-spmn-hide-options .os-select-specimen-cb {
+  visibility: hidden;
+}
+
+.os-table.os-spmn-hide-options .os-more-options {
+  visibility: hidden;
+}
+
+.os-specimen-desc {
+  display: inline-block;
+  white-space: initial;
+  vertical-align: top;
+  padding-right: 32px;
 }

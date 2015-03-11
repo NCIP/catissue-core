@@ -1,7 +1,6 @@
 
 package com.krishagni.catissueplus.core.biospecimen.repository;
 
-import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionOrderDao;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
@@ -10,7 +9,7 @@ import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.audit.repository.AuditDao;
-import com.krishagni.catissueplus.core.auth.repository.DomainDao;
+import com.krishagni.catissueplus.core.auth.repository.AuthDao;
 import com.krishagni.catissueplus.core.common.repository.KeyGeneratorDao;
 import com.krishagni.catissueplus.core.notification.repository.CPStudyMappingDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
@@ -35,13 +34,11 @@ public interface DaoFactory {
 
 	public UserDao getUserDao();
 	
-	public ContainerDao getContainerDao();
-
 	public ExternalAppNotificationDao getExternalAppNotificationDao();
 
 	public ExternalApplicationDao getExternalApplicationDao();
 
-	public DomainDao getDomainDao();
+	public AuthDao getAuthDao();
 
 	public CPStudyMappingDao getCPStudyMappingDao();
 

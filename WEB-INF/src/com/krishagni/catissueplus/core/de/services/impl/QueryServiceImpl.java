@@ -35,6 +35,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.de.domain.AqlBuilder;
 import com.krishagni.catissueplus.core.de.domain.QueryAuditLog;
 import com.krishagni.catissueplus.core.de.domain.QueryFolder;
@@ -136,7 +137,7 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.INVALID_PAGINATION_FILTER);
 			}
 
-			Long userId = req.getSessionDataBean().getUserId();
+			Long userId = AuthUtil.getCurrentUser().getId();
 			List<SavedQuerySummary> queries = daoFactory.getSavedQueryDao().getQueries(
 							userId, 
 							crit.startAt(),
@@ -159,6 +160,10 @@ public class QueryServiceImpl implements QueryService {
 	public ResponseEvent<SavedQueryDetail> getSavedQuery(RequestEvent<Long> req) {
 		try {
 			SavedQuery savedQuery = daoFactory.getSavedQueryDao().getQuery(req.getPayload());
+			if (savedQuery == null) {
+				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
+			}
+			
 			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(savedQuery));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
@@ -543,7 +548,7 @@ public class QueryServiceImpl implements QueryService {
 			
 			daoFactory.getQueryFolderDao().saveOrUpdate(queryFolder);			
 			List<SavedQuerySummary> result = new ArrayList<SavedQuerySummary>();
-			for (SavedQuery query : savedQueries) {
+			for (SavedQuery query : queryFolder.getSavedQueries()) {
 				result.add(SavedQuerySummary.fromSavedQuery(query));
 			}
 			

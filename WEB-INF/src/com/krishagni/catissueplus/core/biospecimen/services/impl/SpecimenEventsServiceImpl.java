@@ -50,7 +50,7 @@ public class SpecimenEventsServiceImpl implements SpecimenEventsService {
 		Long formCtxtId = formDao.getFormCtxtId(formId, "SpecimenEvent", -1L);
 		for (FormData formData : formDataList) {
 			String specimenLabel = formData.getAppData().get("id").toString();
-			Specimen specimen = daoFactory.getSpecimenDao().getSpecimenByLabel(specimenLabel);
+			Specimen specimen = daoFactory.getSpecimenDao().getByLabel(specimenLabel);
 			if (specimen == null) {
 				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND);				
 			}

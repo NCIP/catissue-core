@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Service;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
@@ -42,11 +41,10 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-@Service(value = "CollectionProtocolRegistrationServiceImpl")
 public class CollectionProtocolRegistrationServiceImpl implements CollectionProtocolRegistrationService {
 	private DaoFactory daoFactory;
 
-	private CollectionProtocolRegistrationFactory registrationFactory;
+	private CollectionProtocolRegistrationFactory cprFactory;
 	
 	private VisitFactory visitFactory;
 	
@@ -56,8 +54,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		this.daoFactory = daoFactory;
 	}
 
-	public void setRegistrationFactory(CollectionProtocolRegistrationFactory registrationFactory) {
-		this.registrationFactory = registrationFactory;
+	public void setCprFactory(CollectionProtocolRegistrationFactory cprFactory) {
+		this.cprFactory = cprFactory;
 	}
 	
 	public void setVisitFactory(VisitFactory visitFactory) {
@@ -94,18 +92,54 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	public ResponseEvent<CollectionProtocolRegistrationDetail> createRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req) {
 		try {
 			CollectionProtocolRegistrationDetail cprDetail = req.getPayload();
-			CollectionProtocolRegistration cpr = registrationFactory.createCpr(cprDetail);
+			CollectionProtocolRegistration cpr = cprFactory.createCpr(cprDetail);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			
 			ensureUniqueParticipantReg(cpr, ose);
-			ensureUniquePpid(cpr, ose);
-			ensureUniqueBarcode(cpr.getBarcode(), ose);
+			ensureUniquePpid(null, cpr, ose);
+			ensureUniqueBarcode(null, cpr, ose);
 			ose.checkAndThrow();
 			
-			saveParticipant(cpr, cprDetail.getParticipant());
+			saveParticipant(null, cpr);
 			daoFactory.getCprDao().saveOrUpdate(cpr);
-			return ResponseEvent.response(CollectionProtocolRegistrationDetail.fromDomain(cpr));
+			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(cpr));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<CollectionProtocolRegistrationDetail> updateRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req) {
+		try {
+			CollectionProtocolRegistrationDetail detail = req.getPayload();
+			
+			CollectionProtocolRegistration existing = null;
+			if (detail.getId() != null) {
+				existing = daoFactory.getCprDao().getById(detail.getId());
+			} else if (detail.getCpId() != null && StringUtils.isNotBlank(detail.getPpid())) {
+				existing = daoFactory.getCprDao().getCprByPpId(detail.getCpId(), detail.getPpid());
+			}
+			
+			if (existing == null) {
+				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
+			}
+			
+			CollectionProtocolRegistration cpr = cprFactory.createCpr(detail);
+			
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniquePpid(existing, cpr, ose);
+			ensureUniqueBarcode(existing, cpr, ose);
+			ose.checkAndThrow();
+			
+			saveParticipant(existing, cpr);
+			existing.update(cpr);
+			
+			daoFactory.getCprDao().saveOrUpdate(existing);
+			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -186,51 +220,36 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			return ResponseEvent.serverError(e);
 		}
 	}
-
-	@Override
-	@PlusTransactional
-	public ResponseEvent<CollectionProtocolRegistrationDetail> updateRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req) {
-		try {
-			CollectionProtocolRegistrationDetail cprDetail = req.getPayload();
-			
-			CollectionProtocolRegistration oldCpr = null;
-			if (cprDetail.getId() != null) {
-				oldCpr = daoFactory.getCprDao().getById(cprDetail.getId());
-			} else if (cprDetail.getPpid() != null && cprDetail.getCpId() != null) {
-				oldCpr = daoFactory.getCprDao().getCprByPpId(cprDetail.getCpId(), cprDetail.getPpid());
+	
+	private void saveParticipant(CollectionProtocolRegistration existing, CollectionProtocolRegistration cpr) {		
+		Participant existingParticipant = null;
+		Participant participant = cpr.getParticipant();
+		
+		if (existing == null) { 
+			// new registration
+			if (participant.getId() != null) { 
+				// existing participant
+				existingParticipant = daoFactory.getParticipantDao().getById(participant.getId());
+			} else {
+				// new participant
 			}
-
-			if (oldCpr == null) {
-				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
-			}
-			
-			CollectionProtocolRegistration cpr = registrationFactory.createCpr(cprDetail);
-
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			validatePpid(oldCpr, cpr, ose);
-			validateBarcode(oldCpr.getBarcode(), cpr.getBarcode(), ose);
-			ose.checkAndThrow();
-			
-			oldCpr.update(cpr);
-			daoFactory.getCprDao().saveOrUpdate(cpr);
-			return ResponseEvent.response(CollectionProtocolRegistrationDetail.fromDomain(cpr));
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
-	}
-
-	private void saveParticipant(CollectionProtocolRegistration cpr, ParticipantDetail detail) {
-		if (detail.getId() != null) {
-			return; 
+		} else { 
+			// existing reg, therefore it has to be existing participant
+			existingParticipant = existing.getParticipant();
 		}
 		
-		Participant participant = cpr.getParticipant();
-		participantService.createParticipant(participant);
-		cpr.setParticipant(participant);
+		if (existingParticipant != null) {
+			participantService.updateParticipant(existingParticipant, participant);
+			cpr.setParticipant(existingParticipant);
+		} else {
+			participantService.createParticipant(participant);
+			cpr.setParticipant(participant);
+		}
 	}
 	
+	//
+	// Checks whether same participant is registered for same protocol already
+	//
 	private void ensureUniqueParticipantReg(CollectionProtocolRegistration cpr, OpenSpecimenException ose) {
 		if (cpr.getParticipant() == null || cpr.getParticipant().getId() == null) {
 			return ;
@@ -244,33 +263,31 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 	}
 
-	private void ensureUniquePpid(CollectionProtocolRegistration cpr, OpenSpecimenException ose) {
-		Long cpId = cpr.getCollectionProtocol().getId();
-		String ppid = cpr.getProtocolParticipantIdentifier();
+	private void ensureUniquePpid(CollectionProtocolRegistration existing, CollectionProtocolRegistration cpr, OpenSpecimenException ose) {
+		if (existing != null && existing.getPpid().equals(cpr.getPpid())) { // ppid has not changed
+			return;
+		}
 		
+		Long cpId = cpr.getCollectionProtocol().getId();
+		String ppid = cpr.getPpid();		
 		if (daoFactory.getCprDao().getCprByPpId(cpId, ppid) != null) {
 			ose.addError(CprErrorCode.DUP_PPID);
 		}
 	}
 
-	private void ensureUniqueBarcode(String barcode, OpenSpecimenException ose) {
-		if (!StringUtils.isBlank(barcode) && daoFactory.getCprDao().getCprByBarcode(barcode) != null) {
+	private void ensureUniqueBarcode(CollectionProtocolRegistration existing, CollectionProtocolRegistration cpr, OpenSpecimenException ose) {
+		if (existing != null && 
+			StringUtils.isNotBlank(existing.getBarcode()) && 
+			existing.getBarcode().equals(cpr.getBarcode())) { // barcode has not changed
+			return;
+		}
+		
+		if (StringUtils.isBlank(cpr.getBarcode())) {
+			return;
+		}
+		
+		if (daoFactory.getCprDao().getCprByBarcode(cpr.getBarcode()) != null) {
 			ose.addError(CprErrorCode.DUP_BARCODE);
-		}
-	}
-
-	private void validatePpid(CollectionProtocolRegistration oldCpr, CollectionProtocolRegistration cpr,
-			OpenSpecimenException ose) {
-		String oldPpid = oldCpr.getProtocolParticipantIdentifier();
-		String newPpid = cpr.getProtocolParticipantIdentifier();
-		if (!oldPpid.equals(newPpid)) {
-			ensureUniquePpid(cpr, ose);
-		}
-	}
-
-	private void validateBarcode(String oldBarcode, String newBarcode, OpenSpecimenException ose) {
-		if (!StringUtils.isBlank(newBarcode) && !newBarcode.equals(oldBarcode)) {
-			ensureUniqueBarcode(newBarcode, ose);
 		}
 	}
 
@@ -297,7 +314,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			throw OpenSpecimenException.userError(CprErrorCode.NOT_FOUND);
 		}
 		
-		return CollectionProtocolRegistrationDetail.fromDomain(cpr);
+		return CollectionProtocolRegistrationDetail.from(cpr);
 	}
 	
 	private CollectionProtocolRegistrationDetail getByCpIdAndPpid(Long cpId, String ppid) {
@@ -306,7 +323,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			throw OpenSpecimenException.userError(CprErrorCode.INVALID_CP_AND_PPID);
 		}
 		
-		return CollectionProtocolRegistrationDetail.fromDomain(cpr);
+		return CollectionProtocolRegistrationDetail.from(cpr);
 	}
 	
 	private List<SpecimenDetail> getSpecimensByVisit(Long cprId, Long visitId) {
@@ -318,7 +335,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		Set<SpecimenRequirement> anticipatedSpecimens = visit.getCpEvent().getTopLevelAnticipatedSpecimens();
 		Set<Specimen> specimens = visit.getTopLevelSpecimens();
 
-		return getSpecimens(anticipatedSpecimens, specimens);
+		return SpecimenDetail.getSpecimens(anticipatedSpecimens, specimens);
 	}
 	
 	private List<SpecimenDetail> getAnticipatedSpecimens(Long cprId, Long eventId) {
@@ -328,53 +345,6 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 		
 		Set<SpecimenRequirement> anticipatedSpecimens = cpe.getTopLevelAnticipatedSpecimens();
-		return getSpecimens(anticipatedSpecimens, Collections.<Specimen>emptySet());		
-	}
-	
-	private List<SpecimenDetail> getSpecimens(Collection<SpecimenRequirement> anticipated, Collection<Specimen> specimens) {		
-		List<SpecimenDetail> result = SpecimenDetail.from(specimens);
-		merge(anticipated, result, null, getReqSpecimenMap(result));
-
-		SpecimenDetail.sort(result);
-		return result;
-	}
-	
-	private Map<Long, SpecimenDetail> getReqSpecimenMap(List<SpecimenDetail> specimens) {
-		Map<Long, SpecimenDetail> reqSpecimenMap = new HashMap<Long, SpecimenDetail>();
-						
-		List<SpecimenDetail> remaining = new ArrayList<SpecimenDetail>();
-		remaining.addAll(specimens);
-		
-		while (!remaining.isEmpty()) {
-			SpecimenDetail specimen = remaining.remove(0);
-			Long srId = (specimen.getReqId() == null) ? -1 : specimen.getReqId();
-			reqSpecimenMap.put(srId, specimen);
-			
-			remaining.addAll(specimen.getChildren());
-		}
-		
-		return reqSpecimenMap;
-	}
-	
-	private void merge(
-			Collection<SpecimenRequirement> anticipatedSpecimens, 
-			List<SpecimenDetail> result, 
-			SpecimenDetail currentParent,
-			Map<Long, SpecimenDetail> reqSpecimenMap) {
-		
-		for (SpecimenRequirement anticipated : anticipatedSpecimens) {
-			SpecimenDetail specimen = reqSpecimenMap.get(anticipated.getId());
-			if (specimen != null) {
-				merge(anticipated.getChildSpecimenRequirements(), result, specimen, reqSpecimenMap);
-			} else {
-				specimen = SpecimenDetail.from(anticipated);
-				
-				if (currentParent == null) {
-					result.add(specimen);
-				} else if (specimen == null) {
-					currentParent.getChildren().add(specimen);
-				}				
-			}						
-		}
-	}
+		return SpecimenDetail.getSpecimens(anticipatedSpecimens, Collections.<Specimen>emptySet());		
+	}	
 }

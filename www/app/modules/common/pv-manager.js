@@ -5,39 +5,8 @@
  * 2. Cache the PVs so that frequent calls are not needed
  */
 angular.module('openspecimen')
-  .factory('PvManager', function($http, $q, ApiUrls, ApiUtil, Site) {
-    var url = ApiUrls.getBaseUrl() + 'permissible-values/attribute=';
-
-    var genders = [
-      'Female Gender', 
-      'Male Gender', 
-      'Unknown', 
-      'Unspecified'
-    ];
-
-    var ethnicity = [
-      'Hispanic or Latino', 
-      'Not Hispanic or Latino', 
-      'Not Reported', 
-      'Unknown'
-    ];
-
-    var vitalStatuses = [
-      'Alive', 
-      'Dead', 
-      'Unknown', 
-      'Unspecified'
-    ];
-
-    var races = [
-      'White', 
-      'Black or African American', 
-      'American Indian or Alaska Native',
-      'Asian', 
-      'Native Hawaiian or Other Pacific Islander', 
-      'Not Reported',
-      'Unknown'
-    ];
+  .factory('PvManager', function($http, $q, ApiUrls, ApiUtil, Site, Util) {
+    var url = ApiUrls.getBaseUrl() + 'permissible-values';
 
     var anatomicSites = [
       'DIGESTIVE ORGANS',
@@ -65,6 +34,7 @@ angular.module('openspecimen')
     ];
     
     var domains = [
+      'openspecimen',
       'ldap'
     ];
 
@@ -85,20 +55,37 @@ angular.module('openspecimen')
 
     var visitStatuses = [
       'Complete',
-      'Incomplete',
-       'Pending'
+      'Pending'
+    ];
+
+    var specimenStatuses = [
+      'Collected',
+      'Pending'
+    ];
+
+    var permissions = [
+      'Read',
+      'Create',
+      'Update',
+      'Delete'
+    ];
+
+    var resources = [
+      'User',
+      'Institute',
+      'Site',
+      'Collection Protocol',
     ];
 
     var pvMap = {
-      gender: genders, 
-      ethnicity: ethnicity, 
-      vitalStatus: vitalStatuses, 
-      race: races,
       anatomicSite: anatomicSites,
       domains:domains,
       'storage-type': storageTypes,
       'visit-status': visitStatuses,
+      'specimen-status': specimenStatuses,
       'container-position-labeling-schemes': positionLabelingSchemes,
+      'permissions': permissions,
+      'resources': resources
     };
 
     var pvIdMap = {
@@ -119,69 +106,89 @@ angular.module('openspecimen')
       'clinical-diagnosis'  : 'Clinical_Diagnosis_PID'
     };
 
+    function valueOf(input) {
+      return input.value;
+    };
+
+    function parentAndValue(input) {
+      return {parent: input.parentValue, value: input.value};
+    };
+
+    function transform(pvs, transformfn, incParentVal, result) {
+      transformfn = transformfn || (incParentVal ? parentAndValue : valueOf);
+      return pvs.map(function(pv) { return transformfn(pv); });
+    };
+
+    function loadPvs(attr, srchTerm, transformFn) {
+      var pvId = pvIdMap[attr];
+      if (!pvId) {
+        return _getPvs(attr);
+      }
+
+      return $http.get(url, {params: {attribute: pvId, searchString: srchTerm}}).then(
+        function(result) {
+          return transform(result.data, transformFn, null);
+        }
+      );
+    };
+
+    function loadPvsByParent(parentAttr, parentVal, incParentVal, transformFn) {
+      var pvId = pvIdMap[parentAttr];
+      if (!pvId) {
+        return [];
+      }
+
+      var params = {
+        parentAttribute: pvId, 
+        parentValue: parentVal,  
+        includeParentValue: incParentVal
+      };
+
+      return $http.get(url, {params: params}).then(
+        function(result) {
+          return transform(result.data, transformFn, incParentVal);
+        }
+      );
+    };
+
+    function  _getPvs(attr) {
+      var deferred = $q.defer();
+      var result = undefined;
+      if (pvMap[attr]) {
+        result = pvMap[attr];
+      } else {
+        result = [];
+      }
+      deferred.resolve(result);
+      return deferred.promise;
+    };
+
     return {
-      _getPvs: function(attr) {
-        var deferred = $q.defer();
-        var result = undefined;
-        if (pvMap[attr]) {
-          result = {status: 'ok', data: pvMap[attr]};
-        } else {
-          result = {status: 'error'};
-        }
-
-        deferred.resolve(result);
-        return deferred.promise;
+      getPvs: function(attr, srchTerm, transformFn) {
+        var pvs = [];
+        loadPvs(attr, srchTerm, transformFn).then(
+          function(result) {
+            Util.unshiftAll(pvs, result);
+          }
+        );    
+        return pvs;
       },
 
-      getPvs: function(attr, srchTerm) {
-        var pvId = pvIdMap[attr];
-        if (!pvId) {
-          return pvMap[attr] || [];
-        }
+      loadPvs: loadPvs,
 
+      getPvsByParent: function(parentAttr, parentVal, incParentVal, transformFn) {
         var pvs = [];
-        $http.get(url + pvId, {params: {searchString: srchTerm}}).then(
+
+        loadPvsByParent(parentAttr, parentVal, incParentVal, transformFn).then(
           function(result) {
-            angular.forEach(result.data, function(pv) {
-              pvs.push(pv.value);
-            });
+            Util.unshiftAll(pvs, result);
           }
         );
 
         return pvs;
       },
 
-      getPvsByParent: function(attr, parentVal) {
-        var pvId = pvIdMap[attr];
-        if (!pvId) {
-          return [];
-        }
-
-        var pvs = [];
-        $http.get(url + pvId, {params: {parentValue: parentVal}}).then(
-          function(result) {
-            angular.forEach(result.data, function(pv) {
-              pvs.push(pv.value);
-            });
-          }
-        );
-
-        return pvs;
-      },
-
-      /** loadPvs will be deprecated soon **/
-      loadPvs: function(scope, attr) {
-        this._getPvs(attr).then(
-          function(result) {
-            if (result.status != 'ok') {
-              alert("Failed to load PVs of attribute: " + attr);
-              return;
-            }
-
-            scope[attr + '_pvs'] = result.data;
-          }
-        );
-      },
+      loadPvsByParent: loadPvsByParent,
 
       getSites: function() {
         var sites = [];
@@ -193,15 +200,6 @@ angular.module('openspecimen')
           }
         );
         return sites;
-      },
-
-      getSpecimenTypes: function() {
-        var specimenTypes = {
-          Fluid : ['Whole Blood','Serum'],
-          Molecule :['DNA']
-        };
-        return specimenTypes;
       }
-
     };
   });

@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
@@ -22,7 +23,6 @@ import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
-import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.email.EmailSender;
@@ -31,16 +31,15 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserServiceImpl implements UserService {
-	private static final String DEFAULT_AUTH_DOMAIN = AuthenticationType.CATISSUE.value();
-
+	private static final String DEFAULT_AUTH_DOMAIN = "openspecimen";
+	
 	private DaoFactory daoFactory;
 
 	private UserFactory userFactory;
-	
-	private BCryptPasswordEncoder passwordEncoder;
 	
 	private EmailSender emailSender;
 
@@ -56,10 +55,6 @@ public class UserServiceImpl implements UserService {
 		this.emailSender = emailSender;
 	}
 
-	public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
-		this.passwordEncoder = passwordEncoder;
-	}
-
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<UserSummary>> getUsers(RequestEvent<ListUserCriteria> req) {
@@ -67,33 +62,46 @@ public class UserServiceImpl implements UserService {
 		List<UserSummary> users = daoFactory.getUserDao().getUsers(crit);		
 		return ResponseEvent.response(users);
 	}
+	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return daoFactory.getUserDao().getUser(username, DEFAULT_AUTH_DOMAIN);
+	}
 
 	@Override
 	@PlusTransactional
 	public ResponseEvent<UserDetail> getUser(RequestEvent<Long> req) {
 		User user = daoFactory.getUserDao().getById(req.getPayload());
 		if (user == null) {
-			ResponseEvent.userError(UserErrorCode.NOT_FOUND);
+			return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 		}
 		
 		return ResponseEvent.response(UserDetail.from(user));
 	}
-
 	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<UserDetail> createUser(RequestEvent<UserDetail> req) {
 		try {
-			UserDetail detail = req.getPayload();
-			User user = userFactory.createUser(detail);
+			boolean isSignupReq = (AuthUtil.getCurrentUser() == null);
 			
+			UserDetail detail = req.getPayload();
+			if(isSignupReq) {
+				detail.setActivityStatus(Status.ACTIVITY_STATUS_PENDING.getStatus());
+			}
+			User user = userFactory.createUser(detail);
+		
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueLoginNameInDomain(user.getLoginName(), user.getAuthDomain().getName(), ose);
 			ensureUniqueEmailAddress(user.getEmailAddress(), ose);
 			ose.checkAndThrow();
-
+		
 			daoFactory.getUserDao().saveOrUpdate(user);
-			emailSender.sendUserCreatedEmail(user);
+			if (isSignupReq) {
+				emailSender.sendUserSignupEmail(user);
+			} else {
+				emailSender.sendUserCreatedEmail(user);
+			}
 			return ResponseEvent.response(UserDetail.from(user));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -101,7 +109,7 @@ public class UserServiceImpl implements UserService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-
+	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<UserDetail> updateUser(RequestEvent<UserDetail> req) {
@@ -163,11 +171,11 @@ public class UserServiceImpl implements UserService {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
-			if (!isValidateOldPassword(user, detail.getOldPassword())) {
+			if (!user.isValidOldPassword(detail.getOldPassword())) {
 				return ResponseEvent.userError(UserErrorCode.INVALID_OLD_PASSWD);
 			}
 			
-			setUserPassword(user, detail.getNewPassword());
+			user.changePassword(detail.getNewPassword());
 			daoFactory.getUserDao().saveOrUpdate(user);
 			return ResponseEvent.response(true);
 		} catch (OpenSpecimenException ose) {
@@ -199,10 +207,10 @@ public class UserServiceImpl implements UserService {
 			
 			if (token.hasExpired()) {
 				dao.deleteFpToken(token);
-				return ResponseEvent.userError(UserErrorCode.INVALID_PASSWD_TOKEN);
+				return ResponseEvent.userError(UserErrorCode.INVALID_PASSWD_TOKEN, true);
 			}
 			
-			setUserPassword(user, detail.getNewPassword());
+			user.changePassword(detail.getNewPassword());
 			dao.deleteFpToken(token);
 			return ResponseEvent.response(true);
 		}catch (OpenSpecimenException ose) {
@@ -240,7 +248,7 @@ public class UserServiceImpl implements UserService {
 	private Map<String, List> getDependencies(User user) {
 		List<SiteDetail> sites = new ArrayList<SiteDetail>();
 		for (Site site: user.getSites()) {
-			sites.add(SiteDetail.fromDomain(site));
+			sites.add(SiteDetail.from(site));
 		}
 		
 		Map<String, List> dependencies = new HashMap<String, List>();
@@ -254,7 +262,7 @@ public class UserServiceImpl implements UserService {
 			ensureUniqueEmailAddress(newUser.getEmailAddress(), ose);
 		}
 	}
-	
+
 	private void ensureUniqueEmailAddress(String emailAddress, OpenSpecimenException ose) {
 		if (!daoFactory.getUserDao().isUniqueEmailAddress(emailAddress)) {
 			ose.addError(UserErrorCode.DUP_EMAIL);
@@ -268,19 +276,4 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
-	private void setUserPassword(User user, String newPassword) {
-		if (StringUtils.isBlank(newPassword) || !User.isValidPasswordPattern(newPassword)) {
-			throw OpenSpecimenException.userError(UserErrorCode.PASSWD_VIOLATES_RULES);
-		}
-		
-		user.addPassword(passwordEncoder.encode(newPassword));
-	}
-	
-	private boolean isValidateOldPassword(User user, String oldPassword) {
-		if (StringUtils.isBlank(oldPassword)) {
-			throw OpenSpecimenException.userError(UserErrorCode.OLD_PASSWD_NOT_SPECIFIED);
-		}
-		
-		return passwordEncoder.matches(oldPassword, user.getPassword());
-	}
 }

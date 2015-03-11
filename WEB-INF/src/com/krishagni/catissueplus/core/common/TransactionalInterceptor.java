@@ -48,7 +48,7 @@ public class TransactionalInterceptor {
 		try {
 			object = pjp.proceed();
 			ResponseEvent resp = (object instanceof ResponseEvent) ? (ResponseEvent)object : null; 
-			if ((resp == null || resp.isSuccessful()) && 
+			if ((resp == null || resp.isSuccessful() || resp.isForceTxCommitEnabled()) && 
 				isTransactionStarted && 
 				tx != null) {				
 				tx.commit();

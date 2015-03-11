@@ -1,0 +1,46 @@
+<div class="col-xs-12" class="os-extn-hdr"> 
+  <a ui-sref="{{extnState}}list" style="padding-left: 8px" translate="extensions.list">
+    Extensions
+  </a> / 
+  <span style="margin-right: 20px;">{{recordsResp.formCaption}}</span>
+  <button class="btn btn-primary os-round-btn" ng-click="addRecord()">
+    <span class="fa fa-plus"></span>
+  </button>
+</div>
+
+<div class="col-xs-12">
+  <div ng-if="!recordsResp.records || recordsResp.records.length == 0">
+    <span translate="extensions.no_records">No records to show</span>
+  </div>
+
+  <div class="os-table os-table-fixed" ng-if="recordsResp.records && recordsResp.records.length > 0">
+    <div class="os-table-head">
+      <div class="row">
+        <div class="col col-xs-8">
+          <span translate="extensions.record_id">Record #</span>
+        </div>
+        <div class="col col-xs-2">
+          <span translate="extensions.last_updated_by">Last Modified By</span>
+        </div>
+        <div class="col col-xs-2">
+          <span translate="extensions.last_updated">Modified</span>
+        </div>
+      </div>
+    </div>
+    <div class="os-table-body">
+      <div class="row" ng-repeat="record in recordsResp.records">
+        <div class="col col-xs-8">
+          <a ui-sref="{{extnState}}addedit({formId: formId, formCtxId: formCtxId, recordId: record.recordId})"> 
+            {{record.recordId}} 
+          </a>
+        </div>
+        <div class="col col-xs-2">
+          <span>{{record.user.lastName}} {{record.user.firstName}}</span>
+        </div>
+        <div class="col col-xs-2">
+          <span>{{record.updateTime | date: 'MMM dd, yyyy'}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

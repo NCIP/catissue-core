@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenPosition;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
@@ -55,6 +56,8 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 	
 	private Double availableQty;
 	
+	private Boolean available;
+	
 	private Long parentId;
 	
 	private String parentLabel;
@@ -62,6 +65,8 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 	private StorageLocationSummary storageLocation;
 	
 	private String storageType;
+	
+	private String collectionContainer;
 	
 	private String activityStatus;
 	
@@ -203,6 +208,14 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 		this.availableQty = availableQty;
 	}
 
+	public Boolean getAvailable() {
+		return available;
+	}
+
+	public void setAvailable(Boolean available) {
+		this.available = available;
+	}
+
 	public Long getParentId() {
 		return parentId;
 	}
@@ -233,6 +246,14 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 
 	public void setStorageType(String storageType) {
 		this.storageType = storageType;
+	}
+
+	public String getCollectionContainer() {
+		return collectionContainer;
+	}
+
+	public void setCollectionContainer(String collectionContainer) {
+		this.collectionContainer = collectionContainer;
 	}
 
 	public String getActivityStatus() {
@@ -274,20 +295,21 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 		result.setPathology(specimen.getPathologicalStatus());
 		result.setInitialQty(specimen.getInitialQuantity());
 		result.setAvailableQty(specimen.getAvailableQuantity());
+		result.setAvailable(specimen.getIsAvailable());
 		if (specimen.getParentSpecimen() != null) {
 			result.setParentId(specimen.getParentSpecimen().getId());
 			result.setParentLabel(specimen.getParentSpecimen().getLabel());
 		}
 	
 		StorageLocationSummary location = new StorageLocationSummary();
-		SpecimenPosition position = specimen.getSpecimenPosition();
+		StorageContainerPosition position = specimen.getPosition();
 		if (position == null) {
 			location.id = -1L;
 		} else {
-			location.id = position.getStorageContainer().getId();
-			location.name = position.getStorageContainer().getName();
-			location.positionX = position.getPositionDimensionOneString();
-			location.positionY = position.getPositionDimensionTwoString();
+			location.id = position.getContainer().getId();
+			location.name = position.getContainer().getName();
+			location.positionX = position.getPosOne();
+			location.positionY = position.getPosTwo();
 		}
 		result.setStorageLocation(location);		
 		result.setActivityStatus(specimen.getActivityStatus());
@@ -308,6 +330,7 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 		result.setPathology(anticipated.getPathologyStatus());
 		result.setInitialQty(anticipated.getInitialQuantity());
 		result.setParentId(null);
+		result.setCollectionContainer(anticipated.getCollectionContainer());
 	
 		StorageLocationSummary location = new StorageLocationSummary();
 		result.setStorageLocation(location);
