@@ -16,34 +16,38 @@
         </a>
       </li>
       <li>
-        <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
-          T{{visit.eventPoint}}: {{visit.eventLabel}}
+        <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})" translate="visits.list">
+          Visits
         </a>
       </li>
     </ul>
 
-    <h3>Specimens</h3>
+    <h3>Specimen Collection for T{{visit.eventPoint}}: {{visit.eventLabel}}</h3>
   </div>
 
   <div class="container">
     <form name="collectionForm" os-form-validator="collectionForm" novalidate>
-      <table class="os-table os-table-fixed os-table-tree bulk-edit">
+      <div ng-include src="'specimen_coll_visit_details.html'"></div>
+
+      <table class="os-table os-table-fixed os-table-tree bulk-edit os-border os-table-muted-hdr">
         <thead class="os-table-head">
           <tr class="row">
-            <th class="col os-col-40" translate="specimens.description">Description</th>
+            <th class="col os-col-35" translate="specimens.description">Description</th>
             <th class="col os-col-10" translate="specimens.label">Label</th>
             <th class="col os-col-10" translate="specimens.qty">Quantity</th>
-            <th class="col os-col-35">
+            <th class="col os-col-30">
               <span translate="specimens.location">Location</span>
               <a ng-click="applyFirstLocationToAll()"style="font-weight:normal">
                 (<span translate="specimens.apply_first_loc_to_all">Apply First Location To All</span>)
               </a>
             </th>
+            <th class="col os-col-10">Status</th>
+            <th class="col os-col-5">&nbsp;</th>
           </tr>
         </thead>
         <tbody class="os-table-body">
           <tr class="row" ng-repeat="specimen in specimens | openedTreeNodes" ng-form="sform">
-            <td class="col os-col-40">
+            <td class="col os-col-35">
               <div style="padding-left: {{specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16}}px">
                 <a ng-if="specimen.hasChildren && specimen.isOpened" 
                   class="fa fa-chevron-circle-down"
@@ -54,41 +58,139 @@
                   ng-click="openSpecimenNode(specimen)">
                 </a>
                 <span class="fa fa-circle" 
-                  ng-class="{'os-status-collected': specimen.status == 'Collected',
-                             'os-status-pending': specimen.status == 'Pending' || !specimen.status,
-                             'os-status-not-collected': specimen.status == 'Not Collected'}">
+                  ng-class="{'os-status-collected': specimen.existingStatus == 'Collected',
+                             'os-status-pending': specimen.existingStatus == 'Pending' || !specimen.existingStatus,
+                             'os-status-not-collected': specimen.existingStatus == 'Missed Collection'}">
                 </span>
                 <os-specimen-desc specimen="specimen"></os-specimen-desc>
               </div>
             </td>
             <td class="col os-col-10">
-              <input type="text" os-md-input edit-when="specimen.status != 'Collected'"
-                name="label" ng-model="specimen.label" required 
+              <input type="text" os-md-input edit-when="specimen.existingStatus != 'Collected'"
+                name="label" ng-model="specimen.label" ng-required="specimen.status == 'Collected'"
                 ng-model-options="{updateOn: 'blur'}" os-unique-specimen-label>
               <div os-field-error field="sform.label"></div>
             </td>
             <td class="col os-col-10">
-              <input type="text" os-md-input edit-when="specimen.status != 'Collected'"
-                name="qty" ng-model="specimen.initialQty" required ng-model-options="{allowInvalid: 'true'}">
+              <input type="text" os-md-input edit-when="specimen.existingStatus != 'Collected'"
+                name="qty" ng-model="specimen.initialQty" ng-required="specimen.status == 'Collected'"
+                ng-model-options="{allowInvalid: 'true'}">
               <div os-field-error field="sform.qty"></div>
             </td>
-            <td class="col os-col-35" style="overflow: visible;">
-              <os-specimen-position os-md-input edit-when="specimen.status != 'Collected'"
+            <td class="col os-col-30" style="overflow: visible;">
+              <os-specimen-position os-md-input edit-when="specimen.existingStatus != 'Collected'"
                 specimen="specimen" cp-id="cpr.cpId">
               </os-specimen-position>
             </td>
-          </tr>
-          <tr class="row">
-            <td class="col" colspan="4">
-              <button class="btn btn-primary" 
-                ng-disabled="collectionForm.$invalid || collectionForm.$pending"
-                os-form-submit="saveSpecimens()" translate="common.buttons.save">
-                Save
+            <td class="col os-col-10" style="overflow: visible;">
+              <os-select os-md-input edit-when="specimen.existingStatus != 'Collected'" list="specimenStatuses" 
+                ng-model="specimen.status" on-change="statusChanged(specimen)"> 
+              </os-select>
+            </td>
+            <td class="col os-col-5">
+              <button class="btn btn-xs btn-default" ng-click="remove(specimen)">
+                <span class="fa fa-remove"></span>
               </button>
             </td>
           </tr>
         </tbody>
       </table>
+      <div class="row">
+        <div class="col-xs-10">
+          <button class="btn btn-primary" 
+            ng-disabled="collectionForm.$invalid || collectionForm.$pending"
+            os-form-submit="saveSpecimens()" translate="common.buttons.submit">
+            Submit
+          </button>
+        </div>
+      </div>
     </form>
   </div>
 </div>
+
+<script type="text/ng-template" id="specimen_coll_visit_details.html">
+  <div class="form-horizontal os-spmn-coll-detail">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label class="col-xs-2 control-label">Visit Details</label>
+          <div ng-if="visit.status != 'Complete'">
+            <div class="col-xs-3 input">
+              <div os-md-input ng-model="visit.visitDate" placeholder="Visit Date">
+                <input name="visitDate" ng-model="visit.visitDate" class="form-control" type="text"
+                  datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="visitDt.isOpen" ng-focus="visitDt.isOpen=true"
+                  required placeholder="Visit Date">
+                <div os-field-error field="collectionForm.visitDate"></div>
+              </div>
+            </div>
+            <div class="col-xs-3 input">
+              <os-select name="site" os-md-input ng-model="visit.site" list="sites"
+                placeholder="Visit Site" required>
+              </os-select>
+              <div os-field-error field="collectionForm.visitSite"></div>
+            </div>
+          </div>
+
+          <div ng-if="visit.status == 'Complete'">
+            <div class="col-xs-3 os-md-input read">
+              <label class="os-md-input-label">Visit Date</label>
+              <span>{{visit.visitDate | date: global.dateFmt}}</span>
+            </div>
+            <div class="col-xs-3 os-md-input read">
+              <label class="os-md-input-label">Visit Site</label>
+              <span>{{visit.site}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label class="col-xs-2 control-label">Collection Details</label>
+          <div class="col-xs-3 input">
+            <div os-md-input ng-model="collDetail.collector" placeholder="Collector">
+              <os-users ng-model="collDetail.collector" placeholder="Collector"> </os-users>
+            </div>
+          </div>
+          <div class="col-xs-2 input">
+            <div os-md-input ng-model="collDetail.collectionDate" placeholder="Collection Time">
+              <input name="collDate" ng-model="collDetail.collectionDate" class="form-control" type="text"
+                datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="collDt.isOpen" ng-focus="collDt.isOpen=true"
+                required placeholder="Collection Date">
+              <div os-field-error field="collectionForm.collDate"></div>
+            </div>
+          </div>
+          <div class="col-xs-1 input">
+            <timepicker class="os-time-no-wheels" os-md-input ng-model="collDetail.collectionDate" show-meridian="false"></timepicker>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label class="col-xs-2 control-label">Receive Details</label>
+          <div class="col-xs-3 input">
+            <div os-md-input ng-model="collDetail.receiver" placeholder="Receiver">
+              <os-users ng-model="collDetail.receiver" placeholder="Receiver"> </os-users>
+            </div>
+          </div>
+          <div class="col-xs-2 input">
+            <div os-md-input ng-model="collDetail.receiveDate" placeholder="Received Time">
+              <input name="receiveDate" ng-model="collDetail.receiveDate" class="form-control" type="text"
+                datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="recvDt.isOpen" ng-focus="recvDt.isOpen=true"
+                required placeholder="Receive Date">
+              <div os-field-error field="collectionForm.receiveDate"></div>
+            </div>
+          </div>
+          <div class="col-xs-1 input">
+            <timepicker class="os-time-no-wheels" os-md-input ng-model="collDetail.receiveDate" show-meridian="false"></timepicker>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>

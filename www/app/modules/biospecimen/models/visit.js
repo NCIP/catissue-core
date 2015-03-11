@@ -1,5 +1,5 @@
 angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecimen.models.form'])
-  .factory('Visit', function(osModel, $http, CollectionProtocolEvent, Form) {
+  .factory('Visit', function(osModel, $http, ApiUtil, CollectionProtocolEvent, Form) {
     var Visit = osModel('visits');
  
     function enrich(visits) {
@@ -56,6 +56,10 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
 
     Visit.anticipatedVisits = function(visits) {
       return visitFilter(visits, function(visit) { return !visit.status || visit.status == 'Pending'; });
+    };
+
+    Visit.collectVisitAndSpecimens = function(visitAndSpecimens) {
+      return $http.post(Visit.url() + 'collect', visitAndSpecimens).then(ApiUtil.processResp);
     };
 
     Visit.prototype.getForms = function() {

@@ -14,6 +14,7 @@ import com.krishagni.catissueplus.core.administrative.domain.dependency.SiteDepe
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -144,7 +145,7 @@ public class Site {
 		if (newActivityStatus.equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
 			Map<String, List> dependencies = dependencyChecker.getDependencies(this);
 			if (!dependencies.isEmpty()) {
-				OpenSpecimenException.userError(SiteErrorCode.REF_ENTITY_FOUND);
+				throw new OpenSpecimenException(ErrorType.USER_ERROR,SiteErrorCode.REF_ENTITY_FOUND);
 			}
 		}
 		

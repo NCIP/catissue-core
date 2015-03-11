@@ -25,23 +25,39 @@ import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
-import com.krishagni.catissueplus.core.common.email.EmailSender;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
+import edu.wustl.common.util.XMLPropertyHandler;
+
 public class UserServiceImpl implements UserService {
 	private static final String DEFAULT_AUTH_DOMAIN = "openspecimen";
+	
+	private static final String FORGOT_PASSWORD_EMAIL_TMPL = "users_forgot_password_link"; 
+	
+	private static final String PASSWD_CHANGED_EMAIL_TMPL = "users_passwd_changed";
+	
+	private static final String SIGNED_UP_EMAIL_TMPL = "users_signed_up";
+	
+	private static final String REQUEST_APPROVED_EMAIL_TMPL = "users_request_approved";
+	
+	private static final String NEW_USER_REQUEST_EMAIL_TMPL = "users_new_user_request";
+	
+	private static final String USER_CREATED_EMAIL_TMPL = "users_created";
+	
+	private static final String adminEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
 	
 	private DaoFactory daoFactory;
 
 	private UserFactory userFactory;
 	
-	private EmailSender emailSender;
+	private EmailService emailService;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -50,9 +66,9 @@ public class UserServiceImpl implements UserService {
 	public void setUserFactory(UserFactory userFactory) {
 		this.userFactory = userFactory;
 	}
-
-	public void setEmailSender(EmailSender emailSender) {
-		this.emailSender = emailSender;
+	
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
 	}
 
 	@Override
@@ -98,9 +114,10 @@ public class UserServiceImpl implements UserService {
 		
 			daoFactory.getUserDao().saveOrUpdate(user);
 			if (isSignupReq) {
-				emailSender.sendUserSignupEmail(user);
+				sendUserSignupEmail(user);
+				sendNewUserRequestEmail(user);
 			} else {
-				emailSender.sendUserCreatedEmail(user);
+				sendUserCreatedEmail(user);
 			}
 			return ResponseEvent.response(UserDetail.from(user));
 		} catch (OpenSpecimenException ose) {
@@ -133,6 +150,30 @@ public class UserServiceImpl implements UserService {
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<UserDetail> activateUser(RequestEvent<Long> req) {
+		try {
+			Long id = req.getPayload();
+			User user =  daoFactory.getUserDao().getById(id);
+			if (user == null) {
+				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
+			}
+			
+			user.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+			ForgotPasswordToken token = null;
+			if (user.getAuthDomain().getName().equals(DEFAULT_AUTH_DOMAIN)) {
+				token = new ForgotPasswordToken(user);
+				daoFactory.getUserDao().saveFpToken(token);
+			}
+			
+			sendUserRequestApprovedEmail(user, token);
+			return ResponseEvent.response(UserDetail.from(user));
+		} catch(Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
@@ -177,6 +218,7 @@ public class UserServiceImpl implements UserService {
 			
 			user.changePassword(detail.getNewPassword());
 			daoFactory.getUserDao().saveOrUpdate(user);
+			sendPasswdChangedEmail(user);
 			return ResponseEvent.response(true);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -212,6 +254,7 @@ public class UserServiceImpl implements UserService {
 			
 			user.changePassword(detail.getNewPassword());
 			dao.deleteFpToken(token);
+			sendPasswdChangedEmail(user);
 			return ResponseEvent.response(true);
 		}catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -238,7 +281,7 @@ public class UserServiceImpl implements UserService {
 			
 			ForgotPasswordToken token = new ForgotPasswordToken(user);
 			dao.saveFpToken(token);
-			emailSender.sendForgotPasswordEmail(user, token.getToken());
+			sendForgotPasswordLinkEmail(user, token.getToken());
 			return ResponseEvent.response(true);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
@@ -255,6 +298,53 @@ public class UserServiceImpl implements UserService {
 		dependencies.put("sites", sites);
 		
 		return dependencies;
+	}
+	
+	private void sendForgotPasswordLinkEmail(User user, String token) {
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("user", user);
+		props.put("token", token);
+		
+		emailService.sendEmail(FORGOT_PASSWORD_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
+	}
+	
+	private void sendPasswdChangedEmail(User user) {
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("user", user);
+		
+		emailService.sendEmail(PASSWD_CHANGED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
+	} 
+	
+	private void sendUserCreatedEmail(User user) {
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("user", user);
+		
+		emailService.sendEmail(USER_CREATED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
+	}
+	
+	private void sendUserSignupEmail(User user) {
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("user", user);
+		
+		emailService.sendEmail(SIGNED_UP_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
+	}
+	
+	private void sendNewUserRequestEmail(User user) {
+		String [] subjParams = new String[] {user.getFirstName(), user.getLastName()};
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("newUser", user);
+		props.put("admin", user); //TODO:replace with admin 
+		props.put("$subject", subjParams);
+		
+		emailService.sendEmail(NEW_USER_REQUEST_EMAIL_TMPL, new String[]{adminEmailAddress}, props);
+	}
+	
+	private void sendUserRequestApprovedEmail(User user, ForgotPasswordToken token) {
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("user", user);
+		props.put("token", token);
+		
+		emailService.sendEmail(REQUEST_APPROVED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	}
 	
 	private void ensureUniqueEmail(User existingUser, User newUser, OpenSpecimenException ose) {

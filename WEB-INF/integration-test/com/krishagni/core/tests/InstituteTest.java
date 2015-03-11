@@ -40,8 +40,6 @@ import com.krishagni.core.common.WebContextLoader;
 import com.krishagni.core.tests.testdata.CommonUtils;
 import com.krishagni.core.tests.testdata.InstituteTestData;
 
-import edu.wustl.catissuecore.domain.User;
-
 import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -325,7 +323,7 @@ public class InstituteTest {
 		}
 	}
 	
-	//@Test TODO: Need to fixes user mapping related issues
+	@Test
 	@DatabaseSetup("institute-test/update-institute-with-dependencies-initial.xml")
 	@DatabaseTearDown("institute-test/generic-teardown.xml")
 	@ExpectedDatabase(value="institute-test/update-institute-with-dependencies-expected.xml",
@@ -352,7 +350,7 @@ public class InstituteTest {
 		}
 	}
 	
-	//@Test TODO: Need to fixes user mapping related issues
+	@Test 
 	@DatabaseSetup("institute-test/update-institute-without-dependencies-for-remove-initial.xml")
 	@DatabaseTearDown("institute-test/generic-teardown.xml")
 	@ExpectedDatabase(value="institute-test/update-institute-without-dependencies-expected.xml",
@@ -380,7 +378,7 @@ public class InstituteTest {
 		}
 	}
 	
-	//@Test TODO: Need to fixes user mapping related issues
+	@Test 
 	@DatabaseSetup("institute-test/update-institute-with-dependencies-for-remove-initial.xml")
 	@DatabaseTearDown("institute-test/generic-teardown.xml")
 	public void updateInstituteTestWithRomoveDepartmentsWhichHaveDependencies() {
@@ -472,7 +470,7 @@ public class InstituteTest {
 		InstituteListCriteria crit = new InstituteListCriteria();
 		crit.startAt(1);
 		crit.maxResults(3);
-		RequestEvent<InstituteListCriteria> req = new RequestEvent<InstituteListCriteria>(CommonUtils.getSession(), crit);
+		RequestEvent<InstituteListCriteria> req = getRequest(crit);
 		
 		ResponseEvent<List<InstituteDetail>> resp = instituteSvc.getInstitutes(req);
 		TestUtils.recordResponse(resp);
@@ -504,7 +502,7 @@ public class InstituteTest {
 	public void getInstituteListWithFilter() {
 		InstituteListCriteria crit = new InstituteListCriteria();
 		crit.query("default-institute1");
-		RequestEvent<InstituteListCriteria> req = new RequestEvent<InstituteListCriteria>(CommonUtils.getSession(), crit);
+		RequestEvent<InstituteListCriteria> req = getRequest(crit);
 		
 		ResponseEvent<List<InstituteDetail>> resp = instituteSvc.getInstitutes(req);
 		TestUtils.recordResponse(resp);
@@ -524,7 +522,7 @@ public class InstituteTest {
 	public void getInstituteListWithoutStartAt_MaxResult_QueryFilter() {
 		InstituteListCriteria crit = new InstituteListCriteria();
 		
-		RequestEvent<InstituteListCriteria> req = new RequestEvent<InstituteListCriteria>(CommonUtils.getSession(), crit);
+		RequestEvent<InstituteListCriteria> req = getRequest(crit);
 		ResponseEvent<List<InstituteDetail>> resp = instituteSvc.getInstitutes(req);
 		TestUtils.recordResponse(resp);
 		
@@ -553,7 +551,7 @@ public class InstituteTest {
 		InstituteListCriteria crit = new InstituteListCriteria();
 		crit.startAt(0);
 		crit.maxResults(0);
-		RequestEvent<InstituteListCriteria> req = new RequestEvent<InstituteListCriteria>(CommonUtils.getSession(), crit);
+		RequestEvent<InstituteListCriteria> req = getRequest(crit);
 		ResponseEvent<List<InstituteDetail>> resp = instituteSvc.getInstitutes(req);
 		TestUtils.recordResponse(resp);
 		
@@ -573,7 +571,7 @@ public class InstituteTest {
 		InstituteQueryCriteria crit = new InstituteQueryCriteria(); 
 		crit.setId(1L);
 		
-		RequestEvent<InstituteQueryCriteria> req = new RequestEvent<InstituteQueryCriteria>(CommonUtils.getSession(), crit);		
+		RequestEvent<InstituteQueryCriteria> req = getRequest(crit);		
 		ResponseEvent<InstituteDetail> resp = instituteSvc.getInstitute(req);
 		TestUtils.recordResponse(resp);
 		
@@ -597,7 +595,7 @@ public class InstituteTest {
 		InstituteQueryCriteria crit = new InstituteQueryCriteria(); 
 		crit.setName("default-institute1");
 		
-		RequestEvent<InstituteQueryCriteria> req = new RequestEvent<InstituteQueryCriteria>(CommonUtils.getSession(), crit);		
+		RequestEvent<InstituteQueryCriteria> req = getRequest(crit);		
 		ResponseEvent<InstituteDetail> resp = instituteSvc.getInstitute(req);
 		TestUtils.recordResponse(resp);
 		
@@ -617,12 +615,12 @@ public class InstituteTest {
 	@Test
 	@DatabaseSetup("institute-test/institute-list-initial.xml")
 	@DatabaseTearDown("institute-test/generic-teardown.xml")
-	public void getInstituteWithNullIdAndName() {
+	public void getInstituteWithNullIdAndNullName() {
 		InstituteQueryCriteria crit = new InstituteQueryCriteria(); 
 		crit.setId(null);
 		crit.setName(null);
 		
-		RequestEvent<InstituteQueryCriteria> req = new RequestEvent<InstituteQueryCriteria>(CommonUtils.getSession(), crit);		
+		RequestEvent<InstituteQueryCriteria> req = getRequest(crit);		
 		ResponseEvent<InstituteDetail> resp = instituteSvc.getInstitute(req);
 		TestUtils.recordResponse(resp);
 		
@@ -630,13 +628,13 @@ public class InstituteTest {
 		TestUtils.checkErrorCode(resp, InstituteErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	
-	//@Test TODO: Need to fixes user mapping related issues
+	@Test 
 	@DatabaseSetup("institute-test/institute-list-with-disabled-activity-status-initial.xml")
 	@DatabaseTearDown("institute-test/generic-teardown.xml")
-	public void getInstituteWithIdAndDisableActivityStatus() {
+	public void getInstituteWithIdAndDisabledActivityStatus() {
 		InstituteQueryCriteria crit = new InstituteQueryCriteria(); 
 		crit.setId(4L);
-		RequestEvent<InstituteQueryCriteria> req = new RequestEvent<InstituteQueryCriteria>(CommonUtils.getSession(), crit);		
+		RequestEvent<InstituteQueryCriteria> req = getRequest(crit);		
 		ResponseEvent<InstituteDetail> resp = instituteSvc.getInstitute(req);
 		TestUtils.recordResponse(resp);
 		
@@ -644,13 +642,13 @@ public class InstituteTest {
 		TestUtils.checkErrorCode(resp, InstituteErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	
-	//@Test TODO: Need to fixes user mapping related issues
+	@Test 
 	@DatabaseSetup("institute-test/institute-list-with-disabled-activity-status-initial.xml")
 	@DatabaseTearDown("institute-test/generic-teardown.xml")
-	public void getInstituteWithNameAndDisableActivityStatus() {
+	public void getInstituteWithNameAndDisabledActivityStatus() {
 		InstituteQueryCriteria crit = new InstituteQueryCriteria(); 
 		crit.setId(4L);
-		RequestEvent<InstituteQueryCriteria> req = new RequestEvent<InstituteQueryCriteria>(CommonUtils.getSession(), crit);		
+		RequestEvent<InstituteQueryCriteria> req = getRequest(crit);
 		ResponseEvent<InstituteDetail> resp = instituteSvc.getInstitute(req);
 		TestUtils.recordResponse(resp);
 		
@@ -671,13 +669,13 @@ public class InstituteTest {
 		DeleteEntityOp deleteInstOp = new DeleteEntityOp();
 		deleteInstOp.setId(2L);
 		deleteInstOp.setClose(false);
-		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(CommonUtils.getSession(), deleteInstOp);
+		RequestEvent<DeleteEntityOp> req = getRequest(deleteInstOp);
 		ResponseEvent<Map<String,List>> resp = instituteSvc.deleteInstitute(req);
 		Assert.assertEquals(true, resp.isSuccessful());
 		Assert.assertEquals(0, resp.getPayload().size());
 	}
 	
-	//@Test TODO: Need to fixes user mapping related issues
+	@Test
 	@DatabaseSetup("institute-test/institute-with-dependencies-initial.xml")
 	@DatabaseTearDown("institute-test/generic-teardown.xml")
 	@ExpectedDatabase(value="institute-test/delete-institute-with-dependency-expected.xml",
@@ -686,7 +684,7 @@ public class InstituteTest {
 		DeleteEntityOp deleteInstOp = new DeleteEntityOp();
 		deleteInstOp.setId(1L);
 		deleteInstOp.setClose(false);
-		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(CommonUtils.getSession(), deleteInstOp);
+		RequestEvent<DeleteEntityOp> req = getRequest(deleteInstOp);
 		
 		ResponseEvent<Map<String,List>> resp = instituteSvc.deleteInstitute(req);
 		TestUtils.recordResponse(resp);
@@ -695,7 +693,7 @@ public class InstituteTest {
 	    Assert.assertEquals(1, resp.getPayload().size());
 	}
 	
-	//@Test TODO: Need to fixes user mapping related issues
+	@Test 
 	@DatabaseSetup("institute-test/institute-with-dependencies-initial.xml")
 	@DatabaseTearDown("institute-test/generic-teardown.xml")
 	@ExpectedDatabase(value="institute-test/delete-close-institute-with-dependency-expected.xml",
@@ -704,7 +702,7 @@ public class InstituteTest {
 		DeleteEntityOp deleteInstOp = new DeleteEntityOp();
 		deleteInstOp.setId(1L);
 		deleteInstOp.setClose(true);
-		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(CommonUtils.getSession(), deleteInstOp);
+		RequestEvent<DeleteEntityOp> req = getRequest(deleteInstOp);
 		
 		ResponseEvent<Map<String,List>> resp = instituteSvc.deleteInstitute(req);
 		TestUtils.recordResponse(resp);
@@ -722,7 +720,7 @@ public class InstituteTest {
 		DeleteEntityOp deleteInstOp = new DeleteEntityOp();
 		deleteInstOp.setId(2L);
 		deleteInstOp.setClose(true);
-		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(CommonUtils.getSession(), deleteInstOp);
+		RequestEvent<DeleteEntityOp> req = getRequest(deleteInstOp);
 		
 		ResponseEvent<Map<String,List>> resp = instituteSvc.deleteInstitute(req);
 		TestUtils.recordResponse(resp);
@@ -736,7 +734,7 @@ public class InstituteTest {
 		DeleteEntityOp deleteInstOp = new DeleteEntityOp();
 		deleteInstOp.setId(null);
 		deleteInstOp.setClose(false);
-		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(CommonUtils.getSession(), deleteInstOp);
+		RequestEvent<DeleteEntityOp> req = getRequest(deleteInstOp);
 		
 		ResponseEvent<Map<String,List>> resp = instituteSvc.deleteInstitute(req);
 		TestUtils.recordResponse(resp);
@@ -751,7 +749,7 @@ public class InstituteTest {
 		DeleteEntityOp deleteInstOp = new DeleteEntityOp();
 		deleteInstOp.setId(-1L);
 		deleteInstOp.setClose(false);
-		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(CommonUtils.getSession(), deleteInstOp);
+		RequestEvent<DeleteEntityOp> req = getRequest(deleteInstOp);
 		ResponseEvent<Map<String,List>> resp = instituteSvc.deleteInstitute(req);
 		Assert.assertEquals(false, resp.isSuccessful());
 		TestUtils.checkErrorCode(resp, InstituteErrorCode.NOT_FOUND, ErrorType.USER_ERROR);

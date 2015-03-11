@@ -1,5 +1,6 @@
 package com.krishagni.core.tests;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +36,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
+import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -60,6 +62,8 @@ public class VisitsTest {
 	
 	@Autowired
 	private CollectionProtocolRegistrationService cprSvc;
+	
+	@Autowired
 	private VisitService visitService;
 	
 	@Autowired
@@ -68,6 +72,8 @@ public class VisitsTest {
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return CommonUtils.getRequest(payload);
 	}
+	
+	
 	
 	/*
 	 * Add Visit API Tests
@@ -88,7 +94,7 @@ public class VisitsTest {
 		Assert.assertEquals((Long)1L, resp.getPayload().getCprId());
 		Assert.assertEquals("test-pathology", resp.getPayload().getSurgicalPathologyNumber());
 		Assert.assertEquals("test-daiagnosis", resp.getPayload().getClinicalDiagnosis());
-		Assert.assertEquals("Completed", resp.getPayload().getStatus());
+		Assert.assertEquals("Complete", resp.getPayload().getStatus());
 		Assert.assertEquals("SITE1", resp.getPayload().getSite());
 		Assert.assertEquals("Active", resp.getPayload().getActivityStatus());
 		Assert.assertEquals("test-status", resp.getPayload().getClinicalStatus());
@@ -151,7 +157,7 @@ public class VisitsTest {
 		
 		TestUtils.recordResponse(resp);
 		Assert.assertEquals(false, resp.isSuccessful());
-		TestUtils.checkErrorCode(resp, SiteErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+		TestUtils.checkErrorCode(resp, VisitErrorCode.SITE_REQUIRED, ErrorType.USER_ERROR);
 		TestUtils.checkErrorCode(resp, CpErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
 	}
 	
@@ -288,5 +294,376 @@ public class VisitsTest {
 			cal.add(Calendar.DAY_OF_YEAR, visit.getEventPoint());
 			Assert.assertEquals(cal.getTime(), visit.getAnticipatedVisitDate());
 		}
+	}
+	
+	/*
+	 * Update Visit API's Test
+	 */
+	
+	public void assertVisitDetail(VisitDetail detail){
+		Assert.assertEquals("Error: Event id mismatch", (Long)2L, detail.getEventId());
+		Assert.assertEquals("Error: CPR id mismatch", (Long)2L, detail.getCprId());
+		Assert.assertEquals("Error: Pathology number mismatch", "updated-pathology", detail.getSurgicalPathologyNumber());
+		Assert.assertEquals("Error: Clinical diagnosis mismatch", "updated-daiagnosis", detail.getClinicalDiagnosis());
+		Assert.assertEquals("Error: Status mismatch", "Complete", detail.getStatus());
+		Assert.assertEquals("Error: Site mismatch", "SITE2", detail.getSite());
+		Assert.assertEquals("Error: Activity status mismatch", "Active", detail.getActivityStatus());
+		Assert.assertEquals("Error: Clinical status mismatch", "updated-status", detail.getClinicalStatus());
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/visits-test/update-visit-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void updateVisitsTest() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was not found successfull", true, resp.isSuccessful());
+		Assert.assertNotNull("Error: Response was found null", resp.getPayload());
+		Assert.assertEquals("Error: Name mismatch", "updated-visit", resp.getPayload().getName());
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		Assert.assertEquals("Error: Visit date mismatch", formatter.format(CommonUtils.getDate(21,1,2014)), formatter.format(resp.getPayload().getVisitDate()));
+		assertVisitDetail(resp.getPayload());
+	}
+	
+	@Test
+	public void updateVisitWhichIsNotPresent() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was found successfull", false, resp.isSuccessful());
+		Assert.assertNull("Error: Response was not found null", resp.getPayload());
+		TestUtils.checkErrorCode(resp, VisitErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/visits-test/update-visit-with-null-name-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void updateVisitsTestWithNullName() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setName(null);
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was not found successfull", true, resp.isSuccessful());
+		Assert.assertNotNull("Error: Response was found null", resp.getPayload());
+		Assert.assertEquals("Error: Name mismatch", "default-visit", resp.getPayload().getName());
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		Assert.assertEquals("Error: Visit date mismatch", formatter.format(CommonUtils.getDate(21,1,2014)), formatter.format(resp.getPayload().getVisitDate()));
+		assertVisitDetail(resp.getPayload());
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void updateVisitsTestWithDuplicateName() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setName("duplicate-visit");
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was found successfull", false, resp.isSuccessful());
+		Assert.assertNull("Error: Response was not found null", resp.getPayload());
+		TestUtils.checkErrorCode(resp, VisitErrorCode.DUP_NAME, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/visits-test/update-visit-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void updateVisitsTestWithCpTitleAndEventLabel() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setEventId(null);
+		input.setCpTitle("default-cp");
+		input.setEventLabel("Visit2");
+		
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was not found successfull", true, resp.isSuccessful());
+		Assert.assertNotNull("Error: Response was found null", resp.getPayload());
+		Assert.assertEquals("Error: Name mismatch", "updated-visit", resp.getPayload().getName());
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		Assert.assertEquals("Error: Visit date mismatch", formatter.format(CommonUtils.getDate(21,1,2014)), formatter.format(resp.getPayload().getVisitDate()));
+		assertVisitDetail(resp.getPayload());
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void updateVisitsTestWithInvalidCpId() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setEventId(-1L);
+		
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was found successfull", false, resp.isSuccessful());
+		Assert.assertNull("Error: Response was not found null", resp.getPayload());
+		TestUtils.checkErrorCode(resp, CpeErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void updateVisitsTestWithInvalidCpTitleButValidEventLabel() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setEventId(null);
+		input.setCpTitle("invalid-cp");
+		input.setEventLabel("Visit2");
+		
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was found successfull", false, resp.isSuccessful());
+		Assert.assertNull("Error: Response was not found null", resp.getPayload());
+		TestUtils.checkErrorCode(resp, CpErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void updateVisitsTestWithInvalidEventLabel() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setEventId(null);
+		input.setCpTitle("default-cp");
+		input.setEventLabel("invalid-label");
+		
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was found successfull", false, resp.isSuccessful());
+		Assert.assertNull("Error: Response was not found null", resp.getPayload());
+		TestUtils.checkErrorCode(resp, CpeErrorCode.LABEL_NOT_FOUND, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/visits-test/update-visit-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void updateVisitsTestWithCpTitleAndPpId() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setCprId(null);
+		input.setCpTitle("default-cp");
+		input.setPpid("default-gen-ppid-2");
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was not found successfull", true, resp.isSuccessful());
+		Assert.assertNotNull("Error: Response was found null", resp.getPayload());
+		Assert.assertEquals("Error: Name mismatch", "updated-visit", resp.getPayload().getName());
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		Assert.assertEquals("Error: Visit date mismatch", formatter.format(CommonUtils.getDate(21,1,2014)), formatter.format(resp.getPayload().getVisitDate()));
+		assertVisitDetail(resp.getPayload());
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void updateVisitsTestWithInvalidCprId() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setCprId(-1L);
+		
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was found successfull", false, resp.isSuccessful());
+		Assert.assertNull("Error: Response was not found null", resp.getPayload());
+		TestUtils.checkErrorCode(resp, CprErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void updateVisitsTestWithInvalidCpTitleButValidPpId() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setCprId(null);
+		input.setCpTitle("invalid-title");
+		input.setPpid("default-gen-ppid-2");
+		
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was found successfull", false, resp.isSuccessful());
+		Assert.assertNull("Error: Response was not found null", resp.getPayload());
+		TestUtils.checkErrorCode(resp, CpErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void updateVisitsTestWithInvalidPpId() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setCprId(null);
+		input.setCpTitle("default-cp");
+		input.setPpid("invalid-ppid");
+		
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was found successfull", false, resp.isSuccessful());
+		Assert.assertNull("Error: Response was not found null", resp.getPayload());
+		TestUtils.checkErrorCode(resp, CprErrorCode.INVALID_CP_AND_PPID, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-with-cpr-and-cpe-mismatch.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void updateVisitsTestWithCprAndCpeMismatch() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setCprId(1L);
+		input.setEventId(2L);
+		
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was found successfull", false, resp.isSuccessful());
+		Assert.assertNull("Error: Response was not found null", resp.getPayload());
+		TestUtils.checkErrorCode(resp, CprErrorCode.INVALID_CPE, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/visits-test/update-visit-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void updateVisitsTestWithNullVisitDate() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setVisitDate(null);
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was not found successfull", true, resp.isSuccessful());
+		Assert.assertNotNull("Error: Response was found null", resp.getPayload());
+		Assert.assertEquals("Error: Name mismatch", "updated-visit", resp.getPayload().getName());
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		Assert.assertEquals("Error: Visit date mismatch", formatter.format(new Date()), formatter.format(resp.getPayload().getVisitDate()));
+		assertVisitDetail(resp.getPayload());
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void updateVisitsTestWithInvalidVisitDate() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setVisitDate(CommonUtils.getDate(21, 1, 2000));
+		
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was found successfull", false, resp.isSuccessful());
+		Assert.assertNull("Error: Response was not found null", resp.getPayload());
+		TestUtils.checkErrorCode(resp, VisitErrorCode.INVALID_VISIT_DATE, ErrorType.USER_ERROR);
+	}
+	
+	// TODO: Uncomment this test cases when isValidPv() works fine.
+	//@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void updateVisitsTestWithInvalidVisitStatus() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setStatus("invalid-status");
+		
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was found successfull", false, resp.isSuccessful());
+		Assert.assertNull("Error: Response was not found null", resp.getPayload());
+		TestUtils.checkErrorCode(resp, VisitErrorCode.INVALID_STATUS, ErrorType.USER_ERROR);
+	}
+	
+	// TODO: Uncomment this test cases when isValidPv() works fine.
+	//@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void updateVisitsTestWithInvalidClinicalDiagnosis() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setClinicalDiagnosis("invalid-diagnosis");
+		
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was found successfull", false, resp.isSuccessful());
+		Assert.assertNull("Error: Response was not found null", resp.getPayload());
+		TestUtils.checkErrorCode(resp, VisitErrorCode.INVALID_CLINICAL_DIAGNOSIS, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void updateVisitsTestWithStatusCompleteAndWithoutSiteName() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setId(2L);
+		input.setSite("");
+		
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was found successfull", false, resp.isSuccessful());
+		Assert.assertNull("Error: Response was not found null", resp.getPayload());
+		TestUtils.checkErrorCode(resp, VisitErrorCode.SITE_REQUIRED, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void updateVisitsTestWithInvalidSite(){
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setSite("invalid-site");
+		
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was found successfull", false, resp.isSuccessful());
+		Assert.assertNull("Error: Response was not found null", resp.getPayload());
+		TestUtils.checkErrorCode(resp, SiteErrorCode.NOT_FOUND, ErrorType.USER_ERROR);
+	}
+	
+	@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	@ExpectedDatabase(value="cp-test/visits-test/update-visit-expected.xml", 
+		assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	public void updateVisitsTestWithNullActivityStatus() {
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setActivityStatus(null);
+		
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was not found successfull", true, resp.isSuccessful());
+		Assert.assertNotNull("Error: Response was found null", resp.getPayload());
+		Assert.assertEquals("Error: Name mismatch", "updated-visit", resp.getPayload().getName());
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		Assert.assertEquals("Error: Visit date mismatch", formatter.format(CommonUtils.getDate(21,1,2014)), formatter.format(resp.getPayload().getVisitDate()));
+		assertVisitDetail(resp.getPayload());
+	}
+	
+	//TODO: uncomment this after isValidPV() works fine
+	//@Test
+	@DatabaseSetup("cp-test/visits-test/update-visit-initial.xml")
+	@DatabaseTearDown("cp-test/registration-test/generic-teardown.xml")
+	public void updateVisitsTestWithInvalidActivityStatus(){
+		VisitDetail input = VisitsTestData.getUpdateVisitDetail();
+		input.setSite("invalid-activity-status");
+		
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(input));
+		
+		TestUtils.recordResponse(resp);
+		Assert.assertEquals("Error: Response was found successfull", false, resp.isSuccessful());
+		Assert.assertNull("Error: Response was not found null", resp.getPayload());
+		TestUtils.checkErrorCode(resp, ActivityStatusErrorCode.INVALID, ErrorType.USER_ERROR);
 	}
 }

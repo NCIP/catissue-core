@@ -1,5 +1,8 @@
 <div class="clearfix">
   <div class="col-xs-8">
+    <div class="alert alert-info" ng-if="user.activityStatus == 'Pending'">
+      <span translate="user.request_pending">Following are details of user whose approval is pending.</span>
+    </div>
     <ul class="os-key-values os-two-cols" os-inline-editors on-save="editUser">
       <li class="item">
         <strong class="key key-sm" translate="user.last_name">Last Name</strong>
@@ -89,5 +92,16 @@
         </os-inline-edit>
       </li>
     </ul>
+
+    <div ng-if="user.activityStatus == 'Pending'">
+      <button class="btn btn-success" ng-click="activate()">
+        <span class="fa fa-check"></span>
+        <span translate="user.approve_user"> Approve User </span>
+      </button>
+      <button class="btn btn-danger" ng-click="delete()">
+        <span class="fa fa-remove"></span>
+        <span translate="user.reject_user"> Reject User </span>
+      </button>
+    </div>
   </div>
 </div>

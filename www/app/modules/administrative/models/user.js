@@ -58,6 +58,10 @@ angular.module('os.administrative.models.user', ['os.common.models'])
       return $http.post(User.url() + 'sign-up', user).then(ApiUtil.processResp);
     }
 
+    User.activate = function(id) {
+      return $http.put(User.url() + id + '/activity-status').then(User.modelRespTransform);
+    }
+
     return User;
   });
 

@@ -43,13 +43,13 @@ angular.module('os.administrative.models.role', ['os.common.models'])
     }
 
     Role.prototype.$saveProps = function() {
-      this.acls = getAcls();
+      this.acls = getAclsForSave(this.acls);
       return this;
     };
 
-    function getAcls() {
+    function getAclsForSave(inputAcls) {
       var acls = [];
-      angular.forEach(this.acls, function(acl) {
+      angular.forEach(inputAcls, function(acl) {
         var permissions = [];
         angular.forEach(acl.permissions, function(permission) {
           if (permission.selected) {
@@ -84,7 +84,18 @@ angular.module('os.administrative.models.role', ['os.common.models'])
     var Resource = osModel('resources');
 
     Resource.list = function() {
-      var resources = ['User', 'Institute', 'Collection Protocol', 'Site'];
+      var resources = [
+        'Collection Protocol', 
+        'Distribution Protocol', 
+        'Institute', 
+        'Order',
+        'Participant (PHI)',
+        'Visit',
+        'Specimen',
+        'Site',
+        'Storage Container',
+        'User' 
+      ];
       return resources;
     }
 

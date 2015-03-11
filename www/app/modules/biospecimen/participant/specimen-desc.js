@@ -18,7 +18,7 @@ angular.module('os.biospecimen.participant.specimen-desc', [])
         '<span class="os-specimen-desc">' +
           '<span ng-if="specimen.lineage == \'New\'">' +
             '<span ng-if="!!specimen.pathology && specimen.pathology != notSpecified">' +
-              '{{specimen.pathology}}, ' +
+              '{{specimen.pathology}} ' +
             '</span>' +
             '<span>{{specimen.type}} </span>' +
             '<span ng-if="specimen.specimenClass == \'Tissue\' && ' +

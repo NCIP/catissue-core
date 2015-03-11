@@ -7,45 +7,83 @@ angular.module('os.biospecimen.participant.collect-specimens',
   .factory('CollectSpecimensSvc', function($state) {
     var data = {};
     return {
-      collect: function(visit, specimens) {
+      collect: function(stateDetail, visit, specimens) {
         data.specimens = specimens;
+        data.stateDetail = stateDetail;
         data.visit = visit;
-        $state.go('participant-detail.collect-specimens', {visitId: visit.id});
+        $state.go('participant-detail.collect-specimens', {visitId: visit.id, eventId: visit.eventId});
       },
 
       clear: function() {
         data.specimens = [];
         data.visit = undefined;
+        data.stateDetail = undefined;
       },
 
       getSpecimens: function() {
-        return data.specimens; 
+        return data.specimens || []; 
       },
 
       getVisit: function() {
         return data.visit;
+      },
+
+      getStateDetail: function() {
+        return data.stateDetail;
       }
     };
   })
   .controller('CollectSpecimensCtrl', 
-    function($scope, $translate, Specimen, PvManager, CollectSpecimensSvc, Container, Alerts) {
+    function(
+      $scope, $translate, $state,
+      cpr, visit, 
+      Visit, Specimen, PvManager, 
+      CollectSpecimensSvc, Container, Alerts) {
+
       function init() {
+        $scope.specimens = CollectSpecimensSvc.getSpecimens().map(
+          function(specimen) {
+            specimen.existingStatus = specimen.status;
+            if (specimen.status != 'Collected') {
+              specimen.status = 'Collected';
+            }
+            return specimen;
+          }
+        );
+
+        var visitDate = visit.visitDate || visit.anticipatedVisitDate;
+        visit.visitDate = new Date(visitDate).toISOString();
+        visit.cprId = cpr.id;
+        delete visit.anticipatedVisitDate;
+        $scope.visit = visit;
+        
+        $scope.collDetail = {
+          collector: '',
+          collectionDate: new Date().toISOString(),
+          receiver: '',
+          receiveDate: new Date().toISOString()
+        };
+
+        loadPvs();
+      };
+
+      function loadPvs() {
         $scope.notSpecified = $translate.instant('pvs.not_specified');
-        $scope.specimens = CollectSpecimensSvc.getSpecimens();
-        $scope.visit = CollectSpecimensSvc.getVisit();
+        $scope.sites = PvManager.getSites();
+        $scope.specimenStatuses = PvManager.getPvs('specimen-status');
       };
 
       $scope.applyFirstLocationToAll = function() {
         var containerName = undefined;
         for (var i = 0; i < $scope.specimens.length; ++i) {
-          if ($scope.specimens[i].isOpened && $scope.specimens[i].status != 'Collected') {
+          if ($scope.specimens[i].isOpened && $scope.specimens[i].existingStatus != 'Collected') {
             containerName = $scope.specimens[i].storageLocation.name;
             break;
           }
         }
 
         for (var i = 1; i < $scope.specimens.length; i++) {
-          if ($scope.specimens[i].status != 'Collected') {
+          if ($scope.specimens[i].existingStatus != 'Collected') {
             $scope.specimens[i].storageLocation = {name: containerName};
           }
         }
@@ -59,6 +97,23 @@ angular.module('os.biospecimen.participant.collect-specimens',
         specimen.isOpened = false;
       };
 
+      $scope.remove = function(specimen) {
+        var idx = $scope.specimens.indexOf(specimen);
+        $scope.specimens.splice(idx, descendentCount(specimen) + 1);
+      };
+
+      $scope.statusChanged = function(specimen) {
+        setDescendentStatus(specimen); 
+
+        if (specimen.status == 'Collected') {
+          var curr = specimen.parent;
+          while (curr) {
+            curr.status = specimen.status;
+            curr = curr.parent;
+          }
+        }
+      };
+        
       $scope.saveSpecimens = function() {
         if (areDuplicateLabelsPresent($scope.specimens)) {
           Alerts.error('specimens.errors.duplicate_labels');
@@ -66,24 +121,45 @@ angular.module('os.biospecimen.participant.collect-specimens',
         }
 
         var specimensToSave = getSpecimensToSave($scope.specimens, []);
-        Specimen.save(specimensToSave).then(
-          function(result) {
-            if (result && result.length > 0) {
-              //
-              // TODO: a better way could be to merge results with existing data
-              //
-              //$state.go('participant-detail.visits', {}, {reload: true});
+        if (!!$scope.visit.id && $scope.visit.status == 'Complete') {
+          Specimen.save(specimensToSave).then(
+            function() {
               CollectSpecimensSvc.clear();
               $scope.back();
-            }
-          }
-        );
+            });
+        } else {
+          $scope.visit.status = 'Complete';
+          var payload = {visit: $scope.visit, specimens: specimensToSave};
+          Visit.collectVisitAndSpecimens(payload).then(
+            function(result) {
+              var visitId = result.data.visit.id;
+              var sd = CollectSpecimensSvc.getStateDetail();
+              CollectSpecimensSvc.clear();
+              $state.go(sd.state.name, angular.extend(sd.params, {visitId: visitId}));
+            });
+        }
+      };
+
+      function descendentCount(specimen) { 
+        var count = 0;
+        for (var i = 0; i < specimen.children.length; ++i) {
+          count += 1 + descendentCount(specimen.children[i]);
+        }
+
+        return count;
+      };
+
+      function setDescendentStatus(specimen) {
+        for (var i = 0; i < specimen.children.length; ++i) {
+          specimen.children[i].status = specimen.status;
+          setDescendentStatus(specimen.children[i]);
+        }
       };
 
       function areDuplicateLabelsPresent(input) {
         var labels = [];
         for (var i = 0; i < input.length; ++i) {
-          if (labels.indexOf(input[i].label) != -1) {
+          if (!!input[i].label && labels.indexOf(input[i].label) != -1) {
             return true;
           }
 
@@ -96,7 +172,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
       function getSpecimensToSave(uiSpecimens, visited) {
         var result = [];
         angular.forEach(uiSpecimens, function(uiSpecimen) {
-          if (uiSpecimen.status == 'Collected' || // when specimen is already collected
+          if (uiSpecimen.existingStatus == 'Collected' || // when specimen is already collected
               !uiSpecimen.selected ||  // when specimen is not selected on ui
               visited.indexOf(uiSpecimen) > 0) { // when specimen is already visited
             return;
@@ -122,7 +198,8 @@ angular.module('os.biospecimen.participant.collect-specimens',
           visitId: $scope.visit.id,
           storageLocation: uiSpecimen.storageLocation,
           parentId: uiSpecimen.parentId,
-          lineage: uiSpecimen.lineage
+          lineage: uiSpecimen.lineage,
+          status: uiSpecimen.status
         };
 
         if (!!specimen.reqId || specimen.lineage == 'Aliquot') {

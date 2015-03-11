@@ -240,6 +240,7 @@ public class Visit {
 		setComments(visit.getComments());
 		setName(visit.getName());		
 		setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
+		setVisitDate(visit.getVisitDate());
 	}
 
 	public void updateReports(Visit scg) {

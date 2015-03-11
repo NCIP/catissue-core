@@ -100,6 +100,7 @@
   <bean id="visitService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.VisitServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="visitFactory" ref="visitFactory"/>
+    <property name="specimenSvc" ref="specimenSvc"/>
   </bean>
 
   <bean id="bulkOperationService" class="com.krishagni.catissueplus.bulkoperator.services.impl.BulkOperationServiceImpl">
@@ -184,14 +185,11 @@
   <bean id="userFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.UserFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
-  
-  <bean id="eSender" class="com.krishagni.catissueplus.core.common.email.EmailSender">
-  </bean>
 
   <bean id="userSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="userFactory" ref="userFact"/>
-    <property name="emailSender" ref="eSender"/>
+    <property name="emailService" ref="emailService"/>
   </bean>
 
   <bean id="domainFact" class="com.krishagni.catissueplus.core.auth.domain.factory.impl.DomainRegistrationFactoryImpl">
@@ -277,6 +275,7 @@
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="userDao" ref="userDao"/>
     <property name="queryFolderFactory" ref="queryFolderFactory"/>
+    <property name="emailService" ref="emailService"/>
   </bean>
 
   <bean id="extAppNotificationService" class="com.krishagni.catissueplus.core.notification.services.impl.ExternalAppNotificationServiceImpl">
@@ -300,6 +299,7 @@
   <bean id="emailNotificationSvc"
     class="com.krishagni.catissueplus.core.notification.services.impl.EmailNotificationServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory" />
+    <property name="emailService" ref="emailService"/>
   </bean>
 
   <bean id="instituteDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.InstituteDependencyChecker">
@@ -402,6 +402,26 @@
       </map>
     </property>
   </bean>
+
+  <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+    <property name="resourceLoaderPath" value="/WEB-INF/resources/" />
+  </bean>
+
+  <bean id="templateService" class="com.krishagni.catissueplus.core.common.service.impl.TemplateServiceImpl">
+    <property name="velocityEngine" ref="velocityEngine"/>
+  </bean>
+
+  <bean id="emailService" class="com.krishagni.catissueplus.core.common.service.impl.EmailServiceImpl">
+    <property name="taskExecutor" ref="taskExecutor"/>
+    <property name="templateService" ref="templateService"/>
+    <property name="resourceBundle" ref="resourceBundle"/>
+  </bean>
+
+  <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+    <property name="corePoolSize" value="5" />
+    <property name="maxPoolSize" value="10" />
+    <property name="WaitForTasksToCompleteOnShutdown" value="true"/>
+  </bean>
   
   <task:scheduler id="taskScheduler" pool-size="1"/>
   <task:annotation-driven scheduler="taskScheduler"/>
@@ -409,4 +429,5 @@
   <context:spring-configured/> 
   
   <import resource="classpath*:com/krishagni/openspecimen/custom/*Context.xml"/>
- </beans>	
+
+</beans>
