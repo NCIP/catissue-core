@@ -289,7 +289,7 @@
  
     "buttons": {
       "create_aliquots": "Create Aliquots",
-      "create_derived": "Create Derived",
+      "create_derivative": "Create Derivative",
       "add_sr": "Add Specimen Requirement..."
     },
 
