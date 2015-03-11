@@ -53,4 +53,8 @@ public class Utility {
 		
 		return leftOperand.containsAll(rightOperand);		
 	}	
+
+	public static String getAppUrl() {
+		return XMLPropertyHandler.getValue("application.url");
+	}
 }

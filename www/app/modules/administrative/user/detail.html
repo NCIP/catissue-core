@@ -6,12 +6,13 @@
 
     <h3>{{user.lastName}} {{user.firstName}}</h3>
 
-    <button class="os-round-btn" title="{{'user.tooltip.create_user' | translate}}" ui-sref="user-addedit({userId: user.id})">
+    <button class="os-round-btn" title="{{'user.tooltip.create_user' | translate}}" 
+      ui-sref="user-addedit({userId: user.id})" ng-if="user.activityStatus != 'Pending'">
       <span class="fa fa-pencil"></span>
     </button>
   </div>
     
-  <div os-side-menu>
+  <div os-side-menu ng-if="user.activityStatus != 'Pending'">
     <ul>
       <li ui-sref-active="active">
         <a ui-sref=".overview">

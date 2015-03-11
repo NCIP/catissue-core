@@ -110,9 +110,20 @@ public class UserController {
 		
 		return resp.getPayload();
 	}
-
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/activity-status")
 	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public UserDetail activateUser(@PathVariable Long id) {
+		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		ResponseEvent<UserDetail> resp = userService.activateUser(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public Map<String, List> disableUser(@PathVariable Long id,
 			@RequestParam(value = "close", required = false, defaultValue = "false") boolean close) {

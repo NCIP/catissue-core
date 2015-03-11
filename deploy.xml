@@ -395,7 +395,7 @@
 		<echo message="Copying email-templates to WEB-INF/classes" />	
 		
 		<copy todir="${temp.dir}/catissuecore-properties/ng-email-templates" overwrite="true">
-			<fileset dir="${base.dir}/WEB-INF/resources/ng-email-templates"/>
+			<fileset dir="${base.dir}/WEB-INF/resources/email-templates"/>
 		</copy>
 		
 		<antcall target="configure_log4j" />
@@ -729,6 +729,7 @@
 			<replacefilter token="@@CdmsURL@@" value="${clinportal.url}" />
 			<replacefilter token="@@CdmsKeyStorePath@@" value="" />
 			<replacefilter token="@@appserver.home.dir@@" value="${jboss.home.dir}" />
+			<replacefilter token="@@application.url@@" value="${Application.url}" />
 
 			<replacefilter token="@@use.email.commonpackage.config@@" value="${use.email.commonpackage.config}" />
 			<replacefilter token="@@email.sendEmailTo.emailAddress@@" value="${email.sendEmailTo.emailAddress}" />
