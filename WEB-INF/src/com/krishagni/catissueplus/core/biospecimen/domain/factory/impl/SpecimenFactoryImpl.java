@@ -104,12 +104,11 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setLabel(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		if (StringUtils.isBlank(detail.getLabel()) && specimen.isCollected()) {
+		if (StringUtils.isNotBlank(detail.getLabel())) {
+			specimen.setLabel(detail.getLabel());
+		} else if (specimen.isCollected()) { // blank and status is collected
 			ose.addError(SpecimenErrorCode.LABEL_REQUIRED);
-			return;
-		}
-		
-		specimen.setLabel(detail.getLabel());
+		}		
 	}
 
 	private Visit getVisit(SpecimenDetail detail, OpenSpecimenException ose) {

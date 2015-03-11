@@ -135,6 +135,10 @@ public class SpecimenServiceImpl implements SpecimenService {
 	}
 	
 	private void ensureUniqueLabel(String label, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(label)) {
+			return;
+		}
+		
 		if (daoFactory.getSpecimenDao().getByLabel(label) != null) {
 			ose.addError(SpecimenErrorCode.DUP_LABEL);
 		}
