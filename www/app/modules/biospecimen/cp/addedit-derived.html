@@ -22,9 +22,17 @@
 
       <div class="col-xs-3">
         <div class="form-group">
-          <input name="quantity" ng-model="derivative.quantity" 
-            os-md-input class="form-control" type="text" placeholder="{{'srs.qty' | translate}}"
-            required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+          <div class="os-input-addon-grp">
+            <input name="quantity" ng-model="derivative.quantity" 
+              os-md-input class="form-control" type="text" placeholder="{{'srs.qty' | translate}}"
+              required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+            <div class="os-md-input os-input-addon-right" ng-switch on="derivative.specimenClass">
+              <span ng-switch-when="Cell">cells</span>
+              <span ng-switch-when="Fluid">ml</span>
+              <span ng-switch-when="Molecular">&#181;g</span>
+              <span ng-switch-when="Tissue">gm</span>
+            </div>
+          </div>
           <div os-field-error field="derivativeForm.quantity"></div>
         </div>
       </div>
