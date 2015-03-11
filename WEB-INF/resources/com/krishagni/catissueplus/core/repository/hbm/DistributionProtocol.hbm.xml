@@ -23,7 +23,9 @@
     <property name="irbId" column="IRB_IDENTIFIER"/>
         
     <property name="startDate" column="START_DATE"/>
-            
+     
+    <property name="endDate" column="END_DATE"/>
+    
     <property name="activityStatus" column="ACTIVITY_STATUS"/>
       
     <query name="getDistributionProtocolByTitle">

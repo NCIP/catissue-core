@@ -346,7 +346,9 @@
     "title": "Title",
     "short_title": "Short Title",
     "pi": "Principal Investigator",
+    "date": "Date",
     "start_date": "Start Date",
+    "end_date": "End Date",
     "irb_id": "IRB ID",
     "description_url": "Description URL",
         
