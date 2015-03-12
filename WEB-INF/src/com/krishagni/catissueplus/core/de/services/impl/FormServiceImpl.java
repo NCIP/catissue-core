@@ -449,8 +449,8 @@ public class FormServiceImpl implements FormService {
 		formData.setRecordId(recordId);
 		boolean isInsert = (recordId == null);
 		
-		if(isInsert) {
-			if(!formContext.isMultiRecord()) {
+		if (isInsert) {
+			if (!formContext.isMultiRecord()) {
 				Long noOfRecords = formDao.getRecordsCount(formContext.getIdentifier(), objectId);
 				if(noOfRecords >= 1L) {
 					throw new RuntimeException("Form is single record ");

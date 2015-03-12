@@ -1,6 +1,6 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-public class ReceivedEventParametersDetail extends SpecimenEventParametersDetail {
+public class ReceivedEventDetail extends SpecimenEventDetail {
 	private String receivedQuality;
 
 	public String getReceivedQuality() {

@@ -189,7 +189,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         return result;
       };
 
-      function getSpecimenToSave(uiSpecimen) {
+      function getSpecimenToSave(uiSpecimen) { // Make it object Specimen and do checks like isNew/isCollected
         var specimen = {
           id: uiSpecimen.id,
           initialQty: uiSpecimen.initialQty,
@@ -201,6 +201,18 @@ angular.module('os.biospecimen.participant.collect-specimens',
           lineage: uiSpecimen.lineage,
           status: uiSpecimen.status
         };
+
+        if (specimen.lineage == 'New' && specimen.status == 'Collected') {
+          specimen.collectionEvent = {
+            user: $scope.collDetail.collector,
+            time: $scope.collDetail.collectionDate
+          };
+
+          specimen.receivedEvent = {
+            user: $scope.collDetail.receiver,
+            time: $scope.collDetail.receiveDate
+          };
+        }
 
         if (!!specimen.reqId || specimen.lineage == 'Aliquot') {
           return specimen;

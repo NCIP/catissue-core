@@ -235,9 +235,11 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 		ose.checkAndThrow();
 
+		boolean newSpecimen = true;
 		if (existing != null) {
 			existing.update(specimen);
 			specimen = existing;
+			newSpecimen = false;
 		} else if (specimen.getParentSpecimen() != null) {
 			specimen.getParentSpecimen().addSpecimen(specimen);
 		} else {
@@ -246,7 +248,18 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 
 		daoFactory.getSpecimenDao().saveOrUpdate(specimen);
+		if (newSpecimen) {
+			addEvents(specimen);
+		}
 		return specimen;
+	}
+	
+	private void addEvents(Specimen specimen) {
+		if (!specimen.isCollected()) {
+			return;
+		}
+		
+		specimen.addCollRecvEvents();
 	}
 
 	private static final String DEFAULT_BARCODE_TOKEN = "SPECIMEN_LABEL";

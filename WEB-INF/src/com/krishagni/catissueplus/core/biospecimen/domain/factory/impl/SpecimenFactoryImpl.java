@@ -6,10 +6,15 @@ import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 import java.util.Calendar;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.ReceivedEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
@@ -17,12 +22,16 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorC
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionEventDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ReceivedEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SpecimenFactoryImpl implements SpecimenFactory {
@@ -80,6 +89,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		setSpecimenPosition(detail, specimen, ose);
+		setCollectionDetail(detail, specimen, ose);
+		setReceiveDetail(detail, specimen, ose);
 
 		ose.checkAndThrow();
 		return specimen;
@@ -461,5 +472,85 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		return true;
+	}
+	
+	private void setCollectionDetail(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
+		CollectionEventDetail collDetail = detail.getCollectionEvent();
+		
+		CollectionEvent event = new CollectionEvent(specimen);
+		if (collDetail != null) {
+			BeanUtils.copyProperties(collDetail, event, new String[] {"user"});
+			event.setUser(getUser(collDetail, ose));
+		}
+		
+		SpecimenRequirement sr = specimen.getSpecimenRequirement();
+		if (sr != null) {
+			if (StringUtils.isBlank(event.getContainer())) {
+				event.setContainer(sr.getCollectionContainer());
+			}
+			
+			if (StringUtils.isBlank(event.getProcedure())) {
+				event.setProcedure(sr.getCollectionProcedure());
+			}
+			
+			if (event.getUser() == null) {
+				event.setUser(sr.getCollector());
+			}
+		}
+		
+		if (event.getUser() == null) {
+			event.setUser(AuthUtil.getCurrentUser());
+		}
+		
+		if (event.getTime() == null) {
+			event.setTime(Calendar.getInstance().getTime());
+		}
+		
+		specimen.setCollectionEvent(event);
+	}
+	
+	private void setReceiveDetail(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
+		ReceivedEventDetail recvDetail = detail.getReceivedEvent();
+		
+		ReceivedEvent event = new ReceivedEvent(specimen);
+		if (recvDetail != null) {
+			BeanUtils.copyProperties(recvDetail, event, new String[] {"user"});
+			event.setUser(getUser(recvDetail, ose));
+		}
+		
+		SpecimenRequirement sr = specimen.getSpecimenRequirement();
+		if (sr != null) {
+			if (event.getUser() == null) {
+				event.setUser(sr.getReceiver());
+			}
+		}
+			
+		if (StringUtils.isBlank(event.getQuality())) {
+			event.setQuality(Specimen.ACCEPTABLE);
+		}
+					
+		if (event.getUser() == null) {
+			event.setUser(AuthUtil.getCurrentUser());
+		}
+		
+		if (event.getTime() == null) {
+			event.setTime(Calendar.getInstance().getTime());
+		}
+		
+		specimen.setReceivedEvent(event);
+	}
+		
+	private User getUser(SpecimenEventDetail detail, OpenSpecimenException ose) {
+		if (detail.getUser() == null) {
+			return null;			
+		}
+		
+		Long userId = detail.getUser().getId();
+		User user = daoFactory.getUserDao().getById(userId);
+		if (user == null) {
+			ose.addError(UserErrorCode.NOT_FOUND);			
+		}
+		
+		return user;
 	}
 }
