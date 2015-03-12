@@ -231,6 +231,10 @@
     <property name="specimenListFactory" ref="specimenListFactory"/>
   </bean>
   
+  <bean id="formDataMgr" class="edu.common.dynamicextensions.napi.impl.FormDataManagerImpl">
+    <constructor-arg type="boolean" value="false"/>
+  </bean>
+
   <bean id="formDao" class="com.krishagni.catissueplus.core.de.repository.impl.FormDaoImpl">
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/> 
   </bean>
