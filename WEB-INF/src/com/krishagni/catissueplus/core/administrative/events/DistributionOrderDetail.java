@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
+import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder.DistributionAction;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class DistributionOrderDetail {
@@ -12,23 +13,19 @@ public class DistributionOrderDetail {
 	
 	private String name;
 	
-	private DistributionProtocolDetail distributionProtocol;
-	
-	private SiteDetail site;
+	private Long distributionProtocolId;
 	
 	private UserSummary requester;
 	
-	private Date creationDate;
-	
 	private UserSummary distributor;
 	
-	private Date executionDate;
+	private Date requestedDate;
 	
-	private String status;
-	
-	private List<DistributionOrderItemDetail> orderItems = new ArrayList<DistributionOrderItemDetail>();
+	private DistributionAction distributionAction;
 	
 	private String activityStatus;
+
+	private List<OrderItemDetail> orderItems = new ArrayList<OrderItemDetail>();
 
 	public Long getId() {
 		return id;
@@ -46,21 +43,12 @@ public class DistributionOrderDetail {
 		this.name = name;
 	}
 
-	public DistributionProtocolDetail getDistributionProtocol() {
-		return distributionProtocol;
+	public Long getDistributionProtocolId() {
+		return distributionProtocolId;
 	}
 
-	public void setDistributionProtocol(
-			DistributionProtocolDetail distributionProtocol) {
-		this.distributionProtocol = distributionProtocol;
-	}
-
-	public SiteDetail getSite() {
-		return site;
-	}
-
-	public void setSite(SiteDetail distributionSite) {
-		this.site = distributionSite;
+	public void setDistributionProtocolId(Long distributionProtocolId) {
+		this.distributionProtocolId = distributionProtocolId;
 	}
 
 	public UserSummary getRequester() {
@@ -71,14 +59,6 @@ public class DistributionOrderDetail {
 		this.requester = requester;
 	}
 
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
 	public UserSummary getDistributor() {
 		return distributor;
 	}
@@ -87,28 +67,20 @@ public class DistributionOrderDetail {
 		this.distributor = distributor;
 	}
 
-	public Date getExecutionDate() {
-		return executionDate;
+	public Date getRequestedDate() {
+		return requestedDate;
 	}
 
-	public void setExecutionDate(Date executionDate) {
-		this.executionDate = executionDate;
+	public void setRequestedDate(Date requestedDate) {
+		this.requestedDate = requestedDate;
 	}
 
-	public String getStatus() {
-		return status;
+	public DistributionAction getDistributionAction() {
+		return distributionAction;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public List<DistributionOrderItemDetail> getOrderItems() {
-		return orderItems;
-	}
-
-	public void setOrderItems(List<DistributionOrderItemDetail> orderItems) {
-		this.orderItems = orderItems;
+	public void setDistributionAction(DistributionAction distributionAction) {
+		this.distributionAction = distributionAction;
 	}
 
 	public String getActivityStatus() {
@@ -119,20 +91,30 @@ public class DistributionOrderDetail {
 		this.activityStatus = activityStatus;
 	}
 
-	public static DistributionOrderDetail from(DistributionOrder order) {
+	public List<OrderItemDetail> getOrderItems() {
+		return orderItems;
+	}
+
+	public void setOrderItems(List<OrderItemDetail> orderItems) {
+		this.orderItems = orderItems;
+	}
+
+	public static DistributionOrderDetail from(DistributionOrder distributionOrder) {
 		DistributionOrderDetail detail = new DistributionOrderDetail();
-		detail.setStatus(order.getStatus().toString());
-		detail.setId(order.getId());
-		detail.setName(order.getName());
-		detail.setCreationDate(order.getCreationDate());
-		detail.setExecutionDate(order.getExecutionDate());
-		detail.setOrderItems(DistributionOrderItemDetail.from(order.getOrderItems()));
-		detail.setDistributionProtocol(DistributionProtocolDetail.from(order.getDistributionProtocol()));
-		detail.setRequester(UserSummary.from(order.getRequester()));
-		detail.setSite(SiteDetail.from(order.getSite()));
-		detail.setActivityStatus(order.getActivityStatus());
-		if (order.getDistributor() != null ) {
-			detail.setDistributor(UserSummary.from(order.getDistributor()));
+		detail.setActivityStatus(distributionOrder.getActivityStatus());
+		detail.setDistributionAction(distributionOrder.getDistributionAction());
+		detail.setDistributionProtocolId(distributionOrder.getDistributionProtocol().getId());
+		detail.setId(distributionOrder.getId());
+		detail.setName(distributionOrder.getName());
+		detail.setRequestedDate(distributionOrder.getRequestedDate());
+		detail.setOrderItems(OrderItemDetail.from(distributionOrder.getOrderItems()));
+		
+		if (distributionOrder.getDistributor() != null ) {
+			detail.setDistributor(UserSummary.from(distributionOrder.getDistributor()));
+		}
+		
+		if (distributionOrder.getRequester() != null ) {
+			detail.setRequester(UserSummary.from(distributionOrder.getRequester()));
 		}
 		
 		return detail;

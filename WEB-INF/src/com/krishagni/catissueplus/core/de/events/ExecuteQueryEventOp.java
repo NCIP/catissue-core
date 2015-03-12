@@ -1,8 +1,5 @@
 package com.krishagni.catissueplus.core.de.events;
 
-import java.util.HashSet;
-import java.util.Set;
-
 
 public class ExecuteQueryEventOp  {
 	
@@ -19,10 +16,6 @@ public class ExecuteQueryEventOp  {
 	private String runType;
 	
 	private String indexOf;
-	
-	private boolean forceUseEmail = false;
-	
-	private Set<String> additionalRecipients = new HashSet<String>();
 
 	public Long getCpId() {
 		return cpId;
@@ -78,22 +71,6 @@ public class ExecuteQueryEventOp  {
 
 	public void setIndexOf(String indexOf) {
 		this.indexOf = indexOf;
-	}
-
-	public boolean isForceUseEmail() {
-		return forceUseEmail;
-	}
-
-	public void setForceUseEmail(boolean forceUseEmail) {
-		this.forceUseEmail = forceUseEmail;
-	}
-
-	public Set<String> getAdditionalRecipients() {
-		return additionalRecipients;
-	}
-
-	public void setAdditionalRecipients(Set<String> additionalRecipients) {
-		this.additionalRecipients = additionalRecipients;
 	}
 	
 }

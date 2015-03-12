@@ -18,6 +18,11 @@ import com.krishagni.catissueplus.core.common.util.Status;
 public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 	
 	@Override
+	public Class<?> getType() {
+		return Site.class;
+	}
+
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Site> getSites(SiteListCriteria listCrit) {
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(Site.class)
@@ -56,10 +61,6 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 		return result.isEmpty() ? null : result.get(0);
 	}
 	
-	@Override
-	public Class getType() {
-		return Site.class;
-	}
 
 	private static final String FQN = Site.class.getName();
 

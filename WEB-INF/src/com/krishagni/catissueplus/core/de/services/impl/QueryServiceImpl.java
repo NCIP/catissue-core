@@ -93,7 +93,7 @@ public class QueryServiceImpl implements QueryService {
 	
 	private static final int ONLINE_EXPORT_TIMEOUT_SECS = 30;
 	
-	public static final String EXPORT_DATA_DIR = getExportDataDir();
+	private static final String EXPORT_DATA_DIR = getExportDataDir();
 	
 	private static ExecutorService exportThreadPool = Executors.newFixedThreadPool(EXPORT_THREAD_POOL_SIZE);
 		
@@ -778,18 +778,12 @@ public class QueryServiceImpl implements QueryService {
 					if (queryId != null) {
 						savedQuery = daoFactory.getSavedQueryDao().getQuery(queryId);
 					}					
-
 					sendQueryDataExportedEmail(user, savedQuery, filename);
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}				
 			}
 		});
-		
-		if (req.getPayload().isForceUseEmail()) {
-			return false;
-		}
 		
 		try {
 			return result.get(ONLINE_EXPORT_TIMEOUT_SECS, TimeUnit.SECONDS);

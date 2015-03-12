@@ -623,12 +623,12 @@ public class StorageContainer extends BaseEntity {
 			position = null;
 			site = otherSite;
 		} else {
+			parentContainer = otherParentContainer;
+			site = otherParentContainer.getSite();
 			if (cycleExistsInHierarchy(otherParentContainer)) {
 				throw OpenSpecimenException.userError(StorageContainerErrorCode.HIERARCHY_CONTAINS_CYCLE);
 			}
-
-			parentContainer = otherParentContainer;
-			site = otherParentContainer.getSite();
+			
 			if (position != null) {
 				position.update(otherPos);
 			} else {

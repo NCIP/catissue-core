@@ -1,4 +1,4 @@
-package com.krishagni.catissueplus.core.administrative.events;
+package com.krishagni.catissueplus.core.administrative.repository;
 
 import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 

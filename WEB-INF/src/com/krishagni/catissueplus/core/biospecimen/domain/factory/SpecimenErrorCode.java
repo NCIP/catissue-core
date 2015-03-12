@@ -60,10 +60,6 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	OP_NOT_ALLOWED,
 	
-	REF_ENTITY_FOUND,
-	
-	NOT_AVAILABLE,
-
 	INIT_QTY_LT_ALIQUOT_QTY,
 	
 	ALIQUOT_QTY_GT_PARENT_QTY,
@@ -74,8 +70,10 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	AVBL_QTY_GT_INIT_QTY,
 	
-	AVBL_QTY_GT_ACTUAL;
+	AVBL_QTY_GT_ACTUAL,
 			
+	REF_ENTITY_FOUND;
+
 	public String code() {
 		return "SPECIMEN_" + this.name();
 	}

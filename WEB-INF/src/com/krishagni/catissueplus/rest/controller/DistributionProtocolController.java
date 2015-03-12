@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
-import com.krishagni.catissueplus.core.administrative.events.DpListCriteria;
+import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -29,7 +29,7 @@ import edu.wustl.common.beans.SessionDataBean;
 @RequestMapping("/distribution-protocols")
 public class DistributionProtocolController {
 	@Autowired
-	private DistributionProtocolService dpSvc;
+	private DistributionProtocolService distributionProtocolSvc;
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
@@ -52,7 +52,7 @@ public class DistributionProtocolController {
 			.maxResults(maxResults)
 			.query(searchStr);
 		
-		ResponseEvent<List<DistributionProtocolDetail>> resp = dpSvc.getDistributionProtocols(getRequest(criteria));
+		ResponseEvent<List<DistributionProtocolDetail>> resp = distributionProtocolSvc.getDistributionProtocols(getRequest(criteria));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -61,7 +61,7 @@ public class DistributionProtocolController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public DistributionProtocolDetail getDistributionProtocol(@PathVariable Long id) {
-		ResponseEvent<DistributionProtocolDetail> resp = dpSvc.getDistributionProtocol(getRequest(id));
+		ResponseEvent<DistributionProtocolDetail> resp = distributionProtocolSvc.getDistributionProtocol(getRequest(id));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -71,7 +71,7 @@ public class DistributionProtocolController {
 	@ResponseBody
 	public DistributionProtocolDetail createDistributionProtocol(
 			@RequestBody DistributionProtocolDetail detail) {
-		ResponseEvent<DistributionProtocolDetail> resp = dpSvc.createDistributionProtocol(getRequest(detail));
+		ResponseEvent<DistributionProtocolDetail> resp = distributionProtocolSvc.createDistributionProtocol(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -82,7 +82,8 @@ public class DistributionProtocolController {
 	public DistributionProtocolDetail updateDistributionProtocol(@PathVariable Long id,
 			@RequestBody DistributionProtocolDetail detail) {
 		detail.setId(id);
-		ResponseEvent<DistributionProtocolDetail> resp = dpSvc.updateDistributionProtocol(getRequest(detail));
+		
+		ResponseEvent<DistributionProtocolDetail> resp = distributionProtocolSvc.updateDistributionProtocol(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -91,7 +92,7 @@ public class DistributionProtocolController {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public DistributionProtocolDetail deleteDistributionProtocol(@PathVariable Long id) {
-		ResponseEvent<DistributionProtocolDetail> resp  = dpSvc.deleteDistributionProtocol(getRequest(id));
+		ResponseEvent<DistributionProtocolDetail> resp  = distributionProtocolSvc.deleteDistributionProtocol(getRequest(id));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
