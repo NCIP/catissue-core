@@ -92,7 +92,13 @@
     "tooltip": {
       "view_details": "Click to view/edit Collection Protocol details",
       "reg_participants_count": "Count of Registered Participants",
-      "collected_specimens_count": "Count of Collected Specimens"
+      "collected_specimens_count": "Count of Collected Specimens",
+      "search": "Click to search Collection Protocols"
+    },
+
+    "filter": {
+      "filter_title": "Collection Protocol Title",
+      "title": "Type the title"
     }
   },
 
@@ -332,7 +338,7 @@
     },
 
     "filter": {
-      "filters": "Site Filter",
+      "title": "Site Filter",
       "name": "Type the name",
       "type": "Select type"
     }
@@ -386,6 +392,7 @@
     "login_name": "Login Name",
     "password": "Password",
     "confirm_password": "Confirm Password",
+    "activity_status": "Activity Status",
 
     "role": {
        "new_role": "New Role",
@@ -405,13 +412,23 @@
       "institute_name": "Institute",
       "cp_count": "Collection Protocol(s)",
       "last_login": "Last logged date",
-      "user_since": "User since (years)"
+      "user_since": "User since (years)",
+      "search": "Click to search Users"
     },
       
     "menu": {
       "overview": "Overview",
       "roles": "Roles"
-    }    
+    },
+
+    "filter": {
+      "title": "User Filter",
+      "last_name": "Type the last name",
+      "first_name": "Type the first name",
+      "login_name": "Type the login name",
+      "activity_status": "Select the activity status"
+    }
+
   },
 
   "forgot_password": {

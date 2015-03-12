@@ -32,12 +32,16 @@
   color: #666666!important;
 }
 
-.os-right-drawer input {
+.os-right-drawer .os-md-input input,
+.os-right-drawer .os-md-input .ui-select-match,
+.os-right-drawer .os-md-input .ui-select-search {
   background: #f5f5f5;
   margin-top: 5px;
 }
 
-.os-right-drawer input:focus {
+.os-right-drawer .os-md-input input:focus,
+.os-right-drawer .os-md-input button.ui-select-match:focus,
+.os-right-drawer .os-md-input .ui-select-match:hover {
   background: #f5f5f5!important;
 }
 

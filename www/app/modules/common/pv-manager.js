@@ -29,6 +29,13 @@ angular.module('openspecimen')
       'Unspecified'
     ];
 
+    var activityStatuses = [
+      'Active',
+      'Pending',
+      'Disabled',
+      'Closed'
+    ];
+
     var races = [
       'White', 
       'Black or African American', 
@@ -105,6 +112,7 @@ angular.module('openspecimen')
       'visit-status': visitStatuses,
       'specimen-status': specimenStatuses,
       'container-position-labeling-schemes': positionLabelingSchemes,
+      'activity-status': activityStatuses
     };
 
     var pvIdMap = {

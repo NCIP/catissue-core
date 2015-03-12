@@ -30,18 +30,6 @@
     </div>
   </div>
 
-  <div os-right-drawer>
-    <div class="os-head">
-      <h3 class="os-title" translate="site.filter.filters">Site Filter</h3>
-    </div>
+  <div os-right-drawer ng-include="'modules/administrative/site/search.html'"></div>
 
-    <div class="os-body">
-      <div class="form-group">
-        <label class="control-label" translate="site.name">Name</label>
-        <input os-md-input type="text" ng-model="siteFilterOpts.name"
-          ng-model-options="{debounce: 500}" ng-change="filter(siteFilterOpts)"
-          class="form-control" placeholder="{{'site.filter.name' | translate}}">
-      </div>
-    </div>
-  </div>
 </div>

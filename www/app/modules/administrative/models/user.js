@@ -9,6 +9,10 @@ angular.module('os.administrative.models.user', ['os.common.models'])
         }
       );
 
+    User.list = function(userFilterOpts) {
+      return User.query(userFilterOpts);
+    }
+
     User.prototype.getRoles = function() {
       return {};
     }

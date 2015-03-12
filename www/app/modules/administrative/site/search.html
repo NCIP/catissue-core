@@ -1,0 +1,14 @@
+<div>
+  <div class="os-head">
+    <h3 class="os-title" translate="site.filter.title">Site Filter</h3>
+  </div>
+
+  <div class="os-body">
+    <div class="form-group">
+      <label class="control-label" translate="site.name">Name</label>
+      <input os-md-input type="text" ng-model="siteFilterOpts.name"
+        ng-model-options="{debounce: 500}" ng-change="filter(siteFilterOpts)"
+        class="form-control" placeholder="{{'site.filter.name' | translate}}">
+    </div>
+  </div>
+</div>

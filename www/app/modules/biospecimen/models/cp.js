@@ -9,6 +9,12 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
         }
       );
 
+    CollectionProtocol.list = function(cpFilterOpts) {
+      cpFilterOpts = cpFilterOpts || {};
+      cpFilterOpts.detailedList = true;
+      return CollectionProtocol.query(cpFilterOpts);
+    }
+
     CollectionProtocol.prototype.getConsentTiers = function() {
       return this.consentModel.query();
     };
