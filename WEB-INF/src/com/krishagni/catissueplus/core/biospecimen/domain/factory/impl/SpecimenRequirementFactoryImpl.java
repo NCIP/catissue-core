@@ -279,7 +279,6 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	
 	private User ensureValidUser(UserSummary userSummary, ErrorCode required, ErrorCode notFound, OpenSpecimenException ose) {
 		if (userSummary == null) {
-			ose.addError(required);
 			return null;
 		}
 		
@@ -288,9 +287,6 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			user = daoFactory.getUserDao().getById(userSummary.getId());
 		} else if (userSummary.getLoginName() != null && userSummary.getDomain() != null) {
 			user = daoFactory.getUserDao().getUser(userSummary.getLoginName(), userSummary.getDomain());
-		} else {
-			ose.addError(required);
-			return null;
 		}
 		
 		if (user == null) {

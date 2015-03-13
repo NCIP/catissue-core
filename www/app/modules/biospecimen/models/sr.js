@@ -1,9 +1,11 @@
 angular.module('os.biospecimen.models.sr', ['os.common.models'])
-  .factory('SpecimenRequirement', function(osModel, $http) {
-    var defaultValue = "Not Specified";
+  .factory('SpecimenRequirement', function(osModel, $http, PvManager) {
+    var defaultData;
     var Sr = osModel(
       'specimen-requirements',
       function(sr) {
+        angular.extend(sr, getDefaultData());
+
         if (!sr.children) {
           return;
         }
@@ -11,15 +13,25 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
         sr.children = sr.children.map(function(child) {
             return new Sr(child);
         });
-      }, 
-      {
-        anatomicSite: defaultValue,
-        laterality: defaultValue,
-        pathologyStatus: defaultValue,
-        collectionContainer: defaultValue,
-        collectionProcedure: defaultValue
+
       }
     );
+
+    var getDefaultData = function() {
+      if (defaultData) {
+        return defaultData;
+      }
+
+      var notSpecified = PvManager.notSpecified();
+      defaultData = {
+        anatomicSite: notSpecified,
+        laterality: notSpecified,
+        pathologyStatus: notSpecified,
+        collectionContainer: notSpecified,
+        collectionProcedure: notSpecified
+      }
+      return defaultData; 
+    }
  
     Sr.listFor = function(cpeId) {
       return Sr.query({eventId: cpeId});

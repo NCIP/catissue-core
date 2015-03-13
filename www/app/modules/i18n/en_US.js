@@ -38,6 +38,10 @@
     }
   },
 
+  "pvs": {
+    "not_specified": "Not Specified"
+  },
+
   "cp": {
     "list": "Collection Protocols",
     "create_cp_title": "Create Collection Protocol",
