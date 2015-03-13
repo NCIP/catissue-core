@@ -51,15 +51,8 @@
             <div class="col col-xs-2 os-ellipsis">{{sr.type}}</div>
             <div class="col col-xs-2 os-ellipsis">{{sr.pathologyStatus | osNoValue}}</div>
             <div class="col col-xs-2">
-              <div class="os-input-addon-grp">
-                <div class="text-right col-xs-11">{{sr.initialQty | osNoValue}}</div>
-                <div class="os-md-input os-input-addon-right" ng-switch on="sr.specimenClass" ng-if="!!sr.initialQty">
-                  <span ng-switch-when="Cell">cells</span>
-                  <span ng-switch-when="Fluid">ml</span>
-                  <span ng-switch-when="Molecular">&#181;g</span>
-                  <span ng-switch-when="Tissue">gm</span>
-                </div>
-              </div>
+              <div class="text-right col-xs-11">{{sr.initialQty | osNoValue}}</div>
+              <div os-specimen-qty-unit specimen-class="sr.specimenClass"></div>
             </div>
             <div class="col col-xs-1 action">
               <div class="os-more-options" dropdown ng-if="view == 'list_sr'">

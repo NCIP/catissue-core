@@ -26,12 +26,7 @@
             <input name="quantity" ng-model="derivative.quantity" 
               os-md-input class="form-control" type="text" placeholder="{{'srs.qty' | translate}}"
               required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
-            <div class="os-md-input os-input-addon-right" ng-switch on="derivative.specimenClass">
-              <span ng-switch-when="Cell">cells</span>
-              <span ng-switch-when="Fluid">ml</span>
-              <span ng-switch-when="Molecular">&#181;g</span>
-              <span ng-switch-when="Tissue">gm</span>
-            </div>
+            <div class="os-input-addon-right" os-specimen-qty-unit specimen-class="derivative.specimenClass"></div>
           </div>
           <div os-field-error field="derivativeForm.quantity"></div>
         </div>
@@ -43,7 +38,7 @@
             <input name="concentration" ng-model="derivative.concentration" 
               os-md-input class="form-control" type="text" placeholder="{{'srs.concentration' | translate}}"
               ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/" ng-model-options="{allowInvalid: 'true'}">
-            <span class="os-md-input os-input-addon-right">µg/µl</span>
+            <span class="os-input-addon-right">µg/µl</span>
           </div>
           <div os-field-error field="derivativeForm.concentration"></div>
         </div>

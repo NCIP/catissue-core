@@ -611,10 +611,9 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   left: 0px;
 }
 
-.os-md-input.os-input-addon-right {
+.os-md-input + .os-input-addon-right {
   border: none;
   background-color: inherit;
-  position: absolute;
 }
 
 .os-form-err-msg.ng-inactive {

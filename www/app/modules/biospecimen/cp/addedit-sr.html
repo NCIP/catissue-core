@@ -70,12 +70,7 @@
           <div class="input-group">
             <input name="initialQty" ng-model="sr.initialQty" class="form-control" type="text" 
               placeholder="{{'srs.initial_qty' | translate}}" required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
-            <div class="input-group-addon" ng-switch on="sr.specimenClass">
-              <span ng-switch-when="Cell">cells</span>
-              <span ng-switch-when="Fluid">ml</span>
-              <span ng-switch-when="Molecular">&#181;g</span>
-              <span ng-switch-when="Tissue">gm</span>
-            </div>
+            <div class="input-group-addon" os-specimen-qty-unit specimen-class="sr.specimenClass"></div>
           </div>
           <div os-field-error field="srForm.initialQty"></div>
         </div>
