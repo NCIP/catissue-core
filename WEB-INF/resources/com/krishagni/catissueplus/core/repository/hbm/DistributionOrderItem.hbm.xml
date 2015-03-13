@@ -4,16 +4,9 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false">
-  <class
-    name="com.krishagni.catissueplus.core.administrative.domain.OrderItem"
-    table="OS_ORDER_ITEMS">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem" table="OS_ORDER_ITEMS">
 	
-    <id
-      name="id"
-      column="IDENTIFIER"
-      type="long"
-      length="30"
-      unsaved-value="null">
+    <id name="id" column="IDENTIFIER">
       <generator class="native">
         <param name="sequence">OS_ORDER_ITEMS_SEQ</param>
       </generator>
@@ -22,13 +15,10 @@
     <many-to-one 
       name="order" 
       cascade="none" 
-      class="com.krishagni.catissueplus.core.administrative.domain.Order"
+      class="com.krishagni.catissueplus.core.administrative.domain.DistributionOrder"
       column="ORDER_ID"/>
 
-    <property
-      name="quantity"
-      type="double"
-      column="QUANTITY"/>
+    <property name="quantity" column="QUANTITY"/>
       
     <many-to-one 
       name="specimen" 

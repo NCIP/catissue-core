@@ -434,6 +434,38 @@ public class Specimen extends BaseEntity {
 		
 		checkQtyConstraints();
 	}
+
+	public void distribute(Double quantity, boolean closeAfterDistribution) {
+		if (!isAvailable || !isCollected()) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_AVAILABLE);
+		}
+		
+		if (availableQuantity < quantity) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
+		}
+		
+		availableQuantity = availableQuantity - quantity;
+		addDistributionEvent();
+		if (availableQuantity == 0 || closeAfterDistribution) {
+			isAvailable = false;
+			virtualize();
+			addDisposalEvent();
+		}
+	}
+	
+	private void addDistributionEvent() {
+		//TODO: need to add the feature.
+	}
+	
+	private void addDisposalEvent() {
+		//TODO: need to add the feature.
+	}
+	
+	private void virtualize() {
+		if (position != null) {
+			position.vacate();
+		}
+	}
 	
 	public void addSpecimen(Specimen specimen) {
 		specimen.setParentSpecimen(this);				

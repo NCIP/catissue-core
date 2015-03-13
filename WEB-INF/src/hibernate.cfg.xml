@@ -59,8 +59,8 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConsentTier.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocolEvent.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenRequirement.hbm.xml"/>
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Order.hbm.xml"/>
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/OrderItem.hbm.xml"/>
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/DistributionOrder.hbm.xml"/>
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/DistributionOrderItem.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperationJob.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperation.hbm.xml" />
 
