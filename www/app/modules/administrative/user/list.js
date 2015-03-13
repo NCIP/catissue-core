@@ -7,8 +7,8 @@ angular.module('os.administrative.user.list', ['os.administrative.models'])
       $scope.activityStatuses = PvManager.getPvs('activity-status');
     }
 
-    var loadUsers = function() {
-      User.query().then(function(result) {
+    var loadUsers = function(filterOpts) {
+      User.query(filterOpts).then(function(result) {
         $scope.users = result; 
       });
     };
@@ -17,10 +17,8 @@ angular.module('os.administrative.user.list', ['os.administrative.models'])
       $state.go('user-detail.overview', {userId:user.id});
     };
 
-    $scope.filter = function(userFilterOpts) {
-      User.query(userFilterOpts).then(function(result) {
-        $scope.users = result;
-      });
+    $scope.filter = function() {
+      loadUsers($scope.userFilterOpts);
     }
  
     init();

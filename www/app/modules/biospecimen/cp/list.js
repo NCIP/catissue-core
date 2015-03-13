@@ -6,8 +6,8 @@ angular.module('os.biospecimen.cp.list', ['os.biospecimen.models'])
       loadCollectionProtocols();
     }
 
-    function loadCollectionProtocols() {
-      CollectionProtocol.query({detailedList: true}).then(
+    function loadCollectionProtocols(filterOpts) {
+      CollectionProtocol.list(filterOpts).then(
         function(cpList) {
           $scope.cpList = cpList;
         }
@@ -18,12 +18,8 @@ angular.module('os.biospecimen.cp.list', ['os.biospecimen.models'])
       $state.go('participant-list', {cpId: cp.id});
     };
 
-    $scope.filter = function(cpFilterOpts) {
-      CollectionProtocol.query(cpFilterOpts).then(
-        function(cpList) {
-          $scope.cpList = cpList;
-        }
-      )
+    $scope.filter = function() {
+      loadCollectionProtocols($scope.cpFilterOpts);
     }
 
     init();

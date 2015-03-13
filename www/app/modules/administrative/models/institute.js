@@ -2,10 +2,6 @@ angular.module('os.administrative.models.institute', ['os.common.models'])
   .factory('Institute', function(osModel, $http, $q) {
     var Institute = osModel('institutes');
 
-    Institute.list = function(insFilterOpts) {
-      return Institute.query(insFilterOpts);
-    }
-
     Institute.prototype.newDepartment = function() {
       return {id: '', name: ''}
     };

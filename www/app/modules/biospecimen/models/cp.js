@@ -9,10 +9,9 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
         }
       );
 
-    CollectionProtocol.list = function(cpFilterOpts) {
-      cpFilterOpts = cpFilterOpts || {};
-      cpFilterOpts.detailedList = true;
-      return CollectionProtocol.query(cpFilterOpts);
+    CollectionProtocol.list = function(opts) {
+      var defOpts = {detailedList: true};
+      return CollectionProtocol.query(angular.extend(defOpts, opts || {}));
     }
 
     CollectionProtocol.prototype.getConsentTiers = function() {

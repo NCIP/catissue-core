@@ -10,7 +10,7 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
     function loadPvs() {
       $scope.domains = PvManager.getPvs('domains');
 
-      Institute.list().then(
+      Institute.query().then(
         function(instituteList) {
           $scope.institutes = [];
           angular.forEach(instituteList, function(institute) {
@@ -18,7 +18,6 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
           });
         }
       );
-
     }
 
     $scope.loadDepartments = function(instituteName, unsetDept) {
