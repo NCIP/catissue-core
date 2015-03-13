@@ -27,7 +27,9 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
+import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
 import com.krishagni.catissueplus.core.de.services.FormService;
@@ -143,6 +145,19 @@ public class SpecimensController {
 		opDetail.setFormCtxtId(formCtxtId);
 		
 		ResponseEvent<EntityFormRecords> resp = formSvc.getEntityFormRecords(getRequest(opDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/events")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public List<FormRecordsList> getEvents(@PathVariable("id") Long specimenId) {
+		GetFormRecordsListOp opDetail = new GetFormRecordsListOp();
+		opDetail.setObjectId(specimenId);
+		opDetail.setEntityType("SpecimenEvent");
+		
+		ResponseEvent<List<FormRecordsList>> resp = formSvc.getFormRecords(getRequest(opDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

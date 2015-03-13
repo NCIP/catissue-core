@@ -72,6 +72,7 @@ import edu.common.dynamicextensions.query.QueryResultData;
 import edu.common.dynamicextensions.query.QueryResultExporter;
 import edu.common.dynamicextensions.query.QueryResultScreener;
 import edu.common.dynamicextensions.query.ResultColumn;
+import edu.common.dynamicextensions.query.WideRowMode;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -191,9 +192,12 @@ public class QueryServiceImpl implements QueryService {
 			SavedQueryDetail queryDetail = req.getPayload();
 			queryDetail.setId(null);
 
-			Query.createQuery().wideRows(true).ic(true)
-					.dateFormat(dateFormat).timeFormat(timeFormat)
-					.compile(cprForm, getAql(queryDetail));
+			Query.createQuery()
+				.wideRowMode(WideRowMode.DEEP)
+				.ic(true)
+				.dateFormat(dateFormat)
+				.timeFormat(timeFormat)
+				.compile(cprForm, getAql(queryDetail));
 			SavedQuery savedQuery = getSavedQuery(req.getSessionDataBean(), queryDetail);
 			daoFactory.getSavedQueryDao().saveOrUpdate(savedQuery);
 			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(savedQuery));
@@ -212,9 +216,12 @@ public class QueryServiceImpl implements QueryService {
 		try {
 			SavedQueryDetail queryDetail = req.getPayload();
 
-			Query.createQuery().wideRows(true).ic(true)
-					.dateFormat(dateFormat).timeFormat(timeFormat)
-					.compile(cprForm, getAql(queryDetail));
+			Query.createQuery()
+				.wideRowMode(WideRowMode.DEEP)
+				.ic(true)
+				.dateFormat(dateFormat)
+				.timeFormat(timeFormat)
+				.compile(cprForm, getAql(queryDetail));
 			SavedQuery savedQuery = getSavedQuery(req.getSessionDataBean(), queryDetail);
 			SavedQuery existing = daoFactory.getSavedQueryDao().getQuery(queryDetail.getId());
 			existing.update(savedQuery);
@@ -265,8 +272,10 @@ public class QueryServiceImpl implements QueryService {
 			boolean countQuery = opDetail.getRunType().equals("Count");
 			
 			Query query = Query.createQuery()
-					.wideRows(opDetail.isWideRows()).ic(true)
-					.dateFormat(dateFormat).timeFormat(timeFormat);
+					.wideRowMode(opDetail.isWideRows() ? WideRowMode.DEEP : WideRowMode.SHALLOW)
+					.ic(true)
+					.dateFormat(dateFormat)
+					.timeFormat(timeFormat);
 			query.compile(
 					cprForm, 
 					getAqlWithCpIdInSelect(sdb, countQuery, opDetail.getAql()), 
@@ -315,7 +324,7 @@ public class QueryServiceImpl implements QueryService {
 			
 			
 			Query query = Query.createQuery();
-			query.wideRows(opDetail.isWideRows())
+			query.wideRowMode(opDetail.isWideRows() ? WideRowMode.DEEP : WideRowMode.SHALLOW)
 				.ic(true)
 				.dateFormat(dateFormat).timeFormat(timeFormat)
 				.compile(

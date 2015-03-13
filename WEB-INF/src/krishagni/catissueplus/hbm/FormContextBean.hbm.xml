@@ -486,5 +486,50 @@
         	  r.activity_status = 'ACTIVE' and
         	  c.deleted_on is null	 
         </sql-query>
+
+        <sql-query name="getRecordsByEntityAndObject">
+          <return-scalar column="formId" type="long"/>
+          <return-scalar column="recordId" type="long"/>
+          <return-scalar column="updateTime" type="timestamp"/>
+          <return-scalar column="userId" type="long"/>
+          <return-scalar column="userFirstName" type="string"/>
+          <return-scalar column="userLastName" type="string"/>
+
+          select
+            fc.container_id as formId, re.record_id as recordId, re.update_time as updateTime,
+            u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
+          from
+            catissue_form_context fc
+            inner join catissue_form_record_entry re on re.form_ctxt_id = fc.identifier
+            inner join catissue_user u on u.identifier = re.updated_by
+          where
+            fc.entity_type = :entityType and 
+            re.object_id = :objectId and
+            re.activity_status = 'ACTIVE' and 
+            fc.deleted_on is null
+        </sql-query>
+
+        <sql-query name="getRecords">
+          <return-scalar column="formId" type="long"/>
+          <return-scalar column="recordId" type="long"/>
+          <return-scalar column="updateTime" type="timestamp"/>
+          <return-scalar column="userId" type="long"/>
+          <return-scalar column="userFirstName" type="string"/>
+          <return-scalar column="userLastName" type="string"/>
+
+          select
+            fc.container_id as formId, re.record_id as recordId, re.update_time as updateTime,
+            u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
+          from
+            catissue_form_context fc
+            inner join catissue_form_record_entry re on re.form_ctxt_id = fc.identifier
+            inner join catissue_user u on u.identifier = re.updated_by
+          where
+            fc.container_id = :formId and 
+            fc.entity_type = :entityType and 
+            re.object_id = :objectId and
+            re.activity_status = 'ACTIVE' and
+            fc.deleted_on is null
+        </sql-query>
     </class>
 </hibernate-mapping>

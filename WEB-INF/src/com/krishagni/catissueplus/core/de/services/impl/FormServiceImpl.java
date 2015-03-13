@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -27,12 +28,14 @@ import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormDataDetail;
 import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.FormType;
 import com.krishagni.catissueplus.core.de.events.GenerateBoTemplateOp;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
 import com.krishagni.catissueplus.core.de.events.GetFileDetailOp;
 import com.krishagni.catissueplus.core.de.events.GetFormDataOp;
+import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
 import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
@@ -429,6 +432,43 @@ public class FormServiceImpl implements FormService {
 		return ResponseEvent.response(Collections.<Long>emptyList());
 	}
 	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<FormRecordsList>> getFormRecords(RequestEvent<GetFormRecordsListOp> req) {
+		GetFormRecordsListOp input = req.getPayload();
+		Map<Long, List<FormRecordSummary>> records = formDao.getFormRecords(
+				input.getObjectId(), 
+				input.getEntityType(), 
+				input.getFormId());
+		
+		FormDataManager formDataMgr = new FormDataManagerImpl(false);
+		
+		List<FormRecordsList> result = new ArrayList<FormRecordsList>();
+		for (Map.Entry<Long, List<FormRecordSummary>> formRecs : records.entrySet()) {
+			Long formId = formRecs.getKey();
+			Container container = Container.getContainer(formId);
+			
+			List<Long> recIds = new ArrayList<Long>();
+			Map<Long, FormRecordSummary> recMap = new HashMap<Long, FormRecordSummary>();
+			for (FormRecordSummary rec : formRecs.getValue()) {
+				recMap.put(rec.getRecordId(), rec);
+				recIds.add(rec.getRecordId());
+			}
+						
+			List<FormData> summaryRecs = formDataMgr.getSummaryData(
+					container, 
+					recIds);
+			
+			for (FormData rec : summaryRecs) {
+				recMap.get(rec.getRecordId()).addFieldValues(rec.getFieldValues());
+			}
+			
+			result.add(FormRecordsList.from(container, recMap.values()));			
+		}
+		
+		return ResponseEvent.response(result);
+	}
+		
 	private FormData saveOrUpdateFormData(SessionDataBean session, Long recordId, FormData formData ) {
 		Map<String, Object> appData = formData.getAppData();
 		if (appData.get("formCtxtId") == null || appData.get("objectId") == null) {

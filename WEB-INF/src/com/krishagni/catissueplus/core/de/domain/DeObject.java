@@ -64,6 +64,10 @@ public abstract class DeObject {
 	}
 	
 	public void delete() {
+		if (getId() == null) {
+			return;
+		}
+		
 		FormRecordEntryBean re = daoFactory.getFormDao().getRecordEntry(getId());
 		re.setActivityStatus(Status.CLOSED);
 		daoFactory.getFormDao().saveOrUpdateRecordEntry(re);
