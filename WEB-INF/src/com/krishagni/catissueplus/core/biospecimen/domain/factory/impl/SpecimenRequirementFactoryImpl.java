@@ -225,8 +225,8 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			return;
 		}
 		
-		if (concentration == null || concentration < 0) { 
-			ose.addError(SrErrorCode.CONCENTRATION_REQUIRED);
+		if (concentration != null && concentration < 0) { 
+			ose.addError(SrErrorCode.CONCENTRATION_MUST_BE_POSITIVE);
 			return;
 		}
 		
