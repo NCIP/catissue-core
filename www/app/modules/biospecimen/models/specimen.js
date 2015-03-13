@@ -1,5 +1,5 @@
 angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospecimen.models.form'])
-  .factory('Specimen', function(osModel, $http, SpecimenRequirement, Form) {
+  .factory('Specimen', function(osModel, $http, SpecimenRequirement, Form, Util) {
     var Specimen = osModel(
       'specimens',
       function(specimen) {
@@ -91,6 +91,46 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
 
     Specimen.prototype.getRecords = function(formCtxId) {
       return Form.listRecords(Specimen.url(), this.$id(), formCtxId);
+    };
+
+    Specimen.prototype.getEvents = function() {
+      return $http.get(Specimen.url() + '/' + this.$id() + '/events').then(
+        function(result) {
+          return result.data;
+        }
+      );
+    };
+
+    Specimen.prototype.getActivities = function() {
+      return this.getEvents().then(
+        function(eventsRecs) { /* eventsRecs: [{event info, records: [event records]}] */
+          var activities = [];
+          angular.forEach(eventsRecs, function(eventRecs) {
+            angular.forEach(eventRecs.records, function(record) {
+              var user = null, time = null;
+              for (var i = 0; i < record.fieldValues.length; ++i) {
+                if (record.fieldValues[i].name == 'user') {
+                  user = record.fieldValues[i].value;
+                } else if (record.fieldValues[i].name == 'time') {
+                  time = record.fieldValues[i].value;
+                }
+              }
+
+              activities.push({
+                id: record.recordId,
+                defId: eventRecs.id,
+                name: eventRecs.caption,
+                updatedBy: record.user,
+                updateTime: record.updateTime,
+                user: user,
+                time: time
+              });
+            });
+          });
+
+          return activities;
+        }
+      );
     };
 
     Specimen.prototype.$saveProps = function() {

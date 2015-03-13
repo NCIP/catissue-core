@@ -22,6 +22,7 @@
     "server_error": "Internal Server Error. Please report this problem to system administrator",
     "ui_error": "UI Error. Please report this problem to system administrator",
     "server_connect_error": "Unable to connect server",
+    "recent_activity": "Recent Activity",
 
     "buttons": {
       "add": "Add",
@@ -241,6 +242,10 @@
     "description": "Description",
     "location": "Location",
     "apply_first_loc_to_all": "Copy First Location To All",
+    "activity_full_info": "{{user}} created {{name}} on {{time | date: dateFmt}}",
+    "activity_user_info": "{{user}} created {{name}}",
+    "activity_time_info": "{{name}} created on {{time | date: dateFmt}}",
+    "activity_info": "{{name}} created",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",

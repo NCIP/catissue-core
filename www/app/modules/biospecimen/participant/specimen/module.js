@@ -2,7 +2,8 @@
 angular.module('os.biospecimen.specimen', 
   [
     'ui.router',
-    'os.biospecimen.specimen.addedit'
+    'os.biospecimen.specimen.addedit',
+    'os.biospecimen.specimen.overview'
   ])
   .config(function($stateProvider) {
     $stateProvider
@@ -50,9 +51,7 @@ angular.module('os.biospecimen.specimen',
       .state('specimen-detail.overview', {
         url: '/overview',
         templateUrl: 'modules/biospecimen/participant/specimen/overview.html',
-        controller: function() {
-          // 'SpecimenOverviewCtrl',
-        },
+        controller: 'SpecimenOverviewCtrl',
         parent: 'specimen-detail'
       })
       .state('specimen-detail.extensions', {
