@@ -3,8 +3,9 @@ angular.module('os.administrative.models.container', ['os.common.models'])
   .factory('Container', function(osModel, $q, $http) {
     var Container = new osModel('storage-containers');
 
-    Container.list = function() {
-      return Container.query({topLevelContainers: true});
+    Container.list = function(opts) {
+      var defOpts = {topLevelContainers: true};
+      return Container.query(angular.extend(defOpts, opts || {}));
     };
 
     Container.listForSite = function(siteName, onlyFreeContainers, flatten) {

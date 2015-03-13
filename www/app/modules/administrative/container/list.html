@@ -6,6 +6,11 @@
     <button class="os-round-btn" title="{{'container.tooltip.add' | translate}}" ui-sref="container-addedit({containerId: ''})">
       <span class="fa fa-plus"></span>
     </button>
+    <div class="os-more-options">
+      <button os-right-drawer-toggle class="os-search-button" title="{{'container.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+      </button>
+    </div>
   </div>
 
   <div class="os-cards">
@@ -33,4 +38,7 @@
       </div>
     </div>
   </div>
+
+  <div os-right-drawer ng-include="'modules/administrative/container/search.html'"></div>
+
 </div>

@@ -1,0 +1,52 @@
+.os-right-drawer {
+  position: absolute;
+  height: auto;
+  background: #f5f5f5;
+  border-left: 1px solid #ddd;
+  bottom: 0;
+  right: 0;
+  width: 25%;
+  top: 121px;
+  transform: scaleX(0.00001);
+  transform-origin:100% 50%;
+  transition: all 0.25s ease-in-out 0s;
+}
+
+.os-right-drawer.active {
+  transform: scaleX(1);
+}
+
+.os-right-drawer .os-head {
+  margin-left: 15px;
+}
+
+.os-right-drawer .os-body {
+  margin: 15px;
+}
+
+.os-right-drawer .os-title {
+  color:#666666!important;
+}
+
+.os-right-drawer .control-label {
+  color: #666666!important;
+}
+
+.os-right-drawer .os-md-input input,
+.os-right-drawer .os-md-input .ui-select-match,
+.os-right-drawer .os-md-input .ui-select-search {
+  background: #f5f5f5;
+  margin-top: 5px;
+}
+
+.os-right-drawer .os-md-input input:focus,
+.os-right-drawer .os-md-input button.ui-select-match:focus,
+.os-right-drawer .os-md-input .ui-select-match:hover {
+  background: #f5f5f5!important;
+}
+
+.os-right-drawer .os-md-input-label {
+  opacity: 0;
+}
+
+

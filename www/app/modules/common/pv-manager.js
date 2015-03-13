@@ -7,7 +7,7 @@
 angular.module('openspecimen')
   .factory('PvManager', function($http, $q, ApiUrls, ApiUtil, Site, Util) {
     var url = ApiUrls.getBaseUrl() + 'permissible-values';
-
+    
     var anatomicSites = [
       'DIGESTIVE ORGANS',
       'SKIN',
@@ -64,18 +64,11 @@ angular.module('openspecimen')
       'Pending'
     ];
 
-    var permissions = [
-      'Read',
-      'Create',
-      'Update',
-      'Delete'
-    ];
-
-    var resources = [
-      'User',
-      'Institute',
-      'Site',
-      'Collection Protocol',
+    var activityStatuses = [
+      'Active',
+      'Pending',
+      'Disabled',
+      'Closed'
     ];
 
     var pvMap = {
@@ -85,8 +78,7 @@ angular.module('openspecimen')
       'visit-status': visitStatuses,
       'specimen-status': specimenStatuses,
       'container-position-labeling-schemes': positionLabelingSchemes,
-      'permissions': permissions,
-      'resources': resources
+      'activity-status': activityStatuses
     };
 
     var pvIdMap = {
@@ -193,7 +185,7 @@ angular.module('openspecimen')
 
       getSites: function() {
         var sites = [];
-        Site.list().then(
+        Site.query().then(
           function(siteList) {
             angular.forEach(siteList, function(site) {
               sites.push(site.name);
