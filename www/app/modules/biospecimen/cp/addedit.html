@@ -48,13 +48,13 @@
         <label class="col-xs-3 control-label" translate="cp.date">Date</label>
         <div class="col-xs-3">
           <input type="text" name="startDate" ng-model="cp.startDate" class="form-control"
-            datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="startDt.isOpen" ng-focus="startDt.isOpen=true"
+            datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="startDt.isOpen" ng-focus="startDt.isOpen=true"
             placeholder="{{'cp.start_date' | translate}}">
            <div os-field-error field="cpForm.startDate"></div>
         </div>
         <div class="col-xs-3">
           <input type="text" name="endDate" ng-model="cp.endDate" class="form-control"
-            datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="endDt.isOpen" ng-focus="endDt.isOpen=true"
+            datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="endDt.isOpen" ng-focus="endDt.isOpen=true"
             placeholder="{{'cp.end_date' | translate}}">
            <div os-field-error field="cpForm.endDate"></div>
         </div>
