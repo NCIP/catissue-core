@@ -17,8 +17,8 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.administrative.repository.UserListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DeleteUserOp;
-import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
@@ -73,8 +73,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<UserSummary>> getUsers(RequestEvent<ListUserCriteria> req) {
-		ListUserCriteria crit = req.getPayload();		
+	public ResponseEvent<List<UserSummary>> getUsers(RequestEvent<UserListCriteria> req) {
+		UserListCriteria crit = req.getPayload();		
 		List<UserSummary> users = daoFactory.getUserDao().getUsers(crit);		
 		return ResponseEvent.response(users);
 	}

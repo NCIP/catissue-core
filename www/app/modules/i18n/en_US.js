@@ -462,8 +462,7 @@
 
     "filter": {
       "title": "User Filter",
-      "last_name": "Type the last name",
-      "first_name": "Type the first name",
+      "name": "Type the name",
       "login_name": "Type the login name",
       "activity_status": "Select the activity status"
     }
