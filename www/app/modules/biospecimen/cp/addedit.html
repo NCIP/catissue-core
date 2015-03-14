@@ -1,9 +1,11 @@
 
 <div>
   <div os-page-header>
+    <ul os-breadcrumbs>
+      <li><a ui-sref="cp-list" translate="cp.list">Collection Protocols</a></li>
+    </ul>
+
     <h3>
-      <a ui-sref="cp-list" translate="cp.list">Collection Protocols</a>
-      <span class="fa fa-angle-right"></span>
       <span ng-if="!cp.id" translate="cp.create_cp_title">Create Collection Protocol</span>
       <span ng-if="!!cp.id">{{cp.title}}</span>
     </h3>
