@@ -164,7 +164,7 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
         function(e1, e2) { 
           var t1 = e1.time || 0;
           var t2 = e2.time || 0;
-          return t1 - t2;
+          return t2 - t1;
         }
       );
       return eventsList;

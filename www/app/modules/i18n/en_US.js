@@ -247,6 +247,12 @@
     "activity_time_info": "{{name}} created on {{time | date: dateFmt}}",
     "activity_info": "{{name}} created",
 
+    "events": "Events",
+    "event_name": "Name",
+    "event_user": "User",
+    "event_time": "Date and Time",
+    "no_events": "No events to show",
+
     "ctx_menu": {
       "view_specimen": "View Specimen",
       "edit_specimen": "Edit Specimen",
@@ -570,19 +576,15 @@
     "list": "Extensions",
 
     "name": "Name",
-    "creator": "Creator",
-    "last_updated": "Last Updated",
-    "record_count": "Records",
-    "multiRecord": "Multirecord",
+    "updated_by": "Updated By",
+    "update_time": "Update Time",
 
     "no_records": "No extension records to show",
-    "record_id": "Record #",
-    "last_updated_by": "Last Updated By",
     
     "edit_record": "Edit Record",
     "new_record": "Create New Record",
 
-    "record_saved": "Extension record saved successfully"
+    "record_saved": "Data saved successfully"
   }
 
 }
