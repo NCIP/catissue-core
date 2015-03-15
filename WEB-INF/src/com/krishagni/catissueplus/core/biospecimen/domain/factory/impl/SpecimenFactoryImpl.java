@@ -140,7 +140,11 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	
 	private void setLineage(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		String lineage = detail.getLineage();
-		if (lineage == null && specimen.getSpecimenRequirement() != null) {
+		if (lineage == null) {
+			if (specimen.getSpecimenRequirement() == null) {
+				lineage = Specimen.NEW;
+			}
+			
 			return;
 		}
 		
@@ -228,12 +232,12 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		String anatomicSite = detail.getAnatomicSite();
-		if (StringUtils.isBlank(anatomicSite) && specimen.getSpecimenRequirement() != null) {
-			specimen.setTissueSite(specimen.getSpecimenRequirement().getAnatomicSite());
-			return;
-		} else if (StringUtils.isBlank(anatomicSite)) {
-			ose.addError(SpecimenErrorCode.ANATOMIC_SITE_REQUIRED);
-			return;
+		if (StringUtils.isBlank(anatomicSite)) {
+			if (specimen.getSpecimenRequirement() == null) {
+				ose.addError(SpecimenErrorCode.ANATOMIC_SITE_REQUIRED);
+			}
+			
+			return;				
 		}
 		
 		if (!isValidPv(anatomicSite, "anatomic-site")) {
@@ -255,11 +259,11 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		String laterality = detail.getLaterality();
-		if (StringUtils.isBlank(laterality) && specimen.getSpecimenRequirement() != null) {
-			specimen.setTissueSide(specimen.getSpecimenRequirement().getLaterality());
-			return;
-		} else if (StringUtils.isBlank(laterality)) {
-			ose.addError(SpecimenErrorCode.LATERALITY_REQUIRED);
+		if (StringUtils.isBlank(laterality)) {
+			if (specimen.getSpecimenRequirement() == null) {
+				ose.addError(SpecimenErrorCode.LATERALITY_REQUIRED);
+			}
+			
 			return;
 		}
 		
@@ -272,21 +276,21 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setPathologicalStatus(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		if (specimen.getParentSpecimen() != null && specimen.isAliquot()) {
+		if (specimen.getParentSpecimen() != null) {
 			specimen.setPathologicalStatus(specimen.getParentSpecimen().getPathologicalStatus());
 			return;
 		}
 		
-		if (specimen.isAliquot()) {
-			return; // parent specimen not specified
+		if (specimen.isAliquot() || specimen.isDerivative()) {
+			return; // invalid parent specimen scenario
 		}
 		
 		String pathology = detail.getPathology();
-		if (StringUtils.isBlank(pathology) && specimen.getSpecimenRequirement() != null) {
-			specimen.setPathologicalStatus(specimen.getSpecimenRequirement().getPathologyStatus());
-			return;
-		} else if (StringUtils.isBlank(pathology)) {
-			ose.addError(SpecimenErrorCode.PATHOLOGY_STATUS_REQUIRED);
+		if (StringUtils.isBlank(pathology)) {
+			if (specimen.getSpecimenRequirement() == null) {
+				ose.addError(SpecimenErrorCode.PATHOLOGY_STATUS_REQUIRED);
+			}
+			
 			return;
 		}
 
@@ -300,25 +304,20 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	
 	private void setQuantity(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		Double qty = detail.getInitialQty();
-		if (qty == null && specimen.getSpecimenRequirement() != null) {
-			return;
+		if (qty == null) {
+			SpecimenRequirement sr = specimen.getSpecimenRequirement();			
+			if (sr != null) {
+				qty = sr.getInitialQuantity();
+			}
 		}
-		
-		if (!specimen.isCollected()) { 
-			//
-			// Do not need quantity when specimen is not collected
-			//
-			return;
-		}
-		
+				
 		if (qty == null || qty <= 0) {
 			ose.addError(SpecimenErrorCode.INVALID_QTY);
 			return;
 		}
-		
-		
+				
 		specimen.setInitialQuantity(qty);
-						
+		
 		Double availableQty = detail.getAvailableQty();
 		if (availableQty == null) {
 			availableQty = qty;
@@ -349,11 +348,11 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 				
 		String specimenClass = detail.getSpecimenClass();
-		if (StringUtils.isBlank(specimenClass) && specimen.getSpecimenRequirement() != null) {
-			specimen.setSpecimenClass(specimen.getSpecimenRequirement().getSpecimenClass());
-			return;
-		} else if (StringUtils.isBlank(specimenClass)) {
-			ose.addError(SpecimenErrorCode.SPECIMEN_CLASS_REQUIRED);
+		if (StringUtils.isBlank(specimenClass)) {
+			if (specimen.getSpecimenRequirement() == null) {
+				ose.addError(SpecimenErrorCode.SPECIMEN_CLASS_REQUIRED);
+			}
+			
 			return;
 		}
 		
@@ -376,11 +375,11 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		String type = detail.getType();
-		if (StringUtils.isBlank(type) && specimen.getSpecimenRequirement() != null) {
-			specimen.setSpecimenType(specimen.getSpecimenRequirement().getSpecimenType());
-			return;
-		} else if (StringUtils.isBlank(type)) {
-			ose.addError(SpecimenErrorCode.SPECIMEN_TYPE_REQUIRED);
+		if (StringUtils.isBlank(type)) {
+			if (specimen.getSpecimenRequirement() == null) {
+				ose.addError(SpecimenErrorCode.SPECIMEN_TYPE_REQUIRED);
+			}
+			
 			return;
 		}
 		
@@ -398,16 +397,6 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		} else {
 			specimen.setCreatedOn(detail.getCreatedOn());
 		}
-
-		// TODO: Whether create date can be before visit
-//		if (specimen.getVisit() == null) {
-//			return;
-//		}
-//
-//		Date visitDate = specimen.getVisit().getVisitDate();
-//		if (visitDate.after(specimen.getCreatedOn())) {
-//			ose.addError(SpecimenErrorCode.INVALID_CREATION_DATE);
-//		}
 	}	
 	
 	private void setSpecimenPosition(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
@@ -434,7 +423,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		if (!container.canContain(specimen)) {
-			ose.addError(StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN);			
+			ose.addError(StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN);
+			return;
 		}
 		
 		StorageContainerPosition position = null;
