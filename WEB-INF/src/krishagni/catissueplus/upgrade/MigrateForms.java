@@ -76,9 +76,9 @@ public class MigrateForms {
 		int count = 0;		
 		for (Entry<Long, List<FormInfo>> entry : containerInfo.entrySet()) {
 			try {
-				MigrateForm migrateForm = new MigrateForm(usrCtx, recordsLog);
-				migrateForm.migrateForm(entry.getKey(), entry.getValue());
-				logObsoleteTables(tabLog, migrateForm);
+//				MigrateForm migrateForm = new MigrateForm(usrCtx, recordsLog);
+//				migrateForm.migrateForm(entry.getKey(), entry.getValue());
+//				logObsoleteTables(tabLog, migrateForm);
 				++count;
 				
 				logger.info("Number of forms migrated till now: " + count);
@@ -153,14 +153,14 @@ public class MigrateForms {
 		return containerInfo;
 	}
 	
-	private static void logObsoleteTables(CSVWriter logWriter, MigrateForm migrator) 
-	throws IOException {
-		logWriter.writeNext(new String[] {
-				migrator.getFormCaption(),
-				migrator.getObsoleteTables()
-		});
-		logWriter.flush();
-	}
+//	private static void logObsoleteTables(CSVWriter logWriter, MigrateForm migrator) 
+//	throws IOException {
+//		logWriter.writeNext(new String[] {
+//				migrator.getFormCaption(),
+//				migrator.getObsoleteTables()
+//		});
+//		logWriter.flush();
+//	}
 	
 	private static final String GET_CONTAINER_IDS_SQL = 
 			"select " +

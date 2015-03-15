@@ -7,14 +7,7 @@
 
     <session-factory>
 
-	<property name="show_sql">true</property>
-	<property name="dialect">edu.wustl.catissuecore.hibernate.dialect.MySqlCustomDialect</property>
-	<property name="connection.datasource">java:/catissuecore</property>
-        <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
-	<property name="transaction.manager_lookup_class">org.hibernate.transaction.JBossTransactionManagerLookup</property>
-    	<property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
-	<property name="hibernate.jdbc.batch_size">0</property>
-	<property name="hibernate.current_session_context_class">thread</property>
+ 		<property name="connection.datasource">java:/catissuecore</property>
 
 		<!--  Form Context and Record Entry -->
 		<mapping resource="krishagni/catissueplus/hbm/FormContextBean.hbm.xml" />

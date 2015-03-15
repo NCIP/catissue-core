@@ -10,6 +10,6 @@ public class MySqlCustomDialect extends MySQLDialect {
 	public MySqlCustomDialect()
 	{
 	   super();
-      registerHibernateType(Types.LONGVARCHAR, Hibernate.CLOB.getName());
+//      registerHibernateType(Types.LONGVARCHAR, Hibernate.CLOB.getName());
      }
 }

@@ -68,7 +68,7 @@ public class JobUtility {
 			
 			try {
 				fin = new FileInputStream(logFile);
-				return Hibernate.createBlob(fin);
+				return null;
 			} catch (Exception e) {
 				throw new RuntimeException("Error saving logfile to database: " + e.getMessage());
 			}

@@ -5,10 +5,10 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.context.ManagedSessionContext;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -20,10 +20,10 @@ public class TransactionalInterceptor {
 
 	private static Logger LOGGER = Logger.getCommonLogger(TransactionalInterceptor.class);
 
-	private SessionFactory sessionFactory;
+	private PlatformTransactionManager transactionManager;
 
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+	public void setTransactionManager(PlatformTransactionManager transactionManager) {
+		this.transactionManager = transactionManager;
 	}
 
 	@Pointcut("execution(@com.krishagni.catissueplus.core.common.PlusTransactional * *(..))")
@@ -32,47 +32,39 @@ public class TransactionalInterceptor {
 
 	@Around("transactionalMethod()")
 	public Object startTransaction(ProceedingJoinPoint pjp) {
-		boolean isTransactionStarted = false;
-		boolean isSessionStarted = !ManagedSessionContext.hasBind(sessionFactory);
-
-		Session session = sessionFactory.getCurrentSession();
- 
-		Transaction tx = session.getTransaction();
-		if (tx != null && !tx.isActive()) {
-			tx = session.beginTransaction();
-			LOGGER.info("New transaction started");
-			isTransactionStarted = true;
-		}
-
+		System.out.println("Inside PlusTransactional *******************************");
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    TransactionStatus status = transactionManager.getTransaction( def );
 		Object object = null;
+		System.out.println("getting current transaction *******************************");
+
+		
 		try {
+			System.out.println("PJP proceed *******************************");
 			object = pjp.proceed();
+			System.out.println("PJP Completed *******************************");
 			ResponseEvent resp = (object instanceof ResponseEvent) ? (ResponseEvent)object : null; 
-			if ((resp == null || resp.isSuccessful() || resp.isForceTxCommitEnabled()) && 
-				isTransactionStarted && 
-				tx != null) {				
-				tx.commit();
+			if ((resp == null || resp.isSuccessful() || resp.isForceTxCommitEnabled()) && status.isNewTransaction()) {		
+				transactionManager.commit( status );
 				LOGGER.info("Transaction commited.");
 			}
 		}
 		catch (Throwable e) {
+			System.out.println("Error  while executing PJP *******************************");
 			LOGGER.error(e.getCause(), e);
 			LOGGER.error(e.getMessage(), e);
-			if (isTransactionStarted && tx != null) {
-				tx.rollback();
+			if (status.isNewTransaction()) {
+				transactionManager.rollback(status);
 				LOGGER.info("Error thrown, transaction rolled back.");
 			}
 			throw OpenSpecimenException.serverError(e);
 		}
 		finally {
-			
-			if (session != null && session.isOpen() && isSessionStarted && isTransactionStarted) {
-				session.close();
-				LOGGER.info("Session closed.");
+			if (!status.isCompleted() && !status.isNewTransaction()) {
+				transactionManager.rollback(status);
 			}
-
 		}
-
 		return object;
 	}
 }

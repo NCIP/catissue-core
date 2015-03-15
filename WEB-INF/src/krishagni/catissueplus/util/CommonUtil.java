@@ -14,8 +14,6 @@ import edu.wustl.common.exceptionformatter.ExceptionFormatter;
 import edu.wustl.common.exceptionformatter.ExceptionFormatterFactory;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.util.HibernateMetaData;
-import edu.wustl.dao.util.HibernateMetaDataFactory;
 
 
 public class CommonUtil
@@ -63,16 +61,16 @@ public class CommonUtil
 					obj = ((LinkedHashSet)obj).iterator().next();
 				}
 				String appName = CommonServiceLocator.getInstance().getAppName();
-				HibernateMetaData hibernateMetaData = HibernateMetaDataFactory
-				.getHibernateMetaData(appName);
-				if (hibernateMetaData != null)
-				{
-					tableName = hibernateMetaData.getTableName(obj.getClass());
-				}
-				else
-				{
-					tableName = "";
-				}
+//				HibernateMetaData hibernateMetaData = HibernateMetaDataFactory
+//				.getHibernateMetaData(appName);
+//				if (hibernateMetaData != null)
+//				{
+//					tableName = hibernateMetaData.getTableName(obj.getClass());
+//				}
+//				else
+//				{
+//					tableName = "";
+//				}
 				errMsg = exFormatter.formatMessage(exception);
 			}
 		}

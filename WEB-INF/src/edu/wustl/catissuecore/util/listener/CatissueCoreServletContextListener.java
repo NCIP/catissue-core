@@ -14,18 +14,14 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.sql.DataSource;
 
-import krishagni.catissueplus.csd.CatissueUserContextProviderImpl;
 import krishagni.catissueplus.util.FormProcessor;
 
-import com.krishagni.catissueplus.bulkoperator.util.BulkOperationUtility;
 import com.krishagni.catissueplus.core.de.ui.UserControlFactory;
 import com.krishagni.catissueplus.core.de.ui.UserFieldMapper;
 
 import edu.common.dynamicextensions.domain.nui.factory.ControlManager;
-import edu.common.dynamicextensions.nutility.BOUtil;
 import edu.common.dynamicextensions.nutility.DEApp;
 import edu.common.dynamicextensions.nutility.FormProperties;
-import edu.wustl.catissuecore.action.bulkOperations.BOTemplateUpdater;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.exception.ErrorKey;
@@ -36,9 +32,8 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dynamicextensions.formdesigner.mapper.ControlMapper;
-import edu.wustl.dynamicextensions.formdesigner.usercontext.CSDProperties;
+import gov.nih.nci.system.dao.DAOException;
 
 /**
  *
@@ -80,17 +75,17 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			this.setGlobalVariable();
 			this.initCatissueParams();
 			logApplnInfo();
-			BulkOperationUtility.changeBulkOperationStatusToFailed();
+//			BulkOperationUtility.changeBulkOperationStatusToFailed();
 			if (Constants.TRUE.equals(XMLPropertyHandler.getValue("Imaging.enabled")))
 			{
 				Variables.isImagingConfigurred = true;
 			}
             
-			CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
+//			CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
 			
 			FormProperties.getInstance().setPostProcessor(new FormProcessor());
 
-      BOUtil.getInstance().setGenerator(new BOTemplateUpdater());
+//      BOUtil.getInstance().setGenerator(new BOTemplateUpdater());
             
       InitialContext ic = new InitialContext();
 			DataSource ds = (DataSource)ic.lookup(JNDI_NAME);
@@ -129,7 +124,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 * @throws ParseException ParseException
 	 * @throws IOException 
 	 */
-	public void initCatissueParams() throws ClassNotFoundException, DAOException, ParseException,
+	public void initCatissueParams() throws ClassNotFoundException, ParseException,
 			IOException
 	{
 		initThrottlingModule();
@@ -194,15 +189,15 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 */
 	public void contextDestroyed(final ServletContextEvent sce)
 	{
-		try
-		{
-			BulkOperationUtility.changeBulkOperationStatusToFailed();
-		}
-		catch (final DAOException e)
-		{
-			CatissueCoreServletContextListener.logger.error("Exception occured while updating "
-					+ "the Bulk Operation job status." + e.getMessage(), e);
-		}
+//		try
+//		{
+////			BulkOperationUtility.changeBulkOperationStatusToFailed();
+//		}
+//		catch (final DAOException e)
+//		{
+//			CatissueCoreServletContextListener.logger.error("Exception occured while updating "
+//					+ "the Bulk Operation job status." + e.getMessage(), e);
+//		}
 	}
 
 }
