@@ -14,7 +14,6 @@ angular.module('os.biospecimen.participant',
     'os.biospecimen.visit',
     'os.biospecimen.specimen',
     'os.biospecimen.extensions.list',
-    'os.biospecimen.extensions.records',
     'os.biospecimen.extensions.addedit-record'
   ])
 
@@ -133,14 +132,8 @@ angular.module('os.biospecimen.participant',
         controller: 'FormsListCtrl', 
         parent: 'participant-detail.extensions'
       })
-      .state('participant-detail.extensions.records', {
-        url: '/:formId/records?formCtxId',
-        templateUrl: 'modules/biospecimen/extensions/records.html',
-        controller: 'FormRecordsCtrl',
-        parent: 'participant-detail.extensions'
-      })
       .state('participant-detail.extensions.addedit', {
-        url: '/extensions/:formId/addedit/?recordId&formCtxId',
+        url: '/addedit?formId&recordId&formCtxId',
         templateUrl: 'modules/biospecimen/extensions/addedit.html',
         resolve: {
           formDef: function($stateParams, Form) {
@@ -148,6 +141,6 @@ angular.module('os.biospecimen.participant',
           }
         },
         controller: 'FormRecordAddEditCtrl',
-        parent: 'participant-root'
+        parent: 'participant-detail.extensions'
       });
   });

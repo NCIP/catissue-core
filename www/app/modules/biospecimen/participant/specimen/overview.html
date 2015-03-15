@@ -104,18 +104,18 @@
     <ul class="os-activity-list" ng-if="activities.length > 0">
       <li class="os-activity" ng-repeat="activity in activities | orderBy: time">
         <div class="title">
-          <a>
+          <a ui-sref="specimen-detail.extensions.addedit({recordId: activity.id, formId: activity.formId, formCtxId: activity.formCtxtId})">
             <span ng-if="!!activity.user && !!activity.time">
               {{'specimens.activity_full_info' | translate: activity}} 
             </span>
             <span ng-if="!!activity.user && !activity.time">
-              {{'activity_user_info' | translate: activity}}
+              {{'specimens.activity_user_info' | translate: activity}}
             </span>
             <span ng-if="!activity.user && !!activity.time">
-              {{'activity_time_info' | translate: activity}}
+              {{'specimens.activity_time_info' | translate: activity}}
             </span>
             <span ng-if="!activity.user && !activity.time">
-              {{'activity_info' | translate: activity}}
+              {{'specimens.activity_info' | translate: activity}}
             </span>
           </a>
         </div>

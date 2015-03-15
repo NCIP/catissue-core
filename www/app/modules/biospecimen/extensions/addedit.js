@@ -14,8 +14,7 @@ angular.module('os.biospecimen.extensions.addedit-record', [])
       objectId: $scope.object.id,
 
       onSave: function() {
-        $state.go($scope.extnState + 'records', 
-          {formId: $stateParams.formId, formCtxId: $stateParams.formCtxId});
+        $scope.back();
         Alerts.success("extensions.record_saved");
       },
 

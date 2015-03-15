@@ -85,52 +85,23 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       return curr;
     };
 
-    Specimen.prototype.getForms = function() {
-      return Form.listFor(Specimen.url(), this.$id());
+    Specimen.prototype.getForms = function(params) {
+      return Form.listFor(Specimen.url(), this.$id(), params);
     };
 
-    Specimen.prototype.getRecords = function(formCtxId) {
-      return Form.listRecords(Specimen.url(), this.$id(), formCtxId);
+    Specimen.prototype.getRecords = function() {
+      var url = Specimen.url() + this.$id() + '/extension-records';
+      return Form.listRecords(url);
     };
 
     Specimen.prototype.getEvents = function() {
-      return $http.get(Specimen.url() + '/' + this.$id() + '/events').then(
+      var events = [];
+      $http.get(Specimen.url() + '/' + this.$id() + '/events').then(
         function(result) {
-          return result.data;
+          Util.unshiftAll(events, getEventsList(result.data));
         }
       );
-    };
-
-    Specimen.prototype.getActivities = function() {
-      return this.getEvents().then(
-        function(eventsRecs) { /* eventsRecs: [{event info, records: [event records]}] */
-          var activities = [];
-          angular.forEach(eventsRecs, function(eventRecs) {
-            angular.forEach(eventRecs.records, function(record) {
-              var user = null, time = null;
-              for (var i = 0; i < record.fieldValues.length; ++i) {
-                if (record.fieldValues[i].name == 'user') {
-                  user = record.fieldValues[i].value;
-                } else if (record.fieldValues[i].name == 'time') {
-                  time = record.fieldValues[i].value;
-                }
-              }
-
-              activities.push({
-                id: record.recordId,
-                defId: eventRecs.id,
-                name: eventRecs.caption,
-                updatedBy: record.user,
-                updateTime: record.updateTime,
-                user: user,
-                time: time
-              });
-            });
-          });
-
-          return activities;
-        }
-      );
+      return events;
     };
 
     Specimen.prototype.$saveProps = function() {
@@ -162,6 +133,42 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
 
       return sr;
     };
+
+    function getEventsList(eventsRecs) { /* eventsRecs: [{event info, records: [event records]}] */
+      var eventsList = [];
+      angular.forEach(eventsRecs, function(eventRecs) {
+        angular.forEach(eventRecs.records, function(record) {
+          var user = null, time = null;
+          for (var i = 0; i < record.fieldValues.length; ++i) {
+            if (record.fieldValues[i].name == 'user') {
+              user = record.fieldValues[i].value;
+            } else if (record.fieldValues[i].name == 'time') {
+              time = record.fieldValues[i].value;
+            }
+          }
+
+          eventsList.push({
+            id: record.recordId,
+            formId: eventRecs.id,
+            formCtxtId: record.fcId,
+            name: eventRecs.caption,
+            updatedBy: record.user,
+            updateTime: record.updateTime,
+            user: user,
+            time: time
+          });
+        });
+      });
+
+      eventsList.sort(
+        function(e1, e2) { 
+          var t1 = e1.time || 0;
+          var t2 = e2.time || 0;
+          return t1 - t2;
+        }
+      );
+      return eventsList;
+    }
 
     return Specimen;
   });

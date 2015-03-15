@@ -68,14 +68,8 @@ angular.module('os.biospecimen.specimen',
         controller: 'FormsListCtrl', 
         parent: 'specimen-detail.extensions'
       })
-      .state('specimen-detail.extensions.records', {
-        url: '/:formId/records?formCtxId',
-        templateUrl: 'modules/biospecimen/extensions/records.html',
-        controller: 'FormRecordsCtrl',
-        parent: 'specimen-detail.extensions'
-      })
       .state('specimen-detail.extensions.addedit', {
-        url: '/extensions/:formId/addedit/?recordId&formCtxId',
+        url: '/addedit?formId&recordId&formCtxId',
         templateUrl: 'modules/biospecimen/extensions/addedit.html',
         resolve: {
           formDef: function($stateParams, Form) {
@@ -83,6 +77,17 @@ angular.module('os.biospecimen.specimen',
           }
         },
         controller: 'FormRecordAddEditCtrl',
-        parent: 'specimen-root'
+        parent: 'specimen-detail.extensions'
+      })
+      .state('specimen-detail.events', {
+        url: '/events',
+        templateUrl: 'modules/biospecimen/participant/specimen/events.html',
+        controller: function($scope, specimen) {
+          $scope.entityType = 'SpecimenEvent';
+          $scope.extnState = 'specimen-detail.events';
+          $scope.events = specimen.getEvents();
+          $scope.eventForms = specimen.getForms({entityType: 'SpecimenEvent'});
+        },
+        parent: 'specimen-detail'
       });
   });
