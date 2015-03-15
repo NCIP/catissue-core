@@ -47,11 +47,22 @@ edu.common.de.DataTable = function(args) {
   this.render0 = function() {
     this.formDiv.empty();
 
-    // Render Table Header Part
     if (this.formDef.rows == undefined) {
       this.formDef = JSON.parse(this.formDef);
     }
 
+    
+    // first let's render table body
+    this.tableRowsData = [];
+    var trs = [];
+    for (var i = 0; i < this.tableData.length; i++) {
+      var records = this.renderEntityRecords(this.tableData[i]);
+      trs = trs.concat(records);
+    }
+    var tableBody = $("<tbody/>").append(trs);
+
+   
+    // Now rendering the header
     var width = 0;
     var tr = $("<tr/>");
     if (this.mode == 'add') {
@@ -76,28 +87,26 @@ edu.common.de.DataTable = function(args) {
     }
 
     var rows = this.formDef.rows;
+    var fieldCnt = 0;
     for (var j =0 ; j < rows.length; j++) {
       var row = rows[j];
       for (k = 0 ; k < row.length; k++) {
-        var colWidth = (row[k].type == 'datePicker') ? 225 : 200;
+        var minWidth = this.tableRowsData[0].fieldObjs[fieldCnt].minWidth;
+        if (!minWidth) {
+          minWidth = 200;
+        }
+
         tr.append($("<th/>")
         .append($("<div/>").append(row[k].caption).addClass("truncate"))
-        .css("width", colWidth+"px")
+        .css("width", minWidth + "px")
         .attr('title', row[k].caption));
-        width += colWidth;
+        width += minWidth;
+
+        ++fieldCnt;
       }
     }
 
     var tableHeader = $("<thead/>").append(tr);
-
-    this.tableRowsData = [];
-    var trs = [];
-    for (var i = 0; i < this.tableData.length; i++) {
-      var records = this.renderEntityRecords(this.tableData[i]);
-      trs = trs.concat(records);
-    }
-
-    var tableBody = $("<tbody/>").append(trs);
 
     var tbl = $("<table/>").attr("id", "data-table")
       .addClass("table table-striped table-bordered")
@@ -164,7 +173,7 @@ edu.common.de.DataTable = function(args) {
     for (var i = 0; i < rows.length; i++) {
       var row = rows[i];
       for (j = 0; j < row.length; j++ ) {
-        tr.append($("<td/>").append(this.createFieldEl(mode, row[j], recordId, formData)));
+        tr.append($("<td/>").append(this.createFieldEl(mode, key, row[j], recordId, formData)));
       }
     }
 
@@ -184,7 +193,7 @@ edu.common.de.DataTable = function(args) {
     return tr;
   };
 
-  this.createFieldEl = function(mode, field, recId, formData) {
+  this.createFieldEl = function(mode, key, field, recId, formData) {
     if (field.type == 'checkbox') { 
       field.type = 'listbox'; 
     } else if (field.type == 'radiobutton') { 
@@ -192,7 +201,8 @@ edu.common.de.DataTable = function(args) {
     }
 
     var value = formData ? formData[field.name] : null;
-    var fieldObj = edu.common.de.FieldFactory.getField(field, undefined, args);
+    var appData = {objectId: key.objectId};
+    var fieldObj = edu.common.de.FieldFactory.getField(field, undefined, $.extend({appData: appData}, args));
 
     var inputEl = fieldObj.render(); // TODO: Do we need to render in view mode?
 
@@ -272,7 +282,7 @@ edu.common.de.DataTable = function(args) {
       var fieldObjs = this.tableRowsData[i].fieldObjs;
       var recordId = this.tableRowsData[i].recordId;
       for (var j = 0; j < fieldObjs.length; j++) {
-        var value = firstRow[j].getValue();
+        var value = firstRow[j].getValue(true);
         if (value != undefined) {
           fieldObjs[j].setValue(recordId, value.value);
         }
