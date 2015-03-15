@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.DeleteUserOp;
-import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
+import com.krishagni.catissueplus.core.administrative.repository.UserListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.auth.services.UserAuthenticationService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -52,15 +52,29 @@ public class UserController {
 			@RequestParam(value = "max", required = false, defaultValue = "100") 
 			int max,
 			
-			@RequestParam(value = "searchString", required = false, defaultValue = "") 
-			String searchString){
+			@RequestParam(value = "searchString", required = false) 
+			String searchString,
+			
+			@RequestParam(value = "name", required = false)
+			String name,
+			
+			@RequestParam(value = "loginName", required = false)
+			String loginName,
+			
+			@RequestParam(value = "activityStatus", required = false)
+			String activityStatus
+			){
 		
-		ListUserCriteria crit = new ListUserCriteria()
+		UserListCriteria crit = new UserListCriteria()
 			.startAt(start)
 			.maxResults(max)
-			.query(searchString);
+			.query(searchString)
+			.name(name)
+			.loginName(loginName)
+			.activityStatus(activityStatus);
 		
-		RequestEvent<ListUserCriteria> req = new RequestEvent<ListUserCriteria>(getSession(), crit);
+		
+		RequestEvent<UserListCriteria> req = new RequestEvent<UserListCriteria>(getSession(), crit);
 		ResponseEvent<List<UserSummary>> resp = userService.getUsers(req);
 		resp.throwErrorIfUnsuccessful();
 		
