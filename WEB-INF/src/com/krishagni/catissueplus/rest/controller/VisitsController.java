@@ -27,7 +27,9 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
+import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
 import com.krishagni.catissueplus.core.de.services.FormService;
@@ -141,6 +143,19 @@ public class VisitsController {
 		return resp.getPayload();
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/extension-records")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public List<FormRecordsList> getExtensionRecords(@PathVariable("id") Long visitId) {
+		GetFormRecordsListOp opDetail = new GetFormRecordsListOp();
+		opDetail.setObjectId(visitId);
+		opDetail.setEntityType("SpecimenCollectionGroup");
+		
+		ResponseEvent<List<FormRecordsList>> resp = formSvc.getFormRecords(getRequest(opDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();				
+	}
+	
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(getSession(), payload);				
 	}

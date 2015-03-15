@@ -16,9 +16,11 @@ import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.de.domain.FormErrorCode;
 import com.krishagni.catissueplus.core.de.events.AddRecordEntryOp;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
@@ -58,9 +60,7 @@ import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.napi.FormDataManager;
 import edu.common.dynamicextensions.napi.impl.FormDataManagerImpl;
 import edu.common.dynamicextensions.nutility.FileUploadMgr;
-import edu.wustl.cab2b.common.exception.RuntimeException;
 import edu.wustl.catissuecore.action.bulkOperations.BOTemplateGeneratorUtil;
-import edu.wustl.common.beans.SessionDataBean;
 
 public class FormServiceImpl implements FormService {
 	private static final String PARTICIPANT_FORM = "Participant";
@@ -121,7 +121,7 @@ public class FormServiceImpl implements FormService {
 	@PlusTransactional
 	public ResponseEvent<Boolean> deleteForm(RequestEvent<Long> req) {
 		Long formId = req.getPayload();
-		boolean isAdmin = req.getSessionDataBean().isAdmin();
+		boolean isAdmin = AuthUtil.getCurrentUser().isAdmin();
 		
 		if (!isAdmin) {
 			return ResponseEvent.userError(FormErrorCode.OP_NOT_ALLOWED);
@@ -292,7 +292,8 @@ public class FormServiceImpl implements FormService {
 		FormDataDetail detail = req.getPayload();
 		
 		try {
-			FormData formData = saveOrUpdateFormData(req.getSessionDataBean(), detail.getRecordId(), detail.getFormData());
+			User user = AuthUtil.getCurrentUser();
+			FormData formData = saveOrUpdateFormData(user, detail.getRecordId(), detail.getFormData());
 			return ResponseEvent.response(FormDataDetail.ok(formData.getContainer().getId(), formData.getRecordId(), formData));
 		} catch(IllegalArgumentException ex) {
 			return ResponseEvent.userError(FormErrorCode.INVALID_DATA);
@@ -303,10 +304,11 @@ public class FormServiceImpl implements FormService {
 	@PlusTransactional
 	public ResponseEvent<List<FormData>> saveBulkFormData(RequestEvent<List<FormData>> req) {
 		try{ 
+			User user = AuthUtil.getCurrentUser();
 			List<FormData> formDataList = req.getPayload();
 			List<FormData> savedFormDataList = new ArrayList<FormData>();
 			for (FormData formData : formDataList) {
-				FormData savedFormData = saveOrUpdateFormData(req.getSessionDataBean(), formData.getRecordId(), formData);
+				FormData savedFormData = saveOrUpdateFormData(user, formData.getRecordId(), formData);
 				savedFormDataList.add(savedFormData);
 			}
 			
@@ -469,7 +471,7 @@ public class FormServiceImpl implements FormService {
 		return ResponseEvent.response(result);
 	}
 		
-	private FormData saveOrUpdateFormData(SessionDataBean session, Long recordId, FormData formData ) {
+	private FormData saveOrUpdateFormData(User user, Long recordId, FormData formData ) {
 		Map<String, Object> appData = formData.getAppData();
 		if (appData.get("formCtxtId") == null || appData.get("objectId") == null) {
 			throw new IllegalArgumentException("Invalid form context id or object id ");
@@ -517,7 +519,7 @@ public class FormServiceImpl implements FormService {
 		recordEntry.setFormCtxtId(formContext.getIdentifier());
 		recordEntry.setObjectId(objectId);
 		recordEntry.setRecordId(recordId);
-		recordEntry.setUpdatedBy(session.getUserId());
+		recordEntry.setUpdatedBy(user.getId());
 		recordEntry.setUpdatedTime(Calendar.getInstance().getTime());
 		formDao.saveOrUpdateRecordEntry(recordEntry);
 

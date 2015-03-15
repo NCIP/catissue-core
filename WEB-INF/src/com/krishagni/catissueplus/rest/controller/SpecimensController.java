@@ -123,12 +123,22 @@ public class SpecimensController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<FormCtxtSummary> getForms(@PathVariable("id") Long specimenId) {
+	public List<FormCtxtSummary> getForms(
+			@PathVariable("id") 
+			Long specimenId,
+			
+			@RequestParam(value = "entityType", required = false, defaultValue="Specimen")
+			String entityType
+			) {
 		ListEntityFormsOp opDetail = new ListEntityFormsOp();
 		opDetail.setEntityId(specimenId);
-		opDetail.setEntityType(EntityType.SPECIMEN);
 		
-
+		if (entityType.equals("Specimen")) {
+			opDetail.setEntityType(EntityType.SPECIMEN);
+		} else {
+			opDetail.setEntityType(EntityType.SPECIMEN_EVENT);
+		}
+		
 		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(getRequest(opDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
@@ -153,13 +163,14 @@ public class SpecimensController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public List<FormRecordsList> getEvents(@PathVariable("id") Long specimenId) {
-		GetFormRecordsListOp opDetail = new GetFormRecordsListOp();
-		opDetail.setObjectId(specimenId);
-		opDetail.setEntityType("SpecimenEvent");
-		
-		ResponseEvent<List<FormRecordsList>> resp = formSvc.getFormRecords(getRequest(opDetail));
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
+		return getRecords(specimenId, "SpecimenEvent");
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/extension-records")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<FormRecordsList> getExtensionRecords(@PathVariable("id") Long specimenId) {
+		return getRecords(specimenId, "Specimen");
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/collect")
@@ -177,5 +188,15 @@ public class SpecimensController {
 
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
+	}
+	
+	private List<FormRecordsList> getRecords(Long specimenId, String entityType) {
+		GetFormRecordsListOp opDetail = new GetFormRecordsListOp();
+		opDetail.setObjectId(specimenId);
+		opDetail.setEntityType(entityType);
+		
+		ResponseEvent<List<FormRecordsList>> resp = formSvc.getFormRecords(getRequest(opDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();		
 	}
 }

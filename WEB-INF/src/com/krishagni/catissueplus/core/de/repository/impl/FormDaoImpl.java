@@ -416,13 +416,14 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			Long form = (Long)row[0];
 			
 			FormRecordSummary record = new FormRecordSummary();
-			record.setRecordId((Long)row[1]);
-			record.setUpdateTime((Date)row[2]);
+			record.setFcId((Long)row[1]);
+			record.setRecordId((Long)row[2]);
+			record.setUpdateTime((Date)row[3]);
 			
 			UserSummary user = new UserSummary();
-			user.setId((Long)row[3]);
-			user.setFirstName((String)row[4]);
-			user.setLastName((String)row[5]);
+			user.setId((Long)row[4]);
+			user.setFirstName((String)row[5]);
+			user.setLastName((String)row[6]);
 			record.setUser(user);
 			
 			List<FormRecordSummary> recs = result.get(form);

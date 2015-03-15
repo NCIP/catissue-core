@@ -489,6 +489,7 @@
 
         <sql-query name="getRecordsByEntityAndObject">
           <return-scalar column="formId" type="long"/>
+          <return-scalar column="formCtxId" type="long"/>
           <return-scalar column="recordId" type="long"/>
           <return-scalar column="updateTime" type="timestamp"/>
           <return-scalar column="userId" type="long"/>
@@ -496,7 +497,8 @@
           <return-scalar column="userLastName" type="string"/>
 
           select
-            fc.container_id as formId, re.record_id as recordId, re.update_time as updateTime,
+            fc.container_id as formId, fc.identifier as formCtxId, 
+            re.record_id as recordId, re.update_time as updateTime,
             u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
           from
             catissue_form_context fc
@@ -511,6 +513,7 @@
 
         <sql-query name="getRecords">
           <return-scalar column="formId" type="long"/>
+          <return-scalar column="formCtxId" type="long"/>
           <return-scalar column="recordId" type="long"/>
           <return-scalar column="updateTime" type="timestamp"/>
           <return-scalar column="userId" type="long"/>
@@ -518,7 +521,8 @@
           <return-scalar column="userLastName" type="string"/>
 
           select
-            fc.container_id as formId, re.record_id as recordId, re.update_time as updateTime,
+            fc.container_id as formId, fc.identifier as formCtxId,
+            re.record_id as recordId, re.update_time as updateTime,
             u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
           from
             catissue_form_context fc

@@ -12,6 +12,8 @@ import edu.common.dynamicextensions.napi.ControlValue;
 public class FormRecordSummary {
 	private Long id;
 	
+	private Long fcId;
+	
 	private Long recordId;
 	
 	private UserSummary user;
@@ -26,6 +28,14 @@ public class FormRecordSummary {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getFcId() {
+		return fcId;
+	}
+
+	public void setFcId(Long fcId) {
+		this.fcId = fcId;
 	}
 	
 	public Long getRecordId() {
