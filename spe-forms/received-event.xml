@@ -28,6 +28,7 @@
         <udn>user</udn>
         <caption>User</caption>
         <column>USER_ID</column>
+        <showInGrid>true</showInGrid>
       </userField>
     </row>
 
@@ -38,6 +39,7 @@
         <caption>Date and Time</caption>
         <column>EVENT_TIMESTAMP</column>
         <format>MM-dd-yyyy HH:mm</format>
+        <showInGrid>true</showInGrid>
       </datePicker>
     </row>
 
