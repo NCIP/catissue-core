@@ -693,4 +693,53 @@
       </column>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vpawar" id="Drop event triggers that were introduced in v11">
+    <sql>drop trigger if exists specimen_coll_event_trg</sql>
+    <sql>drop trigger if exists specimen_rcvd_event_trg</sql>
+    <sql>drop trigger if exists specimen_transfer_event_trg</sql>
+    <sql>drop trigger if exists specimen_distri_event_trg</sql>
+    <sql>drop trigger if exists specimen_disposal_event_trg</sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop parent event id from collection event table">
+    <dropColumn columnName="SPE_ID" tableName="CATISSUE_COLL_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Make identifier as PK of collection event table">
+    <addPrimaryKey columnNames="IDENTIFIER" tableName="CATISSUE_COLL_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop parent event id from received event table">
+    <dropColumn columnName="SPE_ID" tableName="CATISSUE_RECEIVED_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Make identifier as PK of received event table">
+    <addPrimaryKey columnNames="IDENTIFIER" tableName="CATISSUE_RECEIVED_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop parent event id from transfer event table">
+    <dropColumn columnName="SPE_ID" tableName="CATISSUE_TRANSFER_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Make identifier as PK of transfer event table">
+    <addPrimaryKey columnNames="IDENTIFIER" tableName="CATISSUE_TRANSFER_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop parent event id from distribution event table">
+    <dropColumn columnName="SPE_ID" tableName="CATISSUE_DISTRI_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Make identifier as PK of distribution event table">
+    <addPrimaryKey columnNames="IDENTIFIER" tableName="CATISSUE_DISTRI_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop parent event id from disposal event table">
+    <dropColumn columnName="SPE_ID" tableName="CATISSUE_DISPOSAL_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Make identifier as PK of disposal event table">
+    <addPrimaryKey columnNames="IDENTIFIER" tableName="CATISSUE_DISPOSAL_EVENT_PARAM"/>
+  </changeSet>
+
 </databaseChangeLog>
