@@ -1861,10 +1861,6 @@ edu.common.de.LookupSvc = function(params) {
 
     return deferred.promise();
   };
-
-  this.getHeaders = function() {
-    return {};
-  }
 };
 
 edu.common.de.LookupSvc.extend = edu.common.de.Extend;

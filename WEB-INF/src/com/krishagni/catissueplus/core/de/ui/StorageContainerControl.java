@@ -6,24 +6,22 @@ import java.util.Properties;
 
 import edu.common.dynamicextensions.domain.nui.AbstractLookupControl;
 
-public class UserControl extends AbstractLookupControl {
+public class StorageContainerControl extends AbstractLookupControl {
 	private static final long serialVersionUID = 1L;
 	
-	private static final String LU_TABLE = "USER_VIEW";
-	
-	private static final String ALT_KEY = "email_address";
+	private static final String LU_TABLE = "CATISSUE_CONTAINER";
 	
 	private static final Properties LU_PV_SOURCE_PROPS = initPvSourceProps();
 	
 	@Override
 	public void getProps(Map<String, Object> props) {
-		props.put("type", "userField");
-		props.put("apiUrl", "rest/ng/users");
+		props.put("type", "storageContainer");
+		props.put("apiUrl", "rest/ng/storage-containers");
 		props.put("dataType", getDataType());
 	}
 	
 	public void serializeToXml(Writer writer, Properties props) {
-		super.serializeToXml("userField", writer, props);
+		super.serializeToXml("storageContainer", writer, props);
 	}
 
 	@Override
@@ -35,19 +33,17 @@ public class UserControl extends AbstractLookupControl {
 	public Properties getPvSourceProps() {
 		return LU_PV_SOURCE_PROPS;
 	}
-	
+
 	@Override
 	public String getAltKeyColumn() {		
-		return ALT_KEY;
+		return getValueColumn();
 	}
 	
 	private static Properties initPvSourceProps() {
 		Properties props = new Properties();
-		props.put("apiUrl", "rest/ng/users");
-		props.put("searchTermName", "searchString");
-		props.put("resultFormat", "{{lastName}}, {{firstName}}");
-		props.put("respField", "users");
-		
+		props.put("apiUrl", "rest/ng/storage-containers");
+		props.put("searchTermName", "name");
+		props.put("resultFormat", "{{name}}");
 		return props;
 	}
 }
