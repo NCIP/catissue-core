@@ -254,6 +254,10 @@ button.btn.os-round-btn {
   background: #428bca;
 }
 
+h4 + .btn-group {
+  margin-left: 10px;
+}
+
 .os-page-hdr .os-round-btn > span {
   color: white;
 }
@@ -867,3 +871,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   margin: 10%;
 }
 
+.os-big-dropdown-menu {
+  max-height: 400px;
+  overflow: auto;
+}
