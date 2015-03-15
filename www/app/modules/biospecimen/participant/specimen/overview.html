@@ -102,7 +102,7 @@
     </h3>
     <span ng-if="activities.length == 0" translate="common.none">None</span>
     <ul class="os-activity-list" ng-if="activities.length > 0">
-      <li class="os-activity" ng-repeat="activity in activities | orderBy: time">
+      <li class="os-activity" ng-repeat="activity in activities">
         <div class="title">
           <a ui-sref="specimen-detail.extensions.addedit({recordId: activity.id, formId: activity.formId, formCtxId: activity.formCtxtId})">
             <span ng-if="!!activity.user && !!activity.time">

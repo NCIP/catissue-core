@@ -58,9 +58,9 @@ angular.module('os.biospecimen.participant.collect-specimens',
         $scope.visit = visit;
         
         $scope.collDetail = {
-          collector: '',
+          collector: undefined,
           collectionDate: new Date().toISOString(),
-          receiver: '',
+          receiver: undefined,
           receiveDate: new Date().toISOString()
         };
 
@@ -99,7 +99,12 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
       $scope.remove = function(specimen) {
         var idx = $scope.specimens.indexOf(specimen);
-        $scope.specimens.splice(idx, descendentCount(specimen) + 1);
+        var descCnt = descendentCount(specimen);
+
+        for (var i = idx + descCnt; i >= idx; --i) {
+          $scope.specimens[i].selected = false;
+          $scope.specimens.splice(i, 1);
+        }
       };
 
       $scope.statusChanged = function(specimen) {
