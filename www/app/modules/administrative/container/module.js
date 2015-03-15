@@ -6,6 +6,7 @@ angular.module('os.administrative.container',
     'os.administrative.container.addedit',
     'os.administrative.container.detail',
     'os.administrative.container.overview',
+    'os.administrative.container.delete',
     'os.administrative.container.util',
     'os.administrative.container.map'
   ])

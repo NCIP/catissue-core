@@ -13,8 +13,9 @@ public enum InstituteErrorCode implements ErrorCode {
 	
 	REF_ENTITY_FOUND,
 	
-	DEPT_REF_ENTITY_FOUND
-	;
+	DEPT_REF_ENTITY_FOUND,
+	
+	DEPENDENCIES_EXIST;
 
 	@Override
 	public String code() {

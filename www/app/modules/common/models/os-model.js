@@ -36,7 +36,7 @@ angular.module('os.common.models', [])
       };
 
       Model.noTransform = function(response) {
-        return response.date;
+        return response.data;
       };
 
       Model.query = function(reqParams, transformer) {
@@ -47,6 +47,10 @@ angular.module('os.common.models', [])
       Model.getById = function (id) {
         return $http.get(url + id).then(Model.modelRespTransform);
       };
+
+      Model.getDependencies = function(id) {
+        return $http.get(url + id + '/dependencies').then(Model.noTransform);
+      }
 
       Model._lazyCollectionInit = function(source, dest) {
         angular.forEach(source, function(item) {

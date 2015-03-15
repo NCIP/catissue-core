@@ -1,0 +1,18 @@
+<div class="os-modal-header">
+  <span ng-if="!dpDependencies">{{'dp.delete_dp_title' | translate: {title: distributionProtocol.title} }}</span>
+  <span ng-if="dpDependencies" class="text-danger">{{'dp.dependency_title' | translate: {title: distributionProtocol.title} }}</span>
+</div>
+<div class="os-modal-body">
+  <div ng-if="!dpDependencies">
+    {{ 'dp.confirm_delete' | translate:{title: distributionProtocol.title} }}
+  </div>
+
+  <div ng-if="dpDependencies">
+    <h5>{{'dp.dependency_details' | translate: {title: distributionProtocol.title} }}</h5>
+  </div>
+</div>
+<div class="os-modal-footer">
+  <button class="btn os-btn-text" ng-click="cancel()" ng-if="!dpDependencies" translate="common.buttons.cancel">Cancel</button>
+  <button class="btn btn-primary" ng-click="delete()" ng-if="!dpDependencies" translate="common.yes">Yes</button>
+  <button class="btn btn-primary" ng-click="cancel()" ng-if="dpDependencies" translate="common.buttons.ok">Ok</button>
+</div>

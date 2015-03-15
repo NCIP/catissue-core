@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -20,6 +21,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.krishagni.catissueplus.core.administrative.domain.dependency.UserDependencyChecker;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
@@ -60,6 +62,9 @@ public class User extends BaseEntity implements UserDetails {
 	private String password;
 	
 	private Set<Password> passwords = new HashSet<Password>();
+	
+	@Autowired
+	UserDependencyChecker dependencyChecker;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -244,12 +249,21 @@ public class User extends BaseEntity implements UserDetails {
 		this.passwords.add(password);
 	}
 	
-	public void delete(boolean isClosed) { 
-		if (isClosed) {
-			this.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
-		} else {
-			this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+	public Map<String, List> getDependencies() {
+		return dependencyChecker.getDependencies(this);
+	}
+	
+	public void delete(boolean close) {
+		String activityStatus = Status.ACTIVITY_STATUS_CLOSED.getStatus();
+		if (!close) {
+			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
+			Map<String, List> dependencies = getDependencies();
+			if (!dependencies.isEmpty()) {
+				throw OpenSpecimenException.userError(UserErrorCode.DEPENDENCIES_EXIST);
+			}
 		}
+		
+		this.setActivityStatus(activityStatus);
 	}
 	
 	public boolean isValidOldPassword(String oldPassword) {

@@ -81,6 +81,7 @@
   <bean id="participantLookupLogic" class="com.krishagni.catissueplus.core.biospecimen.matching.ParticipantLookupLogicImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
+  
   <bean id="collectionProtocolService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
@@ -185,6 +186,8 @@
   <bean id="userFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.UserFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
+  
+  <bean id="userDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.UserDependencyChecker"></bean>
 
   <bean id="userSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
@@ -328,6 +331,9 @@
   <bean id="containerBarcodeGenerator" class="com.krishagni.catissueplus.core.barcodegenerator.impl.StorageContainerBarcodeGenerator">
     <property name="tokenFactory" ref="tokenFactory" />
   </bean>
+  
+  <bean id="containerDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.StorageContainerDependencyChecker">
+  </bean>
 	
   <bean id="storageContainerFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.StorageContainerFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
@@ -352,6 +358,9 @@
   <bean id="distributionProtocolService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionProtocolServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="distributionProtocolFactory" ref="distributionProtocolFactory" />
+  </bean>
+  
+  <bean id="distributionProtocolDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.DistributionProtocolDependencyChecker">
   </bean>
 	
   <bean id="distributionFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionOrderFactoryImpl">

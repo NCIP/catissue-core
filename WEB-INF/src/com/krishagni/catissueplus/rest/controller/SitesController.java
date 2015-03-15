@@ -105,23 +105,31 @@ public class SitesController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-
-	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependencies")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String, List> deleteSite(@PathVariable Long id, 
-			@RequestParam(value="close", required=false, defaultValue="false") boolean close) {
-		DeleteEntityOp deleteOp = new DeleteEntityOp();
-		deleteOp.setId(id);
-		deleteOp.setClose(close);
-		
-		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(getSession(), deleteOp);
-		ResponseEvent<Map<String, List>> resp = siteService.deleteSite(req);
+	public Map<String, List> getSiteDependencies(@PathVariable Long id) {
+		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		ResponseEvent<Map<String, List>> resp = siteService.getSiteDependencies(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
 	}
 
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public SiteDetail deleteSite(@PathVariable Long id, 
+			@RequestParam(value="close", required=false, defaultValue="false") boolean close) {
+		DeleteEntityOp deleteOp = new DeleteEntityOp(id, close);
+		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(null, deleteOp);
+		ResponseEvent<SiteDetail> resp = siteService.deleteSite(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}

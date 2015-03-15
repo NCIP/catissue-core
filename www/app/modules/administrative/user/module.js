@@ -5,7 +5,8 @@ angular.module('os.administrative.user',
     'os.administrative.user.list',
     'os.administrative.user.addedit',
     'os.administrative.user.detail',
-    'os.administrative.user.roles'
+    'os.administrative.user.roles',
+    'os.administrative.user.delete'
   ])
 
   .config(function($stateProvider) {

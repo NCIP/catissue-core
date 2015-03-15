@@ -39,7 +39,9 @@ public enum UserErrorCode implements ErrorCode {
 	
 	DEPT_REQUIRED,
 	
-	STATUS_CHANGE_NOT_ALLOWED;
+	STATUS_CHANGE_NOT_ALLOWED,
+	
+	DEPENDENCIES_EXIST;
 	
 	public String code() {
 		return "USER_" + this.name();

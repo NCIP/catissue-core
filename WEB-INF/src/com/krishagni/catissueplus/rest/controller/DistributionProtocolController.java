@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -84,6 +85,17 @@ public class DistributionProtocolController {
 		detail.setId(id);
 		ResponseEvent<DistributionProtocolDetail> resp = dpSvc.updateDistributionProtocol(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependencies")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public Map<String, List> getDistributionProtocolDependencies(@PathVariable Long id) {
+		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		ResponseEvent<Map<String, List>> resp = dpSvc.getDistributionProtocolDependencies(req);
+		resp.throwErrorIfUnsuccessful();
+		
 		return resp.getPayload();
 	}
 

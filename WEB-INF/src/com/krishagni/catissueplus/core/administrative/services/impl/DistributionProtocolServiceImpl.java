@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
@@ -105,6 +106,22 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			return ResponseEvent.serverError(ex);
 		}
 	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Map<String, List>> getDistributionProtocolDependencies(RequestEvent<Long> req) {
+		try {
+			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(req.getPayload());
+			if (existing == null) {
+				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(existing.getDependencies());
+		}
+		catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
 
 	@Override
 	@PlusTransactional
@@ -118,7 +135,10 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			existing.delete();
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(existing);
 			return ResponseEvent.response(DistributionProtocolDetail.from(existing));
-		}
+		} 
+		catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} 
 		catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

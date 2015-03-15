@@ -1,0 +1,19 @@
+<div class="os-modal-header">
+  <span ng-if="!containerDependencies">{{'container.delete_container' | translate: {name: container.name} }}</span>
+  <span ng-if="containerDependencies" class="text-danger">{{'container.dependency_title' | translate: {name: container.name} }}</span>
+</div>
+<div class="os-modal-body">
+  <div ng-if="!containerDependencies">
+    {{ 'container.confirm_delete' | translate:{name: container.name} }}
+  </div>
+
+  <div ng-if="containerDependencies">
+    <h5>{{'container.dependency_details' | translate: {name: container.name} }}</h5>
+  </div>
+</div>
+<div class="os-modal-footer">
+  <button class="btn os-btn-text" ng-click="cancel()" ng-if="!containerDependencies" translate="common.buttons.cancel">Cancel</button>
+  <button class="btn btn-primary" ng-click="delete()" ng-if="!containerDependencies" translate="common.yes">Yes</button>
+  <button class="btn btn-primary" ng-click="cancel()" ng-if="containerDependencies" translate="common.buttons.ok">Ok</button>
+</div>
+

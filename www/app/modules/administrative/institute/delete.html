@@ -1,0 +1,38 @@
+<div class="os-modal-header">
+  <span ng-if="!siteDependencies">{{'institutes.delete_institute' | translate: {name: institute.name} }}</span>
+  <span ng-if="siteDependencies" class="text-danger">{{'institutes.dependency_title' | translate: {name: institute.name} }}</span>
+</div>
+<div class="os-modal-body">
+  <div ng-if="!instituteDependencies">
+    {{ 'institutes.confirm_delete' | translate:{name: institute.name} }}
+  </div>
+
+  <div ng-if="instituteDependencies">
+    <h5>{{'institute.dependency_details' | translate: {name: institute.name} }}</h5>
+    <div class="os-section">
+      <h3 class="os-sub-section-title" translate="user.list">Users</h3>
+      <div class="os-table os-table-muted-hdr os-border">
+        <div class="os-table-head">
+          <div class="row">
+            <div class="col col-xs-4" translate="user.firstName">First Name</div>
+            <div class="col col-xs-4" translate="user.lastName">Last Name</div>
+            <div class="col col-xs-4" translate="user.department">Department</div>
+          </div>
+        </div>
+        <div class="os-table-body">
+          <div class="row" ng-repeat="user in instituteDependencies.users">
+            <div class="col col-xs-4">{{container.firstName}}</div>
+            <div class="col col-xs-4">{{container.lastName}}</div>
+            <div class="col col-xs-4">{{container.department}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="os-modal-footer">
+  <button class="btn os-btn-text" ng-click="cancel()" ng-if="!instituteDependencies" translate="common.buttons.cancel">Cancel</button>
+  <button class="btn btn-primary" ng-click="delete()" ng-if="!instituteDependencies" translate="common.yes">Yes</button>
+  <button class="btn btn-primary" ng-click="cancel()" ng-if="instituteDependencies" translate="common.buttons.ok">Ok</button>
+</div>
+

@@ -5,9 +5,15 @@
       <li><a ui-sref="site-list" translate="site.list">Sites</a></li>
     </ul>
     <h3>{{site.name}}</h3>
-    <button class="os-round-btn" title="{{'site.tooltip.create_site' | translate}}" ui-sref="site-addedit({siteId: site.id})">
-      <span class="fa fa-pencil"></span>
-    </button>
+
+    <div>
+      <button class="os-round-btn" title="{{'site.tooltip.edit' | translate}}" ui-sref="site-addedit({siteId: site.id})">
+        <span class="fa fa-pencil"></span>
+      </button>
+      <button class="os-round-btn" title="{{'site.tooltip.delete' | translate}}" ng-click="deleteSite()">
+        <span class="fa fa-trash"></span>
+      </button>
+    </div>
   </div>
 
   <div os-side-menu>

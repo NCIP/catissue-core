@@ -326,13 +326,20 @@
     "list": "Institutes",
     "create_institute": "Create Institute",
     "update_institute": "Update Institute",
+    "delete_institute": "Deleting {{name}} institute confirmation",
     "name": "Name",
     "department_name": "Department Name",
     "departments": "Departments",
+    "confirm_delete": "{{name}} institute will be deleted for ever. Are you sure you want to proceed?",
+    "institute_deleted": "{{name}} institute deleted successfully.",
+    "dependency_title": "Error: Cannot delete {{name}} institute",
+    "dependency_details": "Before deleting {{name}} institute, you first need to delete the following related data",
 
     "tooltip": {
       "view_details": "Click to view/edit Institute details",
       "add": "Click to add new Institute",
+      "edit": "Click to edit institute",
+      "delete": "Click to delete institute",
       "department_count": "Count of Departments",
       "user_count": "Count of Users in Institute",
       "search": "Click to search Institutes"
@@ -353,15 +360,22 @@
     "list": "Sites",
     "create_site": "Create Site",
     "update_site": "Update Site",
+    "delete_site": "Deleting {{name}} site confirmation",
     "name": "Name",
     "code": "Code",
     "coordinators": "Coordinators",
     "type": "Type",
     "address": "Address",
+    "confirm_delete": "{{name}} site will be deleted for ever. Are you sure you want to proceed?",
+    "site_deleted": "{{name}} site deleted successfully.",
+    "dependency_title": "Error: Cannot delete {{name}} site",
+    "dependency_details": "Before deleting {{name}} site, you first need to delete the following related data",
 
     "tooltip": {
       "view_details": "Click to view/edit Site details",
-      "create_site": "Click to add new Site",
+      "add": "Click to add new Site",
+      "edit": "Click to edit site",
+      "delete": "Click to delete site",
       "cp_count": "Count of Collection Protocols",
       "search": "Click to search Sites"
     },
@@ -381,16 +395,23 @@
     "list": "Distribution Protocols",
     "create_dp_title": "Create Distribution Protocol",
     "update_dp_title": "Update Distribution Protocol",
+    "delete_dp_title": "Deleting {{name}} distribution protocol confirmation",
     "title": "Title",
     "short_title": "Short Title",
     "pi": "Principal Investigator",
     "start_date": "Start Date",
     "irb_id": "IRB ID",
     "description_url": "Description URL",
-        
+    "confirm_delete": "{{name}} distribution protocol will be deleted for ever. Are you sure you want to proceed?",
+    "dp_deleted": "{{title}} distribution protocol deleted successfully.",
+    "dependency_title": "Error: Cannot delete {{name}} distribution protocol",
+    "dependency_details": "Before deleting {{name}} distribution protocol, you first need to delete the following related data",
+
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",
-      "new_dp": "Click to add new Distribution Protocol",
+      "add": "Click to add new Distribution Protocol",
+      "edit": "Click to edit Distribution Protocol",
+      "delete": "Click to delete Distribution Protocol",
       "pending_count": "Pending to distribute specimens count",
       "distributed_count": "Distributed specimens count",
       "search": "Click to search Distribution Protocols"
@@ -410,6 +431,7 @@
     "list": "Users",
     "create_user": "Create User",
     "update_user": "Update User",
+    "delete_user": "Deleting {{name}} user confirmation",
     "name": "Name",
     "last_name": "Last Name",
     "first_name": "First Name",
@@ -430,6 +452,10 @@
     "request_pending": "Following are details of user whose approval is pending",
     "user_request_approved": "User request approved successfully",
     "activity_status": "Activity Status",
+    "confirm_delete": "{{name}} user will be deleted for ever. Are you sure you want to proceed?",
+    "user_deleted": "{{name}} user deleted successfully.",
+    "dependency_title": "Error: Cannot delete {{name}} user",
+    "dependency_details": "Before deleting {{name}} user, you first need to delete the following related data",
 
     "role": {
        "new_role": "New Role",
@@ -450,8 +476,10 @@
     "return_to_signin": "Return to Sign in",
 
     "tooltip": {
-      "create_user": "Click to add new User",
       "view_details": "Click to view/edit User details",
+      "add": "Click to add new User",
+      "edit": "Click to edit User",
+      "delete": "Click to delete User",
       "email_address": "Email Address",
       "institute_name": "Institute",
       "cp_count": "Collection Protocol(s)",
@@ -499,6 +527,7 @@
     "barcode": "Barcode",
     "create_container": "Create Storage Container",
     "update_container": "Update Storage Container",
+    "delete_container": "Deleting {{name}} storage container confirmation",
     "parent_container": "Parent Container",
     "parent_site": "Parent Site",
     "parent_location": "Parent Location",
@@ -521,10 +550,16 @@
     "no_container_selected": "Please select a container",
     "cannot_hold_specimen": "Selected container cannot hold specimen for which position is being selected",
     "stores_specimens": "Stores Specimens",
+    "confirm_delete": "{{name}} storage container will be deleted for ever. Are you sure you want to proceed?",
+    "container_deleted": "{{name}} storage container deleted successfully.",
+    "dependency_title": "Error: Cannot delete {{name}} storage container",
+    "dependency_details": "Before deleting {{name}} storage container, you first need to delete the following related data",
 
     "tooltip": {
       "view_details": "Click to view/edit Storage Container details",
       "add": "Click to add new Storage Container",
+      "edit": "Click to edit Storage Container",
+      "delete": "Click to delete Storage Container",
       "count_free_locations": "Count of free locations",
       "search": "Click to search Storage Containers"
     },

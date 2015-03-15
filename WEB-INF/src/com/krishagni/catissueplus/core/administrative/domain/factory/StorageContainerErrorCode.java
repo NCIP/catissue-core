@@ -40,7 +40,9 @@ public enum StorageContainerErrorCode implements ErrorCode {
 	
 	CANNOT_HOLD_SPECIMEN,
 	
-	INVALID_POSITIONS;
+	INVALID_POSITIONS,
+	
+	DEPENDENCIES_EXIST;
 
 	@Override
 	public String code() {

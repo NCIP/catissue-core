@@ -2,11 +2,20 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import krishagni.catissueplus.util.CommonUtil;
 
+import com.krishagni.catissueplus.core.administrative.domain.dependency.DistributionProtocolDependencyChecker;
+import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
+@Configurable
 public class DistributionProtocol {
 
 	private Long id;
@@ -22,6 +31,9 @@ public class DistributionProtocol {
 	private Date startDate;
 
 	private String activityStatus;
+	
+	@Autowired
+	private DistributionProtocolDependencyChecker dependencyChecker;
 
 	public Long getId() {
 		return id;
@@ -93,12 +105,22 @@ public class DistributionProtocol {
 		this.setStartDate(distributionProtocol.getStartDate());
 		this.setActivityStatus(distributionProtocol.getActivityStatus());
 	}
-
+	
+	@SuppressWarnings("rawtypes")
+	public Map<String, List> getDependencies() {
+		return dependencyChecker.getDependencies(this);
+	}
+	
+	@SuppressWarnings("rawtypes")
 	public void delete() {
-		//need to check whether its referenced by any order
-		//
+		Map<String, List> dependencies = getDependencies();
+		if(!dependencies.isEmpty()) {
+			throw OpenSpecimenException.userError(DistributionProtocolErrorCode.DEPENDENCIES_EXIST);
+		}
+		
 		this.setShortTitle(CommonUtil.appendTimestamp(getShortTitle()));
 		this.setTitle(CommonUtil.appendTimestamp(getTitle()));
 		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
+	
 }

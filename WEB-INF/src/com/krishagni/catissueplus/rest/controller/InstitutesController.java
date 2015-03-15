@@ -104,18 +104,26 @@ public class InstitutesController {
 		
 		return resp.getPayload();
 	}
-
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependencies")
 	@ResponseBody
-	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String, List> deleteInstitute(@PathVariable Long id,
-			@RequestParam(value="close", required=false, defaultValue="false") boolean close) {
-		DeleteEntityOp deleteInstOp = new DeleteEntityOp();
-		deleteInstOp.setId(id);
-		deleteInstOp.setClose(close);
-		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(getSession(), deleteInstOp);
-		ResponseEvent<Map<String,List>> resp = instituteSvc.deleteInstitute(req);
+	public Map<String, List> getInstituteDependencies(@PathVariable Long id) {
+		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		ResponseEvent<Map<String, List>> resp = instituteSvc.getInstituteDependencies(req);
+		resp.throwErrorIfUnsuccessful();
 		
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public InstituteDetail deleteInstitute(@PathVariable Long id,
+			@RequestParam(value="close", required=false, defaultValue="false") boolean close) {
+		DeleteEntityOp deleteEntityOp = new DeleteEntityOp(id, close);
+		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(getSession(), deleteEntityOp);
+		ResponseEvent<InstituteDetail> resp = instituteSvc.deleteInstitute(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

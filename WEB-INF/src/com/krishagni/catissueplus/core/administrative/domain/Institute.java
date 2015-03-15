@@ -1,6 +1,5 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -62,20 +61,22 @@ public class Institute extends BaseEntity {
 		
 		updateActivityStatus(other.getActivityStatus());
 	}
-
-	public Map<String,List> delete(Boolean close) {
+	
+	public Map<String, List> getDependencies() {
+		return dependencyChecker.getDependencies(this);
+	}
+	
+	public void delete(Boolean close) {
+		String activityStatus = Status.ACTIVITY_STATUS_CLOSED.getStatus();
 		if (!close) {
-			Map<String, List> dependencies = dependencyChecker.getDependencies(this);
+			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
+			Map<String, List> dependencies = getDependencies();
 			if (!dependencies.isEmpty()) {
-				return dependencies;
+				throw OpenSpecimenException.userError(InstituteErrorCode.DEPENDENCIES_EXIST);
 			}
 		}
 		
-		String activityStatus = close ? Status.ACTIVITY_STATUS_CLOSED.getStatus() 
-				: Status.ACTIVITY_STATUS_DISABLED.getStatus();
 		this.setActivityStatus(activityStatus);
-		
-		return Collections.<String, List>emptyMap();
 	}
 	
 	private void updateActivityStatus(String newActivityStatus) {

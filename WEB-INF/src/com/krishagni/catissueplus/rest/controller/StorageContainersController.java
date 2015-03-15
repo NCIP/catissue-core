@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -182,6 +183,28 @@ public class StorageContainersController {
 		
 		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(getSession(), detail);
 		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.updateStorageContainer(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependencies")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, List> getContainerDependencies(@PathVariable Long id) {
+		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		ResponseEvent<Map<String, List>> resp = storageContainerSvc.getStorageContainerDependencies(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public StorageContainerDetail deleteStorageContainer(@PathVariable Long id) {
+		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.deleteStorageContainer(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

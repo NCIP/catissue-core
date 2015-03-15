@@ -6,10 +6,15 @@
 
     <h3>{{user.lastName}} {{user.firstName}}</h3>
 
-    <button class="os-round-btn" title="{{'user.tooltip.create_user' | translate}}" 
-      ui-sref="user-addedit({userId: user.id})" ng-if="user.activityStatus != 'Pending'">
-      <span class="fa fa-pencil"></span>
-    </button>
+    <div class="" ng-if="user.activityStatus != 'Pending'">
+      <button class="os-round-btn" title="{{'user.tooltip.edit' | translate}}" 
+        ui-sref="user-addedit({userId: user.id})"> 
+        <span class="fa fa-pencil"></span>
+      </button>
+      <button class="os-round-btn" title="{{'user.tooltip.delete' | translate}}" ng-click="deleteUser()">
+        <span class="fa fa-trash"></span>
+      </button>
+    </div>
   </div>
     
   <div os-side-menu ng-if="user.activityStatus != 'Pending'">

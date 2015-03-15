@@ -12,7 +12,10 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
+import com.krishagni.catissueplus.core.administrative.domain.dependency.StorageContainerDependencyChecker;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
@@ -22,6 +25,7 @@ import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
+@Configurable
 public class StorageContainer extends BaseEntity {
 	public static final String NUMBER_LABELING_SCHEME = "Numbers";
 	
@@ -88,6 +92,9 @@ public class StorageContainer extends BaseEntity {
 	private Set<String> compAllowedSpecimenTypes = new HashSet<String>();
 	
 	private Set<CollectionProtocol> compAllowedCps = new HashSet<CollectionProtocol>();
+	
+	@Autowired
+	private StorageContainerDependencyChecker dependencyChecker;
 	
 	public StorageContainer() {
 		ancestorContainers.add(this);
@@ -533,6 +540,19 @@ public class StorageContainer extends BaseEntity {
 		}
 				
 		return types;
+	}
+	
+	public Map<String, List> getDependencies() {
+		return dependencyChecker.getDependencies(this);
+	}
+	
+	public void delete() {
+		Map<String, List> dependencies = getDependencies();
+		if (!dependencies.isEmpty()) {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.DEPENDENCIES_EXIST);
+		}
+		
+		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 	
 	private StorageContainerPosition createPosition(int posOneOrdinal, String posOne, int posTwoOrdinal, String posTwo) {

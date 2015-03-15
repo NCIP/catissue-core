@@ -19,6 +19,9 @@ public interface InstituteService {
 	public ResponseEvent<InstituteDetail> createInstitute(RequestEvent<InstituteDetail> req);
 
 	public ResponseEvent<InstituteDetail> updateInstitute(RequestEvent<InstituteDetail> req);
+	
+	public ResponseEvent<Map<String, List>> getInstituteDependencies(RequestEvent<Long> req);
 
-	public ResponseEvent<Map<String, List>> deleteInstitute(RequestEvent<DeleteEntityOp> req);
+	public ResponseEvent<InstituteDetail> deleteInstitute(RequestEvent<DeleteEntityOp> req);
+	
 }

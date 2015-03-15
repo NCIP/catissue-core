@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -174,6 +175,39 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			} else {
 				return ResponseEvent.response(isAllowed);
 			}
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Map<String, List>> getStorageContainerDependencies(RequestEvent<Long> req) {
+		try {
+			StorageContainer existing = daoFactory.getStorageContainerDao().getById(req.getPayload());
+			if (existing == null) {
+				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(existing.getDependencies());
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<StorageContainerDetail> deleteStorageContainer(RequestEvent<Long> req) {
+		try {
+			StorageContainer existing = daoFactory.getStorageContainerDao().getById(req.getPayload());
+			if (existing == null) {
+				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
+			}
+			
+			existing.delete();
+			return ResponseEvent.response(StorageContainerDetail.from(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

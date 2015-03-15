@@ -4,9 +4,15 @@
       <li><a ui-sref="dp-list" translate="dp.list">Distribution Protocols</a></li>
     </ul>
     <h3>{{distributionProtocol.shortTitle}}</h3>
-    <button class="os-round-btn" title="{{'dp.tooltip.new_dp' | translate}}" ui-sref="dp-addedit({dpId: distributionProtocol.id})">
-      <span class="fa fa-pencil"></span>
-    </button>
+
+    <div>
+      <button class="os-round-btn" title="{{'dp.tooltip.edit' | translate}}" ui-sref="dp-addedit({dpId: distributionProtocol.id})">
+        <span class="fa fa-pencil"></span>
+      </button>
+      <button class="os-round-btn" title="{{'dp.tooltip.delete' | translate}}" ng-click="deleteDp()">
+        <span class="fa fa-trash"></span>
+      </button>
+    </div>
   </div>
 
   <div os-side-menu>

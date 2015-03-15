@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.administrative.events.DeleteUserOp;
 import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.auth.services.UserAuthenticationService;
+import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -122,19 +122,30 @@ public class UserController {
 		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependencies")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String, List> disableUser(@PathVariable Long id,
-			@RequestParam(value = "close", required = false, defaultValue = "false") boolean close) {
-		DeleteUserOp deleteUserOp = new DeleteUserOp(id, close);
-		RequestEvent<DeleteUserOp> req = new RequestEvent<DeleteUserOp>(getSession(), deleteUserOp);
-		ResponseEvent<Map<String, List>> resp = userService.deleteUser(req);
+	public Map<String, List> getUserDependencies(@PathVariable Long id) {
+		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		ResponseEvent<Map<String, List>> resp = userService.getUserDependencies(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
 	}
-
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public UserDetail deleteUser(@PathVariable Long id,
+			@RequestParam(value = "close", required = false, defaultValue = "false") boolean close) {
+		DeleteEntityOp deleteEntityOp = new DeleteEntityOp(id, close);
+		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(null, deleteEntityOp);
+		ResponseEvent<UserDetail> resp = userService.deleteUser(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/update-password")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)

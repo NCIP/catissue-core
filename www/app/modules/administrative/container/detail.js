@@ -1,5 +1,5 @@
 angular.module('os.administrative.container.detail', ['os.administrative.models'])
-  .controller('ContainerDetailCtrl', function($scope, $q, container, Site, CollectionProtocol, PvManager) {
+  .controller('ContainerDetailCtrl', function($scope, $q, $state, $modal, container, Site, Container, CollectionProtocol, PvManager) {
 
     function init() {
       $scope.container = container;
@@ -24,6 +24,25 @@ angular.module('os.administrative.container.detail', ['os.administrative.models'
       var d = $q.defer();
       d.resolve({});
       return d.promise;
+    }
+
+    $scope.deleteContainer = function() {
+      var modalInstance = $modal.open({
+        templateUrl: 'modules/administrative/container/delete.html',
+        controller: 'ContainerDeleteCtrl',
+        resolve: {
+          container: function () {
+            return $scope.container;
+          },
+          containerDependencies: function() {
+            return Container.getDependencies($scope.container.id);
+          }
+        }
+      });
+
+      modalInstance.result.then(function () {
+        $state.go('container-list');
+      });
     }
 
     init();
