@@ -22,6 +22,7 @@
     "server_error": "Internal Server Error. Please report this problem to system administrator",
     "ui_error": "UI Error. Please report this problem to system administrator",
     "server_connect_error": "Unable to connect server",
+    "recent_activity": "Recent Activity",
 
     "buttons": {
       "add": "Add",
@@ -100,7 +101,13 @@
     "tooltip": {
       "view_details": "Click to view/edit Collection Protocol details",
       "reg_participants_count": "Count of Registered Participants",
-      "collected_specimens_count": "Count of Collected Specimens"
+      "collected_specimens_count": "Count of Collected Specimens",
+      "search": "Click to search Collection Protocols"
+    },
+
+    "filter": {
+      "filter_title": "Collection Protocol Title",
+      "title": "Type the title"
     }
   },
 
@@ -235,6 +242,16 @@
     "description": "Description",
     "location": "Location",
     "apply_first_loc_to_all": "Copy First Location To All",
+    "activity_full_info": "{{user}} created {{name}} on {{time | date: dateFmt}}",
+    "activity_user_info": "{{user}} created {{name}}",
+    "activity_time_info": "{{name}} created on {{time | date: dateFmt}}",
+    "activity_info": "{{name}} created",
+
+    "events": "Events",
+    "event_name": "Name",
+    "event_user": "User",
+    "event_time": "Date and Time",
+    "no_events": "No events to show",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",
@@ -323,12 +340,19 @@
       "view_details": "Click to view/edit Institute details",
       "add": "Click to add new Institute",
       "department_count": "Count of Departments",
-      "user_count": "Count of Users in Institute"
+      "user_count": "Count of Users in Institute",
+      "search": "Click to search Institutes"
     },
 
     "menu": {
       "overview": "Overview"
+    },
+
+    "filter": {
+      "title": "Institute Filter",
+      "name": "Type the name"
     }
+
   },
 
   "site": {
@@ -344,11 +368,18 @@
     "tooltip": {
       "view_details": "Click to view/edit Site details",
       "create_site": "Click to add new Site",
-      "cp_count": "Count of Collection Protocols"
+      "cp_count": "Count of Collection Protocols",
+      "search": "Click to search Sites"
     },
 
     "menu": {
       "overview": "Overview"
+    },
+
+    "filter": {
+      "title": "Site Filter",
+      "name": "Type the name",
+      "type": "Select type"
     }
   },
   
@@ -366,12 +397,18 @@
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",
       "new_dp": "Click to add new Distribution Protocol",
-      "pending_count":"Pending to distribute specimens count",
-      "distributed_count":"Distributed specimens count"
+      "pending_count": "Pending to distribute specimens count",
+      "distributed_count": "Distributed specimens count",
+      "search": "Click to search Distribution Protocols"
     },
     
     "menu": {
       "overview": "Overview"
+    },
+
+    "filter": {
+      "filter_title": "Distribution Protocol Filter",
+      "title": "Type the title"
     }
   },
 
@@ -398,6 +435,7 @@
     "reject_user": "Reject User",
     "request_pending": "Following are details of user whose approval is pending",
     "user_request_approved": "User request approved successfully",
+    "activity_status": "Activity Status",
 
     "role": {
        "new_role": "New Role",
@@ -424,13 +462,22 @@
       "institute_name": "Institute",
       "cp_count": "Collection Protocol(s)",
       "last_login": "Last logged date",
-      "user_since": "User since (years)"
+      "user_since": "User since (years)",
+      "search": "Click to search Users"
     },
       
     "menu": {
       "overview": "Overview",
       "roles": "Roles"
-    }    
+    },
+
+    "filter": {
+      "title": "User Filter",
+      "name": "Type the name",
+      "login_name": "Type the login name",
+      "activity_status": "Select the activity status"
+    }
+
   },
 
   "forgot_password": {
@@ -483,12 +530,18 @@
     "tooltip": {
       "view_details": "Click to view/edit Storage Container details",
       "add": "Click to add new Storage Container",
-      "count_free_locations": "Count of free locations"
+      "count_free_locations": "Count of free locations",
+      "search": "Click to search Storage Containers"
     },
 
     "menu": {
       "overview": "Overview",
       "locations": "Locations"
+    },
+
+    "filter": {
+      "title": "Storage Container Filter",
+      "name": "Enter the name"
     }
   },
 
@@ -522,18 +575,15 @@
     "list": "Extensions",
 
     "name": "Name",
-    "creator": "Creator",
-    "last_updated": "Last Updated",
-    "record_count": "Records",
-    "multiRecord": "Multirecord",
+    "updated_by": "Updated By",
+    "update_time": "Update Time",
 
     "no_records": "No extension records to show",
-    "record_id": "Record #",
-    "last_updated_by": "Last Updated By",
     
     "edit_record": "Edit Record",
     "new_record": "Create New Record",
 
-    "record_saved": "Extension record saved successfully"
+    "record_saved": "Data saved successfully"
   }
+
 }

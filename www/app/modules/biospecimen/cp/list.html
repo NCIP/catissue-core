@@ -2,7 +2,7 @@
   <div os-page-header>
     <h3 translate="cp.list">Collection Protocols</h3>
     <div dropdown>
-      <button class="os-round-btn dropdown-toggle" title="Click to add new Collection Protocol" ui-sref="cp-addedit">
+      <button class="os-round-btn dropdown-toggle" title="Click to add new Collection Protocol" ui-sref="cp-addedit({cpId: ''})">
         <span class="fa fa-plus"></span>
       </button>
       <ul class="dropdown-menu">
@@ -19,6 +19,11 @@
           </a>
         </li>
       </ul>
+      <div class="os-more-options">
+        <button os-right-drawer-toggle class="os-search-button" title="{{'cp.tooltip.search' | translate}}">
+          <span class="fa fa-search"></span>
+        </button>
+      </div>
     </div>
   </div>
    
@@ -41,4 +46,6 @@
       </div>
     </div>
   </div>
+
+  <div os-right-drawer ng-include="'modules/biospecimen/cp/search.html'"></div>
 </div>

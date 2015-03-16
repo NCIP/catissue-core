@@ -48,6 +48,12 @@
           <span class="os-title" translate="specimens.menu.extensions">Extensions</span>
         </a>
       </li>
+      <li ui-sref-active="active" ng-if="!!specimen.id">
+        <a ui-sref=".events">
+          <i class="fa fa-calendar-o"></i>
+          <span class="os-title">Events</span>
+        </a>
+      </li>
     </ul>
   </div>
 

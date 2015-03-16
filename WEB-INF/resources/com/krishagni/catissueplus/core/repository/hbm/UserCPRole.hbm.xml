@@ -8,8 +8,6 @@
         name="com.krishagni.catissueplus.core.privileges.domain.UserCPRole"
         table="CATISSUE_CP_USER_ROLES"
         lazy="true">	
-    	<cache usage="read-write" />
-
         <id
             name="id"
             column="IDENTIFIER"

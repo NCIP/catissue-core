@@ -16,6 +16,8 @@ import javax.sql.DataSource;
 
 import krishagni.catissueplus.util.FormProcessor;
 
+import com.krishagni.catissueplus.core.de.ui.StorageContainerControlFactory;
+import com.krishagni.catissueplus.core.de.ui.StorageContainerMapper;
 import com.krishagni.catissueplus.core.de.ui.UserControlFactory;
 import com.krishagni.catissueplus.core.de.ui.UserFieldMapper;
 
@@ -104,8 +106,12 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			}
 						
 			DEApp.init(ds, dir, dateFomat,timeFormat);
-			ControlManager.getInstance().registerFactory(UserControlFactory.getInstance());
+			ControlManager.getInstance().registerFactory(UserControlFactory.getInstance());			
 			ControlMapper.getInstance().registerControlMapper("userField", new UserFieldMapper());
+			
+			ControlManager.getInstance().registerFactory(StorageContainerControlFactory.getInstance());
+			ControlMapper.getInstance().registerControlMapper("storageContainer", new StorageContainerMapper());
+			
 			
 			logger.info("Initialization complete");									
 		}

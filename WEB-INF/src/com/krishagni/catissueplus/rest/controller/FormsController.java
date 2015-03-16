@@ -28,10 +28,12 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormDataDetail;
 import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.FormType;
 import com.krishagni.catissueplus.core.de.events.GenerateBoTemplateOp;
 import com.krishagni.catissueplus.core.de.events.GetFormDataOp;
+import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
@@ -172,6 +174,29 @@ public class FormsController {
 		return resp.getPayload();
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/records")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public List<FormRecordsList> getRecords(
+			@PathVariable("id") 
+			Long formId,
+			
+			@RequestParam(value = "objectId", required = true)
+			Long objectId,
+			
+			@RequestParam(value = "entityType", required = true)
+			String entityType) {
+		
+		GetFormRecordsListOp opDetail = new GetFormRecordsListOp();
+		opDetail.setObjectId(objectId);
+		opDetail.setEntityType(entityType);
+		opDetail.setFormId(formId);
+		
+		ResponseEvent<List<FormRecordsList>> resp = formSvc.getFormRecords(getRequestEvent(opDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+		
 	@RequestMapping(method = RequestMethod.DELETE, value="{id}/data")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

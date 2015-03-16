@@ -1,8 +1,10 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -10,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
@@ -25,6 +28,8 @@ public class Specimen extends BaseEntity {
 	public static final String MISSED_COLLECTION = "Missed Collection";
 	
 	public static final String PENDING = "Pending";
+	
+	public static final String ACCEPTABLE = "Acceptable";
 
 	private String tissueSite;
 
@@ -69,7 +74,13 @@ public class Specimen extends BaseEntity {
 	private Set<Specimen> childCollection = new HashSet<Specimen>();
 
 	private Set<ExternalIdentifier> externalIdentifierCollection = new HashSet<ExternalIdentifier>();
-
+	
+	private CollectionEvent collectionEvent;
+	
+	private ReceivedEvent receivedEvent;
+	
+	private List<TransferEvent> transferEvents;
+	
 	public String getTissueSite() {
 		return tissueSite;
 	}
@@ -247,18 +258,22 @@ public class Specimen extends BaseEntity {
 				// Should initial quantity get added over here?				
 				isAvailable = false;
 				availableQuantity = 0.0d;
+				
 				if (position != null) {
 					position.vacate();
-				}
-				
+				}				
 				position = null;
+				
+				deleteEvents();
+				
 				for (Specimen child : getChildCollection()) {
 					child.setCollectionStatus(collectionStatus);
-				}
+				}				
 			} else if (!getVisit().isCompleted()) { // PENDING -> COLLECTED
 				throw OpenSpecimenException.userError(SpecimenErrorCode.VISIT_NOT_COMPLETED);
 			} else { // PENDING -> COLLECTED
-				decAliquotedQtyFromParent(); 
+				decAliquotedQtyFromParent();
+				addCollRecvEvents();
 			}
 		}
 		
@@ -313,6 +328,35 @@ public class Specimen extends BaseEntity {
 		this.externalIdentifierCollection = externalIdentifierCollection;
 	}
 
+	public CollectionEvent getCollectionEvent() {
+		if (this.collectionEvent == null) {
+			this.collectionEvent = CollectionEvent.getFor(this); 
+		}
+		return this.collectionEvent;
+	}
+
+	public void setCollectionEvent(CollectionEvent collectionEvent) {
+		this.collectionEvent = collectionEvent;
+	}
+
+	public ReceivedEvent getReceivedEvent() {
+		if (this.receivedEvent == null) {
+			this.receivedEvent = ReceivedEvent.getFor(this); 			 
+		}		
+		return this.receivedEvent; 
+	}
+
+	public void setReceivedEvent(ReceivedEvent receivedEvent) {
+		this.receivedEvent = receivedEvent;
+	}
+	
+	public List<TransferEvent> getTransferEvents() {
+		if (this.transferEvents == null) {
+			this.transferEvents = TransferEvent.getFor(this);
+		}		
+		return this.transferEvents;
+	}
+
 	public void setActive() {
 		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
@@ -357,6 +401,9 @@ public class Specimen extends BaseEntity {
 	public void update(Specimen specimen) {
 		setLabel(specimen.getLabel());
 		setBarcode(specimen.getBarcode());
+		
+		setCollectionEvent(specimen.getCollectionEvent());
+		setReceivedEvent(specimen.getReceivedEvent());
 		setCollectionStatus(specimen.getCollectionStatus());
 
 		if (isAliquot()) {
@@ -386,6 +433,38 @@ public class Specimen extends BaseEntity {
 		updatePosition(specimen.getPosition());
 		
 		checkQtyConstraints();
+	}
+
+	public void distribute(Double quantity, boolean closeAfterDistribution) {
+		if (!isAvailable || !isCollected()) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_AVAILABLE);
+		}
+		
+		if (availableQuantity < quantity) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
+		}
+		
+		availableQuantity = availableQuantity - quantity;
+		addDistributionEvent();
+		if (availableQuantity == 0 || closeAfterDistribution) {
+			isAvailable = false;
+			virtualize();
+			addDisposalEvent();
+		}
+	}
+	
+	private void addDistributionEvent() {
+		//TODO: need to add the feature.
+	}
+	
+	private void addDisposalEvent() {
+		//TODO: need to add the feature.
+	}
+	
+	private void virtualize() {
+		if (position != null) {
+			position.vacate();
+		}
 	}
 	
 	public void addSpecimen(Specimen specimen) {
@@ -450,7 +529,12 @@ public class Specimen extends BaseEntity {
 				
 		position.occupy();
 	}
-			
+	
+	public void addCollRecvEvents() {
+		addCollectionEvent();
+		addReceivedEvent();		
+	}
+
 	private double getAliquotQuantity() {
 		double aliquotQty = 0.0;
 		for (Specimen child : getChildCollection()) {
@@ -484,16 +568,75 @@ public class Specimen extends BaseEntity {
 	}
 	
 	private void updatePosition(StorageContainerPosition newPosition) {
-		if (position != null) {
-			if (newPosition != null) {
-				position.update(newPosition);
-			} else {
-				position.vacate();
-				position = null;
-			}			
-		} else if (newPosition != null) {
+		if (same(position, newPosition)) {
+			return;
+		}
+		
+		TransferEvent transfer = new TransferEvent(this);
+		transfer.setUser(AuthUtil.getCurrentUser());
+		transfer.setTime(Calendar.getInstance().getTime());
+		
+		if (position != null && newPosition != null) {
+			transfer.setFromPosition(position);
+			transfer.setToPosition(newPosition);
+			
+			position.update(newPosition);			
+		} else if (position != null) {
+			transfer.setFromPosition(position);
+			
+			position.vacate();
+			position = null;
+		} else if (position == null && newPosition != null) {
+			transfer.setToPosition(newPosition);
+			
 			newPosition.occupy();
 			setPosition(newPosition);
 		}
+		
+		transfer.saveOrUpdate();
+	}
+	
+	private void addCollectionEvent() {
+		if (isAliquot() || isDerivative()) {
+			return;
+		}
+		
+		collectionEvent.saveOrUpdate();		
+	}
+	
+	private void addReceivedEvent() {
+		if (isAliquot() || isDerivative()) {
+			return;
+		}
+		
+		receivedEvent.saveOrUpdate();
+	}
+	
+	private void deleteEvents() {
+		if (!isAliquot() && !isDerivative()) {
+			getCollectionEvent().delete();
+			getReceivedEvent().delete();
+		}
+		
+		for (TransferEvent te : getTransferEvents()) {
+			te.delete();
+		}
+	}
+	
+	private boolean same(StorageContainerPosition p1, StorageContainerPosition p2) {
+		if (p1 == null && p2 == null) {
+			return true;
+		}
+		
+		if (p1 == null || p2 == null) {
+			return false;
+		}
+		
+		if (!p1.getContainer().equals(p2.getContainer())) {
+			return false;
+		}
+		
+		return p1.getPosOneOrdinal() == p2.getPosOneOrdinal() && 
+				p1.getPosTwoOrdinal() == p2.getPosTwoOrdinal();
 	}
 }

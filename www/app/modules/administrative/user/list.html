@@ -4,9 +4,14 @@
     <h3>
       <span translate="user.list">Users</span>
     </h3>
-    <button class="os-round-btn" title="{{'user.tooltip.create_user' | translate}}" ui-sref="user-addedit">
+    <button class="os-round-btn" title="{{'user.tooltip.create_user' | translate}}" ui-sref="user-addedit({userId: ''})">
       <span class="fa fa-plus"></span>
     </button>
+    <div class="os-more-options">
+      <button os-right-drawer-toggle class="os-search-button" title="{{'user.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+      </button>
+    </div>
   </div>
     
   <div class="os-cards">
@@ -34,4 +39,6 @@
       </div> 
     </div>
   </div>
+
+  <div os-right-drawer ng-include="'modules/administrative/user/search.html'"></div>
 </div>

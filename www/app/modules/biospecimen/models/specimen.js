@@ -1,5 +1,5 @@
 angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospecimen.models.form'])
-  .factory('Specimen', function(osModel, $http, SpecimenRequirement, Form) {
+  .factory('Specimen', function(osModel, $http, SpecimenRequirement, Form, Util) {
     var Specimen = osModel(
       'specimens',
       function(specimen) {
@@ -85,12 +85,23 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       return curr;
     };
 
-    Specimen.prototype.getForms = function() {
-      return Form.listFor(Specimen.url(), this.$id());
+    Specimen.prototype.getForms = function(params) {
+      return Form.listFor(Specimen.url(), this.$id(), params);
     };
 
-    Specimen.prototype.getRecords = function(formCtxId) {
-      return Form.listRecords(Specimen.url(), this.$id(), formCtxId);
+    Specimen.prototype.getRecords = function() {
+      var url = Specimen.url() + this.$id() + '/extension-records';
+      return Form.listRecords(url);
+    };
+
+    Specimen.prototype.getEvents = function() {
+      var events = [];
+      $http.get(Specimen.url() + '/' + this.$id() + '/events').then(
+        function(result) {
+          Util.unshiftAll(events, getEventsList(result.data));
+        }
+      );
+      return events;
     };
 
     Specimen.prototype.$saveProps = function() {
@@ -122,6 +133,42 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
 
       return sr;
     };
+
+    function getEventsList(eventsRecs) { /* eventsRecs: [{event info, records: [event records]}] */
+      var eventsList = [];
+      angular.forEach(eventsRecs, function(eventRecs) {
+        angular.forEach(eventRecs.records, function(record) {
+          var user = null, time = null;
+          for (var i = 0; i < record.fieldValues.length; ++i) {
+            if (record.fieldValues[i].name == 'user') {
+              user = record.fieldValues[i].value;
+            } else if (record.fieldValues[i].name == 'time') {
+              time = record.fieldValues[i].value;
+            }
+          }
+
+          eventsList.push({
+            id: record.recordId,
+            formId: eventRecs.id,
+            formCtxtId: record.fcId,
+            name: eventRecs.caption,
+            updatedBy: record.user,
+            updateTime: record.updateTime,
+            user: user,
+            time: time
+          });
+        });
+      });
+
+      eventsList.sort(
+        function(e1, e2) { 
+          var t1 = e1.time || 0;
+          var t2 = e2.time || 0;
+          return t2 - t1;
+        }
+      );
+      return eventsList;
+    }
 
     return Specimen;
   });

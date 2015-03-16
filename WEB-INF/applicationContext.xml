@@ -21,10 +21,8 @@
     http://www.springframework.org/schema/context 
     http://www.springframework.org/schema/context/spring-context-3.2.xsd
     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-	http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx 
     http://www.springframework.org/schema/tx/spring-tx.xsd">
-
-
 
   <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
@@ -35,10 +33,7 @@
     <property name="hibernateProperties">
       <props>
         <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-        <prop key="hibernate.cache.use_second_level_cache">false</prop>
         <prop key="hibernate.show_sql">true</prop>
-        <prop key="hibernate.cache.use_query_cache">false</prop>
-        <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
       </props>
     </property>
   </bean>
@@ -68,31 +63,16 @@
     <property name="maxUploadSize" value="100000000"/>
   </bean>
 
-  <aop:aspectj-autoproxy>
-  </aop:aspectj-autoproxy>
+  <aop:aspectj-autoproxy/>
       
   <bean id="auditInterceptor" class="com.krishagni.catissueplus.core.common.AuditInterceptor">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   
-  <!-- bean id="collectionProtocolDao" class="com.krishagni.catissueplus.dao.impl.CollectionProtocolDaoImpl">
-    <property name="daoFactory" value="daoFactory"/>  
-  </bean>
-  
-  <bean id="collectionProtocolRegistrationDao" class="com.krishagni.catissueplus.dao.impl.CollectionProtocolRegistrationDaoImpl">
-    <property name="sessionFactory" ref="sessionFactory"/>  
-  </bean>
-  
-  <bean id="specimenCollectionGroupDao" class="com.krishagni.catissueplus.dao.impl.SpecimenCollectionGroupDaoImpl">
-    <property name="sessionFactory" ref="sessionFactory"/>  
-  </bean>
-  
-  <bean id="specimenDao" class="com.krishagni.catissueplus.dao.impl.SpecimenDaoImpl">
-    <property name="sessionFactory" ref="sessionFactory"/>  
-  </bean-->
   <bean id="participantLookupLogic" class="com.krishagni.catissueplus.core.biospecimen.matching.ParticipantLookupLogicImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
+
   <bean id="collectionProtocolService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
@@ -243,6 +223,10 @@
     <property name="specimenListFactory" ref="specimenListFactory"/>
   </bean>
   
+  <bean id="formDataMgr" class="edu.common.dynamicextensions.napi.impl.FormDataManagerImpl">
+    <constructor-arg type="boolean" value="false"/>
+  </bean>
+
   <bean id="formDao" class="com.krishagni.catissueplus.core.de.repository.impl.FormDaoImpl">
     <property name="sessionFactory" ref="sessionFactory"/> 
   </bean>
@@ -362,14 +346,14 @@
     <property name="distributionProtocolFactory" ref="distributionProtocolFactory" />
   </bean>
 	
-	<!-- bean id="distributionOrderService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionOrderServiceImpl">
-        <property name="daoFactory" ref="biospecimenDaoFactory"/>
-        <property name="distributionFactory" ref="distributionFactory" />
-	</bean>
-	
-	<bean id="distributionFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionOrderFactoryImpl">
-        <property name="daoFactory" ref="biospecimenDaoFactory"/>
-	</bean-->
+  <bean id="distributionFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionOrderFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+
+  <bean id="distributionOrderService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionOrderServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="distributionFactory" ref="distributionFactory" />
+  </bean>
 	
   <bean id="permissibleValueSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
@@ -387,8 +371,8 @@
     <property name="basename" value="errors/messages"/>
   </bean>
 
-  <bean id="appCtxProvider" class="com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider">
-  </bean>
+
+  <bean id="appCtxProvider" class="com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider"/>
   
   <security:authentication-manager alias="authenticationManager">
     <security:authentication-provider user-service-ref="userSvc" >
@@ -437,8 +421,8 @@
   
   <task:scheduler id="taskScheduler" pool-size="1"/>
   <task:annotation-driven scheduler="taskScheduler"/>
-  <context:annotation-config />
+  <context:annotation-config/>
   <context:spring-configured/>
   
   <import resource="classpath*:com/krishagni/openspecimen/custom/*Context.xml"/>
- </beans>
+</beans>

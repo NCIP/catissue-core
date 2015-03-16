@@ -209,13 +209,15 @@ body {
   color: #666666;
 }
   
-.os-page-hdr .os-nav-button, .os-page-hdr .os-options-button {
+.os-page-hdr .os-nav-button,
+.os-page-hdr .os-options-button,
+.os-page-hdr .os-search-button {
   color: #666666;
   background: transparent;
   border: none;
   outline: none;
   margin-top: -20px;
-  margin-right: 24px; 
+  margin-right: 24px;
   margin-left: -10px;
 }
 
@@ -225,7 +227,8 @@ body {
 }
 
 .os-page-hdr .os-nav-button .fa,
-.os-page-hdr .os-options-button .fa {
+.os-page-hdr .os-options-button .fa,
+.os-page-hdr .os-search-button .fa {
   font-size: 24px;
 }
 
@@ -249,6 +252,10 @@ button.btn.os-round-btn {
   border-radius: 100%;
   position: relative;
   background: #428bca;
+}
+
+h4 + .btn-group {
+  margin-left: 10px;
 }
 
 .os-page-hdr .os-round-btn > span {
@@ -280,6 +287,7 @@ button.btn.os-round-btn {
   bottom: 0px;
   height: auto;
   overflow-y: auto;
+  transition: width 0.25s ease-in-out 0s;
 }
 
 .os-page-hdr .os-more-options {
@@ -525,7 +533,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 }
 
 .os-activity-list .os-activity .title {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .os-activity-list .os-activity .info {
@@ -861,4 +869,9 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 .os-margin-10 {
   margin: 10%;
+}
+
+.os-big-dropdown-menu {
+  max-height: 400px;
+  overflow: auto;
 }

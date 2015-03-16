@@ -9,7 +9,6 @@
         table="CATISSUE_EXTERNAL_APPLICATION"
 	lazy="false" >
     
-	<cache usage="read-write" />
         <id
             name="id"
             column="IDENTIFIER"	

@@ -9,8 +9,6 @@
         table="OS_SPECIMEN_PRINT_RULE"
         lazy="true">
 	
-    	<cache usage="read-write" />
-
         <id
             name="id"
             column="IDENTIFIER"
@@ -56,7 +54,6 @@
 <!--             length="1000"/> -->
 
         <set name="dataOnLabel" inverse="false" cascade="save-update" table="CATISSUE_SPECIMEN_PRINT_DATA">
-        <cache usage="read-write"/>
 			<key column="PRINT_RULE_ID">
 			</key>
 			<element  column = "DATA_ON_LABEL" type = "string" />

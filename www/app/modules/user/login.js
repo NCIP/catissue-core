@@ -49,6 +49,7 @@ angular.module('openspecimen')
 
       if (result.status == "ok" && result.data) {
         $rootScope.currentUser = {
+          id: result.data.id,
           firstName: result.data.firstName,
           lastName: result.data.lastName,
           loginName: result.data.loginName

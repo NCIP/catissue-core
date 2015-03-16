@@ -9,7 +9,6 @@
         table="CATISSUE_ADDRESS"
 	lazy="false" >
     
-	<cache usage="read-write" />
         <id
             name="id"
             column="IDENTIFIER"

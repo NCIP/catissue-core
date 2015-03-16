@@ -97,5 +97,35 @@
   </div>
 
   <div class="col-xs-4">
+    <h3 class="os-sub-section-title" translate="common.recent_activity">
+      Recent Activity
+    </h3>
+    <span ng-if="activities.length == 0" translate="common.none">None</span>
+    <ul class="os-activity-list" ng-if="activities.length > 0">
+      <li class="os-activity" ng-repeat="activity in activities">
+        <div class="title">
+          <a ui-sref="specimen-detail.extensions.addedit({recordId: activity.id, formId: activity.formId, formCtxId: activity.formCtxtId})">
+            <span ng-if="!!activity.user && !!activity.time">
+              {{'specimens.activity_full_info' | translate: activity}} 
+            </span>
+            <span ng-if="!!activity.user && !activity.time">
+              {{'specimens.activity_user_info' | translate: activity}}
+            </span>
+            <span ng-if="!activity.user && !!activity.time">
+              {{'specimens.activity_time_info' | translate: activity}}
+            </span>
+            <span ng-if="!activity.user && !activity.time">
+              {{'specimens.activity_info' | translate: activity}}
+            </span>
+          </a>
+        </div>
+        <div class="info">
+          <span>
+            {{activity.updatedBy.lastName}}, {{activity.updatedBy.firstName}} - 
+            {{activity.updateTime | date: dateFmt}}
+          </span>
+        </div>
+      </li>
+    </ul>
   </div>
 </div>

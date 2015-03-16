@@ -14,7 +14,27 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import edu.emory.mathcs.backport.java.util.Collections;
 
 public class SpecimenDetail extends SpecimenInfo {
+	private CollectionEventDetail collectionEvent;
+	
+	private ReceivedEventDetail receivedEvent;
+	
 	private List<SpecimenDetail> children;
+
+	public CollectionEventDetail getCollectionEvent() {
+		return collectionEvent;
+	}
+
+	public void setCollectionEvent(CollectionEventDetail collectionEvent) {
+		this.collectionEvent = collectionEvent;
+	}
+
+	public ReceivedEventDetail getReceivedEvent() {
+		return receivedEvent;
+	}
+
+	public void setReceivedEvent(ReceivedEventDetail receivedEvent) {
+		this.receivedEvent = receivedEvent;
+	}
 
 	public List<SpecimenDetail> getChildren() {
 		return children;

@@ -58,9 +58,9 @@ angular.module('os.biospecimen.participant.collect-specimens',
         $scope.visit = visit;
         
         $scope.collDetail = {
-          collector: '',
+          collector: undefined,
           collectionDate: new Date().toISOString(),
-          receiver: '',
+          receiver: undefined,
           receiveDate: new Date().toISOString()
         };
 
@@ -99,7 +99,12 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
       $scope.remove = function(specimen) {
         var idx = $scope.specimens.indexOf(specimen);
-        $scope.specimens.splice(idx, descendentCount(specimen) + 1);
+        var descCnt = descendentCount(specimen);
+
+        for (var i = idx + descCnt; i >= idx; --i) {
+          $scope.specimens[i].selected = false;
+          $scope.specimens.splice(i, 1);
+        }
       };
 
       $scope.statusChanged = function(specimen) {
@@ -189,7 +194,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         return result;
       };
 
-      function getSpecimenToSave(uiSpecimen) {
+      function getSpecimenToSave(uiSpecimen) { // Make it object Specimen and do checks like isNew/isCollected
         var specimen = {
           id: uiSpecimen.id,
           initialQty: uiSpecimen.initialQty,
@@ -201,6 +206,18 @@ angular.module('os.biospecimen.participant.collect-specimens',
           lineage: uiSpecimen.lineage,
           status: uiSpecimen.status
         };
+
+        if (specimen.lineage == 'New' && specimen.status == 'Collected') {
+          specimen.collectionEvent = {
+            user: $scope.collDetail.collector,
+            time: $scope.collDetail.collectionDate
+          };
+
+          specimen.receivedEvent = {
+            user: $scope.collDetail.receiver,
+            time: $scope.collDetail.receiveDate
+          };
+        }
 
         if (!!specimen.reqId || specimen.lineage == 'Aliquot') {
           return specimen;

@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.de.repository.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -393,6 +394,51 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	}
 	
 	@SuppressWarnings("unchecked")
+	@Override
+	public Map<Long, List<FormRecordSummary>> getFormRecords(Long objectId, String entityType, Long formId) {
+		
+		Query query = null;
+		if (formId == null) {
+			query = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_RECS_BY_TYPE_AND_OBJECT);					
+		} else {
+			query = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_RECS)
+				.setLong("formId", formId);
+		}
+		
+		List<Object[]> rows = query.setString("entityType", entityType)
+				.setLong("objectId", objectId)
+				.list();
+		
+		Map<Long, List<FormRecordSummary>> result = new HashMap<Long, List<FormRecordSummary>>();
+		for (Object[] row : rows) {
+			Long form = (Long)row[0];
+			
+			FormRecordSummary record = new FormRecordSummary();
+			record.setFcId((Long)row[1]);
+			record.setRecordId((Long)row[2]);
+			record.setUpdateTime((Date)row[3]);
+			
+			UserSummary user = new UserSummary();
+			user.setId((Long)row[4]);
+			user.setFirstName((String)row[5]);
+			user.setLastName((String)row[6]);
+			record.setUser(user);
+			
+			List<FormRecordSummary> recs = result.get(form);
+			if (recs == null) {
+				recs = new ArrayList<FormRecordSummary>();
+				result.put(form, recs);
+			}
+			
+			recs.add(record);
+		}
+				
+		return result;
+	}
+		
+	@SuppressWarnings("unchecked")
 	private ObjectCpDetail getObjectIdForParticipant(Map<String, Object> dataHookingInformation) {
 		ObjectCpDetail objCp = new ObjectCpDetail();
 		String cpTitle = (String) dataHookingInformation.get("collectionProtocol");
@@ -543,5 +589,8 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	private static final String GET_QUERY_FORM_CONTEXT = FQN + ".getQueryFormCtxtByContainerId";
 	
 	private static final String GET_RECORD_CNT = FQN + ".getRecordCount";
-
+	
+	private static final String GET_RECS_BY_TYPE_AND_OBJECT = FQN  + ".getRecordsByEntityAndObject";
+	
+	private static final String GET_RECS = FQN + ".getRecords";
 }

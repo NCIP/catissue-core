@@ -59,6 +59,8 @@ public class User extends BaseEntity implements UserDetails {
 	
 	private String password;
 	
+	private boolean admin;
+	
 	private Set<Password> passwords = new HashSet<Password>();
 	
 	@Autowired
@@ -174,6 +176,14 @@ public class User extends BaseEntity implements UserDetails {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 
 	public Set<Password> getPasswords() {

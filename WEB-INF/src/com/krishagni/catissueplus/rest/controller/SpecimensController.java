@@ -27,7 +27,9 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
+import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
 import com.krishagni.catissueplus.core.de.services.FormService;
@@ -121,12 +123,22 @@ public class SpecimensController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<FormCtxtSummary> getForms(@PathVariable("id") Long specimenId) {
+	public List<FormCtxtSummary> getForms(
+			@PathVariable("id") 
+			Long specimenId,
+			
+			@RequestParam(value = "entityType", required = false, defaultValue="Specimen")
+			String entityType
+			) {
 		ListEntityFormsOp opDetail = new ListEntityFormsOp();
 		opDetail.setEntityId(specimenId);
-		opDetail.setEntityType(EntityType.SPECIMEN);
 		
-
+		if (entityType.equals("Specimen")) {
+			opDetail.setEntityType(EntityType.SPECIMEN);
+		} else {
+			opDetail.setEntityType(EntityType.SPECIMEN_EVENT);
+		}
+		
 		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(getRequest(opDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
@@ -146,6 +158,20 @@ public class SpecimensController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/events")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public List<FormRecordsList> getEvents(@PathVariable("id") Long specimenId) {
+		return getRecords(specimenId, "SpecimenEvent");
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/extension-records")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<FormRecordsList> getExtensionRecords(@PathVariable("id") Long specimenId) {
+		return getRecords(specimenId, "Specimen");
+	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/collect")
 	@ResponseStatus(HttpStatus.OK)
@@ -162,5 +188,15 @@ public class SpecimensController {
 
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
+	}
+	
+	private List<FormRecordsList> getRecords(Long specimenId, String entityType) {
+		GetFormRecordsListOp opDetail = new GetFormRecordsListOp();
+		opDetail.setObjectId(specimenId);
+		opDetail.setEntityType(entityType);
+		
+		ResponseEvent<List<FormRecordsList>> resp = formSvc.getFormRecords(getRequest(opDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();		
 	}
 }

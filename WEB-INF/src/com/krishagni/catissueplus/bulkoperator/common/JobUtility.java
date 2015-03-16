@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import org.hibernate.Hibernate;
+import org.hibernate.Session;
 
 import com.krishagni.catissueplus.bulkoperator.domain.BulkOperationJob;
 import com.krishagni.catissueplus.bulkoperator.repository.BulkOperationJobDao;
@@ -68,7 +69,7 @@ public class JobUtility {
 			
 			try {
 				fin = new FileInputStream(logFile);
-				return null;
+				return null; // WAS Hibernte.createBlob(fin);
 			} catch (Exception e) {
 				throw new RuntimeException("Error saving logfile to database: " + e.getMessage());
 			}

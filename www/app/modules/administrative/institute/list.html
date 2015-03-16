@@ -3,9 +3,14 @@
     <h3>
       <span translate="institutes.list">Institutes</span>
     </h3>
-    <button class="os-round-btn" title="{{'institutes.tooltip.add' | translate}}" ui-sref="institute-addedit">
+    <button class="os-round-btn" title="{{'institutes.tooltip.add' | translate}}" ui-sref="institute-addedit({instituteId: ''})">
       <span class="fa fa-plus"></span>
     </button>
+    <div class="os-more-options">
+      <button os-right-drawer-toggle class="os-search-button" title="{{'institutes.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+      </button>
+    </div>
   </div>
 
   <div class="os-cards"> 
@@ -13,7 +18,7 @@
       <h4>
         <a title="{{'institutes.tooltip.view_details' | translate}}" 
           ui-sref="institute-detail.overview({instituteId: institute.id})"> 
-          {{institute.name}} 
+          {{institute.name}}
         </a>
       </h4>
       <div class="stats">
@@ -28,4 +33,7 @@
       </div>
     </div>
   </div>
+
+  <div os-right-drawer ng-include="'modules/administrative/institute/search.html'"></div>
+
 </div>

@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +16,11 @@ import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.de.domain.FormErrorCode;
 import com.krishagni.catissueplus.core.de.events.AddRecordEntryOp;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
@@ -27,12 +30,14 @@ import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormDataDetail;
 import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.FormType;
 import com.krishagni.catissueplus.core.de.events.GenerateBoTemplateOp;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
 import com.krishagni.catissueplus.core.de.events.GetFileDetailOp;
 import com.krishagni.catissueplus.core.de.events.GetFormDataOp;
+import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
 import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
@@ -56,7 +61,6 @@ import edu.common.dynamicextensions.napi.FormDataManager;
 import edu.common.dynamicextensions.napi.impl.FormDataManagerImpl;
 import edu.common.dynamicextensions.nutility.FileUploadMgr;
 import edu.wustl.catissuecore.action.bulkOperations.BOTemplateGeneratorUtil;
-import edu.wustl.common.beans.SessionDataBean;
 
 public class FormServiceImpl implements FormService {
 	private static final String PARTICIPANT_FORM = "Participant";
@@ -117,7 +121,7 @@ public class FormServiceImpl implements FormService {
 	@PlusTransactional
 	public ResponseEvent<Boolean> deleteForm(RequestEvent<Long> req) {
 		Long formId = req.getPayload();
-		boolean isAdmin = req.getSessionDataBean().isAdmin();
+		boolean isAdmin = AuthUtil.getCurrentUser().isAdmin();
 		
 		if (!isAdmin) {
 			return ResponseEvent.userError(FormErrorCode.OP_NOT_ALLOWED);
@@ -288,7 +292,8 @@ public class FormServiceImpl implements FormService {
 		FormDataDetail detail = req.getPayload();
 		
 		try {
-			FormData formData = saveOrUpdateFormData(req.getSessionDataBean(), detail.getRecordId(), detail.getFormData());
+			User user = AuthUtil.getCurrentUser();
+			FormData formData = saveOrUpdateFormData(user, detail.getRecordId(), detail.getFormData());
 			return ResponseEvent.response(FormDataDetail.ok(formData.getContainer().getId(), formData.getRecordId(), formData));
 		} catch(IllegalArgumentException ex) {
 			return ResponseEvent.userError(FormErrorCode.INVALID_DATA);
@@ -299,10 +304,11 @@ public class FormServiceImpl implements FormService {
 	@PlusTransactional
 	public ResponseEvent<List<FormData>> saveBulkFormData(RequestEvent<List<FormData>> req) {
 		try{ 
+			User user = AuthUtil.getCurrentUser();
 			List<FormData> formDataList = req.getPayload();
 			List<FormData> savedFormDataList = new ArrayList<FormData>();
 			for (FormData formData : formDataList) {
-				FormData savedFormData = saveOrUpdateFormData(req.getSessionDataBean(), formData.getRecordId(), formData);
+				FormData savedFormData = saveOrUpdateFormData(user, formData.getRecordId(), formData);
 				savedFormDataList.add(savedFormData);
 			}
 			
@@ -428,7 +434,44 @@ public class FormServiceImpl implements FormService {
 		return ResponseEvent.response(Collections.<Long>emptyList());
 	}
 	
-	private FormData saveOrUpdateFormData(SessionDataBean session, Long recordId, FormData formData ) {
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<FormRecordsList>> getFormRecords(RequestEvent<GetFormRecordsListOp> req) {
+		GetFormRecordsListOp input = req.getPayload();
+		Map<Long, List<FormRecordSummary>> records = formDao.getFormRecords(
+				input.getObjectId(), 
+				input.getEntityType(), 
+				input.getFormId());
+		
+		FormDataManager formDataMgr = new FormDataManagerImpl(false);
+		
+		List<FormRecordsList> result = new ArrayList<FormRecordsList>();
+		for (Map.Entry<Long, List<FormRecordSummary>> formRecs : records.entrySet()) {
+			Long formId = formRecs.getKey();
+			Container container = Container.getContainer(formId);
+			
+			List<Long> recIds = new ArrayList<Long>();
+			Map<Long, FormRecordSummary> recMap = new HashMap<Long, FormRecordSummary>();
+			for (FormRecordSummary rec : formRecs.getValue()) {
+				recMap.put(rec.getRecordId(), rec);
+				recIds.add(rec.getRecordId());
+			}
+						
+			List<FormData> summaryRecs = formDataMgr.getSummaryData(
+					container, 
+					recIds);
+			
+			for (FormData rec : summaryRecs) {
+				recMap.get(rec.getRecordId()).addFieldValues(rec.getFieldValues());
+			}
+			
+			result.add(FormRecordsList.from(container, recMap.values()));			
+		}
+		
+		return ResponseEvent.response(result);
+	}
+		
+	private FormData saveOrUpdateFormData(User user, Long recordId, FormData formData ) {
 		Map<String, Object> appData = formData.getAppData();
 		if (appData.get("formCtxtId") == null || appData.get("objectId") == null) {
 			throw new IllegalArgumentException("Invalid form context id or object id ");
@@ -448,8 +491,8 @@ public class FormServiceImpl implements FormService {
 		formData.setRecordId(recordId);
 		boolean isInsert = (recordId == null);
 		
-		if(isInsert) {
-			if(!formContext.isMultiRecord()) {
+		if (isInsert) {
+			if (!formContext.isMultiRecord()) {
 				Long noOfRecords = formDao.getRecordsCount(formContext.getIdentifier(), objectId);
 				if(noOfRecords >= 1L) {
 					throw new RuntimeException("Form is single record ");
@@ -476,7 +519,7 @@ public class FormServiceImpl implements FormService {
 		recordEntry.setFormCtxtId(formContext.getIdentifier());
 		recordEntry.setObjectId(objectId);
 		recordEntry.setRecordId(recordId);
-		recordEntry.setUpdatedBy(session.getUserId());
+		recordEntry.setUpdatedBy(user.getId());
 		recordEntry.setUpdatedTime(Calendar.getInstance().getTime());
 		formDao.saveOrUpdateRecordEntry(recordEntry);
 

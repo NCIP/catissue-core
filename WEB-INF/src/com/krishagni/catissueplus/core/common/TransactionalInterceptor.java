@@ -8,7 +8,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -21,9 +22,13 @@ public class TransactionalInterceptor {
 	private static Logger LOGGER = Logger.getCommonLogger(TransactionalInterceptor.class);
 
 	private PlatformTransactionManager transactionManager;
+	
+	private TransactionTemplate txTmpl;
 
 	public void setTransactionManager(PlatformTransactionManager transactionManager) {
 		this.transactionManager = transactionManager;
+		this.txTmpl = new TransactionTemplate(transactionManager);
+		this.txTmpl.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 	}
 
 	@Pointcut("execution(@com.krishagni.catissueplus.core.common.PlusTransactional * *(..))")
@@ -31,40 +36,26 @@ public class TransactionalInterceptor {
 	}
 
 	@Around("transactionalMethod()")
-	public Object startTransaction(ProceedingJoinPoint pjp) {
-		System.out.println("Inside PlusTransactional *******************************");
-		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-    TransactionStatus status = transactionManager.getTransaction( def );
-		Object object = null;
-		System.out.println("getting current transaction *******************************");
-
-		
-		try {
-			System.out.println("PJP proceed *******************************");
-			object = pjp.proceed();
-			System.out.println("PJP Completed *******************************");
-			ResponseEvent resp = (object instanceof ResponseEvent) ? (ResponseEvent)object : null; 
-			if ((resp == null || resp.isSuccessful() || resp.isForceTxCommitEnabled()) && status.isNewTransaction()) {		
-				transactionManager.commit( status );
-				LOGGER.info("Transaction commited.");
-			}
-		}
-		catch (Throwable e) {
-			System.out.println("Error  while executing PJP *******************************");
-			LOGGER.error(e.getCause(), e);
-			LOGGER.error(e.getMessage(), e);
-			if (status.isNewTransaction()) {
-				transactionManager.rollback(status);
-				LOGGER.info("Error thrown, transaction rolled back.");
-			}
-			throw OpenSpecimenException.serverError(e);
-		}
-		finally {
-			if (!status.isCompleted() && !status.isNewTransaction()) {
-				transactionManager.rollback(status);
-			}
-		}
-		return object;
+	public Object startTransaction(final ProceedingJoinPoint pjp) {
+		return txTmpl.execute(new TransactionCallback<Object>() {
+			@Override
+			public Object doInTransaction(TransactionStatus status) {				
+				try {
+					Object result = pjp.proceed();					
+					if (result instanceof ResponseEvent) {
+						ResponseEvent<?> resp = (ResponseEvent<?>)result;
+						if (!resp.isSuccessful() && !resp.isForceTxCommitEnabled()) {
+							status.setRollbackOnly();
+						}
+					}
+					
+					return result ;
+				} catch (Throwable t) {
+					status.setRollbackOnly();
+					t.printStackTrace();
+					throw OpenSpecimenException.serverError(t);
+				}
+			}			
+		});
 	}
 }

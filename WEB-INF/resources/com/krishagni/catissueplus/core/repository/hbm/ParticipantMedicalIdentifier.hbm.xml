@@ -10,8 +10,6 @@
         table="CATISSUE_PART_MEDICAL_ID"
     >
     
-    <cache usage="read-write" />
-
         <id
             name="id"
             column="IDENTIFIER"

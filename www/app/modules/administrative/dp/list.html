@@ -4,9 +4,14 @@
     <h3>
       <span translate="dp.list">Distribution Protocols</span>
     </h3>
-    <button class="os-round-btn" title="{{'dp.tooltip.new_dp' | translate}}" ui-sref="dp-addedit">
+    <button class="os-round-btn" title="{{'dp.tooltip.new_dp' | translate}}" ui-sref="dp-addedit({dpId: ''})">
       <span class="fa fa-plus"></span>
     </button>
+    <div class="os-more-options">
+      <button os-right-drawer-toggle class="os-search-button" title="{{'dp.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+      </button>
+    </div>
   </div>
   
   <div class="os-cards">
@@ -33,4 +38,7 @@
       </div>
     </div>
   </div>
+
+  <div os-right-drawer ng-include="'modules/administrative/dp/search.html'"></div>
+
 </div>

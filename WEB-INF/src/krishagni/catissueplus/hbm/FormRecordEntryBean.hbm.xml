@@ -12,8 +12,6 @@
 		lazy="true"
     >
     
-    <cache usage="read-write" />
-
         <id
             name="identifier"
             column="IDENTIFIER"
