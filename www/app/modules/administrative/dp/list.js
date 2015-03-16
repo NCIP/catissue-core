@@ -20,6 +20,11 @@ angular.module('os.administrative.dp.list', ['os.administrative.models'])
     $scope.filter = function() {
       loadDps($scope.dpFilterOpts);
     }
+
+    $scope.onPiSelect = function(pi) {
+      $scope.dpFilterOpts.piId = pi.id;
+      $scope.filter();
+    }
    
     init();
   });

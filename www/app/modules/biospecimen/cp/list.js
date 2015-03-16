@@ -22,5 +22,10 @@ angular.module('os.biospecimen.cp.list', ['os.biospecimen.models'])
       loadCollectionProtocols($scope.cpFilterOpts);
     }
 
+    $scope.onPiSelect = function(pi) {
+      $scope.cpFilterOpts.piId = pi.id;
+      $scope.filter();
+    }
+
     init();
   });

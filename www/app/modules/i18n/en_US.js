@@ -106,7 +106,9 @@
 
     "filter": {
       "filter_title": "Collection Protocol Title",
-      "title": "Type the title"
+      "title_or_short_title": "Title / Short Title",
+      "title": "Type the title",
+      "pi": "Select principal investigator"
     }
   },
 
@@ -397,7 +399,9 @@
 
     "filter": {
       "filter_title": "Distribution Protocol Filter",
-      "title": "Type the title"
+       "title_or_short_title": "Title / Short Title",
+       "title": "Type the title",
+       "pi": "Select principal investigator"
     }
   },
 
