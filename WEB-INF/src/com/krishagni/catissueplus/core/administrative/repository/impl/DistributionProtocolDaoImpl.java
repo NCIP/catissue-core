@@ -58,30 +58,22 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		String searchTerm = dpCriteria.query();
 		
 		if (StringUtils.isBlank(searchTerm)) {
-			addTitleCondition(query, dpCriteria);
+			searchTerm = dpCriteria.title();
 		}
-		else {
+		
+		if (StringUtils.isNotBlank(searchTerm)) {
 			Junction searchCond = Restrictions.disjunction()
 					.add(Restrictions.ilike("title", searchTerm, MatchMode.ANYWHERE))
-					.add(Restrictions.ilike("shortTitle", searchTerm, MatchMode.ANYWHERE))
-					.add(Restrictions.ilike("irbId", searchTerm, MatchMode.ANYWHERE));
+					.add(Restrictions.ilike("shortTitle", searchTerm, MatchMode.ANYWHERE));
+			
+			if (StringUtils.isNotBlank(dpCriteria.query())) {
+				searchCond.add(Restrictions.ilike("irbId", searchTerm, MatchMode.ANYWHERE));
+			}
+			
 			query.add(searchCond);
 		}
 		
 		addPICondition(query, dpCriteria);
-	}
-	
-	private void addTitleCondition(Criteria query, DpListCriteria dpCriteria) {
-		String title = dpCriteria.title();
-		if (StringUtils.isBlank(title)) {
-			return;
-		}
-		
-		Junction titleCond = Restrictions.disjunction()
-				.add(Restrictions.ilike("title", title, MatchMode.ANYWHERE))
-				.add(Restrictions.ilike("shortTitle", title, MatchMode.ANYWHERE));
-		query.add(titleCond);
-		
 	}
 	
 	private void addPICondition(Criteria criteria, DpListCriteria dpCriteria) {
