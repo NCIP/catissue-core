@@ -158,7 +158,12 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		
 		
 		addSearchConditions(query, cpCriteria);
+		addProjections(query, cpCriteria);
+		
+		return query.addOrder(Order.asc("title")).list();
+	}
 
+	private void addProjections(Criteria query, CpListCriteria cpCriteria) {
 		ProjectionList projs = Projections.projectionList();
 		query.setProjection(projs);
 		
@@ -174,8 +179,6 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 			projs.add(Projections.property("pi.lastName"));
 			projs.add(Projections.property("pi.loginName"));
 		}
-		
-		return query.addOrder(Order.asc("title")).list();
 	}
 	
 	private void addSearchConditions(Criteria query, CpListCriteria cpCriteria) {
@@ -195,17 +198,13 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 			
 			query.add(searchCond);
 		}
-		addPiRestriction(query, cpCriteria);
-	}
-	
-	private void addPiRestriction(Criteria query, CpListCriteria cpCriteria) {
-		Long piId = cpCriteria.piId();
-		if (piId == null) {
-			return;
-		}
 		
-		query.add(Restrictions.eq("principalInvestigator.id", piId));
+		Long piId = cpCriteria.piId();
+		if (piId != null) {
+			query.add(Restrictions.eq("principalInvestigator.id", piId));
+		}
 	}
+
 
 	private CollectionProtocolSummary getCp(Object[] fields, boolean includePi) {
 		CollectionProtocolSummary cp = new CollectionProtocolSummary();

@@ -399,9 +399,9 @@
 
     "filter": {
       "filter_title": "Distribution Protocol Filter",
-       "title_or_short_title": "Title / Short Title",
-       "title": "Type the title",
-       "pi": "Select principal investigator"
+      "title_or_short_title": "Title / Short Title",
+      "title": "Type the title",
+      "pi": "Select principal investigator"
     }
   },
 
