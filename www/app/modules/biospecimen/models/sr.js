@@ -16,7 +16,7 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
       }
     );
 
-    var getDefaultProps = function() {
+    function getDefaultProps() {
       var notSpecified = PvManager.notSpecified();
       return {
         anatomicSite: notSpecified,

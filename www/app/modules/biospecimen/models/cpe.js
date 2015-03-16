@@ -7,7 +7,7 @@ angular.module('os.biospecimen.models.cpe', ['os.common.models'])
       }
     );
 
-    var getDefaultProps = function() {
+    function getDefaultProps() {
       var notSpecified = PvManager.notSpecified();
       return {
         clinicalDiagnosis: notSpecified,
