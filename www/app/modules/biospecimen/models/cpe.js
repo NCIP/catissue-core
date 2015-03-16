@@ -1,25 +1,18 @@
 angular.module('os.biospecimen.models.cpe', ['os.common.models'])
   .factory('CollectionProtocolEvent', function($http, osModel, PvManager) {
-    var defaultData;
     var Cpe = osModel(
       'collection-protocol-events', 
       function(cpe) {
-        angular.extend(cpe, getDefaultData());
+        cpe.copyAttrsIfNotPresent(getDefaultProps());
       }
     );
 
-    var getDefaultData = function() {
-      if (defaultData) {
-        return defaultData;
-      }
-
+    var getDefaultProps = function() {
       var notSpecified = PvManager.notSpecified();
-      defaultData = {
+      return {
         clinicalDiagnosis: notSpecified,
         clinicalStatus: notSpecified
       }
- 
-      return defaultData;
     }
  
     Cpe.listFor = function(cpId) {

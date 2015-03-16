@@ -1,4 +1,4 @@
-angular.module('os.biospecimen.common.specimenQtyUnit', [])
+angular.module('os.biospecimen.common.specimenqtyunit', [])
   .directive('osSpecimenQtyUnit', function() {
     return {
       restrict: 'A',
@@ -10,9 +10,8 @@ angular.module('os.biospecimen.common.specimenQtyUnit', [])
           'Tissue': 'gm'
         }
 
-        var specimenClass = attrs.specimenClass;
-        if (specimenClass) {
-          scope.$watch(specimenClass, function(newVal) {
+        if (attrs.osSpecimenQtyUnit) {
+          scope.$watch(attrs.osSpecimenQtyUnit, function(newVal) {
             if (newVal) {
               element.html(units[newVal]);
             } 

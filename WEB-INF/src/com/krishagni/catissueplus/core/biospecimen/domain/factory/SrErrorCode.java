@@ -31,10 +31,6 @@ public enum SrErrorCode implements ErrorCode {
 	
 	COLL_CONT_REQUIRED,
 	
-	COLLECTOR_REQUIRED,
-	
-	RECEIVER_REQUIRED,
-	
 	COLLECTOR_NOT_FOUND,
 	
 	RECEIVER_NOT_FOUND,

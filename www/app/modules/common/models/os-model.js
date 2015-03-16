@@ -5,10 +5,10 @@ angular.module('os.common.models', [])
       var url = ApiUrls.getBaseUrl() + modelName + '/';
     
       var Model = function(data) {
+        angular.extend(this, data);
         if (typeof initCb == 'function') {
           initCb(this);
         }
-        angular.extend(this, data);
       };
 
       Model.url = function() {
@@ -96,6 +96,15 @@ angular.module('os.common.models', [])
       Model.prototype.$saveProps = function() { 
         return this;
       };
+
+      Model.prototype.copyAttrsIfNotPresent = function(src) {
+        var that = this;
+        angular.forEach(src, function(value, attr) {
+          if (!that[attr]) {
+            that[attr] = value;
+          }
+        })
+      }
 
       return Model;
     };

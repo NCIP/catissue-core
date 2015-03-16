@@ -1,10 +1,9 @@
 angular.module('os.biospecimen.models.sr', ['os.common.models'])
   .factory('SpecimenRequirement', function(osModel, $http, PvManager) {
-    var defaultData;
     var Sr = osModel(
       'specimen-requirements',
       function(sr) {
-        angular.extend(sr, getDefaultData());
+        sr.copyAttrsIfNotPresent(getDefaultProps())
 
         if (!sr.children) {
           return;
@@ -17,20 +16,15 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
       }
     );
 
-    var getDefaultData = function() {
-      if (defaultData) {
-        return defaultData;
-      }
-
+    var getDefaultProps = function() {
       var notSpecified = PvManager.notSpecified();
-      defaultData = {
+      return {
         anatomicSite: notSpecified,
         laterality: notSpecified,
         pathologyStatus: notSpecified,
         collectionContainer: notSpecified,
         collectionProcedure: notSpecified
       }
-      return defaultData; 
     }
  
     Sr.listFor = function(cpeId) {

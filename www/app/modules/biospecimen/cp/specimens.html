@@ -52,7 +52,7 @@
             <div class="col col-xs-2 os-ellipsis">{{sr.pathologyStatus | osNoValue}}</div>
             <div class="col col-xs-2">
               <div class="text-right col-xs-11">{{sr.initialQty | osNoValue}}</div>
-              <div os-specimen-qty-unit specimen-class="sr.specimenClass"></div>
+              <div os-specimen-qty-unit="sr.specimenClass"></div>
             </div>
             <div class="col col-xs-1 action">
               <div class="os-more-options" dropdown ng-if="view == 'list_sr'">

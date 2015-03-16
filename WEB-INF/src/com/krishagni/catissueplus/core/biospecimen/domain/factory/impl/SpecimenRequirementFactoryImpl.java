@@ -234,7 +234,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 	
 	private void setCollector(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		sr.setCollector(ensureValidUser(detail.getCollector(), SrErrorCode.COLLECTOR_REQUIRED, SrErrorCode.COLLECTOR_NOT_FOUND, ose));
+		sr.setCollector(ensureValidUser(detail.getCollector(), SrErrorCode.COLLECTOR_NOT_FOUND, ose));
 	}
 
 	private void setCollectionProsedure(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
@@ -250,7 +250,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 
 	private void setReceiver(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		sr.setReceiver(ensureValidUser(detail.getReceiver(), SrErrorCode.RECEIVER_REQUIRED, SrErrorCode.RECEIVER_NOT_FOUND, ose));
+		sr.setReceiver(ensureValidUser(detail.getReceiver(), SrErrorCode.RECEIVER_NOT_FOUND, ose));
 	}
 
 	private void setCpe(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
@@ -277,7 +277,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		return value;
 	}
 	
-	private User ensureValidUser(UserSummary userSummary, ErrorCode required, ErrorCode notFound, OpenSpecimenException ose) {
+	private User ensureValidUser(UserSummary userSummary, ErrorCode notFound, OpenSpecimenException ose) {
 		if (userSummary == null) {
 			return null;
 		}
