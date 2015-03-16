@@ -14,6 +14,8 @@
     </id>
 
     <property name="name" column="NAME"/>
+    
+    <many-to-one name="institute" column="INSTITUTE_ID"/>
           
     <property name="code" column="CODE"/>
             

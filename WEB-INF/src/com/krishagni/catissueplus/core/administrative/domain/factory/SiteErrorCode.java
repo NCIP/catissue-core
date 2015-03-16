@@ -8,6 +8,8 @@ public enum SiteErrorCode implements ErrorCode {
 	
 	NAME_REQUIRED,
 	
+	INSTITUTE_REQUIRED,
+	
 	TYPE_REQUIRED,
 	
 	INVALID_TYPE,

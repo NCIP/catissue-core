@@ -2,6 +2,17 @@
   <div class="col-xs-8">
     <ul class="os-key-values os-two-cols" os-inline-editors on-save="editSite">
       <li class="item">
+        <strong class="key key-sm" translate="site.institute">Institute</strong>
+        <os-inline-edit editor="instEditor" name="institute" class="value value-md" value="site.instituteName">
+          <span ng-if="instEditor.isDisplayMode()">{{instEditor.viewValue}}</span>
+          <div ng-if="instEditor.isEditMode()">
+            <os-select ng-model="instEditor.editValue" list="institutes" placeholder="{{'site.institute' | translate}}" required></os-select>
+          </div>
+        </os-inline-edit>
+      </li>
+
+
+      <li class="item">
         <strong class="key key-sm" translate="site.code">Code</strong>
         <os-inline-edit editor="codeEditor" name="code" class="value value-md" value="site.code">
           <span ng-if="codeEditor.isDisplayMode()">{{codeEditor.viewValue | osNoValue}}</span>

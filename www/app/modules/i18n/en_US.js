@@ -48,7 +48,7 @@
     "import_cp_title": "Import Collection Protocol",
 
     "cp_def_file": "Collection Protocol Definition File",
-    
+   
     "title": "Title",
     "short_title": "Short Title",
     "pi": "Principal Investigator",
@@ -327,6 +327,7 @@
     "create_site": "Create Site",
     "update_site": "Update Site",
     "name": "Name",
+    "institute": "Institute",
     "code": "Code",
     "coordinators": "Coordinators",
     "type": "Type",

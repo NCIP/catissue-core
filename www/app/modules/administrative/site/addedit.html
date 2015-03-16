@@ -12,6 +12,16 @@
   <div class="container">
     <form name="sform" class="form-horizontal" os-form-validator="sform" validator="sformValidator" novalidate>
       <div class="form-group">
+        <label class="col-xs-3 control-label" translate="site.institute">Institute</label>
+        <div class="col-xs-6">
+          <os-select ng-model="site.instituteName" list="institutes" name="institute" 
+            placeholder="{{'site.institute' | translate}}" required>
+          </os-select>
+          <div os-field-error field="sform.institute"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
         <label class="col-xs-3 control-label" translate="site.name">Name</label>
         <div class="col-xs-6">
           <input type="text" name="siteName" ng-model="site.name" class="form-control"

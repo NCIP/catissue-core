@@ -4,12 +4,10 @@ package com.krishagni.catissueplus.core.administrative.events;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
-import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class SiteDetail {
@@ -17,6 +15,8 @@ public class SiteDetail {
 	private Long id;
 	
 	private String name;
+	
+	private String instituteName;
 
 	private String code;
 
@@ -42,6 +42,14 @@ public class SiteDetail {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getInstituteName() {
+		return instituteName;
+	}
+
+	public void setInstituteName(String instituteName) {
+		this.instituteName = instituteName;
 	}
 
 	public String getCode() {
@@ -88,6 +96,7 @@ public class SiteDetail {
 		SiteDetail siteDto = new SiteDetail();
 		siteDto.setId(site.getId());
 		siteDto.setName(site.getName());
+		siteDto.setInstituteName(site.getInstitute().getName());
 		siteDto.setCode(site.getCode());
 		siteDto.setType(site.getType());
 		siteDto.setActivityStatus(site.getActivityStatus());
