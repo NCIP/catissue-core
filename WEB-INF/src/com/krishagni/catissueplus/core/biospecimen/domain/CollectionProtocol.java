@@ -217,6 +217,7 @@ public class CollectionProtocol extends BaseEntity {
 		this.setPpidFormat(cp.getPpidFormat());
 		this.setUnsignedConsentDocumentURL(cp.getUnsignedConsentDocumentURL());
 		
+		CollectionUpdater.update(this.sites, cp.getSites());
 		CollectionUpdater.update(this.coordinators, cp.getCoordinators());
 	}
 	

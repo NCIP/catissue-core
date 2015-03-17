@@ -1,11 +1,24 @@
 
 angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.administrative.models'])
-  .controller('CpAddEditCtrl', function($scope, $state, cp, PvManager, User) {
-  
+  .controller('CpAddEditCtrl', function($scope, $state, cp, User, Site) {
+
+    var siteNames = null;
+
     function init() {
       $scope.cp = cp;
+
+      /**
+       * Some how the ui-select's multiple option is removing pre-selected items
+       * when site list is being loaded or not yet loaded...
+       * Therefore we copy pre-selected siteNames and then use it when all Sites are loaded
+       */
+      siteNames = angular.copy(cp.siteNames);
+
       $scope.ppidFmt = {};
       $scope.coordinators = [];
+      $scope.sites = [];
+
+      loadPvs();
 
       $scope.$watch('ppidFmt', function(newVal) {
         var sample = newVal.prefix || '';
@@ -22,6 +35,16 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
         $scope.ppidFmt.samplePpid = sample;
       }, true);
     };
+
+    function loadPvs() {
+      Site.list().then(function(sites) {
+         angular.forEach(sites, function(site) {
+           $scope.sites.push(site.name);
+         })
+         
+         $scope.cp.siteNames = siteNames;
+      });
+    }
 
     function getPpidFmt() {
       var result = $scope.ppidFmt.prefix || '';

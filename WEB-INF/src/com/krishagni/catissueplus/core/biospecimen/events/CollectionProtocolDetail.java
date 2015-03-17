@@ -1,16 +1,21 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 @JsonFilter("withoutId")
 @JsonInclude(Include.NON_NULL)
 public class CollectionProtocolDetail extends CollectionProtocolSummary {
+	private List<String> siteNames;
+	
 	private List<UserSummary> coordinators;
 
 	private Boolean consentsWaived;
@@ -40,6 +45,14 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 	
 	private List<CollectionProtocolEventDetail> events;
 	
+	public List<String> getSiteNames() {
+		return siteNames;
+	}
+
+	public void setSiteNames(List<String> siteNames) {
+		this.siteNames = siteNames;
+	}
+
 	public List<UserSummary> getCoordinators() {
 		return coordinators;
 	}
@@ -162,6 +175,12 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setAliquotLabelFmt(cp.getAliquotLabelFormat());
 		result.setActivityStatus(cp.getActivityStatus());
 		
+		List<String> siteNames = new ArrayList<String>();
+		for (Site site: cp.getSites()) {
+			siteNames.add(site.getName());
+		}
+		result.setSiteNames(siteNames);
+		
 		if (fullObject) {
 			result.setConsents(ConsentTierDetail.from(cp.getConsentTier()));
 			result.setEvents(CollectionProtocolEventDetail.from(cp.getCollectionProtocolEvents(), true));
@@ -169,4 +188,5 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		
 		return result;
 	}
+	
 }

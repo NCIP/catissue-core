@@ -7,26 +7,27 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory {
-	private UserDao userDao;
-
-	public UserDao getUserDao() {
-		return userDao;
+	private DaoFactory daoFactory;
+	
+	public DaoFactory getDaoFactory() {
+		return daoFactory;
 	}
 
-	public void setUserDao(UserDao userDao) {
-		this.userDao = userDao;
+	public void setDaoFactory(DaoFactory daoFactory) {
+		this.daoFactory = daoFactory;
 	}
 
 	@Override
@@ -36,6 +37,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
 		cp.setId(input.getId());
+		setSites(input, cp, ose);
 		setTitle(input, cp, ose);
 		setShortTitle(input, cp, ose);
 		setPrincipalInvestigator(input, cp, ose);
@@ -55,6 +57,26 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 
 		ose.checkAndThrow();
 		return cp;
+	}
+	
+	private void setSites(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
+		List<String> siteNames = input.getSiteNames();
+		if (CollectionUtils.isEmpty(siteNames)) {
+			ose.addError(CpErrorCode.SITE_REQUIRED);
+			return;
+		}
+		
+		Set<Site> sites = new HashSet<Site>();
+		for (String name : siteNames) {
+			Site site = daoFactory.getSiteDao().getSiteByName(name);
+			if (site == null){
+				ose.addError(CpErrorCode.INVALID_SITES);
+				return;
+			}
+			sites.add(site);
+		}
+		
+		result.setSites(sites);
 	}
 
 	private void setTitle(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
@@ -79,9 +101,9 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		UserSummary user = input.getPrincipalInvestigator();		
 		User pi = null;
 		if (user != null && user.getId() != null) {
-			pi = userDao.getById(user.getId());
+			pi = daoFactory.getUserDao().getById(user.getId());
 		} else if (user != null && user.getLoginName() != null && user.getDomain() != null) {
-			pi = userDao.getUser(user.getLoginName(), user.getDomain());
+			pi = daoFactory.getUserDao().getUser(user.getLoginName(), user.getDomain());
 		} else {			
 			ose.addError(CpErrorCode.PI_REQUIRED);
 			return;
@@ -93,7 +115,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 
 		result.setPrincipalInvestigator(pi);
 	}
-
+	
 	private void setCoordinators(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {		
 		List<UserSummary> users = input.getCoordinators();
 		if (CollectionUtils.isEmpty(users)) {
@@ -105,9 +127,9 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 			User coordinator = null;
 			
 			if (user.getId() != null) {
-				coordinator = userDao.getById(user.getId());
+				coordinator = daoFactory.getUserDao().getById(user.getId());
 			} else if (user.getLoginName() != null && user.getDomain() != null) {
-				coordinator = userDao.getUser(user.getLoginName(), user.getDomain());
+				coordinator = daoFactory.getUserDao().getUser(user.getLoginName(), user.getDomain());
 			} else {
 				ose.addError(CpErrorCode.INVALID_COORDINATORS);
 				return;

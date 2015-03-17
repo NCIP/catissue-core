@@ -50,6 +50,16 @@
           <input ng-if="irbEditor.isEditMode()" type="text" ng-model="irbEditor.editValue" class="form-control" >
         </os-inline-edit>
       </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="cp.sites">Sites</strong>
+        <os-inline-edit editor="siteEditor" name="siteNames" class="value value-md" value="cp.siteNames">
+          <span ng-if="siteEditor.isDisplayMode()">{{siteEditor.viewValue.join(', ') | osNoValue}}</span>
+          <os-select ng-if="siteEditor.isEditMode()" multiple name="siteNames" ng-model="cp.siteNames" list="sites"
+            class="form-control" placeholder="{{'cp.sites' | translate}}">
+          </os-select>
+        </os-inline-edit>
+      </li>
     </ul>
   </div>
 

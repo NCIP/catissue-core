@@ -48,7 +48,8 @@
     "import_cp_title": "Import Collection Protocol",
 
     "cp_def_file": "Collection Protocol Definition File",
-   
+  
+    "sites": "Sites", 
     "title": "Title",
     "short_title": "Short Title",
     "pi": "Principal Investigator",

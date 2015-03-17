@@ -14,6 +14,16 @@
   <div class="container">
     <form name="cpForm" os-form-validator="cpForm" validator="cpFormValidator" class="form-horizontal" novalidate>
       <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.sites">Sites</label>
+        <div class="col-xs-6">
+          <os-select multiple name="siteNames" ng-model="cp.siteNames" list="sites"
+            class="form-control" placeholder="{{'cp.sites' | translate}}" required>
+          </os-select>
+          <div os-field-error field="cpForm.siteNames"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
         <label class="control-label col-xs-3" translate="cp.title">Title</label>
         <div class="col-xs-6">
           <input type="text" name="title" ng-model="cp.title" 

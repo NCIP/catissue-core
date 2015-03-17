@@ -3,6 +3,10 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory;
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 
 public enum CpErrorCode implements ErrorCode {
+	SITE_REQUIRED,
+	
+	INVALID_SITES,
+	
 	DUP_TITLE,
 	
 	TITLE_REQUIRED,
