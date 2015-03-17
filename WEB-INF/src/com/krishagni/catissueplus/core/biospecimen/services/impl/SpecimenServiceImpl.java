@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.krishagni.catissueplus.core.barcodegenerator.BarcodeGenerator;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
@@ -19,7 +18,6 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
-import com.krishagni.catissueplus.core.labelgenerator.LabelGenerator;
 
 public class SpecimenServiceImpl implements SpecimenService {
 
@@ -27,10 +25,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 	private SpecimenFactory specimenFactory;
 
-	private LabelGenerator<Specimen> specimenLabelGenerator;
-
-	private BarcodeGenerator<Specimen> specimenBarcodeGenerator;
-	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -39,14 +33,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 		this.specimenFactory = specimenFactory;
 	}
 
-	public void setSpecimenLabelGenerator(LabelGenerator<Specimen> specimenLabelGenerator) {
-		this.specimenLabelGenerator = specimenLabelGenerator;
-	}
-
-	public void setSpecimenBarcodeGenerator(BarcodeGenerator<Specimen> specimenBarcodeGenerator) {
-		this.specimenBarcodeGenerator = specimenBarcodeGenerator;
-	}
-	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<SpecimenDetail> getSpecimen(RequestEvent<EntityQueryCriteria> req) {
@@ -150,53 +136,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 	}
 
-	// TODO: Auto Label Generation
-	private void setLabel(String label, Specimen specimen, OpenSpecimenException errorHandler) {
-		String specimenLabelFormat = specimen.getVisit().getRegistration()
-				.getCollectionProtocol().getSpecimenLabelFormat();
-		if (StringUtils.isBlank(specimenLabelFormat)) {
-			if (StringUtils.isBlank(label)) {
-				errorHandler.addError(SpecimenErrorCode.LABEL_REQUIRED);
-				return;
-			}
-			specimen.setLabel(label);
-		}
-		else {
-			if (!StringUtils.isBlank(label)) {
-				errorHandler.addError(SpecimenErrorCode.LABEL_AUTO_GENERATED);
-				return;
-			}
-			specimen.setLabel(specimenLabelGenerator.generateLabel(specimenLabelFormat, specimen));
-		}
-	}
-
-
-	// TODO: Auto barcode generation
-	private void setBarcode(String barcode, Specimen specimen, OpenSpecimenException errorHandler) {
-		//TODO: Get Barcode Format 
-		//		String barcodeFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-		//				.getCollectionProtocol();
-
-		String barcodeFormat = null;
-		if (StringUtils.isBlank(barcodeFormat)) {
-			if (StringUtils.isBlank(barcode)) {
-				specimen.setBarcode(specimenBarcodeGenerator.generateBarcode(DEFAULT_BARCODE_TOKEN, specimen));
-				return;
-			}
-			else {
-				specimen.setBarcode(barcode);
-			}
-		}
-		else {
-			if (!StringUtils.isBlank(barcode)) {
-				errorHandler.addError(SpecimenErrorCode.BARCODE_AUTO_GENERATED);
-				return;
-			}
-			specimen.setBarcode(specimenBarcodeGenerator.generateBarcode(barcodeFormat, specimen));
-		}
-
-	}
-	
 	private Specimen collectSpecimen(SpecimenDetail detail, Specimen parent) {
 		Specimen existing = null;
 		if (detail.getId() != null) {
@@ -247,6 +186,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			specimen.occupyPosition();
 		}
 
+		specimen.setLabelIfEmpty();
 		daoFactory.getSpecimenDao().saveOrUpdate(specimen);
 		if (newSpecimen) {
 			addEvents(specimen);
@@ -261,6 +201,4 @@ public class SpecimenServiceImpl implements SpecimenService {
 		
 		specimen.addCollRecvEvents();
 	}
-
-	private static final String DEFAULT_BARCODE_TOKEN = "SPECIMEN_LABEL";
 }

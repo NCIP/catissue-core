@@ -2,7 +2,6 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -111,9 +110,7 @@ public class VisitServiceImpl implements VisitService {
 							
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
-		Visit visit = visitFactory.createVisit(input);			
-		setName(existing, visit);
-		
+		Visit visit = visitFactory.createVisit(input);		
 		if (existing == null || !existing.getName().equals(visit.getName())) {
 			ensureUniqueVisitName(visit.getName(), ose);
 		}
@@ -125,6 +122,7 @@ public class VisitServiceImpl implements VisitService {
 			existing = visit;
 		}
 		
+		existing.setNameIfEmpty();
 		daoFactory.getVisitsDao().saveOrUpdate(existing);
 		return VisitDetail.from(existing);		
 	}
@@ -139,18 +137,6 @@ public class VisitServiceImpl implements VisitService {
 		}		
 		
 		return visit;
-	}
-	
-	private void setName(Visit existing, Visit visit) {
-		if (StringUtils.isNotBlank(visit.getName())) {
-			return;
-		}
-		
-		if (existing == null) {
-			visit.setName(UUID.randomUUID().toString()); // TODO: replace with actual logic
-		} else {
-			visit.setName(existing.getName());
-		}
 	}
 	
 	private void ensureUniqueVisitName(String visitName, OpenSpecimenException ose) {

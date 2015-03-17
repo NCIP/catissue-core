@@ -13,13 +13,17 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory {
 	private UserDao userDao;
+	
+	private LabelGenerator specimenLabelGenerator;
 
 	public UserDao getUserDao() {
 		return userDao;
@@ -27,6 +31,10 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
+	}
+	
+	public void setSpecimenLabelGenerator(LabelGenerator specimenLabelGenerator) {
+		this.specimenLabelGenerator = specimenLabelGenerator;
 	}
 
 	@Override
@@ -47,11 +55,9 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		cp.setPpidFormat(input.getPpidFmt());
 		cp.setEnrollment(input.getAnticipatedParticipantsCount());
 		cp.setDescriptionURL(input.getDescriptionUrl());
-		cp.setSpecimenLabelFormat(input.getSpecimenLabelFmt());
-		cp.setDerivativeLabelFormat(input.getDerivativeLabelFmt());
-		cp.setAliquotLabelFormat(input.getAliquotLabelFmt());
 		cp.setAliquotInSameContainer(input.getAliquotsInSameContainer());
 
+		setLabelFormats(input, cp, ose);
 		setActivityStatus(input, cp, ose);
 
 		ose.checkAndThrow();
@@ -137,5 +143,24 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 
 		// TODO: validate activity status
 		result.setActivityStatus(input.getActivityStatus());
+	}
+	
+	private void setLabelFormats(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
+		String labelFmt = ensureValidLabelFmt(input.getSpecimenLabelFmt(), CpErrorCode.INVALID_SPECIMEN_LABEL_FMT, ose);		
+		result.setSpecimenLabelFormat(labelFmt);
+		
+		labelFmt = ensureValidLabelFmt(input.getAliquotLabelFmt(), CpErrorCode.INVALID_ALIQUOT_LABEL_FMT, ose);
+		result.setAliquotLabelFormat(labelFmt);
+		
+		labelFmt = ensureValidLabelFmt(input.getDerivativeLabelFmt(), CpErrorCode.INVALID_DERIVATIVE_LABEL_FMT, ose);
+		result.setDerivativeLabelFormat(labelFmt);
+	}
+	
+	private String ensureValidLabelFmt(String labelFmt, ErrorCode error, OpenSpecimenException ose) {
+		if (StringUtils.isNotBlank(labelFmt) && !specimenLabelGenerator.isValidLabelTmpl(labelFmt)) {
+			ose.addError(error);
+		}
+		
+		return labelFmt;
 	}
 }

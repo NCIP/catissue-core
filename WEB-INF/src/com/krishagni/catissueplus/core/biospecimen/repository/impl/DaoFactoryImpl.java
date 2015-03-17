@@ -30,8 +30,8 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenRequirementDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-import com.krishagni.catissueplus.core.common.repository.KeyGeneratorDao;
-import com.krishagni.catissueplus.core.common.repository.impl.KeyGeneratorDaoImpl;
+import com.krishagni.catissueplus.core.common.repository.UniqueIdGenerator;
+import com.krishagni.catissueplus.core.common.repository.impl.UniqueIdGeneratorImpl;
 import com.krishagni.catissueplus.core.notification.repository.CPStudyMappingDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalApplicationDao;
@@ -138,12 +138,12 @@ public class DaoFactoryImpl implements DaoFactory {
 		setSessionFactory(dao);
 		return dao;
 	}
-
+	
 	@Override
-	public KeyGeneratorDao getKeyGeneratorDao() {
-		KeyGeneratorDaoImpl dao = new KeyGeneratorDaoImpl();
-		setSessionFactory(dao);
-		return dao;
+	public UniqueIdGenerator getUniqueIdGenerator() {
+		UniqueIdGeneratorImpl impl = new UniqueIdGeneratorImpl();
+		setSessionFactory(impl);
+		return impl;
 	}
 
 	@Override

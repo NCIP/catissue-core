@@ -19,7 +19,13 @@ public enum CpErrorCode implements ErrorCode {
 	
 	NOT_FOUND,
 	
-	CONSENT_TIER_NOT_FOUND;
+	CONSENT_TIER_NOT_FOUND,
+	
+	INVALID_SPECIMEN_LABEL_FMT,
+	
+	INVALID_ALIQUOT_LABEL_FMT,
+	
+	INVALID_DERIVATIVE_LABEL_FMT;
 
 	@Override
 	public String code() {

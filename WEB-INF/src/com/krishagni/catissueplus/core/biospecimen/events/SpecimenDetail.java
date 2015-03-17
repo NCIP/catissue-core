@@ -18,6 +18,8 @@ public class SpecimenDetail extends SpecimenInfo {
 	
 	private ReceivedEventDetail receivedEvent;
 	
+	private String labelFmt;
+	
 	private List<SpecimenDetail> children;
 
 	public CollectionEventDetail getCollectionEvent() {
@@ -34,6 +36,14 @@ public class SpecimenDetail extends SpecimenInfo {
 
 	public void setReceivedEvent(ReceivedEventDetail receivedEvent) {
 		this.receivedEvent = receivedEvent;
+	}
+
+	public String getLabelFmt() {
+		return labelFmt;
+	}
+
+	public void setLabelFmt(String labelFmt) {
+		this.labelFmt = labelFmt;
 	}
 
 	public List<SpecimenDetail> getChildren() {
@@ -57,6 +67,7 @@ public class SpecimenDetail extends SpecimenInfo {
 			result.setChildren(getSpecimens(anticipated, children));
 		}
 		
+		result.setLabelFmt(specimen.getLabelTmpl());		
 		return result;
 	}
 	
@@ -78,7 +89,8 @@ public class SpecimenDetail extends SpecimenInfo {
 		SpecimenDetail result = new SpecimenDetail();
 		
 		SpecimenInfo.fromTo(anticipated, result);		
-		result.setChildren(fromAnticipated(anticipated.getChildSpecimenRequirements()));		
+		result.setChildren(fromAnticipated(anticipated.getChildSpecimenRequirements()));
+		result.setLabelFmt(anticipated.getLabelTmpl());
 		return result;		
 	}
 
@@ -156,5 +168,4 @@ public class SpecimenDetail extends SpecimenInfo {
 			}						
 		}
 	}
-	
 }

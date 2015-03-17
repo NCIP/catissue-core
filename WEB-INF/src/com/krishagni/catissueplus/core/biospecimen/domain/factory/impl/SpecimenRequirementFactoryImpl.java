@@ -19,11 +19,14 @@ import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactory {
 	
 	private DaoFactory daoFactory;
+	
+	private LabelGenerator specimenLabelGenerator;
 
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
@@ -31,6 +34,14 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+
+	public LabelGenerator getSpecimenLabelGenerator() {
+		return specimenLabelGenerator;
+	}
+
+	public void setSpecimenLabelGenerator(LabelGenerator specimenLabelGenerator) {
+		this.specimenLabelGenerator = specimenLabelGenerator;
 	}
 
 	@Override
@@ -42,8 +53,8 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		requirement.setId(detail.getId());
 		requirement.setName(detail.getName());
 		requirement.setLineage("New"); // TODO:
-		requirement.setLabelFormat(detail.getLabelFmt());
 		
+		setLabelFormat(detail, requirement, ose);
 		setSpecimenClass(detail, requirement, ose);
 		setSpecimenType(detail, requirement, ose);
 		setAnatomicSite(detail, requirement, ose);
@@ -149,6 +160,18 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		}
 				
 		return aliquots;
+	}
+	
+	private void setLabelFormat(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(detail.getLabelFmt())) {
+			return;
+		}
+		
+		if (!specimenLabelGenerator.isValidLabelTmpl(detail.getLabelFmt())) {
+			ose.addError(SrErrorCode.INVALID_LABEL_FMT);
+		}
+		
+		sr.setLabelFormat(detail.getLabelFmt());
 	}
 	
 	private void setSpecimenClass(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {

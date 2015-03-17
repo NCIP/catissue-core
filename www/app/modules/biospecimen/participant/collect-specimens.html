@@ -65,11 +65,14 @@
                 <os-specimen-desc specimen="specimen"></os-specimen-desc>
               </div>
             </td>
-            <td class="col os-col-10">
-              <input type="text" os-md-input edit-when="specimen.existingStatus != 'Collected'"
-                name="label" ng-model="specimen.label" ng-required="specimen.status == 'Collected'"
-                ng-model-options="{updateOn: 'blur'}" os-unique-specimen-label>
-              <div os-field-error field="sform.label"></div>
+            <td class="col os-col-10" ng-switch="!specimen.label && !!specimen.labelFmt">
+              <span ng-switch-when="true">Auto</span>
+              <div ng-switch-default>
+                <input type="text" os-md-input edit-when="specimen.existingStatus != 'Collected'"
+                  name="label" ng-model="specimen.label" ng-required="specimen.status == 'Collected'"
+                  ng-model-options="{updateOn: 'blur'}" os-unique-specimen-label>
+                <div os-field-error field="sform.label"></div>
+              </div>
             </td>
             <td class="col os-col-10">
               <input type="text" os-md-input edit-when="specimen.existingStatus != 'Collected'"

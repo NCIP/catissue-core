@@ -81,12 +81,18 @@
     <property name="daoFactory" ref="rbacDaoFactory"/>
   </bean>
 	
-  <bean id="scgBarcodeGenerator" class="com.krishagni.catissueplus.core.barcodegenerator.impl.SpecimenBarcodeGenerator">
-    <property name="tokenFactory" ref="tokenFactory" />
+  <bean id="visitTokenRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
+    <property name="tokens">
+      <list>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.EventLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.PpidLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.VisitUniqueIdLabelToken"/>
+      </list>
+    </property>
   </bean>
-	
-  <bean id="visitLabelGenerator" class="com.krishagni.catissueplus.core.labelgenerator.impl.SCGLabelGenerator">
-    <property name="tokenFactory" ref="tokenFactory" />
+
+  <bean id="visitNameGenerator" class="com.krishagni.catissueplus.core.common.service.impl.LabelGeneratorImpl">
+    <property name="tokenRegistrar" ref="visitTokenRegistrar"/>
   </bean>
 
   <bean id="visitService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.VisitServiceImpl">
@@ -121,6 +127,7 @@
   
   <bean id="cpFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolFactoryImpl">
     <property name="userDao" ref="userDao"/>
+    <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
   </bean>
 
   <bean id="cpeFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CpeFactoryImpl">
@@ -129,16 +136,13 @@
 
   <bean id="srFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenRequirementFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
   </bean>
 
   <bean id="cpSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
     <property name="cpFactory" ref="cpFactory"/>
     <property name="cpeFactory" ref="cpeFactory"/>
     <property name="srFactory" ref="srFactory"/>
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>
-  
-  <bean id="keyFactory" class="com.krishagni.catissueplus.core.keygenerator.factory.impl.KeyGenFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   
@@ -153,12 +157,12 @@
   
   <bean id="visitFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.VisitFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="defaultNameTmpl" value="%PPI%_%EVENT_LABEL%_%SYS_UID%"/>
   </bean>
 
   <bean id="cprFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolRegistrationFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="participantFactory" ref="participantFactory"/>
-    <property name="keyFactory" ref="keyFactory"/>
   </bean>
 
   <bean id="participantSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.ParticipantServiceImpl">
@@ -197,23 +201,32 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 
-  <bean id="specimenLabelGenerator"
-    class="com.krishagni.catissueplus.core.labelgenerator.impl.SpecimenLabelGenerator">
-    <property name="tokenFactory" ref="tokenFactory" />
-  </bean>
-
-  <bean id="specimenBarcodeGenerator"
-    class="com.krishagni.catissueplus.core.barcodegenerator.impl.SpecimenBarcodeGenerator">
-    <property name="tokenFactory" ref="tokenFactory" />
-  </bean>
-
   <bean id="specimenSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="specimenFactory" ref="specimenFactory"/>
-    <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
-    <property name="specimenBarcodeGenerator" ref="specimenBarcodeGenerator"/>
   </bean>
 
+  <bean id="specimenTokenRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
+    <property name="tokens">
+      <list>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.BarcodeLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.EventDateLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.EventLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.ParentSpecimenLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.ParentSpecimenUniqueIdLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.PpidLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.PpidYocUniqueIdLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenUniqueIdLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenYocLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenTypeLabelToken"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="specimenLabelGenerator" class="com.krishagni.catissueplus.core.common.service.impl.LabelGeneratorImpl">
+    <property name="tokenRegistrar" ref="specimenTokenRegistrar"/>
+  </bean>
+  
   <bean id="specimenListFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenListFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
@@ -313,14 +326,6 @@
     <property name="siteFactory" ref="siteFactory" />
   </bean>
 	
-  <bean id="containerLabelGenerator" class="com.krishagni.catissueplus.core.labelgenerator.impl.StorageContainerLabelGenerator">
-    <property name="tokenFactory" ref="tokenFactory" />
-  </bean>
-	
-  <bean id="containerBarcodeGenerator" class="com.krishagni.catissueplus.core.barcodegenerator.impl.StorageContainerBarcodeGenerator">
-    <property name="tokenFactory" ref="tokenFactory" />
-  </bean>
-	
   <bean id="storageContainerFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.StorageContainerFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
@@ -330,13 +335,6 @@
     <property name="containerFactory" ref="storageContainerFactory"/>
   </bean>
 	
-  <bean id="bucketPool" class="com.krishagni.catissueplus.core.common.util.BucketPool">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>
- 	
-  <bean id="tokenFactory" class="com.krishagni.catissueplus.core.tokens.factory.TokenFactory">
-  </bean>
-
   <bean id="distributionProtocolFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionProtocolFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
@@ -418,11 +416,13 @@
     <property name="maxPoolSize" value="10" />
     <property name="WaitForTasksToCompleteOnShutdown" value="true"/>
   </bean>
-  
+
   <task:scheduler id="taskScheduler" pool-size="1"/>
   <task:annotation-driven scheduler="taskScheduler"/>
   <context:annotation-config/>
   <context:spring-configured/>
+
+  <context:component-scan base-package="com.krishagni.catissueplus.core"/>
   
   <import resource="classpath*:com/krishagni/openspecimen/custom/*Context.xml"/>
 </beans>

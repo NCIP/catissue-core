@@ -42,7 +42,7 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Audit.hbm.xml" />
 		
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Institute.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/KeyGenerator.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/KeySequence.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/StorageContainer.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/StorageContainerStats.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/StorageContainerPosition.hbm.xml" />

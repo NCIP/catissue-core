@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -284,6 +285,21 @@ public class SpecimenRequirement {
 		specimen.setConcentrationInMicrogramPerMicroliter(getConcentration());
 		specimen.setSpecimenRequirement(this);
 		return specimen;
+	}
+	
+	public String getLabelTmpl() {
+		if (StringUtils.isNotBlank(labelFormat)) {
+			return labelFormat;
+		}
+		
+		CollectionProtocol cp = getCollectionProtocolEvent().getCollectionProtocol();
+		if (isAliquot()) {
+			return cp.getAliquotLabelFormat();
+		} else if (isDerivative()) {
+			return cp.getDerivativeLabelFormat();
+		} else {
+			return cp.getSpecimenLabelFormat();
+		}
 	}
 		
 	private SpecimenRequirement deepCopy(CollectionProtocolEvent cpe, SpecimenRequirement parent) {

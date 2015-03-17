@@ -177,7 +177,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	}
 
 	@Override
-	public Class getType() {
+	public Class<CollectionProtocol> getType() {
 		return CollectionProtocol.class;
 	}
 	

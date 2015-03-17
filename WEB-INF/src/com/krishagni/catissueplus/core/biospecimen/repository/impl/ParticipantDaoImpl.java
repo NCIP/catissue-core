@@ -91,7 +91,7 @@ public class ParticipantDaoImpl extends AbstractDao<Participant> implements Part
 	}
 	
 	@Override
-	public Class getType() {
+	public Class<Participant> getType() {
 		return Participant.class;
 	}
 	

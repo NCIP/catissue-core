@@ -39,6 +39,8 @@ public enum SrErrorCode implements ErrorCode {
 	
 	RECEIVER_NOT_FOUND,
 	
+	INVALID_LABEL_FMT,
+	
 	CPE_REQUIRED
 	
 	;
