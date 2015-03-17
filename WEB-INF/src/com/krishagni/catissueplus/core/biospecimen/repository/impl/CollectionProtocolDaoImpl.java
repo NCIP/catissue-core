@@ -36,7 +36,6 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	@Override
 	public List<CollectionProtocolSummary> getCollectionProtocols(CpListCriteria cpCriteria) {
 		List<CollectionProtocolSummary> cpList = new ArrayList<CollectionProtocolSummary>();
-		List<Long> cpIds = new ArrayList<Long>();
 		Map<Long, CollectionProtocolSummary> cpMap = new HashMap<Long, CollectionProtocolSummary>();
 		
 		boolean includePi = cpCriteria.includePi();
@@ -46,18 +45,16 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		for (Object[] row : rows) {
 			CollectionProtocolSummary cp = getCp(row, includePi);
 			if (includeStats) {
-				Long cpId = cp.getId();
-				cpMap.put(cpId, cp);
-				cpIds.add(cpId);
+				cpMap.put(cp.getId(), cp);
 			}
 			
 			cpList.add(cp);
 		}
 		
-		if (includeStats && CollectionUtils.isNotEmpty(cpIds)) {
+		if (includeStats && !cpMap.isEmpty()) {
 			rows = getSessionFactory().getCurrentSession()
 					.getNamedQuery(GET_PARTICIPANT_N_SPECIMEN_CNT)
-					.setParameterList("cpIds", cpIds)
+					.setParameterList("cpIds", cpMap.keySet())
 					.list();
 			
 			for (Object[] row : rows) {
@@ -163,24 +160,6 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		return query.addOrder(Order.asc("title")).list();
 	}
 
-	private void addProjections(Criteria query, CpListCriteria cpCriteria) {
-		ProjectionList projs = Projections.projectionList();
-		query.setProjection(projs);
-		
-		projs.add(Projections.property("id"));
-		projs.add(Projections.property("shortTitle"));
-		projs.add(Projections.property("title"));
-		projs.add(Projections.property("startDate"));
-		
-		if (cpCriteria.includePi()) {
-			query.createAlias("principalInvestigator", "pi");
-			projs.add(Projections.property("pi.id"));
-			projs.add(Projections.property("pi.firstName"));
-			projs.add(Projections.property("pi.lastName"));
-			projs.add(Projections.property("pi.loginName"));
-		}
-	}
-	
 	private void addSearchConditions(Criteria query, CpListCriteria cpCriteria) {
 		String searchString = cpCriteria.query();
 		if (StringUtils.isBlank(searchString)) {
@@ -199,12 +178,29 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 			query.add(searchCond);
 		}
 		
+		query.createAlias("principalInvestigator", "pi");
 		Long piId = cpCriteria.piId();
 		if (piId != null) {
-			query.add(Restrictions.eq("principalInvestigator.id", piId));
+			query.add(Restrictions.eq("pi.id", piId));
 		}
 	}
-
+	
+	private void addProjections(Criteria query, CpListCriteria cpCriteria) {
+		ProjectionList projs = Projections.projectionList();
+		query.setProjection(projs);
+		
+		projs.add(Projections.property("id"));
+		projs.add(Projections.property("shortTitle"));
+		projs.add(Projections.property("title"));
+		projs.add(Projections.property("startDate"));
+		
+		if (cpCriteria.includePi()) {
+			projs.add(Projections.property("pi.id"));
+			projs.add(Projections.property("pi.firstName"));
+			projs.add(Projections.property("pi.lastName"));
+			projs.add(Projections.property("pi.loginName"));
+		}
+	}
 
 	private CollectionProtocolSummary getCp(Object[] fields, boolean includePi) {
 		CollectionProtocolSummary cp = new CollectionProtocolSummary();

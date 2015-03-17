@@ -1,9 +1,10 @@
 
 angular.module('os.biospecimen.cp.list', ['os.biospecimen.models'])
-  .controller('CpListCtrl', function($scope, $state, CollectionProtocol) {
+  .controller('CpListCtrl', function($scope, $state, CollectionProtocol, Util) {
     function init() {
       $scope.cpFilterOpts = {};
       loadCollectionProtocols();
+      Util.filter($scope, 'cpFilterOpts', filter);
     }
 
     function loadCollectionProtocols(filterOpts) {
@@ -18,13 +19,14 @@ angular.module('os.biospecimen.cp.list', ['os.biospecimen.models'])
       $state.go('participant-list', {cpId: cp.id});
     };
 
-    $scope.filter = function() {
-      loadCollectionProtocols($scope.cpFilterOpts);
-    }
+    function filter(filterOpts) {
+      var cpFilterOpts = angular.copy(filterOpts);
+      if (cpFilterOpts.pi) {
+        cpFilterOpts.piId = cpFilterOpts.pi.id;
+        delete cpFilterOpts.pi;
+      }
 
-    $scope.onPiSelect = function(pi) {
-      $scope.cpFilterOpts.piId = pi.id;
-      $scope.filter();
+      loadCollectionProtocols(cpFilterOpts);
     }
 
     init();

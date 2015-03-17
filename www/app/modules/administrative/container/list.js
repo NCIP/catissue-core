@@ -1,9 +1,10 @@
 angular.module('os.administrative.container.list', ['os.administrative.models'])
-  .controller('ContainerListCtrl', function($scope, $state, Container) {
+  .controller('ContainerListCtrl', function($scope, $state, Container, Util) {
 
     function init() {
       $scope.containerFilterOpts = {};
       loadContainers();
+      Util.filter($scope, 'containerFilterOpts', filter);
     }
 
     var loadContainers = function(filterOpts) {
@@ -18,8 +19,8 @@ angular.module('os.administrative.container.list', ['os.administrative.models'])
       $state.go('container-detail.overview', {containerId: container.id});
     };
 
-    $scope.filter = function() {
-      loadContainers($scope.containerFilterOpts);
+    function filter(filterOpts) {
+      loadContainers(filterOpts);
     }
 
     init();

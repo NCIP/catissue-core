@@ -188,6 +188,7 @@ angular.module('openspecimen', [
     };
 
     $rootScope.global = {
-      dateFmt: 'MMM dd, yyyy'
+      dateFmt: 'MMM dd, yyyy',
+      filterWaitInterval: 500
     };
   });

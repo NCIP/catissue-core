@@ -6,15 +6,16 @@
   <div class="os-body">
     <div class="form-group">
       <label class="control-label" translate="dp.filter.title_or_short_title">Title / Short Title</label>
-      <input os-md-input type="text" ng-model="dpFilterOpts.title"
-        ng-model-options="{debounce: 500}" ng-change="filter()"
-        class="form-control" placeholder="{{'dp.filter.title' | translate}}">
+      <div class="os-md-input">
+        <input type="text" ng-model="dpFilterOpts.title" class="form-control"
+          placeholder="{{'dp.filter.title' | translate}}">
+      </div>
     </div>
 
     <div class="form-group">
       <label class="control-label" translate="dp.pi">Principal Investigator</label>
-      <div os-md-input>
-        <os-users ng-model="pi" placeholder="{{'dp.filter.pi' | translate}}" on-select="onPiSelect">
+      <div class="os-md-input">
+        <os-users ng-model="dpFilterOpts.pi" placeholder="{{'dp.filter.pi' | translate}}">
         </os-users>
       </div>
     </div>

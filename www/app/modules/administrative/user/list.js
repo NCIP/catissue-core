@@ -1,10 +1,11 @@
 
 angular.module('os.administrative.user.list', ['os.administrative.models'])
-  .controller('UserListCtrl', function($scope, $state, User, PvManager) {
+  .controller('UserListCtrl', function($scope, $state, User, PvManager, Util) {
     function init() {
       $scope.userFilterOpts = {};
       loadUsers();
       loadPvs();
+      Util.filter($scope, 'userFilterOpts', filter);
     }
 
     function loadPvs() {
@@ -30,9 +31,9 @@ angular.module('os.administrative.user.list', ['os.administrative.models'])
       $state.go('user-detail.overview', {userId:user.id});
     };
 
-    $scope.filter = function() {
-      loadUsers($scope.userFilterOpts);
+    function filter(filterOpts) {
+      loadUsers(filterOpts);
     }
- 
+
     init();
   });
