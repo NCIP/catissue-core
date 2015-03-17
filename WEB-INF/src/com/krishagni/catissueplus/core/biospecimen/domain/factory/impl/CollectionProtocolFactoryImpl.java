@@ -37,7 +37,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
 		cp.setId(input.getId());
-		setSites(input, cp, ose);
+		setRepositories(input, cp, ose);
 		setTitle(input, cp, ose);
 		setShortTitle(input, cp, ose);
 		setPrincipalInvestigator(input, cp, ose);
@@ -59,24 +59,24 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		return cp;
 	}
 	
-	private void setSites(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
-		List<String> siteNames = input.getSiteNames();
+	private void setRepositories(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
+		List<String> siteNames = input.getRepositoryNames();
 		if (CollectionUtils.isEmpty(siteNames)) {
-			ose.addError(CpErrorCode.SITE_REQUIRED);
+			ose.addError(CpErrorCode.REPOSITORIES_REQUIRED);
 			return;
 		}
 		
-		Set<Site> sites = new HashSet<Site>();
-		for (String name : siteNames) {
-			Site site = daoFactory.getSiteDao().getSiteByName(name);
-			if (site == null){
-				ose.addError(CpErrorCode.INVALID_SITES);
+		Set<Site> repositories = new HashSet<Site>();
+		for (String siteName : siteNames) {
+			Site repository = daoFactory.getSiteDao().getSiteByName(siteName);
+			if (repository == null){
+				ose.addError(CpErrorCode.INVALID_REPOSITORIES);
 				return;
 			}
-			sites.add(site);
+			repositories.add(repository);
 		}
 		
-		result.setSites(sites);
+		result.setRepositories(repositories);
 	}
 
 	private void setTitle(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {

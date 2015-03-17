@@ -7,14 +7,13 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
-import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 @JsonFilter("withoutId")
 @JsonInclude(Include.NON_NULL)
 public class CollectionProtocolDetail extends CollectionProtocolSummary {
-	private List<String> siteNames;
+	private List<String> repositoryNames;
 	
 	private List<UserSummary> coordinators;
 
@@ -44,13 +43,13 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 	private List<ConsentTierDetail> consents;
 	
 	private List<CollectionProtocolEventDetail> events;
-	
-	public List<String> getSiteNames() {
-		return siteNames;
+
+	public List<String> getRepositoryNames() {
+		return repositoryNames;
 	}
 
-	public void setSiteNames(List<String> siteNames) {
-		this.siteNames = siteNames;
+	public void setRepositoryNames(List<String> repositoryNames) {
+		this.repositoryNames = repositoryNames;
 	}
 
 	public List<UserSummary> getCoordinators() {
@@ -175,11 +174,11 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setAliquotLabelFmt(cp.getAliquotLabelFormat());
 		result.setActivityStatus(cp.getActivityStatus());
 		
-		List<String> siteNames = new ArrayList<String>();
-		for (Site site: cp.getSites()) {
-			siteNames.add(site.getName());
+		List<String> repositoryNames = new ArrayList<String>();
+		for (Site site: cp.getRepositories()) {
+			repositoryNames.add(site.getName());
 		}
-		result.setSiteNames(siteNames);
+		result.setRepositoryNames(repositoryNames);
 		
 		if (fullObject) {
 			result.setConsents(ConsentTierDetail.from(cp.getConsentTier()));

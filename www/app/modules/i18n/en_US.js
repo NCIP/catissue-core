@@ -49,7 +49,7 @@
 
     "cp_def_file": "Collection Protocol Definition File",
   
-    "sites": "Sites", 
+    "repositories": "Repositories", 
     "title": "Title",
     "short_title": "Short Title",
     "pi": "Principal Investigator",

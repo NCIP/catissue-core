@@ -2,7 +2,7 @@
 angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('CpAddEditCtrl', function($scope, $state, cp, User, Site) {
 
-    var siteNames = null;
+    var repositoryNames = null;
 
     function init() {
       $scope.cp = cp;
@@ -10,9 +10,9 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
       /**
        * Some how the ui-select's multiple option is removing pre-selected items
        * when site list is being loaded or not yet loaded...
-       * Therefore we copy pre-selected siteNames and then use it when all Sites are loaded
+       * Therefore we copy pre-selected repositoryNames and then use it when all Sites are loaded
        */
-      siteNames = angular.copy(cp.siteNames);
+      repositoryNames = angular.copy(cp.repositoryNames);
 
       $scope.ppidFmt = {};
       $scope.coordinators = [];
@@ -42,7 +42,7 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
            $scope.sites.push(site.name);
          })
          
-         $scope.cp.siteNames = siteNames;
+         $scope.cp.repositoryNames = repositoryNames;
       });
     }
 

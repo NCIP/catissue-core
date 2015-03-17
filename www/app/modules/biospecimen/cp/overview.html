@@ -52,11 +52,11 @@
       </li>
 
       <li class="item">
-        <strong class="key key-sm" translate="cp.sites">Sites</strong>
-        <os-inline-edit editor="siteEditor" name="siteNames" class="value value-md" value="cp.siteNames">
-          <span ng-if="siteEditor.isDisplayMode()">{{siteEditor.viewValue.join(', ') | osNoValue}}</span>
-          <os-select ng-if="siteEditor.isEditMode()" multiple name="siteNames" ng-model="cp.siteNames" list="sites"
-            class="form-control" placeholder="{{'cp.sites' | translate}}">
+        <strong class="key key-sm" translate="cp.repositories">Repositories</strong>
+        <os-inline-edit editor="repoEditor" name="repositoryNames" class="value value-md" value="cp.repositoryNames">
+          <span ng-if="repoEditor.isDisplayMode()">{{repoEditor.viewValue.join(', ') | osNoValue}}</span>
+          <os-select ng-if="repoEditor.isEditMode()" multiple name="repositoryNames" 
+            ng-model="cp.repositoryNames" list="sites" class="form-control">
           </os-select>
         </os-inline-edit>
       </li>

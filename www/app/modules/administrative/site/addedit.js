@@ -1,7 +1,7 @@
 angular.module('os.administrative.site.addedit', ['os.administrative.models'])
   .controller('SiteAddEditCtrl', function($scope, $state, site, Institute, PvManager) {
 
-    var init = function() {
+    function init() {
       $scope.site = site;
       $scope.institutes = [];
       loadPvs();

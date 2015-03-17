@@ -55,7 +55,7 @@
       <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
     </set>
 
-    <set name="sites" table="CATISSUE_SITE_CP" inverse="false" cascade="none" sort="unsorted">
+    <set name="repositories" table="CATISSUE_SITE_CP" inverse="false" cascade="none" sort="unsorted">
       <key column="COLLECTION_PROTOCOL_ID"/>
       <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.Site" column="SITE_ID"/>
     </set>

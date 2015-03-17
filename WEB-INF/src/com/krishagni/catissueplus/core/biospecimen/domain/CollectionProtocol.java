@@ -45,7 +45,7 @@ public class CollectionProtocol extends BaseEntity {
 	
 	private Set<User> coordinators = new HashSet<User>();
 	
-	private Set<Site> sites = new HashSet<Site>();
+	private Set<Site> repositories = new HashSet<Site>();
 	
 	private Set<CollectionProtocolEvent> collectionProtocolEvents = new HashSet<CollectionProtocolEvent>();
 	
@@ -176,13 +176,13 @@ public class CollectionProtocol extends BaseEntity {
 	public void setCoordinators(Set<User> coordinators) {
 		this.coordinators = coordinators;
 	}
-
-	public Set<Site> getSites() {
-		return sites;
+	
+	public Set<Site> getRepositories() {
+		return repositories;
 	}
 
-	public void setSites(Set<Site> sites) {
-		this.sites = sites;
+	public void setRepositories(Set<Site> repositories) {
+		this.repositories = repositories;
 	}
 
 	public Set<CollectionProtocolEvent> getCollectionProtocolEvents() {
@@ -217,7 +217,7 @@ public class CollectionProtocol extends BaseEntity {
 		this.setPpidFormat(cp.getPpidFormat());
 		this.setUnsignedConsentDocumentURL(cp.getUnsignedConsentDocumentURL());
 		
-		CollectionUpdater.update(this.sites, cp.getSites());
+		CollectionUpdater.update(this.repositories, cp.getRepositories());
 		CollectionUpdater.update(this.coordinators, cp.getCoordinators());
 	}
 	

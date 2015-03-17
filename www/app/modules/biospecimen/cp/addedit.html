@@ -14,12 +14,12 @@
   <div class="container">
     <form name="cpForm" os-form-validator="cpForm" validator="cpFormValidator" class="form-horizontal" novalidate>
       <div class="form-group">
-        <label class="control-label col-xs-3" translate="cp.sites">Sites</label>
+        <label class="control-label col-xs-3" translate="cp.repositories">Repositories</label>
         <div class="col-xs-6">
-          <os-select multiple name="siteNames" ng-model="cp.siteNames" list="sites"
-            class="form-control" placeholder="{{'cp.sites' | translate}}" required>
+          <os-select multiple name="repositoryNames" ng-model="cp.repositoryNames" list="sites"
+            class="form-control" placeholder="{{'cp.repositories' | translate}}" required>
           </os-select>
-          <div os-field-error field="cpForm.siteNames"></div>
+          <div os-field-error field="cpForm.repositoryNames"></div>
         </div>
       </div>
 
