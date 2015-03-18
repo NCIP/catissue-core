@@ -54,6 +54,8 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenRequirement.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/DistributionOrder.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/DistributionOrderItem.hbm.xml"/>
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ScheduledJob.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ScheduledJobRun.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperationJob.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperation.hbm.xml" />
 

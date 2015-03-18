@@ -742,4 +742,142 @@
     <addPrimaryKey columnNames="IDENTIFIER" tableName="CATISSUE_DISPOSAL_EVENT_PARAM"/>
   </changeSet>
 
+<changeSet author="mibrahim" id="Creating scheduled jobs table" failOnError="true">
+    <createTable tableName="OS_SCHEDULED_JOBS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(255)">
+        <constraints unique="true" nullable="false" />
+      </column>
+
+      <column name="CREATED_BY" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+     
+      <column name="START_DATE" type="${nullable.ts.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="END_DATE" type="${nullable.ts.type}"/>
+
+      <column name="SCHEDULED_MINUTE" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="SCHEDULED_HOUR" type="${int.type}"/>
+
+      <column name="SCHEDULED_DAY_OF_WEEK" type="${text.type}(16)"/>
+
+      <column name="SCHEDULED_DAY_OF_MONTH" type="${int.type}"/>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REPEAT_SCHEDULE" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="TYPE" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="COMMAND" type="${text.type}(255)"/>
+
+      <column name="TASK_IMPL_FQN" type="${text.type}(255)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Create sequence for OS_SCHEDULED_JOBS">
+    <createSequence 
+      sequenceName="OS_SCHEDULED_JOBS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK to job created-by">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SCHEDULED_JOB_CREATED_BY"
+      baseTableName="OS_SCHEDULED_JOBS"
+      baseColumnNames="CREATED_BY"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Creating scheduled jobs email recipients table" failOnError="true">
+    <createTable tableName="OS_SCHEDULED_JOBS_NOTIF_RCPTS">
+      <column name="SCHEDULED_JOB_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="USER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK job email recipients">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SCHEDULED_JOB_RECIPIENTS"
+      baseTableName="OS_SCHEDULED_JOBS_NOTIF_RCPTS"
+      baseColumnNames="SCHEDULED_JOB_ID"
+      referencedTableName="OS_SCHEDULED_JOBS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+  
+  <changeSet author="mibrahim" id="Add FK job email recipients users">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SCHLD_JOB_RECPT_USERS"
+      baseTableName="OS_SCHEDULED_JOBS_NOTIF_RCPTS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Creating scheduled job-runs table" failOnError="true">
+    <createTable tableName="OS_SCHEDULED_JOB_RUNS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="SCHEDULED_JOB_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="STATUS" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="STARTED_AT" type="${nullable.ts.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="FINISHED_AT" type="${nullable.ts.type}"/>
+
+      <column name="LOG_FILE_PATH" type="${text.type}(255)"/>
+
+      <column name="MESSAGE" type="${text.type}(255)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Create sequence for OS_SCHEDULED_JOB_RUNS">
+    <createSequence 
+      sequenceName="OS_SCHEDULED_JOB_RUNS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Adding FK to Scheduled job">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SCHEDULED_RUN_JOB_ID"
+      baseTableName="OS_SCHEDULED_JOB_RUNS"
+      baseColumnNames="SCHEDULED_JOB_ID"
+      referencedTableName="OS_SCHEDULED_JOBS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
 </databaseChangeLog>

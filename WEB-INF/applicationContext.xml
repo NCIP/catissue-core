@@ -26,6 +26,8 @@
 
   <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
+  <bean id="appInitializer" class="com.krishagni.catissueplus.core.common.OpenSpecimenAppInitListener" />
+  
   <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
     <property name="configLocation">
       <value>classpath:hibernate.cfg.xml</value>
@@ -351,6 +353,21 @@
   <bean id="distributionOrderService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionOrderServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="distributionFactory" ref="distributionFactory" />
+  </bean>
+  
+  <bean id="scheduledJobFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.ScheduledJobFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+  
+  <bean id="scheduledTaskMgr" class="com.krishagni.catissueplus.core.administrative.services.impl.ScheduledTaskManagerImpl" >
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="emailSvc" ref="emailService"/>
+  </bean>
+  
+  <bean id="scheduledJobSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.ScheduledJobServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="jobFactory" ref="scheduledJobFactory"/>
+    <property name="taskMgr" ref="scheduledTaskMgr"/>
   </bean>
 	
   <bean id="permissibleValueSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl">

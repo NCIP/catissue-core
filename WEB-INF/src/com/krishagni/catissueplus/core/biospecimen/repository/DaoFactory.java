@@ -5,6 +5,7 @@ import com.krishagni.catissueplus.core.administrative.repository.DistributionOrd
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
+import com.krishagni.catissueplus.core.administrative.repository.ScheduledJobDao;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
@@ -55,6 +56,8 @@ public interface DaoFactory {
 	public PermissibleValueDao getPermissibleValueDao();
 	
 	public AuditDao getAuditDao();
+
+	public ScheduledJobDao getScheduledJobDao();
 	
 	public DistributionOrderDao getDistributionOrderDao();
 }
