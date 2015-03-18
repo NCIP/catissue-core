@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
@@ -173,12 +174,7 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setDerivativeLabelFmt(cp.getDerivativeLabelFormat());
 		result.setAliquotLabelFmt(cp.getAliquotLabelFormat());
 		result.setActivityStatus(cp.getActivityStatus());
-		
-		List<String> repositoryNames = new ArrayList<String>();
-		for (Site site: cp.getRepositories()) {
-			repositoryNames.add(site.getName());
-		}
-		result.setRepositoryNames(repositoryNames);
+		result.setRepositoryNames(getRepositoryNames(cp.getRepositories()));
 		
 		if (fullObject) {
 			result.setConsents(ConsentTierDetail.from(cp.getConsentTier()));
@@ -187,5 +183,13 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		
 		return result;
 	}
-	
+
+	private static List<String> getRepositoryNames(Collection<Site> repositories) {
+		List<String> repositoryNames = new ArrayList<String>();
+		for (Site site: repositories) {
+			repositoryNames.add(site.getName());
+		}
+		
+		return repositoryNames;
+	}
 }

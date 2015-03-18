@@ -60,15 +60,15 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	}
 	
 	private void setRepositories(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
-		List<String> siteNames = input.getRepositoryNames();
-		if (CollectionUtils.isEmpty(siteNames)) {
+		List<String> repositoryNames = input.getRepositoryNames();
+		if (CollectionUtils.isEmpty(repositoryNames)) {
 			ose.addError(CpErrorCode.REPOSITORIES_REQUIRED);
 			return;
 		}
 		
 		Set<Site> repositories = new HashSet<Site>();
-		for (String siteName : siteNames) {
-			Site repository = daoFactory.getSiteDao().getSiteByName(siteName);
+		for (String repositoryName : repositoryNames) {
+			Site repository = daoFactory.getSiteDao().getSiteByName(repositoryName);
 			if (repository == null){
 				ose.addError(CpErrorCode.INVALID_REPOSITORIES);
 				return;

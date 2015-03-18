@@ -16,7 +16,6 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
 
       $scope.ppidFmt = {};
       $scope.coordinators = [];
-      $scope.sites = [];
 
       loadPvs();
 
@@ -37,6 +36,7 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
     };
 
     function loadPvs() {
+      $scope.sites = [];
       Site.list().then(function(sites) {
          angular.forEach(sites, function(site) {
            $scope.sites.push(site.name);
