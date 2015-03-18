@@ -5,7 +5,7 @@ angular.module('os.administrative.user.list', ['os.administrative.models'])
       $scope.userFilterOpts = {};
       loadUsers();
       loadPvs();
-      Util.filter($scope, 'userFilterOpts', filter);
+      Util.filter($scope, 'userFilterOpts', loadUsers);
     }
 
     function loadPvs() {
@@ -21,7 +21,7 @@ angular.module('os.administrative.user.list', ['os.administrative.models'])
       );
     }
 
-    var loadUsers = function(filterOpts) {
+    function loadUsers(filterOpts) {
       User.query(filterOpts).then(function(result) {
         $scope.users = result; 
       });
@@ -30,10 +30,6 @@ angular.module('os.administrative.user.list', ['os.administrative.models'])
     $scope.showUserOverview = function(user) {
       $state.go('user-detail.overview', {userId:user.id});
     };
-
-    function filter(filterOpts) {
-      loadUsers(filterOpts);
-    }
 
     init();
   });

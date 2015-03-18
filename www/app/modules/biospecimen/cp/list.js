@@ -15,10 +15,6 @@ angular.module('os.biospecimen.cp.list', ['os.biospecimen.models'])
       );
     };
 
-    $scope.showParticipants = function(cp) {
-      $state.go('participant-list', {cpId: cp.id});
-    };
-
     function filter(filterOpts) {
       var cpFilterOpts = angular.copy(filterOpts);
       if (cpFilterOpts.pi) {
@@ -28,6 +24,10 @@ angular.module('os.biospecimen.cp.list', ['os.biospecimen.models'])
 
       loadCollectionProtocols(cpFilterOpts);
     }
+
+    $scope.showParticipants = function(cp) {
+      $state.go('participant-list', {cpId: cp.id});
+    };
 
     init();
   });

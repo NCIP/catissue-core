@@ -4,10 +4,10 @@ angular.module('os.administrative.site.list', ['os.administrative.models'])
     function init() {
       $scope.siteFilterOpts = {};
       loadSites();
-      Util.filter($scope, 'siteFilterOpts', filter);
+      Util.filter($scope, 'siteFilterOpts', loadSites);
     }
 
-    var loadSites = function(filterOpts) {
+    function loadSites(filterOpts) {
       Site.query(filterOpts).then(
         function(siteList) {
           $scope.siteList = siteList;
@@ -18,10 +18,6 @@ angular.module('os.administrative.site.list', ['os.administrative.models'])
     $scope.showSiteOverview = function(site) {
       $state.go('site-detail.overview', {siteId: site.id});
     };
-
-    function filter(filterOpts) {
-      loadSites(filterOpts);
-    }
 
     init();
   });

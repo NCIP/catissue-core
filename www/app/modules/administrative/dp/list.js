@@ -14,10 +14,6 @@ angular.module('os.administrative.dp.list', ['os.administrative.models'])
       });
     }
 
-    $scope.showDpOverview = function(distributionProtocol) {
-      $state.go('dp-detail.overview', {dpId:distributionProtocol.id});
-    };
-
     function filter(filterOpts) {
       var dpFilterOpts = angular.copy(filterOpts);
       if (dpFilterOpts.pi) {
@@ -27,6 +23,10 @@ angular.module('os.administrative.dp.list', ['os.administrative.models'])
 
       loadDps(dpFilterOpts);
     }
+
+    $scope.showDpOverview = function(distributionProtocol) {
+      $state.go('dp-detail.overview', {dpId:distributionProtocol.id});
+    };
 
     init();
   });

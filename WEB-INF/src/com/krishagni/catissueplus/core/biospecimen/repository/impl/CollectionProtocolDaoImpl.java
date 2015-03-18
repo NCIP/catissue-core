@@ -153,7 +153,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 				.setMaxResults(cpCriteria.maxResults())
 				.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE));
 		
-		
+		query.createAlias("principalInvestigator", "pi");
 		addSearchConditions(query, cpCriteria);
 		addProjections(query, cpCriteria);
 		
@@ -178,7 +178,6 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 			query.add(searchCond);
 		}
 		
-		query.createAlias("principalInvestigator", "pi");
 		Long piId = cpCriteria.piId();
 		if (piId != null) {
 			query.add(Restrictions.eq("pi.id", piId));
