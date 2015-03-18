@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJob;
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJobRun;
@@ -24,7 +25,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
-public class ScheduledJobServiceImpl implements ScheduledJobService {
+public class ScheduledJobServiceImpl implements ScheduledJobService, InitializingBean {
 	private DaoFactory daoFactory;
 	
 	private ScheduledJobFactory jobFactory;
@@ -120,20 +121,6 @@ public class ScheduledJobServiceImpl implements ScheduledJobService {
 		}
 	}
 	
-	@Override
-	@PlusTransactional
-	public void loadAllJobs() {
-		try {
-			List<ScheduledJob> jobs = daoFactory.getScheduledJobDao().getScheduledJobs(new ScheduledJobListCriteria());
-			for (ScheduledJob job : jobs) {
-				taskMgr.schedule(job);
-			}
-			
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
 	/*
 	 *	Job run api's 
 	 */
@@ -191,6 +178,28 @@ public class ScheduledJobServiceImpl implements ScheduledJobService {
 			}
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		try {
+			loadAllJobs();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@PlusTransactional
+	public void loadAllJobs() {
+		try {
+			List<ScheduledJob> jobs = daoFactory.getScheduledJobDao().getScheduledJobs(new ScheduledJobListCriteria());
+			for (ScheduledJob job : jobs) {
+				taskMgr.schedule(job);
+			}
+			
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 

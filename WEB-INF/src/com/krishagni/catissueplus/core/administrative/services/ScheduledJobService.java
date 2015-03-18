@@ -32,12 +32,6 @@ public interface ScheduledJobService {
 
 	public ResponseEvent<JobExportDetail> getExportDataFile(RequestEvent<Long> req);
 	
-	/*
-	 * Internal Api's. Can be changed without notice.
-	 */
-	
-	public void loadAllJobs();
-	
 }
 
 
