@@ -41,6 +41,12 @@ public class DistributionProtocolController {
 			@RequestParam(value = "query", required = false, defaultValue = "") 
 			String searchStr,
 			
+			@RequestParam(value = "title", required = false)
+			String title,
+			
+			@RequestParam(value = "piId", required = false)
+			Long piId,
+			
 			@RequestParam(value = "startAt", required = false, defaultValue = "0") 
 			int startAt,
 			
@@ -50,7 +56,10 @@ public class DistributionProtocolController {
 		DpListCriteria criteria = new DpListCriteria()
 			.startAt(startAt)
 			.maxResults(maxResults)
-			.query(searchStr);
+			.query(searchStr)
+			.title(title)
+			.piId(piId);
+		
 		
 		ResponseEvent<List<DistributionProtocolDetail>> resp = dpSvc.getDistributionProtocols(getRequest(criteria));
 		resp.throwErrorIfUnsuccessful();

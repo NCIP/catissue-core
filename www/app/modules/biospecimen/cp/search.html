@@ -5,10 +5,19 @@
 
   <div class="os-body">
     <div class="form-group">
-      <label class="control-label" translate="cp.title">Title</label>
-      <input os-md-input type="text" ng-model="cpFilterOpts.title"
-        ng-model-options="{debounce: 500}" ng-change="filter()"
-        class="form-control" placeholder="{{'cp.filter.title' | translate}}">
+      <label class="control-label" translate="cp.filter.title_or_short_title">Title / Short Title</label>
+      <div class="os-md-input">
+        <input type="text" ng-model="cpFilterOpts.title" class="form-control"
+          placeholder="{{'cp.filter.title' | translate}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label" translate="cp.pi">Principal Investigator</label>
+      <div class="os-md-input">
+        <os-users ng-model="cpFilterOpts.pi" placeholder="{{'cp.filter.pi' | translate}}">
+        </os-users>
+      </div>
     </div>
   </div>
 </div>

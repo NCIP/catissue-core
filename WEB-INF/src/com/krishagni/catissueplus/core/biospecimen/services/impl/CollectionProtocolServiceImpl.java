@@ -30,9 +30,9 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
 import com.krishagni.catissueplus.core.biospecimen.events.CopyCpeOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.ListCpCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.CpListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
@@ -88,10 +88,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<CollectionProtocolSummary>> getProtocols(RequestEvent<ListCpCriteria> req) {
-		ListCpCriteria crit = req.getPayload();
+	public ResponseEvent<List<CollectionProtocolSummary>> getProtocols(RequestEvent<CpListCriteria> req) {
+		CpListCriteria crit = req.getPayload();
 		List<CollectionProtocolSummary> cpList = daoFactory.getCollectionProtocolDao()
-				.getCollectionProtocols(crit.includePi(), crit.includeStat());
+				.getCollectionProtocols(crit);
 		
 		List<CollectionProtocolSummary> result = new ArrayList<CollectionProtocolSummary>();
 		for (CollectionProtocolSummary collectionProtocolSummary : cpList) {

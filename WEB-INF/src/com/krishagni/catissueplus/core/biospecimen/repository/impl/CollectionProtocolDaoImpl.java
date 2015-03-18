@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
@@ -21,6 +24,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEven
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.CpListCriteria;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
@@ -30,11 +34,14 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<CollectionProtocolSummary> getCollectionProtocols(boolean includePi, boolean includeStats) {
+	public List<CollectionProtocolSummary> getCollectionProtocols(CpListCriteria cpCriteria) {
 		List<CollectionProtocolSummary> cpList = new ArrayList<CollectionProtocolSummary>();
 		Map<Long, CollectionProtocolSummary> cpMap = new HashMap<Long, CollectionProtocolSummary>();
 		
-		List<Object[]> rows = getCpList(includePi);
+		boolean includePi = cpCriteria.includePi();
+		boolean includeStats = cpCriteria.includeStat();		
+		
+		List<Object[]> rows = getCpList(cpCriteria);
 		for (Object[] row : rows) {
 			CollectionProtocolSummary cp = getCp(row, includePi);
 			if (includeStats) {
@@ -44,9 +51,10 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 			cpList.add(cp);
 		}
 		
-		if (includeStats) {
+		if (includeStats && !cpMap.isEmpty()) {
 			rows = getSessionFactory().getCurrentSession()
 					.getNamedQuery(GET_PARTICIPANT_N_SPECIMEN_CNT)
+					.setParameterList("cpIds", cpMap.keySet())
 					.list();
 			
 			for (Object[] row : rows) {
@@ -58,48 +66,6 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		}
 				
 		return cpList;
-	}
-	
-	private List<Object[]> getCpList(boolean includePi) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(CollectionProtocol.class);
-		query.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE));
-		
-		ProjectionList projs = Projections.projectionList();
-		query.setProjection(projs);
-		
-		projs.add(Projections.property("id"));
-		projs.add(Projections.property("shortTitle"));
-		projs.add(Projections.property("title"));
-		projs.add(Projections.property("startDate"));
-		
-		if (includePi) {
-			query.createAlias("principalInvestigator", "pi");
-			projs.add(Projections.property("pi.id"));
-			projs.add(Projections.property("pi.firstName"));
-			projs.add(Projections.property("pi.lastName"));
-			projs.add(Projections.property("pi.loginName"));
-		}
-		
-		return query.addOrder(Order.asc("title")).list();
-	}
-	
-	private CollectionProtocolSummary getCp(Object[] fields, boolean includePi) {
-		CollectionProtocolSummary cp = new CollectionProtocolSummary();
-		cp.setId((Long)fields[0]);
-		cp.setShortTitle((String)fields[1]);
-		cp.setTitle((String)fields[2]);
-		cp.setStartDate((Date)fields[3]);
-		
-		if (includePi) {
-			UserSummary user = new UserSummary();
-			user.setId((Long)fields[4]);
-			user.setFirstName((String)fields[5]);
-			user.setLastName((String)fields[6]);
-			user.setLoginName((String)fields[7]);
-			cp.setPrincipalInvestigator(user);
-		}
-		
-		return cp;		
 	}
 	
 	@Override
@@ -179,6 +145,78 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	@Override
 	public Class<CollectionProtocol> getType() {
 		return CollectionProtocol.class;
+	}
+	
+	private List<Object[]> getCpList(CpListCriteria cpCriteria) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(CollectionProtocol.class)
+				.setFirstResult(cpCriteria.startAt())
+				.setMaxResults(cpCriteria.maxResults())
+				.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE))
+				.createAlias("principalInvestigator", "pi");
+		addSearchConditions(query, cpCriteria);
+		addProjections(query, cpCriteria);
+		
+		return query.addOrder(Order.asc("title")).list();
+	}
+
+	private void addSearchConditions(Criteria query, CpListCriteria cpCriteria) {
+		String searchString = cpCriteria.query();
+		if (StringUtils.isBlank(searchString)) {
+			searchString = cpCriteria.title();
+		} 
+		
+		if (StringUtils.isNotBlank(searchString)) {
+			Junction searchCond = Restrictions.disjunction()
+					.add(Restrictions.ilike("title", searchString, MatchMode.ANYWHERE))
+					.add(Restrictions.ilike("shortTitle", searchString, MatchMode.ANYWHERE));
+			
+			if (StringUtils.isNotBlank(cpCriteria.query())) {
+				searchCond.add(Restrictions.ilike("irbIdentifier", searchString, MatchMode.ANYWHERE));
+			}	
+			
+			query.add(searchCond);
+		}
+		
+		Long piId = cpCriteria.piId();
+		if (piId != null) {
+			query.add(Restrictions.eq("pi.id", piId));
+		}
+	}
+	
+	private void addProjections(Criteria query, CpListCriteria cpCriteria) {
+		ProjectionList projs = Projections.projectionList();
+		query.setProjection(projs);
+		
+		projs.add(Projections.property("id"));
+		projs.add(Projections.property("shortTitle"));
+		projs.add(Projections.property("title"));
+		projs.add(Projections.property("startDate"));
+		
+		if (cpCriteria.includePi()) {
+			projs.add(Projections.property("pi.id"));
+			projs.add(Projections.property("pi.firstName"));
+			projs.add(Projections.property("pi.lastName"));
+			projs.add(Projections.property("pi.loginName"));
+		}
+	}
+
+	private CollectionProtocolSummary getCp(Object[] fields, boolean includePi) {
+		CollectionProtocolSummary cp = new CollectionProtocolSummary();
+		cp.setId((Long)fields[0]);
+		cp.setShortTitle((String)fields[1]);
+		cp.setTitle((String)fields[2]);
+		cp.setStartDate((Date)fields[3]);
+		
+		if (includePi) {
+			UserSummary user = new UserSummary();
+			user.setId((Long)fields[4]);
+			user.setFirstName((String)fields[5]);
+			user.setLastName((String)fields[6]);
+			user.setLoginName((String)fields[7]);
+			cp.setPrincipalInvestigator(user);
+		}
+		
+		return cp;		
 	}
 	
 	private static final String FQN = CollectionProtocol.class.getName();

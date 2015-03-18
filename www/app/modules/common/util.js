@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .factory('Util', function() {
+  .factory('Util', function($rootScope, $timeout) {
     function clear(input) {
       input.splice(0, input.length);
     };
@@ -14,11 +14,32 @@ angular.module('openspecimen')
       unshiftAll(arr, elements);
     };
 
+    function filter($scope, varName, callback) {
+      $scope.$watch(varName, function(newVal, oldVal) {
+        if (newVal == oldVal) {
+          return;
+        }
+
+        if ($scope._filterQ) {
+          $timeout.cancel($scope._filterQ);
+        }
+
+        $scope._filterQ = $timeout(
+          function() {
+            callback(newVal);
+          },
+          $rootScope.global.filterWaitInterval
+        );
+      }, true);
+    }
+
     return {
       clear: clear,
 
       unshiftAll: unshiftAll,
 
-      assign: assign
+      assign: assign,
+
+      filter: filter
     };
   });

@@ -39,8 +39,10 @@ angular.module('openspecimen')
         drawerEl.toggleClass('active');
 
         var cardsDiv = drawerEl.parent().find("div.os-cards");
+
         if (drawerEl.hasClass('active')) {
           cardsDiv.css("width", "75%");
+          drawerEl.find('input, textArea, select, button').filter(':visible:first').focus();
         } else {
           cardsDiv.css("width", "100%");
         }

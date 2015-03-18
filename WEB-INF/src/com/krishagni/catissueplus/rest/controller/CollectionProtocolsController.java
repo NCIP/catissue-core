@@ -32,7 +32,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
-import com.krishagni.catissueplus.core.biospecimen.events.ListCpCriteria;
+import com.krishagni.catissueplus.core.biospecimen.repository.CpListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -55,15 +55,35 @@ public class CollectionProtocolsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<CollectionProtocolSummary> getCollectionProtocols(
+			@RequestParam(value = "query", required = false) 
+			String searchStr,
+			
+			@RequestParam(value = "title", required = false)
+			String title,
+			
+			@RequestParam(value = "piId", required = false)
+			Long piId,
+			
+			@RequestParam(value = "startAt", required = false, defaultValue = "0") 
+			int startAt,
+			
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100") 
+			int maxResults,
+			
 			@RequestParam(value = "chkPrivilege", required = false, defaultValue = "true")  
 			boolean chkPrivlege,
 			
 			@RequestParam(value = "detailedList", required = false, defaultValue = "false") 
 			boolean detailedList) {
 		
-		ListCpCriteria crit = new ListCpCriteria()
+		CpListCriteria crit = new CpListCriteria()
+			.query(searchStr)
+			.title(title)
+			.piId(piId)
 			.includePi(detailedList)
-			.includeStat(detailedList);
+			.includeStat(detailedList)
+			.startAt(startAt)
+			.maxResults(maxResults);
 
 		ResponseEvent<List<CollectionProtocolSummary>> resp = cpSvc.getProtocols(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();		

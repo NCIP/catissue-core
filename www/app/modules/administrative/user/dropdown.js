@@ -6,7 +6,8 @@ angular.module('os.administrative.user.dropdown', ['os.administrative.models'])
 
       scope: {
         ngModel: '=ngModel',
-        placeholder: '@'
+        placeholder: '@',
+        onSelect: '=onSelect'
       },
 
       replace: true,
