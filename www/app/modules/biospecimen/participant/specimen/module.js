@@ -11,14 +11,18 @@ angular.module('os.biospecimen.specimen',
         url: '/specimens?specimenId&srId',
         template: '<div ui-view></div>',
         resolve: {
-          specimen: function($stateParams, Specimen) {
+          specimen: function($stateParams, cpr, Specimen) {
             if ($stateParams.specimenId) {
               return Specimen.getById($stateParams.specimenId);
             } else if ($stateParams.srId) {
               return Specimen.getAnticipatedSpecimen($stateParams.srId);
             }
  
-            return new Specimen({lineage: 'New', visitId: $stateParams.visitId});
+            return new Specimen({
+              lineage: 'New', 
+              visitId: $stateParams.visitId, 
+              labelFmt: cpr.specimenLabelFmt
+            });
           }
         },
         controller: function($scope, specimen) {

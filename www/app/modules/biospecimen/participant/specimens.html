@@ -219,7 +219,8 @@
         <div class="col-xs-3">
           <div class="form-group">
             <input name="label" ng-model="derivative.label" os-md-input class="form-control"
-              type="text" placeholder="{{'specimens.label' | translate}}" required>
+              type="text" placeholder="{{'specimens.label' | translate}}" 
+              ng-required="!cpr.derivativeLabelFmt">
             <div os-field-error field="derivativeForm.label"></div>
           </div>
         </div>
@@ -237,7 +238,7 @@
 
         <div class="col-xs-7">
           <div class="form-group">
-            <os-specimen-position os-md-input specimen="derivative" cp-id="cpId"></os-specimen-position>
+            <os-specimen-position os-md-input specimen="derivative" cp-id="cpr.cpId"></os-specimen-position>
           </div>
         </div>
       </div>

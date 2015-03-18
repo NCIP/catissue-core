@@ -36,7 +36,7 @@
         <label class="col-xs-3 control-label">Label</label>
         <div class="col-xs-6">
           <input type="text" name="label" ng-model="currSpecimen.label" class="form-control" 
-            required placeholder="Label"/>
+            ng-required="!currSpecimen.labelFmt" placeholder="Label"/>
           <div os-field-error field="sform.label"></div>
         </div>
       </div>
@@ -46,7 +46,8 @@
           <label class="col-xs-3 control-label">Specimen Class</label>
           <div class="col-xs-6">
             <os-select name="class" ng-model="currSpecimen.specimenClass" list="specimenClasses"
-              on-change="loadSpecimenTypes" required placeholder="Specimen Class"/>
+              on-change="loadSpecimenTypes" required placeholder="Specimen Class">
+            </os-select>
             <div os-field-error field="sform.class"></div>
           </div>
         </div>
@@ -55,7 +56,8 @@
           <label class="col-xs-3 control-label">Specimen Type</label>
           <div class="col-xs-6">
             <os-select name="type" ng-model="currSpecimen.type" list="specimenTypes"
-              required placeholder="Specimen Type"/>
+              required placeholder="Specimen Type">
+            </os-select>
             <div os-field-error field="sform.type"></div>
           </div>
         </div>
@@ -106,7 +108,8 @@
         <label class="col-xs-3 control-label">Collection Status</label>
         <div class="col-xs-6">
           <os-select name="collectionStatus" ng-model="currSpecimen.status" list="collectionStatuses"
-            required placeholder="Collection Status"/>
+            required placeholder="Collection Status">
+          </os-select>
           <div os-field-error field="sform.collectionStatus"></div>
         </div>
       </div>
@@ -116,7 +119,8 @@
           <label class="col-xs-3 control-label">Anatomic Site</label>
           <div class="col-xs-6">
             <os-select name="anatomicSite" ng-model="currSpecimen.anatomicSite" list="anatomicSites"
-              required placeholder="Anatomic Site"/>
+              required placeholder="Anatomic Site">
+            </os-select>
             <div os-field-error field="sform.anatomicSite"></div>
           </div>
         </div>
@@ -124,7 +128,8 @@
           <label class="col-xs-3 control-label">Laterality</label>
           <div class="col-xs-6">
             <os-select name="laterality" ng-model="currSpecimen.laterality" list="lateralities"
-              required placeholder="Laterality"/>
+              required placeholder="Laterality">
+            </os-select>
             <div os-field-error field="sform.laterality"></div>
           </div>
         </div>
@@ -132,7 +137,8 @@
           <label class="col-xs-3 control-label">Pathology Status</label>
           <div class="col-xs-6">
             <os-select name="pathology" ng-model="currSpecimen.pathology" list="pathologyStatuses"
-              required placeholder="Pathology Status"/>
+              required placeholder="Pathology Status">
+            </os-select>
             <div os-field-error field="sform.pathology"></div>
           </div>
         </div>

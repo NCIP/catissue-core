@@ -4,7 +4,9 @@ angular.module('os.biospecimen.participant.specimen-tree',
     'os.biospecimen.models', 
     'os.biospecimen.participant.collect-specimens'
   ])
-  .directive('osSpecimenTree', function($state, $stateParams, CollectSpecimensSvc, Specimen, Alerts, PvManager) {
+  .directive('osSpecimenTree', function(
+    $state, $stateParams, 
+    CollectSpecimensSvc, Specimen, Alerts, PvManager, Util) {
 
     function loadSpecimenClasses(scope) {
       if (scope.classesLoaded) {
@@ -90,7 +92,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
       restrict: 'E',
 
       scope: {
-        cpId: '@',
+        cpr: '=',
         visit: '=',
         specimenTree: '=specimens'
       },
@@ -168,21 +170,24 @@ angular.module('os.biospecimen.participant.specimen-tree',
           parent.hasChildren = true;
           parent.depth = 0;
 
-          var aliquot = angular.extend(new Specimen(parent), {
-            id: undefined, 
-            reqId: undefined, 
-            label: '',
-            lineage: 'Aliquot', 
+          var aliquot = new Specimen({
+            lineage: 'Aliquot',
+            specimenClass: parent.specimenClass,
+            type: parent.type,
             parentId: parent.id,
             initialQty: spec.qtyPerAliquot,
             storageLocation: {name: '', positionX:'', positionY: ''},
             status: 'Pending', 
+            children: [],
+            cprId: scope.cpr.id,
+            visitId: parent.visitId,
 
             selected: true,
             parent: parent,
             depth: 1,
             isOpened: true,
-            hasChildren: false
+            hasChildren: false,
+            labelFmt: scope.cpr.aliquotLabelFmt
           });
 
           var aliquots = [];
@@ -191,8 +196,9 @@ angular.module('os.biospecimen.participant.specimen-tree',
           }
 
           parent.children = aliquots;
-          aliquots.unshift(parent);
-          CollectSpecimensSvc.collect(getState(), scope.visit, aliquots, parent);
+          var specimens = angular.copy(aliquots);
+          specimens.unshift(parent);
+          CollectSpecimensSvc.collect(getState(), scope.visit, specimens, parent);
         };
 
         scope.loadSpecimenTypes = function(specimenClass, notclear) {
