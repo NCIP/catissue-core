@@ -7,9 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Session;
-import org.springframework.util.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -333,7 +337,11 @@ public class RbacServiceImpl implements RbacService {
 			}
 			
 			Subject subject = daoFactory.getSubjectDao().getSubject(subjectId);
-			return ResponseEvent.response(SubjectRoleDetail.from(subject.getSubjectRoles()));
+			if (subject == null) {
+				return ResponseEvent.userError(RbacErrorCode.SUBJECT_NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(SubjectRoleDetail.from(subject.getRoles()));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -376,47 +384,6 @@ public class RbacServiceImpl implements RbacService {
 			return ResponseEvent.response(SubjectDetail.from(subject));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
-	}
-
-	@Override
-	@PlusTransactional
-	public ResponseEvent<UserAccessInformation> checkAccess(RequestEvent<UserAccessInformation> req) {
-		try {			
-			UserAccessInformation info = req.getPayload();
-			Long subjectId = info.subjectId();
-			Long groupId = info.groupId();			
-			Long dsoId = info.dsoId();
-			String resourceName = info.resourceName();
-			String operationName = info.operationName();
-			Long resourceInstanceId = info.resourceInstanceId() == null ? -1 : info.resourceInstanceId();
-			
-			if ((subjectId == null && groupId == null) || 
-				StringUtils.isEmpty(resourceName) ||
-				StringUtils.isEmpty(operationName) ||
-				dsoId == null) {
-				return ResponseEvent.userError(RbacErrorCode.INSUFFICIENT_USER_DETAILS);
-			}
-			
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("subjectId", subjectId);
-			params.put("groupId", groupId);
-			params.put("dsoId", dsoId);
-			params.put("resource", resourceName);
-			params.put("operation", operationName);
-			params.put("resourceInstanceId", resourceInstanceId);
-			
-			if (daoFactory.getSubjectDao().canUserAccess(params)) {
-				return ResponseEvent.response(info.canUserAccess(true));
-			}
-			
-			if (groupId != null && daoFactory.getGroupDao().canUserAccess(params)) {
-				return ResponseEvent.response(info.canUserAccess(true));
-			}
-			
-			return ResponseEvent.response(info.canUserAccess(false));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -476,6 +443,42 @@ public class RbacServiceImpl implements RbacService {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	//
+	// Internal Api's can change without notice
+	//
+	
+	@Override
+	@PlusTransactional
+	public boolean checkAccess(Long subjectId, String resource, String operation, Long cpId, Long siteId, Long resourceInstanceId) {
+		try {			
+			UserAccessInformation accessInfo = new UserAccessInformation()
+					.subjectId(subjectId)
+					.resourceName(resource)
+					.operationName(operation)
+					.cpId(cpId)
+					.siteId(siteId)
+					.resourceInstanceId(resourceInstanceId);
+			
+			if ((accessInfo.subjectId() == null && accessInfo.groupId() == null) || 
+				StringUtils.isEmpty(accessInfo.resourceName()) ||
+				StringUtils.isEmpty(accessInfo.operationName()) ) {
+				throw OpenSpecimenException.userError(RbacErrorCode.INSUFFICIENT_USER_DETAILS);
+			}
+			
+			if (daoFactory.getSubjectDao().canUserAccess(accessInfo)) {
+				return true;
+			}
+			
+			if (accessInfo.groupId() != null && daoFactory.getGroupDao().canUserAccess(accessInfo)) {
+				return true;
+			}
+			
+			return false;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -554,7 +557,7 @@ public class RbacServiceImpl implements RbacService {
 				
 				ResourceInstanceOp op = new ResourceInstanceOp();
 				op.setRoleAccessControl(rac);
-				op.setResourceInstanceId(riod.getResourceInstanceId() == null ? -1L : riod.getResourceInstanceId());
+				op.setResourceInstanceId(riod.getResourceInstanceId());
 				op.setOperation(permission.getOperation());
 								
 				rac.getOperations().add(op);
@@ -578,9 +581,60 @@ public class RbacServiceImpl implements RbacService {
 		}
 		
 		SubjectRole sr = new SubjectRole();
-		sr.setDsoId(sd.getDsoId() == null ? -1L : sd.getDsoId());
+		sr.setCollectionProtocol(getCollectionProtocol(sd));
+		sr.setSite(getSite(sd));
 		sr.setRole(role);
 		return sr;
+	}
+
+	private CollectionProtocol getCollectionProtocol(SubjectRoleDetail sd) {
+		if (sd.getCollectionProtocol() == null) {
+			/*
+			 *  null cp means all cp's
+			 */
+			return null;
+		}
+		
+		CollectionProtocol cp = null;
+		Long cpId = sd.getCollectionProtocol().getId();
+		String title = sd.getCollectionProtocol().getTitle();
+		
+		if (cpId != null) {
+			cp = daoFactory.getCollectionProtocolDao().getById(cpId);
+		} else if (StringUtils.isNotBlank(title)) {
+			cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);
+		}
+		
+		if (cp == null) {
+			throw OpenSpecimenException.userError(CpErrorCode.NOT_FOUND);
+		}
+		
+		return cp;
+	}
+	
+	private Site getSite(SubjectRoleDetail sd) {
+		if (sd.getSite() == null) {
+			/*
+			 * null site means all sites'
+			 */
+			return null;
+		}
+		
+		Site site = null;
+		Long siteId = sd.getSite().getId();
+		String name = sd.getSite().getName();
+		
+		if (siteId != null) {
+			site = daoFactory.getSiteDao().getById(siteId);
+		} else if (StringUtils.isNotBlank(name)) {
+			site = daoFactory.getSiteDao().getSiteByName(name);
+		}
+		
+		if (site == null) {
+			throw OpenSpecimenException.userError(SiteErrorCode.NOT_FOUND);
+		}
+		
+		return site;
 	}
 
 	private void adjustParentChildRelationForRoleDeletion(Role role) {

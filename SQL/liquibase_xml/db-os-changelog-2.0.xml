@@ -880,4 +880,219 @@
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
 
+
+<changeSet author="mibrahim" id="Create resources table" failOnError="true">
+    <createTable tableName="RBAC_RESOURCES">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(64)">
+        <constraints unique="true" nullable="false" />
+      </column>
+     
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Create operations table" failOnError="true">
+    <createTable tableName="RBAC_OPERATIONS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(64)">
+        <constraints unique="true" nullable="false" />
+      </column>
+     
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="create permissions table" failOnError="true">
+    <createTable tableName="RBAC_PERMISSIONS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="RESOURCE_ID" type="${int.type}">
+        <constraints unique="true" nullable="false" />
+      </column>
+
+      <column name="OPERATION_ID" type="${int.type}">
+        <constraints unique="true" nullable="false" />
+      </column>
+     
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Permission's resources">
+    <addForeignKeyConstraint
+      constraintName="FK_PERM_RESOURCE_ID"
+      baseTableName="RBAC_PERMISSIONS"
+      baseColumnNames="RESOURCE_ID"
+      referencedTableName="RBAC_RESOURCES"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Permission's operation">
+    <addForeignKeyConstraint
+      constraintName="FK_PERM_OPERATION_ID"
+      baseTableName="RBAC_PERMISSIONS"
+      baseColumnNames="OPERATION_ID"
+      referencedTableName="RBAC_OPERATIONS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Create role (rbac) table" failOnError="true">
+    <createTable tableName="RBAC_ROLES">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(64)">
+        <constraints unique="true" nullable="false" />
+      </column>
+     
+      <column name="PARENT_ROLE_ID" type="${int.type}"/>
+
+      <column name="DESCRIPTION" type="${text.type}(255)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Parent role">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_PARENT_ROLE"
+      baseTableName="RBAC_ROLES"
+      baseColumnNames="PARENT_ROLE_ID"
+      referencedTableName="RBAC_ROLES"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Create Role access list table" failOnError="true">
+    <createTable tableName="RBAC_ROLE_ACCESS_LIST">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="ROLE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="RESOURCE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Acl's resources">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ACL_RESOURCE"
+      baseTableName="RBAC_ROLE_ACCESS_LIST"
+      baseColumnNames="RESOURCE_ID"
+      referencedTableName="RBAC_RESOURCES"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Acl's roles">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ACL_ROLE"
+      baseTableName="RBAC_ROLE_ACCESS_LIST"
+      baseColumnNames="ROLE_ID"
+      referencedTableName="RBAC_ROLES"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Create Acl-ops table" failOnError="true">
+    <createTable tableName="RBAC_ROLE_ACCESS_LIST_OPS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="RES_OBJ_ID" type="${int.type}"/>
+
+      <column name="OPERATION_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ACL_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Acl-ops acl">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ACLO_ACL"
+      baseTableName="RBAC_ROLE_ACCESS_LIST_OPS"
+      baseColumnNames="ACL_ID"
+      referencedTableName="RBAC_ROLE_ACCESS_LIST"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Acl-ops operation">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ACLO_OPERATION"
+      baseTableName="RBAC_ROLE_ACCESS_LIST_OPS"
+      baseColumnNames="OPERATION_ID"
+      referencedTableName="RBAC_OPERATIONS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Create subject roles table" failOnError="true">
+    <createTable tableName="RBAC_SUBJECT_ROLES">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="SUBJECT_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ROLE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="SITE_ID" type="${int.type}" />
+
+      <column name="CP_ID" type="${int.type}" />
+
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK on Subject - userid">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SUB_ID_USER_ID"
+      baseTableName="RBAC_SUBJECT_ROLES"
+      baseColumnNames="SUBJECT_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Subject's roles">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SUB_ROLES_TO_ROLES"
+      baseTableName="RBAC_SUBJECT_ROLES"
+      baseColumnNames="ROLE_ID"
+      referencedTableName="RBAC_ROLES"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Subject's site">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SUB_ROLES_TO_SITE"
+      baseTableName="RBAC_SUBJECT_ROLES"
+      baseColumnNames="SITE_ID"
+      referencedTableName="CATISSUE_SITE"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Subject's cp">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SUB_ROLES_TO_CP"
+      baseTableName="RBAC_SUBJECT_ROLES"
+      baseColumnNames="CP_ID"
+      referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
 </databaseChangeLog>

@@ -30,7 +30,9 @@ public enum RbacErrorCode implements ErrorCode {
 	
 	GROUP_NOT_FOUND,
 	
-	CYCLE_DETECTED_IN_HIERARCHY;
+	CYCLE_DETECTED_IN_HIERARCHY, 
+	
+	CP_SITE_COMBI_NOT_FOUND;
 	
 	@Override
 	public String code() {

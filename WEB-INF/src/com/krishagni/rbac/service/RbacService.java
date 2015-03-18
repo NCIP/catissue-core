@@ -62,11 +62,14 @@ public interface RbacService {
 	
 	public ResponseEvent<SubjectDetail> updateSubjectRoles(RequestEvent<SubjectDetail> req);
 	
-	public ResponseEvent<UserAccessInformation> checkAccess(RequestEvent<UserAccessInformation> req);
-	
 	public ResponseEvent<List<SubjectRoleDetail>> getSubjectRoles(RequestEvent<Long> req);
 	
 	public ResponseEvent<GroupDetail> updateGroupRoles(RequestEvent<GroupDetail> req);
 		
 	public ResponseEvent<List<GroupRoleDetail>> getGroupRoles(RequestEvent<Long> req);
+	
+	//
+	// Intern API's can change without notice.
+	//
+	public boolean checkAccess(Long userId, String resource, String operation, Long cpId, Long siteId, Long resourceInstanceId);
 }

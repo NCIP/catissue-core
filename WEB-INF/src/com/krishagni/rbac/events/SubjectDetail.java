@@ -34,7 +34,7 @@ public class SubjectDetail {
 		
 		SubjectDetail ss = new SubjectDetail();
 		ss.setId(subject.getId());
-		for (SubjectRole sr : subject.getSubjectRoles()) {
+		for (SubjectRole sr : subject.getRoles()) {
 			ss.getRoles().add(SubjectRoleDetail.from(sr));
 		}
 		
