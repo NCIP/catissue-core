@@ -151,9 +151,8 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(CollectionProtocol.class)
 				.setFirstResult(cpCriteria.startAt())
 				.setMaxResults(cpCriteria.maxResults())
-				.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE));
-		
-		query.createAlias("principalInvestigator", "pi");
+				.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE))
+				.createAlias("principalInvestigator", "pi");
 		addSearchConditions(query, cpCriteria);
 		addProjections(query, cpCriteria);
 		
