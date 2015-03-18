@@ -96,11 +96,15 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
 
     Specimen.prototype.getEvents = function() {
       var events = [];
-      $http.get(Specimen.url() + '/' + this.$id() + '/events').then(
-        function(result) {
-          Util.unshiftAll(events, getEventsList(result.data));
-        }
-      );
+
+      if (!!this.$id()) {
+        $http.get(Specimen.url() + '/' + this.$id() + '/events').then(
+          function(result) {
+            Util.unshiftAll(events, getEventsList(result.data));
+          }
+        );
+      }
+
       return events;
     };
 
