@@ -66,17 +66,13 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 			return;
 		}
 		
-		Set<Site> repositories = new HashSet<Site>();
-		for (String repositoryName : repositoryNames) {
-			Site repository = daoFactory.getSiteDao().getSiteByName(repositoryName);
-			if (repository == null){
-				ose.addError(CpErrorCode.INVALID_REPOSITORIES);
-				return;
-			}
-			repositories.add(repository);
+		List<Site> repositories = daoFactory.getSiteDao().getSitesByNames(repositoryNames);
+		if (repositories.size() != repositoryNames.size()) {
+			ose.addError(CpErrorCode.INVALID_REPOSITORIES);
+			return;
 		}
 		
-		result.setRepositories(repositories);
+		result.setRepositories(new HashSet<Site>(repositories));
 	}
 
 	private void setTitle(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
