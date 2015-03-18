@@ -16,7 +16,7 @@
       ng-if="specimens && specimens.length > 0">
       <div class="os-table-head">
         <div class="row">
-          <div class="col col-xs-6">
+          <div class="col col-xs-5">
             <div class="clearfix">
               <div class="pull-left os-select-specimen-cb">
                 <os-checkbox ng-model="selection.all" ng-change="toggleAllSpecimenSelect()"></os-checkbox>
@@ -26,7 +26,7 @@
               </div>
             </div>
           </div>
-          <div class="col col-xs-2" translate="specimens.label">Label</div>
+          <div class="col col-xs-3" translate="specimens.label">Label</div>
           <div class="col col-xs-3" translate="specimens.location">Container</div>
           <div class="col col-xs-1">&nbsp;</div>
         </div>
@@ -36,7 +36,7 @@
           ng-repeat="specimen in specimens | openedTreeNodes">        
 
           <div class="row title" ng-class="{'selected': specimen.selected}">
-            <div class="col col-xs-6">
+            <div class="col col-xs-5">
               <div class="clearfix">
                 <div class="os-select-specimen-cb"> 
                   <os-checkbox ng-change="toggleSpecimenSelect(specimen)" ng-model="specimen.selected"></os-checkbox>
@@ -65,7 +65,7 @@
                 </div>
               </div>
             </div>
-            <div class="col col-xs-2" ng-switch on="!!specimen.label">
+            <div class="col col-xs-3" ng-switch on="!!specimen.label">
               <span ng-switch-when="true">{{specimen.label}}</span>
               <span ng-switch-default>
                 <span ng-if="!!specimen.reqLabel">{{specimen.reqLabel}}</span>
