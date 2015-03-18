@@ -44,7 +44,7 @@ angular.module('os.administrative.user.dropdown', ['os.administrative.models'])
               :
 
               '<div>' +
-                '<ui-select ng-model="$parent.ngModel" on-select="$parent.onSelect($item)">' +
+                '<ui-select ng-model="$parent.ngModel">' +
                   '<ui-select-match placeholder="{{$parent.placeholder}}">' +
                     '{{$select.selected.lastName}}, {{$select.selected.firstName}}' +
                   '</ui-select-match>' +
