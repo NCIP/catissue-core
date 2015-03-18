@@ -37,9 +37,10 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
           .append(slot.occupied.occupyingEntityName);
         el.append(slotDesc);
       } else {
-        el.addClass("os-pointer-cursor")
+        el.append(getAddContainerMarker())
+          .addClass("os-pointer-cursor")
           .attr({'data-pos-x': posOne, 'data-pos-y': posTwo})
-          .attr('title', 'Click to add container/specimen');
+          .attr('title', 'Click to add container');
       }
 
       return el;
@@ -49,6 +50,11 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
       return $("<div class='slot'/>")
         .append("<div class='slot-dummy'></div>")
         .append(getContainerSlotEl(container, slot));
+    };
+
+    function getAddContainerMarker() {
+      return $("<div class='slot_add'/>")
+        .append("<span class='fa fa-plus'></span>");
     };
 
     return {
@@ -65,6 +71,10 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
       link: function(scope, element, attrs) {
         scope.addContainer = function($event) {
           var target = angular.element($event.originalEvent.target);
+          while (!target.hasClass('slot-element') && !target.is("table")) {
+            target = target.parent();
+          }
+
           if (target.attr('data-pos-x') && target.attr('data-pos-y')) {
             scope.onAddEvent()(target.attr('data-pos-x'), target.attr('data-pos-y'));
           }
