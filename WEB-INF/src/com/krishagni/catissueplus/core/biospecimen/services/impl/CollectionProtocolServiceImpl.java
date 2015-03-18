@@ -142,6 +142,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueTitle(cp.getTitle(), ose);
+			ensureUniqueShortTitle(cp.getShortTitle(), ose);
 			ose.checkAndThrow();
 
 			daoFactory.getCollectionProtocolDao().saveOrUpdate(cp);
@@ -444,6 +445,13 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);
 		if (cp != null) {
 			ose.addError(CpErrorCode.DUP_TITLE);
+		}		
+	}
+	
+	private void ensureUniqueShortTitle(String shortTitle, OpenSpecimenException ose) {
+		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCpByShortTitle(shortTitle);
+		if (cp != null) {
+			ose.addError(CpErrorCode.DUP_SHORT_TITLE);
 		}
 	}
 	

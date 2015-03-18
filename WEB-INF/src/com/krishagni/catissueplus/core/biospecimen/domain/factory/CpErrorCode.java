@@ -5,6 +5,8 @@ import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 public enum CpErrorCode implements ErrorCode {
 	DUP_TITLE,
 	
+	DUP_SHORT_TITLE,
+	
 	TITLE_REQUIRED,
 	
 	SHORT_TITLE_REQUIRED,
