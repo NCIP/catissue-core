@@ -29,5 +29,26 @@
     <property name="activationDate" column="ACTIVATION_DATE" not-null="true"/>
 
     <property name="activityStatus" column="ACTIVITY_STATUS" not-null="true"/>
+
+    <query name="getAll">
+      select 
+        cs
+      from
+        com.krishagni.catissueplus.core.common.domain.ConfigSetting cs
+      where
+        cs.activityStatus = 'Active'
+    </query>
+
+    <query name="getAllByModule">
+      select
+        cs
+      from
+        com.krishagni.catissueplus.core.common.domain.ConfigSetting cs
+        join cs.property prop 
+        join prop.module module
+      where
+        cs.activityStatus = 'Active' and 
+        module.name = :name
+    </query>
   </class>
 </hibernate-mapping>
