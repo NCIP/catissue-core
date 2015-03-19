@@ -3,9 +3,6 @@ package com.krishagni.catissueplus.core.common.repository.impl;
 import java.util.List;
 
 import org.hibernate.LockMode;
-import org.hibernate.Session;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.krishagni.catissueplus.core.common.domain.KeySequence;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
@@ -15,10 +12,8 @@ public class UniqueIdGeneratorImpl extends AbstractDao<KeySequence> implements U
 
 	@SuppressWarnings("unchecked")
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public Long getUniqueId(String type, String id) {
-		Session session = sessionFactory.openSession();
-		List<KeySequence> seqs = session
+	public Long getUniqueId(String type, String id) { // TODO: Need to get a new transaction here and new session
+		List<KeySequence> seqs = sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_BY_TYPE_AND_TYPE_ID)
 				.setLockMode("ks", LockMode.PESSIMISTIC_WRITE)
 				.setString("type", type)
@@ -35,8 +30,7 @@ public class UniqueIdGeneratorImpl extends AbstractDao<KeySequence> implements U
 		}
 		
 		Long uniqueId = seq.increment();
-		session.saveOrUpdate(seq);
-		session.flush();
+		sessionFactory.getCurrentSession().saveOrUpdate(seq);
 		return uniqueId;
 	}
 	
