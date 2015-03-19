@@ -115,6 +115,8 @@ angular.module('openspecimen', [
       },
 
       initialize: function(token) {
+        $http.defaults.headers.common['X-OS-API-CLIENT'] = "webui";
+
         if (!token) {
           token = $window.localStorage['osAuthToken'];
           if (!token) {
@@ -179,7 +181,7 @@ angular.module('openspecimen', [
     ApiUtil.initialize();
 
     $rootScope.$on('$stateChangeSuccess', 
-      function(event, toState, toParams, fromState, fromParams) { 
+      function(event, toState, toParams, fromState, fromParams) {
         $rootScope.state = toState;
       });
 
