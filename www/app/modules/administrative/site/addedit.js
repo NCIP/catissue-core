@@ -10,7 +10,7 @@ angular.module('os.administrative.site.addedit', ['os.administrative.models'])
       $scope.siteTypes = PvManager.getPvs('site-type');
 
       $scope.institutes = [];
-      Institute.list().then(
+      Institute.query().then(
         function(instituteList) {
           angular.forEach(instituteList, function(institute) {
             $scope.institutes.push(institute.name);
