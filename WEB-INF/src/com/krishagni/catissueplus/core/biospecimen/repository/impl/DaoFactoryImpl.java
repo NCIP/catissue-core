@@ -32,7 +32,9 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenRequirementDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+import com.krishagni.catissueplus.core.common.repository.ConfigSettingDao;
 import com.krishagni.catissueplus.core.common.repository.UniqueIdGenerator;
+import com.krishagni.catissueplus.core.common.repository.impl.ConfigSettingDaoImpl;
 import com.krishagni.catissueplus.core.common.repository.impl.UniqueIdGeneratorImpl;
 import com.krishagni.catissueplus.core.notification.repository.CPStudyMappingDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
@@ -200,6 +202,13 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public ScheduledJobDao getScheduledJobDao() {
 		ScheduledJobDaoImpl dao = new ScheduledJobDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public ConfigSettingDao getConfigSettingDao() {
+		ConfigSettingDaoImpl dao = new ConfigSettingDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

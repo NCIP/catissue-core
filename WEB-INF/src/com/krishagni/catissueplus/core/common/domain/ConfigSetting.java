@@ -15,7 +15,7 @@ public class ConfigSetting extends BaseEntity {
 	private Date activationDate;
 	
 	private String activityStatus;
-
+	
 	public ConfigProperty getProperty() {
 		return property;
 	}
