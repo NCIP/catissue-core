@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -33,7 +34,9 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(User.class, "u")
 				.add(Restrictions.ne("u.activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus()))
-				.setProjection(Projections.countDistinct("u.id"));
+				.setProjection(Projections.countDistinct("u.id"))
+				.addOrder(Order.asc("u.lastName"))
+				.addOrder(Order.asc("u.firstName"));
 		
 		addSearchConditions(criteria, userCriteria);
 		addProjectionFields(criteria);

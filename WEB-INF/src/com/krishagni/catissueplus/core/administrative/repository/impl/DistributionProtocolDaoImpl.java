@@ -8,6 +8,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
@@ -23,7 +24,8 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(DistributionProtocol.class)
 				.setFirstResult(dpCriteria.startAt())
 				.setMaxResults(dpCriteria.maxResults())
-				.add(Restrictions.ne("activityStatus", "Disabled"));
+				.add(Restrictions.ne("activityStatus", "Disabled"))
+				.addOrder(Order.asc("title"));
 
 		addSearchConditions(query, dpCriteria);
 		
