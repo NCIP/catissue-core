@@ -1095,4 +1095,138 @@
       referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
+
+  <changeSet author="vpawar" id="OS Modules table">
+    <createTable tableName="OS_MODULES">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="DESCRIPTION" type="${text.type}(64)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Modules table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_MODULES_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="OS Module Config Properties table">
+    <createTable tableName="OS_CFG_PROPS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="DISPLAY_NAME_CODE" type="${text.type}(32)"/>
+
+      <column name="DESC_CODE" type="${text.type}(32)"/>
+
+      <column name="DATA_TYPE" type="${text.type}(8)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="MODULE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Config properties table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_CFG_PROPS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on module id of config properties table">
+    <addForeignKeyConstraint 
+      constraintName="FK_CFG_PROPS_MODULE_ID"
+      baseTableName="OS_CFG_PROPS"
+      baseColumnNames="MODULE_ID"
+      referencedTableName="OS_MODULES"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="OS Module config property allowed values table">
+    <createTable tableName="OS_CFG_PROP_ALLOWED_VALUES">
+      <column name="PROPERTY_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="VALUE" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add primary key of prop allowed values table">
+    <addPrimaryKey tableName="OS_CFG_PROP_ALLOWED_VALUES"
+      columnNames="PROPERTY_ID, VALUE"
+      constraintName="PK_OS_CFG_PROP_ALLOWED_VALS"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on property id of prop allowed values table">
+    <addForeignKeyConstraint 
+      constraintName="FK_CFG_PROP_ALLOWED_VALS_PID"
+      baseTableName="OS_CFG_PROP_ALLOWED_VALUES"
+      baseColumnNames="PROPERTY_ID"
+      referencedTableName="OS_CFG_PROPS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="OS Module Config Settings table">
+    <createTable tableName="OS_CFG_SETTINGS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="PROPERTY_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="VALUE" type="${text.type}(255)"/>
+
+      <column name="ACTIVATED_BY" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ACTIVATION_DATE" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on property id of config settings">
+    <addForeignKeyConstraint 
+      constraintName="FK_CFG_SETTINGS_PROP_ID"
+      baseTableName="OS_CFG_SETTINGS"
+      baseColumnNames="PROPERTY_ID"
+      referencedTableName="OS_CFG_PROPS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on activated by of config settings">
+    <addForeignKeyConstraint 
+      constraintName="FK_CFG_SETTINGS_ACTIVATED_BY"
+      baseTableName="OS_CFG_SETTINGS"
+      baseColumnNames="ACTIVATED_BY"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
 </databaseChangeLog>
