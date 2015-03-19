@@ -109,8 +109,12 @@ public class AuthTokenFilter extends GenericFilterBean {
 		}
 		
 		if (userDetails == null) {
-			boolean isWebUiClient = (httpReq.getHeader(OS_CLIENT_HDR) != null && httpReq.getHeader(OS_CLIENT_HDR).equals("webui"));
-			sendRequireAuthResp(httpResp, isWebUiClient);
+			String clientHdr = httpReq.getHeader(OS_CLIENT_HDR);
+                        if (clientHdr != null && clientHdr.equals("webui")) {
+				setUnauthorizedResp(httpResp);
+			} else {
+				setRequireAuthResp(httpResp);
+			}
 			return;
 		}
 		
@@ -150,10 +154,12 @@ public class AuthTokenFilter extends GenericFilterBean {
 		return null;
 	}
 
-	private void sendRequireAuthResp(HttpServletResponse httpResp, boolean isWebUiClient) throws IOException {
-		if (!isWebUiClient) {
-			httpResp.setHeader(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"OpenSpecimen\"");
-		}
+	private void setRequireAuthResp(HttpServletResponse httpResp) throws IOException {
+		httpResp.setHeader(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"OpenSpecimen\"");
+		setUnauthorizedResp(httpResp);
+	}
+
+	private void setUnauthorizedResp(HttpServletResponse httpResp) throws IOException {
 		httpResp.sendError(HttpServletResponse.SC_UNAUTHORIZED,
 				"You must supply valid credentials to access the OpenSpecimen REST API");
 	}
