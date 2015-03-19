@@ -33,6 +33,8 @@ import edu.wustl.common.beans.SessionDataBean;
 public class AuthTokenFilter extends GenericFilterBean {
 	private static final String OS_AUTH_TOKEN_HDR = "X-OS-API-TOKEN";
 	
+	private static final String OS_CLIENT_HDR = "X-OS-API-CLIENT";
+	
 	private static final String BASIC_AUTH = "Basic ";
 	
 	private static final String DEFAULT_AUTH_DOMAIN = "openspecimen";
@@ -69,7 +71,7 @@ public class AuthTokenFilter extends GenericFilterBean {
 		httpResp.setHeader("Access-Control-Allow-Origin", "http://localhost:9000");
 		httpResp.setHeader("Access-Control-Allow-Credentials", "true");
 		httpResp.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-		httpResp.setHeader("Access-Control-Allow-Headers", "Origin, Accept, Content-Type, X-OS-API-TOKEN");			
+		httpResp.setHeader("Access-Control-Allow-Headers", "Origin, Accept, Content-Type, X-OS-API-TOKEN, X-OS-API-CLIENT");
 		
 		if (httpReq.getMethod().equalsIgnoreCase("options")) {
 			httpResp.setStatus(HttpServletResponse.SC_OK);	
@@ -102,14 +104,17 @@ public class AuthTokenFilter extends GenericFilterBean {
 			if (atResp.isSuccessful()) {
 				userDetails = atResp.getPayload();
 			}
-		} 
-		
-		if(userDetails == null && httpReq.getHeader(HttpHeaders.AUTHORIZATION) != null) {
+		} else if(httpReq.getHeader(HttpHeaders.AUTHORIZATION) != null) {
 			userDetails = doBasicAuthentication(httpReq, httpResp);
 		}
 		
 		if (userDetails == null) {
-			sendRequireAuthResp(httpResp);
+			String clientHdr = httpReq.getHeader(OS_CLIENT_HDR);
+                        if (clientHdr != null && clientHdr.equals("webui")) {
+				setUnauthorizedResp(httpResp);
+			} else {
+				setRequireAuthResp(httpResp);
+			}
 			return;
 		}
 		
@@ -149,8 +154,12 @@ public class AuthTokenFilter extends GenericFilterBean {
 		return null;
 	}
 
-	private void sendRequireAuthResp(HttpServletResponse httpResp) throws IOException {
+	private void setRequireAuthResp(HttpServletResponse httpResp) throws IOException {
 		httpResp.setHeader(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"OpenSpecimen\"");
+		setUnauthorizedResp(httpResp);
+	}
+
+	private void setUnauthorizedResp(HttpServletResponse httpResp) throws IOException {
 		httpResp.sendError(HttpServletResponse.SC_UNAUTHORIZED,
 				"You must supply valid credentials to access the OpenSpecimen REST API");
 	}

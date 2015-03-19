@@ -3,7 +3,6 @@ angular.module('os.common.models', [])
   .factory('osModel', function(ApiUrls, $http, $q) {
     function ModelFactory(modelName, initCb) {
       var url = ApiUrls.getBaseUrl() + modelName + '/';
-      
     
       var Model = function(data) {
         angular.extend(this, data);
@@ -97,6 +96,15 @@ angular.module('os.common.models', [])
       Model.prototype.$saveProps = function() { 
         return this;
       };
+
+      Model.prototype.copyAttrsIfNotPresent = function(src) {
+        var that = this;
+        angular.forEach(src, function(value, attr) {
+          if (!that[attr]) {
+            that[attr] = value;
+          }
+        })
+      }
 
       return Model;
     };

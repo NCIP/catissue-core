@@ -1,9 +1,22 @@
 angular.module('os.administrative.site.detail', ['os.administrative.models'])
-  .controller('SiteDetailCtrl', function($scope, $q, site, PvManager) {
+  .controller('SiteDetailCtrl', function($scope, $q, site, Institute, PvManager) {
 
     function init() {
       $scope.site = site;
+      $scope.institutes = [];
+      loadPvs();
+    }
+
+    function loadPvs() {
       $scope.siteTypes = PvManager.getPvs('site-type');
+
+      Institute.list().then(
+        function(instituteList) {
+          angular.forEach(instituteList, function(institute) {
+            $scope.institutes.push(institute.name);
+          });
+        }
+      );
     }
 
     $scope.editSite = function(property, value) {

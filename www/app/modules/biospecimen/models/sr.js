@@ -1,8 +1,10 @@
 angular.module('os.biospecimen.models.sr', ['os.common.models'])
-  .factory('SpecimenRequirement', function(osModel, $http) {
+  .factory('SpecimenRequirement', function(osModel, $http, PvManager) {
     var Sr = osModel(
       'specimen-requirements',
       function(sr) {
+        sr.copyAttrsIfNotPresent(getDefaultProps())
+
         if (!sr.children) {
           return;
         }
@@ -10,8 +12,20 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
         sr.children = sr.children.map(function(child) {
             return new Sr(child);
         });
+
       }
     );
+
+    function getDefaultProps() {
+      var notSpecified = PvManager.notSpecified();
+      return {
+        anatomicSite: notSpecified,
+        laterality: notSpecified,
+        pathologyStatus: notSpecified,
+        collectionContainer: notSpecified,
+        collectionProcedure: notSpecified
+      }
+    }
  
     Sr.listFor = function(cpeId) {
       return Sr.query({eventId: cpeId});
@@ -53,6 +67,9 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
     };
 
     Sr.prototype.hasSufficientQty = function(aliquotReq) {
+      if (!angular.isDefined(aliquotReq.qtyPerAliquot)) {
+        return true;
+      }
       var reqQty = aliquotReq.noOfAliquots * aliquotReq.qtyPerAliquot;
       return reqQty <= this.availableQty();
     };

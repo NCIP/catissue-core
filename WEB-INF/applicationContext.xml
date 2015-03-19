@@ -126,8 +126,8 @@
   </bean>
   
   <bean id="cpFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolFactoryImpl">
-    <property name="userDao" ref="userDao"/>
     <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 
   <bean id="cpeFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CpeFactoryImpl">

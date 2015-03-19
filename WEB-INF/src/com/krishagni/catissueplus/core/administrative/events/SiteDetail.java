@@ -15,6 +15,8 @@ public class SiteDetail {
 	private Long id;
 	
 	private String name;
+	
+	private String instituteName;
 
 	private String code;
 
@@ -40,6 +42,14 @@ public class SiteDetail {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getInstituteName() {
+		return instituteName;
+	}
+
+	public void setInstituteName(String instituteName) {
+		this.instituteName = instituteName;
 	}
 
 	public String getCode() {
@@ -86,6 +96,7 @@ public class SiteDetail {
 		SiteDetail siteDto = new SiteDetail();
 		siteDto.setId(site.getId());
 		siteDto.setName(site.getName());
+		siteDto.setInstituteName(site.getInstitute().getName());
 		siteDto.setCode(site.getCode());
 		siteDto.setType(site.getType());
 		siteDto.setActivityStatus(site.getActivityStatus());

@@ -264,7 +264,7 @@ public class SpecimenRequirement {
 	public Double getQtyAfterAliquotsUse() {
 		Double available = initialQuantity;
 		for (SpecimenRequirement childReq : childSpecimenRequirements) {
-			if (childReq.isAliquot()) {
+			if (childReq.isAliquot() && childReq.getInitialQuantity() != null) {
 				available -= childReq.getInitialQuantity();
 			}
 		}

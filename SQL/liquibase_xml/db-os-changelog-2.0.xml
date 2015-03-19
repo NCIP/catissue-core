@@ -742,7 +742,7 @@
     <addPrimaryKey columnNames="IDENTIFIER" tableName="CATISSUE_DISPOSAL_EVENT_PARAM"/>
   </changeSet>
 
-<changeSet author="mibrahim" id="Creating scheduled jobs table" failOnError="true">
+  <changeSet author="mibrahim" id="Creating scheduled jobs table" failOnError="true">
     <createTable tableName="OS_SCHEDULED_JOBS">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
         <constraints primaryKey="true" nullable="false"/>
@@ -1229,4 +1229,33 @@
       referencedTableName="CATISSUE_USER"
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Drop aliquot in same container column from collection_protocol">
+    <dropColumn
+      columnName="ALIQUOT_IN_SAME_CONTAINER"
+      tableName="CATISSUE_COLLECTION_PROTOCOL"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop consents waived column from collection_protocol">
+    <dropColumn
+      columnName="CONSENTS_WAIVED"
+      tableName="CATISSUE_COLLECTION_PROTOCOL"/>
+  </changeSet>
+
+  <changeSet author="vlonuste" id="Add institute column to site table">
+    <addColumn tableName="CATISSUE_SITE">
+      <column name="INSTITUTE_ID" type="${int.type}" defaultValue="null">
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="FK on institute of site">
+    <addForeignKeyConstraint
+      constraintName="FK_CT_SITE_INSTITUTE_ID"
+      baseTableName="CATISSUE_SITE"
+      baseColumnNames="INSTITUTE_ID"
+      referencedTableName="CATISSUE_INSTITUTION"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+  
 </databaseChangeLog>

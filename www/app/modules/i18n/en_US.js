@@ -51,12 +51,15 @@
     "import_cp_title": "Import Collection Protocol",
 
     "cp_def_file": "Collection Protocol Definition File",
-    
+  
+    "repositories": "Repositories", 
     "title": "Title",
     "short_title": "Short Title",
     "pi": "Principal Investigator",
     "coordinators": "Protocol Coordinators",
+    "date": "Date",
     "start_date": "Start Date",
+    "end_date": "End Date",
     "consents_waived": "Consents Waived",
     "ethics_approval_id": "Ethics Approval ID",
     "ppid_fmt": "Protocol Identifier Format",
@@ -321,7 +324,7 @@
  
     "buttons": {
       "create_aliquots": "Create Aliquots",
-      "create_derived": "Create Derived",
+      "create_derivative": "Create Derivative",
       "add_sr": "Add Specimen Requirement..."
     },
 
@@ -362,6 +365,7 @@
     "create_site": "Create Site",
     "update_site": "Update Site",
     "name": "Name",
+    "institute": "Institute",
     "code": "Code",
     "coordinators": "Coordinators",
     "type": "Type",
@@ -392,7 +396,9 @@
     "title": "Title",
     "short_title": "Short Title",
     "pi": "Principal Investigator",
+    "date": "Date",
     "start_date": "Start Date",
+    "end_date": "End Date",
     "irb_id": "IRB ID",
     "description_url": "Description URL",
         

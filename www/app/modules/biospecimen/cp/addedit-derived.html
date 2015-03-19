@@ -22,18 +22,24 @@
 
       <div class="col-xs-3">
         <div class="form-group">
-          <input name="quantity" ng-model="derivative.quantity" 
-            os-md-input class="form-control" type="text" placeholder="{{'srs.qty' | translate}}"
-            required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+          <div class="os-input-addon-grp">
+            <input name="quantity" ng-model="derivative.quantity" 
+              os-md-input class="form-control" type="text" placeholder="{{'srs.qty' | translate}}"
+              required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+            <div class="os-input-addon-right" os-specimen-qty-unit="derivative.specimenClass"></div>
+          </div>
           <div os-field-error field="derivativeForm.quantity"></div>
         </div>
       </div>
 
       <div class="col-xs-3" ng-if="derivative.specimenClass == 'Molecular'">
         <div class="form-group">
-          <input name="concentration" ng-model="derivative.concentration" 
-            os-md-input class="form-control" type="text" placeholder="{{'srs.concentration' | translate}}"
-            required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+          <div class="os-input-addon-grp">
+            <input name="concentration" ng-model="derivative.concentration" 
+              os-md-input class="form-control" type="text" placeholder="{{'srs.concentration' | translate}}"
+              ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/" ng-model-options="{allowInvalid: 'true'}">
+            <span class="os-input-addon-right">µg/µl</span>
+          </div>
           <div os-field-error field="derivativeForm.concentration"></div>
         </div>
       </div>
@@ -66,8 +72,8 @@
     <div class="form-group clearfix">
       <div class="col-xs-12">
         <button type="submit" class="btn btn-success" os-form-submit="createDerivative()"
-          translate="srs.buttons.create_derived">
-          Create Derived
+          translate="srs.buttons.create_derivative">
+          Create Derivative
         </button>
         <a class="btn os-btn-text-secondary" ng-click="revertEdit()" translate="common.buttons.cancel">
           Cancel

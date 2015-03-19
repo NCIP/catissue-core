@@ -7,13 +7,14 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -21,16 +22,16 @@ import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory {
-	private UserDao userDao;
+	private DaoFactory daoFactory;
 	
 	private LabelGenerator specimenLabelGenerator;
-
-	public UserDao getUserDao() {
-		return userDao;
+	
+	public DaoFactory getDaoFactory() {
+		return daoFactory;
 	}
 
-	public void setUserDao(UserDao userDao) {
-		this.userDao = userDao;
+	public void setDaoFactory(DaoFactory daoFactory) {
+		this.daoFactory = daoFactory;
 	}
 	
 	public void setSpecimenLabelGenerator(LabelGenerator specimenLabelGenerator) {
@@ -44,24 +45,40 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
 		cp.setId(input.getId());
+		setRepositories(input, cp, ose);
 		setTitle(input, cp, ose);
 		setShortTitle(input, cp, ose);
 		setPrincipalInvestigator(input, cp, ose);
 		cp.setStartDate(input.getStartDate());
+		cp.setEndDate(input.getEndDate());
 		setCoordinators(input, cp, ose);
-		setConsentsWaived(input, cp, ose);
 
 		cp.setIrbIdentifier(input.getIrbId());
 		cp.setPpidFormat(input.getPpidFmt());
 		cp.setEnrollment(input.getAnticipatedParticipantsCount());
 		cp.setDescriptionURL(input.getDescriptionUrl());
-		cp.setAliquotInSameContainer(input.getAliquotsInSameContainer());
 
 		setLabelFormats(input, cp, ose);
 		setActivityStatus(input, cp, ose);
 
 		ose.checkAndThrow();
 		return cp;
+	}
+	
+	private void setRepositories(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
+		List<String> repositoryNames = input.getRepositoryNames();
+		if (CollectionUtils.isEmpty(repositoryNames)) {
+			ose.addError(CpErrorCode.REPOSITORIES_REQUIRED);
+			return;
+		}
+		
+		List<Site> repositories = daoFactory.getSiteDao().getSitesByNames(repositoryNames);
+		if (repositories.size() != repositoryNames.size()) {
+			ose.addError(CpErrorCode.INVALID_REPOSITORIES);
+			return;
+		}
+		
+		result.setRepositories(new HashSet<Site>(repositories));
 	}
 
 	private void setTitle(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
@@ -86,9 +103,9 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		UserSummary user = input.getPrincipalInvestigator();		
 		User pi = null;
 		if (user != null && user.getId() != null) {
-			pi = userDao.getById(user.getId());
+			pi = daoFactory.getUserDao().getById(user.getId());
 		} else if (user != null && user.getLoginName() != null && user.getDomain() != null) {
-			pi = userDao.getUser(user.getLoginName(), user.getDomain());
+			pi = daoFactory.getUserDao().getUser(user.getLoginName(), user.getDomain());
 		} else {			
 			ose.addError(CpErrorCode.PI_REQUIRED);
 			return;
@@ -100,7 +117,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 
 		result.setPrincipalInvestigator(pi);
 	}
-
+	
 	private void setCoordinators(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {		
 		List<UserSummary> users = input.getCoordinators();
 		if (CollectionUtils.isEmpty(users)) {
@@ -112,9 +129,9 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 			User coordinator = null;
 			
 			if (user.getId() != null) {
-				coordinator = userDao.getById(user.getId());
+				coordinator = daoFactory.getUserDao().getById(user.getId());
 			} else if (user.getLoginName() != null && user.getDomain() != null) {
-				coordinator = userDao.getUser(user.getLoginName(), user.getDomain());
+				coordinator = daoFactory.getUserDao().getUser(user.getLoginName(), user.getDomain());
 			} else {
 				ose.addError(CpErrorCode.INVALID_COORDINATORS);
 				return;
@@ -125,16 +142,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 
 		result.setCoordinators(coordinators);
 	}
-
-	private void setConsentsWaived(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
-		if (input.getConsentsWaived() == null) {
-			ose.addError(CpErrorCode.CONSENTS_WAIVED_REQUIRED);
-			return;
-		}
-
-		result.setConsentsWaived(input.getConsentsWaived());
-	}
-
+	
 	private void setActivityStatus(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(input.getActivityStatus())) {
 			result.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
