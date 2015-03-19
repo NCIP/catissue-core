@@ -907,18 +907,18 @@
     </createTable>
   </changeSet>
 
-  <changeSet author="mibrahim" id="create permissions table" failOnError="true">
+  <changeSet author="mibrahim" id="create permissions table for rbac" failOnError="true">
     <createTable tableName="RBAC_PERMISSIONS">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
         <constraints primaryKey="true" nullable="false"/>
       </column>
 
       <column name="RESOURCE_ID" type="${int.type}">
-        <constraints unique="true" nullable="false" />
+        <constraints nullable="false" />
       </column>
 
       <column name="OPERATION_ID" type="${int.type}">
-        <constraints unique="true" nullable="false" />
+        <constraints nullable="false" />
       </column>
      
     </createTable>
