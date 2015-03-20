@@ -9,6 +9,8 @@ public class CpListCriteria extends AbstractListCriteria<CpListCriteria> {
 	
 	private Long piId;
 	
+	private String repositoryName;
+	
 	private boolean includePi;
 	
 	@Override
@@ -31,6 +33,15 @@ public class CpListCriteria extends AbstractListCriteria<CpListCriteria> {
 	
 	public CpListCriteria piId(Long piId) {
 		this.piId = piId;
+		return self();
+	}
+	
+	public String repositoryName() {
+		return this.repositoryName;
+	}
+	
+	public CpListCriteria repositoryName(String repositoryName) {
+		this.repositoryName = repositoryName;
 		return self();
 	}
 	

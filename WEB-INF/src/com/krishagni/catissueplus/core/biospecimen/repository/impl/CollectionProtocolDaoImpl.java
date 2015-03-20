@@ -177,10 +177,28 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 			query.add(searchCond);
 		}
 		
+		addPiCondition(query, cpCriteria);
+		addSiteCondition(query, cpCriteria);
+		
+	}
+
+	private void addPiCondition(Criteria query, CpListCriteria cpCriteria) {
 		Long piId = cpCriteria.piId();
-		if (piId != null) {
-			query.add(Restrictions.eq("pi.id", piId));
+		if (piId == null) {
+			return;
 		}
+		
+		query.add(Restrictions.eq("pi.id", piId));
+	}
+	
+	private void addSiteCondition(Criteria query, CpListCriteria cpCriteria) {
+		String repositoryName = cpCriteria.repositoryName();
+		if (StringUtils.isBlank(repositoryName)) {
+			return;
+		}
+		
+		query.createCriteria("repositories")
+			.add(Restrictions.eq("name", repositoryName));
 	}
 	
 	private void addProjections(Criteria query, CpListCriteria cpCriteria) {
