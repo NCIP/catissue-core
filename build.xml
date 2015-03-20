@@ -1149,6 +1149,9 @@
 				<fileset dir="${lib.dir}">
 					<include name="*.jar"/>
 				</fileset>
+				<fileset dir="./WEB-INF/integration-test/lib">
+					<include name="*.jar"/>
+				</fileset>
 				<pathelement location="${lib.dir}/aspectjrt-1.5.0.jar"/>
 			</classpath>
 		</iajc>		
@@ -1257,14 +1260,17 @@
 						<pathelement path="${target.dir}" />
 					</classpath>
 					<classpath>
-						<fileset dir="${base.dir}/WEB-INF/lib">
+						<fileset dir="${base.dir}/WEB-INF/integration-test/lib">
 							<include name="*.jar" />
+						</fileset>
+						<fileset dir="${base.dir}/WEB-INF/lib">
+						    <include name="*.jar" />
 						</fileset>
 					</classpath>
 					<formatter type="xml" />
 					<batchtest todir="${base.dir}/integration-test-results">
 						<fileset dir="${base.dir}/WEB-INF/integration-test">
-							<include name="com/**/*Test.java" />
+						    <include name="com/**/*Test.java" />
 						</fileset>
 					</batchtest>
 				</junit>
@@ -1278,8 +1284,11 @@
 						<pathelement path="${target.dir}" />
 					</classpath>
 					<classpath>
-						<fileset dir="${base.dir}/WEB-INF/lib">
+						<fileset dir="${base.dir}/WEB-INF/integration-test/lib">
 							<include name="*.jar" />
+						</fileset>
+						<fileset dir="${base.dir}/WEB-INF/lib">
+						    <include name="*.jar" />
 						</fileset>
 					</classpath>
 					<formatter type="xml" />
