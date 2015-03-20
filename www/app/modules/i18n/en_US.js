@@ -112,7 +112,9 @@
       "filter_title": "Collection Protocol Title",
       "title_or_short_title": "Title / Short Title",
       "title": "Type the title",
-      "pi": "Select principal investigator"
+      "pi": "Select principal investigator",
+      "repository": "Repository",
+      "select_repository": "Select repository"
     }
   },
 
