@@ -35,16 +35,13 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 				.createCriteria(User.class, "u")
 				.add(Restrictions.ne("u.activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus()))
 				.setProjection(Projections.countDistinct("u.id"))
+				.setFirstResult(userCriteria.startAt())
+				.setMaxResults(userCriteria.maxResults())
 				.addOrder(Order.asc("u.lastName"))
 				.addOrder(Order.asc("u.firstName"));
 		
 		addSearchConditions(criteria, userCriteria);
 		addProjectionFields(criteria);
-		
-		criteria.addOrder(Order.asc("u.lastName"))
-			.addOrder(Order.asc("u.firstName"))
-			.setFirstResult(userCriteria.startAt())
-			.setMaxResults(userCriteria.maxResults());
 		
 		return getUsers(criteria.list());
 	}
