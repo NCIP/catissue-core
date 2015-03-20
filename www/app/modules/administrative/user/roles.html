@@ -1,6 +1,9 @@
 <div class="clearfix">
   <div class="col-xs-10">
     <div class="list-group">
+      <div class="list-group-item os-section-hdr">
+        <span translate="user.role.roles">Roles</span>
+      </div>
       <div class="list-group-item" ng-if="userRolesList.length == 0 && !addMode">
         <div class="alert alert-warning">
           <span translate="user.role.no_roles">
@@ -20,19 +23,19 @@
             </div>
           </div>
           <div class="os-table-body">
-            <div ng-repeat="role in userRolesList"  ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
+            <div ng-repeat="role in userRolesList">
               <div class="row" ng-if="role.id != currentRole.id">
                 <div class="col col-xs-3 os-ellipsis">{{role.site || 'user.role.all' | translate}}</div>
                 <div class="col col-xs-5 os-ellipsis">{{role.cp || 'user.role.all' | translate}}</div>
                 <div class="col col-xs-3 os-ellipsis">{{role.role}}</div>
 
                 <div class="col col-xs-1 action">
-                  <div class="btn-group" ng-if="showBtns">
+                  <div class="btn-group">
                     <button class="btn btn-xs btn-default os-btn-icon" ng-click="showEditRole(role)">
                       <span class="fa fa-pencil"></span>
                     </button>
                     <button class="btn btn-xs btn-default os-btn-icon" ng-click="removeRole(role)">
-                      <span class="fa fa-remove"></span>
+                      <span class="fa fa-trash"></span>
                     </button>
                   </div>
                 </div>

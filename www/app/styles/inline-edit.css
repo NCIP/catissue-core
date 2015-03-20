@@ -29,7 +29,15 @@
   display: none;
 }
 
-.os-inline-editable.inactive:hover {
+/**
+ * In OS version 2.0 we are not supporting inline edit,
+ * hence commented following two css
+ * 1. "os-inline-editable.inactive:hover"
+ * 2. "os-inline-editable.inactive:hover button"
+ * which was used to show editable box on hover
+ */
+
+/*.os-inline-editable.inactive:hover {
   box-shadow: 0 0 0 1px #ccc;
   border-radius: 4px;
 }
@@ -47,7 +55,7 @@
   border-top: 0px;
   border-bottom: 0px;
   height: 100%;
-}
+}*/
 
 .os-inline-editable .action-btns {
   position: absolute;

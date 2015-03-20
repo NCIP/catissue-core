@@ -25,11 +25,6 @@
   font-weight: bold;
 }
 
-.os-table .os-table-body .row .col .btn-xs {
-  margin-top: -4px;
-  border-radius: 0px;
-}
-
 .os-table .os-table-head .row:first-child .col {
   border-top: 0;
 }

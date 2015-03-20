@@ -31,7 +31,7 @@ angular.module('os.administrative.user.dropdown', ['os.administrative.models'])
       template: function(tElem, tAttrs) {
         return angular.isDefined(tAttrs.multiple) ?
               '<div>' +
-                '<ui-select multiple ng-model="$parent.ngModel">' +
+                '<ui-select multiple ng-model="$parent.ngModel" reset-search-input="true">' +
                   '<ui-select-match placeholder="{{$parent.placeholder}}">' +
                     '{{$item.lastName}}, {{$item.firstName}}' +
                   '</ui-select-match>' +
@@ -44,7 +44,7 @@ angular.module('os.administrative.user.dropdown', ['os.administrative.models'])
               :
 
               '<div>' +
-                '<ui-select ng-model="$parent.ngModel">' +
+                '<ui-select ng-model="$parent.ngModel" reset-search-input="true">' +
                   '<ui-select-match placeholder="{{$parent.placeholder}}">' +
                     '{{$select.selected.lastName}}, {{$select.selected.firstName}}' +
                   '</ui-select-match>' +

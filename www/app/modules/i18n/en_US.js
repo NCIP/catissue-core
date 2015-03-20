@@ -448,6 +448,7 @@
     "activity_status": "Activity Status",
 
     "role": {
+       "roles": "Roles",
        "new_role": "New Role",
        "add_role": "Add Role...",
        "update_role": "Update Role",
