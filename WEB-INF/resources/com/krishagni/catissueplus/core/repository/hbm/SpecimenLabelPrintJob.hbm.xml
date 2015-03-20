@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class
+    name="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenLabelPrintJob"
+    table="OS_SPECIMEN_LABEL_PRINT_JOBS">
+	
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_SPEC_LABEL_PRINT_JOBS_SEQ</param>
+      </generator>
+    </id>
+
+    <many-to-one
+      name="submittedBy"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      column="SUBMITTED_BY"/>
+ 
+    <property name="submissionDate" column="SUBMISSION_DATE" not-null="true"/>
+
+    <set name="items" table="OS_SPEC_LABEL_PRINT_JOB_ITEMS" inverse="true" cascade="all-delete-orphan">
+      <key column="JOB_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenLabelPrintJobItem"/>
+    </set>
+  </class>
+</hibernate-mapping>

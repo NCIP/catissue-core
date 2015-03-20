@@ -61,6 +61,9 @@
                 <mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConfigProperty.hbm.xml"/>
                 <mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConfigSetting.hbm.xml"/>
 
+                <mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenLabelPrintJob.hbm.xml"/>
+                <mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenLabelPrintJobItem.hbm.xml"/>
+
 		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperationJob.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperation.hbm.xml" />
 

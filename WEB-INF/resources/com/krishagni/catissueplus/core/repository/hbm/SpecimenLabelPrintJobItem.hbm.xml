@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class
+    name="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenLabelPrintJobItem"
+    table="OS_SPEC_LABEL_PRINT_JOB_ITEMS">
+	
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_SPEC_LBL_PRN_JOB_ITEMS_SEQ</param>
+      </generator>
+    </id>
+
+    <many-to-one
+      name="job"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenLabelPrintJob"
+      column="JOB_ID"/>
+ 
+    <many-to-one
+      name="specimen"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
+      column="SPECIMEN_ID"/>
+ 
+    <property name="printDate" column="PRINT_DATE"/>
+
+    <property name="printerName" column="PRINTER_NAME" not-null="true"/>
+
+    <property name="status" column="STATUS" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">
+          com.krishagni.catissueplus.core.biospecimen.domain.SpecimenLabelPrintJobItem$Status
+        </param>
+        <param name="type">
+          12
+        </param>
+      </type>
+    </property>
+
+    <property name="data" column="DATA" not-null="true"/>
+  </class>
+</hibernate-mapping>
