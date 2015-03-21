@@ -48,8 +48,8 @@ angular.module('os.common.models', [])
         return $http.get(url + id).then(Model.modelRespTransform);
       };
 
-      Model.getDependencies = function(id) {
-        return $http.get(url + id + '/dependencies').then(Model.noTransform);
+      Model.getDependencyStat = function(id) {
+        return $http.get(url + id + '/dependency-stat').then(Model.noTransform);
       }
 
       Model._lazyCollectionInit = function(source, dest) {

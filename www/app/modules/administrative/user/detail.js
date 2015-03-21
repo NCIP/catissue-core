@@ -25,14 +25,17 @@ angular.module('os.administrative.user.detail', ['os.administrative.models'])
 
     $scope.deleteUser = function() {
       var modalInstance = $modal.open({
-        templateUrl: 'modules/administrative/user/delete.html',
-        controller: 'UserDeleteCtrl',
+        templateUrl: 'modules/common/delete/delete-entity-template.html',
+        controller: 'entityDeleteCtrl',
         resolve: {
-          user: function() {
-            return $scope.user;
+          entityProps: function() {
+            return {
+              entity: $scope.user,
+              name: $scope.user.firstName + ' ' + $scope.user.lastName,
+            }
           },
-          userDependencies: function() {
-            return User.getDependencies($scope.user.id);
+          entityDependencyStat: function() {
+            return User.getDependencyStat($scope.user.id);
           }
         }
       });

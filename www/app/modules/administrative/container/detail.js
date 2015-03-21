@@ -28,14 +28,17 @@ angular.module('os.administrative.container.detail', ['os.administrative.models'
 
     $scope.deleteContainer = function() {
       var modalInstance = $modal.open({
-        templateUrl: 'modules/administrative/container/delete.html',
-        controller: 'ContainerDeleteCtrl',
+        templateUrl: 'modules/common/delete/delete-entity-template.html',
+        controller: 'entityDeleteCtrl',
         resolve: {
-          container: function () {
-            return $scope.container;
+          entityProps: function() {
+            return {
+              entity: $scope.container,
+              name: $scope.container.name,
+            }
           },
-          containerDependencies: function() {
-            return Container.getDependencies($scope.container.id);
+          entityDependencyStat: function() {
+            return Container.getDependencyStat($scope.container.id);
           }
         }
       });

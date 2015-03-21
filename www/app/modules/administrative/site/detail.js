@@ -14,14 +14,17 @@ angular.module('os.administrative.site.detail', ['os.administrative.models'])
 
     $scope.deleteSite = function() {
       var modalInstance = $modal.open({
-        templateUrl: 'modules/administrative/site/delete.html',
-        controller: 'SiteDeleteCtrl',
+        templateUrl: 'modules/common/delete/delete-entity-template.html',
+        controller: 'entityDeleteCtrl',
         resolve: {
-          site: function() {
-            return $scope.site;
+          entityProps: function() {
+            return {
+              entity: $scope.site,
+              name: $scope.site.name,
+            }
           },
-          siteDependencies: function() {
-            return Site.getDependencies($scope.site.id);
+          entityDependencyStat: function() {
+            return Site.getDependencyStat($scope.site.id);
           }
         }
       });

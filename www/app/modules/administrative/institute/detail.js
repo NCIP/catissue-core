@@ -8,14 +8,17 @@ angular.module('os.administrative.institute.detail', ['os.administrative.models'
 
     $scope.deleteInstitute = function() {
       var modalInstance = $modal.open({
-        templateUrl: 'modules/administrative/institute/delete.html',
-        controller: 'InstituteDeleteCtrl',
+        templateUrl: 'modules/common/delete/delete-entity-template.html',
+        controller: 'entityDeleteCtrl',
         resolve: {
-          institute: function () {
-            return $scope.institute;
+          entityProps: function() {
+            return {
+              entity: $scope.institute,
+              name: $scope.institute.name,
+            }
           },
-          instituteDependencies: function() {
-            return Institute.getDependencies($scope.institute.id);
+          entityDependencyStat: function() {
+            return Institute.getDependencyStat($scope.institute.id);
           }
         }
       });

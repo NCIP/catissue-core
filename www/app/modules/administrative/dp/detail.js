@@ -11,19 +11,22 @@ angular.module('os.administrative.dp.detail', ['os.administrative.models'])
 
     $scope.deleteDp = function() {
       var modalInstance = $modal.open({
-        templateUrl: 'modules/administrative/dp/delete.html',
-        controller: 'DpDeleteCtrl',
+        templateUrl: 'modules/common/delete/delete-entity-template.html',
+        controller: 'entityDeleteCtrl',
         resolve: {
-          distributionProtocol: function() {
-            return $scope.distributionProtocol;
+          entityProps: function() {
+            return {
+              entity: $scope.distributionProtocol,
+              name: $scope.distributionProtocol.name,
+            }
           },
-          dpDependencies: function() {
-            return DistributionProtocol.getDependencies($scope.distributionProtocol.id);
+          entityDependencyStat: function() {
+            return DistributionProtocol.getDependencyStat($scope.distributionProtocol.id);
           }
         }
       });
 
-      modalInstance.result.then(function () {
+      modalInstance.result.then(function (distributionProtocol) {
         $state.go('dp-list');
       });
     }

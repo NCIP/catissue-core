@@ -5,13 +5,22 @@
     </ul>
     <h3>{{distributionProtocol.shortTitle}}</h3>
 
-    <div>
-      <button class="os-round-btn" title="{{'dp.tooltip.edit' | translate}}" ui-sref="dp-addedit({dpId: distributionProtocol.id})">
-        <span class="fa fa-pencil"></span>
+    <button class="os-round-btn" title="{{'dp.tooltip.edit' | translate}}" ui-sref="dp-addedit({dpId: distributionProtocol.id})">
+      <span class="fa fa-pencil"></span>
+    </button>
+
+    <div class="os-more-options" dropdown>
+      <button class="os-options-button dropdown-toggle" >
+        <span class="fa fa-ellipsis-v"></span>
       </button>
-      <button class="os-round-btn" title="{{'dp.tooltip.delete' | translate}}" ng-click="deleteDp()">
-        <span class="fa fa-trash"></span>
-      </button>
+      <ul class="dropdown-menu dropdown-menu-right">
+        <li ng-click="deleteDp()">
+          <a>
+            <i class="fa fa-trash"></i>
+            <span translate="dp.menu_options.delete">Delete</span>
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 

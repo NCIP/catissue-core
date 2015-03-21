@@ -1,7 +1,7 @@
 <div class="clearfix">
   <div class="col-xs-8">
     <div class="alert alert-info" ng-if="user.activityStatus == 'Pending'">
-      <span translate="user.request_pending">Following are details of user whose approval is pending.</span>
+      <span>{{'user.request_pending' | translate: {name: user.firstName + ' ' + user.lastName} }}</span>
     </div>
     <ul class="os-key-values os-two-cols" os-inline-editors on-save="editUser">
       <li class="item">
