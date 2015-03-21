@@ -366,15 +366,9 @@ public class QueryServiceImpl implements QueryService {
 	@PlusTransactional
 	public ResponseEvent<List<QueryFolderSummary>> getUserFolders(RequestEvent<?> req) {
 		try {
-			Long userId = req.getSessionDataBean().getUserId();			
-			List<QueryFolder> queryFolders = daoFactory.getQueryFolderDao().getUserFolders(userId);
-
-			List<QueryFolderSummary> result = new ArrayList<QueryFolderSummary>();
-			for (QueryFolder folder : queryFolders) {
-				result.add(QueryFolderSummary.fromQueryFolder(folder));
-			}
-			
-			return ResponseEvent.response(result);
+			Long userId = AuthUtil.getCurrentUser().getId();			
+			List<QueryFolder> folders = daoFactory.getQueryFolderDao().getUserFolders(userId);			
+			return ResponseEvent.response(QueryFolderSummary.from(folders));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -390,12 +384,12 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !folder.canUserAccess(userId)) {
+			User user = AuthUtil.getCurrentUser();
+			if (!user.isAdmin() && !folder.canUserAccess(user.getId())) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
-			return ResponseEvent.response(QueryFolderDetails.fromQueryFolder(folder));			
+			return ResponseEvent.response(QueryFolderDetails.from(folder));			
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);			
 		}
@@ -409,17 +403,16 @@ public class QueryServiceImpl implements QueryService {
 			QueryFolderDetails folderDetails = req.getPayload();
 			
 			UserSummary owner = new UserSummary();
-			owner.setId(req.getSessionDataBean().getUserId());
+			owner.setId(AuthUtil.getCurrentUser().getId());
 			folderDetails.setOwner(owner);
 			
-			QueryFolder queryFolder = queryFolderFactory.createQueryFolder(folderDetails);	
-			
+			QueryFolder queryFolder = queryFolderFactory.createQueryFolder(folderDetails);			
 			daoFactory.getQueryFolderDao().saveOrUpdate(queryFolder);
 			
 			if (!queryFolder.getSharedWith().isEmpty()) {
 				sendFolderSharedEmail(queryFolder.getOwner(), queryFolder, queryFolder.getSharedWith());
 			}			
-			return ResponseEvent.response(QueryFolderDetails.fromQueryFolder(queryFolder));
+			return ResponseEvent.response(QueryFolderDetails.from(queryFolder));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -442,8 +435,8 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !existing.getOwner().getId().equals(userId)) {
+			User user = AuthUtil.getCurrentUser();
+			if (!user.isAdmin() && !existing.getOwner().equals(user)) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
@@ -459,10 +452,9 @@ public class QueryServiceImpl implements QueryService {
 			daoFactory.getQueryFolderDao().saveOrUpdate(existing);
 			
 			if (!newUsers.isEmpty()) {
-				User user = userDao.getById(userId);
 				sendFolderSharedEmail(user, queryFolder, newUsers);
 			}
-			return ResponseEvent.response(QueryFolderDetails.fromQueryFolder(existing));			
+			return ResponseEvent.response(QueryFolderDetails.from(existing));			
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -484,8 +476,8 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);								
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !existing.getOwner().getId().equals(userId)) {
+			User user = AuthUtil.getCurrentUser();			
+			if (!user.isAdmin() && !existing.getOwner().equals(user)) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
@@ -507,8 +499,8 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !folder.canUserAccess(userId)) {
+			User user = AuthUtil.getCurrentUser();
+			if (!user.isAdmin() && !folder.canUserAccess(user.getId())) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
@@ -541,8 +533,8 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !queryFolder.getOwner().getId().equals(userId)) {
+			User user = AuthUtil.getCurrentUser();
+			if (!user.isAdmin() && !queryFolder.getOwner().equals(user)) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
@@ -593,8 +585,8 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !queryFolder.getOwner().getId().equals(userId)) {
+			User user = AuthUtil.getCurrentUser();
+			if (!user.isAdmin() && !queryFolder.getOwner().equals(user)) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
@@ -624,12 +616,11 @@ public class QueryServiceImpl implements QueryService {
 											
 			daoFactory.getQueryFolderDao().saveOrUpdate(queryFolder);			
 			List<UserSummary> result = new ArrayList<UserSummary>();
-			for (User user : queryFolder.getSharedWith()) {
-				result.add(UserSummary.from(user));
+			for (User sharedUser : queryFolder.getSharedWith()) {
+				result.add(UserSummary.from(sharedUser));
 			}
 			
 			if (newUsers != null && !newUsers.isEmpty()) {
-				User user = userDao.getById(userId);
 				sendFolderSharedEmail(user, queryFolder, newUsers);
 			}
 			

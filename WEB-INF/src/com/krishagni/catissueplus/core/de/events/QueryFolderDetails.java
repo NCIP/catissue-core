@@ -31,7 +31,7 @@ public class QueryFolderDetails extends QueryFolderSummary {
 		this.queries = queries;
 	}
 
-	public static QueryFolderDetails fromQueryFolder(QueryFolder folder) {
+	public static QueryFolderDetails from(QueryFolder folder) {
 		QueryFolderDetails fd = new QueryFolderDetails();
 		fd.setId(folder.getId());
 		fd.setName(folder.getName());
