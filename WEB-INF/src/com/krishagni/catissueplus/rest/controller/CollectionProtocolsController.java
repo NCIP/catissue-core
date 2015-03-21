@@ -64,6 +64,9 @@ public class CollectionProtocolsController {
 			@RequestParam(value = "piId", required = false)
 			Long piId,
 			
+			@RequestParam(value = "repositoryName", required = false)
+			String repositoryName,
+			
 			@RequestParam(value = "startAt", required = false, defaultValue = "0") 
 			int startAt,
 			
@@ -80,6 +83,7 @@ public class CollectionProtocolsController {
 			.query(searchStr)
 			.title(title)
 			.piId(piId)
+			.repositoryName(repositoryName)
 			.includePi(detailedList)
 			.includeStat(detailedList)
 			.startAt(startAt)

@@ -95,8 +95,12 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
         cpsToRemove.push(role.cp);
       });
 
-      var promise = (site == $scope.all) ? CollectionProtocol.query() : CollectionProtocol.listCpsForSite(site);
-      promise.then(
+      var cpListOpts = {detailedList: false};
+      if (site != $scope.all) {
+        cpListOpts["repositoryName"] = site;
+      }
+
+      CollectionProtocol.list(cpListOpts).then(
         function(result) {
           $scope.cps = [];
           angular.forEach(result, function(cp) {
