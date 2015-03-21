@@ -258,6 +258,8 @@
     "event_time": "Date and Time",
     "no_events": "No events to show",
 
+    "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
+
     "ctx_menu": {
       "view_specimen": "View Specimen",
       "edit_specimen": "Edit Specimen",

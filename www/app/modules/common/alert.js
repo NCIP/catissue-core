@@ -29,8 +29,8 @@ angular.module('openspecimen')
         $timeout(function() { self.remove(msg); }, timeout);
       },
 
-      success: function(code, timeout) {
-        this.add($translate.instant(code), 'success', timeout);
+      success: function(code, params, timeout) {
+        this.add($translate.instant(code, params), 'success', timeout);
       },
 
       error: function(code, timeout) {
