@@ -8,7 +8,8 @@
     "sites": "Sites",
     "storage_containers": "Storage Containers",
     "distribution_protocols": "Distribution Protocols",
-    "roles": "Roles"
+    "roles": "Roles",
+    "queries": "Queries"
   },
 
   "common": {
@@ -604,6 +605,24 @@
     "new_record": "Create New Record",
 
     "record_saved": "Data saved successfully"
+  },
+
+  "queries": {
+    "list": "Queries",
+    "title": "Title",
+    "created_by": "Created By",
+    "last_updated": "Last Updated",
+    "edit": "Edit Query",
+    "download_def": "Download Query Definition",
+    "view_query_run_log": "View Query Run Log",
+    "delete": "Delete",
+
+    "no_queries": "No queries to show",
+    "info": "Information",
+
+    "tooltip": {
+      "view_records": "Click to View Records"
+    }
   }
 
 }

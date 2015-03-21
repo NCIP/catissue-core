@@ -4,6 +4,7 @@ angular.module('openspecimen', [
   'os.common',
   'os.biospecimen',
   'os.administrative',
+  'os.query',
 
   'ngMessages',
   'ngSanitize', 

@@ -323,19 +323,32 @@ h4 + .btn-group {
   color: white;
 }
 
-.os-table-body .os-more-options {
+.os-table-body .row .col.col-xs-1.os-more-options {
   position: relative;
   text-align: center;
+  padding: 0px!important;
+  overflow: visible;
+  top: 0px!important;
+  width: 8.33333333%!important;
 }
 
 .os-table-body .os-more-options .dropdown-toggle {
-  font-size: 18px;
+  font-size: 20px;
   color: #777777;
   background: transparent;
   border: 0px;
-  margin-top: -4px;
+  margin-top: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
+.os-table-body .os-more-options .dropdown-menu.dropdown-menu-right {
+  margin-right: 19px!important;
+}
+
+.os-table-body .os-more-options .dropdown-menu {
+  margin-left: 15px;
+}
 
 .os-btn-icon, a {
   cursor: pointer;

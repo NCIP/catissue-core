@@ -1,0 +1,117 @@
+<div>
+  <div os-page-header>
+    <h3> 
+      <span translate="queries.list">Queries</span>
+    </h3>
+    <button class="os-round-btn">
+      <span class="fa fa-plus"></span>
+    </button>
+    <div class="os-more-options">
+      <button os-right-drawer-toggle class="os-search-button">
+        <span class="fa fa-search"></span>
+      </button>
+    </div>
+  </div>    
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-offset-2 col-xs-10">
+        <div ng-include src="'query-list.html'"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="query-list.html">
+  <div class="os-table" overflow="auto" ng-if="queryList.queries.length > 0">
+    <div class="os-table-head">
+      <div class="row">
+        <div class="col col-xs-7" style="padding-left: 20px;" translate="queries.title">
+          Title
+        </div>
+        <div class="col col-xs-2" translate="queries.created_by">
+          Created By
+        </div>
+        <div class="col col-xs-2" translate="queries.last_updated">
+          Last Updated
+        </div>
+        <div class="col col-xs-1">&nbsp;</div>
+      </div>
+    </div>
+    <div class="os-table-body">
+      <div class="row" ng-repeat="query in queryList.queries"
+        ng-class="{selected: query.selected}"> 
+        <div class="col col-xs-7">
+          <div class="clearfix">
+            <div class="pull-left os-query-select-cb">
+              <os-checkbox ng-change="toggleQuerySelect(query)" ng-model="query.selected"></os-checkbox>
+            </div>
+            <div class="pull-left" style="padding-left: 12px;">
+              <a title="{{'queries.tooltip.view_records' | translate}}">
+                #{{query.id}} {{query.title}}
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col col-xs-2">{{query.createdBy.firstName}} {{query.createdBy.lastName}}</div>
+        <div class="col col-xs-2"> {{query.lastModifiedOn | date: global.dateFmt}}</div>
+        <div class="col col-xs-1 os-more-options">
+          <div dropdown>
+            <button class="btn btn-xs btn-default dropdown-toggle">
+              <span class="fa fa-ellipsis-v"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right">
+              <li>
+                <a>
+                  <i class="fa fa-pencil"></i>
+                  <span translate="queries.edit"></span>
+                </a>
+              </li>
+              <li>
+                <a>
+                  <i class="fa fa-download"></i>
+                  <span translate="queries.download_def"></span>
+                </a>
+              </li>
+              <li>
+                <a>
+                  <i class="fa fa-list"></i>
+                  <span translate="queries.view_query_run_log"></span>
+                </a>
+              </li>
+              <li>
+                <a>
+                  <i class="fa fa-trash"></i>
+                  <span translate="queries.delete"></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="os-table" ng-if="!queryList.queries || queryList.queries.length == 0">
+    <div class="os-table-head">
+      <div class="row">
+        <div class="col col-xs-10" translate="queries.info">Information</div>
+      </div>
+    </div>
+    <div class="os-table-body">
+      <div class="row">
+        <div class="col col-xs-10" translate="queries.no_queries">
+          There are no queries to show in selected folder
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-if="queryData.totalQueries > queryData.pageSize">
+    <pagination class="pagination-sm"
+      total-items="queryData.totalQueries" 
+      items-per-page="queryData.pageSize"  
+      max-size="5" 
+      ng-model="queryData.currentPage" 
+      ng-change="changeQueriesPage(false)">
+    </pagination>
+  </div>
+</script>
