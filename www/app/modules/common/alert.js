@@ -33,6 +33,14 @@ angular.module('openspecimen')
         this.add($translate.instant(code, params), 'success', timeout);
       },
 
+      info: function(code, params, timeout) {
+        this.add($translate.instant(code, params), 'info', timeout);
+      },
+
+      warn: function(code, params, timeout) {
+        this.add($translate.instant(code, params), 'warning', timeout);
+      },
+
       error: function(code, timeout) {
         this.add($translate.instant(code), 'danger', timeout);
       },

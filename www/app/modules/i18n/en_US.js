@@ -258,6 +258,9 @@
     "event_time": "Date and Time",
     "no_events": "No events to show",
 
+    "no_specimens_for_collection": "Please select at least one anticipated specimen for collection",
+    "no_specimens_for_print": "Please select at least one collected specimen for label printing",
+
     "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
 
     "ctx_menu": {
@@ -276,7 +279,9 @@
 
     "buttons": {
       "collect_aliquots": "Collect Aliquots",
-      "create_derivative": "Create Derivative"
+      "create_derivative": "Create Derivative",
+      "collect": "Collect",
+      "print": "Print"
     },
 
     "errors": {

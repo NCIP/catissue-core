@@ -1,10 +1,14 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <span translate="specimens.list">Specimens</span>
-    <div class="btn-group os-action-btns" ng-if="selection.any">
+    <div class="btn-group os-action-btns">
       <button class="btn btn-primary" ng-click="collectSpecimens()">
         <span class="fa fa-plus"></span>
-        Collect
+        <span translate="specimens.buttons.collect"> Collect </span>
+      </button>
+      <button class="btn btn-default" ng-click="printSpecimenLabels()">
+        <span class="fa fa-print"></span>
+        <span translate="specimens.buttons.print"> Print </span>
       </button>
     </div>
   </div>
