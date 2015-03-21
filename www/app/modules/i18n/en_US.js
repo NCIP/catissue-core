@@ -109,9 +109,9 @@
     },
 
     "filter": {
-      "filter_title": "Collection Protocol Title",
+      "filter_title": "Collection Protocol Filter",
       "title_or_short_title": "Title / Short Title",
-      "title": "Type The Title",
+      "title": "Type the Title",
       "pi": "Select Principal Investigator",
       "repository": "Repository",
       "select_repository": "Select Repository"
@@ -357,7 +357,7 @@
 
     "filter": {
       "title": "Institute Filter",
-      "name": "Type The Name"
+      "name": "Type the Name"
     }
 
   },
@@ -386,7 +386,7 @@
 
     "filter": {
       "title": "Site Filter",
-      "name": "Type The Name",
+      "name": "Type the Name",
       "type": "Select Type"
     }
   },
@@ -419,7 +419,7 @@
     "filter": {
       "filter_title": "Distribution Protocol Filter",
       "title_or_short_title": "Title / Short Title",
-      "title": "Type The Title",
+      "title": "Type the Title",
       "pi": "Select Principal Investigator"
     }
   },
@@ -485,9 +485,9 @@
 
     "filter": {
       "title": "User Filter",
-      "name": "Type The Name",
-      "login_name": "Type The Login Name",
-      "activity_status": "Select The Activity Status"
+      "name": "Type the Name",
+      "login_name": "Type the Login Name",
+      "activity_status": "Select the Activity Status"
     }
 
   },
@@ -553,7 +553,7 @@
 
     "filter": {
       "title": "Storage Container Filter",
-      "name": "Enter The Name"
+      "name": "Type the Name"
     }
   },
 
