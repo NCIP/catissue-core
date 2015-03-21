@@ -40,6 +40,11 @@ angular.module('openspecimen', [
       .state('signed-in', {
         abstract: true,
         templateUrl: 'modules/common/appmenu.html',
+        resolve: {
+          currentUser: function(User) {
+            return User.getCurrentUser();
+          }
+        },
         controller: 'SignedInCtrl'
       });
 

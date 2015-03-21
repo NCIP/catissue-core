@@ -1,6 +1,6 @@
 
 angular.module('os.query.models.savedquery', ['os.common.models'])
-  .factory('SavedQuery', function($http, osModel, Util) {
+  .factory('SavedQuery', function($http, osModel) {
     var SavedQuery = osModel('saved-queries');
 
     SavedQuery.list = function() {

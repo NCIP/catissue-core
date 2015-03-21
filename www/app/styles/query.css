@@ -6,3 +6,42 @@
   margin-right: 8px;
   position: absolute;
 }
+
+.os-query-selected-folder:before {
+  content: ' ';
+  display: block;
+  border-left: 3px solid #DD4B39;
+  position: absolute;
+  height: 20px;
+}
+
+.os-query-selected-folder {
+  color: #DD4B39;
+}
+
+.os-query-folders {
+  max-height: 150px; 
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.os-query-folders .folder {
+  padding: 2px 8px;
+}
+
+.os-query-folders .folder div:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 83%;
+  white-space: nowrap;
+  padding-left: 10px;
+}
+
+.os-query-folders .folder:hover {
+  background-color: #eee;
+  cursor: pointer;
+}
+
+.os-query-folders .folder .btn {
+  border: 0px;
+}

@@ -76,3 +76,12 @@
   padding: 4px 1px;
   white-space: normal;
 }
+
+.os-table-condensed .os-table-head .row .col, 
+.os-table-condensed .os-table-body .row .col {
+  padding: 5px!important;
+}
+
+.os-table-borderless .os-table-body .row .col {
+  border: 0px!important;
+}
