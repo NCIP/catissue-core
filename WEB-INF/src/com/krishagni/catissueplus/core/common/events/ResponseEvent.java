@@ -74,6 +74,10 @@ public class ResponseEvent<T> {
 	public static <P> ResponseEvent<P> userError(ErrorCode error) {
 		return new ResponseEvent<P>(OpenSpecimenException.userError(error));
 	}
+
+	public static <P> ResponseEvent<P> serverError(ErrorCode error) {
+		return new ResponseEvent<P>(OpenSpecimenException.serverError(error));
+	}
 	
 	public static <P> ResponseEvent<P> userError(ErrorCode error, boolean forceTxCommitEnabled) {
 		return new ResponseEvent<P>(OpenSpecimenException.userError(error), forceTxCommitEnabled);

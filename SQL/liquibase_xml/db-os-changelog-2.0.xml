@@ -1315,6 +1315,10 @@
         <constraints nullable="false"/>
       </column>
 
+      <column name="LABEL_TYPE" type="${text.type}(128)">
+        <constraints nullable="false"/>
+      </column>
+
       <column name="DATA" type="${text.type}(1024)">
         <constraints nullable="false"/>
       </column>

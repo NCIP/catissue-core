@@ -222,6 +222,7 @@
 			<fileset dir="${resources.dir}">
 				<include name="**/*.hbm.xml" />
                                 <include name="errors/*.properties"/>
+                                <include name="com/krishagni/catissueplus/core/biospecimen/default_print_rules.csv"/>
 			</fileset>
 		</copy>
 	</target>
@@ -258,6 +259,7 @@
 			<fileset dir="${resources.dir}">
 				<include name="**/*.hbm.xml" />
                                 <include name="errors/*.properties"/>
+                                <include name="com/krishagni/catissueplus/core/biospecimen/default_print_rules.csv"/>
 			</fileset>
 		</copy>
 	</target>

@@ -159,7 +159,7 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		
 		for (List<ConfigChangeListener> listeners : changeListeners.values()) {
 			for (ConfigChangeListener listener : listeners) {
-				listener.onChange(null, null);
+				listener.onConfigChange(null, null);
 			}			
 		}
 	}
@@ -216,7 +216,7 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		}
 		
 		for (ConfigChangeListener listener : listeners) {
-			listener.onChange(property, setting);
+			listener.onConfigChange(property, setting);
 		}
 	}
 

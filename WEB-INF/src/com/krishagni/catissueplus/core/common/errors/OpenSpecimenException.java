@@ -62,6 +62,10 @@ public class OpenSpecimenException extends RuntimeException {
 		return new OpenSpecimenException(ErrorType.USER_ERROR, error);
 	}
 	
+	public static OpenSpecimenException serverError(ErrorCode error) {
+		return new OpenSpecimenException(ErrorType.SYSTEM_ERROR, error);
+	}
+	
 	public static OpenSpecimenException serverError(Throwable e) {
 		return new OpenSpecimenException(e);
 	}

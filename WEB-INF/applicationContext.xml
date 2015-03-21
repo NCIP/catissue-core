@@ -204,6 +204,7 @@
   <bean id="specimenSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="specimenFactory" ref="specimenFactory"/>
+    <property name="cfgSvc" ref="cfgSvc"/>
   </bean>
 
   <bean id="specimenTokenRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
@@ -428,6 +429,33 @@
 
   <bean id="cfgSvc" class="com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+
+  <bean id="printLabelTokensRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
+    <property name="tokens">
+      <list>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenAnatomicSitePrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenBarcodePrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenClassPrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenConcentrationPrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenCpPrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenCreatedOnPrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenLabelPrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenLineagePrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenLocationPrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenPathologyStatusPrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenPpidPrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenQtyPrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenTypePrintToken"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="defaultSpecimenLabelPrinter" class="com.krishagni.catissueplus.core.biospecimen.services.impl.DefaultSpecimenLabelPrinter">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="cfgSvc" ref="cfgSvc"/>
+    <property name="printLabelTokensRegistrar" ref="printLabelTokensRegistrar"/>
+    <property name="resourceBundle" ref="resourceBundle"/>
   </bean>
 
   <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">

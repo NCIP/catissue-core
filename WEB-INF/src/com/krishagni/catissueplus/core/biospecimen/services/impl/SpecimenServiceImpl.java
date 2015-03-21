@@ -4,26 +4,38 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenLabelPrintJob;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
+import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenLabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
+import com.krishagni.catissueplus.core.biospecimen.services.SpecimenLabelPrinter;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
+import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 
 public class SpecimenServiceImpl implements SpecimenService {
 
 	private DaoFactory daoFactory;
 
 	private SpecimenFactory specimenFactory;
+	
+	private ConfigurationService cfgSvc;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -32,7 +44,11 @@ public class SpecimenServiceImpl implements SpecimenService {
 	public void setSpecimenFactory(SpecimenFactory specimenFactory) {
 		this.specimenFactory = specimenFactory;
 	}
-
+	
+	public void setCfgSvc(ConfigurationService cfgSvc) {
+		this.cfgSvc = cfgSvc;
+	}
+	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<SpecimenDetail> getSpecimen(RequestEvent<EntityQueryCriteria> req) {
@@ -120,6 +136,29 @@ public class SpecimenServiceImpl implements SpecimenService {
 		return ResponseEvent.response(daoFactory.getSpecimenDao().getByLabel(req.getPayload()) != null);
 	}
 	
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SpecimenLabelPrintJobSummary> printSpecimenLabels(RequestEvent<PrintSpecimenLabelDetail> req) {
+		SpecimenLabelPrinter printer = getLabelPrinter();
+		if (printer == null) {
+			return ResponseEvent.serverError(SpecimenErrorCode.NO_PRINTER_CONFIGURED);
+		}
+				
+		List<Specimen> specimens = getSpecimensToPrint(req.getPayload());
+		if (CollectionUtils.isEmpty(specimens)) {
+			return ResponseEvent.userError(SpecimenErrorCode.NO_SPECIMENS_TO_PRINT);
+		}
+		
+		SpecimenLabelPrintJob job = printer.print(specimens);
+		if (job == null) {
+			return ResponseEvent.userError(SpecimenErrorCode.PRINT_ERROR);
+		}
+		
+		return ResponseEvent.response(SpecimenLabelPrintJobSummary.from(job));
+	}
+	
+	
 	private void ensureUniqueLabel(String label, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(label)) {
 			return;
@@ -200,5 +239,39 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 		
 		specimen.addCollRecvEvents();
+	}
+	
+	private SpecimenLabelPrinter getLabelPrinter() {
+		String labelPrinterBean = cfgSvc.getStrSetting(
+				ConfigParams.MODULE, 
+				ConfigParams.LABEL_PRINTER, 
+				"defaultSpecimenLabelPrinter");
+		return (SpecimenLabelPrinter)OpenSpecimenAppCtxProvider
+				.getAppCtx()
+				.getBean(labelPrinterBean);
+	}
+	
+	private List<Specimen> getSpecimensToPrint(PrintSpecimenLabelDetail detail) {
+		SpecimenDao specimenDao = daoFactory.getSpecimenDao();
+		
+		List<Specimen> specimens = null;
+		if (CollectionUtils.isNotEmpty(detail.getSpecimenIds())) {
+			specimens = specimenDao.getSpecimensByIds(detail.getSpecimenIds());
+		} else if (CollectionUtils.isNotEmpty(detail.getSpecimenLabels())) {
+			specimens = specimenDao.getSpecimensByLabels(detail.getSpecimenLabels());
+		} else if (detail.getVisitId() != null) {
+			specimens = specimenDao.getSpecimensByVisitId(detail.getVisitId());
+		} else if (StringUtils.isNotBlank(detail.getVisitName())) {
+			specimens = specimenDao.getSpecimensByVisitName(detail.getVisitName());
+		}
+		
+		CollectionUtils.filter(specimens, new Predicate() {			
+			@Override
+			public boolean evaluate(Object obj) {
+				return ((Specimen)obj).isCollected();
+			}
+		});
+		
+		return specimens;		
 	}
 }

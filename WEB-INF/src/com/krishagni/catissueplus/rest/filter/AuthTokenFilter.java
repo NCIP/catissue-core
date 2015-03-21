@@ -110,7 +110,7 @@ public class AuthTokenFilter extends GenericFilterBean {
 		
 		if (userDetails == null) {
 			String clientHdr = httpReq.getHeader(OS_CLIENT_HDR);
-                        if (clientHdr != null && clientHdr.equals("webui")) {
+			if (clientHdr != null && clientHdr.equals("webui")) {
 				setUnauthorizedResp(httpResp);
 			} else {
 				setRequireAuthResp(httpResp);
