@@ -45,3 +45,13 @@
 .os-query-folders .folder .btn {
   border: 0px;
 }
+
+.os-query-folders-dd > li > input { 
+  width: 260px;
+  margin: 3px 20px;
+}
+
+.os-query-folders-dd .dropdown-menu-subgroup {
+  max-height: 150px;
+  overflow: auto;
+}

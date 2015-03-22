@@ -616,10 +616,14 @@
     "download_def": "Download Query Definition",
     "view_query_run_log": "View Query Run Log",
     "delete": "Delete",
+
     "all": "All",
     "folders": "Folders",
     "my_folders": "My Folders",
     "shared_folders": "Shared Folders",
+    "search_folder": "Search folder",
+    "queries_assigned_to_folder": "{{count}} queries assigned to folder {{folderName}}",
+    
 
     "no_queries": "No queries to show",
     "info": "Information",

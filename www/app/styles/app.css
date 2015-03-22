@@ -209,9 +209,15 @@ body {
   color: #666666;
 }
   
+.os-page-hdr .os-more-options div.inline {
+  display: inline-block;
+  position: relative;
+}
+
 .os-page-hdr .os-nav-button,
 .os-page-hdr .os-options-button,
-.os-page-hdr .os-search-button {
+.os-page-hdr .os-search-button,
+.os-page-hdr .os-more-options button {
   color: #666666;
   background: transparent;
   border: none;
@@ -228,7 +234,8 @@ body {
 
 .os-page-hdr .os-nav-button .fa,
 .os-page-hdr .os-options-button .fa,
-.os-page-hdr .os-search-button .fa {
+.os-page-hdr .os-search-button .fa,
+.os-page-hdr .os-more-options button .fa {
   font-size: 24px;
 }
 

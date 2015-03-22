@@ -21,5 +21,18 @@ angular.module('os.query.models.queryfolder', ['os.common.models'])
       return queryList;
     };
 
+    QueryFolder.prototype.addQueries = function(queries) {
+      var queryIds = queries.map(function(query) { return query.id });
+      return $http.put(addQueriesUrl(this.$id()), queryIds).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    };
+
+    function addQueriesUrl(folderId) {
+      return QueryFolder.url() + folderId + '/saved-queries?operation=ADD'; 
+    };
+
     return QueryFolder;
   });

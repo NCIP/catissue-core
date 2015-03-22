@@ -247,9 +247,8 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
 			}
 
-			boolean isAdmin = req.getSessionDataBean().isAdmin();
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!isAdmin && !query.getCreatedBy().getId().equals(userId)) {
+			User user = AuthUtil.getCurrentUser();
+			if (!user.isAdmin() && !query.getCreatedBy().equals(user)) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 
