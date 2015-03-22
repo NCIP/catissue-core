@@ -187,7 +187,9 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   
-  <bean id="userDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.UserDependencyChecker"></bean>
+  <bean id="userDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.UserDependencyChecker">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
 
   <bean id="userSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
@@ -301,6 +303,7 @@
   </bean>
 
   <bean id="instituteDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.InstituteDependencyChecker">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>	
 
   <bean id="instituteFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl">
@@ -313,6 +316,7 @@
   </bean>
   
   <bean id="siteDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.SiteDependencyChecker">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 
   <bean id="siteFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.SiteFactoryImpl">
@@ -333,6 +337,7 @@
   </bean>
   
   <bean id="containerDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.StorageContainerDependencyChecker">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 	
   <bean id="storageContainerFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.StorageContainerFactoryImpl">
@@ -361,6 +366,7 @@
   </bean>
   
   <bean id="distributionProtocolDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.DistributionProtocolDependencyChecker">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 	
   <bean id="distributionFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionOrderFactoryImpl">

@@ -13,4 +13,6 @@ public interface SiteDao extends Dao<Site> {
 	public Site getSiteByName(String name);
 
 	public Site getSiteByCode(String code);
+	
+	public List<Object[]> getSiteDependencyStat(Long siteId);
 }

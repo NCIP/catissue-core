@@ -127,14 +127,14 @@ public class InstituteServiceImpl implements InstituteService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Map<String, List>> getInstituteDependencies(RequestEvent<Long> req) {
+	public ResponseEvent<List<Map<String, Object>>> getInstituteDependencyStat(RequestEvent<Long> req) {
 		try {
 			Institute existing = daoFactory.getInstituteDao().getById(req.getPayload());
 			if (existing == null) {
 				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND);
 			}
 			
-			return ResponseEvent.response(existing.getDependencies());
+			return ResponseEvent.response(existing.getDependencyStat());
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

@@ -13,6 +13,8 @@ public interface StorageContainerDao extends Dao<StorageContainer> {
 	public StorageContainer getByName(String name);
 	
 	public StorageContainer getByBarcode(String barcode);
+	
+	public List<Object[]> getStorageContainerDependencyStat(Long containerId);
 
 	public void delete(StorageContainerPosition position);
 }

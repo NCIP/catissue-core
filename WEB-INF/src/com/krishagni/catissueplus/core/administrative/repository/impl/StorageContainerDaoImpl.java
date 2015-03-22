@@ -53,6 +53,14 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 
 		return result.isEmpty() ? null : result.iterator().next();		
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getStorageContainerDependencyStat(Long containerId) {
+		return sessionFactory.getCurrentSession()
+				.createSQLQuery(GET_STORAGE_CONTAINER_DEPENDECNY_STAT_SQL)
+				.setLong("containerId", containerId)
+				.list();
+	}
 
 	@Override
 	public void delete(StorageContainerPosition position) {
@@ -230,4 +238,9 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			params.put("storeSpecimenEnabled", crit.storeSpecimensEnabled());
 		}
 	}	
+	
+	private static final String GET_STORAGE_CONTAINER_DEPENDECNY_STAT_SQL = 
+			"select 'Storage Container', count(*) as count from os_storage_containers sc where sc.parent_container_id = :containerId" +
+			"union " +
+			"select 'Specimen' as entityName, count(*) as count from os_container_positions cp where cp.storage_container_id = :containerId";
 }

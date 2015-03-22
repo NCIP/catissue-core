@@ -1,8 +1,6 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,15 +10,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
-import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
-import com.krishagni.catissueplus.core.administrative.events.DeleteUserOp;
 import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
-import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -181,14 +176,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Map<String, List>> getUserDependencies(RequestEvent<Long> req) {
+	public ResponseEvent<List<Map<String, Object>>> getUserDependencyStat(RequestEvent<Long> req) {
 		try {
 			User existing = daoFactory.getUserDao().getById(req.getPayload());
 			if (existing == null) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
-			return ResponseEvent.response(existing.getDependencies());
+			return ResponseEvent.response(existing.getDependencyStat());
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

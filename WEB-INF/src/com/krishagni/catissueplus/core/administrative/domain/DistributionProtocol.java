@@ -106,16 +106,14 @@ public class DistributionProtocol {
 		this.setActivityStatus(distributionProtocol.getActivityStatus());
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public Map<String, List> getDependencies() {
-		return dependencyChecker.getDependencies(this);
+	public List<Map<String, Object>> getDependencyStat() {
+		return dependencyChecker.getDependencyStat(this);
 	}
 	
-	@SuppressWarnings("rawtypes")
 	public void delete() {
-		Map<String, List> dependencies = getDependencies();
+		List<Map<String, Object>> dependencies = getDependencyStat();
 		if(!dependencies.isEmpty()) {
-			throw OpenSpecimenException.userError(DistributionProtocolErrorCode.DEPENDENCIES_EXIST);
+			throw OpenSpecimenException.userError(DistributionProtocolErrorCode.REF_ENTITY_FOUND);
 		}
 		
 		this.setShortTitle(CommonUtil.appendTimestamp(getShortTitle()));

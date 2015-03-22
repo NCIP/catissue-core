@@ -249,17 +249,17 @@ public class User extends BaseEntity implements UserDetails {
 		this.passwords.add(password);
 	}
 	
-	public Map<String, List> getDependencies() {
-		return dependencyChecker.getDependencies(this);
+	public List<Map<String, Object>> getDependencyStat() {
+		return dependencyChecker.getDependencyStat(this);
 	}
 	
 	public void delete(boolean close) {
 		String activityStatus = Status.ACTIVITY_STATUS_CLOSED.getStatus();
 		if (!close) {
 			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
-			Map<String, List> dependencies = getDependencies();
-			if (!dependencies.isEmpty()) {
-				throw OpenSpecimenException.userError(UserErrorCode.DEPENDENCIES_EXIST);
+			List<Map<String, Object>> dependencyStat = getDependencyStat();
+			if (!dependencyStat.isEmpty()) {
+				throw OpenSpecimenException.userError(UserErrorCode.REF_ENTITY_FOUND);
 			}
 		}
 		

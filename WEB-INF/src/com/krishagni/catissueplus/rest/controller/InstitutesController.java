@@ -105,12 +105,12 @@ public class InstitutesController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependencies")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependency-stat")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String, List> getInstituteDependencies(@PathVariable Long id) {
+	public List<Map<String, Object>> getInstituteDependencyStat(@PathVariable Long id) {
 		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
-		ResponseEvent<Map<String, List>> resp = instituteSvc.getInstituteDependencies(req);
+		ResponseEvent<List<Map<String, Object>>> resp = instituteSvc.getInstituteDependencyStat(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

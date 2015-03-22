@@ -188,12 +188,12 @@ public class StorageContainersController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependencies")
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependency-stat")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public Map<String, List> getContainerDependencies(@PathVariable Long id) {
+	public List<Map<String, Object>> getContainerDependencyStat(@PathVariable Long id) {
 		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
-		ResponseEvent<Map<String, List>> resp = storageContainerSvc.getStorageContainerDependencies(req);
+		ResponseEvent<List<Map<String, Object>>> resp = storageContainerSvc.getStorageContainerDependencyStat(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

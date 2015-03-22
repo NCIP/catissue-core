@@ -116,14 +116,14 @@ public class SiteServiceImpl implements SiteService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Map<String, List>> getSiteDependencies(RequestEvent<Long> req) {
+	public ResponseEvent<List<Map<String, Object>>> getSiteDependencyStat(RequestEvent<Long> req) {
 		try {
 			Site existing = daoFactory.getSiteDao().getById(req.getPayload());
 			if (existing == null) {
 				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 			}
 			
-			return ResponseEvent.response(existing.getDependencies());
+			return ResponseEvent.response(existing.getDependencyStat());
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

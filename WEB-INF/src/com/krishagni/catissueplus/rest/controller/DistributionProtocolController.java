@@ -88,12 +88,12 @@ public class DistributionProtocolController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependencies")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependency-stat")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String, List> getDistributionProtocolDependencies(@PathVariable Long id) {
+	public List<Map<String, Object>> getDistributionProtocolDependencies(@PathVariable Long id) {
 		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
-		ResponseEvent<Map<String, List>> resp = dpSvc.getDistributionProtocolDependencies(req);
+		ResponseEvent<List<Map<String, Object>>> resp = dpSvc.getDistributionProtocolDependencyStat(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

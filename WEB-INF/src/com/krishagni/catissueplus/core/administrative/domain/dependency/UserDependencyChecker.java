@@ -1,31 +1,31 @@
 package com.krishagni.catissueplus.core.administrative.domain.dependency;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 
+public class UserDependencyChecker extends AbstractDependencyChecker<User> {
+	private DaoFactory daoFactory;
 
-public class UserDependencyChecker implements EntityDependencyChecker<User> {
+	public DaoFactory getDaoFactory() {
+		return daoFactory;
+	}
+
+	public void setDaoFactory(DaoFactory daoFactory) {
+		this.daoFactory = daoFactory;
+	}
 
 	@Override
-	//TODO: Revisit and check other depedencies like cp, dp, AQ
-	public Map<String, List> getDependencies(User user) {
-		List<SiteDetail> sites = new ArrayList<SiteDetail>();
-		for (Site site: user.getSites()) {
-			sites.add(SiteDetail.from(site));
-		}
+	public List<Map<String, Object>> getDependencyStat(User user) {
+		List<Map<String, Object>> dependencyStat = new ArrayList<Map<String, Object>>();
 		
-		Map<String, List> dependencies = new HashMap<String, List>();
-		if (!sites.isEmpty()) {
-		  dependencies.put("sites", sites);
-		}
+		List<Object[]> stats = daoFactory.getUserDao().getUserDependencyStat(user.getId());
+		setStat(stats, dependencyStat); 
 		
-		return dependencies;
+		return dependencyStat;
 	}
 
 }

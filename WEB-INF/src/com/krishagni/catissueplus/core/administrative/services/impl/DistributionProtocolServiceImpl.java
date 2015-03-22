@@ -109,14 +109,14 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Map<String, List>> getDistributionProtocolDependencies(RequestEvent<Long> req) {
+	public ResponseEvent<List<Map<String, Object>>> getDistributionProtocolDependencyStat(RequestEvent<Long> req) {
 		try {
 			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(req.getPayload());
 			if (existing == null) {
 				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
 			}
 			
-			return ResponseEvent.response(existing.getDependencies());
+			return ResponseEvent.response(existing.getDependencyStat());
 		}
 		catch (Exception e) {
 			return ResponseEvent.serverError(e);

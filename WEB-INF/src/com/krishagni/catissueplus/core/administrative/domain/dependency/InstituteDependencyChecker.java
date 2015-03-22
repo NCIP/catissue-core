@@ -1,33 +1,32 @@
 package com.krishagni.catissueplus.core.administrative.domain.dependency;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
-
-import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
-import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 
-public class InstituteDependencyChecker implements EntityDependencyChecker<Institute> {
+public class InstituteDependencyChecker extends AbstractDependencyChecker<Institute> {
+	
+	private DaoFactory daoFactory;
 
-	@Override
-	public Map<String, List> getDependencies(Institute institute) {
-		List<User> users = new ArrayList<User>();
-		for(Department department : institute.getDepartments()) {
-			if (CollectionUtils.isNotEmpty(department.getUsers())) {
-				users.addAll(department.getUsers());
-			}
-		}
-		
-		Map<String, List> depedencies = new HashMap<String, List>();
-		if (CollectionUtils.isNotEmpty(users)) {
-			depedencies.put("Users", users); 
-		}
-		
-		return depedencies;
+	public DaoFactory getDaoFactory() {
+		return daoFactory;
 	}
 
+	public void setDaoFactory(DaoFactory daoFactory) {
+		this.daoFactory = daoFactory;
+	}
+
+	@Override
+	public List<Map<String, Object>> getDependencyStat(Institute institute) {
+		List<Map<String, Object>> dependencyStat = new ArrayList<Map<String, Object>>();
+		
+		List<Object[]> stats = daoFactory.getInstituteDao().getInstituteDependencyStat(institute.getId());
+		setStat(stats, dependencyStat);
+		
+		return dependencyStat;
+	}
+	
 }

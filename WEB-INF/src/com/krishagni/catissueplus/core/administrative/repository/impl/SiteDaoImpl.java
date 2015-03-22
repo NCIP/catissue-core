@@ -61,6 +61,23 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 		return result.isEmpty() ? null : result.get(0);
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getSiteDependencyStat(Long siteId) {
+		return sessionFactory.getCurrentSession()
+				.createSQLQuery(GET_SITE_DEPENDENCY_STAT_SQL)
+				.setLong("siteId", siteId)
+				.list();
+	}
+	
+	private static final String GET_SITE_DEPENDENCY_STAT_SQL = 
+			"select 'Visit' as entityName, count(*) as count from catissue_specimen_coll_group scg where scg.site_id = :siteId " +
+			"Union " +
+			"select 'Storage Container' as entityName, count(*) as count from os_storage_containers sc where sc.site_id = :siteId " +
+			"Union " +
+			"select 'Collection Protocol' as entityName, count(*) as count from catissue_site_cp cp where cp.site_id = :siteId " +
+			"union " +
+			"select 'MRN' as entityName, count(*) as count from catissue_part_medical_id pm where pm.site_id = :siteId ";
+			
 
 	private static final String FQN = Site.class.getName();
 

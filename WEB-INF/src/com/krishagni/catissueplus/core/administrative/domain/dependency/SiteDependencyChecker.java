@@ -1,47 +1,44 @@
 package com.krishagni.catissueplus.core.administrative.domain.dependency;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
-import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
-import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
-import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 
-public class SiteDependencyChecker implements EntityDependencyChecker<Site> {
+public class SiteDependencyChecker extends AbstractDependencyChecker<Site> {
+	
+	private DaoFactory daoFactory;
+
+	public DaoFactory getDaoFactory() {
+		return daoFactory;
+	}
+
+	public void setDaoFactory(DaoFactory daoFactory) {
+		this.daoFactory = daoFactory;
+	}
 
 	@Override
-	public Map<String, List> getDependencies(Site site) {
-		Map<String, List> depedencies = new HashMap<String, List>();
+	public List<Map<String, Object>> getDependencyStat(Site site) {
+		List<Map<String, Object>> dependencyStat = new ArrayList<Map<String, Object>>();
 		
-		Set<Visit> visits = site.getVisits();
-		if (CollectionUtils.isNotEmpty(visits)) {
-			depedencies.put("visits", VisitDetail.from(visits));
-		}
+		List<Object[]> stats =  daoFactory.getSiteDao().getSiteDependencyStat(site.getId());
+		setStat(stats, dependencyStat);
 		
-		Set<StorageContainer> storageContainers = site.getStorageContainers();
-		if (CollectionUtils.isNotEmpty(storageContainers)) {
-			depedencies.put("storageContainers", StorageContainerDetail.from(storageContainers));
-		}
-		
-		//TODO: Check for site contains any CP or not. 
+		//TODO: Check for site contains any CP or not. 	
 		
 		//TODO: Check for site has distribution order.
-		
+			
 		//TODO: Check for Site is reffered as MRN Site 
-		
+				
 		//TODO: Check Site is set as CP Event Default Site
-		
+			
 		//TODO: Check any user belongs to the site
-		
+			
 		//TODO: Check any form has site has fancy control and uses this site in the values.
 		
-		return depedencies;
+		return dependencyStat;
 	}
 
 }

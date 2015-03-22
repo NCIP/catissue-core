@@ -542,14 +542,14 @@ public class StorageContainer extends BaseEntity {
 		return types;
 	}
 	
-	public Map<String, List> getDependencies() {
-		return dependencyChecker.getDependencies(this);
+	public List<Map<String, Object>> getDependencyStat() {
+		return dependencyChecker.getDependencyStat(this);
 	}
 	
 	public void delete() {
-		Map<String, List> dependencies = getDependencies();
+		List<Map<String, Object>> dependencies = getDependencyStat();
 		if (!dependencies.isEmpty()) {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.DEPENDENCIES_EXIST);
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.REF_ENTITY_FOUND);
 		}
 		
 		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());

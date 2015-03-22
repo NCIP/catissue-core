@@ -77,6 +77,14 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<Object[]> getUserDependencyStat(Long userId) {
+		return sessionFactory.getCurrentSession()
+				.createSQLQuery(GET_USER_DEPENDENCY_STAT_SQL)
+				.setLong("userId", userId)
+				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
 	public ForgotPasswordToken getFpToken(String token) {
 		List<ForgotPasswordToken> result = sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_FP_TOKEN)
@@ -164,6 +172,24 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		));
 	}
 	
+	private static final String GET_USER_DEPENDENCY_STAT_SQL = 
+			"Select 'Site' as entityName, count(*) as Count from catissue_site_coordinators sc where sc.USER_ID = :userId " + 
+			"union " +
+			"select " + 
+			"  'Collection Protocol' as entityName, count(*) as count " + 
+			"from " + 
+			"  catissue_collection_protocol cp " + 
+			"where " + 
+			"  cp.principal_investigator_id = userId or " + 
+			"  cp.identifier in (select cc.collection_protocol_id from catissue_coll_coordinators cc where cc.user_id = :userId) " +
+			"union " + 
+			"select " + 
+			"  'Distribution Protocol' as entityName, count(*) as count " + 
+			"from " + 
+			"  catissue_distribution_protocol dp" + 
+			"where " + 
+			"  dp.principal_investigator_id = :userId";
+	
 	private static final String GET_USER_BY_LOGIN_NAME_HQL = 
 			"from com.krishagni.catissueplus.core.administrative.domain.User where loginName = :loginName and authDomain.name = :domainName  %s";
 	
@@ -181,3 +207,4 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	private static final String GET_FP_TOKEN = TOKEN_FQN + ".getFpToken";
 
 }
+
