@@ -623,9 +623,18 @@
     "shared_folders": "Shared Folders",
     "search_folder": "Search folder",
     "queries_assigned_to_folder": "{{count}} queries assigned to folder {{folderName}}",
-    
+    "create_new_folder": "Create New Folder",
+    "folder_created": "Query folder {{folderName}} created successfully",
+    "new_query_folder": "New Query Folder",
+    "update_query_folder": "Update Query Folder",
+    "folder_name": "Folder Name",
+    "remove_query_from_folder": "Remove query from folder",
+    "share_folder_with_all": "Share folder with all current and future users",
+    "share_folder_with_users": "Share folder with following users",
+    "users": "Users",
 
     "no_queries": "No queries to show",
+    "no_queries_selected": "No queries selected. Please select at least one query",
     "info": "Information",
 
     "tooltip": {

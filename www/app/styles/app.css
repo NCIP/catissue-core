@@ -387,7 +387,7 @@ h4 + .btn-group {
 
 .os-alert-container {
   text-align: center;
-  z-index: 100;
+  z-index: 2000;
   position: absolute;
   width:100%;
   border-radius: 0px;

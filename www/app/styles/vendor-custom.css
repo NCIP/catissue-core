@@ -70,3 +70,7 @@
   color: #333;
   text-decoration: none;
 }
+
+body > .ui-select-bootstrap.open {
+  z-index: 2000; 
+}

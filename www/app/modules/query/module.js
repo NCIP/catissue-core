@@ -2,6 +2,7 @@
 angular.module('os.query', 
   [
     'os.query.models',
+    'os.query.addeditfolder',
     'os.query.list'
   ]
 ).config(function($stateProvider) {

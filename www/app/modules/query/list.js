@@ -1,6 +1,9 @@
 
 angular.module('os.query.list', ['os.query.models'])
-  .controller('QueryListCtrl', function($scope, currentUser, SavedQuery, QueryFolder, Alerts) {
+  .controller('QueryListCtrl', function(
+    $scope, $modal,
+    currentUser, SavedQuery, QueryFolder, Alerts) {
+
     function init() {
       $scope.queryList = [];
       $scope.selectedQueries = [];
@@ -21,6 +24,9 @@ angular.module('os.query.list', ['os.query.models'])
     function loadAllFolders() {
       QueryFolder.query().then(
         function(folders) {
+          $scope.folders.myFolders = [];
+          $scope.folders.sharedFolders = [];
+
           angular.forEach(folders, function(folder) {
             if (folder.owner.id == currentUser.id) {
               $scope.folders.myFolders.push(folder);
@@ -65,6 +71,25 @@ angular.module('os.query.list', ['os.query.models'])
             folderName: folder.name
           };
           Alerts.success("queries.queries_assigned_to_folder", params);
+        }
+      );
+    };
+
+    $scope.createNewFolder = function() {
+      var modalInstance = $modal.open({
+        templateUrl: 'modules/query/addedit-folder.html',
+        controller: 'AddEditQueryFolderCtrl',
+        resolve: {
+          folder: function() {
+            return {queries: $scope.selectedQueries};
+          }
+        }
+      });
+
+      modalInstance.result.then(
+        function(folder) {
+          $scope.folders.myFolders.push(folder);
+          Alerts.success("queries.folder_created", {folderName: folder.name});
         }
       );
     };

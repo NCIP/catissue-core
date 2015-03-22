@@ -55,3 +55,23 @@
   max-height: 150px;
   overflow: auto;
 }
+
+.os-folder-queries-section {
+  height: 180px; 
+  margin-bottom: 20px; 
+  width: 100%; 
+  overflow:auto;
+}
+
+.os-folder-users-section {
+  height: 100px;
+}
+
+.os-folder-users-section .users-select-container {
+  height: 80px;
+}
+
+.os-folder-share-with-all-cb {
+  margin-top: 4px;
+  margin-right: 8px;
+}
