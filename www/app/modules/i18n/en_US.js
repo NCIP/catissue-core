@@ -613,6 +613,8 @@
   },
 
   "entity": {
+    "object_name": "Object Name",
+    "count": "Count",
     "delete_title": "Deleting {{name}} confirmation",
     "confirm_delete": "{{name}} will be deleted forever. Are you sure you want to proceed?",
     "entity_deleted": "{{name}} deleted successfully.",
