@@ -7,6 +7,7 @@ angular.module('openspecimen', [
   'os.query',
 
   'ngMessages',
+  'ngCookies',
   'ngSanitize', 
   'ui.router', 
   'ui.bootstrap', 
@@ -179,8 +180,9 @@ angular.module('openspecimen', [
       };
     }
   })
-  .run(function($rootScope, $window, ApiUtil) {
+  .run(function($rootScope, $window, $cookieStore, ApiUtil) {
     if ($window.localStorage['osAuthToken']) {
+      $cookieStore.put('osAuthToken', $window.localStorage['osAuthToken']);
       $rootScope.loggedIn = true;
     }
 

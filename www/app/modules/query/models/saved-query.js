@@ -20,5 +20,9 @@ angular.module('os.query.models.savedquery', ['os.common.models'])
       return result;
     }
 
+    SavedQuery.prototype.getQueryDefUrl = function() {
+      return SavedQuery.url() + this.$id() + '/definition-file';
+    }
+
     return SavedQuery;
   });

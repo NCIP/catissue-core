@@ -704,9 +704,9 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!query.getCreatedBy().getId().equals(userId) && 
-					!queryDao.isQuerySharedWithUser(queryId, userId)) {
+			User user = AuthUtil.getCurrentUser();
+			if (!query.getCreatedBy().equals(user) && 
+					!queryDao.isQuerySharedWithUser(queryId, user.getId())) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
