@@ -94,5 +94,29 @@ angular.module('os.query.list', ['os.query.models'])
       );
     };
 
+    $scope.editFolder = function(folder) {
+      var modalInstance = $modal.open({
+        templateUrl: 'modules/query/addedit-folder.html',
+        controller: 'AddEditQueryFolderCtrl',
+        resolve: {
+          folder: function() {
+            return QueryFolder.getById(folder.id);
+          }
+        }
+      });
+
+      modalInstance.result.then(
+        function(result) {
+          if (result) {
+            $scope.folders.selectedFolder = folder;
+            $scope.queryList = {count: result.queries.length, queries: result.queries};
+            Alerts.success("queries.folder_updated", {folderName: result.name});
+          } else {
+            // delete code
+          }
+        }
+      );
+    };
+
     init();
   });

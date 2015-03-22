@@ -60,7 +60,7 @@
     </button>
     <button class="btn btn-primary" 
       ng-disabled="folder.queries.length == 0 || !folder.name" 
-      ng-click="saveOrUpdateFolder()" translate="common.buttons.create"
+      ng-click="saveOrUpdateFolder()" 
       ng-switch on="!folder.id">
       <span ng-switch-when="true" translate="common.buttons.create">
         Create
