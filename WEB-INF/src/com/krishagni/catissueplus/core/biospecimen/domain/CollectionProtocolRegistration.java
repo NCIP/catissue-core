@@ -6,14 +6,18 @@ import java.util.Date;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
+@Configurable
 public class CollectionProtocolRegistration {
 	private Long id;
 
@@ -38,6 +42,9 @@ public class CollectionProtocolRegistration {
 	private Set<ConsentTierResponse> consentResponses;
 
 	private String barcode;
+	
+	@Autowired
+	private DaoFactory daoFactory;
 
 	public Long getId() {
 		return id;
@@ -162,14 +169,6 @@ public class CollectionProtocolRegistration {
 		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 	}
 
-	private void checkActiveDependents() {
-		for (Visit visit : this.getVisits()) {
-			if (visit.isActive()) {
-				throw OpenSpecimenException.userError(ParticipantErrorCode.REF_ENTITY_FOUND);
-			}
-		}
-	}
-	
 	public void update(CollectionProtocolRegistration cpr) {
 		setPpid(cpr.getPpid());
 		setRegistrationDate(cpr.getRegistrationDate());
@@ -181,6 +180,22 @@ public class CollectionProtocolRegistration {
 		setConsents(cpr.getConsentResponses());
 		setParticipant(cpr.getParticipant());
 	}
+	
+	public void setPpidIfEmpty() {
+		if (StringUtils.isNotBlank(ppid)) {
+			return;
+		}
+		
+		CollectionProtocol cp = getCollectionProtocol();
+		String ppidFmt = cp.getPpidFormat();
+		if (StringUtils.isNotBlank(ppidFmt)) {
+			Long uniqueId = daoFactory.getUniqueIdGenerator()
+					.getUniqueId("PPID", cp.getShortTitle());
+			setPpid(String.format(ppidFmt, uniqueId.intValue()));
+		} else {
+			setPpid(cp.getId() + "_" + participant.getId());
+		}		
+	}
 
 	private void setConsents(Set<ConsentTierResponse> consentResponses) {
 		CollectionUpdater.update(this.consentResponses, consentResponses);
@@ -189,4 +204,11 @@ public class CollectionProtocolRegistration {
 		}
 	}
 
+	private void checkActiveDependents() {
+		for (Visit visit : this.getVisits()) {
+			if (visit.isActive()) {
+				throw OpenSpecimenException.userError(ParticipantErrorCode.REF_ENTITY_FOUND);
+			}
+		}
+	}	
 }

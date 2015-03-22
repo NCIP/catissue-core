@@ -4,9 +4,7 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-  <class 
-    name="com.krishagni.rbac.domain.Subject" 
-    table="CATISSUE_USER">
+  <class name="com.krishagni.rbac.domain.Subject" table="CATISSUE_USER">
 
     <id name="id" column="IDENTIFIER">
       <generator class="native">
@@ -15,8 +13,9 @@
     </id>
        
     <set 
-      name="subjectRoles" 
-      inverse="true" cascade="all-delete-orphan"
+      name="roles" 
+      inverse="true" 
+      cascade="all-delete-orphan"
       table="RBAC_SUBJECT_ROLES">
       <key column="SUBJECT_ID"/>
       <one-to-many class="com.krishagni.rbac.domain.SubjectRole"/>
@@ -37,9 +36,10 @@
       where 
         (OPS.NAME = :operationName or OPS.NAME = 'ALL')
         and (RES.NAME = :resourceName or RES.NAME = 'ALL')
-        and (SUB.DSO_ID = :dsoId or SUB.DSO_ID = -1) 
+        and (SUB.CP_ID = :cpId or SUB.CP_ID is null) 
+        and (SUB.SITE_ID = :siteId or SUB.SITE_ID is null)
         and SUB.SUBJECT_ID = :subjectId
-        and RLOPS.RES_OBJ_ID = :resourceInstanceId
+        and (RLOPS.RES_OBJ_ID = :resourceInstanceId or RLOPS.RES_OBJ_ID is null)
     </sql-query>
   </class>  
 </hibernate-mapping>

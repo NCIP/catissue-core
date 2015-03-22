@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenPosition;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 
 public class SpecimenInfo implements Comparable<SpecimenInfo> {

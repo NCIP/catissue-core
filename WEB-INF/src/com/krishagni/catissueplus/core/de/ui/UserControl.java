@@ -1,52 +1,20 @@
 package com.krishagni.catissueplus.core.de.ui;
 
-import static edu.common.dynamicextensions.nutility.XmlUtil.writeElementEnd;
-import static edu.common.dynamicextensions.nutility.XmlUtil.writeElementStart;
-
 import java.io.Writer;
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import edu.common.dynamicextensions.domain.nui.ColumnDef;
-import edu.common.dynamicextensions.domain.nui.Control;
-import edu.common.dynamicextensions.domain.nui.DataType;
-import edu.common.dynamicextensions.domain.nui.LookupControl;
-import edu.common.dynamicextensions.ndao.ColumnTypeHelper;
+import edu.common.dynamicextensions.domain.nui.AbstractLookupControl;
 
-public class UserControl extends Control implements LookupControl {
+public class UserControl extends AbstractLookupControl {
 	private static final long serialVersionUID = 1L;
 	
 	private static final String LU_TABLE = "USER_VIEW";
 	
-	private static final String LU_KEY_COLUMN = "IDENTIFIER";
-	
-	private static final String LU_VALUE_COLUMN = "NAME";
+	private static final String ALT_KEY = "email_address";
 	
 	private static final Properties LU_PV_SOURCE_PROPS = initPvSourceProps();
 	
-	@Override
-	public DataType getDataType() {
-		return DataType.INTEGER;
-	}
-
-	@Override
-	public List<ColumnDef> getColumnDefs() {
-		return Collections.singletonList(ColumnDef.get(getDbColumnName(), ColumnTypeHelper.getIntegerColType()));
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public Long fromString(String value) {
-		if (value == null || value.trim().isEmpty()) {
-			return null;
-		}
-		
-		return new BigDecimal(value).longValue();
-	}
-
 	@Override
 	public void getProps(Map<String, Object> props) {
 		props.put("type", "userField");
@@ -55,9 +23,7 @@ public class UserControl extends Control implements LookupControl {
 	}
 	
 	public void serializeToXml(Writer writer, Properties props) {
-		writeElementStart(writer, "userField");
-		super.serializeToXml(writer, props);
-		writeElementEnd(writer, "userField");						
+		super.serializeToXml("userField", writer, props);
 	}
 
 	@Override
@@ -66,30 +32,15 @@ public class UserControl extends Control implements LookupControl {
 	}
 
 	@Override
-	public String getParentKey() {
-		return getDbColumnName();
-	}
-
-	@Override
-	public String getLookupKey() {
-		return LU_KEY_COLUMN;
-	}
-
-	@Override
-	public String getValueColumn() {
-		return LU_VALUE_COLUMN;
-	}
-
-	@Override
-	public DataType getValueType() {
-		return DataType.STRING;
-	}
-
-	@Override
 	public Properties getPvSourceProps() {
 		return LU_PV_SOURCE_PROPS;
 	}
-		
+	
+	@Override
+	public String getAltKeyColumn() {		
+		return ALT_KEY;
+	}
+	
 	private static Properties initPvSourceProps() {
 		Properties props = new Properties();
 		props.put("apiUrl", "rest/ng/users");

@@ -4,9 +4,7 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-  <class 
-    name="com.krishagni.rbac.domain.SubjectRole" 
-    table="RBAC_SUBJECT_ROLES">
+  <class name="com.krishagni.rbac.domain.SubjectRole" table="RBAC_SUBJECT_ROLES">
 
     <id name="id" column="IDENTIFIER">
       <generator class="native">
@@ -26,6 +24,16 @@
       cascade="none"
       column="ROLE_ID"/>
     
-   <property name="dsoId" column="DSO_ID"/>
+    <many-to-one
+      name="site"
+      class="com.krishagni.catissueplus.core.administrative.domain.Site"
+      cascade="none"
+      column="SITE_ID"/>
+      
+    <many-to-one
+      name="collectionProtocol"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol"
+      cascade="none"
+      column="CP_ID"/>
   </class> 
 </hibernate-mapping>

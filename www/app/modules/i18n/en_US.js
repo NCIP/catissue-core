@@ -8,7 +8,8 @@
     "sites": "Sites",
     "storage_containers": "Storage Containers",
     "distribution_protocols": "Distribution Protocols",
-    "roles": "Roles"
+    "roles": "Roles",
+    "queries": "Queries"
   },
 
   "common": {
@@ -51,12 +52,15 @@
     "import_cp_title": "Import Collection Protocol",
 
     "cp_def_file": "Collection Protocol Definition File",
-    
+  
+    "repositories": "Repositories", 
     "title": "Title",
     "short_title": "Short Title",
     "pi": "Principal Investigator",
     "coordinators": "Protocol Coordinators",
+    "date": "Date",
     "start_date": "Start Date",
+    "end_date": "End Date",
     "consents_waived": "Consents Waived",
     "ethics_approval_id": "Ethics Approval ID",
     "ppid_fmt": "Protocol Identifier Format",
@@ -106,8 +110,12 @@
     },
 
     "filter": {
-      "filter_title": "Collection Protocol Title",
-      "title": "Type the title"
+      "filter_title": "Collection Protocol Filter",
+      "title_or_short_title": "Title / Short Title",
+      "title": "Type the Title",
+      "pi": "Select Principal Investigator",
+      "repository": "Repository",
+      "select_repository": "Select Repository"
     }
   },
 
@@ -247,6 +255,17 @@
     "activity_time_info": "{{name}} created on {{time | date: dateFmt}}",
     "activity_info": "{{name}} created",
 
+    "events": "Events",
+    "event_name": "Name",
+    "event_user": "User",
+    "event_time": "Date and Time",
+    "no_events": "No events to show",
+
+    "no_specimens_for_collection": "Please select at least one anticipated specimen for collection",
+    "no_specimens_for_print": "Please select at least one collected specimen for label printing",
+
+    "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
+
     "ctx_menu": {
       "view_specimen": "View Specimen",
       "edit_specimen": "Edit Specimen",
@@ -263,7 +282,9 @@
 
     "buttons": {
       "collect_aliquots": "Collect Aliquots",
-      "create_derivative": "Create Derivative"
+      "create_derivative": "Create Derivative",
+      "collect": "Collect",
+      "print": "Print"
     },
 
     "errors": {
@@ -313,7 +334,7 @@
  
     "buttons": {
       "create_aliquots": "Create Aliquots",
-      "create_derived": "Create Derived",
+      "create_derivative": "Create Derivative",
       "add_sr": "Add Specimen Requirement..."
     },
 
@@ -345,7 +366,7 @@
 
     "filter": {
       "title": "Institute Filter",
-      "name": "Type the name"
+      "name": "Type the Name"
     },
 
     "menu_options": {
@@ -359,6 +380,7 @@
     "create_site": "Create Site",
     "update_site": "Update Site",
     "name": "Name",
+    "institute": "Institute",
     "code": "Code",
     "coordinators": "Coordinators",
     "type": "Type",
@@ -378,8 +400,8 @@
 
     "filter": {
       "title": "Site Filter",
-      "name": "Type the name",
-      "type": "Select type"
+      "name": "Type the Name",
+      "type": "Select Type"
     },
 
     "menu_options": {
@@ -394,7 +416,9 @@
     "title": "Title",
     "short_title": "Short Title",
     "pi": "Principal Investigator",
+    "date": "Date",
     "start_date": "Start Date",
+    "end_date": "End Date",
     "irb_id": "IRB ID",
     "description_url": "Description URL",
 
@@ -413,7 +437,9 @@
 
     "filter": {
       "filter_title": "Distribution Protocol Filter",
-      "title": "Type the title"
+      "title_or_short_title": "Title / Short Title",
+      "title": "Type the Title",
+      "pi": "Select Principal Investigator"
     },
 
     "menu_options": {
@@ -448,6 +474,7 @@
     "confirm_delete_pending_user": "Rejecting the user will delete this user from the database. Are you sure you want to go ahead?",
 
     "role": {
+       "roles": "Roles",
        "new_role": "New Role",
        "add_role": "Add Role...",
        "update_role": "Update Role",
@@ -484,10 +511,9 @@
 
     "filter": {
       "title": "User Filter",
-      "last_name": "Type the last name",
-      "first_name": "Type the first name",
-      "login_name": "Type the login name",
-      "activity_status": "Select the activity status"
+      "name": "Type the Name",
+      "login_name": "Type the Login Name",
+      "activity_status": "Select the Activity Status"
     },
 
     "menu_options": {
@@ -559,7 +585,7 @@
 
     "filter": {
       "title": "Storage Container Filter",
-      "name": "Enter the name"
+      "name": "Type the Name"
     },
 
     "menu_options": {
@@ -597,19 +623,15 @@
     "list": "Extensions",
 
     "name": "Name",
-    "creator": "Creator",
-    "last_updated": "Last Updated",
-    "record_count": "Records",
-    "multiRecord": "Multirecord",
+    "updated_by": "Updated By",
+    "update_time": "Update Time",
 
     "no_records": "No extension records to show",
-    "record_id": "Record #",
-    "last_updated_by": "Last Updated By",
     
     "edit_record": "Edit Record",
     "new_record": "Create New Record",
 
-    "record_saved": "Extension record saved successfully"
+    "record_saved": "Data saved successfully"
   },
 
   "entity": {
@@ -620,6 +642,28 @@
     "entity_deleted": "{{name}} deleted successfully.",
     "dependency_title": "Error: Cannot delete {{name}}",
     "dependency_details": "Cannot delete {{name}} since it has dependency on the following objects"
+  },
+
+  "queries": {
+    "list": "Queries",
+    "title": "Title",
+    "created_by": "Created By",
+    "last_updated": "Last Updated",
+    "edit": "Edit Query",
+    "download_def": "Download Query Definition",
+    "view_query_run_log": "View Query Run Log",
+    "delete": "Delete",
+    "all": "All",
+    "folders": "Folders",
+    "my_folders": "My Folders",
+    "shared_folders": "Shared Folders",
+
+    "no_queries": "No queries to show",
+    "info": "Information",
+
+    "tooltip": {
+      "view_records": "Click to View Records"
+    }
   }
 
 }

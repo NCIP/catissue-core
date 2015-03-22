@@ -1,11 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <CATISSUE_ADDRESS IDENTIFIER="1" STREET="Street1" CITY="New york" STATE="NY" COUNTRY="US" ZIPCODE="12341" PHONE_NUMBER="1231231234" />
-
   <CATISSUE_USER IDENTIFIER="1" FIRST_NAME="ADMIN" LAST_NAME="ADMIN" LOGIN_NAME="admin@admin.com" EMAIL_ADDRESS="admin@admin.com" 
-    ACTIVITY_STATUS="Active" ADDRESS_ID="1"/>
+    ACTIVITY_STATUS="Active" />
   <CATISSUE_USER IDENTIFIER="2" FIRST_NAME="first-name" LAST_NAME="last-name" LOGIN_NAME="user@user.com" EMAIL_ADDRESS="user@user.com" 
-    ACTIVITY_STATUS="Active" ADDRESS_ID="1"/>
+    ACTIVITY_STATUS="Active" />
     
   <CATISSUE_DISTRIBUTION_PROTOCOL IDENTIFIER="1" PRINCIPAL_INVESTIGATOR_ID="2" TITLE="updated-title" SHORT_TITLE="updated-shortTitle" 
     ACTIVITY_STATUS="Active" />

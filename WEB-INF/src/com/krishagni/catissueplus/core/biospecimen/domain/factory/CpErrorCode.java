@@ -3,7 +3,13 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory;
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 
 public enum CpErrorCode implements ErrorCode {
+	REPOSITORIES_REQUIRED,
+	
+	INVALID_REPOSITORIES,
+	
 	DUP_TITLE,
+	
+	DUP_SHORT_TITLE,
 	
 	TITLE_REQUIRED,
 	
@@ -19,7 +25,13 @@ public enum CpErrorCode implements ErrorCode {
 	
 	NOT_FOUND,
 	
-	CONSENT_TIER_NOT_FOUND;
+	CONSENT_TIER_NOT_FOUND,
+	
+	INVALID_SPECIMEN_LABEL_FMT,
+	
+	INVALID_ALIQUOT_LABEL_FMT,
+	
+	INVALID_DERIVATIVE_LABEL_FMT;
 
 	@Override
 	public String code() {

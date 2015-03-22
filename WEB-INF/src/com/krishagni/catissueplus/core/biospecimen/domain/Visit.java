@@ -6,13 +6,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
+@Configurable
 public class Visit {
 	public static final String VISIT_STATUS_PENDING = "Pending";
 	
@@ -47,7 +52,13 @@ public class Visit {
 	private Set<Specimen> specimens = new HashSet<Specimen>();
 
 	private CollectionProtocolRegistration registration;
-
+	
+	private String defNameTmpl;
+	
+	@Autowired
+	@Qualifier("visitNameGenerator")
+	private LabelGenerator labelGenerator;
+	
 	public Long getId() {
 		return id;
 	}
@@ -209,6 +220,14 @@ public class Visit {
 		this.registration = registration;
 	}
 
+	public String getDefNameTmpl() {
+		return defNameTmpl;
+	}
+
+	public void setDefNameTmpl(String defNameTmpl) {
+		this.defNameTmpl = defNameTmpl;
+	}
+
 	public void setActive() {
 		this.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
@@ -254,6 +273,14 @@ public class Visit {
 	
 	public CollectionProtocol getCollectionProtocol() {
 		return registration.getCollectionProtocol();
+	}
+	
+	public void setNameIfEmpty() {
+		if (StringUtils.isNotBlank(name)) {
+			return;
+		}
+		
+		setName(labelGenerator.generateLabel(defNameTmpl, this));
 	}
 	
 	private void checkActiveDependents() {

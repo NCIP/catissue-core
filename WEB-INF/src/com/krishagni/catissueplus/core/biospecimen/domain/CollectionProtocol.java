@@ -9,6 +9,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class CollectionProtocol extends BaseEntity {
@@ -40,15 +41,11 @@ public class CollectionProtocol extends BaseEntity {
 	
 	private String unsignedConsentDocumentURL;
 	
-	private Boolean aliquotInSameContainer;
-	
-	private Boolean consentsWaived;
-	
 	private Set<ConsentTier> consentTier = new HashSet<ConsentTier>();
 	
 	private Set<User> coordinators = new HashSet<User>();
 	
-	private Set<Site> sites = new HashSet<Site>();
+	private Set<Site> repositories = new HashSet<Site>();
 	
 	private Set<CollectionProtocolEvent> collectionProtocolEvents = new HashSet<CollectionProtocolEvent>();
 	
@@ -164,22 +161,6 @@ public class CollectionProtocol extends BaseEntity {
 		this.unsignedConsentDocumentURL = unsignedConsentDocumentURL;
 	}
 
-	public Boolean getAliquotInSameContainer() {
-		return aliquotInSameContainer;
-	}
-
-	public void setAliquotInSameContainer(Boolean aliquotInSameContainer) {
-		this.aliquotInSameContainer = aliquotInSameContainer;
-	}
-
-	public Boolean getConsentsWaived() {
-		return consentsWaived;
-	}
-
-	public void setConsentsWaived(Boolean consentsWaived) {
-		this.consentsWaived = consentsWaived;
-	}
-
 	public Set<ConsentTier> getConsentTier() {
 		return consentTier;
 	}
@@ -195,13 +176,13 @@ public class CollectionProtocol extends BaseEntity {
 	public void setCoordinators(Set<User> coordinators) {
 		this.coordinators = coordinators;
 	}
-
-	public Set<Site> getSites() {
-		return sites;
+	
+	public Set<Site> getRepositories() {
+		return repositories;
 	}
 
-	public void setSites(Set<Site> sites) {
-		this.sites = sites;
+	public void setRepositories(Set<Site> repositories) {
+		this.repositories = repositories;
 	}
 
 	public Set<CollectionProtocolEvent> getCollectionProtocolEvents() {
@@ -218,6 +199,26 @@ public class CollectionProtocol extends BaseEntity {
 		ct.setCollectionProtocol(this);
 		consentTier.add(ct);
 		return ct;
+	}
+	
+	public void update(CollectionProtocol cp) {
+		this.setTitle(cp.getTitle()); 
+		this.setShortTitle(cp.getShortTitle()); 
+		this.setStartDate(cp.getStartDate());
+		this.setEndDate(cp.getEndDate());
+		this.setActivityStatus(cp.getActivityStatus());
+		this.setPrincipalInvestigator(cp.getPrincipalInvestigator());
+		this.setIrbIdentifier(cp.getIrbIdentifier());
+		this.setEnrollment(cp.getEnrollment());
+		this.setDescriptionURL(cp.getDescriptionURL());
+		this.setSpecimenLabelFormat(cp.getSpecimenLabelFormat());
+		this.setDerivativeLabelFormat(cp.getDerivativeLabelFormat());
+		this.setAliquotLabelFormat(cp.getAliquotLabelFormat());
+		this.setPpidFormat(cp.getPpidFormat());
+		this.setUnsignedConsentDocumentURL(cp.getUnsignedConsentDocumentURL());
+		
+		CollectionUpdater.update(this.repositories, cp.getRepositories());
+		CollectionUpdater.update(this.coordinators, cp.getCoordinators());
 	}
 	
 	public ConsentTier updateConsentTier(ConsentTier ct) {

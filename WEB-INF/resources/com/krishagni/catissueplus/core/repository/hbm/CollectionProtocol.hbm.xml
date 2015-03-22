@@ -55,14 +55,10 @@
       <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
     </set>
 
-    <set name="sites" table="CATISSUE_SITE_CP" inverse="false" cascade="none" sort="unsorted">
+    <set name="repositories" table="CATISSUE_SITE_CP" inverse="false" cascade="none" sort="unsorted">
       <key column="COLLECTION_PROTOCOL_ID"/>
       <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.Site" column="SITE_ID"/>
     </set>
-    
-    <property name="aliquotInSameContainer" column="ALIQUOT_IN_SAME_CONTAINER"/>
-
-    <property name="consentsWaived" column="CONSENTS_WAIVED" />
 
     <set name="collectionProtocolEvents" table="CATISSUE_COLL_PROT_EVENT" inverse="true" cascade="save-update">
       <key column="COLLECTION_PROTOCOL_ID"/>
@@ -82,6 +78,7 @@
         left join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = cpr.identifier 
         left join catissue_specimen sp on sp.specimen_collection_group_id = scg.identifier and sp.collection_status = 'Collected'
       where
+        cp.identifier in (:cpIds) and
         cp.activity_status = 'Active'
       group by 
         cp.identifier

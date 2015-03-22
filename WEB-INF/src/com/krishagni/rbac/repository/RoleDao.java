@@ -15,4 +15,5 @@ public interface RoleDao extends Dao<Role> {
 	public void deleteRole(Role role);
 	
 	public List<Role> getRoles(RoleListCriteria listCriteria);
+	
 }

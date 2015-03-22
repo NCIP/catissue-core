@@ -2,6 +2,10 @@ package com.krishagni.rbac.repository.impl;
 
 import org.hibernate.SessionFactory;
 
+import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
+import com.krishagni.catissueplus.core.administrative.repository.impl.SiteDaoImpl;
+import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.impl.CollectionProtocolDaoImpl;
 import com.krishagni.rbac.repository.DaoFactory;
 import com.krishagni.rbac.repository.GroupDao;
 import com.krishagni.rbac.repository.OperationDao;
@@ -59,6 +63,20 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public SubjectDao getSubjectDao() {
 		SubjectDaoImpl dao = new SubjectDaoImpl();
+		dao.setSessionFactory(sessionFactory);
+		return dao;
+	}
+
+	@Override
+	public CollectionProtocolDao getCollectionProtocolDao() {
+		CollectionProtocolDaoImpl dao = new CollectionProtocolDaoImpl();
+		dao.setSessionFactory(sessionFactory);
+		return dao;
+	}
+
+	@Override
+	public SiteDao getSiteDao() {
+		SiteDaoImpl dao = new SiteDaoImpl();
 		dao.setSessionFactory(sessionFactory);
 		return dao;
 	}

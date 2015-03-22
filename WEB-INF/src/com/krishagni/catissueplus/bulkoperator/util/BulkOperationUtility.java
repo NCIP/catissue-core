@@ -25,23 +25,19 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Properties;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import au.com.bytecode.opencsv.CSVReader;
+
 import com.krishagni.catissueplus.bulkoperator.csv.CsvReader;
-import com.krishagni.catissueplus.bulkoperator.csv.impl.CsvFileReader;
 import com.krishagni.catissueplus.bulkoperator.metadata.Attribute;
 import com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationClass;
+
 import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.JDBCDAO;
-import edu.wustl.dao.daofactory.DAOConfigFactory;
-import edu.wustl.dao.exception.DAOException;
 
 public class BulkOperationUtility
 {
@@ -415,29 +411,29 @@ public class BulkOperationUtility
 	 * server and stops.
 	 * @param sessionData SessionDataBean
 	 */
-	public static void changeBulkOperationStatusToFailed() throws DAOException
+	public static void changeBulkOperationStatusToFailed() throws Exception
 	{
-		try
-		{
-			final String appName = CommonServiceLocator.getInstance().getAppName();
-			final JDBCDAO jdbcDao = DAOConfigFactory.getInstance().getDAOFactory(appName)
-					.getJDBCDAO();
-			jdbcDao.openSession(null);
-			jdbcDao
-					.executeUpdate("update job_details set job_status = 'Failed' where job_status = 'In Progress'");
-			jdbcDao.commit();
-			jdbcDao.closeSession();
-		}
-		catch (final DAOException daoExp)
-		{
-			logger
-					.error(
-							"Could not update the table Job Details with the "
-									+ "status column value from inprogess to failed."
-									+ daoExp.getMessage(), daoExp);
-			logger.error(daoExp.getMessage(), daoExp);
-			throw daoExp;
-		}
+//		try
+//		{
+//			final String appName = CommonServiceLocator.getInstance().getAppName();
+//			final JDBCDAO jdbcDao = DAOConfigFactory.getInstance().getDAOFactory(appName)
+//					.getJDBCDAO();
+//			jdbcDao.openSession(null);
+//			jdbcDao
+//					.executeUpdate("update job_details set job_status = 'Failed' where job_status = 'In Progress'");
+//			jdbcDao.commit();
+//			jdbcDao.closeSession();
+//		}
+//		catch (final DAOException daoExp)
+//		{
+//			logger
+//					.error(
+//							"Could not update the table Job Details with the "
+//									+ "status column value from inprogess to failed."
+//									+ daoExp.getMessage(), daoExp);
+//			logger.error(daoExp.getMessage(), daoExp);
+//			throw daoExp;
+//		}
 	}
 
 	public static boolean checkIfAtLeastOneColumnHasAValue(int index, List<String> attributeList,

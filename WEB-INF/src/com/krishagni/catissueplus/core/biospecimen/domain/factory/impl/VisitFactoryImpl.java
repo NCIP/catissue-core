@@ -29,9 +29,15 @@ import com.krishagni.catissueplus.core.common.util.Status;
 public class VisitFactoryImpl implements VisitFactory {
 
 	private DaoFactory daoFactory;
+	
+	private String defaultNameTmpl;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+	
+	public void setDefaultNameTmpl(String defNameTmpl) {
+		this.defaultNameTmpl = defNameTmpl;
 	}
 
 	@Override
@@ -55,6 +61,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		
 		visit.setComments(visitDetail.getComments());
 		visit.setSurgicalPathologyNumber(visitDetail.getSurgicalPathologyNumber());
+		visit.setDefNameTmpl(defaultNameTmpl);
 		
 		ose.checkAndThrow();
 		return visit;

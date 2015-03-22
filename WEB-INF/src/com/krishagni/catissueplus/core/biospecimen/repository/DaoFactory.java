@@ -5,19 +5,19 @@ import com.krishagni.catissueplus.core.administrative.repository.DistributionOrd
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
+import com.krishagni.catissueplus.core.administrative.repository.ScheduledJobDao;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.audit.repository.AuditDao;
 import com.krishagni.catissueplus.core.auth.repository.AuthDao;
-import com.krishagni.catissueplus.core.common.repository.KeyGeneratorDao;
+import com.krishagni.catissueplus.core.common.repository.ConfigSettingDao;
+import com.krishagni.catissueplus.core.common.repository.UniqueIdGenerator;
 import com.krishagni.catissueplus.core.notification.repository.CPStudyMappingDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalApplicationDao;
 
-
 public interface DaoFactory {
-
 	public CollectionProtocolDao getCollectionProtocolDao();
 
 	public ParticipantDao getParticipantDao();
@@ -42,7 +42,7 @@ public interface DaoFactory {
 
 	public CPStudyMappingDao getCPStudyMappingDao();
 
-	public KeyGeneratorDao getKeyGeneratorDao();
+	public UniqueIdGenerator getUniqueIdGenerator();
 
 	public InstituteDao getInstituteDao();
 
@@ -55,6 +55,12 @@ public interface DaoFactory {
 	public PermissibleValueDao getPermissibleValueDao();
 	
 	public AuditDao getAuditDao();
+
+	public ScheduledJobDao getScheduledJobDao();
 	
 	public DistributionOrderDao getDistributionOrderDao();
+	
+	public ConfigSettingDao getConfigSettingDao();
+	
+	public SpecimenLabelPrintJobDao getSpecimenLabelPrintJobDao();
 }

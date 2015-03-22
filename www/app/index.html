@@ -41,6 +41,7 @@
     <link rel="stylesheet" href="styles/right-drawer.css">
     <link rel="stylesheet" href="styles/extensions.css">
     <link rel="stylesheet" href="styles/roles.css">
+    <link rel="stylesheet" href="styles/query.css">
     <!-- endbuild -->
   </head>
   <body ng-app="openspecimen">
@@ -80,6 +81,7 @@
     <script src="external_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
     <script src="external_components/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
     <script src="external_components/de/js/de-form.js"></script>
+    <script src="external_components/de/js/de-field-manager.js"></script>
     <script src="external_components/select2/select2.min.js"></script>
     <!-- endbuild -->
 
@@ -186,14 +188,17 @@
     <script src="modules/biospecimen/models/cpr.js"></script>
     <script src="modules/biospecimen/models/visit.js"></script>
     <script src="modules/biospecimen/models/specimen.js"></script>
+    <script src="modules/biospecimen/models/specimen-printer.js"></script>
     <script src="modules/biospecimen/models/form.js"></script>
 
     <!-- Extensions -->
     <script src="modules/biospecimen/extensions/module.js"></script>
     <script src="modules/biospecimen/extensions/form.js"></script>
     <script src="modules/biospecimen/extensions/list.js"></script>
-    <script src="modules/biospecimen/extensions/records.js"></script>
     <script src="modules/biospecimen/extensions/addedit.js"></script>
+    <script src="modules/biospecimen/extensions/select2.js"></script>
+    <script src="modules/biospecimen/extensions/fancy/de-users.js"></script>
+    <script src="modules/biospecimen/extensions/fancy/de-storage-containers.js"></script>
 
     <!-- CP module -->
     <script src="modules/biospecimen/cp/module.js"></script>
@@ -232,9 +237,18 @@
     <script src="modules/biospecimen/common/module.js"></script>
     <script src="modules/biospecimen/common/specimen-qty-validate.js"></script>
     <script src="modules/biospecimen/common/unique-specimen-label.js"></script>
+    <script src="modules/biospecimen/common/specimen-qty-unit.js"></script>
 
     <script src="modules/biospecimen/cp/config.js"></script>
     <script src="custom-modules/biospecimen/participant/register.js"></script>
+
+    <!-- Query -->
+    <script src="modules/query/module.js"></script>
+    <script src="modules/query/models/module.js"></script>
+    <script src="modules/query/models/saved-query.js"></script>
+    <script src="modules/query/models/query-folder.js"></script>
+    <script src="modules/query/list.js"></script>
+    
 
     <!-- endbuild -->
   </body>

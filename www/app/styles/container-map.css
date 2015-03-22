@@ -15,6 +15,10 @@
   position: relative;
 }
 
+.os-container-map td:hover {
+  background: #f5f5f5;
+}
+
 .os-container-map tr:first-child td {
   border-top: 1px solid #dddddd;
 }
@@ -39,6 +43,15 @@
   bottom: 0;
   right: 0;
   left: 0;
+}
+
+.os-container-map .slot-element .slot_add {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5em;
+  left: 50%;
+  margin-left: -0.5em;
+  color: #428bca;
 }
 
 .os-container-map .slot-pos {

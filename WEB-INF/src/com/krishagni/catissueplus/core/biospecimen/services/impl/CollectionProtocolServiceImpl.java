@@ -30,9 +30,9 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
 import com.krishagni.catissueplus.core.biospecimen.events.CopyCpeOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.ListCpCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.CpListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
@@ -88,10 +88,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<CollectionProtocolSummary>> getProtocols(RequestEvent<ListCpCriteria> req) {
-		ListCpCriteria crit = req.getPayload();
+	public ResponseEvent<List<CollectionProtocolSummary>> getProtocols(RequestEvent<CpListCriteria> req) {
+		CpListCriteria crit = req.getPayload();
 		List<CollectionProtocolSummary> cpList = daoFactory.getCollectionProtocolDao()
-				.getCollectionProtocols(crit.includePi(), crit.includeStat());
+				.getCollectionProtocols(crit);
 		
 		List<CollectionProtocolSummary> result = new ArrayList<CollectionProtocolSummary>();
 		for (CollectionProtocolSummary collectionProtocolSummary : cpList) {
@@ -142,10 +142,36 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueTitle(cp.getTitle(), ose);
+			ensureUniqueShortTitle(cp.getShortTitle(), ose);
 			ose.checkAndThrow();
 
 			daoFactory.getCollectionProtocolDao().saveOrUpdate(cp);
 			return ResponseEvent.response(CollectionProtocolDetail.from(cp));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<CollectionProtocolDetail> updateCollectionProtocol(RequestEvent<CollectionProtocolDetail> req) {
+		try {
+			CollectionProtocolDetail detail = req.getPayload();
+			CollectionProtocol existingCp = daoFactory.getCollectionProtocolDao().getById(detail.getId());
+			if (existingCp == null) {
+				return ResponseEvent.userError(CpErrorCode.NOT_FOUND);
+			}
+
+			CollectionProtocol cp = cpFactory.createCollectionProtocol(detail);
+			
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueTitle(existingCp, cp, ose);
+			ose.checkAndThrow();
+			
+			existingCp.update(cp);
+			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -440,10 +466,23 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		}
 	}
 	
+	private void ensureUniqueTitle(CollectionProtocol existingCp, CollectionProtocol cp, OpenSpecimenException ose) {
+		if (!existingCp.getTitle().equals(cp.getTitle())) {
+			ensureUniqueTitle(cp.getTitle(), ose);
+		}
+	}
+	
 	private void ensureUniqueTitle(String title, OpenSpecimenException ose) {
 		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);
 		if (cp != null) {
 			ose.addError(CpErrorCode.DUP_TITLE);
+		}		
+	}
+	
+	private void ensureUniqueShortTitle(String shortTitle, OpenSpecimenException ose) {
+		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCpByShortTitle(shortTitle);
+		if (cp != null) {
+			ose.addError(CpErrorCode.DUP_SHORT_TITLE);
 		}
 	}
 	

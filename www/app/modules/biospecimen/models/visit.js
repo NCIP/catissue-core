@@ -66,8 +66,9 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
       return Form.listFor(Visit.url(), this.$id());
     };
     
-    Visit.prototype.getRecords = function(formCtxId) {
-      return Form.listRecords(Visit.url(), this.$id(), formCtxId);
+    Visit.prototype.getRecords = function() {
+      var url = Visit.url() + this.$id() + '/extension-records';
+      return Form.listRecords(url);
     };
 
     return Visit;

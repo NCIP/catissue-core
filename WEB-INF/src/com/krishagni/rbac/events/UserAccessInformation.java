@@ -5,7 +5,9 @@ public class UserAccessInformation {
 	
 	private Long groupId;
 	
-	private Long dsoId;
+	private Long cpId;
+	
+	private Long siteId;
 	
 	private String resourceName;
 	
@@ -33,12 +35,21 @@ public class UserAccessInformation {
 		return this;
 	}
 
-	public Long dsoId() {
-		return dsoId;
+	public Long cpId() {
+		return cpId;
 	}
-
-	public UserAccessInformation dsoId(Long dsoId) {
-		this.dsoId = dsoId;
+	
+	public UserAccessInformation cpId(Long cpId) {
+		this.cpId = cpId;
+		return this;
+	}
+	
+	public Long siteId() {
+		return siteId;
+	}
+	
+	public UserAccessInformation siteId(Long siteId) {
+		this.siteId = siteId;
 		return this;
 	}
 

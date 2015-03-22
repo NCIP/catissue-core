@@ -2,6 +2,11 @@ var edu = edu || {};
 edu.common = edu.common || {};
 edu.common.de = edu.common.de || {};
 
+edu.common.de.id = 0;
+edu.common.de.nextUid = function(el) {
+  return ++edu.common.de.id;
+}
+
 edu.common.de.RequiredValidator = function(field, dataEl) {
   this.validate = function() {
     var valid = false;
@@ -156,16 +161,18 @@ edu.common.de.Form = function(args) {
   this.fileDownloadUrl = args.fileDownloadUrl;
   this.appData = args.appData;
   this.dateFormat = args.dateFormat;
+
+  this.customHdrs = args.customHdrs || {};
   
   if (!this.formDef && this.formDefUrl) {
     var url = this.formDefUrl.replace(":formId", this.formId);
-    this.formDefXhr = $.ajax({type: 'GET', url: url, xhrFields: {withCredentials: true}});
+    this.formDefXhr = $.ajax({type: 'GET', url: url, headers: this.customHdrs});
   }
 
   if (this.recordId && !this.formData && this.formDataUrl) {
     var url = this.formDataUrl.replace(":formId", args.id)
                               .replace(":recordId", args.recordId);
-    this.formDataXhr = $.ajax({type: 'GET', url: url, xhrFields: {withCredentials: true}});
+    this.formDataXhr = $.ajax({type: 'GET', url: url, headers: this.customHdrs});
   }
 
   this.render = function() {
@@ -354,7 +361,7 @@ edu.common.de.Form = function(args) {
     $.ajax({
       type: method,
       url: url,
-      xhrFields: {withCredentials: true},
+      headers: this.customHdrs,
       data: JSON.stringify(formData)
     }).done(function(data) { 
       data = JSON.parse(data);
@@ -438,8 +445,7 @@ edu.common.de.FieldFactory = {
     var fieldObj;
     idx = idx || "";
 
-    var id = 'de-' + field.name + "-" + idx;
-
+    var id = 'de-' + field.name + "-" + edu.common.de.nextUid();
     if (field.type == 'stringTextField') {
       fieldObj = new edu.common.de.TextField(id, field, args);
     } else if (field.type == 'numberField') {
@@ -476,7 +482,8 @@ edu.common.de.FieldFactory = {
 
 edu.common.de.TextField = function(id, field) {
   this.inputEl = null;
-  this.validator;
+
+  this.validator = null;
 
   this.render = function() {
     this.inputEl = $("<input/>")
@@ -635,6 +642,8 @@ edu.common.de.DatePicker = function(id, field, args) {
   this.timeEl = null;
   this.validator;
 
+  this.minWidth = 225;
+
   this.render = function() {
     this.dateEl = $("<input/>")
       .prop({id: id, type: 'text', title: field.toolTip})
@@ -663,6 +672,7 @@ edu.common.de.DatePicker = function(id, field, args) {
       this.inputEl.append(timeField);
     }
 
+    this.inputEl.prop({title: field.toolTip});
     this.validator = new edu.common.de.FieldValidator(field.validationRules, this, this.dateEl);
 
     if (format && format.length != 0) {
@@ -732,6 +742,8 @@ edu.common.de.DatePicker = function(id, field, args) {
     } else {
       this.dateEl.val(value);
     }
+
+    this.dateEl.datepicker('update');
   };
 
   this.getDisplayValue = function() {
@@ -830,6 +842,7 @@ edu.common.de.SelectField = function(id, field) {
 
   this.postRender = function() {
     this.inputEl.select2({allowClear: true});
+    this.inputEl.siblings('div.select2-container').prop({title: field.toolTip});
   };
 
   this.getName = function() {
@@ -1224,6 +1237,10 @@ edu.common.de.SubFormField = function(id, sfField, args) {
     var theadRow = $("<tr/>");
     for (var i = 0; i < this.fieldObjsRows[0].length; ++i) {
       var field = this.fieldObjsRows[0][i];
+      if (field instanceof edu.common.de.Note) {
+        continue;
+      }
+
       theadRow.append($("<th/>").append(field.getCaption()));
     }
 
@@ -1234,6 +1251,9 @@ edu.common.de.SubFormField = function(id, sfField, args) {
       var tr = $("<tr/>");
       for (var j = 0; j < this.fieldObjsRows[i].length; ++j) {
         var field = this.fieldObjsRows[i][j];
+        if (field instanceof edu.common.de.Note) {
+          continue;
+        }
         tr.append($("<td/>").append(edu.common.de.Utility.getPrintEl(field)));
       }
       tbody.append(tr);
@@ -1420,6 +1440,10 @@ edu.common.de.Note = function(id, field) {
   this.validate = function() {
     return true;
   };
+
+  this.getDisplayValue = function() {
+    return {name: field.name, value: field.caption};
+  }
 };
 
 edu.common.de.UnknownField = function(id, field) {
@@ -1451,6 +1475,7 @@ edu.common.de.UnknownField = function(id, field) {
     return edu.common.de.Utility.getPrintEl(this);
   };
 };
+
 
 edu.common.de.Utility = {
   /**
@@ -1490,14 +1515,14 @@ edu.common.de.Utility = {
 
   highlightError: function(el, tooltip) {
     if (el.is('select')) {
-      el.next().attr('title', tooltip);
+      el.siblings('div.select2-container').attr('title', tooltip);
     }
     el.addClass('de-input-error').attr('title', tooltip);
   },
 
   unHighlightError: function(el, tooltip) {
     if (el.is('select')) {
-      el.next().attr('title', tooltip);
+      el.siblings('div.select2-container').attr('title', tooltip);
     }
     el.removeClass('de-input-error').attr('title', tooltip);
   },
@@ -1541,3 +1566,301 @@ edu.common.de.Utility = {
     return $("<span/>").append(val);
   }
 };
+
+edu.common.de.Extend = function(props) {
+  var parent = this;
+  var child = function() { return parent.apply(this, arguments); };
+
+  $.extend(child, parent);
+  if (props) {
+    $.extend(child.prototype, props);
+  }
+
+  child.__super__ = parent.prototype;
+  return child;
+};
+
+edu.common.de.LookupField = function(params, callback) {
+  this.inputEl = null;
+
+  this.control = null;
+
+  this.value = '';
+
+  this.validator;
+
+  var timeout = undefined;
+
+  var field = params.field;
+ 
+  var id = params.id;
+
+  var that = this;
+
+  var qFunc = function(qTerm, qCallback) {
+    var timeInterval = 500;
+    if (qTerm.length == 0) {
+      timeInterval = 0;
+    }
+
+    if (timeout != undefined) {
+      clearTimeout(timeout);
+    }
+
+    timeout = setTimeout(
+      function() { 
+        var promise = that.search(qTerm);
+        $.when(promise).done(
+          function(results) {
+            qCallback(results);
+          }
+        );
+      }, 
+      timeInterval);
+  };
+
+  var onChange = function(selected) { 
+    if (selected) {
+      that.value = selected.id;
+    } else {
+      that.value = '';
+    }
+
+    if (typeof callback == "function") {
+      callback(selected);
+    }
+  };
+
+  var initSelection = function(elem, callback) {
+    if (!that.value) {
+      $.when(that.getDefaultValue()).done(
+        function(result) {
+          that.value = result.id;
+          that.control.setValue(result.id);
+          callback(result);
+        }
+      );
+    } else {
+      $.when(that.lookup(that.value)).done(
+        function(result) {
+          callback(result);
+        }
+      );
+    }
+  };
+
+  this.render = function() {
+    this.inputEl = $("<input/>")
+      .prop({id: id, title: field.toolTip, value: field.defaultValue})
+      .css("border", "0px").css("padding", "0px")
+      .val("")
+      .addClass("form-control");
+    this.validator = new edu.common.de.FieldValidator(field.validationRules, this);
+    return this.inputEl;
+  };
+
+  this.postRender = function() {
+    this.control = new Select2Search(this.inputEl);
+    this.control.onQuery(qFunc).onChange(onChange);
+    this.control.onInitSelection(initSelection).render();
+    if (this.value) {
+      this.control.setValue(this.value);
+    }
+  };
+
+  this.getName = function() {
+    return field.name;
+  };
+
+  this.getCaption = function() {
+    return field.caption;
+  };
+
+  this.getTooltip = function() {
+    return field.toolTip ? field.toolTip : field.caption;
+  };
+
+  this.getValue = function() {
+    var val = this.control.getValue();
+    if (val) {
+      val = val.id;
+    }
+
+    return {name: field.name, value: val};
+  };
+
+  this.getDisplayValue = function() {
+    if(!this.control) {
+      this.postRender();
+    }
+    var val = this.control.getValue();
+    if (val) {
+      var displayValue = val.text;
+    }
+    return {name: field.name, value: displayValue ? displayValue : '' };
+  }
+
+  this.setValue = function(recId, value) {
+    this.recId = recId;
+    this.value = value; // ? value : '';
+    if (this.control) {
+      this.control.setValue(value);
+    }
+  };
+
+  this.validate = function() {
+    return this.validator.validate();
+  };
+
+  this.getPrintEl = function() {
+    return edu.common.de.Utility.getPrintEl(this);
+  };
+
+  this.getDefaultValue = function() {
+    return this.svc.getDefaultEntity();
+  };
+
+  this.lookup = function(id) {
+    return this.svc.getEntity(id);
+  };
+
+  this.search = function(qTerm) {
+    var searchFilters = {};
+    if (params) {
+      searchFilters = params.searchFilters || {};
+    }
+    return this.svc.getEntities(qTerm, searchFilters);
+  };
+};
+
+edu.common.de.LookupField.extend = edu.common.de.Extend;
+
+edu.common.de.LookupSvc = function(params) {
+  var entitiesMap = {};
+ 
+  var defaultList = {};
+
+  var xhrMap = {};
+
+  var defaultValue;
+
+  this.getEntities = function(queryTerm, searchFilters) {
+    var deferred = $.Deferred();
+
+    var resultKey = '_default';
+    if (!queryTerm) {
+      if (searchFilters) {
+        var keys = Object.keys(searchFilters).sort();
+        if (keys.length > 0) {
+          resultKey = '';
+        }
+
+        for (var i = 0; i < keys.length; ++i) {
+          resultKey += keys[i] + "__" + searchFilters[keys[i]] + '__';
+        }
+      }
+
+      if (defaultList[resultKey]) {
+        deferred.resolve(defaultList[resultKey]);
+        return deferred.promise();
+      }
+    }
+
+    var baseUrl = this.getApiUrl();
+    var xhr;
+    if (queryTerm) {      
+      xhr = $.ajax({
+        type: 'GET', 
+        url: baseUrl, 
+        headers: this.getHeaders(), 
+        data: this.searchRequest(queryTerm, searchFilters)
+      });
+    } else if (xhrMap[resultKey]) {
+      xhr = xhrMap[resultKey];
+    } else {
+      xhr = xhrMap[resultKey] = $.ajax({
+        type: 'GET', 
+        url: baseUrl, 
+        headers: this.getHeaders(), 
+        data: this.searchRequest(queryTerm, searchFilters)});
+    }
+   
+   
+    var that = this;
+    xhr.done(
+      function(data) {
+        var result = that.formatResults(data, queryTerm);
+        if (!queryTerm) {
+          defaultList[resultKey] = result;
+        }
+
+        deferred.resolve(result);
+        delete xhrMap[resultKey];
+      }
+    ).fail(
+      function(data) {
+        alert("Failed to load entities list");
+        deferred.resolve([]);
+        delete xhrMap[resultKey];
+      }
+    );
+
+    return deferred.promise();
+  };
+
+  this.getEntity = function(id) {
+    var deferred = $.Deferred(); 
+    var entity = entitiesMap[id];
+    if (entity) {
+      deferred.resolve(entity);
+      return deferred.promise();
+    }
+
+    for (var i = 0; i < defaultList.length; ++i) {
+      if (defaultList[i].id == id) { 
+        deferred.resolve(defaultList[i]);
+        return deferred.promise();
+      }
+    }
+
+    var that = this;
+    var baseUrl = this.getApiUrl();
+    $.ajax({type: 'GET', url: baseUrl + id, headers: this.getHeaders()})
+      .done(function(data) {
+        var result = that.formatResult(data);
+        entitiesMap[id] = result;
+        deferred.resolve(result);
+      })
+      .fail(function(data) {
+        alert("Failed to retrieve entity")
+        deferred.resolve(undefined);
+      });
+
+    return deferred.promise();
+  };
+
+  this.getDefaultEntity = function() {
+    var deferred = $.Deferred(); 
+    if (defaultValue) {
+      deferred.resolve(defaultValue);
+      return deferred.promise();
+    }
+
+    var that = this;
+    this.getDefaultValue().done(
+      function(data) {
+        var result = that.formatResult(data);
+        entitiesMap[result.id] = result;
+        defaultValue = result;
+        deferred.resolve(result);
+      })
+      .fail(function(data) {
+        alert("Failed to retrieve default value");
+        deferred.resolve(undefined);
+      });
+
+    return deferred.promise();
+  };
+};
+
+edu.common.de.LookupSvc.extend = edu.common.de.Extend;

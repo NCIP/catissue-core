@@ -88,5 +88,49 @@
         v.id = :visitId and
         csr.id = :srId
     </query>
+
+    <query name="getByIds">
+      select
+        s
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
+      where
+        s.id in (:specimenIds) and
+        s.activityStatus = 'Active'
+    </query>
+
+    <query name="getByLabels">
+      select
+        s
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
+      where
+        s.label in (:specimenLabels) and
+        s.activityStatus = 'Active'
+    </query>
+
+    <query name="getByVisitId">
+      select
+        s
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
+        join s.visit v
+      where
+        v.id = :visitId and
+        v.activityStatus = 'Active' and
+        s.activityStatus = 'Active'
+    </query>
+
+    <query name="getByVisitName">
+      select
+        s
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
+        join s.visit v
+      where
+        v.name = :visitName and
+        v.activityStatus = 'Active' and
+        s.activityStatus = 'Active'
+    </query>
   </class>
 </hibernate-mapping>

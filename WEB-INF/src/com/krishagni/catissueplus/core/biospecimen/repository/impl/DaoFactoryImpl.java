@@ -7,6 +7,7 @@ import com.krishagni.catissueplus.core.administrative.repository.DistributionOrd
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
+import com.krishagni.catissueplus.core.administrative.repository.ScheduledJobDao;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
@@ -14,6 +15,7 @@ import com.krishagni.catissueplus.core.administrative.repository.impl.Distributi
 import com.krishagni.catissueplus.core.administrative.repository.impl.DistributionProtocolDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.InstituteDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.PermissibleValueDaoImpl;
+import com.krishagni.catissueplus.core.administrative.repository.impl.ScheduledJobDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.SiteDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.StorageContainerDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl;
@@ -26,12 +28,15 @@ import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocol
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenLabelPrintJobDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenRequirementDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-import com.krishagni.catissueplus.core.common.repository.KeyGeneratorDao;
-import com.krishagni.catissueplus.core.common.repository.impl.KeyGeneratorDaoImpl;
+import com.krishagni.catissueplus.core.common.repository.ConfigSettingDao;
+import com.krishagni.catissueplus.core.common.repository.UniqueIdGenerator;
+import com.krishagni.catissueplus.core.common.repository.impl.ConfigSettingDaoImpl;
+import com.krishagni.catissueplus.core.common.repository.impl.UniqueIdGeneratorImpl;
 import com.krishagni.catissueplus.core.notification.repository.CPStudyMappingDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalApplicationDao;
@@ -138,12 +143,12 @@ public class DaoFactoryImpl implements DaoFactory {
 		setSessionFactory(dao);
 		return dao;
 	}
-
+	
 	@Override
-	public KeyGeneratorDao getKeyGeneratorDao() {
-		KeyGeneratorDaoImpl dao = new KeyGeneratorDaoImpl();
-		setSessionFactory(dao);
-		return dao;
+	public UniqueIdGenerator getUniqueIdGenerator() {
+		UniqueIdGeneratorImpl impl = new UniqueIdGeneratorImpl();
+		setSessionFactory(impl);
+		return impl;
 	}
 
 	@Override
@@ -191,6 +196,27 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public DistributionOrderDao getDistributionOrderDao() {
 		DistributionOrderDaoImpl dao = new DistributionOrderDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public ScheduledJobDao getScheduledJobDao() {
+		ScheduledJobDaoImpl dao = new ScheduledJobDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public ConfigSettingDao getConfigSettingDao() {
+		ConfigSettingDaoImpl dao = new ConfigSettingDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public SpecimenLabelPrintJobDao getSpecimenLabelPrintJobDao() {
+		SpecimenLabelPrintJobDaoImpl dao = new SpecimenLabelPrintJobDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

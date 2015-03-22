@@ -56,7 +56,7 @@ public class AbstractDao<T> implements Dao<T> {
 		return result.isEmpty() ? null : result.iterator().next();
 	}
 	
-	public Class getType() {
+	public Class<?> getType() {
 		throw new UnsupportedOperationException("Override the dao method getType() to use getById()");
 	}
 	

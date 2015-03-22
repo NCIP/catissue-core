@@ -20,7 +20,6 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.krishagni.catissueplus.rest.controller"})
 @ImportResource("classpath:testContext.xml")
-@Import({PersistentContext.class})
 @PropertySource("classpath:test.properties")
 public class ApplicationContextConfigurer extends WebMvcConfigurerAdapter {
     private static final String MESSAGE_SOURCE_BASE_NAME = "i1	8n/messages";

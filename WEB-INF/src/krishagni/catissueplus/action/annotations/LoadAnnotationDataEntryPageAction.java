@@ -9,14 +9,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.hibernate.Query;
-import org.hibernate.Transaction;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
 
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.dao.HibernateDAO;
 
 public class LoadAnnotationDataEntryPageAction extends BaseAction {
 	@Override
@@ -29,51 +25,51 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction {
 		String entityRecId = request.getParameter("entityRecordId");
 		request.setAttribute("entityRecId", entityRecId);
 		
-		HibernateDAO hibernateDao = null;
-		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
-				.getAttribute(Constants.SESSION_DATA);
-		hibernateDao = (HibernateDAO)AppUtility.openDAOSession(sessionDataBean);
-		Session session = hibernateDao.getConnectionManager().getSessionFactory().getCurrentSession();
-		
-		String userName = new StringBuilder().append(sessionDataBean.getLastName()).append(", ")
-				.append(sessionDataBean.getFirstName()).toString();
-		request.setAttribute("userName", userName);
-		
-		String ppId = null;
-		String cpTitle = null; 
-
-		Object[] result = null;
-		Transaction txn = null;
-		try {
-			txn = session.beginTransaction();
+//		HibernateDAO hibernateDao = null;
+//		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
+//				.getAttribute(Constants.SESSION_DATA);
+//		hibernateDao = (HibernateDAO)AppUtility.openDAOSession(sessionDataBean);
+//		Session session = hibernateDao.getConnectionManager().getSessionFactory().getCurrentSession();
+//		
+//		String userName = new StringBuilder().append(sessionDataBean.getLastName()).append(", ")
+//				.append(sessionDataBean.getFirstName()).toString();
+//		request.setAttribute("userName", userName);
+//		
+//		String ppId = null;
+//		String cpTitle = null; 
+//
+//		Object[] result = null;
+//		Transaction txn = null;
+//		try {
+//			txn = session.beginTransaction();
+//			
+//			if (entityType.equals("Participant")) {
+//				result = getParticipantInfo(session, entityRecId);
+//				request.setAttribute("ppId", (String) result[0]);
+//				request.setAttribute("cpTitle", (String) result[1]);				
+//			} else if (entityType.equals("SpecimenCollectionGroup")) {
+//				result = getScgInfo(session, entityRecId);
+//				request.setAttribute("ppId", (String) result[0]);
+//				request.setAttribute("cpTitle", (String) result[1]);				
+//				request.setAttribute("scgLabel", (String) result[2]);
+//				request.setAttribute("cpEventLabel", (String) result[3]);
+//			} else if (entityType.equals("Specimen") || entityType.equals("SpecimenEvent")) {
+//				result = getSpecimenInfo(session, entityRecId);
+//				request.setAttribute("ppId", (String) result[0]);
+//				request.setAttribute("cpTitle", (String) result[1]);				
+//				request.setAttribute("scgLabel", (String) result[2]);
+//				request.setAttribute("cpEventLabel", (String) result[3]);
+//				request.setAttribute("specimenLabel", (String) result[4]);
+//			}
+//		} catch (Exception e) {
+//			throw new RuntimeException("Exception while fetching entity related info", e);
+//		} finally {
+//			if (session != null) {
+//				session.getTransaction().rollback();
+//			}
 			
-			if (entityType.equals("Participant")) {
-				result = getParticipantInfo(session, entityRecId);
-				request.setAttribute("ppId", (String) result[0]);
-				request.setAttribute("cpTitle", (String) result[1]);				
-			} else if (entityType.equals("SpecimenCollectionGroup")) {
-				result = getScgInfo(session, entityRecId);
-				request.setAttribute("ppId", (String) result[0]);
-				request.setAttribute("cpTitle", (String) result[1]);				
-				request.setAttribute("scgLabel", (String) result[2]);
-				request.setAttribute("cpEventLabel", (String) result[3]);
-			} else if (entityType.equals("Specimen") || entityType.equals("SpecimenEvent")) {
-				result = getSpecimenInfo(session, entityRecId);
-				request.setAttribute("ppId", (String) result[0]);
-				request.setAttribute("cpTitle", (String) result[1]);				
-				request.setAttribute("scgLabel", (String) result[2]);
-				request.setAttribute("cpEventLabel", (String) result[3]);
-				request.setAttribute("specimenLabel", (String) result[4]);
-			}
-		} catch (Exception e) {
-			throw new RuntimeException("Exception while fetching entity related info", e);
-		} finally {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			
-			AppUtility.closeDAOSession(hibernateDao);
-		}
+//			AppUtility.closeDAOSession(hibernateDao);
+//		}
 		
 		return mapping.findForward(Constants.SUCCESS);
 	}

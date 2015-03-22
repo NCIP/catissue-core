@@ -23,6 +23,8 @@ public class Site {
 	private Long id;
 
 	private String name;
+	
+	private Institute institute;
 
 	private String code;
 
@@ -55,6 +57,14 @@ public class Site {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Institute getInstitute() {
+		return institute;
+	}
+
+	public void setInstitute(Institute institute) {
+		this.institute = institute;
 	}
 
 	public String getCode() {
@@ -115,6 +125,7 @@ public class Site {
 
 	public void update(Site other) {
 		setName(other.getName());
+		setInstitute(other.getInstitute());
 		setCode(other.getCode());
 		setType(other.getType());
 		updateActivityStatus(other.getActivityStatus());

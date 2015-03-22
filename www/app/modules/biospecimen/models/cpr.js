@@ -4,7 +4,7 @@ angular.module('os.biospecimen.models.cpr',
     'os.biospecimen.models.participant',
     'os.biospecimen.models.form'
   ])
-  .factory('CollectionProtocolRegistration', function(osModel, Participant, Form) {
+  .factory('CollectionProtocolRegistration', function(osModel, Participant, Form, Util) {
     var CollectionProtocolRegistration = 
       osModel(
         'collection-protocol-registrations',
@@ -23,12 +23,13 @@ angular.module('os.biospecimen.models.cpr',
       return this;
     };
 
-    CollectionProtocolRegistration.prototype.getForms = function() {
-      return Form.listFor(CollectionProtocolRegistration.url(), this.$id());
+    CollectionProtocolRegistration.prototype.getForms = function(params) {
+      return Form.listFor(CollectionProtocolRegistration.url(), this.$id(), params);
     };
 
-    CollectionProtocolRegistration.prototype.getRecords = function(formCtxId) {
-      return Form.listRecords(CollectionProtocolRegistration.url(), this.$id(), formCtxId);
+    CollectionProtocolRegistration.prototype.getRecords = function() {
+      var url = CollectionProtocolRegistration.url() + this.$id() + '/extension-records';
+      return Form.listRecords(url);
     };
 
     CollectionProtocolRegistration.prototype.$saveProps = function() {

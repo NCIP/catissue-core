@@ -8,14 +8,19 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
+@Configurable
 public class Specimen extends BaseEntity {
 	public static final String NEW = "New";
 	
@@ -80,6 +85,10 @@ public class Specimen extends BaseEntity {
 	private ReceivedEvent receivedEvent;
 	
 	private List<TransferEvent> transferEvents;
+	
+	@Autowired
+	@Qualifier("specimenLabelGenerator")
+	private LabelGenerator labelGenerator;
 	
 	public String getTissueSite() {
 		return tissueSite;
@@ -357,6 +366,14 @@ public class Specimen extends BaseEntity {
 		return this.transferEvents;
 	}
 
+	public LabelGenerator getLabelGenerator() {
+		return labelGenerator;
+	}
+
+	public void setLabelGenerator(LabelGenerator labelGenerator) {
+		this.labelGenerator = labelGenerator;
+	}
+
 	public void setActive() {
 		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
@@ -534,6 +551,28 @@ public class Specimen extends BaseEntity {
 		addCollectionEvent();
 		addReceivedEvent();		
 	}
+	
+	public void setLabelIfEmpty() {
+		if (StringUtils.isNotBlank(label) || !isCollected()) {
+			return;
+		}
+		
+		String labelTmpl = getLabelTmpl();				
+		String label = null;
+		if (StringUtils.isNotBlank(labelTmpl)) {
+			label = labelGenerator.generateLabel(labelTmpl, this);
+		} else if (isAliquot() || isDerivative()) {
+			Specimen parentSpecimen = getParentSpecimen();
+			int count = parentSpecimen.getChildCollection().size();
+			label = parentSpecimen.getLabel() + "_" + (count + 1);
+		}
+		
+		if (StringUtils.isBlank(label)) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.LABEL_REQUIRED);
+		}
+		
+		setLabel(label);
+	}
 
 	private double getAliquotQuantity() {
 		double aliquotQty = 0.0;
@@ -544,6 +583,30 @@ public class Specimen extends BaseEntity {
 		}
 		
 		return aliquotQty;		
+	}
+	
+	public String getLabelTmpl() {
+		String labelTmpl = null;
+		
+		SpecimenRequirement sr = getSpecimenRequirement();
+		if (sr != null) { // anticipated specimen
+			labelTmpl = sr.getLabelFormat();
+		}
+				
+		if (StringUtils.isNotBlank(labelTmpl)) {
+			return labelTmpl;
+		}
+		
+		CollectionProtocol cp = getVisit().getCollectionProtocol();
+		if (isAliquot()) {
+			labelTmpl = cp.getAliquotLabelFormat();
+		} else if (isDerivative()) {
+			labelTmpl = cp.getDerivativeLabelFormat();
+		} else {
+			labelTmpl = cp.getSpecimenLabelFormat();
+		}			
+		
+		return labelTmpl;		
 	}
 	
 	/**
@@ -638,5 +701,5 @@ public class Specimen extends BaseEntity {
 		
 		return p1.getPosOneOrdinal() == p2.getPosOneOrdinal() && 
 				p1.getPosTwoOrdinal() == p2.getPosTwoOrdinal();
-	}
+	}	
 }

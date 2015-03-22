@@ -21,17 +21,11 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
-import edu.wustl.dao.DAO;
-import edu.wustl.dao.JDBCDAO;
-import edu.wustl.dao.daofactory.DAOConfigFactory;
-import edu.wustl.dao.exception.DAOException;
 
 /**
  * AppUtility Class contain general methods used through out the application.
@@ -56,84 +50,84 @@ public class AppUtility
 
 	private static Logger logger = Logger.getCommonLogger(AppUtility.class);
 
-	public static JDBCDAO openJDBCSession() throws ApplicationException
-	{
-		JDBCDAO jdbcDAO = null;
-		try
-		{
-			final String applicationName = CommonServiceLocator.getInstance()
-					.getAppName();
-			jdbcDAO = DAOConfigFactory.getInstance()
-					.getDAOFactory(applicationName).getJDBCDAO();
-			jdbcDAO.openSession(null);
-		}
-		catch (final DAOException daoExp)
-		{
-			AppUtility.logger.error(daoExp.getMessage(), daoExp);
-			throw getApplicationException(daoExp, daoExp.getErrorKeyName(),
-					daoExp.getErrorKeyName());
-		}
-		return jdbcDAO;
-	}
+//	public static JDBCDAO openJDBCSession() throws ApplicationException
+//	{
+//		JDBCDAO jdbcDAO = null;
+//		try
+//		{
+//			final String applicationName = CommonServiceLocator.getInstance()
+//					.getAppName();
+//			jdbcDAO = DAOConfigFactory.getInstance()
+//					.getDAOFactory(applicationName).getJDBCDAO();
+//			jdbcDAO.openSession(null);
+//		}
+//		catch (final DAOException daoExp)
+//		{
+//			AppUtility.logger.error(daoExp.getMessage(), daoExp);
+//			throw getApplicationException(daoExp, daoExp.getErrorKeyName(),
+//					daoExp.getErrorKeyName());
+//		}
+//		return jdbcDAO;
+//	}
 
-	public static void closeJDBCSession(final JDBCDAO jdbcDAO)
-			throws ApplicationException
-	{
-		try
-		{
-			if (jdbcDAO != null)
-			{
-				jdbcDAO.closeSession();
-			}
-		}
-		catch (final DAOException daoExp)
-		{
-			AppUtility.logger.error(daoExp.getMessage(), daoExp);
-			throw getApplicationException(daoExp, daoExp.getErrorKeyName(),
-					daoExp.getMsgValues());
-		}
+//	public static void closeJDBCSession(final JDBCDAO jdbcDAO)
+//			throws ApplicationException
+//	{
+//		try
+//		{
+//			if (jdbcDAO != null)
+//			{
+//				jdbcDAO.closeSession();
+//			}
+//		}
+//		catch (final DAOException daoExp)
+//		{
+//			AppUtility.logger.error(daoExp.getMessage(), daoExp);
+//			throw getApplicationException(daoExp, daoExp.getErrorKeyName(),
+//					daoExp.getMsgValues());
+//		}
+//
+//	}
 
-	}
+//	public static DAO openDAOSession(final SessionDataBean sessionDataBean)
+//			throws ApplicationException
+//	{
+//		DAO dao = null;
+//		try
+//		{
+//			final String applicationName = CommonServiceLocator.getInstance()
+//					.getAppName();
+//			dao = DAOConfigFactory.getInstance().getDAOFactory(applicationName)
+//					.getDAO();
+//			dao.openSession(sessionDataBean);
+//		}
+//		catch (final DAOException daoExp)
+//		{
+//			AppUtility.logger.error(daoExp.getMessage(), daoExp);
+//			throw getApplicationException(daoExp, daoExp.getErrorKeyName(),
+//					daoExp.getMsgValues());
+//		}
+//		return dao;
+//	}
 
-	public static DAO openDAOSession(final SessionDataBean sessionDataBean)
-			throws ApplicationException
-	{
-		DAO dao = null;
-		try
-		{
-			final String applicationName = CommonServiceLocator.getInstance()
-					.getAppName();
-			dao = DAOConfigFactory.getInstance().getDAOFactory(applicationName)
-					.getDAO();
-			dao.openSession(sessionDataBean);
-		}
-		catch (final DAOException daoExp)
-		{
-			AppUtility.logger.error(daoExp.getMessage(), daoExp);
-			throw getApplicationException(daoExp, daoExp.getErrorKeyName(),
-					daoExp.getMsgValues());
-		}
-		return dao;
-	}
-
-	public static void closeDAOSession(final DAO dao)
-			throws ApplicationException
-	{
-		try
-		{
-			if (dao != null)
-			{
-				dao.closeSession();
-			}
-		}
-		catch (final DAOException daoExp)
-		{
-			AppUtility.logger.error(daoExp.getMessage(), daoExp);
-			throw getApplicationException(daoExp, daoExp.getErrorKeyName(),
-					daoExp.getMsgValues());
-		}
-
-	}
+//	public static void closeDAOSession(final DAO dao)
+//			throws ApplicationException
+//	{
+//		try
+//		{
+//			if (dao != null)
+//			{
+//				dao.closeSession();
+//			}
+//		}
+//		catch (final DAOException daoExp)
+//		{
+//			AppUtility.logger.error(daoExp.getMessage(), daoExp);
+//			throw getApplicationException(daoExp, daoExp.getErrorKeyName(),
+//					daoExp.getMsgValues());
+//		}
+//
+//	}
 	
 	public static ApplicationException getApplicationException(
 			final Exception exception, final String errorName,

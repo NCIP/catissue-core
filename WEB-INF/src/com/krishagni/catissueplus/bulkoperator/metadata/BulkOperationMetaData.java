@@ -41,4 +41,19 @@ public class BulkOperationMetaData
 	public void setTemplateName(String templateName) {
 		this.templateName = templateName;
 	}
+	
+	public BulkOperationClass getBulkOperationClassInstance() {
+		BulkOperationClass bulkOperationClass = bulkOperationMetaDataClassCollection.iterator().next();
+		if (bulkOperationClass.getTemplateName()==null)
+		{
+			bulkOperationClass.setTemplateName(templateName);
+		}
+		
+		if (bulkOperationClass.getBatchSize()==null || bulkOperationClass.getBatchSize()==0)
+		{
+			bulkOperationClass.setBatchSize(batchSize);
+		}
+		
+		return bulkOperationClass;
+	}
 }

@@ -9,8 +9,6 @@
         table="CATISSUE_BIOHAZARD"
 		lazy="true" >
     
-    <cache usage="read-write" />
-
         <id
             name="id"
             column="IDENTIFIER"

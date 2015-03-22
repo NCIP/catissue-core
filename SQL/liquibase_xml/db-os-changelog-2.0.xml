@@ -108,7 +108,7 @@
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
 
-  <changeSet author="vpawar" id="Containers table sequence">
+  <changeSet author="vpawar" id="Containers table sequence" dbms="oracle">
     <createSequence 
       sequenceName="OS_STORAGE_CONTAINERS_SEQ" 
       startValue="1" 
@@ -227,7 +227,7 @@
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
 
-  <changeSet author="vpawar" id="Containers occupancy table sequence">
+  <changeSet author="vpawar" id="Containers occupancy table sequence" dbms="oracle">
     <createSequence 
       sequenceName="OS_CONTAINER_POSITIONS_SEQ"
       startValue="1" 
@@ -692,5 +692,662 @@
         <constraints nullable="false"/>
       </column>
     </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop event triggers that were introduced in v11">
+    <sql>drop trigger if exists specimen_coll_event_trg</sql>
+    <sql>drop trigger if exists specimen_rcvd_event_trg</sql>
+    <sql>drop trigger if exists specimen_transfer_event_trg</sql>
+    <sql>drop trigger if exists specimen_distri_event_trg</sql>
+    <sql>drop trigger if exists specimen_disposal_event_trg</sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop parent event id from collection event table">
+    <dropColumn columnName="SPE_ID" tableName="CATISSUE_COLL_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Make identifier as PK of collection event table">
+    <addPrimaryKey columnNames="IDENTIFIER" tableName="CATISSUE_COLL_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop parent event id from received event table">
+    <dropColumn columnName="SPE_ID" tableName="CATISSUE_RECEIVED_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Make identifier as PK of received event table">
+    <addPrimaryKey columnNames="IDENTIFIER" tableName="CATISSUE_RECEIVED_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop parent event id from transfer event table">
+    <dropColumn columnName="SPE_ID" tableName="CATISSUE_TRANSFER_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Make identifier as PK of transfer event table">
+    <addPrimaryKey columnNames="IDENTIFIER" tableName="CATISSUE_TRANSFER_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop parent event id from distribution event table">
+    <dropColumn columnName="SPE_ID" tableName="CATISSUE_DISTRI_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Make identifier as PK of distribution event table">
+    <addPrimaryKey columnNames="IDENTIFIER" tableName="CATISSUE_DISTRI_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop parent event id from disposal event table">
+    <dropColumn columnName="SPE_ID" tableName="CATISSUE_DISPOSAL_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Make identifier as PK of disposal event table">
+    <addPrimaryKey columnNames="IDENTIFIER" tableName="CATISSUE_DISPOSAL_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Creating scheduled jobs table" failOnError="true">
+    <createTable tableName="OS_SCHEDULED_JOBS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(255)">
+        <constraints unique="true" nullable="false" />
+      </column>
+
+      <column name="CREATED_BY" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+     
+      <column name="START_DATE" type="${nullable.ts.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="END_DATE" type="${nullable.ts.type}"/>
+
+      <column name="SCHEDULED_MINUTE" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="SCHEDULED_HOUR" type="${int.type}"/>
+
+      <column name="SCHEDULED_DAY_OF_WEEK" type="${text.type}(16)"/>
+
+      <column name="SCHEDULED_DAY_OF_MONTH" type="${int.type}"/>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REPEAT_SCHEDULE" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="TYPE" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="COMMAND" type="${text.type}(255)"/>
+
+      <column name="TASK_IMPL_FQN" type="${text.type}(255)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Create sequence for OS_SCHEDULED_JOBS" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_SCHEDULED_JOBS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK to job created-by">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SCHEDULED_JOB_CREATED_BY"
+      baseTableName="OS_SCHEDULED_JOBS"
+      baseColumnNames="CREATED_BY"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Creating scheduled jobs email recipients table" failOnError="true">
+    <createTable tableName="OS_SCHEDULED_JOBS_NOTIF_RCPTS">
+      <column name="SCHEDULED_JOB_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="USER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK job email recipients">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SCHEDULED_JOB_RECIPIENTS"
+      baseTableName="OS_SCHEDULED_JOBS_NOTIF_RCPTS"
+      baseColumnNames="SCHEDULED_JOB_ID"
+      referencedTableName="OS_SCHEDULED_JOBS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+  
+  <changeSet author="mibrahim" id="Add FK job email recipients users">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SCHLD_JOB_RECPT_USERS"
+      baseTableName="OS_SCHEDULED_JOBS_NOTIF_RCPTS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Creating scheduled job-runs table" failOnError="true">
+    <createTable tableName="OS_SCHEDULED_JOB_RUNS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="SCHEDULED_JOB_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="STATUS" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="STARTED_AT" type="${nullable.ts.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="FINISHED_AT" type="${nullable.ts.type}"/>
+
+      <column name="LOG_FILE_PATH" type="${text.type}(255)"/>
+
+      <column name="MESSAGE" type="${text.type}(255)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Create sequence for OS_SCHEDULED_JOB_RUNS" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_SCHEDULED_JOB_RUNS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Adding FK to Scheduled job">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SCHEDULED_RUN_JOB_ID"
+      baseTableName="OS_SCHEDULED_JOB_RUNS"
+      baseColumnNames="SCHEDULED_JOB_ID"
+      referencedTableName="OS_SCHEDULED_JOBS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+
+<changeSet author="mibrahim" id="Create resources table" failOnError="true">
+    <createTable tableName="RBAC_RESOURCES">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(64)">
+        <constraints unique="true" nullable="false" />
+      </column>
+     
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Create operations table" failOnError="true">
+    <createTable tableName="RBAC_OPERATIONS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(64)">
+        <constraints unique="true" nullable="false" />
+      </column>
+     
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="create permissions table for rbac" failOnError="true">
+    <createTable tableName="RBAC_PERMISSIONS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="RESOURCE_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+
+      <column name="OPERATION_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+     
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Permission's resources">
+    <addForeignKeyConstraint
+      constraintName="FK_PERM_RESOURCE_ID"
+      baseTableName="RBAC_PERMISSIONS"
+      baseColumnNames="RESOURCE_ID"
+      referencedTableName="RBAC_RESOURCES"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Permission's operation">
+    <addForeignKeyConstraint
+      constraintName="FK_PERM_OPERATION_ID"
+      baseTableName="RBAC_PERMISSIONS"
+      baseColumnNames="OPERATION_ID"
+      referencedTableName="RBAC_OPERATIONS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Create role (rbac) table" failOnError="true">
+    <createTable tableName="RBAC_ROLES">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(64)">
+        <constraints unique="true" nullable="false" />
+      </column>
+     
+      <column name="PARENT_ROLE_ID" type="${int.type}"/>
+
+      <column name="DESCRIPTION" type="${text.type}(255)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Parent role">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_PARENT_ROLE"
+      baseTableName="RBAC_ROLES"
+      baseColumnNames="PARENT_ROLE_ID"
+      referencedTableName="RBAC_ROLES"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Create Role access list table" failOnError="true">
+    <createTable tableName="RBAC_ROLE_ACCESS_LIST">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="ROLE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="RESOURCE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Acl's resources">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ACL_RESOURCE"
+      baseTableName="RBAC_ROLE_ACCESS_LIST"
+      baseColumnNames="RESOURCE_ID"
+      referencedTableName="RBAC_RESOURCES"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Acl's roles">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ACL_ROLE"
+      baseTableName="RBAC_ROLE_ACCESS_LIST"
+      baseColumnNames="ROLE_ID"
+      referencedTableName="RBAC_ROLES"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Create Acl-ops table" failOnError="true">
+    <createTable tableName="RBAC_ROLE_ACCESS_LIST_OPS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="RES_OBJ_ID" type="${int.type}"/>
+
+      <column name="OPERATION_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ACL_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Acl-ops acl">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ACLO_ACL"
+      baseTableName="RBAC_ROLE_ACCESS_LIST_OPS"
+      baseColumnNames="ACL_ID"
+      referencedTableName="RBAC_ROLE_ACCESS_LIST"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Acl-ops operation">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ACLO_OPERATION"
+      baseTableName="RBAC_ROLE_ACCESS_LIST_OPS"
+      baseColumnNames="OPERATION_ID"
+      referencedTableName="RBAC_OPERATIONS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Create subject roles table" failOnError="true">
+    <createTable tableName="RBAC_SUBJECT_ROLES">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="SUBJECT_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ROLE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="SITE_ID" type="${int.type}" />
+
+      <column name="CP_ID" type="${int.type}" />
+
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK on Subject - userid">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SUB_ID_USER_ID"
+      baseTableName="RBAC_SUBJECT_ROLES"
+      baseColumnNames="SUBJECT_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Subject's roles">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SUB_ROLES_TO_ROLES"
+      baseTableName="RBAC_SUBJECT_ROLES"
+      baseColumnNames="ROLE_ID"
+      referencedTableName="RBAC_ROLES"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Subject's site">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SUB_ROLES_TO_SITE"
+      baseTableName="RBAC_SUBJECT_ROLES"
+      baseColumnNames="SITE_ID"
+      referencedTableName="CATISSUE_SITE"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK Subject's cp">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SUB_ROLES_TO_CP"
+      baseTableName="RBAC_SUBJECT_ROLES"
+      baseColumnNames="CP_ID"
+      referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="OS Modules table">
+    <createTable tableName="OS_MODULES">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="DESCRIPTION" type="${text.type}(64)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Modules table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_MODULES_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="OS Module Config Properties table">
+    <createTable tableName="OS_CFG_PROPS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="DISPLAY_NAME_CODE" type="${text.type}(32)"/>
+
+      <column name="DESC_CODE" type="${text.type}(32)"/>
+
+      <column name="DATA_TYPE" type="${text.type}(8)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="MODULE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Config properties table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_CFG_PROPS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on module id of config properties table">
+    <addForeignKeyConstraint 
+      constraintName="FK_CFG_PROPS_MODULE_ID"
+      baseTableName="OS_CFG_PROPS"
+      baseColumnNames="MODULE_ID"
+      referencedTableName="OS_MODULES"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="OS Module config property allowed values table">
+    <createTable tableName="OS_CFG_PROP_ALLOWED_VALUES">
+      <column name="PROPERTY_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="VALUE" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add primary key of prop allowed values table">
+    <addPrimaryKey tableName="OS_CFG_PROP_ALLOWED_VALUES"
+      columnNames="PROPERTY_ID, VALUE"
+      constraintName="PK_OS_CFG_PROP_ALLOWED_VALS"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on property id of prop allowed values table">
+    <addForeignKeyConstraint 
+      constraintName="FK_CFG_PROP_ALLOWED_VALS_PID"
+      baseTableName="OS_CFG_PROP_ALLOWED_VALUES"
+      baseColumnNames="PROPERTY_ID"
+      referencedTableName="OS_CFG_PROPS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="OS Module Config Settings table">
+    <createTable tableName="OS_CFG_SETTINGS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="PROPERTY_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="VALUE" type="${text.type}(255)"/>
+
+      <column name="ACTIVATED_BY" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ACTIVATION_DATE" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on property id of config settings">
+    <addForeignKeyConstraint 
+      constraintName="FK_CFG_SETTINGS_PROP_ID"
+      baseTableName="OS_CFG_SETTINGS"
+      baseColumnNames="PROPERTY_ID"
+      referencedTableName="OS_CFG_PROPS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on activated by of config settings">
+    <addForeignKeyConstraint 
+      constraintName="FK_CFG_SETTINGS_ACTIVATED_BY"
+      baseTableName="OS_CFG_SETTINGS"
+      baseColumnNames="ACTIVATED_BY"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop aliquot in same container column from collection_protocol">
+    <dropColumn
+      columnName="ALIQUOT_IN_SAME_CONTAINER"
+      tableName="CATISSUE_COLLECTION_PROTOCOL"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop consents waived column from collection_protocol">
+    <dropColumn
+      columnName="CONSENTS_WAIVED"
+      tableName="CATISSUE_COLLECTION_PROTOCOL"/>
+  </changeSet>
+
+  <changeSet author="vlonuste" id="Add institute column to site table">
+    <addColumn tableName="CATISSUE_SITE">
+      <column name="INSTITUTE_ID" type="${int.type}" defaultValue="null">
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="FK on institute of site">
+    <addForeignKeyConstraint
+      constraintName="FK_CT_SITE_INSTITUTE_ID"
+      baseTableName="CATISSUE_SITE"
+      baseColumnNames="INSTITUTE_ID"
+      referencedTableName="CATISSUE_INSTITUTION"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Print specimen label jobs table">
+    <createTable tableName="OS_SPECIMEN_LABEL_PRINT_JOBS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="SUBMITTED_BY" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    
+      <column name="SUBMISSION_DATE" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Specimen print label jobs sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_SPEC_LABEL_PRINT_JOBS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on submitted by of print label jobs">
+    <addForeignKeyConstraint
+      constraintName="FK_SPMN_LBL_PRN_JOBS_SUBM_ID"
+      baseTableName="OS_SPECIMEN_LABEL_PRINT_JOBS"
+      baseColumnNames="SUBMITTED_BY"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Print specimen label job items table">
+    <createTable tableName="OS_SPEC_LABEL_PRINT_JOB_ITEMS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="JOB_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    
+      <column name="SPECIMEN_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    
+      <column name="PRINT_DATE" type="${nullable.ts.type}"/>
+
+      <column name="PRINTER_NAME" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="STATUS" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="LABEL_TYPE" type="${text.type}(128)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="DATA" type="${text.type}(1024)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Specimen label print job items sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_SPEC_LBL_PRN_JOB_ITEMS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on job id of print label job items">
+    <addForeignKeyConstraint
+      constraintName="FK_SPMN_LBL_PRN_JITEMS_JID"
+      baseTableName="OS_SPEC_LABEL_PRINT_JOB_ITEMS"
+      baseColumnNames="JOB_ID"
+      referencedTableName="OS_SPECIMEN_LABEL_PRINT_JOBS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on specimen of print label job items">
+    <addForeignKeyConstraint
+      constraintName="FK_SPMN_LBL_PRN_JITEMS_SPMN_ID"
+      baseTableName="OS_SPEC_LABEL_PRINT_JOB_ITEMS"
+      baseColumnNames="SPECIMEN_ID"
+      referencedTableName="CATISSUE_SPECIMEN"
+      referencedColumnNames="IDENTIFIER"/>
   </changeSet>
 </databaseChangeLog>

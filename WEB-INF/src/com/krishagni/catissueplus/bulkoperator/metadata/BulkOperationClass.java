@@ -23,7 +23,6 @@ import com.krishagni.catissueplus.bulkoperator.util.BulkOperationException;
 import com.krishagni.catissueplus.bulkoperator.util.BulkOperationUtility;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.util.HibernateMetaData;
 
 public class BulkOperationClass
 {
@@ -395,7 +394,7 @@ public class BulkOperationClass
 					objectOnWhichMethodToInvoke, args);
 			if (returnObject instanceof HibernateProxy)
 			{
-				returnObject = HibernateMetaData.getProxyObjectImpl(returnObject);
+//				returnObject = HibernateMetaData.getProxyObjectImpl(returnObject);
 			}
 		}
 		catch (Exception exp)

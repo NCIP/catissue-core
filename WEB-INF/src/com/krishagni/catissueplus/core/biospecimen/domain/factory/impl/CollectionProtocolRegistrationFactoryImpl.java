@@ -23,12 +23,9 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierResponseDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.biospecimen.util.PpidGenerator;
-import com.krishagni.catissueplus.core.biospecimen.util.impl.PpidGeneratorImpl;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
-import com.krishagni.catissueplus.core.common.util.KeyGenFactory;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 
@@ -38,12 +35,6 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	private final String CONSENT_RESP_NOT_SPECIFIED = "Not Specified";
 
 	private ParticipantFactory participantFactory;
-
-	private KeyGenFactory keyFactory;
-
-	public void setKeyFactory(KeyGenFactory keyFactory) {
-		this.keyFactory = keyFactory;
-	}
 
 	public void setParticipantFactory(ParticipantFactory participantFactory) {
 		this.participantFactory = participantFactory;
@@ -131,20 +122,16 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			return;
 		}
 		
-		String ppidFormat = cpr.getCollectionProtocol().getPpidFormat();
-		String ppid = detail.getPpid();
+		cpr.setPpid(detail.getPpid());
 		
-		if (StringUtils.isBlank(ppid) && StringUtils.isBlank(ppidFormat)) {
-			ose.addError(CprErrorCode.PPID_REQUIRED);
-		} else if (StringUtils.isBlank(ppid)) {
-			Long value = keyFactory.getValueByKey(
-					cpr.getCollectionProtocol().getId().toString(), CollectionProtocol.class.getName());
-
-			PpidGenerator generator = new PpidGeneratorImpl();
-			cpr.setPpid(generator.generatePpid(ppidFormat, value));
-		} else {
-			cpr.setPpid(ppid);
-		}
+//		String ppidFormat = cpr.getCollectionProtocol().getPpidFormat();
+//		String ppid = detail.getPpid();
+//		
+//		if (StringUtils.isBlank(ppid) && StringUtils.isBlank(ppidFormat)) {
+//			ose.addError(CprErrorCode.PPID_REQUIRED);
+//		} else {
+//			cpr.setPpid(ppid);
+//		}
 	}
 
 	private void setConsents(

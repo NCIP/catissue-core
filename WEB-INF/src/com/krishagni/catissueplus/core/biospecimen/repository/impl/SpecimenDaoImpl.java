@@ -101,7 +101,17 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Specimen> getByLabels(List<String> labels) {
+	public List<Specimen> getSpecimensByIds(List<Long> specimenIds) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_BY_IDS)
+				.setParameterList("specimenIds", specimenIds)
+				.list();
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Specimen> getSpecimensByLabels(List<String> labels) {
 		List<Specimen> specimens = new ArrayList<Specimen>();
 		
 		int i = 0;
@@ -112,13 +122,32 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 			
 			specimens.addAll(
 				sessionFactory.getCurrentSession()
-				.createCriteria(Specimen.class)
-				.add(Restrictions.in("label", params))
-				.list());
+					.getNamedQuery(GET_BY_LABELS)
+					.setParameterList("specimenLabels", params)
+					.list());
 		}
 		
 		return specimens;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Specimen> getSpecimensByVisitId(Long visitId) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_BY_VISIT_ID)
+				.setLong("visitId", visitId)
+				.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Specimen> getSpecimensByVisitName(String visitName) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_BY_VISIT_NAME)
+				.setString("visitName", visitName)
+				.list();
+	}
+	
 	
 	private void addSearchConditions(Criteria criteria, String[] searchString) {
 		if (searchString == null || searchString.length == 0 || StringUtils.isBlank(searchString[0])) {
@@ -152,5 +181,12 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	private static final String GET_BY_LABEL = FQN + ".getByLabel";
 	
 	private static final String GET_PARENT_BY_VISIT_AND_SR = FQN + ".getParentByVisitAndReq";
-
+	
+	private static final String GET_BY_IDS = FQN + ".getByIds";
+	
+	private static final String GET_BY_LABELS = FQN + ".getByLabels";
+	
+	private static final String GET_BY_VISIT_ID = FQN + ".getByVisitId";
+	
+	private static final String GET_BY_VISIT_NAME = FQN + ".getByVisitName";
 }

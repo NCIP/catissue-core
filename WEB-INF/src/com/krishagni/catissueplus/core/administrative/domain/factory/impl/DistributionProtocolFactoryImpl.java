@@ -36,6 +36,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		setPrincipalInvestigator(detail, distributionProtocol, ose);
 		setIbrId(detail, distributionProtocol, ose);
 		setStartDate(detail, distributionProtocol);
+		setEndDate(detail, distributionProtocol);
 		setActivityStatus(detail, distributionProtocol, ose);
 		
 		ose.checkAndThrow();
@@ -61,6 +62,10 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 	
 	private void setStartDate(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol) {
 		distributionProtocol.setStartDate(detail.getStartDate());
+	}
+	
+	private void setEndDate(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol) {
+		distributionProtocol.setEndDate(detail.getEndDate());
 	}
 
 	private void setPrincipalInvestigator(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {

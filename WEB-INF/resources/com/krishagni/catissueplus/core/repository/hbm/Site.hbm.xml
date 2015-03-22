@@ -14,6 +14,8 @@
     </id>
 
     <property name="name" column="NAME"/>
+    
+    <many-to-one name="institute" column="INSTITUTE_ID"/>
           
     <property name="code" column="CODE"/>
             
@@ -36,11 +38,11 @@
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Visit"/>
     </set>
 
-    <query name="getSiteByName">
+    <query name="getSitesByNames">
       from 
         com.krishagni.catissueplus.core.administrative.domain.Site site 
       where 
-        site.name = :siteName and site.activityStatus != 'Disabled'
+        site.name in (:siteNames) and site.activityStatus != 'Disabled'
     </query>
     
     <query name="getSiteByCode">

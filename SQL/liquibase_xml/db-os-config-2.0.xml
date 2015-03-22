@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet author="vpawar" id="Default print config settings" dbms="mysql">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (default, 'label_printer', 'Default specimen label printer');
+
+      insert into os_cfg_props
+        (identifier, name, display_name_code, desc_code, data_type, module_id)
+      values 
+        (default, 'rules_file', 'label_print_rules_file', 'label_print_rules_file_desc', 
+         'STRING', last_insert_id());
+
+      insert into os_cfg_settings
+        (identifier, property_id, value, activated_by, activation_date, activity_status)
+      values
+        (default, last_insert_id(), 
+         'classpath:/com/krishagni/catissueplus/core/biospecimen/default_print_rules.csv',
+         1, current_timestamp(), 'Active');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Default print config settings" dbms="oracle">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (os_modules_seq.nextval, 'label_printer', 'Default specimen label printer');
+
+      insert into os_cfg_props
+        (identifier, name, display_name_code, desc_code, data_type, module_id)
+      values 
+        (os_cfg_props_seq.nextval, 'rules_file', 'label_print_rules_file', 'label_print_rules_file_desc', 
+         'STRING', os_modules_seq.currval);
+
+      insert into os_cfg_settings
+        (identifier, property_id, value, activated_by, activation_date, activity_status)
+      values
+        (os_cfg_settings_seq.nextval, os_cfg_props_seq.currval, 
+         'classpath:/com/krishagni/catissueplus/core/biospecimen/default_print_rules.csv',
+         1, current_timestamp(), 'Active');
+    </sql>
+  </changeSet>
+</databaseChangeLog>

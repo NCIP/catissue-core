@@ -5,9 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
 
+@JsonSerialize(include=Inclusion.NON_NULL)
 public class CollectionProtocolRegistrationDetail {
 	private Long id;
 	
@@ -26,6 +31,13 @@ public class CollectionProtocolRegistrationDetail {
 	private Date registrationDate;
 
 	private ConsentDetail consentDetails;
+	
+	/** For UI efficiency **/
+	private String specimenLabelFmt;
+	
+	private String aliquotLabelFmt;
+	
+	private String derivativeLabelFmt;
 	
 	public Long getId() {
 		return id;
@@ -99,14 +111,36 @@ public class CollectionProtocolRegistrationDetail {
 		this.consentDetails = consentDetails;
 	}
 
+	public String getSpecimenLabelFmt() {
+		return specimenLabelFmt;
+	}
+
+	public void setSpecimenLabelFmt(String specimenLabelFmt) {
+		this.specimenLabelFmt = specimenLabelFmt;
+	}
+
+	public String getAliquotLabelFmt() {
+		return aliquotLabelFmt;
+	}
+
+	public void setAliquotLabelFmt(String aliquotLabelFmt) {
+		this.aliquotLabelFmt = aliquotLabelFmt;
+	}
+
+	public String getDerivativeLabelFmt() {
+		return derivativeLabelFmt;
+	}
+
+	public void setDerivativeLabelFmt(String derivativeLabelFmt) {
+		this.derivativeLabelFmt = derivativeLabelFmt;
+	}
+
 	public static CollectionProtocolRegistrationDetail from(CollectionProtocolRegistration cpr) {		 
 		CollectionProtocolRegistrationDetail detail = new CollectionProtocolRegistrationDetail();
 		
 		detail.setParticipant(ParticipantDetail.from(cpr.getParticipant()));
-		detail.setId(cpr.getId());
-		detail.setCpId(cpr.getCollectionProtocol().getId());
+		detail.setId(cpr.getId());		
 		detail.setActivityStatus(cpr.getActivityStatus());
-		detail.setCpTitle(cpr.getCollectionProtocol().getTitle());
 		detail.setBarcode(cpr.getBarcode());
 		detail.setPpid(cpr.getPpid());
 		detail.setRegistrationDate(cpr.getRegistrationDate());
@@ -131,6 +165,14 @@ public class CollectionProtocolRegistrationDetail {
 		}
 		
 		detail.setConsentDetails(consent);
+		
+		CollectionProtocol cp = cpr.getCollectionProtocol();
+		detail.setCpId(cp.getId());
+		detail.setCpTitle(cp.getTitle());
+		detail.setSpecimenLabelFmt(cp.getSpecimenLabelFormat());
+		detail.setAliquotLabelFmt(cp.getAliquotLabelFormat());
+		detail.setDerivativeLabelFmt(cp.getDerivativeLabelFormat());
+		
 		return detail;
 	}
 	
@@ -143,5 +185,4 @@ public class CollectionProtocolRegistrationDetail {
 		
 		return cprs;
 	}
-
 }

@@ -6,10 +6,12 @@ import java.util.Set;
 
 import org.hibernate.Session;
 
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
+
 public class Subject {
 	private Long id;
 	
-	private Set<SubjectRole> subjectRoles = new HashSet<SubjectRole>();
+	private Set<SubjectRole> roles = new HashSet<SubjectRole>();
 
 	public Long getId() {
 		return id;
@@ -19,43 +21,15 @@ public class Subject {
 		this.id = id;
 	}
 
-	public Set<SubjectRole> getSubjectRoles() {
-		return subjectRoles;
+	public Set<SubjectRole> getRoles() {
+		return roles;
 	}
 
-	public void setSubjectRoles(Set<SubjectRole> subjectRoles) {
-		this.subjectRoles = subjectRoles;
-	}
-	
-	public void assignRole(SubjectRole subjectRole) {
-		boolean found = false;		
-		for (SubjectRole sr : subjectRoles) {
-			if (sr.getDsoId().equals(subjectRole.getDsoId())) {
-				sr.setRole(subjectRole.getRole());
-				found = true;
-				break;
-			}
-		}
-		
-		if (!found) {
-			subjectRole.setSubject(this);
-			subjectRoles.add(subjectRole);
-		}
+	public void setRoles(Set<SubjectRole> subjectRoles) {
+		this.roles = subjectRoles;
 	}
 	
 	public void updateRoles(List<SubjectRole> subjectRoles, Session session) {
-		Set<Long> dsoIds = new HashSet<Long>();
-		session.flush();
-		
-		for (SubjectRole role : subjectRoles) {
-			if (!dsoIds.add(role.getDsoId())) {
-				throw new IllegalArgumentException("Multiple roles defined for same DSO");
-			}
-			
-			role.setSubject(this);
-		}
-		
-		this.subjectRoles.clear();
-		this.subjectRoles.addAll(subjectRoles);
+		CollectionUpdater.update(getRoles(), subjectRoles);
 	}		
 }

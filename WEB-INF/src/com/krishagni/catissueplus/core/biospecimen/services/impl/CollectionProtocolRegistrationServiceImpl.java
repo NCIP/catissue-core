@@ -1,12 +1,8 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -102,6 +98,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			ose.checkAndThrow();
 			
 			saveParticipant(null, cpr);
+			cpr.setPpidIfEmpty();
 			daoFactory.getCprDao().saveOrUpdate(cpr);
 			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(cpr));
 		} catch (OpenSpecimenException ose) {
@@ -137,6 +134,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			
 			saveParticipant(existing, cpr);
 			existing.update(cpr);
+			cpr.setPpidIfEmpty();
 			
 			daoFactory.getCprDao().saveOrUpdate(existing);
 			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(existing));

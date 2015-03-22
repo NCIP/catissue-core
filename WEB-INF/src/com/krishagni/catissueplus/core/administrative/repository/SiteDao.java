@@ -10,7 +10,9 @@ public interface SiteDao extends Dao<Site> {
 
 	public List<Site> getSites(SiteListCriteria crit);
 
-	public Site getSiteByName(String name);
+	public List<Site> getSitesByNames(List<String> siteNames);
+	
+	public Site getSiteByName(String siteName);
 
 	public Site getSiteByCode(String code);
 	

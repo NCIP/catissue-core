@@ -254,7 +254,6 @@ select.form-control.de-input-error + .chosen-container-multi .chosen-choices {
   margin: 7px 0 3px 5px;
 }
 
-
 .de-addon {
   position:relative;
 }
@@ -265,3 +264,4 @@ select.form-control.de-input-error + .chosen-container-multi .chosen-choices {
   padding: 10px 20px;
   pointer-events: none;
 }
+

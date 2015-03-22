@@ -70,10 +70,10 @@ public class MigrateSppForms {
 		int count = 0;
 		for (Entry<Long, List<FormInfo>> entry : containerInfo.entrySet()) {
 			try {
-				MigrateSppForm migrateSppForm = new MigrateSppForm(usrCtx, recordsLog);
-				migrateSppForm.migrateForm(entry.getKey(), entry.getValue());
-				logObsoleteTables(tabsLog, migrateSppForm);				
-				++count;
+//				MigrateSppForm migrateSppForm = new MigrateSppForm(usrCtx, recordsLog);
+//				migrateSppForm.migrateForm(entry.getKey(), entry.getValue());
+//				logObsoleteTables(tabsLog, migrateSppForm);				
+//				++count;
 
 				logger.info("Number of SPP forms migrated till now: " + count);
 			} catch (Exception e) {
@@ -131,15 +131,15 @@ public class MigrateSppForms {
 		return containerInfo;
 	}
 	
-	private static void logObsoleteTables(CSVWriter logWriter, MigrateForm migrator) 
-	throws IOException {
-		logWriter.writeNext(new String[] {
-				migrator.getFormCaption(),
-				migrator.getObsoleteTables()
-		});
-		
-		logWriter.flush();
-	}
+//	private static void logObsoleteTables(CSVWriter logWriter, MigrateForm migrator) 
+//	throws IOException {
+//		logWriter.writeNext(new String[] {
+//				migrator.getFormCaption(),
+//				migrator.getObsoleteTables()
+//		});
+//		
+//		logWriter.flush();
+//	}
 	
 	private static final String GET_SPP_CONTAINER_IDS_SQL = 
 			"select " +

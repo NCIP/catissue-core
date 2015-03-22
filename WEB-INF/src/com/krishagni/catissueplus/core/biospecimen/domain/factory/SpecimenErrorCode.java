@@ -73,7 +73,13 @@ public enum SpecimenErrorCode implements ErrorCode {
 	AVBL_QTY_GT_ACTUAL,
 			
 	REF_ENTITY_FOUND,
-
+	
+	NO_PRINTER_CONFIGURED,
+	
+	NO_SPECIMENS_TO_PRINT,
+	
+	PRINT_ERROR,
+	
 	NOT_AVAILABLE;
 
 	public String code() {

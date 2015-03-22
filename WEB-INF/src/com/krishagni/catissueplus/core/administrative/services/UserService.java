@@ -6,16 +6,16 @@ import java.util.Map;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
+import com.krishagni.catissueplus.core.administrative.repository.UserListCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public interface UserService extends UserDetailsService {
-	public ResponseEvent<List<UserSummary>> getUsers(RequestEvent<ListUserCriteria> req);
+	public ResponseEvent<List<UserSummary>> getUsers(RequestEvent<UserListCriteria> req);
 	
 	public ResponseEvent<UserDetail> getUser(RequestEvent<Long> req);
 

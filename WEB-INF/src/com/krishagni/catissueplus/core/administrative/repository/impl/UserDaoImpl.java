@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
+import static com.krishagni.catissueplus.core.common.util.Utility.numberToLong;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,18 +10,17 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.administrative.events.ListUserCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.administrative.repository.UserListCriteria;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
-
-import  static com.krishagni.catissueplus.core.common.util.Utility.numberToLong;
 
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	
@@ -29,17 +30,19 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<UserSummary> getUsers(ListUserCriteria userCriteria) {
+	public List<UserSummary> getUsers(UserListCriteria userCriteria) {
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(User.class, "u")
 				.add(Restrictions.ne("u.activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus()))
-				.setProjection(Projections.countDistinct("u.id"));
+				.setProjection(Projections.countDistinct("u.id"))
+				.setFirstResult(userCriteria.startAt())
+				.setMaxResults(userCriteria.maxResults())
+				.addOrder(Order.asc("u.lastName"))
+				.addOrder(Order.asc("u.firstName"));
 		
-		addSearchConditions(criteria, userCriteria.query());
+		addSearchConditions(criteria, userCriteria);
 		addProjectionFields(criteria);
-		criteria.setFirstResult(userCriteria.startAt());
-		criteria.setMaxResults(userCriteria.maxResults());
-
+		
 		return getUsers(criteria.list());
 	}
 	
@@ -149,17 +152,51 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 				.list();
 	}
 	
-	private void addSearchConditions(Criteria criteria, String searchString) {
+	private void addSearchConditions(Criteria criteria, UserListCriteria userCriteria) {
+		String searchString = userCriteria.query();
+		
 		if (StringUtils.isBlank(searchString)) {
+			addNameRestriction(criteria, userCriteria.name());
+			addLoginNameRestriction(criteria, userCriteria.loginName());
+		} else {
+			Criterion srchCond = Restrictions.disjunction()
+					.add(Restrictions.ilike("u.firstName", searchString, MatchMode.ANYWHERE))
+					.add(Restrictions.ilike("u.lastName", searchString, MatchMode.ANYWHERE))
+					.add(Restrictions.ilike("u.loginName", searchString, MatchMode.ANYWHERE));
+			
+			criteria.add(srchCond);
+		}
+		
+		addActivityStatusRestriction(criteria, userCriteria.activityStatus());
+	}
+
+	private void addNameRestriction(Criteria criteria, String name) {
+		if (StringUtils.isBlank(name)) {
 			return;
 		}
 		
-		Criterion srchCond = Restrictions.disjunction()
-				.add(Restrictions.ilike("u.firstName", searchString, MatchMode.ANYWHERE))
-				.add(Restrictions.ilike("u.lastName", searchString, MatchMode.ANYWHERE))
-				.add(Restrictions.ilike("u.loginName", searchString, MatchMode.ANYWHERE));
+		Criterion nameCond = Restrictions.disjunction()
+				.add(Restrictions.ilike("u.firstName", name, MatchMode.ANYWHERE))
+				.add(Restrictions.ilike("u.lastName", name, MatchMode.ANYWHERE));
+		criteria.add(nameCond);
+	}
+	
+	private void addLoginNameRestriction(Criteria criteria, String loginName) {
+		if (StringUtils.isBlank(loginName)) {
+			return;
+		}
 		
-		criteria.add(srchCond);
+		Criterion loginNameCond = Restrictions.ilike("u.loginName", loginName, MatchMode.ANYWHERE);
+		criteria.add(loginNameCond);
+	}
+	
+	private void addActivityStatusRestriction(Criteria criteria, String activityStatus) {
+		if (StringUtils.isBlank(activityStatus)) {
+			return;
+		}
+		
+		Criterion activityStatusCond = Restrictions.eq("u.activityStatus", activityStatus);
+		criteria.add(activityStatusCond);
 	}
 
 	private void addProjectionFields(Criteria criteria) {

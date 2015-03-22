@@ -9,7 +9,6 @@
         table="CATISSUE_CP_SITE_ROLES"
         lazy="true">
 	
-    	<cache usage="read-write" />
         <id
             name="id"
             column="IDENTIFIER"

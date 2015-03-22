@@ -240,7 +240,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	}	
 	
 	private static final String GET_STORAGE_CONTAINER_DEPENDECNY_STAT_SQL = 
-			"select 'Storage Container', count(*) as count from os_storage_containers sc where sc.parent_container_id = :containerId" +
+			"select 'Storage Container', count(*) as count from os_storage_containers sc where sc.parent_container_id = :containerId " +
 			"union " +
-			"select 'Specimen' as entityName, count(*) as count from os_container_positions cp where cp.storage_container_id = :containerId";
+			"select 'Specimen' as entityName, count(*) as count from os_container_positions cp where cp.storage_container_id = :containerId ";
 }
