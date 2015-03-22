@@ -58,6 +58,11 @@
       translate="common.buttons.cancel">
       Cancel
     </button>
+    <button class="btn btn-danger" ng-if="folder.id"
+      ng-click="deleteFolder()"
+      translate="common.buttons.delete">
+      Delete
+    </button>
     <button class="btn btn-primary" 
       ng-disabled="folder.queries.length == 0 || !folder.name" 
       ng-click="saveOrUpdateFolder()" 

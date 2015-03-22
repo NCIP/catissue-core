@@ -25,6 +25,14 @@ angular.module('os.query.addeditfolder', ['os.query.models'])
       );
     };
 
+    $scope.deleteFolder = function() {
+      $scope.folder.$remove().then(
+        function() {
+          $modalInstance.close(null);
+        }
+      );      
+    };
+
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };

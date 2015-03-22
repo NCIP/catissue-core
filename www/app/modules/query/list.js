@@ -112,7 +112,12 @@ angular.module('os.query.list', ['os.query.models'])
             $scope.queryList = {count: result.queries.length, queries: result.queries};
             Alerts.success("queries.folder_updated", {folderName: result.name});
           } else {
-            // delete code
+            var idx = $scope.folders.myFolders.indexOf(folder);
+            $scope.folders.myFolders.splice(idx, 1);
+            if ($scope.folders.selectedFolder == folder) {
+              $scope.selectFolder(undefined);
+            } 
+            Alerts.success("queries.folder_deleted", {folderName: folder.name});
           }
         }
       );
