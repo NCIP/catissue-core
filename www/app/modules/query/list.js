@@ -38,6 +38,16 @@ angular.module('os.query.list', ['os.query.models'])
       );
     };
 
+    function loadFolderQueries(folder) {
+      $scope.selectedQueries = [];
+      $scope.folders.selectedFolder = folder;
+      if (!folder) {
+        loadAllQueries();
+      } else {
+        $scope.queryList = folder.getQueries(true);
+      }
+    };
+
     $scope.toggleQuerySelect = function(query) {
       if (query.selected) {
         $scope.selectedQueries.push(query);
@@ -49,18 +59,31 @@ angular.module('os.query.list', ['os.query.models'])
       }
     };
 
+    $scope.deleteQuery = function(query) {
+      var mi = $modal.open({
+        templateUrl: 'modules/query/confirm-delete.html',
+        controller: 'DeleteQueryConfirmCtrl',
+        resolve: {
+          query: function() {
+            return query;
+          }
+        }
+      });
+
+      mi.result.then(
+        function(result) {
+          loadFolderQueries($scope.folders.selectedFolder);     
+          Alerts.success('queries.query_deleted', {queryTitle: query.title});
+        }
+      );
+    };
+
     $scope.selectFolder = function(folder) {
       if (folder == $scope.folders.selectedFolder) {
         return;
       }
 
-      $scope.selectedQueries = [];
-      $scope.folders.selectedFolder = folder;
-      if (!folder) {
-        loadAllQueries();
-      } else {
-        $scope.queryList = folder.getQueries(true);
-      }
+      loadFolderQueries(folder);
     };
 
     $scope.addSelectedQueriesToFolder = function(folder) {

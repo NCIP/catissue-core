@@ -106,7 +106,7 @@
                   <span translate="queries.view_query_run_log"></span>
                 </a>
               </li>
-              <li>
+              <li ng-click="deleteQuery(query)">
                 <a>
                   <i class="fa fa-trash"></i>
                   <span translate="queries.delete"></span>
@@ -144,7 +144,7 @@
 </script>
 
 <script type="text/ng-template" id="query_folders.html">
-  <div class="os-table os-table-condensed" style="margin-bottom: 0px;">
+  <div class="os-table" style="margin-bottom: 0px;">
     <div class="os-table-head">
       <div class="row">
         <div class="col col-xs-12" translate="queries.folders">Folders</div>
