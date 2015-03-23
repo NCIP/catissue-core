@@ -124,6 +124,5 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util'])
       //$scope.disableCpSelection();
     };
 
-
     init();
   });

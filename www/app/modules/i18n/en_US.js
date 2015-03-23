@@ -660,10 +660,18 @@
     "select_date": "Select Date",
     "specify_cond": "Specify Condition Value",
     "parameterized_filter": "Parameterized Filter",
-
+    "query_expr": "Query Expression",
+    "parameterized_marker": "P",
+    
     "no_queries": "No queries to show",
     "no_queries_selected": "No queries selected. Please select at least one query",
     "info": "Information",
+
+    "expr_toolbar": {
+      "and": "AND",
+      "or":  "OR",
+      "not": "NOT" 
+    },
 
     "ops": {
       "eq": "Equals",

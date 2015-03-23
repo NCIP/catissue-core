@@ -114,8 +114,10 @@
     </div>
 
     <div class="os-query-exprs-filters">
-      <div ng-repeat="filter in queryLocal.filters">
-        {{filter.id}} {{filter.field.caption}} {{filter.op.desc}} {{filter.value}}
+      <div class="os-query-exprs">
+        <div ng-include src="'modules/query/query-expr.html'"></div>
+      </div>
+      <div class="os-query-filters">
       </div>
     </div>
   </div>
