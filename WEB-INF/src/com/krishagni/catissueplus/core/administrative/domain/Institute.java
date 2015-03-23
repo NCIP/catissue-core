@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.hibernate.envers.AuditTable;
-import org.hibernate.envers.Audited;
-
 import javax.persistence.Entity;
+
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+
+//import javax.persistence.Entity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -23,9 +25,8 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 @Configurable
 @Entity
-//@AuditTable(value="catissue_institution_aud")
+@Audited
 public class Institute extends BaseEntity {
-	@Audited
 	private String name;
 
 	private String activityStatus;
@@ -51,6 +52,7 @@ public class Institute extends BaseEntity {
 		this.activityStatus = activityStatus;
 	}
 
+	@NotAudited
 	public Set<Department> getDepartments() {
 		return departments;
 	}

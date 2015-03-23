@@ -70,13 +70,6 @@
 		<mapping resource="com/krishagni/rbac/resources/Subject.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/SubjectRole.hbm.xml"/>
 		
-		<listener class="org.hibernate.envers.event.AuditEventListener"	type="post-insert" />
-		<listener class="org.hibernate.envers.event.AuditEventListener" type="post-update" />
-		<listener class="org.hibernate.envers.event.AuditEventListener"	type="post-delete" />
-		<listener class="org.hibernate.envers.event.AuditEventListener"	type="pre-collection-update" />
-		<listener class="org.hibernate.envers.event.AuditEventListener"	type="pre-collection-remove" />
-		<listener class="org.hibernate.envers.event.AuditEventListener"	type="post-collection-recreate" />
-		
     </session-factory>
 
 </hibernate-configuration>
