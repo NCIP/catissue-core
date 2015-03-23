@@ -28,8 +28,8 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.ListCpCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummary;
+import com.krishagni.catissueplus.core.biospecimen.repository.CpListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -71,7 +71,7 @@ public class CollectionProtocolTest {
 	@DatabaseSetup("cp-test/get-all-cps-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getAllCps() {
-		ListCpCriteria input = new ListCpCriteria();
+		CpListCriteria input = new CpListCriteria();
 		input.includePi(true);
 		input.includeStat(true);
 		
@@ -109,7 +109,7 @@ public class CollectionProtocolTest {
 	@DatabaseSetup("cp-test/get-all-cps-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getAllCpsWithoutStatsAndPi() {
-		ListCpCriteria input = new ListCpCriteria();
+		CpListCriteria input = new CpListCriteria();
 		input.includePi(false);
 		input.includeStat(false);
 		
@@ -138,7 +138,7 @@ public class CollectionProtocolTest {
 	@DatabaseSetup("cp-test/get-all-cps-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getAllCpsWithoutStats() {
-		ListCpCriteria input = new ListCpCriteria();
+		CpListCriteria input = new CpListCriteria();
 		input.includePi(true);
 		input.includeStat(false);
 		
@@ -171,7 +171,7 @@ public class CollectionProtocolTest {
 	@DatabaseSetup("cp-test/get-all-cps-initial.xml")
 	@DatabaseTearDown("cp-test/generic-teardown.xml")
 	public void getAllCpsWithoutPi() {
-		ListCpCriteria input = new ListCpCriteria();
+		CpListCriteria input = new CpListCriteria();
 		input.includePi(false);
 		input.includeStat(true);
 		
