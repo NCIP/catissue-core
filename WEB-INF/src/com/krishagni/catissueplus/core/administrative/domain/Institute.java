@@ -6,12 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.Entity;
-
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
-
-//import javax.persistence.Entity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -23,8 +18,8 @@ import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
+
 @Configurable
-@Entity
 @Audited
 public class Institute extends BaseEntity {
 	private String name;
@@ -52,7 +47,6 @@ public class Institute extends BaseEntity {
 		this.activityStatus = activityStatus;
 	}
 
-	@NotAudited
 	public Set<Department> getDepartments() {
 		return departments;
 	}
