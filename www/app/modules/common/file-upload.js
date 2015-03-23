@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .directive('osFileUpload', function($timeout, $q, $http) {
+  .directive('osFileUpload', function($timeout, $q, $http, Alerts) {
     return {
       restrict: 'A',
       replace: true,
@@ -16,18 +16,32 @@ angular.module('openspecimen')
           if (this.data) {
             this.data.submit();
           } else {
+            Alerts.error('common.no_file_selected');
             this.q.reject();
           }
 
           return this.q.promise;
         };
 
-        this.done = function(data) {
-          this.q.resolve(data);
+        this.done = function(resp) {
+          this.q.resolve(resp.result);
         };
 
-        this.fail = function() {
-          this.q.reject();
+        this.fail = function(resp) {
+          var xhr = resp.xhr('responseText');
+          var status = Math.floor(xhr.status / 100);
+          if (status == 4) {
+            var responses = eval(xhr.response);
+            var errMsgs = [];
+            angular.forEach(responses, function(err) {
+              errMsgs.push(err.message + "(" + err.code + ")");
+            });
+            Alerts.errorText(errMsgs);
+          } else if (status == 5) {
+            Alerts.error("common.server_error");
+          }
+
+          this.q.reject(resp);
         }
       },
       link: function(scope, element, attrs, ctrl) {
@@ -47,7 +61,7 @@ angular.module('openspecimen')
               ctrl.done(data);
             },
             fail: function(e, data) {
-              ctrl.fail();
+              ctrl.fail(data);
             }
           })
         });

@@ -6,12 +6,8 @@ angular.module('os.query.importquery', ['os.query.models'])
 
     $scope.import = function() {
       $scope.queryImporter.submit().then(
-        function(resp) {
-          $modalInstance.close(resp.result);
-        },
-
-        function() {
-          Alerts.error('queries.import_failed');
+        function(importedQuery) {
+          $modalInstance.close(importedQuery);
         }
       );
     }
