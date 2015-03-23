@@ -14,6 +14,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.sql.DataSource;
 
+import krishagni.catissueplus.csd.CatissueUserContextProviderImpl;
 import krishagni.catissueplus.util.FormProcessor;
 
 import com.krishagni.catissueplus.core.de.ui.StorageContainerControlFactory;
@@ -24,6 +25,7 @@ import com.krishagni.catissueplus.core.de.ui.UserFieldMapper;
 import edu.common.dynamicextensions.domain.nui.factory.ControlManager;
 import edu.common.dynamicextensions.nutility.DEApp;
 import edu.common.dynamicextensions.nutility.FormProperties;
+import edu.common.dynamicextensions.query.PathConfig;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.exception.ErrorKey;
@@ -35,6 +37,7 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dynamicextensions.formdesigner.mapper.ControlMapper;
+import edu.wustl.dynamicextensions.formdesigner.usercontext.CSDProperties;
 import gov.nih.nci.system.dao.DAOException;
 
 /**
@@ -83,7 +86,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 				Variables.isImagingConfigurred = true;
 			}
             
-//			CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
+			CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
 			
 			FormProperties.getInstance().setPostProcessor(new FormProcessor());
 
@@ -111,7 +114,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			
 			ControlManager.getInstance().registerFactory(StorageContainerControlFactory.getInstance());
 			ControlMapper.getInstance().registerControlMapper("storageContainer", new StorageContainerMapper());
-			
+			initQueryPathsConfig();
 			
 			logger.info("Initialization complete");									
 		}
@@ -137,6 +140,10 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		System.setProperty("app.propertiesDir", CommonServiceLocator.getInstance().getPropDirPath());
 	}
 	
+    private void initQueryPathsConfig() {
+        String path = System.getProperty("app.propertiesDir") + File.separatorChar + "paths.xml";
+        PathConfig.intialize(path);
+    }
 
 	private void initThrottlingModule() 
 	{

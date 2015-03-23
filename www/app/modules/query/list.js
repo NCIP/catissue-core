@@ -48,6 +48,20 @@ angular.module('os.query.list', ['os.query.models'])
       }
     };
 
+    $scope.importQuery = function() {
+      var mi = $modal.open({
+        templateUrl: 'modules/query/import_query.html',
+        controller: 'ImportQueryCtrl'
+      });
+
+      mi.result.then(
+        function(result) {
+          $scope.selectFolder(undefined, true);
+          Alerts.success('queries.query_imported', {queryTitle: result.title});
+        }
+      );
+    };
+
     $scope.toggleQuerySelect = function(query) {
       if (query.selected) {
         $scope.selectedQueries.push(query);
@@ -78,8 +92,11 @@ angular.module('os.query.list', ['os.query.models'])
       );
     };
 
-    $scope.selectFolder = function(folder) {
-      if (folder == $scope.folders.selectedFolder) {
+    /**
+     * Folder related actions
+     */
+    $scope.selectFolder = function(folder, force) {
+      if (folder == $scope.folders.selectedFolder && !force) {
         return;
       }
 

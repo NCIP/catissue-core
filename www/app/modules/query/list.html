@@ -3,9 +3,27 @@
     <h3> 
       <span translate="queries.list">Queries</span>
     </h3>
-    <button class="os-round-btn">
-      <span class="fa fa-plus"></span>
-    </button>
+
+    <div dropdown>
+      <button class="os-round-btn dropdown-toggle">
+        <span class="fa fa-plus"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a>
+            <i class="fa fa-plus"></i>
+            <span translate="common.buttons.create">Create</span>
+          </a>
+        </li>
+        <li>
+          <a ng-click="importQuery()">
+            <i class="fa fa-upload"></i>
+            <span translate="common.buttons.import">Import</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
     <div class="os-more-options">
       <div class="inline" dropdown ng-if="selectedQueries.length > 0">
         <button class="dropdown-toggle">

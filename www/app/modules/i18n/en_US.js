@@ -24,6 +24,7 @@
     "ui_error": "UI Error. Please report this problem to system administrator",
     "server_connect_error": "Unable to connect server",
     "recent_activity": "Recent Activity",
+    "no_file_selected": "No File Selected",
 
     "buttons": {
       "add": "Add",
@@ -638,6 +639,10 @@
     "delete_query": "Delete Query",
     "confirm_delete_query": "Are you sure you want to delete query '{{title}}'?",
     "query_deleted": "Query '{{queryTitle}}' deleted",
+    "query_imported": "Query '{{queryTitle}}' imported",
+    "import_failed": "Query import failed",
+    "import_query": "Import Query",
+    "select_query_def_file": "Select Query File",
 
     "no_queries": "No queries to show",
     "no_queries_selected": "No queries selected. Please select at least one query",
