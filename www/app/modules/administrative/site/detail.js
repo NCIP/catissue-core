@@ -1,5 +1,5 @@
 angular.module('os.administrative.site.detail', ['os.administrative.models'])
-  .controller('SiteDetailCtrl', function($scope, $q, $state, $modal, site, Site, Institute, PvManager) {
+  .controller('SiteDetailCtrl', function($scope, $q, $state, $modal, site, Institute, PvManager) {
 
     function init() {
       $scope.site = site;
@@ -26,25 +26,12 @@ angular.module('os.administrative.site.detail', ['os.administrative.models'])
     }
 
     $scope.deleteSite = function() {
-      var modalInstance = $modal.open({
-        templateUrl: 'modules/common/delete/delete-entity-template.html',
-        controller: 'entityDeleteCtrl',
-        resolve: {
-          entityProps: function() {
-            return {
-              entity: $scope.site,
-              name: $scope.site.name,
-            }
-          },
-          entityDependencyStat: function() {
-            return Site.getDependencyStat($scope.site.id);
-          }
-        }
-      });
+      DeleteUtil.delete($scope.site, {
+        onDeleteState: 'site-list',
+        entityNameProp: $scope.site.name,
+        entityTypeProp: 'Site'
+      }, $modal, $state);
 
-      modalInstance.result.then(function (site) {
-        $state.go('site-list');
-      });
     }
 
     $scope.getCoordinatorDisplayText = function(coordinator) {

@@ -1,18 +1,17 @@
 angular.module('os.common.delete', [])
-  .controller('entityDeleteCtrl', function($scope, $modalInstance, $translate, entityProps, entityDependencyStat, Alerts) {
+  .controller('EntityDeleteCtrl', function($scope, $modalInstance, $translate, entityProps, dependentEntities, Alerts) {
 
    function init() {
       $scope.entity = entityProps.entity;
       $scope.entityProps = entityProps;
-      $scope.entityDependencyStat = $.isEmptyObject(entityDependencyStat) ? undefined : entityDependencyStat;
+      $scope.dependentEntities = dependentEntities;
     }
 
     function onDeleted(entity) {
       if (!!entity) {
-        $translate("entity.entity_deleted", {name: entityProps.name})
-          .then(function(msg) {
-            Alerts.success(msg);
-          })
+        Alerts.success("delete_entity.entity_deleted", 
+          {entityName: entityProps.name, entityType: entityProps.type});
+
         $modalInstance.close(entity);
       }
     }

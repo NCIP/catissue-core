@@ -1,26 +1,29 @@
 <div class="os-modal-header">
-  <span ng-if="!entityDependencyStat">{{'entity.delete_title' | translate: {name: entityProps.name} }}</span>
-  <span ng-if="entityDependencyStat" class="text-danger">{{'entity.dependency_title' | translate: {name: entityProps.name} }}</span>
+  <div ng-switch on="!dependentEntities || dependentEntities.length == 0">
+    <span ng-switch-when="true"> {{'delete_entity.title' | translate: {entityName: entityProps.name} }}</span>
+    <span class="text-danger" ng-switch-default> {{'delete_entity.dependents_title' | translate: {entityName: entityProps.name} }}</span>
+  </div>
 </div>
 <div class="os-modal-body">
-  <div ng-if="!entityDependencyStat">
-    {{ 'entity.confirm_delete' | translate:{name: entityProps.name} }}
-  </div>
-
-  <div ng-if="entityDependencyStat">
-    <h5>{{'entity.dependency_details' | translate: {name: entityProps.name} }}</h5>
-    <div class="os-section">
-      <div class="os-table os-table-muted-hdr os-border">
-        <div class="os-table-head">
-          <div class="row">
-            <div class="col col-xs-6" translate="entity.object_name">Object Name</div>
-            <div class="col col-xs-6" translate="entity.count">Count</div>
+  <div ng-switch on="!dependentEntities || dependentEntities.length == 0">
+    <div ng-switch-when="true">
+      {{ 'delete_entity.confirm_delete' | translate:{entityName: entityProps.name, entityType: entityProps.type} }}
+    </div>
+    <div ng-switch-default>
+      <h5>{{'delete_entity.dependents_details' | translate:{entityName: entityProps.name, entityType: entityProps.type} }}</h5>
+      <div class="os-section">
+        <div class="os-table os-table-muted-hdr os-border">
+          <div class="os-table-head">
+            <div class="row">
+              <div class="col col-xs-6" translate="delete_entity.object_name">Object Name</div>
+              <div class="col col-xs-6" translate="delete_entity.count">Count</div>
+            </div>
           </div>
-        </div>
-        <div class="os-table-body">
-          <div class="row" ng-repeat="stat in entityDependencyStat">
-            <div class="col col-xs-6">{{stat.entityName}}(s)</div>
-            <div class="col col-xs-6">{{stat.count}}</div>
+          <div class="os-table-body">
+            <div class="row" ng-repeat="dependentEntity in dependentEntities">
+              <div class="col col-xs-6">{{dependentEntity.name}}</div>
+              <div class="col col-xs-6">{{dependentEntity.count}}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -28,8 +31,14 @@
   </div>
 </div>
 <div class="os-modal-footer">
-  <button class="btn os-btn-text" ng-click="cancel()" ng-if="!entityDependencyStat" translate="common.buttons.cancel">Cancel</button>
-  <button class="btn btn-danger" ng-click="delete()" ng-if="!entityDependencyStat" translate="common.yes">Yes</button>
-  <button class="btn btn-primary" ng-click="cancel()" ng-if="entityDependencyStat" translate="common.buttons.ok">Ok</button>
+  <div ng-switch on="!dependentEntities || dependentEntities.length == 0">
+    <div ng-switch-when="true">
+      <button class="btn os-btn-text" ng-click="cancel()" translate="common.buttons.cancel">Cancel</button>
+      <button class="btn btn-danger" ng-click="delete()" translate="common.yes">Yes</button>
+    </div>
+    <div ng-switch-default>
+      <button class="btn btn-primary" ng-click="cancel()" translate="common.buttons.ok">Ok</button>
+    </div>
+  </div>
 </div>
 

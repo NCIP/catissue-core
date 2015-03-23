@@ -1,5 +1,5 @@
 angular.module('os.administrative.container.detail', ['os.administrative.models'])
-  .controller('ContainerDetailCtrl', function($scope, $q, $state, $modal, container, Site, Container, CollectionProtocol, PvManager) {
+  .controller('ContainerDetailCtrl', function($scope, $q, $state, $modal, container, Site, CollectionProtocol, PvManager) {
 
     function init() {
       $scope.container = container;
@@ -27,25 +27,11 @@ angular.module('os.administrative.container.detail', ['os.administrative.models'
     }
 
     $scope.deleteContainer = function() {
-      var modalInstance = $modal.open({
-        templateUrl: 'modules/common/delete/delete-entity-template.html',
-        controller: 'entityDeleteCtrl',
-        resolve: {
-          entityProps: function() {
-            return {
-              entity: $scope.container,
-              name: $scope.container.name,
-            }
-          },
-          entityDependencyStat: function() {
-            return Container.getDependencyStat($scope.container.id);
-          }
-        }
-      });
-
-      modalInstance.result.then(function () {
-        $state.go('container-list');
-      });
+      DeleteUtil.delete($scope.container, {
+        onDeleteState: 'container-list',
+        entityNameProp: $scope.container.name,
+        entityTypeProp: 'Storage Container'
+      }, $modal, $state);
     }
 
     init();

@@ -47,10 +47,6 @@ angular.module('os.common.models', [])
         return $http.get(url + id).then(Model.modelRespTransform);
       };
 
-      Model.getDependencyStat = function(id) {
-        return $http.get(url + id + '/dependency-stat').then(Model.noTransform);
-      }
-
       Model._lazyCollectionInit = function(source, dest) {
         angular.forEach(source, function(item) {
           dest.push(item);
@@ -92,6 +88,10 @@ angular.module('os.common.models', [])
       Model.prototype.$saveOrUpdate = function () {
         return this.$id() ? this.$update() : this.$save();
       };
+
+      Model.prototype.getDependentEntities = function(id) {
+        return $http.get(url + this.$id() + '/dependent-entities').then(Model.noTransform);
+      }
 
       Model.prototype.$remove = function () {
         return $http['delete'](url + this.$id()).then(Model.modelRespTransform);

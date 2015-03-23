@@ -98,7 +98,7 @@
     },
 
     "menu_options": {
-      "remove": "Remove",
+      "delete": "Delete",
       "export": "Export"
     },
 
@@ -634,14 +634,14 @@
     "record_saved": "Data saved successfully"
   },
 
-  "entity": {
+  "delete_entity": {
     "object_name": "Object Name",
     "count": "Count",
-    "delete_title": "Deleting {{name}} confirmation",
-    "confirm_delete": "{{name}} will be deleted forever. Are you sure you want to proceed?",
-    "entity_deleted": "{{name}} deleted successfully.",
-    "dependency_title": "Error: Cannot delete {{name}}",
-    "dependency_details": "Cannot delete {{name}} since it has dependency on the following objects"
+    "title": "Deleting {{entityName}} confirmation",
+    "confirm_delete": "{{entityType}} {{entityName}} will be deleted forever. Are you sure you want to proceed?",
+    "entity_deleted": "{{entityType}} {{entityName}} deleted successfully.",
+    "dependents_title": "Error: Cannot delete {{entityName}}",
+    "dependents_details": "Cannot delete {{entityType}} {{entityName}} because of following dependent objects"
   },
 
   "queries": {

@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.user.detail', ['os.administrative.models'])
-  .controller('UserDetailCtrl', function($scope, $q, $state, $modal, $translate, user, User, PvManager, Alerts) {
+  .controller('UserDetailCtrl', function($scope, $q, $state, $modal, $translate, user, PvManager, Alerts) {
     $scope.user = user;
     $scope.domains = PvManager.getPvs('domains');
     $scope.sites = PvManager.getSites();
@@ -24,24 +24,11 @@ angular.module('os.administrative.user.detail', ['os.administrative.models'])
     }
 
     $scope.deleteUser = function() {
-      var modalInstance = $modal.open({
-        templateUrl: 'modules/common/delete/delete-entity-template.html',
-        controller: 'entityDeleteCtrl',
-        resolve: {
-          entityProps: function() {
-            return {
-              entity: $scope.user,
-              name: $scope.user.firstName + ' ' + $scope.user.lastName,
-            }
-          },
-          entityDependencyStat: function() {
-            return User.getDependencyStat($scope.user.id);
-          }
-        }
-      });
-
-      modalInstance.result.then(function () {
-        $state.go('user-list');
-      });
+      DeleteUtil.delete($scope.user, {
+        onDeleteState: 'user-list',
+        entityNameProp: $scope.user.firstName + ' ' + $scope.user.lastName,
+        entityTypeProp: 'User'
+      }, $modal, $state);
     }
+
   });
