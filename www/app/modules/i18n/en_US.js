@@ -40,7 +40,8 @@
       "ok": "Ok",
       "select": "Select",
       "unselect": "Unselect",
-      "submit": "Submit"
+      "submit": "Submit",
+      "edit": "Edit"
     }
   },
 
@@ -648,14 +649,46 @@
     "add_filter": "Add Filter",
     "search_field": "Search Field",
     "loading_form_fields": "Loading form fields. Please wait for a moment...",
+    "operator": "Operator",
+    "select_op": "Select Operator",
+    "cond_value": "Condition Value",
+    "select_cond_value": "Select Condition Value",
+    "select_cond_values": "Select Condition Values",
+    "specify_multiple_cond": "Specify Condition Value & then hit enter key",
+    "range_min": "Range Min",
+    "range_max": "Range Max",
+    "select_date": "Select Date",
+    "specify_cond": "Specify Condition Value",
+    "parameterized_filter": "Parameterized Filter",
 
     "no_queries": "No queries to show",
     "no_queries_selected": "No queries selected. Please select at least one query",
     "info": "Information",
 
+    "ops": {
+      "eq": "Equals",
+      "ne": "Not Equals",
+      "lt": "Less than",
+      "le": "Less than or Equals",
+      "gt": "Greater than",
+      "ge": "Greater than or Equals", 
+      "exists": "Exists",
+      "not_exists": "Not Exists",
+      "qin": "Is One Of",
+      "not_in": "Is Not One Of",
+      "starts_with": "Starts With",
+      "ends_with": "Ends With",
+      "contains": "Contains",
+      "and": "And",
+      "or": "Or",
+      "intersect": "Intersection",
+      "not": "Not",
+      "nthchild": "Any Child",
+      "between": "Between"
+    },
+
     "tooltip": {
       "view_records": "Click to View Records"
     }
   }
-
 }

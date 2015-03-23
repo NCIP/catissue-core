@@ -8,7 +8,8 @@ angular.module('os.query',
     'os.query.importquery',
     'os.query.list',
     'os.query.addedit',
-    'os.query.util'
+    'os.query.util',
+    'os.query.datepicker'
   ]
 ).config(function($stateProvider) {
    $stateProvider

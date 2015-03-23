@@ -199,6 +199,7 @@ angular.module('openspecimen', [
 
     $rootScope.global = {
       dateFmt: 'MMM dd, yyyy',
+      queryDateFmt: {format: 'mm-dd-yyyy'},
       timeFmt: 'hh:mm',
       dateTimeFmt: 'MMM dd, yyyy hh:mm',
       filterWaitInterval: 500

@@ -76,9 +76,9 @@
                 ng-repeat="field in form.staticFields | filter: {caption: queryLocal.searchField}">
                 <span class="os-query-form-field"
                   ng-click="onFieldSelect(field)"
-                  popover-title="Add Filter"
-                  popover-placement="right" 
-                  ka-popover-template="filter-popover-tmpl.html">
+                  title="{{'queries.add_filter' | translate}}"
+                  data-placement="right" 
+                  content-template="modules/query/addedit-filter.html" bs-popover>
                   {{field.caption}}
                 </span>
               </div>
@@ -99,8 +99,9 @@
                     ng-repeat="field in filteredExtnFields  = (extnForm.fields | filter: {caption: queryLocal.searchField})">
                     <span class="os-query-form-field"
                       ng-click="onFieldSelect(field)"
-                      popover-title="Add Filter"
-                      popover-placement="right" ka-popover-template="filter-popover-tmpl.html">
+                      title="{{'queries.add_filter' | translate}}"
+                      data-placement="right" 
+                      content-template="modules/query/addedit-filter.html" bs-popover>
                       {{field.caption}}
                     </span>
                   </div>
@@ -113,6 +114,9 @@
     </div>
 
     <div class="os-query-exprs-filters">
+      <div ng-repeat="filter in queryLocal.filters">
+        {{filter.id}} {{filter.field.caption}} {{filter.op.desc}} {{filter.value}}
+      </div>
     </div>
   </div>
 </div>

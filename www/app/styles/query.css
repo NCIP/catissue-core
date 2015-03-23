@@ -140,3 +140,19 @@
 .os-query-extn-form-fields {
   border-bottom: 1px solid #ddd;
 }
+
+.os-query-addedit-filter-po {
+  width: 300px;
+}
+
+.os-query-range-value input {
+  width: 42%;
+  float: left;
+}
+
+.os-query-range-value span {
+  width: 15%;
+  text-align: center;
+  padding: 4px;
+  float: left;
+}

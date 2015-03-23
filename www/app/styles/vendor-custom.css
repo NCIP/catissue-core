@@ -74,3 +74,8 @@
 body > .ui-select-bootstrap.open {
   z-index: 2000; 
 }
+
+.popover {
+  max-width: 350px;
+}
+
