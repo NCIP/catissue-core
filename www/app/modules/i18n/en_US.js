@@ -643,6 +643,11 @@
     "import_failed": "Query import failed",
     "import_query": "Import Query",
     "select_query_def_file": "Select Query File",
+    "new_query": "New Query",
+    "select_cp": "Select a Collection Protocol",
+    "add_filter": "Add Filter",
+    "search_field": "Search Field",
+    "loading_form_fields": "Loading form fields. Please wait for a moment...",
 
     "no_queries": "No queries to show",
     "no_queries_selected": "No queries selected. Please select at least one query",

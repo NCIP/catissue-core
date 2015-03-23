@@ -2,18 +2,52 @@
 angular.module('os.query', 
   [
     'os.query.models',
+    'os.query.globaldata',
     'os.query.addeditfolder',
     'os.query.delete',
     'os.query.importquery',
-    'os.query.list'
+    'os.query.list',
+    'os.query.addedit',
+    'os.query.util'
   ]
 ).config(function($stateProvider) {
    $stateProvider
-     .state('query-list', {
-        url: '/queries',
-        templateUrl: 'modules/query/list.html',
-        controller: 'QueryListCtrl',
-        parent: 'signed-in'
+     .state('query-root', {
+       url: '/queries',
+       template: '<div ui-view></div>',
+       controller: function($scope, queryGlobal) {
+       },
+       resolve: {
+         queryGlobal: function(QueryGlobalData) {
+           return new QueryGlobalData();
+         }
+       },
+       abstract: true,
+       parent: 'signed-in'
      })
+     .state('query-list', {
+       url: '/list',
+       templateUrl: 'modules/query/list.html',
+       controller: 'QueryListCtrl',
+       parent: 'query-root'
+     })
+     .state('query-addedit', {
+       url: '/addedit?queryId',
+       templateUrl: 'modules/query/addedit.html',
+       controller: 'QueryAddEditCtrl',
+       resolve: {
+         cps: function(queryGlobal) {
+           return queryGlobal.getCps();
+         },
+         query: function($stateParams, SavedQuery) {
+           if (!!$stateParams.queryId) {
+             return SavedQuery.getById($stateParams.queryId);
+           }
+
+           return new SavedQuery();
+         }
+       },
+       parent: 'query-root'
+     })  
   });
 

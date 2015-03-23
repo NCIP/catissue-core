@@ -12,6 +12,14 @@ angular.module('openspecimen')
       }
     }
 
+    function getItemDisplayValue(item, tAttrs) {
+      var result = item;
+      if (!!tAttrs.displayProp) {
+        result += '.' + tAttrs.displayProp;
+      }
+      return result;
+    }  
+
     return {
       restrict: 'E',
       compile: function(tElem, tAttrs) {
@@ -23,14 +31,15 @@ angular.module('openspecimen')
         var uiSelectMatch = angular.element('<ui-select-match/>')
           .attr('placeholder', tAttrs.placeholder);
         
+        var searchItem = getItemDisplayValue('item', tAttrs);
         var uiSelectChoices = angular.element('<ui-select-choices/>')
           .attr('repeat', "item in " + tAttrs.list + " | filter: $select.search")
-          .append('<span ng-bind-html="item | highlight: $select.search"></span>');
+          .append('<span ng-bind-html="' + searchItem + ' | highlight: $select.search"></span>');
 
         if (multiple) {
-          uiSelectMatch.append('{{$item}}');
+          uiSelectMatch.append('{{' + getItemDisplayValue('$item', tAttrs) + '}}');
         } else {
-          uiSelectMatch.append('{{$select.selected}}');
+          uiSelectMatch.append('{{' + getItemDisplayValue('$select.selected', tAttrs) + '}}');
         }
 
         if (angular.isDefined(tAttrs.refresh)) {

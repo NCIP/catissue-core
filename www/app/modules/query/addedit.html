@@ -1,0 +1,118 @@
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li>
+        <a ui-sref="query-list" translate="queries.list">Queries</a>
+      </li>
+    </ul>
+    <h3> 
+      <span ng-if="!query.id" translate="queries.new_query">
+        New Query
+      </span>
+      <span ng-if="!!query.id">
+        {{query.title}}
+      </span>
+    </h3>
+  </div>
+
+  <div class="os-query-container">
+    <div class="os-query-cp-forms">
+      <accordion close-others="true"> 
+        <div class="panel panel-primary os-query-block-margin">
+          <div class="panel-heading">
+            <h3 class="panel-title" translate="queries.select_cp">
+              Select a Collection Protocol
+            </h3>
+          </div>
+        </div>
+
+        <div class="os-query-block-margin">
+          <os-select ng-model="queryLocal.selectedCp" list="cps" display-prop="shortTitle" 
+            on-change="loadCpForms">
+          </os-select>
+        </div>
+
+        <div class="panel panel-primary os-query-block-margin">
+          <div class="panel-heading clearfix">
+            <h3 class="panel-title pull-left" translate="queries.add_filter">
+              Add Filter
+            </h3>
+            <div class="pull-right" title="Click to add temporal filter">
+              <button type="button" class="btn btn-default btn-xs"
+                ng-click="onTemporalFilterSelect()"
+                info-link="https://catissueplus.atlassian.net/wiki/x/O4BLAQ"
+                popover-title="Add Temporal Filter"
+                popover-placement="bottom"
+                popover-append-to-body="true"
+                ka-popover-template="temporal-filter-popover-tmpl.html">
+                <span class="glyphicon glyphicon-time"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <accordion-group ng-repeat="form in queryLocal.selectedCp.forms">
+            <accordion-heading>
+              <div ng-click="onFormSelect(form)">
+                {{form.caption}}
+              </div>
+            </accordion-heading>
+            <div ng-show="!form.staticFields" translate="queries.loading_form_fields">
+              Loading form fields. Please wait for a moment ...
+            </div>
+            <div ng-show="form.staticFields">
+              <div class="input-group os-query-search-field">
+                <input type="text" class="form-control" 
+                  placeholder="{{'queries.search_field' | translate}}" 
+                  ng-model="queryLocal.searchField" 
+                  ng-keyup="form.showExtnFields = (queryLocal.searchField != '' )" >
+                <div class="input-group-addon">
+                  <span class="fa fa-search"> </span>
+                </div>
+              </div>
+              <div id="{{form.name}}.{{field.name}}" 
+                data-arg="{{form.name}}.{{field.name}}"
+                ng-repeat="field in form.staticFields | filter: {caption: queryLocal.searchField}">
+                <span class="os-query-form-field"
+                  ng-click="onFieldSelect(field)"
+                  popover-title="Add Filter"
+                  popover-placement="right" 
+                  ka-popover-template="filter-popover-tmpl.html">
+                  {{field.caption}}
+                </span>
+              </div>
+              <div class="os-query-block-margin"
+                ng-repeat="extnForm in form.extnForms">
+                <span class="os-query-extn-form"
+                  ng-click="extnForm.showExtnFields = !extnForm.showExtnFields" 
+                  ng-show="filteredExtnFields.length > 0">
+                  {{extnForm.caption}}
+                  <i ng-if="form.showExtnFields || extnForm.showExtnFields" class="fa fa-caret-down"></i>
+                  <i ng-if="!form.showExtnFields && !extnForm.showExtnFields" class="fa fa-caret-right"></i>
+                </span>
+
+                <div class="os-query-extn-form-fields"
+                  ng-show="(form.showExtnFields || extnForm.showExtnFields) && filteredExtnFields.length > 0">
+                  <div id="{{form.name}}.{{field.name}}" 
+                    data-arg="{{form.name}}.{{field.name}}"
+                    ng-repeat="field in filteredExtnFields  = (extnForm.fields | filter: {caption: queryLocal.searchField})">
+                    <span class="os-query-form-field"
+                      ng-click="onFieldSelect(field)"
+                      popover-title="Add Filter"
+                      popover-placement="right" ka-popover-template="filter-popover-tmpl.html">
+                      {{field.caption}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </accordion-group>
+        </div>
+      </accordion>
+    </div>
+
+    <div class="os-query-exprs-filters">
+    </div>
+  </div>
+</div>
