@@ -176,14 +176,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<Map<String, Object>>> getUserDependencyStat(RequestEvent<Long> req) {
+	public ResponseEvent<List<Map<String, Object>>> getUserDependentEntities(RequestEvent<Long> req) {
 		try {
 			User existing = daoFactory.getUserDao().getById(req.getPayload());
 			if (existing == null) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
-			return ResponseEvent.response(existing.getDependencyStat());
+			return ResponseEvent.response(existing.getDependentEntities());
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

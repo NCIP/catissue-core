@@ -135,12 +135,12 @@ public class UserController {
 		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependency-stat")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependent-entities")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public List<Map<String, Object>> getUserDependencyStat(@PathVariable Long id) {
+	public List<Map<String, Object>> getUserDependentEntities(@PathVariable Long id) {
 		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
-		ResponseEvent<List<Map<String, Object>>> resp = userService.getUserDependencyStat(req);
+		ResponseEvent<List<Map<String, Object>>> resp = userService.getUserDependentEntities(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

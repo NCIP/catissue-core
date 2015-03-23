@@ -72,6 +72,10 @@
   <bean id="participantLookupLogic" class="com.krishagni.catissueplus.core.biospecimen.matching.ParticipantLookupLogicImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
+  
+  <bean id="collectionProtocolDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.CollectionProtocolDependencyChecker">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
 
   <bean id="collectionProtocolService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>

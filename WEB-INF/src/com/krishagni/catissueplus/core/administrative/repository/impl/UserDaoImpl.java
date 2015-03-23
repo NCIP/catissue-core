@@ -80,9 +80,9 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Object[]> getUserDependencyStat(Long userId) {
+	public List<Object[]> getUserDependentEntities(Long userId) {
 		return sessionFactory.getCurrentSession()
-				.createSQLQuery(GET_USER_DEPENDENCY_STAT_SQL)
+				.createSQLQuery(GET_USER_DEPENDENT_ENTITIES_SQL)
 				.setLong("userId", userId)
 				.list();
 	}
@@ -209,23 +209,32 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		));
 	}
 	
-	private static final String GET_USER_DEPENDENCY_STAT_SQL = 
-			"Select 'Site' as entityName, count(*) as Count from catissue_site_coordinators sc where sc.USER_ID = :userId " + 
+	private static final String GET_USER_DEPENDENT_ENTITIES_SQL = 
+			"Select " + 
+			"  'Site' as entityName, count(s.identifier) as count " + 
+			"from " + 
+			"  catissue_site s" +
+			"  inner join catissue_site_coordinators sc on sc.site_id = s.identifier " + 
+			"where " + 
+			"  s.activity_status != 'Disabled' and " +
+			"  sc.USER_ID = :userId " + 
 			"union " +
 			"select " + 
-			"  'Collection Protocol' as entityName, count(*) as count " + 
+			"  'Collection Protocol' as entityName, count(cp.identifier) as count " + 
 			"from " + 
 			"  catissue_collection_protocol cp " + 
-			"where " + 
-			"  cp.principal_investigator_id = userId or " + 
-			"  cp.identifier in (select cc.collection_protocol_id from catissue_coll_coordinators cc where cc.user_id = :userId) " +
+			"where " +
+			"  cp.activity_status != 'Disabled' and " +
+			"  ( cp.principal_investigator_id = :userId or " + 
+			"  cp.identifier in (select cc.collection_protocol_id from catissue_coll_coordinators cc where cc.user_id = :userId)) " +
 			"union " + 
 			"select " + 
-			"  'Distribution Protocol' as entityName, count(*) as count " + 
+			"  'Distribution Protocol' as entityName, count(dp.identifier) as count " + 
 			"from " + 
-			"  catissue_distribution_protocol dp" + 
+			"  catissue_distribution_protocol dp " + 
 			"where " + 
-			"  dp.principal_investigator_id = :userId";
+			"  dp.activity_status != 'Disabled' and " +
+			"  dp.principal_investigator_id = :userId ";
 	
 	private static final String GET_USER_BY_LOGIN_NAME_HQL = 
 			"from com.krishagni.catissueplus.core.administrative.domain.User where loginName = :loginName and authDomain.name = :domainName  %s";

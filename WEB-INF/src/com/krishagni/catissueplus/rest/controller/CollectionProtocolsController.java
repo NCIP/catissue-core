@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
@@ -165,6 +167,25 @@ public class CollectionProtocolsController {
 	public CollectionProtocolDetail updateCollectionProtocol(@RequestBody CollectionProtocolDetail cp) {
 		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.updateCollectionProtocol(getRequest(cp));
 		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependent-entities")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<Map<String, Object>> getCpDependentEntities(@PathVariable Long id) {
+		ResponseEvent<List<Map<String, Object>>> resp = cpSvc.getCpDependentEntities(getRequest(id));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public CollectionProtocolDetail deleteCollectionProtocol(@PathVariable Long id) {
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.deleteCollectionProtocol(getRequest(id));
+		resp.throwErrorIfUnsuccessful();
+		
 		return resp.getPayload();
 	}
 	

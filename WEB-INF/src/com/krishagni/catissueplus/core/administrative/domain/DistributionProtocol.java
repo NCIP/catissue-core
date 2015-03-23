@@ -117,12 +117,12 @@ public class DistributionProtocol {
 		this.setActivityStatus(distributionProtocol.getActivityStatus());
 	}
 	
-	public List<Map<String, Object>> getDependencyStat() {
-		return dependencyChecker.getDependencyStat(this);
+	public List<Map<String, Object>> getDependentEntities() {
+		return dependencyChecker.getDependentEntities(this);
 	}
 	
 	public void delete() {
-		List<Map<String, Object>> dependencies = getDependencyStat();
+		List<Map<String, Object>> dependencies = getDependentEntities();
 		if(!dependencies.isEmpty()) {
 			throw OpenSpecimenException.userError(DistributionProtocolErrorCode.REF_ENTITY_FOUND);
 		}

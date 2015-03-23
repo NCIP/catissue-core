@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.services;
 
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
@@ -32,6 +33,10 @@ public interface CollectionProtocolService {
 	public ResponseEvent<CollectionProtocolDetail> updateCollectionProtocol(RequestEvent<CollectionProtocolDetail> req);
 	
 	public ResponseEvent<CollectionProtocolDetail> importCollectionProtocol(RequestEvent<CollectionProtocolDetail> req);
+	
+	public ResponseEvent<List<Map<String, Object>>> getCpDependentEntities(RequestEvent<Long> req);
+	
+	public ResponseEvent<CollectionProtocolDetail> deleteCollectionProtocol(RequestEvent<Long> req);
 	
 	//
 	// Consent Tier APIs

@@ -19,11 +19,11 @@ public class StorageContainerDependencyChecker extends AbstractDependencyChecker
 	}
 
 	@Override
-	public List<Map<String, Object>> getDependencyStat(StorageContainer container) {
+	public List<Map<String, Object>> getDependentEntities(StorageContainer container) {
 		List<Map<String, Object>> dependencyStat = new ArrayList<Map<String, Object>>();
 		
-		List<Object[]> stats = daoFactory.getStorageContainerDao().getStorageContainerDependencyStat(container.getId());
-		setStat(stats, dependencyStat);
+		List<Object[]> stats = daoFactory.getStorageContainerDao().getStorageContainerDependentEntities(container.getId());
+		setDependentEntities(stats, dependencyStat);
 		
 		return dependencyStat;
 	}

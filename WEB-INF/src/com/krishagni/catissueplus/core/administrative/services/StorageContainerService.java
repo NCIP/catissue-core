@@ -25,7 +25,7 @@ public interface StorageContainerService {
 	
 	public ResponseEvent<Boolean> isAllowed(RequestEvent<PositionTenantDetail> req);
 	
-	public ResponseEvent<List<Map<String, Object>>> getStorageContainerDependencyStat(RequestEvent<Long> req);
+	public ResponseEvent<List<Map<String, Object>>> getStorageContainerDependentEntities(RequestEvent<Long> req);
 	
 	public ResponseEvent<StorageContainerDetail> deleteStorageContainer(RequestEvent<Long> req);
 }

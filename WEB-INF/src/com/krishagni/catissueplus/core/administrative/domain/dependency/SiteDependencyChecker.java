@@ -20,11 +20,11 @@ public class SiteDependencyChecker extends AbstractDependencyChecker<Site> {
 	}
 
 	@Override
-	public List<Map<String, Object>> getDependencyStat(Site site) {
+	public List<Map<String, Object>> getDependentEntities(Site site) {
 		List<Map<String, Object>> dependencyStat = new ArrayList<Map<String, Object>>();
 		
-		List<Object[]> stats =  daoFactory.getSiteDao().getSiteDependencyStat(site.getId());
-		setStat(stats, dependencyStat);
+		List<Object[]> stats =  daoFactory.getSiteDao().getSiteDependentEntities(site.getId());
+		setDependentEntities(stats, dependencyStat);
 		
 		//TODO: Check for site contains any CP or not. 	
 		

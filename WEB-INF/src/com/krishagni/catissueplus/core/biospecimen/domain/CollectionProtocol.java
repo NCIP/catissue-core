@@ -3,15 +3,23 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.domain.dependency.CollectionProtocolDependencyChecker;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.util.Status;
 
+@Configurable
 public class CollectionProtocol extends BaseEntity {
 	private String title;
 
@@ -48,6 +56,9 @@ public class CollectionProtocol extends BaseEntity {
 	private Set<Site> repositories = new HashSet<Site>();
 	
 	private Set<CollectionProtocolEvent> collectionProtocolEvents = new HashSet<CollectionProtocolEvent>();
+	
+	@Autowired
+	CollectionProtocolDependencyChecker dependencyChecker;
 	
 	public String getTitle() {
 		return title;
@@ -287,6 +298,19 @@ public class CollectionProtocol extends BaseEntity {
 		}
 		
 		return null;
+	}
+	
+	public List<Map<String, Object>> getDependentEntities() {
+		return dependencyChecker.getDependentEntities(this);
+	}
+	
+	public void delete() {
+		List<Map<String, Object>> dependencyStat = getDependentEntities();
+		if (!dependencyStat.isEmpty()) {
+			throw OpenSpecimenException.userError(CpeErrorCode.REF_ENTITY_FOUND);
+		}
+		
+		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 
 	private ConsentTier getConsentTierById(Long ctId) {

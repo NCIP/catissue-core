@@ -1,7 +1,6 @@
 
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -69,23 +68,56 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Object[]> getSiteDependencyStat(Long siteId) {
+	public List<Object[]> getSiteDependentEntities(Long siteId) {
 		return sessionFactory.getCurrentSession()
-				.createSQLQuery(GET_SITE_DEPENDENCY_STAT_SQL)
+				.createSQLQuery(GET_SITE_DEPENDENT_ENTITIES_SQL)
 				.setLong("siteId", siteId)
 				.list();
 	}
 	
-	private static final String GET_SITE_DEPENDENCY_STAT_SQL = 
-			"select 'Visit' as entityName, count(*) as count from catissue_specimen_coll_group scg where scg.site_id = :siteId " +
-			"Union " +
-			"select 'Storage Container' as entityName, count(*) as count from os_storage_containers sc where sc.site_id = :siteId " +
-			"Union " +
-			"select 'Collection Protocol' as entityName, count(*) as count from catissue_site_cp cp where cp.site_id = :siteId " +
+	private static final String GET_SITE_DEPENDENT_ENTITIES_SQL = 
+			"select " + 
+			"  'Visit' as entityName, count(scg.identifier) as count " + 
+			"from " + 
+			"  catissue_specimen_coll_group scg " + 
+			"where " +
+			"  scg.activity_status != 'Disabled' and " +
+			"  scg.site_id = :siteId " +
 			"union " +
-			"select 'MRN' as entityName, count(*) as count from catissue_part_medical_id pm where pm.site_id = :siteId ";
+			"select " + 
+			"  'Storage Container' as entityName, count(sc.identifier) as count " + 
+			"from " + 
+			"  os_storage_containers sc " + 
+			"where "+
+			"  sc.activity_status != 'Disabled' and " +
+			"  sc.site_id = :siteId " +
+			"union " +
+			"select " + 
+			"  'Collection Protocol' as entityName, count(cp.identifier) as count " + 
+			"from " +
+			"  catissue_collection_protocol cp " +
+			"  inner join catissue_site_cp scp on scp.collection_protocol_id = cp.identifier " + 
+			"where " + 
+			"  cp.activity_status != 'Disabled' and " +
+			"  scp.site_id = :siteId " +
+			"union " +
+			"select " + 
+			"  'MRN' as entityName, count(pm.identifier) as count " +
+			"from " +
+			"  catissue_participant p " +
+			"  inner join catissue_part_medical_id pm on pm.participant_id = p.identifier " + 
+			"where " + 
+			"  p.activity_status != 'Disabled' and " +
+			"  pm.site_id = :siteId " +
+			"union " +
+			"select " + 
+			" 'CP Event' as entityName, count(cpe.identifier) as count " +
+			"from " +
+			"  catissue_coll_prot_event cpe " +
+			"where " +
+			"  cpe.activity_status != 'Disabled' and " +
+			"  cpe.default_site_id = :siteId ";
 			
-
 	private static final String FQN = Site.class.getName();
 
 	private static final String GET_SITES_BY_NAMES = FQN + ".getSitesByNames";

@@ -62,15 +62,15 @@ public class Institute extends BaseEntity {
 		updateActivityStatus(other.getActivityStatus());
 	}
 	
-	public List<Map<String, Object>> getDependencyStat() {
-		return dependencyChecker.getDependencyStat(this);
+	public List<Map<String, Object>> getDependentEntities() {
+		return dependencyChecker.getDependentEntities(this);
 	}
 	
 	public void delete(Boolean close) {
 		String activityStatus = Status.ACTIVITY_STATUS_CLOSED.getStatus();
 		if (!close) {
 			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
-			List<Map<String, Object>> dependencies = getDependencyStat();
+			List<Map<String, Object>> dependencies = getDependentEntities();
 			if (!dependencies.isEmpty()) {
 				throw OpenSpecimenException.userError(InstituteErrorCode.REF_ENTITY_FOUND);
 			}
@@ -85,7 +85,7 @@ public class Institute extends BaseEntity {
 		}
 		
 		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(newActivityStatus)) {
-			List<Map<String, Object>> dependencies = dependencyChecker.getDependencyStat(this);
+			List<Map<String, Object>> dependencies = dependencyChecker.getDependentEntities(this);
 			if (!dependencies.isEmpty()) {
 				throw new OpenSpecimenException(ErrorType.USER_ERROR, InstituteErrorCode.REF_ENTITY_FOUND);
 			}
@@ -93,4 +93,5 @@ public class Institute extends BaseEntity {
 		
 		setActivityStatus(newActivityStatus);
 	}
+	
 }

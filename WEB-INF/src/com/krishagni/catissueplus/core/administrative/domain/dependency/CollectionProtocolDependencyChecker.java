@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 
-public class UserDependencyChecker extends AbstractDependencyChecker<User> {
+public class CollectionProtocolDependencyChecker extends AbstractDependencyChecker<CollectionProtocol>{
 	private DaoFactory daoFactory;
-
+	
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
 	}
@@ -19,11 +19,11 @@ public class UserDependencyChecker extends AbstractDependencyChecker<User> {
 	}
 
 	@Override
-	public List<Map<String, Object>> getDependentEntities(User user) {
+	public List<Map<String, Object>> getDependentEntities(CollectionProtocol cp) {
 		List<Map<String, Object>> dependencyStat = new ArrayList<Map<String, Object>>();
 		
-		List<Object[]> stats = daoFactory.getUserDao().getUserDependentEntities(user.getId());
-		setDependentEntities(stats, dependencyStat); 
+		List<Object[]> stats = daoFactory.getCollectionProtocolDao().getCpDependentEntities(cp.getId());
+		setDependentEntities(stats, dependencyStat);
 		
 		return dependencyStat;
 	}

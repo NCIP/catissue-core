@@ -106,12 +106,12 @@ public class SitesController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependency-stat")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependent-entities")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public List<Map<String, Object>> getSiteDependencyStat(@PathVariable Long id) {
+	public List<Map<String, Object>> getSiteDependentEntities(@PathVariable Long id) {
 		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
-		ResponseEvent<List<Map<String, Object>>> resp = siteService.getSiteDependencyStat(req);
+		ResponseEvent<List<Map<String, Object>>> resp = siteService.getSiteDependentEntities(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

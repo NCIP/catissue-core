@@ -182,14 +182,14 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<Map<String, Object>>> getStorageContainerDependencyStat(RequestEvent<Long> req) {
+	public ResponseEvent<List<Map<String, Object>>> getStorageContainerDependentEntities(RequestEvent<Long> req) {
 		try {
 			StorageContainer existing = daoFactory.getStorageContainerDao().getById(req.getPayload());
 			if (existing == null) {
 				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
 			}
 			
-			return ResponseEvent.response(existing.getDependencyStat());
+			return ResponseEvent.response(existing.getDependentEntities());
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

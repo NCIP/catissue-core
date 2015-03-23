@@ -20,7 +20,7 @@ public interface InstituteService {
 
 	public ResponseEvent<InstituteDetail> updateInstitute(RequestEvent<InstituteDetail> req);
 	
-	public ResponseEvent<List<Map<String, Object>>> getInstituteDependencyStat(RequestEvent<Long> req);
+	public ResponseEvent<List<Map<String, Object>>> getInstituteDependentEntities(RequestEvent<Long> req);
 
 	public ResponseEvent<InstituteDetail> deleteInstitute(RequestEvent<DeleteEntityOp> req);
 	

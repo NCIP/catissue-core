@@ -132,15 +132,15 @@ public class Site {
 		CollectionUpdater.update(this.getCoordinators(), other.getCoordinators());
 	}
 	
-	public List<Map<String, Object>> getDependencyStat() {
-		return dependencyChecker.getDependencyStat(this);
+	public List<Map<String, Object>> getDependentEntities() {
+		return dependencyChecker.getDependentEntities(this);
 	}
 
 	public void delete(boolean close) {
 		String activityStatus = Status.ACTIVITY_STATUS_CLOSED.getStatus();
 		if (!close) {
 			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
-			List<Map<String, Object>> dependencyStat = getDependencyStat();
+			List<Map<String, Object>> dependencyStat = getDependentEntities();
 			if (!dependencyStat.isEmpty()) {
 				throw OpenSpecimenException.userError(SiteErrorCode.REF_ENTITY_FOUND);
 			}
@@ -155,7 +155,7 @@ public class Site {
 		}
 		
 		if (newActivityStatus.equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
-			List<Map<String, Object>> dependencies = getDependencyStat();
+			List<Map<String, Object>> dependencies = getDependentEntities();
 			if (!dependencies.isEmpty()) {
 				throw new OpenSpecimenException(ErrorType.USER_ERROR,SiteErrorCode.REF_ENTITY_FOUND);
 			}

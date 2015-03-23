@@ -259,15 +259,15 @@ public class User extends BaseEntity implements UserDetails {
 		this.passwords.add(password);
 	}
 	
-	public List<Map<String, Object>> getDependencyStat() {
-		return dependencyChecker.getDependencyStat(this);
+	public List<Map<String, Object>> getDependentEntities() {
+		return dependencyChecker.getDependentEntities(this);
 	}
 	
 	public void delete(boolean close) {
 		String activityStatus = Status.ACTIVITY_STATUS_CLOSED.getStatus();
 		if (!close) {
 			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
-			List<Map<String, Object>> dependencyStat = getDependencyStat();
+			List<Map<String, Object>> dependencyStat = getDependentEntities();
 			if (!dependencyStat.isEmpty()) {
 				throw OpenSpecimenException.userError(UserErrorCode.REF_ENTITY_FOUND);
 			}

@@ -21,7 +21,7 @@ public interface UserDao extends Dao<User> {
 	
 	public Boolean isUniqueEmailAddress(String emailAddress);
 	
-	public List<Object[]> getUserDependencyStat(Long userId);
+	public List<Object[]> getUserDependentEntities(Long userId);
 	
 	public ForgotPasswordToken getFpToken(String token);
 	

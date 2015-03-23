@@ -19,7 +19,7 @@ public class DistributionProtocolDependencyChecker extends AbstractDependencyChe
 	}
 
 	@Override
-	public List<Map<String, Object>> getDependencyStat(DistributionProtocol t) {
+	public List<Map<String, Object>> getDependentEntities(DistributionProtocol t) {
 		List<Map<String, Object>> dependencyStat = new ArrayList<Map<String, Object>>();
 		
 		return dependencyStat;

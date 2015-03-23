@@ -20,11 +20,11 @@ public class InstituteDependencyChecker extends AbstractDependencyChecker<Instit
 	}
 
 	@Override
-	public List<Map<String, Object>> getDependencyStat(Institute institute) {
+	public List<Map<String, Object>> getDependentEntities(Institute institute) {
 		List<Map<String, Object>> dependencyStat = new ArrayList<Map<String, Object>>();
 		
-		List<Object[]> stats = daoFactory.getInstituteDao().getInstituteDependencyStat(institute.getId());
-		setStat(stats, dependencyStat);
+		List<Object[]> stats = daoFactory.getInstituteDao().getInstituteDependentEntities(institute.getId());
+		setDependentEntities(stats, dependencyStat);
 		
 		return dependencyStat;
 	}

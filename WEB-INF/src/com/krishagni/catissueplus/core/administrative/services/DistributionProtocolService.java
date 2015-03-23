@@ -19,7 +19,7 @@ public interface DistributionProtocolService {
 
 	public ResponseEvent<DistributionProtocolDetail> updateDistributionProtocol(RequestEvent<DistributionProtocolDetail> req);
 	
-	public ResponseEvent<List<Map<String, Object>>> getDistributionProtocolDependencyStat(RequestEvent<Long> req);
+	public ResponseEvent<List<Map<String, Object>>> getDistributionProtocolDependentEntities(RequestEvent<Long> req);
 	
 	public ResponseEvent<DistributionProtocolDetail> deleteDistributionProtocol(RequestEvent<Long> req);
 }
