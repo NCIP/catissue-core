@@ -2,74 +2,94 @@
 angular.module('os.administrative.role.addedit', ['os.administrative.models'])
   .controller('RoleAddEditCtrl', function(
     $scope, $state, $filter, role,
-    Permission, Resource) {
+    Operation, Resource) {
     
     var init = function() {
       $scope.role = role;
       loadPvs();
-      getSelectedPermissions($scope.role);
-      if (!role.acls) {
-        $scope.addResource();
-      }
     }
 
     function loadPvs() {
-       $scope.resources =  Resource.list();
-       var permissionsOrder =  Permission.getOrderedPermissions();
-       var unsortedPermissions = Permission.list();
-       $scope.sortedPermissions = [];
-       angular.forEach(unsortedPermissions, function(permission) {
-         $scope.sortedPermissions[permissionsOrder.indexOf(permission)] = {name: permission, selected: false, disabled: false};
+       $scope.resources = [];
+       Resource.query().then(function(resources) {
+         angular.forEach(resources, function(resource) {
+           $scope.resources.push(resource.name);
+         });
        });
+
+       var operationsOrder =  Operation.getOrderedOperations();
+       var unsortedOperations = [];
+       $scope.sortedOperations = [];
+       Operation.query().then(
+         function(operations) {
+           angular.forEach(operations, function(operation) {
+             unsortedOperations.push(operation.name);
+           });
+
+           angular.forEach(unsortedOperations, function(operation) {
+             $scope.sortedOperations[operationsOrder.indexOf(operation)] = {name: operation, selected: false, disabled: false};
+           });
+
+           getSelectedOperations($scope.role);
+
+           if (!role.acl) {
+             $scope.addResource();
+           }
+         }
+       );
     }
 
-    function getSelectedPermissions(role) {
-      angular.forEach(role.acls, function(acl) {
-        var permissions = $scope.sortedPermissions.map(
-          function(permission) {
-            var selected = acl.permissions.indexOf(permission.name) != -1;
+    function getSelectedOperations(role) {
+      angular.forEach(role.acl, function(acl) {
+
+        var selectedOperations = acl.operations.map(function(op) {
+          return op.operationName;
+        });
+
+        var operations = $scope.sortedOperations.map(
+          function(operation) {
+            var selected = selectedOperations.indexOf(operation.name) != -1;
             var disabled = false;
-            if (permission.name == 'Read' || permission.name == 'Update') {
-              disabled = acl.permissions.indexOf('Create') != -1;
+            if (operation.name == 'Read' || operation.name == 'Update') {
+              disabled = selectedOperations.indexOf('Create') != -1;
             }
 
-            return {name: permission.name, selected: selected, disabled: disabled}
+            return {name: operation.name, selected: selected, disabled: disabled};
           }
         );
-        acl.permissions = permissions;
+        acl.operations = operations;
       });
     }
 
     $scope.addResource = function() {
-      $scope.role.addResource($scope.role.newResource(angular.copy($scope.sortedPermissions)));
+      $scope.role.addResource($scope.role.newResource(angular.copy($scope.sortedOperations)));
     };
 
     $scope.removeResource = function(index) {
       $scope.role.removeResource(index);
-      if ($scope.role.acls.length == 0) {
+      if ($scope.role.acl.length == 0) {
         $scope.addResource();
       }
     };
   
-    $scope.saveRole = function() {
+    $scope.save = function() {
       var role = angular.copy($scope.role);
       role.$saveOrUpdate().then(
         function(savedRole) {
           $state.go('role-detail.overview', {roleId: savedRole.id});
         }
       );
-      $state.go('role-detail.overview', {roleId: 1}); // Temporary to show overview page on save
     };
 
-    $scope.setPermissions = function(permission, permissions) {
-      if (permission.name != 'Create') {
+    $scope.setOperations = function(operation, operations) {
+      if (operation.name != 'Create') {
         return;
       }
 
-      angular.forEach(permissions, function(p) {
-        if (p.name == 'Read' || p.name == 'Update') {
-          p.selected = permission.selected;
-          p.disabled = permission.selected;
+      angular.forEach(operations, function(op) {
+        if (op.name == 'Read' || op.name == 'Update') {
+          op.selected = operation.selected;
+          op.disabled = operation.selected;
         }
       });
     }

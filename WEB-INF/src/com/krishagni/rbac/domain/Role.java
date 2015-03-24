@@ -3,7 +3,7 @@ package com.krishagni.rbac.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.Session;
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
 
 public class Role {
 	private Long id;
@@ -66,24 +66,21 @@ public class Role {
 		this.childRoles = childRoles;
 	}
 
-	public void updateRole(Role newRole, Session session) {
-		setName(newRole.getName());
-		setDescription(newRole.getDescription());
-		setParentRole(newRole.getParentRole());
+	public void updateRole(Role other) {
+		setName(other.getName());
+		setDescription(other.getDescription());
+		setParentRole(other.getParentRole());
 		
-		for (Role childRole : newRole.getChildRoles()) {
+		for (Role childRole : other.getChildRoles()) {
 			childRole.setParentRole(this);
 		}
-		setChildRoles(newRole.getChildRoles());
-		updateAcl(newRole.getAcl(), session);
+		setChildRoles(other.getChildRoles());
+		updateAcl(other);
 	}
 	
-	private void updateAcl(Set<RoleAccessControl> newAcl, Session session) {
-		acl.clear();
-		session.flush();
-		acl.addAll(newAcl);
-		
-		for (RoleAccessControl rac : acl) {
+	private void updateAcl(Role other) {
+		CollectionUpdater.update(this.acl, other.getAcl());
+		for (RoleAccessControl rac : this.acl) {
 			rac.setRole(this);
 		}
 	}

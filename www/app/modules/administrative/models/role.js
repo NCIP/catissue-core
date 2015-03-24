@@ -1,104 +1,59 @@
 
 angular.module('os.administrative.models.role', ['os.common.models'])
   .factory('Role', function(osModel, $q) {
-    var Role = osModel('roles');
-    
-    Role.list = function() { 
-      var result = $q.defer();
-      var data = [ {"id":1, "name":"Super Admin", "description": "Super Administrator"},
-                   {"id":2,"name":"Admin", "description": "Administrator"}
-                 ];
-                    
-      result.resolve(data);
-      return result.promise;
-    };
+    var Role = osModel('rbac/roles');
 
-    Role.getById = function(id) {
-      return new Role(
-        {
-          "id":1,
-          "name": "Super Admin",
-          "description": "Super Administrator",
-          "acls" : [
-            {"resource": "User", "permissions": ["Create", "Read", "Update", "Delete"]},
-            {"resource": "Site", "permissions": ["Read"]}
-          ]
-        }
-      );
-    };
-
-    Role.prototype.newResource = function(permissions) {
-      return {resource:'', permissions: permissions};
+    Role.prototype.newResource = function(operations) {
+      return {resourceName:'', operations: operations};
     }
 
     Role.prototype.addResource = function(resource) {
-      if (!this.acls) {
-        this.acls = [];
+      if (!this.acl) {
+        this.acl = [];
       }
-      this.acls.push(resource);
+      this.acl.push(resource);
     }
 
     Role.prototype.removeResource = function(index) {
-      this.acls.splice(index, 1);
+      this.acl.splice(index, 1);
     }
 
     Role.prototype.$saveProps = function() {
-      this.acls = getAclsForSave(this.acls);
+      this.acl = getAclForSave(this.acl);
       return this;
     };
 
-    function getAclsForSave(inputAcls) {
-      var acls = [];
-      angular.forEach(inputAcls, function(acl) {
-        var permissions = [];
-        angular.forEach(acl.permissions, function(permission) {
-          if (permission.selected) {
-            permissions.push(permission.name);
+    function getAclForSave(inputAcl) {
+      var acl = [];
+      angular.forEach(inputAcl, function(ac) {
+        var operations = [];
+        angular.forEach(ac.operations, function(operation) {
+          if (operation.selected) {
+            operations.push({operationName: operation.name});
           }
         });
 
-        acl.permissions = permissions;
-        acls.push(acl);
+        ac.operations = operations;
+        acl.push(ac);
       });
-      return acls;
+
+      return acl;
     };
    
     return Role;
   })
-  .factory('Permission', function(osModel) {
-    var Permission = osModel('permissions');
+  .factory('Operation', function(osModel) {
+    var Operation = osModel('rbac/operations');
 
-    Permission.list = function() {
-      var permissions = ['Create', 'Read', 'Update', 'Delete'];
-      return permissions;
+    Operation.getOrderedOperations = function() {
+      var operations = ['Read', 'Create', 'Update', 'Delete'];
+      return operations;
     }
 
-    Permission.getOrderedPermissions = function() {
-      var permissions = ['Read', 'Create', 'Update', 'Delete'];
-      return permissions;
-    }
-
-    return Permission;
+    return Operation;
   })
   .factory('Resource', function(osModel) {
-    var Resource = osModel('resources');
-
-    Resource.list = function() {
-      var resources = [
-        'Collection Protocol', 
-        'Distribution Protocol', 
-        'Institute', 
-        'Order',
-        'Participant (PHI)',
-        'Visit',
-        'Specimen',
-        'Site',
-        'Storage Container',
-        'User' 
-      ];
-      return resources;
-    }
-
+    var Resource = osModel('rbac/resources');
     return Resource;
   })
 

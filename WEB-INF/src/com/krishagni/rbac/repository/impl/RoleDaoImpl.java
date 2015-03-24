@@ -10,38 +10,12 @@ import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.rbac.domain.Role;
+import com.krishagni.rbac.domain.RoleAccessControl;
 import com.krishagni.rbac.repository.RoleDao;
 import com.krishagni.rbac.repository.RoleListCriteria;
 
 public class RoleDaoImpl extends AbstractDao<Role> implements RoleDao {
-	private static final String FQN = Role.class.getName();
 	
-	private static final String GET_ALL_ROLES = FQN + ".getAllRoles";
-	
-	private static final String GET_ROLES_BY_NAMES = FQN + ".getRolesByNames";
-	
-	@Override
-	public Role getRole(Long roleId) {
-		return (Role) sessionFactory.getCurrentSession()
-				.get(Role.class, roleId);
-	}
-
-	@Override
-	public void deleteRole(Role role) {
-		sessionFactory.getCurrentSession()
-		.delete(role);
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public Role getRoleByName(String roleName) {
-		List<Role> roles = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_ROLES_BY_NAMES)
-				.setParameterList("roleNames", Collections.singletonList(roleName))
-				.list();
-		return roles.isEmpty() ? null : roles.get(0);
-	}
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Role> getRoles(RoleListCriteria listCriteria) {
@@ -55,7 +29,7 @@ public class RoleDaoImpl extends AbstractDao<Role> implements RoleDao {
 		
 		return query.list();
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Role> getRolesByName(List<String> roles) {
@@ -65,4 +39,45 @@ public class RoleDaoImpl extends AbstractDao<Role> implements RoleDao {
 				.list();
 	}
 	
+	@Override
+	@SuppressWarnings("unchecked")
+	public Role getRoleByName(String roleName) {
+		List<Role> roles = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_ROLES_BY_NAMES)
+				.setParameterList("roleNames", Collections.singletonList(roleName))
+				.list();
+		return roles.isEmpty() ? null : roles.get(0);
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public RoleAccessControl getRoleAccessControl(Long racId, Long roleId) {
+		List<RoleAccessControl> racl = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_ROLE_ACCESS_CONTROL)
+				.setParameter("id", racId)
+				.setParameter("roleId", roleId)
+				.list();
+				
+		return racl.isEmpty() ? null : racl.get(0);		
+	}
+	
+	@Override
+	public void deleteRole(Role role) {
+		sessionFactory.getCurrentSession()
+		.delete(role);
+	}
+	
+	@Override
+	public Class<?> getType() {
+		return Role.class;
+	}
+	
+	private static final String FQN = Role.class.getName();
+	
+	private static final String RAC_FQN = RoleAccessControl.class.getName();
+ 	
+	private static final String GET_ROLES_BY_NAMES = FQN + ".getRolesByNames";
+
+	private static final String GET_ROLE_ACCESS_CONTROL = RAC_FQN + ".getRoleAccessControl";
+
 }
