@@ -1,0 +1,24 @@
+<div>
+  <div class="os-modal-header">
+    <span translate="queries.import_query">Import Query</span>
+    <div class="os-close" ng-click="cancel()">&times;</div>
+  </div>
+  <div class="os-modal-body">
+    <form action="{{importQueryUrl}}">
+      <div class="form-group">
+        <label translate="queries.select_query_def_file">
+          Select Query Definition File
+        </label>
+        <div os-file-upload ctrl="queryImporter"></div>
+      </div>
+    </form>
+  </div>
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="cancel()" translate="common.buttons.cancel">
+      Cancel
+    </button>
+    <button class="btn btn-primary" ng-click="import()" translate="common.buttons.import">
+      Import
+    </button>
+  </div>
+</div>

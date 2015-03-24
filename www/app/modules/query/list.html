@@ -3,10 +3,52 @@
     <h3> 
       <span translate="queries.list">Queries</span>
     </h3>
-    <button class="os-round-btn">
-      <span class="fa fa-plus"></span>
-    </button>
+
+    <div dropdown>
+      <button class="os-round-btn dropdown-toggle">
+        <span class="fa fa-plus"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a ui-sref="query-addedit({queryId: undefined})">
+            <i class="fa fa-plus"></i>
+            <span translate="common.buttons.create">Create</span>
+          </a>
+        </li>
+        <li>
+          <a ng-click="importQuery()">
+            <i class="fa fa-upload"></i>
+            <span translate="common.buttons.import">Import</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
     <div class="os-more-options">
+      <div class="inline" dropdown ng-if="selectedQueries.length > 0">
+        <button class="dropdown-toggle">
+          <span class="fa fa-folder">
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right os-query-folders-dd">
+          <li>
+            <input ng-model="searchQueryFolder" type="text" class="form-control" 
+              placeholder="{{'queries.search_folder' | translate}}" 
+              ng-click="$event.stopPropagation()">
+          </li>
+          <li>
+            <ul class="dropdown-menu-subgroup">
+              <li ng-repeat="folder in folders.myFolders | filter: searchQueryFolder"
+                ng-click="addSelectedQueriesToFolder(folder)">
+                <a><span>{{folder.name}}</span></a>
+              </li>
+            </ul>
+          </li>
+          <li class="divider"></li>
+          <li ng-click="createNewFolder()">
+            <a translate="queries.create_new_folder">Create New Folder</a>
+          </li>
+        </ul>
+      </div>
       <button os-right-drawer-toggle class="os-search-button">
         <span class="fa fa-search"></span>
       </button>
@@ -82,7 +124,7 @@
                   <span translate="queries.view_query_run_log"></span>
                 </a>
               </li>
-              <li>
+              <li ng-click="deleteQuery(query)">
                 <a>
                   <i class="fa fa-trash"></i>
                   <span translate="queries.delete"></span>
@@ -120,7 +162,7 @@
 </script>
 
 <script type="text/ng-template" id="query_folders.html">
-  <div class="os-table os-table-condensed" style="margin-bottom: 0px;">
+  <div class="os-table" style="margin-bottom: 0px;">
     <div class="os-table-head">
       <div class="row">
         <div class="col col-xs-12" translate="queries.folders">Folders</div>
@@ -152,8 +194,8 @@
             </div>
 
             <div class="pull-right">
-              <button type="button" class="btn btn-xs btn-default">
-                <span class="fa fa-cog"></span>
+              <button type="button" class="btn btn-xs btn-default" ng-click="editFolder(folder)">
+                <span class="fa fa-pencil"></span>
               </button> 
             </div>
           </div>

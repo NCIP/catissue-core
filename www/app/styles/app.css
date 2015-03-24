@@ -209,9 +209,15 @@ body {
   color: #666666;
 }
   
+.os-page-hdr .os-more-options div.inline {
+  display: inline-block;
+  position: relative;
+}
+
 .os-page-hdr .os-nav-button,
 .os-page-hdr .os-options-button,
-.os-page-hdr .os-search-button {
+.os-page-hdr .os-search-button,
+.os-page-hdr .os-more-options button {
   color: #666666;
   background: transparent;
   border: none;
@@ -228,7 +234,8 @@ body {
 
 .os-page-hdr .os-nav-button .fa,
 .os-page-hdr .os-options-button .fa,
-.os-page-hdr .os-search-button .fa {
+.os-page-hdr .os-search-button .fa,
+.os-page-hdr .os-more-options button .fa {
   font-size: 24px;
 }
 
@@ -380,7 +387,7 @@ h4 + .btn-group {
 
 .os-alert-container {
   text-align: center;
-  z-index: 100;
+  z-index: 2000;
   position: absolute;
   width:100%;
   border-radius: 0px;
@@ -591,24 +598,6 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 .os-right-align {
   text-align: right;
-}
-
-.os-file-upload {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  text-align: left;
-  color: #999;
-}
-
-.os-file-upload > input[type=file] {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 0;
-  opacity: 0;
-  cursor: pointer;
-  padding: 20px;
 }
 
 .os-input-addon-grp {

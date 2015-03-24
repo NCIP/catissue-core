@@ -50,3 +50,32 @@
   padding: 6px 12px 6px 0px;
 }
 
+.dropdown-menu-subgroup {
+  list-style: none;
+  padding: 0px;
+}
+
+.dropdown-menu-subgroup > li > a {
+  clear: both;
+  color: #333;
+  display: block;
+  font-weight: normal;
+  line-height: 1.42857;
+  padding: 3px 20px;
+  white-space: nowrap;
+}
+
+.dropdown-menu-subgroup > li > a:hover,  .dropdown-menu-subgroup > li > a:focus {
+  background: #e5e5e5;
+  color: #333;
+  text-decoration: none;
+}
+
+body > .ui-select-bootstrap.open {
+  z-index: 2000; 
+}
+
+.popover {
+  max-width: 350px;
+}
+

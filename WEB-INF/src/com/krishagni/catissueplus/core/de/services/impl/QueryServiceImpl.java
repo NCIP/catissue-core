@@ -198,7 +198,7 @@ public class QueryServiceImpl implements QueryService {
 				.dateFormat(dateFormat)
 				.timeFormat(timeFormat)
 				.compile(cprForm, getAql(queryDetail));
-			SavedQuery savedQuery = getSavedQuery(req.getSessionDataBean(), queryDetail);
+			SavedQuery savedQuery = getSavedQuery(queryDetail);
 			daoFactory.getSavedQueryDao().saveOrUpdate(savedQuery);
 			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(savedQuery));
 		} catch (QueryParserException qpe) {
@@ -222,7 +222,7 @@ public class QueryServiceImpl implements QueryService {
 				.dateFormat(dateFormat)
 				.timeFormat(timeFormat)
 				.compile(cprForm, getAql(queryDetail));
-			SavedQuery savedQuery = getSavedQuery(req.getSessionDataBean(), queryDetail);
+			SavedQuery savedQuery = getSavedQuery(queryDetail);
 			SavedQuery existing = daoFactory.getSavedQueryDao().getQuery(queryDetail.getId());
 			existing.update(savedQuery);
 
@@ -247,9 +247,8 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
 			}
 
-			boolean isAdmin = req.getSessionDataBean().isAdmin();
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!isAdmin && !query.getCreatedBy().getId().equals(userId)) {
+			User user = AuthUtil.getCurrentUser();
+			if (!user.isAdmin() && !query.getCreatedBy().equals(user)) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 
@@ -717,10 +716,7 @@ public class QueryServiceImpl implements QueryService {
 		}
 	}
          
-	private SavedQuery getSavedQuery(SessionDataBean sdb, SavedQueryDetail detail) {
-		User user = new User();
-		user.setId(sdb.getUserId());
-		
+	private SavedQuery getSavedQuery(SavedQueryDetail detail) {
 		SavedQuery savedQuery = new SavedQuery();		
 		savedQuery.setTitle(detail.getTitle());
 		savedQuery.setCpId(detail.getCpId());
@@ -728,15 +724,14 @@ public class QueryServiceImpl implements QueryService {
 		savedQuery.setFilters(detail.getFilters());
 		savedQuery.setQueryExpression(detail.getQueryExpression());
 		if (detail.getId() == null) {
-			savedQuery.setCreatedBy(user);
+			savedQuery.setCreatedBy(AuthUtil.getCurrentUser());
 		}
 		
-		savedQuery.setLastUpdatedBy(user);
+		savedQuery.setLastUpdatedBy(AuthUtil.getCurrentUser());
 		savedQuery.setLastUpdated(Calendar.getInstance().getTime());
 		savedQuery.setReporting(detail.getReporting());
 		return savedQuery;
 	}
-
 
 	private String getAql(SavedQueryDetail queryDetail) {
 		return AqlBuilder.getInstance().getQuery(

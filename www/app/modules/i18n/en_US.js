@@ -24,12 +24,14 @@
     "ui_error": "UI Error. Please report this problem to system administrator",
     "server_connect_error": "Unable to connect server",
     "recent_activity": "Recent Activity",
+    "no_file_selected": "No File Selected",
 
     "buttons": {
       "add": "Add",
       "save": "Save",
       "update": "Update",
       "create": "Create",
+      "delete": "Delete",
       "import": "Import",
       "cancel": "Cancel",
       "discard": "Discard",
@@ -38,7 +40,8 @@
       "ok": "Ok",
       "select": "Select",
       "unselect": "Unselect",
-      "submit": "Submit"
+      "submit": "Submit",
+      "edit": "Edit"
     }
   },
 
@@ -616,17 +619,86 @@
     "download_def": "Download Query Definition",
     "view_query_run_log": "View Query Run Log",
     "delete": "Delete",
+
     "all": "All",
     "folders": "Folders",
     "my_folders": "My Folders",
     "shared_folders": "Shared Folders",
-
+    "search_folder": "Search folder",
+    "queries_assigned_to_folder": "{{count}} queries assigned to folder '{{folderName}}'",
+    "create_new_folder": "Create New Folder",
+    "folder_created": "Query folder '{{folderName}}' created",
+    "folder_updated": "Query folder '{{folderName}}' updated",
+    "folder_deleted": "Query folder '{{folderName}}' deleted",
+    "new_query_folder": "New Query Folder",
+    "update_query_folder": "Update Query Folder",
+    "folder_name": "Folder Name",
+    "remove_query_from_folder": "Remove query from folder",
+    "share_folder_with_all": "Share folder with all current and future users",
+    "share_folder_with_users": "Share folder with following users",
+    "users": "Users",
+    "delete_query": "Delete Query",
+    "confirm_delete_query": "Are you sure you want to delete query '{{title}}'?",
+    "query_deleted": "Query '{{queryTitle}}' deleted",
+    "query_imported": "Query '{{queryTitle}}' imported",
+    "import_failed": "Query import failed",
+    "import_query": "Import Query",
+    "select_query_def_file": "Select Query File",
+    "new_query": "New Query",
+    "select_cp": "Select a Collection Protocol",
+    "add_filter": "Add Filter",
+    "edit_filter": "Edit Filter",
+    "search_field": "Search Field",
+    "loading_form_fields": "Loading form fields. Please wait for a moment...",
+    "operator": "Operator",
+    "select_op": "Select Operator",
+    "cond_value": "Condition Value",
+    "select_cond_value": "Select Condition Value",
+    "select_cond_values": "Select Condition Values",
+    "specify_multiple_cond": "Specify Condition Value & then hit enter key",
+    "range_min": "Range Min",
+    "range_max": "Range Max",
+    "select_date": "Select Date",
+    "specify_cond": "Specify Condition Value",
+    "parameterized_filter": "Parameterized Filter",
+    "query_expr": "Query Expression",
+    "parameterized_marker": "P",
+    "current_filters": "Current Filters",
+    
     "no_queries": "No queries to show",
+    "no_queries_selected": "No queries selected. Please select at least one query",
     "info": "Information",
+
+    "expr_toolbar": {
+      "and": "AND",
+      "or":  "OR",
+      "not": "NOT" 
+    },
+
+    "ops": {
+      "eq": "Equals",
+      "ne": "Not Equals",
+      "lt": "Less than",
+      "le": "Less than or Equals",
+      "gt": "Greater than",
+      "ge": "Greater than or Equals", 
+      "exists": "Exists",
+      "not_exists": "Not Exists",
+      "qin": "Is One Of",
+      "not_in": "Is Not One Of",
+      "starts_with": "Starts With",
+      "ends_with": "Ends With",
+      "contains": "Contains",
+      "and": "And",
+      "or": "Or",
+      "intersect": "Intersection",
+      "not": "Not",
+      "nthchild": "Any Child",
+      "between": "Between"
+    },
 
     "tooltip": {
       "view_records": "Click to View Records"
     }
   }
-
 }

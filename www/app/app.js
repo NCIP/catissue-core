@@ -14,6 +14,7 @@ angular.module('openspecimen', [
   'ui.mask', 
   'ui.keypress', 
   'ui.select',
+  'ui.sortable',
   'mgcrea.ngStrap.popover',
   'angular-loading-bar',
   'pascalprecht.translate'])
@@ -53,8 +54,8 @@ angular.module('openspecimen', [
 
     $httpProvider.interceptors.push('httpRespInterceptor');
 
-    ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 9090;
+    /*ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
+    ApiUrlsProvider.port = 9090;*/
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
@@ -199,6 +200,7 @@ angular.module('openspecimen', [
 
     $rootScope.global = {
       dateFmt: 'MMM dd, yyyy',
+      queryDateFmt: {format: 'mm-dd-yyyy'},
       timeFmt: 'hh:mm',
       dateTimeFmt: 'MMM dd, yyyy hh:mm',
       filterWaitInterval: 500

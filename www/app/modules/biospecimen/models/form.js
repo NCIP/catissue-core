@@ -11,6 +11,17 @@ angular.module('os.biospecimen.models.form', ['os.common.models'])
       );
     };
 
+    Form.listQueryForms = function() {
+      return $http.get(Form.url(), {params: {formType: 'query'}}).then(
+        function(result) {
+          return result.data.map(function(form) {
+            form.id = form.formId;
+            return new Form(form);
+          });
+        }
+      );
+    };
+
     Form.listFor = function(url, objectId, params) {
       var result = [];
     
@@ -48,6 +59,30 @@ angular.module('os.biospecimen.models.form', ['os.common.models'])
       );
 
       return result;
+    };
+
+    Form.prototype.getFields = function() {
+      var cpId = -1;
+      if (!!this.cp) {
+        cpId = this.cp.id;
+      }
+
+      var params = {cpId: cpId, extendedFields: cpId != -1};
+      var d = $q.defer();
+      var that = this;
+      if (this.fields) {
+        d.resolve(this.fields);
+      } else {
+        $http.get(Form.url() + this.$id() + '/fields', {params: params}).then(
+          function(resp) {
+            that.fields = resp.data;
+            d.resolve(that.fields);
+            return resp.data;
+          }
+        );
+      }
+
+      return d.promise;
     };
 
     function createRecordsList(formsRecords) {
