@@ -647,6 +647,7 @@
     "new_query": "New Query",
     "select_cp": "Select a Collection Protocol",
     "add_filter": "Add Filter",
+    "edit_filter": "Edit Filter",
     "search_field": "Search Field",
     "loading_form_fields": "Loading form fields. Please wait for a moment...",
     "operator": "Operator",
@@ -662,6 +663,7 @@
     "parameterized_filter": "Parameterized Filter",
     "query_expr": "Query Expression",
     "parameterized_marker": "P",
+    "current_filters": "Current Filters",
     
     "no_queries": "No queries to show",
     "no_queries_selected": "No queries selected. Please select at least one query",

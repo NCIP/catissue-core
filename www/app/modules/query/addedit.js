@@ -119,9 +119,41 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util'])
       ql.filtersMap[filter.id] = filter;
       ql.exprNodes.push({type: 'filter', value: filter.id});
       ql.isValid = QueryUtil.isValidQueryExpr(ql.exprNodes);
-      ql.currFilter = {value: ""};
+      ql.currFilter = {};
 
       //$scope.disableCpSelection();
+    };
+
+    $scope.displayFilter = function(filter) {
+      QueryUtil.hidePopovers();
+
+      var ql = $scope.queryLocal;
+      ql.currFilter = angular.copy(filter);
+      if (!filter.expr) {
+        ql.currFilter.ops = QueryUtil.getAllowedOps(filter.field);
+      }
+    };
+
+    $scope.editFilter = function() {
+      QueryUtil.hidePopovers();
+
+      var ql = $scope.queryLocal;
+      var filter = angular.extend({}, ql.currFilter);
+      for (var i = 0; i < ql.filters.length; ++i) {
+        if (filter.id == ql.filters[i].id) {
+          ql.filters[i] = filter;
+          ql.filtersMap[filter.id] = filter;
+          break;
+        }
+      }
+
+      ql.currFilter = {};
+      //$scope.disableCpSelection();
+    };
+
+    $scope.cancelFilter = function() {
+      QueryUtil.hidePopovers();
+      $scope.queryLocal.currFilter = {};
     };
 
     init();

@@ -245,3 +245,24 @@
   font-size: 8px;
   color: #cccccc;
 }
+
+.os-query-filter {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.os-query-filter > div:nth-child(1) {
+  flex: 1;
+}
+  
+.os-query-filter > div:nth-child(2) {
+  flex: 12;
+}
+
+.os-query-filter > div:nth-child(3) {
+  flex: 2;
+}
