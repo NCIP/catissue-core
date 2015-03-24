@@ -8,6 +8,7 @@ angular.module('os.query',
     'os.query.importquery',
     'os.query.list',
     'os.query.addedit',
+    'os.query.addeditfilter',
     'os.query.expr',
     'os.query.util',
     'os.query.datepicker'
