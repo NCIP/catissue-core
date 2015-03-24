@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.dp.detail', ['os.administrative.models'])
-  .controller('DpDetailCtrl', function($scope, $q, $state, $modal, distributionProtocol) {
+  .controller('DpDetailCtrl', function($scope, $q, distributionProtocol, DeleteUtil) {
     $scope.distributionProtocol = distributionProtocol;
     
     $scope.editDp = function(property, value) {
@@ -14,7 +14,7 @@ angular.module('os.administrative.dp.detail', ['os.administrative.models'])
         onDeleteState: 'dp-list',
         entityNameProp: $scope.distributionProtocol.title,
         entityTypeProp: 'Distribution Protocol'
-      }, $modal, $state);
+      });
     }
 
   });

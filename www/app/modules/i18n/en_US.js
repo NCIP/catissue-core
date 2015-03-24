@@ -664,6 +664,20 @@
     "tooltip": {
       "view_records": "Click to View Records"
     }
+  },
+
+  "entity_name": {
+    "cp": "Collection Protocol",
+    "dp": "Distribution Protocol",
+    "user": "User",
+    "site": "Site",
+    "institute": "Institute",
+    "storage_container": "Storage Container",
+    "visit": "Visit",
+    "mrn": "MRN",
+    "cpe": "Collection Protocol Event",
+    "cpr": "Collection Protocol Registration",
+    "specimen": "Specimen"
   }
 
 }

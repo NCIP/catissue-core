@@ -89,7 +89,7 @@ angular.module('os.common.models', [])
         return this.$id() ? this.$update() : this.$save();
       };
 
-      Model.prototype.getDependentEntities = function(id) {
+      Model.prototype.getDependentEntities = function() {
         return $http.get(url + this.$id() + '/dependent-entities').then(Model.noTransform);
       }
 

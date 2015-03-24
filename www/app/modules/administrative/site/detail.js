@@ -1,5 +1,5 @@
 angular.module('os.administrative.site.detail', ['os.administrative.models'])
-  .controller('SiteDetailCtrl', function($scope, $q, $state, $modal, site, Institute, PvManager) {
+  .controller('SiteDetailCtrl', function($scope, $q, site, Institute, PvManager, DeleteUtil) {
 
     function init() {
       $scope.site = site;
@@ -30,7 +30,7 @@ angular.module('os.administrative.site.detail', ['os.administrative.models'])
         onDeleteState: 'site-list',
         entityNameProp: $scope.site.name,
         entityTypeProp: 'Site'
-      }, $modal, $state);
+      });
 
     }
 

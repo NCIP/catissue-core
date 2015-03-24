@@ -1,5 +1,5 @@
 angular.module('os.administrative.container.detail', ['os.administrative.models'])
-  .controller('ContainerDetailCtrl', function($scope, $q, $state, $modal, container, Site, CollectionProtocol, PvManager) {
+  .controller('ContainerDetailCtrl', function($scope, $q, container, Site, CollectionProtocol, PvManager, DeleteUtil) {
 
     function init() {
       $scope.container = container;
@@ -31,7 +31,7 @@ angular.module('os.administrative.container.detail', ['os.administrative.models'
         onDeleteState: 'container-list',
         entityNameProp: $scope.container.name,
         entityTypeProp: 'Storage Container'
-      }, $modal, $state);
+      });
     }
 
     init();

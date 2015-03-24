@@ -1,5 +1,5 @@
 angular.module('os.administrative.institute.detail', ['os.administrative.models'])
-  .controller('InstituteDetailCtrl', function($scope, $state, $modal, institute) {
+  .controller('InstituteDetailCtrl', function($scope, institute, DeleteUtil) {
     $scope.institute = institute;
 
     $scope.getDepartmentText = function(department) {
@@ -11,7 +11,7 @@ angular.module('os.administrative.institute.detail', ['os.administrative.models'
         onDeleteState: 'institute-list',
         entityNameProp: $scope.institute.name,
         entityTypeProp: 'Institute'
-      }, $modal, $state);
+      });
     }
 
   });
