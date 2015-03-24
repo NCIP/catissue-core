@@ -85,5 +85,63 @@ angular.module('os.query.addeditfilter', ['os.query.models'])
       QueryUtil.hidePopovers();
       $scope.queryLocal.currFilter = {};
     };
+
+    $scope.deleteFilter = function(filter) {
+      QueryUtil.hidePopovers();
+
+      //
+      // Remove from filters list
+      // 
+      var ql = $scope.queryLocal;
+      delete ql.filtersMap[filter.id];
+      for (var i = 0; i < ql.filters.length; ++i) { 
+        if (filter.id == ql.filters[i].id) {
+          ql.filters.splice(i, 1);
+          break;
+        }
+      }
+      
+      //
+      // Remove temporal filter from select list
+      //
+      var selectField = '$temporal.' + filter.id;
+      for (var i = 0; i < ql.selectedFields.length; ++i) { 
+        if (ql.selectedFields[i] == selectField) {
+          ql.selectedFields.splice(i, 1);
+          break;
+        }
+      }
+
+      //
+      // Remove from query expression nodes 
+      // 
+      var exprNodes = ql.exprNodes;
+      for (var i = 0; i < exprNodes.length; ++i) {
+        var exprNode = exprNodes[i];
+        if (exprNode.type != 'filter' || filter.id != exprNode.value) {
+          continue;
+        }
+
+        if (i == 0 && exprNodes.length > 1 && exprNodes[1].type == 'op') {
+          // first filter -> remove filter and operator to right
+          exprNodes.splice(0, 2); 
+        } else if (i != 0 && exprNodes[i - 1].type == 'op') {
+          // operator on left -> remove filter and operator to left
+          exprNodes.splice(i - 1, 2);
+        } else if (i != 0 && (i + 1) < exprNodes.length && exprNodes[i + 1].type == 'op') {
+          // operator on right -> remove filter and operator to right
+          exprNodes.splice(i, 2);
+        } else {
+          // no operators before or after filter -> remove only filter
+          exprNodes.splice(i, 1);
+        }
+        break;
+      }
+
+      // validate expression after removing filter and optional operator
+      ql.isValid = QueryUtil.isValidQueryExpr(exprNodes);
+
+      //$scope.disableCpSelection();
+    };
   }
 );

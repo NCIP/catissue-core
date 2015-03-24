@@ -10,7 +10,9 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util'])
         filters: [],
         filtersMap: {},
         exprNodes: [],
-        filterId: 0
+        filterId: 0,
+        selectedFields: [],
+        isValid: true
       };
 
       var cpId = query.cpId || -1;
