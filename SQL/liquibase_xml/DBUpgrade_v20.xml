@@ -149,8 +149,8 @@
 			referencedTableName="QUERY_TAGS" referencedColumnNames="IDENTIFIER" />
 
 		<addForeignKeyConstraint constraintName="FK_QUERYTAG_USER_ID"
-			baseTableName="QUERY_TAGS" baseColumnNames="USER_ID" 					referencedTableName="CATISSUE_USER"
-			referencedColumnNames="IDENTIFIER" />
+			baseTableName="QUERY_TAGS" baseColumnNames="USER_ID" 					
+			referencedTableName="CATISSUE_USER" referencedColumnNames="IDENTIFIER" />
 
 
 		<addUniqueConstraint constraintName="S_TAGID_UNIQUE_KEY"
@@ -158,5 +158,10 @@
 
 		<addUniqueConstraint constraintName="USRID_TAGLABEL_UNIQUE_KEY"
 			tableName="QUERY_TAGS" columnNames="TAG_LABEL,USER_ID" />
-	</changeSet> 	 
+	</changeSet> 	
+	
+	<changeSet id="7" author="catissuecore" dbms="oracle">
+		<createSequence sequenceName="OS_AUDIT_QUERY_SEQ"
+			startValue="1" incrementBy="1" minValue="1" ordered="true" />
+	</changeSet> 
 </databaseChangeLog>         

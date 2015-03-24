@@ -8,14 +8,9 @@ import org.hibernate.envers.RevisionTimestamp;
 
 import com.krishagni.catissueplus.core.auditquery.events.EnversListener;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity
 @RevisionEntity(EnversListener.class)
 public class EnversRevisionEntity {
 	
-	@Id
 	@RevisionNumber
 	private long id;
 	  
