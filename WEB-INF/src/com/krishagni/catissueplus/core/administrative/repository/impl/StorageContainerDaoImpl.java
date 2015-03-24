@@ -54,14 +54,6 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 		return result.isEmpty() ? null : result.iterator().next();		
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<Object[]> getStorageContainerDependentEntities(Long containerId) {
-		return sessionFactory.getCurrentSession()
-				.createSQLQuery(GET_STORAGE_CONTAINER_DEPENDET_ENTITIES_SQL)
-				.setLong("containerId", containerId)
-				.list();
-	}
-
 	@Override
 	public void delete(StorageContainerPosition position) {
 		sessionFactory.getCurrentSession().delete(position);		
@@ -238,23 +230,5 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			params.put("storeSpecimenEnabled", crit.storeSpecimensEnabled());
 		}
 	}	
-	
-	private static final String GET_STORAGE_CONTAINER_DEPENDET_ENTITIES_SQL = 
-			"select " + 
-			"  'Storage Container' as entityName, count(*) as count " + 
-			"from " + 
-			"  os_storage_containers sc " + 
-			"where " + 
-			"  sc.activity_status != 'Disabled' and " +
-			"  sc.parent_container_id = :containerId " +
-			"union " +
-			"select " + 
-			"  'Specimen' as entityName, count(s.identifier) as count " +
-			"from " + 
-			"  catissue_specimen s " +
-			"  inner join os_container_positions cp on cp.occupying_specimen_id = s.identifier " + 
-			"where " +
-			"  s.activity_status != 'Disabled' and " +
-			"  cp.storage_container_id = :containerId ";
 	
 }

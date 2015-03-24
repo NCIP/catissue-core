@@ -76,32 +76,6 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 		return results.isEmpty() ? null : results.get(0);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<Object[]> getInstituteDependentEntities(Long instituteId) {
-		return sessionFactory.getCurrentSession()
-				.createSQLQuery(GET_INSTITUTE_DEPENDENT_ENTITIES_SQL)
-				.setLong("instituteId", instituteId)
-				.list();
-	}
-	
-	private static final String GET_INSTITUTE_DEPENDENT_ENTITIES_SQL = 
-			"select " + 
-			"  'User' as entityName, count(u.identifier) as count " + 
-			"from " +
-			"  CATISSUE_USER u " +
-			"  inner join OS_DEPARTMENTS dept on dept.identifier = u.department_id " +
-			"where " + 
-			"  u.activity_status != 'Disabled' and " +
-			"  dept.INSTITUTE_ID = :instituteId " +
-			"union " +
-			"select " + 
-			"  'Site' as entityName, count(s.identifier) as count " + 
-			"from " + 
-			"  catissue_site s " + 
-			"where " + 
-			"  s.activity_status != 'Disabled' and " +
-			"  s.institute_id = :instituteId "; 
-	
 	private static final String INSTITUTE_FQN = Institute.class.getName();
 	
 	private static final String DEPARTMENT_FQN = Department.class.getName();

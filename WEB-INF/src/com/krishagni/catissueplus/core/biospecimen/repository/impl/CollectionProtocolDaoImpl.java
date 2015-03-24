@@ -93,14 +93,6 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 				.list();
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<Object[]> getCpDependentEntities(Long cpId) {
-		return sessionFactory.getCurrentSession()
-				.createSQLQuery(GET_COLLECTION_PROTOCOL_DEPENDENT_ENTITIES_SQL)
-				.setLong("cpId", cpId)
-				.list();
-	}
-	
 	@Override
 	public CollectionProtocolEvent getCpe(Long cpeId) {
 		return (CollectionProtocolEvent) sessionFactory.getCurrentSession()
@@ -232,25 +224,6 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		
 		return cp;		
 	}
-	
-	private static final String GET_COLLECTION_PROTOCOL_DEPENDENT_ENTITIES_SQL = 
-			"select " + 
-			"  'Storage Container' as entityName, count(sc.identifier) as count " +
-			"from " + 
-			"  os_storage_container sc " +
-			"  inner join os_stor_container_cps scp on scp.storage_contianer_id = sc.identifier " + 
-			"where " +
-			"  sc.activity_status != 'Disabled' and " +
-			"  sc.cp_id = :cpId " + 
-			"union " +
-			"select " + 
-			"  'Participant Registraton' as entityName, count(cpr.identifier) as count " +
-			"from " + 
-			"  catissue_participant p " +
-			"  inner join catissue_coll_prot_reg cpr on cpr.participant_id = p.identifier " + 
-			"where " + 
-			"  p.activity_status != 'Disabled' and " +
-			"  cpr.collection_protocol_id = :cpId ";
 	
 	private static final String FQN = CollectionProtocol.class.getName();
 	

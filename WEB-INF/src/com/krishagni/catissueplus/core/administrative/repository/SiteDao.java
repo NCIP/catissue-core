@@ -16,5 +16,4 @@ public interface SiteDao extends Dao<Site> {
 
 	public Site getSiteByCode(String code);
 	
-	public List<Object[]> getSiteDependentEntities(Long siteId);
 }
