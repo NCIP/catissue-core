@@ -8,5 +8,5 @@
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
   <include file="./SQL/liquibase_xml/db-os-changelog-2.0.xml"/>
-  <include file="./SQL/liquibase_xml/de.dbchangelog-master.xml"/>
+  <include file="./SQL/liquibase_xml/de-os-dbchangelog-master.xml"/>
 </databaseChangeLog> 
