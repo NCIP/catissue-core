@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.models.role', ['os.common.models'])
-  .factory('Role', function(osModel, $q) {
+  .factory('Role', function(osModel) {
     var Role = osModel('rbac/roles');
 
     Role.prototype.newResource = function(operations) {
