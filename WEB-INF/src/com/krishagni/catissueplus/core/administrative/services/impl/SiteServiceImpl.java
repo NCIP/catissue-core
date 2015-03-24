@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -116,7 +117,7 @@ public class SiteServiceImpl implements SiteService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<Map<String, Object>>> getSiteDependentEntities(RequestEvent<Long> req) {
+	public ResponseEvent<List<DependentEntityDetail>> getSiteDependentEntities(RequestEvent<Long> req) {
 		try {
 			Site existing = daoFactory.getSiteDao().getById(req.getPayload());
 			if (existing == null) {

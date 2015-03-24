@@ -22,8 +22,8 @@ public class UserDependencyChecker extends AbstractDependencyChecker<User> {
 	public List<Map<String, Object>> getDependentEntities(User user) {
 		List<Map<String, Object>> dependencyStat = new ArrayList<Map<String, Object>>();
 		
-		List<Object[]> stats = daoFactory.getUserDao().getUserDependentEntities(user.getId());
-		setDependentEntities(stats, dependencyStat); 
+		//List<Object[]> stats = daoFactory.getUserDao().getUserDependentEntities(user.getId());
+		//setDependentEntities(stats, dependencyStat); 
 		
 		return dependencyStat;
 	}

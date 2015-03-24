@@ -26,6 +26,11 @@
       <key column="INSTITUTE_ID"/>
       <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.Department" />
     </set>
+    
+    <set name="sites" inverse="false" cascade="none">
+      <key column="INSTITUTE_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.Site"/>
+    </set>
 
     <query name="getInstituteByName">
       from

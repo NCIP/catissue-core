@@ -1,7 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -22,6 +21,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -182,7 +182,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<Map<String, Object>>> getStorageContainerDependentEntities(RequestEvent<Long> req) {
+	public ResponseEvent<List<DependentEntityDetail>> getStorageContainerDependentEntities(RequestEvent<Long> req) {
 		try {
 			StorageContainer existing = daoFactory.getStorageContainerDao().getById(req.getPayload());
 			if (existing == null) {

@@ -1,7 +1,6 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,6 +22,7 @@ import com.krishagni.catissueplus.core.administrative.events.StorageContainerPos
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -191,9 +191,9 @@ public class StorageContainersController {
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependent-entities")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<Map<String, Object>> getContainerDependentEntities(@PathVariable Long id) {
+	public List<DependentEntityDetail> getContainerDependentEntities(@PathVariable Long id) {
 		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
-		ResponseEvent<List<Map<String, Object>>> resp = storageContainerSvc.getStorageContainerDependentEntities(req);
+		ResponseEvent<List<DependentEntityDetail>> resp = storageContainerSvc.getStorageContainerDependentEntities(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

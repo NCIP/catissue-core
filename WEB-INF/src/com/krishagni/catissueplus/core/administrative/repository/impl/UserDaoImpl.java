@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserListCriteria;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
@@ -80,11 +81,13 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Object[]> getUserDependentEntities(Long userId) {
-		return sessionFactory.getCurrentSession()
+	public List<DependentEntityDetail> getUserDependentEntities(Long userId) {
+		List<Object[]> rows = sessionFactory.getCurrentSession()
 				.createSQLQuery(GET_USER_DEPENDENT_ENTITIES_SQL)
 				.setLong("userId", userId)
 				.list();
+		
+		return getDependentEntities(rows);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -209,9 +212,23 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		));
 	}
 	
+	private List<DependentEntityDetail> getDependentEntities(List<Object[]> rows) {
+		List<DependentEntityDetail> dependentEntities = new ArrayList<DependentEntityDetail>();
+		
+		for (Object[] row: rows) {
+			String name = (String)row[0];
+			int count = ((Number)row[1]).intValue();
+			if (count > 0) {
+				dependentEntities.add(DependentEntityDetail.from(name, count));
+			}
+		}
+		
+		return dependentEntities;
+ 	}
+	
 	private static final String GET_USER_DEPENDENT_ENTITIES_SQL = 
 			"Select " + 
-			"  'Site' as entityName, count(s.identifier) as count " + 
+			"  'site' as entityName, count(s.identifier) as count " + 
 			"from " + 
 			"  catissue_site s" +
 			"  inner join catissue_site_coordinators sc on sc.site_id = s.identifier " + 
@@ -220,7 +237,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 			"  sc.USER_ID = :userId " + 
 			"union " +
 			"select " + 
-			"  'Collection Protocol' as entityName, count(cp.identifier) as count " + 
+			"  'cp' as entityName, count(cp.identifier) as count " + 
 			"from " + 
 			"  catissue_collection_protocol cp " + 
 			"where " +
@@ -229,7 +246,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 			"  cp.identifier in (select cc.collection_protocol_id from catissue_coll_coordinators cc where cc.user_id = :userId)) " +
 			"union " + 
 			"select " + 
-			"  'Distribution Protocol' as entityName, count(dp.identifier) as count " + 
+			"  'dp' as entityName, count(dp.identifier) as count " + 
 			"from " + 
 			"  catissue_distribution_protocol dp " + 
 			"where " + 

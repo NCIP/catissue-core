@@ -2,7 +2,6 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -20,6 +19,7 @@ import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -127,7 +127,7 @@ public class InstituteServiceImpl implements InstituteService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<Map<String, Object>>> getInstituteDependentEntities(RequestEvent<Long> req) {
+	public ResponseEvent<List<DependentEntityDetail>> getInstituteDependentEntities(RequestEvent<Long> req) {
 		try {
 			Institute existing = daoFactory.getInstituteDao().getById(req.getPayload());
 			if (existing == null) {

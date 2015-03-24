@@ -12,10 +12,8 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.krishagni.catissueplus.core.administrative.domain.dependency.StorageContainerDependencyChecker;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
@@ -23,10 +21,13 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 @Configurable
 public class StorageContainer extends BaseEntity {
+	private static final String ENTITY_NAME = "storage_container";
+	
 	public static final String NUMBER_LABELING_SCHEME = "Numbers";
 	
 	public static final String UPPER_CASE_ALPHA_LABELING_SCHEME = "Alphabets Upper Case";
@@ -93,11 +94,12 @@ public class StorageContainer extends BaseEntity {
 	
 	private Set<CollectionProtocol> compAllowedCps = new HashSet<CollectionProtocol>();
 	
-	@Autowired
-	private StorageContainerDependencyChecker dependencyChecker;
-	
 	public StorageContainer() {
 		ancestorContainers.add(this);
+	}
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
 	}
 
 	public String getName() {
@@ -542,12 +544,19 @@ public class StorageContainer extends BaseEntity {
 		return types;
 	}
 	
-	public List<Map<String, Object>> getDependentEntities() {
-		return dependencyChecker.getDependentEntities(this);
+	public List<DependentEntityDetail> getDependentEntities() {
+		List<DependentEntityDetail> dependentEntities = new ArrayList<DependentEntityDetail>();
+		
+		int childContainerSize = this.getChildContainers().size();
+		DependentEntityDetail.setDependentEntities(StorageContainer.getEntityName(), childContainerSize, dependentEntities);
+		DependentEntityDetail.setDependentEntities(Specimen.getEntityName(), 
+				this.getOccupiedPositions().size() - childContainerSize, dependentEntities);
+		
+		return dependentEntities;
 	}
 	
 	public void delete() {
-		List<Map<String, Object>> dependencies = getDependentEntities();
+		List<DependentEntityDetail> dependencies = getDependentEntities();
 		if (!dependencies.isEmpty()) {
 			throw OpenSpecimenException.userError(StorageContainerErrorCode.REF_ENTITY_FOUND);
 		}

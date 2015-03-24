@@ -22,6 +22,8 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Configurable
 public class Specimen extends BaseEntity {
+	private static final String ENTITY_NAME = "specimen";
+	
 	public static final String NEW = "New";
 	
 	public static final String ALIQUOT = "Aliquot";
@@ -89,6 +91,10 @@ public class Specimen extends BaseEntity {
 	@Autowired
 	@Qualifier("specimenLabelGenerator")
 	private LabelGenerator labelGenerator;
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
 	
 	public String getTissueSite() {
 		return tissueSite;

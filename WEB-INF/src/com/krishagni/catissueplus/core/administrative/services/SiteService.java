@@ -2,12 +2,12 @@
 package com.krishagni.catissueplus.core.administrative.services;
 
 import java.util.List;
-import java.util.Map;
 
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.SiteQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.SiteListCriteria;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -20,7 +20,7 @@ public interface SiteService {
 
 	public ResponseEvent<SiteDetail> updateSite(RequestEvent<SiteDetail> req);
 	
-	public ResponseEvent<List<Map<String, Object>>> getSiteDependentEntities(RequestEvent<Long> req);
+	public ResponseEvent<List<DependentEntityDetail>> getSiteDependentEntities(RequestEvent<Long> req);
 
 	public ResponseEvent<SiteDetail> deleteSite(RequestEvent<DeleteEntityOp> req);
 	

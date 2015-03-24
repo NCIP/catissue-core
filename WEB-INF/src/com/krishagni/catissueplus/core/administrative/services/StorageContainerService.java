@@ -1,7 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.services;
 
 import java.util.List;
-import java.util.Map;
 
 import com.krishagni.catissueplus.core.administrative.events.ContainerQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
@@ -9,6 +8,7 @@ import com.krishagni.catissueplus.core.administrative.events.StorageContainerDet
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -25,7 +25,7 @@ public interface StorageContainerService {
 	
 	public ResponseEvent<Boolean> isAllowed(RequestEvent<PositionTenantDetail> req);
 	
-	public ResponseEvent<List<Map<String, Object>>> getStorageContainerDependentEntities(RequestEvent<Long> req);
+	public ResponseEvent<List<DependentEntityDetail>> getStorageContainerDependentEntities(RequestEvent<Long> req);
 	
 	public ResponseEvent<StorageContainerDetail> deleteStorageContainer(RequestEvent<Long> req);
 }

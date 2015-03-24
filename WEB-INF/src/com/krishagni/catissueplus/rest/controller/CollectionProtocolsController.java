@@ -36,6 +36,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.CpListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -173,8 +174,8 @@ public class CollectionProtocolsController {
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependent-entities")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<Map<String, Object>> getCpDependentEntities(@PathVariable Long id) {
-		ResponseEvent<List<Map<String, Object>>> resp = cpSvc.getCpDependentEntities(getRequest(id));
+	public List<DependentEntityDetail> getCpDependentEntities(@PathVariable Long id) {
+		ResponseEvent<List<DependentEntityDetail>> resp = cpSvc.getCpDependentEntities(getRequest(id));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

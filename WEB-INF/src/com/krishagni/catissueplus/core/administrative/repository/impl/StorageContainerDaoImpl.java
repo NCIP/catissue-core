@@ -241,7 +241,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	
 	private static final String GET_STORAGE_CONTAINER_DEPENDET_ENTITIES_SQL = 
 			"select " + 
-			"  'Storage Container', count(*) as count " + 
+			"  'Storage Container' as entityName, count(*) as count " + 
 			"from " + 
 			"  os_storage_containers sc " + 
 			"where " + 

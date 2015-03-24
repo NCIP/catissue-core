@@ -1,7 +1,6 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,6 +20,7 @@ import com.krishagni.catissueplus.core.administrative.events.InstituteQueryCrite
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.InstituteService;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -108,9 +108,9 @@ public class InstitutesController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependent-entities")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public List<Map<String, Object>> getInstituteDependentEntities(@PathVariable Long id) {
+	public List<DependentEntityDetail> getInstituteDependentEntities(@PathVariable Long id) {
 		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
-		ResponseEvent<List<Map<String, Object>>> resp = instituteSvc.getInstituteDependentEntities(req);
+		ResponseEvent<List<DependentEntityDetail>> resp = instituteSvc.getInstituteDependentEntities(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

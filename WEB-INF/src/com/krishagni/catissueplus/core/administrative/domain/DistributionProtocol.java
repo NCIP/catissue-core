@@ -1,22 +1,24 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import krishagni.catissueplus.util.CommonUtil;
 
-import com.krishagni.catissueplus.core.administrative.domain.dependency.DistributionProtocolDependencyChecker;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 @Configurable
 public class DistributionProtocol {
+	private static final String ENTITY_NAME = "dp";
 
 	private Long id;
 
@@ -34,9 +36,12 @@ public class DistributionProtocol {
 
 	private String activityStatus;
 	
-	@Autowired
-	private DistributionProtocolDependencyChecker dependencyChecker;
-
+	private Set<DistributionOrder> distributionOrders = new HashSet<DistributionOrder>();
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -101,6 +106,14 @@ public class DistributionProtocol {
 		this.activityStatus = activityStatus;
 	}
 
+	public Set<DistributionOrder> getDistributionOrders() {
+		return distributionOrders;
+	}
+
+	public void setDistributionOrders(Set<DistributionOrder> distributionOrders) {
+		this.distributionOrders = distributionOrders;
+	}
+
 	public void update(DistributionProtocol distributionProtocol) {
 		if (distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
 			this.setShortTitle(CommonUtil.appendTimestamp(distributionProtocol.getShortTitle()));
@@ -117,12 +130,15 @@ public class DistributionProtocol {
 		this.setActivityStatus(distributionProtocol.getActivityStatus());
 	}
 	
-	public List<Map<String, Object>> getDependentEntities() {
-		return dependencyChecker.getDependentEntities(this);
+	public List<DependentEntityDetail> getDependentEntities() {
+		List<DependentEntityDetail> dependentEntities = new ArrayList<DependentEntityDetail>();
+		DependentEntityDetail.setDependentEntities(DistributionOrder.getEntityName(), getDistributionOrders().size(), dependentEntities);
+		
+		return dependentEntities;
 	}
 	
 	public void delete() {
-		List<Map<String, Object>> dependencies = getDependentEntities();
+		List<DependentEntityDetail> dependencies = getDependentEntities();
 		if(!dependencies.isEmpty()) {
 			throw OpenSpecimenException.userError(DistributionProtocolErrorCode.REF_ENTITY_FOUND);
 		}

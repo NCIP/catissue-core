@@ -43,6 +43,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolSe
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -184,7 +185,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 	
 	@PlusTransactional
-	public ResponseEvent<List<Map<String, Object>>> getCpDependentEntities(RequestEvent<Long> req) {
+	public ResponseEvent<List<DependentEntityDetail>> getCpDependentEntities(RequestEvent<Long> req) {
 		try {
 			CollectionProtocol existingCp = daoFactory.getCollectionProtocolDao().getById(req.getPayload());
 			if (existingCp == null) {

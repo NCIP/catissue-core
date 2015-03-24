@@ -25,11 +25,14 @@ import com.krishagni.catissueplus.core.administrative.domain.dependency.UserDepe
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 @Configurable
 public class User extends BaseEntity implements UserDetails {
+	private static final String ENTITY_NAME = "user";
 
 	private static final long serialVersionUID = 1L;
 
@@ -65,11 +68,15 @@ public class User extends BaseEntity implements UserDetails {
 	
 	private Set<Password> passwords = new HashSet<Password>();
 	
-	@Autowired
-	UserDependencyChecker dependencyChecker;
+	@Autowired 
+	private DaoFactory daoFactory;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
 	
 	public String getLastName() {
 		return lastName;
@@ -259,15 +266,15 @@ public class User extends BaseEntity implements UserDetails {
 		this.passwords.add(password);
 	}
 	
-	public List<Map<String, Object>> getDependentEntities() {
-		return dependencyChecker.getDependentEntities(this);
+	public List<DependentEntityDetail> getDependentEntities() {
+		return daoFactory.getUserDao().getUserDependentEntities(this.id);
 	}
 	
 	public void delete(boolean close) {
 		String activityStatus = Status.ACTIVITY_STATUS_CLOSED.getStatus();
 		if (!close) {
 			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
-			List<Map<String, Object>> dependencyStat = getDependentEntities();
+			List<DependentEntityDetail> dependencyStat = getDependentEntities();
 			if (!dependencyStat.isEmpty()) {
 				throw OpenSpecimenException.userError(UserErrorCode.REF_ENTITY_FOUND);
 			}

@@ -1,24 +1,28 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.krishagni.catissueplus.core.administrative.domain.dependency.SiteDependencyChecker;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
+
 
 @Configurable
 public class Site {
+	private static final String ENTITY_NAME = "site";
 
 	private Long id;
 
@@ -39,10 +43,17 @@ public class Site {
 	private Set<Visit> visits = new HashSet<Visit>();
 
 	private Set<StorageContainer> storageContainers = new HashSet<StorageContainer>();
+	
+	private Set<CollectionProtocol> collectionProtocol = new HashSet<CollectionProtocol>();
+	
+	private Set<ParticipantMedicalIdentifier> pmiCollection = new HashSet<ParticipantMedicalIdentifier>();
+	
+	private Set<CollectionProtocolEvent> cpeCollection = new HashSet<CollectionProtocolEvent>();
 
-	@Autowired
-	private SiteDependencyChecker dependencyChecker;
-
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -123,6 +134,30 @@ public class Site {
 		this.storageContainers = storageContainers;
 	}
 
+	public Set<CollectionProtocol> getCollectionProtocol() {
+		return collectionProtocol;
+	}
+
+	public void setCollectionProtocol(Set<CollectionProtocol> collectionProtocol) {
+		this.collectionProtocol = collectionProtocol;
+	}
+
+	public Set<ParticipantMedicalIdentifier> getPmiCollection() {
+		return pmiCollection;
+	}
+
+	public void setPmiCollection(Set<ParticipantMedicalIdentifier> pmiCollection) {
+		this.pmiCollection = pmiCollection;
+	}
+
+	public Set<CollectionProtocolEvent> getCpeCollection() {
+		return cpeCollection;
+	}
+
+	public void setCpeCollection(Set<CollectionProtocolEvent> cpeCollection) {
+		this.cpeCollection = cpeCollection;
+	}
+
 	public void update(Site other) {
 		setName(other.getName());
 		setInstitute(other.getInstitute());
@@ -132,15 +167,23 @@ public class Site {
 		CollectionUpdater.update(this.getCoordinators(), other.getCoordinators());
 	}
 	
-	public List<Map<String, Object>> getDependentEntities() {
-		return dependencyChecker.getDependentEntities(this);
+	public List<DependentEntityDetail> getDependentEntities() {
+		List<DependentEntityDetail> dependentEntities = new ArrayList<DependentEntityDetail>();
+		
+		DependentEntityDetail.setDependentEntities(Visit.getEntityName(), getVisits().size(), dependentEntities);
+		DependentEntityDetail.setDependentEntities(StorageContainer.getEntityName(), getStorageContainers().size(), dependentEntities);
+		DependentEntityDetail.setDependentEntities(CollectionProtocol.getEntityName(), getCollectionProtocol().size(), dependentEntities);
+		DependentEntityDetail.setDependentEntities(ParticipantMedicalIdentifier.getEntityName(), getPmiCollection().size(), dependentEntities);
+		DependentEntityDetail.setDependentEntities(CollectionProtocolEvent.getEntityName(), getCpeCollection().size(), dependentEntities);
+		
+		return dependentEntities;
 	}
 
 	public void delete(boolean close) {
 		String activityStatus = Status.ACTIVITY_STATUS_CLOSED.getStatus();
 		if (!close) {
 			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
-			List<Map<String, Object>> dependencyStat = getDependentEntities();
+			List<DependentEntityDetail> dependencyStat = getDependentEntities();
 			if (!dependencyStat.isEmpty()) {
 				throw OpenSpecimenException.userError(SiteErrorCode.REF_ENTITY_FOUND);
 			}
@@ -155,7 +198,7 @@ public class Site {
 		}
 		
 		if (newActivityStatus.equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
-			List<Map<String, Object>> dependencies = getDependentEntities();
+			List<DependentEntityDetail> dependencies = getDependentEntities();
 			if (!dependencies.isEmpty()) {
 				throw new OpenSpecimenException(ErrorType.USER_ERROR,SiteErrorCode.REF_ENTITY_FOUND);
 			}
