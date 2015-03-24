@@ -11,6 +11,8 @@
   
   <include file="./SQL/liquibase_xml/db.changeLog-pre-2.0_mysql.xml"/>
   <include file="./SQL/liquibase_xml/db.seeddata-pre-2.0_mysql.xml"/>
+  <include file="./SQL/liquibase_xml/db.changeLog-pre-2.0_oracle.xml"/>
+  <include file="./SQL/liquibase_xml/db.seeddata-pre-2.0_oracle.xml"/>
   <include file="./SQL/liquibase_xml/db-os-changelog-2.0.xml"/>
   <include file="./SQL/liquibase_xml/de.dbchangelog-master.xml"/>   
 </databaseChangeLog> 

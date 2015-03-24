@@ -518,17 +518,6 @@
 			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
 		</replace>
 
-		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml">
-			<replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}" />
-		</replace>
-
-		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml">
-			<replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}" />
-		</replace>
-		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml">
-			<replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}" />
-		</replace>
-
 	</target>
 
 	<!--Server clean-up-->
