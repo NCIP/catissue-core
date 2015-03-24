@@ -565,7 +565,8 @@
 		<antcall target="copydeletedjars">
 			<param name="delPath" value="${temp.dir}/catissuecore/WEB-INF/lib"/>
 		</antcall>
-				
+		<copy file="${base.dir}/lib/liquibase.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib"/>
+		<copy file="${base.dir}/bootstrap.properties" todir="${temp.dir}/catissuecore"/>	
 		<war destfile="${temp.dir}/catissuecore.war"
 			webxml="${temp.dir}/catissuecore/WEB-INF/web.xml" manifest="${base.dir}/MANIFEST.MF">
 			<fileset dir="${temp.dir}/catissuecore">

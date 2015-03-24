@@ -395,6 +395,7 @@
 				<include name="css/**" />
 				<include name="images/**" />
 				<include name="jss/**" />
+				<include name="SQL/liquibase_xml/**" />
 				<include name="deploytempCatissuecore/AdvanceQuery/dhtml/**"/>
 				<include name="WEB-INF/**" />
 				<include name="caTissue_Suite_User_Manual.pdf" />
