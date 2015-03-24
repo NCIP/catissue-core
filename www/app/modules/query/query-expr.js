@@ -1,6 +1,15 @@
 
 angular.module('os.query.expr', ['os.query.models'])
   .controller('QueryExprCtrl', function($scope, QueryUtil) {
+    $scope.exprSortOpts = {
+      placeholder: 'os-query-expr-node-placeholder',
+      stop: function(event, ui) {
+        var ql = $scope.queryLocal;
+        ql.isValid = QueryUtil.isValidQueryExpr($scope.queryLocal.exprNodes);
+        $scope.$apply($scope.ql);
+      }
+    };
+
     $scope.getFilterDesc = function(filterId) {
       var filter = $scope.queryLocal.filtersMap[filterId];
       var desc = "Unknown";

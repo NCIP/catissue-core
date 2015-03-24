@@ -266,3 +266,9 @@
 .os-query-filter > div:nth-child(3) {
   flex: 2;
 }
+
+.os-query-expr-node-placeholder {
+  float: left;
+  width: 40px;
+  height: 40px;
+}
