@@ -750,16 +750,21 @@ public class QueryServiceImpl implements QueryService {
 				QueryResultExporter exporter = new QueryResultCsvExporter();
 				String path = EXPORT_DATA_DIR + File.separator + filename;
 				
-				Transaction txn = startTxn();
-				QueryResponse resp = exporter.export(
-						path, query, new QueryResultScreenerImpl(user, false));
+				Session session = startTxn();
 				try {
+					QueryResponse resp = exporter.export(
+						path, query, new QueryResultScreenerImpl(user, false));
 					insertAuditLog(user, req, resp);
 					sendEmail();
-					txn.commit();
+					session.getTransaction().commit();
 				} catch (Exception e) {
+					Transaction txn = session.getTransaction();
 					if (txn != null) {
 						txn.rollback();
+					}
+				} finally {
+					if (session != null) {
+						session.close();
 					}
 				}
                 
@@ -881,15 +886,11 @@ public class QueryServiceImpl implements QueryService {
 		daoFactory.getQueryAuditLogDao().saveOrUpdate(auditLog);
 	}
 	
-	private Transaction startTxn() {
+	private Session startTxn() {
 		AbstractDao<?> dao = (AbstractDao<?>)daoFactory.getQueryAuditLogDao();
-		Session session = dao.getSessionFactory().getCurrentSession();
-		Transaction txn = session.getTransaction();
-		if (txn == null || !txn.isActive()) {
-			txn = session.beginTransaction();			
-		}
-		
-		return txn;
+		Session session = dao.getSessionFactory().openSession();
+		session.beginTransaction();
+		return session;
 	}
 		
 	private class QueryResultScreenerImpl implements QueryResultScreener {

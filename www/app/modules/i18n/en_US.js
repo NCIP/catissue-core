@@ -29,6 +29,7 @@
     "buttons": {
       "add": "Add",
       "save": "Save",
+      "export": "Export",
       "update": "Update",
       "create": "Create",
       "delete": "Delete",
@@ -674,6 +675,9 @@
     "export_to_get_all": "Export records to get all records",
     "know_why_export_has_more_data": "Click here to know why exported file has more records",
     "error": "Error occurred. Please contact system administrator for further resolution",
+    "export_initiated": "Query results export has been initiated. Export file download should start in few moments...",
+    "downloading_data_file": "Downloading query results export data file",
+    "data_file_will_be_emailed": "Export is taking longer time to finish. Link to download exported data will be sent to you by e-mail",
     
     "no_queries": "No queries to show",
     "no_queries_selected": "No queries selected. Please select at least one query",

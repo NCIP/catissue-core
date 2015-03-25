@@ -19,7 +19,7 @@ angular.module('openspecimen')
         this.messages.push(msg);
 
         if (timeout === false) {
-          return;
+          return msg;
         }
 
         if (timeout === undefined || timeout === null) {
@@ -27,22 +27,23 @@ angular.module('openspecimen')
         }
 
         $timeout(function() { self.remove(msg); }, timeout);
+        return msg;
       },
 
       success: function(code, params, timeout) {
-        this.add($translate.instant(code, params), 'success', timeout);
+        return this.add($translate.instant(code, params), 'success', timeout);
       },
 
       info: function(code, params, timeout) {
-        this.add($translate.instant(code, params), 'info', timeout);
+        return this.add($translate.instant(code, params), 'info', timeout);
       },
 
       warn: function(code, params, timeout) {
-        this.add($translate.instant(code, params), 'warning', timeout);
+        return this.add($translate.instant(code, params), 'warning', timeout);
       },
 
       error: function(code, timeout) {
-        this.add($translate.instant(code), 'danger', timeout);
+        return this.add($translate.instant(code), 'danger', timeout);
       },
 
       errorText: function(text, timeout) {
@@ -50,7 +51,11 @@ angular.module('openspecimen')
         if (text instanceof Array) {
           msg = text.join(", ");
         }
-        this.add(msg, 'danger', timeout);
+        return this.add(msg, 'danger', timeout);
+      },
+
+      clear: function() {
+        this.messages.length = 0;
       },
 
       remove: function(msg) {

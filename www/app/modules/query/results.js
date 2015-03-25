@@ -1,6 +1,6 @@
 
 angular.module('os.query.results', ['os.query.models'])
-  .controller('QueryResultsCtrl', function($scope, queryGlobal, QueryUtil, QueryExecutor) {
+  .controller('QueryResultsCtrl', function($scope, queryGlobal, QueryUtil, QueryExecutor, Alerts) {
     function init() {
       $scope.queryCtx = queryGlobal.queryCtx;
       $scope.selectedRows = [];
@@ -35,15 +35,9 @@ angular.module('os.query.results', ['os.query.models'])
 
     function loadRecords() {
       var qc = $scope.queryCtx;
-      var aql = QueryUtil.getDataAql(
-        qc.selectedFields, 
-        qc.filtersMap, 
-        qc.exprNodes, 
-        qc.reporting);
-
       $scope.resultsCtx.waitingForRecords = true;
       $scope.resultsCtx.error = false;
-      QueryExecutor.getRecords(undefined, qc.selectedCp.id, aql, 'DEEP').then(
+      QueryExecutor.getRecords(undefined, qc.selectedCp.id, getAql(), 'DEEP').then(
         function(result) {
           $scope.resultsCtx.waitingForRecords = false;
           if (qc.reporting.type == 'crosstab') {
@@ -58,6 +52,15 @@ angular.module('os.query.results', ['os.query.models'])
           $scope.resultsCtx.error = true;
         }
       );
+    }
+
+    function getAql() { 
+      var qc = $scope.queryCtx;
+      return QueryUtil.getDataAql(
+        qc.selectedFields, 
+        qc.filtersMap, 
+        qc.exprNodes, 
+        qc.reporting);
     }
 
     function prepareDataGrid(result) {
@@ -135,5 +138,27 @@ angular.module('os.query.results', ['os.query.models'])
       grid: undefined
     };
 
+    $scope.downloadResults = function() {
+      var qc = $scope.queryCtx;
+
+      var alert = Alerts.info('queries.export_initiated', {}, false);  
+      QueryExecutor.exportQueryResultsData(undefined, qc.selectedCp.id, getAql(), 'DEEP').then(
+        function(result) {
+          Alerts.remove(alert);
+          if (result.completed) {
+            Alerts.info('queries.downloading_data_file');
+            QueryExecutor.downloadDataFile(result.dataFile);
+          } else if (result.dataFile) {
+            Alerts.info('queries.data_file_will_be_emailed');
+          }
+        },
+
+        function() {
+          Alerts.remove(alert);
+        }
+      );
+    };
+
+    
     init();
   });

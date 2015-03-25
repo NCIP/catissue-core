@@ -1,6 +1,6 @@
 
 angular.module('os.query.executor', [])
-  .factory('QueryExecutor', function($http, ApiUrls) {
+  .factory('QueryExecutor', function($http, $document, ApiUrls) {
     var queryUrl = ApiUrls.getBaseUrl() + 'query';
 
     return {
@@ -42,6 +42,45 @@ angular.module('os.query.executor', [])
             return resp.data;
           }
         );
+      },
+
+      exportQueryResultsData: function(queryId, cpId, aql, wideRowMode) {
+        var req = {
+          savedQueryId: queryId,
+          cpId: cpId,
+          drivingForm: 'Participant',
+          runType: 'Export',
+          aql: aql,
+          indexOf: 'Specimen.label',
+          wideRowMode: wideRowMode || "OFF"
+        };
+
+        return $http.post(queryUrl + '/export', req).then(
+          function(resp) {
+            return resp.data;
+          }
+        );
+      },
+
+      downloadDataFile: function(fileId) {
+        var link = angular.element('<a/>').attr(
+          {
+            href: queryUrl + '/export?fileId=' + fileId,
+            target: '_blank'
+          }
+        );
+
+        angular.element($document[0].body).append(link);
+
+        if (typeof link[0].click == "function") {
+          link[0].click();
+        } else { // Safari fix
+          var dispatch = document.createEvent("HTMLEvents");
+          dispatch.initEvent("click", true, true);
+          link[0].dispatchEvent(dispatch);
+        }
+
+        link.remove();
       }
     };
   });
