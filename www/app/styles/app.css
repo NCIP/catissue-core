@@ -307,6 +307,27 @@ h4 + .btn-group {
   margin-right: 24px;
 }
 
+.os-page-hdr .os-breadcrumbs ~ .os-btns {
+  position: absolute;
+  bottom: 10px;
+}
+
+.os-page-hdr .os-btns button {
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 4px 10px;
+}
+
+.os-page-hdr .os-btns button:hover {
+  background: #ddd;
+  border: 1px solid #a5a5a5;
+}
+
+.os-page-hdr .os-btns.right {
+  right: 25px;
+}
+
 .os-more-options {
   position: absolute;
   cursor: pointer;

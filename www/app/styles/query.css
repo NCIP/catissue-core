@@ -106,23 +106,11 @@
   order: 0;
   flex: 7;
   align-self: auto;
-  display: flex;
-  flex-direction: column;
   padding: 0px 5px;
 }
 
-.os-query-exprs {
-  order: 0;
-  flex: 1;
-  align-self: auto;
-  padding: 0px 5px;
-}
-
-.os-query-filters {
-  order: 0;
-  flex: 2;
-  align-self: auto;
-  padding: 0px 5px;
+.os-query-exprs-filters .panel {
+  margin-bottom: 0px;
 }
 
 .os-query-block-margin {

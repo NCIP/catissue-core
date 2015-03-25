@@ -5,6 +5,7 @@
         <a ui-sref="query-list" translate="queries.list">Queries</a>
       </li>
     </ul>
+
     <h3> 
       <span ng-if="!query.id" translate="queries.new_query">
         New Query
@@ -13,6 +14,21 @@
         {{query.title}}
       </span>
     </h3>
+
+    <div class="os-btns right">
+      <button>
+        <span class="fa fa-save"></span>
+        <span translate="common.buttons.save">Save</span>
+      </button>
+      <button>
+        <span class="fa fa-dashboard"></span>
+        <span translate="queries.get_count">Get Count</span>
+      </button>
+      <button>
+        <span class="fa fa-list"></span>
+        <span translate="queries.view_records">View Records</span>
+      </button>
+    </div>
   </div>
 
   <div class="os-query-container">
@@ -114,11 +130,16 @@
     </div>
 
     <div class="os-query-exprs-filters">
-      <div class="os-query-exprs">
-        <div ng-include src="'modules/query/query-expr.html'"></div>
-      </div>
-      <div class="os-query-filters">
-        <div ng-include src="'modules/query/filters.html'"></div>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title" translate="queries.expr_and_filters">
+            Expressions and Filters
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div ng-include src="'modules/query/query-expr.html'"></div>
+          <div ng-include src="'modules/query/filters.html'"></div>
+        </div>
       </div>
     </div>
   </div>

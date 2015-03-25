@@ -1,56 +1,52 @@
-<div class="os-query-block-margin" ng-controller="QueryAddEditFilterCtrl">
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-      <h3 class="panel-title" translate="queries.current_filters">
-        Current Filters
-      </h3>
-    </div>
-    <div class="panel-body">
-      <div class="os-query-filter" ng-repeat="filter in queryLocal.filters">
-        <div>
-          <div class="os-query-filter-node">
-            <span><b>{{filter.id}}</b></span>
-            <div class="pq" ng-if="filter.parameterized"
-              tooltip="Parameterized Filter" tooltip-placement="bottom" tooltip-append-to-body="true">
-              <span>P</span>
-            </div>
-          </div>
-        </div>
-        <div ng-switch on="!filter.expr">
-          <div ng-switch-when="true"> 
-            <i>{{filter.form.caption}} &gt;&gt; </i>
-            <i ng-if="filter.field.extensionForm">{{filter.field.extensionForm}} &gt;&gt; </i>
-            <i>{{filter.field.caption}} </i>
-            <b>{{filter.op.desc}}</b> 
-
-            <i ng-if="filter.op.name == 'between'">{{filter.value[0]}} and {{filter.value[1]}}</i>
-            <i ng-if="filter.op.name != 'between'">{{filter.value}}</i>
-          </div>
-          <div ng-switch-when="false"> 
-            <i>{{filter.desc}}</i>
-          </div>
-        </div>
-        <div>
-          <div class="btn-group btn-group-sm pull-right">
-            <button class="btn btn-default" ng-click="displayFilter(filter)" ng-if="!filter.expr"
-              title="{{'queries.edit_filter' | translate}}" data-placement="left" 
-              content-template="modules/query/addedit-filter.html" bs-popover>
-              <span class="fa fa-pencil"></span>
-            </button>
-            <button class="btn btn-default" ng-click="displayFilter(filter)" ng-if="filter.expr"
-              info-link="https://catissueplus.atlassian.net/wiki/x/O4BLAQ"
-              popover-placement="left" 
-              popover-append-to-body="true"
-              popover-title="Edit Filter"
-              ka-popover-template="temporal-filter-popover-tmpl.html">
-              <span class="fa fa-pencil"></span>
-            </button>
-            <button class="btn btn-default" ng-click="deleteFilter(filter)">
-              <span class="fa fa-trash"></span>
-            </button>
+<div class="os-section" ng-controller="QueryAddEditFilterCtrl">
+  <h4 class="os-sub-section-title" translate="queries.filters"> 
+    Filters 
+  </h4>
+  <div>
+    <div class="os-query-filter" ng-repeat="filter in queryLocal.filters">
+      <div>
+        <div class="os-query-filter-node">
+          <span><b>{{filter.id}}</b></span>
+          <div class="pq" ng-if="filter.parameterized"
+            tooltip="Parameterized Filter" tooltip-placement="bottom" tooltip-append-to-body="true">
+            <span>P</span>
           </div>
         </div>
       </div>
+      <div ng-switch on="!filter.expr">
+        <div ng-switch-when="true"> 
+          <i>{{filter.form.caption}} &gt;&gt; </i>
+          <i ng-if="filter.field.extensionForm">{{filter.field.extensionForm}} &gt;&gt; </i>
+          <i>{{filter.field.caption}} </i>
+          <b>{{filter.op.desc}}</b> 
+
+          <i ng-if="filter.op.name == 'between'">{{filter.value[0]}} and {{filter.value[1]}}</i>
+          <i ng-if="filter.op.name != 'between'">{{filter.value}}</i>
+        </div>
+        <div ng-switch-when="false"> 
+          <i>{{filter.desc}}</i>
+        </div>
+      </div>
+      <div>
+        <div class="btn-group btn-group-sm pull-right">
+          <button class="btn btn-default" ng-click="displayFilter(filter)" ng-if="!filter.expr"
+            title="{{'queries.edit_filter' | translate}}" data-placement="left" 
+            content-template="modules/query/addedit-filter.html" bs-popover>
+            <span class="fa fa-pencil"></span>
+          </button>
+          <button class="btn btn-default" ng-click="displayFilter(filter)" ng-if="filter.expr"
+            info-link="https://catissueplus.atlassian.net/wiki/x/O4BLAQ"
+            popover-placement="left" 
+            popover-append-to-body="true"
+            popover-title="Edit Filter"
+            ka-popover-template="temporal-filter-popover-tmpl.html">
+            <span class="fa fa-pencil"></span>
+          </button>
+          <button class="btn btn-default" ng-click="deleteFilter(filter)">
+            <span class="fa fa-trash"></span>
+          </button>
+        </div>
+      </div>
     </div>
-  </div> 
-</div>
+  </div>
+</div> 

@@ -661,9 +661,11 @@
     "select_date": "Select Date",
     "specify_cond": "Specify Condition Value",
     "parameterized_filter": "Parameterized Filter",
-    "query_expr": "Query Expression",
+    "expr_and_filters": "Expression and Filters",
+    "filters": "Filters",
     "parameterized_marker": "P",
-    "current_filters": "Current Filters",
+    "get_count": "Get Count",
+    "view_records": "View Records",
     
     "no_queries": "No queries to show",
     "no_queries_selected": "No queries selected. Please select at least one query",
