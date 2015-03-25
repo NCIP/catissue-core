@@ -59,7 +59,7 @@ angular.module('os.administrative.models.user', ['os.common.models'])
     }
 
     User.activate = function(id) {
-      return $http.put(User.url() + id + '/activity-status').then(User.modelRespTransform);
+      return $http.put(User.url() + id + '/activity-status', {activityStatus: 'Active'}).then(User.modelRespTransform);
     }
 
     return User;
