@@ -12,7 +12,6 @@ import com.krishagni.rbac.events.ResourceDetail;
 import com.krishagni.rbac.events.RoleDetail;
 import com.krishagni.rbac.events.SubjectDetail;
 import com.krishagni.rbac.events.SubjectRoleDetail;
-import com.krishagni.rbac.events.UserAccessInformation;
 import com.krishagni.rbac.repository.OperationListCriteria;
 import com.krishagni.rbac.repository.PermissionListCriteria;
 import com.krishagni.rbac.repository.ResourceListCriteria;
@@ -50,9 +49,13 @@ public interface RbacService {
 	// Role APIs
 	//
 	
+	public ResponseEvent<List<RoleDetail>> getRoles(RequestEvent<RoleListCriteria> req);
+	
+	public ResponseEvent<RoleDetail> getRole(RequestEvent<Long> req);
+
 	public ResponseEvent<RoleDetail> saveRole(RequestEvent<RoleDetail> req);
 	
-	public ResponseEvent<List<RoleDetail>> getRoles(RequestEvent<RoleListCriteria> req);
+	public ResponseEvent<RoleDetail> updateRole(RequestEvent<RoleDetail> req);
 	
 	public ResponseEvent<RoleDetail> deleteRole(RequestEvent<String> req);
 	
@@ -72,4 +75,6 @@ public interface RbacService {
 	// Intern API's can change without notice.
 	//
 	public boolean checkAccess(Long userId, String resource, String operation, Long cpId, Long siteId, Long resourceInstanceId);
+
+	
 }
