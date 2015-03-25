@@ -752,6 +752,7 @@
     "mrn": "MRN",
     "cpe": "Collection Protocol Event",
     "cpr": "Collection Protocol Registration",
-    "specimen": "Specimen"
+    "specimen": "Specimen",
+    "dist_order": "Distribution Order"
   }
 }
