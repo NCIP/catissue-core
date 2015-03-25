@@ -12,7 +12,8 @@ angular.module('os.query',
     'os.query.expr',
     'os.query.util',
     'os.query.datepicker',
-    'os.query.executor'
+    'os.query.executor',
+    'os.query.results'
   ]
 ).config(function($stateProvider) {
    $stateProvider
@@ -20,6 +21,7 @@ angular.module('os.query',
        url: '/queries',
        template: '<div ui-view></div>',
        controller: function($scope, queryGlobal) {
+         $scope.queryGlobal = queryGlobal;
        },
        resolve: {
          queryGlobal: function(QueryGlobalData) {
@@ -53,5 +55,13 @@ angular.module('os.query',
        },
        parent: 'query-root'
      })  
+     .state('query-results', {
+       url: '/results?querId',
+       templateUrl: 'modules/query/results.html',
+       controller: 'QueryResultsCtrl',
+       resolve: {
+       },
+       parent: 'query-root'
+     })
   });
 

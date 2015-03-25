@@ -2,7 +2,7 @@
 angular.module('os.query.list', ['os.query.models'])
   .controller('QueryListCtrl', function(
     $scope, $modal,
-    currentUser, SavedQuery, QueryFolder, Alerts) {
+    currentUser, queryGlobal, SavedQuery, QueryFolder, Alerts) {
 
     function init() {
       $scope.queryList = [];
@@ -13,6 +13,7 @@ angular.module('os.query.list', ['os.query.models'])
         sharedFolders: []
       };
 
+      queryGlobal.queryCtx = undefined;
       loadAllQueries();
       loadAllFolders();
     };

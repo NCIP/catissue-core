@@ -1,0 +1,48 @@
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li>
+        <a ui-sref="query-list" translate="queries.list">Queries</a>
+      </li>
+    </ul>
+
+    <h3> 
+      <span ng-if="!query.id" translate="queries.new_query">
+        New Query
+      </span>
+      <span ng-if="!!query.id">
+        {{query.title}}
+      </span>
+    </h3>
+  </div>
+
+  <div class="os-query-container">
+    <div ng-if="resultsCtx.waitingForRecords">
+      <span translate="queries.waiting_for_records">
+        Loading records, please wait for a moment ...
+      </span>
+    </div>
+
+    <div ng-if="!resultsCtx.waitingForRecords && resultsCtx.error">
+      <span translate="queries.error"></span>
+    </div>
+
+    <div class="os-query-results-container" ng-show="!resultsCtx.waitingForRecords && !resultsCtx.error">
+      <div ng-if="resultsCtx.moreData">
+        <span translate="queries.export_to_get_all">Export to view all records.</span>
+        <a href="https://catissueplus.atlassian.net/wiki/x/LgDGAQ" target="_blank" 
+           translate="queries.know_why_export_has_more_data">
+          Click here to know why exported data file have more records.
+        </a> 
+      </div>
+
+      <div class="os-query-results-grid-container" ng-if="queryCtx.reporting.type == 'crosstab'">
+        <div ka-pivot-table="queryData.pivotTableOpts"> </div>
+      </div>
+
+      <div class="os-query-results-grid-container" ng-if="queryCtx.reporting.type != 'crosstab'">
+        <div class="os-query-results-grid" ng-grid="resultsCtx.gridOpts"> </div>
+      </div>
+    </div>
+  </div>
+</div>

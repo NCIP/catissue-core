@@ -1,19 +1,21 @@
 
 angular.module('os.query.addedit', ['os.query.models', 'os.query.util'])
-  .controller('QueryAddEditCtrl', function($scope, cps, query, queryGlobal, QueryUtil, QueryExecutor) {
+  .controller('QueryAddEditCtrl', function($scope, $state, cps, query, queryGlobal, QueryUtil, QueryExecutor) {
     function init() {
       $scope.cps = cps;
       $scope.query = query;
 
-      $scope.queryLocal = {
+      $scope.queryLocal = queryGlobal.queryCtx || {
         currentFilter: {},
         filters: [],
         filtersMap: {},
         exprNodes: [],
         filterId: 0,
-        selectedFields: [],
+        selectedFields: QueryUtil.getDefSelectedFields(),
+        reporting: {type: 'none'},
         isValid: true
       };
+      queryGlobal.queryCtx = $scope.queryLocal;
 
       var cpId = query.cpId || -1;
       $scope.queryLocal.selectedCp = getCp(cpId);
@@ -92,6 +94,10 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util'])
 
     $scope.closePopover = function() {
       QueryUtil.hidePopovers();
+    }
+
+    $scope.viewResults = function() {
+      $state.go('query-results', {queryId: query.id});
     }
 
     init();

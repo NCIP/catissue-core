@@ -25,6 +25,23 @@ angular.module('os.query.executor', [])
             return result;
           }
         );
+      },
+
+      getRecords: function(queryId, cpId, aql, wideRowMode) {
+        var req = {
+          savedQueryId: queryId, 
+          cpId: cpId,
+          drivingForm: 'Participant',
+          runType: 'Data', 
+          aql: aql, 
+          indexOf: 'Specimen.label',
+          wideRowMode: wideRowMode || "OFF"
+        };
+        return $http.post(queryUrl, req).then(
+          function(resp) {
+            return resp.data;
+          }
+        );
       }
     };
   });

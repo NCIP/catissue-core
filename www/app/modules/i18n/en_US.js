@@ -670,6 +670,9 @@
     "participants": "Participants",
     "specimens": "Specimens",
     "waiting_for_count": "Please wait for a moment while we count Participants and Specimens matching your criteria",
+    "waiting_for_records": "Loading records, please wait for a moment...",
+    "export_to_get_all": "Export records to get all records",
+    "know_why_export_has_more_data": "Click here to know why exported file has more records",
     "error": "Error occurred. Please contact system administrator for further resolution",
     
     "no_queries": "No queries to show",

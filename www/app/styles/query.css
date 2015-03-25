@@ -260,3 +260,39 @@
   width: 40px;
   height: 40px;
 }
+
+.os-query-count-po {
+  width: 200px;
+}
+
+.os-query-count-po .btn.btn-success {
+  background: #5cb85c;
+  border-color: #4cae4c;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.os-query-count-po table.table {
+  margin-bottom: 0px;
+}
+
+.os-query-results-container {
+  height: 100%;
+  width: 100%;
+}
+
+.os-query-results-grid-container {
+  width: 100%;
+  height: 95%;
+}
+
+.os-query-results-more-data {
+  height: 5%;
+  width: 100%;
+}
+
+.os-query-results-grid {
+  border: 1px solid #ddd;
+  width: 100%;
+  height: 100%;
+}

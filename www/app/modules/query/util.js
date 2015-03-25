@@ -247,7 +247,7 @@ angular.module('os.query.util', [])
         if (filter.op.name == 'qin' || filter.op.name == 'not_in' || filter.op.name == 'between') {
           filterValue = filterValue.map(function(value) { return "\"" + value + "\""; });
         } else {
-          filterValue = "\"" + queryVal + "\"";
+          filterValue = "\"" + filterValue + "\"";
         }
       }
 
@@ -272,11 +272,175 @@ angular.module('os.query.util', [])
       return query;
     };
 
+    function getSelectList(selectedFields, filtersMap) {
+      var result = "";
+      angular.forEach(selectedFields, function(field) {
+        if (typeof field == "string") {
+          field = getFieldExpr(filtersMap, field, true);
+        } else if (typeof field != "string") {
+          if (field.aggFns && field.aggFns.length > 0) {
+            var fieldExpr = getFieldExpr(filtersMap, field.name);
+            var fnExprs = "";
+            for (var j = 0; j < field.aggFns.length; ++j) {
+              if (fnExprs.length > 0) {
+                fnExprs += ", ";
+              }
+
+              var aggFn = field.aggFns[j];
+              if (aggFn.name == 'count') {
+                fnExprs += 'count(distinct ';
+              } else {
+                fnExprs += aggFn.name + '(';
+              }
+
+              fnExprs += fieldExpr + ") as \"" + aggFn.desc + " \"";
+            }
+
+            field = fnExprs;
+          } else {
+            field = getFieldExpr(filtersMap, field.name, true);
+          }
+        }
+        result += field + ", ";
+      });
+
+      if (result) {
+        result = result.substring(0, result.length - 2);
+      }
+
+      return result;
+    };
+
+    function getFieldExpr(filtersMap, fieldName, includeDesc) {
+      var temporalMarker = '$temporal.';
+      if (fieldName.indexOf(temporalMarker) != 0) {
+        return fieldName;
+      }
+
+      var filterId = fieldName.substring(temporalMarker.length);
+      var filter = filtersMap[filterId];
+      var expr = getTemporalExprObj(filter.expr).lhs;
+      if (includeDesc) {
+        expr += " as \"" + filter.desc + "\"";
+      }
+
+      return expr;
+    };
+
+    function getTemporalExprObj(temporalExpr) {
+      var re = /<=|>=|<|>|=|!=/g
+      var matches = undefined;
+      if ((matches = re.exec(temporalExpr))) {
+        return {
+          lhs: temporalExpr.substring(0, matches.index),
+          op : matches[0],
+          rhs: temporalExpr.substring(matches.index + matches[0].length)
+        }
+      }
+
+      return {};
+    };
+
+    function getRptExpr(selectedFields, reporting) {
+      if (!reporting || reporting.type == 'none') {
+        return '';
+      }
+
+      if (reporting.type != 'crosstab') {
+        return reporting.type;
+      }
+
+      var pivotTabFields = getPivotTabFields(selectedFields, true);
+      var rowIdx = getFieldIndices(pivotTabFields, reporting.params.groupRowsBy);
+      var colIdx = getFieldIndices(pivotTabFields, [reporting.params.groupColBy]);
+      colIdx = colIdx.length > 0 ? colIdx[0] : undefined;
+      var summaryIdx = getFieldIndices(pivotTabFields, reporting.params.summaryFields);
+
+      var includeSubTotals = "";
+      if (reporting.params.includeSubTotals) {
+        includeSubTotals = ", true";
+      } 
+
+      return 'crosstab(' +
+               '(' + rowIdx.join(',') + '), ' + 
+               colIdx + ', ' +
+               '(' + summaryIdx.join(',') + ') ' + 
+               includeSubTotals + 
+             ')';
+    };
+
+    function getPivotTabFields(selectedFields, fresh) {
+      var reportFields = [];
+
+      angular.forEach(selectedFields, function(field) {
+        var isAgg = false;
+        angular.forEach(field.aggFns, function(aggFn) {
+          if (fresh || aggFn.opted) {
+            reportFields.push({
+              id: field.name + '$' + aggFn.name,
+              name: field.name,
+              value: aggFn.desc,
+              aggFn: aggFn.name
+            });
+            isAgg = true;
+          }
+        });
+
+        if (!isAgg) {
+          reportFields.push({
+            id: field.name, 
+            name: field.name, 
+            value: field.form + ": " + field.label
+          });
+        }
+      });
+
+      return reportFields;
+    };
+
+    var getFieldIndices = function(fields, reportFields) {
+      var idx = [];
+      if (!reportFields) {
+        return idx;
+      }
+
+      for (var i = 0; i < reportFields.length; ++i) {
+        var rptField = reportFields[i];
+        for (var j = 0; j < fields.length; ++j) {
+          var selField = fields[j];
+          selField = (typeof selField == "string") ? selField : selField.id;
+
+          if (selField == rptField.id) {
+            idx.push(j + 1);
+            break;
+          }
+        }
+      }
+
+      return idx;
+    };
+
     function getCountAql(filtersMap, exprNodes) {
       var query = getWhereExpr(filtersMap, exprNodes);
       return "select count(distinct Participant.id) as \"cprCnt\", " +
                        "count(distinct Specimen.id) as \"specimenCnt\" " + 
                 " where " + query;
+    }
+
+    function getDataAql(selectedFields, filtersMap, exprNodes, reporting) {
+      var selectList = getSelectList(selectedFields, filtersMap);
+      var where = getWhereExpr(filtersMap, exprNodes);
+      var rptExpr = getRptExpr(selectedFields, reporting);
+      return "select " + selectList + 
+             " where " + where + 
+             " limit 0, 10000 " + rptExpr;
+    }
+
+    function getDefSelectedFields() {
+      return [
+        "Participant.id", "Participant.firstName", "Participant.lastName",
+        "Participant.regDate", "Participant.ppid", "Participant.activityStatus"
+      ];
     }
 
     return {
@@ -300,6 +464,10 @@ angular.module('os.query.util', [])
 
       isValidQueryExpr:    isValidQueryExpr,
 
-      getCountAql:         getCountAql
+      getCountAql:         getCountAql,
+
+      getDataAql:          getDataAql,
+
+      getDefSelectedFields: getDefSelectedFields
     };
   });

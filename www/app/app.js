@@ -9,6 +9,7 @@ angular.module('openspecimen', [
   'ngMessages',
   'ngCookies',
   'ngSanitize', 
+  'ngGrid',
   'ui.router', 
   'ui.bootstrap', 
   'ui.mask', 
