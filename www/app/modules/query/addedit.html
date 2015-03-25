@@ -16,7 +16,8 @@
     </h3>
 
     <div class="os-btns right">
-      <button>
+      <button ng-click="saveQuery()"
+        ng-disabled="!queryLocal.isValid || queryLocal.filters.length == 0">
         <span class="fa fa-save"></span>
         <span translate="common.buttons.save">Save</span>
       </button>

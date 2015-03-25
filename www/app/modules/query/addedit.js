@@ -1,26 +1,32 @@
 
-angular.module('os.query.addedit', ['os.query.models', 'os.query.util'])
-  .controller('QueryAddEditCtrl', function($scope, $state, cps, query, queryGlobal, QueryUtil, QueryExecutor) {
+angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.query.save'])
+  .controller('QueryAddEditCtrl', function(
+    $scope, $state, $modal, 
+    cps, query, queryGlobal, Alerts,
+    SavedQuery, QueryUtil, QueryExecutor) {
+
     function init() {
       $scope.cps = cps;
       $scope.query = query;
 
       $scope.queryLocal = queryGlobal.queryCtx || {
         currentFilter: {},
+        id: query.id,
+        title: query.title,
         filters: [],
         filtersMap: {},
         exprNodes: [],
         filterId: 0,
         selectedFields: QueryUtil.getDefSelectedFields(),
         reporting: {type: 'none'},
-        isValid: true
+        selectedCp: getCp(query.cpId || -1),
+        isValid: true,
+        drivingForm: 'Participant',
+        wideRowMode: 'DEEP'
       };
       queryGlobal.queryCtx = $scope.queryLocal;
 
-      var cpId = query.cpId || -1;
-      $scope.queryLocal.selectedCp = getCp(cpId);
       loadCpForms($scope.queryLocal.selectedCp);
-
       QueryUtil.initOpsDesc();
     }
 
@@ -73,6 +79,25 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util'])
         ops: QueryUtil.getAllowedOps(field)
       };
     }
+
+    $scope.saveQuery = function() {
+      var mi = $modal.open({
+        templateUrl: 'modules/query/save.html',
+        controller: 'QuerySaveCtrl',
+        resolve: {
+          queryToSave: function() {
+            return SavedQuery.fromQueryCtx($scope.queryLocal);
+          }
+        }
+      });
+
+      mi.result.then(
+        function(query) { 
+          $state.go('query-list');
+          Alerts.success('queries.query_saved', {title: query.title});
+        }
+      );
+    };
 
     $scope.getCount = function() {
       var ql = $scope.queryLocal;

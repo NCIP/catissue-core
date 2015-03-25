@@ -679,6 +679,10 @@
     "downloading_data_file": "Downloading query results export data file",
     "data_file_will_be_emailed": "Export is taking longer time to finish. Link to download exported data will be sent to you by e-mail",
     
+    "save_query": "Save Query",
+    "save_copy": "Save a Copy",
+    "query_saved": "Query '{{title}}' saved",
+
     "no_queries": "No queries to show",
     "no_queries_selected": "No queries selected. Please select at least one query",
     "info": "Information",
