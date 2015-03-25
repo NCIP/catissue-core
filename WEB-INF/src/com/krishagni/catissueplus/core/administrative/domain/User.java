@@ -23,13 +23,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 @Configurable
 public class User extends BaseEntity implements UserDetails {
-
 	private static final long serialVersionUID = 1L;
+	
+	private static final String ENTITY_NAME = "user";
 
 	private final static Pattern pattern = Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})");
 	
@@ -63,8 +66,15 @@ public class User extends BaseEntity implements UserDetails {
 	
 	private Set<Password> passwords = new HashSet<Password>();
 	
+	@Autowired 
+	private DaoFactory daoFactory;
+	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
 	
 	public String getLastName() {
 		return lastName;
@@ -254,12 +264,21 @@ public class User extends BaseEntity implements UserDetails {
 		this.passwords.add(password);
 	}
 	
-	public void delete(boolean isClosed) { 
-		if (isClosed) {
-			this.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
-		} else {
-			this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+	public List<DependentEntityDetail> getDependentEntities() {
+		return daoFactory.getUserDao().getDependentEntities(this.id);
+	}
+	
+	public void delete(boolean close) {
+		String activityStatus = Status.ACTIVITY_STATUS_CLOSED.getStatus();
+		if (!close) {
+			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
+			List<DependentEntityDetail> dependentEntities = getDependentEntities();
+			if (!dependentEntities.isEmpty()) {
+				throw OpenSpecimenException.userError(UserErrorCode.REF_ENTITY_FOUND);
+			}
 		}
+		
+		this.setActivityStatus(activityStatus);
 	}
 	
 	public boolean isValidOldPassword(String oldPassword) {

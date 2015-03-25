@@ -1,7 +1,6 @@
 
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -67,8 +66,7 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 		
 		return result.isEmpty() ? null : result.get(0);
 	}
-	
-
+			
 	private static final String FQN = Site.class.getName();
 
 	private static final String GET_SITES_BY_NAMES = FQN + ".getSitesByNames";

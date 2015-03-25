@@ -72,7 +72,7 @@
   <bean id="participantLookupLogic" class="com.krishagni.catissueplus.core.biospecimen.matching.ParticipantLookupLogicImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
-
+  
   <bean id="collectionProtocolService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
@@ -181,7 +181,7 @@
   <bean id="userFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.UserFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
-
+  
   <bean id="userSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="userFactory" ref="userFact"/>
@@ -303,9 +303,6 @@
     <property name="emailService" ref="emailService"/>
   </bean>
 
-  <bean id="instituteDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.InstituteDependencyChecker">
-  </bean>	
-
   <bean id="instituteFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
@@ -313,9 +310,6 @@
   <bean id="instSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.InstituteServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="instituteFactory" ref="instituteFact"/>
-  </bean>
-  
-  <bean id="siteDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.SiteDependencyChecker">
   </bean>
 
   <bean id="siteFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.SiteFactoryImpl">

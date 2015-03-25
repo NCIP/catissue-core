@@ -1,7 +1,6 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +18,7 @@ import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -116,23 +116,32 @@ public class SiteServiceImpl implements SiteService {
 	}
 
 	@Override
-	@PlusTransactional	
-	public ResponseEvent<Map<String, List>> deleteSite(RequestEvent<DeleteEntityOp> req) {
+	@PlusTransactional
+	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req) {
 		try {
-			DeleteEntityOp deleteOp = req.getPayload();
-
-			Site site = daoFactory.getSiteDao().getById(deleteOp.getId());
-			if (site == null) {
+			Site existing = daoFactory.getSiteDao().getById(req.getPayload());
+			if (existing == null) {
 				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 			}
 			
-			Map<String, List> dependencies = site.delete(deleteOp.isClose());
-			if (!dependencies.isEmpty()) {
-				return ResponseEvent.response(dependencies);
+			return ResponseEvent.response(existing.getDependentEntities());
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional	
+	public ResponseEvent<SiteDetail> deleteSite(RequestEvent<DeleteEntityOp> req) {
+		try {
+			DeleteEntityOp deleteOp = req.getPayload();
+			Site existing = daoFactory.getSiteDao().getById(deleteOp.getId());
+			if (existing == null) {
+				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 			}
 			
-			daoFactory.getSiteDao().saveOrUpdate(site);
-			return ResponseEvent.response(Collections.<String, List>emptyMap());
+			existing.delete(deleteOp.isClose());
+			return ResponseEvent.response(SiteDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

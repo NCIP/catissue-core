@@ -1,13 +1,22 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import krishagni.catissueplus.util.CommonUtil;
 
+import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 
+
 public class DistributionProtocol {
+	private static final String ENTITY_NAME = "dp";
 
 	private Long id;
 
@@ -24,7 +33,13 @@ public class DistributionProtocol {
 	private Date endDate;
 
 	private String activityStatus;
-
+	
+	private Set<DistributionOrder> distributionOrders = new HashSet<DistributionOrder>();
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -89,6 +104,14 @@ public class DistributionProtocol {
 		this.activityStatus = activityStatus;
 	}
 
+	public Set<DistributionOrder> getDistributionOrders() {
+		return distributionOrders;
+	}
+
+	public void setDistributionOrders(Set<DistributionOrder> distributionOrders) {
+		this.distributionOrders = distributionOrders;
+	}
+
 	public void update(DistributionProtocol distributionProtocol) {
 		if (distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
 			this.setShortTitle(CommonUtil.appendTimestamp(distributionProtocol.getShortTitle()));
@@ -104,12 +127,23 @@ public class DistributionProtocol {
 		this.setEndDate(distributionProtocol.getEndDate());
 		this.setActivityStatus(distributionProtocol.getActivityStatus());
 	}
-
+	
+	public List<DependentEntityDetail> getDependentEntities() {
+		List<DependentEntityDetail> dependentEntities = new ArrayList<DependentEntityDetail>();
+		DependentEntityDetail.setDependentEntities(DistributionOrder.getEntityName(), getDistributionOrders().size(), dependentEntities);
+		
+		return dependentEntities;
+	}
+	
 	public void delete() {
-		//need to check whether its referenced by any order
-		//
+		List<DependentEntityDetail> dependentEntities = getDependentEntities();
+		if(!dependentEntities.isEmpty()) {
+			throw OpenSpecimenException.userError(DistributionProtocolErrorCode.REF_ENTITY_FOUND);
+		}
+		
 		this.setShortTitle(CommonUtil.appendTimestamp(getShortTitle()));
 		this.setTitle(CommonUtil.appendTimestamp(getTitle()));
 		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
+	
 }

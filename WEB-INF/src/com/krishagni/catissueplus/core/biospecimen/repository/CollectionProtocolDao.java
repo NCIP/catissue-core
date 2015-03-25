@@ -19,7 +19,7 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	public CollectionProtocol getCpByShortTitle(String shortTitle);
 	
 	public List<CollectionProtocol> getCpsByShortTitle(Collection<String> shortTitles);
-
+	
 	public CollectionProtocolEvent getCpe(Long cpeId);
 
 	public CollectionProtocolEvent getCpeByEventLabel(Long cpId, String eventLabel);

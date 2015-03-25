@@ -19,6 +19,8 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Configurable
 public class CollectionProtocolRegistration {
+	private static final String ENTITY_NAME = "cpr";
+	
 	private Long id;
 
 	private String ppid;
@@ -46,6 +48,10 @@ public class CollectionProtocolRegistration {
 	@Autowired
 	private DaoFactory daoFactory;
 
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
+	
 	public Long getId() {
 		return id;
 	}

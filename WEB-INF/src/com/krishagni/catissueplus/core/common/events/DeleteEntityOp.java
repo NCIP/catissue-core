@@ -5,6 +5,11 @@ public class DeleteEntityOp {
 	private Long id;
 	
 	private boolean close;
+	
+	public DeleteEntityOp(Long id, boolean close) {
+		this.id = id;
+		this.close = close;
+	}
 
 	public Long getId() {
 		return id;

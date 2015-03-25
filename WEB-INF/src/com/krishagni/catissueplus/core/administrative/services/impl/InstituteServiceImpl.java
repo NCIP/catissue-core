@@ -1,9 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -21,6 +19,7 @@ import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -128,26 +127,31 @@ public class InstituteServiceImpl implements InstituteService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Map<String, List>> deleteInstitute(RequestEvent<DeleteEntityOp> req) {
+	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req) {
 		try {
-			DeleteEntityOp deleteOp = req.getPayload();
-			Long instituteId = deleteOp.getId();
-			Institute institute = null;						
-			if (instituteId != null) {
-				institute = daoFactory.getInstituteDao().getById(instituteId);
-			}
-			
-			if (institute == null) {
+			Institute existing = daoFactory.getInstituteDao().getById(req.getPayload());
+			if (existing == null) {
 				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND);
 			}
 			
-			Map<String, List> dependencies = institute.delete(deleteOp.isClose());
-			if (!dependencies.isEmpty()) {
-				return ResponseEvent.response(dependencies);
+			return ResponseEvent.response(existing.getDependentEntities());
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<InstituteDetail> deleteInstitute(RequestEvent<DeleteEntityOp> req) {
+		try {
+			DeleteEntityOp deleteOp = req.getPayload();
+			Institute existing = daoFactory.getInstituteDao().getById(deleteOp.getId());
+			if (existing == null) {
+				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND);
 			}
 			
-			daoFactory.getInstituteDao().saveOrUpdate(institute);
-			return ResponseEvent.response(Collections.<String, List>emptyMap());
+			existing.delete(deleteOp.isClose());
+			return ResponseEvent.response(InstituteDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

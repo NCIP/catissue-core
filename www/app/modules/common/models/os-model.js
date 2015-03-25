@@ -35,7 +35,7 @@ angular.module('os.common.models', [])
       };
 
       Model.noTransform = function(response) {
-        return response.date;
+        return response.data;
       };
 
       Model.query = function(reqParams, transformer) {
@@ -88,6 +88,10 @@ angular.module('os.common.models', [])
       Model.prototype.$saveOrUpdate = function () {
         return this.$id() ? this.$update() : this.$save();
       };
+
+      Model.prototype.getDependentEntities = function() {
+        return $http.get(url + this.$id() + '/dependent-entities').then(Model.noTransform);
+      }
 
       Model.prototype.$remove = function () {
         return $http['delete'](url + this.$id()).then(Model.modelRespTransform);

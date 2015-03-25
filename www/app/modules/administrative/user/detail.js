@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.user.detail', ['os.administrative.models'])
-  .controller('UserDetailCtrl', function($scope, $q, $state, $translate, user, User, PvManager, Alerts) {
+  .controller('UserDetailCtrl', function($scope, $q, $translate, user, PvManager, Alerts, DeleteUtil) {
     $scope.user = user;
     $scope.domains = PvManager.getPvs('domains');
     $scope.sites = PvManager.getSites();
@@ -23,11 +23,12 @@ angular.module('os.administrative.user.detail', ['os.administrative.models'])
       );
     }
 
-    $scope.delete = function() {
-      $scope.user.$remove().then(
-        function() {
-          $state.go('user-list');
-        }
-      );
+    $scope.deleteUser = function() {
+      DeleteUtil.delete($scope.user, {
+        onDeleteState: 'user-list',
+        entityNameProp: $scope.user.firstName + ' ' + $scope.user.lastName,
+        entityTypeProp: 'entity_name.user'
+      });
     }
+
   });

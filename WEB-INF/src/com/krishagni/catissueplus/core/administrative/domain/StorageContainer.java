@@ -20,9 +20,13 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 
+
 public class StorageContainer extends BaseEntity {
+	private static final String ENTITY_NAME = "storage_container";
+	
 	public static final String NUMBER_LABELING_SCHEME = "Numbers";
 	
 	public static final String UPPER_CASE_ALPHA_LABELING_SCHEME = "Alphabets Upper Case";
@@ -91,6 +95,10 @@ public class StorageContainer extends BaseEntity {
 	
 	public StorageContainer() {
 		ancestorContainers.add(this);
+	}
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
 	}
 
 	public String getName() {
@@ -533,6 +541,26 @@ public class StorageContainer extends BaseEntity {
 		}
 				
 		return types;
+	}
+	
+	public List<DependentEntityDetail> getDependentEntities() {
+		List<DependentEntityDetail> dependentEntities = new ArrayList<DependentEntityDetail>();
+		
+		int childContainerSize = this.getChildContainers().size();
+		DependentEntityDetail.setDependentEntities(StorageContainer.getEntityName(), childContainerSize, dependentEntities);
+		DependentEntityDetail.setDependentEntities(Specimen.getEntityName(), 
+				this.getOccupiedPositions().size() - childContainerSize, dependentEntities);
+		
+		return dependentEntities;
+	}
+	
+	public void delete() {
+		List<DependentEntityDetail> dependentEntities = getDependentEntities();
+		if (!dependentEntities.isEmpty()) {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.REF_ENTITY_FOUND);
+		}
+		
+		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 	
 	private StorageContainerPosition createPosition(int posOneOrdinal, String posOne, int posTwoOrdinal, String posTwo) {

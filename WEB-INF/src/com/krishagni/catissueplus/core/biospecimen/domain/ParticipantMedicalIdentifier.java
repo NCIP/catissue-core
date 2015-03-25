@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 
 public class ParticipantMedicalIdentifier {
+	private static final String ENTITY_NAME = "mrn";
 
 	/**
 	System generated unique id.
@@ -25,6 +26,10 @@ public class ParticipantMedicalIdentifier {
 	 */
 	private Participant participant;
 
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
+	
 	public Long getId() {
 		return id;
 	}

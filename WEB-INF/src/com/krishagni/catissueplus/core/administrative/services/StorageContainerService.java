@@ -8,6 +8,7 @@ import com.krishagni.catissueplus.core.administrative.events.StorageContainerDet
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -23,4 +24,8 @@ public interface StorageContainerService {
 	public ResponseEvent<StorageContainerDetail> updateStorageContainer(RequestEvent<StorageContainerDetail> req);
 	
 	public ResponseEvent<Boolean> isAllowed(RequestEvent<PositionTenantDetail> req);
+	
+	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req);
+	
+	public ResponseEvent<StorageContainerDetail> deleteStorageContainer(RequestEvent<Long> req);
 }

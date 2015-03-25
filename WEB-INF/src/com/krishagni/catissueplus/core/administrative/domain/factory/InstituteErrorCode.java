@@ -13,9 +13,8 @@ public enum InstituteErrorCode implements ErrorCode {
 	
 	REF_ENTITY_FOUND,
 	
-	DEPT_REF_ENTITY_FOUND
-	;
-
+	DEPT_REF_ENTITY_FOUND;
+	
 	@Override
 	public String code() {
 		return "INSTITUTE_" + this.name();
