@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -21,7 +20,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.krishagni.catissueplus.core.administrative.domain.dependency.UserDependencyChecker;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
@@ -32,9 +30,9 @@ import com.krishagni.catissueplus.core.common.util.Status;
 
 @Configurable
 public class User extends BaseEntity implements UserDetails {
-	private static final String ENTITY_NAME = "user";
-
 	private static final long serialVersionUID = 1L;
+	
+	private static final String ENTITY_NAME = "user";
 
 	private final static Pattern pattern = Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})");
 	
@@ -267,15 +265,15 @@ public class User extends BaseEntity implements UserDetails {
 	}
 	
 	public List<DependentEntityDetail> getDependentEntities() {
-		return daoFactory.getUserDao().getUserDependentEntities(this.id);
+		return daoFactory.getUserDao().getDependentEntities(this.id);
 	}
 	
 	public void delete(boolean close) {
 		String activityStatus = Status.ACTIVITY_STATUS_CLOSED.getStatus();
 		if (!close) {
 			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
-			List<DependentEntityDetail> dependencyStat = getDependentEntities();
-			if (!dependencyStat.isEmpty()) {
+			List<DependentEntityDetail> dependentEntities = getDependentEntities();
+			if (!dependentEntities.isEmpty()) {
 				throw OpenSpecimenException.userError(UserErrorCode.REF_ENTITY_FOUND);
 			}
 		}

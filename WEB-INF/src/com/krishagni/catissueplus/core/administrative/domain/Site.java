@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
@@ -20,7 +18,6 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 
-@Configurable
 public class Site {
 	private static final String ENTITY_NAME = "site";
 
@@ -183,10 +180,7 @@ public class Site {
 		String activityStatus = Status.ACTIVITY_STATUS_CLOSED.getStatus();
 		if (!close) {
 			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
-			List<DependentEntityDetail> dependencyStat = getDependentEntities();
-			if (!dependencyStat.isEmpty()) {
-				throw OpenSpecimenException.userError(SiteErrorCode.REF_ENTITY_FOUND);
-			}
+			ensureFreeOfDependencies();
 		}
 		
 		this.setActivityStatus(activityStatus);
@@ -198,13 +192,17 @@ public class Site {
 		}
 		
 		if (newActivityStatus.equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
-			List<DependentEntityDetail> dependencies = getDependentEntities();
-			if (!dependencies.isEmpty()) {
-				throw new OpenSpecimenException(ErrorType.USER_ERROR,SiteErrorCode.REF_ENTITY_FOUND);
-			}
+			ensureFreeOfDependencies();
 		}
 		
 		this.setActivityStatus(newActivityStatus);
+	}
+	
+	private void ensureFreeOfDependencies() {
+		List<DependentEntityDetail> dependentEntities = getDependentEntities();
+		if (!dependentEntities.isEmpty()) {
+			throw new OpenSpecimenException(ErrorType.USER_ERROR,SiteErrorCode.REF_ENTITY_FOUND);
+		}
 	}
 
 }

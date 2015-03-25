@@ -81,9 +81,9 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<DependentEntityDetail> getUserDependentEntities(Long userId) {
+	public List<DependentEntityDetail> getDependentEntities(Long userId) {
 		List<Object[]> rows = sessionFactory.getCurrentSession()
-				.createSQLQuery(GET_USER_DEPENDENT_ENTITIES_SQL)
+				.getNamedQuery(GET_DEPENDENT_ENTITIES)
 				.setLong("userId", userId)
 				.list();
 		
@@ -218,40 +218,11 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		for (Object[] row: rows) {
 			String name = (String)row[0];
 			int count = ((Number)row[1]).intValue();
-			if (count > 0) {
-				dependentEntities.add(DependentEntityDetail.from(name, count));
-			}
+			dependentEntities.add(DependentEntityDetail.from(name, count));
 		}
 		
 		return dependentEntities;
  	}
-	
-	private static final String GET_USER_DEPENDENT_ENTITIES_SQL = 
-			"Select " + 
-			"  'site' as entityName, count(s.identifier) as count " + 
-			"from " + 
-			"  catissue_site s" +
-			"  inner join catissue_site_coordinators sc on sc.site_id = s.identifier " + 
-			"where " + 
-			"  s.activity_status != 'Disabled' and " +
-			"  sc.USER_ID = :userId " + 
-			"union " +
-			"select " + 
-			"  'cp' as entityName, count(cp.identifier) as count " + 
-			"from " + 
-			"  catissue_collection_protocol cp " + 
-			"where " +
-			"  cp.activity_status != 'Disabled' and " +
-			"  ( cp.principal_investigator_id = :userId or " + 
-			"  cp.identifier in (select cc.collection_protocol_id from catissue_coll_coordinators cc where cc.user_id = :userId)) " +
-			"union " + 
-			"select " + 
-			"  'dp' as entityName, count(dp.identifier) as count " + 
-			"from " + 
-			"  catissue_distribution_protocol dp " + 
-			"where " + 
-			"  dp.activity_status != 'Disabled' and " +
-			"  dp.principal_investigator_id = :userId ";
 	
 	private static final String GET_USER_BY_LOGIN_NAME_HQL = 
 			"from com.krishagni.catissueplus.core.administrative.domain.User where loginName = :loginName and authDomain.name = :domainName  %s";
@@ -262,6 +233,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	private static final String FQN = User.class.getName();
 
 	private static final String GET_USERS_BY_IDS = FQN + ".getUsersByIds";
+	
+	private static final String GET_DEPENDENT_ENTITIES = FQN + ".getDependentEntities"; 
 	
 	private static final String TOKEN_FQN = ForgotPasswordToken.class.getName();
 	

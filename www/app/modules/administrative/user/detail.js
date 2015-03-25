@@ -27,7 +27,7 @@ angular.module('os.administrative.user.detail', ['os.administrative.models'])
       DeleteUtil.delete($scope.user, {
         onDeleteState: 'user-list',
         entityNameProp: $scope.user.firstName + ' ' + $scope.user.lastName,
-        entityTypeProp: 'User'
+        entityTypeProp: 'entity_name.user'
       });
     }
 

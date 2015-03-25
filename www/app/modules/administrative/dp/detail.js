@@ -13,7 +13,7 @@ angular.module('os.administrative.dp.detail', ['os.administrative.models'])
       DeleteUtil.delete($scope.distributionProtocol, {
         onDeleteState: 'dp-list',
         entityNameProp: $scope.distributionProtocol.title,
-        entityTypeProp: 'Distribution Protocol'
+        entityTypeProp: 'entity_name.dp'
       });
     }
 

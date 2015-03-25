@@ -127,7 +127,7 @@ public class InstituteServiceImpl implements InstituteService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<DependentEntityDetail>> getInstituteDependentEntities(RequestEvent<Long> req) {
+	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req) {
 		try {
 			Institute existing = daoFactory.getInstituteDao().getById(req.getPayload());
 			if (existing == null) {

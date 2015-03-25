@@ -10,7 +10,7 @@ angular.module('os.administrative.institute.detail', ['os.administrative.models'
       DeleteUtil.delete($scope.institute, {
         onDeleteState: 'institute-list',
         entityNameProp: $scope.institute.name,
-        entityTypeProp: 'Institute'
+        entityTypeProp: 'entity_name.institute'
       });
     }
 

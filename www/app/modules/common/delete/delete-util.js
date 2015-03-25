@@ -1,5 +1,5 @@
 angular.module('os.common.delete')
-  .factory('DeleteUtil', function($modal, $state) {
+  .factory('DeleteUtil', function($modal, $state, $translate) {
   
     function deleteEntity(object, props) {
       var modalInstance = $modal.open({
@@ -10,7 +10,7 @@ angular.module('os.common.delete')
             return {
               entity: object,
               name: props.entityNameProp,
-              type: props.entityTypeProp
+              type: $translate.instant(props.entityTypeProp)
             }
           },
           dependentEntities: function() {

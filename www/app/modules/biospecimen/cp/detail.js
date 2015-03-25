@@ -19,7 +19,7 @@ angular.module('os.biospecimen.cp.detail', ['os.biospecimen.models'])
       DeleteUtil.delete($scope.cp, {
         onDeleteState: 'cp-list',
         entityNameProp: $scope.cp.title,
-        entityTypeProp: 'Collection Protocol'
+        entityTypeProp: 'entity_name.cp'
       });
     }
 

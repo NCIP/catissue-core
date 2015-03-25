@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Configurable;
-
 import krishagni.catissueplus.util.CommonUtil;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
@@ -16,7 +14,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-@Configurable
+
 public class DistributionProtocol {
 	private static final String ENTITY_NAME = "dp";
 
@@ -138,8 +136,8 @@ public class DistributionProtocol {
 	}
 	
 	public void delete() {
-		List<DependentEntityDetail> dependencies = getDependentEntities();
-		if(!dependencies.isEmpty()) {
+		List<DependentEntityDetail> dependentEntities = getDependentEntities();
+		if(!dependentEntities.isEmpty()) {
 			throw OpenSpecimenException.userError(DistributionProtocolErrorCode.REF_ENTITY_FOUND);
 		}
 		

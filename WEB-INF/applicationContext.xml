@@ -73,10 +73,6 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   
-  <bean id="collectionProtocolDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.CollectionProtocolDependencyChecker">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>
-
   <bean id="collectionProtocolService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
@@ -186,10 +182,6 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   
-  <bean id="userDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.UserDependencyChecker">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>
-
   <bean id="userSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="userFactory" ref="userFact"/>
@@ -311,10 +303,6 @@
     <property name="emailService" ref="emailService"/>
   </bean>
 
-  <bean id="instituteDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.InstituteDependencyChecker">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>	
-
   <bean id="instituteFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
@@ -322,10 +310,6 @@
   <bean id="instSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.InstituteServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="instituteFactory" ref="instituteFact"/>
-  </bean>
-  
-  <bean id="siteDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.SiteDependencyChecker">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 
   <bean id="siteFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.SiteFactoryImpl">
@@ -335,10 +319,6 @@
   <bean id="siteService" class="com.krishagni.catissueplus.core.administrative.services.impl.SiteServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="siteFactory" ref="siteFactory" />
-  </bean>
-	
-  <bean id="containerDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.StorageContainerDependencyChecker">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 	
   <bean id="storageContainerFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.StorageContainerFactoryImpl">
@@ -357,10 +337,6 @@
   <bean id="distributionProtocolService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionProtocolServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="distributionProtocolFactory" ref="distributionProtocolFactory" />
-  </bean>
-  
-  <bean id="distributionProtocolDependencyChecker" class="com.krishagni.catissueplus.core.administrative.domain.dependency.DistributionProtocolDependencyChecker">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 	
   <bean id="distributionFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionOrderFactoryImpl">

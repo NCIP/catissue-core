@@ -22,7 +22,7 @@ public interface UserDao extends Dao<User> {
 	
 	public Boolean isUniqueEmailAddress(String emailAddress);
 	
-	public List<DependentEntityDetail> getUserDependentEntities(Long userId);
+	public List<DependentEntityDetail> getDependentEntities(Long userId);
 	
 	public ForgotPasswordToken getFpToken(String token);
 	

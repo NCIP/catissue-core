@@ -29,7 +29,7 @@ angular.module('os.administrative.site.detail', ['os.administrative.models'])
       DeleteUtil.delete($scope.site, {
         onDeleteState: 'site-list',
         entityNameProp: $scope.site.name,
-        entityTypeProp: 'Site'
+        entityTypeProp: 'entity_name.site'
       });
 
     }

@@ -177,7 +177,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<DependentEntityDetail>> getUserDependentEntities(RequestEvent<Long> req) {
+	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req) {
 		try {
 			User existing = daoFactory.getUserDao().getById(req.getPayload());
 			if (existing == null) {

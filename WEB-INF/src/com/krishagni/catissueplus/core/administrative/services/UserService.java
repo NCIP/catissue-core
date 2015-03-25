@@ -31,7 +31,7 @@ public interface UserService extends UserDetailsService {
 
 	public ResponseEvent<Boolean> forgotPassword(RequestEvent<String> req);
 	
-	public ResponseEvent<List<DependentEntityDetail>> getUserDependentEntities(RequestEvent<Long> req);
+	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req);
 
 	public ResponseEvent<UserDetail> deleteUser(RequestEvent<DeleteEntityOp> req);
 

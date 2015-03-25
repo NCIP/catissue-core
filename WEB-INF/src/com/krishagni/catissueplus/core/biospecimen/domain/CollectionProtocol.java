@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -20,7 +18,6 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 
-@Configurable
 public class CollectionProtocol extends BaseEntity {
 	private static final String ENTITY_NAME = "cp";
 	
@@ -336,8 +333,8 @@ public class CollectionProtocol extends BaseEntity {
 	}
 	
 	public void delete() {
-		List<DependentEntityDetail> dependencyStat = getDependentEntities();
-		if (!dependencyStat.isEmpty()) {
+		List<DependentEntityDetail> dependentEntities = getDependentEntities();
+		if (!dependentEntities.isEmpty()) {
 			throw OpenSpecimenException.userError(CpeErrorCode.REF_ENTITY_FOUND);
 		}
 		

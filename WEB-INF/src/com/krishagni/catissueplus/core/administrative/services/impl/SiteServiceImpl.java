@@ -117,7 +117,7 @@ public class SiteServiceImpl implements SiteService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<DependentEntityDetail>> getSiteDependentEntities(RequestEvent<Long> req) {
+	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req) {
 		try {
 			Site existing = daoFactory.getSiteDao().getById(req.getPayload());
 			if (existing == null) {
