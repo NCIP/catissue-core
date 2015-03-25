@@ -208,9 +208,7 @@ public class RbacController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public RoleDetail getRole(@PathVariable Long id) {
-		RequestEvent<Long> req = new RequestEvent<Long>(id);
-		
-		ResponseEvent<RoleDetail> resp = rbacSvc.getRole(req);
+		ResponseEvent<RoleDetail> resp = rbacSvc.getRole(getRequest(id));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -227,9 +225,9 @@ public class RbacController {
 	@RequestMapping(method = RequestMethod.PUT, value="/roles/{roleId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public RoleDetail updateRole(@PathVariable Long roleId, @RequestBody RoleDetail roleDetails) {
-		roleDetails.setId(roleId);
-		ResponseEvent<RoleDetail> resp = rbacSvc.updateRole(getRequest(roleDetails));
+	public RoleDetail updateRole(@PathVariable Long roleId, @RequestBody RoleDetail roleDetail) {
+		roleDetail.setId(roleId);
+		ResponseEvent<RoleDetail> resp = rbacSvc.updateRole(getRequest(roleDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

@@ -22,12 +22,10 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
        $scope.sortedOperations = [];
        Operation.query().then(
          function(operations) {
-           angular.forEach(operations, function(operation) {
-             unsortedOperations.push(operation.name);
-           });
+           unsortedOperations = operations;
 
            angular.forEach(unsortedOperations, function(operation) {
-             $scope.sortedOperations[operationsOrder.indexOf(operation)] = {name: operation, selected: false, disabled: false};
+             $scope.sortedOperations[operationsOrder.indexOf(operation.name)] = {name: operation.name, selected: false, disabled: false};
            });
 
            getSelectedOperations($scope.role);

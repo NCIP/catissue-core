@@ -1,8 +1,10 @@
 package com.krishagni.rbac.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -304,20 +306,18 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<RoleDetail> updateRole(RequestEvent<RoleDetail> request) {
 		try {
-			RoleDetail details = request.getPayload();
+			RoleDetail detail = request.getPayload();
 		
-			Role existing = daoFactory.getRoleDao().getById(details.getId(), null);
+			Role existing = daoFactory.getRoleDao().getById(detail.getId(), null);
 			if (existing == null) {
 				return ResponseEvent.userError(RbacErrorCode.ROLE_NOT_FOUND);
 			}
 		
-			Role newRole = createRole(details);
+			Role newRole = createRole(detail);
 			ensureUniqueName(newRole, existing);
 			checkCycles(newRole);
 				
-			updateOrphanRoles(existing,newRole);
 			existing.updateRole(newRole);
-
 			daoFactory.getRoleDao().saveOrUpdate(existing);
 			return ResponseEvent.response(RoleDetail.from(existing));
 		} catch(OpenSpecimenException ose) {
@@ -508,24 +508,24 @@ public class RbacServiceImpl implements RbacService {
 	// HELPER METHODS
 	// 
 	
-	private Role createRole(RoleDetail details) {
+	private Role createRole(RoleDetail detail) {
 		Role role = new Role();
-		setName(role, details);
-		role.setDescription(details.getDescription());
-		role.setAcl(getAcl(details, role));
-		role.setParentRole(getRole(details.getParentRoleName()));
+		setName(detail, role);
+		role.setDescription(detail.getDescription());
+		role.setAcl(getAcl(detail, role));
+		role.setParentRole(getRole(detail.getParentRoleName()));
 		
-		for (String childRole : details.getChildRoles()) {
+		for (String childRole : detail.getChildRoles()) {
 			role.getChildRoles().add(getRole(childRole));
 		}
 		return role;
 	}
 	
-	private void setName(Role role, RoleDetail details) {
-		if (StringUtils.isBlank(details.getName())) {
+	private void setName(RoleDetail detail, Role role) {
+		if (StringUtils.isBlank(detail.getName())) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ROLE_NAME_REQUIRED);
 		}
-		role.setName(details.getName());
+		role.setName(detail.getName());
 	}
 	
 	private void checkCycles(Role role) {
@@ -534,6 +534,10 @@ public class RbacServiceImpl implements RbacService {
 		}
 		
 		Role parentRole = role.getParentRole();
+		if (parentRole == null) {
+			return;
+		}
+		
 		for (Role childRole : role.getChildRoles()) {
 			if (parentRole.isDescendentOf(childRole)) {
 				throw OpenSpecimenException.userError(RbacErrorCode.CYCLE_DETECTED_IN_HIERARCHY);
@@ -555,24 +559,21 @@ public class RbacServiceImpl implements RbacService {
 		return role;
 	}
 	
-	private void updateOrphanRoles(Role existing, Role role) {
-		for (Role existingChild : existing.getChildRoles()) {
-			if (!role.getChildRoles().contains(existingChild)) {
-				existingChild.setParentRole(null);
-				daoFactory.getRoleDao().saveOrUpdate(existingChild);
-			}
-		}
-	}
-
 	private Set<RoleAccessControl> getAcl(RoleDetail detail, Role role) {
 		Set<RoleAccessControl> result = new HashSet<RoleAccessControl>();
+		Map<Long, RoleAccessControl> racMap = new HashMap<Long, RoleAccessControl>();
+		
+		if (detail.getId() != null) {
+			Role existingRole  = daoFactory.getRoleDao().getById(detail.getId(), null);
+			for (RoleAccessControl rac : existingRole.getAcl()) {
+				racMap.put(rac.getId(), rac);
+			}
+		}
 		
 		for (RoleAccessControlDetails rd : detail.getAcl()) {
-			RoleAccessControl rac = null; 
+			RoleAccessControl rac = racMap.get(rd.getId());
 			
-			if(rd.getId() != null && detail.getId() != null) {
-				rac = daoFactory.getRoleDao().getRoleAccessControl(rd.getId(), detail.getId());
-			} else {
+			if(rac == null) {
 				rac = new RoleAccessControl();
 				rac.setRole(role);
 			}
@@ -581,7 +582,6 @@ public class RbacServiceImpl implements RbacService {
 			if (resource == null) {
 				throw OpenSpecimenException.userError(RbacErrorCode.RESOURCE_NOT_FOUND);
 			}
-			
 			rac.setResource(resource);
 			rac.getOperations().clear(); 
 			for (ResourceInstanceOpDetails riod  : rd.getOperations()) {

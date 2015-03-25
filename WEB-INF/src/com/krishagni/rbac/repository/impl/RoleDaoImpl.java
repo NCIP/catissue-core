@@ -19,7 +19,8 @@ public class RoleDaoImpl extends AbstractDao<Role> implements RoleDao {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Role> getRoles(RoleListCriteria listCriteria) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(Role.class)
+		Criteria query = sessionFactory.getCurrentSession()
+				.createCriteria(Role.class)
 				.setFirstResult(listCriteria.startAt())
 				.setMaxResults(listCriteria.maxResults());
 		
@@ -32,20 +33,16 @@ public class RoleDaoImpl extends AbstractDao<Role> implements RoleDao {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Role> getRolesByName(List<String> roles) {
+	public List<Role> getRolesByNames(List<String> roleNames) {
 		return (List<Role>) sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_ROLES_BY_NAMES)
-				.setParameterList("roleNames", roles)
+				.setParameterList("roleNames", roleNames)
 				.list();
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public Role getRoleByName(String roleName) {
-		List<Role> roles = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_ROLES_BY_NAMES)
-				.setParameterList("roleNames", Collections.singletonList(roleName))
-				.list();
+		List<Role> roles = getRolesByNames(Collections.singletonList(roleName));
 		return roles.isEmpty() ? null : roles.get(0);
 	}
 	

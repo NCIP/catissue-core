@@ -1,7 +1,11 @@
 package com.krishagni.rbac.domain;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 
@@ -70,33 +74,22 @@ public class Role {
 		setName(other.getName());
 		setDescription(other.getDescription());
 		setParentRole(other.getParentRole());
-		
-		for (Role childRole : other.getChildRoles()) {
-			childRole.setParentRole(this);
-		}
-		setChildRoles(other.getChildRoles());
+		updateChildRoles(other);
 		updateAcl(other);
-	}
-	
-	private void updateAcl(Role other) {
-		CollectionUpdater.update(this.acl, other.getAcl());
-		for (RoleAccessControl rac : this.acl) {
-			rac.setRole(this);
-		}
 	}
 	
     public boolean isDescendentOf(Role other) {
         if (id == null || other.getId() == null) {
-                return false;
+        	return false;
         }
 
         Role role = this;
         while (role != null) {
-                if (other.getId().equals(role.getId())) {
-                        return true;
-                }
+        	if (other.getId().equals(role.getId())) {
+        		return true;
+            }
 
-                role = role.getParentRole();
+            role = role.getParentRole();
         }
 
         return false;
@@ -129,5 +122,24 @@ public class Role {
 		
 		return false;
 	}
-		
+	
+	private void updateChildRoles(Role other) {
+		for (Role child : this.getChildRoles()) {
+			if (!other.getChildRoles().contains(child)) {
+				child.setParentRole(null);
+			}
+		}
+
+		CollectionUpdater.update(this.childRoles, other.childRoles);
+		for (Role childRole: this.childRoles) {
+			childRole.setParentRole(this);
+		}
+	}
+	
+	private void updateAcl(Role other) {
+		CollectionUpdater.update(this.acl, other.getAcl());
+		for (RoleAccessControl rac : this.acl) {
+			rac.setRole(this);
+		}
+	}
 }

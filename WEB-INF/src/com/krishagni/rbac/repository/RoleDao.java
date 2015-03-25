@@ -9,7 +9,7 @@ import com.krishagni.rbac.domain.RoleAccessControl;
 public interface RoleDao extends Dao<Role> {
 	public List<Role> getRoles(RoleListCriteria listCriteria);
 	
-	public List<Role> getRolesByName(List<String> roles);
+	public List<Role> getRolesByNames(List<String> roleNames);
 
 	public Role getRoleByName(String roleName);
 	

@@ -50,18 +50,18 @@
         </div>
       </div>
 
-      <div class="form-group clearfix" ng-repeat="acl in role.acl">
+      <div class="form-group clearfix" ng-repeat="ac in role.acl">
         <ng-form name="roleResourceForm" os-form-validator="roleResourceForm" parent-validator="roleFormValidator">
           <div class="col-xs-3 col-xs-offset-3">
-            <os-select ng-model="acl.resourceName" list="resources" placeholder="{{'role.resource' | translate}}"
+            <os-select ng-model="ac.resourceName" list="resources" placeholder="{{'role.resource' | translate}}"
               name="resource" required>
             </os-select>
             <div os-field-error field="roleResourceForm.resource"></div>
           </div>
 
           <div class="col-xs-3">
-            <div class="os-permissions-checkbox col-xs-3" ng-repeat="operation in acl.operations">
-              <os-checkbox ng-model="operation.selected" ng-change="setOperations(operation, acl.operations)"
+            <div class="os-permissions-checkbox col-xs-3" ng-repeat="operation in ac.operations">
+              <os-checkbox ng-model="operation.selected" ng-change="setOperations(operation, ac.operations)"
                 ng-disabled="operation.disabled"></os-checkbox>
             </div>
           </div>

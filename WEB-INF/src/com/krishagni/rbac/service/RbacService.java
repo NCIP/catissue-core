@@ -55,7 +55,7 @@ public interface RbacService {
 
 	public ResponseEvent<RoleDetail> saveRole(RequestEvent<RoleDetail> req);
 	
-	public ResponseEvent<RoleDetail> updateRole(RequestEvent<RoleDetail> request);
+	public ResponseEvent<RoleDetail> updateRole(RequestEvent<RoleDetail> req);
 	
 	public ResponseEvent<RoleDetail> deleteRole(RequestEvent<String> req);
 	
