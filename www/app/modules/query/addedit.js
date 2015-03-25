@@ -1,6 +1,6 @@
 
 angular.module('os.query.addedit', ['os.query.models', 'os.query.util'])
-  .controller('QueryAddEditCtrl', function($scope, cps, query, queryGlobal, QueryUtil) {
+  .controller('QueryAddEditCtrl', function($scope, cps, query, queryGlobal, QueryUtil, QueryExecutor) {
     function init() {
       $scope.cps = cps;
       $scope.query = query;
@@ -70,6 +70,28 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util'])
         value: undefined,
         ops: QueryUtil.getAllowedOps(field)
       };
+    }
+
+    $scope.getCount = function() {
+      var ql = $scope.queryLocal;
+      var aql = QueryUtil.getCountAql(ql.filtersMap, ql.exprNodes);
+
+      ql.waitingForCnt = true;
+      ql.countResults = undefined;
+      QueryExecutor.getCount(undefined, ql.selectedCp.id, aql).then(
+        function(result) {
+          ql.waitingForCnt = false;
+          ql.countResults = result;
+        },
+
+        function(result) {
+          ql.waitingForCnt = false;
+        }
+      );
+    }
+
+    $scope.closePopover = function() {
+      QueryUtil.hidePopovers();
     }
 
     init();

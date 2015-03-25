@@ -129,9 +129,12 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/activity-status")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public UserDetail activateUser(@PathVariable Long id) {
-		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
-		ResponseEvent<UserDetail> resp = userService.activateUser(req);
+	public UserDetail updateUserStatus(@PathVariable Long id, @RequestBody Map<String, String> props) {
+		UserDetail detail = new UserDetail();
+ 		detail.setId(id);
+		detail.setActivityStatus(props.get("activityStatus"));
+		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(null, detail);
+		ResponseEvent<UserDetail> resp = userService.updateStatus(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

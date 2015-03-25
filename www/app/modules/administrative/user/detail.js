@@ -12,8 +12,7 @@ angular.module('os.administrative.user.detail', ['os.administrative.models'])
     }
 
     $scope.activate = function() {
-      var user = angular.copy($scope.user);
-      User.activate(user.id).then(
+      User.activate($scope.user.id).then(
         function(user) {
           $scope.user = user;
           $translate('user.user_request_approved').then(function(msg) {

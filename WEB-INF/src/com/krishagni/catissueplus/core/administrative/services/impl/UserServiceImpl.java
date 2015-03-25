@@ -150,25 +150,44 @@ public class UserServiceImpl implements UserService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
-	public ResponseEvent<UserDetail> activateUser(RequestEvent<Long> req) {
+	public ResponseEvent<UserDetail> updateStatus(RequestEvent<UserDetail> req) {
 		try {
-			Long id = req.getPayload();
-			User user =  daoFactory.getUserDao().getById(id);
+			boolean sendRequestApprovedMail = false;
+			UserDetail detail = req.getPayload();
+			User user =  daoFactory.getUserDao().getById(detail.getId());
 			if (user == null) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
-			user.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
-			ForgotPasswordToken token = null;
-			if (user.getAuthDomain().getName().equals(DEFAULT_AUTH_DOMAIN)) {
-				token = new ForgotPasswordToken(user);
-				daoFactory.getUserDao().saveFpToken(token);
+			String currentStatus = user.getActivityStatus();
+			String newStatus = detail.getActivityStatus();
+			if (currentStatus.equals(newStatus)) {
+				return ResponseEvent.response(UserDetail.from(user));
 			}
 			
-			sendUserRequestApprovedEmail(user, token);
+			if (!isStatusChangeAllowed(newStatus)) {
+				return ResponseEvent.userError(UserErrorCode.STATUS_CHANGE_NOT_ALLOWED);
+			}
+ 			
+			if (isActivated(currentStatus, newStatus)) {
+				user.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+				sendRequestApprovedMail = currentStatus.equals(Status.ACTIVITY_STATUS_PENDING.getStatus());
+			} else if (isLocked(currentStatus, newStatus)) {
+				user.setActivityStatus(Status.ACTIVITY_STATUS_LOCKED.getStatus());
+			}
+			
+			if (sendRequestApprovedMail) {
+				ForgotPasswordToken token = null;
+				if (user.getAuthDomain().getName().equals(DEFAULT_AUTH_DOMAIN)) {
+					token = new ForgotPasswordToken(user);
+					daoFactory.getUserDao().saveFpToken(token);
+				}
+				sendUserRequestApprovedEmail(user, token);
+			}
+			
 			return ResponseEvent.response(UserDetail.from(user));
 		} catch(Exception e) {
 			return ResponseEvent.serverError(e);
@@ -360,5 +379,19 @@ public class UserServiceImpl implements UserService {
 			ose.addError(UserErrorCode.DUP_LOGIN_NAME);
 		}
 	}
+
+	private boolean isStatusChangeAllowed(String newStatus) {
+		return newStatus.equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus()) || 
+				newStatus.equals(Status.ACTIVITY_STATUS_LOCKED.getStatus());
+	}
 	
+	private boolean isActivated(String currentStatus, String newStatus) {
+		return !currentStatus.equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus()) && 
+				newStatus.equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+	}
+	
+	private boolean isLocked(String currentStatus, String newStatus) {
+		return currentStatus.equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus()) &&
+				newStatus.equals(Status.ACTIVITY_STATUS_LOCKED.getStatus());
+	}
 }

@@ -11,7 +11,8 @@ angular.module('os.query',
     'os.query.addeditfilter',
     'os.query.expr',
     'os.query.util',
-    'os.query.datepicker'
+    'os.query.datepicker',
+    'os.query.executor'
   ]
 ).config(function($stateProvider) {
    $stateProvider
