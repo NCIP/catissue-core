@@ -47,18 +47,6 @@ public class RoleDaoImpl extends AbstractDao<Role> implements RoleDao {
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
-	public RoleAccessControl getRoleAccessControl(Long racId, Long roleId) {
-		List<RoleAccessControl> racl = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_ROLE_ACCESS_CONTROL)
-				.setParameter("id", racId)
-				.setParameter("roleId", roleId)
-				.list();
-				
-		return racl.isEmpty() ? null : racl.get(0);		
-	}
-	
-	@Override
 	public void deleteRole(Role role) {
 		sessionFactory.getCurrentSession()
 		.delete(role);

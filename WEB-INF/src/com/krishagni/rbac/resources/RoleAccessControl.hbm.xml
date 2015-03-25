@@ -33,12 +33,6 @@
       <one-to-many class="com.krishagni.rbac.domain.ResourceInstanceOp"/>
     </set>
     
-    <query name="getRoleAccessControl">
-      from 
-        com.krishagni.rbac.domain.RoleAccessControl rac
-      where 
-        rac.id = :id and role.id = :roleId
-    </query> 
   </class>
 </hibernate-mapping> 
  
