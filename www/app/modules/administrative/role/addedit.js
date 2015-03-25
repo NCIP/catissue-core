@@ -18,13 +18,10 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
        });
 
        var operationsOrder =  Operation.getOrderedOperations();
-       var unsortedOperations = [];
        $scope.sortedOperations = [];
        Operation.query().then(
          function(operations) {
-           unsortedOperations = operations;
-
-           angular.forEach(unsortedOperations, function(operation) {
+           angular.forEach(operations, function(operation) {
              $scope.sortedOperations[operationsOrder.indexOf(operation.name)] = {name: operation.name, selected: false, disabled: false};
            });
 
