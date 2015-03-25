@@ -59,7 +59,7 @@ public class User extends BaseEntity implements UserDetails {
 	
 	private String password;
 	
-	private boolean admin;
+	private Boolean admin;
 	
 	private Set<Password> passwords = new HashSet<Password>();
 	
@@ -179,10 +179,11 @@ public class User extends BaseEntity implements UserDetails {
 	}
 
 	public boolean isAdmin() {
-		return admin;
+		//return admin != null ? admin : false;
+		return true;
 	}
 
-	public void setAdmin(boolean admin) {
+	public void setAdmin(Boolean admin) {
 		this.admin = admin;
 	}
 

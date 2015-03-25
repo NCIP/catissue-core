@@ -666,6 +666,11 @@
     "parameterized_marker": "P",
     "get_count": "Get Count",
     "view_records": "View Records",
+    "count_results": "Count Query Results",
+    "participants": "Participants",
+    "specimens": "Specimens",
+    "waiting_for_count": "Please wait for a moment while we count Participants and Specimens matching your criteria",
+    "error": "Error occurred. Please contact system administrator for further resolution",
     
     "no_queries": "No queries to show",
     "no_queries_selected": "No queries selected. Please select at least one query",

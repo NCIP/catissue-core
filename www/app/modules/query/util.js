@@ -230,6 +230,55 @@ angular.module('os.query.util', [])
       return parenCnt == 0 && last == 'filter';
     };
 
+    function getFilterExpr(filter) {
+      if (filter.expr) {
+        return filter.expr;
+      }
+          
+      var expr = filter.form.name + "." + filter.field.name + " ";
+      expr += filter.op.symbol + " ";
+
+      if (filter.op.name == 'exists' || filter.op.name == 'not_exists') {
+        return expr;
+      }
+
+      var filterValue = filter.value;
+      if (filter.field.type == "STRING" || filter.field.type == "DATE") {
+        if (filter.op.name == 'qin' || filter.op.name == 'not_in' || filter.op.name == 'between') {
+          filterValue = filterValue.map(function(value) { return "\"" + value + "\""; });
+        } else {
+          filterValue = "\"" + queryVal + "\"";
+        }
+      }
+
+      if (filter.op.name == 'qin' || filter.op.name == 'not_in' || filter.op.name == 'between') {
+        filterValue = "(" + filterValue.join() + ")";
+      }
+
+      return expr + filterValue;
+    }
+
+    function getWhereExpr(filtersMap, exprNodes) {
+      var query = "";
+      angular.forEach(exprNodes, function(exprNode) {
+        if (exprNode.type == 'paren') {
+          query + exprNode.value;
+        } else if (exprNode.type == 'op') {
+          query += ops[exprNode.value].symbol + " ";
+        } else if (exprNode.type == 'filter') {
+          query += " " + getFilterExpr(filtersMap[exprNode.value]) + " ";
+        }
+      });
+      return query;
+    };
+
+    function getCountAql(filtersMap, exprNodes) {
+      var query = getWhereExpr(filtersMap, exprNodes);
+      return "select count(distinct Participant.id) as \"cprCnt\", " +
+                       "count(distinct Specimen.id) as \"specimenCnt\" " + 
+                " where " + query;
+    }
+
     return {
       initOpsDesc:         initOpsDesc,
 
@@ -249,6 +298,8 @@ angular.module('os.query.util', [])
 
       getOp:               getOp,
 
-      isValidQueryExpr:    isValidQueryExpr
+      isValidQueryExpr:    isValidQueryExpr,
+
+      getCountAql:         getCountAql
     };
   });

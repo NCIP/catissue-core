@@ -903,3 +903,18 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   max-height: 400px;
   overflow: auto;
 }
+
+.os-query-count-po {
+  width: 200px;
+}
+
+.os-query-count-po .btn.btn-success {
+  background: #5cb85c;
+  border-color: #4cae4c;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.os-query-count-po table.table {
+  margin-bottom: 0px;
+}

@@ -267,24 +267,25 @@ public class QueryServiceImpl implements QueryService {
 		
 		try {
 			ExecuteQueryEventOp opDetail = req.getPayload();
-			SessionDataBean sdb = req.getSessionDataBean();
+			User user = AuthUtil.getCurrentUser();
 			boolean countQuery = opDetail.getRunType().equals("Count");
 			
+			
 			Query query = Query.createQuery()
-					.wideRowMode(opDetail.isWideRows() ? WideRowMode.DEEP : WideRowMode.SHALLOW)
+					.wideRowMode(WideRowMode.valueOf(opDetail.getWideRowMode()))
 					.ic(true)
 					.dateFormat(dateFormat)
 					.timeFormat(timeFormat);
 			query.compile(
 					cprForm, 
-					getAqlWithCpIdInSelect(sdb, countQuery, opDetail.getAql()), 
-					getRestriction(sdb, opDetail.getCpId()));
+					getAqlWithCpIdInSelect(user, countQuery, opDetail.getAql()), 
+					getRestriction(user, opDetail.getCpId()));
 			
 			QueryResponse resp = query.getData();
-			insertAuditLog(req, resp);
+			insertAuditLog(user, req, resp);
 			
 			queryResult = resp.getResultData();
-			queryResult.setScreener(new QueryResultScreenerImpl(sdb, countQuery));
+			queryResult.setScreener(new QueryResultScreenerImpl(user, countQuery));
 			
 			Integer[] indices = null;
 			if (opDetail.getIndexOf() != null && !opDetail.getIndexOf().isEmpty()) {
@@ -318,18 +319,18 @@ public class QueryServiceImpl implements QueryService {
 	public ResponseEvent<QueryDataExportResult> exportQueryData(RequestEvent<ExecuteQueryEventOp> req) {
 		try {
 			ExecuteQueryEventOp opDetail = req.getPayload();
-			SessionDataBean sdb = req.getSessionDataBean();
+			User user = AuthUtil.getCurrentUser();
 			boolean countQuery = opDetail.getRunType().equals("Count");
 			
 			
 			Query query = Query.createQuery();
-			query.wideRowMode(opDetail.isWideRows() ? WideRowMode.DEEP : WideRowMode.SHALLOW)
+			query.wideRowMode(WideRowMode.valueOf(opDetail.getWideRowMode()))
 				.ic(true)
 				.dateFormat(dateFormat).timeFormat(timeFormat)
 				.compile(
-						cprForm, 
-						getAqlWithCpIdInSelect(sdb, countQuery, opDetail.getAql()), 
-						getRestriction(sdb, opDetail.getCpId()));
+					cprForm, 
+					getAqlWithCpIdInSelect(user, countQuery, opDetail.getAql()), 
+					getRestriction(user, opDetail.getCpId()));
 			
 			String filename = UUID.randomUUID().toString();
 			boolean completed = exportData(filename, query, req);
@@ -742,6 +743,7 @@ public class QueryServiceImpl implements QueryService {
 	
 	private boolean exportData(final String filename, final Query query, final RequestEvent<ExecuteQueryEventOp> req) 
 	throws ExecutionException, InterruptedException, CancellationException {
+		final User user = AuthUtil.getCurrentUser();
 		Future<Boolean> result = exportThreadPool.submit(new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {				
@@ -750,9 +752,9 @@ public class QueryServiceImpl implements QueryService {
 				
 				Transaction txn = startTxn();
 				QueryResponse resp = exporter.export(
-						path, query, new QueryResultScreenerImpl(req.getSessionDataBean(), false));
+						path, query, new QueryResultScreenerImpl(user, false));
 				try {
-					insertAuditLog(req, resp);
+					insertAuditLog(user, req, resp);
 					sendEmail();
 					txn.commit();
 				} catch (Exception e) {
@@ -787,8 +789,8 @@ public class QueryServiceImpl implements QueryService {
 		}		
 	}
 	
-	private String getRestriction(SessionDataBean sdb, Long cpId) {
-		if (sdb.isAdmin()) {
+	private String getRestriction(User user, Long cpId) {
+		if (user.isAdmin()) {
 			if (cpId != null && cpId != -1) {
 				return cpForm + ".id = " + cpId;
 			}
@@ -834,8 +836,8 @@ public class QueryServiceImpl implements QueryService {
 			.toString();
 	}
 			
-	private String getAqlWithCpIdInSelect(SessionDataBean sdb, boolean isCount, String aql) {
-		if (sdb.isAdmin() || isCount) {
+	private String getAqlWithCpIdInSelect(User user, boolean isCount, String aql) {
+		if (user.isAdmin() || isCount) {
 			return aql;
 		} else {
 			String afterSelect = aql.trim().substring(6);
@@ -868,10 +870,7 @@ public class QueryServiceImpl implements QueryService {
 		return dir;
 	}
 
-	private void insertAuditLog(RequestEvent<ExecuteQueryEventOp> req, QueryResponse resp) {
-		User user = new User();
-		user.setId(req.getSessionDataBean().getUserId());
-
+	private void insertAuditLog(User user, RequestEvent<ExecuteQueryEventOp> req, QueryResponse resp) {
 		QueryAuditLog auditLog = new QueryAuditLog();
 		auditLog.setQueryId(req.getPayload().getSavedQueryId());
 		auditLog.setRunBy(user);
@@ -894,7 +893,7 @@ public class QueryServiceImpl implements QueryService {
 	}
 		
 	private class QueryResultScreenerImpl implements QueryResultScreener {
-		private SessionDataBean sdb;
+		private User user;
 		
 		private boolean countQuery;
 		
@@ -902,14 +901,14 @@ public class QueryServiceImpl implements QueryService {
 		
 		private static final String mask = "##########";
 		
-		public QueryResultScreenerImpl(SessionDataBean sdb, boolean countQuery) {
-			this.sdb = sdb;
+		public QueryResultScreenerImpl(User user, boolean countQuery) {
+			this.user = user;
 			this.countQuery = countQuery;
 		}
 
 		@Override
 		public List<ResultColumn> getScreenedResultColumns(List<ResultColumn> preScreenedResultCols) {
-			if (sdb.isAdmin() || this.countQuery) {
+			if (user.isAdmin() || this.countQuery) {
 				return preScreenedResultCols;
 			}
 			
@@ -920,7 +919,7 @@ public class QueryServiceImpl implements QueryService {
 
 		@Override
 		public Object[] getScreenedRowData(List<ResultColumn> preScreenedResultCols, Object[] rowData) {
-			if (sdb.isAdmin() || this.countQuery || rowData.length == 0) {
+			if (user.isAdmin() || this.countQuery || rowData.length == 0) {
 				return rowData;
 			}
 						
