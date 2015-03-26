@@ -42,7 +42,8 @@
       "select": "Select",
       "unselect": "Unselect",
       "submit": "Submit",
-      "edit": "Edit"
+      "edit": "Edit",
+      "done": "Done"
     }
   },
 
@@ -684,6 +685,14 @@
     "query_saved": "Query '{{title}}' saved",
 
     "edit_filters": "Edit Filters",
+    "define_view": "Define View",
+
+    "select_fields": "Select Fields",
+    
+    "define_view_info": "Please select fields that you wish to view in results table. Drag and drop the fields to reorder the view",
+
+    "enable_wide_rows": "Enable Wide Rows",
+    "no_fields_selected": "No fields selected. Please select at least one field",
 
     "no_queries": "No queries to show",
     "no_queries_selected": "No queries selected. Please select at least one query",
