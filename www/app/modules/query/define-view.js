@@ -15,6 +15,7 @@ angular.module('os.query.defineview', ['os.query.models'])
 
       $scope.wideRowMode = angular.copy(queryCtx.wideRowMode); 
       $scope.reporting = angular.copy(queryCtx.reporting);
+      $scope.pivotTable = (queryCtx.reporting.type == 'crosstab');
       $scope.reportingOpts = [ // TODO: Translate label
         {type: 'none', label: 'None'},
         {type: 'crosstab', label: 'Crosstab'}

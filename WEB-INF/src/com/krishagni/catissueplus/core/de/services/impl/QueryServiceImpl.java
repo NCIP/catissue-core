@@ -227,7 +227,7 @@ public class QueryServiceImpl implements QueryService {
 			existing.update(savedQuery);
 
 			daoFactory.getSavedQueryDao().saveOrUpdate(existing);	
-			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(savedQuery));
+			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(existing));
 		} catch (QueryParserException qpe) {
 			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (IllegalArgumentException iae) {

@@ -59,6 +59,7 @@ angular.module('os.query.addeditfilter', ['os.query.models'])
 
       var ql = $scope.queryLocal;
       ql.currFilter = angular.copy(filter);
+      ql.currFilter.unaryOp = QueryUtil.isUnaryOp(filter.op);
       if (!filter.expr) {
         ql.currFilter.ops = QueryUtil.getAllowedOps(filter.field);
       }

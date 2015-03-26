@@ -153,7 +153,7 @@ angular.module('os.query.results', ['os.query.models'])
     };
 
     $scope.editFilters = function() {
-      $state.go('query-addedit'); //, {queryId: ''});
+      $state.go('query-addedit', {queryId: $scope.queryCtx.id});
     }
 
     $scope.defineView = function() {
