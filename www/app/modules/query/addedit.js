@@ -2,28 +2,12 @@
 angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.query.save'])
   .controller('QueryAddEditCtrl', function(
     $scope, $state, $modal, 
-    cps, query, queryGlobal, Alerts,
+    cps, queryGlobal, queryCtx, Alerts,
     SavedQuery, QueryUtil, QueryExecutor) {
 
     function init() {
       $scope.cps = cps;
-      $scope.query = query;
-
-      $scope.queryLocal = queryGlobal.queryCtx || {
-        currentFilter: {},
-        id: query.id,
-        title: query.title,
-        filters: [],
-        filtersMap: {},
-        exprNodes: [],
-        filterId: 0,
-        selectedFields: QueryUtil.getDefSelectedFields(),
-        reporting: {type: 'none', params: {}},
-        selectedCp: getCp(query.cpId || -1),
-        isValid: true,
-        drivingForm: 'Participant',
-        wideRowMode: 'DEEP'
-      };
+      $scope.queryLocal = queryCtx;
       queryGlobal.queryCtx = $scope.queryLocal;
 
       loadCpForms($scope.queryLocal.selectedCp);
@@ -32,18 +16,6 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.quer
 
     function loadCpForms(cp) {
       queryGlobal.loadCpForms(cp);
-    }
-
-    function getCp(cpId) {
-      var cp = undefined;
-      for (var i = 0; i < cps.length; ++i) {
-        if (cps[i].id == cpId) {
-          cp = cps[i];
-          break;
-        }
-      }
-
-      return cp;
     }
 
     $scope.loadCpForms = function() {
@@ -61,13 +33,7 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.quer
 
       ql.openForm = form;
       ql.currFilter = {form: form};
-      form.getFields().then(
-        function(fields) {
-          form.staticFields = QueryUtil.flattenStaticFields("", fields);
-          form.extnForms = QueryUtil.getExtnForms("", fields);
-          form.extnFields = QueryUtil.flattenExtnFields(form.extnForms);
-        }
-      );
+      form.getFields();
     }
 
     $scope.onFieldSelect = function(field) {
@@ -127,7 +93,7 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.quer
     }
 
     $scope.viewResults = function() {
-      $state.go('query-results', {queryId: query.id});
+      $state.go('query-results', {queryId: $scope.queryLocal.id});
     }
 
     init();

@@ -7,11 +7,11 @@
     </ul>
 
     <h3> 
-      <span ng-if="!query.id" translate="queries.new_query">
+      <span ng-if="!queryCtx.id" translate="queries.new_query">
         New Query
       </span>
-      <span ng-if="!!query.id">
-        {{query.title}}
+      <span ng-if="!!queryCtx.id">
+        {{queryCtx.title}}
       </span>
     </h3>
     <div class="os-btns right">

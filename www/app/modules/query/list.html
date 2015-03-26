@@ -92,7 +92,7 @@
               <os-checkbox ng-change="toggleQuerySelect(query)" ng-model="query.selected"></os-checkbox>
             </div>
             <div class="pull-left" style="padding-left: 12px;">
-              <a title="{{'queries.tooltip.view_records' | translate}}">
+              <a ui-sref="query-results({queryId: query.id})" title="{{'queries.tooltip.view_records' | translate}}">
                 #{{query.id}} {{query.title}}
               </a>
             </div>

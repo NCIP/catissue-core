@@ -40,6 +40,27 @@ angular.module('os.query.util', [])
       );
     }
 
+    var getOp = function(fn) {
+      var result = undefined;
+      for (var k in ops) {
+        if (fn(ops[k])) {
+          result = ops[k];
+          break;
+        }
+      }
+
+      return result;
+    };
+
+    var getOpBySymbol = function(symbol) {
+      return getOp(function(op) { return op.symbol == symbol });
+    };
+      
+    var getOpByModel = function(model) {
+      return getOp(function(op) { return op.model == model });
+    };
+
+
     function getAllowedOps(field) {
       var result = null;
       if (field.type == "STRING") {
@@ -432,6 +453,35 @@ angular.module('os.query.util', [])
       return index;
     }
 
+    function getUiFilter(selectedCp, filterDef) {
+      if (filterDef.expr) {
+        return filterDef;
+      }
+
+      var fieldName = filterDef.field;
+      var dotIdx = fieldName.indexOf(".");
+      var formName = fieldName.substr(0, dotIdx);
+
+      var op = getOpByModel(filterDef.op);
+      var value = undefined;
+      if (op.name == 'exists' || op.name == 'not_exists') {
+        value = undefined;
+      } else if (op.name != 'qin' && op.name != 'not_in' && op.name != 'between') {
+        value = filterDef.values[0];
+      } else {
+        value = filterDef.values;
+      }
+
+      return {
+        id: filterDef.id,
+        op: getOpByModel(filterDef.op),
+        value: value,
+        form: getForm(selectedCp, formName),
+        fieldName: fieldName.substr(dotIdx + 1),
+        parameterized: filterDef.parameterized
+      };
+    };
+
     return {
       initOpsDesc:         initOpsDesc,
 
@@ -459,6 +509,10 @@ angular.module('os.query.util', [])
 
       getFieldsAdvise:     getFieldsAdvise,
 
-      getOpIdx:            getOpIdx
+      getOpIdx:            getOpIdx,
+
+      getOpByModel:        getOpByModel,
+
+      getUiFilter:         getUiFilter
     };
   });

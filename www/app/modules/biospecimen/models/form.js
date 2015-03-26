@@ -87,7 +87,23 @@ angular.module('os.biospecimen.models.form', ['os.common.models'])
       }
 
       return d.promise;
-    };
+    }
+
+    Form.prototype.getField = function(fieldName) {
+      for (var i = 0; i < this.staticFields.length; ++i) {
+        if (fieldName == this.staticFields[i].name) {
+          return this.staticFields[i];
+        }
+      }
+
+      for (var i = 0; i < this.extnFields.length; ++i) {
+        if (fieldName == this.extnFields[i].name) {
+          return this.extnFields[i];
+        }
+      }
+ 
+      return undefined;
+    }
 
     function createRecordsList(formsRecords) {
       var recordsList = [];

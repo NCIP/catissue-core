@@ -1,8 +1,8 @@
 
 angular.module('os.query.results', ['os.query.models'])
-  .controller('QueryResultsCtrl', function($scope, $state, $modal, queryGlobal, QueryUtil, QueryExecutor, Alerts) {
+  .controller('QueryResultsCtrl', function($scope, $state, $modal, queryCtx, QueryUtil, QueryExecutor, Alerts) {
     function init() {
-      $scope.queryCtx = queryGlobal.queryCtx;
+      $scope.queryCtx = queryCtx;
       $scope.selectedRows = [];
 
       $scope.resultsCtx = {

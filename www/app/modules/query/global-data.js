@@ -1,6 +1,6 @@
 
 angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models'])
-  .factory('QueryGlobalData', function($translate, $q, CollectionProtocol, Form) {
+  .factory('QueryGlobalData', function($translate, $q, CollectionProtocol, Form, SavedQuery, QueryUtil) {
     var QueryGlobalData = function() {
       this.cpsQ = undefined;
       this.cpList = undefined;
@@ -49,6 +49,153 @@ angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models
       }  
     
       return d.promise;
+    }
+
+    QueryGlobalData.prototype.newQueryCtx = function(savedQuery) {
+      savedQuery = savedQuery || {};
+      this.queryCtx = {
+        currentFilter: {},
+        id: savedQuery.id,
+        title: savedQuery.title,
+        filters: [],
+        filtersMap: {},
+        exprNodes: [],
+        filterId: 0,
+        selectedFields: savedQuery.selectList || QueryUtil.getDefSelectedFields(),
+        reporting: savedQuery.reporting || {type: 'none', params: {}},
+        selectedCp: {id: savedQuery.cpId},
+        isValid: true,
+        drivingForm: 'Participant',
+        wideRowMode: savedQuery.wideRowMode || 'DEEP'
+      };
+
+
+      return this.queryCtx;
+    }
+
+    QueryGlobalData.prototype.clearQueryCtx = function() {
+      this.queryCtx = undefined;
+    }
+
+    QueryGlobalData.prototype.getQueryCtx = function(queryId) {
+      if (this.queryCtx) {
+        return this.queryCtx;
+      }
+
+      if (!queryId) {
+        return this.newQueryCtx();
+      }
+
+      var that = this;
+      return SavedQuery.getById(queryId).then(
+        function(savedQuery) {
+          return createQueryCtx(that, savedQuery);
+        }
+      );
+    };
+
+    function createQueryCtx(queryGlobal, savedQuery) {
+      var queryCtx = queryGlobal.newQueryCtx(savedQuery);
+      return queryGlobal.getCps().then(
+        function(cps) {
+          var selectedCp = queryCtx.selectedCp = getCp(cps, savedQuery.cpId || -1);
+          if (!selectedCp) {
+            return undefined;
+          }
+         
+          var promise = queryGlobal.loadCpForms(selectedCp).then(
+            function(forms) {
+              recreateUiFilters(queryCtx, savedQuery.filters);
+              recreateUiExprNodes(queryCtx, savedQuery.queryExpression);
+              return $q.all(loadFormFieldsNeededForFilters(queryCtx.filters));
+            }
+          );
+
+          return promise.then(
+            function() {
+              fleshOutFilterFields(queryCtx);
+              return queryCtx;
+            }
+          )
+        }
+      );
+    }
+        
+    function getCp(cps, cpId) {
+      for (var i = 0; i < cps.length; ++i) {
+        if (cps[i].id == cpId) {
+          return cps[i];
+        }
+      }
+
+      return null;
+    }
+
+    function recreateUiFilters(queryCtx, filters) {
+      var uiFilters = queryCtx.filters = []; 
+      var filtersMap = queryCtx.filtersMap = {};
+      var filterId = 0;
+
+      angular.forEach(filters, function(filter) {
+        var uiFilter = QueryUtil.getUiFilter(queryCtx.selectedCp, filter);
+        uiFilters.push(uiFilter);
+        filtersMap[uiFilter.id] = uiFilter;
+
+        if (filterId < uiFilter.id) {
+          filterId = uiFilter.id;
+        }
+      });
+
+      queryCtx.filterId = filterId;
+    }
+
+    function recreateUiExprNodes(queryCtx, queryExpressions) {
+      var exprNodes = queryCtx.exprNodes = [];
+      angular.forEach(queryExpressions, function(expr) {
+        if (expr.nodeType == 'FILTER') {
+          exprNodes.push({type: 'filter', value: expr.value});
+        } else if (expr.nodeType == 'OPERATOR') {
+          exprNodes.push({type: 'op', value: QueryUtil.getOpByModel(expr.value).name});
+        } else if (expr.nodeType == 'PARENTHESIS') {
+          exprNodes.push({type: 'paren', value: expr.value == 'LEFT' ? '(' : ')'});
+        }
+      });
+
+      return exprNodes;
+    }
+
+    function loadFormFieldsNeededForFilters(filters) {
+      var promises = [];
+      var loadedForms = {};
+      angular.forEach(filters, function(filter) {
+        if (filter.expr) {
+          return;
+        }
+
+        var form = filter.form;
+        if (!loadedForms[form.name]) {
+          promises.push(form.getFields());
+          loadedForms[form.name] = true;
+        }
+      });
+
+      return promises;
+    }
+
+    function fleshOutFilterFields(queryCtx) {
+      for (var i = 0; i < queryCtx.filters.length; ++i) {
+        var filter = queryCtx.filters[i];
+        if (filter.expr) {
+          continue;
+        }
+                  
+        filter.field = filter.form.getField(filter.fieldName);
+        if (!filter.field) {
+          return undefined;
+        }
+                
+        //$scope.disableCpSelection();
+      }
     }
 
     return QueryGlobalData;

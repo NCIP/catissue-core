@@ -47,21 +47,20 @@ angular.module('os.query',
          cps: function(queryGlobal) {
            return queryGlobal.getCps();
          },
-         query: function($stateParams, SavedQuery) {
-           if (!!$stateParams.queryId) {
-             return SavedQuery.getById($stateParams.queryId);
-           }
-
-           return new SavedQuery();
+         queryCtx: function($stateParams, queryGlobal) {
+           return queryGlobal.getQueryCtx($stateParams.queryId);        
          }
        },
        parent: 'query-root'
      })  
      .state('query-results', {
-       url: '/results?querId',
+       url: '/results?queryId',
        templateUrl: 'modules/query/results.html',
        controller: 'QueryResultsCtrl',
        resolve: {
+         queryCtx: function($stateParams, queryGlobal) {
+           return queryGlobal.getQueryCtx($stateParams.queryId);
+         }
        },
        parent: 'query-root'
      })

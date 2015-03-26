@@ -16,6 +16,7 @@ angular.module('openspecimen', [
   'ui.keypress', 
   'ui.select',
   'ui.sortable',
+  'ui.autocomplete',
   'mgcrea.ngStrap.popover',
   'angular-loading-bar',
   'pascalprecht.translate'])

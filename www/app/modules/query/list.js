@@ -13,7 +13,7 @@ angular.module('os.query.list', ['os.query.models'])
         sharedFolders: []
       };
 
-      queryGlobal.queryCtx = undefined;
+      queryGlobal.clearQueryCtx();
       loadAllQueries();
       loadAllFolders();
     };
