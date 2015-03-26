@@ -909,7 +909,7 @@
     
   <changeSet author="vgaikwad" id="Operations table sequence" dbms="oracle">
     <createSequence 
-      sequenceName="RBAC_OPERATION_SEQ" 
+      sequenceName="RBAC_OPERATIONS_SEQ" 
       startValue="1" 
       incrementBy="1" 
       ordered="true"/>
