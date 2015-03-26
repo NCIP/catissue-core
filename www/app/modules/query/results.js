@@ -1,6 +1,6 @@
 
 angular.module('os.query.results', ['os.query.models'])
-  .controller('QueryResultsCtrl', function($scope, queryGlobal, QueryUtil, QueryExecutor, Alerts) {
+  .controller('QueryResultsCtrl', function($scope, $state, queryGlobal, QueryUtil, QueryExecutor, Alerts) {
     function init() {
       $scope.queryCtx = queryGlobal.queryCtx;
       $scope.selectedRows = [];
@@ -137,6 +137,10 @@ angular.module('os.query.results', ['os.query.models'])
       scope: undefined,
       grid: undefined
     };
+
+    $scope.editFilters = function() {
+      $state.go('query-addedit'); //, {queryId: ''});
+    }
 
     $scope.downloadResults = function() {
       var qc = $scope.queryCtx;
