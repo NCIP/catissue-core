@@ -24,11 +24,11 @@
         </div>
       </os-wizard-step>
 
-      <!-- os-wizard-step on-finish="preparePivotTableOpts" title="Aggregates">
+      <os-wizard-step on-finish="preparePivotTableOpts" title="{{'queries.aggregates' | translate}}">
         <div ng-include="'aggregate-functions.html'"></div>
       </os-wizard-step>
 
-      <os-wizard-step title="Pivot Table">
+      <!-- os-wizard-step title="Pivot Table">
         <div ng-include="'pivot-table.html'"></div>
       </os-wizard-step -->
 
@@ -53,21 +53,21 @@
 </div>
 
 <script type="text/ng-template" id="aggregate-functions.html">
-  <div style="margin-top: 20px;">
+  <div class="os-query-dv-aggregates"> 
     <div class="row">
       <div class="col-xs-6">
-        <label>Selected Fields</label>
+        <label translate="queries.selected_fields">Selected Fields</label>
       </div>
 
       <div class="col-xs-6">
-        <label>Functions</label>
+        <label translate="queries.agg_fns">Functions</label>
       </div> 
     </div>
                
     <div class="row">
       <div class="col-xs-6" style="height: 340px;">
-        <div class="list-group ka-list-box">
-          <a class="list-group-item ellipsis" 
+        <div class="list-group">
+          <a class="list-group-item os-ellipsis" 
             ng-class="{'active': currField.name == selectedField.name}"
             ng-repeat="selectedField in selectedFields"
             ng-click="showCurrField(selectedField)"
@@ -76,13 +76,17 @@
             <span class="badge">
               {{(selectedField.aggFns | filter:{opted: true}).length}}
             </span>
-            <span> {{selectedField.form}}: {{selectedField.label}} </span>
+            <span> 
+              {{selectedField.form}}: {{selectedField.label}} 
+            </span>
           </a>
         </div>
       </div>
 
       <div class="col-xs-6" ng-if="!currField.name">
-        <span>Select field in list on the left side panel</span>
+        <span translate="queries.select_field_in_left_panel">
+          Select field in list on the left side panel
+        </span>
       </div>
 
       <div class="col-xs-6" ng-if="currField.name">
@@ -93,7 +97,7 @@
                 ng-model="fn.opted" 
                 ng-checked="fn.opted"
                 ng-change="toggleAggFn(currField, fn)"> 
-                {{fn.label}}
+              {{fn.label}}
             </label>
           </div>
           <div class="col-xs-9" ng-if="fn.opted">

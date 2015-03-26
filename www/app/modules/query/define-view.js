@@ -1,5 +1,5 @@
 angular.module('os.query.defineview', ['os.query.models']) 
-  .controller('DefineViewCtrl', function($scope, $modalInstance, $q, queryCtx, Alerts) {
+  .controller('DefineViewCtrl', function($scope, $modalInstance, $q, queryCtx, $translate, Alerts) {
     var aggFns = { // TODO: Translate labels
       count: {name: 'count', label: 'Count'},
       sum:   {name: 'sum',   label: 'Sum'},
@@ -11,6 +11,8 @@ angular.module('os.query.defineview', ['os.query.models'])
     var forms = undefined;
 
     function init() {
+      initAggFnsDesc();
+
       $scope.wideRowMode = angular.copy(queryCtx.wideRowMode); 
       $scope.reporting = angular.copy(queryCtx.reporting);
       $scope.reportingOpts = [ // TODO: Translate label
@@ -23,9 +25,22 @@ angular.module('os.query.defineview', ['os.query.models'])
       selectFields(getSelectedFieldsMap(), forms);
     }
 
+    function initAggFnsDesc() {
+      $translate('queries.list').then(
+        function() {
+          angular.forEach(aggFns, function(aggFn) {
+            aggFn.label = $translate.instant('queries.agg_fn_labels.' + aggFn.name);
+          });
+        }
+      );
+    }
+
     $scope.ok = function() {
-      var selectedFields = getSelectedFields(forms);
-      if (!selectedFields || selectedFields.length == 0) {
+      if (!$scope.selectedFields || $scope.selectedFields.length == 0) {
+        $scope.selectedFields = getSelectedFields(forms);
+      }
+
+      if (!$scope.selectedFields || $scope.selectedFields.length == 0) {
         Alerts.error('queries.no_fields_selected');
         return;
       }
@@ -48,10 +63,10 @@ angular.module('os.query.defineview', ['os.query.models'])
         }
       }
 
-      sanitizeSelectedFields(selectedFields);
+      sanitizeSelectedFields($scope.selectedFields);
       $modalInstance.close(angular.extend(queryCtx, {
          wideRowMode: $scope.wideRowMode, 
-         selectedFields: selectedFields, 
+         selectedFields: $scope.selectedFields, 
          reporting: $scope.reporting
         })
       );

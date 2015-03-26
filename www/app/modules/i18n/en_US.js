@@ -688,11 +688,16 @@
     "define_view": "Define View",
 
     "select_fields": "Select Fields",
+    "aggregates": "Aggregates",
     
     "define_view_info": "Please select fields that you wish to view in results table. Drag and drop the fields to reorder the view",
 
     "enable_wide_rows": "Enable Wide Rows",
     "no_fields_selected": "No fields selected. Please select at least one field",
+
+    "selected_fields": "Selected Fields",
+    "agg_fns": "Aggregate Functions",
+    "select_field_in_left_panel": "Select field in list on the left side panel",
 
     "no_queries": "No queries to show",
     "no_queries_selected": "No queries selected. Please select at least one query",
@@ -724,6 +729,14 @@
       "not": "Not",
       "nthchild": "Any Child",
       "between": "Between"
+    },
+
+    "agg_fn_labels": {
+      "count": "Count",
+      "sum": "Sum",
+      "min": "Minimum",
+      "max": "Maximum",
+      "avg": "Average"
     },
 
     "tooltip": {
