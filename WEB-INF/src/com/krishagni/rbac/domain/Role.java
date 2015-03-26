@@ -3,7 +3,7 @@ package com.krishagni.rbac.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.Session;
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
 
 public class Role {
 	private Long id;
@@ -66,44 +66,30 @@ public class Role {
 		this.childRoles = childRoles;
 	}
 
-	public void updateRole(Role newRole, Session session) {
-		setName(newRole.getName());
-		setDescription(newRole.getDescription());
-		setParentRole(newRole.getParentRole());
-		
-		for (Role childRole : newRole.getChildRoles()) {
-			childRole.setParentRole(this);
-		}
-		setChildRoles(newRole.getChildRoles());
-		updateAcl(newRole.getAcl(), session);
+	public void updateRole(Role other) {
+		setName(other.getName());
+		setDescription(other.getDescription());
+		setParentRole(other.getParentRole());
+		updateChildRoles(other);
+		updateAcl(other);
 	}
 	
-	private void updateAcl(Set<RoleAccessControl> newAcl, Session session) {
-		acl.clear();
-		session.flush();
-		acl.addAll(newAcl);
-		
-		for (RoleAccessControl rac : acl) {
-			rac.setRole(this);
+	public boolean isDescendentOf(Role other) {
+		if (id == null || other.getId() == null) {
+			return false;
 		}
+
+		Role role = this;
+		while (role != null) {
+			if (other.getId().equals(role.getId())) {
+				return true;
+			}
+
+			role = role.getParentRole();
+		}
+
+		return false;
 	}
-	
-    public boolean isDescendentOf(Role other) {
-        if (id == null || other.getId() == null) {
-                return false;
-        }
-
-        Role role = this;
-        while (role != null) {
-                if (other.getId().equals(role.getId())) {
-                        return true;
-                }
-
-                role = role.getParentRole();
-        }
-
-        return false;
-    }
 
 	
 	@Override
@@ -132,5 +118,24 @@ public class Role {
 		
 		return false;
 	}
-		
+	
+	private void updateChildRoles(Role other) {
+		for (Role child : this.getChildRoles()) {
+			if (!other.getChildRoles().contains(child)) {
+				child.setParentRole(null);
+			}
+		}
+
+		CollectionUpdater.update(getChildRoles(), other.getChildRoles());
+		for (Role childRole: getChildRoles()) {
+			childRole.setParentRole(this);
+		}
+	}
+	
+	private void updateAcl(Role other) {
+		CollectionUpdater.update(getAcl(), other.getAcl());
+		for (RoleAccessControl rac : getAcl()) {
+			rac.setRole(this);
+		}
+	}
 }

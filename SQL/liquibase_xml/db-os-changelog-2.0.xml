@@ -305,7 +305,7 @@
       </column>
     </createTable>
   </changeSet>
-  
+   
   <changeSet author="vgaikwad" id="Add FK to institute id">
     <addForeignKeyConstraint
       constraintName="FK_OS_DEPT_INSTITUTE_ID"
@@ -369,7 +369,7 @@
       columnName="INSTITUTION_ID"
       tableName="CATISSUE_USER"/>
   </changeSet>
-
+ 
   <changeSet author="vlonushte" id="OS auth domains table">
     <createTable tableName="OS_AUTH_DOMAINS">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
@@ -906,7 +906,23 @@
      
     </createTable>
   </changeSet>
-
+    
+  <changeSet author="vgaikwad" id="Operations table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="RBAC_OPERATIONS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Resources table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="RBAC_RESOURCES_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+  
   <changeSet author="mibrahim" id="create permissions table for rbac" failOnError="true">
     <createTable tableName="RBAC_PERMISSIONS">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">

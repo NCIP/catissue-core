@@ -1,13 +1,10 @@
-.os-permissions {
-  float: left;
-  margin-right: 5px;
-}
-
 .os-permissions .os-status {
   font-weight: bold;
   color: white;
   background: #ab9364;
   padding: 3px 5px;
+  float: left;
+  margin-right: 5px;
 }
 
 .os-permissions-checkbox {

@@ -21,7 +21,7 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
       setSitePvs();
 
       $scope.roles = [];
-      Role.list().then(
+      Role.query().then(
         function(roleList) {
           angular.forEach(roleList, function(role) {
             $scope.roles.push(role.name);

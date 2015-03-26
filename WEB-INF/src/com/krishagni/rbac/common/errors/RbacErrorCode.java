@@ -20,6 +20,8 @@ public enum RbacErrorCode implements ErrorCode {
 	
 	ROLE_NOT_FOUND, 
 	
+	DUP_ROLE_NAME,
+	
 	SUBJECT_ID_REQUIRED, 
 	
 	INSUFFICIENT_USER_DETAILS, 
