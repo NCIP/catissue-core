@@ -28,9 +28,9 @@
         <div ng-include="'aggregate-functions.html'"></div>
       </os-wizard-step>
 
-      <!-- os-wizard-step title="Pivot Table">
+      <os-wizard-step title="{{'queries.pivot_table' | translate}}">
         <div ng-include="'pivot-table.html'"></div>
-      </os-wizard-step -->
+      </os-wizard-step>
 
       <div class="os-modal-footer">
         <button class="btn os-btn-text" ng-click="cancel()" translate="common.buttons.cancel">
@@ -110,41 +110,44 @@
 </script>
 
 <script type="text/ng-template" id="pivot-table.html">
-  <div style="margin-top: 10px; height: 380px; overflow: auto">
+  <div class="os-query-dv-pivot-table">
     <div class="form-group">
       <label class="checkbox-inline">
         <input type="checkbox" ng-model="pivotTable" 
           ng-checked="reporting.type == 'crosstab'" ng-change="createPivotTable(pivotTable)"> 
-          Create Pivot Table
+        <span translate="queries.create_pivot_table">Create Pivot Table</span>
       </label>
     </div>
 
     <div ng-if="reporting.type == 'crosstab'">
       <div class="form-group">
-        <label for="group-rows-by">Row Fields</label>
+        <label for="group-rows-by" translate="queries.row_fields">Row Fields</label>
         <os-select id="group-rows-by"
-          placeholder="Select fields to use for grouping rows"
+          placeholder="{{'queries.select_row_group_fields' | translate}}"
           list="groupRowsBy"
+          display-prop="value"
           on-change="onGroupRowsByChange"
           multiple ng-model="reporting.params.groupRowsBy">
         </os-select>
       </div>
 
       <div class="form-group">
-        <label for="group-col-by">Column Field</label>
+        <label for="group-col-by" translate="queries.column_field">Column Field</label>
         <os-select id="group-col-by"
-          placeholder="Select field to use for grouping columns"
+          placeholder="{{'queries.select_col_group_field' | translate}}"
           list="groupColBy"
+          display-prop="value"
           on-change="onGroupColByChange"
           ng-model="reporting.params.groupColBy">
         </os-select>
       </div>
 
       <div class="form-group">
-        <label for="summary-value">Value Field</label>
+        <label for="summary-value" translate="queries.value_fields">Value Fields</label>
         <os-select id="summary-value"
-          placeholder="Select summary field"
+          placeholder="{{'queries.select_summary_fields' | translate}}"
           list="summaryFields"
+          display-prop="value"
           on-change="onSummaryFieldChange"
           multiple ng-model="reporting.params.summaryFields">
         </os-select>
@@ -154,7 +157,9 @@
         <label class="checkbox-inline">
           <input type="checkbox" ng-model="reporting.params.includeSubTotals" 
             ng-checked="reporting.params.includeSubTotals">
-          Include sub-totals
+          <span translate="queries.include_sub_totals">
+            Include sub-totals
+          </span>
         </label>
       </div>
     </div>

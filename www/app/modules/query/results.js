@@ -41,7 +41,7 @@ angular.module('os.query.results', ['os.query.models'])
         function(result) {
           $scope.resultsCtx.waitingForRecords = false;
           if (qc.reporting.type == 'crosstab') {
-            // showPivotTable(result);
+            preparePivotTable(result);
           } else {
             prepareDataGrid(result);
           }
@@ -62,6 +62,20 @@ angular.module('os.query.results', ['os.query.models'])
         qc.exprNodes, 
         qc.reporting);
     }
+
+    function preparePivotTable(result) {
+      $scope.resultsCtx.rows = result.rows;
+      $scope.resultsCtx.columnLabels = result.columnLabels;
+
+      $scope.resultsCtx.pivotTableOpts = {
+        height: '500px',
+        width: '1200px',
+        colHeaders: $scope.resultsCtx.columnLabels,
+        numGrpCols: $scope.queryCtx.reporting.params.groupRowsBy.length,
+        multipleVal: $scope.queryCtx.reporting.params.summaryFields.length > 1,
+        data: $scope.resultsCtx.rows
+      };
+    };
 
     function prepareDataGrid(result) {
       var idx = -1;
@@ -150,7 +164,8 @@ angular.module('os.query.results', ['os.query.models'])
           queryCtx: function() {
             return $scope.queryCtx;
           }
-        }
+        },
+        size: 'lg'
       });
 
       mi.result.then(

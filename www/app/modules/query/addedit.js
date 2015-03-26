@@ -18,7 +18,7 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.quer
         exprNodes: [],
         filterId: 0,
         selectedFields: QueryUtil.getDefSelectedFields(),
-        reporting: {type: 'none'},
+        reporting: {type: 'none', params: {}},
         selectedCp: getCp(query.cpId || -1),
         isValid: true,
         drivingForm: 'Participant',

@@ -290,6 +290,35 @@ angular.module('os.query.defineview', ['os.query.models'])
       return getGroupFields(reportFields, excludeFields);
     };
 
+    function getPivotTabFields(selectedFields, fresh) {
+      var reportFields = [];
+
+      for (var i = 0; i < selectedFields.length; ++i) {
+        var field = selectedFields[i];
+        var isAgg = false;
+        var len = field.aggFns ? field.aggFns.length : 0;
+ 
+        for (var j = 0; j < len; ++j) {
+          var aggFn = field.aggFns[j];
+          if (fresh || aggFn.opted) {
+            reportFields.push({
+              id: field.name + '$' + aggFn.name,
+              name: field.name,
+              value: aggFn.desc,
+              aggFn: aggFn.name
+            });
+            isAgg = true;
+          }
+        }
+
+        if (!isAgg) {
+          reportFields.push({id: field.name, name:  field.name, value: field.form + ": " + field.label});
+        }
+      }
+
+      return reportFields;
+    };
+
     function preparePivotTabFields(reportFields) {
       $scope.groupRowsBy = getGroupRowsBy(reportFields);       
       $scope.groupColBy = getGroupColBy(reportFields);       

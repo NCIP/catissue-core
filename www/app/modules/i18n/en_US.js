@@ -689,6 +689,7 @@
 
     "select_fields": "Select Fields",
     "aggregates": "Aggregates",
+    "pivot_table": "Pivot Table",
     
     "define_view_info": "Please select fields that you wish to view in results table. Drag and drop the fields to reorder the view",
 
@@ -698,6 +699,15 @@
     "selected_fields": "Selected Fields",
     "agg_fns": "Aggregate Functions",
     "select_field_in_left_panel": "Select field in list on the left side panel",
+
+    "create_pivot_table": "Create Pivot Table",
+    "row_fields": "Row Fields",
+    "select_row_group_fields": "Select fields to use for grouping rows",
+    "column_field": "Column Field",
+    "select_col_group_field": "Select field to use for grouping columns",
+    "value_fields": "Value Fields",
+    "select_summary_fields": "Select summary fields",
+    "include_sub_totals": "Include Sub Totals",
 
     "no_queries": "No queries to show",
     "no_queries_selected": "No queries selected. Please select at least one query",

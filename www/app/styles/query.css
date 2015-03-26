@@ -313,3 +313,9 @@
   max-height: 100%;
   overflow: auto;
 }
+
+.os-query-dv-pivot-table {
+  margin-top: 10px; 
+  height: 380px; 
+  overflow: auto;
+}
