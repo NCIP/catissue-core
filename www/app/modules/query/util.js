@@ -40,7 +40,7 @@ angular.module('os.query.util', [])
       );
     }
 
-    var getOp = function(fn) {
+    var searchOp = function(fn) {
       var result = undefined;
       for (var k in ops) {
         if (fn(ops[k])) {
@@ -53,11 +53,11 @@ angular.module('os.query.util', [])
     };
 
     var getOpBySymbol = function(symbol) {
-      return getOp(function(op) { return op.symbol == symbol });
+      return searchOp(function(op) { return op.symbol == symbol });
     };
       
     var getOpByModel = function(model) {
-      return getOp(function(op) { return op.model == model });
+      return searchOp(function(op) { return op.model == model });
     };
 
 
