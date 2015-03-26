@@ -35,11 +35,8 @@
             <span class="fa fa-pencil"></span>
           </button>
           <button class="btn btn-default" ng-click="displayFilter(filter)" ng-if="filter.expr"
-            info-link="https://catissueplus.atlassian.net/wiki/x/O4BLAQ"
-            popover-placement="left" 
-            popover-append-to-body="true"
-            popover-title="Edit Filter"
-            ka-popover-template="temporal-filter-popover-tmpl.html">
+            title="{{'queries.edit_filter' | translate}}" data-placement="left" data-container="body"
+            content-template="modules/query/addedit-temporal-filter.html" bs-popover>
             <span class="fa fa-pencil"></span>
           </button>
           <button class="btn btn-default" ng-click="deleteFilter(filter)">

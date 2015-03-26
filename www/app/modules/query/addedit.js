@@ -80,6 +80,11 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.quer
       };
     }
 
+    $scope.onTemporalFilterSelect = function() { 
+      QueryUtil.hidePopovers();
+      $scope.queryLocal.currFilter = { };
+    }
+
     $scope.saveQuery = function() {
       var mi = $modal.open({
         templateUrl: 'modules/query/save.html',

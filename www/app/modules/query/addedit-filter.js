@@ -17,7 +17,7 @@ angular.module('os.query.addeditfilter', ['os.query.models'])
 
     $scope.disableAddEditFilterBtn = function() {
       var filter = $scope.queryLocal.currFilter;
-      if (filter.expr && filter.desc) {
+      if (!!filter.expr && !!filter.desc) {
         return false;
       } else if (filter.field && filter.op) {
         var op = filter.op.name;
@@ -143,5 +143,67 @@ angular.module('os.query.addeditfilter', ['os.query.models'])
 
       //$scope.disableCpSelection();
     };
+ 
+    $scope.handleAutocompleteKeyDown = function(event) {
+      if (event.keyCode === $.ui.keyCode.TAB && 
+          angular.element(event.target).data("ui-autocomplete").menu.active) {
+        event.preventDefault();
+      }
+    };
+
+    $scope.temporalFilterOpts = {
+      options: {
+        source: function(request, response) {
+          var ql = $scope.queryLocal;
+          var term = request.term.replace(/\s+/g, '');
+          var srchTerm = term.substr(QueryUtil.getOpIdx(term) + 1);
+          var dotIdx = srchTerm.indexOf(".");
+          if (dotIdx == -1) {
+            var formsAndFn = QueryUtil.getFormsAndFnAdvise(ql.selectedCp);
+            response($scope.temporalFilterOpts.methods.filter(formsAndFn, srchTerm));
+          } else {
+            var formName = srchTerm.substr(0, dotIdx);
+            var fieldName = srchTerm.substr(dotIdx + 1).replace(/\s+/g, '');
+            var form = QueryUtil.getForm(ql.selectedCp, formName);
+            form.getFields().then(
+              function() {
+                var fieldsAdvise = QueryUtil.getFieldsAdvise(form);
+                response($scope.temporalFilterOpts.methods.filter(fieldsAdvise, fieldName));
+              }
+            );
+          }
+        },
+
+        focus: function(event, ui) {
+          event.preventDefault();
+          return false;
+        },
+
+        select: function(event, ui) {
+          var cf = $scope.queryLocal.currFilter;
+          var expr = cf.expr;
+          var opIdx = QueryUtil.getOpIdx(expr);
+          var dotIdx = expr.lastIndexOf('.');
+          if (opIdx == -1) {
+            if (dotIdx == -1) {
+              cf.expr = ui.item.value;
+            } else {
+              cf.expr = expr.substr(0, dotIdx + 1) + ui.item.value;
+            }
+          } else {
+            if (dotIdx < opIdx) {
+              cf.expr = expr.substr(0, opIdx + 1) + ' ' + ui.item.value;
+            } else {
+              cf.expr = expr.substr(0, dotIdx + 1) + ui.item.value;
+            }
+          }
+             
+          ui.item.value = cf.expr;
+          return false;
+        }
+      },
+
+      methods: {}
+    }
   }
 );

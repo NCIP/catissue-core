@@ -62,11 +62,10 @@
             <div class="pull-right" title="Click to add temporal filter">
               <button type="button" class="btn btn-default btn-xs"
                 ng-click="onTemporalFilterSelect()"
-                info-link="https://catissueplus.atlassian.net/wiki/x/O4BLAQ"
-                popover-title="Add Temporal Filter"
-                popover-placement="bottom"
-                popover-append-to-body="true"
-                ka-popover-template="temporal-filter-popover-tmpl.html">
+                title="{{'queries.add_filter' | translate}}"
+                data-placement="right" 
+                data-container="body"
+                content-template="modules/query/addedit-temporal-filter.html" bs-popover>
                 <span class="glyphicon glyphicon-time"></span>
               </button>
             </div>

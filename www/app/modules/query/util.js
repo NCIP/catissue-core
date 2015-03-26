@@ -23,10 +23,10 @@ angular.module('os.query.util', [])
       between:     {name: 'between',    desc: "", code: '&#xf1e0;',    symbol: 'between',     model: 'BETWEEN'}
     };
 
-    var opsInit = false;
+    var init = false;
 
     function initOpsDesc() {
-      if (opsInit) {
+      if (init) {
         return;
       }
 
@@ -35,82 +35,10 @@ angular.module('os.query.util', [])
           angular.forEach(ops, function(op) {
             op.desc = $translate.instant('queries.ops.' + op.name);
           });
-          opsInit = true;
+          init = true;
         }
       );
     }
-
-    function flattenFields(fqn, fields) {
-      var result = [];
-      angular.forEach(fields, function(field) {
-        if (field.type == 'SUBFORM') {
-          result = result.concat(flattenFields(fqn + field.name + '.', field.subFields));
-        } else {
-          var f = angular.extend({}, field);
-          f.name = fqn + field.name;
-          result.push(f);
-        }
-      });
-
-      return result;
-    };
-
-    function filterAndFlattenFields(fqn, fields, filterfn) {
-      var result = [];
-      angular.forEach(fields, function(field) {
-        if (filterfn(field)) {
-          result.push(field);
-        }
-      });
-
-      return flattenFields(fqn, result);
-    };
-      
-    function flattenStaticFields(fqn, fields) {
-      return filterAndFlattenFields(
-        fqn, 
-        fields, 
-        function(field) {
-          return field.type != 'SUBFORM' || field.name != 'extensions';
-        });
-    };
-
-    function flattenExtnFields(extnForms) {
-      var fields = [];
-      angular.forEach(extnForms, function(extnForm) {
-        fields = fields.concat(extnForm.fields);
-      });
-
-      return fields;
-    };
-
-    function getExtnForms(fqn, fields) {
-      var extnSubForm = undefined;
-      for (var i = 0; i < fields.length; ++i) {
-        if (fields[i].type != 'SUBFORM' || fields[i].name != 'extensions') {
-          continue;
-        }
-
-        extnSubForm = fields[i];
-        break;
-      }
-
-      if (!extnSubForm) {
-        return [];
-      }
-
-      var extnForms = [];
-      for (var i = 0; i < extnSubForm.subFields.length; ++i) {
-        var subForm = extnSubForm.subFields[i];
-        var extnFields = flattenFields(fqn + "extensions." + subForm.name + ".", subForm.subFields);
-        for (var j = 0; j < extnFields.length; ++j) {
-          extnFields[j].extensionForm = subForm.caption;
-        }
-        extnForms.push({name: subForm.name, caption: subForm.caption, fields: extnFields});
-      }
-
-      return extnForms;
-    };
 
     function getAllowedOps(field) {
       var result = null;
@@ -443,14 +371,69 @@ angular.module('os.query.util', [])
       ];
     }
 
+    function getForm(selectedCp, formName) {
+      var form = undefined;
+      var forms = selectedCp.forms;
+      for (var i = 0; i < forms.length; ++i) {
+        if (formName == forms[i].name) {
+          form = forms[i];
+          break;
+        }
+      }
+
+      return form;
+    }
+
+    function getDateFns() {
+      return [
+        {label:'current_date', value: 'current_date()'},
+        {label:'months_between', value: 'months_between('},
+        {label:'years_between', value: 'years_between('},
+        {label:'minutes_between', value: 'minutes_between('},
+        {label:'round', value: 'round('}
+      ];
+    };
+
+    function getFormsAndFnAdvise(selectedCp) {
+      var forms = selectedCp.forms.map(
+        function(form) {
+          return {label: form.caption, value: form.name};
+        }
+      );
+      return getDateFns().concat(forms);
+    };
+
+    function getFieldsAdvise(form) {
+      console.log(form);
+      var result = [];
+      var fields = [].concat(form.staticFields).concat(form.extnFields);
+      angular.forEach(fields, function(field) {
+        if (field.type == 'DATE' || field.type == 'INTEGER' || field.type == 'FLOAT') {
+          var label = field.caption;
+          if (field.extensionForm) {
+            label = field.extensionForm + ": " + label;
+          }
+
+          result.push({label: label, value: field.name});
+        }
+      });
+
+      return result;
+    };
+
+    function getOpIdx(term) {
+      var re = /[\+\-\(,<=>!]/g;
+      var index = -1, numMatches = 0;
+      var match;
+      while ((match = re.exec(term)) != null) {
+        index = match.index;
+        re.lastIndex = ++numMatches;
+      }
+      return index;
+    }
+
     return {
       initOpsDesc:         initOpsDesc,
-
-      flattenStaticFields: flattenStaticFields, 
-
-      flattenExtnFields:   flattenExtnFields, 
-
-      getExtnForms:        getExtnForms,
 
       getAllowedOps:       getAllowedOps,
  
@@ -468,6 +451,14 @@ angular.module('os.query.util', [])
 
       getDataAql:          getDataAql,
 
-      getDefSelectedFields: getDefSelectedFields
+      getDefSelectedFields: getDefSelectedFields,
+
+      getForm:             getForm,
+
+      getFormsAndFnAdvise: getFormsAndFnAdvise,
+
+      getFieldsAdvise:     getFieldsAdvise,
+
+      getOpIdx:            getOpIdx
     };
   });

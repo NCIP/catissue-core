@@ -709,6 +709,9 @@
     "select_summary_fields": "Select summary fields",
     "include_sub_totals": "Include Sub Totals",
 
+    "temporal_exprs": "Temporal Expressions",
+    "expr_desc": "Description",
+
     "no_queries": "No queries to show",
     "no_queries_selected": "No queries selected. Please select at least one query",
     "info": "Information",
