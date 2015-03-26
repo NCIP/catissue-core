@@ -906,7 +906,23 @@
      
     </createTable>
   </changeSet>
-
+    
+  <changeSet author="vgaikwad" id="Operations table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="RBAC_OPERATION_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Resources table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="RBAC_RESOURCES_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+  
   <changeSet author="mibrahim" id="create permissions table for rbac" failOnError="true">
     <createTable tableName="RBAC_PERMISSIONS">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">

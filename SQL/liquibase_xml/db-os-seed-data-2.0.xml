@@ -5,51 +5,52 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
         
-  <changeSet author="vgaikwad" id="Add Operations">
-    <insert tableName="RBAC_OPERATIONS">
-      <column name="NAME" value="Create"/>
-    </insert>
-    <insert tableName="RBAC_OPERATIONS">
-      <column name="NAME" value="Read"/>
-    </insert>
-    <insert tableName="RBAC_OPERATIONS">
-      <column name="NAME" value="Update"/>
-    </insert>
-    <insert tableName="RBAC_OPERATIONS">
-      <column name="NAME" value="Delete"/>
-    </insert>
+  <changeSet author="vgaikwad" id="Add operations" dbms="mysql">
+    <sql>
+      insert into RBAC_OPERATIONS(NAME) values ('Create');
+      insert into RBAC_OPERATIONS(NAME) values ('Read');
+      insert into RBAC_OPERATIONS(NAME) values ('Update');
+      insert into RBAC_OPERATIONS(NAME) values ('Delete');
+    </sql>
   </changeSet>
   
-  <changeSet author="vgaikwad" id="Add Resources">
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Collection Protocol"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Distribution Protocol"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Institute"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Order"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Participant (PHI)"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Specimen"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Site"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Storage Container"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="User"/>
-    </insert>    
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Visit"/>
-    </insert>
+  <changeSet author="vgaikwad" id="Add operations" dbms="oracle">
+    <sql>
+      insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATION_SEQ.nextval, 'Create');
+      insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATION_SEQ.nextval, 'Read');
+      insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATION_SEQ.nextval, 'Update');
+      insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATION_SEQ.nextval, 'Delete');
+    </sql>
+  </changeSet>     
+        
+  <changeSet author="vgaikwad" id="Add resources" dbms="mysql">
+    <sql>
+      insert into RBAC_RESOURCES(NAME) values('Collection Protocol');
+      insert into RBAC_RESOURCES(NAME) values('Distribution Protocol');
+      insert into RBAC_RESOURCES(NAME) values('Institute');
+      insert into RBAC_RESOURCES(NAME) values('Order');
+      insert into RBAC_RESOURCES(NAME) values('Participant (PHI)');
+      insert into RBAC_RESOURCES(NAME) values('Specimen');
+      insert into RBAC_RESOURCES(NAME) values('Site');
+      insert into RBAC_RESOURCES(NAME) values('Storage Container');
+      insert into RBAC_RESOURCES(NAME) values('User');
+      insert into RBAC_RESOURCES(NAME) values('Visit');
+    </sql>
   </changeSet>
+  
+  <changeSet author="vgaikwad" id="Add resources" dbms="oracle">
+    <sql>
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Collection Protocol');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Distribution Protocol');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Institute');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Order');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Participant (PHI)');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Specimen');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Site');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Storage Container');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'User');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Visit');
+    </sql>
+  </changeSet>  
+
 </databaseChangeLog>
