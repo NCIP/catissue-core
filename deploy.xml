@@ -960,6 +960,15 @@
         password="${database.password}" 
         dropFirst="false" 
         classpathref="liquibaseClasspath" />
+    	
+        <updateDatabase 
+          changeLogFile="${base.dir}/SQL/liquibase_xml/db-os-seed-data-2.0.xml"
+          driver="${final.database.driver}" 
+          url="${final.database.url}" 
+          username="${database.username}" 
+          password="${database.password}" 
+          dropFirst="false" 
+          classpathref="liquibaseClasspath" />
     </target>
 
        <target name="upgrade_de_db">

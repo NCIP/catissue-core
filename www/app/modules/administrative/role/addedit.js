@@ -12,8 +12,8 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
     function loadPvs() {
        $scope.resources = [];
        Resource.query().then(function(resources) {
-         angular.forEach(resources, function(resource) {
-           $scope.resources.push(resource.name);
+         $scope.resources = resources.map(function(resource) {
+           return resource.name;
          });
        });
 

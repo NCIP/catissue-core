@@ -305,7 +305,7 @@
       </column>
     </createTable>
   </changeSet>
-  
+   
   <changeSet author="vgaikwad" id="Add FK to institute id">
     <addForeignKeyConstraint
       constraintName="FK_OS_DEPT_INSTITUTE_ID"
@@ -369,7 +369,7 @@
       columnName="INSTITUTION_ID"
       tableName="CATISSUE_USER"/>
   </changeSet>
-
+ 
   <changeSet author="vlonushte" id="OS auth domains table">
     <createTable tableName="OS_AUTH_DOMAINS">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
@@ -1350,53 +1350,4 @@
       referencedTableName="CATISSUE_SPECIMEN"
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
-  
-  <changeSet author="vgaikwad" id="Add Operations">
-    <insert tableName="RBAC_OPERATIONS">
-      <column name="NAME" value="Create"/>
-    </insert>
-    <insert tableName="RBAC_OPERATIONS">
-      <column name="NAME" value="Read"/>
-    </insert>
-    <insert tableName="RBAC_OPERATIONS">
-      <column name="NAME" value="Update"/>
-    </insert>
-    <insert tableName="RBAC_OPERATIONS">
-      <column name="NAME" value="Delete"/>
-    </insert>
-  </changeSet>
-  
-  <changeSet author="vgaikwad" id="Add Resources">
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Collection Protocol"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Distribution Protocol"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Institute"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Order"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Participant (PHI)"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Specimen"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Site"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Storage Container"/>
-    </insert>
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="User"/>
-    </insert>    
-    <insert tableName="RBAC_RESOURCES">
-      <column name="NAME" value="Visit"/>
-    </insert>
-  </changeSet>
-  
 </databaseChangeLog>

@@ -11,7 +11,4 @@ public interface RoleDao extends Dao<Role> {
 	public List<Role> getRolesByNames(List<String> roleNames);
 
 	public Role getRoleByName(String roleName);
-	
-	public void deleteRole(Role role);
-	
 }

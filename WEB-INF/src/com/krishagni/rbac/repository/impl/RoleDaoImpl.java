@@ -47,12 +47,6 @@ public class RoleDaoImpl extends AbstractDao<Role> implements RoleDao {
 	}
 	
 	@Override
-	public void deleteRole(Role role) {
-		sessionFactory.getCurrentSession()
-		.delete(role);
-	}
-	
-	@Override
 	public Class<?> getType() {
 		return Role.class;
 	}

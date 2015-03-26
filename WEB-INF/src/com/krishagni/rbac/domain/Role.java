@@ -1,11 +1,7 @@
 package com.krishagni.rbac.domain;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 
@@ -78,22 +74,22 @@ public class Role {
 		updateAcl(other);
 	}
 	
-    public boolean isDescendentOf(Role other) {
-        if (id == null || other.getId() == null) {
-        	return false;
-        }
+	public boolean isDescendentOf(Role other) {
+		if (id == null || other.getId() == null) {
+			return false;
+		}
 
-        Role role = this;
-        while (role != null) {
-        	if (other.getId().equals(role.getId())) {
-        		return true;
-            }
+		Role role = this;
+		while (role != null) {
+			if (other.getId().equals(role.getId())) {
+				return true;
+			}
 
-            role = role.getParentRole();
-        }
+			role = role.getParentRole();
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 	
 	@Override
@@ -130,15 +126,15 @@ public class Role {
 			}
 		}
 
-		CollectionUpdater.update(this.childRoles, other.childRoles);
-		for (Role childRole: this.childRoles) {
+		CollectionUpdater.update(getChildRoles(), other.getChildRoles());
+		for (Role childRole: getChildRoles()) {
 			childRole.setParentRole(this);
 		}
 	}
 	
 	private void updateAcl(Role other) {
-		CollectionUpdater.update(this.acl, other.getAcl());
-		for (RoleAccessControl rac : this.acl) {
+		CollectionUpdater.update(getAcl(), other.getAcl());
+		for (RoleAccessControl rac : getAcl()) {
 			rac.setRole(this);
 		}
 	}
