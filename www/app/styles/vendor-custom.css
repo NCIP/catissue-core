@@ -112,3 +112,8 @@ body > .ui-select-bootstrap.open {
 .ui-autocomplete li a {
   color: #333333;
 }
+
+.datepicker {
+  z-index: 1050!important;
+}
+

@@ -677,6 +677,7 @@
     "know_why_export_has_more_data": "Click here to know why exported file has more records",
     "error": "Error occurred. Please contact system administrator for further resolution",
     "export_initiated": "Query results export has been initiated. Export file download should start in few moments...",
+    "field": "Field",
     "downloading_data_file": "Downloading query results export data file",
     "data_file_will_be_emailed": "Export is taking longer time to finish. Link to download exported data will be sent to you by e-mail",
     
@@ -686,6 +687,7 @@
 
     "edit_filters": "Edit Filters",
     "define_view": "Define View",
+    "rerun": "Rerun",
 
     "select_fields": "Select Fields",
     "aggregates": "Aggregates",

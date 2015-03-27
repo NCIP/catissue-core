@@ -118,6 +118,23 @@ angular.module('os.query.util', [])
       return op && (op.name == 'exists' || op.name == 'not_exists');
     }
 
+    function onOpSelect(filter) {
+      if (!filter.op) {
+        return;
+      }
+
+      if (filter.op.name == "between") {
+        filter.value = [undefined, undefined];
+      } else if (filter.op.name == 'qin' || filter.op.name == 'not_in') {
+        filter.value = [];
+      } else {
+        filter.value = undefined;
+      }
+
+      filter.valueType = getValueType(filter.field, filter.op);
+      filter.unaryOp = isUnaryOp(filter.op);
+    }
+
     function hidePopovers() {
       var popups = $document.find('div.popover');
       angular.forEach(popups, function(popup) {
@@ -490,6 +507,8 @@ angular.module('os.query.util', [])
       getValueType:        getValueType,
 
       isUnaryOp:           isUnaryOp,
+ 
+      onOpSelect:          onOpSelect,
 
       hidePopovers:        hidePopovers,
 
@@ -513,6 +532,10 @@ angular.module('os.query.util', [])
 
       getOpByModel:        getOpByModel,
 
-      getUiFilter:         getUiFilter
+      getOpBySymbol:       getOpBySymbol,
+
+      getUiFilter:         getUiFilter,
+
+      getTemporalExprObj:  getTemporalExprObj,
     };
   });

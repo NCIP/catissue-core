@@ -317,3 +317,8 @@
   height: 380px; 
   overflow: auto;
 }
+
+.os-query-pv-table-container {
+  max-height: 380px; 
+  overflow: auto;
+}

@@ -11,7 +11,6 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.quer
       queryGlobal.queryCtx = $scope.queryLocal;
 
       loadCpForms($scope.queryLocal.selectedCp);
-      QueryUtil.initOpsDesc();
     }
 
     function loadCpForms(cp) {
@@ -93,7 +92,7 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.quer
     }
 
     $scope.viewResults = function() {
-      $state.go('query-results', {queryId: $scope.queryLocal.id});
+      $state.go('query-results', {queryId: $scope.queryLocal.id, editMode: true});
     }
 
     init();

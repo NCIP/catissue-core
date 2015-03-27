@@ -15,15 +15,17 @@ angular.module('os.query',
     'os.query.datepicker',
     'os.query.executor',
     'os.query.results',
-    'os.query.defineview'
+    'os.query.defineview',
+    'os.query.parameterized'
   ]
 ).config(function($stateProvider) {
    $stateProvider
      .state('query-root', {
        url: '/queries',
        template: '<div ui-view></div>',
-       controller: function($scope, queryGlobal) {
+       controller: function($scope, queryGlobal, QueryUtil) {
          $scope.queryGlobal = queryGlobal;
+         QueryUtil.initOpsDesc();
        },
        resolve: {
          queryGlobal: function(QueryGlobalData) {
@@ -54,7 +56,7 @@ angular.module('os.query',
        parent: 'query-root'
      })  
      .state('query-results', {
-       url: '/results?queryId',
+       url: '/results?queryId&editMode',
        templateUrl: 'modules/query/results.html',
        controller: 'QueryResultsCtrl',
        resolve: {

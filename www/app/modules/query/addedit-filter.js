@@ -1,18 +1,7 @@
 angular.module('os.query.addeditfilter', ['os.query.models'])
   .controller('QueryAddEditFilterCtrl', function($scope, QueryUtil) {
     $scope.onOpSelect = function() {
-      var filter = $scope.queryLocal.currFilter;
-      if (filter.op.name == "between") {
-        filter.value = [undefined, undefined];
-      } else if (filter.op.name == 'qin' || filter.op.name == 'not_in') {
-        filter.value = [];
-      } else {
-        filter.value = undefined;
-      }
-
-      var field = filter.field;
-      filter.valueType = QueryUtil.getValueType(field, filter.op);
-      filter.unaryOp = QueryUtil.isUnaryOp(filter.op);
+      QueryUtil.onOpSelect($scope.queryLocal.currFilter);
     };
 
     $scope.disableAddEditFilterBtn = function() {

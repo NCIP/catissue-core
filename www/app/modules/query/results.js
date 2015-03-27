@@ -1,6 +1,9 @@
 
 angular.module('os.query.results', ['os.query.models'])
-  .controller('QueryResultsCtrl', function($scope, $state, $modal, queryCtx, QueryUtil, QueryExecutor, Alerts) {
+  .controller('QueryResultsCtrl', function(
+    $scope, $state, $stateParams, $modal, 
+    queryCtx, QueryUtil, QueryExecutor, Alerts) {
+
     function init() {
       $scope.queryCtx = queryCtx;
       $scope.selectedRows = [];
@@ -16,7 +19,7 @@ angular.module('os.query.results', ['os.query.models'])
         gridOpts: getGridOpts()
       }
 
-      loadRecords();
+      executeQuery($stateParams.editMode);
     }
 
     function getGridOpts() {
@@ -32,6 +35,48 @@ angular.module('os.query.results', ['os.query.models'])
         enablePaging      : false
       };
     }
+
+    function executeQuery(editMode) {
+      if (!editMode && isParameterized()) {
+        showParameterizedFilters();
+      } else {
+        loadRecords();
+      }
+    }
+
+    function isParameterized() {
+      var filters = $scope.queryCtx.filters;
+      for (var i = 0; i < filters.length; ++i) {
+        if (filters[i].parameterized) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    function showParameterizedFilters() {
+      var modal = $modal.open({
+        templateUrl: 'modules/query/parameters.html',
+        controller: 'ParameterizedFilterCtrl',
+        resolve: {
+          queryCtx: function() {
+            return $scope.queryCtx;
+          }
+        },
+        size: 'lg'
+      });
+
+      modal.result.then(
+        function(result) {
+          if (result) {
+            $scope.queryCtx = result;
+          }
+
+          loadRecords();
+        }
+      );
+    };
 
     function loadRecords() {
       var qc = $scope.queryCtx;
@@ -175,6 +220,10 @@ angular.module('os.query.results', ['os.query.models'])
           loadRecords();
         }
       );
+    }
+
+    $scope.rerun = function() {
+      executeQuery(false);
     }
 
     $scope.downloadResults = function() {
