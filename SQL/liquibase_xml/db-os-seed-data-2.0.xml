@@ -25,14 +25,14 @@
         
   <changeSet author="vgaikwad" id="Add resources" dbms="mysql">
     <sql>
-      insert into RBAC_RESOURCES(NAME) values('Collection Protocol');
-      insert into RBAC_RESOURCES(NAME) values('Distribution Protocol');
+      insert into RBAC_RESOURCES(NAME) values('CollectionProtocol');
+      insert into RBAC_RESOURCES(NAME) values('DistributionProtocol');
       insert into RBAC_RESOURCES(NAME) values('Institute');
       insert into RBAC_RESOURCES(NAME) values('Order');
-      insert into RBAC_RESOURCES(NAME) values('Participant (PHI)');
+      insert into RBAC_RESOURCES(NAME) values('ParticipantPhi');
       insert into RBAC_RESOURCES(NAME) values('Specimen');
       insert into RBAC_RESOURCES(NAME) values('Site');
-      insert into RBAC_RESOURCES(NAME) values('Storage Container');
+      insert into RBAC_RESOURCES(NAME) values('StorageContainer');
       insert into RBAC_RESOURCES(NAME) values('User');
       insert into RBAC_RESOURCES(NAME) values('Visit');
     </sql>
@@ -40,14 +40,14 @@
   
   <changeSet author="vgaikwad" id="Add resources" dbms="oracle">
     <sql>
-      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Collection Protocol');
-      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Distribution Protocol');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'CollectionProtocol');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'DistributionProtocol');
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Institute');
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Order');
-      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Participant (PHI)');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'ParticipantPhi');
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Specimen');
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Site');
-      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Storage Container');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'StorageContainer');
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'User');
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Visit');
     </sql>

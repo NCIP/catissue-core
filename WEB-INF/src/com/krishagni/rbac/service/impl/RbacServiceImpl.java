@@ -30,6 +30,7 @@ import com.krishagni.rbac.domain.Role;
 import com.krishagni.rbac.domain.RoleAccessControl;
 import com.krishagni.rbac.domain.Subject;
 import com.krishagni.rbac.domain.SubjectRole;
+import com.krishagni.rbac.events.CpSiteInfo;
 import com.krishagni.rbac.events.GroupDetail;
 import com.krishagni.rbac.events.GroupRoleDetail;
 import com.krishagni.rbac.events.OperationDetail;
@@ -40,7 +41,7 @@ import com.krishagni.rbac.events.RoleAccessControlDetails;
 import com.krishagni.rbac.events.RoleDetail;
 import com.krishagni.rbac.events.SubjectDetail;
 import com.krishagni.rbac.events.SubjectRoleDetail;
-import com.krishagni.rbac.events.UserAccessInformation;
+import com.krishagni.rbac.events.UserAccessCriteria;
 import com.krishagni.rbac.repository.DaoFactory;
 import com.krishagni.rbac.repository.OperationListCriteria;
 import com.krishagni.rbac.repository.PermissionListCriteria;
@@ -474,36 +475,40 @@ public class RbacServiceImpl implements RbacService {
 	
 	@Override
 	@PlusTransactional
-	public boolean checkAccess(Long subjectId, String resource, String operation, Long cpId, Long siteId, Long resourceInstanceId) {
+	public boolean canUserPerformOp(Long subjectId, String resource, String operation, Long cpId, Set<Long> sites) {
 		try {			
-			UserAccessInformation accessInfo = new UserAccessInformation()
+			UserAccessCriteria uac = new UserAccessCriteria()
 					.subjectId(subjectId)
-					.resourceName(resource)
-					.operationName(operation)
+					.resource(resource)
+					.operation(operation)
 					.cpId(cpId)
-					.siteId(siteId)
-					.resourceInstanceId(resourceInstanceId);
+					.sites(sites);
 			
-			if ((accessInfo.subjectId() == null && accessInfo.groupId() == null) || 
-				StringUtils.isEmpty(accessInfo.resourceName()) ||
-				StringUtils.isEmpty(accessInfo.operationName()) ) {
+			if ((uac.subjectId() == null) || 
+				StringUtils.isBlank(uac.resource()) ||
+				StringUtils.isBlank(uac.operation()) ) {
 				throw OpenSpecimenException.userError(RbacErrorCode.INSUFFICIENT_USER_DETAILS);
 			}
 			
-			if (daoFactory.getSubjectDao().canUserAccess(accessInfo)) {
-				return true;
-			}
-			
-			if (accessInfo.groupId() != null && daoFactory.getGroupDao().canUserAccess(accessInfo)) {
-				return true;
-			}
-			
-			return false;
+			return daoFactory.getSubjectDao().canUserPerformOp(uac);
+		} catch (OpenSpecimenException oce) {
+			throw oce;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
+	@Override
+	@PlusTransactional
+	public List<CpSiteInfo> getAccessibleCpSites(Long userId, String resource, String operation) {
+		UserAccessCriteria crit = new UserAccessCriteria()
+				.subjectId(userId)
+				.operation(operation)
+				.resource(resource);
+		
+		return daoFactory.getSubjectDao().getCpSiteForOpExecution(crit);
+	}
+	
 	//
 	// HELPER METHODS
 	// 

@@ -121,5 +121,20 @@
         shortTitle in (:shortTitles) and 
         activityStatus = 'Active'
     </query>
+    
+    <sql-query name="getCpIdsBySiteIds">
+      <return-scalar column="cpId" type="long"/> 
+      
+      select
+        siteCp.collection_protocol_id as cpId
+      from
+        catissue_site_cp siteCp 
+        inner join catissue_collection_protocol cp on siteCp.collection_protocol_id = cp.identifier
+        inner join catissue_site site on site.identifier = siteCp.site_id
+      where
+        cp.activity_status = 'Active' 
+        and site.activity_status = 'Active'
+        and siteCp.site_id in (:siteIds)
+    </sql-query>
   </class>
 </hibernate-mapping>

@@ -1,9 +1,15 @@
 
 package com.krishagni.catissueplus.core.common.repository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.Restrictions;
 
 public class AbstractDao<T> implements Dao<T> {
 
@@ -62,6 +68,33 @@ public class AbstractDao<T> implements Dao<T> {
 	
 	public void flush() {
 		sessionFactory.getCurrentSession().flush();
+	}
+	
+	protected void applyIdsFilter(Criteria criteria, String attrName, Set<Long> ids) {
+		if (CollectionUtils.isEmpty(ids)) {
+			return;
+		}
+		
+		/*
+		 * All of this because oracle doesn't allow `in` parameter size to be more than 1000
+		 * so the parameter item list needs to be chunked out.
+		 */
+		List<Long> list = new ArrayList<Long>(ids);
+		
+		Junction or = Restrictions.disjunction();
+		if (list.size() > 1000) {
+			while (list.size() > 1000) {
+				List<?> subList = list.subList(0, 1000);
+				or.add(Restrictions.in(attrName, subList));
+				list.subList(0, 1000).clear();
+			}
+		}
+		
+		if (list.size() > 0) {
+			or.add(Restrictions.in(attrName, list));
+		}
+		
+		criteria.add(or);
 	}
 		 
 }

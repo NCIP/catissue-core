@@ -93,6 +93,17 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 				.list();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Long> getCpIdsBySiteIds(List<Long> siteIds) {
+		List<Long> rows = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CP_IDS_BY_SITE_IDS)
+				.setParameterList("siteIds", siteIds)
+				.list();
+		
+		return new ArrayList<Long>(rows);
+	}
+	
 	@Override
 	public CollectionProtocolEvent getCpe(Long cpeId) {
 		return (CollectionProtocolEvent) sessionFactory.getCurrentSession()
@@ -153,10 +164,11 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 				.setMaxResults(cpCriteria.maxResults())
 				.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE))
 				.createAlias("principalInvestigator", "pi");
+		
 		addSearchConditions(query, cpCriteria);
 		addProjections(query, cpCriteria);
 		
-		return query.addOrder(Order.asc("title")).list();
+		return query.addOrder(Order.asc("shortTitle")).list();
 	}
 
 	private void addSearchConditions(Criteria query, CpListCriteria cpCriteria) {
@@ -187,6 +199,8 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 			query.createCriteria("repositories", "repo")
 				.add(Restrictions.eq("repo.name", repositoryName));
 		}
+
+		applyIdsFilter(query, "id", cpCriteria.ids());
 	}
 	
 	private void addProjections(Criteria query, CpListCriteria cpCriteria) {
@@ -236,4 +250,6 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	private static final String GET_CP_BY_TITLE = FQN + ".getCpByTitle";
 	
 	private static final String GET_CPS_BY_SHORT_TITLE = FQN + ".getCpsByShortTitle";
+	
+	private static final String GET_CP_IDS_BY_SITE_IDS = FQN + ".getCpIdsBySiteIds";
 }

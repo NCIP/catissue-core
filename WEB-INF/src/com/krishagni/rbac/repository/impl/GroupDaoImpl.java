@@ -2,7 +2,7 @@ package com.krishagni.rbac.repository.impl;
 
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.rbac.domain.Group;
-import com.krishagni.rbac.events.UserAccessInformation;
+import com.krishagni.rbac.events.UserAccessCriteria;
 import com.krishagni.rbac.repository.GroupDao;
 
 public class GroupDaoImpl extends AbstractDao<Group> implements GroupDao {
@@ -16,15 +16,13 @@ public class GroupDaoImpl extends AbstractDao<Group> implements GroupDao {
 	}
 
 	@Override
-	public boolean canUserAccess(UserAccessInformation info) {
+	public boolean canUserAccess(UserAccessCriteria info) {
 		return (!(sessionFactory.getCurrentSession()
 				.getNamedQuery(CAN_USER_ACCESS)
 				.setLong("groupId" , info.groupId())
-				.setString("resourceName", info.resourceName())
-				.setString("operationName", info.operationName())
+				.setString("resourceName", info.resource())
+				.setString("operationName", info.operation())
 				.setLong("cpId",  info.cpId())
-				.setLong("siteId", info.siteId())
-				.setLong("resourceInstanceId", info.resourceInstanceId())
 				.list().isEmpty()));
 	}
 

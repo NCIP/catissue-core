@@ -1372,4 +1372,23 @@
       <column name="IS_ADMIN" type="${boolean.type}"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="mibrahim" id="Rbac subject access view" runOnChange="true">
+    <sql>
+      create or replace view RBAC_SUBJECT_ACCESS_VIEW as (
+        select 
+          sub.subject_id as subject_id, 
+          sub.cp_id as cp_id, 
+          sub.site_id as site_id, 
+          res.name as resource, 
+          ops.name as operation
+        from 
+          rbac_subject_roles sub 
+          inner join rbac_role_access_list acl on acl.role_id = sub.role_id 
+          inner join rbac_role_access_list_ops aclo on aclo.acl_id = acl.identifier
+          inner join rbac_resources res on res.identifier = acl.resource_id
+          inner join rbac_operations ops on ops.identifier = aclo.operation_id
+      )
+     </sql>   
+  </changeSet>
 </databaseChangeLog>
