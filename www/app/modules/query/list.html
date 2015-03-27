@@ -4,9 +4,10 @@
       <span translate="queries.list">Queries</span>
     </h3>
 
-    <div dropdown>
-      <button class="os-round-btn dropdown-toggle">
+    <div class="os-btns" dropdown>
+      <button class="primary dropdown-toggle">
         <span class="fa fa-plus"></span>
+        <span translate="common.buttons.create">Create</span>
       </button>
       <ul class="dropdown-menu" role="menu">
         <li>
@@ -24,10 +25,11 @@
       </ul>
     </div>
 
-    <div class="os-more-options">
-      <div class="inline" dropdown ng-if="selectedQueries.length > 0">
-        <button class="dropdown-toggle">
-          <span class="fa fa-folder">
+    <div class="os-btns right">
+      <div dropdown ng-if="selectedQueries.length > 0" class="inline">
+        <button class="default dropdown-toggle">
+          <span class="fa fa-folder"></span>
+          <span translate="queries.assign">Assign</span>
         </button>
         <ul class="dropdown-menu dropdown-menu-right os-query-folders-dd">
           <li>
@@ -49,13 +51,14 @@
           </li>
         </ul>
       </div>
-      <button os-right-drawer-toggle class="os-search-button">
+      <button os-right-drawer-toggle class="default">
         <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
       </button>
     </div>
   </div>    
 
-  <div class="container">
+  <div class="container os-list-container">
     <div class="row">
       <div class="os-col-20">
         <div ng-include src="'query_folders.html'"></div>
@@ -65,6 +68,9 @@
       </div>
     </div>
   </div>
+
+  <!-- div os-right-drawer ng-include="'modules/query/search.html'"></div -->
+  <div os-right-drawer>Coming Soon</div>
 </div>
 
 <script type="text/ng-template" id="query_list.html">

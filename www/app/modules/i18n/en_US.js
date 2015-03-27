@@ -43,7 +43,8 @@
       "unselect": "Unselect",
       "submit": "Submit",
       "edit": "Edit",
-      "done": "Done"
+      "done": "Done",
+      "search": "Search"
     }
   },
 
@@ -632,6 +633,7 @@
     "folder_created": "Query folder '{{folderName}}' created",
     "folder_updated": "Query folder '{{folderName}}' updated",
     "folder_deleted": "Query folder '{{folderName}}' deleted",
+    "assign": "Assign",
     "new_query_folder": "New Query Folder",
     "update_query_folder": "Update Query Folder",
     "folder_name": "Folder Name",

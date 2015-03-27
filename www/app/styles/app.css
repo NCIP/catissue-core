@@ -209,11 +209,6 @@ body {
   color: #666666;
 }
   
-.os-page-hdr .os-more-options div.inline {
-  display: inline-block;
-  position: relative;
-}
-
 .os-page-hdr .os-nav-button,
 .os-page-hdr .os-options-button,
 .os-page-hdr .os-search-button,
@@ -312,14 +307,39 @@ h4 + .btn-group {
   bottom: 10px;
 }
 
+.os-page-hdr .os-btns {
+  position: absolute;
+}
+
+.os-page-hdr .os-btns div.inline {
+  display: inline-block;
+  position: relative;
+}
+
 .os-page-hdr .os-btns button {
-  background: #f5f5f5;
-  border: 1px solid #ccc;
   border-radius: 3px;
   padding: 4px 10px;
 }
 
-.os-page-hdr .os-btns button:hover {
+.os-page-hdr .os-btns button.primary {
+  color: #fff;
+  background: #428bca;
+  border: 1px solid #357ebd;
+}
+
+.os-page-hdr .os-btns button.primary:hover {
+  color: #fff;
+  background: #3071a9;
+  border: 1px solid #357ebd;
+}
+
+.os-page-hdr .os-btns button.default {
+  color: #666666;
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+}
+
+.os-page-hdr .os-btns button.default:hover {
   background: #ddd;
   border: 1px solid #a5a5a5;
 }
