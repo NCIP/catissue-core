@@ -40,7 +40,7 @@ angular.module('os.query.addeditfilter', ['os.query.models'])
       ql.isValid = QueryUtil.isValidQueryExpr(ql.exprNodes);
       ql.currFilter = {};
 
-      //$scope.disableCpSelection();
+      QueryUtil.disableCpSelection(ql);
     };
 
     $scope.displayFilter = function(filter) {
@@ -68,7 +68,7 @@ angular.module('os.query.addeditfilter', ['os.query.models'])
       }
 
       ql.currFilter = {};
-      //$scope.disableCpSelection();
+      QueryUtil.disableCpSelection(ql);
     };
 
     $scope.cancelFilter = function() {
@@ -130,8 +130,7 @@ angular.module('os.query.addeditfilter', ['os.query.models'])
 
       // validate expression after removing filter and optional operator
       ql.isValid = QueryUtil.isValidQueryExpr(exprNodes);
-
-      //$scope.disableCpSelection();
+      QueryUtil.disableCpSelection(ql);
     };
  
     $scope.handleAutocompleteKeyDown = function(event) {

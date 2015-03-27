@@ -67,7 +67,7 @@ angular.module('os.biospecimen.models.form', ['os.common.models'])
         cpId = this.cp.id;
       }
 
-      var params = {cpId: cpId, extendedFields: cpId != -1};
+      var params = {cpId: cpId, extendedFields: true};
       var d = $q.defer();
       var that = this;
       if (this.fields) {

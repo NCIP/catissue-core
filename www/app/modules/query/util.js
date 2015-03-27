@@ -499,6 +499,36 @@ angular.module('os.query.util', [])
       };
     };
 
+    function disableCpSelection(queryCtx) {
+      if (queryCtx.selectedCp.id == -1) {
+        queryCtx.disableCpSelection = false;
+        return;
+      }
+
+      var filters = queryCtx.filters;
+      for (var i = 0; i < filters.length; ++i) {
+        if (filters[i].expr && filters[i].expr.indexOf('.extensions.') != -1) { 
+          queryCtx.disableCpSelection = true;
+          return;
+        }
+
+        if (filters[i].field.name.indexOf('extensions.') == 0) {
+          queryCtx.disableCpSelection = true;
+          return;
+        }
+      }
+
+      var selectedFields = queryCtx.selectedFields;
+      for (var i = 0; i < selectedFields.length; ++i) {
+        if (selectedFields[i].split(".")[1] == 'extensions') {
+          queryCtx.disableCpSelection = true;
+          return;
+        }
+      }
+
+      queryCtx.disableCpSelection = false;
+    }
+    
     return {
       initOpsDesc:         initOpsDesc,
 
@@ -537,5 +567,7 @@ angular.module('os.query.util', [])
       getUiFilter:         getUiFilter,
 
       getTemporalExprObj:  getTemporalExprObj,
+
+      disableCpSelection:  disableCpSelection
     };
   });

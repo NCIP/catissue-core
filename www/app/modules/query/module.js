@@ -16,7 +16,8 @@ angular.module('os.query',
     'os.query.executor',
     'os.query.results',
     'os.query.defineview',
-    'os.query.parameterized'
+    'os.query.parameterized',
+    'os.query.lookup'
   ]
 ).config(function($stateProvider) {
    $stateProvider

@@ -26,6 +26,7 @@ angular.module('openspecimen')
         var multiple = angular.isDefined(tAttrs.multiple);
         var uiSelect = angular.element(multiple ? '<ui-select multiple/>' : '<ui-select/>')
           .attr('ng-model', tAttrs.ngModel)
+          .attr('ng-disabled', tAttrs.ngDisabled)
           .attr('reset-search-input', true);
 
         var uiSelectMatch = angular.element('<ui-select-match/>')

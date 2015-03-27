@@ -52,16 +52,16 @@
         </div>
         <div ng-switch-when="lookupSingle">
           <input type="hidden" 
-            os-lookup opts="queryLookup.currFilter.field.lookupProps" 
+            os-lookup opts="queryLocal.currFilter.field.lookupProps" 
             placeholder="{{'queries.select_cond_value' | translate}}"
-            selected-opt="queryLookup.currFilter.value">
+            ng-model="queryLocal.currFilter.value">
           </input>
         </div>
         <div ng-switch-when="lookupMultiple">
           <input type="hidden" 
-            os-lookup opts="queryLookup.currFilter.field.lookupProps" multiple
+            os-lookup opts="queryLocal.currFilter.field.lookupProps" multiple
             placeholder="{{'queries.select_cond_values' | translate}}"
-            selected-opt="queryLookup.currFilter.value">
+            ng-model="queryLocal.currFilter.value">
           </input>
         </div>
         <input ng-switch-when="datePicker" class="form-control"

@@ -77,14 +77,14 @@
                     <input type="hidden" 
                       os-lookup opts="filter.field.lookupProps" 
                       placeholder="{{'queries.select_cond_value' | translate}}"
-                      selected-opt="filter.value">
+                      ng-model="filter.value">
                     </input>
                   </div>
                   <div ng-switch-when="lookupMultiple">
                     <input type="hidden" 
                       os-lookup opts="filter.field.lookupProps" multiple
                       placeholder="{{'queries.select_cond_values' | translate}}"
-                      selected-opt="filter.value">
+                      ng-model="filter.value">
                     </input>
                   </div>
                   <input ng-switch-when="datePicker" class="form-control"

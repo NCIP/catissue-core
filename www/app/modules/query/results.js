@@ -216,7 +216,7 @@ angular.module('os.query.results', ['os.query.models'])
       mi.result.then(
         function(queryCtx) {
           $scope.queryCtx = queryCtx;
-          //$scope.disableCpSelection();
+          QueryUtil.disableCpSelection(queryCtx);
           loadRecords();
         }
       );

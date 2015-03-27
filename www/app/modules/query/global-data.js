@@ -55,6 +55,7 @@ angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models
       savedQuery = savedQuery || {};
       this.queryCtx = {
         currentFilter: {},
+        disableCpSelection: false,
         id: savedQuery.id,
         title: savedQuery.title,
         filters: [],
@@ -193,8 +194,7 @@ angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models
         if (!filter.field) {
           return undefined;
         }
-                
-        //$scope.disableCpSelection();
+        QueryUtil.disableCpSelection(queryCtx);
       }
     }
 
