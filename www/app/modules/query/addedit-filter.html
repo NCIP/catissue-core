@@ -37,11 +37,11 @@
         <div ng-switch-when="betweenDate" class="clearfix os-query-range-value">
           <input class="form-control" placeholder="{{'queries.range_min' | translate}}" 
             type="text" os-query-date-picker="{{global.queryDateFmt}}"
-            ng-model="queryData.currFilter.value[0]">
+            ng-model="queryLocal.currFilter.value[0]">
           <span>and</span>
           <input class="form-control" placeholder="{{'queries.range_max' | translate}}" 
             type="text" os-query-date-picker="{{global.queryDateFmt}}"
-            ng-model="queryData.currFilter.value[1]">
+            ng-model="queryLocal.currFilter.value[1]">
         </div>
         <div ng-switch-when="betweenNumeric" class="clearfix os-query-range-value">
           <input class="form-control" placeholder="{{'queries.range_min' | translate}}" 

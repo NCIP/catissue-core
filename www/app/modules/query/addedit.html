@@ -24,7 +24,7 @@
       <button ng-click="getCount()" 
         ng-disabled="!queryLocal.isValid || queryLocal.filters.length == 0"
         title="{{'queries.count_results' | translate}}"
-        data-placement="bottom" 
+        data-placement="bottom" data-container="body"
         content-template="modules/query/count.html" bs-popover>
         <span class="fa fa-dashboard"></span>
         <span translate="queries.get_count">Get Count</span>
