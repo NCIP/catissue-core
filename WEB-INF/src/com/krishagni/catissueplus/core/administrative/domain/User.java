@@ -179,8 +179,11 @@ public class User extends BaseEntity implements UserDetails {
 	}
 
 	public boolean isAdmin() {
-		//return admin != null ? admin : false;
-		return true;
+		return admin != null ? admin : false;
+	}
+	
+	public Boolean getAdmin() {
+		return admin;
 	}
 
 	public void setAdmin(Boolean admin) {

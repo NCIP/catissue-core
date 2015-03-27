@@ -1366,4 +1366,10 @@
       referencedTableName="CATISSUE_SPECIMEN"
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
+
+  <changeSet author="vpawar" id="A flag to determine whether user is admin">
+    <addColumn tableName="CATISSUE_USER">
+      <column name="IS_ADMIN" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

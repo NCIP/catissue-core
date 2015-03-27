@@ -43,6 +43,8 @@
     </set>
 		
     <property name="comments" column="STATUS_COMMENT"/>
+ 
+    <property name="admin" column="IS_ADMIN"/>
     
     <query name="getUsersByIds">
       from 
