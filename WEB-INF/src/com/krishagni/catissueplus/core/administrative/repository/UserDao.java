@@ -15,6 +15,8 @@ public interface UserDao extends Dao<User> {
 	
 	public User getUser(String loginName, String domain);
 	
+	public User getSystemUser();
+	
 	public User getUserByEmailAddress(String emailAddress);
 	
 	public Boolean isUniqueLoginName(String loginName, String domainName);

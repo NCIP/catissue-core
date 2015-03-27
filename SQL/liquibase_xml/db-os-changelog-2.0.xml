@@ -1391,4 +1391,21 @@
       )
      </sql>   
   </changeSet>
+
+  <changeSet author="vpawar" id="Import forms change log table">
+    <createTable tableName="OS_IMPORT_FORMS_LOG">
+      <column name="FILENAME" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="FORM_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="MD5_DIGEST" type="${text.type}(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="EXECUTED_ON" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
 </databaseChangeLog>

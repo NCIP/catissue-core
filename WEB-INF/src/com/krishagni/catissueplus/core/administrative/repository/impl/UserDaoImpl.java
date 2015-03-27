@@ -60,6 +60,11 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		return users.isEmpty() ? null : users.get(0);
 	}
 	
+	@Override
+	public User getSystemUser() {
+		return getUser(User.SYS_USER, "openspecimen");
+	}
+	
 	public User getUserByEmailAddress(String emailAddress) {
 		String hql = String.format(GET_USER_BY_EMAIL_HQL, " and activityStatus != 'Disabled'");
 		List<User> users = executeGetUserByEmailAddressHql(hql, emailAddress);

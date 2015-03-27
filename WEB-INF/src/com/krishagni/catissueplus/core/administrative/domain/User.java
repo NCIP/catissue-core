@@ -28,13 +28,14 @@ import com.krishagni.catissueplus.core.common.util.Status;
 
 @Configurable
 public class User extends BaseEntity implements UserDetails {
-
+	public static final String SYS_USER = "$system";
+	
 	private static final long serialVersionUID = 1L;
 
 	private final static Pattern pattern = Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})");
 	
 	private static final int PASSWDS_TO_EXAMINE = 5;
-	
+		
 	private String lastName;
 
 	private String firstName;

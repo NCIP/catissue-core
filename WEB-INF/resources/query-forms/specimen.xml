@@ -1,0 +1,359 @@
+<form>
+	<view>
+		<name>Specimen</name>
+		<caption>Specimen</caption>
+		<table>CATISSUE_SPECIMEN</table>
+		<hierarchyTable>CATISSUE_SPECIMEN_HIERARCHY</hierarchyTable>
+		<hierarchyAncestorColumn>ANCESTOR_ID</hierarchyAncestorColumn>
+		<hierarchyDescendentColumn>DESCENDENT_ID</hierarchyDescendentColumn>
+		<activeCondition>ACTIVITY_STATUS != 'Disabled'</activeCondition>
+		<row>
+			<numberField>
+				<name>id</name>
+				<udn>id</udn>
+				<caption>Identifier</caption>
+				<column>IDENTIFIER</column>
+			</numberField>
+		</row>
+		<row>
+			<dropDown>
+				<name>lineage</name>
+				<udn>lineage</udn>
+				<caption>Lineage</caption>
+				<column>LINEAGE</column>
+				<options>
+					<option><value>New</value></option>
+					<option><value>Derived</value></option>
+					<option><value>Aliquot</value></option>
+				</options>
+			</dropDown>
+		</row>
+		<row>
+			<textField>
+				<name>label</name>
+				<udn>label</udn>
+				<caption>Specimen Label</caption>
+				<column>LABEL</column>
+			</textField>
+		</row>
+		<row>
+			<subForm>
+                                <name>parentSpecimen</name>
+                                <udn>parentSpecimen</udn>
+                                <caption>Parent Specimen</caption>
+                                <table>CATISSUE_SPECIMEN</table>
+                                <foreignKey>IDENTIFIER</foreignKey>
+                                <parentKey>PARENT_SPECIMEN_ID</parentKey>
+                                <row>
+					<textField>
+						<name>parentLabel</name>
+						<udn>parentLabel</udn>
+						<caption>Parent Specimen Label</caption>
+						<column>LABEL</column>
+					</textField>	
+                                </row>
+                        </subForm>
+                </row>
+		<row>
+			<textField>
+				<name>barcode</name>
+				<udn>barcode</udn>
+				<caption>Barcode</caption>
+				<column>BARCODE</column>
+			</textField>
+		</row>
+		<row>
+			<dropDown>
+      				<name>class</name>
+                                <udn>class</udn>
+                                <caption>Class</caption>
+                                <column>SPECIMEN_CLASS</column>
+                                <options>
+					<sql>select value from catissue_permissible_value where public_id = '2003991' order by value</sql>
+                                </options>
+			</dropDown>
+		</row>
+		<row>
+			<dropDown>
+      				<name>type</name>
+                                <udn>type</udn>
+                                <caption>Type</caption>
+                                <column>SPECIMEN_TYPE</column>
+                                <options>
+                                      <sql>select subpv.value from catissue_permissible_value subpv inner join catissue_permissible_value mainpv on subpv.parent_identifier = mainpv.identifier where mainpv.public_id = '2003991' order by subpv.value</sql>
+                                </options>
+			</dropDown>
+		</row>
+		<row>
+			<dropDown>
+				<name>tissueSite</name>
+				<udn>tissueSite</udn>
+				<caption>Tissue Site</caption>
+				<column>TISSUE_SITE</column>
+				<options>
+					<sql>
+                                          select pv.value 
+                                          from catissue_permissible_value pv 
+                                          where pv.public_id = 'Tissue_Site_PID'
+
+                                          union 
+
+                                          select subpv.value 
+                                          from catissue_permissible_value pv 
+                                               inner join catissue_permissible_value subpv on subpv.parent_identifier = pv.identifier 
+                                          where pv.public_id = 'Tissue_Site_PID' 
+
+                                          union 
+
+                                          select subpv1.value 
+                                          from catissue_permissible_value pv 
+                                               inner join catissue_permissible_value subpv on subpv.parent_identifier = pv.identifier 
+                                               inner join catissue_permissible_value subpv1 on subpv1.parent_identifier = subpv.identifier 
+                                          where pv.public_id = 'Tissue_Site_PID'
+
+                                          order by value
+					</sql>
+				</options>
+			</dropDown>
+		</row>
+		<row>
+			<dropDown>
+				<name>tissueSide</name>
+				<udn>tissueSide</udn>
+				<caption>Tissue Side</caption>
+				<column>TISSUE_SIDE</column>
+				<options>
+					<sql>select value from catissue_permissible_value where public_id = '2003992' order by value</sql>
+				</options>
+			</dropDown>
+		</row>
+		<row>
+			<dropDown>
+				<name>pathologicalStatus</name>
+				<udn>pathologicalStatus</udn>
+				<caption>Pathological Status</caption>
+				<column>PATHOLOGICAL_STATUS</column>
+				<options>
+					<sql>select value from catissue_permissible_value where public_id = '2003993' order by value</sql>
+				</options>
+			</dropDown>
+		</row>
+		<row>
+			<datePicker>
+				<name>createdOn</name>
+				<udn>createdOn</udn>
+				<caption>Created On</caption>
+				<column>CREATED_ON_DATE</column>
+			</datePicker>
+		</row>
+		<row>
+			<numberField>
+				<name>initialQty</name>
+				<udn>initialQty</udn>
+				<caption>Initial Quantity</caption>
+				<column>INITIAL_QUANTITY</column>
+			</numberField>
+		</row>
+		<row>
+			<numberField>
+				<name>availableQty</name>
+				<udn>availableQty</udn>
+				<caption>Available Quantity</caption>
+				<column>AVAILABLE_QUANTITY</column>
+			</numberField>
+		</row>
+		<row>
+			<numberField>
+				<name>concentration</name>
+				<udn>concentration</udn>
+				<caption>Concentration</caption>
+				<column>CONCENTRATION</column>
+			</numberField>
+		</row>
+		<row>
+			<dropDown>
+				<name>collectionStatus</name>
+				<udn>collectionStatus</udn>
+				<caption>Collection Status</caption>
+				<column>COLLECTION_STATUS</column>
+				<options>
+					<option><value>Pending</value></option>
+					<option><value>Collected</value></option>
+					<option><value>Not Collected</value></option>
+				</options>
+			</dropDown>
+		</row>
+		<row>
+			<dropDown>
+				<name>activityStatus</name>
+				<udn>activityStatus</udn>
+				<caption>Activity Status</caption>
+				<column>ACTIVITY_STATUS</column>
+				<options>
+					<option><value>Active</value></option>
+					<option><value>Closed</value></option>
+					<option><value>Disabled</value></option>
+				</options>
+			</dropDown>
+		</row>
+		<row>
+                        <subForm>
+                                <name>specimenOrders</name>
+                                <udn>specimenOrders</udn>
+                                <caption>Specimen Orders</caption>
+                                <table>SPECIMEN_ORDER_VIEW</table>
+                                <foreignKey>SPECIMEN_ID</foreignKey>
+                                <parentKey>IDENTIFIER</parentKey>
+				<pathLink>true</pathLink>
+				<row>
+					<subForm>
+						<name>order</name>
+						<udn>order</udn>
+						<caption>Orders</caption>
+						<table>CATISSUE_ORDER</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>ORDER_ID</parentKey>
+					</subForm>
+				</row>
+                        </subForm>
+                </row>
+		<row>
+			<subForm>
+				<name>specimenShipment</name>
+				<udn>specimenShipment</udn>
+				<caption>Specimen Shipment</caption>
+				<table>SPECIMEN_SHIPMENT_VIEW</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<pathLink>true</pathLink>
+				<row>
+					<subForm>
+						<name>shipment</name>
+						<udn>shipment</udn>
+						<caption>Shipment</caption>
+						<table>CATISSUE_BASE_SHIPMENT</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>SHIPMENT_ID</parentKey>
+					</subForm>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<textField>
+				<name>comments</name>
+				<udn>comments</udn>
+				<caption>Comments</caption>
+				<column>COMMENTS</column>
+			</textField>
+		</row>
+		<row>
+			<subForm>
+                                <name>externalIdentifiers</name>
+                                <udn>externalIdentifiers</udn>
+                                <caption>External Identifiers</caption>
+                                <table>CATISSUE_EXTERNAL_IDENTIFIER</table>
+                                <foreignKey>SPECIMEN_ID</foreignKey>
+                                <parentKey>IDENTIFIER</parentKey>
+                                <row>
+					<textField>
+						<name>externalIdentifierName</name>
+						<udn>externalIdentifierName</udn>
+						<caption>External Identifier Name</caption>
+						<column>NAME</column>
+						<maxLength>255</maxLength>
+					</textField>	
+                                </row>
+                                <row>
+					<textField>
+						<name>externalIdentifierValue</name>
+						<udn>externalIdentifierValue</udn>
+						<caption>External Identifier Value</caption>
+						<column>VALUE</column>
+						<maxLength>255</maxLength>
+					</textField>	
+                                </row>
+                        </subForm>
+                </row>
+		<row>
+                        <booleanCheckBox>
+                                <name>isAvailable</name>
+                                <udn>isAvailable</udn>
+                                <caption>Is Available</caption>
+                                <column>AVAILABLE</column>
+                        </booleanCheckBox>
+                </row>
+		<row>
+			<subForm>
+				<name>specimenPosition</name>
+				<udn>specimenPosition</udn>
+				<caption>Specimen Storage Details</caption>
+				<table>SPECIMEN_POS_VIEW</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<textField>
+						<name>containerName</name>
+						<udn>containerName</udn>
+						<caption>Storage Container Name</caption>
+						<column>CONTAINER_NAME</column>
+						<maxLength>255</maxLength>
+					</textField>							
+					<textField>
+						<name>positionDimensionOneString</name>
+						<udn>positionDimensionOneString</udn>
+						<caption>Position Dimension One</caption>
+						<column>POSITION_DIMENSION_ONE_STRING</column>
+						<maxLength>255</maxLength>
+					</textField>							
+					<textField>
+						<name>positionDimensionTwoString</name>
+						<udn>positionDimensionTwoString</udn>
+						<caption>Position Dimension Two</caption>
+						<column>POSITION_DIMENSION_TWO_STRING</column>
+						<maxLength>255</maxLength>
+					</textField>							
+						
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>specimenBiohazard</name>
+				<udn>specimenBiohazard</udn>
+				<caption>Specimen Biohazard</caption>
+				<table>SPECIMEN_BIOHAZARD_VIEW</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<textField>
+						<name>biohazardName</name>
+						<udn>biohazardName</udn>
+						<caption>Biohazard Name</caption>
+						<column>BIOHAZARD_NAME</column>
+						<maxLength>255</maxLength>
+					</textField>
+
+					<textField>
+						<name>biohazardType</name>
+						<udn>biohazardType</udn>
+						<caption>Biohazard Type</caption>
+						<column>BIOHAZARD_TYPE</column>
+						<maxLength>255</maxLength>
+					</textField>							
+				</row>
+			</subForm>
+		</row>
+  		<row>
+                        <subForm>
+                                <name>extensions</name>
+                                <udn>extensions</udn>
+                                <caption>Extensions</caption>
+                                <table>SPECIMEN_EXTN_RECORDS_VIEW</table>
+                                <foreignKey>SPECIMEN_ID</foreignKey>
+                                <parentKey>IDENTIFIER</parentKey>
+                                <pathLink>true</pathLink>
+                                <extnFkCol>RECORD_ID</extnFkCol>
+                        </subForm>
+                </row>
+	</view>
+</form>
