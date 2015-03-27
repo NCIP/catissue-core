@@ -9,6 +9,14 @@ angular.module('os.administrative.models.user', ['os.common.models'])
         }
       );
 
+    User.prototype.getType = function() {
+      return 'user';
+    }
+
+    User.prototype.getDisplayName = function() {
+      return this.firstName + ' ' + this.lastName;
+    }
+
     User.prototype.getRoles = function() {
       return {};
     }

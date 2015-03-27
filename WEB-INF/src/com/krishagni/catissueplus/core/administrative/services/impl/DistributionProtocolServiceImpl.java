@@ -2,7 +2,6 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
@@ -118,8 +117,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			}
 			
 			return ResponseEvent.response(existing.getDependentEntities());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
@@ -136,11 +134,9 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			existing.delete();
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(existing);
 			return ResponseEvent.response(DistributionProtocolDetail.from(existing));
-		} 
-		catch (OpenSpecimenException ose) {
+		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}

@@ -69,16 +69,16 @@
           sc.USER_ID = :userId
         union 
         select 
-          'cp' as entityName, count(cp.identifier) as count 
+          'collection_protocol' as entityName, count(cp.identifier) as count 
         from 
-          catissue_collection_protocol cp 
+          catissue_collection_protocol cp
+          left join catissue_coll_coordinators cc on cc.collection_protocol_id = cp.identifier
         where 
           cp.activity_status != 'Disabled' and
-          ( cp.principal_investigator_id = :userId or 
-            cp.identifier in (select cc.collection_protocol_id from catissue_coll_coordinators cc where cc.user_id = :userId))
+          (cp.principal_investigator_id = :userId or cc.user_id = :userId)
         union
         select 
-          'dp' as entityName, count(dp.identifier) as count 
+          'distribution_protocol' as entityName, count(dp.identifier) as count 
         from
           catissue_distribution_protocol dp 
         where

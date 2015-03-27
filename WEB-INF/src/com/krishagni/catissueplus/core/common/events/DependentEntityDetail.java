@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.common.events;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DependentEntityDetail {
@@ -31,11 +32,29 @@ public class DependentEntityDetail {
 		return detail;
 	}
 	
-	public static void setDependentEntities(String name, int count, List<DependentEntityDetail> dependentEntities) {
-		if (count == 0) {
-			return;
+	public static List<DependentEntityDetail> singletonList(String name, int count) {
+		return listBuilder()
+				.add(name, count)
+				.build();
+	}
+
+	public static DependentEntityDetailListBuilder listBuilder() {
+		return new DependentEntityDetailListBuilder();
+	}
+	
+	public static class DependentEntityDetailListBuilder {
+		private List<DependentEntityDetail> dependentEntities = new ArrayList<DependentEntityDetail>();
+		
+		public DependentEntityDetailListBuilder add(String name, int count) {
+			if (count > 0) {
+				dependentEntities.add(DependentEntityDetail.from(name, count));
+			}
+			
+			return this;
 		}
 		
-		dependentEntities.add(from(name, count));
+		public List<DependentEntityDetail> build() {
+			return dependentEntities;
+		}
 	}
 }

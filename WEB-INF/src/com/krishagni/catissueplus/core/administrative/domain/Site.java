@@ -1,10 +1,11 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import krishagni.catissueplus.util.CommonUtil;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
@@ -41,11 +42,11 @@ public class Site {
 
 	private Set<StorageContainer> storageContainers = new HashSet<StorageContainer>();
 	
-	private Set<CollectionProtocol> collectionProtocol = new HashSet<CollectionProtocol>();
+	private Set<CollectionProtocol> collectionProtocols = new HashSet<CollectionProtocol>();
 	
-	private Set<ParticipantMedicalIdentifier> pmiCollection = new HashSet<ParticipantMedicalIdentifier>();
+	private Set<ParticipantMedicalIdentifier> pmis = new HashSet<ParticipantMedicalIdentifier>();
 	
-	private Set<CollectionProtocolEvent> cpeCollection = new HashSet<CollectionProtocolEvent>();
+	private Set<CollectionProtocolEvent> collectionProtocolEvents = new HashSet<CollectionProtocolEvent>();
 
 	public static String getEntityName() {
 		return ENTITY_NAME;
@@ -130,29 +131,30 @@ public class Site {
 	public void setStorageContainers(Set<StorageContainer> storageContainers) {
 		this.storageContainers = storageContainers;
 	}
-
-	public Set<CollectionProtocol> getCollectionProtocol() {
-		return collectionProtocol;
+	
+	public Set<CollectionProtocol> getCollectionProtocols() {
+		return collectionProtocols;
 	}
 
-	public void setCollectionProtocol(Set<CollectionProtocol> collectionProtocol) {
-		this.collectionProtocol = collectionProtocol;
+	public void setCollectionProtocols(Set<CollectionProtocol> collectionProtocols) {
+		this.collectionProtocols = collectionProtocols;
 	}
 
-	public Set<ParticipantMedicalIdentifier> getPmiCollection() {
-		return pmiCollection;
+	public Set<ParticipantMedicalIdentifier> getPmis() {
+		return pmis;
 	}
 
-	public void setPmiCollection(Set<ParticipantMedicalIdentifier> pmiCollection) {
-		this.pmiCollection = pmiCollection;
+	public void setPmis(Set<ParticipantMedicalIdentifier> pmis) {
+		this.pmis = pmis;
 	}
 
-	public Set<CollectionProtocolEvent> getCpeCollection() {
-		return cpeCollection;
+	public Set<CollectionProtocolEvent> getCollectionProtocolEvents() {
+		return collectionProtocolEvents;
 	}
 
-	public void setCpeCollection(Set<CollectionProtocolEvent> cpeCollection) {
-		this.cpeCollection = cpeCollection;
+	public void setCollectionProtocolEvents(
+			Set<CollectionProtocolEvent> collectionProtocolEvents) {
+		this.collectionProtocolEvents = collectionProtocolEvents;
 	}
 
 	public void update(Site other) {
@@ -164,16 +166,16 @@ public class Site {
 		CollectionUpdater.update(this.getCoordinators(), other.getCoordinators());
 	}
 	
+	//TODO: need to check few more dependencies like user, distribution order
 	public List<DependentEntityDetail> getDependentEntities() {
-		List<DependentEntityDetail> dependentEntities = new ArrayList<DependentEntityDetail>();
-		
-		DependentEntityDetail.setDependentEntities(Visit.getEntityName(), getVisits().size(), dependentEntities);
-		DependentEntityDetail.setDependentEntities(StorageContainer.getEntityName(), getStorageContainers().size(), dependentEntities);
-		DependentEntityDetail.setDependentEntities(CollectionProtocol.getEntityName(), getCollectionProtocol().size(), dependentEntities);
-		DependentEntityDetail.setDependentEntities(ParticipantMedicalIdentifier.getEntityName(), getPmiCollection().size(), dependentEntities);
-		DependentEntityDetail.setDependentEntities(CollectionProtocolEvent.getEntityName(), getCpeCollection().size(), dependentEntities);
-		
-		return dependentEntities;
+		return DependentEntityDetail
+				.listBuilder()
+				.add(Visit.getEntityName(), getVisits().size())
+				.add(StorageContainer.getEntityName(), getStorageContainers().size())
+				.add(CollectionProtocol.getEntityName(), getCollectionProtocols().size())
+				.add(ParticipantMedicalIdentifier.getEntityName(), getPmis().size())
+				.add(CollectionProtocolEvent.getEntityName(), getCollectionProtocolEvents().size())
+				.build();
 	}
 
 	public void delete(boolean close) {
@@ -181,9 +183,14 @@ public class Site {
 		if (!close) {
 			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 			ensureFreeOfDependencies();
+			
+			setName(CommonUtil.appendTimestamp(getName()));
+			if (getCode() != null) {
+				setCode(CommonUtil.appendTimestamp(getCode()));
+			}
 		}
 		
-		this.setActivityStatus(activityStatus);
+		setActivityStatus(activityStatus);
 	}
 	
 	private void updateActivityStatus(String newActivityStatus) {
@@ -201,7 +208,7 @@ public class Site {
 	private void ensureFreeOfDependencies() {
 		List<DependentEntityDetail> dependentEntities = getDependentEntities();
 		if (!dependentEntities.isEmpty()) {
-			throw new OpenSpecimenException(ErrorType.USER_ERROR,SiteErrorCode.REF_ENTITY_FOUND);
+			throw new OpenSpecimenException(ErrorType.USER_ERROR, SiteErrorCode.REF_ENTITY_FOUND);
 		}
 	}
 

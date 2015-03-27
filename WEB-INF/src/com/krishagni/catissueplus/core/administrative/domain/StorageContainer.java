@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import krishagni.catissueplus.util.CommonUtil;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -523,6 +525,42 @@ public class StorageContainer extends BaseEntity {
 		
 		return types;
 	}
+
+	public List<DependentEntityDetail> getDependentEntities() {
+		int noOfSpecimens = getSpecimenCount();
+		return DependentEntityDetail
+				.singletonList(Specimen.getEntityName(), noOfSpecimens);
+	}
+	
+	public void delete() {
+		if(getParentContainer() == null || 
+				!getParentContainer().getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
+			List<DependentEntityDetail> dependentEntities = getDependentEntities();
+			if (!dependentEntities.isEmpty()) {
+				throw OpenSpecimenException.userError(StorageContainerErrorCode.REF_ENTITY_FOUND);
+			}
+		}
+		
+		setName(CommonUtil.appendTimestamp(getName()));
+		if (getBarcode() != null) {
+			setBarcode(CommonUtil.appendTimestamp(getBarcode()));
+		}
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+		
+		for (StorageContainer childContainer: getChildContainers()) {
+			childContainer.delete();
+		}
+	}
+	
+	private int getSpecimenCount() {
+		int noOfSpecimens = getOccupiedPositions().size() - getChildContainers().size();
+		
+		for (StorageContainer childContainer: getChildContainers()) {
+			noOfSpecimens += childContainer.getSpecimenCount();
+		}
+		
+		return noOfSpecimens;
+	}
 	
 	private Set<String> computeAllAllowedSpecimenTypes() {
 		Set<String> types = new HashSet<String>();
@@ -541,26 +579,6 @@ public class StorageContainer extends BaseEntity {
 		}
 				
 		return types;
-	}
-	
-	public List<DependentEntityDetail> getDependentEntities() {
-		List<DependentEntityDetail> dependentEntities = new ArrayList<DependentEntityDetail>();
-		
-		int childContainerSize = this.getChildContainers().size();
-		DependentEntityDetail.setDependentEntities(StorageContainer.getEntityName(), childContainerSize, dependentEntities);
-		DependentEntityDetail.setDependentEntities(Specimen.getEntityName(), 
-				this.getOccupiedPositions().size() - childContainerSize, dependentEntities);
-		
-		return dependentEntities;
-	}
-	
-	public void delete() {
-		List<DependentEntityDetail> dependentEntities = getDependentEntities();
-		if (!dependentEntities.isEmpty()) {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.REF_ENTITY_FOUND);
-		}
-		
-		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 	
 	private StorageContainerPosition createPosition(int posOneOrdinal, String posOne, int posTwoOrdinal, String posTwo) {

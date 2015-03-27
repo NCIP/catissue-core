@@ -1,11 +1,12 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import krishagni.catissueplus.util.CommonUtil;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
@@ -19,7 +20,7 @@ import com.krishagni.catissueplus.core.common.util.Status;
 
 
 public class CollectionProtocol extends BaseEntity {
-	private static final String ENTITY_NAME = "cp";
+	private static final String ENTITY_NAME = "collection_protocol";
 	
 	private String title;
 
@@ -57,9 +58,9 @@ public class CollectionProtocol extends BaseEntity {
 	
 	private Set<CollectionProtocolEvent> collectionProtocolEvents = new HashSet<CollectionProtocolEvent>();
 
-	private Set<StorageContainer> storageContainer = new HashSet<StorageContainer>();
+	private Set<StorageContainer> storageContainers = new HashSet<StorageContainer>();
 	
-	private Set<CollectionProtocolRegistration> collectionProtocolRegistration = new HashSet<CollectionProtocolRegistration>();
+	private Set<CollectionProtocolRegistration> collectionProtocolRegistrations = new HashSet<CollectionProtocolRegistration>();
 	
 	public static String getEntityName() {
 		return ENTITY_NAME;
@@ -208,22 +209,22 @@ public class CollectionProtocol extends BaseEntity {
 	public void setCollectionProtocolEvents(Set<CollectionProtocolEvent> collectionProtocolEvents) {
 		this.collectionProtocolEvents = collectionProtocolEvents;
 	}
-	
-	public Set<StorageContainer> getStorageContainer() {
-		return storageContainer;
+
+	public Set<StorageContainer> getStorageContainers() {
+		return storageContainers;
 	}
 
-	public void setStorageContainer(Set<StorageContainer> storageContainer) {
-		this.storageContainer = storageContainer;
+	public void setStorageContainers(Set<StorageContainer> storageContainers) {
+		this.storageContainers = storageContainers;
 	}
 
-	public Set<CollectionProtocolRegistration> getCollectionProtocolRegistration() {
-		return collectionProtocolRegistration;
+	public Set<CollectionProtocolRegistration> getCollectionProtocolRegistrations() {
+		return collectionProtocolRegistrations;
 	}
 
-	public void setCollectionProtocolRegistration(
-			Set<CollectionProtocolRegistration> collectionProtocolRegistration) {
-		this.collectionProtocolRegistration = collectionProtocolRegistration;
+	public void setCollectionProtocolRegistrations(
+			Set<CollectionProtocolRegistration> collectionProtocolRegistrations) {
+		this.collectionProtocolRegistrations = collectionProtocolRegistrations;
 	}
 
 	// new	
@@ -322,14 +323,13 @@ public class CollectionProtocol extends BaseEntity {
 		return null;
 	}
 	
+	//TODO: need to check few more dependencies like user role 
 	public List<DependentEntityDetail> getDependentEntities() {
-		List<DependentEntityDetail> dependentEntities = new ArrayList<DependentEntityDetail>();
-		
-		DependentEntityDetail.setDependentEntities(CollectionProtocolRegistration.getEntityName(), 
-				getCollectionProtocolRegistration().size(), dependentEntities);
-		DependentEntityDetail.setDependentEntities(StorageContainer.getEntityName(), getStorageContainer().size(), dependentEntities);
-		
-		return dependentEntities;
+		return DependentEntityDetail
+				.listBuilder()
+				.add(CollectionProtocolRegistration.getEntityName(), getCollectionProtocolRegistrations().size())
+				.add(StorageContainer.getEntityName(), getStorageContainers().size())
+				.build();
 	}
 	
 	public void delete() {
@@ -337,8 +337,10 @@ public class CollectionProtocol extends BaseEntity {
 		if (!dependentEntities.isEmpty()) {
 			throw OpenSpecimenException.userError(CpeErrorCode.REF_ENTITY_FOUND);
 		}
-		
-		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+
+		setTitle(CommonUtil.appendTimestamp(getTitle()));
+		setShortTitle(CommonUtil.appendTimestamp(getShortTitle()));
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 
 	private ConsentTier getConsentTierById(Long ctId) {

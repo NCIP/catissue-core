@@ -15,9 +15,7 @@ angular.module('os.administrative.user.detail', ['os.administrative.models'])
       User.activate($scope.user.id).then(
         function(user) {
           $scope.user = user;
-          $translate('user.user_request_approved').then(function(msg) {
-            Alerts.success(msg);
-          })
+          Alerts.success('user.user_request_approved');
         }
       );
     }
@@ -25,8 +23,7 @@ angular.module('os.administrative.user.detail', ['os.administrative.models'])
     $scope.deleteUser = function() {
       DeleteUtil.delete($scope.user, {
         onDeleteState: 'user-list',
-        entityNameProp: $scope.user.firstName + ' ' + $scope.user.lastName,
-        entityTypeProp: 'entity_name.user'
+        confirmDelete: $scope.user.activityStatus == 'Pending' ? 'user.confirm_reject' : undefined
       });
     }
 

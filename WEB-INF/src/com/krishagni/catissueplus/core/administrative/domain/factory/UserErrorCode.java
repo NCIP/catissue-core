@@ -5,8 +5,6 @@ import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 public enum UserErrorCode implements ErrorCode {
 	DUP_LOGIN_NAME,
 
-	LOGIN_NAME_CHANGE_NOT_ALLOWED,
-	
 	OLD_PASSWD_NOT_SPECIFIED,
 	
 	INVALID_OLD_PASSWD,

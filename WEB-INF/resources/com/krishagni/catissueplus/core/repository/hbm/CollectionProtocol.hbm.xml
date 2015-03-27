@@ -65,12 +65,12 @@
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent"/>
     </set>
     
-    <set name="collectionProtocolRegistration" inverse="false" cascade="none">
+    <set name="collectionProtocolRegistrations" inverse="false" cascade="none">
       <key column="COLLECTION_PROTOCOL_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration"/>
     </set>
     
-    <set name="storageContainer" table="OS_STOR_CONTAINER_CPS" inverse="false">
+    <set name="storageContainers" table="OS_STOR_CONTAINER_CPS" inverse="false">
       <key column="CP_ID"/>
       <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" column="STORAGE_CONTAINER_ID"/>
     </set>

@@ -2,6 +2,14 @@ angular.module('os.administrative.models.institute', ['os.common.models'])
   .factory('Institute', function(osModel, $http, $q) {
     var Institute = osModel('institutes');
 
+    Institute.prototype.getType = function() {
+      return 'institute';
+    }
+
+    Institute.prototype.getDisplayName = function() {
+      return this.name;
+    }
+
     Institute.prototype.newDepartment = function() {
       return {id: '', name: ''}
     };

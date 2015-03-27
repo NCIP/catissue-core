@@ -1,7 +1,6 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -16,7 +15,7 @@ import com.krishagni.catissueplus.core.common.util.Status;
 
 
 public class DistributionProtocol {
-	private static final String ENTITY_NAME = "dp";
+	private static final String ENTITY_NAME = "distribution_protocol";
 
 	private Long id;
 
@@ -129,21 +128,19 @@ public class DistributionProtocol {
 	}
 	
 	public List<DependentEntityDetail> getDependentEntities() {
-		List<DependentEntityDetail> dependentEntities = new ArrayList<DependentEntityDetail>();
-		DependentEntityDetail.setDependentEntities(DistributionOrder.getEntityName(), getDistributionOrders().size(), dependentEntities);
-		
-		return dependentEntities;
+		return DependentEntityDetail
+				.singletonList(DistributionOrder.getEntityName(), getDistributionOrders().size());
 	}
 	
 	public void delete() {
 		List<DependentEntityDetail> dependentEntities = getDependentEntities();
-		if(!dependentEntities.isEmpty()) {
+		if (!dependentEntities.isEmpty()) {
 			throw OpenSpecimenException.userError(DistributionProtocolErrorCode.REF_ENTITY_FOUND);
 		}
 		
-		this.setShortTitle(CommonUtil.appendTimestamp(getShortTitle()));
-		this.setTitle(CommonUtil.appendTimestamp(getTitle()));
-		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+		setShortTitle(CommonUtil.appendTimestamp(getShortTitle()));
+		setTitle(CommonUtil.appendTimestamp(getTitle()));
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 	
 }

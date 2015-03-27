@@ -1,14 +1,14 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import krishagni.catissueplus.util.CommonUtil;
+
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
-import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
@@ -73,17 +73,16 @@ public class Institute extends BaseEntity {
 	}
 	
 	public List<DependentEntityDetail> getDependentEntities() {
-		List<DependentEntityDetail> dependentEntities = new ArrayList<DependentEntityDetail>();
-		
 		int userCount = 0;
 		for (Department dept : getDepartments()) {
 			userCount += dept.getUsers().size();
 		}
 		
-		DependentEntityDetail.setDependentEntities(User.getEntityName(), userCount, dependentEntities);
-		DependentEntityDetail.setDependentEntities(Site.getEntityName(), getSites().size(), dependentEntities);
-		
-		return dependentEntities;
+		return DependentEntityDetail
+				.listBuilder()
+				.add(User.getEntityName(), userCount)
+				.add(Site.getEntityName(), getSites().size())
+				.build();
 	}
 	
 	public void delete(Boolean close) {
@@ -91,9 +90,11 @@ public class Institute extends BaseEntity {
 		if (!close) {
 			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 			ensureFreeOfDependencies();
+			
+			setName(CommonUtil.appendTimestamp(getName()));
 		}
 		
-		this.setActivityStatus(activityStatus);
+		setActivityStatus(activityStatus);
 	}
 	
 	private void updateActivityStatus(String newActivityStatus) {

@@ -7,11 +7,7 @@ angular.module('os.administrative.institute.detail', ['os.administrative.models'
     }
 
     $scope.deleteInstitute = function() {
-      DeleteUtil.delete($scope.institute, {
-        onDeleteState: 'institute-list',
-        entityNameProp: $scope.institute.name,
-        entityTypeProp: 'entity_name.institute'
-      });
+      DeleteUtil.delete($scope.institute, {onDeleteState: 'institute-list'});
     }
 
   });

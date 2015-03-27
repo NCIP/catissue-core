@@ -6,7 +6,7 @@ import java.util.Set;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 
 public class CollectionProtocolEvent {
-	private static final String ENTITY_NAME = "cpe";
+	private static final String ENTITY_NAME = "collection_protocol_event";
 	
 	private Long id;
 

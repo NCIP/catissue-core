@@ -3,6 +3,14 @@ angular.module('os.administrative.models.container', ['os.common.models'])
   .factory('Container', function(osModel, $q, $http) {
     var Container = new osModel('storage-containers');
 
+    Container.prototype.getType = function() {
+      return 'storage_container';
+    }
+
+    Container.prototype.getDisplayName = function() {
+      return this.name;
+    }
+
     Container.list = function(opts) {
       var defOpts = {topLevelContainers: true};
       return Container.query(angular.extend(defOpts, opts || {}));

@@ -29,8 +29,7 @@ angular.module('os.administrative.container.detail', ['os.administrative.models'
     $scope.deleteContainer = function() {
       DeleteUtil.delete($scope.container, {
         onDeleteState: 'container-list',
-        entityNameProp: $scope.container.name,
-        entityTypeProp: 'entity_name.storage_container'
+        confirmDelete: 'container.confirm_delete'
       });
     }
 

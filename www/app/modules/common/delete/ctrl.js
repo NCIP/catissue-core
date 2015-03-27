@@ -1,5 +1,5 @@
 angular.module('os.common.delete', [])
-  .controller('EntityDeleteCtrl', function($scope, $modalInstance, $translate, entityProps, dependentEntities, Alerts) {
+  .controller('EntityDeleteCtrl', function($scope, $modalInstance, entityProps, dependentEntities, Alerts) {
 
    function init() {
       $scope.entity = entityProps.entity;
@@ -7,17 +7,15 @@ angular.module('os.common.delete', [])
       $scope.dependentEntities = dependentEntities;
     }
 
-    function onDeleted(entity) {
+    function onDeletion(entity) {
       if (!!entity) {
-        Alerts.success("delete_entity.entity_deleted", 
-          {entityName: entityProps.name, entityType: entityProps.type});
-
+        Alerts.success("delete_entity.entity_deleted", entityProps);
         $modalInstance.close(entity);
       }
     }
 
     $scope.delete = function () {
-      $scope.entity.$remove().then(onDeleted)
+      $scope.entity.$remove().then(onDeletion)
     };
 
     $scope.cancel = function () {

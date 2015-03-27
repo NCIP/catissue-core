@@ -19,7 +19,7 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Configurable
 public class CollectionProtocolRegistration {
-	private static final String ENTITY_NAME = "cpr";
+	private static final String ENTITY_NAME = "collection_protocol_registration";
 	
 	private Long id;
 

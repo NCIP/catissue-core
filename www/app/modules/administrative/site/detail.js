@@ -26,12 +26,7 @@ angular.module('os.administrative.site.detail', ['os.administrative.models'])
     }
 
     $scope.deleteSite = function() {
-      DeleteUtil.delete($scope.site, {
-        onDeleteState: 'site-list',
-        entityNameProp: $scope.site.name,
-        entityTypeProp: 'entity_name.site'
-      });
-
+      DeleteUtil.delete($scope.site, {onDeleteState: 'site-list'});
     }
 
     $scope.getCoordinatorDisplayText = function(coordinator) {

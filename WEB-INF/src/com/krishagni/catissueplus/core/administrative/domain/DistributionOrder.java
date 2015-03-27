@@ -16,7 +16,7 @@ public class DistributionOrder extends BaseEntity {
 		DISTRIBUTED_AND_CLOSED
 	}
 	
-	private static final String ENTITY_NAME = "dist_order";
+	private static final String ENTITY_NAME = "distribution_order";
 	
 	private String name;
 	

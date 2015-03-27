@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import krishagni.catissueplus.util.CommonUtil;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -129,14 +131,6 @@ public class User extends BaseEntity implements UserDetails {
 	}
 
 	public void setLoginName(String loginName) {
-		if (StringUtils.isBlank(loginName)) {
-			throw OpenSpecimenException.userError(LOGIN_NAME_REQUIRED);
-		}
-		
-		if (StringUtils.isNotBlank(this.getLoginName()) && !this.getLoginName().equals(loginName)) {
-			throw OpenSpecimenException.userError(LOGIN_NAME_CHANGE_NOT_ALLOWED);
-		}
-
 		this.loginName = loginName;
 	}
 
@@ -265,8 +259,9 @@ public class User extends BaseEntity implements UserDetails {
 		this.passwords.add(password);
 	}
 	
+	//TODO: need to check few more entities like AQ, Custom form, Distribution order etc.
 	public List<DependentEntityDetail> getDependentEntities() {
-		return daoFactory.getUserDao().getDependentEntities(this.id);
+		return daoFactory.getUserDao().getDependentEntities(getId());
 	}
 	
 	public void delete(boolean close) {
@@ -277,9 +272,12 @@ public class User extends BaseEntity implements UserDetails {
 			if (!dependentEntities.isEmpty()) {
 				throw OpenSpecimenException.userError(UserErrorCode.REF_ENTITY_FOUND);
 			}
+			
+			setLoginName(CommonUtil.appendTimestamp(getLoginName()));
+			setEmailAddress(CommonUtil.appendTimestamp(getEmailAddress()));
 		}
 		
-		this.setActivityStatus(activityStatus);
+		setActivityStatus(activityStatus);
 	}
 	
 	public boolean isValidOldPassword(String oldPassword) {

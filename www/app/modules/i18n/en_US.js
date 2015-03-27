@@ -471,10 +471,10 @@
     "confirm_password": "Confirm Password",
     "approve_user": "Approve User",
     "reject_user": "Reject User",
-    "request_pending": "Note: {{name}} would like to access OpenSpecimen. Approve or Reject?",
+    "request_pending": "Note: {{firstName}}  {{lastName}} would like to access OpenSpecimen. Approve or Reject?",
     "user_request_approved": "User request approved successfully",
     "activity_status": "Activity Status",
-    "confirm_delete_pending_user": "Rejecting the user will delete this user from the database. Are you sure you want to go ahead?",
+    "confirm_reject": "Rejecting the User {{entityName}} will delete this user from the database. Are you sure you want to go ahead?",
 
     "role": {
        "roles": "Roles",
@@ -571,6 +571,7 @@
     "no_container_selected": "Please select a container",
     "cannot_hold_specimen": "Selected container cannot hold specimen for which position is being selected",
     "stores_specimens": "Stores Specimens",
+    "confirm_delete": "{{entityType}} {{entityName}} and its child containers will be deleted forever. Are you sure you want to proceed?",
 
     "tooltip": {
       "view_details": "Click to view/edit Storage Container details",
@@ -638,7 +639,7 @@
   },
 
   "delete_entity": {
-    "object_name": "Object Name",
+    "entity_name": "Entity Name",
     "count": "Count",
     "title": "Deleting {{entityName}} confirmation",
     "confirm_delete": "{{entityType}} {{entityName}} will be deleted forever. Are you sure you want to proceed?",
@@ -746,18 +747,18 @@
     }
   },
 
-  "entity_name": {
-    "cp": "Collection Protocol",
-    "dp": "Distribution Protocol",
+  "entities": {
+    "collection_protocol": "Collection Protocol",
+    "distribution_protocol": "Distribution Protocol",
     "user": "User",
     "site": "Site",
     "institute": "Institute",
     "storage_container": "Storage Container",
     "visit": "Visit",
-    "mrn": "MRN",
-    "cpe": "Collection Protocol Event",
-    "cpr": "Collection Protocol Registration",
+    "medical_record_number": "MRN",
+    "collection_protocol_event": "Collection Protocol Event",
+    "collection_protocol_registration": "Collection Protocol Registration",
     "specimen": "Specimen",
-    "dist_order": "Distribution Order"
+    "distribution_order": "Distribution Order"
   }
 }
