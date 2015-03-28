@@ -51,17 +51,16 @@ angular.module('os.biospecimen.participant.collect-specimens',
           }
         );
 
-        var visitDate = visit.visitDate || visit.anticipatedVisitDate;
-        visit.visitDate = new Date(visitDate).toISOString();
+        visit.visitDate = visit.visitDate || visit.anticipatedVisitDate;
         visit.cprId = cpr.id;
         delete visit.anticipatedVisitDate;
         $scope.visit = visit;
         
         $scope.collDetail = {
           collector: undefined,
-          collectionDate: new Date().toISOString(),
+          collectionDate: new Date(),
           receiver: undefined,
-          receiveDate: new Date().toISOString()
+          receiveDate: new Date()
         };
 
         loadPvs();
