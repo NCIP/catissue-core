@@ -4,14 +4,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import krishagni.catissueplus.util.CommonUtil;
-
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 
 public class Institute extends BaseEntity {
@@ -88,10 +87,10 @@ public class Institute extends BaseEntity {
 	public void delete(Boolean close) {
 		String activityStatus = Status.ACTIVITY_STATUS_CLOSED.getStatus();
 		if (!close) {
-			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 			ensureFreeOfDependencies();
 			
-			setName(CommonUtil.appendTimestamp(getName()));
+			setName(Utility.appendTimestamp(getName()));
+			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 		}
 		
 		setActivityStatus(activityStatus);

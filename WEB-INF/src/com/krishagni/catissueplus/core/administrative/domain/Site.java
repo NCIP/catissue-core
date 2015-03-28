@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import krishagni.catissueplus.util.CommonUtil;
-
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
@@ -17,6 +15,7 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 
 public class Site {
@@ -184,9 +183,9 @@ public class Site {
 			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 			ensureFreeOfDependencies();
 			
-			setName(CommonUtil.appendTimestamp(getName()));
+			setName(Utility.appendTimestamp(getName()));
 			if (getCode() != null) {
-				setCode(CommonUtil.appendTimestamp(getCode()));
+				setCode(Utility.appendTimestamp(getCode()));
 			}
 		}
 		

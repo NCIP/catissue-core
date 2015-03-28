@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import krishagni.catissueplus.util.CommonUtil;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -24,6 +22,7 @@ import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 
 public class StorageContainer extends BaseEntity {
@@ -527,39 +526,43 @@ public class StorageContainer extends BaseEntity {
 	}
 
 	public List<DependentEntityDetail> getDependentEntities() {
-		int noOfSpecimens = getSpecimenCount();
+		int specimenCnt = getSpecimenCount();
 		return DependentEntityDetail
-				.singletonList(Specimen.getEntityName(), noOfSpecimens);
+			.singletonList(Specimen.getEntityName(), specimenCnt);
 	}
 	
 	public void delete() {
-		if(getParentContainer() == null || 
-				!getParentContainer().getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
-			List<DependentEntityDetail> dependentEntities = getDependentEntities();
-			if (!dependentEntities.isEmpty()) {
-				throw OpenSpecimenException.userError(StorageContainerErrorCode.REF_ENTITY_FOUND);
-			}
+		int specimenCnt = getSpecimenCount();
+		if (specimenCnt > 0) {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.REF_ENTITY_FOUND);
 		}
 		
-		setName(CommonUtil.appendTimestamp(getName()));
+		deleteWithoutCheck();
+	}
+	
+	private void deleteWithoutCheck() {
+		for (StorageContainer child: getChildContainers()) {
+			child.deleteWithoutCheck();
+		}
+		
+		setName(Utility.appendTimestamp(getName()));
 		if (getBarcode() != null) {
-			setBarcode(CommonUtil.appendTimestamp(getBarcode()));
+			setBarcode(Utility.appendTimestamp(getBarcode()));
 		}
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
-		
-		for (StorageContainer childContainer: getChildContainers()) {
-			childContainer.delete();
-		}
 	}
 	
 	private int getSpecimenCount() {
-		int noOfSpecimens = getOccupiedPositions().size() - getChildContainers().size();
-		
-		for (StorageContainer childContainer: getChildContainers()) {
-			noOfSpecimens += childContainer.getSpecimenCount();
+		int specimenCnt = 0;
+		for (StorageContainer descendant: descendentContainers) {
+			specimenCnt += descendant.getSelfSpecimenCount();
 		}
 		
-		return noOfSpecimens;
+		return specimenCnt;
+	}
+	
+	private int getSelfSpecimenCount() {
+		return getOccupiedPositions().size() - getChildContainers().size();
 	}
 	
 	private Set<String> computeAllAllowedSpecimenTypes() {

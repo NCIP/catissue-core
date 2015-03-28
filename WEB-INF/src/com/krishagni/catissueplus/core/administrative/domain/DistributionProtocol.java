@@ -6,12 +6,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import krishagni.catissueplus.util.CommonUtil;
-
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 
 public class DistributionProtocol {
@@ -113,18 +112,18 @@ public class DistributionProtocol {
 
 	public void update(DistributionProtocol distributionProtocol) {
 		if (distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
-			this.setShortTitle(CommonUtil.appendTimestamp(distributionProtocol.getShortTitle()));
-			this.setTitle(CommonUtil.appendTimestamp(distributionProtocol.getTitle()));
+			setShortTitle(Utility.appendTimestamp(distributionProtocol.getShortTitle()));
+			setTitle(Utility.appendTimestamp(distributionProtocol.getTitle()));
 		}
 		else {
-			this.setShortTitle(distributionProtocol.getShortTitle());
-			this.setTitle(distributionProtocol.getTitle());
+			setShortTitle(distributionProtocol.getShortTitle());
+			setTitle(distributionProtocol.getTitle());
 		}
-		this.setIrbId(distributionProtocol.getIrbId());
-		this.setPrincipalInvestigator(distributionProtocol.getPrincipalInvestigator());
-		this.setStartDate(distributionProtocol.getStartDate());
-		this.setEndDate(distributionProtocol.getEndDate());
-		this.setActivityStatus(distributionProtocol.getActivityStatus());
+		setIrbId(distributionProtocol.getIrbId());
+		setPrincipalInvestigator(distributionProtocol.getPrincipalInvestigator());
+		setStartDate(distributionProtocol.getStartDate());
+		setEndDate(distributionProtocol.getEndDate());
+		setActivityStatus(distributionProtocol.getActivityStatus());
 	}
 	
 	public List<DependentEntityDetail> getDependentEntities() {
@@ -138,8 +137,8 @@ public class DistributionProtocol {
 			throw OpenSpecimenException.userError(DistributionProtocolErrorCode.REF_ENTITY_FOUND);
 		}
 		
-		setShortTitle(CommonUtil.appendTimestamp(getShortTitle()));
-		setTitle(CommonUtil.appendTimestamp(getTitle()));
+		setShortTitle(Utility.appendTimestamp(getShortTitle()));
+		setTitle(Utility.appendTimestamp(getTitle()));
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 	

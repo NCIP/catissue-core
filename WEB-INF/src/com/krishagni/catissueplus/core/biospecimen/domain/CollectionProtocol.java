@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import krishagni.catissueplus.util.CommonUtil;
-
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -17,6 +15,7 @@ import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 
 public class CollectionProtocol extends BaseEntity {
@@ -338,8 +337,8 @@ public class CollectionProtocol extends BaseEntity {
 			throw OpenSpecimenException.userError(CpeErrorCode.REF_ENTITY_FOUND);
 		}
 
-		setTitle(CommonUtil.appendTimestamp(getTitle()));
-		setShortTitle(CommonUtil.appendTimestamp(getShortTitle()));
+		setTitle(Utility.appendTimestamp(getTitle()));
+		setShortTitle(Utility.appendTimestamp(getShortTitle()));
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 

@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import krishagni.catissueplus.util.CommonUtil;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -29,6 +27,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Configurable
 public class User extends BaseEntity implements UserDetails {
@@ -273,8 +272,8 @@ public class User extends BaseEntity implements UserDetails {
 				throw OpenSpecimenException.userError(UserErrorCode.REF_ENTITY_FOUND);
 			}
 			
-			setLoginName(CommonUtil.appendTimestamp(getLoginName()));
-			setEmailAddress(CommonUtil.appendTimestamp(getEmailAddress()));
+			setLoginName(Utility.appendTimestamp(getLoginName()));
+			setEmailAddress(Utility.appendTimestamp(getEmailAddress()));
 		}
 		
 		setActivityStatus(activityStatus);
