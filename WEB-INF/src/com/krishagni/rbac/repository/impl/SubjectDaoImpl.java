@@ -42,13 +42,13 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
 					.setParameterList("siteIds", crit.sites());
 		} else {
 			query = sessionFactory.getCurrentSession()
-				.getNamedQuery(CAN_USER_PERFORM_OP_ON_CP);
+					.getNamedQuery(CAN_USER_PERFORM_OP_ON_CP);
 		}
 		
 		query.setString("resource", crit.resource())
-			.setString("operation", crit.operation())
-			.setLong("subjectId", crit.subjectId())
-			.setLong("cpId", crit.cpId() == null ? -1L : crit.cpId());
+				.setString("operation", crit.operation())
+				.setLong("subjectId", crit.subjectId())
+				.setLong("cpId", crit.cpId() == null ? -1L : crit.cpId());
 		
 		return CollectionUtils.isNotEmpty(query.list()); 
 	}	

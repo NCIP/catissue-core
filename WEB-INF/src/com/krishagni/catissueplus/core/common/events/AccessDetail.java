@@ -14,8 +14,8 @@ public class AccessDetail {
 		
 	}
 	
-	public AccessDetail(boolean canAccessAll) {
-		accessAll = canAccessAll;
+	public AccessDetail(boolean accessAll) {
+		this.accessAll = accessAll;
 	}
 
 	public Boolean canAccessAll() {

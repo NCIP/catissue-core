@@ -53,65 +53,35 @@ public class AccessCtrlMgr {
 	}
 	
 	public void ensureReadPermission(Resource resource, CollectionProtocol cp, Set<Site> sites) {
-		User user = AuthUtil.getCurrentUser();
-		if (user.isAdmin()) {
-			return;
-		}
-		
-		if (!rbacService.canUserPerformOp( 
-				user.getId(), 
-				resource.getName(), 
-				Operation.READ.getName(), 
-				cp.getId(), 
-				getSiteIds(sites))) {
-			throwAccessDenied();
-		}
+		ensureUserHasPermission(resource, cp, sites, Operation.READ);
 	}
 	
 	public void ensureCreatePermission(Resource resource, CollectionProtocol cp, Set<Site> sites) {
-		User user = AuthUtil.getCurrentUser();
-		if (user.isAdmin()) {
-			return;
-		}
-		
-		if(!rbacService.canUserPerformOp(
-				user.getId(), 
-				resource.getName(), 
-				Operation.CREATE.getName(), 
-				cp.getId(), 
-				getSiteIds(sites))) {
-			throwAccessDenied();
-		}
+		ensureUserHasPermission(resource, cp, sites, Operation.CREATE);
 	}
 	
 	public void ensureUpdatePermission(Resource resource, CollectionProtocol cp, Set<Site> sites) {
-		User user = AuthUtil.getCurrentUser();
-		if (user.isAdmin()) {
-			return;
-		}
-		
-		if(!rbacService.canUserPerformOp(
-				user.getId(), 
-				resource.getName(), 
-				Operation.UPDATE.getName(), 
-				cp.getId(), 
-				getSiteIds(sites))) {
-			throwAccessDenied();
-		}
+		ensureUserHasPermission(resource, cp, sites, Operation.UPDATE);
 	}
 	
 	public void ensureDeletePermission(Resource resource, CollectionProtocol cp, Set<Site> sites) {
+		ensureUserHasPermission(resource, cp, sites, Operation.DELETE);
+	}
+	
+	private void ensureUserHasPermission(Resource resource, CollectionProtocol cp, Set<Site> sites, Operation operation) {
 		User user = AuthUtil.getCurrentUser();
 		if (user.isAdmin()) {
 			return;
 		}
 		
-		if(!rbacService.canUserPerformOp(
+		boolean canPerformOp = rbacService.canUserPerformOp( 
 				user.getId(), 
 				resource.getName(), 
-				Operation.DELETE.getName(), 
+				operation.getName(), 
 				cp.getId(), 
-				getSiteIds(sites))) {
+				getSiteIds(sites));
+		
+		if (!canPerformOp) {
 			throwAccessDenied();
 		}
 	}

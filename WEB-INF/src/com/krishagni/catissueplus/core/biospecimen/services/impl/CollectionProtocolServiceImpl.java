@@ -158,7 +158,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		try {
 			CollectionProtocol cp = cpFactory.createCollectionProtocol(req.getPayload());
 			ensureUserHasCreatePermission(cp);
-			ensureCpPiCordsSiteRelationShipIsValid(cp);
+			ensureUsersBelongtoCpSites(cp);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueTitle(cp.getTitle(), ose);
@@ -186,7 +186,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 			ensureUserHasUpdatePermission(existingCp);
 			CollectionProtocol cp = cpFactory.createCollectionProtocol(detail);
-			ensureCpPiCordsSiteRelationShipIsValid(cp);
+			ensureUsersBelongtoCpSites(cp);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueTitle(existingCp, cp, ose);
@@ -316,8 +316,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 				return ResponseEvent.userError(CpeErrorCode.NOT_FOUND);
 			}
 			
-			CollectionProtocol cp = cpe.getCollectionProtocol();
-			ensureUserHasReadPermission(cp);
+			ensureUserHasReadPermission(cpe.getCollectionProtocol());
 			return ResponseEvent.response(CollectionProtocolEventDetail.from(cpe));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -520,13 +519,13 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		AccessCtrlMgr.getInstance().ensureCreatePermission(Resource.CP, cp, cp.getRepositories());
 	}
 	
-	private void ensureCpPiCordsSiteRelationShipIsValid(CollectionProtocol cp) {
-		ensureUserSitesBelongToCpSite(cp);
-		ensurePISitesBelongToCpSite(cp);
-		ensureCoordSitesBelongToCpSite(cp);		
+	private void ensureUsersBelongtoCpSites(CollectionProtocol cp) {
+		ensureCreatorBelongsCpSites(cp);
+		ensurePiBelongsCpSites(cp);
+		ensureCoordinatorsBelongsCpSites(cp);		
 	}
 	
-	private void ensureUserSitesBelongToCpSite(CollectionProtocol cp) {
+	private void ensureCreatorBelongsCpSites(CollectionProtocol cp) {
 		User user = AuthUtil.getCurrentUser();
 		if (user.isAdmin()) {
 			return;
@@ -537,50 +536,37 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		Set<Site> cpSites = cp.getRepositories();
 		
 		if (!userSites.containsAll(cpSites)) {
-			throw OpenSpecimenException.userError(CpErrorCode.USER_DOESNT_BELONG_TO_CP_SITES);
+			throw OpenSpecimenException.userError(CpErrorCode.CREATOR_DOES_NOT_BELONG_CP_REPOS);
 		}
 	}
 	
 	private User loadUser(User user) {
-		user = daoFactory.getUserDao().getById(user.getId());
-		if (user == null) {
-			throw OpenSpecimenException.userError(UserErrorCode.NOT_FOUND);
-		}
-		
-		return user;
+		return daoFactory.getUserDao().getById(user.getId());
 	}
 
-	private void ensurePISitesBelongToCpSite(CollectionProtocol cp) {
+	private void ensurePiBelongsCpSites(CollectionProtocol cp) {
 		Set<Site> piSites = cp.getPrincipalInvestigator().getSites();
-		Set<Site> cpsites = cp.getRepositories();
+		Set<Site> cpSites = cp.getRepositories();
 		
-		if (!hasAtleastOneSiteInCommon(cpsites, piSites)) {
-			throw OpenSpecimenException.userError(CpErrorCode.PI_DOESNT_BELONG_CP_SITE);
+		if (!hasAtleastOneSiteInCommon(cpSites, piSites)) {
+			throw OpenSpecimenException.userError(CpErrorCode.PI_DOES_NOT_BELONG_CP_REPOS);
 		}
 	}
 	
-	private void ensureCoordSitesBelongToCpSite(CollectionProtocol cp) {
+	private void ensureCoordinatorsBelongsCpSites(CollectionProtocol cp) {
 		Set<Site> cpSites = cp.getRepositories();
 		Set<User> coordinators = cp.getCoordinators();
 		
 		for (User coordinator : coordinators) {
 			Set<Site> coordinatorSites = coordinator.getSites();
 			if (!hasAtleastOneSiteInCommon(cpSites, coordinatorSites)) {
-				throw OpenSpecimenException.userError(CpErrorCode.CO_ORD_DOESNT_BELONG_CP_SITE);
+				throw OpenSpecimenException.userError(CpErrorCode.CO_ORD_DOES_NOT_BELONG_CP_REPOS);
 			}
 		}
 	}
 	
 	private boolean hasAtleastOneSiteInCommon(Set<Site> arg1, Set<Site> arg2) {
-		for (Site site1 : arg1) {
-			for (Site site2 : arg2) {
-				if (site1.equals(site2)) {
-					return true;
-				}
-			}
-		}
-		
-		return false;
+		return !CollectionUtils.intersection(arg1, arg2).isEmpty();
 	}
 	
 	private void ensureUserHasReadPermission(CollectionProtocol cp) {
