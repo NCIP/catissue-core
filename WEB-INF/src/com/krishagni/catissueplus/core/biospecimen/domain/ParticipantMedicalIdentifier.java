@@ -3,35 +3,12 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 
-public class ParticipantMedicalIdentifier {
-
-	/**
-	System generated unique id.
-	 */
-	private Long id;
-
-	/**
-	 * Participant's medical record number used in their medical treatment.
-	 */
+public class ParticipantMedicalIdentifier extends BaseEntity {
 	private String medicalRecordNumber;
 
-	/**
-	 * Source of medical record number.
-	 */
 	private Site site;
 
-	/**
-	 * Participant.
-	 */
 	private Participant participant;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getMedicalRecordNumber() {
 		return medicalRecordNumber;
@@ -56,5 +33,4 @@ public class ParticipantMedicalIdentifier {
 	public void setParticipant(Participant participant) {
 		this.participant = participant;
 	}
-
 }

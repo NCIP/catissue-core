@@ -4,91 +4,92 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false">
-	<class name="com.krishagni.catissueplus.core.biospecimen.domain.Participant"
-		table="CATISSUE_PARTICIPANT" lazy="true">
+  <class name="com.krishagni.catissueplus.core.biospecimen.domain.Participant"
+    table="CATISSUE_PARTICIPANT">
 
-		<id name="id" column="IDENTIFIER" type="long">
-			<generator class="native">
-				<param name="sequence">CATISSUE_PARTICIPANT_SEQ</param>
-			</generator>
-		</id>
+    <id name="id" column="IDENTIFIER" type="long">
+      <generator class="native">
+        <param name="sequence">CATISSUE_PARTICIPANT_SEQ</param>
+      </generator>
+    </id>
 
-		<property name="lastName" type="string" column="LAST_NAME" />
+    <property name="lastName" column="LAST_NAME" />
 
-		<property name="firstName" type="string" column="FIRST_NAME" />
+    <property name="firstName" column="FIRST_NAME" />
 
-		<property name="middleName" type="string" column="MIDDLE_NAME" />
+    <property name="middleName" column="MIDDLE_NAME" />
 
-		<property name="birthDate" type="date" column="BIRTH_DATE" />
+    <property name="birthDate" column="BIRTH_DATE" />
 
-		<property name="gender" type="string" column="GENDER" />
+    <property name="gender" column="GENDER" />
 
-		<property name="sexGenotype" type="string" column="GENOTYPE" />
+    <property name="sexGenotype" column="GENOTYPE" />
 
-		<property name="ethnicity" type="string" column="ETHNICITY" />
+    <property name="ethnicity" column="ETHNICITY" />
 
-		<property name="socialSecurityNumber" type="string"
-			column="SOCIAL_SECURITY_NUMBER" unique="true" />
+    <property name="socialSecurityNumber" column="SOCIAL_SECURITY_NUMBER" unique="true" />
 
-		<property name="activityStatus" type="string" column="ACTIVITY_STATUS" />
+    <property name="activityStatus" column="ACTIVITY_STATUS" />
 
-		<property name="deathDate" type="date" column="DEATH_DATE" />
+    <property name="deathDate" column="DEATH_DATE" />
 
-		<property name="vitalStatus" type="string" column="VITAL_STATUS" />
+    <property name="vitalStatus" column="VITAL_STATUS" />
 
-                <property name="empi" column="EMPI_ID"/>
+    <property name="empi" column="EMPI_ID"/>
 
+    <set name="pmis" table="CATISSUE_PART_MEDICAL_ID" inverse="true" cascade="all-delete-orphan">
+      <key column="PARTICIPANT_ID" />
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier"/>
+    </set>
 
-		<map name="pmiCollection" table="CATISSUE_PART_MEDICAL_ID"
-			cascade="all-delete-orphan">
-			<key column="PARTICIPANT_ID" />
-			<map-key
-				formula="(Select site.name from catissue_site site where site.identifier = SITE_ID)"
-				type="string" />
-			<one-to-many
-				class="com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier" />
-		</map>
+    <set name="cprs" table="catissue_coll_prot_reg" inverse="true" cascade="all-delete-orphan">
+      <key column="PARTICIPANT_ID" />
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration"/>
+    </set>
 
+    <set name="races" table="CATISSUE_RACE" cascade="all-delete-orphan">
+      <key column="PARTICIPANT_ID" />
+      <element column="RACE_NAME" type="string" />
+    </set>
 
-		<map name="cprCollection" table="catissue_coll_prot_reg" cascade="all">
-			<key column="PARTICIPANT_ID" />
-			<map-key
-				formula="(select cp.TITLE from catissue_collection_protocol cp where cp.identifier=COLLECTION_PROTOCOL_ID)"
-				type="string" />
-			<one-to-many
-				class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration" />
-		</map>
-
-		<set name="raceColl" table="CATISSUE_RACE" cascade="all-delete-orphan">
-			<key column="PARTICIPANT_ID" />
-			<element column="RACE_NAME" type="string" />
-		</set>
-
-                <query name="getBySsn">
-                  from com.krishagni.catissueplus.core.biospecimen.domain.Participant p
-                  where p.socialSecurityNumber = :ssn
-                </query>
+    <query name="getBySsn">
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.Participant p
+      where 
+        p.socialSecurityNumber = :ssn
+    </query>
  
-                <query name="getByEmpi">
-                  from com.krishagni.catissueplus.core.biospecimen.domain.Participant p
-                  where p.empi = :empi
-                </query>
+    <query name="getByEmpi">
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.Participant p
+      where 
+        p.empi = :empi
+    </query>
 
-                <query name="getByLnameAndDob">
-                  from com.krishagni.catissueplus.core.biospecimen.domain.Participant p
-                  where p.lastName = :lname and birthDate = :dob
-                </query>
+    <query name="getByLnameAndDob">
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.Participant p
+      where 
+        p.lastName = :lname and birthDate = :dob
+    </query>
 
-		<query name="getParticipantIdBySSN">
-			select participant.id from
-			com.krishagni.catissueplus.core.biospecimen.domain.Participant
-			participant where participant.socialSecurityNumber = :ssn
-		</query>
+    <query name="getParticipantIdBySSN">
+      select 
+        p.id 
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.Participant p
+      where 
+        p.socialSecurityNumber = :ssn
+    </query>
 
-		<query name="getPmiIdBySiteMrn">
-			select pmi.id from
-			com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier
-			pmi where pmi.site.name=:siteName and pmi.medicalRecordNumber=:mrn
-		</query>
-	</class>
+    <query name="getPmiIdBySiteMrn">
+      select 
+        pmi.id 
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier pmi
+      where 
+        pmi.site.name = :siteName and 
+        pmi.medicalRecordNumber = :mrn
+    </query>
+  </class>
 </hibernate-mapping>

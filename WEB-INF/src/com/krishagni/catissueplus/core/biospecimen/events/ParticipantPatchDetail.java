@@ -9,7 +9,6 @@ import java.util.Set;
 
 import com.google.gson.Gson;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 
 import edu.wustl.catissuecore.util.global.AppUtility;
 
@@ -215,19 +214,8 @@ public class ParticipantPatchDetail {
 		participantDetail.setEthnicity(participant.getEthnicity());
 		participantDetail.setGender(participant.getGender());
 		participantDetail.setId(participant.getId());
-		//TODO revisit
-		Map<String, ParticipantMedicalIdentifier> pmi = participant.getPmiCollection();
-		List<PmiDetail> pmiColl = new ArrayList<PmiDetail>();
-		if (pmi != null) {
-			for (ParticipantMedicalIdentifier participantMedicalIdentifier : pmi.values()) {
-				PmiDetail medicalRecordNumberDetail = new PmiDetail();
-				medicalRecordNumberDetail.setMrn(participantMedicalIdentifier.getMedicalRecordNumber());
-				medicalRecordNumberDetail.setSiteName(participantMedicalIdentifier.getSite().getName());
-				pmiColl.add(medicalRecordNumberDetail);
-			}
-		}
-		participantDetail.setPmiCollection(pmiColl);
-		participantDetail.setRace(participant.getRaceColl());
+		participantDetail.setPmiCollection(PmiDetail.from(participant.getPmis()));
+		participantDetail.setRace(participant.getRaces());
 		participantDetail.setSexGenotype(participant.getSexGenotype());
 		participantDetail.setSsn(participant.getSocialSecurityNumber());
 		participantDetail.setVitalStatus(participant.getVitalStatus());
