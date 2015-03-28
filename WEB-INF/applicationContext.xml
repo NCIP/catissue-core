@@ -470,6 +470,12 @@
     <property name="daoFactory" ref="deDaoFactory"/>
   </bean>
 
+  <bean id="importSpeForms" class="com.krishagni.catissueplus.core.init.ImportSpecimenEventForms">
+    <property name="txnMgr" ref="transactionManager"/>
+    <property name="userDao" ref="userDao"/>
+    <property name="daoFactory" ref="deDaoFactory"/>
+  </bean>
+
   <task:scheduler id="taskScheduler" pool-size="1"/>
   <task:annotation-driven scheduler="taskScheduler"/>
   <context:annotation-config/>

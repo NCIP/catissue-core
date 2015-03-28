@@ -222,6 +222,7 @@
 			<fileset dir="${resources.dir}">
 				<include name="**/*.hbm.xml" />
                                 <include name="query-forms/*.*"/>
+                                <include name="spe-forms/*.*"/>
                                 <include name="errors/*.properties"/>
                                 <include name="com/krishagni/catissueplus/core/biospecimen/default_print_rules.csv"/>
 			</fileset>
@@ -260,6 +261,7 @@
 			<fileset dir="${resources.dir}">
 				<include name="**/*.hbm.xml" />
                                 <include name="query-forms/*.*"/>
+                                <include name="spe-forms/*.*"/>
                                 <include name="errors/*.properties"/>
                                 <include name="com/krishagni/catissueplus/core/biospecimen/default_print_rules.csv"/>
 			</fileset>
