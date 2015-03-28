@@ -5,9 +5,12 @@
       <li><a ui-sref="institute-list" translate="institutes.list">Institutes</a></li>
     </ul>
     <h3>{{institute.name}}</h3>
-    <button class="os-round-btn" ui-sref="institute-addedit({instituteId: institute.id})">
-      <span class="fa fa-pencil"></span>
-    </button>
+    <div class="os-btns">
+      <button class="primary" ui-sref="institute-addedit({instituteId: institute.id})">
+        <span class="fa fa-pencil"></span>
+        <span translate="common.buttons.edit">Edit</span>
+      </button>
+    </div>
   </div>
 
   <div os-side-menu>

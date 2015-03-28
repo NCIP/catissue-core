@@ -4,12 +4,16 @@
     <h3>
       <span translate="user.list">Users</span>
     </h3>
-    <button class="os-round-btn" title="{{'user.tooltip.create_user' | translate}}" ui-sref="user-addedit({userId: ''})">
-      <span class="fa fa-plus"></span>
-    </button>
-    <div class="os-more-options">
-      <button os-right-drawer-toggle class="os-search-button" title="{{'user.tooltip.search' | translate}}">
+    <div class="os-btns">
+      <button class="primary" title="{{'user.tooltip.create_user' | translate}}" ui-sref="user-addedit({userId: ''})">
+        <span class="fa fa-plus"></span>
+        <span translate="common.buttons.create">Create</span>
+      </button>
+    </div>
+    <div class="os-btns right">
+      <button class="default" os-right-drawer-toggle title="{{'user.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
       </button>
     </div>
   </div>
