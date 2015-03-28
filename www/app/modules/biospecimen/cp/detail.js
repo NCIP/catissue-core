@@ -1,6 +1,6 @@
 
 angular.module('os.biospecimen.cp.detail', ['os.biospecimen.models'])
-  .controller('CpDetailCtrl', function($scope, $state, $q, cp, CollectionProtocol, PvManager) {
+  .controller('CpDetailCtrl', function($scope, $q, cp, CollectionProtocol, PvManager, DeleteUtil) {
     $scope.cp = cp;
 
     $scope.downloadUri = CollectionProtocol.url() + cp.id + '/definition';
@@ -13,6 +13,10 @@ angular.module('os.biospecimen.cp.detail', ['os.biospecimen.models'])
       var d = $q.defer();
       d.resolve({});
       return d.promise;
+    }
+
+    $scope.deleteCp = function() {
+      DeleteUtil.delete($scope.cp, {onDeleteState: 'cp-list'});
     }
 
     init();

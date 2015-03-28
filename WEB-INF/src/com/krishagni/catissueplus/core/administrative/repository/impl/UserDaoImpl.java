@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserListCriteria;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
@@ -82,6 +83,16 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		List<User> users = executeGetUserByEmailAddressHql(hql, emailAddress);
 		
 		return users.isEmpty();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<DependentEntityDetail> getDependentEntities(Long userId) {
+		List<Object[]> rows = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_DEPENDENT_ENTITIES)
+				.setLong("userId", userId)
+				.list();
+		
+		return getDependentEntities(rows);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -206,6 +217,18 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		));
 	}
 	
+	private List<DependentEntityDetail> getDependentEntities(List<Object[]> rows) {
+		List<DependentEntityDetail> dependentEntities = new ArrayList<DependentEntityDetail>();
+		
+		for (Object[] row: rows) {
+			String name = (String)row[0];
+			int count = ((Number)row[1]).intValue();
+			dependentEntities.add(DependentEntityDetail.from(name, count));
+		}
+		
+		return dependentEntities;
+ 	}
+	
 	private static final String GET_USER_BY_LOGIN_NAME_HQL = 
 			"from com.krishagni.catissueplus.core.administrative.domain.User where loginName = :loginName and authDomain.name = :domainName  %s";
 	
@@ -216,6 +239,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
 	private static final String GET_USERS_BY_IDS = FQN + ".getUsersByIds";
 	
+	private static final String GET_DEPENDENT_ENTITIES = FQN + ".getDependentEntities"; 
+	
 	private static final String TOKEN_FQN = ForgotPasswordToken.class.getName();
 	
 	private static final String GET_FP_TOKEN_BY_USER = TOKEN_FQN + ".getFpTokenByUser";
@@ -223,3 +248,4 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	private static final String GET_FP_TOKEN = TOKEN_FQN + ".getFpToken";
 
 }
+

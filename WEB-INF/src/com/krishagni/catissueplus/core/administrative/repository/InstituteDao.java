@@ -15,4 +15,5 @@ public interface InstituteDao extends Dao<Institute> {
 	public Department getDepartment(Long id, Long instituteId);
 
 	public Department getDeptByNameAndInstitute(String deptName, String instituteName);
+	
 }

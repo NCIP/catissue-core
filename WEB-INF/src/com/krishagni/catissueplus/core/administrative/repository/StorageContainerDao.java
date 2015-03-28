@@ -13,7 +13,7 @@ public interface StorageContainerDao extends Dao<StorageContainer> {
 	public StorageContainer getByName(String name);
 	
 	public StorageContainer getByBarcode(String barcode);
-
+	
 	public void delete(StorageContainerPosition position);
 }
 	

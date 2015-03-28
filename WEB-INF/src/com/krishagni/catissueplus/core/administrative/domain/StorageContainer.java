@@ -20,9 +20,14 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
+
 
 public class StorageContainer extends BaseEntity {
+	private static final String ENTITY_NAME = "storage_container";
+	
 	public static final String NUMBER_LABELING_SCHEME = "Numbers";
 	
 	public static final String UPPER_CASE_ALPHA_LABELING_SCHEME = "Alphabets Upper Case";
@@ -91,6 +96,10 @@ public class StorageContainer extends BaseEntity {
 	
 	public StorageContainer() {
 		ancestorContainers.add(this);
+	}
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
 	}
 
 	public String getName() {
@@ -514,6 +523,46 @@ public class StorageContainer extends BaseEntity {
 		}
 		
 		return types;
+	}
+
+	public List<DependentEntityDetail> getDependentEntities() {
+		int specimenCnt = getSpecimenCount();
+		return DependentEntityDetail
+			.singletonList(Specimen.getEntityName(), specimenCnt);
+	}
+	
+	public void delete() {
+		int specimenCnt = getSpecimenCount();
+		if (specimenCnt > 0) {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.REF_ENTITY_FOUND);
+		}
+		
+		deleteWithoutCheck();
+	}
+	
+	private void deleteWithoutCheck() {
+		for (StorageContainer child: getChildContainers()) {
+			child.deleteWithoutCheck();
+		}
+		
+		setName(Utility.appendTimestamp(getName()));
+		if (getBarcode() != null) {
+			setBarcode(Utility.appendTimestamp(getBarcode()));
+		}
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+	}
+	
+	private int getSpecimenCount() {
+		int specimenCnt = 0;
+		for (StorageContainer descendant: descendentContainers) {
+			specimenCnt += descendant.getSelfSpecimenCount();
+		}
+		
+		return specimenCnt;
+	}
+	
+	private int getSelfSpecimenCount() {
+		return getOccupiedPositions().size() - getChildContainers().size();
 	}
 	
 	private Set<String> computeAllAllowedSpecimenTypes() {

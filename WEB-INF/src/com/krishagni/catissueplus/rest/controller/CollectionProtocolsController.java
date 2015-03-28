@@ -34,6 +34,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.CpListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -165,6 +166,25 @@ public class CollectionProtocolsController {
 	public CollectionProtocolDetail updateCollectionProtocol(@RequestBody CollectionProtocolDetail cp) {
 		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.updateCollectionProtocol(getRequest(cp));
 		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependent-entities")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<DependentEntityDetail> getCpDependentEntities(@PathVariable Long id) {
+		ResponseEvent<List<DependentEntityDetail>> resp = cpSvc.getCpDependentEntities(getRequest(id));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public CollectionProtocolDetail deleteCollectionProtocol(@PathVariable Long id) {
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.deleteCollectionProtocol(getRequest(id));
+		resp.throwErrorIfUnsuccessful();
+		
 		return resp.getPayload();
 	}
 	

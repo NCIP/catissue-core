@@ -4,12 +4,18 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 
 public class ParticipantMedicalIdentifier extends BaseEntity {
+	private static final String ENTITY_NAME = "medical_record_number";
+
 	private String medicalRecordNumber;
 
 	private Site site;
 
 	private Participant participant;
 
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
+	
 	public String getMedicalRecordNumber() {
 		return medicalRecordNumber;
 	}

@@ -27,6 +27,11 @@
     <property name="endDate" column="END_DATE"/>
     
     <property name="activityStatus" column="ACTIVITY_STATUS"/>
+    
+    <set name="distributionOrders" inverse="false" cascade="none">
+      <key column="DISTRIBUTION_PROTOCOL_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DistributionOrder"/>
+    </set>
       
     <query name="getDistributionProtocolByTitle">
       from 

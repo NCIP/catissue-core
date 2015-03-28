@@ -361,6 +361,7 @@
     "tooltip": {
       "view_details": "Click to view/edit Institute details",
       "add": "Click to add new Institute",
+      "edit": "Click to edit institute",
       "department_count": "Count of Departments",
       "user_count": "Count of Users in Institute",
       "search": "Click to search Institutes"
@@ -373,6 +374,10 @@
     "filter": {
       "title": "Institute Filter",
       "name": "Type the Name"
+    },
+
+    "menu_options": {
+      "delete": "Delete"
     }
 
   },
@@ -390,7 +395,8 @@
 
     "tooltip": {
       "view_details": "Click to view/edit Site details",
-      "create_site": "Click to add new Site",
+      "add": "Click to add new Site",
+      "edit": "Click to edit site",
       "cp_count": "Count of Collection Protocols",
       "search": "Click to search Sites"
     },
@@ -403,6 +409,10 @@
       "title": "Site Filter",
       "name": "Type the Name",
       "type": "Select Type"
+    },
+
+    "menu_options": {
+      "delete": "Delete"
     }
   },
   
@@ -418,10 +428,11 @@
     "end_date": "End Date",
     "irb_id": "IRB ID",
     "description_url": "Description URL",
-        
+
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",
-      "new_dp": "Click to add new Distribution Protocol",
+      "add": "Click to add new Distribution Protocol",
+      "edit": "Click to edit Distribution Protocol",
       "pending_count": "Pending to distribute specimens count",
       "distributed_count": "Distributed specimens count",
       "search": "Click to search Distribution Protocols"
@@ -436,6 +447,10 @@
       "title_or_short_title": "Title / Short Title",
       "title": "Type the Title",
       "pi": "Select Principal Investigator"
+    },
+
+    "menu_options": {
+      "delete": "Delete"
     }
   },
 
@@ -460,9 +475,10 @@
     "confirm_password": "Confirm Password",
     "approve_user": "Approve User",
     "reject_user": "Reject User",
-    "request_pending": "Following are details of user whose approval is pending",
+    "request_pending": "Note: {{firstName}}  {{lastName}} would like to access OpenSpecimen. Approve or Reject?",
     "user_request_approved": "User request approved successfully",
     "activity_status": "Activity Status",
+    "confirm_reject": "Rejecting the User {{entityName}} will delete this user from the database. Are you sure you want to go ahead?",
 
     "role": {
        "roles": "Roles",
@@ -484,8 +500,9 @@
     "return_to_signin": "Return to Sign in",
 
     "tooltip": {
-      "create_user": "Click to add new User",
       "view_details": "Click to view/edit User details",
+      "add": "Click to add new User",
+      "edit": "Click to edit User",
       "email_address": "Email Address",
       "institute_name": "Institute",
       "cp_count": "Collection Protocol(s)",
@@ -504,6 +521,10 @@
       "name": "Type the Name",
       "login_name": "Type the Login Name",
       "activity_status": "Select the Activity Status"
+    },
+
+    "menu_options": {
+      "delete": "Delete"
     }
 
   },
@@ -554,10 +575,12 @@
     "no_container_selected": "Please select a container",
     "cannot_hold_specimen": "Selected container cannot hold specimen for which position is being selected",
     "stores_specimens": "Stores Specimens",
+    "confirm_delete": "{{entityType}} {{entityName}} and its child containers will be deleted forever. Are you sure you want to proceed?",
 
     "tooltip": {
       "view_details": "Click to view/edit Storage Container details",
       "add": "Click to add new Storage Container",
+      "edit": "Click to edit Storage Container",
       "count_free_locations": "Count of free locations",
       "search": "Click to search Storage Containers"
     },
@@ -570,6 +593,10 @@
     "filter": {
       "title": "Storage Container Filter",
       "name": "Type the Name"
+    },
+
+    "menu_options": {
+      "delete": "Delete"
     }
   },
 
@@ -612,6 +639,16 @@
     "new_record": "Create New Record",
 
     "record_saved": "Data saved successfully"
+  },
+
+  "delete_entity": {
+    "entity_name": "Entity Name",
+    "count": "Count",
+    "title": "Deleting {{entityName}} confirmation",
+    "confirm_delete": "{{entityType}} {{entityName}} will be deleted forever. Are you sure you want to proceed?",
+    "entity_deleted": "{{entityType}} {{entityName}} deleted successfully.",
+    "dependents_title": "Error: Cannot delete {{entityName}}",
+    "dependents_details": "Cannot delete {{entityType}} {{entityName}} because of following dependent objects"
   },
 
   "queries": {
@@ -760,5 +797,20 @@
     "tooltip": {
       "view_records": "Click to View Records"
     }
+  },
+
+  "entities": {
+    "collection_protocol": "Collection Protocol",
+    "distribution_protocol": "Distribution Protocol",
+    "user": "User",
+    "site": "Site",
+    "institute": "Institute",
+    "storage_container": "Storage Container",
+    "visit": "Visit",
+    "medical_record_number": "MRN",
+    "collection_protocol_event": "Collection Protocol Event",
+    "collection_protocol_registration": "Collection Protocol Registration",
+    "specimen": "Specimen",
+    "distribution_order": "Distribution Order"
   }
 }

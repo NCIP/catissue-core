@@ -1,8 +1,6 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,21 +10,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
-import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserListCriteria;
-import com.krishagni.catissueplus.core.administrative.events.DeleteUserOp;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
-import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -199,23 +196,33 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Map<String, List>> deleteUser(RequestEvent<DeleteUserOp> req) {
+	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req) {
 		try {
-			DeleteUserOp deleteUserOp = req.getPayload();
-			boolean close = deleteUserOp.isClose();
-			User user =  daoFactory.getUserDao().getById(deleteUserOp.getId());
-			
-			if (user == null) {
+			User existing = daoFactory.getUserDao().getById(req.getPayload());
+			if (existing == null) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
-			//TODO: Revisit and check other depedencies like cp, dp, AQ
-			if (!close && !user.getSites().isEmpty()) {
-				return ResponseEvent.response(getDependencies(user));
+			return ResponseEvent.response(existing.getDependentEntities());
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<UserDetail> deleteUser(RequestEvent<DeleteEntityOp> req) {
+		try {
+			DeleteEntityOp deleteEntityOp = req.getPayload();
+			User existing =  daoFactory.getUserDao().getById(deleteEntityOp.getId());
+			if (existing == null) {
+				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
-			user.delete(close);
-			return ResponseEvent.response(Collections.<String, List>emptyMap());
+			existing.delete(deleteEntityOp.isClose());
+			return ResponseEvent.response(UserDetail.from(existing)); 
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -305,18 +312,6 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
-	}
-	
-	private Map<String, List> getDependencies(User user) {
-		List<SiteDetail> sites = new ArrayList<SiteDetail>();
-		for (Site site: user.getSites()) {
-			sites.add(SiteDetail.from(site));
-		}
-		
-		Map<String, List> dependencies = new HashMap<String, List>();
-		dependencies.put("sites", sites);
-		
-		return dependencies;
 	}
 	
 	private void sendForgotPasswordLinkEmail(User user, String token) {

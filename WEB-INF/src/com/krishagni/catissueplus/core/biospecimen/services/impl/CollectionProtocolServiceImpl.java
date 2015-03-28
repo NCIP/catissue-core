@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
@@ -43,6 +44,7 @@ import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.AccessDetail;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -193,6 +195,38 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			ose.checkAndThrow();
 			
 			existingCp.update(cp);
+			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@PlusTransactional
+	public ResponseEvent<List<DependentEntityDetail>> getCpDependentEntities(RequestEvent<Long> req) {
+		try {
+			CollectionProtocol existingCp = daoFactory.getCollectionProtocolDao().getById(req.getPayload());
+			if (existingCp == null) {
+				return ResponseEvent.userError(CpErrorCode.NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(existingCp.getDependentEntities());
+ 		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<CollectionProtocolDetail> deleteCollectionProtocol(RequestEvent<Long> req) {
+		try {
+			CollectionProtocol existingCp = daoFactory.getCollectionProtocolDao().getById(req.getPayload());
+			if (existingCp == null) {
+				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
+			}
+			
+			existingCp.delete();
 			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);

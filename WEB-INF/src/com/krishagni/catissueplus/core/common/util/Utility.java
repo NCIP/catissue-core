@@ -61,6 +61,12 @@ public class Utility {
 		
 		return leftOperand.containsAll(rightOperand);		
 	}	
+	
+	public static String appendTimestamp(String name) {
+		Calendar cal = Calendar.getInstance();
+		name = name + "_" + cal.getTimeInMillis();
+		return name;
+	}
 
 	public static String getAppUrl() {
 		return XMLPropertyHandler.getValue("application.url");

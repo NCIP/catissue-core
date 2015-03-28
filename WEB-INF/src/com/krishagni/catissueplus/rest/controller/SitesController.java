@@ -2,7 +2,6 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,6 +21,7 @@ import com.krishagni.catissueplus.core.administrative.events.SiteQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.SiteListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.SiteService;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -105,23 +105,31 @@ public class SitesController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-
-	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependent-entities")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String, List> deleteSite(@PathVariable Long id, 
-			@RequestParam(value="close", required=false, defaultValue="false") boolean close) {
-		DeleteEntityOp deleteOp = new DeleteEntityOp();
-		deleteOp.setId(id);
-		deleteOp.setClose(close);
-		
-		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(getSession(), deleteOp);
-		ResponseEvent<Map<String, List>> resp = siteService.deleteSite(req);
+	public List<DependentEntityDetail> getDependentEntities(@PathVariable Long id) {
+		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		ResponseEvent<List<DependentEntityDetail>> resp = siteService.getDependentEntities(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
 	}
 
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public SiteDetail deleteSite(@PathVariable Long id, 
+			@RequestParam(value="close", required=false, defaultValue="false") boolean close) {
+		DeleteEntityOp deleteOp = new DeleteEntityOp(id, close);
+		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(null, deleteOp);
+		ResponseEvent<SiteDetail> resp = siteService.deleteSite(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}

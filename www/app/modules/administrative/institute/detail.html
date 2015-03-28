@@ -6,10 +6,25 @@
     </ul>
     <h3>{{institute.name}}</h3>
     <div class="os-btns">
-      <button class="primary" ui-sref="institute-addedit({instituteId: institute.id})">
+      <button class="primary" title="{{'institutes.tooltip.edit' | translate}}"
+        ui-sref="institute-addedit({instituteId: institute.id})">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
+    </div>
+   
+    <div class="os-more-options" dropdown>
+      <button class="os-options-button dropdown-toggle" >
+        <span class="fa fa-ellipsis-v"></span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right">
+        <li ng-click="deleteInstitute()">
+          <a>
+            <i class="fa fa-trash"></i>
+            <span translate="institutes.menu_options.delete">Delete</span>
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 

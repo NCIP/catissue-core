@@ -9,6 +9,14 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
         }
       );
 
+    CollectionProtocol.prototype.getType = function() {
+      return 'collection_protocol';
+    }
+
+    CollectionProtocol.prototype.getDisplayName = function() {
+      return this.title;
+    }
+
     CollectionProtocol.list = function(opts) {
       var defOpts = {detailedList: true};
       return CollectionProtocol.query(angular.extend(defOpts, opts || {}));

@@ -22,6 +22,7 @@ import com.krishagni.catissueplus.core.administrative.events.StorageContainerPos
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -182,6 +183,28 @@ public class StorageContainersController {
 		
 		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(getSession(), detail);
 		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.updateStorageContainer(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependent-entities")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<DependentEntityDetail> getDependentEntities(@PathVariable Long id) {
+		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		ResponseEvent<List<DependentEntityDetail>> resp = storageContainerSvc.getDependentEntities(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public StorageContainerDetail deleteStorageContainer(@PathVariable Long id) {
+		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.deleteStorageContainer(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
