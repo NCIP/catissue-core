@@ -10,7 +10,6 @@ angular.module('os.biospecimen.models.cpr',
         'collection-protocol-registrations',
         function(cpr) {
           cpr.participant = new Participant(cpr.participant);
-          cpr.registrationDate = new Date(cpr.registrationDate).toISOString();
         }
       );
  
