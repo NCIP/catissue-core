@@ -22,8 +22,6 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Configurable
 public class Specimen extends BaseEntity {
-	private static final String ENTITY_NAME = "specimen";
-	
 	public static final String NEW = "New";
 	
 	public static final String ALIQUOT = "Aliquot";
@@ -37,6 +35,8 @@ public class Specimen extends BaseEntity {
 	public static final String PENDING = "Pending";
 	
 	public static final String ACCEPTABLE = "Acceptable";
+	
+	private static final String ENTITY_NAME = "specimen";
 
 	private String tissueSite;
 
@@ -422,6 +422,9 @@ public class Specimen extends BaseEntity {
 	}
 
 	public void update(Specimen specimen) {
+		String previousStatus = getCollectionStatus();
+		Double previousQty = getInitialQuantity();
+		
 		setLabel(specimen.getLabel());
 		setBarcode(specimen.getBarcode());
 		
@@ -454,6 +457,18 @@ public class Specimen extends BaseEntity {
 		setComment(specimen.getComment());		
 		setActivityStatus(specimen.getActivityStatus());
 		updatePosition(specimen.getPosition());
+		
+		if (isAliquot()) {
+			if (isCollected()) {
+				if (!collectionStatus.equals(previousStatus)) { // *** -> COLLECTED
+					decAliquotedQtyFromParent();
+				} else if (!initialQuantity.equals(previousQty)) {
+					adjustParentSpecimenQty(initialQuantity - previousQty);
+				}
+			} else if (COLLECTED.equals(previousStatus)) { // COLLECTED -> ***
+				adjustParentSpecimenQty(-previousQty); // give back the quantity to parent
+			}
+		}
 		
 		checkQtyConstraints();
 	}
@@ -535,8 +550,8 @@ public class Specimen extends BaseEntity {
 	
 	public void decAliquotedQtyFromParent() {
 		if (isCollected() && isAliquot()) {
-			parentSpecimen.setAvailableQuantity(parentSpecimen.getAvailableQuantity() - initialQuantity); 
-		}
+			adjustParentSpecimenQty(initialQuantity);
+		}		
 	}
 	
 	public void occupyPosition() {
@@ -707,5 +722,9 @@ public class Specimen extends BaseEntity {
 		
 		return p1.getPosOneOrdinal() == p2.getPosOneOrdinal() && 
 				p1.getPosTwoOrdinal() == p2.getPosTwoOrdinal();
-	}	
+	}
+	
+	private void adjustParentSpecimenQty(double qty) {
+		parentSpecimen.setAvailableQuantity(parentSpecimen.getAvailableQuantity() - qty); 
+	}
 }
