@@ -5,10 +5,13 @@
       <li> <a ui-sref="cp-detail.overview({cpId: cp.id})">{{cp.title}}</a> </li>
     </ul>
     <h3 translate="participant.list"></h3>
-    <button class="os-round-btn" title="{{'participant.tooltip.register' | translate}}" 
-      ui-sref="participant-addedit({cprId: -1, cpId: cp.id})">
-      <span class="fa fa-plus"></span>
-    </button>
+    <div class="os-btns">
+      <button class="primary" title="{{'participant.tooltip.register' | translate}}" 
+        ui-sref="participant-addedit({cprId: -1, cpId: cp.id})">
+        <span class="fa fa-plus"></span>
+        <span translate="participant.buttons.register">Register</span>
+      </button>
+    </div>
   </div>
 
   <div class="os-cards">

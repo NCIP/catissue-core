@@ -10,9 +10,12 @@
       <span ng-switch-when="false" translate="common.na"> N/A </span>
     </h3>
 
-    <button class="os-round-btn" ui-sref="participant-addedit({cprId: cpr.id, cpId: cpr.cpId})">
-      <span class="fa fa-pencil"></span>
-    </button>
+    <div class="os-btns">
+      <button class="primary" ui-sref="participant-addedit({cprId: cpr.id, cpId: cpr.cpId})">
+        <span class="fa fa-pencil"></span>
+        <span translate="common.buttons.edit">Edit</span>
+      </button>
+    </div>
   </div>
 
   <div os-side-menu>

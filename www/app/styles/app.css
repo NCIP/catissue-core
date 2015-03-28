@@ -14,7 +14,7 @@ body {
 }
 
 .os-navbar {
-  height: 57px;
+  height: 50px;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -28,9 +28,14 @@ body {
 }
 
 .os-navbar .logo {
-  height: 57px;
-  width: 275px;
+  height: 50px;
+  width: 235px;
   flex-grow: 0.25;
+}
+
+.os-navbar .logo img {
+  height: 50px;
+  width: 235px;
 }
 
 .os-navbar .search {
@@ -192,11 +197,11 @@ body {
   padding: 30px 20px 10px 20px;
   background: #f5f5f5;
   border-bottom: 1px solid #ccc;
-  height: 64px;
+  height: 71px;
   color: #666666;
   display: flex;
   position: absolute;
-  top: 57px;
+  top: 50px;
   width: 100%;
 }
 
@@ -217,14 +222,14 @@ body {
   background: transparent;
   border: none;
   outline: none;
-  margin-top: -20px;
+  margin-top: -27px;
   margin-right: 24px;
   margin-left: -10px;
 }
 
 .os-page-hdr.no-breadcrumbs .os-nav-button,
 .os-page-hdr.no-breadcrumbs .os-options-button {
-  margin-top: -8px;
+  margin-top: -15px;
 }
 
 .os-page-hdr .os-nav-button .fa,
@@ -433,7 +438,7 @@ h4 + .btn-group {
   width:100%;
   border-radius: 0px;
   left: 0;
-  top: 57px;
+  top: 50px;
 }
 
 input.ng-dirty.ng-invalid {
@@ -690,7 +695,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 #loading-bar .bar {
   background: #b91f1f!important;
-  top: 57px!important;
+  top: 50px!important;
   height: 3px!important;
 }
 

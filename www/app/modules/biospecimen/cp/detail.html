@@ -4,19 +4,24 @@
       <li> <a ui-sref="cp-list" translate="menu.collection_protocols"></a> </li>
     </ul>
     <h3>{{cp.title}}</h3>
-    <button class="os-round-btn" ui-sref="cp-addedit({cpId:cp.id})">
-      <span class="fa fa-pencil"></span>
-    </button>
 
-    <div class="os-more-options" dropdown>
-      <button class="os-options-button dropdown-toggle" >
-        <span class="fa fa-ellipsis-v"></span>
+    <div class="os-btns">
+      <button class="primary" ui-sref="cp-addedit({cpId:cp.id})">
+        <span class="fa fa-pencil"></span>
+        <span translate="common.buttons.edit">Edit</span>
+      </button>
+    </div>
+
+    <div class="os-btns right" dropdown>
+      <button class="default dropdown-toggle" >
+        <span translate="common.buttons.more">More</span>
+        <span class="fa fa-caret-down"></span>
       </button>
       <ul class="dropdown-menu dropdown-menu-right">
         <li>
           <a>
             <i class="fa fa-trash"></i>
-            <span translate="cp.menu_options.remove">Remove</span>
+            <span translate="cp.menu_options.delete">Delete</span>
           </a>
         </li>
         <li>

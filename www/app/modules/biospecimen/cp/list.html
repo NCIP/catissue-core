@@ -1,9 +1,11 @@
 <div>
   <div os-page-header>
     <h3 translate="cp.list">Collection Protocols</h3>
-    <div dropdown>
-      <button class="os-round-btn dropdown-toggle" title="Click to add new Collection Protocol" ui-sref="cp-addedit({cpId: ''})">
+    <div class="os-btns" dropdown>
+      <button class="primary dropdown-toggle" title="Click to add new Collection Protocol" 
+        ui-sref="cp-addedit({cpId: ''})">
         <span class="fa fa-plus"></span>
+        <span translate="common.buttons.create">Create</span>
       </button>
       <ul class="dropdown-menu">
         <li>
@@ -19,11 +21,12 @@
           </a>
         </li>
       </ul>
-      <div class="os-more-options">
-        <button os-right-drawer-toggle class="os-search-button" title="{{'cp.tooltip.search' | translate}}">
-          <span class="fa fa-search"></span>
-        </button>
-      </div>
+    </div>
+    <div class="os-btns right">
+      <button class="default" os-right-drawer-toggle title="{{'cp.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
+      </button>
     </div>
   </div>
    

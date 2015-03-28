@@ -36,6 +36,7 @@
       "import": "Import",
       "cancel": "Cancel",
       "discard": "Discard",
+      "more": "More",
       "next": "Next",
       "previous": "Previous",
       "ok": "Ok",
@@ -104,7 +105,7 @@
     },
 
     "menu_options": {
-      "remove": "Remove",
+      "delete": "Delete",
       "export": "Export"
     },
 
