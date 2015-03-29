@@ -67,9 +67,6 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
     };
 
     Sr.prototype.hasSufficientQty = function(aliquotReq) {
-      if (!angular.isDefined(aliquotReq.qtyPerAliquot)) {
-        return true;
-      }
       var reqQty = aliquotReq.noOfAliquots * aliquotReq.qtyPerAliquot;
       return reqQty <= this.availableQty();
     };

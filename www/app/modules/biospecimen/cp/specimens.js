@@ -110,6 +110,11 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     //
     ////////////////////////////////////////////////
     $scope.showCreateAliquots = function(sr) {
+      if (sr.availableQty() == 0) {
+        Alerts.error('srs.errors.insufficient_qty');
+        return;
+      }
+
       $scope.parentSr = sr;
       $scope.view = 'addedit_aliquot';
       $scope.aliquot = {};
@@ -117,13 +122,22 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     };
 
     $scope.createAliquots = function() {
-      if (!$scope.parentSr.hasSufficientQty($scope.aliquot)) {
-        $scope.errorCode = 'srs.errors.insufficient_qty';
-        $timeout(function() { $scope.errorCode = '' }, 3000);
-        return;
+      var spec = $scope.aliquot;
+      var availableQty = $scope.parentSr.availableQty();
+
+      if (!!spec.qtyPerAliquot && !!spec.noOfAliquots) {
+        var requiredQty = spec.qtyPerAliquot * spec.noOfAliquots;
+        if (requiredQty > availableQty) {
+          Alerts.error("srs.errors.insufficient_qty");
+          return;
+        }
+      } else if (!!spec.qtyPerAliquot) {
+        spec.noOfAliquots = Math.floor(availableQty / spec.qtyPerAliquot);
+      } else if (!!spec.noOfAliquots) {
+        spec.qtyPerAliquot = Math.round(availableQty / spec.noOfAliquots * 10000) / 10000;
       }
-      
-      $scope.parentSr.createAliquots($scope.aliquot).then(
+
+      $scope.parentSr.createAliquots(spec).then(
         function(aliquots) {
           addChildren($scope.parentSr, aliquots);
           $scope.parentSr.isOpened = true;

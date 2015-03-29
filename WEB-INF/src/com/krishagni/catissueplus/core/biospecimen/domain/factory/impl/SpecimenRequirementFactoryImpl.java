@@ -9,6 +9,7 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenRequirementFactory;
@@ -132,22 +133,19 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			throw ose;
 		}
 		
-		if (req.getQtyPerAliquot() != null) {
-			if (req.getQtyPerAliquot() <= 0L) {
-				ose.addError(SrErrorCode.INVALID_QTY);
-				throw ose;
-			}
-			
-			Double total = req.getNoOfAliquots() * req.getQtyPerAliquot();
-			if (total > parent.getQtyAfterAliquotsUse()) {
-				ose.addError(SrErrorCode.INSUFFICIENT_QTY);
-			}
+		if (req.getQtyPerAliquot() == null || req.getQtyPerAliquot() <= 0L) {
+			ose.addError(SrErrorCode.INVALID_QTY);
+		}
+		
+		Double total = req.getNoOfAliquots() * req.getQtyPerAliquot();
+		if (total > parent.getQtyAfterAliquotsUse()) {
+			ose.addError(SrErrorCode.INSUFFICIENT_QTY);
 		}
 		
 		List<SpecimenRequirement> aliquots = new ArrayList<SpecimenRequirement>();
 		for (int i = 0; i < req.getNoOfAliquots(); ++i) {
 			SpecimenRequirement aliquot = parent.copy();
-			aliquot.setLineage("Aliquot"); // TODO: have an enum			
+			aliquot.setLineage(Specimen.ALIQUOT); 			
 			setStorageType(req.getStorageType(), aliquot, ose);
 			
 			if (StringUtils.isNotBlank(req.getLabelFmt())) {
