@@ -40,7 +40,7 @@
               <div class="col col-xs-3">{{record.user.lastName}}, {{record.user.lastName}}</div>
               <div class="col col-xs-3">{{record.updateTime | date: global.dateTimeFmt}}</div>
               <div class="col col-xs-1">
-                <button class="btn btn-xs btn-default">
+                <button class="btn btn-xs btn-default" ng-click="deleteRecord(record)">
                   <span class="fa fa-trash"></span>
                 </button>
               </div>

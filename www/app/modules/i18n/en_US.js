@@ -638,7 +638,8 @@
     "edit_record": "Edit Record",
     "new_record": "Create New Record",
 
-    "record_saved": "Data saved successfully"
+    "record_saved": "Extension record saved",
+    "record_deleted": "Extension record deleted"
   },
 
   "delete_entity": {
