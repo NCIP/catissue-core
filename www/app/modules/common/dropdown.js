@@ -28,6 +28,10 @@ angular.module('openspecimen')
           .attr('ng-model', tAttrs.ngModel)
           .attr('ng-disabled', tAttrs.ngDisabled)
           .attr('reset-search-input', true);
+    
+        if (tAttrs.onSelect) {
+          uiSelect.attr('on-select', tAttrs.onSelect);
+        }
 
         var uiSelectMatch = angular.element('<ui-select-match/>')
           .attr('placeholder', tAttrs.placeholder);

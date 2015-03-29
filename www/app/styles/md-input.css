@@ -99,3 +99,9 @@
   border-right: 6px solid transparent;
   border-left: 6px solid transparent;
 }
+
+.os-md-input-addon, 
+.os-md-input + .os-input-addon-right {
+  border: none;
+  background-color: inherit;
+}
