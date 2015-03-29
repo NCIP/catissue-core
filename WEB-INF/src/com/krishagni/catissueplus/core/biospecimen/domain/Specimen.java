@@ -344,9 +344,18 @@ public class Specimen extends BaseEntity {
 	}
 
 	public CollectionEvent getCollectionEvent() {
+		if (isAliquot() || isDerivative()) {
+			return null;
+		}
+				
 		if (this.collectionEvent == null) {
 			this.collectionEvent = CollectionEvent.getFor(this); 
 		}
+		
+		if (this.collectionEvent == null) {
+			this.collectionEvent = CollectionEvent.createFromSr(this);
+		}
+		
 		return this.collectionEvent;
 	}
 
@@ -355,9 +364,18 @@ public class Specimen extends BaseEntity {
 	}
 
 	public ReceivedEvent getReceivedEvent() {
+		if (isAliquot() || isDerivative()) {
+			return null;
+		}
+		
 		if (this.receivedEvent == null) {
 			this.receivedEvent = ReceivedEvent.getFor(this); 			 
-		}		
+		}
+		
+		if (this.receivedEvent == null) {
+			this.receivedEvent = ReceivedEvent.createFromSr(this);
+		}
+		
 		return this.receivedEvent; 
 	}
 
@@ -389,11 +407,11 @@ public class Specimen extends BaseEntity {
 	}
 	
 	public boolean isAliquot() {
-		return lineage.equals(ALIQUOT);
+		return ALIQUOT.equals(lineage);
 	}
 	
 	public boolean isDerivative() {
-		return lineage.equals(DERIVED);
+		return DERIVED.equals(lineage);
 	}
 	
 	public boolean isCollected() {
@@ -428,8 +446,8 @@ public class Specimen extends BaseEntity {
 		setLabel(specimen.getLabel());
 		setBarcode(specimen.getBarcode());
 		
-		setCollectionEvent(specimen.getCollectionEvent());
-		setReceivedEvent(specimen.getReceivedEvent());
+		updateEvent(getCollectionEvent(), specimen.getCollectionEvent());
+		updateEvent(getReceivedEvent(), specimen.getReceivedEvent());
 		setCollectionStatus(specimen.getCollectionStatus());
 
 		if (isAliquot()) {
@@ -727,4 +745,12 @@ public class Specimen extends BaseEntity {
 	private void adjustParentSpecimenQty(double qty) {
 		parentSpecimen.setAvailableQuantity(parentSpecimen.getAvailableQuantity() - qty); 
 	}
+	
+	private void updateEvent(SpecimenEvent thisEvent, SpecimenEvent otherEvent) {
+		if (isAliquot() || isDerivative()) {
+			return;
+		}
+		
+		thisEvent.update(otherEvent);
+	}	
 }

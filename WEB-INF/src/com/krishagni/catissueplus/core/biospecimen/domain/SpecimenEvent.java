@@ -5,12 +5,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.de.domain.DeObject;
+
+import edu.common.dynamicextensions.domain.nui.DatePicker;
 
 @Configurable
 public abstract class SpecimenEvent extends DeObject {
@@ -35,6 +38,7 @@ public abstract class SpecimenEvent extends DeObject {
 	}
 
 	public void setUser(User user) {
+		loadRecordIfNotLoaded();
 		this.user = user;
 	}
 
@@ -44,6 +48,7 @@ public abstract class SpecimenEvent extends DeObject {
 	}
 
 	public void setTime(Date time) {
+		loadRecordIfNotLoaded();
 		this.time = time;
 	}
 
@@ -53,6 +58,7 @@ public abstract class SpecimenEvent extends DeObject {
 	}
 
 	public void setComments(String comments) {
+		loadRecordIfNotLoaded();
 		this.comments = comments;
 	}
 
@@ -62,7 +68,13 @@ public abstract class SpecimenEvent extends DeObject {
 
 	public void setSpecimen(Specimen specimen) {
 		this.specimen = specimen;
-	}	
+	}
+	
+	public void update(SpecimenEvent other) {
+		setUser(other.getUser());
+		setTime(other.getTime());
+		setComments(other.getComments());
+	}
 	
 	public Map<String, Object> getAttrValues() {
 		Map<String, Object> vals = new HashMap<String, Object>();
@@ -75,13 +87,18 @@ public abstract class SpecimenEvent extends DeObject {
 	}
 	
 	public void setAttrValues(Map<String, Object> values) {
-		Number userId = (Number)values.get("user");
-		if (userId != null) {
-			this.user = userDao.getById(userId.longValue());
+		String userIdStr = (String)values.get("user");
+		if (StringUtils.isNotBlank(userIdStr)) {
+			Long userId = Long.parseLong(userIdStr);
+			this.user = userDao.getById(userId);
 		}
-		this.time = (Date)values.get("time");
-		this.comments = (String)values.get("comments");
 		
+		String timeStr = (String)values.get("time");
+		if (StringUtils.isNotBlank(timeStr)) {
+			this.time = new DatePicker().fromString(timeStr);
+		}
+				
+		this.comments = (String)values.get("comments");		
 		setEventAttrs(values);
 	}
 

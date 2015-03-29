@@ -271,6 +271,10 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			}
 		}
 		
+		if (detail.getPmis() == null) {
+			return;
+		}
+		
 		for (PmiDetail pmiDetail : detail.getPmis()) {
 			ParticipantMedicalIdentifier pmi = getPmi(pmiDetail, oce);
 			participant.updatePmi(pmi);
