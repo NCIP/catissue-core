@@ -123,7 +123,8 @@ angular.module('openspecimen')
             '<ui-select-match placeholder="{{$parent.placeholder}}">' +
               '{{$item.text}}' +
             '</ui-select-match>' +
-            '<ui-select-choices repeat="item in $parent.itemsList" group-by="\'category\'">' +
+            '<ui-select-choices repeat="item in $parent.itemsList | filter: $select.search" ' +
+              ' group-by="\'category\'">' +
               '<span ng-bind-html="item.text | highlight: $select.search"></span>' +
             '</ui-select-choices>' +
           '</ui-select>' +
