@@ -21,7 +21,7 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
       return {
         anatomicSite: notSpecified,
         laterality: notSpecified,
-        pathologyStatus: notSpecified,
+        pathology: notSpecified,
         collectionContainer: notSpecified,
         collectionProcedure: notSpecified
       }

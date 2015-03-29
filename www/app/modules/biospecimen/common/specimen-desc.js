@@ -1,5 +1,4 @@
-
-angular.module('os.biospecimen.participant.specimen-desc', [])
+angular.module('os.biospecimen.common.specimendesc', [])
   .directive('osSpecimenDesc', function($translate) {
     return {
       restrict: 'E',

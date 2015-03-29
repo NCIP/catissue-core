@@ -17,10 +17,9 @@
     <div class="os-table os-table-fixed os-table-tree">
       <div class="os-table-head">
         <div class="row">
-          <div class="col col-xs-5" translate="srs.name">Name</div>
-          <div class="col col-xs-2" translate="srs.type">Type</div>
-          <div class="col col-xs-2" translate="srs.pathology">Pathology</div>
-          <div class="col col-xs-2 text-right" translate="srs.qty">Quantity</div>
+          <div class="col col-xs-6" translate="srs.name">Name</div>
+          <div class="col col-xs-3" translate="srs.type">Type</div>
+          <div class="col col-xs-2" translate="srs.qty">Quantity</div>
           <div class="col col-xs-1">&nbsp;</div>
         </div>
       </div>
@@ -29,7 +28,7 @@
           ng-repeat="sr in specimenRequirements | openedTreeNodes" 
           ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
           <div class="row title">
-            <div class="col col-xs-5 os-ellipsis">
+            <div class="col col-xs-6 os-ellipsis">
               <div style="padding-left: {{sr.hasChildren ? sr.depth * 20 : sr.depth * 20 + 16}}px">
                 <a ng-if="sr.hasChildren && sr.isOpened" 
                    class="fa fa-chevron-circle-down"
@@ -44,15 +43,18 @@
                                  'os-lineage-aliquot': sr.lineage == 'Aliquot',
                                  'os-lineage-derivative': sr.lineage == 'Derived'}">
                 </span>
-                <a ng-if="sr.name">{{sr.name}}</a>
-                <a ng-if="!sr.name">{{sr.type}} ({{sr.specimenClass}})</a>
+                <a>
+                  <os-specimen-desc specimen="sr"></os-specimen-desc>
+                </a>
+
               </div>
             </div>
-            <div class="col col-xs-2 os-ellipsis">{{sr.type}}</div>
-            <div class="col col-xs-2 os-ellipsis">{{sr.pathologyStatus | osNoValue}}</div>
+            <div class="col col-xs-3 os-ellipsis">
+              <span>{{sr.type | osNoValue}}</span>
+            </div>
             <div class="col col-xs-2">
-              <div class="text-right col-xs-11">{{sr.initialQty | osNoValue}}</div>
-              <div os-specimen-qty-unit="sr.specimenClass"></div>
+              <span>{{sr.initialQty}}</span>
+              <span os-specimen-qty-unit="sr.specimenClass"></span>
             </div>
             <div class="col col-xs-1 os-more-options"> 
               <div dropdown ng-if="view == 'list_sr'">

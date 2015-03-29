@@ -53,7 +53,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	
 		requirement.setId(detail.getId());
 		requirement.setName(detail.getName());
-		requirement.setLineage("New"); // TODO:
+		requirement.setLineage(Specimen.NEW);
 		
 		setLabelFormat(detail, requirement, ose);
 		setSpecimenClass(detail, requirement, ose);
@@ -208,7 +208,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 	
 	private void setPathologyStatus(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		String pathologyStatus = ensureNotEmpty(detail.getPathologyStatus(), SrErrorCode.PATHOLOGY_STATUS_REQUIRED, ose);
+		String pathologyStatus = ensureNotEmpty(detail.getPathology(), SrErrorCode.PATHOLOGY_STATUS_REQUIRED, ose);
 		sr.setPathologyStatus(pathologyStatus);
 		// TODO: check for valid pathology status
 	}
