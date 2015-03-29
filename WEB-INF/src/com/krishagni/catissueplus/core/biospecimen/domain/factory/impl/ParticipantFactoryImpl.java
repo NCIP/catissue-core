@@ -5,6 +5,7 @@ import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -83,19 +84,18 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			return;
 		}
 		
-		String ssn = detail.getSsn();		
+		String ssn = detail.getSsn();
+		
+		if (StringUtils.isBlank(ssn)) { 
+			participant.setSocialSecurityNumber(null);
+			return;
+		}
+		
 		if (isValidSsn(ssn)) {
-			if (partial) {
-				boolean isUnique = ParticipantUtil.validateSsn(
-						daoFactory, 
-						participant.getSocialSecurityNumber(), 
-						ssn, 
-						oce);
-				if (!isUnique) {
-					return;
-				}
+			if (partial && !ssn.equals(participant.getSocialSecurityNumber())) {
+				ParticipantUtil.ensureUniqueSsn(daoFactory, ssn, oce);
 			}
-			
+							
 			participant.setSocialSecurityNumber(ssn);
 		} else {
 			oce.addError(ParticipantErrorCode.INVALID_SSN);
@@ -271,14 +271,18 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			}
 		}
 		
-		if (detail.getPmis() == null) {
-			return;
+		Set<ParticipantMedicalIdentifier> newPmis = new HashSet<ParticipantMedicalIdentifier>();		
+		if (CollectionUtils.isEmpty(detail.getPmis())) {
+			participant.setPmis(newPmis);
+		} else {
+			for (PmiDetail pmiDetail : detail.getPmis()) {
+				ParticipantMedicalIdentifier pmi = getPmi(pmiDetail, oce);
+				pmi.setParticipant(participant);
+				newPmis.add(pmi);				
+			}			
 		}
-		
-		for (PmiDetail pmiDetail : detail.getPmis()) {
-			ParticipantMedicalIdentifier pmi = getPmi(pmiDetail, oce);
-			participant.updatePmi(pmi);
-		}
+				
+		participant.setPmis(newPmis);
 	}
 
 	private ParticipantMedicalIdentifier getPmi(PmiDetail pmiDetail, OpenSpecimenException oce) {

@@ -79,11 +79,11 @@ public class ParticipantServiceImpl implements ParticipantService {
 			Participant participant = participantFactory.createParticipant(req.getPayload());
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ParticipantUtil.validateSsn(
-					daoFactory, 
-					existing.getSocialSecurityNumber(), 
-					participant.getSocialSecurityNumber(), 
-					ose);
+			
+			String newSsn = participant.getSocialSecurityNumber();
+			if (StringUtils.isNotBlank(newSsn) && !newSsn.equals(existing.getSocialSecurityNumber())) {
+				ParticipantUtil.ensureUniqueSsn(daoFactory, newSsn, ose);
+			}
 			
 			ParticipantUtil.ensureUniquePmis(
 					daoFactory, 

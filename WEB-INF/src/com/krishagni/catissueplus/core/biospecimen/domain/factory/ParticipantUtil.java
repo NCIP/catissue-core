@@ -11,16 +11,6 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class ParticipantUtil {
-	public static boolean validateSsn(DaoFactory daoFactory, String oldSsn, String newSsn, OpenSpecimenException ose) {
-		if (StringUtils.isBlank(oldSsn) && !StringUtils.isBlank(newSsn)) {
-			return ensureUniqueSsn(daoFactory, newSsn, ose);
-		} else if (!StringUtils.isBlank(oldSsn) && !StringUtils.isBlank(newSsn) && !oldSsn.equals(newSsn)) {
-			return ensureUniqueSsn(daoFactory, newSsn, ose);
-		}
-		
-		return true;
-	}
-
 	public static boolean ensureUniqueSsn(DaoFactory daoFactory, String ssn, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(ssn)) {
 			return true;
