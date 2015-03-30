@@ -96,7 +96,7 @@
                 <div id="{{form.name}}.{{field.name}}" 
                   data-arg="{{form.name}}.{{field.name}}"
                   ng-repeat="field in ::form.staticFields | filter: {caption: queryLocal.searchField}">
-                  <span class="os-query-form-field"
+                  <span class="os-query-form-field" ng-class="{'selected': queryLocal.currFilter.field == field}"
                     ng-click="onFieldSelect(field)"
                     title="{{'queries.add_filter' | translate}}"
                     data-placement="right" 

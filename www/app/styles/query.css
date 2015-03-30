@@ -132,6 +132,7 @@
   padding: 2px;
 }
 
+.os-query-form-field.selected,
 .os-query-form-field:hover {
   background: #e5e5e5;
 }
@@ -146,6 +147,7 @@
 
 .os-query-addedit-filter-po {
   width: 300px;
+  min-height: 220px;
 }
 
 .os-query-range-value input {
