@@ -940,6 +940,14 @@
     </createTable>
   </changeSet>
 
+  <changeSet author="mibrahim" id="Permissions table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="RBAC_PERMISSIONS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+
   <changeSet author="mibrahim" id="Add FK Permission's resources">
     <addForeignKeyConstraint
       constraintName="FK_PERM_RESOURCE_ID"
@@ -974,6 +982,14 @@
     </createTable>
   </changeSet>
 
+  <changeSet author="mibrahim" id="role table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="RBAC_ROLES_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+
   <changeSet author="mibrahim" id="Add FK Parent role">
     <addForeignKeyConstraint
       constraintName="FK_OS_PARENT_ROLE"
@@ -998,6 +1014,14 @@
       </column>
 
     </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Role access list table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="RBAC_ACL_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
   </changeSet>
 
   <changeSet author="mibrahim" id="Add FK Acl's resources">
@@ -1037,6 +1061,14 @@
     </createTable>
   </changeSet>
 
+  <changeSet author="mibrahim" id="Role access list ops table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="RBAC_ACL_OPS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+
   <changeSet author="mibrahim" id="Add FK Acl-ops acl">
     <addForeignKeyConstraint
       constraintName="FK_OS_ACLO_ACL"
@@ -1074,6 +1106,14 @@
       <column name="CP_ID" type="${int.type}" />
 
     </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Subject roles table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="RBAC_SUBJECT_ROLES_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
   </changeSet>
 
   <changeSet author="mibrahim" id="Add FK on Subject - userid">
@@ -1407,5 +1447,135 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Orders table" failOnError="true">
+    <createTable tableName="OS_ORDERS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(255)">
+        <constraints nullable="false" />
+      </column>
+
+      <column name="REQUESTER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="CREATION_DATE" type="${nullable.ts.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="EXECUTION_DATE" type="${nullable.ts.type}"/>
+
+      <column name="STATUS" type="${text.type}(64)">
+        <constraints nullable="false" />
+      </column>
+
+      <column name="ORDER_TYPE" type="${text.type}(64)" />
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)"/>
+
+      <column name="SITE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="DISTRIBUTION_PROTOCOL_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="DISTRIBUTOR_ID" type="${int.type}"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Orders table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_ORDERS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK to Order requester">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_DO_REQUESTER_ID"
+      baseTableName="OS_ORDERS"
+      baseColumnNames="REQUESTER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK to Order distributor">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_DO_DISTRIBUTER_ID"
+      baseTableName="OS_ORDERS"
+      baseColumnNames="DISTRIBUTOR_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK to order site">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_DO_SITE_ID"
+      baseTableName="OS_ORDERS"
+      baseColumnNames="SITE_ID"
+      referencedTableName="CATISSUE_SITE"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK to distribution protocol">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_DO_DP_ID"
+      baseTableName="OS_ORDERS"
+      baseColumnNames="DISTRIBUTION_PROTOCOL_ID"
+      referencedTableName="CATISSUE_DISTRIBUTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Order items table" failOnError="true">
+    <createTable tableName="OS_ORDER_ITEMS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="ORDER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="QUANTITY" type="${double.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="SPECIMEN_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Order items table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_ORDER_ITEMS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK to OrderItem's Order">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_OI_DO_ID"
+      baseTableName="OS_ORDER_ITEMS"
+      baseColumnNames="ORDER_ID"
+      referencedTableName="OS_ORDERS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mibrahim" id="Add FK to OrderItem's Specimen">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_OI_SPECIMEN_ID"
+      baseTableName="OS_ORDER_ITEMS"
+      baseColumnNames="SPECIMEN_ID"
+      referencedTableName="CATISSUE_SPECIMEN"
+      referencedColumnNames="IDENTIFIER" />
   </changeSet>
 </databaseChangeLog>
