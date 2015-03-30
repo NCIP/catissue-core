@@ -47,7 +47,7 @@ openspecimen.ui.container.ContainerPositionSelector = function(opts) {
         var posX = Utility.fromOrdinal(container.dimensionOneLabelingScheme, j + 1);
         var td = $("<td/>")
           .addClass("os-container-pos")
-          .attr({ 'data-pos-x': posX, 'data-pos-y': posY, 'title': '(' + posX + ', ' + posY + ')'});
+          .attr({ 'data-pos-x': posX, 'data-pos-y': posY, 'title': '(' + posY + ', ' + posX + ')'});
 
         var pos = i * container.dimensionOneCapacity + j + 1;
         if (occupiedPosMap[pos]) {

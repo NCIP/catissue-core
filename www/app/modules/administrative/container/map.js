@@ -20,7 +20,7 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
     };
 
     function formatPos(posX, posY) {
-      return "(" + posX + ", " + posY + ")";
+      return "(" + posY + ", " + posX + ")";
     };
 
     function getContainerSlotEl(container, slot) {

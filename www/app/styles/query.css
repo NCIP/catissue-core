@@ -107,6 +107,7 @@
   flex: 7;
   align-self: auto;
   padding: 0px 5px;
+  overflow: auto;
 }
 
 .os-query-exprs-filters .panel {

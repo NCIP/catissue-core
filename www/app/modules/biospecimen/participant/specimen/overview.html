@@ -84,7 +84,7 @@
         <ng-switch on="!!specimen.storageLocation.id && specimen.storageLocation.id != -1">
           <span class="value value-md" ng-switch-when="true">
             {{specimen.storageLocation.name}} 
-              ({{specimen.storageLocation.positionX}} x {{specimen.storageLocation.positionY}})
+              ({{specimen.storageLocation.positionY}} x {{specimen.storageLocation.positionX}})
           </span>
           <span class="value value-md" ng-switch-default translate="specimens.virtually_located"> 
             Virtual 
