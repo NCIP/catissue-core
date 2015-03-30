@@ -4,7 +4,7 @@ import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 
-public class StorageContainerPosition {
+public class StorageContainerPosition implements Comparable<StorageContainerPosition> {
 	private Long id;
 	
 	private int posOneOrdinal;
@@ -116,4 +116,15 @@ public class StorageContainerPosition {
 		"occupyingSpecimen", 
 		"occupyingContainer"
 	};
+
+	@Override
+	public int compareTo(StorageContainerPosition other) {
+		if (getPosTwoOrdinal() < other.getPosTwoOrdinal()) {
+			return -1;
+		} else if (getPosTwoOrdinal() == other.getPosTwoOrdinal()) {
+			return getPosOneOrdinal() - other.getPosOneOrdinal();
+		} else {
+			return 1;
+		}
+	}
 }

@@ -359,6 +359,14 @@ public class StorageContainer extends BaseEntity {
 		return result;
 	}
 	
+	public String toDimensionOneScheme(int ordinal) {
+		return converters.get(getDimensionOneLabelingScheme()).fromOrdinal(ordinal);
+	}
+	
+	public String toDimensionTwoScheme(int ordinal) {
+		return converters.get(getDimensionTwoLabelingScheme()).fromOrdinal(ordinal);
+	}
+	
 	public boolean areValidPositions(String posOne, String posTwo) {
 		int posOneOrdinal = converters.get(getDimensionOneLabelingScheme()).toOrdinal(posOne);
 		int posTwoOrdinal = converters.get(getDimensionTwoLabelingScheme()).toOrdinal(posTwo);
@@ -538,6 +546,13 @@ public class StorageContainer extends BaseEntity {
 		}
 		
 		deleteWithoutCheck();
+	}
+	
+	public String getStringifiedAncestors() {
+		StringBuilder names = new StringBuilder();
+		getStringifiedAncestors(names);
+		names.delete(names.length() - 2, names.length());
+		return names.toString();
 	}
 	
 	private void deleteWithoutCheck() {
@@ -816,6 +831,14 @@ public class StorageContainer extends BaseEntity {
 		}
 		
 		return false;
+	}
+	
+	private void getStringifiedAncestors(StringBuilder names) {
+		if (getParentContainer() != null) {
+			getParentContainer().getStringifiedAncestors(names);
+		}
+		
+		names.append(getName()).append(", ");
 	}
 	
 	//

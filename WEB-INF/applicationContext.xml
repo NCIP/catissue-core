@@ -325,9 +325,14 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 
+  <bean id="containerMapExporter" class="com.krishagni.catissueplus.core.administrative.services.impl.ContainerMapExporterImpl">
+    <property name="resourceBundle" ref="resourceBundle"/>
+  </bean>
+
   <bean id="storageContainerSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.StorageContainerServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="containerFactory" ref="storageContainerFactory"/>
+    <property name="mapExporter" ref="containerMapExporter"/>
   </bean>
 	
   <bean id="distributionProtocolFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionProtocolFactoryImpl">

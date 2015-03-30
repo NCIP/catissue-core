@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.io.File;
 import java.util.List;
 import java.util.Set;
 
@@ -9,12 +10,14 @@ import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
+import com.krishagni.catissueplus.core.administrative.events.ContainerMapExportDetail;
 import com.krishagni.catissueplus.core.administrative.events.ContainerQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
+import com.krishagni.catissueplus.core.administrative.services.ContainerMapExporter;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -29,6 +32,8 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	private DaoFactory daoFactory;
 	
 	private StorageContainerFactory containerFactory;
+	
+	private ContainerMapExporter mapExporter;
 
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
@@ -44,6 +49,10 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 
 	public void setContainerFactory(StorageContainerFactory containerFactory) {
 		this.containerFactory = containerFactory;
+	}
+	
+	public void setMapExporter(ContainerMapExporter mapExporter) {
+		this.mapExporter = mapExporter;
 	}
 
 	@Override
@@ -63,16 +72,8 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<StorageContainerDetail> getStorageContainer(RequestEvent<ContainerQueryCriteria> req) {
-		try {
-			ContainerQueryCriteria crit = req.getPayload();
-			
-			StorageContainer container = null;
-			if (crit.getId() != null) {
-				container = daoFactory.getStorageContainerDao().getById(crit.getId());
-			} else if (StringUtils.isNotBlank(crit.getName())) {
-				container = daoFactory.getStorageContainerDao().getByName(crit.getName());
-			}
-						
+		try {		
+			StorageContainer container = getContainer(req.getPayload());						
 			if (container == null) {
 				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
 			}
@@ -182,6 +183,22 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	
 	@Override
 	@PlusTransactional
+	public ResponseEvent<ContainerMapExportDetail> exportMap(RequestEvent<ContainerQueryCriteria> req) {
+		try {
+			StorageContainer container = getContainer(req.getPayload());						
+			if (container == null) {
+				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
+			}
+			
+			File file = mapExporter.exportToFile(container);
+			return ResponseEvent.response(new ContainerMapExportDetail(container.getName(), file));
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
 	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req) {
 		try {
 			StorageContainer existing = daoFactory.getStorageContainerDao().getById(req.getPayload());
@@ -212,7 +229,18 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-			
+
+	private StorageContainer getContainer(ContainerQueryCriteria crit) {
+		StorageContainer container = null;
+		if (crit.getId() != null) {
+			container = daoFactory.getStorageContainerDao().getById(crit.getId());
+		} else if (StringUtils.isNotBlank(crit.getName())) {
+			container = daoFactory.getStorageContainerDao().getByName(crit.getName());
+		}
+		
+		return container;
+	}
+	
 	private void ensureUniqueConstraints(StorageContainer container) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		

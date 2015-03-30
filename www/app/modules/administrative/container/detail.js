@@ -1,8 +1,11 @@
 angular.module('os.administrative.container.detail', ['os.administrative.models'])
-  .controller('ContainerDetailCtrl', function($scope, $q, container, Site, CollectionProtocol, PvManager, DeleteUtil) {
+  .controller('ContainerDetailCtrl', function(
+      $scope, $q, container, Container,
+      Site, CollectionProtocol, PvManager, DeleteUtil) {
 
     function init() {
       $scope.container = container;
+      $scope.downloadUri = Container.url() + container.$id() + '/export-map';
       loadPvs();
     }
 

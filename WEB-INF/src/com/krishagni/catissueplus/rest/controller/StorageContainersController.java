@@ -1,8 +1,12 @@
 package com.krishagni.catissueplus.rest.controller;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.events.ContainerMapExportDetail;
 import com.krishagni.catissueplus.core.administrative.events.ContainerQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
@@ -26,6 +31,7 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
+import edu.common.dynamicextensions.nutility.IoUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -157,7 +163,34 @@ public class StorageContainersController {
 		
 		return resp.getPayload();
 	}
+
+	@RequestMapping(method = RequestMethod.GET, value="{id}/export-map")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public void exportContainerMap(@PathVariable("id") Long id, HttpServletResponse response) {
+		ContainerQueryCriteria crit = new ContainerQueryCriteria(id);
+		RequestEvent<ContainerQueryCriteria> req = new RequestEvent<ContainerQueryCriteria>(crit);
+		ResponseEvent<ContainerMapExportDetail> resp = storageContainerSvc.exportMap(req);
+		resp.throwErrorIfUnsuccessful();
 		
+		
+		ContainerMapExportDetail detail = resp.getPayload();		
+		response.setContentType("application/csv");
+		response.setHeader("Content-Disposition", "attachment;filename=" + detail.getName() + ".csv");
+			
+		InputStream in = null;
+		try {
+			in = new FileInputStream(detail.getFile());
+			IoUtil.copy(in, response.getOutputStream());
+		} catch (IOException e) {
+			throw new RuntimeException("Error sending file", e);
+		} finally {
+			IoUtil.close(in);
+			detail.getFile().delete();
+		}				
+	}
+	
+	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
