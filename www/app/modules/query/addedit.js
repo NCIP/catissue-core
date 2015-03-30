@@ -6,6 +6,7 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.quer
     SavedQuery, QueryUtil, QueryExecutor) {
 
     function init() {
+      $scope.openForm = undefined;
       $scope.cps = cps;
       $scope.queryLocal = queryCtx;
       queryGlobal.queryCtx = $scope.queryLocal;
@@ -26,11 +27,11 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.quer
 
       var ql = $scope.queryLocal;
       ql.searchField = '';
-      if (ql.openForm) {
-        ql.openForm.showExtnFields = false; // previously selected form
+      if ($scope.openForm) {
+        $scope.openForm.showExtnFields = false; // previously selected form
       }
 
-      ql.openForm = form;
+      $scope.openForm = form;
       ql.currFilter = {form: form};
       form.getFields();
     }

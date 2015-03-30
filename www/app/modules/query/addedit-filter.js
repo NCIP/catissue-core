@@ -29,7 +29,7 @@ angular.module('os.query.addeditfilter', ['os.query.models'])
 
       var ql = $scope.queryLocal;
       ql.filterId++;
-      var filter = angular.extend({form: ql.openForm, id: ql.filterId}, ql.currFilter);
+      var filter = angular.extend({form: $scope.openForm, id: ql.filterId}, ql.currFilter);
       if (ql.filters.length > 0) {
         ql.exprNodes.push({type: 'op', value: QueryUtil.getOp('and').name});
       }

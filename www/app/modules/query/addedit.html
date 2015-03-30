@@ -79,52 +79,54 @@
                 {{form.caption}}
               </div>
             </accordion-heading>
-            <div ng-show="!form.staticFields" translate="queries.loading_form_fields">
-              Loading form fields. Please wait for a moment ...
-            </div>
-            <div ng-show="form.staticFields">
-              <div class="input-group os-query-search-field">
-                <input type="text" class="form-control" 
-                  placeholder="{{'queries.search_field' | translate}}" 
-                  ng-model="queryLocal.searchField" 
-                  ng-keyup="form.showExtnFields = (queryLocal.searchField != '' )" >
-                <div class="input-group-addon">
-                  <span class="fa fa-search"> </span>
+            <div ng-if="form == openForm">
+              <div ng-if="!form.staticFields" translate="queries.loading_form_fields">
+                Loading form fields. Please wait for a moment ...
+              </div>
+              <div ng-if="form.staticFields">
+                <div class="input-group os-query-search-field">
+                  <input type="text" class="form-control" 
+                    placeholder="{{'queries.search_field' | translate}}" 
+                    ng-model="queryLocal.searchField" 
+                    ng-keyup="form.showExtnFields = (queryLocal.searchField != '' )" >
+                  <div class="input-group-addon">
+                    <span class="fa fa-search"> </span>
+                  </div>
                 </div>
-              </div>
-              <div id="{{form.name}}.{{field.name}}" 
-                data-arg="{{form.name}}.{{field.name}}"
-                ng-repeat="field in form.staticFields | filter: {caption: queryLocal.searchField}">
-                <span class="os-query-form-field"
-                  ng-click="onFieldSelect(field)"
-                  title="{{'queries.add_filter' | translate}}"
-                  data-placement="right" 
-                  content-template="modules/query/addedit-filter.html" bs-popover>
-                  {{field.caption}}
-                </span>
-              </div>
-              <div class="os-query-block-margin"
-                ng-repeat="extnForm in form.extnForms">
-                <span class="os-query-extn-form"
-                  ng-click="extnForm.showExtnFields = !extnForm.showExtnFields" 
-                  ng-show="filteredExtnFields.length > 0">
-                  {{extnForm.caption}}
-                  <i ng-if="form.showExtnFields || extnForm.showExtnFields" class="fa fa-caret-down"></i>
-                  <i ng-if="!form.showExtnFields && !extnForm.showExtnFields" class="fa fa-caret-right"></i>
-                </span>
+                <div id="{{form.name}}.{{field.name}}" 
+                  data-arg="{{form.name}}.{{field.name}}"
+                  ng-repeat="field in ::form.staticFields | filter: {caption: queryLocal.searchField}">
+                  <span class="os-query-form-field"
+                    ng-click="onFieldSelect(field)"
+                    title="{{'queries.add_filter' | translate}}"
+                    data-placement="right" 
+                    content-template="modules/query/addedit-filter.html" bs-popover>
+                    {{field.caption}}
+                  </span>
+                </div>
+                <div class="os-query-block-margin"
+                  ng-repeat="extnForm in form.extnForms">
+                  <span class="os-query-extn-form"
+                    ng-click="extnForm.showExtnFields = !extnForm.showExtnFields" 
+                    ng-show="filteredExtnFields.length > 0">
+                    {{extnForm.caption}}
+                    <i ng-if="form.showExtnFields || extnForm.showExtnFields" class="fa fa-caret-down"></i>
+                    <i ng-if="!form.showExtnFields && !extnForm.showExtnFields" class="fa fa-caret-right"></i>
+                  </span>
 
-                <div class="os-query-extn-form-fields"
-                  ng-show="(form.showExtnFields || extnForm.showExtnFields) && filteredExtnFields.length > 0">
-                  <div id="{{form.name}}.{{field.name}}" 
-                    data-arg="{{form.name}}.{{field.name}}"
-                    ng-repeat="field in filteredExtnFields  = (extnForm.fields | filter: {caption: queryLocal.searchField})">
-                    <span class="os-query-form-field"
-                      ng-click="onFieldSelect(field)"
-                      title="{{'queries.add_filter' | translate}}"
-                      data-placement="right" 
-                      content-template="modules/query/addedit-filter.html" bs-popover>
-                      {{field.caption}}
-                    </span>
+                  <div class="os-query-extn-form-fields"
+                    ng-show="(form.showExtnFields || extnForm.showExtnFields) && filteredExtnFields.length > 0">
+                    <div id="{{form.name}}.{{field.name}}" 
+                      data-arg="{{form.name}}.{{field.name}}"
+                      ng-repeat="field in filteredExtnFields  = (extnForm.fields | filter: {caption: queryLocal.searchField})">
+                      <span class="os-query-form-field"
+                        ng-click="onFieldSelect(field)"
+                        title="{{'queries.add_filter' | translate}}"
+                        data-placement="right" 
+                        content-template="modules/query/addedit-filter.html" bs-popover>
+                        {{field.caption}}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

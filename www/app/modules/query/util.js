@@ -228,7 +228,7 @@ angular.module('os.query.util', [])
       var query = "";
       angular.forEach(exprNodes, function(exprNode) {
         if (exprNode.type == 'paren') {
-          query + exprNode.value;
+          query += exprNode.value;
         } else if (exprNode.type == 'op') {
           query += ops[exprNode.value].symbol + " ";
         } else if (exprNode.type == 'filter') {
