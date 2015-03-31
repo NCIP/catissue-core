@@ -1,6 +1,9 @@
 
 angular.module('os.administrative.user.detail', ['os.administrative.models'])
-  .controller('UserDetailCtrl', function($scope, $q, $translate, user, PvManager, Alerts, DeleteUtil) {
+  .controller('UserDetailCtrl', function(
+    $scope, $q, $translate, user, 
+    User, PvManager, Alerts, DeleteUtil) {
+
     $scope.user = user;
     $scope.domains = PvManager.getPvs('domains');
     $scope.sites = PvManager.getSites();
