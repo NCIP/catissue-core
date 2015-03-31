@@ -579,6 +579,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 
 	private void ensurePiBelongsCpSites(CollectionProtocol cp) {
+		if (cp.getPrincipalInvestigator().isAdmin()) {
+			return;
+		}
+		
 		Set<Site> piSites = cp.getPrincipalInvestigator().getSites();
 		Set<Site> cpSites = cp.getRepositories();
 		
@@ -592,6 +596,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		Set<User> coordinators = cp.getCoordinators();
 		
 		for (User coordinator : coordinators) {
+			if (coordinator.isAdmin()) {
+				continue;
+			}
+			
 			Set<Site> coordinatorSites = coordinator.getSites();
 			if (!hasAtleastOneSiteInCommon(cpSites, coordinatorSites)) {
 				throw OpenSpecimenException.userError(CpErrorCode.CO_ORD_DOES_NOT_BELONG_CP_REPOS);
