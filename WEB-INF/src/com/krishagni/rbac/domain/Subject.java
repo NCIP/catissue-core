@@ -36,8 +36,8 @@ public class Subject {
 	}
 	
 	public SubjectRole addRole(SubjectRole sr) {
-		roles.add(sr);
 		sr.setSubject(this);
+		roles.add(sr);
 		return sr;
 	}
 	
@@ -68,7 +68,7 @@ public class Subject {
 
 	private SubjectRole getExistingRole(Long srId) {
 		for (SubjectRole sr : roles) {
-			if (sr.getId() == srId) {
+			if (sr.getId().equals(srId)) {
 				return sr;
 			}
 		}

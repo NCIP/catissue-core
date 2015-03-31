@@ -25,8 +25,8 @@
           <div class="os-table-body">
             <div ng-repeat="role in userRolesList">
               <div class="row" ng-if="role.id != currentRole.id">
-                <div class="col col-xs-3 os-ellipsis">{{role.site || 'user.role.all' | translate}}</div>
-                <div class="col col-xs-5 os-ellipsis">{{role.collectionProtocol || 'user.role.all' | translate}}</div>
+                <div class="col col-xs-3 os-ellipsis">{{role.site || ('user.role.all' | translate)}}</div>
+                <div class="col col-xs-5 os-ellipsis">{{role.collectionProtocol || ('user.role.all' | translate)}}</div>
                 <div class="col col-xs-3 os-ellipsis">{{role.role}}</div>
 
                 <div class="col col-xs-1 action">

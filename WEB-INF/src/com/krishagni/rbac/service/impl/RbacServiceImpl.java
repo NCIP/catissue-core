@@ -401,8 +401,7 @@ public class RbacServiceImpl implements RbacService {
 			return ResponseEvent.response(SubjectRoleDetail.from(resp));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
