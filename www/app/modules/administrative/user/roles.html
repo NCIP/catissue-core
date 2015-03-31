@@ -26,7 +26,7 @@
             <div ng-repeat="role in userRolesList">
               <div class="row" ng-if="role.id != currentRole.id">
                 <div class="col col-xs-3 os-ellipsis">{{role.site || 'user.role.all' | translate}}</div>
-                <div class="col col-xs-5 os-ellipsis">{{role.cp || 'user.role.all' | translate}}</div>
+                <div class="col col-xs-5 os-ellipsis">{{role.collectionProtocol || 'user.role.all' | translate}}</div>
                 <div class="col col-xs-3 os-ellipsis">{{role.role}}</div>
 
                 <div class="col col-xs-1 action">
@@ -81,7 +81,7 @@
 
       <div class="col-xs-4">
         <div class="form-group">
-          <os-select os-md-input ng-model="currentRole.cp" list="cps" name="cp"
+          <os-select os-md-input ng-model="currentRole.collectionProtocol" list="cps" name="cp"
             placeholder="{{'user.role.cp' | translate}}" required>
           </os-select>
           <div os-field-error field="pform.cp"></div>

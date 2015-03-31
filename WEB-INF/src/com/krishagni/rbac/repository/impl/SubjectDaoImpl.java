@@ -6,15 +6,6 @@ import com.krishagni.rbac.events.UserAccessInformation;
 import com.krishagni.rbac.repository.SubjectDao;
 
 public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
-	private static final String FQN = Subject.class.getName();
-	
-	private static final String CAN_USER_ACCESS = FQN + ".getRolesforUserAccess";
-
-	@Override
-	public Subject getSubject(Long subjectId) {
-		return (Subject) sessionFactory.getCurrentSession()
-				.get(Subject.class, subjectId);
-	}
 
 	@Override
 	public boolean canUserAccess(UserAccessInformation info) {
@@ -28,4 +19,13 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
 				.setLong("resourceInstanceId", info.resourceInstanceId())
 				.list().isEmpty()));
 	}
+	
+	@Override
+	public Class<?> getType() {
+		return Subject.class;
+	}
+	
+	private static final String FQN = Subject.class.getName();
+	
+	private static final String CAN_USER_ACCESS = FQN + ".getRolesforUserAccess";
 }

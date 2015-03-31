@@ -5,7 +5,5 @@ import com.krishagni.rbac.domain.Subject;
 import com.krishagni.rbac.events.UserAccessInformation;
 
 public interface SubjectDao extends Dao<Subject> {
-	public Subject getSubject(Long subjectId);
-	
 	public boolean canUserAccess(UserAccessInformation accessInfo);
 }

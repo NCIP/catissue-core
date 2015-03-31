@@ -53,10 +53,6 @@ public class RoleDaoImpl extends AbstractDao<Role> implements RoleDao {
 	
 	private static final String FQN = Role.class.getName();
 	
-	private static final String RAC_FQN = RoleAccessControl.class.getName();
- 	
 	private static final String GET_ROLES_BY_NAMES = FQN + ".getRolesByNames";
-
-	private static final String GET_ROLE_ACCESS_CONTROL = RAC_FQN + ".getRoleAccessControl";
 
 }

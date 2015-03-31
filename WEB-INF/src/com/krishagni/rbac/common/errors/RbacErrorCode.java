@@ -34,7 +34,9 @@ public enum RbacErrorCode implements ErrorCode {
 	
 	CYCLE_DETECTED_IN_HIERARCHY, 
 	
-	CP_SITE_COMBI_NOT_FOUND;
+	CP_SITE_COMBI_NOT_FOUND,
+	
+	SUBJECT_ROLE_NOT_FOUND;
 	
 	@Override
 	public String code() {
