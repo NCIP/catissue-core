@@ -3,7 +3,7 @@ angular.module('openspecimen')
   .factory('CpConfigSvc', function($http) {
     return {
       getRegParticipantTmpl: function(cpId) {
-        if (cpId == 9933) {
+        if (cpId == 18) {
           return 'custom-modules/biospecimen/participant/register.html';
         }
 
@@ -11,7 +11,7 @@ angular.module('openspecimen')
       },
 
       getRegParticipantCtrl : function(cpId) {
-        if (cpId == 9933) {
+        if (cpId == 18) {
           return 'CustomRegParticipantCtrl';
         }
 

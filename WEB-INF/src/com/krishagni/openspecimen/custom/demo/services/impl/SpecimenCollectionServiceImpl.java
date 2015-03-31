@@ -6,13 +6,16 @@ import java.util.Set;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
+import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -28,6 +31,8 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 	private DaoFactory daoFactory;
 	
 	private CollectionProtocolRegistrationService cprSvc;
+	
+	private VisitService visitService;
 	
 	private SpecimenService specimenSvc;
 	
@@ -113,10 +118,10 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 		visit.setEventId(cpe.getId());
 		visit.setCprId(cprId);
 		visit.setCpTitle(cp.getTitle());
-		visit.setStatus("Complete"); // TODO: hard coded
+		visit.setStatus(Visit.VISIT_STATUS_COMPLETED);
 		
 		RequestEvent<VisitDetail> req = new RequestEvent<VisitDetail>(sdb, visit);
-		ResponseEvent<VisitDetail> resp = cprSvc.addVisit(req);
+		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -149,8 +154,8 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 	
 	private SpecimenDetail createSpecimen(VisitDetail visit, SpecimenRequirement sr, SessionDataBean sdb, SpecimenDetail specimen) {
 		specimen.setVisitId(visit.getId());
-		specimen.setLineage("New");
-		specimen.setStatus("Collected");
+		specimen.setLineage(Specimen.NEW);
+		specimen.setStatus(Specimen.COLLECTED);
 		specimen.setCreatedOn(Calendar.getInstance().getTime());
 		specimen.setReqId(sr.getId());
 		specimen.setSpecimenClass(sr.getSpecimenClass());
@@ -179,6 +184,14 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 		this.cprSvc = cprSvc;
 	}
 	
+	public VisitService getVisitService() {
+		return visitService;
+	}
+
+	public void setVisitService(VisitService visitService) {
+		this.visitService = visitService;
+	}
+
 	public SpecimenService getSpecimenSvc() {
 		return specimenSvc;
 	}
@@ -195,5 +208,5 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 		this.formSvc = formSvc;
 	}
 
-	private static final String CP_TITLE = "Advanced Specimen Collection";
+	private static final String CP_TITLE = "Custom Protocol";
 }

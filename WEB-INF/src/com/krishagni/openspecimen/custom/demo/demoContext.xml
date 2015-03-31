@@ -20,8 +20,9 @@
 
   
   <bean id="specimensCollectionSvc" class="com.krishagni.openspecimen.custom.demo.services.impl.SpecimenCollectionServiceImpl">
-    <property name="daoFactory"  ref="biospecimenDaoFactory"/>
-    <property name="cprSvc"      ref="cprSvc"/>
-    <property name="specimenSvc" ref="specimenSvc"/>
+    <property name="daoFactory"   ref="biospecimenDaoFactory"/>
+    <property name="cprSvc"       ref="cprSvc"/>
+    <property name="visitService" ref="visitService"/>
+    <property name="specimenSvc"  ref="specimenSvc"/>
   </bean>
 </beans>
