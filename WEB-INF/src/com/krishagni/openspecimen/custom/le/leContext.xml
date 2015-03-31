@@ -19,11 +19,7 @@
     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
   
-  <bean id="specimensCollectionSvc" class="com.krishagni.openspecimen.custom.demo.services.impl.SpecimenCollectionServiceImpl">
+  <bean id="cprService" class="com.krishagni.openspecimen.custom.le.services.impl.CprServiceImpl">
     <property name="daoFactory"  ref="biospecimenDaoFactory"/>
-    <property name="cprSvc"      ref="cprSvc"/>
-    <property name="specimenSvc" ref="specimenSvc"/>
   </bean>
-
-  <context:component-scan base-package="com.krishagni.openspecimen.custom.demo"/>
 </beans>

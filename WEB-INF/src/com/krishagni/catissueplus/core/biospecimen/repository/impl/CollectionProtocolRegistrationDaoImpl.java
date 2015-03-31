@@ -91,9 +91,9 @@ public class CollectionProtocolRegistrationDaoImpl
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Long getRegistrationId(Long cpId, Long participantId) {		
-		List<Long> result =  getSessionFactory().getCurrentSession()
-				.getNamedQuery(GET_REGISTRATION_ID)
+	public CollectionProtocolRegistration getCprByParticipantId(Long cpId, Long participantId) {		
+		List<CollectionProtocolRegistration> result =  sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_BY_CP_ID_AND_PID)
 				.setLong("cpId", cpId)
 				.setLong("participantId", participantId)
 				.list();
@@ -185,5 +185,5 @@ public class CollectionProtocolRegistrationDaoImpl
 	
 	private static final String GET_BY_CP_ID_AND_PPID = FQN + ".getCprByCpIdAndPpid";
 	
-	private static final String GET_REGISTRATION_ID = FQN + ".getRegistrationId";
+	private static final String GET_BY_CP_ID_AND_PID = FQN + ".getCprByCpIdAndPid";
 }

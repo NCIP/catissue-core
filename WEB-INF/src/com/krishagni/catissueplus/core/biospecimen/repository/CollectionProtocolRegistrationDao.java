@@ -14,5 +14,5 @@ public interface CollectionProtocolRegistrationDao extends Dao<CollectionProtoco
 
 	public CollectionProtocolRegistration getCprByBarcode(String barcode);
 
-	public Long getRegistrationId(Long cpId, Long participantId);
+	public CollectionProtocolRegistration getCprByParticipantId(Long cpId, Long participantId);
 }
