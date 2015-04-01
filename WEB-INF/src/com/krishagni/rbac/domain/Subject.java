@@ -67,8 +67,7 @@ public class Subject {
 	}
 
 	private SubjectRole getExistingRole(Long srId) {
-		Set<SubjectRole> roles = getRoles();  
-		for (SubjectRole sr : roles) {
+		for (SubjectRole sr : getRoles()) {
 			if (sr.getId().equals(srId)) {
 				return sr;
 			}

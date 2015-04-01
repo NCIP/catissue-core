@@ -18,7 +18,7 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
 
     function createUserRolesJson(userRoles) {
       angular.forEach(userRoles, function(userRole) {
-        updateUserRolesJson(userRole);
+        updateUserRoles(userRole);
       });
     }
 
@@ -63,7 +63,7 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
     $scope.saveOrUpdateRole = function() {
       $scope.currentRole.$saveOrUpdate().then(
         function(role) {
-          updateUserRolesJson(role);
+          updateUserRoles(role);
           $scope.userRolesList = getUserRolesList($scope.userRoles);
 
           $scope.currentRole = {};
@@ -114,15 +114,15 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
       });
     }
 
-    function updateUserRolesJson(userRole) {
+    function updateUserRoles(userRole) {
       // In Case of Update, remove old role from json.
-      if ($scope.currentRole.id) {
-        var deleted = false;
-        angular.forEach($scope.userRoles, function(roles) {
-          if (!deleted) {
-            deleted = deleteRoleById(roles, userRole);
+      if (userRole.id) {
+        for (var key in $scope.userRoles) {
+          var deleted = deleteRoleById($scope.userRoles[key], userRole);
+          if (deleted) {
+            break;
           }
-        });
+        }
       }
 
       var roleType = getRoleType(userRole);
