@@ -37,7 +37,7 @@ public class Subject {
 	
 	public SubjectRole addRole(SubjectRole sr) {
 		sr.setSubject(this);
-		roles.add(sr);
+		getRoles().add(sr);
 		return sr;
 	}
 	
@@ -62,11 +62,12 @@ public class Subject {
 			OpenSpecimenException.userError(RbacErrorCode.SUBJECT_ROLE_NOT_FOUND);
 		}
 		
-		roles.remove(existingRole);
+		getRoles().remove(existingRole);
 		return existingRole;
 	}
 
 	private SubjectRole getExistingRole(Long srId) {
+		Set<SubjectRole> roles = getRoles();  
 		for (SubjectRole sr : roles) {
 			if (sr.getId().equals(srId)) {
 				return sr;

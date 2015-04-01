@@ -74,7 +74,7 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
 
     $scope.removeRole = function(role) {
       role.$remove().then(function(role) {
-        deleteRole(role, 'delete');
+        deleteRole($scope.userRoles, role);
         $scope.userRolesList = getUserRolesList($scope.userRoles);
       })
     }
@@ -117,34 +117,29 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
     function updateUserRolesJson(userRole) {
       // In Case of Update, remove old role from json.
       if ($scope.currentRole.id) {
-        deleteRole(userRole, 'update');
+        var deleted = false;
+        angular.forEach($scope.userRoles, function(roles) {
+          if (!deleted) {
+            deleted = deleteRoleById(roles, userRole);
+          }
+        });
       }
 
       var roleType = getRoleType(userRole);
-      userRole = formatUserRole(userRole);
       var roles = $scope.userRoles[roleType] || [];
-      roles.push(userRole);
+      roles.push(formatRoleToUiModel(userRole));
       $scope.userRoles[roleType] = roles;
     }
 
-    function deleteRole(userRole, action) {
-      if (action == 'delete') {
-        var roleType = getRoleType(userRole);
-        var roles = $scope.userRoles[roleType];
-        _deleteRole(userRole, roles);
-      } else if (action == 'update') {
-        var deleted = false;
-        angular.forEach($scope.userRoles, function(roles) {
-           if (!deleted) {
-             deleted = _deleteRole(userRole, roles);
-           }
-        });
-      }
+    function deleteRole(userRoles, role) {
+      var roleType = getRoleType(role);
+      var roles = userRoles[roleType];
+      deleteRoleById(roles, role);
     }
 
-    function _deleteRole(userRole, roles) {
+    function deleteRoleById(roles, role) {
       for (var i = roles.length - 1; i >= 0; i--) {
-        if (roles[i].id == userRole.id) {
+        if (roles[i].id == role.id) {
           roles.splice(i, 1);
           return true;
         }
@@ -153,7 +148,7 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
       return false;
     }
 
-    function formatUserRole(userRole) {
+    function formatRoleToUiModel(userRole) {
       userRole.role = userRole.role.name;
       userRole.site = userRole.site ? userRole.site.name : $scope.all;
       userRole.collectionProtocol = userRole.collectionProtocol ? userRole.collectionProtocol.shortTitle : $scope.all;

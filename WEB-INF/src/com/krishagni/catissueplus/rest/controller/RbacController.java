@@ -233,11 +233,11 @@ public class RbacController {
 		return resp.getPayload();
 	}
 		
-	@RequestMapping(method = RequestMethod.DELETE, value="/roles/{name}")
+	@RequestMapping(method = RequestMethod.DELETE, value="/roles/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody 
-	public RoleDetail deleteRole(@PathVariable("name") String roleName) {
-		ResponseEvent<RoleDetail> resp = rbacSvc.deleteRole(getRequest(roleName));
+	public RoleDetail deleteRole(@PathVariable("id") Long id) {
+		ResponseEvent<RoleDetail> resp = rbacSvc.deleteRole(getRequest(id));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

@@ -6,7 +6,7 @@ angular.module('os.administrative.models.user', ['os.common.models'])
         'users',
         function(user) {
           user.roleModel =  osModel('rbac/subjects/' + user.$id() + '/roles');
-          user.roleModel.prototype.$saveProps = saveProps;
+          user.roleModel.prototype.$saveProps = saveRoleProps;
         }
       );
 
@@ -18,7 +18,7 @@ angular.module('os.administrative.models.user', ['os.common.models'])
       return new this.roleModel(role);
     }
 
-    var saveProps = function() {
+    var saveRoleProps = function() {
       var userRole = angular.copy(this);
       var all = $translate.instant('user.role.all');
       if (userRole.site == all) {

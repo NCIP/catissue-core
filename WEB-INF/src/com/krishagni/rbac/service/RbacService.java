@@ -58,7 +58,7 @@ public interface RbacService {
 	
 	public ResponseEvent<RoleDetail> updateRole(RequestEvent<RoleDetail> req);
 	
-	public ResponseEvent<RoleDetail> deleteRole(RequestEvent<String> req);
+	public ResponseEvent<RoleDetail> deleteRole(RequestEvent<Long> req);
 	
 	//
 	// Subject - Group roles API's
@@ -76,5 +76,5 @@ public interface RbacService {
 	// Intern API's can change without notice.
 	//
 	public boolean checkAccess(Long userId, String resource, String operation, Long cpId, Long siteId, Long resourceInstanceId);
-	
+
 }

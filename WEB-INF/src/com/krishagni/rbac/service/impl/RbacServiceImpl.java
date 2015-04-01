@@ -329,14 +329,10 @@ public class RbacServiceImpl implements RbacService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<RoleDetail> deleteRole(RequestEvent<String> req) {
+	public ResponseEvent<RoleDetail> deleteRole(RequestEvent<Long> req) {
 		try {
-			String roleName = req.getPayload();
-			if (StringUtils.isEmpty(roleName)) {
-				return ResponseEvent.userError(RbacErrorCode.ROLE_NAME_REQUIRED);
-			}
-			
-			Role role = daoFactory.getRoleDao().getRoleByName(roleName);
+			Long roleId = req.getPayload();
+			Role role = daoFactory.getRoleDao().getById(roleId, null);
 			if (role == null) {
 				return ResponseEvent.userError(RbacErrorCode.ROLE_NOT_FOUND);
 			}
@@ -379,19 +375,19 @@ public class RbacServiceImpl implements RbacService {
 			SubjectRole resp = null;
 			SubjectRole sr = null;
 			switch (subjectRoleOp.getOp()) {
-			case ADD:
-				sr = createSubjectRole(subjectRoleOp.getSubjectRole());
-				resp = subject.addRole(sr);
-				break;
+				case ADD:
+					sr = createSubjectRole(subjectRoleOp.getSubjectRole());
+					resp = subject.addRole(sr);
+					break;
 				
-			case UPDATE:
-				sr = createSubjectRole(subjectRoleOp.getSubjectRole());
-				resp = subject.updateRole(sr);
-				break;
+				case UPDATE:
+					sr = createSubjectRole(subjectRoleOp.getSubjectRole());
+					resp = subject.updateRole(sr);
+					break;
 				
-			case REMOVE:
-				resp = subject.removeSubjectRole(subjectRoleOp.getSubjectRole().getId());
-				break;
+				case REMOVE:
+					resp = subject.removeSubjectRole(subjectRoleOp.getSubjectRole().getId());
+					break;
 			}
 			
 			if (resp != null) {
