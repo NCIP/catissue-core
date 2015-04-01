@@ -53,7 +53,7 @@
       <div class="form-group clearfix" ng-repeat="ac in role.acl">
         <ng-form name="roleResourceForm" os-form-validator="roleResourceForm" parent-validator="roleFormValidator">
           <div class="col-xs-3 col-xs-offset-3">
-            <os-select ng-model="ac.resourceName" list="resources" placeholder="{{'role.resource' | translate}}"
+            <os-select ng-model="ac.resource" display-prop="displayName" list="resources" placeholder="{{'role.resource' | translate}}"
               name="resource" required>
             </os-select>
             <div os-field-error field="roleResourceForm.resource"></div>

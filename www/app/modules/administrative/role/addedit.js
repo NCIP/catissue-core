@@ -1,19 +1,32 @@
 
 angular.module('os.administrative.role.addedit', ['os.administrative.models'])
   .controller('RoleAddEditCtrl', function(
-    $scope, $state, $filter, role,
+    $scope, $state, $translate, role,
     Operation, Resource) {
     
     var init = function() {
       $scope.role = role;
+      formatRoleToUiModel($scope.role);
       loadPvs();
+    }
+
+    function formatRoleToUiModel(role) {
+      angular.forEach(role.acl, function(ac) {
+        ac.resource = {
+          displayName: $translate.instant('role.resources.' + ac.resourceName),
+          value: ac.resourceName
+        };
+      });
     }
 
     function loadPvs() {
        $scope.resources = [];
        Resource.query().then(function(resources) {
          $scope.resources = resources.map(function(resource) {
-           return resource.name;
+           return {
+             displayName: $translate.instant('role.resources.' + resource.name),
+             value: resource.name
+           };
          });
        });
 

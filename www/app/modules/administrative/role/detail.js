@@ -1,11 +1,16 @@
 
 angular.module('os.administrative.role.detail', ['os.administrative.models'])
-  .controller('RoleDetailCtrl', function($scope, $q, role, PvManager) {
+  .controller('RoleDetailCtrl', function($scope, $q, $translate, role, PvManager) {
     $scope.role = role;
 
     angular.forEach($scope.role.acl, function(ac) {
-        ac.operationNames = ac.operations.map( function(operation) {
-          return operation.operationName
+        ac.resource = {
+          displayName: $translate.instant('role.resources.' + ac.resourceName),
+          value: ac.resourceName
+        };
+
+        ac.operationNames = ac.operations.map(function(operation) {
+          return operation.operationName;
         });
     });
 
