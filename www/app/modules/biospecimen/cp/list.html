@@ -1,28 +1,28 @@
 <div>
   <div os-page-header>
     <h3 translate="cp.list">Collection Protocols</h3>
-    <div class="os-btns" dropdown>
-      <button class="primary dropdown-toggle" title="Click to add new Collection Protocol" 
-        ui-sref="cp-addedit({cpId: ''})">
-        <span class="fa fa-plus"></span>
-        <span translate="common.buttons.create">Create</span>
-      </button>
-      <ul class="dropdown-menu">
-        <li>
-          <a ui-sref="cp-addedit">
-            <i class="fa fa-plus"></i>
-            <span translate="common.buttons.create">Create</span>
-          </a>
-        </li>
-        <li>
-          <a ui-sref="cp-import">
-            <i class="fa fa-upload"></i>
-            <span translate="common.buttons.import">Import</span>
-          </a>
-        </li>
-      </ul>
-    </div>
     <div class="os-btns right">
+      <div dropdown class="inline">
+        <button class="primary dropdown-toggle" title="Click to add new Collection Protocol" 
+          ui-sref="cp-addedit({cpId: ''})">
+          <span class="fa fa-plus"></span>
+          <span translate="common.buttons.create">Create</span>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a ui-sref="cp-addedit">
+              <i class="fa fa-plus"></i>
+              <span translate="common.buttons.create">Create</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="cp-import">
+              <i class="fa fa-upload"></i>
+              <span translate="common.buttons.import">Import</span>
+            </a>
+          </li>
+        </ul>
+      </div>
       <button class="default" os-right-drawer-toggle title="{{'cp.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>

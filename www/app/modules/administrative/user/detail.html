@@ -7,15 +7,12 @@
     <h3>{{user.lastName}} {{user.firstName}}</h3>
 
     <div class="" ng-if="user.activityStatus != 'Pending'">
-      <div class="os-btns">
+      <div class="os-btns right">
         <button class="primary" title="{{'user.tooltip.edit' | translate}}" 
           ui-sref="user-addedit({userId: user.id})">
           <span class="fa fa-pencil"></span>
           <span translate="common.buttons.edit">Edit</span>
         </button>
-      </div>
-
-      <div class="os-btns right">
         <button class="default" ng-click="deleteUser()">
           <span class="fa fa-trash"></span>
           <span translate="common.buttons.delete">Delete</span>

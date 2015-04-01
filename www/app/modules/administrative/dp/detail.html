@@ -4,15 +4,13 @@
       <li><a ui-sref="dp-list" translate="dp.list">Distribution Protocols</a></li>
     </ul>
     <h3>{{distributionProtocol.shortTitle}}</h3>
-    <div class="os-btns">
+
+    <div class="os-btns right">
       <button class="primary" title="{{'dp.tooltip.edit' | translate}}" 
         ui-sref="dp-addedit({dpId: distributionProtocol.id})">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
-    </div>
-
-    <div class="os-btns right">
       <button class="default" ng-click="deleteDp()">
         <span class="fa fa-trash"></span>
         <span translate="common.buttons.delete">Delete</span>

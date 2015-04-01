@@ -321,7 +321,7 @@ h4 + .btn-group {
   position: relative;
 }
 
-.os-page-hdr .os-btns a, 
+.os-page-hdr .os-btns a.btn, 
 .os-page-hdr .os-btns button {
   border-radius: 3px;
   padding: 4px 10px;
