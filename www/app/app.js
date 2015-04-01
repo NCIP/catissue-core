@@ -50,6 +50,13 @@ angular.module('openspecimen', [
           }
         },
         controller: 'SignedInCtrl'
+      })
+      .state('home', {
+        url: '/home',
+        templateUrl: 'modules/common/home.html',
+        controller: function() {
+        },
+        parent: 'signed-in'
       });
 
     $urlRouterProvider.otherwise('/');

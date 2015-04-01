@@ -42,7 +42,7 @@ angular.module('openspecimen')
       }
  
       if ($http.defaults.headers.common['X-OS-API-TOKEN']) {
-        $state.go('cp-list');
+        $state.go('home');
       }
     }
 
@@ -58,7 +58,7 @@ angular.module('openspecimen')
         };
         $rootScope.loggedIn = true;
         AuthService.saveToken(result.data.token);
-        $state.go('cp-list');
+        $state.go('home');
       } else {
         $rootScope.currentUser = {};
         $rootScope.loggedIn = false;

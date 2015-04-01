@@ -9,10 +9,25 @@
     "storage_containers": "Storage Containers",
     "distribution_protocols": "Distribution Protocols",
     "roles": "Roles",
-    "queries": "Queries"
+    "queries": "Queries",
+    "reports": "Reports",
+    "containers": "Containers",
+    "forms": "Forms",
+
+    "cp_desc": "Create, update SOP of visits and specimens",
+    "dp_desc": "Create, update procedures for distributing specimens",
+    "institutes_desc": "Update information about institutions",
+    "users_desc": "Add, rename and manage users",
+    "roles_desc": "Create, update user access controls",
+    "sites_desc": "Add and update sites",
+    "containers_desc": "Manage containers and their restrictions",
+    "reports_desc": "Create, share and schedule reports",
+    "forms_desc": "Create and manage custom forms",
+    "settings_desc": "Manage application configuration settings"
   },
 
   "common": {
+    "home": "Home",
     "count" : "Count",
     "date": "Date",
     "na": "N/A",
