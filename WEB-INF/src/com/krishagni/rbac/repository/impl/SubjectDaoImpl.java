@@ -13,10 +13,10 @@ import com.krishagni.rbac.events.UserAccessCriteria;
 import com.krishagni.rbac.repository.SubjectDao;
 
 public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
+        
 	@Override
-	public Subject getSubject(Long subjectId) {
-		return (Subject) sessionFactory.getCurrentSession()
-				.get(Subject.class, subjectId);
+	public Class<?> getType() {
+		return Subject.class;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -65,6 +65,8 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
 		
 		return list;
 	}
+
+        
 	
 	private static final String FQN = Subject.class.getName();
 

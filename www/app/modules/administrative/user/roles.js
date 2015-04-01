@@ -7,12 +7,19 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
     
     function init() {
       $scope.currentRole = {};
-      $scope.userRoles = userRoles;
+      $scope.userRoles = {};
+      createUserRolesJson(userRoles);
+
       $scope.addMode = false;
       $scope.all = $translate.instant('user.role.all');
-
       loadPvs();
       $scope.userRolesList = getUserRolesList($scope.userRoles);
+    }
+
+    function createUserRolesJson(userRoles) {
+      angular.forEach(userRoles, function(userRole) {
+        updateUserRoles(userRole);
+      });
     }
 
     function loadPvs() {
@@ -22,8 +29,8 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
 
       $scope.roles = [];
       Role.query().then(
-        function(roleList) {
-          angular.forEach(roleList, function(role) {
+        function(result) {
+          angular.forEach(result, function(role) {
             $scope.roles.push(role.name);
           });
         }
@@ -46,17 +53,17 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
       if (!$scope.currentRole.site) {
         $scope.currentRole.site = $scope.all;
       }
-      if (!$scope.currentRole.cp) {
-        $scope.currentRole.cp = $scope.all;
+      if (!$scope.currentRole.collectionProtocol) {
+        $scope.currentRole.collectionProtocol = $scope.all;
       }
 
       $scope.addMode = false;
     }
 
     $scope.saveOrUpdateRole = function() {
-      user.saveOrUpdateRole($scope.currentRole).then(
+      $scope.currentRole.$saveOrUpdate().then(
         function(role) {
-          updateUserRolesJson(role);
+          updateUserRoles(role);
           $scope.userRolesList = getUserRolesList($scope.userRoles);
 
           $scope.currentRole = {};
@@ -66,17 +73,10 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
     }
 
     $scope.removeRole = function(role) {
-      //TODO: Call REST API to remove role.
-      if (role.site == $scope.all) {
-        delete role.site;
-      }
-      if (role.cp == $scope.all) {
-        delete role.cp;
-      }
-
-
-      deleteRole(role)
-      $scope.userRolesList = getUserRolesList($scope.userRoles);
+      role.$remove().then(function(role) {
+        deleteRole($scope.userRoles, role);
+        $scope.userRolesList = getUserRolesList($scope.userRoles);
+      })
     }
 
     $scope.revertEdit = function() {
@@ -85,14 +85,13 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
     }
 
     $scope.loadCps = function(site) {
+      if (site == $scope.all) {
+        $scope.cps = [$scope.all];
+        return;
+      }
       var cpsToRemove = [];
-
-      angular.forEach($scope.userRoles.allSites, function(role) {
-        cpsToRemove.push(role.cp);
-      });
-
       angular.forEach($scope.userRoles.siteCpRoles, function(role) {
-        cpsToRemove.push(role.cp);
+        cpsToRemove.push(role.collectionProtocol);
       });
 
       var cpListOpts = {detailedList: false};
@@ -104,7 +103,7 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
         function(result) {
           $scope.cps = [];
           angular.forEach(result, function(cp) {
-            if (cpsToRemove.indexOf(cp.shortTitle) == -1 || $scope.currentRole.cp == cp.shortTitle) {
+            if (cpsToRemove.indexOf(cp.shortTitle) == -1 || $scope.currentRole.collectionProtocol == cp.shortTitle) {
               $scope.cps.push(cp.shortTitle);
             }
           });
@@ -115,34 +114,54 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
       });
     }
 
-    function updateUserRolesJson(userRole) {
+    function updateUserRoles(userRole) {
       // In Case of Update, remove old role from json.
-      if ($scope.currentRole.id) {
-        deleteRole(userRole);
+      if (userRole.id) {
+        for (var key in $scope.userRoles) {
+          var deleted = deleteRoleById($scope.userRoles[key], userRole);
+          if (deleted) {
+            break;
+          }
+        }
       }
+
       var roleType = getRoleType(userRole);
       var roles = $scope.userRoles[roleType] || [];
-      roles.push(userRole);
+      roles.push(formatRoleToUiModel(userRole));
       $scope.userRoles[roleType] = roles;
     }
 
-    function deleteRole(userRole) {
-      var roleType = getRoleType(userRole);
-      var roles = $scope.userRoles[roleType];
+    function deleteRole(userRoles, role) {
+      var roleType = getRoleType(role);
+      var roles = userRoles[roleType];
+      deleteRoleById(roles, role);
+    }
+
+    function deleteRoleById(roles, role) {
       for (var i = roles.length - 1; i >= 0; i--) {
-        if (roles[i].id == userRole.id) {
+        if (roles[i].id == role.id) {
           roles.splice(i, 1);
+          return true;
         }
       }
+
+      return false;
+    }
+
+    function formatRoleToUiModel(userRole) {
+      userRole.role = userRole.role.name;
+      userRole.site = userRole.site ? userRole.site.name : $scope.all;
+      userRole.collectionProtocol = userRole.collectionProtocol ? userRole.collectionProtocol.shortTitle : $scope.all;
+      return userRole;
     }
 
     function getRoleType(userRole) {
       var roleType = undefined;
-      if (!userRole.site && !userRole.cp) {
+      if (!userRole.site && !userRole.collectionProtocol) {
         roleType = 'all';
       } else if (!userRole.site) {
         roleType = 'allSites';
-      } else if (!userRole.cp) {
+      } else if (!userRole.collectionProtocol) {
         roleType = 'allCps';
       } else {
         roleType = 'siteCpRoles';
@@ -167,13 +186,6 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
     }
 
     function setSitePvs() {
-      // If all Sites role is exist then can add roles only on all site.
-      // Hence show only "All Sites" in dropdown.
-      if ($scope.userRoles.allSites &&  $scope.userRoles.allSites.length > 0) {
-        $scope.sitePvs = [$scope.all];
-        return;
-      }
-
       // If role exist on individual site then hide "All Sites" option.
       $scope.sitePvs = angular.copy($scope.sites);
       if (hasRoleOnIndividualSite()) {

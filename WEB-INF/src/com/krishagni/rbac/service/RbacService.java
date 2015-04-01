@@ -14,6 +14,7 @@ import com.krishagni.rbac.events.ResourceDetail;
 import com.krishagni.rbac.events.RoleDetail;
 import com.krishagni.rbac.events.SubjectDetail;
 import com.krishagni.rbac.events.SubjectRoleDetail;
+import com.krishagni.rbac.events.SubjectRoleOp;
 import com.krishagni.rbac.repository.OperationListCriteria;
 import com.krishagni.rbac.repository.PermissionListCriteria;
 import com.krishagni.rbac.repository.ResourceListCriteria;
@@ -59,13 +60,13 @@ public interface RbacService {
 	
 	public ResponseEvent<RoleDetail> updateRole(RequestEvent<RoleDetail> req);
 	
-	public ResponseEvent<RoleDetail> deleteRole(RequestEvent<String> req);
+	public ResponseEvent<RoleDetail> deleteRole(RequestEvent<Long> req);
 	
 	//
 	// Subject - Group roles API's
 	//
 	
-	public ResponseEvent<SubjectDetail> updateSubjectRoles(RequestEvent<SubjectDetail> req);
+	public ResponseEvent<SubjectRoleDetail> updateSubjectRole(RequestEvent<SubjectRoleOp> req);
 	
 	public ResponseEvent<List<SubjectRoleDetail>> getSubjectRoles(RequestEvent<Long> req);
 	

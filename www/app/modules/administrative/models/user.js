@@ -1,11 +1,12 @@
 
 angular.module('os.administrative.models.user', ['os.common.models'])
-  .factory('User', function(osModel, $http, $q, $translate, ApiUtil) {
+  .factory('User', function(osModel, $http, $translate, ApiUtil) {
     var User =
       osModel(
         'users',
         function(user) {
-          user.roleModel =  osModel('users/' + user.$id() + '/roles');
+          user.roleModel =  osModel('rbac/subjects/' + user.$id() + '/roles');
+          user.roleModel.prototype.$saveProps = saveRoleProps;
         }
       );
 
@@ -18,36 +19,30 @@ angular.module('os.administrative.models.user', ['os.common.models'])
     }
 
     User.prototype.getRoles = function() {
-      return {};
+      return this.roleModel.query();
     }
 
     User.prototype.newRole = function(role) {
       return new this.roleModel(role);
     }
 
-    var id = 1;
-
-    User.prototype.saveOrUpdateRole = function(role) {
-      //TODO: REST Call to save or update
-      // Temporary Code will be deleted after backend implementation done.
-      // Here Assumes rest call will return role object with values null for 'All'
-      // Also send null instead of all.
-       var all = $translate.instant('user.role.all');
-      var userRole = angular.copy(role);
+    var saveRoleProps = function() {
+      var userRole = angular.copy(this);
+      var all = $translate.instant('user.role.all');
       if (userRole.site == all) {
         delete userRole.site;
-      }
-      if (userRole.cp == all) {
-        delete userRole.cp;
-      }
-
-      if (!role.id) {
-        userRole.id = id++; // Temporary id given to saved roles
+      } else {
+        userRole.site = {name: userRole.site};
       }
 
-      var d = $q.defer();
-      d.resolve(userRole);
-      return d.promise;
+      if (userRole.collectionProtocol == all) {
+        delete userRole.collectionProtocol;
+      } else {
+        userRole.collectionProtocol = {shortTitle: userRole.collectionProtocol};
+      }
+
+      userRole.role = {name: userRole.role};
+      return userRole;
     }
 
     User.sendPasswordResetLink = function(user) {
