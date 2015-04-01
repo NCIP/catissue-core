@@ -197,7 +197,7 @@ body {
   padding: 30px 20px 10px 20px;
   background: #f5f5f5;
   border-bottom: 1px solid #ccc;
-  height: 71px;
+  height: 64px;
   color: #666666;
   display: flex;
   position: absolute;
@@ -222,14 +222,14 @@ body {
   background: transparent;
   border: none;
   outline: none;
-  margin-top: -27px;
+  margin-top: -20px;
   margin-right: 24px;
   margin-left: -10px;
 }
 
 .os-page-hdr.no-breadcrumbs .os-nav-button,
 .os-page-hdr.no-breadcrumbs .os-options-button {
-  margin-top: -15px;
+  margin-top: -8px;
 }
 
 .os-page-hdr .os-nav-button .fa,
@@ -281,7 +281,7 @@ h4 + .btn-group {
 .os-page-hdr + .container {
   padding-top: 20px;
   position: absolute;
-  top: 121px;
+  top: 114px;
   bottom: 0px;
   height: auto;
   width: 100%;
@@ -290,7 +290,7 @@ h4 + .btn-group {
 
 .os-page-hdr + .os-cards {
   position: absolute;
-  top: 121px;
+  top: 114px;
   bottom: 0px;
   height: auto;
   overflow-y: auto;

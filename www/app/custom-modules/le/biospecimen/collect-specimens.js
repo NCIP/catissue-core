@@ -18,7 +18,7 @@ angular.module('openspecimen')
               delete p.isOpen 
               return p;
             }
-          );
+          )
         };
 
         var baseUrl = ApiUrls.getBaseUrl();
