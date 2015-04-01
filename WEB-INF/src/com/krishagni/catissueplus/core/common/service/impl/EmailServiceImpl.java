@@ -9,6 +9,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,24 +19,19 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.krishagni.catissueplus.core.common.domain.Email;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
+import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.service.TemplateService;
-import com.krishagni.catissueplus.core.common.util.Utility;
 
-import edu.wustl.common.util.XMLPropertyHandler;
-
-public class EmailServiceImpl implements EmailService {
-	private static final String locale = Locale.getDefault().toString();
+public class EmailServiceImpl implements EmailService, ConfigChangeListener, InitializingBean {
+	private static final String MODULE = "email";
 	
-	private static final String TEMPLATE_SOURCE = "email-templates/" + locale;
+	private static final String TEMPLATE_SOURCE = "email-templates/";
 	
-	private static final String BASE_TMPL = TEMPLATE_SOURCE + "/baseTemplate.vm";
+	private static final String BASE_TMPL = "baseTemplate.vm";
 	
-	private static final String FOOTER_TMPL = TEMPLATE_SOURCE + "/footer.vm";
-	
-	private static String adminEmailAddress;
-	
-	private static String fromAddress;
+	private static final String FOOTER_TMPL = "footer.vm";
 	
 	private static String subjectPrefix;
 	
@@ -46,6 +42,8 @@ public class EmailServiceImpl implements EmailService {
 	private ResourceBundleMessageSource resourceBundle;
 	
 	private ThreadPoolTaskExecutor taskExecutor;
+	
+	private ConfigurationService cfgSvc;
 
 	public void setTemplateService(TemplateService templateService) {
 		this.templateService = templateService;
@@ -59,39 +57,41 @@ public class EmailServiceImpl implements EmailService {
 		this.taskExecutor = taskExecutor;
 	}
 	
-	public EmailServiceImpl(){
-		initJavaMailSenderInstance();
+	public void setCfgSvc(ConfigurationService cfgSvc) {
+		this.cfgSvc = cfgSvc;
 	}
 	
-	private void initJavaMailSenderInstance() {
+	@Override
+	public void onConfigChange(String name, String value) {
+		initializeMailSender();		
+	}
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		initializeMailSender();
+		cfgSvc.registerChangeListener(MODULE, this);		
+	}
+	
+	private void initializeMailSender() {
 		try {
-			adminEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
-			fromAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
-			
-			String fromPassword = XMLPropertyHandler.getValue("email.sendEmailFrom.emailPassword");
-			String host = XMLPropertyHandler.getValue("email.mailServer");
-			String port = XMLPropertyHandler.getValue("email.mailServer.port");
-			String isStartTLSEnabled = XMLPropertyHandler.getValue("email.smtp.starttls.enabled");
-			String isSMTPAuthEnabled = XMLPropertyHandler.getValue("email.smtp.auth.enabled");
-			
 			JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-			mailSender.setUsername(fromAddress);
-			mailSender.setPassword(fromPassword);
-			mailSender.setHost(host);
-			
-			if (StringUtils.isNotBlank(port)) {
-				mailSender.setPort(new Integer(port));
-			}
-			
-			if (StringUtils.isNotBlank(isStartTLSEnabled) && StringUtils.isNotBlank(isSMTPAuthEnabled)) {
+			mailSender.setUsername(getAccountId());
+			mailSender.setPassword(getAccountPassword());
+			mailSender.setHost(getMailServerHost());
+			mailSender.setPort(getMailServerPort());
+
+			String startTlsEnabled = getStartTlsEnabled();
+			String authEnabled = getAuthEnabled();
+			if (StringUtils.isNotBlank(startTlsEnabled) && StringUtils.isNotBlank(authEnabled)) {
 				Properties props = new Properties();
-				props.put("mail.smtp.starttls.enable", isStartTLSEnabled);
-				props.put("mail.smtp.auth", isSMTPAuthEnabled);
+				props.put("mail.smtp.starttls.enable", startTlsEnabled);
+				props.put("mail.smtp.auth", authEnabled);
 				mailSender.setJavaMailProperties(props);
 			}
 			
 			this.mailSender = mailSender;
 		} catch (Exception e) {
+			e.printStackTrace();
 			new RuntimeException("Error while initialising java mail sender", e);
 		}
 	}
@@ -103,19 +103,21 @@ public class EmailServiceImpl implements EmailService {
 	
 	@Override
 	public boolean sendEmail(String emailTmplKey, String[] to, File[] attachments, Map<String, Object> props) {
+		String adminEmailId = getAdminEmailId();
+		
 		props.put("template", getEmailTmpl(emailTmplKey));
-		props.put("footer", FOOTER_TMPL);
-		props.put("appUrl", Utility.getAppUrl());
-		props.put("adminEmailAddress", adminEmailAddress);
+		props.put("footer", getFooterTmpl());
+		props.put("appUrl", getAppUrl());
+		props.put("adminEmailAddress", adminEmailId);
 		props.put("adminPhone", "1234567890");//TODO: will be replaced by property file
 		String subject = getSubject(emailTmplKey, (String[]) props.get("$subject"));
-		String content = templateService.render(BASE_TMPL, props);
+		String content = templateService.render(getBaseTmpl(), props);
 		
 		Email email = new Email();
 		email.setSubject(subject);
 		email.setBody(content);
 		email.setToAddress(to);
-		email.setCcAddress(new String[] {adminEmailAddress});
+		email.setCcAddress(new String[] {adminEmailId});
 		email.setAttachments(attachments);
 		
 		return sendEmail(email);
@@ -138,7 +140,7 @@ public class EmailServiceImpl implements EmailService {
 			}
 			
 			message.setText(mail.getBody(), true); // true = isHtml
-			message.setFrom(fromAddress);
+			message.setFrom(getAccountId());
 			
 			if (mail.getAttachments() != null) {
 				for (File attachment: mail.getAttachments()) {
@@ -163,7 +165,7 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	private String getEmailTmpl(String emailTmplKey) {
-		return TEMPLATE_SOURCE + "/" + emailTmplKey + ".vm";
+		return getTmplSource() + emailTmplKey + ".vm";
 	}
 	
 	private class SendMailTask implements Runnable {
@@ -177,8 +179,56 @@ public class EmailServiceImpl implements EmailService {
 			try{
 				mailSender.send(mimeMessage);
 			} catch(Exception e) {
+				e.printStackTrace();
 				new RuntimeException("Error while sending Email", e);
 			}
 		}
+	}
+	
+	private String getTmplSource() {
+		return TEMPLATE_SOURCE + Locale.getDefault().toString() + "/";
+	}
+	
+	private String getBaseTmpl() {
+		return getTmplSource() + BASE_TMPL;
+	}
+	
+	private String getFooterTmpl() {
+		return getTmplSource() + FOOTER_TMPL;
+	}
+	
+	/**
+	 *  Config helper methods
+	 */
+	private String getAccountId() {
+		return cfgSvc.getStrSetting(MODULE, "account_id");
+	}
+	
+	private String getAccountPassword() {
+		return cfgSvc.getStrSetting(MODULE, "account_password");
+	}
+	
+	private String getMailServerHost() {
+		return cfgSvc.getStrSetting(MODULE, "server_host");
+	}
+	
+	private Integer getMailServerPort() {
+		return cfgSvc.getIntSetting(MODULE, "server_port", 25);
+	}
+	
+	private String getStartTlsEnabled() {
+		return cfgSvc.getStrSetting(MODULE, "starttls_enabled");
+	}
+	
+	private String getAuthEnabled() {
+		return cfgSvc.getStrSetting(MODULE, "auth_enabled");
+	}
+	
+	private String getAdminEmailId() {
+		return cfgSvc.getStrSetting(MODULE, "admin_email_id");
+	}	
+	
+	private String getAppUrl() {
+		return cfgSvc.getStrSetting("common", "app_url");
 	}
 }

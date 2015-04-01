@@ -1,8 +1,8 @@
 package com.krishagni.catissueplus.core.common.util;
 
+import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
+
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -14,9 +14,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
-import edu.common.dynamicextensions.nutility.IoUtil;
 import edu.wustl.common.util.XMLPropertyHandler;
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
 public class Utility {
 
