@@ -6,7 +6,7 @@ angular.module('os.administrative.user.detail', ['os.administrative.models'])
 
     function init() {
       $scope.user = user;
-      $scope.domains = PvManager.getPvs('domains');
+      $scope.domains = PvManager.getDomains();
       $scope.sites = PvManager.getSites();
     }
 

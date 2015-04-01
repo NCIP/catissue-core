@@ -32,10 +32,11 @@ angular.module('openspecimen')
       }
     }
   })
-  .controller('LoginCtrl', function($scope, $rootScope, $state, $http, $location, AuthService, AuthorizationService) {
+  .controller('LoginCtrl', function($scope, $rootScope, $state, $http, $location, AuthService, PvManager) {
 
     function init() {
-      $scope.loginData = {domainName: 'openspecimen'};
+      $scope.loginData = {};
+      $scope.domains = PvManager.getDomains(onDomainsLoad);
       
       if ($location.search().logout) {
         $scope.logout();
@@ -44,6 +45,12 @@ angular.module('openspecimen')
  
       if ($http.defaults.headers.common['X-OS-API-TOKEN']) {
         $state.go('home');
+      }
+    }
+
+    function onDomainsLoad() {
+      if ($scope.domains.length == 1) {
+         $scope.loginData.domainName = $scope.domains[0];
       }
     }
 

@@ -9,7 +9,7 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
     }
 
     function loadPvs() {
-      $scope.domains = PvManager.getPvs('domains');
+      $scope.domains = PvManager.getDomains(onDomainsLoad);
       $scope.institutes = [];
       var q = undefined;
       if (!$rootScope.currentUser || $rootScope.currentUser.admin) {
@@ -39,6 +39,12 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
       );
     }
 
+    function onDomainsLoad() {
+      if (!$scope.user.id && $scope.domains.length == 1) {
+        $scope.user.domainName = $scope.domains[0];
+      }
+    }
+
     $scope.loadDepartments = function(instituteName) {
       Institute.getByName(instituteName).then(
         function(institute) {
@@ -56,6 +62,13 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
         }
       );
     };
+
+    $scope.setLoginName = function(loginName) {
+      var user = $scope.user;
+      if (!user.id && user.domainName == $scope.global.defaultDomain) {
+        user.loginName = loginName;
+      }
+    }
     
     $scope.createUser = function() {
       var user = angular.copy($scope.user);

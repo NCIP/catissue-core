@@ -28,10 +28,21 @@
       </div>
       
       <div class="form-group">
+        <label class="col-xs-3 control-label" translate="user.email_address">Email Address</label>
+        <div class="col-xs-4">
+          <input type="email" name="email" class="form-control" ng-model="user.emailAddress"
+            placeholder="{{'user.email_address' | translate}}" ng-maxlength="255" 
+            ng-change="setLoginName(user.emailAddress)" required>
+          <div os-field-error field="userForm.email"></div>
+        </div>
+      </div>
+      
+      <div class="form-group">
         <label class="col-xs-3 control-label" translate="user.login_details">Login Details</label>
         <div class="col-xs-4">
           <os-select ng-model="user.domainName" list="domains" name="domain"
-            placeholder="{{'user.domain_name' | translate}}" required>
+            placeholder="{{'user.domain_name' | translate}}" 
+            on-select="setLoginName(user.emailAddress)" required>
           </os-select>
           <div os-field-error field="userForm.domain"></div>
         </div>
@@ -43,15 +54,6 @@
         </div>
       </div>
        
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="user.email_address">Email Address</label>
-        <div class="col-xs-4">
-          <input type="email" name="email" class="form-control" ng-model="user.emailAddress"
-            placeholder="{{'user.email_address' | translate}}" ng-maxlength="255" required>
-          <div os-field-error field="userForm.email"></div>
-        </div>
-      </div>
-      
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="user.institute">Institute</label>
         <div class="col-xs-4">
