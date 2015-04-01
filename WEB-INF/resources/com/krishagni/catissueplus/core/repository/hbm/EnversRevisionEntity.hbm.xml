@@ -18,6 +18,11 @@
     <property name="userId" column="USER_ID" />
     
     <property name="ipAddress" column="IP_ADDRESS" />
+    
+    <set name="entityNames" table="REVCHANGES">
+      <key column="REV"/>
+      <element column="ENTITYNAME" type="string"></element>
+    </set>
   </class>
 
 </hibernate-mapping>

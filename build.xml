@@ -44,9 +44,9 @@
 	<property name="flex.dir" value="${base.dir}/WEB-INF/flex" />
 	<!-- flex related properties finish -->
 	<taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties">
-          <classpath>
-	    <pathelement location="${lib.dir}/aspectjtools-1.6.6.jar"/>
-	  </classpath>
+		<classpath>
+			<pathelement location="${lib.dir}/aspectjtools-1.6.6.jar"/>
+		</classpath>
 	</taskdef>
 	<path id="app.classpath">
 		<fileset dir="${lib.dir}">
@@ -74,8 +74,6 @@
 	<property name="cat.cobertura.dir" value="${base.dir}" />
 	<property name="cat.instrumented.dir" value="./instrument"/>
 	<property name="cobertura.lib" value="./cobertura/lib"/>
-
-
 
 	<!-- sub tasks -->
 	<target name="init" description="initialize">
@@ -333,6 +331,21 @@
 	<target name="build_war" depends="init, aspect.compile,common_build_war,build_client_jar">
 
 	</target>
+	
+	<target name="export_schema" depends="compile">
+		<echo> Export Envers Schema </echo>
+		<java classname="com.krishagni.catissueplus.core.auditquery.domain.SchemaExportUtils" fork="true">
+			<classpath>
+				<pathelement path="${target.dir}" />
+			</classpath>
+			<classpath>
+				<fileset dir="${base.dir}/WEB-INF/lib">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+
 	<!-- Create war file for installable zip file.Please us this target when creating installable zip.
 		Note: database type is not replaced
 	-->
@@ -1133,7 +1146,7 @@
 			</else>
 		</if>
 
-		<iajc source="1.6" verbose="true" destdir="${target.dir}" includes="**/*.java" target="1.6" showWeaveInfo="true">
+		<iajc source="1.6" verbose="true" destDir="${target.dir}" includes="**/*.java" target="1.6" showWeaveInfo="true">
 			<!--src path="./WEB-INF/integration-test"/>
 			<src path="./WEB-INF/src"/-->
 
@@ -1285,7 +1298,7 @@
 					<formatter type="xml" />
 					<batchtest todir="${base.dir}/integration-test-results">
 						<fileset dir="${base.dir}/WEB-INF/integration-test">
-							<include name="com/**/*Test.java" />
+							<include name="com/**/StorageContainerTest.java" />
 							<exclude name="com/**/CollectionProtocolRegistrationTest.java" />
 							<exclude name="com/**/QueryFoldersTest.java" />
 							<exclude name="com/**/SavedQueryTest.java" />

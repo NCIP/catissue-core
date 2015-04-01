@@ -1,7 +1,9 @@
 package com.krishagni.catissueplus.core.auditquery.domain;
 
 import java.util.Date;
+import java.util.Set;
 
+import org.hibernate.envers.ModifiedEntityNames;
 import org.hibernate.envers.RevisionEntity;
 import org.hibernate.envers.RevisionNumber;
 import org.hibernate.envers.RevisionTimestamp;
@@ -21,6 +23,9 @@ public class EnversRevisionEntity {
 	
 	private String ipAddress;
 	
+	@ModifiedEntityNames
+	private Set<String> entityNames;
+
 	public long getId() {
 		return id;
 	}
@@ -51,5 +56,13 @@ public class EnversRevisionEntity {
 
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
+	}
+
+	public Set<String> getEntityNames() {
+		return entityNames;
+	}
+
+	public void setEntityNames(Set<String> entityNames) {
+		this.entityNames = entityNames;
 	}
 }
