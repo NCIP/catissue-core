@@ -22,4 +22,8 @@
   <bean id="cprService" class="com.krishagni.openspecimen.custom.le.services.impl.CprServiceImpl">
     <property name="daoFactory"  ref="biospecimenDaoFactory"/>
   </bean>
+
+  <bean id="specimenCollSvc" class="com.krishagni.openspecimen.custom.le.services.impl.SpecimenCollectionServiceImpl">
+    <property name="visitService"  ref="visitService"/>
+  </bean>
 </beans>
