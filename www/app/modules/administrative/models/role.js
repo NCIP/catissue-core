@@ -26,9 +26,6 @@ angular.module('os.administrative.models.role', ['os.common.models'])
     function getAclForSave(inputAcl) {
       var acl = [];
       angular.forEach(inputAcl, function(ac) {
-        ac.resourceName = ac.resource.value;
-        delete ac.resource;
-
         var operations = [];
         angular.forEach(ac.operations, function(operation) {
           if (operation.selected) {

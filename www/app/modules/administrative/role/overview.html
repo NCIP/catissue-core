@@ -36,7 +36,7 @@
           <div class="os-table-body">
             <div ng-repeat="acl in role.acl">
               <div class="row">
-                <div class="col col-xs-6">{{acl.resource.displayName}}</div>
+                <div class="col col-xs-6">{{ 'role.resources.' + acl.resourceName | translate}}</div>
                 <div class="col col-xs-6">
                   <div class="os-permissions">
                     <div class="os-status" ng-if="acl.operationNames.indexOf('Read') > -1">

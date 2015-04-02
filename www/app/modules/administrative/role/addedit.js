@@ -6,17 +6,7 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
     
     var init = function() {
       $scope.role = role;
-      formatRoleToUiModel($scope.role);
       loadPvs();
-    }
-
-    function formatRoleToUiModel(role) {
-      angular.forEach(role.acl, function(ac) {
-        ac.resource = {
-          displayName: $translate.instant('role.resources.' + ac.resourceName),
-          value: ac.resourceName
-        };
-      });
     }
 
     function loadPvs() {
@@ -25,7 +15,7 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
          $scope.resources = resources.map(function(resource) {
            return {
              displayName: $translate.instant('role.resources.' + resource.name),
-             value: resource.name
+             name: resource.name
            };
          });
        });
