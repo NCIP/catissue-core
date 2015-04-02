@@ -94,7 +94,8 @@
       <div class="form-group">
         <label class="control-label col-xs-2">Diagnosis</label>
         <div class="col-xs-3">
-          <os-select ng-model="visit.clinicalDiagnosis" list="diagnoses" placeholder="Select Diagnosis">
+          <os-select ng-model="visit.clinicalDiagnosis" list="diagnoses" 
+            refresh="searchClinicalDiagnoses" placeholder="Select Diagnosis">
           </os-select>
         </div>
       </div>

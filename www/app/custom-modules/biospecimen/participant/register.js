@@ -10,7 +10,7 @@ angular.module('openspecimen')
         $scope.genders = PvManager.getPvs('gender');
         $scope.anatomicSites = PvManager.getPvs('anatomic-site');
         $scope.hospitals = PvManager.getSites();
-        $scope.diagnoses = PvManager.getPvs('clinical-diagnosis');
+        $scope.diagnoses = [];
       };
 
       function init() {
@@ -72,10 +72,6 @@ angular.module('openspecimen')
         };
       };
 
-      $scope.isInteracted = function(field) {
-        return $scope.submitted || field.$dirty;
-      };
-
       $scope.collectSpecimens = function() {
         var url = ApiUrls.getUrl() + '/rest/ng/demo/participant-specimens';
         $http.post(url, getPayload()).then(
@@ -83,6 +79,10 @@ angular.module('openspecimen')
             $state.go('participant-detail.overview', {cprId: result.data.cpr.id});
           }
         );
+      };
+
+      $scope.searchClinicalDiagnoses = function(searchTerm) {
+        $scope.diagnoses = PvManager.getPvs('clinical-diagnosis', searchTerm);
       };
 
       init();
