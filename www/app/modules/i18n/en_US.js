@@ -1,6 +1,7 @@
 {
   "menu": {
     "navigate_to": "Navigate To",
+    "home": "Home",
     "collection_protocols": "Collection Protocols",
     "settings": "Settings",
     "users": "Users",
