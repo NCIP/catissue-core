@@ -1,5 +1,8 @@
 package com.krishagni.rbac.domain;
 
+import org.hibernate.envers.Audited;
+
+@Audited
 public class Operation {
 	private Long id;
 	

@@ -3,6 +3,10 @@ package com.krishagni.rbac.domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+
+@Audited
 public class RoleAccessControl {
 	private Long id;
 	
@@ -36,6 +40,7 @@ public class RoleAccessControl {
 		this.resource = resource;
 	}
 
+	@NotAudited
 	public Set<ResourceInstanceOp> getOperations() {
 		return operations;
 	}

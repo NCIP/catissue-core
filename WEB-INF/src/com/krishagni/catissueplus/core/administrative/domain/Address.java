@@ -1,6 +1,9 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import org.hibernate.envers.Audited;
+
+@Audited
 public class Address {
 
 	private Long id;

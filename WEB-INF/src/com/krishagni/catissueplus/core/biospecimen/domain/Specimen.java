@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,6 +23,7 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Configurable
+@Audited
 public class Specimen extends BaseEntity {
 	public static final String NEW = "New";
 	
@@ -329,6 +332,7 @@ public class Specimen extends BaseEntity {
 		this.childCollection = childSpecimenCollection;
 	}
 
+	@NotAudited
 	public Set<ExternalIdentifier> getExternalIdentifierCollection() {
 		return externalIdentifierCollection;
 	}
@@ -337,6 +341,7 @@ public class Specimen extends BaseEntity {
 		this.externalIdentifierCollection = externalIdentifierCollection;
 	}
 
+	@NotAudited
 	public CollectionEvent getCollectionEvent() {
 		if (this.collectionEvent == null) {
 			this.collectionEvent = CollectionEvent.getFor(this); 
@@ -348,6 +353,7 @@ public class Specimen extends BaseEntity {
 		this.collectionEvent = collectionEvent;
 	}
 
+	@NotAudited
 	public ReceivedEvent getReceivedEvent() {
 		if (this.receivedEvent == null) {
 			this.receivedEvent = ReceivedEvent.getFor(this); 			 
@@ -359,6 +365,7 @@ public class Specimen extends BaseEntity {
 		this.receivedEvent = receivedEvent;
 	}
 	
+	@NotAudited
 	public List<TransferEvent> getTransferEvents() {
 		if (this.transferEvents == null) {
 			this.transferEvents = TransferEvent.getFor(this);

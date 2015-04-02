@@ -4,8 +4,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
+import org.hibernate.envers.Audited;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
+@Audited
 public class ForgotPasswordToken extends BaseEntity {
 	
 	private static final long DEFAULT_EXPIRY_TIME = 1000 * 60 * 60 * 24; //24 hours

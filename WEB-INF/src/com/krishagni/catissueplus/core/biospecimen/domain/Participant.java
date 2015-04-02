@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
@@ -16,6 +18,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
+@Audited
 public class Participant {
 
 	/**
@@ -218,6 +221,7 @@ public class Participant {
 		this.empi = empi;
 	}
 
+	@NotAudited
 	public Map<String, ParticipantMedicalIdentifier> getPmiCollection() {
 		return pmiCollection;
 	}
@@ -226,6 +230,7 @@ public class Participant {
 		this.pmiCollection = participantMedicalIdentifierCollection;
 	}
 
+	@NotAudited
 	public Map<String, CollectionProtocolRegistration> getCprCollection() {
 		return cprCollection;
 	}

@@ -3,8 +3,11 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.envers.Audited;
+
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 
+@Audited
 public class CollectionProtocolEvent {
 	private Long id;
 

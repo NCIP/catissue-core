@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.hibernate.Session;
+import org.hibernate.envers.Audited;
 
+@Audited
 public class Subject {
 	private Long id;
 	

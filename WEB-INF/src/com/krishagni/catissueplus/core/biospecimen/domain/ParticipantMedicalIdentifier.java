@@ -1,8 +1,11 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import org.hibernate.envers.Audited;
+
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 
+@Audited
 public class ParticipantMedicalIdentifier {
 
 	/**

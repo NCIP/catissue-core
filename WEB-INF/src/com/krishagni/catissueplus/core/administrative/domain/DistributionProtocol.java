@@ -3,10 +3,13 @@ package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.Date;
 
+import org.hibernate.envers.Audited;
+
 import krishagni.catissueplus.util.CommonUtil;
 
 import com.krishagni.catissueplus.core.common.util.Status;
 
+@Audited
 public class DistributionProtocol {
 
 	private Long id;
