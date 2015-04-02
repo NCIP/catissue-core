@@ -30,12 +30,8 @@ body {
 .os-navbar .logo {
   height: 50px;
   width: 235px;
+  padding: 2.5px;
   flex-grow: 0.25;
-}
-
-.os-navbar .logo img {
-  height: 50px;
-  width: 235px;
 }
 
 .os-navbar .search {
