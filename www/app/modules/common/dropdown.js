@@ -37,9 +37,14 @@ angular.module('openspecimen')
           .attr('placeholder', tAttrs.placeholder);
         
         var searchItem = getItemDisplayValue('item', tAttrs);
-        var uiSelectChoices = angular.element('<ui-select-choices/>')
-          .attr('repeat', "item in " + tAttrs.list + " | filter: $select.search")
-          .append('<span ng-bind-html="' + searchItem + ' | highlight: $select.search"></span>');
+        var uiSelectChoices = angular.element('<ui-select-choices/>');
+
+        if (tAttrs.selectProp) {
+          uiSelectChoices.attr('repeat', "item." + tAttrs.selectProp + " as item in " + tAttrs.list + " | filter: $select.search");
+        } else {
+          uiSelectChoices.attr('repeat', "item in " + tAttrs.list + " | filter: $select.search");
+        }
+        uiSelectChoices.append('<span ng-bind-html="' + searchItem + ' | highlight: $select.search"></span>');
 
         if (multiple) {
           uiSelectMatch.append('{{' + getItemDisplayValue('$item', tAttrs) + '}}');

@@ -625,12 +625,25 @@
     "create_role": "Create Role",
     "resource": "Resource",
     "permission": "Permissions",
-    "resources": "Resources",
+    "resources_lbl": "Resources",
     "read": "Read",
     "create": "Create",
     "update": "Update",
     "delete": "Delete",
     "add_resource": "Add Resource",
+
+    "resources" : {
+      "CollectionProtocol": "Collection Protocol",
+      "DistributionProtocol": "Distribution Protocol",
+      "Institute": "Institute",
+      "Order": "Order",
+      "ParticipantPhi": "Participant (PHI)",
+      "Specimen": "Specimen",
+      "Site": "Site",
+      "StorageContainer": "Storage Container",
+      "User": "User",
+      "Visit": "Visit"
+    },
 
     "menu": {
       "overview": "Overview"
@@ -641,7 +654,7 @@
       "add": "Click to add new Role"
     }
   },
-  
+
   "extensions": {
     "no_extensions": "No extensions to show",
     "list": "Extensions",
