@@ -77,6 +77,33 @@ angular.module('openspecimen')
       return result;
     }
 
+    function getDupObjects(objs, props) {
+      var dupObjs = {};
+      var scannedObjs = {};
+      angular.forEach(props, function(prop) {
+        dupObjs[prop] = [];
+        scannedObjs[prop] = [];
+      });
+
+      angular.forEach(objs, function(obj) {
+        angular.forEach(props, function(prop) {
+          if (!obj[prop]) {
+            return;
+          }
+
+          if (scannedObjs[prop].indexOf(obj[prop]) >= 0) {
+            if (dupObjs[prop].indexOf(obj[prop]) == -1) {
+              dupObjs[prop].push(obj[prop]);
+            }
+          }
+
+          scannedObjs[prop].push(obj[prop]);
+        })
+      });
+ 
+      return dupObjs;
+    }
+
     return {
       clear: clear,
 
@@ -86,6 +113,8 @@ angular.module('openspecimen')
 
       filter: filter,
 
-      csvToArray: csvToArray
+      csvToArray: csvToArray,
+
+      getDupObjects: getDupObjects
     };
   });

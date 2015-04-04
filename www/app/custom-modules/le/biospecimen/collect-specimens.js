@@ -2,7 +2,8 @@ angular.module('openspecimen')
   .controller('le.RegAndCollectSpecimensCtrl', 
     function(
       $scope, $state, $stateParams, $http, 
-      CollectionProtocolEvent, SpecimenRequirement, Visit, Specimen, Util, ApiUrls) {
+      CollectionProtocolEvent, SpecimenRequirement, Visit, Specimen, 
+      Alerts, Util, ApiUrls) {
 
       var baseUrl = ApiUrls.getBaseUrl();
 
@@ -25,6 +26,10 @@ angular.module('openspecimen')
       }
 
       function registerParticipants() {
+        if (!validParticipantsInfo()) {
+          return;
+        }
+
         var req = {
           cpId: $scope.cpId,
           registrations: $scope.participants.map(
@@ -40,7 +45,22 @@ angular.module('openspecimen')
             onRegistrations(result.data.registrations);
           }
         );
-      };
+      }
+
+      function validParticipantsInfo() {
+        var dupObjs = Util.getDupObjects($scope.participants, ['empi', 'ppid']);
+        if (dupObjs.empi.length > 0) {
+          Alerts.errorText('Duplicate participant IDs: ' + dupObjs.empi.join());
+          return false;
+        }
+
+        if (dupObjs.ppid.length > 0) {
+          Alerts.errorText('Duplicate participant protocol IDs: ' + dupObjs.ppid.join());
+          return false;
+        }
+
+        return true;
+      }
 
       function onRegistrations(participants) {
         prepareForSpecimenCollection(participants);
@@ -196,6 +216,25 @@ angular.module('openspecimen')
         }
       }
 
+      function validPrimarySpecimens(visitsAndSpecimens) {
+        var specimens = [];
+        angular.forEach(visitsAndSpecimens, function(visitSpecimens) {
+          specimens = specimens.concat(visitSpecimens.specimens);
+        });
+
+        return validSpecimens(specimens);
+      }
+
+      function validSpecimens(specimens) {
+        var dupObjs = Util.getDupObjects(specimens, ['label']);
+        if (dupObjs.label.length > 0) {
+          Alerts.errorText("Duplicate specimen labels: " + dupObjs.label.join());
+          return false;
+        }
+
+        return true;
+      }
+
       $scope.addParticipant = function() {
         $scope.participants.push({empi: null, ppid: null, regDate: null});
       }
@@ -211,6 +250,10 @@ angular.module('openspecimen')
         angular.forEach($scope.participants, function(participant) {
           payload.push(getVisitAndSpecimensToSave(participant));
         });
+
+        if (!validPrimarySpecimens(payload)) {
+          return;
+        }
  
         $http.post(baseUrl + 'le/specimens', payload).then(
           function(result) {
@@ -233,6 +276,10 @@ angular.module('openspecimen')
       $scope.saveAliquots = function() {
         var payload = [];
         var specimens = $scope.boxOpts.specimens;
+        if (!validSpecimens(specimens)) {
+          return;
+        }
+
         for (var i = 0; i < specimens.length; ++i) {
           if (!specimens[i].parentSpecimenId) {
             continue;
