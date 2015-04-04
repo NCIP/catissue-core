@@ -703,7 +703,7 @@ public class Specimen extends BaseEntity {
 			return;
 		}
 		
-		collectionEvent.saveOrUpdate();		
+		getCollectionEvent().saveOrUpdate();		
 	}
 	
 	private void addReceivedEvent() {
@@ -711,7 +711,7 @@ public class Specimen extends BaseEntity {
 			return;
 		}
 		
-		receivedEvent.saveOrUpdate();
+		getReceivedEvent().saveOrUpdate();
 	}
 	
 	private void deleteEvents() {
