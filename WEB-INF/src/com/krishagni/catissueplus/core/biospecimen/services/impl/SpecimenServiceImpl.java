@@ -165,13 +165,13 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 		
 		if (daoFactory.getSpecimenDao().getByLabel(label) != null) {
-			ose.addError(SpecimenErrorCode.DUP_LABEL);
+			ose.addError(SpecimenErrorCode.DUP_LABEL, label);
 		}
 	}
 
 	private void ensureUniqueBarcode(String barcode, OpenSpecimenException ose) {
 		if (daoFactory.getSpecimenDao().getByBarcode(barcode) != null) {
-			ose.addError(SpecimenErrorCode.DUP_BARCODE);
+			ose.addError(SpecimenErrorCode.DUP_BARCODE, barcode);
 		}
 	}
 
