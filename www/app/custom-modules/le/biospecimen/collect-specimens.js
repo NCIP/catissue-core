@@ -2,7 +2,7 @@ angular.module('openspecimen')
   .controller('le.RegAndCollectSpecimensCtrl', 
     function(
       $scope, $state, $stateParams, $http, 
-      CollectionProtocolEvent, SpecimenRequirement, Visit, ApiUrls) {
+      CollectionProtocolEvent, SpecimenRequirement, Visit, Specimen, Util, ApiUrls) {
 
       var baseUrl = ApiUrls.getBaseUrl();
 
@@ -11,8 +11,18 @@ angular.module('openspecimen')
         $scope.view = 'register';
         $scope.participants = [];
         $scope.cpe = {};
-      }
+        $scope.boxOpts = {
+          compact: true,
+          dimension: {rows: 9, columns: 9},
+          specimens: []
+        },
 
+        $scope.boxData = {
+          csLabels: '',
+          delimiter: ',',
+          ctrl: undefined
+        }
+      }
 
       function registerParticipants() {
         var req = {
@@ -118,6 +128,74 @@ angular.module('openspecimen')
         }
       }
 
+      function getChildSpecimensToShow(response) {
+        var result = [];
+        for (var i = 0; i < $scope.participants.length; ++i) {
+          var participant = $scope.participants[i]; 
+          var collPrimarySpmns = response[i].specimens;
+          var visitId = response[i].visit.id;
+
+          for (var j = 0; j < participant.specimens.length; ++j) {
+            var  childSpecimens = prepareChildSpecimens(
+              participant.specimens[j].children, 
+              participant.empi, 
+              visitId,
+              collPrimarySpmns[j]);
+            result = result.concat(childSpecimens);
+          }
+        }
+
+        return result;
+      }
+
+      function prepareChildSpecimens(requirements, empi, visitId, primarySpmn) {
+        var result = [];
+        angular.forEach(requirements, function(requirement) {
+          requirement.parentSpecimenId = primarySpmn.id;
+          setEmpiAndVisitId(requirement, empi, visitId);
+          flatten(requirement, result);
+        });
+
+        return result;
+      }
+
+      function setEmpiAndVisitId(requirement, empi, visitId) {
+        requirement.visitId = visitId;
+        requirement.empi = empi;
+        angular.forEach(requirement.children, function(childReq) {
+          setEmpiAndVisitId(childReq, empi, visitId);
+        });
+      }
+
+      function flatten(requirement, result) {
+        if (result) {
+          result.push(requirement);
+        } else {
+          result = [requirement]
+        }
+
+        angular.forEach(requirement.children, function(childReq) {
+          flatten(childReq, result);
+        });
+      }      
+
+      function assignLabels(labels) {
+        var labelIdx = 0;
+
+        for (var i = 0; i < $scope.boxOpts.specimens.length; ++i) {        
+          var specimen = $scope.boxOpts.specimens[i];
+          if (specimen.storageType == 'Virtual') {
+            continue;
+          }
+
+          if (labelIdx < labels.length) {
+            specimen.label = labels[labelIdx++];
+          } else {
+            specimen.label = '';
+          }
+        }
+      }
+
       $scope.addParticipant = function() {
         $scope.participants.push({empi: null, ppid: null, regDate: null});
       }
@@ -135,10 +213,66 @@ angular.module('openspecimen')
         });
  
         $http.post(baseUrl + 'le/specimens', payload).then(
+          function(result) {
+            $scope.view = 'collect-child-specimens';
+            $scope.boxOpts.specimens = getChildSpecimensToShow(result.data);     
+          }
+        );
+      }
+
+      $scope.processAliquotLabels = function(input) {
+        var labels = Util.csvToArray($scope.boxData.csLabels, ',');
+        assignLabels(labels); 
+        if ($scope.boxData.ctrl) {
+          $scope.boxData.ctrl.draw();
+        } else {
+          console.log("box not yet available");
+        }
+      };
+
+      $scope.saveAliquots = function() {
+        var payload = [];
+        var specimens = $scope.boxOpts.specimens;
+        for (var i = 0; i < specimens.length; ++i) {
+          if (!specimens[i].parentSpecimenId) {
+            continue;
+          }
+
+          var toSave = getChildSpecimensToSave(specimens[i]);
+          if (toSave) {
+            payload.push(toSave);
+          }
+        } 
+
+        Specimen.save(payload).then(
           function() {
             $state.go('participant-list', {cpId: $scope.cpId});
           }
         );
+      }
+
+      function getChildSpecimensToSave(specimen) {
+        var label = specimen.label || '';
+        if (specimen.storageType != 'Virtual' && (!label  || label.trim().length == 0)) {
+          return null;
+        }
+
+        var children = [];
+        angular.forEach(specimen.children, function(childSpecimen) {
+          var toSave = getChildSpecimensToSave(childSpecimen);
+          if (toSave) {
+            children.push(toSave);
+          }     
+        });
+
+        return {
+          label: label.trim(),
+          reqId: specimen.id,
+          status: 'Collected',      
+          parentId: specimen.parentSpecimenId,
+          visitId: specimen.visitId,
+          children: children
+        };
       }
 
       init();
