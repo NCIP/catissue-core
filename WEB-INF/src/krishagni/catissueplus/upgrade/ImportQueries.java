@@ -40,7 +40,7 @@ public class ImportQueries {
 		
 		DataSource ds = DbUtil.getDataSource();
 		JdbcDaoFactory.setDataSource(ds);
-        TransactionManager.getInstance(ds);
+        TransactionManager.getInstance(ds, null);
 		
         Long userId = getUserId(args[0]);
         if (userId == null) {

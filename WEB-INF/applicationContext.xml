@@ -38,6 +38,10 @@
     </property>
   </bean>
 
+  <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+    <property name="jndiName" value="java:/catissuecore"/>
+  </bean>
+
   <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
     <property name="sessionFactory" ref="sessionFactory" />
   </bean>
@@ -464,17 +468,26 @@
     <property name="WaitForTasksToCompleteOnShutdown" value="true"/>
   </bean>
 
+  <bean id="deInitializer" class="com.krishagni.catissueplus.core.init.DeInitializer">
+    <property name="transactionManager" ref="transactionManager"/>
+    <property name="cfgSvc" ref="cfgSvc"/>
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+
   <bean id="importQueryForms" class="com.krishagni.catissueplus.core.init.ImportQueryForms">
     <property name="txnMgr" ref="transactionManager"/>
     <property name="userDao" ref="userDao"/>
     <property name="daoFactory" ref="deDaoFactory"/>
+    <property name="deInitializer" ref="deInitializer"/>
   </bean>
 
   <bean id="importSpeForms" class="com.krishagni.catissueplus.core.init.ImportSpecimenEventForms">
     <property name="txnMgr" ref="transactionManager"/>
     <property name="userDao" ref="userDao"/>
     <property name="daoFactory" ref="deDaoFactory"/>
+    <property name="deInitializer" ref="deInitializer"/>
   </bean>
+
 
   <task:scheduler id="taskScheduler" pool-size="1"/>
   <task:annotation-driven scheduler="taskScheduler"/>

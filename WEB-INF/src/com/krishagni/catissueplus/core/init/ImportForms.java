@@ -28,6 +28,11 @@ public abstract class ImportForms implements InitializingBean {
 	
 	private DaoFactory daoFactory;
 	
+	//
+	// This is to ensure DE is initialized before importing forms 
+	//
+	private DeInitializer deInitializer;
+	
 	public PlatformTransactionManager getTxnMgr() {
 		return txnMgr;
 	}
@@ -46,6 +51,10 @@ public abstract class ImportForms implements InitializingBean {
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+	
+	public void setDeInitializer(DeInitializer deInitializer) {
+		this.deInitializer = deInitializer;
 	}
 
 	@Override
