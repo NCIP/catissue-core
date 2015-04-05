@@ -238,11 +238,38 @@ angular.module('openspecimen')
       $scope.addParticipant = function() {
         $scope.participants.push({empi: null, ppid: null, regDate: null});
       }
+  
+      $scope.removeParticipant = function(p) {
+        var idx = $scope.participants.indexOf(p);
+        if (idx >= 0) {
+          $scope.participants.splice(idx, 1);
+        }
+      }
 
       $scope.registerParticipants = registerParticipants;
 
       $scope.cancel = function() {
         $state.go('participant-list', {cpId: $scope.cpId});
+      }
+
+      $scope.removePrimarySpecimen = function(participant, specimen) {
+        var idx = participant.specimens.indexOf(specimen);
+        if (idx >= 0) {
+          participant.specimens.splice(idx, 1);
+        }
+
+        if (participant.specimens.length > 0) {
+          return;
+        }
+
+        idx = $scope.participants.indexOf(participant);
+        if (idx >= 0) {
+          $scope.participants.splice(idx, 1);
+        }
+
+        if ($scope.participants.length == 0) {
+          $scope.view = 'register';       
+        }
       }
 
       $scope.collectPrimarySpecimens = function() {

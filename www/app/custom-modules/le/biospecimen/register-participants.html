@@ -13,9 +13,7 @@
 
           <div class="list-group-item" ng-if="participants.length == 0">
             <div class="alert alert-warning">
-              <span>
-                There are no participants to show. Add a new participant by clicking Add Participant ...
-              </span>
+              <span>There are no participants to show. Add a new participant by clicking Add Participant ...</span>
             </div>
           </div>
 
@@ -52,7 +50,7 @@
                     </div>
                   </div>
                   <div class="col os-col-10">
-                    <button class="btn btn-xs btn-default">
+                    <button class="btn btn-xs btn-default" ng-click="removeParticipant(participant)">
                       <span class="fa fa-remove"></span>
                     </button>
                   </div>
@@ -62,7 +60,9 @@
           </div>
 
           <div class="list-group-item">
-            <a ng-click="addParticipant()"> Add Participant </a>
+            <a ng-click="addParticipant()"> 
+              <span>Add Participant</span>
+            </a>
           </div>
         </div>
 
@@ -71,10 +71,10 @@
 
           <div>
             <button class="btn btn-primary" os-form-submit="registerParticipants()">
-              Register
+              <span>Register</span>
             </button>
             <button class="btn os-btn-text">
-              Cancel
+              <span>Cancel</span>
             </button>
           </div>
         </div>
