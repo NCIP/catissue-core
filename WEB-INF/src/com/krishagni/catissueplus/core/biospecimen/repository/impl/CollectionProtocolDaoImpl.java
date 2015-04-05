@@ -21,6 +21,7 @@ import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.CpWorkflowConfig;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
@@ -153,6 +154,22 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 				.get(SpecimenRequirement.class, requirementId);
 	}
 
+	@Override
+	public void saveCpWorkflows(CpWorkflowConfig cfg) {
+		sessionFactory.getCurrentSession().saveOrUpdate(cfg);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public CpWorkflowConfig getCpWorkflows(Long cpId) {		
+		List<CpWorkflowConfig> cfgs = sessionFactory.getCurrentSession()
+			.createCriteria(CpWorkflowConfig.class)
+			.add(Restrictions.eq("id", cpId))
+			.list();
+		
+		return cfgs.isEmpty() ? null : cfgs.iterator().next();
+	}
+	
 	@Override
 	public Class<CollectionProtocol> getType() {
 		return CollectionProtocol.class;

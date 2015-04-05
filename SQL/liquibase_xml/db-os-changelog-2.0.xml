@@ -28,6 +28,9 @@
   <property name="nullable.ts.type" value="timestamp null" dbms="mysql" />
   <property name="nullable.ts.type" value="timestamp" dbms="oracle" />
 
+  <property name="clob.type" value="text" dbms="mysql"/>
+  <property name="clob.type" value="clob" dbms="oracle"/>
+
   <changeSet author="vpawar" id="Simplified storage containers" failOnError="true">
     <createTable tableName="OS_STORAGE_CONTAINERS">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
@@ -1576,6 +1579,26 @@
       baseTableName="OS_ORDER_ITEMS"
       baseColumnNames="SPECIMEN_ID"
       referencedTableName="CATISSUE_SPECIMEN"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="CP workflows config table">
+    <createTable tableName="OS_CP_WORKFLOWS">
+      <column name="CP_ID" type="${int.type}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="WORKFLOWS" type="${clob.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on CP workflow's CP_ID column">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_CP_WORKFLOWS_CP_ID"
+      baseTableName="OS_CP_WORKFLOWS"
+      baseColumnNames="CP_ID"
+      referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
 </databaseChangeLog>

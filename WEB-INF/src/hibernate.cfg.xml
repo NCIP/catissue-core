@@ -34,6 +34,7 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/QueryFolder.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Site.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocol.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CpWorkflowConfig.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthDomain.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthProvider.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthToken.hbm.xml" />

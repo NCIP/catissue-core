@@ -6,15 +6,17 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
+import com.krishagni.catissueplus.core.biospecimen.domain.CpWorkflowConfig;
+import com.krishagni.catissueplus.core.biospecimen.domain.CpWorkflowConfig.Workflow;
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
@@ -32,6 +34,8 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
 import com.krishagni.catissueplus.core.biospecimen.events.CopyCpeOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
+import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail.WorkflowDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
@@ -549,6 +553,54 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		}
 	}
 
+	@Override
+	@PlusTransactional
+	public ResponseEvent<CpWorkflowCfgDetail> getWorkflows(RequestEvent<Long> req) {
+		Long cpId = req.getPayload();
+		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(cpId);
+		if (cp == null) {
+			return ResponseEvent.userError(CpErrorCode.NOT_FOUND);
+		}
+		
+		CpWorkflowConfig cfg = daoFactory.getCollectionProtocolDao().getCpWorkflows(cpId);
+		if (cfg == null) {
+			cfg = new CpWorkflowConfig();
+			cfg.setCp(cp);
+		}
+		
+		return ResponseEvent.response(CpWorkflowCfgDetail.from(cfg));
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<CpWorkflowCfgDetail> saveWorkflows(RequestEvent<CpWorkflowCfgDetail> req) {
+		try {
+			CpWorkflowCfgDetail input = req.getPayload();
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(input.getCpId());
+			if (cp == null) {
+				return ResponseEvent.userError(CpErrorCode.NOT_FOUND);
+			}
+			
+			CpWorkflowConfig cfg = daoFactory.getCollectionProtocolDao().getCpWorkflows(input.getCpId());
+			if (cfg == null) {
+				cfg = new CpWorkflowConfig();
+				cfg.setCp(cp);
+			}
+			
+			cfg.getWorkflows().clear();
+			for (WorkflowDetail detail : input.getWorkflows().values()) {
+				Workflow wf = new Workflow();
+				BeanUtils.copyProperties(detail, wf);
+				cfg.getWorkflows().put(wf.getName(), wf);
+			}
+			
+			daoFactory.getCollectionProtocolDao().saveCpWorkflows(cfg);
+			return ResponseEvent.response(CpWorkflowCfgDetail.from(cfg));
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
 	private void ensureUserHasCreatePermission(CollectionProtocol cp) {
 		AccessCtrlMgr.getInstance().ensureCreatePermission(Resource.CP, cp, cp.getRepositories());
 	}
