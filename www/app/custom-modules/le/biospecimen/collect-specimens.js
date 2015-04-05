@@ -141,8 +141,8 @@ angular.module('openspecimen')
             time: collDetail.collectionDate
           },
           receivedEvent: {
-            user: recvDetail.collector,
-            time: recvDetail.collectionDate
+            user: recvDetail.receiver,
+            time: recvDetail.receiveDate
           },
           children: []
         }
