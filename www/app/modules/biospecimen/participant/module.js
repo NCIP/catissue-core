@@ -48,11 +48,11 @@ angular.module('os.biospecimen.participant',
       .state('participant-addedit', {
         url: '/addedit-participant?cpId',
         templateProvider: function($stateParams, CpConfigSvc) {
-          var tmpl = CpConfigSvc.getRegParticipantTmpl($stateParams.cpId);
+          var tmpl = CpConfigSvc.getRegParticipantTmpl($stateParams.cpId, $stateParams.cprId);
           return '<div ng-include src="\'' + tmpl + '\'"></div>';
         },
         controllerProvider: function($stateParams, CpConfigSvc) {
-          return CpConfigSvc.getRegParticipantCtrl($stateParams.cpId);
+          return CpConfigSvc.getRegParticipantCtrl($stateParams.cpId, $stateParams.cprId);
         },
         resolve: {
         },
