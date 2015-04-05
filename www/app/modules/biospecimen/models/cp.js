@@ -9,17 +9,28 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
         }
       );
 
+    CollectionProtocol.list = function(opts) {
+      var defOpts = {detailedList: true};
+      return CollectionProtocol.query(angular.extend(defOpts, opts || {}));
+    }
+
+    //
+    // TODO: This should be an instance method.
+    //
+    CollectionProtocol.getWorkflows = function(cpId) {
+      return $http.get(CollectionProtocol.url() + cpId + '/workflows').then(
+        function(result) {
+          return result.data;
+        }
+      )
+    }
+
     CollectionProtocol.prototype.getType = function() {
       return 'collection_protocol';
     }
 
     CollectionProtocol.prototype.getDisplayName = function() {
       return this.title;
-    }
-
-    CollectionProtocol.list = function(opts) {
-      var defOpts = {detailedList: true};
-      return CollectionProtocol.query(angular.extend(defOpts, opts || {}));
     }
 
     CollectionProtocol.prototype.getConsentTiers = function() {
