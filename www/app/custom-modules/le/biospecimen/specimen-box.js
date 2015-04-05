@@ -19,8 +19,7 @@ angular.module('openspecimen')
       var boxContent = angular.element('<tbody/>');
       box.append(boxContent);
 
-      var idx = 0;
-      var lastEmpi = undefined;
+      var idx = 0, lastEmpi = undefined, labelPresent = false;
       for (var i = 0; i < dimension.rows; i++) {
         var row = angular.element('<tr class="os-le-box-row"/>');
         for (var j = 0; j < dimension.columns; ++j) {
@@ -41,7 +40,10 @@ angular.module('openspecimen')
               idx++;
 
               if (specimen.label && specimen.label.trim().length > 0) {
+                labelPresent = true;
                 col.addClass('collected');
+              } else {
+                col.addClass('not-collected');
               }
             }
           }
@@ -51,6 +53,10 @@ angular.module('openspecimen')
         }
 
         boxContent.append(row);
+      }
+       
+      if (labelPresent) {
+        boxContent.addClass('show-not-collected');
       }
 
       element.append(box);

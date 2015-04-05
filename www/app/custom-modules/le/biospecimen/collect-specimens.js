@@ -13,7 +13,7 @@ angular.module('openspecimen')
         $scope.participants = [];
         $scope.cpe = {};
         $scope.boxOpts = {
-          compact: true,
+          compact: false,
           dimension: {rows: 9, columns: 9},
           specimens: []
         },

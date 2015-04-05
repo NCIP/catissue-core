@@ -34,6 +34,11 @@
   color: #fff;
 }
 
+.os-le-box-container .show-not-collected .os-le-box-col.not-collected {
+  background: rgba(217, 83, 79, 0.8);
+  color: #fff;
+}
+
 .os-le-box-row:first-child .os-le-box-col {
   border-top: 1px solid #ddd;
 }
@@ -74,6 +79,10 @@
   color: #777;
 }
 
+
+.os-le-box-container .show-not-collected .os-le-box-col.not-collected .content .label,
+.os-le-box-container .show-not-collected .os-le-box-col.not-collected .content .title,
+.os-le-box-container .show-not-collected .os-le-box-col.not-collected .content .desc,
 .os-le-box-col.collected .content .label,
 .os-le-box-col.collected .content .title,
 .os-le-box-col.collected .content .desc {
