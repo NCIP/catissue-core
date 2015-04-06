@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.events.AssignPositionsOp;
 import com.krishagni.catissueplus.core.administrative.events.ContainerMapExportDetail;
 import com.krishagni.catissueplus.core.administrative.events.ContainerQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
@@ -153,6 +154,36 @@ public class StorageContainersController {
 		return getContainer(new ContainerQueryCriteria(name));
 	}
 	
+	@RequestMapping(method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public StorageContainerDetail createStorageContainer(@RequestBody StorageContainerDetail detail) {
+		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(getSession(), detail);
+		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.createStorageContainer(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value="{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public StorageContainerDetail updateStorageContainer(
+			@PathVariable("id") 
+			Long containerId,
+			
+			@RequestBody 
+			StorageContainerDetail detail) {
+		
+		detail.setId(containerId);
+		
+		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(getSession(), detail);
+		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.updateStorageContainer(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value="{id}/occupied-positions")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -190,35 +221,25 @@ public class StorageContainersController {
 		}				
 	}
 	
-	
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST, value="{id}/occupied-positions")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public StorageContainerDetail createStorageContainer(@RequestBody StorageContainerDetail detail) {
-		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(getSession(), detail);
-		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.createStorageContainer(req);
-		resp.throwErrorIfUnsuccessful();
-		
-		return resp.getPayload();
-	}
-
-	@RequestMapping(method = RequestMethod.PUT, value="{id}")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public StorageContainerDetail updateStorageContainer(
-			@PathVariable("id") 
+	public List<StorageContainerPositionDetail> assignPositions(
+			@PathVariable("id")
 			Long containerId,
 			
-			@RequestBody 
-			StorageContainerDetail detail) {
+			@RequestBody
+			List<StorageContainerPositionDetail> positions) {
 		
-		detail.setId(containerId);
+		AssignPositionsOp detail = new AssignPositionsOp();
+		detail.setContainerId(containerId);
+		detail.setPositions(positions);
 		
-		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(getSession(), detail);
-		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.updateStorageContainer(req);
+		RequestEvent<AssignPositionsOp> req = new RequestEvent<AssignPositionsOp>(detail);
+		ResponseEvent<List<StorageContainerPositionDetail>> resp = storageContainerSvc.assignPositions(req);
 		resp.throwErrorIfUnsuccessful();
 		
-		return resp.getPayload();
+		return resp.getPayload();		
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependent-entities")

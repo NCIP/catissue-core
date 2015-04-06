@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -552,6 +553,24 @@ public class StorageContainer extends BaseEntity {
 		getStringifiedAncestors(names);
 		names.delete(names.length() - 2, names.length());
 		return names.toString();
+	}
+		
+	//
+	// Assign unoccupied positions in container
+	//
+	public void assignPositions(Collection<StorageContainerPosition> positions) {
+		for (StorageContainerPosition position : positions) {
+			StorageContainerPosition existing = getOccupiedPosition(position.getPosOneOrdinal(), position.getPosTwoOrdinal());
+			if (existing != null) {
+				continue; 
+			}
+						
+			if (position.getOccupyingSpecimen() != null) {
+				position.getOccupyingSpecimen().updatePosition(position);
+			} else {
+				position.getOccupyingContainer().updateContainerLocation(getSite(), this, position);
+			}
+		}
 	}
 	
 	private void deleteWithoutCheck() {

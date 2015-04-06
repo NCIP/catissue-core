@@ -648,28 +648,7 @@ public class Specimen extends BaseEntity {
 		return labelTmpl;		
 	}
 	
-	/**
-	 * Ensures following constraints are adhered
-	 * 1. Specimen initial quantity is greater than or equals to sum of
-	 *    all immediate aliquot child specimens
-	 * 2. Specimen available quantity is less than 
-	 *    initial - sum of all immediate aliquot child specimens initial quantity
-	 */
-	private void ensureAliquotQtyOk(SpecimenErrorCode initGtAliquotQty, SpecimenErrorCode avblQtyGtAct) {		
-		double initialQty = getInitialQuantity();
-		double aliquotQty = getAliquotQuantity();
-		
-		if (initialQty < aliquotQty) {
-			throw OpenSpecimenException.userError(initGtAliquotQty);
-		}
-		
-		double actAvailableQty = initialQty - aliquotQty;
-		if (getAvailableQuantity() > actAvailableQty) {
-			throw OpenSpecimenException.userError(avblQtyGtAct);
-		}
-	}
-	
-	private void updatePosition(StorageContainerPosition newPosition) {
+	public void updatePosition(StorageContainerPosition newPosition) {
 		if (same(position, newPosition)) {
 			return;
 		}
@@ -698,6 +677,27 @@ public class Specimen extends BaseEntity {
 		transfer.saveOrUpdate();
 	}
 	
+	/**
+	 * Ensures following constraints are adhered
+	 * 1. Specimen initial quantity is greater than or equals to sum of
+	 *    all immediate aliquot child specimens
+	 * 2. Specimen available quantity is less than 
+	 *    initial - sum of all immediate aliquot child specimens initial quantity
+	 */
+	private void ensureAliquotQtyOk(SpecimenErrorCode initGtAliquotQty, SpecimenErrorCode avblQtyGtAct) {		
+		double initialQty = getInitialQuantity();
+		double aliquotQty = getAliquotQuantity();
+		
+		if (initialQty < aliquotQty) {
+			throw OpenSpecimenException.userError(initGtAliquotQty);
+		}
+		
+		double actAvailableQty = initialQty - aliquotQty;
+		if (getAvailableQuantity() > actAvailableQty) {
+			throw OpenSpecimenException.userError(avblQtyGtAct);
+		}
+	}
+		
 	private void addCollectionEvent() {
 		if (isAliquot() || isDerivative()) {
 			return;
