@@ -1,7 +1,24 @@
-.os-container-map-wrapper {
-  width: 95%;
-  height: 525px;
+.os-container-locations {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.os-container-locations .input-spmn-labels {
+  flex: 1;
+  width: 100%;
+}
+
+.os-container-locations .map {
+  flex: 9;
+  width: 100%;
   overflow: auto;
+}
+
+.os-container-map-wrapper {
+  width: 100%;
+  height: 100%;
 }
 
 .os-container-map {
@@ -79,28 +96,36 @@
   color: white;
 }
 
+.os-container-map .slot-assigned .slot-desc {
+  background: rgba(92, 184, 92, 0.8);
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.os-container-map .slot-assigned,
 .os-container-map .slot-occupied {
   background: #f5f5f5;
 }
 
 
 /** Scroll bar **/
-.os-container-map-wrapper::-webkit-scrollbar {
+.os-container-locations .map::-webkit-scrollbar {
   height:12px;
   width:12px
 }
 
-.os-container-map-wrapper::-webkit-scrollbar-thumb:vertical,
-.os-container-map-wrapper::-webkit-scrollbar-thumb:horizontal {
+.os-container-locations .map::-webkit-scrollbar-thumb:vertical,
+.os-container-locations .map::-webkit-scrollbar-thumb:horizontal {
   background: #d0d0d0;
 }
 
-.os-container-map-wrapper::-webkit-scrollbar-track:hover {
+.os-container-locations .map::-webkit-scrollbar-track:hover {
   background: #f5f5f5;
   border: 1px solid #ddd;
 }
 
-.os-container-map-wrapper::-webkit-scrollbar-track {
+.os-container-locations .map::-webkit-scrollbar-track {
   background: #ffffff;
 }
 
@@ -142,3 +167,4 @@ td.os-container-pos.occupied {
 td.os-container-pos.selected {
   background: #d5d5d5;
 }
+

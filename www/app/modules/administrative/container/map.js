@@ -1,6 +1,41 @@
 
 angular.module('os.administrative.container.map', ['os.administrative.container.util'])
   .directive('osContainerMap', function($compile, ContainerUtil) {
+    function drawMap(scope, element) {
+      var locationMatrix = getLocationsMatrix(scope.container, scope.occupancyMap);
+
+      var width = element.width();
+      var noOfColumns = scope.container.noOfColumns;
+      var slotWidth = width / 10;
+      if (slotWidth * noOfColumns > width) {
+        slotWidth = width / noOfColumns;
+        if (slotWidth < 85) {
+          slotWidth = 85;
+        }
+      }
+
+      var table = $("<table class='os-container-map' ng-click='addContainer($event)'/>");
+      for (var i = 0; i < locationMatrix.length; ++i) {
+        var tr = $("<tr/>");
+
+        for (var j = 0; j < locationMatrix[i].length; ++j) {
+          var td = $("<td/>")
+            .css("width", slotWidth)
+            .append(getContainerSlot(scope.container, locationMatrix[i][j]));
+
+          if (locationMatrix[i][j].occupied) {
+            td.addClass(!!locationMatrix[i][j].occupied.id ? 'slot-occupied' : 'slot-assigned');
+          }
+
+          tr.append(td);
+        }
+
+        table.append(tr);
+      }
+
+      element.append(table);
+    }
+
     function getLocationsMatrix(container, occupancyMap) {
       var matrix = new Array(container.noOfRows);
 
@@ -80,50 +115,11 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
           }
         };
 
-        var locationMatrix = getLocationsMatrix(scope.container, scope.occupancyMap);
-
-        var width = element.width();
-        var noOfColumns = scope.container.noOfColumns;
-        var slotWidth = width / 10;
-        if (slotWidth * noOfColumns > width) {
-          slotWidth = width / noOfColumns;
-          if (slotWidth < 85) {
-            slotWidth = 85;
-          }
-        }
-
-        var table = $("<table class='os-container-map' ng-click='addContainer($event)'/>");
-        for (var i = 0; i < locationMatrix.length; ++i) {
-          var tr = $("<tr/>");
-
-          for (var j = 0; j < locationMatrix[i].length; ++j) {
-            var td = $("<td/>")
-              .css("width", slotWidth)
-              .append(getContainerSlot(scope.container, locationMatrix[i][j]));
-
-            if (locationMatrix[i][j].occupied) {
-              td.addClass("slot-occupied");
-            }
-
-            tr.append(td);
-          }
-
-          table.append(tr);
-        }
-
-        element.append(table);
-
-        if (slotWidth * noOfColumns < element.width()) {
-          element.width(slotWidth * noOfColumns);
-        } else {
-          table.css('width', '100%');
-        }
-
-        if (table.height() + 20 < element.height()) {
-          element.height(table.height() + 20);
-        }
-
-        $compile(element)(scope);
+        scope.$watch('occupancyMap', function() {
+          element.children().remove();
+          drawMap(scope, element);
+          $compile(element)(scope);
+        });
       },
 
       template: '<div class="os-container-map-wrapper"></div>'

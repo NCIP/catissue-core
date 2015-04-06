@@ -593,6 +593,8 @@
     "cannot_hold_specimen": "Selected container cannot hold specimen for which position is being selected",
     "stores_specimens": "Stores Specimens",
     "confirm_delete": "{{entityType}} {{entityName}} and its child containers will be deleted forever. Are you sure you want to proceed?",
+    "assign_positions": "Assign Positions",
+    "paste_specimen_labels": "Paste or input specimen labels separated by comma",
 
     "tooltip": {
       "view_details": "Click to view/edit Storage Container details",
