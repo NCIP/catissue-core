@@ -217,7 +217,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			}
 			
 			container.assignPositions(positions);
-			daoFactory.getStorageContainerDao().saveOrUpdate(container);
+			daoFactory.getStorageContainerDao().saveOrUpdate(container, true);
 			return ResponseEvent.response(StorageContainerPositionDetail.from(container.getOccupiedPositions()));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);

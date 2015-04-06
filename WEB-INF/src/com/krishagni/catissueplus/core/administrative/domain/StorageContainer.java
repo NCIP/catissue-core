@@ -333,7 +333,7 @@ public class StorageContainer extends BaseEntity {
 		boolean hasParentChanged = false;
 		if (getParentContainer() == null && other.getParentContainer() != null) {
 			hasParentChanged = true;
-		} if (getParentContainer() != null && !getParentContainer().equals(other.getParentContainer())) {
+		} else if (getParentContainer() != null && !getParentContainer().equals(other.getParentContainer())) {
 			hasParentChanged = true;
 		}
 		
