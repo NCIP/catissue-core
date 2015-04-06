@@ -2,8 +2,12 @@ package com.krishagni.catissueplus.core.auth.domain;
 
 import java.util.Date;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
+@Audited
 public class AuthToken {
 	private String token;
 	
@@ -47,6 +51,7 @@ public class AuthToken {
 		this.ipAddress = ipAddress;
 	}
 
+	@NotAudited
 	public LoginAuditLog getLoginAuditLog() {
 		return loginAuditLog;
 	}

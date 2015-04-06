@@ -332,20 +332,6 @@
 
 	</target>
 	
-	<target name="export_schema" depends="compile">
-		<echo> Export Envers Schema </echo>
-		<java classname="com.krishagni.catissueplus.core.auditquery.domain.SchemaExportUtils" fork="true">
-			<classpath>
-				<pathelement path="${target.dir}" />
-			</classpath>
-			<classpath>
-				<fileset dir="${base.dir}/WEB-INF/lib">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</java>
-	</target>
-
 	<!-- Create war file for installable zip file.Please us this target when creating installable zip.
 		Note: database type is not replaced
 	-->
