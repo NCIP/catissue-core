@@ -330,16 +330,23 @@ public class StorageContainer extends BaseEntity {
 	}
 
 	public void update(StorageContainer other) {
+		boolean hasParentChanged = false;
+		if (getParentContainer() == null && other.getParentContainer() != null) {
+			hasParentChanged = true;
+		} if (getParentContainer() != null && !getParentContainer().equals(other.getParentContainer())) {
+			hasParentChanged = true;
+		}
+		
 		setName(other.name);
 		setBarcode(other.barcode);
 		setTemperature(other.temperature);
 		updateCapacity(other.noOfColumns, other.noOfRows);
 		updateLabelingScheme(other.columnLabelingScheme, other.rowLabelingScheme);
-		updateContainerLocation(other.site, other.parentContainer, other.position);
+		updateContainerLocation(other.getSite(), other.getParentContainer(), other.getPosition());
 		updateActivityStatus(other.activityStatus);
 		setComments(other.comments);
-		updateAllowedSpecimenClassAndTypes(other.allowedSpecimenClasses, other.allowedSpecimenTypes);
-		updateAllowedCps(other.allowedCps);
+		updateAllowedSpecimenClassAndTypes(other.getAllowedSpecimenClasses(), other.getAllowedSpecimenTypes(), hasParentChanged);
+		updateAllowedCps(other.getAllowedCps(), hasParentChanged);
 		updateStoreSpecimenEnabled(other.storeSpecimenEnabled);
 		
 		validateRestrictions();
@@ -568,7 +575,14 @@ public class StorageContainer extends BaseEntity {
 			if (position.getOccupyingSpecimen() != null) {
 				position.getOccupyingSpecimen().updatePosition(position);
 			} else {
-				position.getOccupyingContainer().updateContainerLocation(getSite(), this, position);
+				StorageContainer childContainer = position.getOccupyingContainer();
+				boolean hasParentChanged = !this.equals(childContainer.getParentContainer());
+				childContainer.updateContainerLocation(getSite(), this, position);
+				
+				if (hasParentChanged) {
+					childContainer.updateComputedClassAndTypes();
+					childContainer.updateComputedCps();
+				}
 			}
 		}
 	}
@@ -742,45 +756,63 @@ public class StorageContainer extends BaseEntity {
 		}
 	}
 
-	private void updateAllowedSpecimenClassAndTypes(Set<String> newSpecimenClasses, Set<String> newSpecimenTypes) {
-		boolean modified = false;
+	private void updateAllowedSpecimenClassAndTypes(
+			Set<String> newSpecimenClasses, 
+			Set<String> newSpecimenTypes, 
+			boolean updateComputedTypes) {
+		
+		boolean computeTypes = updateComputedTypes;
 		
 		if (!CollectionUtils.isEqualCollection(getAllowedSpecimenClasses(), newSpecimenClasses)) {
 			getAllowedSpecimenClasses().clear();
 			getAllowedSpecimenClasses().addAll(newSpecimenClasses);
-			modified = true;			
+			computeTypes = true;			
 		}
 		
 		if (!CollectionUtils.isEqualCollection(getAllowedSpecimenTypes(), newSpecimenTypes)) {
 			getAllowedSpecimenTypes().clear();
 			getAllowedSpecimenTypes().addAll(newSpecimenTypes);
-			modified = true;			
+			computeTypes = true;			
 		}
 		
-		if (modified) {
-			for (StorageContainer desc : getDescendentContainers()) {
-				desc.getCompAllowedSpecimenClasses().clear();
-				desc.getCompAllowedSpecimenClasses().addAll(desc.computeAllowedSpecimenClasses());
-				
-				desc.getCompAllowedSpecimenTypes().clear();
-				desc.getCompAllowedSpecimenTypes().addAll(desc.computeAllowedSpecimenTypes());				
-			}
+		if (computeTypes) {
+			updateComputedClassAndTypes();
 		}
 				
 	}
 	
-	private void updateAllowedCps(Set<CollectionProtocol> newCps) {
-		if (CollectionUtils.isEqualCollection(getAllowedCps(), newCps)) {
-			return;
+	private void updateComputedClassAndTypes() {
+		getCompAllowedSpecimenClasses().clear();
+		getCompAllowedSpecimenClasses().addAll(computeAllowedSpecimenClasses());
+
+		getCompAllowedSpecimenTypes().clear();
+		getCompAllowedSpecimenTypes().addAll(computeAllowedSpecimenTypes());				
+		
+		for (StorageContainer childContainer : getChildContainers()) {
+			childContainer.updateComputedClassAndTypes();
+		}		
+	}
+	
+	private void updateAllowedCps(Set<CollectionProtocol> newCps, boolean updateComputedCps) {
+		boolean computeCps = updateComputedCps;		
+		if (!CollectionUtils.isEqualCollection(getAllowedCps(), newCps)) {
+			getAllowedCps().clear();
+			getAllowedCps().addAll(newCps);			
+			computeCps = true;
 		}
 		
-		getAllowedCps().clear();
-		getAllowedCps().addAll(newCps);
-		
-		for (StorageContainer desc : getDescendentContainers()) {
-			desc.getCompAllowedCps().clear();
-			desc.getCompAllowedCps().addAll(desc.computeAllowedCps());
+		if (computeCps) {
+			updateComputedCps();			
 		}
+	}
+	
+	private void updateComputedCps() {
+		getCompAllowedCps().clear();
+		getCompAllowedCps().addAll(computeAllowedCps());
+		
+		for (StorageContainer childContainer : getChildContainers()) {
+			childContainer.updateComputedCps();
+		}		
 	}
 	
 	private void updateStoreSpecimenEnabled(boolean newStoreSpecimenEnabled) {
