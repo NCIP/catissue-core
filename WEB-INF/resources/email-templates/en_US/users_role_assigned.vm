@@ -1,0 +1,91 @@
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
+  <tbody>
+    <tr>
+      <td style="border-collapse:collapse;">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px;line-height:20px">
+          <tbody>
+            <tr>
+              <td style="border-collapse:collapse;padding:0px;padding-bottom:10px">
+                <p style="margin:10px 0 0 0">
+                  Hello $user.firstName $user.lastName,
+                  <br><br>
+                  
+                  #if( $sr.collectionProtocol )  
+                    #set( $cp = $sr.collectionProtocol.shortTitle )
+                  #else
+                    #set( $cp = "All current and future")
+                  #end
+                  
+                  #if( $sr.site )
+                    #set( $site = $sr.site.name )
+                  #else
+                    #set( $site = "All sites" )
+                  #end
+                  
+                  You have been assigned <b> $sr.role.name </b> role on <b> $cp </b> collection protocol(s) for site(s) <b> $site </b>
+                  <br><br>
+                  A brief description of your role privileges is mentioned below:
+                  <br><br>
+                  Role Description: $sr.role.description
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:0px;border-collapse:collapse;padding:0px;padding-bottom:10px">
+	        <table width="80%" style="border-collapse: collapse" cellpadding="5">
+		  <tr>
+		    <th align="left" style="border-bottom:1px solid #e3e3e3;">Resource</th>
+		    <th align="left" style="border-bottom:1px solid #e3e3e3;">Permissions</th>
+          	  </tr>
+		  #foreach( $ac in $sr.role.acl )
+		    <tr>
+		      <td>$ac.resource.name</td>
+                      <td>
+	                #set( $privileges = [] )
+	                #foreach( $resourceInstantOp in $ac.operations )
+	                  #set( $result = $privileges.add($resourceInstantOp.operation.name) )
+	                #end
+			            
+	                #if( $privileges.contains("Read") )
+	                  <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
+		            <span>Read</span>
+		          </div>
+		        #end
+			           
+		        #if( $privileges.contains("Create") )
+		          <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
+		            <span>Create</span>
+		          </div>
+		        #end
+			           
+		        #if( $privileges.contains("Update") )
+		          <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
+		            <span>Update</span>
+		          </div>
+	                #end
+			           
+		        #if( $privileges.contains("Delete") )
+		          <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
+		            <span>Delete</span>
+                          </div>
+	                #end
+		      </td>
+		    </tr>
+		  #end
+	        </table> 	
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="height:5px;line-height:5px;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+        #parse( $footer )
+      </td>
+    <tr>
+  </tbody>
+</table>

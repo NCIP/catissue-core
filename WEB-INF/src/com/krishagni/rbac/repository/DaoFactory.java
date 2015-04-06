@@ -1,6 +1,7 @@
 package com.krishagni.rbac.repository;
 
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
+import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 
 public interface DaoFactory {
@@ -19,5 +20,7 @@ public interface DaoFactory {
 	public CollectionProtocolDao getCollectionProtocolDao();
 	
 	public SiteDao getSiteDao();
+	
+	public UserDao getUserDao();
 	
 }

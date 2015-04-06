@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Session;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
@@ -19,6 +20,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.domain.Group;
 import com.krishagni.rbac.domain.GroupRole;
@@ -52,12 +54,22 @@ import com.krishagni.rbac.service.RbacService;
 public class RbacServiceImpl implements RbacService {
 	private DaoFactory daoFactory;
 	
+	private EmailService emailService;
+	
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
 	}
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+	
+	public EmailService getEmailService() {
+		return emailService;
+	}
+
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
 	}
 
 	@Override
@@ -374,6 +386,7 @@ public class RbacServiceImpl implements RbacService {
 			Subject subject = daoFactory.getSubjectDao().getById(subjectRoleOp.getSubjectId(), null);
 			
 			SubjectRole resp = null;
+			SubjectRole oldSR = null;
 			SubjectRole sr = null;
 			switch (subjectRoleOp.getOp()) {
 				case ADD:
@@ -382,6 +395,9 @@ public class RbacServiceImpl implements RbacService {
 					break;
 				
 				case UPDATE:
+					oldSR  = (SubjectRole) subject.getExistingRole(subjectRoleOp.getSubjectRole().getId())
+						.clone();
+					
 					sr = createSubjectRole(subjectRoleOp.getSubjectRole());
 					resp = subject.updateRole(sr);
 					break;
@@ -393,6 +409,7 @@ public class RbacServiceImpl implements RbacService {
 			
 			if (resp != null) {
 				daoFactory.getSubjectDao().saveOrUpdate(subject, true);
+				sendEmail(resp, oldSR, subjectRoleOp);
 			}
 			
 			return ResponseEvent.response(SubjectRoleDetail.from(resp));
@@ -403,6 +420,25 @@ public class RbacServiceImpl implements RbacService {
 		}
 	}
 	
+	private void sendEmail(SubjectRole newSr, SubjectRole oldSR, SubjectRoleOp subjectRoleOp) {
+		User user = daoFactory.getUserDao().getById(newSr.getSubject().getId());
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("user", user);
+		props.put("sr", newSr);
+		switch (subjectRoleOp.getOp()) {
+			case ADD:
+				emailService.sendEmail(ROLE_ASSIGN_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
+				break;
+			case UPDATE:
+				props.put("oldSr", oldSR);
+				emailService.sendEmail(ROLE_UPDATED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
+				break;
+			case REMOVE:
+				emailService.sendEmail(ROLE_REMOVED_EMAIL_TMPL, new String[] {user.getEmailAddress()}, props);
+				break;
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<GroupRoleDetail>> getGroupRoles(RequestEvent<Long> req) {
@@ -718,5 +754,11 @@ public class RbacServiceImpl implements RbacService {
 			throw OpenSpecimenException.userError(RbacErrorCode.DUP_ROLE_NAME);
 		}
 	}
+	
+	private static final String ROLE_ASSIGN_EMAIL_TMPL = "users_role_assigned";
+
+	private static final String ROLE_UPDATED_EMAIL_TMPL = "users_role_updated";
+
+	private static final String ROLE_REMOVED_EMAIL_TMPL = "users_role_deleted";
 
 }
