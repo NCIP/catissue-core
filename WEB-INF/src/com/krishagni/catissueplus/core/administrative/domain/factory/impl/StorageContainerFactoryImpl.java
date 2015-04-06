@@ -84,42 +84,42 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}
 	
 	private void setCapacity(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
-		int dimensionOneCapacity = detail.getDimensionOneCapacity();		
-		if (dimensionOneCapacity <= 0) {
+		int noOfCols = detail.getNoOfColumns();		
+		if (noOfCols <= 0) {
 			ose.addError(StorageContainerErrorCode.INVALID_DIMENSION_CAPACITY);			
 		}
 		
-		int dimensionTwoCapacity = detail.getDimensionTwoCapacity();
-		if (dimensionTwoCapacity <= 0) {
+		int noOfRows = detail.getNoOfRows();
+		if (noOfRows <= 0) {
 			ose.addError(StorageContainerErrorCode.INVALID_DIMENSION_CAPACITY);
 		}
 		
-		container.setDimensionOneCapacity(dimensionOneCapacity);
-		container.setDimensionTwoCapacity(dimensionTwoCapacity);		
+		container.setNoOfColumns(noOfCols);
+		container.setNoOfRows(noOfRows);		
 	}
 	
 	private void setLabelingSchemes(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
-		String dimensionOneLabelingScheme = detail.getDimensionOneLabelingScheme();
-		if (StringUtils.isBlank(dimensionOneLabelingScheme)) {
-			dimensionOneLabelingScheme = StorageContainer.NUMBER_LABELING_SCHEME;
+		String columnLabelingScheme = detail.getColumnLabelingScheme();
+		if (StringUtils.isBlank(columnLabelingScheme)) {
+			columnLabelingScheme = StorageContainer.NUMBER_LABELING_SCHEME;
 		}
 		
-		if (!StorageContainer.isValidScheme(dimensionOneLabelingScheme)) {
+		if (!StorageContainer.isValidScheme(columnLabelingScheme)) {
 			ose.addError(StorageContainerErrorCode.INVALID_DIMENSION_LABELING_SCHEME);
 		}
 		
-		container.setDimensionOneLabelingScheme(dimensionOneLabelingScheme);
+		container.setColumnLabelingScheme(columnLabelingScheme);
 		
-		String dimensionTwoLabelingScheme = detail.getDimensionTwoLabelingScheme();
-		if (StringUtils.isBlank(dimensionTwoLabelingScheme)) {
-			dimensionTwoLabelingScheme = container.getDimensionOneLabelingScheme();
+		String rowLabelingScheme = detail.getRowLabelingScheme();
+		if (StringUtils.isBlank(rowLabelingScheme)) {
+			rowLabelingScheme = container.getColumnLabelingScheme();
 		}
 		
-		if (!StorageContainer.isValidScheme(dimensionTwoLabelingScheme)) {
+		if (!StorageContainer.isValidScheme(rowLabelingScheme)) {
 			ose.addError(StorageContainerErrorCode.INVALID_DIMENSION_LABELING_SCHEME);
 		}
 		
-		container.setDimensionTwoLabelingScheme(dimensionTwoLabelingScheme);
+		container.setRowLabelingScheme(rowLabelingScheme);
 	}
 		
 	private void setSiteAndParentContainer(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {

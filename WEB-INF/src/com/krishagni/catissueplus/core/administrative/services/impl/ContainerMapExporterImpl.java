@@ -92,8 +92,8 @@ public class ContainerMapExporterImpl implements ContainerMapExporter {
 	private void exportOccupiedPositions(CSVWriter writer, StorageContainer container) {
 		List<String> cells = new ArrayList<String>();
 		cells.add("");
-		for (int i = 1; i <= container.getDimensionOneCapacity(); ++i) {
-			cells.add(container.toDimensionOneScheme(i));
+		for (int i = 1; i <= container.getNoOfColumns(); ++i) {
+			cells.add(container.toColumnLabelingScheme(i));
 		}		
 		writer.writeNext(cells.toArray(new String[0]));
 				
@@ -102,11 +102,11 @@ public class ContainerMapExporterImpl implements ContainerMapExporter {
 				new ArrayList<StorageContainerPosition>(container.getOccupiedPositions());
 		Collections.sort(positions);
 		
-		for (int j = 1; j <= container.getDimensionTwoCapacity(); ++j) {
+		for (int j = 1; j <= container.getNoOfRows(); ++j) {
 			cells.clear();
-			cells.add(container.toDimensionTwoScheme(j));
+			cells.add(container.toRowLabelingScheme(j));
 			
-			for (int i = 1; i <= container.getDimensionOneCapacity(); ++i) {				
+			for (int i = 1; i <= container.getNoOfColumns(); ++i) {				
 				if (posIdx >= positions.size()) {
 					cells.add("");
 					continue;

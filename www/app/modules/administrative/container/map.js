@@ -2,12 +2,12 @@
 angular.module('os.administrative.container.map', ['os.administrative.container.util'])
   .directive('osContainerMap', function($compile, ContainerUtil) {
     function getLocationsMatrix(container, occupancyMap) {
-      var matrix = new Array(container.dimensionTwoCapacity);
+      var matrix = new Array(container.noOfRows);
 
-      for (var i = 0; i < container.dimensionTwoCapacity; ++i) {
-        matrix[i] = new Array(container.dimensionOneCapacity);
+      for (var i = 0; i < container.noOfRows; ++i) {
+        matrix[i] = new Array(container.noOfColumns);
 
-        for (var j = 0; j < container.dimensionOneCapacity; ++j) {
+        for (var j = 0; j < container.noOfColumns; ++j) {
           matrix[i][j] = {posX: j + 1, posY: i + 1};
         }
       }
@@ -26,8 +26,8 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
     function getContainerSlotEl(container, slot) {
       var el = $("<div class='slot-element'/>");
 
-      var posOne = ContainerUtil.fromOrdinal(container.dimensionOneLabelingScheme, slot.posX);
-      var posTwo = ContainerUtil.fromOrdinal(container.dimensionTwoLabelingScheme, slot.posY);
+      var posOne = ContainerUtil.fromOrdinal(container.columnLabelingScheme, slot.posX);
+      var posTwo = ContainerUtil.fromOrdinal(container.rowLabelingScheme, slot.posY);
       el.append($("<div class='slot-pos'/>").append(formatPos(posOne, posTwo)));
 
       if (slot.occupied) {
@@ -83,7 +83,7 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
         var locationMatrix = getLocationsMatrix(scope.container, scope.occupancyMap);
 
         var width = element.width();
-        var noOfColumns = scope.container.dimensionOneCapacity;
+        var noOfColumns = scope.container.noOfColumns;
         var slotWidth = width / 10;
         if (slotWidth * noOfColumns > width) {
           slotWidth = width / noOfColumns;

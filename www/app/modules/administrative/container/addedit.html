@@ -48,30 +48,30 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="container.dimension">Dimension</label>
         <div class="col-xs-3">
-          <input type="text" name="dimensionOneCapacity" ng-model="container.dimensionOneCapacity" class="form-control"
-            placeholder="{{'container.horizontal_dimension' | translate}}" ng-pattern="/^[0-9]*$/" required>
-          <div os-field-error field="cform.dimensionOneCapacity"></div>
+          <input type="text" name="noOfRows" ng-model="container.noOfRows" class="form-control"
+            placeholder="{{'container.vertical_dimension' | translate}}" ng-pattern="/^[0-9]*$/" required>
+          <div os-field-error field="cform.noOfRows"></div>
         </div>
         <div class="col-xs-3">
-          <input type="text" name="dimensionTwoCapacity" ng-model="container.dimensionTwoCapacity" class="form-control"
-            placeholder="{{'container.vertical_dimension' | translate}}" ng-pattern="/^[0-9]*$/" required>
-          <div os-field-error field="cform.dimensionTwoCapacity"></div>
+          <input type="text" name="noOfColumns" ng-model="container.noOfColumns" class="form-control"
+            placeholder="{{'container.horizontal_dimension' | translate}}" ng-pattern="/^[0-9]*$/" required>
+          <div os-field-error field="cform.noOfColumns"></div>
         </div>
       </div>
 
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="container.labeling_scheme">Labeling Scheme</label>
         <div class="col-xs-3">
-          <os-select ng-model="container.dimensionOneLabelingScheme" list="positionLabelingSchemes"
-            name="dimensionOneLabelingScheme" placeholder="{{'container.horizontal_labeling_scheme' | translate}}" required>
+          <os-select ng-model="container.rowLabelingScheme" list="positionLabelingSchemes"
+            name="rowLabelingScheme" placeholder="{{'container.vertical_labeling_scheme' | translate}}" required>
           </os-select>
-          <div os-field-error field="cform.dimensionOneLabelingScheme"></div>
+          <div os-field-error field="cform.rowLabelingScheme"></div>
         </div>
         <div class="col-xs-3">
-          <os-select ng-model="container.dimensionTwoLabelingScheme" list="positionLabelingSchemes"
-            name="dimensionTwoLabelingScheme" placeholder="{{'container.vertical_labeling_scheme' | translate}}" required>
+          <os-select ng-model="container.columnLabelingScheme" list="positionLabelingSchemes"
+            name="columnLabelingScheme" placeholder="{{'container.horizontal_labeling_scheme' | translate}}" required>
           </os-select>
-          <div os-field-error field="cform.dimensionTwoLabelingScheme"></div>
+          <div os-field-error field="cform.columnLabelingScheme"></div>
         </div>
       </div>
 

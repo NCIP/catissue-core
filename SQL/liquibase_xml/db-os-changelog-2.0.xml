@@ -48,18 +48,18 @@
       <column name="TEMPERATURE" type="${double.type}">
       </column>
      
-      <column name="DIMENSION_ONE_CAPACITY" type="${int.type}">
+      <column name="NO_OF_COLS" type="${int.type}">
         <constraints nullable="false"/>
       </column>
      
-      <column name="DIMENSION_TWO_CAPACITY" type="${int.type}">
+      <column name="NO_OF_ROWS" type="${int.type}">
         <constraints nullable="false"/>
       </column>
      
-      <column name="DIMENSION_ONE_LABELING_SCHEME" type="${text.type}(64)" defaultValue="Numbers">
+      <column name="COLUMN_LABELING_SCHEME" type="${text.type}(64)" defaultValue="Numbers">
       </column>
      
-      <column name="DIMENSION_TWO_LABELING_SCHEME" type="${text.type}(64)" defaultValue="Numbers">
+      <column name="ROW_LABELING_SCHEME" type="${text.type}(64)" defaultValue="Numbers">
       </column>
 
       <column name="SITE_ID" type="${int.type}">
@@ -275,12 +275,12 @@
       create or replace view OS_STORAGE_CONT_STATS_VIEW as (
         select 
           s.identifier as container_id, s.name as container_name, 
-          s.dimension_one_capacity * s.dimension_two_capacity - count(p.identifier) as free_positions
+          s.no_of_cols * s.no_of_rows - count(p.identifier) as free_positions
         from 
           os_storage_containers s 
           left join os_container_positions p on p.storage_container_id = s.identifier 
         group by 
-          s.identifier, s.name, s.dimension_one_capacity, s.dimension_two_capacity
+          s.identifier, s.name, s.no_of_cols, s.no_of_rows
       )
     </sql>
   </changeSet>

@@ -24,7 +24,6 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
-
 public class StorageContainer extends BaseEntity {
 	private static final String ENTITY_NAME = "storage_container";
 	
@@ -44,13 +43,13 @@ public class StorageContainer extends BaseEntity {
 
 	private Double temperature;
 	
-	private int dimensionOneCapacity;
+	private int noOfColumns;
 	
-	private int dimensionTwoCapacity;
+	private int noOfRows;
 	
-	private String dimensionOneLabelingScheme = NUMBER_LABELING_SCHEME;
+	private String columnLabelingScheme = NUMBER_LABELING_SCHEME;
 	
-	private String dimensionTwoLabelingScheme = NUMBER_LABELING_SCHEME;
+	private String rowLabelingScheme = NUMBER_LABELING_SCHEME;
 	
 	private Site site;
 
@@ -126,36 +125,36 @@ public class StorageContainer extends BaseEntity {
 		this.temperature = temperature;
 	}
 
-	public int getDimensionOneCapacity() {
-		return dimensionOneCapacity;
+	public int getNoOfColumns() {
+		return noOfColumns;
 	}
 
-	public void setDimensionOneCapacity(int dimensionOneCapacity) {
-		this.dimensionOneCapacity = dimensionOneCapacity;
+	public void setNoOfColumns(int noOfColumns) {
+		this.noOfColumns = noOfColumns;
 	}
 
-	public int getDimensionTwoCapacity() {
-		return dimensionTwoCapacity;
+	public int getNoOfRows() {
+		return noOfRows;
 	}
 
-	public void setDimensionTwoCapacity(int dimensionTwoCapacity) {
-		this.dimensionTwoCapacity = dimensionTwoCapacity;
+	public void setNoOfRows(int noOfRows) {
+		this.noOfRows = noOfRows;
 	}
 
-	public String getDimensionOneLabelingScheme() {
-		return dimensionOneLabelingScheme;
+	public String getColumnLabelingScheme() {
+		return columnLabelingScheme;
 	}
 
-	public void setDimensionOneLabelingScheme(String dimensionOneLabelingScheme) {
-		this.dimensionOneLabelingScheme = dimensionOneLabelingScheme;
+	public void setColumnLabelingScheme(String columnLabelingScheme) {
+		this.columnLabelingScheme = columnLabelingScheme;
 	}
 
-	public String getDimensionTwoLabelingScheme() {
-		return dimensionTwoLabelingScheme;
+	public String getRowLabelingScheme() {
+		return rowLabelingScheme;
 	}
 
-	public void setDimensionTwoLabelingScheme(String dimensionTwoLabelingScheme) {
-		this.dimensionTwoLabelingScheme = dimensionTwoLabelingScheme;
+	public void setRowLabelingScheme(String rowLabelingScheme) {
+		this.rowLabelingScheme = rowLabelingScheme;
 	}
 
 	public Site getSite() {
@@ -333,8 +332,8 @@ public class StorageContainer extends BaseEntity {
 		setName(other.name);
 		setBarcode(other.barcode);
 		setTemperature(other.temperature);
-		updateCapacity(other.dimensionOneCapacity, other.dimensionTwoCapacity);
-		updateLabelingScheme(other.dimensionOneLabelingScheme, other.dimensionTwoLabelingScheme);
+		updateCapacity(other.noOfColumns, other.noOfRows);
+		updateLabelingScheme(other.columnLabelingScheme, other.rowLabelingScheme);
 		updateContainerLocation(other.site, other.parentContainer, other.position);
 		updateActivityStatus(other.activityStatus);
 		setComments(other.comments);
@@ -346,42 +345,42 @@ public class StorageContainer extends BaseEntity {
 	}
 	
 	public int freePositionsCount() {
-		return dimensionOneCapacity * dimensionTwoCapacity - occupiedPositions.size();
+		return noOfColumns * noOfRows - occupiedPositions.size();
 	}
 	
 	public Set<Integer> occupiedPositionsOrdinals() {
 		Set<Integer> result = new HashSet<Integer>();
 				
 		for (StorageContainerPosition pos : getOccupiedPositions()) {
-			result.add((pos.getPosTwoOrdinal() - 1) * dimensionTwoCapacity + pos.getPosOneOrdinal());
+			result.add((pos.getPosTwoOrdinal() - 1) * noOfRows + pos.getPosOneOrdinal());
 		}
 		
 		return result;
 	}
 	
-	public String toDimensionOneScheme(int ordinal) {
-		return converters.get(getDimensionOneLabelingScheme()).fromOrdinal(ordinal);
+	public String toColumnLabelingScheme(int ordinal) {
+		return converters.get(getColumnLabelingScheme()).fromOrdinal(ordinal);
 	}
 	
-	public String toDimensionTwoScheme(int ordinal) {
-		return converters.get(getDimensionTwoLabelingScheme()).fromOrdinal(ordinal);
+	public String toRowLabelingScheme(int ordinal) {
+		return converters.get(getRowLabelingScheme()).fromOrdinal(ordinal);
 	}
 	
 	public boolean areValidPositions(String posOne, String posTwo) {
-		int posOneOrdinal = converters.get(getDimensionOneLabelingScheme()).toOrdinal(posOne);
-		int posTwoOrdinal = converters.get(getDimensionTwoLabelingScheme()).toOrdinal(posTwo);
+		int posOneOrdinal = converters.get(getColumnLabelingScheme()).toOrdinal(posOne);
+		int posTwoOrdinal = converters.get(getRowLabelingScheme()).toOrdinal(posTwo);
 			
 		return areValidPositions(posOneOrdinal, posTwoOrdinal);
 	}
 	
 	public boolean areValidPositions(int posOne, int posTwo) {
-		return posOne >= 1 && posOne <= getDimensionOneCapacity() && 
-				posTwo >= 1 && posTwo <= getDimensionTwoCapacity();
+		return posOne >= 1 && posOne <= getNoOfColumns() && 
+				posTwo >= 1 && posTwo <= getNoOfRows();
 	}
 	
 	public StorageContainerPosition createPosition(String posOne, String posTwo) {
-		int posOneOrdinal = converters.get(getDimensionOneLabelingScheme()).toOrdinal(posOne);
-		int posTwoOrdinal = converters.get(getDimensionTwoLabelingScheme()).toOrdinal(posTwo);
+		int posOneOrdinal = converters.get(getColumnLabelingScheme()).toOrdinal(posOne);
+		int posTwoOrdinal = converters.get(getRowLabelingScheme()).toOrdinal(posTwo);
 		return createPosition(posOneOrdinal, posOne, posTwoOrdinal, posTwo);
 	}
 	
@@ -403,12 +402,12 @@ public class StorageContainer extends BaseEntity {
 	public StorageContainerPosition nextAvailablePosition() {
 		Set<Integer> occupiedPositionOrdinals = occupiedPositionsOrdinals();
 		
-		for (int y = 1; y <= getDimensionTwoCapacity(); ++y) {
-			for (int x = 1; x <= getDimensionOneCapacity(); ++x) {
-				int pos = (y - 1) * getDimensionOneCapacity() + x;
+		for (int y = 1; y <= getNoOfRows(); ++y) {
+			for (int x = 1; x <= getNoOfColumns(); ++x) {
+				int pos = (y - 1) * getNoOfColumns() + x;
 				if (!occupiedPositionOrdinals.contains(pos)) {
-					String posOne = converters.get(getDimensionOneLabelingScheme()).fromOrdinal(x);
-					String posTwo = converters.get(getDimensionTwoLabelingScheme()).fromOrdinal(y);
+					String posOne = converters.get(getColumnLabelingScheme()).fromOrdinal(x);
+					String posTwo = converters.get(getRowLabelingScheme()).fromOrdinal(y);
 					return createPosition(x, posOne, y, posTwo);
 				}
 			}
@@ -624,8 +623,8 @@ public class StorageContainer extends BaseEntity {
 	}
 	
 	private boolean canOccupyPosition(boolean isSpecimenEntity, Long entityId, String posOne, String posTwo) {
-		int posOneOrdinal = converters.get(getDimensionOneLabelingScheme()).toOrdinal(posOne);
-		int posTwoOrdinal = converters.get(getDimensionTwoLabelingScheme()).toOrdinal(posTwo);
+		int posOneOrdinal = converters.get(getColumnLabelingScheme()).toOrdinal(posOne);
+		int posTwoOrdinal = converters.get(getRowLabelingScheme()).toOrdinal(posTwo);
 		
 		if (!areValidPositions(posOneOrdinal, posTwoOrdinal)) {
 			return false;
@@ -643,38 +642,38 @@ public class StorageContainer extends BaseEntity {
 		}
 	}
 	
-	private void updateCapacity(int newDimensionOneCapacity, int newDimensionTwoCapacity) {
-		if (newDimensionOneCapacity < getDimensionOneCapacity() || 
-				newDimensionTwoCapacity < getDimensionTwoCapacity()) {
-			if (arePositionsOccupiedBeyondCapacity(newDimensionOneCapacity, newDimensionTwoCapacity)) {
+	private void updateCapacity(int newNoOfColumns, int newNoOfRows) {
+		if (newNoOfColumns < getNoOfColumns() || 
+				newNoOfRows < getNoOfRows()) {
+			if (arePositionsOccupiedBeyondCapacity(newNoOfColumns, newNoOfRows)) {
 				throw OpenSpecimenException.userError(StorageContainerErrorCode.CANNOT_SHRINK_CONTAINER);
 			}
 		}
 		
-		setDimensionOneCapacity(newDimensionOneCapacity);
-		setDimensionTwoCapacity(newDimensionTwoCapacity); 
+		setNoOfColumns(newNoOfColumns);
+		setNoOfRows(newNoOfRows); 
 	}
 	
-	private void updateLabelingScheme(String newDimOneScheme, String newDimTwoScheme) {
-		boolean dimOneSchemeChanged = !getDimensionOneLabelingScheme().equals(newDimOneScheme);
-		boolean dimTwoSchemeChanged = !getDimensionTwoLabelingScheme().equals(newDimTwoScheme);
+	private void updateLabelingScheme(String newColumnLabelingScheme, String newRowLabelingScheme) {
+		boolean colSchemeChanged = !getColumnLabelingScheme().equals(newColumnLabelingScheme);
+		boolean rowSchemeChanged = !getRowLabelingScheme().equals(newRowLabelingScheme);
 		
-		if (!dimOneSchemeChanged && !dimTwoSchemeChanged) {
+		if (!colSchemeChanged && !rowSchemeChanged) {
 			return;
 		}
 		
 		for (StorageContainerPosition pos : getOccupiedPositions()) {
-			if (dimOneSchemeChanged) {
-				pos.setPosOne(converters.get(newDimOneScheme).fromOrdinal(pos.getPosOneOrdinal()));
+			if (colSchemeChanged) {
+				pos.setPosOne(converters.get(newColumnLabelingScheme).fromOrdinal(pos.getPosOneOrdinal()));
 			}
 			
-			if (dimTwoSchemeChanged) {
-				pos.setPosTwo(converters.get(newDimTwoScheme).fromOrdinal(pos.getPosTwoOrdinal()));
+			if (rowSchemeChanged) {
+				pos.setPosTwo(converters.get(newRowLabelingScheme).fromOrdinal(pos.getPosTwoOrdinal()));
 			}
 		}
 		
-		setDimensionOneLabelingScheme(newDimOneScheme);
-		setDimensionTwoLabelingScheme(newDimTwoScheme);
+		setColumnLabelingScheme(newColumnLabelingScheme);
+		setRowLabelingScheme(newRowLabelingScheme);
 	}
 	
 	private void updateContainerLocation(Site otherSite, StorageContainer otherParentContainer, StorageContainerPosition otherPos) {
@@ -769,15 +768,15 @@ public class StorageContainer extends BaseEntity {
 		this.storeSpecimenEnabled = newStoreSpecimenEnabled;
 	}
 		
-	private boolean arePositionsOccupiedBeyondCapacity(int dimensionOneCapacity, int dimensionTwoCapacity) {
+	private boolean arePositionsOccupiedBeyondCapacity(int noOfCols, int noOfRows) {
 		boolean result = false;
 		for (StorageContainerPosition pos : getOccupiedPositions()) {
-			if (pos.getPosOneOrdinal() > dimensionOneCapacity) {
+			if (pos.getPosOneOrdinal() > noOfCols) {
 				result = true;
 				break;
 			}
 			
-			if (pos.getPosTwoOrdinal() > dimensionTwoCapacity) {
+			if (pos.getPosTwoOrdinal() > noOfRows) {
 				result = true;
 				break;
 			}

@@ -18,13 +18,13 @@
 
     <property name="temperature" column="TEMPERATURE"/>
 
-    <property name="dimensionOneCapacity" column="DIMENSION_ONE_CAPACITY"/>
+    <property name="noOfColumns" column="NO_OF_COLS"/>
 
-    <property name="dimensionTwoCapacity" column="DIMENSION_TWO_CAPACITY"/>
+    <property name="noOfRows" column="NO_OF_ROWS"/>
 
-    <property name="dimensionOneLabelingScheme" column="DIMENSION_ONE_LABELING_SCHEME"/>
+    <property name="columnLabelingScheme" column="COLUMN_LABELING_SCHEME"/>
 
-    <property name="dimensionTwoLabelingScheme" column="DIMENSION_TWO_LABELING_SCHEME"/>
+    <property name="rowLabelingScheme" column="ROW_LABELING_SCHEME"/>
 
     <property name="storeSpecimenEnabled" column="STORE_SPECIMENS"/>
 
