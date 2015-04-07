@@ -47,8 +47,8 @@ angular.module('os.biospecimen.participant',
       })
       .state('participant-addedit', {
         url: '/addedit-participant?cpId',
-        templateProvider: function($stateParams, CpConfigSvc) {
-          return CpConfigSvc.getRegParticipantTmpl($stateParams.cpId, $stateParams.cprId).then(
+        templateProvider: function($stateParams, $q, CpConfigSvc) {
+          return $q.when(CpConfigSvc.getRegParticipantTmpl($stateParams.cpId, $stateParams.cprId)).then(
             function(tmpl) {
               return '<div ng-include src="\'' + tmpl + '\'"></div>';
             }
