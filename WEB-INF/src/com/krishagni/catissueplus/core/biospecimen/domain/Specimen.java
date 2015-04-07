@@ -677,6 +677,31 @@ public class Specimen extends BaseEntity {
 		transfer.saveOrUpdate();
 	}
 	
+	public String getLabelOrDesc() {
+		if (StringUtils.isNotBlank(label)) {
+			return label;
+		}
+		
+		return getDesc(specimenClass, specimenType);
+	}
+	
+	public static String getDesc(String specimenClass, String type) {
+		StringBuilder desc = new StringBuilder();
+		if (StringUtils.isNotBlank(specimenClass)) {
+			desc.append(specimenClass);
+		}
+		
+		if (StringUtils.isNotBlank(type)) {
+			if (desc.length() > 0) {
+				desc.append("-");
+			}
+			
+			desc.append(type);
+		}
+			
+		return desc.toString();		
+	}
+
 	/**
 	 * Ensures following constraints are adhered
 	 * 1. Specimen initial quantity is greater than or equals to sum of

@@ -430,7 +430,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		if (!container.canContain(specimen)) {
-			ose.addError(StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN);
+			ose.addError(StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN, container.getName(), specimen.getLabelOrDesc());
 			return;
 		}
 		

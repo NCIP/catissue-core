@@ -4,7 +4,7 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
     function init() {
       $scope.container = container;
       $scope.pristineMap = $scope.occupancyMap = occupancyMap;
-      $scope.labelsText = '';
+      $scope.input = {labels: ''};
     }
 
     $scope.addContainer = function(posOne, posTwo) {
@@ -20,7 +20,7 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
     $scope.showUpdatedMap = function() {
       var newMap = angular.copy($scope.pristineMap);
       var mapIdx = 0, labelIdx = 0;
-      var labels = Util.csvToArray($scope.labelsText);
+      var labels = Util.csvToArray($scope.input.labels);
 
       var done = false;
       for (var y = 1; y <= container.noOfRows; ++y) {
@@ -79,7 +79,7 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
       container.assignPositions(positions).then(
         function(latestOccupancyMap) {
           $scope.pristineMap = $scope.occupancyMap = latestOccupancyMap;
-          $scope.labelsText = undefined;
+          $scope.input.labels = undefined;
         }
       );
     }

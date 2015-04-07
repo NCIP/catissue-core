@@ -90,6 +90,7 @@
   padding: 2px 0px;
   display: block;
   text-decoration: none!important;
+  text-align: center;
 }
 
 .os-container-map .slot-desc:hover {

@@ -173,10 +173,15 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			
 			CollectionProtocol cp = new CollectionProtocol();
 			cp.setId(detail.getCpId());
-			boolean isAllowed = container.canContainSpecimen(cp, detail.getSpecimenClass(), detail.getSpecimenType());
+			String specimenClass = detail.getSpecimenClass();
+			String type = detail.getSpecimenType();
+			boolean isAllowed = container.canContainSpecimen(cp, specimenClass, type);
 
 			if (!isAllowed) {
-				return ResponseEvent.userError(StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN);
+				return ResponseEvent.userError(
+						StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN, 
+						container.getName(), 
+						Specimen.getDesc(specimenClass, type));
 			} else {
 				return ResponseEvent.response(isAllowed);
 			}
@@ -362,7 +367,10 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		}
 		
 		if (!container.canContain(specimen)) {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.VIOLATES_RESTRICTIONS);
+			throw OpenSpecimenException.userError(
+					StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN, 
+					container.getName(), 
+					specimen.getLabelOrDesc());
 		}
 		
 		if (!container.canSpecimenOccupyPosition(specimen.getId(), pos.getPosOne(), pos.getPosTwo())) {
@@ -386,7 +394,10 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		}
 		
 		if (!container.canContain(childContainer)) {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.VIOLATES_RESTRICTIONS);
+			throw OpenSpecimenException.userError(
+					StorageContainerErrorCode.CANNOT_HOLD_CONTAINER, 
+					container.getName(), 
+					childContainer.getName());
 		}
 		
 		if (!container.canContainerOccupyPosition(childContainer.getId(), pos.getPosOne(), pos.getPosTwo())) {
@@ -396,5 +407,5 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		StorageContainerPosition position = container.createPosition(pos.getPosOne(), pos.getPosTwo());
 		position.setOccupyingContainer(childContainer);
 		return position;
-	}
+	}	
 }

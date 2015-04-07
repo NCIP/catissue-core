@@ -26,7 +26,7 @@ public enum StorageContainerErrorCode implements ErrorCode {
 	
 	PARENT_CONT_NOT_FOUND,
 
-	VIOLATES_RESTRICTIONS,
+	CANNOT_HOLD_CONTAINER,
 	
 	INVALID_NUMBER_POSITION,
 	

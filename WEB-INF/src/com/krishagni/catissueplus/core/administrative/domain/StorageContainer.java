@@ -494,7 +494,7 @@ public class StorageContainer extends BaseEntity {
 	public void validateRestrictions() {
 		StorageContainer parent = getParentContainer();		
 		if (parent != null && !parent.canContain(this)) {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.VIOLATES_RESTRICTIONS);
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.CANNOT_HOLD_CONTAINER, parent.getName(), getName());
 		}
 		
 		for (StorageContainerPosition pos : getOccupiedPositions()) {
@@ -502,7 +502,10 @@ public class StorageContainer extends BaseEntity {
 				pos.getOccupyingContainer().validateRestrictions();
 			} else if (pos.getOccupyingSpecimen() != null) {
 				if (!canContain(pos.getOccupyingSpecimen())) {
-					throw OpenSpecimenException.userError(StorageContainerErrorCode.VIOLATES_RESTRICTIONS);
+					throw OpenSpecimenException.userError(
+							StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN, 
+							getName(), 
+							pos.getOccupyingSpecimen().getLabelOrDesc());
 				}
 			}
 		}
