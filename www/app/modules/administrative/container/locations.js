@@ -1,10 +1,12 @@
 angular.module('os.administrative.container.locations', ['os.administrative.models'])
-  .controller('ContainerLocationsCtrl', function($scope, $state, container, occupancyMap, Util, ContainerUtil) {
+  .controller('ContainerLocationsCtrl', function(
+    $scope, $state, container, occupancyMap, 
+    Util, ContainerUtil, Alerts) {
 
     function init() {
       $scope.container = container;
       $scope.pristineMap = $scope.occupancyMap = occupancyMap;
-      $scope.input = {labels: ''};
+      $scope.input = {labels: '', noFreeLocs: false};
     }
 
     $scope.addContainer = function(posOne, posTwo) {
@@ -23,6 +25,7 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
       var labels = Util.csvToArray($scope.input.labels);
 
       var done = false;
+      $scope.input.noFreeLocs = false;
       for (var y = 1; y <= container.noOfRows; ++y) {
         for (var x = 1; x <= container.noOfColumns; ++x) {
           if (labelIdx >= labels.length) {
@@ -57,11 +60,26 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
           break;
         }
       }
+ 
+      while (labelIdx < labels.length) {
+        if (!!labels[labelIdx] && labels[labelIdx].trim().length > 0) {
+          $scope.input.noFreeLocs = true;
+          Alerts.error("container.no_free_locs");
+          break;
+        }
+
+        labelIdx++;
+      }
 
       $scope.occupancyMap = newMap;
     }
 
     $scope.assignPositions = function() {
+      if ($scope.input.noFreeLocs) {
+        Alerts.error("container.no_free_locs");
+        return;
+      }
+
       var positions = [];
       for (var i = 0; i < $scope.occupancyMap.length; ++i) {
         var pos = $scope.occupancyMap[i];
