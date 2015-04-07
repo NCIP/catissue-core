@@ -11,4 +11,6 @@ public interface SubjectDao extends Dao<Subject> {
 	public List<CpSiteInfo> getCpSiteForOpExecution(UserAccessCriteria uac);
 	
 	public boolean canUserPerformOp(UserAccessCriteria uac);
+	
+	public boolean canUserPerformOps(Long subjectId, String resource, String[] ops);
 }

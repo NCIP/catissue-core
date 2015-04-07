@@ -12,7 +12,6 @@ import com.krishagni.rbac.events.OperationDetail;
 import com.krishagni.rbac.events.PermissionDetail;
 import com.krishagni.rbac.events.ResourceDetail;
 import com.krishagni.rbac.events.RoleDetail;
-import com.krishagni.rbac.events.SubjectDetail;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 import com.krishagni.rbac.events.SubjectRoleOp;
 import com.krishagni.rbac.repository.OperationListCriteria;
@@ -78,6 +77,8 @@ public interface RbacService {
 	// Intern API's can change without notice.
 	//
 	public boolean canUserPerformOp(Long userId, String resource, String operation, Long cpId, Set<Long> sites);
+	
+	public boolean canUserPerformOp(Long userId, String resource, String[] operations);
 	
 	public List<CpSiteInfo> getAccessibleCpSites(Long userId, String resource, String operation);
 }

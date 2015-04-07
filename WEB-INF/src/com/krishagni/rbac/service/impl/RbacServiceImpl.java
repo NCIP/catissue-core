@@ -15,6 +15,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCo
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -75,6 +76,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<ResourceDetail> saveResource(RequestEvent<ResourceDetail> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			ResourceDetail detail = req.getPayload();
 			if (detail == null || StringUtils.isEmpty(detail.getName())) { 
 				return ResponseEvent.userError(RbacErrorCode.RESOURCE_NAME_REQUIRED);
@@ -99,6 +102,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<ResourceDetail> deleteResource(RequestEvent<String> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			String resourceName = req.getPayload();
 			if (StringUtils.isEmpty(resourceName)) {
 				return ResponseEvent.userError(RbacErrorCode.RESOURCE_NAME_REQUIRED);
@@ -131,6 +136,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<OperationDetail> saveOperation(RequestEvent<OperationDetail> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			OperationDetail detail = req.getPayload();
 			String operationName = detail.getName();
 			if (detail == null || StringUtils.isEmpty(operationName)) {
@@ -154,6 +161,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<OperationDetail> deleteOperation(RequestEvent<String> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			String operationName = req.getPayload();
 			if (StringUtils.isEmpty(operationName)) {
 				return ResponseEvent.userError(RbacErrorCode.OPERATION_NAME_REQUIRED);
@@ -186,6 +195,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<PermissionDetail> addPermission(RequestEvent<PermissionDetail> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			PermissionDetail details = req.getPayload();
 			if (details == null) {
 				details = new PermissionDetail();
@@ -230,6 +241,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<PermissionDetail> deletePermission(RequestEvent<PermissionDetail> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			PermissionDetail detail = req.getPayload();
 			if (detail == null) {
 				detail = new PermissionDetail();
@@ -286,6 +299,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<RoleDetail> saveRole(RequestEvent<RoleDetail> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			RoleDetail detail = req.getPayload();
 			Role role = createRole(detail);
 			ensureUniqueName(role, null);
@@ -307,6 +322,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<RoleDetail> updateRole(RequestEvent<RoleDetail> request) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			RoleDetail detail = request.getPayload();
 		
 			Role existing = daoFactory.getRoleDao().getById(detail.getId(), null);
@@ -332,6 +349,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<RoleDetail> deleteRole(RequestEvent<Long> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			Long roleId = req.getPayload();
 			Role role = daoFactory.getRoleDao().getById(roleId, null);
 			if (role == null) {
@@ -370,6 +389,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<SubjectRoleDetail> updateSubjectRole(RequestEvent<SubjectRoleOp> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			SubjectRoleOp subjectRoleOp = req.getPayload();
 			Subject subject = daoFactory.getSubjectDao().getById(subjectRoleOp.getSubjectId(), null);
 			
@@ -423,6 +444,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public  ResponseEvent<GroupDetail> updateGroupRoles(RequestEvent<GroupDetail> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			GroupDetail detail = req.getPayload();
 			if (detail == null || detail.getId() == null) {
 				return ResponseEvent.userError(RbacErrorCode.GROUP_ID_REQUIRED);
@@ -488,7 +511,13 @@ public class RbacServiceImpl implements RbacService {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
+	@Override
+	@PlusTransactional
+	public boolean canUserPerformOp(Long userId, String resource, String[] operations) {
+		return daoFactory.getSubjectDao().canUserPerformOps(userId, resource, operations);
+	}
+	
 	@Override
 	@PlusTransactional
 	public List<CpSiteInfo> getAccessibleCpSites(Long userId, String resource, String operation) {
@@ -718,5 +747,4 @@ public class RbacServiceImpl implements RbacService {
 			throw OpenSpecimenException.userError(RbacErrorCode.DUP_ROLE_NAME);
 		}
 	}
-
 }

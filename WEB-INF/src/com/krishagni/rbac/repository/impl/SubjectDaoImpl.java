@@ -1,6 +1,7 @@
 package com.krishagni.rbac.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -51,7 +52,21 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
 				.setLong("cpId", crit.cpId() == null ? -1L : crit.cpId());
 		
 		return CollectionUtils.isNotEmpty(query.list()); 
-	}	
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean canUserPerformOps(Long subjectId, String resource, String[] ops) {
+		List<Long> rows = sessionFactory.getCurrentSession()
+				.getNamedQuery(CAN_USER_PERFORM_ANY_OP)
+				.setLong("subjectId", subjectId)
+				.setString("resource", resource)
+				.setParameterList("operations", ops)
+				.list();
+		
+		return rows.isEmpty() ? false : (rows.iterator().next() > 0);
+	}
+	
 	
 	/*
 	 * Private methods
@@ -75,4 +90,6 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
 	private static final String CAN_USER_PERFORM_OP_ON_CP = FQN + ".canUserPerformOpOnCp";
 	
 	private static final String CAN_USER_PERFORM_OP_ON_CP_SITE = FQN + ".canUserPerformOpOnCpSite";
+
+	private static final String CAN_USER_PERFORM_ANY_OP = FQN + ".canUserPerformAnyOp";
 }

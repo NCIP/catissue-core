@@ -13,7 +13,7 @@ public enum Resource {
 	
 	USER("User"),
 	
-	DISTRIBUTION_ORDER("DistributionOrder"),
+	ORDER("Order"),
 	
 	DP("DistributionProtocol"),
 	

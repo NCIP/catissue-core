@@ -58,6 +58,15 @@ public class AccessCtrlMgr {
 		}
 	}
 	
+	public boolean canUserPerformOp(Long userId, Resource resource, Operation[] operations) {
+		List<String> ops = new ArrayList<String>();
+		for (Operation operation : operations) {
+			ops.add(operation.getName());
+		}
+		
+		return rbacService.canUserPerformOp(userId, resource.getName(), ops.toArray(new String[0]));
+	}
+	
 	public Set<Site> getAccessibleSites() {
 		User user = AuthUtil.getCurrentUser();		
 		Subject subject = daoFactory.getSubjectDao().getById(user.getId());

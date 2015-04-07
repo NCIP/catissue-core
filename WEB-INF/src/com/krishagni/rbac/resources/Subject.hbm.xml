@@ -51,7 +51,20 @@
         (cp_id = :cpId or cp_id is null) and
         (site_id in (:siteIds) or site_id is null)
     </sql-query>
-    
+
+    <sql-query name="canUserPerformAnyOp">
+      <return-scalar column="count" type="long"/>
+
+      select
+        count(*) as count
+      from
+        rbac_subject_access_view
+      where
+        subject_id = :subjectId and
+        resource = :resource and
+        operation in (:operations)
+    </sql-query>
+
     <sql-query name="getCpSiteForOpExec">
       <return-scalar column="cpId" type="long"/>
       <return-scalar column="siteId" type="long"/>
