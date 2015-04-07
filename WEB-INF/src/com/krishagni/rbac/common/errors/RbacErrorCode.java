@@ -36,7 +36,7 @@ public enum RbacErrorCode implements ErrorCode {
 	
 	ACCESS_DENIED,
 	
-	ADMIN_PRIVILEGES_REQUIRED,
+	ADMIN_RIGHTS_REQUIRED,
 
 	SUBJECT_ROLE_NOT_FOUND;
 	

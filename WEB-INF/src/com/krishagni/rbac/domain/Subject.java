@@ -13,6 +13,8 @@ import com.krishagni.rbac.common.errors.RbacErrorCode;
 public class Subject {
 	private Long id;
 	
+	private String activityStatus;
+	
 	private Set<SubjectRole> roles = new HashSet<SubjectRole>();
 
 	public Long getId() {
@@ -21,6 +23,14 @@ public class Subject {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getActivityStatus() {
+		return activityStatus;
+	}
+
+	public void setActivityStatus(String activityStatus) {
+		this.activityStatus = activityStatus;
 	}
 
 	public Set<SubjectRole> getRoles() {

@@ -9,8 +9,6 @@ public enum Resource {
 	
 	SPECIMEN("Specimen"),
 	
-	ORDER("Order"),
-	
 	STORAGE_CONTAINER("StorageContainer"),
 	
 	USER("User"),

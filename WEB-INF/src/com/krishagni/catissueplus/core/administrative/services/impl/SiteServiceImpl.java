@@ -1,7 +1,11 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -14,12 +18,14 @@ import com.krishagni.catissueplus.core.administrative.repository.SiteListCriteri
 import com.krishagni.catissueplus.core.administrative.services.SiteService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
 public class SiteServiceImpl implements SiteService {
 	private SiteFactory siteFactory;
@@ -38,7 +44,13 @@ public class SiteServiceImpl implements SiteService {
 	@PlusTransactional	
 	public ResponseEvent<List<SiteDetail>> getSites(RequestEvent<SiteListCriteria> req) {
 		try {
-			List<Site> sites = daoFactory.getSiteDao().getSites(req.getPayload());
+			List<Site> sites = null;
+			if (AuthUtil.isAdmin()) {
+				sites = daoFactory.getSiteDao().getSites(req.getPayload());
+			} else {
+				sites = getAccessibleSites(req.getPayload().query());
+			} 
+			
 			return ResponseEvent.response(SiteDetail.from(sites));
 		} catch(OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -53,10 +65,10 @@ public class SiteServiceImpl implements SiteService {
 		SiteQueryCriteria crit = req.getPayload();
 		Site site = null;
 		
-		if (crit.getId() != null) {
-			site = daoFactory.getSiteDao().getById(crit.getId());
-		} else if (crit.getName() != null) {
-			site = daoFactory.getSiteDao().getSiteByName(crit.getName());
+		if (AuthUtil.isAdmin()) {
+			site = getFromDb(crit);
+		} else {
+			site = getFromAccessibleSite(crit);
 		}
 		
 		if (site == null) {
@@ -70,14 +82,15 @@ public class SiteServiceImpl implements SiteService {
 	@PlusTransactional	
 	public ResponseEvent<SiteDetail> createSite(RequestEvent<SiteDetail> req) {
 		try {	
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			Site site = siteFactory.createSite(req.getPayload());
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueConstraint(site, null, ose);
 			ose.checkAndThrow();
 			
-			daoFactory.getSiteDao().saveOrUpdate(site, true);
-			
+			daoFactory.getSiteDao().saveOrUpdate(site, true);			
 			return ResponseEvent.response(SiteDetail.from(site));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -90,8 +103,9 @@ public class SiteServiceImpl implements SiteService {
 	@PlusTransactional		
 	public ResponseEvent<SiteDetail> updateSite(RequestEvent<SiteDetail> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			SiteDetail detail = req.getPayload();
-
 			Site existing = daoFactory.getSiteDao().getById(detail.getId());
 			if (existing == null) {
 				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
@@ -103,9 +117,8 @@ public class SiteServiceImpl implements SiteService {
 			ensureUniqueConstraint(site, existing, ose);
 			ose.checkAndThrow();
 			
-			existing.update(site);
-			daoFactory.getSiteDao().saveOrUpdate(existing);
-			
+			existing.update(site);			
+			daoFactory.getSiteDao().saveOrUpdate(existing);			
 			return ResponseEvent.response(SiteDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -133,6 +146,8 @@ public class SiteServiceImpl implements SiteService {
 	@PlusTransactional	
 	public ResponseEvent<SiteDetail> deleteSite(RequestEvent<DeleteEntityOp> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			DeleteEntityOp deleteOp = req.getPayload();
 			Site existing = daoFactory.getSiteDao().getById(deleteOp.getId());
 			if (existing == null) {
@@ -172,8 +187,8 @@ public class SiteServiceImpl implements SiteService {
 	}
 	
 	private boolean isUniqueCode(Site newSite, Site existingSite) {
-		if (StringUtils.isBlank(newSite.getCode()) ||
-	              existingSite != null && newSite.getCode().equals(existingSite.getCode())) {
+		if (StringUtils.isBlank(newSite.getCode()) || 
+			existingSite != null && newSite.getCode().equals(existingSite.getCode())) {
 			return true;
 		}
 		
@@ -183,5 +198,62 @@ public class SiteServiceImpl implements SiteService {
 		}
 		
 		return true;
+	}
+	
+	private List<Site> getAccessibleSites(String searchTerm) {
+		List<Site> results = new ArrayList<Site>();
+		
+		Set<Site> accessibleSites = AccessCtrlMgr.getInstance().getAccessibleSites();		
+		if (StringUtils.isNotBlank(searchTerm)) {
+			for (Site site : accessibleSites) {
+				if (StringUtils.containsIgnoreCase(site.getName(), searchTerm)) {
+					results.add(site);
+				}
+			}
+		} else {
+			results.addAll(accessibleSites);
+		}
+		
+		Collections.sort(results, new Comparator<Site>() {
+			@Override
+			public int compare(Site site1, Site site2) {
+				return site1.getName().compareTo(site2.getName());
+			}			
+		});
+		
+		return results;
+	}
+	
+	private Site getFromAccessibleSite(SiteQueryCriteria crit) {
+		Set<Site> accessibleSites = AccessCtrlMgr.getInstance().getAccessibleSites();
+				
+
+		Long siteId = crit.getId();
+		String siteName = crit.getName();
+
+		Site result = null;		
+		for (Site site : accessibleSites) {
+			if (siteId != null && siteId.equals(site.getId())) {
+				result = site;
+				break;
+			} else if (StringUtils.isNotBlank(siteName) && siteName.equals(site.getName())) {
+				result = site;
+				break;
+			}
+		}
+		
+		return result;
+	}
+	
+	private Site getFromDb(SiteQueryCriteria crit) {
+		Site result = null;
+		
+		if (crit.getId() != null) {
+			result = daoFactory.getSiteDao().getById(crit.getId());
+		} else if (crit.getName() != null) {
+			result = daoFactory.getSiteDao().getSiteByName(crit.getName());
+		}		
+		
+		return result;
 	}
 }

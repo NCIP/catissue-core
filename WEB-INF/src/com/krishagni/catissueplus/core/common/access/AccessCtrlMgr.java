@@ -10,15 +10,18 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
-import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.AccessDetail;
 import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
+import com.krishagni.rbac.domain.Subject;
+import com.krishagni.rbac.domain.SubjectRole;
 import com.krishagni.rbac.events.CpSiteInfo;
+import com.krishagni.rbac.repository.DaoFactory;
 import com.krishagni.rbac.service.RbacService;
 
 @Configurable
@@ -29,6 +32,9 @@ public class AccessCtrlMgr {
 	
 	@Autowired
 	private DaoFactory daoFactory;
+	
+	@Autowired
+	private UserDao userDao;
 	
 	private static AccessCtrlMgr instance;
 	
@@ -50,6 +56,35 @@ public class AccessCtrlMgr {
 		if (!user.isAdmin()) {
 			throwAdminAccessRequired();
 		}
+	}
+	
+	public Set<Site> getAccessibleSites() {
+		User user = AuthUtil.getCurrentUser();		
+		Subject subject = daoFactory.getSubjectDao().getById(user.getId());
+				
+		Set<Site> results = new HashSet<Site>();
+		boolean accessAllSites = false;
+		for (SubjectRole role : subject.getRoles()) {
+			if (role.getSite() == null) {
+				accessAllSites = true;
+				break;
+			}
+			
+			results.add(role.getSite());
+		}
+		
+		if (accessAllSites) {
+			results.clear();
+
+			//
+			// AuthUtil user is from different session
+			// we need to fetch a fresh copy from DB
+			//
+			user = userDao.getById(user.getId()); 
+			results.addAll(user.getDepartment().getInstitute().getSites());
+		}
+
+		return results;
 	}
 	
 	public void ensureReadPermission(Resource resource, CollectionProtocol cp, Set<Site> sites) {
@@ -135,7 +170,7 @@ public class AccessCtrlMgr {
 	}
 
 	private void throwAdminAccessRequired() {
-		throw OpenSpecimenException.userError(RbacErrorCode.ADMIN_PRIVILEGES_REQUIRED);
+		throw OpenSpecimenException.userError(RbacErrorCode.ADMIN_RIGHTS_REQUIRED);
 	}
 	
 	private void throwAccessDenied() {

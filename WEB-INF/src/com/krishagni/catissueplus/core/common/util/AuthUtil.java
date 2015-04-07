@@ -30,4 +30,8 @@ public class AuthUtil {
 		
 		return null;
 	}
+	
+	public static boolean isAdmin() {
+		return getCurrentUser().isAdmin();
+	}
 }
