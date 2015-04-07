@@ -11,17 +11,21 @@
                   <br><br>
                   #if( $sr.collectionProtocol )  
                     #set( $cp = $sr.collectionProtocol.shortTitle )
+                    #set( $cpText = "collection protocol" )
                   #else
                     #set( $cp = "All current and future")
+                    #set( $cpText = "collection protocols" )
                   #end
                   
                   #if( $sr.site )
                     #set( $site = $sr.site.name)
+                    #set( $siteText = "site" )
                   #else
                     #set( $site = "All sites")
+                    #set( $siteText = "sites" )
                   #end
                   
-                  Your <b>$sr.role.name</b> role on <b>$cp</b> collection protocol(s) for site(s) <b>$site</b> has been removed.
+                  Your <b>$sr.role.name</b> role on <b>$cp</b> $cpText for $siteText <b>$site</b> has been removed.
                   <br><br>
                   Kindly contact administrator in case of any queries.
                 </p>

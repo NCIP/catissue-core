@@ -12,17 +12,21 @@
                   
                   #if( $sr.collectionProtocol )  
                     #set( $cp = $sr.collectionProtocol.shortTitle )
+                    #set( $cpText = "collection protocol" )
                   #else
                     #set( $cp = "All current and future")
+                    #set( $cpText = "collection protocols" )
                   #end
                   
                   #if( $sr.site )
                     #set( $site = $sr.site.name )
+                    #set( $siteText = "site" )
                   #else
                     #set( $site = "All sites" )
+                    #set( $siteText = "sites" )
                   #end
                   
-                  You have been assigned <b> $sr.role.name </b> role on <b> $cp </b> collection protocol(s) for site(s) <b> $site </b>
+                  You have been assigned <b> $sr.role.name </b> role on <b> $cp </b> $cpText for $siteText <b> $site </b>
                   <br><br>
                   A brief description of your role privileges is mentioned below:
                   <br><br>
