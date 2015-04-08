@@ -24,8 +24,19 @@
     http://www.springframework.org/schema/tx 
     http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-  <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
-
+  <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="location" value="classpath:application.properties"/>
+  </bean>  
+  
+  <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+    <property name="jndiName" value="${datasource.jndi}"/>
+  </bean>
+  
+  <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="changeLog" value="classpath:../resources/db/db-os-changelog-master-${datasource.type}.xml" />
+  </bean>
+  
   <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
     <property name="dataSource" ref="dataSource" />
     <property name="configLocation">
@@ -39,19 +50,6 @@
     </property>
   </bean>
 
-  <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-    <property name="location" value="classpath:../../bootstrap.properties"/>
-  </bean>  
-  
-  <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-    <property name="jndiName" value="java:${dsname}"/>
-  </bean>
-  
-  <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
-    <property name="dataSource" ref="dataSource"/>
-    <property name="changeLog" value="./SQL/liquibase_xml/db-os-changelog-master-${deployType}.xml" />
-  </bean>
-  
   <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
     <property name="sessionFactory" ref="sessionFactory" />
   </bean>
@@ -59,6 +57,12 @@
   <bean id="serviceInterceptor" class="com.krishagni.catissueplus.core.common.TransactionalInterceptor" factory-method="aspectOf">
     <property name="transactionManager" ref="transactionManager"/>
   </bean>
+  
+  <bean id="cfgSvc" class="com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+  
+  <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
   
   <bean id="biospecimenDaoFactory" class="com.krishagni.catissueplus.core.biospecimen.repository.impl.DaoFactoryImpl">
     <property name="sessionFactory" ref="sessionFactory"/>
@@ -438,10 +442,6 @@
     <property name="taskExecutor" ref="taskExecutor"/>
     <property name="templateService" ref="templateService"/>
     <property name="resourceBundle" ref="resourceBundle"/>
-  </bean>
-
-  <bean id="cfgSvc" class="com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 
   <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">

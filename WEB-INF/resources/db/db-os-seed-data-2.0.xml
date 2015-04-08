@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+		<changeSet author="vgaikwad" id="sequen1ce" dbms="oracle">
+    <createSequence 
+      sequenceName="RBAC_OPERATION_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="RBAC_RESOURCES_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+<changeSet author="vgaikwad" id="Add operations" dbms="oracle">
+    <sql>
+       insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATION_SEQ.nextval, 'test1');
+       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'test1');
+    </sql>
+  </changeSet>      
+</databaseChangeLog>
