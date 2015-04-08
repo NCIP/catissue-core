@@ -4,11 +4,25 @@
     <ul os-breadcrumbs>
       <li><a ui-sref="cp-list" translate="cp.list">Collection Protocols</a></li>
     </ul>
-    <h3 translate="cp.create_cp_title">Create Collection Protocol</h3>
+
+    <h3>
+      <span ng-if="!cp.id" translate="cp.create_cp_title">Create Collection Protocol</span>
+      <span ng-if="!!cp.id">{{cp.title}}</span>
+    </h3>
   </div>
 
   <div class="container">
     <form name="cpForm" os-form-validator="cpForm" validator="cpFormValidator" class="form-horizontal" novalidate>
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.repositories">Repositories</label>
+        <div class="col-xs-6">
+          <os-select multiple name="repositoryNames" ng-model="cp.repositoryNames" list="sites"
+            class="form-control" placeholder="{{'cp.repositories' | translate}}" required>
+          </os-select>
+          <div os-field-error field="cpForm.repositoryNames"></div>
+        </div>
+      </div>
+
       <div class="form-group">
         <label class="control-label col-xs-3" translate="cp.title">Title</label>
         <div class="col-xs-6">
@@ -43,27 +57,18 @@
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="cp.start_date">Start Date</label>
-        <div class="col-xs-6">
+        <label class="col-xs-3 control-label" translate="cp.date">Date</label>
+        <div class="col-xs-3">
           <input type="text" name="startDate" ng-model="cp.startDate" class="form-control"
-            datepicker-popup="yyyy-MM-dd" show-button-bar="true" is-open="startDt.isOpen" ng-focus="startDt.isOpen=true"
-            placeholder="{{'cp.start_date' | translate}}" required>
-          <div os-field-error field="cpForm.startDate"></div>
+            datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="startDt.isOpen" ng-focus="startDt.isOpen=true"
+            placeholder="{{'cp.start_date' | translate}}">
+           <div os-field-error field="cpForm.startDate"></div>
         </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="cp.consents_waived">Consents Waived</label>
-        <div class="col-xs-6">
-          <label class="radio-inline">
-            <input type="radio" name="consentsWaived" ng-model="cp.consentsWaived" value="true" ng-required="true"> 
-            <span translate="common.yes">Yes</span>
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="consentsWaived" ng-model="cp.consentsWaived" value="false" ng-required="true"> 
-            <span translate="common.no">No</span>
-          </label>
-          <div os-field-error field="cpForm.consentsWaived"></div>
+        <div class="col-xs-3">
+          <input type="text" name="endDate" ng-model="cp.endDate" class="form-control"
+            datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="endDt.isOpen" ng-focus="endDt.isOpen=true"
+            placeholder="{{'cp.end_date' | translate}}">
+           <div os-field-error field="cpForm.endDate"></div>
         </div>
       </div>
 
@@ -131,28 +136,15 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="cp.store_all_aliquots_in_same_container">
-          Store all Aliquots in same Container
-        </label>
-        <div class="col-xs-6">
-          <label class="radio-inline">
-            <input type="radio" name="aliquotsInSameContainer" ng-model="cp.aliquotsInSameContainer" value="true"> 
-            <span translate="common.yes">Yes</span>
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="aliquotsInSameContainer" ng-model="cp.aliquotsInSameContainer" value="false">
-            <span translate="common.no">No</span>
-          </label>
-        </div>
-      </div>
-
       <div class="os-divider"></div>
 
       <div class="form-group">
         <div class="col-xs-offset-3 col-xs-6">
-          <button class="btn btn-primary" os-form-submit="createCp()" translate="common.buttons.create"> Create </button>
-          <button class="btn os-btn-text" ng-click="$window.history.back();" translate="common.buttons.discard">Discard</button>
+          <button class="btn btn-primary" os-form-submit="createCp()"> 
+            <span ng-if="!cp.id" translate="common.buttons.create"> Create </span>
+            <span ng-if="!!cp.id" translate="common.buttons.update"> Update </span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">Discard</button>
         </div>
       </div>
     </form>

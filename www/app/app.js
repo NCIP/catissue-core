@@ -4,14 +4,19 @@ angular.module('openspecimen', [
   'os.common',
   'os.biospecimen',
   'os.administrative',
+  'os.query',
 
   'ngMessages',
+  'ngCookies',
   'ngSanitize', 
+  'ngGrid',
   'ui.router', 
   'ui.bootstrap', 
   'ui.mask', 
   'ui.keypress', 
   'ui.select',
+  'ui.sortable',
+  'ui.autocomplete',
   'mgcrea.ngStrap.popover',
   'angular-loading-bar',
   'pascalprecht.translate'])
@@ -39,15 +44,27 @@ angular.module('openspecimen', [
       .state('signed-in', {
         abstract: true,
         templateUrl: 'modules/common/appmenu.html',
+        resolve: {
+          currentUser: function(User) {
+            return User.getCurrentUser();
+          }
+        },
         controller: 'SignedInCtrl'
+      })
+      .state('home', {
+        url: '/home',
+        templateUrl: 'modules/common/home.html',
+        controller: function() {
+        },
+        parent: 'signed-in'
       });
 
     $urlRouterProvider.otherwise('/');
 
     $httpProvider.interceptors.push('httpRespInterceptor');
 
-    ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 9090;
+    /*ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
+    ApiUrlsProvider.port = 9090;*/
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
@@ -115,6 +132,8 @@ angular.module('openspecimen', [
       },
 
       initialize: function(token) {
+        $http.defaults.headers.common['X-OS-API-CLIENT'] = "webui";
+
         if (!token) {
           token = $window.localStorage['osAuthToken'];
           if (!token) {
@@ -171,15 +190,16 @@ angular.module('openspecimen', [
       };
     }
   })
-  .run(function($rootScope, $window, ApiUtil) {
+  .run(function($rootScope, $window, $cookieStore, ApiUtil) {
     if ($window.localStorage['osAuthToken']) {
+      $cookieStore.put('osAuthToken', $window.localStorage['osAuthToken']);
       $rootScope.loggedIn = true;
     }
 
     ApiUtil.initialize();
 
     $rootScope.$on('$stateChangeSuccess', 
-      function(event, toState, toParams, fromState, fromParams) { 
+      function(event, toState, toParams, fromState, fromParams) {
         $rootScope.state = toState;
       });
 
@@ -189,7 +209,9 @@ angular.module('openspecimen', [
 
     $rootScope.global = {
       dateFmt: 'MMM dd, yyyy',
+      queryDateFmt: {format: 'mm-dd-yyyy'},
       timeFmt: 'hh:mm',
-      dateTimeFmt: 'MMM dd, yyyy hh:mm'
+      dateTimeFmt: 'MMM dd, yyyy hh:mm',
+      filterWaitInterval: 500
     };
   });

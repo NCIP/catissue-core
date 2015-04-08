@@ -13,7 +13,7 @@
         <strong class="key key-sm" translate="cp.pi">Principal Investigator</strong>
         <os-inline-edit editor="piEditor" name="pi" class="value value-md" value="cp.principalInvestigator">
           <span ng-if="piEditor.isDisplayMode()">{{piEditor.viewValue.lastName}}, {{piEditor.viewValue.firstName}}</span>
-          <os-users ng-model="piEditor.editValue"></os-users>
+          <os-users ng-if="piEditor.isEditMode()" ng-model="piEditor.editValue"></os-users>
         </os-inline-edit>
       </li>
 
@@ -27,24 +27,11 @@
       </li>
 
       <li class="item">
-        <strong class="key key-sm" translate="cp.consents_waived">Consents Waived:</strong>
-        <os-inline-edit editor="cwEditor" name="consentsWaived" class="value value-md" value="cp.consentsWaived">
-          <div ng-if="cwEditor.isDisplayMode()" ng-switch on="cwEditor.viewValue">
-            <span ng-switch-when="false" translate="common.no"></span>
-            <span ng-switch-when="true" translate="common.yes"></span>
-            <span ng-switch-default translate="common.not_specified"></span>
-          </div>
-
-          <div class="form-control" ng-if="cwEditor.isEditMode()">
-            <label class="radio-inline">
-              <input type="radio" name="consentsWaivedGrp" ng-model="cwEditor.editValue" value="true" ng-required="true"> 
-              <span translate="common.yes">Yes</span>
-            </label>
-            <label class="radio-inline">
-              <input type="radio" name="consentsWaivedGrp" ng-model="cwEditor.editValue" value="false" ng-required="true"> 
-              <span translate="common.no">No</span>
-            </label>
-          </div>
+        <strong class="key key-sm" translate="cp.end_date">End Date:</strong>
+        <os-inline-edit editor="edEditor" name="endDate" class="value value-md" value="cp.endDate">
+          <span ng-if="edEditor.isDisplayMode()">{{edEditor.viewValue | date: 'MMM dd, yyyy' | osNoValue}}</span>
+          <input ng-if="edEditor.isEditMode()" class="form-control" type="text" ng-model="edEditor.editValue"
+            datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true">
         </os-inline-edit>
       </li>
 
@@ -63,10 +50,20 @@
           <input ng-if="irbEditor.isEditMode()" type="text" ng-model="irbEditor.editValue" class="form-control" >
         </os-inline-edit>
       </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="cp.repositories">Repositories</strong>
+        <os-inline-edit editor="repoEditor" name="repositoryNames" class="value value-md" value="cp.repositoryNames">
+          <span ng-if="repoEditor.isDisplayMode()">{{repoEditor.viewValue.join(', ') | osNoValue}}</span>
+          <os-select ng-if="repoEditor.isEditMode()" multiple name="repositoryNames" 
+            ng-model="cp.repositoryNames" list="sites" class="form-control">
+          </os-select>
+        </os-inline-edit>
+      </li>
     </ul>
   </div>
 
-  <div class="col-xs-4">
+  <!-- div class="col-xs-4">
     <h3 class="os-sub-section-title"> Recent Activity </h3>
     <ul class="os-activity-list">
       <li class="os-activity">
@@ -74,5 +71,5 @@
         <div class="info"><span>User 1 - an hour ago</span></div>
       </li>
     </ul>
-  </div>
+  </div -->
 </div>

@@ -3,18 +3,27 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.envers.Audited;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
+import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
+
 
 @Audited
 public class CollectionProtocol extends BaseEntity {
+	private static final String ENTITY_NAME = "collection_protocol";
+	
 	private String title;
 
 	private String shortTitle;
@@ -43,17 +52,21 @@ public class CollectionProtocol extends BaseEntity {
 	
 	private String unsignedConsentDocumentURL;
 	
-	private Boolean aliquotInSameContainer;
-	
-	private Boolean consentsWaived;
-	
 	private Set<ConsentTier> consentTier = new HashSet<ConsentTier>();
 	
 	private Set<User> coordinators = new HashSet<User>();
 	
-	private Set<Site> sites = new HashSet<Site>();
+	private Set<Site> repositories = new HashSet<Site>();
 	
 	private Set<CollectionProtocolEvent> collectionProtocolEvents = new HashSet<CollectionProtocolEvent>();
+
+	private Set<StorageContainer> storageContainers = new HashSet<StorageContainer>();
+	
+	private Set<CollectionProtocolRegistration> collectionProtocolRegistrations = new HashSet<CollectionProtocolRegistration>();
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
 	
 	public String getTitle() {
 		return title;
@@ -167,22 +180,6 @@ public class CollectionProtocol extends BaseEntity {
 		this.unsignedConsentDocumentURL = unsignedConsentDocumentURL;
 	}
 
-	public Boolean getAliquotInSameContainer() {
-		return aliquotInSameContainer;
-	}
-
-	public void setAliquotInSameContainer(Boolean aliquotInSameContainer) {
-		this.aliquotInSameContainer = aliquotInSameContainer;
-	}
-
-	public Boolean getConsentsWaived() {
-		return consentsWaived;
-	}
-
-	public void setConsentsWaived(Boolean consentsWaived) {
-		this.consentsWaived = consentsWaived;
-	}
-
 	public Set<ConsentTier> getConsentTier() {
 		return consentTier;
 	}
@@ -198,13 +195,13 @@ public class CollectionProtocol extends BaseEntity {
 	public void setCoordinators(Set<User> coordinators) {
 		this.coordinators = coordinators;
 	}
-
-	public Set<Site> getSites() {
-		return sites;
+	
+	public Set<Site> getRepositories() {
+		return repositories;
 	}
 
-	public void setSites(Set<Site> sites) {
-		this.sites = sites;
+	public void setRepositories(Set<Site> repositories) {
+		this.repositories = repositories;
 	}
 
 	public Set<CollectionProtocolEvent> getCollectionProtocolEvents() {
@@ -215,12 +212,49 @@ public class CollectionProtocol extends BaseEntity {
 		this.collectionProtocolEvents = collectionProtocolEvents;
 	}
 
+	public Set<StorageContainer> getStorageContainers() {
+		return storageContainers;
+	}
+
+	public void setStorageContainers(Set<StorageContainer> storageContainers) {
+		this.storageContainers = storageContainers;
+	}
+
+	public Set<CollectionProtocolRegistration> getCollectionProtocolRegistrations() {
+		return collectionProtocolRegistrations;
+	}
+
+	public void setCollectionProtocolRegistrations(
+			Set<CollectionProtocolRegistration> collectionProtocolRegistrations) {
+		this.collectionProtocolRegistrations = collectionProtocolRegistrations;
+	}
+
 	// new	
 	public ConsentTier addConsentTier(ConsentTier ct) {
 		ct.setId(null);
 		ct.setCollectionProtocol(this);
 		consentTier.add(ct);
 		return ct;
+	}
+	
+	public void update(CollectionProtocol cp) {
+		this.setTitle(cp.getTitle()); 
+		this.setShortTitle(cp.getShortTitle()); 
+		this.setStartDate(cp.getStartDate());
+		this.setEndDate(cp.getEndDate());
+		this.setActivityStatus(cp.getActivityStatus());
+		this.setPrincipalInvestigator(cp.getPrincipalInvestigator());
+		this.setIrbIdentifier(cp.getIrbIdentifier());
+		this.setEnrollment(cp.getEnrollment());
+		this.setDescriptionURL(cp.getDescriptionURL());
+		this.setSpecimenLabelFormat(cp.getSpecimenLabelFormat());
+		this.setDerivativeLabelFormat(cp.getDerivativeLabelFormat());
+		this.setAliquotLabelFormat(cp.getAliquotLabelFormat());
+		this.setPpidFormat(cp.getPpidFormat());
+		this.setUnsignedConsentDocumentURL(cp.getUnsignedConsentDocumentURL());
+		
+		CollectionUpdater.update(this.repositories, cp.getRepositories());
+		CollectionUpdater.update(this.coordinators, cp.getCoordinators());
 	}
 	
 	public ConsentTier updateConsentTier(ConsentTier ct) {
@@ -290,6 +324,26 @@ public class CollectionProtocol extends BaseEntity {
 		
 		return null;
 	}
+	
+	//TODO: need to check few more dependencies like user role 
+	public List<DependentEntityDetail> getDependentEntities() {
+		return DependentEntityDetail
+				.listBuilder()
+				.add(CollectionProtocolRegistration.getEntityName(), getCollectionProtocolRegistrations().size())
+				.add(StorageContainer.getEntityName(), getStorageContainers().size())
+				.build();
+	}
+	
+	public void delete() {
+		List<DependentEntityDetail> dependentEntities = getDependentEntities();
+		if (!dependentEntities.isEmpty()) {
+			throw OpenSpecimenException.userError(CpeErrorCode.REF_ENTITY_FOUND);
+		}
+
+		setTitle(Utility.appendTimestamp(getTitle()));
+		setShortTitle(Utility.appendTimestamp(getShortTitle()));
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+	}
 
 	private ConsentTier getConsentTierById(Long ctId) {
 		for (ConsentTier ct : consentTier) {
@@ -300,4 +354,5 @@ public class CollectionProtocol extends BaseEntity {
 		
 		return null;
 	}
+	
 }

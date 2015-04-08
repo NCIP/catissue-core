@@ -10,9 +10,9 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 public class StorageContainerDetail extends StorageContainerSummary {
 	private Double temperature;
 	
-	private String dimensionOneLabelingScheme;
+	private String columnLabelingScheme;
 	
-	private String dimensionTwoLabelingScheme;
+	private String rowLabelingScheme;
 	
 	private String comments;
 	
@@ -40,20 +40,20 @@ public class StorageContainerDetail extends StorageContainerSummary {
 		this.temperature = temperature;
 	}
 
-	public String getDimensionOneLabelingScheme() {
-		return dimensionOneLabelingScheme;
+	public String getColumnLabelingScheme() {
+		return columnLabelingScheme;
 	}
 
-	public void setDimensionOneLabelingScheme(String dimensionOneLabelingScheme) {
-		this.dimensionOneLabelingScheme = dimensionOneLabelingScheme;
+	public void setColumnLabelingScheme(String columnLabelingScheme) {
+		this.columnLabelingScheme = columnLabelingScheme;
 	}
 
-	public String getDimensionTwoLabelingScheme() {
-		return dimensionTwoLabelingScheme;
+	public String getRowLabelingScheme() {
+		return rowLabelingScheme;
 	}
 
-	public void setDimensionTwoLabelingScheme(String dimensionTwoLabelingScheme) {
-		this.dimensionTwoLabelingScheme = dimensionTwoLabelingScheme;
+	public void setRowLabelingScheme(String rowLabelingScheme) {
+		this.rowLabelingScheme = rowLabelingScheme;
 	}
 
 	public String getComments() {
@@ -134,8 +134,8 @@ public class StorageContainerDetail extends StorageContainerSummary {
 		StorageContainerDetail.transform(container, result);
 		
 		result.setTemperature(container.getTemperature());
-		result.setDimensionOneLabelingScheme(container.getDimensionOneLabelingScheme());
-		result.setDimensionTwoLabelingScheme(container.getDimensionTwoLabelingScheme());
+		result.setColumnLabelingScheme(container.getColumnLabelingScheme());
+		result.setRowLabelingScheme(container.getRowLabelingScheme());
 		result.setComments(container.getComments());
 		result.setAllowedSpecimenClasses(new HashSet<String>(container.getAllowedSpecimenClasses()));
 		result.setCalcAllowedSpecimenClasses(new HashSet<String>(container.getCompAllowedSpecimenClasses()));		

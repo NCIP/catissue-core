@@ -184,7 +184,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			if (labels == null || labels.isEmpty()) {
 				specimens = new ArrayList<Specimen>();
 			} else {
-				specimens = daoFactory.getSpecimenDao().getByLabels(labels);
+				specimens = daoFactory.getSpecimenDao().getSpecimensByLabels(labels);
 			}
 			
 			switch (opDetail.getOp()) {

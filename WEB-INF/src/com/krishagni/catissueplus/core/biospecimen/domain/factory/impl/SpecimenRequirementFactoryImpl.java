@@ -9,6 +9,7 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenRequirementFactory;
@@ -52,7 +53,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	
 		requirement.setId(detail.getId());
 		requirement.setName(detail.getName());
-		requirement.setLineage("New"); // TODO:
+		requirement.setLineage(Specimen.NEW);
 		
 		setLabelFormat(detail, requirement, ose);
 		setSpecimenClass(detail, requirement, ose);
@@ -134,9 +135,8 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		
 		if (req.getQtyPerAliquot() == null || req.getQtyPerAliquot() <= 0L) {
 			ose.addError(SrErrorCode.INVALID_QTY);
-			throw ose;
 		}
-						
+		
 		Double total = req.getNoOfAliquots() * req.getQtyPerAliquot();
 		if (total > parent.getQtyAfterAliquotsUse()) {
 			ose.addError(SrErrorCode.INSUFFICIENT_QTY);
@@ -145,7 +145,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		List<SpecimenRequirement> aliquots = new ArrayList<SpecimenRequirement>();
 		for (int i = 0; i < req.getNoOfAliquots(); ++i) {
 			SpecimenRequirement aliquot = parent.copy();
-			aliquot.setLineage("Aliquot"); // TODO: have an enum			
+			aliquot.setLineage(Specimen.ALIQUOT); 			
 			setStorageType(req.getStorageType(), aliquot, ose);
 			
 			if (StringUtils.isNotBlank(req.getLabelFmt())) {
@@ -158,7 +158,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			
 			ose.checkAndThrow();
 		}
-				
+
 		return aliquots;
 	}
 	
@@ -208,7 +208,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 	
 	private void setPathologyStatus(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		String pathologyStatus = ensureNotEmpty(detail.getPathologyStatus(), SrErrorCode.PATHOLOGY_STATUS_REQUIRED, ose);
+		String pathologyStatus = ensureNotEmpty(detail.getPathology(), SrErrorCode.PATHOLOGY_STATUS_REQUIRED, ose);
 		sr.setPathologyStatus(pathologyStatus);
 		// TODO: check for valid pathology status
 	}
@@ -246,8 +246,8 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			return;
 		}
 		
-		if (concentration == null || concentration < 0) { 
-			ose.addError(SrErrorCode.CONCENTRATION_REQUIRED);
+		if (concentration != null && concentration < 0) { 
+			ose.addError(SrErrorCode.CONCENTRATION_MUST_BE_POSITIVE);
 			return;
 		}
 		
@@ -255,7 +255,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 	
 	private void setCollector(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		sr.setCollector(ensureValidUser(detail.getCollector(), SrErrorCode.COLLECTOR_REQUIRED, SrErrorCode.COLLECTOR_NOT_FOUND, ose));
+		sr.setCollector(ensureValidUser(detail.getCollector(), SrErrorCode.COLLECTOR_NOT_FOUND, ose));
 	}
 
 	private void setCollectionProsedure(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
@@ -271,7 +271,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 
 	private void setReceiver(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		sr.setReceiver(ensureValidUser(detail.getReceiver(), SrErrorCode.RECEIVER_REQUIRED, SrErrorCode.RECEIVER_NOT_FOUND, ose));
+		sr.setReceiver(ensureValidUser(detail.getReceiver(), SrErrorCode.RECEIVER_NOT_FOUND, ose));
 	}
 
 	private void setCpe(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
@@ -298,9 +298,8 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		return value;
 	}
 	
-	private User ensureValidUser(UserSummary userSummary, ErrorCode required, ErrorCode notFound, OpenSpecimenException ose) {
+	private User ensureValidUser(UserSummary userSummary, ErrorCode notFound, OpenSpecimenException ose) {
 		if (userSummary == null) {
-			ose.addError(required);
 			return null;
 		}
 		
@@ -309,9 +308,6 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			user = daoFactory.getUserDao().getById(userSummary.getId());
 		} else if (userSummary.getLoginName() != null && userSummary.getDomain() != null) {
 			user = daoFactory.getUserDao().getUser(userSummary.getLoginName(), userSummary.getDomain());
-		} else {
-			ose.addError(required);
-			return null;
 		}
 		
 		if (user == null) {

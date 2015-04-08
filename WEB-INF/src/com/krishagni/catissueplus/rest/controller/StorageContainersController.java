@@ -1,8 +1,12 @@
 package com.krishagni.catissueplus.rest.controller;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.events.AssignPositionsOp;
+import com.krishagni.catissueplus.core.administrative.events.ContainerMapExportDetail;
 import com.krishagni.catissueplus.core.administrative.events.ContainerQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
@@ -22,9 +28,11 @@ import com.krishagni.catissueplus.core.administrative.events.StorageContainerPos
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
+import edu.common.dynamicextensions.nutility.IoUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -146,17 +154,6 @@ public class StorageContainersController {
 		return getContainer(new ContainerQueryCriteria(name));
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value="{id}/occupied-positions")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public List<StorageContainerPositionDetail> getStorageContainerOccupiedPositions(@PathVariable("id") Long containerId) {
-		RequestEvent<Long> req = new RequestEvent<Long>(getSession(), containerId);
-		ResponseEvent<List<StorageContainerPositionDetail>> resp = storageContainerSvc.getOccupiedPositions(req);
-		resp.throwErrorIfUnsuccessful();
-		
-		return resp.getPayload();
-	}
-		
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -182,6 +179,86 @@ public class StorageContainersController {
 		
 		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(getSession(), detail);
 		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.updateStorageContainer(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="{id}/occupied-positions")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<StorageContainerPositionDetail> getStorageContainerOccupiedPositions(@PathVariable("id") Long containerId) {
+		RequestEvent<Long> req = new RequestEvent<Long>(getSession(), containerId);
+		ResponseEvent<List<StorageContainerPositionDetail>> resp = storageContainerSvc.getOccupiedPositions(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value="{id}/export-map")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public void exportContainerMap(@PathVariable("id") Long id, HttpServletResponse response) {
+		ContainerQueryCriteria crit = new ContainerQueryCriteria(id);
+		RequestEvent<ContainerQueryCriteria> req = new RequestEvent<ContainerQueryCriteria>(crit);
+		ResponseEvent<ContainerMapExportDetail> resp = storageContainerSvc.exportMap(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		
+		ContainerMapExportDetail detail = resp.getPayload();		
+		response.setContentType("application/csv");
+		response.setHeader("Content-Disposition", "attachment;filename=" + detail.getName() + ".csv");
+			
+		InputStream in = null;
+		try {
+			in = new FileInputStream(detail.getFile());
+			IoUtil.copy(in, response.getOutputStream());
+		} catch (IOException e) {
+			throw new RuntimeException("Error sending file", e);
+		} finally {
+			IoUtil.close(in);
+			detail.getFile().delete();
+		}				
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value="{id}/occupied-positions")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<StorageContainerPositionDetail> assignPositions(
+			@PathVariable("id")
+			Long containerId,
+			
+			@RequestBody
+			List<StorageContainerPositionDetail> positions) {
+		
+		AssignPositionsOp detail = new AssignPositionsOp();
+		detail.setContainerId(containerId);
+		detail.setPositions(positions);
+		
+		RequestEvent<AssignPositionsOp> req = new RequestEvent<AssignPositionsOp>(detail);
+		ResponseEvent<List<StorageContainerPositionDetail>> resp = storageContainerSvc.assignPositions(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();		
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependent-entities")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<DependentEntityDetail> getDependentEntities(@PathVariable Long id) {
+		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		ResponseEvent<List<DependentEntityDetail>> resp = storageContainerSvc.getDependentEntities(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public StorageContainerDetail deleteStorageContainer(@PathVariable Long id) {
+		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.deleteStorageContainer(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

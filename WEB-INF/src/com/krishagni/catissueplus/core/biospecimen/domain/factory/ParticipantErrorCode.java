@@ -28,6 +28,8 @@ public enum ParticipantErrorCode implements ErrorCode {
 	
 	DUP_MRN,
 	
+	EMPI_REQUIRED,
+	
 	REF_ENTITY_FOUND;
 
 	public String code() {

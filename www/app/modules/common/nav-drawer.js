@@ -29,10 +29,13 @@ angular.module('openspecimen')
         element.addClass('os-nav-drawer')
           .prepend(getNavHeader());
 
-        element.after(angular.element('<div/>').addClass('os-nav-drawer-overlay'));
+        var overlay = angular.element('<div/>').addClass('os-nav-drawer-overlay');
+        element.after(overlay);
+        overlay.on('click', function() {
+          osNavDrawerSvc.toggle();
+        });
 
         element.removeAttr('os-nav-drawer');
-
         osNavDrawerSvc.setDrawer(element);
         $compile(element)(scope);
       }

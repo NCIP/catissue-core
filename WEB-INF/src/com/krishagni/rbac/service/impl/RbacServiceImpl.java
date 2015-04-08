@@ -7,10 +7,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Session;
-import org.springframework.util.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
+import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -25,7 +32,9 @@ import com.krishagni.rbac.domain.ResourceInstanceOp;
 import com.krishagni.rbac.domain.Role;
 import com.krishagni.rbac.domain.RoleAccessControl;
 import com.krishagni.rbac.domain.Subject;
+import com.krishagni.rbac.domain.SubjectAccess;
 import com.krishagni.rbac.domain.SubjectRole;
+import com.krishagni.rbac.events.CpSiteInfo;
 import com.krishagni.rbac.events.GroupDetail;
 import com.krishagni.rbac.events.GroupRoleDetail;
 import com.krishagni.rbac.events.OperationDetail;
@@ -34,9 +43,9 @@ import com.krishagni.rbac.events.ResourceDetail;
 import com.krishagni.rbac.events.ResourceInstanceOpDetails;
 import com.krishagni.rbac.events.RoleAccessControlDetails;
 import com.krishagni.rbac.events.RoleDetail;
-import com.krishagni.rbac.events.SubjectDetail;
 import com.krishagni.rbac.events.SubjectRoleDetail;
-import com.krishagni.rbac.events.UserAccessInformation;
+import com.krishagni.rbac.events.SubjectRoleOp;
+import com.krishagni.rbac.events.UserAccessCriteria;
 import com.krishagni.rbac.repository.DaoFactory;
 import com.krishagni.rbac.repository.OperationListCriteria;
 import com.krishagni.rbac.repository.PermissionListCriteria;
@@ -47,12 +56,18 @@ import com.krishagni.rbac.service.RbacService;
 public class RbacServiceImpl implements RbacService {
 	private DaoFactory daoFactory;
 	
+	private UserDao userDao;
+	
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
 	}
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+	
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
 	}
 
 	@Override
@@ -70,6 +85,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<ResourceDetail> saveResource(RequestEvent<ResourceDetail> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			ResourceDetail detail = req.getPayload();
 			if (detail == null || StringUtils.isEmpty(detail.getName())) { 
 				return ResponseEvent.userError(RbacErrorCode.RESOURCE_NAME_REQUIRED);
@@ -94,6 +111,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<ResourceDetail> deleteResource(RequestEvent<String> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			String resourceName = req.getPayload();
 			if (StringUtils.isEmpty(resourceName)) {
 				return ResponseEvent.userError(RbacErrorCode.RESOURCE_NAME_REQUIRED);
@@ -126,6 +145,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<OperationDetail> saveOperation(RequestEvent<OperationDetail> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			OperationDetail detail = req.getPayload();
 			String operationName = detail.getName();
 			if (detail == null || StringUtils.isEmpty(operationName)) {
@@ -149,6 +170,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<OperationDetail> deleteOperation(RequestEvent<String> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			String operationName = req.getPayload();
 			if (StringUtils.isEmpty(operationName)) {
 				return ResponseEvent.userError(RbacErrorCode.OPERATION_NAME_REQUIRED);
@@ -181,6 +204,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<PermissionDetail> addPermission(RequestEvent<PermissionDetail> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			PermissionDetail details = req.getPayload();
 			if (details == null) {
 				details = new PermissionDetail();
@@ -225,6 +250,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<PermissionDetail> deletePermission(RequestEvent<PermissionDetail> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			PermissionDetail detail = req.getPayload();
 			if (detail == null) {
 				detail = new PermissionDetail();
@@ -261,39 +288,38 @@ public class RbacServiceImpl implements RbacService {
 			return ResponseEvent.serverError(e);
 		}
 	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<RoleDetail> getRole(RequestEvent<Long> req) {
+		try {
+			Role role = daoFactory.getRoleDao().getById(req.getPayload(), null);
+			if (role == null) {
+				return ResponseEvent.userError(RbacErrorCode.ROLE_NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(RoleDetail.from(role));
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
 		
 	@Override
 	@PlusTransactional
 	public ResponseEvent<RoleDetail> saveRole(RequestEvent<RoleDetail> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			RoleDetail detail = req.getPayload();
-
-			String roleName = detail == null ? null : detail.getName();
-			if (StringUtils.isEmpty(roleName)) {
-				return ResponseEvent.userError(RbacErrorCode.ROLE_NAME_REQUIRED); 
+			Role role = createRole(detail);
+			ensureUniqueName(role, null);
+			checkCycles(role);
+			for (Role childRole : role.getChildRoles()) {
+				childRole.setParentRole(role);
 			}
 			
-			Role newRole = createRole(detail);
-			checkCycles(newRole);
-			
-			Role existing = daoFactory.getRoleDao().getRoleByName(roleName);						
-			if (existing == null) {
-				existing = newRole;
-				
-				for (Role childRole : existing.getChildRoles()) {
-					childRole.setParentRole(existing);
-				}
-			} else {
-				//TODO - find a solution about this hack
-				AbstractDao<?> dao = (AbstractDao<?>)daoFactory.getGroupDao();
-				Session session = dao.getSessionFactory().getCurrentSession();
-				
-				updateOrphanRoles(existing,newRole);
-				existing.updateRole(newRole, session);
-			}
-			
-			daoFactory.getRoleDao().saveOrUpdate(existing);
-			return ResponseEvent.response(RoleDetail.from(existing));
+			daoFactory.getRoleDao().saveOrUpdate(role);
+			return ResponseEvent.response(RoleDetail.from(role));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -303,14 +329,39 @@ public class RbacServiceImpl implements RbacService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<RoleDetail> deleteRole(RequestEvent<String> req) {
+	public ResponseEvent<RoleDetail> updateRole(RequestEvent<RoleDetail> request) {
 		try {
-			String roleName = req.getPayload();
-			if (StringUtils.isEmpty(roleName)) {
-				return ResponseEvent.userError(RbacErrorCode.ROLE_NAME_REQUIRED);
-			}
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 			
-			Role role = daoFactory.getRoleDao().getRoleByName(roleName);
+			RoleDetail detail = request.getPayload();
+		
+			Role existing = daoFactory.getRoleDao().getById(detail.getId(), null);
+			if (existing == null) {
+				return ResponseEvent.userError(RbacErrorCode.ROLE_NOT_FOUND);
+			}
+		
+			Role newRole = createRole(detail);
+			ensureUniqueName(newRole, existing);
+			checkCycles(newRole);
+				
+			existing.updateRole(newRole);
+			daoFactory.getRoleDao().saveOrUpdate(existing);
+			return ResponseEvent.response(RoleDetail.from(existing));
+		} catch(OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch(Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<RoleDetail> deleteRole(RequestEvent<Long> req) {
+		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
+			Long roleId = req.getPayload();
+			Role role = daoFactory.getRoleDao().getById(roleId, null);
 			if (role == null) {
 				return ResponseEvent.userError(RbacErrorCode.ROLE_NOT_FOUND);
 			}
@@ -332,8 +383,12 @@ public class RbacServiceImpl implements RbacService {
 				return ResponseEvent.userError(RbacErrorCode.SUBJECT_ID_REQUIRED);
 			}
 			
-			Subject subject = daoFactory.getSubjectDao().getSubject(subjectId);
-			return ResponseEvent.response(SubjectRoleDetail.from(subject.getSubjectRoles()));
+			Subject subject = daoFactory.getSubjectDao().getById(subjectId, null);
+			if (subject == null) {
+				return ResponseEvent.userError(RbacErrorCode.SUBJECT_NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(SubjectRoleDetail.from(subject.getRoles()));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -341,87 +396,47 @@ public class RbacServiceImpl implements RbacService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<SubjectDetail> updateSubjectRoles(RequestEvent<SubjectDetail> req) {
+	public ResponseEvent<SubjectRoleDetail> updateSubjectRole(RequestEvent<SubjectRoleOp> req) {
 		try {
-			SubjectDetail detail = req.getPayload();
-			Long subjectId = detail == null ? null : detail.getId();
-			if (subjectId == null) {
-				return ResponseEvent.userError(RbacErrorCode.SUBJECT_ID_REQUIRED);
-			}
-			
-			List<SubjectRoleDetail> roles = detail.getRoles();
-			if (roles == null) {
-				roles = new ArrayList<SubjectRoleDetail>();
-			}
-
-			Subject subject = daoFactory.getSubjectDao().getSubject(subjectId);
+			SubjectRoleOp subjectRoleOp = req.getPayload();
+			Subject subject = daoFactory.getSubjectDao().getById(subjectRoleOp.getSubjectId(), null);
 			if (subject == null) {
 				return ResponseEvent.userError(RbacErrorCode.SUBJECT_NOT_FOUND);
 			}
 			
-			List<SubjectRole> subjectRoles = new ArrayList<SubjectRole>();
-			for (SubjectRoleDetail sd : roles) {
-				SubjectRole sr = createSubjectRole(sd);
-				sr.setSubject(subject);
+			User user = userDao.getById(subject.getId());
+			AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
+						
+			SubjectRole resp = null;
+			SubjectRole sr = null;
+			switch (subjectRoleOp.getOp()) {
+				case ADD:
+					sr = createSubjectRole(subjectRoleOp.getSubjectRole());
+					resp = subject.addRole(sr);
+					break;
 				
-				subjectRoles.add(sr);
+				case UPDATE:
+					sr = createSubjectRole(subjectRoleOp.getSubjectRole());
+					resp = subject.updateRole(sr);
+					break;
+				
+				case REMOVE:
+					resp = subject.removeSubjectRole(subjectRoleOp.getSubjectRole().getId());
+					break;
 			}
 			
-			//TODO - find a solution about this hack
-			AbstractDao<?> dao = (AbstractDao<?>)daoFactory.getGroupDao();
-			Session session = dao.getSessionFactory().getCurrentSession();
-
-			subject.updateRoles(subjectRoles,session);			
-			daoFactory.getSubjectDao().saveOrUpdate(subject);
-			return ResponseEvent.response(SubjectDetail.from(subject));
+			if (resp != null) {
+				daoFactory.getSubjectDao().saveOrUpdate(subject, true);
+			}
+			
+			return ResponseEvent.response(SubjectRoleDetail.from(resp));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
-
-	@Override
-	@PlusTransactional
-	public ResponseEvent<UserAccessInformation> checkAccess(RequestEvent<UserAccessInformation> req) {
-		try {			
-			UserAccessInformation info = req.getPayload();
-			Long subjectId = info.subjectId();
-			Long groupId = info.groupId();			
-			Long dsoId = info.dsoId();
-			String resourceName = info.resourceName();
-			String operationName = info.operationName();
-			Long resourceInstanceId = info.resourceInstanceId() == null ? -1 : info.resourceInstanceId();
-			
-			if ((subjectId == null && groupId == null) || 
-				StringUtils.isEmpty(resourceName) ||
-				StringUtils.isEmpty(operationName) ||
-				dsoId == null) {
-				return ResponseEvent.userError(RbacErrorCode.INSUFFICIENT_USER_DETAILS);
-			}
-			
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("subjectId", subjectId);
-			params.put("groupId", groupId);
-			params.put("dsoId", dsoId);
-			params.put("resource", resourceName);
-			params.put("operation", operationName);
-			params.put("resourceInstanceId", resourceInstanceId);
-			
-			if (daoFactory.getSubjectDao().canUserAccess(params)) {
-				return ResponseEvent.response(info.canUserAccess(true));
-			}
-			
-			if (groupId != null && daoFactory.getGroupDao().canUserAccess(params)) {
-				return ResponseEvent.response(info.canUserAccess(true));
-			}
-			
-			return ResponseEvent.response(info.canUserAccess(false));
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
-	}
-
+	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<GroupRoleDetail>> getGroupRoles(RequestEvent<Long> req) {
@@ -442,6 +457,8 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public  ResponseEvent<GroupDetail> updateGroupRoles(RequestEvent<GroupDetail> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			GroupDetail detail = req.getPayload();
 			if (detail == null || detail.getId() == null) {
 				return ResponseEvent.userError(RbacErrorCode.GROUP_ID_REQUIRED);
@@ -478,22 +495,81 @@ public class RbacServiceImpl implements RbacService {
 			return ResponseEvent.serverError(e);
 		}
 	}
+	
+	//
+	// Internal Api's can change without notice
+	//
+	
+	@Override
+	@PlusTransactional
+	public boolean canUserPerformOp(Long subjectId, String resource, String operation, Long cpId, Set<Long> sites) {
+		try {			
+			UserAccessCriteria uac = new UserAccessCriteria()
+					.subjectId(subjectId)
+					.resource(resource)
+					.operation(operation)
+					.cpId(cpId)
+					.sites(sites);
+			
+			if ((uac.subjectId() == null) || 
+				StringUtils.isBlank(uac.resource()) ||
+				StringUtils.isBlank(uac.operation()) ) {
+				throw OpenSpecimenException.userError(RbacErrorCode.INSUFFICIENT_USER_DETAILS);
+			}
+			
+			return daoFactory.getSubjectDao().canUserPerformOp(uac);
+		} catch (OpenSpecimenException oce) {
+			throw oce;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public boolean canUserPerformOp(Long userId, String resource, String[] operations) {
+		return daoFactory.getSubjectDao().canUserPerformOps(userId, resource, operations);
+	}
 
+	@Override
+	@PlusTransactional	
+	public List<SubjectAccess> getAccessList(Long userId, String resource, String[] operations) {
+		return daoFactory.getSubjectDao().getAccessList(userId, resource, operations);
+	}
+	
+	@Override
+	@PlusTransactional
+	public List<CpSiteInfo> getAccessibleCpSites(Long userId, String resource, String operation) {
+		UserAccessCriteria crit = new UserAccessCriteria()
+				.subjectId(userId)
+				.operation(operation)
+				.resource(resource);
+		
+		return daoFactory.getSubjectDao().getCpSiteForOpExecution(crit);
+	}
+	
 	//
 	// HELPER METHODS
 	// 
 	
-	private Role createRole(RoleDetail details) {
+	private Role createRole(RoleDetail detail) {
 		Role role = new Role();
-		role.setName(details.getName());
-		role.setDescription(details.getDescription());
-		role.setAcl(getAcl(role, details.getAcl()));
-		role.setParentRole(getRole(details.getParentRoleName()));
+		setName(detail, role);
+		role.setDescription(detail.getDescription());
+		role.setAcl(getAcl(detail, role));
+		role.setParentRole(getRole(detail.getParentRoleName()));
 		
-		for (String childRole : details.getChildRoles()) {
+		for (String childRole : detail.getChildRoles()) {
 			role.getChildRoles().add(getRole(childRole));
 		}
 		return role;
+	}
+	
+	private void setName(RoleDetail detail, Role role) {
+		if (StringUtils.isBlank(detail.getName())) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ROLE_NAME_REQUIRED);
+		}
+		role.setName(detail.getName());
 	}
 	
 	private void checkCycles(Role role) {
@@ -502,6 +578,10 @@ public class RbacServiceImpl implements RbacService {
 		}
 		
 		Role parentRole = role.getParentRole();
+		if (parentRole == null) {
+			return;
+		}
+		
 		for (Role childRole : role.getChildRoles()) {
 			if (parentRole.isDescendentOf(childRole)) {
 				throw OpenSpecimenException.userError(RbacErrorCode.CYCLE_DETECTED_IN_HIERARCHY);
@@ -523,39 +603,41 @@ public class RbacServiceImpl implements RbacService {
 		return role;
 	}
 	
-	private void updateOrphanRoles(Role existing, Role role) {
-		for (Role existingChild : existing.getChildRoles()) {
-			if (!role.getChildRoles().contains(existingChild)) {
-				existingChild.setParentRole(null);
-				daoFactory.getRoleDao().saveOrUpdate(existingChild);
+	private Set<RoleAccessControl> getAcl(RoleDetail detail, Role role) {
+		Set<RoleAccessControl> result = new HashSet<RoleAccessControl>();
+		Map<Long, RoleAccessControl> racMap = new HashMap<Long, RoleAccessControl>();
+		
+		if (detail.getId() != null) {
+			Role existingRole  = daoFactory.getRoleDao().getById(detail.getId(), null);
+			for (RoleAccessControl rac : existingRole.getAcl()) {
+				racMap.put(rac.getId(), rac);
 			}
 		}
-	}
-
-	private Set<RoleAccessControl> getAcl(Role role, List<RoleAccessControlDetails> acl) {
-		Set<RoleAccessControl> result = new HashSet<RoleAccessControl>();
 		
-		for (RoleAccessControlDetails rd : acl) {
-			RoleAccessControl rac = new RoleAccessControl();
-			rac.setRole(role);
+		for (RoleAccessControlDetails rd : detail.getAcl()) {
+			RoleAccessControl rac = racMap.get(rd.getId());
+			
+			if(rac == null) {
+				rac = new RoleAccessControl();
+				rac.setRole(role);
+			}
 			
 			Resource resource = daoFactory.getResourceDao().getResourceByName(rd.getResourceName());
 			if (resource == null) {
 				throw OpenSpecimenException.userError(RbacErrorCode.RESOURCE_NOT_FOUND);
 			}
-			
-			rac.setResource(resource);				
+			rac.setResource(resource);
+			rac.getOperations().clear(); 
 			for (ResourceInstanceOpDetails riod  : rd.getOperations()) {
-				Permission permission = daoFactory.getPermissionDao()
-						.getPermission(resource.getName(), riod.getOperationName());
-				if (permission == null) {
-					throw OpenSpecimenException.userError(RbacErrorCode.PERMISSION_NOT_FOUND);
+				Operation operation = daoFactory.getOperationDao().getOperationByName(riod.getOperationName());
+				if (operation == null) {
+					throw OpenSpecimenException.userError(RbacErrorCode.OPERATION_NOT_FOUND);
 				}
 				
 				ResourceInstanceOp op = new ResourceInstanceOp();
 				op.setRoleAccessControl(rac);
-				op.setResourceInstanceId(riod.getResourceInstanceId() == null ? -1L : riod.getResourceInstanceId());
-				op.setOperation(permission.getOperation());
+				op.setResourceInstanceId(riod.getResourceInstanceId());
+				op.setOperation(operation);
 								
 				rac.getOperations().add(op);
 			}
@@ -566,8 +648,8 @@ public class RbacServiceImpl implements RbacService {
 		return result;
 	}
 	
-	private SubjectRole createSubjectRole(SubjectRoleDetail sd) {
-		RoleDetail detail = sd.getRoleDetails();
+	private SubjectRole createSubjectRole(SubjectRoleDetail srd) {
+		RoleDetail detail = srd.getRole();
 		if (detail == null || StringUtils.isEmpty(detail.getName())) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ROLE_NAME_REQUIRED);
 		}
@@ -578,9 +660,64 @@ public class RbacServiceImpl implements RbacService {
 		}
 		
 		SubjectRole sr = new SubjectRole();
-		sr.setDsoId(sd.getDsoId() == null ? -1L : sd.getDsoId());
+		sr.setId(srd.getId());
+		sr.setCollectionProtocol(getCollectionProtocol(srd));
+		sr.setSite(getSite(srd));
 		sr.setRole(role);
 		return sr;
+	}
+
+	private CollectionProtocol getCollectionProtocol(SubjectRoleDetail sd) {
+		if (sd.getCollectionProtocol() == null) {
+			/*
+			 *  null cp means all cp's
+			 */
+			return null;
+		}
+		
+		CollectionProtocol cp = null;
+		Long cpId = sd.getCollectionProtocol().getId();
+		String title = sd.getCollectionProtocol().getTitle();
+		String shortTitle = sd.getCollectionProtocol().getShortTitle();
+		
+		if (cpId != null) {
+			cp = daoFactory.getCollectionProtocolDao().getById(cpId);
+		} else if (StringUtils.isNotBlank(title)) {
+			cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);
+		} else if (StringUtils.isNotBlank(shortTitle)) {
+			cp = daoFactory.getCollectionProtocolDao().getCpByShortTitle(shortTitle);
+		}
+		
+		if (cp == null) {
+			throw OpenSpecimenException.userError(CpErrorCode.NOT_FOUND);
+		}
+		
+		return cp;
+	}
+	
+	private Site getSite(SubjectRoleDetail sd) {
+		if (sd.getSite() == null) {
+			/*
+			 * null site means all sites'
+			 */
+			return null;
+		}
+		
+		Site site = null;
+		Long siteId = sd.getSite().getId();
+		String name = sd.getSite().getName();
+		
+		if (siteId != null) {
+			site = daoFactory.getSiteDao().getById(siteId);
+		} else if (StringUtils.isNotBlank(name)) {
+			site = daoFactory.getSiteDao().getSiteByName(name);
+		}
+		
+		if (site == null) {
+			throw OpenSpecimenException.userError(SiteErrorCode.NOT_FOUND);
+		}
+		
+		return site;
 	}
 
 	private void adjustParentChildRelationForRoleDeletion(Role role) {
@@ -618,4 +755,15 @@ public class RbacServiceImpl implements RbacService {
 		sr.setRole(role);
 		return sr;
 	}
+	
+	private void ensureUniqueName(Role newRole, Role existingRole) {
+		if (existingRole != null && existingRole.getName().equals(newRole.getName())) {
+			return;
+		}
+		
+		Role role = daoFactory.getRoleDao().getRoleByName(newRole.getName());
+		if (role != null) {
+			throw OpenSpecimenException.userError(RbacErrorCode.DUP_ROLE_NAME);
+		}
+	}	
 }

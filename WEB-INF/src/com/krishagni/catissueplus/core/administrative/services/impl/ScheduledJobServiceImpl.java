@@ -193,7 +193,9 @@ public class ScheduledJobServiceImpl implements ScheduledJobService, Initializin
 	@PlusTransactional
 	public void loadAllJobs() {
 		try {
-			List<ScheduledJob> jobs = daoFactory.getScheduledJobDao().getScheduledJobs(new ScheduledJobListCriteria());
+			ScheduledJobListCriteria crit = new ScheduledJobListCriteria()
+					.maxResults(5000000);
+			List<ScheduledJob> jobs = daoFactory.getScheduledJobDao().getScheduledJobs(crit);
 			for (ScheduledJob job : jobs) {
 				taskMgr.schedule(job);
 			}

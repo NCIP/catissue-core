@@ -21,6 +21,8 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 @Configurable
 @Audited
 public class Visit {
+	private static final String ENTITY_NAME = "visit";
+	
 	public static final String VISIT_STATUS_PENDING = "Pending";
 	
 	public static final String VISIT_STATUS_COMPLETED = "Complete";
@@ -60,6 +62,10 @@ public class Visit {
 	@Autowired
 	@Qualifier("visitNameGenerator")
 	private LabelGenerator labelGenerator;
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
 	
 	public Long getId() {
 		return id;

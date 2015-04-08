@@ -6,19 +6,22 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.CpWorkflowConfig;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 
-	public List<CollectionProtocolSummary> getCollectionProtocols(boolean includePi, boolean includeStats);
+	public List<CollectionProtocolSummary> getCollectionProtocols(CpListCriteria criteria);
 
 	public CollectionProtocol getCollectionProtocol(String title);
 	
 	public CollectionProtocol getCpByShortTitle(String shortTitle);
 	
 	public List<CollectionProtocol> getCpsByShortTitle(Collection<String> shortTitles);
+	
+	public List<Long> getCpIdsBySiteIds(List<Long> siteIds);
 
 	public CollectionProtocolEvent getCpe(Long cpeId);
 
@@ -30,5 +33,9 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	
 	public void saveCpe(CollectionProtocolEvent cpe, boolean flush);
 
-	public SpecimenRequirement getSpecimenRequirement(Long requirementId);	
+	public SpecimenRequirement getSpecimenRequirement(Long requirementId);
+	
+	public void saveCpWorkflows(CpWorkflowConfig cfg);
+	
+	public CpWorkflowConfig getCpWorkflows(Long cpId);
 }

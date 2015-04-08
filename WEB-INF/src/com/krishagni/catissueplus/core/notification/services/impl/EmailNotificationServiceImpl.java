@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -28,13 +29,17 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
 
 	private static final Logger LOGGER = Logger.getCommonLogger(ExternalAppNotificationSchedular.class);
 
+	private static final String locale = Locale.getDefault().toString();
+
+	private static final String TEMPLATE_SOURCE = "email-templates/" + locale;
+
 	private static String FAILED_NOTIFICATION_EMAIL_TMPL = "failed_notification";
 
 	private static final String KEY_EMAIL_ADMIN_EMAIL_ADDRESS = "email.administrative.emailAddress";
 
 	private static final String adminEmailAddress = XMLPropertyHandler.getValue(KEY_EMAIL_ADMIN_EMAIL_ADDRESS);
 
-	private static final String FAILED_NOTIFICATION_CSV_TMPL_FILE_PATH = "../ng-file-templates/failed_notification_csv.vm";
+	private static final String FAILED_NOTIFICATION_CSV_TMPL_FILE_PATH = TEMPLATE_SOURCE + "/failed_notification_csv.vm";
 
 	private static final String FILE_NAME = "FailedNotifications_";
 

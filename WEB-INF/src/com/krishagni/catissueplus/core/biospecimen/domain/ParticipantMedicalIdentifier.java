@@ -6,36 +6,19 @@ import org.hibernate.envers.Audited;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 
 @Audited
-public class ParticipantMedicalIdentifier {
+public class ParticipantMedicalIdentifier extends BaseEntity {
+	private static final String ENTITY_NAME = "medical_record_number";
 
-	/**
-	System generated unique id.
-	 */
-	private Long id;
-
-	/**
-	 * Participant's medical record number used in their medical treatment.
-	 */
 	private String medicalRecordNumber;
 
-	/**
-	 * Source of medical record number.
-	 */
 	private Site site;
 
-	/**
-	 * Participant.
-	 */
 	private Participant participant;
 
-	public Long getId() {
-		return id;
+	public static String getEntityName() {
+		return ENTITY_NAME;
 	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
+	
 	public String getMedicalRecordNumber() {
 		return medicalRecordNumber;
 	}
@@ -59,5 +42,4 @@ public class ParticipantMedicalIdentifier {
 	public void setParticipant(Participant participant) {
 		this.participant = participant;
 	}
-
 }

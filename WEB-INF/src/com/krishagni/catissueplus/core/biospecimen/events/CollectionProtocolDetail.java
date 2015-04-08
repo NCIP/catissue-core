@@ -1,16 +1,21 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 @JsonFilter("withoutId")
 @JsonInclude(Include.NON_NULL)
 public class CollectionProtocolDetail extends CollectionProtocolSummary {
+	private List<String> repositoryNames;
+	
 	private List<UserSummary> coordinators;
 
 	private Boolean consentsWaived;
@@ -39,7 +44,15 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 	private List<ConsentTierDetail> consents;
 	
 	private List<CollectionProtocolEventDetail> events;
-	
+
+	public List<String> getRepositoryNames() {
+		return repositoryNames;
+	}
+
+	public void setRepositoryNames(List<String> repositoryNames) {
+		this.repositoryNames = repositoryNames;
+	}
+
 	public List<UserSummary> getCoordinators() {
 		return coordinators;
 	}
@@ -153,7 +166,6 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		CollectionProtocolSummary.copy(cp, result);
 		result.setCoordinators(UserSummary.from(cp.getCoordinators()));
 
-		result.setConsentsWaived(cp.getConsentsWaived());
 		result.setIrbId(cp.getIrbIdentifier());
 		result.setPpidFmt(cp.getPpidFormat());
 		result.setAnticipatedParticipantsCount(cp.getEnrollment());
@@ -161,8 +173,8 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setSpecimenLabelFmt(cp.getSpecimenLabelFormat());
 		result.setDerivativeLabelFmt(cp.getDerivativeLabelFormat());
 		result.setAliquotLabelFmt(cp.getAliquotLabelFormat());
-		result.setAliquotsInSameContainer(cp.getAliquotInSameContainer());
 		result.setActivityStatus(cp.getActivityStatus());
+		result.setRepositoryNames(getRepositoryNames(cp.getRepositories()));
 		
 		if (fullObject) {
 			result.setConsents(ConsentTierDetail.from(cp.getConsentTier()));
@@ -170,5 +182,14 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		}
 		
 		return result;
+	}
+
+	private static List<String> getRepositoryNames(Collection<Site> repositories) {
+		List<String> repositoryNames = new ArrayList<String>();
+		for (Site site: repositories) {
+			repositoryNames.add(site.getName());
+		}
+		
+		return repositoryNames;
 	}
 }

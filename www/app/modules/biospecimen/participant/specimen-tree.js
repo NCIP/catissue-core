@@ -6,7 +6,8 @@ angular.module('os.biospecimen.participant.specimen-tree',
   ])
   .directive('osSpecimenTree', function(
     $state, $stateParams, 
-    CollectSpecimensSvc, Specimen, Alerts, PvManager, Util) {
+    CollectSpecimensSvc, Specimen, SpecimenLabelPrinter,
+    Alerts, PvManager, Util) {
 
     function loadSpecimenClasses(scope) {
       if (scope.classesLoaded) {
@@ -86,7 +87,11 @@ angular.module('os.biospecimen.participant.specimen-tree',
 
     function getState() {
       return {state: $state.current, params: $stateParams};
-    }
+    };
+
+    function showSelectSpecimens(msgCode) {
+      Alerts.error(msgCode);
+    };
 
     return {
       restrict: 'E',
@@ -130,6 +135,11 @@ angular.module('os.biospecimen.participant.specimen-tree',
         };
 
         scope.collectSpecimens = function() {
+          if (!scope.selection.any) {
+            showSelectSpecimens('specimens.no_specimens_for_collection');
+            return;
+          }
+
           var specimensToCollect = [];
           angular.forEach(scope.specimens, function(specimen) {
             if (specimen.selected) {
@@ -141,7 +151,47 @@ angular.module('os.biospecimen.participant.specimen-tree',
             }
           });
 
+          var onlyCollected = true;
+          for (var i = 0; i < specimensToCollect.length; ++i) {
+            if (specimensToCollect[i].status != 'Collected') {
+              onlyCollected = false;
+              break;
+            }
+          }
+
+          if (onlyCollected) {
+            showSelectSpecimens('specimens.no_specimens_for_collection');
+            return;
+          }
           CollectSpecimensSvc.collect(getState(), scope.visit, specimensToCollect);
+        };
+
+        scope.printSpecimenLabels = function() {
+          if (!scope.selection.any) {
+            showSelectSpecimens('specimens.no_specimens_for_print');
+            return;
+          }
+
+          var specimensToPrint = [];
+          var anyUncollected = false;
+          angular.forEach(scope.specimens, function(specimen) {
+            if (!specimen.selected) {
+              return;
+            }
+
+            if (specimen.status == 'Collected') {
+              specimensToPrint.push(specimen.id);
+            } else {
+              anyUncollected = true;
+            }
+          });
+
+          if (specimensToPrint.length == 0) {
+            showSelectSpecimens('specimens.no_specimens_for_print');
+            return;
+          }
+             
+          SpecimenLabelPrinter.printLabels({specimenIds: specimensToPrint});
         };
 
         scope.showCreateAliquots = function(specimen) {

@@ -55,18 +55,24 @@
       <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
     </set>
 
-    <set name="sites" table="CATISSUE_SITE_CP" inverse="false" cascade="none" sort="unsorted">
+    <set name="repositories" table="CATISSUE_SITE_CP" inverse="false" cascade="none" sort="unsorted">
       <key column="COLLECTION_PROTOCOL_ID"/>
       <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.Site" column="SITE_ID"/>
     </set>
-    
-    <property name="aliquotInSameContainer" column="ALIQUOT_IN_SAME_CONTAINER"/>
-
-    <property name="consentsWaived" column="CONSENTS_WAIVED" />
 
     <set name="collectionProtocolEvents" table="CATISSUE_COLL_PROT_EVENT" inverse="true" cascade="save-update">
       <key column="COLLECTION_PROTOCOL_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent"/>
+    </set>
+    
+    <set name="collectionProtocolRegistrations" inverse="false" cascade="none">
+      <key column="COLLECTION_PROTOCOL_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration"/>
+    </set>
+    
+    <set name="storageContainers" table="OS_STOR_CONTAINER_CPS" inverse="false">
+      <key column="CP_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" column="STORAGE_CONTAINER_ID"/>
     </set>
 
     <sql-query name="getParticipantAndSpecimenCount">
@@ -82,6 +88,7 @@
         left join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = cpr.identifier 
         left join catissue_specimen sp on sp.specimen_collection_group_id = scg.identifier and sp.collection_status = 'Collected'
       where
+        cp.identifier in (:cpIds) and
         cp.activity_status = 'Active'
       group by 
         cp.identifier
@@ -124,5 +131,20 @@
         shortTitle in (:shortTitles) and 
         activityStatus = 'Active'
     </query>
+    
+    <sql-query name="getCpIdsBySiteIds">
+      <return-scalar column="cpId" type="long"/> 
+      
+      select
+        siteCp.collection_protocol_id as cpId
+      from
+        catissue_site_cp siteCp 
+        inner join catissue_collection_protocol cp on siteCp.collection_protocol_id = cp.identifier
+        inner join catissue_site site on site.identifier = siteCp.site_id
+      where
+        cp.activity_status = 'Active' 
+        and site.activity_status = 'Active'
+        and siteCp.site_id in (:siteIds)
+    </sql-query>
   </class>
 </hibernate-mapping>

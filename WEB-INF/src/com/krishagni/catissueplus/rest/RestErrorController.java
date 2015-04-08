@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.errors.ParameterizedError;
 
 @ControllerAdvice
 public class RestErrorController extends ResponseEntityExceptionHandler {
@@ -43,15 +44,15 @@ public class RestErrorController extends ResponseEntityExceptionHandler {
 
 			if (ose.getException() != null) {
 				ose.getException().printStackTrace();
-				errorMsgs.add(getMessage(INTERNAL_ERROR));
+				errorMsgs.add(getMessage(INTERNAL_ERROR, null));
 			} else {
-				for (ErrorCode error : ose.getErrors()) {
-					errorMsgs.add(getMessage(error));
+				for (ParameterizedError error : ose.getErrors()) {
+					errorMsgs.add(getMessage(error.error(), error.params()));
 				}
 			}
 		} else {
 			exception.printStackTrace();
-			errorMsgs.add(getMessage(INTERNAL_ERROR));
+			errorMsgs.add(getMessage(INTERNAL_ERROR, null));
 		}
 
 		HttpHeaders headers = new HttpHeaders();
@@ -79,14 +80,14 @@ public class RestErrorController extends ResponseEntityExceptionHandler {
 		}
 	}
 
-	private ErrorMessage getMessage(ErrorCode error) {
-		return getMessage(error.code());
+	private ErrorMessage getMessage(ErrorCode error, Object[] params) {
+		return getMessage(error.code(), params);
 	}
 
-	private ErrorMessage getMessage(String code) {
+	private ErrorMessage getMessage(String code, Object[] params) {
 		String message = resourceBundle.getMessage(
 				code.toLowerCase(), 
-				null,
+				params,
 				Locale.getDefault());
 		return new ErrorMessage(code, message);
 	}

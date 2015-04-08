@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 
 @JsonIgnoreProperties({"modifiedAttrs"})
 public class ParticipantDetail {
@@ -186,7 +185,7 @@ public class ParticipantDetail {
 
 	public static ParticipantDetail from(Participant participant) {
 		ParticipantDetail result = new ParticipantDetail();
-		
+		result.setId(participant.getId());
 		result.setFirstName(participant.getFirstName());
 		result.setLastName(participant.getLastName());
 		result.setMiddleName(participant.getMiddleName());
@@ -195,23 +194,9 @@ public class ParticipantDetail {
 		result.setDeathDate(participant.getDeathDate());
 		result.setEthnicity(participant.getEthnicity());
 		result.setGender(participant.getGender());
-		result.setEmpi(participant.getEmpi());
-		result.setId(participant.getId());
-		
-		//TODO revisit 
-		List<PmiDetail> pmiDetails = new ArrayList<PmiDetail>();
-		Map<String, ParticipantMedicalIdentifier> pmiMap = participant.getPmiCollection();
-		if (pmiMap != null) {
-			for (ParticipantMedicalIdentifier pmi : pmiMap.values()) {
-				PmiDetail pmiDetail = new PmiDetail();
-				pmiDetail.setMrn(pmi.getMedicalRecordNumber());
-				pmiDetail.setSiteName(pmi.getSite().getName());
-				pmiDetails.add(pmiDetail);
-			}				
-		}			
-		result.setPmis(pmiDetails);
-		
-		result.setRaces(new HashSet<String>(participant.getRaceColl()));
+		result.setEmpi(participant.getEmpi());				
+		result.setPmis(PmiDetail.from(participant.getPmis())); 
+		result.setRaces(new HashSet<String>(participant.getRaces()));
 		result.setSexGenotype(participant.getSexGenotype());
 		result.setSsn(participant.getSocialSecurityNumber());
 		result.setVitalStatus(participant.getVitalStatus());

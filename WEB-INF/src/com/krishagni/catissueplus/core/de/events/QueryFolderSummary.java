@@ -1,10 +1,13 @@
 package com.krishagni.catissueplus.core.de.events;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.de.domain.QueryFolder;
 
 public class QueryFolderSummary {
-
 	private Long id;
 	
 	private String name;
@@ -45,12 +48,20 @@ public class QueryFolderSummary {
 		this.sharedWithAll = sharedWithAll;
 	}
 
-	public static QueryFolderSummary fromQueryFolder(QueryFolder queryFolder){
+	public static QueryFolderSummary from(QueryFolder queryFolder){
 		QueryFolderSummary folderSummary = new QueryFolderSummary();
 		folderSummary.setId(queryFolder.getId());
 		folderSummary.setName(queryFolder.getName());
 		folderSummary.setOwner(UserSummary.from(queryFolder.getOwner()));
 		folderSummary.setSharedWithAll(queryFolder.isSharedWithAll());
 		return folderSummary;
+	}
+	
+	public static List<QueryFolderSummary> from(Collection<QueryFolder> folders) {
+		List<QueryFolderSummary> result = new ArrayList<QueryFolderSummary>();
+		for (QueryFolder folder : folders) {
+			result.add(QueryFolderSummary.from(folder));
+		}
+		return result;
 	}
 }

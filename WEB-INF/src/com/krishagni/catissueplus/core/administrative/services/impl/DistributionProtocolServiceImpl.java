@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
@@ -11,10 +12,16 @@ import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
+import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 public class DistributionProtocolServiceImpl implements DistributionProtocolService {
 	private DaoFactory daoFactory;
@@ -33,9 +40,13 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<List<DistributionProtocolDetail>> getDistributionProtocols(RequestEvent<DpListCriteria> req) {
 		try {
-			return ResponseEvent.response(
-					DistributionProtocolDetail.from(daoFactory.getDistributionProtocolDao()
-							.getDistributionProtocols(req.getPayload())));
+			if (!canReadDp()) {
+				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
+			}
+			
+			List<DistributionProtocol> dps = daoFactory.getDistributionProtocolDao()
+					.getDistributionProtocols(req.getPayload());
+			return ResponseEvent.response(DistributionProtocolDetail.from(dps));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -47,6 +58,10 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<DistributionProtocolDetail> getDistributionProtocol(RequestEvent<Long> req) {
 		try {
+			if (!canReadDp()) {
+				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
+			}
+			
 			Long protocolId = req.getPayload();
 			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(protocolId);
 			if (existing == null) {
@@ -63,11 +78,13 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<DistributionProtocolDetail> createDistributionProtocol(RequestEvent<DistributionProtocolDetail> req) {
 		try {
-			DistributionProtocol distributionProtocol = distributionProtocolFactory.createDistributionProtocol(req.getPayload());
-			ensureUniqueConstraints(distributionProtocol);
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 			
-			daoFactory.getDistributionProtocolDao().saveOrUpdate(distributionProtocol);
-			return ResponseEvent.response(DistributionProtocolDetail.from(distributionProtocol));
+			DistributionProtocol dp = distributionProtocolFactory.createDistributionProtocol(req.getPayload());
+			ensureUniqueConstraints(dp, null);
+			
+			daoFactory.getDistributionProtocolDao().saveOrUpdate(dp);
+			return ResponseEvent.response(DistributionProtocolDetail.from(dp));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -79,6 +96,8 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<DistributionProtocolDetail> updateDistributionProtocol(RequestEvent<DistributionProtocolDetail> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+						
 			Long protocolId = req.getPayload().getId();
 			String title = req.getPayload().getTitle();
 			
@@ -94,7 +113,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			}
 		
 			DistributionProtocol distributionProtocol = distributionProtocolFactory.createDistributionProtocol(req.getPayload());
-			ensureUniqueConstraints(distributionProtocol);
+			ensureUniqueConstraints(distributionProtocol, existing);
 			
 			existing.update(distributionProtocol);
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(existing);
@@ -105,11 +124,28 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			return ResponseEvent.serverError(ex);
 		}
 	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req) {
+		try {
+			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(req.getPayload());
+			if (existing == null) {
+				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(existing.getDependentEntities());
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
 
 	@Override
 	@PlusTransactional
 	public ResponseEvent<DistributionProtocolDetail> deleteDistributionProtocol(RequestEvent<Long> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
 			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(req.getPayload());
 			if (existing == null) {
 				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
@@ -118,49 +154,60 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			existing.delete();
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(existing);
 			return ResponseEvent.response(DistributionProtocolDetail.from(existing));
-		}
-		catch (Exception e) {
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
 	
-	private void ensureUniqueConstraints(DistributionProtocol distributionProtocol) {
+	private void ensureUniqueConstraints(DistributionProtocol newDp, DistributionProtocol existingDp) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
-		if (!isUniqueTitle(distributionProtocol)) {
+		if (!isUniqueTitle(newDp, existingDp)) {
 			ose.addError(DistributionProtocolErrorCode.DUP_TITLE);
 		}
 		
-		if (!isUniqueShortTitle(distributionProtocol)) {
+		if (!isUniqueShortTitle(newDp, existingDp)) {
 			ose.addError(DistributionProtocolErrorCode.DUP_SHORT_TITLE);
 		}
 		
 		ose.checkAndThrow();
 	}
 	
-	private boolean isUniqueTitle(DistributionProtocol distributionProtocol) {
-		DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getDistributionProtocol(distributionProtocol.getTitle());
-		if (existing == null) {
-			return true; // no dp by this name
-		} else if (distributionProtocol.getId() == null) {
-			return false; // a different dp by this name exists 
-		} else if (existing.getId().equals(distributionProtocol.getId())) {
-			return true; // same dp
-		} else {
+	private boolean isUniqueTitle(DistributionProtocol newDp, DistributionProtocol existingDp) {
+		if (existingDp != null && newDp.getTitle().equals(existingDp.getTitle())) {
+			return true;
+		}
+		
+		DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getDistributionProtocol(newDp.getTitle());
+		if (existing != null) {
 			return false;
 		}
+		
+		return true;
 	}
 
-	private boolean isUniqueShortTitle(DistributionProtocol distributionProtocol) {
-		DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getByShortTitle(distributionProtocol.getShortTitle());
-		if (existing == null) {
-			return true; // no dp by this short title
-		} else if (distributionProtocol.getId() == null) {
-			return false; // a different dp by this short-title exists 
-		} else if (existing.getId().equals(distributionProtocol.getId())) {
-			return true; // same dp
-		} else {
+	private boolean isUniqueShortTitle(DistributionProtocol newDp, DistributionProtocol existingDp) {
+		if (existingDp != null && newDp.getShortTitle().equals(existingDp.getShortTitle())) {
+			return true;
+		}
+		
+		DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getByShortTitle(newDp.getShortTitle());
+		if (existing != null) {
 			return false;
 		}
+		
+		return true;
+	}
+	
+	private boolean canReadDp() {
+		if (AuthUtil.isAdmin()) {
+			return true;
+		} 
+		
+		User user = AuthUtil.getCurrentUser();
+		Operation[] ops = {Operation.CREATE, Operation.UPDATE};
+		return AccessCtrlMgr.getInstance().canUserPerformOp(user.getId(), Resource.ORDER, ops);
 	}
 }

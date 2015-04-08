@@ -13,7 +13,9 @@ public enum DistributionProtocolErrorCode implements ErrorCode {
 
 	NOT_FOUND,
 
-	PI_NOT_FOUND;
+	PI_NOT_FOUND,
+	
+	REF_ENTITY_FOUND;
 
 	@Override
 	public String code() {

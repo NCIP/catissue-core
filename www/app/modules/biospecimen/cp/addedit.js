@@ -1,11 +1,23 @@
 
 angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.administrative.models'])
-  .controller('CpAddEditCtrl', function($scope, $state, CollectionProtocol, PvManager, User) {
-  
+  .controller('CpAddEditCtrl', function($scope, $state, cp, User, Site) {
+
+    var repositoryNames = null;
+
     function init() {
-      $scope.cp = new CollectionProtocol();
+      $scope.cp = cp;
+
+      /**
+       * Some how the ui-select's multiple option is removing pre-selected items
+       * when site list is being loaded or not yet loaded...
+       * Therefore we copy pre-selected repositoryNames and then use it when all Sites are loaded
+       */
+      repositoryNames = angular.copy(cp.repositoryNames);
+
       $scope.ppidFmt = {};
       $scope.coordinators = [];
+
+      loadPvs();
 
       $scope.$watch('ppidFmt', function(newVal) {
         var sample = newVal.prefix || '';
@@ -22,6 +34,17 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
         $scope.ppidFmt.samplePpid = sample;
       }, true);
     };
+
+    function loadPvs() {
+      $scope.sites = [];
+      Site.query().then(function(sites) {
+         angular.forEach(sites, function(site) {
+           $scope.sites.push(site.name);
+         })
+         
+         $scope.cp.repositoryNames = repositoryNames;
+      });
+    }
 
     function getPpidFmt() {
       var result = $scope.ppidFmt.prefix || '';

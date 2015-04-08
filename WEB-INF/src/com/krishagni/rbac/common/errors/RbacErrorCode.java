@@ -20,6 +20,8 @@ public enum RbacErrorCode implements ErrorCode {
 	
 	ROLE_NOT_FOUND, 
 	
+	DUP_ROLE_NAME,
+	
 	SUBJECT_ID_REQUIRED, 
 	
 	INSUFFICIENT_USER_DETAILS, 
@@ -30,7 +32,13 @@ public enum RbacErrorCode implements ErrorCode {
 	
 	GROUP_NOT_FOUND,
 	
-	CYCLE_DETECTED_IN_HIERARCHY;
+	CYCLE_DETECTED_IN_HIERARCHY, 
+	
+	ACCESS_DENIED,
+	
+	ADMIN_RIGHTS_REQUIRED,
+
+	SUBJECT_ROLE_NOT_FOUND;
 	
 	@Override
 	public String code() {

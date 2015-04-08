@@ -5,8 +5,6 @@ import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 public enum UserErrorCode implements ErrorCode {
 	DUP_LOGIN_NAME,
 
-	LOGIN_NAME_CHANGE_NOT_ALLOWED,
-	
 	OLD_PASSWD_NOT_SPECIFIED,
 	
 	INVALID_OLD_PASSWD,
@@ -39,7 +37,9 @@ public enum UserErrorCode implements ErrorCode {
 	
 	DEPT_REQUIRED,
 	
-	STATUS_CHANGE_NOT_ALLOWED;
+	STATUS_CHANGE_NOT_ALLOWED,
+	
+	REF_ENTITY_FOUND;
 	
 	public String code() {
 		return "USER_" + this.name();

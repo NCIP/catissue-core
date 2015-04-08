@@ -4,38 +4,64 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.rbac.domain.SubjectRole;
 
 public class SubjectRoleDetail {
-	private Long dsoId;
+	private Long id; 
 	
-	private RoleDetail roleDetails;
-
-	public Long getDsoId() {
-		return dsoId;
-	}
-
-	public void setDsoId(Long dsoId) {
-		this.dsoId = dsoId;
-	}
-
-	public RoleDetail getRoleDetails() {
-		return roleDetails;
-	}
-
-	public void setRoleDetails(RoleDetail roleDetails) {
-		this.roleDetails = roleDetails;
-	}
+	private RoleDetail role;
 	
+	private CollectionProtocolSummary collectionProtocol;
+	
+	private SiteDetail site;
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public RoleDetail getRole() {
+		return role;
+	}
+
+	public void setRole(RoleDetail role) {
+		this.role = role;
+	}
+
+	public CollectionProtocolSummary getCollectionProtocol() {
+		return collectionProtocol;
+	}
+
+	public void setCollectionProtocol(CollectionProtocolSummary collectionProtocol) {
+		this.collectionProtocol = collectionProtocol;
+	}
+
+	public SiteDetail getSite() {
+		return site;
+	}
+
+	public void setSite(SiteDetail site) {
+		this.site = site;
+	}
+
 	public static SubjectRoleDetail from(SubjectRole subjectRole) {
-		SubjectRoleDetail srs = new SubjectRoleDetail();
-		srs.setDsoId(subjectRole.getDsoId());
+		SubjectRoleDetail sr = new SubjectRoleDetail();
+		sr.setId(subjectRole.getId());
+		sr.setRole(RoleDetail.from(subjectRole.getRole()));
 		
-		if (subjectRole.getRole() != null) {
-			srs.setRoleDetails(RoleDetail.from(subjectRole.getRole()));
+		if (subjectRole.getCollectionProtocol() != null) {
+			sr.setCollectionProtocol(CollectionProtocolSummary.from(subjectRole.getCollectionProtocol()));
 		}
 		
-		return srs;
+		if (subjectRole.getSite() != null) {
+			sr.setSite(SiteDetail.from(subjectRole.getSite()));
+		}
+		return sr;
 	}
 	
 	public static List<SubjectRoleDetail> from(Collection<SubjectRole> subjectRoles) {

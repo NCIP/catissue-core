@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.de.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -30,7 +31,7 @@ import com.krishagni.catissueplus.core.de.repository.FormDao;
 public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao {
 	
 	@Override
-	public Class getType() {
+	public Class<FormContextBean> getType() {
 		return FormContextBean.class;
 	}
 
@@ -437,6 +438,32 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 				
 		return result;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public String getFormChangeLogDigest(String file) {
+		List<Object> rows = sessionFactory.getCurrentSession()
+				.createSQLQuery(GET_CHANGE_LOG_DIGEST_SQL)
+				.setString("filename", file)
+				.list();
+		
+		if (rows == null || rows.isEmpty()) {
+			return null;
+		}		
+		return (String)rows.iterator().next();
+	}
+
+	@Override
+	public void insertFormChangeLog(String file, String digest, Long formId) {
+		sessionFactory.getCurrentSession()
+				.createSQLQuery(INSERT_CHANGE_LOG_SQL)
+				.setString("filename", file)
+				.setString("digest", digest)
+				.setLong("formId", formId)
+				.setTimestamp("executedOn", Calendar.getInstance().getTime())
+				.executeUpdate();
+	}
+	
 		
 	@SuppressWarnings("unchecked")
 	private ObjectCpDetail getObjectIdForParticipant(Map<String, Object> dataHookingInformation) {
@@ -593,4 +620,24 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	private static final String GET_RECS_BY_TYPE_AND_OBJECT = FQN  + ".getRecordsByEntityAndObject";
 	
 	private static final String GET_RECS = FQN + ".getRecords";
+	
+	private static final String GET_CHANGE_LOG_DIGEST_SQL =
+			"select " +
+			"  md5_digest " +
+			"from " +
+			"  os_import_forms_log fl " +
+			"where " +
+			"  fl.filename = :filename and fl.executed_on in (" +
+			"    select " +
+			"      max(executed_on) " +
+			"    from " +
+			"      os_import_forms_log " +
+			"    where " +
+			"      filename = :filename )";
+	
+	private static final String INSERT_CHANGE_LOG_SQL =
+			"insert into os_import_forms_log " +
+			"	(filename, form_id, md5_digest, executed_on) " +
+			"values " +
+			"   (:filename, :formId, :digest, :executedOn) ";
 }

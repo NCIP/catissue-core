@@ -12,7 +12,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 @JsonFilter("withoutId")
-public class SpecimenRequirementDetail implements Comparable<SpecimenRequirementDetail>{
+public class SpecimenRequirementDetail implements Comparable<SpecimenRequirementDetail> {
 	private Long id;
 	
 	private String name;
@@ -27,7 +27,7 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 	
 	private String laterality;
 	
-	private String pathologyStatus;
+	private String pathology;
 	
 	private String storageType;
 	
@@ -105,12 +105,12 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		this.laterality = laterality;
 	}
 
-	public String getPathologyStatus() {
-		return pathologyStatus;
+	public String getPathology() {
+		return pathology;
 	}
 
-	public void setPathologyStatus(String pathologyStatus) {
-		this.pathologyStatus = pathologyStatus;
+	public void setPathology(String pathology) {
+		this.pathology = pathology;
 	}
 
 	public String getStorageType() {
@@ -240,14 +240,14 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		detail.setType(sr.getSpecimenType());
 		detail.setAnatomicSite(sr.getAnatomicSite());
 		detail.setLaterality(sr.getLaterality());
-		detail.setPathologyStatus(sr.getPathologyStatus());
+		detail.setPathology(sr.getPathologyStatus());
 		detail.setStorageType(sr.getStorageType());
 		detail.setInitialQty(sr.getInitialQuantity());
 		detail.setConcentration(sr.getConcentration());
-		detail.setCollector(UserSummary.from(sr.getCollector()));
+		detail.setCollector(sr.getCollector() == null ? null : UserSummary.from(sr.getCollector()));
 		detail.setCollectionProcedure(sr.getCollectionProcedure());
 		detail.setCollectionContainer(sr.getCollectionContainer());
-		detail.setReceiver(UserSummary.from(sr.getReceiver()));
+		detail.setReceiver(sr.getReceiver() == null ? null : UserSummary.from(sr.getReceiver()));
 		detail.setLabelFmt(sr.getLabelFormat());
 		detail.setEventId(sr.getCollectionProtocolEvent().getId());
 		detail.setChildren(from(sr.getChildSpecimenRequirements()));

@@ -10,7 +10,7 @@
 
     <id name="id" column="IDENTIFIER">
       <generator class="native">
-        <param name="sequence">RBAC_OPERATION_SEQ</param>
+        <param name="sequence">RBAC_OPERATIONS_SEQ</param>
       </generator>
     </id>
 

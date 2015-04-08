@@ -33,13 +33,13 @@
   /*margin: 10px -20px -10px -20px;*/
 }
 
-.os-modal-footer > button.btn-primary, .os-modal-footer > button.btn-default {
+.os-modal-footer button {
   margin-right: 10px;
 }
 
-.os-modal-footer > button.ka-btn-text {
-  margin-right: 20px;
-}
+/*.os-modal-footer > button.os-btn-text {
+  margin-right: 10px;
+}*/
 
 .os-modal-footer:after {
   clear: both;

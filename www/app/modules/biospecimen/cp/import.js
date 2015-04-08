@@ -1,17 +1,14 @@
 
 angular.module('os.biospecimen.cp.import', ['os.biospecimen.models'])
-  .controller('CpImportCtrl', function($scope, $state, CollectionProtocol, FileSvc) {
-    $scope.import = {};
+  .controller('CpImportCtrl', function($scope, $state, $sce, CollectionProtocol) {
+    $scope.cpImporter = {};
+    $scope.cpImportUrl = $sce.trustAsResourceUrl(CollectionProtocol.url() + 'definition');
+    
 
     $scope.importCp = function() {
-      if (!$scope.import.cpDef) {
-        return;
-      }
-
-      var url = CollectionProtocol.url() + 'definition';
-      FileSvc.upload(url, $scope.import.cpDef).then(
-        function(result) {
-          $state.go('cp-detail.overview', {cpId: result.data.id});
+      $scope.cpImporter.submit().then(
+        function(importedCp) {
+          $state.go('cp-detail.overview', {cpId: importedCp.id});
         }
       );
     }

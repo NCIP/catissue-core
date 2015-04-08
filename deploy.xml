@@ -626,7 +626,6 @@
 			<include name="commons-lang-2.1.jar" />
 			<include name="commons-logging-1.0.4.jar" />
 			<!--<include name="dom4*.jar" />-->
-			<include name="ehcache-1.2.3.jar" />
 			<include name="freemarker.jar" />
 			<include name="jakarta-oro.jar" />
 			<include name="uml-1.3.jar" />
@@ -945,6 +944,24 @@
     <target name="upgrade_db_os_v2.0">
       <updateDatabase 
         changeLogFile="${base.dir}/SQL/liquibase_xml/db-os-changelog-2.0.xml" 
+        driver="${final.database.driver}" 
+        url="${final.database.url}" 
+        username="${database.username}" 
+        password="${database.password}" 
+        dropFirst="false" 
+        classpathref="liquibaseClasspath" />
+
+      <updateDatabase 
+        changeLogFile="${base.dir}/SQL/liquibase_xml/db-os-config-2.0.xml"
+        driver="${final.database.driver}" 
+        url="${final.database.url}" 
+        username="${database.username}" 
+        password="${database.password}" 
+        dropFirst="false" 
+        classpathref="liquibaseClasspath" />
+    	
+      <updateDatabase 
+        changeLogFile="${base.dir}/SQL/liquibase_xml/db-os-seed-data-2.0.xml"
         driver="${final.database.driver}" 
         url="${final.database.url}" 
         username="${database.username}" 

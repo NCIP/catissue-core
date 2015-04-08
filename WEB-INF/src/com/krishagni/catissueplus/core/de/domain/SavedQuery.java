@@ -40,6 +40,8 @@ public class SavedQuery {
 	private ReportSpec reporting;
 	
 	private Set<QueryFolder> folders = new HashSet<QueryFolder>();
+	
+	private String wideRowMode = "DEEP";
 
 	private Date deletedOn;
 
@@ -159,6 +161,14 @@ public class SavedQuery {
 		this.folders = folders;
 	}
 
+	public String getWideRowMode() {
+		return wideRowMode;
+	}
+
+	public void setWideRowMode(String wideRowMode) {
+		this.wideRowMode = wideRowMode;
+	}
+
 	public Date getDeletedOn() {
 		return deletedOn;
 	}
@@ -185,9 +195,10 @@ public class SavedQuery {
 		query.drivingForm = drivingForm;
 		query.folders = null;
 		query.reporting = reporting;
+		query.wideRowMode = wideRowMode;
 		
 		try {
-			return getObjectMapper().writeValueAsString(query);
+			return getWriteMapper().writeValueAsString(query);
 		} catch (Exception e) {
 			throw new RuntimeException("Error marshalling saved query to JSON", e);
 		}				
@@ -196,7 +207,7 @@ public class SavedQuery {
 	public void setQueryDefJson(String queryDefJson) {
 		SavedQuery query = null;
 		try {
-			query = getObjectMapper().readValue(queryDefJson, SavedQuery.class);
+			query = getReadMapper().readValue(queryDefJson, SavedQuery.class);
 		} catch (Exception e) {
 			throw new RuntimeException("Error marshalling JSON to saved query", e);
 		}
@@ -207,6 +218,7 @@ public class SavedQuery {
 		this.queryExpression = query.queryExpression;
 		this.drivingForm = query.drivingForm;
 		this.reporting = query.reporting;
+		this.wideRowMode = query.wideRowMode;
 	}
 	
 	public String getAql() {
@@ -223,6 +235,7 @@ public class SavedQuery {
 		setFilters(query.getFilters());		
 		setQueryExpression(query.getQueryExpression());
 		setReporting(query.getReporting());
+		setWideRowMode(query.getWideRowMode());
 	}
 	
 	@Override
@@ -255,7 +268,11 @@ public class SavedQuery {
 		return true;
 	}
 		
-	private ObjectMapper getObjectMapper() {
+	private ObjectMapper getReadMapper() {
+		return new ObjectMapper();
+	}
+	
+	private ObjectMapper getWriteMapper() {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setVisibilityChecker(
 			mapper.getSerializationConfig().getDefaultVisibilityChecker()
@@ -264,5 +281,5 @@ public class SavedQuery {
 				.withSetterVisibility(Visibility.NONE)
 				.withCreatorVisibility(Visibility.NONE));
 		return mapper;		
-	}	
+	}
 }

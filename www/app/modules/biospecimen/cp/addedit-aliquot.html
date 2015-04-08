@@ -16,7 +16,7 @@
         <div class="form-group">
           <input name="noOfAliquots" ng-model="aliquot.noOfAliquots" 
             os-md-input class="form-control" type="text" placeholder="{{'srs.aliquot_cnt' | translate}}"
-            required ng-pattern="/^[1-9][0-9]*$/">
+            ng-required="!aliquot.qtyPerAliquot" ng-pattern="/^[1-9][0-9]*$/">
           <div os-field-error field="aliquotForm.noOfAliquots"></div>
         </div>
       </div>
@@ -25,7 +25,8 @@
         <div class="form-group">
           <input name="qtyPerAliquot" ng-model="aliquot.qtyPerAliquot" 
             os-md-input class="form-control" type="text" placeholder="{{'srs.qty_per_aliquot' | translate}}"
-            required ng-pattern="/^[1-9][0-9]*$/">
+            ng-required="!aliquot.noOfAliquots" ng-pattern="/^([1-9][0-9]*(\.([0-9]{1,2}))?)$|^([0]\.([0-9]{1,2}))$/" 
+            ng-model-options="{allowInvalid: 'true'}">
           <div os-field-error field="aliquotForm.qtyPerAliquot"></div>
         </div>
       </div>

@@ -21,6 +21,8 @@ public class DistributionProtocolDetail {
 	private String irbId;
 
 	private Date startDate;
+	
+	private Date endDate;
 
 	private String activityStatus;
 
@@ -72,6 +74,14 @@ public class DistributionProtocolDetail {
 		this.startDate = startDate;
 	}
 
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
 	public String getActivityStatus() {
 		return activityStatus;
 	}
@@ -87,6 +97,7 @@ public class DistributionProtocolDetail {
 		details.setTitle(distributionProtocol.getTitle());
 		details.setIrbId(distributionProtocol.getIrbId());
 		details.setStartDate(distributionProtocol.getStartDate());
+		details.setEndDate(distributionProtocol.getEndDate());
 		details.setPrincipalInvestigator(getPrincipleInvestigatorInfo(distributionProtocol.getPrincipalInvestigator()));
 		details.setActivityStatus(distributionProtocol.getActivityStatus());
 		return details;

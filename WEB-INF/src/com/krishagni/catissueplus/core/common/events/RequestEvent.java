@@ -9,8 +9,11 @@ public class RequestEvent<T> {
 	
 	private T payload;
 	
-	public RequestEvent() {
-		
+	public RequestEvent() {		
+	}
+	
+	public RequestEvent(T payload) {
+		this.payload = payload;
 	}
 	
 	public RequestEvent(SessionDataBean sdb, T payload) {

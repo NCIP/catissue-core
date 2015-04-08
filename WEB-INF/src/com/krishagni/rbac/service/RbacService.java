@@ -1,18 +1,20 @@
 package com.krishagni.rbac.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.rbac.domain.SubjectAccess;
+import com.krishagni.rbac.events.CpSiteInfo;
 import com.krishagni.rbac.events.GroupDetail;
 import com.krishagni.rbac.events.GroupRoleDetail;
 import com.krishagni.rbac.events.OperationDetail;
 import com.krishagni.rbac.events.PermissionDetail;
 import com.krishagni.rbac.events.ResourceDetail;
 import com.krishagni.rbac.events.RoleDetail;
-import com.krishagni.rbac.events.SubjectDetail;
 import com.krishagni.rbac.events.SubjectRoleDetail;
-import com.krishagni.rbac.events.UserAccessInformation;
+import com.krishagni.rbac.events.SubjectRoleOp;
 import com.krishagni.rbac.repository.OperationListCriteria;
 import com.krishagni.rbac.repository.PermissionListCriteria;
 import com.krishagni.rbac.repository.ResourceListCriteria;
@@ -50,23 +52,36 @@ public interface RbacService {
 	// Role APIs
 	//
 	
-	public ResponseEvent<RoleDetail> saveRole(RequestEvent<RoleDetail> req);
-	
 	public ResponseEvent<List<RoleDetail>> getRoles(RequestEvent<RoleListCriteria> req);
 	
-	public ResponseEvent<RoleDetail> deleteRole(RequestEvent<String> req);
+	public ResponseEvent<RoleDetail> getRole(RequestEvent<Long> req);
+
+	public ResponseEvent<RoleDetail> saveRole(RequestEvent<RoleDetail> req);
+	
+	public ResponseEvent<RoleDetail> updateRole(RequestEvent<RoleDetail> req);
+	
+	public ResponseEvent<RoleDetail> deleteRole(RequestEvent<Long> req);
 	
 	//
 	// Subject - Group roles API's
 	//
 	
-	public ResponseEvent<SubjectDetail> updateSubjectRoles(RequestEvent<SubjectDetail> req);
-	
-	public ResponseEvent<UserAccessInformation> checkAccess(RequestEvent<UserAccessInformation> req);
+	public ResponseEvent<SubjectRoleDetail> updateSubjectRole(RequestEvent<SubjectRoleOp> req);
 	
 	public ResponseEvent<List<SubjectRoleDetail>> getSubjectRoles(RequestEvent<Long> req);
 	
 	public ResponseEvent<GroupDetail> updateGroupRoles(RequestEvent<GroupDetail> req);
 		
 	public ResponseEvent<List<GroupRoleDetail>> getGroupRoles(RequestEvent<Long> req);
+	
+	//
+	// Intern API's can change without notice.
+	//
+	public boolean canUserPerformOp(Long userId, String resource, String operation, Long cpId, Set<Long> sites);
+	
+	public boolean canUserPerformOp(Long userId, String resource, String[] operations);
+	
+	public List<SubjectAccess> getAccessList(Long userId, String resource, String[] operations);
+	
+	public List<CpSiteInfo> getAccessibleCpSites(Long userId, String resource, String operation);
 }

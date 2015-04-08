@@ -256,7 +256,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		Long participantId = cpr.getParticipant().getId();
 		Long cpId = cpr.getCollectionProtocol().getId();
 		
-		if (daoFactory.getCprDao().getRegistrationId(cpId, participantId) != null) {
+		if (daoFactory.getCprDao().getCprByParticipantId(cpId, participantId) != null) {
 			ose.addError(CprErrorCode.DUP_REGISTRATION);
 		}
 	}
@@ -269,7 +269,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		Long cpId = cpr.getCollectionProtocol().getId();
 		String ppid = cpr.getPpid();		
 		if (daoFactory.getCprDao().getCprByPpId(cpId, ppid) != null) {
-			ose.addError(CprErrorCode.DUP_PPID);
+			ose.addError(CprErrorCode.DUP_PPID, ppid);
 		}
 	}
 

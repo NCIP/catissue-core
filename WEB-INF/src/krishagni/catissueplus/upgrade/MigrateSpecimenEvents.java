@@ -68,7 +68,7 @@ public class MigrateSpecimenEvents {
 		DbSettingsFactory.init(DbUtil.isMySQL() ? "MySQL" : "Oracle");
 
 		JdbcDaoFactory.setDataSource(ds);
-		TransactionManager.getInstance(ds);
+		TransactionManager.getInstance(ds, null);
 
 		UserContext ctx = getUserCtxt(args[0]);
 		if (ctx == null) {

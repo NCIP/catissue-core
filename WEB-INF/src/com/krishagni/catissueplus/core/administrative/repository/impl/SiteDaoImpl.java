@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -38,14 +39,19 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 		
 		return query.list();
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
-	public Site getSiteByName(String siteName) {
-		List<Site> result = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_SITE_BY_NAME)
-				.setString("siteName", siteName)
+	public List<Site> getSitesByNames(List<String> siteNames) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_SITES_BY_NAMES)
+				.setParameterList("siteNames", siteNames)
 				.list();
+	}
+	
+	@Override
+	public Site getSiteByName(String siteName) {
+		List<Site> result = getSitesByNames(Collections.singletonList(siteName));
 		
 		return result.isEmpty() ? null : result.get(0);
 	}
@@ -60,11 +66,10 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 		
 		return result.isEmpty() ? null : result.get(0);
 	}
-	
-
+			
 	private static final String FQN = Site.class.getName();
 
-	private static final String GET_SITE_BY_NAME = FQN + ".getSiteByName";
+	private static final String GET_SITES_BY_NAMES = FQN + ".getSitesByNames";
 	
 	private static final String GET_SITE_BY_CODE = FQN + ".getSiteByCode";
 

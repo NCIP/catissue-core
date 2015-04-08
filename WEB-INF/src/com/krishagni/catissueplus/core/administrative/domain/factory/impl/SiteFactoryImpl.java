@@ -6,8 +6,10 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
@@ -35,6 +37,7 @@ public class SiteFactoryImpl implements SiteFactory {
 
 		site.setId(detail.getId());
 		setName(detail, site, ose);
+		setInstitute(detail, site, ose);
 		setCode(detail, site);
 		setCoordinators(detail, site, ose);
 		setType(detail, site, ose);
@@ -53,6 +56,21 @@ public class SiteFactoryImpl implements SiteFactory {
 		}
 		
 		site.setName(detail.getName());
+	}
+	
+	private void setInstitute(SiteDetail detail, Site site, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(detail.getInstituteName())) {
+			ose.addError(SiteErrorCode.INSTITUTE_REQUIRED);
+			return;
+		}
+		
+		Institute institute = daoFactory.getInstituteDao().getInstituteByName(detail.getInstituteName());
+		if (institute == null) {
+			ose.addError(InstituteErrorCode.NOT_FOUND);
+			return;
+		}
+		
+		site.setInstitute(institute);
 	}
 	
 	private void setCode(SiteDetail detail, Site site) {

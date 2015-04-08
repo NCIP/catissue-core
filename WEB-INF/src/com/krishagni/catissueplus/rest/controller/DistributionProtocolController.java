@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -41,6 +42,12 @@ public class DistributionProtocolController {
 			@RequestParam(value = "query", required = false, defaultValue = "") 
 			String searchStr,
 			
+			@RequestParam(value = "title", required = false)
+			String title,
+			
+			@RequestParam(value = "piId", required = false)
+			Long piId,
+			
 			@RequestParam(value = "startAt", required = false, defaultValue = "0") 
 			int startAt,
 			
@@ -50,7 +57,10 @@ public class DistributionProtocolController {
 		DpListCriteria criteria = new DpListCriteria()
 			.startAt(startAt)
 			.maxResults(maxResults)
-			.query(searchStr);
+			.query(searchStr)
+			.title(title)
+			.piId(piId);
+		
 		
 		ResponseEvent<List<DistributionProtocolDetail>> resp = dpSvc.getDistributionProtocols(getRequest(criteria));
 		resp.throwErrorIfUnsuccessful();
@@ -84,6 +94,17 @@ public class DistributionProtocolController {
 		detail.setId(id);
 		ResponseEvent<DistributionProtocolDetail> resp = dpSvc.updateDistributionProtocol(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependent-entities")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List<DependentEntityDetail> getDependentEntities(@PathVariable Long id) {
+		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		ResponseEvent<List<DependentEntityDetail>> resp = dpSvc.getDependentEntities(req);
+		resp.throwErrorIfUnsuccessful();
+		
 		return resp.getPayload();
 	}
 

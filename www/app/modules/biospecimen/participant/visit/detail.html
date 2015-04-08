@@ -24,10 +24,18 @@
 
     <h3>T{{visit.eventPoint}}: {{visit.eventLabel}}</h3>
 
-    <button class="os-round-btn" ng-switch on="!!visit.id" ui-sref="visit-addedit">
-      <span ng-switch-when="true" class="fa fa-pencil"></span>
-      <span ng-switch-default class="fa fa-plus"></span>
-    </button>
+    <div class="os-btns right">
+      <button class="primary" ng-switch on="!!visit.id" ui-sref="visit-addedit">
+        <span ng-switch-when="true">
+          <span class="fa fa-pencil"></span>
+          <span translate="common.buttons.edit">Edit</span>
+        </span>
+        <span ng-switch-default>
+          <span class="fa fa-plus"></span>
+          <span translate="common.buttons.add">Add</span>
+        </span>
+      </button>
+    </div>
   </div>
 
   <div os-side-menu>

@@ -1,2 +1,2 @@
 
-angular.module('os.common', ['os.common.models', 'os.common.form']);
+angular.module('os.common', ['os.common.models', 'os.common.form', 'os.common.delete']);

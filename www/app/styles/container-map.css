@@ -1,7 +1,24 @@
-.os-container-map-wrapper {
-  width: 95%;
-  height: 525px;
+.os-container-locations {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.os-container-locations .input-spmn-labels {
+  flex: 1;
+  width: 100%;
+}
+
+.os-container-locations .map {
+  flex: 9;
+  width: 100%;
   overflow: auto;
+}
+
+.os-container-map-wrapper {
+  width: 100%;
+  height: 100%;
 }
 
 .os-container-map {
@@ -13,6 +30,10 @@
   border-right: 1px solid #dddddd;
   padding: 0px 2px;
   position: relative;
+}
+
+.os-container-map td:hover {
+  background: #f5f5f5;
 }
 
 .os-container-map tr:first-child td {
@@ -41,6 +62,15 @@
   left: 0;
 }
 
+.os-container-map .slot-element .slot_add {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5em;
+  left: 50%;
+  margin-left: -0.5em;
+  color: #428bca;
+}
+
 .os-container-map .slot-pos {
   width: 100%;
   text-align: right; 
@@ -60,34 +90,43 @@
   padding: 2px 0px;
   display: block;
   text-decoration: none!important;
+  text-align: center;
 }
 
 .os-container-map .slot-desc:hover {
   color: white;
 }
 
+.os-container-map .slot-assigned .slot-desc {
+  background: rgba(92, 184, 92, 0.8);
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.os-container-map .slot-assigned,
 .os-container-map .slot-occupied {
   background: #f5f5f5;
 }
 
 
 /** Scroll bar **/
-.os-container-map-wrapper::-webkit-scrollbar {
+.os-container-locations .map::-webkit-scrollbar {
   height:12px;
   width:12px
 }
 
-.os-container-map-wrapper::-webkit-scrollbar-thumb:vertical,
-.os-container-map-wrapper::-webkit-scrollbar-thumb:horizontal {
+.os-container-locations .map::-webkit-scrollbar-thumb:vertical,
+.os-container-locations .map::-webkit-scrollbar-thumb:horizontal {
   background: #d0d0d0;
 }
 
-.os-container-map-wrapper::-webkit-scrollbar-track:hover {
+.os-container-locations .map::-webkit-scrollbar-track:hover {
   background: #f5f5f5;
   border: 1px solid #ddd;
 }
 
-.os-container-map-wrapper::-webkit-scrollbar-track {
+.os-container-locations .map::-webkit-scrollbar-track {
   background: #ffffff;
 }
 
@@ -129,3 +168,4 @@ td.os-container-pos.occupied {
 td.os-container-pos.selected {
   background: #d5d5d5;
 }
+

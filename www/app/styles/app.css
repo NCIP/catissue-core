@@ -14,7 +14,7 @@ body {
 }
 
 .os-navbar {
-  height: 57px;
+  height: 50px;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -28,8 +28,9 @@ body {
 }
 
 .os-navbar .logo {
-  height: 57px;
-  width: 275px;
+  height: 50px;
+  width: 235px;
+  padding: 2.5px;
   flex-grow: 0.25;
 }
 
@@ -196,7 +197,7 @@ body {
   color: #666666;
   display: flex;
   position: absolute;
-  top: 57px;
+  top: 50px;
   width: 100%;
 }
 
@@ -211,7 +212,8 @@ body {
   
 .os-page-hdr .os-nav-button,
 .os-page-hdr .os-options-button,
-.os-page-hdr .os-search-button {
+.os-page-hdr .os-search-button,
+.os-page-hdr .os-more-options button {
   color: #666666;
   background: transparent;
   border: none;
@@ -228,7 +230,8 @@ body {
 
 .os-page-hdr .os-nav-button .fa,
 .os-page-hdr .os-options-button .fa,
-.os-page-hdr .os-search-button .fa {
+.os-page-hdr .os-search-button .fa,
+.os-page-hdr .os-more-options button .fa {
   font-size: 24px;
 }
 
@@ -274,7 +277,7 @@ h4 + .btn-group {
 .os-page-hdr + .container {
   padding-top: 20px;
   position: absolute;
-  top: 121px;
+  top: 114px;
   bottom: 0px;
   height: auto;
   width: 100%;
@@ -283,7 +286,7 @@ h4 + .btn-group {
 
 .os-page-hdr + .os-cards {
   position: absolute;
-  top: 121px;
+  top: 114px;
   bottom: 0px;
   height: auto;
   overflow-y: auto;
@@ -298,6 +301,56 @@ h4 + .btn-group {
 
 .os-page-hdr .os-more-options .dropdown-menu-right {
   margin-right: 24px;
+}
+
+.os-page-hdr .os-breadcrumbs ~ .os-btns {
+  position: absolute;
+  bottom: 10px;
+}
+
+.os-page-hdr .os-btns {
+  position: absolute;
+}
+
+.os-page-hdr .os-btns div.inline {
+  display: inline-block;
+  position: relative;
+}
+
+.os-page-hdr .os-btns a.btn, 
+.os-page-hdr .os-btns button {
+  border-radius: 3px;
+  padding: 4px 10px;
+  display: inline-block;
+}
+
+.os-page-hdr .os-btns button.primary {
+  color: #fff;
+  background: #428bca;
+  border: 1px solid #357ebd;
+}
+
+.os-page-hdr .os-btns button.primary:hover {
+  color: #fff;
+  background: #3071a9;
+  border: 1px solid #357ebd;
+}
+
+.os-page-hdr .os-btns a.default,
+.os-page-hdr .os-btns button.default {
+  color: #666666;
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+}
+
+.os-page-hdr .os-btns a.default:hover,
+.os-page-hdr .os-btns button.default:hover {
+  background: #ddd;
+  border: 1px solid #a5a5a5;
+}
+
+.os-page-hdr .os-btns.right {
+  right: 25px;
 }
 
 .os-more-options {
@@ -323,19 +376,32 @@ h4 + .btn-group {
   color: white;
 }
 
-.os-table-body .os-more-options {
+.os-table-body .row .col.col-xs-1.os-more-options {
   position: relative;
   text-align: center;
+  padding: 0px!important;
+  overflow: visible;
+  top: 0px!important;
+  width: 8.33333333%!important;
 }
 
 .os-table-body .os-more-options .dropdown-toggle {
-  font-size: 18px;
+  font-size: 20px;
   color: #777777;
   background: transparent;
   border: 0px;
-  margin-top: -4px;
+  margin-top: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
+.os-table-body .os-more-options .dropdown-menu.dropdown-menu-right {
+  margin-right: 19px!important;
+}
+
+.os-table-body .os-more-options .dropdown-menu {
+  margin-left: 15px;
+}
 
 .os-btn-icon, a {
   cursor: pointer;
@@ -367,12 +433,12 @@ h4 + .btn-group {
 
 .os-alert-container {
   text-align: center;
-  z-index: 100;
+  z-index: 2000;
   position: absolute;
   width:100%;
   border-radius: 0px;
   left: 0;
-  top: 57px;
+  top: 50px;
 }
 
 input.ng-dirty.ng-invalid {
@@ -580,24 +646,6 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   text-align: right;
 }
 
-.os-file-upload {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  text-align: left;
-  color: #999;
-}
-
-.os-file-upload > input[type=file] {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 0;
-  opacity: 0;
-  cursor: pointer;
-  padding: 20px;
-}
-
 .os-input-addon-grp {
   position: relative;
 }
@@ -642,7 +690,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 #loading-bar .bar {
   background: #b91f1f!important;
-  top: 57px!important;
+  top: 50px!important;
   height: 3px!important;
 }
 

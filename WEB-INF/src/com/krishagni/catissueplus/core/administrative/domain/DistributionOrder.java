@@ -19,6 +19,8 @@ public class DistributionOrder extends BaseEntity {
 		DISTRIBUTED_AND_CLOSED
 	}
 	
+	private static final String ENTITY_NAME = "distribution_order";
+	
 	private String name;
 	
 	private DistributionProtocol distributionProtocol;
@@ -40,6 +42,10 @@ public class DistributionOrder extends BaseEntity {
 	private Status status;
 	
 	private String activityStatus;
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
 	
 	public String getName() {
 		return name;

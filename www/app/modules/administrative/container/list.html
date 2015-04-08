@@ -3,12 +3,15 @@
     <h3> 
       <span translate="container.list">Storage Containers</span>
     </h3>
-    <button class="os-round-btn" title="{{'container.tooltip.add' | translate}}" ui-sref="container-addedit({containerId: ''})">
-      <span class="fa fa-plus"></span>
-    </button>
-    <div class="os-more-options">
-      <button os-right-drawer-toggle class="os-search-button" title="{{'container.tooltip.search' | translate}}">
+    <div class="os-btns right">
+      <button class="primary" title="{{'container.tooltip.add' | translate}}" 
+        ui-sref="container-addedit({containerId: ''})">
+        <span class="fa fa-plus"></span>
+        <span translate="common.buttons.create">Create</span>
+      </button>
+      <button class="default" os-right-drawer-toggle title="{{'container.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
       </button>
     </div>
   </div>
@@ -29,7 +32,7 @@
       <div class="stats">
         <div class="stat col-xs-6" title="{{'container.dimension' | translate}}">
           <span class="fa fa-arrows-alt"></span>
-          <span>{{container.dimensionOneCapacity}} X {{container.dimensionTwoCapacity}}</span>
+          <span>{{container.noOfRows}} X {{container.noOfColumns}}</span>
         </div>
         <div class="stat col-xs-6" title="{{'container.tooltip.count_free_locations' | translate}}">
           <span class="fa fa-table"></span>

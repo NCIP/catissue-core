@@ -53,7 +53,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 
 		return result.isEmpty() ? null : result.iterator().next();		
 	}
-
+	
 	@Override
 	public void delete(StorageContainerPosition position) {
 		sessionFactory.getCurrentSession().delete(position);		
@@ -230,4 +230,5 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			params.put("storeSpecimenEnabled", crit.storeSpecimensEnabled());
 		}
 	}	
+	
 }

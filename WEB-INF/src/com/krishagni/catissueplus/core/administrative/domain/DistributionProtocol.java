@@ -2,15 +2,21 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.hibernate.envers.Audited;
 
-import krishagni.catissueplus.util.CommonUtil;
-
+import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Audited
 public class DistributionProtocol {
+	private static final String ENTITY_NAME = "distribution_protocol";
 
 	private Long id;
 
@@ -23,9 +29,17 @@ public class DistributionProtocol {
 	private String irbId;
 
 	private Date startDate;
+	
+	private Date endDate;
 
 	private String activityStatus;
-
+	
+	private Set<DistributionOrder> distributionOrders = new HashSet<DistributionOrder>();
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -74,6 +88,14 @@ public class DistributionProtocol {
 		this.startDate = startDate;
 	}
 
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
 	public String getActivityStatus() {
 		return activityStatus;
 	}
@@ -82,26 +104,44 @@ public class DistributionProtocol {
 		this.activityStatus = activityStatus;
 	}
 
-	public void update(DistributionProtocol distributionProtocol) {
-		if (distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
-			this.setShortTitle(CommonUtil.appendTimestamp(distributionProtocol.getShortTitle()));
-			this.setTitle(CommonUtil.appendTimestamp(distributionProtocol.getTitle()));
-		}
-		else {
-			this.setShortTitle(distributionProtocol.getShortTitle());
-			this.setTitle(distributionProtocol.getTitle());
-		}
-		this.setIrbId(distributionProtocol.getIrbId());
-		this.setPrincipalInvestigator(distributionProtocol.getPrincipalInvestigator());
-		this.setStartDate(distributionProtocol.getStartDate());
-		this.setActivityStatus(distributionProtocol.getActivityStatus());
+	public Set<DistributionOrder> getDistributionOrders() {
+		return distributionOrders;
 	}
 
-	public void delete() {
-		//need to check whether its referenced by any order
-		//
-		this.setShortTitle(CommonUtil.appendTimestamp(getShortTitle()));
-		this.setTitle(CommonUtil.appendTimestamp(getTitle()));
-		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+	public void setDistributionOrders(Set<DistributionOrder> distributionOrders) {
+		this.distributionOrders = distributionOrders;
 	}
+
+	public void update(DistributionProtocol distributionProtocol) {
+		if (distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
+			setShortTitle(Utility.appendTimestamp(distributionProtocol.getShortTitle()));
+			setTitle(Utility.appendTimestamp(distributionProtocol.getTitle()));
+		}
+		else {
+			setShortTitle(distributionProtocol.getShortTitle());
+			setTitle(distributionProtocol.getTitle());
+		}
+		setIrbId(distributionProtocol.getIrbId());
+		setPrincipalInvestigator(distributionProtocol.getPrincipalInvestigator());
+		setStartDate(distributionProtocol.getStartDate());
+		setEndDate(distributionProtocol.getEndDate());
+		setActivityStatus(distributionProtocol.getActivityStatus());
+	}
+	
+	public List<DependentEntityDetail> getDependentEntities() {
+		return DependentEntityDetail
+				.singletonList(DistributionOrder.getEntityName(), getDistributionOrders().size());
+	}
+	
+	public void delete() {
+		List<DependentEntityDetail> dependentEntities = getDependentEntities();
+		if (!dependentEntities.isEmpty()) {
+			throw OpenSpecimenException.userError(DistributionProtocolErrorCode.REF_ENTITY_FOUND);
+		}
+		
+		setShortTitle(Utility.appendTimestamp(getShortTitle()));
+		setTitle(Utility.appendTimestamp(getTitle()));
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+	}
+	
 }

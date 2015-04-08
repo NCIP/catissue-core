@@ -6,12 +6,24 @@ import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 @Audited
 public class Subject {
 	private Long id;
 	
-	private Set<SubjectRole> subjectRoles = new HashSet<SubjectRole>();
+	private String activityStatus;
+	
+	private Set<SubjectRole> roles = new HashSet<SubjectRole>();
+	
+	//
+	// read only
+	//
+	private Set<SubjectAccess> accessList = new HashSet<SubjectAccess>();
 
 	public Long getId() {
 		return id;
@@ -21,43 +33,74 @@ public class Subject {
 		this.id = id;
 	}
 
-	public Set<SubjectRole> getSubjectRoles() {
-		return subjectRoles;
+	public String getActivityStatus() {
+		return activityStatus;
 	}
 
-	public void setSubjectRoles(Set<SubjectRole> subjectRoles) {
-		this.subjectRoles = subjectRoles;
+	public void setActivityStatus(String activityStatus) {
+		this.activityStatus = activityStatus;
+	}
+
+	public Set<SubjectRole> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<SubjectRole> subjectRoles) {
+		this.roles = subjectRoles;
 	}
 	
-	public void assignRole(SubjectRole subjectRole) {
-		boolean found = false;		
-		for (SubjectRole sr : subjectRoles) {
-			if (sr.getDsoId().equals(subjectRole.getDsoId())) {
-				sr.setRole(subjectRole.getRole());
-				found = true;
-				break;
-			}
-		}
-		
-		if (!found) {
-			subjectRole.setSubject(this);
-			subjectRoles.add(subjectRole);
-		}
+	@NotAudited
+	public Set<SubjectAccess> getAccessList() {
+		return accessList;
 	}
-	
+
+	public void setAccessList(Set<SubjectAccess> accessList) {
+		this.accessList = accessList;
+	}
+
 	public void updateRoles(List<SubjectRole> subjectRoles, Session session) {
-		Set<Long> dsoIds = new HashSet<Long>();
-		session.flush();
+		CollectionUpdater.update(getRoles(), subjectRoles);
+	}
+	
+	public SubjectRole addRole(SubjectRole sr) {
+		sr.setSubject(this);
+		getRoles().add(sr);
+		return sr;
+	}
+	
+	public SubjectRole updateRole(SubjectRole sr) {
+		SubjectRole existingRole = getExistingRole(sr.getId());
 		
-		for (SubjectRole role : subjectRoles) {
-			if (!dsoIds.add(role.getDsoId())) {
-				throw new IllegalArgumentException("Multiple roles defined for same DSO");
-			}
-			
-			role.setSubject(this);
+		if (existingRole == null) {
+			OpenSpecimenException.userError(RbacErrorCode.SUBJECT_ROLE_NOT_FOUND);
 		}
 		
-		this.subjectRoles.clear();
-		this.subjectRoles.addAll(subjectRoles);
-	}		
+		existingRole.setSite(sr.getSite());
+		existingRole.setCollectionProtocol(sr.getCollectionProtocol());
+		existingRole.setRole(sr.getRole());
+		existingRole.setSubject(this);
+		return existingRole;
+	}
+	
+	public SubjectRole removeSubjectRole(Long srId) {
+		SubjectRole existingRole = getExistingRole(srId);
+		
+		if (existingRole == null) {
+			OpenSpecimenException.userError(RbacErrorCode.SUBJECT_ROLE_NOT_FOUND);
+		}
+		
+		getRoles().remove(existingRole);
+		return existingRole;
+	}
+
+	private SubjectRole getExistingRole(Long srId) {
+		for (SubjectRole sr : getRoles()) {
+			if (sr.getId().equals(srId)) {
+				return sr;
+			}
+		}
+		
+		return null;
+	}
+	
 }

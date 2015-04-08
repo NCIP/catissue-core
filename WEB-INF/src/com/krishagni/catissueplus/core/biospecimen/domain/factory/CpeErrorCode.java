@@ -11,7 +11,9 @@ public enum CpeErrorCode implements ErrorCode {
 	
 	LABEL_REQUIRED,
 	
-	INVALID_POINT;
+	INVALID_POINT,
+	
+	REF_ENTITY_FOUND;
 
 	@Override
 	public String code() {

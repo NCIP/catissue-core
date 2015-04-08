@@ -1,0 +1,44 @@
+<paths>
+	<path>
+		<from>Participant</from>
+		<to>CollectionProtocol</to>
+		<links>
+			<link>
+				<key>CP_ID</key>
+				<ref-tab-key>IDENTIFIER</ref-tab-key>
+			</link>
+		</links>
+	</path>
+
+	<path>
+		<from>Participant</from>
+		<to>SpecimenCollectionGroup</to>
+		<start-field>scgs</start-field>
+		<links>
+		</links>
+	</path>
+
+	<path>
+		<from>Participant</from>
+		<to>Specimen</to>
+		<start-field>scgs.specimens</start-field>
+		<links>
+		</links>
+	</path>
+
+	<path>
+		<from>Participant</from>
+		<to>Order</to>
+		<start-field>scgs.specimens.specimenOrders.order</start-field>
+		<links>
+		</links>
+	</path>
+	
+	<path>
+		<from>Participant</from>
+		<to>Shipping</to>
+		<start-field>scgs.specimens.specimenShipment.shipment</start-field>
+		<links>
+		</links>
+	</path>
+</paths>

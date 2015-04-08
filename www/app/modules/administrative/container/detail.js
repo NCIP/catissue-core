@@ -1,8 +1,11 @@
 angular.module('os.administrative.container.detail', ['os.administrative.models'])
-  .controller('ContainerDetailCtrl', function($scope, $q, container, Site, CollectionProtocol, PvManager) {
+  .controller('ContainerDetailCtrl', function(
+      $scope, $q, container, Container,
+      Site, CollectionProtocol, PvManager, DeleteUtil) {
 
     function init() {
       $scope.container = container;
+      $scope.downloadUri = Container.url() + container.$id() + '/export-map';
       loadPvs();
     }
 
@@ -24,6 +27,13 @@ angular.module('os.administrative.container.detail', ['os.administrative.models'
       var d = $q.defer();
       d.resolve({});
       return d.promise;
+    }
+
+    $scope.deleteContainer = function() {
+      DeleteUtil.delete($scope.container, {
+        onDeleteState: 'container-list',
+        confirmDelete: 'container.confirm_delete'
+      });
     }
 
     init();

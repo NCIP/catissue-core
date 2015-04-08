@@ -1,35 +1,35 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.envers.Audited;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-
-import com.krishagni.catissueplus.core.administrative.domain.dependency.InstituteDependencyChecker;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
-import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
-@Configurable
 @Audited
 public class Institute extends BaseEntity {
+
+	private static final String ENTITY_NAME ="institute";
+	
 	private String name;
 
 	private String activityStatus;
 
 	private Set<Department> departments = new HashSet<Department>();
+	
+	private Set<Site> sites = new HashSet<Site>(); 
 
-	@Autowired
-	private InstituteDependencyChecker dependencyChecker;
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
 	
 	public String getName() {
 		return name;
@@ -55,6 +55,14 @@ public class Institute extends BaseEntity {
 		this.departments = departments;
 	}
 	
+	public Set<Site> getSites() {
+		return sites;
+	}
+
+	public void setSites(Set<Site> sites) {
+		this.sites = sites;
+	}
+
 	public void update(Institute other) {		
 		setName(other.getName());
 		
@@ -65,20 +73,30 @@ public class Institute extends BaseEntity {
 		
 		updateActivityStatus(other.getActivityStatus());
 	}
-
-	public Map<String,List> delete(Boolean close) {
-		if (!close) {
-			Map<String, List> dependencies = dependencyChecker.getDependencies(this);
-			if (!dependencies.isEmpty()) {
-				return dependencies;
-			}
+	
+	public List<DependentEntityDetail> getDependentEntities() {
+		int userCount = 0;
+		for (Department dept : getDepartments()) {
+			userCount += dept.getUsers().size();
 		}
 		
-		String activityStatus = close ? Status.ACTIVITY_STATUS_CLOSED.getStatus() 
-				: Status.ACTIVITY_STATUS_DISABLED.getStatus();
-		this.setActivityStatus(activityStatus);
+		return DependentEntityDetail
+				.listBuilder()
+				.add(User.getEntityName(), userCount)
+				.add(Site.getEntityName(), getSites().size())
+				.build();
+	}
+	
+	public void delete(Boolean close) {
+		String activityStatus = Status.ACTIVITY_STATUS_CLOSED.getStatus();
+		if (!close) {
+			ensureFreeOfDependencies();
+			
+			setName(Utility.appendTimestamp(getName()));
+			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
+		}
 		
-		return Collections.<String, List>emptyMap();
+		setActivityStatus(activityStatus);
 	}
 	
 	private void updateActivityStatus(String newActivityStatus) {
@@ -87,12 +105,17 @@ public class Institute extends BaseEntity {
 		}
 		
 		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(newActivityStatus)) {
-			Map<String, List> dependencies = dependencyChecker.getDependencies(this);
-			if (!dependencies.isEmpty()) {
-				throw new OpenSpecimenException(ErrorType.USER_ERROR, InstituteErrorCode.REF_ENTITY_FOUND);
-			}
+			ensureFreeOfDependencies();
 		}
 		
 		setActivityStatus(newActivityStatus);
 	}
+	
+	private void ensureFreeOfDependencies() {
+		List<DependentEntityDetail> dependentEntities = getDependentEntities();
+		if (!dependentEntities.isEmpty()) {
+			throw OpenSpecimenException.userError(InstituteErrorCode.REF_ENTITY_FOUND);
+		}
+	}
+	
 }

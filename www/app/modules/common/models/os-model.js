@@ -3,7 +3,6 @@ angular.module('os.common.models', [])
   .factory('osModel', function(ApiUrls, $http, $q) {
     function ModelFactory(modelName, initCb) {
       var url = ApiUrls.getBaseUrl() + modelName + '/';
-      
     
       var Model = function(data) {
         angular.extend(this, data);
@@ -36,7 +35,7 @@ angular.module('os.common.models', [])
       };
 
       Model.noTransform = function(response) {
-        return response.date;
+        return response.data;
       };
 
       Model.query = function(reqParams, transformer) {
@@ -90,6 +89,10 @@ angular.module('os.common.models', [])
         return this.$id() ? this.$update() : this.$save();
       };
 
+      Model.prototype.getDependentEntities = function() {
+        return $http.get(url + this.$id() + '/dependent-entities').then(Model.noTransform);
+      }
+
       Model.prototype.$remove = function () {
         return $http['delete'](url + this.$id()).then(Model.modelRespTransform);
       };
@@ -97,6 +100,15 @@ angular.module('os.common.models', [])
       Model.prototype.$saveProps = function() { 
         return this;
       };
+
+      Model.prototype.copyAttrsIfNotPresent = function(src) {
+        var that = this;
+        angular.forEach(src, function(value, attr) {
+          if (!that[attr]) {
+            that[attr] = value;
+          }
+        })
+      }
 
       return Model;
     };

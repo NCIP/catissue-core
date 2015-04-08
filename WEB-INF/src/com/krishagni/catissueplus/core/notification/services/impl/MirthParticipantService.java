@@ -11,8 +11,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.springframework.context.ApplicationContext;
 
@@ -64,10 +62,7 @@ public class MirthParticipantService implements CrudService {
 		Date dob = participant.getBirthDate();
 		subject.setBirthDate(dob);
 
-		Map<String, CollectionProtocolRegistration> cprCollection = participant.getCprCollection();
-		for (Entry<String, CollectionProtocolRegistration> entry : cprCollection.entrySet()) {
-
-			CollectionProtocolRegistration cpr = entry.getValue();
+		for (CollectionProtocolRegistration cpr : participant.getCprs()) {
 			Date regDate = cpr.getRegistrationDate();
 			subject.setEnrollmentDate(regDate);
 			subject.setLabel(cpr.getPpid().toString());

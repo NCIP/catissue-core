@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
@@ -146,6 +147,10 @@ public class VisitServiceImpl implements VisitService {
 	}
 	
 	private void setVisitId(Long visitId, List<SpecimenDetail> specimens) {
+		if (CollectionUtils.isEmpty(specimens)) {
+			return;
+		}
+		
 		for (SpecimenDetail specimen : specimens) {
 			specimen.setVisitId(visitId);
 			setVisitId(visitId, specimen.getChildren());
