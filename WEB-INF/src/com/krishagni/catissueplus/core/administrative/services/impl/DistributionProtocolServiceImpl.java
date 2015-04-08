@@ -40,9 +40,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<List<DistributionProtocolDetail>> getDistributionProtocols(RequestEvent<DpListCriteria> req) {
 		try {
-			if (!canReadDp()) {
-				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
-			}
+			AccessCtrlMgr.getInstance().ensureReadDpRights();
 			
 			List<DistributionProtocol> dps = daoFactory.getDistributionProtocolDao()
 					.getDistributionProtocols(req.getPayload());
@@ -58,9 +56,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<DistributionProtocolDetail> getDistributionProtocol(RequestEvent<Long> req) {
 		try {
-			if (!canReadDp()) {
-				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
-			}
+			AccessCtrlMgr.getInstance().ensureReadDpRights();
 			
 			Long protocolId = req.getPayload();
 			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(protocolId);
@@ -199,15 +195,5 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		}
 		
 		return true;
-	}
-	
-	private boolean canReadDp() {
-		if (AuthUtil.isAdmin()) {
-			return true;
-		} 
-		
-		User user = AuthUtil.getCurrentUser();
-		Operation[] ops = {Operation.CREATE, Operation.UPDATE};
-		return AccessCtrlMgr.getInstance().canUserPerformOp(user.getId(), Resource.ORDER, ops);
-	}
+	}	
 }

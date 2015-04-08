@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
@@ -90,17 +91,22 @@ public class AccessCtrlMgr {
 		
 		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);		
 	}
+
+	//////////////////////////////////////////////////////////////////////////////////////
+	//                                                                                  //
+	//          Distribution Protocol object access control helper methods              //
+	//                                                                                  //
+	//////////////////////////////////////////////////////////////////////////////////////
+	public void ensureReadDpRights() {
+		if (AuthUtil.isAdmin()) {
+			return;
+		} 
 		
-	public boolean canUserPerformOp(Long userId, Resource resource, Operation[] operations) {
-		List<String> ops = new ArrayList<String>();
-		for (Operation operation : operations) {
-			ops.add(operation.getName());
-		}
-		
-		return daoFactory.getSubjectDao().canUserPerformOps(
-				userId, 
-				resource.getName(), 
-				ops.toArray(new String[0]));
+		User user = AuthUtil.getCurrentUser();
+		Operation[] ops = {Operation.CREATE, Operation.UPDATE};
+		if (!canUserPerformOp(user.getId(), Resource.ORDER, ops)) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}		
 	}
 	
 	public Set<Site> getRoleAssignedSites() {
@@ -244,4 +250,17 @@ public class AccessCtrlMgr {
 		User user = userDao.getById(userId); 
 		return user.getInstitute().getSites();		
 	}
+	
+	private boolean canUserPerformOp(Long userId, Resource resource, Operation[] operations) {
+		List<String> ops = new ArrayList<String>();
+		for (Operation operation : operations) {
+			ops.add(operation.getName());
+		}
+		
+		return daoFactory.getSubjectDao().canUserPerformOps(
+				userId, 
+				resource.getName(), 
+				ops.toArray(new String[0]));
+	}
+	
 }
