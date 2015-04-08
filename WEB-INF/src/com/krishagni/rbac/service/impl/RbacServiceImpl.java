@@ -11,7 +11,9 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Session;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
+import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -54,12 +56,18 @@ import com.krishagni.rbac.service.RbacService;
 public class RbacServiceImpl implements RbacService {
 	private DaoFactory daoFactory;
 	
+	private UserDao userDao;
+	
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
 	}
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+	
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
 	}
 
 	@Override
@@ -390,11 +398,15 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<SubjectRoleDetail> updateSubjectRole(RequestEvent<SubjectRoleOp> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-			
 			SubjectRoleOp subjectRoleOp = req.getPayload();
 			Subject subject = daoFactory.getSubjectDao().getById(subjectRoleOp.getSubjectId(), null);
+			if (subject == null) {
+				return ResponseEvent.userError(RbacErrorCode.SUBJECT_NOT_FOUND);
+			}
 			
+			User user = userDao.getById(subject.getId());
+			AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
+						
 			SubjectRole resp = null;
 			SubjectRole sr = null;
 			switch (subjectRoleOp.getOp()) {
@@ -753,5 +765,5 @@ public class RbacServiceImpl implements RbacService {
 		if (role != null) {
 			throw OpenSpecimenException.userError(RbacErrorCode.DUP_ROLE_NAME);
 		}
-	}
+	}	
 }

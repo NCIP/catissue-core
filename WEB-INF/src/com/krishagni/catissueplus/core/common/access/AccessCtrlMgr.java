@@ -58,7 +58,39 @@ public class AccessCtrlMgr {
 			throwAdminAccessRequired();
 		}
 	}
+
+	//////////////////////////////////////////////////////////////////////////////////////
+	//                                                                                  //
+	//          User object access control helper methods                               //
+	//                                                                                  //
+	//////////////////////////////////////////////////////////////////////////////////////
+	public void ensureCreateUserRights(User user) {
+		ensureUserObjectRights(user, Operation.CREATE);
+	}
 	
+	public void ensureUpdateUserRights(User user) {
+		ensureUserObjectRights(user, Operation.UPDATE);
+	}
+	
+	public void ensureDeleteUserRights(User user) {
+		ensureUserObjectRights(user, Operation.DELETE);
+	}
+	
+	private void ensureUserObjectRights(User user, Operation op) {
+		if (AuthUtil.isAdmin()) {
+			return;
+		}
+		
+		Set<Site> sites = getSites(Resource.USER, op);
+		for (Site site : sites) {
+			if (site.getInstitute().equals(user.getInstitute())) {
+				return;
+			}
+		}
+		
+		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);		
+	}
+		
 	public boolean canUserPerformOp(Long userId, Resource resource, Operation[] operations) {
 		List<String> ops = new ArrayList<String>();
 		for (Operation operation : operations) {
