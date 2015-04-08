@@ -16,6 +16,11 @@ public class Subject {
 	private String activityStatus;
 	
 	private Set<SubjectRole> roles = new HashSet<SubjectRole>();
+	
+	//
+	// read only
+	//
+	private Set<SubjectAccess> accessList = new HashSet<SubjectAccess>();
 
 	public Long getId() {
 		return id;
@@ -41,6 +46,14 @@ public class Subject {
 		this.roles = subjectRoles;
 	}
 	
+	public Set<SubjectAccess> getAccessList() {
+		return accessList;
+	}
+
+	public void setAccessList(Set<SubjectAccess> accessList) {
+		this.accessList = accessList;
+	}
+
 	public void updateRoles(List<SubjectRole> subjectRoles, Session session) {
 		CollectionUpdater.update(getRoles(), subjectRoles);
 	}

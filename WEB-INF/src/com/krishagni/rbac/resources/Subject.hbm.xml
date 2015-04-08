@@ -14,14 +14,39 @@
 
     <property name="activityStatus" column="ACTIVITY_STATUS"/>
        
-    <set 
-      name="roles" 
-      inverse="true" 
-      cascade="all-delete-orphan"
-      table="RBAC_SUBJECT_ROLES">
+    <set name="roles" inverse="true" cascade="all-delete-orphan" table="RBAC_SUBJECT_ROLES">
       <key column="SUBJECT_ID"/>
       <one-to-many class="com.krishagni.rbac.domain.SubjectRole"/>
     </set>
+
+    <set name="accessList" table="RBAC_SUBJECT_ACCESS_VIEW">
+      <key column="SUBJECT_ID"/>
+      <one-to-many class="com.krishagni.rbac.domain.SubjectAccess"/>
+    </set>
+
+    <query name="getAccessList">
+      select
+        sa
+      from
+        com.krishagni.rbac.domain.Subject s
+        join s.accessList sa
+      where
+        s.id = :subjectId and
+        sa.resource = :resource and
+        sa.operation in (:operations)
+    </query>
+
+    <query name="getAccessListCount">
+      select
+        count(sa)
+      from
+        com.krishagni.rbac.domain.Subject s
+        join s.accessList sa
+      where
+        s.id = :subjectId and
+        sa.resource = :resource and
+        sa.operation in (:operations)
+    </query>
     
     <sql-query name="canUserPerformOpOnCp" >
       <return-scalar column="subjectId" type="long"/>
@@ -50,19 +75,6 @@
         operation = :operation and
         (cp_id = :cpId or cp_id is null) and
         (site_id in (:siteIds) or site_id is null)
-    </sql-query>
-
-    <sql-query name="canUserPerformAnyOp">
-      <return-scalar column="count" type="long"/>
-
-      select
-        count(*) as count
-      from
-        rbac_subject_access_view
-      where
-        subject_id = :subjectId and
-        resource = :resource and
-        operation in (:operations)
     </sql-query>
 
     <sql-query name="getCpSiteForOpExec">

@@ -4,12 +4,15 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
+import com.krishagni.catissueplus.core.administrative.domain.Institute;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
@@ -20,16 +23,20 @@ import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
+import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 import edu.wustl.common.util.XMLPropertyHandler;
 
@@ -72,7 +79,11 @@ public class UserServiceImpl implements UserService {
 	@PlusTransactional
 	public ResponseEvent<List<UserSummary>> getUsers(RequestEvent<UserListCriteria> req) {
 		UserListCriteria crit = req.getPayload();		
-		List<UserSummary> users = daoFactory.getUserDao().getUsers(crit);		
+		if (!AuthUtil.isAdmin()) {
+			crit.instituteId(getCurrUserInstitute().getId());
+		} 
+		
+		List<UserSummary> users = daoFactory.getUserDao().getUsers(crit);
 		return ResponseEvent.response(users);
 	}
 	
@@ -89,6 +100,10 @@ public class UserServiceImpl implements UserService {
 			return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 		}
 		
+		if (!AuthUtil.isAdmin() && !user.getInstitute().equals(getCurrUserInstitute())) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+		
 		return ResponseEvent.response(UserDetail.from(user));
 	}
 	
@@ -99,10 +114,14 @@ public class UserServiceImpl implements UserService {
 			boolean isSignupReq = (AuthUtil.getCurrentUser() == null);
 			
 			UserDetail detail = req.getPayload();
-			if(isSignupReq) {
+			if (isSignupReq) {
 				detail.setActivityStatus(Status.ACTIVITY_STATUS_PENDING.getStatus());
 			}
-			User user = userFactory.createUser(detail);
+			
+			User user = userFactory.createUser(detail);			
+			if (!isSignupReq) {
+				ensureUserHasCreatePermission(user.getInstitute());
+			}
 		
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueLoginNameInDomain(user.getLoginName(), user.getAuthDomain().getName(), ose);
@@ -137,6 +156,7 @@ public class UserServiceImpl implements UserService {
 			}
 			
 			User user = userFactory.createUser(detail);
+			ensureUserHasUpdatePermission(user.getInstitute());
 
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueEmail(existingUser, user, ose);
@@ -167,6 +187,8 @@ public class UserServiceImpl implements UserService {
 			if (currentStatus.equals(newStatus)) {
 				return ResponseEvent.response(UserDetail.from(user));
 			}
+			
+			ensureUserHasUpdatePermission(user.getInstitute());
 			
 			if (!isStatusChangeAllowed(newStatus)) {
 				return ResponseEvent.userError(UserErrorCode.STATUS_CHANGE_NOT_ALLOWED);
@@ -219,6 +241,7 @@ public class UserServiceImpl implements UserService {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
+			ensureUserHasDeletePermission(existing.getInstitute());			
 			existing.delete(deleteEntityOp.isClose());
 			return ResponseEvent.response(UserDetail.from(existing)); 
 		} catch (OpenSpecimenException ose) {
@@ -394,4 +417,36 @@ public class UserServiceImpl implements UserService {
 		return currentStatus.equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus()) &&
 				newStatus.equals(Status.ACTIVITY_STATUS_LOCKED.getStatus());
 	}
+		
+	private void ensureUserHasCreatePermission(Institute institute) {
+		ensureUserHasPermission(institute, Operation.CREATE);
+	}
+	
+	private void ensureUserHasUpdatePermission(Institute institute) {
+		ensureUserHasPermission(institute, Operation.UPDATE);
+	}
+	
+	private void ensureUserHasDeletePermission(Institute institute) {
+		ensureUserHasPermission(institute, Operation.DELETE);
+	}
+	
+	private void ensureUserHasPermission(Institute institute, Operation op) {
+		if (AuthUtil.isAdmin()) {
+			return;
+		}
+		
+		Set<Site> sites = AccessCtrlMgr.getInstance().getSites(Resource.USER, op);
+		for (Site site : sites) {
+			if (site.getInstitute().equals(institute)) {
+				return;
+			}
+		}
+		
+		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);		
+	}
+
+	private Institute getCurrUserInstitute() {
+		User user = daoFactory.getUserDao().getById(AuthUtil.getCurrentUser().getId());
+		return user.getInstitute();		
+	}	
 }

@@ -158,6 +158,10 @@ public class User extends BaseEntity implements UserDetails {
 	public void setDepartment(Department department) {
 		this.department = department;
 	}
+	
+	public Institute getInstitute() {
+		return getDepartment().getInstitute();
+	}
 
 	public Address getAddress() {
 		return address;

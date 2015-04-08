@@ -203,7 +203,7 @@ public class SiteServiceImpl implements SiteService {
 	private List<Site> getAccessibleSites(String searchTerm) {
 		List<Site> results = new ArrayList<Site>();
 		
-		Set<Site> accessibleSites = AccessCtrlMgr.getInstance().getAccessibleSites();		
+		Set<Site> accessibleSites = AccessCtrlMgr.getInstance().getRoleAssignedSites();		
 		if (StringUtils.isNotBlank(searchTerm)) {
 			for (Site site : accessibleSites) {
 				if (StringUtils.containsIgnoreCase(site.getName(), searchTerm)) {
@@ -225,7 +225,7 @@ public class SiteServiceImpl implements SiteService {
 	}
 	
 	private Site getFromAccessibleSite(SiteQueryCriteria crit) {
-		Set<Site> accessibleSites = AccessCtrlMgr.getInstance().getAccessibleSites();
+		Set<Site> accessibleSites = AccessCtrlMgr.getInstance().getRoleAssignedSites();
 				
 
 		Long siteId = crit.getId();

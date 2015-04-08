@@ -19,6 +19,7 @@ import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.domain.Subject;
+import com.krishagni.rbac.domain.SubjectAccess;
 import com.krishagni.rbac.domain.SubjectRole;
 import com.krishagni.rbac.events.CpSiteInfo;
 import com.krishagni.rbac.repository.DaoFactory;
@@ -64,35 +65,56 @@ public class AccessCtrlMgr {
 			ops.add(operation.getName());
 		}
 		
-		return rbacService.canUserPerformOp(userId, resource.getName(), ops.toArray(new String[0]));
+		return daoFactory.getSubjectDao().canUserPerformOps(
+				userId, 
+				resource.getName(), 
+				ops.toArray(new String[0]));
 	}
 	
-	public Set<Site> getAccessibleSites() {
+	public Set<Site> getRoleAssignedSites() {
 		User user = AuthUtil.getCurrentUser();		
 		Subject subject = daoFactory.getSubjectDao().getById(user.getId());
 				
 		Set<Site> results = new HashSet<Site>();
-		boolean accessAllSites = false;
+		boolean allSites = false;
 		for (SubjectRole role : subject.getRoles()) {
 			if (role.getSite() == null) {
-				accessAllSites = true;
+				allSites = true;
 				break;
 			}
 			
 			results.add(role.getSite());
 		}
 		
-		if (accessAllSites) {
+		if (allSites) {
 			results.clear();
-
-			//
-			// AuthUtil user is from different session
-			// we need to fetch a fresh copy from DB
-			//
-			user = userDao.getById(user.getId()); 
-			results.addAll(user.getDepartment().getInstitute().getSites());
+			results.addAll(getUserInstituteSites(user.getId()));
 		}
 
+		return results;
+	}
+	
+	public Set<Site> getSites(Resource resource, Operation operation) {
+		User user = AuthUtil.getCurrentUser();
+		String[] ops = {operation.getName()};
+		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(user.getId(), resource.getName(), ops);
+		
+		Set<Site> results = new HashSet<Site>();
+		boolean allSites = false;
+		for (SubjectAccess access : accessList) {
+			if (access.getSite() == null) {
+				allSites = true;
+				break;
+			}
+			
+			results.add(access.getSite());
+		}
+		
+		if (allSites) {
+			results.clear();
+			results.addAll(getUserInstituteSites(user.getId()));
+		}
+		
 		return results;
 	}
 	
@@ -184,5 +206,10 @@ public class AccessCtrlMgr {
 	
 	private void throwAccessDenied() {
 		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+	}
+	
+	private Set<Site> getUserInstituteSites(Long userId) {
+		User user = userDao.getById(userId); 
+		return user.getInstitute().getSites();		
 	}
 }

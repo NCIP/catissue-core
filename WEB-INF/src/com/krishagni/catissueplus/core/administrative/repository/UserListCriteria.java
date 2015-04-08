@@ -3,12 +3,13 @@ package com.krishagni.catissueplus.core.administrative.repository;
 import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 
 public class UserListCriteria extends AbstractListCriteria<UserListCriteria> {
-
 	private String name;
 	
 	private String loginName;
 	
 	private String activityStatus;
+	
+	private Long instituteId;
 	
 	@Override
 	public UserListCriteria self() {
@@ -42,4 +43,12 @@ public class UserListCriteria extends AbstractListCriteria<UserListCriteria> {
 		return self();
 	}
 	
+	public UserListCriteria instituteId(Long instituteId) {
+		this.instituteId = instituteId;
+		return self();
+	}
+	
+	public Long instituteId() {
+		return instituteId;
+	}	
 }

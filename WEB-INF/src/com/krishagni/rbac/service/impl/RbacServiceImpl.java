@@ -30,6 +30,7 @@ import com.krishagni.rbac.domain.ResourceInstanceOp;
 import com.krishagni.rbac.domain.Role;
 import com.krishagni.rbac.domain.RoleAccessControl;
 import com.krishagni.rbac.domain.Subject;
+import com.krishagni.rbac.domain.SubjectAccess;
 import com.krishagni.rbac.domain.SubjectRole;
 import com.krishagni.rbac.events.CpSiteInfo;
 import com.krishagni.rbac.events.GroupDetail;
@@ -516,6 +517,12 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public boolean canUserPerformOp(Long userId, String resource, String[] operations) {
 		return daoFactory.getSubjectDao().canUserPerformOps(userId, resource, operations);
+	}
+
+	@Override
+	@PlusTransactional	
+	public List<SubjectAccess> getAccessList(Long userId, String resource, String[] operations) {
+		return daoFactory.getSubjectDao().getAccessList(userId, resource, operations);
 	}
 	
 	@Override

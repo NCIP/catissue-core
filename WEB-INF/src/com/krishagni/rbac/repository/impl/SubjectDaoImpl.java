@@ -3,12 +3,14 @@ package com.krishagni.rbac.repository.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Query;
 
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.rbac.domain.Subject;
+import com.krishagni.rbac.domain.SubjectAccess;
 import com.krishagni.rbac.events.CpSiteInfo;
 import com.krishagni.rbac.events.UserAccessCriteria;
 import com.krishagni.rbac.repository.SubjectDao;
@@ -58,13 +60,24 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
 	@Override
 	public boolean canUserPerformOps(Long subjectId, String resource, String[] ops) {
 		List<Long> rows = sessionFactory.getCurrentSession()
-				.getNamedQuery(CAN_USER_PERFORM_ANY_OP)
+				.getNamedQuery(GET_ACCESS_LIST_COUNT)
 				.setLong("subjectId", subjectId)
 				.setString("resource", resource)
 				.setParameterList("operations", ops)
 				.list();
 		
 		return rows.isEmpty() ? false : (rows.iterator().next() > 0);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SubjectAccess> getAccessList(Long subjectId, String resource, String[] ops) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_ACCESS_LIST)
+				.setLong("subjectId", subjectId)
+				.setString("resource", resource)
+				.setParameterList("operations", ops)
+				.list();
 	}
 	
 	
@@ -91,5 +104,7 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
 	
 	private static final String CAN_USER_PERFORM_OP_ON_CP_SITE = FQN + ".canUserPerformOpOnCpSite";
 
-	private static final String CAN_USER_PERFORM_ANY_OP = FQN + ".canUserPerformAnyOp";
+	private static final String GET_ACCESS_LIST = FQN + ".getAccessList";
+	
+	private static final String GET_ACCESS_LIST_COUNT = FQN + ".getAccessListCount";
 }

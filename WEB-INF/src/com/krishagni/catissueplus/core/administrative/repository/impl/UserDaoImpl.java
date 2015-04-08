@@ -31,17 +31,17 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<UserSummary> getUsers(UserListCriteria userCriteria) {
+	public List<UserSummary> getUsers(UserListCriteria listCrit) {
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(User.class, "u")
 				.add(Restrictions.ne("u.activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus()))
 				.setProjection(Projections.countDistinct("u.id"))
-				.setFirstResult(userCriteria.startAt())
-				.setMaxResults(userCriteria.maxResults())
+				.setFirstResult(listCrit.startAt())
+				.setMaxResults(listCrit.maxResults())
 				.addOrder(Order.asc("u.lastName"))
 				.addOrder(Order.asc("u.firstName"));
 		
-		addSearchConditions(criteria, userCriteria);
+		addSearchConditions(criteria, listCrit);
 		addProjectionFields(criteria);
 		
 		return getUsers(criteria.list());
@@ -160,12 +160,12 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 				.list();
 	}
 	
-	private void addSearchConditions(Criteria criteria, UserListCriteria userCriteria) {
-		String searchString = userCriteria.query();
+	private void addSearchConditions(Criteria criteria, UserListCriteria listCrit) {
+		String searchString = listCrit.query();
 		
 		if (StringUtils.isBlank(searchString)) {
-			addNameRestriction(criteria, userCriteria.name());
-			addLoginNameRestriction(criteria, userCriteria.loginName());
+			addNameRestriction(criteria, listCrit.name());
+			addLoginNameRestriction(criteria, listCrit.loginName());
 		} else {
 			Criterion srchCond = Restrictions.disjunction()
 					.add(Restrictions.ilike("u.firstName", searchString, MatchMode.ANYWHERE))
@@ -175,7 +175,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 			criteria.add(srchCond);
 		}
 		
-		addActivityStatusRestriction(criteria, userCriteria.activityStatus());
+		addActivityStatusRestriction(criteria, listCrit.activityStatus());
+		addInstituteRestriction(criteria, listCrit.instituteId());
 	}
 
 	private void addNameRestriction(Criteria criteria, String name) {
@@ -205,6 +206,16 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		
 		Criterion activityStatusCond = Restrictions.eq("u.activityStatus", activityStatus);
 		criteria.add(activityStatusCond);
+	}
+	
+	private void addInstituteRestriction(Criteria criteria, Long instituteId) {
+		if (instituteId == null) {
+			return;
+		}
+		
+		criteria.createAlias("u.department", "dept")
+			.createAlias("dept.institute", "institute")
+			.add(Restrictions.eq("institute.id", instituteId));
 	}
 
 	private void addProjectionFields(Criteria criteria) {
