@@ -952,6 +952,17 @@
         dropFirst="false" 
         classpathref="liquibaseClasspath" />
     </target>
+	
+    <target name="generate_envers_schema">
+      <updateDatabase 
+        changeLogFile="${base.dir}/SQL/liquibase_xml/envers-schema.xml" 
+        driver="${final.database.driver}" 
+        url="${final.database.url}" 
+        username="${database.username}" 
+        password="${database.password}" 
+        dropFirst="false" 
+        classpathref="liquibaseClasspath" />
+    </target>
 
        <target name="upgrade_de_db">
            <delete dir="${temp.dir}/dynamicextensions" failonerror="no"/>
