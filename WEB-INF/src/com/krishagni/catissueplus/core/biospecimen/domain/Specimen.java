@@ -438,6 +438,10 @@ public class Specimen extends BaseEntity {
 			}
 		}
 	}
+	
+	public CollectionProtocolRegistration getRegistration() {
+		return getVisit().getRegistration();
+	}
 
 	public void update(Specimen specimen) {
 		String previousStatus = getCollectionStatus();

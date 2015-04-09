@@ -638,14 +638,12 @@
     "resources" : {
       "CollectionProtocol": "Collection Protocol",
       "DistributionProtocol": "Distribution Protocol",
-      "Institute": "Institute",
       "Order": "Order",
       "ParticipantPhi": "Participant (PHI)",
-      "Specimen": "Specimen",
+      "ParticipantDeid": "Participant (DeId)",
+      "VisitAndSpecimen": "Visits and Specimens",
       "Site": "Site",
-      "StorageContainer": "Storage Container",
-      "User": "User",
-      "Visit": "Visit"
+      "StorageContainer": "Storage Container"
     },
 
     "menu": {

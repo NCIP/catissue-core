@@ -27,14 +27,12 @@
     <sql>
       insert into RBAC_RESOURCES(NAME) values('CollectionProtocol');
       insert into RBAC_RESOURCES(NAME) values('DistributionProtocol');
-      insert into RBAC_RESOURCES(NAME) values('Institute');
       insert into RBAC_RESOURCES(NAME) values('Order');
       insert into RBAC_RESOURCES(NAME) values('ParticipantPhi');
-      insert into RBAC_RESOURCES(NAME) values('Specimen');
-      insert into RBAC_RESOURCES(NAME) values('Site');
+      insert into RBAC_RESOURCES(NAME) values('ParticipantDeid');
+      insert into RBAC_RESOURCES(NAME) values('VisitAndSpecimen');
       insert into RBAC_RESOURCES(NAME) values('StorageContainer');
       insert into RBAC_RESOURCES(NAME) values('User');
-      insert into RBAC_RESOURCES(NAME) values('Visit');
     </sql>
   </changeSet>
   
@@ -42,15 +40,12 @@
     <sql>
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'CollectionProtocol');
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'DistributionProtocol');
-      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Institute');
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Order');
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'ParticipantPhi');
-      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Specimen');
-      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Site');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'ParticipantDeid');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'VisitAndSpecimen');
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'StorageContainer');
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'User');
-      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Visit');
     </sql>
   </changeSet>  
-
 </databaseChangeLog>

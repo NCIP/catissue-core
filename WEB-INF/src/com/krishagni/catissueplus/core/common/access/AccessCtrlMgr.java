@@ -14,6 +14,8 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.Resource;
@@ -326,6 +328,90 @@ public class AccessCtrlMgr {
 		}
 		
 		return phiAccess;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////
+	//                                                                                  //
+	//          Visit and Specimen object access control helper methods                 //
+	//                                                                                  //
+	//////////////////////////////////////////////////////////////////////////////////////
+	public void ensureCreateOrUpdateVisitRights(Visit visit) {
+		ensureVisitAndSpecimenObjectRights(visit.getRegistration(), Operation.UPDATE);
+	}
+
+	public void ensureReadVisitRights(Visit visit) {
+		ensureReadVisitRights(visit.getRegistration());
+	}
+	
+	public void ensureReadVisitRights(CollectionProtocolRegistration cpr) {
+		ensureVisitAndSpecimenObjectRights(cpr, Operation.READ);
+	}
+		
+	public void ensureDeleteVisitRights(Visit visit) {
+		ensureVisitAndSpecimenObjectRights(visit.getRegistration(), Operation.DELETE);
+	}
+	
+	public void ensureCreateOrUpdateSpecimenRights(Specimen specimen) {
+		ensureVisitAndSpecimenObjectRights(specimen.getRegistration(), Operation.UPDATE);
+	}
+	
+	public void ensureReadSpecimenRights(Specimen specimen) {
+		ensureReadSpecimenRights(specimen.getRegistration());
+	}
+	
+	public void ensureReadSpecimenRights(CollectionProtocolRegistration cpr) {
+		ensureVisitAndSpecimenObjectRights(cpr, Operation.READ);
+	}
+	
+	public void ensureDeleteSpecimenRights(Specimen specimen) {
+		ensureVisitAndSpecimenObjectRights(specimen.getRegistration(), Operation.DELETE);
+	}
+		
+	private void ensureVisitAndSpecimenObjectRights(CollectionProtocolRegistration cpr, Operation op) {
+		if (AuthUtil.isAdmin()) {
+			return;
+		}
+		
+		Long userId = AuthUtil.getCurrentUser().getId();
+		String resource = Resource.VISIT_N_SPECIMEN.getName();
+		String[] ops = null;
+		if (op == Operation.CREATE || op == Operation.UPDATE) {
+			ops = new String[]{Operation.CREATE.getName(), Operation.UPDATE.getName()};
+		} else {
+			ops = new String[]{op.getName()};
+		}
+		
+		boolean allowed = false;
+		Long cpId = cpr.getCollectionProtocol().getId();		
+		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource, ops);		
+		if (accessList.isEmpty()) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+		
+		Set<Site> mrnSites = cpr.getParticipant().getMrnSites();
+		if (mrnSites.isEmpty()) {
+			return;
+		}
+		
+		for (SubjectAccess access : accessList) {
+			Site accessSite = access.getSite();
+			if (accessSite != null && mrnSites.contains(accessSite)) { // Specific site
+				allowed = true;
+			} else if (accessSite == null) { // All user institute sites
+				Set<Site> instituteSites = getUserInstituteSites(userId);
+				if (CollectionUtils.containsAny(instituteSites, mrnSites)) {
+					allowed = true;
+				}
+			}
+			
+			if (allowed) {
+				break;
+			}
+		}
+		
+		if (!allowed) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
 	}
 	
 	public Set<Site> getRoleAssignedSites() {

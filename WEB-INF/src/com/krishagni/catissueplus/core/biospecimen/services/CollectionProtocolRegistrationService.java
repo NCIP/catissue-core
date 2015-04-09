@@ -7,7 +7,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegi
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationsList;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
@@ -22,8 +21,6 @@ public interface CollectionProtocolRegistrationService {
 	ResponseEvent<List<VisitSummary>> getVisits(RequestEvent<VisitsListCriteria> req);
 	
 	ResponseEvent<List<SpecimenDetail>> getSpecimens(RequestEvent<VisitSpecimensQueryCriteria> req);
-	
-	ResponseEvent<VisitDetail> addVisit(RequestEvent<VisitDetail> req);
 	
 	//
 	// TODO: Requires review

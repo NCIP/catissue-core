@@ -22,6 +22,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.SpecimenLabelPrinter
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
@@ -66,6 +67,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND);
 			}
 			
+			AccessCtrlMgr.getInstance().ensureReadSpecimenRights(specimen);
 			return ResponseEvent.response(SpecimenDetail.from(specimen));			
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
@@ -102,7 +104,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 			if (existing == null) {
 				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND);
 			}
-			
+		
+			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(existing);
 			saveOrUpdate(detail, existing, null);
 			return ResponseEvent.response(SpecimenDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
@@ -196,6 +199,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	
 	private Specimen saveOrUpdate(SpecimenDetail detail, Specimen existing, Specimen parent) {
 		Specimen specimen = specimenFactory.createSpecimen(detail, parent);
+		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);
 
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		if (existing == null || // no specimen before 
