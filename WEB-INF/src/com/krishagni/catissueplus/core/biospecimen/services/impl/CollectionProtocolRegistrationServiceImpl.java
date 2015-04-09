@@ -32,6 +32,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -67,15 +68,20 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	public ResponseEvent<CollectionProtocolRegistrationDetail> getRegistration(RequestEvent<RegistrationQueryCriteria> req) {				
 		try {			
 			RegistrationQueryCriteria crit = req.getPayload();
-			CollectionProtocolRegistrationDetail cpr = null;
+			CollectionProtocolRegistration cpr = null;
 			
 			if (crit.getCprId() != null) {
-				cpr = getByCprId(crit.getCprId());
+				cpr = daoFactory.getCprDao().getById(crit.getCprId());
 			} else if (crit.getCpId() != null && crit.getPpid() != null) {
-				cpr = getByCpIdAndPpid(crit.getCpId(), crit.getPpid());
+				cpr = daoFactory.getCprDao().getCprByPpId(crit.getCpId(), crit.getPpid());
 			} 
 			
-			return ResponseEvent.response(cpr);
+			if (cpr == null) {
+				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
+			}
+			
+			boolean phiInfo = AccessCtrlMgr.getInstance().ensureReadCprRights(cpr);
+			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(cpr));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -89,6 +95,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		try {
 			CollectionProtocolRegistrationDetail cprDetail = req.getPayload();
 			CollectionProtocolRegistration cpr = cprFactory.createCpr(cprDetail);
+			AccessCtrlMgr.getInstance().ensureCreateCprRights(cpr);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			
@@ -124,6 +131,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			if (existing == null) {
 				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
 			}
+			
+			AccessCtrlMgr.getInstance().ensureUpdateCprRights(existing);
 			
 			CollectionProtocolRegistration cpr = cprFactory.createCpr(detail);
 			

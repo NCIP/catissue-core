@@ -3,7 +3,9 @@ package com.krishagni.catissueplus.core.common.events;
 public enum Resource {
 	CP("CollectionProtocol"),
 	
-	CPR("ParticipantPhi"),
+	PARTICIPANT("ParticipantPhi"),
+	
+	PARTICIPANT_DEID("ParticipantDeid"),
 	
 	VISIT("Visit"),
 	

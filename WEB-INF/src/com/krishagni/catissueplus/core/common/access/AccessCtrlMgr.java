@@ -13,6 +13,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.Resource;
@@ -208,6 +209,123 @@ public class AccessCtrlMgr {
 		if (!allowed) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////
+	//                                                                                  //
+	//          Participant object access control helper methods                        //
+	//                                                                                  //
+	//////////////////////////////////////////////////////////////////////////////////////
+	public static class ParticipantReadAccess {
+		public boolean admin;
+		
+		public Set<Long> siteIds;
+		
+		public boolean phiAccess;		
+	}
+	
+	public ParticipantReadAccess getParticipantReadAccess(Long cpId) {
+		ParticipantReadAccess result = new ParticipantReadAccess();
+		result.phiAccess = true;
+		
+		if (AuthUtil.isAdmin()) {
+			result.admin = true;
+			return result;
+		}
+		
+		Long userId = AuthUtil.getCurrentUser().getId();
+		String resource = Resource.PARTICIPANT.getName();
+		String[] ops = {Operation.READ.getName()};
+		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource, ops);
+		if (accessList.isEmpty()) {
+			resource = Resource.PARTICIPANT_DEID.getName();
+			accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource, ops);
+			result.phiAccess = false;
+		}
+		
+		Set<Long> siteIds = new HashSet<Long>();		
+		for (SubjectAccess access : accessList) {
+			Site accessSite = access.getSite();
+			if (accessSite != null) {
+				siteIds.add(accessSite.getId());
+			} else if (accessSite == null) {
+				Set<Site> sites = getUserInstituteSites(userId);
+				for (Site site : sites) {
+					siteIds.add(site.getId());
+				}
+				break;
+			}
+		}
+
+		result.siteIds = siteIds;
+		return result;
+	}
+	
+	public boolean ensureCreateCprRights(CollectionProtocolRegistration cpr) {
+		return ensureCprObjectRights(cpr, Operation.CREATE);
+	}
+
+	public boolean ensureReadCprRights(CollectionProtocolRegistration cpr) {
+		return ensureCprObjectRights(cpr, Operation.READ);
+	}
+
+	public boolean ensureUpdateCprRights(CollectionProtocolRegistration cpr) {
+		return ensureCprObjectRights(cpr, Operation.UPDATE);
+	}
+
+	public boolean ensureDeleteCprRights(CollectionProtocolRegistration cpr) {
+		return ensureCprObjectRights(cpr, Operation.DELETE);
+	}
+	
+	private boolean ensureCprObjectRights(CollectionProtocolRegistration cpr, Operation op) {
+		if (AuthUtil.isAdmin()) {
+			return true;
+		}
+		
+		Long userId = AuthUtil.getCurrentUser().getId();
+		boolean phiAccess = true;
+		String resource = Resource.PARTICIPANT.getName();
+		String[] ops = {op.getName()};
+		
+		boolean allowed = false;
+		Long cpId = cpr.getCollectionProtocol().getId();		
+		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource, ops);		
+		if (accessList.isEmpty() && op == Operation.READ) {
+			phiAccess = false;
+			resource = Resource.PARTICIPANT_DEID.getName();
+			accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource, ops);
+		}
+		
+		if (accessList.isEmpty()) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+		
+		Set<Site> mrnSites = cpr.getParticipant().getMrnSites();
+		if (mrnSites.isEmpty()) {
+			return phiAccess;
+		}
+		
+		for (SubjectAccess access : accessList) {
+			Site accessSite = access.getSite();
+			if (accessSite != null && mrnSites.contains(accessSite)) { // Specific site
+				allowed = true;
+			} else if (accessSite == null) { // All user institute sites
+				Set<Site> instituteSites = getUserInstituteSites(userId);
+				if (CollectionUtils.containsAny(instituteSites, mrnSites)) {
+					allowed = true;
+				}
+			}
+			
+			if (allowed) {
+				break;
+			}
+		}
+		
+		if (!allowed) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+		
+		return phiAccess;
 	}
 	
 	public Set<Site> getRoleAssignedSites() {

@@ -46,6 +46,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr.ParticipantReadAccess;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -150,9 +151,18 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<CprSummary>> getRegisteredParticipants(RequestEvent<CprListCriteria> req) {
-		try {	
-			//TODO: add participant permission checking 
+		try { 
 			CprListCriteria listCrit = req.getPayload();
+			ParticipantReadAccess access = AccessCtrlMgr.getInstance().getParticipantReadAccess(listCrit.cpId());
+			if (!access.admin && CollectionUtils.isEmpty(access.siteIds)) {
+				return ResponseEvent.response(Collections.<CprSummary>emptyList());
+			} 
+			
+			listCrit.includePhi(access.phiAccess);
+			if (!access.admin) {
+				listCrit.siteIds(access.siteIds);
+			}
+			
 			return ResponseEvent.response(daoFactory.getCprDao().getCprList(listCrit));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
