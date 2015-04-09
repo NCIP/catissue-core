@@ -226,18 +226,18 @@ public class SiteServiceImpl implements SiteService {
 	
 	private Site getFromAccessibleSite(SiteQueryCriteria crit) {
 		Set<Site> accessibleSites = AccessCtrlMgr.getInstance().getRoleAssignedSites();
-				
-
+		
 		Long siteId = crit.getId();
 		String siteName = crit.getName();
-
 		Site result = null;		
 		for (Site site : accessibleSites) {
 			if (siteId != null && siteId.equals(site.getId())) {
 				result = site;
-				break;
 			} else if (StringUtils.isNotBlank(siteName) && siteName.equals(site.getName())) {
 				result = site;
+			}
+			
+			if (result != null) {
 				break;
 			}
 		}

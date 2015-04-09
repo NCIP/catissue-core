@@ -21,7 +21,7 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	
 	public List<CollectionProtocol> getCpsByShortTitle(Collection<String> shortTitles);
 	
-	public List<Long> getCpIdsBySiteIds(List<Long> siteIds);
+	public List<Long> getCpIdsBySiteIds(Collection<Long> siteIds);
 
 	public CollectionProtocolEvent getCpe(Long cpeId);
 

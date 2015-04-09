@@ -4,6 +4,8 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 
 public class SubjectAccess {
+	private String id;
+	
 	private Subject subject;
 	
 	private CollectionProtocol collectionProtocol;
@@ -14,12 +16,12 @@ public class SubjectAccess {
 	
 	private String operation;
 	
-	public Long getId() {
-		return subject != null ? subject.getId() : null;
+	public String getId() {
+		return id;
 	}
 	
-	public void setId(Long id) {
-		
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public Subject getSubject() {

@@ -1420,6 +1420,18 @@
     <sql>
       create or replace view RBAC_SUBJECT_ACCESS_VIEW as (
         select 
+          concat(aclo.identifier, concat(
+              '-' , concat(
+                sub.subject_id, concat(
+                  '-', concat(
+                    coalesce(sub.cp_id, 'A') , concat(
+                      '-', coalesce(sub.site_id, 'A')
+                    )
+                  )
+                )
+              )
+            )
+          ) as identifier,
           sub.subject_id as subject_id, 
           sub.cp_id as cp_id, 
           sub.site_id as site_id, 
