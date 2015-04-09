@@ -5,67 +5,87 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+  <property name="boolean.type" value="boolean" dbms="mysql" />
+  <property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
+  <property name="int.type" value="bigint" dbms="mysql" />
+  <property name="int.type" value="number(19,0)" dbms="oracle" />
+
+  <property name="smallint.type" value="smallint" dbms="mysql" />
+  <property name="smallint.type" value="number(5,0)" dbms="oracle" />
+
+  <property name="text.type" value="varchar" dbms="mysql" />
+  <property name="text.type" value="varchar2" dbms="oracle" />
+
+  <property name="double.type" value="double"/>
+
+  <property name="autoIncrement" value="true" dbms="mysql"/>
+  <property name="autoIncrement" value="false" dbms="oracle"/>
+
+  <property name="timestamp.type" value="timestamp" dbms="mysql" />
+  <property name="timestamp.type" value="timestamp" dbms="oracle" />
+
   <property name="clob.type" value="clob" dbms="oracle"/>
   <property name="clob.type" value="longtext" dbms="mysql"/>
 
   <changeSet id="Envers Schema Export - 1" author="slakhani">
     <createTable tableName="REVINFO">
-      <column name="REV" type="BIGINT" autoIncrement="true">
+      <column name="REV" type="${int.type}" autoIncrement="${autoIncrement}">
         <constraints primaryKey="true"/>
       </column>
-      <column name="REVTSTMP" type="datetime"></column>
-      <column name="USER_ID" type="BIGINT"></column>
-      <column name="IP_ADDRESS" type="VARCHAR(255)"></column>
+      <column name="REVTSTMP" type="${timestamp.type}"></column>
+      <column name="USER_ID" type="${int.type}"></column>
+      <column name="IP_ADDRESS" type="${text.type} (255)"></column>
     </createTable>
     
     <createTable tableName="REVCHANGES">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_REVCAHNGES_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
-      <column name="ENTITYNAME" type="VARCHAR(255)"></column>
+      <column name="ENTITYNAME" type="${text.type} (255)"></column>
     </createTable>
     
     <createTable tableName="CATISSUE_ADDRESS_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_ADDRESS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="STREET" type="VARCHAR(50)"></column>
-      <column name="CITY" type="VARCHAR(50)"></column>
-      <column name="STATE" type="VARCHAR(50)"></column>
-      <column name="COUNTRY" type="VARCHAR(50)"></column>
-      <column name="ZIPCODE" type="VARCHAR(30)"></column>
-      <column name="PHONE_NUMBER" type="VARCHAR(50)"></column>
-      <column name="FAX_NUMBER" type="VARCHAR(50)"></column>
+      <column name="STREET" type="${text.type} (50)"></column>
+      <column name="CITY" type="${text.type} (50)"></column>
+      <column name="STATE" type="${text.type} (50)"></column>
+      <column name="COUNTRY" type="${text.type} (50)"></column>
+      <column name="ZIPCODE" type="${text.type} (30)"></column>
+      <column name="PHONE_NUMBER" type="${text.type} (50)"></column>
+      <column name="FAX_NUMBER" type="${text.type} (50)"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_ADDRESS_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="CATISSUE_CLINICAL_DIAGNOSIS_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_CLINICAL_DIAGNOSIS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="CLINICAL_DIAGNOSIS" type="VARCHAR(255)"></column>
-      <column name="COLLECTION_PROTOCOL_ID" type="BIGINT"></column>
+      <column name="CLINICAL_DIAGNOSIS" type="${text.type} (255)"></column>
+      <column name="COLLECTION_PROTOCOL_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_CLINICAL_DIAGNOSIS_AUD" 
       columnNames="IDENTIFIER, REV"/>  
       
     <createTable tableName="CATISSUE_COLL_COORDINATORS_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_COLL_COORDINATORS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
-      <column name="COLLECTION_PROTOCOL_ID" type="BIGINT">
+      <column name="COLLECTION_PROTOCOL_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="USER_ID" type="BIGINT">
+      <column name="USER_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
@@ -75,226 +95,227 @@
     
     
     <createTable tableName="CATISSUE_COLL_PROT_EVENT_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_COLL_PROT_EVENT_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="STUDY_CALENDAR_EVENT_POINT" type="DOUBLE"></column>
-      <column name="ACTIVITY_STATUS" type="VARCHAR(50)"></column>
-      <column name="CLINICAL_DIAGNOSIS" type="VARCHAR(150)"></column>
-      <column name="CLINICAL_STATUS" type="VARCHAR(50)"></column>
-      <column name="COLLECTION_PROTOCOL_ID" type="BIGINT"></column>
-      <column name="DEFAULT_SITE_ID" type="BIGINT"></column>
+      <column name="STUDY_CALENDAR_EVENT_POINT" type="${double.type}"></column>
+      <column name="ACTIVITY_STATUS" type="${text.type} (50)"></column>
+      <column name="CLINICAL_DIAGNOSIS" type="${text.type} (150)"></column>
+      <column name="CLINICAL_STATUS" type="${text.type} (50)"></column>
+      <column name="COLLECTION_PROTOCOL_ID" type="${int.type}"></column>
+      <column name="DEFAULT_SITE_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_COLL_PROT_EVENT_AUD" 
       columnNames="IDENTIFIER, REV"/>
 
     <createTable tableName="CATISSUE_COLL_PROT_REG_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_COLL_PROT_REG_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="CONSENT_SIGN_DATE" type="DATETIME"></column>
-      <column name="CONSENT_DOC_URL" type="VARCHAR(255)"></column>
-      <column name="PROTOCOL_PARTICIPANT_ID" type="VARCHAR(255)"></column>
-      <column name="BARCODE" type="VARCHAR(255)"></column>
-      <column name="REGISTRATION_DATE" type="DATETIME"></column>
-      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"></column>
-      <column name="CONSENT_WITNESS" type="BIGINT"></column>
-      <column name="PARTICIPANT_ID" type="BIGINT"></column>
-      <column name="COLLECTION_PROTOCOL_ID" type="BIGINT"></column>
+      <column name="CONSENT_SIGN_DATE" type="${timestamp.type}"></column>
+      <column name="CONSENT_DOC_URL" type="${text.type} (255)"></column>
+      <column name="PROTOCOL_PARTICIPANT_ID" type="${text.type} (255)"></column>
+      <column name="BARCODE" type="${text.type} (255)"></column>
+      <column name="REGISTRATION_DATE" type="${timestamp.type}"></column>
+      <column name="ACTIVITY_STATUS" type="${text.type} (255)"></column>
+      <column name="CONSENT_WITNESS" type="${int.type}"></column>
+      <column name="PARTICIPANT_ID" type="${int.type}"></column>
+      <column name="COLLECTION_PROTOCOL_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_COLL_PROT_REG_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="CATISSUE_COLLECTION_PROTOCOL_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_COLLECTION_PROTOCOL_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="TITLE" type="VARCHAR(255)"></column>
-      <column name="SHORT_TITLE" type="VARCHAR(255)"></column>
-      <column name="START_DATE" type="DATETIME"></column>
-      <column name="END_DATE" type="DATETIME"></column>
-      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"></column>
-      <column name="IRB_IDENTIFIER" type="VARCHAR(255)"></column>
-      <column name="ENROLLMENT" type="BIGINT"></column>
-      <column name="DESCRIPTION_URL" type="VARCHAR(255)"></column>
-      <column name="LABEL_FORMAT" type="VARCHAR(255)"></column>
-      <column name="DERIV_LABEL_FORMAT" type="VARCHAR(255)"></column>
-      <column name="ALIQUOT_LABEL_FORMAT" type="VARCHAR(255)"></column>
-      <column name="PPID_FORMAT" type="VARCHAR(255)"></column>
-      <column name="UNSIGNED_CONSENT_DOC_URL" type="VARCHAR(255)"></column>
-      <column name="ALIQUOT_IN_SAME_CONTAINER" type="BOOLEAN"></column>
-      <column name="CONSENTS_WAIVED" type="BOOLEAN"></column>
-      <column name="PRINCIPAL_INVESTIGATOR_ID" type="BIGINT"></column>
+      <column name="TITLE" type="${text.type} (255)"></column>
+      <column name="SHORT_TITLE" type="${text.type} (255)"></column>
+      <column name="START_DATE" type="${timestamp.type}"></column>
+      <column name="END_DATE" type="${timestamp.type}"></column>
+      <column name="ACTIVITY_STATUS" type="${text.type} (255)"></column>
+      <column name="IRB_IDENTIFIER" type="${text.type} (255)"></column>
+      <column name="ENROLLMENT" type="${int.type}"></column>
+      <column name="DESCRIPTION_URL" type="${text.type} (255)"></column>
+      <column name="LABEL_FORMAT" type="${text.type} (255)"></column>
+      <column name="DERIV_LABEL_FORMAT" type="${text.type} (255)"></column>
+      <column name="ALIQUOT_LABEL_FORMAT" type="${text.type} (255)"></column>
+      <column name="PPID_FORMAT" type="${text.type} (255)"></column>
+      <column name="UNSIGNED_CONSENT_DOC_URL" type="${text.type} (255)"></column>
+      <column name="ALIQUOT_IN_SAME_CONTAINER" type="${boolean.type}"></column>
+      <column name="CONSENTS_WAIVED" type="${boolean.type}"></column>
+      <column name="PRINCIPAL_INVESTIGATOR_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_COLLECTION_PROTOCOL_AUD" 
       columnNames="IDENTIFIER, REV"/>
     
     
     <createTable tableName="CATISSUE_CONSENT_TIER_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_CONSENT_TIER_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
       <column name="STATEMENT" type="${clob.type}"></column>
-      <column name="COLL_PROTOCOL_ID" type="BIGINT"></column>
+      <column name="COLL_PROTOCOL_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_CONSENT_TIER_AUD" 
       columnNames="IDENTIFIER, REV"/>
 
     <createTable tableName="CATISSUE_CONSENT_TIER_RESPONSE_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_CONSENT_TIER_RESPONSE_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="RESPONSE" type="VARCHAR(255)"></column>
-      <column name="CONSENT_TIER_ID" type="BIGINT"></column>
-      <column name="COLL_PROT_REG_ID" type="BIGINT"></column>
+      <column name="RESPONSE" type="${text.type} (255)"></column>
+      <column name="CONSENT_TIER_ID" type="${int.type}"></column>
+      <column name="COLL_PROT_REG_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_CONSENT_TIER_RESPONSE_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="CATISSUE_CP_REQ_SPECIMEN_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_CP_REQ_SPECIMEN_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="LINEAGE" type="VARCHAR(50)"></column>
-      <column name="SPECIMEN_CLASS" type="VARCHAR(50)"></column>
-      <column name="SPECIMEN_TYPE" type="VARCHAR(50)"></column>
-      <column name="TISSUE_SITE" type="VARCHAR(50)"></column>
-      <column name="TISSUE_SIDE" type="VARCHAR(50)"></column>
-      <column name="PATHOLOGICAL_STATUS" type="VARCHAR(50)"></column>
-      <column name="STORAGE_TYPE" type="VARCHAR(50)"></column>
-      <column name="INITIAL_QUANTITY" type="DOUBLE"></column>
-      <column name="CONCENTRATION" type="DOUBLE"></column>
-      <column name="COLLECTION_PROCEDURE" type="VARCHAR(50)"></column>
-      <column name="COLLECTION_CONTAINER" type="VARCHAR(50)"></column>
-      <column name="LABELFORMAT" type="VARCHAR(255)"></column>
-      <column name="ACTIVITY_STATUS" type="VARCHAR(50)"></column>
-      <column name="COLLECTOR_ID" type="BIGINT"></column>
-      <column name="RECEIVER_ID" type="BIGINT"></column>
-      <column name="COLLECTION_PROTOCOL_EVENT_ID" type="BIGINT"></column>
-      <column name="PARENT_SPECIMEN_ID" type="BIGINT"></column>
+      <column name="LINEAGE" type="${text.type} (50)"></column>
+      <column name="SPECIMEN_CLASS" type="${text.type} (50)"></column>
+      <column name="SPECIMEN_TYPE" type="${text.type} (50)"></column>
+      <column name="TISSUE_SITE" type="${text.type} (50)"></column>
+      <column name="TISSUE_SIDE" type="${text.type} (50)"></column>
+      <column name="PATHOLOGICAL_STATUS" type="${text.type} (50)"></column>
+      <column name="STORAGE_TYPE" type="${text.type} (50)"></column>
+      <column name="INITIAL_QUANTITY" type="${double.type}"></column>
+      <column name="CONCENTRATION" type="${double.type}"></column>
+      <column name="COLLECTION_PROCEDURE" type="${text.type} (50)"></column>
+      <column name="COLLECTION_CONTAINER" type="${text.type} (50)"></column>
+      <column name="LABELFORMAT" type="${text.type} (255)"></column>
+      <column name="ACTIVITY_STATUS" type="${text.type} (50)"></column>
+      <column name="COLLECTOR_ID" type="${int.type}"></column>
+      <column name="RECEIVER_ID" type="${int.type}"></column>
+      <column name="COLLECTION_PROTOCOL_EVENT_ID" type="${int.type}"></column>
+      <column name="PARENT_SPECIMEN_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_CP_REQ_SPECIMEN_AUD" 
       columnNames="IDENTIFIER, REV"/>
 
     <createTable tableName="CATISSUE_DISTRIBUTION_PROTOCOL_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_DISTRIBUTION_PROTOCOL_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="TITLE" type="VARCHAR(255)"></column>
-      <column name="SHORT_TITLE" type="VARCHAR(255)"></column>
-      <column name="IRB_IDENTIFIER" type="VARCHAR(50)"></column>
-      <column name="START_DATE" type="VARCHAR(50)"></column>
-      <column name="ACTIVITY_STATUS" type="VARCHAR(50)"></column>
-      <column name="PRINCIPAL_INVESTIGATOR_ID" type="VARCHAR(50)"></column>
+      <column name="TITLE" type="${text.type} (255)"></column>
+      <column name="SHORT_TITLE" type="${text.type} (255)"></column>
+      <column name="IRB_IDENTIFIER" type="${text.type} (50)"></column>
+      <column name="START_DATE" type="${timestamp.type}"></column>
+      <column name="END_DATE" type="${timestamp.type}"></column>
+      <column name="ACTIVITY_STATUS" type="${text.type} (50)"></column>
+      <column name="PRINCIPAL_INVESTIGATOR_ID" type="${text.type} (50)"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_DISTRIBUTION_PROTOCOL_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="CATISSUE_INSTITUTION_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_INSTITUTION_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="NAME" type="VARCHAR(255)"></column>
-      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"></column>
+      <column name="NAME" type="${text.type} (255)"></column>
+      <column name="ACTIVITY_STATUS" type="${text.type} (255)"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_INSTITUTION_AUD" 
       columnNames="IDENTIFIER, REV"/>
 
     <createTable tableName="CATISSUE_PART_MEDICAL_ID_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_PART_MEDICAL_ID_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="MEDICAL_RECORD_NUMBER" type="VARCHAR(50)"></column>
-      <column name="SITE_ID" type="BIGINT"></column>
-      <column name="PARTICIPANT_ID" type="BIGINT"></column>
+      <column name="MEDICAL_RECORD_NUMBER" type="${text.type} (50)"></column>
+      <column name="SITE_ID" type="${int.type}"></column>
+      <column name="PARTICIPANT_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_PART_MEDICAL_ID_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="CATISSUE_PARTICIPANT_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_PARTICIPANT_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="LAST_NAME" type="VARCHAR(255)"></column>
-      <column name="FIRST_NAME" type="VARCHAR(255)"></column>
-      <column name="MIDDLE_NAME" type="VARCHAR(255)"></column>
-      <column name="BIRTH_DATE" type="DATETIME"></column>
-      <column name="GENDER" type="VARCHAR(255)"></column>
-      <column name="GENOTYPE" type="VARCHAR(255)"></column>
-      <column name="ETHNICITY" type="VARCHAR(255)"></column>
-      <column name="SOCIAL_SECURITY_NUMBER" type="VARCHAR(255)"></column>
-      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"></column>
-      <column name="DEATH_DATE" type="DATETIME"></column>
-      <column name="VITAL_STATUS" type="VARCHAR(255)"></column>
-      <column name="EMPI_ID" type="VARCHAR(255)"></column>
+      <column name="LAST_NAME" type="${text.type} (255)"></column>
+      <column name="FIRST_NAME" type="${text.type} (255)"></column>
+      <column name="MIDDLE_NAME" type="${text.type} (255)"></column>
+      <column name="BIRTH_DATE" type="${timestamp.type}"></column>
+      <column name="GENDER" type="${text.type} (255)"></column>
+      <column name="GENOTYPE" type="${text.type} (255)"></column>
+      <column name="ETHNICITY" type="${text.type} (255)"></column>
+      <column name="SOCIAL_SECURITY_NUMBER" type="${text.type} (255)"></column>
+      <column name="ACTIVITY_STATUS" type="${text.type} (255)"></column>
+      <column name="DEATH_DATE" type="${timestamp.type}"></column>
+      <column name="VITAL_STATUS" type="${text.type} (255)"></column>
+      <column name="EMPI_ID" type="${text.type} (255)"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_PARTICIPANT_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="CATISSUE_PASSWORD_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_PASSWORD_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="PASSWORD" type="VARCHAR(255)"></column>
-      <column name="UPDATE_DATE" type="DATETIME"></column>
-      <column name="USER_ID" type="BIGINT"></column>
+      <column name="PASSWORD" type="${text.type} (255)"></column>
+      <column name="UPDATE_DATE" type="${timestamp.type}"></column>
+      <column name="USER_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_PASSWORD_AUD" 
       columnNames="IDENTIFIER, REV"/>
 
     <createTable tableName="CATISSUE_RACE_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_RACE_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="PARTICIPANT_ID" type="BIGINT">
+      <column name="PARTICIPANT_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="RACE_NAME" type="VARCHAR(255)">
+      <column name="RACE_NAME" type="${text.type} (255)">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -303,50 +324,50 @@
     
     
     <createTable tableName="CATISSUE_SAVED_QUERIES_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_SAVED_QUERIES_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="TITLE" type="VARCHAR(255)"></column>
-      <column name="LAST_RUN_ON" type="DATETIME"></column>
-      <column name="QUERY_DEF" type="VARCHAR(255)"></column>
-      <column name="LAST_UPDATED_ON" type="DATETIME"></column>
-      <column name="LAST_RUN_COUNT" type="BIGINT"></column>
-      <column name="DELETED_ON" type="DATETIME"></column>
-      <column name="CREATED_BY" type="BIGINT"></column>
-      <column name="LAST_UPDATED_BY" type="BIGINT"></column>
+      <column name="TITLE" type="${text.type} (255)"></column>
+      <column name="LAST_RUN_ON" type="${timestamp.type}"></column>
+      <column name="QUERY_DEF" type="${text.type} (255)"></column>
+      <column name="LAST_UPDATED_ON" type="${timestamp.type}"></column>
+      <column name="LAST_RUN_COUNT" type="${int.type}"></column>
+      <column name="DELETED_ON" type="${timestamp.type}"></column>
+      <column name="CREATED_BY" type="${int.type}"></column>
+      <column name="LAST_UPDATED_BY" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_SAVED_QUERIES_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="CATISSUE_SITE_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_SITE_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="NAME" type="VARCHAR(255)"></column>
-      <column name="CODE" type="VARCHAR(255)"></column>
-      <column name="TYPE" type="VARCHAR(255)"></column>
-      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"></column>
+      <column name="NAME" type="${text.type} (255)"></column>
+      <column name="CODE" type="${text.type} (255)"></column>
+      <column name="TYPE" type="${text.type} (255)"></column>
+      <column name="ACTIVITY_STATUS" type="${text.type} (255)"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_SITE_AUD" 
       columnNames="IDENTIFIER, REV"/>
 
     <createTable tableName="CATISSUE_SITE_COORDINATORS_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_SITE_COORDINATORS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="SITE_ID" type="BIGINT">
+      <column name="SITE_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="USER_ID" type="BIGINT">
+      <column name="USER_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -354,14 +375,14 @@
       columnNames="REV, SITE_ID, USER_ID"/>
 
     <createTable tableName="CATISSUE_SITE_CP_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_SITE_CP_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="COLLECTION_PROTOCOL_ID" type="BIGINT">
+      <column name="COLLECTION_PROTOCOL_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="SITE_ID" type="BIGINT">
+      <column name="SITE_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -369,14 +390,14 @@
       columnNames="REV, COLLECTION_PROTOCOL_ID, SITE_ID"/>
       
     <createTable tableName="CATISSUE_SITE_USERS_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_SITE_USERS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="USER_ID" type="BIGINT">
+      <column name="USER_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="SITE_ID" type="BIGINT">
+      <column name="SITE_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -384,91 +405,107 @@
       columnNames="REV, USER_ID, SITE_ID"/>
       
     <createTable tableName="CATISSUE_SPECIMEN_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_SPECIMEN_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="INITIAL_QUANTITY" type="DOUBLE"></column>
-      <column name="PATHOLOGICAL_STATUS" type="VARCHAR(255)"></column>
-      <column name="LINEAGE" type="VARCHAR(255)"></column>
-      <column name="SPECIMEN_CLASS" type="VARCHAR(255)"></column>
-      <column name="SPECIMEN_TYPE" type="VARCHAR(255)"></column>
-      <column name="LABEL" type="VARCHAR(255)"></column>
-      <column name="AVAILABLE" type="BOOLEAN"></column>
-      <column name="COMMENTS" type="VARCHAR(255)"></column>
-      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"></column>
-      <column name="COLLECTION_STATUS" type="VARCHAR(255)"></column>
-      <column name="BARCODE" type="VARCHAR(255)"></column>
-      <column name="CREATED_ON_DATE" type="DATETIME"></column>
-      <column name="AVAILABLE_QUANTITY" type="DOUBLE"></column>
-      <column name="TISSUE_SIDE" type="VARCHAR(255)"></column>
-      <column name="TISSUE_SITE" type="VARCHAR(255)"></column>
-      <column name="PARENT_SPECIMEN_ID" type="BIGINT"></column>
-      <column name="SPECIMEN_COLLECTION_GROUP_ID" type="BIGINT"></column>
-      <column name="REQ_SPECIMEN_ID" type="BIGINT"></column>
+      <column name="INITIAL_QUANTITY" type="${double.type}"></column>
+      <column name="PATHOLOGICAL_STATUS" type="${text.type} (255)"></column>
+      <column name="LINEAGE" type="${text.type} (255)"></column>
+      <column name="SPECIMEN_CLASS" type="${text.type} (255)"></column>
+      <column name="SPECIMEN_TYPE" type="${text.type} (255)"></column>
+      <column name="LABEL" type="${text.type} (255)"></column>
+      <column name="AVAILABLE" type="${boolean.type}"></column>
+      <column name="COMMENTS" type="${text.type} (255)"></column>
+      <column name="ACTIVITY_STATUS" type="${text.type} (255)"></column>
+      <column name="COLLECTION_STATUS" type="${text.type} (255)"></column>
+      <column name="BARCODE" type="${text.type} (255)"></column>
+      <column name="CREATED_ON_DATE" type="${timestamp.type}"></column>
+      <column name="AVAILABLE_QUANTITY" type="${double.type}"></column>
+      <column name="TISSUE_SIDE" type="${text.type} (255)"></column>
+      <column name="TISSUE_SITE" type="${text.type} (255)"></column>
+      <column name="PARENT_SPECIMEN_ID" type="${int.type}"></column>
+      <column name="SPECIMEN_COLLECTION_GROUP_ID" type="${int.type}"></column>
+      <column name="REQ_SPECIMEN_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_SPECIMEN_AUD" 
       columnNames="IDENTIFIER, REV"/>
 
     <createTable tableName="CATISSUE_SPECIMEN_COLL_GROUP_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_SPECIMEN_COLL_GROUP_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="CLINICAL_DIAGNOSIS" type="VARCHAR(255)"></column>
-      <column name="CLINICAL_STATUS" type="VARCHAR(255)"></column>
-      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"></column>
-      <column name="NAME" type="VARCHAR(255)"></column>
-      <column name="COLLECTION_STATUS" type="VARCHAR(255)"></column>
-      <column name="IDENTIFIED_REPORT" type="VARCHAR(255)"></column>
-      <column name="DEIDENTIFIED_REPORT" type="VARCHAR(255)"></column>
-      <column name="COMMENTS" type="VARCHAR(255)"></column>
-      <column name="SURGICAL_PATHOLOGY_NUMBER" type="VARCHAR(255)"></column>
-      <column name="COLLECTION_TIMESTAMP" type="DATETIME"></column>
-      <column name="COLLECTION_PROTOCOL_REG_ID" type="BIGINT"></column>
-      <column name="COLLECTION_PROTOCOL_EVENT_ID" type="BIGINT"></column>
-      <column name="SITE_ID" type="BIGINT"></column>
+      <column name="CLINICAL_DIAGNOSIS" type="${text.type} (255)"></column>
+      <column name="CLINICAL_STATUS" type="${text.type} (255)"></column>
+      <column name="ACTIVITY_STATUS" type="${text.type} (255)"></column>
+      <column name="NAME" type="${text.type} (255)"></column>
+      <column name="COLLECTION_STATUS" type="${text.type} (255)"></column>
+      <column name="IDENTIFIED_REPORT" type="${text.type} (255)"></column>
+      <column name="DEIDENTIFIED_REPORT" type="${text.type} (255)"></column>
+      <column name="COMMENTS" type="${text.type} (255)"></column>
+      <column name="SURGICAL_PATHOLOGY_NUMBER" type="${text.type} (255)"></column>
+      <column name="COLLECTION_TIMESTAMP" type="${timestamp.type}"></column>
+      <column name="COLLECTION_PROTOCOL_REG_ID" type="${int.type}"></column>
+      <column name="COLLECTION_PROTOCOL_EVENT_ID" type="${int.type}"></column>
+      <column name="SITE_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_SPECIMEN_COLL_GROUP_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="CATISSUE_USER_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_CATISSUE_USER_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="EMAIL_ADDRESS" type="VARCHAR(255)"></column>
-      <column name="FIRST_NAME" type="VARCHAR(255)"></column>
-      <column name="LAST_NAME" type="VARCHAR(255)"></column>
-      <column name="LOGIN_NAME" type="VARCHAR(255)"></column>
-      <column name="START_DATE" type="DATETIME"></column>
-      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"></column>
-      <column name="PASSWORD" type="VARCHAR(255)"></column>
-      <column name="STATUS_COMMENT" type="VARCHAR(255)"></column>
-      <column name="DEPARTMENT_ID" type="BIGINT"></column>
-      <column name="DOMAIN_NAME" type="BIGINT"></column>
+      <column name="EMAIL_ADDRESS" type="${text.type} (255)"></column>
+      <column name="FIRST_NAME" type="${text.type} (255)"></column>
+      <column name="LAST_NAME" type="${text.type} (255)"></column>
+      <column name="LOGIN_NAME" type="${text.type} (255)"></column>
+      <column name="START_DATE" type="${timestamp.type}"></column>
+      <column name="ACTIVITY_STATUS" type="${text.type} (255)"></column>
+      <column name="PASSWORD" type="${text.type} (255)"></column>
+      <column name="STATUS_COMMENT" type="${text.type} (255)"></column>
+      <column name="IS_ADMIN" type="${boolean.type}"></column>
+      <column name="DEPARTMENT_ID" type="${int.type}"></column>
+      <column name="DOMAIN_NAME" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="CATISSUE_USER_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
+    <createTable tableName="COLLECTIONPROTOCOL_COLLECTIONPROTOCOLREGISTRATION_AUD">
+      <column name="REV" type="${int.type}">
+        <constraints foreignKeyName="FK_COLLECTIONPROTOCOL_COLLECTIONPROTOCOLREGISTRATION_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
+      </column>
+      <column name="REVTYPE" type="TINYINT(4)"></column>
+      <column name="COLLECTION_PROTOCOL_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey tableName="COLLECTIONPROTOCOL_COLLECTIONPROTOCOLREGISTRATION_AUD" 
+      columnNames="REV, COLLECTION_PROTOCOL_ID, IDENTIFIER"/>
+      
     <createTable tableName="COLLECTIONPROTOCOL_CONSENTTIER_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_COLLECTIONPROTOCOL_CONSENTTIER_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="COLL_PROTOCOL_ID" type="BIGINT">
+      <column name="COLL_PROTOCOL_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -476,46 +513,76 @@
       columnNames="REV, COLL_PROTOCOL_ID, IDENTIFIER"/>
       
     <createTable tableName="DEPARTMENT_USER_AUD">
-      <column name="REV" type="BIGINT">
-        <constraints foreignKeyName="FK_DEPARTMENT_USER_AUD" references="REVINFO(REV)" nullable="false" />
+      <column name="REV" type="${int.type}">
+        <constraints foreignKeyName="FK_DEPARTMENT_USER_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="DEPARTMENT_ID" type="BIGINT">
+      <column name="DEPARTMENT_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
     </createTable>
     <addPrimaryKey tableName="DEPARTMENT_USER_AUD" 
       columnNames="REV, DEPARTMENT_ID, IDENTIFIER"/>
-
-    <createTable tableName="OS_AUTH_DOMAINS_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      
+    <createTable tableName="DISTRIBUTIONPROTOCOL_DISTRIBUTIONORDER_AUD">
+      <column name="REV" type="${int.type}">
+        <constraints foreignKeyName="FK_DISTRIBUTIONPROTOCOL_DISTRIBUTIONORDER_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
+      </column>
+      <column name="REVTYPE" type="TINYINT(4)"></column>
+      <column name="DISTRIBUTION_PROTOCOL_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey tableName="DISTRIBUTIONPROTOCOL_DISTRIBUTIONORDER_AUD" 
+      columnNames="REV, DISTRIBUTION_PROTOCOL_ID, IDENTIFIER"/>
+      
+    <createTable tableName="INSTITUTE_SITE_AUD">
+      <column name="REV" type="${int.type}">
+        <constraints foreignKeyName="FK_INSTITUTE_SITE_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
+      </column>
+      <column name="REVTYPE" type="TINYINT(4)"></column>
+      <column name="INSTITUTE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey tableName="INSTITUTE_SITE_AUD" 
+      columnNames="REV, INSTITUTE_ID, IDENTIFIER"/>
+      
+    <createTable tableName="OS_AUTH_DOMAINS_AUD">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_AUTH_DOMAINS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="DOMAIN_NAME" type="VARCHAR(255)"></column>
-      <column name="AUTH_TYPE" type="BIGINT"></column>
+      <column name="DOMAIN_NAME" type="${text.type} (255)"></column>
+      <column name="AUTH_TYPE" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="OS_AUTH_DOMAINS_AUD" 
       columnNames="IDENTIFIER, REV"/>
 
     <createTable tableName="OS_AUTH_PROVIDER_PROPS_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_AUTH_PROVIDER_PROPS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="AUTH_PROVIDER_ID" type="BIGINT">
+      <column name="AUTH_PROVIDER_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="VALUE" type="VARCHAR(255)">
+      <column name="VALUE" type="${text.type} (255)">
         <constraints nullable="false"/>
       </column>
-      <column name="NAME" type="VARCHAR(255)">
+      <column name="NAME" type="${text.type} (255)">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -523,62 +590,62 @@
       columnNames="REV, AUTH_PROVIDER_ID, VALUE, NAME"/>
       
     <createTable tableName="OS_AUTH_PROVIDERS_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_AUTH_PROVIDERS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="AUTH_TYPE" type="VARCHAR(255)"></column>
-      <column name="IMPL_CLASS" type="VARCHAR(255)"></column>
+      <column name="AUTH_TYPE" type="${text.type} (255)"></column>
+      <column name="IMPL_CLASS" type="${text.type} (255)"></column>
     </createTable>
     <addPrimaryKey tableName="OS_AUTH_PROVIDERS_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="OS_AUTH_TOKENS_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_AUTH_TOKENS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="TOKEN" type="VARCHAR(255)">
+      <column name="TOKEN" type="${text.type} (255)">
         <constraints nullable="false"/>
       </column>
-      <column name="EXPIRES_ON" type="DATETIME"></column>
-      <column name="IP_ADDRESS" type="VARCHAR(255)"></column>
-      <column name="USER_ID" type="BIGINT"></column>
+      <column name="EXPIRES_ON" type="${timestamp.type}"></column>
+      <column name="IP_ADDRESS" type="${text.type} (255)"></column>
+      <column name="USER_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="OS_AUTH_TOKENS_AUD" 
       columnNames="TOKEN, REV"/>
       
     <createTable tableName="OS_CONTAINER_POSITIONS_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_CONTAINER_POSITIONS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
       <column name="POS_ONE" type="INT(11)"></column>
       <column name="POS_TWO" type="INT(11)"></column>
-      <column name="POS_ONE_STR" type="VARCHAR(255)"></column>
-      <column name="POS_TWO_STR" type="VARCHAR(255)"></column>
-      <column name="STORAGE_CONTAINER_ID" type="BIGINT"></column>
-      <column name="OCCUPYING_SPECIMEN_ID" type="BIGINT"></column>
-      <column name="OCCUPYING_CONTAINER_ID" type="BIGINT"></column>
+      <column name="POS_ONE_STR" type="${text.type} (255)"></column>
+      <column name="POS_TWO_STR" type="${text.type} (255)"></column>
+      <column name="STORAGE_CONTAINER_ID" type="${int.type}"></column>
+      <column name="OCCUPYING_SPECIMEN_ID" type="${int.type}"></column>
+      <column name="OCCUPYING_CONTAINER_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="OS_CONTAINER_POSITIONS_AUD" 
       columnNames="IDENTIFIER, REV"/>
 
     <createTable tableName="OS_CONTAINERS_HIERARCHY_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_CONTAINERS_HIERARCHY_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="DESCENDENT_ID" type="BIGINT">
+      <column name="DESCENDENT_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="ANCESTOR_ID" type="BIGINT">
+      <column name="ANCESTOR_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -586,79 +653,79 @@
       columnNames="REV, ANCESTOR_ID, DESCENDENT_ID"/>
       
     <createTable tableName="OS_DEPARTMENTS_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_DEPARTMENTS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="NAME" type="VARCHAR(255)"></column>
-      <column name="INSTITUTE_ID" type="BIGINT"></column>
+      <column name="NAME" type="${text.type} (255)"></column>
+      <column name="INSTITUTE_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="OS_DEPARTMENTS_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="OS_FORGOT_PASSWORD_TOKENS_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_FORGOT_PASSWORD_TOKENS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="USER_ID" type="BIGINT">
+      <column name="USER_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="TOKEN" type="VARCHAR(255)"></column>
-      <column name="CREATED_DATE" type="DATETIME"></column>
+      <column name="TOKEN" type="${text.type} (255)"></column>
+      <column name="CREATED_DATE" type="${timestamp.type}"></column>
     </createTable>
     <addPrimaryKey tableName="OS_FORGOT_PASSWORD_TOKENS_AUD" 
       columnNames="USER_ID, REV"/>
       
     <createTable tableName="OS_ORDER_ITEMS_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_ORDER_ITEMS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="QUANTITY" type="DOUBLE"></column>
-      <column name="ORDER_ID" type="BIGINT"></column>
-      <column name="SPECIMEN_ID" type="BIGINT"></column>
+      <column name="QUANTITY" type="${double.type}"></column>
+      <column name="ORDER_ID" type="${int.type}"></column>
+      <column name="SPECIMEN_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="OS_ORDER_ITEMS_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="OS_ORDERS_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_ORDERS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="NAME" type="VARCHAR(255)"></column>
-      <column name="CREATION_DATE" type="DATETIME"></column>
-      <column name="EXECUTION_DATE" type="DATETIME"></column>
-      <column name="STATUS" type="VARCHAR(255)"></column>
-      <column name="ORDER_TYPE" type="VARCHAR(255)"></column>
-      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"></column>
-      <column name="REQUESTER_ID" type="BIGINT"></column>
-      <column name="SITE_ID" type="BIGINT"></column>
-      <column name="DISTRIBUTION_PROTOCOL_ID" type="BIGINT"></column>
-      <column name="DISTRIBUTOR_ID" type="BIGINT"></column>
+      <column name="NAME" type="${text.type} (255)"></column>
+      <column name="CREATION_DATE" type="${timestamp.type}"></column>
+      <column name="EXECUTION_DATE" type="${timestamp.type}"></column>
+      <column name="STATUS" type="${smallint.type}"></column>
+      <column name="ORDER_TYPE" type="${text.type} (255)"></column>
+      <column name="ACTIVITY_STATUS" type="${text.type} (255)"></column>
+      <column name="REQUESTER_ID" type="${int.type}"></column>
+      <column name="SITE_ID" type="${int.type}"></column>
+      <column name="DISTRIBUTION_PROTOCOL_ID" type="${int.type}"></column>
+      <column name="DISTRIBUTOR_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="OS_ORDERS_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="OS_STOR_CONT_COMP_SPEC_CLASSES_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_STOR_CONT_COMP_SPEC_CLASSES_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="STORAGE_CONTAINER_ID" type="BIGINT">
+      <column name="STORAGE_CONTAINER_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="SPECIMEN_CLASS" type="VARCHAR(255)">
+      <column name="SPECIMEN_CLASS" type="${text.type} (255)">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -666,14 +733,14 @@
       columnNames="REV, STORAGE_CONTAINER_ID, SPECIMEN_CLASS"/>
       
     <createTable tableName="OS_STOR_CONT_COMP_SPEC_TYPES_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_STOR_CONT_COMP_SPEC_TYPES_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="STORAGE_CONTAINER_ID" type="BIGINT">
+      <column name="STORAGE_CONTAINER_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="SPECIMEN_TYPE" type="VARCHAR(255)">
+      <column name="SPECIMEN_TYPE" type="${text.type} (255)">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -681,14 +748,14 @@
       columnNames="REV, STORAGE_CONTAINER_ID, SPECIMEN_TYPE"/>
       
     <createTable tableName="OS_STOR_CONT_SPEC_CLASSES_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_STOR_CONT_SPEC_CLASSES_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="STORAGE_CONTAINER_ID" type="BIGINT">
+      <column name="STORAGE_CONTAINER_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="SPECIMEN_CLASS" type="VARCHAR(255)">
+      <column name="SPECIMEN_CLASS" type="${text.type} (255)">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -696,14 +763,14 @@
       columnNames="REV, STORAGE_CONTAINER_ID, SPECIMEN_CLASS"/>
       
     <createTable tableName="OS_STOR_CONT_SPEC_TYPES_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_STOR_CONT_SPEC_TYPES_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="STORAGE_CONTAINER_ID" type="BIGINT">
+      <column name="STORAGE_CONTAINER_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="SPECIMEN_TYPE" type="VARCHAR(255)">
+      <column name="SPECIMEN_TYPE" type="${text.type} (255)">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -711,14 +778,14 @@
       columnNames="REV, STORAGE_CONTAINER_ID, SPECIMEN_TYPE"/>
 
     <createTable tableName="OS_STOR_CONTAINER_COMP_CPS_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_STOR_CONTAINER_COMP_CPS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="STORAGE_CONTAINER_ID" type="BIGINT">
+      <column name="STORAGE_CONTAINER_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="CP_ID" type="BIGINT">
+      <column name="CP_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -726,138 +793,169 @@
       columnNames="REV, STORAGE_CONTAINER_ID, CP_ID"/>
       
     <createTable tableName="OS_STOR_CONTAINER_CPS_AUD">
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_STOR_CONTAINER_CPS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="STORAGE_CONTAINER_ID" type="BIGINT">
+      <column name="STORAGE_CONTAINER_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="CP_ID" type="BIGINT">
+      <column name="CP_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
     </createTable>
     <addPrimaryKey tableName="OS_STOR_CONTAINER_CPS_AUD" 
-      columnNames="REV, STORAGE_CONTAINER_ID, CP_ID"/>
+      columnNames="REV, CP_ID, STORAGE_CONTAINER_ID"/>
 
     <createTable tableName="OS_STORAGE_CONTAINERS_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_OS_STORAGE_CONTAINERS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="NAME" type="VARCHAR(255)"></column>
-      <column name="BARCODE" type="VARCHAR(255)"></column>
-      <column name="TEMPERATURE" type="DOUBLE"></column>
-      <column name="DIMENSION_ONE_CAPACITY" type="INT"></column>
-      <column name="DIMENSION_TWO_CAPACITY" type="INT"></column>
-      <column name="DIMENSION_ONE_LABELING_SCHEME" type="VARCHAR(255)"></column>
-      <column name="DIMENSION_TWO_LABELING_SCHEME" type="VARCHAR(255)"></column>
-      <column name="STORE_SPECIMENS" type="BOOLEAN"></column>
-      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"></column>
-      <column name="COMMENTS" type="VARCHAR(255)"></column>
-      <column name="SITE_ID" type="BIGINT"></column>
-      <column name="PARENT_CONTAINER_ID" type="BIGINT"></column>
-      <column name="CREATED_BY" type="BIGINT"></column>
+      <column name="NAME" type="${text.type} (255)"></column>
+      <column name="BARCODE" type="${text.type} (255)"></column>
+      <column name="TEMPERATURE" type="${double.type}"></column>
+      <column name="NO_OF_COLS" type="${smallint.type}"></column>
+      <column name="NO_OF_ROWS" type="${smallint.type}"></column>
+      <column name="COLUMN_LABELING_SCHEME" type="${text.type} (255)"></column>
+      <column name="ROW_LABELING_SCHEME" type="${text.type} (255)"></column>
+      <column name="STORE_SPECIMENS" type="${boolean.type}"></column>
+      <column name="ACTIVITY_STATUS" type="${text.type} (255)"></column>
+      <column name="COMMENTS" type="${text.type} (255)"></column>
+      <column name="SITE_ID" type="${int.type}"></column>
+      <column name="PARENT_CONTAINER_ID" type="${int.type}"></column>
+      <column name="CREATED_BY" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="OS_STORAGE_CONTAINERS_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="RBAC_OPERATIONS_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_RBAC_OPERATIONS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="NAME" type="VARCHAR(255)"></column>
+      <column name="NAME" type="${text.type} (255)"></column>
     </createTable>
     <addPrimaryKey tableName="RBAC_OPERATIONS_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="RBAC_PERMISSIONS_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_RBAC_PERMISSIONS_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="RESOURCE_ID" type="BIGINT"></column>
-      <column name="OPERATION_ID" type="BIGINT"></column>
+      <column name="RESOURCE_ID" type="${int.type}"></column>
+      <column name="OPERATION_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="RBAC_PERMISSIONS_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="RBAC_RESOURCES_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_RBAC_RESOURCES_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="NAME" type="VARCHAR(255)"></column>
+      <column name="NAME" type="${text.type} (255)"></column>
     </createTable>
     <addPrimaryKey tableName="RBAC_RESOURCES_AUD" 
       columnNames="IDENTIFIER, REV"/>
 
     <createTable tableName="RBAC_ROLE_ACCESS_LIST_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_RBAC_ROLE_ACCESS_LIST_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="ROLE_ID" type="BIGINT"></column>
-      <column name="RESOURCE_ID" type="BIGINT"></column>
+      <column name="ROLE_ID" type="${int.type}"></column>
+      <column name="RESOURCE_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="RBAC_ROLE_ACCESS_LIST_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="RBAC_ROLES_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_RBAC_ROLES_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="NAME" type="VARCHAR(255)"></column>
-      <column name="DESCRIPTION" type="VARCHAR(255)"></column>
-      <column name="PARENT_ROLE_ID" type="BIGINT"></column>
+      <column name="NAME" type="${text.type} (255)"></column>
+      <column name="DESCRIPTION" type="${text.type} (255)"></column>
+      <column name="PARENT_ROLE_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="RBAC_ROLES_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
     <createTable tableName="RBAC_SUBJECT_ROLES_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_RBAC_SUBJECT_ROLES_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="DSO_ID" type="BIGINT"></column>
-      <column name="SUBJECT_ID" type="BIGINT"></column>
-      <column name="ROLE_ID" type="BIGINT"></column>
+      <column name="SUBJECT_ID" type="${int.type}"></column>
+      <column name="ROLE_ID" type="${int.type}"></column>
+      <column name="SITE_ID" type="${int.type}"></column>
+      <column name="CP_ID" type="${int.type}"></column>
     </createTable>
     <addPrimaryKey tableName="RBAC_SUBJECT_ROLES_AUD" 
       columnNames="IDENTIFIER, REV"/>
       
-    <createTable tableName="SITE_STORAGECONTAINER_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+    <createTable tableName="SITE_COLLECTIONPROTOCOLEVENT_AUD">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
+        <constraints foreignKeyName="FK_SITE_COLLECTIONPROTOCOLEVENT_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
+      </column>
+      <column name="REVTYPE" type="TINYINT(4)"></column>
+      <column name="DEFAULT_SITE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey tableName="SITE_COLLECTIONPROTOCOLEVENT_AUD" 
+      columnNames="REV, DEFAULT_SITE_ID, IDENTIFIER"/>
+      
+    <createTable tableName="SITE_PARTICIPANTMEDICALIDENTIFIER_AUD">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="${int.type}">
+        <constraints foreignKeyName="FK_SITE_PARTICIPANTMEDICALIDENTIFIER_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
+      </column>
+      <column name="REVTYPE" type="TINYINT(4)"></column>
+      <column name="SITE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey tableName="SITE_PARTICIPANTMEDICALIDENTIFIER_AUD" 
+      columnNames="REV, SITE_ID, IDENTIFIER"/>
+      
+    <createTable tableName="SITE_STORAGECONTAINER_AUD">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_SITE_STORAGECONTAINER_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="SITE_ID" type="BIGINT">
+      <column name="SITE_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -865,14 +963,14 @@
       columnNames="REV, SITE_ID, IDENTIFIER"/>
 
     <createTable tableName="SITE_VISIT_AUD">
-      <column name="IDENTIFIER" type="BIGINT">
+      <column name="IDENTIFIER" type="${int.type}">
         <constraints nullable="false"/>
       </column>
-      <column name="REV" type="BIGINT">
+      <column name="REV" type="${int.type}">
         <constraints foreignKeyName="FK_SITE_VISIT_AUD_REVINFO" references="REVINFO(REV)" nullable="false" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"></column>
-      <column name="SITE_ID" type="BIGINT">
+      <column name="SITE_ID" type="${int.type}">
         <constraints nullable="false"/>
       </column>
     </createTable>

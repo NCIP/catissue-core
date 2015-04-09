@@ -14,11 +14,15 @@ public class EnversListener implements RevisionListener {
 
 	@Override
 	public void newRevision(Object revisionEntity) {
+		Long userId = null;
 		EnversRevisionEntity revEntity = (EnversRevisionEntity) revisionEntity;
 		
 		HttpServletRequest curRequest = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 		
-		revEntity.setUserId(AuthUtil.getCurrentUser().getId());
+		if(AuthUtil.getCurrentUser() != null){
+			userId = AuthUtil.getCurrentUser().getId();
+		}
+		revEntity.setUserId(userId);
 		revEntity.setIpAddress(curRequest.getRemoteAddr());
 	}
 }

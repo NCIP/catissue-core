@@ -14,6 +14,7 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
@@ -299,6 +300,7 @@ public class StorageContainer extends BaseEntity {
 		this.occupiedPositions = occupiedPositions;
 	}
 	
+	@NotAudited
 	public StorageContainerStats getStats() {
 		return stats;
 	}
