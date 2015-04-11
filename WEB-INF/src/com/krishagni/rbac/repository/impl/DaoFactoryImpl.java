@@ -5,7 +5,13 @@ import org.hibernate.SessionFactory;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.impl.SiteDaoImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.VisitsDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.impl.CollectionProtocolDaoImpl;
+import com.krishagni.catissueplus.core.biospecimen.repository.impl.CollectionProtocolRegistrationDaoImpl;
+import com.krishagni.catissueplus.core.biospecimen.repository.impl.SpecimenDaoImpl;
+import com.krishagni.catissueplus.core.biospecimen.repository.impl.VisitsDaoImpl;
 import com.krishagni.rbac.repository.DaoFactory;
 import com.krishagni.rbac.repository.GroupDao;
 import com.krishagni.rbac.repository.OperationDao;
@@ -81,4 +87,24 @@ public class DaoFactoryImpl implements DaoFactory {
 		return dao;
 	}
 
+	@Override
+	public CollectionProtocolRegistrationDao getCprDao() {
+		CollectionProtocolRegistrationDaoImpl dao = new CollectionProtocolRegistrationDaoImpl();
+		dao.setSessionFactory(sessionFactory);
+		return dao;
+	}
+
+	@Override
+	public VisitsDao getVisitDao() {
+		VisitsDaoImpl dao = new VisitsDaoImpl();
+		dao.setSessionFactory(sessionFactory);
+		return dao;
+	}
+
+	@Override
+	public SpecimenDao getSpecimenDao() {
+		SpecimenDaoImpl dao = new SpecimenDaoImpl();
+		dao.setSessionFactory(sessionFactory);		
+		return dao;
+	}
 }

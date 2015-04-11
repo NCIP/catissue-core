@@ -50,13 +50,8 @@ angular.module('os.biospecimen.models.form', ['os.common.models'])
     };
 
     Form.deleteRecord = function(formId, recordId) {
-      var deleteUrl = Form.url() + formId + '/data';
-      return $http({
-        method: 'DELETE', 
-        url: deleteUrl, 
-        data: [recordId],
-        headers: {'Content-Type': 'application/json;charset=utf-8'}
-      }).then(
+      var url = Form.url() + formId + '/data/' + recordId;
+      return $http.delete(url).then(
         function(resp) {
           return resp.data;
         }

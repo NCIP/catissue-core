@@ -16,6 +16,9 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.Resource;
@@ -263,20 +266,45 @@ public class AccessCtrlMgr {
 		return result;
 	}
 	
+	public boolean ensureCreateCprRights(Long cprId) {
+		return ensureCprObjectRights(cprId, Operation.CREATE);
+	}
+	
 	public boolean ensureCreateCprRights(CollectionProtocolRegistration cpr) {
 		return ensureCprObjectRights(cpr, Operation.CREATE);
 	}
 
+	public void ensureReadCprRights(Long cprId) {
+		ensureCprObjectRights(cprId, Operation.READ);
+	}
+	
 	public boolean ensureReadCprRights(CollectionProtocolRegistration cpr) {
 		return ensureCprObjectRights(cpr, Operation.READ);
 	}
 
+	public void ensureUpdateCprRights(Long cprId) {
+		ensureCprObjectRights(cprId, Operation.UPDATE);
+	}
+	
 	public boolean ensureUpdateCprRights(CollectionProtocolRegistration cpr) {
 		return ensureCprObjectRights(cpr, Operation.UPDATE);
 	}
 
+	public void ensureDeleteCprRights(Long cprId) {
+		ensureCprObjectRights(cprId, Operation.DELETE);
+	}
+		
 	public boolean ensureDeleteCprRights(CollectionProtocolRegistration cpr) {
 		return ensureCprObjectRights(cpr, Operation.DELETE);
+	}
+	
+	private boolean ensureCprObjectRights(Long cprId, Operation op) {
+		CollectionProtocolRegistration cpr = daoFactory.getCprDao().getById(cprId);
+		if (cpr == null) {
+			throw OpenSpecimenException.userError(CprErrorCode.NOT_FOUND);
+		}
+		
+		return ensureCprObjectRights(cpr, op);
 	}
 	
 	private boolean ensureCprObjectRights(CollectionProtocolRegistration cpr, Operation op) {
@@ -335,10 +363,18 @@ public class AccessCtrlMgr {
 	//          Visit and Specimen object access control helper methods                 //
 	//                                                                                  //
 	//////////////////////////////////////////////////////////////////////////////////////
+	public void ensureCreateOrUpdateVisitRights(Long visitId) {
+		ensureVisitObjectRights(visitId, Operation.UPDATE);
+	}
+	
 	public void ensureCreateOrUpdateVisitRights(Visit visit) {
 		ensureVisitAndSpecimenObjectRights(visit.getRegistration(), Operation.UPDATE);
 	}
 
+	public void ensureReadVisitRights(Long visitId) {
+		ensureVisitObjectRights(visitId, Operation.READ);
+	}
+	
 	public void ensureReadVisitRights(Visit visit) {
 		ensureReadVisitRights(visit.getRegistration());
 	}
@@ -346,13 +382,25 @@ public class AccessCtrlMgr {
 	public void ensureReadVisitRights(CollectionProtocolRegistration cpr) {
 		ensureVisitAndSpecimenObjectRights(cpr, Operation.READ);
 	}
-		
+
+	public void ensureDeleteVisitRights(Long visitId) {
+		ensureVisitObjectRights(visitId, Operation.DELETE);
+	}
+	
 	public void ensureDeleteVisitRights(Visit visit) {
 		ensureVisitAndSpecimenObjectRights(visit.getRegistration(), Operation.DELETE);
 	}
 	
+	public void ensureCreateOrUpdateSpecimenRights(Long specimenId) {
+		ensureSpecimenObjectRights(specimenId, Operation.UPDATE);
+	}
+	
 	public void ensureCreateOrUpdateSpecimenRights(Specimen specimen) {
 		ensureVisitAndSpecimenObjectRights(specimen.getRegistration(), Operation.UPDATE);
+	}
+
+	public void ensureReadSpecimenRights(Long specimenId) {
+		ensureSpecimenObjectRights(specimenId, Operation.READ);
 	}
 	
 	public void ensureReadSpecimenRights(Specimen specimen) {
@@ -362,11 +410,33 @@ public class AccessCtrlMgr {
 	public void ensureReadSpecimenRights(CollectionProtocolRegistration cpr) {
 		ensureVisitAndSpecimenObjectRights(cpr, Operation.READ);
 	}
+
+	public void ensureDeleteSpecimenRights(Long specimenId) {
+		ensureSpecimenObjectRights(specimenId, Operation.DELETE);
+	}
 	
 	public void ensureDeleteSpecimenRights(Specimen specimen) {
 		ensureVisitAndSpecimenObjectRights(specimen.getRegistration(), Operation.DELETE);
 	}
+
+	private void ensureVisitObjectRights(Long visitId, Operation op) {
+		Visit visit = daoFactory.getVisitDao().getById(visitId);
+		if (visit == null) {
+			throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND);
+		}
 		
+		ensureVisitAndSpecimenObjectRights(visit.getRegistration(), op);
+	}
+
+	private void ensureSpecimenObjectRights(Long specimenId, Operation op) {
+		Specimen specimen = daoFactory.getSpecimenDao().getById(specimenId);
+		if (specimen == null) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND);
+		}
+		
+		ensureVisitAndSpecimenObjectRights(specimen.getRegistration(), op);
+	}
+	
 	private void ensureVisitAndSpecimenObjectRights(CollectionProtocolRegistration cpr, Operation op) {
 		if (AuthUtil.isAdmin()) {
 			return;
