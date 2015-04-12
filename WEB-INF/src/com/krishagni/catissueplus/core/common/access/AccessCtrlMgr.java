@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
@@ -477,6 +478,76 @@ public class AccessCtrlMgr {
 			if (allowed) {
 				break;
 			}
+		}
+		
+		if (!allowed) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////
+	//                                                                                  //
+	//          Storage container object access control helper methods                  //
+	//                                                                                  //
+	//////////////////////////////////////////////////////////////////////////////////////
+	public Set<Long> getReadAccessContainerSites() {
+		if (AuthUtil.isAdmin()) {
+			return null;
+		}
+		
+		Set<Site> sites = getSites(Resource.STORAGE_CONTAINER, Operation.READ);
+		Set<Long> result = new HashSet<Long>(); 
+		for (Site site : sites) {
+			result.add(site.getId());
+		}
+		
+		return result;
+	}
+	
+	public void ensureCreateContainerRights(StorageContainer container) {
+		ensureStorageContainerObjectRights(container, Operation.CREATE);
+	}
+	
+	public void ensureReadContainerRights(StorageContainer container) {
+		ensureStorageContainerObjectRights(container, Operation.READ);
+	}
+	
+	public void ensureUpdateContainerRights(StorageContainer container) {
+		ensureStorageContainerObjectRights(container, Operation.UPDATE);
+	}
+
+	public void ensureDeleteContainerRights(StorageContainer container) {
+		ensureStorageContainerObjectRights(container, Operation.DELETE);
+	}
+	
+	private void ensureStorageContainerObjectRights(StorageContainer container, Operation op) {
+		if (AuthUtil.isAdmin()) {
+			return;
+		}
+		
+		Long userId = AuthUtil.getCurrentUser().getId();
+		String resource = Resource.STORAGE_CONTAINER.getName();
+		String[] ops = {op.getName()};
+		
+		boolean allowed = false;	
+		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);		
+		if (accessList.isEmpty()) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+		
+		Site containerSite = container.getSite();
+		for (SubjectAccess access : accessList) {
+			Site accessSite = access.getSite();
+			if (accessSite != null && accessSite.equals(containerSite)) { // Specific site
+				allowed = true;
+				break;
+			} else if (accessSite == null) { // All user institute sites
+				Set<Site> instituteSites = getUserInstituteSites(userId);
+				if (instituteSites.contains(containerSite)) {
+					allowed = true;
+				}
+				break;
+			}			
 		}
 		
 		if (!allowed) {
