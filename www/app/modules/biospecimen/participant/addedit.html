@@ -219,7 +219,7 @@
           <td><input type="radio" name="selectedParticipant" ng-click="selectParticipant(participant)" value="{{participant.id}}"></td>
           <td>{{participant.firstName}}</td>
           <td>{{participant.lastName}}</td>
-          <td>{{participant.birthDate}}</td>
+          <td>{{participant.birthDate | date: global.dateFmt}}</td>
           <td>{{participant.ssn}}</td>
           <td>{{participant.pmis | osArrayJoin: pmiText | osNoValue}}</td>
         </tr>

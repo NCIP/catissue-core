@@ -32,6 +32,7 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/QueryFolder.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Site.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocol.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CpWorkflowConfig.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthDomain.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthProvider.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthToken.hbm.xml" />
@@ -74,6 +75,7 @@
 		<mapping resource="com/krishagni/rbac/resources/ResourceInstanceOp.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/RoleAccessControl.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/Subject.hbm.xml"/>
+		<mapping resource="com/krishagni/rbac/resources/SubjectAccess.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/SubjectRole.hbm.xml"/>
 		
     </session-factory>

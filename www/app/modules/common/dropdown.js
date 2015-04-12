@@ -12,25 +12,44 @@ angular.module('openspecimen')
       }
     }
 
+    function getItemDisplayValue(item, tAttrs) {
+      var result = item;
+      if (!!tAttrs.displayProp) {
+        result += '.' + tAttrs.displayProp;
+      }
+      return result;
+    }  
+
     return {
       restrict: 'E',
       compile: function(tElem, tAttrs) {
         var multiple = angular.isDefined(tAttrs.multiple);
         var uiSelect = angular.element(multiple ? '<ui-select multiple/>' : '<ui-select/>')
           .attr('ng-model', tAttrs.ngModel)
+          .attr('ng-disabled', tAttrs.ngDisabled)
           .attr('reset-search-input', true);
+    
+        if (tAttrs.onSelect) {
+          uiSelect.attr('on-select', tAttrs.onSelect);
+        }
 
         var uiSelectMatch = angular.element('<ui-select-match/>')
           .attr('placeholder', tAttrs.placeholder);
         
-        var uiSelectChoices = angular.element('<ui-select-choices/>')
-          .attr('repeat', "item in " + tAttrs.list + " | filter: $select.search")
-          .append('<span ng-bind-html="item | highlight: $select.search"></span>');
+        var searchItem = getItemDisplayValue('item', tAttrs);
+        var uiSelectChoices = angular.element('<ui-select-choices/>');
+
+        if (tAttrs.selectProp) {
+          uiSelectChoices.attr('repeat', "item." + tAttrs.selectProp + " as item in " + tAttrs.list + " | filter: $select.search");
+        } else {
+          uiSelectChoices.attr('repeat', "item in " + tAttrs.list + " | filter: $select.search");
+        }
+        uiSelectChoices.append('<span ng-bind-html="' + searchItem + ' | highlight: $select.search"></span>');
 
         if (multiple) {
-          uiSelectMatch.append('{{$item}}');
+          uiSelectMatch.append('{{' + getItemDisplayValue('$item', tAttrs) + '}}');
         } else {
-          uiSelectMatch.append('{{$select.selected}}');
+          uiSelectMatch.append('{{' + getItemDisplayValue('$select.selected', tAttrs) + '}}');
         }
 
         if (angular.isDefined(tAttrs.refresh)) {

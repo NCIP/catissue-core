@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.rest.filter;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.codec.Base64;
@@ -92,6 +94,10 @@ public class AuthTokenFilter extends GenericFilterBean {
 
 		User userDetails = null;
 		String authToken = httpReq.getHeader(OS_AUTH_TOKEN_HDR);
+		if (authToken == null) {
+			authToken = getAuthTokenFromCookie(httpReq);
+		}
+		
 		if (authToken != null) {
 			TokenDetail tokenDetail = new TokenDetail();
 			tokenDetail.setToken(authToken);
@@ -110,7 +116,7 @@ public class AuthTokenFilter extends GenericFilterBean {
 		
 		if (userDetails == null) {
 			String clientHdr = httpReq.getHeader(OS_CLIENT_HDR);
-                        if (clientHdr != null && clientHdr.equals("webui")) {
+			if (clientHdr != null && clientHdr.equals("webui")) {
 				setUnauthorizedResp(httpResp);
 			} else {
 				setRequireAuthResp(httpResp);
@@ -163,5 +169,32 @@ public class AuthTokenFilter extends GenericFilterBean {
 		httpResp.sendError(HttpServletResponse.SC_UNAUTHORIZED,
 				"You must supply valid credentials to access the OpenSpecimen REST API");
 	}
-
+	
+	private String getAuthTokenFromCookie(HttpServletRequest httpReq) {
+		String cookieHdr = httpReq.getHeader("Cookie");
+		if (StringUtils.isBlank(cookieHdr)) {
+			return null;
+		}
+		
+		String[] cookies = cookieHdr.split(";");
+		String authToken = null;
+		for (String cookie : cookies) {
+			if (!cookie.trim().startsWith("osAuthToken")) {
+				continue;
+			}
+			
+			String[] authTokenParts = cookie.trim().split("=");
+			if (authTokenParts.length == 2) {
+				try {
+					authToken = URLDecoder.decode(authTokenParts[1], "utf-8");
+					authToken = authToken.substring(1, authToken.length() - 1);
+				} catch (Exception e) {
+					
+				}				
+				break;
+			}
+		}
+		
+		return authToken;
+	}
 }

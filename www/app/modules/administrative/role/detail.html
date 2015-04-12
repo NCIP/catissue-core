@@ -4,9 +4,13 @@
       <li><a ui-sref="role-list" translate="role.list">Roles</a></li>
     </ul>
     <h3>{{role.name}}</h3>
-    <button class="os-round-btn" ui-sref="role-addedit({roleId: role.id})">
-      <span class="fa fa-pencil"></span>
-    </button>
+
+    <div class="os-btns right">
+      <button class="primary" ui-sref="role-addedit({roleId: role.id})">
+        <span class="fa fa-pencil"></span>
+        <span translate="common.buttons.edit">Edit</span>
+      </button>
+    </div>
   </div>
 
   <div os-side-menu>

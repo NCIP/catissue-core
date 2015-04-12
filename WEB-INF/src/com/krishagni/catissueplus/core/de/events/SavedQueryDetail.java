@@ -18,6 +18,8 @@ public class SavedQueryDetail extends SavedQuerySummary {
 	private Object[] selectList;
 	
 	private ReportSpec reporting;
+	
+	private String wideRowMode;
 
 	public Long getCpId() {
 		return cpId;
@@ -67,6 +69,14 @@ public class SavedQueryDetail extends SavedQuerySummary {
 		this.reporting = reporting;
 	}
 
+	public String getWideRowMode() {
+		return wideRowMode;
+	}
+
+	public void setWideRowMode(String wideRowMode) {
+		this.wideRowMode = wideRowMode;
+	}
+
 	public static SavedQueryDetail fromSavedQuery(SavedQuery savedQuery){
 		SavedQueryDetail detail = new SavedQueryDetail();
 		
@@ -74,7 +84,7 @@ public class SavedQueryDetail extends SavedQuerySummary {
 		detail.setTitle(savedQuery.getTitle());
 		detail.setCpId(savedQuery.getCpId());
 		detail.setDrivingForm(savedQuery.getDrivingForm());		
-		detail.setCreatedBy( UserSummary.from(savedQuery.getCreatedBy()));
+		detail.setCreatedBy(UserSummary.from(savedQuery.getCreatedBy()));
 		detail.setLastModifiedBy(UserSummary.from(savedQuery.getLastUpdatedBy()));
 		detail.setLastModifiedOn(savedQuery.getLastUpdated());
 		detail.setLastRunCount(savedQuery.getLastRunCount());
@@ -82,6 +92,7 @@ public class SavedQueryDetail extends SavedQuerySummary {
 		detail.setQueryExpression(savedQuery.getQueryExpression());
 		detail.setSelectList(savedQuery.getSelectList());
 		detail.setReporting(savedQuery.getReporting());
+		detail.setWideRowMode(savedQuery.getWideRowMode());
 		return detail;
 	}	
 }

@@ -21,9 +21,6 @@ angular.module('os.biospecimen.visit.addedit', [])
         angular.extend(currVisit, {visitDate: currVisit.anticipatedVisitDate, status: 'Complete'});
         delete currVisit.anticipatedVisitDate;
       }
-
-      /* Date picker fix */
-      currVisit.visitDate = new Date(currVisit.visitDate).toISOString();
     }
 
     $scope.saveVisit = function() {

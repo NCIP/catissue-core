@@ -61,17 +61,14 @@
         cpr.ppid = :ppid
     </query>
     
-    <sql-query name="getRegistrationId">
-      <return-scalar column="identifier" type="long"/>
-      
-      select 
-        identifier
+    <query name="getCprByCpIdAndPid">
+      select
+        cpr
       from
-        catissue_coll_prot_reg
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration cpr
       where
-        collection_protocol_id = :cpId 
-        and participant_id = :participantId
-    </sql-query>
+        cpr.collectionProtocol.id = :cpId and
+        cpr.participant.id = :participantId 
+    </query>
   </class>
 </hibernate-mapping>
-

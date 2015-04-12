@@ -32,8 +32,11 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
+import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail.WorkflowDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.CpListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -64,6 +67,9 @@ public class CollectionProtocolsController {
 			@RequestParam(value = "piId", required = false)
 			Long piId,
 			
+			@RequestParam(value = "repositoryName", required = false)
+			String repositoryName,
+			
 			@RequestParam(value = "startAt", required = false, defaultValue = "0") 
 			int startAt,
 			
@@ -80,6 +86,7 @@ public class CollectionProtocolsController {
 			.query(searchStr)
 			.title(title)
 			.piId(piId)
+			.repositoryName(repositoryName)
 			.includePi(detailedList)
 			.includeStat(detailedList)
 			.startAt(startAt)
@@ -164,6 +171,25 @@ public class CollectionProtocolsController {
 		return resp.getPayload();
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependent-entities")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<DependentEntityDetail> getCpDependentEntities(@PathVariable Long id) {
+		ResponseEvent<List<DependentEntityDetail>> resp = cpSvc.getCpDependentEntities(getRequest(id));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public CollectionProtocolDetail deleteCollectionProtocol(@PathVariable Long id) {
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.deleteCollectionProtocol(getRequest(id));
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/consent-tiers")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -204,6 +230,32 @@ public class CollectionProtocolsController {
 		return performConsentTierOp(OP.REMOVE, cpId, consentTier);		
 	}
 	
+
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/workflows")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody		
+	public CpWorkflowCfgDetail getWorkflowCfg(@PathVariable("id") Long cpId) {
+		ResponseEvent<CpWorkflowCfgDetail> resp = cpSvc.getWorkflows(new RequestEvent<Long>(cpId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value="/{id}/workflows")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody		
+	public CpWorkflowCfgDetail saveWorkflowCfg(@PathVariable("id") Long cpId, @RequestBody List<WorkflowDetail> workflows) {
+		CpWorkflowCfgDetail input = new CpWorkflowCfgDetail();
+		input.setCpId(cpId);
+		
+		for (WorkflowDetail workflow : workflows) {
+			input.getWorkflows().put(workflow.getName(), workflow);
+		}
+		
+		ResponseEvent<CpWorkflowCfgDetail> resp = cpSvc.saveWorkflows(new RequestEvent<CpWorkflowCfgDetail>(input));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+		
 	private ConsentTierDetail performConsentTierOp(OP op, Long cpId, ConsentTierDetail consentTier) {
 		ConsentTierOp req = new ConsentTierOp();		
 		req.setConsentTier(consentTier);

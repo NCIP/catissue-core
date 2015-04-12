@@ -197,11 +197,11 @@ public class FormsController {
 		return resp.getPayload();
 	}
 		
-	@RequestMapping(method = RequestMethod.DELETE, value="{id}/data")
+	@RequestMapping(method = RequestMethod.DELETE, value="{id}/data/{recordId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<Long> deleteRecords(@PathVariable("id") Long formId, @RequestBody List<Long> recIds) {		
-		ResponseEvent<List<Long>> resp = formSvc.deleteRecords(getRequestEvent(recIds));
+	public Long deleteRecords(@PathVariable("id") Long formId, @PathVariable("recordId") Long recId) {		
+		ResponseEvent<Long> resp = formSvc.deleteRecord(getRequestEvent(recId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

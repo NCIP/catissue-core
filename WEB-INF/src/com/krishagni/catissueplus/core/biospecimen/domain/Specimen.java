@@ -35,6 +35,8 @@ public class Specimen extends BaseEntity {
 	public static final String PENDING = "Pending";
 	
 	public static final String ACCEPTABLE = "Acceptable";
+	
+	private static final String ENTITY_NAME = "specimen";
 
 	private String tissueSite;
 
@@ -89,6 +91,10 @@ public class Specimen extends BaseEntity {
 	@Autowired
 	@Qualifier("specimenLabelGenerator")
 	private LabelGenerator labelGenerator;
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
 	
 	public String getTissueSite() {
 		return tissueSite;
@@ -338,9 +344,18 @@ public class Specimen extends BaseEntity {
 	}
 
 	public CollectionEvent getCollectionEvent() {
+		if (isAliquot() || isDerivative()) {
+			return null;
+		}
+				
 		if (this.collectionEvent == null) {
 			this.collectionEvent = CollectionEvent.getFor(this); 
 		}
+		
+		if (this.collectionEvent == null) {
+			this.collectionEvent = CollectionEvent.createFromSr(this);
+		}
+		
 		return this.collectionEvent;
 	}
 
@@ -349,9 +364,18 @@ public class Specimen extends BaseEntity {
 	}
 
 	public ReceivedEvent getReceivedEvent() {
+		if (isAliquot() || isDerivative()) {
+			return null;
+		}
+		
 		if (this.receivedEvent == null) {
 			this.receivedEvent = ReceivedEvent.getFor(this); 			 
-		}		
+		}
+		
+		if (this.receivedEvent == null) {
+			this.receivedEvent = ReceivedEvent.createFromSr(this);
+		}
+		
 		return this.receivedEvent; 
 	}
 
@@ -383,11 +407,11 @@ public class Specimen extends BaseEntity {
 	}
 	
 	public boolean isAliquot() {
-		return lineage.equals(ALIQUOT);
+		return ALIQUOT.equals(lineage);
 	}
 	
 	public boolean isDerivative() {
-		return lineage.equals(DERIVED);
+		return DERIVED.equals(lineage);
 	}
 	
 	public boolean isCollected() {
@@ -414,13 +438,20 @@ public class Specimen extends BaseEntity {
 			}
 		}
 	}
+	
+	public CollectionProtocolRegistration getRegistration() {
+		return getVisit().getRegistration();
+	}
 
 	public void update(Specimen specimen) {
+		String previousStatus = getCollectionStatus();
+		Double previousQty = getInitialQuantity();
+		
 		setLabel(specimen.getLabel());
 		setBarcode(specimen.getBarcode());
 		
-		setCollectionEvent(specimen.getCollectionEvent());
-		setReceivedEvent(specimen.getReceivedEvent());
+		updateEvent(getCollectionEvent(), specimen.getCollectionEvent());
+		updateEvent(getReceivedEvent(), specimen.getReceivedEvent());
 		setCollectionStatus(specimen.getCollectionStatus());
 
 		if (isAliquot()) {
@@ -448,6 +479,18 @@ public class Specimen extends BaseEntity {
 		setComment(specimen.getComment());		
 		setActivityStatus(specimen.getActivityStatus());
 		updatePosition(specimen.getPosition());
+		
+		if (isAliquot()) {
+			if (isCollected()) {
+				if (!collectionStatus.equals(previousStatus)) { // *** -> COLLECTED
+					decAliquotedQtyFromParent();
+				} else if (!initialQuantity.equals(previousQty)) {
+					adjustParentSpecimenQty(initialQuantity - previousQty);
+				}
+			} else if (COLLECTED.equals(previousStatus)) { // COLLECTED -> ***
+				adjustParentSpecimenQty(-previousQty); // give back the quantity to parent
+			}
+		}
 		
 		checkQtyConstraints();
 	}
@@ -529,8 +572,8 @@ public class Specimen extends BaseEntity {
 	
 	public void decAliquotedQtyFromParent() {
 		if (isCollected() && isAliquot()) {
-			parentSpecimen.setAvailableQuantity(parentSpecimen.getAvailableQuantity() - initialQuantity); 
-		}
+			adjustParentSpecimenQty(initialQuantity);
+		}		
 	}
 	
 	public void occupyPosition() {
@@ -609,28 +652,7 @@ public class Specimen extends BaseEntity {
 		return labelTmpl;		
 	}
 	
-	/**
-	 * Ensures following constraints are adhered
-	 * 1. Specimen initial quantity is greater than or equals to sum of
-	 *    all immediate aliquot child specimens
-	 * 2. Specimen available quantity is less than 
-	 *    initial - sum of all immediate aliquot child specimens initial quantity
-	 */
-	private void ensureAliquotQtyOk(SpecimenErrorCode initGtAliquotQty, SpecimenErrorCode avblQtyGtAct) {		
-		double initialQty = getInitialQuantity();
-		double aliquotQty = getAliquotQuantity();
-		
-		if (initialQty < aliquotQty) {
-			throw OpenSpecimenException.userError(initGtAliquotQty);
-		}
-		
-		double actAvailableQty = initialQty - aliquotQty;
-		if (getAvailableQuantity() > actAvailableQty) {
-			throw OpenSpecimenException.userError(avblQtyGtAct);
-		}
-	}
-	
-	private void updatePosition(StorageContainerPosition newPosition) {
+	public void updatePosition(StorageContainerPosition newPosition) {
 		if (same(position, newPosition)) {
 			return;
 		}
@@ -659,12 +681,58 @@ public class Specimen extends BaseEntity {
 		transfer.saveOrUpdate();
 	}
 	
+	public String getLabelOrDesc() {
+		if (StringUtils.isNotBlank(label)) {
+			return label;
+		}
+		
+		return getDesc(specimenClass, specimenType);
+	}
+	
+	public static String getDesc(String specimenClass, String type) {
+		StringBuilder desc = new StringBuilder();
+		if (StringUtils.isNotBlank(specimenClass)) {
+			desc.append(specimenClass);
+		}
+		
+		if (StringUtils.isNotBlank(type)) {
+			if (desc.length() > 0) {
+				desc.append("-");
+			}
+			
+			desc.append(type);
+		}
+			
+		return desc.toString();		
+	}
+
+	/**
+	 * Ensures following constraints are adhered
+	 * 1. Specimen initial quantity is greater than or equals to sum of
+	 *    all immediate aliquot child specimens
+	 * 2. Specimen available quantity is less than 
+	 *    initial - sum of all immediate aliquot child specimens initial quantity
+	 */
+	private void ensureAliquotQtyOk(SpecimenErrorCode initGtAliquotQty, SpecimenErrorCode avblQtyGtAct) {		
+		double initialQty = getInitialQuantity();
+		double aliquotQty = getAliquotQuantity();
+		
+		if (initialQty < aliquotQty) {
+			throw OpenSpecimenException.userError(initGtAliquotQty);
+		}
+		
+		double actAvailableQty = initialQty - aliquotQty;
+		if (getAvailableQuantity() > actAvailableQty) {
+			throw OpenSpecimenException.userError(avblQtyGtAct);
+		}
+	}
+		
 	private void addCollectionEvent() {
 		if (isAliquot() || isDerivative()) {
 			return;
 		}
 		
-		collectionEvent.saveOrUpdate();		
+		getCollectionEvent().saveOrUpdate();		
 	}
 	
 	private void addReceivedEvent() {
@@ -672,7 +740,7 @@ public class Specimen extends BaseEntity {
 			return;
 		}
 		
-		receivedEvent.saveOrUpdate();
+		getReceivedEvent().saveOrUpdate();
 	}
 	
 	private void deleteEvents() {
@@ -701,5 +769,17 @@ public class Specimen extends BaseEntity {
 		
 		return p1.getPosOneOrdinal() == p2.getPosOneOrdinal() && 
 				p1.getPosTwoOrdinal() == p2.getPosTwoOrdinal();
+	}
+	
+	private void adjustParentSpecimenQty(double qty) {
+		parentSpecimen.setAvailableQuantity(parentSpecimen.getAvailableQuantity() - qty); 
+	}
+	
+	private void updateEvent(SpecimenEvent thisEvent, SpecimenEvent otherEvent) {
+		if (isAliquot() || isDerivative()) {
+			return;
+		}
+		
+		thisEvent.update(otherEvent);
 	}	
 }

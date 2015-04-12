@@ -11,35 +11,98 @@
         <param name="sequence">CATISSUE_USER_SEQ</param>
       </generator>
     </id>
+
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
        
-    <set 
-      name="roles" 
-      inverse="true" 
-      cascade="all-delete-orphan"
-      table="RBAC_SUBJECT_ROLES">
+    <set name="roles" inverse="true" cascade="all-delete-orphan" table="RBAC_SUBJECT_ROLES">
       <key column="SUBJECT_ID"/>
       <one-to-many class="com.krishagni.rbac.domain.SubjectRole"/>
     </set>
+
+    <set name="accessList" table="RBAC_SUBJECT_ACCESS_VIEW">
+      <key column="SUBJECT_ID"/>
+      <one-to-many class="com.krishagni.rbac.domain.SubjectAccess"/>
+    </set>
+
+    <query name="getAccessList">
+      select
+        sa
+      from
+        com.krishagni.rbac.domain.Subject s
+        join s.accessList sa
+      where
+        s.id = :subjectId and
+        sa.resource = :resource and
+        sa.operation in (:operations)
+    </query>
+
+    <query name="getAccessListByCp">
+      select
+        sa
+      from
+        com.krishagni.rbac.domain.Subject s
+        join s.accessList sa
+        left join sa.collectionProtocol cp
+      where
+        s.id = :subjectId and
+        sa.resource = :resource and
+        (cp.id is null or cp.id = :cpId) and
+        sa.operation in (:operations)
+    </query>
+
+    <query name="getAccessListCount">
+      select
+        count(sa)
+      from
+        com.krishagni.rbac.domain.Subject s
+        join s.accessList sa
+      where
+        s.id = :subjectId and
+        sa.resource = :resource and
+        sa.operation in (:operations)
+    </query>
     
-    <sql-query name="getRolesforUserAccess">
-      <return-scalar column="ROLE_ID" type="long"/>
-    
+    <sql-query name="canUserPerformOpOnCp" >
+      <return-scalar column="subjectId" type="long"/>
+      
       select 
-        ROLES.IDENTIFIER as ROLE_ID
+        subject_id as subjectId
+      from
+        rbac_subject_access_view
+      where
+        subject_id = :subjectId and
+        resource = :resource and
+        operation = :operation and
+        (cp_id = :cpId or cp_id is null) 
+    </sql-query>
+    
+    <sql-query name="canUserPerformOpOnCpSite" >
+      <return-scalar column="subjectId" type="long"/>
+      
+      select  
+        subject_id as subjectId
+      from
+        rbac_subject_access_view
+      where
+        subject_id = :subjectId and
+        resource = :resource and
+        operation = :operation and
+        (cp_id = :cpId or cp_id is null) and
+        (site_id in (:siteIds) or site_id is null)
+    </sql-query>
+
+    <sql-query name="getCpSiteForOpExec">
+      <return-scalar column="cpId" type="long"/>
+      <return-scalar column="siteId" type="long"/>
+
+      select
+        cp_id as cpId, site_id as siteId 
       from 
-        RBAC_SUBJECT_ROLES SUB 
-        join RBAC_ROLES ROLES on SUB.ROLE_ID = ROLES.IDENTIFIER
-        join RBAC_ROLE_ACCESS_LIST ACL on ACL.ROLE_ID = ROLES.IDENTIFIER
-        join RBAC_ROLE_ACCESS_LIST_OPS RLOPS on RLOPS.ACL_ID = ACL.IDENTIFIER
-        join RBAC_RESOURCES RES on RES.IDENTIFIER = ACL.RESOURCE_ID
-        join RBAC_OPERATIONS OPS on RLOPS.OPERATION_ID = OPS.IDENTIFIER
-      where 
-        (OPS.NAME = :operationName or OPS.NAME = 'ALL')
-        and (RES.NAME = :resourceName or RES.NAME = 'ALL')
-        and (SUB.CP_ID = :cpId or SUB.CP_ID is null) 
-        and (SUB.SITE_ID = :siteId or SUB.SITE_ID is null)
-        and SUB.SUBJECT_ID = :subjectId
-        and (RLOPS.RES_OBJ_ID = :resourceInstanceId or RLOPS.RES_OBJ_ID is null)
+        rbac_subject_access_view
+      where
+        resource = :resource 
+        and operation = :operation
+        and subject_id = :userId
     </sql-query>
   </class>  
 </hibernate-mapping>

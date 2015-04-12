@@ -14,6 +14,25 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       return CollectionProtocol.query(angular.extend(defOpts, opts || {}));
     }
 
+    //
+    // TODO: This should be an instance method.
+    //
+    CollectionProtocol.getWorkflows = function(cpId) {
+      return $http.get(CollectionProtocol.url() + cpId + '/workflows').then(
+        function(result) {
+          return result.data;
+        }
+      )
+    }
+
+    CollectionProtocol.prototype.getType = function() {
+      return 'collection_protocol';
+    }
+
+    CollectionProtocol.prototype.getDisplayName = function() {
+      return this.title;
+    }
+
     CollectionProtocol.prototype.getConsentTiers = function() {
       return this.consentModel.query();
     };
@@ -21,20 +40,6 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
     CollectionProtocol.prototype.newConsentTier = function(consentTier) {
       return new this.consentModel(consentTier);
     };
-
-    // Temp Added
-    var cps = {
-      "AKU":[{id: 1, shortTitle:'AMCS'}, {id: 2, shortTitle:'Amy CP'}],
-      "ATCC": [{id: 1, shortTitle:'Arm1'}, {id: 2, shortTitle:'Arm2'}]
-    };
-
-    CollectionProtocol.listCpsForSite = function(siteName) {
-      //TODO: get Site CPs by calling back end REST
-      var result = angular.copy(cps[siteName] || []);
-      var d = $q.defer();
-      d.resolve(result);
-      return d.promise;
-    }
 
     return CollectionProtocol;
   });

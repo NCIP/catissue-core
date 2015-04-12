@@ -1,14 +1,20 @@
 package com.krishagni.catissueplus.core.common.util;
 
+import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Set;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
 import edu.wustl.common.util.XMLPropertyHandler;
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
 public class Utility {
 
@@ -53,8 +59,46 @@ public class Utility {
 		
 		return leftOperand.containsAll(rightOperand);		
 	}	
+	
+	public static String appendTimestamp(String name) {
+		Calendar cal = Calendar.getInstance();
+		name = name + "_" + cal.getTimeInMillis();
+		return name;
+	}
 
 	public static String getAppUrl() {
 		return XMLPropertyHandler.getValue("application.url");
+	}
+	
+	public static String getInputStreamDigest(InputStream in) 
+	throws IOException {
+		return DigestUtils.md5Hex(getInputStreamBytes(in));
+	}
+	
+	public static String getResourceDigest(String resource) 
+	throws IOException {
+		InputStream in = null;
+		try {
+			in = getResourceInputStream(resource);
+			return getInputStreamDigest(in);
+		} finally {
+			IOUtils.closeQuietly(in);
+		}		
+	}
+	
+	public static byte[] getInputStreamBytes(InputStream in) 
+	throws IOException {
+		ByteArrayOutputStream bout = null;
+		try {
+			bout = new ByteArrayOutputStream();
+			IOUtils.copy(in, bout);
+			return bout.toByteArray();
+		} finally {
+			IOUtils.closeQuietly(bout);
+		}
+	}
+	
+	public static InputStream getResourceInputStream(String path) {
+		return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);		
 	}
 }

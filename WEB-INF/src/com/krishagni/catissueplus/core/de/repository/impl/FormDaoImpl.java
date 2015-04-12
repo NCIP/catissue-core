@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.de.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Projections;
@@ -30,7 +32,7 @@ import com.krishagni.catissueplus.core.de.repository.FormDao;
 public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao {
 	
 	@Override
-	public Class getType() {
+	public Class<FormContextBean> getType() {
 		return FormContextBean.class;
 	}
 
@@ -279,21 +281,23 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	@SuppressWarnings("unchecked")
 	@Override
 	public FormRecordEntryBean getRecordEntry(Long formCtxtId, Long objectId, Long recordId) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_RECORD_ENTRY);
-		query.setLong("formCtxtId", formCtxtId).setLong("objectId", objectId).setLong("recordId", recordId);
-		
-		List<FormRecordEntryBean> objs = query.list();
-		return objs != null && !objs.isEmpty() ? objs.iterator().next() : null;		
+		List<Object[]> rows = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_RECORD_ENTRY)
+				.setLong("formCtxtId", formCtxtId)
+				.setLong("objectId", objectId)
+				.setLong("recordId", recordId)
+				.list();
+		return CollectionUtils.isEmpty(rows) ? null : getFormRecordEntry(rows.iterator().next());
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public FormRecordEntryBean getRecordEntry(Long recordId) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_RECORD_ENTRY_BY_REC_ID);
-		query.setLong("recordId", recordId);
-		
-		List<FormRecordEntryBean> objs = query.list();
-		return objs != null && !objs.isEmpty() ? objs.iterator().next() : null;		
+		List<Object[]> rows = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_RECORD_ENTRY_BY_REC_ID)
+				.setLong("recordId", recordId)
+				.list();
+		return CollectionUtils.isEmpty(rows) ? null : getFormRecordEntry(rows.iterator().next());
 	}
 	
 	private List<FormCtxtSummary> getEntityForms(List<Object[]> rows) {
@@ -437,6 +441,32 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 				
 		return result;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public String getFormChangeLogDigest(String file) {
+		List<Object> rows = sessionFactory.getCurrentSession()
+				.createSQLQuery(GET_CHANGE_LOG_DIGEST_SQL)
+				.setString("filename", file)
+				.list();
+		
+		if (rows == null || rows.isEmpty()) {
+			return null;
+		}		
+		return (String)rows.iterator().next();
+	}
+
+	@Override
+	public void insertFormChangeLog(String file, String digest, Long formId) {
+		sessionFactory.getCurrentSession()
+				.createSQLQuery(INSERT_CHANGE_LOG_SQL)
+				.setString("filename", file)
+				.setString("digest", digest)
+				.setLong("formId", formId)
+				.setTimestamp("executedOn", Calendar.getInstance().getTime())
+				.executeUpdate();
+	}
+	
 		
 	@SuppressWarnings("unchecked")
 	private ObjectCpDetail getObjectIdForParticipant(Map<String, Object> dataHookingInformation) {
@@ -548,6 +578,19 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		return objCp;
 	}
 	
+	private FormRecordEntryBean getFormRecordEntry(Object[] row) {
+		FormRecordEntryBean re = new FormRecordEntryBean();
+		re.setIdentifier((Long)row[0]);
+		re.setFormCtxtId((Long)row[1]);
+		re.setObjectId((Long)row[2]);
+		re.setRecordId((Long)row[3]);
+		re.setUpdatedBy((Long)row[4]);
+		re.setUpdatedTime((Date)row[5]);
+		re.setActivityStatusStr((String)row[6]);
+		re.setEntityType((String)row[7]);
+		return re;
+	}
+	
 	private static final String FQN = FormContextBean.class.getName();
 	
 	private static final String GET_ALL_FORMS = FQN + ".getAllFormsSummary";
@@ -593,4 +636,24 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	private static final String GET_RECS_BY_TYPE_AND_OBJECT = FQN  + ".getRecordsByEntityAndObject";
 	
 	private static final String GET_RECS = FQN + ".getRecords";
+	
+	private static final String GET_CHANGE_LOG_DIGEST_SQL =
+			"select " +
+			"  md5_digest " +
+			"from " +
+			"  os_import_forms_log fl " +
+			"where " +
+			"  fl.filename = :filename and fl.executed_on in (" +
+			"    select " +
+			"      max(executed_on) " +
+			"    from " +
+			"      os_import_forms_log " +
+			"    where " +
+			"      filename = :filename )";
+	
+	private static final String INSERT_CHANGE_LOG_SQL =
+			"insert into os_import_forms_log " +
+			"	(filename, form_id, md5_digest, executed_on) " +
+			"values " +
+			"   (:filename, :formId, :digest, :executedOn) ";
 }

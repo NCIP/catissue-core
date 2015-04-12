@@ -181,6 +181,10 @@ public class SpecimenRequirement {
 	public void setCollectionProtocolEvent(CollectionProtocolEvent collectionProtocolEvent) {
 		this.collectionProtocolEvent = collectionProtocolEvent;
 	}
+	
+	public CollectionProtocol getCollectionProtocol() {
+		return collectionProtocolEvent != null ? collectionProtocolEvent.getCollectionProtocol() : null;
+	}
 
 	public String getLabelFormat() {
 		return labelFormat;

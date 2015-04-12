@@ -54,5 +54,9 @@ public interface FormDao extends Dao<FormContextBean>{
 	
 	public List<FormContextBean> getFormContextsById(List<Long> formContextIds);
 	
-	public Map<Long, List<FormRecordSummary>> getFormRecords(Long objectId, String entityType, Long formId);	
+	public Map<Long, List<FormRecordSummary>> getFormRecords(Long objectId, String entityType, Long formId);
+	
+	public String getFormChangeLogDigest(String file);
+	
+	public void insertFormChangeLog(String file, String digest, Long formId);	
 }

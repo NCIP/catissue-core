@@ -1,5 +1,8 @@
 package com.krishagni.catissueplus.core.common.events;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 public abstract class AbstractListCriteria<T extends ListCriteria<T>> implements ListCriteria<T> {	
 	private int startAt;
@@ -13,6 +16,8 @@ public abstract class AbstractListCriteria<T extends ListCriteria<T>> implements
 	private boolean exactMatch;
 	
 	private boolean includeStat;
+	
+	private Set<Long> ids = new HashSet<Long>();
 	
 	@Override
 	public int startAt() {
@@ -80,5 +85,16 @@ public abstract class AbstractListCriteria<T extends ListCriteria<T>> implements
 		return self();
 	}
 		
+	@Override
+	public Set<Long> ids() {
+		return ids;
+	}
+	
+	@Override
+	public T ids(Set<Long> ids) {
+		this.ids = ids;
+		return self();
+	}
+	
 	public abstract T self();
 }

@@ -1,0 +1,44 @@
+<div class="os-modal-header">
+  <span ng-if="!dependentEntities || dependentEntities.length == 0">
+    {{'delete_entity.title' | translate: entityProps }}
+  </span>
+  <span class="text-danger" ng-if="dependentEntities.length > 0">
+    {{'delete_entity.dependents_title' | translate: entityProps }}
+  </span>
+</div>
+<div class="os-modal-body">
+  <div ng-if="!dependentEntities || dependentEntities.length == 0">
+      {{ entityProps.confirmDelete | translate: entityProps }}
+  </div>
+  <div ng-if="dependentEntities.length > 0">
+    <h5>{{'delete_entity.dependents_details' | translate: entityProps }}</h5>
+    <div class="os-section">
+      <div class="os-table os-table-muted-hdr os-border">
+        <div class="os-table-head">
+          <div class="row">
+            <div class="col col-xs-6" translate="delete_entity.entity_name">Entity Name</div>
+            <div class="col col-xs-6" translate="delete_entity.count">Count</div>
+          </div>
+        </div>
+        <div class="os-table-body">
+          <div class="row" ng-repeat="dependentEntity in dependentEntities">
+            <div class="col col-xs-6">{{'entities.' +  dependentEntity.name | translate}}</div>
+            <div class="col col-xs-6">{{dependentEntity.count}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="os-modal-footer">
+  <div ng-switch on="!dependentEntities || dependentEntities.length == 0">
+    <div ng-switch-when="true">
+      <button class="btn os-btn-text" ng-click="cancel()" translate="common.buttons.cancel">Cancel</button>
+      <button class="btn btn-danger" ng-click="delete()" translate="common.yes">Yes</button>
+    </div>
+    <div ng-switch-default>
+      <button class="btn btn-primary" ng-click="cancel()" translate="common.buttons.ok">Ok</button>
+    </div>
+  </div>
+</div>
+

@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.Date;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenLabelPrintJob;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class SpecimenLabelPrintJobSummary {
@@ -35,4 +36,11 @@ public class SpecimenLabelPrintJobSummary {
 		this.submissionDate = submissionDate;
 	}
 
+	public static SpecimenLabelPrintJobSummary from(SpecimenLabelPrintJob job) {
+		SpecimenLabelPrintJobSummary result = new SpecimenLabelPrintJobSummary();
+		result.setId(job.getId());
+		result.setSubmissionDate(job.getSubmissionDate());
+		result.setSubmittedBy(UserSummary.from(job.getSubmittedBy()));
+		return result;
+	}
 }

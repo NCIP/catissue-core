@@ -6,7 +6,6 @@ import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 import java.util.Calendar;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
@@ -16,6 +15,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCo
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.ReceivedEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
@@ -31,7 +31,6 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
-import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SpecimenFactoryImpl implements SpecimenFactory {
@@ -431,7 +430,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		if (!container.canContain(specimen)) {
-			ose.addError(StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN);
+			ose.addError(StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN, container.getName(), specimen.getLabelOrDesc());
 			return;
 		}
 		
@@ -473,71 +472,64 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setCollectionDetail(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
+		if (specimen.isAliquot() || specimen.isDerivative()) {
+			return;
+		}
+				
 		CollectionEventDetail collDetail = detail.getCollectionEvent();
-		
-		CollectionEvent event = new CollectionEvent(specimen);
-		if (collDetail != null) {
-			BeanUtils.copyProperties(collDetail, event, new String[] {"user"});
-			event.setUser(getUser(collDetail, ose));
+		if (collDetail == null) {
+			return;
 		}
 		
-		SpecimenRequirement sr = specimen.getSpecimenRequirement();
-		if (sr != null) {
-			if (StringUtils.isBlank(event.getContainer())) {
-				event.setContainer(sr.getCollectionContainer());
-			}
-			
-			if (StringUtils.isBlank(event.getProcedure())) {
-				event.setProcedure(sr.getCollectionProcedure());
-			}
-			
-			if (event.getUser() == null) {
-				event.setUser(sr.getCollector());
-			}
+		CollectionEvent event = CollectionEvent.createFromSr(specimen);
+		setEventAttrs(collDetail, event, ose);
+
+		if (StringUtils.isNotBlank(collDetail.getContainer())) {
+			event.setContainer(collDetail.getContainer());
 		}
 		
-		if (event.getUser() == null) {
-			event.setUser(AuthUtil.getCurrentUser());
+		if (StringUtils.isNotBlank(collDetail.getProcedure())) {
+			event.setProcedure(collDetail.getProcedure());
 		}
-		
-		if (event.getTime() == null) {
-			event.setTime(Calendar.getInstance().getTime());
-		}
-		
+				
 		specimen.setCollectionEvent(event);
 	}
 	
 	private void setReceiveDetail(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
+		if (specimen.isAliquot() || specimen.isDerivative()) {
+			return;			
+		}
+		
 		ReceivedEventDetail recvDetail = detail.getReceivedEvent();
-		
-		ReceivedEvent event = new ReceivedEvent(specimen);
-		if (recvDetail != null) {
-			BeanUtils.copyProperties(recvDetail, event, new String[] {"user"});
-			event.setUser(getUser(recvDetail, ose));
+		if (recvDetail == null) {
+			return;
 		}
 		
-		SpecimenRequirement sr = specimen.getSpecimenRequirement();
-		if (sr != null) {
-			if (event.getUser() == null) {
-				event.setUser(sr.getReceiver());
-			}
-		}
-			
-		if (StringUtils.isBlank(event.getQuality())) {
-			event.setQuality(Specimen.ACCEPTABLE);
-		}
-					
-		if (event.getUser() == null) {
-			event.setUser(AuthUtil.getCurrentUser());
-		}
+		ReceivedEvent event = ReceivedEvent.createFromSr(specimen);
+		setEventAttrs(recvDetail, event, ose);
 		
-		if (event.getTime() == null) {
-			event.setTime(Calendar.getInstance().getTime());
+		if (StringUtils.isNotBlank(recvDetail.getReceivedQuality())) {
+			event.setQuality(recvDetail.getReceivedQuality());
 		}
 		
 		specimen.setReceivedEvent(event);
 	}
+
+	private void setEventAttrs(SpecimenEventDetail detail, SpecimenEvent event, OpenSpecimenException ose) {
+		User user = getUser(detail, ose);
+		if (user != null) {
+			event.setUser(user);
+		}
 		
+		if (detail.getTime() != null) {
+			event.setTime(detail.getTime());
+		}
+		
+		if (StringUtils.isNotBlank(detail.getComments())) {
+			event.setComments(detail.getComments());
+		}		
+	}
+	
 	private User getUser(SpecimenEventDetail detail, OpenSpecimenException ose) {
 		if (detail.getUser() == null) {
 			return null;			

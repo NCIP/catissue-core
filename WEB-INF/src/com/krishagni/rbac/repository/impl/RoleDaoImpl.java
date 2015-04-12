@@ -10,42 +10,17 @@ import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.rbac.domain.Role;
+import com.krishagni.rbac.domain.RoleAccessControl;
 import com.krishagni.rbac.repository.RoleDao;
 import com.krishagni.rbac.repository.RoleListCriteria;
 
 public class RoleDaoImpl extends AbstractDao<Role> implements RoleDao {
-	private static final String FQN = Role.class.getName();
 	
-	private static final String GET_ALL_ROLES = FQN + ".getAllRoles";
-	
-	private static final String GET_ROLES_BY_NAMES = FQN + ".getRolesByNames";
-	
-	@Override
-	public Role getRole(Long roleId) {
-		return (Role) sessionFactory.getCurrentSession()
-				.get(Role.class, roleId);
-	}
-
-	@Override
-	public void deleteRole(Role role) {
-		sessionFactory.getCurrentSession()
-		.delete(role);
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public Role getRoleByName(String roleName) {
-		List<Role> roles = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_ROLES_BY_NAMES)
-				.setParameterList("roleNames", Collections.singletonList(roleName))
-				.list();
-		return roles.isEmpty() ? null : roles.get(0);
-	}
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Role> getRoles(RoleListCriteria listCriteria) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(Role.class)
+		Criteria query = sessionFactory.getCurrentSession()
+				.createCriteria(Role.class)
 				.setFirstResult(listCriteria.startAt())
 				.setMaxResults(listCriteria.maxResults());
 		
@@ -55,14 +30,29 @@ public class RoleDaoImpl extends AbstractDao<Role> implements RoleDao {
 		
 		return query.list();
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Role> getRolesByName(List<String> roles) {
+	public List<Role> getRolesByNames(List<String> roleNames) {
 		return (List<Role>) sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_ROLES_BY_NAMES)
-				.setParameterList("roleNames", roles)
+				.setParameterList("roleNames", roleNames)
 				.list();
 	}
 	
+	@Override
+	public Role getRoleByName(String roleName) {
+		List<Role> roles = getRolesByNames(Collections.singletonList(roleName));
+		return roles.isEmpty() ? null : roles.get(0);
+	}
+	
+	@Override
+	public Class<?> getType() {
+		return Role.class;
+	}
+	
+	private static final String FQN = Role.class.getName();
+	
+	private static final String GET_ROLES_BY_NAMES = FQN + ".getRolesByNames";
+
 }

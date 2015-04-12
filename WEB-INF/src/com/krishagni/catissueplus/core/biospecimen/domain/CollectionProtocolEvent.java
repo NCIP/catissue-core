@@ -6,6 +6,8 @@ import java.util.Set;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 
 public class CollectionProtocolEvent {
+	private static final String ENTITY_NAME = "collection_protocol_event";
+	
 	private Long id;
 
 	private String eventLabel;
@@ -26,6 +28,10 @@ public class CollectionProtocolEvent {
 
 	private Set<Visit> specimenCollectionGroups = new HashSet<Visit>();
 
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
+	
 	public Long getId() {
 		return id;
 	}

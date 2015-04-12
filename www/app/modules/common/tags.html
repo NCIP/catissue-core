@@ -1,0 +1,13 @@
+<div class="os-tags-container">
+  <ul class="clearfix os-tags">
+    <li class="os-tag" ng-repeat="tag in tags"> 
+      <div>{{tag}}</div> 
+      <a href="#" ng-click="removeTag($index)" class="os-tags-remove">
+        &times;
+      </a>
+    </li>
+    <li class="os-tag-input">
+      <input ng-keypress="keyPress($event)" type="text" ng-model="newTag" placeholder="{{placeholder}}">
+    </li>
+  </ul>
+</div>

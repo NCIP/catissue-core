@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -152,10 +153,19 @@ public class UserDetail {
 		userDto.setEmailAddress(user.getEmailAddress());
 		userDto.setDomainName(user.getAuthDomain().getName());
 		userDto.setDeptName(user.getDepartment().getName());
-		userDto.setInstituteName(user.getDepartment().getInstitute().getName());
+		userDto.setInstituteName(user.getInstitute().getName());
 		setUserSiteNames(userDto, user.getSites());	
 
 		return userDto;
+	}
+	
+	public static List<UserDetail> from(Collection<User> users) {
+		List<UserDetail> result = new ArrayList<UserDetail>();
+		for (User user: users) {
+			result.add(from(user));
+		}
+		
+		return result;
 	}
 
 	private static void setUserSiteNames(UserDetail userDto, Set<Site> sites) {

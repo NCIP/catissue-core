@@ -6,10 +6,19 @@
 
     <h3>{{user.lastName}} {{user.firstName}}</h3>
 
-    <button class="os-round-btn" title="{{'user.tooltip.create_user' | translate}}" 
-      ui-sref="user-addedit({userId: user.id})" ng-if="user.activityStatus != 'Pending'">
-      <span class="fa fa-pencil"></span>
-    </button>
+    <div class="" ng-if="user.activityStatus != 'Pending'">
+      <div class="os-btns right">
+        <button class="primary" title="{{'user.tooltip.edit' | translate}}" 
+          ui-sref="user-addedit({userId: user.id})">
+          <span class="fa fa-pencil"></span>
+          <span translate="common.buttons.edit">Edit</span>
+        </button>
+        <button class="default" ng-click="deleteUser()">
+          <span class="fa fa-trash"></span>
+          <span translate="common.buttons.delete">Delete</span>
+        </button>
+      </div>
+    </div>
   </div>
     
   <div os-side-menu ng-if="user.activityStatus != 'Pending'">

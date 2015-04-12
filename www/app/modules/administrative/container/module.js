@@ -6,6 +6,7 @@ angular.module('os.administrative.container',
     'os.administrative.container.addedit',
     'os.administrative.container.detail',
     'os.administrative.container.overview',
+    'os.administrative.container.locations',
     'os.administrative.container.util',
     'os.administrative.container.map'
   ])
@@ -63,19 +64,7 @@ angular.module('os.administrative.container',
             return container.getOccupiedPositions();
           }
         },
-        controller: function($scope, $state, container, occupancyMap) {
-          $scope.container = container;
-          $scope.occupancyMap = occupancyMap;
-          $scope.addContainer = function(posOne, posTwo) {
-            var params = {
-              containerId: '',
-              posOne: posOne, posTwo: posTwo,
-              parentContainerName: container.name,
-              parentContainerId: container.id
-            };
-            $state.go('container-addedit', params);
-          }
-        },
+        controller: 'ContainerLocationsCtrl',
         parent: 'container-detail'
       });
   });

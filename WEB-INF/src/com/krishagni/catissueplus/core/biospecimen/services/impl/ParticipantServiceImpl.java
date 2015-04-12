@@ -1,17 +1,14 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantUtil;
 import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipants;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.PmiDetail;
@@ -25,13 +22,8 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class ParticipantServiceImpl implements ParticipantService {
-
-	//TODO: Handle privileges
 	private DaoFactory daoFactory;
 
-	/**
-	 * Participant factory to create/update and perform all validations on participant details 
-	 */
 	private ParticipantFactory participantFactory;
 	
 	private ParticipantLookupLogic participantLookupLogic;
@@ -52,9 +44,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<ParticipantDetail> getParticipant(RequestEvent<Long> req) {
-		Long participantId = req.getPayload();
-
-		Participant participant = daoFactory.getParticipantDao().getById(participantId);
+		Participant participant = daoFactory.getParticipantDao().getById(req.getPayload());
 		if (participant == null) {
 			return ResponseEvent.userError(ParticipantErrorCode.NOT_FOUND);
 		}
@@ -76,40 +66,6 @@ public class ParticipantServiceImpl implements ParticipantService {
 		}
 	}
 	
-	public void createParticipant(Participant participant) {
-		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		
-		ensureUniqueSsn(participant.getSocialSecurityNumber(), ose);
-		ensureUniquePMI(participant.getPmiCollection(), ose);
-		
-		ose.checkAndThrow();
-		daoFactory.getParticipantDao().saveOrUpdate(participant);
-	}
-	
-	public void updateParticipant(Participant existing, Participant newParticipant) {
-		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		
-		String existingSsn = existing.getSocialSecurityNumber();
-		String newSsn = newParticipant.getSocialSecurityNumber();
-		if (StringUtils.isNotBlank(newSsn) && !newSsn.equals(existingSsn)) {
-			ensureUniqueSsn(newSsn, ose);
-		}
-		
-		List<PmiDetail> pmis = PmiDetail.from(newParticipant.getPmiCollection().values());
-		List<Long> participantIds = daoFactory.getParticipantDao().getParticipantIdsByPmis(pmis);
-		for (Long participantId : participantIds) {
-			if (!participantId.equals(existing.getId())) {
-				ose.addError(ParticipantErrorCode.DUP_MRN);
-				break;
-			}
-		}
-		
-		ose.checkAndThrow();
-		
-		existing.update(newParticipant);
-		daoFactory.getParticipantDao().saveOrUpdate(existing, true);			
-	}
-
 	@Override
 	@PlusTransactional
 	public ResponseEvent<ParticipantDetail> updateParticipant(RequestEvent<ParticipantDetail> req) {
@@ -123,8 +79,18 @@ public class ParticipantServiceImpl implements ParticipantService {
 			Participant participant = participantFactory.createParticipant(req.getPayload());
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			validateSsn(existing.getSocialSecurityNumber(), participant.getSocialSecurityNumber(), ose);
-			checkForUniquePMI(existing.getPmiCollection(), participant.getPmiCollection(), ose);
+			
+			String newSsn = participant.getSocialSecurityNumber();
+			if (StringUtils.isNotBlank(newSsn) && !newSsn.equals(existing.getSocialSecurityNumber())) {
+				ParticipantUtil.ensureUniqueSsn(daoFactory, newSsn, ose);
+			}
+			
+			ParticipantUtil.ensureUniquePmis(
+					daoFactory, 
+					req.getPayload().getPmis(), 
+					participant, 
+					ose);
+			
 			ose.checkAndThrow();
 
 			existing.update(participant);
@@ -163,51 +129,30 @@ public class ParticipantServiceImpl implements ParticipantService {
 		return ResponseEvent.response(participantLookupLogic.getMatchingParticipants(req.getPayload())); 
 	}
 	
-	private void validateSsn(String oldSsn, String newSsn, OpenSpecimenException ose) {
-		if (StringUtils.isBlank(oldSsn) && !StringUtils.isBlank(newSsn)) {
-			ensureUniqueSsn(newSsn, ose);
-		} else if (!StringUtils.isBlank(oldSsn) && !StringUtils.isBlank(newSsn) && !oldSsn.equals(newSsn)) {
-			ensureUniqueSsn(newSsn, ose);
-		}
-	}
-
-	private void ensureUniqueSsn(String ssn, OpenSpecimenException ose) {
-		if (!daoFactory.getParticipantDao().isSsnUnique(ssn)) {
-			ose.addError(ParticipantErrorCode.DUP_SSN);
-		}
-	}
-
-	private void ensureUniquePMI(Map<String, ParticipantMedicalIdentifier> pmiCollection, OpenSpecimenException ose) {
-		//TODO: need to handle for update
-		for (Entry<String, ParticipantMedicalIdentifier> entry : pmiCollection.entrySet()) {
-			String siteName = entry.getKey();
-			String mrn = entry.getValue().getMedicalRecordNumber();
-			if (!daoFactory.getParticipantDao().isPmiUnique(siteName, mrn)) {
-				ose.addError(ParticipantErrorCode.DUP_MRN);
-			}
-
-		}
+	public void createParticipant(Participant participant) {
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		ParticipantUtil.ensureUniqueSsn(daoFactory, participant.getSocialSecurityNumber(), ose);
+		ParticipantUtil.ensureUniquePmis(daoFactory, PmiDetail.from(participant.getPmis()), participant, ose);		
+		ose.checkAndThrow();
+		
+		daoFactory.getParticipantDao().saveOrUpdate(participant);
 	}
 	
-	private void checkForUniquePMI(Map<String, ParticipantMedicalIdentifier> oldPmiCollection,
-					Map<String, ParticipantMedicalIdentifier> newPmiCollection, OpenSpecimenException ose) {
-		Map<String,ParticipantMedicalIdentifier> map = new HashMap<String, ParticipantMedicalIdentifier>();
-					for (Entry<String, ParticipantMedicalIdentifier> entry : newPmiCollection.entrySet()) {
-						{
-							if(!oldPmiCollection.containsKey(entry.getKey())){
-										map.put(entry.getKey(), entry.getValue());
-							}
-							else{
-								ParticipantMedicalIdentifier pmi = oldPmiCollection.get(entry.getKey());
-								pmi.setMedicalRecordNumber(entry.getValue().getMedicalRecordNumber());
-								entry.setValue(pmi);
-//								entry.getValue().setId(oldPmiCollection.get(entry.getKey()).getId());
-							}
-						}
-					}
-					if (!map.isEmpty()) {
-						ensureUniquePMI(map, ose);
-				}
-			}
-
+	public void updateParticipant(Participant existing, Participant newParticipant) {
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		
+		String existingSsn = existing.getSocialSecurityNumber();
+		String newSsn = newParticipant.getSocialSecurityNumber();
+		if (StringUtils.isNotBlank(newSsn) && !newSsn.equals(existingSsn)) {
+			ParticipantUtil.ensureUniqueSsn(daoFactory, newSsn, ose);
+		}
+		
+		
+		List<PmiDetail> pmis = PmiDetail.from(newParticipant.getPmis());
+		ParticipantUtil.ensureUniquePmis(daoFactory, pmis, existing, ose);
+		ose.checkAndThrow();
+		
+		existing.update(newParticipant);
+		daoFactory.getParticipantDao().saveOrUpdate(existing, true);			
+	}	
 }

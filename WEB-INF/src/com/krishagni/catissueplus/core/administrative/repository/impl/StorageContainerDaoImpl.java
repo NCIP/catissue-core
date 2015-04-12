@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
@@ -53,7 +54,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 
 		return result.isEmpty() ? null : result.iterator().next();		
 	}
-
+	
 	@Override
 	public void delete(StorageContainerPosition position) {
 		sessionFactory.getCurrentSession().delete(position);		
@@ -142,16 +143,26 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			where.append("stats.freePositions > 0");
 		}
 
-		private void addSiteRestriction() {			
-			if (StringUtils.isBlank(crit.siteName())) {
+		private void addSiteRestriction() {
+			boolean blankSiteName = StringUtils.isBlank(crit.siteName());
+			boolean emptySiteIds = CollectionUtils.isEmpty(crit.siteIds());			
+			if (blankSiteName && emptySiteIds) {
 				return;
 			}
 			
 			from.append(" join c.site site");
 
-			addAnd();
-			where.append("site.name = :siteName");
-			params.put("siteName", crit.siteName());
+			if (!blankSiteName) {
+				addAnd();
+				where.append("site.name = :siteName");
+				params.put("siteName", crit.siteName());				
+			}
+			
+			if (!emptySiteIds) {
+				addAnd();
+				where.append("site.id in (:siteIds)");
+				params.put("siteIds", crit.siteIds());				
+			}
 		}
 
 		private void addParentRestriction() {			
@@ -230,4 +241,5 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			params.put("storeSpecimenEnabled", crit.storeSpecimensEnabled());
 		}
 	}	
+	
 }

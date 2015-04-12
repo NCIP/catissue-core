@@ -3,12 +3,15 @@
     <h3>
       <span translate="institutes.list">Institutes</span>
     </h3>
-    <button class="os-round-btn" title="{{'institutes.tooltip.add' | translate}}" ui-sref="institute-addedit({instituteId: ''})">
-      <span class="fa fa-plus"></span>
-    </button>
-    <div class="os-more-options">
-      <button os-right-drawer-toggle class="os-search-button" title="{{'institutes.tooltip.search' | translate}}">
+    <div class="os-btns right">
+      <button class="primary" title="{{'institutes.tooltip.add' | translate}}" 
+        ui-sref="institute-addedit({instituteId: ''})">
+        <span class="fa fa-plus"></span>
+        <span translate="common.buttons.create">Create</span>
+      </button>
+      <button class="default" os-right-drawer-toggle title="{{'institutes.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
       </button>
     </div>
   </div>

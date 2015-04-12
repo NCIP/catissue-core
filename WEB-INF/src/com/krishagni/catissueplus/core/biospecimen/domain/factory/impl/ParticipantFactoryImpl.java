@@ -5,9 +5,7 @@ import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -21,6 +19,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantUtil;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.PmiDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -51,7 +50,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	@Override
 	public Participant createParticipant(Participant existing, ParticipantDetail detail) {
 		Participant participant = new Participant();		
-		BeanUtils.copyProperties(existing, participant, new String[] {"cprCollection"});
+		BeanUtils.copyProperties(existing, participant, new String[] {"cprs"});
 		
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		setParticipantAttrs(detail, participant, true, ose);
@@ -62,6 +61,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 	
 	private void setParticipantAttrs(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException ose) {
+		participant.setId(detail.getId());
 		setSsn(detail, participant, partial, ose);
 		setName(detail, participant, partial, ose);
 		setVitalStatus(detail, participant, partial, ose);
@@ -86,11 +86,16 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		
 		String ssn = detail.getSsn();
 		
-		if (StringUtils.isBlank(ssn)) {
+		if (StringUtils.isBlank(ssn)) { 
+			participant.setSocialSecurityNumber(null);
 			return;
 		}
 		
 		if (isValidSsn(ssn)) {
+			if (partial && !ssn.equals(participant.getSocialSecurityNumber())) {
+				ParticipantUtil.ensureUniqueSsn(daoFactory, ssn, oce);
+			}
+							
 			participant.setSocialSecurityNumber(ssn);
 		} else {
 			oce.addError(ParticipantErrorCode.INVALID_SSN);
@@ -228,7 +233,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			return;
 		}
 		
-		participant.setRaceColl(races);
+		participant.setRaces(races);
 	}
 
 	private void setEthnicity(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
@@ -254,21 +259,30 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		if (partial && !detail.getModifiedAttrs().contains("pmis")) {
 			return;
 		}
-				
-		List<PmiDetail> pmis = detail.getPmis();		
-		if (CollectionUtils.isEmpty(pmis)) {
-			return;
-		}
-		
-		Map<String, ParticipantMedicalIdentifier> map = new HashMap<String, ParticipantMedicalIdentifier>();		
-		for (PmiDetail pmiDetail : pmis) {
-			ParticipantMedicalIdentifier pmi = getPmi(pmiDetail, oce);
-			if (pmi != null) {
-				map.put(pmi.getSite().getName(), pmi);
+
+		if (partial) {
+			boolean unique = ParticipantUtil.ensureUniquePmis(
+					daoFactory, 
+					detail.getPmis(), 
+					participant, 
+					oce);
+			if (!unique) {
+				return;
 			}
 		}
-
-		participant.setPmiCollection(map);
+		
+		Set<ParticipantMedicalIdentifier> newPmis = new HashSet<ParticipantMedicalIdentifier>();		
+		if (CollectionUtils.isEmpty(detail.getPmis())) {
+			participant.setPmis(newPmis);
+		} else {
+			for (PmiDetail pmiDetail : detail.getPmis()) {
+				ParticipantMedicalIdentifier pmi = getPmi(pmiDetail, oce);
+				pmi.setParticipant(participant);
+				newPmis.add(pmi);				
+			}			
+		}
+				
+		participant.setPmis(newPmis);
 	}
 
 	private ParticipantMedicalIdentifier getPmi(PmiDetail pmiDetail, OpenSpecimenException oce) {
@@ -291,6 +305,10 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	private boolean isValidSsn(String ssn) {
 		try {
+			if (StringUtils.isBlank(ssn)) {
+				return true;
+			}
+			
 			return SSN_PATTERN.matcher(ssn).matches();
 		} catch (Exception exp) {
 			return false;

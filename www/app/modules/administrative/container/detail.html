@@ -1,13 +1,24 @@
-
 <div>
   <div os-page-header>
     <ul os-breadcrumbs>
       <li><a ui-sref="container-list" translate="container.list">Storage Containers</a></li>
     </ul>
     <h3>{{container.name}}</h3>
-    <button class="os-round-btn" title="{{'container.tooltip.add' | translate}}" ui-sref="container-addedit({containerId: container.id})">
-      <span class="fa fa-pencil"></span>
-    </button>
+    <div class="os-btns right">
+      <button class="primary" title="{{'container.tooltip.add' | translate}}" 
+        ui-sref="container-addedit({containerId: container.id})">
+        <span class="fa fa-pencil"></span>
+        <span translate="common.buttons.edit">Edit</span>
+      </button>
+      <a class="btn default" href="{{downloadUri}}" target="_blank">
+        <span class="fa fa-download"></span>
+        <span translate="common.buttons.export">Export</span>
+      </a>
+      <button class="default" ng-click="deleteContainer()">
+        <span class="fa fa-trash"></span>
+        <span translate="common.buttons.delete">Delete</span>
+      </button>
+    </div>
   </div>
 
   <div os-side-menu>

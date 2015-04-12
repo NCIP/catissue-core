@@ -1,6 +1,7 @@
 {
   "menu": {
     "navigate_to": "Navigate To",
+    "home": "Home",
     "collection_protocols": "Collection Protocols",
     "settings": "Settings",
     "users": "Users",
@@ -8,10 +9,26 @@
     "sites": "Sites",
     "storage_containers": "Storage Containers",
     "distribution_protocols": "Distribution Protocols",
-    "roles": "Roles"
+    "roles": "Roles",
+    "queries": "Queries",
+    "reports": "Reports",
+    "containers": "Containers",
+    "forms": "Forms",
+
+    "cp_desc": "Create, update SOP of visits and specimens",
+    "dp_desc": "Create, update procedures for distributing specimens",
+    "institutes_desc": "Update information about institutions",
+    "users_desc": "Add, rename and manage users",
+    "roles_desc": "Create, update user access controls",
+    "sites_desc": "Add and update sites",
+    "containers_desc": "Manage containers and their restrictions",
+    "reports_desc": "Create, share and schedule reports",
+    "forms_desc": "Create and manage custom forms",
+    "settings_desc": "Manage application configuration settings"
   },
 
   "common": {
+    "home": "Home",
     "count" : "Count",
     "date": "Date",
     "na": "N/A",
@@ -23,21 +40,28 @@
     "ui_error": "UI Error. Please report this problem to system administrator",
     "server_connect_error": "Unable to connect server",
     "recent_activity": "Recent Activity",
+    "no_file_selected": "No File Selected",
 
     "buttons": {
       "add": "Add",
       "save": "Save",
+      "export": "Export",
       "update": "Update",
       "create": "Create",
+      "delete": "Delete",
       "import": "Import",
       "cancel": "Cancel",
       "discard": "Discard",
+      "more": "More",
       "next": "Next",
       "previous": "Previous",
       "ok": "Ok",
       "select": "Select",
       "unselect": "Unselect",
-      "submit": "Submit"
+      "submit": "Submit",
+      "edit": "Edit",
+      "done": "Done",
+      "search": "Search"
     }
   },
 
@@ -97,7 +121,7 @@
     },
 
     "menu_options": {
-      "remove": "Remove",
+      "delete": "Delete",
       "export": "Export"
     },
 
@@ -109,10 +133,12 @@
     },
 
     "filter": {
-      "filter_title": "Collection Protocol Title",
+      "filter_title": "Collection Protocol Filter",
       "title_or_short_title": "Title / Short Title",
-      "title": "Type the title",
-      "pi": "Select principal investigator"
+      "title": "Type the Title",
+      "pi": "Select Principal Investigator",
+      "repository": "Repository",
+      "select_repository": "Select Repository"
     }
   },
 
@@ -247,16 +273,22 @@
     "description": "Description",
     "location": "Location",
     "apply_first_loc_to_all": "Copy First Location To All",
-    "activity_full_info": "{{user}} created {{name}} on {{time | date: dateFmt}}",
+    "activity_full_info": "{{user}} created {{name}} on {{time | date: dateTimeFmt}}",
     "activity_user_info": "{{user}} created {{name}}",
-    "activity_time_info": "{{name}} created on {{time | date: dateFmt}}",
+    "activity_time_info": "{{name}} created on {{time | date: dateTimeFmt}}",
     "activity_info": "{{name}} created",
 
+    "recent_events": "Recent Events",
     "events": "Events",
     "event_name": "Name",
     "event_user": "User",
     "event_time": "Date and Time",
     "no_events": "No events to show",
+
+    "no_specimens_for_collection": "Please select at least one anticipated specimen for collection",
+    "no_specimens_for_print": "Please select at least one collected specimen for label printing",
+
+    "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",
@@ -274,7 +306,9 @@
 
     "buttons": {
       "collect_aliquots": "Collect Aliquots",
-      "create_derivative": "Create Derivative"
+      "create_derivative": "Create Derivative",
+      "collect": "Collect",
+      "print": "Print"
     },
 
     "errors": {
@@ -344,6 +378,7 @@
     "tooltip": {
       "view_details": "Click to view/edit Institute details",
       "add": "Click to add new Institute",
+      "edit": "Click to edit institute",
       "department_count": "Count of Departments",
       "user_count": "Count of Users in Institute",
       "search": "Click to search Institutes"
@@ -355,7 +390,11 @@
 
     "filter": {
       "title": "Institute Filter",
-      "name": "Type the name"
+      "name": "Type the Name"
+    },
+
+    "menu_options": {
+      "delete": "Delete"
     }
 
   },
@@ -373,7 +412,8 @@
 
     "tooltip": {
       "view_details": "Click to view/edit Site details",
-      "create_site": "Click to add new Site",
+      "add": "Click to add new Site",
+      "edit": "Click to edit site",
       "cp_count": "Count of Collection Protocols",
       "search": "Click to search Sites"
     },
@@ -384,8 +424,12 @@
 
     "filter": {
       "title": "Site Filter",
-      "name": "Type the name",
-      "type": "Select type"
+      "name": "Type the Name",
+      "type": "Select Type"
+    },
+
+    "menu_options": {
+      "delete": "Delete"
     }
   },
   
@@ -401,10 +445,11 @@
     "end_date": "End Date",
     "irb_id": "IRB ID",
     "description_url": "Description URL",
-        
+
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",
-      "new_dp": "Click to add new Distribution Protocol",
+      "add": "Click to add new Distribution Protocol",
+      "edit": "Click to edit Distribution Protocol",
       "pending_count": "Pending to distribute specimens count",
       "distributed_count": "Distributed specimens count",
       "search": "Click to search Distribution Protocols"
@@ -417,8 +462,12 @@
     "filter": {
       "filter_title": "Distribution Protocol Filter",
       "title_or_short_title": "Title / Short Title",
-      "title": "Type the title",
-      "pi": "Select principal investigator"
+      "title": "Type the Title",
+      "pi": "Select Principal Investigator"
+    },
+
+    "menu_options": {
+      "delete": "Delete"
     }
   },
 
@@ -443,9 +492,10 @@
     "confirm_password": "Confirm Password",
     "approve_user": "Approve User",
     "reject_user": "Reject User",
-    "request_pending": "Following are details of user whose approval is pending",
+    "request_pending": "Note: {{firstName}}  {{lastName}} would like to access OpenSpecimen. Approve or Reject?",
     "user_request_approved": "User request approved successfully",
     "activity_status": "Activity Status",
+    "confirm_reject": "Rejecting the User {{entityName}} will delete this user from the database. Are you sure you want to go ahead?",
 
     "role": {
        "roles": "Roles",
@@ -467,8 +517,9 @@
     "return_to_signin": "Return to Sign in",
 
     "tooltip": {
-      "create_user": "Click to add new User",
       "view_details": "Click to view/edit User details",
+      "add": "Click to add new User",
+      "edit": "Click to edit User",
       "email_address": "Email Address",
       "institute_name": "Institute",
       "cp_count": "Collection Protocol(s)",
@@ -484,9 +535,13 @@
 
     "filter": {
       "title": "User Filter",
-      "name": "Type the name",
-      "login_name": "Type the login name",
-      "activity_status": "Select the activity status"
+      "name": "Type the Name",
+      "login_name": "Type the Login Name",
+      "activity_status": "Select the Activity Status"
+    },
+
+    "menu_options": {
+      "delete": "Delete"
     }
 
   },
@@ -537,10 +592,15 @@
     "no_container_selected": "Please select a container",
     "cannot_hold_specimen": "Selected container cannot hold specimen for which position is being selected",
     "stores_specimens": "Stores Specimens",
+    "confirm_delete": "{{entityType}} {{entityName}} and its child containers will be deleted forever. Are you sure you want to proceed?",
+    "assign_positions": "Assign Positions",
+    "paste_specimen_labels": "Paste or input specimen labels separated by comma",
+    "no_free_locs": "Container does not have enough free locations to accommodate input specimen labels",
 
     "tooltip": {
       "view_details": "Click to view/edit Storage Container details",
       "add": "Click to add new Storage Container",
+      "edit": "Click to edit Storage Container",
       "count_free_locations": "Count of free locations",
       "search": "Click to search Storage Containers"
     },
@@ -552,7 +612,11 @@
 
     "filter": {
       "title": "Storage Container Filter",
-      "name": "Enter the name"
+      "name": "Type the Name"
+    },
+
+    "menu_options": {
+      "delete": "Delete"
     }
   },
 
@@ -564,12 +628,23 @@
     "create_role": "Create Role",
     "resource": "Resource",
     "permission": "Permissions",
-    "resources": "Resources",
+    "resources_lbl": "Resources",
     "read": "Read",
     "create": "Create",
     "update": "Update",
     "delete": "Delete",
     "add_resource": "Add Resource",
+
+    "resources" : {
+      "CollectionProtocol": "Collection Protocol",
+      "DistributionProtocol": "Distribution Protocol",
+      "Order": "Order",
+      "ParticipantPhi": "Participant (PHI)",
+      "ParticipantDeid": "Participant (DeId)",
+      "VisitAndSpecimen": "Visits and Specimens",
+      "Site": "Site",
+      "StorageContainer": "Storage Container"
+    },
 
     "menu": {
       "overview": "Overview"
@@ -580,7 +655,7 @@
       "add": "Click to add new Role"
     }
   },
-  
+
   "extensions": {
     "no_extensions": "No extensions to show",
     "list": "Extensions",
@@ -594,7 +669,180 @@
     "edit_record": "Edit Record",
     "new_record": "Create New Record",
 
-    "record_saved": "Data saved successfully"
-  }
+    "record_saved": "Extension record saved",
+    "record_deleted": "Extension record deleted"
+  },
 
+  "delete_entity": {
+    "entity_name": "Entity Name",
+    "count": "Count",
+    "title": "Deleting {{entityName}} confirmation",
+    "confirm_delete": "{{entityType}} {{entityName}} will be deleted forever. Are you sure you want to proceed?",
+    "entity_deleted": "{{entityType}} {{entityName}} deleted successfully.",
+    "dependents_title": "Error: Cannot delete {{entityName}}",
+    "dependents_details": "Cannot delete {{entityType}} {{entityName}} because of following dependent objects"
+  },
+
+  "queries": {
+    "list": "Queries",
+    "title": "Title",
+    "created_by": "Created By",
+    "last_updated": "Last Updated",
+    "edit": "Edit Query",
+    "download_def": "Download Query Definition",
+    "view_query_run_log": "View Query Run Log",
+    "delete": "Delete",
+
+    "all": "All",
+    "folders": "Folders",
+    "my_folders": "My Folders",
+    "shared_folders": "Shared Folders",
+    "search_folder": "Search folder",
+    "queries_assigned_to_folder": "{{count}} queries assigned to folder '{{folderName}}'",
+    "create_new_folder": "Create New Folder",
+    "folder_created": "Query folder '{{folderName}}' created",
+    "folder_updated": "Query folder '{{folderName}}' updated",
+    "folder_deleted": "Query folder '{{folderName}}' deleted",
+    "assign": "Assign",
+    "new_query_folder": "New Query Folder",
+    "update_query_folder": "Update Query Folder",
+    "folder_name": "Folder Name",
+    "remove_query_from_folder": "Remove query from folder",
+    "share_folder_with_all": "Share folder with all current and future users",
+    "share_folder_with_users": "Share folder with following users",
+    "users": "Users",
+    "delete_query": "Delete Query",
+    "confirm_delete_query": "Are you sure you want to delete query '{{title}}'?",
+    "query_deleted": "Query '{{queryTitle}}' deleted",
+    "query_imported": "Query '{{queryTitle}}' imported",
+    "import_failed": "Query import failed",
+    "import_query": "Import Query",
+    "select_query_def_file": "Select Query File",
+    "new_query": "New Query",
+    "select_cp": "Select a Collection Protocol",
+    "add_filter": "Add Filter",
+    "edit_filter": "Edit Filter",
+    "search_field": "Search Field",
+    "loading_form_fields": "Loading form fields. Please wait for a moment...",
+    "operator": "Operator",
+    "select_op": "Select Operator",
+    "cond_value": "Condition Value",
+    "select_cond_value": "Select Condition Value",
+    "select_cond_values": "Select Condition Values",
+    "specify_multiple_cond": "Specify Condition Value & then hit enter key",
+    "range_min": "Range Min",
+    "range_max": "Range Max",
+    "select_date": "Select Date",
+    "specify_cond": "Specify Condition Value",
+    "parameterized_filter": "Parameterized Filter",
+    "expr_and_filters": "Expression and Filters",
+    "filters": "Filters",
+    "parameterized_marker": "P",
+    "get_count": "Get Count",
+    "view_records": "View Records",
+    "count_results": "Count Query Results",
+    "participants": "Participants",
+    "specimens": "Specimens",
+    "waiting_for_count": "Please wait for a moment while we count Participants and Specimens matching your criteria",
+    "waiting_for_records": "Loading records, please wait for a moment...",
+    "export_to_get_all": "Export records to get all records",
+    "know_why_export_has_more_data": "Click here to know why exported file has more records",
+    "error": "Error occurred. Please contact system administrator for further resolution",
+    "export_initiated": "Query results export has been initiated. Export file download should start in few moments...",
+    "field": "Field",
+    "downloading_data_file": "Downloading query results export data file",
+    "data_file_will_be_emailed": "Export is taking longer time to finish. Link to download exported data will be sent to you by e-mail",
+    
+    "save_query": "Save Query",
+    "save_copy": "Save a Copy",
+    "query_saved": "Query '{{title}}' saved",
+
+    "edit_filters": "Edit Filters",
+    "define_view": "Define View",
+    "rerun": "Rerun",
+
+    "select_fields": "Select Fields",
+    "aggregates": "Aggregates",
+    "pivot_table": "Pivot Table",
+    
+    "define_view_info": "Please select fields that you wish to view in results table. Drag and drop the fields to reorder the view",
+
+    "enable_wide_rows": "Enable Wide Rows",
+    "no_fields_selected": "No fields selected. Please select at least one field",
+
+    "selected_fields": "Selected Fields",
+    "agg_fns": "Aggregate Functions",
+    "select_field_in_left_panel": "Select field in list on the left side panel",
+
+    "create_pivot_table": "Create Pivot Table",
+    "row_fields": "Row Fields",
+    "select_row_group_fields": "Select fields to use for grouping rows",
+    "column_field": "Column Field",
+    "select_col_group_field": "Select field to use for grouping columns",
+    "value_fields": "Value Fields",
+    "select_summary_fields": "Select summary fields",
+    "include_sub_totals": "Include Sub Totals",
+
+    "temporal_exprs": "Temporal Expressions",
+    "expr_desc": "Description",
+
+    "no_queries": "No queries to show",
+    "no_queries_selected": "No queries selected. Please select at least one query",
+    "info": "Information",
+
+    "expr_toolbar": {
+      "and": "AND",
+      "or":  "OR",
+      "not": "NOT" 
+    },
+
+    "ops": {
+      "eq": "Equals",
+      "ne": "Not Equals",
+      "lt": "Less than",
+      "le": "Less than or Equals",
+      "gt": "Greater than",
+      "ge": "Greater than or Equals", 
+      "exists": "Exists",
+      "not_exists": "Not Exists",
+      "qin": "Is One Of",
+      "not_in": "Is Not One Of",
+      "starts_with": "Starts With",
+      "ends_with": "Ends With",
+      "contains": "Contains",
+      "and": "And",
+      "or": "Or",
+      "intersect": "Intersection",
+      "not": "Not",
+      "nthchild": "Any Child",
+      "between": "Between"
+    },
+
+    "agg_fn_labels": {
+      "count": "Count",
+      "sum": "Sum",
+      "min": "Minimum",
+      "max": "Maximum",
+      "avg": "Average"
+    },
+
+    "tooltip": {
+      "view_records": "Click to View Records"
+    }
+  },
+
+  "entities": {
+    "collection_protocol": "Collection Protocol",
+    "distribution_protocol": "Distribution Protocol",
+    "user": "User",
+    "site": "Site",
+    "institute": "Institute",
+    "storage_container": "Storage Container",
+    "visit": "Visit",
+    "medical_record_number": "MRN",
+    "collection_protocol_event": "Collection Protocol Event",
+    "collection_protocol_registration": "Collection Protocol Registration",
+    "specimen": "Specimen",
+    "distribution_order": "Distribution Order"
+  }
 }

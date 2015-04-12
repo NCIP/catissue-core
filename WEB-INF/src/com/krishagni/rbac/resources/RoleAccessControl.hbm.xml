@@ -17,22 +17,22 @@
     <many-to-one
       name="role"
       class="com.krishagni.rbac.domain.Role"
-      cascade="none"
       column="ROLE_ID"/>
     
     <many-to-one
       name="resource"
       class="com.krishagni.rbac.domain.Resource"
-      cascade="none"
       column="RESOURCE_ID"/>
       
     <set 
       name="operations" 
-      inverse="true" cascade="all-delete-orphan"
+      inverse="true" 
+      cascade="all-delete-orphan"
       table="RBAC_ROLE_ACCESS_LIST_OPS">
       <key column="ACL_ID"/>
       <one-to-many class="com.krishagni.rbac.domain.ResourceInstanceOp"/>
-    </set> 
+    </set>
+    
   </class>
 </hibernate-mapping> 
  

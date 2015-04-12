@@ -1,5 +1,5 @@
 angular.module('os.administrative.site.detail', ['os.administrative.models'])
-  .controller('SiteDetailCtrl', function($scope, $q, site, Institute, PvManager) {
+  .controller('SiteDetailCtrl', function($scope, $q, site, Institute, PvManager, DeleteUtil) {
 
     function init() {
       $scope.site = site;
@@ -23,6 +23,10 @@ angular.module('os.administrative.site.detail', ['os.administrative.models'])
       var d = $q.defer();
       d.resolve({});
       return d.promise;
+    }
+
+    $scope.deleteSite = function() {
+      DeleteUtil.delete($scope.site, {onDeleteState: 'site-list'});
     }
 
     $scope.getCoordinatorDisplayText = function(coordinator) {

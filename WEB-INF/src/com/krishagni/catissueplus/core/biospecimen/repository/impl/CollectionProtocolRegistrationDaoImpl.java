@@ -6,7 +6,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.CriteriaSpecification;
@@ -16,6 +18,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
@@ -91,9 +94,9 @@ public class CollectionProtocolRegistrationDaoImpl
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Long getRegistrationId(Long cpId, Long participantId) {		
-		List<Long> result =  getSessionFactory().getCurrentSession()
-				.getNamedQuery(GET_REGISTRATION_ID)
+	public CollectionProtocolRegistration getCprByParticipantId(Long cpId, Long participantId) {		
+		List<CollectionProtocolRegistration> result =  sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_BY_CP_ID_AND_PID)
 				.setLong("cpId", cpId)
 				.setLong("participantId", participantId)
 				.list();
@@ -103,18 +106,19 @@ public class CollectionProtocolRegistrationDaoImpl
 	
 	
 	private Criteria getCprListQuery(CprListCriteria cprCrit) {
-		Criteria query = getSessionFactory().getCurrentSession().createCriteria(CollectionProtocolRegistration.class);
-		query.createAlias("collectionProtocol", "cp");
-		query.createAlias("participant", "participant");
+		Criteria query = getSessionFactory().getCurrentSession()
+				.createCriteria(CollectionProtocolRegistration.class)
+				.createAlias("collectionProtocol", "cp")
+				.createAlias("participant", "participant")
+				.add(Restrictions.eq("cp.id", cprCrit.cpId()))
+				.add(Restrictions.ne("activityStatus", "Disabled"))
+				.add(Restrictions.ne("cp.activityStatus", "Disabled"))
+				.add(Restrictions.ne("participant.activityStatus", "Disabled"))
+				.addOrder(Order.asc("id"))
+				.setFirstResult(cprCrit.startAt() < 0 ? 0 : cprCrit.startAt())
+				.setMaxResults(cprCrit.maxResults() < 0 || cprCrit.maxResults() > 100 ? 100 : cprCrit.maxResults());
 		
-		query.add(Restrictions.eq("cp.id", cprCrit.cpId()));
-		query.add(Restrictions.ne("activityStatus", "Disabled"));
-		query.add(Restrictions.ne("cp.activityStatus", "Disabled"));
-		query.add(Restrictions.ne("participant.activityStatus", "Disabled"));
-
-		query.addOrder(Order.asc("id"));
-		query.setFirstResult(cprCrit.startAt() < 0 ? 0 : cprCrit.startAt());
-		query.setMaxResults(cprCrit.maxResults() < 0 || cprCrit.maxResults() > 100 ? 100 : cprCrit.maxResults());
+		addMrnSiteCondition(query, cprCrit.siteIds());
 		
 		String searchTerm = cprCrit.query();
 		boolean isSearchTermSpecified = !StringUtils.isBlank(searchTerm);
@@ -131,6 +135,18 @@ public class CollectionProtocolRegistrationDaoImpl
 			
 		query.add(searchCrit);
 		return query;		
+	}
+	
+	private void addMrnSiteCondition(Criteria query, Set<Long> siteIds) {
+		if (CollectionUtils.isEmpty(siteIds)) {
+			return;
+		}
+		
+		query.createAlias("participant.pmis", "pmi", JoinType.LEFT_OUTER_JOIN)
+			.createAlias("pmi.site", "site", JoinType.LEFT_OUTER_JOIN)
+			.add(Restrictions.disjunction()
+					.add(Restrictions.isNull("site.id"))
+					.add(Restrictions.in("site.id", siteIds)));
 	}
 	
 	private ProjectionList getCprSummaryFields(CprListCriteria cprCrit) {
@@ -185,5 +201,5 @@ public class CollectionProtocolRegistrationDaoImpl
 	
 	private static final String GET_BY_CP_ID_AND_PPID = FQN + ".getCprByCpIdAndPpid";
 	
-	private static final String GET_REGISTRATION_ID = FQN + ".getRegistrationId";
+	private static final String GET_BY_CP_ID_AND_PID = FQN + ".getCprByCpIdAndPid";
 }

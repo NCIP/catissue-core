@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,9 +21,13 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class StorageContainer extends BaseEntity {
+	private static final String ENTITY_NAME = "storage_container";
+	
 	public static final String NUMBER_LABELING_SCHEME = "Numbers";
 	
 	public static final String UPPER_CASE_ALPHA_LABELING_SCHEME = "Alphabets Upper Case";
@@ -39,13 +44,13 @@ public class StorageContainer extends BaseEntity {
 
 	private Double temperature;
 	
-	private int dimensionOneCapacity;
+	private int noOfColumns;
 	
-	private int dimensionTwoCapacity;
+	private int noOfRows;
 	
-	private String dimensionOneLabelingScheme = NUMBER_LABELING_SCHEME;
+	private String columnLabelingScheme = NUMBER_LABELING_SCHEME;
 	
-	private String dimensionTwoLabelingScheme = NUMBER_LABELING_SCHEME;
+	private String rowLabelingScheme = NUMBER_LABELING_SCHEME;
 	
 	private Site site;
 
@@ -92,6 +97,10 @@ public class StorageContainer extends BaseEntity {
 	public StorageContainer() {
 		ancestorContainers.add(this);
 	}
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
 
 	public String getName() {
 		return name;
@@ -117,36 +126,36 @@ public class StorageContainer extends BaseEntity {
 		this.temperature = temperature;
 	}
 
-	public int getDimensionOneCapacity() {
-		return dimensionOneCapacity;
+	public int getNoOfColumns() {
+		return noOfColumns;
 	}
 
-	public void setDimensionOneCapacity(int dimensionOneCapacity) {
-		this.dimensionOneCapacity = dimensionOneCapacity;
+	public void setNoOfColumns(int noOfColumns) {
+		this.noOfColumns = noOfColumns;
 	}
 
-	public int getDimensionTwoCapacity() {
-		return dimensionTwoCapacity;
+	public int getNoOfRows() {
+		return noOfRows;
 	}
 
-	public void setDimensionTwoCapacity(int dimensionTwoCapacity) {
-		this.dimensionTwoCapacity = dimensionTwoCapacity;
+	public void setNoOfRows(int noOfRows) {
+		this.noOfRows = noOfRows;
 	}
 
-	public String getDimensionOneLabelingScheme() {
-		return dimensionOneLabelingScheme;
+	public String getColumnLabelingScheme() {
+		return columnLabelingScheme;
 	}
 
-	public void setDimensionOneLabelingScheme(String dimensionOneLabelingScheme) {
-		this.dimensionOneLabelingScheme = dimensionOneLabelingScheme;
+	public void setColumnLabelingScheme(String columnLabelingScheme) {
+		this.columnLabelingScheme = columnLabelingScheme;
 	}
 
-	public String getDimensionTwoLabelingScheme() {
-		return dimensionTwoLabelingScheme;
+	public String getRowLabelingScheme() {
+		return rowLabelingScheme;
 	}
 
-	public void setDimensionTwoLabelingScheme(String dimensionTwoLabelingScheme) {
-		this.dimensionTwoLabelingScheme = dimensionTwoLabelingScheme;
+	public void setRowLabelingScheme(String rowLabelingScheme) {
+		this.rowLabelingScheme = rowLabelingScheme;
 	}
 
 	public Site getSite() {
@@ -321,50 +330,65 @@ public class StorageContainer extends BaseEntity {
 	}
 
 	public void update(StorageContainer other) {
+		boolean hasParentChanged = false;
+		if (getParentContainer() == null && other.getParentContainer() != null) {
+			hasParentChanged = true;
+		} else if (getParentContainer() != null && !getParentContainer().equals(other.getParentContainer())) {
+			hasParentChanged = true;
+		}
+		
 		setName(other.name);
 		setBarcode(other.barcode);
 		setTemperature(other.temperature);
-		updateCapacity(other.dimensionOneCapacity, other.dimensionTwoCapacity);
-		updateLabelingScheme(other.dimensionOneLabelingScheme, other.dimensionTwoLabelingScheme);
-		updateContainerLocation(other.site, other.parentContainer, other.position);
+		updateCapacity(other.noOfColumns, other.noOfRows);
+		updateLabelingScheme(other.columnLabelingScheme, other.rowLabelingScheme);
+		updateContainerLocation(other.getSite(), other.getParentContainer(), other.getPosition());
 		updateActivityStatus(other.activityStatus);
 		setComments(other.comments);
-		updateAllowedSpecimenClassAndTypes(other.allowedSpecimenClasses, other.allowedSpecimenTypes);
-		updateAllowedCps(other.allowedCps);
+		updateAllowedSpecimenClassAndTypes(other.getAllowedSpecimenClasses(), other.getAllowedSpecimenTypes(), hasParentChanged);
+		updateAllowedCps(other.getAllowedCps(), hasParentChanged);
 		updateStoreSpecimenEnabled(other.storeSpecimenEnabled);
 		
 		validateRestrictions();
 	}
 	
 	public int freePositionsCount() {
-		return dimensionOneCapacity * dimensionTwoCapacity - occupiedPositions.size();
+		return noOfColumns * noOfRows - occupiedPositions.size();
 	}
 	
 	public Set<Integer> occupiedPositionsOrdinals() {
 		Set<Integer> result = new HashSet<Integer>();
 				
 		for (StorageContainerPosition pos : getOccupiedPositions()) {
-			result.add((pos.getPosTwoOrdinal() - 1) * dimensionTwoCapacity + pos.getPosOneOrdinal());
+			result.add((pos.getPosTwoOrdinal() - 1) * noOfRows + pos.getPosOneOrdinal());
 		}
 		
 		return result;
 	}
 	
+	public String toColumnLabelingScheme(int ordinal) {
+		return converters.get(getColumnLabelingScheme()).fromOrdinal(ordinal);
+	}
+	
+	public String toRowLabelingScheme(int ordinal) {
+		return converters.get(getRowLabelingScheme()).fromOrdinal(ordinal);
+	}
+	
 	public boolean areValidPositions(String posOne, String posTwo) {
-		int posOneOrdinal = converters.get(getDimensionOneLabelingScheme()).toOrdinal(posOne);
-		int posTwoOrdinal = converters.get(getDimensionTwoLabelingScheme()).toOrdinal(posTwo);
+		int posOneOrdinal = converters.get(getColumnLabelingScheme()).toOrdinal(posOne);
+		int posTwoOrdinal = converters.get(getRowLabelingScheme()).toOrdinal(posTwo);
 			
 		return areValidPositions(posOneOrdinal, posTwoOrdinal);
 	}
 	
 	public boolean areValidPositions(int posOne, int posTwo) {
-		return posOne >= 1 && posOne <= getDimensionOneCapacity() && 
-				posTwo >= 1 && posTwo <= getDimensionTwoCapacity();
+		return posOne >= 1 && posOne <= getNoOfColumns() && 
+				posTwo >= 1 && posTwo <= getNoOfRows();
 	}
 	
 	public StorageContainerPosition createPosition(String posOne, String posTwo) {
-		int posOneOrdinal = converters.get(getDimensionOneLabelingScheme()).toOrdinal(posOne);
-		int posTwoOrdinal = converters.get(getDimensionTwoLabelingScheme()).toOrdinal(posTwo);
+		int posOneOrdinal = converters.get(getColumnLabelingScheme()).toOrdinal(posOne);
+		int posTwoOrdinal = converters.get(getRowLabelingScheme()).toOrdinal(posTwo);
 		return createPosition(posOneOrdinal, posOne, posTwoOrdinal, posTwo);
 	}
 	
@@ -386,12 +410,12 @@ public class StorageContainer extends BaseEntity {
 	public StorageContainerPosition nextAvailablePosition() {
 		Set<Integer> occupiedPositionOrdinals = occupiedPositionsOrdinals();
 		
-		for (int y = 1; y <= getDimensionTwoCapacity(); ++y) {
-			for (int x = 1; x <= getDimensionOneCapacity(); ++x) {
-				int pos = (y - 1) * getDimensionOneCapacity() + x;
+		for (int y = 1; y <= getNoOfRows(); ++y) {
+			for (int x = 1; x <= getNoOfColumns(); ++x) {
+				int pos = (y - 1) * getNoOfColumns() + x;
 				if (!occupiedPositionOrdinals.contains(pos)) {
-					String posOne = converters.get(getDimensionOneLabelingScheme()).fromOrdinal(x);
-					String posTwo = converters.get(getDimensionTwoLabelingScheme()).fromOrdinal(y);
+					String posOne = converters.get(getColumnLabelingScheme()).fromOrdinal(x);
+					String posTwo = converters.get(getRowLabelingScheme()).fromOrdinal(y);
 					return createPosition(x, posOne, y, posTwo);
 				}
 			}
@@ -470,7 +494,7 @@ public class StorageContainer extends BaseEntity {
 	public void validateRestrictions() {
 		StorageContainer parent = getParentContainer();		
 		if (parent != null && !parent.canContain(this)) {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.VIOLATES_RESTRICTIONS);
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.CANNOT_HOLD_CONTAINER, parent.getName(), getName());
 		}
 		
 		for (StorageContainerPosition pos : getOccupiedPositions()) {
@@ -478,7 +502,10 @@ public class StorageContainer extends BaseEntity {
 				pos.getOccupyingContainer().validateRestrictions();
 			} else if (pos.getOccupyingSpecimen() != null) {
 				if (!canContain(pos.getOccupyingSpecimen())) {
-					throw OpenSpecimenException.userError(StorageContainerErrorCode.VIOLATES_RESTRICTIONS);
+					throw OpenSpecimenException.userError(
+							StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN, 
+							getName(), 
+							pos.getOccupyingSpecimen().getLabelOrDesc());
 				}
 			}
 		}
@@ -514,6 +541,78 @@ public class StorageContainer extends BaseEntity {
 		}
 		
 		return types;
+	}
+
+	public List<DependentEntityDetail> getDependentEntities() {
+		int specimenCnt = getSpecimenCount();
+		return DependentEntityDetail
+			.singletonList(Specimen.getEntityName(), specimenCnt);
+	}
+	
+	public void delete() {
+		int specimenCnt = getSpecimenCount();
+		if (specimenCnt > 0) {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.REF_ENTITY_FOUND);
+		}
+		
+		deleteWithoutCheck();
+	}
+	
+	public String getStringifiedAncestors() {
+		StringBuilder names = new StringBuilder();
+		getStringifiedAncestors(names);
+		names.delete(names.length() - 2, names.length());
+		return names.toString();
+	}
+		
+	//
+	// Assign unoccupied positions in container
+	//
+	public void assignPositions(Collection<StorageContainerPosition> positions) {
+		for (StorageContainerPosition position : positions) {
+			StorageContainerPosition existing = getOccupiedPosition(position.getPosOneOrdinal(), position.getPosTwoOrdinal());
+			if (existing != null) {
+				continue; 
+			}
+						
+			if (position.getOccupyingSpecimen() != null) {
+				position.getOccupyingSpecimen().updatePosition(position);
+			} else {
+				StorageContainer childContainer = position.getOccupyingContainer();
+				boolean hasParentChanged = !this.equals(childContainer.getParentContainer());
+				childContainer.updateContainerLocation(getSite(), this, position);
+				
+				if (hasParentChanged) {
+					childContainer.updateComputedClassAndTypes();
+					childContainer.updateComputedCps();
+				}
+			}
+		}
+	}
+	
+	private void deleteWithoutCheck() {
+		for (StorageContainer child: getChildContainers()) {
+			child.deleteWithoutCheck();
+		}
+		
+		setName(Utility.appendTimestamp(getName()));
+		if (getBarcode() != null) {
+			setBarcode(Utility.appendTimestamp(getBarcode()));
+		}
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+	}
+	
+	private int getSpecimenCount() {
+		int specimenCnt = 0;
+		for (StorageContainer descendant: descendentContainers) {
+			specimenCnt += descendant.getSelfSpecimenCount();
+		}
+		
+		return specimenCnt;
+	}
+	
+	private int getSelfSpecimenCount() {
+		return getOccupiedPositions().size() - getChildContainers().size();
 	}
 	
 	private Set<String> computeAllAllowedSpecimenTypes() {
@@ -560,8 +659,8 @@ public class StorageContainer extends BaseEntity {
 	}
 	
 	private boolean canOccupyPosition(boolean isSpecimenEntity, Long entityId, String posOne, String posTwo) {
-		int posOneOrdinal = converters.get(getDimensionOneLabelingScheme()).toOrdinal(posOne);
-		int posTwoOrdinal = converters.get(getDimensionTwoLabelingScheme()).toOrdinal(posTwo);
+		int posOneOrdinal = converters.get(getColumnLabelingScheme()).toOrdinal(posOne);
+		int posTwoOrdinal = converters.get(getRowLabelingScheme()).toOrdinal(posTwo);
 		
 		if (!areValidPositions(posOneOrdinal, posTwoOrdinal)) {
 			return false;
@@ -579,38 +678,38 @@ public class StorageContainer extends BaseEntity {
 		}
 	}
 	
-	private void updateCapacity(int newDimensionOneCapacity, int newDimensionTwoCapacity) {
-		if (newDimensionOneCapacity < getDimensionOneCapacity() || 
-				newDimensionTwoCapacity < getDimensionTwoCapacity()) {
-			if (arePositionsOccupiedBeyondCapacity(newDimensionOneCapacity, newDimensionTwoCapacity)) {
+	private void updateCapacity(int newNoOfColumns, int newNoOfRows) {
+		if (newNoOfColumns < getNoOfColumns() || 
+				newNoOfRows < getNoOfRows()) {
+			if (arePositionsOccupiedBeyondCapacity(newNoOfColumns, newNoOfRows)) {
 				throw OpenSpecimenException.userError(StorageContainerErrorCode.CANNOT_SHRINK_CONTAINER);
 			}
 		}
 		
-		setDimensionOneCapacity(newDimensionOneCapacity);
-		setDimensionTwoCapacity(newDimensionTwoCapacity); 
+		setNoOfColumns(newNoOfColumns);
+		setNoOfRows(newNoOfRows); 
 	}
 	
-	private void updateLabelingScheme(String newDimOneScheme, String newDimTwoScheme) {
-		boolean dimOneSchemeChanged = !getDimensionOneLabelingScheme().equals(newDimOneScheme);
-		boolean dimTwoSchemeChanged = !getDimensionTwoLabelingScheme().equals(newDimTwoScheme);
+	private void updateLabelingScheme(String newColumnLabelingScheme, String newRowLabelingScheme) {
+		boolean colSchemeChanged = !getColumnLabelingScheme().equals(newColumnLabelingScheme);
+		boolean rowSchemeChanged = !getRowLabelingScheme().equals(newRowLabelingScheme);
 		
-		if (!dimOneSchemeChanged && !dimTwoSchemeChanged) {
+		if (!colSchemeChanged && !rowSchemeChanged) {
 			return;
 		}
 		
 		for (StorageContainerPosition pos : getOccupiedPositions()) {
-			if (dimOneSchemeChanged) {
-				pos.setPosOne(converters.get(newDimOneScheme).fromOrdinal(pos.getPosOneOrdinal()));
+			if (colSchemeChanged) {
+				pos.setPosOne(converters.get(newColumnLabelingScheme).fromOrdinal(pos.getPosOneOrdinal()));
 			}
 			
-			if (dimTwoSchemeChanged) {
-				pos.setPosTwo(converters.get(newDimTwoScheme).fromOrdinal(pos.getPosTwoOrdinal()));
+			if (rowSchemeChanged) {
+				pos.setPosTwo(converters.get(newRowLabelingScheme).fromOrdinal(pos.getPosTwoOrdinal()));
 			}
 		}
 		
-		setDimensionOneLabelingScheme(newDimOneScheme);
-		setDimensionTwoLabelingScheme(newDimTwoScheme);
+		setColumnLabelingScheme(newColumnLabelingScheme);
+		setRowLabelingScheme(newRowLabelingScheme);
 	}
 	
 	private void updateContainerLocation(Site otherSite, StorageContainer otherParentContainer, StorageContainerPosition otherPos) {
@@ -660,60 +759,78 @@ public class StorageContainer extends BaseEntity {
 		}
 	}
 
-	private void updateAllowedSpecimenClassAndTypes(Set<String> newSpecimenClasses, Set<String> newSpecimenTypes) {
-		boolean modified = false;
+	private void updateAllowedSpecimenClassAndTypes(
+			Set<String> newSpecimenClasses, 
+			Set<String> newSpecimenTypes, 
+			boolean updateComputedTypes) {
+		
+		boolean computeTypes = updateComputedTypes;
 		
 		if (!CollectionUtils.isEqualCollection(getAllowedSpecimenClasses(), newSpecimenClasses)) {
 			getAllowedSpecimenClasses().clear();
 			getAllowedSpecimenClasses().addAll(newSpecimenClasses);
-			modified = true;			
+			computeTypes = true;			
 		}
 		
 		if (!CollectionUtils.isEqualCollection(getAllowedSpecimenTypes(), newSpecimenTypes)) {
 			getAllowedSpecimenTypes().clear();
 			getAllowedSpecimenTypes().addAll(newSpecimenTypes);
-			modified = true;			
+			computeTypes = true;			
 		}
 		
-		if (modified) {
-			for (StorageContainer desc : getDescendentContainers()) {
-				desc.getCompAllowedSpecimenClasses().clear();
-				desc.getCompAllowedSpecimenClasses().addAll(desc.computeAllowedSpecimenClasses());
-				
-				desc.getCompAllowedSpecimenTypes().clear();
-				desc.getCompAllowedSpecimenTypes().addAll(desc.computeAllowedSpecimenTypes());				
-			}
+		if (computeTypes) {
+			updateComputedClassAndTypes();
 		}
 				
 	}
 	
-	private void updateAllowedCps(Set<CollectionProtocol> newCps) {
-		if (CollectionUtils.isEqualCollection(getAllowedCps(), newCps)) {
-			return;
+	private void updateComputedClassAndTypes() {
+		getCompAllowedSpecimenClasses().clear();
+		getCompAllowedSpecimenClasses().addAll(computeAllowedSpecimenClasses());
+
+		getCompAllowedSpecimenTypes().clear();
+		getCompAllowedSpecimenTypes().addAll(computeAllowedSpecimenTypes());				
+		
+		for (StorageContainer childContainer : getChildContainers()) {
+			childContainer.updateComputedClassAndTypes();
+		}		
+	}
+	
+	private void updateAllowedCps(Set<CollectionProtocol> newCps, boolean updateComputedCps) {
+		boolean computeCps = updateComputedCps;		
+		if (!CollectionUtils.isEqualCollection(getAllowedCps(), newCps)) {
+			getAllowedCps().clear();
+			getAllowedCps().addAll(newCps);			
+			computeCps = true;
 		}
 		
-		getAllowedCps().clear();
-		getAllowedCps().addAll(newCps);
-		
-		for (StorageContainer desc : getDescendentContainers()) {
-			desc.getCompAllowedCps().clear();
-			desc.getCompAllowedCps().addAll(desc.computeAllowedCps());
+		if (computeCps) {
+			updateComputedCps();			
 		}
+	}
+	
+	private void updateComputedCps() {
+		getCompAllowedCps().clear();
+		getCompAllowedCps().addAll(computeAllowedCps());
+		
+		for (StorageContainer childContainer : getChildContainers()) {
+			childContainer.updateComputedCps();
+		}		
 	}
 	
 	private void updateStoreSpecimenEnabled(boolean newStoreSpecimenEnabled) {
 		this.storeSpecimenEnabled = newStoreSpecimenEnabled;
 	}
 		
-	private boolean arePositionsOccupiedBeyondCapacity(int dimensionOneCapacity, int dimensionTwoCapacity) {
+	private boolean arePositionsOccupiedBeyondCapacity(int noOfCols, int noOfRows) {
 		boolean result = false;
 		for (StorageContainerPosition pos : getOccupiedPositions()) {
-			if (pos.getPosOneOrdinal() > dimensionOneCapacity) {
+			if (pos.getPosOneOrdinal() > noOfCols) {
 				result = true;
 				break;
 			}
 			
-			if (pos.getPosTwoOrdinal() > dimensionTwoCapacity) {
+			if (pos.getPosTwoOrdinal() > noOfRows) {
 				result = true;
 				break;
 			}
@@ -767,6 +884,14 @@ public class StorageContainer extends BaseEntity {
 		}
 		
 		return false;
+	}
+	
+	private void getStringifiedAncestors(StringBuilder names) {
+		if (getParentContainer() != null) {
+			getParentContainer().getStringifiedAncestors(names);
+		}
+		
+		names.append(getName()).append(", ");
 	}
 	
 	//

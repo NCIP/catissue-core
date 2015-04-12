@@ -1,7 +1,7 @@
 .os-nav-drawer, .os-nav-drawer-overlay {
   position: absolute;
   height: auto;
-  top: 57px;
+  top: 50px;
   bottom: 0;
 }
 
@@ -39,6 +39,7 @@
   bottom: 0px;
   height: auto;
   width: 100%;
+  margin-bottom: 0px;
 }
 
 .os-nav-drawer .os-page-hdr ~ ul.os-menu-items {

@@ -1,12 +1,12 @@
 <div>
   <div class="os-navbar os-navbar-default os-navbar-docked">
     <a class="logo" href="#"><img src="images/os_logo.png"></img></a>
-    <div class="search">
+    <!-- div class="search">
       <input type="text" class="form-control" placeholder="Quick Search"></input>
       <button class="btn btn-primary">
         <span class="fa fa-search"></span>
       </button>
-    </div>
+    </div -->
     <ul class="menu">
       <li class="dropdown">
         <a class="dropdown-toggle">
@@ -33,14 +33,16 @@
     <div>
       <div os-nav-drawer>
         <ul role="menu">
-          <li><a ui-sref="cp-list" ui-sref-active="active" translate="menu.collection_protocols">Collection Protocols</a></li>
-          <li><a ui-sref="dp-list" translate="menu.distribution_protocols">Distribution Protocols</a></li>
+          <li><a ui-sref="home"           translate="menu.home">Home</a></li>
+          <li><a ui-sref="cp-list"        translate="menu.collection_protocols">Collection Protocols</a></li>
+          <li><a ui-sref="dp-list"        translate="menu.distribution_protocols">Distribution Protocols</a></li>
           <li><a ui-sref="institute-list" translate="menu.institutes">Institutes</a></li>
-          <li><a ui-sref="user-list" translate="menu.users">Users</a></li>
-          <li><a ui-sref="role-list" translate="menu.roles">Roles</a></li>
-          <li><a ui-sref="site-list" translate="menu.sites">Sites</a></li>
+          <li><a ui-sref="user-list"      translate="menu.users">Users</a></li>
+          <li><a ui-sref="role-list"      translate="menu.roles">Roles</a></li>
+          <li><a ui-sref="site-list"      translate="menu.sites">Sites</a></li>
           <li><a ui-sref="container-list" translate="menu.storage_containers">Storage Containers</a></li>
-          <li><a href="#" translate="menu.settings">Settings</a></li>
+          <li><a ui-sref="query-list"     translate="menu.queries">Queries</a></li>
+          <!-- li><a href="#" translate="menu.settings">Settings</a></li -->
         </ul>
       </div>
       <div>

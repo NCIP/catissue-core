@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -19,6 +20,8 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Configurable
 public class CollectionProtocolRegistration {
+	private static final String ENTITY_NAME = "collection_protocol_registration";
+	
 	private Long id;
 
 	private String ppid;
@@ -29,7 +32,7 @@ public class CollectionProtocolRegistration {
 
 	private CollectionProtocol collectionProtocol;
 
-	private Collection<Visit> visits;
+	private Collection<Visit> visits = new HashSet<Visit>();
 
 	private String activityStatus;
 
@@ -39,13 +42,17 @@ public class CollectionProtocolRegistration {
 
 	private User consentWitness;
 
-	private Set<ConsentTierResponse> consentResponses;
+	private Set<ConsentTierResponse> consentResponses = new HashSet<ConsentTierResponse>();
 
 	private String barcode;
 	
 	@Autowired
 	private DaoFactory daoFactory;
 
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -189,8 +196,7 @@ public class CollectionProtocolRegistration {
 		CollectionProtocol cp = getCollectionProtocol();
 		String ppidFmt = cp.getPpidFormat();
 		if (StringUtils.isNotBlank(ppidFmt)) {
-			Long uniqueId = daoFactory.getUniqueIdGenerator()
-					.getUniqueId("PPID", cp.getShortTitle());
+			Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("PPID", cp.getShortTitle());
 			setPpid(String.format(ppidFmt, uniqueId.intValue()));
 		} else {
 			setPpid(cp.getId() + "_" + participant.getId());
@@ -198,8 +204,8 @@ public class CollectionProtocolRegistration {
 	}
 
 	private void setConsents(Set<ConsentTierResponse> consentResponses) {
-		CollectionUpdater.update(this.consentResponses, consentResponses);
-		for (ConsentTierResponse resp : this.consentResponses) {
+		CollectionUpdater.update(getConsentResponses(), consentResponses);
+		for (ConsentTierResponse resp : getConsentResponses()) {
 			resp.setCpr(this);
 		}
 	}

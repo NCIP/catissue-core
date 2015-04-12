@@ -25,22 +25,31 @@
     <!-- endbuild -->
     <!-- build:css(.tmp) css/app.css -->
     <link rel="stylesheet" href="styles/app.css">
+    <link rel="stylesheet" href="styles/home.css">
     <link rel="stylesheet" href="styles/card.css">
     <link rel="stylesheet" href="styles/modal.css">
     <link rel="stylesheet" href="styles/tube-wizard.css">
     <link rel="stylesheet" href="styles/sidemenu.css">
     <link rel="stylesheet" href="styles/inline-edit.css">
+    <link rel="stylesheet" href="styles/file-upload.css">
     <link rel="stylesheet" href="styles/breadcrumbs.css">
     <link rel="stylesheet" href="styles/biospecimen.css">
     <link rel="stylesheet" href="styles/vendor-custom.css">
     <link rel="stylesheet" href="styles/md-input.css">
+    <link rel="stylesheet" href="styles/tags.css">
     <link rel="stylesheet" href="styles/table.css">
+    <link rel="stylesheet" href="styles/tree.css">
+    <link rel="stylesheet" href="styles/pivot-table.css">
     <link rel="stylesheet" href="styles/checkbox.css">
     <link rel="stylesheet" href="styles/container-map.css">
     <link rel="stylesheet" href="styles/nav-drawer.css">
     <link rel="stylesheet" href="styles/right-drawer.css">
     <link rel="stylesheet" href="styles/extensions.css">
     <link rel="stylesheet" href="styles/roles.css">
+    <link rel="stylesheet" href="styles/query.css">
+
+    <!-- custom modules css -->
+    <link rel="stylesheet" href="custom-modules/le/styles/le.css">
     <!-- endbuild -->
   </head>
   <body ng-app="openspecimen">
@@ -76,6 +85,7 @@
     <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
     <script src="bower_components/angular-translate/angular-translate.js"></script>
     <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <!-- endbower -->
     <script src="external_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
     <script src="external_components/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
@@ -115,6 +125,12 @@
     <script src="modules/common/opened-tree-nodes.js"></script>
     <script src="modules/common/match.js"></script>
     <script src="modules/common/util.js"></script>
+    <script src="modules/common/tags.js"></script>
+    <script src="modules/common/tree.js"></script>
+    <script src="modules/common/pivot-table.js"></script>
+    <script src="modules/common/delete/ctrl.js"></script>
+    <script src="modules/common/delete/util.js"></script>
+    <script src="modules/common/datepicker.js"></script>
 
     <!-- Administrative module -->
     <script src="modules/administrative/module.js"></script>
@@ -164,6 +180,7 @@
     <script src="modules/administrative/container/addedit.js"></script>
     <script src="modules/administrative/container/detail.js"></script>
     <script src="modules/administrative/container/overview.js"></script>
+    <script src="modules/administrative/container/locations.js"></script>
     <script src="modules/administrative/container/position-selector.js"></script>
     <script src="modules/administrative/container/map.js"></script>
     <script src="modules/administrative/container/util.js"></script>
@@ -186,6 +203,7 @@
     <script src="modules/biospecimen/models/cpr.js"></script>
     <script src="modules/biospecimen/models/visit.js"></script>
     <script src="modules/biospecimen/models/specimen.js"></script>
+    <script src="modules/biospecimen/models/specimen-printer.js"></script>
     <script src="modules/biospecimen/models/form.js"></script>
 
     <!-- Extensions -->
@@ -216,7 +234,6 @@
     <script src="modules/biospecimen/participant/visits.js"></script>
     <script src="modules/biospecimen/participant/add-visit.js"></script>
     <script src="modules/biospecimen/participant/specimen-tree.js"></script>
-    <script src="modules/biospecimen/participant/specimen-desc.js"></script>
     <script src="modules/biospecimen/participant/collect-specimens.js"></script>
     <script src="modules/biospecimen/participant/specimen-position.js"></script>
     <script src="modules/biospecimen/participant/specimen-position-selector.js"></script>
@@ -235,9 +252,36 @@
     <script src="modules/biospecimen/common/specimen-qty-validate.js"></script>
     <script src="modules/biospecimen/common/unique-specimen-label.js"></script>
     <script src="modules/biospecimen/common/specimen-qty-unit.js"></script>
+    <script src="modules/biospecimen/common/specimen-desc.js"></script>
 
+    <!-- Query -->
+    <script src="modules/query/module.js"></script>
+    <script src="modules/query/models/module.js"></script>
+    <script src="modules/query/models/saved-query.js"></script>
+    <script src="modules/query/models/query-folder.js"></script>
+    <script src="modules/query/global-data.js"></script>
+    <script src="modules/query/addedit-folder.js"></script>
+    <script src="modules/query/delete.js"></script>
+    <script src="modules/query/import_query.js"></script>
+    <script src="modules/query/list.js"></script>
+    <script src="modules/query/util.js"></script>
+    <script src="modules/query/datepicker.js"></script>
+    <script src="modules/query/addedit.js"></script>
+    <script src="modules/query/addedit-filter.js"></script>
+    <script src="modules/query/save.js"></script>
+    <script src="modules/query/query-expr.js"></script>
+    <script src="modules/query/executor.js"></script>
+    <script src="modules/query/results.js"></script>
+    <script src="modules/query/define-view.js"></script>
+    <script src="modules/query/parameters.js"></script>
+    <script src="modules/query/lookup.js"></script>
+
+    <!-- TODO: Interim includes. Should go away -->
     <script src="modules/biospecimen/cp/config.js"></script>
     <script src="custom-modules/biospecimen/participant/register.js"></script>
+    <script src="custom-modules/le/biospecimen/collect-specimens.js"></script>
+    <script src="custom-modules/le/biospecimen/specimen-box.js"></script>
+
 
     <!-- endbuild -->
   </body>

@@ -21,8 +21,9 @@ import com.krishagni.rbac.events.OperationDetail;
 import com.krishagni.rbac.events.PermissionDetail;
 import com.krishagni.rbac.events.ResourceDetail;
 import com.krishagni.rbac.events.RoleDetail;
-import com.krishagni.rbac.events.SubjectDetail;
 import com.krishagni.rbac.events.SubjectRoleDetail;
+import com.krishagni.rbac.events.SubjectRoleOp;
+import com.krishagni.rbac.events.SubjectRoleOp.OP;
 import com.krishagni.rbac.repository.OperationListCriteria;
 import com.krishagni.rbac.repository.PermissionListCriteria;
 import com.krishagni.rbac.repository.ResourceListCriteria;
@@ -204,6 +205,15 @@ public class RbacController {
 		return resp.getPayload();
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value="/roles/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public RoleDetail getRole(@PathVariable Long id) {
+		ResponseEvent<RoleDetail> resp = rbacSvc.getRole(getRequest(id));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, value="/roles")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -213,23 +223,21 @@ public class RbacController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value="/roles/{name}")
+	@RequestMapping(method = RequestMethod.PUT, value="/roles/{roleId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public RoleDetail updateRole(
-			@PathVariable("name") String roleName, 
-			@RequestBody RoleDetail roleDetails) {
-		roleDetails.setName(roleName);
-		ResponseEvent<RoleDetail> resp = rbacSvc.saveRole(getRequest(roleDetails));
+	public RoleDetail updateRole(@PathVariable Long roleId, @RequestBody RoleDetail roleDetail) {
+		roleDetail.setId(roleId);
+		ResponseEvent<RoleDetail> resp = rbacSvc.updateRole(getRequest(roleDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 		
-	@RequestMapping(method = RequestMethod.DELETE, value="/roles/{name}")
+	@RequestMapping(method = RequestMethod.DELETE, value="/roles/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody 
-	public RoleDetail deleteRole(@PathVariable("name") String roleName) {
-		ResponseEvent<RoleDetail> resp = rbacSvc.deleteRole(getRequest(roleName));
+	public RoleDetail deleteRole(@PathVariable("id") Long id) {
+		ResponseEvent<RoleDetail> resp = rbacSvc.deleteRole(getRequest(id));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -238,18 +246,6 @@ public class RbacController {
 	//
 	// - Subject APIs
 	//	
-	@RequestMapping(method = RequestMethod.PUT, value="/subjects/{subjectId}/roles")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public SubjectDetail updateSubjectRole(
-			@PathVariable("subjectId") Long subjectId,
-			@RequestBody SubjectDetail subject) {
-		subject.setId(subjectId);
-		ResponseEvent<SubjectDetail> resp = rbacSvc.updateSubjectRoles(getRequest(subject));
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
-	}
-	
 	@RequestMapping(method = RequestMethod.GET, value="/subjects/{subjectId}/roles")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -258,7 +254,49 @@ public class RbacController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+	
+	@RequestMapping(method = RequestMethod.POST, value="/subjects/{id}/roles")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SubjectRoleDetail addSubjectRole(
+			@PathVariable("id") Long subjectId, 
+			@RequestBody SubjectRoleDetail subjectRole) {
+		return performSubjectRoleOp(SubjectRoleOp.OP.ADD, subjectId, subjectRole);
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value="/subjects/{id}/roles/{roleId}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SubjectRoleDetail updateSubjectRole(
+			@PathVariable("id") Long subjectId,
+			@PathVariable("roleId") Long roleId,
+			@RequestBody SubjectRoleDetail subjectRole) {
+		subjectRole.setId(roleId);
+		return performSubjectRoleOp(SubjectRoleOp.OP.UPDATE, subjectId, subjectRole);
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="/subjects/{id}/roles/{roleId}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SubjectRoleDetail removeSubjectRole(
+			@PathVariable("id") Long subjectId,
+			@PathVariable("roleId") Long roleId) {
+		SubjectRoleDetail subjectRole= new SubjectRoleDetail();
+		subjectRole.setId(roleId);
+		return performSubjectRoleOp(SubjectRoleOp.OP.REMOVE, subjectId, subjectRole);
+	}
 		
+	private SubjectRoleDetail performSubjectRoleOp(OP op, Long subjectId, SubjectRoleDetail subjectRole) {
+		SubjectRoleOp subjectRoleOp = new SubjectRoleOp();
+		subjectRoleOp.setSubjectId(subjectId);
+		subjectRoleOp.setOp(op);
+		subjectRoleOp.setSubjectRole(subjectRole);
+		
+		ResponseEvent<SubjectRoleDetail> resp = rbacSvc.updateSubjectRole(getRequest(subjectRoleOp));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
 	//
 	// - Group APIs
 	//

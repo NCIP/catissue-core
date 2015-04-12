@@ -26,9 +26,9 @@ public class StorageContainerSummary {
 
 	private UserSummary createdBy;
 	
-	private int dimensionOneCapacity;
+	private int noOfColumns;
 	
-	private int dimensionTwoCapacity;
+	private int noOfRows;
 	
 	private int freePositions;
 	
@@ -100,20 +100,20 @@ public class StorageContainerSummary {
 		this.createdBy = createdBy;
 	}
 
-	public int getDimensionOneCapacity() {
-		return dimensionOneCapacity;
+	public int getNoOfColumns() {
+		return noOfColumns;
 	}
 
-	public void setDimensionOneCapacity(int dimensionOneCapacity) {
-		this.dimensionOneCapacity = dimensionOneCapacity;
+	public void setNoOfColumns(int noOfColumns) {
+		this.noOfColumns = noOfColumns;
 	}
 
-	public int getDimensionTwoCapacity() {
-		return dimensionTwoCapacity;
+	public int getNoOfRows() {
+		return noOfRows;
 	}
 
-	public void setDimensionTwoCapacity(int dimensionTwoCapacity) {
-		this.dimensionTwoCapacity = dimensionTwoCapacity;
+	public void setNoOfRows(int noOfRows) {
+		this.noOfRows = noOfRows;
 	}
 
 	public int getFreePositions() {
@@ -153,8 +153,8 @@ public class StorageContainerSummary {
 			result.setParentContainerName(container.getParentContainer().getName());
 		}
 		
-		result.setDimensionOneCapacity(container.getDimensionOneCapacity());
-		result.setDimensionTwoCapacity(container.getDimensionTwoCapacity());
+		result.setNoOfColumns(container.getNoOfColumns());
+		result.setNoOfRows(container.getNoOfRows());
 		result.setFreePositions(container.freePositionsCount());
 		result.setStoreSpecimensEnabled(container.isStoreSpecimenEnabled());
 	}

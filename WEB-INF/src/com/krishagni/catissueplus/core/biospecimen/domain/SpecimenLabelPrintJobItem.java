@@ -19,6 +19,8 @@ public class SpecimenLabelPrintJobItem extends BaseEntity {
 	
 	private Status status;
 	
+	private String labelType;
+	
 	private String data;
 
 	public SpecimenLabelPrintJob getJob() {
@@ -59,6 +61,14 @@ public class SpecimenLabelPrintJobItem extends BaseEntity {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	public String getLabelType() {
+		return labelType;
+	}
+
+	public void setLabelType(String labelType) {
+		this.labelType = labelType;
 	}
 
 	public String getData() {

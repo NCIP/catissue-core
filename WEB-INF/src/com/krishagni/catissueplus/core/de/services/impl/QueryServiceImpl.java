@@ -198,7 +198,7 @@ public class QueryServiceImpl implements QueryService {
 				.dateFormat(dateFormat)
 				.timeFormat(timeFormat)
 				.compile(cprForm, getAql(queryDetail));
-			SavedQuery savedQuery = getSavedQuery(req.getSessionDataBean(), queryDetail);
+			SavedQuery savedQuery = getSavedQuery(queryDetail);
 			daoFactory.getSavedQueryDao().saveOrUpdate(savedQuery);
 			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(savedQuery));
 		} catch (QueryParserException qpe) {
@@ -222,12 +222,12 @@ public class QueryServiceImpl implements QueryService {
 				.dateFormat(dateFormat)
 				.timeFormat(timeFormat)
 				.compile(cprForm, getAql(queryDetail));
-			SavedQuery savedQuery = getSavedQuery(req.getSessionDataBean(), queryDetail);
+			SavedQuery savedQuery = getSavedQuery(queryDetail);
 			SavedQuery existing = daoFactory.getSavedQueryDao().getQuery(queryDetail.getId());
 			existing.update(savedQuery);
 
 			daoFactory.getSavedQueryDao().saveOrUpdate(existing);	
-			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(savedQuery));
+			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(existing));
 		} catch (QueryParserException qpe) {
 			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (IllegalArgumentException iae) {
@@ -247,9 +247,8 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
 			}
 
-			boolean isAdmin = req.getSessionDataBean().isAdmin();
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!isAdmin && !query.getCreatedBy().getId().equals(userId)) {
+			User user = AuthUtil.getCurrentUser();
+			if (!user.isAdmin() && !query.getCreatedBy().equals(user)) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 
@@ -268,24 +267,25 @@ public class QueryServiceImpl implements QueryService {
 		
 		try {
 			ExecuteQueryEventOp opDetail = req.getPayload();
-			SessionDataBean sdb = req.getSessionDataBean();
+			User user = AuthUtil.getCurrentUser();
 			boolean countQuery = opDetail.getRunType().equals("Count");
 			
+			
 			Query query = Query.createQuery()
-					.wideRowMode(opDetail.isWideRows() ? WideRowMode.DEEP : WideRowMode.SHALLOW)
+					.wideRowMode(WideRowMode.valueOf(opDetail.getWideRowMode()))
 					.ic(true)
 					.dateFormat(dateFormat)
 					.timeFormat(timeFormat);
 			query.compile(
 					cprForm, 
-					getAqlWithCpIdInSelect(sdb, countQuery, opDetail.getAql()), 
-					getRestriction(sdb, opDetail.getCpId()));
+					getAqlWithCpIdInSelect(user, countQuery, opDetail.getAql()), 
+					getRestriction(user, opDetail.getCpId()));
 			
 			QueryResponse resp = query.getData();
-			insertAuditLog(req, resp);
+			insertAuditLog(user, req, resp);
 			
 			queryResult = resp.getResultData();
-			queryResult.setScreener(new QueryResultScreenerImpl(sdb, countQuery));
+			queryResult.setScreener(new QueryResultScreenerImpl(user, countQuery));
 			
 			Integer[] indices = null;
 			if (opDetail.getIndexOf() != null && !opDetail.getIndexOf().isEmpty()) {
@@ -319,18 +319,18 @@ public class QueryServiceImpl implements QueryService {
 	public ResponseEvent<QueryDataExportResult> exportQueryData(RequestEvent<ExecuteQueryEventOp> req) {
 		try {
 			ExecuteQueryEventOp opDetail = req.getPayload();
-			SessionDataBean sdb = req.getSessionDataBean();
+			User user = AuthUtil.getCurrentUser();
 			boolean countQuery = opDetail.getRunType().equals("Count");
 			
 			
 			Query query = Query.createQuery();
-			query.wideRowMode(opDetail.isWideRows() ? WideRowMode.DEEP : WideRowMode.SHALLOW)
+			query.wideRowMode(WideRowMode.valueOf(opDetail.getWideRowMode()))
 				.ic(true)
 				.dateFormat(dateFormat).timeFormat(timeFormat)
 				.compile(
-						cprForm, 
-						getAqlWithCpIdInSelect(sdb, countQuery, opDetail.getAql()), 
-						getRestriction(sdb, opDetail.getCpId()));
+					cprForm, 
+					getAqlWithCpIdInSelect(user, countQuery, opDetail.getAql()), 
+					getRestriction(user, opDetail.getCpId()));
 			
 			String filename = UUID.randomUUID().toString();
 			boolean completed = exportData(filename, query, req);
@@ -366,15 +366,9 @@ public class QueryServiceImpl implements QueryService {
 	@PlusTransactional
 	public ResponseEvent<List<QueryFolderSummary>> getUserFolders(RequestEvent<?> req) {
 		try {
-			Long userId = req.getSessionDataBean().getUserId();			
-			List<QueryFolder> queryFolders = daoFactory.getQueryFolderDao().getUserFolders(userId);
-
-			List<QueryFolderSummary> result = new ArrayList<QueryFolderSummary>();
-			for (QueryFolder folder : queryFolders) {
-				result.add(QueryFolderSummary.fromQueryFolder(folder));
-			}
-			
-			return ResponseEvent.response(result);
+			Long userId = AuthUtil.getCurrentUser().getId();			
+			List<QueryFolder> folders = daoFactory.getQueryFolderDao().getUserFolders(userId);			
+			return ResponseEvent.response(QueryFolderSummary.from(folders));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -390,12 +384,12 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !folder.canUserAccess(userId)) {
+			User user = AuthUtil.getCurrentUser();
+			if (!user.isAdmin() && !folder.canUserAccess(user.getId())) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
-			return ResponseEvent.response(QueryFolderDetails.fromQueryFolder(folder));			
+			return ResponseEvent.response(QueryFolderDetails.from(folder));			
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);			
 		}
@@ -409,17 +403,16 @@ public class QueryServiceImpl implements QueryService {
 			QueryFolderDetails folderDetails = req.getPayload();
 			
 			UserSummary owner = new UserSummary();
-			owner.setId(req.getSessionDataBean().getUserId());
+			owner.setId(AuthUtil.getCurrentUser().getId());
 			folderDetails.setOwner(owner);
 			
-			QueryFolder queryFolder = queryFolderFactory.createQueryFolder(folderDetails);	
-			
+			QueryFolder queryFolder = queryFolderFactory.createQueryFolder(folderDetails);			
 			daoFactory.getQueryFolderDao().saveOrUpdate(queryFolder);
 			
 			if (!queryFolder.getSharedWith().isEmpty()) {
 				sendFolderSharedEmail(queryFolder.getOwner(), queryFolder, queryFolder.getSharedWith());
 			}			
-			return ResponseEvent.response(QueryFolderDetails.fromQueryFolder(queryFolder));
+			return ResponseEvent.response(QueryFolderDetails.from(queryFolder));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -442,8 +435,8 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !existing.getOwner().getId().equals(userId)) {
+			User user = AuthUtil.getCurrentUser();
+			if (!user.isAdmin() && !existing.getOwner().equals(user)) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
@@ -459,10 +452,9 @@ public class QueryServiceImpl implements QueryService {
 			daoFactory.getQueryFolderDao().saveOrUpdate(existing);
 			
 			if (!newUsers.isEmpty()) {
-				User user = userDao.getById(userId);
 				sendFolderSharedEmail(user, queryFolder, newUsers);
 			}
-			return ResponseEvent.response(QueryFolderDetails.fromQueryFolder(existing));			
+			return ResponseEvent.response(QueryFolderDetails.from(existing));			
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -484,8 +476,8 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);								
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !existing.getOwner().getId().equals(userId)) {
+			User user = AuthUtil.getCurrentUser();			
+			if (!user.isAdmin() && !existing.getOwner().equals(user)) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
@@ -507,8 +499,8 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !folder.canUserAccess(userId)) {
+			User user = AuthUtil.getCurrentUser();
+			if (!user.isAdmin() && !folder.canUserAccess(user.getId())) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
@@ -541,8 +533,8 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !queryFolder.getOwner().getId().equals(userId)) {
+			User user = AuthUtil.getCurrentUser();
+			if (!user.isAdmin() && !queryFolder.getOwner().equals(user)) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
@@ -593,8 +585,8 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !queryFolder.getOwner().getId().equals(userId)) {
+			User user = AuthUtil.getCurrentUser();
+			if (!user.isAdmin() && !queryFolder.getOwner().equals(user)) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
@@ -624,12 +616,11 @@ public class QueryServiceImpl implements QueryService {
 											
 			daoFactory.getQueryFolderDao().saveOrUpdate(queryFolder);			
 			List<UserSummary> result = new ArrayList<UserSummary>();
-			for (User user : queryFolder.getSharedWith()) {
-				result.add(UserSummary.from(user));
+			for (User sharedUser : queryFolder.getSharedWith()) {
+				result.add(UserSummary.from(sharedUser));
 			}
 			
 			if (newUsers != null && !newUsers.isEmpty()) {
-				User user = userDao.getById(userId);
 				sendFolderSharedEmail(user, queryFolder, newUsers);
 			}
 			
@@ -713,9 +704,9 @@ public class QueryServiceImpl implements QueryService {
 				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!query.getCreatedBy().getId().equals(userId) && 
-					!queryDao.isQuerySharedWithUser(queryId, userId)) {
+			User user = AuthUtil.getCurrentUser();
+			if (!query.getCreatedBy().equals(user) && 
+					!queryDao.isQuerySharedWithUser(queryId, user.getId())) {
 				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 			}
 			
@@ -726,10 +717,7 @@ public class QueryServiceImpl implements QueryService {
 		}
 	}
          
-	private SavedQuery getSavedQuery(SessionDataBean sdb, SavedQueryDetail detail) {
-		User user = new User();
-		user.setId(sdb.getUserId());
-		
+	private SavedQuery getSavedQuery(SavedQueryDetail detail) {
 		SavedQuery savedQuery = new SavedQuery();		
 		savedQuery.setTitle(detail.getTitle());
 		savedQuery.setCpId(detail.getCpId());
@@ -737,15 +725,14 @@ public class QueryServiceImpl implements QueryService {
 		savedQuery.setFilters(detail.getFilters());
 		savedQuery.setQueryExpression(detail.getQueryExpression());
 		if (detail.getId() == null) {
-			savedQuery.setCreatedBy(user);
+			savedQuery.setCreatedBy(AuthUtil.getCurrentUser());
 		}
 		
-		savedQuery.setLastUpdatedBy(user);
+		savedQuery.setLastUpdatedBy(AuthUtil.getCurrentUser());
 		savedQuery.setLastUpdated(Calendar.getInstance().getTime());
 		savedQuery.setReporting(detail.getReporting());
 		return savedQuery;
 	}
-
 
 	private String getAql(SavedQueryDetail queryDetail) {
 		return AqlBuilder.getInstance().getQuery(
@@ -756,22 +743,28 @@ public class QueryServiceImpl implements QueryService {
 	
 	private boolean exportData(final String filename, final Query query, final RequestEvent<ExecuteQueryEventOp> req) 
 	throws ExecutionException, InterruptedException, CancellationException {
+		final User user = AuthUtil.getCurrentUser();
 		Future<Boolean> result = exportThreadPool.submit(new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {				
 				QueryResultExporter exporter = new QueryResultCsvExporter();
 				String path = EXPORT_DATA_DIR + File.separator + filename;
 				
-				Transaction txn = startTxn();
-				QueryResponse resp = exporter.export(
-						path, query, new QueryResultScreenerImpl(req.getSessionDataBean(), false));
+				Session session = startTxn();
 				try {
-					insertAuditLog(req, resp);
+					QueryResponse resp = exporter.export(
+						path, query, new QueryResultScreenerImpl(user, false));
+					insertAuditLog(user, req, resp);
 					sendEmail();
-					txn.commit();
+					session.getTransaction().commit();
 				} catch (Exception e) {
+					Transaction txn = session.getTransaction();
 					if (txn != null) {
 						txn.rollback();
+					}
+				} finally {
+					if (session != null) {
+						session.close();
 					}
 				}
                 
@@ -801,8 +794,8 @@ public class QueryServiceImpl implements QueryService {
 		}		
 	}
 	
-	private String getRestriction(SessionDataBean sdb, Long cpId) {
-		if (sdb.isAdmin()) {
+	private String getRestriction(User user, Long cpId) {
+		if (user.isAdmin()) {
 			if (cpId != null && cpId != -1) {
 				return cpForm + ".id = " + cpId;
 			}
@@ -848,8 +841,8 @@ public class QueryServiceImpl implements QueryService {
 			.toString();
 	}
 			
-	private String getAqlWithCpIdInSelect(SessionDataBean sdb, boolean isCount, String aql) {
-		if (sdb.isAdmin() || isCount) {
+	private String getAqlWithCpIdInSelect(User user, boolean isCount, String aql) {
+		if (user.isAdmin() || isCount) {
 			return aql;
 		} else {
 			String afterSelect = aql.trim().substring(6);
@@ -882,10 +875,7 @@ public class QueryServiceImpl implements QueryService {
 		return dir;
 	}
 
-	private void insertAuditLog(RequestEvent<ExecuteQueryEventOp> req, QueryResponse resp) {
-		User user = new User();
-		user.setId(req.getSessionDataBean().getUserId());
-
+	private void insertAuditLog(User user, RequestEvent<ExecuteQueryEventOp> req, QueryResponse resp) {
 		QueryAuditLog auditLog = new QueryAuditLog();
 		auditLog.setQueryId(req.getPayload().getSavedQueryId());
 		auditLog.setRunBy(user);
@@ -896,19 +886,15 @@ public class QueryServiceImpl implements QueryService {
 		daoFactory.getQueryAuditLogDao().saveOrUpdate(auditLog);
 	}
 	
-	private Transaction startTxn() {
+	private Session startTxn() {
 		AbstractDao<?> dao = (AbstractDao<?>)daoFactory.getQueryAuditLogDao();
-		Session session = dao.getSessionFactory().getCurrentSession();
-		Transaction txn = session.getTransaction();
-		if (txn == null || !txn.isActive()) {
-			txn = session.beginTransaction();			
-		}
-		
-		return txn;
+		Session session = dao.getSessionFactory().openSession();
+		session.beginTransaction();
+		return session;
 	}
 		
 	private class QueryResultScreenerImpl implements QueryResultScreener {
-		private SessionDataBean sdb;
+		private User user;
 		
 		private boolean countQuery;
 		
@@ -916,14 +902,14 @@ public class QueryServiceImpl implements QueryService {
 		
 		private static final String mask = "##########";
 		
-		public QueryResultScreenerImpl(SessionDataBean sdb, boolean countQuery) {
-			this.sdb = sdb;
+		public QueryResultScreenerImpl(User user, boolean countQuery) {
+			this.user = user;
 			this.countQuery = countQuery;
 		}
 
 		@Override
 		public List<ResultColumn> getScreenedResultColumns(List<ResultColumn> preScreenedResultCols) {
-			if (sdb.isAdmin() || this.countQuery) {
+			if (user.isAdmin() || this.countQuery) {
 				return preScreenedResultCols;
 			}
 			
@@ -934,7 +920,7 @@ public class QueryServiceImpl implements QueryService {
 
 		@Override
 		public Object[] getScreenedRowData(List<ResultColumn> preScreenedResultCols, Object[] rowData) {
-			if (sdb.isAdmin() || this.countQuery || rowData.length == 0) {
+			if (user.isAdmin() || this.countQuery || rowData.length == 0) {
 				return rowData;
 			}
 						

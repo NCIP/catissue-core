@@ -1,6 +1,9 @@
 
 angular.module('os.administrative.user.detail', ['os.administrative.models'])
-  .controller('UserDetailCtrl', function($scope, $q, $state, $translate, user, User, PvManager, Alerts) {
+  .controller('UserDetailCtrl', function(
+    $scope, $q, $translate, user, 
+    User, PvManager, Alerts, DeleteUtil) {
+
     $scope.user = user;
     $scope.domains = PvManager.getPvs('domains');
     $scope.sites = PvManager.getSites();
@@ -12,22 +15,19 @@ angular.module('os.administrative.user.detail', ['os.administrative.models'])
     }
 
     $scope.activate = function() {
-      var user = angular.copy($scope.user);
-      User.activate(user.id).then(
+      User.activate($scope.user.id).then(
         function(user) {
           $scope.user = user;
-          $translate('user.user_request_approved').then(function(msg) {
-            Alerts.success(msg);
-          })
+          Alerts.success('user.user_request_approved');
         }
       );
     }
 
-    $scope.delete = function() {
-      $scope.user.$remove().then(
-        function() {
-          $state.go('user-list');
-        }
-      );
+    $scope.deleteUser = function() {
+      DeleteUtil.delete($scope.user, {
+        onDeleteState: 'user-list',
+        confirmDelete: $scope.user.activityStatus == 'Pending' ? 'user.confirm_reject' : undefined
+      });
     }
+
   });

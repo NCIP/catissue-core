@@ -69,8 +69,7 @@ public class ParticipantDaoImpl extends AbstractDao<Participant> implements Part
 			return Collections.emptyList();
 		}
 		
-		ProjectionList projs = Projections.projectionList()
-				.add(Projections.property("id"));
+		ProjectionList projs = Projections.projectionList().add(Projections.property("id"));
 		query.setProjection(projs);
 		return query.list();
 	}
@@ -97,7 +96,7 @@ public class ParticipantDaoImpl extends AbstractDao<Participant> implements Part
 	
 	private Criteria getByPmisQuery(List<PmiDetail> pmis) {
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(Participant.class)
-				.createAlias("pmiCollection", "pmi")
+				.createAlias("pmis", "pmi")
 				.createAlias("pmi.site", "site");
 		
 		Disjunction junction = Restrictions.disjunction();

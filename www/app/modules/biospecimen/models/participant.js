@@ -80,7 +80,7 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
 
     Participant.prototype.$saveProps = function() {
       var pmis = this.getPmis();
-      this.pmis = pmis.length == 0 ? undefined : pmis;
+      this.pmis = pmis.length == 0 ? [] : pmis;
       this.ssn = this.formatSsn();
       return this;
     };

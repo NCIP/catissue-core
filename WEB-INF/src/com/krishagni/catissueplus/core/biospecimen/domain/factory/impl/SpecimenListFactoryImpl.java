@@ -87,7 +87,7 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 	
 	private void setSpecimens(SpecimenList list, List<String> labels, OpenSpecimenException ose) {
 		if (labels != null && !labels.isEmpty()) {
-			List<Specimen> specimens = daoFactory.getSpecimenDao().getByLabels(labels);
+			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimensByLabels(labels);
 			if (specimens.size() != labels.size()) {
 				ose.addError(SpecimenListErrorCode.INVALID_LABELS);
 			} else {

@@ -37,6 +37,21 @@
       <key column="SITE_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Visit"/>
     </set>
+    
+    <set name="collectionProtocols" table="CATISSUE_SITE_CP" inverse="false" cascade="none" sort="unsorted">
+      <key column="SITE_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID"/>
+    </set>
+    
+    <set name="pmis" inverse="false" cascade="none" sort="unsorted">
+      <key column="SITE_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier"/>
+    </set>
+    
+    <set name="collectionProtocolEvents" inverse="false" cascade="none" sort="unsorted">
+      <key column="DEFAULT_SITE_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent"/>    
+    </set>
 
     <query name="getSitesByNames">
       from 

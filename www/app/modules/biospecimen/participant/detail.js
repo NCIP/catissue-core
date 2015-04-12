@@ -1,6 +1,6 @@
 
 angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
-  .controller('ParticipantDetailCtrl', function($scope, $q, cpr, visits, PvManager) {
+  .controller('ParticipantDetailCtrl', function($scope, $q, cpr, visits, SpecimenLabelPrinter, PvManager) {
 
     function loadPvs() {
       $scope.genders = PvManager.getPvs('gender');
@@ -24,6 +24,10 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
       return pmi.mrn + " (" + pmi.siteName + ")";
     }
 
+    $scope.printSpecimenLabels = function(visitDetail) {
+      SpecimenLabelPrinter.printLabels(visitDetail);
+    }
+
     /**
      * Add visit logic
      */
@@ -37,6 +41,8 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
       $scope.addVisitIdx = -1;
       $scope.visitToAdd = {};
     };
+
+    
 
     init();
   });

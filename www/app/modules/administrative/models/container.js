@@ -3,6 +3,14 @@ angular.module('os.administrative.models.container', ['os.common.models'])
   .factory('Container', function(osModel, $q, $http) {
     var Container = new osModel('storage-containers');
 
+    Container.prototype.getType = function() {
+      return 'storage_container';
+    }
+
+    Container.prototype.getDisplayName = function() {
+      return this.name;
+    }
+
     Container.list = function(opts) {
       var defOpts = {topLevelContainers: true};
       return Container.query(angular.extend(defOpts, opts || {}));
@@ -63,6 +71,14 @@ angular.module('os.administrative.models.container', ['os.common.models'])
         }
       );
     };
+
+    Container.prototype.assignPositions = function(positions) {
+      return $http.post(Container.url() + this.$id() + '/occupied-positions', positions).then(
+        function(result) {
+          return result.data;
+        }
+      )
+    }
 
     return Container;
   });

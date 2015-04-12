@@ -1,0 +1,23 @@
+<div>
+  <div os-page-header>
+    <h3>Collect Aliquots</h3>
+  </div>
+  <div class="container os-le-box-container">
+    <div style="flex: 1; display: flex; margin-bottom: 20px;">
+      <div style="flex: 9; margin-right: 15px;">
+        <textarea ng-model="boxData.csLabels" ng-model-options="{debounce: 500}" 
+          ng-change="processAliquotLabels(boxData.csLabels)" 
+          class="form-control" placeholder="Paste labels from Clipboard" rows="2">
+        </textarea>
+      </div>
+      <div style="flex: 1;">
+        <button class="btn btn-primary" ng-click="saveAliquots()">
+          Save Aliquots
+        </button>
+      </div>
+    </div>
+    <div style="flex: 9; overflow: auto">
+      <le-specimen-box ctrl="boxData.ctrl" opts="boxOpts"></le-specimen-box>
+    </div>
+  </div>
+</div>

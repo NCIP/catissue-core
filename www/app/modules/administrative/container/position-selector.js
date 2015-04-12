@@ -13,11 +13,11 @@ openspecimen.ui.container.ContainerPositionSelector = function(opts) {
     var thead = $("<thead/>");
     var tr = $("<tr/>");
     tr.append($("<th/>").addClass("os-container-pos").append("&nbsp;"));
-    for (var i = 0; i < +container.dimensionOneCapacity; ++i) {
+    for (var i = 0; i < +container.noOfColumns; ++i) {
       tr.append(
         $("<th/>")
           .addClass("os-container-pos")
-          .append(Utility.fromOrdinal(container.dimensionOneLabelingScheme, i + 1))
+          .append(Utility.fromOrdinal(container.columnLabelingScheme, i + 1))
       );
     }
 
@@ -38,18 +38,18 @@ openspecimen.ui.container.ContainerPositionSelector = function(opts) {
     var occupiedPosMap = getOccupiedPositionsMap(container.occupiedPositions);
 
     var tbody = $("<tbody/>");
-    for (var i = 0; i < +container.dimensionTwoCapacity; ++i) {
-      var posY = Utility.fromOrdinal(container.dimensionTwoLabelingScheme, i + 1);
+    for (var i = 0; i < +container.noOfRows; ++i) {
+      var posY = Utility.fromOrdinal(container.rowLabelingScheme, i + 1);
       var tr = $("<tr/>")
         .append($("<th/>").addClass("os-container-pos").append(posY));
 
-      for (var j = 0; j < +container.dimensionOneCapacity; ++j) {
-        var posX = Utility.fromOrdinal(container.dimensionOneLabelingScheme, j + 1);
+      for (var j = 0; j < +container.noOfColumns; ++j) {
+        var posX = Utility.fromOrdinal(container.columnLabelingScheme, j + 1);
         var td = $("<td/>")
           .addClass("os-container-pos")
-          .attr({ 'data-pos-x': posX, 'data-pos-y': posY, 'title': '(' + posX + ', ' + posY + ')'});
+          .attr({ 'data-pos-x': posX, 'data-pos-y': posY, 'title': '(' + posY + ', ' + posX + ')'});
 
-        var pos = i * container.dimensionOneCapacity + j + 1;
+        var pos = i * container.noOfColumns + j + 1;
         if (occupiedPosMap[pos]) {
           td.addClass("occupied");
         }

@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
@@ -15,6 +16,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
@@ -51,6 +53,7 @@ public class VisitServiceImpl implements VisitService {
 				return ResponseEvent.userError(VisitErrorCode.NOT_FOUND);
 			}
 			
+			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
 			return ResponseEvent.response(VisitDetail.from(visit));			
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
@@ -105,12 +108,16 @@ public class VisitServiceImpl implements VisitService {
 			existing = getVisit(input.getId(), input.getName());
 			if (existing == null) {
 				throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND);
-			}			
+			}
+			
+			AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(existing);
 		}
 							
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
-		Visit visit = visitFactory.createVisit(input);		
+		Visit visit = visitFactory.createVisit(input);
+		AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(visit);
+		
 		if (existing == null || !existing.getName().equals(visit.getName())) {
 			ensureUniqueVisitName(visit.getName(), ose);
 		}
@@ -146,6 +153,10 @@ public class VisitServiceImpl implements VisitService {
 	}
 	
 	private void setVisitId(Long visitId, List<SpecimenDetail> specimens) {
+		if (CollectionUtils.isEmpty(specimens)) {
+			return;
+		}
+		
 		for (SpecimenDetail specimen : specimens) {
 			specimen.setVisitId(visitId);
 			setVisitId(visitId, specimen.getChildren());

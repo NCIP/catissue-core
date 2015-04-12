@@ -9,18 +9,28 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSumm
 import com.krishagni.rbac.domain.SubjectRole;
 
 public class SubjectRoleDetail {
-	private RoleDetail roleDetails;
+	private Long id; 
+	
+	private RoleDetail role;
 	
 	private CollectionProtocolSummary collectionProtocol;
 	
 	private SiteDetail site;
 	
-	public RoleDetail getRoleDetails() {
-		return roleDetails;
+	public Long getId() {
+		return id;
 	}
 
-	public void setRoleDetails(RoleDetail roleDetails) {
-		this.roleDetails = roleDetails;
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public RoleDetail getRole() {
+		return role;
+	}
+
+	public void setRole(RoleDetail role) {
+		this.role = role;
 	}
 
 	public CollectionProtocolSummary getCollectionProtocol() {
@@ -40,17 +50,18 @@ public class SubjectRoleDetail {
 	}
 
 	public static SubjectRoleDetail from(SubjectRole subjectRole) {
-		SubjectRoleDetail srs = new SubjectRoleDetail();
-		srs.setRoleDetails(RoleDetail.from(subjectRole.getRole()));
+		SubjectRoleDetail sr = new SubjectRoleDetail();
+		sr.setId(subjectRole.getId());
+		sr.setRole(RoleDetail.from(subjectRole.getRole()));
 		
 		if (subjectRole.getCollectionProtocol() != null) {
-			srs.setCollectionProtocol(CollectionProtocolSummary.from(subjectRole.getCollectionProtocol()));
+			sr.setCollectionProtocol(CollectionProtocolSummary.from(subjectRole.getCollectionProtocol()));
 		}
 		
 		if (subjectRole.getSite() != null) {
-			srs.setSite(SiteDetail.from(subjectRole.getSite()));
+			sr.setSite(SiteDetail.from(subjectRole.getSite()));
 		}
-		return srs;
+		return sr;
 	}
 	
 	public static List<SubjectRoleDetail> from(Collection<SubjectRole> subjectRoles) {

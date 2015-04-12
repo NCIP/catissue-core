@@ -1,0 +1,50 @@
+<div ng-controller="QueryExprCtrl" style="margin-bottom: 20px;">
+  <div class="btn-group os-query-block-margin">
+    <div class="btn btn-sm btn-default" ng-click="addOp('and')">
+      <span translate="queries.expr_toolbar.and">AND</span>
+    </div>
+    <div class="btn btn-sm btn-default" ng-click="addOp('or')">
+      <span translate="queries.expr_toolbar.or">OR</span>
+    </div>
+    <div class="btn btn-sm btn-default" title="Intersection" ng-click="addOp('intersect')">
+      <span>&#8745;</span>
+    </div>
+    <div class="btn btn-sm btn-default" ng-click="addOp('not')">
+      <span translate="queries.expr_toolbar.not">NOT</span>
+    </div>
+    <div class="btn btn-sm btn-default" ng-click="addOp('nthchild')">
+      <span class="fa fa-share-alt"></span>
+    </div>
+  </div>
+
+  <div class="btn btn-sm btn-default" ng-click="addParen()">
+    <span>(&nbsp;...&nbsp;)</span>
+  </div>
+
+  <div id="os-query-expr" class="os-query-expr-nodes clearfix" 
+    ng-class="{'os-query-expr-error': !queryLocal.isValid}" 
+    ng-model="queryLocal.exprNodes" ui-sortable="exprSortOpts">
+
+    <div class="pull-left" ng-switch="node.type" ng-repeat="node in queryLocal.exprNodes">
+      <div ng-switch-when="filter" class="os-query-filter-node"
+        tooltip-html-unsafe="{{getFilterDesc(node.value)}}" tooltip-placement="bottom">
+        <b>{{node.value}}</b>
+        <div class="pq" ng-if="isFilterParamterized(node.value)"
+          tooltip="Parameterized Filter" tooltip-placement="bottom" tooltip-append-to-body="true">
+          <span translate="queries.parameterized_marker">P</span>
+        </div>
+      </div>
+      <div ng-switch-when="op" ng-click="toggleOp($index)" 
+        class="os-query-op-node" data-node-pos="{{$index}}" 
+        tooltip="{{node.value != 'not' && node.value != 'nthchild' ? 'Click to toggle operator' : ''}}" 
+        tooltip-placement="bottom">
+        <span class="fa" ng-bind-html="getOpCode(node.value)"></span>
+        <span class="remove fa fa-remove" ng-click="removeNode($index)"></span>
+      </div>
+      <div ng-switch-when="paren" class="os-query-paren-node">
+        <span>{{node.value}}</span>
+        <span class="remove fa fa-remove" ng-click="removeNode($index)"></span>
+      </div>
+    </div>
+  </div>
+</div>

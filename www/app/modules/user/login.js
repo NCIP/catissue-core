@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .factory('AuthService', function($http, $window, ApiUtil, ApiUrls) {
+  .factory('AuthService', function($http, $window, $cookieStore, ApiUtil, ApiUrls) {
     var url = function() {
       return ApiUrls.getUrl('sessions');
     };
@@ -18,12 +18,14 @@ angular.module('openspecimen')
 
       saveToken: function(token) {
         $window.localStorage['osAuthToken'] = token;
+        $cookieStore.put('osAuthToken', token);
         $http.defaults.headers.common['X-OS-API-TOKEN'] = token;
         $http.defaults.withCredentials = true;
       },
 
       removeToken: function() {
         delete $window.localStorage['osAuthToken'];
+        $cookieStore.remove('osAuthToken');
         delete $http.defaults.headers.common['X-OS-API-TOKEN'];
         delete $http.defaults.headers.common['Authorization'];
       }
@@ -40,7 +42,7 @@ angular.module('openspecimen')
       }
  
       if ($http.defaults.headers.common['X-OS-API-TOKEN']) {
-        $state.go('cp-list');
+        $state.go('home');
       }
     }
 
@@ -56,7 +58,7 @@ angular.module('openspecimen')
         };
         $rootScope.loggedIn = true;
         AuthService.saveToken(result.data.token);
-        $state.go('cp-list');
+        $state.go('home');
       } else {
         $rootScope.currentUser = {};
         $rootScope.loggedIn = false;

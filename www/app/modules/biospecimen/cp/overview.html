@@ -13,7 +13,7 @@
         <strong class="key key-sm" translate="cp.pi">Principal Investigator</strong>
         <os-inline-edit editor="piEditor" name="pi" class="value value-md" value="cp.principalInvestigator">
           <span ng-if="piEditor.isDisplayMode()">{{piEditor.viewValue.lastName}}, {{piEditor.viewValue.firstName}}</span>
-          <os-users ng-model="piEditor.editValue"></os-users>
+          <os-users ng-if="piEditor.isEditMode()" ng-model="piEditor.editValue"></os-users>
         </os-inline-edit>
       </li>
 
@@ -63,7 +63,7 @@
     </ul>
   </div>
 
-  <div class="col-xs-4">
+  <!-- div class="col-xs-4">
     <h3 class="os-sub-section-title"> Recent Activity </h3>
     <ul class="os-activity-list">
       <li class="os-activity">
@@ -71,5 +71,5 @@
         <div class="info"><span>User 1 - an hour ago</span></div>
       </li>
     </ul>
-  </div>
+  </div -->
 </div>

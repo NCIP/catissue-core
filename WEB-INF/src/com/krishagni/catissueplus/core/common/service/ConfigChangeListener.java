@@ -1,5 +1,5 @@
 package com.krishagni.catissueplus.core.common.service;
 
 public interface ConfigChangeListener {
-	public void onChange(String name, String value);
+	public void onConfigChange(String name, String value);
 }

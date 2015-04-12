@@ -2,6 +2,7 @@
 angular.module('os.biospecimen.participant', 
   [ 
     'ui.router',
+    'os.biospecimen.common',
     'os.biospecimen.participant.list',
     'os.biospecimen.participant.detail',
     'os.biospecimen.participant.overview',
@@ -10,7 +11,6 @@ angular.module('os.biospecimen.participant',
     'os.biospecimen.participant.addvisit',
     'os.biospecimen.participant.collect-specimens',
     'os.biospecimen.participant.specimen-position',
-    'os.biospecimen.participant.specimen-desc',
     'os.biospecimen.visit',
     'os.biospecimen.specimen',
     'os.biospecimen.extensions.list',
@@ -47,12 +47,15 @@ angular.module('os.biospecimen.participant',
       })
       .state('participant-addedit', {
         url: '/addedit-participant?cpId',
-        templateProvider: function($stateParams, CpConfigSvc) {
-          var tmpl = CpConfigSvc.getRegParticipantTmpl($stateParams.cpId);
-          return '<div ng-include src="\'' + tmpl + '\'"></div>';
+        templateProvider: function($stateParams, $q, CpConfigSvc) {
+          return $q.when(CpConfigSvc.getRegParticipantTmpl($stateParams.cpId, $stateParams.cprId)).then(
+            function(tmpl) {
+              return '<div ng-include src="\'' + tmpl + '\'"></div>';
+            }
+          );
         },
         controllerProvider: function($stateParams, CpConfigSvc) {
-          return CpConfigSvc.getRegParticipantCtrl($stateParams.cpId);
+          return CpConfigSvc.getRegParticipantCtrl($stateParams.cpId, $stateParams.cprId);
         },
         resolve: {
         },

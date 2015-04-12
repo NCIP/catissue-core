@@ -2,7 +2,6 @@ package com.krishagni.catissueplus.core.biospecimen.label.specimen;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.common.domain.LabelTmplToken;
-import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public abstract class AbstractSpecimenLabelToken implements LabelTmplToken {
 	protected String name = "";
@@ -15,7 +14,7 @@ public abstract class AbstractSpecimenLabelToken implements LabelTmplToken {
 	@Override
 	public String getReplacement(Object object) {
 		if (!(object instanceof Specimen)) {
-			throw OpenSpecimenException.userError(null); // TODO:
+			throw new RuntimeException("Invalid input object type");
 		}
 		
 		Specimen specimen = (Specimen)object;

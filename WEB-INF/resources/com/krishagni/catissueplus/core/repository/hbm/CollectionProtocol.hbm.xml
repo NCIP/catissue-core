@@ -64,6 +64,16 @@
       <key column="COLLECTION_PROTOCOL_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent"/>
     </set>
+    
+    <set name="collectionProtocolRegistrations" inverse="false" cascade="none">
+      <key column="COLLECTION_PROTOCOL_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration"/>
+    </set>
+    
+    <set name="storageContainers" table="OS_STOR_CONTAINER_CPS" inverse="false">
+      <key column="CP_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" column="STORAGE_CONTAINER_ID"/>
+    </set>
 
     <sql-query name="getParticipantAndSpecimenCount">
       <return-scalar column="cpId" type="long"/>
@@ -121,5 +131,20 @@
         shortTitle in (:shortTitles) and 
         activityStatus = 'Active'
     </query>
+    
+    <sql-query name="getCpIdsBySiteIds">
+      <return-scalar column="cpId" type="long"/> 
+      
+      select
+        cp_site.collection_protocol_id as cpId
+      from
+        catissue_site_cp cp_site 
+        inner join catissue_collection_protocol cp on cp_site.collection_protocol_id = cp.identifier
+        inner join catissue_site site on site.identifier = cp_site.site_id
+      where
+        cp.activity_status = 'Active' 
+        and site.activity_status = 'Active'
+        and cp_site.site_id in (:siteIds)
+    </sql-query>
   </class>
 </hibernate-mapping>

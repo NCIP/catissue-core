@@ -78,7 +78,7 @@ public class UpgradeUtil {
 			}
 		}
 					
-		DEApp.init(ds, dir, null, null);		
+		DEApp.init(ds, null, dir, null, null);		
 	}
 	
 	public static Properties loadInstallProps() {

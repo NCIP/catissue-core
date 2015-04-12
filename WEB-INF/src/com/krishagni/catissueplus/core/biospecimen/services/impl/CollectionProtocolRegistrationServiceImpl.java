@@ -4,7 +4,6 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -18,13 +17,11 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProt
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationsList;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -32,6 +29,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -41,8 +39,6 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	private DaoFactory daoFactory;
 
 	private CollectionProtocolRegistrationFactory cprFactory;
-	
-	private VisitFactory visitFactory;
 	
 	private ParticipantService participantService;
 
@@ -54,10 +50,6 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		this.cprFactory = cprFactory;
 	}
 	
-	public void setVisitFactory(VisitFactory visitFactory) {
-		this.visitFactory = visitFactory;
-	}
-
 	public void setParticipantService(ParticipantService participantService) {
 		this.participantService = participantService;
 	}
@@ -67,15 +59,20 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	public ResponseEvent<CollectionProtocolRegistrationDetail> getRegistration(RequestEvent<RegistrationQueryCriteria> req) {				
 		try {			
 			RegistrationQueryCriteria crit = req.getPayload();
-			CollectionProtocolRegistrationDetail cpr = null;
+			CollectionProtocolRegistration cpr = null;
 			
 			if (crit.getCprId() != null) {
-				cpr = getByCprId(crit.getCprId());
+				cpr = daoFactory.getCprDao().getById(crit.getCprId());
 			} else if (crit.getCpId() != null && crit.getPpid() != null) {
-				cpr = getByCpIdAndPpid(crit.getCpId(), crit.getPpid());
+				cpr = daoFactory.getCprDao().getCprByPpId(crit.getCpId(), crit.getPpid());
 			} 
 			
-			return ResponseEvent.response(cpr);
+			if (cpr == null) {
+				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
+			}
+			
+			boolean phiInfo = AccessCtrlMgr.getInstance().ensureReadCprRights(cpr);
+			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(cpr));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -89,6 +86,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		try {
 			CollectionProtocolRegistrationDetail cprDetail = req.getPayload();
 			CollectionProtocolRegistration cpr = cprFactory.createCpr(cprDetail);
+			AccessCtrlMgr.getInstance().ensureCreateCprRights(cpr);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			
@@ -125,6 +123,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
 			}
 			
+			AccessCtrlMgr.getInstance().ensureUpdateCprRights(existing);
+			
 			CollectionProtocolRegistration cpr = cprFactory.createCpr(detail);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
@@ -149,7 +149,16 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@PlusTransactional
 	public ResponseEvent<List<VisitSummary>> getVisits(RequestEvent<VisitsListCriteria> req) {
 		try {
+			Long cprId = req.getPayload().cprId();
+			CollectionProtocolRegistration cpr = daoFactory.getCprDao().getById(cprId);
+			if (cpr == null) {
+				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureReadVisitRights(cpr);
 			return ResponseEvent.response(daoFactory.getVisitsDao().getVisits(req.getPayload()));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -161,6 +170,14 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		VisitSpecimensQueryCriteria crit = req.getPayload();
 		
 		try {
+			Long cprId = req.getPayload().getCprId();
+			CollectionProtocolRegistration cpr = daoFactory.getCprDao().getById(cprId);
+			if (cpr == null) {
+				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureReadSpecimenRights(cpr);
+
 			List<SpecimenDetail> specimens = Collections.emptyList();			
 			if (crit.getVisitId() != null) {
 				specimens = getSpecimensByVisit(crit.getCprId(), crit.getVisitId());
@@ -175,23 +192,6 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
-	@Override
-	@PlusTransactional
-	public ResponseEvent<VisitDetail> addVisit(RequestEvent<VisitDetail> req) {
-		try { // TODO: visit name
-			Visit visit = visitFactory.createVisit(req.getPayload()); 
-			visit.setName(UUID.randomUUID().toString()); 
-
-			daoFactory.getVisitsDao().saveOrUpdate(visit); 
-			return ResponseEvent.response(VisitDetail.from(visit));			
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);			
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
-	}
-		
 	
 	@Override
 	@PlusTransactional
@@ -256,7 +256,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		Long participantId = cpr.getParticipant().getId();
 		Long cpId = cpr.getCollectionProtocol().getId();
 		
-		if (daoFactory.getCprDao().getRegistrationId(cpId, participantId) != null) {
+		if (daoFactory.getCprDao().getCprByParticipantId(cpId, participantId) != null) {
 			ose.addError(CprErrorCode.DUP_REGISTRATION);
 		}
 	}
@@ -269,7 +269,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		Long cpId = cpr.getCollectionProtocol().getId();
 		String ppid = cpr.getPpid();		
 		if (daoFactory.getCprDao().getCprByPpId(cpId, ppid) != null) {
-			ose.addError(CprErrorCode.DUP_PPID);
+			ose.addError(CprErrorCode.DUP_PPID, ppid);
 		}
 	}
 
@@ -305,25 +305,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		
 		return result;
 	}
-	
-	private CollectionProtocolRegistrationDetail getByCprId(Long cprId) {
-		CollectionProtocolRegistration cpr = daoFactory.getCprDao().getById(cprId);
-		if (cpr == null) {
-			throw OpenSpecimenException.userError(CprErrorCode.NOT_FOUND);
-		}
 		
-		return CollectionProtocolRegistrationDetail.from(cpr);
-	}
-	
-	private CollectionProtocolRegistrationDetail getByCpIdAndPpid(Long cpId, String ppid) {
-		CollectionProtocolRegistration cpr = daoFactory.getCprDao().getCprByPpId(cpId, ppid);
-		if (cpr == null) {
-			throw OpenSpecimenException.userError(CprErrorCode.INVALID_CP_AND_PPID);
-		}
-		
-		return CollectionProtocolRegistrationDetail.from(cpr);
-	}
-	
 	private List<SpecimenDetail> getSpecimensByVisit(Long cprId, Long visitId) {
 		Visit visit = daoFactory.getVisitsDao().getById(visitId);
 		if (visit == null) {
