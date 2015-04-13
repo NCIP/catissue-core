@@ -713,6 +713,8 @@ public class StorageContainer extends BaseEntity {
 	}
 	
 	private void updateContainerLocation(Site otherSite, StorageContainer otherParentContainer, StorageContainerPosition otherPos) {
+		Site existing = site;
+		
 		if (otherParentContainer == null) {
 			if (getParentContainer() != null) {
 				getParentContainer().removePosition(position);
@@ -733,6 +735,17 @@ public class StorageContainer extends BaseEntity {
 			} else {
 				position = otherPos;
 			}			
+		}
+		
+		if (!site.equals(existing)) { // has site changed? if yes, ensure all child containers beneath it are updated
+			updateSite(site);
+		}
+	}
+	
+	private void updateSite(Site site) {
+		this.site = site;
+		for (StorageContainer container : getChildContainers()) {
+			container.updateSite(site);
 		}
 	}
 	

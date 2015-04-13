@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,7 +107,11 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 					.setMaxResults(crit.maxResults());
 			
 			for (Map.Entry<String, Object> param : params.entrySet()) {
-				query.setParameter(param.getKey(), param.getValue());
+				if (param.getValue() instanceof Collection<?>) {
+					query.setParameterList(param.getKey(), (Collection<?>)param.getValue());
+				} else {
+					query.setParameter(param.getKey(), param.getValue());
+				}				
 			}
 			
 			return query;
