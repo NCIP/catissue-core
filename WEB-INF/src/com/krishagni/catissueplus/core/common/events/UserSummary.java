@@ -20,6 +20,8 @@ public class UserSummary {
 	private String loginName;
 	
 	private String domain;
+	
+	private Boolean admin; 
 
 	public Long getId() {
 		return id;
@@ -60,6 +62,14 @@ public class UserSummary {
 	public void setDomain(String domain) {
 		this.domain = domain;
 	}
+	
+	public Boolean getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Boolean admin) {
+		this.admin = admin;
+	}
 
 	public static UserSummary from(User user) {
 		UserSummary userSummary = new UserSummary();
@@ -68,6 +78,7 @@ public class UserSummary {
 		userSummary.setLastName(user.getLastName());
 		userSummary.setLoginName(user.getLoginName());
 		userSummary.setDomain(user.getAuthDomain().getName());
+		userSummary.setAdmin(user.isAdmin());
 		return userSummary;
 	}
 	

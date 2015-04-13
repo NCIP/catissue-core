@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .factory('AuthService', function($http, $window, $cookieStore, ApiUtil, ApiUrls) {
+  .factory('AuthService', function($rootScope, $http, $window, $cookieStore, ApiUtil, ApiUrls) {
     var url = function() {
       return ApiUrls.getUrl('sessions');
     };
@@ -31,7 +31,7 @@ angular.module('openspecimen')
       }
     }
   })
-  .controller('LoginCtrl', function($scope, $rootScope, $state, $http, $location, AuthService) {
+  .controller('LoginCtrl', function($scope, $rootScope, $state, $http, $location, AuthService, AuthorizationService) {
 
     function init() {
       $scope.loginData = {domainName: 'openspecimen'};
@@ -54,11 +54,16 @@ angular.module('openspecimen')
           id: result.data.id,
           firstName: result.data.firstName,
           lastName: result.data.lastName,
-          loginName: result.data.loginName
+          loginName: result.data.loginName,
+          admin: result.data.admin
         };
         $rootScope.loggedIn = true;
         AuthService.saveToken(result.data.token);
-        $state.go('home');
+        AuthorizationService.initUserPermissions(result.data.id).then(
+          function(result) {
+            $state.go('home');
+          }
+        );
       } else {
         $rootScope.currentUser = {};
         $rootScope.loggedIn = false;
