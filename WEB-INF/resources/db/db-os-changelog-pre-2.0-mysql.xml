@@ -1853,39 +1853,6 @@
             <column name="COMMENTS" type="TEXT"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-178">
-        <createTable tableName="dyextn_containers">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="NAME" type="VARCHAR(64)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CAPTION" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED_BY" type="BIGINT"/>
-            <column defaultValueComputed="CURRENT_TIMESTAMP" name="CREATE_TIME" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="LAST_MODIFIED_BY" type="BIGINT"/>
-            <column name="LAST_MODIFY_TIME" type="DATETIME"/>
-            <column name="XML" type="LONGBLOB">
-                <constraints nullable="false"/>
-            </column>
-            <column name="DELETED_ON" type="TIMESTAMP"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-179">
-        <createTable tableName="dyextn_id_seq">
-            <column name="TABLE_NAME" type="VARCHAR(64)">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="LAST_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-180">
         <createTable tableName="job_details">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
@@ -2697,11 +2664,6 @@
         </createIndex>
     </changeSet>
 
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-342">
-        <createIndex indexName="IDX_DE_FORM_DELETED_ON" tableName="dyextn_containers" unique="false">
-            <column name="DELETED_ON"/>
-        </createIndex>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-344">
         <createIndex indexName="OS_DEPT_INSTID_UNIQUE_KEY" tableName="os_department" unique="true">
             <column name="NAME"/>
@@ -2760,17 +2722,11 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-360">
         <addForeignKeyConstraint baseColumnNames="SENDER_USER_ID" baseTableName="catissue_base_shipment"  constraintName="FK84DE7ECC2ABD7347" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-361">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_cell_req_specimen"  constraintName="FK_CELL_REQ_SPECIMEN" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_cp_req_specimen"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-362">
         <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID" baseTableName="catissue_cell_spe_review_param"  constraintName="FK_SPEC_CELL_REV_EVENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-363">
         <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_cell_spe_review_param"  constraintName="FK_USER_CELL_EVENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-364">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_cell_specimen"  constraintName="FK_CELL_SPECIMEN" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-365">
         <addForeignKeyConstraint baseColumnNames="COLLECTION_PROTOCOL_ID" baseTableName="catissue_clinical_diagnosis"  constraintName="FK_CD_COLPROT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_collection_protocol"  referencesUniqueColumn="false"/>

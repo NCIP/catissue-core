@@ -937,7 +937,7 @@
 
     <target name="upgrade_db_os_v2.0">
     	<updateDatabase
-    	changeLogFile="${base.dir}/SQL/liquibase_xml/db-os-seed-data-2.0.xml"
+    	changeLogFile="${base.dir}/WEB-INF/resources/db/db-os-changelog-2.0.xml"
     	driver="${final.database.driver}"
     	url="${final.database.url}"
     	username="${database.username}"
@@ -946,7 +946,7 @@
     	classpathref="liquibaseClasspath" />
 
       <updateDatabase 
-        changeLogFile="${base.dir}/SQL/liquibase_xml/db-os-config-2.0.xml"
+        changeLogFile="${base.dir}/WEB-INF/resources/db/db-os-config-2.0.xml"
         driver="${final.database.driver}" 
         url="${final.database.url}" 
         username="${database.username}" 
@@ -955,7 +955,7 @@
         classpathref="liquibaseClasspath" />
     	
       <updateDatabase 
-        changeLogFile="${base.dir}/SQL/liquibase_xml/db-os-seed-data-2.0.xml"
+        changeLogFile="${base.dir}/WEB-INF/resources/db/db-os-seed-data-2.0.xml"
         driver="${final.database.driver}" 
         url="${final.database.url}" 
         username="${database.username}" 
@@ -1471,6 +1471,12 @@
           <mkdir dir="${temp.dir}/catissuecore/ngweb/external/de/css"/>
           <copy todir="${temp.dir}/catissuecore/ngweb/external/de/css/" overwrite="true">
             <fileset dir="${temp.dir}/dynamicextensions/ngweb/css">
+              <include name="*/**"/>
+            </fileset>
+          </copy>
+		
+		  <copy todir="${temp.dir}/catissuecore/WEB-INF/classes/db" overwrite="true">
+            <fileset dir="${temp.dir}/dynamicextensions/db/liquibase">
               <include name="*/**"/>
             </fileset>
           </copy>

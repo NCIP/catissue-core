@@ -4,26 +4,58 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-
-		<changeSet author="vgaikwad" id="sequen1ce" dbms="oracle">
-    <createSequence 
-      sequenceName="RBAC_OPERATION_SEQ" 
-      startValue="1" 
-      incrementBy="1" 
-      ordered="true" />
+        
+  <changeSet author="vgaikwad" id="Add operations" dbms="mysql">
+    <sql>
+      insert into RBAC_OPERATIONS(NAME) values ('Create');
+      insert into RBAC_OPERATIONS(NAME) values ('Read');
+      insert into RBAC_OPERATIONS(NAME) values ('Update');
+      insert into RBAC_OPERATIONS(NAME) values ('Delete');
+    </sql>
   </changeSet>
   
-  <changeSet author="vgaikwad" id="sequence" dbms="oracle">
-    <createSequence 
-      sequenceName="RBAC_RESOURCES_SEQ" 
-      startValue="1" 
-      incrementBy="1" 
-      ordered="true" />
-  </changeSet>
-<changeSet author="vgaikwad" id="Add operations" dbms="oracle">
+  <changeSet author="vgaikwad" id="Add operations" dbms="oracle">
     <sql>
-       insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATION_SEQ.nextval, 'test1');
-       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'test1');
+      insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATIONS_SEQ.nextval, 'Create');
+      insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATIONS_SEQ.nextval, 'Read');
+      insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATIONS_SEQ.nextval, 'Update');
+      insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATIONS_SEQ.nextval, 'Delete');
     </sql>
-  </changeSet>      
+  </changeSet>     
+        
+  <changeSet author="vgaikwad" id="Add resources" dbms="mysql">
+    <sql>
+      insert into RBAC_RESOURCES(NAME) values('CollectionProtocol');
+      insert into RBAC_RESOURCES(NAME) values('DistributionProtocol');
+      insert into RBAC_RESOURCES(NAME) values('Order');
+      insert into RBAC_RESOURCES(NAME) values('ParticipantPhi');
+      insert into RBAC_RESOURCES(NAME) values('ParticipantDeid');
+      insert into RBAC_RESOURCES(NAME) values('VisitAndSpecimen');
+      insert into RBAC_RESOURCES(NAME) values('StorageContainer');
+      insert into RBAC_RESOURCES(NAME) values('User');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Add resources" dbms="oracle">
+    <sql>
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'CollectionProtocol');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'DistributionProtocol');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Order');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'ParticipantPhi');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'ParticipantDeid');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'VisitAndSpecimen');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'StorageContainer');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'User');
+    </sql>
+  </changeSet>  
+  <changeSet author="vgaikwad" id="Insert default systemt user" dbms="mysql">
+    <sql>
+      insert into catissue_user values (default, '$system', 'System', null, '$system', null, 'Locked', null, null, null, null, null, 0, null, null, 'openspecimen', 1);
+    </sql>
+  </changeSet>
+  <changeSet author="nmarwaha" id="Insert default systemt user" dbms="oracle">
+    <sql>
+      insert into catissue_user values (default, '$system', 'System', null, '$system', null, 'Locked', null, null, null, null, null, 0, null, null, 'openspecimen', 1);
+    </sql>
+  </changeSet>
 </databaseChangeLog>

@@ -34,7 +34,7 @@
   
   <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
     <property name="dataSource" ref="dataSource"/>
-    <property name="changeLog" value="classpath:../resources/db/db-os-changelog-master-${datasource.type}.xml" />
+    <property name="changeLog" value="classpath:db/db-os-changelog-master-${datasource.type}.xml" />
   </bean>
   
   <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
@@ -48,10 +48,6 @@
         <prop key="hibernate.show_sql">true</prop>
       </props>
     </property>
-  </bean>
-
-  <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-    <property name="jndiName" value="java:/catissuecore"/>
   </bean>
 
   <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
@@ -449,12 +445,6 @@
     <property name="cfgSvc" ref="cfgSvc"/>
   </bean>
 
-<<<<<<< HEAD
-=======
-  <bean id="cfgSvc" class="com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>
-
   <bean id="printLabelTokensRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
     <property name="tokens">
       <list>
@@ -482,7 +472,6 @@
     <property name="resourceBundle" ref="resourceBundle"/>
   </bean>
 
->>>>>>> OS_v20
   <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
     <property name="corePoolSize" value="5" />
     <property name="maxPoolSize" value="10" />

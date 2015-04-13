@@ -9,10 +9,12 @@
     http://www.liquibase.org/xml/ns/dbchangelog-ext 
 	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
   
-  <include file="../resources/db/db-os-changelog-pre-2.0-mysql.xml"/>
-  <include file="../resources/db/db-os-seed-data-pre-2.0-mysql.xml"/>
-  <include file="../resources/db/db-os-changelog-pre-2.0-oracle.xml"/>
-  <include file="../resources/db/db-os-seed-data-pre-2.0-oracle.xml"/>
-  <include file="../resources/db/db-os-changelog-2.0.xml"/>
-  <include file="../resources/db/db-de-changelog-master.xml"/>   
+  <include file="db/db.changelog-master.xml"/>
+  <include file="db/db-os-changelog-pre-2.0-mysql.xml"/>
+  <include file="db/db-os-seed-data-pre-2.0-mysql.xml"/>
+  <include file="db/db-os-changelog-pre-2.0-oracle.xml"/>
+  <include file="db/db-os-seed-data-pre-2.0-oracle.xml"/>
+  <include file="db/db-os-changelog-2.0.xml"/>
+  <include file="db/db-os-config-2.0.xml"/>
+  <include file="db/db-os-seed-data-2.0.xml"/>
 </databaseChangeLog> 

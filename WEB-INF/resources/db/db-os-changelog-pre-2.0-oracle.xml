@@ -1863,37 +1863,6 @@
             <column name="COMMENTS" type="VARCHAR2(4000 BYTE)"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-178">
-        <createTable tableName="DYEXTN_CONTAINERS">
-            <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_DYEXTN_CONTAINERS" primaryKeyTablespace="USERS"/>
-            </column>
-            <column name="NAME" type="VARCHAR2(64 BYTE)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CAPTION" type="VARCHAR2(255 BYTE)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED_BY" type="NUMBER(19,0)"/>
-            <column name="CREATE_TIME" type="TIMESTAMP(6)"/>
-            <column name="LAST_MODIFIED_BY" type="NUMBER(19,0)"/>
-            <column name="LAST_MODIFY_TIME" type="TIMESTAMP(6)"/>
-            <column name="XML" type="BLOB">
-                <constraints nullable="false"/>
-            </column>
-            <column defaultValueComputed="NULL" name="DELETED_ON" type="TIMESTAMP(6)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-179">
-        <createTable tableName="DYEXTN_ID_SEQ">
-            <column name="TABLE_NAME" type="VARCHAR2(64 BYTE)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_DYEXTN_ID_SEQ" primaryKeyTablespace="USERS"/>
-            </column>
-            <column name="LAST_ID" type="NUMBER(19,0)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-180">
         <createTable tableName="JOB_DETAILS">
             <column name="IDENTIFIER" type="NUMBER(38,0)">
@@ -2664,11 +2633,6 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-355">
         <createIndex indexName="INDX_USER_LNAME" tableName="CATISSUE_USER" tablespace="USERS" unique="false">
             <column name="LAST_NAME"/>
-        </createIndex>
-    </changeSet>
-    <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-356">
-        <createIndex indexName="IDX_DE_FORM_DELETED_ON" tableName="DYEXTN_CONTAINERS" tablespace="USERS" unique="false">
-            <column name="DELETED_ON"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-357">
