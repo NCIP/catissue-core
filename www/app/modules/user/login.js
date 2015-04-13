@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .factory('AuthService', function($rootScope, $http, $window, $cookieStore, ApiUtil, ApiUrls) {
+  .factory('AuthService', function($http, $window, $cookieStore, ApiUtil, ApiUrls) {
     var url = function() {
       return ApiUrls.getUrl('sessions');
     };
