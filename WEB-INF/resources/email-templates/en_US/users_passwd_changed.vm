@@ -7,7 +7,7 @@
             <tr>
               <td style="padding:0px;border-collapse:collapse;padding:0px;padding-bottom:10px">
                 <p style="margin:10px 0 0 0">
-                  Hi $user.firstName $user.lastName,
+                  Hello $user.firstName $user.lastName,
                   <br><br>
                   The password for your OpenSpecimen account was recently changed. If you made this change, you don't need to do anything more.
                   <br><br>
