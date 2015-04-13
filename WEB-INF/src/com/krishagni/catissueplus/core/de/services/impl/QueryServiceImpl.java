@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,6 +28,8 @@ import org.hibernate.Transaction;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr.ParticipantReadAccess;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -224,8 +225,16 @@ public class QueryServiceImpl implements QueryService {
 				.compile(cprForm, getAql(queryDetail));
 			SavedQuery savedQuery = getSavedQuery(queryDetail);
 			SavedQuery existing = daoFactory.getSavedQueryDao().getQuery(queryDetail.getId());
+			if (existing == null) {
+				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
+			}
+			
+			User user = AuthUtil.getCurrentUser();
+			if (!user.isAdmin() && !existing.getCreatedBy().equals(user)) {
+				return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
+			}
+			
 			existing.update(savedQuery);
-
 			daoFactory.getSavedQueryDao().saveOrUpdate(existing);	
 			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(existing));
 		} catch (QueryParserException qpe) {
@@ -799,12 +808,12 @@ public class QueryServiceImpl implements QueryService {
 			if (cpId != null && cpId != -1) {
 				return cpForm + ".id = " + cpId;
 			}
-		} else {
-			List<Long> cpIds = Collections.emptyList(); //privilegeSvc.getCpList(sdb.getUserId(), PrivilegeType.READ.value());
+		} else {			
+			Set<Long> cpIds = AccessCtrlMgr.getInstance().getReadableCpIds();
 			if (cpIds == null || cpIds.isEmpty()) {
 				throw new IllegalAccessError("User does not have access to any CP");
 			}
-			
+						
 			if (cpId != null && cpId != -1) {
 				if (cpIds.contains(cpId)) {
 					return cpForm + ".id = " + cpId; 
@@ -813,8 +822,9 @@ public class QueryServiceImpl implements QueryService {
 				throw new IllegalAccessError("Access to cp is not permitted: " + cpId);
 			} else {
 				List<String> restrictions = new ArrayList<String>();
+				List<Long> cpIdList = new ArrayList<Long>(cpIds);
 				
-				int startIdx = 0, numCpIds = cpIds.size();
+				int startIdx = 0, numCpIds = cpIdList.size();
 				int chunkSize = 999;
 				while (startIdx < numCpIds) {
 					int endIdx = startIdx + chunkSize;
@@ -822,7 +832,7 @@ public class QueryServiceImpl implements QueryService {
 						endIdx = numCpIds;
 					}
 					
-					restrictions.add(getCpIdRestriction(cpIds.subList(startIdx, endIdx)));
+					restrictions.add(getCpIdRestriction(cpIdList.subList(startIdx, endIdx)));
 					startIdx = endIdx;
 				}
 				
@@ -898,7 +908,7 @@ public class QueryServiceImpl implements QueryService {
 		
 		private boolean countQuery;
 		
-		private Map<Long, Boolean> phiAccessMap = new HashMap<Long, Boolean>();
+		private Map<Long, ParticipantReadAccess> phiAccessMap = new HashMap<Long, ParticipantReadAccess>();
 		
 		private static final String mask = "##########";
 		
@@ -927,14 +937,13 @@ public class QueryServiceImpl implements QueryService {
 			Long cpId = ((Number)rowData[0]).longValue();
 			Object[] screenedData = ArrayUtils.remove(rowData, 0);
 			
-			Boolean phiAccess = phiAccessMap.get(cpId);
-			if (phiAccess == null) {
-				phiAccess = true; //privilegeSvc.hasPrivilege(sdb.getUserId(), cpId, PrivilegeType.PHI_ACCESS.value());
-				phiAccess = phiAccess != null && phiAccess.equals(true);
-				phiAccessMap.put(cpId, phiAccess);
+			ParticipantReadAccess access = phiAccessMap.get(cpId);
+			if (access == null) {
+				access = AccessCtrlMgr.getInstance().getParticipantReadAccess(cpId);
+				phiAccessMap.put(cpId, access);
 			}
 			
-			if (phiAccess) {
+			if (access.phiAccess) {
 				return screenedData;
 			}
 			

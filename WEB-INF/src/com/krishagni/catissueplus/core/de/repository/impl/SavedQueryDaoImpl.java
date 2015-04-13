@@ -12,12 +12,14 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 import com.krishagni.catissueplus.core.de.repository.SavedQueryDao;
+
 import org.springframework.util.CollectionUtils;
 
 public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQueryDao {
@@ -26,15 +28,13 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 	
 	private static final String GET_QUERIES_BY_ID = FQN + ".getQueriesByIds";
 		
-	private static final String IS_QUERY_SHARED_WITH_USER = FQN + ".isQuerySharedWithUser";
-	
 	@Override
 	public Long getQueriesCount(Long userId, String ... searchString) {		
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(SavedQuery.class, "s")
 				.createAlias("createdBy", "c")
-				.createAlias("folders", "f", Criteria.LEFT_JOIN)
-				.createAlias("f.sharedWith", "su", Criteria.LEFT_JOIN)
+				.createAlias("folders", "f", JoinType.LEFT_OUTER_JOIN)
+				.createAlias("f.sharedWith", "su", JoinType.LEFT_OUTER_JOIN)
 				.add(Restrictions.isNull("s.deletedOn"))
 				.add(Restrictions.disjunction()
 						.add(Restrictions.eq("f.sharedWithAll", true))
@@ -51,9 +51,9 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(SavedQuery.class, "s")
 				.createAlias("createdBy", "c")
-				.createAlias("lastUpdatedBy", "m", Criteria.LEFT_JOIN)				
-				.createAlias("folders", "f", Criteria.LEFT_JOIN)
-				.createAlias("f.sharedWith", "su", Criteria.LEFT_JOIN)
+				.createAlias("lastUpdatedBy", "m", JoinType.LEFT_OUTER_JOIN)		
+				.createAlias("folders", "f", JoinType.LEFT_OUTER_JOIN)
+				.createAlias("f.sharedWith", "su", JoinType.LEFT_OUTER_JOIN)
 				.add(Restrictions.isNull("s.deletedOn"))
 				.add(Restrictions.disjunction()
 						.add(Restrictions.eq("f.sharedWithAll", true))
@@ -67,13 +67,14 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 		return getSavedQueries(criteria);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public SavedQuery getQuery(Long queryId) {
-		Criteria criteria = sessionFactory.getCurrentSession()
+		List<SavedQuery> queries = sessionFactory.getCurrentSession()
 				.createCriteria(SavedQuery.class, "s")
 				.add(Restrictions.eq("s.id", queryId))
-				.add(Restrictions.isNull("s.deletedOn"));
-		List<SavedQuery> queries = criteria.list();
+				.add(Restrictions.isNull("s.deletedOn"))
+				.list();
 		return CollectionUtils.isEmpty(queries) ? null : queries.iterator().next();
 	}
 
@@ -88,7 +89,7 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 	public Long getQueriesCountByFolderId(Long folderId, String ... searchString) {
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(SavedQuery.class, "s")
-				.createAlias("folders", "f", Criteria.INNER_JOIN)
+				.createAlias("folders", "f", JoinType.INNER_JOIN)
 				.add(Restrictions.isNull("s.deletedOn"))
 				.add(Restrictions.eq("f.id", folderId))
 				.setProjection(Projections.countDistinct("s.id"));
@@ -102,8 +103,8 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(SavedQuery.class, "s")
 				.createAlias("createdBy", "c")
-				.createAlias("folders", "f", Criteria.INNER_JOIN)
-				.createAlias("lastUpdatedBy", "m", Criteria.LEFT_JOIN)
+				.createAlias("folders", "f", JoinType.INNER_JOIN)
+				.createAlias("lastUpdatedBy", "m", JoinType.LEFT_OUTER_JOIN)
 				.add(Restrictions.isNull("s.deletedOn"))
 				.add(Restrictions.eq("f.id", folderId));
 
@@ -120,8 +121,8 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(SavedQuery.class, "s")
 				.createAlias("createdBy", "c")
-				.createAlias("folders", "f", Criteria.INNER_JOIN)
-				.createAlias("f.sharedWith", "su", Criteria.INNER_JOIN)
+				.createAlias("folders", "f", JoinType.INNER_JOIN)
+				.createAlias("f.sharedWith", "su", JoinType.INNER_JOIN)
 				.add(Restrictions.eq("s.id", queryId))
 				.add(Restrictions.isNull("s.deletedOn"))
 				.add(Restrictions.or(
