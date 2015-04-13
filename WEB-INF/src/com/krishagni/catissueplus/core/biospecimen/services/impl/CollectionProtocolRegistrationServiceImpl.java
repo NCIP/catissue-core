@@ -71,8 +71,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
 			}
 			
-			boolean phiInfo = AccessCtrlMgr.getInstance().ensureReadCprRights(cpr);
-			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(cpr));
+			boolean allowPhiAccess = AccessCtrlMgr.getInstance().ensureReadCprRights(cpr);
+			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(cpr, !allowPhiAccess));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -98,7 +98,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			saveParticipant(null, cpr);
 			cpr.setPpidIfEmpty();
 			daoFactory.getCprDao().saveOrUpdate(cpr);
-			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(cpr));
+			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(cpr, false));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -137,7 +137,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			cpr.setPpidIfEmpty();
 			
 			daoFactory.getCprDao().saveOrUpdate(existing);
-			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(existing));
+			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(existing, false));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

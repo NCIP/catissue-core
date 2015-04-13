@@ -31,7 +31,7 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 		if (StringUtils.isNotBlank(participant.getEmpi())) {
 			Participant matched = dao.getByEmpi(participant.getEmpi());
 			if (matched != null) {
-				List<ParticipantDetail> result = ParticipantDetail.from(Collections.singletonList(matched));
+				List<ParticipantDetail> result = ParticipantDetail.from(Collections.singletonList(matched), false);
 				return new MatchedParticipants("empi", result);
 			}
 		}
@@ -39,7 +39,7 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 		if (StringUtils.isNotBlank(participant.getSsn())) {
 			Participant matched = dao.getBySsn(participant.getSsn());
 			if (matched != null) {
-				List<ParticipantDetail> result = ParticipantDetail.from(Collections.singletonList(matched));
+				List<ParticipantDetail> result = ParticipantDetail.from(Collections.singletonList(matched), false);
 				return new MatchedParticipants("ssn", result);
 			}
 		}
@@ -47,14 +47,14 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 		if (participant.getPmis() != null) {
 			List<Participant> matched = dao.getByPmis(participant.getPmis());
 			if (matched != null && !matched.isEmpty()) {
-				return new MatchedParticipants("pmi", ParticipantDetail.from(matched));
+				return new MatchedParticipants("pmi", ParticipantDetail.from(matched, false));
 			}
 		}
 		
 		if (StringUtils.isNotBlank(participant.getLastName()) && participant.getBirthDate() != null) {
 			List<Participant> matched = dao.getByLastNameAndBirthDate(participant.getLastName(), participant.getBirthDate());
 			if (matched != null && !matched.isEmpty()) {
-				return new MatchedParticipants("lnameAndDob", ParticipantDetail.from(matched));
+				return new MatchedParticipants("lnameAndDob", ParticipantDetail.from(matched, false));
 			}
 		}
 		

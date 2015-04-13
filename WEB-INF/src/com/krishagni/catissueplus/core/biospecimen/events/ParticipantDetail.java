@@ -183,30 +183,30 @@ public class ParticipantDetail {
 		return modifiedAttrs;
 	}
 
-	public static ParticipantDetail from(Participant participant) {
+	public static ParticipantDetail from(Participant participant, boolean excludePhi) {
 		ParticipantDetail result = new ParticipantDetail();
 		result.setId(participant.getId());
-		result.setFirstName(participant.getFirstName());
-		result.setLastName(participant.getLastName());
-		result.setMiddleName(participant.getMiddleName());
+		result.setFirstName(excludePhi ? "###" : participant.getFirstName());
+		result.setLastName(excludePhi ? "###" : participant.getLastName());
+		result.setMiddleName(excludePhi ? "###" : participant.getMiddleName());
 		result.setActivityStatus(participant.getActivityStatus());
-		result.setBirthDate(participant.getBirthDate());
-		result.setDeathDate(participant.getDeathDate());
+		result.setBirthDate(excludePhi ? null : participant.getBirthDate());
+		result.setDeathDate(excludePhi ? null : participant.getDeathDate());
 		result.setEthnicity(participant.getEthnicity());
 		result.setGender(participant.getGender());
 		result.setEmpi(participant.getEmpi());				
-		result.setPmis(PmiDetail.from(participant.getPmis())); 
+		result.setPmis(PmiDetail.from(participant.getPmis(), excludePhi)); 
 		result.setRaces(new HashSet<String>(participant.getRaces()));
 		result.setSexGenotype(participant.getSexGenotype());
-		result.setSsn(participant.getSocialSecurityNumber());
+		result.setSsn(excludePhi ? "###" : participant.getSocialSecurityNumber());
 		result.setVitalStatus(participant.getVitalStatus());
 		return result;
 	}
 	
-	public static List<ParticipantDetail> from(List<Participant> participants) {
+	public static List<ParticipantDetail> from(List<Participant> participants, boolean excludePhi) {
 		List<ParticipantDetail> result = new ArrayList<ParticipantDetail>();
 		for (Participant participant : participants) {
-			result.add(ParticipantDetail.from(participant));
+			result.add(ParticipantDetail.from(participant, excludePhi));
 		}
 		
 		return result;

@@ -1,9 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
@@ -135,10 +133,10 @@ public class CollectionProtocolRegistrationDetail {
 		this.derivativeLabelFmt = derivativeLabelFmt;
 	}
 
-	public static CollectionProtocolRegistrationDetail from(CollectionProtocolRegistration cpr) {		 
+	public static CollectionProtocolRegistrationDetail from(CollectionProtocolRegistration cpr, boolean excludePhi) {		 
 		CollectionProtocolRegistrationDetail detail = new CollectionProtocolRegistrationDetail();
 		
-		detail.setParticipant(ParticipantDetail.from(cpr.getParticipant()));
+		detail.setParticipant(ParticipantDetail.from(cpr.getParticipant(), excludePhi));
 		detail.setId(cpr.getId());		
 		detail.setActivityStatus(cpr.getActivityStatus());
 		detail.setBarcode(cpr.getBarcode());
@@ -174,15 +172,5 @@ public class CollectionProtocolRegistrationDetail {
 		detail.setDerivativeLabelFmt(cp.getDerivativeLabelFormat());
 		
 		return detail;
-	}
-	
-	public static List<CollectionProtocolRegistrationDetail> fromCprs(List<CollectionProtocolRegistration> cprList) {
-		List<CollectionProtocolRegistrationDetail> cprs = new ArrayList<CollectionProtocolRegistrationDetail>();
-		
-		for (CollectionProtocolRegistration cpr : cprList) {
-			cprs.add(from(cpr));
-		}
-		
-		return cprs;
-	}
+	}	
 }
