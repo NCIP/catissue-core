@@ -1,13 +1,16 @@
 package com.krishagni.catissueplus.core.init;
 
 import java.io.File;
+import java.io.InputStream;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.ui.StorageContainerControlFactory;
 import com.krishagni.catissueplus.core.de.ui.StorageContainerMapper;
 import com.krishagni.catissueplus.core.de.ui.UserControlFactory;
@@ -15,9 +18,12 @@ import com.krishagni.catissueplus.core.de.ui.UserFieldMapper;
 
 import edu.common.dynamicextensions.domain.nui.factory.ControlManager;
 import edu.common.dynamicextensions.nutility.DEApp;
+import edu.common.dynamicextensions.query.PathConfig;
 import edu.wustl.dynamicextensions.formdesigner.mapper.ControlMapper;
 
 public class DeInitializer implements InitializingBean {
+	private static final String QUERY_PATH_CFG = "/com/krishagni/catissueplus/core/de/query/paths.xml";
+	
 	private PlatformTransactionManager transactionManager;
 	
 	private ConfigurationService cfgSvc;
@@ -58,6 +64,14 @@ public class DeInitializer implements InitializingBean {
 		ControlMapper.getInstance().registerControlMapper("userField", new UserFieldMapper());
 		
 		ControlManager.getInstance().registerFactory(StorageContainerControlFactory.getInstance());
-		ControlMapper.getInstance().registerControlMapper("storageContainer", new StorageContainerMapper());		
+		ControlMapper.getInstance().registerControlMapper("storageContainer", new StorageContainerMapper());
+
+		InputStream in = null;
+		try {
+			in = Utility.getResourceInputStream(QUERY_PATH_CFG);
+			PathConfig.initialize(in);			
+		} finally {
+			IOUtils.closeQuietly(in);
+		}
 	}
 }

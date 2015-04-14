@@ -225,6 +225,7 @@
                                 <include name="spe-forms/*.*"/>
                                 <include name="errors/*.properties"/>
                                 <include name="com/krishagni/catissueplus/core/biospecimen/default_print_rules.csv"/>
+                                <include name="com/krishagni/catissueplus/core/de/query/paths.xml"/>
 			</fileset>
 		</copy>
 	</target>
@@ -264,6 +265,7 @@
                                 <include name="spe-forms/*.*"/>
                                 <include name="errors/*.properties"/>
                                 <include name="com/krishagni/catissueplus/core/biospecimen/default_print_rules.csv"/>
+                                <include name="com/krishagni/catissueplus/core/de/query/paths.xml"/>
 			</fileset>
 		</copy>
 	</target>
