@@ -5,7 +5,7 @@ import java.util.List;
 import krishagni.catissueplus.dto.FormDetailsDTO;
 import krishagni.catissueplus.dto.FormRecordDetailsDTO;
 
-import com.krishagni.catissueplus.bulkoperator.metadata.HookingInformation;
+//import com.krishagni.catissueplus.bulkoperator.metadata.HookingInformation;
 
 public interface FormDao {
 	Long getContainerId(Long formId);
@@ -30,5 +30,5 @@ public interface FormDao {
 	
 	void insertForm(FormDetailsDTO form);
 
-	void insertFormRecord(Long containerId, Long recordId, HookingInformation recEntryInfo);
+//	void insertFormRecord(Long containerId, Long recordId, HookingInformation recEntryInfo);
 }

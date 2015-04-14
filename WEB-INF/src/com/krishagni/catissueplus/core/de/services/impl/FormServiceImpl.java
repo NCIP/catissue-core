@@ -62,7 +62,6 @@ import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.napi.FormDataManager;
 import edu.common.dynamicextensions.napi.impl.FormDataManagerImpl;
 import edu.common.dynamicextensions.nutility.FileUploadMgr;
-import edu.wustl.catissuecore.action.bulkOperations.BOTemplateGeneratorUtil;
 
 public class FormServiceImpl implements FormService {
 	private static final String PARTICIPANT_FORM = "Participant";
@@ -464,18 +463,20 @@ public class FormServiceImpl implements FormService {
 	
 	@Override
 	public ResponseEvent<List<Long>> genereateBoTemplate(RequestEvent<GenerateBoTemplateOp> boReq) {
-		GenerateBoTemplateOp opDetail = boReq.getPayload();		
-		Long formId = opDetail.getFormId();
-		BOTemplateGeneratorUtil generator = new BOTemplateGeneratorUtil();
+		// TODO: Fix this with new bulk importer
 		
-		try {
-			for (String level : opDetail.getEntityLevels()) {
-				generator.generateAndUploadTemplate(formId, level);
-			}
-		} catch (Exception e) {
-			ResponseEvent.serverError(e);
-		}
-		
+//		GenerateBoTemplateOp opDetail = boReq.getPayload();		
+//		Long formId = opDetail.getFormId();
+//		BOTemplateGeneratorUtil generator = new BOTemplateGeneratorUtil();
+//		
+//		try {
+//			for (String level : opDetail.getEntityLevels()) {
+//				generator.generateAndUploadTemplate(formId, level);
+//			}
+//		} catch (Exception e) {
+//			ResponseEvent.serverError(e);
+//		}
+//		
 		return ResponseEvent.response(Collections.<Long>emptyList());
 	}
 	

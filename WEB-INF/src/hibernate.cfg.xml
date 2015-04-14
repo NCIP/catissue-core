@@ -65,9 +65,6 @@
                 <mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenLabelPrintJob.hbm.xml"/>
                 <mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenLabelPrintJobItem.hbm.xml"/>
 
-		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperationJob.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperation.hbm.xml" />
-
 		<mapping resource="com/krishagni/rbac/resources/Group.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/GroupRole.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/Operation.hbm.xml"/>
