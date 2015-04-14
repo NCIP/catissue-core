@@ -195,14 +195,14 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 
 	@Override
 	public int compareTo(SpecimenRequirementDetail other) {
-		if (type == null && other.type == null) {
-			if (id == null && other.id == null) {
-				return -1;
-			} else {
-				return id.compareTo(other.id);
-			}
+		if (id != null && other.id != null) {
+			return id.compareTo(other.id);
+		} else if (id != null) {
+			return -1;
+		} else if(other.id != null) {
+			return 1;
 		} else {
-			return type.compareTo(other.type);
+			return 0;
 		}
 	}
 	
