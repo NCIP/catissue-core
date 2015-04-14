@@ -33,12 +33,6 @@ public class ObjectSchema {
 		return (ObjectSchema)parser.fromXML(new File(filePath));
 	}
 	
-	public static void main(String[] args) 
-	throws Exception {
-		ObjectSchema schema = ObjectSchema.parseSchema("/home/vpawar/Desktop/cpr_schema.xml");
-		System.err.println(new ObjectMapper().writeValueAsString(schema));		
-	}
-	
 	private static XStream getSchemaParser() {
 		XStream xstream = new XStream(new Dom4JDriver());
 		
