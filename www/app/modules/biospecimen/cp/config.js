@@ -63,6 +63,15 @@ angular.module('openspecimen')
         // we do not call loadWorkflows, as it would have been loaded by above 
         // template provider
         return getRegParticipantCtrl(cpId, cprId);
+      },
+
+      getWorkflowData: function(cpId, name) {
+        return loadWorkflows(cpId).then(
+          function(cfg) {
+            var workflow = cfg.workflows[name];
+            return workflow ? (workflow.data || {}) : {};
+          }
+        );
       }
     }
   });

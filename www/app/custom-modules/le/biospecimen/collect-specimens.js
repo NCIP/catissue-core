@@ -3,7 +3,7 @@ angular.module('openspecimen')
     function(
       $scope, $state, $stateParams, $http, 
       CollectionProtocolEvent, SpecimenRequirement, Visit, Specimen, 
-      Alerts, Util, ApiUrls) {
+      CpConfigSvc, Alerts, Util, ApiUrls) {
 
       var baseUrl = ApiUrls.getBaseUrl();
 
@@ -22,7 +22,14 @@ angular.module('openspecimen')
           csLabels: '',
           delimiter: ',',
           ctrl: undefined
-        }
+        },
+
+        CpConfigSvc.getWorkflowData($scope.cpId, 'registerParticipant').then(
+          function(data) {
+            var boxOpts = data.boxOpts || {};
+            angular.extend($scope.boxOpts, boxOpts);
+          }
+        );
       }
 
       function registerParticipants() {

@@ -60,6 +60,8 @@ public class CpWorkflowCfgDetail {
 		
 		private String ctrl;
 		
+		private Map<String, Object> data = new HashMap<String, Object>();
+		
 		public String getName() {
 			return name;
 		}
@@ -82,7 +84,14 @@ public class CpWorkflowCfgDetail {
 
 		public void setCtrl(String ctrl) {
 			this.ctrl = ctrl;
+		}
+
+		public Map<String, Object> getData() {
+			return data;
+		}
+
+		public void setData(Map<String, Object> data) {
+			this.data = data;
 		}		
 	}
-
 }
