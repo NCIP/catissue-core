@@ -1851,18 +1851,6 @@
             <column name="SITE_ID" type="NUMBER(19,0)"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-177">
-        <createTable tableName="DE_E_11001">
-            <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108401" primaryKeyTablespace="USERS"/>
-            </column>
-            <column name="DE_A_1" type="NUMBER(19,0)"/>
-            <column name="DE_A_2" type="TIMESTAMP(6)"/>
-            <column name="DE_A_3" type="NUMBER(19,0)"/>
-            <column name="DE_A_4" type="NUMBER(19,6)"/>
-            <column name="COMMENTS" type="VARCHAR2(4000 BYTE)"/>
-        </createTable>
-    </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-180">
         <createTable tableName="JOB_DETAILS">
             <column name="IDENTIFIER" type="NUMBER(38,0)">

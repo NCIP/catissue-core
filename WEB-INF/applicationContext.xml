@@ -32,7 +32,11 @@
     <property name="jndiName" value="${datasource.jndi}"/>
   </bean>
   
-  <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
+  <bean id="de-liquibase" class="liquibase.integration.spring.SpringLiquibase">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="changeLog" value="classpath:db.changelog-master.xml" />
+  </bean>
+  <bean id="os-liquibase" class="liquibase.integration.spring.SpringLiquibase" depends-on="de-liquibase">
     <property name="dataSource" ref="dataSource"/>
     <property name="changeLog" value="classpath:db/db-os-changelog-master-${datasource.type}.xml" />
   </bean>

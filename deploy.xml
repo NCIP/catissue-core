@@ -1475,12 +1475,6 @@
             </fileset>
           </copy>
 		
-		  <copy todir="${temp.dir}/catissuecore/WEB-INF/classes/db" overwrite="true">
-            <fileset dir="${temp.dir}/dynamicextensions/db/liquibase">
-              <include name="*/**"/>
-            </fileset>
-          </copy>
-
           <copy file="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" 
                 todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
 	</target>

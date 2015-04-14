@@ -1841,18 +1841,6 @@
             <column name="SITE_ID" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-177">
-        <createTable tableName="de_e_11001">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="DE_A_1" type="BIGINT"/>
-            <column name="DE_A_2" type="TIMESTAMP"/>
-            <column name="DE_A_3" type="BIGINT"/>
-            <column name="DE_A_4" type="DECIMAL(19,6)"/>
-            <column name="COMMENTS" type="TEXT"/>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-180">
         <createTable tableName="job_details">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">

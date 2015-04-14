@@ -48,14 +48,14 @@
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'User');
     </sql>
   </changeSet>  
-  <changeSet author="vgaikwad" id="Insert default systemt user" dbms="mysql">
+  <changeSet author="nmarwaha" id="Insert default systemt user" dbms="mysql">
     <sql>
       insert into catissue_user values (default, '$system', 'System', null, '$system', null, 'Locked', null, null, null, null, null, 0, null, null, 'openspecimen', 1);
     </sql>
   </changeSet>
   <changeSet author="nmarwaha" id="Insert default systemt user" dbms="oracle">
     <sql>
-      insert into catissue_user values (default, '$system', 'System', null, '$system', null, 'Locked', null, null, null, null, null, 0, null, null, 'openspecimen', 1);
+      insert into catissue_user values (CATISSUE_USER_SEQ.nextval, '$system', 'System', null, '$system', null, 'Locked', null, null, null, null, null, 0, null, null, 'openspecimen', 1);
     </sql>
   </changeSet>
 </databaseChangeLog>
