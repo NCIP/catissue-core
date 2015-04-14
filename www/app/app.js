@@ -47,6 +47,9 @@ angular.module('openspecimen', [
         resolve: {
           currentUser: function(User) {
             return User.getCurrentUser();
+          },
+          authInit: function(AuthorizationService) {
+            return AuthorizationService.init();
           }
         },
         controller: 'SignedInCtrl'
@@ -64,7 +67,7 @@ angular.module('openspecimen', [
     $httpProvider.interceptors.push('httpRespInterceptor');
 
     /*ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 9090;*/
+    ApiUrlsProvider.port = 9000;*/
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
@@ -198,7 +201,7 @@ angular.module('openspecimen', [
 
     ApiUtil.initialize();
 
-    $rootScope.$on('$stateChangeSuccess', 
+    $rootScope.$on('$stateChangeSuccess',
       function(event, toState, toParams, fromState, fromParams) {
         $rootScope.state = toState;
       });

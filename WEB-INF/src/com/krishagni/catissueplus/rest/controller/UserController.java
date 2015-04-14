@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.repository.UserListCriteria;
@@ -26,6 +27,7 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.rbac.events.SubjectRoleDetail;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -206,6 +208,24 @@ public class UserController {
 		
 		return resp.getPayload();
  	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/current-user-roles")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List<SubjectRoleDetail> getCurrentUserRoles() {
+		ResponseEvent<List<SubjectRoleDetail>> resp = userService.getCurrentUserRoles();
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/institute")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public InstituteDetail getInstitute(@PathVariable Long id) {
+		ResponseEvent<InstituteDetail> resp = userService.getInstitute(new RequestEvent<Long>(id));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);

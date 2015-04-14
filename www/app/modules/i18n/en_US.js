@@ -643,7 +643,8 @@
       "ParticipantDeid": "Participant (DeId)",
       "VisitAndSpecimen": "Visits and Specimens",
       "Site": "Site",
-      "StorageContainer": "Storage Container"
+      "StorageContainer": "Storage Container",
+      "User": "User"
     },
 
     "menu": {

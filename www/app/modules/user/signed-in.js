@@ -3,7 +3,6 @@ angular.module('openspecimen')
      function init() {
        $scope.alerts = Alerts.messages;
        $rootScope.currentUser = currentUser;
-       AuthorizationService.initUserPermissions(currentUser.id);
      }
 
      init();

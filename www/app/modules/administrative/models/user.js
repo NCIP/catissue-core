@@ -65,6 +65,19 @@ angular.module('os.administrative.models.user', ['os.common.models'])
       return $http.put(User.url() + id + '/activity-status', {activityStatus: 'Active'}).then(User.modelRespTransform);
     }
 
+    User.getCurrentUserRoles = function() {
+      return $http.get(User.url() + 'current-user-roles').then(function(result) {
+        return result.data;
+      });
+    }
+
+    User.getInstitute = function(id) {
+      return $http.get(User.url() + id + '/institute').then(function(result) {
+        return result.data;
+      });
+    }
+
+
     return User;
   });
 
