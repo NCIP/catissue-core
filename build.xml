@@ -221,6 +221,7 @@
 			</fileset>
 			<fileset dir="${resources.dir}">
 				<include name="**/*.hbm.xml" />
+				<include name="db/*.*" />
                                 <include name="query-forms/*.*"/>
                                 <include name="spe-forms/*.*"/>
                                 <include name="errors/*.properties"/>
@@ -261,6 +262,7 @@
 			</fileset>
 			<fileset dir="${resources.dir}">
 				<include name="**/*.hbm.xml" />
+				<include name="db/*.*" />
                                 <include name="query-forms/*.*"/>
                                 <include name="spe-forms/*.*"/>
                                 <include name="errors/*.properties"/>

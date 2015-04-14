@@ -56,7 +56,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	/**
 	 * DATASOURCE_JNDI_NAME.
 	 */
-	private static final String JNDI_NAME = "java:/catissuecore";
+	private static final String JNDI_NAME = "java:/openspecimen";
 
 	/**
 	 * This method is called during server startup, It is used when want some initliazation before

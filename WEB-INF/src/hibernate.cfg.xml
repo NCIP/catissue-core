@@ -7,8 +7,6 @@
 
     <session-factory>
 
- 		<property name="connection.datasource">java:/catissuecore</property>
-
 		<!--  Form Context and Record Entry -->
 		<mapping resource="krishagni/catissueplus/hbm/FormContextBean.hbm.xml" />
 		<mapping resource="krishagni/catissueplus/hbm/FormRecordEntryBean.hbm.xml" />
