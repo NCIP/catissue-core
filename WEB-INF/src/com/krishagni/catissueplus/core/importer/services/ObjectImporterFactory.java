@@ -1,7 +1,7 @@
 package com.krishagni.catissueplus.core.importer.services;
 
 public interface ObjectImporterFactory {
-	public ObjectImporter getImporter(String objectType);
+	public <T> ObjectImporter<T> getImporter(String objectType);
 	
-	public void registerImporter(String objectType, ObjectImporter importer);
+	public <T> void registerImporter(String objectType, ObjectImporter<T> importer);
 }

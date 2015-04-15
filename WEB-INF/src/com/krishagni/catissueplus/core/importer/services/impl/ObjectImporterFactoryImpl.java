@@ -8,20 +8,20 @@ import com.krishagni.catissueplus.core.importer.services.ObjectImporterFactory;
 
 public class ObjectImporterFactoryImpl implements ObjectImporterFactory {
 	
-	private Map<String, ObjectImporter> importersMap = new HashMap<String, ObjectImporter>();
+	private Map<String, ObjectImporter<?>> importersMap = new HashMap<String, ObjectImporter<?>>();
 	
-	
-	public void setImportersMap(Map<String, ObjectImporter> importersMap) {
+	public void setImportersMap(Map<String, ObjectImporter<?>> importersMap) {
 		this.importersMap = importersMap;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public ObjectImporter getImporter(String objectType) {
-		return importersMap.get(objectType);
+	public <T> ObjectImporter<T> getImporter(String objectType) {
+		return (ObjectImporter<T>)importersMap.get(objectType);
 	}
 	
 	@Override
-	public void registerImporter(String objectType, ObjectImporter importer) {
+	public <T> void registerImporter(String objectType, ObjectImporter<T> importer) {
 		importersMap.put(objectType, importer);
 	}
 }

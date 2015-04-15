@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,8 @@ public class ObjectReader implements Closeable {
 	
 	private Class<?> objectClass;
 	
+	private String[] currentRow;
+	
 	public ObjectReader(String filePath, ObjectSchema schema) {
 		try {
 			this.csvReader = CsvFileReader.createCsvFileReader(filePath, true);
@@ -36,7 +39,21 @@ public class ObjectReader implements Closeable {
 	}
 	
 	public Object next() {
-		return csvReader.next() ? parseObject() : null;
+		if (csvReader.next()) {
+			currentRow = csvReader.getRow();
+			return parseObject();
+		} else {
+			currentRow = null;
+			return null;
+		}
+	}
+	
+	public List<String> getCsvColumnNames() {
+		return new ArrayList<String>(Arrays.asList(csvReader.getColumnNames()));
+	}
+	
+	public List<String> getCsvRow() {
+		return new ArrayList<String>(Arrays.asList(currentRow));
 	}
 	
 	@Override
@@ -112,7 +129,7 @@ public class ObjectReader implements Closeable {
 		if (record.isMultiple()) {
 			List<Map<String, Object>> subObjects = new ArrayList<Map<String, Object>>();
 			for (int idx = 1; true; ++idx) {
-				Map<String, Object> subObject = parseObject(record, newPrefix += idx + "#");
+				Map<String, Object> subObject = parseObject(record, newPrefix + idx + "#");
 				if (subObject.isEmpty()) {
 					break;
 				}
@@ -134,17 +151,20 @@ public class ObjectReader implements Closeable {
 		}
 		
 		String value = csvReader.getColumn(columnName);
-		if (StringUtils.isNotBlank(value) && field.getFormat() != null) {
+		boolean isBlank = StringUtils.isBlank(value);
+		if (isBlank) {
+			return null;
+		} else if (field.getFormat() != null) {
 			return new SimpleDateFormat(field.getFormat()).parse(value);
 		} else {
 			return value;
-		}		
+		}
 	}
 		
 	public static void main(String[] args) 
 	throws Exception {
-		ObjectSchema schema = ObjectSchema.parseSchema("/home/vpawar/Desktop/cpr_schema.xml");
-		ObjectReader reader = new ObjectReader("/home/vpawar/Desktop/test.csv", schema);
+		ObjectSchema schema = ObjectSchema.parseSchema("/home/vpawar/work/ka/catp/os/WEB-INF/resources/com/krishagni/catissueplus/core/administrative/schema/institute.xml");
+		ObjectReader reader = new ObjectReader("/home/vpawar/Desktop/institute.csv", schema);
 		
 		Object obj = null;
 		while ((obj = reader.next()) != null) {

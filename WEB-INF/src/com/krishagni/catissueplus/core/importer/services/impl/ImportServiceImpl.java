@@ -2,21 +2,32 @@ package com.krishagni.catissueplus.core.importer.services.impl;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import au.com.bytecode.opencsv.CSVWriter;
+
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.errors.ParameterizedError;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
@@ -49,6 +60,8 @@ public class ImportServiceImpl implements ImportService {
 	
 	private TransactionTemplate txTmpl;
 	
+	private ResourceBundleMessageSource resourceBundle;
+	
 	public void setCfgSvc(ConfigurationService cfgSvc) {
 		this.cfgSvc = cfgSvc;
 	}
@@ -73,6 +86,10 @@ public class ImportServiceImpl implements ImportService {
 		this.transactionManager = transactionManager;
 		this.txTmpl = new TransactionTemplate(this.transactionManager);
 		this.txTmpl.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+	}
+	
+	public void setResourceBundle(ResourceBundleMessageSource resourceBundle) {
+		this.resourceBundle = resourceBundle;
 	}
 
 	@Override
@@ -121,7 +138,7 @@ public class ImportServiceImpl implements ImportService {
 			createJobDir(job.getId());
 			moveToJobDir(inputFile, job.getId());
 			
-			taskExecutor.submit(new ImporterTask(detail, job));
+			taskExecutor.submit(new ImporterTask(AuthUtil.getAuth(), job));
 			return ResponseEvent.response(ImportJobDetail.from(job));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);			
@@ -170,56 +187,148 @@ public class ImportServiceImpl implements ImportService {
 		job.setType(StringUtils.isBlank(importType) ? Type.CREATE : Type.valueOf(importType));		
 		return job;		
 	}
+
+	private String getMessage(ParameterizedError error) {
+		return resourceBundle.getMessage(
+				error.error().code().toLowerCase(), 
+				error.params(), 
+				Locale.getDefault());
+	}
 	
 	private class ImporterTask implements Runnable {
-		private ImportDetail detail;
+		private Authentication auth;
 		
 		private ImportJob job;
 		
-		public ImporterTask(ImportDetail detail, ImportJob job) {
-			this.detail = detail;
-			this.job = job;
+		public ImporterTask(Authentication auth, ImportJob job) {
+			this.auth = auth;
+			this.job = job;			
 		}
 
 		@Override
 		public void run() {
+			SecurityContextHolder.getContext().setAuthentication(auth);			
 			ObjectSchema   schema   = schemaFactory.getSchema(job.getName());
-			ObjectImporter importer = importerFactory.getImporter(job.getName());
+			ObjectImporter<Object> importer = importerFactory.getImporter(job.getName());
 			
-			ObjectReader reader = null;			
+			ObjectReader objReader = null;
+			CSVWriter csvWriter = null;
+			long totalRecords = 0, failedRecords = 0;
 			try {
 				String filePath = getJobDir(job.getId()) + File.separator + "input.csv";
-				reader = new ObjectReader(filePath, schema);
+				objReader = new ObjectReader(filePath, schema);
+				
+				List<String> columnNames = objReader.getCsvColumnNames();
+				columnNames.add("OS_IMPORT_STATUS");
+				columnNames.add("OS_ERROR_MESSAGE");
+				
+				csvWriter = getOutputCsvWriter(job);
+				csvWriter.writeNext(columnNames.toArray(new String[0]));
 				
 				Object object = null;
-				while ((object = reader.next()) != null) {
-					importObject(importer, object);
+				while ((object = objReader.next()) != null) {
+					List<String> row = objReader.getCsvRow();					
+					String errMsg = importObject(importer, object);
+
+					++totalRecords;
+					if (StringUtils.isNotBlank(errMsg)) {
+						row.add("FAIL");
+						row.add(errMsg);
+						++failedRecords;
+					} else {
+						row.add("SUCCESS");
+						row.add("");
+					}
+					
+					csvWriter.writeNext(row.toArray(new String[0]));
+					if (totalRecords % 25 == 0) {
+						saveJob(totalRecords, failedRecords, Status.IN_PROGRESS);
+					}
 				}
-			} catch (Exception e) {
 				
-			}			
+				saveJob(totalRecords, failedRecords, Status.COMPLETED);
+			} catch (Exception e) {
+				saveJob(totalRecords, failedRecords, Status.FAILED);
+			} finally {
+				IOUtils.closeQuietly(objReader);
+				closeQueitly(csvWriter);
+			}
 		}		
 		
-		private void importObject(final ObjectImporter importer, Object object) {
+		private String importObject(final ObjectImporter<Object> importer, Object object) {
 			try {
 				final RequestEvent<Object> req = new RequestEvent<Object>(object);
 				ResponseEvent<Object> resp = txTmpl.execute(
 						new TransactionCallback<ResponseEvent<Object>>() {
 							@Override
 							public ResponseEvent<Object> doInTransaction(TransactionStatus status) {
-								return importer.importObject(req);
+								ResponseEvent<Object> resp = importer.importObject(req);
+								if (!resp.isSuccessful()) {
+									status.setRollbackOnly();
+								}
+								
+								return resp;
 							}
 						});
 				
 				if (resp.isSuccessful()) {
-					System.err.println("Success");
+					return null;
 				} else {
-					System.err.println("Unsuccessful");
+					OpenSpecimenException error = resp.getError();
+					StringBuilder errorMsg = new StringBuilder();
+					if (!error.getErrors().isEmpty()) {
+						for (ParameterizedError pe : resp.getError().getErrors()) {
+							errorMsg.append(getMessage(pe));
+						}						
+					} else if (error.getException() != null) {
+						errorMsg.append(error.getException().getMessage());
+					} else {
+						errorMsg.append("Unknown error");
+					}
+					
+					System.err.println("Unsuccessful: " + errorMsg.toString());
+					return errorMsg.toString();
 				}				
 			} catch (Exception e) {
-				// TODO:
+				if (StringUtils.isBlank(e.getMessage())) {					
+					return "Internal Server Error";
+				} else {
+					return e.getMessage();
+				}
+			}
+		}
+				
+		private void saveJob(long totalRecords, long failedRecords, Status status) {
+			job.setTotalRecords(totalRecords);
+			job.setFailedRecords(failedRecords);
+			job.setStatus(status);
+			
+			if (status == Status.COMPLETED || status == Status.FAILED) {
+				job.setEndTime(Calendar.getInstance().getTime());
+			}
+			
+			txTmpl.execute(new TransactionCallback<Void>() {
+				@Override
+				public Void doInTransaction(TransactionStatus status) {
+					importJobDao.saveOrUpdate(job);
+					return null;
+				}
+			});
+		}
+
+		private CSVWriter getOutputCsvWriter(ImportJob job) 
+		throws IOException {
+			return new CSVWriter(new FileWriter(getJobDir(job.getId()) + File.separator + "output.csv"));
+		}
+				
+		private void closeQueitly(CSVWriter writer) {
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (Exception e) {
+											
+				}
 			}
 		}
 	}
-
 }

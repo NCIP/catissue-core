@@ -470,14 +470,29 @@
     <property name="deInitializer" ref="deInitializer"/>
   </bean>
 
+  <!-- Move these to importer-beans.xml -->
   <bean id="importJobDao" class="com.krishagni.catissueplus.core.importer.repository.impl.ImportJobDaoImpl">
     <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
 
   <bean id="objectSchemaFactory" class="com.krishagni.catissueplus.core.importer.services.impl.ObjectSchemaFactoryImpl">
+    <property name="schemaResources">
+      <list>
+        <value>com/krishagni/catissueplus/core/administrative/schema/institute.xml</value>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="instituteImporter" class="com.krishagni.catissueplus.core.administrative.services.impl.InstituteImporter">
+    <property name="instituteSvc" ref="instSvc"/>
   </bean>
 
   <bean id="objectImporterFactory" class="com.krishagni.catissueplus.core.importer.services.impl.ObjectImporterFactoryImpl">
+    <property name="importersMap">
+      <map>
+        <entry key="institute" value-ref="instituteImporter"/>
+      </map>
+    </property>
   </bean>
 
   <bean id="importObjectsSvc" class="com.krishagni.catissueplus.core.importer.services.impl.ImportServiceImpl">
@@ -487,6 +502,7 @@
     <property name="schemaFactory" ref="objectSchemaFactory"/>
     <property name="importerFactory" ref="objectImporterFactory"/>
     <property name="transactionManager" ref="transactionManager"/>
+    <property name="resourceBundle" ref="resourceBundle"/>
   </bean>
 
   <task:scheduler id="taskScheduler" pool-size="1"/>
