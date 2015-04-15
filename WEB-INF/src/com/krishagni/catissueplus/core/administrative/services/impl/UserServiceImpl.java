@@ -75,10 +75,6 @@ public class UserServiceImpl implements UserService {
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
 	}
-	
-	public RbacService getRbacSvc() {
-		return rbacSvc;
-	}
 
 	public void setRbacSvc(RbacService rbacSvc) {
 		this.rbacSvc = rbacSvc;

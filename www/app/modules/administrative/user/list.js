@@ -6,8 +6,6 @@ angular.module('os.administrative.user.list', ['os.administrative.models'])
       loadUsers();
       loadPvs();
       Util.filter($scope, 'userFilterOpts', loadUsers);
-
-      $scope.createOpts = {resource: 'User', operation: 'Create'};
     }
 
     function loadPvs() {

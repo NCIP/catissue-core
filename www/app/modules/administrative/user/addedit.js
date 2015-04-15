@@ -11,24 +11,32 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
     function loadPvs() {
       $scope.domains = PvManager.getPvs('domains');
       $scope.institutes = [];
+      var q = undefined;
       if (!$rootScope.currentUser || $rootScope.currentUser.admin) {
-        Institute.query().then(
-          function(instituteList) {
-            angular.forEach(instituteList, function(institute) {
+        q = Institute.query();
+      } else {
+        q = $rootScope.currentUser.getInstitute();
+      }
+
+      q.then(
+        function(result) {
+          if (result instanceof Array) {
+            angular.forEach(result, function(institute) {
               $scope.institutes.push(institute.name);
             });
+          } else {
+            $scope.institutes.push(result.name);
           }
-        );
-      } else {
-        User.getInstitute($rootScope.currentUser.id).then(function(institute) {
-          $scope.institutes.push(institute.name);
-        });
-      }
 
-      if (user.instituteName) {
-        $scope.loadDepartments(user.instituteName)
-      }
+          if (!$scope.user.id && $scope.institutes.length == 1) {
+            $scope.user.instituteName = $scope.institutes[0];
+          }
+        }
+      );
 
+      if ($scope.user.instituteName) {
+        $scope.loadDepartments($scope.user.instituteName);
+      }
     }
 
     $scope.loadDepartments = function(instituteName) {

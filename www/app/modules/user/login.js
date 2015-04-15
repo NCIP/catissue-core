@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .factory('AuthService', function($http, $window, $cookieStore, ApiUtil, ApiUrls) {
+  .factory('AuthService', function($http, $rootScope, $window, $cookieStore, ApiUtil, ApiUrls) {
     var url = function() {
       return ApiUrls.getUrl('sessions');
     };
@@ -13,6 +13,7 @@ angular.module('openspecimen')
       logout: function() {
         var q = $http.delete(url());
         this.removeToken();
+        delete $rootScope.currentUser;
         return q.then(ApiUtil.processResp);
       },
 

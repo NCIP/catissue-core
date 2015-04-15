@@ -8,8 +8,6 @@ angular.module('os.administrative.user.detail', ['os.administrative.models'])
       $scope.user = user;
       $scope.domains = PvManager.getPvs('domains');
       $scope.sites = PvManager.getSites();
-      $scope.updateOpts = {resource: 'User', operation: 'Update'};
-      $scope.deleteOpts = {resource: 'User', operation: 'Delete'};
     }
 
     $scope.editUser = function(property, value) {

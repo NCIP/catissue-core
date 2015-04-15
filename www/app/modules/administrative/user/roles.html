@@ -31,10 +31,12 @@
 
                 <div class="col col-xs-1 action">
                   <div class="btn-group">
-                    <button class="btn btn-xs btn-default os-btn-icon" ng-click="showEditRole(role)">
+                    <button class="btn btn-xs btn-default os-btn-icon" ng-click="showEditRole(role)"
+                      show-if-allowed="userAuthOpts.updateOpts">
                       <span class="fa fa-pencil"></span>
                     </button>
-                    <button class="btn btn-xs btn-default os-btn-icon" ng-click="removeRole(role)">
+                    <button class="btn btn-xs btn-default os-btn-icon" ng-click="removeRole(role)"
+                      show-if-allowed="userAuthOpts.updateOpts">
                       <span class="fa fa-trash"></span>
                     </button>
                   </div>
@@ -54,7 +56,7 @@
       </div>
 
       <a class="list-group-item" ng-click="showAddRole()" translate="user.role.add_role"
-        ng-if="!addMode && allowAddRoles()">Add role...</a>
+        ng-if="!addMode && allowAddRoles()" show-if-allowed="userAuthOpts.updateOpts">Add role...</a>
 
       <div ng-if="addMode" class="os-inplace-form-edit-po">
         <div class="list-group-item">

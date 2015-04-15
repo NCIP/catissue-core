@@ -18,6 +18,14 @@ angular.module('os.administrative.models.user', ['os.common.models'])
       return this.firstName + ' ' + this.lastName;
     }
 
+    User.prototype.getInstitute = function() {
+      return $http.get(User.url() + this.id + '/institute').then(
+        function(result) {
+          return result.data;
+        }
+      );
+    }
+
     User.prototype.getRoles = function() {
       return this.roleModel.query();
     }
@@ -66,17 +74,12 @@ angular.module('os.administrative.models.user', ['os.common.models'])
     }
 
     User.getCurrentUserRoles = function() {
-      return $http.get(User.url() + 'current-user-roles').then(function(result) {
-        return result.data;
-      });
+      return $http.get(User.url() + 'current-user-roles').then(
+        function(result) {
+          return result.data;
+        }
+      );
     }
-
-    User.getInstitute = function(id) {
-      return $http.get(User.url() + id + '/institute').then(function(result) {
-        return result.data;
-      });
-    }
-
 
     return User;
   });

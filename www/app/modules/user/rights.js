@@ -1,10 +1,10 @@
 angular.module('openspecimen')
-  .directive('hasRights', function(AuthorizationService) {
+  .directive('showIfAllowed', function(AuthorizationService) {
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
-        scope.$watch(attrs.hasRights, function(oldOpts, newOpts) {
-          if (AuthorizationService.hasRights(newOpts)) {
+        scope.$watch(attrs.showIfAllowed, function(oldOpts, newOpts) {
+          if (AuthorizationService.isAllowed(newOpts)) {
             element.show();
           } else {
             element.hide();
@@ -14,7 +14,7 @@ angular.module('openspecimen')
     };
   })
 
-  .directive('isAdmin', function($rootScope) {
+  .directive('showIfAdmin', function($rootScope) {
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
