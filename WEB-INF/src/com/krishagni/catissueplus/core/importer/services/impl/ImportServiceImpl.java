@@ -38,6 +38,7 @@ import com.krishagni.catissueplus.core.importer.domain.ImportJob.Type;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema;
 import com.krishagni.catissueplus.core.importer.events.ImportDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportJobDetail;
+import com.krishagni.catissueplus.core.importer.events.ImportObjectDetail;
 import com.krishagni.catissueplus.core.importer.repository.ImportJobDao;
 import com.krishagni.catissueplus.core.importer.services.ImportService;
 import com.krishagni.catissueplus.core.importer.services.ObjectImporter;
@@ -253,11 +254,15 @@ public class ImportServiceImpl implements ImportService {
 				IOUtils.closeQuietly(objReader);
 				closeQueitly(csvWriter);
 			}
-		}		
+		}
 		
 		private String importObject(final ObjectImporter<Object> importer, Object object) {
 			try {
-				final RequestEvent<Object> req = new RequestEvent<Object>(object);
+				ImportObjectDetail<Object> detail = new ImportObjectDetail<Object>();
+				detail.setCreate(job.getType() == Type.CREATE);
+				detail.setObject(object);
+				
+				final RequestEvent<ImportObjectDetail<Object>> req = new RequestEvent<ImportObjectDetail<Object>>(detail);
 				ResponseEvent<Object> resp = txTmpl.execute(
 						new TransactionCallback<ResponseEvent<Object>>() {
 							@Override

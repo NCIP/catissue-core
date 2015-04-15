@@ -105,9 +105,15 @@ public class InstituteServiceImpl implements InstituteService {
 		try {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 			
-			InstituteDetail detail = req.getPayload();
+			InstituteDetail detail = req.getPayload();			
+			Institute existing = null;
 			
-			Institute existing = daoFactory.getInstituteDao().getById(detail.getId());
+			if (detail.getId() != null) {
+				existing = daoFactory.getInstituteDao().getById(detail.getId());
+			} else if (StringUtils.isNotBlank(detail.getName())) {
+				existing = daoFactory.getInstituteDao().getInstituteByName(detail.getName());
+			}
+			
 			if (existing == null) {
 				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND);
 			}
