@@ -62,6 +62,7 @@
 
                 <mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenLabelPrintJob.hbm.xml"/>
                 <mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenLabelPrintJobItem.hbm.xml"/>
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ImportJob.hbm.xml"/>
 
 		<mapping resource="com/krishagni/rbac/resources/Group.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/GroupRole.hbm.xml"/>

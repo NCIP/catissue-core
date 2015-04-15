@@ -3,11 +3,14 @@ package com.krishagni.catissueplus.core.importer.events;
 import java.util.Date;
 
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.importer.domain.ImportJob;
 
 public class ImportJobDetail {
 	private Long id;
 	
 	private String name; 
+	
+	private String type;
 	
 	private String status;
 	
@@ -35,6 +38,14 @@ public class ImportJobDetail {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getStatus() {
@@ -83,5 +94,19 @@ public class ImportJobDetail {
 
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
+	}
+	
+	public static ImportJobDetail from(ImportJob job) {
+		ImportJobDetail detail = new ImportJobDetail();
+		detail.setId(job.getId());
+		detail.setName(job.getName());
+		detail.setType(job.getType().name());
+		detail.setStatus(job.getStatus().name());
+		detail.setCreatedBy(UserSummary.from(job.getCreatedBy()));
+		detail.setCreationTime(job.getCreationTime());
+		detail.setEndTime(job.getEndTime());
+		detail.setTotalRecords(job.getTotalRecords());
+		detail.setFailedRecords(job.getFailedRecords());
+		return detail;
 	}
 }

@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.importer.domain;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,6 +32,11 @@ public class ObjectSchema {
 	public static ObjectSchema parseSchema(String filePath) {
 		XStream parser = getSchemaParser();		
 		return (ObjectSchema)parser.fromXML(new File(filePath));
+	}
+	
+	public static ObjectSchema parseSchema(InputStream in) {
+		XStream parser = getSchemaParser();
+		return (ObjectSchema)parser.fromXML(in);
 	}
 	
 	private static XStream getSchemaParser() {

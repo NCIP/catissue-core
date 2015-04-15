@@ -1655,4 +1655,51 @@
       referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
+
+  <changeSet author="vpawar" id="Bulk import objects jobs table">
+    <createTable tableName="OS_BULK_IMPORT_JOBS">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="NAME" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="TYPE" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="STATUS" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="TOTAL_RECORDS" type="${int.type}">
+      </column>
+      <column name="FAILED_RECORDS" type="${int.type}">
+      </column>
+      <column name="CREATED_BY" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CREATION_TIME" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="END_TIME" type="${nullable.ts.type}">
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on bulk import creator column">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_BLK_IMP_JOBS_CREATED_BY"
+      baseTableName="OS_BULK_IMPORT_JOBS"
+      baseColumnNames="CREATED_BY"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Bulk import objects table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_BULK_IMPORT_JOBS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
 </databaseChangeLog>

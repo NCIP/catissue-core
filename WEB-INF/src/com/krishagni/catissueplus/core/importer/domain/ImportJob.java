@@ -12,7 +12,14 @@ public class ImportJob extends BaseEntity {
 		IN_PROGRESS
 	}
 	
+	public static enum Type {
+		CREATE,
+		UPDATE
+	}
+	
 	private String name; 
+	
+	private Type type;
 	
 	private Status status;
 	
@@ -32,6 +39,14 @@ public class ImportJob extends BaseEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
 	}
 
 	public Status getStatus() {

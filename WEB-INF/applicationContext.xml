@@ -470,6 +470,24 @@
     <property name="deInitializer" ref="deInitializer"/>
   </bean>
 
+  <bean id="importJobDao" class="com.krishagni.catissueplus.core.importer.repository.impl.ImportJobDaoImpl">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="objectSchemaFactory" class="com.krishagni.catissueplus.core.importer.services.impl.ObjectSchemaFactoryImpl">
+  </bean>
+
+  <bean id="objectImporterFactory" class="com.krishagni.catissueplus.core.importer.services.impl.ObjectImporterFactoryImpl">
+  </bean>
+
+  <bean id="importObjectsSvc" class="com.krishagni.catissueplus.core.importer.services.impl.ImportServiceImpl">
+    <property name="cfgSvc" ref="cfgSvc"/>
+    <property name="importJobDao" ref="importJobDao"/>
+    <property name="taskExecutor" ref="taskExecutor"/>
+    <property name="schemaFactory" ref="objectSchemaFactory"/>
+    <property name="importerFactory" ref="objectImporterFactory"/>
+    <property name="transactionManager" ref="transactionManager"/>
+  </bean>
 
   <task:scheduler id="taskScheduler" pool-size="1"/>
   <task:annotation-driven scheduler="taskScheduler"/>
