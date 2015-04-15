@@ -1,0 +1,43 @@
+<object-schema>
+  <name>site</name>
+  <record> 
+    <name>com.krishagni.catissueplus.core.administrative.events.SiteDetail</name>
+    
+    <field>
+      <caption>Name</caption>
+      <attribute>name</attribute>
+    </field>
+
+    <field>
+      <caption>Institute Name</caption>
+      <attribute>instituteName</attribute>
+    </field>
+
+    <field>
+      <caption>Code</caption>
+      <attribute>code</attribute>
+    </field>
+
+    <field>
+      <caption>Type</caption>
+      <attribute>type</attribute>
+    </field>
+
+    <field>
+      <caption>Address</caption>
+      <attribute>address</attribute>
+    </field>
+
+    <record>
+      <attribute>coordinators</attribute>
+      <multiple>true</multiple>
+      <caption>Coordinator</caption>
+      
+      <field>
+        <caption>Email Address</caption>
+        <attribute>emailAddress</attribute>
+      </field>
+    </record>
+  </record>
+</object-schema>
+

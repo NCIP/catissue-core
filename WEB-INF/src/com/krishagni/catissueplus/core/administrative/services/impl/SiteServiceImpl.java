@@ -106,7 +106,13 @@ public class SiteServiceImpl implements SiteService {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 			
 			SiteDetail detail = req.getPayload();
-			Site existing = daoFactory.getSiteDao().getById(detail.getId());
+			Site existing = null;			
+			if (detail.getId() != null) {
+				existing = daoFactory.getSiteDao().getById(detail.getId()); 
+			} else if (StringUtils.isNotBlank(detail.getName())) {
+				existing = daoFactory.getSiteDao().getSiteByName(detail.getName());
+			}
+			
 			if (existing == null) {
 				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 			}
