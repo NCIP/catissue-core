@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
@@ -15,6 +16,7 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Audited
+@AuditTable(value="CAT_DISTRIBUTION_PROTOCOL_AUD")
 public class DistributionProtocol {
 	private static final String ENTITY_NAME = "distribution_protocol";
 

@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.core.GrantedAuthority;
@@ -105,6 +106,7 @@ public class User extends BaseEntity implements UserDetails {
 		this.emailAddress = emailAddress;
 	}
 
+	@NotAudited
 	public AuthDomain getAuthDomain() {
 		return authDomain;
 	}
@@ -201,6 +203,7 @@ public class User extends BaseEntity implements UserDetails {
 		this.admin = admin;
 	}
 
+	@NotAudited
 	public Set<Password> getPasswords() {
 		return passwords;
 	}

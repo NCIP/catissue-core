@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
@@ -21,6 +22,7 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 
 @Audited
+@AuditTable(value="CAT_COLLECTION_PROTOCOL_AUD")
 public class CollectionProtocol extends BaseEntity {
 	private static final String ENTITY_NAME = "collection_protocol";
 	

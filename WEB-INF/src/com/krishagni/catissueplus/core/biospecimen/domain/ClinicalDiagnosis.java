@@ -1,8 +1,5 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
-import org.hibernate.envers.Audited;
-
-@Audited
 public class ClinicalDiagnosis {
 	private Long id;
 	

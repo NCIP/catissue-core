@@ -10,9 +10,11 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
 @Audited
+@AuditTable(value="CAT_CONSENT_TIER_RESPONSE_AUD")
 public class ConsentTierResponse {
 
 	private Long id;

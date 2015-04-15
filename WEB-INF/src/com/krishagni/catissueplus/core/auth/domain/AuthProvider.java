@@ -3,9 +3,6 @@ package com.krishagni.catissueplus.core.auth.domain;
 
 import java.util.Map;
 
-import org.hibernate.envers.Audited;
-
-@Audited
 public class AuthProvider {
 
 	private Long id;

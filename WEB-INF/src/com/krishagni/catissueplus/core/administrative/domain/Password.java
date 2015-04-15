@@ -5,7 +5,6 @@ import java.util.Date;
 
 import org.hibernate.envers.Audited;
 
-@Audited
 public class Password implements Comparable<Password>{
 
 	private Long id;
