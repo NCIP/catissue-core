@@ -16,9 +16,9 @@ angular.module('os.administrative.user',
         controller: function($scope) {
           // User Authorization Options
           $scope.userResource = {
-            createOpts: {resource: 'User', operation: 'Create'},
-            updateOpts: {resource: 'User', operation: 'Update'},
-            deleteOpts: {resource: 'User', operation: 'Delete'}
+            createOpts: {resource: 'User', operations: ['Create']},
+            updateOpts: {resource: 'User', operations: ['Update']},
+            deleteOpts: {resource: 'User', operations: ['Delete']}
           }
         },
         parent: 'signed-in'

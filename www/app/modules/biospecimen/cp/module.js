@@ -20,9 +20,9 @@ angular.module('os.biospecimen.cp',
         controller: function($scope) {
           // Collection Protocol Authorization Options
           $scope.cpResource = {
-            createOpts: {resource: 'CollectionProtocol', operation: 'Create'},
-            updateOpts: {resource: 'CollectionProtocol', operation: 'Update'},
-            deleteOpts: {resource: 'CollectionProtocol', operation: 'Delete'}
+            createOpts: {resource: 'CollectionProtocol', operations: ['Create']},
+            updateOpts: {resource: 'CollectionProtocol', operations: ['Update']},
+            deleteOpts: {resource: 'CollectionProtocol', operations: ['Delete']}
           }
         },
         parent: 'signed-in'

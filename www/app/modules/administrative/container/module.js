@@ -19,9 +19,9 @@ angular.module('os.administrative.container',
         controller: function($scope) {
           // Storage Container Authorization Options
           $scope.containerResource = {
-            createOpts: {resource: 'StorageContainer', operation: 'Create'},
-            updateOpts: {resource: 'StorageContainer', operation: 'Update'},
-            deleteOpts: {resource: 'StorageContainer', operation: 'Delete'}
+            createOpts: {resource: 'StorageContainer', operations: ['Create']},
+            updateOpts: {resource: 'StorageContainer', operations: ['Update']},
+            deleteOpts: {resource: 'StorageContainer', operations: ['Delete']}
           }
         },
         parent: 'signed-in'

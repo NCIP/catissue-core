@@ -5,5 +5,6 @@ angular.module('openspecimen')
        $rootScope.currentUser = currentUser;
      }
 
+     $scope.userCreateUpdateOpts = {resource: 'User', operations: ['Create', 'Update']};
      init();
   })
