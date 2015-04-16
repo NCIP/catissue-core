@@ -57,15 +57,40 @@ public class CollectionProtocolRegistrationsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<CprSummary> getRegistrations(
-			@RequestParam(value = "cpId", required = true) Long cpId,
-			@RequestParam(value = "query", required = false, defaultValue = "") String searchStr,
-			@RequestParam(value = "startAt", required = false, defaultValue = "0") int startAt,
-			@RequestParam(value = "maxRecs", required = false, defaultValue = "100") int maxRecs,
-			@RequestParam(value = "includeStats", required = false, defaultValue = "false") boolean includeStats) {
+			@RequestParam(value = "cpId",         required = true)
+			Long cpId,
+			
+			@RequestParam(value = "query",        required = false, defaultValue = "")
+			String searchStr,
+			
+			@RequestParam(value = "name",         required = false, defaultValue = "")
+			String name,
+			
+			@RequestParam(value = "ppid",         required = false, defaultValue = "")
+			String ppid,
+			
+			@RequestParam(value = "mrn",          required = false, defaultValue = "")
+			String mrn,
+			
+			@RequestParam(value = "empi",         required = false, defaultValue = "")
+			String empi,
+			
+			@RequestParam(value = "startAt",      required = false, defaultValue = "0")
+			int startAt,
+			
+			@RequestParam(value = "maxRecs",      required = false, defaultValue = "100")
+			int maxRecs,
+			
+			@RequestParam(value = "includeStats", required = false, defaultValue = "false") 
+			boolean includeStats) {
 
 		CprListCriteria crit = new CprListCriteria()
 			.cpId(cpId)
 			.query(searchStr)
+			.name(name)
+			.ppid(ppid)
+			.mrn(mrn)
+			.empi(empi)
 			.startAt(startAt)
 			.maxResults(maxRecs)
 			.includeStat(includeStats)
@@ -131,7 +156,7 @@ public class CollectionProtocolRegistrationsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public EntityFormRecords getFormRecords(@PathVariable("id") Long cprId,
-			@PathVariable("formCtxtId") Long formCtxtId) {
+			@PathVariable("formCtxtId") Long formCtxtId) { // TODO: Remove
 
 		GetEntityFormRecordsOp opDetail = new GetEntityFormRecordsOp();
 		opDetail.setEntityId(cprId);
