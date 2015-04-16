@@ -3417,7 +3417,7 @@
         <createSequence  sequenceName="CATISSUE_FORM_REC_ENTRY_SEQ"/>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-663">
-        <createSequence  sequenceName="CATISSUE_INSTITUTION_SEQ"/>
+        <createSequence  sequenceName="CATISSUE_INSTITUTION_SEQ" startValue="2"/>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-664">
         <createSequence  sequenceName="CATISSUE_INTF_COLUMN_DATA_SEQ"/>
@@ -3525,7 +3525,7 @@
         <createSequence  sequenceName="CATISSUE_USER_CP_ROLE_SEQ"/>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-700">
-        <createSequence  sequenceName="CATISSUE_USER_SEQ"/>
+        <createSequence  sequenceName="CATISSUE_USER_SEQ" startValue="2"/>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-701">
         <createSequence  sequenceName="CAT_CP_EXTAPP_STUDY_REL_SEQ"/>

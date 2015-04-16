@@ -338,7 +338,7 @@
     </addColumn>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Script ot map departments and institutes" dbms="mysql">
+  <changeSet author="nmarwaha" id="Script to map departments and institutes" dbms="mysql">
     <sql>
       insert into os_departments(name,institute_id)
       (select distinct d.name, u.institution_id from catissue_user u
@@ -348,6 +348,22 @@
       update catissue_user u join os_departments od on od.institute_id = u.institution_id
       join catissue_department d on d.name = od.name 
       set u.dpt_id = od.identifier where d.identifier = u.department_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="marwahan" id="Mapping departments" dbms="oracle">
+    <sql>
+      insert into os_departments(identifier,name,institute_id)
+      (select OS_DEPARTMENTS_SEQ.nextval, d.name, u.institution_id from catissue_user u
+      join catissue_department d on d.identifier = u.department_id)
+    </sql>
+    <sql>
+      update catissue_user u set u.dpt_id = 
+      (
+        select od.identifier from os_departments od 
+        join catissue_user usr on od.institute_id = usr.institution_id
+        join catissue_department d on d.name = od.name where d.identifier = usr.department_id
+      )
     </sql>
   </changeSet>
   
@@ -388,7 +404,7 @@
 
   <changeSet author="vlonushte" id="Adding password column to user table">
     <addColumn tableName="CATISSUE_USER">
-      <column name="password" type="${text.type}(64)"/>
+      <column name="PASSWORD" type="${text.type}(64)"/>
     </addColumn>
   </changeSet>
   
@@ -399,6 +415,24 @@
 
     <dropColumn
       columnName="INSTITUTION_ID"
+      tableName="CATISSUE_USER"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Drop CRG column from CATISSUE_USER" failOnError="false">
+    <dropColumn
+      columnName="CANCER_RESEARCH_GROUP_ID"
+      tableName="CATISSUE_USER"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Drop CSM_USER_ID column from CATISSUE_USER" failOnError="false">
+    <dropColumn
+      columnName="CSM_USER_ID"
+      tableName="CATISSUE_USER"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Drop WUSTLKEY column from CATISSUE_USER" failOnError="false">
+    <dropColumn
+      columnName="WUSTLKEY"
       tableName="CATISSUE_USER"/>
   </changeSet>
  
@@ -1237,6 +1271,14 @@
       incrementBy="1" 
       ordered="true"/>
   </changeSet>
+  
+  <changeSet author="nmarwaha" id="Config settings table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_CFG_SETTINGS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
 
   <changeSet author="vpawar" id="FK on module id of config properties table">
     <addForeignKeyConstraint 
@@ -1348,7 +1390,8 @@
 
   <changeSet author="vpawar" id="Print specimen label jobs table">
     <createTable tableName="OS_SPECIMEN_LABEL_PRINT_JOBS">
-      <column name="IDENTIFIER" type="${int.type}">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="PK_OS_SP_LABEL_PRINT_JOBS"/>
       </column>
 
       <column name="SUBMITTED_BY" type="${int.type}">
@@ -1361,13 +1404,6 @@
     </createTable>
   </changeSet>
   
-  <changeSet author="marwahan" id="Primary key for Print specimen label jobs table">
-    <addPrimaryKey columnNames="identifier" constraintName="PK_OS_SP_LABEL_PRINT_JOBS" tableName="OS_SPECIMEN_LABEL_PRINT_JOBS"/>
-  </changeSet>
-  <changeSet author="marwahan" id="Auto increment for identifier in OS_SPECIMEN_LABEL_PRINT_JOBS table">
-    <addAutoIncrement columnDataType="${int.type}" columnName="IDENTIFIER" incrementBy="1" tableName="OS_SPECIMEN_LABEL_PRINT_JOBS"/>
-  </changeSet>
-
   <changeSet author="vpawar" id="Specimen print label jobs sequence" dbms="oracle">
     <createSequence 
       sequenceName="OS_SPEC_LABEL_PRINT_JOBS_SEQ" 
@@ -1387,7 +1423,8 @@
 
   <changeSet author="vpawar" id="Print specimen label job items table">
     <createTable tableName="OS_SPEC_LABEL_PRINT_JOB_ITEMS">
-      <column name="IDENTIFIER" type="${int.type}" >
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="PK_OS_SP_LBL_PRNT_JOB_ITEMS"/>
       </column>
 
       <column name="JOB_ID" type="${int.type}">
@@ -1418,14 +1455,6 @@
     </createTable>
   </changeSet>
   
-  <changeSet author="marwahan" id="Primary key for Print specimen label items">
-    <addPrimaryKey columnNames="identifier" constraintName="PK_OS_SP_LBL_PRNT_JOB_ITEMS" tableName="OS_SPEC_LABEL_PRINT_JOB_ITEMS"/>
-  </changeSet>
-  
-  <changeSet author="marwahan" id="Auto increment for identifier in OS_SPEC_LABEL_PRINT_JOB_ITEMS table">
-    <addAutoIncrement columnDataType="${int.type}" columnName="IDENTIFIER" incrementBy="1" tableName="OS_SPEC_LABEL_PRINT_JOB_ITEMS"/>
-  </changeSet>
-
   <changeSet author="vpawar" id="Specimen label print job items sequence" dbms="oracle">
     <createSequence 
       sequenceName="OS_SPEC_LBL_PRN_JOB_ITEMS_SEQ" 
@@ -1466,8 +1495,8 @@
               '-' , concat(
                 sub.subject_id, concat(
                   '-', concat(
-                    coalesce(sub.cp_id, 'A') , concat(
-                      '-', coalesce(sub.site_id, 'A')
+                    coalesce(cast(sub.cp_id as char), 'A') , concat(
+                      '-', coalesce(cast(sub.site_id as char), 'A')
                     )
                   )
                 )
@@ -1477,7 +1506,7 @@
           sub.subject_id as subject_id, 
           sub.cp_id as cp_id, 
           sub.site_id as site_id, 
-          res.name as resource, 
+          res.name as resource_name, 
           ops.name as operation
         from 
           rbac_subject_roles sub 
@@ -1655,7 +1684,6 @@
       referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
-
   <changeSet author="vpawar" id="Bulk import objects jobs table">
     <createTable tableName="OS_BULK_IMPORT_JOBS">
       <column name="IDENTIFIER" type="${int.type}">
@@ -1693,13 +1721,16 @@
       referencedTableName="CATISSUE_USER"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
-
   <changeSet author="vpawar" id="Bulk import objects table sequence" dbms="oracle">
-    <createSequence 
-      sequenceName="OS_BULK_IMPORT_JOBS_SEQ" 
-      startValue="1" 
-      incrementBy="1" 
+    <createSequence
+      sequenceName="OS_BULK_IMPORT_JOBS_SEQ"
+      startValue="1"
+      incrementBy="1"
       ordered="true" />
   </changeSet>
-
+  <changeSet author="nmarwaha" id="Updating activity status for Specimen Req table" >
+    <sql>
+      update catissue_cp_req_specimen set activity_status = 'Active' where activity_status is null
+    </sql>
+  </changeSet>
 </databaseChangeLog>

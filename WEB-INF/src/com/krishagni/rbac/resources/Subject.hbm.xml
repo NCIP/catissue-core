@@ -71,7 +71,7 @@
         rbac_subject_access_view
       where
         subject_id = :subjectId and
-        resource = :resource and
+        resource_name = :resource and
         operation = :operation and
         (cp_id = :cpId or cp_id is null) 
     </sql-query>
@@ -85,7 +85,7 @@
         rbac_subject_access_view
       where
         subject_id = :subjectId and
-        resource = :resource and
+        resource_name = :resource and
         operation = :operation and
         (cp_id = :cpId or cp_id is null) and
         (site_id in (:siteIds) or site_id is null)
@@ -100,7 +100,7 @@
       from 
         rbac_subject_access_view
       where
-        resource = :resource 
+        resource_name = :resource 
         and operation = :operation
         and subject_id = :userId
     </sql-query>

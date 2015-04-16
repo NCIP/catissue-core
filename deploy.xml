@@ -560,6 +560,24 @@
 			<replacefilter token="@@datasourcejndi@@" value="${datasource.jndi}" />
 			<replacefilter token="@@datasourcetype@@" value="${datasource.type}" />
 		</replace>
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<replace file="${temp.dir}/catissuecore/WEB-INF/classes/application.properties">
+					<replacefilter token="@@datasource.dialect@@" value="${mysql.dialect.string}" />
+				</replace>
+			</then>
+
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<replace file="${temp.dir}/catissuecore/WEB-INF/classes/application.properties">
+						<replacefilter token="@@datasource.dialect@@" value="${oracle.dialect.string}" />
+					</replace>
+				</then>
+			</elseif>
+		</if>
+
 		<war destfile="${temp.dir}/catissuecore.war"
 			webxml="${temp.dir}/catissuecore/WEB-INF/web.xml" manifest="${base.dir}/MANIFEST.MF">
 			<fileset dir="${temp.dir}/catissuecore">

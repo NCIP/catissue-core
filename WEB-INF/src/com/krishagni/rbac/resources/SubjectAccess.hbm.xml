@@ -26,7 +26,7 @@
       cascade="none"
       column="SITE_ID"/>
 
-    <property name="resource" column="RESOURCE"/>
+    <property name="resource" column="RESOURCE_NAME"/>
 
     <property name="operation" column="OPERATION"/>
   </class> 
