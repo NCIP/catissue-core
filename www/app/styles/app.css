@@ -317,36 +317,40 @@ h4 + .btn-group {
   position: relative;
 }
 
-.os-page-hdr .os-btns a.btn, 
-.os-page-hdr .os-btns button {
+.os-btns a.btn, 
+.os-btns button {
   border-radius: 3px;
   padding: 4px 10px;
   display: inline-block;
 }
 
-.os-page-hdr .os-btns button.primary {
+.os-btns button.primary {
   color: #fff;
   background: #428bca;
   border: 1px solid #357ebd;
 }
 
-.os-page-hdr .os-btns button.primary:hover {
+.os-btns button.primary:hover {
   color: #fff;
   background: #3071a9;
   border: 1px solid #357ebd;
 }
 
-.os-page-hdr .os-btns a.default,
-.os-page-hdr .os-btns button.default {
+.os-btns a.default,
+.os-btns button.default {
   color: #666666;
   background: #f5f5f5;
   border: 1px solid #ccc;
 }
 
-.os-page-hdr .os-btns a.default:hover,
-.os-page-hdr .os-btns button.default:hover {
+.os-btns a.default:hover,
+.os-btns button.default:hover {
   background: #ddd;
   border: 1px solid #a5a5a5;
+}
+
+.os-btns button.full-width {
+  width: 100%;
 }
 
 .os-page-hdr .os-btns.right {

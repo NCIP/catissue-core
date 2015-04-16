@@ -13,8 +13,10 @@ angular.module('os.biospecimen.models.cpr',
         }
       );
  
-    CollectionProtocolRegistration.listForCp = function(cpId, includeStats) {
-      return CollectionProtocolRegistration.query({cpId: cpId, includeStats: !!includeStats});
+    CollectionProtocolRegistration.listForCp = function(cpId, includeStats, filterOpts) {
+      var params = {cpId: cpId, includeStats: !!includeStats};
+      angular.extend(params, filterOpts || {});
+      return CollectionProtocolRegistration.query(params);
     };
 
     CollectionProtocolRegistration.prototype.$saveProps = function() {
