@@ -11,7 +11,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
-@Audited
 public class DistributionOrder extends BaseEntity {
 	public enum Status { 
 		PENDING,

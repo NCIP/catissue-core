@@ -12,6 +12,7 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 @Audited
 @AuditTable(value="CAT_CONSENT_TIER_RESPONSE_AUD")
@@ -41,6 +42,7 @@ public class ConsentTierResponse {
 		this.response = response;
 	}
 
+	@NotAudited
 	public ConsentTier getConsentTier() {
 		return consentTier;
 	}
@@ -49,6 +51,7 @@ public class ConsentTierResponse {
 		this.consentTier = consentTier;
 	}
 
+	@NotAudited
 	public CollectionProtocolRegistration getCpr() {
 		return cpr;
 	}

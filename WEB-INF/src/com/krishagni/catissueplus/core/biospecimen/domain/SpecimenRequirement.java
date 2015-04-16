@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -176,6 +177,7 @@ public class SpecimenRequirement {
 		this.receiver = receiver;
 	}
 
+	@NotAudited
 	public CollectionProtocolEvent getCollectionProtocolEvent() {
 		return collectionProtocolEvent;
 	}
@@ -204,6 +206,7 @@ public class SpecimenRequirement {
 		this.activityStatus = activityStatus;
 	}
 
+	@NotAudited
 	public SpecimenRequirement getParentSpecimenRequirement() {
 		return parentSpecimenRequirement;
 	}
@@ -212,6 +215,7 @@ public class SpecimenRequirement {
 		this.parentSpecimenRequirement = parentSpecimenRequirement;
 	}
 
+	@NotAudited
 	public Set<SpecimenRequirement> getChildSpecimenRequirements() {
 		return childSpecimenRequirements;
 	}
@@ -220,6 +224,7 @@ public class SpecimenRequirement {
 		this.childSpecimenRequirements = childSpecimenRequirements;
 	}
 
+	@NotAudited
 	public Set<Specimen> getSpecimens() {
 		return specimens;
 	}

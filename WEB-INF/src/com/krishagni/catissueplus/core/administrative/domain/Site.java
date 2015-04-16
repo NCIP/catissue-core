@@ -5,7 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
@@ -108,6 +110,7 @@ public class Site extends BaseEntity {
 		this.coordinators = coordinators;
 	}
 
+	@NotAudited
 	public Set<Visit> getVisits() {
 		return visits;
 	}
@@ -116,6 +119,7 @@ public class Site extends BaseEntity {
 		this.visits = visits;
 	}
 
+	@NotAudited
 	public Set<StorageContainer> getStorageContainers() {
 		return storageContainers;
 	}
@@ -124,6 +128,7 @@ public class Site extends BaseEntity {
 		this.storageContainers = storageContainers;
 	}
 	
+	@NotAudited
 	public Set<CollectionProtocol> getCollectionProtocols() {
 		return collectionProtocols;
 	}
@@ -132,6 +137,7 @@ public class Site extends BaseEntity {
 		this.collectionProtocols = collectionProtocols;
 	}
 
+	@NotAudited
 	public Set<ParticipantMedicalIdentifier> getPmis() {
 		return pmis;
 	}
@@ -140,6 +146,7 @@ public class Site extends BaseEntity {
 		this.pmis = pmis;
 	}
 
+	@NotAudited
 	public Set<CollectionProtocolEvent> getCollectionProtocolEvents() {
 		return collectionProtocolEvents;
 	}

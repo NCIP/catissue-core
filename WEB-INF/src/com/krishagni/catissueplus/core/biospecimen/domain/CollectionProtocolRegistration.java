@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -95,6 +96,7 @@ public class CollectionProtocolRegistration {
 		this.collectionProtocol = collectionProtocol;
 	}
 
+	@NotAudited
 	public Collection<Visit> getVisits() {
 		return visits;
 	}

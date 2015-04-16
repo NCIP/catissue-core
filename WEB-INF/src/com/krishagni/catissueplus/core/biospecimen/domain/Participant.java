@@ -173,6 +173,7 @@ public class Participant extends BaseEntity {
 		this.pmis = pmis;
 	}
 
+	@NotAudited
 	public Set<CollectionProtocolRegistration> getCprs() {
 		return cprs;
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
@@ -55,6 +56,7 @@ public class Institute extends BaseEntity {
 		this.departments = departments;
 	}
 	
+	@NotAudited
 	public Set<Site> getSites() {
 		return sites;
 	}

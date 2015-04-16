@@ -25,6 +25,7 @@ public class Department extends BaseEntity {
 		this.name = name;
 	}
 
+	@NotAudited
 	public Institute getInstitute() {
 		return institute;
 	}
@@ -33,6 +34,7 @@ public class Department extends BaseEntity {
 		this.institute = institute;
 	}
 
+	@NotAudited
 	public Set<User> getUsers() {
 		return users;
 	}

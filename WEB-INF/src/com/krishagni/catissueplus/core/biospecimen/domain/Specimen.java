@@ -330,6 +330,7 @@ public class Specimen extends BaseEntity {
 		this.parentSpecimen = parentSpecimen;
 	}
 
+	@NotAudited
 	public Set<Specimen> getChildCollection() {
 		return childCollection;
 	}

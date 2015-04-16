@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -228,6 +229,7 @@ public class StorageContainer extends BaseEntity {
 		this.comments = comments;
 	}
 
+	@NotAudited
 	public Set<StorageContainer> getChildContainers() {
 		return childContainers;
 	}
@@ -236,6 +238,7 @@ public class StorageContainer extends BaseEntity {
 		this.childContainers = childContainers;
 	}
 
+	@NotAudited
 	public Set<StorageContainer> getAncestorContainers() {
 		return ancestorContainers;
 	}
@@ -244,6 +247,7 @@ public class StorageContainer extends BaseEntity {
 		this.ancestorContainers = ancestorContainers;
 	}
 
+	@NotAudited
 	public Set<StorageContainer> getDescendentContainers() {
 		return descendentContainers;
 	}
@@ -292,6 +296,7 @@ public class StorageContainer extends BaseEntity {
 		this.position = position;
 	}
 
+	@NotAudited
 	public Set<StorageContainerPosition> getOccupiedPositions() {
 		return occupiedPositions;
 	}
@@ -309,6 +314,7 @@ public class StorageContainer extends BaseEntity {
 		this.stats = stats;
 	}
 	
+	@NotAudited
 	public Set<String> getCompAllowedSpecimenClasses() {
 		return compAllowedSpecimenClasses;
 	}
@@ -317,6 +323,7 @@ public class StorageContainer extends BaseEntity {
 		this.compAllowedSpecimenClasses = compAllowedSpecimenClasses;
 	}
 
+	@NotAudited
 	public Set<String> getCompAllowedSpecimenTypes() {
 		return compAllowedSpecimenTypes;
 	}
@@ -325,6 +332,7 @@ public class StorageContainer extends BaseEntity {
 		this.compAllowedSpecimenTypes = compAllowedSpecimenTypes;
 	}
 
+	@NotAudited
 	public Set<CollectionProtocol> getCompAllowedCps() {
 		return compAllowedCps;
 	}

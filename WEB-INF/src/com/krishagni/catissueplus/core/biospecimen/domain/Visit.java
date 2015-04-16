@@ -8,6 +8,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -199,6 +200,7 @@ public class Visit {
 		this.cpEvent = cpEvent;
 	}
 
+	@NotAudited
 	public Set<Specimen> getSpecimens() {
 		return specimens;
 	}

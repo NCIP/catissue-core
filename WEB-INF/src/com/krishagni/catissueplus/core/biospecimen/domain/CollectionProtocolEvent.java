@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 
@@ -59,6 +60,7 @@ public class CollectionProtocolEvent {
 		this.eventPoint = eventPoint;
 	}
 
+	@NotAudited
 	public CollectionProtocol getCollectionProtocol() {
 		return collectionProtocol;
 	}
@@ -99,6 +101,7 @@ public class CollectionProtocolEvent {
 		this.activityStatus = activityStatus;
 	}
 
+	@NotAudited
 	public Set<SpecimenRequirement> getSpecimenRequirements() {
 		return specimenRequirements;
 	}
@@ -122,6 +125,7 @@ public class CollectionProtocolEvent {
 		return anticipated;
 	}
 
+	@NotAudited
 	public Set<Visit> getSpecimenCollectionGroups() {
 		return specimenCollectionGroups;
 	}

@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 
@@ -35,6 +36,7 @@ public class ParticipantMedicalIdentifier extends BaseEntity {
 		this.site = site;
 	}
 
+	@NotAudited
 	public Participant getParticipant() {
 		return participant;
 	}

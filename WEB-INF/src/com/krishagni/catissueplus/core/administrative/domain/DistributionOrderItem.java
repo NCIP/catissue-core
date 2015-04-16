@@ -1,11 +1,8 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import org.hibernate.envers.Audited;
-
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 
-@Audited
 public class DistributionOrderItem extends BaseEntity {
 	private DistributionOrder order;
 	

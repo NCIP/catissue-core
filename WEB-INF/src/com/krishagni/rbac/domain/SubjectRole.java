@@ -1,11 +1,8 @@
 package com.krishagni.rbac.domain;
 
-import org.hibernate.envers.Audited;
-
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 
-@Audited
 public class SubjectRole {
 	private Long id;
 	

@@ -5,14 +5,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.hibernate.Session;
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
 
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
-@Audited
 public class Subject {
 	private Long id;
 	
@@ -49,7 +46,6 @@ public class Subject {
 		this.roles = subjectRoles;
 	}
 	
-	@NotAudited
 	public Set<SubjectAccess> getAccessList() {
 		return accessList;
 	}

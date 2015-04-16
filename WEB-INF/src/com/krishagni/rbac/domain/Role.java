@@ -3,11 +3,8 @@ package com.krishagni.rbac.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.envers.Audited;
-
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 
-@Audited
 public class Role {
 	private Long id;
 
