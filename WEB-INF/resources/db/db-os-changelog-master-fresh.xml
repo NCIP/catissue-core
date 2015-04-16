@@ -16,4 +16,6 @@
   <include file="db/db-os-changelog-2.0.xml"/>
   <include file="db/db-os-config-2.0.xml"/>
   <include file="db/db-os-seed-data-2.0.xml"/>
+  <include file="db/db-os-changelog-envers-mysql.xml"/>
+  <include file="db/db-os-changelog-envers-oracle.xml"/>
 </databaseChangeLog> 
