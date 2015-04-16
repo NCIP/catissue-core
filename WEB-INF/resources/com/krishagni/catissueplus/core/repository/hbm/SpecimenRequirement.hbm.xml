@@ -145,6 +145,8 @@
       <key column="PARENT_SPECIMEN_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"/>
     </set>
+
+    <filter name="activeEntity"/>
   </class>
 </hibernate-mapping>
 

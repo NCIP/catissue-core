@@ -74,6 +74,7 @@
       <key column="COLLECTION_PROTOCOL_EVENT_ID"/>
       <one-to-many
             class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"/>
+      <filter name="activeEntity"/>
     </set>
 
     <set
@@ -87,7 +88,14 @@
 
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Visit"/>
     </set>
+
+    <filter name="activeEntity"/>
+
+    <query name="getCpeById">
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent cpe
+      where
+        cpe.id = :cpeId
+    </query>
   </class>
 </hibernate-mapping>
-
-

@@ -92,6 +92,15 @@ public class CollectionProtocolEventsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();		
 	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value="/{eventId}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public CollectionProtocolEventDetail deleteEvent(@PathVariable("eventId") Long eventId) {
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.deleteEvent(new RequestEvent<Long>(eventId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(getSession(), payload);

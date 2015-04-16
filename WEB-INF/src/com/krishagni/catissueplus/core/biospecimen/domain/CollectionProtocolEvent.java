@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class CollectionProtocolEvent {
 	private static final String ENTITY_NAME = "collection_protocol_event";
@@ -106,11 +107,11 @@ public class CollectionProtocolEvent {
 	
 	public Set<SpecimenRequirement> getTopLevelAnticipatedSpecimens() {
 		Set<SpecimenRequirement> anticipated = new HashSet<SpecimenRequirement>();
-		if (specimenRequirements == null) {
+		if (getSpecimenRequirements() == null) {
 			return anticipated;
 		}
 		
-		for (SpecimenRequirement sr : specimenRequirements) {
+		for (SpecimenRequirement sr : getSpecimenRequirements()) {
 			if (sr.getParentSpecimenRequirement() == null) {
 				anticipated.add(sr);
 			}
@@ -144,10 +145,19 @@ public class CollectionProtocolEvent {
 	}
 	
 	public void copySpecimenRequirementsTo(CollectionProtocolEvent cpe) {
-		for (SpecimenRequirement sr : specimenRequirements) {
+		for (SpecimenRequirement sr : getSpecimenRequirements()) {
 			if (sr.getParentSpecimenRequirement() == null) {
 				cpe.addSpecimenRequirement(sr.deepCopy(cpe));
 			}			
 		}		
+	}
+	
+	public void delete() {
+		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
+		for (SpecimenRequirement sr : getSpecimenRequirements()) {
+			if (sr.getParentSpecimenRequirement() == null) {
+				sr.delete();
+			}
+		}
 	}
 }

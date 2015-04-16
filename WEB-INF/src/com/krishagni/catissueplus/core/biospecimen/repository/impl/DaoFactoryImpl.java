@@ -45,7 +45,6 @@ import com.krishagni.catissueplus.core.notification.repository.impl.ExternalAppN
 import com.krishagni.catissueplus.core.notification.repository.impl.ExternalApplicationDaoImpl;
 
 public class DaoFactoryImpl implements DaoFactory {
-
 	private SessionFactory sessionFactory;
 
 	public SessionFactory getSessionFactory() {
@@ -58,6 +57,7 @@ public class DaoFactoryImpl implements DaoFactory {
 
 	public void setSessionFactory(AbstractDao<?> dao) {
 		dao.setSessionFactory(sessionFactory);
+		sessionFactory.getCurrentSession().enableFilter("activeEntity");
 	}
 
 	@Override

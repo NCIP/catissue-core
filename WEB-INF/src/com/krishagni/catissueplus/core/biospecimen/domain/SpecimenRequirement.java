@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SpecimenRequirement {
 	private Long id;
@@ -303,6 +304,13 @@ public class SpecimenRequirement {
 			return cp.getDerivativeLabelFormat();
 		} else {
 			return cp.getSpecimenLabelFormat();
+		}
+	}
+	
+	public void delete() {
+		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
+		for (SpecimenRequirement childReq : getChildSpecimenRequirements()) {
+			childReq.delete();
 		}
 	}
 		

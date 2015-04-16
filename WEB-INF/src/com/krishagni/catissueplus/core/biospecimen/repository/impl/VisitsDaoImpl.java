@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsDao;
@@ -36,17 +38,23 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 		Map<String, VisitSummary> visitsMap = new HashMap<String, VisitSummary>();
 		
 		for (Object[] row : rows) {
+			Long visitId = (Long)row[0];
+			String eventStatus = (String)row[3];
+			if (visitId == null && StringUtils.isNotBlank(eventStatus) && eventStatus.equals("Disabled")) {
+				continue;
+			}
+			
 			VisitSummary visit = new VisitSummary();
-			visit.setId((Long)row[0]);
+			visit.setId(visitId);
 			visit.setEventId((Long)row[1]);
 			visit.setName((String)row[2]);
-			visit.setEventLabel((String)row[3]);
-			visit.setEventPoint((Integer)row[4]);
-			visit.setStatus((String)row[5]);
-			visit.setVisitDate((Date)row[6]);
+			visit.setEventLabel((String)row[4]);
+			visit.setEventPoint((Integer)row[5]);
+			visit.setStatus((String)row[6]);
+			visit.setVisitDate((Date)row[7]);
 			
 			Calendar cal = Calendar.getInstance();
-			cal.setTime((Date)row[7]);
+			cal.setTime((Date)row[8]);
 			cal.add(Calendar.DAY_OF_YEAR, visit.getEventPoint());
 			visit.setAnticipatedVisitDate(cal.getTime());
 			
