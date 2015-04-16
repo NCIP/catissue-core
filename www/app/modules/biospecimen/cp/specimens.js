@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
   .controller('CpSpecimensCtrl', function(
-    $scope, $state, $stateParams, $filter, $timeout,
+    $scope, $state, $stateParams, $filter, $timeout, $modal,
     cp, events, specimenRequirements,
     Specimen, SpecimenRequirement, PvManager, Alerts) {
 
@@ -191,6 +191,31 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
         }
       );
     };
+
+    $scope.deleteRequirement = function(sr) {
+      var modalInstance = $modal.open({
+        templateUrl: 'delete_sr.html',
+        controller: function($scope, $modalInstance) {
+          $scope.yes = function() {
+            $modalInstance.close(true);
+          }
+
+          $scope.no = function() {
+            $modalInstance.dismiss('cancel');
+          }
+        }
+      });
+
+      modalInstance.result.then(
+        function() {
+          sr.delete().then(
+            function() {
+              $state.go($state.current, {}, {reload: true});
+            }
+          );
+        }
+      );
+    }; 
 
     init();
   });

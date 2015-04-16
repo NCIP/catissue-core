@@ -107,11 +107,16 @@
     "clinical_diagnosis": "Clinical Diagnosis",
     "clinical_status": "Clinical Status",
 
+    "edit_cpe": "Edit Event",
+    "copy_cpe": "Copy Event",
+    "remove_cpe": "Delete Event",
     "no_cpes": "There are no collection protocol events to show. Please create an event by clicking on Add Event...",
     "add_cpe": "Add Event...",
     "cpe_list": "Events",
     "cpe_point": "Event Point (in Days)",
     "cpe_point_label": "Event Point Label",
+    "deleting_event": "Deleting Event...",
+    "confirm_delete_event": "Collection Protocol Event and its specimen requirements will be deleted. Are you sure you want to proceed?",
 
     "tab": {
       "overview": "Overview",
@@ -352,12 +357,15 @@
     "receiver": "Receiver",
     "collection_container": "Collection Container",
     "collection_proc": "Collection Procedure",
+    "deleting_sr": "Deleting Specimen Requirement",
+    "confirm_delete_sr": "Specimen Requirement and all its children will be deleted. Are you sure you want to proceed?",
     
     "ctx_menu": {
       "view_sr": "View Requirement",
       "edit_sr": "Edit Requirement",
       "create_aliquots": "Create Aliquots",
-      "create_derivatives": "Create Derivatives"
+      "create_derivatives": "Create Derivatives",
+      "delete": "Delete Requirement"
     },
  
     "buttons": {

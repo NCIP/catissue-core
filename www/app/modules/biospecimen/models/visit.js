@@ -4,8 +4,15 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
  
     function enrich(visits) {
       angular.forEach(visits, function(visit) {
-        visit.pendingSpecimens = visit.anticipatedSpecimens - (visit.collectedSpecimens + visit.uncollectedSpecimens);
-        visit.totalSpecimens = visit.anticipatedSpecimens + visit.unplannedSpecimens;
+        var actualSpecimenCnt = visit.collectedSpecimens + visit.uncollectedSpecimens;
+        if (actualSpecimenCnt <= visit.anticipatedSpecimens) {
+          visit.pendingSpecimens = visit.anticipatedSpecimens - actualSpecimenCnt;
+          visit.totalSpecimens = visit.anticipatedSpecimens + visit.unplannedSpecimens;
+        } else {
+          // usually occurs when specimens got collected and requirement was deleted later
+          visit.pendingSpecimens = 0;
+          visit.totalSpecimens = actualSpecimenCnt + visit.unplannedSpecimens;
+        }
       });
 
       return visits;

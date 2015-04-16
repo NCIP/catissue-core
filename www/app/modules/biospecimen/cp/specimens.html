@@ -98,6 +98,15 @@
                       </span>
                     </a>
                   </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a ng-click="deleteRequirement(sr)">
+                      <i class="fa fa-trash"></i>
+                      <span translate="srs.ctx_menu.delete">
+                        Delete
+                      </span>
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -122,3 +131,18 @@
 
 <div ng-include="'modules/biospecimen/cp/addedit-sr.html'" ng-if="view == 'addedit_sr'"> 
 </div>
+
+<script type="text/ng-template" id="delete_sr.html">
+  <div class="os-modal-header">
+    <span translate="srs.deleting_sr">Deleting Specimen Requirement</span>
+  </div>
+  <div class="os-modal-body">
+    <span translate="srs.confirm_delete_sr">
+      Specimen Requirement and all its children will be deleted. Are you sure you want to proceed?
+    </span>
+  </div>
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="no()" translate="common.buttons.cancel">Cancel</button>
+    <button class="btn btn-danger" ng-click="yes()" translate="common.yes">Yes</button>
+  </div>
+</script>
