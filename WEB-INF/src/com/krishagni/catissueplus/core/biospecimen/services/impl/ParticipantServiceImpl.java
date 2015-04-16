@@ -49,7 +49,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 			return ResponseEvent.userError(ParticipantErrorCode.NOT_FOUND);
 		}
 		
-		return ResponseEvent.response(ParticipantDetail.from(participant));
+		return ResponseEvent.response(ParticipantDetail.from(participant, false));
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 		try {
 			Participant participant = participantFactory.createParticipant(req.getPayload());
 			createParticipant(participant);
-			return ResponseEvent.response(ParticipantDetail.from(participant));
+			return ResponseEvent.response(ParticipantDetail.from(participant, false));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -95,7 +95,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 			existing.update(participant);
 			daoFactory.getParticipantDao().saveOrUpdate(existing);
-			return ResponseEvent.response(ParticipantDetail.from(existing));
+			return ResponseEvent.response(ParticipantDetail.from(existing, false));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -115,7 +115,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 			
 			participant.delete();
 			daoFactory.getParticipantDao().saveOrUpdate(participant);
-			return ResponseEvent.response(ParticipantDetail.from(participant));
+			return ResponseEvent.response(ParticipantDetail.from(participant, false));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -132,7 +132,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	public void createParticipant(Participant participant) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		ParticipantUtil.ensureUniqueSsn(daoFactory, participant.getSocialSecurityNumber(), ose);
-		ParticipantUtil.ensureUniquePmis(daoFactory, PmiDetail.from(participant.getPmis()), participant, ose);		
+		ParticipantUtil.ensureUniquePmis(daoFactory, PmiDetail.from(participant.getPmis(), false), participant, ose);		
 		ose.checkAndThrow();
 		
 		daoFactory.getParticipantDao().saveOrUpdate(participant);
@@ -148,7 +148,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 		}
 		
 		
-		List<PmiDetail> pmis = PmiDetail.from(newParticipant.getPmis());
+		List<PmiDetail> pmis = PmiDetail.from(newParticipant.getPmis(), false);
 		ParticipantUtil.ensureUniquePmis(daoFactory, pmis, existing, ose);
 		ose.checkAndThrow();
 		

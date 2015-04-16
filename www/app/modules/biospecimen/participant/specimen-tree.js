@@ -34,17 +34,6 @@ angular.module('os.biospecimen.participant.specimen-tree',
       selection.all = true;
     };
 
-    function selectChildrenSpecimens(specimen) {
-      if (!specimen.selected) {
-        return;
-      }
-
-      angular.forEach(specimen.children, function(child) {
-        child.selected = true;
-        selectChildrenSpecimens(child);
-      });
-    };
-
     function selectParentSpecimen(specimen) {
       if (!specimen.selected) {
         return false;
@@ -127,7 +116,6 @@ angular.module('os.biospecimen.participant.specimen-tree',
         };
 
         scope.toggleSpecimenSelect = function(specimen) {
-          selectChildrenSpecimens(specimen);
           selectParentSpecimen(specimen);  
           toggleAllSelected(scope.selection, scope.specimens, specimen);
 

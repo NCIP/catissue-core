@@ -1,0 +1,64 @@
+<div>
+  <div class="os-head">
+    <h3 class="os-title" translate="participant.filter_title">
+      Participants Filter
+    </h3>
+  </div>
+
+  <div class="os-body">
+    <div class="form-group">
+      <label class="control-label" translate="participant.ppid">Participant Protocol ID</label>
+      <div class="os-md-input">
+        <input type="text" ng-model="filterOpts.ppid" class="form-control"
+          placeholder="{{'participant.ppid' | translate}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label" translate="participant.mrn">Medical Record Number</label>
+      <div class="os-md-input">
+        <input type="text" ng-model="filterOpts.mrn" class="form-control"
+          placeholder="{{'participant.mrn' | translate}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label" translate="participant.mpi">Master Patient Index</label>
+      <div class="os-md-input">
+        <input type="text" ng-model="filterOpts.empi" class="form-control"
+          placeholder="{{'participant.mpi' | translate}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label" translate="participant.name">Name</label>
+      <div class="os-md-input">
+        <input type="text" ng-model="filterOpts.name" class="form-control"
+          placeholder="{{'participant.name' | translate}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label" translate="participant.birth_date">Birth Date</label>
+      <div class="os-md-input">
+        <input type="text" ng-model="filterOpts.dob" class="form-control" 
+          datepicker-popup="{{global.dateFmt}}" is-open="birthDt.isOpen" ng-focus="birthDt.isOpen=true" 
+          placeholder="{{'participant.birth_date' | translate}}"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label" translate="participant.spmn_label_or_barcode">Specimen Label/Barcode</label>
+      <div class="os-md-input">
+        <input type="text" ng-model="filterOpts.specimen" class="form-control"
+          placeholder="{{'participant.spmn_label_or_barcode' | translate}}">
+      </div>
+    </div>
+
+    <div class="form-group os-btns">
+      <button class="default full-width" translate="common.buttons.clear_filters" ng-click="clearFilters()">
+        Clear Filters
+      </button>
+    </div>
+  </div>
+</div>

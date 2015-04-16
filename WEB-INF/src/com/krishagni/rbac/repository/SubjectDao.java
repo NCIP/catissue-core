@@ -16,4 +16,6 @@ public interface SubjectDao extends Dao<Subject> {
 	public boolean canUserPerformOps(Long subjectId, String resource, String[] ops);
 	
 	public List<SubjectAccess> getAccessList(Long subjectId, String resource, String[] ops);
+	
+	public List<SubjectAccess> getAccessList(Long subjectId, Long cpId, String resource, String[] ops);
 }

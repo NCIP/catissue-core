@@ -106,7 +106,13 @@ public class SiteServiceImpl implements SiteService {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 			
 			SiteDetail detail = req.getPayload();
-			Site existing = daoFactory.getSiteDao().getById(detail.getId());
+			Site existing = null;			
+			if (detail.getId() != null) {
+				existing = daoFactory.getSiteDao().getById(detail.getId()); 
+			} else if (StringUtils.isNotBlank(detail.getName())) {
+				existing = daoFactory.getSiteDao().getSiteByName(detail.getName());
+			}
+			
 			if (existing == null) {
 				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 			}
@@ -226,18 +232,18 @@ public class SiteServiceImpl implements SiteService {
 	
 	private Site getFromAccessibleSite(SiteQueryCriteria crit) {
 		Set<Site> accessibleSites = AccessCtrlMgr.getInstance().getRoleAssignedSites();
-				
-
+		
 		Long siteId = crit.getId();
 		String siteName = crit.getName();
-
 		Site result = null;		
 		for (Site site : accessibleSites) {
 			if (siteId != null && siteId.equals(site.getId())) {
 				result = site;
-				break;
 			} else if (StringUtils.isNotBlank(siteName) && siteName.equals(site.getName())) {
 				result = site;
+			}
+			
+			if (result != null) {
 				break;
 			}
 		}

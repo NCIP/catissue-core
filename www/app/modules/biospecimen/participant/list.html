@@ -11,6 +11,10 @@
         <span class="fa fa-plus"></span>
         <span translate="participant.buttons.register">Register</span>
       </button>
+      <button class="default" os-right-drawer-toggle title="{{'participant.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
+      </button>
     </div>
   </div>
 
@@ -40,4 +44,6 @@
       </div>
     </div>
   </div>
+
+  <div os-right-drawer ng-include="'modules/biospecimen/participant/search.html'"></div>
 </div>

@@ -24,22 +24,34 @@
     http://www.springframework.org/schema/tx 
     http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-  <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
-
+  <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="location" value="classpath:application.properties"/>
+  </bean>  
+  
+  <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+    <property name="jndiName" value="${datasource.jndi}"/>
+  </bean>
+  
+  <bean id="de-liquibase" class="liquibase.integration.spring.SpringLiquibase">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="changeLog" value="classpath:db.changelog-master.xml" />
+  </bean>
+  <bean id="os-liquibase" class="liquibase.integration.spring.SpringLiquibase" depends-on="de-liquibase">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="changeLog" value="classpath:db/db-os-changelog-master-${datasource.type}.xml" />
+  </bean>
+  
   <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource" />
     <property name="configLocation">
       <value>classpath:hibernate.cfg.xml</value>
     </property>
     <property name="hibernateProperties">
       <props>
-        <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+        <prop key="hibernate.dialect">${datasource.dialect}</prop>
         <prop key="hibernate.show_sql">true</prop>
       </props>
     </property>
-  </bean>
-
-  <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-    <property name="jndiName" value="java:/catissuecore"/>
   </bean>
 
   <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
@@ -49,6 +61,12 @@
   <bean id="serviceInterceptor" class="com.krishagni.catissueplus.core.common.TransactionalInterceptor" factory-method="aspectOf">
     <property name="transactionManager" ref="transactionManager"/>
   </bean>
+  
+  <bean id="cfgSvc" class="com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+  
+  <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
   
   <bean id="biospecimenDaoFactory" class="com.krishagni.catissueplus.core.biospecimen.repository.impl.DaoFactoryImpl">
     <property name="sessionFactory" ref="sessionFactory"/>
@@ -106,30 +124,6 @@
     <property name="specimenSvc" ref="specimenSvc"/>
   </bean>
 
-  <bean id="bulkOperationService" class="com.krishagni.catissueplus.bulkoperator.services.impl.BulkOperationServiceImpl">
-    <property name="bulkOperationDao" ref="bulkOperationDao"/>
-    <property name="jobDao" ref="bulkOperationJobDao"/>
-    <property name="userDao" ref="userDao"/>
-    <property name="importerFactory" ref="importerFactory"/>
-  </bean>
-
-  <bean id="importerFactory" class="com.krishagni.catissueplus.bulkoperator.services.impl.ObjectImporterFactoryImpl">
-    <property name="importersMap">
-      <map>
-        <entry key="ParticipantRegistrationDetails" value-ref="cprObjectImporter"/>
-        <entry key="VisitDetail" value-ref="visitObjectImporter"/>
-      </map>
-    </property>
-  </bean>
-  
-  <bean id="cprObjectImporter" class="com.krishagni.catissueplus.bulkoperator.services.impl.CprObjectImporter">
-	<property name="cprSvc" ref="cprSvc"/>
-  </bean>
-  
-  <bean id="visitObjectImporter" class="com.krishagni.catissueplus.bulkoperator.services.impl.VisitObjectImporter">
-	<property name="visitService" ref="visitService"/>
-  </bean>
-  
   <bean id="cpFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolFactoryImpl">
     <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
@@ -179,7 +173,6 @@
   <bean id="cprSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolRegistrationServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="cprFactory" ref="cprFactory"/>
-    <property name="visitFactory" ref="visitFactory"/>
     <property name="participantService" ref="participantSvc"/>
   </bean>
 
@@ -261,14 +254,6 @@
   </bean>
 
   <bean id="userDao" class="com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl">
-    <property name="sessionFactory" ref="sessionFactory"/>
-  </bean>
-  
-  <bean id="bulkOperationDao" class="com.krishagni.catissueplus.bulkoperator.repository.impl.BulkOperationDaoImpl">
-    <property name="sessionFactory" ref="sessionFactory"/>
-  </bean>
-  
-  <bean id="bulkOperationJobDao" class="com.krishagni.catissueplus.bulkoperator.repository.impl.BulkOperationJobDaoImpl">
     <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
   
@@ -432,10 +417,6 @@
     <property name="cfgSvc" ref="cfgSvc"/>
   </bean>
 
-  <bean id="cfgSvc" class="com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>
-
   <bean id="printLabelTokensRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
     <property name="tokens">
       <list>
@@ -489,6 +470,46 @@
     <property name="deInitializer" ref="deInitializer"/>
   </bean>
 
+  <!-- Move these to importer-beans.xml -->
+  <bean id="importJobDao" class="com.krishagni.catissueplus.core.importer.repository.impl.ImportJobDaoImpl">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="objectSchemaFactory" class="com.krishagni.catissueplus.core.importer.services.impl.ObjectSchemaFactoryImpl">
+    <property name="schemaResources">
+      <list>
+        <value>com/krishagni/catissueplus/core/administrative/schema/institute.xml</value>
+        <value>com/krishagni/catissueplus/core/administrative/schema/site.xml</value>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="instituteImporter" class="com.krishagni.catissueplus.core.administrative.services.impl.InstituteImporter">
+    <property name="instituteSvc" ref="instSvc"/>
+  </bean>
+
+  <bean id="siteImporter" class="com.krishagni.catissueplus.core.administrative.services.impl.SiteImporter">
+    <property name="siteSvc" ref="siteService"/>
+  </bean>
+
+  <bean id="objectImporterFactory" class="com.krishagni.catissueplus.core.importer.services.impl.ObjectImporterFactoryImpl">
+    <property name="importersMap">
+      <map>
+        <entry key="institute" value-ref="instituteImporter"/>
+        <entry key="site"      value-ref="siteImporter"/>
+      </map>
+    </property>
+  </bean>
+
+  <bean id="importObjectsSvc" class="com.krishagni.catissueplus.core.importer.services.impl.ImportServiceImpl">
+    <property name="cfgSvc" ref="cfgSvc"/>
+    <property name="importJobDao" ref="importJobDao"/>
+    <property name="taskExecutor" ref="taskExecutor"/>
+    <property name="schemaFactory" ref="objectSchemaFactory"/>
+    <property name="importerFactory" ref="objectImporterFactory"/>
+    <property name="transactionManager" ref="transactionManager"/>
+    <property name="resourceBundle" ref="resourceBundle"/>
+  </bean>
 
   <task:scheduler id="taskScheduler" pool-size="1"/>
   <task:annotation-driven scheduler="taskScheduler"/>

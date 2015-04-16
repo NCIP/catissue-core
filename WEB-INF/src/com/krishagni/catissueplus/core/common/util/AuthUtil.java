@@ -7,6 +7,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
 public class AuthUtil {
+	public static Authentication getAuth() {
+		return SecurityContextHolder.getContext().getAuthentication();
+	}
+	
 	public static User getCurrentUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth == null) {

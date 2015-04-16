@@ -7,8 +7,6 @@
 
     <session-factory>
 
- 		<property name="connection.datasource">java:/catissuecore</property>
- 		<!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
  		<property name="org.hibernate.envers.track_entities_changed_in_revision">true</property>
  		<property name="org.hibernate.envers.global_with_modified_flag">true</property>
  		<property name="show_sql">true</property>
@@ -69,9 +67,7 @@
 
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenLabelPrintJob.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenLabelPrintJobItem.hbm.xml"/>
-		
-		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperationJob.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperation.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ImportJob.hbm.xml"/>
 
 		<mapping resource="com/krishagni/rbac/resources/Group.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/GroupRole.hbm.xml"/>

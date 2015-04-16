@@ -96,13 +96,11 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Long> getCpIdsBySiteIds(List<Long> siteIds) {
-		List<Long> rows = sessionFactory.getCurrentSession()
+	public List<Long> getCpIdsBySiteIds(Collection<Long> siteIds) {
+		return sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_CP_IDS_BY_SITE_IDS)
 				.setParameterList("siteIds", siteIds)
 				.list();
-		
-		return new ArrayList<Long>(rows);
 	}
 	
 	@Override

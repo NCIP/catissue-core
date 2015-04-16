@@ -218,9 +218,9 @@
 				<include name="**/*.vm" />
 			</fileset>
 			<fileset dir="${resources.dir}">
-				<include name="**/*.hbm.xml" />
-                                <include name="query-forms/*.*"/>
-                                <include name="spe-forms/*.*"/>
+				<include name="**/*.xml" />
+                                <include name="query-forms/list.txt"/>
+                                <include name="spe-forms/list.csv"/>
                                 <include name="errors/*.properties"/>
                                 <include name="com/krishagni/catissueplus/core/biospecimen/default_print_rules.csv"/>
 			</fileset>
@@ -257,9 +257,9 @@
 				<include name="**/*.vm" />
 			</fileset>
 			<fileset dir="${resources.dir}">
-				<include name="**/*.hbm.xml" />
-                                <include name="query-forms/*.*"/>
-                                <include name="spe-forms/*.*"/>
+				<include name="**/*.xml" />
+                                <include name="query-forms/list.txt"/>
+                                <include name="spe-forms/list.csv"/>
                                 <include name="errors/*.properties"/>
                                 <include name="com/krishagni/catissueplus/core/biospecimen/default_print_rules.csv"/>
 			</fileset>

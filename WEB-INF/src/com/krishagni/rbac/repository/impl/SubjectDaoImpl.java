@@ -79,6 +79,18 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
 				.setParameterList("operations", ops)
 				.list();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override	
+	public List<SubjectAccess> getAccessList(Long subjectId, Long cpId, String resource, String[] ops) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_ACCESS_LIST_BY_CP)
+				.setLong("subjectId", subjectId)
+				.setLong("cpId", cpId)
+				.setString("resource", resource)
+				.setParameterList("operations", ops)
+				.list();		
+	}
 	
 	
 	/*
@@ -105,6 +117,8 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
 	private static final String CAN_USER_PERFORM_OP_ON_CP_SITE = FQN + ".canUserPerformOpOnCpSite";
 
 	private static final String GET_ACCESS_LIST = FQN + ".getAccessList";
+	
+	private static final String GET_ACCESS_LIST_BY_CP = FQN + ".getAccessListByCp";
 	
 	private static final String GET_ACCESS_LIST_COUNT = FQN + ".getAccessListCount";
 }

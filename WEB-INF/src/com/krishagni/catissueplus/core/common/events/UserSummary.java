@@ -20,6 +20,8 @@ public class UserSummary {
 	private String loginName;
 	
 	private String domain;
+	
+	private String emailAddress;
 
 	public Long getId() {
 		return id;
@@ -61,6 +63,14 @@ public class UserSummary {
 		this.domain = domain;
 	}
 
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
+
 	public static UserSummary from(User user) {
 		UserSummary userSummary = new UserSummary();
 		userSummary.setId(user.getId());
@@ -68,6 +78,7 @@ public class UserSummary {
 		userSummary.setLastName(user.getLastName());
 		userSummary.setLoginName(user.getLoginName());
 		userSummary.setDomain(user.getAuthDomain().getName());
+		userSummary.setEmailAddress(user.getEmailAddress());
 		return userSummary;
 	}
 	

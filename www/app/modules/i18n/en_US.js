@@ -61,7 +61,8 @@
       "submit": "Submit",
       "edit": "Edit",
       "done": "Done",
-      "search": "Search"
+      "search": "Search",
+      "clear_filters": "Clear Filters"
     }
   },
 
@@ -171,6 +172,8 @@
     "select_site": "Select Site",
     "pmis": "Medical Identifiers",
     "protocol_id": "Protocol Identifier",
+    "filter_title": "Participants Filter", 
+    "spmn_label_or_barcode": "Specimen Label / Barcode",
 
     "matched_on_mpi": "Following Participant matched based on EMPI",
     "matched_on_ssn": "Following Participant matched based on SSN",
@@ -196,7 +199,8 @@
       "register": "Click to register new Participant",
       "view_details": "Click to view/edit Participant details",
       "completed_visits_count": "Count of Completed Visits",
-      "collected_specimens_count": "Count of Collected Specimens"
+      "collected_specimens_count": "Count of Collected Specimens",
+      "search": "Click to filter Participants"
     }
   },
 
@@ -638,14 +642,12 @@
     "resources" : {
       "CollectionProtocol": "Collection Protocol",
       "DistributionProtocol": "Distribution Protocol",
-      "Institute": "Institute",
       "Order": "Order",
       "ParticipantPhi": "Participant (PHI)",
-      "Specimen": "Specimen",
+      "ParticipantDeid": "Participant (DeId)",
+      "VisitAndSpecimen": "Visits and Specimens",
       "Site": "Site",
-      "StorageContainer": "Storage Container",
-      "User": "User",
-      "Visit": "Visit"
+      "StorageContainer": "Storage Container"
     },
 
     "menu": {

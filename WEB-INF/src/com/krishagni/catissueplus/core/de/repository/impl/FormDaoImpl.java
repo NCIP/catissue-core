@@ -11,6 +11,7 @@ import java.util.Map;
 import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Projections;
@@ -280,21 +281,23 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	@SuppressWarnings("unchecked")
 	@Override
 	public FormRecordEntryBean getRecordEntry(Long formCtxtId, Long objectId, Long recordId) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_RECORD_ENTRY);
-		query.setLong("formCtxtId", formCtxtId).setLong("objectId", objectId).setLong("recordId", recordId);
-		
-		List<FormRecordEntryBean> objs = query.list();
-		return objs != null && !objs.isEmpty() ? objs.iterator().next() : null;		
+		List<Object[]> rows = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_RECORD_ENTRY)
+				.setLong("formCtxtId", formCtxtId)
+				.setLong("objectId", objectId)
+				.setLong("recordId", recordId)
+				.list();
+		return CollectionUtils.isEmpty(rows) ? null : getFormRecordEntry(rows.iterator().next());
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public FormRecordEntryBean getRecordEntry(Long recordId) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_RECORD_ENTRY_BY_REC_ID);
-		query.setLong("recordId", recordId);
-		
-		List<FormRecordEntryBean> objs = query.list();
-		return objs != null && !objs.isEmpty() ? objs.iterator().next() : null;		
+		List<Object[]> rows = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_RECORD_ENTRY_BY_REC_ID)
+				.setLong("recordId", recordId)
+				.list();
+		return CollectionUtils.isEmpty(rows) ? null : getFormRecordEntry(rows.iterator().next());
 	}
 	
 	private List<FormCtxtSummary> getEntityForms(List<Object[]> rows) {
@@ -573,6 +576,19 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		objCp.setObjectId((Long) row[0]);
 		objCp.setCpId((Long) row[1]);
 		return objCp;
+	}
+	
+	private FormRecordEntryBean getFormRecordEntry(Object[] row) {
+		FormRecordEntryBean re = new FormRecordEntryBean();
+		re.setIdentifier((Long)row[0]);
+		re.setFormCtxtId((Long)row[1]);
+		re.setObjectId((Long)row[2]);
+		re.setRecordId((Long)row[3]);
+		re.setUpdatedBy((Long)row[4]);
+		re.setUpdatedTime((Date)row[5]);
+		re.setActivityStatusStr((String)row[6]);
+		re.setEntityType((String)row[7]);
+		return re;
 	}
 	
 	private static final String FQN = FormContextBean.class.getName();

@@ -29,17 +29,17 @@ public class PmiDetail {
 		this.mrn = mrn;
 	}
 	
-	public static PmiDetail from(ParticipantMedicalIdentifier pmi) {
+	public static PmiDetail from(ParticipantMedicalIdentifier pmi, boolean excludePhi) {
 		PmiDetail result = new PmiDetail();
-		result.setMrn(pmi.getMedicalRecordNumber());
+		result.setMrn(excludePhi ? "###" : pmi.getMedicalRecordNumber());
 		result.setSiteName(pmi.getSite().getName());
 		return result;
 	}
 	
-	public static List<PmiDetail> from(Collection<ParticipantMedicalIdentifier> pmis) {
+	public static List<PmiDetail> from(Collection<ParticipantMedicalIdentifier> pmis, boolean excludePhi) {
 		List<PmiDetail> result = new ArrayList<PmiDetail>();
 		for (ParticipantMedicalIdentifier pmi : pmis) {
-			result.add(PmiDetail.from(pmi));
+			result.add(PmiDetail.from(pmi, excludePhi));
 		}
 		
 		return result;

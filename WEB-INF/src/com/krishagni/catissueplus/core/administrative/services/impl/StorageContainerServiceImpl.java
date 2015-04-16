@@ -26,11 +26,13 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 public class StorageContainerServiceImpl implements StorageContainerService {
 	private DaoFactory daoFactory;
@@ -63,8 +65,18 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	@PlusTransactional
 	public ResponseEvent<List<StorageContainerSummary>> getStorageContainers(RequestEvent<StorageContainerListCriteria> req) {
 		try {			
-			List<StorageContainer> containers = daoFactory.getStorageContainerDao().getStorageContainers(req.getPayload());
-			List<StorageContainerSummary> result = StorageContainerSummary.from(containers, req.getPayload().includeChildren());
+			StorageContainerListCriteria crit = req.getPayload();
+			Set<Long> siteIds = AccessCtrlMgr.getInstance().getReadAccessContainerSites();
+			if (siteIds != null && siteIds.isEmpty()) {
+				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
+			}
+			
+			if (siteIds != null) {
+				crit.siteIds(siteIds);
+			}
+			
+			List<StorageContainer> containers = daoFactory.getStorageContainerDao().getStorageContainers(crit);
+			List<StorageContainerSummary> result = StorageContainerSummary.from(containers, crit.includeChildren());
 			return ResponseEvent.response(result);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -82,6 +94,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
 			}
 			
+			AccessCtrlMgr.getInstance().ensureReadContainerRights(container);
 			return ResponseEvent.response(StorageContainerDetail.from(container));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -94,13 +107,13 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	@PlusTransactional
 	public ResponseEvent<List<StorageContainerPositionDetail>> getOccupiedPositions(RequestEvent<Long> req) {
 		try {
-			Long containerId = req.getPayload();
-			
+			Long containerId = req.getPayload();			
 			StorageContainer container = daoFactory.getStorageContainerDao().getById(containerId);
 			if (container == null) {
 				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
 			}
 			
+			AccessCtrlMgr.getInstance().ensureReadContainerRights(container);
 			Set<StorageContainerPosition> positions = container.getOccupiedPositions();
 			return ResponseEvent.response(StorageContainerPositionDetail.from(positions));
 		} catch (OpenSpecimenException ose) {
@@ -114,12 +127,12 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	@PlusTransactional
 	public ResponseEvent<StorageContainerDetail> createStorageContainer(RequestEvent<StorageContainerDetail> req) {
 		try {
-			StorageContainerDetail input = req.getPayload();
-			
+			StorageContainerDetail input = req.getPayload();			
 			StorageContainer container = containerFactory.createStorageContainer(input);
-			ensureUniqueConstraints(container);
-			container.validateRestrictions();
+			AccessCtrlMgr.getInstance().ensureCreateContainerRights(container);
 			
+			ensureUniqueConstraints(container);
+			container.validateRestrictions();			
 			daoFactory.getStorageContainerDao().saveOrUpdate(container, true);
 			return ResponseEvent.response(StorageContainerDetail.from(container));
 		} catch (OpenSpecimenException ose) {
@@ -140,7 +153,8 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			if (existing == null) {
 				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
 			}
-						
+			AccessCtrlMgr.getInstance().ensureUpdateContainerRights(existing);			
+			
 			StorageContainer container = containerFactory.createStorageContainer(input);
 			ensureUniqueConstraints(container);
 			
@@ -171,6 +185,8 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
 			}
 			
+			AccessCtrlMgr.getInstance().ensureReadContainerRights(container);
+			
 			CollectionProtocol cp = new CollectionProtocol();
 			cp.setId(detail.getCpId());
 			String specimenClass = detail.getSpecimenClass();
@@ -198,6 +214,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			if (container == null) {
 				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
 			}
+			AccessCtrlMgr.getInstance().ensureReadContainerRights(container);
 			
 			File file = mapExporter.exportToFile(container);
 			return ResponseEvent.response(new ContainerMapExportDetail(container.getName(), file));
@@ -218,7 +235,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			
 			List<StorageContainerPosition> positions = new ArrayList<StorageContainerPosition>();
 			for (StorageContainerPositionDetail posDetail : op.getPositions()) {
-				positions.add(getPosition(container, posDetail));				
+				positions.add(createPosition(container, posDetail));				
 			}
 			
 			container.assignPositions(positions);
@@ -255,6 +272,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
 			}
 			
+			AccessCtrlMgr.getInstance().ensureDeleteContainerRights(existing);
 			existing.delete();
 			return ResponseEvent.response(StorageContainerDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
@@ -290,7 +308,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			ose.addError(StorageContainerErrorCode.DUP_BARCODE);
 		}
 		
-		ose.checkAndThrow();		
+		ose.checkAndThrow();
 	}
 	
 	private boolean isUniqueName(StorageContainer container) {
@@ -324,7 +342,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		}
 	}
 	
-	private StorageContainerPosition getPosition(StorageContainer container, StorageContainerPositionDetail pos) {
+	private StorageContainerPosition createPosition(StorageContainer container, StorageContainerPositionDetail pos) {
 		if (StringUtils.isBlank(pos.getPosOne()) || StringUtils.isBlank(pos.getPosTwo())) {
 			throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_POSITIONS);
 		}
@@ -341,15 +359,15 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		}
 		
 		if (entityType.equalsIgnoreCase("specimen")) {
-			return getSpecimenPosition(container, pos, entityId, entityName);
+			return createSpecimenPosition(container, pos, entityId, entityName);
 		} else if (entityType.equalsIgnoreCase("container")) {
-			return getChildContainerPosition(container, pos, entityId, entityName);
+			return createChildContainerPosition(container, pos, entityId, entityName);
 		}
 		
 		throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_ENTITY_TYPE, entityType);
 	}
 	
-	private StorageContainerPosition getSpecimenPosition(
+	private StorageContainerPosition createSpecimenPosition(
 			StorageContainer container, 
 			StorageContainerPositionDetail pos, 
 			Long specimenId, 
@@ -366,6 +384,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND);
 		}
 		
+		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);		
 		if (!container.canContain(specimen)) {
 			throw OpenSpecimenException.userError(
 					StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN, 
@@ -382,7 +401,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		return position;		
 	}
 	
-	private StorageContainerPosition getChildContainerPosition(
+	private StorageContainerPosition createChildContainerPosition(
 			StorageContainer container, 
 			StorageContainerPositionDetail pos, 
 			Long containerId, 
@@ -393,6 +412,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			throw OpenSpecimenException.userError(StorageContainerErrorCode.NOT_FOUND);
 		}
 		
+		AccessCtrlMgr.getInstance().ensureUpdateContainerRights(childContainer);
 		if (!container.canContain(childContainer)) {
 			throw OpenSpecimenException.userError(
 					StorageContainerErrorCode.CANNOT_HOLD_CONTAINER, 

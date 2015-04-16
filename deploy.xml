@@ -402,7 +402,7 @@
 		<antcall target="configure_appResources" />
 
 		<antcall target="configure_contactus" />
-		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true" />
+		<copy file="openspecimen-ds.xml" todir="${temp.dir}" overwrite="true" />
 
 		<!--Kapil V 1.0.1 Changes-->
 		<copy file="properties-service.xml" todir="${temp.dir}" overwrite="true" />
@@ -475,7 +475,7 @@
 		</replace>
 		
 		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
-		        <include name="catissuecore-ds.xml" />
+		        <include name="openspecimen-ds.xml" />
 		        <replacefilter token="@@databaseurl@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
 		        <replacefilter token="@@username@@" value="${database.username}" />
 		        <replacefilter token="@@pasword@@" value="${database.password}" />
@@ -507,7 +507,7 @@
 		</replace>
 		
 		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
-		        <include name="catissuecore-ds.xml" />
+		        <include name="openspecimen-ds.xml" />
 		        <replacefilter token="@@databaseurl@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
 		        <replacefilter token="@@username@@" value="${database.username}" />
 		        <replacefilter token="@@pasword@@" value="${database.password}" />
@@ -516,17 +516,6 @@
 
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
-		</replace>
-
-		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml">
-			<replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}" />
-		</replace>
-
-		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml">
-			<replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}" />
-		</replace>
-		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml">
-			<replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}" />
 		</replace>
 
 	</target>
@@ -565,7 +554,30 @@
 		<antcall target="copydeletedjars">
 			<param name="delPath" value="${temp.dir}/catissuecore/WEB-INF/lib"/>
 		</antcall>
-				
+		<copy file="${base.dir}/lib/liquibase.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib"/>
+		<copy file="${base.dir}/WEB-INF/resources/application.properties" todir="${temp.dir}/catissuecore/WEB-INF/classes"/>
+		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/application.properties">
+			<replacefilter token="@@datasourcejndi@@" value="${datasource.jndi}" />
+			<replacefilter token="@@datasourcetype@@" value="${datasource.type}" />
+		</replace>
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<replace file="${temp.dir}/catissuecore/WEB-INF/classes/application.properties">
+					<replacefilter token="@@datasource.dialect@@" value="${mysql.dialect.string}" />
+				</replace>
+			</then>
+
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<replace file="${temp.dir}/catissuecore/WEB-INF/classes/application.properties">
+						<replacefilter token="@@datasource.dialect@@" value="${oracle.dialect.string}" />
+					</replace>
+				</then>
+			</elseif>
+		</if>
+
 		<war destfile="${temp.dir}/catissuecore.war"
 			webxml="${temp.dir}/catissuecore/WEB-INF/web.xml" manifest="${base.dir}/MANIFEST.MF">
 			<fileset dir="${temp.dir}/catissuecore">
@@ -840,7 +852,7 @@
 		</copy>
 		<copy todir="${jboss.server.url}/deploy" overwrite="true">
 			<fileset dir="${temp.dir}">
-				<include name="catissuecore-ds.xml" />
+				<include name="openspecimen-ds.xml" />
 				<include name="catissuecorecsm.war" />
 			</fileset>
 		</copy>
@@ -942,17 +954,17 @@
     </target>
 
     <target name="upgrade_db_os_v2.0">
-      <updateDatabase 
-        changeLogFile="${base.dir}/SQL/liquibase_xml/db-os-changelog-2.0.xml" 
-        driver="${final.database.driver}" 
-        url="${final.database.url}" 
-        username="${database.username}" 
-        password="${database.password}" 
-        dropFirst="false" 
-        classpathref="liquibaseClasspath" />
+    	<updateDatabase
+    	changeLogFile="${base.dir}/WEB-INF/resources/db/db-os-changelog-2.0.xml"
+    	driver="${final.database.driver}"
+    	url="${final.database.url}"
+    	username="${database.username}"
+    	password="${database.password}"
+    	dropFirst="false"
+    	classpathref="liquibaseClasspath" />
 
       <updateDatabase 
-        changeLogFile="${base.dir}/SQL/liquibase_xml/db-os-config-2.0.xml"
+        changeLogFile="${base.dir}/WEB-INF/resources/db/db-os-config-2.0.xml"
         driver="${final.database.driver}" 
         url="${final.database.url}" 
         username="${database.username}" 
@@ -961,7 +973,7 @@
         classpathref="liquibaseClasspath" />
     	
       <updateDatabase 
-        changeLogFile="${base.dir}/SQL/liquibase_xml/db-os-seed-data-2.0.xml"
+        changeLogFile="${base.dir}/WEB-INF/resources/db/db-os-seed-data-2.0.xml"
         driver="${final.database.driver}" 
         url="${final.database.url}" 
         username="${database.username}" 
@@ -1491,7 +1503,7 @@
               <include name="*/**"/>
             </fileset>
           </copy>
-
+		
           <copy file="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" 
                 todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
 	</target>

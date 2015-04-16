@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -226,6 +227,15 @@ public class Participant extends BaseEntity {
 		} else {
 			existing.setMedicalRecordNumber(pmi.getMedicalRecordNumber());
 		}
+	}
+	
+	public Set<Site> getMrnSites() {
+		Set<Site> result = new HashSet<Site>();
+		for (ParticipantMedicalIdentifier pmi : getPmis()) {
+			result.add(pmi.getSite());
+		}
+		
+		return result;
 	}
 	
 	private void updatePmis(Participant participant) {

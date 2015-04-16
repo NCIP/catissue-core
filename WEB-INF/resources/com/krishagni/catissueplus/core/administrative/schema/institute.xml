@@ -1,0 +1,23 @@
+<object-schema>
+  <name>institute</name>
+  <record> 
+    <name>com.krishagni.catissueplus.core.administrative.events.InstituteDetail</name>
+    
+    <field>
+      <caption>Name</caption>
+      <attribute>name</attribute>
+    </field>
+
+    <record>
+      <attribute>departments</attribute>
+      <multiple>true</multiple>
+      <caption>Department</caption>
+      
+      <field>
+        <caption>Name</caption>
+        <attribute>name</attribute>
+      </field>
+    </record>
+  </record>
+</object-schema>
+

@@ -214,7 +214,7 @@ public class ParticipantPatchDetail {
 		participantDetail.setEthnicity(participant.getEthnicity());
 		participantDetail.setGender(participant.getGender());
 		participantDetail.setId(participant.getId());
-		participantDetail.setPmiCollection(PmiDetail.from(participant.getPmis()));
+		participantDetail.setPmiCollection(PmiDetail.from(participant.getPmis(), false));
 		participantDetail.setRace(participant.getRaces());
 		participantDetail.setSexGenotype(participant.getSexGenotype());
 		participantDetail.setSsn(participant.getSocialSecurityNumber());

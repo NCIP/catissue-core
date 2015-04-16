@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.repository;
 
+import java.util.Set;
+
 import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 
 public class StorageContainerListCriteria extends AbstractListCriteria<StorageContainerListCriteria> {
@@ -23,6 +25,8 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 	private boolean hierarchical;
 	
 	private Long cpId;
+	
+	private Set<Long> siteIds;
 	
 	@Override
 	public StorageContainerListCriteria self() {
@@ -118,4 +122,12 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 		this.cpId = cpId;
 		return self();
 	}	
+	
+	public Set<Long> siteIds() {
+		return siteIds;
+	}
+	
+	public void siteIds(Set<Long> siteIds) {
+		this.siteIds = siteIds;
+	}
 }

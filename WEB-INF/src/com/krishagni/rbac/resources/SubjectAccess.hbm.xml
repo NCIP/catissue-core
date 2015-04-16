@@ -5,11 +5,7 @@
 
 <hibernate-mapping>
   <class name="com.krishagni.rbac.domain.SubjectAccess" table="RBAC_SUBJECT_ACCESS_VIEW" mutable="false">
-    <id name="id" column="SUBJECT_ID" type="long">
-      <generator class="foreign">
-        <param name="property">subject</param>
-      </generator>
-    </id>
+    <id name="id" column="IDENTIFIER" type="string"> </id>
 
     <many-to-one 
       name="subject" 
@@ -30,7 +26,7 @@
       cascade="none"
       column="SITE_ID"/>
 
-    <property name="resource" column="RESOURCE"/>
+    <property name="resource" column="RESOURCE_NAME"/>
 
     <property name="operation" column="OPERATION"/>
   </class> 

@@ -15,6 +15,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -107,6 +108,7 @@ public class CprServiceImpl implements CprService {
 			daoFactory.getParticipantDao().saveOrUpdate(participant);
 		}
 		
+		AccessCtrlMgr.getInstance().ensureUpdateCprRights(cpr);		
 		daoFactory.getCprDao().saveOrUpdate(cpr);
 		return ParticipantRegDetail.from(cpr);
 	}

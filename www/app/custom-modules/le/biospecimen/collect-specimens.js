@@ -3,7 +3,7 @@ angular.module('openspecimen')
     function(
       $scope, $state, $stateParams, $http, 
       CollectionProtocolEvent, SpecimenRequirement, Visit, Specimen, 
-      Alerts, Util, ApiUrls) {
+      CpConfigSvc, Alerts, Util, ApiUrls) {
 
       var baseUrl = ApiUrls.getBaseUrl();
 
@@ -11,7 +11,7 @@ angular.module('openspecimen')
         $scope.cpId = $stateParams.cpId
         $scope.view = 'register';
         $scope.participants = [];
-        $scope.cpe = {};
+        $scope.visit = {};
         $scope.boxOpts = {
           compact: false,
           dimension: {rows: 9, columns: 9},
@@ -22,7 +22,14 @@ angular.module('openspecimen')
           csLabels: '',
           delimiter: ',',
           ctrl: undefined
-        }
+        },
+
+        CpConfigSvc.getWorkflowData($scope.cpId, 'registerParticipant').then(
+          function(data) {
+            var boxOpts = data.boxOpts || {};
+            angular.extend($scope.boxOpts, boxOpts);
+          }
+        );
       }
 
       function registerParticipants() {
@@ -90,8 +97,8 @@ angular.module('openspecimen')
               }
             );
 
-            if ($scope.cpes.length == 1) {
-              $scope.cpe = $scope.cpes[0];
+            if ($scope.cpes.length >= 1) {
+              $scope.visit.cpe = $scope.cpes[0];
               loadSpecimenRequirements();
             }
           }
@@ -99,7 +106,7 @@ angular.module('openspecimen')
       }
 
       function loadSpecimenRequirements() {
-        SpecimenRequirement.listFor($scope.cpe.id).then(
+        SpecimenRequirement.listFor($scope.visit.cpe.id).then(
           function(srs) {
             angular.forEach($scope.participants, function(participant) {
               participant.specimens = angular.copy(srs);
@@ -111,10 +118,10 @@ angular.module('openspecimen')
       function getVisitAndSpecimensToSave(participant) {
         var visit = {
           cprId: participant.cprId,
-          eventId: $scope.cpe.id,
+          eventId: $scope.visit.cpe.id,
           visitDate: participant.collDetail.collectionDate,
           status: 'Complete',
-          site: $scope.cpe.defaultSite
+          site: $scope.visit.cpe.defaultSite
         };
 
         var specimens = participant.specimens.map(
@@ -251,6 +258,8 @@ angular.module('openspecimen')
       $scope.cancel = function() {
         $state.go('participant-list', {cpId: $scope.cpId});
       }
+
+      $scope.loadSpecimenRequirements = loadSpecimenRequirements;
 
       $scope.removePrimarySpecimen = function(participant, specimen) {
         var idx = participant.specimens.indexOf(specimen);

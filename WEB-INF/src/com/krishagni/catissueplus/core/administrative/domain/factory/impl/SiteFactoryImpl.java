@@ -82,7 +82,13 @@ public class SiteFactoryImpl implements SiteFactory {
 		Set<User> result = new HashSet<User>();
 		
 		for (UserSummary userSummary : detail.getCoordinators()) {
-			User user = daoFactory.getUserDao().getById(userSummary.getId());			
+			User user = null;
+			if (userSummary.getId() != null) {
+				user = daoFactory.getUserDao().getById(userSummary.getId());
+			} else if (StringUtils.isNotBlank(userSummary.getEmailAddress())) {
+				user = daoFactory.getUserDao().getUserByEmailAddress(userSummary.getEmailAddress());
+			}
+						
 			if (user == null) {
 				ose.addError(UserErrorCode.NOT_FOUND);
 				return;

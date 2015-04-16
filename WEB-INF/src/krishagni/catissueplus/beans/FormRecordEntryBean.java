@@ -17,6 +17,8 @@ public class FormRecordEntryBean {
 	private Date updatedTime;
 	
 	private Status status;
+	
+	private String entityType;
 
 	public enum Status {
 		ACTIVE, CLOSED
@@ -84,5 +86,13 @@ public class FormRecordEntryBean {
 
 	public void setActivityStatusStr(String status) {
 	  this.status = status != null ? Status.valueOf(status) : Status.ACTIVE;
+	}
+
+	public String getEntityType() {
+		return entityType;
+	}
+
+	public void setEntityType(String entityType) {
+		this.entityType = entityType;
 	}
 }

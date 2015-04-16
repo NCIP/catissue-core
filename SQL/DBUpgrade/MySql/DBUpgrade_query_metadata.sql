@@ -1,1 +1,0 @@
-delete from dyextn_column_properties where primitive_attribute_id in (select identifier from dyextn_attribute where entiy_id in (select identifier from dyextn_abstract_metadata where name = 'edu.wustl.catissuecore.domain.Password'));

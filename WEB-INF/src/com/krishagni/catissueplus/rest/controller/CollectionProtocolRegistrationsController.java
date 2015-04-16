@@ -1,11 +1,13 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,15 +59,49 @@ public class CollectionProtocolRegistrationsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<CprSummary> getRegistrations(
-			@RequestParam(value = "cpId", required = true) Long cpId,
-			@RequestParam(value = "query", required = false, defaultValue = "") String searchStr,
-			@RequestParam(value = "startAt", required = false, defaultValue = "0") int startAt,
-			@RequestParam(value = "maxRecs", required = false, defaultValue = "100") int maxRecs,
-			@RequestParam(value = "includeStats", required = false, defaultValue = "false") boolean includeStats) {
+			@RequestParam(value = "cpId",         required = true)
+			Long cpId,
+			
+			@RequestParam(value = "query",        required = false)
+			String searchStr,
+			
+			@RequestParam(value = "name",         required = false)
+			String name,
+			
+			@RequestParam(value = "ppid",         required = false)
+			String ppid,
+			
+			@RequestParam(value = "mrn",          required = false)
+			String mrn,
+			
+			@RequestParam(value = "empi",         required = false)
+			String empi,
+			
+			@RequestParam(value = "dob",          required = false) 
+			@DateTimeFormat(pattern="yyyy-MM-dd")
+			Date dob,
+			
+			@RequestParam(value = "specimen",     required = false)
+			String specimen,
+			
+			@RequestParam(value = "startAt",      required = false, defaultValue = "0")
+			int startAt,
+			
+			@RequestParam(value = "maxRecs",      required = false, defaultValue = "100")
+			int maxRecs,
+			
+			@RequestParam(value = "includeStats", required = false, defaultValue = "false") 
+			boolean includeStats) {
 
 		CprListCriteria crit = new CprListCriteria()
 			.cpId(cpId)
 			.query(searchStr)
+			.name(name)
+			.ppid(ppid)
+			.mrn(mrn)
+			.empi(empi)
+			.dob(dob)
+			.specimen(specimen)
 			.startAt(startAt)
 			.maxResults(maxRecs)
 			.includeStat(includeStats)
@@ -131,7 +167,7 @@ public class CollectionProtocolRegistrationsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public EntityFormRecords getFormRecords(@PathVariable("id") Long cprId,
-			@PathVariable("formCtxtId") Long formCtxtId) {
+			@PathVariable("formCtxtId") Long formCtxtId) { // TODO: Remove
 
 		GetEntityFormRecordsOp opDetail = new GetEntityFormRecordsOp();
 		opDetail.setEntityId(cprId);

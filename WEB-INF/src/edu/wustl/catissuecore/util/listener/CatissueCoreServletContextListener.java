@@ -56,7 +56,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	/**
 	 * DATASOURCE_JNDI_NAME.
 	 */
-	private static final String JNDI_NAME = "java:/catissuecore";
+	private static final String JNDI_NAME = "java:/openspecimen";
 
 	/**
 	 * This method is called during server startup, It is used when want some initliazation before
@@ -88,28 +88,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
             
 			CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
 			
-			FormProperties.getInstance().setPostProcessor(new FormProcessor());
-
-//      BOUtil.getInstance().setGenerator(new BOTemplateUpdater());
-            
-      InitialContext ic = new InitialContext();
-			DataSource ds = (DataSource)ic.lookup(JNDI_NAME);
-			String dateFomat = CommonServiceLocator.getInstance().getDatePattern();
-			String timeFormat = CommonServiceLocator.getInstance().getTimePattern(); 
-			
-			String dir = new StringBuilder(XMLPropertyHandler.getValue("appserver.home.dir")).append(File.separator)
-					.append("os-data").append(File.separator)
-					.append("de-file-data").append(File.separator)
-					.toString();
-			File dirFile = new File(dir);
-			if (!dirFile.exists()) {
-				if (!dirFile.mkdirs()) {
-					throw new RuntimeException("Error couldn't create directory for storing de file data");
-				}
-			}
-						
-			initQueryPathsConfig();
-			
+			FormProperties.getInstance().setPostProcessor(new FormProcessor());            
 			logger.info("Initialization complete");									
 		}
 		catch (final Exception e)
@@ -134,11 +113,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		System.setProperty("app.propertiesDir", CommonServiceLocator.getInstance().getPropDirPath());
 	}
 	
-    private void initQueryPathsConfig() {
-        String path = System.getProperty("app.propertiesDir") + File.separatorChar + "paths.xml";
-        PathConfig.intialize(path);
-    }
-
 	private void initThrottlingModule() 
 	{
 		String timeIntervalInMinutes = XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT);

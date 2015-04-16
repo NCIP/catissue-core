@@ -7,15 +7,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
@@ -37,7 +38,13 @@ public class CollectionProtocolRegistrationDaoImpl
 	@Override
 	public List<CprSummary> getCprList(CprListCriteria cprCrit) {
 		Criteria query = getCprListQuery(cprCrit);
-		query.setProjection(getCprSummaryFields(cprCrit));
+		ProjectionList cprFields = getCprSummaryFields(cprCrit);
+		if (StringUtils.isNotBlank(cprCrit.specimen())) {
+			query.setProjection(Projections.distinct(cprFields));
+		} else {
+			query.setProjection(cprFields);
+		}
+		
 		
 		List<CprSummary> cprs = new ArrayList<CprSummary>();
 		Map<Long, CprSummary> cprMap = new HashMap<Long, CprSummary>();
@@ -103,36 +110,108 @@ public class CollectionProtocolRegistrationDaoImpl
 	
 	
 	private Criteria getCprListQuery(CprListCriteria cprCrit) {
-		Criteria query = getSessionFactory().getCurrentSession().createCriteria(CollectionProtocolRegistration.class);
-		query.createAlias("collectionProtocol", "cp");
-		query.createAlias("participant", "participant");
+		Criteria query = getSessionFactory().getCurrentSession()
+				.createCriteria(CollectionProtocolRegistration.class)
+				.createAlias("collectionProtocol", "cp")
+				.createAlias("participant", "participant")
+				.add(Restrictions.eq("cp.id", cprCrit.cpId()))
+				.add(Restrictions.ne("activityStatus", "Disabled"))
+				.add(Restrictions.ne("cp.activityStatus", "Disabled"))
+				.add(Restrictions.ne("participant.activityStatus", "Disabled"))
+				.addOrder(Order.asc("id"))
+				.setFirstResult(cprCrit.startAt() < 0 ? 0 : cprCrit.startAt())
+				.setMaxResults(cprCrit.maxResults() < 0 || cprCrit.maxResults() > 100 ? 100 : cprCrit.maxResults());
 		
-		query.add(Restrictions.eq("cp.id", cprCrit.cpId()));
-		query.add(Restrictions.ne("activityStatus", "Disabled"));
-		query.add(Restrictions.ne("cp.activityStatus", "Disabled"));
-		query.add(Restrictions.ne("participant.activityStatus", "Disabled"));
-
-		query.addOrder(Order.asc("id"));
-		query.setFirstResult(cprCrit.startAt() < 0 ? 0 : cprCrit.startAt());
-		query.setMaxResults(cprCrit.maxResults() < 0 || cprCrit.maxResults() > 100 ? 100 : cprCrit.maxResults());
-		
-		String searchTerm = cprCrit.query();
-		boolean isSearchTermSpecified = !StringUtils.isBlank(searchTerm);
-		if (!isSearchTermSpecified) {
-			return query;
-		}
-		
-		Junction searchCrit = Restrictions.disjunction()
-					.add(Restrictions.ilike("ppid", searchTerm, MatchMode.ANYWHERE));			
-		if (cprCrit.includePhi()) {				
-			searchCrit.add(Restrictions.ilike("participant.firstName", searchTerm, MatchMode.ANYWHERE));
-			searchCrit.add(Restrictions.ilike("participant.lastName", searchTerm, MatchMode.ANYWHERE));
-		}
-			
-		query.add(searchCrit);
+		addMrnSiteCondition(query, cprCrit);
+		addEmpiCondition(query, cprCrit);
+		addNameAndPpidCondition(query, cprCrit);
+		addDobCondition(query, cprCrit);
+		addSpecimenCondition(query, cprCrit);
 		return query;		
 	}
 	
+	private void addMrnSiteCondition(Criteria query, CprListCriteria crit) {
+		boolean mrnSpecified   = StringUtils.isNotBlank(crit.mrn());
+		boolean sitesSpecified = CollectionUtils.isNotEmpty(crit.siteIds());
+		
+		if (mrnSpecified && sitesSpecified) {
+			query.createAlias("participant.pmis", "pmi")
+				.createAlias("pmi.site", "site")
+				.add(Restrictions.ilike("pmi.medicalRecordNumber", crit.mrn(), MatchMode.ANYWHERE))
+				.add(Restrictions.in("site.id", crit.siteIds()));
+
+		} else if (mrnSpecified) {
+			query.createAlias("participant.pmis", "pmi")
+				.add(Restrictions.ilike("pmi.medicalRecordNumber", crit.mrn(), MatchMode.ANYWHERE));
+
+		} else if (sitesSpecified) {
+			query.createAlias("participant.pmis", "pmi", JoinType.LEFT_OUTER_JOIN)
+			.createAlias("pmi.site", "site", JoinType.LEFT_OUTER_JOIN)
+			.add(Restrictions.disjunction()
+					.add(Restrictions.isNull("site.id"))
+					.add(Restrictions.in("site.id", crit.siteIds())));
+		} else {
+			// both MRN and sites are not specified. Do nothing
+		}		
+	}
+	
+	private void addEmpiCondition(Criteria query, CprListCriteria crit) {
+		if (StringUtils.isBlank(crit.empi())) {
+			return;
+		}
+		
+		query.add(Restrictions.ilike("participant.empi", crit.empi(), MatchMode.ANYWHERE));
+	}
+	
+	private void addNameAndPpidCondition(Criteria query, CprListCriteria crit) {
+		if (StringUtils.isNotBlank(crit.query())) {
+			Junction namePpidCrit = Restrictions.disjunction()
+				.add(Restrictions.ilike("ppid", crit.query(), MatchMode.ANYWHERE));
+
+			if (crit.includePhi()) {
+				namePpidCrit.add(Restrictions.ilike("participant.firstName", crit.query(), MatchMode.ANYWHERE));
+				namePpidCrit.add(Restrictions.ilike("participant.lastName", crit.query(), MatchMode.ANYWHERE));
+			}
+			
+			query.add(namePpidCrit);
+			return;
+		}
+		
+		if (StringUtils.isNotBlank(crit.ppid())) {
+			query.add(Restrictions.ilike("ppid", crit.ppid(), MatchMode.ANYWHERE));
+		}
+		
+		if (crit.includePhi() && StringUtils.isNotBlank(crit.name())) {
+			query.add(
+				Restrictions.disjunction()
+					.add(Restrictions.ilike("participant.firstName", crit.name(), MatchMode.ANYWHERE))
+					.add(Restrictions.ilike("participant.lastName", crit.name(), MatchMode.ANYWHERE))
+			);
+		}
+	}
+	
+	private void addDobCondition(Criteria query, CprListCriteria crit) {
+		if (crit.dob() == null) {
+			return;
+		}
+		
+		query.add(Restrictions.eq("participant.birthDate", crit.dob()));
+	}
+	
+	private void addSpecimenCondition(Criteria query, CprListCriteria crit) {
+		if (StringUtils.isBlank(crit.specimen())) {
+			return;
+		}
+		
+		query.createAlias("visits", "visit")
+			.createAlias("visit.specimens", "specimen")
+			.add(Restrictions.disjunction()
+					.add(Restrictions.ilike("specimen.label", crit.specimen(), MatchMode.ANYWHERE))
+					.add(Restrictions.ilike("specimen.barcode", crit.specimen(), MatchMode.ANYWHERE)))
+			.add(Restrictions.ne("specimen.activityStatus", "Disabled"))
+			.add(Restrictions.ne("visit.activityStatus", "Disabled"));		
+	}
+
 	private ProjectionList getCprSummaryFields(CprListCriteria cprCrit) {
 		ProjectionList projs = Projections.projectionList()
 				.add(Projections.property("id"))
@@ -167,11 +246,14 @@ public class CollectionProtocolRegistrationDaoImpl
 	
 	@SuppressWarnings("unchecked")
 	private List<Object[]> getScgAndSpecimenCounts(CprListCriteria cprCrit) {
-		Criteria countQuery = getCprListQuery(cprCrit)
+		Criteria countQuery = getCprListQuery(cprCrit);
+		if (StringUtils.isBlank(cprCrit.specimen())) {
+			countQuery
 				.createAlias("visits", "visit",
-						CriteriaSpecification.LEFT_JOIN, Restrictions.eq("visit.status", "Complete"))
+					JoinType.LEFT_OUTER_JOIN, Restrictions.eq("visit.status", "Complete"))
 				.createAlias("visit.specimens", "specimen",
-						CriteriaSpecification.LEFT_JOIN, Restrictions.eq("specimen.collectionStatus", "Collected"));
+					JoinType.LEFT_OUTER_JOIN, Restrictions.eq("specimen.collectionStatus", "Collected"));
+		}
 		
 		return countQuery.setProjection(Projections.projectionList()
 				.add(Projections.property("id"))

@@ -3,11 +3,11 @@ package com.krishagni.catissueplus.core.common.events;
 public enum Resource {
 	CP("CollectionProtocol"),
 	
-	CPR("ParticipantPhi"),
+	PARTICIPANT("ParticipantPhi"),
 	
-	VISIT("Visit"),
+	PARTICIPANT_DEID("ParticipantDeid"),
 	
-	SPECIMEN("Specimen"),
+	VISIT_N_SPECIMEN("VisitAndSpecimen"),
 	
 	STORAGE_CONTAINER("StorageContainer"),
 	
@@ -15,10 +15,8 @@ public enum Resource {
 	
 	ORDER("Order"),
 	
-	DP("DistributionProtocol"),
-	
-	SITE("Site");
-	
+	DP("DistributionProtocol");
+
 	private final String name;
 	
 	private Resource(String name) {
