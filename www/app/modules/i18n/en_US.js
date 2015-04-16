@@ -173,6 +173,7 @@
     "pmis": "Medical Identifiers",
     "protocol_id": "Protocol Identifier",
     "filter_title": "Participants Filter", 
+    "spmn_label_or_barcode": "Specimen Label / Barcode",
 
     "matched_on_mpi": "Following Participant matched based on EMPI",
     "matched_on_ssn": "Following Participant matched based on SSN",

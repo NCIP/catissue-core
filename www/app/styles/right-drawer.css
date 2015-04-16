@@ -10,10 +10,13 @@
   transform: scaleX(0.00001);
   transform-origin:100% 50%;
   transition: all 0.25s ease-in-out 0s;
+  display: none;
+  overflow: auto;
 }
 
 .os-right-drawer.active {
   transform: scaleX(1);
+  display: block;
 }
 
 .os-right-drawer .os-head {

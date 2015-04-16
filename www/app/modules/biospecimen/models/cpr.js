@@ -4,7 +4,7 @@ angular.module('os.biospecimen.models.cpr',
     'os.biospecimen.models.participant',
     'os.biospecimen.models.form'
   ])
-  .factory('CollectionProtocolRegistration', function(osModel, Participant, Form, Util) {
+  .factory('CollectionProtocolRegistration', function($filter, osModel, Participant, Form, Util) {
     var CollectionProtocolRegistration = 
       osModel(
         'collection-protocol-registrations',
@@ -16,6 +16,9 @@ angular.module('os.biospecimen.models.cpr',
     CollectionProtocolRegistration.listForCp = function(cpId, includeStats, filterOpts) {
       var params = {cpId: cpId, includeStats: !!includeStats};
       angular.extend(params, filterOpts || {});
+      if (!!params.dob) {
+        params.dob = $filter('date')(params.dob, 'yyyy-MM-dd');
+      }
       return CollectionProtocolRegistration.query(params);
     };
 

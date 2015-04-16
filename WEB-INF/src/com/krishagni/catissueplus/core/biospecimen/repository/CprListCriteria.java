@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.biospecimen.repository;
 
+import java.util.Date;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
@@ -15,6 +16,10 @@ public class CprListCriteria extends AbstractListCriteria<CprListCriteria> {
 	private String empi;
 	
 	private String name;
+	
+	private Date dob;
+	
+	private String specimen;
 	
 	private Set<Long> siteIds;
 
@@ -66,6 +71,24 @@ public class CprListCriteria extends AbstractListCriteria<CprListCriteria> {
 	
 	public String name() {
 		return name;
+	}
+
+	public CprListCriteria dob(Date dob) {
+		this.dob = dob;
+		return self();
+	}
+	
+	public Date dob() {
+		return dob;
+	}
+	
+	public CprListCriteria specimen(String specimen) {
+		this.specimen = specimen;
+		return self();
+	}
+	
+	public String specimen() {
+		return specimen;
 	}
 	
 	public Set<Long> siteIds() {

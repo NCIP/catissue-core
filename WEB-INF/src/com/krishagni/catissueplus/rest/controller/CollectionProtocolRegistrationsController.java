@@ -1,11 +1,13 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,20 +62,27 @@ public class CollectionProtocolRegistrationsController {
 			@RequestParam(value = "cpId",         required = true)
 			Long cpId,
 			
-			@RequestParam(value = "query",        required = false, defaultValue = "")
+			@RequestParam(value = "query",        required = false)
 			String searchStr,
 			
-			@RequestParam(value = "name",         required = false, defaultValue = "")
+			@RequestParam(value = "name",         required = false)
 			String name,
 			
-			@RequestParam(value = "ppid",         required = false, defaultValue = "")
+			@RequestParam(value = "ppid",         required = false)
 			String ppid,
 			
-			@RequestParam(value = "mrn",          required = false, defaultValue = "")
+			@RequestParam(value = "mrn",          required = false)
 			String mrn,
 			
-			@RequestParam(value = "empi",         required = false, defaultValue = "")
+			@RequestParam(value = "empi",         required = false)
 			String empi,
+			
+			@RequestParam(value = "dob",          required = false) 
+			@DateTimeFormat(pattern="yyyy-MM-dd")
+			Date dob,
+			
+			@RequestParam(value = "specimen",     required = false)
+			String specimen,
 			
 			@RequestParam(value = "startAt",      required = false, defaultValue = "0")
 			int startAt,
@@ -91,6 +100,8 @@ public class CollectionProtocolRegistrationsController {
 			.ppid(ppid)
 			.mrn(mrn)
 			.empi(empi)
+			.dob(dob)
+			.specimen(specimen)
 			.startAt(startAt)
 			.maxResults(maxRecs)
 			.includeStat(includeStats)

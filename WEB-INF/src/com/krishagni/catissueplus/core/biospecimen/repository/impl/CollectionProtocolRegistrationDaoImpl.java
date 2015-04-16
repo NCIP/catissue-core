@@ -38,7 +38,13 @@ public class CollectionProtocolRegistrationDaoImpl
 	@Override
 	public List<CprSummary> getCprList(CprListCriteria cprCrit) {
 		Criteria query = getCprListQuery(cprCrit);
-		query.setProjection(getCprSummaryFields(cprCrit));
+		ProjectionList cprFields = getCprSummaryFields(cprCrit);
+		if (StringUtils.isNotBlank(cprCrit.specimen())) {
+			query.setProjection(Projections.distinct(cprFields));
+		} else {
+			query.setProjection(cprFields);
+		}
+		
 		
 		List<CprSummary> cprs = new ArrayList<CprSummary>();
 		Map<Long, CprSummary> cprMap = new HashMap<Long, CprSummary>();
@@ -119,6 +125,8 @@ public class CollectionProtocolRegistrationDaoImpl
 		addMrnSiteCondition(query, cprCrit);
 		addEmpiCondition(query, cprCrit);
 		addNameAndPpidCondition(query, cprCrit);
+		addDobCondition(query, cprCrit);
+		addSpecimenCondition(query, cprCrit);
 		return query;		
 	}
 	
@@ -181,6 +189,28 @@ public class CollectionProtocolRegistrationDaoImpl
 			);
 		}
 	}
+	
+	private void addDobCondition(Criteria query, CprListCriteria crit) {
+		if (crit.dob() == null) {
+			return;
+		}
+		
+		query.add(Restrictions.eq("participant.birthDate", crit.dob()));
+	}
+	
+	private void addSpecimenCondition(Criteria query, CprListCriteria crit) {
+		if (StringUtils.isBlank(crit.specimen())) {
+			return;
+		}
+		
+		query.createAlias("visits", "visit")
+			.createAlias("visit.specimens", "specimen")
+			.add(Restrictions.disjunction()
+					.add(Restrictions.ilike("specimen.label", crit.specimen(), MatchMode.ANYWHERE))
+					.add(Restrictions.ilike("specimen.barcode", crit.specimen(), MatchMode.ANYWHERE)))
+			.add(Restrictions.ne("specimen.activityStatus", "Disabled"))
+			.add(Restrictions.ne("visit.activityStatus", "Disabled"));		
+	}
 
 	private ProjectionList getCprSummaryFields(CprListCriteria cprCrit) {
 		ProjectionList projs = Projections.projectionList()
@@ -216,11 +246,14 @@ public class CollectionProtocolRegistrationDaoImpl
 	
 	@SuppressWarnings("unchecked")
 	private List<Object[]> getScgAndSpecimenCounts(CprListCriteria cprCrit) {
-		Criteria countQuery = getCprListQuery(cprCrit)
+		Criteria countQuery = getCprListQuery(cprCrit);
+		if (StringUtils.isBlank(cprCrit.specimen())) {
+			countQuery
 				.createAlias("visits", "visit",
-						JoinType.LEFT_OUTER_JOIN, Restrictions.eq("visit.status", "Complete"))
+					JoinType.LEFT_OUTER_JOIN, Restrictions.eq("visit.status", "Complete"))
 				.createAlias("visit.specimens", "specimen",
-						JoinType.LEFT_OUTER_JOIN, Restrictions.eq("specimen.collectionStatus", "Collected"));
+					JoinType.LEFT_OUTER_JOIN, Restrictions.eq("specimen.collectionStatus", "Collected"));
+		}
 		
 		return countQuery.setProjection(Projections.projectionList()
 				.add(Projections.property("id"))
