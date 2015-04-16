@@ -29,25 +29,29 @@ angular.module('openspecimen')
           return true;
         }
 
+        var allowed = false;
         for (var i = 0; i < userRights.length; i++) {
-          /**
-           * If condition - Entities whose rights are not depends on site and cp for those,
-           * check only resource and operation name is matching.
-           * Else condition - Entities whose rights are depends on site and cp for those,
-           * check site, cp and resource match. site and cp null means rights on all sites and cps.
-           */
-          if (!opts.site && !opts.cp && userRights[i].resource == opts.resource) {
-            if (userRights[i].operations.indexOf(opts.operation) != -1) {
-              return true;
-            }
-          } else if ((!userRights[i].site || userRights[i].site == opts.site)
-            && (!userRights[i].cp || userRights[i].cp == opts.cp)
-            && userRights[i].resource == opts.resource) {
-            return userRights[i].operations.indexOf(opts.operation) != -1;
+          if (!opts.sites && !opts.cp && userRights[i].resource == opts.resource) {
+            //
+            // For resources whose rights are independent of CP and/or Site
+            //
+            allowed = userRights[i].operations.indexOf(opts.operation) != -1;
+
+          } else if ((!userRights[i].site || (opts.sites && opts.sites.indexOf(userRights[i].site) != -1)) &&
+                    (!userRights[i].cp || userRights[i].cp == opts.cp) &&
+                    (userRights[i].resource == opts.resource)) {
+            //
+            // For resources whose rights are specified based on CP and/or Site
+            //
+            allowed = userRights[i].operations.indexOf(opts.operation) != -1;
+          }
+
+          if (allowed) {
+            break;
           }
         }
 
-        return false;
+        return allowed;
       }
     }
   });

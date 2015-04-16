@@ -4,8 +4,8 @@
       <span translate="container.list">Storage Containers</span>
     </h3>
     <div class="os-btns right">
-      <button class="primary" title="{{'container.tooltip.add' | translate}}" 
-        ui-sref="container-addedit({containerId: ''})">
+      <button show-if-allowed="containerResource.createOpts" class="primary"
+        title="{{'container.tooltip.add' | translate}}" ui-sref="container-addedit({containerId: ''})">
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>

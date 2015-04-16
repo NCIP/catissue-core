@@ -3,7 +3,7 @@ angular.module('openspecimen')
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
-        scope.$watch(attrs.showIfAllowed, function(oldOpts, newOpts) {
+        scope.$watch(attrs.showIfAllowed, function(newOpts) {
           if (AuthorizationService.isAllowed(newOpts)) {
             element.show();
           } else {
