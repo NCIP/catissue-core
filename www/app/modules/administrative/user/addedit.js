@@ -31,12 +31,12 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
           if (!$scope.user.id && $scope.institutes.length == 1) {
             $scope.user.instituteName = $scope.institutes[0];
           }
+
+          if ($scope.user.instituteName) {
+            $scope.loadDepartments($scope.user.instituteName);
+          }
         }
       );
-
-      if ($scope.user.instituteName) {
-        $scope.loadDepartments($scope.user.instituteName);
-      }
     }
 
     $scope.loadDepartments = function(instituteName) {
