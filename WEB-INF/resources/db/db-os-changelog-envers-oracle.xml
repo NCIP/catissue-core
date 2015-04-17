@@ -1,787 +1,868 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-    <changeSet author="slakhani" id="1429175726743-1">
-        <createSequence cacheSize="20" cycle="false" incrementBy="1" maxValue="999999999999999999999999999" minValue="1" ordered="false" sequenceName="OS_REVINFO_SEQ" startValue="1"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-2">
-        <createTable tableName="CATISSUE_ADDRESS_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="STREET" type="VARCHAR2(50 CHAR)"/>
-            <column name="STREET_MOD" type="NUMBER(1, 0)"/>
-            <column name="CITY" type="VARCHAR2(50 CHAR)"/>
-            <column name="CITY_MOD" type="NUMBER(1, 0)"/>
-            <column name="STATE" type="VARCHAR2(50 CHAR)"/>
-            <column name="STATE_MOD" type="NUMBER(1, 0)"/>
-            <column name="COUNTRY" type="VARCHAR2(50 CHAR)"/>
-            <column name="COUNTRY_MOD" type="NUMBER(1, 0)"/>
-            <column name="ZIPCODE" type="VARCHAR2(30 CHAR)"/>
-            <column name="ZIPCODE_MOD" type="NUMBER(1, 0)"/>
-            <column name="PHONE_NUMBER" type="VARCHAR2(50 CHAR)"/>
-            <column name="PHONENUMBER_MOD" type="NUMBER(1, 0)"/>
-            <column name="FAX_NUMBER" type="VARCHAR2(50 CHAR)"/>
-            <column name="FAXNUMBER_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-3">
-        <createTable tableName="CATISSUE_COLL_COORDINATORS_AUD">
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="COLLECTION_PROTOCOL_ID" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="USER_ID" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-4">
-        <createTable tableName="CATISSUE_COLL_PROT_EVENT_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="COLLECTION_POINT_LABEL" type="VARCHAR2(255 CHAR)"/>
-            <column name="EVENTLABEL_MOD" type="NUMBER(1, 0)"/>
-            <column name="STUDY_CALENDAR_EVENT_POINT" type="FLOAT(22)"/>
-            <column name="EVENTPOINT_MOD" type="NUMBER(1, 0)"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR2(50 CHAR)"/>
-            <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="CLINICAL_DIAGNOSIS" type="VARCHAR2(150 CHAR)"/>
-            <column name="CLINICALDIAGNOSIS_MOD" type="NUMBER(1, 0)"/>
-            <column name="CLINICAL_STATUS" type="VARCHAR2(50 CHAR)"/>
-            <column name="CLINICALSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="DEFAULT_SITE_ID" type="NUMBER(19, 0)"/>
-            <column name="DEFAULTSITE_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-5">
-        <createTable tableName="CATISSUE_COLL_PROT_REG_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="CONSENT_SIGN_DATE" type="TIMESTAMP"/>
-            <column name="CONSENTSIGNDATE_MOD" type="NUMBER(1, 0)"/>
-            <column name="CONSENT_DOC_URL" type="VARCHAR2(255 CHAR)"/>
-            <column name="SIGNEDCONSENTDOCUMENTURL_MOD" type="NUMBER(1, 0)"/>
-            <column name="PROTOCOL_PARTICIPANT_ID" type="VARCHAR2(255 CHAR)"/>
-            <column name="PPID_MOD" type="NUMBER(1, 0)"/>
-            <column name="BARCODE" type="VARCHAR2(255 CHAR)"/>
-            <column name="BARCODE_MOD" type="NUMBER(1, 0)"/>
-            <column name="REGISTRATION_DATE" type="TIMESTAMP"/>
-            <column name="REGISTRATIONDATE_MOD" type="NUMBER(1, 0)"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
-            <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="CONSENT_WITNESS" type="NUMBER(19, 0)"/>
-            <column name="CONSENTWITNESS_MOD" type="NUMBER(1, 0)"/>
-            <column name="PARTICIPANT_ID" type="NUMBER(19, 0)"/>
-            <column name="PARTICIPANT_MOD" type="NUMBER(1, 0)"/>
-            <column name="COLLECTION_PROTOCOL_ID" type="NUMBER(19, 0)"/>
-            <column name="COLLECTIONPROTOCOL_MOD" type="NUMBER(1, 0)"/>
-            <column name="CONSENTRESPONSES_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-6">
-        <createTable tableName="CATISSUE_CONSENT_TIER_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="STATEMENT" type="VARCHAR2(500 CHAR)"/>
-            <column name="STATEMENT_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-7">
-        <createTable tableName="CATISSUE_CP_REQ_SPECIMEN_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="SPEC_REQ_LABEL" type="VARCHAR2(255 CHAR)"/>
-            <column name="NAME_MOD" type="NUMBER(1, 0)"/>
-            <column name="LINEAGE" type="VARCHAR2(50 CHAR)"/>
-            <column name="LINEAGE_MOD" type="NUMBER(1, 0)"/>
-            <column name="SPECIMEN_CLASS" type="VARCHAR2(50 CHAR)"/>
-            <column name="SPECIMENCLASS_MOD" type="NUMBER(1, 0)"/>
-            <column name="SPECIMEN_TYPE" type="VARCHAR2(50 CHAR)"/>
-            <column name="SPECIMENTYPE_MOD" type="NUMBER(1, 0)"/>
-            <column name="TISSUE_SITE" type="VARCHAR2(50 CHAR)"/>
-            <column name="ANATOMICSITE_MOD" type="NUMBER(1, 0)"/>
-            <column name="TISSUE_SIDE" type="VARCHAR2(50 CHAR)"/>
-            <column name="LATERALITY_MOD" type="NUMBER(1, 0)"/>
-            <column name="PATHOLOGICAL_STATUS" type="VARCHAR2(50 CHAR)"/>
-            <column name="PATHOLOGYSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="STORAGE_TYPE" type="VARCHAR2(50 CHAR)"/>
-            <column name="STORAGETYPE_MOD" type="NUMBER(1, 0)"/>
-            <column name="INITIAL_QUANTITY" type="FLOAT(22)"/>
-            <column name="INITIALQUANTITY_MOD" type="NUMBER(1, 0)"/>
-            <column name="CONCENTRATION" type="FLOAT(22)"/>
-            <column name="CONCENTRATION_MOD" type="NUMBER(1, 0)"/>
-            <column name="COLLECTION_PROCEDURE" type="VARCHAR2(50 CHAR)"/>
-            <column name="COLLECTIONPROCEDURE_MOD" type="NUMBER(1, 0)"/>
-            <column name="COLLECTION_CONTAINER" type="VARCHAR2(50 CHAR)"/>
-            <column name="COLLECTIONCONTAINER_MOD" type="NUMBER(1, 0)"/>
-            <column name="LABELFORMAT" type="VARCHAR2(255 CHAR)"/>
-            <column name="LABELFORMAT_MOD" type="NUMBER(1, 0)"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR2(50 CHAR)"/>
-            <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="COLLECTOR_ID" type="NUMBER(19, 0)"/>
-            <column name="COLLECTOR_MOD" type="NUMBER(1, 0)"/>
-            <column name="RECEIVER_ID" type="NUMBER(19, 0)"/>
-            <column name="RECEIVER_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-8">
-        <createTable tableName="CATISSUE_INSTITUTION_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="NAME" type="VARCHAR2(255 CHAR)"/>
-            <column name="NAME_MOD" type="NUMBER(1, 0)"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
-            <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="DEPARTMENTS_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-9">
-        <createTable tableName="CATISSUE_PARTICIPANT_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="LAST_NAME" type="VARCHAR2(255 CHAR)"/>
-            <column name="LASTNAME_MOD" type="NUMBER(1, 0)"/>
-            <column name="FIRST_NAME" type="VARCHAR2(255 CHAR)"/>
-            <column name="FIRSTNAME_MOD" type="NUMBER(1, 0)"/>
-            <column name="MIDDLE_NAME" type="VARCHAR2(255 CHAR)"/>
-            <column name="MIDDLENAME_MOD" type="NUMBER(1, 0)"/>
-            <column name="BIRTH_DATE" type="TIMESTAMP"/>
-            <column name="BIRTHDATE_MOD" type="NUMBER(1, 0)"/>
-            <column name="GENDER" type="VARCHAR2(255 CHAR)"/>
-            <column name="GENDER_MOD" type="NUMBER(1, 0)"/>
-            <column name="GENOTYPE" type="VARCHAR2(255 CHAR)"/>
-            <column name="SEXGENOTYPE_MOD" type="NUMBER(1, 0)"/>
-            <column name="ETHNICITY" type="VARCHAR2(255 CHAR)"/>
-            <column name="ETHNICITY_MOD" type="NUMBER(1, 0)"/>
-            <column name="SOCIAL_SECURITY_NUMBER" type="VARCHAR2(255 CHAR)"/>
-            <column name="SOCIALSECURITYNUMBER_MOD" type="NUMBER(1, 0)"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
-            <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="DEATH_DATE" type="TIMESTAMP"/>
-            <column name="DEATHDATE_MOD" type="NUMBER(1, 0)"/>
-            <column name="VITAL_STATUS" type="VARCHAR2(255 CHAR)"/>
-            <column name="VITALSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="EMPI_ID" type="VARCHAR2(255 CHAR)"/>
-            <column name="EMPI_MOD" type="NUMBER(1, 0)"/>
-            <column name="PMIS_MOD" type="NUMBER(1, 0)"/>
-            <column name="RACES_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-10">
-        <createTable tableName="CATISSUE_PART_MEDICAL_ID_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="MEDICAL_RECORD_NUMBER" type="VARCHAR2(50 CHAR)"/>
-            <column name="MEDICALRECORDNUMBER_MOD" type="NUMBER(1, 0)"/>
-            <column name="SITE_ID" type="NUMBER(19, 0)"/>
-            <column name="SITE_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-11">
-        <createTable tableName="CATISSUE_RACE_AUD">
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="PARTICIPANT_ID" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="RACE_NAME" type="VARCHAR2(255 CHAR)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-12">
-        <createTable tableName="CATISSUE_SITE_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="NAME" type="VARCHAR2(255 CHAR)"/>
-            <column name="NAME_MOD" type="NUMBER(1, 0)"/>
-            <column name="CODE" type="VARCHAR2(255 CHAR)"/>
-            <column name="CODE_MOD" type="NUMBER(1, 0)"/>
-            <column name="TYPE" type="VARCHAR2(255 CHAR)"/>
-            <column name="TYPE_MOD" type="NUMBER(1, 0)"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
-            <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="INSTITUTE_ID" type="NUMBER(19, 0)"/>
-            <column name="INSTITUTE_MOD" type="NUMBER(1, 0)"/>
-            <column name="COORDINATORS_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-13">
-        <createTable tableName="CATISSUE_SITE_COORDINATORS_AUD">
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SITE_ID" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="USER_ID" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-14">
-        <createTable tableName="CATISSUE_SITE_CP_AUD">
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="COLLECTION_PROTOCOL_ID" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SITE_ID" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-15">
-        <createTable tableName="CATISSUE_SITE_USERS_AUD">
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="USER_ID" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SITE_ID" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-16">
-        <createTable tableName="CATISSUE_SPECIMEN_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="INITIAL_QUANTITY" type="FLOAT(22)"/>
-            <column name="INITIALQUANTITY_MOD" type="NUMBER(1, 0)"/>
-            <column name="PATHOLOGICAL_STATUS" type="VARCHAR2(255 CHAR)"/>
-            <column name="PATHOLOGICALSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="LINEAGE" type="VARCHAR2(255 CHAR)"/>
-            <column name="LINEAGE_MOD" type="NUMBER(1, 0)"/>
-            <column name="SPECIMEN_CLASS" type="VARCHAR2(255 CHAR)"/>
-            <column name="SPECIMENCLASS_MOD" type="NUMBER(1, 0)"/>
-            <column name="SPECIMEN_TYPE" type="VARCHAR2(255 CHAR)"/>
-            <column name="SPECIMENTYPE_MOD" type="NUMBER(1, 0)"/>
-            <column name="LABEL" type="VARCHAR2(255 CHAR)"/>
-            <column name="LABEL_MOD" type="NUMBER(1, 0)"/>
-            <column name="AVAILABLE" type="NUMBER(1, 0)"/>
-            <column name="ISAVAILABLE_MOD" type="NUMBER(1, 0)"/>
-            <column name="COMMENTS" type="VARCHAR2(255 CHAR)"/>
-            <column name="COMMENT_MOD" type="NUMBER(1, 0)"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
-            <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="COLLECTION_STATUS" type="VARCHAR2(255 CHAR)"/>
-            <column name="COLLECTIONSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="BARCODE" type="VARCHAR2(255 CHAR)"/>
-            <column name="BARCODE_MOD" type="NUMBER(1, 0)"/>
-            <column name="CREATED_ON_DATE" type="TIMESTAMP"/>
-            <column name="CREATEDON_MOD" type="NUMBER(1, 0)"/>
-            <column name="AVAILABLE_QUANTITY" type="FLOAT(22)"/>
-            <column name="AVAILABLEQUANTITY_MOD" type="NUMBER(1, 0)"/>
-            <column name="TISSUE_SIDE" type="VARCHAR2(255 CHAR)"/>
-            <column name="TISSUESIDE_MOD" type="NUMBER(1, 0)"/>
-            <column name="TISSUE_SITE" type="VARCHAR2(255 CHAR)"/>
-            <column name="TISSUESITE_MOD" type="NUMBER(1, 0)"/>
-            <column name="POSITION_MOD" type="NUMBER(1, 0)"/>
-            <column name="PARENT_SPECIMEN_ID" type="NUMBER(19, 0)"/>
-            <column name="PARENTSPECIMEN_MOD" type="NUMBER(1, 0)"/>
-            <column name="SPECIMEN_COLLECTION_GROUP_ID" type="NUMBER(19, 0)"/>
-            <column name="VISIT_MOD" type="NUMBER(1, 0)"/>
-            <column name="REQ_SPECIMEN_ID" type="NUMBER(19, 0)"/>
-            <column name="SPECIMENREQUIREMENT_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-17">
-        <createTable tableName="CATISSUE_USER_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="EMAIL_ADDRESS" type="VARCHAR2(255 CHAR)"/>
-            <column name="EMAILADDRESS_MOD" type="NUMBER(1, 0)"/>
-            <column name="FIRST_NAME" type="VARCHAR2(255 CHAR)"/>
-            <column name="FIRSTNAME_MOD" type="NUMBER(1, 0)"/>
-            <column name="LAST_NAME" type="VARCHAR2(255 CHAR)"/>
-            <column name="LASTNAME_MOD" type="NUMBER(1, 0)"/>
-            <column name="LOGIN_NAME" type="VARCHAR2(255 CHAR)"/>
-            <column name="LOGINNAME_MOD" type="NUMBER(1, 0)"/>
-            <column name="START_DATE" type="TIMESTAMP"/>
-            <column name="CREATIONDATE_MOD" type="NUMBER(1, 0)"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
-            <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="PASSWORD" type="VARCHAR2(255 CHAR)"/>
-            <column name="PASSWORD_MOD" type="NUMBER(1, 0)"/>
-            <column name="STATUS_COMMENT" type="VARCHAR2(255 CHAR)"/>
-            <column name="COMMENTS_MOD" type="NUMBER(1, 0)"/>
-            <column name="IS_ADMIN" type="NUMBER(1, 0)"/>
-            <column name="ADMIN_MOD" type="NUMBER(1, 0)"/>
-            <column name="DEPARTMENT_ID" type="NUMBER(19, 0)"/>
-            <column name="DEPARTMENT_MOD" type="NUMBER(1, 0)"/>
-            <column name="SITES_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-18">
-        <createTable tableName="CAT_COLLECTION_PROTOCOL_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="TITLE" type="VARCHAR2(255 CHAR)"/>
-            <column name="TITLE_MOD" type="NUMBER(1, 0)"/>
-            <column name="SHORT_TITLE" type="VARCHAR2(255 CHAR)"/>
-            <column name="SHORTTITLE_MOD" type="NUMBER(1, 0)"/>
-            <column name="START_DATE" type="TIMESTAMP"/>
-            <column name="STARTDATE_MOD" type="NUMBER(1, 0)"/>
-            <column name="END_DATE" type="TIMESTAMP"/>
-            <column name="ENDDATE_MOD" type="NUMBER(1, 0)"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
-            <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="IRB_IDENTIFIER" type="VARCHAR2(255 CHAR)"/>
-            <column name="IRBIDENTIFIER_MOD" type="NUMBER(1, 0)"/>
-            <column name="ENROLLMENT" type="NUMBER(19, 0)"/>
-            <column name="ENROLLMENT_MOD" type="NUMBER(1, 0)"/>
-            <column name="DESCRIPTION_URL" type="VARCHAR2(255 CHAR)"/>
-            <column name="DESCRIPTIONURL_MOD" type="NUMBER(1, 0)"/>
-            <column name="LABEL_FORMAT" type="VARCHAR2(255 CHAR)"/>
-            <column name="SPECIMENLABELFORMAT_MOD" type="NUMBER(1, 0)"/>
-            <column name="DERIV_LABEL_FORMAT" type="VARCHAR2(255 CHAR)"/>
-            <column name="DERIVATIVELABELFORMAT_MOD" type="NUMBER(1, 0)"/>
-            <column name="ALIQUOT_LABEL_FORMAT" type="VARCHAR2(255 CHAR)"/>
-            <column name="ALIQUOTLABELFORMAT_MOD" type="NUMBER(1, 0)"/>
-            <column name="PPID_FORMAT" type="VARCHAR2(255 CHAR)"/>
-            <column name="PPIDFORMAT_MOD" type="NUMBER(1, 0)"/>
-            <column name="UNSIGNED_CONSENT_DOC_URL" type="VARCHAR2(255 CHAR)"/>
-            <column name="UNSIGNEDCONSENTDOCUMENTURL_MOD" type="NUMBER(1, 0)"/>
-            <column name="PRINCIPAL_INVESTIGATOR_ID" type="NUMBER(19, 0)"/>
-            <column name="PRINCIPALINVESTIGATOR_MOD" type="NUMBER(1, 0)"/>
-            <column name="CONSENTTIER_MOD" type="NUMBER(1, 0)"/>
-            <column name="COORDINATORS_MOD" type="NUMBER(1, 0)"/>
-            <column name="REPOSITORIES_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-19">
-        <createTable tableName="CAT_CONSENT_TIER_RESPONSE_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="RESPONSE" type="VARCHAR2(255 CHAR)"/>
-            <column name="RESPONSE_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-20">
-        <createTable tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="CLINICAL_DIAGNOSIS" type="VARCHAR2(255 CHAR)"/>
-            <column name="CLINICALDIAGNOSIS_MOD" type="NUMBER(1, 0)"/>
-            <column name="CLINICAL_STATUS" type="VARCHAR2(255 CHAR)"/>
-            <column name="CLINICALSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
-            <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="NAME" type="VARCHAR2(255 CHAR)"/>
-            <column name="NAME_MOD" type="NUMBER(1, 0)"/>
-            <column name="COLLECTION_STATUS" type="VARCHAR2(255 CHAR)"/>
-            <column name="STATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="IDENTIFIED_REPORT" type="VARCHAR2(255 CHAR)"/>
-            <column name="IDENTIFIEDREPORT_MOD" type="NUMBER(1, 0)"/>
-            <column name="DEIDENTIFIED_REPORT" type="VARCHAR2(255 CHAR)"/>
-            <column name="DEIDENTIFIEDREPORT_MOD" type="NUMBER(1, 0)"/>
-            <column name="COMMENTS" type="VARCHAR2(255 CHAR)"/>
-            <column name="COMMENTS_MOD" type="NUMBER(1, 0)"/>
-            <column name="SURGICAL_PATHOLOGY_NUMBER" type="VARCHAR2(255 CHAR)"/>
-            <column name="SURGICALPATHOLOGYNUMBER_MOD" type="NUMBER(1, 0)"/>
-            <column name="COLLECTION_TIMESTAMP" type="TIMESTAMP"/>
-            <column name="VISITDATE_MOD" type="NUMBER(1, 0)"/>
-            <column name="COLLECTION_PROTOCOL_REG_ID" type="NUMBER(19, 0)"/>
-            <column name="REGISTRATION_MOD" type="NUMBER(1, 0)"/>
-            <column name="COLLECTION_PROTOCOL_EVENT_ID" type="NUMBER(19, 0)"/>
-            <column name="CPEVENT_MOD" type="NUMBER(1, 0)"/>
-            <column name="SITE_ID" type="NUMBER(19, 0)"/>
-            <column name="SITE_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-21">
-        <createTable tableName="CP_CONSENTTIER_AUD">
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="COLL_PROTOCOL_ID" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-22">
-        <createTable tableName="OS_CONTAINER_POSITIONS_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="POS_ONE" type="NUMBER(10, 0)"/>
-            <column name="POSONEORDINAL_MOD" type="NUMBER(1, 0)"/>
-            <column name="POS_TWO" type="NUMBER(10, 0)"/>
-            <column name="POSTWOORDINAL_MOD" type="NUMBER(1, 0)"/>
-            <column name="POS_ONE_STR" type="VARCHAR2(255 CHAR)"/>
-            <column name="POSONE_MOD" type="NUMBER(1, 0)"/>
-            <column name="POS_TWO_STR" type="VARCHAR2(255 CHAR)"/>
-            <column name="POSTWO_MOD" type="NUMBER(1, 0)"/>
-            <column name="STORAGE_CONTAINER_ID" type="NUMBER(19, 0)"/>
-            <column name="CONTAINER_MOD" type="NUMBER(1, 0)"/>
-            <column name="OCCUPYING_SPECIMEN_ID" type="NUMBER(19, 0)"/>
-            <column name="OCCUPYINGSPECIMEN_MOD" type="NUMBER(1, 0)"/>
-            <column name="OCCUPYING_CONTAINER_ID" type="NUMBER(19, 0)"/>
-            <column name="OCCUPYINGCONTAINER_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-23">
-        <createTable tableName="OS_DEPARTMENTS_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="NAME" type="VARCHAR2(255 CHAR)"/>
-            <column name="NAME_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-24">
-        <createTable tableName="OS_STORAGE_CONTAINERS_AUD">
-            <column name="IDENTIFIER" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-            <column name="NAME" type="VARCHAR2(255 CHAR)"/>
-            <column name="NAME_MOD" type="NUMBER(1, 0)"/>
-            <column name="BARCODE" type="VARCHAR2(255 CHAR)"/>
-            <column name="BARCODE_MOD" type="NUMBER(1, 0)"/>
-            <column name="TEMPERATURE" type="FLOAT(22)"/>
-            <column name="TEMPERATURE_MOD" type="NUMBER(1, 0)"/>
-            <column name="NO_OF_COLS" type="NUMBER(10, 0)"/>
-            <column name="NOOFCOLUMNS_MOD" type="NUMBER(1, 0)"/>
-            <column name="NO_OF_ROWS" type="NUMBER(10, 0)"/>
-            <column name="NOOFROWS_MOD" type="NUMBER(1, 0)"/>
-            <column name="COLUMN_LABELING_SCHEME" type="VARCHAR2(255 CHAR)"/>
-            <column name="COLUMNLABELINGSCHEME_MOD" type="NUMBER(1, 0)"/>
-            <column name="ROW_LABELING_SCHEME" type="VARCHAR2(255 CHAR)"/>
-            <column name="ROWLABELINGSCHEME_MOD" type="NUMBER(1, 0)"/>
-            <column name="STORE_SPECIMENS" type="NUMBER(1, 0)"/>
-            <column name="STORESPECIMENENABLED_MOD" type="NUMBER(1, 0)"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
-            <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
-            <column name="COMMENTS" type="VARCHAR2(255 CHAR)"/>
-            <column name="COMMENTS_MOD" type="NUMBER(1, 0)"/>
-            <column name="SITE_ID" type="NUMBER(19, 0)"/>
-            <column name="SITE_MOD" type="NUMBER(1, 0)"/>
-            <column name="PARENT_CONTAINER_ID" type="NUMBER(19, 0)"/>
-            <column name="PARENTCONTAINER_MOD" type="NUMBER(1, 0)"/>
-            <column name="CREATED_BY" type="NUMBER(19, 0)"/>
-            <column name="CREATEDBY_MOD" type="NUMBER(1, 0)"/>
-            <column name="ALLOWEDSPECIMENCLASSES_MOD" type="NUMBER(1, 0)"/>
-            <column name="ALLOWEDSPECIMENTYPES_MOD" type="NUMBER(1, 0)"/>
-            <column name="ALLOWEDCPS_MOD" type="NUMBER(1, 0)"/>
-            <column name="POSITION_MOD" type="NUMBER(1, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-25">
-        <createTable tableName="OS_STOR_CONTAINER_CPS_AUD">
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="STORAGE_CONTAINER_ID" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CP_ID" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-26">
-        <createTable tableName="OS_STOR_CONT_SPEC_CLASSES_AUD">
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="STORAGE_CONTAINER_ID" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SPECIMEN_CLASS" type="VARCHAR2(255 CHAR)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-27">
-        <createTable tableName="OS_STOR_CONT_SPEC_TYPES_AUD">
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="STORAGE_CONTAINER_ID" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SPECIMEN_TYPE" type="VARCHAR2(255 CHAR)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTYPE" type="NUMBER(3, 0)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-28">
-        <createTable tableName="REVCHANGES">
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="ENTITYNAME" type="VARCHAR2(255 CHAR)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-29">
-        <createTable tableName="REVINFO">
-            <column name="REV" type="NUMBER(19, 0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REVTSTMP" type="TIMESTAMP"/>
-            <column name="USER_ID" type="NUMBER(19, 0)"/>
-            <column name="IP_ADDRESS" type="VARCHAR2(255 CHAR)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-30">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007909" tableName="CATISSUE_ADDRESS_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-31">
-        <addPrimaryKey columnNames="REV, COLLECTION_PROTOCOL_ID, USER_ID" constraintName="SYS_C007913" tableName="CATISSUE_COLL_COORDINATORS_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-32">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007916" tableName="CATISSUE_COLL_PROT_EVENT_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-33">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007919" tableName="CATISSUE_COLL_PROT_REG_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-34">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007922" tableName="CATISSUE_CONSENT_TIER_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-35">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007925" tableName="CATISSUE_CP_REQ_SPECIMEN_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-36">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007928" tableName="CATISSUE_INSTITUTION_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-37">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007931" tableName="CATISSUE_PARTICIPANT_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-38">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007934" tableName="CATISSUE_PART_MEDICAL_ID_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-39">
-        <addPrimaryKey columnNames="REV, PARTICIPANT_ID, RACE_NAME" constraintName="SYS_C007938" tableName="CATISSUE_RACE_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-40">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007941" tableName="CATISSUE_SITE_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-41">
-        <addPrimaryKey columnNames="REV, SITE_ID, USER_ID" constraintName="SYS_C007945" tableName="CATISSUE_SITE_COORDINATORS_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-42">
-        <addPrimaryKey columnNames="REV, COLLECTION_PROTOCOL_ID, SITE_ID" constraintName="SYS_C007949" tableName="CATISSUE_SITE_CP_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-43">
-        <addPrimaryKey columnNames="REV, USER_ID, SITE_ID" constraintName="SYS_C007953" tableName="CATISSUE_SITE_USERS_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-44">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007956" tableName="CATISSUE_SPECIMEN_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-45">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007959" tableName="CATISSUE_USER_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-46">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007962" tableName="CAT_COLLECTION_PROTOCOL_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-47">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007965" tableName="CAT_CONSENT_TIER_RESPONSE_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-48">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007968" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-49">
-        <addPrimaryKey columnNames="REV, COLL_PROTOCOL_ID, IDENTIFIER" constraintName="SYS_C007972" tableName="CP_CONSENTTIER_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-50">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007975" tableName="OS_CONTAINER_POSITIONS_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-51">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007978" tableName="OS_DEPARTMENTS_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-52">
-        <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007981" tableName="OS_STORAGE_CONTAINERS_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-53">
-        <addPrimaryKey columnNames="REV, STORAGE_CONTAINER_ID, CP_ID" constraintName="SYS_C007985" tableName="OS_STOR_CONTAINER_CPS_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-54">
-        <addPrimaryKey columnNames="REV, STORAGE_CONTAINER_ID, SPECIMEN_CLASS" constraintName="SYS_C007989" tableName="OS_STOR_CONT_SPEC_CLASSES_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-55">
-        <addPrimaryKey columnNames="REV, STORAGE_CONTAINER_ID, SPECIMEN_TYPE" constraintName="SYS_C007993" tableName="OS_STOR_CONT_SPEC_TYPES_AUD"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-56">
-        <addPrimaryKey columnNames="REV" constraintName="SYS_C007996" tableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-57">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CP_CONSENTTIER_AUD" constraintName="FK_2JFIMA9LE1HXI3P2VNBGERFX3" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-58">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_COLL_PROT_REG_AUD" constraintName="FK_4RWYWID6HIS5VAWYGBBOK91H7" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-59">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_SITE_USERS_AUD" constraintName="FK_5X23QJS6W09IQ557HFV1IFILC" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-60">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CAT_CONSENT_TIER_RESPONSE_AUD" constraintName="FK_7CROKK0UHXA3AQQH626NASP9Q" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-61">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CAT_SPECIMEN_COLL_GROUP_AUD" constraintName="FK_7NMB9YN4UQ0FOJTBH2NL7STV2" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-62">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_SITE_CP_AUD" constraintName="FK_8BYTNB90KR6DD9HR194P9EI57" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-63">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_CONTAINER_POSITIONS_AUD" constraintName="FK_8QR9YJMIG276S5NJJ5Q9S5KVM" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-64">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_COLL_PROT_EVENT_AUD" constraintName="FK_9XHRYW88Q1UV2S2OXCN53RSDH" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-65">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_INSTITUTION_AUD" constraintName="FK_C4N30Y077YCHT0HL58RI6FKO7" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-66">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_SPECIMEN_AUD" constraintName="FK_CTDA38YKFJTWULJY7PB6Y753D" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-67">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_COLL_COORDINATORS_AUD" constraintName="FK_CX3WXVECF9PRG0ULWAW3BWB2S" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-68">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CAT_COLLECTION_PROTOCOL_AUD" constraintName="FK_DYOQILY0S2M061BXVXIK0WOU5" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-69">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_DEPARTMENTS_AUD" constraintName="FK_FHLBE4CIAVOOL7N6HRYDSXM0A" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-70">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_ADDRESS_AUD" constraintName="FK_GDOG1MH6CU0CAL5P6TXOP62U7" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-71">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_STOR_CONT_SPEC_TYPES_AUD" constraintName="FK_H1DXR1MK3LBOJLD9CPGCJOS2E" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-72">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_CONSENT_TIER_AUD" constraintName="FK_HMDOFYMKUI8JF2MHK2A4UB8QM" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-73">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_PARTICIPANT_AUD" constraintName="FK_HS8CRR2D3NWCA17QQFLI82YM" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-74">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_STORAGE_CONTAINERS_AUD" constraintName="FK_I34F99D4J0U2HCATO9DWW1MXW" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-75">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_SITE_AUD" constraintName="FK_ISB8MLTBK8QAA3Q4EPKOY9ELL" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-76">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_STOR_CONTAINER_CPS_AUD" constraintName="FK_ITWT8WCH7FUJEIEKNVGJU804W" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-77">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_STOR_CONT_SPEC_CLASSES_AUD" constraintName="FK_LGUQTANQXX49UIYNH9IHCBJHC" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-78">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_USER_AUD" constraintName="FK_M9SLXW75ECRVRK31NWWAMD7NG" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-79">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_PART_MEDICAL_ID_AUD" constraintName="FK_PKJKHVGSGJKGPWJRG65VIUG05" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-80">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_RACE_AUD" constraintName="FK_QAYPYKBLEPJFTRCV2XE056RVH" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-81">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_CP_REQ_SPECIMEN_AUD" constraintName="FK_R51PE9NBOAPNGJJH34HBM3I2S" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-82">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="REVCHANGES" constraintName="FK_T69KEA3HASJ6UC6DDN5CK5R9Y" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
-    <changeSet author="slakhani" id="1429175726743-83">
-        <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_SITE_COORDINATORS_AUD" constraintName="FK_W3JPS5E5BYVOCJPG18NUYFFY" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
-    </changeSet>
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-1">
+    <createSequence cacheSize="20" cycle="false" incrementBy="1" maxValue="999999999999999999999999999" minValue="1" ordered="false" sequenceName="OS_REVINFO_SEQ" startValue="1"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-2">
+    <createTable tableName="CATISSUE_ADDRESS_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="STREET" type="VARCHAR2(50 CHAR)"/>
+      <column name="STREET_MOD" type="NUMBER(1, 0)"/>
+      <column name="CITY" type="VARCHAR2(50 CHAR)"/>
+      <column name="CITY_MOD" type="NUMBER(1, 0)"/>
+      <column name="STATE" type="VARCHAR2(50 CHAR)"/>
+      <column name="STATE_MOD" type="NUMBER(1, 0)"/>
+      <column name="COUNTRY" type="VARCHAR2(50 CHAR)"/>
+      <column name="COUNTRY_MOD" type="NUMBER(1, 0)"/>
+      <column name="ZIPCODE" type="VARCHAR2(30 CHAR)"/>
+      <column name="ZIPCODE_MOD" type="NUMBER(1, 0)"/>
+      <column name="PHONE_NUMBER" type="VARCHAR2(50 CHAR)"/>
+      <column name="PHONENUMBER_MOD" type="NUMBER(1, 0)"/>
+      <column name="FAX_NUMBER" type="VARCHAR2(50 CHAR)"/>
+      <column name="FAXNUMBER_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-3">
+    <createTable tableName="CATISSUE_COLL_COORDINATORS_AUD">
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="COLLECTION_PROTOCOL_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-4">
+    <createTable tableName="CATISSUE_COLL_PROT_EVENT_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="COLLECTION_POINT_LABEL" type="VARCHAR2(255 CHAR)"/>
+      <column name="EVENTLABEL_MOD" type="NUMBER(1, 0)"/>
+      <column name="STUDY_CALENDAR_EVENT_POINT" type="FLOAT(22)"/>
+      <column name="EVENTPOINT_MOD" type="NUMBER(1, 0)"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR2(50 CHAR)"/>
+      <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="CLINICAL_DIAGNOSIS" type="VARCHAR2(150 CHAR)"/>
+      <column name="CLINICALDIAGNOSIS_MOD" type="NUMBER(1, 0)"/>
+      <column name="CLINICAL_STATUS" type="VARCHAR2(50 CHAR)"/>
+      <column name="CLINICALSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="DEFAULT_SITE_ID" type="NUMBER(19, 0)"/>
+      <column name="DEFAULTSITE_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-5">
+    <createTable tableName="CATISSUE_COLL_PROT_REG_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="CONSENT_SIGN_DATE" type="TIMESTAMP"/>
+      <column name="CONSENTSIGNDATE_MOD" type="NUMBER(1, 0)"/>
+      <column name="CONSENT_DOC_URL" type="VARCHAR2(255 CHAR)"/>
+      <column name="SIGNEDCONSENTDOCUMENTURL_MOD" type="NUMBER(1, 0)"/>
+      <column name="PROTOCOL_PARTICIPANT_ID" type="VARCHAR2(255 CHAR)"/>
+      <column name="PPID_MOD" type="NUMBER(1, 0)"/>
+      <column name="BARCODE" type="VARCHAR2(255 CHAR)"/>
+      <column name="BARCODE_MOD" type="NUMBER(1, 0)"/>
+      <column name="REGISTRATION_DATE" type="TIMESTAMP"/>
+      <column name="REGISTRATIONDATE_MOD" type="NUMBER(1, 0)"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
+      <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="CONSENT_WITNESS" type="NUMBER(19, 0)"/>
+      <column name="CONSENTWITNESS_MOD" type="NUMBER(1, 0)"/>
+      <column name="PARTICIPANT_ID" type="NUMBER(19, 0)"/>
+      <column name="PARTICIPANT_MOD" type="NUMBER(1, 0)"/>
+      <column name="COLLECTION_PROTOCOL_ID" type="NUMBER(19, 0)"/>
+      <column name="COLLECTIONPROTOCOL_MOD" type="NUMBER(1, 0)"/>
+      <column name="CONSENTRESPONSES_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-6">
+    <createTable tableName="CATISSUE_CONSENT_TIER_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="STATEMENT" type="VARCHAR2(500 CHAR)"/>
+      <column name="STATEMENT_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-7">
+    <createTable tableName="CATISSUE_CP_REQ_SPECIMEN_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="SPEC_REQ_LABEL" type="VARCHAR2(255 CHAR)"/>
+      <column name="NAME_MOD" type="NUMBER(1, 0)"/>
+      <column name="LINEAGE" type="VARCHAR2(50 CHAR)"/>
+      <column name="LINEAGE_MOD" type="NUMBER(1, 0)"/>
+      <column name="SPECIMEN_CLASS" type="VARCHAR2(50 CHAR)"/>
+      <column name="SPECIMENCLASS_MOD" type="NUMBER(1, 0)"/>
+      <column name="SPECIMEN_TYPE" type="VARCHAR2(50 CHAR)"/>
+      <column name="SPECIMENTYPE_MOD" type="NUMBER(1, 0)"/>
+      <column name="TISSUE_SITE" type="VARCHAR2(50 CHAR)"/>
+      <column name="ANATOMICSITE_MOD" type="NUMBER(1, 0)"/>
+      <column name="TISSUE_SIDE" type="VARCHAR2(50 CHAR)"/>
+      <column name="LATERALITY_MOD" type="NUMBER(1, 0)"/>
+      <column name="PATHOLOGICAL_STATUS" type="VARCHAR2(50 CHAR)"/>
+      <column name="PATHOLOGYSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="STORAGE_TYPE" type="VARCHAR2(50 CHAR)"/>
+      <column name="STORAGETYPE_MOD" type="NUMBER(1, 0)"/>
+      <column name="INITIAL_QUANTITY" type="FLOAT(22)"/>
+      <column name="INITIALQUANTITY_MOD" type="NUMBER(1, 0)"/>
+      <column name="CONCENTRATION" type="FLOAT(22)"/>
+      <column name="CONCENTRATION_MOD" type="NUMBER(1, 0)"/>
+      <column name="COLLECTION_PROCEDURE" type="VARCHAR2(50 CHAR)"/>
+      <column name="COLLECTIONPROCEDURE_MOD" type="NUMBER(1, 0)"/>
+      <column name="COLLECTION_CONTAINER" type="VARCHAR2(50 CHAR)"/>
+      <column name="COLLECTIONCONTAINER_MOD" type="NUMBER(1, 0)"/>
+      <column name="LABELFORMAT" type="VARCHAR2(255 CHAR)"/>
+      <column name="LABELFORMAT_MOD" type="NUMBER(1, 0)"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR2(50 CHAR)"/>
+      <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="COLLECTOR_ID" type="NUMBER(19, 0)"/>
+      <column name="COLLECTOR_MOD" type="NUMBER(1, 0)"/>
+      <column name="RECEIVER_ID" type="NUMBER(19, 0)"/>
+      <column name="RECEIVER_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-8">
+    <createTable tableName="CATISSUE_INSTITUTION_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="NAME" type="VARCHAR2(255 CHAR)"/>
+      <column name="NAME_MOD" type="NUMBER(1, 0)"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
+      <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="DEPARTMENTS_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-9">
+    <createTable tableName="CATISSUE_PARTICIPANT_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="LAST_NAME" type="VARCHAR2(255 CHAR)"/>
+      <column name="LASTNAME_MOD" type="NUMBER(1, 0)"/>
+      <column name="FIRST_NAME" type="VARCHAR2(255 CHAR)"/>
+      <column name="FIRSTNAME_MOD" type="NUMBER(1, 0)"/>
+      <column name="MIDDLE_NAME" type="VARCHAR2(255 CHAR)"/>
+      <column name="MIDDLENAME_MOD" type="NUMBER(1, 0)"/>
+      <column name="BIRTH_DATE" type="TIMESTAMP"/>
+      <column name="BIRTHDATE_MOD" type="NUMBER(1, 0)"/>
+      <column name="GENDER" type="VARCHAR2(255 CHAR)"/>
+      <column name="GENDER_MOD" type="NUMBER(1, 0)"/>
+      <column name="GENOTYPE" type="VARCHAR2(255 CHAR)"/>
+      <column name="SEXGENOTYPE_MOD" type="NUMBER(1, 0)"/>
+      <column name="ETHNICITY" type="VARCHAR2(255 CHAR)"/>
+      <column name="ETHNICITY_MOD" type="NUMBER(1, 0)"/>
+      <column name="SOCIAL_SECURITY_NUMBER" type="VARCHAR2(255 CHAR)"/>
+      <column name="SOCIALSECURITYNUMBER_MOD" type="NUMBER(1, 0)"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
+      <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="DEATH_DATE" type="TIMESTAMP"/>
+      <column name="DEATHDATE_MOD" type="NUMBER(1, 0)"/>
+      <column name="VITAL_STATUS" type="VARCHAR2(255 CHAR)"/>
+      <column name="VITALSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="EMPI_ID" type="VARCHAR2(255 CHAR)"/>
+      <column name="EMPI_MOD" type="NUMBER(1, 0)"/>
+      <column name="PMIS_MOD" type="NUMBER(1, 0)"/>
+      <column name="RACES_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-10">
+    <createTable tableName="CATISSUE_PART_MEDICAL_ID_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="MEDICAL_RECORD_NUMBER" type="VARCHAR2(50 CHAR)"/>
+      <column name="MEDICALRECORDNUMBER_MOD" type="NUMBER(1, 0)"/>
+      <column name="SITE_ID" type="NUMBER(19, 0)"/>
+      <column name="SITE_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-11">
+    <createTable tableName="CATISSUE_RACE_AUD">
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="PARTICIPANT_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="RACE_NAME" type="VARCHAR2(255 CHAR)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-12">
+    <createTable tableName="CATISSUE_SITE_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="NAME" type="VARCHAR2(255 CHAR)"/>
+      <column name="NAME_MOD" type="NUMBER(1, 0)"/>
+      <column name="CODE" type="VARCHAR2(255 CHAR)"/>
+      <column name="CODE_MOD" type="NUMBER(1, 0)"/>
+      <column name="TYPE" type="VARCHAR2(255 CHAR)"/>
+      <column name="TYPE_MOD" type="NUMBER(1, 0)"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
+      <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="INSTITUTE_ID" type="NUMBER(19, 0)"/>
+      <column name="INSTITUTE_MOD" type="NUMBER(1, 0)"/>
+      <column name="COORDINATORS_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-13">
+    <createTable tableName="CATISSUE_SITE_COORDINATORS_AUD">
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SITE_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-14">
+    <createTable tableName="CATISSUE_SITE_CP_AUD">
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="COLLECTION_PROTOCOL_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SITE_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-15">
+    <createTable tableName="CATISSUE_SITE_USERS_AUD">
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SITE_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-16">
+    <createTable tableName="CATISSUE_SPECIMEN_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="INITIAL_QUANTITY" type="FLOAT(22)"/>
+      <column name="INITIALQUANTITY_MOD" type="NUMBER(1, 0)"/>
+      <column name="PATHOLOGICAL_STATUS" type="VARCHAR2(255 CHAR)"/>
+      <column name="PATHOLOGICALSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="LINEAGE" type="VARCHAR2(255 CHAR)"/>
+      <column name="LINEAGE_MOD" type="NUMBER(1, 0)"/>
+      <column name="SPECIMEN_CLASS" type="VARCHAR2(255 CHAR)"/>
+      <column name="SPECIMENCLASS_MOD" type="NUMBER(1, 0)"/>
+      <column name="SPECIMEN_TYPE" type="VARCHAR2(255 CHAR)"/>
+      <column name="SPECIMENTYPE_MOD" type="NUMBER(1, 0)"/>
+      <column name="LABEL" type="VARCHAR2(255 CHAR)"/>
+      <column name="LABEL_MOD" type="NUMBER(1, 0)"/>
+      <column name="AVAILABLE" type="NUMBER(1, 0)"/>
+      <column name="ISAVAILABLE_MOD" type="NUMBER(1, 0)"/>
+      <column name="COMMENTS" type="VARCHAR2(255 CHAR)"/>
+      <column name="COMMENT_MOD" type="NUMBER(1, 0)"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
+      <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="COLLECTION_STATUS" type="VARCHAR2(255 CHAR)"/>
+      <column name="COLLECTIONSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="BARCODE" type="VARCHAR2(255 CHAR)"/>
+      <column name="BARCODE_MOD" type="NUMBER(1, 0)"/>
+      <column name="CREATED_ON_DATE" type="TIMESTAMP"/>
+      <column name="CREATEDON_MOD" type="NUMBER(1, 0)"/>
+      <column name="AVAILABLE_QUANTITY" type="FLOAT(22)"/>
+      <column name="AVAILABLEQUANTITY_MOD" type="NUMBER(1, 0)"/>
+      <column name="TISSUE_SIDE" type="VARCHAR2(255 CHAR)"/>
+      <column name="TISSUESIDE_MOD" type="NUMBER(1, 0)"/>
+      <column name="TISSUE_SITE" type="VARCHAR2(255 CHAR)"/>
+      <column name="TISSUESITE_MOD" type="NUMBER(1, 0)"/>
+      <column name="POSITION_MOD" type="NUMBER(1, 0)"/>
+      <column name="PARENT_SPECIMEN_ID" type="NUMBER(19, 0)"/>
+      <column name="PARENTSPECIMEN_MOD" type="NUMBER(1, 0)"/>
+      <column name="SPECIMEN_COLLECTION_GROUP_ID" type="NUMBER(19, 0)"/>
+      <column name="VISIT_MOD" type="NUMBER(1, 0)"/>
+      <column name="REQ_SPECIMEN_ID" type="NUMBER(19, 0)"/>
+      <column name="SPECIMENREQUIREMENT_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-17">
+    <createTable tableName="CATISSUE_USER_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="EMAIL_ADDRESS" type="VARCHAR2(255 CHAR)"/>
+      <column name="EMAILADDRESS_MOD" type="NUMBER(1, 0)"/>
+      <column name="FIRST_NAME" type="VARCHAR2(255 CHAR)"/>
+      <column name="FIRSTNAME_MOD" type="NUMBER(1, 0)"/>
+      <column name="LAST_NAME" type="VARCHAR2(255 CHAR)"/>
+      <column name="LASTNAME_MOD" type="NUMBER(1, 0)"/>
+      <column name="LOGIN_NAME" type="VARCHAR2(255 CHAR)"/>
+      <column name="LOGINNAME_MOD" type="NUMBER(1, 0)"/>
+      <column name="START_DATE" type="TIMESTAMP"/>
+      <column name="CREATIONDATE_MOD" type="NUMBER(1, 0)"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
+      <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="STATUS_COMMENT" type="VARCHAR2(255 CHAR)"/>
+      <column name="COMMENTS_MOD" type="NUMBER(1, 0)"/>
+      <column name="IS_ADMIN" type="NUMBER(1, 0)"/>
+      <column name="ADMIN_MOD" type="NUMBER(1, 0)"/>
+      <column name="DEPARTMENT_ID" type="NUMBER(19, 0)"/>
+      <column name="DEPARTMENT_MOD" type="NUMBER(1, 0)"/>
+      <column name="SITES_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-18">
+    <createTable tableName="CAT_COLLECTION_PROTOCOL_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="TITLE" type="VARCHAR2(255 CHAR)"/>
+      <column name="TITLE_MOD" type="NUMBER(1, 0)"/>
+      <column name="SHORT_TITLE" type="VARCHAR2(255 CHAR)"/>
+      <column name="SHORTTITLE_MOD" type="NUMBER(1, 0)"/>
+      <column name="START_DATE" type="TIMESTAMP"/>
+      <column name="STARTDATE_MOD" type="NUMBER(1, 0)"/>
+      <column name="END_DATE" type="TIMESTAMP"/>
+      <column name="ENDDATE_MOD" type="NUMBER(1, 0)"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
+      <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="IRB_IDENTIFIER" type="VARCHAR2(255 CHAR)"/>
+      <column name="IRBIDENTIFIER_MOD" type="NUMBER(1, 0)"/>
+      <column name="ENROLLMENT" type="NUMBER(19, 0)"/>
+      <column name="ENROLLMENT_MOD" type="NUMBER(1, 0)"/>
+      <column name="DESCRIPTION_URL" type="VARCHAR2(255 CHAR)"/>
+      <column name="DESCRIPTIONURL_MOD" type="NUMBER(1, 0)"/>
+      <column name="LABEL_FORMAT" type="VARCHAR2(255 CHAR)"/>
+      <column name="SPECIMENLABELFORMAT_MOD" type="NUMBER(1, 0)"/>
+      <column name="DERIV_LABEL_FORMAT" type="VARCHAR2(255 CHAR)"/>
+      <column name="DERIVATIVELABELFORMAT_MOD" type="NUMBER(1, 0)"/>
+      <column name="ALIQUOT_LABEL_FORMAT" type="VARCHAR2(255 CHAR)"/>
+      <column name="ALIQUOTLABELFORMAT_MOD" type="NUMBER(1, 0)"/>
+      <column name="PPID_FORMAT" type="VARCHAR2(255 CHAR)"/>
+      <column name="PPIDFORMAT_MOD" type="NUMBER(1, 0)"/>
+      <column name="UNSIGNED_CONSENT_DOC_URL" type="VARCHAR2(255 CHAR)"/>
+      <column name="UNSIGNEDCONSENTDOCUMENTURL_MOD" type="NUMBER(1, 0)"/>
+      <column name="PRINCIPAL_INVESTIGATOR_ID" type="NUMBER(19, 0)"/>
+      <column name="PRINCIPALINVESTIGATOR_MOD" type="NUMBER(1, 0)"/>
+      <column name="CONSENTTIER_MOD" type="NUMBER(1, 0)"/>
+      <column name="COORDINATORS_MOD" type="NUMBER(1, 0)"/>
+      <column name="REPOSITORIES_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-19">
+    <createTable tableName="CAT_CONSENT_TIER_RESPONSE_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="RESPONSE" type="VARCHAR2(255 CHAR)"/>
+      <column name="RESPONSE_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-20">
+    <createTable tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="CLINICAL_DIAGNOSIS" type="VARCHAR2(255 CHAR)"/>
+      <column name="CLINICALDIAGNOSIS_MOD" type="NUMBER(1, 0)"/>
+      <column name="CLINICAL_STATUS" type="VARCHAR2(255 CHAR)"/>
+      <column name="CLINICALSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
+      <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="NAME" type="VARCHAR2(255 CHAR)"/>
+      <column name="NAME_MOD" type="NUMBER(1, 0)"/>
+      <column name="COLLECTION_STATUS" type="VARCHAR2(255 CHAR)"/>
+      <column name="STATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="IDENTIFIED_REPORT" type="VARCHAR2(255 CHAR)"/>
+      <column name="IDENTIFIEDREPORT_MOD" type="NUMBER(1, 0)"/>
+      <column name="DEIDENTIFIED_REPORT" type="VARCHAR2(255 CHAR)"/>
+      <column name="DEIDENTIFIEDREPORT_MOD" type="NUMBER(1, 0)"/>
+      <column name="COMMENTS" type="VARCHAR2(255 CHAR)"/>
+      <column name="COMMENTS_MOD" type="NUMBER(1, 0)"/>
+      <column name="SURGICAL_PATHOLOGY_NUMBER" type="VARCHAR2(255 CHAR)"/>
+      <column name="SURGICALPATHOLOGYNUMBER_MOD" type="NUMBER(1, 0)"/>
+      <column name="COLLECTION_TIMESTAMP" type="TIMESTAMP"/>
+      <column name="VISITDATE_MOD" type="NUMBER(1, 0)"/>
+      <column name="COLLECTION_PROTOCOL_REG_ID" type="NUMBER(19, 0)"/>
+      <column name="REGISTRATION_MOD" type="NUMBER(1, 0)"/>
+      <column name="COLLECTION_PROTOCOL_EVENT_ID" type="NUMBER(19, 0)"/>
+      <column name="CPEVENT_MOD" type="NUMBER(1, 0)"/>
+      <column name="SITE_ID" type="NUMBER(19, 0)"/>
+      <column name="SITE_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-21">
+    <createTable tableName="CP_CONSENTTIER_AUD">
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="COLL_PROTOCOL_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-22">
+    <createTable tableName="OS_CONTAINER_POSITIONS_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="POS_ONE" type="NUMBER(10, 0)"/>
+      <column name="POSONEORDINAL_MOD" type="NUMBER(1, 0)"/>
+      <column name="POS_TWO" type="NUMBER(10, 0)"/>
+      <column name="POSTWOORDINAL_MOD" type="NUMBER(1, 0)"/>
+      <column name="POS_ONE_STR" type="VARCHAR2(255 CHAR)"/>
+      <column name="POSONE_MOD" type="NUMBER(1, 0)"/>
+      <column name="POS_TWO_STR" type="VARCHAR2(255 CHAR)"/>
+      <column name="POSTWO_MOD" type="NUMBER(1, 0)"/>
+      <column name="STORAGE_CONTAINER_ID" type="NUMBER(19, 0)"/>
+      <column name="CONTAINER_MOD" type="NUMBER(1, 0)"/>
+      <column name="OCCUPYING_SPECIMEN_ID" type="NUMBER(19, 0)"/>
+      <column name="OCCUPYINGSPECIMEN_MOD" type="NUMBER(1, 0)"/>
+      <column name="OCCUPYING_CONTAINER_ID" type="NUMBER(19, 0)"/>
+      <column name="OCCUPYINGCONTAINER_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-23">
+    <createTable tableName="OS_DEPARTMENTS_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="NAME" type="VARCHAR2(255 CHAR)"/>
+      <column name="NAME_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-24">
+    <createTable tableName="OS_STORAGE_CONTAINERS_AUD">
+      <column name="IDENTIFIER" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="NAME" type="VARCHAR2(255 CHAR)"/>
+      <column name="NAME_MOD" type="NUMBER(1, 0)"/>
+      <column name="BARCODE" type="VARCHAR2(255 CHAR)"/>
+      <column name="BARCODE_MOD" type="NUMBER(1, 0)"/>
+      <column name="TEMPERATURE" type="FLOAT(22)"/>
+      <column name="TEMPERATURE_MOD" type="NUMBER(1, 0)"/>
+      <column name="NO_OF_COLS" type="NUMBER(10, 0)"/>
+      <column name="NOOFCOLUMNS_MOD" type="NUMBER(1, 0)"/>
+      <column name="NO_OF_ROWS" type="NUMBER(10, 0)"/>
+      <column name="NOOFROWS_MOD" type="NUMBER(1, 0)"/>
+      <column name="COLUMN_LABELING_SCHEME" type="VARCHAR2(255 CHAR)"/>
+      <column name="COLUMNLABELINGSCHEME_MOD" type="NUMBER(1, 0)"/>
+      <column name="ROW_LABELING_SCHEME" type="VARCHAR2(255 CHAR)"/>
+      <column name="ROWLABELINGSCHEME_MOD" type="NUMBER(1, 0)"/>
+      <column name="STORE_SPECIMENS" type="NUMBER(1, 0)"/>
+      <column name="STORESPECIMENENABLED_MOD" type="NUMBER(1, 0)"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR2(255 CHAR)"/>
+      <column name="ACTIVITYSTATUS_MOD" type="NUMBER(1, 0)"/>
+      <column name="COMMENTS" type="VARCHAR2(255 CHAR)"/>
+      <column name="COMMENTS_MOD" type="NUMBER(1, 0)"/>
+      <column name="SITE_ID" type="NUMBER(19, 0)"/>
+      <column name="SITE_MOD" type="NUMBER(1, 0)"/>
+      <column name="PARENT_CONTAINER_ID" type="NUMBER(19, 0)"/>
+      <column name="PARENTCONTAINER_MOD" type="NUMBER(1, 0)"/>
+      <column name="CREATED_BY" type="NUMBER(19, 0)"/>
+      <column name="CREATEDBY_MOD" type="NUMBER(1, 0)"/>
+      <column name="ALLOWEDSPECIMENCLASSES_MOD" type="NUMBER(1, 0)"/>
+      <column name="ALLOWEDSPECIMENTYPES_MOD" type="NUMBER(1, 0)"/>
+      <column name="ALLOWEDCPS_MOD" type="NUMBER(1, 0)"/>
+      <column name="POSITION_MOD" type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-25">
+    <createTable tableName="OS_STOR_CONTAINER_CPS_AUD">
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="STORAGE_CONTAINER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CP_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-26">
+    <createTable tableName="OS_STOR_CONT_SPEC_CLASSES_AUD">
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="STORAGE_CONTAINER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SPECIMEN_CLASS" type="VARCHAR2(255 CHAR)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-27">
+    <createTable tableName="OS_STOR_CONT_SPEC_TYPES_AUD">
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="STORAGE_CONTAINER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SPECIMEN_TYPE" type="VARCHAR2(255 CHAR)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-28">
+    <createTable tableName="REVCHANGES">
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ENTITYNAME" type="VARCHAR2(255 CHAR)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-29">
+    <createTable tableName="REVINFO">
+      <column name="REV" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTSTMP" type="TIMESTAMP"/>
+      <column name="USER_ID" type="NUMBER(19, 0)"/>
+      <column name="IP_ADDRESS" type="VARCHAR2(255 CHAR)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-30">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007909" tableName="CATISSUE_ADDRESS_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-31">
+    <addPrimaryKey columnNames="REV, COLLECTION_PROTOCOL_ID, USER_ID" constraintName="SYS_C007913" tableName="CATISSUE_COLL_COORDINATORS_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-32">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007916" tableName="CATISSUE_COLL_PROT_EVENT_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-33">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007919" tableName="CATISSUE_COLL_PROT_REG_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-34">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007922" tableName="CATISSUE_CONSENT_TIER_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-35">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007925" tableName="CATISSUE_CP_REQ_SPECIMEN_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-36">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007928" tableName="CATISSUE_INSTITUTION_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-37">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007931" tableName="CATISSUE_PARTICIPANT_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-38">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007934" tableName="CATISSUE_PART_MEDICAL_ID_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-39">
+    <addPrimaryKey columnNames="REV, PARTICIPANT_ID, RACE_NAME" constraintName="SYS_C007938" tableName="CATISSUE_RACE_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-40">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007941" tableName="CATISSUE_SITE_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-41">
+    <addPrimaryKey columnNames="REV, SITE_ID, USER_ID" constraintName="SYS_C007945" tableName="CATISSUE_SITE_COORDINATORS_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-42">
+    <addPrimaryKey columnNames="REV, COLLECTION_PROTOCOL_ID, SITE_ID" constraintName="SYS_C007949" tableName="CATISSUE_SITE_CP_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-43">
+    <addPrimaryKey columnNames="REV, USER_ID, SITE_ID" constraintName="SYS_C007953" tableName="CATISSUE_SITE_USERS_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-44">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007956" tableName="CATISSUE_SPECIMEN_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-45">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007959" tableName="CATISSUE_USER_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-46">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007962" tableName="CAT_COLLECTION_PROTOCOL_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-47">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007965" tableName="CAT_CONSENT_TIER_RESPONSE_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-48">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007968" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-49">
+    <addPrimaryKey columnNames="REV, COLL_PROTOCOL_ID, IDENTIFIER" constraintName="SYS_C007972" tableName="CP_CONSENTTIER_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-50">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007975" tableName="OS_CONTAINER_POSITIONS_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-51">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007978" tableName="OS_DEPARTMENTS_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-52">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007981" tableName="OS_STORAGE_CONTAINERS_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-53">
+    <addPrimaryKey columnNames="REV, STORAGE_CONTAINER_ID, CP_ID" constraintName="SYS_C007985" tableName="OS_STOR_CONTAINER_CPS_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-54">
+    <addPrimaryKey columnNames="REV, STORAGE_CONTAINER_ID, SPECIMEN_CLASS" constraintName="SYS_C007989" tableName="OS_STOR_CONT_SPEC_CLASSES_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-55">
+    <addPrimaryKey columnNames="REV, STORAGE_CONTAINER_ID, SPECIMEN_TYPE" constraintName="SYS_C007993" tableName="OS_STOR_CONT_SPEC_TYPES_AUD"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-56">
+    <addPrimaryKey columnNames="REV" constraintName="SYS_C007996" tableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-57">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CP_CONSENTTIER_AUD" constraintName="FK_2JFIMA9LE1HXI3P2VNBGERFX3" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-58">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_COLL_PROT_REG_AUD" constraintName="FK_4RWYWID6HIS5VAWYGBBOK91H7" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-59">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_SITE_USERS_AUD" constraintName="FK_5X23QJS6W09IQ557HFV1IFILC" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-60">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CAT_CONSENT_TIER_RESPONSE_AUD" constraintName="FK_7CROKK0UHXA3AQQH626NASP9Q" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-61">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CAT_SPECIMEN_COLL_GROUP_AUD" constraintName="FK_7NMB9YN4UQ0FOJTBH2NL7STV2" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-62">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_SITE_CP_AUD" constraintName="FK_8BYTNB90KR6DD9HR194P9EI57" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-63">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_CONTAINER_POSITIONS_AUD" constraintName="FK_8QR9YJMIG276S5NJJ5Q9S5KVM" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-64">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_COLL_PROT_EVENT_AUD" constraintName="FK_9XHRYW88Q1UV2S2OXCN53RSDH" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-65">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_INSTITUTION_AUD" constraintName="FK_C4N30Y077YCHT0HL58RI6FKO7" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-66">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_SPECIMEN_AUD" constraintName="FK_CTDA38YKFJTWULJY7PB6Y753D" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-67">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_COLL_COORDINATORS_AUD" constraintName="FK_CX3WXVECF9PRG0ULWAW3BWB2S" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-68">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CAT_COLLECTION_PROTOCOL_AUD" constraintName="FK_DYOQILY0S2M061BXVXIK0WOU5" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-69">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_DEPARTMENTS_AUD" constraintName="FK_FHLBE4CIAVOOL7N6HRYDSXM0A" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-70">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_ADDRESS_AUD" constraintName="FK_GDOG1MH6CU0CAL5P6TXOP62U7" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-71">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_STOR_CONT_SPEC_TYPES_AUD" constraintName="FK_H1DXR1MK3LBOJLD9CPGCJOS2E" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-72">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_CONSENT_TIER_AUD" constraintName="FK_HMDOFYMKUI8JF2MHK2A4UB8QM" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-73">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_PARTICIPANT_AUD" constraintName="FK_HS8CRR2D3NWCA17QQFLI82YM" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-74">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_STORAGE_CONTAINERS_AUD" constraintName="FK_I34F99D4J0U2HCATO9DWW1MXW" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-75">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_SITE_AUD" constraintName="FK_ISB8MLTBK8QAA3Q4EPKOY9ELL" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-76">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_STOR_CONTAINER_CPS_AUD" constraintName="FK_ITWT8WCH7FUJEIEKNVGJU804W" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-77">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_STOR_CONT_SPEC_CLASSES_AUD" constraintName="FK_LGUQTANQXX49UIYNH9IHCBJHC" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-78">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_USER_AUD" constraintName="FK_M9SLXW75ECRVRK31NWWAMD7NG" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-79">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_PART_MEDICAL_ID_AUD" constraintName="FK_PKJKHVGSGJKGPWJRG65VIUG05" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-80">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_RACE_AUD" constraintName="FK_QAYPYKBLEPJFTRCV2XE056RVH" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-81">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_CP_REQ_SPECIMEN_AUD" constraintName="FK_R51PE9NBOAPNGJJH34HBM3I2S" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-82">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="REVCHANGES" constraintName="FK_T69KEA3HASJ6UC6DDN5CK5R9Y" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="slakhani" id="1429175726743-83">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_SITE_COORDINATORS_AUD" constraintName="FK_W3JPS5E5BYVOCJPG18NUYFFY" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="REVINFO"/>
+  </changeSet>
+
 </databaseChangeLog>

@@ -183,6 +183,7 @@ public class User extends BaseEntity implements UserDetails {
 		this.comments = comments;
 	}
 
+	@NotAudited
 	public String getPassword() {
 		return password;
 	}
