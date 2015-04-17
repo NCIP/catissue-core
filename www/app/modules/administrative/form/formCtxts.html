@@ -1,0 +1,72 @@
+<div class="os-modal-header">
+  <h4>{{form.caption}}</h4>
+</div>
+
+<div class="os-modal-body">
+  <div class="form-context-list" ng-if="cpFormCtxts && cpFormCtxts.length > 0">
+    <h5 translate="form_ctxt.title">
+      Used in following collection protocols
+    </h5>
+
+    <div class="os-section">
+      <div class="os-table os-table-muted-hdr os-border">
+        <div class="os-table-head">
+          <div class="row">
+            <div class="col col-xs-6" translate="form_ctxt.collection_protocol">Collection Protocol</div>
+            <div class="col col-xs-5" translate="form_ctxt.level">Level</div>
+            <div class="col col-xs-1">&nbsp;</div>
+          </div>
+        </div>
+        <div class="os-table-body">
+          <div class="row" ng-repeat="ctxt in cpFormCtxts">
+            <div class="col col-xs-6">{{ctxt.title}}</div>
+            <div class="col col-xs-5">{{ctxt.levels.join(", ")}}</div>
+            <div class="col col-xs-1">
+              <span class="glyphicon glyphicon-th-list" 
+                title="{{'form_ctxt.multiple_records_allwoed' | translate}}" ng-if="ctxt.multiRecord"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-context-form">
+    <div ng-show="!cpFormCtxt.isSpecimenEvent" translate="form_ctxt.form_title">
+      Use form in following collection protocols</div>
+    <div ng-show="cpFormCtxt.isSpecimenEvent" translate="form_ctxt.specimen_event_selected">
+      Specimen Event forms always attached to all collection protocols. </div>
+    <div class="checkbox" ng-show="!cpFormCtxt.isSpecimenEvent">
+      <label><input type="checkbox" ng-checked="cpFormCtxt.allProtocols" ng-model="cpFormCtxt.allProtocols" 
+        ng-disabled="cpFormCtxt.isSpecimenEvent"
+        translate="form_ctxt.select_all_cps"> All Present and Future Collection Protocols </label>
+    </div>
+    <div ng-show="cpFormCtxt.allProtocols != true" style="margin-top:10px;margin-bottom:10px;">
+      <os-select multiple ng-model="cpFormCtxt.selectedCps" list="cpList" display-prop="shortTitle"
+        placeholder="{{'form_ctxt.select_cps' | translate}}" name="cps">
+      </os-select>
+    </div>
+    <div style="margin-top:10px;margin-bottom:10px;">
+      <os-select ng-model="cpFormCtxt.selectedEntity" list="extnEntities" display-prop="name"
+        placeholder="{{'form_ctxt.select_level' | translate }}" on-change="onEntitySelect" append-to-body="true">
+      </os-select>
+    </div>
+    <div class="checkbox">
+      <label><input type="checkbox" ng-checked="cpFormCtxt.isMultiRecord" 
+        ng-model="cpFormCtxt.isMultiRecord" translate="form_ctxt.multiple_records_allowed"> Multiple records allowed </label>
+    </div>
+  </div>
+</div>
+
+<div class="os-modal-footer" ng-switch on="enableAttach(cpFormCtxt)">
+  <button ng-switch-when="true"  class="btn btn-primary" ng-click="attach(cpFormCtxt)" translate="form_ctxt.attach_form">
+    Attach Form
+  </button>
+  <button ng-switch-when="true"  class="btn btn-default" ng-click="cancel()" translate="common.buttons.cancel">
+    Cancel
+  </button>
+  <button ng-switch-when="false" class="btn btn-primary" ng-click="cancel()" translate="common.buttons.done">
+    Done
+  </button>
+</div> 
+

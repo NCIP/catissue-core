@@ -6,7 +6,8 @@ angular.module('os.administrative.models',
     'os.administrative.models.site',
     'os.administrative.models.dp',
     'os.administrative.models.container',
-    'os.administrative.models.role'
+    'os.administrative.models.role',
+    'os.administrative.models.form'
   ]
 );
  

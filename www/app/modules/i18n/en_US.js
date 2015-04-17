@@ -660,6 +660,33 @@
     }
   },
 
+  "form": {
+    "list": "Forms",
+    "create_form": "Create Form",
+    "name": "Form Name",
+    "created_by": "Created By",
+    "last_updated": "Last Updated",
+    "cp_count": "CP Count",
+
+    "tooltip": {
+      "add": "Click to add new Form",
+      "search": "Click to search Form"
+    }
+  },
+
+  "form_ctxt": {
+    "title": "Used in following collection protocols",
+    "collection_protocol": "Collection Protocol",
+    "level": "Level",
+    "multiple_records_allwoed": "Multiple records allowed",
+    "form_title": "Use form in following collection protocols",
+    "specimen_event_selected": "Specimen Event forms always attached to all collection protocols.",
+    "select_all_cps": "All Present and Future Collection Protocols",
+    "select_cps": "Select One or More Collection Protocols",
+    "select_level": "Select Level",
+    "attach_form": "Attach Form"
+  },
+
   "extensions": {
     "no_extensions": "No extensions to show",
     "list": "Extensions",
@@ -847,6 +874,7 @@
     "collection_protocol_event": "Collection Protocol Event",
     "collection_protocol_registration": "Collection Protocol Registration",
     "specimen": "Specimen",
-    "distribution_order": "Distribution Order"
+    "distribution_order": "Distribution Order",
+    "form": "Form"
   }
 }
