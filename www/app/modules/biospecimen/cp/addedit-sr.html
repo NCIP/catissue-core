@@ -1,6 +1,10 @@
 <div class="list-group">
   <div class="list-group-item os-section-hdr">
     <span ng-if="!sr.id" translate="srs.new_sr">New Specimen Requirement</span>
+    <span ng-if="!!sr.id" ng-switch on="!!sr.name">
+      <span ng-switch-when="true">{{sr.name}}</span>
+      <span ng-switch-default>{{sr.type}} ({{sr.specimenClass}})</span>
+    </span>
   </div>
   <div class="list-group-item">
     <form class="form-horizontal" name="srForm" os-form-validator="srForm" novalidate>
@@ -14,7 +18,7 @@
         <label class="control-label col-xs-4" translate="srs.specimen_class">Specimen Class</label>
         <div class="col-xs-8">
           <os-select name="specimenClass" ng-model="sr.specimenClass" list="specimenClasses"
-            placeholder="{{'srs.specimen_class' | translate}}" required>
+            placeholder="{{'srs.specimen_class' | translate}}" required ng-disabled="!!sr.id">
           </os-select>
           <div os-field-error field="srForm.specimenClass"></div>
         </div>
@@ -23,7 +27,7 @@
         <label class="control-label col-xs-4" translate="srs.specimen_type">Specimen Type</label>
         <div class="col-xs-8">
           <os-select name="specimenType" ng-model="sr.type" list="specimenTypes"
-            placeholder="{{'srs.specimen_type' | translate}}" required>
+            placeholder="{{'srs.specimen_type' | translate}}" required ng-disabled="!!sr.id">
           </os-select>
           <div os-field-error field="srForm.specimenType"></div>
         </div>
@@ -123,14 +127,22 @@
       <div class="form-group">
         <label class="control-label col-xs-4" translate="srs.label_fmt">Label Format</label>
         <div class="col-xs-8">
-          <input ng-model="sr.labelFmt" class="form-control" type="text" placeholder="{{'srs.label_fmt' | translate}}">
+          <input ng-model="sr.labelFmt" class="form-control" type="text" 
+            placeholder="{{'srs.label_fmt' | translate}}">
         </div>
       </div>
       <div class="os-divider"></div>
       <div class="form-group">
         <div class="col-xs-offset-4 col-xs-8">
-          <button type="submit" class="btn btn-success" os-form-submit="createSr()" translate="common.buttons.create">Create</button>
-          <a class="btn os-btn-text-secondary" ng-click="revertEdit()" translate="common.buttons.cancel">Cancel</a>
+          <button type="submit" class="btn btn-success" os-form-submit="createSr()" ng-if="!sr.id">
+            <span translate="common.buttons.create">Create</span>
+          </button>
+          <button type="submit" class="btn btn-success" os-form-submit="updateSr()" ng-if="!!sr.id">
+            <span translate="common.buttons.update">Update</span>
+          </button>
+          <a class="btn os-btn-text-secondary" ng-click="revertEdit()">
+            <span translate="common.buttons.cancel">Cancel</span>
+          </a>
         </div>
       </div>
     </form>
