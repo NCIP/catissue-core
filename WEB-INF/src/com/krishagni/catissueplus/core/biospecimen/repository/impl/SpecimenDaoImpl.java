@@ -2,8 +2,11 @@
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Disjunction;
@@ -148,7 +151,26 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 				.list();
 	}
 	
-	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Long> getCprAndVisitIds(Long specimenId) {
+		List<Object[]> rows = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CPR_AND_VISIT_IDS)
+				.setLong("specimenId", specimenId)
+				.list();
+		
+		if (CollectionUtils.isEmpty(rows)) {
+			return null;
+		}
+		
+		Map<String, Long> result = new HashMap<String, Long>();
+		Object[] row = rows.iterator().next();
+		result.put("cprId", (Long)row[0]);
+		result.put("visitId", (Long)row[1]);
+		result.put("specimenId", specimenId);
+		return result;
+	}
+			
 	private void addSearchConditions(Criteria criteria, String[] searchString) {
 		if (searchString == null || searchString.length == 0 || StringUtils.isBlank(searchString[0])) {
 			return;
@@ -189,4 +211,7 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	private static final String GET_BY_VISIT_ID = FQN + ".getByVisitId";
 	
 	private static final String GET_BY_VISIT_NAME = FQN + ".getByVisitName";
+	
+	private static final String GET_CPR_AND_VISIT_IDS = FQN + ".getCprAndVisitIds";
+
 }

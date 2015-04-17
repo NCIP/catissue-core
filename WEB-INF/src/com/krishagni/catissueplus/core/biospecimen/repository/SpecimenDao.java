@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.common.repository.Dao;
@@ -29,4 +30,6 @@ public interface SpecimenDao extends Dao<Specimen> {
 	public List<Specimen> getAllSpecimens(int startAt, int maxRecords, String... searchString);
 
 	public Long getSpecimensCount(String... searchString);
+	
+	public Map<String, Long> getCprAndVisitIds(Long specimenId);
 }

@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
@@ -161,7 +162,21 @@ public class SpecimenServiceImpl implements SpecimenService {
 		return ResponseEvent.response(SpecimenLabelPrintJobSummary.from(job));
 	}
 	
-	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Map<String, Long>> getCprAndVisitIds(RequestEvent<Long> req) {
+		try {
+			Map<String, Long> ids = daoFactory.getSpecimenDao().getCprAndVisitIds(req.getPayload());
+			if (ids == null || ids.isEmpty()) {
+				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(ids);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+		
 	private void ensureUniqueLabel(String label, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(label)) {
 			return;

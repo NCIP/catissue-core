@@ -65,6 +65,14 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       );
     };
 
+    Specimen.getRouteIds = function(specimenId) {
+      return $http.get(Specimen.url() + specimenId + '/cpr-visit-ids').then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
     Specimen.prototype.hasSufficientQty = function() {
       var qty = this.initialQty;
       angular.forEach(this.children, function(child) {
