@@ -78,8 +78,6 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
         if (!newVal || newVal == oldVal || !oldVal) {
           return;
         }
-
-        $scope.specimenTypes = PvManager.getPvsByParent('specimen-class', newVal);
         $scope.sr.type = '';
       });
 

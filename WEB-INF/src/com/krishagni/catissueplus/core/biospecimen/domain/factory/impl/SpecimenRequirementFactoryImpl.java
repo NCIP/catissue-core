@@ -115,6 +115,14 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		sr.setName(req.getName());
+		
+		//
+		// Specimen class and type are set here so that properties dependent on these can
+		// be calculated and set appropriately. For example, concentration is set only
+		// for molecular specimens.
+		//
+		setSpecimenClass(req, sr, ose);
+		setSpecimenType(req, sr, ose);		
 		setInitialQty(req, sr, ose);
 		setStorageType(req, sr, ose);
 		setLabelFormat(req, sr, ose);
