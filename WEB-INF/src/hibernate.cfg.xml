@@ -7,10 +7,6 @@
 
     <session-factory>
 
- 		<property name="org.hibernate.envers.track_entities_changed_in_revision">true</property>
- 		<property name="org.hibernate.envers.global_with_modified_flag">true</property>
- 		<property name="show_sql">true</property>
-
 		<!--  Form Context and Record Entry -->
 		<mapping resource="krishagni/catissueplus/hbm/FormContextBean.hbm.xml" />
 		<mapping resource="krishagni/catissueplus/hbm/FormRecordEntryBean.hbm.xml" />
