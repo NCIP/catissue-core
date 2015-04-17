@@ -16,6 +16,10 @@ public class LdapAuthenticationServiceImpl implements AuthenticationService {
 	
 	private LdapAuthenticationProvider provider;
 	
+	public LdapAuthenticationServiceImpl() {
+		
+	}
+	
 	public LdapAuthenticationServiceImpl(Map<String, String> props) {
 		provider = getProvider(props);
 	}
