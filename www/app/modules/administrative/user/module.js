@@ -10,7 +10,7 @@ angular.module('os.administrative.user',
 
   .config(function($stateProvider) {
     $stateProvider
-      .state('users', {
+      .state('user-root', {
         abstract: true,
         template: '<div ui-view></div>',
         controller: function($scope) {
@@ -27,7 +27,7 @@ angular.module('os.administrative.user',
         url: '/users',
         templateUrl: 'modules/administrative/user/list.html',
         controller: 'UserListCtrl',
-        parent: 'users'
+        parent: 'user-root'
       })
       .state('user-addedit', {
         url: '/user-addedit/:userId',
@@ -41,7 +41,7 @@ angular.module('os.administrative.user',
           }
         },
         controller: 'UserAddEditCtrl',
-        parent: 'users'
+        parent: 'user-root'
       })
       .state('user-detail', {
         url: '/users/:userId',
@@ -52,7 +52,7 @@ angular.module('os.administrative.user',
           }
         },
         controller: 'UserDetailCtrl',
-        parent: 'users'
+        parent: 'user-root'
       })
       .state('user-detail.overview', {
         url: '/overview',

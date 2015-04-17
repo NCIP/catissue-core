@@ -8,11 +8,9 @@ angular.module('os.biospecimen.cp.detail', ['os.biospecimen.models'])
     function init() {
       $scope.sites = PvManager.getSites();
 
-      $scope.cpResource.updateOpts.sites = cp.repositoryNames;
-      $scope.cpResource.updateOpts.cp = cp.shortTitle;
-
-      $scope.cpResource.deleteOpts.sites = cp.repositoryNames;
-      $scope.cpResource.deleteOpts.cp = cp.shortTitle;
+      var opts = {sites: cp.repositoryNames, cp: cp.shortTitle};
+      angular.extend($scope.cpResource.updateOpts, opts);
+      angular.extend($scope.cpResource.deleteOpts, opts);
     }
 
     $scope.editCp = function(property, value) {

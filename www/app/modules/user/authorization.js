@@ -2,11 +2,11 @@ angular.module('openspecimen')
   .factory('AuthorizationService', function($rootScope, $http, User, ApiUtil, ApiUrls) {
     var userRights = [];
 
-    function isAllowed(userRight, operations) {
+    function isAllowed(allowedOps, requestedOps) {
       var allowed = false;
-      for (var i = 0; i < operations.length; i++) {
-        allowed = userRight.operations.indexOf(operations[i]) != -1;
-        if (allowed) {
+      for (var i = 0; i < requestedOps.length; ++i) {
+        if (allowedOps.indexOf(requestedOps[i]) != -1) {
+          allowed = true;
           break;
         }
       }
@@ -46,7 +46,7 @@ angular.module('openspecimen')
             //
             // For resources whose rights are independent of CP and/or Site
             //
-            allowed = isAllowed(userRights[i], opts.operations);
+            allowed = isAllowed(userRights[i].operations, opts.operations);
 
           } else if ((!userRights[i].site || (opts.sites && opts.sites.indexOf(userRights[i].site) != -1)) &&
                     (!userRights[i].cp || userRights[i].cp == opts.cp) &&
@@ -54,7 +54,7 @@ angular.module('openspecimen')
             //
             // For resources whose rights are specified based on CP and/or Site
             //
-            allowed = isAllowed(userRights[i], opts.operations);
+            allowed = isAllowed(userRights[i].operations, opts.operations);
           }
 
           if (allowed) {

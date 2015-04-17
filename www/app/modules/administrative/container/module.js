@@ -13,7 +13,7 @@ angular.module('os.administrative.container',
 
   .config(function($stateProvider) {
     $stateProvider
-      .state('containers', {
+      .state('container-root', {
         abstract: true,
         template: '<div ui-view></div>',
         controller: function($scope) {
@@ -30,7 +30,7 @@ angular.module('os.administrative.container',
         url: '/containers',
         templateUrl: 'modules/administrative/container/list.html',
         controller: 'ContainerListCtrl',
-        parent: 'containers'
+        parent: 'container-root'
       })
       .state('container-addedit', {
         url: '/container-addedit/:containerId?posOne&posTwo&parentContainerId&parentContainerName',
@@ -45,7 +45,7 @@ angular.module('os.administrative.container',
           } 
         },
         controller: 'ContainerAddEditCtrl',
-        parent: 'containers'
+        parent: 'container-root'
       })
       .state('container-detail', {
         url: '/containers/:containerId',
@@ -56,7 +56,7 @@ angular.module('os.administrative.container',
           }
         },
         controller: 'ContainerDetailCtrl',
-        parent: 'containers'
+        parent: 'container-root'
       })
       .state('container-detail.overview', {
         url: '/overview',
