@@ -50,7 +50,6 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		SpecimenRequirement requirement = new SpecimenRequirement();
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
-	
 		requirement.setId(detail.getId());
 		requirement.setName(detail.getName());
 		requirement.setLineage(Specimen.NEW);
@@ -65,7 +64,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setInitialQty(detail, requirement, ose);
 		setConcentration(detail, requirement, ose);
 		setCollector(detail, requirement, ose);
-		setCollectionProsedure(detail, requirement, ose);
+		setCollectionProcedure(detail, requirement, ose);
 		setCollectionContainer(detail, requirement, ose);
 		setReceiver(detail, requirement, ose);		
 		setCpe(detail, requirement, ose);
@@ -98,10 +97,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setInitialQty(req.getQuantity(), derived, ose);
 		setStorageType(req.getStorageType(), derived, ose);
 		setConcentration(req.getConcentration(), derived, ose);
-		
-		if (StringUtils.isNotBlank(req.getLabelFmt())) {
-			derived.setLabelFormat(req.getLabelFmt());
-		}
+		setLabelFormat(req.getLabelFmt(), derived, ose);
 		
 		if (StringUtils.isNotBlank(req.getName())) {
 			derived.setName(req.getName());
@@ -111,6 +107,33 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		
 		derived.setParentSpecimenRequirement(parent);
 		return derived;
+	}
+	
+	@Override
+	public SpecimenRequirement createForUpdate(String lineage, SpecimenRequirementDetail req) {
+		SpecimenRequirement sr = new SpecimenRequirement();
+		
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		sr.setName(req.getName());
+		setInitialQty(req, sr, ose);
+		setStorageType(req, sr, ose);
+		setLabelFormat(req, sr, ose);
+		setConcentration(req, sr, ose);
+		
+		if (!lineage.equals(Specimen.NEW)) {
+			return sr;
+		}
+		
+		setAnatomicSite(req, sr, ose);
+		setLaterality(req, sr, ose);
+		setPathologyStatus(req, sr, ose);
+		setCollector(req, sr, ose);
+		setCollectionProcedure(req, sr, ose);
+		setCollectionContainer(req, sr, ose);
+		setReceiver(req, sr, ose);		
+
+		ose.checkAndThrow();	
+		return sr;		
 	}
 	
 	@Override
@@ -133,7 +156,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			throw ose;
 		}
 		
-		if (req.getQtyPerAliquot() == null || req.getQtyPerAliquot() <= 0L) {
+		if (req.getQtyPerAliquot() == null || req.getQtyPerAliquot() <= 0) {
 			ose.addError(SrErrorCode.INVALID_QTY);
 		}
 		
@@ -147,11 +170,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			SpecimenRequirement aliquot = parent.copy();
 			aliquot.setLineage(Specimen.ALIQUOT); 			
 			setStorageType(req.getStorageType(), aliquot, ose);
-			
-			if (StringUtils.isNotBlank(req.getLabelFmt())) {
-				aliquot.setLabelFormat(req.getLabelFmt());
-			}
-			
+			setLabelFormat(req.getLabelFmt(), aliquot, ose);			
 			aliquot.setInitialQuantity(req.getQtyPerAliquot());
 			aliquot.setParentSpecimenRequirement(parent);
 			aliquots.add(aliquot);
@@ -163,15 +182,19 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 	
 	private void setLabelFormat(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		if (StringUtils.isBlank(detail.getLabelFmt())) {
+		setLabelFormat(detail.getLabelFmt(), sr, ose);
+	}
+	
+	private void setLabelFormat(String labelFmt, SpecimenRequirement sr, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(labelFmt)) {
 			return;
 		}
 		
-		if (!specimenLabelGenerator.isValidLabelTmpl(detail.getLabelFmt())) {
+		if (!specimenLabelGenerator.isValidLabelTmpl(labelFmt)) {
 			ose.addError(SrErrorCode.INVALID_LABEL_FMT);
 		}
 		
-		sr.setLabelFormat(detail.getLabelFmt());
+		sr.setLabelFormat(labelFmt);
 	}
 	
 	private void setSpecimenClass(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
@@ -242,7 +265,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 	
 	private void setConcentration(Double concentration, SpecimenRequirement sr, OpenSpecimenException ose) {
-		if (sr.getAnatomicSite() == null || !"Molecular".equals(sr.getSpecimenClass())) { 
+		if (sr.getSpecimenClass() == null || !"Molecular".equals(sr.getSpecimenClass())) { 
 			return;
 		}
 		
@@ -258,7 +281,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		sr.setCollector(ensureValidUser(detail.getCollector(), SrErrorCode.COLLECTOR_NOT_FOUND, ose));
 	}
 
-	private void setCollectionProsedure(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+	private void setCollectionProcedure(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
 		String collProc = ensureNotEmpty(detail.getCollectionProcedure(), SrErrorCode.COLL_PROC_REQUIRED, ose);
 		sr.setCollectionProcedure(collProc);
 		// TODO: check for valid collection proc

@@ -65,6 +65,17 @@ public class SpecimenRequirementsController {
 		return resp.getPayload();		
 	}
 	
+	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SpecimenRequirementDetail updateRequirement(@PathVariable("id") Long id, @RequestBody SpecimenRequirementDetail requirement) {
+		requirement.setId(id);
+		
+		ResponseEvent<SpecimenRequirementDetail> resp = cpSvc.updateSpecimenRequirement(getRequest(requirement));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();		
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, value="/{id}/aliquots")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
