@@ -17,6 +17,14 @@ angular.module('os.biospecimen.cp',
         url: '/cps',
         abstract: true,
         template: '<div ui-view></div>',
+        controller: function($scope) {
+          // Collection Protocol Authorization Options
+          $scope.cpResource = {
+            createOpts: {resource: 'CollectionProtocol', operations: ['Create']},
+            updateOpts: {resource: 'CollectionProtocol', operations: ['Update']},
+            deleteOpts: {resource: 'CollectionProtocol', operations: ['Delete']}
+          }
+        },
         parent: 'signed-in'
       })
       .state('cp-list', {

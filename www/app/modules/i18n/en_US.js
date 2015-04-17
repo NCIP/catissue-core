@@ -651,13 +651,12 @@
 
     "resources" : {
       "CollectionProtocol": "Collection Protocol",
-      "DistributionProtocol": "Distribution Protocol",
       "Order": "Order",
       "ParticipantPhi": "Participant (PHI)",
       "ParticipantDeid": "Participant (DeId)",
       "VisitAndSpecimen": "Visits and Specimens",
-      "Site": "Site",
-      "StorageContainer": "Storage Container"
+      "StorageContainer": "Storage Container",
+      "User": "User"
     },
 
     "menu": {

@@ -5,8 +5,8 @@
     </ul>
     <h3>{{container.name}}</h3>
     <div class="os-btns right">
-      <button class="primary" title="{{'container.tooltip.add' | translate}}" 
-        ui-sref="container-addedit({containerId: container.id})">
+      <button show-if-allowed="containerResource.updateOpts" class="primary"
+        title="{{'container.tooltip.add' | translate}}" ui-sref="container-addedit({containerId: container.id})">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
@@ -14,7 +14,7 @@
         <span class="fa fa-download"></span>
         <span translate="common.buttons.export">Export</span>
       </a>
-      <button class="default" ng-click="deleteContainer()">
+      <button show-if-allowed="containerResource.deleteOpts" class="default" ng-click="deleteContainer()">
         <span class="fa fa-trash"></span>
         <span translate="common.buttons.delete">Delete</span>
       </button>

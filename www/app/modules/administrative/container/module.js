@@ -13,11 +13,24 @@ angular.module('os.administrative.container',
 
   .config(function($stateProvider) {
     $stateProvider
+      .state('container-root', {
+        abstract: true,
+        template: '<div ui-view></div>',
+        controller: function($scope) {
+          // Storage Container Authorization Options
+          $scope.containerResource = {
+            createOpts: {resource: 'StorageContainer', operations: ['Create']},
+            updateOpts: {resource: 'StorageContainer', operations: ['Update']},
+            deleteOpts: {resource: 'StorageContainer', operations: ['Delete']}
+          }
+        },
+        parent: 'signed-in'
+      })
       .state('container-list', {
         url: '/containers',
         templateUrl: 'modules/administrative/container/list.html',
         controller: 'ContainerListCtrl',
-        parent: 'signed-in'
+        parent: 'container-root'
       })
       .state('container-addedit', {
         url: '/container-addedit/:containerId?posOne&posTwo&parentContainerId&parentContainerName',
@@ -32,7 +45,7 @@ angular.module('os.administrative.container',
           } 
         },
         controller: 'ContainerAddEditCtrl',
-        parent: 'signed-in'
+        parent: 'container-root'
       })
       .state('container-detail', {
         url: '/containers/:containerId',
@@ -43,7 +56,7 @@ angular.module('os.administrative.container',
           }
         },
         controller: 'ContainerDetailCtrl',
-        parent: 'signed-in'
+        parent: 'container-root'
       })
       .state('container-detail.overview', {
         url: '/overview',

@@ -14,6 +14,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
+import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
@@ -33,6 +34,8 @@ import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
+import com.krishagni.rbac.events.SubjectRoleDetail;
+import com.krishagni.rbac.service.RbacService;
 
 import edu.wustl.common.util.XMLPropertyHandler;
 
@@ -58,6 +61,8 @@ public class UserServiceImpl implements UserService {
 	private UserFactory userFactory;
 	
 	private EmailService emailService;
+	
+	private RbacService rbacSvc;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -69,6 +74,10 @@ public class UserServiceImpl implements UserService {
 	
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
+	}
+
+	public void setRbacSvc(RbacService rbacSvc) {
+		this.rbacSvc = rbacSvc;
 	}
 
 	@Override
@@ -335,6 +344,19 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<SubjectRoleDetail>> getCurrentUserRoles() {
+		return rbacSvc.getSubjectRoles(new RequestEvent<Long>(AuthUtil.getCurrentUser().getId()));
+	}		
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<InstituteDetail> getInstitute(RequestEvent<Long> req) {
+		Institute institute = getInstitute(req.getPayload());
+		return ResponseEvent.response(InstituteDetail.from(institute));
+	}
+	
 	private void sendForgotPasswordLinkEmail(User user, String token) {
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("user", user);
@@ -417,7 +439,12 @@ public class UserServiceImpl implements UserService {
 	}
 		
 	private Institute getCurrUserInstitute() {
-		User user = daoFactory.getUserDao().getById(AuthUtil.getCurrentUser().getId());
+		return getInstitute(AuthUtil.getCurrentUser().getId());
+	}
+	
+	private Institute getInstitute(Long id) {
+		User user = daoFactory.getUserDao().getById(id);
 		return user.getInstitute();		
-	}		
+	}
+
 }
