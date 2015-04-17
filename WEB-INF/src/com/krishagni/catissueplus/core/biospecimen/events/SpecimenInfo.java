@@ -1,10 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -336,23 +333,23 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 		result.setStorageType(anticipated.getStorageType());
 	}	
 	
-	public static void sort(List<SpecimenDetail> specimens) {
-		Collections.sort(specimens, new Comparator<SpecimenDetail>() {
-			@Override
-			public int compare(SpecimenDetail specimen1, SpecimenDetail specimen2) {
-				return specimen1.getType().compareTo(specimen2.getType());
-			}
-		});
-		
-		for (SpecimenDetail specimen : specimens) {
-			if (specimen.getChildren() != null) {
-				sort(specimen.getChildren());
-			}
-		}
-	}
-
 	@Override
 	public int compareTo(SpecimenInfo other) {
-		return getType().compareTo(other.getType());
+		if (reqId != null && other.reqId != null) {
+			return reqId.compareTo(other.reqId);
+		} else if (reqId != null) {
+			return -1;
+		} else if (other.reqId != null) {
+			return 1;
+		} else if (id != null && other.id != null) {
+			return id.compareTo(other.id);
+		}
+		
+		// 
+		// TODO: ERROR: need to put a logger here
+		// This scenario should not happen, as this means we neither have
+		// anticipated specimen nor actual specimen
+		//
+		return 0;
 	}	
 }
