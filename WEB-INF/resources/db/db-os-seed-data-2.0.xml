@@ -62,4 +62,9 @@
       Update catissue_user set password = '$2a$10$GOH1.KmElP0ZusLYS6l12ejO.xAIzDUFpIm7LVz9xAcrObyvd3gLC', is_admin = 1 where identifier = 1
     </sql>
   </changeSet>
+  <changeSet author="nmarwaha" id="Setting institute id for default site">
+    <sql>
+      Update catissue_site set institute_id = 1 where identifier = 1
+    </sql>
+  </changeSet>
 </databaseChangeLog>
