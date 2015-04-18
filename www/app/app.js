@@ -193,7 +193,7 @@ angular.module('openspecimen', [
       };
     }
   })
-  .run(function($rootScope, $window, $cookieStore, ApiUtil) {
+  .run(function($rootScope, $window, $cookieStore, $translate, ApiUtil, Setting) {
     if ($window.localStorage['osAuthToken']) {
       $cookieStore.put('osAuthToken', $window.localStorage['osAuthToken']);
       $rootScope.loggedIn = true;
@@ -211,10 +211,20 @@ angular.module('openspecimen', [
     };
 
     $rootScope.global = {
-      dateFmt: 'MMM dd, yyyy',
-      queryDateFmt: {format: 'mm-dd-yyyy'},
-      timeFmt: 'hh:mm',
-      dateTimeFmt: 'MMM dd, yyyy hh:mm',
       filterWaitInterval: 500
     };
+
+    Setting.getLocale().then(
+      function(settings) {
+        var fmts = {
+          dateFmt: settings.dateFmt,
+          timeFmt: settings.timeFmt,
+          queryDateFmt: {format: settings.deFeDateFmt},
+          dateTimeFmt: settings.dateFmt + ' ' + settings.timeFmt
+        };
+
+        angular.extend($rootScope.global, fmts);
+        $translate.use(settings.locale);
+      }
+    );
   });

@@ -245,6 +245,19 @@
         (identifier, property_id, value, activated_by, activation_date, activity_status)
       values
         (default, @prop_id, '', 1, current_timestamp(), 'Active');
+
+      insert into os_cfg_props
+        (identifier, name, display_name_code, desc_code, data_type, module_id)
+      values
+        (default, 'locale', 'common_locale', 'common_locale_desc',
+         'STRING', @module_id);
+
+      select last_insert_id() into @prop_id;
+
+      insert into os_cfg_settings
+        (identifier, property_id, value, activated_by, activation_date, activity_status)
+      values
+        (default, @prop_id, 'en-US', 1, current_timestamp(), 'Active');
     </sql>
   </changeSet>
 
@@ -265,6 +278,17 @@
         (identifier, property_id, value, activated_by, activation_date, activity_status)
       values
         (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');
+
+      insert into os_cfg_props
+        (identifier, name, display_name_code, desc_code, data_type, module_id)
+      values 
+        (OS_CFG_PROPS_SEQ.nextval, 'locale', 'common_locale', 'common_locale_desc', 
+         'STRING', os_modules_seq.currval);
+
+      insert into os_cfg_settings
+        (identifier, property_id, value, activated_by, activation_date, activity_status)
+      values
+        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, 'en-US', 1, sysdate, 'Active');
     </sql>
   </changeSet>
 </databaseChangeLog>

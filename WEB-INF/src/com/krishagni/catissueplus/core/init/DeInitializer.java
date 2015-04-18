@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.init;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -44,8 +45,9 @@ public class DeInitializer implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		String dateFormat = cfgSvc.getStrSetting("common", "date_format", "MM-dd-yyyy");
-		String timeFormat = cfgSvc.getStrSetting("common", "time_format", "HH:mm");
+		Map<String, String> localeSettings = cfgSvc.getLocaleSettings();		
+		String dateFormat = localeSettings.get("deBeDateFmt");
+		String timeFormat = localeSettings.get("timeFmt");
 		String dataDir = cfgSvc.getStrSetting("common", "data_dir", ".");
 		
 		String dir = new StringBuilder(dataDir).append(File.separator)

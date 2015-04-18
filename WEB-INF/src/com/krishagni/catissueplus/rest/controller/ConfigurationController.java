@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class ConfigurationController {
 	
 	@Autowired
 	private ConfigurationService cfgSvc;
-		
+	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
@@ -46,4 +47,11 @@ public class ConfigurationController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/locale")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, String> getLocaleSettings() {
+		return cfgSvc.getLocaleSettings();
+	}	
 }
