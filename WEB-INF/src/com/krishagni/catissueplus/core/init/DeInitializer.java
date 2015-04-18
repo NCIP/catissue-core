@@ -10,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.ui.StorageContainerControlFactory;
@@ -75,5 +76,20 @@ public class DeInitializer implements InitializingBean {
 		} finally {
 			IOUtils.closeQuietly(in);
 		}
+		
+		cfgSvc.registerChangeListener("common", new ConfigChangeListener() {			
+			@Override
+			public void onConfigChange(String name, String value) {
+				if (!name.equals("locale")) {
+					return;
+				}
+				
+				Map<String, String> localeSettings = cfgSvc.getLocaleSettings();		
+				String dateFormat = localeSettings.get("deBeDateFmt");
+				String timeFormat = localeSettings.get("timeFmt");
+				DEApp.setDateFormat(dateFormat);
+				DEApp.setTimeFormat(timeFormat);				
+			}
+		});		
 	}
 }
