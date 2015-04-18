@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.InitializingBean;
@@ -257,8 +258,8 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	}
 	
 	private void setLocale() {		
-		String setting = getStrSetting("common", "locale", "en-US");
-		Locale newLocale = Locale.forLanguageTag(setting);
+		String setting = getStrSetting("common", "locale", "en_US");
+		Locale newLocale = LocaleUtils.toLocale(setting);
 		Locale existingLocale = Locale.getDefault();
 		
 		if (!existingLocale.equals(newLocale)) {

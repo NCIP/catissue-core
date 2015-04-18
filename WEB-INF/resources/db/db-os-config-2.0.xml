@@ -257,7 +257,7 @@
       insert into os_cfg_settings
         (identifier, property_id, value, activated_by, activation_date, activity_status)
       values
-        (default, @prop_id, 'en-US', 1, current_timestamp(), 'Active');
+        (default, @prop_id, 'en_US', 1, current_timestamp(), 'Active');
     </sql>
   </changeSet>
 
@@ -288,7 +288,7 @@
       insert into os_cfg_settings
         (identifier, property_id, value, activated_by, activation_date, activity_status)
       values
-        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, 'en-US', 1, sysdate, 'Active');
+        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, 'en_US', 1, sysdate, 'Active');
     </sql>
   </changeSet>
 </databaseChangeLog>
