@@ -198,71 +198,6 @@
       </column>
     </addColumn>
   </changeSet>
-  
-  <changeSet author="nmarwaha" id="Migration script for container data">
-    <sql>
-      insert into os_storage_containers 
-        (identifier,name,barcode,temperature,no_of_cols,no_of_rows,column_labeling_scheme,row_labeling_scheme,site_id,parent_container_id,activity_status,comments) 
-        select cc.identifier,cc.name,cc.barcode,csc.temperature,c_capacity.one_dimension_capacity,c_capacity.two_dimension_capacity,
-          csc.one_dimension_labelling_scheme,csc.two_dimension_labelling_scheme,
-          csc.site_id,ccp.parent_container_id,cc.activity_status,cc.comments 
-        from 
-          catissue_storage_container csc 
-        join 
-          catissue_container cc ON cc.identifier=csc.identifier 
-        join 
-          catissue_capacity c_capacity ON cc.capacity_id=c_capacity.identifier 
-        left join 
-          catissue_container_position ccp ON ccp.container_id=cc.identifier
-    </sql>
-    <sql>
-      update os_storage_containers set store_specimens = 1 WHERE 
-        (
-          SELECT COUNT(container_id) as count from catissue_specimen_position where 
-            os_storage_containers.identifier=catissue_specimen_position.container_id
-        ) >= 1
-    </sql>
-    <sql>
-      INSERT INTO OS_CONTAINER_POSITIONS(POS_ONE,POS_TWO,POS_ONE_STR,POS_TWO_STR,STORAGE_CONTAINER_ID,OCCUPYING_SPECIMEN_ID) 
-        SELECT 
-          cap.POSITION_DIMENSION_ONE,cap.POSITION_DIMENSION_TWO,cap.POSITION_DIMENSION_ONE_STRING,cap.POSITION_DIMENSION_TWO_STRING,
-          csp.CONTAINER_ID,csp.SPECIMEN_ID 
-        FROM 
-          catissue_abstract_position cap 
-        JOIN catissue_specimen_position csp ON csp.identifier=cap.identifier
-    </sql>
-    <sql>
-      INSERT INTO OS_CONTAINER_POSITIONS(POS_ONE,POS_TWO,POS_ONE_STR,POS_TWO_STR,STORAGE_CONTAINER_ID,OCCUPYING_CONTAINER_ID) 
-        SELECT 
-          cap.POSITION_DIMENSION_ONE,cap.POSITION_DIMENSION_TWO,cap.POSITION_DIMENSION_ONE_STRING,cap.POSITION_DIMENSION_TWO_STRING,
-          ccp.PARENT_CONTAINER_ID,ccp.CONTAINER_ID 
-        FROM catissue_abstract_position cap 
-        JOIN catissue_container_position ccp ON ccp.identifier=cap.identifier
-    </sql>
-  </changeSet>
-  
-  <changeSet author="nmarwaha" id="Creating sequences for container and position table" dbms="oracle">
-    <sql endDelimiter="/">
-      BEGIN
-        DECLARE
-          contId NUMBER;
-          posID NUMBER;
-        BEGIN
-          SELECT NVL(MAX(IDENTIFIER),0)+1
-            INTO contId
-          FROM OS_STORAGE_CONTAINERS;
-  
-          SELECT NVL(MAX(IDENTIFIER),0)+1
-            INTO posID
-          FROM OS_CONTAINER_POSITIONS;
-  
-          execute immediate('CREATE SEQUENCE OS_STORAGE_CONTAINERS_SEQ MINVALUE 0 START WITH '||contId||' INCREMENT BY 1 NOCACHE');
-          execute immediate('CREATE SEQUENCE OS_CONTAINER_POSITIONS_SEQ MINVALUE 0 START WITH '||posID||' INCREMENT BY 1 NOCACHE');
-        END;
-      END;
-      /
-    </sql>
-  </changeSet>
 
   <changeSet author="vpawar" id="Add FK to container's parent container">
     <addForeignKeyConstraint
@@ -480,7 +415,7 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Drop unique constraint from CSM_USER_ID column in CATISSUE_USER" failOnError="false">
-    <dropUniqueConstraint catalogName="cat"
+    <dropUniqueConstraint 
       constraintName="CSM_USER_ID_UNIQUE_KEY"
       tableName="CATISSUE_USER"/>
   </changeSet>
@@ -1783,6 +1718,71 @@
   <changeSet author="nmarwaha" id="Updating activity status for Specimen Req table" >
     <sql>
       update catissue_cp_req_specimen set activity_status = 'Active' where activity_status is null
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Migration script for container data">
+    <sql>
+      insert into os_storage_containers 
+        (identifier,name,barcode,temperature,no_of_cols,no_of_rows,column_labeling_scheme,row_labeling_scheme,site_id,parent_container_id,activity_status,comments) 
+        select cc.identifier,cc.name,cc.barcode,csc.temperature,c_capacity.one_dimension_capacity,c_capacity.two_dimension_capacity,
+          csc.one_dimension_labelling_scheme,csc.two_dimension_labelling_scheme,
+          csc.site_id,ccp.parent_container_id,cc.activity_status,cc.comments 
+        from 
+          catissue_storage_container csc 
+        join 
+          catissue_container cc ON cc.identifier=csc.identifier 
+        join 
+          catissue_capacity c_capacity ON cc.capacity_id=c_capacity.identifier 
+        left join 
+          catissue_container_position ccp ON ccp.container_id=cc.identifier
+    </sql>
+    <sql>
+      update os_storage_containers set store_specimens = 1 WHERE 
+        (
+          SELECT COUNT(container_id) as count from catissue_specimen_position where 
+            os_storage_containers.identifier=catissue_specimen_position.container_id
+        ) >= 1
+    </sql>
+    <sql>
+      INSERT INTO OS_CONTAINER_POSITIONS(POS_ONE,POS_TWO,POS_ONE_STR,POS_TWO_STR,STORAGE_CONTAINER_ID,OCCUPYING_SPECIMEN_ID) 
+        SELECT 
+          cap.POSITION_DIMENSION_ONE,cap.POSITION_DIMENSION_TWO,cap.POSITION_DIMENSION_ONE_STRING,cap.POSITION_DIMENSION_TWO_STRING,
+          csp.CONTAINER_ID,csp.SPECIMEN_ID 
+        FROM 
+          catissue_abstract_position cap 
+        JOIN catissue_specimen_position csp ON csp.identifier=cap.identifier
+    </sql>
+    <sql>
+      INSERT INTO OS_CONTAINER_POSITIONS(POS_ONE,POS_TWO,POS_ONE_STR,POS_TWO_STR,STORAGE_CONTAINER_ID,OCCUPYING_CONTAINER_ID) 
+        SELECT 
+          cap.POSITION_DIMENSION_ONE,cap.POSITION_DIMENSION_TWO,cap.POSITION_DIMENSION_ONE_STRING,cap.POSITION_DIMENSION_TWO_STRING,
+          ccp.PARENT_CONTAINER_ID,ccp.CONTAINER_ID 
+        FROM catissue_abstract_position cap 
+        JOIN catissue_container_position ccp ON ccp.identifier=cap.identifier
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating sequences for container and position table" dbms="oracle">
+    <sql endDelimiter="/">
+      BEGIN
+        DECLARE
+          contId NUMBER;
+          posID NUMBER;
+        BEGIN
+          SELECT NVL(MAX(IDENTIFIER),0)+1
+            INTO contId
+          FROM OS_STORAGE_CONTAINERS;
+  
+          SELECT NVL(MAX(IDENTIFIER),0)+1
+            INTO posID
+          FROM OS_CONTAINER_POSITIONS;
+  
+          execute immediate('CREATE SEQUENCE OS_STORAGE_CONTAINERS_SEQ MINVALUE 0 START WITH '||contId||' INCREMENT BY 1 NOCACHE');
+          execute immediate('CREATE SEQUENCE OS_CONTAINER_POSITIONS_SEQ MINVALUE 0 START WITH '||posID||' INCREMENT BY 1 NOCACHE');
+        END;
+      END;
+      /
     </sql>
   </changeSet>
 </databaseChangeLog>
