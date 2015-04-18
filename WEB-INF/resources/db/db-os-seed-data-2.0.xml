@@ -56,4 +56,10 @@
       insert into catissue_user values (CATISSUE_USER_SEQ.nextval, '$system', 'System', null, '$system', null, 'Locked', null, null, null, null, 0, null, 'openspecimen', 1);
     </sql>
   </changeSet>
+  
+  <changeSet author="nmarwaha" id="Updating existing super admin user to set the password">
+    <sql>
+      Update catissue_user set password = '$2a$10$GOH1.KmElP0ZusLYS6l12ejO.xAIzDUFpIm7LVz9xAcrObyvd3gLC', is_admin = 1 where identifier = 1
+    </sql>
+  </changeSet>
 </databaseChangeLog>
