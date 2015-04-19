@@ -27,13 +27,19 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     function addToSrList(sr) {
       specimenRequirements.push(sr);
       $scope.specimenRequirements = Specimen.flatten(specimenRequirements);
-    };
+    }
 
     function updateSrList(sr) {
-      var modelSr = findSr(specimenRequirements, sr.id);
-      angular.extend(modelSr, sr);
+      var result = findSr(specimenRequirements, sr.id);
+      angular.extend(result.sr, sr);
       $scope.specimenRequirements = Specimen.flatten(specimenRequirements);
-    };
+    }
+
+    function deleteFromSrList(sr) {
+      var result = findSr(specimenRequirements, sr.id);
+      result.list.splice(result.idx, 1);
+      $scope.specimenRequirements = Specimen.flatten(specimenRequirements);
+    }
 
     function findSr(srList, srId) {
       if (!srList) {
@@ -42,11 +48,11 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
 
       for (var i = 0; i < srList.length; ++i) {
         if (srList[i].id == srId) {
-          return srList[i];
+          return {list: srList, sr: srList[i], idx: i};
         }
-        var sr = findSr(srList[i].children, srId);
-        if (!!sr) {
-          return sr;
+        var result = findSr(srList[i].children, srId);
+        if (!!result) {
+          return result;
         }
       }
 
@@ -261,7 +267,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
         function() {
           sr.delete().then(
             function() {
-              $state.go($state.current, {}, {reload: true});
+              deleteFromSrList(sr);
             }
           );
         }
