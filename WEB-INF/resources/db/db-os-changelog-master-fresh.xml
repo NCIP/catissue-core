@@ -13,7 +13,7 @@
   <include file="db/db-os-seed-data-pre-2.0-mysql.xml"/>
   <include file="db/db-os-changelog-pre-2.0-oracle.xml"/>
   <include file="db/db-os-seed-data-pre-2.0-oracle.xml"/>
-  <include file="db/db-os-changelog-2.0.xml"/>
-  <include file="db/db-os-config-2.0.xml"/>
-  <include file="db/db-os-seed-data-2.0.xml"/>
+  <include file="db/2.0/db-os-changelog-2.0.xml"/>
+  <include file="db/2.0/db-os-config-2.0.xml"/>
+  <include file="db/2.0/db-os-seed-data-2.0.xml"/>
 </databaseChangeLog> 
