@@ -420,7 +420,6 @@
 				<exclude name="**/WEB-INF/lib/mockito-all-1.9.5.jar" />	
 				<exclude name="**/WEB-INF/lib/cobertura.jar"/>
 				<exclude name="**/WEB-INF/lib/junit*.jar" />
-				<exclude name="**/WEB-INF/resources/db*/**" />
 				<exclude name="**/*servlet.jar*" />
 				
 				<exclude name="**/*hibernate2.jar*" />
