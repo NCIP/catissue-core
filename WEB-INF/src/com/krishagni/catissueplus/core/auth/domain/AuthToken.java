@@ -2,8 +2,6 @@ package com.krishagni.catissueplus.core.auth.domain;
 
 import java.util.Date;
 
-import org.hibernate.envers.NotAudited;
-
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
 public class AuthToken {

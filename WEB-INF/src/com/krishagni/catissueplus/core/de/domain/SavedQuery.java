@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;

@@ -1,4 +1,4 @@
-package com.krishagni.catissueplus.core.auditquery.domain;
+package com.krishagni.catissueplus.core.audit;
 
 import java.util.Date;
 import java.util.Set;
@@ -8,10 +8,8 @@ import org.hibernate.envers.RevisionEntity;
 import org.hibernate.envers.RevisionNumber;
 import org.hibernate.envers.RevisionTimestamp;
 
-import com.krishagni.catissueplus.core.auditquery.events.EnversListener;
-
-@RevisionEntity(EnversListener.class)
-public class EnversRevisionEntity {
+@RevisionEntity(EntityRevisionListenerImpl.class)
+public class Revision {
 	
 	@RevisionNumber
 	private long id;

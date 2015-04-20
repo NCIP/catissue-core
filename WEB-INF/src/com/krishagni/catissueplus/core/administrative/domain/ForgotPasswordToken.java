@@ -4,8 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
-import org.hibernate.envers.Audited;
-
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
 public class ForgotPasswordToken extends BaseEntity {

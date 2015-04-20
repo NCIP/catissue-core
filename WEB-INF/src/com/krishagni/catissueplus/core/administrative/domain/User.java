@@ -111,6 +111,7 @@ public class User extends BaseEntity implements UserDetails {
 		return authDomain;
 	}
 
+	@NotAudited
 	public Set<Site> getSites() {
 		return sites;
 	}
@@ -167,6 +168,7 @@ public class User extends BaseEntity implements UserDetails {
 		return getDepartment().getInstitute();
 	}
 
+	@NotAudited
 	public Address getAddress() {
 		return address;
 	}

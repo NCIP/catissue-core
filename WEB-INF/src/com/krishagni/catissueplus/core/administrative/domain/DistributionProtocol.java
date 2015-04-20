@@ -6,10 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.envers.AuditJoinTable;
-import org.hibernate.envers.AuditTable;
-import org.hibernate.envers.Audited;
-
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -105,7 +101,6 @@ public class DistributionProtocol {
 		this.activityStatus = activityStatus;
 	}
 
-	@AuditJoinTable(name="DP_DistributionOrder_AUD")
 	public Set<DistributionOrder> getDistributionOrders() {
 		return distributionOrders;
 	}

@@ -92,31 +92,6 @@
       <column name="site_MOD" type="BIT"/>
     </createTable>
   </changeSet>
-  <changeSet dbms="mysql" author="slakhani" id="1429178687139-4">
-    <createTable tableName="catissue_address_aud">
-      <column name="IDENTIFIER" type="BIGINT">
-        <constraints nullable="false"/>
-      </column>
-      <column name="REV" type="BIGINT">
-        <constraints nullable="false"/>
-      </column>
-      <column name="REVTYPE" type="TINYINT"/>
-      <column name="STREET" type="VARCHAR(50)"/>
-      <column name="street_MOD" type="BIT"/>
-      <column name="CITY" type="VARCHAR(50)"/>
-      <column name="city_MOD" type="BIT"/>
-      <column name="STATE" type="VARCHAR(50)"/>
-      <column name="state_MOD" type="BIT"/>
-      <column name="COUNTRY" type="VARCHAR(50)"/>
-      <column name="country_MOD" type="BIT"/>
-      <column name="ZIPCODE" type="VARCHAR(30)"/>
-      <column name="zipCode_MOD" type="BIT"/>
-      <column name="PHONE_NUMBER" type="VARCHAR(50)"/>
-      <column name="phoneNumber_MOD" type="BIT"/>
-      <column name="FAX_NUMBER" type="VARCHAR(50)"/>
-      <column name="faxNumber_MOD" type="BIT"/>
-    </createTable>
-  </changeSet>
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-5">
     <createTable tableName="catissue_coll_coordinators_aud">
       <column name="REV" type="BIGINT">
@@ -372,20 +347,6 @@
       <column name="REVTYPE" type="TINYINT"/>
     </createTable>
   </changeSet>
-  <changeSet dbms="mysql" author="slakhani" id="1429178687139-17">
-    <createTable tableName="catissue_site_users_aud">
-      <column name="REV" type="BIGINT">
-        <constraints nullable="false"/>
-      </column>
-      <column name="USER_ID" type="BIGINT">
-        <constraints nullable="false"/>
-      </column>
-      <column name="SITE_ID" type="BIGINT">
-        <constraints nullable="false"/>
-      </column>
-      <column name="REVTYPE" type="TINYINT"/>
-    </createTable>
-  </changeSet>
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-18">
     <createTable tableName="catissue_specimen_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -461,7 +422,6 @@
       <column name="admin_MOD" type="BIT"/>
       <column name="DEPARTMENT_ID" type="BIGINT"/>
       <column name="department_MOD" type="BIT"/>
-      <column name="sites_MOD" type="BIT"/>
     </createTable>
   </changeSet>
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-20">
@@ -600,7 +560,7 @@
     </createTable>
   </changeSet>
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-27">
-    <createTable tableName="revchanges">
+    <createTable tableName="OS_REVISION_ENTITIES">
       <column name="REV" type="BIGINT">
         <constraints nullable="false"/>
       </column>
@@ -608,7 +568,7 @@
     </createTable>
   </changeSet>
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-28">
-    <createTable tableName="revinfo">
+    <createTable tableName="OS_REVISIONS">
       <column autoIncrement="true" name="REV" type="BIGINT">
         <constraints nullable="false" primaryKey="true"/>
       </column>
@@ -628,10 +588,6 @@
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-31">
     <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="cat_specimen_coll_group_aud"/>
-  </changeSet>
-  
-  <changeSet dbms="mysql" author="slakhani" id="1429178687139-32">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="catissue_address_aud"/>
   </changeSet>
   
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-33">
@@ -682,10 +638,6 @@
     <addPrimaryKey columnNames="REV, COLLECTION_PROTOCOL_ID, SITE_ID" tableName="catissue_site_cp_aud"/>
   </changeSet>
 
-  <changeSet dbms="mysql" author="slakhani" id="1429178687139-45">
-    <addPrimaryKey columnNames="REV, USER_ID, SITE_ID" tableName="catissue_site_users_aud"/>
-  </changeSet>
-
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-46">
     <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="catissue_specimen_aud"/>
   </changeSet>
@@ -723,110 +675,102 @@
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-55">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="cat_collection_protocol_aud"  constraintName="FK_dyoqily0s2m061bxvxik0wou5" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="cat_collection_protocol_aud"  constraintName="FK_dyoqily0s2m061bxvxik0wou5" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-56">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="cat_consent_tier_response_aud"  constraintName="FK_7crokk0uhxa3aqqh626nasp9q" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="cat_consent_tier_response_aud"  constraintName="FK_7crokk0uhxa3aqqh626nasp9q" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-57">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="cat_specimen_coll_group_aud"  constraintName="FK_7nmb9yn4uq0fojtbh2nl7stv2" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
-  </changeSet>
-
-  <changeSet dbms="mysql" author="slakhani" id="1429178687139-58">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_address_aud"  constraintName="FK_gdog1mh6cu0cal5p6txop62u7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="cat_specimen_coll_group_aud"  constraintName="FK_7nmb9yn4uq0fojtbh2nl7stv2" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-59">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_coll_coordinators_aud"  constraintName="FK_cx3wxvecf9prg0ulwaw3bwb2s" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_coll_coordinators_aud"  constraintName="FK_cx3wxvecf9prg0ulwaw3bwb2s" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-60">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_coll_prot_event_aud"  constraintName="FK_9xhryw88q1uv2s2oxcn53rsdh" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_coll_prot_event_aud"  constraintName="FK_9xhryw88q1uv2s2oxcn53rsdh" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-61">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_coll_prot_reg_aud"  constraintName="FK_4rwywid6his5vawygbbok91h7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_coll_prot_reg_aud"  constraintName="FK_4rwywid6his5vawygbbok91h7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-62">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_consent_tier_aud"  constraintName="FK_hmdofymkui8jf2mhk2a4ub8qm" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_consent_tier_aud"  constraintName="FK_hmdofymkui8jf2mhk2a4ub8qm" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-63">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_cp_req_specimen_aud"  constraintName="FK_r51pe9nboapngjjh34hbm3i2s" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_cp_req_specimen_aud"  constraintName="FK_r51pe9nboapngjjh34hbm3i2s" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-64">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_institution_aud"  constraintName="FK_c4n30y077ycht0hl58ri6fko7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_institution_aud"  constraintName="FK_c4n30y077ycht0hl58ri6fko7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-65">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_part_medical_id_aud"  constraintName="FK_pkjkhvgsgjkgpwjrg65viug05" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_part_medical_id_aud"  constraintName="FK_pkjkhvgsgjkgpwjrg65viug05" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-66">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_participant_aud"  constraintName="FK_hs8crr2d3nwca17qqfli82ym" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_participant_aud"  constraintName="FK_hs8crr2d3nwca17qqfli82ym" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-67">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_race_aud"  constraintName="FK_qaypykblepjftrcv2xe056rvh" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_race_aud"  constraintName="FK_qaypykblepjftrcv2xe056rvh" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-68">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_site_aud"  constraintName="FK_isb8mltbk8qaa3q4epkoy9ell" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_site_aud"  constraintName="FK_isb8mltbk8qaa3q4epkoy9ell" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-69">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_site_coordinators_aud"  constraintName="FK_w3jps5e5byvocjpg18nuyffy" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_site_coordinators_aud"  constraintName="FK_w3jps5e5byvocjpg18nuyffy" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-70">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_site_cp_aud"  constraintName="FK_8bytnb90kr6dd9hr194p9ei57" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
-  </changeSet>
-
-  <changeSet dbms="mysql" author="slakhani" id="1429178687139-71">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_site_users_aud"  constraintName="FK_5x23qjs6w09iq557hfv1ifilc" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_site_cp_aud"  constraintName="FK_8bytnb90kr6dd9hr194p9ei57" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-72">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_specimen_aud"  constraintName="FK_ctda38ykfjtwuljy7pb6y753d" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_specimen_aud"  constraintName="FK_ctda38ykfjtwuljy7pb6y753d" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-73">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_user_aud"  constraintName="FK_m9slxw75ecrvrk31nwwamd7ng" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_user_aud"  constraintName="FK_m9slxw75ecrvrk31nwwamd7ng" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-74">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="cp_consenttier_aud"  constraintName="FK_2jfima9le1hxi3p2vnbgerfx3" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="cp_consenttier_aud"  constraintName="FK_2jfima9le1hxi3p2vnbgerfx3" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-75">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_container_positions_aud"  constraintName="FK_8qr9yjmig276s5njj5q9s5kvm" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_container_positions_aud"  constraintName="FK_8qr9yjmig276s5njj5q9s5kvm" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-76">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_departments_aud"  constraintName="FK_fhlbe4ciavool7n6hrydsxm0a" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_departments_aud"  constraintName="FK_fhlbe4ciavool7n6hrydsxm0a" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-77">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_stor_cont_spec_classes_aud"  constraintName="FK_lguqtanqxx49uiynh9ihcbjhc" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_stor_cont_spec_classes_aud"  constraintName="FK_lguqtanqxx49uiynh9ihcbjhc" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-78">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_stor_cont_spec_types_aud"  constraintName="FK_h1dxr1mk3lbojld9cpgcjos2e" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_stor_cont_spec_types_aud"  constraintName="FK_h1dxr1mk3lbojld9cpgcjos2e" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-79">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_stor_container_cps_aud"  constraintName="FK_itwt8wch7fujeieknvgju804w" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_stor_container_cps_aud"  constraintName="FK_itwt8wch7fujeieknvgju804w" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-80">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_storage_containers_aud"  constraintName="FK_i34f99d4j0u2hcato9dww1mxw" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_storage_containers_aud"  constraintName="FK_i34f99d4j0u2hcato9dww1mxw" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet dbms="mysql" author="slakhani" id="1429178687139-81">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="revchanges"  constraintName="FK_t69kea3hasj6uc6ddn5ck5r9y" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="revinfo" referencesUniqueColumn="false"/>
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_REVISION_ENTITIES"  constraintName="FK_t69kea3hasj6uc6ddn5ck5r9y" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 </databaseChangeLog>
