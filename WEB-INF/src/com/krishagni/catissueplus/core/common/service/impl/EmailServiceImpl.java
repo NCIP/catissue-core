@@ -24,8 +24,6 @@ import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.service.TemplateService;
 
-
-
 public class EmailServiceImpl implements EmailService, ConfigChangeListener, InitializingBean {
 	private static Log LOGGER = LogFactory.getLog(EmailServiceImpl.class);
 	
