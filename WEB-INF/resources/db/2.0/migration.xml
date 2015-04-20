@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet author="nmarwaha" id="Updating activity status for Specimen Req table" >
+    <sql>
+      update 
+        catissue_cp_req_specimen 
+      set 
+        activity_status = 'Active' 
+      where 
+        activity_status is null
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Script to map departments and institutes" dbms="mysql">
+    <sql>
+      insert into os_departments
+        (name, institute_id)
+      select 
+        distinct d.name, u.institution_id 
+      from 
+        catissue_user u
+        inner join catissue_department d on d.identifier = u.department_id
+    </sql>
+
+    <sql>
+      update 
+        catissue_user u 
+        inner join os_departments od on od.institute_id = u.institution_id
+        inner join catissue_department d on d.name = od.name 
+      set 
+        u.department_id = od.identifier 
+      where 
+        d.identifier = u.department_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Script to map departments and institutes" dbms="oracle">
+    <sql>
+      insert into os_departments
+        (identifier, name, institute_id)
+      select 
+        OS_DEPARTMENTS_SEQ.nextval, d.name, u.institution_id 
+      from 
+        catissue_user u
+        inner join catissue_department d on d.identifier = u.department_id
+    </sql>
+
+    <sql>
+      update 
+        (
+          select
+            u.department_id as user_dept_id,od.identifier as new_dept_id 
+          from 
+            catissue_user u 
+            inner join os_departments od on od.institute_id = u.institution_id
+            inner join catissue_department d on d.name = od.name 
+          where
+            d.identifier = u.department_id
+        ) up
+      set 
+        up.user_dept_id = up.new_dept_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vlonushte" id="Drop foreign key and institution id column from CATISSUE_USER">
+    <dropForeignKeyConstraint
+      baseTableName="CATISSUE_USER"
+      constraintName="FKB025CFC71792AD22"/>
+
+    <dropColumn
+      columnName="INSTITUTION_ID"
+      tableName="CATISSUE_USER"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Migration script for container data">
+    <sql>
+      select identifier into @sys_usr_id from catissue_user where email_address like '$system';
+      
+      insert into os_storage_containers 
+        (identifier, name, barcode, temperature, 
+         no_of_cols, no_of_rows,
+         column_labeling_scheme, row_labeling_scheme, site_id, 
+         parent_container_id, activity_status, comments, created_by)
+      select 
+        cc.identifier, cc.name, cc.barcode, csc.temperature, 
+        c_capacity.one_dimension_capacity, c_capacity.two_dimension_capacity,
+        csc.one_dimension_labelling_scheme, csc.two_dimension_labelling_scheme, csc.site_id, 
+        ccp.parent_container_id, cc.activity_status, cc.comments, @sys_usr_id
+      from 
+        catissue_storage_container csc 
+        inner join catissue_container cc ON cc.identifier=csc.identifier 
+        inner join catissue_capacity c_capacity ON cc.capacity_id=c_capacity.identifier 
+        left join catissue_container_position ccp ON ccp.container_id=cc.identifier;
+    </sql>
+    
+    <sql>
+      update os_storage_containers set store_specimens = 1 
+      where 
+        (
+          select count(container_id) as count from catissue_specimen_position 
+          where os_storage_containers.identifier=catissue_specimen_position.container_id
+        ) >= 1
+    </sql>
+    
+    <sql>
+      insert into os_container_positions
+        (pos_one, pos_two, 
+         pos_one_str, pos_two_str, 
+         storage_container_id, occupying_specimen_id) 
+      select 
+        cap.position_dimension_one, cap.position_dimension_two, 
+        cap.position_dimension_one_string,cap.position_dimension_two_string,
+        csp.container_id,csp.specimen_id 
+      from 
+        catissue_abstract_position cap 
+        inner join catissue_specimen_position csp ON csp.identifier=cap.identifier
+    </sql>
+    
+    <sql>
+      insert into os_container_positions
+        (pos_one, pos_two, 
+         pos_one_str, pos_two_str,
+         storage_container_id, occupying_container_id) 
+      select 
+        cap.position_dimension_one, cap.position_dimension_two, 
+        cap.position_dimension_one_string, cap.position_dimension_two_string,
+        ccp.parent_container_id, ccp.container_id 
+      from 
+        catissue_abstract_position cap 
+        inner join catissue_container_position ccp on ccp.identifier=cap.identifier
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating sequences for container and position table" dbms="oracle">
+    <sql endDelimiter="/">
+      begin
+        declare
+          containerId number;
+          positionId number;
+        begin
+          select 
+            nvl(max(identifier),0)+1 into containerId
+          from 
+            os_storage_containers;
+  
+          select 
+            nvl(max(identifier),0)+1 into positionId
+          from 
+            os_container_positions;
+  
+          execute immediate('alter sequence os_storage_containers_seq increment by '||containerId||);
+          execute immediate('alter sequence os_container_positions_seq increment by '||positionId||);
+        end;
+      end;
+      /
+    </sql>
+  </changeSet>
+</databaseChangeLog>
