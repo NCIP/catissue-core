@@ -1,7 +1,6 @@
 package com.krishagni.catissueplus.core.common.domain;
 
 import java.io.File;
-import java.util.List;
 
 public class Email {
 

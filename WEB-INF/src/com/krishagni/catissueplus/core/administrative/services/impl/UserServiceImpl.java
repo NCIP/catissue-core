@@ -138,7 +138,8 @@ public class UserServiceImpl implements UserService {
 				sendUserSignupEmail(user);
 				sendNewUserRequestEmail(user);
 			} else {
-				sendUserCreatedEmail(user);
+				ForgotPasswordToken token = generateForgotPwdToken(user);
+				sendUserCreatedEmail(user, token);
 			}
 			return ResponseEvent.response(UserDetail.from(user));
 		} catch (OpenSpecimenException ose) {
@@ -207,11 +208,7 @@ public class UserServiceImpl implements UserService {
 			}
 			
 			if (sendRequestApprovedMail) {
-				ForgotPasswordToken token = null;
-				if (user.getAuthDomain().getName().equals(DEFAULT_AUTH_DOMAIN)) {
-					token = new ForgotPasswordToken(user);
-					daoFactory.getUserDao().saveFpToken(token);
-				}
+				ForgotPasswordToken token = generateForgotPwdToken(user);
 				sendUserRequestApprovedEmail(user, token);
 			}
 			
@@ -372,9 +369,10 @@ public class UserServiceImpl implements UserService {
 		emailService.sendEmail(PASSWD_CHANGED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	} 
 	
-	private void sendUserCreatedEmail(User user) {
+	private void sendUserCreatedEmail(User user, ForgotPasswordToken token) {
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("user", user);
+		props.put("token", token);
 		
 		emailService.sendEmail(USER_CREATED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	}
@@ -445,6 +443,15 @@ public class UserServiceImpl implements UserService {
 	private Institute getInstitute(Long id) {
 		User user = daoFactory.getUserDao().getById(id);
 		return user.getInstitute();		
+	}
+	
+	private ForgotPasswordToken generateForgotPwdToken(User user) {
+		ForgotPasswordToken token = null;
+		if (user.getAuthDomain().getName().equals(DEFAULT_AUTH_DOMAIN)) {
+			token = new ForgotPasswordToken(user);
+			daoFactory.getUserDao().saveFpToken(token);
+		}
+		return token;
 	}
 
 }
