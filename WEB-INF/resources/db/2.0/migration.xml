@@ -12,7 +12,7 @@
       set 
         activity_status = 'Active' 
       where 
-          activity_status is null
+        activity_status is null
     </sql>
   </changeSet>
   
@@ -20,17 +20,18 @@
     <sql>
       insert into os_departments
         (name, institute_id)
-      select distinct d.name, u.institution_id 
+      select 
+        distinct d.name, u.institution_id 
       from 
         catissue_user u
-      inner join catissue_department d on d.identifier = u.department_id
+        inner join catissue_department d on d.identifier = u.department_id
     </sql>
 
     <sql>
       update 
         catissue_user u 
-      inner join os_departments od on od.institute_id = u.institution_id
-      inner join catissue_department d on d.name = od.name 
+        inner join os_departments od on od.institute_id = u.institution_id
+        inner join catissue_department d on d.name = od.name 
       set 
         u.department_id = od.identifier 
       where 
@@ -42,23 +43,27 @@
     <sql>
       insert into os_departments
         (identifier, name, institute_id)
-      select OS_DEPARTMENTS_SEQ.nextval, d.name, u.institution_id 
+      select 
+        OS_DEPARTMENTS_SEQ.nextval, d.name, u.institution_id 
       from 
         catissue_user u
-      inner join catissue_department d on d.identifier = u.department_id
+        inner join catissue_department d on d.identifier = u.department_id
     </sql>
 
     <sql>
       update 
         (
-          select u.department_id as udp,od.identifier as dpid 
+          select
+            u.department_id as user_dept_id,od.identifier as new_dept_id 
           from 
             catissue_user u 
-          inner join os_departments od on od.institute_id = u.institution_id
-          inner join catissue_department d on d.name = od.name where d.identifier = u.department_id
+            inner join os_departments od on od.institute_id = u.institution_id
+            inner join catissue_department d on d.name = od.name 
+          where
+            d.identifier = u.department_id
         ) up
       set 
-        up.udp = up.dpid
+        up.user_dept_id = up.new_dept_id
     </sql>
   </changeSet>
   
@@ -104,25 +109,30 @@
     
     <sql>
       insert into os_container_positions
-        (pos_one, pos_two, pos_one_str, pos_two_str, 
+        (pos_one, pos_two, 
+         pos_one_str, pos_two_str, 
          storage_container_id, occupying_specimen_id) 
       select 
-        cap.position_dimension_one, cap.position_dimension_two, cap.position_dimension_one_string,cap.position_dimension_two_string,
+        cap.position_dimension_one, cap.position_dimension_two, 
+        cap.position_dimension_one_string,cap.position_dimension_two_string,
         csp.container_id,csp.specimen_id 
       from 
         catissue_abstract_position cap 
-      inner join catissue_specimen_position csp ON csp.identifier=cap.identifier
+        inner join catissue_specimen_position csp ON csp.identifier=cap.identifier
     </sql>
     
     <sql>
       insert into os_container_positions
-        (pos_one, pos_two, pos_one_str, pos_two_str,
+        (pos_one, pos_two, 
+         pos_one_str, pos_two_str,
          storage_container_id, occupying_container_id) 
       select 
-        cap.position_dimension_one, cap.position_dimension_two, cap.position_dimension_one_string, cap.position_dimension_two_string,
+        cap.position_dimension_one, cap.position_dimension_two, 
+        cap.position_dimension_one_string, cap.position_dimension_two_string,
         ccp.parent_container_id, ccp.container_id 
-      from catissue_abstract_position cap 
-      inner join catissue_container_position ccp on ccp.identifier=cap.identifier
+      from 
+        catissue_abstract_position cap 
+        inner join catissue_container_position ccp on ccp.identifier=cap.identifier
     </sql>
   </changeSet>
   
@@ -133,13 +143,15 @@
           containerId number;
           positionId number;
         begin
-          select nvl(max(identifier),0)+1
-            into containerId
-          from os_storage_containers;
+          select 
+            nvl(max(identifier),0)+1 into containerId
+          from 
+            os_storage_containers;
   
-          select nvl(max(identifier),0)+1
-            into positionId
-          from os_container_positions;
+          select 
+            nvl(max(identifier),0)+1 into positionId
+          from 
+            os_container_positions;
   
           execute immediate('alter sequence os_storage_containers_seq increment by '||containerId||);
           execute immediate('alter sequence os_container_positions_seq increment by '||positionId||);
