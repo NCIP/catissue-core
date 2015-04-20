@@ -89,7 +89,7 @@ public class Subject {
 		return existingRole;
 	}
 
-	private SubjectRole getExistingRole(Long srId) {
+	public SubjectRole getExistingRole(Long srId) {
 		for (SubjectRole sr : getRoles()) {
 			if (sr.getId().equals(srId)) {
 				return sr;

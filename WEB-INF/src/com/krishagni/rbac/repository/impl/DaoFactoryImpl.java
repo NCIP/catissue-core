@@ -3,7 +3,9 @@ package com.krishagni.rbac.repository.impl;
 import org.hibernate.SessionFactory;
 
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
+import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.repository.impl.SiteDaoImpl;
+import com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
