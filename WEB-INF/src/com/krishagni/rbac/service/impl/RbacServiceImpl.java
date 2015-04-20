@@ -43,6 +43,7 @@ import com.krishagni.rbac.events.RoleAccessControlDetails;
 import com.krishagni.rbac.events.RoleDetail;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 import com.krishagni.rbac.events.SubjectRoleOp;
+import com.krishagni.rbac.events.SubjectRoleOp.OP;
 import com.krishagni.rbac.events.UserAccessCriteria;
 import com.krishagni.rbac.repository.DaoFactory;
 import com.krishagni.rbac.repository.OperationListCriteria;
@@ -425,18 +426,16 @@ public class RbacServiceImpl implements RbacService {
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("user", user);
 		props.put("sr", newSr);
-		switch (subjectRoleOp.getOp()) {
-			case ADD:
-				emailService.sendEmail(ROLE_ASSIGN_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
-				break;
-			case UPDATE:
-				props.put("oldSr", oldSR);
-				emailService.sendEmail(ROLE_UPDATED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
-				break;
-			case REMOVE:
-				emailService.sendEmail(ROLE_REMOVED_EMAIL_TMPL, new String[] {user.getEmailAddress()}, props);
-				break;
+		if (OP.UPDATE.name().equals(subjectRoleOp.getOp())) {
+			props.put("oldSr", oldSR);
 		}
+		
+		Map<SubjectRoleOp.OP, String> emailTemplates = new HashMap<SubjectRoleOp.OP, String>();
+		emailTemplates.put(OP.ADD, ROLE_ASSIGN_EMAIL_TMPL);
+		emailTemplates.put(OP.UPDATE, ROLE_UPDATED_EMAIL_TMPL);
+		emailTemplates.put(OP.REMOVE, ROLE_REMOVED_EMAIL_TMPL);
+		
+		emailService.sendEmail(emailTemplates.get(subjectRoleOp.getOp()), new String[]{user.getEmailAddress()}, props);
 	}
 
 	@Override
