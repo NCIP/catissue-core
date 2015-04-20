@@ -42,7 +42,7 @@
                                  'os-lineage-aliquot': sr.lineage == 'Aliquot',
                                  'os-lineage-derivative': sr.lineage == 'Derived'}">
                 </span>
-                <a>
+                <a ng-click="viewSr(sr)">
                   <os-specimen-desc specimen="sr"></os-specimen-desc>
                 </a>
 
@@ -63,7 +63,7 @@
 
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
                   <li>
-                    <a href="#">
+                    <a ng-click="viewSr(sr)">
                       <i class="fa fa-eye"></i>
                       <span translate="srs.ctx_menu.view_sr">View Requirement</span>
                     </a>
@@ -112,11 +112,14 @@
           </div>
           <div class="row content" ng-if="view != 'list_sr' && 
                                           ((!childReq.id && parentSr == sr) || (childReq.id == sr.id))">
+            <div ng-if="view == 'view_sr'"
+              ng-include="'modules/biospecimen/cp/sr.html'">
+            </div>
             <div ng-if="view == 'addedit_aliquot'"  
-                ng-include="'modules/biospecimen/cp/addedit-aliquot.html'"> 
+              ng-include="'modules/biospecimen/cp/addedit-aliquot.html'"> 
             </div>
             <div ng-if="view == 'addedit_derived'"  
-                ng-include="'modules/biospecimen/cp/addedit-derived.html'"> 
+              ng-include="'modules/biospecimen/cp/addedit-derived.html'"> 
             </div>
           </div>
         </div>

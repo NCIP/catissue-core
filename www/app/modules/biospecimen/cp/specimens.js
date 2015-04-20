@@ -136,6 +136,12 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       loadPvs();
     };
 
+    $scope.viewSr = function(sr) {
+      $scope.view = 'view_sr';
+      $scope.parentSr = sr.parent;
+      $scope.childReq = sr;
+    };
+
     $scope.revertEdit = function() {
       $scope.view = 'list_sr';
       $scope.parentSr = null;
