@@ -1675,5 +1675,13 @@
       incrementBy="1"
       ordered="true" />
   </changeSet>
+  
+  <changeSet author="nmarwaha" id="Institution table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="CATISSUE_INSTITUTE_SEQ" 
+      startValue="2" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
 
 </databaseChangeLog>
