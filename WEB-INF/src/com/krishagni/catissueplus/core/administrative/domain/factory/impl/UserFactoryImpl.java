@@ -28,6 +28,7 @@ public class UserFactoryImpl implements UserFactory {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		User user = new User();
+		user.setAdmin(detail.getAdmin());
 		setFirstName(detail, user, ose);
 		setLastName(detail, user, ose);
 		setLoginName(detail, user, ose);
@@ -126,4 +127,5 @@ public class UserFactoryImpl implements UserFactory {
 		
 		user.setAuthDomain(authDomain);
 	}
+
 }
