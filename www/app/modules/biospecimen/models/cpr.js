@@ -17,6 +17,9 @@ angular.module('os.biospecimen.models.cpr',
       var params = {cpId: cpId, includeStats: !!includeStats};
       angular.extend(params, filterOpts || {});
       if (!!params.dob) {
+        //
+        // Note: yyyy-MM-dd is server date format and is not locale based
+        //
         params.dob = $filter('date')(params.dob, 'yyyy-MM-dd');
       }
       return CollectionProtocolRegistration.query(params);

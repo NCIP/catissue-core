@@ -196,6 +196,22 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		result.put("deBeDateFmt", resourceBundle.getMessage("common_de_be_date_fmt", null, locale));
 		return result;
 	}
+		
+	@Override
+	public String getDeDateFormat() {		
+		return resourceBundle.getMessage("common_de_be_date_fmt", null, Locale.getDefault());
+	}
+
+	@Override
+	public String getTimeFormat() {
+		return resourceBundle.getMessage("common_time_fmt", null, Locale.getDefault());
+	}
+
+	@Override
+	public String getDeDateTimeFormat() {
+		return getDeDateFormat() + " " + getTimeFormat();
+	}
+	
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
