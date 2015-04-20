@@ -5,7 +5,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang.StringUtils;
@@ -18,13 +17,16 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.krishagni.catissueplus.core.common.domain.Email;
-import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.service.TemplateService;
 
+import edu.wustl.common.util.logger.Logger;
+
 public class EmailServiceImpl implements EmailService, ConfigChangeListener, InitializingBean {
+	private static Logger LOGGER = Logger.getCommonLogger(EmailServiceImpl.class);
+	
 	private static final String MODULE = "email";
 	
 	private static final String TEMPLATE_SOURCE = "email-templates/";
@@ -151,9 +153,11 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 			
 			taskExecutor.submit(new SendMailTask(mimeMessage));
 			return true;
-		} catch (MessagingException e) {
-			 throw OpenSpecimenException.serverError(e);
+		} catch (Exception e) {
+			LOGGER.error("Error while sending email: "+ e.getMessage(), e);
+			return false;
 		}
+		
 	}
 	
 	private String getSubject(String emailTmplKey, String[] subjParams) {
