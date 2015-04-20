@@ -31,7 +31,7 @@
         </a>
       </h4>
       <h5>{{cpr.ppid}}</h5>
-      <p>{{cpr.registrationDate | date: 'MMM dd, yyyy'}}</p>
+      <p>{{cpr.registrationDate | date: global.dateFmt}}</p>
       <div class="stats">
         <div class="stat col-xs-6" title="{{'participant.tooltip.completed_visits_count' | translate}}">
           <span class="os-lavatar os-lavatar-sm">V</span>

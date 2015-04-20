@@ -12,5 +12,7 @@ public interface SpecimenRequirementFactory {
 	
 	public SpecimenRequirement createDerived(DerivedSpecimenRequirement req);
 	
+	public SpecimenRequirement createForUpdate(String lineage, SpecimenRequirementDetail req);
+	
 	public List<SpecimenRequirement> createAliquots(AliquotSpecimensRequirement req);
 }

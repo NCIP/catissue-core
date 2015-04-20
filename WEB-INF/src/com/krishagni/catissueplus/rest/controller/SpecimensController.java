@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -178,6 +179,16 @@ public class SpecimensController {
 	@ResponseBody	
 	public List<SpecimenDetail> collectSpecimens(@RequestBody List<SpecimenDetail> specimens) {		
 		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.collectSpecimens(getRequest(specimens));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	/** API present for UI purpose **/
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/cpr-visit-ids")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public Map<String, Long> getCprAndVisitIds(@PathVariable("id") Long specimenId) {
+		ResponseEvent<Map<String, Long>> resp = specimenSvc.getCprAndVisitIds(new RequestEvent<Long>(specimenId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

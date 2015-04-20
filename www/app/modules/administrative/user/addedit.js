@@ -1,5 +1,5 @@
 angular.module('os.administrative.user.addedit', ['os.administrative.models'])
-  .controller('UserAddEditCtrl', function($scope, $state, $stateParams,
+  .controller('UserAddEditCtrl', function($scope, $rootScope, $state, $stateParams,
     user, User, Institute, PvManager) {
  
     function init() {
@@ -7,21 +7,39 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
       $scope.signedUp = false;
       loadPvs();
     }
-    
+
     function loadPvs() {
       $scope.domains = PvManager.getPvs('domains');
+      $scope.institutes = [];
+      var q = undefined;
+      if (!$rootScope.currentUser || $rootScope.currentUser.admin) {
+        q = Institute.query();
+      } else {
+        q = $rootScope.currentUser.getInstitute();
+      }
 
-      Institute.query().then(
-        function(instituteList) {
-          $scope.institutes = [];
-          angular.forEach(instituteList, function(institute) {
-            $scope.institutes.push(institute.name);
-          });
+      q.then(
+        function(result) {
+          if (result instanceof Array) {
+            angular.forEach(result, function(institute) {
+              $scope.institutes.push(institute.name);
+            });
+          } else {
+            $scope.institutes.push(result.name);
+          }
+
+          if (!$scope.user.id && $scope.institutes.length == 1) {
+            $scope.user.instituteName = $scope.institutes[0];
+          }
+
+          if ($scope.user.instituteName) {
+            $scope.loadDepartments($scope.user.instituteName);
+          }
         }
       );
     }
 
-    $scope.loadDepartments = function(instituteName, unsetDept) {
+    $scope.loadDepartments = function(instituteName) {
       Institute.getByName(instituteName).then(
         function(institute) {
           $scope.departments = [];

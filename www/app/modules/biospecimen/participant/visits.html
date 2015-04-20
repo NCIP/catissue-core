@@ -11,10 +11,10 @@
         ui-sref-active="active">
         <h5 class="list-group-item-heading">T{{visit.eventPoint}}: {{visit.eventLabel}}</h5>
         <p class="list-group-item-text" ng-if="visit.status == 'Pending' || !visit.status">
-          {{'visits.status.pending' | translate}} | {{visit.anticipatedVisitDate | date: 'MMM dd, yyyy'}}
+          {{'visits.status.pending' | translate}} | {{visit.anticipatedVisitDate | date: global.dateFmt}}
         </p>
         <p class="list-group-item-text" ng-if="visit.status == 'Complete'">
-          {{'visits.status.complete' | translate}} | {{visit.visitDate | date: 'MMM dd, yyyy'}}
+          {{'visits.status.complete' | translate}} | {{visit.visitDate | date: global.dateFmt}}
         </p>
         <p class="os-more-options" ng-click="showVisitDetail($event, visit.id, visit.eventId)">
           <span class="fa fa-eye"></span>

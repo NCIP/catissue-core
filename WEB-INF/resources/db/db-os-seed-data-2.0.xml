@@ -26,7 +26,6 @@
   <changeSet author="vgaikwad" id="Add resources" dbms="mysql">
     <sql>
       insert into RBAC_RESOURCES(NAME) values('CollectionProtocol');
-      insert into RBAC_RESOURCES(NAME) values('DistributionProtocol');
       insert into RBAC_RESOURCES(NAME) values('Order');
       insert into RBAC_RESOURCES(NAME) values('ParticipantPhi');
       insert into RBAC_RESOURCES(NAME) values('ParticipantDeid');
@@ -39,7 +38,6 @@
   <changeSet author="vgaikwad" id="Add resources" dbms="oracle">
     <sql>
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'CollectionProtocol');
-      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'DistributionProtocol');
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Order');
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'ParticipantPhi');
       insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'ParticipantDeid');

@@ -103,10 +103,14 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 				.list();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public CollectionProtocolEvent getCpe(Long cpeId) {
-		return (CollectionProtocolEvent) sessionFactory.getCurrentSession()
-				.get(CollectionProtocolEvent.class.getName(), cpeId);
+		List<CollectionProtocolEvent> events = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CPE_BY_ID)
+				.setLong("cpeId", cpeId)
+				.list();
+		return events != null && !events.isEmpty() ? events.iterator().next() : null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -267,4 +271,8 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	private static final String GET_CPS_BY_SHORT_TITLE = FQN + ".getCpsByShortTitle";
 	
 	private static final String GET_CP_IDS_BY_SITE_IDS = FQN + ".getCpIdsBySiteIds";
+	
+	private static final String CPE_FQN = CollectionProtocolEvent.class.getName();
+	
+	private static final String GET_CPE_BY_ID = CPE_FQN + ".getCpeById";
 }

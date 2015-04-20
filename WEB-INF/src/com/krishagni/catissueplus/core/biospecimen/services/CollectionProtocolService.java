@@ -59,6 +59,8 @@ public interface CollectionProtocolService {
 	
 	public ResponseEvent<CollectionProtocolEventDetail> copyEvent(RequestEvent<CopyCpeOpDetail> req);
 	
+	public ResponseEvent<CollectionProtocolEventDetail> deleteEvent(RequestEvent<Long> req);
+	
 	//
 	// Specimen Requirement API
 	//
@@ -72,7 +74,11 @@ public interface CollectionProtocolService {
 	
 	public ResponseEvent<SpecimenRequirementDetail> createDerived(RequestEvent<DerivedSpecimenRequirement> req);
 	
+	public ResponseEvent<SpecimenRequirementDetail> updateSpecimenRequirement(RequestEvent<SpecimenRequirementDetail> req);
+	
 	public ResponseEvent<SpecimenRequirementDetail> copySpecimenRequirement(RequestEvent<Long> req);
+	
+	public ResponseEvent<SpecimenRequirementDetail> deleteSpecimenRequirement(RequestEvent<Long> req);
 	
 	//
 	// Workflow API

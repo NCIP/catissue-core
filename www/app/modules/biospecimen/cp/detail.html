@@ -6,17 +6,17 @@
     <h3>{{cp.title}}</h3>
 
     <div class="os-btns right">
-      <button class="primary" ui-sref="cp-addedit({cpId:cp.id})">
+      <button show-if-allowed="cpResource.updateOpts" class="primary" ui-sref="cp-addedit({cpId:cp.id})">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
       <div dropdown class="inline">
-        <button class="default dropdown-toggle" >
+        <button class="default dropdown-toggle">
           <span translate="common.buttons.more">More</span>
           <span class="fa fa-caret-down"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-right">
-          <li ng-click="deleteCp()">
+          <li show-if-allowed="cpResource.deleteOpts" ng-click="deleteCp()">
             <a>
               <i class="fa fa-trash"></i>
               <span translate="cp.menu_options.delete">Delete</span>

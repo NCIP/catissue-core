@@ -47,6 +47,9 @@ angular.module('openspecimen', [
         resolve: {
           currentUser: function(User) {
             return User.getCurrentUser();
+          },
+          authInit: function(AuthorizationService) {
+            return AuthorizationService.initializeUserRights();
           }
         },
         controller: 'SignedInCtrl'
@@ -64,7 +67,7 @@ angular.module('openspecimen', [
     $httpProvider.interceptors.push('httpRespInterceptor');
 
     /*ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 9090;*/
+    ApiUrlsProvider.port = 9000;*/
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
@@ -190,7 +193,7 @@ angular.module('openspecimen', [
       };
     }
   })
-  .run(function($rootScope, $window, $cookieStore, ApiUtil) {
+  .run(function($rootScope, $window, $cookieStore, $translate, ApiUtil, Setting) {
     if ($window.localStorage['osAuthToken']) {
       $cookieStore.put('osAuthToken', $window.localStorage['osAuthToken']);
       $rootScope.loggedIn = true;
@@ -198,7 +201,7 @@ angular.module('openspecimen', [
 
     ApiUtil.initialize();
 
-    $rootScope.$on('$stateChangeSuccess', 
+    $rootScope.$on('$stateChangeSuccess',
       function(event, toState, toParams, fromState, fromParams) {
         $rootScope.state = toState;
       });
@@ -208,10 +211,20 @@ angular.module('openspecimen', [
     };
 
     $rootScope.global = {
-      dateFmt: 'MMM dd, yyyy',
-      queryDateFmt: {format: 'mm-dd-yyyy'},
-      timeFmt: 'hh:mm',
-      dateTimeFmt: 'MMM dd, yyyy hh:mm',
       filterWaitInterval: 500
     };
+
+    Setting.getLocale().then(
+      function(settings) {
+        var fmts = {
+          dateFmt: settings.dateFmt,
+          timeFmt: settings.timeFmt,
+          queryDateFmt: {format: settings.deFeDateFmt},
+          dateTimeFmt: settings.dateFmt + ' ' + settings.timeFmt
+        };
+
+        angular.extend($rootScope.global, fmts);
+        $translate.use(settings.locale);
+      }
+    );
   });

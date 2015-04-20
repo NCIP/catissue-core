@@ -3,7 +3,7 @@
     <h3 translate="cp.list">Collection Protocols</h3>
     <div class="os-btns right">
       <div dropdown class="inline">
-        <button class="primary dropdown-toggle" title="Click to add new Collection Protocol" 
+        <button show-if-allowed="cpResource.createOpts" class="primary dropdown-toggle" title="Click to add new Collection Protocol"
           ui-sref="cp-addedit({cpId: ''})">
           <span class="fa fa-plus"></span>
           <span translate="common.buttons.create">Create</span>
@@ -38,7 +38,7 @@
         </a>
       </h4>
       <h5>{{cp.principalInvestigator.firstName}} {{cp.principalInvestigator.lastName}}</h5>
-      <p>{{cp.startDate | date: 'MMM dd, yyyy'}}</p>
+      <p>{{cp.startDate | date: global.dateFmt}}</p>
       <div class="stats">
         <div class="stat col-xs-6" title="{{'cp.tooltip.reg_participants_count' | translate}}">
           <span class="os-lavatar os-lavatar-sm">P</span>

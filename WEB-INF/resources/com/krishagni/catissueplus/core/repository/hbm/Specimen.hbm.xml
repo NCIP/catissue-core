@@ -69,6 +69,8 @@
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier" />
     </set>
 
+    <filter name="activeEntity"/>
+
     <query name="getByLabel">
       from 
         com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
@@ -131,6 +133,17 @@
         v.name = :visitName and
         v.activityStatus = 'Active' and
         s.activityStatus = 'Active'
+    </query>
+
+    <query name="getCprAndVisitIds">
+      select
+        cpr.id, v.id
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
+        join s.visit v
+        join v.registration cpr
+      where
+        s.id = :specimenId
     </query>
   </class>
 </hibernate-mapping>

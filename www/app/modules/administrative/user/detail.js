@@ -4,9 +4,11 @@ angular.module('os.administrative.user.detail', ['os.administrative.models'])
     $scope, $q, $translate, user, 
     User, PvManager, Alerts, DeleteUtil) {
 
-    $scope.user = user;
-    $scope.domains = PvManager.getPvs('domains');
-    $scope.sites = PvManager.getSites();
+    function init() {
+      $scope.user = user;
+      $scope.domains = PvManager.getPvs('domains');
+      $scope.sites = PvManager.getSites();
+    }
 
     $scope.editUser = function(property, value) {
       var d = $q.defer();
@@ -29,5 +31,7 @@ angular.module('os.administrative.user.detail', ['os.administrative.models'])
         confirmDelete: $scope.user.activityStatus == 'Pending' ? 'user.confirm_reject' : undefined
       });
     }
+
+    init();
 
   });

@@ -449,6 +449,29 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	
 	@Override
 	@PlusTransactional
+	public ResponseEvent<CollectionProtocolEventDetail> deleteEvent(RequestEvent<Long> req) {
+		try {
+			Long cpeId = req.getPayload();
+			CollectionProtocolEvent cpe = daoFactory.getCollectionProtocolDao().getCpe(cpeId);
+			if (cpe == null) {
+				throw OpenSpecimenException.userError(CpeErrorCode.NOT_FOUND);
+			}
+			
+			CollectionProtocol cp = cpe.getCollectionProtocol();
+			AccessCtrlMgr.getInstance().ensureUpdateCpRights(cp);
+			
+			cpe.delete();
+			daoFactory.getCollectionProtocolDao().saveCpe(cpe);
+			return ResponseEvent.response(CollectionProtocolEventDetail.from(cpe));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+		
+	@Override
+	@PlusTransactional
 	public ResponseEvent<List<SpecimenRequirementDetail>> getSpecimenRequirments(RequestEvent<Long> req) {
 		Long cpeId = req.getPayload();
 		try {
@@ -542,6 +565,28 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	
 	@Override
 	@PlusTransactional
+	public ResponseEvent<SpecimenRequirementDetail> updateSpecimenRequirement(RequestEvent<SpecimenRequirementDetail> req) {
+		try {
+			SpecimenRequirementDetail detail = req.getPayload();
+			Long srId = detail.getId();
+			SpecimenRequirement sr = daoFactory.getSpecimenRequirementDao().getById(srId);
+			if (sr == null) {
+				throw OpenSpecimenException.userError(SrErrorCode.NOT_FOUND);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureUpdateCpRights(sr.getCollectionProtocol());
+			SpecimenRequirement partial = srFactory.createForUpdate(sr.getLineage(), detail);
+			sr.update(partial);
+			return ResponseEvent.response(SpecimenRequirementDetail.from(sr));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
 	public ResponseEvent<SpecimenRequirementDetail> copySpecimenRequirement(RequestEvent<Long> req) {
 		try {
 			Long srId = req.getPayload();
@@ -561,7 +606,28 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			return ResponseEvent.serverError(e);
 		}
 	}
-
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SpecimenRequirementDetail> deleteSpecimenRequirement(RequestEvent<Long> req) {
+		try {
+			Long srId = req.getPayload();
+			SpecimenRequirement sr = daoFactory.getSpecimenRequirementDao().getById(srId);
+			if (sr == null) {
+				throw OpenSpecimenException.userError(SrErrorCode.NOT_FOUND);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureUpdateCpRights(sr.getCollectionProtocol());
+			sr.delete();
+			daoFactory.getSpecimenRequirementDao().saveOrUpdate(sr);
+			return ResponseEvent.response(SpecimenRequirementDetail.from(sr));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<CpWorkflowCfgDetail> getWorkflows(RequestEvent<Long> req) {

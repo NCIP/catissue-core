@@ -3,15 +3,19 @@ package com.krishagni.catissueplus.core.common.service.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -19,7 +23,6 @@ import com.krishagni.catissueplus.core.common.domain.ConfigErrorCode;
 import com.krishagni.catissueplus.core.common.domain.ConfigProperty;
 import com.krishagni.catissueplus.core.common.domain.ConfigSetting;
 import com.krishagni.catissueplus.core.common.domain.Module;
-import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.ConfigSettingDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -36,9 +39,15 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	private Map<String, Map<String, ConfigSetting>> configSettings;
 	
 	private DaoFactory daoFactory;
+	
+	private ResourceBundleMessageSource resourceBundle;
 		
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+	
+	public void setResourceBundle(ResourceBundleMessageSource resourceBundle) {
+		this.resourceBundle = resourceBundle;
 	}
 
 	@Override
@@ -175,6 +184,50 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		listeners.add(callback);
 	}
 	
+	@Override
+	public Map<String, String> getLocaleSettings() {
+		Map<String, String> result = new HashMap<String, String>();
+		
+		Locale locale = Locale.getDefault();
+		result.put("locale", locale.toString());
+		result.put("dateFmt", resourceBundle.getMessage("common_date_fmt", null, locale));
+		result.put("timeFmt", resourceBundle.getMessage("common_time_fmt", null, locale));
+		result.put("deFeDateFmt", resourceBundle.getMessage("common_de_fe_date_fmt", null, locale));
+		result.put("deBeDateFmt", resourceBundle.getMessage("common_de_be_date_fmt", null, locale));
+		return result;
+	}
+		
+	@Override
+	public String getDeDateFormat() {		
+		return resourceBundle.getMessage("common_de_be_date_fmt", null, Locale.getDefault());
+	}
+
+	@Override
+	public String getTimeFormat() {
+		return resourceBundle.getMessage("common_time_fmt", null, Locale.getDefault());
+	}
+
+	@Override
+	public String getDeDateTimeFormat() {
+		return getDeDateFormat() + " " + getTimeFormat();
+	}
+	
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		reload();
+		
+		setLocale();
+		registerChangeListener("common", new ConfigChangeListener() {			
+			@Override
+			public void onConfigChange(String name, String value) {				
+				if (name.equals("locale")) {
+					setLocale();
+				}
+			}
+		});
+	}
+	
 	private boolean isValidSetting(ConfigProperty property, String setting) {
 		if (StringUtils.isBlank(setting)) {
 			return true;
@@ -219,9 +272,14 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 			listener.onConfigChange(property, setting);
 		}
 	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		reload();		
+	
+	private void setLocale() {		
+		String setting = getStrSetting("common", "locale", "en_US");
+		Locale newLocale = LocaleUtils.toLocale(setting);
+		Locale existingLocale = Locale.getDefault();
+		
+		if (!existingLocale.equals(newLocale)) {
+			Locale.setDefault(newLocale);
+		}
 	}
 }

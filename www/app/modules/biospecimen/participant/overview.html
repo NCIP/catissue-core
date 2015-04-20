@@ -5,9 +5,9 @@
       <li class="item">
         <strong class="key key-sm" translate="participant.birth_date">Birth Date:</strong>
         <os-inline-edit editor="bdEditor" name="birthDate" class="value value-md" value="cpr.participant.birthDate">
-          <span ng-if="bdEditor.isDisplayMode()">{{bdEditor.viewValue | date: 'MMM dd, yyyy' | osNoValue}}</span>
+          <span ng-if="bdEditor.isDisplayMode()">{{bdEditor.viewValue | date: global.dateFmt | osNoValue}}</span>
           <input ng-if="bdEditor.isEditMode()" class="form-control" type="text" ng-model="bdEditor.editValue"
-            datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true">
+            datepicker-popup="{{global.dateFmt}}" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true">
         </os-inline-edit>
       </li>
 
@@ -19,9 +19,9 @@
       <li class="item">
         <strong class="key key-sm" translate="participant.reg_date">Registration Date:</strong>
         <os-inline-edit editor="rdEditor" name="regDate" class="value value-md" value="cpr.registrationDate">
-          <span ng-if="rdEditor.isDisplayMode()">{{rdEditor.viewValue | date: 'MMM dd, yyyy' | osNoValue}}</span>
+          <span ng-if="rdEditor.isDisplayMode()">{{rdEditor.viewValue | date: global.dateFmt | osNoValue}}</span>
           <input ng-if="rdEditor.isEditMode()" class="form-control" type="text" ng-model="rdEditor.editValue"
-            datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true">
+            datepicker-popup="{{global.dateFmt}}" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true">
         </os-inline-edit>
       </li>
 
@@ -99,7 +99,7 @@
                 </a>
               </div>
               <div class="col col-xs-2">
-                {{visit.visitDate | date: 'MMM dd, yyyy'}} 
+                {{visit.visitDate | date: global.dateFmt}} 
               </div>
               <div class="col col-xs-4">
                 <progress class="progress" max="visit.totalSpecimens"
@@ -170,7 +170,7 @@
                     T{{visit.eventPoint}}: {{visit.eventLabel}}
                   </a>
                 </div>
-                <div class="col col-xs-3">{{visit.anticipatedVisitDate | date: 'MMM dd, yyyy'}}</div>
+                <div class="col col-xs-3">{{visit.anticipatedVisitDate | date: global.dateFmt}}</div>
                 <div class="col col-xs-3">{{visit.anticipatedSpecimens}}</div>
                 <div class="col col-xs-1 os-more-options">
                   <div dropdown>

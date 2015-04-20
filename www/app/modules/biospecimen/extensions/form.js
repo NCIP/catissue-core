@@ -1,6 +1,6 @@
 
 angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
-  .directive('osDeForm', function($http, Form) {
+  .directive('osDeForm', function($http, $rootScope, Form) {
     return {
       restrict: 'A',
 
@@ -23,7 +23,7 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
             formDataUrl   : baseUrl + '/:formId/data/:recordId',
             formSaveUrl   : baseUrl + '/:formId/data',
             recordId      : opts.recordId,
-            dateFormat    : 'mm-dd-yyyy',
+            dateFormat    : $rootScope.global.queryDateFmt.format,
             appData       : {formCtxtId: opts.formCtxtId, objectId: opts.objectId},
             onSaveSuccess : opts.onSave,
             onSaveError   : opts.onError,

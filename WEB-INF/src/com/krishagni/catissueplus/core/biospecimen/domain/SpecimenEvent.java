@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.de.domain.DeObject;
 
 import edu.common.dynamicextensions.domain.nui.DatePicker;
@@ -27,6 +28,9 @@ public abstract class SpecimenEvent extends DeObject {
 	
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private ConfigurationService cfgSvc;
 	
 	public SpecimenEvent(Specimen specimen) {
 		this.specimen = specimen;
@@ -79,7 +83,7 @@ public abstract class SpecimenEvent extends DeObject {
 	public Map<String, Object> getAttrValues() {
 		Map<String, Object> vals = new HashMap<String, Object>();
 		vals.put("user", user.getId());
-		vals.put("time", new SimpleDateFormat("MM-dd-yyyy HH:mm").format(time)); // TODO: take date format from locale 
+		vals.put("time", new SimpleDateFormat(cfgSvc.getDeDateTimeFormat()).format(time)); 
 		vals.put("comments", comments);
 		
 		vals.putAll(getEventAttrs());

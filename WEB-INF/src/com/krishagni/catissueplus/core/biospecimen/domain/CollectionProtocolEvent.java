@@ -7,6 +7,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 @Audited
 public class CollectionProtocolEvent {
@@ -112,11 +113,11 @@ public class CollectionProtocolEvent {
 	
 	public Set<SpecimenRequirement> getTopLevelAnticipatedSpecimens() {
 		Set<SpecimenRequirement> anticipated = new HashSet<SpecimenRequirement>();
-		if (specimenRequirements == null) {
+		if (getSpecimenRequirements() == null) {
 			return anticipated;
 		}
 		
-		for (SpecimenRequirement sr : specimenRequirements) {
+		for (SpecimenRequirement sr : getSpecimenRequirements()) {
 			if (sr.getParentSpecimenRequirement() == null) {
 				anticipated.add(sr);
 			}
@@ -151,10 +152,19 @@ public class CollectionProtocolEvent {
 	}
 	
 	public void copySpecimenRequirementsTo(CollectionProtocolEvent cpe) {
-		for (SpecimenRequirement sr : specimenRequirements) {
+		for (SpecimenRequirement sr : getSpecimenRequirements()) {
 			if (sr.getParentSpecimenRequirement() == null) {
 				cpe.addSpecimenRequirement(sr.deepCopy(cpe));
 			}			
 		}		
+	}
+	
+	public void delete() {
+		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
+		for (SpecimenRequirement sr : getSpecimenRequirements()) {
+			if (sr.getParentSpecimenRequirement() == null) {
+				sr.delete();
+			}
+		}
 	}
 }

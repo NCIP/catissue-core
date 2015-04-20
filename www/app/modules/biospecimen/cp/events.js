@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.cp.events', ['os.biospecimen.models'])
   .controller('CpEventsCtrl', function(
-     $scope, $state, $stateParams, 
+     $scope, $state, $stateParams, $modal,
      cp, events, 
      CollectionProtocolEvent, PvManager) {
 
@@ -110,6 +110,35 @@ angular.module('os.biospecimen.cp.events', ['os.biospecimen.models'])
         }
       );
     };
+
+    $scope.deleteEvent = function(evt) {
+      var modalInstance = $modal.open({
+        templateUrl: 'cp_event_delete.html',
+        controller: function($scope, $modalInstance) {
+          $scope.yes = function() {
+            $modalInstance.close(true);
+          }
+
+          $scope.no = function() {
+            $modalInstance.dismiss('cancel');
+          }
+        }
+      });
+
+      modalInstance.result.then(
+        function() {
+          evt.delete().then(
+            function() {
+              var idx = $scope.events.indexOf(evt);
+              $scope.events.splice(idx, 1);
+              if ($scope.events.length > 0) {
+                $scope.selectEvent($scope.events[0]);           
+              }
+            }
+          );
+        }
+      );
+    }; 
 
     init();
   });

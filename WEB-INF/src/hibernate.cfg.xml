@@ -7,6 +7,7 @@
 
     <session-factory>
 
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/filters.hbm.xml" />
 		<!--  Form Context and Record Entry -->
 		<mapping resource="krishagni/catissueplus/hbm/FormContextBean.hbm.xml" />
 		<mapping resource="krishagni/catissueplus/hbm/FormRecordEntryBean.hbm.xml" />

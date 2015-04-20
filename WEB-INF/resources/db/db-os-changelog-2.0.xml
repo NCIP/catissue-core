@@ -947,7 +947,7 @@
   </changeSet>
 
 
-<changeSet author="mibrahim" id="Create resources table" failOnError="true">
+  <changeSet author="mibrahim" id="Create resources table" failOnError="true">
     <createTable tableName="RBAC_RESOURCES">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
         <constraints primaryKey="true" nullable="false"/>
@@ -1684,6 +1684,7 @@
       referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
+
   <changeSet author="vpawar" id="Bulk import objects jobs table">
     <createTable tableName="OS_BULK_IMPORT_JOBS">
       <column name="IDENTIFIER" type="${int.type}">
@@ -1721,6 +1722,7 @@
       referencedTableName="CATISSUE_USER"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
+
   <changeSet author="vpawar" id="Bulk import objects table sequence" dbms="oracle">
     <createSequence
       sequenceName="OS_BULK_IMPORT_JOBS_SEQ"
@@ -1728,6 +1730,7 @@
       incrementBy="1"
       ordered="true" />
   </changeSet>
+
   <changeSet author="nmarwaha" id="Updating activity status for Specimen Req table" >
     <sql>
       update catissue_cp_req_specimen set activity_status = 'Active' where activity_status is null

@@ -7,12 +7,12 @@
     <h3>{{institute.name}}</h3>
 
     <div class="os-btns right">
-      <button class="primary" title="{{'institutes.tooltip.edit' | translate}}"
+      <button show-if-admin class="primary" title="{{'institutes.tooltip.edit' | translate}}"
         ui-sref="institute-addedit({instituteId: institute.id})">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
-      <button class="default" ng-click="deleteInstitute()">
+      <button show-if-admin class="default" ng-click="deleteInstitute()">
         <span class="fa fa-trash"></span>
         <span translate="common.buttons.delete">Delete</span>
       </button>

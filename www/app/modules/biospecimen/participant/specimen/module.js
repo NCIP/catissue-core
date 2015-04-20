@@ -7,6 +7,18 @@ angular.module('os.biospecimen.specimen',
   ])
   .config(function($stateProvider) {
     $stateProvider
+      .state('specimen', {
+        url: '/specimens/:specimenId',
+        controller: function($state, params) {
+          $state.go('specimen-detail.overview', params, {location: 'replace'});
+        },
+        resolve: {
+          params: function($stateParams, Specimen) {
+            return Specimen.getRouteIds($stateParams.specimenId);
+          }
+        },
+        parent: 'signed-in'
+      })
       .state('specimen-root', {
         url: '/specimens?specimenId&srId',
         template: '<div ui-view></div>',
@@ -48,7 +60,6 @@ angular.module('os.biospecimen.specimen',
           $scope.specimen = specimen;
 
           $scope.childSpecimens = $scope.specimen.children; 
-          // 'SpecimenDetailCtrl'
         },
         parent: 'specimen-root'
       })
