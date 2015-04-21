@@ -2,7 +2,7 @@ package com.krishagni.catissueplus.core.importer.repository.impl;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -44,8 +44,8 @@ public class ImportJobDaoImpl extends AbstractDao<ImportJob> implements ImportJo
 				.add(Restrictions.eq("createdBy.id", crit.userId()));
 		}
 		
-		if (StringUtils.isNotBlank(crit.objectType())) {
-			query.add(Restrictions.eq("name", crit.objectType()));
+		if (CollectionUtils.isNotEmpty(crit.objectTypes())) {
+			query.add(Restrictions.in("name", crit.objectTypes()));
 		}
 						
 		return query.list();

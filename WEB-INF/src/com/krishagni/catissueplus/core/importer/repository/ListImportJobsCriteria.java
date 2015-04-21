@@ -1,12 +1,14 @@
 package com.krishagni.catissueplus.core.importer.repository;
 
+import java.util.List;
+
 import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 
 public class ListImportJobsCriteria extends AbstractListCriteria<ListImportJobsCriteria> {
 	
 	private Long userId;
 	
-	private String objectType;
+	private List<String> objectTypes;
 
 	@Override
 	public ListImportJobsCriteria self() {
@@ -22,12 +24,12 @@ public class ListImportJobsCriteria extends AbstractListCriteria<ListImportJobsC
 		return self();
 	}
 	
-	public String objectType() {
-		return objectType;
+	public List<String> objectTypes() {
+		return objectTypes;
 	}
 	
-	public ListImportJobsCriteria objectType(String objectType) {
-		this.objectType = objectType;
+	public ListImportJobsCriteria objectTypes(List<String> objectTypes) {
+		this.objectTypes = objectTypes;
 		return self();
 	}
 }

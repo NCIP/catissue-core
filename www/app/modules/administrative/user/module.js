@@ -68,6 +68,21 @@ angular.module('os.administrative.user',
         },
         parent: 'user-root'
       })
+      .state('user-import-jobs', {
+        url: '/users-import-jobs',
+        templateUrl: 'modules/common/import/list.html',
+        controller: 'ImportJobsListCtrl',
+        resolve: {
+          importDetail: function() {
+            return {
+              breadcrumbs: [{state: 'user-list', title: 'user.list'}],
+              title: 'user.bulk_import_jobs',
+              objectTypes: ['user', 'userRoles']
+            }
+          }
+        },
+        parent: 'user-root'
+      })
       .state('user-detail', {
         url: '/users/:userId',
         templateUrl: 'modules/administrative/user/detail.html',

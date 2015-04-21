@@ -1,0 +1,71 @@
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li ng-repeat="breadcrumb in importDetail.breadcrumbs">
+        <a ui-sref="{{breadcrumb.state}}" translate="{{breadcrumb.title}}"></a>
+      </li>
+    </ul>
+    <h3>
+      <span translate="{{importDetail.title}}"></span>
+    </h3> 
+  </div>
+
+  <div class="container os-list-container">
+    <div class="os-table" ng-if="importJobs.length > 0">
+      <div class="os-table-head">
+        <div class="row">
+          <div class="col col-xs-3">
+            <span translate="bulk_imports.job_id">Job ID</span>
+          </div>
+          <div class="col col-xs-2">
+            <span translate="bulk_imports.submit_time">Submit Time</span>
+          </div>
+          <div class="col col-xs-2">
+            <span translate="bulk_imports.finish_time">Finish Time</span>
+          </div>
+          <div class="col col-xs-1">
+            <span translate="bulk_imports.processed_records">Success</span>
+          </div>
+          <div class="col col-xs-1">
+            <span translate="bulk_imports.failed_records">Failed</span>
+          </div>
+          <div class="col col-xs-2">
+            <span translate="bulk_imports.status">Status</span>
+          </div>
+          <div class="col col-xs-1">
+            <span translate="bulk_imports.file">Report File</span>
+          </div>
+        </div>
+      </div>
+      <div class="os-table-body">
+        <div class="row" ng-repeat="importJob in importJobs">
+          <div class="col col-xs-3">
+            <a>
+              <span>#{{importJob.id}} 
+              <span translate="bulk_imports.import_types.{{importJob.type}}"></span>
+              <span translate="bulk_imports.object_types.{{importJob.name}}"></span>
+            </a>
+          </div>
+          <div class="col col-xs-2">
+            <span>{{importJob.creationTime | date: global.dateTimeFmt}}</span>
+          </div>
+          <div class="col col-xs-2">
+            <span ng-if="importJob.endTime">{{importJob.endTime | date: global.dateTimeFmt}}</span>
+          </div>
+          <div class="col col-xs-1">
+            <span>{{importJob.totalRecords - imporJob.failedRecords}}</span>
+          </div>
+          <div class="col col-xs-1">
+            <span>{{importJob.failedRecords}}</span>
+          </div>
+          <div class="col col-xs-2">
+            <span translate="bulk_imports.status_{{importJob.status}}"></span>
+          </div>
+          <div class="col col-xs-1">
+            <a> <span class="fa fa-download"></span> </a>
+          </div>
+        </div>
+      </div>
+    </div> 
+  </div>
+</div>

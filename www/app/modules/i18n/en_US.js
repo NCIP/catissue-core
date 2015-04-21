@@ -41,6 +41,7 @@
     "server_connect_error": "Unable to connect server",
     "recent_activity": "Recent Activity",
     "no_file_selected": "No File Selected",
+    "jobs": "Jobs",
 
     "buttons": {
       "add": "Add",
@@ -514,6 +515,7 @@
     "user_roles": "User Roles",
     "bulk_import_users": "Bulk Import Users",
     "bulk_import_user_roles": "Bulk Import User Roles",
+    "bulk_import_jobs": "Bulk Import Users Job List",
 
     "role": {
        "roles": "Roles",
@@ -869,6 +871,26 @@
     "import_type": "Import Type",
     "object_type": "Object Type",
     "create": "Create",
-    "update": "Update"
+    "update": "Update",
+    "status_COMPLETED": "Completed",
+    "status_FAILED": "Failed",
+
+    "job_id": "Job ID",
+    "submit_time": "Submit Time",
+    "finish_time": "Finish Time",
+    "processed_records": "Success",
+    "failed_records": "Failed",
+    "status": "Status",
+    "file": "Report File",
+ 
+    "object_types": {
+      "user": "Users",
+      "userRoles": "User Roles"
+    },
+
+    "import_types": {
+      "CREATE": "Create",
+      "UPDATE": "Update"
+    }
   }
 }

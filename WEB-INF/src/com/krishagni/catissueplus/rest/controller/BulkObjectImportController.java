@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.rest.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,7 @@ public class BulkObjectImportController {
 		return Collections.singletonMap("fileId", resp.getPayload());
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
@@ -55,12 +57,12 @@ public class BulkObjectImportController {
 			int maxResults,
 			
 			@RequestParam(value = "objectType", required = false) 
-			String objectType) {
+			String[] objectTypes) {
 		
 		ListImportJobsCriteria crit = new ListImportJobsCriteria()
 			.startAt(startAt)
 			.maxResults(maxResults)
-			.objectType(objectType);
+			.objectTypes(objectTypes != null ? Arrays.asList(objectTypes) : null);
 		
 		RequestEvent<ListImportJobsCriteria> req = new RequestEvent<ListImportJobsCriteria>(crit);
 		ResponseEvent<List<ImportJobDetail>> resp = importSvc.getImportJobs(req);
