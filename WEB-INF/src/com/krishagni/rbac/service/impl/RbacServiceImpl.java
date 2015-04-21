@@ -416,7 +416,7 @@ public class RbacServiceImpl implements RbacService {
 			AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
 						
 			SubjectRole resp = null;
-			SubjectRole oldSR = null;
+			Map<String,Object> oldSRDetails = new HashMap<String, Object>();
 			SubjectRole sr = null;
 			switch (subjectRoleOp.getOp()) {
 				case ADD:
@@ -425,8 +425,10 @@ public class RbacServiceImpl implements RbacService {
 					break;
 				
 				case UPDATE:
-					oldSR  = (SubjectRole) subject.getExistingRole(subjectRoleOp.getSubjectRole().getId())
-						.clone();
+					SubjectRole oldSR = subject.getExistingRole(subjectRoleOp.getSubjectRole().getId());
+					oldSRDetails.put("site", oldSR.getSite());
+					oldSRDetails.put("cp", oldSR.getCollectionProtocol());
+					oldSRDetails.put("role", oldSR.getRole());
 					
 					sr = createSubjectRole(subjectRoleOp.getSubjectRole());
 					resp = subject.updateRole(sr);
@@ -439,7 +441,7 @@ public class RbacServiceImpl implements RbacService {
 			
 			if (resp != null) {
 				daoFactory.getSubjectDao().saveOrUpdate(subject, true);
-				sendEmail(resp, oldSR, subjectRoleOp);
+				sendEmail(resp, oldSRDetails, subjectRoleOp);
 			}
 			
 			return ResponseEvent.response(SubjectRoleDetail.from(resp));
@@ -450,18 +452,6 @@ public class RbacServiceImpl implements RbacService {
 		}
 	}
 	
-	private void sendEmail(SubjectRole newSR, SubjectRole oldSR, SubjectRoleOp subjectRoleOp) {
-		User user = userDao.getById(newSR.getSubject().getId());
-		Map<String, Object> props = new HashMap<String, Object>();
-		props.put("user", user);
-		props.put("sr", newSR);
-		if (OP.UPDATE.name().equals(subjectRoleOp.getOp().name())) {
-			props.put("oldSr", oldSR);
-		}
-		
-		emailService.sendEmail(emailTemplates.get(subjectRoleOp.getOp()), new String[]{user.getEmailAddress()}, props);
-	}
-
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<GroupRoleDetail>> getGroupRoles(RequestEvent<Long> req) {
@@ -792,18 +782,18 @@ public class RbacServiceImpl implements RbacService {
 		}
 	}
 	
-	private static final String ROLE_ASSIGN_EMAIL_TMPL = "users_role_assigned";
-
+	private void sendEmail(SubjectRole newSR, Map<String, Object> oldSRDetails, SubjectRoleOp subjectRoleOp) {
+		User user = userDao.getById(newSR.getSubject().getId());
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("operation", subjectRoleOp.getOp().name());
+		props.put("user", user);
+		props.put("sr", newSR);
+		props.put("oldSr", oldSRDetails);
+		
+		emailService.sendEmail(ROLE_UPDATED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
+	}
+	
 	private static final String ROLE_UPDATED_EMAIL_TMPL = "users_role_updated";
 
-	private static final String ROLE_REMOVED_EMAIL_TMPL = "users_role_deleted";
-	
-	private static final Map<SubjectRoleOp.OP, String> emailTemplates = new HashMap<SubjectRoleOp.OP, String>();
-	
-	static {
-		emailTemplates.put(SubjectRoleOp.OP.ADD, ROLE_ASSIGN_EMAIL_TMPL);
-		emailTemplates.put(SubjectRoleOp.OP.UPDATE, ROLE_UPDATED_EMAIL_TMPL);
-		emailTemplates.put(SubjectRoleOp.OP.REMOVE, ROLE_REMOVED_EMAIL_TMPL);
-	}
 
 }

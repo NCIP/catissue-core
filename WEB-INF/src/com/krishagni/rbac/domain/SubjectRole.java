@@ -3,7 +3,7 @@ package com.krishagni.rbac.domain;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 
-public class SubjectRole implements Cloneable {
+public class SubjectRole {
 	private Long id;
 	
 	private Subject subject;
@@ -52,11 +52,6 @@ public class SubjectRole implements Cloneable {
 
 	public void setSite(Site site) {
 		this.site = site;
-	}
-	
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
 	}
 	
 	@Override
