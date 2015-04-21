@@ -45,20 +45,40 @@ angular.module('os.administrative.user',
         parent: 'user-root'
       })
       .state('user-import', {
-        url: '/users-import',
+        url: '/users-import?objectType',
         templateUrl: 'modules/common/import/add.html',
         controller: 'ImportObjectCtrl',
+        resolve: {
+          importDetail: function($stateParams) {
+            var objectType = $stateParams.objectType;
+            var title = undefined;
+            if (objectType == 'user') {
+              title = 'user.bulk_import_users';
+            } else if (objectType == 'userRoles') {
+              title = 'user.bulk_import_user_roles';
+            }
+
+            return {
+              breadcrumbs: [{state: 'user-list', title: 'user.list'}],
+              objectType: objectType,
+              title: title,
+              onSuccessState: 'user-list'
+            };
+          }
+        },
+        parent: 'user-root'
+      })
+      .state('user-import-jobs', {
+        url: '/users-import-jobs',
+        templateUrl: 'modules/common/import/list.html',
+        controller: 'ImportJobsListCtrl',
         resolve: {
           importDetail: function() {
             return {
               breadcrumbs: [{state: 'user-list', title: 'user.list'}],
-              objectTypes: [
-                {type: 'user',      displayName: 'user.user_object'},
-                {type: 'userRoles', displayName: 'user.user_roles'}
-              ],
-              title: 'user.bulk_import',
-              onSuccessState: 'user-list'
-            };
+              title: 'user.bulk_import_jobs',
+              objectTypes: ['user', 'userRoles']
+            }
           }
         },
         parent: 'user-root'

@@ -10,10 +10,32 @@
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
-      <a show-if-allowed="userResource.createOpts" class="btn default" ui-sref="user-import">
-        <span class="fa fa-upload"></span>
-        <span translate="common.buttons.import">Import</span>
-      </a>
+      <div show-if-allowed="userResource.createOpts" dropdown class="inline">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.import">Import</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li>
+            <a ui-sref="user-import({objectType: 'user'})">
+              <i class="fa fa-user"></i>
+              <span translate="user.list">Users</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="user-import({objectType: 'userRoles'})">
+              <i class="fa fa-lock"></i>
+              <span translate="user.user_roles">User Roles</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="user-import-jobs">
+              <i class="fa fa-table"></i>
+              <span translate="common.jobs">Jobs</span>
+            </a>
+          </li>
+        </ul>
+      </div>
       <button class="default" os-right-drawer-toggle title="{{'user.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>

@@ -40,6 +40,7 @@ import com.krishagni.catissueplus.core.importer.events.ImportDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportJobDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportObjectDetail;
 import com.krishagni.catissueplus.core.importer.repository.ImportJobDao;
+import com.krishagni.catissueplus.core.importer.repository.ListImportJobsCriteria;
 import com.krishagni.catissueplus.core.importer.services.ImportService;
 import com.krishagni.catissueplus.core.importer.services.ObjectImporter;
 import com.krishagni.catissueplus.core.importer.services.ObjectImporterFactory;
@@ -93,6 +94,22 @@ public class ImportServiceImpl implements ImportService {
 		this.resourceBundle = resourceBundle;
 	}
 
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<ImportJobDetail>> getImportJobs(RequestEvent<ListImportJobsCriteria> req) {
+		try {
+			ListImportJobsCriteria crit = req.getPayload();
+			if (!AuthUtil.isAdmin()) {
+				crit.userId(AuthUtil.getCurrentUser().getId());
+			}
+			
+			List<ImportJob> jobs = importJobDao.getImportJobs(crit);			
+			return ResponseEvent.response(ImportJobDetail.from(jobs));
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
 	@Override
 	public ResponseEvent<String> uploadImportJobFile(RequestEvent<InputStream> req) {
 		OutputStream out = null;

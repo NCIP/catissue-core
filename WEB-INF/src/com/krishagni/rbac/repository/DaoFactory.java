@@ -28,4 +28,5 @@ public interface DaoFactory {
 	public VisitsDao getVisitDao();
 	
 	public SpecimenDao getSpecimenDao();	
+
 }
