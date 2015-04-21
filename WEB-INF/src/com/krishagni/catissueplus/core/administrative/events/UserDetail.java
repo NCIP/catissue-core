@@ -34,7 +34,7 @@ public class UserDetail {
 
 	private String deptName;
 
-	private Boolean superAdmin;
+	private boolean admin;
 
 	private String address;
 
@@ -118,12 +118,12 @@ public class UserDetail {
 		this.deptName = deptName;
 	}
 
-	public Boolean getSuperAdmin() {
-		return superAdmin;
+	public Boolean getAdmin() {
+		return admin;
 	}
 
-	public void setSuperAdmin(Boolean superAdmin) {
-		this.superAdmin = superAdmin;
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 
 	public String getAddress() {
@@ -154,6 +154,7 @@ public class UserDetail {
 		userDto.setDomainName(user.getAuthDomain().getName());
 		userDto.setDeptName(user.getDepartment().getName());
 		userDto.setInstituteName(user.getInstitute().getName());
+		userDto.setAdmin(user.isAdmin());
 		setUserSiteNames(userDto, user.getSites());	
 
 		return userDto;

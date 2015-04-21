@@ -332,51 +332,6 @@
       constraintName="FKB025CFC7F30C2528"/>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Adding temporary department column to user table">
-    <addColumn tableName="CATISSUE_USER">
-      <column name="DPT_ID" type="${int.type}"/>
-    </addColumn>
-  </changeSet>
-  
-  <changeSet author="nmarwaha" id="Script to map departments and institutes" dbms="mysql">
-    <sql>
-      insert into os_departments(name,institute_id)
-      (select distinct d.name, u.institution_id from catissue_user u
-      join catissue_department d on d.identifier = u.department_id)
-    </sql>
-    <sql>
-      update catissue_user u join os_departments od on od.institute_id = u.institution_id
-      join catissue_department d on d.name = od.name 
-      set u.dpt_id = od.identifier where d.identifier = u.department_id
-    </sql>
-  </changeSet>
-  
-  <changeSet author="marwahan" id="Mapping departments" dbms="oracle">
-    <sql>
-      insert into os_departments(identifier,name,institute_id)
-      (select OS_DEPARTMENTS_SEQ.nextval, d.name, u.institution_id from catissue_user u
-      join catissue_department d on d.identifier = u.department_id)
-    </sql>
-    <sql>
-      update catissue_user u set u.dpt_id = 
-      (
-        select od.identifier from os_departments od 
-        join catissue_user usr on od.institute_id = usr.institution_id
-        join catissue_department d on d.name = od.name where d.identifier = usr.department_id
-      )
-    </sql>
-  </changeSet>
-  
-  <changeSet author="nmarwaha" id="Drop department column from catissue user">
-    <dropColumn
-      columnName="DEPARTMENT_ID"
-      tableName="CATISSUE_USER"/>
-    <renameColumn columnDataType="${int.type}"
-      newColumnName="DEPARTMENT_ID"
-      oldColumnName="DPT_ID"
-      tableName="CATISSUE_USER"/>
-  </changeSet>
-
   <changeSet author="vlonuste" id="OS forgot password tokens table">
     <createTable tableName="OS_FORGOT_PASSWORD_TOKENS">
       <column name="USER_ID" type="${int.type}">
@@ -408,25 +363,15 @@
     </addColumn>
   </changeSet>
   
-  <changeSet author="vlonushte" id="Drop foreign key and institution id column from CATISSUE_USER">
+  <changeSet author="nmarwaha" id="Drop foreign key from CRG column in CATISSUE_USER" failOnError="false">
     <dropForeignKeyConstraint
       baseTableName="CATISSUE_USER"
-      constraintName="FKB025CFC71792AD22"/>
-
-    <dropColumn
-      columnName="INSTITUTION_ID"
-      tableName="CATISSUE_USER"/>
+      constraintName="FKB025CFC7FFA96920"/>
   </changeSet>
   
   <changeSet author="nmarwaha" id="Drop CRG column from CATISSUE_USER" failOnError="false">
     <dropColumn
       columnName="CANCER_RESEARCH_GROUP_ID"
-      tableName="CATISSUE_USER"/>
-  </changeSet>
-  
-  <changeSet author="nmarwaha" id="Drop CSM_USER_ID column from CATISSUE_USER" failOnError="false">
-    <dropColumn
-      columnName="CSM_USER_ID"
       tableName="CATISSUE_USER"/>
   </changeSet>
   
@@ -1730,10 +1675,13 @@
       incrementBy="1"
       ordered="true" />
   </changeSet>
-
-  <changeSet author="nmarwaha" id="Updating activity status for Specimen Req table" >
-    <sql>
-      update catissue_cp_req_specimen set activity_status = 'Active' where activity_status is null
-    </sql>
+  
+  <changeSet author="nmarwaha" id="Institution table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="CATISSUE_INSTITUTE_SEQ" 
+      startValue="2" 
+      incrementBy="1" 
+      ordered="true" />
   </changeSet>
+
 </databaseChangeLog>

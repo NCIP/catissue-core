@@ -255,6 +255,7 @@ public class User extends BaseEntity implements UserDetails {
 		this.setDepartment(user.getDepartment());
 		this.setEmailAddress(user.getEmailAddress());
 		this.setComments(user.getComments());
+		this.setAdmin(user.isAdmin());		
 	}
 	
 	public void changePassword(String newPassword) {

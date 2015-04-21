@@ -154,8 +154,15 @@ public class UserServiceImpl implements UserService {
 		try {
 			UserDetail detail = req.getPayload();
 			Long userId = detail.getId();
+			String emailAddress = detail.getEmailAddress();
 			
-			User existingUser = daoFactory.getUserDao().getById(userId);
+			User existingUser = null; 
+			if (userId != null) {
+				existingUser = daoFactory.getUserDao().getById(userId); 
+			} else if (StringUtils.isNotBlank(emailAddress)) {
+				existingUser = daoFactory.getUserDao().getUserByEmailAddress(emailAddress);
+			}
+			
 			if (existingUser == null) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}

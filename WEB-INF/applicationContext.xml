@@ -489,6 +489,8 @@
       <list>
         <value>com/krishagni/catissueplus/core/administrative/schema/institute.xml</value>
         <value>com/krishagni/catissueplus/core/administrative/schema/site.xml</value>
+        <value>com/krishagni/catissueplus/core/administrative/schema/user.xml</value>
+        <value>com/krishagni/catissueplus/core/administrative/schema/user-roles.xml</value>
       </list>
     </property>
   </bean>
@@ -501,11 +503,21 @@
     <property name="siteSvc" ref="siteService"/>
   </bean>
 
+  <bean id="userImporter" class="com.krishagni.catissueplus.core.administrative.services.impl.UserImporter">
+    <property name="userSvc" ref="userSvc"/>
+  </bean>
+
+  <bean id="userRolesImporter" class="com.krishagni.rbac.service.impl.SubjectRolesImporter">
+    <property name="rbacSvc" ref="rbacSvc"/>
+  </bean>
+
   <bean id="objectImporterFactory" class="com.krishagni.catissueplus.core.importer.services.impl.ObjectImporterFactoryImpl">
     <property name="importersMap">
       <map>
         <entry key="institute" value-ref="instituteImporter"/>
         <entry key="site"      value-ref="siteImporter"/>
+        <entry key="user"      value-ref="userImporter"/>
+        <entry key="userRoles" value-ref="userRolesImporter"/>
       </map>
     </property>
   </bean>

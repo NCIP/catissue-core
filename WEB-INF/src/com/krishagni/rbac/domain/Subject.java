@@ -88,6 +88,10 @@ public class Subject {
 		getRoles().remove(existingRole);
 		return existingRole;
 	}
+	
+	public void removeAllSubjectRoles() {
+		getRoles().clear();
+	}
 
 	private SubjectRole getExistingRole(Long srId) {
 		for (SubjectRole sr : getRoles()) {
