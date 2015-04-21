@@ -10,6 +10,10 @@
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
+      <a show-if-allowed="userResource.createOpts" class="btn default" ui-sref="user-import">
+        <span class="fa fa-upload"></span>
+        <span translate="common.buttons.import">Import</span>
+      </a>
       <button class="default" os-right-drawer-toggle title="{{'user.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>

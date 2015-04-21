@@ -5,7 +5,8 @@ angular.module('os.administrative.user',
     'os.administrative.user.list',
     'os.administrative.user.addedit',
     'os.administrative.user.detail',
-    'os.administrative.user.roles'
+    'os.administrative.user.roles',
+    'os.common.import'
   ])
 
   .config(function($stateProvider) {
@@ -41,6 +42,25 @@ angular.module('os.administrative.user',
           }
         },
         controller: 'UserAddEditCtrl',
+        parent: 'user-root'
+      })
+      .state('user-import', {
+        url: '/users-import',
+        templateUrl: 'modules/common/import/add.html',
+        controller: 'ImportObjectCtrl',
+        resolve: {
+          importDetail: function() {
+            return {
+              breadcrumbs: [{state: 'user-list', title: 'user.list'}],
+              objectTypes: [
+                {type: 'user',      displayName: 'user.user_object'},
+                {type: 'userRoles', displayName: 'user.user_roles'}
+              ],
+              title: 'user.bulk_import',
+              onSuccessState: 'user-list'
+            };
+          }
+        },
         parent: 'user-root'
       })
       .state('user-detail', {

@@ -511,6 +511,10 @@
     "activity_status": "Activity Status",
     "confirm_reject": "Rejecting the User {{entityName}} will delete this user from the database. Are you sure you want to go ahead?",
 
+    "user_object": "User",
+    "user_roles": "Roles",
+    "bulk_import": "Bulk Import Users",
+
     "role": {
        "roles": "Roles",
        "new_role": "New Role",
@@ -857,5 +861,14 @@
     "collection_protocol_registration": "Collection Protocol Registration",
     "specimen": "Specimen",
     "distribution_order": "Distribution Order"
+  },
+
+  "bulk_imports": {
+    "job_submitted": "Bulk import job {{id}} submitted",
+    "input_file": "Input Records File",
+    "import_type": "Import Type",
+    "object_type": "Object Type",
+    "create": "Create",
+    "update": "Update"
   }
 }
