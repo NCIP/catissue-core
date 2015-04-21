@@ -42,6 +42,7 @@
       <column name="repositories_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-2">
     <createTable tableName="cat_consent_tier_response_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -55,6 +56,7 @@
       <column name="response_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-3">
     <createTable tableName="cat_specimen_coll_group_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -92,6 +94,7 @@
       <column name="site_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-5">
     <createTable tableName="catissue_coll_coordinators_aud">
       <column name="REV" type="BIGINT">
@@ -106,6 +109,7 @@
       <column name="REVTYPE" type="TINYINT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-6">
     <createTable tableName="catissue_coll_prot_event_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -129,6 +133,7 @@
       <column name="defaultSite_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-7">
     <createTable tableName="catissue_coll_prot_reg_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -159,6 +164,7 @@
       <column name="consentResponses_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-8">
     <createTable tableName="catissue_consent_tier_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -174,6 +180,7 @@
       <column name="collectionProtocol_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-9">
     <createTable tableName="catissue_cp_req_specimen_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -217,6 +224,7 @@
       <column name="receiver_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-10">
     <createTable tableName="catissue_institution_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -233,6 +241,7 @@
       <column name="departments_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-11">
     <createTable tableName="catissue_part_medical_id_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -248,6 +257,7 @@
       <column name="site_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-12">
     <createTable tableName="catissue_participant_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -285,6 +295,7 @@
       <column name="races_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-13">
     <createTable tableName="catissue_race_aud">
       <column name="REV" type="BIGINT">
@@ -299,6 +310,7 @@
       <column name="REVTYPE" type="TINYINT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-14">
     <createTable tableName="catissue_site_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -321,6 +333,7 @@
       <column name="coordinators_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-15">
     <createTable tableName="catissue_site_coordinators_aud">
       <column name="REV" type="BIGINT">
@@ -335,6 +348,7 @@
       <column name="REVTYPE" type="TINYINT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-16">
     <createTable tableName="catissue_site_cp_aud">
       <column name="REV" type="BIGINT">
@@ -349,6 +363,7 @@
       <column name="REVTYPE" type="TINYINT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-18">
     <createTable tableName="catissue_specimen_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -397,6 +412,7 @@
       <column name="specimenRequirement_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-19">
     <createTable tableName="catissue_user_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -426,6 +442,7 @@
       <column name="department_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-20">
     <createTable tableName="cp_consenttier_aud">
       <column name="REV" type="BIGINT">
@@ -440,6 +457,7 @@
       <column name="REVTYPE" type="TINYINT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-21">
     <createTable tableName="os_container_positions_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -465,6 +483,7 @@
       <column name="occupyingContainer_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-22">
     <createTable tableName="os_departments_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -478,6 +497,7 @@
       <column name="name_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-23">
     <createTable tableName="os_stor_cont_spec_classes_aud">
       <column name="REV" type="BIGINT">
@@ -492,6 +512,7 @@
       <column name="REVTYPE" type="TINYINT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-24">
     <createTable tableName="os_stor_cont_spec_types_aud">
       <column name="REV" type="BIGINT">
@@ -506,6 +527,7 @@
       <column name="REVTYPE" type="TINYINT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-25">
     <createTable tableName="os_stor_container_cps_aud">
       <column name="REV" type="BIGINT">
@@ -520,6 +542,7 @@
       <column name="REVTYPE" type="TINYINT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-26">
     <createTable tableName="os_storage_containers_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -561,6 +584,7 @@
       <column name="position_MOD" type="BIT"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-27">
     <createTable tableName="OS_REVISION_ENTITIES">
       <column name="REV" type="BIGINT">
@@ -569,6 +593,7 @@
       <column name="ENTITYNAME" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
+  
   <changeSet author="slakhani" id="1429178687139-28">
     <createTable tableName="OS_REVISIONS">
       <column autoIncrement="true" name="REV" type="BIGINT">
