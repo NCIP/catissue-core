@@ -86,7 +86,7 @@
       <column name="STATEMENT" type="VARCHAR2(500 CHAR)"/>
       <column name="STATEMENT_MOD" type="NUMBER(1, 0)"/>
       <column name="COLL_PROTOCOL_ID" type="NUMBER(19, 0)"/>
-      <column name="collectionProtocol_MOD" type="NUMBER(1, 0)"/>
+      <column name="COLLECTIONPROTOCOL_MOD" type="NUMBER(1, 0)"/>
     </createTable>
   </changeSet>
 
