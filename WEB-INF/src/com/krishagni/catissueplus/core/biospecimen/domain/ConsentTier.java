@@ -1,9 +1,9 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
-@Audited
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class ConsentTier extends BaseEntity {
 	private String statement;
 	
@@ -17,7 +17,6 @@ public class ConsentTier extends BaseEntity {
 		this.statement = statement;
 	}
 
-	@NotAudited
 	public CollectionProtocol getCollectionProtocol() {
 		return collectionProtocol;
 	}
