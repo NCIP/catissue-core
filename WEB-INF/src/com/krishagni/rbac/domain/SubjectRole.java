@@ -40,8 +40,8 @@ public class SubjectRole {
 
 	public CollectionProtocol getCollectionProtocol() {
 		return collectionProtocol;
-	}
 
+	}
 	public void setCollectionProtocol(CollectionProtocol collectionProtocol) {
 		this.collectionProtocol = collectionProtocol;
 	}
@@ -53,7 +53,7 @@ public class SubjectRole {
 	public void setSite(Site site) {
 		this.site = site;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		return 31 * 1 
