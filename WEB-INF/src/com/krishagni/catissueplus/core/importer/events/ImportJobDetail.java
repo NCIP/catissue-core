@@ -1,6 +1,8 @@
 package com.krishagni.catissueplus.core.importer.events;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob;
@@ -108,5 +110,14 @@ public class ImportJobDetail {
 		detail.setTotalRecords(job.getTotalRecords());
 		detail.setFailedRecords(job.getFailedRecords());
 		return detail;
+	}
+	
+	public static List<ImportJobDetail> from(List<ImportJob> jobs) {
+		List<ImportJobDetail> result = new ArrayList<ImportJobDetail>();
+		for (ImportJob job : jobs) {
+			result.add(ImportJobDetail.from(job));
+		}
+		
+		return result;
 	}
 }
