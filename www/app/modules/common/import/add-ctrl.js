@@ -7,7 +7,7 @@ angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
       $scope.fileImporter = {};
  
       $scope.importJob = new ImportJob({
-        objectType: importDetail.objectTypes[0].type,
+        objectType: importDetail.objectType,
         importType: 'CREATE',
         inputFileId: undefined
       });

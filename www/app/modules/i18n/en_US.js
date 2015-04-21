@@ -511,9 +511,9 @@
     "activity_status": "Activity Status",
     "confirm_reject": "Rejecting the User {{entityName}} will delete this user from the database. Are you sure you want to go ahead?",
 
-    "user_object": "User",
-    "user_roles": "Roles",
-    "bulk_import": "Bulk Import Users",
+    "user_roles": "User Roles",
+    "bulk_import_users": "Bulk Import Users",
+    "bulk_import_user_roles": "Bulk Import User Roles",
 
     "role": {
        "roles": "Roles",

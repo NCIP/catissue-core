@@ -2,7 +2,7 @@
   <div os-page-header>
     <ul os-breadcrumbs>
       <li ng-repeat="breadcrumb in importDetail.breadcrumbs">
-        <a ui-sref="breadcrumb.state" translate="{{breadcrumb.title}}"></a>
+        <a ui-sref="{{breadcrumb.state}}" translate="{{breadcrumb.title}}"></a>
       </li>
     </ul>
     <h3>
@@ -13,7 +13,9 @@
   <div class="container">
     <form class="form-horizontal" action="{{importJobsFileUrl}}">
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="bulk_imports.input_file">Input File</label>
+        <label class="col-xs-3 control-label" translate="bulk_imports.input_file">
+          Input File
+        </label>
         <div class="col-xs-4">
           <div os-file-upload ctrl="fileImporter"></div>
         </div>
@@ -22,7 +24,9 @@
 
     <form class="form-horizontal">
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="bulk_imports.import_type">Import Type</label>
+        <label class="col-xs-3 control-label" translate="bulk_imports.import_type">
+          Import Type
+        </label>
         <div class="col-xs-4 clearfix">
           <label class="radio-inline col-xs-3">
             <input type="radio" name="importType" ng-model="importJob.importType" ng-value="'CREATE'"> 
@@ -31,16 +35,6 @@
           <label class="radio-inline col-xs-3">
             <input type="radio" name="importType" ng-model="importJob.importType" ng-value="'UPDATE'"> 
             <span translate="bulk_imports.update"></span>
-          </label>
-        </div>
-      </div>
-
-      <div class="form-group" ng-if="importDetail.objectTypes.length > 1">
-        <label class="col-xs-3 control-label" translate="bulk_imports.object_type">Object Type</label>
-        <div class="col-xs-4 clearfix">
-          <label class="radio-inline col-xs-3" ng-repeat="objectType in importDetail.objectTypes">
-            <input type="radio" name="objectType" ng-model="importJob.objectType" ng-value="'{{objectType.type}}'">
-            <span translate="{{objectType.displayName}}"></span>
           </label>
         </div>
       </div>
