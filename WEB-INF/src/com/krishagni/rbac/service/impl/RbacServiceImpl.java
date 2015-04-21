@@ -416,7 +416,7 @@ public class RbacServiceImpl implements RbacService {
 			AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
 						
 			SubjectRole resp = null;
-			Map<String,Object> oldSRDetails = new HashMap<String, Object>();
+			Map<String,Object> oldSrDetails = new HashMap<String, Object>();
 			SubjectRole sr = null;
 			switch (subjectRoleOp.getOp()) {
 				case ADD:
@@ -425,10 +425,10 @@ public class RbacServiceImpl implements RbacService {
 					break;
 				
 				case UPDATE:
-					SubjectRole oldSR = subject.getExistingRole(subjectRoleOp.getSubjectRole().getId());
-					oldSRDetails.put("site", oldSR.getSite());
-					oldSRDetails.put("cp", oldSR.getCollectionProtocol());
-					oldSRDetails.put("role", oldSR.getRole());
+					SubjectRole oldSr = subject.getExistingRole(subjectRoleOp.getSubjectRole().getId());
+					oldSrDetails.put("site", oldSr.getSite());
+					oldSrDetails.put("cp", oldSr.getCollectionProtocol());
+					oldSrDetails.put("role", oldSr.getRole());
 					
 					sr = createSubjectRole(subjectRoleOp.getSubjectRole());
 					resp = subject.updateRole(sr);
@@ -441,7 +441,7 @@ public class RbacServiceImpl implements RbacService {
 			
 			if (resp != null) {
 				daoFactory.getSubjectDao().saveOrUpdate(subject, true);
-				sendEmail(resp, oldSRDetails, subjectRoleOp);
+				sendEmail(resp, oldSrDetails, subjectRoleOp);
 			}
 			
 			return ResponseEvent.response(SubjectRoleDetail.from(resp));
@@ -782,13 +782,13 @@ public class RbacServiceImpl implements RbacService {
 		}
 	}
 	
-	private void sendEmail(SubjectRole newSR, Map<String, Object> oldSRDetails, SubjectRoleOp subjectRoleOp) {
-		User user = userDao.getById(newSR.getSubject().getId());
+	private void sendEmail(SubjectRole newSr, Map<String, Object> oldSrDetails, SubjectRoleOp subjectRoleOp) {
+		User user = userDao.getById(newSr.getSubject().getId());
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("operation", subjectRoleOp.getOp().name());
 		props.put("user", user);
-		props.put("sr", newSR);
-		props.put("oldSr", oldSRDetails);
+		props.put("sr", newSr);
+		props.put("oldSr", oldSrDetails);
 		
 		emailService.sendEmail(ROLE_UPDATED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	}

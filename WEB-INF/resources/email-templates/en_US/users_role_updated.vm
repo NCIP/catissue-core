@@ -49,7 +49,7 @@
                   #end
 
                   #if( $operation == 'UPDATE' )
-                    There is change in your privileges.
+                    There is change in your roles.
                     Your <b> $oldSr.role.name </b> role on <b> $oldCP </b> $oldCPText for $oldSiteText <b> $oldSite </b>
                     has been updated.<br><br>
                     Your new role is <b> $sr.role.name </b> on <b>$cp</b> $cpText for $siteText <b> $site </b>
@@ -63,7 +63,7 @@
 
                   #if( $operation != 'REMOVE')
                     <br><br>
-                    A brief description of your role privileges is mentioned below:
+                    A brief description of your role is mentioned below:
                     <br><br>
                     Role Description: $sr.role.description
                   #end
@@ -83,30 +83,30 @@
 		      <tr style="padding-top: 10px; padding-bottom: 10px;">
 	                <td>$ac.resource.name</td>
 	                <td>
-		          #set( $privileges = [] )
+		          #set( $operations = [] )
 		          #foreach( $resourceInstantOp in $ac.operations )
-			    #set( $result = $privileges.add($resourceInstantOp.operation.name) )
+			    #set( $result = $operations.add($resourceInstantOp.operation.name) )
 			  #end
 			           
-			  #if( $privileges.contains("Read") )
+			  #if( $operations.contains("Read") )
 			    <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
 			      <span>Read</span>
 			    </div>
 		 	  #end
 			           
-			  #if( $privileges.contains("Create") )
+			  #if( $operations.contains("Create") )
 			    <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
 			      <span>Create</span>
 			    </div>
 			  #end
 			           
-			  #if( $privileges.contains("Update") )
+			  #if( $operations.contains("Update") )
 			    <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
 			      <span>Update</span>
 		            </div>
 			  #end
 			           
-			  #if( $privileges.contains("Delete") )
+			  #if( $operations.contains("Delete") )
 			    <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
 			      <span>Delete</span>
 			    </div>
