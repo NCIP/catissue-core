@@ -1,0 +1,32 @@
+<object-schema>
+  <name>userRoles</name>
+  <record> 
+    <name>com.krishagni.rbac.events.SubjectRolesList</name>
+    
+    <field>
+      <caption>Email Address</caption>
+      <attribute>emailAddress</attribute>
+    </field>
+
+    <record>
+      <attribute>roles</attribute>
+      <multiple>true</multiple>
+      <caption>Role</caption>
+      
+      <field>
+        <caption>Name</caption>
+        <attribute>roleName</attribute>
+      </field>
+
+      <field>
+        <caption>Site Name</caption>
+        <attribute>siteName</attribute>
+      </field>
+
+      <field>
+        <caption>CP Short Title</caption>
+        <attribute>cpShortTitle</attribute>
+      </field>
+    </record>
+  </record>
+</object-schema>

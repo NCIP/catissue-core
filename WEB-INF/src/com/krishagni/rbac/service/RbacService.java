@@ -15,6 +15,7 @@ import com.krishagni.rbac.events.ResourceDetail;
 import com.krishagni.rbac.events.RoleDetail;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 import com.krishagni.rbac.events.SubjectRoleOp;
+import com.krishagni.rbac.events.SubjectRolesList;
 import com.krishagni.rbac.repository.OperationListCriteria;
 import com.krishagni.rbac.repository.PermissionListCriteria;
 import com.krishagni.rbac.repository.ResourceListCriteria;
@@ -73,6 +74,11 @@ public interface RbacService {
 	public ResponseEvent<GroupDetail> updateGroupRoles(RequestEvent<GroupDetail> req);
 		
 	public ResponseEvent<List<GroupRoleDetail>> getGroupRoles(RequestEvent<Long> req);
+	
+	//
+	// Bulk update subject roles
+	//
+	public ResponseEvent<SubjectRolesList> assignRoles(RequestEvent<SubjectRolesList> req);
 	
 	//
 	// Intern API's can change without notice.
