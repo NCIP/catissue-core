@@ -41,7 +41,7 @@
     "server_connect_error": "Unable to connect server",
     "recent_activity": "Recent Activity",
     "no_file_selected": "No File Selected",
-    "jobs": "Jobs",
+    "view_jobs": "View Jobs",
 
     "buttons": {
       "add": "Add",
@@ -390,6 +390,9 @@
     "department_name": "Department Name",
     "departments": "Departments",
 
+    "bulk_import": "Import Institutes",
+    "bulk_import_jobs": "Import Institutes Job List",
+
     "tooltip": {
       "view_details": "Click to view/edit Institute details",
       "add": "Click to add new Institute",
@@ -424,6 +427,9 @@
     "coordinators": "Coordinators",
     "type": "Type",
     "address": "Address",
+
+    "bulk_import": "Import Sites",
+    "bulk_import_jobs": "Import Sites Job List",
 
     "tooltip": {
       "view_details": "Click to view/edit Site details",
@@ -513,9 +519,9 @@
     "confirm_reject": "Rejecting the User {{entityName}} will delete this user from the database. Are you sure you want to go ahead?",
 
     "user_roles": "User Roles",
-    "bulk_import_users": "Bulk Import Users",
-    "bulk_import_user_roles": "Bulk Import User Roles",
-    "bulk_import_jobs": "Bulk Import Users Job List",
+    "bulk_import_users": "Import Users",
+    "bulk_import_user_roles": "Import User Roles",
+    "bulk_import_jobs": "Import Users Job List",
 
     "role": {
        "roles": "Roles",
@@ -874,6 +880,7 @@
     "update": "Update",
     "status_COMPLETED": "Completed",
     "status_FAILED": "Failed",
+    "status_IN_PROGRESS": "In Progress",
 
     "job_id": "Job ID",
     "submit_time": "Submit Time",
@@ -885,7 +892,9 @@
  
     "object_types": {
       "user": "Users",
-      "userRoles": "User Roles"
+      "userRoles": "User Roles",
+      "institute": "Institutes",
+      "site": "Site"
     },
 
     "import_types": {

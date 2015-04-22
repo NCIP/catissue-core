@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -7,6 +9,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -45,7 +50,6 @@ public class BulkObjectImportController {
 		return Collections.singletonMap("fileId", resp.getPayload());
 	}
 
-	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
@@ -69,7 +73,39 @@ public class BulkObjectImportController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ImportJobDetail getImportJob(@PathVariable("id") Long jobId) {
+		RequestEvent<Long> req = new RequestEvent<Long>(jobId);
+		ResponseEvent<ImportJobDetail> resp = importSvc.getImportJob(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+			
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/output")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public void getImportJobOutputFile(@PathVariable("id") Long jobId, HttpServletResponse response) {		
+		RequestEvent<Long> req = new RequestEvent<Long>(jobId);
+		ResponseEvent<String> resp = importSvc.getImportJobFile(req);
+		resp.throwErrorIfUnsuccessful();
 		
+		response.setContentType("application/csv");
+		response.setHeader("Content-Disposition", "attachment;filename=BulkImportJob_" + jobId + ".csv");
+			
+		InputStream in = null;
+		try {
+			in = new FileInputStream(new File(resp.getPayload()));
+			IOUtils.copy(in, response.getOutputStream());
+		} catch (IOException e) {
+			throw new RuntimeException("Error sending file", e);
+		} finally {
+			IOUtils.closeQuietly(in);
+		}				
+	}
+			
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	

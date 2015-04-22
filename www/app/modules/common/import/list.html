@@ -53,7 +53,7 @@
             <span ng-if="importJob.endTime">{{importJob.endTime | date: global.dateTimeFmt}}</span>
           </div>
           <div class="col col-xs-1">
-            <span>{{importJob.totalRecords - imporJob.failedRecords}}</span>
+            <span>{{importJob.totalRecords - importJob.failedRecords}}</span>
           </div>
           <div class="col col-xs-1">
             <span>{{importJob.failedRecords}}</span>
@@ -62,7 +62,9 @@
             <span translate="bulk_imports.status_{{importJob.status}}"></span>
           </div>
           <div class="col col-xs-1">
-            <a> <span class="fa fa-download"></span> </a>
+            <a href="{{importJob.outputFileUrl}}" target="_blank">
+              <span class="fa fa-download"></span>
+            </a>
           </div>
         </div>
       </div>

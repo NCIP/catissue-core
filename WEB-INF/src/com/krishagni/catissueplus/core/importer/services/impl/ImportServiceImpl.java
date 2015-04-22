@@ -25,6 +25,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.errors.ParameterizedError;
@@ -33,6 +34,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob;
+import com.krishagni.catissueplus.core.importer.domain.ImportJobErrorCode;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.Status;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.Type;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema;
@@ -111,6 +113,37 @@ public class ImportServiceImpl implements ImportService {
 	}
 	
 	@Override
+	@PlusTransactional
+	public ResponseEvent<ImportJobDetail> getImportJob(RequestEvent<Long> req) {
+		try {
+			ImportJob job = getImportJob(req.getPayload());
+			return ResponseEvent.response(ImportJobDetail.from(job));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<String> getImportJobFile(RequestEvent<Long> req) {
+		try {
+			ImportJob job = getImportJob(req.getPayload());
+			File file = new File(getJobOutputFilePath(job.getId()));
+			if (!file.exists()) {
+				return ResponseEvent.userError(ImportJobErrorCode.OUTPUT_FILE_NOT_CREATED);
+			}
+			
+			return ResponseEvent.response(file.getAbsolutePath());
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+		
+	@Override
 	public ResponseEvent<String> uploadImportJobFile(RequestEvent<InputStream> req) {
 		OutputStream out = null;
 		
@@ -146,7 +179,7 @@ public class ImportServiceImpl implements ImportService {
 	public ResponseEvent<ImportJobDetail> importObjects(RequestEvent<ImportDetail> req) {
 		try {
 			ImportDetail detail = req.getPayload();
-			ImportJob job = getImportJob(detail);						
+			ImportJob job = createImportJob(detail);						
 			importJobDao.saveOrUpdate(job, true);
 			
 			//
@@ -163,6 +196,20 @@ public class ImportServiceImpl implements ImportService {
 		}		
 	}
 	
+	private ImportJob getImportJob(Long jobId) {
+		User currentUser = AuthUtil.getCurrentUser();
+		
+		ImportJob job = importJobDao.getById(jobId);
+		if (job == null) {
+			throw OpenSpecimenException.userError(ImportJobErrorCode.NOT_FOUND);
+		}
+		
+		if (!currentUser.isAdmin() && !currentUser.equals(job.getCreatedBy())) {
+			throw OpenSpecimenException.userError(ImportJobErrorCode.ACCESS_DENIED);
+		}
+		
+		return job;
+	}
 	
 	private String getDataDir() {
 		return cfgSvc.getStrSetting("common", "data_dir", ".");
@@ -184,6 +231,10 @@ public class ImportServiceImpl implements ImportService {
 		return getJobsDir() + File.separator + jobId;
 	}
 	
+	private String getJobOutputFilePath(Long jobId) {
+		return getJobDir(jobId) + File.separator + "output.csv";
+	}
+	
 	private boolean createJobDir(Long jobId) {
 		return new File(getJobDir(jobId)).mkdirs();
 	}
@@ -194,7 +245,7 @@ public class ImportServiceImpl implements ImportService {
 		return src.renameTo(dest);		
 	}
 	
-	private ImportJob getImportJob(ImportDetail detail) { // TODO: ensure checks are done
+	private ImportJob createImportJob(ImportDetail detail) { // TODO: ensure checks are done
 		ImportJob job = new ImportJob();
 		job.setCreatedBy(AuthUtil.getCurrentUser());
 		job.setCreationTime(Calendar.getInstance().getTime());
@@ -340,7 +391,7 @@ public class ImportServiceImpl implements ImportService {
 
 		private CSVWriter getOutputCsvWriter(ImportJob job) 
 		throws IOException {
-			return new CSVWriter(new FileWriter(getJobDir(job.getId()) + File.separator + "output.csv"));
+			return new CSVWriter(new FileWriter(getJobOutputFilePath(job.getId())));
 		}
 				
 		private void closeQueitly(CSVWriter writer) {

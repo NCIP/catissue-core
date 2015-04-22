@@ -29,6 +29,37 @@ angular.module('os.administrative.site',
         controller: 'SiteAddEditCtrl',
         parent: 'signed-in'
       })
+      .state('site-import', {
+        url: '/sites-import',
+        templateUrl: 'modules/common/import/add.html',
+        controller: 'ImportObjectCtrl',
+        resolve: {
+          importDetail: function() {
+            return {
+              breadcrumbs: [{state: 'site-list', title: 'site.list'}],
+              objectType: 'site',
+              title: 'site.bulk_import',
+              onSuccessState: 'site-list'
+            };
+          }
+        },
+        parent: 'signed-in'
+      })
+      .state('site-import-jobs', {
+        url: '/sites-import-jobs',
+        templateUrl: 'modules/common/import/list.html',
+        controller: 'ImportJobsListCtrl',
+        resolve: {
+          importDetail: function() {
+            return {
+              breadcrumbs: [{state: 'site-list', title: 'site.list'}],
+              title: 'site.bulk_import_jobs',
+              objectTypes: ['site']
+            }
+          }
+        },
+        parent: 'signed-in'
+      })
       .state('site-detail', {
         url: '/sites/:siteId',
         templateUrl: 'modules/administrative/site/detail.html',

@@ -4,11 +4,31 @@
       <span translate="site.list">Sites</span>
     </h3>
     <div class="os-btns right">
-
-      <button show-if-admin class="primary" title="{{'site.tooltip.add' | translate}}" ui-sref="site-addedit({siteId: ''})">
+      <button show-if-admin class="primary" title="{{'site.tooltip.add' | translate}}" 
+        ui-sref="site-addedit({siteId: ''})">
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
+      <div show-if-admin dropdown class="inline">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.import">Import</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li>
+            <a ui-sref="site-import">
+              <i class="fa fa-hospital-o"></i>
+              <span translate="site.list">Sites</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="site-import-jobs">
+              <i class="fa fa-table"></i>
+              <span translate="common.view_jobs">View Jobs</span>
+            </a>
+          </li>
+        </ul>
+      </div>
       <button class="default" os-right-drawer-toggle title="{{'site.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>
