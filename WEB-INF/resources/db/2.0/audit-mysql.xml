@@ -37,7 +37,6 @@
       <column name="unsignedConsentDocumentURL_MOD" type="BIT"/>
       <column name="PRINCIPAL_INVESTIGATOR_ID" type="BIGINT"/>
       <column name="principalInvestigator_MOD" type="BIT"/>
-      <column name="consentTier_MOD" type="BIT"/>
       <column name="coordinators_MOD" type="BIT"/>
       <column name="repositories_MOD" type="BIT"/>
     </createTable>
@@ -443,21 +442,6 @@
     </createTable>
   </changeSet>
   
-  <changeSet author="slakhani" id="1429178687139-20">
-    <createTable tableName="cp_consenttier_aud">
-      <column name="REV" type="BIGINT">
-        <constraints nullable="false"/>
-      </column>
-      <column name="COLL_PROTOCOL_ID" type="BIGINT">
-        <constraints nullable="false"/>
-      </column>
-      <column name="IDENTIFIER" type="BIGINT">
-        <constraints nullable="false"/>
-      </column>
-      <column name="REVTYPE" type="TINYINT"/>
-    </createTable>
-  </changeSet>
-  
   <changeSet author="slakhani" id="1429178687139-21">
     <createTable tableName="os_container_positions_aud">
       <column name="IDENTIFIER" type="BIGINT">
@@ -673,10 +657,6 @@
     <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="catissue_user_aud"/>
   </changeSet>
 
-  <changeSet author="slakhani" id="1429178687139-48">
-    <addPrimaryKey columnNames="REV, COLL_PROTOCOL_ID, IDENTIFIER" tableName="cp_consenttier_aud"/>
-  </changeSet>
-
   <changeSet author="slakhani" id="1429178687139-49">
     <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="os_container_positions_aud"/>
   </changeSet>
@@ -767,10 +747,6 @@
 
   <changeSet author="slakhani" id="1429178687139-73">
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_user_aud"  constraintName="FK_m9slxw75ecrvrk31nwwamd7ng" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
-  </changeSet>
-
-  <changeSet author="slakhani" id="1429178687139-74">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="cp_consenttier_aud"  constraintName="FK_2jfima9le1hxi3p2vnbgerfx3" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429178687139-75">

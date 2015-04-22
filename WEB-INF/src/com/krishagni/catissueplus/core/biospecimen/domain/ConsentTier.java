@@ -1,9 +1,8 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 
-@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+@Audited
 public class ConsentTier extends BaseEntity {
 	private String statement;
 	

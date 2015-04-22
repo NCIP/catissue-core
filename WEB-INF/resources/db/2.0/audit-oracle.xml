@@ -389,7 +389,6 @@
       <column name="UNSIGNEDCONSENTDOCUMENTURL_MOD" type="NUMBER(1, 0)"/>
       <column name="PRINCIPAL_INVESTIGATOR_ID" type="NUMBER(19, 0)"/>
       <column name="PRINCIPALINVESTIGATOR_MOD" type="NUMBER(1, 0)"/>
-      <column name="CONSENTTIER_MOD" type="NUMBER(1, 0)"/>
       <column name="COORDINATORS_MOD" type="NUMBER(1, 0)"/>
       <column name="REPOSITORIES_MOD" type="NUMBER(1, 0)"/>
     </createTable>
@@ -444,21 +443,6 @@
       <column name="CPEVENT_MOD" type="NUMBER(1, 0)"/>
       <column name="SITE_ID" type="NUMBER(19, 0)"/>
       <column name="SITE_MOD" type="NUMBER(1, 0)"/>
-    </createTable>
-  </changeSet>
-
-  <changeSet author="slakhani" id="1429175726743-21">
-    <createTable tableName="CP_CONSENTTIER_AUD">
-      <column name="REV" type="NUMBER(19, 0)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="COLL_PROTOCOL_ID" type="NUMBER(19, 0)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="IDENTIFIER" type="NUMBER(19, 0)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="REVTYPE" type="NUMBER(3, 0)"/>
     </createTable>
   </changeSet>
 
@@ -677,10 +661,6 @@
     <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007968" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
   </changeSet>
 
-  <changeSet author="slakhani" id="1429175726743-49">
-    <addPrimaryKey columnNames="REV, COLL_PROTOCOL_ID, IDENTIFIER" constraintName="SYS_C007972" tableName="CP_CONSENTTIER_AUD"/>
-  </changeSet>
-
   <changeSet author="slakhani" id="1429175726743-50">
     <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007975" tableName="OS_CONTAINER_POSITIONS_AUD"/>
   </changeSet>
@@ -707,10 +687,6 @@
 
   <changeSet author="slakhani" id="1429175726743-56">
     <addPrimaryKey columnNames="REV" constraintName="SYS_C007996" tableName="OS_REVISIONS"/>
-  </changeSet>
-
-  <changeSet author="slakhani" id="1429175726743-57">
-    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CP_CONSENTTIER_AUD" constraintName="FK_2JFIMA9LE1HXI3P2VNBGERFX3" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="OS_REVISIONS"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-58">

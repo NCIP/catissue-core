@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -183,7 +182,7 @@ public class CollectionProtocol extends BaseEntity {
 		this.unsignedConsentDocumentURL = unsignedConsentDocumentURL;
 	}
 
-	@AuditJoinTable(name="CP_ConsentTier_AUD")
+	@NotAudited
 	public Set<ConsentTier> getConsentTier() {
 		return consentTier;
 	}
