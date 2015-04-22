@@ -428,6 +428,9 @@
     "type": "Type",
     "address": "Address",
 
+    "bulk_import": "Import Sites",
+    "bulk_import_jobs": "Import Sites Job List",
+
     "tooltip": {
       "view_details": "Click to view/edit Site details",
       "add": "Click to add new Site",
@@ -890,7 +893,8 @@
     "object_types": {
       "user": "Users",
       "userRoles": "User Roles",
-      "institute": "Institutes"
+      "institute": "Institutes",
+      "site": "Site"
     },
 
     "import_types": {
