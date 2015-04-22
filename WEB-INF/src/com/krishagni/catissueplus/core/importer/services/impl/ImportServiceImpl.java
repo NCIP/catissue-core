@@ -350,9 +350,10 @@ public class ImportServiceImpl implements ImportService {
 					OpenSpecimenException error = resp.getError();
 					StringBuilder errorMsg = new StringBuilder();
 					if (!error.getErrors().isEmpty()) {
-						for (ParameterizedError pe : resp.getError().getErrors()) {
-							errorMsg.append(getMessage(pe));
-						}						
+						for (ParameterizedError pe : error.getErrors()) {
+							errorMsg.append(getMessage(pe)).append(", ");
+						}
+						errorMsg.delete(errorMsg.length() - 2, errorMsg.length());
 					} else if (error.getException() != null) {
 						errorMsg.append(error.getException().getMessage());
 					} else {

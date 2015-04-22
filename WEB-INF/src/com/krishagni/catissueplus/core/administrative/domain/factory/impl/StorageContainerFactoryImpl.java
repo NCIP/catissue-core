@@ -25,6 +25,7 @@ import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class StorageContainerFactoryImpl implements StorageContainerFactory {
@@ -202,15 +203,13 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}
 	
 	private void setCreatedBy(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
+		Long userId = null;
 		if (detail.getCreatedBy() == null) {
-			return;
+			userId = AuthUtil.getCurrentUser().getId();
+		} else {
+			userId = detail.getCreatedBy().getId();
 		}
-		
-		Long userId = detail.getCreatedBy().getId();		
-		if (userId == null) {
-			return;
-		}
-				
+
 		User user = daoFactory.getUserDao().getById(userId);
 		if (user == null) {
 			ose.addError(UserErrorCode.NOT_FOUND);

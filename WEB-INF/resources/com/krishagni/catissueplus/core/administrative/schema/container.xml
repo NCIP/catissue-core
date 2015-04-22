@@ -1,0 +1,89 @@
+<object-schema>
+  <name>storageContainer</name>
+  <record> 
+    <name>com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail</name>
+    
+    <field>
+      <caption>Name</caption>
+      <attribute>name</attribute>
+    </field>
+
+    <field>
+      <caption>Barcode</caption>
+      <attribute>barcode</attribute>
+    </field>
+
+    <field>
+      <caption>Activity Status</caption>
+      <attribute>activityStatus</attribute>
+    </field>
+
+    <field>
+      <caption>Site Name</caption>
+      <attribute>siteName</attribute>
+    </field>
+
+    <field>
+      <caption>Parent Container Name</caption>
+      <attribute>parentContainerName</attribute>
+    </field>
+
+    <field>
+      <caption>No. of Columns</caption>
+      <attribute>noOfColumns</attribute>
+    </field>
+
+    <field>
+      <caption>No. of Rows</caption>
+      <attribute>noOfRows</attribute>
+    </field>
+
+    <field>
+      <caption>Column Labeling Scheme</caption>
+      <attribute>columnLabelingScheme</attribute>
+    </field>
+
+    <field>
+      <caption>Row Labeling Scheme</caption>
+      <attribute>rowLabelingScheme</attribute>
+    </field>
+
+    <record>
+      <attribute>position</attribute>
+      <caption>Position</caption>
+      
+      <field>
+        <caption>Column</caption>
+        <attribute>posOne</attribute>
+      </field>
+    
+      <field>
+        <caption>Row</caption>
+        <attribute>posTwo</attribute>
+      </field>
+    </record>
+    
+    <field>
+      <multiple>true</multiple>
+      <caption>Allowed Specimen Class</caption>
+      <attribute>allowedSpecimenClasses</attribute>
+    </field>
+
+    <field>
+      <multiple>true</multiple>
+      <caption>Allowed Specimen Type</caption>
+      <attribute>allowedSpecimenTypes</attribute>
+    </field>
+
+    <field>
+      <multiple>true</multiple>
+      <caption>Allowed Collection Protocol</caption>
+      <attribute>allowedCollectionProtocols</attribute>
+    </field>
+
+    <field>
+      <caption>Stores Specimen</caption>
+      <attribute>storeSpecimensEnabled</attribute>
+    </field>
+  </record>
+</object-schema>
