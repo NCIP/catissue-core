@@ -32,11 +32,10 @@ angular.module('openspecimen')
       }
     }
   })
-  .controller('LoginCtrl', function($scope, $rootScope, $state, $http, $location, AuthService, PvManager) {
+  .controller('LoginCtrl', function($scope, $rootScope, $state, $http, $location, AuthDomain, AuthService) {
 
     function init() {
       $scope.loginData = {};
-      $scope.domains = PvManager.getDomains(onDomainsLoad);
       
       if ($location.search().logout) {
         $scope.logout();
@@ -46,12 +45,23 @@ angular.module('openspecimen')
       if ($http.defaults.headers.common['X-OS-API-TOKEN']) {
         $state.go('home');
       }
+
+      loadPvs();
     }
 
-    function onDomainsLoad() {
-      if ($scope.domains.length == 1) {
-         $scope.loginData.domainName = $scope.domains[0];
-      }
+    function loadPvs() {
+      $scope.domains = [];
+      AuthDomain.query().then(
+        function(domainList) {
+          angular.forEach(domainList, function(domain) {
+            $scope.domains.push(domain.name);
+          });
+
+          if ($scope.domains.length == 1) {
+            $scope.loginData.domainName = $scope.domains[0];
+          }
+        }
+      );
     }
 
     function onLogin(result) {

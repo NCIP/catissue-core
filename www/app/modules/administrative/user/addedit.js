@@ -1,6 +1,6 @@
 angular.module('os.administrative.user.addedit', ['os.administrative.models'])
   .controller('UserAddEditCtrl', function($scope, $rootScope, $state, $stateParams,
-    user, User, Institute, PvManager) {
+    user, User, Institute, AuthDomain) {
  
     function init() {
       $scope.user = user;
@@ -9,7 +9,19 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
     }
 
     function loadPvs() {
-      $scope.domains = PvManager.getDomains(onDomainsLoad);
+      $scope.domains = [];
+      AuthDomain.query().then(
+        function(domainList) {
+          angular.forEach(domainList, function(domain) {
+            $scope.domains.push(domain.name);
+          });
+
+          if (!$scope.user.id && $scope.domains.length == 1) {
+            $scope.user.domainName = $scope.domains[0];
+          }
+        }
+      );
+
       $scope.institutes = [];
       var q = undefined;
       if (!$rootScope.currentUser || $rootScope.currentUser.admin) {
@@ -39,12 +51,6 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
       );
     }
 
-    function onDomainsLoad() {
-      if (!$scope.user.id && $scope.domains.length == 1) {
-        $scope.user.domainName = $scope.domains[0];
-      }
-    }
-
     $scope.loadDepartments = function(instituteName) {
       Institute.getByName(instituteName).then(
         function(institute) {
@@ -65,7 +71,8 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
 
     $scope.setLoginName = function(loginName) {
       var user = $scope.user;
-      if (!user.id && user.domainName == $scope.global.defaultDomain) {
+      if (!user.id && !user.loginName && 
+           user.domainName == $scope.global.defaultDomain) {
         user.loginName = loginName;
       }
     }

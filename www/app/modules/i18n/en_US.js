@@ -512,7 +512,7 @@
     "password": "Password",
     "confirm_password": "Confirm Password",
     "sign_in_title": "Sign in to continue to OpenSpecimen",
-    "signin_failed": "The username or password you entered is incorrect",
+    "sign_in_failed": "The username or password you entered is incorrect",
     "sign_in": "Sign In",
     "forgot_password": "Forgot password?",
     "approve_user": "Approve User",

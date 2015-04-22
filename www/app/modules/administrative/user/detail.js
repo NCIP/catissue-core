@@ -2,12 +2,23 @@
 angular.module('os.administrative.user.detail', ['os.administrative.models'])
   .controller('UserDetailCtrl', function(
     $scope, $q, $translate, user, 
-    User, PvManager, Alerts, DeleteUtil) {
+    User, AuthDomain, PvManager, Alerts, DeleteUtil) {
 
     function init() {
       $scope.user = user;
-      $scope.domains = PvManager.getDomains();
+      loadPvs();
+    }
+
+    function loadPvs() {
       $scope.sites = PvManager.getSites();
+      $scope.domains = [];
+      AuthDomain.query().then(
+        function(domainList) {
+          angular.forEach(domainList, function(domain) {
+            $scope.domains.push(domain.name);
+          });
+        }
+      );
     }
 
     $scope.editUser = function(property, value) {

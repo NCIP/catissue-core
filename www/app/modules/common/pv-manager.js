@@ -5,7 +5,7 @@
  * 2. Cache the PVs so that frequent calls are not needed
  */
 angular.module('openspecimen')
-  .factory('PvManager', function($http, $q, $translate, ApiUrls, ApiUtil, Site, AuthDomain, Util) {
+  .factory('PvManager', function($http, $q, $translate, ApiUrls, ApiUtil, Site, Util) {
     var url = ApiUrls.getBaseUrl() + 'permissible-values';
     
     var anatomicSites = [
@@ -33,11 +33,6 @@ angular.module('openspecimen')
       'Not Specified'
     ];
     
-    var domains = [
-      'openspecimen',
-      'ldap'
-    ];
-
     var positionLabelingSchemes = [
       'Numbers',
       'Alphabets Upper Case',
@@ -73,7 +68,6 @@ angular.module('openspecimen')
 
     var pvMap = {
       anatomicSite: anatomicSites,
-      domains:domains,
       'storage-type': storageTypes,
       'visit-status': visitStatuses,
       'specimen-status': specimenStatuses,
@@ -194,22 +188,6 @@ angular.module('openspecimen')
           }
         );
         return sites;
-      },
-    
-      getDomains: function(callback) {
-        var domains = [];
-        AuthDomain.query().then(
-          function(domainList) {
-            angular.forEach(domainList, function(domain) {
-              domains.push(domain.name);
-            });
-
-            if (callback) {
-              callback();
-            }
-          }
-        );
-        return domains;
       },
 
       notSpecified: function() {
