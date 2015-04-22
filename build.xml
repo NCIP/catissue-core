@@ -1299,7 +1299,7 @@
 					<formatter type="xml" />
 					<batchtest todir="${base.dir}/integration-test-results">
 						<fileset dir="${base.dir}/WEB-INF/integration-test">
-							<include name="com/**/StorageContainerTest.java" />
+							<include name="com/**/*Test.java" />
 							<exclude name="com/**/CollectionProtocolRegistrationTest.java" />
 							<exclude name="com/**/QueryFoldersTest.java" />
 							<exclude name="com/**/SavedQueryTest.java" />
