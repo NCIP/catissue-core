@@ -47,42 +47,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	</listener>
 <!-- listener definition starts -->
 <!-- servlet configuration starts -->
-	 <servlet>
-		<servlet-name>action</servlet-name>
-		<servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
-
-		<init-param>
-			<param-name>config</param-name>
-			<param-value>/WEB-INF/struts-config.xml</param-value>
-		</init-param>
-		<init-param>
-			<param-name>debug</param-name>
-			<param-value>3</param-value>
-		</init-param>
-		<init-param>
-			<param-name>detail</param-name>
-			<param-value>2</param-value>
-		</init-param>
-		<load-on-startup>2</load-on-startup>
-	</servlet>
-	<servlet>
-		<servlet-name>ResponseServlet</servlet-name>
-		<servlet-class>edu.wustl.common.struts.ResponseServlet</servlet-class>
-	</servlet>
-	
-	
 	<servlet>
 		<servlet-name>httpinvoker</servlet-name>
 		<servlet-class>
 			org.springframework.web.servlet.DispatcherServlet
 		</servlet-class>
 		<load-on-startup>3</load-on-startup>
-	</servlet>
-	
-	<servlet>
-		<servlet-name>AxisServlet</servlet-name>
-		<display-name>Apache-Axis Servlet</display-name>
-		<servlet-class>org.apache.axis.transport.http.AxisServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>restApi</servlet-name>
@@ -164,28 +134,8 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	</servlet-mapping>
  
 	<servlet-mapping>
-		<servlet-name>action</servlet-name>
-		<url-pattern>*.do</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>ResponseServlet</servlet-name>
-		<url-pattern>/ResponseServlet</url-pattern>
-	</servlet-mapping> 
-	<servlet-mapping>
 		<servlet-name>httpinvoker</servlet-name>
 		<url-pattern>/http/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>AxisServlet</servlet-name>
-		<url-pattern>/ws/AxisServlet</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>AxisServlet</servlet-name>
-		<url-pattern>*.jws</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>AxisServlet</servlet-name>
-		<url-pattern>/ws/*</url-pattern>
 	</servlet-mapping>
 <!-- servlet mapping ends -->
 <!-- session timeout -->
