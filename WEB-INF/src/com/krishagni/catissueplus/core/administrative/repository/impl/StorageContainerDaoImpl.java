@@ -37,7 +37,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 		List<StorageContainer> result = sessionFactory.getCurrentSession()
 				.createCriteria(StorageContainer.class)
 				.add(Restrictions.eq("name", name))
-				.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS.getStatus()))
+				.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
 				.list();
 
 		return result.isEmpty() ? null : result.iterator().next();

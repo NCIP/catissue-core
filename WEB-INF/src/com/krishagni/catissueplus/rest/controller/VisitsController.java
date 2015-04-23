@@ -34,9 +34,6 @@ import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("/visits")
 public class VisitsController {

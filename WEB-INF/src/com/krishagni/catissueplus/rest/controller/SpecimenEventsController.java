@@ -27,8 +27,6 @@ import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
 import edu.common.dynamicextensions.napi.FormData;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
 
 @Controller
 @RequestMapping("/specimen-events")
@@ -91,12 +89,6 @@ public class SpecimenEventsController {
 	
 
 	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(getSession(), payload);
-	}
-	
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(
-				Constants.SESSION_DATA);
-	}
-
+		return new RequestEvent<T>(payload);
+	}	
 }

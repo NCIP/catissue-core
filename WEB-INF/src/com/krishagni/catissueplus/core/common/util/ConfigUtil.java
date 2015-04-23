@@ -31,5 +31,13 @@ public class ConfigUtil {
 	public String getAdminEmailId() {
 		return cfgSvc.getStrSetting("email", "admin_email_id", "");
 	}
+	
+	public String getDeDateFmt() {
+		return cfgSvc.getDeDateFormat();
+	}
+	
+	public String getTimeFmt() {
+		return cfgSvc.getTimeFormat();
+	}
 
 }

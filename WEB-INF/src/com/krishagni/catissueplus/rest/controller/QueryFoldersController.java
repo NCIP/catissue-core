@@ -28,9 +28,6 @@ import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesOp;
 import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesOp.Operation;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("/query-folders")
 public class QueryFoldersController {
@@ -155,11 +152,6 @@ public class QueryFoldersController {
 	}
 
 	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(getSession(), payload);				
-	}
-	
-	
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
-	}
+		return new RequestEvent<T>(payload);				
+	}	
 }

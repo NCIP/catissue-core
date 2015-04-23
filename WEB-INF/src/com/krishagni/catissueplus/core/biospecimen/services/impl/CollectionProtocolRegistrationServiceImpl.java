@@ -202,7 +202,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				CollectionProtocolRegistrationDetail cprDetail = buildCprForBulkParticipantDetails(participantRegDetails, i);
 				
 				ResponseEvent<CollectionProtocolRegistrationDetail> response = 
-						createRegistration(new RequestEvent<CollectionProtocolRegistrationDetail>(req.getSessionDataBean(), cprDetail));
+						createRegistration(new RequestEvent<CollectionProtocolRegistrationDetail>(cprDetail));
 				
 				if (response.isSuccessful()) {
 					CollectionProtocolRegistrationDetail savedCpr = response.getPayload(); 

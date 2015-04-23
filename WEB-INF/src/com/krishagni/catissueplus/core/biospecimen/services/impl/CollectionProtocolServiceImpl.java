@@ -54,8 +54,6 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
-import edu.wustl.common.beans.SessionDataBean;
-
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
 
 	private CollectionProtocolFactory cpFactory;
@@ -256,14 +254,13 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	@PlusTransactional
 	public ResponseEvent<CollectionProtocolDetail> importCollectionProtocol(RequestEvent<CollectionProtocolDetail> req) {
 		try {
-			SessionDataBean sdb = req.getSessionDataBean();
 			CollectionProtocolDetail cpDetail = req.getPayload();
 			
 			ResponseEvent<CollectionProtocolDetail> resp = createCollectionProtocol(req);
 			resp.throwErrorIfUnsuccessful();
 						
-			importConsents(resp.getPayload().getId(), sdb, cpDetail.getConsents());
-			importEvents(cpDetail.getTitle(), sdb, cpDetail.getEvents());		
+			importConsents(resp.getPayload().getId(), cpDetail.getConsents());
+			importEvents(cpDetail.getTitle(), cpDetail.getEvents());		
 			
 			return resp;
 		} catch (OpenSpecimenException ose) {
@@ -751,7 +748,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		}
 	}
 	
-	private void importConsents(Long cpId, SessionDataBean sdb, List<ConsentTierDetail> consents) {
+	private void importConsents(Long cpId, List<ConsentTierDetail> consents) {
 		if (CollectionUtils.isEmpty(consents)) {
 			return;			
 		}
@@ -762,29 +759,29 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			addOp.setCpId(cpId);
 			addOp.setOp(OP.ADD);
 			
-			RequestEvent<ConsentTierOp> req = new RequestEvent<ConsentTierOp>(sdb, addOp);					
+			RequestEvent<ConsentTierOp> req = new RequestEvent<ConsentTierOp>(addOp);					
 			ResponseEvent<ConsentTierDetail> resp = updateConsentTier(req);
 			resp.throwErrorIfUnsuccessful();
 		}
 	}
 	
-	private void importEvents(String cpTitle, SessionDataBean sdb, List<CollectionProtocolEventDetail> events) {
+	private void importEvents(String cpTitle, List<CollectionProtocolEventDetail> events) {
 		if (CollectionUtils.isEmpty(events)) {
 			return;
 		}
 		
 		for (CollectionProtocolEventDetail event : events) {
 			event.setCollectionProtocol(cpTitle);
-			RequestEvent<CollectionProtocolEventDetail> req = new RequestEvent<CollectionProtocolEventDetail>(sdb, event);
+			RequestEvent<CollectionProtocolEventDetail> req = new RequestEvent<CollectionProtocolEventDetail>(event);
 			ResponseEvent<CollectionProtocolEventDetail> resp = addEvent(req);
 			resp.throwErrorIfUnsuccessful();
 			
 			Long eventId = resp.getPayload().getId();
-			importSpecimenReqs(eventId, null, sdb, event.getSpecimenRequirements());
+			importSpecimenReqs(eventId, null, event.getSpecimenRequirements());
 		}
 	}
 	
-	private void importSpecimenReqs(Long eventId, Long parentSrId, SessionDataBean sdb, List<SpecimenRequirementDetail> srs) {
+	private void importSpecimenReqs(Long eventId, Long parentSrId, List<SpecimenRequirementDetail> srs) {
 		if (CollectionUtils.isEmpty(srs)) {
 			return;
 		}
@@ -793,23 +790,23 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			sr.setEventId(eventId);
 			
 			if (sr.getLineage().equals(Specimen.NEW)) {
-				RequestEvent<SpecimenRequirementDetail> req = new RequestEvent<SpecimenRequirementDetail>(sdb, sr);
+				RequestEvent<SpecimenRequirementDetail> req = new RequestEvent<SpecimenRequirementDetail>(sr);
 				ResponseEvent<SpecimenRequirementDetail> resp = addSpecimenRequirement(req);
 				resp.throwErrorIfUnsuccessful();
 				
-				importSpecimenReqs(eventId, resp.getPayload().getId(), sdb, sr.getChildren());
+				importSpecimenReqs(eventId, resp.getPayload().getId(), sr.getChildren());
 			} else if (parentSrId != null && sr.getLineage().equals(Specimen.ALIQUOT)) {				
 				AliquotSpecimensRequirement aliquotReq = sr.toAliquotRequirement(parentSrId, 1);
-				ResponseEvent<List<SpecimenRequirementDetail>> resp = createAliquots(new RequestEvent<AliquotSpecimensRequirement>(sdb, aliquotReq));
+				ResponseEvent<List<SpecimenRequirementDetail>> resp = createAliquots(new RequestEvent<AliquotSpecimensRequirement>(aliquotReq));
 				resp.throwErrorIfUnsuccessful();
 				
-				importSpecimenReqs(eventId, resp.getPayload().get(0).getId(), sdb, sr.getChildren());
+				importSpecimenReqs(eventId, resp.getPayload().get(0).getId(), sr.getChildren());
 			} else if (parentSrId != null && sr.getLineage().equals(Specimen.DERIVED)) {
 				DerivedSpecimenRequirement derivedReq = sr.toDerivedRequirement(parentSrId);
-				ResponseEvent<SpecimenRequirementDetail> resp = createDerived(new RequestEvent<DerivedSpecimenRequirement>(sdb, derivedReq));
+				ResponseEvent<SpecimenRequirementDetail> resp = createDerived(new RequestEvent<DerivedSpecimenRequirement>(derivedReq));
 				resp.throwErrorIfUnsuccessful();
 				
-				importSpecimenReqs(eventId, resp.getPayload().getId(), sdb, sr.getChildren());
+				importSpecimenReqs(eventId, resp.getPayload().getId(), sr.getChildren());
 			}			
 		}
 	}

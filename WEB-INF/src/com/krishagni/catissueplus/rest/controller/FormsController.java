@@ -41,8 +41,6 @@ import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.nutility.ContainerJsonSerializer;
 import edu.common.dynamicextensions.nutility.ContainerSerializer;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
 
 
 @Controller
@@ -251,10 +249,6 @@ public class FormsController {
   	}
   
 	private <T> RequestEvent<T> getRequestEvent(T payload) {
-		return new RequestEvent<T>(getSession(), payload);				
-	}
-	
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
-	}
+		return new RequestEvent<T>(payload);				
+	}	
 }

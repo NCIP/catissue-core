@@ -21,9 +21,6 @@ import com.krishagni.catissueplus.core.administrative.services.ScheduledJobServi
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("/scheduled-jobs")
 public class ScheduledJobsController {
@@ -90,10 +87,6 @@ public class ScheduledJobsController {
 	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(getSession(), payload);
-	}
-	
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpReq.getSession().getAttribute(Constants.SESSION_DATA);
+		return new RequestEvent<T>(payload);
 	}
 }

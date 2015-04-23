@@ -7,32 +7,31 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
+
 import edu.common.dynamicextensions.domain.nui.UserContext;
 import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
 import edu.common.dynamicextensions.ndao.ResultExtractor;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.dynamicextensions.formdesigner.usercontext.AppUserContextProvider;
 
 public class CatissueUserContextProviderImpl implements AppUserContextProvider {
 
 	@Override
 	public UserContext getUserContext(HttpServletRequest request) {
-		final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute("sessionData");
-		
 		return new UserContext() {	
 			@Override
 			public String getUserName() {
-				return sessionDataBean.getUserName();
+				return AuthUtil.getCurrentUser().getLoginName();
 			}
 
 			@Override
 			public Long getUserId() {
-				return sessionDataBean.getUserId();
+				return AuthUtil.getCurrentUser().getId();
 			}
 
 			@Override
 			public String getIpAddress() {
-				return sessionDataBean.getIpAddress();
+				return AuthUtil.getRemoteAddr();
 			}
 		};
 	}

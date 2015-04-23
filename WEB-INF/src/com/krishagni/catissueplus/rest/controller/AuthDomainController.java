@@ -40,7 +40,7 @@ public class AuthDomainController {
 			int maxResults) {
 		
 		ListAuthDomainCriteria crit = new ListAuthDomainCriteria().maxResults(maxResults);
-		RequestEvent<ListAuthDomainCriteria> req = new RequestEvent<ListAuthDomainCriteria>(null, crit);
+		RequestEvent<ListAuthDomainCriteria> req = new RequestEvent<ListAuthDomainCriteria>(crit);
 		ResponseEvent<List<AuthDomainDetail>> resp = domainRegService.getDomains(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -51,7 +51,7 @@ public class AuthDomainController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public AuthDomainDetail registerDomain(@RequestBody AuthDomainDetail domainDetail) {
-		RequestEvent<AuthDomainDetail> req = new RequestEvent<AuthDomainDetail>(null, domainDetail);
+		RequestEvent<AuthDomainDetail> req = new RequestEvent<AuthDomainDetail>(domainDetail);
 		ResponseEvent<AuthDomainDetail> resp = domainRegService.registerDomain(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -63,7 +63,7 @@ public class AuthDomainController {
 	@ResponseBody
 	public AuthDomainDetail updaterDomain(@PathVariable Long id, @RequestBody AuthDomainDetail domainDetail) {
 		domainDetail.setId(id);
-		RequestEvent<AuthDomainDetail> req = new RequestEvent<AuthDomainDetail>(null, domainDetail);
+		RequestEvent<AuthDomainDetail> req = new RequestEvent<AuthDomainDetail>(domainDetail);
 		ResponseEvent<AuthDomainDetail> resp = domainRegService.updateDomain(req);
 		resp.throwErrorIfUnsuccessful();
 		

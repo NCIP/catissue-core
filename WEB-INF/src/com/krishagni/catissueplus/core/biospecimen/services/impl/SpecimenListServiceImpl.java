@@ -20,6 +20,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
 public class SpecimenListServiceImpl implements SpecimenListService {
 	
@@ -47,7 +48,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenListSummary>> getUserSpecimenLists(RequestEvent<?> req) {
 		try {
-			Long userId = req.getSessionDataBean().getUserId();			
+			Long userId = AuthUtil.getCurrentUser().getId();			
 			List<SpecimenList> specimenLists = daoFactory.getSpecimenListDao().getUserSpecimenLists(userId);
 
 			List<SpecimenListSummary> result = new ArrayList<SpecimenListSummary>();
@@ -71,8 +72,8 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !specimenList.canUserAccess(userId)) {
+			Long userId = AuthUtil.getCurrentUser().getId();
+			if (!AuthUtil.isAdmin() && !specimenList.canUserAccess(userId)) {
 				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
@@ -89,7 +90,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			SpecimenListDetails listDetails = req.getPayload();
 			
 			UserSummary owner = new UserSummary();
-			owner.setId(req.getSessionDataBean().getUserId());
+			owner.setId(AuthUtil.getCurrentUser().getId());
 			listDetails.setOwner(owner);
 			
 			SpecimenList specimenList = specimenListFactory.createSpecimenList(listDetails);	
@@ -117,8 +118,8 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !existing.getOwner().getId().equals(userId)) {
+			Long userId = AuthUtil.getCurrentUser().getId();
+			if (!AuthUtil.isAdmin() && !existing.getOwner().getId().equals(userId)) {
 				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
@@ -148,8 +149,8 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !specimenList.canUserAccess(userId)) {
+			Long userId = AuthUtil.getCurrentUser().getId();
+			if (!AuthUtil.isAdmin() && !specimenList.canUserAccess(userId)) {
 				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
@@ -173,8 +174,8 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !specimenList.getOwner().getId().equals(userId)) {
+			Long userId = AuthUtil.getCurrentUser().getId();
+			if (!AuthUtil.isAdmin() && !specimenList.getOwner().getId().equals(userId)) {
 				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
@@ -228,8 +229,8 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
 			}
 			
-			Long userId = req.getSessionDataBean().getUserId();
-			if (!req.getSessionDataBean().isAdmin() && !specimenList.getOwner().getId().equals(userId)) {
+			Long userId = AuthUtil.getCurrentUser().getId();
+			if (!AuthUtil.isAdmin() && !specimenList.getOwner().getId().equals(userId)) {
 				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			

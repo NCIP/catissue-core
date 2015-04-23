@@ -35,9 +35,6 @@ import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("/specimens")
 public class SpecimensController {
@@ -194,13 +191,9 @@ public class SpecimensController {
 	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(getSession(), payload);
+		return new RequestEvent<T>(payload);
 	}
 
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
-	}
-	
 	private List<FormRecordsList> getRecords(Long specimenId, String entityType) {
 		GetFormRecordsListOp opDetail = new GetFormRecordsListOp();
 		opDetail.setObjectId(specimenId);

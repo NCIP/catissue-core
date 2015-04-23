@@ -453,7 +453,7 @@ public class FormServiceImpl implements FormService {
 		recordEntry.setFormCtxtId(formCtxtId);
 		recordEntry.setObjectId(objCp.getObjectId());
 		recordEntry.setRecordId(opDetail.getRecordId());
-		recordEntry.setUpdatedBy(req.getSessionDataBean().getUserId());
+		recordEntry.setUpdatedBy(AuthUtil.getCurrentUser().getId());
 		recordEntry.setUpdatedTime(Calendar.getInstance().getTime());
 		recordEntry.setActivityStatus(Status.ACTIVE);
 

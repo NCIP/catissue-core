@@ -34,8 +34,6 @@ import com.krishagni.catissueplus.core.de.events.SavedQueryDetail;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
 
 @Controller
 @RequestMapping("/saved-queries")
@@ -154,12 +152,6 @@ public class SavedQueriesController {
 		return response(querySvc.getAuditLogs(getRequest(crit))).getAuditLogs();
 	}
 	
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(
-				Constants.SESSION_DATA);
-	}
-	
-	
 	private void curateSavedQueryDetail(SavedQueryDetail detail) {
 		Object[] selectList = detail.getSelectList();
 		if (selectList == null) {
@@ -195,6 +187,6 @@ public class SavedQueriesController {
 	}
 
 	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(getSession(), payload);				
+		return new RequestEvent<T>(payload);				
 	}		
 }

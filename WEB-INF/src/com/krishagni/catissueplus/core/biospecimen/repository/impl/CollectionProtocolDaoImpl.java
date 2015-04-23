@@ -28,8 +28,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocol
 import com.krishagni.catissueplus.core.biospecimen.repository.CpListCriteria;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-
-import edu.wustl.catissuecore.util.global.Constants;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> implements CollectionProtocolDao {
 
@@ -181,7 +180,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(CollectionProtocol.class)
 				.setFirstResult(cpCriteria.startAt())
 				.setMaxResults(cpCriteria.maxResults())
-				.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE))
+				.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
 				.createAlias("principalInvestigator", "pi");
 		
 		addSearchConditions(query, cpCriteria);

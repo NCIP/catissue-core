@@ -95,10 +95,6 @@
 
   <aop:aspectj-autoproxy/>
       
-  <bean id="auditInterceptor" class="com.krishagni.catissueplus.core.common.AuditInterceptor">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>
-  
   <bean id="participantLookupLogic" class="com.krishagni.catissueplus.core.biospecimen.matching.ParticipantLookupLogicImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>

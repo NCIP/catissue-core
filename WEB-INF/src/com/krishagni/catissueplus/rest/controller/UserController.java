@@ -29,9 +29,6 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -77,7 +74,7 @@ public class UserController {
 			.activityStatus(activityStatus);
 		
 		
-		RequestEvent<UserListCriteria> req = new RequestEvent<UserListCriteria>(getSession(), crit);
+		RequestEvent<UserListCriteria> req = new RequestEvent<UserListCriteria>(crit);
 		ResponseEvent<List<UserSummary>> resp = userService.getUsers(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -88,7 +85,7 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public UserDetail getUser(@PathVariable Long id) {
-		ResponseEvent<UserDetail> resp = userService.getUser(new RequestEvent<Long>(getSession(), id));
+		ResponseEvent<UserDetail> resp = userService.getUser(new RequestEvent<Long>(id));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -97,7 +94,7 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public UserDetail createUser(@RequestBody UserDetail userDetails) {
-		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(getSession(), userDetails);
+		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(userDetails);
 		ResponseEvent<UserDetail> resp = userService.createUser(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -108,7 +105,7 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public UserDetail signupUser(@RequestBody UserDetail detail) {
-		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(getSession(), detail);
+		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(detail);
 		ResponseEvent<UserDetail> resp = userService.createUser(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -121,7 +118,7 @@ public class UserController {
 	public UserDetail updateUser(@PathVariable Long id, @RequestBody UserDetail userDetails) {
 		userDetails.setId(id);
 		
-		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(getSession(), userDetails);
+		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(userDetails);
 		ResponseEvent<UserDetail> resp = userService.updateUser(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -135,7 +132,7 @@ public class UserController {
 		UserDetail detail = new UserDetail();
  		detail.setId(id);
 		detail.setActivityStatus(props.get("activityStatus"));
-		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(null, detail);
+		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(detail);
 		ResponseEvent<UserDetail> resp = userService.updateStatus(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -146,7 +143,7 @@ public class UserController {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public List<DependentEntityDetail> getDependentEntities(@PathVariable Long id) {
-		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		RequestEvent<Long> req = new RequestEvent<Long>(id);
 		ResponseEvent<List<DependentEntityDetail>> resp = userService.getDependentEntities(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -159,7 +156,7 @@ public class UserController {
 	public UserDetail deleteUser(@PathVariable Long id,
 			@RequestParam(value = "close", required = false, defaultValue = "false") boolean close) {
 		DeleteEntityOp deleteEntityOp = new DeleteEntityOp(id, close);
-		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(null, deleteEntityOp);
+		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(deleteEntityOp);
 		ResponseEvent<UserDetail> resp = userService.deleteUser(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -170,7 +167,7 @@ public class UserController {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public Boolean changePassword(@RequestBody PasswordDetails passwordDetails) {
-		RequestEvent<PasswordDetails> req = new RequestEvent<PasswordDetails>(getSession(), passwordDetails);
+		RequestEvent<PasswordDetails> req = new RequestEvent<PasswordDetails>(passwordDetails);
 		ResponseEvent<Boolean> resp = userService.changePassword(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -181,7 +178,7 @@ public class UserController {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public Boolean resetPassword(@RequestBody PasswordDetails passwordDetails) {
-		RequestEvent<PasswordDetails> req = new RequestEvent<PasswordDetails>(getSession(), passwordDetails);
+		RequestEvent<PasswordDetails> req = new RequestEvent<PasswordDetails>(passwordDetails);
 		ResponseEvent<Boolean> resp = userService.resetPassword(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -192,7 +189,7 @@ public class UserController {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public Boolean forgotPassword(@RequestBody Map<String, String>  data) {
-		RequestEvent<String> req = new RequestEvent<String>(getSession(), data.get("loginName"));
+		RequestEvent<String> req = new RequestEvent<String>(data.get("loginName"));
 		ResponseEvent<Boolean> resp = userService.forgotPassword(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -225,9 +222,5 @@ public class UserController {
 		ResponseEvent<InstituteDetail> resp = userService.getInstitute(new RequestEvent<Long>(id));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
-	}
-
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}
 }

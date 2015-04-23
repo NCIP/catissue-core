@@ -74,8 +74,6 @@ import edu.common.dynamicextensions.query.QueryResultExporter;
 import edu.common.dynamicextensions.query.QueryResultScreener;
 import edu.common.dynamicextensions.query.ResultColumn;
 import edu.common.dynamicextensions.query.WideRowMode;
-import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.util.global.CommonServiceLocator;
 
 public class QueryServiceImpl implements QueryService {
 	private static final String cpForm = "CollectionProtocol";
@@ -86,10 +84,6 @@ public class QueryServiceImpl implements QueryService {
 	
 	private static String SHARE_QUERY_FOLDER_EMAIL_TMPL = "query_share_query_folder";
 
-	private static final String dateFormat = CommonServiceLocator.getInstance().getDatePattern();
-
-	private static final String timeFormat = CommonServiceLocator.getInstance().getTimePattern();
-	
 	private static final int EXPORT_THREAD_POOL_SIZE = getThreadPoolSize();
 	
 	private static final int ONLINE_EXPORT_TIMEOUT_SECS = 30;
@@ -193,8 +187,8 @@ public class QueryServiceImpl implements QueryService {
 			Query.createQuery()
 				.wideRowMode(WideRowMode.DEEP)
 				.ic(true)
-				.dateFormat(dateFormat)
-				.timeFormat(timeFormat)
+				.dateFormat(ConfigUtil.getInstance().getDeDateFmt())
+				.timeFormat(ConfigUtil.getInstance().getTimeFmt())
 				.compile(cprForm, getAql(queryDetail));
 			SavedQuery savedQuery = getSavedQuery(queryDetail);
 			daoFactory.getSavedQueryDao().saveOrUpdate(savedQuery);
@@ -217,8 +211,8 @@ public class QueryServiceImpl implements QueryService {
 			Query.createQuery()
 				.wideRowMode(WideRowMode.DEEP)
 				.ic(true)
-				.dateFormat(dateFormat)
-				.timeFormat(timeFormat)
+				.dateFormat(ConfigUtil.getInstance().getDeDateFmt())
+				.timeFormat(ConfigUtil.getInstance().getTimeFmt())
 				.compile(cprForm, getAql(queryDetail));
 			SavedQuery savedQuery = getSavedQuery(queryDetail);
 			SavedQuery existing = daoFactory.getSavedQueryDao().getQuery(queryDetail.getId());
@@ -280,8 +274,8 @@ public class QueryServiceImpl implements QueryService {
 			Query query = Query.createQuery()
 					.wideRowMode(WideRowMode.valueOf(opDetail.getWideRowMode()))
 					.ic(true)
-					.dateFormat(dateFormat)
-					.timeFormat(timeFormat);
+					.dateFormat(ConfigUtil.getInstance().getDeDateFmt())
+					.timeFormat(ConfigUtil.getInstance().getTimeFmt());
 			query.compile(
 					cprForm, 
 					getAqlWithCpIdInSelect(user, countQuery, opDetail.getAql()), 
@@ -332,7 +326,8 @@ public class QueryServiceImpl implements QueryService {
 			Query query = Query.createQuery();
 			query.wideRowMode(WideRowMode.valueOf(opDetail.getWideRowMode()))
 				.ic(true)
-				.dateFormat(dateFormat).timeFormat(timeFormat)
+				.dateFormat(ConfigUtil.getInstance().getDeDateFmt())
+				.timeFormat(ConfigUtil.getInstance().getTimeFmt())
 				.compile(
 					cprForm, 
 					getAqlWithCpIdInSelect(user, countQuery, opDetail.getAql()), 
@@ -639,9 +634,8 @@ public class QueryServiceImpl implements QueryService {
     @Override
     @PlusTransactional
     public ResponseEvent<QueryAuditLogsList> getAuditLogs(RequestEvent<ListQueryAuditLogsCriteria> req){
-		try {
-			SessionDataBean session = req.getSessionDataBean();			
-			Long userId = session.getUserId();
+		try {			
+			Long userId = AuthUtil.getCurrentUser().getId();
 			
 			ListQueryAuditLogsCriteria crit = req.getPayload();
 			Long savedQueryId = crit.savedQueryId();
@@ -652,7 +646,7 @@ public class QueryServiceImpl implements QueryService {
 			List<QueryAuditLogSummary> auditLogs = null;
 			Long count = null;
 			if (savedQueryId == null || savedQueryId == -1) {
-				if (!session.isAdmin()) {
+				if (!AuthUtil.isAdmin()) {
 					return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
 				}
 				
@@ -779,7 +773,7 @@ public class QueryServiceImpl implements QueryService {
 			
 			private void sendEmail() {
 				try {
-					User user = userDao.getById(req.getSessionDataBean().getUserId());
+					User user = userDao.getById(AuthUtil.getCurrentUser().getId());
 					
 					SavedQuery savedQuery = null;
 					Long queryId = req.getPayload().getSavedQueryId();

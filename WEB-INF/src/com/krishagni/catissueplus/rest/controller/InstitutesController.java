@@ -24,9 +24,6 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("/institutes")
 public class InstitutesController {
@@ -60,7 +57,7 @@ public class InstitutesController {
 				.startAt(startAt)
 				.maxResults(maxResults);
 		
-		RequestEvent<InstituteListCriteria> req = new RequestEvent<InstituteListCriteria>(getSession(), crit);
+		RequestEvent<InstituteListCriteria> req = new RequestEvent<InstituteListCriteria>(crit);
 		ResponseEvent<List<InstituteDetail>> resp = instituteSvc.getInstitutes(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -74,7 +71,7 @@ public class InstitutesController {
 		InstituteQueryCriteria crit = new InstituteQueryCriteria(); 
 		crit.setId(id);
 		
-		RequestEvent<InstituteQueryCriteria> req = new RequestEvent<InstituteQueryCriteria>(getSession(), crit);		
+		RequestEvent<InstituteQueryCriteria> req = new RequestEvent<InstituteQueryCriteria>(crit);		
 		ResponseEvent<InstituteDetail> resp = instituteSvc.getInstitute(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -85,7 +82,7 @@ public class InstitutesController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public InstituteDetail createInstitute(@RequestBody InstituteDetail detail) {
-		RequestEvent<InstituteDetail> req = new RequestEvent<InstituteDetail>(getSession(), detail);		
+		RequestEvent<InstituteDetail> req = new RequestEvent<InstituteDetail>(detail);		
 		ResponseEvent<InstituteDetail> resp = instituteSvc.createInstitute(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -98,7 +95,7 @@ public class InstitutesController {
 	public InstituteDetail updateInstitute(@PathVariable Long instituteId, @RequestBody InstituteDetail instituteDetail) {
 		instituteDetail.setId(instituteId);
 		
-		RequestEvent<InstituteDetail> req = new RequestEvent<InstituteDetail>(getSession(), instituteDetail);
+		RequestEvent<InstituteDetail> req = new RequestEvent<InstituteDetail>(instituteDetail);
 		ResponseEvent<InstituteDetail> resp = instituteSvc.updateInstitute(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -109,7 +106,7 @@ public class InstitutesController {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public List<DependentEntityDetail> getDependentEntities(@PathVariable Long id) {
-		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		RequestEvent<Long> req = new RequestEvent<Long>(id);
 		ResponseEvent<List<DependentEntityDetail>> resp = instituteSvc.getDependentEntities(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -122,15 +119,10 @@ public class InstitutesController {
 	public InstituteDetail deleteInstitute(@PathVariable Long id,
 			@RequestParam(value="close", required=false, defaultValue="false") boolean close) {
 		DeleteEntityOp deleteEntityOp = new DeleteEntityOp(id, close);
-		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(getSession(), deleteEntityOp);
+		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(deleteEntityOp);
 		ResponseEvent<InstituteDetail> resp = instituteSvc.deleteInstitute(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
-	}
-
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(
-				Constants.SESSION_DATA);
 	}
 }

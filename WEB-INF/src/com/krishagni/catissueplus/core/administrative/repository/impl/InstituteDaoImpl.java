@@ -16,8 +16,6 @@ import com.krishagni.catissueplus.core.administrative.repository.InstituteListCr
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-import edu.wustl.catissuecore.util.global.Constants;
-
 public class InstituteDaoImpl extends AbstractDao<Institute> implements InstituteDao {
 	
 	@Override

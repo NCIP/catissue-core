@@ -20,9 +20,6 @@ import com.krishagni.catissueplus.core.de.events.QueryAuditLogDetail;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogsList;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("/query-audit-logs")
 public class QueryAuditLogsController {
@@ -75,11 +72,6 @@ public class QueryAuditLogsController {
 	}
 
 	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(getSession(), payload);				
-	}
-	
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(
-				Constants.SESSION_DATA);
+		return new RequestEvent<T>(payload);				
 	}	
 }

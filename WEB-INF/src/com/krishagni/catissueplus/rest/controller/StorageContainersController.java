@@ -33,8 +33,6 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
 
 @Controller
 @RequestMapping("/storage-containers")
@@ -105,7 +103,7 @@ public class StorageContainersController {
 			.storeSpecimensEnabled(storeSpecimensEnabled)
 			.hierarchical(hierarchical);
 					
-		RequestEvent<StorageContainerListCriteria> req = new RequestEvent<StorageContainerListCriteria>(getSession(), crit);
+		RequestEvent<StorageContainerListCriteria> req = new RequestEvent<StorageContainerListCriteria>(crit);
 		ResponseEvent<List<StorageContainerSummary>> resp = storageContainerSvc.getStorageContainers(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -134,7 +132,7 @@ public class StorageContainersController {
 		detail.setSpecimenClass(specimenClass);
 		detail.setSpecimenType(specimenType);
 		
-		RequestEvent<PositionTenantDetail> req = new RequestEvent<PositionTenantDetail>(getSession(), detail);
+		RequestEvent<PositionTenantDetail> req = new RequestEvent<PositionTenantDetail>(detail);
 		ResponseEvent<Boolean> resp = storageContainerSvc.isAllowed(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
@@ -158,7 +156,7 @@ public class StorageContainersController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public StorageContainerDetail createStorageContainer(@RequestBody StorageContainerDetail detail) {
-		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(getSession(), detail);
+		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(detail);
 		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.createStorageContainer(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -177,7 +175,7 @@ public class StorageContainersController {
 		
 		detail.setId(containerId);
 		
-		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(getSession(), detail);
+		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(detail);
 		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.updateStorageContainer(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -196,7 +194,7 @@ public class StorageContainersController {
 		
 		detail.setId(containerId);
 		
-		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(getSession(), detail);
+		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(detail);
 		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.patchStorageContainer(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -207,7 +205,7 @@ public class StorageContainersController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<StorageContainerPositionDetail> getStorageContainerOccupiedPositions(@PathVariable("id") Long containerId) {
-		RequestEvent<Long> req = new RequestEvent<Long>(getSession(), containerId);
+		RequestEvent<Long> req = new RequestEvent<Long>(containerId);
 		ResponseEvent<List<StorageContainerPositionDetail>> resp = storageContainerSvc.getOccupiedPositions(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -265,7 +263,7 @@ public class StorageContainersController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<DependentEntityDetail> getDependentEntities(@PathVariable Long id) {
-		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		RequestEvent<Long> req = new RequestEvent<Long>(id);
 		ResponseEvent<List<DependentEntityDetail>> resp = storageContainerSvc.getDependentEntities(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -276,7 +274,7 @@ public class StorageContainersController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public StorageContainerDetail deleteStorageContainer(@PathVariable Long id) {
-		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		RequestEvent<Long> req = new RequestEvent<Long>(id);
 		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.deleteStorageContainer(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -284,14 +282,10 @@ public class StorageContainersController {
 	}
 	
 	private StorageContainerDetail getContainer(ContainerQueryCriteria crit) {
-		RequestEvent<ContainerQueryCriteria> req = new RequestEvent<ContainerQueryCriteria>(getSession(), crit);
+		RequestEvent<ContainerQueryCriteria> req = new RequestEvent<ContainerQueryCriteria>(crit);
 		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.getStorageContainer(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();		
-	}
-	
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpReq.getSession().getAttribute(Constants.SESSION_DATA);
 	}	
 }

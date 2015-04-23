@@ -21,9 +21,6 @@ import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolSe
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("/collection-protocol-events")
 public class CollectionProtocolEventsController {
@@ -103,10 +100,6 @@ public class CollectionProtocolEventsController {
 	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(getSession(), payload);
-	}
-	
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
+		return new RequestEvent<T>(payload);
 	}	
 }

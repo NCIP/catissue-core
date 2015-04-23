@@ -16,9 +16,6 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.openspecimen.custom.demo.events.SpecimenCollectionDetail;
 import com.krishagni.openspecimen.custom.demo.services.SpecimenCollectionService;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("/demo/participant-specimens")
 public class SpecimenCollectionController {
@@ -33,13 +30,9 @@ public class SpecimenCollectionController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SpecimenCollectionDetail collectSpecimens(@RequestBody SpecimenCollectionDetail input) {
-		RequestEvent<SpecimenCollectionDetail> req = new RequestEvent<SpecimenCollectionDetail>(getSession(), input);	
+		RequestEvent<SpecimenCollectionDetail> req = new RequestEvent<SpecimenCollectionDetail>(input);	
 		ResponseEvent<SpecimenCollectionDetail> resp = specimenCollectionSvc.collect(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
-	}
-	
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpReq.getSession().getAttribute(Constants.SESSION_DATA);
 	}	
 }

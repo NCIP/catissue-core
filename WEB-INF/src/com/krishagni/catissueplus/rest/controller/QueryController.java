@@ -26,8 +26,6 @@ import com.krishagni.catissueplus.core.de.events.QueryExecResult;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
 
 @Controller
 @RequestMapping("/query")
@@ -75,17 +73,13 @@ public class QueryController {
 		}
 	}
 	
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
-	}
-	
 	private <T> T response(ResponseEvent<T> resp) {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 
 	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(getSession(), payload);				
+		return new RequestEvent<T>(payload);				
 	}
 }
 																																																																																																																																						

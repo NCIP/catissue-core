@@ -14,13 +14,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-import edu.wustl.common.util.logger.Logger;
-
 @Aspect
 public class TransactionalInterceptor {
-
-	private static Logger LOGGER = Logger.getCommonLogger(TransactionalInterceptor.class);
-
 	private PlatformTransactionManager transactionManager;
 	
 	private TransactionTemplate txTmpl;

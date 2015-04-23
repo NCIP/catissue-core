@@ -83,6 +83,6 @@ public class DistributionOrderController {
 	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(null, payload);
+		return new RequestEvent<T>(payload);
 	}
 }
