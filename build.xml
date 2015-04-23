@@ -2,7 +2,6 @@
 
 <!--Ant Script for create Build for caTISSUE Core-->
 <project name="caTissue Suite" default="compile">
-	<import file="build-properties.xml"/>
 	<!--define require dir and Properties for <if> </if> tag-->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
@@ -667,7 +666,6 @@
 			<fileset dir="${base.dir}/WEB-INF/resources/ng-email-templates"/>
 		</copy>
 		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true" />
-		<copy file="build-properties.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
 		<copy file="deploy_zip.xml" todir="${zip.dir}" overwrite="true" />
 		<rename src="${zip.dir}/deploy_zip.xml" dest="${zip.dir}/build.xml"/>
