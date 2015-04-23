@@ -145,32 +145,13 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<StorageContainerDetail> updateStorageContainer(RequestEvent<StorageContainerDetail> req) {
-		try {
-			StorageContainerDetail input = req.getPayload();			
-			StorageContainer existing = null;
-			if (input.getId() != null) {
-				existing = daoFactory.getStorageContainerDao().getById(input.getId());
-			} else if (StringUtils.isNotBlank(input.getName())) {
-				existing = daoFactory.getStorageContainerDao().getByName(input.getName());
-				input.setId(existing.getId());
-			}
-			
-			if (existing == null) {
-				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
-			}
-			AccessCtrlMgr.getInstance().ensureUpdateContainerRights(existing);			
-			
-			StorageContainer container = containerFactory.createStorageContainer(input);
-			ensureUniqueConstraints(existing, container);
-			
-			existing.update(container);			
-			daoFactory.getStorageContainerDao().saveOrUpdate(existing, true);
-			return ResponseEvent.response(StorageContainerDetail.from(existing));			
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
+		return updateStorageContainer(req, false);
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<StorageContainerDetail> patchStorageContainer(RequestEvent<StorageContainerDetail> req) {
+		return updateStorageContainer(req, true);
 	}
 	
 	@Override
@@ -300,6 +281,35 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		}
 		
 		return container;
+	}
+	
+	private ResponseEvent<StorageContainerDetail> updateStorageContainer(RequestEvent<StorageContainerDetail> req, boolean partial) {
+		try {
+			StorageContainerDetail input = req.getPayload();			
+			StorageContainer existing = getContainer(input.getId(), input.getName());			
+			if (existing == null) {
+				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
+			}
+			AccessCtrlMgr.getInstance().ensureUpdateContainerRights(existing);			
+			
+			input.setId(existing.getId());
+			StorageContainer container = null;
+			if (partial) {
+				container = containerFactory.createStorageContainer(existing, input);
+			} else {
+				container = containerFactory.createStorageContainer(input); 
+			}
+			
+			
+			ensureUniqueConstraints(existing, container);			
+			existing.update(container);			
+			daoFactory.getStorageContainerDao().saveOrUpdate(existing, true);
+			return ResponseEvent.response(StorageContainerDetail.from(existing));			
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}		
 	}
 	
 	private void ensureUniqueConstraints(StorageContainer existing, StorageContainer newContainer) {

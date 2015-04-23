@@ -7,9 +7,12 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
+import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
+import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
-public class StorageContainerSummary {
+@ListenAttributeChanges
+public class StorageContainerSummary extends AttributeModifiedSupport {
 	private Long id;
 
 	private String name;
@@ -35,7 +38,7 @@ public class StorageContainerSummary {
 	private boolean storeSpecimensEnabled;
 	
 	private List<StorageContainerSummary> childContainers;
-
+	
 	public Long getId() {
 		return id;
 	}

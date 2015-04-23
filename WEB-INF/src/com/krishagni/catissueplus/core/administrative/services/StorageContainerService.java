@@ -25,6 +25,8 @@ public interface StorageContainerService {
 	
 	public ResponseEvent<StorageContainerDetail> updateStorageContainer(RequestEvent<StorageContainerDetail> req);
 	
+	public ResponseEvent<StorageContainerDetail> patchStorageContainer(RequestEvent<StorageContainerDetail> req);
+	
 	public ResponseEvent<Boolean> isAllowed(RequestEvent<PositionTenantDetail> req);
 	
 	public ResponseEvent<ContainerMapExportDetail> exportMap(RequestEvent<ContainerQueryCriteria> req);

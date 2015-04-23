@@ -80,7 +80,12 @@ public class ObjectReader implements Closeable {
 		}
 		
 		for (Record subRec : record.getSubRecords()) {
-			props.put(subRec.getAttribute(), parseSubObjects(subRec, prefix));
+			Object subObjProps = parseSubObjects(subRec, prefix);
+			if (isEmpty(subObjProps)) {
+				continue;
+			}
+			
+			props.put(subRec.getAttribute(), subObjProps);
 		}
 		
 		return props;
@@ -103,9 +108,7 @@ public class ObjectReader implements Closeable {
 					values.add(value);
 				}
 				
-				if (!values.isEmpty()) {
-					props.put(field.getAttribute(), values);
-				}				
+				props.put(field.getAttribute(), values);				
 			} else {
 				String columnName = prefix + field.getCaption();
 				Object value = getValue(field, columnName);
@@ -159,6 +162,18 @@ public class ObjectReader implements Closeable {
 		} else {
 			return value;
 		}
+	}
+	
+	private boolean isEmpty(Object obj) {
+		if (obj instanceof List<?>) {
+			List<?> list = (List<?>)obj;
+			return list.isEmpty();
+		} else if (obj instanceof Map<?, ?>) {
+			Map<?, ?> map = (Map<?, ?>)obj;
+			return map.isEmpty();
+		}
+		
+		return false;
 	}
 		
 	public static void main(String[] args) 

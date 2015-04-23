@@ -23,7 +23,7 @@ public class StorageContainerImporter implements ObjectImporter<StorageContainer
 			if (detail.isCreate()) {
 				return containerSvc.createStorageContainer(containerReq);
 			} else {
-				return containerSvc.updateStorageContainer(containerReq);
+				return containerSvc.patchStorageContainer(containerReq);
 			}			
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);

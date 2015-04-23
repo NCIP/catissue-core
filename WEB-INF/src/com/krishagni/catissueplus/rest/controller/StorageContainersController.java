@@ -183,6 +183,25 @@ public class StorageContainersController {
 		
 		return resp.getPayload();
 	}
+
+	@RequestMapping(method = RequestMethod.PATCH, value="{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public StorageContainerDetail patchStorageContainer(
+			@PathVariable("id") 
+			Long containerId,
+			
+			@RequestBody 
+			StorageContainerDetail detail) {
+		
+		detail.setId(containerId);
+		
+		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(getSession(), detail);
+		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.patchStorageContainer(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="{id}/occupied-positions")
 	@ResponseStatus(HttpStatus.OK)

@@ -65,6 +65,9 @@
   <bean id="serviceInterceptor" class="com.krishagni.catissueplus.core.common.TransactionalInterceptor" factory-method="aspectOf">
     <property name="transactionManager" ref="transactionManager"/>
   </bean>
+
+  <bean id="listenerInterceptor" class="com.krishagni.catissueplus.core.common.ListenAttributeChangesInterceptor" factory-method="aspectOf">
+  </bean>
   
   <bean id="cfgSvc" class="com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
