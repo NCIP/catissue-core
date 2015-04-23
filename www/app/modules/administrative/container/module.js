@@ -47,6 +47,37 @@ angular.module('os.administrative.container',
         controller: 'ContainerAddEditCtrl',
         parent: 'container-root'
       })
+      .state('container-import', {
+        url: '/containers-import',
+        templateUrl: 'modules/common/import/add.html',
+        controller: 'ImportObjectCtrl',
+        resolve: {
+          importDetail: function() {
+            return {
+              breadcrumbs: [{state: 'container-list', title: 'container.list'}],
+              objectType: 'storageContainer',
+              title: 'container.bulk_import',
+              onSuccessState: 'container-list'
+            };
+          }
+        },
+        parent: 'container-root'
+      })
+      .state('container-import-jobs', {
+        url: '/containers-import-jobs',
+        templateUrl: 'modules/common/import/list.html',
+        controller: 'ImportJobsListCtrl',
+        resolve: {
+          importDetail: function() {
+            return {
+              breadcrumbs: [{state: 'container-list', title: 'container.list'}],
+              title: 'container.bulk_import_jobs',
+              objectTypes: ['storageContainer']
+            }
+          }
+        },
+        parent: 'container-root'
+      })
       .state('container-detail', {
         url: '/containers/:containerId',
         templateUrl: 'modules/administrative/container/detail.html',

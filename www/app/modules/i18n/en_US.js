@@ -623,6 +623,9 @@
     "paste_specimen_labels": "Paste or input specimen labels separated by comma",
     "no_free_locs": "Container does not have enough free locations to accommodate input specimen labels",
 
+    "bulk_import": "Import Storage Containers",
+    "bulk_import_jobs": "Import Storage Containers Jobs List",
+
     "tooltip": {
       "view_details": "Click to view/edit Storage Container details",
       "add": "Click to add new Storage Container",
@@ -894,7 +897,8 @@
       "user": "Users",
       "userRoles": "User Roles",
       "institute": "Institutes",
-      "site": "Site"
+      "site": "Site",
+      "storageContainer": "Storage Container"
     },
 
     "import_types": {
