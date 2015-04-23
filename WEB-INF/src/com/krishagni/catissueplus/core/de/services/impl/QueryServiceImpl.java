@@ -37,7 +37,7 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
-import com.krishagni.catissueplus.core.common.util.Utility;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.de.domain.AqlBuilder;
 import com.krishagni.catissueplus.core.de.domain.QueryAuditLog;
 import com.krishagni.catissueplus.core.de.domain.QueryFolder;
@@ -75,7 +75,6 @@ import edu.common.dynamicextensions.query.QueryResultScreener;
 import edu.common.dynamicextensions.query.ResultColumn;
 import edu.common.dynamicextensions.query.WideRowMode;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.CommonServiceLocator;
 
 public class QueryServiceImpl implements QueryService {
@@ -94,8 +93,6 @@ public class QueryServiceImpl implements QueryService {
 	private static final int EXPORT_THREAD_POOL_SIZE = getThreadPoolSize();
 	
 	private static final int ONLINE_EXPORT_TIMEOUT_SECS = 30;
-	
-	private static final String EXPORT_DATA_DIR = getExportDataDir();
 	
 	private static ExecutorService exportThreadPool = Executors.newFixedThreadPool(EXPORT_THREAD_POOL_SIZE);
 		
@@ -359,7 +356,7 @@ public class QueryServiceImpl implements QueryService {
 	public ResponseEvent<File> getExportDataFile(RequestEvent<String> req) {
 		String fileId = req.getPayload();
 		try {
-			String path = EXPORT_DATA_DIR + File.separator + fileId;
+			String path = getExportDataDir() + File.separator + fileId;
 			File f = new File(path);
 			if (f.exists()) {
 				return ResponseEvent.response(f);
@@ -757,7 +754,7 @@ public class QueryServiceImpl implements QueryService {
 			@Override
 			public Boolean call() throws Exception {				
 				QueryResultExporter exporter = new QueryResultCsvExporter();
-				String path = EXPORT_DATA_DIR + File.separator + filename;
+				String path = getExportDataDir() + File.separator + filename;
 				
 				Session session = startTxn();
 				try {
@@ -861,17 +858,12 @@ public class QueryServiceImpl implements QueryService {
 	}
 	
 	private static int getThreadPoolSize() {
-		String poolSize = XMLPropertyHandler.getValue("query.exportThreadPoolSize");
-		if (poolSize == null || poolSize.isEmpty()) {
-			return 5;
-		}
-		
-		return Integer.parseInt(poolSize);
+		return 5; // TODO: configurable property
 	}
 	
 	private static String getExportDataDir() {
-		String dir = new StringBuilder(XMLPropertyHandler.getValue("appserver.home.dir")).append(File.separator)
-			.append("os-data").append(File.separator)
+		String dir = new StringBuilder()
+			.append(ConfigUtil.getInstance().getDataDir()).append(File.separator)
 			.append("query-exported-data").append(File.separator)
 			.toString();
 		
@@ -985,7 +977,7 @@ public class QueryServiceImpl implements QueryService {
 							cal.add(Calendar.DAY_OF_MONTH, -30);
 							long deleteBeforeTime = cal.getTimeInMillis();
 							
-							File dir = new File(EXPORT_DATA_DIR);							
+							File dir = new File(getExportDataDir());							
 							for (File file : dir.listFiles()) {								
 								if (file.lastModified() <= deleteBeforeTime) {
 									file.delete();
@@ -1007,7 +999,7 @@ public class QueryServiceImpl implements QueryService {
 		props.put("user", user);
 		props.put("query", query);
 		props.put("filename", filename);
-		props.put("appUrl", Utility.getAppUrl());
+		props.put("appUrl", ConfigUtil.getInstance().getAppUrl());
 		props.put("$subject", new String[] {title});
 		
 		emailService.sendEmail(QUERY_DATA_EXPORTED_EMAIL_TMPL, new String[] {user.getEmailAddress()}, props);
@@ -1017,7 +1009,7 @@ public class QueryServiceImpl implements QueryService {
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("user", user);
 		props.put("folder", folder);
-		props.put("appUrl", Utility.getAppUrl());
+		props.put("appUrl", ConfigUtil.getInstance().getAppUrl());
 		
 		for (User sharedWith : sharedUsers) {
 			props.put("sharedWith", sharedWith);

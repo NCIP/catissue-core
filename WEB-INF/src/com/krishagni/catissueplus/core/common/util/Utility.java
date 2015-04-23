@@ -1,7 +1,5 @@
 package com.krishagni.catissueplus.core.common.util;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,32 +10,19 @@ import java.util.Set;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.math.NumberUtils;
-
-import edu.wustl.common.util.XMLPropertyHandler;
+import org.apache.commons.lang.StringUtils;
 
 public class Utility {
-
 	public static String getDisabledValue(String value) {
-		if(isBlank(value))
-		{
+		if (StringUtils.isBlank(value)) {
 			return value;
 		}
-		return value+"_"+getCurrentTimeStamp();
+		
+		return value + "_" + getCurrentTimeStamp();
 	}
 
 	private static String getCurrentTimeStamp() {
 		return new SimpleDateFormat().format(Calendar.getInstance().getTime());
-	}
-	
-	public static int getMaxParticipantCnt(){
-		int maxParticipants = 200;
-		String participantsCnt = XMLPropertyHandler.getValue("participant.list.count");
-		
-		if(NumberUtils.isNumber(participantsCnt)){
-			maxParticipants = Integer.valueOf(participantsCnt);
-		}
-		return maxParticipants;
 	}
 	
 	public static Long numberToLong(Object number) {
@@ -66,10 +51,6 @@ public class Utility {
 		return name;
 	}
 
-	public static String getAppUrl() {
-		return XMLPropertyHandler.getValue("application.url");
-	}
-	
 	public static String getInputStreamDigest(InputStream in) 
 	throws IOException {
 		return DigestUtils.md5Hex(getInputStreamBytes(in));

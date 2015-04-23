@@ -32,12 +32,11 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 import com.krishagni.rbac.service.RbacService;
-
-import edu.wustl.common.util.XMLPropertyHandler;
 
 public class UserServiceImpl implements UserService {
 	private static final String DEFAULT_AUTH_DOMAIN = "openspecimen";
@@ -53,8 +52,6 @@ public class UserServiceImpl implements UserService {
 	private static final String NEW_USER_REQUEST_EMAIL_TMPL = "users_new_user_request";
 	
 	private static final String USER_CREATED_EMAIL_TMPL = "users_created";
-	
-	private static final String adminEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
 	
 	private DaoFactory daoFactory;
 
@@ -398,7 +395,8 @@ public class UserServiceImpl implements UserService {
 		props.put("admin", user); //TODO:replace with admin 
 		props.put("$subject", subjParams);
 		
-		emailService.sendEmail(NEW_USER_REQUEST_EMAIL_TMPL, new String[]{adminEmailAddress}, props);
+		String[] to = {ConfigUtil.getInstance().getAdminEmailId()};
+		emailService.sendEmail(NEW_USER_REQUEST_EMAIL_TMPL, to, props);
 	}
 	
 	private void sendUserRequestApprovedEmail(User user, ForgotPasswordToken token) {
@@ -406,7 +404,8 @@ public class UserServiceImpl implements UserService {
 		props.put("user", user);
 		props.put("token", token);
 		
-		emailService.sendEmail(REQUEST_APPROVED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
+		String[] to = new String[]{user.getEmailAddress()};
+		emailService.sendEmail(REQUEST_APPROVED_EMAIL_TMPL, to, props);
 	}
 	
 	private void ensureUniqueEmail(User existingUser, User newUser, OpenSpecimenException ose) {

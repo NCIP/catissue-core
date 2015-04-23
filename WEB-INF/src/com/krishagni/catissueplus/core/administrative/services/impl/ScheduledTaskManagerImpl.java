@@ -21,9 +21,8 @@ import com.krishagni.catissueplus.core.administrative.services.ScheduledTaskMana
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.service.EmailService;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
-
-import edu.wustl.common.util.XMLPropertyHandler;
 
 public class ScheduledTaskManagerImpl implements ScheduledTaskManager, ScheduledTaskListener {
 	private static ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5);
@@ -142,7 +141,7 @@ public class ScheduledTaskManagerImpl implements ScheduledTaskManager, Scheduled
 		props.put("lname", job.getCreatedBy().getLastName());
 		props.put("jobName", job.getName());
 		props.put("jobRunId", jobRun.getId());
-		props.put("appUrl", Utility.getAppUrl());
+		props.put("appUrl",  ConfigUtil.getInstance().getAppUrl());
 		props.put("$subject", new String[] {job.getName()});
 		List<String> recipients = new ArrayList<String>();
 		
@@ -154,10 +153,10 @@ public class ScheduledTaskManagerImpl implements ScheduledTaskManager, Scheduled
 		emailSvc.sendEmail(JOB_FAILED_TEMPLATE, recipients.toArray(recipientEmails), props);
 	}
 	
-	private static String getExportDataDir() {
-		String dir = new StringBuilder(XMLPropertyHandler.getValue("appserver.home.dir")).append(File.separator)
-			.append("os-data").append(File.separator)
-			.append("scheduled-jobs-exported-data").append(File.separator)
+	public static String getExportDataDir() {
+		String dir = new StringBuilder()
+			.append(ConfigUtil.getInstance().getDataDir()).append(File.separator)			
+			.append("scheduled-jobs").append(File.separator)
 			.toString();
 		
 		File dirFile = new File(dir);
@@ -169,8 +168,6 @@ public class ScheduledTaskManagerImpl implements ScheduledTaskManager, Scheduled
 		
 		return dir;
 	}
-	
-	public static final String EXPORT_DATA_DIR = getExportDataDir();
 	
 	private static final String JOB_FAILED_TEMPLATE = "scheduled_job_failed";
 }

@@ -18,8 +18,6 @@ import com.krishagni.catissueplus.core.administrative.repository.StorageContaine
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-import edu.wustl.catissuecore.util.global.Constants;
-
 public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> implements StorageContainerDao {
 
 	@Override
@@ -39,7 +37,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 		List<StorageContainer> result = sessionFactory.getCurrentSession()
 				.createCriteria(StorageContainer.class)
 				.add(Restrictions.eq("name", name))
-				.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE))
+				.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS.getStatus()))
 				.list();
 
 		return result.isEmpty() ? null : result.iterator().next();

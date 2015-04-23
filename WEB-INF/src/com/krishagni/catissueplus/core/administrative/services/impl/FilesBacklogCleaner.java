@@ -22,7 +22,7 @@ public class FilesBacklogCleaner implements ScheduledTask {
 		timeBefore.add(Calendar.DATE, -period);
 		Long timeInMilliseconds = timeBefore.getTimeInMillis();
 		
-		cleanupFolder(ScheduledTaskManagerImpl.EXPORT_DATA_DIR, timeInMilliseconds);
+		cleanupFolder(ScheduledTaskManagerImpl.getExportDataDir(), timeInMilliseconds);
 	}
 	
 	private void cleanupFolder(String directory, Long timeBefore) {

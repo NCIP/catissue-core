@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.util.global;
 import java.util.Locale;
 
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.global.Status;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -2240,12 +2239,12 @@ public class Constants
 	/** The Constant USER_ACTIVITY_STATUS_VALUES. */
 	public static final String[] USER_ACTIVITY_STATUS_VALUES = {SELECT_OPTION, "Active", "Closed"};
 
-	/** The Constant APPROVE_USER_STATUS_VALUES. */
-	public static final String[] APPROVE_USER_STATUS_VALUES = {SELECT_OPTION,
-			Status.APPROVE_USER_APPROVE_STATUS.toString(),
-			Status.APPROVE_USER_REJECT_STATUS.toString(),
-			Status.APPROVE_USER_PENDING_STATUS.toString(),};
-
+//	/** The Constant APPROVE_USER_STATUS_VALUES. */
+//	public static final String[] APPROVE_USER_STATUS_VALUES = {SELECT_OPTION,
+//			Status.APPROVE_USER_APPROVE_STATUS.toString(),
+//			Status.APPROVE_USER_REJECT_STATUS.toString(),
+//			Status.APPROVE_USER_PENDING_STATUS.toString(),};
+//
 	/** The Constant REPORTED_PROBLEM_ACTIVITY_STATUS_VALUES. */
 	public static final String[] REPORTED_PROBLEM_ACTIVITY_STATUS_VALUES = {SELECT_OPTION,
 			"Closed", "Pending"};
