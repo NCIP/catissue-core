@@ -7,6 +7,7 @@ import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthProviderErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.factory.DomainRegistrationFactory;
 import com.krishagni.catissueplus.core.auth.events.AuthDomainDetail;
+import com.krishagni.catissueplus.core.auth.events.AuthDomainSummary;
 import com.krishagni.catissueplus.core.auth.events.ListAuthDomainCriteria;
 import com.krishagni.catissueplus.core.auth.services.DomainRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -31,9 +32,9 @@ public class DomainRegistrationServiceImpl implements DomainRegistrationService 
 
 	@Override
 	@PlusTransactional	
-	public ResponseEvent<List<AuthDomainDetail>> getDomains(RequestEvent<ListAuthDomainCriteria> req) {
+	public ResponseEvent<List<AuthDomainSummary>> getDomains(RequestEvent<ListAuthDomainCriteria> req) {
 		List<AuthDomain> authDomains = daoFactory.getAuthDao().getAuthDomains(req.getPayload().maxResults());
-		return ResponseEvent.response(AuthDomainDetail.form(authDomains));
+		return ResponseEvent.response(AuthDomainSummary.from(authDomains));
 	}
 
 	@Override

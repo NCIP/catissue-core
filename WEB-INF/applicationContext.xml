@@ -381,6 +381,7 @@
           <list>
             <value>/institutes/</value>
             <value>/config-settings/locale</value>
+            <value>/auth-domains/</value>
           </list>
         </entry>
       </map>

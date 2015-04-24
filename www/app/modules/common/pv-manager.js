@@ -33,11 +33,6 @@ angular.module('openspecimen')
       'Not Specified'
     ];
     
-    var domains = [
-      'openspecimen',
-      'ldap'
-    ];
-
     var positionLabelingSchemes = [
       'Numbers',
       'Alphabets Upper Case',
@@ -73,7 +68,6 @@ angular.module('openspecimen')
 
     var pvMap = {
       anatomicSite: anatomicSites,
-      domains:domains,
       'storage-type': storageTypes,
       'visit-status': visitStatuses,
       'specimen-status': specimenStatuses,
@@ -195,7 +189,7 @@ angular.module('openspecimen')
         );
         return sites;
       },
-    
+
       notSpecified: function() {
         return $translate.instant('pvs.not_specified');
       }
