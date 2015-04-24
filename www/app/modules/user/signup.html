@@ -27,8 +27,7 @@
         <div class="form-group">
           <div class="col-xs-12">
             <input type="email" name="email" class="form-control" ng-model="user.emailAddress"
-              placeholder="{{'user.email_address' | translate}}" ng-maxlength="255" 
-              ng-change="setLoginName(user.emailAddress)" required> 
+              placeholder="{{'user.email_address' | translate}}" ng-maxlength="255" required> 
             <div os-field-error field="userForm.email"></div>
           </div>
         </div>
@@ -36,8 +35,7 @@
         <div class="form-group">
           <div class="col-xs-6" ng-hide="domains.length == 1">
             <os-select ng-model="user.domainName" list="domains" name="domain"
-              placeholder="{{'user.domain_name' | translate}}" 
-              on-select="setLoginName(user.emailAddress)" required>
+              placeholder="{{'user.domain_name' | translate}}" required>
             </os-select>
             <div os-field-error field="userForm.domain"></div>
           </div>

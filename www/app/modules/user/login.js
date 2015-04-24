@@ -51,12 +51,9 @@ angular.module('openspecimen')
 
     function loadPvs() {
       $scope.domains = [];
-      AuthDomain.query().then(
-        function(domainList) {
-          angular.forEach(domainList, function(domain) {
-            $scope.domains.push(domain.name);
-          });
-
+      AuthDomain.getDomainNames().then(
+        function(domains) {
+          $scope.domains = domains;
           if ($scope.domains.length == 1) {
             $scope.loginData.domainName = $scope.domains[0];
           }

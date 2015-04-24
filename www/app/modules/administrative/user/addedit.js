@@ -10,12 +10,9 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
 
     function loadPvs() {
       $scope.domains = [];
-      AuthDomain.query().then(
-        function(domainList) {
-          angular.forEach(domainList, function(domain) {
-            $scope.domains.push(domain.name);
-          });
-
+      AuthDomain.getDomainNames().then(
+        function(domains) {
+          $scope.domains = domains;
           if (!$scope.user.id && $scope.domains.length == 1) {
             $scope.user.domainName = $scope.domains[0];
           }
@@ -69,14 +66,6 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
       );
     };
 
-    $scope.setLoginName = function(loginName) {
-      var user = $scope.user;
-      if (!user.id && !user.loginName && 
-           user.domainName == $scope.global.defaultDomain) {
-        user.loginName = loginName;
-      }
-    }
-    
     $scope.createUser = function() {
       var user = angular.copy($scope.user);
       user.$saveOrUpdate().then(
