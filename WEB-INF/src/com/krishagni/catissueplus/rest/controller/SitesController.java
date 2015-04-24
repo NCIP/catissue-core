@@ -103,6 +103,18 @@ public class SitesController {
 		return resp.getPayload();
 	}
 	
+	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public SiteDetail patchSite(@PathVariable Long id, @RequestBody SiteDetail siteDetail) {
+		siteDetail.setId(id);
+		
+		RequestEvent<SiteDetail> req = new RequestEvent<SiteDetail>(siteDetail);
+		ResponseEvent<SiteDetail> resp = siteService.patchSite(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+		
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependent-entities")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)

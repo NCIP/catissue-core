@@ -102,37 +102,15 @@ public class SiteServiceImpl implements SiteService {
 	@Override
 	@PlusTransactional		
 	public ResponseEvent<SiteDetail> updateSite(RequestEvent<SiteDetail> req) {
-		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-			
-			SiteDetail detail = req.getPayload();
-			Site existing = null;			
-			if (detail.getId() != null) {
-				existing = daoFactory.getSiteDao().getById(detail.getId()); 
-			} else if (StringUtils.isNotBlank(detail.getName())) {
-				existing = daoFactory.getSiteDao().getSiteByName(detail.getName());
-			}
-			
-			if (existing == null) {
-				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
-			}
-
-			Site site = siteFactory.createSite(detail);
-			
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureUniqueConstraint(site, existing, ose);
-			ose.checkAndThrow();
-			
-			existing.update(site);			
-			daoFactory.getSiteDao().saveOrUpdate(existing);			
-			return ResponseEvent.response(SiteDetail.from(existing));
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}		
+		return updateSite(req, false);
 	}
 
+	@Override
+	@PlusTransactional		
+	public ResponseEvent<SiteDetail> patchSite(RequestEvent<SiteDetail> req) {
+		return updateSite(req, true);
+	}
+	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req) {
@@ -169,6 +147,43 @@ public class SiteServiceImpl implements SiteService {
 		}
 	}
 
+	private ResponseEvent<SiteDetail> updateSite(RequestEvent<SiteDetail> req, boolean partial) {
+		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();			
+			SiteDetail detail = req.getPayload();
+			
+			Site existing = null;			
+			if (detail.getId() != null) {
+				existing = daoFactory.getSiteDao().getById(detail.getId()); 
+			} else if (StringUtils.isNotBlank(detail.getName())) {
+				existing = daoFactory.getSiteDao().getSiteByName(detail.getName());
+			}
+			
+			if (existing == null) {
+				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
+			}
+
+			Site site = null;
+			if (partial) {
+				site = siteFactory.createSite(existing, detail);
+			} else {
+				site = siteFactory.createSite(detail); 
+			}
+						
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueConstraint(site, existing, ose);
+			ose.checkAndThrow();
+			
+			existing.update(site);			
+			daoFactory.getSiteDao().saveOrUpdate(existing);			
+			return ResponseEvent.response(SiteDetail.from(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}		
+	}
+	
 	private void ensureUniqueConstraint(Site newSite, Site existingSite, OpenSpecimenException ose) {
 		if (!isUniqueName(newSite, existingSite)) {
 			ose.addError(SiteErrorCode.DUP_NAME);

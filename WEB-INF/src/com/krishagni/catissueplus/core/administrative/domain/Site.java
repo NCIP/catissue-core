@@ -160,6 +160,7 @@ public class Site extends BaseEntity {
 		setInstitute(other.getInstitute());
 		setCode(other.getCode());
 		setType(other.getType());
+		setAddress(other.getAddress());
 		updateActivityStatus(other.getActivityStatus());
 		CollectionUpdater.update(this.getCoordinators(), other.getCoordinators());
 	}

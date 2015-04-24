@@ -8,10 +8,12 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
+import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
-public class SiteDetail {
-
+@ListenAttributeChanges
+public class SiteDetail extends AttributeModifiedSupport {
 	private Long id;
 	
 	private String name;

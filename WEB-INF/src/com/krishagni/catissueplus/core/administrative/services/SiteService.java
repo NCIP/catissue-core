@@ -20,6 +20,8 @@ public interface SiteService {
 
 	public ResponseEvent<SiteDetail> updateSite(RequestEvent<SiteDetail> req);
 	
+	public ResponseEvent<SiteDetail> patchSite(RequestEvent<SiteDetail> req);
+	
 	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req);
 
 	public ResponseEvent<SiteDetail> deleteSite(RequestEvent<DeleteEntityOp> req);

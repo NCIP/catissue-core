@@ -23,7 +23,7 @@ public class SiteImporter implements ObjectImporter<SiteDetail> {
 			if (detail.isCreate()) {
 				return siteSvc.createSite(siteReq);
 			} else {
-				return siteSvc.updateSite(siteReq);
+				return siteSvc.patchSite(siteReq);
 			}			
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
