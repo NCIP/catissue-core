@@ -149,36 +149,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<UserDetail> updateUser(RequestEvent<UserDetail> req) {
-		try {
-			UserDetail detail = req.getPayload();
-			Long userId = detail.getId();
-			String emailAddress = detail.getEmailAddress();
-			
-			User existingUser = null; 
-			if (userId != null) {
-				existingUser = daoFactory.getUserDao().getById(userId); 
-			} else if (StringUtils.isNotBlank(emailAddress)) {
-				existingUser = daoFactory.getUserDao().getUserByEmailAddress(emailAddress);
-			}
-			
-			if (existingUser == null) {
-				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
-			}
-			
-			User user = userFactory.createUser(detail);
-			AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
-
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureUniqueEmail(existingUser, user, ose);
-			ose.checkAndThrow();
-
-			existingUser.update(user);
-			return ResponseEvent.response(UserDetail.from(existingUser));
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
+		return updateUser(req, false);
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<UserDetail> patchUser(RequestEvent<UserDetail> req) {
+		return updateUser(req, true);
 	}
 
 	@Override
@@ -356,6 +333,45 @@ public class UserServiceImpl implements UserService {
 	public ResponseEvent<InstituteDetail> getInstitute(RequestEvent<Long> req) {
 		Institute institute = getInstitute(req.getPayload());
 		return ResponseEvent.response(InstituteDetail.from(institute));
+	}
+
+	private ResponseEvent<UserDetail> updateUser(RequestEvent<UserDetail> req, boolean partial) {
+		try {
+			UserDetail detail = req.getPayload();
+			Long userId = detail.getId();
+			String emailAddress = detail.getEmailAddress();
+			
+			User existingUser = null; 
+			if (userId != null) {
+				existingUser = daoFactory.getUserDao().getById(userId); 
+			} else if (StringUtils.isNotBlank(emailAddress)) {
+				existingUser = daoFactory.getUserDao().getUserByEmailAddress(emailAddress);
+			}
+			
+			if (existingUser == null) {
+				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
+			}
+			
+			User user = null;
+			if (partial) {
+				user = userFactory.createUser(existingUser, detail);
+			} else {
+				user = userFactory.createUser(detail);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
+
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueEmail(existingUser, user, ose);
+			ose.checkAndThrow();
+
+			existingUser.update(user);
+			return ResponseEvent.response(UserDetail.from(existingUser));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}		
 	}
 	
 	private void sendForgotPasswordLinkEmail(User user, String token) {

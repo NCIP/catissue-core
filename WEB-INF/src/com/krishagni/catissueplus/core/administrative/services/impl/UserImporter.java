@@ -23,7 +23,7 @@ public class UserImporter implements ObjectImporter<UserDetail> {
 			if (detail.isCreate()) {
 				return userSvc.createUser(userReq);
 			} else {
-				return userSvc.updateUser(userReq);
+				return userSvc.patchUser(userReq);
 			}						
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);

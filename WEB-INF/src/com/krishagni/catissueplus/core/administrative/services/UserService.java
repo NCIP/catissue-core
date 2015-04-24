@@ -24,6 +24,8 @@ public interface UserService extends UserDetailsService {
 	public ResponseEvent<UserDetail> createUser(RequestEvent<UserDetail> req);
 
 	public ResponseEvent<UserDetail> updateUser(RequestEvent<UserDetail> req);
+	
+	public ResponseEvent<UserDetail> patchUser(RequestEvent<UserDetail> req);
 
 	public ResponseEvent<UserDetail> updateStatus(RequestEvent<UserDetail> req);
 

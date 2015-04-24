@@ -9,8 +9,11 @@ import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
+import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 
-public class UserDetail {
+@ListenAttributeChanges
+public class UserDetail extends AttributeModifiedSupport {
 
 	private Long id;
 
@@ -143,21 +146,21 @@ public class UserDetail {
 	}
 
 	public static UserDetail from(User user) {
-		UserDetail userDto = new UserDetail();
-		userDto.setId(user.getId());
-		userDto.setLoginName(user.getLoginName());
-		userDto.setFirstName(user.getFirstName());
-		userDto.setLastName(user.getLastName());
-		userDto.setCreationDate(user.getCreationDate());
-		userDto.setActivityStatus(user.getActivityStatus());
-		userDto.setEmailAddress(user.getEmailAddress());
-		userDto.setDomainName(user.getAuthDomain().getName());
-		userDto.setDeptName(user.getDepartment().getName());
-		userDto.setInstituteName(user.getInstitute().getName());
-		userDto.setAdmin(user.isAdmin());
-		setUserSiteNames(userDto, user.getSites());	
+		UserDetail detail = new UserDetail();
+		detail.setId(user.getId());
+		detail.setLoginName(user.getLoginName());
+		detail.setFirstName(user.getFirstName());
+		detail.setLastName(user.getLastName());
+		detail.setCreationDate(user.getCreationDate());
+		detail.setActivityStatus(user.getActivityStatus());
+		detail.setEmailAddress(user.getEmailAddress());
+		detail.setDomainName(user.getAuthDomain().getName());
+		detail.setDeptName(user.getDepartment().getName());
+		detail.setInstituteName(user.getInstitute().getName());
+		detail.setAdmin(user.isAdmin());
+		setUserSiteNames(detail, user.getSites());	
 
-		return userDto;
+		return detail;
 	}
 	
 	public static List<UserDetail> from(Collection<User> users) {
@@ -169,11 +172,12 @@ public class UserDetail {
 		return result;
 	}
 
-	private static void setUserSiteNames(UserDetail userDto, Set<Site> sites) {
+	private static void setUserSiteNames(UserDetail detail, Set<Site> sites) {
 		List<String> siteNames = new ArrayList<String>();
 		for (Site site : sites) {
 			siteNames.add(site.getName());
 		}
-		userDto.setSiteNames(siteNames);
+		
+		detail.setSiteNames(siteNames);
 	}
 }

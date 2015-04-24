@@ -115,15 +115,29 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public UserDetail updateUser(@PathVariable Long id, @RequestBody UserDetail userDetails) {
-		userDetails.setId(id);
+	public UserDetail updateUser(@PathVariable Long id, @RequestBody UserDetail userDetail) {
+		userDetail.setId(id);
 		
-		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(userDetails);
+		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(userDetail);
 		ResponseEvent<UserDetail> resp = userService.updateUser(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
 	}
+	
+	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public UserDetail patchUser(@PathVariable Long id, @RequestBody UserDetail userDetail) {
+		userDetail.setId(id);
+		
+		RequestEvent<UserDetail> req = new RequestEvent<UserDetail>(userDetail);
+		ResponseEvent<UserDetail> resp = userService.patchUser(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/activity-status")
 	@ResponseBody
