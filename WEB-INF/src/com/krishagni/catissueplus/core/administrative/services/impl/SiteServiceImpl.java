@@ -23,11 +23,12 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
+import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
-import com.krishagni.catissueplus.core.common.events.Operation;
-import com.krishagni.catissueplus.core.common.events.Resource;
+import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 
 public class SiteServiceImpl implements SiteService {
@@ -216,12 +217,12 @@ public class SiteServiceImpl implements SiteService {
 		if (StringUtils.isNotBlank(criteria.resource()) && StringUtils.isNotBlank(criteria.operation())) {
 			Resource resource = Resource.fromName(criteria.resource());
 			if (resource == null) {
-				throw OpenSpecimenException.userError(SiteErrorCode.RESOURCE_NOT_FOUND);
+				throw OpenSpecimenException.userError(RbacErrorCode.RESOURCE_NOT_FOUND);
 			}
 			
 			Operation operation = Operation.fromName(criteria.operation());
 			if (operation == null) {
-				throw OpenSpecimenException.userError(SiteErrorCode.OPERATION_NOT_FOUND);
+				throw OpenSpecimenException.userError(RbacErrorCode.OPERATION_NOT_FOUND);
 			}
 			
 			accessibleSites = AccessCtrlMgr.getInstance().getSites(resource, operation);

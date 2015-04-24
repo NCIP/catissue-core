@@ -22,13 +22,18 @@ public enum Operation {
 	}
 	
 	public static Operation fromName(String name) {
-		if (StringUtils.isNotBlank(name)) {
-			for (Operation op : Operation.values()) {
-				if (op.name.equalsIgnoreCase(name)) {
-					return op;
-				}
+		if (StringUtils.isBlank(name)) {
+			return null;
+		}
+		
+		Operation result = null;
+		for (Operation op : Operation.values()) {
+			if (op.name.equalsIgnoreCase(name)) {
+				result = op;
+				break;
 			}
 		}
-		return null;		
+		
+		return result;		
 	}
 }

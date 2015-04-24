@@ -30,14 +30,19 @@ public enum Resource {
 	}
 	
 	public static Resource fromName(String name) {
-		if (StringUtils.isNotBlank(name)) {
-			for (Resource r : Resource.values()) {
-				if (r.name.equalsIgnoreCase(name)) {
-					return r;
-				}
+		if (StringUtils.isBlank(name)) {
+			return null;
+		}
+		
+		Resource result = null;
+		for (Resource r : Resource.values()) {
+			if (r.name.equalsIgnoreCase(name)) {
+				result =  r;
+				break;
 			}
 		}
-		return null;
+		
+		return result;
 	}
 	
 }
