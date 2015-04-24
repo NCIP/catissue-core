@@ -25,7 +25,7 @@
 	<property name="common.sql.dir" value="${base.dir}/SQL/Common" />
 	<property name="mssqlserver.sql.dir" value="${base.dir}/SQL/MsSqlServer" />
 	<property name="oracle.dialect.string" value="org.hibernate.dialect.Oracle9Dialect" />
-	<property name="mysql.dialect.string" value="edu.wustl.catissuecore.hibernate.dialect.MySqlCustomDialect" />
+	<property name="mysql.dialect.string" value="org.hibernate.dialect.MySQL5Dialect"/>
 	<property name="catissue.datasource" value="java:/catissuecore" />
 	<property name="dynamicextensions.datasource" value="java:/dynamicextensions" />
 	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect" />
