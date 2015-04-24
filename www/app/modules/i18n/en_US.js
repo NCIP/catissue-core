@@ -875,8 +875,9 @@
   },
 
   "bulk_imports": {
-    "job_submitted": "Bulk import job {{id}} submitted",
+    "job_submitted": "Bulk Import Job {{id}} Submitted",
     "input_file": "Input Records File",
+    "download_input_file_tmpl": "Download Template File",
     "import_type": "Import Type",
     "object_type": "Object Type",
     "create": "Create",

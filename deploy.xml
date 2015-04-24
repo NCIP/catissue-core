@@ -58,7 +58,6 @@
 	<property name="mysql.dao.datasource.prop.filename" value="MysqlDataSourceDAOProperties.xml"/>
 	
 	<var name="databaseurl" value="" />
-	<import file="DEDeploy.xml" />
 
 	<property name="tempcacore.dir" value="${base.dir}/temp_deaudit_related_files" />
 	<property name="export.dir" value="${tempcacore.dir}/temp_exported_xmi" />

@@ -4,6 +4,8 @@ angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
     function init() {
       $scope.importDetail = importDetail;
       $scope.importJobsFileUrl = $sce.trustAsResourceUrl(ImportJob.url() + 'input-file');
+      $scope.inputFileTmplUrl  = $sce.trustAsResourceUrl(
+        ImportJob.url() + 'input-file-template?schema=' + importDetail.objectType);
       $scope.fileImporter = {};
  
       $scope.importJob = new ImportJob({
