@@ -23,9 +23,13 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
+import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.rbac.common.errors.RbacErrorCode;
+
 
 public class SiteServiceImpl implements SiteService {
 	private SiteFactory siteFactory;
@@ -48,7 +52,7 @@ public class SiteServiceImpl implements SiteService {
 			if (AuthUtil.isAdmin()) {
 				sites = daoFactory.getSiteDao().getSites(req.getPayload());
 			} else {
-				sites = getAccessibleSites(req.getPayload().query());
+				sites = getAccessibleSites(req.getPayload());
 			} 
 			
 			return ResponseEvent.response(SiteDetail.from(sites));
@@ -221,10 +225,27 @@ public class SiteServiceImpl implements SiteService {
 		return true;
 	}
 	
-	private List<Site> getAccessibleSites(String searchTerm) {
+	private List<Site> getAccessibleSites(SiteListCriteria criteria) {
 		List<Site> results = new ArrayList<Site>();
 		
-		Set<Site> accessibleSites = AccessCtrlMgr.getInstance().getRoleAssignedSites();		
+		Set<Site> accessibleSites = null;
+		if (StringUtils.isNotBlank(criteria.resource()) && StringUtils.isNotBlank(criteria.operation())) {
+			Resource resource = Resource.fromName(criteria.resource());
+			if (resource == null) {
+				throw OpenSpecimenException.userError(RbacErrorCode.RESOURCE_NOT_FOUND);
+			}
+			
+			Operation operation = Operation.fromName(criteria.operation());
+			if (operation == null) {
+				throw OpenSpecimenException.userError(RbacErrorCode.OPERATION_NOT_FOUND);
+			}
+			
+			accessibleSites = AccessCtrlMgr.getInstance().getSites(resource, operation);
+		} else {
+			accessibleSites = AccessCtrlMgr.getInstance().getRoleAssignedSites();
+		}
+		
+		String searchTerm = criteria.query();
 		if (StringUtils.isNotBlank(searchTerm)) {
 			for (Site site : accessibleSites) {
 				if (StringUtils.containsIgnoreCase(site.getName(), searchTerm)) {

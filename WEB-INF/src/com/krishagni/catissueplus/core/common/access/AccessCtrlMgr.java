@@ -578,7 +578,7 @@ public class AccessCtrlMgr {
 		return results;
 	}
 	
-	private Set<Site> getSites(Resource resource, Operation operation) {
+	public Set<Site> getSites(Resource resource, Operation operation) {
 		User user = AuthUtil.getCurrentUser();
 		String[] ops = {operation.getName()};
 		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(user.getId(), resource.getName(), ops);

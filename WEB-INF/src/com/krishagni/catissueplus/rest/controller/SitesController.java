@@ -45,6 +45,12 @@ public class SitesController {
 			@RequestParam(value = "exactMatch", required= false, defaultValue = "false")
 			boolean exactMatch,
 			
+			@RequestParam(value = "resource", required = false)
+			String resource,
+			
+			@RequestParam(value = "operation", required = false)
+			String operation,
+			
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
 			
@@ -55,6 +61,8 @@ public class SitesController {
 		SiteListCriteria crit = new SiteListCriteria()
 			.query(name)
 			.exactMatch(exactMatch)
+			.resource(resource)
+			.operation(operation)
 			.startAt(startAt)
 			.maxResults(maxResults);
 		
