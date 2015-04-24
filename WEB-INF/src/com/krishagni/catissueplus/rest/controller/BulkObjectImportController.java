@@ -38,6 +38,29 @@ public class BulkObjectImportController {
 	@Autowired
 	private ImportService importSvc;
 
+	@RequestMapping(method = RequestMethod.GET, value="/input-file-template")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody		
+	public void getInputFileTemplate(
+			@RequestParam(value = "schema", required = true) 
+			String schemaName,
+			
+			HttpServletResponse httpResp) {
+		
+		RequestEvent<String> req = new RequestEvent<String>(schemaName);
+		ResponseEvent<String> resp = importSvc.getInputFileTemplate(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		httpResp.setContentType("application/csv");
+		httpResp.setHeader("Content-Disposition", "attachment;filename=" + schemaName + ".csv");
+			
+		try {
+			httpResp.getOutputStream().write(resp.getPayload().getBytes());
+		} catch (IOException e) {
+			throw new RuntimeException("Error sending file", e);
+		} 			
+	}
+		
 	@RequestMapping(method = RequestMethod.POST, value="/input-file")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody		
@@ -87,18 +110,18 @@ public class BulkObjectImportController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/output")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public void getImportJobOutputFile(@PathVariable("id") Long jobId, HttpServletResponse response) {		
+	public void getImportJobOutputFile(@PathVariable("id") Long jobId, HttpServletResponse httpResp) {		
 		RequestEvent<Long> req = new RequestEvent<Long>(jobId);
 		ResponseEvent<String> resp = importSvc.getImportJobFile(req);
 		resp.throwErrorIfUnsuccessful();
 		
-		response.setContentType("application/csv");
-		response.setHeader("Content-Disposition", "attachment;filename=BulkImportJob_" + jobId + ".csv");
+		httpResp.setContentType("application/csv");
+		httpResp.setHeader("Content-Disposition", "attachment;filename=BulkImportJob_" + jobId + ".csv");
 			
 		InputStream in = null;
 		try {
 			in = new FileInputStream(new File(resp.getPayload()));
-			IOUtils.copy(in, response.getOutputStream());
+			IOUtils.copy(in, httpResp.getOutputStream());
 		} catch (IOException e) {
 			throw new RuntimeException("Error sending file", e);
 		} finally {

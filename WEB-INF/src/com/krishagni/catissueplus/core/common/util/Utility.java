@@ -3,14 +3,18 @@ package com.krishagni.catissueplus.core.common.util;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 public class Utility {
 	public static String getDisabledValue(String value) {
@@ -81,5 +85,29 @@ public class Utility {
 	
 	public static InputStream getResourceInputStream(String path) {
 		return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);		
+	}
+	
+	public static String stringListToCsv(List<String> elements) {
+		return stringListToCsv(elements.toArray(new String[0]));
+	}
+	
+	public static String stringListToCsv(String[] elements) {
+		StringWriter writer = new StringWriter();
+		CSVWriter csvWriter = null;
+		try {
+			csvWriter = new CSVWriter(writer);
+			csvWriter.writeNext(elements);
+			csvWriter.flush();
+			return writer.toString();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		} finally {
+			if (csvWriter != null) {
+				try {
+					csvWriter.close();
+				} catch (Exception e) {					
+				}				
+			}
+		}		
 	}
 }

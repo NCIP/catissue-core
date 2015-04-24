@@ -196,6 +196,21 @@ public class ImportServiceImpl implements ImportService {
 		}		
 	}
 	
+	@Override
+	public ResponseEvent<String> getInputFileTemplate(RequestEvent<String> req) {
+		try {
+			ObjectSchema schema = schemaFactory.getSchema(req.getPayload());
+			if (schema == null) {
+				return ResponseEvent.response(""); // TODO: return schema not found
+			}
+			
+			return ResponseEvent.response(ObjectReader.getSchemaFields(schema));
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	
 	private ImportJob getImportJob(Long jobId) {
 		User currentUser = AuthUtil.getCurrentUser();
 		

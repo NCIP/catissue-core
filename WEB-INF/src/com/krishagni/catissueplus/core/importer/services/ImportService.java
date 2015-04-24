@@ -13,10 +13,12 @@ public interface ImportService {
 	public ResponseEvent<List<ImportJobDetail>> getImportJobs(RequestEvent<ListImportJobsCriteria> req);
 	
 	public ResponseEvent<ImportJobDetail> getImportJob(RequestEvent<Long> req);
-	
+			
 	public ResponseEvent<String> getImportJobFile(RequestEvent<Long> req);
 	
 	public ResponseEvent<String> uploadImportJobFile(RequestEvent<InputStream> in);
 	
 	public ResponseEvent<ImportJobDetail> importObjects(RequestEvent<ImportDetail> req);
+	
+	public ResponseEvent<String> getInputFileTemplate(RequestEvent<String> schemaName);
 }
