@@ -4,168 +4,78 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
-	<display-name>caTISSUE Core</display-name>
+  <display-name>OpenSpecimen Core</display-name>
 
-	<description></description>
+  <description></description>
 	
-    	<context-param>
-		<param-name>applicationproperties</param-name>
-		<param-value>ApplicationResources.properties</param-value>
-	</context-param>
-	<context-param>
-		<param-name>rowCounter</param-name>
-		<param-value>200</param-value>
-	</context-param>
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/applicationContext.xml</param-value>
-	</context-param>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/applicationContext.xml</param-value>
+  </context-param>
 
-	<!-- base class for Application Resource bundle -->
-	<context-param>
-		<param-name>resourcebundleclass</param-name>
-		<param-value>ApplicationResources</param-value>
-	</context-param>
-<!--  filter mapping starts --> 
-	<filter>
-		<filter-name>authTokenFilter</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter>
+  <filter>
+    <filter-name>authTokenFilter</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
 
-	<filter-mapping>
-		<filter-name>authTokenFilter</filter-name>
-		<url-pattern>/rest/ng/*</url-pattern>
-	</filter-mapping>
+  <filter-mapping>
+    <filter-name>authTokenFilter</filter-name>
+    <url-pattern>/rest/ng/*</url-pattern>
+  </filter-mapping>
 
-<!-- filter mapping ends -->
-<!-- listener definition starts -->
- 	  <listener>
-		<listener-class>edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener</listener-class>
-	</listener>
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-<!-- listener definition starts -->
-<!-- servlet configuration starts -->
-	<servlet>
-		<servlet-name>httpinvoker</servlet-name>
-		<servlet-class>
-			org.springframework.web.servlet.DispatcherServlet
-		</servlet-class>
-		<load-on-startup>3</load-on-startup>
-	</servlet>
-	<servlet>
-		<servlet-name>restApi</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/restApiContext.xml</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
 
-	<servlet>
-		<servlet-name>CreateFormAction</servlet-name>
-		<servlet-class>edu.common.dynamicextensions.nui.action.CreateFormAction</servlet-class>
-	</servlet>
+  <servlet>
+    <servlet-name>restApi</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/restApiContext.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
 
-	<servlet>
-		<servlet-name>CreateAQFormAction</servlet-name>
-        	<servlet-class>edu.common.dynamicextensions.nui.action.CreateAQFormAction</servlet-class>
-	</servlet>
+  <servlet>
+    <servlet-name>CSD</servlet-name>
+    <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+    <init-param>
+      <param-name>javax.ws.rs.Application</param-name>
+      <param-value>edu.wustl.dynamicextensions.formdesigner.resource.Resources</param-value>
+    </init-param>
+  </servlet>
 
-	<servlet>
-		<servlet-name>ExportFormAction</servlet-name>
-		<servlet-class>edu.common.dynamicextensions.nui.action.ExportFormAction</servlet-class>
-	</servlet>
-
-	<servlet>
-		<servlet-name>CSD</servlet-name>
-		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-		<init-param>
-			<param-name>javax.ws.rs.Application</param-name>
-			<param-value>edu.wustl.dynamicextensions.formdesigner.resource.Resources</param-value>
-		</init-param>
-	</servlet>
-	<servlet>
-		<servlet-name>caTissue REST Service</servlet-name>
-		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-		<init-param>
-			<param-name>com.sun.jersey.config.property.packages</param-name>
-			<param-value>krishagni.catissueplus.rest</param-value>
-		</init-param>
-		<init-param>
-        		<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-        		<param-value>true</param-value>
-    		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
+  <servlet>
+    <servlet-name>caTissue REST Service</servlet-name>
+    <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+    <init-param>
+      <param-name>com.sun.jersey.config.property.packages</param-name>
+      <param-value>krishagni.catissueplus.rest</param-value>
+    </init-param>
+    <init-param>
+      <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
 	
-<!-- servlet configuration ends -->
-<!-- servlet mapping starts -->
-	<servlet-mapping>
-		<servlet-name>caTissue REST Service</servlet-name>
-		<url-pattern>/rest/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>CSD</servlet-name>
-		<url-pattern>/csdApi/*</url-pattern>
-	</servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>caTissue REST Service</servlet-name>
+    <url-pattern>/rest/*</url-pattern>
+  </servlet-mapping>
 
-        <servlet-mapping>
-          <servlet-name>CreateFormAction</servlet-name>
-          <url-pattern>/CreateFormAction.de</url-pattern>
-        </servlet-mapping>
-        
-         <servlet-mapping>
-          <servlet-name>CreateAQFormAction</servlet-name>
-          <url-pattern>/CreateAQFormAction.de</url-pattern>
-        </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CSD</servlet-name>
+    <url-pattern>/csdApi/*</url-pattern>
+  </servlet-mapping>
 
-         <servlet-mapping>
-          <servlet-name>ExportFormAction</servlet-name>
-          <url-pattern>/ExportFormAction.de</url-pattern>
-        </servlet-mapping>
-        
-
-	<servlet-mapping>
-		<servlet-name>restApi</servlet-name>
-		<url-pattern>/rest/ng/*</url-pattern>
-	</servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>restApi</servlet-name>
+    <url-pattern>/rest/ng/*</url-pattern>
+  </servlet-mapping>
  
-	<servlet-mapping>
-		<servlet-name>httpinvoker</servlet-name>
-		<url-pattern>/http/*</url-pattern>
-	</servlet-mapping>
-<!-- servlet mapping ends -->
-<!-- session timeout -->
-	<session-config>
-		<session-timeout>30</session-timeout>
-	</session-config>
-<!-- session timeout -->
-<!-- mime mapping -->
-	<mime-mapping>
-		<extension>wsdl</extension>
-		<mime-type>text/xml</mime-type>
-	</mime-mapping>
-<!-- mime mapping ends -->
-<!-- welcome file list -->
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
-<!-- welcome file list ends -->
-<!-- error page conf -->
-	<error-page>
-		<exception-type>java.lang.Exception</exception-type>
-		<location>/pages/content/home/Error.jsp</location>
-	</error-page>
-<!-- error page conf ends -->
-<!-- env entry starts -->
-	<env-entry>
-		<env-entry-name>DataSource</env-entry-name>
-		<env-entry-value>java:/catissuecore</env-entry-value>
-		<env-entry-type>java.lang.String</env-entry-type>
-	</env-entry>
-<!-- env entry ends -->
-
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
 </web-app>
