@@ -22,6 +22,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.domain.Group;
 import com.krishagni.rbac.domain.GroupRole;
@@ -45,6 +46,7 @@ import com.krishagni.rbac.events.RoleAccessControlDetails;
 import com.krishagni.rbac.events.RoleDetail;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 import com.krishagni.rbac.events.SubjectRoleOp;
+import com.krishagni.rbac.events.SubjectRolesList;
 import com.krishagni.rbac.events.UserAccessCriteria;
 import com.krishagni.rbac.repository.DaoFactory;
 import com.krishagni.rbac.repository.OperationListCriteria;
@@ -58,6 +60,8 @@ public class RbacServiceImpl implements RbacService {
 	
 	private UserDao userDao;
 	
+	private EmailService emailService;
+	
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
 	}
@@ -68,6 +72,10 @@ public class RbacServiceImpl implements RbacService {
 	
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
+	}	
+
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
 	}
 
 	@Override
@@ -408,6 +416,7 @@ public class RbacServiceImpl implements RbacService {
 			AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
 						
 			SubjectRole resp = null;
+			Map<String,Object> oldSrDetails = new HashMap<String, Object>();
 			SubjectRole sr = null;
 			switch (subjectRoleOp.getOp()) {
 				case ADD:
@@ -416,6 +425,11 @@ public class RbacServiceImpl implements RbacService {
 					break;
 				
 				case UPDATE:
+					SubjectRole oldSr = subject.getExistingRole(subjectRoleOp.getSubjectRole().getId());
+					oldSrDetails.put("site", oldSr.getSite());
+					oldSrDetails.put("cp", oldSr.getCollectionProtocol());
+					oldSrDetails.put("role", oldSr.getRole());
+					
 					sr = createSubjectRole(subjectRoleOp.getSubjectRole());
 					resp = subject.updateRole(sr);
 					break;
@@ -427,6 +441,7 @@ public class RbacServiceImpl implements RbacService {
 			
 			if (resp != null) {
 				daoFactory.getSubjectDao().saveOrUpdate(subject, true);
+				sendEmail(resp, oldSrDetails, subjectRoleOp);
 			}
 			
 			return ResponseEvent.response(SubjectRoleDetail.from(resp));
@@ -496,6 +511,45 @@ public class RbacServiceImpl implements RbacService {
 		}
 	}
 	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SubjectRolesList> assignRoles(RequestEvent<SubjectRolesList> req) {
+		try {
+			SubjectRolesList rolesList = req.getPayload();
+			Long subjectId = rolesList.getSubjectId();
+			String emailAddress = rolesList.getEmailAddress();
+
+			User user = null;
+			if (subjectId != null) {
+				user = userDao.getById(subjectId);
+			} else if (StringUtils.isNotBlank(emailAddress)) {
+				user = userDao.getUserByEmailAddress(emailAddress);
+			}
+			
+			if (user == null) {
+				return ResponseEvent.userError(RbacErrorCode.SUBJECT_NOT_FOUND);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
+			Subject subject = daoFactory.getSubjectDao().getById(user.getId());
+			subject.removeAllSubjectRoles();
+			
+			for (SubjectRolesList.Role srd : rolesList.getRoles()) {
+				SubjectRole sr = createSubjectRole(srd);
+				subject.addRole(sr);
+			}
+			
+			daoFactory.getSubjectDao().saveOrUpdate(subject);
+			return ResponseEvent.response(
+					SubjectRolesList.from(
+							user.getId(), user.getEmailAddress(), subject.getRoles()));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}		
+	}
+
 	//
 	// Internal Api's can change without notice
 	//
@@ -719,6 +773,43 @@ public class RbacServiceImpl implements RbacService {
 		
 		return site;
 	}
+	
+	private SubjectRole createSubjectRole(SubjectRolesList.Role srd) {
+		SubjectRole sr = new SubjectRole();
+		
+		String roleName = srd.getRoleName();
+		if (StringUtils.isBlank(roleName)) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ROLE_NAME_REQUIRED);
+		}
+		
+		Role role = daoFactory.getRoleDao().getRoleByName(roleName);
+		if (role == null) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ROLE_NOT_FOUND);
+		}
+		sr.setRole(role);
+		
+		
+		String cpShortTitle = srd.getCpShortTitle();
+		if (StringUtils.isNotBlank(cpShortTitle)) {
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCpByShortTitle(cpShortTitle);
+			if (cp == null) {
+				throw OpenSpecimenException.userError(CpErrorCode.NOT_FOUND);
+			}
+			sr.setCollectionProtocol(cp);
+		}
+		
+		String siteName = srd.getSiteName();
+		if (StringUtils.isNotBlank(siteName)) {
+			Site site = daoFactory.getSiteDao().getSiteByName(siteName);
+			if (site == null) {
+				throw OpenSpecimenException.userError(SiteErrorCode.NOT_FOUND);
+			}
+			sr.setSite(site);
+		}
+		
+		return sr;
+	}
+	
 
 	private void adjustParentChildRelationForRoleDeletion(Role role) {
 		Role parent = role.getParentRole();
@@ -738,6 +829,7 @@ public class RbacServiceImpl implements RbacService {
 			}
 		}
 	}
+	
 	
 	private GroupRole createGroupRole(GroupRoleDetail gd) {
 		RoleDetail detail = gd.getRoleDetails();
@@ -765,5 +857,19 @@ public class RbacServiceImpl implements RbacService {
 		if (role != null) {
 			throw OpenSpecimenException.userError(RbacErrorCode.DUP_ROLE_NAME);
 		}
-	}	
+	}
+	
+	private void sendEmail(SubjectRole newSr, Map<String, Object> oldSrDetails, SubjectRoleOp subjectRoleOp) {
+		User user = userDao.getById(newSr.getSubject().getId());
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("operation", subjectRoleOp.getOp().name());
+		props.put("user", user);
+		props.put("sr", newSr);
+		props.put("oldSr", oldSrDetails);
+		
+		emailService.sendEmail(ROLE_UPDATED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
+	}
+	
+	private static final String ROLE_UPDATED_EMAIL_TMPL = "users_role_updated";
+
 }

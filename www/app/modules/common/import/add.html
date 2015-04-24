@@ -1,0 +1,65 @@
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li ng-repeat="breadcrumb in importDetail.breadcrumbs">
+        <a ui-sref="{{breadcrumb.state}}" translate="{{breadcrumb.title}}"></a>
+      </li>
+    </ul>
+    <h3>
+      <span translate="{{importDetail.title}}"></span>
+    </h3> 
+  </div>
+
+  <div class="container">
+    <form class="form-horizontal" action="{{importJobsFileUrl}}">
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="bulk_imports.input_file">
+          Input File
+        </label>
+        <div class="col-xs-4">
+          <div os-file-upload ctrl="fileImporter"></div>
+        </div>
+        <div class="clearfix">
+          <div class="col-xs-offset-3 col-xs-4">
+            <a href="{{inputFileTmplUrl}}" target="_blank">
+              <span translate="bulk_imports.download_input_file_tmpl">
+                Download Input File Template
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <form class="form-horizontal">
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="bulk_imports.import_type">
+          Import Type
+        </label>
+        <div class="col-xs-4 clearfix">
+          <label class="radio-inline col-xs-3">
+            <input type="radio" name="importType" ng-model="importJob.importType" ng-value="'CREATE'"> 
+            <span translate="bulk_imports.create"></span>
+          </label>
+          <label class="radio-inline col-xs-3">
+            <input type="radio" name="importType" ng-model="importJob.importType" ng-value="'UPDATE'"> 
+            <span translate="bulk_imports.update"></span>
+          </label>
+        </div>
+      </div>
+    </form>
+
+    <div class="os-divider"></div>
+
+    <div class="form-group">
+      <div class="col-xs-offset-3 col-xs-6">
+        <button class="btn btn-primary" ng-click="import()"> 
+          <span translate="common.buttons.import">Import</span> 
+        </button>
+        <button class="btn os-btn-text" ng-click="back()">
+          <span translate="common.buttons.discard">Discard</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

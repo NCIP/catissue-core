@@ -13,6 +13,8 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,6 +32,7 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Configurable
+@Audited
 public class User extends BaseEntity implements UserDetails {
 	public static final String SYS_USER = "$system";
 	
@@ -103,10 +106,12 @@ public class User extends BaseEntity implements UserDetails {
 		this.emailAddress = emailAddress;
 	}
 
+	@NotAudited
 	public AuthDomain getAuthDomain() {
 		return authDomain;
 	}
 
+	@NotAudited
 	public Set<Site> getSites() {
 		return sites;
 	}
@@ -163,6 +168,7 @@ public class User extends BaseEntity implements UserDetails {
 		return getDepartment().getInstitute();
 	}
 
+	@NotAudited
 	public Address getAddress() {
 		return address;
 	}
@@ -179,6 +185,7 @@ public class User extends BaseEntity implements UserDetails {
 		this.comments = comments;
 	}
 
+	@NotAudited
 	public String getPassword() {
 		return password;
 	}
@@ -199,6 +206,7 @@ public class User extends BaseEntity implements UserDetails {
 		this.admin = admin;
 	}
 
+	@NotAudited
 	public Set<Password> getPasswords() {
 		return passwords;
 	}
@@ -247,6 +255,7 @@ public class User extends BaseEntity implements UserDetails {
 		this.setDepartment(user.getDepartment());
 		this.setEmailAddress(user.getEmailAddress());
 		this.setComments(user.getComments());
+		this.setAdmin(user.isAdmin());		
 	}
 	
 	public void changePassword(String newPassword) {

@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class ConfigurationController {
 	
 	@Autowired
 	private ConfigurationService cfgSvc;
-		
+	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
@@ -31,7 +32,7 @@ public class ConfigurationController {
 			@RequestParam(value = "module", required = true) 
 			String moduleName) {
 		
-		RequestEvent<String> req = new RequestEvent<String>(null, moduleName);
+		RequestEvent<String> req = new RequestEvent<String>(moduleName);
 		ResponseEvent<List<ConfigSettingDetail>> resp = cfgSvc.getSettings(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
@@ -41,9 +42,16 @@ public class ConfigurationController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public ConfigSettingDetail saveConfigSetting(@RequestBody ConfigSettingDetail detail) {
-		RequestEvent<ConfigSettingDetail> req = new RequestEvent<ConfigSettingDetail>(null, detail);
+		RequestEvent<ConfigSettingDetail> req = new RequestEvent<ConfigSettingDetail>(detail);
 		ResponseEvent<ConfigSettingDetail> resp = cfgSvc.saveSetting(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/locale")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, String> getLocaleSettings() {
+		return cfgSvc.getLocaleSettings();
+	}	
 }

@@ -24,10 +24,12 @@ public class UserFactoryImpl implements UserFactory {
 		this.daoFactory = daoFactory;
 	}
 
+	@Override
 	public User createUser(UserDetail detail) {
-		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		
 		User user = new User();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+				
+		setAdmin(detail, user, ose);
 		setFirstName(detail, user, ose);
 		setLastName(detail, user, ose);
 		setLoginName(detail, user, ose);
@@ -40,6 +42,37 @@ public class UserFactoryImpl implements UserFactory {
 		return user;
 	}
 	
+	@Override
+	public User createUser(User existing, UserDetail detail) {
+		User user = new User();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		
+		user.setId(existing.getId());
+		setAdmin(detail, existing, user, ose);
+		setFirstName(detail, existing, user, ose);
+		setLastName(detail, existing, user, ose);
+		setLoginName(detail, existing, user, ose);
+		setActivityStatus(detail, existing, user, ose);
+		setEmailAddress(detail, existing, user, ose);
+		setDepartment(detail, existing, user, ose);
+		setAuthDomain(detail, existing, user, ose);
+		
+		ose.checkAndThrow();
+		return user;		
+	}
+	
+	private void setAdmin(UserDetail detail, User user, OpenSpecimenException ose) {
+		user.setAdmin(detail.getAdmin());
+	}
+	
+	private void setAdmin(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
+		if (detail.isAttrModified("admin")) {
+			setAdmin(detail, user, ose);
+		} else {
+			user.setAdmin(existing.getAdmin());
+		}
+	}
+	
 	private void setFirstName(UserDetail detail, User user, OpenSpecimenException ose) {
 		String firstName = detail.getFirstName();
 		if (StringUtils.isBlank(firstName)) {
@@ -48,6 +81,14 @@ public class UserFactoryImpl implements UserFactory {
 		}
 		
 		user.setFirstName(firstName);
+	}
+	
+	private void setFirstName(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
+		if (detail.isAttrModified("firstName")) {
+			setFirstName(detail, user, ose);
+		} else {
+			user.setFirstName(existing.getFirstName());
+		}
 	}
 	
 	private void setLastName(UserDetail detail, User user, OpenSpecimenException ose) {
@@ -60,6 +101,14 @@ public class UserFactoryImpl implements UserFactory {
 		user.setLastName(lastName);
 	}
 
+	private void setLastName(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
+		if (detail.isAttrModified("lastName")) {
+			setLastName(detail, user, ose);
+		} else {
+			user.setLastName(existing.getLastName());
+		}
+	}
+	
 	private void setLoginName(UserDetail detail, User user, OpenSpecimenException ose) {
 		String loginName = detail.getLoginName();
 		if (StringUtils.isBlank(loginName)) {
@@ -69,7 +118,15 @@ public class UserFactoryImpl implements UserFactory {
 		
 		user.setLoginName(loginName);
 	}
-
+	
+	private void setLoginName(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
+		if (detail.isAttrModified("loginName")) {
+			setLoginName(detail, user, ose);
+		} else {
+			user.setLoginName(existing.getLoginName());
+		}
+	}
+	
 	private void setDepartment(UserDetail detail, User user, OpenSpecimenException ose) {
 		String departmentName = detail.getDeptName();
 		if (StringUtils.isBlank(departmentName)) {
@@ -86,7 +143,15 @@ public class UserFactoryImpl implements UserFactory {
 		
 		user.setDepartment(department);
 	}
-
+	
+	private void setDepartment(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
+		if (detail.isAttrModified("deptName")) {
+			setDepartment(detail, user, ose);
+		} else {
+			user.setDepartment(existing.getDepartment());
+		}
+	}
+	
 	private void setActivityStatus(UserDetail detail, User user, OpenSpecimenException ose) {
 		String activityStatus = detail.getActivityStatus();
 		if (activityStatus == null) {
@@ -98,9 +163,18 @@ public class UserFactoryImpl implements UserFactory {
 			ose.addError(UserErrorCode.STATUS_CHANGE_NOT_ALLOWED);
 			return;
 		}
+		
 		user.setActivityStatus(activityStatus);
 	}
 
+	private void setActivityStatus(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
+		if (detail.isAttrModified("activityStatus")) {
+			setActivityStatus(detail, user, ose);
+		} else {
+			user.setActivityStatus(existing.getActivityStatus());
+		}
+	}
+	
 	private void setEmailAddress(UserDetail detail, User user, OpenSpecimenException ose) {
 		String email = detail.getEmailAddress();
 		if (!CommonValidator.isEmailValid(email)) {
@@ -111,6 +185,14 @@ public class UserFactoryImpl implements UserFactory {
 		user.setEmailAddress(email);
 	}
 
+	private void setEmailAddress(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
+		if (detail.isAttrModified("emailAddress")) {
+			setEmailAddress(detail, user, ose);
+		} else {
+			user.setEmailAddress(existing.getEmailAddress());
+		}
+	}
+	
 	private void setAuthDomain(UserDetail detail, User user, OpenSpecimenException ose) {
 		String domainName = detail.getDomainName();
 		if (StringUtils.isBlank(domainName)) {
@@ -126,4 +208,12 @@ public class UserFactoryImpl implements UserFactory {
 		
 		user.setAuthDomain(authDomain);
 	}
+
+	private void setAuthDomain(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
+		if (detail.isAttrModified("domainName")) {
+			setAuthDomain(detail, user, ose);
+		} else {
+			user.setAuthDomain(existing.getAuthDomain());
+		}
+	}	
 }

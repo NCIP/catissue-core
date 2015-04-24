@@ -7,6 +7,10 @@ angular.module('os.administrative.container.detail', ['os.administrative.models'
       $scope.container = container;
       $scope.downloadUri = Container.url() + container.$id() + '/export-map';
       loadPvs();
+
+      var opts = {sites: [$scope.container.siteName]};
+      angular.extend($scope.containerResource.updateOpts, opts);
+      angular.extend($scope.containerResource.deleteOpts, opts);
     }
 
     function loadPvs () {

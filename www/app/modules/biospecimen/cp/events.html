@@ -27,19 +27,19 @@
                 <li>
                   <a ng-click="showEditEvent(evt)">
                     <i class="fa fa-pencil"></i>
-                    <span>Edit</span>
+                    <span translate="cp.edit_cpe">Edit</span>
                   </a>
                 </li>
                 <li>
                   <a ng-click="showCopyEvent(evt)">
                     <i class="fa fa-copy"></i>
-                    <span>Copy</span>
+                    <span translate="cp.copy_cpe">Copy</span>
                   </a>
                 </li>
                 <li>
-                  <a>
+                  <a ng-click="deleteEvent(evt)">
                     <i class="fa fa-trash"></i>
-                    <span>Remove</span>
+                    <span translate="cp.remove_cpe">Remove</span>
                   </a>
                 </li>
               </ul>
@@ -123,4 +123,19 @@
       </a>
     </div>
   </form>
+</script>
+
+<script type="text/ng-template" id="cp_event_delete.html">
+  <div class="os-modal-header">
+    <span translate="cp.deleting_event">Deleting Event</span>
+  </div>
+  <div class="os-modal-body">
+    <span translate="cp.confirm_delete_event">
+      Collection Protocol Event and its specimen requirements will be deleted. Are you sure you want to proceed?
+    </span>
+  </div>
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="no()" translate="common.buttons.cancel">Cancel</button>
+    <button class="btn btn-danger" ng-click="yes()" translate="common.yes">Yes</button>
+  </div>
 </script>

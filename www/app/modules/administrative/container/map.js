@@ -67,9 +67,15 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
 
       if (slot.occupied) {
         var slotDesc = $("<a class='slot-desc'/>")
-          .attr('ui-sref', 'container-detail.locations({containerId: ' + slot.occupied.occupyingEntityId + '})')
           .attr('title', slot.occupied.occupyingEntityName)
           .append(slot.occupied.occupyingEntityName);
+
+        var entityId = slot.occupied.occupyingEntityId;
+        if (slot.occupied.occuypingEntity == 'specimen') {
+          slotDesc.attr('ui-sref', 'specimen({specimenId: ' + entityId + '})');
+        } else {
+          slotDesc.attr('ui-sref', 'container-detail.locations({containerId: ' + entityId + '})');
+        }
         el.append(slotDesc);
       } else {
         el.append(getAddContainerMarker())

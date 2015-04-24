@@ -13,11 +13,24 @@ angular.module('os.administrative.container',
 
   .config(function($stateProvider) {
     $stateProvider
+      .state('container-root', {
+        abstract: true,
+        template: '<div ui-view></div>',
+        controller: function($scope) {
+          // Storage Container Authorization Options
+          $scope.containerResource = {
+            createOpts: {resource: 'StorageContainer', operations: ['Create']},
+            updateOpts: {resource: 'StorageContainer', operations: ['Update']},
+            deleteOpts: {resource: 'StorageContainer', operations: ['Delete']}
+          }
+        },
+        parent: 'signed-in'
+      })
       .state('container-list', {
         url: '/containers',
         templateUrl: 'modules/administrative/container/list.html',
         controller: 'ContainerListCtrl',
-        parent: 'signed-in'
+        parent: 'container-root'
       })
       .state('container-addedit', {
         url: '/container-addedit/:containerId?posOne&posTwo&parentContainerId&parentContainerName',
@@ -32,7 +45,38 @@ angular.module('os.administrative.container',
           } 
         },
         controller: 'ContainerAddEditCtrl',
-        parent: 'signed-in'
+        parent: 'container-root'
+      })
+      .state('container-import', {
+        url: '/containers-import',
+        templateUrl: 'modules/common/import/add.html',
+        controller: 'ImportObjectCtrl',
+        resolve: {
+          importDetail: function() {
+            return {
+              breadcrumbs: [{state: 'container-list', title: 'container.list'}],
+              objectType: 'storageContainer',
+              title: 'container.bulk_import',
+              onSuccessState: 'container-list'
+            };
+          }
+        },
+        parent: 'container-root'
+      })
+      .state('container-import-jobs', {
+        url: '/containers-import-jobs',
+        templateUrl: 'modules/common/import/list.html',
+        controller: 'ImportJobsListCtrl',
+        resolve: {
+          importDetail: function() {
+            return {
+              breadcrumbs: [{state: 'container-list', title: 'container.list'}],
+              title: 'container.bulk_import_jobs',
+              objectTypes: ['storageContainer']
+            }
+          }
+        },
+        parent: 'container-root'
       })
       .state('container-detail', {
         url: '/containers/:containerId',
@@ -43,7 +87,7 @@ angular.module('os.administrative.container',
           }
         },
         controller: 'ContainerDetailCtrl',
-        parent: 'signed-in'
+        parent: 'container-root'
       })
       .state('container-detail.overview', {
         url: '/overview',

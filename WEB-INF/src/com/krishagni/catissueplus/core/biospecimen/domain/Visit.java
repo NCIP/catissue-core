@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,6 +21,8 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Configurable
+@Audited
+@AuditTable(value="CAT_SPECIMEN_COLL_GROUP_AUD")
 public class Visit {
 	private static final String ENTITY_NAME = "visit";
 	
@@ -195,6 +200,7 @@ public class Visit {
 		this.cpEvent = cpEvent;
 	}
 
+	@NotAudited
 	public Set<Specimen> getSpecimens() {
 		return specimens;
 	}

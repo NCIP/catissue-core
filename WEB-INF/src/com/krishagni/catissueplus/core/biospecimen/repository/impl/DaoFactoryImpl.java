@@ -37,15 +37,8 @@ import com.krishagni.catissueplus.core.common.repository.ConfigSettingDao;
 import com.krishagni.catissueplus.core.common.repository.UniqueIdGenerator;
 import com.krishagni.catissueplus.core.common.repository.impl.ConfigSettingDaoImpl;
 import com.krishagni.catissueplus.core.common.repository.impl.UniqueIdGeneratorImpl;
-import com.krishagni.catissueplus.core.notification.repository.CPStudyMappingDao;
-import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
-import com.krishagni.catissueplus.core.notification.repository.ExternalApplicationDao;
-import com.krishagni.catissueplus.core.notification.repository.impl.CPStudyMappingDaoImpl;
-import com.krishagni.catissueplus.core.notification.repository.impl.ExternalAppNotificationDaoImpl;
-import com.krishagni.catissueplus.core.notification.repository.impl.ExternalApplicationDaoImpl;
 
 public class DaoFactoryImpl implements DaoFactory {
-
 	private SessionFactory sessionFactory;
 
 	public SessionFactory getSessionFactory() {
@@ -58,6 +51,7 @@ public class DaoFactoryImpl implements DaoFactory {
 
 	public void setSessionFactory(AbstractDao<?> dao) {
 		dao.setSessionFactory(sessionFactory);
+		sessionFactory.getCurrentSession().enableFilter("activeEntity");
 	}
 
 	@Override
@@ -117,33 +111,12 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 
 	@Override
-	public ExternalAppNotificationDao getExternalAppNotificationDao() {
-		ExternalAppNotificationDaoImpl dao = new ExternalAppNotificationDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
-
-	@Override
-	public ExternalApplicationDao getExternalApplicationDao() {
-		ExternalApplicationDaoImpl dao = new ExternalApplicationDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
-
-	@Override
 	public AuthDao getAuthDao() {
 		AuthDaoImpl dao = new AuthDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}
 
-	@Override
-	public CPStudyMappingDao getCPStudyMappingDao() {
-		CPStudyMappingDaoImpl dao = new CPStudyMappingDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
-	
 	@Override
 	public UniqueIdGenerator getUniqueIdGenerator() {
 		UniqueIdGeneratorImpl impl = new UniqueIdGeneratorImpl();

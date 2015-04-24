@@ -3,8 +3,13 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.krishagni.catissueplus.core.administrative.domain.Site;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.common.util.Status;
+
+@Audited
 public class CollectionProtocolEvent {
 	private static final String ENTITY_NAME = "collection_protocol_event";
 	
@@ -56,6 +61,7 @@ public class CollectionProtocolEvent {
 		this.eventPoint = eventPoint;
 	}
 
+	@NotAudited
 	public CollectionProtocol getCollectionProtocol() {
 		return collectionProtocol;
 	}
@@ -96,6 +102,7 @@ public class CollectionProtocolEvent {
 		this.activityStatus = activityStatus;
 	}
 
+	@NotAudited
 	public Set<SpecimenRequirement> getSpecimenRequirements() {
 		return specimenRequirements;
 	}
@@ -106,11 +113,11 @@ public class CollectionProtocolEvent {
 	
 	public Set<SpecimenRequirement> getTopLevelAnticipatedSpecimens() {
 		Set<SpecimenRequirement> anticipated = new HashSet<SpecimenRequirement>();
-		if (specimenRequirements == null) {
+		if (getSpecimenRequirements() == null) {
 			return anticipated;
 		}
 		
-		for (SpecimenRequirement sr : specimenRequirements) {
+		for (SpecimenRequirement sr : getSpecimenRequirements()) {
 			if (sr.getParentSpecimenRequirement() == null) {
 				anticipated.add(sr);
 			}
@@ -119,6 +126,7 @@ public class CollectionProtocolEvent {
 		return anticipated;
 	}
 
+	@NotAudited
 	public Set<Visit> getSpecimenCollectionGroups() {
 		return specimenCollectionGroups;
 	}
@@ -144,10 +152,19 @@ public class CollectionProtocolEvent {
 	}
 	
 	public void copySpecimenRequirementsTo(CollectionProtocolEvent cpe) {
-		for (SpecimenRequirement sr : specimenRequirements) {
+		for (SpecimenRequirement sr : getSpecimenRequirements()) {
 			if (sr.getParentSpecimenRequirement() == null) {
 				cpe.addSpecimenRequirement(sr.deepCopy(cpe));
 			}			
 		}		
+	}
+	
+	public void delete() {
+		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
+		for (SpecimenRequirement sr : getSpecimenRequirements()) {
+			if (sr.getParentSpecimenRequirement() == null) {
+				sr.delete();
+			}
+		}
 	}
 }

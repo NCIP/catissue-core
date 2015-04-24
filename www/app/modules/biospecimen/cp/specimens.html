@@ -24,9 +24,8 @@
         </div>
       </div>
       <div class="os-table-body">
-        <div ng-class="{'os-inplace-form-edit-po': parentSr == sr}" 
-          ng-repeat="sr in specimenRequirements | openedTreeNodes" 
-          ng-mouseenter="showBtns=true" ng-mouseleave="showBtns=false">
+        <div ng-class="{'os-inplace-form-edit-po': (!childReq.id && parentSr == sr) || (childReq.id == sr.id)}" 
+          ng-repeat="sr in specimenRequirements | openedTreeNodes">
           <div class="row title">
             <div class="col col-xs-6 os-ellipsis">
               <div style="padding-left: {{sr.hasChildren ? sr.depth * 20 : sr.depth * 20 + 16}}px">
@@ -43,7 +42,7 @@
                                  'os-lineage-aliquot': sr.lineage == 'Aliquot',
                                  'os-lineage-derivative': sr.lineage == 'Derived'}">
                 </span>
-                <a>
+                <a ng-click="viewSr(sr)">
                   <os-specimen-desc specimen="sr"></os-specimen-desc>
                 </a>
 
@@ -64,13 +63,13 @@
 
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
                   <li>
-                    <a href="#">
+                    <a ng-click="viewSr(sr)">
                       <i class="fa fa-eye"></i>
                       <span translate="srs.ctx_menu.view_sr">View Requirement</span>
                     </a>
                   </li>
                   <li>
-                    <a href="#">
+                    <a ng-click="showEditSr(sr)">
                       <i class="fa fa-pencil"></i>
                       <span translate="srs.ctx_menu.edit_sr">Edit Requirement</span>
                     </a>
@@ -98,16 +97,29 @@
                       </span>
                     </a>
                   </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a ng-click="deleteRequirement(sr)">
+                      <i class="fa fa-trash"></i>
+                      <span translate="srs.ctx_menu.delete">
+                        Delete
+                      </span>
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
           </div>
-          <div class="row content" ng-if="parentSr == sr && view != 'list_sr'">
+          <div class="row content" ng-if="view != 'list_sr' && 
+                                          ((!childReq.id && parentSr == sr) || (childReq.id == sr.id))">
+            <div ng-if="view == 'view_sr'"
+              ng-include="'modules/biospecimen/cp/sr.html'">
+            </div>
             <div ng-if="view == 'addedit_aliquot'"  
-                ng-include="'modules/biospecimen/cp/addedit-aliquot.html'"> 
+              ng-include="'modules/biospecimen/cp/addedit-aliquot.html'"> 
             </div>
             <div ng-if="view == 'addedit_derived'"  
-                ng-include="'modules/biospecimen/cp/addedit-derived.html'"> 
+              ng-include="'modules/biospecimen/cp/addedit-derived.html'"> 
             </div>
           </div>
         </div>
@@ -122,3 +134,18 @@
 
 <div ng-include="'modules/biospecimen/cp/addedit-sr.html'" ng-if="view == 'addedit_sr'"> 
 </div>
+
+<script type="text/ng-template" id="delete_sr.html">
+  <div class="os-modal-header">
+    <span translate="srs.deleting_sr">Deleting Specimen Requirement</span>
+  </div>
+  <div class="os-modal-body">
+    <span translate="srs.confirm_delete_sr">
+      Specimen Requirement and all its children will be deleted. Are you sure you want to proceed?
+    </span>
+  </div>
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="no()" translate="common.buttons.cancel">Cancel</button>
+    <button class="btn btn-danger" ng-click="yes()" translate="common.yes">Yes</button>
+  </div>
+</script>

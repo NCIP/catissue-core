@@ -41,6 +41,7 @@
     "server_connect_error": "Unable to connect server",
     "recent_activity": "Recent Activity",
     "no_file_selected": "No File Selected",
+    "view_jobs": "View Jobs",
 
     "buttons": {
       "add": "Add",
@@ -107,11 +108,16 @@
     "clinical_diagnosis": "Clinical Diagnosis",
     "clinical_status": "Clinical Status",
 
+    "edit_cpe": "Edit Event",
+    "copy_cpe": "Copy Event",
+    "remove_cpe": "Delete Event",
     "no_cpes": "There are no collection protocol events to show. Please create an event by clicking on Add Event...",
     "add_cpe": "Add Event...",
     "cpe_list": "Events",
     "cpe_point": "Event Point (in Days)",
     "cpe_point_label": "Event Point Label",
+    "deleting_event": "Deleting Event...",
+    "confirm_delete_event": "Collection Protocol Event and its specimen requirements will be deleted. Are you sure you want to proceed?",
 
     "tab": {
       "overview": "Overview",
@@ -352,17 +358,22 @@
     "receiver": "Receiver",
     "collection_container": "Collection Container",
     "collection_proc": "Collection Procedure",
+    "deleting_sr": "Deleting Specimen Requirement",
+    "confirm_delete_sr": "Specimen Requirement and all its children will be deleted. Are you sure you want to proceed?",
     
     "ctx_menu": {
       "view_sr": "View Requirement",
       "edit_sr": "Edit Requirement",
       "create_aliquots": "Create Aliquots",
-      "create_derivatives": "Create Derivatives"
+      "create_derivatives": "Create Derivatives",
+      "delete": "Delete Requirement"
     },
  
     "buttons": {
       "create_aliquots": "Create Aliquots",
+      "update_aliquot": "Update Aliquot",
       "create_derivative": "Create Derivative",
+      "update_derivative": "Update Derivative",
       "add_sr": "Add Specimen Requirement..."
     },
 
@@ -378,6 +389,9 @@
     "name": "Name",
     "department_name": "Department Name",
     "departments": "Departments",
+
+    "bulk_import": "Import Institutes",
+    "bulk_import_jobs": "Import Institutes Job List",
 
     "tooltip": {
       "view_details": "Click to view/edit Institute details",
@@ -413,6 +427,9 @@
     "coordinators": "Coordinators",
     "type": "Type",
     "address": "Address",
+
+    "bulk_import": "Import Sites",
+    "bulk_import_jobs": "Import Sites Job List",
 
     "tooltip": {
       "view_details": "Click to view/edit Site details",
@@ -494,12 +511,21 @@
     "login_name": "Login Name",
     "password": "Password",
     "confirm_password": "Confirm Password",
+    "sign_in_title": "Sign in to continue to OpenSpecimen",
+    "sign_in_failed": "The username or password you entered is incorrect",
+    "sign_in": "Sign In",
+    "forgot_password": "Forgot password?",
     "approve_user": "Approve User",
     "reject_user": "Reject User",
     "request_pending": "Note: {{firstName}}  {{lastName}} would like to access OpenSpecimen. Approve or Reject?",
     "user_request_approved": "User request approved successfully",
     "activity_status": "Activity Status",
     "confirm_reject": "Rejecting the User {{entityName}} will delete this user from the database. Are you sure you want to go ahead?",
+
+    "user_roles": "User Roles",
+    "bulk_import_users": "Import Users",
+    "bulk_import_user_roles": "Import User Roles",
+    "bulk_import_jobs": "Import Users Job List",
 
     "role": {
        "roles": "Roles",
@@ -601,6 +627,9 @@
     "paste_specimen_labels": "Paste or input specimen labels separated by comma",
     "no_free_locs": "Container does not have enough free locations to accommodate input specimen labels",
 
+    "bulk_import": "Import Storage Containers",
+    "bulk_import_jobs": "Import Storage Containers Jobs List",
+
     "tooltip": {
       "view_details": "Click to view/edit Storage Container details",
       "add": "Click to add new Storage Container",
@@ -641,13 +670,12 @@
 
     "resources" : {
       "CollectionProtocol": "Collection Protocol",
-      "DistributionProtocol": "Distribution Protocol",
       "Order": "Order",
       "ParticipantPhi": "Participant (PHI)",
       "ParticipantDeid": "Participant (DeId)",
       "VisitAndSpecimen": "Visits and Specimens",
-      "Site": "Site",
-      "StorageContainer": "Storage Container"
+      "StorageContainer": "Storage Container",
+      "User": "User"
     },
 
     "menu": {
@@ -876,5 +904,39 @@
     "specimen": "Specimen",
     "distribution_order": "Distribution Order",
     "form": "Form"
+  },
+
+  "bulk_imports": {
+    "job_submitted": "Bulk Import Job {{id}} Submitted",
+    "input_file": "Input Records File",
+    "download_input_file_tmpl": "Download Template File",
+    "import_type": "Import Type",
+    "object_type": "Object Type",
+    "create": "Create",
+    "update": "Update",
+    "status_COMPLETED": "Completed",
+    "status_FAILED": "Failed",
+    "status_IN_PROGRESS": "In Progress",
+
+    "job_id": "Job ID",
+    "submit_time": "Submit Time",
+    "finish_time": "Finish Time",
+    "processed_records": "Success",
+    "failed_records": "Failed",
+    "status": "Status",
+    "file": "Report File",
+ 
+    "object_types": {
+      "user": "Users",
+      "userRoles": "User Roles",
+      "institute": "Institutes",
+      "site": "Site",
+      "storageContainer": "Storage Container"
+    },
+
+    "import_types": {
+      "CREATE": "Create",
+      "UPDATE": "Update"
+    }
   }
 }

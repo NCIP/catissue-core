@@ -71,5 +71,9 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
       return reqQty <= this.availableQty();
     };
 
+    Sr.prototype.delete = function() {
+      return $http.delete(Sr.url() + this.$id());
+    }
+
     return Sr;
   });

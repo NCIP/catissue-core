@@ -5,10 +5,37 @@
       <span translate="user.list">Users</span>
     </h3>
     <div class="os-btns right">
-      <button class="primary" title="{{'user.tooltip.add' | translate}}" ui-sref="user-addedit({userId: ''})">
+      <button show-if-allowed="userResource.createOpts" class="primary" title="{{'user.tooltip.add' | translate}}"
+        ui-sref="user-addedit({userId: ''})">
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
+      <div show-if-allowed="userResource.createOpts" dropdown class="inline">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.import">Import</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li>
+            <a ui-sref="user-import({objectType: 'user'})">
+              <i class="fa fa-user"></i>
+              <span translate="user.list">Users</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="user-import({objectType: 'userRoles'})">
+              <i class="fa fa-lock"></i>
+              <span translate="user.user_roles">User Roles</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="user-import-jobs">
+              <i class="fa fa-table"></i>
+              <span translate="common.view_jobs">View Jobs</span>
+            </a>
+          </li>
+        </ul>
+      </div>
       <button class="default" os-right-drawer-toggle title="{{'user.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>

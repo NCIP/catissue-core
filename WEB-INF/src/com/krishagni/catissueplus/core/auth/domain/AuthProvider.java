@@ -3,7 +3,6 @@ package com.krishagni.catissueplus.core.auth.domain;
 
 import java.util.Map;
 
-
 public class AuthProvider {
 
 	private Long id;

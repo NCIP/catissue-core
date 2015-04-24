@@ -63,6 +63,7 @@
     <set name="collectionProtocolEvents" table="CATISSUE_COLL_PROT_EVENT" inverse="true" cascade="save-update">
       <key column="COLLECTION_PROTOCOL_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent"/>
+      <filter name="activeEntity"/>
     </set>
     
     <set name="collectionProtocolRegistrations" inverse="false" cascade="none">

@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.common.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.common.events.ConfigSettingDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -24,4 +25,12 @@ public interface ConfigurationService {
 	public void reload();
 	
 	public void registerChangeListener(String module, ConfigChangeListener callback);
+	
+	public Map<String, String> getLocaleSettings();
+	
+	public String getDeDateFormat();
+	
+	public String getTimeFormat();
+	
+	public String getDeDateTimeFormat();
 }

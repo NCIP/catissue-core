@@ -131,6 +131,7 @@
     <set name="childSpecimenRequirements" table="CATISSUE_CP_REQ_SPECIMEN" inverse="true" cascade="all">
       <key column="PARENT_SPECIMEN_ID"></key>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement" />
+      <filter name="activeEntity"/>
     </set>
 
       
@@ -145,6 +146,8 @@
       <key column="PARENT_SPECIMEN_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"/>
     </set>
+
+    <filter name="activeEntity"/>
   </class>
 </hibernate-mapping>
 

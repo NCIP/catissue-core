@@ -14,6 +14,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
+import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
@@ -31,10 +32,11 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
-
-import edu.wustl.common.util.XMLPropertyHandler;
+import com.krishagni.rbac.events.SubjectRoleDetail;
+import com.krishagni.rbac.service.RbacService;
 
 public class UserServiceImpl implements UserService {
 	private static final String DEFAULT_AUTH_DOMAIN = "openspecimen";
@@ -51,13 +53,13 @@ public class UserServiceImpl implements UserService {
 	
 	private static final String USER_CREATED_EMAIL_TMPL = "users_created";
 	
-	private static final String adminEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
-	
 	private DaoFactory daoFactory;
 
 	private UserFactory userFactory;
 	
 	private EmailService emailService;
+	
+	private RbacService rbacSvc;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -69,6 +71,10 @@ public class UserServiceImpl implements UserService {
 	
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
+	}
+
+	public void setRbacSvc(RbacService rbacSvc) {
+		this.rbacSvc = rbacSvc;
 	}
 
 	@Override
@@ -129,7 +135,8 @@ public class UserServiceImpl implements UserService {
 				sendUserSignupEmail(user);
 				sendNewUserRequestEmail(user);
 			} else {
-				sendUserCreatedEmail(user);
+				ForgotPasswordToken token = generateForgotPwdToken(user);
+				sendUserCreatedEmail(user, token);
 			}
 			return ResponseEvent.response(UserDetail.from(user));
 		} catch (OpenSpecimenException ose) {
@@ -142,29 +149,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<UserDetail> updateUser(RequestEvent<UserDetail> req) {
-		try {
-			UserDetail detail = req.getPayload();
-			Long userId = detail.getId();
-			
-			User existingUser = daoFactory.getUserDao().getById(userId);
-			if (existingUser == null) {
-				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
-			}
-			
-			User user = userFactory.createUser(detail);
-			AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
-
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureUniqueEmail(existingUser, user, ose);
-			ose.checkAndThrow();
-
-			existingUser.update(user);
-			return ResponseEvent.response(UserDetail.from(existingUser));
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
+		return updateUser(req, false);
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<UserDetail> patchUser(RequestEvent<UserDetail> req) {
+		return updateUser(req, true);
 	}
 
 	@Override
@@ -198,11 +189,7 @@ public class UserServiceImpl implements UserService {
 			}
 			
 			if (sendRequestApprovedMail) {
-				ForgotPasswordToken token = null;
-				if (user.getAuthDomain().getName().equals(DEFAULT_AUTH_DOMAIN)) {
-					token = new ForgotPasswordToken(user);
-					daoFactory.getUserDao().saveFpToken(token);
-				}
+				ForgotPasswordToken token = generateForgotPwdToken(user);
 				sendUserRequestApprovedEmail(user, token);
 			}
 			
@@ -335,6 +322,58 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<SubjectRoleDetail>> getCurrentUserRoles() {
+		return rbacSvc.getSubjectRoles(new RequestEvent<Long>(AuthUtil.getCurrentUser().getId()));
+	}		
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<InstituteDetail> getInstitute(RequestEvent<Long> req) {
+		Institute institute = getInstitute(req.getPayload());
+		return ResponseEvent.response(InstituteDetail.from(institute));
+	}
+
+	private ResponseEvent<UserDetail> updateUser(RequestEvent<UserDetail> req, boolean partial) {
+		try {
+			UserDetail detail = req.getPayload();
+			Long userId = detail.getId();
+			String emailAddress = detail.getEmailAddress();
+			
+			User existingUser = null; 
+			if (userId != null) {
+				existingUser = daoFactory.getUserDao().getById(userId); 
+			} else if (StringUtils.isNotBlank(emailAddress)) {
+				existingUser = daoFactory.getUserDao().getUserByEmailAddress(emailAddress);
+			}
+			
+			if (existingUser == null) {
+				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
+			}
+			
+			User user = null;
+			if (partial) {
+				user = userFactory.createUser(existingUser, detail);
+			} else {
+				user = userFactory.createUser(detail);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
+
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueEmail(existingUser, user, ose);
+			ose.checkAndThrow();
+
+			existingUser.update(user);
+			return ResponseEvent.response(UserDetail.from(existingUser));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}		
+	}
+	
 	private void sendForgotPasswordLinkEmail(User user, String token) {
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("user", user);
@@ -350,9 +389,10 @@ public class UserServiceImpl implements UserService {
 		emailService.sendEmail(PASSWD_CHANGED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	} 
 	
-	private void sendUserCreatedEmail(User user) {
+	private void sendUserCreatedEmail(User user, ForgotPasswordToken token) {
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("user", user);
+		props.put("token", token);
 		
 		emailService.sendEmail(USER_CREATED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	}
@@ -371,7 +411,8 @@ public class UserServiceImpl implements UserService {
 		props.put("admin", user); //TODO:replace with admin 
 		props.put("$subject", subjParams);
 		
-		emailService.sendEmail(NEW_USER_REQUEST_EMAIL_TMPL, new String[]{adminEmailAddress}, props);
+		String[] to = {ConfigUtil.getInstance().getAdminEmailId()};
+		emailService.sendEmail(NEW_USER_REQUEST_EMAIL_TMPL, to, props);
 	}
 	
 	private void sendUserRequestApprovedEmail(User user, ForgotPasswordToken token) {
@@ -379,7 +420,8 @@ public class UserServiceImpl implements UserService {
 		props.put("user", user);
 		props.put("token", token);
 		
-		emailService.sendEmail(REQUEST_APPROVED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
+		String[] to = new String[]{user.getEmailAddress()};
+		emailService.sendEmail(REQUEST_APPROVED_EMAIL_TMPL, to, props);
 	}
 	
 	private void ensureUniqueEmail(User existingUser, User newUser, OpenSpecimenException ose) {
@@ -417,7 +459,21 @@ public class UserServiceImpl implements UserService {
 	}
 		
 	private Institute getCurrUserInstitute() {
-		User user = daoFactory.getUserDao().getById(AuthUtil.getCurrentUser().getId());
+		return getInstitute(AuthUtil.getCurrentUser().getId());
+	}
+	
+	private Institute getInstitute(Long id) {
+		User user = daoFactory.getUserDao().getById(id);
 		return user.getInstitute();		
-	}		
+	}
+	
+	private ForgotPasswordToken generateForgotPwdToken(User user) {
+		ForgotPasswordToken token = null;
+		if (user.getAuthDomain().getName().equals(DEFAULT_AUTH_DOMAIN)) {
+			token = new ForgotPasswordToken(user);
+			daoFactory.getUserDao().saveFpToken(token);
+		}
+		return token;
+	}
+
 }

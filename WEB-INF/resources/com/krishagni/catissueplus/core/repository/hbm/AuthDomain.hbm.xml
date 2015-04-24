@@ -14,7 +14,7 @@
       </generator>
     </id>
 
-    <many-to-one name="authProvider" property-ref="authType" column="AUTH_TYPE"/>
+    <many-to-one name="authProvider" property-ref="authType" column="AUTH_TYPE" cascade="all"/>
 	
     <property name="name" column="DOMAIN_NAME"/>    
         

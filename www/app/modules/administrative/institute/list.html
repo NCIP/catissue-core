@@ -4,11 +4,31 @@
       <span translate="institutes.list">Institutes</span>
     </h3>
     <div class="os-btns right">
-      <button class="primary" title="{{'institutes.tooltip.add' | translate}}" 
+      <button show-if-admin class="primary" title="{{'institutes.tooltip.add' | translate}}"
         ui-sref="institute-addedit({instituteId: ''})">
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
+      <div show-if-admin dropdown class="inline">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.import">Import</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li>
+            <a ui-sref="institute-import">
+              <i class="fa fa-institution"></i>
+              <span translate="institutes.list">Institutes</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="institute-import-jobs">
+              <i class="fa fa-table"></i>
+              <span translate="common.view_jobs">View Jobs</span>
+            </a>
+          </li>
+        </ul>
+      </div>
       <button class="default" os-right-drawer-toggle title="{{'institutes.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>

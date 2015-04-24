@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
@@ -12,8 +15,9 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
-
+@Audited
 public class Institute extends BaseEntity {
+
 	private static final String ENTITY_NAME ="institute";
 	
 	private String name;
@@ -52,6 +56,7 @@ public class Institute extends BaseEntity {
 		this.departments = departments;
 	}
 	
+	@NotAudited
 	public Set<Site> getSites() {
 		return sites;
 	}

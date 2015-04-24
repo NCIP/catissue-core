@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.auth.events.AuthDomainDetail;
+import com.krishagni.catissueplus.core.auth.events.AuthDomainSummary;
 import com.krishagni.catissueplus.core.auth.events.ListAuthDomainCriteria;
 import com.krishagni.catissueplus.core.auth.services.DomainRegistrationService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -35,13 +36,13 @@ public class AuthDomainController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<AuthDomainDetail> getAuthDomains(
+	public List<AuthDomainSummary> getAuthDomains(
 			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") 
 			int maxResults) {
 		
 		ListAuthDomainCriteria crit = new ListAuthDomainCriteria().maxResults(maxResults);
-		RequestEvent<ListAuthDomainCriteria> req = new RequestEvent<ListAuthDomainCriteria>(null, crit);
-		ResponseEvent<List<AuthDomainDetail>> resp = domainRegService.getDomains(req);
+		RequestEvent<ListAuthDomainCriteria> req = new RequestEvent<ListAuthDomainCriteria>(crit);
+		ResponseEvent<List<AuthDomainSummary>> resp = domainRegService.getDomains(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
@@ -51,7 +52,7 @@ public class AuthDomainController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public AuthDomainDetail registerDomain(@RequestBody AuthDomainDetail domainDetail) {
-		RequestEvent<AuthDomainDetail> req = new RequestEvent<AuthDomainDetail>(null, domainDetail);
+		RequestEvent<AuthDomainDetail> req = new RequestEvent<AuthDomainDetail>(domainDetail);
 		ResponseEvent<AuthDomainDetail> resp = domainRegService.registerDomain(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -63,7 +64,7 @@ public class AuthDomainController {
 	@ResponseBody
 	public AuthDomainDetail updaterDomain(@PathVariable Long id, @RequestBody AuthDomainDetail domainDetail) {
 		domainDetail.setId(id);
-		RequestEvent<AuthDomainDetail> req = new RequestEvent<AuthDomainDetail>(null, domainDetail);
+		RequestEvent<AuthDomainDetail> req = new RequestEvent<AuthDomainDetail>(domainDetail);
 		ResponseEvent<AuthDomainDetail> resp = domainRegService.updateDomain(req);
 		resp.throwErrorIfUnsuccessful();
 		

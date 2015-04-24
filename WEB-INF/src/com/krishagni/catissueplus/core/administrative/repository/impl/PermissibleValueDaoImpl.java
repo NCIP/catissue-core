@@ -8,9 +8,9 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 
 import com.krishagni.catissueplus.core.administrative.domain.PermissibleValue;
 import com.krishagni.catissueplus.core.administrative.events.ListPvCriteria;
@@ -28,19 +28,11 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PermissibleValue> getPvs(ListPvCriteria crit) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class);
-		if (StringUtils.isNotBlank(crit.parentAttribute()) || StringUtils.isNotBlank(crit.parentValue())) {
-			query.createAlias("parent", "p");
-		}
-				
-		if (StringUtils.isNotBlank(crit.attribute())) {
-			query.add(Restrictions.eq("attribute", crit.attribute()));
-		} else if (StringUtils.isNotBlank(crit.parentAttribute())) {
-			query.add(Restrictions.eq("p.attribute", crit.parentAttribute()));
-		}
-		
-		if (StringUtils.isNotBlank(crit.parentValue())) {
-			query.add(Restrictions.eq("p.value", crit.parentValue()));
+		Criteria query = null;
+		if (StringUtils.isNotBlank(crit.attribute()) && crit.attribute().equals(ANATOMIC_SITE)) {
+			query = getAnatomicSiteQuery(crit);
+		} else {
+			query = getPvQuery(crit);
 		}
 		
 		if (StringUtils.isNotBlank(crit.query())) {
@@ -74,4 +66,36 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 		
 		return query.setProjection(Projections.property("value")).list();
 	}	
+	
+
+	private Criteria getPvQuery(ListPvCriteria crit) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class);
+		if (StringUtils.isNotBlank(crit.parentAttribute()) || StringUtils.isNotBlank(crit.parentValue())) {
+			query.createAlias("parent", "p");
+		}
+				
+		if (StringUtils.isNotBlank(crit.attribute())) {
+			query.add(Restrictions.eq("attribute", crit.attribute()));
+		} else if (StringUtils.isNotBlank(crit.parentAttribute())) {
+			query.add(Restrictions.eq("p.attribute", crit.parentAttribute()));
+		}
+		
+		if (StringUtils.isNotBlank(crit.parentValue())) {
+			query.add(Restrictions.eq("p.value", crit.parentValue()));
+		}
+		
+		return query;
+	}
+	
+	private Criteria getAnatomicSiteQuery(ListPvCriteria crit) {
+		return sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class)
+				.createAlias("parent", "mpv")
+				.createAlias("mpv.parent", "tpv", JoinType.LEFT_OUTER_JOIN)
+				.add(Restrictions.disjunction()
+						.add(Restrictions.eq("tpv.attribute", "Tissue_Site_PID"))
+						.add(Restrictions.eq("mpv.attribute", "Tissue_Site_PID"))
+					);
+	}
+	
+	private static final String ANATOMIC_SITE = "Tissue_Site_PID";
 }

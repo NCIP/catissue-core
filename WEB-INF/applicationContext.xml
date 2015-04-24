@@ -36,6 +36,7 @@
     <property name="dataSource" ref="dataSource"/>
     <property name="changeLog" value="classpath:db.changelog-master.xml" />
   </bean>
+
   <bean id="os-liquibase" class="liquibase.integration.spring.SpringLiquibase" depends-on="de-liquibase">
     <property name="dataSource" ref="dataSource"/>
     <property name="changeLog" value="classpath:db/db-os-changelog-master-${datasource.type}.xml" />
@@ -50,6 +51,9 @@
       <props>
         <prop key="hibernate.dialect">${datasource.dialect}</prop>
         <prop key="hibernate.show_sql">true</prop>
+        <prop key="org.hibernate.envers.track_entities_changed_in_revision">true</prop>
+        <prop key="org.hibernate.envers.global_with_modified_flag">true</prop>
+        <prop key="show_sql">true</prop>
       </props>
     </property>
   </bean>
@@ -61,9 +65,13 @@
   <bean id="serviceInterceptor" class="com.krishagni.catissueplus.core.common.TransactionalInterceptor" factory-method="aspectOf">
     <property name="transactionManager" ref="transactionManager"/>
   </bean>
+
+  <bean id="listenerInterceptor" class="com.krishagni.catissueplus.core.common.ListenAttributeChangesInterceptor" factory-method="aspectOf">
+  </bean>
   
   <bean id="cfgSvc" class="com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="resourceBundle" ref="resourceBundle"/>
   </bean>
   
   <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
@@ -87,10 +95,6 @@
 
   <aop:aspectj-autoproxy/>
       
-  <bean id="auditInterceptor" class="com.krishagni.catissueplus.core.common.AuditInterceptor">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>
-  
   <bean id="participantLookupLogic" class="com.krishagni.catissueplus.core.biospecimen.matching.ParticipantLookupLogicImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
@@ -102,6 +106,7 @@
   <bean id="rbacSvc" class="com.krishagni.rbac.service.impl.RbacServiceImpl">
     <property name="daoFactory" ref="rbacDaoFactory"/>
     <property name="userDao" ref="userDao"/>
+    <property name="emailService" ref="emailService"/>
   </bean>
 	
   <bean id="visitTokenRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
@@ -184,6 +189,7 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="userFactory" ref="userFact"/>
     <property name="emailService" ref="emailService"/>
+    <property name="rbacSvc" ref="rbacSvc"/>
   </bean>
 
   <bean id="domainFact" class="com.krishagni.catissueplus.core.auth.domain.factory.impl.DomainRegistrationFactoryImpl">
@@ -268,31 +274,7 @@
     <property name="queryFolderFactory" ref="queryFolderFactory"/>
     <property name="emailService" ref="emailService"/>
   </bean>
-
-  <bean id="extAppNotificationService" class="com.krishagni.catissueplus.core.notification.services.impl.ExternalAppNotificationServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory" />
-  </bean>
   
-  <bean id="externalApplications" class="com.krishagni.catissueplus.core.notification.util.ExternalApplications"  scope="singleton">
-    <property name="daoFactory" ref="biospecimenDaoFactory" />
-  </bean>
-  
-  <bean id="mirthAppService" class="com.krishagni.catissueplus.core.notification.services.impl.MirthApplicationService">
-    <property name="sessionFactory" ref="sessionFactory"/>
-  </bean>
-
-  <bean id="catissueNotificationSvc"
-    class="com.krishagni.catissueplus.core.notification.services.impl.CatissueNotificationServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory" />
-    <property name="cprSvc" ref="cprSvc" />
-  </bean>
-
-  <bean id="emailNotificationSvc"
-    class="com.krishagni.catissueplus.core.notification.services.impl.EmailNotificationServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory" />
-    <property name="emailService" ref="emailService"/>
-  </bean>
-
   <bean id="instituteFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
@@ -396,7 +378,11 @@
           </list>
         </entry>
         <entry key="GET">
-          <value>/institutes/</value>
+          <list>
+            <value>/institutes/</value>
+            <value>/config-settings/locale</value>
+            <value>/auth-domains/</value>
+          </list>
         </entry>
       </map>
     </property>
@@ -480,6 +466,9 @@
       <list>
         <value>com/krishagni/catissueplus/core/administrative/schema/institute.xml</value>
         <value>com/krishagni/catissueplus/core/administrative/schema/site.xml</value>
+        <value>com/krishagni/catissueplus/core/administrative/schema/user.xml</value>
+        <value>com/krishagni/catissueplus/core/administrative/schema/user-roles.xml</value>
+        <value>com/krishagni/catissueplus/core/administrative/schema/container.xml</value>
       </list>
     </property>
   </bean>
@@ -492,11 +481,27 @@
     <property name="siteSvc" ref="siteService"/>
   </bean>
 
+  <bean id="userImporter" class="com.krishagni.catissueplus.core.administrative.services.impl.UserImporter">
+    <property name="userSvc" ref="userSvc"/>
+  </bean>
+
+  <bean id="userRolesImporter" class="com.krishagni.rbac.service.impl.SubjectRolesImporter">
+    <property name="rbacSvc" ref="rbacSvc"/>
+  </bean>
+
+  <bean id="storageContainerImporter" 
+    class="com.krishagni.catissueplus.core.administrative.services.impl.StorageContainerImporter">
+    <property name="containerSvc" ref="storageContainerSvc"/>
+  </bean>
+
   <bean id="objectImporterFactory" class="com.krishagni.catissueplus.core.importer.services.impl.ObjectImporterFactoryImpl">
     <property name="importersMap">
       <map>
-        <entry key="institute" value-ref="instituteImporter"/>
-        <entry key="site"      value-ref="siteImporter"/>
+        <entry key="institute"        value-ref="instituteImporter"/>
+        <entry key="site"             value-ref="siteImporter"/>
+        <entry key="user"             value-ref="userImporter"/>
+        <entry key="userRoles"        value-ref="userRolesImporter"/>
+        <entry key="storageContainer" value-ref="storageContainerImporter"/>
       </map>
     </property>
   </bean>

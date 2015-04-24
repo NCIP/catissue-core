@@ -1,0 +1,51 @@
+<object-schema>
+  <name>user</name>
+  <record> 
+    <name>com.krishagni.catissueplus.core.administrative.events.UserDetail</name>
+    
+    <field>
+      <caption>Last Name</caption>
+      <attribute>lastName</attribute>
+    </field>
+
+    <field>
+      <caption>First Name</caption>
+      <attribute>firstName</attribute>
+    </field>
+
+    <field>
+      <caption>Domain Name</caption>
+      <attribute>domainName</attribute>
+    </field>
+
+    <field>
+      <caption>Login Name</caption>
+      <attribute>loginName</attribute>
+    </field>
+
+    <field>
+      <caption>Email Address</caption>
+      <attribute>emailAddress</attribute>
+    </field>
+
+    <field>
+      <caption>Institute</caption>
+      <attribute>instituteName</attribute>
+    </field>
+
+    <field>
+      <caption>Department</caption>
+      <attribute>deptName</attribute>
+    </field>
+
+    <field>
+      <caption>Super Administrator</caption>
+      <attribute>admin</attribute>
+    </field>
+
+    <field>
+      <caption>Address</caption>
+      <attribute>address</attribute>
+    </field>
+  </record>
+</object-schema>

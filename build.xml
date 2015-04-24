@@ -2,7 +2,6 @@
 
 <!--Ant Script for create Build for caTISSUE Core-->
 <project name="caTissue Suite" default="compile">
-	<import file="build-properties.xml"/>
 	<!--define require dir and Properties for <if> </if> tag-->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
@@ -44,9 +43,9 @@
 	<property name="flex.dir" value="${base.dir}/WEB-INF/flex" />
 	<!-- flex related properties finish -->
 	<taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties">
-          <classpath>
-	    <pathelement location="${lib.dir}/aspectjtools-1.6.6.jar"/>
-	  </classpath>
+		<classpath>
+			<pathelement location="${lib.dir}/aspectjtools-1.6.6.jar"/>
+		</classpath>
 	</taskdef>
 	<path id="app.classpath">
 		<fileset dir="${lib.dir}">
@@ -74,8 +73,6 @@
 	<property name="cat.cobertura.dir" value="${base.dir}" />
 	<property name="cat.instrumented.dir" value="./instrument"/>
 	<property name="cobertura.lib" value="./cobertura/lib"/>
-
-
 
 	<!-- sub tasks -->
 	<target name="init" description="initialize">
@@ -339,6 +336,7 @@
 	<target name="build_war" depends="init, aspect.compile,common_build_war,build_client_jar">
 
 	</target>
+	
 	<!-- Create war file for installable zip file.Please us this target when creating installable zip.
 		Note: database type is not replaced
 	-->
@@ -668,7 +666,6 @@
 			<fileset dir="${base.dir}/WEB-INF/resources/ng-email-templates"/>
 		</copy>
 		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true" />
-		<copy file="build-properties.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
 		<copy file="deploy_zip.xml" todir="${zip.dir}" overwrite="true" />
 		<rename src="${zip.dir}/deploy_zip.xml" dest="${zip.dir}/build.xml"/>
@@ -1139,7 +1136,7 @@
 			</else>
 		</if>
 
-		<iajc source="1.6" verbose="true" destdir="${target.dir}" includes="**/*.java" target="1.6" showWeaveInfo="true">
+		<iajc source="1.6" verbose="true" destDir="${target.dir}" includes="**/*.java" target="1.6" showWeaveInfo="true">
 			<!--src path="./WEB-INF/integration-test"/>
 			<src path="./WEB-INF/src"/-->
 

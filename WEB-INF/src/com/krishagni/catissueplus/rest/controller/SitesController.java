@@ -25,9 +25,6 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("/sites")
 public class SitesController {
@@ -61,7 +58,7 @@ public class SitesController {
 			.startAt(startAt)
 			.maxResults(maxResults);
 		
-		RequestEvent<SiteListCriteria> req = new RequestEvent<SiteListCriteria>(getSession(), crit);
+		RequestEvent<SiteListCriteria> req = new RequestEvent<SiteListCriteria>(crit);
 		ResponseEvent<List<SiteDetail>> resp = siteService.getSites(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -76,7 +73,7 @@ public class SitesController {
 		SiteQueryCriteria crit = new SiteQueryCriteria();
 		crit.setId(id);
 		
-		RequestEvent<SiteQueryCriteria> req = new RequestEvent<SiteQueryCriteria>(getSession(), crit);
+		RequestEvent<SiteQueryCriteria> req = new RequestEvent<SiteQueryCriteria>(crit);
 		ResponseEvent<SiteDetail> resp = siteService.getSite(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -88,7 +85,7 @@ public class SitesController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SiteDetail createSite(@RequestBody SiteDetail siteDetail) {
-		RequestEvent<SiteDetail> req = new RequestEvent<SiteDetail>(getSession(), siteDetail);
+		RequestEvent<SiteDetail> req = new RequestEvent<SiteDetail>(siteDetail);
 		ResponseEvent<SiteDetail> resp = siteService.createSite(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
@@ -100,17 +97,29 @@ public class SitesController {
 	public SiteDetail updateSite(@PathVariable Long id, @RequestBody SiteDetail siteDetail) {
 		siteDetail.setId(id);
 		
-		RequestEvent<SiteDetail> req = new RequestEvent<SiteDetail>(getSession(), siteDetail);
+		RequestEvent<SiteDetail> req = new RequestEvent<SiteDetail>(siteDetail);
 		ResponseEvent<SiteDetail> resp = siteService.updateSite(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 	
+	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public SiteDetail patchSite(@PathVariable Long id, @RequestBody SiteDetail siteDetail) {
+		siteDetail.setId(id);
+		
+		RequestEvent<SiteDetail> req = new RequestEvent<SiteDetail>(siteDetail);
+		ResponseEvent<SiteDetail> resp = siteService.patchSite(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+		
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependent-entities")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public List<DependentEntityDetail> getDependentEntities(@PathVariable Long id) {
-		RequestEvent<Long> req = new RequestEvent<Long>(null, id);
+		RequestEvent<Long> req = new RequestEvent<Long>(id);
 		ResponseEvent<List<DependentEntityDetail>> resp = siteService.getDependentEntities(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -123,14 +132,10 @@ public class SitesController {
 	public SiteDetail deleteSite(@PathVariable Long id, 
 			@RequestParam(value="close", required=false, defaultValue="false") boolean close) {
 		DeleteEntityOp deleteOp = new DeleteEntityOp(id, close);
-		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(null, deleteOp);
+		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(deleteOp);
 		ResponseEvent<SiteDetail> resp = siteService.deleteSite(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
-	}
-	
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
-	}
+	}	
 }

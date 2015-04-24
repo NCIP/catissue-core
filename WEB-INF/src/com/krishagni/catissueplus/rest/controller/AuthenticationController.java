@@ -25,9 +25,6 @@ import com.krishagni.catissueplus.core.auth.services.UserAuthenticationService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("/sessions")
 public class AuthenticationController {
@@ -43,7 +40,7 @@ public class AuthenticationController {
 	@ResponseBody
 	public Map<String, Object> authenticate(@RequestBody LoginDetail loginDetail) {
 		loginDetail.setIpAddress(httpReq.getRemoteAddr());
-		RequestEvent<LoginDetail> req = new RequestEvent<LoginDetail>(getSession(), loginDetail);
+		RequestEvent<LoginDetail> req = new RequestEvent<LoginDetail>(loginDetail);
 		ResponseEvent<Map<String, Object>> resp = userAuthService.authenticateUser(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -54,6 +51,7 @@ public class AuthenticationController {
 		detail.put("lastName", user.getLastName());
 		detail.put("loginName", user.getLoginName());
 		detail.put("token", (String)resp.getPayload().get("token"));
+		detail.put("admin", user.isAdmin());
 		
 		return detail;
 	}
@@ -63,15 +61,10 @@ public class AuthenticationController {
 	@ResponseBody
 	public Map<String, String> delete(HttpServletResponse httpResp) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		RequestEvent<String> req = new RequestEvent<String>(getSession(), (String)auth.getCredentials());
+		RequestEvent<String> req = new RequestEvent<String>((String)auth.getCredentials());
 		ResponseEvent<String> resp = userAuthService.removeToken(req);
 		resp.throwErrorIfUnsuccessful();
 
 		return Collections.singletonMap("Status", resp.getPayload());
 	}
-
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpReq.getSession().getAttribute(Constants.SESSION_DATA);
-	}
-	
 }

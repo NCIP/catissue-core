@@ -75,19 +75,15 @@ public class VisitServiceImpl implements VisitService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<VisitSpecimenDetail> collectVisitAndSpecimens(
-			RequestEvent<VisitSpecimenDetail> req) {
-		
+	public ResponseEvent<VisitSpecimenDetail> collectVisitAndSpecimens(RequestEvent<VisitSpecimenDetail> req) {		
 		try {
 			VisitDetail visit = saveOrUpdateVisit(req.getPayload().getVisit());			
 			
 			List<SpecimenDetail> specimens = req.getPayload().getSpecimens();
 			setVisitId(visit.getId(), specimens);
 						
-			RequestEvent<List<SpecimenDetail>> collectSpecimensReq =
-					new RequestEvent<List<SpecimenDetail>>(req.getSessionDataBean(), specimens);
-			ResponseEvent<List<SpecimenDetail>> collectSpecimensResp =
-					specimenSvc.collectSpecimens(collectSpecimensReq);
+			RequestEvent<List<SpecimenDetail>> collectSpecimensReq = new RequestEvent<List<SpecimenDetail>>(specimens);
+			ResponseEvent<List<SpecimenDetail>> collectSpecimensResp = specimenSvc.collectSpecimens(collectSpecimensReq);
 			collectSpecimensResp.throwErrorIfUnsuccessful();
 			
 			VisitSpecimenDetail resp = new VisitSpecimenDetail();

@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
@@ -16,6 +18,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
+@Audited
 public class Participant extends BaseEntity {
 	private String lastName;
 
@@ -171,6 +174,7 @@ public class Participant extends BaseEntity {
 		this.pmis = pmis;
 	}
 
+	@NotAudited
 	public Set<CollectionProtocolRegistration> getCprs() {
 		return cprs;
 	}

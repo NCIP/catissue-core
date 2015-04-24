@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
 import edu.common.dynamicextensions.domain.nui.UserContext;
@@ -19,23 +18,20 @@ public class CatissueUserContextProviderImpl implements AppUserContextProvider {
 
 	@Override
 	public UserContext getUserContext(HttpServletRequest request) {
-		final User user = AuthUtil.getCurrentUser();
-		final HttpServletRequest httpReq = request;
-		
 		return new UserContext() {	
 			@Override
 			public String getUserName() {
-				return user.getUsername();
+				return AuthUtil.getCurrentUser().getLoginName();
 			}
 
 			@Override
 			public Long getUserId() {
-				return user.getId();
+				return AuthUtil.getCurrentUser().getId();
 			}
 
 			@Override
 			public String getIpAddress() {
-				return httpReq.getRemoteAddr();
+				return AuthUtil.getRemoteAddr();
 			}
 		};
 	}

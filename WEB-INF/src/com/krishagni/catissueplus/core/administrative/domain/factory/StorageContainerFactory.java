@@ -5,4 +5,6 @@ import com.krishagni.catissueplus.core.administrative.events.StorageContainerDet
 
 public interface StorageContainerFactory {
 	public StorageContainer createStorageContainer(StorageContainerDetail detail);
+	
+	public StorageContainer createStorageContainer(StorageContainer existing, StorageContainerDetail detail);
 }

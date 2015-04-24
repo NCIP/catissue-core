@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,9 +34,6 @@ import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
 import com.krishagni.catissueplus.core.de.services.FormService;
-
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
 
 @Controller
 @RequestMapping("/specimens")
@@ -182,14 +180,20 @@ public class SpecimensController {
 		return resp.getPayload();
 	}
 	
-	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(getSession(), payload);
-	}
-
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
+	/** API present for UI purpose **/
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/cpr-visit-ids")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public Map<String, Long> getCprAndVisitIds(@PathVariable("id") Long specimenId) {
+		ResponseEvent<Map<String, Long>> resp = specimenSvc.getCprAndVisitIds(new RequestEvent<Long>(specimenId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return new RequestEvent<T>(payload);
+	}
+
 	private List<FormRecordsList> getRecords(Long specimenId, String entityType) {
 		GetFormRecordsListOp opDetail = new GetFormRecordsListOp();
 		opDetail.setObjectId(specimenId);

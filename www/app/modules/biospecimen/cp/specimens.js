@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
   .controller('CpSpecimensCtrl', function(
-    $scope, $state, $stateParams, $filter, $timeout,
+    $scope, $state, $stateParams, $timeout, $modal,
     cp, events, specimenRequirements,
     Specimen, SpecimenRequirement, PvManager, Alerts) {
 
@@ -20,17 +20,44 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
 
       $scope.view = 'list_sr';
       $scope.sr = {};
-      $scope.aliquot = {};
-      $scope.derivative = {};
-
+      $scope.childReq = {};
       $scope.errorCode = '';
     }
 
     function addToSrList(sr) {
       specimenRequirements.push(sr);
-      specimenRequirements = $filter('orderBy')(specimenRequirements, ['type', 'id']);
       $scope.specimenRequirements = Specimen.flatten(specimenRequirements);
-    };
+    }
+
+    function updateSrList(sr) {
+      var result = findSr(specimenRequirements, sr.id);
+      angular.extend(result.sr, sr);
+      $scope.specimenRequirements = Specimen.flatten(specimenRequirements);
+    }
+
+    function deleteFromSrList(sr) {
+      var result = findSr(specimenRequirements, sr.id);
+      result.list.splice(result.idx, 1);
+      $scope.specimenRequirements = Specimen.flatten(specimenRequirements);
+    }
+
+    function findSr(srList, srId) {
+      if (!srList) {
+        return undefined;
+      }
+
+      for (var i = 0; i < srList.length; ++i) {
+        if (srList[i].id == srId) {
+          return {list: srList, sr: srList[i], idx: i};
+        }
+        var result = findSr(srList[i].children, srId);
+        if (!!result) {
+          return result;
+        }
+      }
+
+      return undefined;
+    }
 
     function addChildren(parent, children) {
       if (!parent.children) {
@@ -41,7 +68,6 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
         parent.children.push(child);
       });
 
-      parent.children = $filter('orderBy')(parent.children, ['type', 'id']);
       $scope.specimenRequirements = Specimen.flatten(specimenRequirements);
     };
 
@@ -55,11 +81,9 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       $scope.specimenTypes = [];
 
       $scope.$watch('sr.specimenClass', function(newVal, oldVal) {
-        if (!newVal || newVal == oldVal) {
+        if (!newVal || newVal == oldVal || !oldVal) {
           return;
         }
-
-        $scope.specimenTypes = PvManager.getPvsByParent('specimen-class', newVal);
         $scope.sr.type = '';
       });
 
@@ -90,9 +114,39 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       loadPvs();
     };
 
+    $scope.showEditSr = function(sr) {
+      $scope.sr = angular.copy(sr);
+      delete $scope.sr.depth;
+      delete $scope.sr.hasChildren;
+      delete $scope.sr.children;
+      delete $scope.sr.isOpened;
+      delete $scope.sr.parent;
+
+      if (sr.isAliquot()) {
+        $scope.view = 'addedit_aliquot';
+        $scope.parentSr = sr.parent;
+        $scope.childReq = $scope.sr;
+      } else if (sr.isDerivative()) {
+        $scope.view = 'addedit_derived';
+        $scope.parentSr = sr.parent;
+        $scope.childReq = $scope.sr;
+      } else {
+        $scope.view = 'addedit_sr';
+      }
+      loadPvs();
+    };
+
+    $scope.viewSr = function(sr) {
+      $scope.view = 'view_sr';
+      $scope.parentSr = sr.parent;
+      $scope.childReq = sr;
+    };
+
     $scope.revertEdit = function() {
       $scope.view = 'list_sr';
       $scope.parentSr = null;
+      $scope.childReq = {};
+      $scope.sr = {};
     };
 
     $scope.createSr = function() {
@@ -100,6 +154,15 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
         function(result) {
           addToSrList(result);
           $scope.view = 'list_sr';
+        }
+      );
+    };
+
+    $scope.updateSr = function() {
+      $scope.sr.$saveOrUpdate().then(
+        function(result) {
+          updateSrList(result);
+          $scope.revertEdit();
         }
       );
     };
@@ -117,12 +180,12 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
 
       $scope.parentSr = sr;
       $scope.view = 'addedit_aliquot';
-      $scope.aliquot = {};
+      $scope.childReq = {};
       loadPvs();
     };
 
     $scope.createAliquots = function() {
-      var spec = $scope.aliquot;
+      var spec = $scope.childReq;
       var availableQty = $scope.parentSr.availableQty();
 
       if (!!spec.qtyPerAliquot && !!spec.noOfAliquots) {
@@ -142,7 +205,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
           addChildren($scope.parentSr, aliquots);
           $scope.parentSr.isOpened = true;
 
-          $scope.aliquot = {};
+          $scope.childReq = {};
           $scope.parentSr = undefined;
           $scope.view = 'list_sr';
         }
@@ -157,17 +220,17 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     $scope.showCreateDerived = function(sr) {
       $scope.parentSr = sr;
       $scope.view = 'addedit_derived';
-      $scope.derivative = {};
+      $scope.childReq = {};
       loadPvs();
     };
 
     $scope.createDerivative = function() {
-      $scope.parentSr.createDerived($scope.derivative).then(
+      $scope.parentSr.createDerived($scope.childReq).then(
         function(derived) {
           addChildren($scope.parentSr, [derived]);
           $scope.parentSr.isOpened = true;
 
-          $scope.derivative = {};
+          $scope.childReq = {};
           $scope.parentSr = undefined;
           $scope.view = 'list_sr';
         }
@@ -191,6 +254,31 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
         }
       );
     };
+
+    $scope.deleteRequirement = function(sr) {
+      var modalInstance = $modal.open({
+        templateUrl: 'delete_sr.html',
+        controller: function($scope, $modalInstance) {
+          $scope.yes = function() {
+            $modalInstance.close(true);
+          }
+
+          $scope.no = function() {
+            $modalInstance.dismiss('cancel');
+          }
+        }
+      });
+
+      modalInstance.result.then(
+        function() {
+          sr.delete().then(
+            function() {
+              deleteFromSrList(sr);
+            }
+          );
+        }
+      );
+    }; 
 
     init();
   });

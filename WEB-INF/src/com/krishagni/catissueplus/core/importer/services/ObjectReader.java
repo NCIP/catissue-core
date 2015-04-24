@@ -9,12 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krishagni.catissueplus.core.common.util.CsvFileReader;
 import com.krishagni.catissueplus.core.common.util.CsvReader;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema.Field;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema.Record;
@@ -60,7 +60,12 @@ public class ObjectReader implements Closeable {
 	public void close() throws IOException {
 		csvReader.close();
 	}
-		
+	
+	public static String getSchemaFields(ObjectSchema schema) {
+		List<String> columnNames = getSchemaFields(schema.getRecord(), "");
+		return Utility.stringListToCsv(columnNames);
+	}
+			
 	private Object parseObject() {
 		try {
 			Map<String, Object> objectProps = parseObject(schema.getRecord(), "");
@@ -80,7 +85,12 @@ public class ObjectReader implements Closeable {
 		}
 		
 		for (Record subRec : record.getSubRecords()) {
-			props.put(subRec.getAttribute(), parseSubObjects(subRec, prefix));
+			Object subObjProps = parseSubObjects(subRec, prefix);
+			if (isEmpty(subObjProps)) {
+				continue;
+			}
+			
+			props.put(subRec.getAttribute(), subObjProps);
 		}
 		
 		return props;
@@ -103,9 +113,7 @@ public class ObjectReader implements Closeable {
 					values.add(value);
 				}
 				
-				if (!values.isEmpty()) {
-					props.put(field.getAttribute(), values);
-				}				
+				props.put(field.getAttribute(), values);				
 			} else {
 				String columnName = prefix + field.getCaption();
 				Object value = getValue(field, columnName);
@@ -160,19 +168,69 @@ public class ObjectReader implements Closeable {
 			return value;
 		}
 	}
-		
-	public static void main(String[] args) 
-	throws Exception {
-		ObjectSchema schema = ObjectSchema.parseSchema("/home/vpawar/work/ka/catp/os/WEB-INF/resources/com/krishagni/catissueplus/core/administrative/schema/institute.xml");
-		ObjectReader reader = new ObjectReader("/home/vpawar/Desktop/institute.csv", schema);
-		
-		Object obj = null;
-		while ((obj = reader.next()) != null) {
-			System.err.println(new ObjectMapper().writeValueAsString(obj));
-			System.err.println("---");
+	
+	private boolean isEmpty(Object obj) {
+		if (obj instanceof List<?>) {
+			List<?> list = (List<?>)obj;
+			return list.isEmpty();
+		} else if (obj instanceof Map<?, ?>) {
+			Map<?, ?> map = (Map<?, ?>)obj;
+			return map.isEmpty();
 		}
 		
-		IOUtils.closeQuietly(reader);
-		System.err.println("--Done--");
+		return false;
+	}
+	
+	private static List<String> getSchemaFields(Record record, String prefix) {
+		List<String> columnNames = new ArrayList<String>();
+		
+		for (Field field : record.getFields()) {
+			String columnName = prefix + field.getCaption();
+			if (field.isMultiple()) {
+				columnNames.add(columnName + "#1");
+				columnNames.add(columnName + "#2");
+			} else {
+				columnNames.add(columnName);
+			}
+		}
+		
+		if (record.getSubRecords() == null) {
+			return columnNames;
+		}
+		
+		for (Record subRecord : record.getSubRecords()) {
+			String newPrefix = prefix;
+			if (StringUtils.isNotBlank(subRecord.getCaption())) {
+				newPrefix += subRecord.getCaption() + "#";
+			}
+			
+			if (subRecord.isMultiple()) {
+				columnNames.addAll(getSchemaFields(subRecord, newPrefix + "1#"));
+				columnNames.addAll(getSchemaFields(subRecord, newPrefix + "2#"));
+			} else {
+				columnNames.addAll(getSchemaFields(subRecord, newPrefix));
+			}			
+		}
+		
+		return columnNames;				
+	}
+			
+	public static void main(String[] args) 
+	throws Exception {
+		ObjectSchema containerSchema = ObjectSchema.parseSchema("/home/vpawar/work/ka/catp/os/WEB-INF/resources/com/krishagni/catissueplus/core/administrative/schema/container.xml");
+		System.err.println("Container: " + ObjectReader.getSchemaFields(containerSchema));
+		
+		ObjectSchema instituteSchema = ObjectSchema.parseSchema("/home/vpawar/work/ka/catp/os/WEB-INF/resources/com/krishagni/catissueplus/core/administrative/schema/institute.xml");
+		System.err.println("Institute: " + ObjectReader.getSchemaFields(instituteSchema));
+		
+		ObjectSchema siteSchema = ObjectSchema.parseSchema("/home/vpawar/work/ka/catp/os/WEB-INF/resources/com/krishagni/catissueplus/core/administrative/schema/site.xml");
+		System.err.println("Site: " + ObjectReader.getSchemaFields(siteSchema));
+		
+		ObjectSchema userSchema = ObjectSchema.parseSchema("/home/vpawar/work/ka/catp/os/WEB-INF/resources/com/krishagni/catissueplus/core/administrative/schema/user.xml");
+		System.err.println("User: " + ObjectReader.getSchemaFields(userSchema));
+
+		ObjectSchema userRolesSchema = ObjectSchema.parseSchema("/home/vpawar/work/ka/catp/os/WEB-INF/resources/com/krishagni/catissueplus/core/administrative/schema/user-roles.xml");
+		System.err.println("User Roles: " + ObjectReader.getSchemaFields(userRolesSchema));
+		
 	}
 }

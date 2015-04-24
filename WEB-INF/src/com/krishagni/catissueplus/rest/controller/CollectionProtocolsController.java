@@ -41,8 +41,6 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
 
 @Controller
 @RequestMapping("/collection-protocols")
@@ -146,7 +144,7 @@ public class CollectionProtocolsController {
 	public CollectionProtocolDetail importCpDef(@PathVariable("file") MultipartFile file) 
 	throws IOException {
 		CollectionProtocolDetail cp = new ObjectMapper().readValue(file.getBytes(), CollectionProtocolDetail.class);
-		RequestEvent<CollectionProtocolDetail> req = new RequestEvent<CollectionProtocolDetail>(getSession(), cp);
+		RequestEvent<CollectionProtocolDetail> req = new RequestEvent<CollectionProtocolDetail>(cp);
 		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.importCollectionProtocol(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -268,10 +266,6 @@ public class CollectionProtocolsController {
 	}
 
 	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(getSession(), payload);
+		return new RequestEvent<T>(payload);
 	}
-	
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
-	}	
 }

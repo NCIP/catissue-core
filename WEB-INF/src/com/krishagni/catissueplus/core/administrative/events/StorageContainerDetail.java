@@ -6,7 +6,9 @@ import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 
+@ListenAttributeChanges
 public class StorageContainerDetail extends StorageContainerSummary {
 	private Double temperature;
 	
@@ -72,10 +74,6 @@ public class StorageContainerDetail extends StorageContainerSummary {
 		this.allowedSpecimenClasses = allowedSpecimenClasses;
 	}
 
-	public Set<String> getAllowedSpecimenTypes() {
-		return allowedSpecimenTypes;
-	}
-
 	public Set<String> getCalcAllowedSpecimenClasses() {
 		return calcAllowedSpecimenClasses;
 	}
@@ -83,7 +81,11 @@ public class StorageContainerDetail extends StorageContainerSummary {
 	public void setCalcAllowedSpecimenClasses(Set<String> calcAllowedSpecimenClasses) {
 		this.calcAllowedSpecimenClasses = calcAllowedSpecimenClasses;
 	}
-	
+
+	public Set<String> getAllowedSpecimenTypes() {
+		return allowedSpecimenTypes;
+	}
+
 	public void setAllowedSpecimenTypes(Set<String> allowedSpecimenTypes) {
 		this.allowedSpecimenTypes = allowedSpecimenTypes;
 	}

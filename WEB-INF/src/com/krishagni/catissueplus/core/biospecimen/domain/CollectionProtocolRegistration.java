@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -19,6 +21,7 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Configurable
+@Audited
 public class CollectionProtocolRegistration {
 	private static final String ENTITY_NAME = "collection_protocol_registration";
 	
@@ -93,6 +96,7 @@ public class CollectionProtocolRegistration {
 		this.collectionProtocol = collectionProtocol;
 	}
 
+	@NotAudited
 	public Collection<Visit> getVisits() {
 		return visits;
 	}

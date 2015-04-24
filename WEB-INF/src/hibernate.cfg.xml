@@ -7,6 +7,7 @@
 
     <session-factory>
 
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/filters.hbm.xml" />
 		<!--  Form Context and Record Entry -->
 		<mapping resource="krishagni/catissueplus/hbm/FormContextBean.hbm.xml" />
 		<mapping resource="krishagni/catissueplus/hbm/FormRecordEntryBean.hbm.xml" />
@@ -24,9 +25,6 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ForgotPasswordToken.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Address.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Password.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExternalApplication.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExtAppNotificationStatus.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocolStudyMapping.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SavedQuery.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/QueryAuditLog.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/QueryFolder.hbm.xml" />
@@ -55,13 +53,14 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/DistributionOrderItem.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ScheduledJob.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ScheduledJobRun.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Revision.hbm.xml" />
+	
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Module.hbm.xml"/>
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConfigProperty.hbm.xml"/>
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConfigSetting.hbm.xml"/>
 
-                <mapping resource="com/krishagni/catissueplus/core/repository/hbm/Module.hbm.xml"/>
-                <mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConfigProperty.hbm.xml"/>
-                <mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConfigSetting.hbm.xml"/>
-
-                <mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenLabelPrintJob.hbm.xml"/>
-                <mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenLabelPrintJobItem.hbm.xml"/>
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenLabelPrintJob.hbm.xml"/>
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenLabelPrintJobItem.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ImportJob.hbm.xml"/>
 
 		<mapping resource="com/krishagni/rbac/resources/Group.hbm.xml"/>

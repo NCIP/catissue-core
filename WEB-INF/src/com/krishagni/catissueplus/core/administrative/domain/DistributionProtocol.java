@@ -12,7 +12,6 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
-
 public class DistributionProtocol {
 	private static final String ENTITY_NAME = "distribution_protocol";
 

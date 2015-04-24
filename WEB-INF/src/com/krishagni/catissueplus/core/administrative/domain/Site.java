@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
@@ -18,7 +21,7 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
-
+@Audited
 public class Site extends BaseEntity {
 	private static final String ENTITY_NAME = "site";
 
@@ -106,6 +109,7 @@ public class Site extends BaseEntity {
 		this.coordinators = coordinators;
 	}
 
+	@NotAudited
 	public Set<Visit> getVisits() {
 		return visits;
 	}
@@ -114,6 +118,7 @@ public class Site extends BaseEntity {
 		this.visits = visits;
 	}
 
+	@NotAudited
 	public Set<StorageContainer> getStorageContainers() {
 		return storageContainers;
 	}
@@ -122,6 +127,7 @@ public class Site extends BaseEntity {
 		this.storageContainers = storageContainers;
 	}
 	
+	@NotAudited
 	public Set<CollectionProtocol> getCollectionProtocols() {
 		return collectionProtocols;
 	}
@@ -130,6 +136,7 @@ public class Site extends BaseEntity {
 		this.collectionProtocols = collectionProtocols;
 	}
 
+	@NotAudited
 	public Set<ParticipantMedicalIdentifier> getPmis() {
 		return pmis;
 	}
@@ -138,6 +145,7 @@ public class Site extends BaseEntity {
 		this.pmis = pmis;
 	}
 
+	@NotAudited
 	public Set<CollectionProtocolEvent> getCollectionProtocolEvents() {
 		return collectionProtocolEvents;
 	}
@@ -152,6 +160,7 @@ public class Site extends BaseEntity {
 		setInstitute(other.getInstitute());
 		setCode(other.getCode());
 		setType(other.getType());
+		setAddress(other.getAddress());
 		updateActivityStatus(other.getActivityStatus());
 		CollectionUpdater.update(this.getCoordinators(), other.getCoordinators());
 	}

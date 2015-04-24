@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.init;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -9,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.ui.StorageContainerControlFactory;
@@ -44,8 +46,9 @@ public class DeInitializer implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		String dateFormat = cfgSvc.getStrSetting("common", "date_format", "MM-dd-yyyy");
-		String timeFormat = cfgSvc.getStrSetting("common", "time_format", "HH:mm");
+		Map<String, String> localeSettings = cfgSvc.getLocaleSettings();		
+		String dateFormat = localeSettings.get("deBeDateFmt");
+		String timeFormat = localeSettings.get("timeFmt");
 		String dataDir = cfgSvc.getStrSetting("common", "data_dir", ".");
 		
 		String dir = new StringBuilder(dataDir).append(File.separator)
@@ -73,5 +76,20 @@ public class DeInitializer implements InitializingBean {
 		} finally {
 			IOUtils.closeQuietly(in);
 		}
+		
+		cfgSvc.registerChangeListener("common", new ConfigChangeListener() {			
+			@Override
+			public void onConfigChange(String name, String value) {
+				if (!name.equals("locale")) {
+					return;
+				}
+				
+				Map<String, String> localeSettings = cfgSvc.getLocaleSettings();		
+				String dateFormat = localeSettings.get("deBeDateFmt");
+				String timeFormat = localeSettings.get("timeFmt");
+				DEApp.setDateFormat(dateFormat);
+				DEApp.setTimeFormat(timeFormat);				
+			}
+		});		
 	}
 }

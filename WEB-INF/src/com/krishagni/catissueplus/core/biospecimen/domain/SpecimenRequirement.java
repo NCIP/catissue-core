@@ -5,12 +5,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.util.Status;
 
+@Audited
 public class SpecimenRequirement {
 	private Long id;
 	
@@ -174,6 +178,7 @@ public class SpecimenRequirement {
 		this.receiver = receiver;
 	}
 
+	@NotAudited
 	public CollectionProtocolEvent getCollectionProtocolEvent() {
 		return collectionProtocolEvent;
 	}
@@ -202,6 +207,7 @@ public class SpecimenRequirement {
 		this.activityStatus = activityStatus;
 	}
 
+	@NotAudited
 	public SpecimenRequirement getParentSpecimenRequirement() {
 		return parentSpecimenRequirement;
 	}
@@ -210,6 +216,7 @@ public class SpecimenRequirement {
 		this.parentSpecimenRequirement = parentSpecimenRequirement;
 	}
 
+	@NotAudited
 	public Set<SpecimenRequirement> getChildSpecimenRequirements() {
 		return childSpecimenRequirements;
 	}
@@ -218,6 +225,7 @@ public class SpecimenRequirement {
 		this.childSpecimenRequirements = childSpecimenRequirements;
 	}
 
+	@NotAudited
 	public Set<Specimen> getSpecimens() {
 		return specimens;
 	}
@@ -232,6 +240,26 @@ public class SpecimenRequirement {
 	
 	public boolean isDerivative() {
 		return getLineage().equals(Specimen.DERIVED);
+	}
+	
+	public void update(SpecimenRequirement sr) {
+		if (!isAliquot() && !isDerivative()) {
+			updateRequirementAttrs(sr);
+		}
+
+		setName(sr.getName());
+		setInitialQuantity(sr.getInitialQuantity());
+		setStorageType(sr.getStorageType());
+		setLabelFormat(sr.getLabelFormat());
+		setConcentration(sr.getConcentration());
+		
+		if (getQtyAfterAliquotsUse() < 0) {
+			throw OpenSpecimenException.userError(SrErrorCode.INSUFFICIENT_QTY);
+		}
+		
+		if (isAliquot() && getParentSpecimenRequirement().getQtyAfterAliquotsUse() < 0) {
+			throw OpenSpecimenException.userError(SrErrorCode.INSUFFICIENT_QTY);
+		}
 	}
 				
 	public SpecimenRequirement copy() {
@@ -305,6 +333,13 @@ public class SpecimenRequirement {
 			return cp.getSpecimenLabelFormat();
 		}
 	}
+	
+	public void delete() {
+		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
+		for (SpecimenRequirement childReq : getChildSpecimenRequirements()) {
+			childReq.delete();
+		}
+	}
 		
 	private SpecimenRequirement deepCopy(CollectionProtocolEvent cpe, SpecimenRequirement parent) {
 		SpecimenRequirement result = copy();
@@ -318,6 +353,20 @@ public class SpecimenRequirement {
 		
 		result.setChildSpecimenRequirements(childSrs);
 		return result;
+	}
+	
+	private void updateRequirementAttrs(SpecimenRequirement sr) {
+		setAnatomicSite(sr.getAnatomicSite());
+		setLaterality(sr.getLaterality());
+		setPathologyStatus(sr.getPathologyStatus());
+		setCollector(sr.getCollector());
+		setCollectionContainer(sr.getCollectionContainer());
+		setCollectionProcedure(sr.getCollectionProcedure());
+		setReceiver(sr.getReceiver());
+		
+		for (SpecimenRequirement childSr : sr.getChildSpecimenRequirements()) {
+			childSr.updateRequirementAttrs(sr);
+		}		
 	}
 	
 	private static final String[] EXCLUDE_COPY_PROPS = {

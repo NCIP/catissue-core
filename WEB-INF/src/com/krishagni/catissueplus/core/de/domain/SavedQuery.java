@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.envers.NotAudited;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -113,6 +115,7 @@ public class SavedQuery {
 		this.drivingForm = drivingForm;
 	}
 
+	@NotAudited
 	public Filter[] getFilters() {
 		return filters;
 	}
@@ -121,6 +124,7 @@ public class SavedQuery {
 		this.filters = filters;
 	}
 
+	@NotAudited
 	public QueryExpressionNode[] getQueryExpression() {
 		return queryExpression;
 	}
@@ -137,6 +141,7 @@ public class SavedQuery {
 		this.selectList = selectList;
 	}
 	
+	@NotAudited
 	public ReportSpec getReporting() {
 		return reporting;
 	}
@@ -145,6 +150,7 @@ public class SavedQuery {
 		this.reporting = reporting;
 	}
 
+	@NotAudited
 	public Set<QueryFolder> getFolders() {
 		return folders;
 	}

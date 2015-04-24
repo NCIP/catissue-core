@@ -22,9 +22,6 @@ import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolSe
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("specimen-requirements")
 public class SpecimenRequirementsController {
@@ -65,6 +62,17 @@ public class SpecimenRequirementsController {
 		return resp.getPayload();		
 	}
 	
+	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SpecimenRequirementDetail updateRequirement(@PathVariable("id") Long id, @RequestBody SpecimenRequirementDetail requirement) {
+		requirement.setId(id);
+		
+		ResponseEvent<SpecimenRequirementDetail> resp = cpSvc.updateSpecimenRequirement(getRequest(requirement));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();		
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, value="/{id}/aliquots")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -101,12 +109,17 @@ public class SpecimenRequirementsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public SpecimenRequirementDetail deleteSr(@PathVariable("id") Long srId) {
+		ResponseEvent<SpecimenRequirementDetail> resp = cpSvc.deleteSpecimenRequirement(getRequest(srId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 		
 	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(getSession(), payload);
-	}
-	
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
-	}		
+		return new RequestEvent<T>(payload);
+	}	
 }

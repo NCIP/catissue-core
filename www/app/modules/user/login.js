@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .factory('AuthService', function($http, $window, $cookieStore, ApiUtil, ApiUrls) {
+  .factory('AuthService', function($http, $rootScope, $window, $cookieStore, ApiUtil, ApiUrls) {
     var url = function() {
       return ApiUrls.getUrl('sessions');
     };
@@ -13,6 +13,7 @@ angular.module('openspecimen')
       logout: function() {
         var q = $http.delete(url());
         this.removeToken();
+        delete $rootScope.currentUser;
         return q.then(ApiUtil.processResp);
       },
 
@@ -31,19 +32,32 @@ angular.module('openspecimen')
       }
     }
   })
-  .controller('LoginCtrl', function($scope, $rootScope, $state, $http, $location, AuthService) {
+  .controller('LoginCtrl', function($scope, $rootScope, $state, $http, $location, AuthDomain, AuthService) {
 
     function init() {
-      $scope.loginData = {domainName: 'openspecimen'};
+      $scope.loginData = {};
       
       if ($location.search().logout) {
         $scope.logout();
-        return;
       }
  
       if ($http.defaults.headers.common['X-OS-API-TOKEN']) {
         $state.go('home');
       }
+
+      loadPvs();
+    }
+
+    function loadPvs() {
+      $scope.domains = [];
+      AuthDomain.getDomainNames().then(
+        function(domains) {
+          $scope.domains = domains;
+          if ($scope.domains.length == 1) {
+            $scope.loginData.domainName = $scope.domains[0];
+          }
+        }
+      );
     }
 
     function onLogin(result) {
@@ -54,7 +68,8 @@ angular.module('openspecimen')
           id: result.data.id,
           firstName: result.data.firstName,
           lastName: result.data.lastName,
-          loginName: result.data.loginName
+          loginName: result.data.loginName,
+          admin: result.data.admin
         };
         $rootScope.loggedIn = true;
         AuthService.saveToken(result.data.token);

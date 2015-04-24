@@ -29,9 +29,6 @@ import com.krishagni.catissueplus.core.auth.services.UserAuthenticationService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 public class AuthTokenFilter extends GenericFilterBean {
 	private static final String OS_AUTH_TOKEN_HDR = "X-OS-API-TOKEN";
 	
@@ -101,11 +98,9 @@ public class AuthTokenFilter extends GenericFilterBean {
 		if (authToken != null) {
 			TokenDetail tokenDetail = new TokenDetail();
 			tokenDetail.setToken(authToken);
-			tokenDetail.setIpAddress(httpReq.getRemoteAddr());
+			tokenDetail.setIpAddress(httpReq.getRemoteAddr());			
 			
-			SessionDataBean sdb = (SessionDataBean) httpReq.getSession().getAttribute(Constants.SESSION_DATA);
-			RequestEvent<TokenDetail> atReq = new RequestEvent<TokenDetail>(sdb, tokenDetail);
-			
+			RequestEvent<TokenDetail> atReq = new RequestEvent<TokenDetail>(tokenDetail);			
 			ResponseEvent<User> atResp = authService.validateToken(atReq);
 			if (atResp.isSuccessful()) {
 				userDetails = atResp.getPayload();
@@ -150,8 +145,7 @@ public class AuthTokenFilter extends GenericFilterBean {
 		detail.setDomainName(DEFAULT_AUTH_DOMAIN);
 		detail.setDoNotGenerateToken(true);
 
-		SessionDataBean sdb = (SessionDataBean) httpReq.getSession().getAttribute(Constants.SESSION_DATA);
-		RequestEvent<LoginDetail> req = new RequestEvent<LoginDetail>(sdb, detail);
+		RequestEvent<LoginDetail> req = new RequestEvent<LoginDetail>(detail);
 		ResponseEvent<Map<String, Object>> resp = authService.authenticateUser(req);
 		if (resp.isSuccessful()) {
 			return (User)resp.getPayload().get("user");

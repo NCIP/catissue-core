@@ -1,7 +1,10 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import org.hibernate.envers.Audited;
+
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 
+@Audited
 public class SpecimenPosition extends AbstractPosition {
 	private Specimen specimen;
 	

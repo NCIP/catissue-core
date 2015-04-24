@@ -6,6 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -17,7 +21,8 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
-
+@Audited
+@AuditTable(value="CAT_COLLECTION_PROTOCOL_AUD")
 public class CollectionProtocol extends BaseEntity {
 	private static final String ENTITY_NAME = "collection_protocol";
 	
@@ -177,6 +182,7 @@ public class CollectionProtocol extends BaseEntity {
 		this.unsignedConsentDocumentURL = unsignedConsentDocumentURL;
 	}
 
+	@NotAudited
 	public Set<ConsentTier> getConsentTier() {
 		return consentTier;
 	}
@@ -201,6 +207,7 @@ public class CollectionProtocol extends BaseEntity {
 		this.repositories = repositories;
 	}
 
+	@NotAudited
 	public Set<CollectionProtocolEvent> getCollectionProtocolEvents() {
 		return collectionProtocolEvents;
 	}
@@ -209,6 +216,7 @@ public class CollectionProtocol extends BaseEntity {
 		this.collectionProtocolEvents = collectionProtocolEvents;
 	}
 
+	@NotAudited
 	public Set<StorageContainer> getStorageContainers() {
 		return storageContainers;
 	}
@@ -217,6 +225,7 @@ public class CollectionProtocol extends BaseEntity {
 		this.storageContainers = storageContainers;
 	}
 
+	@NotAudited
 	public Set<CollectionProtocolRegistration> getCollectionProtocolRegistrations() {
 		return collectionProtocolRegistrations;
 	}
@@ -351,5 +360,4 @@ public class CollectionProtocol extends BaseEntity {
 		
 		return null;
 	}
-	
 }

@@ -5,7 +5,7 @@
       <span translate="dp.list">Distribution Protocols</span>
     </h3>
     <div class="os-btns right">
-      <button class="primary" title="{{'dp.tooltip.add' | translate}}" ui-sref="dp-addedit({dpId: ''})">
+      <button show-if-admin class="primary" title="{{'dp.tooltip.add' | translate}}" ui-sref="dp-addedit({dpId: ''})">
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
@@ -30,7 +30,7 @@
         {{distributionProtocol.principalInvestigator.firstName}} {{distributionProtocol.principalInvestigator.lastName}}
       </h5>
       
-      <h5 title="{{'dp.start_date' | translate}}" > {{distributionProtocol.startDate | date : 'MMM dd, yyyy'}}</h5>
+      <h5 title="{{'dp.start_date' | translate}}" > {{distributionProtocol.startDate | date : global.dateFmt}}</h5>
 
       <div class="stats">
         <div class="stat col-xs-6" title="{{'dp.tooltip.distributed_count' | translate}}">

@@ -23,6 +23,8 @@ public class UserSummary {
 	
 	private String emailAddress;
 
+	private Boolean admin; 
+
 	public Long getId() {
 		return id;
 	}
@@ -62,13 +64,21 @@ public class UserSummary {
 	public void setDomain(String domain) {
 		this.domain = domain;
 	}
-
+	
 	public String getEmailAddress() {
 		return emailAddress;
 	}
 
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
+	}
+
+	public Boolean getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Boolean admin) {
+		this.admin = admin;
 	}
 
 	public static UserSummary from(User user) {
@@ -79,6 +89,7 @@ public class UserSummary {
 		userSummary.setLoginName(user.getLoginName());
 		userSummary.setDomain(user.getAuthDomain().getName());
 		userSummary.setEmailAddress(user.getEmailAddress());
+		userSummary.setAdmin(user.isAdmin());
 		return userSummary;
 	}
 	

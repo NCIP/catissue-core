@@ -4,8 +4,12 @@ package com.krishagni.catissueplus.core.administrative.domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
+@Audited
 public class Department extends BaseEntity {
 	private String name;
 
@@ -21,6 +25,7 @@ public class Department extends BaseEntity {
 		this.name = name;
 	}
 
+	@NotAudited
 	public Institute getInstitute() {
 		return institute;
 	}
@@ -29,6 +34,7 @@ public class Department extends BaseEntity {
 		this.institute = institute;
 	}
 
+	@NotAudited
 	public Set<User> getUsers() {
 		return users;
 	}

@@ -27,7 +27,7 @@ public class PermissibleValuesManagerImpl implements PermissibleValuesManager {
 	@Override
 	public List<PvDetail> getPermissibleValueList(String attribute) {
 		ListPvCriteria crit = new ListPvCriteria().attribute(attribute);
-		RequestEvent<ListPvCriteria> req = new RequestEvent<ListPvCriteria>(null, crit);
+		RequestEvent<ListPvCriteria> req = new RequestEvent<ListPvCriteria>(crit);
 		ResponseEvent<List<PvDetail>> resp = permissibleValueSvc.getPermissibleValues(req);
 		resp.throwErrorIfUnsuccessful();
 		

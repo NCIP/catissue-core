@@ -35,9 +35,6 @@ import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("/collection-protocol-registrations")
 public class CollectionProtocolRegistrationsController {
@@ -193,10 +190,6 @@ public class CollectionProtocolRegistrationsController {
 	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(getSession(), payload);
-	}
-	
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpReq.getSession().getAttribute(Constants.SESSION_DATA);
-	}
+		return new RequestEvent<T>(payload);
+	}	
 }

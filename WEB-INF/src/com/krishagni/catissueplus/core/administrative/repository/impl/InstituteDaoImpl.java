@@ -14,8 +14,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-
-import edu.wustl.catissuecore.util.global.Constants;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class InstituteDaoImpl extends AbstractDao<Institute> implements InstituteDao {
 	
@@ -28,7 +27,7 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 	@SuppressWarnings("unchecked")
 	public List<Institute> getInstitutes(InstituteListCriteria listCrit) {
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(Institute.class)
-			.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE))
+			.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
 			.addOrder(Order.asc("name"))
 			.setFirstResult(listCrit.startAt())
 			.setMaxResults(listCrit.maxResults());

@@ -28,8 +28,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocol
 import com.krishagni.catissueplus.core.biospecimen.repository.CpListCriteria;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-
-import edu.wustl.catissuecore.util.global.Constants;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> implements CollectionProtocolDao {
 
@@ -103,10 +102,14 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 				.list();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public CollectionProtocolEvent getCpe(Long cpeId) {
-		return (CollectionProtocolEvent) sessionFactory.getCurrentSession()
-				.get(CollectionProtocolEvent.class.getName(), cpeId);
+		List<CollectionProtocolEvent> events = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CPE_BY_ID)
+				.setLong("cpeId", cpeId)
+				.list();
+		return events != null && !events.isEmpty() ? events.iterator().next() : null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -177,7 +180,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(CollectionProtocol.class)
 				.setFirstResult(cpCriteria.startAt())
 				.setMaxResults(cpCriteria.maxResults())
-				.add(Restrictions.eq("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE))
+				.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
 				.createAlias("principalInvestigator", "pi");
 		
 		addSearchConditions(query, cpCriteria);
@@ -267,4 +270,8 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	private static final String GET_CPS_BY_SHORT_TITLE = FQN + ".getCpsByShortTitle";
 	
 	private static final String GET_CP_IDS_BY_SITE_IDS = FQN + ".getCpIdsBySiteIds";
+	
+	private static final String CPE_FQN = CollectionProtocolEvent.class.getName();
+	
+	private static final String GET_CPE_BY_ID = CPE_FQN + ".getCpeById";
 }

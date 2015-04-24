@@ -48,6 +48,24 @@ public class SiteFactoryImpl implements SiteFactory {
 		return site;
 	}
 	
+	@Override
+	public Site createSite(Site existing, SiteDetail detail) {
+		Site site = new Site();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		
+		site.setId(existing.getId());
+		setName(detail, existing, site, ose);
+		setInstitute(detail, existing, site, ose);
+		setCode(detail, existing, site, ose);
+		setCoordinators(detail, existing, site, ose);
+		setType(detail, existing, site, ose);
+		setAddress(detail, existing, site, ose);
+		setActivityStatus(detail, existing, site, ose);
+		
+		ose.checkAndThrow();
+		return site;		
+	}
+	
 
 	private void setName(SiteDetail detail, Site site, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(detail.getName())) {
@@ -56,6 +74,14 @@ public class SiteFactoryImpl implements SiteFactory {
 		}
 		
 		site.setName(detail.getName());
+	}
+	
+	private void setName(SiteDetail detail, Site existing, Site site, OpenSpecimenException ose) {
+		if (detail.isAttrModified("name")) {
+			setName(detail, site, ose);
+		} else {
+			site.setName(existing.getName());
+		}		
 	}
 	
 	private void setInstitute(SiteDetail detail, Site site, OpenSpecimenException ose) {
@@ -73,10 +99,25 @@ public class SiteFactoryImpl implements SiteFactory {
 		site.setInstitute(institute);
 	}
 	
+	private void setInstitute(SiteDetail detail, Site existing, Site site, OpenSpecimenException ose) {
+		if (detail.isAttrModified("instituteName")) {
+			setInstitute(detail, site, ose);
+		} else {
+			site.setInstitute(existing.getInstitute());
+		}		
+	}
+	
 	private void setCode(SiteDetail detail, Site site) {
 		site.setCode(detail.getCode());
 	}
-
+	
+	private void setCode(SiteDetail detail, Site existing, Site site, OpenSpecimenException ose) {
+		if (detail.isAttrModified("code")) {
+			setCode(detail, site);
+		} else {
+			site.setCode(existing.getCode());
+		}
+	}
 
 	private void setCoordinators(SiteDetail detail, Site site, OpenSpecimenException ose) {		
 		Set<User> result = new HashSet<User>();
@@ -100,6 +141,14 @@ public class SiteFactoryImpl implements SiteFactory {
 		site.setCoordinators(result);
 	}
 	
+	private void setCoordinators(SiteDetail detail, Site existing, Site site, OpenSpecimenException ose) {
+		if (detail.isAttrModified("coordinators")) {
+			setCoordinators(detail, site, ose);
+		} else {
+			site.setCoordinators(existing.getCoordinators());
+		}
+	}
+	
 	private void setType(SiteDetail detail, Site site, OpenSpecimenException ose) {
 		String siteType = detail.getType();
 		if (StringUtils.isBlank(siteType)) {
@@ -113,9 +162,25 @@ public class SiteFactoryImpl implements SiteFactory {
 		
 		site.setType(siteType);
 	}
+	
+	private void setType(SiteDetail detail, Site existing, Site site, OpenSpecimenException ose) {
+		if (detail.isAttrModified("type")) {
+			setType(detail, site, ose);
+		} else {
+			site.setType(existing.getType());
+		}
+	}
 
 	private void setAddress(SiteDetail detail, Site site) {
 		site.setAddress(detail.getAddress());
+	}
+	
+	private void setAddress(SiteDetail detail, Site existing, Site site, OpenSpecimenException ose) {
+		if (detail.isAttrModified("address")) {
+			setAddress(detail, site);
+		} else {
+			site.setAddress(existing.getAddress());
+		}
 	}
 	
 	private void setActivityStatus(SiteDetail detail, Site site, OpenSpecimenException ose) {
@@ -131,5 +196,13 @@ public class SiteFactoryImpl implements SiteFactory {
 		}
 		
 		site.setActivityStatus(activityStatus);
+	}
+	
+	private void setActivityStatus(SiteDetail detail, Site existing, Site site, OpenSpecimenException ose) {
+		if (detail.isAttrModified("activityStatus")) {
+			setActivityStatus(detail, site, ose);
+		} else {
+			site.setActivityStatus(existing.getActivityStatus());
+		}
 	}
 }

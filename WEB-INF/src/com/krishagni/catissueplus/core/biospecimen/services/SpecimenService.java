@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.services;
 
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
@@ -22,4 +23,7 @@ public interface SpecimenService {
 	public ResponseEvent<Boolean> doesSpecimenExists(RequestEvent<String> label);
 	
 	public ResponseEvent<SpecimenLabelPrintJobSummary> printSpecimenLabels(RequestEvent<PrintSpecimenLabelDetail> req);
+	
+	/** Mostly present for UI **/
+	public ResponseEvent<Map<String, Long>> getCprAndVisitIds(RequestEvent<Long> req);
 }

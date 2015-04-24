@@ -134,6 +134,10 @@ angular.module('os.biospecimen.participant.specimen-tree',
               specimen.isOpened = true;
               specimensToCollect.push(specimen);
             } else if (isAnyChildSpecimenSelected(specimen)) {
+              if (specimen.status != 'Collected') {
+                // a parent needs to be collected first
+                specimen.selected = true; 
+              }
               specimen.isOpened = true;
               specimensToCollect.push(specimen);
             }
@@ -151,6 +155,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
             showSelectSpecimens('specimens.no_specimens_for_collection');
             return;
           }
+
           CollectSpecimensSvc.collect(getState(), scope.visit, specimensToCollect);
         };
 

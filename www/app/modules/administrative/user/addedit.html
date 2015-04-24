@@ -28,6 +28,15 @@
       </div>
       
       <div class="form-group">
+        <label class="col-xs-3 control-label" translate="user.email_address">Email Address</label>
+        <div class="col-xs-4">
+          <input type="email" name="email" class="form-control" ng-model="user.emailAddress"
+            placeholder="{{'user.email_address' | translate}}" ng-maxlength="255" required>
+          <div os-field-error field="userForm.email"></div>
+        </div>
+      </div>
+      
+      <div class="form-group">
         <label class="col-xs-3 control-label" translate="user.login_details">Login Details</label>
         <div class="col-xs-4">
           <os-select ng-model="user.domainName" list="domains" name="domain"
@@ -43,15 +52,6 @@
         </div>
       </div>
        
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="user.email_address">Email Address</label>
-        <div class="col-xs-4">
-          <input type="email" name="email" class="form-control" ng-model="user.emailAddress"
-            placeholder="{{'user.email_address' | translate}}" ng-maxlength="255" required>
-          <div os-field-error field="userForm.email"></div>
-        </div>
-      </div>
-      
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="user.institute">Institute</label>
         <div class="col-xs-4">
@@ -73,7 +73,7 @@
         <label class="col-xs-3 control-label" translate="user.super_admin">Super Administrator</label>
         <div class="col-xs-9">
           <label class="checkbox-inline">
-            <input type="checkbox" ng-model="user.superAdmin" /> <span translate="common.yes"></span>
+            <input type="checkbox" ng-model="user.admin" /> <span translate="common.yes"></span>
           </label>
         </div>
       </div>

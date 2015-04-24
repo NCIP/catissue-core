@@ -23,5 +23,9 @@ angular.module('os.biospecimen.models.cpe', ['os.common.models'])
       return $http.post(Cpe.url() + copyFrom  + '/copy', this.$saveProps()).then(Cpe.modelRespTransform);
     };
 
+    Cpe.prototype.delete = function() {
+      return $http.delete(Cpe.url() + this.$id());
+    };
+
     return Cpe;
   });

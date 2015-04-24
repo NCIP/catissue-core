@@ -20,9 +20,6 @@ import com.krishagni.catissueplus.core.administrative.services.PermissibleValueS
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("/permissible-values")
 public class PermissibleValueController {
@@ -63,14 +60,10 @@ public class PermissibleValueController {
 			.parentAttribute(parentAttribute)
 			.maxResults(maxResults);
 		
-		RequestEvent<ListPvCriteria> req = new RequestEvent<ListPvCriteria>(getSession(), crit);
+		RequestEvent<ListPvCriteria> req = new RequestEvent<ListPvCriteria>(crit);
 		ResponseEvent<List<PvDetail>> resp = pvSvc.getPermissibleValues(req);
 		resp.throwErrorIfUnsuccessful();
 				
 		return resp.getPayload();
-	}
-
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}
 }

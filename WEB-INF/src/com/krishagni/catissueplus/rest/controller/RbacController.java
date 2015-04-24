@@ -38,7 +38,7 @@ public class RbacController {
 	private RbacService rbacSvc;
 	
 	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(null, payload);
+		return new RequestEvent<T>(payload);
 	}
 	
 	//

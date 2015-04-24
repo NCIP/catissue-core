@@ -13,9 +13,6 @@ import com.krishagni.catissueplus.core.audit.repository.AuditDao;
 import com.krishagni.catissueplus.core.auth.repository.AuthDao;
 import com.krishagni.catissueplus.core.common.repository.ConfigSettingDao;
 import com.krishagni.catissueplus.core.common.repository.UniqueIdGenerator;
-import com.krishagni.catissueplus.core.notification.repository.CPStudyMappingDao;
-import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
-import com.krishagni.catissueplus.core.notification.repository.ExternalApplicationDao;
 
 public interface DaoFactory {
 	public CollectionProtocolDao getCollectionProtocolDao();
@@ -34,13 +31,7 @@ public interface DaoFactory {
 
 	public UserDao getUserDao();
 	
-	public ExternalAppNotificationDao getExternalAppNotificationDao();
-
-	public ExternalApplicationDao getExternalApplicationDao();
-
 	public AuthDao getAuthDao();
-
-	public CPStudyMappingDao getCPStudyMappingDao();
 
 	public UniqueIdGenerator getUniqueIdGenerator();
 

@@ -5,16 +5,30 @@ angular.module('os.administrative.user',
     'os.administrative.user.list',
     'os.administrative.user.addedit',
     'os.administrative.user.detail',
-    'os.administrative.user.roles'
+    'os.administrative.user.roles',
+    'os.common.import'
   ])
 
   .config(function($stateProvider) {
     $stateProvider
+      .state('user-root', {
+        abstract: true,
+        template: '<div ui-view></div>',
+        controller: function($scope) {
+          // User Authorization Options
+          $scope.userResource = {
+            createOpts: {resource: 'User', operations: ['Create']},
+            updateOpts: {resource: 'User', operations: ['Update']},
+            deleteOpts: {resource: 'User', operations: ['Delete']}
+          }
+        },
+        parent: 'signed-in'
+      })
       .state('user-list', {
         url: '/users',
         templateUrl: 'modules/administrative/user/list.html',
         controller: 'UserListCtrl',
-        parent: 'signed-in'
+        parent: 'user-root'
       })
       .state('user-addedit', {
         url: '/user-addedit/:userId',
@@ -28,7 +42,46 @@ angular.module('os.administrative.user',
           }
         },
         controller: 'UserAddEditCtrl',
-        parent: 'signed-in'
+        parent: 'user-root'
+      })
+      .state('user-import', {
+        url: '/users-import?objectType',
+        templateUrl: 'modules/common/import/add.html',
+        controller: 'ImportObjectCtrl',
+        resolve: {
+          importDetail: function($stateParams) {
+            var objectType = $stateParams.objectType;
+            var title = undefined;
+            if (objectType == 'user') {
+              title = 'user.bulk_import_users';
+            } else if (objectType == 'userRoles') {
+              title = 'user.bulk_import_user_roles';
+            }
+
+            return {
+              breadcrumbs: [{state: 'user-list', title: 'user.list'}],
+              objectType: objectType,
+              title: title,
+              onSuccessState: 'user-list'
+            };
+          }
+        },
+        parent: 'user-root'
+      })
+      .state('user-import-jobs', {
+        url: '/users-import-jobs',
+        templateUrl: 'modules/common/import/list.html',
+        controller: 'ImportJobsListCtrl',
+        resolve: {
+          importDetail: function() {
+            return {
+              breadcrumbs: [{state: 'user-list', title: 'user.list'}],
+              title: 'user.bulk_import_jobs',
+              objectTypes: ['user', 'userRoles']
+            }
+          }
+        },
+        parent: 'user-root'
       })
       .state('user-detail', {
         url: '/users/:userId',
@@ -39,7 +92,7 @@ angular.module('os.administrative.user',
           }
         },
         controller: 'UserDetailCtrl',
-        parent: 'signed-in'
+        parent: 'user-root'
       })
       .state('user-detail.overview', {
         url: '/overview',

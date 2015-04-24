@@ -29,15 +29,35 @@ angular.module('os.administrative.institute',
         controller: 'InstituteAddEditCtrl',
         parent: 'signed-in'
       })
-      .state('institute-edit', {
-        url: '/institutes/:instituteId/edit',
-        templateUrl: 'modules/administrative/institute/addedit.html',
+      .state('institute-import', {
+        url: '/institutes-import',
+        templateUrl: 'modules/common/import/add.html',
+        controller: 'ImportObjectCtrl',
         resolve: {
-          institute: function($stateParams, Institute) {
-            return Institute.getById($stateParams.instituteId);
+          importDetail: function() {
+            return {
+              breadcrumbs: [{state: 'institute-list', title: 'institutes.list'}],
+              objectType: 'institute',
+              title: 'institutes.bulk_import',
+              onSuccessState: 'institute-list'
+            };
           }
         },
-        controller: 'InstituteAddEditCtrl',
+        parent: 'signed-in'
+      })
+      .state('institute-import-jobs', {
+        url: '/institutes-import-jobs',
+        templateUrl: 'modules/common/import/list.html',
+        controller: 'ImportJobsListCtrl',
+        resolve: {
+          importDetail: function() {
+            return {
+              breadcrumbs: [{state: 'institute-list', title: 'institutes.list'}],
+              title: 'institutes.bulk_import_jobs',
+              objectTypes: ['institute']
+            }
+          }
+        },
         parent: 'signed-in'
       })
       .state('institute-detail', {

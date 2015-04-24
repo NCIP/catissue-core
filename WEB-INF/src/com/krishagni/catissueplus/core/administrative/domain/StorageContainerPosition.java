@@ -1,9 +1,11 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import org.hibernate.envers.Audited;
 import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 
+@Audited
 public class StorageContainerPosition implements Comparable<StorageContainerPosition> {
 	private Long id;
 	

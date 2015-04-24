@@ -21,9 +21,6 @@ import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolSe
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("/collection-protocol-events")
 public class CollectionProtocolEventsController {
@@ -92,12 +89,17 @@ public class CollectionProtocolEventsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();		
 	}
-	
-	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(getSession(), payload);
+
+	@RequestMapping(method = RequestMethod.DELETE, value="/{eventId}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public CollectionProtocolEventDetail deleteEvent(@PathVariable("eventId") Long eventId) {
+		ResponseEvent<CollectionProtocolEventDetail> resp = cpSvc.deleteEvent(new RequestEvent<Long>(eventId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
-	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return new RequestEvent<T>(payload);
 	}	
 }

@@ -17,12 +17,12 @@
 
       <li class="item" ng-if="visit.id">
         <strong class="key key-sm" translate="visits.visit_date">Visit Date</strong>
-        <span class="value value-md">{{visit.visitDate | date: 'MMM dd, yyyy'}}</span>
+        <span class="value value-md">{{visit.visitDate | date: global.dateFmt}}</span>
       </li>
  
       <li class="item" ng-if="!visit.id">
         <strong class="key key-sm" translate="visits.anticipated_visit_date">Anticipated Visit Date</strong>
-        <span class="value value-md">{{visit.anticipatedVisitDate | date: 'MMM dd, yyyy'}}</span>
+        <span class="value value-md">{{visit.anticipatedVisitDate | date: global.dateFmt}}</span>
       </li>
  
       <li class="item">

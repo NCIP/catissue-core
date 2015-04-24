@@ -131,7 +131,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			StorageContainer container = containerFactory.createStorageContainer(input);
 			AccessCtrlMgr.getInstance().ensureCreateContainerRights(container);
 			
-			ensureUniqueConstraints(container);
+			ensureUniqueConstraints(null, container);
 			container.validateRestrictions();			
 			daoFactory.getStorageContainerDao().saveOrUpdate(container, true);
 			return ResponseEvent.response(StorageContainerDetail.from(container));
@@ -145,27 +145,13 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<StorageContainerDetail> updateStorageContainer(RequestEvent<StorageContainerDetail> req) {
-		try {
-			StorageContainerDetail input = req.getPayload();
-			
-			Long id = input.getId();
-			StorageContainer existing = daoFactory.getStorageContainerDao().getById(id);
-			if (existing == null) {
-				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
-			}
-			AccessCtrlMgr.getInstance().ensureUpdateContainerRights(existing);			
-			
-			StorageContainer container = containerFactory.createStorageContainer(input);
-			ensureUniqueConstraints(container);
-			
-			existing.update(container);			
-			daoFactory.getStorageContainerDao().saveOrUpdate(existing, true);
-			return ResponseEvent.response(StorageContainerDetail.from(existing));			
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
+		return updateStorageContainer(req, false);
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<StorageContainerDetail> patchStorageContainer(RequestEvent<StorageContainerDetail> req) {
+		return updateStorageContainer(req, true);
 	}
 	
 	@Override
@@ -297,49 +283,69 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		return container;
 	}
 	
-	private void ensureUniqueConstraints(StorageContainer container) {
+	private ResponseEvent<StorageContainerDetail> updateStorageContainer(RequestEvent<StorageContainerDetail> req, boolean partial) {
+		try {
+			StorageContainerDetail input = req.getPayload();			
+			StorageContainer existing = getContainer(input.getId(), input.getName());			
+			if (existing == null) {
+				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
+			}
+			AccessCtrlMgr.getInstance().ensureUpdateContainerRights(existing);			
+			
+			input.setId(existing.getId());
+			StorageContainer container = null;
+			if (partial) {
+				container = containerFactory.createStorageContainer(existing, input);
+			} else {
+				container = containerFactory.createStorageContainer(input); 
+			}
+			
+			
+			ensureUniqueConstraints(existing, container);			
+			existing.update(container);			
+			daoFactory.getStorageContainerDao().saveOrUpdate(existing, true);
+			return ResponseEvent.response(StorageContainerDetail.from(existing));			
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}		
+	}
+	
+	private void ensureUniqueConstraints(StorageContainer existing, StorageContainer newContainer) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
-		if (!isUniqueName(container)) {
+		if (!isUniqueName(existing, newContainer)) {
 			ose.addError(StorageContainerErrorCode.DUP_NAME);
 		}
 		
-		if (!isUniqueBarcode(container)) {
+		if (!isUniqueBarcode(existing, newContainer)) {
 			ose.addError(StorageContainerErrorCode.DUP_BARCODE);
 		}
 		
 		ose.checkAndThrow();
 	}
 	
-	private boolean isUniqueName(StorageContainer container) {
-		StorageContainer existing = daoFactory.getStorageContainerDao().getByName(container.getName());
-		if (existing == null) {
-			return true; // no container by this name
-		} else if (container.getId() == null) {
-			return false; // a different container by this name exists 
-		} else if (existing.getId().equals(container.getId())) {
-			return true; // same container
-		} else {
-			return false;
-		}
-	}
-	
-	private boolean isUniqueBarcode(StorageContainer container) {
-		String barcode = container.getBarcode();
-		if (barcode == null) {
+	private boolean isUniqueName(StorageContainer existingContainer, StorageContainer newContainer) {
+		if (existingContainer != null && existingContainer.getName().equals(newContainer.getName())) {
 			return true;
 		}
 		
-		StorageContainer existing = daoFactory.getStorageContainerDao().getByBarcode(barcode);
-		if (existing == null) {
+		StorageContainer container = daoFactory.getStorageContainerDao().getByName(newContainer.getName());
+		return container == null;
+	}
+	
+	private boolean isUniqueBarcode(StorageContainer existingContainer, StorageContainer newContainer) {
+		if (StringUtils.isBlank(newContainer.getBarcode())) {
 			return true;
-		} else if (container.getId() == null) {
-			return false;
-		} else if (existing.getId().equals(container.getId())) {
-			return true;
-		} else {
-			return false;
 		}
+		
+		if (existingContainer != null && newContainer.getBarcode().equals(existingContainer.getBarcode())) {
+			return true;
+		}
+		
+		StorageContainer container = daoFactory.getStorageContainerDao().getByBarcode(newContainer.getBarcode());
+		return container == null;
 	}
 	
 	private StorageContainerPosition createPosition(StorageContainer container, StorageContainerPositionDetail pos) {

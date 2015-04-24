@@ -8,6 +8,8 @@ angular.module('os.administrative.models',
     'os.administrative.models.container',
     'os.administrative.models.role',
     'os.administrative.models.form'
+    'os.administrative.models.setting',
+    'os.administrative.models.authdomain'
   ]
 );
  
