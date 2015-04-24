@@ -1632,7 +1632,7 @@
 
   <changeSet author="vpawar" id="Bulk import objects jobs table">
     <createTable tableName="OS_BULK_IMPORT_JOBS">
-      <column name="IDENTIFIER" type="${int.type}">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="NAME" type="${text.type}(32)">
