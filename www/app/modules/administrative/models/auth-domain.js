@@ -1,17 +1,15 @@
 
 angular.module('os.administrative.models.authdomain', ['os.common.models'])
-  .factory('AuthDomain', function(osModel, $http) {
+  .factory('AuthDomain', function(osModel) {
     var AuthDomain = new osModel('auth-domains');
 
     AuthDomain.getDomainNames = function() {
-      return $http.get(AuthDomain.url()).then(function(result) {
-        var domains = [];
-        angular.forEach(result.data, function(domain) {
-          domains.push(domain.name);
-        });
-        return domains;
-      });
-    }
+      return AuthDomain.query().then(
+        function(domains) {
+          return domains.map(function(domain) { return domain.name; });
+        }
+      );
+    };
 
     return AuthDomain;
   });
