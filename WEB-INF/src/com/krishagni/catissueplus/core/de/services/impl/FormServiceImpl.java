@@ -3,7 +3,6 @@ package com.krishagni.catissueplus.core.de.services.impl;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,7 +34,6 @@ import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.FormType;
-import com.krishagni.catissueplus.core.de.events.GenerateBoTemplateOp;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
 import com.krishagni.catissueplus.core.de.events.GetFileDetailOp;
 import com.krishagni.catissueplus.core.de.events.GetFormDataOp;
@@ -460,26 +458,7 @@ public class FormServiceImpl implements FormService {
 		formDao.saveOrUpdateRecordEntry(recordEntry);		
 		return ResponseEvent.response(recordEntry.getIdentifier());
 	}
-	
-	@Override
-	public ResponseEvent<List<Long>> genereateBoTemplate(RequestEvent<GenerateBoTemplateOp> boReq) {
-		// TODO: Fix this with new bulk importer
 		
-//		GenerateBoTemplateOp opDetail = boReq.getPayload();		
-//		Long formId = opDetail.getFormId();
-//		BOTemplateGeneratorUtil generator = new BOTemplateGeneratorUtil();
-//		
-//		try {
-//			for (String level : opDetail.getEntityLevels()) {
-//				generator.generateAndUploadTemplate(formId, level);
-//			}
-//		} catch (Exception e) {
-//			ResponseEvent.serverError(e);
-//		}
-//		
-		return ResponseEvent.response(Collections.<Long>emptyList());
-	}
-	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<FormRecordsList>> getFormRecords(RequestEvent<GetFormRecordsListOp> req) {

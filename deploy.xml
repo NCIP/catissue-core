@@ -395,7 +395,6 @@
 		</copy>
 		
 		<antcall target="configure_log4j" />
-		<antcall target="configure_appResources" />
 
 		<antcall target="configure_contactus" />
 		<copy file="openspecimen-ds.xml" todir="${temp.dir}" overwrite="true" />
@@ -1178,7 +1177,6 @@
 			<antcall target="db_configuration" />
 			<!-- antcall target="integrate_advanced_query"/ -->
 		
-			<antcall target="app_configuration"/>
 			<antcall target="de_integrate_app" />
 			<antcall target="build_war" />
 			<antcall target="jboss_configuration" />

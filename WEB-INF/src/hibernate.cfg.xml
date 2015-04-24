@@ -36,7 +36,6 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthToken.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/LoginAuditLog.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExternalIdentifier.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Audit.hbm.xml" />
 		
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Institute.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/KeySequence.hbm.xml" />
@@ -45,7 +44,6 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/StorageContainerPosition.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/DistributionProtocol.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/PermissibleValue.hbm.xml"/>
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ClinicalDiagnosis.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConsentTier.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocolEvent.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenRequirement.hbm.xml"/>

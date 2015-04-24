@@ -31,7 +31,6 @@ import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.FormType;
-import com.krishagni.catissueplus.core.de.events.GenerateBoTemplateOp;
 import com.krishagni.catissueplus.core.de.events.GetFormDataOp;
 import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
@@ -159,16 +158,6 @@ public class FormsController {
 		
 		ResponseEvent<List<FormContextDetail>> resp = formSvc.addFormContexts(getRequestEvent(formCtxts));
 		resp.throwErrorIfUnsuccessful();
-
-		GenerateBoTemplateOp boReq = new GenerateBoTemplateOp();
-		boReq.setFormId(formCtxts.get(0).getFormId());
-
-		for (FormContextDetail ctxt : formCtxts) {
-			boReq.setFormId(ctxt.getFormId());
-			boReq.addEntityLevel(ctxt.getLevel());
-		}
-
-		ResponseEvent<?> boResp = formSvc.genereateBoTemplate(getRequestEvent(boReq));
 		return resp.getPayload();
 	}
 	

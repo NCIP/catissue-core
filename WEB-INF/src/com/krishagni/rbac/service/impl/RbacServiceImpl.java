@@ -35,7 +35,6 @@ import com.krishagni.rbac.domain.RoleAccessControl;
 import com.krishagni.rbac.domain.Subject;
 import com.krishagni.rbac.domain.SubjectAccess;
 import com.krishagni.rbac.domain.SubjectRole;
-import com.krishagni.rbac.events.CpSiteInfo;
 import com.krishagni.rbac.events.GroupDetail;
 import com.krishagni.rbac.events.GroupRoleDetail;
 import com.krishagni.rbac.events.OperationDetail;
@@ -47,7 +46,6 @@ import com.krishagni.rbac.events.RoleDetail;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 import com.krishagni.rbac.events.SubjectRoleOp;
 import com.krishagni.rbac.events.SubjectRolesList;
-import com.krishagni.rbac.events.UserAccessCriteria;
 import com.krishagni.rbac.repository.DaoFactory;
 import com.krishagni.rbac.repository.OperationListCriteria;
 import com.krishagni.rbac.repository.PermissionListCriteria;
@@ -556,31 +554,6 @@ public class RbacServiceImpl implements RbacService {
 	
 	@Override
 	@PlusTransactional
-	public boolean canUserPerformOp(Long subjectId, String resource, String operation, Long cpId, Set<Long> sites) {
-		try {			
-			UserAccessCriteria uac = new UserAccessCriteria()
-					.subjectId(subjectId)
-					.resource(resource)
-					.operation(operation)
-					.cpId(cpId)
-					.sites(sites);
-			
-			if ((uac.subjectId() == null) || 
-				StringUtils.isBlank(uac.resource()) ||
-				StringUtils.isBlank(uac.operation()) ) {
-				throw OpenSpecimenException.userError(RbacErrorCode.INSUFFICIENT_USER_DETAILS);
-			}
-			
-			return daoFactory.getSubjectDao().canUserPerformOp(uac);
-		} catch (OpenSpecimenException oce) {
-			throw oce;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	@Override
-	@PlusTransactional
 	public boolean canUserPerformOp(Long userId, String resource, String[] operations) {
 		return daoFactory.getSubjectDao().canUserPerformOps(userId, resource, operations);
 	}
@@ -590,18 +563,7 @@ public class RbacServiceImpl implements RbacService {
 	public List<SubjectAccess> getAccessList(Long userId, String resource, String[] operations) {
 		return daoFactory.getSubjectDao().getAccessList(userId, resource, operations);
 	}
-	
-	@Override
-	@PlusTransactional
-	public List<CpSiteInfo> getAccessibleCpSites(Long userId, String resource, String operation) {
-		UserAccessCriteria crit = new UserAccessCriteria()
-				.subjectId(userId)
-				.operation(operation)
-				.resource(resource);
 		
-		return daoFactory.getSubjectDao().getCpSiteForOpExecution(crit);
-	}
-	
 	//
 	// HELPER METHODS
 	// 

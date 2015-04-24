@@ -1,12 +1,10 @@
 package com.krishagni.rbac.service;
 
 import java.util.List;
-import java.util.Set;
 
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.rbac.domain.SubjectAccess;
-import com.krishagni.rbac.events.CpSiteInfo;
 import com.krishagni.rbac.events.GroupDetail;
 import com.krishagni.rbac.events.GroupRoleDetail;
 import com.krishagni.rbac.events.OperationDetail;
@@ -83,11 +81,7 @@ public interface RbacService {
 	//
 	// Intern API's can change without notice.
 	//
-	public boolean canUserPerformOp(Long userId, String resource, String operation, Long cpId, Set<Long> sites);
-	
 	public boolean canUserPerformOp(Long userId, String resource, String[] operations);
 	
 	public List<SubjectAccess> getAccessList(Long userId, String resource, String[] operations);
-	
-	public List<CpSiteInfo> getAccessibleCpSites(Long userId, String resource, String operation);
 }

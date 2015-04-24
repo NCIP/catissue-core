@@ -46,25 +46,6 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     </init-param>
   </servlet>
 
-  <servlet>
-    <servlet-name>caTissue REST Service</servlet-name>
-    <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-    <init-param>
-      <param-name>com.sun.jersey.config.property.packages</param-name>
-      <param-value>krishagni.catissueplus.rest</param-value>
-    </init-param>
-    <init-param>
-      <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-      <param-value>true</param-value>
-    </init-param>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-	
-  <servlet-mapping>
-    <servlet-name>caTissue REST Service</servlet-name>
-    <url-pattern>/rest/*</url-pattern>
-  </servlet-mapping>
-
   <servlet-mapping>
     <servlet-name>CSD</servlet-name>
     <url-pattern>/csdApi/*</url-pattern>
