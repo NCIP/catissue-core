@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.core.common.events;
 
+import org.apache.commons.lang.StringUtils;
+
 public enum Resource {
 	CP("CollectionProtocol"),
 	
@@ -26,4 +28,16 @@ public enum Resource {
 	public String getName() { 
 		return name;
 	}
+	
+	public static Resource fromName(String name) {
+		if (StringUtils.isNotBlank(name)) {
+			for (Resource r : Resource.values()) {
+				if (r.name.equalsIgnoreCase(name)) {
+					return r;
+				}
+			}
+		}
+		return null;
+	}
+	
 }

@@ -213,8 +213,18 @@ public class SiteServiceImpl implements SiteService {
 		List<Site> results = new ArrayList<Site>();
 		
 		Set<Site> accessibleSites = null;
-		if (criteria.resource() != null && criteria.operation() != null) {
-			accessibleSites = AccessCtrlMgr.getInstance().getSites(criteria.resource(), criteria.operation());
+		if (StringUtils.isNotBlank(criteria.resource()) && StringUtils.isNotBlank(criteria.operation())) {
+			Resource resource = Resource.fromName(criteria.resource());
+			if (resource == null) {
+				throw OpenSpecimenException.userError(SiteErrorCode.RESOURCE_NOT_FOUND);
+			}
+			
+			Operation operation = Operation.fromName(criteria.operation());
+			if (operation == null) {
+				throw OpenSpecimenException.userError(SiteErrorCode.OPERATION_NOT_FOUND);
+			}
+			
+			accessibleSites = AccessCtrlMgr.getInstance().getSites(resource, operation);
 		} else {
 			accessibleSites = AccessCtrlMgr.getInstance().getRoleAssignedSites();
 		}

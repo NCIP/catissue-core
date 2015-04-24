@@ -1,35 +1,33 @@
 package com.krishagni.catissueplus.core.administrative.repository;
 
 import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
-import com.krishagni.catissueplus.core.common.events.Operation;
-import com.krishagni.catissueplus.core.common.events.Resource;
 
 
 public class SiteListCriteria extends AbstractListCriteria<SiteListCriteria> {
 
-	private Resource resource;
+	private String resource;
 	
-	private Operation operation;
+	private String operation;
 	
 	@Override
 	public SiteListCriteria self() {
 		return this;
 	}
 	
-	public Resource resource() {
+	public String resource() {
 		return resource;
 	}
 	
-	public SiteListCriteria resource(Resource resource) {
+	public SiteListCriteria resource(String resource) {
 		this.resource = resource;
 		return self();
 	}
 	
-	public Operation operation() {
+	public String operation() {
 		return operation;
 	}
 	
-	public SiteListCriteria operation(Operation operation) {
+	public SiteListCriteria operation(String operation) {
 		this.operation = operation;
 		return self();
 	}

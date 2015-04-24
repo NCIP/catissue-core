@@ -63,8 +63,9 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     function loadPvs() {
       $scope.positionLabelingSchemes = PvManager.getPvs('container-position-labeling-schemes');
 
-      var op = $scope.container.id ? AuthorizationService.getOp('update') : AuthorizationService.getOp('create');
-      var opts = {resource:AuthorizationService.getResource('storage_container'), operation: op};
+      var op = $scope.container.id ? $scope.containerResource.updateOpts.operations[0] :
+        $scope.containerResource.createOpts.operations[0];
+      var opts = {resource: $scope.containerResource.createOpts.resource, operation: op};
       $scope.sites = PvManager.getSites(opts);
 
       if ($scope.container.parentContainerName) {
