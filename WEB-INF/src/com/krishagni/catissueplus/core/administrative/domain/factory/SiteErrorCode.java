@@ -18,11 +18,7 @@ public enum SiteErrorCode implements ErrorCode {
 	
 	DUP_CODE,
 	
-	REF_ENTITY_FOUND,
-	
-	RESOURCE_NOT_FOUND,
-	
-	OPERATION_NOT_FOUND;
+	REF_ENTITY_FOUND;
 	
 	public String code() {
 		return "SITE_" + this.name();
