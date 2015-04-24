@@ -279,6 +279,22 @@ public class ImportServiceImpl implements ImportService {
 				Locale.getDefault());
 	}
 	
+	private String getMessage(OpenSpecimenException ose) {
+		StringBuilder errorMsg = new StringBuilder();
+		if (!ose.getErrors().isEmpty()) {
+			for (ParameterizedError pe : ose.getErrors()) {
+				errorMsg.append(getMessage(pe)).append(", ");
+			}
+			errorMsg.delete(errorMsg.length() - 2, errorMsg.length());
+		} else if (ose.getException() != null) {
+			errorMsg.append(ose.getException().getMessage());
+		} else {
+			errorMsg.append("Unknown error");
+		}
+		
+		return errorMsg.toString();		
+	}
+	
 	private class ImporterTask implements Runnable {
 		private Authentication auth;
 		
@@ -309,12 +325,22 @@ public class ImportServiceImpl implements ImportService {
 				csvWriter = getOutputCsvWriter(job);
 				csvWriter.writeNext(columnNames.toArray(new String[0]));
 				
-				Object object = null;
-				while ((object = objReader.next()) != null) {
-					List<String> row = objReader.getCsvRow();					
-					String errMsg = importObject(importer, object);
-
+				while (true) {
+					String errMsg = null;					
+					try {
+						Object object = objReader.next();
+						if (object == null) {
+							break;
+						}
+											
+						errMsg = importObject(importer, object);
+					} catch (OpenSpecimenException ose) {						
+						errMsg = getMessage(ose);						
+					}
+					
 					++totalRecords;
+					
+					List<String> row = objReader.getCsvRow();
 					if (StringUtils.isNotBlank(errMsg)) {
 						row.add("FAIL");
 						row.add(errMsg);
@@ -327,11 +353,12 @@ public class ImportServiceImpl implements ImportService {
 					csvWriter.writeNext(row.toArray(new String[0]));
 					if (totalRecords % 25 == 0) {
 						saveJob(totalRecords, failedRecords, Status.IN_PROGRESS);
-					}
+					}					
 				}
 				
 				saveJob(totalRecords, failedRecords, Status.COMPLETED);
 			} catch (Exception e) {
+				e.printStackTrace();
 				saveJob(totalRecords, failedRecords, Status.FAILED);
 			} finally {
 				IOUtils.closeQuietly(objReader);
@@ -362,21 +389,7 @@ public class ImportServiceImpl implements ImportService {
 				if (resp.isSuccessful()) {
 					return null;
 				} else {
-					OpenSpecimenException error = resp.getError();
-					StringBuilder errorMsg = new StringBuilder();
-					if (!error.getErrors().isEmpty()) {
-						for (ParameterizedError pe : error.getErrors()) {
-							errorMsg.append(getMessage(pe)).append(", ");
-						}
-						errorMsg.delete(errorMsg.length() - 2, errorMsg.length());
-					} else if (error.getException() != null) {
-						errorMsg.append(error.getException().getMessage());
-					} else {
-						errorMsg.append("Unknown error");
-					}
-					
-					System.err.println("Unsuccessful: " + errorMsg.toString());
-					return errorMsg.toString();
+					return getMessage(resp.getError());
 				}				
 			} catch (Exception e) {
 				if (StringUtils.isBlank(e.getMessage())) {					

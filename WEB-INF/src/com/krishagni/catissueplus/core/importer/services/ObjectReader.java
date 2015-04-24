@@ -12,9 +12,11 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.CsvFileReader;
 import com.krishagni.catissueplus.core.common.util.CsvReader;
 import com.krishagni.catissueplus.core.common.util.Utility;
+import com.krishagni.catissueplus.core.importer.domain.ImportJobErrorCode;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema.Field;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema.Record;
@@ -71,7 +73,8 @@ public class ObjectReader implements Closeable {
 			Map<String, Object> objectProps = parseObject(schema.getRecord(), "");
 			return new ObjectMapper().convertValue(objectProps, objectClass);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
+			throw OpenSpecimenException.userError(ImportJobErrorCode.RECORD_PARSE_ERROR);
 		}
 	}
 	

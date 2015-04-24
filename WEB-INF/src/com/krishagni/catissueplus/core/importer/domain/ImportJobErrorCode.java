@@ -6,8 +6,10 @@ public enum ImportJobErrorCode implements ErrorCode {
 	NOT_FOUND,
 	
 	ACCESS_DENIED,
+			
+	OUTPUT_FILE_NOT_CREATED,
 	
-	OUTPUT_FILE_NOT_CREATED;
+	RECORD_PARSE_ERROR;
 
 	@Override
 	public String code() {		
