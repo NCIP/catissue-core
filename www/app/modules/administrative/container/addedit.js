@@ -1,7 +1,7 @@
 angular.module('os.administrative.container.addedit', ['os.administrative.models'])
   .controller('ContainerAddEditCtrl', function(
     $scope, $state, $stateParams, $q, container, 
-    Site, Container, CollectionProtocol, PvManager, Util) {
+    Site, Container, CollectionProtocol, PvManager, Util, AuthorizationService) {
 
 
     var allCps = undefined;
@@ -62,7 +62,10 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
 
     function loadPvs() {
       $scope.positionLabelingSchemes = PvManager.getPvs('container-position-labeling-schemes');
-      $scope.sites = PvManager.getSites();
+
+      var op = $scope.container.id ? AuthorizationService.getOp('update') : AuthorizationService.getOp('create');
+      var opts = {resource:AuthorizationService.getResource('storage_container'), operation: op};
+      $scope.sites = PvManager.getSites(opts);
 
       if ($scope.container.parentContainerName) {
         restrictCpsAndSpecimenTypes();

@@ -24,6 +24,8 @@ import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.events.Operation;
+import com.krishagni.catissueplus.core.common.events.Resource;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -48,6 +50,12 @@ public class SitesController {
 			@RequestParam(value = "exactMatch", required= false, defaultValue = "false")
 			boolean exactMatch,
 			
+			@RequestParam(value = "resource", required = false)
+			Resource resource,
+			
+			@RequestParam(value = "operation", required = false)
+			Operation operation,
+			
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
 			
@@ -58,6 +66,8 @@ public class SitesController {
 		SiteListCriteria crit = new SiteListCriteria()
 			.query(name)
 			.exactMatch(exactMatch)
+			.resource(resource)
+			.operation(operation)
 			.startAt(startAt)
 			.maxResults(maxResults);
 		

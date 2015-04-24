@@ -184,9 +184,9 @@ angular.module('openspecimen')
 
       loadPvsByParent: loadPvsByParent,
 
-      getSites: function() {
+      getSites: function(opts) {
         var sites = [];
-        Site.query().then(
+        Site.query(opts).then(
           function(siteList) {
             angular.forEach(siteList, function(site) {
               sites.push(site.name);

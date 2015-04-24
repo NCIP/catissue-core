@@ -2,6 +2,23 @@ angular.module('openspecimen')
   .factory('AuthorizationService', function($rootScope, $http, User, ApiUtil, ApiUrls) {
     var userRights = [];
 
+    var resources = {
+      'collection_protocol': 'CP',
+      'participant_phi': 'PARTICIPANT',
+      'participant_deid': 'PARTICIPANT_DEID',
+      'visit_n_specimen': 'VISIT_N_SPECIMEN',
+      'storage_container': 'STORAGE_CONTAINER',
+      'user': 'USER',
+      'order': 'ORDER'
+    };
+
+    var ops = {
+      'create': 'CREATE',
+      'update': 'UPDATE',
+      'read': 'READ',
+      'delete': 'Delete'
+    }
+
     function isAllowed(allowedOps, requestedOps) {
       var allowed = false;
       for (var i = 0; i < requestedOps.length; ++i) {
@@ -63,6 +80,14 @@ angular.module('openspecimen')
         }
 
         return allowed;
+      },
+
+      getResource: function(name) {
+        return resources[name];
+      },
+
+      getOp: function(name) {
+        return ops[name];
       }
     }
   });
