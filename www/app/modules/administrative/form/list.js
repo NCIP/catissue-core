@@ -36,7 +36,7 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
 
       form.getFormContexts().then(function(formCtxts) {
         var formCtxtsModal = $modal.open({
-          templateUrl: 'modules/administrative/form/formCtxts.html',
+          templateUrl: 'modules/administrative/form/association.html',
           controller: 'FormCtxtsCtrl',
 
           resolve: {

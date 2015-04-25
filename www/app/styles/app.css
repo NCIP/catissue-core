@@ -928,13 +928,3 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   overflow: auto;
 }
 
-.form-context-list .os-table-body {
-  max-height:175px; 
-  width: 100%; 
-  overflow:auto;
-}
-
-.form-context-form {
-  max-height: 210px; 
-  overflow: auto;
-}

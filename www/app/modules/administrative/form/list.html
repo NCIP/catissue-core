@@ -17,7 +17,7 @@
   </div>
 
   <div class="container">
-    <div class="os-table os-table-muted-hdr os-border">
+    <div class="os-table">
       <div class="os-table-head">
         <div class="row">
           <div class="col col-xs-4" translate="form.name">Form Name</div>
@@ -27,32 +27,29 @@
         </div>
       </div>
       <div class="os-table-body">
-        <div ng-repeat="form in formsList | filter:searchFormName" 
-              ng-mouseenter="form.highlight=true"
-              ng-mouseleave="form.highlight=false"
-              class="row os-pointer-cursor">
-            <div class="col col-xs-4">
-              <a style="cursor:pointer;" ui-sref="form-addedit({formId: form.formId})" 
-                tooltip-placement="right" tooltip="Click to edit form">{{form.caption}}</a>
-            </div>
-            <div class="col col-xs-3">{{form.createdBy.lastName}} {{form.createdBy.firstName}}</div>
-            <div class="col col-xs-3" ng-if="form.modificationTime">{{form.modificationTime | date:global.dateFmt }}</div>
-            <div class="col col-xs-3" ng-if="!form.modificationTime">{{form.creationTime |  date:global.dateFmt }}</div>
-            <div class="col col-xs-2 clearfix">
-              {{form.cpCount == -1 ? "ALL" : form.cpCount}}
-
-              <div class="pull-right btn-group btn-group-xs" ng-if="form.highlight">
-                <button type="button" class="btn btn-default" ng-click="showFormContexts(form)"
-                  tooltip-placement="bottom" tooltip="Click to attach form to a Collection Protocol" tooltip-append-to-body="true">
-                  <span class="glyphicon glyphicon-wrench"></span>
-                </button>
-                <button type="button" class="btn btn-default" ng-click="deleteForm(form)" 
-                  tooltip-placement="bottom" tooltip="Delete Form" tooltip-append-to-body="true">
-                  <i class="fa fa-trash-o"></i>
-                </button>
-              </div>
-            </td>
+        <div ng-repeat="form in formsList | filter:searchFormName" class="row os-pointer-cursor">
+          <div class="col col-xs-4">
+            <a style="cursor:pointer;" ui-sref="form-addedit({formId: form.formId})" 
+              title="{{'form.edit_form' | translate}}">{{form.caption}}</a>
           </div>
+          <div class="col col-xs-3">{{form.createdBy.lastName}} {{form.createdBy.firstName}}</div>
+          <div class="col col-xs-3" ng-if="form.modificationTime">{{form.modificationTime | date:global.dateFmt }}</div>
+          <div class="col col-xs-3" ng-if="!form.modificationTime">{{form.creationTime |  date:global.dateFmt }}</div>
+          <div class="col col-xs-2 clearfix">
+            {{form.cpCount == -1 ? "ALL" : form.cpCount}}
+
+            <div class="pull-right btn-group btn-group-xs">
+              <button type="button" class="btn btn-default" ng-click="showFormContexts(form)"
+                title="{{'form.attach_form_to_cp' | translate}}">
+                <span class="fa fa-wrench"></span>
+              </button>
+              <button type="button" class="btn btn-default" ng-click="deleteForm(form)" 
+                title="{{'form.delete_form' | translate}}"> 
+                <i class="fa fa-trash-o"></i>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

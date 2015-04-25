@@ -7,6 +7,7 @@ angular.module('os.administrative.models.form', ['os.common.models'])
         function(form) {
           form.FormContextModel =  osModel('forms/' + form.$id() + '/contexts');
           form.FormContextModel.prototype.$update = updateFormContext;
+          form.FormContextModel.prototype.$remove = removeFormContext;
         }
       );
 
@@ -20,7 +21,14 @@ angular.module('os.administrative.models.form', ['os.common.models'])
       return $http.put(form.FormContextModel.url(), formCtxts).then(form.FormContextModel.modelRespTransform);
     };
 
-    Form.prototype.$id = function () {
+    var removeFormContext = function() {
+      var form = this.form;
+      var param = {params: {cpId: this.cpId, entityType: this.entityType}}
+
+      return $http.delete(form.FormContextModel.url(), param).then(form.FormContextModel.noTransform);
+    }
+
+    Form.prototype.$id = function() {
       return this.formId;
     };
 
@@ -41,7 +49,7 @@ angular.module('os.administrative.models.form', ['os.common.models'])
     };
 
     Form.prototype.$remove = function () {
-      return $http['delete']( Form.url() + this.$id()).then(function(result) { return result.data; });
+      return $http.delete( Form.url() + this.$id()).then(function(result) { return result.data; });
     };
 
     return Form;
