@@ -19,13 +19,29 @@ angular.module('os.biospecimen.participant',
 
   .config(function($stateProvider) {
     $stateProvider
+      .state('participant-root', {
+        template:'<div ui-view></div>',
+        controller: function($scope) {
+          $scope.participantResource = {
+            registerOpts: {resource: 'ParticipantPhi', operations: ['Create']},
+            updateOpts: {resource: 'ParticipantPhi', operations: ['Update']},
+          }
+        },
+        parent: 'signed-in',
+        abstract: true
+      })
       .state('participant-list', {
         url: '/participants?cpId',
         templateUrl: 'modules/biospecimen/participant/list.html',
         controller: 'ParticipantListCtrl',
-        parent: 'signed-in'
+        resolve: {
+          cp: function($stateParams, CollectionProtocol) {
+              return CollectionProtocol.getById($stateParams.cpId);
+          }
+        },
+        parent: 'participant-root'
       })
-      .state('participant-root', {
+      .state('participants', {
         url: '/participants/:cprId',
         template: '<div ui-view></div>',
         resolve: {
@@ -42,7 +58,7 @@ angular.module('os.biospecimen.participant',
           $scope.entityType = 'Participant';
           $scope.extnState = 'participant-detail.extensions.'
         },
-        parent: 'signed-in',
+        parent: 'participant-root',
         abstract: true
       })
       .state('participant-addedit', {
@@ -59,7 +75,7 @@ angular.module('os.biospecimen.participant',
         },
         resolve: {
         },
-        parent: 'participant-root'
+        parent: 'participants'
       })
       .state('participant-detail', {
         url: '/detail',
@@ -70,7 +86,7 @@ angular.module('os.biospecimen.participant',
           }
         },
         controller: 'ParticipantDetailCtrl',
-        parent: 'participant-root'
+        parent: 'participants'
       })
       .state('participant-detail.overview', {
         url: '/overview',
@@ -119,7 +135,7 @@ angular.module('os.biospecimen.participant',
             return null;
           }
         },
-        parent: 'participant-root'
+        parent: 'participants'
       })
       .state('participant-detail.extensions', {
         url: '/extensions',
