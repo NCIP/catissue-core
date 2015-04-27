@@ -23,7 +23,6 @@ angular.module('os.biospecimen.extensions.list', ['os.biospecimen.models'])
     }
 
     $scope.deleteRecord = function(record) {
-      console.log(record);
       var modalInstance = $modal.open({
         templateUrl: 'delete_extension_record.html',
         controller: function($scope, $modalInstance) {
