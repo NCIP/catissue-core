@@ -738,7 +738,7 @@
     "record_saved": "Extension record saved",
     "record_deleted": "Extension record deleted",
 
-    "deleting_record": "Deleting Extension record {{name}}",
+    "deleting_record": "Deleting extension record {{name}}",
     "confirm_delete_record": "Extension record {{name}} will be deleted. Are you sure you want to proceed?"
   },
 
