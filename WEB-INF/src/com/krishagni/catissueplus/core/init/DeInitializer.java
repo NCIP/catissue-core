@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import krishagni.catissueplus.csd.CatissueUserContextProviderImpl;
+
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -22,6 +24,7 @@ import edu.common.dynamicextensions.domain.nui.factory.ControlManager;
 import edu.common.dynamicextensions.nutility.DEApp;
 import edu.common.dynamicextensions.query.PathConfig;
 import edu.wustl.dynamicextensions.formdesigner.mapper.ControlMapper;
+import edu.wustl.dynamicextensions.formdesigner.usercontext.CSDProperties;
 
 public class DeInitializer implements InitializingBean {
 	private static final String QUERY_PATH_CFG = "/com/krishagni/catissueplus/core/de/query/paths.xml";
@@ -61,6 +64,8 @@ public class DeInitializer implements InitializingBean {
 				throw new RuntimeException("Error couldn't create directory for storing de file data");
 			}
 		}
+		
+		CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
 					
 		DEApp.init(dataSource, transactionManager, dir, dateFormat, timeFormat);
 		ControlManager.getInstance().registerFactory(UserControlFactory.getInstance());			

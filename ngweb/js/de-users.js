@@ -28,9 +28,8 @@ openspecimen.ui.fancy.Users = function() {
     }
    
     xhr.done(
-      function(data) {
+      function(users) {
         var result = [];
-        var users = data.users;
         for (var i = 0; i < users.length; ++i) {
           result.push({id: users[i].id, text: users[i].lastName + ', ' + users[i].firstName});
         }
