@@ -64,4 +64,156 @@
       Update catissue_user set password = '$2a$10$GOH1.KmElP0ZusLYS6l12ejO.xAIzDUFpIm7LVz9xAcrObyvd3gLC', is_admin = 1 where identifier = 1
     </sql>
   </changeSet>
+  
+  <changeSet id="create procedures for default roles" author="nmarwaha" dbms="mysql">
+    <sql endDelimiter="//">
+      create PROCEDURE create_role(IN role_name TEXT, IN role_desc TEXT)
+      begin
+
+        insert into rbac_roles 
+          (name, description)
+        values
+          (role_name, role_desc);
+      END;
+      //
+    </sql>
+    <sql endDelimiter="//">
+      create PROCEDURE assign_to_role(IN role_name TEXT, IN resource_name TEXT, IN operations TEXT)
+      begin
+
+      select identifier into @role_id from rbac_roles where name = role_name;
+      select identifier into @resource_id from rbac_resources where name = resource_name;
+      insert into rbac_role_access_list (role_id, resource_id) values (@role_id, @resource_id);
+      select last_insert_id() into @acl_id;
+      SET @operations = operations;
+      SET @occurrences = LENGTH(@operations) - LENGTH(REPLACE(@operations, ',', ''));
+        myloop: WHILE (@occurrences >= 0)
+        DO 
+          SET @myValue = SUBSTRING_INDEX(@operations, ',', 1);
+          IF (@myValue != '') THEN
+              
+            select identifier into @op_id from rbac_operations where name = @myValue;
+            insert into rbac_role_access_list_ops (operation_id, acl_id) values (@op_id, @acl_id);
+          ELSE
+            LEAVE myloop; 
+          END IF;
+          
+          set @occurrences = LENGTH(@operations) - LENGTH(REPLACE(@operations, ',', ''));
+          IF (@occurrences = 0) THEN 
+            LEAVE myloop; 
+          END IF;
+          
+          SET @operations = SUBSTRING(@operations,LENGTH(SUBSTRING_INDEX(@operations, ',', 1)) + 2);
+        END WHILE;
+      END;
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="create procedures for default roles" dbms="oracle">
+    <sql endDelimiter="//">
+      CREATE OR REPLACE PROCEDURE create_role(role_name IN varchar2, role_desc IN varchar2)
+      IS
+      begin
+        insert into rbac_roles 
+          (identifier,name, description)
+        values
+          (RBAC_ROLES_SEQ.nextval,role_name, role_desc);
+      END;
+      //
+    </sql>
+    <sql endDelimiter="//">
+      CREATE OR REPLACE PROCEDURE assign_to_role(role_name IN varchar2, resource_name IN varchar2, operations IN varchar2)
+      IS
+        role_id number(20);
+        resource_id number(20);
+        operation_id number(20);
+        occurances number(20);
+        opArr varchar2(100) := operations;
+        operation_name varchar2(10);
+        acl_id number(10);
+        type ops_array IS VARRAY(5) OF VARCHAR2(10);
+        op_names ops_array;
+      BEGIN
+        op_names := ops_array('Create','Update','Delete','Read');
+        select identifier into role_id from rbac_roles where name = role_name;
+        select identifier into resource_id from rbac_resources where name = resource_name;
+        insert into rbac_role_access_list (identifier, role_id, resource_id) values (RBAC_ACL_SEQ.nextval, role_id, resource_id);
+        select RBAC_ACL_SEQ.currval into acl_id from dual;
+  
+        FOR i in 1 .. 4 LOOP
+          select INSTR(opArr,op_names(i)) into occurances from dual;
+          if(occurances > 0) then
+            select identifier into operation_id from rbac_operations where name = op_names(i);
+            insert into rbac_role_access_list_ops 
+              (identifier, operation_id, acl_id) 
+            values 
+              (RBAC_ACL_OPS_SEQ.nextval, operation_id, acl_id);
+          END IF;
+        END LOOP;
+        Commit;
+      END;
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Insert Coordinator role">
+    <sql>call create_role('Coordinator', 'User who can create and process data within specific CPs.');</sql>
+    <sql>call assign_to_role('Coordinator', 'CollectionProtocol', 'Read');</sql>
+    <sql>call assign_to_role('Coordinator', 'StorageContainer', 'Read');</sql>
+    <sql>call assign_to_role('Coordinator', 'ParticipantPhi', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Coordinator', 'VisitAndSpecimen', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Coordinator', 'Order', 'Read,Create,Update,Delete');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Insert PI role" >
+    <sql>call create_role('Principal Investigator', 'User who has PHI data read access within specific protocols.');</sql>
+    <sql>call assign_to_role('Principal Investigator', 'CollectionProtocol', 'Read');</sql>
+    <sql>call assign_to_role('Principal Investigator', 'ParticipantPhi', 'Read');</sql>
+    <sql>call assign_to_role('Principal Investigator', 'VisitAndSpecimen', 'Read');</sql>
+    <sql>call assign_to_role('Principal Investigator', 'Order', 'Read');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Insert Researcher role">
+    <sql>call create_role('Researcher', 'User who has PHI data read access within specific protocols.');</sql>
+    <sql>call assign_to_role('Researcher', 'CollectionProtocol', 'Read');</sql>
+    <sql>call assign_to_role('Researcher', 'ParticipantDeid', 'Read');</sql>
+    <sql>call assign_to_role('Researcher', 'VisitAndSpecimen', 'Read');</sql>
+    <sql>call assign_to_role('Researcher', 'Order', 'Read');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Insert Technician role">
+    <sql>call create_role('Technician', 'User who collects and processes specimens.');</sql>
+    <sql>call assign_to_role('Technician', 'StorageContainer', 'Read');</sql>
+    <sql>call assign_to_role('Technician', 'CollectionProtocol', 'Read');</sql>
+    <sql>call assign_to_role('Technician', 'ParticipantDeid', 'Read');</sql>
+    <sql>call assign_to_role('Technician', 'VisitAndSpecimen', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Technician', 'Order', 'Read,Create,Update,Delete');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Insert Tissue Banker role" >
+    <sql>call create_role('Tissue Banker', 'Tissue banker who registers participants and collects specimens.');</sql>
+    <sql>call assign_to_role('Tissue Banker', 'StorageContainer', 'Read');</sql>
+    <sql>call assign_to_role('Tissue Banker', 'CollectionProtocol', 'Read');</sql>
+    <sql>call assign_to_role('Tissue Banker', 'ParticipantPhi', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Tissue Banker', 'VisitAndSpecimen', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Tissue Banker', 'Order', 'Read,Create,Update,Delete');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Insert Administrator role" >
+    <sql>call create_role('Administrator', 'Administrator who can perform all operation within specific site.');</sql>
+    <sql>call assign_to_role('Administrator', 'User', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Administrator', 'StorageContainer', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Administrator', 'CollectionProtocol', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Administrator', 'ParticipantPhi', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Administrator', 'VisitAndSpecimen', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Administrator', 'Order', 'Read,Create,Update,Delete');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+  
 </databaseChangeLog>
