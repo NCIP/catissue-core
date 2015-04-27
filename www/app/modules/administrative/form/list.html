@@ -36,7 +36,7 @@
           <div class="col col-xs-3" ng-if="form.modificationTime">{{form.modificationTime | date:global.dateFmt }}</div>
           <div class="col col-xs-3" ng-if="!form.modificationTime">{{form.creationTime |  date:global.dateFmt }}</div>
           <div class="col col-xs-2 clearfix">
-            {{form.cpCount == -1 ? "ALL" : form.cpCount}}
+            {{form.cpCount == -1 ? ('form.all' | translate) : form.cpCount}}
 
             <div class="pull-right btn-group btn-group-xs">
               <button type="button" class="btn btn-default" ng-click="showFormContexts(form)"

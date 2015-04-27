@@ -690,6 +690,7 @@
   },
 
   "form": {
+    "all": "ALL",
     "list": "Forms",
     "create_form": "New Form",
     "edit_form": "Click to Edit Form",
