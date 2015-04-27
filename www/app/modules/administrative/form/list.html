@@ -1,0 +1,56 @@
+
+<div>
+  <div os-page-header>
+    <h3>
+      <span translate="form.list">Forms</span>
+    </h3>
+    <div class="os-btns right">
+      <button class="primary" title="{{'form.tooltip.add' | translate}}" ui-sref="form-addedit({formId: ''})">
+        <span class="fa fa-plus"></span>
+        <span translate="common.buttons.create">Create</span>
+      </button>
+      <button class="default" os-right-drawer-toggle title="{{'form.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="os-table">
+      <div class="os-table-head">
+        <div class="row">
+          <div class="col col-xs-4" translate="form.name">Form Name</div>
+          <div class="col col-xs-3" translate="form.created_by">Created By</div>
+          <div class="col col-xs-3" translate="form.last_updated">Last Updated</div>
+          <div class="col col-xs-2" translate="form.cp_count">CP Count</div>
+        </div>
+      </div>
+      <div class="os-table-body">
+        <div ng-repeat="form in formsList | filter:searchFormName" class="row os-pointer-cursor">
+          <div class="col col-xs-4">
+            <a style="cursor:pointer;" ui-sref="form-addedit({formId: form.formId})" 
+              title="{{'form.edit_form' | translate}}">{{form.caption}}</a>
+          </div>
+          <div class="col col-xs-3">{{form.createdBy.lastName}} {{form.createdBy.firstName}}</div>
+          <div class="col col-xs-3" ng-if="form.modificationTime">{{form.modificationTime | date:global.dateFmt }}</div>
+          <div class="col col-xs-3" ng-if="!form.modificationTime">{{form.creationTime |  date:global.dateFmt }}</div>
+          <div class="col col-xs-2 clearfix">
+            {{form.cpCount == -1 ? ('form.all' | translate) : form.cpCount}}
+
+            <div class="pull-right btn-group btn-group-xs">
+              <button type="button" class="btn btn-default" ng-click="showFormContexts(form)"
+                title="{{'form.attach_form_to_cp' | translate}}">
+                <span class="fa fa-wrench"></span>
+              </button>
+              <button type="button" class="btn btn-default" ng-click="deleteForm(form)" 
+                title="{{'form.delete_form' | translate}}"> 
+                <i class="fa fa-trash-o"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

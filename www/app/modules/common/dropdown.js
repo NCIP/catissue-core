@@ -27,7 +27,8 @@ angular.module('openspecimen')
         var uiSelect = angular.element(multiple ? '<ui-select multiple/>' : '<ui-select/>')
           .attr('ng-model', tAttrs.ngModel)
           .attr('ng-disabled', tAttrs.ngDisabled)
-          .attr('reset-search-input', true);
+          .attr('reset-search-input', true)
+          .attr('append-to-body', !!tAttrs.appendToBody);
     
         if (tAttrs.onSelect) {
           uiSelect.attr('on-select', tAttrs.onSelect);

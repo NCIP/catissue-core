@@ -80,7 +80,7 @@ openspecimen.ui.fancy.Users = function() {
     }
 
     var that = this;
-    $.ajax({type: 'GET', url: baseUrl + '/signed-in-user'})
+    $.ajax({type: 'GET', url: baseUrl + '/current-user'})
       .done(function(data) {
         var result = {id: data.id, text: data.lastName + ', ' + data.firstName};
         userCacheMap[data.id] = result;

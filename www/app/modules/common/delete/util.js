@@ -17,13 +17,17 @@ angular.module('os.common.delete')
             }
           },
           dependentEntities: function() {
-            return object.getDependentEntities();
+            return props.deleteWithoutCheck ? [] :  object.getDependentEntities();
           }
         }
       });
 
       modalInstance.result.then(function(object) {
-        $state.go(props.onDeleteState);
+        if (!props.onDeletion) {
+           $state.go(props.onDeleteState);
+        } else {
+          props.onDeletion();
+        }
       });
     }
 
