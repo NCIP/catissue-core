@@ -77,6 +77,67 @@
       tableName="CATISSUE_USER"/>
   </changeSet>
   
+  <changeSet id="Trigger for contianer hierarchy" author="marwahan" dbms="mysql">
+    <sql endDelimiter="//" >
+      create trigger trg_container_replication after insert 
+      on os_storage_containers
+      for each row begin
+ 
+        if (new.parent_container_id is not null ) then
+          insert into os_containers_hierarchy(ancestor_id,descendent_id) 
+            (select och.ancestor_id, new.identifier from os_containers_hierarchy och where (och.descendent_id = new.parent_container_id));
+        end if;
+ 
+        insert into os_containers_hierarchy(ancestor_id, descendent_id) values (new.identifier,new.identifier);
+
+      end;
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet id="Trigger for contianer hierarchy" author="marwahan" dbms="oracle">
+    <sql endDelimiter="//">
+       CREATE OR REPLACE TRIGGER trg_container_replication AFTER INSERT 
+       ON os_storage_containers
+       FOR EACH ROW
+       BEGIN
+ 
+        IF (:NEW.PARENT_SPECIMEN_ID IS NOT NULL ) THEN
+         INSERT INTO os_containers_hierarchy(ANCESTOR_ID,DESCENDENT_ID) 
+           (SELECT OCH.ANCESTOR_ID, :NEW.IDENTIFIER FROM os_containers_hierarchy OCH WHERE OCH.DESCENDENT_ID = :NEW.parent_container_id);
+        END IF;
+  
+        INSERT INTO os_containers_hierarchy(ANCESTOR_ID, DESCENDENT_ID) VALUES (:NEW.IDENTIFIER,:NEW.IDENTIFIER);
+
+       END;
+       //
+     </sql>
+  </changeSet>
+  
+   <changeSet author="nmarwaha" id="Drop FK on containers hierarchy ancestor">
+    <dropForeignKeyConstraint
+      baseTableName="OS_CONTAINERS_HIERARCHY"
+      constraintName="FK_OS_CONT_HIERARCHY_AID"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Drop FK on containers hierarchy discendent">
+    <dropForeignKeyConstraint
+      baseTableName="OS_CONTAINERS_HIERARCHY"
+      constraintName="FK_OS_CONT_HIERARCHY_DID"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Drop container hierarchy unique constraint" dbms="mysql">
+    <sql>
+      alter table os_containers_hierarchy drop index container_rel_uq
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Drop container hierarchy unique constraint" dbms="oracle">
+    <sql>
+      alter table os_containers_hierarchy drop constraint container_rel_uq
+    </sql>
+  </changeSet>
+  
   <changeSet author="nmarwaha" id="Migration script for container data">
     <sql>
       select identifier into @sys_usr_id from catissue_user where email_address like '$system';
@@ -153,8 +214,8 @@
           from 
             os_container_positions;
   
-          execute immediate('alter sequence os_storage_containers_seq increment by '||containerId||);
-          execute immediate('alter sequence os_container_positions_seq increment by '||positionId||);
+          execute immediate('alter sequence os_storage_containers_seq increment by '||containerId);
+          execute immediate('alter sequence os_container_positions_seq increment by '||positionId);
         end;
       end;
       /
@@ -173,10 +234,42 @@
           from 
             catissue_institution;
   
-          execute immediate('alter sequence catissue_institute_seq increment by '||instId||);
+          execute immediate('alter sequence catissue_institute_seq increment by '||instId);
         end;
       end;
       /
     </sql>
   </changeSet>
+  
+  <changeSet id="Drop container hierarchy trigger" author="nmarwaha">
+    <sql>
+      drop trigger if exists trg_continaer_replication
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vpawar" id="FK on containers hierarchy ancestor">
+    <addForeignKeyConstraint 
+      constraintName="FK_OS_CONT_HIERARCHY_AID"
+      baseTableName="OS_CONTAINERS_HIERARCHY"
+      baseColumnNames="ANCESTOR_ID"
+      referencedTableName="OS_STORAGE_CONTAINERS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="nmarwaha" id="Re-Add FK on containers hierarchy descendent">
+    <addForeignKeyConstraint 
+      constraintName="FK_OS_CONT_HIERARCHY_DID"
+      baseTableName="OS_CONTAINERS_HIERARCHY"
+      baseColumnNames="DESCENDENT_ID"
+      referencedTableName="OS_STORAGE_CONTAINERS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="nmarwaha" id="Re-Add FK container hierarchy unique constraint">
+    <addUniqueConstraint 
+      tableName="OS_CONTAINERS_HIERARCHY"
+      columnNames="ANCESTOR_ID,DESCENDENT_ID"
+      constraintName="CONTAINER_REL_UQ"/>
+  </changeSet>
+  
 </databaseChangeLog>
