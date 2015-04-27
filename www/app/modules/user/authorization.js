@@ -44,12 +44,11 @@ angular.module('openspecimen')
         for (var i = 0; i < userRights.length; i++) {
           if (!opts.sites && !opts.cp && userRights[i].resource == opts.resource) {
             //
-            // For resources whose rights are independent of CP and/or Site
+            // For resources whose rights are independent of CP and Site
             //
             allowed = isAllowed(userRights[i].operations, opts.operations);
 
-          } else if ((!opts.sites || !userRights[i].site ||
-                      (opts.sites && opts.sites.indexOf(userRights[i].site) != -1)) &&
+          } else if ((!opts.sites || !userRights[i].site || opts.sites.indexOf(userRights[i].site) != -1) &&
                     (!opts.cp || !userRights[i].cp || userRights[i].cp == opts.cp) &&
                     (userRights[i].resource == opts.resource)) {
             //
