@@ -2,22 +2,16 @@
 angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
   .controller('ParticipantListCtrl', function(
     $scope, $state, $stateParams, $modal, 
-    CollectionProtocol, CollectionProtocolRegistration, Util) {
+    cp, CollectionProtocolRegistration, Util) {
 
     function init() {
       $scope.cpId = $stateParams.cpId;
+      $scope.cp = cp;
       $scope.filterOpts = {};
-      loadCp();
+      var opts = {cp: $scope.cp.shortTitle};
+      angular.extend($scope.participantResource.registerOpts, opts);
       loadParticipants();
       Util.filter($scope, 'filterOpts', loadParticipants);
-    }
-
-    function loadCp() {
-      CollectionProtocol.getById($scope.cpId).then(
-        function(cp) {
-          $scope.cp = cp;
-        }
-      );
     }
 
     function loadParticipants() {

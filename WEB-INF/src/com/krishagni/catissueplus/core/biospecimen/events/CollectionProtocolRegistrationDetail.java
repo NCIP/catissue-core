@@ -19,6 +19,8 @@ public class CollectionProtocolRegistrationDetail {
 	private Long cpId;
 	
 	private String cpTitle;
+	
+	private String cpShortTitle;
 
 	private String ppid;
 
@@ -67,6 +69,14 @@ public class CollectionProtocolRegistrationDetail {
 
 	public void setCpTitle(String cpTitle) {
 		this.cpTitle = cpTitle;
+	}
+	
+	public String getCpShortTitle() {
+		return cpShortTitle;
+	}
+
+	public void setCpShortTitle(String cpShortTitle) {
+		this.cpShortTitle = cpShortTitle;
 	}
 
 	public String getPpid() {
@@ -167,6 +177,7 @@ public class CollectionProtocolRegistrationDetail {
 		CollectionProtocol cp = cpr.getCollectionProtocol();
 		detail.setCpId(cp.getId());
 		detail.setCpTitle(cp.getTitle());
+		detail.setCpShortTitle(cp.getShortTitle());
 		detail.setSpecimenLabelFmt(cp.getSpecimenLabelFormat());
 		detail.setAliquotLabelFmt(cp.getAliquotLabelFormat());
 		detail.setDerivativeLabelFmt(cp.getDerivativeLabelFormat());

@@ -27,7 +27,7 @@ angular.module('os.biospecimen.visit', [
           $scope.extnState = 'visit-detail.extensions.'
         },
         abstract: true,
-        parent: 'participant-root'
+        parent: 'participants'
       })
       .state('visit-addedit', {
         url: '/addedit-visit',
