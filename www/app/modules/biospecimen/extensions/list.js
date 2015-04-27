@@ -1,12 +1,12 @@
 
 angular.module('os.biospecimen.extensions.list', ['os.biospecimen.models'])
-  .controller('FormsListCtrl', function($scope, Form, Alerts) {
+  .controller('FormsListCtrl', function($scope, $modal, Form, Alerts) {
     function init() {
       $scope.forms = $scope.object.getForms();
       $scope.records = $scope.object.getRecords();
     }
 
-    $scope.deleteRecord = function(record) {
+    function deleteRecord(record) {
       Form.deleteRecord(record.formId, record.recordId).then(
         function() {
           var records = $scope.records;
@@ -21,6 +21,30 @@ angular.module('os.biospecimen.extensions.list', ['os.biospecimen.models'])
         }
       );
     }
+
+    $scope.deleteRecord = function(record) {
+      var modalInstance = $modal.open({
+        templateUrl: 'delete_extension_record.html',
+        controller: function($scope, $modalInstance) {
+          $scope.record = record;
+
+          $scope.yes = function() {
+            $modalInstance.close(true);
+          }
+
+          $scope.no = function() {
+            $modalInstance.dismiss('cancel');
+          }
+        }
+      });
+
+      modalInstance.result.then(
+        function() {
+          deleteRecord(record);
+        }
+      );
+    };
+
 
     init();
   });

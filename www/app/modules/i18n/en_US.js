@@ -736,7 +736,10 @@
     "new_record": "Create New Record",
 
     "record_saved": "Extension record saved",
-    "record_deleted": "Extension record deleted"
+    "record_deleted": "Extension record deleted",
+
+    "deleting_record": "Deleting Extension record {{name}}",
+    "confirm_delete_record": "Extension record {{name}} will be deleted. Are you sure you want to proceed?"
   },
 
   "delete_entity": {
