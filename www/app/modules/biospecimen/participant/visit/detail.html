@@ -25,12 +25,12 @@
     <h3>T{{visit.eventPoint}}: {{visit.eventLabel}}</h3>
 
     <div class="os-btns right">
-      <button class="primary" ng-switch on="!!visit.id" ui-sref="visit-addedit">
-        <span ng-switch-when="true">
+      <button show-if-allowed="visitAndSpecimenResource.createOrUpdateOpts" class="primary" ng-switch on="!!visit.id" ui-sref="visit-addedit">
+        <span show-if-allowed="visitAndSpecimenResource.updateOpts" ng-switch-when="true">
           <span class="fa fa-pencil"></span>
           <span translate="common.buttons.edit">Edit</span>
         </span>
-        <span ng-switch-default>
+        <span show-if-allowed="visitAndSpecimenResource.createOpts" ng-switch-default>
           <span class="fa fa-plus"></span>
           <span translate="common.buttons.add">Add</span>
         </span>

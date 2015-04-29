@@ -94,6 +94,12 @@ angular.module('os.biospecimen.participant.specimen-tree',
       templateUrl: 'modules/biospecimen/participant/specimens.html',
 
       link: function(scope, element, attrs) {
+        scope.visitAndSpecimenResource = {
+          createOpts: {resource: 'VisitAndSpecimen', operations: ['Create']},
+          updateOpts: {resource: 'VisitAndSpecimen', operations: ['Update']},
+          createOrUpdateOpts: {resource: 'VisitAndSpecimen', operations: ['Create', 'Update']}
+        }
+
         scope.specimens = Specimen.flatten(scope.specimenTree);
         scope.view = 'list';
         scope.parentSpecimen = undefined;

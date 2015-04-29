@@ -28,13 +28,13 @@
     </h3>
 
     <div class="os-btns right">
-      <button class="primary" ui-sref="specimen-addedit" 
+      <button show-if-allowed="visitAndSpecimenResource.createOrUpdateOpts" class="primary" ui-sref="specimen-addedit"
         ng-switch on="specimen.status == 'Collected'" ng-if="!!visit.id">
-        <span ng-switch-when="true">
+        <span show-if-allowed="visitAndSpecimenResource.updateOpts" ng-switch-when="true">
           <span class="fa fa-pencil"></span>
           <span translate="common.buttons.edit">Edit</span>
         </span>
-        <span ng-switch-default>
+        <span show-if-allowed="visitAndSpecimenResource.createOpts" ng-switch-default>
           <span class="fa fa-plus"></span>
           <span translate="specimens.buttons.collect">Collect</span>
         </span>

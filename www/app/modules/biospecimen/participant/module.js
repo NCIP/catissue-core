@@ -23,8 +23,15 @@ angular.module('os.biospecimen.participant',
         template:'<div ui-view></div>',
         controller: function($scope) {
           $scope.participantResource = {
+            readOpts: {resource: 'ParticipantPhi', operations: ['Read']},
             registerOpts: {resource: 'ParticipantPhi', operations: ['Create']},
             updateOpts: {resource: 'ParticipantPhi', operations: ['Update']},
+          },
+
+          $scope.visitAndSpecimenResource = {
+            createOpts: {resource: 'VisitAndSpecimen', operations: ['Create']},
+            updateOpts: {resource: 'VisitAndSpecimen', operations: ['Update']},
+            createOrUpdateOpts: {resource: 'VisitAndSpecimen', operations: ['Create', 'Update']}
           }
         },
         parent: 'signed-in',
@@ -51,7 +58,8 @@ angular.module('os.biospecimen.participant',
             } 
 
             return new CollectionProtocolRegistration({registrationDate: new Date()});
-          }
+          },
+
         },
         controller: function($scope, cpr) {
           $scope.cpr = $scope.object = cpr;
@@ -140,7 +148,10 @@ angular.module('os.biospecimen.participant',
       .state('participant-detail.extensions', {
         url: '/extensions',
         template: '<div ui-view></div>',
-        controller: function() {
+        controller: function($scope) {
+          var opts = {cp: $scope.cpr.cpShortTitle};
+          angular.extend($scope.participantResource.updateOpts, opts);
+          $scope.extensionUpdateOpts = $scope.participantResource.updateOpts;
         },
         abstract: true,
         parent: 'participant-detail'
