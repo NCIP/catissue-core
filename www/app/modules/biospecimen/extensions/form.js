@@ -1,6 +1,9 @@
-
+/*
+* For temporary we hide the print button using css.
+* Css changes are in extension.css file.
+*/
 angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
-  .directive('osDeForm', function($http, $rootScope, Form) {
+  .directive('osDeForm', function($http, $rootScope, $timeout, Form) {
     return {
       restrict: 'A',
 
@@ -36,6 +39,7 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
           var form = new edu.common.de.Form(args);
           form.render();
           onceRendered = true;
+
         }, true);
       }
     }
