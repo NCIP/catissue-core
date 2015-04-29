@@ -18,6 +18,15 @@ angular.module('os.administrative.form',
         url: '/form-addedit/:formId',
         templateUrl: 'modules/administrative/form/addedit.html',
         controller: 'FormAddEditCtrl',
+        resolve: {
+          form: function($stateParams, Form) {
+            if ($stateParams.formId) {
+              return Form.getDefinition($stateParams.formId);
+            }
+
+            return new Form();
+          }
+        },
         parent: 'signed-in'
       })
   });
