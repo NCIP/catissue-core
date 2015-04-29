@@ -176,8 +176,8 @@
     <sql>commit;</sql>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Insert Researcher role">
-    <sql>call create_role('Researcher', 'User who has PHI data read access within specific protocols.');</sql>
+  <changeSet author="nmarwaha" id="Insert Researcher role" runOnChange="true">
+    <sql>call create_role('Researcher', 'User who has non-PHI data read access within specific protocols.');</sql>
     <sql>call assign_to_role('Researcher', 'CollectionProtocol', 'Read');</sql>
     <sql>call assign_to_role('Researcher', 'ParticipantDeid', 'Read');</sql>
     <sql>call assign_to_role('Researcher', 'VisitAndSpecimen', 'Read');</sql>
