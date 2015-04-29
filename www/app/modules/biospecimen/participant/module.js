@@ -23,7 +23,6 @@ angular.module('os.biospecimen.participant',
         template:'<div ui-view></div>',
         controller: function($scope) {
           $scope.participantResource = {
-            readOpts: {resource: 'ParticipantPhi', operations: ['Read']},
             registerOpts: {resource: 'ParticipantPhi', operations: ['Create']},
             updateOpts: {resource: 'ParticipantPhi', operations: ['Update']},
           },
@@ -58,8 +57,7 @@ angular.module('os.biospecimen.participant',
             } 
 
             return new CollectionProtocolRegistration({registrationDate: new Date()});
-          },
-
+          }
         },
         controller: function($scope, cpr) {
           $scope.cpr = $scope.object = cpr;
