@@ -72,7 +72,10 @@ angular.module('os.biospecimen.specimen',
       .state('specimen-detail.extensions', {
         url: '/extensions',
         template: '<div ui-view></div>',
-        controller: function() {
+        controller: function($scope) {
+          var opts = {cp: $scope.cpr.cpShortTitle};
+          angular.extend($scope.visitAndSpecimenResource.updateOpts, opts);
+          $scope.extensionUpdateOpts = $scope.visitAndSpecimenResource.updateOpts;
         },
         abstract: true,
         parent: 'specimen-detail'
