@@ -425,7 +425,7 @@ public class RbacServiceImpl implements RbacService {
 				case UPDATE:
 					SubjectRole oldSr = subject.getExistingRole(subjectRoleOp.getSubjectRole().getId());
 					oldSrDetails.put("site", oldSr.getSite());
-					oldSrDetails.put("cp", oldSr.getCollectionProtocol());
+					oldSrDetails.put("collectionProtocol", oldSr.getCollectionProtocol());
 					oldSrDetails.put("role", oldSr.getRole());
 					
 					sr = createSubjectRole(subjectRoleOp.getSubjectRole());
