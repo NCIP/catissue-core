@@ -4,7 +4,7 @@
   </div>
 
   <ul class="os-home-items-container">
-    <li class="os-home-item">
+    <li show-if-allowed="cpReadOpts" class="os-home-item">
       <a ui-sref="cp-list">
         <span class="os-home-item-icon"> 
           <span class="fa fa-calendar"></span>
@@ -70,7 +70,7 @@
         </span>
       </a>
     </li>
-    <li class="os-home-item">
+    <li show-if-allowed="containerReadOpts" class="os-home-item">
       <a ui-sref="container-list">
         <span class="os-home-item-icon">
           <span class="fa fa-dropbox"></span>

@@ -33,15 +33,33 @@
     <div>
       <div os-nav-drawer>
         <ul role="menu">
-          <li><a ui-sref="home"           translate="menu.home">Home</a></li>
-          <li><a ui-sref="cp-list"        translate="menu.collection_protocols">Collection Protocols</a></li>
-          <!--<li><a ui-sref="dp-list"  translate="menu.distribution_protocols">Distribution Protocols</a></li>-->
-          <li><a ui-sref="institute-list" translate="menu.institutes">Institutes</a></li>
-          <li><a ui-sref="user-list"      translate="menu.users">Users</a></li>
-          <li><a show-if-allowed="userCreateUpdateOpts" ui-sref="role-list" translate="menu.roles">Roles</a></li>
-          <li><a ui-sref="site-list"      translate="menu.sites">Sites</a></li>
-          <li><a ui-sref="container-list" translate="menu.storage_containers">Storage Containers</a></li>
-          <li><a ui-sref="query-list"     translate="menu.queries">Queries</a></li>
+          <li>
+            <a ui-sref="home" translate="menu.home">Home</a>
+          </li>
+          <li show-if-allowed="cpReadOpts">
+            <a ui-sref="cp-list" translate="menu.collection_protocols">Collection Protocols</a>
+          </li>
+          <!--<li>
+            <a ui-sref="dp-list" translate="menu.distribution_protocols">Distribution Protocols</a>
+          </li>-->
+          <li>
+            <a ui-sref="institute-list" translate="menu.institutes">Institutes</a>
+          </li>
+          <li>
+            <a ui-sref="user-list" translate="menu.users">Users</a>
+          </li>
+          <li show-if-allowed="userCreateUpdateOpts">
+            <a ui-sref="role-list" translate="menu.roles">Roles</a>
+          </li>
+          <li>
+            <a ui-sref="site-list" translate="menu.sites">Sites</a>
+          </li>
+          <li show-if-allowed="containerReadOpts">
+            <a ui-sref="container-list" translate="menu.storage_containers">Storage Containers</a>
+          </li>
+          <li>
+            <a ui-sref="query-list" translate="menu.queries">Queries</a>
+          </li>
           <!-- li><a href="#" translate="menu.settings">Settings</a></li -->
         </ul>
       </div>
