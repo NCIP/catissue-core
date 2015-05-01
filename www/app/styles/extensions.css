@@ -31,3 +31,12 @@
   color: #666666; 
   margin-bottom: 10px;
 }
+
+/*
+* Temporary we hide print button.
+*/
+#de-form #print {
+  display: none;
+}
+
+

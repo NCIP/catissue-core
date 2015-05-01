@@ -24,10 +24,11 @@ angular.module('os.administrative.user.detail', ['os.administrative.models'])
     }
 
     $scope.activate = function() {
+      var msgKey = $scope.user.activityStatus == 'Locked' ? 'user.user_unlocked' : 'user.user_request_approved';
       User.activate($scope.user.id).then(
         function(user) {
           $scope.user = user;
-          Alerts.success('user.user_request_approved');
+          Alerts.success(msgKey);
         }
       );
     }

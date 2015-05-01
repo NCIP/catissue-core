@@ -522,6 +522,9 @@
     "user_request_approved": "User request approved successfully",
     "activity_status": "Activity Status",
     "confirm_reject": "Rejecting the User {{entityName}} will delete this user from the database. Are you sure you want to go ahead?",
+    "locked": "User {{firstName}} {{lastName}} has been locked. Unlock?",
+    "unlock_user": "Unlock User",
+    "user_unlocked": "User unlocked successfully",
 
     "user_roles": "User Roles",
     "bulk_import_users": "Import Users",

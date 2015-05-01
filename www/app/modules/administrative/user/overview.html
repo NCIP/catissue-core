@@ -3,6 +3,9 @@
     <div class="alert alert-info" ng-if="user.activityStatus == 'Pending'">
       <span>{{'user.request_pending' | translate: user }}</span>
     </div>
+    <div class="alert alert-info" ng-if="user.activityStatus == 'Locked'">
+      <span>{{'user.locked' | translate: user }}</span>
+    </div>
     <ul class="os-key-values os-two-cols" os-inline-editors on-save="editUser">
       <li class="item">
         <strong class="key key-sm" translate="user.last_name">Last Name</strong>
@@ -101,6 +104,13 @@
       <button class="btn btn-danger" ng-click="deleteUser()">
         <span class="fa fa-remove"></span>
         <span translate="user.reject_user"> Reject User </span>
+      </button>
+    </div>
+
+    <div ng-if="user.activityStatus == 'Locked'">
+      <button class="btn btn-primary" ng-click="activate()">
+        <span class="fa fa-check"></span>
+        <span translate="user.unlock_user"> Unlocked User </span>
       </button>
     </div>
   </div>
