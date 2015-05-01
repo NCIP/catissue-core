@@ -3,7 +3,7 @@
 * Css changes are in extension.css file.
 */
 angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
-  .directive('osDeForm', function($http, $rootScope, $timeout, Form) {
+  .directive('osDeForm', function($http, $rootScope, Form) {
     return {
       restrict: 'A',
 
@@ -39,7 +39,6 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
           var form = new edu.common.de.Form(args);
           form.render();
           onceRendered = true;
-
         }, true);
       }
     }
