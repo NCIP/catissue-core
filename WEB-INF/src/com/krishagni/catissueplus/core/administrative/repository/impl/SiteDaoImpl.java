@@ -26,17 +26,15 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Site> getSites(SiteListCriteria listCrit) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(Site.class)
-				.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
-				.addOrder(Order.asc("name"))
+		Criteria query = sessionFactory.getCurrentSession()
+				.createCriteria(Site.class, "s")
+				.add(Restrictions.eq("s.activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
+				.addOrder(Order.asc("s.name"))
 				.setFirstResult(listCrit.startAt())
 				.setMaxResults(listCrit.maxResults());
 				
-		if (StringUtils.isNotBlank(listCrit.query())) {
-			MatchMode mathMode = listCrit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;
-			query.add(Restrictions.ilike("name", listCrit.query(), mathMode));
-		}
-		
+		addSearchConditions(query, listCrit);
+
 		return query.list();
 	}
 
@@ -65,6 +63,19 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 				.list();
 		
 		return result.isEmpty() ? null : result.get(0);
+	}
+	
+	private void addSearchConditions(Criteria query, SiteListCriteria listCrit) {
+		MatchMode mathMode = listCrit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;
+		
+		if (StringUtils.isNotBlank(listCrit.query())) {
+			query.add(Restrictions.ilike("s.name", listCrit.query(), mathMode));
+		}
+		
+		if (StringUtils.isNotBlank(listCrit.institute())) {
+			query.createAlias("s.institute", "institute")
+				.add(Restrictions.ilike("institute.name", listCrit.institute(), mathMode));	
+		}
 	}
 			
 	private static final String FQN = Site.class.getName();
