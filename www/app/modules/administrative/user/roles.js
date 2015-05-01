@@ -1,7 +1,7 @@
 
 angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.biospecimen.models'])
   .controller('UserRolesCtrl', function(
-    $scope, $translate, $filter,
+    $rootScope, $scope, $translate, $filter,
     user, userRoles,
     PvManager, CollectionProtocol, Role) {
     
@@ -23,7 +23,9 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
     }
 
     function loadPvs() {
-      $scope.sites = PvManager.getSites();
+      var opts = $rootScope.currentUser.admin ? {institute: $scope.user.instituteName, exactMatch: true} :
+        {resource: 'User', operation: 'Update'};
+      $scope.sites = PvManager.getSites(opts);
       $scope.sites.splice(0, 0, $scope.all);
       setSitePvs();
 

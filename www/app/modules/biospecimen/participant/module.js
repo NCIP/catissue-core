@@ -24,7 +24,8 @@ angular.module('os.biospecimen.participant',
         controller: function($scope) {
           $scope.participantResource = {
             registerOpts: {resource: 'ParticipantPhi', operations: ['Create']},
-            updateOpts: {resource: 'ParticipantPhi', operations: ['Update']},
+            readOpts:     {resource: 'ParticipantPhi', operations:['Read']},
+            updateOpts:   {resource: 'ParticipantPhi', operations: ['Update']},
           },
 
           $scope.visitAndSpecimenResource = {

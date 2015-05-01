@@ -51,6 +51,9 @@ public class SitesController {
 			@RequestParam(value = "operation", required = false)
 			String operation,
 			
+			@RequestParam(value = "institute", required = false)
+			String institute,
+			
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
 			
@@ -63,6 +66,7 @@ public class SitesController {
 			.exactMatch(exactMatch)
 			.resource(resource)
 			.operation(operation)
+			.institute(institute)
 			.startAt(startAt)
 			.maxResults(maxResults);
 		

@@ -21,7 +21,7 @@
     </div>
   </div>
     
-  <div os-side-menu ng-if="user.activityStatus != 'Pending'">
+  <div os-side-menu ng-if="!user.admin && user.activityStatus != 'Pending'">
     <ul>
       <li ui-sref-active="active">
         <a ui-sref=".overview">

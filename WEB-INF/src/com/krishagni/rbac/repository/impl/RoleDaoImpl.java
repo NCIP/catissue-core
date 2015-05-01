@@ -6,11 +6,11 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.rbac.domain.Role;
-import com.krishagni.rbac.domain.RoleAccessControl;
 import com.krishagni.rbac.repository.RoleDao;
 import com.krishagni.rbac.repository.RoleListCriteria;
 
@@ -22,7 +22,8 @@ public class RoleDaoImpl extends AbstractDao<Role> implements RoleDao {
 		Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(Role.class)
 				.setFirstResult(listCriteria.startAt())
-				.setMaxResults(listCriteria.maxResults());
+				.setMaxResults(listCriteria.maxResults())
+				.addOrder(Order.asc("name"));
 		
 		if (StringUtils.isNotBlank(listCriteria.query())) {
 			query.add(Restrictions.ilike("name", listCriteria.query(), MatchMode.ANYWHERE));

@@ -9,6 +9,8 @@ public class SiteListCriteria extends AbstractListCriteria<SiteListCriteria> {
 	
 	private String operation;
 	
+	private String institute;
+	
 	@Override
 	public SiteListCriteria self() {
 		return this;
@@ -31,4 +33,15 @@ public class SiteListCriteria extends AbstractListCriteria<SiteListCriteria> {
 		this.operation = operation;
 		return self();
 	}
+
+	public String institute() {
+		return institute;
+	}
+
+	public SiteListCriteria institute(String institute) {
+		this.institute = institute;
+		return self();
+	}
+	
+	
 }
