@@ -53,7 +53,6 @@
         <prop key="hibernate.show_sql">true</prop>
         <prop key="org.hibernate.envers.track_entities_changed_in_revision">true</prop>
         <prop key="org.hibernate.envers.global_with_modified_flag">true</prop>
-        <prop key="hibernate.listeners.envers.autoRegister">false</prop>
       </props>
     </property>
   </bean>
