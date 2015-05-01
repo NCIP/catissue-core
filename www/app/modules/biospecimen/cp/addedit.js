@@ -37,7 +37,9 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
 
     function loadPvs() {
       $scope.sites = [];
-      Site.query().then(function(sites) {
+      var op = !$scope.cp.id ? 'Create' : 'Update';
+      var opts = {resource:'CollectionProtocol', operation: op};
+      Site.query(opts).then(function(sites) {
          angular.forEach(sites, function(site) {
            $scope.sites.push(site.name);
          })
