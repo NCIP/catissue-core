@@ -1684,4 +1684,19 @@
       ordered="true" />
   </changeSet>
 
+  <changeSet author="vpawar" id="Updated user view" runOnChange="true">
+    <sql>
+      create or replace view USER_VIEW as (
+        select 
+          u.identifier as identifier, u.first_name as first_name, u.last_name as last_name,
+          u.email_address as email_address,
+          concat(u.last_name, concat(', ', u.first_name)) as name,
+          d.name as department_name 
+        from 
+          catissue_user u 
+          inner join os_departments d on u.department_id = d.identifier
+      )
+    </sql>    
+  </changeSet>
+
 </databaseChangeLog>
