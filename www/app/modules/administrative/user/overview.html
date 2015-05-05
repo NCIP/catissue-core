@@ -1,9 +1,9 @@
 <div class="clearfix">
   <div class="col-xs-8">
-    <div class="alert alert-info" ng-if="user.activityStatus == 'Pending'">
+    <div class="alert alert-info" ng-if="user.activityStatus == 'Pending' && currentUser.admin">
       <span>{{'user.request_pending' | translate: user }}</span>
     </div>
-    <div class="alert alert-info" ng-if="user.activityStatus == 'Locked'">
+    <div show-if-allowed="userResource.updateOpts" class="alert alert-info" ng-if="user.activityStatus == 'Locked'">
       <span>{{'user.locked' | translate: user }}</span>
     </div>
     <ul class="os-key-values os-two-cols" os-inline-editors on-save="editUser">
@@ -96,7 +96,7 @@
       </li>
     </ul>
 
-    <div ng-if="user.activityStatus == 'Pending'">
+    <div ng-if="user.activityStatus == 'Pending' && currentUser.admin">
       <button class="btn btn-success" ng-click="activate()">
         <span class="fa fa-check"></span>
         <span translate="user.approve_user"> Approve User </span>
@@ -107,7 +107,7 @@
       </button>
     </div>
 
-    <div ng-if="user.activityStatus == 'Locked'">
+    <div show-if-allowed="userResource.updateOpts" ng-if="user.activityStatus == 'Locked'">
       <button class="btn btn-primary" ng-click="activate()">
         <span class="fa fa-check"></span>
         <span translate="user.unlock_user"> Unlocked User </span>
