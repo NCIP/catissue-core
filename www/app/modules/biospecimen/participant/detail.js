@@ -11,8 +11,6 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
 
     function init() {
       $scope.cpr = cpr;
-      var opts = {cp: $scope.cpr.cpShortTitle};
-      angular.extend($scope.participantResource.updateOpts, opts);
       loadPvs();
     }
 

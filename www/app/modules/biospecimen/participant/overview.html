@@ -123,7 +123,7 @@
                       </a>
                     </li>
                     <li class="divider"></li>
-                    <li show-if-allowed="visitAndSpecimenResource.createOpts">
+                    <li show-if-allowed="specimenResource.updateOpts">
                       <a ui-sref="specimen-addedit({visitId: visit.id})">
                         <i class="fa fa-plus"></i>
                         <span translate="visits.ctx_menu.collect_unplanned_specimens">Collect Unplanned Specimens</span>
@@ -178,7 +178,7 @@
                       <span class="fa fa-ellipsis-v"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
-                      <li show-if-allowed="visitAndSpecimenResource.createOpts">
+                      <li show-if-allowed="specimenResource.updateOpts">
                         <a ng-click="showAddVisit(visit, $index)">
                           <i class="fa fa-plus"></i>
                           <span translate="visits.ctx_menu.add_visit">Add Visit</span>

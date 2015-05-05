@@ -43,6 +43,8 @@ public class ParticipantDetail {
 	
 	private String empi;
 	
+	private boolean phiAccess;
+	
 	private Set<String> modifiedAttrs = new HashSet<String>();
 
 	public Long getId() {
@@ -179,6 +181,14 @@ public class ParticipantDetail {
 		modifiedAttrs.add("empi");
 	}
 	
+	public boolean getPhiAccess() {
+		return phiAccess;
+	}
+
+	public void setPhiAccess(boolean phiAccess) {
+		this.phiAccess = phiAccess;
+	}
+
 	public Set<String> getModifiedAttrs() {
 		return modifiedAttrs;
 	}
@@ -200,6 +210,7 @@ public class ParticipantDetail {
 		result.setSexGenotype(participant.getSexGenotype());
 		result.setSsn(excludePhi ? "###" : participant.getSocialSecurityNumber());
 		result.setVitalStatus(participant.getVitalStatus());
+		result.setPhiAccess(!excludePhi);
 		return result;
 	}
 	

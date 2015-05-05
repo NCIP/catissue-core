@@ -27,9 +27,9 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 	@SuppressWarnings("unchecked")
 	public List<Site> getSites(SiteListCriteria listCrit) {
 		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(Site.class, "s")
-				.add(Restrictions.eq("s.activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
-				.addOrder(Order.asc("s.name"))
+				.createCriteria(Site.class)
+				.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
+				.addOrder(Order.asc("name"))
 				.setFirstResult(listCrit.startAt())
 				.setMaxResults(listCrit.maxResults());
 				
@@ -66,15 +66,15 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 	}
 	
 	private void addSearchConditions(Criteria query, SiteListCriteria listCrit) {
-		MatchMode mathMode = listCrit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;
 		
 		if (StringUtils.isNotBlank(listCrit.query())) {
-			query.add(Restrictions.ilike("s.name", listCrit.query(), mathMode));
+			MatchMode matchMode = listCrit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;
+			query.add(Restrictions.ilike("name", listCrit.query(), matchMode));
 		}
 		
 		if (StringUtils.isNotBlank(listCrit.institute())) {
-			query.createAlias("s.institute", "institute")
-				.add(Restrictions.ilike("institute.name", listCrit.institute(), mathMode));	
+			query.createAlias("institute", "i")
+				.add(Restrictions.eq("i.name", listCrit.institute()));	
 		}
 	}
 			

@@ -4,7 +4,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <span translate="specimens.events">Events</span>
-        <div class="btn-group" style="margin-left: 10px;" dropdown>
+        <div show-if-allowed="specimenResource.updateOpts" class="btn-group" style="margin-left: 10px;" dropdown>
           <button class="btn btn-primary os-round-btn dropdown-toggle">
             <span class="fa fa-plus"></span>
           </button>
@@ -40,7 +40,7 @@
               <div class="col col-xs-3">{{event.user}}</div>
               <div class="col col-xs-3">{{event.time | date: global.dateTimeFmt}}</div>
               <div class="col col-xs-1">
-                <button class="btn btn-xs btn-default">
+                <button show-if-allowed="specimenResource.updateOpts" class="btn btn-xs btn-default">
                   <span class="fa fa-trash"></span>
                 </button>
               </div>
