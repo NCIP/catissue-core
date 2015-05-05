@@ -1,6 +1,6 @@
 
 angular.module('os.biospecimen.extensions.addedit-record', [])
-  .controller('FormRecordAddEditCtrl', function($scope, $state, $stateParams, formDef, Form, Alerts) {
+  .controller('FormRecordAddEditCtrl', function($scope, $state, $stateParams, formDef, ExtensionsUtil, Alerts) {
     var recId = $stateParams.recordId;
     if (!!recId) {
       recId = parseInt(recId);
@@ -31,10 +31,10 @@ angular.module('os.biospecimen.extensions.addedit-record', [])
       },
 
       onDelete: function() {
-        Form.deleteRecord($stateParams.formId, recId).then(
-          function() {
+        var record = {formId: $stateParams.formId, formCaption: $stateParams.formCaption, recordId: recId}
+        ExtensionsUtil.deleteRecord(record, 
+          function(record) {
             $scope.back();
-            Alerts.success('extensions.record_deleted');
           }
         );
       }

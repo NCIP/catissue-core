@@ -33,7 +33,7 @@
           <div class="os-table-body">
             <div class="row" ng-repeat="record in records">
               <div class="col col-xs-5">
-                <a ui-sref="{{extnState}}addedit({formId: record.formId, recordId: record.recordId, formCtxId: record.fcId})"> 
+                <a ui-sref="{{extnState}}addedit({formId: record.formId, formCaption: record.formCaption, recordId: record.recordId, formCtxId: record.fcId})"> 
                   #{{record.recordId}} {{record.formCaption}}
                 </a>
               </div>
@@ -51,19 +51,4 @@
     </div>
   </div>
 </div>
-
-<script type="text/ng-template" id="delete_extension_record.html">
-  <div class="os-modal-header">
-    <span>{{'extensions.deleting_record' | translate: {name: "#" + record.recordId + " " + record.formCaption} }}</span>
-  </div>
-  <div class="os-modal-body">
-    <span>
-      {{'extensions.confirm_delete_record' | translate: {name: "#" + record.recordId + " " + record.formCaption} }}
-    </span>
-  </div>
-  <div class="os-modal-footer">
-    <button class="btn os-btn-text" ng-click="no()" translate="common.buttons.cancel">Cancel</button>
-    <button class="btn btn-danger" ng-click="yes()" translate="common.yes">Yes</button>
-  </div>
-</script>
 
