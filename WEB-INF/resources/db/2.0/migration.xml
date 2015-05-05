@@ -107,7 +107,7 @@
       for each row
       begin
  
-        if (:new.parent_specimen_id is not null ) then
+        if (:new.parent_container_id is not null ) then
           insert into os_containers_hierarchy
             (ancestor_id, descendent_id) 
           select 
@@ -116,9 +116,9 @@
             os_containers_hierarchy och 
           where 
             och.descendent_id = :new.parent_container_id;
-         end if;
+        end if;
   
-      insert into os_containers_hierarchy(ancestor_id, descendent_id) values (:new.identifier, :new.identifier);
+        insert into os_containers_hierarchy(ancestor_id, descendent_id) values (:new.identifier, :new.identifier);
 
       end;
       //
