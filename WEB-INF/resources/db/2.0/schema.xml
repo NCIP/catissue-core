@@ -1753,7 +1753,7 @@
   
   <changeSet author="nmarwaha" id="Create procedure for splitting values on oracle" dbms="oracle">
     <sql endDelimiter="//">
-      create or replace type split_tbl as table of varchar2(2000);
+      create or replace type split_tbl as table of varchar2(64);
       //
     </sql>
     <sql endDelimiter="//">
@@ -1764,20 +1764,21 @@
       
         splitted split_tbl := split_tbl();
         i pls_integer := 0;
-        list_ varchar2(32767) := list;
+        new_list varchar2(256) := list;
       begin
         loop
-          i := instr(list_, delimiter);
+          i := instr(new_list, delimiter);
           if i > 0 then
             splitted.extend(1);
-            splitted(splitted.last) := substr(list_, 1, i - 1);
-            list_ := substr(list_, i + length(delimiter));
+            splitted(splitted.last) := substr(new_list, 1, i - 1);
+            new_list := substr(new_list, i + length(delimiter));
           else
             splitted.extend(1);
-            splitted(splitted.last) := list_;
-            return splitted;
+            splitted(splitted.last) := new_list;
+            exit;
           end if;
         end loop;
+        return splitted;
       end;
       //
     </sql>
@@ -1820,14 +1821,11 @@
         select rbac_acl_seq.currval into acl_id from dual;
   
         for i in op_names.first .. op_names.last loop
-          select instr(oparr, op_names(i)) into occurances from dual;
-          if(occurances > 0) then
-            select identifier into operation_id from rbac_operations where name = op_names(i);
-            insert into rbac_role_access_list_ops 
-              (identifier, operation_id, acl_id) 
-            values 
-              (rbac_acl_ops_seq.nextval, operation_id, acl_id);
-          end if;
+          select identifier into operation_id from rbac_operations where name = op_names(i);
+          insert into rbac_role_access_list_ops 
+            (identifier, operation_id, acl_id) 
+          values 
+            (rbac_acl_ops_seq.nextval, operation_id, acl_id);
         end loop;
         commit;
       end;
