@@ -1683,20 +1683,154 @@
       incrementBy="1" 
       ordered="true" />
   </changeSet>
-
+  
   <changeSet author="vpawar" id="Updated user view" runOnChange="true">
     <sql>
       create or replace view USER_VIEW as (
-        select 
+        select
           u.identifier as identifier, u.first_name as first_name, u.last_name as last_name,
           u.email_address as email_address,
           concat(u.last_name, concat(', ', u.first_name)) as name,
-          d.name as department_name 
-        from 
-          catissue_user u 
+          d.name as department_name
+        from
+          catissue_user u
           inner join os_departments d on u.department_id = d.identifier
       )
-    </sql>    
+    </sql>
+  </changeSet>
+  
+  <changeSet id="Create procedures for default roles" author="nmarwaha" dbms="mysql">
+    <sql endDelimiter="//">
+      create procedure create_role(
+        in role_name text, 
+        in role_desc text
+      )
+      begin
+
+        insert into rbac_roles 
+          (name, description)
+        values
+          (role_name, role_desc);
+      end;
+      //
+    </sql>
+    <sql endDelimiter="//">
+      create procedure assign_to_role(
+        in role_name text, 
+        in resource_name text, 
+        in operations text
+      )
+      begin
+
+      select identifier into @role_id from rbac_roles where name = role_name;
+      select identifier into @resource_id from rbac_resources where name = resource_name;
+      insert into rbac_role_access_list (role_id, resource_id) values (@role_id, @resource_id);
+      select last_insert_id() into @acl_id;
+      set @operations = operations;
+      set @occurrences = length(@operations) - length(replace(@operations, ',', ''));
+        loop: while (@occurrences >= 0)
+        do 
+          set @opName = substring_index(@operations, ',', 1);
+          if (@opName != '') THEN
+              
+            select identifier into @op_id from rbac_operations where name = @opName;
+            insert into rbac_role_access_list_ops (operation_id, acl_id) values (@op_id, @acl_id);
+          else
+            leave loop; 
+          end if;
+          
+          set @occurrences = length(@operations) - length(replace(@operations, ',', ''));
+          if (@occurrences = 0) then 
+            leave loop; 
+          end if;
+          
+          set @operations = substring(@operations,length(substring_index(@operations, ',', 1)) + 2);
+        end while;
+      end;
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Create procedure for splitting values on oracle" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace type split_tbl as table of varchar2(64);
+      //
+    </sql>
+    <sql endDelimiter="//">
+      create or replace function split(
+        list in varchar2, 
+        delimiter in varchar2 default ','
+      ) return split_tbl is 
+      
+        splitted split_tbl := split_tbl();
+        i pls_integer := 0;
+        new_list varchar2(256) := list;
+      begin
+        loop
+          i := instr(new_list, delimiter);
+          if i > 0 then
+            splitted.extend(1);
+            splitted(splitted.last) := substr(new_list, 1, i - 1);
+            new_list := substr(new_list, i + length(delimiter));
+          else
+            splitted.extend(1);
+            splitted(splitted.last) := new_list;
+            exit;
+          end if;
+        end loop;
+        return splitted;
+      end;
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Create procedures for default roles" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace procedure create_role(
+        role_name in varchar2, role_desc in varchar2
+      ) is
+      
+      begin
+        insert into rbac_roles 
+          (identifier, name, description)
+        values
+          (rbac_roles_seq.nextval, role_name, role_desc);
+      end;
+      //
+    </sql>
+    <sql endDelimiter="//">
+      create or replace procedure assign_to_role(
+        role_name in varchar2, 
+        resource_name in varchar2, 
+        operations in varchar2
+      ) is
+        
+        role_id number(20);
+        resource_id number(20);
+        operation_id number(20);
+        occurances number(20);
+        oparr varchar2(100) := operations;
+        operation_name varchar2(10);
+        acl_id number(10);
+        op_names split_tbl;
+      begin
+        op_names := split(operations);
+        select identifier into role_id from rbac_roles where name = role_name;
+        select identifier into resource_id from rbac_resources where name = resource_name;
+        insert into rbac_role_access_list (identifier, role_id, resource_id) values (rbac_acl_seq.nextval, role_id, resource_id);
+        select rbac_acl_seq.currval into acl_id from dual;
+  
+        for i in op_names.first .. op_names.last loop
+          select identifier into operation_id from rbac_operations where name = op_names(i);
+          insert into rbac_role_access_list_ops 
+            (identifier, operation_id, acl_id) 
+          values 
+            (rbac_acl_ops_seq.nextval, operation_id, acl_id);
+        end loop;
+        commit;
+      end;
+      //
+    </sql>
   </changeSet>
 
 </databaseChangeLog>
