@@ -712,7 +712,7 @@
     "select_level": "Select Level",
     "attach_form": "Attach Form",
     "attached": "Form Successfully Attached",
-    "confirm_delete_association": "Are you sure you want to delete this form at <b>{{ctx.level.name}}</b> level from <b>{{!ctx.collectionProtocol.id ? 'All Protocols' : ctx.collectionProtocol.shortTitle}}</b>? \n Please note you will no longer be able to access data for this form",
+    "confirm_delete_association": "Are you sure you want to delete this form at <b>{{level.name}}</b> level from <b>{{!collectionProtocol.id ? 'All Protocols' : collectionProtocol.shortTitle}}</b>? \n Please note you will no longer be able to access data for this form",
 
     "tooltip": {
       "add": "Click to add new Form",
