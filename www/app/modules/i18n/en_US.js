@@ -50,7 +50,6 @@
       "update": "Update",
       "create": "Create",
       "delete": "Delete",
-      "remove": "Remove",
       "import": "Import",
       "cancel": "Cancel",
       "discard": "Discard",
@@ -696,32 +695,31 @@
     "all": "ALL",
     "list": "Forms",
     "create_form": "New Form",
-    "edit_form": "Click to Edit Form",
     "name": "Form Name",
     "created_by": "Created By",
     "last_updated": "Last Updated",
     "cp_count": "CP Count",
-    "attach_form_to_cp": "Click to attach form to a Collection Protocol",
-    "delete_form": "Delete Form",
-    "no_association": "Not used in any collection protocols",
-    "association_title": "Used in following collection protocols",
+    "no_used": "Not used in any collection protocols",
+    "used_in": "Used in following collection protocols",
     "multiple_records": "Multiple Records",
     "collection_protocol": "Collection Protocol",
     "level": "Level",
     "multiple_records_allowed": "Multiple records allowed",
-    "cp_association_title": "Use form in following collection protocols",
-    "specimen_event_info": "Specimen Event forms always attached to all collection protocols.",
+    "use_in_cps": "Use form in following collection protocols",
+    "spe_attached_to_all_cps": "Specimen Event forms always attached to all collection protocols.",
     "all_cps": "All Present and Future Collection Protocols",
     "select_cps": "Select One or More Collection Protocols",
     "select_level": "Select Level",
     "attach_form": "Attach Form",
-    "form_attached": "Form Successfully Attached",
-    "form_attachment_failed": "Error in attaching form. Contact administrator",
-    "confirm_delete_association": "Are you sure you want to delete this form at Participant level from ALL protocols? \n Please note you will no longer be able to access data for this form",
+    "attached": "Form Successfully Attached",
+    "confirm_delete_association": "Are you sure you want to delete this form at <b>{{ctx.level.name}}</b> level from <b>{{!ctx.collectionProtocol.id ? 'All Protocols' : ctx.collectionProtocol.shortTitle}}</b>? \n Please note you will no longer be able to access data for this form",
 
     "tooltip": {
       "add": "Click to add new Form",
-      "search": "Click to search Form"
+      "edit": "Click to edit Form",
+      "delete": "Click to delete Form",
+      "search": "Click to search Form",
+      "attach_form_to_cp": "Click to attach form to a Collection Protocol"
     }
   },
 
@@ -916,7 +914,9 @@
     "collection_protocol_registration": "Collection Protocol Registration",
     "specimen": "Specimen",
     "distribution_order": "Distribution Order",
-    "form": "Form"
+    "form": "Form",
+    "participant": "Participant",
+    "specimen_event": "Specimen Event"
   },
 
   "bulk_imports": {

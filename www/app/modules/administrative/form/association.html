@@ -5,10 +5,10 @@
 
   <div class="os-modal-body">
     <div class="os-form-association-list" ng-if="!cpFormCtxts || cpFormCtxts.length == 0">
-      <h5><i translate="form.no_association">Not used in any collection protocols</i></h5>   
+      <h5><i translate="form.no_used">Not used in any collection protocols</i></h5>   
     </div>
     <div class="os-form-association-list" ng-if="cpFormCtxts && cpFormCtxts.length > 0">
-      <h5 translate="form.association_title">
+      <h5 translate="form.used_in">
         Used in following collection protocols
       </h5>
 
@@ -25,7 +25,7 @@
           <div class="os-table-body">
             <div class="row" ng-repeat="ctxt in cpFormCtxts">
               <div class="col col-xs-5">{{ctxt.collectionProtocol.shortTitle}}</div>
-              <div class="col col-xs-3">{{ctxt.level}}</div>
+              <div class="col col-xs-3">{{ctxt.level.name}}</div>
               <div class="col col-xs-3">
                 <div class="os-tag" ng-if="ctxt.multiRecord" translate="form.multiple_records">Multiple Records</div>
               </div>
@@ -41,46 +41,42 @@
     </div>
 
     <div class="os-form-association-form">
-      <div ng-show="!cpFormCtxt.isSpecimenEvent" translate="form.cp_association_title">
+      <div ng-show="!cpFormCtxt.isSpecimenEvent" translate="form.use_in_cps">
         Use form in following collection protocols
       </div>
-      <div ng-show="cpFormCtxt.isSpecimenEvent" translate="form.specimen_event_info">
+      <div ng-show="cpFormCtxt.isSpecimenEvent" translate="form.spe_attached_to_all_cps">
         Specimen Event forms always attached to all collection protocols. 
       </div>
       <div class="checkbox" ng-show="!cpFormCtxt.isSpecimenEvent">
         <label>
-          <input type="checkbox" ng-checked="cpFormCtxt.allProtocols" ng-model="cpFormCtxt.allProtocols" 
-            ng-disabled="cpFormCtxt.isSpecimenEvent"/> 
-          {{ 'form.all_cps' | translate}}
+          <input type="checkbox" ng-checked="cpFormCtxt.allProtocols" ng-model="cpFormCtxt.allProtocols"/> 
+          <span translate="form.all_cps">All Present and Future Collection Protocols</span>
         </label>
       </div>
-      <div class="os-select" ng-show="cpFormCtxt.allProtocols != true">
-        <os-select multiple ng-model="cpFormCtxt.selectedCps" list="cpList" display-prop="shortTitle"
-          placeholder="{{'form.select_cps' | translate}}" name="cps" append-to-body="true">
-        </os-select>
-      </div>
-      <div class="os-select">
-        <os-select ng-model="cpFormCtxt.selectedEntity" list="extnEntities" display-prop="name"
-          placeholder="{{'form.select_level' | translate }}" on-change="onEntitySelect" append-to-body="true">
-        </os-select>
-      </div>
+      <os-select multiple ng-model="cpFormCtxt.selectedCps" list="cpList" display-prop="shortTitle"
+        placeholder="{{'form.select_cps' | translate}}" name="cps" append-to-body="true" 
+        ng-show="!cpFormCtxt.allProtocols && !cpFormCtxt.isSpecimenEvent">
+      </os-select>
+      <os-select ng-model="cpFormCtxt.selectedEntity" list="extnEntities" display-prop="name"
+        placeholder="{{'form.select_level' | translate }}" on-change="onEntitySelect" append-to-body="true">
+      </os-select>
       <div class="checkbox">
         <label>
           <input type="checkbox" ng-checked="cpFormCtxt.isMultiRecord" ng-model="cpFormCtxt.isMultiRecord"/>
-          {{ 'form.multiple_records_allowed' | translate }}
+          <span translate="form.multiple_records_allowed">Multiple records allowed</span>
         </label>
       </div>
     </div>
   </div>
 
   <div class="os-modal-footer" ng-switch on="enableAttach(cpFormCtxt)">
+    <button ng-switch-when="true"  class="btn os-btn-text" ng-click="cancel()"           translate="common.buttons.cancel">
+      Cancel
+    </button>
     <button ng-switch-when="true"  class="btn btn-primary" ng-click="attach(cpFormCtxt)" translate="form.attach_form">
       Attach Form
     </button>
-    <button ng-switch-when="true"  class="btn btn-default" ng-click="cancel()" translate="common.buttons.cancel">
-      Cancel
-    </button>
-    <button ng-switch-when="false" class="btn btn-primary" ng-click="cancel()" translate="common.buttons.done">
+    <button ng-switch-when="false" class="btn btn-primary" ng-click="cancel()"           translate="common.buttons.done">
       Done
     </button>
   </div>
@@ -92,7 +88,7 @@
   </div>
   
   <div class="os-modal-body">
-   <span translate="form.confirm_delete_association">
+   <span translate="form.confirm_delete_association" translate-values="{ctx: removeCtxData.ctx}">
      Are you sure you want to delete this form at Participant level from ALL protocols? <br/>
      Please note you will no longer be able to access data for this form
    </span>
@@ -100,7 +96,7 @@
 
   <div class="os-modal-footer">
     <button class="btn os-btn-text" ng-click="cancelRemoveCtx()" translate="common.buttons.cancel">Cancel</button>
-    <button class="btn btn-danger" ng-click="removeCtx()" translate="common.buttons.remove">Remove</button>
+    <button class="btn btn-danger"  ng-click="removeCtx()"       translate="common.buttons.delete">Delete</button>
   </div>
 </div> 
 

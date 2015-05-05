@@ -23,17 +23,7 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
       );
     };
 
-    $scope.extnEntities = [
-      {entity: 'Participant', name: 'Participant'},
-      {entity: 'Specimen', name: 'Specimen'},
-      {entity: 'SpecimenCollectionGroup', name: 'Specimen Collection Group'},
-      {entity: 'SpecimenEvent', name:'Specimen Event'}
-    ];
-
-
     $scope.showFormContexts = function(form) {
-      form.highlight = false;
-
       form.getFormContexts().then(function(formCtxts) {
         var formCtxtsModal = $modal.open({
           templateUrl: 'modules/administrative/form/association.html',
@@ -44,15 +34,16 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
               return {
                 formCtxts: formCtxts,
                 form: form,
-                cpList: $scope.cpList,
-                extnEntities: $scope.extnEntities
+                cpList: $scope.cpList
               }
             }
           }
         });
 
-        formCtxtsModal.result.then(function(newCpCnt) {
-          form.cpCount = newCpCnt;
+        formCtxtsModal.result.then(function(reloadForms) {
+          if (reloadForms) {
+            loadAllForms();
+          }
         });
       });
     };

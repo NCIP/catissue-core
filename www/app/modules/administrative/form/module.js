@@ -15,13 +15,13 @@ angular.module('os.administrative.form',
         parent: 'signed-in'
       })
       .state('form-addedit', {
-        url: '/form-addedit/:formId',
+        url: '/form-addedit/:formId?formCaption',
         templateUrl: 'modules/administrative/form/addedit.html',
         controller: 'FormAddEditCtrl',
         resolve: {
           form: function($stateParams, Form) {
             if ($stateParams.formId) {
-              return Form.getDefinition($stateParams.formId);
+              return new Form({id: $stateParams.formId, caption: $stateParams.formCaption});
             }
 
             return new Form();

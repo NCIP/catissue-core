@@ -3,8 +3,16 @@
   padding: 0px 0px 5px;
 }
 
+.os-form-association-list .os-table {
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: column;
+}
+
 .os-form-association-list .os-table-body {
-  max-height:175px; 
+  -webkit-flex: initial;
+          flex: initial;
+  max-height: 175px; 
   width: 100%; 
   overflow:auto;
 }
@@ -14,7 +22,7 @@
   overflow: auto;
 }
 
-.os-form-association-form .os-select {
+.os-form-association-form .os-select-container {
   margin: 10px 0;
 }
 

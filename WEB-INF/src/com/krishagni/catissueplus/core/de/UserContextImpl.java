@@ -1,4 +1,4 @@
-package krishagni.catissueplus.csd;
+package com.krishagni.catissueplus.core.de;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +14,7 @@ import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
 import edu.common.dynamicextensions.ndao.ResultExtractor;
 import edu.wustl.dynamicextensions.formdesigner.usercontext.AppUserContextProvider;
 
-public class CatissueUserContextProviderImpl implements AppUserContextProvider {
+public class UserContextImpl implements AppUserContextProvider {
 
 	@Override
 	public UserContext getUserContext(HttpServletRequest request) {

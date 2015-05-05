@@ -6,8 +6,6 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import krishagni.catissueplus.csd.CatissueUserContextProviderImpl;
-
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -15,6 +13,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.Utility;
+import com.krishagni.catissueplus.core.de.UserContextImpl;
 import com.krishagni.catissueplus.core.de.ui.StorageContainerControlFactory;
 import com.krishagni.catissueplus.core.de.ui.StorageContainerMapper;
 import com.krishagni.catissueplus.core.de.ui.UserControlFactory;
@@ -65,7 +64,7 @@ public class DeInitializer implements InitializingBean {
 			}
 		}
 		
-		CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
+		CSDProperties.getInstance().setUserContextProvider(new UserContextImpl());
 					
 		DEApp.init(dataSource, transactionManager, dir, dateFormat, timeFormat);
 		ControlManager.getInstance().registerFactory(UserControlFactory.getInstance());			
