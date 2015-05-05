@@ -6,7 +6,7 @@ angular.module('os.biospecimen.extensions.util', [])
       var modalInstance = $modal.open({
         templateUrl: 'modules/biospecimen/extensions/delete-record.html',
         controller: function($scope, $modalInstance) {
-          $scope.recordName = !!record.formCaption ? "#" + record.recordId + " " + record.formCaption : "";
+          $scope.record= record;
 
           $scope.yes = function() {
             Form.deleteRecord(record.formId, record.recordId)

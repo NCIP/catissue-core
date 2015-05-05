@@ -31,7 +31,7 @@ angular.module('os.biospecimen.extensions.addedit-record', [])
       },
 
       onDelete: function() {
-        var record = {formId: $stateParams.formId, recordId: recId}
+        var record = {formId: $stateParams.formId, formCaption: $stateParams.formCaption, recordId: recId}
         ExtensionsUtil.deleteRecord(record, 
           function(record) {
             $scope.back();
