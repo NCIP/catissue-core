@@ -309,6 +309,7 @@
     "no_specimens_for_print": "Please select at least one collected specimen for label printing",
 
     "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
+    "bulk_import": "Bulk Import Specimens",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",
@@ -956,7 +957,8 @@
       "storageContainer": "Storage Containers",
       "cpr": "Collection Protocol Registrations",
       "participant": "Participants",
-      "visit": "Visits"
+      "visit": "Visits",
+      "specimen": "Specimens"
     },
 
     "import_types": {

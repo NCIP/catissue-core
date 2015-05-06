@@ -18,6 +18,8 @@ public interface SpecimenService {
 	
 	public ResponseEvent<SpecimenDetail> updateSpecimen(RequestEvent<SpecimenDetail> req);
 	
+	public ResponseEvent<SpecimenDetail> patchSpecimen(RequestEvent<SpecimenDetail> req);
+	
 	public ResponseEvent<List<SpecimenDetail>> collectSpecimens(RequestEvent<List<SpecimenDetail>> req);
 	
 	public ResponseEvent<Boolean> doesSpecimenExists(RequestEvent<String> label);

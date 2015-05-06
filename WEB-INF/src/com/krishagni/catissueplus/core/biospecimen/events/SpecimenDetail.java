@@ -10,9 +10,11 @@ import org.springframework.util.CollectionUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
+import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 
+@ListenAttributeChanges
 public class SpecimenDetail extends SpecimenInfo {
 	private CollectionEventDetail collectionEvent;
 	

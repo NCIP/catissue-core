@@ -80,7 +80,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	public ResponseEvent<SpecimenDetail> createSpecimen(RequestEvent<SpecimenDetail> req) {
 		try {
 			SpecimenDetail detail = req.getPayload();
-			Specimen specimen = saveOrUpdate(detail, null, null);
+			Specimen specimen = saveOrUpdate(detail, null, null, false);
 			return ResponseEvent.response(SpecimenDetail.from(specimen));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -92,28 +92,12 @@ public class SpecimenServiceImpl implements SpecimenService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<SpecimenDetail> updateSpecimen(RequestEvent<SpecimenDetail> req) {
-		try {
-			SpecimenDetail detail = req.getPayload();
-			
-			Specimen existing = null;
-			if (detail.getId() != null) {
-				existing = daoFactory.getSpecimenDao().getById(detail.getId());
-			} else if (StringUtils.isNotBlank(detail.getLabel())) {
-				existing = daoFactory.getSpecimenDao().getByLabel(detail.getLabel());
-			}
-			
-			if (existing == null) {
-				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND);
-			}
-		
-			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(existing);
-			saveOrUpdate(detail, existing, null);
-			return ResponseEvent.response(SpecimenDetail.from(existing));
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
+		return updateSpecimen(req.getPayload(), false);
+	}
+	
+	@Override
+	public ResponseEvent<SpecimenDetail> patchSpecimen(RequestEvent<SpecimenDetail> req) {
+		return updateSpecimen(req.getPayload(), true);
 	}
 	
 	@Override
@@ -202,7 +186,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			}
 		}
 		
-		Specimen specimen = saveOrUpdate(detail, existing, parent);
+		Specimen specimen = saveOrUpdate(detail, existing, parent, false);
 		if (detail.getChildren() != null) {
 			for (SpecimenDetail childDetail : detail.getChildren()) {
 				collectSpecimen(childDetail, specimen);
@@ -212,8 +196,37 @@ public class SpecimenServiceImpl implements SpecimenService {
 		return specimen;
 	}
 	
-	private Specimen saveOrUpdate(SpecimenDetail detail, Specimen existing, Specimen parent) {
-		Specimen specimen = specimenFactory.createSpecimen(detail, parent);
+	private ResponseEvent<SpecimenDetail> updateSpecimen(SpecimenDetail detail, boolean partial) {
+		try {
+			Specimen existing = null;
+			if (detail.getId() != null) {
+				existing = daoFactory.getSpecimenDao().getById(detail.getId());
+			} else if (StringUtils.isNotBlank(detail.getLabel())) {
+				existing = daoFactory.getSpecimenDao().getByLabel(detail.getLabel());
+			}
+				
+			if (existing == null) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(existing);
+			saveOrUpdate(detail, existing, null, partial);
+			return ResponseEvent.response(SpecimenDetail.from(existing));			
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	private Specimen saveOrUpdate(SpecimenDetail detail, Specimen existing, Specimen parent, boolean partial) {
+		Specimen specimen = null;		
+		if (partial) {
+			specimen = specimenFactory.createSpecimen(existing, detail, parent);
+		} else {
+			specimen = specimenFactory.createSpecimen(detail, parent);
+		}
+		
 		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);
 
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);

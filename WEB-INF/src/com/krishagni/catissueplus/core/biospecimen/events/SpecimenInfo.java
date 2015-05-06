@@ -6,8 +6,11 @@ import java.util.Date;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
+import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
+import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 
-public class SpecimenInfo implements Comparable<SpecimenInfo> {
+@ListenAttributeChanges
+public class SpecimenInfo extends AttributeModifiedSupport implements Comparable<SpecimenInfo> {
 	public static class StorageLocationSummary {
 		public Long id;
 		
@@ -25,6 +28,8 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 	private Long eventId;
 	
 	private Long visitId;
+	
+	private String visitName;
 	
 	private Long reqId;
 	
@@ -98,6 +103,14 @@ public class SpecimenInfo implements Comparable<SpecimenInfo> {
 
 	public void setVisitId(Long visitId) {
 		this.visitId = visitId;
+	}
+
+	public String getVisitName() {
+		return visitName;
+	}
+
+	public void setVisitName(String visitName) {
+		this.visitName = visitName;
 	}
 
 	public Long getReqId() {

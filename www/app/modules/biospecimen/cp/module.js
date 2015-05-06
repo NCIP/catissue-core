@@ -60,6 +60,8 @@ angular.module('os.biospecimen.cp',
               });
             } else if (objectType == 'visit') {
               importDetail.title = 'visits.bulk_import';
+            } else if (objectType == 'specimen') {
+              importDetail.title = 'specimens.bulk_import';
             }
 
             return importDetail;
@@ -76,7 +78,7 @@ angular.module('os.biospecimen.cp',
             return {
               breadcrumbs: [{state: 'cp-list', title: 'cp.list'}],
               title: 'cp.bulk_import_biospecimen_obj_jobs',
-              objectTypes: ['cpr', 'participant', 'visit']
+              objectTypes: ['cpr', 'participant', 'visit', 'specimen']
             }
           }
         },

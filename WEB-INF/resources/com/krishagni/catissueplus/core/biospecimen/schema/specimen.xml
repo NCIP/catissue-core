@@ -1,0 +1,159 @@
+<object-schema>
+  <name>specimen</name>
+
+  <record> 
+    <name>com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail</name>
+   
+    <field>
+      <caption>Visit Name</caption>
+      <attribute>visitName</attribute>
+    </field>     
+
+    <field>
+      <caption>Label</caption>
+      <attribute>label</attribute>
+    </field>  
+
+    <field>
+      <caption>Barcode</caption>
+      <attribute>barcode</attribute>
+    </field>  
+
+    <field>
+      <caption>Specimen Class</caption>
+      <attribute>specimenClass</attribute>
+    </field>  
+
+    <field>
+      <caption>Specimen Type</caption>
+      <attribute>type</attribute>
+    </field>  
+
+    <field>
+      <caption>Lineage</caption>
+      <attribute>lineage</attribute>
+    </field>  
+
+    <field>
+      <caption>Parent Specimen Label</caption>
+      <attribute>parentLabel</attribute>
+    </field>  
+
+    <field>
+      <caption>Anatomic Site</caption>
+      <attribute>anatomicSite</attribute>
+    </field>  
+
+    <field>
+      <caption>Laterality</caption>
+      <attribute>laterality</attribute>
+    </field>  
+
+    <field>
+      <caption>Status</caption>
+      <attribute>status</attribute>
+    </field>  
+
+    <field>
+      <caption>Pathological Status</caption>
+      <attribute>pathology</attribute>
+    </field>  
+
+    <field>
+      <caption>Initial Quantity</caption>
+      <attribute>initialQty</attribute>
+    </field>
+
+    <field>
+      <caption>Available Quantity</caption>
+      <attribute>availableQty</attribute>
+    </field>
+
+    <record>
+      <caption>Location</caption>
+      <attribute>storageLocation</attribute>
+
+      <field>
+        <caption>Container</caption>
+        <attribute>name</attribute>
+      </field>
+
+      <field>
+        <caption>Row</caption>
+        <attribute>positionY</attribute>
+      </field>
+
+      <field>
+        <caption>Column</caption>
+        <attribute>positionX</attribute>
+      </field>
+    </record>
+
+    <record>
+      <caption>Collection Event</caption>
+      <attribute>collectionEvent</attribute>
+    
+      <field>
+        <type>datetime</type>
+        <caption>Date and Time</caption>
+        <attribute>time</attribute>
+      </field>
+
+      <record>
+        <caption>User</caption>
+        <attribute>user</attribute>
+
+        <field>
+          <caption>Email Address</caption>
+          <attribute>emailAddress</attribute>
+        </field>
+      </record>
+
+      <field>
+        <caption>Comments</caption>
+        <attribute>comments</attribute>
+      </field>
+
+      <field>
+        <caption>Procedure</caption>
+        <attribute>procedure</attribute>
+      </field>
+
+      <field>
+        <caption>Container</caption>
+        <attribute>container</attribute>
+      </field>
+    </record>  
+
+    <record>
+      <caption>Received Event</caption>
+      <attribute>receivedEvent</attribute>
+    
+      <field>
+        <type>datetime</type>
+        <caption>Date and Time</caption>
+        <attribute>time</attribute>
+      </field>
+
+      <record>
+        <caption>User</caption>
+        <attribute>user</attribute>
+
+        <field>
+          <caption>Email Address</caption>
+          <attribute>emailAddress</attribute>
+        </field>
+      </record>
+
+      <field>
+        <caption>Comments</caption>
+        <attribute>comments</attribute>
+      </field>
+
+      <field>
+        <caption>Quality</caption>
+        <attribute>receivedQuality</attribute>
+      </field>
+    </record>
+  </record>
+</object-schema>

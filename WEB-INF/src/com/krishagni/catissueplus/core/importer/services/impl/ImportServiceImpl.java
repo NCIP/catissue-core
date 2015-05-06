@@ -317,7 +317,10 @@ public class ImportServiceImpl implements ImportService {
 			long totalRecords = 0, failedRecords = 0;
 			try {
 				String filePath = getJobDir(job.getId()) + File.separator + "input.csv";
-				objReader = new ObjectReader(filePath, schema, ConfigUtil.getInstance().getDeDateFmt());
+				objReader = new ObjectReader(
+						filePath, schema, 
+						ConfigUtil.getInstance().getDeDateFmt(),
+						ConfigUtil.getInstance().getTimeFmt());
 				
 				List<String> columnNames = objReader.getCsvColumnNames();
 				columnNames.add("OS_IMPORT_STATUS");
