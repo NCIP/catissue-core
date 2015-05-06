@@ -79,7 +79,7 @@ public class CprServiceImpl implements CprService {
 			participant.setEmpi(empi);
 		}
 		
-		CollectionProtocolRegistration cpr = daoFactory.getCprDao().getCprByPpId(cp.getId(), ppid);
+		CollectionProtocolRegistration cpr = daoFactory.getCprDao().getCprByPpid(cp.getId(), ppid);
 		if (cpr != null && !cpr.getParticipant().equals(participant)) {
 			ose.addError(CprErrorCode.DUP_PPID);
 			return detail;

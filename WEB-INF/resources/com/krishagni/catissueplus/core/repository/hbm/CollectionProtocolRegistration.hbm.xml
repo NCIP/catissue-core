@@ -60,6 +60,26 @@
         cpr.collectionProtocol.id = :cpId and
         cpr.ppid = :ppid
     </query>
+
+    <query name="getCprByCpTitleAndPpid">
+      select
+        cpr
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration cpr
+      where
+        cpr.collectionProtocol.title = :title and
+        cpr.ppid = :ppid
+    </query>
+    
+    <query name="getCprByCpShortTitleAndPpid">
+      select
+        cpr
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration cpr
+      where
+        cpr.collectionProtocol.shortTitle = :shortTitle and
+        cpr.ppid = :ppid
+    </query>
     
     <query name="getCprByCpIdAndPid">
       select

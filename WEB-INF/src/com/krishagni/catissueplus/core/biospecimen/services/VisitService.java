@@ -11,6 +11,8 @@ public interface VisitService {
 	public ResponseEvent<VisitDetail> getVisit(RequestEvent<EntityQueryCriteria> req);
 	
 	public ResponseEvent<VisitDetail> addOrUpdateVisit(RequestEvent<VisitDetail> req);
+	
+	public ResponseEvent<VisitDetail> patchVisit(RequestEvent<VisitDetail> req);
 		
 	public ResponseEvent<VisitSpecimenDetail> collectVisitAndSpecimens(RequestEvent<VisitSpecimenDetail> req);
 }

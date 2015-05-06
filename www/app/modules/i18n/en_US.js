@@ -234,6 +234,8 @@
     "clinical_status": "Clinical Status",
     "surgical_path_no": "Surgical Pathology No.",
 
+    "bulk_import": "Bulk Import Visits",
+
     "status": {
       "pending": "Pending",
       "complete": "Complete"
@@ -953,7 +955,8 @@
       "site": "Sites",
       "storageContainer": "Storage Containers",
       "cpr": "Collection Protocol Registrations",
-      "participant": "Participants"
+      "participant": "Participants",
+      "visit": "Visits"
     },
 
     "import_types": {

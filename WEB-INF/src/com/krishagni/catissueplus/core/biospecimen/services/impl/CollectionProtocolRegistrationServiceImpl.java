@@ -65,7 +65,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			if (crit.getCprId() != null) {
 				cpr = daoFactory.getCprDao().getById(crit.getCprId());
 			} else if (crit.getCpId() != null && crit.getPpid() != null) {
-				cpr = daoFactory.getCprDao().getCprByPpId(crit.getCpId(), crit.getPpid());
+				cpr = daoFactory.getCprDao().getCprByPpid(crit.getCpId(), crit.getPpid());
 			} 
 			
 			if (cpr == null) {
@@ -103,7 +103,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			if (detail.getId() != null) {
 				existing = daoFactory.getCprDao().getById(detail.getId());
 			} else if (detail.getCpId() != null && StringUtils.isNotBlank(detail.getPpid())) {
-				existing = daoFactory.getCprDao().getCprByPpId(detail.getCpId(), detail.getPpid());
+				existing = daoFactory.getCprDao().getCprByPpid(detail.getCpId(), detail.getPpid());
 			}
 			
 			if (existing == null) {
@@ -283,7 +283,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		
 		Long cpId = cpr.getCollectionProtocol().getId();
 		String ppid = cpr.getPpid();		
-		if (daoFactory.getCprDao().getCprByPpId(cpId, ppid) != null) {
+		if (daoFactory.getCprDao().getCprByPpid(cpId, ppid) != null) {
 			ose.addError(CprErrorCode.DUP_PPID, ppid);
 		}
 	}

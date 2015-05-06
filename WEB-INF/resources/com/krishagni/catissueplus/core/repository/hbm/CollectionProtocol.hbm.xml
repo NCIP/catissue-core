@@ -117,6 +117,17 @@
         cpe.eventLabel = :label
     </query>
     
+    <query name="getCpeByShortTitleAndEventLabel">
+      select
+        cpe
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
+        join cp.collectionProtocolEvents cpe
+      where
+        cp.shortTitle = :shortTitle and
+        cpe.eventLabel = :label
+    </query>
+
     <query name="getCpByTitle">
       from 
         com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol

@@ -64,12 +64,25 @@ public class VisitServiceImpl implements VisitService {
 	@PlusTransactional
 	public ResponseEvent<VisitDetail> addOrUpdateVisit(RequestEvent<VisitDetail> req) {
 		try {
-			VisitDetail respPayload = saveOrUpdateVisit(req.getPayload());
+			VisitDetail respPayload = saveOrUpdateVisit(req.getPayload(), false);
 			return ResponseEvent.response(respPayload);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
-		} catch (Exception ex) {
-			return ResponseEvent.serverError(ex);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<VisitDetail> patchVisit(RequestEvent<VisitDetail> req) {
+		try {
+			VisitDetail respPayload = saveOrUpdateVisit(req.getPayload(), true);
+			return ResponseEvent.response(respPayload);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 
@@ -77,7 +90,7 @@ public class VisitServiceImpl implements VisitService {
 	@PlusTransactional
 	public ResponseEvent<VisitSpecimenDetail> collectVisitAndSpecimens(RequestEvent<VisitSpecimenDetail> req) {		
 		try {
-			VisitDetail visit = saveOrUpdateVisit(req.getPayload().getVisit());			
+			VisitDetail visit = saveOrUpdateVisit(req.getPayload().getVisit(), false);			
 			
 			List<SpecimenDetail> specimens = req.getPayload().getSpecimens();
 			setVisitId(visit.getId(), specimens);
@@ -97,7 +110,7 @@ public class VisitServiceImpl implements VisitService {
 		}
 	}
 	
-	private VisitDetail saveOrUpdateVisit(VisitDetail input) {		
+	private VisitDetail saveOrUpdateVisit(VisitDetail input, boolean partial) {		
 		Visit existing = null;
 		
 		if (input.getId() != null || StringUtils.isNotEmpty(input.getName())) {
@@ -108,10 +121,19 @@ public class VisitServiceImpl implements VisitService {
 			
 			AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(existing);
 		}
+		
+		if (partial && existing == null) {
+			throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND);
+		}
 							
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
-		Visit visit = visitFactory.createVisit(input);
+		Visit visit = null;
+		if (partial) {
+			visit = visitFactory.createVisit(existing, input);
+		} else {
+			visit = visitFactory.createVisit(input);
+		}		
 		AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(visit);
 		
 		if (existing == null || !existing.getName().equals(visit.getName())) {

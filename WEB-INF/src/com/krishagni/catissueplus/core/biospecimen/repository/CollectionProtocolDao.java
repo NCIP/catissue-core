@@ -29,6 +29,8 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	
 	public CollectionProtocolEvent getCpeByEventLabel(String title, String label);
 	
+	public CollectionProtocolEvent getCpeByShortTitleAndEventLabel(String shortTitle, String label);
+	
 	public void saveCpe(CollectionProtocolEvent cpe);
 	
 	public void saveCpe(CollectionProtocolEvent cpe, boolean flush);

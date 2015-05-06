@@ -10,8 +10,11 @@ import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
+import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
+import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 
-public class VisitDetail {
+@ListenAttributeChanges
+public class VisitDetail extends AttributeModifiedSupport {
 	private Long cprId;
 
 	private Long eventId;
@@ -23,6 +26,8 @@ public class VisitDetail {
 	private Double eventPoint;
 	
 	private String cpTitle;
+	
+	private String cpShortTitle;
 
 	private Long id;
 
@@ -91,7 +96,15 @@ public class VisitDetail {
 	public void setCpTitle(String cpTitle) {
 		this.cpTitle = cpTitle;
 	}
+	
+	public String getCpShortTitle() {
+		return cpShortTitle;		
+	}
 
+	public void setCpShortTitle(String cpShortTitle) {
+		this.cpShortTitle = cpShortTitle;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -190,6 +203,7 @@ public class VisitDetail {
 		detail.setCprId(cpr.getId());
 		detail.setPpid(cpr.getPpid());
 		detail.setCpTitle(cpr.getCollectionProtocol().getTitle());
+		detail.setCpShortTitle(cpr.getCollectionProtocol().getShortTitle());
 		
 		detail.setEventId(visit.getCpEvent().getId());
 		detail.setEventLabel(visit.getCpEvent().getEventLabel());

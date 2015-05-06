@@ -10,11 +10,9 @@ import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
@@ -66,66 +64,103 @@ public class VisitFactoryImpl implements VisitFactory {
 		ose.checkAndThrow();
 		return visit;
 	}
+	
+	@Override
+	public Visit createVisit(Visit existing, VisitDetail detail) {
+		Visit visit = new Visit();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		
+		visit.setId(existing.getId());		
+		if (detail.isAttrModified("name")) {
+			visit.setName(detail.getName());
+		} else {
+			visit.setName(existing.getName());
+		}
+		
+		setCpe(detail, existing, visit, ose);		
+		setCpr(detail, existing, visit, ose);
+		validateCprAndCpe(visit, ose);
+		
+		setVisitDate(detail, existing, visit, ose);
+		setVisitStatus(detail, existing, visit, ose);
+		setClinicalDiagnosis(detail, existing, visit, ose);
+		setClinicalStatus(detail, existing, visit, ose);
+		setSite(detail, existing, visit, ose);
+		setActivityStatus(detail, existing, visit, ose);
+		setComments(detail, existing, visit, ose);
+		setSurgicalPathNo(detail, existing, visit, ose);
+		visit.setDefNameTmpl(defaultNameTmpl);
+		
+		ose.checkAndThrow();
+		return visit;
+	}
 
 	private void setCpe(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		CollectionProtocolEvent cpe = null;
 		
 		Long cpeId = visitDetail.getEventId();
-		String cpTitle = visitDetail.getCpTitle(), 
-			   eventLabel = visitDetail.getEventLabel();
+		String cpTitle = visitDetail.getCpTitle(),
+				cpShortTitle = visitDetail.getCpShortTitle(),
+				eventLabel = visitDetail.getEventLabel();
 		
 		if (cpeId != null) {
 			cpe = daoFactory.getCollectionProtocolDao().getCpe(cpeId);
-			if (cpe == null) {
-				ose.addError(CpeErrorCode.NOT_FOUND);
-				return;
-			}
 		} else if (StringUtils.isNotBlank(cpTitle) && StringUtils.isNotBlank(eventLabel)) {			
-			CollectionProtocol cp = daoFactory.getCollectionProtocolDao()
-					.getCollectionProtocol(cpTitle);
-			
-			if (cp == null) {
-				ose.addError(CpErrorCode.NOT_FOUND);
-				return;
-			}
-			
-			cpe = daoFactory.getCollectionProtocolDao()
-					.getCpeByEventLabel(cp.getId(), eventLabel);			
-			if (cpe == null) {
-				ose.addError(CpeErrorCode.LABEL_NOT_FOUND);
-				return;
-			}
+			cpe = daoFactory.getCollectionProtocolDao().getCpeByEventLabel(cpTitle, eventLabel);			
+		} else if (StringUtils.isNotBlank(cpShortTitle) && StringUtils.isNotBlank(eventLabel)) {
+			cpe = daoFactory.getCollectionProtocolDao().getCpeByShortTitleAndEventLabel(cpShortTitle, eventLabel);
 		}
-				
+		
+		if (cpe == null) {
+			ose.addError(CpeErrorCode.NOT_FOUND);
+			return;
+		}
+					
 		visit.setCpEvent(cpe);
+	}
+	
+	private void setCpe(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (detail.isAttrModified("eventId")) {
+			setCpe(detail, visit, ose);
+		} else if (detail.isAttrModified("eventLabel") && (detail.isAttrModified("cpTitle") || detail.isAttrModified("cpShortTitle"))) {
+			setCpe(detail, visit, ose);
+		} else {
+			visit.setCpEvent(existing.getCpEvent());
+		}		
 	}
 
 	private void setCpr(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		CollectionProtocolRegistration cpr = null;
+
+		Long cprId = visitDetail.getCprId();
+		String cpTitle = visitDetail.getCpTitle(),
+				cpShortTitle = visitDetail.getCpShortTitle(),
+				ppid = visitDetail.getPpid();
 		
-		if (visitDetail.getCprId() != null) {
-			cpr = daoFactory.getCprDao().getById(visitDetail.getCprId());
-			if (cpr == null) {
-				ose.addError(CprErrorCode.NOT_FOUND);
-				return;
-			}			
-		} else if (visitDetail.getPpid() != null && visitDetail.getCpTitle() != null) {			
-			CollectionProtocol cp = daoFactory.getCollectionProtocolDao()
-					.getCollectionProtocol(visitDetail.getCpTitle());			
-			if (cp == null) {
-				ose.addError(CpErrorCode.NOT_FOUND);
-				return ;
-			}
-			
-			cpr = daoFactory.getCprDao().getCprByPpId(cp.getId(), visitDetail.getPpid());
-			if (cpr == null) {
-				ose.addError(CprErrorCode.INVALID_CP_AND_PPID);
-				return ;
-			}
-		} 
-		
+		if (cprId != null) {
+			cpr = daoFactory.getCprDao().getById(cprId);
+		} else if (StringUtils.isNotBlank(cpTitle) && StringUtils.isNotBlank(ppid)) {			
+			cpr = daoFactory.getCprDao().getCprByPpid(cpTitle, ppid);
+		} else if (StringUtils.isNotBlank(cpShortTitle) && StringUtils.isNotBlank(ppid)) {
+			cpr = daoFactory.getCprDao().getCprByCpShortTitleAndPpid(cpShortTitle, ppid);
+		}
+
+		if (cpr == null) {
+			ose.addError(CprErrorCode.NOT_FOUND);
+			return;
+		}
 		
 		visit.setRegistration(cpr);
+	}
+	
+	private void setCpr(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (detail.isAttrModified("cprId")) {
+			setCpr(detail, visit, ose);
+		} else if (detail.isAttrModified("ppid") && (detail.isAttrModified("cpTitle") || detail.isAttrModified("cpShortTitle"))) {
+			setCpr(detail, visit, ose);
+		} else {
+			visit.setRegistration(existing.getRegistration());
+		}
 	}
 
 	private void validateCprAndCpe(Visit visit, OpenSpecimenException ose) {
@@ -141,7 +176,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		}
 	}
 
-	public void setVisitDate(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
+	private void setVisitDate(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		CollectionProtocolRegistration cpr = visit.getRegistration();
 		if (cpr == null) {
 			return;
@@ -161,6 +196,14 @@ public class VisitFactoryImpl implements VisitFactory {
 		visit.setVisitDate(visitDate);
 	}
 	
+	private void setVisitDate(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (detail.isAttrModified("visitDate")) {
+			setVisitDate(detail, visit, ose);
+		} else {
+			visit.setVisitDate(existing.getVisitDate());
+		}
+	}
+	
 	private void setVisitStatus(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String visitStatus = visitDetail.getStatus();
 		if (isValidPv(visitStatus, "visit-status")) {
@@ -169,6 +212,14 @@ public class VisitFactoryImpl implements VisitFactory {
 		}
 		
 		ose.addError(VisitErrorCode.INVALID_STATUS);
+	}
+	
+	private void setVisitStatus(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (detail.isAttrModified("status")) {
+			setVisitStatus(detail, visit, ose);
+		} else {
+			visit.setStatus(existing.getStatus());
+		}
 	}
 
 	private void setClinicalDiagnosis(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
@@ -181,6 +232,14 @@ public class VisitFactoryImpl implements VisitFactory {
 		ose.addError(VisitErrorCode.INVALID_CLINICAL_DIAGNOSIS);
 	}
 	
+	private void setClinicalDiagnosis(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (detail.isAttrModified("clinicalDiagnosis")) {
+			setClinicalDiagnosis(detail, visit, ose);
+		} else {
+			visit.setClinicalDiagnosis(existing.getClinicalDiagnosis());
+		}
+	}
+	
 	private void setClinicalStatus(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String clinicalStatus = visitDetail.getClinicalStatus();
 		if (isValidPv(clinicalStatus, "clinical-status")) {
@@ -189,6 +248,14 @@ public class VisitFactoryImpl implements VisitFactory {
 		}
 		
 		ose.addError(VisitErrorCode.INVALID_CLINICAL_STATUS);
+	}
+	
+	private void setClinicalStatus(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (detail.isAttrModified("clinicalStatus")) {
+			setClinicalStatus(detail, visit, ose);
+		} else {
+			visit.setClinicalStatus(existing.getClinicalStatus());
+		}
 	}
 
 	private void setSite(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
@@ -206,6 +273,14 @@ public class VisitFactoryImpl implements VisitFactory {
 			visit.setSite(site);
 		}
 	}
+	
+	private void setSite(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (detail.isAttrModified("site")) {
+			setSite(detail, visit, ose);
+		} else {
+			visit.setSite(existing.getSite());
+		}
+	}
 
 	private void setActivityStatus(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String status = visitDetail.getActivityStatus();
@@ -215,6 +290,30 @@ public class VisitFactoryImpl implements VisitFactory {
 			visit.setActivityStatus(status);
 		} else { 
 			ose.addError(ActivityStatusErrorCode.INVALID);
+		}
+	}
+	
+	private void setActivityStatus(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (detail.isAttrModified("activityStatus")) {
+			setActivityStatus(detail, visit, ose);
+		} else {
+			visit.setActivityStatus(existing.getActivityStatus());
+		}
+	}
+	
+	private void setComments(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (detail.isAttrModified("comments")) {
+			visit.setComments(detail.getComments());
+		} else {
+			visit.setComments(existing.getComments());
+		}		
+	}
+	
+	private void setSurgicalPathNo(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (detail.isAttrModified("surgicalPathologyNumber")) {
+			visit.setSurgicalPathologyNumber(detail.getSurgicalPathologyNumber());
+		} else {
+			visit.setSurgicalPathologyNumber(existing.getSurgicalPathologyNumber());
 		}
 	}
 }

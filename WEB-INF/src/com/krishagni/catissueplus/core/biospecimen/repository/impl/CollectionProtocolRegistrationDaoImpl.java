@@ -86,16 +86,40 @@ public class CollectionProtocolRegistrationDaoImpl
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public CollectionProtocolRegistration getCprByPpId(Long cpId, String ppid) {
+	public CollectionProtocolRegistration getCprByPpid(Long cpId, String ppid) {
 		List<CollectionProtocolRegistration> result = sessionFactory.getCurrentSession()
 			.getNamedQuery(GET_BY_CP_ID_AND_PPID)
 			.setLong("cpId", cpId)
 			.setString("ppid", ppid)
 			.list();
 		
-		return result != null && !result.isEmpty() ? result.iterator().next() : null;
+		return CollectionUtils.isEmpty(result) ? null : result.iterator().next();
 	}
-
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public CollectionProtocolRegistration getCprByPpid(String cpTitle, String ppid) {
+		List<CollectionProtocolRegistration> result = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_BY_CP_TITLE_AND_PPID)
+				.setString("title", cpTitle)
+				.setString("ppid", ppid)
+				.list();
+		
+		return CollectionUtils.isEmpty(result) ? null : result.iterator().next();
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public CollectionProtocolRegistration getCprByCpShortTitleAndPpid(String cpShortTitle, String ppid) {
+		List<CollectionProtocolRegistration> result = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_BY_CP_SHORT_TITLE_AND_PPID)
+				.setString("shortTitle", cpShortTitle)
+				.setString("ppid", ppid)
+				.list();
+		
+		return CollectionUtils.isEmpty(result) ? null : result.iterator().next();		
+	}
+	
 	@Override
 	@SuppressWarnings("unchecked")
 	public CollectionProtocolRegistration getCprByParticipantId(Long cpId, Long participantId) {		
@@ -266,6 +290,10 @@ public class CollectionProtocolRegistrationDaoImpl
 	private static final String FQN = CollectionProtocolRegistration.class.getName();
 	
 	private static final String GET_BY_CP_ID_AND_PPID = FQN + ".getCprByCpIdAndPpid";
+	
+	private static final String GET_BY_CP_TITLE_AND_PPID = FQN + ".getCprByCpTitleAndPpid";
+	
+	private static final String GET_BY_CP_SHORT_TITLE_AND_PPID = FQN + ".getCprByCpShortTitleAndPpid";
 	
 	private static final String GET_BY_CP_ID_AND_PID = FQN + ".getCprByCpIdAndPid";
 }

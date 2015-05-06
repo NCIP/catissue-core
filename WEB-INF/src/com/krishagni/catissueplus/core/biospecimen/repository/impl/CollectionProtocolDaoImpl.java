@@ -128,8 +128,20 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	@Override
 	public CollectionProtocolEvent getCpeByEventLabel(String title, String label) {
 		List<CollectionProtocolEvent> events = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_CPY_BY_CP_TITLE_AND_LABEL)
+				.getNamedQuery(GET_CPE_BY_CP_TITLE_AND_LABEL)
 				.setString("title", title)
+				.setString("label", label)
+				.list();
+		
+		return CollectionUtils.isEmpty(events) ? null : events.iterator().next();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public CollectionProtocolEvent getCpeByShortTitleAndEventLabel(String shortTitle, String label) {
+		List<CollectionProtocolEvent> events = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CPE_BY_CP_SHORT_TITLE_AND_LABEL)
+				.setString("shortTitle", shortTitle)
 				.setString("label", label)
 				.list();
 		
@@ -263,7 +275,9 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	
 	private static final String GET_CPE_BY_CP_AND_LABEL = FQN + ".getCpeByCpIdAndEventLabel";
 	
-	private static final String GET_CPY_BY_CP_TITLE_AND_LABEL = FQN + ".getCpeByTitleAndEventLabel";
+	private static final String GET_CPE_BY_CP_TITLE_AND_LABEL = FQN + ".getCpeByTitleAndEventLabel";
+	
+	private static final String GET_CPE_BY_CP_SHORT_TITLE_AND_LABEL = FQN + ".getCpeByShortTitleAndEventLabel";
 	
 	private static final String GET_CP_BY_TITLE = FQN + ".getCpByTitle";
 	
