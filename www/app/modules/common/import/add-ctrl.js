@@ -10,7 +10,7 @@ angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
  
       $scope.importJob = new ImportJob({
         objectType: importDetail.objectType,
-        importType: 'CREATE',
+        importType: importDetail.importType || 'CREATE',
         inputFileId: undefined
       });
     }
@@ -20,7 +20,7 @@ angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
       $scope.importJob.$saveOrUpdate().then(
         function(resp) {
           Alerts.success('bulk_imports.job_submitted', resp);
-          $state.go(importDetail.onSuccessState);
+          $state.go(importDetail.onSuccess.state, importDetail.onSuccess.params);
         }
       );
     }

@@ -22,10 +22,12 @@ public interface CollectionProtocolRegistrationService {
 	
 	ResponseEvent<List<SpecimenDetail>> getSpecimens(RequestEvent<VisitSpecimensQueryCriteria> req);
 	
+	ResponseEvent<ParticipantRegistrationsList> createRegistrations(RequestEvent<ParticipantRegistrationsList> req);
+	
 	//
 	// TODO: Requires review
 	// 
 	ResponseEvent<CollectionProtocolRegistrationDetail> updateRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req);
 
-	ResponseEvent<ParticipantRegistrationsList> createBulkRegistration(RequestEvent<ParticipantRegistrationsList> req);
+	
 }

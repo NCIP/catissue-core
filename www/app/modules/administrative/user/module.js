@@ -62,7 +62,7 @@ angular.module('os.administrative.user',
               breadcrumbs: [{state: 'user-list', title: 'user.list'}],
               objectType: objectType,
               title: title,
-              onSuccessState: 'user-list'
+              onSuccess: {state: 'user-list'}
             };
           }
         },

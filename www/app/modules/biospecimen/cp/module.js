@@ -33,6 +33,53 @@ angular.module('os.biospecimen.cp',
         controller: 'CpListCtrl',
         parent: 'cps'
       })
+      .state('import-biospecimen-objs', {
+        url: '/bulk-import?objectType',
+        templateUrl: 'modules/common/import/add.html',
+        controller: 'ImportObjectCtrl',
+        resolve: {
+          importDetail: function($stateParams) {
+            var objectType = $stateParams.objectType;
+            var importDetail = {
+              breadcrumbs: [{state: 'cp-list', title: 'cp.list'}],
+              objectType: objectType,
+              onSuccess: {state: 'cp-list', params: {}},
+            };
+
+            if (objectType == 'cpr') {
+              angular.extend(importDetail, {
+                title:          'participant.bulk_reg_participants',
+                showImportType: false,
+                importType:     'CREATE'
+              });
+            } else if (objectType == 'participant') {
+              angular.extend(importDetail, {
+                title:          'participant.bulk_update_participants',
+                showImportType: false,
+                importType:     'UPDATE'
+              });
+            }
+
+            return importDetail;
+          }
+        },
+        parent: 'cps'
+      })
+      .state('biospecimen-obj-import-jobs', {
+        url: '/bulk-import-jobs',
+        templateUrl: 'modules/common/import/list.html',
+        controller: 'ImportJobsListCtrl',
+        resolve: {
+          importDetail: function() {
+            return {
+              breadcrumbs: [{state: 'cp-list', title: 'cp.list'}],
+              title: 'cp.bulk_import_biospecimen_obj_jobs',
+              objectTypes: ['cpr', 'participant']
+            }
+          }
+        },
+        parent: 'cps'
+      })
       .state('cp-addedit', {
         url: '/addedit/:cpId',
         templateUrl: 'modules/biospecimen/cp/addedit.html',

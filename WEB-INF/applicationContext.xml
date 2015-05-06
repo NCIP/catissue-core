@@ -468,6 +468,8 @@
         <value>com/krishagni/catissueplus/core/administrative/schema/user.xml</value>
         <value>com/krishagni/catissueplus/core/administrative/schema/user-roles.xml</value>
         <value>com/krishagni/catissueplus/core/administrative/schema/container.xml</value>
+        <value>com/krishagni/catissueplus/core/biospecimen/schema/cpr.xml</value>
+        <value>com/krishagni/catissueplus/core/biospecimen/schema/participant.xml</value>
       </list>
     </property>
   </bean>
@@ -493,6 +495,14 @@
     <property name="containerSvc" ref="storageContainerSvc"/>
   </bean>
 
+  <bean id="cprImporter" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CprImporter">
+    <property name="cprSvc" ref="cprSvc"/>
+  </bean>
+
+  <bean id="participantImporter" class="com.krishagni.catissueplus.core.biospecimen.services.impl.ParticipantImporter">
+    <property name="participantSvc" ref="participantSvc"/>
+  </bean>
+
   <bean id="objectImporterFactory" class="com.krishagni.catissueplus.core.importer.services.impl.ObjectImporterFactoryImpl">
     <property name="importersMap">
       <map>
@@ -501,6 +511,8 @@
         <entry key="user"             value-ref="userImporter"/>
         <entry key="userRoles"        value-ref="userRolesImporter"/>
         <entry key="storageContainer" value-ref="storageContainerImporter"/>
+        <entry key="cpr"              value-ref="cprImporter"/>
+        <entry key="participant"      value-ref="participantImporter"/>
       </map>
     </property>
   </bean>

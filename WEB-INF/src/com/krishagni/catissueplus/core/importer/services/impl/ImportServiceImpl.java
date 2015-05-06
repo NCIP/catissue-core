@@ -33,6 +33,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob;
 import com.krishagni.catissueplus.core.importer.domain.ImportJobErrorCode;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.Status;
@@ -316,7 +317,7 @@ public class ImportServiceImpl implements ImportService {
 			long totalRecords = 0, failedRecords = 0;
 			try {
 				String filePath = getJobDir(job.getId()) + File.separator + "input.csv";
-				objReader = new ObjectReader(filePath, schema);
+				objReader = new ObjectReader(filePath, schema, ConfigUtil.getInstance().getDeDateFmt());
 				
 				List<String> columnNames = objReader.getCsvColumnNames();
 				columnNames.add("OS_IMPORT_STATUS");

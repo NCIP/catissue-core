@@ -7,12 +7,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
+import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
+import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 
-@JsonIgnoreProperties({"modifiedAttrs"})
-public class ParticipantDetail {
+@ListenAttributeChanges
+public class ParticipantDetail extends AttributeModifiedSupport {
 	private Long id;
 	
 	private String firstName;
@@ -43,8 +43,6 @@ public class ParticipantDetail {
 	
 	private String empi;
 	
-	private Set<String> modifiedAttrs = new HashSet<String>();
-
 	public Long getId() {
 		return id;
 	}
@@ -59,7 +57,6 @@ public class ParticipantDetail {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
-		modifiedAttrs.add("firstName");
 	}
 
 	public String getLastName() {
@@ -68,7 +65,6 @@ public class ParticipantDetail {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-		modifiedAttrs.add("lastName");
 	}
 
 	public String getMiddleName() {
@@ -77,7 +73,6 @@ public class ParticipantDetail {
 
 	public void setMiddleName(String middleName) {
 		this.middleName = middleName;
-		modifiedAttrs.add("middleName");
 	}
 
 	public Date getBirthDate() {
@@ -86,7 +81,6 @@ public class ParticipantDetail {
 
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
-		modifiedAttrs.add("birthDate");
 	}
 
 	public Date getDeathDate() {
@@ -95,7 +89,6 @@ public class ParticipantDetail {
 
 	public void setDeathDate(Date deathDate) {
 		this.deathDate = deathDate;
-		modifiedAttrs.add("deathDate");
 	}
 
 	public String getGender() {
@@ -104,7 +97,6 @@ public class ParticipantDetail {
 
 	public void setGender(String gender) {
 		this.gender = gender;
-		modifiedAttrs.add("gender");
 	}
 
 	public Set<String> getRaces() {
@@ -113,7 +105,6 @@ public class ParticipantDetail {
 
 	public void setRaces(Set<String> races) {
 		this.races = races;
-		modifiedAttrs.add("races");
 	}
 
 	public String getVitalStatus() {
@@ -122,7 +113,6 @@ public class ParticipantDetail {
 
 	public void setVitalStatus(String vitalStatus) {
 		this.vitalStatus = vitalStatus;
-		modifiedAttrs.add("vitalStatus");
 	}
 
 	public List<PmiDetail> getPmis() {
@@ -131,7 +121,6 @@ public class ParticipantDetail {
 
 	public void setPmis(List<PmiDetail> pmis) {
 		this.pmis = pmis;
-		modifiedAttrs.add("pmis");
 	}
 
 	public String getSexGenotype() {
@@ -140,7 +129,6 @@ public class ParticipantDetail {
 
 	public void setSexGenotype(String sexGenotype) {
 		this.sexGenotype = sexGenotype;
-		modifiedAttrs.add("genotype");
 	}
 
 	public String getEthnicity() {
@@ -149,7 +137,6 @@ public class ParticipantDetail {
 
 	public void setEthnicity(String ethnicity) {
 		this.ethnicity = ethnicity;
-		modifiedAttrs.add("ethnicity");
 	}
 
 	public String getSsn() {
@@ -158,7 +145,6 @@ public class ParticipantDetail {
 
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
-		modifiedAttrs.add("ssn");
 	}
 
 	public String getActivityStatus() {
@@ -167,7 +153,6 @@ public class ParticipantDetail {
 
 	public void setActivityStatus(String activityStatus) {
 		this.activityStatus = activityStatus;
-		modifiedAttrs.add("activityStatus");
 	}
 
 	public String getEmpi() {
@@ -176,13 +161,8 @@ public class ParticipantDetail {
 
 	public void setEmpi(String empi) {
 		this.empi = empi;
-		modifiedAttrs.add("empi");
 	}
 	
-	public Set<String> getModifiedAttrs() {
-		return modifiedAttrs;
-	}
-
 	public static ParticipantDetail from(Participant participant, boolean excludePhi) {
 		ParticipantDetail result = new ParticipantDetail();
 		result.setId(participant.getId());

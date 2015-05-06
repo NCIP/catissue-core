@@ -89,12 +89,15 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 				
 		Long cpId = detail.getCpId();
 		String title = detail.getCpTitle();
+		String shortTitle = detail.getCpShortTitle();
 		
 		CollectionProtocol protocol = null;
-		if (cpId == null && StringUtils.isNotBlank(title)) {			
-			protocol = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);
-		} else if (cpId != null){
+		if (cpId != null) {
 			protocol = daoFactory.getCollectionProtocolDao().getById(detail.getCpId());
+		} else if (StringUtils.isNotBlank(title)) {
+			protocol = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);
+		} else if (StringUtils.isNotBlank(shortTitle)) {
+			protocol = daoFactory.getCollectionProtocolDao().getCpByShortTitle(shortTitle);
 		} else {
 			ose.addError(CprErrorCode.CP_REQUIRED);
 			return;

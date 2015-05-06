@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -41,7 +42,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	private CollectionProtocolRegistrationFactory cprFactory;
 	
 	private ParticipantService participantService;
-
+	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -84,21 +85,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@PlusTransactional
 	public ResponseEvent<CollectionProtocolRegistrationDetail> createRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req) {
 		try {
-			CollectionProtocolRegistrationDetail cprDetail = req.getPayload();
-			CollectionProtocolRegistration cpr = cprFactory.createCpr(cprDetail);
-			AccessCtrlMgr.getInstance().ensureCreateCprRights(cpr);
-			
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			
-			ensureUniqueParticipantReg(cpr, ose);
-			ensureUniquePpid(null, cpr, ose);
-			ensureUniqueBarcode(null, cpr, ose);
-			ose.checkAndThrow();
-			
-			saveParticipant(null, cpr);
-			cpr.setPpidIfEmpty();
-			daoFactory.getCprDao().saveOrUpdate(cpr);
-			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(cpr, false));
+			return ResponseEvent.response(createRegistration(req.getPayload(), true));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -195,28 +182,56 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<ParticipantRegistrationsList> createBulkRegistration(RequestEvent<ParticipantRegistrationsList> req) {
+	public ResponseEvent<ParticipantRegistrationsList> createRegistrations(RequestEvent<ParticipantRegistrationsList> req) {
 		try {
-			ParticipantRegistrationsList participantRegDetails = req.getPayload();
-			for (int i =0; i < participantRegDetails.getRegistrations().size(); i++) {
-				CollectionProtocolRegistrationDetail cprDetail = buildCprForBulkParticipantDetails(participantRegDetails, i);
-				
-				ResponseEvent<CollectionProtocolRegistrationDetail> response = 
-						createRegistration(new RequestEvent<CollectionProtocolRegistrationDetail>(cprDetail));
-				
-				if (response.isSuccessful()) {
-					CollectionProtocolRegistrationDetail savedCpr = response.getPayload(); 
-					participantRegDetails.setId(savedCpr.getParticipant().getId());
-					participantRegDetails.getRegistrations().get(i).setId(savedCpr.getId());
-				} else {
-					return ResponseEvent.error(response.getError());
-				}
+			ParticipantRegistrationsList input = req.getPayload();
+						
+			//
+			// Step 1: Save or update participant
+			//
+			ParticipantDetail participantDetail = participantService.saveOrUpdateParticipant(input.getParticipant());
+			ParticipantDetail p = new ParticipantDetail();
+			p.setId(participantDetail.getId());
+			
+			//
+			// Step 2: Run through each registration
+			//
+			List<CollectionProtocolRegistrationDetail> registrations = new ArrayList<CollectionProtocolRegistrationDetail>();
+			for (CollectionProtocolRegistrationDetail cprDetail : input.getRegistrations()) {
+				cprDetail.setParticipant(p);
+				cprDetail = createRegistration(cprDetail, false);
+				cprDetail.setParticipant(null);
+				registrations.add(cprDetail);
 			}
 			
-			return ResponseEvent.response(participantRegDetails);
+			ParticipantRegistrationsList result = new ParticipantRegistrationsList();
+			result.setParticipant(participantDetail);
+			result.setRegistrations(registrations);			
+			return ResponseEvent.response(result);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
+	}
+
+	private CollectionProtocolRegistrationDetail createRegistration(CollectionProtocolRegistrationDetail input, boolean saveParticipant) {
+		CollectionProtocolRegistration cpr = cprFactory.createCpr(input);
+		AccessCtrlMgr.getInstance().ensureCreateCprRights(cpr);
+		
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		
+		ensureUniqueParticipantReg(cpr, ose);
+		ensureUniquePpid(null, cpr, ose);
+		ensureUniqueBarcode(null, cpr, ose);
+		ose.checkAndThrow();
+		
+		if (saveParticipant) {
+			saveParticipant(null, cpr);
+		}		
+		cpr.setPpidIfEmpty();
+		daoFactory.getCprDao().saveOrUpdate(cpr);
+		return CollectionProtocolRegistrationDetail.from(cpr, false);		
 	}
 	
 	private void saveParticipant(CollectionProtocolRegistration existing, CollectionProtocolRegistration cpr) {		
@@ -244,7 +259,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			cpr.setParticipant(participant);
 		}
 	}
-	
+		
 	//
 	// Checks whether same participant is registered for same protocol already
 	//
@@ -287,23 +302,6 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		if (daoFactory.getCprDao().getCprByBarcode(cpr.getBarcode()) != null) {
 			ose.addError(CprErrorCode.DUP_BARCODE);
 		}
-	}
-
-	private CollectionProtocolRegistrationDetail buildCprForBulkParticipantDetails(ParticipantRegistrationsList participantRegList, int idx) {
-		CollectionProtocolRegistrationDetail result = new CollectionProtocolRegistrationDetail();
-		
-		ParticipantDetail participant = (ParticipantDetail)participantRegList;		
-		result.setParticipant(participant);
-		
-		CollectionProtocolRegistrationDetail cpr = participantRegList.getRegistrations().get(idx);
-		result.setCpId(cpr.getCpId());
-		result.setCpTitle(cpr.getCpTitle());
-		result.setId(cpr.getId());
-		result.setPpid(cpr.getPpid());
-		result.setRegistrationDate(cpr.getRegistrationDate());
-		result.setConsentDetails(cpr.getConsentDetails());
-		
-		return result;
 	}
 		
 	private List<SpecimenDetail> getSpecimensByVisit(Long cprId, Long visitId) {

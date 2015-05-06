@@ -23,6 +23,32 @@
           </li>
         </ul>
       </div>
+      <div dropdown class="inline">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.import">Import</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li>
+            <a ui-sref="import-biospecimen-objs({objectType: 'cpr'})">
+              <i class="fa fa-user"></i>
+              <span translate="participant.registrations">Participant Registrations</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="import-biospecimen-objs({objectType: 'participant'})">
+              <i class="fa fa-user"></i>
+              <span translate="participant.updates">Participant Updates</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="biospecimen-obj-import-jobs">
+              <i class="fa fa-table"></i>
+              <span translate="common.view_jobs">View Jobs</span>
+            </a>
+          </li>
+        </ul>
+      </div>
       <button class="default" os-right-drawer-toggle title="{{'cp.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>

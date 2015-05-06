@@ -61,7 +61,10 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 	
 	private void setParticipantAttrs(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException ose) {
-		participant.setId(detail.getId());
+		if (participant.getId() == null && detail.getId() != null) {
+			participant.setId(detail.getId());
+		}
+
 		setSsn(detail, participant, partial, ose);
 		setName(detail, participant, partial, ose);
 		setVitalStatus(detail, participant, partial, ose);
@@ -74,13 +77,13 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		setEthnicity(detail, participant, partial, ose);
 		setPmi(detail, participant, partial, ose);
 		
-		if (!partial || detail.getModifiedAttrs().contains("empi")) {
+		if (!partial || detail.isAttrModified("empi")) {
 			participant.setEmpi(detail.getEmpi());
 		}				
 	}
 
 	private void setSsn(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
-		if (partial && !detail.getModifiedAttrs().contains("ssn")) {
+		if (partial && !detail.isAttrModified("ssn")) {
 			return;
 		}
 		
@@ -103,23 +106,21 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 	
 	private void setName(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException ose) {
-		Set<String> modifiedAttrs = detail.getModifiedAttrs();
-		
-		if (!partial || modifiedAttrs.contains("firstName")) {
+		if (!partial || detail.isAttrModified("firstName")) {
 			participant.setFirstName(detail.getFirstName());
 		}
 		
-		if (!partial || modifiedAttrs.contains("middleName")) {
+		if (!partial || detail.isAttrModified("middleName")) {
 			participant.setMiddleName(detail.getMiddleName());
 		}
 		
-		if (!partial || modifiedAttrs.contains("lastName")) {
+		if (!partial || detail.isAttrModified("lastName")) {
 			participant.setLastName(detail.getLastName());
 		}		
 	}	
 
 	private void setVitalStatus(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
-		if (partial && !detail.getModifiedAttrs().contains("vitalStatus")) {
+		if (partial && !detail.isAttrModified("vitalStatus")) {
 			return;
 		}
 		
@@ -134,7 +135,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	private void setBirthDate(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
-		if (partial && !detail.getModifiedAttrs().contains("birthDate")) {
+		if (partial && !detail.isAttrModified("birthDate")) {
 			return;
 		}
 				
@@ -153,7 +154,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 	
 	private void setDeathDate(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
-		if (partial && !detail.getModifiedAttrs().contains("deathDate")) {
+		if (partial && !detail.isAttrModified("deathDate")) {
 			return;
 		}
 				
@@ -172,7 +173,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	private void setActivityStatus(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
-		if (partial && !detail.getModifiedAttrs().contains("activityStatus")) {
+		if (partial && !detail.isAttrModified("activityStatus")) {
 			return;
 		}
 				
@@ -191,7 +192,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	private void setSexGenotype(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
-		if (partial && !detail.getModifiedAttrs().contains("genotype")) {
+		if (partial && !detail.isAttrModified("sexGenotype")) {
 			return;
 		}
 		
@@ -205,7 +206,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 	
 	private void setGender(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
-		if (partial && !detail.getModifiedAttrs().contains("gender")) {
+		if (partial && !detail.isAttrModified("gender")) {
 			return;
 		}
 		
@@ -219,7 +220,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	private void setRace(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
-		if (partial && !detail.getModifiedAttrs().contains("races")) {
+		if (partial && !detail.isAttrModified("races")) {
 			return;
 		}
 		
@@ -237,7 +238,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	private void setEthnicity(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
-		if (partial && !detail.getModifiedAttrs().contains("ethnicity")) {
+		if (partial && !detail.isAttrModified("ethnicity")) {
 			return;
 		}
 		
@@ -256,7 +257,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			boolean partial,
 			OpenSpecimenException oce) {
 		
-		if (partial && !detail.getModifiedAttrs().contains("pmis")) {
+		if (partial && !detail.isAttrModified("pmis")) {
 			return;
 		}
 
@@ -277,6 +278,10 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		} else {
 			for (PmiDetail pmiDetail : detail.getPmis()) {
 				ParticipantMedicalIdentifier pmi = getPmi(pmiDetail, oce);
+				if (pmi == null) {
+					continue;
+				}
+				
 				pmi.setParticipant(participant);
 				newPmis.add(pmi);				
 			}			

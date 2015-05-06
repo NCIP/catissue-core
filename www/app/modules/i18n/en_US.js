@@ -120,6 +120,8 @@
     "deleting_event": "Deleting Event...",
     "confirm_delete_event": "Collection Protocol Event and its specimen requirements will be deleted. Are you sure you want to proceed?",
 
+    "bulk_import_biospecimen_obj_jobs": "Import Biospecimen Objects Job List",
+
     "tab": {
       "overview": "Overview",
       "consents": "Consents",
@@ -186,6 +188,11 @@
     "matched_on_ssn": "Following Participant matched based on SSN",
     "matched_on_pmi": "Following Participant matched based on MRN",
     "matched_on_lname_and_dob": "Following possible Participants matched based on Last Name and Birth Date",
+
+    "bulk_reg_participants": "Bulk Register Participants",
+    "bulk_update_participants": "Bulk Update Participants",
+    "updates": "Participant Updates",
+    "registrations": "Participant Registrations",
     
     "buttons": {
       "register": "Register",
@@ -943,8 +950,10 @@
       "user": "Users",
       "userRoles": "User Roles",
       "institute": "Institutes",
-      "site": "Site",
-      "storageContainer": "Storage Container"
+      "site": "Sites",
+      "storageContainer": "Storage Containers",
+      "cpr": "Collection Protocol Registrations",
+      "participant": "Participants"
     },
 
     "import_types": {

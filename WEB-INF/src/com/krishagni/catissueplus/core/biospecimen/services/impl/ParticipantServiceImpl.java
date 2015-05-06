@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
@@ -70,31 +71,15 @@ public class ParticipantServiceImpl implements ParticipantService {
 	@PlusTransactional
 	public ResponseEvent<ParticipantDetail> updateParticipant(RequestEvent<ParticipantDetail> req) {
 		try {
-			Long participantId = req.getPayload().getId();
-			Participant existing = daoFactory.getParticipantDao().getById(participantId);
+			ParticipantDetail detail = req.getPayload();
+			Participant existing = getParticipant(detail, true);
 			if (existing == null) {
 				return ResponseEvent.userError(ParticipantErrorCode.NOT_FOUND);
 			}
-			
-			Participant participant = participantFactory.createParticipant(req.getPayload());
-			
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			
-			String newSsn = participant.getSocialSecurityNumber();
-			if (StringUtils.isNotBlank(newSsn) && !newSsn.equals(existing.getSocialSecurityNumber())) {
-				ParticipantUtil.ensureUniqueSsn(daoFactory, newSsn, ose);
-			}
-			
-			ParticipantUtil.ensureUniquePmis(
-					daoFactory, 
-					req.getPayload().getPmis(), 
-					participant, 
-					ose);
-			
-			ose.checkAndThrow();
 
-			existing.update(participant);
-			daoFactory.getParticipantDao().saveOrUpdate(existing);
+			
+			Participant participant = participantFactory.createParticipant(detail);
+			updateParticipant(existing, participant);			
 			return ResponseEvent.response(ParticipantDetail.from(existing, false));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -103,6 +88,26 @@ public class ParticipantServiceImpl implements ParticipantService {
 		}
 	}
 	
+	@Override
+	public ResponseEvent<ParticipantDetail> patchParticipant(RequestEvent<ParticipantDetail> req) {
+		try {
+			ParticipantDetail detail = req.getPayload();
+			Participant existing = getParticipant(detail, true);
+			if (existing == null) {
+				return ResponseEvent.userError(ParticipantErrorCode.NOT_FOUND);
+			}
+
+			
+			Participant participant = participantFactory.createParticipant(existing, detail);
+			updateParticipant(existing, participant);			
+			return ResponseEvent.response(ParticipantDetail.from(existing, false));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}	
+		
 	@Override
 	@PlusTransactional
 	public ResponseEvent<ParticipantDetail> delete(RequestEvent<Long> req) {
@@ -135,7 +140,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 		ParticipantUtil.ensureUniquePmis(daoFactory, PmiDetail.from(participant.getPmis(), false), participant, ose);		
 		ose.checkAndThrow();
 		
-		daoFactory.getParticipantDao().saveOrUpdate(participant);
+		daoFactory.getParticipantDao().saveOrUpdate(participant, true);
 	}
 	
 	public void updateParticipant(Participant existing, Participant newParticipant) {
@@ -153,6 +158,56 @@ public class ParticipantServiceImpl implements ParticipantService {
 		ose.checkAndThrow();
 		
 		existing.update(newParticipant);
-		daoFactory.getParticipantDao().saveOrUpdate(existing, true);			
-	}	
+		daoFactory.getParticipantDao().saveOrUpdate(existing);			
+	}
+
+	@Override
+	public ParticipantDetail saveOrUpdateParticipant(ParticipantDetail detail) {
+		Participant existing = getParticipant(detail, false);
+
+		if (existing == null) {
+			Participant participant = participantFactory.createParticipant(detail);
+			createParticipant(participant);
+			return ParticipantDetail.from(participant, false);
+		} else {
+			Participant participant = participantFactory.createParticipant(existing, detail);
+			updateParticipant(existing, participant);
+			return ParticipantDetail.from(existing, false);
+		}
+	}
+	
+	private Participant getParticipant(ParticipantDetail detail, boolean forUpdate) {
+		Participant result = null;
+		if (detail.getId() != null) {
+			result = daoFactory.getParticipantDao().getById(detail.getId());
+		} else {
+			boolean blankEmpi = StringUtils.isBlank(detail.getEmpi());
+			if (!blankEmpi) {
+				result = daoFactory.getParticipantDao().getByEmpi(detail.getEmpi());
+			}
+			
+			if (blankEmpi || (result == null && !forUpdate)) {
+				result = getByPmis(detail);
+			}
+		}
+		
+		return result;
+	}
+	
+	private Participant getByPmis(ParticipantDetail detail) {
+		Participant result = null;
+		
+		if (CollectionUtils.isEmpty(detail.getPmis())) {
+			return result;
+		}
+		
+		List<Participant> participants = daoFactory.getParticipantDao().getByPmis(detail.getPmis());
+		if (participants.size() > 1) {
+			throw OpenSpecimenException.userError(ParticipantErrorCode.DUP_MRN);
+		} else if (participants.size() == 1) {
+			result = participants.iterator().next();
+		}
+		
+		return result;
+	}
 }

@@ -16,9 +16,16 @@ public interface ParticipantService {
 
 	public ResponseEvent<ParticipantDetail> updateParticipant(RequestEvent<ParticipantDetail> req);
 	
+	public ResponseEvent<ParticipantDetail> patchParticipant(RequestEvent<ParticipantDetail> req);
+	
 	public ResponseEvent<ParticipantDetail>  delete(RequestEvent<Long> req);
 
+	//
+	// Internal APIs
+	//
 	public void createParticipant(Participant participant);
 	
 	public void updateParticipant(Participant existing, Participant newParticipant);
+	
+	public ParticipantDetail saveOrUpdateParticipant(ParticipantDetail participant);
 }

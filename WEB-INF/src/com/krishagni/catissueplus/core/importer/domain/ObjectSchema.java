@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.importer.domain;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 
 import com.thoughtworks.xstream.XStream;
@@ -98,7 +99,7 @@ public class ObjectSchema {
 		}
 
 		public List<Record> getSubRecords() {
-			return subRecords;
+			return subRecords == null ? Collections.<Record>emptyList() : subRecords;
 		}
 
 		public void setSubRecords(List<Record> subRecords) {
@@ -106,7 +107,7 @@ public class ObjectSchema {
 		}
 
 		public List<Field> getFields() {
-			return fields;
+			return fields == null ? Collections.<Field>emptyList() : fields;
 		}
 
 		public void setFields(List<Field> fields) {
@@ -120,7 +121,7 @@ public class ObjectSchema {
 		
 		private String attribute;
 		
-		private String format;
+		private String type;
 		
 		private boolean multiple;
 
@@ -140,12 +141,12 @@ public class ObjectSchema {
 			this.attribute = attribute;
 		}
 
-		public String getFormat() {
-			return format;
+		public String getType() {
+			return type;
 		}
 
-		public void setFormat(String format) {
-			this.format = format;
+		public void setType(String type) {
+			this.type = type;
 		}
 
 		public boolean isMultiple() {

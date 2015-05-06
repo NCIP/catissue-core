@@ -1,0 +1,91 @@
+<object-schema>
+  <name>participant</name>
+
+  <record> 
+    <name>com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail</name>
+   
+    <field>
+      <caption>First Name</caption>
+      <attribute>firstName</attribute>
+    </field>     
+
+    <field>
+      <caption>Last Name</caption>
+      <attribute>lastName</attribute>
+    </field>     
+
+    <field>
+      <caption>Middle Name</caption>
+      <attribute>middleName</attribute>
+    </field>     
+
+    <field>
+      <type>date</type>
+      <caption>Date Of Birth</caption>
+      <attribute>birthDate</attribute>
+    </field>  
+
+    <field>
+      <type>date</type>
+      <caption>Date Of Death</caption>
+      <attribute>deathDate</attribute>
+    </field>  
+
+    <field>
+      <caption>Gender</caption>
+      <attribute>gender</attribute>
+    </field>  
+
+    <field>
+      <multiple>true</multiple>
+      <caption>Race</caption>
+      <attribute>races</attribute>
+    </field>  
+
+    <field>
+      <caption>Vital Status</caption>
+      <attribute>vitalStatus</attribute>
+    </field>  
+
+    <field>
+      <caption>Genotype</caption>
+      <attribute>sexGenotype</attribute>
+    </field>  
+
+    <field>
+      <caption>Ethnicity</caption>
+      <attribute>ethnicity</attribute>
+    </field>  
+
+    <field>
+      <caption>SSN</caption>
+      <attribute>ssn</attribute>
+    </field>  
+
+    <field>
+      <caption>EMPI</caption>
+      <attribute>empi</attribute>
+    </field>  
+
+    <field>
+      <caption>Activity Status</caption>
+      <attribute>activityStatus</attribute>
+    </field>  
+
+    <record>
+      <caption>PMI</caption>
+      <attribute>pmis</attribute>
+      <multiple>true</multiple>
+
+      <field>
+        <caption>Site Name</caption>
+        <attribute>siteName</attribute>
+      </field>
+
+      <field>
+        <caption>MRN</caption>
+        <attribute>mrn</attribute>
+      </field>
+    </record>
+  </record>
+</object-schema>

@@ -30,11 +30,14 @@ public class ObjectReader implements Closeable {
 	
 	private String[] currentRow;
 	
-	public ObjectReader(String filePath, ObjectSchema schema) {
+	private String dateFmt;
+	
+	public ObjectReader(String filePath, ObjectSchema schema, String dateFmt) {
 		try {
 			this.csvReader = CsvFileReader.createCsvFileReader(filePath, true);
 			this.schema = schema;
-			this.objectClass = Class.forName(schema.getRecord().getName());			
+			this.objectClass = Class.forName(schema.getRecord().getName());
+			this.dateFmt = dateFmt;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -165,8 +168,8 @@ public class ObjectReader implements Closeable {
 		boolean isBlank = StringUtils.isBlank(value);
 		if (isBlank) {
 			return null;
-		} else if (field.getFormat() != null) {
-			return new SimpleDateFormat(field.getFormat()).parse(value);
+		} else if (field.getType() != null && field.getType().equals("date")) {
+			return new SimpleDateFormat(dateFmt).parse(value);
 		} else {
 			return value;
 		}

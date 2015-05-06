@@ -3,8 +3,18 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParticipantRegistrationsList extends ParticipantDetail {
+public class ParticipantRegistrationsList {
+	private ParticipantDetail participant;
+		
 	private List<CollectionProtocolRegistrationDetail> registrations = new ArrayList<CollectionProtocolRegistrationDetail>();
+
+	public ParticipantDetail getParticipant() {
+		return participant;
+	}
+
+	public void setParticipant(ParticipantDetail participant) {
+		this.participant = participant;
+	}
 
 	public List<CollectionProtocolRegistrationDetail> getRegistrations() {
 		return registrations;
