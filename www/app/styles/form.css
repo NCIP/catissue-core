@@ -4,14 +4,12 @@
 }
 
 .os-form-association-list .os-table {
-  display: -webkit-flex;
   display: flex;
   flex-direction: column;
 }
 
 .os-form-association-list .os-table-body {
-  -webkit-flex: initial;
-          flex: initial;
+  flex: initial;
   max-height: 175px; 
   width: 100%; 
   overflow:auto;
