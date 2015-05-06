@@ -21,7 +21,7 @@ angular.module('os.administrative.models.site', ['os.common.models'])
     }
 
     Site.listForContainers = function(opName) {
-      var opts = {resource: 'ParticipantPhi', operation: opName};
+      var opts = {resource: 'StorageContainer', operation: opName};
       return getSites(opts);
     }
 
