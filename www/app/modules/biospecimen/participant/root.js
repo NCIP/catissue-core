@@ -11,9 +11,11 @@ angular.module('os.biospecimen.participant.root', ['os.biospecimen.models'])
     }
 
     function initAuthorizationOpts() {
-
-      var sites = $scope.cpr.participant.pmis.map(function(pmi) { return pmi.siteName; });
-      sites = sites.length > 0 ? sites : undefined;
+      var sites = undefined;
+      if ($scope.cpr.participant.pmis) {
+        sites = $scope.cpr.participant.pmis.map(function(pmi) { return pmi.siteName; });
+        sites = sites.length > 0 ? sites : undefined;
+      }
 
       // Participant Authorization Options
       $scope.participantResource = {
