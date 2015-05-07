@@ -15,7 +15,7 @@ angular.module('os.administrative.form',
         parent: 'signed-in'
       })
       .state('form-addedit', {
-        url: '/form-addedit/:formId?formCaption',
+        url: '/form-addedit/:formId',
         templateUrl: 'modules/administrative/form/addedit.html',
         controller: 'FormAddEditCtrl',
         resolve: {

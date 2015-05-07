@@ -3,8 +3,8 @@
   padding: 0px 0px 5px;
 }
 
-.os-modal-body {
-  height: 550px;
+.os-form-association .os-modal-body {
+  height: 530px;
   display: flex;
   flex-direction: column;
 }
