@@ -29,7 +29,7 @@
       <div class="os-table-body">
         <div ng-repeat="form in formsList | filter:searchFormName" class="row">
           <div class="col col-xs-4">
-            <a ui-sref="form-addedit({formId: form.formId, formCaption: form.caption})" 
+            <a ui-sref="form-addedit({formId: form.formId})" 
               title="{{'form.tooltip.edit' | translate}}">{{form.caption}}</a>
           </div>
           <div class="col col-xs-3">{{form.createdBy.lastName}} {{form.createdBy.firstName}}</div>

@@ -699,7 +699,7 @@
     "created_by": "Created By",
     "last_updated": "Last Updated",
     "cp_count": "CP Count",
-    "no_used": "Not used in any collection protocols",
+    "not_used": "Not used in any collection protocols",
     "used_in": "Used in following collection protocols",
     "multiple_records": "Multiple Records",
     "collection_protocol": "Collection Protocol",

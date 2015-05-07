@@ -21,7 +21,7 @@ angular.module('os.administrative.form',
         resolve: {
           form: function($stateParams, Form) {
             if ($stateParams.formId) {
-              return new Form({id: $stateParams.formId, caption: $stateParams.formCaption});
+              return new Form({id: $stateParams.formId});
             }
 
             return new Form();

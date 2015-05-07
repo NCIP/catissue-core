@@ -4,8 +4,8 @@
   </div>
 
   <div class="os-modal-body">
-    <div class="os-form-association-list" ng-if="!cpFormCtxts || cpFormCtxts.length == 0">
-      <h5><i translate="form.no_used">Not used in any collection protocols</i></h5>   
+    <div class="os-form-association-empty-list" ng-if="!cpFormCtxts || cpFormCtxts.length == 0">
+      <h5><i translate="form.not_used">Not used in any collection protocols</i></h5>   
     </div>
     <div class="os-form-association-list" ng-if="cpFormCtxts && cpFormCtxts.length > 0">
       <h5 translate="form.used_in">

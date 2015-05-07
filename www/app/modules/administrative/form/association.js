@@ -41,7 +41,8 @@ angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
     }
 
     $scope.enableAttach = function(formCtxt) {
-      return ((formCtxt.allProtocols || !!formCtxt.selectedCps) && !!formCtxt.selectedEntity) || formCtxt.isSpecimenEvent;
+      return ((formCtxt.allProtocols || (formCtxt.selectedCps && formCtxt.selectedCps.length > 0)) 
+               && !!formCtxt.selectedEntity) || formCtxt.isSpecimenEvent;
     };
 
     $scope.attach = function(formCtxt) {
