@@ -79,7 +79,7 @@ angular.module('os.biospecimen.visit', [
         parent: 'visit-detail.extensions'
       })
       .state('visit-detail.extensions.addedit', {
-        url: '/addedit?formIdi&recordId&formCtxId',
+        url: '/addedit?formId&recordId&formCtxId',
         templateUrl: 'modules/biospecimen/extensions/addedit.html',
         resolve: {
           formDef: function($stateParams, Form) {

@@ -6,18 +6,11 @@ angular.module('os.biospecimen.extensions.list', ['os.biospecimen.models', 'os.b
       $scope.records = $scope.object.getRecords();
     }
 
-    function onDeleteRecord(record) {
-      var records = $scope.records;
-      for (var i = 0; i < records.length; ++i) {
-        if (records[i] == record) {
-          records.splice(i, 1);
-          break;
-        }
-      }
-    }
-
     $scope.deleteRecord = function(record) {
-      ExtensionsUtil.deleteRecord(record, onDeleteRecord); 
+      ExtensionsUtil.deleteRecord(record, function(record) {
+        var idx = $scope.records.indexOf(record);
+        $scope.records.splice(idx, 1);
+      }); 
     }
 
     init();

@@ -24,7 +24,9 @@ angular.module('os.biospecimen.extensions.util', [])
 
       modalInstance.result.then(
         function() {
-          onDeletion(record);
+          if (typeof onDeletion == 'function') {
+            onDeletion(record);
+          }
         }
       );
     };
