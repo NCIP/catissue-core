@@ -1728,7 +1728,7 @@
       select last_insert_id() into @acl_id;
       set @operations = operations;
       set @occurrences = length(@operations) - length(replace(@operations, ',', ''));
-        loop: while (@occurrences >= 0)
+        oploop: while (@occurrences >= 0)
         do 
           set @opName = substring_index(@operations, ',', 1);
           if (@opName != '') THEN
@@ -1736,12 +1736,12 @@
             select identifier into @op_id from rbac_operations where name = @opName;
             insert into rbac_role_access_list_ops (operation_id, acl_id) values (@op_id, @acl_id);
           else
-            leave loop; 
+            leave oploop; 
           end if;
           
           set @occurrences = length(@operations) - length(replace(@operations, ',', ''));
           if (@occurrences = 0) then 
-            leave loop; 
+            leave oploop; 
           end if;
           
           set @operations = substring(@operations,length(substring_index(@operations, ',', 1)) + 2);
