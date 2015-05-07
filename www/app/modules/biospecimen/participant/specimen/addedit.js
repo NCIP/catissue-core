@@ -2,7 +2,6 @@
 angular.module('os.biospecimen.specimen.addedit', [])
   .controller('AddEditSpecimenCtrl', function($scope, $state, cpr, visit, specimen, PvManager) {
     function loadPvs() {
-
       $scope.loadSpecimenTypes = function(specimenClass, notclear) {
         $scope.specimenTypes = PvManager.getPvsByParent('specimen-class', specimenClass);
         if (!notclear) {
@@ -33,6 +32,16 @@ angular.module('os.biospecimen.specimen.addedit', [])
 
       if (!currSpecimen.storageLocation) {
         currSpecimen.storageLocation = {};
+      }
+
+      if (!currSpecimen.labelFmt) {
+        if (specimen.lineage == 'New') {
+          currSpecimen.labelFmt = cpr.specimenLabelFmt;
+        } else if (specimen.lineage == 'Aliquot') {
+          currSpecimen.labelFmt = cpr.aliquotLabelFmt;
+        } else if (specimen.lineage == 'Derived') {
+          currSpecimen.labelFmt = cpr.derivativeLabelFmt;
+        }
       }
     }
 

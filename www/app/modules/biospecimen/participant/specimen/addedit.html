@@ -32,11 +32,12 @@
 
   <div class="container os-margin-top" ng-init="showAdvAttrs=currSpecimen.lineage == 'New' && !currSpecimen.id && !currSpecimen.reqId">
     <form name="sform" class="form-horizontal" os-form-validator="sform" validator="sformValidator" novalidate>
-      <div class="form-group">
+      <div class="form-group" ng-hide="!!currSpecimen.labelFmt && !currSpecimen.id">
         <label class="col-xs-3 control-label">Label</label>
         <div class="col-xs-6">
           <input type="text" name="label" ng-model="currSpecimen.label" class="form-control" 
-            ng-required="!currSpecimen.labelFmt" placeholder="Label"/>
+            ng-required="!currSpecimen.labelFmt" ng-disabled="!!currSpecimen.labelFmt"
+            placeholder="{{'specimens.label' | translate}}"/>
           <div os-field-error field="sform.label"></div>
         </div>
       </div>
