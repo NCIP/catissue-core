@@ -32,7 +32,7 @@
 	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySqlCustomDialect" />
 	<property name="mssqlserver.dialect.string" value="org.hibernate.dialect.SQLServerDialect" />
 
-	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver" />
+	<property name="oracle.driver.string" value="oracle.jdbc.OracleDriver" />
 	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver" />
 	<property name="mssqlserver.driver.string" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
 	<!-- Added for eMPI integration -->
