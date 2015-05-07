@@ -3,6 +3,7 @@ angular.module('os.biospecimen.participant',
   [ 
     'ui.router',
     'os.biospecimen.common',
+    'os.biospecimen.participant.root',
     'os.biospecimen.participant.list',
     'os.biospecimen.participant.detail',
     'os.biospecimen.participant.overview',
@@ -19,24 +20,6 @@ angular.module('os.biospecimen.participant',
 
   .config(function($stateProvider) {
     $stateProvider
-      .state('participant-root', {
-        template:'<div ui-view></div>',
-        controller: function($scope) {
-          $scope.participantResource = {
-            registerOpts: {resource: 'ParticipantPhi', operations: ['Create']},
-            readOpts:     {resource: 'ParticipantPhi', operations:['Read']},
-            updateOpts:   {resource: 'ParticipantPhi', operations: ['Update']},
-          },
-
-          $scope.visitAndSpecimenResource = {
-            createOpts: {resource: 'VisitAndSpecimen', operations: ['Create']},
-            updateOpts: {resource: 'VisitAndSpecimen', operations: ['Update']},
-            createOrUpdateOpts: {resource: 'VisitAndSpecimen', operations: ['Create', 'Update']}
-          }
-        },
-        parent: 'signed-in',
-        abstract: true
-      })
       .state('participant-list', {
         url: '/participants?cpId',
         templateUrl: 'modules/biospecimen/participant/list.html',
@@ -46,9 +29,9 @@ angular.module('os.biospecimen.participant',
               return CollectionProtocol.getById($stateParams.cpId);
           }
         },
-        parent: 'participant-root'
+        parent: 'signed-in'
       })
-      .state('participants', {
+      .state('participant-root', {
         url: '/participants/:cprId',
         template: '<div ui-view></div>',
         resolve: {
@@ -60,12 +43,8 @@ angular.module('os.biospecimen.participant',
             return new CollectionProtocolRegistration({registrationDate: new Date()});
           }
         },
-        controller: function($scope, cpr) {
-          $scope.cpr = $scope.object = cpr;
-          $scope.entityType = 'Participant';
-          $scope.extnState = 'participant-detail.extensions.'
-        },
-        parent: 'participant-root',
+        controller: 'ParticipantRootCtrl',
+        parent: 'signed-in',
         abstract: true
       })
       .state('participant-addedit', {
@@ -82,7 +61,7 @@ angular.module('os.biospecimen.participant',
         },
         resolve: {
         },
-        parent: 'participants'
+        parent: 'participant-root'
       })
       .state('participant-detail', {
         url: '/detail',
@@ -93,7 +72,7 @@ angular.module('os.biospecimen.participant',
           }
         },
         controller: 'ParticipantDetailCtrl',
-        parent: 'participants'
+        parent: 'participant-root'
       })
       .state('participant-detail.overview', {
         url: '/overview',
@@ -142,15 +121,13 @@ angular.module('os.biospecimen.participant',
             return null;
           }
         },
-        parent: 'participants'
+        parent: 'participant-root'
       })
       .state('participant-detail.extensions', {
         url: '/extensions',
         template: '<div ui-view></div>',
         controller: function($scope) {
-          var opts = {cp: $scope.cpr.cpShortTitle};
-          angular.extend($scope.participantResource.updateOpts, opts);
-          $scope.extensionUpdateOpts = $scope.participantResource.updateOpts;
+          $scope.extnOpts = $scope.participantResource.updateOpts;
         },
         abstract: true,
         parent: 'participant-detail'

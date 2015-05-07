@@ -62,10 +62,12 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
 
     function loadPvs() {
       $scope.positionLabelingSchemes = PvManager.getPvs('container-position-labeling-schemes');
-
+      
       var op = !!$scope.container.id ? 'Update' : 'Create';
-      var opts = {resource:'StorageContainer', operation: op};
-      $scope.sites = PvManager.getSites(opts);
+      $scope.sites = [];
+      Site.listForContainers(op).then(function(sites) {
+        $scope.sites = sites;
+      });
 
       if ($scope.container.parentContainerName) {
         restrictCpsAndSpecimenTypes();

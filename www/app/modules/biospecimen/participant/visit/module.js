@@ -27,7 +27,7 @@ angular.module('os.biospecimen.visit', [
           $scope.extnState = 'visit-detail.extensions.'
         },
         abstract: true,
-        parent: 'participants'
+        parent: 'participant-root'
       })
       .state('visit-addedit', {
         url: '/addedit-visit',
@@ -65,9 +65,7 @@ angular.module('os.biospecimen.visit', [
         url: '/extensions',
         template: '<div ui-view></div>',
         controller: function($scope) {
-          var opts = {cp: $scope.cpr.cpShortTitle};
-          angular.extend($scope.visitAndSpecimenResource.updateOpts, opts);
-          $scope.extensionUpdateOpts = $scope.visitAndSpecimenResource.updateOpts;
+          $scope.extnOpts = $scope.specimenResource.updateOpts;
         },
         abstract: true,
         parent: 'visit-detail'

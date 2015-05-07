@@ -43,6 +43,8 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 	
 	private String empi;
 	
+	private boolean phiAccess;
+	
 	public Long getId() {
 		return id;
 	}
@@ -163,6 +165,14 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 		this.empi = empi;
 	}
 	
+	public boolean getPhiAccess() {
+		return phiAccess;
+	}
+
+	public void setPhiAccess(boolean phiAccess) {
+		this.phiAccess = phiAccess;
+	}
+
 	public static ParticipantDetail from(Participant participant, boolean excludePhi) {
 		ParticipantDetail result = new ParticipantDetail();
 		result.setId(participant.getId());
@@ -180,6 +190,7 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 		result.setSexGenotype(participant.getSexGenotype());
 		result.setSsn(excludePhi ? "###" : participant.getSocialSecurityNumber());
 		result.setVitalStatus(participant.getVitalStatus());
+		result.setPhiAccess(!excludePhi);
 		return result;
 	}
 	

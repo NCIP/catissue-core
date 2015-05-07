@@ -7,8 +7,10 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
 
     function loadPvs() {
       var op = !!$scope.cpr.id ? 'Update' : 'Create';
-      var opts = {resource:'ParticipantPhi', operation: op};
-      $scope.sites = PvManager.getSites(opts);
+      $scope.sites = [];
+      Site.listForParticipants(op).then(function(sites) {
+        $scope.sites = sites;
+      });
 
       $scope.genders = PvManager.getPvs('gender');
       $scope.ethnicities = PvManager.getPvs('ethnicity');

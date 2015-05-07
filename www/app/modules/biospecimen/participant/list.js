@@ -8,8 +8,9 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
       $scope.cpId = $stateParams.cpId;
       $scope.cp = cp;
       $scope.filterOpts = {};
-      var opts = {cp: $scope.cp.shortTitle};
-      angular.extend($scope.participantResource.registerOpts, opts);
+      $scope.participantResource = {
+        registerOpts: {resource: 'ParticipantPhi', operations: ['Create'], cp: $scope.cp.shortTitle},
+      }
       loadParticipants();
       Util.filter($scope, 'filterOpts', loadParticipants);
     }
