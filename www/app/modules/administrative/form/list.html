@@ -27,10 +27,10 @@
         </div>
       </div>
       <div class="os-table-body">
-        <div ng-repeat="form in formsList | filter:searchFormName" class="row os-pointer-cursor">
+        <div ng-repeat="form in formsList | filter:searchFormName" class="row">
           <div class="col col-xs-4">
-            <a style="cursor:pointer;" ui-sref="form-addedit({formId: form.formId})" 
-              title="{{'form.edit_form' | translate}}">{{form.caption}}</a>
+            <a ui-sref="form-addedit({formId: form.formId})" 
+              title="{{'form.tooltip.edit' | translate}}">{{form.caption}}</a>
           </div>
           <div class="col col-xs-3">{{form.createdBy.lastName}} {{form.createdBy.firstName}}</div>
           <div class="col col-xs-3" ng-if="form.modificationTime">{{form.modificationTime | date:global.dateFmt }}</div>
@@ -40,11 +40,11 @@
 
             <div class="pull-right btn-group btn-group-xs">
               <button type="button" class="btn btn-default" ng-click="showFormContexts(form)"
-                title="{{'form.attach_form_to_cp' | translate}}">
+                title="{{'form.tooltip.attach_form_to_cp' | translate}}">
                 <span class="fa fa-wrench"></span>
               </button>
               <button type="button" class="btn btn-default" ng-click="deleteForm(form)" 
-                title="{{'form.delete_form' | translate}}"> 
+                title="{{'form.tooltip.delete' | translate}}"> 
                 <i class="fa fa-trash-o"></i>
               </button>
             </div>

@@ -23,10 +23,10 @@ angular.module('os.common.delete')
       });
 
       modalInstance.result.then(function(object) {
-        if (!props.onDeletion) {
-           $state.go(props.onDeleteState);
-        } else {
+        if (typeof props.onDeletion == 'function') {
           props.onDeletion();
+        } else {
+          $state.go(props.onDeleteState);
         }
       });
     }

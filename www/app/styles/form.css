@@ -3,18 +3,26 @@
   padding: 0px 0px 5px;
 }
 
-.os-form-association-list .os-table-body {
-  max-height:175px; 
-  width: 100%; 
-  overflow:auto;
+.os-form-association .os-modal-body {
+  height: 530px;
+  display: flex;
+  flex-direction: column;
+}
+
+.os-form-association-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.os-form-association-empty-list,
+.os-form-association-form {
+  flex: 0 0 auto;
 }
 
 .os-form-association-form {
-  max-height: 210px; 
-  overflow: auto;
+  margin-top: 10px;
 }
-
-.os-form-association-form .os-select {
+.os-form-association-form .os-select-container {
   margin: 10px 0;
 }
 

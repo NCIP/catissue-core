@@ -6,12 +6,12 @@ angular.module('os.biospecimen.models.form', ['os.common.models'])
         'forms',
         function(form) {
           form.FormContextModel =  osModel('forms/' + form.$id() + '/contexts');
-          form.FormContextModel.prototype.$update = updateFormContext;
+          form.FormContextModel.prototype.$saveOrUpdate = updateFormContext;
           form.FormContextModel.prototype.$remove = removeFormContext;
         }
       );
 
-    var updateFormContext = function() {
+    function updateFormContext() {
       var form = this.form;
       var formCtxts = [];
       for (var i = 0; i < this.cpIds.length; ++i) {
@@ -21,7 +21,7 @@ angular.module('os.biospecimen.models.form', ['os.common.models'])
       return $http.put(form.FormContextModel.url(), formCtxts).then(form.FormContextModel.modelRespTransform);
     };
 
-    var removeFormContext = function() {
+    function removeFormContext() {
       var form = this.form;
       var param = {params: {cpId: this.cpId, entityType: this.entityType}}
 
