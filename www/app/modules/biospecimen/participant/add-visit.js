@@ -1,4 +1,3 @@
-
 angular.module('os.biospecimen.participant.addvisit', ['os.biospecimen.participant.detail'])
   .controller('AddVisitCtrl', function($scope, $state, Visit, PvManager, CollectionProtocolEvent) {
     function loadPvs() {
@@ -19,15 +18,24 @@ angular.module('os.biospecimen.participant.addvisit', ['os.biospecimen.participa
         eventId: $scope.visit.eventId
       });
 
-      CollectionProtocolEvent.getById($scope.visit.eventId).then(
-        function(cpe) {
-          $scope.visit.clinicalDiagnosis = cpe.clinicalDiagnosis;
-          $scope.visit.clinicalStatus = cpe.clinicalStatus;
-          $scope.visit.site = cpe.defaultSite;
-          $scope.visit.visitDate = $scope.visitToAdd.anticipatedVisitDate;
-          $scope.visit.status = 'Complete';
-        }
-      );
+      if (!!$scope.visitToAdd.id) {
+        Visit.getById($scope.visitToAdd.id).then(
+          function(result) {
+            angular.extend(visit, result);
+            angular.extend(visit, {id: undefined, name: undefined, status: 'Complete'});
+          }
+        );
+      } else {
+        CollectionProtocolEvent.getById($scope.visit.eventId).then(
+          function(cpe) {
+            visit.clinicalDiagnosis = cpe.clinicalDiagnosis;
+            visit.clinicalStatus = cpe.clinicalStatus;
+            visit.site = cpe.defaultSite;
+            visit.visitDate = $scope.visitToAdd.anticipatedVisitDate;
+            visit.status = 'Complete';
+          }
+        );
+      }
 
       return visit;
     }
@@ -44,7 +52,7 @@ angular.module('os.biospecimen.participant.addvisit', ['os.biospecimen.participa
           $scope.revertAddVisit();
 
           var params = {visitId: result.id, eventId: result.eventId};
-          $state.go('participant-detail.visits', params);
+          $state.go('participant-detail.visits', params, {reload: true});
         }
       );
     };

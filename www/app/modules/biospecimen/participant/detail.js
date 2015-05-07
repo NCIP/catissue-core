@@ -32,17 +32,24 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
      * Add visit logic
      */
     $scope.addVisitIdx = -1;
+    $scope.rptVisitIdx = -1;
+
     $scope.showAddVisit = function(visit, index) {
       $scope.addVisitIdx = index;
+      $scope.rptVisitIdx = -1;
       $scope.visitToAdd = visit;
     };
 
     $scope.revertAddVisit = function() {
-      $scope.addVisitIdx = -1;
+      $scope.addVisitIdx = $scope.rptVisitIdx = -1;
       $scope.visitToAdd = {};
     };
 
-    
+    $scope.showRepeatVisit = function(visit, index) {
+      $scope.addVisitIdx = -1;
+      $scope.rptVisitIdx = index;
+      $scope.visitToAdd = angular.copy(visit);
+    };
 
     init();
   });

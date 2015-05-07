@@ -247,7 +247,8 @@
       "edit_visit": "Edit Visit",
       "collect_planned_specimens": "Collect Planned Specimens",
       "collect_unplanned_specimens": "Collect Unplanned Specimens",
-      "print_specimen_labels": "Print Specimen Labels"
+      "print_specimen_labels": "Print Specimen Labels",
+      "repeat_visit": "Repeat Visit"
     },
 
     "menu": {

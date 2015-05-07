@@ -19,7 +19,7 @@ angular.module('os.biospecimen.participant.visits', ['os.biospecimen.models'])
     $scope.visit = {};
     for (var i = 0; i < visits.length; ++i) {
       if ((!!$stateParams.visitId && $stateParams.visitId == visits[i].id) ||
-          (!!$stateParams.eventId && $stateParams.eventId == visits[i].eventId)) {
+          (!$stateParams.visitId && !!$stateParams.eventId && $stateParams.eventId == visits[i].eventId)) {
         $scope.visit = visits[i];
         break;
       } 
