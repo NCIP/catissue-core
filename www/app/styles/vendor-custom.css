@@ -8,6 +8,10 @@
   white-space: normal!important;
 }
 
+.ui-select-bootstrap .ui-select-match .btn span {
+  white-space: normal!important;
+}
+
 .dropdown-menu:before {
   position: absolute;
   top: -7px;
