@@ -12,28 +12,32 @@ angular.module('os.biospecimen.participant.root', ['os.biospecimen.models'])
 
     function initAuthorizationOpts() {
 
+      var sites = $scope.cpr.participant.pmis.map(function(pmi) { return pmi.siteName; });
+      sites = sites.length > 0 ? sites : undefined;
+
       // Participant Authorization Options
       $scope.participantResource = {
-        updateOpts: {resource: 'ParticipantPhi', operations: ['Update'], cp: $scope.cpr.cpShortTitle}
-      }
+        updateOpts: {
+          resource: 'ParticipantPhi',
+          operations: ['Update'],
+          cp: $scope.cpr.cpShortTitle,
+          sites: sites
+        }
+      };
 
       // Specimen and Visit Authorization Options
       $scope.specimenResource = {
-        updateOpts: {resource: 'VisitAndSpecimen', operations: ['Update'], cp: $scope.cpr.cpShortTitle}
-      }
-
-      $scope.sites = $scope.cpr.participant.pmis.map(
-        function(pmi) {
-          return pmi.siteName;
+        updateOpts: {
+          resource: 'VisitAndSpecimen',
+          operations: ['Update'],
+          cp: $scope.cpr.cpShortTitle,
+          sites: sites
         }
-      );
-      if ($scope.sites.length > 0) {
-        angular.extend($scope.specimenResource.updateOpts, {sites: $scope.sites});
       }
 
       // Specimen Tree Authorization Options
       var update = AuthorizationService.isAllowed($scope.specimenResource.updateOpts);
-      $scope.specimenTreeOpts = {update: update};
+      $scope.specimenAllowedOps = {update: update};
     }
 
     init();

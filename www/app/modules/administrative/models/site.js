@@ -15,7 +15,7 @@ angular.module('os.administrative.models.site', ['os.common.models'])
       return getSites(opts);
     }
 
-    Site.listForPmis = function(opName) {
+    Site.listForParticipants = function(opName) {
       var opts = {resource: 'ParticipantPhi', operation: opName};
       return getSites(opts);
     }
@@ -25,11 +25,13 @@ angular.module('os.administrative.models.site', ['os.common.models'])
       return getSites(opts);
     }
 
-    Site.listForRoles = function(instituteName) {
+    Site.listForUsers = function(opName) {
+      var opts = {resource: 'User', operation: opName};
+      return getSites(opts);
+    }
+
+    Site.listForInstitute = function(instituteName) {
        var opts = {institute: instituteName}
-       if (!$rootScope.currentUser.admin) {
-         opts = {resource: 'User', operation: 'Update'};
-       }
        return getSites(opts);
     }
 

@@ -23,7 +23,14 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
     }
 
     function loadPvs() {
-      Site.listForRoles($scope.user.instituteName).then(function(sites) {
+      var query = undefined;
+      if ($scope.currentUser.admin) {
+        query = Site.listForInstitute($scope.user.instituteName)
+      } else {
+        query = Site.listForUsers('Update');
+      }
+
+      query.then(function(sites) {
         $scope.sites = sites;
       });
       $scope.sites.splice(0, 0, $scope.all);

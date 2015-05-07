@@ -2,7 +2,7 @@
   <div class="panel-heading">
     <span translate="specimens.list">Specimens</span>
     <div class="btn-group os-action-btns">
-      <button ng-if="opts.update" class="btn btn-primary" ng-click="collectSpecimens()">
+      <button ng-if="!allowedOps || allowedOps.update" class="btn btn-primary" ng-click="collectSpecimens()">
         <span class="fa fa-plus"></span>
         <span translate="specimens.buttons.collect"> Collect </span>
       </button>
@@ -98,33 +98,33 @@
                       <span translate="specimens.ctx_menu.view_specimen">View Specimen</span>
                     </a>
                   </li>
-                  <li ng-if="opts.update">
+                  <li ng-if="!allowedOps || allowedOps.update">
                     <a href="#">
                       <i class="fa fa-pencil"></i>
                       <span translate="specimens.ctx_menu.edit_specimen">Edit Specimen</span>
                     </a>
                   </li>
                   <li class="divider"></li>
-                  <li ng-if="opts.update">
+                  <li ng-if="!allowedOps || allowedOps.update">
                     <a ng-click="showCreateAliquots(specimen)">
                       <i class="fa fa-share-alt"></i>
                       <span translate="specimens.ctx_menu.create_aliquots">Create Aliquots</span>
                     </a>
                   </li>
-                  <li ng-if="opts.update">
+                  <li ng-if="!allowedOps || allowedOps.update">
                     <a ng-click="showCreateDerivative(specimen)">
                       <i class="fa fa-flask"></i>
                       <span translate="specimens.ctx_menu.create_derivative">Create Derivative</span>
                     </a>
                   </li>
                   <li class="divider"></li>
-                  <li ng-if="opts.update">
+                  <li ng-if="!allowedOps || allowedOps.update">
                     <a href="#">
                       <i class="fa fa-cogs"></i>
                       <span translate="specimens.ctx_menu.add_event">Add Event</span>
                     </a>
                   </li>
-                  <li ng-if="opts.update">
+                  <li ng-if="!allowedOps || allowedOps.update">
                     <a href="#">
                       <i class="fa fa-trash"></i>
                       <span translate="specimens.ctx_menu.dispose">Dispose</span>

@@ -8,7 +8,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
     function loadPvs() {
       var op = !!$scope.cpr.id ? 'Update' : 'Create';
       $scope.sites = [];
-      Site.listForPmis(op).then(function(sites) {
+      Site.listForParticipants(op).then(function(sites) {
         $scope.sites = sites;
       });
 

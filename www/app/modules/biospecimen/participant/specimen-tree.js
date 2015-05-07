@@ -89,7 +89,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
         cpr: '=',
         visit: '=',
         specimenTree: '=specimens',
-        opts: '='
+        allowedOps: '='
       },
 
       templateUrl: 'modules/biospecimen/participant/specimens.html',
