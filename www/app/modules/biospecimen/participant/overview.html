@@ -72,6 +72,11 @@
           </div>
         </os-inline-edit>
       </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="participant.registered_cps">Registered CPs:</strong>
+        <span class="value value-md">{{cpr.participant.registeredCps | osArrayJoin}}</span>
+      </li>
     </ul>
 
     <div class="os-section" ng-init="ovCollapsed=false">

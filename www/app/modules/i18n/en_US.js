@@ -194,6 +194,7 @@
     "bulk_update_participants": "Bulk Update Participants",
     "updates": "Participant Updates",
     "registrations": "Participant Registrations",
+    "registered_cps": "Registered CPs",
     
     "buttons": {
       "register": "Register",

@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
 import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
@@ -44,6 +45,8 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 	private String empi;
 	
 	private boolean phiAccess;
+	
+	private Set<String> registeredCps;
 	
 	public Long getId() {
 		return id;
@@ -173,6 +176,14 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 		this.phiAccess = phiAccess;
 	}
 
+	public Set<String> getRegisteredCps() {
+		return registeredCps;
+	}
+
+	public void setRegisteredCps(Set<String> registeredCps) {
+		this.registeredCps = registeredCps;
+	}
+
 	public static ParticipantDetail from(Participant participant, boolean excludePhi) {
 		ParticipantDetail result = new ParticipantDetail();
 		result.setId(participant.getId());
@@ -191,6 +202,12 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 		result.setSsn(excludePhi ? "###" : participant.getSocialSecurityNumber());
 		result.setVitalStatus(participant.getVitalStatus());
 		result.setPhiAccess(!excludePhi);
+		
+		Set<String> cps = new HashSet<String>();
+		for (CollectionProtocolRegistration cpr : participant.getCprs()) {
+			cps.add(cpr.getCollectionProtocol().getShortTitle());
+		}
+		result.setRegisteredCps(cps);
 		return result;
 	}
 	
