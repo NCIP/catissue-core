@@ -155,19 +155,28 @@ war {
   
   from ('./') {
     include 'ngweb/**'
-    include 'css/**'
-    include 'jss/**'
-    include 'WEB-INF/'    
+    include 'WEB-INF/'
   }
   
   from ('./detemp/') {
     include 'csd_web/**'
   }
   
-  from ('./WEB-INF/resources') {
+  from ('./www/dist/') {
+    include 'css/**'
+    include 'custom-modules/**'
+    include 'fonts/**'
+    include 'images/**'
+    include 'modules/**'
+    include 'scripts/**'
+    include 'styles/**'
+    include 'index.html'
+  }
+  
+  from ('./WEB-INF/resources/') {
     include 'application.properties'
-    exclude '/email-templates'
-    exclude '/ng-file-templates'
+    exclude 'email-templates/**'
+    exclude 'ng-file-templates/**'
     
     def datasource_dialect = (database_type == "mysql") ? datasource_mysql_dialect : datasource_oracle_dialect
     filter(ReplaceTokens, tokens: [datasource_jndi : datasource_jndi, datasource_type : datasource_type, datasource_dialect : datasource_dialect])
