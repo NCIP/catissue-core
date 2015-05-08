@@ -3,9 +3,9 @@
 <datasources>
 	<local-tx-datasource>
 		<jndi-name>openspecimen</jndi-name>
-		<connection-url>@@databaseurl@@</connection-url>
-		<user-name>@@username@@</user-name>
-		<password>@@pasword@@</password>
-		<driver-class>@@databasedriver@@</driver-class>
+		<connection-url>@database_url@</connection-url>
+		<user-name>@username@</user-name>
+		<password>@password@</password>
+		<driver-class>@database_driver@</driver-class>
 	</local-tx-datasource>
 </datasources>
