@@ -3719,4 +3719,28 @@
           inner join CATISSUE_DEPARTMENT d ON u.DEPARTMENT_ID = d.IDENTIFIER
       )</createView>
     </changeSet>
+    
+    <changeSet  dbms="oracle" author="nmarwaha" id="Create trigger to manage specimen hierarchy">
+      <sql splitStatements="false">
+        create or replace trigger tgr_specimen_replication after insert 
+        on catissue_specimen
+        for each row
+        begin
+ 
+          if (:new.parent_specimen_id is not null ) then
+            insert into catissue_specimen_hierarchy
+              (ancestor_id, descendent_id) 
+            select 
+              csh.ancestor_id, :new.identifier 
+            from 
+              catissue_specimen_hierarchy csh 
+            where 
+              csh.descendent_id = :new.parent_specimen_id);
+          end if;
+  
+          insert into catissue_specimen_hierarchy (ancestor_id, descendent_id) values (:new.identifier, :new.identifier);
+
+        end;
+      </sql>
+    </changeSet>
 </databaseChangeLog>
