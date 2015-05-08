@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
+import com.krishagni.rbac.events.SubjectRoleDetail;
 
 public class Subject {
 	private Long id;
@@ -98,6 +99,44 @@ public class Subject {
 			if (sr.getId().equals(srId)) {
 				return sr;
 			}
+		}
+		
+		return null;
+	}
+	
+	public SubjectRole getExistingRole(SubjectRoleDetail srd) {
+		for (SubjectRole sr : getRoles()) {
+
+			if (!sr.getRole().getId().equals(srd.getRole().getId())) {
+				continue;
+			}
+
+			boolean cpEquals = false;
+			if (sr.getCollectionProtocol() == null && srd.getCollectionProtocol() == null) {
+				cpEquals = true;
+			} else if (sr.getCollectionProtocol() != null && srd.getCollectionProtocol() != null && 
+						sr.getCollectionProtocol().getShortTitle().equals(srd.getCollectionProtocol().getShortTitle())) {
+				cpEquals = true;
+			}
+						
+			if (!cpEquals) {
+				continue;
+			}
+			
+			boolean siteEquals = false;
+			if (sr.getSite() == null && srd.getSite() == null) {
+				siteEquals = true;
+			} else if (sr.getSite() != null && srd.getSite() != null &&
+						sr.getSite().getName().equals(srd.getSite().getName())) {
+				siteEquals = true;
+			}
+			
+			if (!siteEquals) {
+				continue;
+			}
+			
+			return sr;
+			
 		}
 		
 		return null;

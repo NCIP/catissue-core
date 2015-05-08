@@ -2,14 +2,17 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
@@ -29,6 +32,12 @@ import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
+import com.krishagni.rbac.events.RoleDetail;
+import com.krishagni.rbac.events.RoleQueryCriteria;
+import com.krishagni.rbac.events.SubjectRoleDetail;
+import com.krishagni.rbac.events.SubjectRoleOp;
+import com.krishagni.rbac.events.SubjectRoleOp.OP;
+import com.krishagni.rbac.service.RbacService;
 
 
 public class SiteServiceImpl implements SiteService {
@@ -36,12 +45,18 @@ public class SiteServiceImpl implements SiteService {
 
 	private DaoFactory daoFactory;
 	
+	private RbacService rbacSvc;
+	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 
 	public void setSiteFactory(SiteFactory siteFactory) {
 		this.siteFactory = siteFactory;
+	}
+	
+	public void setRbacSvc(RbacService rbacSvc) {
+		this.rbacSvc = rbacSvc;
 	}
 	
 	@Override
@@ -93,8 +108,8 @@ public class SiteServiceImpl implements SiteService {
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueConstraint(site, null, ose);
 			ose.checkAndThrow();
-			
-			daoFactory.getSiteDao().saveOrUpdate(site, true);			
+			daoFactory.getSiteDao().saveOrUpdate(site, true);
+			addRemoveDefaultRole(site.getCoordinators(), site, SubjectRoleOp.OP.ADD);
 			return ResponseEvent.response(SiteDetail.from(site));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -178,14 +193,51 @@ public class SiteServiceImpl implements SiteService {
 			ensureUniqueConstraint(site, existing, ose);
 			ose.checkAndThrow();
 			
+			Collection<User> addedCoordinators = CollectionUtils.subtract(site.getCoordinators(),
+					existing.getCoordinators());
+			Collection<User> removedCoordinators = CollectionUtils.subtract(existing.getCoordinators(),
+					site.getCoordinators());
+			
 			existing.update(site);			
-			daoFactory.getSiteDao().saveOrUpdate(existing);			
+			daoFactory.getSiteDao().saveOrUpdate(existing);
+			
+			addRemoveDefaultRole(addedCoordinators, existing, SubjectRoleOp.OP.ADD);
+			addRemoveDefaultRole(removedCoordinators, existing, SubjectRoleOp.OP.REMOVE);
+			
 			return ResponseEvent.response(SiteDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}		
+	}
+	
+	private void addRemoveDefaultRole(Collection<User> users, Site site, OP op) {
+		for (User user: users) {
+			ResponseEvent<SubjectRoleDetail> resp = rbacSvc.updateSubjectRole(getSubjectRoleOpEvent(site, user, op));
+			resp.throwErrorIfUnsuccessful();
+		}
+	}
+	
+	private RequestEvent<SubjectRoleOp> getSubjectRoleOpEvent(Site site, User user, OP op) {
+		RoleQueryCriteria criteria = new RoleQueryCriteria();
+		criteria.setName("Administrator");
+		RoleDetail role = rbacSvc.getRole(new RequestEvent<RoleQueryCriteria>(criteria)).getPayload();
+		if (role == null) {
+			OpenSpecimenException.userError(RbacErrorCode.ROLE_NOT_FOUND);
+		}
+		
+		SubjectRoleDetail srDetail = new SubjectRoleDetail();
+		srDetail.setSite(SiteDetail.from(site));
+		srDetail.setRole(role);
+		srDetail.setImplicit(true);
+
+		SubjectRoleOp subRoleOp = new SubjectRoleOp();
+		subRoleOp.setOp(op);
+		subRoleOp.setSubjectId(user.getId());
+		subRoleOp.setSubjectRole(srDetail);
+		
+		return new RequestEvent<SubjectRoleOp>(subRoleOp);
 	}
 	
 	private void ensureUniqueConstraint(Site newSite, Site existingSite, OpenSpecimenException ose) {

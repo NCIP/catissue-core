@@ -13,6 +13,8 @@ public class SubjectRole {
 	private CollectionProtocol collectionProtocol;
 	
 	private Site site;
+	
+	private Boolean implicit;
 
 	public Long getId() {
 		return id;
@@ -54,6 +56,14 @@ public class SubjectRole {
 		this.site = site;
 	}
 	
+	public Boolean getImplicit() {
+		return implicit;
+	}
+
+	public void setImplicit(Boolean implicit) {
+		this.implicit = implicit;
+	}
+
 	@Override
 	public int hashCode() {
 		return 31 * 1 

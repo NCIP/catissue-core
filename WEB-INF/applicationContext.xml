@@ -290,6 +290,7 @@
   <bean id="siteService" class="com.krishagni.catissueplus.core.administrative.services.impl.SiteServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="siteFactory" ref="siteFactory" />
+    <property name="rbacSvc" ref="rbacSvc"/>
   </bean>
 	
   <bean id="storageContainerFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.StorageContainerFactoryImpl">

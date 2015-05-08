@@ -17,6 +17,8 @@ public class SubjectRoleDetail {
 	
 	private SiteDetail site;
 	
+	private boolean implicit;
+	
 	public Long getId() {
 		return id;
 	}
@@ -47,6 +49,14 @@ public class SubjectRoleDetail {
 
 	public void setSite(SiteDetail site) {
 		this.site = site;
+	}
+	
+	public boolean getImplicit() {
+		return implicit;
+	}
+
+	public void setImplicit(boolean implicit) {
+		this.implicit = implicit;
 	}
 
 	public static SubjectRoleDetail from(SubjectRole subjectRole) {

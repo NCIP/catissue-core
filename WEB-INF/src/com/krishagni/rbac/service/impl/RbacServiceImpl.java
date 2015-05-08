@@ -43,6 +43,7 @@ import com.krishagni.rbac.events.ResourceDetail;
 import com.krishagni.rbac.events.ResourceInstanceOpDetails;
 import com.krishagni.rbac.events.RoleAccessControlDetails;
 import com.krishagni.rbac.events.RoleDetail;
+import com.krishagni.rbac.events.RoleQueryCriteria;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 import com.krishagni.rbac.events.SubjectRoleOp;
 import com.krishagni.rbac.events.SubjectRolesList;
@@ -297,9 +298,16 @@ public class RbacServiceImpl implements RbacService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<RoleDetail> getRole(RequestEvent<Long> req) {
+	public ResponseEvent<RoleDetail> getRole(RequestEvent<RoleQueryCriteria> req) {
 		try {
-			Role role = daoFactory.getRoleDao().getById(req.getPayload(), null);
+			RoleQueryCriteria criteria = req.getPayload();
+			Role role = null;
+			if (criteria.getId() != null) {
+				role = daoFactory.getRoleDao().getById(req.getPayload().getId(), null);
+			} else if (StringUtils.isNotBlank(criteria.getName())) {
+				role = getRole(req.getPayload().getName());
+			}
+			
 			if (role == null) {
 				return ResponseEvent.userError(RbacErrorCode.ROLE_NOT_FOUND);
 			}
@@ -433,7 +441,18 @@ public class RbacServiceImpl implements RbacService {
 					break;
 				
 				case REMOVE:
-					resp = subject.removeSubjectRole(subjectRoleOp.getSubjectRole().getId());
+					Long srId = null;
+					if (subjectRoleOp.getSubjectRole().getId() != null) {
+						srId = subjectRoleOp.getSubjectRole().getId();
+					} else { 
+						SubjectRole existingSr = subject.getExistingRole(subjectRoleOp.getSubjectRole());
+						if (existingSr == null) {
+							OpenSpecimenException.userError(RbacErrorCode.SUBJECT_ROLE_NOT_FOUND);
+						}
+						srId = existingSr.getId();
+					}	
+					
+					resp = subject.removeSubjectRole(srId);
 					break;
 			}
 			
@@ -680,6 +699,7 @@ public class RbacServiceImpl implements RbacService {
 		sr.setCollectionProtocol(getCollectionProtocol(srd));
 		sr.setSite(getSite(srd));
 		sr.setRole(role);
+		sr.setImplicit(srd.getImplicit());
 		return sr;
 	}
 

@@ -1115,6 +1115,8 @@
       <column name="SITE_ID" type="${int.type}" />
 
       <column name="CP_ID" type="${int.type}" />
+      
+      <column name="IS_IMPLICIT" type="${boolean.type}" />
 
     </createTable>
   </changeSet>
@@ -1832,5 +1834,5 @@
       //
     </sql>
   </changeSet>
-
+  
 </databaseChangeLog>
