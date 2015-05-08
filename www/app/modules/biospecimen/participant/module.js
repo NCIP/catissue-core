@@ -20,16 +20,24 @@ angular.module('os.biospecimen.participant',
 
   .config(function($stateProvider) {
     $stateProvider
-      .state('participant-list', {
-        url: '/participants?cpId',
-        templateUrl: 'modules/biospecimen/participant/list.html',
-        controller: 'ParticipantListCtrl',
+      .state('cp-view', {
+        url: '/cp-view/:cpId',
+        template: '<div ui-view></div>',
+        controller: function() {
+        },
         resolve: {
           cp: function($stateParams, CollectionProtocol) {
-              return CollectionProtocol.getById($stateParams.cpId);
+            return CollectionProtocol.getById($stateParams.cpId);
           }
         },
-        parent: 'signed-in'
+        parent: 'signed-in',
+        abstract: true
+      })
+      .state('participant-list', {
+        url: '/participants',
+        templateUrl: 'modules/biospecimen/participant/list.html',
+        controller: 'ParticipantListCtrl',
+        parent: 'cp-view'
       })
       .state('participant-root', {
         url: '/participants/:cprId',
@@ -44,11 +52,11 @@ angular.module('os.biospecimen.participant',
           }
         },
         controller: 'ParticipantRootCtrl',
-        parent: 'signed-in',
+        parent: 'cp-view',
         abstract: true
       })
       .state('participant-addedit', {
-        url: '/addedit-participant?cpId',
+        url: '/addedit-participant',
         templateProvider: function($stateParams, $q, CpConfigSvc) {
           return $q.when(CpConfigSvc.getRegParticipantTmpl($stateParams.cpId, $stateParams.cprId)).then(
             function(tmpl) {

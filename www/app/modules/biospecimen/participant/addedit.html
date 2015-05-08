@@ -1,5 +1,8 @@
 <div>
   <div os-page-header>
+    <ul os-breadcrumbs>
+      <li> <a ui-sref="cp-detail.overview({cpId: cp.id})">{{cp.shortTitle}}</a> </li>
+    </ul>
     <h3 ng-switch on="!!cpr.id"> 
       <span ng-switch-when="true" translate="participant.edit_participant">Edit Participant</span>
       <span ng-switch-default translate="participant.register_participant">Register Participant</span>
@@ -20,11 +23,11 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" ng-if="cpr.id || !cp.ppidFmt">
           <label class="col-xs-3 control-label" translate="participant.ppid">Participant Protocol ID</label>
           <div class="col-xs-6">
             <input type="text" name="ppid" ng-model="cpr.ppid" class="form-control" 
-              placeholder="{{'participant.ppid' | translate}}">
+              placeholder="{{'participant.ppid' | translate}}" ng-disabled="!!cp.ppidFmt">
 
             <div os-field-error field="pform.ppid"></div>
           </div>

@@ -1,11 +1,11 @@
 
 angular.module('os.biospecimen.cp.detail', ['os.biospecimen.models'])
   .controller('CpDetailCtrl', function($scope, $q, cp, CollectionProtocol, PvManager, DeleteUtil) {
-    $scope.cp = cp;
-
-    $scope.downloadUri = CollectionProtocol.url() + cp.id + '/definition';
 
     function init() {
+      $scope.cp = cp;
+      $scope.ppidFmt = cp.getUiPpidFmt();
+      $scope.downloadUri = CollectionProtocol.url() + cp.id + '/definition';
       $scope.sites = PvManager.getSites();
 
       var opts = {sites: cp.repositoryNames, cp: cp.shortTitle};
@@ -22,6 +22,8 @@ angular.module('os.biospecimen.cp.detail', ['os.biospecimen.models'])
     $scope.deleteCp = function() {
       DeleteUtil.delete($scope.cp, {onDeleteState: 'cp-list'});
     }
+
+   
 
     init();
   });

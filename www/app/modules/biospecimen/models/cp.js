@@ -41,5 +41,24 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       return new this.consentModel(consentTier);
     };
 
+    CollectionProtocol.prototype.getUiPpidFmt = function() {
+      var input = this.ppidFmt;
+      if (!input) {
+        return {};
+      }
+
+      var matches = input.match(/\%(\d)+d/);
+      if (matches && matches.length > 1) {
+        var idx = input.indexOf(matches[0]);
+        return {
+          prefix: input.substr(0, idx),
+          suffix: input.substr(idx + matches[0].length),
+          digitsWidth: parseInt(matches[1])
+        };
+      }
+
+      return {prefix: input}
+    }
+
     return CollectionProtocol;
   });

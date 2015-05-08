@@ -14,7 +14,7 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
        */
       repositoryNames = angular.copy(cp.repositoryNames);
 
-      $scope.ppidFmt = {};
+      $scope.ppidFmt = cp.getUiPpidFmt();
       $scope.coordinators = [];
 
       loadPvs();

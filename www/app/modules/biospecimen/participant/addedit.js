@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('ParticipantAddEditCtrl', function(
-    $scope, $state, $stateParams, cpr,
+    $scope, $state, $stateParams, cp, cpr,
     CollectionProtocolRegistration, Participant,
     Site, PvManager) {
 
@@ -22,6 +22,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       $scope.cpId = $stateParams.cpId;
       $scope.pid = undefined;
 
+      $scope.cp = cp;
       $scope.cpr = cpr;
       $scope.cpr.participant.addPmi($scope.cpr.participant.newPmi());
       

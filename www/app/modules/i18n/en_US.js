@@ -42,6 +42,8 @@
     "recent_activity": "Recent Activity",
     "no_file_selected": "No File Selected",
     "view_jobs": "View Jobs",
+    "digits": "digits",
+    "not_specified": "Not Specified",
 
     "buttons": {
       "add": "Add",
@@ -88,7 +90,7 @@
     "end_date": "End Date",
     "consents_waived": "Consents Waived",
     "ethics_approval_id": "Ethics Approval ID",
-    "ppid_fmt": "Protocol Identifier Format",
+    "ppid_fmt": "PPID Format",
     "ppid_prefix": "Prefix",
     "ppid_digits": "No. of digits",
     "ppid_suffix": "Suffix",
