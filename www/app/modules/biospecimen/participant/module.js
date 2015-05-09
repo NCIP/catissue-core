@@ -9,6 +9,7 @@ angular.module('os.biospecimen.participant',
     'os.biospecimen.participant.overview',
     'os.biospecimen.participant.visits',
     'os.biospecimen.participant.addedit',
+    'os.biospecimen.participant.newreg',
     'os.biospecimen.participant.addvisit',
     'os.biospecimen.participant.collect-specimens',
     'os.biospecimen.participant.specimen-position',
@@ -81,6 +82,12 @@ angular.module('os.biospecimen.participant',
         },
         controller: 'ParticipantDetailCtrl',
         parent: 'participant-root'
+      })
+      .state('participant-newreg', {
+        url: '/newreg',
+        templateUrl: 'modules/biospecimen/participant/register-new.html',
+        controller: 'RegisterNewCtrl',
+        parent: 'participant-detail'
       })
       .state('participant-detail.overview', {
         url: '/overview',

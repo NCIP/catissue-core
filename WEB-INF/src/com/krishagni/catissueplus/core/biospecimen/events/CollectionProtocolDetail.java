@@ -22,8 +22,6 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 
 	private String irbId;
 
-	private String ppidFmt;
-
 	private Long anticipatedParticipantsCount;
 
 	private String descriptionUrl;
@@ -75,14 +73,6 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 
 	public void setIrbId(String irbId) {
 		this.irbId = irbId;
-	}
-
-	public String getPpidFmt() {
-		return ppidFmt;
-	}
-
-	public void setPpidFmt(String ppidFmt) {
-		this.ppidFmt = ppidFmt;
 	}
 
 	public Long getAnticipatedParticipantsCount() {
@@ -167,7 +157,6 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setCoordinators(UserSummary.from(cp.getCoordinators()));
 
 		result.setIrbId(cp.getIrbIdentifier());
-		result.setPpidFmt(cp.getPpidFormat());
 		result.setAnticipatedParticipantsCount(cp.getEnrollment());
 		result.setDescriptionUrl(cp.getDescriptionURL());
 		result.setSpecimenLabelFmt(cp.getSpecimenLabelFormat());

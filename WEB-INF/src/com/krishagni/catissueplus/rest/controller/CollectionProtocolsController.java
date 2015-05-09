@@ -4,6 +4,8 @@ package com.krishagni.catissueplus.rest.controller;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +39,9 @@ import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail.Wo
 import com.krishagni.catissueplus.core.biospecimen.repository.CpListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
+import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
@@ -253,7 +257,44 @@ public class CollectionProtocolsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+	
+	//
+	// For UI work
+	//
+	@RequestMapping(method = RequestMethod.GET, value="/byop")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody			
+	public List<CollectionProtocolSummary> getCpListByOp(
+			@RequestParam(value = "resource", required = true)
+			String resourceName,
+			
+			@RequestParam(value = "op", required = true) 
+			String opName,
+			
+			@RequestParam(value = "siteName", required = false)
+			String[] siteNames,
+			
+			@RequestParam(value = "title", required = false)
+			String searchTitle)	 {
+				
+		List<String> inputSiteList = Collections.emptyList();
+		if (siteNames != null) {
+			inputSiteList = Arrays.asList(siteNames);
+		}
 		
+		Resource resource = Resource.fromName(resourceName);
+		Operation op = Operation.fromName(opName);
+		
+		List<CollectionProtocolSummary> emptyList = Collections.<CollectionProtocolSummary>emptyList();
+		ResponseEvent<List<CollectionProtocolSummary>> resp = new ResponseEvent<List<CollectionProtocolSummary>>(emptyList);
+		if (resource == Resource.PARTICIPANT && op == Operation.CREATE) {
+			 resp = cpSvc.getRegisterEnabledCps(inputSiteList, searchTitle);			
+		}
+		
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
 	private ConsentTierDetail performConsentTierOp(OP op, Long cpId, ConsentTierDetail consentTier) {
 		ConsentTierOp req = new ConsentTierOp();		
 		req.setConsentTier(consentTier);

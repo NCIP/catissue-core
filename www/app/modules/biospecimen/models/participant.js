@@ -46,6 +46,14 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
       return pmis;
     };
 
+    Participant.prototype.getMrnSites = function() {
+      if (!this.pmis) {
+        return [];
+      }
+
+      return this.pmis.map(function(pmi) { return pmi.siteName; });
+    };
+
     Participant.prototype.isMatchingInfoPresent = function() {
       return (this.lastName && this.birthDate) ||
              this.empi ||
