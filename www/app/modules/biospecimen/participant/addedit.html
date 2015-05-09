@@ -11,7 +11,7 @@
 
   <div class="container os-margin-top">
     <form name="pform" class="form-horizontal" os-form-validator="pform" validator="pformValidator" novalidate>
-      <div ng-if="matchedResults.matchedAttr == 'none' || !matchedResults.matchedAttr">
+      <div ng-if="!matchedParticipants || matchedParticipants.length == 0">
         <div class="form-group">
           <label class="col-xs-3 control-label" translate="participant.reg_date">Registration Date</label>
           <div class="col-xs-6">
@@ -182,8 +182,8 @@
         </div>
       </div>
   
-      <div class="form-group" ng-if="matchedResults.matchedAttr">
-        <div ng-include="'matched-participants.html'" class="col-xs-offset-2 col-xs-8">
+      <div class="form-group" ng-if="matchedParticipants.length > 0">
+        <div ng-include="'matched-participants.html'" class="col-xs-offset-1 col-xs-10">
         </div>
       </div>
     </form>
@@ -191,52 +191,59 @@
 </div>
 
 <script type="text/ng-template" id="matched-participants.html">
-  <div ng-switch on="matchedResults.matchedAttr" class="alert alert-warning os-participant-matching-msg">
-    <span ng-switch-when="empi" translate="participant.matched_on_mpi">
-      Following Participant matched based on EMPI
-    </span>
-    <span ng-switch-when="ssn" translate="participant.matched_on_ssn">
-      Following Participant matched based on SSN
-    </span>
-    <span ng-switch-when="pmi" translate="participant.matched_on_pmi">
-      Following Participant matched based on medical identifiers
-    </span>
-    <span ng-switch-when="lnameAndDob" translate="participant.matched_on_lname_and_dob">
-      Following possible Participants matched based on last name and birth date
+  <div class="alert alert-warning os-participant-matching-msg">
+    <span translate="participant.similar_participants">
+      Following participants similar to new participant being registered found
     </span>
   </div>
 
   <div class="os-participant-matching-tbl">
-    <table class="table table-bordered table-condensed table-hover">
-      <thead>
-        <tr>
-          <th class="col-xs-1">&nbsp;</th>
-          <th class="col-xs-2" translate="participant.first_name">First Name</th>
-          <th class="col-xs-2" translate="participant.last_name">Last Name</th>
-          <th class="col-xs-2" translate="participant.birth_date">Birth Date</th>
-          <th class="col-xs-2" translate="participant.ssn_short">SSN</th>
-          <th class="col-xs-3" translate="participant.pmis">Medical Identifiers</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="participant in matchedResults.participants" ng-class="{'info': selectedParticipant.id == participant.id}">
-          <td><input type="radio" name="selectedParticipant" ng-click="selectParticipant(participant)" value="{{participant.id}}"></td>
-          <td>{{participant.firstName}}</td>
-          <td>{{participant.lastName}}</td>
-          <td>{{participant.birthDate | date: global.dateFmt}}</td>
-          <td>{{participant.ssn}}</td>
-          <td>{{participant.pmis | osArrayJoin: pmiText | osNoValue}}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="os-table os-table-muted-hdr os-border">
+      <div class="os-table-head">
+        <div class="row">
+          <div class="col os-col-5">&nbsp;</div>
+          <div class="col os-col-15" translate="participant.first_name">First Name</div>
+          <div class="col os-col-15" translate="participant.last_name">Last Name</div>
+          <div class="col os-col-15" translate="participant.birth_date">Birth Date</div>
+          <div class="col os-col-10" translate="participant.ssn_short">SSN</div>
+          <div class="col os-col-20" translate="participant.pmis">Medical Identifiers</div>
+          <div class="col os-col-20" translate="participant.matched_attrs">Matched Attributes</div>
+        </div>
+      </div>
+      <div class="os-table-body">
+        <div class="row" ng-repeat="matchedPart in matchedParticipants" 
+          ng-class="{'bg-info': selectedParticipant.id == matchedPart.participant.id}">
+
+          <div class="col os-col-5">
+            <input type="radio" name="selectedParticipant" 
+              ng-click="selectParticipant(matchedPart.participant)" value="{{matchedPart.participant.id}}">
+          </div>
+          <div class="col os-col-15">{{matchedPart.participant.firstName | osNoValue}}</div>
+          <div class="col os-col-15">{{matchedPart.participant.lastName | osNoValue}}</div>
+          <div class="col os-col-15">{{matchedPart.participant.birthDate | date: global.dateFmt | osNoValue}}</div>
+          <div class="col os-col-10">{{matchedPart.participant.ssn | osNoValue}}</div>
+          <div class="col os-col-20">{{matchedPart.participant.pmis | osArrayJoin: pmiText | osNoValue}}</div>
+          <div class="col os-col-20">{{matchedPart.matchedAttrs | osArrayJoin: matchedAttrText}}</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div>
-    <button class="btn btn-primary" ng-if="selectedParticipant" ng-click="registerUsingSelectedParticipant()" 
-      translate="participant.buttons.register_selected_participant"> Register Selected Participant </button>
-    <button class="btn btn-primary" ng-if="matchedResults.matchedAttr == 'lnameAndDob'" ng-click="ignoreMatchesAndRegister()"
-      translate="participant.buttons.ignore_matches"> Ignore Matches and Register Participant </button>
-    <button class="btn btn-warning" ng-if="matchedResults.matchedAttr" ng-click="lookupAgain()"
-      translate="participant.buttons.lookup_again"> Lookup Again </button>
+    <button class="btn btn-primary" ng-if="selectedParticipant" ng-click="registerUsingSelectedParticipant()"> 
+      <span translate="participant.buttons.register_selected_participant"> 
+        Register Selected Participant 
+      </span>
+    </button>
+    <button class="btn btn-primary" ng-if="allowIgnoreMatches" ng-click="ignoreMatchesAndRegister()"
+      <span translate="participant.buttons.ignore_matches"> 
+        Ignore Matches and Register Participant 
+      </span>
+    </button>
+    <button class="btn btn-warning" ng-click="lookupAgain()"
+      <span translate="participant.buttons.lookup_again"> 
+        Lookup Again  
+      </span>
+    </button>
   </div>
 </script>

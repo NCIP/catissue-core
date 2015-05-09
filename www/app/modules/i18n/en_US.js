@@ -187,10 +187,14 @@
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
 
-    "matched_on_mpi": "Following Participant matched based on EMPI",
-    "matched_on_ssn": "Following Participant matched based on SSN",
-    "matched_on_pmi": "Following Participant matched based on MRN",
-    "matched_on_lname_and_dob": "Following possible Participants matched based on Last Name and Birth Date",
+    "similar_participants": "Following participants found that are similar to new participant being registered",
+    "matched_attrs": "Matched Attributes",
+    "matching_attr": {
+      "empi": "EMPI",
+      "pmi": "MRN",
+      "ssn": "SSN",
+      "lnameAndDob": "Last Name and DOB"
+    },
 
     "bulk_reg_participants": "Bulk Register Participants",
     "bulk_update_participants": "Bulk Update Participants",

@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('ParticipantAddEditCtrl', function(
-    $scope, $state, $stateParams, cp, cpr,
+    $scope, $state, $stateParams, $translate, cp, cpr,
     CollectionProtocolRegistration, Participant,
     Site, PvManager) {
 
@@ -34,6 +34,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
     function init() {
       $scope.cpId = $stateParams.cpId;
       $scope.pid = undefined;
+      $scope.allowIgnoreMatches = true;
 
       $scope.cp = cp;
       $scope.cpr = cpr;
@@ -82,23 +83,36 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       } else {
         participant.getMatchingParticipants().then(
           function(result) {
-            if (result.matchedAttr == 'none') {
+            if (!result || result.length == 0) {
               registerParticipant();
             }
 
-            $scope.matchedResults = result;
+            $scope.allowIgnoreMatches = true;
+            for (var i = 0; i < result.length; ++i) {
+              var matchedAttrs = result[i].matchedAttrs;
+              if (matchedAttrs.length > 1 || (matchedAttrs[0] != 'lnameAndDob')) {
+                $scope.allowIgnoreMatches = false;
+                break;
+              }
+            } 
+            $scope.matchedParticipants = result;
           }
         );
       }
     };
+
+    $scope.matchedAttrText = function(attr) {
+      return $translate.instant("participant.matching_attr." + attr);
+    }
 
     $scope.selectParticipant = function(participant) {
       $scope.selectedParticipant = participant;
     };
 
     $scope.lookupAgain = function() {
-      $scope.matchedResults = undefined;
+      $scope.matchedParticipants = undefined;
       $scope.selectedParticipant = undefined;
+      $scope.allowIgnoreMatches = true;
     };
 
     $scope.ignoreMatchesAndRegister = function() {

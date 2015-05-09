@@ -76,12 +76,9 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
       return $http.post(Participant.url() + '/match', criteria)
         .then(function(result) {
           var response = result.data;
-          response.participants = (response.participants || []).map(
-            function(participant) {
-              return new Participant(participant);
-            }
-          );
-
+          angular.forEach(response, function(matched) {
+            matched.participant = new Participant(matched.participant);
+          });
           return response;
         });
     };
