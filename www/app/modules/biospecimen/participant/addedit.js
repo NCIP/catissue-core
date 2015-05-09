@@ -5,11 +5,15 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
     CollectionProtocolRegistration, Participant,
     Site, PvManager) {
 
+    var availableSites = [];
+
     function loadPvs() {
       var op = !!$scope.cpr.id ? 'Update' : 'Create';
+
       $scope.sites = [];
       Site.listForParticipants(op).then(function(sites) {
-        $scope.sites = sites;
+        availableSites = sites;
+        filterAvailableSites();
       });
 
       $scope.genders = PvManager.getPvs('gender');
@@ -17,6 +21,15 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       $scope.vitalStatuses = PvManager.getPvs('vital-status');
       $scope.races = PvManager.getPvs('race');
     };
+
+    function filterAvailableSites() {
+      var siteNames = $scope.cpr.getMrnSites();
+      $scope.sites = availableSites.filter(
+        function(site) {
+          return siteNames.indexOf(site) == -1;
+        }
+      );
+    }
 
     function init() {
       $scope.cpId = $stateParams.cpId;
@@ -53,10 +66,14 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
     $scope.removePmi = function(pmi) {
       var participant = $scope.cpr.participant;
       participant.removePmi(pmi);
+      filterAvailableSites();    
+
       if (participant.pmis.length == 0) {
         participant.addPmi(participant.newPmi());
       }
     };
+
+    $scope.onSiteSelect = filterAvailableSites;
 
     $scope.register = function() {
       var participant = $scope.cpr.participant;

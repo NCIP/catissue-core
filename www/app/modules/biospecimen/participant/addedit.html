@@ -142,9 +142,10 @@
 
         <div class="form-group clearfix" ng-repeat="pmi in cpr.participant.pmis">
           <ng-form name="pmiForm" os-form-validator="pmiForm" parent-validator="pformValidator"> 
-            <!-- label class="col-xs-3 control-label">MRN #{{$index + 1}}</label -->
             <div class="col-xs-3 col-xs-offset-3">
-              <ui-select name="siteName" ng-model="pmi.siteName" ng-click="addPmiIfLast($index)" ng-required="!!pmi.mrn">
+              <ui-select name="siteName" ng-model="pmi.siteName" 
+                ng-click="addPmiIfLast($index)" ng-required="!!pmi.mrn"
+                on-select="onSiteSelect()">
                 <ui-select-match placeholder="{{'participant.select_site' | translate}}">{{$select.selected}}</ui-select-match>
                 <ui-select-choices repeat="site in sites | filter: $select.search">
                   <span ng-bind-html="site | highlight: $select.search"></span>

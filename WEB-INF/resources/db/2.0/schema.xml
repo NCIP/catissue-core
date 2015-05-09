@@ -1833,4 +1833,11 @@
     </sql>
   </changeSet>
 
+  <changeSet author="vpawar" id="Add Unique MRN site constraint for a participant">
+    <addUniqueConstraint 
+      constraintName="OS_PMI_PART_SITE_UQ" 
+      tableName="CATISSUE_PART_MEDICAL_ID" 
+      columnNames="PARTICIPANT_ID, SITE_ID"/>
+  </changeSet>  
+
 </databaseChangeLog>
