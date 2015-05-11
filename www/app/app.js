@@ -66,8 +66,8 @@ angular.module('openspecimen', [
 
     $httpProvider.interceptors.push('httpRespInterceptor');
 
-    /*ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 9090;*/
+    ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
+    ApiUrlsProvider.port = 8380;
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
@@ -211,7 +211,6 @@ angular.module('openspecimen', [
     };
 
     $rootScope.global = {
-      defaultDomain: 'openspecimen',
       filterWaitInterval: 500
     };
 

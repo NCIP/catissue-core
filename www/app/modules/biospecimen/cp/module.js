@@ -160,6 +160,22 @@ angular.module('os.biospecimen.cp',
           }
         },
         controller: 'CpSpecimensCtrl'
+      })
+      .state('cp-detail.bulk-print', {
+        url: '/bulk-registration?cpId',
+        templateUrl: 'custom-modules/sgh/biospecimen/bulk-print.html',
+        parent: 'cp-detail',
+        resolve: {
+          specimenRequirements: function($stateParams, SpecimenRequirement) {
+            var eventId = $stateParams.eventId;
+            if (!eventId) {
+              return [];
+            }
+
+            return SpecimenRequirement.listFor(eventId);
+          }
+        },
+        controller: 'CpBulkPrintCtrl'
       });
-  });
+    });
   
