@@ -1,12 +1,29 @@
 
 angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
-  .controller('ParticipantDetailCtrl', function($scope, $q, cpr, visits, SpecimenLabelPrinter, PvManager) {
+  .controller('ParticipantDetailCtrl', function(
+    $scope, $q, cpr, visits, 
+    CollectionProtocol, SpecimenLabelPrinter, PvManager, RegisterToNewCpsHolder) {
 
     function loadPvs() {
       $scope.genders = PvManager.getPvs('gender');
       $scope.ethnicities = PvManager.getPvs('ethnicity');
       $scope.vitalStatuses = PvManager.getPvs('vital-status');
       $scope.races = PvManager.getPvs('race');
+
+      var siteNames = cpr.getMrnSites();
+      $scope.cpsForReg = [];
+      CollectionProtocol.listForRegistrations(siteNames).then(
+        function(cps) {
+          var registeredCps = cpr.participant.registeredCps;
+          for (var i = 0; i < cps.length; ++i) {
+            if (registeredCps.indexOf(cps[i].shortTitle) == -1) {
+              $scope.cpsForReg.push(cps[i]);
+            }
+          }
+        }
+      );
+
+      RegisterToNewCpsHolder.setCpList($scope.cpsForReg);
     }
 
     function init() {

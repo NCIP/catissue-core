@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipants;
+import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipant;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -71,8 +73,8 @@ public class ParticipantController {
 	@RequestMapping(method = RequestMethod.POST, value = "/match")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public MatchedParticipants getMatchedParticipants(@RequestBody ParticipantDetail criteria) {
-		ResponseEvent<MatchedParticipants> resp = participantSvc.getMatchingParticipants(getRequest(criteria));
+	public List<MatchedParticipant> getMatchedParticipants(@RequestBody ParticipantDetail criteria) {
+		ResponseEvent<List<MatchedParticipant>> resp = participantSvc.getMatchingParticipants(getRequest(criteria));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

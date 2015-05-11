@@ -86,4 +86,11 @@ public interface CollectionProtocolService {
 	public ResponseEvent<CpWorkflowCfgDetail> getWorkflows(RequestEvent<Long> req);
 	
 	public ResponseEvent<CpWorkflowCfgDetail> saveWorkflows(RequestEvent<CpWorkflowCfgDetail> req);
+	
+	//
+	// For UI work
+	//
+	
+	// input is site names
+	public ResponseEvent<List<CollectionProtocolSummary>> getRegisterEnabledCps(List<String> siteNames, String searchTitle);	
 }

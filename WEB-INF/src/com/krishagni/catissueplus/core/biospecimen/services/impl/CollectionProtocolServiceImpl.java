@@ -674,6 +674,29 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		}
 	}
 	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<CollectionProtocolSummary>> getRegisterEnabledCps(List<String> siteNames, String searchTitle) {
+		try {
+			Set<Long> cpIds = AccessCtrlMgr.getInstance().getRegisterEnabledCpIds(siteNames);
+			
+			CpListCriteria crit = new CpListCriteria()
+				.title(searchTitle);
+			if (cpIds != null && cpIds.isEmpty()) {
+				return ResponseEvent.response(Collections.<CollectionProtocolSummary>emptyList());
+			} else if (cpIds != null) {
+				crit.ids(cpIds);
+			}
+			
+			List<CollectionProtocolSummary> cpList = daoFactory.getCollectionProtocolDao().getCollectionProtocols(crit);			
+			return ResponseEvent.response(cpList);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
 	private void ensureUsersBelongtoCpSites(CollectionProtocol cp) {
 		ensureCreatorBelongToCpSites(cp);
 		ensurePiBelongToCpSites(cp);

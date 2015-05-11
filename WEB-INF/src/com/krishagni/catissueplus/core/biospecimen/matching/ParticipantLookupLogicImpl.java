@@ -1,16 +1,20 @@
 
 package com.krishagni.catissueplus.core.biospecimen.matching;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipants;
+import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipant;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
+import com.krishagni.catissueplus.core.common.PlusTransactional;
 
 public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 
@@ -25,39 +29,55 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 	}
 
 	@Override
-	public MatchedParticipants getMatchingParticipants(ParticipantDetail participant) {
+	@PlusTransactional
+	public List<MatchedParticipant> getMatchingParticipants(ParticipantDetail participant) {
+		Map<Participant, List<String>> matchedParticipants = new HashMap<Participant, List<String>>();
+		
 		ParticipantDao dao = daoFactory.getParticipantDao();
-				
 		if (StringUtils.isNotBlank(participant.getEmpi())) {
-			Participant matched = dao.getByEmpi(participant.getEmpi());
+			Participant matched = dao.getByEmpi(participant.getEmpi());			
 			if (matched != null) {
-				List<ParticipantDetail> result = ParticipantDetail.from(Collections.singletonList(matched), false);
-				return new MatchedParticipants("empi", result);
+				addParticipant(matchedParticipants, matched, "empi");
 			}
 		}
 		
 		if (StringUtils.isNotBlank(participant.getSsn())) {
 			Participant matched = dao.getBySsn(participant.getSsn());
 			if (matched != null) {
-				List<ParticipantDetail> result = ParticipantDetail.from(Collections.singletonList(matched), false);
-				return new MatchedParticipants("ssn", result);
+				addParticipant(matchedParticipants, matched, "ssn");
 			}
 		}
 		
 		if (participant.getPmis() != null) {
 			List<Participant> matched = dao.getByPmis(participant.getPmis());
-			if (matched != null && !matched.isEmpty()) {
-				return new MatchedParticipants("pmi", ParticipantDetail.from(matched, false));
+			if (CollectionUtils.isNotEmpty(matched)) {
+				addParticipant(matchedParticipants, matched, "pmi");
 			}
 		}
 		
 		if (StringUtils.isNotBlank(participant.getLastName()) && participant.getBirthDate() != null) {
 			List<Participant> matched = dao.getByLastNameAndBirthDate(participant.getLastName(), participant.getBirthDate());
-			if (matched != null && !matched.isEmpty()) {
-				return new MatchedParticipants("lnameAndDob", ParticipantDetail.from(matched, false));
+			if (CollectionUtils.isNotEmpty(matched)) {
+				addParticipant(matchedParticipants, matched, "lnameAndDob");
 			}
 		}
 		
-		return new MatchedParticipants("none", Collections.<ParticipantDetail>emptyList());		
+		return MatchedParticipant.from(matchedParticipants);		
+	}
+	
+	private void addParticipant(Map<Participant, List<String>> matchedParticipants, List<Participant> participants, String matchedAttr) {
+		for (Participant participant : participants) {
+			addParticipant(matchedParticipants, participant, matchedAttr);
+		}
+	}
+	
+	private void addParticipant(Map<Participant, List<String>> matchedParticipants, Participant participant, String matchedAttr) {
+		List<String> matchedAttrs = matchedParticipants.get(participant);
+		if (matchedAttrs == null) {
+			matchedAttrs = new ArrayList<String>();
+			matchedParticipants.put(participant, matchedAttrs);
+		}
+		
+		matchedAttrs.add(matchedAttr);
 	}
 }

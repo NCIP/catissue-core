@@ -1,14 +1,16 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services;
 
+import java.util.List;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipants;
+import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipant;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public interface ParticipantService {
-	public ResponseEvent<MatchedParticipants> getMatchingParticipants(RequestEvent<ParticipantDetail> req);
+	public ResponseEvent<List<MatchedParticipant>> getMatchingParticipants(RequestEvent<ParticipantDetail> req);
 	
 	public ResponseEvent<ParticipantDetail> getParticipant(RequestEvent<Long> req);
 

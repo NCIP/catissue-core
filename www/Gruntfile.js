@@ -165,10 +165,17 @@ module.exports = function (grunt) {
           ]
       },
       styles: {
-        expand: true,
-        cwd: '<%= config.app %>/styles',
-        dest: '.tmp/styles/',
-        src: '**/*.css'
+        files: [{
+          expand: true,
+          cwd: '<%= config.app %>/styles',
+          dest: '.tmp/styles/',
+          src: '**/*.css'
+        }, {
+          expand: true,
+          cwd: '<%= config.app %>/custom-modules',
+          dest: '.tmp/styles/',
+          src: '**/*.css'
+        }]
       }
     },
 

@@ -25,6 +25,10 @@ angular.module('os.biospecimen.models.cpr',
       return CollectionProtocolRegistration.query(params);
     };
 
+    CollectionProtocolRegistration.prototype.getMrnSites = function() {
+      return !this.participant ? undefined : this.participant.getMrnSites();
+    };
+
     CollectionProtocolRegistration.prototype.$saveProps = function() {
       this.participant = this.participant.$saveProps();
       return this;

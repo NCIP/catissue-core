@@ -5,9 +5,8 @@ angular.module('os.biospecimen.participant.overview', ['os.biospecimen.models'])
     function init() {
       $scope.occurredVisits    = Visit.completedVisits(visits);
       $scope.anticipatedVisits = Visit.anticipatedVisits(visits);
-
       addMaskMarker();
-     }
+    }
 
     function addMaskMarker() {
       if ($scope.cpr.participant.phiAccess) {

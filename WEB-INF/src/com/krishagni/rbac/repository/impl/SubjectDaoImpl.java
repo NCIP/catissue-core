@@ -39,6 +39,18 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
+	public List<SubjectAccess> getAccessList(Long subjectId, String resource, String[] ops, String[] siteNames) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_ACCESS_LIST_BY_SITES)
+				.setLong("subjectId", subjectId)
+				.setString("resource", resource)
+				.setParameterList("operations", ops)
+				.setParameterList("sites", siteNames)
+				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
 	@Override	
 	public List<SubjectAccess> getAccessList(Long subjectId, Long cpId, String resource, String[] ops) {
 		return sessionFactory.getCurrentSession()
@@ -53,6 +65,8 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
 	private static final String FQN = Subject.class.getName();
 
 	private static final String GET_ACCESS_LIST = FQN + ".getAccessList";
+	
+	private static final String GET_ACCESS_LIST_BY_SITES = FQN + ".getAccessListBySites";
 	
 	private static final String GET_ACCESS_LIST_BY_CP = FQN + ".getAccessListByCp";
 	
