@@ -1840,4 +1840,10 @@
       columnNames="PARTICIPANT_ID, SITE_ID"/>
   </changeSet>  
 
+  <changeSet author="vpawar" id="Added import job parameters column for dynamic schemas">
+    <addColumn tableName="OS_BULK_IMPORT_JOBS">
+      <column name="PARAMS" type="${text.type}(512)"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

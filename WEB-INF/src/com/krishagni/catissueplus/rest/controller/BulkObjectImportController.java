@@ -6,12 +6,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.importer.events.ImportDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportJobDetail;
+import com.krishagni.catissueplus.core.importer.events.ObjectSchemaCriteria;
 import com.krishagni.catissueplus.core.importer.repository.ListImportJobsCriteria;
 import com.krishagni.catissueplus.core.importer.services.ImportService;
 
@@ -42,17 +45,35 @@ public class BulkObjectImportController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody		
 	public void getInputFileTemplate(
-			@RequestParam(value = "schema", required = true) 
+			@RequestParam(value = "schema", required = true)
 			String schemaName,
 			
+			@RequestParam(value = "formName", required = false)
+			String formName,
+			
+			@RequestParam(value = "entityType", required = false)
+			String entityType,
+
 			HttpServletResponse httpResp) {
 		
-		RequestEvent<String> req = new RequestEvent<String>(schemaName);
+		Map<String, Object> params = new HashMap<String, Object>();
+		String filename = schemaName + ".csv";
+		if (StringUtils.isNotBlank(formName) && StringUtils.isNotBlank(entityType)) {
+			params.put("formName", formName);
+			params.put("entityType", entityType);			
+			filename = formName + "_" + entityType + ".csv";
+		}
+		
+		ObjectSchemaCriteria detail = new ObjectSchemaCriteria();
+		detail.setObjectType(schemaName);		
+		detail.setParams(params);
+		
+		RequestEvent<ObjectSchemaCriteria> req = new RequestEvent<ObjectSchemaCriteria>(detail);
 		ResponseEvent<String> resp = importSvc.getInputFileTemplate(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		httpResp.setContentType("application/csv");
-		httpResp.setHeader("Content-Disposition", "attachment;filename=" + schemaName + ".csv");
+		httpResp.setHeader("Content-Disposition", "attachment;filename=" + filename);
 			
 		try {
 			httpResp.getOutputStream().write(resp.getPayload().getBytes());

@@ -1,11 +1,16 @@
 package com.krishagni.catissueplus.core.importer.events;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ImportDetail {
 	private String objectType;
 	
 	private String importType;
 	
 	private String inputFileId;
+	
+	private Map<String, Object> objectParams = new HashMap<String, Object>();
 
 	public String getObjectType() {
 		return objectType;
@@ -29,5 +34,13 @@ public class ImportDetail {
 
 	public void setInputFileId(String inputFileId) {
 		this.inputFileId = inputFileId;
+	}
+
+	public Map<String, Object> getObjectParams() {
+		return objectParams;
+	}
+
+	public void setObjectParams(Map<String, Object> objectParams) {
+		this.objectParams = objectParams;
 	}
 }

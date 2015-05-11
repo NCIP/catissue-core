@@ -38,7 +38,9 @@ public class ObjectReader implements Closeable {
 		try {
 			this.csvReader = CsvFileReader.createCsvFileReader(filePath, true);
 			this.schema = schema;
-			this.objectClass = Class.forName(schema.getRecord().getName());
+			if (StringUtils.isNotBlank(schema.getRecord().getName())) {
+				this.objectClass = Class.forName(schema.getRecord().getName());
+			}			
 			this.dateFmt = dateFmt;
 			this.timeFmt = timeFmt;
 		} catch (Exception e) {
@@ -77,7 +79,11 @@ public class ObjectReader implements Closeable {
 	private Object parseObject() {
 		try {
 			Map<String, Object> objectProps = parseObject(schema.getRecord(), "");
-			return new ObjectMapper().convertValue(objectProps, objectClass);
+			if (objectClass == null) {
+				return objectProps;
+			} else {
+				return new ObjectMapper().convertValue(objectProps, objectClass);
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw OpenSpecimenException.userError(ImportJobErrorCode.RECORD_PARSE_ERROR);

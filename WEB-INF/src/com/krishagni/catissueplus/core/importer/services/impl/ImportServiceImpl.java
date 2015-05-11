@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
@@ -42,6 +43,7 @@ import com.krishagni.catissueplus.core.importer.domain.ObjectSchema;
 import com.krishagni.catissueplus.core.importer.events.ImportDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportJobDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportObjectDetail;
+import com.krishagni.catissueplus.core.importer.events.ObjectSchemaCriteria;
 import com.krishagni.catissueplus.core.importer.repository.ImportJobDao;
 import com.krishagni.catissueplus.core.importer.repository.ListImportJobsCriteria;
 import com.krishagni.catissueplus.core.importer.services.ImportService;
@@ -198,11 +200,12 @@ public class ImportServiceImpl implements ImportService {
 	}
 	
 	@Override
-	public ResponseEvent<String> getInputFileTemplate(RequestEvent<String> req) {
+	public ResponseEvent<String> getInputFileTemplate(RequestEvent<ObjectSchemaCriteria> req) {
 		try {
-			ObjectSchema schema = schemaFactory.getSchema(req.getPayload());
+			ObjectSchemaCriteria detail = req.getPayload();
+			ObjectSchema schema = schemaFactory.getSchema(detail.getObjectType(), detail.getParams());
 			if (schema == null) {
-				return ResponseEvent.response(""); // TODO: return schema not found
+				return ResponseEvent.userError(ImportJobErrorCode.OBJ_SCHEMA_NOT_FOUND);
 			}
 			
 			return ResponseEvent.response(ObjectReader.getSchemaFields(schema));
@@ -267,6 +270,7 @@ public class ImportServiceImpl implements ImportService {
 		job.setCreationTime(Calendar.getInstance().getTime());
 		job.setName(detail.getObjectType());
 		job.setStatus(Status.IN_PROGRESS);
+		job.setParams(detail.getObjectParams());
 		
 		String importType = detail.getImportType();
 		job.setType(StringUtils.isBlank(importType) ? Type.CREATE : Type.valueOf(importType));		
@@ -309,7 +313,7 @@ public class ImportServiceImpl implements ImportService {
 		@Override
 		public void run() {
 			SecurityContextHolder.getContext().setAuthentication(auth);			
-			ObjectSchema   schema   = schemaFactory.getSchema(job.getName());
+			ObjectSchema   schema   = schemaFactory.getSchema(job.getName(), job.getParams());
 			ObjectImporter<Object> importer = importerFactory.getImporter(job.getName());
 			
 			ObjectReader objReader = null;
@@ -337,7 +341,7 @@ public class ImportServiceImpl implements ImportService {
 							break;
 						}
 											
-						errMsg = importObject(importer, object);
+						errMsg = importObject(importer, object, job.getParams());
 					} catch (OpenSpecimenException ose) {						
 						errMsg = getMessage(ose);						
 					}
@@ -370,11 +374,12 @@ public class ImportServiceImpl implements ImportService {
 			}
 		}
 		
-		private String importObject(final ObjectImporter<Object> importer, Object object) {
+		private String importObject(final ObjectImporter<Object> importer, Object object, Map<String, Object> params) {
 			try {
 				ImportObjectDetail<Object> detail = new ImportObjectDetail<Object>();
 				detail.setCreate(job.getType() == Type.CREATE);
 				detail.setObject(object);
+				detail.setParams(params);
 				
 				final RequestEvent<ImportObjectDetail<Object>> req = new RequestEvent<ImportObjectDetail<Object>>(detail);
 				ResponseEvent<Object> resp = txTmpl.execute(

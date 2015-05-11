@@ -7,6 +7,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.importer.events.ImportDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportJobDetail;
+import com.krishagni.catissueplus.core.importer.events.ObjectSchemaCriteria;
 import com.krishagni.catissueplus.core.importer.repository.ListImportJobsCriteria;
 
 public interface ImportService {
@@ -20,5 +21,5 @@ public interface ImportService {
 	
 	public ResponseEvent<ImportJobDetail> importObjects(RequestEvent<ImportDetail> req);
 	
-	public ResponseEvent<String> getInputFileTemplate(RequestEvent<String> schemaName);
+	public ResponseEvent<String> getInputFileTemplate(RequestEvent<ObjectSchemaCriteria> req);
 }

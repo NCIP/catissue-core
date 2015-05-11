@@ -474,6 +474,15 @@
         <value>com/krishagni/catissueplus/core/biospecimen/schema/specimen.xml</value>
       </list>
     </property>
+
+    <property name="schemaBuilders">
+      <map>
+        <entry key="extensions">
+          <bean class="com.krishagni.catissueplus.core.de.services.impl.ExtensionSchemaBuilder">
+          </bean>
+        </entry>
+      </map>
+    </property>
   </bean>
 
   <bean id="instituteImporter" class="com.krishagni.catissueplus.core.administrative.services.impl.InstituteImporter">
@@ -513,6 +522,12 @@
     <property name="specimenSvc" ref="specimenSvc"/>
   </bean>
 
+  <bean id="extensionImporter" class="com.krishagni.catissueplus.core.de.services.impl.ExtensionsImporter">
+    <property name="formSvc" ref="formSvc"/>
+    <property name="formDao" ref="formDao"/>
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+
   <bean id="objectImporterFactory" class="com.krishagni.catissueplus.core.importer.services.impl.ObjectImporterFactoryImpl">
     <property name="importersMap">
       <map>
@@ -525,6 +540,7 @@
         <entry key="participant"      value-ref="participantImporter"/>
         <entry key="visit"            value-ref="visitImporter"/>
         <entry key="specimen"         value-ref="specimenImporter"/>
+        <entry key="extensions"       value-ref="extensionImporter"/>
       </map>
     </property>
   </bean>
