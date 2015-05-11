@@ -1,0 +1,21 @@
+import org.apache.tools.ant.filters.ReplaceTokens;
+
+task deploy(type: Copy, dependsOn: 'war') {
+  delete jbossHome + "/server/default/deploy/openspecimen.war"
+  delete jbossHome + "/server/default/deploy/openspecimen-ds.xml"
+  
+  from war
+  into jbossHome
+  
+  def db_mysql = 'jdbc:mysql://' + database_host + ':' + database_port + '/' + database_name
+  def db_oracle = 'jdbc:oracle:thin:@' + database_host + ':' + database_port + ':' + database_name
+  
+  def database_url = (database_type == "mysql") ? db_mysql : db_oracle 
+  
+  from ('./') {
+    include 'openspecimen-ds.xml'
+    filter(ReplaceTokens, tokens: [database_url :  database_url, username : database_username, 
+                                   password : database_password, database_driver : database_driver])
+  }
+  into jbossHome + "/server/default/deploy"
+}

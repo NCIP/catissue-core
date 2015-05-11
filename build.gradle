@@ -13,6 +13,30 @@ group = 'com.krishagni'
 
 description = "openspecimen"
 
+def env = 'dev';
+def envScript;
+
+if (project.hasProperty("environment")) {
+  env = environment
+}
+
+if (env == 'prod') {
+  envScript = file("prod.gradle")
+  if (!envScript.exists()) {
+    throw new GradleException("Unknown environment: $environment")
+  }
+} else if (env == 'test') {
+  envScript = file("test.gradle")
+  if (!envScript.exists()) {
+    throw new GradleException("Unknown environment: $environment")
+  }
+} else {
+  envScript = file("dev.gradle")
+  if (!envScript.exists()) {
+    throw new GradleException("Unknown environment: $environment")
+  }
+}
+
 repositories {
   maven { url "http://repo.maven.apache.org/maven2" }
 }
@@ -39,14 +63,7 @@ dependencies {
   compile fileTree(dir: 'lib', include: ['DynamicExtensions.jar', 'kxml2-min-2.3.0.jar'])
   
   providedCompile group: 'javax.servlet', name: 'servlet-api', version:'2.5'
-  providedRuntime group: 'org.slf4j', name: 'slf4j-api', version:'1.6.1'
-  providedRuntime group: 'org.slf4j', name: 'slf4j-log4j12', version:'1.6.1'
-  providedRuntime group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.0-api', version:'1.0.1.Final'
-  providedRuntime group: 'org.hibernate', name: 'hibernate-validator', version:'4.2.0.Final'
-  providedRuntime group: 'org.mockito', name: 'mockito-all', version:'1.9.5'
-  providedRuntime group: 'mysql', name: 'mysql-connector-java', version:'5.0.8'
   
-  compile group: 'kxml2', name: 'kxml2', version:'2.3.0'
   compile group: 'antlr', name: 'antlr', version:'2.7.7'
   compile group: 'org.antlr', name: 'antlr4', version:'4.1'
   compile group: 'aopalliance', name: 'aopalliance', version:'1.0'
@@ -177,24 +194,6 @@ war {
   }
 }
 
-task deploy(type: Copy, dependsOn: 'war') {
-  delete jbossHome + "/server/default/deploy/openspecimen.war"
-  delete jbossHome + "/server/default/deploy/openspecimen-ds.xml"
-  
-  from war
-  into jbossHome
-  
-  def db_mysql = 'jdbc:mysql://' + database_host + ':' + database_port + '/' + database_name
-  def db_oracle = 'jdbc:oracle:thin:@' + database_host + ':' + database_port + ':' + database_name
-  
-  def database_url = (database_type == "mysql") ? db_mysql : db_oracle 
-  
-  from ('./') {
-    include 'openspecimen-ds.xml'
-    filter(ReplaceTokens, tokens: [database_url :  database_url, username : database_username, 
-                                   password : database_password, database_driver : database_driver])
-  }
-  into jbossHome + "/server/default/deploy"
-}
-
 build.dependsOn ':grunt_project:grunt_build'
+
+apply from: envScript
