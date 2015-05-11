@@ -123,8 +123,8 @@ dependencies {
 compileJava {
   dependsOn configurations.ajc.getTaskDependencyFromProjectDependency(true, "compileJava")
   
-  sourceCompatibility="1.6"
-  targetCompatibility="1.6"
+  sourceCompatibility=sourceCompatibilityValue
+  targetCompatibility=targetCompatibilityValue
 
   doLast{
       ant.taskdef(resource:"org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties", classpath: configurations.ajc.asPath)
@@ -152,7 +152,6 @@ war {
   exclude 'WEB-INF/test'
   exclude 'jss'
   
-  
   from ('./') {
     include 'ngweb/**'
     include 'WEB-INF/'
@@ -175,8 +174,6 @@ war {
   
   from ('./WEB-INF/resources/') {
     include 'application.properties'
-    exclude 'email-templates/**'
-    exclude 'ng-file-templates/**'
     
     def datasource_dialect = (database_type == "mysql") ? datasource_mysql_dialect : datasource_oracle_dialect
     filter(ReplaceTokens, tokens: [datasource_jndi : datasource_jndi, datasource_type : datasource_type, datasource_dialect : datasource_dialect])
