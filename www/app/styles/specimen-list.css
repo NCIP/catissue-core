@@ -1,0 +1,62 @@
+.os-specimen-list {
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.os-specimen-list-selected-list {
+   color: #DD4B39;
+}
+
+.os-specimen-list-selected-list:before {
+  content: ' ';
+  display: block;
+  border-left: 3px solid #DD4B39;
+  position: absolute;
+  height: 20px;
+}
+
+.os-specimen-list .list {
+  padding: 2px 8px;
+}
+
+.os-specimen-list .list div:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 170px;
+  white-space: nowrap;
+  padding-left: 10px;
+}
+
+.os-specimen-list .list:hover {
+  background-color: #eee;
+  cursor: pointer;
+}
+
+.os-specimen-list .list .btn {
+  border: 0px;
+}
+
+.os-specimen-select-cb {
+  height: 16px;
+  margin-left: -8px;
+  margin-top: 4px;
+  margin-right: 8px;
+  position: absolute;
+}
+
+.os-list-specimens-section {
+  height: 180px;
+  margin-bottom: 20px;
+  width: 100%;
+  overflow:auto;
+}
+
+.os-list-users-section {
+  height: 100px;
+}
+
+.os-list-users-section .users-select-container {
+  height: 80px;
+}
+

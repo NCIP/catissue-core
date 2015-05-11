@@ -14,6 +14,7 @@
     "reports": "Reports",
     "containers": "Containers",
     "forms": "Forms",
+    "specimen_lists": "Specimen Lists",
 
     "cp_desc": "Create, update SOP of visits and specimens",
     "dp_desc": "Create, update procedures for distributing specimens",
@@ -975,5 +976,31 @@
       "CREATE": "Create",
       "UPDATE": "Update"
     }
-  }
+  },
+
+  "specimen_list": {
+    "new_specimen_list": "New Specimen List",
+    "update_specimen_list": "Update Specimen List",
+    "specimen_list": "Specimen List",
+    "list_name": "List Name",
+    "list": "Specimens",
+    "no_specimens_selected": "No specimens selected. Please select at least one specimen.",
+    "share_list_with_users": "Share list with following users",
+    "users": "Users",
+    "my_lists": "My Lists",
+    "shared_lists": "Shared Lists",
+    "info": "Information",
+    "no_specimens": "There are no specimens to show in selected specimen list.",
+    "visit_name": "Visit Name",
+    "label": "Label (Barcode)",
+    "parent_label": "Parent Label",
+    "class_type": "Class (Type)",
+    "quantity": "Quantity",
+    "lineage": "Lineage",
+    "remove_specimens": "Removing Specimens Form {{name}} list",
+    "confirm_remove_specimens": "Are you sure you want to remove selected specimens from {{name}} list?",
+    "list_updated": "Specimen List  '{{name}}' updated",
+    "list_deleted": "Specimen List '{{name}}' deleted"
+   }
+
 }

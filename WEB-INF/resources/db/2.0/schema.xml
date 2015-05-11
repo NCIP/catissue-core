@@ -1840,4 +1840,9 @@
       columnNames="PARTICIPANT_ID, SITE_ID"/>
   </changeSet>  
 
+  <changeSet author="vlonushte" id="Adding deleted on column to user table">
+    <addColumn tableName="CATISSUE_SPECIMENLIST_TAGS">
+      <column name="DELETED_ON" type="${nullable.ts.type}" defaultValue="null"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>
