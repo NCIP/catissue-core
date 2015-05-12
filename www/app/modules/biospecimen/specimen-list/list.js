@@ -34,15 +34,16 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
 
     function removeSpecimensFromList() {
       var data = {
-        list: $scope.lists.selectedList,
+        id: $scope.lists.selectedList.id,
         specimens: $scope.selectedSpecimens,
         operation: 'REMOVE'
       }
 
-      var specimen = $scope.lists.selectedList.newSpecimen(data);
-      specimen.$saveOrUpdate().then(function(specimens) {
+      var specimenList = new SpecimenList(data);
+      specimenList.updateSpecimens().then(function(specimens) {
         $scope.specimens = specimens;
         $scope.selectedSpecimens = [];
+        Alerts.success('specimen_list.specimens_removed', {name: $scope.lists.selectedList.name});
       })
     }
 
@@ -66,44 +67,12 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
     };
 
     $scope.confirmRemoveSpecimens = function () {
-      var props = {
+      DeleteUtil.confirmDelete({
+        entity: $scope.lists.selectedList,
         templateUrl: 'modules/biospecimen/specimen-list/confirm-remove-specimens.html',
         delete: removeSpecimensFromList
-      }
-      DeleteUtil.confirmDelete($scope.lists.selectedList, props);
-    }
-
-    $scope.editList = function(list) {
-      var modalInstance = $modal.open({
-        templateUrl: 'modules/biospecimen/specimen-list/addedit-list.html',
-        controller: 'AddEditSpecimenListCtrl',
-        resolve: {
-          list: function() {
-            return SpecimenList.getById(list.id);
-          }
-        }
       });
-
-      modalInstance.result.then(
-        function(result) {
-          $scope.selectedSpecimens = [];
-          if (result) {
-            $scope.lists.selectedList = list;
-            $scope.specimens = result.specimens;
-            Alerts.success("specimen_list.list_updated", {name: list.name});
-          } else {
-            var idx = $scope.lists.myLists.indexOf(list);
-            $scope.lists.myLists.splice(idx, 1);
-            if ($scope.lists.selectedList == list) {
-              $scope.lists.selectedList = undefined;
-              $scope.specimens = [];
-            }
-            Alerts.success("specimen_list.list_deleted", {name: list.name});
-          }
-        }
-      );
-    };
+    }
 
     init();
   });
-

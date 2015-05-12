@@ -1,5 +1,5 @@
 angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
-  .controller('AddEditSpecimenListCtrl', function($scope, $modalInstance, list, SpecimenList) {
+  .controller('AddEditSpecimenListCtrl', function($scope, $state, list, SpecimenList) {
     $scope.list = list;
 
     $scope.saveOrUpdateList = function() {
@@ -13,27 +13,17 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
  
       specimenList.$saveOrUpdate().then(
         function(savedList) {
-          $modalInstance.close(savedList);
+          $state.go('specimen-list');
         }
       );
-    
     }
     
     $scope.deleteList = function() {
       $scope.list.$remove().then(
         function() {
-          $modalInstance.close(null);
+          $state.go('specimen-list');
         }
       );
     };
-
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
-
-    $scope.removeSpecimen = function(specimen, idx) {
-      $scope.list.specimens.splice(idx, 1);
-    };
-
   }
 );

@@ -1,5 +1,32 @@
+.os-list-container .row {
+  display: flex;
+  height: 98%;
+}
+
+.os-list-container .os-col-20 {
+  flex : 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.os-list-container .os-col-80 {
+  flex: 8;
+}
+
+.os-list-container .os-col-20 > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.os-list-container .os-col-20 .os-table.os-table-condensed {
+  margin-top: 5px;
+  margin-bottom: 0px;
+  flex: none;
+}
+
 .os-specimen-list {
-  max-height: 200px;
+  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -36,27 +63,3 @@
 .os-specimen-list .list .btn {
   border: 0px;
 }
-
-.os-specimen-select-cb {
-  height: 16px;
-  margin-left: -8px;
-  margin-top: 4px;
-  margin-right: 8px;
-  position: absolute;
-}
-
-.os-list-specimens-section {
-  height: 180px;
-  margin-bottom: 20px;
-  width: 100%;
-  overflow:auto;
-}
-
-.os-list-users-section {
-  height: 100px;
-}
-
-.os-list-users-section .users-select-container {
-  height: 80px;
-}
-

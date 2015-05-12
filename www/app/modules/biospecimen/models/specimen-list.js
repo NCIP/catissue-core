@@ -1,29 +1,25 @@
 angular.module('os.biospecimen.models.specimenlist', ['os.common.models'])
   .factory('SpecimenList', function(osModel, $http) {
-    var SpecimenList = 
-      osModel(
-        'specimen-lists',
-        function(specimenList) {
-          specimenList.SpecimenModel = osModel('specimen-lists/' + specimenList.$id() + '/specimens');
-          specimenList.SpecimenModel.prototype.$saveOrUpdate = updateSpecimenList;
-        }
-      );
+    var SpecimenList = osModel('specimen-lists');
 
-    function updateSpecimenList() {
-      var list = this.list;
-      var specimenLabels = this.specimens.map(function(spec) {return spec.label;})
-      var param = "?operation=" + this.operation;
-
-      return $http.put(list.SpecimenModel.url() + param, specimenLabels).then(list.SpecimenModel.modelArrayRespTransform);
+    function getSpecimensUrl(id) {
+      return SpecimenList.url() + id + '/specimens';
     }
 
     SpecimenList.prototype.getSpecimens = function() {
-      return this.SpecimenModel.query();
+      return $http.get(getSpecimensUrl(this.$id())).then(
+        function(result) {
+          return result.data;
+        }
+      );
     };
 
-    SpecimenList.prototype.newSpecimen = function(data) {
-      return new this.SpecimenModel(data);
-    };
+    SpecimenList.prototype.updateSpecimens = function() {
+      var specimenLabels = this.specimens.map(function(spec) {return spec.label;})
+      var param = "?operation=" + this.operation;
+
+      return $http.put(getSpecimensUrl(this.$id()) + param, specimenLabels).then(SpecimenList.noTransform);
+    }
 
     return SpecimenList;
   });

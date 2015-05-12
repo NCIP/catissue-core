@@ -31,11 +31,11 @@ angular.module('os.common.delete')
       });
     }
 
-    function confirmDelete(object, props) {
+    function confirmDelete(opts) {
       var modalInstance = $modal.open({
-        templateUrl: props.templateUrl,
+        templateUrl: opts.templateUrl,
         controller: function($scope, $modalInstance) {
-          $scope.entity = object;
+          $scope.entity = opts.entity;
 
           $scope.ok = function() {
             $modalInstance.close(true);
@@ -49,7 +49,7 @@ angular.module('os.common.delete')
 
       modalInstance.result.then(
         function() {
-          props.delete();
+          opts.delete();
         }
       );
     };
