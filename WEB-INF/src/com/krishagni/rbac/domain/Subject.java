@@ -6,6 +6,10 @@ import java.util.Set;
 
 import org.hibernate.Session;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
@@ -106,40 +110,45 @@ public class Subject {
 	
 	public SubjectRole getExistingRole(SubjectRoleDetail srd) {
 		for (SubjectRole sr : getRoles()) {
-
-			if (!sr.getRole().getId().equals(srd.getRole().getId())) {
+			if (!sr.getRole().getName().equals(srd.getRole().getName())) {
 				continue;
 			}
 
-			boolean cpEquals = false;
-			if (sr.getCollectionProtocol() == null && srd.getCollectionProtocol() == null) {
-				cpEquals = true;
-			} else if (sr.getCollectionProtocol() != null && srd.getCollectionProtocol() != null && 
-						sr.getCollectionProtocol().getShortTitle().equals(srd.getCollectionProtocol().getShortTitle())) {
-				cpEquals = true;
-			}
-						
-			if (!cpEquals) {
+			if (!isEqualCps(sr.getCollectionProtocol(), srd.getCollectionProtocol())) {
 				continue;
 			}
 			
-			boolean siteEquals = false;
-			if (sr.getSite() == null && srd.getSite() == null) {
-				siteEquals = true;
-			} else if (sr.getSite() != null && srd.getSite() != null &&
-						sr.getSite().getName().equals(srd.getSite().getName())) {
-				siteEquals = true;
-			}
-			
-			if (!siteEquals) {
+			if (!isEqualSites(sr.getSite(), srd.getSite())) {
 				continue;
 			}
-			
+					
 			return sr;
-			
 		}
 		
 		return null;
 	}
 	
+	
+	private boolean isEqualCps(CollectionProtocol cp1, CollectionProtocolSummary cp2) {
+		boolean equals = false;
+		if (cp1 == null && cp2 == null) {
+			equals = true;
+		} else if (cp1 != null && cp2 != null) {
+			equals = cp1.getShortTitle().equals(cp2.getShortTitle());
+		}
+
+		return equals;
+	}
+
+	private boolean isEqualSites(Site site1, SiteDetail site2) {
+		boolean equals = false;
+		if (site1 == null && site2 == null) {
+			equals = true;
+		} else if (site1 != null && site2 != null) {
+			equals = site1.getName().equals(site2.getName());
+		}
+
+		return equals;
+	}
+
 }

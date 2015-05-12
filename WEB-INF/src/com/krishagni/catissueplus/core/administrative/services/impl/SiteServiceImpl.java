@@ -33,7 +33,6 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.events.RoleDetail;
-import com.krishagni.rbac.events.RoleQueryCriteria;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 import com.krishagni.rbac.events.SubjectRoleOp;
 import com.krishagni.rbac.events.SubjectRoleOp.OP;
@@ -220,13 +219,9 @@ public class SiteServiceImpl implements SiteService {
 	}
 	
 	private RequestEvent<SubjectRoleOp> getSubjectRoleOpEvent(Site site, User user, OP op) {
-		RoleQueryCriteria criteria = new RoleQueryCriteria();
-		criteria.setName("Administrator");
-		RoleDetail role = rbacSvc.getRole(new RequestEvent<RoleQueryCriteria>(criteria)).getPayload();
-		if (role == null) {
-			OpenSpecimenException.userError(RbacErrorCode.ROLE_NOT_FOUND);
-		}
-		
+		RoleDetail role = new RoleDetail();
+		role.setName("Administrator");
+				
 		SubjectRoleDetail srDetail = new SubjectRoleDetail();
 		srDetail.setSite(SiteDetail.from(site));
 		srDetail.setRole(role);

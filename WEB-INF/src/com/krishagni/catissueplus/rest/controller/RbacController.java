@@ -21,7 +21,6 @@ import com.krishagni.rbac.events.OperationDetail;
 import com.krishagni.rbac.events.PermissionDetail;
 import com.krishagni.rbac.events.ResourceDetail;
 import com.krishagni.rbac.events.RoleDetail;
-import com.krishagni.rbac.events.RoleQueryCriteria;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 import com.krishagni.rbac.events.SubjectRoleOp;
 import com.krishagni.rbac.events.SubjectRoleOp.OP;
@@ -210,9 +209,7 @@ public class RbacController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public RoleDetail getRole(@PathVariable Long id) {
-		RoleQueryCriteria crit = new RoleQueryCriteria();
-		crit.setId(id);
-		ResponseEvent<RoleDetail> resp = rbacSvc.getRole(getRequest(crit));
+		ResponseEvent<RoleDetail> resp = rbacSvc.getRole(getRequest(id));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

@@ -43,7 +43,6 @@ import com.krishagni.rbac.events.ResourceDetail;
 import com.krishagni.rbac.events.ResourceInstanceOpDetails;
 import com.krishagni.rbac.events.RoleAccessControlDetails;
 import com.krishagni.rbac.events.RoleDetail;
-import com.krishagni.rbac.events.RoleQueryCriteria;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 import com.krishagni.rbac.events.SubjectRoleOp;
 import com.krishagni.rbac.events.SubjectRolesList;
@@ -298,16 +297,9 @@ public class RbacServiceImpl implements RbacService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<RoleDetail> getRole(RequestEvent<RoleQueryCriteria> req) {
+	public ResponseEvent<RoleDetail> getRole(RequestEvent<Long> req) {
 		try {
-			RoleQueryCriteria criteria = req.getPayload();
-			Role role = null;
-			if (criteria.getId() != null) {
-				role = daoFactory.getRoleDao().getById(req.getPayload().getId(), null);
-			} else if (StringUtils.isNotBlank(criteria.getName())) {
-				role = getRole(req.getPayload().getName());
-			}
-			
+			Role role = daoFactory.getRoleDao().getById(req.getPayload(), null);
 			if (role == null) {
 				return ResponseEvent.userError(RbacErrorCode.ROLE_NOT_FOUND);
 			}
