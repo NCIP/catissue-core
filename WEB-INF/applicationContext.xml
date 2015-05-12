@@ -146,6 +146,7 @@
     <property name="cpFactory" ref="cpFactory"/>
     <property name="cpeFactory" ref="cpeFactory"/>
     <property name="srFactory" ref="srFactory"/>
+    <property name="rbacSvc" ref="rbacSvc"/>
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   
