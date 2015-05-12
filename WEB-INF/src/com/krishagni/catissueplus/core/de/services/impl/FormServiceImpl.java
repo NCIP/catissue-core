@@ -91,17 +91,21 @@ public class FormServiceImpl implements FormService {
     @Override
     @PlusTransactional
 	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<FormType> req) {
-		switch (req.getPayload()) {
-		    case DATA_ENTRY_FORMS:
-			    return ResponseEvent.response(formDao.getAllFormsSummary());
-			    
-		    case SPECIMEN_EVENT_FORMS: 
-		    	return ResponseEvent.response(formDao.getSpecimenEventFormsSummary());
-					    
-		    case QUERY_FORMS:
-		    default:
-		    	return ResponseEvent.response(formDao.getQueryForms());		
-		}		
+		FormType ft = req.getPayload();
+		switch (ft) {
+			case DATA_ENTRY_FORMS:
+				return ResponseEvent.response(formDao.getAllFormsSummary());
+
+			case PARTICIPANT_FORMS:
+			case VISIT_FORMS:
+			case SPECIMEN_FORMS:
+			case SPECIMEN_EVENT_FORMS:
+				return ResponseEvent.response(formDao.getFormsByEntityType(ft.getType()));
+
+			case QUERY_FORMS:
+			default:
+				return ResponseEvent.response(formDao.getQueryForms());
+		}
 	}
 
     @Override

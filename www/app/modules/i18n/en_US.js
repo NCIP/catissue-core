@@ -198,7 +198,8 @@
 
     "bulk_reg_participants": "Bulk Register Participants",
     "bulk_update_participants": "Bulk Update Participants",
-    "updates": "Participant Updates",
+    "part_updates": "Participant Updates",
+    "part_extensions": "Participant Extensions",
     "registrations": "Participant Registrations",
     "registered_cps": "Registered CPs",
     
@@ -243,6 +244,7 @@
     "surgical_path_no": "Surgical Pathology No.",
 
     "bulk_import": "Bulk Import Visits",
+    "visit_extensions": "Visit Extensions",
 
     "status": {
       "pending": "Pending",
@@ -319,6 +321,8 @@
 
     "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
     "bulk_import": "Bulk Import Specimens",
+    "spmn_extensions": "Specimen Extensions",
+    "spmn_events": "Specimen Events",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",
@@ -760,7 +764,12 @@
     "record_deleted": "Extension record deleted",
 
     "deleting_record": "Deleting extension record #{{recordId}} of {{formCaption}}",
-    "confirm_delete_record": " Extension record #{{recordId}} of {{formCaption}} will be deleted forever. Are you sure you want to proceed?"
+    "confirm_delete_record": " Extension record #{{recordId}} of {{formCaption}} will be deleted forever. Are you sure you want to proceed?",
+
+    "bulk_import_participant_extns": "Bulk Import Participant Extensions",
+    "bulk_import_visit_extns": "Bulk Import Visit Extensions",
+    "bulk_import_specimen_extns": "Bulk Import Specimen Extensions",
+    "bulk_import_specimen_events": "Bulk Import Specimen Events"
   },
 
   "delete_entity": {
@@ -941,6 +950,7 @@
 
   "bulk_imports": {
     "job_submitted": "Bulk Import Job {{id}} Submitted",
+    "select_extn": "Select Extension",
     "input_file": "Input Records File",
     "download_input_file_tmpl": "Download Template File",
     "import_type": "Import Type",
@@ -974,6 +984,8 @@
     "import_types": {
       "CREATE": "Create",
       "UPDATE": "Update"
-    }
+    },
+
+    "extension_name": "{{params.formName}} ({{params.entityType}})"
   }
 }

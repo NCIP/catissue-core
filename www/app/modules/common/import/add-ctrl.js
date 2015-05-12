@@ -1,6 +1,9 @@
 
 angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
-  .controller('ImportObjectCtrl', function($scope, $sce, $state, importDetail, Alerts, ImportJob) {
+  .controller('ImportObjectCtrl', function(
+    $scope, $sce, $state, importDetail, 
+    Form, Alerts, ImportJob) {
+
     function init() {
       $scope.importDetail = importDetail;
       $scope.importJobsFileUrl = $sce.trustAsResourceUrl(ImportJob.url() + 'input-file');
@@ -11,8 +14,29 @@ angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
       $scope.importJob = new ImportJob({
         objectType: importDetail.objectType,
         importType: importDetail.importType || 'CREATE',
-        inputFileId: undefined
+        inputFileId: undefined,
+        objectParams: {
+          entityType: importDetail.entityType,
+          formName: undefined
+        }
       });
+
+      $scope.extn = {
+        selectedForm: [],
+        formsList: []
+      }
+
+      if (importDetail.objectType == 'extensions') {
+        Form.listForms(importDetail.entityType).then(
+          function(forms) {
+            $scope.extn.formsList = forms;
+            if (forms.length > 0) {
+              $scope.extn.selectedForm = forms[0];
+              $scope.onFormSelect();
+            }
+          }
+        );
+      }
     }
 
     function submitJob(fileId) {
@@ -31,6 +55,17 @@ angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
           submitJob(resp.fileId);
         }
       );
+    };
+
+    $scope.onFormSelect = function() {
+      var formName = $scope.extn.selectedForm.name;
+      $scope.inputFileTmplUrl  = $sce.trustAsResourceUrl(
+        ImportJob.url() + 'input-file-template?' +
+        'schema=' + importDetail.objectType +
+        '&formName=' + formName +
+        '&entityType=' + importDetail.entityType
+      );
+      $scope.inputJob.objectParams.formName = formName;
     };
 
     init();

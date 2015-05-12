@@ -38,9 +38,16 @@
           <li>
             <a ui-sref="import-biospecimen-objs({objectType: 'participant'})">
               <i class="fa fa-user"></i>
-              <span translate="participant.updates">Participant Updates</span>
+              <span translate="participant.part_updates">Participant Updates</span>
             </a>
           </li>
+          <li>
+            <a ui-sref="import-biospecimen-objs({objectType: 'extensions', entityType: 'Participant'})">
+              <i class="fa fa-copy"></i>
+              <span translate="participant.part_extensions">Participant Extensions</span>
+            </a>
+          </li>
+          <li class="os-divider"></li>
           <li>
             <a ui-sref="import-biospecimen-objs({objectType: 'visit'})">
               <i class="fa fa-calendar"></i>
@@ -48,11 +55,31 @@
             </a>
           </li>
           <li>
+            <a ui-sref="import-biospecimen-objs({objectType: 'extensions', entityType: 'SpecimenCollectionGroup'})">
+              <i class="fa fa-copy"></i>
+              <span translate="visits.visit_extensions">Visit Extensions</span>
+            </a>
+          </li>
+          <li class="os-divider"></li>
+          <li>
             <a ui-sref="import-biospecimen-objs({objectType: 'specimen'})">
               <i class="fa fa-sliders"></i>
               <span translate="specimens.list">Specimens</span>
             </a>
           </li>
+          <li>
+            <a ui-sref="import-biospecimen-objs({objectType: 'extensions', entityType: 'Specimen'})">
+              <i class="fa fa-copy"></i>
+              <span translate="specimens.spmn_extensions">Specimen Extensions</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="import-biospecimen-objs({objectType: 'extensions', entityType: 'SpecimenEvent'})">
+              <i class="fa fa-calendar-o"></i>
+              <span translate="specimens.spmn_events">Specimen Events</span>
+            </a>
+          </li>
+          <li class="os-divider"></li>
           <li>
             <a ui-sref="biospecimen-obj-import-jobs">
               <i class="fa fa-table"></i>
