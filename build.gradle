@@ -138,8 +138,6 @@ dependencies {
 }
 
 compileJava {
-  dependsOn configurations.ajc.getTaskDependencyFromProjectDependency(true, "compileJava")
-  
   sourceCompatibility=sourceCompatibilityValue
   targetCompatibility=targetCompatibilityValue
 
