@@ -300,7 +300,7 @@ angular.module('openspecimen')
       }
 
       $scope.processAliquotLabels = function(input) {
-        var labels = Util.csvToArray($scope.boxData.csLabels, ',');
+        var labels = $scope.boxData.csLabels.split(/,|\t/);
         assignLabels(labels); 
         if ($scope.boxData.ctrl) {
           $scope.boxData.ctrl.draw();
