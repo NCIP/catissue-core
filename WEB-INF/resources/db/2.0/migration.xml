@@ -232,7 +232,7 @@
     <sql>
       drop trigger if exists trg_container_replication
     </sql>
-  </changeSet> 
+  </changeSet>  
   
   <changeSet author="vgaikwad" id="Assign Administrator role to existing site coordinators" dbms="mysql">
     <sql>
@@ -270,12 +270,11 @@
       select identifier into @role_id from rbac_roles where name = 'Principal Investigator';
       
       insert into rbac_subject_roles 
-        (subject_id, role_id, site_id, cp_id, is_implicit) 
+        (subject_id, role_id, cp_id, is_implicit) 
       select 
-        cp.principal_investigator_id, @role_id, scp.site_id, scp.collection_protocol_id, 1  
+        principal_investigator_id, @role_id, identifier, 1  
       from 
-        catissue_site_cp scp
-        inner join catissue_collection_protocol cp on scp.collection_protocol_id = cp.identifier;   
+        catissue_collection_protocol;
     </sql>
   </changeSet>
   
@@ -287,12 +286,11 @@
         select identifier into role_id from rbac_roles where name = 'Principal Investigator';
    
         insert into rbac_subject_roles 
-          (identifier, subject_id, role_id, site_id, cp_id, is_implicit) 
+          (identifier, subject_id, role_id, cp_id, is_implicit) 
         select 
-          rbac_subject_roles_seq.nextval, cp.principal_investigator_id, role_id, scp.site_id, scp.collection_protocol_id, 1  
+          rbac_subject_roles_seq.nextval, principal_investigator_id, role_id, identifier, 1  
         from 
-          catissue_site_cp scp
-          inner join catissue_collection_protocol cp on scp.collection_protocol_id = cp.identifier;
+          catissue_collection_protocol;
       end; 
       /
     </sql>
@@ -303,12 +301,11 @@
       select identifier into @role_id from rbac_roles where name = 'Coordinator';
       
       insert into rbac_subject_roles 
-        (subject_id, role_id, site_id, cp_id, is_implicit) 
+        (subject_id, role_id, cp_id, is_implicit) 
       select 
-        coord.user_id, @role_id, scp.site_id, scp.collection_protocol_id, 1  
+        user_id, @role_id, collection_protocol_id, 1  
       from 
-        catissue_site_cp scp
-        inner join catissue_coll_coordinators coord on scp.collection_protocol_id = coord.collection_protocol_id;   
+        catissue_coll_coordinators;   
     </sql>
   </changeSet>
   
@@ -320,12 +317,11 @@
         select identifier into role_id from rbac_roles where name = 'Coordinator';
    
         insert into rbac_subject_roles 
-          (identifier, subject_id, role_id, site_id, cp_id, is_implicit) 
+          (identifier, subject_id, role_id, cp_id, is_implicit) 
         select 
-          rbac_subject_roles_seq.nextval, coord.user_id, role_id, scp.site_id, scp.collection_protocol_id, 1  
+          rbac_subject_roles_seq.nextval, user_id, role_id, collection_protocol_id, 1  
         from 
-          catissue_site_cp scp
-          inner join catissue_coll_coordinators coord on scp.collection_protocol_id = coord.collection_protocol_id;   
+          catissue_coll_coordinators;
       end;   
       /
     </sql>
