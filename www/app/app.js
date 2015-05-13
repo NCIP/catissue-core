@@ -211,7 +211,7 @@ angular.module('openspecimen', [
     };
 
     $rootScope.global = {
-      defaultDomain: 'openspecimen',
+      defaultDomain: 'openspecimen',	
       filterWaitInterval: 500
     };
 
