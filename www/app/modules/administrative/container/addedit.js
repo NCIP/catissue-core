@@ -7,9 +7,11 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     var allCps = undefined;
     var allSpecimenTypes = undefined;
     var allowedCps = undefined;
+    var parentContainerName = undefined;
 
     function init() {
       $scope.container = container;
+      parentContainerName = container.parentContainerName;
 
       /**
        * Some how the ui-select's multiple option is removing pre-selected items
@@ -181,7 +183,15 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
 
     $scope.save = function() {
       var container = angular.copy($scope.container);
-      container.createdBy = {id: 1}; // TODO: Handle this in server side.
+      if (container.id && container.parentContainerName != parentContainerName) {
+        //
+        // if parent container is changed, we need to invalidate 
+        // existing container position
+        // 
+        //
+        container.position = undefined;
+      }
+
       container.$saveOrUpdate().then(
         function(result) {
           if (!$scope.locationSelected) {
