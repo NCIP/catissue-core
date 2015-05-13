@@ -1,4 +1,0 @@
-rootProject.name = 'openspecimen'
-
-include 'www'
-project(':www').name = 'grunt_project'
