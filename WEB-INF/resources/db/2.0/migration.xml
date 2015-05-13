@@ -232,6 +232,103 @@
     <sql>
       drop trigger if exists trg_container_replication
     </sql>
+  </changeSet> 
+  
+  <changeSet author="vgaikwad" id="Assign Administrator role to existing site coordinators" dbms="mysql">
+    <sql>
+      select identifier into @role_id from rbac_roles where name = 'Administrator';
+      
+      insert into rbac_subject_roles 
+        (subject_id, role_id, site_id, is_implicit) 
+      select 
+        user_id, @role_id, site_id, 1 
+      from 
+        catissue_site_coordinators;
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Assign Administrator role to existing site coordinators" dbms="oracle">
+    <sql endDelimiter="/">
+      declare
+        role_id number;
+      begin
+        select identifier into role_id from rbac_roles where name = 'Administrator';
+
+        insert into rbac_subject_roles
+          (identifier, subject_id, role_id, site_id, is_implicit)
+	select
+          rbac_subject_roles_seq.nextval, user_id, role_id, site_id, 1
+        from
+          catissue_site_coordinators;
+      end;
+      /
+    </sql>
   </changeSet>
   
+  <changeSet author="vgaikwad" id="Assign Principal Investigator role to PI of existing CP's" dbms="mysql">
+    <sql>
+      select identifier into @role_id from rbac_roles where name = 'Principal Investigator';
+      
+      insert into rbac_subject_roles 
+        (subject_id, role_id, site_id, cp_id, is_implicit) 
+      select 
+        cp.principal_investigator_id, @role_id, scp.site_id, scp.collection_protocol_id, 1  
+      from 
+        catissue_site_cp scp
+        inner join catissue_collection_protocol cp on scp.collection_protocol_id = cp.identifier;   
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Assign Principal Investigator role to PI of existing CP's" dbms="oracle">
+    <sql endDelimiter="/">  
+      declare 
+        role_id number;
+      begin 
+        select identifier into role_id from rbac_roles where name = 'Principal Investigator';
+   
+        insert into rbac_subject_roles 
+          (identifier, subject_id, role_id, site_id, cp_id, is_implicit) 
+        select 
+          rbac_subject_roles_seq.nextval, cp.principal_investigator_id, role_id, scp.site_id, scp.collection_protocol_id, 1  
+        from 
+          catissue_site_cp scp
+          inner join catissue_collection_protocol cp on scp.collection_protocol_id = cp.identifier;
+      end; 
+      /
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Assign Coordinator role to coordinators of existing CP's" dbms="mysql">
+    <sql>
+      select identifier into @role_id from rbac_roles where name = 'Coordinator';
+      
+      insert into rbac_subject_roles 
+        (subject_id, role_id, site_id, cp_id, is_implicit) 
+      select 
+        coord.user_id, @role_id, scp.site_id, scp.collection_protocol_id, 1  
+      from 
+        catissue_site_cp scp
+        inner join catissue_coll_coordinators coord on scp.collection_protocol_id = coord.collection_protocol_id;   
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Assign Coordinator role to coordinators of existing CP's" dbms="oracle">
+    <sql endDelimiter="/">
+      declare 
+        role_id number;
+      begin 
+        select identifier into role_id from rbac_roles where name = 'Coordinator';
+   
+        insert into rbac_subject_roles 
+          (identifier, subject_id, role_id, site_id, cp_id, is_implicit) 
+        select 
+          rbac_subject_roles_seq.nextval, coord.user_id, role_id, scp.site_id, scp.collection_protocol_id, 1  
+        from 
+          catissue_site_cp scp
+          inner join catissue_coll_coordinators coord on scp.collection_protocol_id = coord.collection_protocol_id;   
+      end;   
+      /
+    </sql>
+  </changeSet>
+    
 </databaseChangeLog>
