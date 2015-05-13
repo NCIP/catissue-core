@@ -116,7 +116,7 @@
           <span ng-switch-when="true">Auto</span>
           <div ng-switch-default>
             <input type="text" os-md-input name="label" ng-model="specimen.label" 
-              required ng-model-options="{updateOn: 'blur'}" os-unique-specimen-label>
+              required ng-model-options="{updateOn: 'blur', allowInvalid: 'true'}" os-unique-specimen-label>
             <div os-field-error field="sform.label"></div>
           </div>
         </td>

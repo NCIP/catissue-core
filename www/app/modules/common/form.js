@@ -22,6 +22,10 @@ angular.module('os.common.form', [])
           this._form = form;
         };
 
+        this.getForm = function() {
+          return this._form;
+        };
+
         this.isValidForm = function() {
           return !this._form.$invalid;
         };
@@ -58,6 +62,31 @@ angular.module('os.common.form', [])
   })
 
   .directive('osFormSubmit', function(Alerts) {
+    function onSubmit(scope, ctrl, submitHandler) {
+      var form = ctrl.getForm();
+      if (form.$pending) {
+        var pendingWatch = scope.$watch(
+          function() {
+            return form.$pending;
+          },
+
+          function(pending) {
+            if (!pending) {
+              pendingWatch();
+              onSubmit(scope, ctrl, submitHandler);
+            }
+          }
+        );
+      } else {
+        ctrl.formSubmitted(true);
+        if (ctrl.isValidForm()) {
+          scope.$eval(submitHandler);
+        } else {
+          Alerts.error("common.form_validation_error");
+        }
+      }
+    }
+
     return {
       restrict: 'A',
   
@@ -66,15 +95,8 @@ angular.module('os.common.form', [])
       priority: 1,
 
       link: function(scope, element, attrs, ctrl) {
-        var onSubmit = attrs.osFormSubmit;
-
         element.bind('click', function() {
-          ctrl.formSubmitted(true);
-          if (ctrl.isValidForm()) {
-            scope.$eval(onSubmit);
-          } else {
-            Alerts.error("common.form_validation_error");
-          }
+          onSubmit(scope, ctrl, attrs.osFormSubmit);
         });
       }
     };
