@@ -3,7 +3,6 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -14,7 +13,6 @@ import org.springframework.beans.BeanUtils;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
-import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
@@ -196,8 +194,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			daoFactory.getCollectionProtocolDao().saveOrUpdate(cp);
 			
 			//Assign default roles to PI and Coordinators
-			addRemovePIRole(cp.getPrincipalInvestigator(), cp.getRepositories(), cp, SubjectRoleOp.OP.ADD);
-			addRemoveCoordinatorsRole(cp.getCoordinators(), cp.getRepositories(), cp, SubjectRoleOp.OP.ADD);
+			addRemovePIRole(cp.getPrincipalInvestigator(), cp, SubjectRoleOp.OP.ADD);
+			addRemoveCoordinatorsRole(cp.getCoordinators(), cp, SubjectRoleOp.OP.ADD);
 			
 			return ResponseEvent.response(CollectionProtocolDetail.from(cp));
 		} catch (OpenSpecimenException ose) {
@@ -227,40 +225,22 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			ose.checkAndThrow();
 			
 			User oldPI = existingCp.getPrincipalInvestigator();
-			boolean piChanged = false;
-			if (!existingCp.getPrincipalInvestigator().equals(cp.getPrincipalInvestigator())) {
-				piChanged = true;
-			}
+			boolean piChanged = !oldPI.equals(cp.getPrincipalInvestigator());
 			
-			Collection<User> oldCoord = new HashSet<User>(existingCp.getCoordinators());
 			Collection<User> addedCoord = CollectionUtils.subtract(cp.getCoordinators(), existingCp.getCoordinators());
 			Collection<User> removedCoord = CollectionUtils.subtract(existingCp.getCoordinators(), cp.getCoordinators());
-			
-			Collection<Site> oldRepos =  new HashSet<Site>(existingCp.getRepositories());
-			Collection<Site> addedRepos = CollectionUtils.subtract(cp.getRepositories(), existingCp.getRepositories());
-			Collection<Site> removedRepos = CollectionUtils.subtract(existingCp.getRepositories(), cp.getRepositories());
-			Collection<Site> commonRepos = CollectionUtils.intersection(cp.getRepositories(), existingCp.getRepositories());
 			
 			existingCp.update(cp);
 			
 			// PI role handling
-			Collection<Site> newRepos = null;
-			Collection<Site> remRepos = null;
 			if (piChanged) {
-				newRepos = cp.getRepositories();
-				remRepos = oldRepos;
-			} else {
-				newRepos = addedRepos;
-				remRepos = removedRepos;
-			}
-			addRemovePIRole(cp.getPrincipalInvestigator(), newRepos, cp, SubjectRoleOp.OP.ADD);
-			addRemovePIRole(oldPI, remRepos, cp, SubjectRoleOp.OP.REMOVE);
-			
+				addRemovePIRole(oldPI, cp, SubjectRoleOp.OP.REMOVE);
+				addRemovePIRole(cp.getPrincipalInvestigator(), cp, SubjectRoleOp.OP.ADD);
+			} 
+
 			// Coordinator Role Handling
-			addRemoveCoordinatorsRole(cp.getCoordinators(), addedRepos, cp, SubjectRoleOp.OP.ADD);
-			addRemoveCoordinatorsRole(addedCoord, commonRepos, cp, SubjectRoleOp.OP.ADD);
-			addRemoveCoordinatorsRole(oldCoord, removedRepos, cp, SubjectRoleOp.OP.REMOVE);
-			addRemoveCoordinatorsRole(removedCoord, commonRepos, cp, SubjectRoleOp.OP.REMOVE);
+			addRemoveCoordinatorsRole(removedCoord, cp, SubjectRoleOp.OP.REMOVE);
+			addRemoveCoordinatorsRole(addedCoord, cp, SubjectRoleOp.OP.ADD);
 			
 			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
 		} catch (OpenSpecimenException ose) {
@@ -887,36 +867,30 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		}
 	}
 	
-	private void addRemovePIRole(User pi, Collection<Site> repositories, 
-			CollectionProtocol cp, com.krishagni.rbac.events.SubjectRoleOp.OP op) {
-		for (Site site : repositories) {
-			addRemoveDefaultRole(pi, site, cp, "Principal Investigator", op);
-		}
+	private void addRemovePIRole(User pi, CollectionProtocol cp, com.krishagni.rbac.events.SubjectRoleOp.OP op) {
+		addRemoveDefaultRole(pi, cp, "Principal Investigator", op);
 	}
 	
-	private void addRemoveCoordinatorsRole(Collection<User> coordinators, Collection<Site> repositories,
-			CollectionProtocol cp, com.krishagni.rbac.events.SubjectRoleOp.OP op) {
+	private void addRemoveCoordinatorsRole(Collection<User> coordinators, CollectionProtocol cp,
+			com.krishagni.rbac.events.SubjectRoleOp.OP op) {
 		for (User user : coordinators) {
-			for (Site site : repositories) {
-				addRemoveDefaultRole(user, site, cp, "Coordinator", op);
-			}
+			addRemoveDefaultRole(user, cp, "Coordinator", op);
 		}
 	}
 
-	private void addRemoveDefaultRole(User user, Site site, CollectionProtocol cp, String roleName,
+	private void addRemoveDefaultRole(User user, CollectionProtocol cp, String roleName,
 			com.krishagni.rbac.events.SubjectRoleOp.OP op) {
-		RequestEvent<SubjectRoleOp> req = getSubjectRoleOpEvent(user, site, cp, roleName, op);
+		RequestEvent<SubjectRoleOp> req = getSubjectRoleOpEvent(user, cp, roleName, op);
 		ResponseEvent<SubjectRoleDetail> resp = rbacSvc.updateSubjectRole(req);
 		resp.throwErrorIfUnsuccessful();
 	}
 	
-	private RequestEvent<SubjectRoleOp> getSubjectRoleOpEvent(User user, Site site, CollectionProtocol cp,
+	private RequestEvent<SubjectRoleOp> getSubjectRoleOpEvent(User user, CollectionProtocol cp,
 			String roleName, com.krishagni.rbac.events.SubjectRoleOp.OP op) {
 		RoleDetail role = new RoleDetail();
 		role.setName(roleName);
 		
 		SubjectRoleDetail srDetail = new SubjectRoleDetail();
-		srDetail.setSite(SiteDetail.from(site));
 		srDetail.setCollectionProtocol(CollectionProtocolSummary.from(cp));
 		srDetail.setRole(role);
 		srDetail.setImplicit(true);
