@@ -7,6 +7,8 @@ public class ParticipantSummary {
 	private String firstName = "";
 
 	private String lastName = "";
+	
+	private String empi;
 
 	public Long getId() {
 		return id;
@@ -30,5 +32,13 @@ public class ParticipantSummary {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public String getEmpi() {
+		return empi;
+	}
+
+	public void setEmpi(String empi) {
+		this.empi = empi;
 	}
 }

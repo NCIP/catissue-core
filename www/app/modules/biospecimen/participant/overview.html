@@ -35,6 +35,15 @@
       </li>
 
       <li class="item">
+        <strong class="key key-sm" translate="participant.mpi">Master Patient Index:</strong>
+        <os-inline-edit editor="mpiEditor" name="empi" class="value value-md" value="cpr.participant.empi">
+          <span ng-if="mpiEditor.isDisplayMode()">{{mpiEditor.viewValue | osNoValue}}</span>
+          <input ng-if="mpiEditor.isEditMode()" type="text" ng-model="mpiEditor.editValue" class="form-control" 
+            placeholder="{{'participant.mpi' | translate}}">
+        </os-inline-edit>
+      </li>
+
+      <li class="item">
         <strong class="key key-sm" translate="participant.ssn_short">Social Security No:</strong>
         <os-inline-edit editor="ssnEditor" name="ssn" class="value value-md" value="cpr.participant.ssn">
           <span ng-if="ssnEditor.isDisplayMode()">{{ssnEditor.viewValue | osNoValue}}</span>

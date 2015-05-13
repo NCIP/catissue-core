@@ -30,8 +30,17 @@
           </span>
         </a>
       </h4>
-      <h5>{{cpr.ppid}}</h5>
-      <p>{{cpr.registrationDate | date: global.dateFmt}}</p>
+      <h5>
+        <span title="{{'participant.ppid' | translate}}">
+          {{cpr.ppid}}
+        </span>
+        <span title="{{'participant.mpi' | translate}}" ng-if="!!cpr.participant.empi">
+          | {{cpr.participant.empi}}
+        </span>
+      </h5>
+      <p title="{{'participant.reg_date' | translate}}">
+        {{cpr.registrationDate | date: global.dateFmt}}
+      </p>
       <div class="stats">
         <div class="stat col-xs-6" title="{{'participant.tooltip.completed_visits_count' | translate}}">
           <span class="os-lavatar os-lavatar-sm">V</span>
