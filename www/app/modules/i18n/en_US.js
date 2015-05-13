@@ -125,13 +125,15 @@
     "bulk_import_biospecimen_obj_jobs": "Import Biospecimen Objects Job List",
     "number_of_participants": "Number of Participants",
     "bulk_registration": "Bulk Registration",
+    "participant_registered" : "{{participantCount}} partticipants registered successfully.",
 
     "tab": {
       "overview": "Overview",
       "consents": "Consents",
       "events": "Events",
       "users": "Users",
-      "dashboard": "Dashboard"
+      "dashboard": "Dashboard",
+      "bulk_register": "Bulk Register"
     },
 
     "menu_options": {

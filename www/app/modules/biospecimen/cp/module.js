@@ -1,6 +1,7 @@
 
 angular.module('os.biospecimen.cp', 
   [
+    'openspecimen',
     'ui.router',
     'os.biospecimen.cp.list',
     'os.biospecimen.cp.addedit',
@@ -161,9 +162,9 @@ angular.module('os.biospecimen.cp',
         },
         controller: 'CpSpecimensCtrl'
       })
-      .state('cp-detail.bulk-print', {
-        url: '/bulk-registration?cpId',
-        templateUrl: 'custom-modules/sgh/biospecimen/bulk-print.html',
+      .state('cp-detail.bulk-registrations', {
+        url: '/bulk-registrations',
+        templateUrl: 'custom-modules/sgh/biospecimen/bulk-registrations.html',
         parent: 'cp-detail',
         resolve: {
           specimenRequirements: function($stateParams, SpecimenRequirement) {
@@ -175,7 +176,7 @@ angular.module('os.biospecimen.cp',
             return SpecimenRequirement.listFor(eventId);
           }
         },
-        controller: 'CpBulkPrintCtrl'
+        controller: 'CpBulkRegistrationsCtrl'
       });
     });
   
