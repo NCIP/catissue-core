@@ -166,16 +166,6 @@ angular.module('os.biospecimen.cp',
         url: '/bulk-registrations',
         templateUrl: 'custom-modules/sgh/biospecimen/bulk-registrations.html',
         parent: 'cp-detail',
-        resolve: {
-          specimenRequirements: function($stateParams, SpecimenRequirement) {
-            var eventId = $stateParams.eventId;
-            if (!eventId) {
-              return [];
-            }
-
-            return SpecimenRequirement.listFor(eventId);
-          }
-        },
         controller: 'CpBulkRegistrationsCtrl'
       });
     });

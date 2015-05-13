@@ -52,19 +52,21 @@ public class CprServiceImpl implements CprService {
 		try {
 			BulkParticipantRegDetail detail = req.getPayload();
 			
+			int participantCount = detail.getParticipantCount();
+			if(participantCount < 1){
+				return ResponseEvent.userError(CpErrorCode.INVALID_PARTICIPANT_COUNT);
+			}
+			
 			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(detail.getCpId());
 			if (cp == null) {
 				return ResponseEvent.userError(CpErrorCode.NOT_FOUND);
 			}
 			
-			int patientCount = detail.getParticipantCount();
 			List<ParticipantRegDetail> result = new ArrayList<ParticipantRegDetail>();
 
-			if(patientCount > 0){
-				for (int i = 0; i < patientCount; i++){
-					ParticipantRegDetail regDetail = registerParticipant(cp);
-					result.add(regDetail);
-				}
+			for (int i = 0; i < participantCount; i++){
+				ParticipantRegDetail regDetail = registerParticipant(cp);
+				result.add(regDetail);
 			}
 			
 			return ResponseEvent.response(new BulkParticipantRegDetail(detail.getCpId(), result));			
@@ -77,9 +79,7 @@ public class CprServiceImpl implements CprService {
 	
 	private ParticipantRegDetail registerParticipant(CollectionProtocol cp) {
 		CollectionProtocolRegistrationDetail cprDetail = getRegistrationDetail(cp);
-		
 		ResponseEvent<CollectionProtocolRegistrationDetail> response = cprService.createRegistration(getRequest(cprDetail));
-		
 		response.throwErrorIfUnsuccessful();
 		
 		cprDetail = response.getPayload();

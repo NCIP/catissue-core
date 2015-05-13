@@ -20,10 +20,6 @@ public class BulkParticipantRegistrationController {
 	@Autowired
 	private CprService sgCprService;
 	
-	public void setCprService(CprService sgCprService) {
-		this.sgCprService = sgCprService;
-	}
-	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	

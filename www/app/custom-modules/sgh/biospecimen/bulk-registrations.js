@@ -1,7 +1,6 @@
 angular.module('openspecimen')
   .controller('CpBulkRegistrationsCtrl', function(
-     $scope, $state, $stateParams, $modal, $http,
-     cp, ApiUrls, Alerts) {
+     $scope, $http, cp, ApiUrls, Alerts) {
 
     var baseUrl = ApiUrls.getBaseUrl();
     var pvsLoaded = false;
@@ -14,13 +13,9 @@ angular.module('openspecimen')
     };
 
     $scope.bulkRegister = function() {
-      if (!validParticipantsInfo()) {
-        return;
-      }
-
       var req = {
         cpId: $scope.cp.id,
-        participantCount: parseInt($scope.cp.paticipantCount)
+        participantCount: $scope.cp.paticipantCount
       };
 
       $http.post(baseUrl + 'sgh/registrations', req).then(
@@ -30,9 +25,5 @@ angular.module('openspecimen')
       );
     }
 
-    function validParticipantsInfo() {
-      return true;
-    }
-    
     init();
   });
