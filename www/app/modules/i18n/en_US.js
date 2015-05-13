@@ -798,6 +798,11 @@
     "new_query_folder": "New Query Folder",
     "update_query_folder": "Update Query Folder",
     "folder_name": "Folder Name",
+    "select_all": "Select All",
+    "unselect_all": "Unselect All",
+    "specimen_list_created": "Specimen List '{{listName}}' created",
+    "search_specimen_list": "Search Specimen List",
+    "create_new_specimen_list": "Create New Specimen List",
     "remove_query_from_folder": "Remove query from folder",
     "share_folder_with_all": "Share folder with all current and future users",
     "share_folder_with_users": "Share folder with following users",
@@ -979,9 +984,11 @@
   },
 
   "specimen_list": {
+    "new_specimen_list": "New Specimen List",
     "create_specimen_list": "Create Specimen List",
     "update_specimen_list": "Update Specimen List",
     "specimen_list": "Specimen List",
+    "specimen_list_name": "Specimen List Name",
     "name": "Name",
     "share_list_with_users": "Share list with following users",
     "users": "Users",
@@ -997,6 +1004,7 @@
     "lineage": "Lineage",
     "remove_specimens": "Removing Specimens From {{name}} list",
     "confirm_remove_specimens": "Are you sure you want to remove selected specimens from {{name}} list?",
-    "specimens_removed": "Specimens removed successfully from {{name}} list",
+    "specimens_added": "Specimens added successfully into {{name}} list",
+    "specimens_removed": "Specimens removed successfully from {{name}} list"
    }
 }

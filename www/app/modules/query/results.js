@@ -2,7 +2,7 @@
 angular.module('os.query.results', ['os.query.models'])
   .controller('QueryResultsCtrl', function(
     $scope, $state, $stateParams, $modal, 
-    queryCtx, QueryUtil, QueryExecutor, Alerts) {
+    queryCtx, QueryUtil, QueryExecutor, SpecimenList, Alerts) {
 
     function init() {
       $scope.queryCtx = queryCtx;
@@ -20,6 +20,7 @@ angular.module('os.query.results', ['os.query.models'])
       }
 
       executeQuery($stateParams.editMode);
+      loadAllSpecimenList();
     }
 
     function getGridOpts() {
@@ -42,6 +43,14 @@ angular.module('os.query.results', ['os.query.models'])
       } else {
         loadRecords();
       }
+    }
+
+    function loadAllSpecimenList() {
+      SpecimenList.query().then(
+        function(lists) {
+          $scope.specimenLists = lists;
+        }
+      );
     }
 
     function isParameterized() {
@@ -80,6 +89,7 @@ angular.module('os.query.results', ['os.query.models'])
 
     function loadRecords() {
       var qc = $scope.queryCtx;
+      $scope.showAddToSpecimenList = showAddToSpecimenList();
       $scope.resultsCtx.waitingForRecords = true;
       $scope.resultsCtx.error = false;
       QueryExecutor.getRecords(undefined, qc.selectedCp.id, getAql(), 'DEEP').then(
@@ -161,6 +171,19 @@ angular.module('os.query.results', ['os.query.models'])
       }
       return formattedRows;
     }
+
+    function showAddToSpecimenList() {
+      if ($scope.queryCtx.reporting.type == 'crosstab') {
+        return false;
+      }
+
+      var idx = $scope.queryCtx.selectedFields.indexOf('Specimen.label');
+      if (idx != -1) {
+        return true;
+      }
+
+      return false;
+    };
 
     var gridFilterPlugin = {
       init: function(scope, grid) {
@@ -247,6 +270,59 @@ angular.module('os.query.results', ['os.query.models'])
       );
     };
 
-    
+    $scope.selectAllRows = function() {
+      $scope.resultsCtx.gridOpts.selectAll(true);
+      $scope.queryCtx.selectAll = true;
+    };
+
+    $scope.unSelectAllRows = function() {
+      $scope.resultsCtx.gridOpts.selectAll(false);
+      $scope.queryCtx.selectAll = false;
+    };
+
+    $scope.addSelectedSpecimensToSpecimenList = function(list) {
+      var idx = $scope.queryCtx.selectedFields.indexOf('Specimen.label');
+      var colName = $scope.resultsCtx.columnDefs[idx].field;
+      var specimens = $scope.selectedRows.map(function(row) {
+         return {label: row[colName]};
+      })
+
+      var data = {
+        id: list.id,
+        specimens: specimens,
+        operation: 'ADD'
+      }
+
+      var specimenList = new SpecimenList(data);
+      specimenList.updateSpecimens().then(function(specimens) {
+        Alerts.success('specimen_list.specimens_added', {name: list.name});
+      })
+    }
+
+    $scope.createNewSpecimenList = function() {
+      var modalInstance = $modal.open({
+        templateUrl: 'modules/query/add-specimen-list.html',
+        controller: 'AddEditSpecimenListCtrl',
+        resolve: {
+          list: function() {
+            var idx = $scope.queryCtx.selectedFields.indexOf('Specimen.label');
+            var colName = $scope.resultsCtx.columnDefs[idx].field;
+            var specimens = $scope.selectedRows.map(function(row) {
+              return {label: row[colName]};
+            })
+            
+            return {specimens: specimens, sharedWith: []};
+          }
+        }
+      });
+
+      modalInstance.result.then(
+        function(list) {
+          $scope.specimenLists.push(list);
+          Alerts.success("queries.specimen_list_created", {listName: list.name});
+        }
+      );
+    };
+ 
     init();
   });

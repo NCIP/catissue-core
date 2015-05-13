@@ -21,6 +21,9 @@ angular.module('os.biospecimen.specimenlist',
               return SpecimenList.getById($stateParams.listId);
             }
             return new SpecimenList();
+          },
+          $modalInstance: function() {
+             return undefined;
           }
         },
         controller: 'AddEditSpecimenListCtrl',

@@ -1,0 +1,23 @@
+<div>
+  <div class="os-modal-header">
+    <span translate="specimen_list.new_specimen_list">New Specimen List</span>
+    <div class="os-close" ng-click="cancel()">&times;</div>
+  </div>
+
+  <div class="os-modal-body">
+    <div class="form-group">
+      <label translate="specimen_list.specimen_list_name">Specimen List Name</label>
+      <input type="text" ng-model="list.name" class="form-control" 
+        placeholder="{{'specimen_list.specimen_list_name' | translate}}">
+    </div>
+  </div>
+
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="cancel()" translate="common.buttons.cancel">
+      Cancel
+    </button>
+    <button class="btn btn-primary" ng-disabled="!list.name"  ng-click="saveOrUpdateList()" translate="common.buttons.create">
+      Create
+    </button>
+  </div> 
+</div>
