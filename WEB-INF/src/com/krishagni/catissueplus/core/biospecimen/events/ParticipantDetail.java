@@ -195,7 +195,7 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 		result.setDeathDate(excludePhi ? null : participant.getDeathDate());
 		result.setEthnicity(participant.getEthnicity());
 		result.setGender(participant.getGender());
-		result.setEmpi(participant.getEmpi());				
+		result.setEmpi(excludePhi ? "###" : participant.getEmpi());				
 		result.setPmis(PmiDetail.from(participant.getPmis(), excludePhi)); 
 		result.setRaces(new HashSet<String>(participant.getRaces()));
 		result.setSexGenotype(participant.getSexGenotype());
