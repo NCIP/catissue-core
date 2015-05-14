@@ -35,5 +35,8 @@
       class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol"
       cascade="none"
       column="CP_ID"/>
+      
+    <property name="systemRole" column="SYSTEM_ROLE"/>
+        
   </class> 
 </hibernate-mapping>

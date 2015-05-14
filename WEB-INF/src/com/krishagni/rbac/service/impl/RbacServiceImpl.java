@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Session;
 
@@ -45,6 +46,7 @@ import com.krishagni.rbac.events.RoleAccessControlDetails;
 import com.krishagni.rbac.events.RoleDetail;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 import com.krishagni.rbac.events.SubjectRoleOp;
+import com.krishagni.rbac.events.SubjectRoleOp.OP;
 import com.krishagni.rbac.events.SubjectRolesList;
 import com.krishagni.rbac.repository.DaoFactory;
 import com.krishagni.rbac.repository.OperationListCriteria;
@@ -423,7 +425,7 @@ public class RbacServiceImpl implements RbacService {
 					break;
 				
 				case UPDATE:
-					SubjectRole oldSr = subject.getExistingRole(subjectRoleOp.getSubjectRole().getId());
+					SubjectRole oldSr = subject.getRole(subjectRoleOp.getSubjectRole().getId());
 					oldSrDetails.put("site", oldSr.getSite());
 					oldSrDetails.put("collectionProtocol", oldSr.getCollectionProtocol());
 					oldSrDetails.put("role", oldSr.getRole());
@@ -439,7 +441,7 @@ public class RbacServiceImpl implements RbacService {
 			
 			if (resp != null) {
 				daoFactory.getSubjectDao().saveOrUpdate(subject, true);
-				sendEmail(resp, oldSrDetails, subjectRoleOp);
+				sendEmail(resp, oldSrDetails, subjectRoleOp.getOp());
 			}
 			
 			return ResponseEvent.response(SubjectRoleDetail.from(resp));
@@ -448,6 +450,69 @@ public class RbacServiceImpl implements RbacService {
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
+	}
+	
+	@Override 
+	@PlusTransactional
+	public void addSubjectRole(Site site, CollectionProtocol cp, User user, String[] roleNames) {
+		addOrRemoveSubjectRole(site, cp, user, roleNames, SubjectRoleOp.OP.ADD, true);
+	}
+	
+	@Override 
+	@PlusTransactional
+	public void removeSubjectRole(Site site, CollectionProtocol cp, User user, String[] roleNames) {
+		addOrRemoveSubjectRole(site, cp, user, roleNames, SubjectRoleOp.OP.REMOVE, true);
+	}
+
+	private void addOrRemoveSubjectRole(Site site, CollectionProtocol cp, User user,
+			String[] roleNames, SubjectRoleOp.OP op, boolean systemRole) {
+		Subject subject = daoFactory.getSubjectDao().getById(user.getId(), null);
+		if (subject == null) {
+			throw OpenSpecimenException.userError(RbacErrorCode.SUBJECT_NOT_FOUND);
+		}
+		
+		AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
+		ArrayList<SubjectRole> subjectRoles = new ArrayList<SubjectRole>();
+		for (String role : roleNames) {
+			SubjectRole sr = createSubjectRole(site, cp, role, systemRole);
+			SubjectRole resp = null;
+			switch (op) {
+			case ADD:
+				resp = subject.addRole(sr);
+				break;
+			case REMOVE:
+				resp = subject.removeSubjectRole(sr);
+				break;
+			}
+			
+			if (resp != null) {
+				subjectRoles.add(resp);
+			}
+		}
+		
+		if (CollectionUtils.isEmpty(subjectRoles)) {
+			return;
+		}
+		
+		daoFactory.getSubjectDao().saveOrUpdate(subject, true);
+		for (SubjectRole sr : subjectRoles) {
+			sendEmail(sr, null, op);
+		}
+	}
+	
+	private SubjectRole createSubjectRole(Site site, CollectionProtocol cp, String roleName, boolean systemRole) {
+		Role role = daoFactory.getRoleDao().getRoleByName(roleName);
+		if (role == null) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ROLE_NOT_FOUND);
+		}
+		
+		SubjectRole subjectRole = new SubjectRole();
+		subjectRole.setSite(site);
+		subjectRole.setCollectionProtocol(cp);
+		subjectRole.setRole(role);
+		subjectRole.setSystemRole(systemRole);
+		
+		return subjectRole;
 	}
 	
 	@Override
@@ -680,6 +745,7 @@ public class RbacServiceImpl implements RbacService {
 		sr.setCollectionProtocol(getCollectionProtocol(srd));
 		sr.setSite(getSite(srd));
 		sr.setRole(role);
+		sr.setSystemRole(srd.getSystemRole());
 		return sr;
 	}
 
@@ -821,10 +887,10 @@ public class RbacServiceImpl implements RbacService {
 		}
 	}
 	
-	private void sendEmail(SubjectRole newSr, Map<String, Object> oldSrDetails, SubjectRoleOp subjectRoleOp) {
+	private void sendEmail(SubjectRole newSr, Map<String, Object> oldSrDetails, OP op) {
 		User user = userDao.getById(newSr.getSubject().getId());
 		Map<String, Object> props = new HashMap<String, Object>();
-		props.put("operation", subjectRoleOp.getOp().name());
+		props.put("operation", op.name());
 		props.put("user", user);
 		props.put("sr", newSr);
 		props.put("oldSr", oldSrDetails);

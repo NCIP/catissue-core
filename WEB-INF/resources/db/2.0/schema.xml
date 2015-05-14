@@ -30,7 +30,7 @@
 
   <property name="clob.type" value="text" dbms="mysql"/>
   <property name="clob.type" value="clob" dbms="oracle"/>
-
+ 
   <changeSet author="vpawar" id="Simplified storage containers" failOnError="true">
     <createTable tableName="OS_STORAGE_CONTAINERS">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
@@ -1115,7 +1115,6 @@
       <column name="SITE_ID" type="${int.type}" />
 
       <column name="CP_ID" type="${int.type}" />
-
     </createTable>
   </changeSet>
 
@@ -1838,6 +1837,14 @@
       constraintName="OS_PMI_PART_SITE_UQ" 
       tableName="CATISSUE_PART_MEDICAL_ID" 
       columnNames="PARTICIPANT_ID, SITE_ID"/>
+  </changeSet> 
+  
+  <changeSet author="vgaikwad" id="Added field to indicate subject role is system role or not">
+    <addColumn tableName="RBAC_SUBJECT_ROLES">
+      <column name="SYSTEM_ROLE" type="${boolean.type}" defaultValueBoolean="0">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
   </changeSet>  
 
   <changeSet author="vpawar" id="Added import job parameters column for dynamic schemas">
