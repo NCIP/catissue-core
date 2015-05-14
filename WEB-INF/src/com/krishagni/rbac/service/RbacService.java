@@ -2,6 +2,9 @@ package com.krishagni.rbac.service;
 
 import java.util.List;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.rbac.domain.SubjectAccess;
@@ -84,4 +87,8 @@ public interface RbacService {
 	public boolean canUserPerformOp(Long userId, String resource, String[] operations);
 	
 	public List<SubjectAccess> getAccessList(Long userId, String resource, String[] operations);
+	
+	public void addSubjectRole(Site site, CollectionProtocol cp, User user, String roleName);
+	
+	public void removeSubjectRole(Site site, CollectionProtocol cp, User user, String roleName);
 }

@@ -32,10 +32,6 @@ import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
-import com.krishagni.rbac.events.RoleDetail;
-import com.krishagni.rbac.events.SubjectRoleDetail;
-import com.krishagni.rbac.events.SubjectRoleOp;
-import com.krishagni.rbac.events.SubjectRoleOp.OP;
 import com.krishagni.rbac.service.RbacService;
 
 
@@ -108,7 +104,7 @@ public class SiteServiceImpl implements SiteService {
 			ensureUniqueConstraint(site, null, ose);
 			ose.checkAndThrow();
 			daoFactory.getSiteDao().saveOrUpdate(site, true);
-			addRemoveDefaultRole(site.getCoordinators(), site, SubjectRoleOp.OP.ADD);
+			addDefaultCoordinatorRole(site, site.getCoordinators());
 			return ResponseEvent.response(SiteDetail.from(site));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -192,16 +188,16 @@ public class SiteServiceImpl implements SiteService {
 			ensureUniqueConstraint(site, existing, ose);
 			ose.checkAndThrow();
 			
-			Collection<User> addedCoordinators = CollectionUtils.subtract(site.getCoordinators(),
-					existing.getCoordinators());
-			Collection<User> removedCoordinators = CollectionUtils.subtract(existing.getCoordinators(),
-					site.getCoordinators());
+			Collection<User> addedCoordinators = 
+				CollectionUtils.subtract(site.getCoordinators(), existing.getCoordinators());
+			Collection<User> removedCoordinators = 
+				CollectionUtils.subtract(existing.getCoordinators(), site.getCoordinators());
 			
 			existing.update(site);			
 			daoFactory.getSiteDao().saveOrUpdate(existing);
 			
-			addRemoveDefaultRole(addedCoordinators, existing, SubjectRoleOp.OP.ADD);
-			addRemoveDefaultRole(removedCoordinators, existing, SubjectRoleOp.OP.REMOVE);
+			removeDefaultCoordinatorRole(existing, removedCoordinators);
+			addDefaultCoordinatorRole(existing, addedCoordinators);
 			
 			return ResponseEvent.response(SiteDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
@@ -211,30 +207,18 @@ public class SiteServiceImpl implements SiteService {
 		}		
 	}
 	
-	private void addRemoveDefaultRole(Collection<User> users, Site site, OP op) {
+	private void addDefaultCoordinatorRole(Site site, Collection<User> users) {
 		for (User user: users) {
-			ResponseEvent<SubjectRoleDetail> resp = rbacSvc.updateSubjectRole(getSubjectRoleOpEvent(site, user, op));
-			resp.throwErrorIfUnsuccessful();
+			rbacSvc.addSubjectRole(site, null, user, ADMINISTRATOR);
 		}
 	}
 	
-	private RequestEvent<SubjectRoleOp> getSubjectRoleOpEvent(Site site, User user, OP op) {
-		RoleDetail role = new RoleDetail();
-		role.setName("Administrator");
-				
-		SubjectRoleDetail srDetail = new SubjectRoleDetail();
-		srDetail.setSite(SiteDetail.from(site));
-		srDetail.setRole(role);
-		srDetail.setImplicit(true);
-
-		SubjectRoleOp subRoleOp = new SubjectRoleOp();
-		subRoleOp.setOp(op);
-		subRoleOp.setSubjectId(user.getId());
-		subRoleOp.setSubjectRole(srDetail);
-		
-		return new RequestEvent<SubjectRoleOp>(subRoleOp);
+	private void removeDefaultCoordinatorRole(Site site, Collection<User> users) {
+		for (User user: users) {
+			rbacSvc.removeSubjectRole(site, null, user, ADMINISTRATOR);
+		}
 	}
-	
+
 	private void ensureUniqueConstraint(Site newSite, Site existingSite, OpenSpecimenException ose) {
 		if (!isUniqueName(newSite, existingSite)) {
 			ose.addError(SiteErrorCode.DUP_NAME);
@@ -345,4 +329,6 @@ public class SiteServiceImpl implements SiteService {
 		
 		return result;
 	}
+	
+	private static final String ADMINISTRATOR = "Administrator"; 
 }

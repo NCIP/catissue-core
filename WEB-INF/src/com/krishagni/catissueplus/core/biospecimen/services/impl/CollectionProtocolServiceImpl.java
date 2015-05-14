@@ -54,9 +54,6 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
-import com.krishagni.rbac.events.RoleDetail;
-import com.krishagni.rbac.events.SubjectRoleDetail;
-import com.krishagni.rbac.events.SubjectRoleOp;
 import com.krishagni.rbac.service.RbacService;
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
@@ -194,8 +191,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			daoFactory.getCollectionProtocolDao().saveOrUpdate(cp);
 			
 			//Assign default roles to PI and Coordinators
-			addRemovePIRole(cp.getPrincipalInvestigator(), cp, SubjectRoleOp.OP.ADD);
-			addRemoveCoordinatorsRole(cp.getCoordinators(), cp, SubjectRoleOp.OP.ADD);
+			addDefaultPIRole(cp, cp.getPrincipalInvestigator());
+			addDefaultCoordinatorRole(cp, cp.getCoordinators());
 			
 			return ResponseEvent.response(CollectionProtocolDetail.from(cp));
 		} catch (OpenSpecimenException ose) {
@@ -234,13 +231,13 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			
 			// PI role handling
 			if (piChanged) {
-				addRemovePIRole(oldPI, cp, SubjectRoleOp.OP.REMOVE);
-				addRemovePIRole(cp.getPrincipalInvestigator(), cp, SubjectRoleOp.OP.ADD);
+				removeDefaultPIRole(cp, oldPI);
+				addDefaultPIRole(cp, cp.getPrincipalInvestigator());
 			} 
 
 			// Coordinator Role Handling
-			addRemoveCoordinatorsRole(removedCoord, cp, SubjectRoleOp.OP.REMOVE);
-			addRemoveCoordinatorsRole(addedCoord, cp, SubjectRoleOp.OP.ADD);
+			removeDefaultCoordinatorRole(cp, removedCoord);
+			addDefaultCoordinatorRole(cp, addedCoord);
 			
 			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
 		} catch (OpenSpecimenException ose) {
@@ -866,40 +863,27 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			}			
 		}
 	}
-	
-	private void addRemovePIRole(User pi, CollectionProtocol cp, com.krishagni.rbac.events.SubjectRoleOp.OP op) {
-		addRemoveDefaultRole(pi, cp, "Principal Investigator", op);
+
+	private void addDefaultPIRole(CollectionProtocol cp, User user) {
+		rbacSvc.addSubjectRole(null, cp, user, PI);
 	}
 	
-	private void addRemoveCoordinatorsRole(Collection<User> coordinators, CollectionProtocol cp,
-			com.krishagni.rbac.events.SubjectRoleOp.OP op) {
+	private void removeDefaultPIRole(CollectionProtocol cp, User user) {
+		rbacSvc.removeSubjectRole(null, cp, user, PI);
+	}
+	
+	private void addDefaultCoordinatorRole(CollectionProtocol cp, Collection<User> coordinators) {
 		for (User user : coordinators) {
-			addRemoveDefaultRole(user, cp, "Coordinator", op);
+			rbacSvc.addSubjectRole(null, cp, user, COORDINATOR);
+		}
+	}
+	
+	private void removeDefaultCoordinatorRole(CollectionProtocol cp, Collection<User> coordinators) {
+		for (User user : coordinators) {
+			rbacSvc.removeSubjectRole(null, cp, user, COORDINATOR);
 		}
 	}
 
-	private void addRemoveDefaultRole(User user, CollectionProtocol cp, String roleName,
-			com.krishagni.rbac.events.SubjectRoleOp.OP op) {
-		RequestEvent<SubjectRoleOp> req = getSubjectRoleOpEvent(user, cp, roleName, op);
-		ResponseEvent<SubjectRoleDetail> resp = rbacSvc.updateSubjectRole(req);
-		resp.throwErrorIfUnsuccessful();
-	}
-	
-	private RequestEvent<SubjectRoleOp> getSubjectRoleOpEvent(User user, CollectionProtocol cp,
-			String roleName, com.krishagni.rbac.events.SubjectRoleOp.OP op) {
-		RoleDetail role = new RoleDetail();
-		role.setName(roleName);
-		
-		SubjectRoleDetail srDetail = new SubjectRoleDetail();
-		srDetail.setCollectionProtocol(CollectionProtocolSummary.from(cp));
-		srDetail.setRole(role);
-		srDetail.setImplicit(true);
-
-		SubjectRoleOp subRoleOp = new SubjectRoleOp();
-		subRoleOp.setOp(op);
-		subRoleOp.setSubjectId(user.getId());
-		subRoleOp.setSubjectRole(srDetail);
-		
-		return new RequestEvent<SubjectRoleOp>(subRoleOp);
-	}
+	private static final String PI = "Principal Investigator";
+	private static final String COORDINATOR = "Coordinator";
 }

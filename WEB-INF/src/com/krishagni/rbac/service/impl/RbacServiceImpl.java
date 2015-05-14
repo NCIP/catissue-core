@@ -45,6 +45,7 @@ import com.krishagni.rbac.events.RoleAccessControlDetails;
 import com.krishagni.rbac.events.RoleDetail;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 import com.krishagni.rbac.events.SubjectRoleOp;
+import com.krishagni.rbac.events.SubjectRoleOp.OP;
 import com.krishagni.rbac.events.SubjectRolesList;
 import com.krishagni.rbac.repository.DaoFactory;
 import com.krishagni.rbac.repository.OperationListCriteria;
@@ -423,7 +424,7 @@ public class RbacServiceImpl implements RbacService {
 					break;
 				
 				case UPDATE:
-					SubjectRole oldSr = subject.getExistingRole(subjectRoleOp.getSubjectRole().getId());
+					SubjectRole oldSr = subject.getRole(subjectRoleOp.getSubjectRole().getId());
 					oldSrDetails.put("site", oldSr.getSite());
 					oldSrDetails.put("collectionProtocol", oldSr.getCollectionProtocol());
 					oldSrDetails.put("role", oldSr.getRole());
@@ -433,24 +434,13 @@ public class RbacServiceImpl implements RbacService {
 					break;
 				
 				case REMOVE:
-					Long srId = null;
-					if (subjectRoleOp.getSubjectRole().getId() != null) {
-						srId = subjectRoleOp.getSubjectRole().getId();
-					} else { 
-						SubjectRole existingSr = subject.getExistingRole(subjectRoleOp.getSubjectRole());
-						if (existingSr == null) {
-							OpenSpecimenException.userError(RbacErrorCode.SUBJECT_ROLE_NOT_FOUND);
-						}
-						srId = existingSr.getId();
-					}	
-					
-					resp = subject.removeSubjectRole(srId);
+					resp = subject.removeSubjectRole(subjectRoleOp.getSubjectRole().getId());
 					break;
 			}
 			
 			if (resp != null) {
 				daoFactory.getSubjectDao().saveOrUpdate(subject, true);
-				sendEmail(resp, oldSrDetails, subjectRoleOp);
+				sendEmail(resp, oldSrDetails, subjectRoleOp.getOp());
 			}
 			
 			return ResponseEvent.response(SubjectRoleDetail.from(resp));
@@ -459,6 +449,58 @@ public class RbacServiceImpl implements RbacService {
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
+	}
+	
+	@Override 
+	@PlusTransactional
+	public void addSubjectRole(Site site, CollectionProtocol cp, User user, String roleName) {
+		addOrRemoveSubjectRole(site, cp, user, roleName, SubjectRoleOp.OP.ADD, true);
+	}
+	
+	@Override 
+	@PlusTransactional
+	public void removeSubjectRole(Site site, CollectionProtocol cp, User user, String roleName) {
+		addOrRemoveSubjectRole(site, cp, user, roleName, SubjectRoleOp.OP.REMOVE, true);
+	}
+
+	private void addOrRemoveSubjectRole(Site site, CollectionProtocol cp, User user,
+			String roleName, SubjectRoleOp.OP op, boolean implicit) {
+		Subject subject = daoFactory.getSubjectDao().getById(user.getId(), null);
+		if (subject == null) {
+			throw OpenSpecimenException.userError(RbacErrorCode.SUBJECT_NOT_FOUND);
+		}
+		
+		AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
+		SubjectRole sr = createSubjectRole(site, cp, roleName, implicit);
+		SubjectRole resp = null;
+		switch (op) {
+		case ADD:
+			resp = subject.addRole(sr);
+			break;
+		case REMOVE:
+			resp = subject.removeSubjectRole(sr);
+			break;
+		}
+		
+		if (resp != null) {
+			daoFactory.getSubjectDao().saveOrUpdate(subject, true);
+			sendEmail(resp, null, op);
+		}
+	}
+	
+	private SubjectRole createSubjectRole(Site site, CollectionProtocol cp, String roleName, boolean implicit) {
+		Role role = daoFactory.getRoleDao().getRoleByName(roleName);
+		if (role == null) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ROLE_NOT_FOUND);
+		}
+		
+		SubjectRole subjectRole = new SubjectRole();
+		subjectRole.setSite(site);
+		subjectRole.setCollectionProtocol(cp);
+		subjectRole.setRole(role);
+		subjectRole.setImplicit(implicit);
+		
+		return subjectRole;
 	}
 	
 	@Override
@@ -833,10 +875,10 @@ public class RbacServiceImpl implements RbacService {
 		}
 	}
 	
-	private void sendEmail(SubjectRole newSr, Map<String, Object> oldSrDetails, SubjectRoleOp subjectRoleOp) {
+	private void sendEmail(SubjectRole newSr, Map<String, Object> oldSrDetails, OP op) {
 		User user = userDao.getById(newSr.getSubject().getId());
 		Map<String, Object> props = new HashMap<String, Object>();
-		props.put("operation", subjectRoleOp.getOp().name());
+		props.put("operation", op.name());
 		props.put("user", user);
 		props.put("sr", newSr);
 		props.put("oldSr", oldSrDetails);
