@@ -7,13 +7,10 @@ import java.util.Set;
 import org.hibernate.Session;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
-import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
-import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
-import com.krishagni.rbac.events.SubjectRoleDetail;
 
 public class Subject {
 	private Long id;
@@ -70,7 +67,7 @@ public class Subject {
 	}
 	
 	public SubjectRole updateRole(SubjectRole sr) {
-		SubjectRole existingRole = getExistingRole(sr.getId());
+		SubjectRole existingRole = getRole(sr.getId());
 		
 		if (existingRole == null) {
 			OpenSpecimenException.userError(RbacErrorCode.SUBJECT_ROLE_NOT_FOUND);
@@ -84,8 +81,17 @@ public class Subject {
 	}
 	
 	public SubjectRole removeSubjectRole(Long srId) {
-		SubjectRole existingRole = getExistingRole(srId);
+		SubjectRole existingRole = getRole(srId);
+		if (existingRole == null) {
+			OpenSpecimenException.userError(RbacErrorCode.SUBJECT_ROLE_NOT_FOUND);
+		}
 		
+		getRoles().remove(existingRole);
+		return existingRole;
+	}
+	
+	public SubjectRole removeSubjectRole(SubjectRole sr) {
+		SubjectRole existingRole = getRole(sr);
 		if (existingRole == null) {
 			OpenSpecimenException.userError(RbacErrorCode.SUBJECT_ROLE_NOT_FOUND);
 		}
@@ -97,8 +103,8 @@ public class Subject {
 	public void removeAllSubjectRoles() {
 		getRoles().clear();
 	}
-
-	public SubjectRole getExistingRole(Long srId) {
+	
+	public SubjectRole getRole(Long srId) {
 		for (SubjectRole sr : getRoles()) {
 			if (sr.getId().equals(srId)) {
 				return sr;
@@ -108,17 +114,17 @@ public class Subject {
 		return null;
 	}
 	
-	public SubjectRole getExistingRole(SubjectRoleDetail srd) {
+	private SubjectRole getRole(SubjectRole input) {
 		for (SubjectRole sr : getRoles()) {
-			if (!sr.getRole().getName().equals(srd.getRole().getName())) {
+			if (!sr.getRole().equals(input.getRole())) {
 				continue;
 			}
 
-			if (!isEqualCps(sr.getCollectionProtocol(), srd.getCollectionProtocol())) {
+			if (!isCpEquals(sr.getCollectionProtocol(), input.getCollectionProtocol())) {
 				continue;
 			}
 			
-			if (!isEqualSites(sr.getSite(), srd.getSite())) {
+			if (!isSiteEquals(sr.getSite(), input.getSite())) {
 				continue;
 			}
 					
@@ -128,27 +134,25 @@ public class Subject {
 		return null;
 	}
 	
-	
-	private boolean isEqualCps(CollectionProtocol cp1, CollectionProtocolSummary cp2) {
+	private boolean isCpEquals(CollectionProtocol cp1, CollectionProtocol cp2) {
 		boolean equals = false;
 		if (cp1 == null && cp2 == null) {
 			equals = true;
-		} else if (cp1 != null && cp2 != null) {
-			equals = cp1.getShortTitle().equals(cp2.getShortTitle());
+		} else if (cp1 != null && cp1.equals(cp2)) {
+			equals = true;
 		}
 
 		return equals;
 	}
 
-	private boolean isEqualSites(Site site1, SiteDetail site2) {
+	private boolean isSiteEquals(Site site1, Site site2) {
 		boolean equals = false;
 		if (site1 == null && site2 == null) {
 			equals = true;
-		} else if (site1 != null && site2 != null) {
-			equals = site1.getName().equals(site2.getName());
+		} else if (site1 != null && site1.equals(site2)) {
+			equals = true;
 		}
 
 		return equals;
 	}
-
 }
