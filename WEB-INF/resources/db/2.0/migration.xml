@@ -184,7 +184,7 @@
     </sql>
   </changeSet> 
   
-  <changeSet author="nmarwaha" id="Creating sequences for container and position table" dbms="oracle" failOnError="false">
+  <changeSet author="nmarwaha" id="Creating sequences for container and position table" dbms="oracle" runOnChange="true">
     <sql endDelimiter="//">
       begin
         declare
@@ -209,7 +209,7 @@
     </sql>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Creating sequences for institution table" dbms="oracle" failOnError="false">
+  <changeSet author="nmarwaha" id="Creating sequences for institution table" dbms="oracle" runOnChange="true">
     <sql endDelimiter="//">
       begin
         declare
@@ -232,7 +232,7 @@
     <sql>
       drop trigger if exists trg_container_replication
     </sql>
-  </changeSet>    
+  </changeSet>     
   
   <changeSet author="vgaikwad" id="Assign Administrator role to existing site coordinators" dbms="mysql">
     <sql>

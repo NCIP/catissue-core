@@ -104,7 +104,7 @@ public class SiteServiceImpl implements SiteService {
 			ensureUniqueConstraint(site, null, ose);
 			ose.checkAndThrow();
 			daoFactory.getSiteDao().saveOrUpdate(site, true);
-			addDefaultCoordinatorRole(site, site.getCoordinators());
+			addDefaultCoordinatorRoles(site, site.getCoordinators());
 			return ResponseEvent.response(SiteDetail.from(site));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -196,8 +196,8 @@ public class SiteServiceImpl implements SiteService {
 			existing.update(site);			
 			daoFactory.getSiteDao().saveOrUpdate(existing);
 			
-			removeDefaultCoordinatorRole(existing, removedCoordinators);
-			addDefaultCoordinatorRole(existing, addedCoordinators);
+			removeDefaultCoordinatorRoles(existing, removedCoordinators);
+			addDefaultCoordinatorRoles(existing, addedCoordinators);
 			
 			return ResponseEvent.response(SiteDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
@@ -207,16 +207,20 @@ public class SiteServiceImpl implements SiteService {
 		}		
 	}
 	
-	private void addDefaultCoordinatorRole(Site site, Collection<User> users) {
+	private void addDefaultCoordinatorRoles(Site site, Collection<User> users) {
 		for (User user: users) {
-			rbacSvc.addSubjectRole(site, null, user, ADMINISTRATOR);
+			rbacSvc.addSubjectRole(site, null, user, getDefaultCoordinatorRoles());
 		}
 	}
 	
-	private void removeDefaultCoordinatorRole(Site site, Collection<User> users) {
+	private void removeDefaultCoordinatorRoles(Site site, Collection<User> users) {
 		for (User user: users) {
-			rbacSvc.removeSubjectRole(site, null, user, ADMINISTRATOR);
+			rbacSvc.removeSubjectRole(site, null, user, getDefaultCoordinatorRoles());
 		}
+	}
+	
+	private String[] getDefaultCoordinatorRoles() {
+		return new String[] {"Administrator"};
 	}
 
 	private void ensureUniqueConstraint(Site newSite, Site existingSite, OpenSpecimenException ose) {
@@ -330,5 +334,4 @@ public class SiteServiceImpl implements SiteService {
 		return result;
 	}
 	
-	private static final String ADMINISTRATOR = "Administrator"; 
 }

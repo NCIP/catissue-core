@@ -191,8 +191,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			daoFactory.getCollectionProtocolDao().saveOrUpdate(cp);
 			
 			//Assign default roles to PI and Coordinators
-			addDefaultPIRole(cp, cp.getPrincipalInvestigator());
-			addDefaultCoordinatorRole(cp, cp.getCoordinators());
+			addDefaultPIRoles(cp, cp.getPrincipalInvestigator());
+			addDefaultCoordinatorRoles(cp, cp.getCoordinators());
 			
 			return ResponseEvent.response(CollectionProtocolDetail.from(cp));
 		} catch (OpenSpecimenException ose) {
@@ -231,13 +231,13 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			
 			// PI role handling
 			if (piChanged) {
-				removeDefaultPIRole(cp, oldPI);
-				addDefaultPIRole(cp, cp.getPrincipalInvestigator());
+				removeDefaultPIRoles(cp, oldPI);
+				addDefaultPIRoles(cp, cp.getPrincipalInvestigator());
 			} 
 
 			// Coordinator Role Handling
-			removeDefaultCoordinatorRole(cp, removedCoord);
-			addDefaultCoordinatorRole(cp, addedCoord);
+			removeDefaultCoordinatorRoles(cp, removedCoord);
+			addDefaultCoordinatorRoles(cp, addedCoord);
 			
 			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
 		} catch (OpenSpecimenException ose) {
@@ -864,26 +864,32 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		}
 	}
 
-	private void addDefaultPIRole(CollectionProtocol cp, User user) {
-		rbacSvc.addSubjectRole(null, cp, user, PI);
+	private void addDefaultPIRoles(CollectionProtocol cp, User user) {
+		rbacSvc.addSubjectRole(null, cp, user, getDefaultPIRoles());
 	}
 	
-	private void removeDefaultPIRole(CollectionProtocol cp, User user) {
-		rbacSvc.removeSubjectRole(null, cp, user, PI);
+	private void removeDefaultPIRoles(CollectionProtocol cp, User user) {
+		rbacSvc.removeSubjectRole(null, cp, user, getDefaultPIRoles());
 	}
 	
-	private void addDefaultCoordinatorRole(CollectionProtocol cp, Collection<User> coordinators) {
+	private void addDefaultCoordinatorRoles(CollectionProtocol cp, Collection<User> coordinators) {
 		for (User user : coordinators) {
-			rbacSvc.addSubjectRole(null, cp, user, COORDINATOR);
+			rbacSvc.addSubjectRole(null, cp, user, getDefaultCoordinatorRoles());
 		}
 	}
 	
-	private void removeDefaultCoordinatorRole(CollectionProtocol cp, Collection<User> coordinators) {
+	private void removeDefaultCoordinatorRoles(CollectionProtocol cp, Collection<User> coordinators) {
 		for (User user : coordinators) {
-			rbacSvc.removeSubjectRole(null, cp, user, COORDINATOR);
+			rbacSvc.removeSubjectRole(null, cp, user, getDefaultCoordinatorRoles());
 		}
+	}
+	
+	private String[] getDefaultPIRoles() {
+		return new String[] {"Principal Investigator"};
+	}
+	
+	private String[] getDefaultCoordinatorRoles() {
+		return new String[] {"Coordinator"};
 	}
 
-	private static final String PI = "Principal Investigator";
-	private static final String COORDINATOR = "Coordinator";
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Session;
 
@@ -453,42 +454,53 @@ public class RbacServiceImpl implements RbacService {
 	
 	@Override 
 	@PlusTransactional
-	public void addSubjectRole(Site site, CollectionProtocol cp, User user, String roleName) {
-		addOrRemoveSubjectRole(site, cp, user, roleName, SubjectRoleOp.OP.ADD, true);
+	public void addSubjectRole(Site site, CollectionProtocol cp, User user, String[] roleNames) {
+		addOrRemoveSubjectRole(site, cp, user, roleNames, SubjectRoleOp.OP.ADD, true);
 	}
 	
 	@Override 
 	@PlusTransactional
-	public void removeSubjectRole(Site site, CollectionProtocol cp, User user, String roleName) {
-		addOrRemoveSubjectRole(site, cp, user, roleName, SubjectRoleOp.OP.REMOVE, true);
+	public void removeSubjectRole(Site site, CollectionProtocol cp, User user, String[] roleNames) {
+		addOrRemoveSubjectRole(site, cp, user, roleNames, SubjectRoleOp.OP.REMOVE, true);
 	}
 
 	private void addOrRemoveSubjectRole(Site site, CollectionProtocol cp, User user,
-			String roleName, SubjectRoleOp.OP op, boolean implicit) {
+			String[] roleNames, SubjectRoleOp.OP op, boolean systemRole) {
 		Subject subject = daoFactory.getSubjectDao().getById(user.getId(), null);
 		if (subject == null) {
 			throw OpenSpecimenException.userError(RbacErrorCode.SUBJECT_NOT_FOUND);
 		}
 		
 		AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
-		SubjectRole sr = createSubjectRole(site, cp, roleName, implicit);
-		SubjectRole resp = null;
-		switch (op) {
-		case ADD:
-			resp = subject.addRole(sr);
-			break;
-		case REMOVE:
-			resp = subject.removeSubjectRole(sr);
-			break;
+		ArrayList<SubjectRole> subjectRoles = new ArrayList<SubjectRole>();
+		for (String role : roleNames) {
+			SubjectRole sr = createSubjectRole(site, cp, role, systemRole);
+			SubjectRole resp = null;
+			switch (op) {
+			case ADD:
+				resp = subject.addRole(sr);
+				break;
+			case REMOVE:
+				resp = subject.removeSubjectRole(sr);
+				break;
+			}
+			
+			if (resp != null) {
+				subjectRoles.add(resp);
+			}
 		}
 		
-		if (resp != null) {
-			daoFactory.getSubjectDao().saveOrUpdate(subject, true);
-			sendEmail(resp, null, op);
+		if (CollectionUtils.isEmpty(subjectRoles)) {
+			return;
+		}
+		
+		daoFactory.getSubjectDao().saveOrUpdate(subject, true);
+		for (SubjectRole sr : subjectRoles) {
+			sendEmail(sr, null, op);
 		}
 	}
 	
-	private SubjectRole createSubjectRole(Site site, CollectionProtocol cp, String roleName, boolean implicit) {
+	private SubjectRole createSubjectRole(Site site, CollectionProtocol cp, String roleName, boolean systemRole) {
 		Role role = daoFactory.getRoleDao().getRoleByName(roleName);
 		if (role == null) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ROLE_NOT_FOUND);
@@ -498,7 +510,7 @@ public class RbacServiceImpl implements RbacService {
 		subjectRole.setSite(site);
 		subjectRole.setCollectionProtocol(cp);
 		subjectRole.setRole(role);
-		subjectRole.setImplicit(implicit);
+		subjectRole.setSystemRole(systemRole);
 		
 		return subjectRole;
 	}
@@ -733,7 +745,7 @@ public class RbacServiceImpl implements RbacService {
 		sr.setCollectionProtocol(getCollectionProtocol(srd));
 		sr.setSite(getSite(srd));
 		sr.setRole(role);
-		sr.setImplicit(srd.getImplicit());
+		sr.setSystemRole(srd.getSystemRole());
 		return sr;
 	}
 
