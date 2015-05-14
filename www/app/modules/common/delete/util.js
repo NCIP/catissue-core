@@ -31,8 +31,34 @@ angular.module('os.common.delete')
       });
     }
 
+    function confirmDelete(opts) {
+      var modalInstance = $modal.open({
+        templateUrl: opts.templateUrl,
+        controller: function($scope, $modalInstance) {
+          $scope.entity = opts.entity;
+
+          $scope.ok = function() {
+            $modalInstance.close(true);
+          }
+
+          $scope.cancel = function() {
+            $modalInstance.dismiss('cancel');
+          }
+        }
+      });
+
+      modalInstance.result.then(
+        function() {
+          opts.delete();
+        }
+      );
+    };
+
+
     return {
-      delete : deleteEntity
+      delete : deleteEntity,
+
+      confirmDelete: confirmDelete
     }
 
   });

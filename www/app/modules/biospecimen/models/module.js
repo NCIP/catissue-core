@@ -9,6 +9,7 @@ angular.module('os.biospecimen.models',
     'os.biospecimen.models.visit',
     'os.biospecimen.models.specimen',
     'os.biospecimen.models.specimenlabelprinter',
-    'os.biospecimen.models.form'
+    'os.biospecimen.models.form',
+    'os.biospecimen.models.specimenlist'
   ]
 );

@@ -1846,4 +1846,9 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="vlonushte" id="Added column to soft delete specimen list">
+    <addColumn tableName="CATISSUE_SPECIMENLIST_TAGS">
+      <column name="DELETED_ON" type="${nullable.ts.type}" defaultValue="null"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>
