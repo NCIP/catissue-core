@@ -6,12 +6,14 @@ angular.module('openspecimen')
       CpConfigSvc, Alerts, Util, ApiUrls) {
 
       var baseUrl = ApiUrls.getBaseUrl();
+      var currCpe = undefined;
 
       function init() {
         $scope.cpId = $stateParams.cpId
         $scope.view = 'register';
         $scope.participants = [];
         $scope.visit = {};
+        $scope.tabOrderCnt = 0;
         $scope.boxOpts = {
           compact: false,
           dimension: {rows: 9, columns: 9},
@@ -106,13 +108,21 @@ angular.module('openspecimen')
       }
 
       function loadSpecimenRequirements() {
+        if (currCpe == $scope.visit.cpe) {
+          return;
+        }
+
         SpecimenRequirement.listFor($scope.visit.cpe.id).then(
           function(srs) {
             angular.forEach($scope.participants, function(participant) {
               participant.specimens = angular.copy(srs);
             });
+
+            ++$scope.tabOrderCnt;
           }
-        )
+        );
+
+        currCpe = $scope.visit.cpe;
       }
 
       function getVisitAndSpecimensToSave(participant) {
@@ -262,6 +272,8 @@ angular.module('openspecimen')
       $scope.loadSpecimenRequirements = loadSpecimenRequirements;
 
       $scope.removePrimarySpecimen = function(participant, specimen) {
+        $scope.tabOrderCnt++;
+
         var idx = participant.specimens.indexOf(specimen);
         if (idx >= 0) {
           participant.specimens.splice(idx, 1);
