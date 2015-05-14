@@ -33,11 +33,11 @@
       </button>
 
       <div dropdown class="btn-group" ng-if="showAddToSpecimenList">
-        <button class="btn default" ng-if="!queryCtx.selectAll" ng-click="selectAllRows()">
+        <button class="btn default" ng-if="!resultsCtx.selectAll" ng-click="selectAllRows()">
           <span class="fa fa-check"></span>
           <span translate="queries.select_all">Select All</span>
         </button>
-        <button type="button" class="btn default" ng-if="queryCtx.selectAll" ng-click="unSelectAllRows()">
+        <button type="button" class="btn default" ng-if="resultsCtx.selectAll" ng-click="unSelectAllRows()">
           <span class="fa fa-remove"></span>
             <span translate="queries.unselect_all">Unselect All</span>
           </button>

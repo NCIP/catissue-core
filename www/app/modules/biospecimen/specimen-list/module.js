@@ -1,13 +1,14 @@
 angular.module('os.biospecimen.specimenlist', 
   [ 
     'os.biospecimen.specimenlist.list',
-    'os.biospecimen.specimenlist.addedit'
+    'os.biospecimen.specimenlist.addedit',
+    'os.biospecimen.specimenlist.specimensholder'
   ])
 
   .config(function($stateProvider) {
     $stateProvider
       .state('specimen-list', {
-        url: '/specimen-list',
+        url: '/specimen-list?listId',
         templateUrl: 'modules/biospecimen/specimen-list/list.html',
         controller: 'SpecimenListsCtrl',
         parent: 'signed-in'
@@ -21,9 +22,6 @@ angular.module('os.biospecimen.specimenlist',
               return SpecimenList.getById($stateParams.listId);
             }
             return new SpecimenList();
-          },
-          $modalInstance: function() {
-             return undefined;
           }
         },
         controller: 'AddEditSpecimenListCtrl',

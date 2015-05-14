@@ -6,6 +6,16 @@ angular.module('os.biospecimen.models.specimenlist', ['os.common.models'])
       return SpecimenList.url() + id + '/specimens';
     }
 
+    function doSpecimenListOp(listId, specimens, op) {
+      var params = "?operation=" + op;
+      var labels = specimens.map(function(specimen) { return specimen.label; });
+      return $http.put(getSpecimensUrl(listId) + params, labels).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
     SpecimenList.prototype.getSpecimens = function() {
       return $http.get(getSpecimensUrl(this.$id())).then(
         function(result) {
@@ -14,12 +24,18 @@ angular.module('os.biospecimen.models.specimenlist', ['os.common.models'])
       );
     };
 
-    SpecimenList.prototype.updateSpecimens = function() {
-      var specimenLabels = this.specimens.map(function(spec) {return spec.label;})
-      var param = "?operation=" + this.operation;
-
-      return $http.put(getSpecimensUrl(this.$id()) + param, specimenLabels).then(SpecimenList.noTransform);
+    SpecimenList.prototype.addSpecimens = function(specimens) {
+      return doSpecimenListOp(this.$id(), specimens, 'ADD');
     }
+
+    SpecimenList.prototype.removeSpecimens = function(specimens) {
+      return doSpecimenListOp(this.$id(), specimens, 'REMOVE');
+    }
+
+    SpecimenList.prototype.updateSpecimens = function(specimens) {
+      return doSpecimenListOp(this.$id(), specimens, 'UPDATE');
+    }
+
 
     return SpecimenList;
   });

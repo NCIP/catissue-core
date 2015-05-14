@@ -1,6 +1,12 @@
 angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
-  .controller('AddEditSpecimenListCtrl', function($scope, $state, $modalInstance, list, SpecimenList) {
-    $scope.list = list;
+  .controller('AddEditSpecimenListCtrl', function(
+    $scope, $state, list, SpecimenList, SpecimensHolder) {
+ 
+    function init() { 
+      $scope.list = list;
+      $scope.list.specimens = SpecimensHolder.getSpecimens() || list.specimens;
+      $scope.isQueryOrSpecimenPage =  SpecimensHolder.getSpecimens() != undefined;
+    }
 
     $scope.saveOrUpdateList = function() {
       var sharedWith = $scope.list.sharedWith.map(function(user) { return {id: user.id} });
@@ -13,10 +19,10 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
  
       specimenList.$saveOrUpdate().then(
         function(savedList) {
-          if (!!$modalInstance) {
-            $modalInstance.close(savedList);
+          if ($scope.isQueryOrSpecimenPage) {
+            $scope.back();
           } else {
-            $state.go('specimen-list');
+           $state.go('specimen-list', {listId: savedList.id});
           }
         }
       );
@@ -30,8 +36,6 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
       );
     };
 
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
+    init();
   }
 );

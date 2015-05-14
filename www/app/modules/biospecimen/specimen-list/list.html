@@ -104,7 +104,7 @@
           Visit Name
         </div>
         <div class="col col-xs-2" translate="specimen_list.label">
-          Label
+          Label (Barcode)
         </div>
         <div class="col col-xs-2" translate="specimen_list.parent_label">
           Parent Label
@@ -133,7 +133,7 @@
             </div>
           </div>
         </div>
-        <div class="col col-xs-2">{{specimen.label}}</div>
+        <div class="col col-xs-2">{{specimen.label}} {{ !!specimen.barcode ? '(' + specimen.barcode + ')' : '' }}</div>
         <div class="col col-xs-2">{{specimen.parentLabel}}</div>
         <div class="col col-xs-3">{{specimen.type}} ({{specimen.specimenClass}})</div>
         <div class="col col-xs-1">{{specimen.availableQty}}</div>

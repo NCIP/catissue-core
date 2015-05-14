@@ -317,6 +317,7 @@
 
     "no_specimens_for_collection": "Please select at least one anticipated specimen for collection",
     "no_specimens_for_print": "Please select at least one collected specimen for label printing",
+    "no_specimens_for_specimen_list": "Please select at least one specmen to add specimen list",
 
     "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
     "bulk_import": "Bulk Import Specimens",
@@ -339,7 +340,8 @@
       "collect_aliquots": "Collect Aliquots",
       "create_derivative": "Create Derivative",
       "collect": "Collect",
-      "print": "Print"
+      "print": "Print",
+      "add_to_specimen_list": "Add To Specimen List"
     },
 
     "errors": {
@@ -997,7 +999,7 @@
     "info": "Information",
     "no_specimens": "There are no specimens to show in selected specimen list.",
     "visit_name": "Visit Name",
-    "label": "Label",
+    "label": "Label (Barcode)",
     "parent_label": "Parent Label",
     "type_class": "Type (Class)",
     "quantity": "Quantity",
