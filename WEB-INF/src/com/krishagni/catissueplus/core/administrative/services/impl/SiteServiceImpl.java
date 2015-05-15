@@ -2,14 +2,17 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
@@ -29,6 +32,7 @@ import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
+import com.krishagni.rbac.service.RbacService;
 
 
 public class SiteServiceImpl implements SiteService {
@@ -36,12 +40,18 @@ public class SiteServiceImpl implements SiteService {
 
 	private DaoFactory daoFactory;
 	
+	private RbacService rbacSvc;
+	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 
 	public void setSiteFactory(SiteFactory siteFactory) {
 		this.siteFactory = siteFactory;
+	}
+	
+	public void setRbacSvc(RbacService rbacSvc) {
+		this.rbacSvc = rbacSvc;
 	}
 	
 	@Override
@@ -93,8 +103,8 @@ public class SiteServiceImpl implements SiteService {
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueConstraint(site, null, ose);
 			ose.checkAndThrow();
-			
-			daoFactory.getSiteDao().saveOrUpdate(site, true);			
+			daoFactory.getSiteDao().saveOrUpdate(site, true);
+			addDefaultCoordinatorRoles(site, site.getCoordinators());
 			return ResponseEvent.response(SiteDetail.from(site));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -178,8 +188,17 @@ public class SiteServiceImpl implements SiteService {
 			ensureUniqueConstraint(site, existing, ose);
 			ose.checkAndThrow();
 			
+			Collection<User> addedCoordinators = 
+				CollectionUtils.subtract(site.getCoordinators(), existing.getCoordinators());
+			Collection<User> removedCoordinators = 
+				CollectionUtils.subtract(existing.getCoordinators(), site.getCoordinators());
+			
 			existing.update(site);			
-			daoFactory.getSiteDao().saveOrUpdate(existing);			
+			daoFactory.getSiteDao().saveOrUpdate(existing);
+			
+			removeDefaultCoordinatorRoles(existing, removedCoordinators);
+			addDefaultCoordinatorRoles(existing, addedCoordinators);
+			
 			return ResponseEvent.response(SiteDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -188,6 +207,22 @@ public class SiteServiceImpl implements SiteService {
 		}		
 	}
 	
+	private void addDefaultCoordinatorRoles(Site site, Collection<User> users) {
+		for (User user: users) {
+			rbacSvc.addSubjectRole(site, null, user, getDefaultCoordinatorRoles());
+		}
+	}
+	
+	private void removeDefaultCoordinatorRoles(Site site, Collection<User> users) {
+		for (User user: users) {
+			rbacSvc.removeSubjectRole(site, null, user, getDefaultCoordinatorRoles());
+		}
+	}
+	
+	private String[] getDefaultCoordinatorRoles() {
+		return new String[] {"Administrator"};
+	}
+
 	private void ensureUniqueConstraint(Site newSite, Site existingSite, OpenSpecimenException ose) {
 		if (!isUniqueName(newSite, existingSite)) {
 			ose.addError(SiteErrorCode.DUP_NAME);
@@ -298,4 +333,5 @@ public class SiteServiceImpl implements SiteService {
 		
 		return result;
 	}
+	
 }

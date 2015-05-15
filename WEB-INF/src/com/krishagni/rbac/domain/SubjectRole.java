@@ -13,6 +13,8 @@ public class SubjectRole {
 	private CollectionProtocol collectionProtocol;
 	
 	private Site site;
+	
+	private Boolean systemRole;
 
 	public Long getId() {
 		return id;
@@ -54,6 +56,14 @@ public class SubjectRole {
 		this.site = site;
 	}
 	
+	public Boolean getSystemRole() {
+		return systemRole;
+	}
+
+	public void setSystemRole(Boolean systemRole) {
+		this.systemRole = systemRole;
+	}
+
 	@Override
 	public int hashCode() {
 		return 31 * 1 

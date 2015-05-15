@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -53,6 +54,7 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.rbac.service.RbacService;
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
 
@@ -63,6 +65,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	private SpecimenRequirementFactory srFactory;
 
 	private DaoFactory daoFactory;
+	
+	private RbacService rbacSvc;
 
 	public CollectionProtocolFactory getCpFactory() {
 		return cpFactory;
@@ -94,6 +98,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+	
+	public void setRbacSvc(RbacService rbacSvc) {
+		this.rbacSvc = rbacSvc;
 	}
 
 	@Override
@@ -181,6 +189,11 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			ose.checkAndThrow();
 
 			daoFactory.getCollectionProtocolDao().saveOrUpdate(cp);
+			
+			//Assign default roles to PI and Coordinators
+			addDefaultPiRoles(cp, cp.getPrincipalInvestigator());
+			addDefaultCoordinatorRoles(cp, cp.getCoordinators());
+			
 			return ResponseEvent.response(CollectionProtocolDetail.from(cp));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -208,7 +221,24 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			ensureUniqueTitle(existingCp, cp, ose);
 			ose.checkAndThrow();
 			
+			User oldPI = existingCp.getPrincipalInvestigator();
+			boolean piChanged = !oldPI.equals(cp.getPrincipalInvestigator());
+			
+			Collection<User> addedCoord = CollectionUtils.subtract(cp.getCoordinators(), existingCp.getCoordinators());
+			Collection<User> removedCoord = CollectionUtils.subtract(existingCp.getCoordinators(), cp.getCoordinators());
+			
 			existingCp.update(cp);
+			
+			// PI role handling
+			if (piChanged) {
+				removeDefaultPiRoles(cp, oldPI);
+				addDefaultPiRoles(cp, cp.getPrincipalInvestigator());
+			} 
+
+			// Coordinator Role Handling
+			removeDefaultCoordinatorRoles(cp, removedCoord);
+			addDefaultCoordinatorRoles(cp, addedCoord);
+			
 			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -833,4 +863,33 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			}			
 		}
 	}
+
+	private void addDefaultPiRoles(CollectionProtocol cp, User user) {
+		rbacSvc.addSubjectRole(null, cp, user, getDefaultPiRoles());
+	}
+	
+	private void removeDefaultPiRoles(CollectionProtocol cp, User user) {
+		rbacSvc.removeSubjectRole(null, cp, user, getDefaultPiRoles());
+	}
+	
+	private void addDefaultCoordinatorRoles(CollectionProtocol cp, Collection<User> coordinators) {
+		for (User user : coordinators) {
+			rbacSvc.addSubjectRole(null, cp, user, getDefaultCoordinatorRoles());
+		}
+	}
+	
+	private void removeDefaultCoordinatorRoles(CollectionProtocol cp, Collection<User> coordinators) {
+		for (User user : coordinators) {
+			rbacSvc.removeSubjectRole(null, cp, user, getDefaultCoordinatorRoles());
+		}
+	}
+	
+	private String[] getDefaultPiRoles() {
+		return new String[] {"Principal Investigator"};
+	}
+	
+	private String[] getDefaultCoordinatorRoles() {
+		return new String[] {"Coordinator"};
+	}
+
 }

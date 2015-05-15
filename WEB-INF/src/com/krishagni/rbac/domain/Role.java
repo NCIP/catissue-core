@@ -3,6 +3,8 @@ package com.krishagni.rbac.domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.proxy.HibernateProxyHelper;
+
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 
 public class Role {
@@ -107,7 +109,7 @@ public class Role {
 			return false;
 		}
 		
-		if (getClass() != obj.getClass()) {
+		if (getClass() != HibernateProxyHelper.getClassWithoutInitializingProxy(obj)) {
 			return false;
 		}
 		
