@@ -65,7 +65,7 @@ angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
         '&formName=' + formName +
         '&entityType=' + importDetail.entityType
       );
-      $scope.inputJob.objectParams.formName = formName;
+      $scope.importJob.objectParams.formName = formName;
     };
 
     init();
