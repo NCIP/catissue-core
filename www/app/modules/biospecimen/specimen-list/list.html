@@ -1,7 +1,7 @@
 <div>
   <div os-page-header>
     <h3>
-      <span translate="specimen_list.specimen_list">Specimen List</span>
+      <span translate="specimen_list.title">Specimen List</span>
     </h3>
     <div class="os-btns right">
       <button class="btn btn-danger" ng-click="confirmRemoveSpecimens()"
@@ -133,7 +133,7 @@
             </div>
           </div>
         </div>
-        <div class="col col-xs-2">{{specimen.label}} {{ !!specimen.barcode ? '(' + specimen.barcode + ')' : '' }}</div>
+        <div class="col col-xs-2">{{specimen.label}} <span ng-if="!!specimen.barcode">({{specimen.barcode}})</span></div>
         <div class="col col-xs-2">{{specimen.parentLabel}}</div>
         <div class="col col-xs-3">{{specimen.type}} ({{specimen.specimenClass}})</div>
         <div class="col col-xs-1">{{specimen.availableQty}}</div>

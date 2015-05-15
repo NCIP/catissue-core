@@ -6,6 +6,7 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
       $scope.list = list;
       $scope.list.specimens = SpecimensHolder.getSpecimens() || list.specimens;
       $scope.isQueryOrSpecimenPage =  SpecimensHolder.getSpecimens() != undefined;
+      SpecimensHolder.setSpecimens(undefined);
     }
 
     $scope.saveOrUpdateList = function() {

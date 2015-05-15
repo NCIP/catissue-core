@@ -21,7 +21,12 @@ angular.module('os.biospecimen.participant.specimen-tree',
     function loadAllSpecimenList(scope) {
       SpecimenList.query().then(
         function(lists) {
-          scope.specimenLists = lists;
+          scope.specimenLists = [];
+          angular.forEach(lists, function(list) {
+            if (list.owner.id == scope.$parent.currentUser.id) {
+              scope.specimenLists.push(list);
+            }
+          })
         }
       );
     }
@@ -93,7 +98,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
     function getSelectedSpecimens(scope) {
       var selectedSpecimens = [];
       angular.forEach(scope.specimens, function(specimen) {
-        if (specimen.selected && specimen.status == 'Collected') {
+        if (specimen.selected && specimen.id != null) {
           selectedSpecimens.push({label: specimen.label});
         }
       });
