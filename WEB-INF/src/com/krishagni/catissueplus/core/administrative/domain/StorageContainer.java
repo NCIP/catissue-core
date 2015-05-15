@@ -610,7 +610,12 @@ public class StorageContainer extends BaseEntity {
 		if (getBarcode() != null) {
 			setBarcode(Utility.appendTimestamp(getBarcode()));
 		}
+		
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+		if (getParentContainer() != null) {
+			getParentContainer().removePosition(getPosition());
+			setPosition(null);
+		}
 	}
 	
 	private int getSpecimenCount() {
