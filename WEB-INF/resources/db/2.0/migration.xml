@@ -232,14 +232,14 @@
     <sql>
       drop trigger if exists trg_container_replication
     </sql>
-  </changeSet>     
+  </changeSet>      
   
   <changeSet author="vgaikwad" id="Assign Administrator role to existing site coordinators" dbms="mysql">
     <sql>
       select identifier into @role_id from rbac_roles where name = 'Administrator';
       
       insert into rbac_subject_roles 
-        (subject_id, role_id, site_id, is_implicit) 
+        (subject_id, role_id, site_id, system_role) 
       select 
         sc.user_id, @role_id, sc.site_id, 1 
       from 
@@ -259,7 +259,7 @@
         select identifier into role_id from rbac_roles where name = 'Administrator';
 
         insert into rbac_subject_roles 
-          (identifier, subject_id, role_id, site_id, is_implicit)
+          (identifier, subject_id, role_id, site_id, system_role)
         select
           rbac_subject_roles_seq.nextval, sc.user_id, role_id, sc.site_id, 1
         from
@@ -278,7 +278,7 @@
       select identifier into @role_id from rbac_roles where name = 'Principal Investigator';
       
       insert into rbac_subject_roles 
-        (subject_id, role_id, cp_id, is_implicit) 
+        (subject_id, role_id, cp_id, system_role) 
       select 
         cp.principal_investigator_id, @role_id, cp.identifier, 1  
       from 
@@ -297,7 +297,7 @@
         select identifier into role_id from rbac_roles where name = 'Principal Investigator';
    
         insert into rbac_subject_roles 
-          (identifier, subject_id, role_id, cp_id, is_implicit) 
+          (identifier, subject_id, role_id, cp_id, system_role) 
         select 
           rbac_subject_roles_seq.nextval, cp.principal_investigator_id, role_id, cp.identifier, 1  
         from 
@@ -315,7 +315,7 @@
       select identifier into @role_id from rbac_roles where name = 'Coordinator';
       
       insert into rbac_subject_roles 
-        (subject_id, role_id, cp_id, is_implicit) 
+        (subject_id, role_id, cp_id, system_role) 
       select 
         coord.user_id, @role_id, coord.collection_protocol_id, 1  
       from 
@@ -335,7 +335,7 @@
         select identifier into role_id from rbac_roles where name = 'Coordinator';
    
         insert into rbac_subject_roles 
-          (identifier, subject_id, role_id, cp_id, is_implicit) 
+          (identifier, subject_id, role_id, cp_id, system_role) 
         select 
           rbac_subject_roles_seq.nextval, coord.user_id, role_id, coord.collection_protocol_id, 1  
         from 
