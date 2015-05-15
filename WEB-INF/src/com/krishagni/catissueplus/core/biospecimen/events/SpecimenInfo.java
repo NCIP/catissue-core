@@ -324,6 +324,7 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		result.setActivityStatus(specimen.getActivityStatus());
 		result.setCreatedOn(specimen.getCreatedOn());
 		result.setStorageType(sr != null ? sr.getStorageType() : null);
+		result.setVisitName(specimen.getVisit().getName());
 	}	
 	
 	public static void fromTo(SpecimenRequirement anticipated, SpecimenInfo result) {

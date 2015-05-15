@@ -14,6 +14,7 @@
     "reports": "Reports",
     "containers": "Containers",
     "forms": "Forms",
+    "specimen_lists": "Specimen Lists",
 
     "cp_desc": "Create, update SOP of visits and specimens",
     "dp_desc": "Create, update procedures for distributing specimens",
@@ -319,6 +320,7 @@
 
     "no_specimens_for_collection": "Please select at least one anticipated specimen for collection",
     "no_specimens_for_print": "Please select at least one collected specimen for label printing",
+    "no_specimens_for_specimen_list": "Please select at least one specmen to add specimen list",
 
     "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
     "bulk_import": "Bulk Import Specimens",
@@ -343,7 +345,8 @@
       "collect_aliquots": "Collect Aliquots",
       "create_derivative": "Create Derivative",
       "collect": "Collect",
-      "print": "Print"
+      "print": "Print",
+      "assign_to": "Assign To"
     },
 
     "errors": {
@@ -807,6 +810,8 @@
     "new_query_folder": "New Query Folder",
     "update_query_folder": "Update Query Folder",
     "folder_name": "Folder Name",
+    "select_all": "Select All",
+    "unselect_all": "Unselect All",
     "remove_query_from_folder": "Remove query from folder",
     "share_folder_with_all": "Share folder with all current and future users",
     "share_folder_with_users": "Share folder with following users",
@@ -988,5 +993,31 @@
     },
 
     "extension_name": "{{params.formName}} ({{params.entityType}})"
-  }
+  },
+
+  "specimen_list": {
+    "new_list": "New Specimen List",
+    "create_list": "Create Specimen List",
+    "update_list": "Update Specimen List",
+    "create_new_list": "Create New Specimen List",
+    "search_list": "Search Specimen List",
+    "title": "Specimen List",
+    "name": "Name",
+    "share_list_with_users": "Share list with following users",
+    "users": "Users",
+    "my_lists": "My Lists",
+    "shared_lists": "Shared Lists",
+    "info": "Information",
+    "no_specimens": "There are no specimens to show in selected specimen list.",
+    "visit_name": "Visit Name",
+    "label": "Label (Barcode)",
+    "parent_label": "Parent Label",
+    "type_class": "Type (Class)",
+    "quantity": "Quantity",
+    "lineage": "Lineage",
+    "remove_specimens": "Removing Specimens From {{name}} list",
+    "confirm_remove_specimens": "Are you sure you want to remove selected specimens from {{name}} list?",
+    "specimens_added": "Specimens sucessfully added to {{name}} list",
+    "specimens_removed": "Specimens successfully removed from {{name}} list"
+   }
 }

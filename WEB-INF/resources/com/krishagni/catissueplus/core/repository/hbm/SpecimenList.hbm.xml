@@ -36,6 +36,8 @@
       <key column="TAG_ID"/>
       <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen" column="OBJ_ID" />
     </set>
+    
+    <property name="deletedOn" column="DELETED_ON"/>
 	
     <query name="getSpecimenListsByUser">
       select 
@@ -43,7 +45,10 @@
       from 
         SpecimenList l inner join l.owner owner left join l.sharedWith sharedWith 
       where 
-        owner.id = :userId or sharedWith.id = :userId
+        (owner.id = :userId or sharedWith.id = :userId)
+        and l.deletedOn is null
+      order by
+        l.name
     </query>
   </class> 
 </hibernate-mapping>
