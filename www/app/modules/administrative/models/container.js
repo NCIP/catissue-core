@@ -48,7 +48,7 @@ angular.module('os.administrative.models.container', ['os.common.models'])
     };
 
     Container.prototype.getChildContainers = function(anyLevel) {
-      return Container.query({parentContainerId: this.$id(), includeChildren: true});
+      return Container.query({parentContainerId: this.$id(), includeChildren: anyLevel});
     };
 
     Container.prototype.getOccupiedPositions = function() {
@@ -79,6 +79,32 @@ angular.module('os.administrative.models.container', ['os.common.models'])
         }
       )
     }
+
+    Container.prototype.lazyLoadFlattenedChildren = function(containers, placeholder) {
+      if (this.childContainersLoaded) {
+        return;
+      }
+
+      var container = this;
+      container.getChildContainers(false).then(
+        function(childContainers) {
+          angular.forEach(childContainers, function(childContainer, idx) {
+            var dummyId = -1 * container.id + "." + idx;
+            childContainer.childContainers = [angular.extend({id: dummyId}, placeholder)];
+            childContainer.childContainersLoaded = false;
+          });
+          container.childContainersLoaded = true;
+
+          var flattened = Container._flatten(childContainers, 'childContainers', container, container.depth + 1);
+          var idx = containers.indexOf(container);
+          var args = [idx + 1, 1].concat(flattened)
+          Array.prototype.splice.apply(containers, args);
+          if (childContainers.length == 0) {
+            container.hasChildren = false;
+          }
+        }
+      );
+    };
 
     return Container;
   });

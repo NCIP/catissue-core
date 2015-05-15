@@ -44,6 +44,7 @@
     "view_jobs": "View Jobs",
     "digits": "digits",
     "not_specified": "Not Specified",
+    "loading": "Loading...",
 
     "buttons": {
       "add": "Add",
