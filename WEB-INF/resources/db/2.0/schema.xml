@@ -1846,4 +1846,12 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="vpawar" id="Add covering index for use in stat view" dbms="mysql">
+    <createIndex indexName="OS_STAT_VIEW_IDX" tableName="OS_STORAGE_CONTAINERS" unique="true">
+      <column name="IDENTIFIER"/>
+      <column name="NAME"/>
+      <column name="NO_OF_COLS"/>
+      <column name="NO_OF_ROWS"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>
