@@ -191,7 +191,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			daoFactory.getCollectionProtocolDao().saveOrUpdate(cp);
 			
 			//Assign default roles to PI and Coordinators
-			addDefaultPIRoles(cp, cp.getPrincipalInvestigator());
+			addDefaultPiRoles(cp, cp.getPrincipalInvestigator());
 			addDefaultCoordinatorRoles(cp, cp.getCoordinators());
 			
 			return ResponseEvent.response(CollectionProtocolDetail.from(cp));
@@ -231,8 +231,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			
 			// PI role handling
 			if (piChanged) {
-				removeDefaultPIRoles(cp, oldPI);
-				addDefaultPIRoles(cp, cp.getPrincipalInvestigator());
+				removeDefaultPiRoles(cp, oldPI);
+				addDefaultPiRoles(cp, cp.getPrincipalInvestigator());
 			} 
 
 			// Coordinator Role Handling
@@ -864,12 +864,12 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		}
 	}
 
-	private void addDefaultPIRoles(CollectionProtocol cp, User user) {
-		rbacSvc.addSubjectRole(null, cp, user, getDefaultPIRoles());
+	private void addDefaultPiRoles(CollectionProtocol cp, User user) {
+		rbacSvc.addSubjectRole(null, cp, user, getDefaultPiRoles());
 	}
 	
-	private void removeDefaultPIRoles(CollectionProtocol cp, User user) {
-		rbacSvc.removeSubjectRole(null, cp, user, getDefaultPIRoles());
+	private void removeDefaultPiRoles(CollectionProtocol cp, User user) {
+		rbacSvc.removeSubjectRole(null, cp, user, getDefaultPiRoles());
 	}
 	
 	private void addDefaultCoordinatorRoles(CollectionProtocol cp, Collection<User> coordinators) {
@@ -884,7 +884,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		}
 	}
 	
-	private String[] getDefaultPIRoles() {
+	private String[] getDefaultPiRoles() {
 		return new String[] {"Principal Investigator"};
 	}
 	

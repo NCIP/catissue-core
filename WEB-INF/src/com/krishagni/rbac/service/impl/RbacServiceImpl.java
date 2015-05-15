@@ -477,12 +477,12 @@ public class RbacServiceImpl implements RbacService {
 			SubjectRole sr = createSubjectRole(site, cp, role, systemRole);
 			SubjectRole resp = null;
 			switch (op) {
-			case ADD:
-				resp = subject.addRole(sr);
-				break;
-			case REMOVE:
-				resp = subject.removeSubjectRole(sr);
-				break;
+				case ADD:
+					resp = subject.addRole(sr);
+					break;
+				case REMOVE:
+					resp = subject.removeSubjectRole(sr);
+					break;
 			}
 			
 			if (resp != null) {
