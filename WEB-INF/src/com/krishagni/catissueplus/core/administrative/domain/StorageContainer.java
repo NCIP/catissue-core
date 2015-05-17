@@ -371,7 +371,7 @@ public class StorageContainer extends BaseEntity {
 		Set<Integer> result = new HashSet<Integer>();
 				
 		for (StorageContainerPosition pos : getOccupiedPositions()) {
-			result.add((pos.getPosTwoOrdinal() - 1) * noOfRows + pos.getPosOneOrdinal());
+			result.add((pos.getPosTwoOrdinal() - 1) * getNoOfColumns() + pos.getPosOneOrdinal());
 		}
 		
 		return result;
