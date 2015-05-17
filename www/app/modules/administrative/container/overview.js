@@ -9,11 +9,15 @@ angular.module('os.administrative.container.overview', ['os.administrative.model
       $scope.container = container;
 
       $scope.childContainers = [];
-      $scope.loadChildren(container);
+      if (!!container.childContainers) {
+        $scope.childContainers = Container.flatten(container.childContainers);
+      } else {
+        $scope.loadChildren(container);
+      }
     }
 
-    $scope.loadChildren = function(container) {
-      container.lazyLoadFlattenedChildren($scope.childContainers, placeholder);
+    $scope.loadChildren = function(container, forceLoad) {
+      container.lazyLoadFlattenedChildren($scope.childContainers, placeholder, forceLoad);
     };
 
     init();

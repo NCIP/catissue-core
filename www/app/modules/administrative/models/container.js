@@ -93,6 +93,7 @@ angular.module('os.administrative.models.container', ['os.common.models'])
             childContainer.childContainers = [angular.extend({id: dummyId}, placeholder)];
             childContainer.childContainersLoaded = false;
           });
+          container.childContainers = childContainers;
           container.childContainersLoaded = true;
 
           var flattened = Container._flatten(childContainers, 'childContainers', container, container.depth + 1);
