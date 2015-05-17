@@ -20,7 +20,7 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
 
         for (var j = 0; j < locationMatrix[i].length; ++j) {
           var td = $("<td/>")
-            .css("width", slotWidth)
+            .css("min-width", slotWidth)
             .append(getContainerSlot(scope.container, locationMatrix[i][j]));
 
           if (locationMatrix[i][j].occupied) {
