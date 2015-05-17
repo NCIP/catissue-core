@@ -137,7 +137,7 @@
 
     <query name="getCprAndVisitIds">
       select
-        cpr.id, v.id
+        cpr.collectionProtocol.id, cpr.id, v.id
       from
         com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
         join s.visit v
