@@ -161,8 +161,8 @@
          pos_one_str, pos_two_str, 
          storage_container_id, occupying_specimen_id) 
       select 
-        cap.position_dimension_one, cap.position_dimension_two, 
-        cap.position_dimension_one_string, cap.position_dimension_two_string,
+        cap.position_dimension_two, cap.position_dimension_one, 
+        cap.position_dimension_two_string, cap.position_dimension_one_string,
         csp.container_id, csp.specimen_id 
       from 
         catissue_abstract_position cap 
@@ -175,8 +175,8 @@
          pos_one_str, pos_two_str,
          storage_container_id, occupying_container_id) 
       select 
-        cap.position_dimension_one, cap.position_dimension_two, 
-        cap.position_dimension_one_string, cap.position_dimension_two_string,
+        cap.position_dimension_two, cap.position_dimension_one, 
+        cap.position_dimension_two_string, cap.position_dimension_one_string,
         ccp.parent_container_id, ccp.container_id 
       from 
         catissue_abstract_position cap 
