@@ -71,6 +71,7 @@ public class AuthTokenFilter extends GenericFilterBean {
 		httpResp.setHeader("Access-Control-Allow-Credentials", "true");
 		httpResp.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
 		httpResp.setHeader("Access-Control-Allow-Headers", "Origin, Accept, Content-Type, X-OS-API-TOKEN, X-OS-API-CLIENT");
+		httpResp.setHeader("Cache-Control", "no-cache");
 		
 		if (httpReq.getMethod().equalsIgnoreCase("options")) {
 			httpResp.setStatus(HttpServletResponse.SC_OK);	
