@@ -205,7 +205,6 @@ war {
   }
   
   from ('./WEB-INF/') {
-    include 'integration-test/**'
     include 'resources/**'
     include 'applicationContext.xml'
     include 'restApiContext.xml'
