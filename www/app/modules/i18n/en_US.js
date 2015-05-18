@@ -24,6 +24,7 @@
     "sites_desc": "Add and update sites",
     "containers_desc": "Manage containers and their restrictions",
     "reports_desc": "Create, share and schedule reports",
+    "specimen_lists_desc": "Create, share and manage specimen lists",
     "forms_desc": "Create and manage custom forms",
     "settings_desc": "Manage application configuration settings"
   },
