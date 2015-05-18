@@ -1,5 +1,6 @@
 import org.apache.tools.ant.filters.ReplaceTokens;
 import org.gradle.api.tasks.Exec;
+import org.apache.tools.ant.taskdefs.condition.Os
 
 apply plugin: 'java'
 apply plugin: 'maven'
@@ -225,9 +226,15 @@ war {
   }
 }
 
+def grunt_cmd = "grunt"
+
+if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+  grunt_cmd = "grunt.cmd"
+}
+
 task grunt_build(type: Exec) {
    workingDir './www'
-   commandLine 'grunt', 'build'
+   commandLine grunt_cmd, 'build'
 }
 
 war.dependsOn unzip_de
