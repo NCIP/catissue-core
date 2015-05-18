@@ -1,6 +1,9 @@
 import org.apache.tools.ant.filters.ReplaceTokens;
 
 task deploy(type: Copy) {
+  delete deploy_location + "/openspecimen.war"
+  delete deploy_location + "/openspecimen-ds.xml"
+  
   from war
   
   def mysql_url = 'jdbc:mysql://' + database_host + ':' + database_port + '/' + database_name
