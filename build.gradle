@@ -13,7 +13,6 @@ project.ext["oracle_driver"]             = "oracle.jdbc.OracleDriver"
 Properties props = new Properties()
 props.load(new FileInputStream("build.properties"))
 
-project.ext["appHome"]           = props.appHome
 project.ext["datasource_jndi"]   = props.datasource_jndi
 project.ext["deployment_type"]   = props.deployment_type
 project.ext["database_type"]     = props.database_type
@@ -25,10 +24,10 @@ project.ext["database_password"] = props.database_password
 
 def springVersion = "3.2.13.RELEASE"
 
-def deploymentLocation = appHome + "/server/default/deploy"
+def deploymentLocation = props.appHome + "/server/default/deploy"
 
-if(new File(appHome + '/webapps').exists()) {
-  deploymentLocation = appHome + "/webapps"
+if(new File(props.appHome + '/webapps').exists()) {
+  deploymentLocation = props.appHome + "/webapps"
 }
 
 project.ext["deploy_location"] = deploymentLocation
