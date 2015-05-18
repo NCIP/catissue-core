@@ -5,27 +5,36 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'war'
 
-project.ext["datasource_mysql_dialect"] = "org.hibernate.dialect.MySQLDialect"
+project.ext["datasource_mysql_dialect"]  = "org.hibernate.dialect.MySQLDialect"
 project.ext["datasource_oracle_dialect"] = "org.hibernate.dialect.Oracle10gDialect"
-project.ext["mysql_driver"] = "org.gjt.mm.mysql.Driver"
-project.ext["oracle_driver"] = "oracle.jdbc.OracleDriver"
+project.ext["mysql_driver"]              = "org.gjt.mm.mysql.Driver"
+project.ext["oracle_driver"]             = "oracle.jdbc.OracleDriver"
 
 Properties props = new Properties()
 props.load(new FileInputStream("build.properties"))
 
-project.ext["appHome"] = props.appHome
-project.ext["datasource_jndi"] = props.datasource_jndi
-project.ext["deployment_type"] = props.deployment_type
-project.ext["database_type"] = props.database_type
-project.ext["database_host"] = props.database_host
-project.ext["database_port"] = props.database_port
-project.ext["database_name"] = props.database_name
+project.ext["appHome"]           = props.appHome
+project.ext["datasource_jndi"]   = props.datasource_jndi
+project.ext["deployment_type"]   = props.deployment_type
+project.ext["database_type"]     = props.database_type
+project.ext["database_host"]     = props.database_host
+project.ext["database_port"]     = props.database_port
+project.ext["database_name"]     = props.database_name
 project.ext["database_username"] = props.database_username
 project.ext["database_password"] = props.database_password
 
+def springVersion = "3.2.13.RELEASE"
+
+def deploymentLocation = appHome + "/server/default/deploy"
+
+if(new File(appHome + '/webapps').exists()) {
+  deploymentLocation = appHome + "/webapps"
+}
+
+project.ext["deploy_location"] = deploymentLocation
+
 def environment = 'dev';
 def envScript;
-def springVersion = "3.2.13.RELEASE"
 
 if (project.hasProperty("env")) {
   environment = env
@@ -52,8 +61,6 @@ sourceSets {
   main.java.srcDirs = ['WEB-INF/src']
   main.resources.srcDirs = ['WEB-INF/resources']
 }
-
-group = 'com.krishagni'
 
 description = "openspecimen"
 
@@ -149,9 +156,6 @@ dependencies {
 }
 
 compileJava {
-  sourceCompatibility = "1.6"
-  targetCompatibility = "1.6"
-
   doLast{
     ant.taskdef(resource: "org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties", 
                 classpath: configurations.ajc.asPath)
@@ -193,16 +197,22 @@ task unzip_de(type: Copy) {
 }
 
 war {
-  exclude 'WEB-INF/src'
-  exclude 'WEB-INF/test'
-  
   from ('./') {
     include 'ngweb/**'
-    include 'WEB-INF/'
   }
   
   from ('./www/dist/') {
     include '**/**'
+  }
+  
+  from ('./WEB-INF/') {
+    include 'integration-test/**'
+    include 'resources/**'
+    include 'applicationContext.xml'
+    include 'restApiContext.xml'
+    include 'web.xml'
+    
+    into 'WEB-INF/'
   }
   
   from ('./build/detemp/') {

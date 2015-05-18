@@ -1,16 +1,12 @@
 import org.apache.tools.ant.filters.ReplaceTokens;
 
-task deploy(type: Copy, dependsOn: 'war') {
-  delete appHome + "/server/default/deploy/openspecimen.war"
-  delete appHome + "/server/default/deploy/openspecimen-ds.xml"
-  
+task deploy(type: Copy) {
   from war
-  into appHome
   
-  def db_mysql = 'jdbc:mysql://' + database_host + ':' + database_port + '/' + database_name
-  def db_oracle = 'jdbc:oracle:thin:@' + database_host + ':' + database_port + ':' + database_name
+  def mysql_url = 'jdbc:mysql://' + database_host + ':' + database_port + '/' + database_name
+  def oracle_url = 'jdbc:oracle:thin:@' + database_host + ':' + database_port + ':' + database_name
   
-  def database_url = (database_type == "mysql") ? db_mysql : db_oracle 
+  def database_url = (database_type == "mysql") ? mysql_url : oracle_url 
   def database_driver = (database_type == "mysql") ? mysql_driver : oracle_driver
   
   from ('./') {
@@ -18,5 +14,6 @@ task deploy(type: Copy, dependsOn: 'war') {
     filter(ReplaceTokens, tokens: [database_url :  database_url, username : database_username, 
                                    password : database_password, database_driver : database_driver])
   }
-  into appHome + "/server/default/deploy"
+  
+  into deploy_location
 }
