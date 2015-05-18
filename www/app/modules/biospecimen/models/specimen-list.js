@@ -16,6 +16,14 @@ angular.module('os.biospecimen.models.specimenlist', ['os.common.models'])
       );
     }
 
+    SpecimenList.prototype.getType = function() {
+      return 'specimen_list';
+    }
+
+    SpecimenList.prototype.getDisplayName = function() {
+      return this.name;
+    }
+
     SpecimenList.prototype.getSpecimens = function() {
       return $http.get(getSpecimensUrl(this.$id())).then(
         function(result) {

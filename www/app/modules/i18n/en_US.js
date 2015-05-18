@@ -951,7 +951,8 @@
     "distribution_order": "Distribution Order",
     "form": "Form",
     "participant": "Participant",
-    "specimen_event": "Specimen Event"
+    "specimen_event": "Specimen Event",
+    "specimen_list": "Specimen List"
   },
 
   "bulk_imports": {

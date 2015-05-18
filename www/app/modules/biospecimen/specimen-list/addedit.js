@@ -1,6 +1,6 @@
 angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
   .controller('AddEditSpecimenListCtrl', function(
-    $scope, $state, list, SpecimenList, SpecimensHolder) {
+    $scope, $state, list, SpecimenList, SpecimensHolder, DeleteUtil) {
  
     function init() { 
       $scope.list = list;
@@ -28,14 +28,13 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
         }
       );
     }
-    
+
     $scope.deleteList = function() {
-      $scope.list.$remove().then(
-        function() {
-          $state.go('specimen-list');
-        }
-      );
-    };
+      DeleteUtil.delete($scope.list, {
+        onDeleteState: 'specimen-list',
+        deleteWithoutCheck: true
+      });
+    }
 
     init();
   }
