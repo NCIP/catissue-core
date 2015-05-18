@@ -30,13 +30,10 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
         query = Site.listForUsers('Update');
       }
 
-      $scope.sites = [];
+      $scope.sites = [$scope.all];
       query.then(function(sites) {
-        angular.forEach(sites, function(site) {
-          $scope.sites.push(site);
-        });
+        $scope.sites = $scope.sites.concat(sites);
       });
-      $scope.sites.splice(0, 0, $scope.all);
       setSitePvs();
 
       $scope.roles = [];
