@@ -82,7 +82,7 @@
     "uniqueSpecimenLabel": "Not unique",
     "specimenQty": "Invalid quantity",
     "match": "This field does not match with above field"
-  }
+  },
 
   "pvs": {
     "not_specified": "Not Specified"
