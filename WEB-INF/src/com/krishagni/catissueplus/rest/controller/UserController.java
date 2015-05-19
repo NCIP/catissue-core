@@ -61,6 +61,9 @@ public class UserController {
 			@RequestParam(value = "loginName", required = false)
 			String loginName,
 			
+			@RequestParam(value = "institute", required = false)
+			String institute,
+			
 			@RequestParam(value = "activityStatus", required = false)
 			String activityStatus
 			){
@@ -71,6 +74,7 @@ public class UserController {
 			.query(searchString)
 			.name(name)
 			.loginName(loginName)
+			.instituteName(institute)
 			.activityStatus(activityStatus);
 		
 		

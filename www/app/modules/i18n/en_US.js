@@ -507,6 +507,7 @@
     "end_date": "End Date",
     "irb_id": "IRB ID",
     "description_url": "Description URL",
+    "institute": "Institute",
 
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",

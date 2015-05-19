@@ -1,9 +1,21 @@
 
 angular.module('os.administrative.dp.addedit', ['os.administrative.models'])
-  .controller('DpAddEditCtrl', function($scope, $state, distributionProtocol, DistributionProtocol) {
+  .controller('DpAddEditCtrl', function(
+    $scope, $state, distributionProtocol, DistributionProtocol, Institute, User) {
     
-    var init = function() {
+    function init() {
       $scope.distributionProtocol = distributionProtocol;
+      $scope.piFilterOpts = {institute: distributionProtocol.instituteName};
+      $scope.institutes = [];
+      loadInstitutes();
+    }
+
+    function loadInstitutes() {
+      Institute.query().then(
+        function(institutes) {
+          $scope.institutes = institutes;
+        }
+      );
     }
     
     $scope.createDp = function() {
@@ -14,6 +26,11 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models'])
         }
       );
     };
+
+    $scope.loadUsers = function() {
+      $scope.distributionProtocol.principalInvestigator = undefined;
+      $scope.piFilterOpts = {institute: $scope.distributionProtocol.instituteName};
+    }
     
     init();
   });

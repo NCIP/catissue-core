@@ -4,21 +4,19 @@ package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
+import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
+import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class DistributionProtocolFactoryImpl implements DistributionProtocolFactory {
-
-	private static final String ACTIVITY_STATUS = "activity status";
-
 	private DaoFactory daoFactory;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
@@ -33,8 +31,9 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		distributionProtocol.setId(detail.getId());
 		setTitle(detail, distributionProtocol, ose);
 		setShortTitle(detail, distributionProtocol, ose);
+		setInstitute(detail, distributionProtocol, ose);
 		setPrincipalInvestigator(detail, distributionProtocol, ose);
-		setIbrId(detail, distributionProtocol, ose);
+		setIrbId(detail, distributionProtocol, ose);
 		setStartDate(detail, distributionProtocol);
 		setEndDate(detail, distributionProtocol);
 		setActivityStatus(detail, distributionProtocol, ose);
@@ -68,31 +67,57 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		distributionProtocol.setEndDate(detail.getEndDate());
 	}
 
-	private void setPrincipalInvestigator(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
-		User pi = null;
-		if(detail.getPrincipalInvestigator() != null) {
-			pi = daoFactory.getUserDao().getById(detail.getPrincipalInvestigator().getId());
+	private void setInstitute(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
+		String instituteName = detail.getInstituteName();
+		if (StringUtils.isBlank(instituteName)) {
+			ose.addError(DistributionProtocolErrorCode.INSTITUTE_REQUIRED);
+			return;
 		}
 		
+		Institute institute = daoFactory.getInstituteDao().getInstituteByName(instituteName);
+		if (institute == null) {
+			ose.addError(InstituteErrorCode.NOT_FOUND);
+			return;
+		}
+		
+		distributionProtocol.setInstitute(institute);
+	}
+	
+	private void setPrincipalInvestigator(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
+		
+		if (detail.getPrincipalInvestigator() == null || detail.getPrincipalInvestigator().getId() == null) {
+			ose.addError(DistributionProtocolErrorCode.PI_REQUIRED);
+			return;
+		}
+		
+		Long piId = detail.getPrincipalInvestigator().getId();
+		User pi = daoFactory.getUserDao().getById(piId);
 		if (pi == null) {
 			ose.addError(DistributionProtocolErrorCode.PI_NOT_FOUND);
 			return;
 		}
 		
+		if (!pi.getInstitute().equals(distributionProtocol.getInstitute())) {
+			ose.addError(DistributionProtocolErrorCode.PI_DOES_NOT_BELONG_TO_INST);
+			return;
+		}
+		
 		distributionProtocol.setPrincipalInvestigator(pi);
 	}
-
-	private void setIbrId(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
+	
+	private void setIrbId(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
 		distributionProtocol.setIrbId(detail.getIrbId());
 	}
 
 	private void setActivityStatus(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
 		String activityStatus = detail.getActivityStatus();
-		if (!CommonValidator.isValidPv(activityStatus, ACTIVITY_STATUS)) {
+		if (StringUtils.isBlank(activityStatus)) {
+			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
+		} else if (!Status.isValidActivityStatus(activityStatus)) {
 			ose.addError(ActivityStatusErrorCode.INVALID);
+			return;
 		}
 		
-		activityStatus = StringUtils.isBlank(activityStatus) ? Status.ACTIVITY_STATUS_ACTIVE.getStatus() : activityStatus;
 		distributionProtocol.setActivityStatus(activityStatus);
 	}
 }

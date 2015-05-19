@@ -1879,4 +1879,19 @@
       baseTableName="CATISSUE_TISSUE_EVENT_PARAM"
       constraintName="FK71F9AC103C2DAC61"/>
   </changeSet>
+
+  <changeSet author="vpawar" id="Added institute field to distribution protocol">
+    <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+      <column name="INSTITUTE_ID" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK on distribution protocol institute">
+    <addForeignKeyConstraint
+      constraintName="FK_CAT_DP_INSTITUTE_ID"
+      baseTableName="CATISSUE_DISTRIBUTION_PROTOCOL"
+      baseColumnNames="INSTITUTE_ID"
+      referencedTableName="CATISSUE_INSTITUTION"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
 </databaseChangeLog>

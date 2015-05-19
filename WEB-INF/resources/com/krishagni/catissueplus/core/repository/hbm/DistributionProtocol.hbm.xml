@@ -12,6 +12,11 @@
     </id>
     
     <many-to-one
+      name="institute"
+      class="com.krishagni.catissueplus.core.administrative.domain.Institute"
+      column="INSTITUTE_ID"/>
+
+    <many-to-one
       name="principalInvestigator"
       class="com.krishagni.catissueplus.core.administrative.domain.User"
       column="PRINCIPAL_INVESTIGATOR_ID"/>

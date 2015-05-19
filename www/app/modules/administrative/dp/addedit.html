@@ -23,7 +23,7 @@
      
       <div class="form-group">
         <label class="control-label col-xs-3" translate="dp.short_title">Short Title</label>
-        <div class="col-xs-3">
+        <div class="col-xs-6">
           <input type="text" name="shortTitle" ng-model="distributionProtocol.shortTitle" 
             class="form-control" placeholder="{{'dp.short_title' | translate}}" ng-maxlength="255" required/>
           <div os-field-error field="dpForm.shortTitle"></div>
@@ -31,9 +31,19 @@
       </div>
        
       <div class="form-group">
+        <label class="control-label col-xs-3" translate="dp.institute">Institute</label>
+        <div class="col-xs-6">
+          <os-select name="institute" ng-model="distributionProtocol.instituteName" 
+            list="institutes" select-prop="name" display-prop="name" on-select="loadUsers()"
+            placeholder="{{'dp.institute' | translate}}" required/>
+          <div os-field-error field="dpForm.institute"></div>
+        </div>
+      </div>
+       
+      <div class="form-group">
         <label class="control-label col-xs-3" translate="dp.pi">Principle Investigator</label>
         <div class="col-xs-6">
-          <os-users name="pi" ng-model="distributionProtocol.principalInvestigator" 
+          <os-users name="pi" ng-model="distributionProtocol.principalInvestigator" filter-opts="piFilterOpts"
             placeholder="{{'dp.pi' | translate}}" required></os-users>
           <div os-field-error field="dpForm.pi"></div>
         </div>

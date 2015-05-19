@@ -9,7 +9,7 @@ public class UserListCriteria extends AbstractListCriteria<UserListCriteria> {
 	
 	private String activityStatus;
 	
-	private Long instituteId;
+	private String instituteName;
 	
 	@Override
 	public UserListCriteria self() {
@@ -43,12 +43,12 @@ public class UserListCriteria extends AbstractListCriteria<UserListCriteria> {
 		return self();
 	}
 	
-	public UserListCriteria instituteId(Long instituteId) {
-		this.instituteId = instituteId;
+	public UserListCriteria instituteName(String instituteName) {
+		this.instituteName = instituteName;
 		return self();
 	}
 	
-	public Long instituteId() {
-		return instituteId;
+	public String instituteName() {
+		return instituteName;
 	}	
 }

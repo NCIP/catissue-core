@@ -12,6 +12,8 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 public class DistributionProtocolDetail {
 	private Long id;
 
+	private String instituteName;
+	
 	private UserSummary principalInvestigator;
 
 	private String title;
@@ -32,6 +34,14 @@ public class DistributionProtocolDetail {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getInstituteName() {
+		return instituteName;
+	}
+
+	public void setInstituteName(String instituteName) {
+		this.instituteName = instituteName;
 	}
 
 	public UserSummary getPrincipalInvestigator() {
@@ -98,6 +108,7 @@ public class DistributionProtocolDetail {
 		details.setIrbId(distributionProtocol.getIrbId());
 		details.setStartDate(distributionProtocol.getStartDate());
 		details.setEndDate(distributionProtocol.getEndDate());
+		details.setInstituteName(distributionProtocol.getInstitute().getName());
 		details.setPrincipalInvestigator(getPrincipleInvestigatorInfo(distributionProtocol.getPrincipalInvestigator()));
 		details.setActivityStatus(distributionProtocol.getActivityStatus());
 		return details;

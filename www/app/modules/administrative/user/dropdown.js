@@ -1,25 +1,39 @@
 
 angular.module('os.administrative.user.dropdown', ['os.administrative.models'])
   .directive('osUsers', function(User) {
+    function loadUsers(scope, searchTerm) {
+      var opts = angular.extend({searchString : searchTerm}, scope.filterOpts || {});
+      User.query(opts).then(
+        function(result) {
+          scope.users = result;
+        }
+      );
+    };
+
     return {
       restrict: 'AE',
 
       scope: {
         ngModel: '=ngModel',
         placeholder: '@',
-        onSelect: '=onSelect'
+        onSelect: '=onSelect',
+        filterOpts: '='
       },
 
       replace: true,
 
       controller: function($scope) {
         $scope.searchUsers = function(searchTerm) {
-          User.query({searchString: searchTerm}).then(
-            function(result) {
-              $scope.users = result;
-            }
-          );
+          loadUsers($scope, searchTerm);
         };
+
+        $scope.$watch('filterOpts', function(newVal, oldVal) {
+          if (newVal == oldVal) {
+            return;
+          }
+
+          loadUsers($scope);
+        });
       },
   
       link: function(scope, element, attrs, ctrl) {

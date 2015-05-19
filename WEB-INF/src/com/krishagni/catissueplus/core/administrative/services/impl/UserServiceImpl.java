@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
 	public ResponseEvent<List<UserSummary>> getUsers(RequestEvent<UserListCriteria> req) {
 		UserListCriteria crit = req.getPayload();		
 		if (!AuthUtil.isAdmin()) {
-			crit.instituteId(getCurrUserInstitute().getId());
+			crit.instituteName(getCurrUserInstitute().getName());
 		} 
 		
 		List<UserSummary> users = daoFactory.getUserDao().getUsers(crit);

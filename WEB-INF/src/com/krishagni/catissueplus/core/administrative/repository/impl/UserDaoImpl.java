@@ -176,7 +176,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		}
 		
 		addActivityStatusRestriction(criteria, listCrit.activityStatus());
-		addInstituteRestriction(criteria, listCrit.instituteId());
+		addInstituteRestriction(criteria, listCrit.instituteName());
 	}
 
 	private void addNameRestriction(Criteria criteria, String name) {
@@ -208,14 +208,14 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		criteria.add(activityStatusCond);
 	}
 	
-	private void addInstituteRestriction(Criteria criteria, Long instituteId) {
-		if (instituteId == null) {
+	private void addInstituteRestriction(Criteria criteria, String instituteName) {
+		if (StringUtils.isBlank(instituteName)) {
 			return;
 		}
 		
 		criteria.createAlias("u.department", "dept")
 			.createAlias("dept.institute", "institute")
-			.add(Restrictions.eq("institute.id", instituteId));
+			.add(Restrictions.eq("institute.name", instituteName));
 	}
 
 	private void addProjectionFields(Criteria criteria) {

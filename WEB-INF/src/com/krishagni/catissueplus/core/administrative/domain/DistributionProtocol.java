@@ -16,6 +16,8 @@ public class DistributionProtocol {
 	private static final String ENTITY_NAME = "distribution_protocol";
 
 	private Long id;
+	
+	private Institute institute;
 
 	private User principalInvestigator;
 
@@ -43,6 +45,14 @@ public class DistributionProtocol {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Institute getInstitute() {
+		return institute;
+	}
+
+	public void setInstitute(Institute institute) {
+		this.institute = institute;
 	}
 
 	public User getPrincipalInvestigator() {
@@ -119,6 +129,7 @@ public class DistributionProtocol {
 			setTitle(distributionProtocol.getTitle());
 		}
 		setIrbId(distributionProtocol.getIrbId());
+		setInstitute(distributionProtocol.getInstitute());
 		setPrincipalInvestigator(distributionProtocol.getPrincipalInvestigator());
 		setStartDate(distributionProtocol.getStartDate());
 		setEndDate(distributionProtocol.getEndDate());

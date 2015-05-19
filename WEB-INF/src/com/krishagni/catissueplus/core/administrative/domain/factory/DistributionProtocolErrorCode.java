@@ -8,12 +8,18 @@ public enum DistributionProtocolErrorCode implements ErrorCode {
 	DUP_SHORT_TITLE,
 
 	TITLE_REQUIRED,
+	
+	INSTITUTE_REQUIRED,
 
 	DUP_TITLE,
 
 	NOT_FOUND,
 
+	PI_REQUIRED,
+	
 	PI_NOT_FOUND,
+	
+	PI_DOES_NOT_BELONG_TO_INST,
 	
 	REF_ENTITY_FOUND;
 
