@@ -6,32 +6,30 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'war'
 
-project.ext["datasource_mysql_dialect"]  = "org.hibernate.dialect.MySQLDialect"
-project.ext["datasource_oracle_dialect"] = "org.hibernate.dialect.Oracle10gDialect"
-project.ext["mysql_driver"]              = "org.gjt.mm.mysql.Driver"
-project.ext["oracle_driver"]             = "oracle.jdbc.OracleDriver"
+def springVersion = "3.2.13.RELEASE"
 
 Properties props = new Properties()
 props.load(new FileInputStream("build.properties"))
 
-project.ext["datasource_jndi"]   = props.datasource_jndi
-project.ext["deployment_type"]   = props.deployment_type
-project.ext["database_type"]     = props.database_type
-project.ext["database_host"]     = props.database_host
-project.ext["database_port"]     = props.database_port
-project.ext["database_name"]     = props.database_name
-project.ext["database_username"] = props.database_username
-project.ext["database_password"] = props.database_password
+def deploymentLocation = props.app_home + "/server/default/deploy"
 
-def springVersion = "3.2.13.RELEASE"
-
-def deploymentLocation = props.appHome + "/server/default/deploy"
-
-if(new File(props.appHome + '/webapps').exists()) {
-  deploymentLocation = props.appHome + "/webapps"
+if(new File(props.app_home + '/webapps').exists()) {
+  deploymentLocation = props.app_home + "/webapps"
 }
 
-project.ext["deploy_location"] = deploymentLocation
+project.ext["datasource_jndi"]           = props.datasource_jndi
+project.ext["deployment_type"]           = props.deployment_type
+project.ext["database_type"]             = props.database_type
+project.ext["database_host"]             = props.database_host
+project.ext["database_port"]             = props.database_port
+project.ext["database_name"]             = props.database_name
+project.ext["database_username"]         = props.database_username
+project.ext["database_password"]         = props.database_password
+project.ext["datasource_mysql_dialect"]  = "org.hibernate.dialect.MySQLDialect"
+project.ext["datasource_oracle_dialect"] = "org.hibernate.dialect.Oracle10gDialect"
+project.ext["mysql_driver"]              = "com.mysql.jdbc.Driver"
+project.ext["oracle_driver"]             = "oracle.jdbc.OracleDriver"
+project.ext["deploy_location"]           = deploymentLocation
 
 def environment = 'dev';
 def envScript;
@@ -39,7 +37,6 @@ def envScript;
 if (project.hasProperty("env")) {
   environment = env
 }
-
 if (environment == 'prod') {
   envScript = file("prod.gradle")
   if (!envScript.exists()) {
