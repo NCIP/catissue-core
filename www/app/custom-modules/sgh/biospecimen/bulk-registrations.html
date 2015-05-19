@@ -1,19 +1,23 @@
-<div class="list-group col col-xs-6">
-  <div class="list-group-item os-section-hdr">
-    <span translate="cp.bulk_registration">Bulk Registration</span>
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li> <a ui-sref="cp-detail.overview({cpId: cp.id})">{{cp.shortTitle}}</a> </li>
+    </ul>
+    <h3> 
+      <span translate="custom_sgh.register_participants">Register Participants</span>
+    </h3>
   </div>
-  
-  <div class="list-group-item">
+   
+  <div class="container os-margin-top">
     <form class="form-horizontal" name="bulkregistrationForm" os-form-validator="bulkregistrationForm" novalidate>
       <div class="form-group">
-        <label class="control-label col-xs-4" translate="cp.number_of_participants">Number of Participants</label>
+        <label class="control-label col-xs-4" translate="custom_sgh.number_of_participants">Number of Participants</label>
         <div class="col-xs-5">
-          <input type="text" name="paticipantCount" ng-model="cp.paticipantCount" class="form-control" 
-            placeholder="{{'cp.number_of_participants' | translate}}" ng-pattern="/^[1-9][0-9]*$/" required>
+          <input type="text" name="paticipantCount" ng-model="sgh.paticipantCount" class="form-control" 
+            placeholder="{{'custom_sgh.number_of_participants' | translate}}" ng-pattern="/^[1-9][0-9]*$/" required>
           <div os-field-error field="bulkregistrationForm.paticipantCount"></div>
         </div>
       </div>
-	  
       <div class="form-group">
         <div class="col-xs-offset-4 col-xs-8">
           <button type="submit" class="btn btn-success" os-form-submit="bulkRegister()">

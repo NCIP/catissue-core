@@ -1,6 +1,7 @@
 
 angular.module('os.biospecimen.participant', 
   [ 
+    'openspecimen',
     'ui.router',
     'os.biospecimen.common',
     'os.biospecimen.participant.root',
@@ -163,5 +164,19 @@ angular.module('os.biospecimen.participant',
         },
         controller: 'FormRecordAddEditCtrl',
         parent: 'participant-detail.extensions'
+      })
+      .state('bulk-registrations', {
+        url: '/bulk-registrations',
+        templateProvider: function($stateParams, $q, CpConfigSvc) {
+          return $q.when(CpConfigSvc.getBulkRegParticipantTmpl($stateParams.cpId, $stateParams.cprId)).then(
+            function(tmpl) {
+              return '<div ng-include src="\'' + tmpl + '\'"></div>';
+            }
+          );
+        },
+        controllerProvider: function($stateParams, CpConfigSvc) {
+          return CpConfigSvc.getBulkRegParticipantCtrl($stateParams.cpId, $stateParams.cprId);
+        },
+        parent: 'participant-root'
       });
   });

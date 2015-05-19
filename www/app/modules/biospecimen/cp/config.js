@@ -6,25 +6,42 @@
 angular.module('openspecimen')
   .factory('CpConfigSvc', function(CollectionProtocol, $q) {
     var cpWorkflowsMap = {};
-
+    
     function getRegParticipantTmpl(cpId, cprId) {
-      var cfg = cpWorkflowsMap[cpId];
-      var workflow = cfg.workflows['registerParticipant'];
-      if (workflow) {
-        return workflow.view;
-      }
+      var view = getRegistrationTmpl(cpId, cprId, 'registerParticipant');
+        
+      return !!view ? view : 'modules/biospecimen/participant/addedit.html';
+    }
 
-      return 'modules/biospecimen/participant/addedit.html';
+    function getBulkRegParticipantTmpl(cpId, cprId) {
+      return getRegistrationTmpl(cpId, cprId, 'registerBulkParticipant');
+    }
+
+    function getBulkRegParticipantCtrl(cpId, cprId) {
+      return getRegistrationCtrl(cpId, cprId, 'registerBulkParticipant');
     }
 
     function getRegParticipantCtrl(cpId, cprId) {
+      var ctrl = getRegistrationCtrl(cpId, cprId, 'registerParticipant');
+      return !!ctrl ? ctrl : 'ParticipantAddEditCtrl';
+    }
+
+    function getRegistrationTmpl(cpId, cprId, name){
       var cfg = cpWorkflowsMap[cpId];
-      var workflow = cfg.workflows['registerParticipant'];
+      var workflow = cfg.workflows[name];
+      if (workflow) {
+        return workflow.view;
+      }
+      return undefined;      
+    }
+
+    function getRegistrationCtrl(cpId, cprId, name){
+      var cfg = cpWorkflowsMap[cpId];
+      var workflow = cfg.workflows[name];
       if (workflow) {
         return workflow.ctrl;
       }
-
-      return 'ParticipantAddEditCtrl';
+      return undefined;      
     }
 
     function loadWorkflows(cpId) {
@@ -72,6 +89,18 @@ angular.module('openspecimen')
             return workflow ? (workflow.data || {}) : {};
           }
         );
+      },
+      getBulkRegParticipantTmpl: function(cpId, cprId) {
+        return loadWorkflows(cpId).then(
+          function() {
+            return getBulkRegParticipantTmpl(cpId, cprId);
+          }
+        );
+      },
+      getBulkRegParticipantCtrl: function(cpId, cprId) {
+        // we do not call loadWorkflows, as it would have been loaded by above 
+        // template provider
+        return getBulkRegParticipantCtrl(cpId, cprId);
       }
     }
   });

@@ -11,19 +11,23 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenLabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
+import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.openspecimen.custom.sgh.SghErrorCode;
 import com.krishagni.openspecimen.custom.sgh.events.BulkParticipantRegDetail;
-import com.krishagni.openspecimen.custom.sgh.events.ParticipantRegDetail;
+import com.krishagni.openspecimen.custom.sgh.events.BulkParticipantRegSummary;
 import com.krishagni.openspecimen.custom.sgh.services.CprService;
 
 public class CprServiceImpl implements CprService {
@@ -31,6 +35,8 @@ public class CprServiceImpl implements CprService {
 	private DaoFactory daoFactory;
 	
 	private CollectionProtocolRegistrationService cprService;
+	
+	private SpecimenService specimenSvc;
 	
 	private VisitService visitService;
 	
@@ -42,19 +48,23 @@ public class CprServiceImpl implements CprService {
 		this.cprService = cprService;
 	}
 	
+	public void setSpecimenSvc(SpecimenService specimenSvc) {
+		this.specimenSvc = specimenSvc;
+	}
+
 	public void setVisitService(VisitService visitService) {
 		this.visitService = visitService;
 	}
 
 	@Override
 	@PlusTransactional	
-	public ResponseEvent<BulkParticipantRegDetail> registerParticipants(RequestEvent<BulkParticipantRegDetail> req) {		
+	public ResponseEvent<BulkParticipantRegDetail> registerParticipants(RequestEvent<BulkParticipantRegSummary> req) {		
 		try {
-			BulkParticipantRegDetail detail = req.getPayload();
+			BulkParticipantRegSummary detail = req.getPayload();
 			
 			int participantCount = detail.getParticipantCount();
 			if(participantCount < 1){
-				return ResponseEvent.userError(CpErrorCode.INVALID_PARTICIPANT_COUNT);
+				return ResponseEvent.userError(SghErrorCode.INVALID_PARTICIPANT_COUNT);
 			}
 			
 			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(detail.getCpId());
@@ -62,14 +72,14 @@ public class CprServiceImpl implements CprService {
 				return ResponseEvent.userError(CpErrorCode.NOT_FOUND);
 			}
 			
-			List<ParticipantRegDetail> result = new ArrayList<ParticipantRegDetail>();
+			List<CollectionProtocolRegistrationDetail> registrations = new ArrayList<CollectionProtocolRegistrationDetail>();
 
 			for (int i = 0; i < participantCount; i++){
-				ParticipantRegDetail regDetail = registerParticipant(cp);
-				result.add(regDetail);
+				CollectionProtocolRegistrationDetail regDetail = registerParticipant(cp);
+				registrations.add(regDetail);
 			}
 			
-			return ResponseEvent.response(new BulkParticipantRegDetail(detail.getCpId(), result));			
+			return ResponseEvent.response(new BulkParticipantRegDetail(detail.getCpId(), detail.getParticipantCount(), registrations));			
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);			
 		} catch (Exception e) {
@@ -77,39 +87,25 @@ public class CprServiceImpl implements CprService {
 		}
 	}
 	
-	private ParticipantRegDetail registerParticipant(CollectionProtocol cp) {
+	private CollectionProtocolRegistrationDetail registerParticipant(CollectionProtocol cp) {
 		CollectionProtocolRegistrationDetail cprDetail = getRegistrationDetail(cp);
-		ResponseEvent<CollectionProtocolRegistrationDetail> response = cprService.createRegistration(getRequest(cprDetail));
-		response.throwErrorIfUnsuccessful();
+		ResponseEvent<CollectionProtocolRegistrationDetail> regResp = cprService.createRegistration(getRequest(cprDetail));
+		regResp.throwErrorIfUnsuccessful();
 		
-		cprDetail = response.getPayload();
+		cprDetail = regResp.getPayload();
 		Set<CollectionProtocolEvent> eventColl = cp.getCollectionProtocolEvents();
-		int visitCount=1;
+		int visitCnt=1;
 			
 		for (CollectionProtocolEvent cpe : eventColl) {
-			VisitSpecimenDetail visitSpecDetail = new VisitSpecimenDetail();
-			VisitDetail visit = createVisit(cp, cprDetail, cpe);
-//			visit.setName(cprDetail.getPpid()+"-v"+visitCount);
-			visitSpecDetail.setVisit(visit);
-			visitSpecDetail.setSpecimens(getSpecimenList(cpe.getSpecimenRequirements()));
-			ResponseEvent<VisitSpecimenDetail> result = visitService.collectVisitAndSpecimens(getRequest(visitSpecDetail));
+			RequestEvent<VisitSpecimenDetail> visitCollReq = getVisitCollReq(cprDetail, cpe, visitCnt++);
+			ResponseEvent<VisitSpecimenDetail> visitCollResp = visitService.collectVisitAndSpecimens(visitCollReq);
+			visitCollResp.throwErrorIfUnsuccessful();
 			
-			result.throwErrorIfUnsuccessful();
-		
-			visitCount++;
+			ResponseEvent<SpecimenLabelPrintJobSummary> printResponse = specimenSvc.printSpecimenLabels(getPrintPayload(visitCollResp.getPayload()));
+			printResponse.throwErrorIfUnsuccessful();
+			visitCnt++;
 		}
-		return ParticipantRegDetail.from(response.getPayload());
-	}
-
-	private VisitDetail createVisit(CollectionProtocol cp, CollectionProtocolRegistrationDetail cprDetail,
-			CollectionProtocolEvent cpe) {
-		VisitDetail visit = new VisitDetail();
-		visit.setEventId(cpe.getId());
-		visit.setStatus(Status.VISIT_STATUS_PENDING.getStatus());
-		visit.setSite(cpe.getDefaultSite().getName());
-		visit.setCprId(cprDetail.getId());
-		visit.setCpShortTitle(cp.getShortTitle());
-		return visit;
+		return cprDetail;
 	}
 
 	private CollectionProtocolRegistrationDetail getRegistrationDetail(CollectionProtocol cp) {
@@ -121,8 +117,29 @@ public class CprServiceImpl implements CprService {
 		cprDetail.setParticipant(participant);
 		return cprDetail;
 	}
-
-	private List<SpecimenDetail> getSpecimenList(Set<SpecimenRequirement> specimenRequirements) {
+	
+	private RequestEvent<VisitSpecimenDetail> getVisitCollReq(CollectionProtocolRegistrationDetail cprDetail, CollectionProtocolEvent cpe, int visitCnt) {
+		VisitDetail visit = createVisit(cprDetail, cpe);
+//		visit.setName(cprDetail.getPpid() + "-v" + visitCnt);
+		
+		VisitSpecimenDetail visitSpecDetail = new VisitSpecimenDetail();
+		visitSpecDetail.setVisit(visit);
+		visitSpecDetail.setSpecimens(getSpecimensDetail(cpe.getSpecimenRequirements()));
+		return getRequest(visitSpecDetail);
+	}
+	
+	private VisitDetail createVisit(CollectionProtocolRegistrationDetail cprDetail,
+			CollectionProtocolEvent cpe) {
+		VisitDetail visit = new VisitDetail();
+		visit.setEventId(cpe.getId());
+		visit.setStatus(Status.VISIT_STATUS_PENDING.getStatus());
+		visit.setSite(cpe.getDefaultSite().getName());
+		visit.setCprId(cprDetail.getId());
+		visit.setCpShortTitle(cpe.getCollectionProtocol().getShortTitle());
+		return visit;
+	}
+	
+	private List<SpecimenDetail> getSpecimensDetail(Set<SpecimenRequirement> specimenRequirements) {
 		List<SpecimenDetail> specimens = new ArrayList<SpecimenDetail>();
 		for (SpecimenRequirement sr : specimenRequirements) {
 			SpecimenDetail specimen = SpecimenDetail.from(sr);
@@ -131,6 +148,20 @@ public class CprServiceImpl implements CprService {
 		}
 		return specimens;
 	}
+	
+	private RequestEvent<PrintSpecimenLabelDetail> getPrintPayload(VisitSpecimenDetail visitSpecDetail) {
+		List<Long> specimenIds = new ArrayList<Long>();
+		for (SpecimenDetail specimen : visitSpecDetail.getSpecimens()) {
+			specimenIds.add(specimen.getId());
+		}
+		
+		PrintSpecimenLabelDetail printLblDetails = new PrintSpecimenLabelDetail();
+		printLblDetails.setSpecimenIds(specimenIds);
+		printLblDetails.setVisitId(visitSpecDetail.getVisit().getId());
+		
+		return getRequest(printLblDetails);
+	}
+	
 
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(payload);

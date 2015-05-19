@@ -7,6 +7,11 @@
     <h3 translate="participant.list"></h3>
     <div class="os-btns right">
       <button show-if-allowed="participantResource.registerOpts" class="primary"
+        title="{{'participant.tooltip.register' | translate}}" ui-sref="bulk-registrations" ng-if="allowBulkReg">
+        <span class="fa fa-plus"></span>
+        <span translate="custom_sgh.bulk_register">Bulk Register</span>
+      </button>
+      <button show-if-allowed="participantResource.registerOpts" class="primary"
         title="{{'participant.tooltip.register' | translate}}" ui-sref="participant-addedit({cprId: -1, cpId: cp.id})">
         <span class="fa fa-plus"></span>
         <span translate="participant.buttons.register">Register</span>

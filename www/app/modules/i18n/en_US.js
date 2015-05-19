@@ -123,17 +123,13 @@
     "confirm_delete_event": "Collection Protocol Event and its specimen requirements will be deleted. Are you sure you want to proceed?",
 
     "bulk_import_biospecimen_obj_jobs": "Import Biospecimen Objects Job List",
-    "number_of_participants": "Number of Participants",
-    "bulk_registration": "Bulk Registration",
-    "participant_registered" : "{{participantCount}} partticipants registered successfully.",
 
     "tab": {
       "overview": "Overview",
       "consents": "Consents",
       "events": "Events",
       "users": "Users",
-      "dashboard": "Dashboard",
-      "bulk_register": "Bulk Register"
+      "dashboard": "Dashboard"
     },
 
     "menu_options": {
@@ -990,7 +986,15 @@
       "CREATE": "Create",
       "UPDATE": "Update"
     },
-
+    
     "extension_name": "{{params.formName}} ({{params.entityType}})"
-  }
+  },
+  
+  "custom_sgh": {
+    "number_of_participants": "Number of Participants",
+    "bulk_registration": "Bulk Registration",
+    "bulk_register": "Bulk Register",
+    "register_participants": "Register Participants",
+    "participant_registered" : "{{participantCount}} partticipants registered successfully."
+    }
 }

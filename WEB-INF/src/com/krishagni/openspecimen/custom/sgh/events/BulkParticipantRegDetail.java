@@ -2,34 +2,25 @@ package com.krishagni.openspecimen.custom.sgh.events;
 
 import java.util.List;
 
-import com.krishagni.openspecimen.custom.sgh.events.ParticipantRegDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 
 
-public class BulkParticipantRegDetail {
-	private Long cpId;
-	private Integer participantCount;
-	
-	public BulkParticipantRegDetail() {
+public class BulkParticipantRegDetail extends BulkParticipantRegSummary {
+
+	private List<CollectionProtocolRegistrationDetail> cprDetails;
+
+	public BulkParticipantRegDetail(Long cpId, Integer participantCount, List<CollectionProtocolRegistrationDetail> result) {
+		this.cprDetails = result;
+		this.setCpId(cpId);
+		this.setParticipantCount(participantCount);
+	}
+
+	public List<CollectionProtocolRegistrationDetail> getCprDetails() {
+		return cprDetails;
+	}
+
+	public void setCprDetails(List<CollectionProtocolRegistrationDetail> cprDetails) {
+		this.cprDetails = cprDetails;
 	}
 	
-	public BulkParticipantRegDetail(Long cpId, List<ParticipantRegDetail> registrations) {
-		this.cpId = cpId;
-	}
-
-	public Long getCpId() {
-		return cpId;
-	}
-
-	public void setCpId(Long cpId) {
-		this.cpId = cpId;
-	}
-
-	public Integer getParticipantCount() {
-		return participantCount;
-	}
-
-	public void setParticipantCount(Integer participantCount) {
-		this.participantCount = participantCount;
-	}
-
 }

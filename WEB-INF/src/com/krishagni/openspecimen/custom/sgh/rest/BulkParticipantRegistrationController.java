@@ -12,20 +12,21 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.openspecimen.custom.sgh.events.BulkParticipantRegDetail;
+import com.krishagni.openspecimen.custom.sgh.events.BulkParticipantRegSummary;
 import com.krishagni.openspecimen.custom.sgh.services.CprService;
 
 @Controller
 @RequestMapping("/sgh/registrations")
 public class BulkParticipantRegistrationController {
 	@Autowired
-	private CprService sgCprService;
+	private CprService cprService;
 	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
-	public BulkParticipantRegDetail registerParticipants(@RequestBody BulkParticipantRegDetail detail) {
-		RequestEvent<BulkParticipantRegDetail> req = new RequestEvent<BulkParticipantRegDetail>(detail);
-		ResponseEvent<BulkParticipantRegDetail> resp = sgCprService.registerParticipants(req);
+	public BulkParticipantRegDetail registerParticipants(@RequestBody BulkParticipantRegSummary summary) {
+		RequestEvent<BulkParticipantRegSummary> req = new RequestEvent<BulkParticipantRegSummary>(summary);
+		ResponseEvent<BulkParticipantRegDetail> resp = cprService.registerParticipants(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
