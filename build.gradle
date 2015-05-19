@@ -5,6 +5,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'war'
+apply plugin: 'eclipse'
 
 def springVersion = "3.2.13.RELEASE"
 
