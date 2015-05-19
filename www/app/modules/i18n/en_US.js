@@ -72,6 +72,18 @@
     }
   },
 
+  "form_errors": {
+    "required": "Please fill out this field",
+    "minlength": "This field value is too short",
+    "maxlength": "This field value is too long",
+    "date": "This field value is not valid date",
+    "pattern": "This field value is not valid",
+    "email": "This field value is not valid email",
+    "uniqueSpecimenLabel": "Not unique",
+    "specimenQty": "Invalid quantity",
+    "match": "This field does not match with above field"
+  }
+
   "pvs": {
     "not_specified": "Not Specified"
    },

@@ -1,5 +1,5 @@
 angular.module('openspecimen')
-  .directive('osNavDrawer', function($compile, osNavDrawerSvc) {
+  .directive('osNavDrawer', function($compile, $translate, osNavDrawerSvc) {
     function getNavHeader() {
       var div = angular.element('<div/>').addClass('os-page-hdr');
 
@@ -7,11 +7,12 @@ angular.module('openspecimen')
         .addClass('os-nav-button')
         .append('<span class="fa fa-bars"></span>');
 
+      var navigateTo = $translate.instant("menu.navigate_to");
       var title = angular.element('<h3/>')
         .addClass('os-title')
         .css('margin', 0)
         .css('margin-top', '-11px')
-        .append('Navigate To');
+        .append(navigateTo);
 
       div.append(navBtn).append(title);
       return div;
