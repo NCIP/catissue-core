@@ -2,11 +2,11 @@ language: java
 node_js:
   - "0.10"
 
-before_install: npm install -g bower
-script: bower install && cd ..
-
-before_install: npm install -g grunt-cli
-script: cd www && npm install
+before_script:
+  - cd www
+  - npm install -g bower
+  - npm install
+  - bower install -f
 
 script: gradle build
 
