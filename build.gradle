@@ -193,6 +193,7 @@ task unzip_de(type: Copy) {
   into outputDir
 }
 
+war.archiveName = "openspecimen.war"
 war {
   from ('./') {
     include 'ngweb/**'
