@@ -75,11 +75,11 @@ public class CprServiceImpl implements CprService {
 			List<CollectionProtocolRegistrationDetail> registrations = new ArrayList<CollectionProtocolRegistrationDetail>();
 
 			for (int i = 0; i < participantCount; i++){
-				CollectionProtocolRegistrationDetail regDetail = registerParticipant(cp);
+				CollectionProtocolRegistrationDetail regDetail = registerParticipant(cp, detail.isPrintLabels());
 				registrations.add(regDetail);
 			}
 			
-			return ResponseEvent.response(new BulkParticipantRegDetail(detail.getCpId(), detail.getParticipantCount(), registrations));			
+			return ResponseEvent.response(new BulkParticipantRegDetail(detail.isPrintLabels(),detail.getCpId(), detail.getParticipantCount(), registrations));			
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);			
 		} catch (Exception e) {
@@ -87,7 +87,7 @@ public class CprServiceImpl implements CprService {
 		}
 	}
 	
-	private CollectionProtocolRegistrationDetail registerParticipant(CollectionProtocol cp) {
+	private CollectionProtocolRegistrationDetail registerParticipant(CollectionProtocol cp, Boolean isPrintLabels) {
 		CollectionProtocolRegistrationDetail cprDetail = getRegistrationDetail(cp);
 		ResponseEvent<CollectionProtocolRegistrationDetail> regResp = cprService.createRegistration(getRequest(cprDetail));
 		regResp.throwErrorIfUnsuccessful();
@@ -100,9 +100,10 @@ public class CprServiceImpl implements CprService {
 			RequestEvent<VisitSpecimenDetail> visitCollReq = getVisitCollReq(cprDetail, cpe, visitCnt++);
 			ResponseEvent<VisitSpecimenDetail> visitCollResp = visitService.collectVisitAndSpecimens(visitCollReq);
 			visitCollResp.throwErrorIfUnsuccessful();
-			
-			ResponseEvent<SpecimenLabelPrintJobSummary> printResponse = specimenSvc.printSpecimenLabels(getPrintPayload(visitCollResp.getPayload()));
-			printResponse.throwErrorIfUnsuccessful();
+			if(isPrintLabels){
+				ResponseEvent<SpecimenLabelPrintJobSummary> printResponse = specimenSvc.printSpecimenLabels(getPrintPayload(visitCollResp.getPayload()));
+				printResponse.throwErrorIfUnsuccessful();
+			}
 			visitCnt++;
 		}
 		return cprDetail;

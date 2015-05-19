@@ -9,10 +9,11 @@ public class BulkParticipantRegDetail extends BulkParticipantRegSummary {
 
 	private List<CollectionProtocolRegistrationDetail> cprDetails;
 
-	public BulkParticipantRegDetail(Long cpId, Integer participantCount, List<CollectionProtocolRegistrationDetail> result) {
-		this.cprDetails = result;
+	public BulkParticipantRegDetail(Boolean isPrintLabels, Long cpId, Integer participantCount, List<CollectionProtocolRegistrationDetail> registrations) {
+		this.cprDetails = registrations;
 		this.setCpId(cpId);
 		this.setParticipantCount(participantCount);
+		this.setPrintLabels(isPrintLabels);
 	}
 
 	public List<CollectionProtocolRegistrationDetail> getCprDetails() {

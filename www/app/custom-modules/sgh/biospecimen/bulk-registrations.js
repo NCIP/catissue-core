@@ -9,13 +9,16 @@ angular.module('openspecimen')
     function init() {
       $scope.cp = cp;
       $scope.mode = undefined;
-      $scope.sgh = {};
+      $scope.sgh = {
+        printLabels: false
+      };
     };
 
     $scope.bulkRegister = function() {
       var req = {
         cpId: $scope.cp.id,
-        participantCount: $scope.sgh.paticipantCount
+        participantCount: $scope.sgh.paticipantCount,
+        printLabels: $scope.sgh.printLabels
       };
 
       $http.post(baseUrl + 'sgh/registrations', req).then(
