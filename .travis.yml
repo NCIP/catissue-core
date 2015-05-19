@@ -2,11 +2,11 @@ language: java
 node_js:
   - "0.10"
 
-before_install: npm install -g grunt-cli
-install: npm install
-
 before_install: npm install -g bower
-install: bower install
+script: bower install && cd ..
+
+before_install: npm install -g grunt-cli
+script: cd www && npm install
 
 script: gradle build
 
@@ -15,7 +15,7 @@ notifications:
     recipients:
       - os-v20-devs@krishagni.com
     on_success: always
-    on_failure: always
+
 
 branches:
   only:
