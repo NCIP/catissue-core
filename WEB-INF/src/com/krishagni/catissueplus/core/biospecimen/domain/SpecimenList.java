@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +18,8 @@ public class SpecimenList {
 	private Set<User> sharedWith = new HashSet<User>();
 	
 	private Set<Specimen> specimens = new HashSet<Specimen>();
+	
+	private Date deletedOn;
 
 	public Long getId() {
 		return id;
@@ -58,6 +61,14 @@ public class SpecimenList {
 		this.specimens = specimens;
 	}
 	
+	public Date getDeletedOn() {
+		return deletedOn;
+	}
+
+	public void setDeletedOn(Date deletedOn) {
+		this.deletedOn = deletedOn;
+	}
+
 	public void addSpecimens(List<Specimen> specimens) {
 		this.specimens.addAll(specimens);
 	}

@@ -49,7 +49,7 @@
                   #end
 
                   #if( $operation == 'UPDATE' )
-                    There is change in your roles.
+                    There is change in your role.
                     Your <b> $oldSr.role.name </b> role on <b> $oldCP </b> $oldCPText for $oldSiteText <b> $oldSite </b>
                     has been updated.<br><br>
                     Your new role is <b> $sr.role.name </b> on <b>$cp</b> $cpText for $siteText <b> $site </b>

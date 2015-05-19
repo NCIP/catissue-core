@@ -93,9 +93,6 @@ angular.module('os.administrative.container',
         url: '/overview',
         templateUrl: 'modules/administrative/container/overview.html',
         resolve: {
-          childContainers: function(container) {
-            return container.getChildContainers(true); 
-          }
         },
         controller: 'ContainerOverviewCtrl',
         parent: 'container-detail'

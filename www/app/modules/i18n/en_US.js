@@ -14,6 +14,7 @@
     "reports": "Reports",
     "containers": "Containers",
     "forms": "Forms",
+    "specimen_lists": "Specimen Lists",
 
     "cp_desc": "Create, update SOP of visits and specimens",
     "dp_desc": "Create, update procedures for distributing specimens",
@@ -23,6 +24,7 @@
     "sites_desc": "Add and update sites",
     "containers_desc": "Manage containers and their restrictions",
     "reports_desc": "Create, share and schedule reports",
+    "specimen_lists_desc": "Create, share and manage specimen lists",
     "forms_desc": "Create and manage custom forms",
     "settings_desc": "Manage application configuration settings"
   },
@@ -44,6 +46,7 @@
     "view_jobs": "View Jobs",
     "digits": "digits",
     "not_specified": "Not Specified",
+    "loading": "Loading...",
 
     "buttons": {
       "add": "Add",
@@ -184,15 +187,22 @@
     "protocol_id": "Protocol Identifier",
     "filter_title": "Participants Filter", 
     "spmn_label_or_barcode": "Specimen Label / Barcode",
+    "collection_protocol": "Collection Protocol",
+    "regDate": "Registration Date",
 
-    "matched_on_mpi": "Following Participant matched based on EMPI",
-    "matched_on_ssn": "Following Participant matched based on SSN",
-    "matched_on_pmi": "Following Participant matched based on MRN",
-    "matched_on_lname_and_dob": "Following possible Participants matched based on Last Name and Birth Date",
+    "similar_participants": "Following participants found that are similar to new participant being registered",
+    "matched_attrs": "Matched Attributes",
+    "matching_attr": {
+      "empi": "EMPI",
+      "pmi": "MRN",
+      "ssn": "SSN",
+      "lnameAndDob": "Last Name and DOB"
+    },
 
     "bulk_reg_participants": "Bulk Register Participants",
     "bulk_update_participants": "Bulk Update Participants",
-    "updates": "Participant Updates",
+    "part_updates": "Participant Updates",
+    "part_extensions": "Participant Extensions",
     "registrations": "Participant Registrations",
     "registered_cps": "Registered CPs",
     
@@ -237,6 +247,7 @@
     "surgical_path_no": "Surgical Pathology No.",
 
     "bulk_import": "Bulk Import Visits",
+    "visit_extensions": "Visit Extensions",
 
     "status": {
       "pending": "Pending",
@@ -310,9 +321,12 @@
 
     "no_specimens_for_collection": "Please select at least one anticipated specimen for collection",
     "no_specimens_for_print": "Please select at least one collected specimen for label printing",
+    "no_specimens_for_specimen_list": "Please select at least one specmen to add specimen list",
 
     "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
     "bulk_import": "Bulk Import Specimens",
+    "spmn_extensions": "Specimen Extensions",
+    "spmn_events": "Specimen Events",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",
@@ -332,7 +346,8 @@
       "collect_aliquots": "Collect Aliquots",
       "create_derivative": "Create Derivative",
       "collect": "Collect",
-      "print": "Print"
+      "print": "Print",
+      "assign_to": "Assign To"
     },
 
     "errors": {
@@ -754,7 +769,12 @@
     "record_deleted": "Extension record deleted",
 
     "deleting_record": "Deleting extension record #{{recordId}} of {{formCaption}}",
-    "confirm_delete_record": " Extension record #{{recordId}} of {{formCaption}} will be deleted forever. Are you sure you want to proceed?"
+    "confirm_delete_record": " Extension record #{{recordId}} of {{formCaption}} will be deleted forever. Are you sure you want to proceed?",
+
+    "bulk_import_participant_extns": "Bulk Import Participant Extensions",
+    "bulk_import_visit_extns": "Bulk Import Visit Extensions",
+    "bulk_import_specimen_extns": "Bulk Import Specimen Extensions",
+    "bulk_import_specimen_events": "Bulk Import Specimen Events"
   },
 
   "delete_entity": {
@@ -791,6 +811,8 @@
     "new_query_folder": "New Query Folder",
     "update_query_folder": "Update Query Folder",
     "folder_name": "Folder Name",
+    "select_all": "Select All",
+    "unselect_all": "Unselect All",
     "remove_query_from_folder": "Remove query from folder",
     "share_folder_with_all": "Share folder with all current and future users",
     "share_folder_with_users": "Share folder with following users",
@@ -930,11 +952,13 @@
     "distribution_order": "Distribution Order",
     "form": "Form",
     "participant": "Participant",
-    "specimen_event": "Specimen Event"
+    "specimen_event": "Specimen Event",
+    "specimen_list": "Specimen List"
   },
 
   "bulk_imports": {
     "job_submitted": "Bulk Import Job {{id}} Submitted",
+    "select_extn": "Select Extension",
     "input_file": "Input Records File",
     "download_input_file_tmpl": "Download Template File",
     "import_type": "Import Type",
@@ -968,6 +992,34 @@
     "import_types": {
       "CREATE": "Create",
       "UPDATE": "Update"
-    }
-  }
+    },
+
+    "extension_name": "{{params.formName}} ({{params.entityType}})"
+  },
+
+  "specimen_list": {
+    "new_list": "New Specimen List",
+    "create_list": "Create Specimen List",
+    "update_list": "Update Specimen List",
+    "create_new_list": "Create New Specimen List",
+    "search_list": "Search Specimen List",
+    "title": "Specimen List",
+    "name": "Name",
+    "share_list_with_users": "Share list with following users",
+    "users": "Users",
+    "my_lists": "My Lists",
+    "shared_lists": "Shared Lists",
+    "info": "Information",
+    "no_specimens": "There are no specimens to show in selected specimen list.",
+    "visit_name": "Visit Name",
+    "label": "Label (Barcode)",
+    "parent_label": "Parent Label",
+    "type_class": "Type (Class)",
+    "quantity": "Quantity",
+    "lineage": "Lineage",
+    "remove_specimens": "Removing Specimens From {{name}} list",
+    "confirm_remove_specimens": "Are you sure you want to remove selected specimens from {{name}} list?",
+    "specimens_added": "Specimens sucessfully added to {{name}} list",
+    "specimens_removed": "Specimens successfully removed from {{name}} list"
+   }
 }

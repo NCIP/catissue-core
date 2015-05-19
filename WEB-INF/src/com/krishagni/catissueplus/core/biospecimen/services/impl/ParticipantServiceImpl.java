@@ -10,7 +10,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantUtil;
-import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipants;
+import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipant;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.PmiDetail;
 import com.krishagni.catissueplus.core.biospecimen.matching.ParticipantLookupLogic;
@@ -130,7 +130,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<MatchedParticipants> getMatchingParticipants(RequestEvent<ParticipantDetail> req) {
+	public ResponseEvent<List<MatchedParticipant>> getMatchingParticipants(RequestEvent<ParticipantDetail> req) {
 		return ResponseEvent.response(participantLookupLogic.getMatchingParticipants(req.getPayload())); 
 	}
 	

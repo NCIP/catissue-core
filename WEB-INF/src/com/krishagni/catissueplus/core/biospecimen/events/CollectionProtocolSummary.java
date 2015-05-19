@@ -22,6 +22,8 @@ public class CollectionProtocolSummary implements Comparable<CollectionProtocolS
 	private Long participantCount;
 	
 	private Long specimenCount;
+	
+	private String ppidFmt;	
 
 	public Long getId() {
 		return id;
@@ -87,6 +89,14 @@ public class CollectionProtocolSummary implements Comparable<CollectionProtocolS
 		this.specimenCount = specimenCount;
 	}
 	
+	public String getPpidFmt() {
+		return ppidFmt;
+	}
+
+	public void setPpidFmt(String ppidFmt) {
+		this.ppidFmt = ppidFmt;
+	}
+
 	@Override
 	public int compareTo(CollectionProtocolSummary cpSummary) {
 		return this.shortTitle.toUpperCase().compareTo(cpSummary.getShortTitle().toUpperCase());
@@ -105,5 +115,6 @@ public class CollectionProtocolSummary implements Comparable<CollectionProtocolS
 		detail.setStartDate(cp.getStartDate());
 		detail.setEndDate(cp.getEndDate());
 		detail.setPrincipalInvestigator(UserSummary.from(cp.getPrincipalInvestigator()));
+		detail.setPpidFmt(cp.getPpidFormat());
 	}
 }

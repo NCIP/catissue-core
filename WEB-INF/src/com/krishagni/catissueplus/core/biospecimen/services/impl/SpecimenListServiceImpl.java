@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -132,6 +133,30 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			
 			daoFactory.getSpecimenListDao().saveOrUpdate(existing);
 			return ResponseEvent.response(SpecimenListDetails.from(existing));			
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SpecimenListDetails> deleteSpecimenList(RequestEvent<Long> req) {
+		try {
+			SpecimenList existing = daoFactory.getSpecimenListDao().getSpecimenList(req.getPayload());
+			if (existing == null) {
+				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
+			}
+			
+			Long userId = AuthUtil.getCurrentUser().getId();
+			if (!AuthUtil.isAdmin() && !existing.getOwner().getId().equals(userId)) {
+				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
+			}
+			
+			existing.setDeletedOn(Calendar.getInstance().getTime());
+			daoFactory.getSpecimenListDao().saveOrUpdate(existing);
+			return ResponseEvent.response(SpecimenListDetails.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

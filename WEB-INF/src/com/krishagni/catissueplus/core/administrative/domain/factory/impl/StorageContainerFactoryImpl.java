@@ -232,7 +232,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		
 		if (site == null) {
 			container.setSite(parentContainer.getSite());
-		} else if (parentContainer != null && !parentContainer.getSite().equals(site.getId())) {
+		} else if (parentContainer != null && !parentContainer.getSite().equals(site)) {
 			ose.addError(StorageContainerErrorCode.INVALID_SITE_AND_PARENT_CONT);
 		}
 	}

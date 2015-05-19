@@ -241,11 +241,12 @@ public class CollectionProtocolRegistrationDaoImpl
 				.add(Projections.property("id"))
 				.add(Projections.property("ppid"))
 				.add(Projections.property("registrationDate"))
-				.add(Projections.property("participant.id"));
+				.add(Projections.property("participant.id"));				
 		
 		if (cprCrit.includePhi()) {
 			projs.add(Projections.property("participant.firstName"))
-				.add(Projections.property("participant.lastName"));				
+				.add(Projections.property("participant.lastName"))
+				.add(Projections.property("participant.empi"));
 		}
 		
 		return projs;		
@@ -263,6 +264,7 @@ public class CollectionProtocolRegistrationDaoImpl
 		if (row.length > 4) {
 			participant.setFirstName((String)row[4]);
 			participant.setLastName((String)row[5]);
+			participant.setEmpi((String)row[6]);
 		}
 		
 		return cpr;

@@ -40,63 +40,17 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	@Override
 	public List<FormSummary> getAllFormsSummary() {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_FORMS);
-		List<Object[]> rows = query.list();
-
-		List<FormSummary> forms = new ArrayList<FormSummary>();
-		for (Object[] row : rows) {
-			FormSummary form = new FormSummary();
-			form.setFormId((Long)row[0]);
-			form.setName((String)row[1]);
-			form.setCaption((String)row[2]);
-			form.setCreationTime((Date)row[3]);
-			form.setModificationTime((Date)row[4]);
-			
-			Integer minCpId = (Integer)row[6];
-			if (minCpId != null && minCpId == -1) {			
-			    form.setCpCount(-1);			
-			} else {			
-			    form.setCpCount((Integer)row[5]);
-			}
-
-			UserSummary user = new UserSummary();
-			user.setId((Long)row[7]);
-			user.setFirstName((String)row[8]);
-			user.setLastName((String)row[9]);
-			form.setCreatedBy(user);
-			
-			forms.add(form);						
-		}
-				
-		return forms;
+		return getForms(query.list());
 	}
 	
 	@SuppressWarnings("unchecked")
  	@Override
-  	public List<FormSummary> getSpecimenEventFormsSummary() {
-       Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMEN_EVENT_FORMS_SUMMARY);
-       List<Object[]> rows = query.list();
-  
-       List<FormSummary> forms = new ArrayList<FormSummary>();
-       for (Object[] row : rows) {
-           FormSummary form = new FormSummary();
-           form.setFormId((Long) row[0]);
-           form.setName((String) row[1]);
-           form.setCaption((String) row[2]);
-           form.setCreationTime((Date) row[3]);
-           form.setModificationTime((Date) row[4]);
-           form.setCpCount(-1);
-           form.setSysForm((Boolean)row[8]);
-
-           UserSummary user = new UserSummary();
-           user.setId((Long) row[5]);
-           user.setFirstName((String) row[6]);
-           user.setLastName((String) row[7]);
-           form.setCreatedBy(user);
-           
-           forms.add(form);
-       }
-  
-       return forms;
+  	public List<FormSummary> getFormsByEntityType(String entityType) {
+		List<Object[]> rows = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_FORMS_BY_ENTITY_TYPE)
+				.setString("entityType", entityType)
+				.list();
+		return getForms(rows);
    }
 	
 	@SuppressWarnings("unchecked")
@@ -591,11 +545,40 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		return re;
 	}
 	
+	private List<FormSummary> getForms(List<Object[]> rows) {
+		List<FormSummary> forms = new ArrayList<FormSummary>();
+		for (Object[] row : rows) {
+			FormSummary form = new FormSummary();
+			form.setFormId((Long)row[0]);
+			form.setName((String)row[1]);
+			form.setCaption((String)row[2]);
+			form.setCreationTime((Date)row[3]);
+			form.setModificationTime((Date)row[4]);
+			
+			Integer minCpId = (Integer)row[6];
+			if (minCpId != null && minCpId == -1) {			
+			    form.setCpCount(-1);			
+			} else {			
+			    form.setCpCount((Integer)row[5]);
+			}
+
+			UserSummary user = new UserSummary();
+			user.setId((Long)row[7]);
+			user.setFirstName((String)row[8]);
+			user.setLastName((String)row[9]);
+			form.setCreatedBy(user);
+			
+			forms.add(form);						
+		}		
+		
+		return forms;
+	}
+	
 	private static final String FQN = FormContextBean.class.getName();
 	
 	private static final String GET_ALL_FORMS = FQN + ".getAllFormsSummary";
 	
-	private static final String GET_SPECIMEN_EVENT_FORMS_SUMMARY = FQN + ".getSpecimenEventFormsSummary";
+	private static final String GET_FORMS_BY_ENTITY_TYPE = FQN + ".getFormsByEntityType";
 	
 	private static final String GET_QUERY_FORMS = FQN + ".getQueryForms";
 	

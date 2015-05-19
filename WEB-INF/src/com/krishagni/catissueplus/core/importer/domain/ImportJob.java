@@ -1,7 +1,12 @@
 package com.krishagni.catissueplus.core.importer.domain;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
@@ -32,6 +37,8 @@ public class ImportJob extends BaseEntity {
 	private Date creationTime;
 	
 	private Date endTime;
+	
+	private Map<String, Object> params = new HashMap<String, Object>();
 	
 	public String getName() {
 		return name;
@@ -95,5 +102,32 @@ public class ImportJob extends BaseEntity {
 
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
+	}
+
+	public Map<String, Object> getParams() {
+		return params;
+	}
+
+	public void setParams(Map<String, Object> params) {
+		this.params = params;
+	}
+	
+	public String getParamsStr() {
+		try {
+			return new ObjectMapper().writeValueAsString(params);
+		} catch (Exception e) {
+			throw new RuntimeException("Error converting params map to string", e);
+		}		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void setParamsStr(String paramsStr) {
+		try {
+			if (StringUtils.isNotBlank(paramsStr)) {
+				this.params = (Map<String, Object>)new ObjectMapper().readValue(paramsStr, HashMap.class);
+			}			
+		} catch (Exception e) {
+			throw new RuntimeException("Error converting params str to map", e);
+		}
 	}
 }

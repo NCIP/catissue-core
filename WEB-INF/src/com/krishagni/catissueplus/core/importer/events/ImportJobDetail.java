@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.importer.events;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob;
@@ -25,6 +26,8 @@ public class ImportJobDetail {
 	private Date creationTime;
 	
 	private Date endTime;
+	
+	private Map<String, Object> params;
 
 	public Long getId() {
 		return id;
@@ -98,6 +101,14 @@ public class ImportJobDetail {
 		this.endTime = endTime;
 	}
 	
+	public Map<String, Object> getParams() {
+		return params;
+	}
+
+	public void setParams(Map<String, Object> params) {
+		this.params = params;
+	}
+
 	public static ImportJobDetail from(ImportJob job) {
 		ImportJobDetail detail = new ImportJobDetail();
 		detail.setId(job.getId());
@@ -109,6 +120,7 @@ public class ImportJobDetail {
 		detail.setEndTime(job.getEndTime());
 		detail.setTotalRecords(job.getTotalRecords());
 		detail.setFailedRecords(job.getFailedRecords());
+		detail.setParams(job.getParams());
 		return detail;
 	}
 	

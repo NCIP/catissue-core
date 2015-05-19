@@ -30,10 +30,10 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
         query = Site.listForUsers('Update');
       }
 
+      $scope.sites = [$scope.all];
       query.then(function(sites) {
-        $scope.sites = sites;
+        $scope.sites = $scope.sites.concat(sites);
       });
-      $scope.sites.splice(0, 0, $scope.all);
       setSitePvs();
 
       $scope.roles = [];
@@ -94,11 +94,12 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
     }
 
     $scope.loadCps = function(site) {
-      if (site == $scope.all) {
-        $scope.cps = [$scope.all];
-        return;
-      }
       var cpsToRemove = [];
+
+      angular.forEach($scope.userRoles.allSites, function(role) {
+        cpsToRemove.push(role.collectionProtocol);
+      });
+
       angular.forEach($scope.userRoles.siteCpRoles, function(role) {
         cpsToRemove.push(role.collectionProtocol);
       });

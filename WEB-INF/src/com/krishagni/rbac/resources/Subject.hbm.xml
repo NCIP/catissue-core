@@ -36,6 +36,20 @@
         sa.operation in (:operations)
     </query>
 
+    <query name="getAccessListBySites">
+      select
+        sa
+      from
+        com.krishagni.rbac.domain.Subject s
+        join s.accessList sa
+        left join sa.site site
+      where
+        s.id = :subjectId and
+        sa.resource = :resource and
+        sa.operation in (:operations) and
+        (site.id is null or site.name in (:sites))
+    </query>
+
     <query name="getAccessListByCp">
       select
         sa

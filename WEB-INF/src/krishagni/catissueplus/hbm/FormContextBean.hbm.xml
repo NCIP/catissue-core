@@ -86,31 +86,40 @@
         modificationTime desc
     </sql-query>
         
-    <sql-query name="getSpecimenEventFormsSummary">
+    <sql-query name="getFormsByEntityType">
       <return-scalar column="formId" type="long"/>
       <return-scalar column="formName" type="string"/>
       <return-scalar column="formCaption" type="string"/>
       <return-scalar column="creationTime" type="timestamp"/>
       <return-scalar column="modificationTime" type="timestamp"/>
+      <return-scalar column="cpCount" type="integer"/>
+      <return-scalar column="allCp" type="integer"/>
       <return-scalar column="userId" type="long"/>
       <return-scalar column="userFirstName" type="string"/>
       <return-scalar column="userLastName" type="string"/>
-      <return-scalar column="sysForm" type="boolean"/>
-  
+
       select
         c.identifier as formId, c.name as formName, c.caption as formCaption,
         c.create_time as creationTime,
         case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
-        u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName,
-        ctxt.is_sys_form as sysForm	
+        derived.cpCount as cpCount, derived.allCp,
+        u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
       from
-        catissue_form_context ctxt
-        inner join dyextn_containers c on ctxt.container_id = c.identifier
+        dyextn_containers c
         inner join catissue_user u on u.identifier = c.created_by
+        inner join (
+          select
+            ic.identifier as formId, min(ctxt.cp_id) as allCp, count(distinct ctxt.cp_id) as cpCount
+          from
+            dyextn_containers ic
+            left join catissue_form_context ctxt on ctxt.container_id = ic.identifier and ctxt.deleted_on is null
+          where
+            ic.deleted_on is null and (ctxt.entity_type is null or ctxt.entity_type = :entityType )
+          group by
+            ic.identifier
+        ) derived on derived.formId = c.identifier
       where
-        c.deleted_on is null and	
-        ctxt.deleted_on is null and
-        ctxt.entity_type='SpecimenEvent'
+        c.deleted_on is null		
       order by
         c.caption
     </sql-query>        

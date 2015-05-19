@@ -2,7 +2,7 @@
 angular.module('os.query.results', ['os.query.models'])
   .controller('QueryResultsCtrl', function(
     $scope, $state, $stateParams, $modal, 
-    queryCtx, QueryUtil, QueryExecutor, Alerts) {
+    queryCtx, QueryUtil, QueryExecutor, SpecimenList, SpecimensHolder, Alerts) {
 
     function init() {
       $scope.queryCtx = queryCtx;
@@ -44,6 +44,14 @@ angular.module('os.query.results', ['os.query.models'])
       }
     }
 
+    function loadAllSpecimenList() {
+      SpecimenList.query().then(
+        function(lists) {
+          $scope.specimenLists = lists;
+        }
+      );
+    }
+
     function isParameterized() {
       var filters = $scope.queryCtx.filters;
       for (var i = 0; i < filters.length; ++i) {
@@ -80,6 +88,7 @@ angular.module('os.query.results', ['os.query.models'])
 
     function loadRecords() {
       var qc = $scope.queryCtx;
+      $scope.showAddToSpecimenList = showAddToSpecimenList();
       $scope.resultsCtx.waitingForRecords = true;
       $scope.resultsCtx.error = false;
       QueryExecutor.getRecords(undefined, qc.selectedCp.id, getAql(), 'DEEP').then(
@@ -160,6 +169,23 @@ angular.module('os.query.results', ['os.query.models'])
         formattedRows.push(formattedRow);
       }
       return formattedRows;
+    }
+
+    function showAddToSpecimenList() {
+      if ($scope.queryCtx.selectedFields.indexOf('Specimen.label') != -1) {
+        loadAllSpecimenList();
+        return true;
+      }
+
+      return false;
+    };
+
+    function getSelectedSpecimens() {
+      var idx = $scope.queryCtx.selectedFields.indexOf('Specimen.label');
+      var colName = $scope.resultsCtx.columnDefs[idx].field;
+      return $scope.selectedRows.map(function(row) {
+         return {label: row[colName]};
+      })
     }
 
     var gridFilterPlugin = {
@@ -247,6 +273,28 @@ angular.module('os.query.results', ['os.query.models'])
       );
     };
 
-    
+    $scope.selectAllRows = function() {
+      $scope.resultsCtx.gridOpts.selectAll(true);
+      $scope.resultsCtx.selectAll = true;
+    };
+
+    $scope.unSelectAllRows = function() {
+      $scope.resultsCtx.gridOpts.selectAll(false);
+      $scope.resultsCtx.selectAll = false;
+    };
+
+    $scope.addSelectedSpecimensToSpecimenList = function(list) {
+      list.addSpecimens(getSelectedSpecimens()).then(
+        function(specimens) {
+          Alerts.success('specimen_list.specimens_added', {name: list.name});
+        }
+      );
+    }
+
+    $scope.createNewSpecimenList = function() {
+      SpecimensHolder.setSpecimens(getSelectedSpecimens());
+      $state.go('specimen-list-addedit', {listId: ''});
+    };
+ 
     init();
   });

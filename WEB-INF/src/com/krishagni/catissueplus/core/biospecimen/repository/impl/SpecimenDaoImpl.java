@@ -165,8 +165,9 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		
 		Map<String, Long> result = new HashMap<String, Long>();
 		Object[] row = rows.iterator().next();
-		result.put("cprId", (Long)row[0]);
-		result.put("visitId", (Long)row[1]);
+		result.put("cpId", (Long)row[0]);
+		result.put("cprId", (Long)row[1]);
+		result.put("visitId", (Long)row[2]);
 		result.put("specimenId", specimenId);
 		return result;
 	}

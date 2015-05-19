@@ -161,8 +161,8 @@
          pos_one_str, pos_two_str, 
          storage_container_id, occupying_specimen_id) 
       select 
-        cap.position_dimension_one, cap.position_dimension_two, 
-        cap.position_dimension_one_string, cap.position_dimension_two_string,
+        cap.position_dimension_two, cap.position_dimension_one, 
+        cap.position_dimension_two_string, cap.position_dimension_one_string,
         csp.container_id, csp.specimen_id 
       from 
         catissue_abstract_position cap 
@@ -175,17 +175,17 @@
          pos_one_str, pos_two_str,
          storage_container_id, occupying_container_id) 
       select 
-        cap.position_dimension_one, cap.position_dimension_two, 
-        cap.position_dimension_one_string, cap.position_dimension_two_string,
+        cap.position_dimension_two, cap.position_dimension_one, 
+        cap.position_dimension_two_string, cap.position_dimension_one_string,
         ccp.parent_container_id, ccp.container_id 
       from 
         catissue_abstract_position cap 
         inner join catissue_container_position ccp on ccp.identifier=cap.identifier
     </sql>
-  </changeSet>
+  </changeSet> 
   
-  <changeSet author="nmarwaha" id="Creating sequences for container and position table" dbms="oracle">
-    <sql endDelimiter="/">
+  <changeSet author="nmarwaha" id="Creating sequences for container and position table" dbms="oracle" runOnChange="true">
+    <sql endDelimiter="//">
       begin
         declare
           containerId number;
@@ -205,12 +205,12 @@
           execute immediate('alter sequence os_container_positions_seq increment by '||positionId);
         end;
       end;
-      /
+      //
     </sql>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Creating sequences for institution table" dbms="oracle">
-    <sql endDelimiter="/">
+  <changeSet author="nmarwaha" id="Creating sequences for institution table" dbms="oracle" runOnChange="true">
+    <sql endDelimiter="//">
       begin
         declare
           instId number;
@@ -224,7 +224,7 @@
           execute immediate('alter sequence catissue_institute_seq increment by '||instId);
         end;
       end;
-      /
+      //
     </sql>
   </changeSet>
   
@@ -232,6 +232,121 @@
     <sql>
       drop trigger if exists trg_container_replication
     </sql>
+  </changeSet>      
+  
+  <changeSet author="vgaikwad" id="Assign Administrator role to existing site coordinators" dbms="mysql">
+    <sql>
+      select identifier into @role_id from rbac_roles where name = 'Administrator';
+      
+      insert into rbac_subject_roles 
+        (subject_id, role_id, site_id, system_role) 
+      select 
+        sc.user_id, @role_id, sc.site_id, 1 
+      from 
+        catissue_site_coordinators sc 
+        inner join catissue_site s on s.identifier = sc.site_id
+        inner join catissue_user u on u.identifier = sc.user_id
+      where
+        s.activity_status != 'Disabled' and u.activity_status != 'Disabled'; 
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Assign Administrator role to existing site coordinators" dbms="oracle">
+    <sql endDelimiter="//">
+      declare
+        role_id number;
+      begin
+        select identifier into role_id from rbac_roles where name = 'Administrator';
+
+        insert into rbac_subject_roles 
+          (identifier, subject_id, role_id, site_id, system_role)
+        select
+          rbac_subject_roles_seq.nextval, sc.user_id, role_id, sc.site_id, 1
+        from
+          catissue_site_coordinators sc
+          inner join catissue_site s on s.identifier = sc.site_id
+          inner join catissue_user u on u.identifier = sc.user_id
+        where
+          s.activity_status != 'Disabled' and u.activity_status != 'Disabled'; 
+      end;
+      //
+    </sql>
   </changeSet>
   
+  <changeSet author="vgaikwad" id="Assign Principal Investigator role to PI of existing CP's" dbms="mysql">
+    <sql>
+      select identifier into @role_id from rbac_roles where name = 'Principal Investigator';
+      
+      insert into rbac_subject_roles 
+        (subject_id, role_id, cp_id, system_role) 
+      select 
+        cp.principal_investigator_id, @role_id, cp.identifier, 1  
+      from 
+        catissue_collection_protocol cp
+        inner join catissue_user u on u.identifier = cp.principal_investigator_id 
+      where 
+        cp.activity_status != 'Disabled' and u.activity_status != 'Disabled';
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Assign Principal Investigator role to PI of existing CP's" dbms="oracle">
+    <sql endDelimiter="//">  
+      declare 
+        role_id number;
+      begin 
+        select identifier into role_id from rbac_roles where name = 'Principal Investigator';
+   
+        insert into rbac_subject_roles 
+          (identifier, subject_id, role_id, cp_id, system_role) 
+        select 
+          rbac_subject_roles_seq.nextval, cp.principal_investigator_id, role_id, cp.identifier, 1  
+        from 
+          catissue_collection_protocol cp
+          inner join catissue_user u on u.identifier = cp.principal_investigator_id 
+        where 
+          cp.activity_status != 'Disabled' and u.activity_status != 'Disabled';
+      end; 
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Assign Coordinator role to coordinators of existing CP's" dbms="mysql">
+    <sql>
+      select identifier into @role_id from rbac_roles where name = 'Coordinator';
+      
+      insert into rbac_subject_roles 
+        (subject_id, role_id, cp_id, system_role) 
+      select 
+        coord.user_id, @role_id, coord.collection_protocol_id, 1  
+      from 
+        catissue_coll_coordinators coord
+        inner join catissue_collection_protocol cp on cp.identifier = coord.collection_protocol_id
+        inner join catissue_user u on u.identifier = coord.user_id
+      where  
+        cp.activity_status != 'Disabled' and u.activity_status != 'Disabled';   
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Assign Coordinator role to coordinators of existing CP's" dbms="oracle">
+    <sql endDelimiter="//">
+      declare 
+        role_id number;
+      begin 
+        select identifier into role_id from rbac_roles where name = 'Coordinator';
+   
+        insert into rbac_subject_roles 
+          (identifier, subject_id, role_id, cp_id, system_role) 
+        select 
+          rbac_subject_roles_seq.nextval, coord.user_id, role_id, coord.collection_protocol_id, 1  
+        from 
+          catissue_coll_coordinators coord
+          inner join catissue_collection_protocol cp on cp.identifier = coord.collection_protocol_id
+          inner join catissue_user u on u.identifier = coord.user_id
+        where  
+          cp.activity_status != 'Disabled' and u.activity_status != 'Disabled'; 
+      end;   
+      //
+    </sql>
+  </changeSet>
+    
 </databaseChangeLog>

@@ -30,7 +30,7 @@
 
   <property name="clob.type" value="text" dbms="mysql"/>
   <property name="clob.type" value="clob" dbms="oracle"/>
-
+ 
   <changeSet author="vpawar" id="Simplified storage containers" failOnError="true">
     <createTable tableName="OS_STORAGE_CONTAINERS">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
@@ -1115,7 +1115,6 @@
       <column name="SITE_ID" type="${int.type}" />
 
       <column name="CP_ID" type="${int.type}" />
-
     </createTable>
   </changeSet>
 
@@ -1833,4 +1832,51 @@
     </sql>
   </changeSet>
 
+  <changeSet author="vpawar" id="Add Unique MRN site constraint for a participant">
+    <addUniqueConstraint 
+      constraintName="OS_PMI_PART_SITE_UQ" 
+      tableName="CATISSUE_PART_MEDICAL_ID" 
+      columnNames="PARTICIPANT_ID, SITE_ID"/>
+  </changeSet> 
+  
+  <changeSet author="vgaikwad" id="Added field to indicate subject role is system role or not">
+    <addColumn tableName="RBAC_SUBJECT_ROLES">
+      <column name="SYSTEM_ROLE" type="${boolean.type}" defaultValueBoolean="0">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>  
+
+  <changeSet author="vpawar" id="Added import job parameters column for dynamic schemas">
+    <addColumn tableName="OS_BULK_IMPORT_JOBS">
+      <column name="PARAMS" type="${text.type}(512)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add covering index for use in stat view" dbms="mysql">
+    <createIndex indexName="OS_STAT_VIEW_IDX" tableName="OS_STORAGE_CONTAINERS" unique="true">
+      <column name="IDENTIFIER"/>
+      <column name="NAME"/>
+      <column name="NO_OF_COLS"/>
+      <column name="NO_OF_ROWS"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Added column to soft delete specimen list">
+    <addColumn tableName="CATISSUE_SPECIMENLIST_TAGS">
+      <column name="DELETED_ON" type="${nullable.ts.type}" defaultValue="null"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop old foreign key on transfer event source container ID" failOnError="false">
+    <dropForeignKeyConstraint
+      baseTableName="CATISSUE_TISSUE_EVENT_PARAM"
+      constraintName="FK71F9AC1099DF0A92"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop old foreign key on transfer event dest container ID" failOnError="false">
+    <dropForeignKeyConstraint
+      baseTableName="CATISSUE_TISSUE_EVENT_PARAM"
+      constraintName="FK71F9AC103C2DAC61"/>
+  </changeSet>
 </databaseChangeLog>

@@ -276,14 +276,22 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		if (CollectionUtils.isEmpty(detail.getPmis())) {
 			participant.setPmis(newPmis);
 		} else {
+			Set<String> siteNames = new HashSet<String>();
+			boolean dupSite = false;
+			
 			for (PmiDetail pmiDetail : detail.getPmis()) {
 				ParticipantMedicalIdentifier pmi = getPmi(pmiDetail, oce);
 				if (pmi == null) {
 					continue;
 				}
 				
+				if (!dupSite && !siteNames.add(pmiDetail.getSiteName())) {
+					dupSite = true;
+					oce.addError(ParticipantErrorCode.DUP_MRN_SITE, pmiDetail.getSiteName());
+				}
+				
 				pmi.setParticipant(participant);
-				newPmis.add(pmi);				
+				newPmis.add(pmi);
 			}			
 		}
 				

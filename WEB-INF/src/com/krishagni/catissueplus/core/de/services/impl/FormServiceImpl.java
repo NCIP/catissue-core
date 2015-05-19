@@ -91,17 +91,21 @@ public class FormServiceImpl implements FormService {
     @Override
     @PlusTransactional
 	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<FormType> req) {
-		switch (req.getPayload()) {
-		    case DATA_ENTRY_FORMS:
-			    return ResponseEvent.response(formDao.getAllFormsSummary());
-			    
-		    case SPECIMEN_EVENT_FORMS: 
-		    	return ResponseEvent.response(formDao.getSpecimenEventFormsSummary());
-					    
-		    case QUERY_FORMS:
-		    default:
-		    	return ResponseEvent.response(formDao.getQueryForms());		
-		}		
+		FormType ft = req.getPayload();
+		switch (ft) {
+			case DATA_ENTRY_FORMS:
+				return ResponseEvent.response(formDao.getAllFormsSummary());
+
+			case PARTICIPANT_FORMS:
+			case VISIT_FORMS:
+			case SPECIMEN_FORMS:
+			case SPECIMEN_EVENT_FORMS:
+				return ResponseEvent.response(formDao.getFormsByEntityType(ft.getType()));
+
+			case QUERY_FORMS:
+			default:
+				return ResponseEvent.response(formDao.getQueryForms());
+		}
 	}
 
     @Override
@@ -517,9 +521,9 @@ public class FormServiceImpl implements FormService {
 			throw new IllegalArgumentException("Invalid form context id or object id ");
 		}
 
-		Long objectId = ((Double) appData.get("objectId")).longValue();
+		Long objectId = ((Number) appData.get("objectId")).longValue();
 		List<Long> formCtxtId = new ArrayList<Long>();
-		formCtxtId.add(((Double) appData.get("formCtxtId")).longValue());
+		formCtxtId.add(((Number) appData.get("formCtxtId")).longValue());
 		
 		List<FormContextBean> formContexts = formDao.getFormContextsById(formCtxtId);
 		if(formContexts == null) {

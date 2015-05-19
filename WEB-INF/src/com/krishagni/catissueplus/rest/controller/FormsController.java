@@ -55,14 +55,13 @@ public class FormsController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<FormSummary> getAllFormsSummary(
+	public List<FormSummary> getForms(
 			@RequestParam(value="formType", required=false, defaultValue="dataEntry") 
 			String formType) {
-		FormType type = FormType.DATA_ENTRY_FORMS;
-		if (formType.equals("query")) {
-			type = FormType.QUERY_FORMS;
-		} else if (formType.equals("specimenEvent")) {
-			type = FormType.SPECIMEN_EVENT_FORMS;
+		
+		FormType type = FormType.fromType(formType);
+		if (type == null) {
+			type = FormType.DATA_ENTRY_FORMS;
 		}
 		
 		ResponseEvent<List<FormSummary>> resp = formSvc.getForms(getRequestEvent(type));

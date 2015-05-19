@@ -241,7 +241,8 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		projs.add(Projections.property("shortTitle"));
 		projs.add(Projections.property("title"));
 		projs.add(Projections.property("startDate"));
-		
+		projs.add(Projections.property("ppidFormat"));
+				
 		if (cpCriteria.includePi()) {
 			projs.add(Projections.property("pi.id"));
 			projs.add(Projections.property("pi.firstName"));
@@ -256,13 +257,14 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		cp.setShortTitle((String)fields[1]);
 		cp.setTitle((String)fields[2]);
 		cp.setStartDate((Date)fields[3]);
+		cp.setPpidFmt((String)fields[4]);
 		
 		if (includePi) {
 			UserSummary user = new UserSummary();
-			user.setId((Long)fields[4]);
-			user.setFirstName((String)fields[5]);
-			user.setLastName((String)fields[6]);
-			user.setLoginName((String)fields[7]);
+			user.setId((Long)fields[5]);
+			user.setFirstName((String)fields[6]);
+			user.setLastName((String)fields[7]);
+			user.setLoginName((String)fields[8]);
 			cp.setPrincipalInvestigator(user);
 		}
 		

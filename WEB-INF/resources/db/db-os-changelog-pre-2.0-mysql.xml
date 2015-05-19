@@ -3434,4 +3434,32 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-633">
         <createView viewName="user_view">(select `u`.`IDENTIFIER` AS `IDENTIFIER`,`u`.`FIRST_NAME` AS `FIRST_NAME`,`u`.`LAST_NAME` AS `LAST_NAME`,`u`.`EMAIL_ADDRESS` AS `EMAIL_ADDRESS`,concat(`u`.`LAST_NAME`,', ',`u`.`FIRST_NAME`) AS `NAME`,`d`.`NAME` AS `DEPARTMENT_NAME` from (`catissue_user` `u` join `catissue_department` `d` on((`u`.`DEPARTMENT_ID` = `d`.`IDENTIFIER`))))</createView>
     </changeSet>
+    
+    <changeSet dbms="mysql" author="nmarwaha" id="Create trigger to manage specimen hierarchy">
+      <sql endDelimiter="//" >
+        drop trigger if exists trg_specimen_replication //
+      </sql>
+      <sql endDelimiter="//" >
+        create trigger trg_specimen_replication after insert 
+        on catissue_specimen
+        for each row begin
+ 
+          if (new.parent_specimen_id is not null ) then
+            insert into catissue_specimen_hierarchy 
+              (ancestor_id, descendent_id) 
+            select 
+              csh.ancestor_id, new.identifier 
+            from 
+              catissue_specimen_hierarchy csh 
+            where 
+              csh.descendent_id = new.parent_specimen_id;
+          end if;
+ 
+          insert into catissue_specimen_hierarchy (ancestor_id, descendent_id) values (new.identifier, new.identifier);
+
+        end;
+        //
+      </sql>
+    </changeSet>
+    
 </databaseChangeLog>

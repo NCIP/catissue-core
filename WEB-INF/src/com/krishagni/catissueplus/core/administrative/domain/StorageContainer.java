@@ -371,7 +371,7 @@ public class StorageContainer extends BaseEntity {
 		Set<Integer> result = new HashSet<Integer>();
 				
 		for (StorageContainerPosition pos : getOccupiedPositions()) {
-			result.add((pos.getPosTwoOrdinal() - 1) * noOfRows + pos.getPosOneOrdinal());
+			result.add((pos.getPosTwoOrdinal() - 1) * getNoOfColumns() + pos.getPosOneOrdinal());
 		}
 		
 		return result;
@@ -610,7 +610,12 @@ public class StorageContainer extends BaseEntity {
 		if (getBarcode() != null) {
 			setBarcode(Utility.appendTimestamp(getBarcode()));
 		}
+		
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+		if (getParentContainer() != null) {
+			getParentContainer().removePosition(getPosition());
+			setPosition(null);
+		}
 	}
 	
 	private int getSpecimenCount() {

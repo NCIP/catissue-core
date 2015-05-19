@@ -18,7 +18,7 @@ public interface FormDao extends Dao<FormContextBean>{
 	
 	public List<FormSummary> getQueryForms();
 			
-	public List<FormSummary> getSpecimenEventFormsSummary();
+	public List<FormSummary> getFormsByEntityType(String entityType);
 	
 	public List<FormContextDetail> getFormContexts(Long formId);
 	

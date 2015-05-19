@@ -6,7 +6,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
   ])
   .directive('osSpecimenTree', function(
     $state, $stateParams, 
-    CollectSpecimensSvc, Specimen, SpecimenLabelPrinter,
+    CollectSpecimensSvc, Specimen, SpecimenLabelPrinter, SpecimenList, SpecimensHolder,
     Alerts, PvManager, Util) {
 
     function loadSpecimenClasses(scope) {
@@ -16,6 +16,19 @@ angular.module('os.biospecimen.participant.specimen-tree',
 
       scope.specimenClasses = PvManager.getPvs('specimen-class');
       scope.classesLoaded = true;
+    }
+
+    function loadAllSpecimenList(scope) {
+      SpecimenList.query().then(
+        function(lists) {
+          scope.specimenLists = [];
+          angular.forEach(lists, function(list) {
+            if (list.owner.id == scope.$parent.currentUser.id) {
+              scope.specimenLists.push(list);
+            }
+          })
+        }
+      );
     }
 
     function toggleAllSelected(selection, specimens, specimen) {
@@ -82,6 +95,17 @@ angular.module('os.biospecimen.participant.specimen-tree',
       Alerts.error(msgCode);
     };
 
+    function getSelectedSpecimens(scope) {
+      var selectedSpecimens = [];
+      angular.forEach(scope.specimens, function(specimen) {
+        if (specimen.selected && specimen.id != null) {
+          selectedSpecimens.push({label: specimen.label});
+        }
+      });
+
+      return selectedSpecimens;
+    };
+
     return {
       restrict: 'E',
 
@@ -98,6 +122,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
         scope.specimens = Specimen.flatten(scope.specimenTree);
         scope.view = 'list';
         scope.parentSpecimen = undefined;
+        loadAllSpecimenList(scope);
 
         scope.openSpecimenNode = function(specimen) {
           specimen.isOpened = true;
@@ -187,6 +212,23 @@ angular.module('os.biospecimen.participant.specimen-tree',
              
           SpecimenLabelPrinter.printLabels({specimenIds: specimensToPrint});
         };
+
+        scope.addSpecimensToSpecimenList = function(list) {
+          if (!scope.selection.any) {
+            showSelectSpecimens('specimens.no_specimens_for_specimen_list');
+            return;
+          }
+ 
+          var selectedSpecimens = getSelectedSpecimens(scope);
+          if (!!list) {
+            list.addSpecimens(selectedSpecimens).then(function(specimens) {
+              Alerts.success('specimen_list.specimens_added', {name: list.name});
+            })
+          } else {
+            SpecimensHolder.setSpecimens(selectedSpecimens);
+            $state.go('specimen-list-addedit', {listId: ''});
+          }
+        }
 
         scope.showCreateAliquots = function(specimen) {
           scope.view = 'create_aliquots';      

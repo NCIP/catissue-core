@@ -71,6 +71,14 @@ public class SpecimenListsController {
 		return resp.getPayload();
 	}
 	
+	@RequestMapping(method = RequestMethod.DELETE, value="/{listId}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SpecimenListDetails deleteSpecimenList(@PathVariable Long listId) {
+		ResponseEvent<SpecimenListDetails> resp = specimenListSvc.deleteSpecimenList(getRequest(listId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 			
 	@RequestMapping(method = RequestMethod.GET, value="/{listId}/specimens")
 	@ResponseStatus(HttpStatus.OK)

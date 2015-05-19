@@ -60,8 +60,8 @@ angular.module('os.biospecimen.models.form', ['os.common.models'])
       );
     };
 
-    Form.listQueryForms = function() {
-      return $http.get(Form.url(), {params: {formType: 'query'}}).then(
+    Form.listForms = function(formType) {
+      return $http.get(Form.url(), {params: {formType: formType}}).then(
         function(result) {
           return result.data.map(function(form) {
             form.id = form.formId;
@@ -69,6 +69,10 @@ angular.module('os.biospecimen.models.form', ['os.common.models'])
           });
         }
       );
+    };
+
+    Form.listQueryForms = function() {
+      return Form.listForms('query');
     };
 
     Form.listFor = function(url, objectId, params) {

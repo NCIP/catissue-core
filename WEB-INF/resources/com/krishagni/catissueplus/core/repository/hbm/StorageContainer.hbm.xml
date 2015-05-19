@@ -50,6 +50,7 @@
     <set name="childContainers" table="OS_STORAGE_CONTAINERS" inverse="true">
       <key column="PARENT_CONTAINER_ID"/>
       <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" />
+      <filter name="activeEntity"/>
     </set>
 
     <set name="ancestorContainers" table="OS_CONTAINERS_HIERARCHY">
@@ -106,5 +107,7 @@
     <one-to-one
       name="stats"
       class="com.krishagni.catissueplus.core.administrative.domain.StorageContainerStats"/>
+
+    <filter name="activeEntity"/>
   </class>
 </hibernate-mapping>

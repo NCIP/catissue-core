@@ -9,6 +9,8 @@ public enum ImportJobErrorCode implements ErrorCode {
 			
 	OUTPUT_FILE_NOT_CREATED,
 	
+	OBJ_SCHEMA_NOT_FOUND,
+	
 	RECORD_PARSE_ERROR;
 
 	@Override

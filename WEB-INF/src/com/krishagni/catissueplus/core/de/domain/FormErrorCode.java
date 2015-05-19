@@ -7,11 +7,17 @@ public enum FormErrorCode implements ErrorCode {
 	
 	INVALID_REQ,
 	
+	NAME_REQUIRED,
+	
+	ENTITY_TYPE_REQUIRED,
+	
 	REC_NOT_FOUND,
 	
 	INVALID_DATA,
 	
 	FILE_NOT_FOUND,
+	
+	NO_ASSOCIATION,
 	
 	OP_NOT_ALLOWED;
 

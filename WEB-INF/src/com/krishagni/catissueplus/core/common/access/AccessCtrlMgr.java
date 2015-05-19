@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.common.access;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -120,36 +121,11 @@ public class AccessCtrlMgr {
 	//                                                                                  //
 	//////////////////////////////////////////////////////////////////////////////////////
 	public Set<Long> getReadableCpIds() {
-		if (AuthUtil.isAdmin()) {
-			return null;
-		}
-		
-		Long userId = AuthUtil.getCurrentUser().getId();
-		String resource = Resource.CP.getName();
-		String[] ops = {Operation.READ.getName()};
-		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);
-		
-		Set<Long> readableCpIds = new HashSet<Long>();
-		Set<Long> cpOfSites = new HashSet<Long>();
-		for (SubjectAccess access : accessList) {
-			if (access.getSite() != null && access.getCollectionProtocol() != null) {
-				readableCpIds.add(access.getCollectionProtocol().getId());
-			} else if (access.getSite() != null) {
-				cpOfSites.add(access.getSite().getId());
-			} else {
-				Set<Site> sites = getUserInstituteSites(userId);
-				for (Site site : sites) {
-					cpOfSites.add(site.getId());
-				}
-				break;
-			}
-		}
-		
-		if (!cpOfSites.isEmpty()) {
-			readableCpIds.addAll(daoFactory.getCollectionProtocolDao().getCpIdsBySiteIds(cpOfSites));
-		}
-		
-		return readableCpIds;
+		return getEligibleCpIds(Resource.CP.getName(), Operation.READ.getName(), null);
+	}
+	
+	public Set<Long> getRegisterEnabledCpIds(List<String> siteNames) {
+		return getEligibleCpIds(Resource.PARTICIPANT.getName(), Operation.CREATE.getName(), siteNames);
 	}
 	
 	public void ensureCreateCpRights(CollectionProtocol cp) {
@@ -601,8 +577,47 @@ public class AccessCtrlMgr {
 		
 		return results;
 	}
-	
 
+	public Set<Long> getEligibleCpIds(String resource, String op, List<String> siteNames) {
+		if (AuthUtil.isAdmin()) {
+			return null;
+		}
+		
+		Long userId = AuthUtil.getCurrentUser().getId();
+		String[] ops = {op};
+		
+		List<SubjectAccess> accessList = null;
+		if (CollectionUtils.isEmpty(siteNames)) {
+			accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);
+		} else {
+			accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops, siteNames.toArray(new String[0]));
+		}
+				
+		Set<Long> cpIds = new HashSet<Long>();
+		Set<Long> cpOfSites = new HashSet<Long>();
+		for (SubjectAccess access : accessList) {
+			if (access.getSite() != null && access.getCollectionProtocol() != null) {
+				cpIds.add(access.getCollectionProtocol().getId());
+			} else if (access.getSite() != null) {
+				cpOfSites.add(access.getSite().getId());
+			} else {
+				Collection<Site> sites = getUserInstituteSites(userId);
+				for (Site site : sites) {
+					if (CollectionUtils.isEmpty(siteNames) || siteNames.contains(site.getName())) {
+						cpOfSites.add(site.getId());
+					}					
+				}
+				break;
+			}				
+		}
+		
+		if (!cpOfSites.isEmpty()) {
+			cpIds.addAll(daoFactory.getCollectionProtocolDao().getCpIdsBySiteIds(cpOfSites));
+		}
+		
+		return cpIds;
+	}
+	
 	private Set<Site> getUserInstituteSites(Long userId) {
 		User user = userDao.getById(userId); 
 		return user.getInstitute().getSites();		
