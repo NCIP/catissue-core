@@ -408,7 +408,6 @@ public class UserServiceImpl implements UserService {
 		String [] subjParams = new String[] {user.getFirstName(), user.getLastName()};
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("newUser", user);
-		props.put("admin", user); //TODO:replace with admin 
 		props.put("$subject", subjParams);
 		
 		String[] to = {ConfigUtil.getInstance().getAdminEmailId()};
