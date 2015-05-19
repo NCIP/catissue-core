@@ -124,6 +124,7 @@ dependencies {
   compile group: 'javax.ws.rs', name: 'jsr311-api', version:'1.1.1'
   compile group: 'javax.servlet', name: 'jstl', version:'1.2'
   compile group: 'org.liquibase', name: 'liquibase-core', version:'3.3.3'
+  compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.12'
   compile group: 'log4j', name: 'log4j', version:'1.2.16'
   compile group: 'org.apache.lucene', name: 'lucene-core', version:'5.1.0'
   compile group: 'javax.mail', name: 'mail', version:'1.4.7'
@@ -148,6 +149,9 @@ dependencies {
   compile group: 'org.springframework.security', name: 'spring-security-web', version:'3.2.7.RELEASE'
   compile group: 'velocity', name: 'velocity-dep', version:'1.4'
   compile group: 'com.thoughtworks.xstream', name: 'xstream', version:'1.4.8'
+   
+  runtime group: 'antlr', name: 'antlr', version: '2.7.7'
+  runtime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.12'
   
   testCompile group: 'junit', name: 'junit', version:'4.11'
 }
