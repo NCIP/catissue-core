@@ -9,7 +9,6 @@ angular.module('openspecimen')
     
     function getRegParticipantTmpl(cpId, cprId) {
       var view = getRegistrationTmpl(cpId, cprId, 'registerParticipant');
-        
       return !!view ? view : 'modules/biospecimen/participant/addedit.html';
     }
 
@@ -90,6 +89,7 @@ angular.module('openspecimen')
           }
         );
       },
+
       getBulkRegParticipantTmpl: function(cpId, cprId) {
         return loadWorkflows(cpId).then(
           function() {
@@ -97,6 +97,7 @@ angular.module('openspecimen')
           }
         );
       },
+
       getBulkRegParticipantCtrl: function(cpId, cprId) {
         // we do not call loadWorkflows, as it would have been loaded by above 
         // template provider

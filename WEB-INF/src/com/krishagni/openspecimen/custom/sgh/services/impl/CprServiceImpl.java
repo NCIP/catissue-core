@@ -94,7 +94,7 @@ public class CprServiceImpl implements CprService {
 		
 		cprDetail = regResp.getPayload();
 		Set<CollectionProtocolEvent> eventColl = cp.getCollectionProtocolEvents();
-		int visitCnt=1;
+		int visitCnt = 1;
 			
 		for (CollectionProtocolEvent cpe : eventColl) {
 			RequestEvent<VisitSpecimenDetail> visitCollReq = getVisitCollReq(cprDetail, cpe, visitCnt++);

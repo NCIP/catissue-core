@@ -4,7 +4,9 @@ package com.krishagni.openspecimen.custom.sgh.events;
 
 public class BulkParticipantRegSummary {
 	private Long cpId;
+	
 	private Integer participantCount;
+	
 	private Boolean printLabels; 
 	
 	public BulkParticipantRegSummary() {

@@ -997,5 +997,5 @@
     "register_participants": "Register Participants",
     "participant_registered" : "{{participantCount}} partticipants registered successfully.",
     "print_labels": "Print Labels"
-    }
+  }
 }
