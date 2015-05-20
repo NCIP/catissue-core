@@ -1,29 +1,25 @@
 angular.module('openspecimen')
-  .controller('sgh.CpBulkRegistrationsCtrl', function(
-     $scope, $http, cp, ApiUrls, Alerts) {
 
+  .controller('sgh.CpBulkRegistrationsCtrl', function(
+     $scope, $http,
+     cp, ApiUrls, Alerts) {
     var baseUrl = ApiUrls.getBaseUrl();
     var pvsLoaded = false;
     var copyFrom = undefined;
     
     function init() {
       $scope.cp = cp;
-      $scope.mode = undefined;
-      $scope.sgh = {
+      $scope.regReq = {
+        cpId: cp.id,
+        participantCount: 0,
         printLabels: false
-      };
+      }
     };
 
     $scope.bulkRegister = function() {
-      var req = {
-        cpId: $scope.cp.id,
-        participantCount: $scope.sgh.paticipantCount,
-        printLabels: $scope.sgh.printLabels
-      };
-
-      $http.post(baseUrl + 'sgh/registrations', req).then(
+      $http.post(baseUrl + 'sgh/registrations', $scope.regReq).then(
         function(result) {
-          Alerts.success("custom_sgh.participant_registered", {participantCount: $scope.sgh.paticipantCount});
+          Alerts.success("custom_sgh.participant_registered", {participantCount: $scope.regReq.paticipantCount});
         }
       );
     }

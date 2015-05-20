@@ -60,14 +60,14 @@ public class CprServiceImpl implements CprService {
 	@PlusTransactional	
 	public ResponseEvent<BulkParticipantRegDetail> registerParticipants(RequestEvent<BulkParticipantRegSummary> req) {		
 		try {
-			BulkParticipantRegSummary detail = req.getPayload();
+			BulkParticipantRegSummary regReq = req.getPayload();
 			
-			int participantCount = detail.getParticipantCount();
+			int participantCount = regReq.getParticipantCount();
 			if(participantCount < 1){
 				return ResponseEvent.userError(SghErrorCode.INVALID_PARTICIPANT_COUNT);
 			}
 			
-			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(detail.getCpId());
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(regReq.getCpId());
 			if (cp == null) {
 				return ResponseEvent.userError(CpErrorCode.NOT_FOUND);
 			}
@@ -75,11 +75,11 @@ public class CprServiceImpl implements CprService {
 			List<CollectionProtocolRegistrationDetail> registrations = new ArrayList<CollectionProtocolRegistrationDetail>();
 
 			for (int i = 0; i < participantCount; i++){
-				CollectionProtocolRegistrationDetail regDetail = registerParticipant(cp, detail.isPrintLabels());
+				CollectionProtocolRegistrationDetail regDetail = registerParticipant(cp, regReq.isPrintLabels());
 				registrations.add(regDetail);
 			}
 			
-			return ResponseEvent.response(new BulkParticipantRegDetail(detail.isPrintLabels(),detail.getCpId(), detail.getParticipantCount(), registrations));			
+			return ResponseEvent.response(BulkParticipantRegDetail.from(regReq, registrations));			
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);			
 		} catch (Exception e) {
@@ -101,8 +101,9 @@ public class CprServiceImpl implements CprService {
 			ResponseEvent<VisitSpecimenDetail> visitCollResp = visitService.collectVisitAndSpecimens(visitCollReq);
 			visitCollResp.throwErrorIfUnsuccessful();
 			if(isPrintLabels){
-				ResponseEvent<SpecimenLabelPrintJobSummary> printResponse = specimenSvc.printSpecimenLabels(getPrintPayload(visitCollResp.getPayload()));
-				printResponse.throwErrorIfUnsuccessful();
+				RequestEvent<PrintSpecimenLabelDetail> printLabelsReq = getPrintLabelsReq(visitCollResp.getPayload());
+				ResponseEvent<SpecimenLabelPrintJobSummary> printLabelsResp = specimenSvc.printSpecimenLabels(printLabelsReq);
+				printLabelsResp.throwErrorIfUnsuccessful();
 			}
 			visitCnt++;
 		}
@@ -150,7 +151,7 @@ public class CprServiceImpl implements CprService {
 		return specimens;
 	}
 	
-	private RequestEvent<PrintSpecimenLabelDetail> getPrintPayload(VisitSpecimenDetail visitSpecDetail) {
+	private RequestEvent<PrintSpecimenLabelDetail> getPrintLabelsReq(VisitSpecimenDetail visitSpecDetail) {
 		List<Long> specimenIds = new ArrayList<Long>();
 		for (SpecimenDetail specimen : visitSpecDetail.getSpecimens()) {
 			specimenIds.add(specimen.getId());

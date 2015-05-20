@@ -13,7 +13,7 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
       }
       loadParticipants();
       Util.filter($scope, 'filterOpts', loadParticipants);
-      isBulkRegistrationAllowed();
+      showOrHideBulkRegBtn();
     }
 
     function loadParticipants() {
@@ -24,10 +24,10 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
       )
     }
 
-    function isBulkRegistrationAllowed() {
+    function showOrHideBulkRegBtn() {
       $q.when(CpConfigSvc.getBulkRegParticipantTmpl($scope.cpId, -1)).then(
         function(tmpl) {
-          $scope.allowBulkReg = tmpl != undefined;
+          $scope.showBulkRegBtn = tmpl != undefined;
         }
       );
     };

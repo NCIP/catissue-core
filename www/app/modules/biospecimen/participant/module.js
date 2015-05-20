@@ -1,7 +1,6 @@
 
 angular.module('os.biospecimen.participant', 
   [ 
-    'openspecimen',
     'ui.router',
     'os.biospecimen.common',
     'os.biospecimen.participant.root',

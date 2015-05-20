@@ -19,7 +19,8 @@ angular.module('openspecimen', [
   'ui.autocomplete',
   'mgcrea.ngStrap.popover',
   'angular-loading-bar',
-  'pascalprecht.translate'])
+  'pascalprecht.translate'
+  ])
 
   .config(function(
     $stateProvider, $urlRouterProvider, 
@@ -27,12 +28,16 @@ angular.module('openspecimen', [
     uiSelectConfig, ApiUrlsProvider) {
 
     $translateProvider.useStaticFilesLoader({
-      prefix: 'modules/i18n/',
-      suffix: '.js'
+      files: [{
+        prefix: 'modules/i18n/',
+        suffix: '.js'
+        }, {
+        prefix: 'custom-modules/sgh/i18n/',
+        suffix: '.js'
+      }]
     });
-
+ 
     $translateProvider.preferredLanguage('en_US');
-
     $stateProvider
       .state('default', {
         abstract: true,
@@ -66,8 +71,8 @@ angular.module('openspecimen', [
 
     $httpProvider.interceptors.push('httpRespInterceptor');
 
-    /*ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 9090;*/
+    ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
+    ApiUrlsProvider.port = 8380;
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {

@@ -8,39 +8,37 @@ angular.module('openspecimen')
     var cpWorkflowsMap = {};
     
     function getRegParticipantTmpl(cpId, cprId) {
-      var view = getRegistrationTmpl(cpId, cprId, 'registerParticipant');
-      return !!view ? view : 'modules/biospecimen/participant/addedit.html';
-    }
-
-    function getBulkRegParticipantTmpl(cpId, cprId) {
-      return getRegistrationTmpl(cpId, cprId, 'registerBulkParticipant');
-    }
-
-    function getBulkRegParticipantCtrl(cpId, cprId) {
-      return getRegistrationCtrl(cpId, cprId, 'registerBulkParticipant');
+      return getTmpl(cpId, cprId, 'registerParticipant', 'modules/biospecimen/participant/addedit.html');
     }
 
     function getRegParticipantCtrl(cpId, cprId) {
-      var ctrl = getRegistrationCtrl(cpId, cprId, 'registerParticipant');
-      return !!ctrl ? ctrl : 'ParticipantAddEditCtrl';
+      return getCtrl(cpId, cprId, 'registerParticipant','ParticipantAddEditCtrl');
     }
 
-    function getRegistrationTmpl(cpId, cprId, name){
+    function getBulkRegParticipantTmpl(cpId, cprId) {
+      return getTmpl(cpId, cprId, 'registerBulkParticipant');
+    }
+
+    function getBulkRegParticipantCtrl(cpId, cprId) {
+      return getCtrl(cpId, cprId, 'registerBulkParticipant');
+    }
+
+    function getTmpl(cpId, cprId, name, defaultTmpl){
       var cfg = cpWorkflowsMap[cpId];
       var workflow = cfg.workflows[name];
       if (workflow) {
         return workflow.view;
       }
-      return undefined;      
+      return defaultTmpl;      
     }
 
-    function getRegistrationCtrl(cpId, cprId, name){
+    function getCtrl(cpId, cprId, name, defaultCtrl){
       var cfg = cpWorkflowsMap[cpId];
       var workflow = cfg.workflows[name];
       if (workflow) {
         return workflow.ctrl;
       }
-      return undefined;      
+      return defaultCtrl;      
     }
 
     function loadWorkflows(cpId) {
