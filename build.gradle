@@ -240,6 +240,7 @@ task grunt_build(type: Exec) {
    commandLine grunt_cmd, 'build'
 }
 
-war.dependsOn unzip_de, grunt_build
+war.dependsOn unzip_de
+build.dependsOn grunt_build
 
 apply from: envScript
