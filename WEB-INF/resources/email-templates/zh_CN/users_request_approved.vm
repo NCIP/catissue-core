@@ -1,7 +1,7 @@
 #if( $token )
-  #set ($url = "$appUrl#/reset-password?token=$token.token")
+  #set ($url = "$appUrl/#/reset-password?token=$token.token")
 #else
-  #set ($url = "$appUrl#/")
+  #set ($url = "$appUrl/#/")
 #end
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
