@@ -61,7 +61,6 @@ public class CprServiceImpl implements CprService {
 	public ResponseEvent<BulkParticipantRegDetail> registerParticipants(RequestEvent<BulkParticipantRegSummary> req) {		
 		try {
 			BulkParticipantRegSummary regReq = req.getPayload();
-			
 			int participantCount = regReq.getParticipantCount();
 			if(participantCount < 1){
 				return ResponseEvent.userError(SghErrorCode.INVALID_PARTICIPANT_COUNT);
@@ -73,7 +72,6 @@ public class CprServiceImpl implements CprService {
 			}
 			
 			List<CollectionProtocolRegistrationDetail> registrations = new ArrayList<CollectionProtocolRegistrationDetail>();
-
 			for (int i = 0; i < participantCount; i++){
 				CollectionProtocolRegistrationDetail regDetail = registerParticipant(cp, regReq.isPrintLabels());
 				registrations.add(regDetail);
@@ -157,11 +155,11 @@ public class CprServiceImpl implements CprService {
 			specimenIds.add(specimen.getId());
 		}
 		
-		PrintSpecimenLabelDetail printLblDetails = new PrintSpecimenLabelDetail();
-		printLblDetails.setSpecimenIds(specimenIds);
-		printLblDetails.setVisitId(visitSpecDetail.getVisit().getId());
+		PrintSpecimenLabelDetail printLblDetail = new PrintSpecimenLabelDetail();
+		printLblDetail.setSpecimenIds(specimenIds);
+		printLblDetail.setVisitId(visitSpecDetail.getVisit().getId());
 		
-		return getRequest(printLblDetails);
+		return getRequest(printLblDetail);
 	}
 	
 

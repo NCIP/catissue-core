@@ -1,11 +1,7 @@
 angular.module('openspecimen')
-
   .controller('sgh.CpBulkRegistrationsCtrl', function(
-     $scope, $http,
-     cp, ApiUrls, Alerts) {
+    $scope, $http, cp, ApiUrls, Alerts) {
     var baseUrl = ApiUrls.getBaseUrl();
-    var pvsLoaded = false;
-    var copyFrom = undefined;
     
     function init() {
       $scope.cp = cp;
@@ -19,7 +15,7 @@ angular.module('openspecimen')
     $scope.bulkRegister = function() {
       $http.post(baseUrl + 'sgh/registrations', $scope.regReq).then(
         function(result) {
-          Alerts.success("custom_sgh.participant_registered", {participantCount: $scope.regReq.paticipantCount});
+          Alerts.success("custom_sgh.participant_registered", {$scope.regReq});
         }
       );
     }

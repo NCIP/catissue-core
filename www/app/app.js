@@ -38,6 +38,7 @@ angular.module('openspecimen', [
     });
  
     $translateProvider.preferredLanguage('en_US');
+
     $stateProvider
       .state('default', {
         abstract: true,
