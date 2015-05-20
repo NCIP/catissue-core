@@ -6,25 +6,39 @@
 angular.module('openspecimen')
   .factory('CpConfigSvc', function(CollectionProtocol, $q) {
     var cpWorkflowsMap = {};
-
+    
     function getRegParticipantTmpl(cpId, cprId) {
-      var cfg = cpWorkflowsMap[cpId];
-      var workflow = cfg.workflows['registerParticipant'];
-      if (workflow) {
-        return workflow.view;
-      }
-
-      return 'modules/biospecimen/participant/addedit.html';
+      return getTmpl(cpId, cprId, 'registerParticipant', 'modules/biospecimen/participant/addedit.html');
     }
 
     function getRegParticipantCtrl(cpId, cprId) {
+      return getCtrl(cpId, cprId, 'registerParticipant','ParticipantAddEditCtrl');
+    }
+
+    function getBulkRegParticipantTmpl(cpId, cprId) {
+      return getTmpl(cpId, cprId, 'registerBulkParticipant');
+    }
+
+    function getBulkRegParticipantCtrl(cpId, cprId) {
+      return getCtrl(cpId, cprId, 'registerBulkParticipant');
+    }
+
+    function getTmpl(cpId, cprId, name, defaultTmpl){
       var cfg = cpWorkflowsMap[cpId];
-      var workflow = cfg.workflows['registerParticipant'];
+      var workflow = cfg.workflows[name];
+      if (workflow) {
+        return workflow.view;
+      }
+      return defaultTmpl;      
+    }
+
+    function getCtrl(cpId, cprId, name, defaultCtrl){
+      var cfg = cpWorkflowsMap[cpId];
+      var workflow = cfg.workflows[name];
       if (workflow) {
         return workflow.ctrl;
       }
-
-      return 'ParticipantAddEditCtrl';
+      return defaultCtrl;      
     }
 
     function loadWorkflows(cpId) {
@@ -72,6 +86,20 @@ angular.module('openspecimen')
             return workflow ? (workflow.data || {}) : {};
           }
         );
+      },
+
+      getBulkRegParticipantTmpl: function(cpId, cprId) {
+        return loadWorkflows(cpId).then(
+          function() {
+            return getBulkRegParticipantTmpl(cpId, cprId);
+          }
+        );
+      },
+
+      getBulkRegParticipantCtrl: function(cpId, cprId) {
+        // we do not call loadWorkflows, as it would have been loaded by above 
+        // template provider
+        return getBulkRegParticipantCtrl(cpId, cprId);
       }
     }
   });

@@ -1,8 +1,8 @@
 
 angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
   .controller('ParticipantListCtrl', function(
-    $scope, $state, $stateParams, $modal, 
-    cp, CollectionProtocolRegistration, Util) {
+    $scope, $state, $stateParams, $modal, $q, 
+    cp, CollectionProtocolRegistration, Util, CpConfigSvc) {
 
     function init() {
       $scope.cpId = $stateParams.cpId;
@@ -13,6 +13,7 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
       }
       loadParticipants();
       Util.filter($scope, 'filterOpts', loadParticipants);
+      showOrHideBulkRegBtn();
     }
 
     function loadParticipants() {
@@ -21,6 +22,14 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
           $scope.cprList = cprList;
         }
       )
+    }
+
+    function showOrHideBulkRegBtn() {
+      $q.when(CpConfigSvc.getBulkRegParticipantTmpl($scope.cpId, -1)).then(
+        function(tmpl) {
+          $scope.showBulkRegBtn = tmpl != undefined;
+        }
+      );
     };
 
     $scope.clearFilters = function() {

@@ -68,7 +68,8 @@
       "edit": "Edit",
       "done": "Done",
       "search": "Search",
-      "clear_filters": "Clear Filters"
+      "clear_filters": "Clear Filters",
+      "register": "Register"
     }
   },
 
@@ -1006,7 +1007,7 @@
       "CREATE": "Create",
       "UPDATE": "Update"
     },
-
+    
     "extension_name": "{{params.formName}} ({{params.entityType}})"
   },
 
@@ -1035,4 +1036,5 @@
     "specimens_added": "Specimens sucessfully added to {{name}} list",
     "specimens_removed": "Specimens successfully removed from {{name}} list"
    }
+
 }

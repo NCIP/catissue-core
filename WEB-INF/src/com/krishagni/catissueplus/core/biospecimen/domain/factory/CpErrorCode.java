@@ -38,7 +38,7 @@ public enum CpErrorCode implements ErrorCode {
 	PI_DOES_NOT_BELONG_CP_REPOS,
 	
 	CO_ORD_DOES_NOT_BELONG_CP_REPOS;
-
+	
 	@Override
 	public String code() {
 		return "CP_" + this.name();

@@ -1,6 +1,7 @@
 
 angular.module('os.biospecimen.cp', 
   [
+    'openspecimen',
     'ui.router',
     'os.biospecimen.cp.list',
     'os.biospecimen.cp.addedit',
@@ -178,5 +179,5 @@ angular.module('os.biospecimen.cp',
         },
         controller: 'CpSpecimensCtrl'
       });
-  });
+    });
   
