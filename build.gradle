@@ -199,7 +199,7 @@ task unzip_de(type: Copy) {
 }
 
 war.archiveName = "openspecimen.war"
-war {
+task create_war(type: War) {
   from ('./') {
     include 'ngweb/**'
   }
@@ -236,11 +236,11 @@ if (Os.isFamily(Os.FAMILY_WINDOWS)) {
 }
 
 task grunt_build(type: Exec) {
-   workingDir './www'
-   commandLine grunt_cmd, 'build'
+  workingDir './www'
+  commandLine grunt_cmd, 'build'
 }
 
-war.dependsOn unzip_de
-build.dependsOn grunt_build
+create_war.dependsOn unzip_de, grunt_build
+build.dependsOn create_war
 
 apply from: envScript

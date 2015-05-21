@@ -1,6 +1,6 @@
 import org.apache.tools.ant.filters.ReplaceTokens;
 
-task deploy(type: Copy) {
+task deploy(type: Copy, dependsOn: 'build') {
   delete deploy_location + "/openspecimen.war"
   delete deploy_location + "/openspecimen-ds.xml"
   
