@@ -7,6 +7,8 @@ apply plugin: 'maven'
 apply plugin: 'war'
 apply plugin: 'eclipse'
 
+archivesBaseName = 'openspecimen'
+
 def springVersion = "3.2.13.RELEASE"
 
 Properties props = new Properties()
@@ -198,7 +200,6 @@ task unzip_de(type: Copy) {
   into outputDir
 }
 
-war.archiveName = "openspecimen.war"
 task create_war(type: War) {
   from ('./') {
     include 'ngweb/**'
