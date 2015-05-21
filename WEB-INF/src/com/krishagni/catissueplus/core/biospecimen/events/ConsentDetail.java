@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 public class ConsentDetail {
+	
+	private Long cprId;
 
 	private String consentDocumentUrl;
 
@@ -14,6 +16,16 @@ public class ConsentDetail {
 	private String witnessName;
 
 	private List<ConsentTierResponseDetail> consentTierResponses = new ArrayList<ConsentTierResponseDetail>();
+	
+	private String consentDocumentName;
+
+	public Long getCprId() {
+		return cprId;
+	}
+
+	public void setCprId(Long cprId) {
+		this.cprId = cprId;
+	}
 
 	public String getConsentDocumentUrl() {
 		return consentDocumentUrl;
@@ -47,4 +59,12 @@ public class ConsentDetail {
 		this.consentTierResponses = consenTierStatements;
 	}
 
+	public String getConsentDocumentName() {
+		return consentDocumentName;
+	}
+
+	public void setConsentDocumentName(String consentDocumentName) {
+		this.consentDocumentName = consentDocumentName;
+	}
+	
 }

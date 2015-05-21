@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.biospecimen.services;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationsList;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
@@ -28,6 +29,8 @@ public interface CollectionProtocolRegistrationService {
 	// TODO: Requires review
 	// 
 	ResponseEvent<CollectionProtocolRegistrationDetail> updateRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req);
-
 	
+	ResponseEvent<String> updateSignedConsentDocName(RequestEvent<ConsentDetail> req);
+
+	ResponseEvent<Boolean> deleteSignedConsentDoc(RequestEvent<Long> req);
 }

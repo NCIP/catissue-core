@@ -16,7 +16,8 @@ angular.module('os.biospecimen.participant',
     'os.biospecimen.visit',
     'os.biospecimen.specimen',
     'os.biospecimen.extensions.list',
-    'os.biospecimen.extensions.addedit-record'
+    'os.biospecimen.extensions.addedit-record',
+    'os.biospecimen.participant.consents'
   ])
 
   .config(function($stateProvider) {
@@ -98,8 +99,7 @@ angular.module('os.biospecimen.participant',
       .state('participant-detail.consents', {
         url: '/consents',
         templateUrl: 'modules/biospecimen/participant/consents.html',
-        controller: function() {
-        },
+        controller: 'ConsentsCtrl',
         parent: 'participant-detail'
       })
       .state('participant-detail.visits', {

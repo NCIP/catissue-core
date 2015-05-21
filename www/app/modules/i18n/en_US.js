@@ -58,6 +58,7 @@
       "import": "Import",
       "cancel": "Cancel",
       "discard": "Discard",
+      "upload": "Upload",
       "more": "More",
       "next": "Next",
       "previous": "Previous",
@@ -201,6 +202,13 @@
     "spmn_label_or_barcode": "Specimen Label / Barcode",
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
+  
+    "signed_consent_form": "Signed Consent Form",
+    "no_consent_form": " There is no form to show. Upload a form by clicking upload form", 
+    "update_form": "Update Form",
+    "new_consent_form": "New Consent Form",
+    "delete_consent_doc": "Deleting Signed Consent Document",
+    "confirm_delete_consent_doc": "Are you sure you want to delete {{consentDocumentName}}?",
 
     "similar_participants": "Following participants found that are similar to new participant being registered",
     "matched_attrs": "Matched Attributes",
@@ -223,7 +231,8 @@
       "update_registration": "Update",
       "register_selected_participant": "Register Selected participant",
       "ignore_matches": "Ignore Matches and Register Participant",
-      "lookup_again": "Lookup Again"
+      "lookup_again": "Lookup Again",
+      "upload_form": "Upload Form"
     },
 
     "menu": {

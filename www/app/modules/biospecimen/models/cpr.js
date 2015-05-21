@@ -4,7 +4,7 @@ angular.module('os.biospecimen.models.cpr',
     'os.biospecimen.models.participant',
     'os.biospecimen.models.form'
   ])
-  .factory('CollectionProtocolRegistration', function($filter, osModel, Participant, Form, Util) {
+  .factory('CollectionProtocolRegistration', function($filter, $http, osModel, Participant, Form, Util) {
     var CollectionProtocolRegistration = 
       osModel(
         'collection-protocol-registrations',
@@ -47,6 +47,14 @@ angular.module('os.biospecimen.models.cpr',
       this.participant = this.participant.$saveProps();
       return this;
     };
+
+    CollectionProtocolRegistration.prototype.getSignedConsentDocUrl = function() {
+      return CollectionProtocolRegistration.url() + this.$id() + "/signed-consent";
+    }
+
+    CollectionProtocolRegistration.prototype.deleteSignedConsentDoc = function() {
+      return $http.delete(this.getSignedConsentDocUrl()).then(function(result){ return result.data; });
+    }
 
     return CollectionProtocolRegistration;
   });
