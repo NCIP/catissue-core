@@ -16,6 +16,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorC
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenLabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
@@ -24,6 +25,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
+import com.krishagni.catissueplus.core.common.errors.CommonErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
@@ -70,6 +72,26 @@ public class SpecimenServiceImpl implements SpecimenService {
 			
 			AccessCtrlMgr.getInstance().ensureReadSpecimenRights(specimen);
 			return ResponseEvent.response(SpecimenDetail.from(specimen));			
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<SpecimenInfo>> getSpecimens(RequestEvent<List<String>> req) {
+		try {
+			List<String> labels = req.getPayload();
+			if (CollectionUtils.isEmpty(labels)) {
+				return ResponseEvent.userError(CommonErrorCode.INVALID_REQUEST);
+			}
+			
+			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimensByLabels(labels);
+			List<SpecimenInfo> result = SpecimenInfo.from(specimens);
+			SpecimenInfo.orderByLabels(result, labels);
+			return ResponseEvent.response(result);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

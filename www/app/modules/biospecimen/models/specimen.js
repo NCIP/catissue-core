@@ -17,6 +17,10 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       return Specimen.query(angular.extend({cprId: cprId}, visitDetail || {}));
     };
 
+    Specimen.listByLabels = function(labels) {
+      return Specimen.query({label: labels});
+    };
+
     Specimen.flatten = function(specimens, parent, depth) {
       var result = [];
       if (!specimens) {

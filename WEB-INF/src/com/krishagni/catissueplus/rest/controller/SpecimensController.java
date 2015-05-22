@@ -1,11 +1,13 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
@@ -66,19 +69,37 @@ public class SpecimensController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
-	public List<SpecimenDetail> getSpecimens(
-			@RequestParam(value = "cprId") Long cprId,
-			@RequestParam(value = "eventId", required = false) Long eventId,
-			@RequestParam(value = "visitId", required = false) Long visitId) {
+	public List<?> getSpecimens(
+			@RequestParam(value = "cprId", required = false) 
+			Long cprId,
+			
+			@RequestParam(value = "eventId", required = false) 
+			Long eventId,
+			
+			@RequestParam(value = "visitId", required = false) 
+			Long visitId,
+			
+			@RequestParam(value = "label", required = false)
+			List<String> labels) {
+				
+		if (cprId != null) { // TODO: Move this to CPR controller
+			VisitSpecimensQueryCriteria crit = new VisitSpecimensQueryCriteria();
+			crit.setCprId(cprId);
+			crit.setEventId(eventId);
+			crit.setVisitId(visitId);
+			
+			ResponseEvent<List<SpecimenDetail>> resp = cprSvc.getSpecimens(getRequest(crit));
+			resp.throwErrorIfUnsuccessful();
+			return resp.getPayload();			
+		} else if (CollectionUtils.isNotEmpty(labels)) {
+			ResponseEvent<List<SpecimenInfo>> resp = specimenSvc.getSpecimens(getRequest(labels));
+			resp.throwErrorIfUnsuccessful();
+			return resp.getPayload();
+		} else {
+			return Collections.emptyList();
+		}
 		
-		VisitSpecimensQueryCriteria crit = new VisitSpecimensQueryCriteria();
-		crit.setCprId(cprId);
-		crit.setEventId(eventId);
-		crit.setVisitId(visitId);
 		
-		ResponseEvent<List<SpecimenDetail>> resp = cprSvc.getSpecimens(getRequest(crit));
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")

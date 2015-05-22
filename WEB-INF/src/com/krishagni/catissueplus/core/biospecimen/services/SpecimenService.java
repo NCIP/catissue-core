@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenLabelPrintJobSummary;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -13,6 +14,8 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public interface SpecimenService {
 	public ResponseEvent<SpecimenDetail> getSpecimen(RequestEvent<EntityQueryCriteria> req);
+	
+	public ResponseEvent<List<SpecimenInfo>> getSpecimens(RequestEvent<List<String>> req);
 	
 	public ResponseEvent<SpecimenDetail> createSpecimen(RequestEvent<SpecimenDetail> req);
 	

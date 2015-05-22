@@ -1,7 +1,11 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -286,6 +290,15 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		fromTo(specimen,info);
 		return info;
 	}
+	
+	public static List<SpecimenInfo> from(List<Specimen> specimens) {
+		List<SpecimenInfo> result = new ArrayList<SpecimenInfo>();
+		for (Specimen specimen : specimens) {
+			result.add(SpecimenInfo.from(specimen));
+		}
+		
+		return result;
+	}
 
 	public static void fromTo(Specimen specimen, SpecimenInfo result) {
 		result.setId(specimen.getId());
@@ -366,4 +379,16 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		//
 		return 0;
 	}	
+		
+	public static void orderByLabels(final List<SpecimenInfo> list, final List<String> labels) {
+		Collections.sort(list, new Comparator<SpecimenInfo>() {
+			@Override
+			public int compare(SpecimenInfo o1, SpecimenInfo o2) {
+				// Don't think indexOf will have perf impact as long as input labels list is within 500 limit
+				int idx1 = labels.indexOf(o1.getLabel()); 
+				int idx2 = labels.indexOf(o2.getLabel());
+				return idx1 - idx2;
+			}			
+		});
+	}
 }
