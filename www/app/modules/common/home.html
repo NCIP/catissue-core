@@ -15,17 +15,6 @@
         </span>
       </a>
     </li>
-    <!--<li class="os-home-item">
-      <a ui-sref="dp-list">
-        <span class="os-home-item-icon">
-          <span class="fa fa-truck"></span>
-        </span>
-        <span class="os-home-item-info"> 
-          <h3 translate="menu.distribution_protocols">Distribution Protocols</h3>
-          <span translate="menu.dp_desc">Create, update procedures for distributing specimens</span>
-        </span>
-      </a>
-    </li>-->
     <li class="os-home-item"> 
       <a ui-sref="institute-list">
         <span class="os-home-item-icon">
@@ -111,6 +100,30 @@
         <span class="os-home-item-info"> 
           <h3 translate="menu.forms">Forms</h3>
           <span translate="menu.forms_desc">Create and manage custom forms</span>
+        </span>
+      </a>
+    </li>
+    <li class="os-home-item" show-if-admin>
+      <a ui-sref="dp-list">
+        <span class="os-home-item-icon">
+          <span class="fa fa-truck"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.distribution_protocols">Distribution Protocols</h3>
+          <span translate="menu.dp_desc">Create, update procedures for distributing specimens</span>
+        </span>
+      </a>
+    </li>
+    <li class="os-home-item" show-if-admin>
+      <a ui-sref="order-list">
+        <span class="os-home-item-icon">
+          <span class="fa fa-shopping-cart"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.distribution_orders">Distribution Orders</h3>
+          <span translate="menu.distribution_orders_desc">
+            Create, execute request orders for distributing specimens
+          </span>
         </span>
       </a>
     </li>

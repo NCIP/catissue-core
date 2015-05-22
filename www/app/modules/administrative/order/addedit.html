@@ -1,0 +1,231 @@
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li>
+        <a ui-sref="order-list" translate="orders.list">Distribution Orders</a>
+      </li>
+    </ul>
+    <h3 ng-switch on="!order.id">
+      <span ng-switch-when="true" translate="orders.create_order">Create Distribution Order</span>
+      <span ng-switch-default>{{order.name}}</span>
+    </h3>
+  </div>
+  
+  <div class="container">
+    <div os-wizard="doWizard" type="classic">
+      <os-wizard-step title="{{'orders.details' | translate}}" on-finish="passThrough">
+        <div ng-include src="'orders/addedit-detail.html'"></div>
+      </os-wizard-step>
+
+      <os-wizard-step title="{{'orders.specimens' | translate}}" on-finish="passThrough">
+        <div ng-include src="'orders/addedit-order-specimens.html'"></div>
+      </os-wizard-step>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="orders/addedit-detail.html">
+  <form name="ordForm" class="form-horizontal" 
+    os-form-validator="ordForm" validator="ordFormValidator" novalidate>
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="orders.name">Name</label>
+      <div class="col-xs-6">
+        <input type="text" name="name" ng-model="order.name"
+          class="form-control" placeholder="{{'orders.name' | translate}}" ng-maxlength="255" required/>
+        <div os-field-error field="ordForm.name"></div>
+      </div>
+    </div>
+     
+    <div class="form-group">
+      <label class="control-label col-xs-3" translate="orders.dp">Distribution Protocol</label>
+      <div class="col-xs-6">
+        <os-select name="dp" ng-model="order.distributionProtocol" 
+          list="dpList" display-prop="title" on-select="onDpSelect()"
+          placeholder="{{'orders.dp' | translate}}" required>
+        </os-select>       
+        <div os-field-error field="ordForm.dp"></div>
+      </div>
+    </div>
+       
+    <div class="form-group">
+      <label class="control-label col-xs-3" translate="orders.requestor">Requestor</label>
+      <div class="col-xs-6">
+        <os-users name="requestor" ng-model="order.requester" 
+          filter-opts="userFilterOpts" placeholder="{{'orders.requestor' | translate}}" required>
+        </os-users>
+        <div os-field-error field="ordForm.requestor"></div>
+      </div>
+    </div>
+     
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="orders.receiving_site">Receiving Site</label>
+      <div class="col-xs-6">
+        <os-select name="site" ng-model="order.siteName" 
+          list="siteList" placeholder="{{'orders.receiving_site' | translate}}" required>
+        </os-select>       
+        <div os-field-error field="ordForm.site"></div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="control-label col-xs-3" translate="orders.execution_date">Date</label>
+      <div class="col-xs-6">
+        <input type="text" name="executionDate" ng-model="order.executionDate" class="form-control" 
+          datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
+          placeholder="{{'orders.execution_date' | translate}}"   
+          is-open="dt.isOpen" ng-focus="dt.isOpen=true" required>
+        <div os-field-error field="ordForm.executionDate"></div>
+      </div>  
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-3" translate="orders.courier_tracking_url">Courier Tracking URL</label>
+      <div class="col-xs-6">
+        <input type="text" name="trackingUrl" ng-model="order.trackingUrl" class="form-control" 
+          placeholder="{{'orders.courier_tracking_url' | translate}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-3" translate="orders.sender_comments">Sender Comments</label>
+      <div class="col-xs-6">
+        <textarea type="text" name="comments" ng-model="order.comments" class="form-control" 
+          placeholder="{{'orders.sender_comments' | translate}}" rows="2">
+        </textarea>
+      </div>
+    </div>
+
+    <div class="os-divider"></div>
+
+    <div class="form-group" style="text-align: right;">
+      <div class="col-xs-offset-3 col-xs-9">
+        <button class="btn os-btn-text" ng-click="back()">
+          <span translate="common.buttons.cancel">Cancel</span>
+        </button>
+        <button class="btn btn-primary" os-form-submit="doWizard.next(false)">
+          <span translate="common.buttons.next"> Next </span>
+        </button>
+      </div>
+    </div>
+  </form>
+</script>
+
+<script type="text/ng-template" id="orders/addedit-order-specimens.html">
+  <form name="specForm" class="form-horizontal" 
+    os-form-validator="specForm" validator="specFormValidator" novalidate>
+    <div class="alert alert-danger" ng-if="!order.orderItems || order.orderItems.length == 0">
+      <span translate="orders.no_specimens_in_list">
+        No specimens in list to distribute. Add at least one specimen
+      </span>
+    </div>
+
+    <div class="input-group" style="margin-bottom:5px;">
+      <input type="text" ng-model="input.labelText" class="form-control" 
+        placeholder="{{'orders.enter_specimen_label' | translate}}" os-enable-tab>
+      <span class="input-group-btn">
+        <button class="btn btn-primary" ng-click="addSpecimens()">
+          <span translate="common.buttons.add">Add</span>
+        </button>
+      </span>
+    </div>
+
+    <div class="os-table os-table-fixed bulk-edit os-border os-table-muted-hdr" 
+      ng-if="order.orderItems && order.orderItems.length > 0">
+      <div class="os-table-head">
+        <div class="row">
+          <div class="col os-col-15">
+            <span translate="orders.spec.label">Label</span>
+          </div>
+          <div class="col os-col-20">
+            <span translate="orders.spec.visit_name">Visit Name</span>
+          </div>
+          <div class="col os-col-15">
+            <span translate="orders.spec.type">Type</span>
+          </div>
+          <div class="col os-col-20">
+            <span translate="orders.spec.location">Location</span>
+          </div>
+          <div class="col os-col-10">
+            <span translate="orders.spec.quantity">Quantity</span>
+          </div>
+          <div class="col os-col-15">
+            <span translate="orders.status">Status</span>
+          </div>
+          <div class="col os-col-5">
+            <span>&nbsp;</span>
+          </div>
+        </div>
+      </div>
+      <div class="os-table-body">
+        <div class="row" ng-repeat="item in order.orderItems" 
+          ng-form="sform" ng-init="specimen=item.specimen">
+
+          <div class="col os-col-15">
+            <span>{{specimen.label}}</span>
+          </div>
+          <div class="col os-col-20">
+            <span>{{specimen.visitName}}</span>
+          </div>
+          <div class="col os-col-15">
+            <span>{{specimen.type}} ({{specimen.specimenClass}})</span>
+          </div>
+          <div class="col os-col-20">
+            <span ng-switch on="!!specimen.storageLocation.name">
+              <span ng-switch-when="true">
+                {{specimen.storageLocation.name}} 
+                <span>
+                  ({{specimen.storageLocation.positionX}}, {{specimen.storageLocation.positionY}})
+                </span>
+              </span>
+              <span ng-switch-default translate="orders.spec.virtual">
+                Virtual
+              </span>
+            </span>
+          </div>
+          <div class="col os-col-10">
+            <div class="os-input-addon-grp">
+              <input type="text" os-md-input name="qty" ng-model="item.quantity" required 
+                os-ensure-range="[
+                  {tgt: specimen.availableQty, cmp: 'le', errorKey: 'distQtyGtAvailableQty'},
+                  {tgt: 0, cmp: 'gt', errorKey: 'distQtyLeZero'}
+                ]" 
+                ng-model-options="{allowInvalid: 'true'}">
+              <div class="os-input-addon-right os-md-input-addon" os-specimen-qty-unit="specimen.specimenClass">
+              </div>
+            </div>
+            <div os-field-error field="sform.qty"></div>
+          </div>
+          <div class="col os-col-15" style="overflow: visible;">
+            <os-select os-md-input ng-model="item.status" 
+              list="orderItemStatuses" select-prop="id" display-prop="name">
+            </os-select>
+          </div>
+          <div class="col os-col-5">
+            <button class="btn btn-xs btn-default" ng-click="removeOrderItem(item)">
+              <span class="fa fa-remove"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="os-divider"></div>
+     
+    <div class="form-group" style="text-align: right;">
+      <div class="col-xs-offset-3 col-xs-9">
+        <button class="btn os-btn-text" ng-click="back()">
+          <span translate="common.buttons.cancel">Cancel</span>
+        </button>
+        <button class="btn os-btn-secondary" ng-click="doWizard.previous(false)">
+          <span translate="common.buttons.previous"> Previous </span>
+        </button>
+        <button class="btn btn-primary" os-form-submit="saveDraft()">
+          <span translate="orders.buttons.save_draft"> Save as Draft </span>
+        </button>
+        <button class="btn btn-primary" os-form-submit="distribute()">
+          <span translate="orders.buttons.distribute"> Distribute </span>
+        </button>
+      </div>
+    </div>
+  </form>
+</script>

@@ -1,6 +1,7 @@
 angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
   .controller('SpecimenListsCtrl', function(
-     $scope, $modal, $stateParams, currentUser, SpecimenList, DeleteUtil, Alerts) {
+    $scope, $modal, $state, $stateParams, currentUser, 
+    SpecimensHolder, SpecimenList, DeleteUtil, Alerts) {
 
     function init() { 
       $scope.specimens = [];
@@ -73,6 +74,11 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
         templateUrl: 'modules/biospecimen/specimen-list/confirm-remove-specimens.html',
         delete: removeSpecimensFromList
       });
+    }
+
+    $scope.distributeSpecimens = function() {
+      SpecimensHolder.setSpecimens($scope.selectedSpecimens);
+      $state.go('order-addedit', {orderId: ''});
     }
 
     init();

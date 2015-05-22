@@ -15,6 +15,7 @@
     "containers": "Containers",
     "forms": "Forms",
     "specimen_lists": "Specimen Lists",
+    "distribution_orders": "Distribution Orders",
 
     "cp_desc": "Create, update SOP of visits and specimens",
     "dp_desc": "Create, update procedures for distributing specimens",
@@ -26,7 +27,8 @@
     "reports_desc": "Create, share and schedule reports",
     "specimen_lists_desc": "Create, share and manage specimen lists",
     "forms_desc": "Create and manage custom forms",
-    "settings_desc": "Manage application configuration settings"
+    "settings_desc": "Manage application configuration settings",
+    "distribution_orders_desc": "Create, execute request orders for distributing specimens"
   },
 
   "common": {
@@ -81,7 +83,10 @@
     "email": "This field value is not valid email",
     "uniqueSpecimenLabel": "Not unique",
     "specimenQty": "Invalid quantity",
-    "match": "This field does not match with above field"
+    "match": "This field does not match with above field",
+    "dist_qty_gt_avail_qty": "Distribution quantity greater than available",
+    "dist_qty_le_zero": "Distribution quantity cannot be less than or equals zero",
+    "nan": "Not a valid number"
   },
 
   "pvs": {
@@ -1033,6 +1038,61 @@
     "remove_specimens": "Removing Specimens From {{name}} list",
     "confirm_remove_specimens": "Are you sure you want to remove selected specimens from {{name}} list?",
     "specimens_added": "Specimens sucessfully added to {{name}} list",
-    "specimens_removed": "Specimens successfully removed from {{name}} list"
+    "specimens_removed": "Specimens successfully removed from {{name}} list",
+    "distribute": "Distribute"
+   },
+
+   "orders": {
+     "list": "Distribution Orders",
+     "title": "Distribution Order",
+     "create_order": "Create Distribution Order",
+     "name": "Name",
+     "requestor": "Requestor",
+     "site": "Site",
+     "dp": "Distribution Protocol",
+     "date": "Date",
+     "status": "Status",
+     "specimens": "Specimens",
+     "distributor": "Distributor",
+     "dist_date": "Distribution Date",
+     "creation_date": "Creation Date",
+     "tracking_url": "Tracking URL",
+     "receiving_site": "Receiving Site",
+     "execution_date": "Execution Date",
+     "courier_tracking_url": "Courier Tracking URL",
+     "sender_comments": "Sender Comments",
+     "details": "Order Details",
+     "no_specimens_in_list": "No specimens in order list to distribute. Add at least one specimen",
+     "enter_specimen_label": "Enter specimen labels separated by comma/tab/newline",
+     "filter": "Distribution Order Filters",
+   
+     "spec": {
+       "label": "Label",
+       "visit_name": "Visit Name",
+       "type": "Type",
+       "quantity": "Quantity",
+       "location": "Location",
+       "virtual": "Virtual"
+     },
+
+     "statuses": {
+       "EXECUTED": "Executed",
+       "PENDING": "Pending"
+     },
+
+     "item_statuses": {
+       "DISTRIBUTED": "Distribute",
+       "DISTRIBUTED_AND_CLOSED": "Distribute and Close"
+     },
+
+     "buttons": {
+       "distribute": "Distribute",
+       "save_draft": "Save Draft"
+     },
+
+     "tooltip": {
+       "create": "Create new distribution order",
+       "search": "Filter out distribution orders"
+     }
    }
 }

@@ -3,9 +3,12 @@
     <h3>
       <span translate="specimen_list.title">Specimen List</span>
     </h3>
-    <div class="os-btns right">
-      <button class="btn btn-danger" ng-click="confirmRemoveSpecimens()"
-        ng-if="selectedSpecimens && selectedSpecimens.length > 0">
+    <div class="os-btns right" ng-if="selectedSpecimens && selectedSpecimens.length > 0">
+      <button class="default" ng-click="distributeSpecimens()">
+        <span class="fa fa-shopping-cart"></span>
+        <span translate="specimen_list.distribute">Distribute</span>
+      </button>
+      <button class="btn btn-danger" ng-click="confirmRemoveSpecimens()">
         <span class="fa fa-trash"></span>
         <span translate="common.buttons.delete">Delete</span>
       </button>
