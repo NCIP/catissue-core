@@ -11,11 +11,12 @@ angular.module('os.biospecimen.common.specimendesc', [])
 
       link: function(scope, element, attrs) {
         scope.notSpecified = $translate.instant('pvs.not_specified');
+        scope.detailed = attrs.detailed === 'true';
       },
 
       template: 
         '<span class="os-specimen-desc">' +
-          '<span ng-if="specimen.lineage == \'New\'">' +
+          '<span ng-if="specimen.lineage == \'New\' || detailed">' +
             '<span ng-if="!!specimen.pathology && specimen.pathology != notSpecified">' +
               '{{specimen.pathology}} ' +
             '</span>' +
@@ -29,10 +30,10 @@ angular.module('os.biospecimen.common.specimendesc', [])
               '<span translate="specimens.collected_in">collected in</span> {{specimen.collectionContainer}}' +
             '</span>' +
           '</span>' +
-          '<span ng-if="specimen.lineage == \'Aliquot\'">' +
+          '<span ng-if="specimen.lineage == \'Aliquot\' && !detailed">' +
             '<span translate="specimens.aliquot">Aliquot</span>' +
           '</span>' +
-          '<span ng-if="specimen.lineage == \'Derived\'">' +
+          '<span ng-if="specimen.lineage == \'Derived\' && !detailed">' +
             '<span translate="specimens.derived">Derived</span> {{specimen.type}}' +
           '</span>' +
         '</span>'

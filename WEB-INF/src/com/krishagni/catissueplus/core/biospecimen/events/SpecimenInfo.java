@@ -35,6 +35,8 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 	
 	private String visitName;
 	
+	private String cpShortTitle;
+	
 	private Long reqId;
 	
 	private String label;
@@ -115,6 +117,14 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 
 	public void setVisitName(String visitName) {
 		this.visitName = visitName;
+	}
+
+	public String getCpShortTitle() {
+		return cpShortTitle;
+	}
+
+	public void setCpShortTitle(String cpShortTitle) {
+		this.cpShortTitle = cpShortTitle;
 	}
 
 	public Long getReqId() {
@@ -338,6 +348,7 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		result.setCreatedOn(specimen.getCreatedOn());
 		result.setStorageType(sr != null ? sr.getStorageType() : null);
 		result.setVisitName(specimen.getVisit().getName());
+		result.setCpShortTitle(specimen.getCollectionProtocol().getShortTitle());
 	}	
 	
 	public static void fromTo(SpecimenRequirement anticipated, SpecimenInfo result) {

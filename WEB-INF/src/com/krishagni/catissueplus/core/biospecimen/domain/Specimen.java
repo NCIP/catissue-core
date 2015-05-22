@@ -557,7 +557,7 @@ public class Specimen extends BaseEntity {
 	}
 	
 	public CollectionProtocol getCollectionProtocol() {
-		return visit.getCollectionProtocol();
+		return getVisit().getCollectionProtocol();
 	}
 	
 	public void setPending() {

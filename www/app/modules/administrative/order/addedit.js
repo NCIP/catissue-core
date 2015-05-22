@@ -68,8 +68,8 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
         function(specimen) {
           return {
             specimen: specimen,
-            quantity: 0,
-            status: 'DISTRIBUTED'
+            quantity: specimen.availableQty,
+            status: 'DISTRIBUTED_AND_CLOSED'
           };
         }
       );
@@ -88,7 +88,7 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     }
 
     $scope.addSpecimens = function() {
-      var labels = $scope.input.labelText.split(/,|\t/).filter(
+      var labels = $scope.input.labelText.split(/,|\t|\n/).filter(
         function(label) {
           return label.trim().length != 0;
         }

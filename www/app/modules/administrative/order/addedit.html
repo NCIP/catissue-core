@@ -120,8 +120,9 @@
     </div>
 
     <div class="input-group" style="margin-bottom:5px;">
-      <input type="text" ng-model="input.labelText" class="form-control" 
+      <textarea ng-model="input.labelText" class="form-control" 
         placeholder="{{'orders.enter_specimen_label' | translate}}" os-enable-tab>
+      </textarea>
       <span class="input-group-btn">
         <button class="btn btn-primary" ng-click="addSpecimens()">
           <span translate="common.buttons.add">Add</span>
@@ -133,17 +134,20 @@
       ng-if="order.orderItems && order.orderItems.length > 0">
       <div class="os-table-head">
         <div class="row">
-          <div class="col os-col-15">
+          <div class="col os-col-10">
             <span translate="orders.spec.label">Label</span>
           </div>
           <div class="col os-col-20">
-            <span translate="orders.spec.visit_name">Visit Name</span>
+            <span translate="orders.spec.desc">Description</span>
           </div>
           <div class="col os-col-15">
-            <span translate="orders.spec.type">Type</span>
+            <span translate="orders.spec.cp">Collection Protocol</span>
           </div>
-          <div class="col os-col-20">
+          <div class="col os-col-15">
             <span translate="orders.spec.location">Location</span>
+          </div>
+          <div class="col os-col-10">
+            <span translate="orders.spec.available_qty">Available</span>
           </div>
           <div class="col os-col-10">
             <span translate="orders.spec.quantity">Quantity</span>
@@ -160,16 +164,18 @@
         <div class="row" ng-repeat="item in order.orderItems" 
           ng-form="sform" ng-init="specimen=item.specimen">
 
-          <div class="col os-col-15">
-            <span>{{specimen.label}}</span>
+          <div class="col os-col-10">
+            <a ui-sref="specimen({specimenId: specimen.id})">
+              <span>{{specimen.label}}</span>
+            </a>
           </div>
           <div class="col os-col-20">
-            <span>{{specimen.visitName}}</span>
+            <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
           </div>
           <div class="col os-col-15">
-            <span>{{specimen.type}} ({{specimen.specimenClass}})</span>
+            <span>{{specimen.cpShortTitle}}</span>
           </div>
-          <div class="col os-col-20">
+          <div class="col os-col-15">
             <span ng-switch on="!!specimen.storageLocation.name">
               <span ng-switch-when="true">
                 {{specimen.storageLocation.name}} 
@@ -181,6 +187,10 @@
                 Virtual
               </span>
             </span>
+          </div>
+          <div class="col os-col-10">
+            <span> {{specimen.availableQty}} </span>
+            <span os-specimen-qty-unit="specimen.specimenClass"></span>
           </div>
           <div class="col os-col-10">
             <div class="os-input-addon-grp">

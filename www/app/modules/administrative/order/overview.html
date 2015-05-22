@@ -59,27 +59,27 @@
         <div class="os-table os-table-fixed os-table-muted-hdr os-border">
           <div class="os-table-head">
             <div class="row">
-              <div class="col os-col-15" translate="orders.spec.label">Label</div>
-              <div class="col os-col-30" translate="orders.spec.visit_name">Visit Name</div>
-              <div class="col os-col-30" translate="orders.spec.type">Type</div>
-              <div class="col os-col-10" translate="orders.spec.quantity">Quantity</div>
+              <div class="col os-col-20" translate="orders.spec.label">Label</div>
+              <div class="col os-col-30" translate="orders.spec.desc">Description</div>
+              <div class="col os-col-20" translate="orders.spec.cp">Collection Protocol</div>
+              <div class="col os-col-15" translate="orders.spec.quantity">Quantity</div>
               <div class="col os-col-15" translate="orders.status">Status</div>
             </div>
           </div>
           <div class="os-table-body">
             <div class="row" ng-repeat="item in order.orderItems" ng-init="specimen = item.specimen">
-              <div class="col os-col-15">
+              <div class="col os-col-20">
                 <a ui-sref="specimen({specimenId: specimen.id})">
                   <span>{{specimen.label}}</span>
                 </a>
               </div>
               <div class="col os-col-30">
-                <span>{{specimen.visitName}}</span>
+                <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
               </div>
-              <div class="col os-col-30">
-                <span>{{specimen.type}} ({{specimen.specimenClass}})</span>
+              <div class="col os-col-20">
+                <span>{{specimen.cpShortTitle}}</span>
               </div>
-              <div class="col os-col-10">
+              <div class="col os-col-15">
                 <span>{{item.quantity}}</span>
                 <span os-specimen-qty-unit="specimen.specimenClass"></span>
               </div>

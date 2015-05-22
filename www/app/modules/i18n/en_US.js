@@ -1068,8 +1068,9 @@
    
      "spec": {
        "label": "Label",
-       "visit_name": "Visit Name",
-       "type": "Type",
+       "cp": "Collection Protocol",
+       "desc": "Description",
+       "available_qty": "Available",
        "quantity": "Quantity",
        "location": "Location",
        "virtual": "Virtual"
