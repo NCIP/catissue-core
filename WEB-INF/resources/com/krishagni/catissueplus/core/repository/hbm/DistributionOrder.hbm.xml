@@ -31,9 +31,11 @@
       </type>
     </property> 
     
-    <property name="orderType" column="ORDER_TYPE"/>
-    
     <property name="activityStatus" column="ACTIVITY_STATUS" />
+    
+    <property name="trackingUrl" column="TRACKING_URL"/>
+
+    <property name="comments" column="COMMENTS"/>
     
     <set
       name="orderItems"
@@ -63,11 +65,27 @@
       class="com.krishagni.catissueplus.core.administrative.domain.User"
       column="DISTRIBUTOR_ID"/>
         
-    <query name="getDistributionOrderByName">
+    <query name="getOrderByName">
       from 
         com.krishagni.catissueplus.core.administrative.domain.DistributionOrder
       where 
         name = :name and activityStatus = 'Active'
     </query>
+
+    <sql-query name="getSpecimenCountByOrder">
+      <return-scalar column="ordId"       type="long"/>
+      <return-scalar column="specimenCnt" type="long"/>
+      
+      select
+        ord.identifier as ordId, count(orderItem.identifier) as specimenCnt
+      from
+        os_orders ord
+        inner join os_order_items orderItem on orderItem.order_id = ord.identifier
+      where
+        ord.identifier in (:orderIds) and
+        ord.activity_status != 'Disabled'
+      group by
+        ord.identifier
+    </sql-query>
   </class>
 </hibernate-mapping>

@@ -15,7 +15,7 @@ import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPos
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 
 @Configurable
-public class TransferEvent extends SpecimenEvent {
+public class SpecimenTransferEvent extends SpecimenEvent {
 	private StorageContainer fromContainer;
 	
 	private int fromDimensionOne;
@@ -31,7 +31,7 @@ public class TransferEvent extends SpecimenEvent {
 	@Autowired
 	private DaoFactory daoFactory;
 
-	public TransferEvent(Specimen specimen) {
+	public SpecimenTransferEvent(Specimen specimen) {
 		super(specimen);
 	}
 
@@ -141,15 +141,15 @@ public class TransferEvent extends SpecimenEvent {
 		return "SpecimenTransferEvent";
 	}
 			
-	public static List<TransferEvent> getFor(Specimen specimen) {
-		List<Long> recIds = new TransferEvent(specimen).getRecordIds();		
+	public static List<SpecimenTransferEvent> getFor(Specimen specimen) {
+		List<Long> recIds = new SpecimenTransferEvent(specimen).getRecordIds();		
 		if (CollectionUtils.isEmpty(recIds)) {
 			return Collections.emptyList();
 		}
 		
-		List<TransferEvent> events = new ArrayList<TransferEvent>();
+		List<SpecimenTransferEvent> events = new ArrayList<SpecimenTransferEvent>();
 		for (Long recId : recIds) {
-			TransferEvent event = new TransferEvent(specimen);
+			SpecimenTransferEvent event = new SpecimenTransferEvent(specimen);
 			event.setId(recId);
 			events.add(event);
 		}

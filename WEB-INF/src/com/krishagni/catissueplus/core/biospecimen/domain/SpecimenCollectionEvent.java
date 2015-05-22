@@ -11,12 +11,12 @@ import org.springframework.beans.factory.annotation.Configurable;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
 @Configurable
-public class CollectionEvent extends SpecimenEvent {
+public class SpecimenCollectionEvent extends SpecimenEvent {
 	private String procedure;
 	
 	private String container;
 
-	public CollectionEvent(Specimen specimen) {
+	public SpecimenCollectionEvent(Specimen specimen) {
 		super(specimen);
 	}
 	
@@ -59,29 +59,29 @@ public class CollectionEvent extends SpecimenEvent {
 		this.container = (String)attrValues.get("container");		
 	}
 	
-	public void update(CollectionEvent other) {
+	public void update(SpecimenCollectionEvent other) {
 		super.update(other);
 		setContainer(other.getContainer());
 		setProcedure(other.getProcedure());
 	}
 		
-	public static CollectionEvent getFor(Specimen specimen) {
+	public static SpecimenCollectionEvent getFor(Specimen specimen) {
 		if (specimen.getId() == null) {
 			return createFromSr(specimen);
 		}
 		
-		List<Long> recIds = new CollectionEvent(specimen).getRecordIds();		
+		List<Long> recIds = new SpecimenCollectionEvent(specimen).getRecordIds();		
 		if (CollectionUtils.isEmpty(recIds)) {
 			return createFromSr(specimen);
 		}
 		
-		CollectionEvent event = new CollectionEvent(specimen);
+		SpecimenCollectionEvent event = new SpecimenCollectionEvent(specimen);
 		event.setId(recIds.iterator().next());
 		return event;		
 	}
 	
-	public static CollectionEvent createFromSr(Specimen specimen) {
-		CollectionEvent event = new CollectionEvent(specimen);
+	public static SpecimenCollectionEvent createFromSr(Specimen specimen) {
+		SpecimenCollectionEvent event = new SpecimenCollectionEvent(specimen);
 		
 		SpecimenRequirement sr = specimen.getSpecimenRequirement();
 		if (sr != null) {

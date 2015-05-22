@@ -9,10 +9,10 @@ import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
-public class ReceivedEvent extends SpecimenEvent {
+public class SpecimenReceivedEvent extends SpecimenEvent {
 	private String quality;
 
-	public ReceivedEvent(Specimen specimen) {
+	public SpecimenReceivedEvent(Specimen specimen) {
 		super(specimen);
 	}
 	
@@ -41,28 +41,28 @@ public class ReceivedEvent extends SpecimenEvent {
 		this.quality = (String)attrValues.get("quality");
 	}
 	
-	public void update(ReceivedEvent other) {
+	public void update(SpecimenReceivedEvent other) {
 		super.update(other);
 		setQuality(other.getQuality());
 	}
 	
-	public static ReceivedEvent getFor(Specimen specimen) {
+	public static SpecimenReceivedEvent getFor(Specimen specimen) {
 		if (specimen.getId() == null) {
 			return createFromSr(specimen);
 		}
 
-		List<Long> recIds = new ReceivedEvent(specimen).getRecordIds();		
+		List<Long> recIds = new SpecimenReceivedEvent(specimen).getRecordIds();		
 		if (CollectionUtils.isEmpty(recIds)) {
 			return createFromSr(specimen);
 		}
 		
-		ReceivedEvent event = new ReceivedEvent(specimen);
+		SpecimenReceivedEvent event = new SpecimenReceivedEvent(specimen);
 		event.setId(recIds.iterator().next());
 		return event;		
 	}
 	
-	public static ReceivedEvent createFromSr(Specimen specimen) {
-		ReceivedEvent event = new ReceivedEvent(specimen);
+	public static SpecimenReceivedEvent createFromSr(Specimen specimen) {
+		SpecimenReceivedEvent event = new SpecimenReceivedEvent(specimen);
 		event.setQuality(Specimen.ACCEPTABLE);
 		
 		SpecimenRequirement sr = specimen.getSpecimenRequirement();

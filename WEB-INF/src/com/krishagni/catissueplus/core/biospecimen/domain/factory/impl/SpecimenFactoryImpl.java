@@ -12,8 +12,8 @@ import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPos
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionEvent;
-import com.krishagni.catissueplus.core.biospecimen.domain.ReceivedEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenReceivedEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
@@ -615,7 +615,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;
 		}
 		
-		CollectionEvent event = CollectionEvent.createFromSr(specimen);
+		SpecimenCollectionEvent event = SpecimenCollectionEvent.createFromSr(specimen);
 		setEventAttrs(collDetail, event, ose);
 
 		if (StringUtils.isNotBlank(collDetail.getContainer())) {
@@ -647,7 +647,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;
 		}
 		
-		ReceivedEvent event = ReceivedEvent.createFromSr(specimen);
+		SpecimenReceivedEvent event = SpecimenReceivedEvent.createFromSr(specimen);
 		setEventAttrs(recvDetail, event, ose);
 		
 		if (StringUtils.isNotBlank(recvDetail.getReceivedQuality())) {

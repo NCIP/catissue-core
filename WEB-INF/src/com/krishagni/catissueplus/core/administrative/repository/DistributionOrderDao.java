@@ -4,10 +4,11 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface DistributionOrderDao extends Dao<DistributionOrder> {
-	public List<DistributionOrder> getDistributionOrders(DistributionOrderListCriteria criteria);
+	public List<DistributionOrderSummary> getOrders(DistributionOrderListCriteria criteria);
 	
-	public DistributionOrder getDistributionOrder(String name);
+	public DistributionOrder getOrder(String name);
 }

@@ -5,6 +5,8 @@ import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 public enum DistributionOrderErrorCode implements ErrorCode {
 	NOT_FOUND,
 	
+	DP_REQUIRED,
+	
 	DUP_NAME,
 	
 	NAME_REQUIRED, 
@@ -19,9 +21,17 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 	
 	STATUS_CHANGE_NOT_ALLOWED, 
 	
-	ALREADY_DISTRIBUTED,
+	ALREADY_EXECUTED,
 	
-	DUPLICATE_SPECIMENS;
+	DUPLICATE_SPECIMENS,
+	
+	INVALID_SPECIMEN_STATUS,
+	
+	NO_SPECIMENS_TO_DIST,
+	
+	REQUESTER_DOES_NOT_BELONG_DP_INST,
+	
+	RECV_SITE_DOES_NOT_BELONG_DP_INST;
 
 	@Override
 	public String code() {

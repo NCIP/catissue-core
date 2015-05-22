@@ -13,6 +13,8 @@ public class DistributionOrderItemDetail {
 	private SpecimenInfo specimen;
 	
 	private Double quantity;
+	
+	private String status;
 
 	public Long getId() {
 		return id;
@@ -38,11 +40,20 @@ public class DistributionOrderItemDetail {
 		this.quantity = quantity;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public static DistributionOrderItemDetail from(DistributionOrderItem orderItem) {
 		DistributionOrderItemDetail detail = new DistributionOrderItemDetail();
 		detail.setId(orderItem.getId());
 		detail.setQuantity(orderItem.getQuantity());
 		detail.setSpecimen(SpecimenInfo.from(orderItem.getSpecimen()));
+		detail.setStatus(orderItem.getStatus().name());
 
 		return detail;
 	}

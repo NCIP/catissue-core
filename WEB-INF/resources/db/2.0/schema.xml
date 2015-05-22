@@ -1894,4 +1894,22 @@
       referencedTableName="CATISSUE_INSTITUTION"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
+
+  <changeSet author="vpawar" id="Distribution order item status">
+    <addColumn tableName="OS_ORDER_ITEMS">
+      <column name="STATUS" type="${text.type}(32)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Distribution order tracking url column">
+    <addColumn tableName="OS_ORDERS">
+      <column name="TRACKING_URL" type="${text.type}(128)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Distribution order comments column">
+    <addColumn tableName="OS_ORDERS">
+      <column name="COMMENTS" type="${text.type}(255)"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

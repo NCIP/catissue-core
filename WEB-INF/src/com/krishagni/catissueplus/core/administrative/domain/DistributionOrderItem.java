@@ -4,11 +4,19 @@ import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 
 public class DistributionOrderItem extends BaseEntity {
+	public enum Status {
+		DISTRIBUTED,
+		
+		DISTRIBUTED_AND_CLOSED
+	}
+	
 	private DistributionOrder order;
 	
 	private Double quantity;
 	
 	private Specimen specimen;
+	
+	private Status status;
 
 	public DistributionOrder getOrder() {
 		return order;
@@ -34,11 +42,19 @@ public class DistributionOrderItem extends BaseEntity {
 		this.specimen = specimen;
 	}
 	
-	public void distribute() {
-		specimen.distribute(quantity, false);
+	public Status getStatus() {
+		return status;
 	}
-	
-	public void distributeAndClose() {
-		specimen.distribute(quantity, true);
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}
+
+	public void distribute() {		
+		specimen.distribute(
+				order.getDistributor(),
+				order.getExecutionDate(),
+				quantity, 
+				status == Status.DISTRIBUTED_AND_CLOSED);
+	}	
 }

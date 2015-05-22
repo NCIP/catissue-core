@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 
@@ -29,7 +29,7 @@ public class PpidYocUniqueIdLabelToken extends AbstractSpecimenLabelToken {
 	public java.lang.String getLabel(Specimen specimen) {	
 		String ppid = specimen.getVisit().getRegistration().getPpid();
 		
-		CollectionEvent collEvent = specimen.getCollectionEvent();
+		SpecimenCollectionEvent collEvent = specimen.getCollectionEvent();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(collEvent.getTime());
 		int yoc = cal.get(Calendar.YEAR);

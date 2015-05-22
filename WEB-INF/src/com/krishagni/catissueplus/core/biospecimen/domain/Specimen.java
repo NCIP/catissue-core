@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
@@ -85,11 +86,11 @@ public class Specimen extends BaseEntity {
 
 	private Set<ExternalIdentifier> externalIdentifierCollection = new HashSet<ExternalIdentifier>();
 	
-	private CollectionEvent collectionEvent;
+	private SpecimenCollectionEvent collectionEvent;
 	
-	private ReceivedEvent receivedEvent;
+	private SpecimenReceivedEvent receivedEvent;
 	
-	private List<TransferEvent> transferEvents;
+	private List<SpecimenTransferEvent> transferEvents;
 	
 	@Autowired
 	@Qualifier("specimenLabelGenerator")
@@ -349,51 +350,51 @@ public class Specimen extends BaseEntity {
 	}
 
 	@NotAudited
-	public CollectionEvent getCollectionEvent() {
+	public SpecimenCollectionEvent getCollectionEvent() {
 		if (isAliquot() || isDerivative()) {
 			return null;
 		}
 				
 		if (this.collectionEvent == null) {
-			this.collectionEvent = CollectionEvent.getFor(this); 
+			this.collectionEvent = SpecimenCollectionEvent.getFor(this); 
 		}
 		
 		if (this.collectionEvent == null) {
-			this.collectionEvent = CollectionEvent.createFromSr(this);
+			this.collectionEvent = SpecimenCollectionEvent.createFromSr(this);
 		}
 		
 		return this.collectionEvent;
 	}
 
-	public void setCollectionEvent(CollectionEvent collectionEvent) {
+	public void setCollectionEvent(SpecimenCollectionEvent collectionEvent) {
 		this.collectionEvent = collectionEvent;
 	}
 
 	@NotAudited
-	public ReceivedEvent getReceivedEvent() {
+	public SpecimenReceivedEvent getReceivedEvent() {
 		if (isAliquot() || isDerivative()) {
 			return null;
 		}
 		
 		if (this.receivedEvent == null) {
-			this.receivedEvent = ReceivedEvent.getFor(this); 			 
+			this.receivedEvent = SpecimenReceivedEvent.getFor(this); 			 
 		}
 		
 		if (this.receivedEvent == null) {
-			this.receivedEvent = ReceivedEvent.createFromSr(this);
+			this.receivedEvent = SpecimenReceivedEvent.createFromSr(this);
 		}
 		
 		return this.receivedEvent; 
 	}
 
-	public void setReceivedEvent(ReceivedEvent receivedEvent) {
+	public void setReceivedEvent(SpecimenReceivedEvent receivedEvent) {
 		this.receivedEvent = receivedEvent;
 	}
 	
 	@NotAudited
-	public List<TransferEvent> getTransferEvents() {
+	public List<SpecimenTransferEvent> getTransferEvents() {
 		if (this.transferEvents == null) {
-			this.transferEvents = TransferEvent.getFor(this);
+			this.transferEvents = SpecimenTransferEvent.getFor(this);
 		}		
 		return this.transferEvents;
 	}
@@ -503,35 +504,44 @@ public class Specimen extends BaseEntity {
 		checkQtyConstraints();
 	}
 
-	public void distribute(Double quantity, boolean closeAfterDistribution) {
-		if (!isAvailable || !isCollected()) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_AVAILABLE);
+	public void distribute(User distributor, Date time, Double quantity, boolean closeAfterDistribution) {
+		if (!getIsAvailable() || !isCollected() || getAvailableQuantity() <= 0) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_AVAILABLE_FOR_DIST, getLabel());
 		}
 		
-		if (availableQuantity < quantity) {
+		if (getAvailableQuantity() < quantity) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
 		}
 		
-		availableQuantity = availableQuantity - quantity;
-		addDistributionEvent();
+		setAvailableQuantity(getAvailableQuantity() - quantity);
+		addDistributionEvent(distributor, time, quantity);
 		if (availableQuantity == 0 || closeAfterDistribution) {
-			isAvailable = false;
+			setIsAvailable(false);
 			virtualize();
-			addDisposalEvent();
+			addDisposalEvent(distributor, time, "Distributed"); // TODO: i18n?
 		}
 	}
 	
-	private void addDistributionEvent() {
-		//TODO: need to add the feature.
+	private void addDistributionEvent(User user, Date time, Double quantity) {
+		SpecimenDistributionEvent event = new SpecimenDistributionEvent(this);
+		event.setQuantity(quantity);
+		event.setUser(user);
+		event.setTime(time);
+		event.saveOrUpdate();
 	}
 	
-	private void addDisposalEvent() {
-		//TODO: need to add the feature.
+	private void addDisposalEvent(User user, Date time, String reason) {
+		SpecimenDisposalEvent event = new SpecimenDisposalEvent(this);
+		event.setReason(reason);
+		event.setUser(user);
+		event.setTime(time);
+		event.saveOrUpdate();
 	}
 	
 	private void virtualize() {
-		if (position != null) {
-			position.vacate();
+		if (getPosition() != null) {
+			getPosition().vacate();
+			setPosition(null);
 		}
 	}
 	
@@ -665,7 +675,7 @@ public class Specimen extends BaseEntity {
 			return;
 		}
 		
-		TransferEvent transfer = new TransferEvent(this);
+		SpecimenTransferEvent transfer = new SpecimenTransferEvent(this);
 		transfer.setUser(AuthUtil.getCurrentUser());
 		transfer.setTime(Calendar.getInstance().getTime());
 		
@@ -757,7 +767,7 @@ public class Specimen extends BaseEntity {
 			getReceivedEvent().delete();
 		}
 		
-		for (TransferEvent te : getTransferEvents()) {
+		for (SpecimenTransferEvent te : getTransferEvents()) {
 			te.delete();
 		}
 	}

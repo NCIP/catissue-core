@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
@@ -12,8 +14,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 public class DistributionOrder extends BaseEntity {
 	public enum Status { 
 		PENDING,
-		DISTRIBUTED,
-		DISTRIBUTED_AND_CLOSED
+		EXECUTED
 	}
 	
 	private static final String ENTITY_NAME = "distribution_order";
@@ -32,13 +33,15 @@ public class DistributionOrder extends BaseEntity {
 	
 	private Date executionDate;
 
-	private String orderType = "Distribution";
-	
 	private Set<DistributionOrderItem> orderItems = new HashSet<DistributionOrderItem>();
 	
 	private Status status;
 	
 	private String activityStatus;
+	
+	private String trackingUrl;
+	
+	private String comments;
 	
 	public static String getEntityName() {
 		return ENTITY_NAME;
@@ -100,14 +103,6 @@ public class DistributionOrder extends BaseEntity {
 		this.executionDate = executionDate;
 	}
 
-	public String getOrderType() {
-		return orderType;
-	}
-
-	public void setOrderType(String orderType) {
-		this.orderType = orderType;
-	}
-
 	public Set<DistributionOrderItem> getOrderItems() {
 		return orderItems;
 	}
@@ -131,55 +126,68 @@ public class DistributionOrder extends BaseEntity {
 	public void setActivityStatus(String activityStatus) {
 		this.activityStatus = activityStatus;
 	}
+	
+	public String getTrackingUrl() {
+		return trackingUrl;
+	}
 
-	public void update(DistributionOrder other) {
+	public void setTrackingUrl(String trackingUrl) {
+		this.trackingUrl = trackingUrl;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	public Institute getInstitute() {
+		return distributionProtocol.getInstitute();
+	}
+
+	public void update(DistributionOrder newOrder) { // TODO: can't update executed order
+		setName(newOrder.getName());
+		setRequester(newOrder.getRequester());
+		setDistributor(newOrder.getDistributor());
+		setDistributionProtocol(newOrder.getDistributionProtocol());
+		setCreationDate(newOrder.getCreationDate());
+		setSite(newOrder.getSite());
+		setExecutionDate(newOrder.getExecutionDate());
+		setTrackingUrl(newOrder.getTrackingUrl());
+		setComments(newOrder.getComments());
 		
-		setName(other.name);
-		setRequester(other.requester);
-		setDistributor(other.distributor);
-		updateOrderItems(other);
-		updateDistribution(other);
-		setDistributionProtocol(other.distributionProtocol);
-		updateStatus(other);
-		setCreationDate(other.creationDate);
-		setSite(other.site);
-		setExecutionDate(other.executionDate);
+		updateOrderItems(newOrder);
+		updateDistribution(newOrder);		
+		updateStatus(newOrder);
 	}
 	
 	public void distribute() {
-		if (isOrderDistributed()) {
-			throw OpenSpecimenException.userError(DistributionOrderErrorCode.ALREADY_DISTRIBUTED);
+		if (isOrderExecuted()) {
+			throw OpenSpecimenException.userError(DistributionOrderErrorCode.ALREADY_EXECUTED);
+		}
+		
+		if (CollectionUtils.isEmpty(getOrderItems())) {
+			throw OpenSpecimenException.userError(DistributionOrderErrorCode.NO_SPECIMENS_TO_DIST);
 		}
 		
 		for (DistributionOrderItem orderItem : getOrderItems()) {
 			orderItem.distribute();
 		}
 		
-		setStatus(Status.DISTRIBUTED);
-	}
-	
-	public void distributeAndClose() {
-		if (isOrderDistributed()) {
-			throw OpenSpecimenException.userError(DistributionOrderErrorCode.ALREADY_DISTRIBUTED);
-		}
-		
-		for (DistributionOrderItem orderItem : getOrderItems()) {
-			orderItem.distributeAndClose();
-		}
-		
-		setStatus(Status.DISTRIBUTED_AND_CLOSED);
+		setStatus(Status.EXECUTED);
 	}
 	
 	private void updateOrderItems(DistributionOrder other) {
-		if (isOrderDistributed()) {
+		if (isOrderExecuted()) {
 			/*
 			 * Order items can't be modified once the order is distributed.
 			 */
 			return;
 		}
 		
-		CollectionUpdater.update(orderItems, other.orderItems);
-		
+		CollectionUpdater.update(orderItems, other.orderItems);		
 		for (DistributionOrderItem item : getOrderItems()) {
 			item.setOrder(this);
 		}
@@ -187,10 +195,8 @@ public class DistributionOrder extends BaseEntity {
 	}
 	
 	private void updateDistribution(DistributionOrder other) {
-		if (status == Status.PENDING && other.status == Status.DISTRIBUTED) {
+		if (getStatus() == Status.PENDING && other.getStatus() == Status.EXECUTED) {
 			distribute();
-		} else if (status == Status.PENDING && other.status == Status.DISTRIBUTED_AND_CLOSED) {
-			distributeAndClose();
 		}
 	}
 	
@@ -199,15 +205,14 @@ public class DistributionOrder extends BaseEntity {
 			return;
 		}
 		
-		if (status == Status.PENDING && other.isOrderDistributed()) {
+		if (status == Status.PENDING && other.isOrderExecuted()) {
 			setStatus(other.status);
 		} else {
 			throw OpenSpecimenException.userError(DistributionOrderErrorCode.STATUS_CHANGE_NOT_ALLOWED);
 		}
 	}
 	
-	public boolean isOrderDistributed() {
-		return (Status.DISTRIBUTED == status || 
-				Status.DISTRIBUTED_AND_CLOSED == status);
+	public boolean isOrderExecuted() {
+		return Status.EXECUTED == status;
 	}
 }
