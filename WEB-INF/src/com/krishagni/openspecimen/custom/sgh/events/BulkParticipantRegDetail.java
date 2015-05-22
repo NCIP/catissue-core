@@ -21,10 +21,10 @@ public class BulkParticipantRegDetail extends BulkParticipantRegSummary {
 			List<CollectionProtocolRegistrationDetail> registrations){
 		
 		BulkParticipantRegDetail detail = new BulkParticipantRegDetail();
-		detail.setPrintLabels(summary.isPrintLabels());
 		detail.setCpId(summary.getCpId());
 		detail.setParticipantCount(summary.getParticipantCount());
 		detail.cprDetails = registrations;
+		detail.setPrintLabels(summary.isPrintLabels());
 		return detail;
 	}
 	
