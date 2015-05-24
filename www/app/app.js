@@ -195,7 +195,6 @@ angular.module('openspecimen', [
     }
   })
   .run(function($rootScope, $window, $cookieStore, $translate, ApiUtil, Setting) {
-    
     if ($window.localStorage['osAuthToken']) {
       $cookieStore.put('osAuthToken', $window.localStorage['osAuthToken']);
       $rootScope.loggedIn = true;
