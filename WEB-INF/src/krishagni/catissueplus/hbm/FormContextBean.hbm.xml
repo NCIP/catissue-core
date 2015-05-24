@@ -114,7 +114,7 @@
             dyextn_containers ic
             left join catissue_form_context ctxt on ctxt.container_id = ic.identifier and ctxt.deleted_on is null
           where
-            ic.deleted_on is null and (ctxt.entity_type is null or ctxt.entity_type = :entityType )
+            ic.deleted_on is null and ctxt.entity_type = :entityType
           group by
             ic.identifier
         ) derived on derived.formId = c.identifier
