@@ -23,18 +23,13 @@ angular.module('openspecimen', [
   ])
 
   .config(function(
-    $stateProvider, $urlRouterProvider, 
-    $httpProvider, $translateProvider,
+    $stateProvider, $urlRouterProvider, $httpProvider, 
+    $translateProvider, $translatePartialLoaderProvider,
     uiSelectConfig, ApiUrlsProvider) {
 
-    $translateProvider.useStaticFilesLoader({
-      files: [{
-        prefix: 'modules/i18n/',
-        suffix: '.js'
-        }, {
-        prefix: 'custom-modules/sgh/i18n/',
-        suffix: '.js'
-      }]
+    $translatePartialLoaderProvider.addPart('modules');
+    $translateProvider.useLoader('$translatePartialLoader', {  
+      urlTemplate: '{part}/i18n/{lang}.js'
     });
  
     $translateProvider.preferredLanguage('en_US');
@@ -200,6 +195,7 @@ angular.module('openspecimen', [
     }
   })
   .run(function($rootScope, $window, $cookieStore, $translate, ApiUtil, Setting) {
+    
     if ($window.localStorage['osAuthToken']) {
       $cookieStore.put('osAuthToken', $window.localStorage['osAuthToken']);
       $rootScope.loggedIn = true;

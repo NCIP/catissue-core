@@ -68,8 +68,7 @@
       "edit": "Edit",
       "done": "Done",
       "search": "Search",
-      "clear_filters": "Clear Filters",
-      "register": "Register"
+      "clear_filters": "Clear Filters"
     }
   },
 
@@ -224,7 +223,8 @@
       "update_registration": "Update",
       "register_selected_participant": "Register Selected participant",
       "ignore_matches": "Ignore Matches and Register Participant",
-      "lookup_again": "Lookup Again"
+      "lookup_again": "Lookup Again",
+      "bulk_register": "Bulk Register"  
     },
 
     "menu": {
@@ -239,7 +239,8 @@
       "view_details": "Click to view/edit Participant details",
       "completed_visits_count": "Count of Completed Visits",
       "collected_specimens_count": "Count of Collected Specimens",
-      "search": "Click to filter Participants"
+      "search": "Click to filter Participants",
+      "bulk_register": "Click to register participants"
     }
   },
 
