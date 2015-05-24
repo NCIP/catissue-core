@@ -354,9 +354,17 @@
   </bean>
 
   <bean id="resourceBundle" class="org.springframework.context.support.ResourceBundleMessageSource">
-    <property name="basename" value="errors/messages"/>
+    <property name="basenames">
+      <list>
+        <value>
+          errors/messages
+        </value>
+        <value>
+          com/krishagni/openspecimen/custom/sgh/messages
+        </value>
+      </list>
+    </property>
   </bean>
-
 
   <bean id="appCtxProvider" class="com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider"/>
   
