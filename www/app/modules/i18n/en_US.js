@@ -7,7 +7,6 @@
     "users": "Users",
     "institutes": "Institutes",
     "sites": "Sites",
-    "storage_containers": "Storage Containers",
     "distribution_protocols": "Distribution Protocols",
     "roles": "Roles",
     "queries": "Queries",
@@ -645,7 +644,7 @@
   },
   
   "container": {
-    "list": "Storage Containers",
+    "list": "Containers",
     "name": "Name",
     "barcode": "Barcode",
     "create_container": "Create Storage Container",
