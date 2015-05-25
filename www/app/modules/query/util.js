@@ -520,7 +520,14 @@ angular.module('os.query.util', [])
 
       var selectedFields = queryCtx.selectedFields;
       for (var i = 0; i < selectedFields.length; ++i) {
-        if (selectedFields[i].split(".")[1] == 'extensions') {
+        var fieldName = undefined;
+        if (typeof selectedFields[i] == "string") {
+          fieldName = selectedFields[i];
+        } else if (typeof selectedFields[i] == "object") {
+          fieldName = selectedFields[i].name;
+        } 
+
+        if (fieldName.split(".")[1] == 'extensions') {
           queryCtx.disableCpSelection = true;
           return;
         }
