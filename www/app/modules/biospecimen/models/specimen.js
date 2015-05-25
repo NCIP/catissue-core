@@ -106,13 +106,16 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       return Form.listRecords(url);
     };
 
-    Specimen.prototype.getEvents = function() {
+    Specimen.prototype.getEvents = function(callback) {
       var events = [];
 
       if (!!this.$id()) {
         $http.get(Specimen.url() + '/' + this.$id() + '/events').then(
           function(result) {
             Util.unshiftAll(events, getEventsList(result.data));
+            if (typeof callback == 'function') {
+              callback(events);
+            }
           }
         );
       }

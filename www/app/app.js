@@ -222,7 +222,8 @@ angular.module('openspecimen', [
           dateFmt: settings.dateFmt,
           timeFmt: settings.timeFmt,
           queryDateFmt: {format: settings.deFeDateFmt},
-          dateTimeFmt: settings.dateFmt + ' ' + settings.timeFmt
+          dateTimeFmt: settings.dateFmt + ' ' + settings.timeFmt,
+          utcOffset: settings.utcOffset
         };
 
         angular.extend($rootScope.global, fmts);

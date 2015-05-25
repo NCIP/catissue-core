@@ -325,9 +325,9 @@
     "description": "Description",
     "location": "Location",
     "apply_first_loc_to_all": "Copy First Location To All",
-    "activity_full_info": "{{user}} created {{name}} on {{time | date: dateTimeFmt}}",
+    "activity_full_info": "{{user}} created {{name}} on {{time | osServerTime: global.utcOffset | date: global.dateTimeFmt}}",
     "activity_user_info": "{{user}} created {{name}}",
-    "activity_time_info": "{{name}} created on {{time | date: dateTimeFmt}}",
+    "activity_time_info": "{{name}} created on {{time | osServerTime: utcOffset | date: global.dateTimeFmt}}",
     "activity_info": "{{name}} created",
 
     "recent_events": "Recent Events",

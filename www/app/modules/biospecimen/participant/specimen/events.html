@@ -34,13 +34,17 @@
             <div class="row" ng-repeat="event in events">
               <div class="col col-xs-5">
                 <a ui-sref="specimen-detail.extensions.addedit({formId: event.formId, recordId: event.id, formCtxId: event.formCtxtId})">
-                  #{{event.id}} {{event.name}}
+                  <span>#{{event.id}} {{event.name}}</span>
                 </a>
               </div>
-              <div class="col col-xs-3">{{event.user}}</div>
-              <div class="col col-xs-3">{{event.time | date: global.dateTimeFmt}}</div>
+              <div class="col col-xs-3">
+                <span>{{event.user}}</span>
+              </div>
+              <div class="col col-xs-3">
+                <span>{{event.time | osServerTime: global.utcOffset | date: global.dateTimeFmt}}</span>
+              </div>
               <div class="col col-xs-1">
-                <button show-if-allowed="specimenResource.updateOpts" class="btn btn-xs btn-default">
+                <button show-if-allowed="specimenResource.updateOpts" class="btn btn-xs btn-default"> 
                   <span class="fa fa-trash"></span>
                 </button>
               </div>
