@@ -11,7 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -41,7 +41,7 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	
 	private TemplateService templateService;
 	
-	private ResourceBundleMessageSource resourceBundle;
+	private MessageSource messageSource;
 	
 	private ThreadPoolTaskExecutor taskExecutor;
 	
@@ -51,8 +51,8 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 		this.templateService = templateService;
 	}
 
-	public void setResourceBundle(ResourceBundleMessageSource resourceBundle) {
-		this.resourceBundle = resourceBundle;
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 
 	public void setTaskExecutor(ThreadPoolTaskExecutor taskExecutor) {
@@ -162,10 +162,10 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	
 	private String getSubject(String emailTmplKey, String[] subjParams) {
 		if (subjectPrefix == null) {
-			subjectPrefix = resourceBundle.getMessage("email_subject_prefix", null, Locale.getDefault());
+			subjectPrefix = messageSource.getMessage("email_subject_prefix", null, Locale.getDefault());
 		}
 		
-		return subjectPrefix + resourceBundle.getMessage(emailTmplKey.toLowerCase() + "_subj", subjParams, Locale.getDefault());
+		return subjectPrefix + messageSource.getMessage(emailTmplKey.toLowerCase() + "_subj", subjParams, Locale.getDefault());
 	}
 	
 	private String getEmailTmpl(String emailTmplKey) {

@@ -11,6 +11,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.MessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
@@ -39,7 +40,7 @@ public class DefaultSpecimenLabelPrinter implements SpecimenLabelPrinter, Initia
 	
 	private LabelTmplTokenRegistrar printLabelTokensRegistrar;
 	
-	private ResourceBundleMessageSource resourceBundle;
+	private MessageSource messageSource;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -53,8 +54,8 @@ public class DefaultSpecimenLabelPrinter implements SpecimenLabelPrinter, Initia
 		this.printLabelTokensRegistrar = printLabelTokensRegistrar;
 	}
 
-	public void setResourceBundle(ResourceBundleMessageSource resourceBundle) {
-		this.resourceBundle = resourceBundle;
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 
 	@Override
@@ -198,7 +199,7 @@ public class DefaultSpecimenLabelPrinter implements SpecimenLabelPrinter, Initia
 			
 			rule.setDataTokens(tokens);
 			rule.setPrinterName(ruleLineFields[6]);
-			rule.setResourceBundle(resourceBundle);
+			rule.setMessageSource(messageSource);
 			return rule;
 		} catch (Exception e) {
 			logger.error("Error parsing rule: " + ruleLine, e);

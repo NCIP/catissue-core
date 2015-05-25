@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,7 +24,7 @@ import com.krishagni.catissueplus.core.common.errors.ParameterizedError;
 public class RestErrorController extends ResponseEntityExceptionHandler {
 
 	@Autowired
-	private ResourceBundleMessageSource resourceBundle;
+	private MessageSource messageSource;
 
 	private static final String INTERNAL_ERROR = "internal_error";
 
@@ -85,7 +85,7 @@ public class RestErrorController extends ResponseEntityExceptionHandler {
 	}
 
 	private ErrorMessage getMessage(String code, Object[] params) {
-		String message = resourceBundle.getMessage(
+		String message = messageSource.getMessage(
 				code.toLowerCase(), 
 				params,
 				Locale.getDefault());

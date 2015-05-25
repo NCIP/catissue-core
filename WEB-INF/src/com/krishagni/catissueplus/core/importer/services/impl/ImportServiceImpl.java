@@ -14,7 +14,7 @@ import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.context.MessageSource;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,9 +36,9 @@ import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob;
-import com.krishagni.catissueplus.core.importer.domain.ImportJobErrorCode;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.Status;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.Type;
+import com.krishagni.catissueplus.core.importer.domain.ImportJobErrorCode;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema;
 import com.krishagni.catissueplus.core.importer.events.ImportDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportJobDetail;
@@ -67,7 +67,7 @@ public class ImportServiceImpl implements ImportService {
 	
 	private TransactionTemplate txTmpl;
 	
-	private ResourceBundleMessageSource resourceBundle;
+	private MessageSource messageSource;
 	
 	public void setCfgSvc(ConfigurationService cfgSvc) {
 		this.cfgSvc = cfgSvc;
@@ -95,8 +95,8 @@ public class ImportServiceImpl implements ImportService {
 		this.txTmpl.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 	}
 	
-	public void setResourceBundle(ResourceBundleMessageSource resourceBundle) {
-		this.resourceBundle = resourceBundle;
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 
 	@Override
@@ -278,7 +278,7 @@ public class ImportServiceImpl implements ImportService {
 	}
 
 	private String getMessage(ParameterizedError error) {
-		return resourceBundle.getMessage(
+		return messageSource.getMessage(
 				error.error().code().toLowerCase(), 
 				error.params(), 
 				Locale.getDefault());

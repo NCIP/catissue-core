@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.context.MessageSource;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +31,7 @@ public class SpecimenLabelPrintRule {
 	
 	private List<LabelTmplToken> dataTokens = new ArrayList<LabelTmplToken>();
 	
-	private ResourceBundleMessageSource resourceBundle;	
+	private MessageSource messageSource;	
 	
 	public String getSpecimenClass() {
 		return specimenClass;
@@ -89,12 +89,12 @@ public class SpecimenLabelPrintRule {
 		this.dataTokens = dataTokens;
 	}
 	
-	public ResourceBundleMessageSource getResourceBundle() {
-		return resourceBundle;
+	public MessageSource getMessageSource() {
+		return messageSource;
 	}
 
-	public void setResourceBundle(ResourceBundleMessageSource resourceBundle) {
-		this.resourceBundle = resourceBundle;
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 
 	public boolean isApplicableFor(Specimen specimen, User user, String ipAddr) {
@@ -121,7 +121,7 @@ public class SpecimenLabelPrintRule {
 		try {
 			Map<String, String> dataItems = new HashMap<String, String>();
 			for (LabelTmplToken token : dataTokens) {
-				String propName = resourceBundle.getMessage(token.getName(), null, Locale.getDefault());
+				String propName = messageSource.getMessage(token.getName(), null, Locale.getDefault());
 				dataItems.put(propName, token.getReplacement(specimen));
 			}
 			

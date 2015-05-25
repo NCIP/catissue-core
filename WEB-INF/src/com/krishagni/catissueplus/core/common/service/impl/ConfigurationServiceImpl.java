@@ -15,7 +15,7 @@ import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.context.MessageSource;
 
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -40,14 +40,14 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	
 	private DaoFactory daoFactory;
 	
-	private ResourceBundleMessageSource resourceBundle;
+	private MessageSource messageSource;
 		
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 	
-	public void setResourceBundle(ResourceBundleMessageSource resourceBundle) {
-		this.resourceBundle = resourceBundle;
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 
 	@Override
@@ -190,21 +190,21 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		
 		Locale locale = Locale.getDefault();
 		result.put("locale", locale.toString());
-		result.put("dateFmt", resourceBundle.getMessage("common_date_fmt", null, locale));
-		result.put("timeFmt", resourceBundle.getMessage("common_time_fmt", null, locale));
-		result.put("deFeDateFmt", resourceBundle.getMessage("common_de_fe_date_fmt", null, locale));
-		result.put("deBeDateFmt", resourceBundle.getMessage("common_de_be_date_fmt", null, locale));
+		result.put("dateFmt", messageSource.getMessage("common_date_fmt", null, locale));
+		result.put("timeFmt", messageSource.getMessage("common_time_fmt", null, locale));
+		result.put("deFeDateFmt", messageSource.getMessage("common_de_fe_date_fmt", null, locale));
+		result.put("deBeDateFmt", messageSource.getMessage("common_de_be_date_fmt", null, locale));
 		return result;
 	}
 		
 	@Override
 	public String getDeDateFormat() {		
-		return resourceBundle.getMessage("common_de_be_date_fmt", null, Locale.getDefault());
+		return messageSource.getMessage("common_de_be_date_fmt", null, Locale.getDefault());
 	}
 
 	@Override
 	public String getTimeFormat() {
-		return resourceBundle.getMessage("common_time_fmt", null, Locale.getDefault());
+		return messageSource.getMessage("common_time_fmt", null, Locale.getDefault());
 	}
 
 	@Override

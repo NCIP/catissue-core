@@ -70,7 +70,7 @@
   
   <bean id="cfgSvc" class="com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
-    <property name="resourceBundle" ref="resourceBundle"/>
+    <property name="messageSource" ref="messageSource"/>
   </bean>
   
   <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
@@ -299,7 +299,7 @@
   </bean>
 
   <bean id="containerMapExporter" class="com.krishagni.catissueplus.core.administrative.services.impl.ContainerMapExporterImpl">
-    <property name="resourceBundle" ref="resourceBundle"/>
+    <property name="messageSource" ref="messageSource"/>
   </bean>
 
   <bean id="storageContainerSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.StorageContainerServiceImpl">
@@ -353,15 +353,11 @@
     <property name="pvManager" ref="pvMangeerSvc"/>
   </bean>
 
-  <bean id="resourceBundle" class="org.springframework.context.support.ResourceBundleMessageSource">
+  <bean id="messageSource" class="com.krishagni.catissueplus.core.common.WildcardReloadableResourceBundle">
     <property name="basenames">
       <list>
-        <value>
-          errors/messages
-        </value>
-        <value>
-          com/krishagni/openspecimen/custom/sgh/messages
-        </value>
+        <value>classpath:errors/messages*</value>
+        <value>classpath*:com/krishagni/openspecimen/custom/**/messages*</value>
       </list>
     </property>
   </bean>
@@ -408,7 +404,7 @@
   <bean id="emailService" class="com.krishagni.catissueplus.core.common.service.impl.EmailServiceImpl">
     <property name="taskExecutor" ref="taskExecutor"/>
     <property name="templateService" ref="templateService"/>
-    <property name="resourceBundle" ref="resourceBundle"/>
+    <property name="messageSource" ref="messageSource"/>
     <property name="cfgSvc" ref="cfgSvc"/>
   </bean>
 
@@ -436,7 +432,7 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="cfgSvc" ref="cfgSvc"/>
     <property name="printLabelTokensRegistrar" ref="printLabelTokensRegistrar"/>
-    <property name="resourceBundle" ref="resourceBundle"/>
+    <property name="messageSource" ref="messageSource"/>
   </bean>
 
   <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
@@ -562,7 +558,7 @@
     <property name="schemaFactory" ref="objectSchemaFactory"/>
     <property name="importerFactory" ref="objectImporterFactory"/>
     <property name="transactionManager" ref="transactionManager"/>
-    <property name="resourceBundle" ref="resourceBundle"/>
+    <property name="messageSource" ref="messageSource"/>
   </bean>
 
   <task:scheduler id="taskScheduler" pool-size="1"/>

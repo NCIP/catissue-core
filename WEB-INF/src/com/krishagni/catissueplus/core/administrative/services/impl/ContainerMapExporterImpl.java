@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.context.MessageSource;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -19,10 +19,10 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 
 public class ContainerMapExporterImpl implements ContainerMapExporter {
-	private ResourceBundleMessageSource resourceBundle;
+	private MessageSource messageSource;
 	
-	public void setResourceBundle(ResourceBundleMessageSource resourceBundle) {
-		this.resourceBundle = resourceBundle;
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 
 	@Override
@@ -132,7 +132,7 @@ public class ContainerMapExporterImpl implements ContainerMapExporter {
 	}
 		
 	private String getMessage(String key) {
-		return resourceBundle.getMessage(key, null, Locale.getDefault());
+		return messageSource.getMessage(key, null, Locale.getDefault());
 	}
 
 	private static final String CONTAINER_DETAILS        = "storage_container_details";
