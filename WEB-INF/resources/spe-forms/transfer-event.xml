@@ -6,12 +6,12 @@
     <primaryKey>IDENTIFIER</primaryKey>
 
     <row>
-      <numberField>
+      <storageContainer>
         <name>fromContainer</name>
         <udn>fromContainer</udn>
         <caption>From Container</caption>
         <column>FROM_STORAGE_CONTAINER_ID</column>
-      </numberField>
+      </storageContainer>
       
       <numberField>
         <name>fromDimensionOne</name>
@@ -29,12 +29,12 @@
     </row>
 
     <row>
-      <numberField>
+      <storageContainer>
         <name>toContainer</name>
         <udn>toContainer</udn>
         <caption>To Container</caption>
         <column>TO_STORAGE_CONTAINER_ID</column>
-      </numberField>
+      </storageContainer>
       
       <numberField>
         <name>toDimensionOne</name>
