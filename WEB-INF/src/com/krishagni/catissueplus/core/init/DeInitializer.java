@@ -48,9 +48,9 @@ public class DeInitializer implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		Map<String, String> localeSettings = cfgSvc.getLocaleSettings();		
-		String dateFormat = localeSettings.get("deBeDateFmt");
-		String timeFormat = localeSettings.get("timeFmt");
+		Map<String, Object> localeSettings = cfgSvc.getLocaleSettings();		
+		String dateFormat = (String)localeSettings.get("deBeDateFmt");
+		String timeFormat = (String)localeSettings.get("timeFmt");
 		String dataDir = cfgSvc.getStrSetting("common", "data_dir", ".");
 		
 		String dir = new StringBuilder(dataDir).append(File.separator)
@@ -88,11 +88,9 @@ public class DeInitializer implements InitializingBean {
 					return;
 				}
 				
-				Map<String, String> localeSettings = cfgSvc.getLocaleSettings();		
-				String dateFormat = localeSettings.get("deBeDateFmt");
-				String timeFormat = localeSettings.get("timeFmt");
-				DEApp.setDateFormat(dateFormat);
-				DEApp.setTimeFormat(timeFormat);				
+				Map<String, Object> localeSettings = cfgSvc.getLocaleSettings();		
+				DEApp.setDateFormat((String)localeSettings.get("deBeDateFmt"));
+				DEApp.setTimeFormat((String)localeSettings.get("timeFmt"));				
 			}
 		});		
 	}

@@ -26,7 +26,7 @@ public interface ConfigurationService {
 	
 	public void registerChangeListener(String module, ConfigChangeListener callback);
 	
-	public Map<String, String> getLocaleSettings();
+	public Map<String, Object> getLocaleSettings();
 	
 	public String getDeDateFormat();
 	

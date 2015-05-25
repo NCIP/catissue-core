@@ -110,4 +110,9 @@ public class Utility {
 			}
 		}		
 	}
+	
+	public static long getTimezoneOffset() {
+		Calendar cal = Calendar.getInstance();
+		return -1 * (cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET));		
+	}
 }

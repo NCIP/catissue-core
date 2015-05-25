@@ -30,6 +30,7 @@ import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class ConfigurationServiceImpl implements ConfigurationService, InitializingBean {
 	
@@ -185,8 +186,8 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	}
 	
 	@Override
-	public Map<String, String> getLocaleSettings() {
-		Map<String, String> result = new HashMap<String, String>();
+	public Map<String, Object> getLocaleSettings() {
+		Map<String, Object> result = new HashMap<String, Object>();
 		
 		Locale locale = Locale.getDefault();
 		result.put("locale", locale.toString());
@@ -194,6 +195,7 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		result.put("timeFmt", messageSource.getMessage("common_time_fmt", null, locale));
 		result.put("deFeDateFmt", messageSource.getMessage("common_de_fe_date_fmt", null, locale));
 		result.put("deBeDateFmt", messageSource.getMessage("common_de_be_date_fmt", null, locale));
+		result.put("utcOffset", Utility.getTimezoneOffset());
 		return result;
 	}
 		

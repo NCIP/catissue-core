@@ -51,7 +51,7 @@ public class ConfigurationController {
 	@RequestMapping(method = RequestMethod.GET, value="/locale")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public Map<String, String> getLocaleSettings() {
+	public Map<String, Object> getLocaleSettings() {
 		return cfgSvc.getLocaleSettings();
 	}	
 }
