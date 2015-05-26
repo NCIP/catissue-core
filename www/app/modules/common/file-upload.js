@@ -61,7 +61,7 @@ angular.module('openspecimen')
               scope.ctrl.done(data);
             },
             fail: function(e, data) {
-             scope.ctrl.fail(data);
+              scope.ctrl.fail(data);
             }
           })
 

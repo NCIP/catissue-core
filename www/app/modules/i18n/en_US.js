@@ -204,9 +204,6 @@
     "regDate": "Registration Date",
   
     "signed_consent_form": "Signed Consent Form",
-    "no_consent_form": " There is no form to show. Upload a form by clicking upload form", 
-    "update_form": "Update Form",
-    "new_consent_form": "New Consent Form",
     "delete_consent_doc": "Deleting Signed Consent Document",
     "confirm_delete_consent_doc": "Are you sure you want to delete {{consentDocumentName}}?",
 
@@ -231,8 +228,7 @@
       "update_registration": "Update",
       "register_selected_participant": "Register Selected participant",
       "ignore_matches": "Ignore Matches and Register Participant",
-      "lookup_again": "Lookup Again",
-      "upload_form": "Upload Form"
+      "lookup_again": "Lookup Again"
     },
 
     "menu": {

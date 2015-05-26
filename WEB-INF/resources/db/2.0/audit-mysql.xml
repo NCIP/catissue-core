@@ -776,4 +776,13 @@
   <changeSet author="slakhani" id="1429178687139-81">
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_REVISION_ENTITIES"  constraintName="FK_t69kea3hasj6uc6ddn5ck5r9y" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
+
+  <changeSet author="vlonushte" id="1429178687139-82">
+    <addColumn tableName="CATISSUE_COLL_PROT_REG_AUD">
+      <column name="CONSENT_DOCUMENT_NAME" type="VARCHAR(255)"/>
+    </addColumn>
+    <addColumn tableName="CATISSUE_COLL_PROT_REG_AUD">
+      <column name="signedConsentDocumentName_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

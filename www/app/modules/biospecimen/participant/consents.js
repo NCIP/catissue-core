@@ -1,21 +1,20 @@
 
-angular.module('os.biospecimen.participant.consents', ['os.biospecimen.models'])
-  .controller('ConsentsCtrl', function(
-    $scope, $state, $stateParams, $sce, cpr,
-    CollectionProtocolRegistration, DeleteUtil) {
+angular.module('os.biospecimen.participant.consents', [])
+  .controller('ConsentsCtrl', function($scope, $sce, cpr, DeleteUtil) {
 
-    $scope.consentDocUploader = {};
-    $scope.consentDocUrl = !!cpr ? $sce.trustAsResourceUrl(cpr.getSignedConsentDocUrl()) : "";
+    $scope.consentFormUploader = {};
+    $scope.consentFormUrl = $sce.trustAsResourceUrl(cpr.getSignedConsentFormUrl());
 
     function init() {
+      $scope.consent = cpr.consentDetails;
       $scope.uploadMode = false;
     }
 
-    function deleteConsentDoc() {
-      cpr.deleteSignedConsentDoc().then(
+    function deleteConsentForm() {
+      cpr.deleteSignedConsentForm().then(
         function(result) {
           if (result) {
-            cpr.consentDetails.consentDocumentName = undefined;
+            $scope.consent.consentDocumentName = undefined;
           }
         }
       );
@@ -29,22 +28,22 @@ angular.module('os.biospecimen.participant.consents', ['os.biospecimen.models'])
       $scope.uploadMode = false;
     }
 
-    $scope.uploadConsentDoc = function() {
-      $scope.consentDocUploader.submit().then(
+    $scope.uploadConsentForm = function() {
+      $scope.consentFormUploader.submit().then(
         function(fileName) {
-          cpr.consentDetails.consentDocumentName = fileName;
+          $scope.consent.consentDocumentName = fileName;
           $scope.uploadMode = false;
         }
       );
-      return false;
     }
 
-    $scope.confirmDeleteConsentDoc = function () {
+    $scope.confirmDeleteConsentForm = function () {
       DeleteUtil.confirmDelete({
-        entity: cpr.consentDetails,
-        templateUrl: 'modules/biospecimen/participant/confirm-delete-consent-doc.html',
-        delete: deleteConsentDoc
+        entity: $scope.consent,
+        templateUrl: 'modules/biospecimen/participant/confirm-delete-consent-form.html',
+        delete: deleteConsentForm
       });
     }
-   
+
+    init();
   });

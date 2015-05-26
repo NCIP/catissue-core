@@ -11,6 +11,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentFormDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
@@ -33,7 +34,6 @@ import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRe
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
-import com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
@@ -43,13 +43,9 @@ import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
-import edu.common.dynamicextensions.nutility.IoUtil;
-
 @Controller
 @RequestMapping("/collection-protocol-registrations")
 public class CollectionProtocolRegistrationsController {
-	private static final String MODULE = "common";
-
 	@Autowired
 	private CollectionProtocolRegistrationService cprSvc;
 
@@ -59,9 +55,6 @@ public class CollectionProtocolRegistrationsController {
 	@Autowired
 	private FormService formSvc;
 	
-	@Autowired
-	private ConfigurationServiceImpl cfgSvc;
-
 	@Autowired
 	private HttpServletRequest httpReq;
 	
@@ -122,8 +115,6 @@ public class CollectionProtocolRegistrationsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-	
-	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{cprId}")
 	@ResponseStatus(HttpStatus.OK)
@@ -164,37 +155,38 @@ public class CollectionProtocolRegistrationsController {
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/signed-consent")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public void downloadSignedConsent(@PathVariable("id") Long cprId, HttpServletResponse response) {
-		CollectionProtocolRegistrationDetail detail = getRegistration(cprId);
-		String fileName = detail.getConsentDetails().getConsentDocumentName();
-		File file = new File(getConsentDirPath() + fileName);
+	public void downloadSignedConsentForm(@PathVariable("id") Long cprId, HttpServletResponse response) {
+		ResponseEvent<String> resp = cprSvc.getSignedConsentFormName(getRequest(cprId));
+		resp.throwErrorIfUnsuccessful();
+		
+		String fileName = resp.getPayload();
+		File file = new File(fileName);
+		fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
+		
 		response.setContentType("application/json");
 		response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
 
 		InputStream in = null;
 		try {
 			in = new FileInputStream(file);
-			IoUtil.copy(in, response.getOutputStream());
+			IOUtils.copy(in, response.getOutputStream());
 		} catch (IOException e) {
 			throw new RuntimeException("Error sending file", e);
 		} finally {
-			IoUtil.close(in);
+			IOUtils.closeQuietly(in);
 		}	
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value="/{id}/signed-consent")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public String uploadSignedConsent(@PathVariable("id") Long cprId, @PathVariable("file") MultipartFile file) 
+	public String uploadSignedConsentForm(@PathVariable("id") Long cprId, @PathVariable("file") MultipartFile file) 
 	throws IOException {
-		String fileName = file.getOriginalFilename();
-		file.transferTo(new File(getConsentDirPath() + fileName));
-
-		ConsentDetail detail = new ConsentDetail();
+		ConsentFormDetail detail = new ConsentFormDetail();
 		detail.setCprId(cprId);
-		detail.setConsentDocumentName(fileName);
-
-		ResponseEvent<String> resp = cprSvc.updateSignedConsentDocName(getRequest(detail));
+		detail.setFile(file); 
+		
+		ResponseEvent<String> resp = cprSvc.uploadSignedConsentForm(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
 
 		return resp.getPayload();
@@ -203,8 +195,8 @@ public class CollectionProtocolRegistrationsController {
 	@RequestMapping(method = RequestMethod.DELETE, value="/{id}/signed-consent")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public boolean deleteSignedConsent(@PathVariable("id") Long cprId) {
-		ResponseEvent<Boolean> resp = cprSvc.deleteSignedConsentDoc(getRequest(cprId));
+	public boolean deleteSignedConsentForm(@PathVariable("id") Long cprId) {
+		ResponseEvent<Boolean> resp = cprSvc.deleteSignedConsentForm(getRequest(cprId));
 		resp.throwErrorIfUnsuccessful();
 
 		return resp.getPayload();
@@ -254,9 +246,5 @@ public class CollectionProtocolRegistrationsController {
 	
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(payload);
-	}
-
-	private String getConsentDirPath() {
-		return cfgSvc.getStrSetting(MODULE, "consent_dir");
 	}
 }

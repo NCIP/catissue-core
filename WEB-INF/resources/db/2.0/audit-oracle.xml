@@ -785,4 +785,12 @@
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_SITE_COORDINATORS_AUD" constraintName="FK_W3JPS5E5BYVOCJPG18NUYFFY" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="OS_REVISIONS"/>
   </changeSet>
 
+  <changeSet author="vlonushte" id="1429178687139-84">
+    <addColumn tableName="CATISSUE_COLL_PROT_REG_AUD">
+      <column name="CONSENT_DOCUMENT_NAME" type="VARCHAR2(255 CHAR)"/>
+    </addColumn>
+    <addColumn tableName="CATISSUE_COLL_PROT_REG_AUD">
+      <column name="SIGNEDCONSENTDOCUMENTNAME_MOD" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

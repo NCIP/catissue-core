@@ -48,12 +48,12 @@ angular.module('os.biospecimen.models.cpr',
       return this;
     };
 
-    CollectionProtocolRegistration.prototype.getSignedConsentDocUrl = function() {
+    CollectionProtocolRegistration.prototype.getSignedConsentFormUrl = function() {
       return CollectionProtocolRegistration.url() + this.$id() + "/signed-consent";
     }
 
-    CollectionProtocolRegistration.prototype.deleteSignedConsentDoc = function() {
-      return $http.delete(this.getSignedConsentDocUrl()).then(function(result){ return result.data; });
+    CollectionProtocolRegistration.prototype.deleteSignedConsentForm = function() {
+      return $http.delete(this.getSignedConsentFormUrl()).then(function(result){ return result.data; });
     }
 
     return CollectionProtocolRegistration;

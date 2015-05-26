@@ -151,7 +151,6 @@ public class CollectionProtocolRegistration {
 		this.consentWitness = consentWitness;
 	}
 
-	@NotAudited
 	public String getSignedConsentDocumentName() {
 		return signedConsentDocumentName;
 	}
