@@ -44,6 +44,8 @@ public class CollectionProtocolRegistration {
 	private Date consentSignDate;
 
 	private User consentWitness;
+	
+	private String signedConsentDocumentName;
 
 	private Set<ConsentTierResponse> consentResponses = new HashSet<ConsentTierResponse>();
 
@@ -147,6 +149,14 @@ public class CollectionProtocolRegistration {
 
 	public void setConsentWitness(User consentWitness) {
 		this.consentWitness = consentWitness;
+	}
+
+	public String getSignedConsentDocumentName() {
+		return signedConsentDocumentName;
+	}
+
+	public void setSignedConsentDocumentName(String signedConsentDocumentName) {
+		this.signedConsentDocumentName = signedConsentDocumentName;
 	}
 
 	public Set<ConsentTierResponse> getConsentResponses() {

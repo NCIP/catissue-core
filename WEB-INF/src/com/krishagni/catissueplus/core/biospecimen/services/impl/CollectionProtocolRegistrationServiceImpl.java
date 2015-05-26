@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +20,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentFormDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationsList;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
@@ -35,13 +37,18 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl;
 
 public class CollectionProtocolRegistrationServiceImpl implements CollectionProtocolRegistrationService {
+	private static final String MODULE = "common";
+
 	private DaoFactory daoFactory;
 
 	private CollectionProtocolRegistrationFactory cprFactory;
 	
 	private ParticipantService participantService;
+	
+	private ConfigurationServiceImpl cfgSvc;
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -55,6 +62,10 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		this.participantService = participantService;
 	}
 	
+	public void setCfgSvc(ConfigurationServiceImpl cfgSvc) {
+		this.cfgSvc = cfgSvc;
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<CollectionProtocolRegistrationDetail> getRegistration(RequestEvent<RegistrationQueryCriteria> req) {				
@@ -132,6 +143,76 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 	}
 	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<String> getSignedConsentFormName(RequestEvent<Long> req) {
+		try {
+			CollectionProtocolRegistration existing = daoFactory.getCprDao().getById(req.getPayload());
+			if (existing == null) {
+				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
+			}
+			
+			String fileName = getConsentDirPath() + existing.getSignedConsentDocumentName();
+			return ResponseEvent.response(fileName);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<String> uploadSignedConsentForm(RequestEvent<ConsentFormDetail> req) {
+		try {
+			ConsentFormDetail detail = req.getPayload();
+			CollectionProtocolRegistration existing = daoFactory.getCprDao().getById(detail.getCprId());
+			if (existing == null) {
+				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
+			}
+			
+			String oldFileName = existing.getSignedConsentDocumentName();
+			String fileName = detail.getFile().getOriginalFilename();
+			detail.getFile().transferTo(new File(getConsentDirPath() + fileName));
+
+			if (oldFileName != null && !oldFileName.equals(fileName)) {
+				File oldFile = new File(getConsentDirPath() + oldFileName);
+				if (oldFile.exists()) {
+					oldFile.delete();
+				}
+ 			}
+			existing.setSignedConsentDocumentName(fileName);
+			return ResponseEvent.response(fileName);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Boolean> deleteSignedConsentForm(RequestEvent<Long> req) {
+		try {
+			Long cprId = req.getPayload();
+			CollectionProtocolRegistration cpr = daoFactory.getCprDao().getById(cprId);
+			if (cpr == null) {
+				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
+			}
+
+			String fileName = cpr.getSignedConsentDocumentName();
+			File file = new File(getConsentDirPath() + fileName);
+			if (!file.exists()) {
+				return ResponseEvent.userError(CprErrorCode.SIGNED_CONSENT_FORM_NOT_FOUND);
+			}
+			
+			boolean isFileDeleted = file.delete();
+			if (isFileDeleted) {
+				cpr.setSignedConsentDocumentName(null);
+			} 
+
+			return ResponseEvent.response(isFileDeleted);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<VisitSummary>> getVisits(RequestEvent<VisitsListCriteria> req) {
@@ -325,4 +406,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		Set<SpecimenRequirement> anticipatedSpecimens = cpe.getTopLevelAnticipatedSpecimens();
 		return SpecimenDetail.getSpecimens(anticipatedSpecimens, Collections.<Specimen>emptySet());		
 	}	
+	
+	private String getConsentDirPath() {
+		return cfgSvc.getStrSetting(MODULE, "consent_dir") + "/";
+	}
 }
