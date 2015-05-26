@@ -10,7 +10,12 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
     }
 
     $scope.saveOrUpdateList = function() {
-      var sharedWith = $scope.list.sharedWith.map(function(user) { return {id: user.id} });
+      var sharedWith = $scope.list.sharedWith.map(
+        function(user) { 
+          return {id: user.id} 
+        }
+      );
+
       var specimenList =  new SpecimenList({
         id: $scope.list.id,
         name: $scope.list.name,
@@ -23,7 +28,7 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
           if ($scope.isQueryOrSpecimenPage) {
             $scope.back();
           } else {
-           $state.go('specimen-list', {listId: savedList.id});
+            $state.go('specimen-list', {listId: savedList.id});
           }
         }
       );

@@ -1,9 +1,16 @@
 <div>
   <div os-page-header>
+    <ul os-breadcrumbs>
+      <li> 
+        <span translate="specimen_list.lists">Specimen Lists</span>
+      </li>
+    </ul>
+
     <h3>
-      <span translate="specimen_list.title">Specimen List</span>
+      <span>{{lists.selectedList.name}}</span>
     </h3>
-    <div class="os-btns right" ng-if="selectedSpecimens && selectedSpecimens.length > 0">
+
+    <div class="os-btns right" ng-if="selection.any">
       <button class="default" ng-click="distributeSpecimens()">
         <span class="fa fa-shopping-cart"></span>
         <span translate="specimen_list.distribute">Distribute</span>
@@ -18,21 +25,23 @@
    <div class="container os-list-container">
     <div class="row">
       <div class="os-col-20">
-        <div ng-include src="'specimen_lists.html'"></div>
+        <div ng-include src="'specimen-list/lists.html'"></div>
       </div>
       <div class="os-col-80">
-        <div ng-include src="'specimens.html'"></div>
+        <div ng-include src="'specimen-list/specimens.html'"></div>
       </div>
     </div>
   </div>
 
 </div>
 
-<script type="text/ng-template" id="specimen_lists.html">
+<script type="text/ng-template" id="specimen-list/lists.html">
   <div class="os-table os-table-condensed"> 
     <div class="os-table-head">
       <div class="row">
-        <div class="col col-xs-12" translate="specimen_list.my_lists">My Lists</div>
+        <div class="col col-xs-12">
+          <span translate="specimen_list.my_lists">My Lists</span>
+        </div>
       </div>
     </div>
   </div>
@@ -43,7 +52,7 @@
           <div class="col col-xs-12 clearfix list" 
             ng-class="{'os-specimen-list-selected-list': lists.selectedList.id == list.id}"> 
             <div class="pull-left" ng-click="selectList(list)" title="{{list.name}}">
-              {{list.name}}
+              <span>{{list.name}}</span>
             </div>
 
             <div class="pull-right">
@@ -59,8 +68,8 @@
     <div class="table table-condensed borderless" ng-if="lists.myLists.length == 0">
       <div class="os-table-body">
         <div class="row">
-          <div class="col col-xs-12" translate="common.none">
-            None
+          <div class="col col-xs-12">
+            <span translate="common.none">None</span>
           </div>
         </div>
       </div>
@@ -69,7 +78,9 @@
   <div class="os-table os-table-condensed"> 
     <div class="os-table-head">
       <div class="row">
-        <div class="col col-xs-12" translate="specimen_list.shared_lists">Shared Lists</div>
+        <div class="col col-xs-12">
+          <span translate="specimen_list.shared_lists">Shared Lists</span>
+        </div>
       </div>
     </div>
   </div>
@@ -80,7 +91,7 @@
           <div class="col col-xs-12 clearfix list"
             ng-class="{'os-specimen-list-selected-list': selectedList.id == list.id}"> 
             <div class="pull-left" ng-click="selectList(list)" title="{{list.name}}">
-              {{list.name}}
+              <span>{{list.name}}</span>
             </div>
           </div>
         </div>
@@ -89,71 +100,93 @@
     <div class="table table-condensed borderless" ng-if="lists.sharedLists.length == 0">
       <div class="os-table-body">
         <div class="row">
-          <div class="col col-xs-12" translate="common.none">
-            None
+          <div class="col col-xs-12">
+            <span translate="common.none">None</span>
           </div>
         </div>
       </div>
     </div>
   </div>
-
 </script>
 
-<script type="text/ng-template" id="specimens.html">
+<script type="text/ng-template" id="specimen-list/specimens.html">
   <div class="os-table" overflow="auto" ng-if="specimens.length > 0">
     <div class="os-table-head">
       <div class="row">
-        <div class="col col-xs-3" style="padding-left: 20px;" translate="specimen_list.visit_name">
-          Visit Name
+        <div class="col os-col-20">
+          <div class="clearfix">
+            <div class="pull-left os-select-specimen-cb">
+              <os-checkbox ng-change="toggleAllSpecimenSelect()" ng-model="selection.all" ></os-checkbox>
+            </div>
+            <div class="pull-left" style="padding-left: 12px;">
+              <span translate="specimen_list.label">Label</span>
+            </div>
+          </div>
         </div>
-        <div class="col col-xs-2" translate="specimen_list.label">
-          Label (Barcode)
+        <div class="col os-col-30">
+          <span translate="specimen_list.description">Description</span>
         </div>
-        <div class="col col-xs-2" translate="specimen_list.parent_label">
-          Parent Label
+        <div class="col os-col-20">
+          <span translate="specimen_list.cp">Collection Protocol</span>
         </div>
-        <div class="col col-xs-3" translate="specimen_list.type_class">
-          Type (Class)
+        <div class="col os-col-15" 
+          <span translate="specimen_list.quantity">Quantity</span>
         </div>
-        <div class="col col-xs-1" translate="specimen_list.quantity">
-          Quantity
-        </div>
-        <div class="col col-xs-1" translate="specimen_list.lineage">
-          Lineage
+        <div class="col os-col-15">
+          <span translate="specimen_list.lineage">Lineage</span>
         </div>
       </div>
     </div>
     <div class="os-table-body">
       <div class="row" ng-repeat="specimen in specimens"
         ng-class="{selected: specimen.selected}">
-        <div class="col col-xs-3">
+        <div class="col os-col-20">
           <div class="clearfix">
             <div class="pull-left os-select-specimen-cb">
               <os-checkbox ng-change="toggleSpecimenSelect(specimen)" ng-model="specimen.selected"></os-checkbox>
             </div>
             <div class="pull-left" style="padding-left: 12px;">
-              {{specimen.visitName}}
+              <a ui-sref="specimen({specimenId: specimen.id})">
+                <span>{{specimen.label}}</span>
+                <span ng-if="!!specimen.barcode">
+                  ({{specimen.barcode}})
+                </span>
+              </a>
             </div>
           </div>
         </div>
-        <div class="col col-xs-2">{{specimen.label}} <span ng-if="!!specimen.barcode">({{specimen.barcode}})</span></div>
-        <div class="col col-xs-2">{{specimen.parentLabel}}</div>
-        <div class="col col-xs-3">{{specimen.type}} ({{specimen.specimenClass}})</div>
-        <div class="col col-xs-1">{{specimen.availableQty}}</div>
-        <div class="col col-xs-1">{{specimen.lineage}}</div>
+        <div class="col os-col-30">
+          <a ui-sref="specimen({specimenId: specimen.id})">
+            <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
+          </a>
+        </div>
+        <div class="col os-col-20">
+          <span>{{specimen.cpShortTitle}}</span>
+        </div>
+        <div class="col os-col-15">
+          <span>{{specimen.availableQty}}</span>
+          <span os-specimen-qty-unit="specimen.specimenClass"></span>
+        </div>
+        <div class="col os-col-15">
+          <span>{{specimen.lineage}}</span>
+        </div>
       </div>
     </div>
   </div>
   <div class="os-table" ng-if="!specimens || specimens.length == 0">
     <div class="os-table-head">
       <div class="row">
-        <div class="col col-xs-10" translate="specimen_list.info">Information</div>
+        <div class="col col-xs-10">
+          <span translate="specimen_list.info">Information</span>
+        </div>
       </div>
     </div>
     <div class="os-table-body">
       <div class="row">
-        <div class="col col-xs-10" translate="specimen_list.no_specimens">
-          There are no specimens to show in selected specimen list.
+        <div class="col col-xs-10">
+          <span translate="specimen_list.no_specimens">
+            There are no specimens to show in selected specimen list.
+          </span>
         </div>
       </div>
     </div>

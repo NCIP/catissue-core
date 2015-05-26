@@ -5,17 +5,21 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
 
     function init() { 
       $scope.specimens = [];
-      $scope.selectedSpecimens = [];
+      $scope.selection = resetSelection();
       $scope.lists = {
         selectedList: undefined,
         myLists: [],
         sharedLists: []
       }
 
-      loadAllSpecimenList();
+      loadAllSpecimenLists();
     }
 
-    function loadAllSpecimenList() {
+    function resetSelection() {
+      return $scope.selection = {all: false, any: false, specimens: []};
+    }
+
+    function loadAllSpecimenLists() {
       SpecimenList.query().then(
         function(lists) {
           var selectedList = undefined;
@@ -40,32 +44,50 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
 
     function removeSpecimensFromList() {
       var list = $scope.lists.selectedList;
-      list.removeSpecimens($scope.selectedSpecimens).then(
+      list.removeSpecimens($scope.selection.specimens).then(
         function(specimens) {
           $scope.specimens = specimens;
-          $scope.selectedSpecimens = [];
+          $scope.selection = resetSelection();
           Alerts.success('specimen_list.specimens_removed', {name: list.name});
         }
       );
     }
 
     $scope.selectList = function (specimenList) {
-      $scope.selectedSpecimens = [];
+      $scope.selection = resetSelection();
       $scope.lists.selectedList = specimenList;
-      specimenList.getSpecimens().then(function(specimens) {
-        $scope.specimens = specimens;
-      })
+      specimenList.getSpecimens().then(
+        function(specimens) {
+          $scope.specimens = specimens;
+        }
+      );
+    }
+
+    $scope.toggleAllSpecimenSelect = function() {
+      $scope.selection.any = $scope.selection.all;
+      if (!$scope.selection.all) {
+        $scope.selection.specimens = [];
+      } else {
+        $scope.selection.specimens = [].concat($scope.specimens);
+      }
+
+      angular.forEach($scope.specimens, function(specimen) {
+        specimen.selected = $scope.selection.all;
+      });
     }
 
     $scope.toggleSpecimenSelect = function (specimen) {
       if (specimen.selected) {
-        $scope.selectedSpecimens.push(specimen);
+        $scope.selection.specimens.push(specimen);
       } else {
-        var idx = $scope.selectedSpecimens.indexOf(specimen);
+        var idx = $scope.selection.specimens.indexOf(specimen);
         if (idx != -1) {
-          $scope.selectedSpecimens.splice(idx, 1);
+          $scope.selection.specimens.splice(idx, 1);
         }
       }
+
+      $scope.selection.all = ($scope.selection.specimens.length == $scope.specimens.length);
+      $scope.selection.any = ($scope.selection.specimens.length > 0);
     };
 
     $scope.confirmRemoveSpecimens = function () {
@@ -77,7 +99,7 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
     }
 
     $scope.distributeSpecimens = function() {
-      SpecimensHolder.setSpecimens($scope.selectedSpecimens);
+      SpecimensHolder.setSpecimens($scope.selection.specimens);
       $state.go('order-addedit', {orderId: ''});
     }
 
