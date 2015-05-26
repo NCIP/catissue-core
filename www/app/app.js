@@ -19,6 +19,7 @@ angular.module('openspecimen', [
   'ui.autocomplete',
   'mgcrea.ngStrap.popover',
   'angular-loading-bar',
+  'cfp.loadingBar',
   'pascalprecht.translate'
   ])
 
