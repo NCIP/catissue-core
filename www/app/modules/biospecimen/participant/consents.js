@@ -1,11 +1,11 @@
 
 angular.module('os.biospecimen.participant.consents', [])
-  .controller('ConsentsCtrl', function($scope, $sce, cpr, DeleteUtil) {
+  .controller('ParticipantConsentsCtrl', function($scope, $sce, cpr, DeleteUtil) {
 
-    $scope.consentFormUploader = {};
-    $scope.consentFormUrl = $sce.trustAsResourceUrl(cpr.getSignedConsentFormUrl());
 
     function init() {
+      $scope.consentFormUploader = {};
+      $scope.consentFormUrl = $sce.trustAsResourceUrl(cpr.getSignedConsentFormUrl());
       $scope.consent = cpr.consentDetails;
       $scope.uploadMode = false;
     }
@@ -29,7 +29,7 @@ angular.module('os.biospecimen.participant.consents', [])
     }
 
     $scope.uploadConsentForm = function() {
-      $scope.consentFormUploader.submit().then(
+      $scope.consentFormUploader.ctrl.submit().then(
         function(fileName) {
           $scope.consent.consentDocumentName = fileName;
           $scope.uploadMode = false;

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Date;
 import java.util.List;
 
@@ -152,19 +153,21 @@ public class CollectionProtocolRegistrationsController {
 		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value="/{id}/signed-consent")
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/consent-form")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public void downloadSignedConsentForm(@PathVariable("id") Long cprId, HttpServletResponse response) {
-		ResponseEvent<String> resp = cprSvc.getSignedConsentFormName(getRequest(cprId));
+	public void downloadConsentForm(@PathVariable("id") Long cprId, HttpServletResponse response) throws IOException {
+		RegistrationQueryCriteria crit = new RegistrationQueryCriteria();
+		crit.setCprId(cprId);
+		
+		ResponseEvent<File> resp = cprSvc.getConsentForm(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		
-		String fileName = resp.getPayload();
-		File file = new File(fileName);
-		fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
+		File file =resp.getPayload();
+		String fileType = Files.probeContentType(file.toPath());
 		
-		response.setContentType("application/json");
-		response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+		response.setContentType(fileType);
+		response.setHeader("Content-Disposition", "attachment;filename=" + file.getName());
 
 		InputStream in = null;
 		try {
@@ -177,26 +180,30 @@ public class CollectionProtocolRegistrationsController {
 		}	
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value="/{id}/signed-consent")
+	@RequestMapping(method = RequestMethod.POST, value="/{id}/consent-form")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public String uploadSignedConsentForm(@PathVariable("id") Long cprId, @PathVariable("file") MultipartFile file) 
+	public String uploadConsentForm(@PathVariable("id") Long cprId, @PathVariable("file") MultipartFile file) 
 	throws IOException {
 		ConsentFormDetail detail = new ConsentFormDetail();
 		detail.setCprId(cprId);
-		detail.setFile(file); 
+		detail.setFileName(file.getOriginalFilename());
+		detail.setInputStream(file.getInputStream());
 		
-		ResponseEvent<String> resp = cprSvc.uploadSignedConsentForm(getRequest(detail));
+		ResponseEvent<String> resp = cprSvc.uploadConsentForm(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
 
 		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value="/{id}/signed-consent")
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}/consent-form")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public boolean deleteSignedConsentForm(@PathVariable("id") Long cprId) {
-		ResponseEvent<Boolean> resp = cprSvc.deleteSignedConsentForm(getRequest(cprId));
+	public boolean deleteConsentForm(@PathVariable("id") Long cprId) {
+		RegistrationQueryCriteria crit = new RegistrationQueryCriteria();
+		crit.setCprId(cprId);
+		
+		ResponseEvent<Boolean> resp = cprSvc.deleteConsentForm(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 
 		return resp.getPayload();

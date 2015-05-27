@@ -789,6 +789,9 @@
     <addColumn tableName="CATISSUE_COLL_PROT_REG_AUD">
       <column name="CONSENT_DOCUMENT_NAME" type="VARCHAR2(255 CHAR)"/>
     </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="1429178687139-85">
     <addColumn tableName="CATISSUE_COLL_PROT_REG_AUD">
       <column name="SIGNEDCONSENTDOCUMENTNAME_MOD" type="NUMBER(1, 0)"/>
     </addColumn>

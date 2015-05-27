@@ -25,7 +25,9 @@ public enum CprErrorCode implements ErrorCode {
 	
 	PARTICIPANT_DETAIL_REQUIRED,
 	
-	SIGNED_CONSENT_FORM_NOT_FOUND;
+	CONSENT_FORM_NOT_FOUND,
+	
+	DUP_CONSENT_FORM_NAME;
 	
 	@Override
 	public String code() {

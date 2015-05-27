@@ -1,11 +1,14 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-import org.springframework.web.multipart.MultipartFile;
+import java.io.InputStream;
+
 
 public class ConsentFormDetail {
 	private Long cprId;
 	
-	private MultipartFile file;
+	private String fileName;
+	
+	private InputStream inputStream;
 
 	public Long getCprId() {
 		return cprId;
@@ -15,12 +18,20 @@ public class ConsentFormDetail {
 		this.cprId = cprId;
 	}
 
-	public MultipartFile getFile() {
-		return file;
+	public String getFileName() {
+		return fileName;
 	}
 
-	public void setFile(MultipartFile file) {
-		this.file = file;
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public InputStream getInputStream() {
+		return inputStream;
+	}
+
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
 	}
 	
 }

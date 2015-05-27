@@ -49,7 +49,7 @@ angular.module('os.biospecimen.models.cpr',
     };
 
     CollectionProtocolRegistration.prototype.getSignedConsentFormUrl = function() {
-      return CollectionProtocolRegistration.url() + this.$id() + "/signed-consent";
+      return CollectionProtocolRegistration.url() + this.$id() + "/consent-form";
     }
 
     CollectionProtocolRegistration.prototype.deleteSignedConsentForm = function() {

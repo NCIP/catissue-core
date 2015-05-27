@@ -292,14 +292,19 @@
     </sql>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Added consent_dir prop of Common application settings" dbms="mysql">
+  <changeSet author="vlonushte" id="Biospecimen settings" dbms="mysql">
     <sql>
-      select identifier into @module_id from os_modules where name = 'common';
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (default, 'biospecimen', 'Biospecimen');
+
+      select last_insert_id() into @module_id;
 
       insert into os_cfg_props
         (identifier, name, display_name_code, desc_code, data_type, module_id)
       values 
-        (default, 'consent_dir', 'common_consent_dir', 'common_consent_dir_desc', 'STRING', @module_id);
+        (default, 'participant_consent_dir', 'participant_consent_dir', 'participant_consent_dir_desc', 'STRING', @module_id);
 
       select last_insert_id() into @prop_id;
 
@@ -310,25 +315,23 @@
     </sql>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Added consent_dir prop of Common application settings" dbms="oracle">
-    <sql endDelimiter="//">
-      declare
-        module_id number;
-      begin
-        select identifier into module_id from os_modules where name = 'common';
+  <changeSet author="vlonushte" id="Biospecimen settings" dbms="oracle">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (os_modules_seq.nextval, 'biospecimen', 'Biospecimen');
 
-        insert into os_cfg_props
-          (identifier, name, display_name_code, desc_code, data_type, module_id)
-        values 
-          (OS_CFG_PROPS_SEQ.nextval, 'consent_dir', 'common_consent_dir', 'common_consent_dir_desc', 
-           'STRING', module_id);
+      insert into os_cfg_props
+        (identifier, name, display_name_code, desc_code, data_type, module_id)
+      values 
+        (OS_CFG_PROPS_SEQ.nextval, 'participant_consent_dir', 'participant_consent_dir', 'participant_consent_dir_desc', 
+         'STRING', os_modules_seq.currval);
 
-        insert into os_cfg_settings
-          (identifier, property_id, value, activated_by, activation_date, activity_status)
-        values
-          (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');
-      end;
-      //
+      insert into os_cfg_settings
+        (identifier, property_id, value, activated_by, activation_date, activity_status)
+      values
+        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');
     </sql>
   </changeSet>
 </databaseChangeLog>
