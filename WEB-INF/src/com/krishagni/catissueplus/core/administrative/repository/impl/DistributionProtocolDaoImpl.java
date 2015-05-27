@@ -3,9 +3,9 @@ package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -20,47 +20,46 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<DistributionProtocol> getDistributionProtocols(DpListCriteria dpCriteria) {
+	public List<DistributionProtocol> getDistributionProtocols(DpListCriteria crit) {
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(DistributionProtocol.class)
-				.setFirstResult(dpCriteria.startAt())
-				.setMaxResults(dpCriteria.maxResults())
+				.setFirstResult(crit.startAt())
+				.setMaxResults(crit.maxResults())
 				.add(Restrictions.ne("activityStatus", "Disabled"))
 				.addOrder(Order.asc("title"));
 
-		addSearchConditions(query, dpCriteria);
-		
+		addSearchConditions(query, crit);		
 		return query.list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public DistributionProtocol getByShortTitle(String shortTitle) {
-		List<DistributionProtocol> result = sessionFactory.getCurrentSession()
+		List<DistributionProtocol> dps = sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_DP_BY_SHORT_TITLE)
 				.setString("shortTitle", shortTitle)
-				.list();
-		
-		return result.isEmpty() ? null : result.iterator().next();
+				.list();		
+		return CollectionUtils.isNotEmpty(dps) ? dps.iterator().next() : null;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public DistributionProtocol getDistributionProtocol(String title) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_DP_BY_TITLE);
-		query.setString("title", title);
-		List<DistributionProtocol> list = query.list();
-		return list.isEmpty() ? null : list.get(0);
+		List<DistributionProtocol> dps = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_DP_BY_TITLE)
+				.setString("title", title)
+				.list();
+		return CollectionUtils.isNotEmpty(dps) ? dps.iterator().next() : null;
 	}
 	
-	public Class getType() {
+	public Class<DistributionProtocol> getType() {
 		return DistributionProtocol.class;
 	}
 	
-	private void addSearchConditions(Criteria query, DpListCriteria dpCriteria) {
-		String searchTerm = dpCriteria.query();
+	private void addSearchConditions(Criteria query, DpListCriteria crit) {
+		String searchTerm = crit.query();
 		
 		if (StringUtils.isBlank(searchTerm)) {
-			searchTerm = dpCriteria.title();
+			searchTerm = crit.title();
 		}
 		
 		if (StringUtils.isNotBlank(searchTerm)) {
@@ -68,23 +67,33 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 					.add(Restrictions.ilike("title", searchTerm, MatchMode.ANYWHERE))
 					.add(Restrictions.ilike("shortTitle", searchTerm, MatchMode.ANYWHERE));
 			
-			if (StringUtils.isNotBlank(dpCriteria.query())) {
+			if (StringUtils.isNotBlank(crit.query())) {
 				searchCond.add(Restrictions.ilike("irbId", searchTerm, MatchMode.ANYWHERE));
 			}
 			
 			query.add(searchCond);
 		}
 		
-		addPICondition(query, dpCriteria);
+		addPiCondition(query, crit);
+		addInstCondition(query, crit);
 	}
 	
-	private void addPICondition(Criteria criteria, DpListCriteria dpCriteria) {
-		Long piId = dpCriteria.piId();
+	private void addPiCondition(Criteria query, DpListCriteria crit) {
+		Long piId = crit.piId();
 		if (piId == null) {
 			return;
 		}
 		
-		criteria.add(Restrictions.eq("principalInvestigator.id", piId));
+		query.add(Restrictions.eq("principalInvestigator.id", piId));
+	}
+	
+	private void addInstCondition(Criteria query, DpListCriteria crit) {
+		Long instituteId = crit.instituteId();
+		if (instituteId == null) {
+			return;
+		}
+		
+		query.add(Restrictions.eq("institute.id", instituteId));
 	}
 	
 	private static final String FQN = DistributionProtocol.class.getName();

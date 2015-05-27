@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.common.access;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +11,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
+import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -21,6 +24,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
+import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.Resource;
@@ -235,7 +239,6 @@ public class AccessCtrlMgr {
 				for (Site site : sites) {
 					siteIds.add(site.getId());
 				}
-				break;
 			}
 		}
 
@@ -395,6 +398,36 @@ public class AccessCtrlMgr {
 	public void ensureDeleteSpecimenRights(Specimen specimen) {
 		ensureVisitAndSpecimenObjectRights(specimen.getRegistration(), Operation.DELETE);
 	}
+	
+	public List<Pair<Long, Long>> getReadAccessSpecimenSiteCps() {
+		if (AuthUtil.isAdmin()) {
+			return null;
+		}
+		
+		String[] ops = {Operation.READ.getName()};
+		Set<Pair<Long, Long>> siteCpPairs = getVisitAndSpecimenSiteCps(ops);
+		siteCpPairs.addAll(getDistributionOrderSiteCps(ops));
+		
+		Set<Long> sitesOfAllCps = new HashSet<Long>();
+		List<Pair<Long, Long>> result = new ArrayList<Pair<Long, Long>>();		
+		for (Pair<Long, Long> siteCp : siteCpPairs) {
+			if (siteCp.second() == null) {
+				sitesOfAllCps.add(siteCp.first());
+				result.add(siteCp);
+			}
+		}
+		
+		
+		for (Pair<Long, Long> siteCp : siteCpPairs) {
+			if (sitesOfAllCps.contains(siteCp.first())) {
+				continue;
+			}
+			
+			result.add(siteCp);
+		}
+		
+		return result;
+	}
 
 	private void ensureVisitObjectRights(Long visitId, Operation op) {
 		Visit visit = daoFactory.getVisitDao().getById(visitId);
@@ -460,6 +493,33 @@ public class AccessCtrlMgr {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 	}
+	
+	private Set<Pair<Long, Long>> getVisitAndSpecimenSiteCps(String[] ops) {
+		Long userId = AuthUtil.getCurrentUser().getId();
+		String resource = Resource.VISIT_N_SPECIMEN.getName();
+		
+		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);
+		Set<Pair<Long, Long>> siteCpPairs = new HashSet<Pair<Long, Long>>();
+		for (SubjectAccess access : accessList) {
+			Set<Site> sites = null;
+			if (access.getSite() != null) {
+				sites = Collections.singleton(access.getSite());
+			} else {				
+				sites = getUserInstituteSites(userId);
+			}
+			
+			Long cpId = null;
+			if (access.getCollectionProtocol() != null) {
+				cpId = access.getCollectionProtocol().getId();
+			}
+			
+			for (Site site : sites) {
+				siteCpPairs.add(Pair.make(site.getId(), cpId));
+			}			
+		}
+		
+		return siteCpPairs;		
+	}
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	//                                                                                  //
@@ -516,19 +576,115 @@ public class AccessCtrlMgr {
 			Site accessSite = access.getSite();
 			if (accessSite != null && accessSite.equals(containerSite)) { // Specific site
 				allowed = true;
-				break;
 			} else if (accessSite == null) { // All user institute sites
 				Set<Site> instituteSites = getUserInstituteSites(userId);
 				if (instituteSites.contains(containerSite)) {
 					allowed = true;
 				}
+			}
+			
+			if (allowed) {
 				break;
-			}			
+			}
 		}
 		
 		if (!allowed) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////
+	//                                                                                  //
+	//          Distribution order access control helper methods                        //
+	//                                                                                  //
+	//////////////////////////////////////////////////////////////////////////////////////
+	public Set<Long> getReadAccessDistributionOrderInstitutes() {
+		if (AuthUtil.isAdmin()) {
+			return null;
+		}
+		
+		Set<Site> sites = getSites(Resource.ORDER, Operation.READ);
+		Set<Long> result = new HashSet<Long>(); 
+		for (Site site : sites) {
+			result.add(site.getInstitute().getId());
+		}
+		
+		return result;
+	}
+	
+	public void ensureCreateDistributionOrderRights(DistributionOrder order) {
+		ensureDistributionOrderObjectRights(order, Operation.CREATE);
+	}
+	
+	public void ensureReadDistributionOrderRights(DistributionOrder order) {
+		ensureDistributionOrderObjectRights(order, Operation.READ);
+	}
+	
+	public void ensureUpdateDistributionOrderRights(DistributionOrder order) {
+		ensureDistributionOrderObjectRights(order, Operation.UPDATE);
+	}
+
+	public void ensureDeleteDistributionOrderRights(DistributionOrder order) {
+		ensureDistributionOrderObjectRights(order, Operation.DELETE);
+	}
+	
+	private void ensureDistributionOrderObjectRights(DistributionOrder order, Operation op) {
+		if (AuthUtil.isAdmin()) {
+			return;
+		}
+		
+		Long userId = AuthUtil.getCurrentUser().getId();
+		String resource = Resource.ORDER.getName();
+		String[] ops = {op.getName()};
+		
+		boolean allowed = false;	
+		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);		
+		if (accessList.isEmpty()) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+		
+		Institute orderInstitute = order.getInstitute();
+		for (SubjectAccess access : accessList) {
+			Site accessSite = access.getSite();
+			if (accessSite != null && accessSite.getInstitute().equals(orderInstitute)) { // Specific site institute
+				allowed = true;
+			} else if (accessSite == null) { // user institute
+				Institute userInstitute = getUserInstitute(userId);
+				if (userInstitute.equals(orderInstitute)) {
+					allowed = true;
+				}
+			}
+			
+			if (allowed) {
+				break;
+			}
+		}
+		
+		if (!allowed) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+	}
+	
+	private Set<Pair<Long, Long>> getDistributionOrderSiteCps(String[] ops) {
+		Long userId = AuthUtil.getCurrentUser().getId();
+		String resource = Resource.ORDER.getName();		
+		
+		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);
+		Set<Pair<Long, Long>> siteCpPairs = new HashSet<Pair<Long, Long>>();
+		for (SubjectAccess access : accessList) {
+			Set<Site> sites = null;
+			if (access.getSite() != null) {
+				sites = access.getSite().getInstitute().getSites();
+			} else {
+				sites = getUserInstituteSites(userId);
+			}
+			
+			for (Site site : sites) {
+				siteCpPairs.add(Pair.make(site.getId(), (Long)null));
+			}
+		}
+		
+		return siteCpPairs;		
 	}
 	
 	public Set<Site> getRoleAssignedSites() {
@@ -607,7 +763,6 @@ public class AccessCtrlMgr {
 						cpOfSites.add(site.getId());
 					}					
 				}
-				break;
 			}				
 		}
 		
@@ -618,9 +773,13 @@ public class AccessCtrlMgr {
 		return cpIds;
 	}
 	
-	private Set<Site> getUserInstituteSites(Long userId) {
-		User user = userDao.getById(userId); 
-		return user.getInstitute().getSites();		
+	private Set<Site> getUserInstituteSites(Long userId) { 
+		return getUserInstitute(userId).getSites();		
+	}
+	
+	private Institute getUserInstitute(Long userId) {
+		User user = userDao.getById(userId);
+		return user.getInstitute();			
 	}
 	
 	private boolean canUserPerformOp(Long userId, Resource resource, Operation[] operations) {
