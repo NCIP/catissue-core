@@ -8,11 +8,24 @@ angular.module('os.administrative.order',
 
   .config(function($stateProvider) {
     $stateProvider
+      .state('order-root', {
+        abstract: true,
+        template: '<div ui-view></div>',
+        controller: function($scope) {
+          // Storage Container Authorization Options
+          $scope.orderResource = {
+            createOpts: {resource: 'Order', operations: ['Create']},
+            updateOpts: {resource: 'Order', operations: ['Update']},
+            deleteOpts: {resource: 'Order', operations: ['Delete']}
+          }
+        },
+        parent: 'signed-in'
+      })
       .state('order-list', {
         url: '/orders',
         templateUrl: 'modules/administrative/order/list.html',     
         controller: 'OrderListCtrl',
-        parent: 'signed-in'
+        parent: 'order-root'
       })
       .state('order-addedit', {
         url: '/order-addedit/:orderId',
@@ -26,7 +39,7 @@ angular.module('os.administrative.order',
           }
         },
         controller: 'OrderAddEditCtrl',
-        parent: 'signed-in'
+        parent: 'order-root'
       })
       .state('order-detail', {
         url: '/orders/:orderId',
@@ -37,7 +50,7 @@ angular.module('os.administrative.order',
           }
         },
         controller: 'OrderDetailCtrl',
-        parent: 'signed-in'
+        parent: 'order-root'
       })
       .state('order-detail.overview', {
         url: '/overview',

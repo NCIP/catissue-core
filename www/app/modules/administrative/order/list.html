@@ -4,7 +4,7 @@
       <span translate="orders.list">Distribution Orders</span>
     </h3>
     <div class="os-btns right">
-      <button show-if-admin 
+      <button show-if-allowed="orderResource.createOpts"
         class="primary" title="{{'orders.tooltip.create' | translate}}" ui-sref="order-addedit({orderId: ''})">
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>

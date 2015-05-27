@@ -4,6 +4,7 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
     SpecimensHolder, SpecimenList, DeleteUtil, Alerts) {
 
     function init() { 
+      $scope.orderCreateOpts = {resource: 'Order', operations: ['Create']};
       $scope.specimens = [];
       $scope.selection = resetSelection();
       $scope.lists = {

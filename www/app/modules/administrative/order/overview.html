@@ -13,7 +13,11 @@
         
       <li class="item">
         <strong class="key key-sm" translate="orders.dp">Distribution Protocol</strong>
-        <span class="value value-md">{{order.distributionProtocol.shortTitle}}</span>
+        <span class="value value-md">
+          <a ui-sref="dp-detail.overview({dpId: order.distributionProtocol.id})">
+            {{order.distributionProtocol.shortTitle}}
+          </a>
+        </span>
       </li>
 
       <li class="item">
@@ -74,7 +78,9 @@
                 </a>
               </div>
               <div class="col os-col-30">
-                <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
+                <a ui-sref="specimen({specimenId: specimen.id})">
+                  <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
+                </a>
               </div>
               <div class="col os-col-20">
                 <span>{{specimen.cpShortTitle}}</span>
