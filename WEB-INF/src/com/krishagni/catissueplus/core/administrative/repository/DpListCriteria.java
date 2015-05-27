@@ -7,6 +7,8 @@ public class DpListCriteria extends AbstractListCriteria<DpListCriteria> {
 	private String title;
 	
 	private Long piId;
+	
+	private Long instituteId;
 
 	@Override
 	public DpListCriteria self() {
@@ -28,6 +30,15 @@ public class DpListCriteria extends AbstractListCriteria<DpListCriteria> {
 	
 	public DpListCriteria piId(Long piId) {
 		this.piId = piId;
+		return self();
+	}
+	
+	public Long instituteId() {
+		return instituteId;
+	}
+	
+	public DpListCriteria instituteId(Long instituteId) {
+		this.instituteId = instituteId;
 		return self();
 	}
 }

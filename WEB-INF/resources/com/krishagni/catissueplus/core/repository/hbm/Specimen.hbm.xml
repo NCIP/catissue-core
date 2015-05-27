@@ -101,16 +101,6 @@
         s.activityStatus = 'Active'
     </query>
 
-    <query name="getByLabels">
-      select
-        s
-      from
-        com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
-      where
-        s.label in (:specimenLabels) and
-        s.activityStatus = 'Active'
-    </query>
-
     <query name="getByVisitId">
       select
         s
@@ -144,6 +134,20 @@
         join v.registration cpr
       where
         s.id = :specimenId
+    </query>
+
+    <query name="getSpecimenInstituteIds">
+      select
+        distinct s.label, i.id
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
+        join s.visit v
+        join v.registration cpr
+        join cpr.collectionProtocol cp
+        join cp.repositories site
+        join site.institute i
+      where
+        s.id in (:specimenIds)
     </query>
   </class>
 </hibernate-mapping>

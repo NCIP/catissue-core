@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -20,9 +21,11 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenLabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenLabelPrinter;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
+import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.CommonErrorCode;
@@ -86,7 +89,16 @@ public class SpecimenServiceImpl implements SpecimenService {
 				return ResponseEvent.userError(CommonErrorCode.INVALID_REQUEST);
 			}
 			
-			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimensByLabels(labels);
+			List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
+			if (siteCpPairs != null && siteCpPairs.isEmpty()) {
+				return ResponseEvent.response(Collections.<SpecimenInfo>emptyList());
+			}
+			
+			SpecimenListCriteria crit = new SpecimenListCriteria()
+				.labels(labels)
+				.siteCps(siteCpPairs);
+			
+			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimens(crit);
 			List<SpecimenInfo> result = SpecimenInfo.from(specimens);
 			SpecimenInfo.orderByLabels(result, labels);
 			return ResponseEvent.response(result);
@@ -312,7 +324,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		if (CollectionUtils.isNotEmpty(detail.getSpecimenIds())) {
 			specimens = specimenDao.getSpecimensByIds(detail.getSpecimenIds());
 		} else if (CollectionUtils.isNotEmpty(detail.getSpecimenLabels())) {
-			specimens = specimenDao.getSpecimensByLabels(detail.getSpecimenLabels());
+			specimens = specimenDao.getSpecimens(new SpecimenListCriteria().labels(detail.getSpecimenLabels()));
 		} else if (detail.getVisitId() != null) {
 			specimens = specimenDao.getSpecimensByVisitId(detail.getVisitId());
 		} else if (StringUtils.isNotBlank(detail.getVisitName())) {

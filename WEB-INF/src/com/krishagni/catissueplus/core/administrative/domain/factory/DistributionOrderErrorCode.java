@@ -29,6 +29,8 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 	
 	NO_SPECIMENS_TO_DIST,
 	
+	INVALID_SPECIMENS_FOR_DP,
+	
 	REQUESTER_DOES_NOT_BELONG_DP_INST,
 	
 	RECV_SITE_DOES_NOT_BELONG_DP_INST;

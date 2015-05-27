@@ -8,14 +8,14 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenList;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenListErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenListFactory;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -87,7 +87,8 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 	
 	private void setSpecimens(SpecimenList list, List<String> labels, OpenSpecimenException ose) {
 		if (labels != null && !labels.isEmpty()) {
-			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimensByLabels(labels);
+			SpecimenListCriteria crit = new SpecimenListCriteria().labels(labels);			
+			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimens(crit);
 			if (specimens.size() != labels.size()) {
 				ose.addError(SpecimenListErrorCode.INVALID_LABELS);
 			} else {

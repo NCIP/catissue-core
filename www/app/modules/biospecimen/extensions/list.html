@@ -37,7 +37,7 @@
                   #{{record.recordId}} {{record.formCaption}}
                 </a>
               </div>
-              <div class="col col-xs-3">{{record.user.lastName}}, {{record.user.lastName}}</div>
+              <div class="col col-xs-3">{{record.user.firstName}} {{record.user.lastName}}</div>
               <div class="col col-xs-3">{{record.updateTime | date: global.dateTimeFmt}}</div>
               <div class="col col-xs-1">
                 <button show-if-allowed="extnOpts" class="btn btn-xs btn-default" ng-click="deleteRecord(record)">

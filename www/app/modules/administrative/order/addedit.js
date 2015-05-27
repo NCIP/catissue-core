@@ -2,7 +2,7 @@
 angular.module('os.administrative.order.addedit', ['os.administrative.models', 'os.biospecimen.models'])
   .controller('OrderAddEditCtrl', function(
     $scope, $state, $translate, order, 
-    Specimen, SpecimensHolder, Site, DistributionProtocol, DistributionOrder) {
+    Specimen, SpecimensHolder, Site, DistributionProtocol, DistributionOrder, Alerts) {
     
     function init() {
       $scope.order = order;
@@ -111,6 +111,9 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
 
       Specimen.listByLabels(labels).then(
         function(specimens) {
+          if (labels.length != specimens.length) {
+            Alerts.error('orders.specimens_not_found_or_no_access');
+          }
           order.orderItems = order.orderItems.concat(getOrderItems(specimens));
           $scope.input.labelText = '';
         }

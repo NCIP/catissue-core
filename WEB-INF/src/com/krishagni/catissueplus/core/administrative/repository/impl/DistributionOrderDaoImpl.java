@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
@@ -42,7 +43,7 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 			}
 		}
 		
-		if (listCrit.includeStat()) {
+		if (listCrit.includeStat() && !doMap.isEmpty()) {
 			rows = getSessionFactory().getCurrentSession()
 				.getNamedQuery(GET_SPEC_CNT_BY_ORDER)
 				.setParameterList("orderIds", doMap.keySet())
@@ -84,8 +85,18 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 				.setFirstResult(crit.startAt() < 0 ? 0 : crit.startAt())
 				.setMaxResults(crit.maxResults() < 0 || crit.maxResults() > 100 ? 100 : crit.maxResults())
 				.addOrder(Order.desc("id"));
-				
 		
+		//
+		// Restrict by institutes 
+		//
+		if (CollectionUtils.isNotEmpty(crit.instituteIds())) {
+			query.createAlias("dp.institute", "institute")
+				.add(Restrictions.in("institute.id", crit.instituteIds()));
+		}
+		
+		//
+		// Restrict by search term
+		//
 		String searchTerm = crit.query();
 		if (StringUtils.isNotBlank(searchTerm)) {
 			query.add(Restrictions.ilike("name", searchTerm, MatchMode.ANYWHERE));

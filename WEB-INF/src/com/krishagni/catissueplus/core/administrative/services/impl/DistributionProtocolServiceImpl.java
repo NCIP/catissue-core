@@ -40,10 +40,15 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<List<DistributionProtocolDetail>> getDistributionProtocols(RequestEvent<DpListCriteria> req) {
 		try {
+			DpListCriteria crit = req.getPayload();			
 			AccessCtrlMgr.getInstance().ensureReadDpRights();
+			if (!AuthUtil.isAdmin()) {
+				User user = daoFactory.getUserDao().getById(AuthUtil.getCurrentUser().getId());
+				crit.instituteId(user.getInstitute().getId());
+			}
 			
-			List<DistributionProtocol> dps = daoFactory.getDistributionProtocolDao()
-					.getDistributionProtocols(req.getPayload());
+			List<DistributionProtocol> dps = 
+					daoFactory.getDistributionProtocolDao().getDistributionProtocols(crit);
 			return ResponseEvent.response(DistributionProtocolDetail.from(dps));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);

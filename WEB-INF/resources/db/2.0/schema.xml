@@ -1870,13 +1870,13 @@
 
   <changeSet author="vpawar" id="Drop old foreign key on transfer event source container ID" failOnError="false">
     <dropForeignKeyConstraint
-      baseTableName="CATISSUE_TISSUE_EVENT_PARAM"
+      baseTableName="CATISSUE_TRANSFER_EVENT_PARAM"
       constraintName="FK71F9AC1099DF0A92"/>
   </changeSet>
 
   <changeSet author="vpawar" id="Drop old foreign key on transfer event dest container ID" failOnError="false">
     <dropForeignKeyConstraint
-      baseTableName="CATISSUE_TISSUE_EVENT_PARAM"
+      baseTableName="CATISSUE_TRANSFER_EVENT_PARAM"
       constraintName="FK71F9AC103C2DAC61"/>
   </changeSet>
 

@@ -10,6 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.VfsResource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
@@ -35,7 +36,7 @@ public class WildcardReloadableResourceBundle extends ReloadableResourceBundleMe
 				for (Resource resource : resources) {
 					String uri = resource.getURI().toString();
 					String basename = null;
-					if (resource instanceof FileSystemResource) {
+					if (resource instanceof FileSystemResource || resource instanceof VfsResource) {
 						basename = "classpath:"	+ StringUtils.substringBetween(uri, "/classes/", ".properties");
 					} else if (resource instanceof ClassPathResource) {
 						basename = StringUtils.substringBefore(uri, ".properties");

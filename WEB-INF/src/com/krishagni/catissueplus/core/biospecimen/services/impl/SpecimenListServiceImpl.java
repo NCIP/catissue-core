@@ -15,6 +15,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensOp;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenListService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -210,7 +211,8 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			if (labels == null || labels.isEmpty()) {
 				specimens = new ArrayList<Specimen>();
 			} else {
-				specimens = daoFactory.getSpecimenDao().getSpecimensByLabels(labels);
+				specimens = daoFactory.getSpecimenDao()
+						.getSpecimens(new SpecimenListCriteria().labels(labels));
 			}
 			
 			switch (opDetail.getOp()) {
