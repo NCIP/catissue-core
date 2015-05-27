@@ -784,5 +784,14 @@
   <changeSet author="slakhani" id="1429175726743-83">
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_SITE_COORDINATORS_AUD" constraintName="FK_W3JPS5E5BYVOCJPG18NUYFFY" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="OS_REVISIONS"/>
   </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-84">
+    <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
+      <column name="REPORT" type="CLOB"/>
+    </addColumn>
+    <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
+      <column name="REPORT_MOD" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
 
 </databaseChangeLog>

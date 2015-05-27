@@ -5,14 +5,19 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.util.PDFTextStripper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.services.ReportsDeIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -29,6 +34,9 @@ public class VisitServiceImpl implements VisitService {
 	private VisitFactory visitFactory;
 	
 	private SpecimenService specimenSvc;
+	
+	@Autowired
+	private ReportsDeIdentifier reportsDeIdentifier;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -107,6 +115,41 @@ public class VisitServiceImpl implements VisitService {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Boolean> uploadSPR(RequestEvent<SprDetail> req) {
+		try {
+			SprDetail sprDetail = req.getPayload();
+			
+			Visit visit = daoFactory.getVisitsDao().getById(sprDetail.getVisitId());
+			if (visit == null) {
+				throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(visit);
+						
+			PDDocument pd = PDDocument.load(sprDetail.getReport());
+			PDFTextStripper pdfStripper = new PDFTextStripper();
+			pdfStripper.setStartPage(1);
+			pdfStripper.setEndPage(pd.getNumberOfPages());
+			String report = pdfStripper.getText(pd);
+			pd.close();
+			
+			if (reportsDeIdentifier != null) {
+				report = reportsDeIdentifier.deIdentify(report, sprDetail.getVisitId());
+			} 
+			
+			visit.updateReport(report.substring(1, 255)); // TODO: Not saving more than 256 bytes. 
+			daoFactory.getVisitsDao().saveOrUpdate(visit);
+			
+			return new ResponseEvent<Boolean>(true);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception ex) {
+			return ResponseEvent.serverError(ex);
 		}
 	}
 	

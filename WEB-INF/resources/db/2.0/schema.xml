@@ -1912,4 +1912,16 @@
       <column name="COMMENTS" type="${text.type}(255)"/>
     </addColumn>
   </changeSet>
+  
+  <changeSet author="vgaikwad" id="Drop IDENTIFIED_REPORT and DEIDENTIFIED_REPORT columns">
+    <dropColumn columnName="IDENTIFIED_REPORT" tableName="CATISSUE_SPECIMEN_COLL_GROUP"/>
+    <dropColumn columnName="DEIDENTIFIED_REPORT" tableName="CATISSUE_SPECIMEN_COLL_GROUP"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Added REPORT field in CATISSUE_SPECIMEN_COLL_GROUP table">
+    <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+      <column name="REPORT" type="${clob.type}"/>
+    </addColumn>
+  </changeSet>
+  
 </databaseChangeLog>

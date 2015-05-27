@@ -78,5 +78,10 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
       return Form.listRecords(url);
     };
 
+    Visit.prototype.getSprUrl = function() {
+      var url = Visit.url() + this.$id() + '/spr';
+      return url;
+    }
+
     return Visit;
   });

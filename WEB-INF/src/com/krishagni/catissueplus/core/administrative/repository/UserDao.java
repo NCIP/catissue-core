@@ -14,6 +14,8 @@ public interface UserDao extends Dao<User> {
 	
 	public List<User> getUsersByIds(List<Long> userIds);
 	
+	public List<User> getAllUsers();
+	
 	public User getUser(String loginName, String domain);
 	
 	public User getSystemUser();
@@ -33,5 +35,5 @@ public interface UserDao extends Dao<User> {
 	public void saveFpToken(ForgotPasswordToken token);
 	
 	public void deleteFpToken(ForgotPasswordToken token);
-	
+
 }

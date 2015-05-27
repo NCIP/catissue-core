@@ -46,7 +46,7 @@ angular.module('openspecimen')
       },
       link: function(scope, element, attrs, ctrl) {
         $timeout(function() {
-          scope.ctrl = ctrl;
+          angular.extend(scope.ctrl, ctrl);
 
           element.find('input').fileupload({
             dataType: 'json',
@@ -55,15 +55,16 @@ angular.module('openspecimen')
             },
             add: function (e, data) {
               element.find('span').text(data.files[0].name);
-              ctrl.data = data;
+              scope.ctrl.data = data;
             },
             done: function(e, data) {
-              ctrl.done(data);
+              scope.ctrl.done(data);
             },
             fail: function(e, data) {
-              ctrl.fail(data);
+             scope.ctrl.fail(data);
             }
           })
+
         });
       },
       template: 

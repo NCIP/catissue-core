@@ -42,9 +42,7 @@ public class Visit {
 
 	private String activityStatus;
 
-	private String identifiedReport;
-
-	private String deIdentifiedReport;
+	private String report;
 
 	private Site site;
 
@@ -168,20 +166,12 @@ public class Visit {
 		this.comments = comments;
 	}
 
-	public String getIdentifiedReport() {
-		return identifiedReport;
+	public String getReport() {
+		return report;
 	}
 
-	public void setIdentifiedReport(String identifiedReport) {
-		this.identifiedReport = identifiedReport;
-	}
-
-	public String getDeIdentifiedReport() {
-		return deIdentifiedReport;
-	}
-
-	public void setDeIdentifiedReport(String deIdentifiedReport) {
-		this.deIdentifiedReport = deIdentifiedReport;
+	public void setReport(String report) {
+		this.report = report;
 	}
 
 	public String getSurgicalPathologyNumber() {
@@ -266,17 +256,15 @@ public class Visit {
 		setRegistration(visit.getRegistration());
 		setSite(visit.getSite());
 		setStatus(visit.getStatus());
-		setIdentifiedReport(visit.getIdentifiedReport());
-		setDeIdentifiedReport(visit.getDeIdentifiedReport());
+		setReport(visit.getReport());
 		setComments(visit.getComments());
 		setName(visit.getName());		
 		setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 		setVisitDate(visit.getVisitDate());
 	}
 
-	public void updateReports(Visit scg) {
-		this.setIdentifiedReport(scg.getIdentifiedReport());
-		this.setDeIdentifiedReport(scg.getDeIdentifiedReport());
+	public void updateReport(String report ) {
+		this.setReport(report);
 	}	
 	
 	public void addSpecimen(Specimen specimen) {

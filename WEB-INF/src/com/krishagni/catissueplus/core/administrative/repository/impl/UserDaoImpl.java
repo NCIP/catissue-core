@@ -54,6 +54,15 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 				.setParameterList("userIds", userIds)
 				.list();
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> getAllUsers() {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_ALL_USERS)
+				.list();
+	}
 
 	public User getUser(String loginName, String domainName) {
 		String hql = String.format(GET_USER_BY_LOGIN_NAME_HQL, " and activityStatus != 'Disabled'");
@@ -249,6 +258,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	private static final String FQN = User.class.getName();
 
 	private static final String GET_USERS_BY_IDS = FQN + ".getUsersByIds";
+	
+	private static final String GET_ALL_USERS = FQN + ".getAllUsers";
 	
 	private static final String GET_DEPENDENT_ENTITIES = FQN + ".getDependentEntities"; 
 	

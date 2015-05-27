@@ -3,7 +3,8 @@ angular.module('os.biospecimen.visit', [
     'ui.router',
     'os.biospecimen.participant.specimen-tree',
     'os.biospecimen.extensions',
-    'os.biospecimen.visit.addedit'
+    'os.biospecimen.visit.addedit',
+    'os.biospecimen.visit.spr'
   ])
   .config(function($stateProvider) {
     $stateProvider
@@ -86,5 +87,11 @@ angular.module('os.biospecimen.visit', [
         },
         controller: 'FormRecordAddEditCtrl',
         parent: 'visit-detail.extensions'
+      })
+      .state('visit-detail.spr', {
+        url: '/report',
+        templateUrl: 'modules/biospecimen/participant/visit/spr.html',
+        controller: 'SprController',
+        parent: 'visit-detail'
       });
   });

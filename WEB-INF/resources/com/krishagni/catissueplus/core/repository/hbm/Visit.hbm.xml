@@ -25,11 +25,9 @@
 
     <property name="status" column="COLLECTION_STATUS" />
 		
-    <property name="identifiedReport" lazy="true" column="IDENTIFIED_REPORT" />
+    <property name="report" lazy="true" column="REPORT" />
 		
-    <property name="deIdentifiedReport" lazy="true" column="DEIDENTIFIED_REPORT" />
-
-    <property name="comments" type="string" column="COMMENTS" />
+    <property name="comments" type="string" column="COMMENTS"/>
 
     <property name="surgicalPathologyNumber" column="SURGICAL_PATHOLOGY_NUMBER" />
 

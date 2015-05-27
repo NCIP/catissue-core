@@ -1,0 +1,23 @@
+<div class="clearfix">
+  <div class="col-xs-8">
+    <ul class="os-key-values os-one-col">
+      <li class="item">
+        <strong class="key key-sm" translate="visits.spr_report">Surgical Pathology Report</strong>
+        <div class="value value-md">
+          <form action="{{sprUrl}}" class="form-inline">
+            <div class="form-group">
+              <div os-file-upload ctrl="sprUploader"></div>
+            </div>
+            <div class="form-group clearfix">
+              <div class="col-xs-6">
+                <button type="button" class="btn btn-success" ng-click="upload()" translate="common.buttons.upload">
+                  Upload
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

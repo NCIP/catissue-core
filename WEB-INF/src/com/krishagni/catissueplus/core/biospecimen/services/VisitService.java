@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services;
 
+import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
@@ -15,4 +16,6 @@ public interface VisitService {
 	public ResponseEvent<VisitDetail> patchVisit(RequestEvent<VisitDetail> req);
 		
 	public ResponseEvent<VisitSpecimenDetail> collectVisitAndSpecimens(RequestEvent<VisitSpecimenDetail> req);
+
+	public ResponseEvent<Boolean> uploadSPR(RequestEvent<SprDetail> req);
 }

@@ -776,4 +776,20 @@
   <changeSet author="slakhani" id="1429178687139-81">
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_REVISION_ENTITIES"  constraintName="FK_t69kea3hasj6uc6ddn5ck5r9y" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-82">
+    <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
+      <column name="REPORT" type="TEXT"/>
+    </addColumn>
+    <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
+      <column name="REPORT_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Drop IDENTIFIED_REPORT, DEIDENTIFIED_REPORT and its audit columns">
+    <dropColumn columnName="DEIDENTIFIED_REPORT" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+    <dropColumn columnName="deidentifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+    <dropColumn columnName="IDENTIFIED_REPORT" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+    <dropColumn columnName="identifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
 </databaseChangeLog>
