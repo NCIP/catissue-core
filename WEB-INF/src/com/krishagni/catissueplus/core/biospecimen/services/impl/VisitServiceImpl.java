@@ -142,7 +142,7 @@ public class VisitServiceImpl implements VisitService {
 				report = reportsDeIdentifier.deIdentify(report, sprDetail.getVisitId());
 			} 
 			
-			visit.updateReport(report.substring(1, 255)); // TODO: Not saving more than 256 bytes. 
+			visit.updateReport(report); 
 			daoFactory.getVisitsDao().saveOrUpdate(visit);
 			
 			return new ResponseEvent<Boolean>(true);
