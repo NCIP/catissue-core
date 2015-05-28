@@ -13,6 +13,7 @@ import java.util.UUID;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
@@ -45,8 +46,6 @@ import com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceI
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 
 public class CollectionProtocolRegistrationServiceImpl implements CollectionProtocolRegistrationService {
-	private static final String MODULE = "biospecimen";
-	
 	private DaoFactory daoFactory;
 
 	private CollectionProtocolRegistrationFactory cprFactory;
@@ -442,7 +441,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	}	
 	
 	private String getConsentDirPath() {
-		String path = cfgSvc.getStrSetting(MODULE, "participant_consent_dir");
+		String path = cfgSvc.getStrSetting(ConfigParams.MODULE, "participant_consent_dir");
 		if (path == null) {
 			path = ConfigUtil.getInstance().getDataDir() + File.separator + "participant-consents";
 		}
