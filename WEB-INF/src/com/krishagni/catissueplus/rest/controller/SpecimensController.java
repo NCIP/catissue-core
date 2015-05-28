@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenStatusDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
@@ -137,6 +138,23 @@ public class SpecimensController {
 		ResponseEvent<SpecimenDetail> resp = specimenSvc.updateSpecimen(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value="/{id}/status")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public SpecimenDetail updateSpecimenStatus(
+			@PathVariable("id")
+			Long specimenId,
+			
+			@RequestBody
+			SpecimenStatusDetail detail) {
+		
+		detail.setId(specimenId);
+		
+		ResponseEvent<SpecimenDetail> resp = specimenSvc.updateSpecimenStatus(getRequest(detail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();		
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")

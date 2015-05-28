@@ -4,7 +4,8 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <span translate="extensions.list">Extensions</span>
-        <div show-if-allowed="extnOpts" class="btn-group" style="margin-left: 10px;" dropdown>
+        <div show-if-allowed="extnOpts.update" class="btn-group" style="margin-left: 10px;" dropdown
+          ng-if="extnOpts.isEntityActive">
           <button class="btn btn-primary os-round-btn dropdown-toggle">
             <span class="fa fa-plus"></span>
           </button>
@@ -39,7 +40,7 @@
               </div>
               <div class="col col-xs-3">{{record.user.firstName}} {{record.user.lastName}}</div>
               <div class="col col-xs-3">{{record.updateTime | date: global.dateTimeFmt}}</div>
-              <div class="col col-xs-1">
+              <div class="col col-xs-1" ng-if="extnOpts.isEntityActive">
                 <button show-if-allowed="extnOpts" class="btn btn-xs btn-default" ng-click="deleteRecord(record)">
                   <span class="fa fa-trash"></span>
                 </button>

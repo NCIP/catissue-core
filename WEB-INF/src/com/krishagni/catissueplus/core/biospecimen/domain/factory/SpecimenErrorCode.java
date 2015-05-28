@@ -58,7 +58,7 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	INVALID_CREATION_DATE,
 	
-	OP_NOT_ALLOWED,
+	EDIT_NOT_ALLOWED,
 	
 	INIT_QTY_LT_ALIQUOT_QTY,
 	

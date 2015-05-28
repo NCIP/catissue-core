@@ -331,6 +331,20 @@ angular.module('os.biospecimen.participant.specimen-tree',
           );
         };
 
+        scope.showCloseSpecimen = function(specimen) {
+          scope.view = 'close_specimen';
+          scope.specStatus = { reason: '' };
+          scope.parentSpecimen = specimen;
+        };
+
+        scope.closeSpecimen = function() {
+          scope.parentSpecimen.close(scope.specStatus.reason).then(
+            function() {
+              scope.revertEdit();
+            }
+          );
+        };
+         
         scope.revertEdit = function() {
           scope.view = 'list';
           scope.parentSpecimen = undefined;

@@ -54,6 +54,7 @@
     <set name="childCollection" table="CATISSUE_SPECIMEN" inverse="true" cascade="all">
       <key column="PARENT_SPECIMEN_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"/>
+      <filter name="activeEntity"/>
     </set>
 
     <many-to-one name="visit"

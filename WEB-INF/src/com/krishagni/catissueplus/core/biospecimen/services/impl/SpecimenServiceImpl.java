@@ -19,6 +19,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDeta
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenLabelPrintJobSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenStatusDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
@@ -134,6 +135,32 @@ public class SpecimenServiceImpl implements SpecimenService {
 		return updateSpecimen(req.getPayload(), true);
 	}
 	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SpecimenDetail> updateSpecimenStatus(RequestEvent<SpecimenStatusDetail> req) {
+		try {
+			SpecimenStatusDetail detail = req.getPayload();
+
+			Specimen specimen = null;			
+			if (detail.getId() != null) {
+				specimen = daoFactory.getSpecimenDao().getById(detail.getId());
+			} else if (StringUtils.isNotBlank(detail.getLabel())) {
+				specimen = daoFactory.getSpecimenDao().getByLabel(detail.getLabel());
+			}
+			
+			if (specimen == null) {
+				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND);
+			}
+			
+			specimen.updateStatus(detail.getStatus(), detail.getReason());
+			return ResponseEvent.response(SpecimenDetail.from(specimen));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+		
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenDetail>> collectSpecimens(RequestEvent<List<SpecimenDetail>> req) {
@@ -254,6 +281,10 @@ public class SpecimenServiceImpl implements SpecimenService {
 	}
 	
 	private Specimen saveOrUpdate(SpecimenDetail detail, Specimen existing, Specimen parent, boolean partial) {
+		if (existing != null && !existing.isActive()) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.EDIT_NOT_ALLOWED, existing.getLabel());
+		}
+		
 		Specimen specimen = null;		
 		if (partial) {
 			specimen = specimenFactory.createSpecimen(existing, detail, parent);
@@ -285,6 +316,10 @@ public class SpecimenServiceImpl implements SpecimenService {
 			specimen = existing;
 			newSpecimen = false;
 		} else if (specimen.getParentSpecimen() != null) {
+			if (!specimen.getParentSpecimen().isActive()) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.EDIT_NOT_ALLOWED, specimen.getParentSpecimen().getLabel());
+			}
+			
 			specimen.getParentSpecimen().addSpecimen(specimen);
 		} else {
 			specimen.checkQtyConstraints(); // TODO: Should we be calling this at all?

@@ -119,7 +119,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 
 	private void setActivityStatus(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(detail.getActivityStatus())) {
-			specimen.setActive();
+			specimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 		} else if (isValidPv(detail.getActivityStatus(), Status.ACTIVITY_STATUS.getStatus())) {
 			specimen.setActivityStatus(detail.getActivityStatus());
 		} else {

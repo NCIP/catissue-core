@@ -69,7 +69,8 @@
       "edit": "Edit",
       "done": "Done",
       "search": "Search",
-      "clear_filters": "Clear Filters"
+      "clear_filters": "Clear Filters",
+      "close": "Close"
     }
   },
 
@@ -330,6 +331,8 @@
     "activity_time_info": "{{name}} created on {{time | osServerTime: utcOffset | date: global.dateTimeFmt}}",
     "activity_info": "{{name}} created",
 
+    "reason_for_closing": "Reason for closing",
+
     "recent_events": "Recent Events",
     "events": "Events",
     "event_name": "Name",
@@ -352,7 +355,7 @@
       "create_aliquots": "Create Aliquots",
       "create_derivative": "Create Derivative",
       "add_event": "Add Event",
-      "dispose": "Dispose"
+      "close": "Close"
     },
 
     "menu": {
@@ -365,7 +368,8 @@
       "create_derivative": "Create Derivative",
       "collect": "Collect",
       "print": "Print",
-      "assign_to": "Assign To"
+      "assign_to": "Assign To",
+      "reopen": "Reopen"
     },
 
     "errors": {

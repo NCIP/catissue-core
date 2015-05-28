@@ -60,6 +60,9 @@ angular.module('os.biospecimen.specimen',
           $scope.specimen = specimen;
 
           $scope.childSpecimens = $scope.specimen.children; 
+          $scope.reopen = function() {
+            specimen.reopen();
+          }
         },
         parent: 'specimen-root'
       })
@@ -72,8 +75,12 @@ angular.module('os.biospecimen.specimen',
       .state('specimen-detail.extensions', {
         url: '/extensions',
         template: '<div ui-view></div>',
-        controller: function($scope) {
-          $scope.extnOpts = $scope.specimenResource.updateOpts;
+        controller: function($scope, specimen) {
+          $scope.extnOpts = {
+            update: $scope.specimenResource.updateOpts,
+            entity: specimen,
+            isEntityActive: (specimen.activityStatus == 'Active')
+          };
         },
         abstract: true,
         parent: 'specimen-detail'

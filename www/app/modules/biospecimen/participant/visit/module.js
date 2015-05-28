@@ -64,8 +64,12 @@ angular.module('os.biospecimen.visit', [
       .state('visit-detail.extensions', {
         url: '/extensions',
         template: '<div ui-view></div>',
-        controller: function($scope) {
-          $scope.extnOpts = $scope.specimenResource.updateOpts;
+        controller: function($scope, visit) {
+          $scope.extnOpts = {
+            update: $scope.specimenResource.updateOpts,
+            entity: visit,
+            isEntityActive: visit.activityStatus == 'Active'
+          }
         },
         abstract: true,
         parent: 'visit-detail'

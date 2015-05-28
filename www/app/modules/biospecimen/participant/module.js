@@ -141,8 +141,12 @@ angular.module('os.biospecimen.participant',
       .state('participant-detail.extensions', {
         url: '/extensions',
         template: '<div ui-view></div>',
-        controller: function($scope) {
-          $scope.extnOpts = $scope.participantResource.updateOpts;
+        controller: function($scope, cpr) {
+          $scope.extnOpts = {
+            update: $scope.participantResource.updateOpts,
+            isEntityActive: cpr.activityStatus == 'Active',
+            entity: cpr
+          }
         },
         abstract: true,
         parent: 'participant-detail'

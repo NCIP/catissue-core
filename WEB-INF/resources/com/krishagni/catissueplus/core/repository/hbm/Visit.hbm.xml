@@ -50,7 +50,10 @@
     <set name="specimens" table="CATISSUE_SPECIMEN" inverse="true" cascade="save-update">
       <key column="SPECIMEN_COLLECTION_GROUP_ID"></key>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen" />
+      <filter name="activeEntity"/>
     </set>
+
+    <filter name="activeEntity"/>
 
     <query name="getVisitByName">
       from 
@@ -107,6 +110,7 @@
           on scg.collection_protocol_event_id = cpe.identifier and scg.collection_protocol_reg_id = :cprId
         left join catissue_specimen s 
           on s.specimen_collection_group_id = scg.identifier and s.req_specimen_id = sp_rq.identifier
+             and s.activity_status != 'Disabled'
       where
         cpe.identifier in (:eventIds)
       group by
@@ -128,7 +132,8 @@
       where 
         cpe.identifier in (:eventIds) and 
         scg.collection_protocol_reg_id = :cprId and 
-        s.req_specimen_id is null
+        s.req_specimen_id is null and
+        s.activity_status != 'Disabled'
       group by 
         scg.identifier, cpe.identifier
     </sql-query>

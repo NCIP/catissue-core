@@ -130,6 +130,16 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       return this;
     };
 
+    Specimen.prototype.close = function(reason) {
+      var statusSpec = {status: 'Closed', reason: reason};
+      return updateSpecimenStatus(this, statusSpec);
+    }
+
+    Specimen.prototype.reopen = function() {
+      var statusSpec = {status: 'Active'};
+      return updateSpecimenStatus(this, statusSpec);
+    };
+
     function toSpecimenAttrs(sr) {
       sr.reqId = sr.id;
       sr.reqLabel = sr.name;
@@ -187,6 +197,15 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
         }
       );
       return eventsList;
+    }
+
+    function updateSpecimenStatus(specimen, statusSpec) {
+      return $http.put(Specimen.url() + '/' + specimen.$id() + '/status', statusSpec).then(
+        function(result) {
+          angular.extend(specimen, result.data);
+          return new Specimen(result);
+        }
+      );
     }
 
     return Specimen;

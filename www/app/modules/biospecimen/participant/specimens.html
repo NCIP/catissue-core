@@ -124,36 +124,36 @@
                   <li ui-sref="specimen-addedit({
                                  eventId: visit.eventId, visitId: visit.id, 
                                  specimenId: specimen.id, srId: specimen.reqId})" 
-                    ng-if="!allowedOps || allowedOps.update">
+                    ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
                     <a href="#">
                       <i class="fa fa-pencil"></i>
                       <span translate="specimens.ctx_menu.edit_specimen">Edit Specimen</span>
                     </a>
                   </li>
                   <li class="divider"></li>
-                  <li ng-if="!allowedOps || allowedOps.update">
+                  <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
                     <a ng-click="showCreateAliquots(specimen)">
                       <i class="fa fa-share-alt"></i>
                       <span translate="specimens.ctx_menu.create_aliquots">Create Aliquots</span>
                     </a>
                   </li>
-                  <li ng-if="!allowedOps || allowedOps.update">
+                  <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
                     <a ng-click="showCreateDerivative(specimen)">
                       <i class="fa fa-flask"></i>
                       <span translate="specimens.ctx_menu.create_derivative">Create Derivative</span>
                     </a>
                   </li>
                   <li class="divider"></li>
-                  <li ng-if="!allowedOps || allowedOps.update">
+                  <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
                     <a href="#">
                       <i class="fa fa-cogs"></i>
                       <span translate="specimens.ctx_menu.add_event">Add Event</span>
                     </a>
                   </li>
-                  <li ng-if="!allowedOps || allowedOps.update">
-                    <a href="#">
+                  <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
+                    <a ng-click="showCloseSpecimen(specimen)">
                       <i class="fa fa-trash"></i>
-                      <span translate="specimens.ctx_menu.dispose">Dispose</span>
+                      <span translate="specimens.ctx_menu.close">Close</span>
                     </a>
                   </li>
                 </ul>
@@ -164,6 +164,7 @@
           <div class="row content" ng-if="parentSpecimen == specimen && view != 'list'">
             <div ng-if="view == 'create_aliquots'" ng-include="'aliquot_specs.html'"> </div>
             <div ng-if="view == 'create_derivatives'" ng-include="'derivative_specs.html'"> </div>
+            <div ng-if="view == 'close_specimen'" ng-include="'close_specimen.html'"></div>
           </div>
 
         </div> 
@@ -280,6 +281,34 @@
           <button type="submit" class="btn btn-success" os-form-submit="createDerivative()"
             translate="specimens.buttons.create_derivative">
             Create Derivative
+          </button>
+          <a class="btn os-btn-text-secondary" ng-click="revertEdit()" translate="common.buttons.cancel">
+            Cancel
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+</script>
+
+<script type="text/ng-template" id="close_specimen.html">
+  <div>
+    <form name="closeSpecForm" os-form-validator="closeSpecForm" novalidate>
+      <div class="clearfix">
+        <div class="col-xs-12">
+          <div class="form-group">
+            <input name="reason" ng-model="specStatus.reason" os-md-input class="form-control" 
+              type="text" placeholder="{{'specimens.reason_for_closing' | translate}}">
+            <div os-field-error field="closeSpecForm.reason"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-success" os-form-submit="closeSpecimen()" 
+            translate="common.buttons.close">
+            Close
           </button>
           <a class="btn os-btn-text-secondary" ng-click="revertEdit()" translate="common.buttons.cancel">
             Cancel

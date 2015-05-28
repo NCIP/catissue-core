@@ -211,18 +211,9 @@ public class Specimen extends BaseEntity {
 	}
 
 	public void setActivityStatus(String activityStatus) {
-		if (this.activityStatus != null && this.activityStatus.equals(activityStatus)) {
-			return;
-		}
-		
 		if (StringUtils.isBlank(activityStatus)) {
 			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
 		}
-		
-		if (this.activityStatus != null && Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
-			delete();
-		}		
-
 		this.activityStatus = activityStatus;
 	}
 
@@ -407,10 +398,6 @@ public class Specimen extends BaseEntity {
 		this.labelGenerator = labelGenerator;
 	}
 
-	public void setActive() {
-		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
-	}
-
 	public boolean isActive() {
 		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.getActivityStatus());
 	}
@@ -427,34 +414,55 @@ public class Specimen extends BaseEntity {
 		return Status.SPECIMEN_COLLECTION_STATUS_COLLECTED.getStatus().equals(this.collectionStatus);
 	}
 
-	public void delete() {
-		checkActiveDependents();
+	public void disable() {
+		if (getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
+			return;
+		}
 		
-		if (this.position != null) {
-			//this.specimenPosition.setSpecimen(null);
-			this.setPosition(null);
-		}
-
-		this.barcode = Utility.getDisabledValue(barcode);
-		this.label = Utility.getDisabledValue(label);
-		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
-	}
-
-	private void checkActiveDependents() {
-		for (Specimen specimen : this.getChildCollection()) {
-			if (specimen.isActive()) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.REF_ENTITY_FOUND);
-			}
-		}
+		ensureChildSpecimensAreDisabled();		
+		virtualize();
+		setLabel(Utility.getDisabledValue(getLabel()));
+		setBarcode(Utility.getDisabledValue(getBarcode()));
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());		
 	}
 	
+	public void close(User user, Date time, String reason) {
+		if (!getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus())) {
+			return;
+		}
+		
+		setIsAvailable(false);
+		virtualize();
+		addDisposalEvent(user, time, reason);		
+		setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
+	}
+	
+	public void activate() {
+		if (getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus())) {
+			return;
+		}
+		
+		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+		if (getAvailableQuantity() > 0) {
+			setIsAvailable(true);
+		}
+		
+		// TODO: we need to add a reopen event here
+	}
+		
 	public CollectionProtocolRegistration getRegistration() {
 		return getVisit().getRegistration();
 	}
 
 	public void update(Specimen specimen) {
+		
 		String previousStatus = getCollectionStatus();
 		Double previousQty = getInitialQuantity();
+		
+		updateStatus(specimen.getActivityStatus(), null);
+		if (!isActive()) {
+			return;
+		}
 		
 		setLabel(specimen.getLabel());
 		setBarcode(specimen.getBarcode());
@@ -486,7 +494,6 @@ public class Specimen extends BaseEntity {
 		setIsAvailable(specimen.getIsAvailable());
 				
 		setComment(specimen.getComment());		
-		setActivityStatus(specimen.getActivityStatus());
 		updatePosition(specimen.getPosition());
 		
 		if (isAliquot()) {
@@ -503,7 +510,21 @@ public class Specimen extends BaseEntity {
 		
 		checkQtyConstraints();
 	}
-
+	
+	public void updateStatus(String activityStatus, String reason) {
+		if (this.activityStatus != null && this.activityStatus.equals(activityStatus)) {
+			return;
+		}
+		
+		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
+			disable();
+		} else if (Status.ACTIVITY_STATUS_CLOSED.getStatus().equals(activityStatus)) {
+			close(AuthUtil.getCurrentUser(), Calendar.getInstance().getTime(), reason);
+		} else if (Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(activityStatus)) {
+			activate();
+		}
+	}
+		
 	public void distribute(User distributor, Date time, Double quantity, boolean closeAfterDistribution) {
 		if (!getIsAvailable() || !isCollected() || getAvailableQuantity() <= 0) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_AVAILABLE_FOR_DIST, getLabel());
@@ -516,9 +537,7 @@ public class Specimen extends BaseEntity {
 		setAvailableQuantity(getAvailableQuantity() - quantity);
 		addDistributionEvent(distributor, time, quantity);
 		if (availableQuantity == 0 || closeAfterDistribution) {
-			setIsAvailable(false);
-			virtualize();
-			addDisposalEvent(distributor, time, "Distributed"); // TODO: i18n?
+			close(distributor, time, "Distributed");
 		}
 	}
 	
@@ -539,10 +558,37 @@ public class Specimen extends BaseEntity {
 	}
 	
 	private void virtualize() {
-		if (getPosition() != null) {
-			getPosition().vacate();
-			setPosition(null);
+		transferTo(null);
+	}
+	
+	private void transferTo(StorageContainerPosition newPosition) {
+		StorageContainerPosition oldPosition = getPosition();
+		if (same(oldPosition, newPosition)) {
+			return;
 		}
+		
+		SpecimenTransferEvent transferEvent = new SpecimenTransferEvent(this);
+		transferEvent.setUser(AuthUtil.getCurrentUser());
+		transferEvent.setTime(Calendar.getInstance().getTime());
+		
+		if (oldPosition != null && newPosition != null) {
+			transferEvent.setFromPosition(oldPosition);
+			transferEvent.setToPosition(newPosition);
+			
+			oldPosition.update(newPosition);			
+		} else if (oldPosition != null) {
+			transferEvent.setFromPosition(oldPosition);
+			
+			oldPosition.vacate();
+			setPosition(null);
+		} else if (oldPosition == null && newPosition != null) {
+			transferEvent.setToPosition(newPosition);
+			
+			newPosition.occupy();
+			setPosition(newPosition);
+		}
+		
+		transferEvent.saveOrUpdate();		
 	}
 	
 	public void addSpecimen(Specimen specimen) {
@@ -671,32 +717,7 @@ public class Specimen extends BaseEntity {
 	}
 	
 	public void updatePosition(StorageContainerPosition newPosition) {
-		if (same(position, newPosition)) {
-			return;
-		}
-		
-		SpecimenTransferEvent transfer = new SpecimenTransferEvent(this);
-		transfer.setUser(AuthUtil.getCurrentUser());
-		transfer.setTime(Calendar.getInstance().getTime());
-		
-		if (position != null && newPosition != null) {
-			transfer.setFromPosition(position);
-			transfer.setToPosition(newPosition);
-			
-			position.update(newPosition);			
-		} else if (position != null) {
-			transfer.setFromPosition(position);
-			
-			position.vacate();
-			position = null;
-		} else if (position == null && newPosition != null) {
-			transfer.setToPosition(newPosition);
-			
-			newPosition.occupy();
-			setPosition(newPosition);
-		}
-		
-		transfer.saveOrUpdate();
+		transferTo(newPosition);
 	}
 	
 	public String getLabelOrDesc() {
@@ -724,6 +745,14 @@ public class Specimen extends BaseEntity {
 		return desc.toString();		
 	}
 
+	private void ensureChildSpecimensAreDisabled() {
+		for (Specimen specimen : getChildCollection()) {
+			if (!specimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.REF_ENTITY_FOUND);
+			}
+		}
+	}
+	
 	/**
 	 * Ensures following constraints are adhered
 	 * 1. Specimen initial quantity is greater than or equals to sum of
@@ -744,7 +773,7 @@ public class Specimen extends BaseEntity {
 			throw OpenSpecimenException.userError(avblQtyGtAct);
 		}
 	}
-		
+			
 	private void addCollectionEvent() {
 		if (isAliquot() || isDerivative()) {
 			return;
