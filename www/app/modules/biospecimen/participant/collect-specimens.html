@@ -70,7 +70,7 @@
               <div ng-switch-default>
                 <input type="text" os-md-input edit-when="specimen.existingStatus != 'Collected'"
                   name="label" ng-model="specimen.label" ng-required="specimen.status == 'Collected'"
-                  ng-model-options="{updateOn: 'blur'}" os-unique-specimen-label>
+                  ng-model-options="{updateOn: 'blur', allowInvalid: 'true'}" os-unique-specimen-label>
                 <div os-field-error field="sform.label"></div>
               </div>
             </td>
@@ -105,10 +105,9 @@
       </table>
       <div class="row">
         <div class="col-xs-10">
-          <button class="btn btn-primary" 
-            ng-disabled="collectionForm.$invalid || collectionForm.$pending"
-            os-form-submit="saveSpecimens()" translate="common.buttons.submit">
-            Submit
+          <button type="submit" class="btn btn-primary" os-form-submit="saveSpecimens()" 
+            ng-disabled="!!collectionForm.$pending || collectionForm.$invalid">
+            <span translate="common.buttons.submit"> Submit </span>
           </button>
         </div>
       </div>
