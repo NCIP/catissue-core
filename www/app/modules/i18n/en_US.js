@@ -70,7 +70,8 @@
       "done": "Done",
       "search": "Search",
       "clear_filters": "Clear Filters",
-      "close": "Close"
+      "close": "Close",
+      "upload": "Upload"
     }
   },
 
@@ -268,6 +269,9 @@
     "bulk_import": "Bulk Import Visits",
     "visit_extensions": "Visit Extensions",
 
+    "spr_report": "Surgical Pathology Report",
+    "report_uploaded": "{{file}} uploaded successfully.",
+
     "status": {
       "pending": "Pending",
       "complete": "Complete"
@@ -285,7 +289,8 @@
 
     "menu": {
       "overview": "Overview",
-      "extensions": "Extensions"
+      "extensions": "Extensions",
+      "spr_report": "Surgical Pathology Report"
     }
   },
 

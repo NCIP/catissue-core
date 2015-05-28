@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
@@ -95,6 +98,21 @@ public class VisitsController {
 		
 		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(visit));
 		resp.throwErrorIfUnsuccessful();				
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value="/{id}/spr")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public String uploadSpr(@PathVariable("id") Long visitId, @PathVariable("file") MultipartFile file)
+	throws IOException {
+		SprDetail sprDetail = new SprDetail();
+		sprDetail.setSpr(file.getInputStream());
+		sprDetail.setSprName(file.getOriginalFilename());
+		sprDetail.setVisitId(visitId);
+		
+		ResponseEvent<String> resp = visitService.uploadSpr(getRequest(sprDetail));
+		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 	

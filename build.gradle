@@ -152,6 +152,8 @@ dependencies {
   compile group: 'org.springframework.security', name: 'spring-security-web', version:'3.2.7.RELEASE'
   compile group: 'velocity', name: 'velocity-dep', version:'1.4'
   compile group: 'com.thoughtworks.xstream', name: 'xstream', version:'1.4.8'
+  compile group: 'org.apache.pdfbox', name: 'pdfbox', version:'1.8.9'
+  compile group: 'org.apache.pdfbox', name: 'fontbox', version:'1.8.9'
    
   runtime group: 'antlr', name: 'antlr', version: '2.7.7'
   runtime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.12'
