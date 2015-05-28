@@ -387,7 +387,12 @@ public class FormServiceImpl implements FormService {
 			Long recId = req.getPayload();
 			FormRecordEntryBean recEntry = formDao.getRecordEntry(recId); 
 			if (recEntry == null) {
-				return ResponseEvent.response(null);
+				return ResponseEvent.userError(FormErrorCode.REC_NOT_FOUND);
+			}
+			
+			FormContextBean formCtxt = formDao.getById(recEntry.getFormCtxtId());
+			if (formCtxt.isSysForm()) {
+				return ResponseEvent.userError(FormErrorCode.SYS_REC_DEL_NOT_ALLOWED);
 			}
 			
 			String entityType = recEntry.getEntityType();

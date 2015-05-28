@@ -9,11 +9,16 @@ angular.module('os.biospecimen.extensions.util', [])
           $scope.record= record;
 
           $scope.yes = function() {
-            Form.deleteRecord(record.formId, record.recordId)
-              .then(function(result) {
+            Form.deleteRecord(record.formId, record.recordId).then(
+              function(result) {
                 $modalInstance.close();
                 Alerts.success('extensions.record_deleted');
-              })
+              },
+
+              function() {
+                $modalInstance.dismiss('cancel');
+              }
+            );
           }
 
           $scope.no = function() {

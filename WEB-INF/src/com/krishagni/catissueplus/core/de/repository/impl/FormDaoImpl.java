@@ -35,7 +35,12 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	public Class<FormContextBean> getType() {
 		return FormContextBean.class;
 	}
-
+	
+	@Override
+	public FormContextBean getById(Long id) {
+		return getById(id, "deletedOn is null");
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<FormSummary> getAllFormsSummary() {

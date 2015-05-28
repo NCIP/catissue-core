@@ -45,7 +45,8 @@
                 <span>{{event.time | osServerTime: global.utcOffset | date: global.dateTimeFmt}}</span>
               </div>
               <div class="col col-xs-1" ng-if="specimen.activityStatus == 'Active'">
-                <button show-if-allowed="specimenResource.updateOpts" class="btn btn-xs btn-default"> 
+                <button show-if-allowed="specimenResource.updateOpts" class="btn btn-xs btn-default"
+                  ng-click="deleteEvent(event)"> 
                   <span class="fa fa-trash"></span>
                 </button>
               </div>

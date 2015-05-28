@@ -105,11 +105,22 @@ angular.module('os.biospecimen.specimen',
       .state('specimen-detail.events', {
         url: '/events',
         templateUrl: 'modules/biospecimen/participant/specimen/events.html',
-        controller: function($scope, specimen) {
+        controller: function($scope, specimen, ExtensionsUtil) {
           $scope.entityType = 'SpecimenEvent';
           $scope.extnState = 'specimen-detail.events';
           $scope.events = specimen.getEvents();
           $scope.eventForms = specimen.getForms({entityType: 'SpecimenEvent'});
+
+          $scope.deleteEvent = function(event) {
+            var record = {recordId: event.id, formId: event.formId, formCaption: event.name};
+            ExtensionsUtil.deleteRecord(
+              record, 
+              function() {
+                var idx = $scope.events.indexOf(event);
+                $scope.events.splice(idx, 1);
+              }
+            );
+          }
         },
         parent: 'specimen-detail'
       });
