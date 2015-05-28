@@ -166,6 +166,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			}
 			
 			return ResponseEvent.response(file);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -201,6 +203,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
  			}
 			existing.setSignedConsentDocumentName(newFileName);
 			return ResponseEvent.response(newFileName);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -230,6 +234,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			} 
 
 			return ResponseEvent.response(isFileDeleted);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

@@ -8,7 +8,7 @@
             <a ng-href="{{consentFormUrl}}" target="_blank" ng-if="!!consent.consentDocumentName">{{consent.consentDocumentName}}</a>
             <span ng-if="!consent.consentDocumentName" translate="common.not_specified">Not Specified</span>
           </div>
-          <div class="col-xs-2" ng-switch on="!!consent.consentDocumentName">
+          <div class="col-xs-2" ng-switch on="!!consent.consentDocumentName" show-if-allowed="participantResource.updateOpts">
             <div class="btn btn-default btn-xs" ng-switch-when="false" ng-click="showUploadMode()">
               <span class="fa fa-wrench"></span>
             </div>
