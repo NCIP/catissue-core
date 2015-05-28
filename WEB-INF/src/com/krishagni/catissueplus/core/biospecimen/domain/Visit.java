@@ -262,7 +262,7 @@ public class Visit {
 		setVisitDate(visit.getVisitDate());
 	}
 
-	public void updateSprName(String sprName ) {
+	public void updateSprName(String sprName) {
 		setSprName(sprName);
 	}	
 	
