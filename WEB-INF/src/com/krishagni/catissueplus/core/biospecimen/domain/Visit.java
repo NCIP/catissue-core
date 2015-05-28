@@ -42,8 +42,6 @@ public class Visit {
 
 	private String activityStatus;
 
-	private String report;
-
 	private Site site;
 
 	private String status;
@@ -51,6 +49,8 @@ public class Visit {
 	private String comments;
 
 	private String surgicalPathologyNumber;
+	
+	private String sprName;
 
 	private CollectionProtocolEvent cpEvent;
 
@@ -166,20 +166,20 @@ public class Visit {
 		this.comments = comments;
 	}
 
-	public String getReport() {
-		return report;
-	}
-
-	public void setReport(String report) {
-		this.report = report;
-	}
-
 	public String getSurgicalPathologyNumber() {
 		return surgicalPathologyNumber;
 	}
 
 	public void setSurgicalPathologyNumber(String surgicalPathologyNumber) {
 		this.surgicalPathologyNumber = surgicalPathologyNumber;
+	}
+	
+	public String getSprName() {
+		return sprName;
+	}
+
+	public void setSprName(String sprName) {
+		this.sprName = sprName;
 	}
 
 	public CollectionProtocolEvent getCpEvent() {
@@ -256,15 +256,14 @@ public class Visit {
 		setRegistration(visit.getRegistration());
 		setSite(visit.getSite());
 		setStatus(visit.getStatus());
-		setReport(visit.getReport());
 		setComments(visit.getComments());
 		setName(visit.getName());		
 		setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 		setVisitDate(visit.getVisitDate());
 	}
 
-	public void updateReport(String report ) {
-		this.setReport(report);
+	public void updateSprName(String sprName ) {
+		setSprName(sprName);
 	}	
 	
 	public void addSpecimen(Specimen specimen) {

@@ -291,4 +291,87 @@
         (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, 'en_US', 1, sysdate, 'Active');
     </sql>
   </changeSet>
+  
+  <changeSet author="vgaikwad" id="Biospecimen module and surgical pathalogy reports dir config setting" dbms="mysql">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (default, 'biospecimen', 'Biospecimen');
+
+      select last_insert_id() into @module_id;
+
+      insert into os_cfg_props
+        (identifier, name, display_name_code, desc_code, data_type, module_id)
+      values 
+        (default, 'spr_dir', 'spr_dir', 'spr_dir_desc', 'STRING', @module_id);
+
+      select last_insert_id() into @prop_id;
+
+      insert into os_cfg_settings
+        (identifier, property_id, value, activated_by, activation_date, activity_status)
+      values
+        (default, @prop_id, '', 1, current_timestamp(), 'Active');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Biospecimen module and surgical pathalogy reports dir config setting" dbms="oracle">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (os_modules_seq.nextval, 'biospecimen', 'Biospecimen');
+
+      insert into os_cfg_props
+        (identifier, name, display_name_code, desc_code, data_type, module_id)
+      values 
+        (OS_CFG_PROPS_SEQ.nextval, 'spr_dir', 'spr_dir', 'spr_dir_desc', 
+         'STRING', os_modules_seq.currval);
+
+      insert into os_cfg_settings
+        (identifier, property_id, value, activated_by, activation_date, activity_status)
+      values
+        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Surgical pathology report deidentifier config property" dbms="mysql">
+    <sql>
+      select identifier into @module_id from os_modules where name = 'biospecimen'; 	
+     
+      insert into os_cfg_props
+        (identifier, name, display_name_code, desc_code, data_type, module_id)
+      values 
+        (default, 'spr_deidentifier', 'spr_deidentifier', 'spr_deidentifier', 'STRING', @module_id);
+
+      select last_insert_id() into @prop_id;
+
+      insert into os_cfg_settings
+        (identifier, property_id, value, activated_by, activation_date, activity_status)
+      values
+        (default, @prop_id, '', 1, current_timestamp(), 'Active');
+        
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Surgical pathology report deidentifier config property" dbms="oracle">
+    <sql endDelimiter="//">
+      declare 
+        module_id number;
+      begin 
+        select identifier into module_id from os_modules where name = 'biospecimen'; 	
+     
+      insert into os_cfg_props
+        (identifier, name, display_name_code, desc_code, data_type, module_id)
+      values 
+        (OS_CFG_PROPS_SEQ.nextval, 'spr_deidentifier', 'spr_deidentifier', 'spr_deidentifier', 'STRING', module_id);
+        
+      insert into os_cfg_settings
+        (identifier, property_id, value, activated_by, activation_date, activity_status)
+      values
+        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');  
+      end;
+      //
+    </sql>
+  </changeSet>
 </databaseChangeLog>

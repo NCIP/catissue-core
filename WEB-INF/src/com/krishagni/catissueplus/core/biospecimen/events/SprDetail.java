@@ -6,7 +6,9 @@ public class SprDetail {
 	
 	private Long visitId;
 
-	private InputStream report;
+	private String sprName;
+	
+	private InputStream spr;
 	
 	public Long getVisitId() {
 		return visitId;
@@ -16,13 +18,20 @@ public class SprDetail {
 		this.visitId = visitId;
 	}
 
-	public InputStream getReport() {
-		return report;
+	public String getSprName() {
+		return sprName;
 	}
 
-	public void setReport(InputStream report) {
-		this.report = report;
+	public void setSprName(String sprName) {
+		this.sprName = sprName;
 	}
 
+	public InputStream getSpr() {
+		return spr;
+	}
+
+	public void setSpr(InputStream spr) {
+		this.spr = spr;
+	}
 	
 }

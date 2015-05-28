@@ -126,6 +126,7 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="visitFactory" ref="visitFactory"/>
     <property name="specimenSvc" ref="specimenSvc"/>
+    <property name="cfgSvc" ref="cfgSvc"/>
   </bean>
 
   <bean id="cpFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolFactoryImpl">

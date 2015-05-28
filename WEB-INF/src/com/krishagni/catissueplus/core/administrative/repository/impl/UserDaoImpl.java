@@ -43,7 +43,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		
 		addSearchConditions(criteria, listCrit);
 		addProjectionFields(criteria);
-		
 		return getUsers(criteria.list());
 	}
 	
@@ -55,15 +54,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 				.list();
 	}
 	
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<User> getAllUsers() {
-		return sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_ALL_USERS)
-				.list();
-	}
-
 	public User getUser(String loginName, String domainName) {
 		String hql = String.format(GET_USER_BY_LOGIN_NAME_HQL, " and activityStatus != 'Disabled'");
 		List<User> users = executeGetUserByLoginNameHql(hql, loginName, domainName);

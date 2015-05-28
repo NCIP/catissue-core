@@ -779,14 +779,17 @@
   
   <changeSet author="vgaikwad" id="1429178687139-82">
     <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
-      <column name="REPORT" type="TEXT"/>
-    </addColumn>
-    <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
-      <column name="REPORT_MOD" type="BIT"/>
+      <column name="SPR_NAME" type="VARCHAR(255)"/>
     </addColumn>
   </changeSet>
   
-  <changeSet author="vgaikwad" id="Drop IDENTIFIED_REPORT, DEIDENTIFIED_REPORT and its audit columns">
+  <changeSet author="vgaikwad" id="1429178687139-83">
+    <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
+      <column name="sprName_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>  
+  
+  <changeSet author="vgaikwad" id="1429178687139-84">
     <dropColumn columnName="DEIDENTIFIED_REPORT" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
     <dropColumn columnName="deidentifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
     <dropColumn columnName="IDENTIFIED_REPORT" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>

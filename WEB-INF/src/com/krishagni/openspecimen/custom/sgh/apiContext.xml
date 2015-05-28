@@ -18,7 +18,7 @@
     http://www.springframework.org/schema/context/spring-context-3.2.xsd
     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-  <bean id="reportsDeIdentifier" class="com.krishagni.openspecimen.custom.sgh.serviceImpl.ReportsDeIdentifierImpl">
+  <bean id="sghReportsDeIdentifier" class="com.krishagni.openspecimen.custom.sgh.serviceImpl.SprDeIdentifier">
     <property name="daoFactory"  ref="biospecimenDaoFactory"/>
   </bean>
 

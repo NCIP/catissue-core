@@ -17,5 +17,5 @@ public interface VisitService {
 		
 	public ResponseEvent<VisitSpecimenDetail> collectVisitAndSpecimens(RequestEvent<VisitSpecimenDetail> req);
 
-	public ResponseEvent<Boolean> uploadSPR(RequestEvent<SprDetail> req);
+	public ResponseEvent<String> uploadSpr(RequestEvent<SprDetail> req);
 }

@@ -54,10 +54,6 @@
         and activityStatus != 'Disabled'
     </query>
     
-    <query name="getAllUsers">
-      from com.krishagni.catissueplus.core.administrative.domain.User 
-    </query>
-    
     <sql-query name="getDependentEntities">
       <return-scalar column="entityName" type="string"/>
       <return-scalar column="count" type="int"/>    

@@ -1,14 +1,13 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import java.io.File;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.util.PDFTextStripper;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
@@ -17,9 +16,11 @@ import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.biospecimen.services.ReportsDeIdentifier;
+import com.krishagni.catissueplus.core.biospecimen.services.DocumentDeIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
+import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
+import com.krishagni.catissueplus.core.common.PdfDocument;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -27,6 +28,8 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.ConfigurationService;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 
 public class VisitServiceImpl implements VisitService {
 	private DaoFactory daoFactory;
@@ -35,8 +38,7 @@ public class VisitServiceImpl implements VisitService {
 	
 	private SpecimenService specimenSvc;
 	
-	@Autowired
-	private ReportsDeIdentifier reportsDeIdentifier;
+	private ConfigurationService cfgSvc;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -48,6 +50,10 @@ public class VisitServiceImpl implements VisitService {
 	
 	public void setSpecimenSvc(SpecimenService specimenSvc) {
 		this.specimenSvc = specimenSvc;
+	}
+	
+	public void setCfgSvc(ConfigurationService cfgSvc) {
+		this.cfgSvc = cfgSvc;
 	}
 
 	@Override
@@ -120,7 +126,7 @@ public class VisitServiceImpl implements VisitService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Boolean> uploadSPR(RequestEvent<SprDetail> req) {
+	public ResponseEvent<String> uploadSpr(RequestEvent<SprDetail> req) {
 		try {
 			SprDetail sprDetail = req.getPayload();
 			
@@ -130,29 +136,25 @@ public class VisitServiceImpl implements VisitService {
 			}
 			
 			AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(visit);
-						
-			PDDocument pd = PDDocument.load(sprDetail.getReport());
-			PDFTextStripper pdfStripper = new PDFTextStripper();
-			pdfStripper.setStartPage(1);
-			pdfStripper.setEndPage(pd.getNumberOfPages());
-			String report = pdfStripper.getText(pd);
-			pd.close();
 			
+			String spr = PdfDocument.getText(sprDetail.getSpr());
+			DocumentDeIdentifier reportsDeIdentifier = getSprDeIdentifier(); 
 			if (reportsDeIdentifier != null) {
-				report = reportsDeIdentifier.deIdentify(report, sprDetail.getVisitId());
+				spr = reportsDeIdentifier.deIdentify(spr, sprDetail.getVisitId());
 			} 
-			
-			visit.updateReport(report); 
-			daoFactory.getVisitsDao().saveOrUpdate(visit);
-			
-			return new ResponseEvent<Boolean>(true);
+
+			String path = getSprDirPath() + File.separator + visit.getId();
+			PdfDocument.create(spr, path, "Surgical-Pathology-Report");
+ 			
+			visit.updateSprName(sprDetail.getSprName()); 
+			return new ResponseEvent<String>(sprDetail.getSprName());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
-		} catch (Exception ex) {
-			return ResponseEvent.serverError(ex);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
 	private VisitDetail saveOrUpdateVisit(VisitDetail input, boolean partial) {		
 		Visit existing = null;
 		
@@ -222,5 +224,24 @@ public class VisitServiceImpl implements VisitService {
 			specimen.setVisitId(visitId);
 			setVisitId(visitId, specimen.getChildren());
 		}
+	}
+	
+	private String getSprDirPath() {
+		String path = cfgSvc.getStrSetting(ConfigParams.MODULE, ConfigParams.SPR_DIR);
+		if (path == null) {
+			path = ConfigUtil.getInstance().getDataDir() + File.separator + "visit-sprs";
+		}
+		return path + File.separator; 
+	}
+
+	private DocumentDeIdentifier getSprDeIdentifier() {
+		String sprDeidentifierBean = cfgSvc.getStrSetting(ConfigParams.MODULE, ConfigParams.SPR_DEIDENTIFIER);
+		if (StringUtils.isBlank(sprDeidentifierBean)) {
+			return null;
+		}
+		
+		return (DocumentDeIdentifier) OpenSpecimenAppCtxProvider
+				.getAppCtx()
+				.getBean(sprDeidentifierBean);
 	}
 }

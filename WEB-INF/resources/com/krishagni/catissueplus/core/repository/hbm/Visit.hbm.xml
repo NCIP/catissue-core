@@ -25,7 +25,7 @@
 
     <property name="status" column="COLLECTION_STATUS" />
 		
-    <property name="report" lazy="true" column="REPORT" />
+    <property name="sprName" lazy="true" column="SPR_NAME"/>
 		
     <property name="comments" type="string" column="COMMENTS"/>
 

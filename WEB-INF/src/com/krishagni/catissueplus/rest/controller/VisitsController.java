@@ -107,12 +107,13 @@ public class VisitsController {
 	public String uploadSpr(@PathVariable("id") Long visitId, @PathVariable("file") MultipartFile file)
 	throws IOException {
 		SprDetail sprDetail = new SprDetail();
-		sprDetail.setReport(file.getInputStream());
+		sprDetail.setSpr(file.getInputStream());
+		sprDetail.setSprName(file.getOriginalFilename());
 		sprDetail.setVisitId(visitId);
 		
-		ResponseEvent<Boolean> resp = visitService.uploadSPR(getRequest(sprDetail));
+		ResponseEvent<String> resp = visitService.uploadSpr(getRequest(sprDetail));
 		resp.throwErrorIfUnsuccessful();
-		return file.getOriginalFilename();
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/collect")

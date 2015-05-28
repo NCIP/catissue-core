@@ -1918,9 +1918,9 @@
     <dropColumn columnName="DEIDENTIFIED_REPORT" tableName="CATISSUE_SPECIMEN_COLL_GROUP"/>
   </changeSet>
   
-  <changeSet author="vgaikwad" id="Added REPORT field in CATISSUE_SPECIMEN_COLL_GROUP table">
+  <changeSet author="vgaikwad" id="Added SPR_NAME column in CATISSUE_SPECIMEN_COLL_GROUP table">
     <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
-      <column name="REPORT" type="${clob.type}"/>
+      <column name="SPR_NAME" type="${text.type}(255)"/>
     </addColumn>
   </changeSet>
   

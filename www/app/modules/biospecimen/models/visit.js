@@ -79,8 +79,7 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
     };
 
     Visit.prototype.getSprUrl = function() {
-      var url = Visit.url() + this.$id() + '/spr';
-      return url;
+      return Visit.url() + this.$id() + '/spr';
     }
 
     return Visit;
