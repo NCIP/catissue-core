@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -160,6 +161,10 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			AccessCtrlMgr.getInstance().ensureReadCprRights(existing);
 			
 			String fileName = existing.getSignedConsentDocumentName();
+			if (fileName == null) {
+				return ResponseEvent.userError(CprErrorCode.CONSENT_FORM_NOT_FOUND);
+			}
+			
 			File file = new File(getConsentDirPath() + fileName);
 			if (!file.exists()) {
 				return ResponseEvent.userError(CprErrorCode.CONSENT_FORM_NOT_FOUND);
@@ -185,24 +190,21 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			
 			AccessCtrlMgr.getInstance().ensureUpdateCprRights(existing);
 			
-			String oldFileName = existing.getSignedConsentDocumentName();
-			String newFileName = detail.getFileName();
+			String newFileName = UUID.randomUUID() + "_" + detail.getFileName(); 
 			File newFile = new File(getConsentDirPath() + newFileName);
-			if (!newFileName.equals(oldFileName) && newFile.exists()) {
-				return ResponseEvent.userError(CprErrorCode.DUP_CONSENT_FORM_NAME);
-			}
 			
 			OutputStream outputStream = new FileOutputStream(newFile);
 			IOUtils.copy(detail.getInputStream(), outputStream);
 			
-			if (oldFileName != null && !oldFileName.equals(newFileName)) {
+			String oldFileName = existing.getSignedConsentDocumentName();
+			if (oldFileName != null) {
 				File oldFile = new File(getConsentDirPath() + oldFileName);
 				if (oldFile.exists()) {
 					oldFile.delete();
 				}
  			}
 			existing.setSignedConsentDocumentName(newFileName);
-			return ResponseEvent.response(newFileName);
+			return ResponseEvent.response(detail.getFileName());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -223,6 +225,10 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			AccessCtrlMgr.getInstance().ensureUpdateCprRights(cpr);
 
 			String fileName = cpr.getSignedConsentDocumentName();
+			if (fileName == null) {
+				return ResponseEvent.userError(CprErrorCode.CONSENT_FORM_NOT_FOUND);
+			}
+			
 			File file = new File(getConsentDirPath() + fileName);
 			if (!file.exists()) {
 				return ResponseEvent.userError(CprErrorCode.CONSENT_FORM_NOT_FOUND);

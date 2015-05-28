@@ -163,11 +163,12 @@ public class CollectionProtocolRegistrationsController {
 		ResponseEvent<File> resp = cprSvc.getConsentForm(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		
-		File file =resp.getPayload();
+		File file = resp.getPayload();
+		String fileName = file.getName().split("_", 2)[1];
 		String fileType = Files.probeContentType(file.toPath());
 		
 		response.setContentType(fileType);
-		response.setHeader("Content-Disposition", "attachment;filename=" + file.getName());
+		response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
 
 		InputStream in = null;
 		try {

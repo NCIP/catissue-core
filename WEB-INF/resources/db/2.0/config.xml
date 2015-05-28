@@ -292,7 +292,7 @@
     </sql>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Biospecimen settings" dbms="mysql">
+  <changeSet author="vlonushte" id="Biospecimen module and participant consent dir config setting" dbms="mysql">
     <sql>
       insert into os_modules
         (identifier, name, description)
@@ -315,7 +315,7 @@
     </sql>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Biospecimen settings" dbms="oracle">
+  <changeSet author="vlonushte" id="Biospecimen module and participant consent dir config setting" dbms="oracle">
     <sql>
       insert into os_modules
         (identifier, name, description)
