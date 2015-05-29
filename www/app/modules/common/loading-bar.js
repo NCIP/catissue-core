@@ -1,5 +1,5 @@
 angular.module('openspecimen')
-  .directive('osLoadingBar', function(cfpLoadingBar) {
+  .directive('osElementLoadingBar', function(cfpLoadingBar) {
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
