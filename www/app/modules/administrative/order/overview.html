@@ -87,7 +87,8 @@
               </div>
               <div class="col os-col-15">
                 <span>{{item.quantity}}</span>
-                <span os-specimen-qty-unit="specimen.specimenClass"></span>
+                <os-specimen-qty-unit specimen-class="specimen.specimenClass" type="specimen.type">
+                </os-specimen-qty-unit>
               </div>
               <div class="col os-col-15">
                 <span>{{'orders.item_statuses.' + item.status | translate}}</span>

@@ -123,5 +123,52 @@
     <sql>call assign_to_role('Administrator', 'Order', 'Read,Create,Update,Delete');</sql>
     <sql>commit;</sql>
   </changeSet>
-  
+
+  <changeSet author="vpawar" id="Add default specimen quantity units" dbms="mysql">
+    <sql>
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (default, 'Cell', null, 'Cells', null, 'Active');
+
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (default, 'Fluid', null, 'ml', null, 'Active');
+
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (default, 'Molecular', null, 'microgram', '&#181;g', 'Active');
+
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (default, 'Tissue', null, 'gm', null, 'Active');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add default specimen quantity units" dbms="oracle">
+    <sql>
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (os_specimen_qty_units_seq.nextval, 'Cell', null, 'Cells', null, 'Active');
+
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (os_specimen_qty_units_seq.nextval, 'Fluid', null, 'ml', null, 'Active');
+
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (os_specimen_qty_units_seq.nextval, 'Molecular', null, 'microgram', '&#181;g', 'Active');
+
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (os_specimen_qty_units_seq.nextval, 'Tissue', null, 'gm', null, 'Active');
+    </sql>
+  </changeSet>
 </databaseChangeLog>

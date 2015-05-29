@@ -51,4 +51,6 @@ public interface DaoFactory {
 	public ConfigSettingDao getConfigSettingDao();
 	
 	public SpecimenLabelPrintJobDao getSpecimenLabelPrintJobDao();
+	
+	public SpecimenQuantityUnitDao getSpecimenQuantityUnitDao();
 }

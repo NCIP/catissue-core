@@ -1912,4 +1912,44 @@
       <column name="COMMENTS" type="${text.type}(255)"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vpawar" id="Specimen quantity units" failOnError="true">
+    <createTable tableName="OS_SPECIMEN_QTY_UNITS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="SPECIMEN_CLASS" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+     
+      <column name="SPECIMEN_TYPE" type="${text.type}(128)">
+      </column>
+
+      <column name="UNIT" type="${text.type}(32)">
+        <constraints nullable="false" />
+      </column>
+
+      <column name="HTML_DISPLAY_CODE" type="${text.type}(32)">
+      </column>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)">
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Specimen quantity units table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_SPECIMEN_QTY_UNITS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Unique constraint on specimen class type of units table">
+    <addUniqueConstraint 
+      tableName="OS_SPECIMEN_QTY_UNITS"
+      columnNames="SPECIMEN_CLASS,SPECIMEN_TYPE"
+      constraintName="OS_SPEC_QTY_UNITS_UQ"/>
+  </changeSet>
 </databaseChangeLog>

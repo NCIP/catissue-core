@@ -211,6 +211,10 @@
     <property name="cfgSvc" ref="cfgSvc"/>
   </bean>
 
+  <bean id="specQtyUnitsSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenQuantityUnitServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+
   <bean id="specimenTokenRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
     <property name="tokens">
       <list>
