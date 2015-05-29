@@ -61,7 +61,7 @@ angular.module('os.common.form', [])
     };
   })
 
-  .directive('osFormSubmit', function(Alerts) {
+  .directive('osFormSubmit', function($document, Alerts) {
     function onSubmit(scope, ctrl, submitHandler) {
       var form = ctrl.getForm();
       if (form.$pending) {
@@ -87,6 +87,8 @@ angular.module('os.common.form', [])
       }
     }
 
+    var cnt = 0;
+
     return {
       restrict: 'A',
   
@@ -95,9 +97,20 @@ angular.module('os.common.form', [])
       priority: 1,
 
       link: function(scope, element, attrs, ctrl) {
-        element.bind('click', function() {
-          onSubmit(scope, ctrl, attrs.osFormSubmit);
-        });
+        if (attrs.mousedownClick == 'true') {
+          element.bind('mousedown', function() {
+            ++cnt;
+            var eventName = "mouseup.formsubmit." + cnt;
+            $document.on(eventName, function() {
+              $document.unbind(eventName);
+              onSubmit(scope, ctrl, attrs.osFormSubmit);
+            });
+          })
+        } else {
+          element.bind('click', function() {
+            onSubmit(scope, ctrl, attrs.osFormSubmit);
+          });
+        }
       }
     };
   })
