@@ -23,6 +23,13 @@ angular.module('os.biospecimen.participant.root', ['os.biospecimen.models'])
           operations: ['Update'],
           cp: $scope.cpr.cpShortTitle,
           sites: sites
+        },
+
+        deleteOpts: {
+          resource: 'ParticipantPhi',
+          operations: ['Delete'],
+          cp: $scope.cpr.cpShortTitle,
+          sites: sites
         }
       };
 
@@ -31,6 +38,13 @@ angular.module('os.biospecimen.participant.root', ['os.biospecimen.models'])
         updateOpts: {
           resource: 'VisitAndSpecimen',
           operations: ['Update'],
+          cp: $scope.cpr.cpShortTitle,
+          sites: sites
+        },
+
+        deleteOpts: {
+          resource: 'VisitAndSpecimen',
+          operations: ['Delete'],
           cp: $scope.cpr.cpShortTitle,
           sites: sites
         }

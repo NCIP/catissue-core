@@ -399,7 +399,15 @@ public class Specimen extends BaseEntity {
 	}
 
 	public boolean isActive() {
-		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.getActivityStatus());
+		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(getActivityStatus());
+	}
+	
+	public boolean isClosed() {
+		return Status.ACTIVITY_STATUS_CLOSED.getStatus().equals(getActivityStatus());
+	}
+	
+	public boolean isActiveOrClosed() {
+		return isActive() || isClosed();
 	}
 	
 	public boolean isAliquot() {
@@ -415,15 +423,23 @@ public class Specimen extends BaseEntity {
 	}
 
 	public void disable() {
+		disable(true);
+	}
+	
+	protected void disable(boolean checkChildSpecimens) {
 		if (getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
 			return;
 		}
-		
-		ensureChildSpecimensAreDisabled();		
+
+		if (checkChildSpecimens) {
+			ensureChildSpecimensAreDisabled();
+		}
+
 		virtualize();
 		setLabel(Utility.getDisabledValue(getLabel()));
 		setBarcode(Utility.getDisabledValue(getBarcode()));
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());		
+		
 	}
 	
 	public void close(User user, Date time, String reason) {

@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -14,8 +15,10 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
@@ -115,18 +118,10 @@ public class Visit {
 	}
 
 	public void setActivityStatus(String activityStatus) {
-		if (this.activityStatus != null && this.activityStatus.equals(activityStatus)) {
-			return;
-		}
-		
 		if (StringUtils.isBlank(activityStatus)) {
 			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
 		}
 		
-		if (this.activityStatus != null && Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
-			delete();
-		}		
-
 		this.activityStatus = activityStatus;
 	}
 
@@ -252,14 +247,37 @@ public class Visit {
 		return Visit.VISIT_STATUS_COMPLETED.equals(this.status);
 	}
 
-	public void delete() {
-		checkActiveDependents();
-		this.name = Utility.getDisabledValue(name);
-		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
+	public List<DependentEntityDetail> getDependentEntities() {
+		return DependentEntityDetail.singletonList(Specimen.getEntityName(), getActiveSpecimens()); 
 	}
-
+	
+	public void updateActivityStatus(String activityStatus) {
+		if (this.activityStatus != null && this.activityStatus.equals(activityStatus)) {
+			return;
+		}
+		
+		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
+			delete();
+		}
+	}
+	
+	public void delete() {
+		ensureNoActiveChildObjects();
+		
+		for (Specimen specimen : getSpecimens()) {
+			specimen.disable(false);
+		}
+		
+		setName(Utility.getDisabledValue(getName()));
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+	}
+	
 	public void update(Visit visit) {
-		setActivityStatus(visit.getActivityStatus());
+		updateActivityStatus(visit.getActivityStatus());
+		if (!isActive()) {
+			return;
+		}
+		
 		setClinicalDiagnosis(visit.getClinicalDiagnosis());
 		setClinicalStatus(visit.getClinicalStatus());
 		setCpEvent(visit.getCpEvent());
@@ -295,11 +313,22 @@ public class Visit {
 		setName(labelGenerator.generateLabel(defNameTmpl, this));
 	}
 	
-	private void checkActiveDependents() {
-		for (Specimen specimen : this.specimens) {
-			if (specimen.isActive()) {
-				throw OpenSpecimenException.userError(VisitErrorCode.REF_ENTITY_FOUND);
+	private void ensureNoActiveChildObjects() {
+		for (Specimen specimen : getSpecimens()) {
+			if (specimen.isActiveOrClosed() && specimen.isCollected()) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.REF_ENTITY_FOUND);
 			}
 		}
-	}	
+	}
+	
+	private int getActiveSpecimens() {
+		int count = 0;
+		for (Specimen specimen : getSpecimens()) {
+			if (specimen.isActiveOrClosed() && specimen.isCollected()) {
+				++count;
+			}
+		}
+		
+		return count;
+	}
 }

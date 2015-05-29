@@ -25,6 +25,18 @@ angular.module('os.biospecimen.models.cpr',
       return CollectionProtocolRegistration.query(params);
     };
 
+    CollectionProtocolRegistration.prototype.getType = function() {
+      return 'collection_protocol_registration';
+    }
+
+    CollectionProtocolRegistration.prototype.getDisplayName = function() {
+      var str = this.ppid;
+      if (!!this.participant.firstName || !!this.participant.lastName) {
+        str += " (" + this.participant.firstName + " " + this.participant.lastName + ")";
+      }
+      return str;
+    };
+
     CollectionProtocolRegistration.prototype.getMrnSites = function() {
       return !this.participant ? undefined : this.participant.getMrnSites();
     };

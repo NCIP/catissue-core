@@ -35,6 +35,12 @@
           <span translate="common.buttons.add">Add</span>
         </span>
       </button>
+ 
+      <button show-if-allowed="specimenResource.deleteOpts" class="default" 
+        ng-if="!!visit.id" ng-click="deleteVisit()">
+        <span class="fa fa-trash"></span>
+        <span translate="common.buttons.delete">Delete</span>
+      </button>
     </div>
   </div>
 

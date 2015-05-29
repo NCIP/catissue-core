@@ -24,6 +24,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCrite
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
@@ -147,6 +148,25 @@ public class CollectionProtocolRegistrationsController {
 		return resp.getPayload();
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependent-entities")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<DependentEntityDetail> getDependentEntities(@PathVariable("id") Long cprId) {
+		ResponseEvent<List<DependentEntityDetail>> resp = cprSvc.getDependentEntities(getRegQueryReq(cprId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public CollectionProtocolRegistrationDetail deleteRegistration(@PathVariable("id") Long cprId) {
+		ResponseEvent<CollectionProtocolRegistrationDetail> resp = cprSvc.deleteRegistration(getRegQueryReq(cprId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -187,6 +207,12 @@ public class CollectionProtocolRegistrationsController {
 		ResponseEvent<List<FormRecordsList>> resp = formSvc.getFormRecords(getRequest(opDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();				
+	}
+	
+	private RequestEvent<RegistrationQueryCriteria> getRegQueryReq(Long cprId) {
+		RegistrationQueryCriteria crit = new RegistrationQueryCriteria();
+		crit.setCprId(cprId);
+		return new RequestEvent<RegistrationQueryCriteria>(crit);
 	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {
