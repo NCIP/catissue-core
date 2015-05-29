@@ -1,12 +1,17 @@
 package com.krishagni.catissueplus.rest.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Writer;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,6 +45,8 @@ import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.nutility.ContainerJsonSerializer;
 import edu.common.dynamicextensions.nutility.ContainerSerializer;
+import edu.common.dynamicextensions.nutility.FormDefinitionExporter;
+import edu.common.dynamicextensions.nutility.IoUtil;
 
 
 @Controller
@@ -48,6 +55,7 @@ public class FormsController {
 	@Autowired
 	private HttpServletRequest httpServletRequest;
 
+	private static AtomicInteger formCnt = new AtomicInteger();
 	
 	@Autowired
 	private FormService formSvc;
@@ -191,6 +199,40 @@ public class FormsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/definition-zip")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public void exportForm(@PathVariable("id") Long containerId, HttpServletResponse httpResp) {
+		ResponseEvent<Container> resp = formSvc.getFormDefinition(getRequestEvent(containerId));
+		resp.throwErrorIfUnsuccessful();
+			
+		String tmpDir = getTmpDirName();
+		String zipFileName = null;
+		FileInputStream fin = null;
+		
+		try {
+			Container container = resp.getPayload();
+			FormDefinitionExporter formExporter = new FormDefinitionExporter();
+			formExporter.export(container, tmpDir);
+			
+			String fileName = container.getName() + ".zip";
+			zipFileName = zipFiles(tmpDir);
+			
+			httpResp.setContentType("application/zip");
+			httpResp.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+			
+			OutputStream out = httpResp.getOutputStream();
+			fin = new FileInputStream(zipFileName);
+			IoUtil.copy(fin, out);
+		} catch (Exception e) {
+			throw new RuntimeException("Error occurred when exporting form", e);
+		} finally {
+			IoUtil.delete(tmpDir);
+			IoUtil.delete(zipFileName);
+			IoUtil.close(fin);
+		}
+	}
 
 	private String saveOrUpdateFormData(Long formId, String formDataJson) {
 		try {
@@ -235,6 +277,21 @@ public class FormsController {
   		}
   		return new Gson().toJson(savedFormData);
   	}
+	
+	private String zipFiles(String dir) {
+		String zipFile = new StringBuilder(System.getProperty("java.io.tmpdir"))
+			.append(File.separator).append("export-form-")
+			.append(formCnt.incrementAndGet()).append(".zip")
+			.toString();
+		
+		IoUtil.zipFiles(dir, zipFile);
+		return zipFile;
+	}
+	
+	private String getTmpDirName() {
+		return new StringBuilder().append(System.getProperty("java.io.tmpdir")).append(File.separator)
+				.append(System.currentTimeMillis()).append(formCnt.incrementAndGet()).append("create").toString();
+	}
   
 	private <T> RequestEvent<T> getRequestEvent(T payload) {
 		return new RequestEvent<T>(payload);				
