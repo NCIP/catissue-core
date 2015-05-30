@@ -803,8 +803,17 @@
   
   <changeSet author="vgaikwad" id="1429178687139-86">
     <dropColumn columnName="DEIDENTIFIED_REPORT" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-87">  
     <dropColumn columnName="deidentifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
+   
+  <changeSet author="vgaikwad" id="1429178687139-88">  
     <dropColumn columnName="IDENTIFIED_REPORT" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-89">  
     <dropColumn columnName="identifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
   </changeSet>  
 

@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -105,12 +106,21 @@ public class VisitsController {
 	@ResponseBody
 	public String uploadSpr(@PathVariable("id") Long visitId, @PathVariable("file") MultipartFile file)
 	throws IOException {
-		SprDetail sprDetail = new SprDetail();
-		sprDetail.setSpr(file.getInputStream());
-		sprDetail.setSprName(file.getOriginalFilename());
-		sprDetail.setVisitId(visitId);
+		ResponseEvent<String> resp = null;
+		InputStream sprIn = null;
+		try {
+			SprDetail sprDetail = new SprDetail();
+			sprIn = file.getInputStream();
+			sprDetail.setSprIn(sprIn);
+			sprDetail.setSprName(file.getOriginalFilename());
+			sprDetail.setVisitId(visitId);
 		
-		ResponseEvent<String> resp = visitService.uploadSpr(getRequest(sprDetail));
+			resp = visitService.uploadSpr(getRequest(sprDetail));
+		} finally {
+			if (sprIn != null) {
+				sprIn.close();
+			}
+		}
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

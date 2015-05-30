@@ -27,7 +27,7 @@
     <property name="specimenSvc" ref="specimenSvc"/>
   </bean>
   
-  <bean id="sghReportsDeIdentifier" class="com.krishagni.openspecimen.custom.sgh.serviceImpl.SprDeIdentifier">
+  <bean id="sghReportsDeIdentifier" class="com.krishagni.openspecimen.custom.sgh.services.impl.SprDeIdentifier">
     <property name="daoFactory"  ref="biospecimenDaoFactory"/>
   </bean>
 

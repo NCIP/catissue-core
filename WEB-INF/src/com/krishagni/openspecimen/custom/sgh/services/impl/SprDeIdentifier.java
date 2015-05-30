@@ -1,6 +1,7 @@
-package com.krishagni.openspecimen.custom.sgh.serviceImpl;
+package com.krishagni.openspecimen.custom.sgh.services.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -19,11 +20,11 @@ public class SprDeIdentifier implements DocumentDeIdentifier {
 	}
 
 	@Override
-	public String deIdentify(String report, Long visitId) {
+	public String deIdentify(String report, Map<String, Object> contextMap) {
 		UserListCriteria criteria = new UserListCriteria();
 		String replaceString = "XXX";
 		int startAt = 0;
-		int maxResult = 1000;
+		int maxResult = 100;
 		boolean moreUsers = true;
 		
 		while (moreUsers) {
@@ -46,19 +47,34 @@ public class SprDeIdentifier implements DocumentDeIdentifier {
 			}
 		}		
 		
+		Long visitId = (Long) contextMap.get("visitId");
 		Visit visit = daoFactory.getVisitsDao().getById(visitId);
 		Participant participant = visit.getRegistration().getParticipant();
-			
+		
+		visit.getRegistration().getParticipant().getCprs();
+		StringBuilder regex = new StringBuilder();
 		if(StringUtils.isNotBlank(participant.getLastName())) {
-			report = report.replaceAll("(?i)" + participant.getLastName(), replaceString);
+			regex.append(participant.getLastName());
 		}
 		if(StringUtils.isNotBlank(participant.getFirstName())) {
-			report = report.replaceAll("(?i)" + participant.getFirstName(), replaceString);
+			addOr(regex);
+			regex.append(participant.getFirstName());
 		}
 		if(StringUtils.isNotBlank(participant.getMiddleName())) {
-			report = report.replaceAll("(?i)" + participant.getMiddleName(), replaceString);
+			addOr(regex);
+			regex.append(participant.getMiddleName());
 		}
 		
+		regex.insert(0, "(?i)(");
+		regex.append(")");
+		report = report.replaceAll(regex.toString(), replaceString);
 		return report;
 	}
+
+	private void addOr(StringBuilder cond) {
+		if (cond.length() > 0) {
+			cond.append("|");
+		}
+	}
+
 }

@@ -274,8 +274,8 @@
     "bulk_import": "Bulk Import Visits",
     "visit_extensions": "Visit Extensions",
 
-    "spr_report": "Surgical Pathology Report",
-    "report_uploaded": "{{file}} uploaded successfully.",
+    "spr": "Surgical Pathology Report",
+    "spr_uploaded": "Surgical pathology report {{file}} uploaded successfully.",
 
     "status": {
       "pending": "Pending",

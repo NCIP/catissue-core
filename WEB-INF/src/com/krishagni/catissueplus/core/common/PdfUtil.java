@@ -12,28 +12,35 @@ import org.apache.pdfbox.util.PDFTextStripper;
 
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
-public class PdfDocument {
+public class PdfUtil {
 	
-	public static String getText(InputStream spr) {
-		String report = null;
+	public static String getText(InputStream in) {
+		PDDocument pd = null;
 		try {
-			PDDocument pd = PDDocument.load(spr);
+			pd = PDDocument.load(in);
 			PDFTextStripper pdfStripper = new PDFTextStripper();
 			pdfStripper.setStartPage(1);
 			pdfStripper.setEndPage(pd.getNumberOfPages());
-			report = pdfStripper.getText(pd);
-			pd.close();
+			return pdfStripper.getText(pd);
 		} catch (Exception e) {
 			throw OpenSpecimenException.serverError(e);
+		} finally {
+			if (pd != null) {
+				try {
+					pd.close();
+				} catch (Exception e) {
+					throw OpenSpecimenException.serverError(e);
+				}
+			}
 		}
-		return report;
 	}
 	
-	public static void create(String text, String path, String fileName) {
+	public static void create(String filePath, String fileText) {
+		PDDocument document = null;
 		try {
-			PDDocument document = new PDDocument();
+			document = new PDDocument();
 			PDPage page = new PDPage();
-			document.addPage( page );
+			document.addPage(page);
 
 			PDFont font = PDType1Font.HELVETICA_BOLD;
 
@@ -41,17 +48,26 @@ public class PdfDocument {
 
 			contentStream.beginText();
 			contentStream.setFont(font, 10);
-			contentStream.drawString(text);
+			contentStream.drawString(fileText);
 			contentStream.endText();
 			contentStream.close();
 			
-			File dir = new File(path);
-			dir.mkdirs();
-			String file = path + File.separator + fileName + ".pdf";
+			File file = new File(filePath);
+			file.getParentFile().mkdirs();
 			document.save(file);
-			document.close();
+			
 		} catch (Exception e) {
-			OpenSpecimenException.serverError(e);
+			throw OpenSpecimenException.serverError(e);
+		} finally {
+			if (document != null) {
+				try {
+					document.close();
+				}
+				catch (Exception e) {
+					throw OpenSpecimenException.serverError(e);
+				}
+			}	
 		}
 	}
+
 }

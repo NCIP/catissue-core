@@ -799,7 +799,7 @@
   
   <changeSet author="vgaikwad" id="1429178687139-86">
     <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
-      <column name="SPR_NAME" type="CLOB"/>
+      <column name="SPR_NAME" type="VARCHAR2(255 CHAR)"/>
     </addColumn>
   </changeSet>
   
@@ -811,8 +811,17 @@
   
   <changeSet author="vgaikwad" id="1429178687139-88">
     <dropColumn columnName="DEIDENTIFIED_REPORT" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-89">
     <dropColumn columnName="deidentifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-90">  
     <dropColumn columnName="IDENTIFIED_REPORT" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-91">  
     <dropColumn columnName="identifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
   </changeSet>
   

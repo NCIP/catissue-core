@@ -8,7 +8,7 @@ public class SprDetail {
 
 	private String sprName;
 	
-	private InputStream spr;
+	private InputStream sprIn;
 	
 	public Long getVisitId() {
 		return visitId;
@@ -26,12 +26,12 @@ public class SprDetail {
 		this.sprName = sprName;
 	}
 
-	public InputStream getSpr() {
-		return spr;
+	public InputStream getSprIn() {
+		return sprIn;
 	}
 
-	public void setSpr(InputStream spr) {
-		this.spr = spr;
+	public void setSprIn(InputStream spr) {
+		this.sprIn = spr;
 	}
 	
 }

@@ -88,9 +88,9 @@ angular.module('os.biospecimen.visit', [
         parent: 'visit-detail.extensions'
       })
       .state('visit-detail.spr', {
-        url: '/report',
+        url: '/spr',
         templateUrl: 'modules/biospecimen/participant/visit/spr.html',
-        controller: 'SprController',
+        controller: 'VisitSprCtrl',
         parent: 'visit-detail'
       });
   });
