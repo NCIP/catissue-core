@@ -3735,7 +3735,7 @@
             from 
               catissue_specimen_hierarchy csh 
             where 
-              csh.descendent_id = :new.parent_specimen_id);
+              csh.descendent_id = :new.parent_specimen_id;
           end if;
   
           insert into catissue_specimen_hierarchy (ancestor_id, descendent_id) values (:new.identifier, :new.identifier);
