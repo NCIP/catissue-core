@@ -160,7 +160,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			AccessCtrlMgr.getInstance().ensureReadCprRights(existing);
 			
 			String fileName = existing.getSignedConsentDocumentName();
-			if (fileName == null) {
+			if (StringUtils.isBlank(fileName)) {
 				return ResponseEvent.userError(CprErrorCode.CONSENT_FORM_NOT_FOUND);
 			}
 			
@@ -180,6 +180,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@Override
 	@PlusTransactional
 	public ResponseEvent<String> uploadConsentForm(RequestEvent<ConsentFormDetail> req) {
+		OutputStream outputStream = null;
 		try {
 			ConsentFormDetail detail = req.getPayload();
 			CollectionProtocolRegistration existing = daoFactory.getCprDao().getById(detail.getCprId());
@@ -192,11 +193,11 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			String newFileName = UUID.randomUUID() + "_" + detail.getFileName(); 
 			File newFile = new File(getConsentDirPath() + newFileName);
 			
-			OutputStream outputStream = new FileOutputStream(newFile);
+			outputStream = new FileOutputStream(newFile);
 			IOUtils.copy(detail.getInputStream(), outputStream);
 			
 			String oldFileName = existing.getSignedConsentDocumentName();
-			if (oldFileName != null) {
+			if (StringUtils.isNotBlank(oldFileName)) {
 				File oldFile = new File(getConsentDirPath() + oldFileName);
 				if (oldFile.exists()) {
 					oldFile.delete();
@@ -208,6 +209,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
+		} finally {
+			IOUtils.closeQuietly(outputStream);
 		}
 	}
 
@@ -224,7 +227,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			AccessCtrlMgr.getInstance().ensureUpdateCprRights(cpr);
 
 			String fileName = cpr.getSignedConsentDocumentName();
-			if (fileName == null) {
+			if (StringUtils.isBlank(fileName)) {
 				return ResponseEvent.userError(CprErrorCode.CONSENT_FORM_NOT_FOUND);
 			}
 			
