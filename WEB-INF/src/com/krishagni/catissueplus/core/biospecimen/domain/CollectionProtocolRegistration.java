@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -17,6 +18,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErr
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
@@ -44,6 +46,8 @@ public class CollectionProtocolRegistration {
 	private Date consentSignDate;
 
 	private User consentWitness;
+	
+	private String signedConsentDocumentName;
 
 	private Set<ConsentTierResponse> consentResponses = new HashSet<ConsentTierResponse>();
 
@@ -110,18 +114,10 @@ public class CollectionProtocolRegistration {
 	}
 
 	public void setActivityStatus(String activityStatus) {
-		if (this.activityStatus != null && this.activityStatus.equals(activityStatus)) {
-			return;
-		}
-		
 		if (StringUtils.isBlank(activityStatus)) {
 			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
 		}
 		
-		if (this.activityStatus != null && Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
-			delete();
-		}		
-
 		this.activityStatus = activityStatus;
 	}
 
@@ -149,6 +145,14 @@ public class CollectionProtocolRegistration {
 		this.consentWitness = consentWitness;
 	}
 
+	public String getSignedConsentDocumentName() {
+		return signedConsentDocumentName;
+	}
+
+	public void setSignedConsentDocumentName(String signedConsentDocumentName) {
+		this.signedConsentDocumentName = signedConsentDocumentName;
+	}
+
 	public Set<ConsentTierResponse> getConsentResponses() {
 		return consentResponses;
 	}
@@ -173,17 +177,40 @@ public class CollectionProtocolRegistration {
 		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
 
+	public List<DependentEntityDetail> getDependentEntities() {
+		return DependentEntityDetail.singletonList(Visit.getEntityName(), getActiveVisits()); 
+	}
+	
+	public void updateActivityStatus(String activityStatus) {
+		if (this.activityStatus != null && this.activityStatus.equals(activityStatus)) {
+			return;
+		}
+		
+		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
+			delete();
+		}
+	}
+	
 	public void delete() {
-		checkActiveDependents();
-		this.barcode = Utility.getDisabledValue(this.barcode);
-		this.ppid = Utility.getDisabledValue(this.ppid);
-		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
+		ensureNoActiveChildObjects();
+		for (Visit visit : getVisits()) {
+			visit.delete();
+		}
+		
+		setBarcode(Utility.getDisabledValue(getBarcode()));
+		setPpid(Utility.getDisabledValue(getPpid()));
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 
 	public void update(CollectionProtocolRegistration cpr) {
+		updateActivityStatus(cpr.getActivityStatus());
+		if (!isActive()) {
+			return;
+		}
+		
 		setPpid(cpr.getPpid());
 		setRegistrationDate(cpr.getRegistrationDate());
-		setActivityStatus(cpr.getActivityStatus());
+		
 		setSignedConsentDocumentUrl(cpr.getSignedConsentDocumentUrl());
 		setConsentSignDate(cpr.getConsentSignDate());
 		setConsentWitness(cpr.getConsentWitness());
@@ -214,11 +241,22 @@ public class CollectionProtocolRegistration {
 		}
 	}
 
-	private void checkActiveDependents() {
-		for (Visit visit : this.getVisits()) {
-			if (visit.isActive()) {
+	private void ensureNoActiveChildObjects() {
+		for (Visit visit : getVisits()) {
+			if (visit.isActive() && visit.isCompleted()) {
 				throw OpenSpecimenException.userError(ParticipantErrorCode.REF_ENTITY_FOUND);
-			}
+			}			
 		}
 	}	
+	
+	private int getActiveVisits() {
+		int count = 0;
+		for (Visit visit : getVisits()) {
+			if (visit.isActive() && visit.isCompleted()) {
+				++count;
+			}
+		}
+		
+		return count;
+	}
 }

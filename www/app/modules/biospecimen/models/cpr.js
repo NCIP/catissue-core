@@ -4,7 +4,7 @@ angular.module('os.biospecimen.models.cpr',
     'os.biospecimen.models.participant',
     'os.biospecimen.models.form'
   ])
-  .factory('CollectionProtocolRegistration', function($filter, osModel, Participant, Form, Util) {
+  .factory('CollectionProtocolRegistration', function($filter, $http, osModel, Participant, Form, Util) {
     var CollectionProtocolRegistration = 
       osModel(
         'collection-protocol-registrations',
@@ -23,6 +23,18 @@ angular.module('os.biospecimen.models.cpr',
         params.dob = $filter('date')(params.dob, 'yyyy-MM-dd');
       }
       return CollectionProtocolRegistration.query(params);
+    };
+
+    CollectionProtocolRegistration.prototype.getType = function() {
+      return 'collection_protocol_registration';
+    }
+
+    CollectionProtocolRegistration.prototype.getDisplayName = function() {
+      var str = this.ppid;
+      if (!!this.participant.firstName || !!this.participant.lastName) {
+        str += " (" + this.participant.firstName + " " + this.participant.lastName + ")";
+      }
+      return str;
     };
 
     CollectionProtocolRegistration.prototype.getMrnSites = function() {
@@ -47,6 +59,14 @@ angular.module('os.biospecimen.models.cpr',
       this.participant = this.participant.$saveProps();
       return this;
     };
+
+    CollectionProtocolRegistration.prototype.getSignedConsentFormUrl = function() {
+      return CollectionProtocolRegistration.url() + this.$id() + "/consent-form";
+    }
+
+    CollectionProtocolRegistration.prototype.deleteSignedConsentForm = function() {
+      return $http.delete(this.getSignedConsentFormUrl()).then(function(result){ return result.data; });
+    }
 
     return CollectionProtocolRegistration;
   });

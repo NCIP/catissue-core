@@ -4,7 +4,8 @@ angular.module('os.biospecimen.visit', [
     'os.biospecimen.participant.specimen-tree',
     'os.biospecimen.extensions',
     'os.biospecimen.visit.addedit',
-    'os.biospecimen.visit.spr'
+    'os.biospecimen.visit.spr',
+    'os.biospecimen.visit.detail'
   ])
   .config(function($stateProvider) {
     $stateProvider
@@ -45,13 +46,7 @@ angular.module('os.biospecimen.visit', [
             return Specimen.listFor(cpr.id, criteria);
           }
         },
-        controller: function($scope, cpr, visit, specimens, Specimen) {
-          $scope.cpr = cpr;
-          $scope.visit = visit;
-          $scope.specimens = specimens;
-
-          // 'VisitDetailCtrl'
-        },
+        controller: 'VisitDetailCtrl',
         parent: 'visit-root'
       })
       .state('visit-detail.overview', {

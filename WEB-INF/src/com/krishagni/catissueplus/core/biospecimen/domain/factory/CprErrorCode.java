@@ -23,7 +23,11 @@ public enum CprErrorCode implements ErrorCode {
 	
 	CONSENT_WITNESS_NOT_FOUND,
 	
-	PARTICIPANT_DETAIL_REQUIRED;
+	PARTICIPANT_DETAIL_REQUIRED,
+	
+	CONSENT_FORM_NOT_FOUND,
+	
+	DUP_CONSENT_FORM_NAME;
 	
 	@Override
 	public String code() {

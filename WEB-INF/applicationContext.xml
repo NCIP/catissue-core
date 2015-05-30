@@ -180,6 +180,7 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="cprFactory" ref="cprFactory"/>
     <property name="participantService" ref="participantSvc"/>
+    <property name="cfgSvc" ref="cfgSvc"/>
   </bean>
 
   <bean id="userFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.UserFactoryImpl">
@@ -210,6 +211,10 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="specimenFactory" ref="specimenFactory"/>
     <property name="cfgSvc" ref="cfgSvc"/>
+  </bean>
+
+  <bean id="specQtyUnitsSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenQuantityUnitServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 
   <bean id="specimenTokenRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">

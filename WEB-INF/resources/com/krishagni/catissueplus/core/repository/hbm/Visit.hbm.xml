@@ -80,7 +80,9 @@
         inner join catissue_coll_prot_event cpe 
           on cpe.collection_protocol_id = cpr.collection_protocol_id
         left join catissue_specimen_coll_group scg 
-          on scg.collection_protocol_event_id = cpe.identifier and scg.collection_protocol_reg_id = cpr.identifier
+          on scg.collection_protocol_event_id = cpe.identifier and 
+             scg.collection_protocol_reg_id = cpr.identifier and
+             scg.activity_status != 'Disabled'
       where
         cpr.identifier = :cprId and
         cpr.activity_status != 'Disabled'
@@ -105,10 +107,13 @@
         inner join catissue_cp_req_specimen sp_rq 
           on sp_rq.collection_protocol_event_id = cpe.identifier
         left join catissue_specimen_coll_group scg 
-          on scg.collection_protocol_event_id = cpe.identifier and scg.collection_protocol_reg_id = :cprId
+          on scg.collection_protocol_event_id = cpe.identifier and 
+             scg.collection_protocol_reg_id = :cprId and
+             scg.activity_status != 'Disabled'
         left join catissue_specimen s 
-          on s.specimen_collection_group_id = scg.identifier and s.req_specimen_id = sp_rq.identifier
-             and s.activity_status != 'Disabled'
+          on s.specimen_collection_group_id = scg.identifier and 
+             s.req_specimen_id = sp_rq.identifier and 
+             s.activity_status != 'Disabled'
       where
         cpe.identifier in (:eventIds)
       group by
@@ -131,6 +136,7 @@
         cpe.identifier in (:eventIds) and 
         scg.collection_protocol_reg_id = :cprId and 
         s.req_specimen_id is null and
+        scg.activity_status != 'Disabled' and
         s.activity_status != 'Disabled'
       group by 
         scg.identifier, cpe.identifier

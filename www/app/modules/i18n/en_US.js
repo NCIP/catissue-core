@@ -59,6 +59,7 @@
       "import": "Import",
       "cancel": "Cancel",
       "discard": "Discard",
+      "upload": "Upload",
       "more": "More",
       "next": "Next",
       "previous": "Previous",
@@ -207,6 +208,10 @@
     "spmn_label_or_barcode": "Specimen Label / Barcode",
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
+  
+    "signed_consent_form": "Signed Consent Form",
+    "deleting_consent_form": "Deleting Signed Consent Form",
+    "confirm_delete_consent_form": "Are you sure you want to delete {{consentDocumentName}}?",
 
     "similar_participants": "Following participants found that are similar to new participant being registered",
     "matched_attrs": "Matched Attributes",

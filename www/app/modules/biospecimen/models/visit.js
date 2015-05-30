@@ -69,6 +69,14 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
       return $http.post(Visit.url() + 'collect', visitAndSpecimens).then(ApiUtil.processResp);
     };
 
+    Visit.prototype.getType = function() {
+      return 'visit';
+    }
+
+    Visit.prototype.getDisplayName = function() {
+      return this.name;
+    };
+
     Visit.prototype.getForms = function() {
       return Form.listFor(Visit.url(), this.$id());
     };

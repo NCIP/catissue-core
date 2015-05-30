@@ -25,6 +25,7 @@ import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -60,13 +61,8 @@ public class VisitServiceImpl implements VisitService {
 	@PlusTransactional
 	public ResponseEvent<VisitDetail> getVisit(RequestEvent<EntityQueryCriteria> req) {
 		try {
-			EntityQueryCriteria crit = req.getPayload();
-			
+			EntityQueryCriteria crit = req.getPayload();			
 			Visit visit = getVisit(crit.getId(), crit.getName());
-			if (visit == null) {
-				return ResponseEvent.userError(VisitErrorCode.NOT_FOUND);
-			}
-			
 			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
 			return ResponseEvent.response(VisitDetail.from(visit));			
 		} catch (Exception e) {
@@ -100,6 +96,37 @@ public class VisitServiceImpl implements VisitService {
 		}
 	}
 
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<EntityQueryCriteria> req) {
+		try {
+			EntityQueryCriteria crit = req.getPayload();
+			Visit visit = getVisit(crit.getId(), crit.getName());
+			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
+			return ResponseEvent.response(visit.getDependentEntities());
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<VisitDetail> deleteVisit(RequestEvent<EntityQueryCriteria> req) {
+		try {
+			EntityQueryCriteria crit = req.getPayload();
+			Visit visit = getVisit(crit.getId(), crit.getName());
+			AccessCtrlMgr.getInstance().ensureDeleteVisitRights(visit);
+			visit.delete();
+			return ResponseEvent.response(VisitDetail.from(visit));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<VisitSpecimenDetail> collectVisitAndSpecimens(RequestEvent<VisitSpecimenDetail> req) {		
@@ -160,10 +187,6 @@ public class VisitServiceImpl implements VisitService {
 		
 		if (input.getId() != null || StringUtils.isNotEmpty(input.getName())) {
 			existing = getVisit(input.getId(), input.getName());
-			if (existing == null) {
-				throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND);
-			}
-			
 			AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(existing);
 		}
 		
@@ -205,6 +228,10 @@ public class VisitServiceImpl implements VisitService {
 		} else if (StringUtils.isNotBlank(visitName)) {
 			visit = daoFactory.getVisitsDao().getByName(visitName);
 		}		
+		
+		if (visit == null) {
+			throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND);
+		}
 		
 		return visit;
 	}

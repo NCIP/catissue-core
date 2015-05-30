@@ -2,7 +2,8 @@
 angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
   .controller('ParticipantDetailCtrl', function(
     $scope, $q, cpr, visits, 
-    CollectionProtocol, SpecimenLabelPrinter, PvManager, RegisterToNewCpsHolder) {
+    CollectionProtocol, SpecimenLabelPrinter, PvManager, 
+    RegisterToNewCpsHolder, DeleteUtil) {
 
     function loadPvs() {
       $scope.genders = PvManager.getPvs('gender');
@@ -43,6 +44,10 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
 
     $scope.printSpecimenLabels = function(visitDetail) {
       SpecimenLabelPrinter.printLabels(visitDetail);
+    }
+
+    $scope.deleteReg = function() {
+      DeleteUtil.delete($scope.cpr, {onDeleteState: 'participant-list'});
     }
 
     /**

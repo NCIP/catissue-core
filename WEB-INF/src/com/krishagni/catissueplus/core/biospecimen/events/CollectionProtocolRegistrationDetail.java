@@ -156,6 +156,12 @@ public class CollectionProtocolRegistrationDetail {
 		ConsentDetail consent = new ConsentDetail();
 		consent.setConsentDocumentUrl(cpr.getSignedConsentDocumentUrl());
 		consent.setConsentSignatureDate(cpr.getConsentSignDate());
+		
+		String fileName = cpr.getSignedConsentDocumentName();
+		if (fileName != null) {
+			fileName = fileName.split("_", 2)[1];
+		}
+		consent.setConsentDocumentName(fileName);
 		if (cpr.getConsentWitness() != null) {
 			consent.setWitnessName(cpr.getConsentWitness().getEmailAddress());
 		}

@@ -13,6 +13,7 @@ angular.module('os.biospecimen.participant',
     'os.biospecimen.participant.addvisit',
     'os.biospecimen.participant.collect-specimens',
     'os.biospecimen.participant.specimen-position',
+    'os.biospecimen.participant.consents',
     'os.biospecimen.visit',
     'os.biospecimen.specimen',
     'os.biospecimen.extensions.list',
@@ -98,8 +99,7 @@ angular.module('os.biospecimen.participant',
       .state('participant-detail.consents', {
         url: '/consents',
         templateUrl: 'modules/biospecimen/participant/consents.html',
-        controller: function() {
-        },
+        controller: 'ParticipantConsentsCtrl',
         parent: 'participant-detail'
       })
       .state('participant-detail.visits', {

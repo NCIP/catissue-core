@@ -25,6 +25,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -74,9 +75,7 @@ public class VisitsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public VisitDetail getVisit(@PathVariable("id") Long visitId) {
-		EntityQueryCriteria crit = new EntityQueryCriteria(visitId);
-		
-		ResponseEvent<VisitDetail> resp = visitService.getVisit(getRequest(crit));
+		ResponseEvent<VisitDetail> resp = visitService.getVisit(getVisitQueryReq(visitId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -126,6 +125,26 @@ public class VisitsController {
 		return resp.getPayload();
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependent-entities")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<DependentEntityDetail> getDependentEntities(@PathVariable("id") Long visitId) {
+		ResponseEvent<List<DependentEntityDetail>> resp = visitService.getDependentEntities(getVisitQueryReq(visitId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public VisitDetail deleteVisit(@PathVariable("id") Long visitId) {
+		ResponseEvent<VisitDetail> resp = visitService.deleteVisit(getVisitQueryReq(visitId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -169,6 +188,10 @@ public class VisitsController {
 		ResponseEvent<List<FormRecordsList>> resp = formSvc.getFormRecords(getRequest(opDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();				
+	}
+	
+	private RequestEvent<EntityQueryCriteria> getVisitQueryReq(Long visitId) {
+		return getRequest(new EntityQueryCriteria(visitId));		
 	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {

@@ -51,7 +51,8 @@
     <li class="item">
       <strong class="key key-sm" translate="srs.initial_qty">Initial Quantity</strong>
       <div class="value value-md">
-        <span>{{childReq.initialQty}} <span os-specimen-qty-unit="childReq.specimenClass"></span></span>
+        <span>{{childReq.initialQty}}</span>
+        <os-specimen-qty-unit specimen-class="childReq.specimenClass" type="childReq.type"></os-specimen-qty-unit>
       </div>
     </li>
     <li class="item" ng-if="childReq.specimenClass == 'Molecular'">

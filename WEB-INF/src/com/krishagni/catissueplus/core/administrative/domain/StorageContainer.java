@@ -555,9 +555,8 @@ public class StorageContainer extends BaseEntity {
 	}
 
 	public List<DependentEntityDetail> getDependentEntities() {
-		int specimenCnt = getSpecimenCount();
-		return DependentEntityDetail
-			.singletonList(Specimen.getEntityName(), specimenCnt);
+		return DependentEntityDetail.singletonList(
+				Specimen.getEntityName(), getSpecimenCount());
 	}
 	
 	public void delete() {

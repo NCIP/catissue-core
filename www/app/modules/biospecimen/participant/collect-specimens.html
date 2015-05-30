@@ -79,8 +79,9 @@
                 <input type="text" os-md-input edit-when="specimen.existingStatus != 'Collected'"
                   name="qty" ng-model="specimen.initialQty" ng-required="specimen.status == 'Collected'"
                   ng-model-options="{allowInvalid: 'true'}">
-                <div class="os-input-addon-right os-md-input-addon" 
-                  os-specimen-qty-unit="specimen.specimenClass">
+                <div class="os-input-addon-right os-md-input-addon">
+                  <os-specimen-qty-unit specimen-class="specimen.specimenClass" type="specimen.type">
+                  </os-specimen-qty-unit>
                 </div>
               </div>
               <div os-field-error field="sform.qty"></div>
@@ -105,8 +106,7 @@
       </table>
       <div class="row">
         <div class="col-xs-10">
-          <button type="submit" class="btn btn-primary" os-form-submit="saveSpecimens()" 
-            ng-disabled="!!collectionForm.$pending || collectionForm.$invalid">
+          <button type="submit" class="btn btn-primary" os-form-submit="saveSpecimens()" mousedown-click="true"> 
             <span translate="common.buttons.submit"> Submit </span>
           </button>
         </div>

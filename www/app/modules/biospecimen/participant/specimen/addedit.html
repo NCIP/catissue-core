@@ -71,10 +71,8 @@
             <input type="text" name="qty" ng-model="currSpecimen.initialQty" class="form-control" 
                 required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/" placeholder="Initial Quantity">
             <div class="input-group-addon" ng-switch on="currSpecimen.specimenClass">
-              <span ng-switch-when="Cell">cells</span>
-              <span ng-switch-when="Fluid">ml</span>
-              <span ng-switch-when="Molecular">&#181;g</span>
-              <span ng-switch-when="Tissue">gm</span>
+              <os-specimen-qty-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type">
+              </os-specimen-qty-unit>
             </div>
           </div>
           <div os-field-error field="sform.qty"></div>
@@ -88,10 +86,8 @@
             <input type="text" name="aqty" ng-model="currSpecimen.availableQty" class="form-control" 
                 required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/" placeholder="Available Quantity">
             <div class="input-group-addon" ng-switch on="currSpecimen.specimenClass">
-              <span ng-switch-when="Cell">cells</span>
-              <span ng-switch-when="Fluid">ml</span>
-              <span ng-switch-when="Molecular">&#181;g</span>
-              <span ng-switch-when="Tissue">gm</span>
+              <os-specimen-qty-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type">
+              </os-specimen-qty-unit>
             </div>
           </div>
           <div os-field-error field="sform.aqty"></div>

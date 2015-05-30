@@ -777,22 +777,35 @@
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_REVISION_ENTITIES"  constraintName="FK_t69kea3hasj6uc6ddn5ck5r9y" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
   
-  <changeSet author="vgaikwad" id="1429178687139-82">
+  <changeSet author="vlonushte" id="1429178687139-82">
+    <addColumn tableName="CATISSUE_COLL_PROT_REG_AUD">
+      <column name="CONSENT_DOCUMENT_NAME" type="VARCHAR(255)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="1429178687139-83">
+    <addColumn tableName="CATISSUE_COLL_PROT_REG_AUD">
+      <column name="signedConsentDocumentName_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-84">
     <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
       <column name="SPR_NAME" type="VARCHAR(255)"/>
     </addColumn>
   </changeSet>
   
-  <changeSet author="vgaikwad" id="1429178687139-83">
+  <changeSet author="vgaikwad" id="1429178687139-85">
     <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
       <column name="sprName_MOD" type="BIT"/>
     </addColumn>
   </changeSet>  
   
-  <changeSet author="vgaikwad" id="1429178687139-84">
+  <changeSet author="vgaikwad" id="1429178687139-86">
     <dropColumn columnName="DEIDENTIFIED_REPORT" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
     <dropColumn columnName="deidentifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
     <dropColumn columnName="IDENTIFIED_REPORT" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
     <dropColumn columnName="identifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
-  </changeSet>
+  </changeSet>  
+
 </databaseChangeLog>
