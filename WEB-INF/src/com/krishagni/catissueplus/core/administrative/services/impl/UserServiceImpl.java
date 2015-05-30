@@ -47,9 +47,9 @@ public class UserServiceImpl implements UserService {
 	
 	private static final String SIGNED_UP_EMAIL_TMPL = "users_signed_up";
 	
-	private static final String REQUEST_APPROVED_EMAIL_TMPL = "users_request_approved";
-	
 	private static final String NEW_USER_REQUEST_EMAIL_TMPL = "users_new_user_request";
+	
+	private static final String USER_REQUEST_REJECTED_TMPL = "users_request_rejected";
 	
 	private static final String USER_CREATED_EMAIL_TMPL = "users_created";
 	
@@ -190,7 +190,7 @@ public class UserServiceImpl implements UserService {
 			
 			if (sendRequestApprovedMail) {
 				ForgotPasswordToken token = generateForgotPwdToken(user);
-				sendUserRequestApprovedEmail(user, token);
+				sendUserCreatedEmail(user, token);
 			}
 			
 			return ResponseEvent.response(UserDetail.from(user));
@@ -225,9 +225,18 @@ public class UserServiceImpl implements UserService {
 			if (existing == null) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
-			
-			AccessCtrlMgr.getInstance().ensureDeleteUserRights(existing);			
+
+			AccessCtrlMgr.getInstance().ensureDeleteUserRights(existing);
+
+			User user = new User();
+			user.update(existing);
 			existing.delete(deleteEntityOp.isClose());
+
+			boolean sendRequestRejectedMail = user.getActivityStatus().equals(Status.ACTIVITY_STATUS_PENDING.getStatus());
+			if (sendRequestRejectedMail) {
+				sendUserRequestRejectedEmail(user);
+			}
+
 			return ResponseEvent.response(UserDetail.from(existing)); 
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -414,13 +423,11 @@ public class UserServiceImpl implements UserService {
 		emailService.sendEmail(NEW_USER_REQUEST_EMAIL_TMPL, to, props);
 	}
 	
-	private void sendUserRequestApprovedEmail(User user, ForgotPasswordToken token) {
+	private void sendUserRequestRejectedEmail(User user) {
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("user", user);
-		props.put("token", token);
 		
-		String[] to = new String[]{user.getEmailAddress()};
-		emailService.sendEmail(REQUEST_APPROVED_EMAIL_TMPL, to, props);
+		emailService.sendEmail(USER_REQUEST_REJECTED_TMPL, new String[]{user.getEmailAddress()}, props);
 	}
 	
 	private void ensureUniqueEmail(User existingUser, User newUser, OpenSpecimenException ose) {
