@@ -1,11 +1,18 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -17,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentFormDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
@@ -39,7 +48,6 @@ import com.krishagni.catissueplus.core.de.services.FormService;
 @Controller
 @RequestMapping("/collection-protocol-registrations")
 public class CollectionProtocolRegistrationsController {
-
 	@Autowired
 	private CollectionProtocolRegistrationService cprSvc;
 
@@ -48,7 +56,7 @@ public class CollectionProtocolRegistrationsController {
 
 	@Autowired
 	private FormService formSvc;
-
+	
 	@Autowired
 	private HttpServletRequest httpReq;
 	
@@ -109,8 +117,6 @@ public class CollectionProtocolRegistrationsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-	
-	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{cprId}")
 	@ResponseStatus(HttpStatus.OK)
@@ -165,8 +171,64 @@ public class CollectionProtocolRegistrationsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-	
-	
+
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/consent-form")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public void downloadConsentForm(@PathVariable("id") Long cprId, HttpServletResponse response) throws IOException {
+		RegistrationQueryCriteria crit = new RegistrationQueryCriteria();
+		crit.setCprId(cprId);
+		
+		ResponseEvent<File> resp = cprSvc.getConsentForm(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		
+		File file = resp.getPayload();
+		String fileName = file.getName().split("_", 2)[1];
+		String fileType = Files.probeContentType(file.toPath());
+		
+		response.setContentType(fileType);
+		response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+
+		InputStream in = null;
+		try {
+			in = new FileInputStream(file);
+			IOUtils.copy(in, response.getOutputStream());
+		} catch (IOException e) {
+			throw new RuntimeException("Error sending file", e);
+		} finally {
+			IOUtils.closeQuietly(in);
+		}	
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value="/{id}/consent-form")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public String uploadConsentForm(@PathVariable("id") Long cprId, @PathVariable("file") MultipartFile file) 
+	throws IOException {
+		ConsentFormDetail detail = new ConsentFormDetail();
+		detail.setCprId(cprId);
+		detail.setFileName(file.getOriginalFilename());
+		detail.setInputStream(file.getInputStream());
+		
+		ResponseEvent<String> resp = cprSvc.uploadConsentForm(getRequest(detail));
+		resp.throwErrorIfUnsuccessful();
+
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}/consent-form")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public boolean deleteConsentForm(@PathVariable("id") Long cprId) {
+		RegistrationQueryCriteria crit = new RegistrationQueryCriteria();
+		crit.setCprId(cprId);
+		
+		ResponseEvent<Boolean> resp = cprSvc.deleteConsentForm(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+
+		return resp.getPayload();
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -174,7 +236,7 @@ public class CollectionProtocolRegistrationsController {
 		ListEntityFormsOp opDetail = new ListEntityFormsOp();
 		opDetail.setEntityId(cprId);
 		opDetail.setEntityType(EntityType.COLLECTION_PROTOCOL_REGISTRATION);
-		
+
 		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(getRequest(opDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
@@ -217,5 +279,5 @@ public class CollectionProtocolRegistrationsController {
 	
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(payload);
-	}	
+	}
 }

@@ -1,9 +1,11 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services;
 
+import java.io.File;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentFormDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationsList;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
@@ -33,6 +35,10 @@ public interface CollectionProtocolRegistrationService {
 	// TODO: Requires review
 	// 
 	ResponseEvent<CollectionProtocolRegistrationDetail> updateRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req);
-
 	
+	ResponseEvent<File> getConsentForm(RequestEvent<RegistrationQueryCriteria> req);
+	
+	ResponseEvent<String> uploadConsentForm(RequestEvent<ConsentFormDetail> req);
+
+	ResponseEvent<Boolean> deleteConsentForm(RequestEvent<RegistrationQueryCriteria> req);
 }

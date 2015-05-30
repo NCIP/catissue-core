@@ -17,6 +17,8 @@
     <property name="consentSignDate" column="CONSENT_SIGN_DATE" />
 
     <property name="signedConsentDocumentUrl" column="CONSENT_DOC_URL" />
+    
+    <property name="signedConsentDocumentName" column="CONSENT_DOCUMENT_NAME"/>
 
     <property name="ppid" column="PROTOCOL_PARTICIPANT_ID" />
 

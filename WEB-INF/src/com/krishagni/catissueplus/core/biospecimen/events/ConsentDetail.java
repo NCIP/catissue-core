@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 public class ConsentDetail {
-
+	
 	private String consentDocumentUrl;
 
 	private Date consentSignatureDate;
@@ -14,6 +14,8 @@ public class ConsentDetail {
 	private String witnessName;
 
 	private List<ConsentTierResponseDetail> consentTierResponses = new ArrayList<ConsentTierResponseDetail>();
+	
+	private String consentDocumentName;
 
 	public String getConsentDocumentUrl() {
 		return consentDocumentUrl;
@@ -47,4 +49,12 @@ public class ConsentDetail {
 		this.consentTierResponses = consenTierStatements;
 	}
 
+	public String getConsentDocumentName() {
+		return consentDocumentName;
+	}
+
+	public void setConsentDocumentName(String consentDocumentName) {
+		this.consentDocumentName = consentDocumentName;
+	}
+	
 }
