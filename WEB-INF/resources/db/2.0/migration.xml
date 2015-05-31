@@ -391,6 +391,10 @@
     </sql>
   </changeSet>
 
+  <changeSet author="vpawar" id="Drop specimen biohazard view">
+    <dropView viewName="specimen_biohazard_view"/>
+  </changeSet>
+
   <changeSet author="vpawar" id="Drop specimen biohazard relation table">
     <dropTable tableName="catissue_specimen_biohz_rel"/>
   </changeSet>
