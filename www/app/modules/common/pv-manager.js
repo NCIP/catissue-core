@@ -90,7 +90,8 @@ angular.module('openspecimen')
       'race'                : 'Race_PID',
       'anatomic-site'       : 'Tissue_Site_PID',
       'site-type'           : 'Site_Type_PID',
-      'clinical-diagnosis'  : 'Clinical_Diagnosis_PID'
+      'clinical-diagnosis'  : 'Clinical_Diagnosis_PID',
+      'specimen-biohazard'  : 'specimen_biohazard'
     };
 
     function valueOf(input) {

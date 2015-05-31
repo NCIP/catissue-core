@@ -4,7 +4,10 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
@@ -86,6 +89,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setSpecimenClass(detail, existing, specimen, ose);
 		setSpecimenType(detail, existing, specimen, ose);
 		setCreatedOn(detail, existing, specimen, ose);
+		setBiohazards(detail, existing, specimen, ose);
 				
 		if (sr != null && 
 				(!sr.getSpecimenClass().equals(specimen.getSpecimenClass()) ||
@@ -529,6 +533,38 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			setCreatedOn(detail, specimen, ose); 
 		} else {
 			specimen.setCreatedOn(existing.getCreatedOn());
+		}
+	}
+	
+	private void setBiohazards(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
+		Specimen parentSpecimen = specimen.getParentSpecimen();
+		
+		if (specimen.isAliquot()) {
+			if (parentSpecimen != null) {
+				specimen.setBiohazards(new HashSet<String>(parentSpecimen.getBiohazards()));
+			}
+			
+			return;
+		}
+		
+		Set<String> biohazards = detail.getBiohazards();
+		if (CollectionUtils.isEmpty(biohazards)) {
+			return;
+		}
+		
+		if (!isValidPv(biohazards.toArray(new String[0]), "biohazard")) {
+			ose.addError(SpecimenErrorCode.INVALID_BIOHAZARDS);
+			return;
+		}
+		
+		specimen.setBiohazards(detail.getBiohazards());
+	}
+	
+	private void setBiohazards(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {
+		if (existing == null || detail.isAttrModified("biohazards")) {
+			setBiohazards(detail, specimen, ose);
+		} else {
+			specimen.setBiohazards(existing.getBiohazards());
 		}
 	}
 	

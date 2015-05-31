@@ -80,7 +80,9 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	PRINT_ERROR,
 	
-	NOT_AVAILABLE_FOR_DIST;
+	NOT_AVAILABLE_FOR_DIST,
+	
+	INVALID_BIOHAZARDS;
 
 	public String code() {
 		return "SPECIMEN_" + this.name();

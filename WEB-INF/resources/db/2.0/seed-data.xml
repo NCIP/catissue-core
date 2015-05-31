@@ -5,6 +5,9 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
         
+  <property name="now" value="now()"   dbms="mysql" />
+  <property name="now" value="sysdate" dbms="oracle" />
+
   <changeSet author="vgaikwad" id="Add operations" dbms="mysql">
     <sql>
       insert into RBAC_OPERATIONS(NAME) values ('Create');
@@ -169,6 +172,15 @@
         (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
       values
         (os_specimen_qty_units_seq.nextval, 'Tissue', null, 'gm', null, 'Active');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Specimen biohazard PV category">
+    <sql> 
+      insert into catissue_cde
+        (public_id, long_name, definition, version, last_updated)
+      values
+        ('specimen_biohazard', 'Specimen Biohazard', 'Specimen Biohazard', '2.0', ${now})
     </sql>
   </changeSet>
 </databaseChangeLog>

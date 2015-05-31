@@ -796,4 +796,33 @@
       <column name="SIGNEDCONSENTDOCUMENTNAME_MOD" type="NUMBER(1, 0)"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vpawar" id="Column to indicate whether specimen biohazards got modified">
+    <addColumn tableName="CATISSUE_SPECIMEN_AUD">
+      <column name="biohazards_MOD" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Specimen biohazards audit table">
+    <createTable tableName="OS_SPECIMEN_BIOHAZARDS_AUD">
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SPECIMEN_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="BIOHAZARD" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="PK of specimen biohazards table">
+    <addPrimaryKey columnNames="REV, SPECIMEN_ID, BIOHAZARD" tableName="OS_SPECIMEN_BIOHAZARDS_AUD"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on specimen biohazards revision number">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_SPECIMEN_BIOHAZARDS_AUD"  constraintName="FK_SPEC_BIOHAZARD_AUD_REV" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
 </databaseChangeLog>

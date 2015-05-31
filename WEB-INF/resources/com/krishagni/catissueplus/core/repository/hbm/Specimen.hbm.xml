@@ -40,6 +40,11 @@
     <property name="tissueSide" type="string" column="TISSUE_SIDE" />
 		
     <property name="tissueSite" type="string" column="TISSUE_SITE" />
+  
+    <set name="biohazards" table="OS_SPECIMEN_BIOHAZARDS" cascade="all-delete-orphan">
+      <key column="SPECIMEN_ID" />
+      <element column="BIOHAZARD" type="string" />
+    </set>
 
     <one-to-one
       name="position"

@@ -73,6 +73,8 @@ public class Specimen extends BaseEntity {
 	private Double availableQuantity;
 
 	private String collectionStatus;
+	
+	private Set<String> biohazards = new HashSet<String>();
 
 	private Visit visit;
 
@@ -290,6 +292,25 @@ public class Specimen extends BaseEntity {
 		this.collectionStatus = collectionStatus;		
 	}
 
+	public Set<String> getBiohazards() {
+		return biohazards;
+	}
+
+	public void setBiohazards(Set<String> biohazards) {
+		this.biohazards = biohazards;
+	}
+	
+	public void updateBiohazards(Set<String> biohazards) {
+		getBiohazards().addAll(biohazards);
+		getBiohazards().retainAll(biohazards);
+		
+		for (Specimen child : getChildCollection()) {
+			if (child.isAliquot()) {
+				child.updateBiohazards(biohazards);
+			}
+		}
+	}
+
 	public Visit getVisit() {
 		return visit;
 	}
@@ -470,8 +491,7 @@ public class Specimen extends BaseEntity {
 		return getVisit().getRegistration();
 	}
 
-	public void update(Specimen specimen) {
-		
+	public void update(Specimen specimen) {		
 		String previousStatus = getCollectionStatus();
 		Double previousQty = getInitialQuantity();
 		
@@ -487,12 +507,15 @@ public class Specimen extends BaseEntity {
 		updateEvent(getReceivedEvent(), specimen.getReceivedEvent());
 		setCollectionStatus(specimen.getCollectionStatus());
 
+		// TODO: Specimen class/type should not be allowed to change 
 		if (isAliquot()) {
 			setSpecimenClass(parentSpecimen.getSpecimenClass());
 			setSpecimenType(parentSpecimen.getSpecimenType());
+			updateBiohazards(parentSpecimen.getBiohazards());
 		} else {
 			setSpecimenClass(specimen.getSpecimenClass());
 			setSpecimenType(specimen.getSpecimenType());
+			updateBiohazards(specimen.getBiohazards());
 		}
 		
 		if (parentSpecimen == null) {

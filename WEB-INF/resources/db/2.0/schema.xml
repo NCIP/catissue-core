@@ -1952,4 +1952,24 @@
       columnNames="SPECIMEN_CLASS,SPECIMEN_TYPE"
       constraintName="OS_SPEC_QTY_UNITS_UQ"/>
   </changeSet>
+
+  <changeSet author="vpawar" id="Specimen biohazards table">
+    <createTable tableName="OS_SPECIMEN_BIOHAZARDS">
+      <column name="SPECIMEN_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="BIOHAZARD" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK to specimen in biohazards table">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_BIOHZ_SPECIMEN_ID"
+      baseTableName="OS_SPECIMEN_BIOHAZARDS"
+      baseColumnNames="SPECIMEN_ID"
+      referencedTableName="CATISSUE_SPECIMEN"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
 </databaseChangeLog>

@@ -17,6 +17,7 @@ angular.module('os.biospecimen.specimen.addedit', [])
       $scope.anatomicSites = PvManager.getPvs('anatomic-site');
       $scope.lateralities = PvManager.getPvs('laterality');
       $scope.pathologyStatuses = PvManager.getPvs('pathology-status');
+      $scope.biohazards = PvManager.getPvs('specimen-biohazard');
     };
 
     function init() {

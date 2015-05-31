@@ -69,6 +69,12 @@
       <attribute>availableQty</attribute>
     </field>
 
+    <field>
+      <multiple>true</multiple>
+      <caption>Biohazards</caption>
+      <attribute>biohazards</attribute>
+    </field>
+
     <record>
       <caption>Location</caption>
       <attribute>storageLocation</attribute>

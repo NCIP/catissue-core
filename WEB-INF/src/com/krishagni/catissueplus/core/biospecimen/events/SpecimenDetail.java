@@ -3,8 +3,10 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.util.CollectionUtils;
 
@@ -22,8 +24,10 @@ public class SpecimenDetail extends SpecimenInfo {
 	
 	private String labelFmt;
 	
+	private Set<String> biohazards;
+	
 	private List<SpecimenDetail> children;
-
+	
 	public CollectionEventDetail getCollectionEvent() {
 		return collectionEvent;
 	}
@@ -56,6 +60,14 @@ public class SpecimenDetail extends SpecimenInfo {
 		this.children = children;
 	}
 	
+	public Set<String> getBiohazards() {
+		return biohazards;
+	}
+
+	public void setBiohazards(Set<String> biohazards) {
+		this.biohazards = biohazards;
+	}
+
 	public static SpecimenDetail from(Specimen specimen) {
 		SpecimenDetail result = new SpecimenDetail();
 		SpecimenInfo.fromTo(specimen, result);
@@ -69,7 +81,8 @@ public class SpecimenDetail extends SpecimenInfo {
 			result.setChildren(getSpecimens(anticipated, children));
 		}
 		
-		result.setLabelFmt(specimen.getLabelTmpl());		
+		result.setLabelFmt(specimen.getLabelTmpl());
+		result.setBiohazards(new HashSet<String>(specimen.getBiohazards()));
 		return result;
 	}
 	

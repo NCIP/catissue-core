@@ -330,6 +330,7 @@
     "collected_in": "collected in",
     "description": "Description",
     "location": "Location",
+    "biohazards": "Biohazards",
     "apply_first_loc_to_all": "Copy First Location To All",
     "activity_full_info": "{{user}} created {{name}} on {{time | osServerTime: global.utcOffset | date: global.dateTimeFmt}}",
     "activity_user_info": "{{user}} created {{name}}",
