@@ -348,5 +348,54 @@
       //
     </sql>
   </changeSet>
-    
+
+  <changeSet author="vpawar" id="Migrate specimen biohazards">
+    <sql>
+      insert into os_specimen_biohazards
+        (specimen_id, biohazard)
+      select 
+        s.identifier, b.name
+      from
+        catissue_specimen s
+        inner join catissue_specimen_biohz_rel br on br.specimen_id = s.identifier
+        inner join catissue_biohazard b on b.identifier = br.biohazard_id 
+      where 
+        s.activity_status != 'Disabled' and 
+        b.activity_status != 'Disabled'
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Migrate specimen biohazards PV values" dbms="mysql">
+    <sql>
+      insert into catissue_permissible_value
+        (public_id, value) 
+      select
+        'specimen_biohazard', b.name
+      from
+        catissue_biohazard b
+      where
+        b.activity_status != 'Disabled'
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Migrate specimen biohazards PV values" dbms="oracle">
+    <sql>
+      insert into catissue_permissible_value
+        (identifier, public_id, value) 
+      select
+        catissue_permi_value_seq.nextval, 'specimen_biohazard', b.name
+      from
+        catissue_biohazard b
+      where
+        b.activity_status != 'Disabled'
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop specimen biohazard relation table">
+    <dropTable tableName="catissue_specimen_biohz_rel"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop biohazard types table">
+    <dropTable tableName="catissue_biohazard"/>
+  </changeSet>
 </databaseChangeLog>
