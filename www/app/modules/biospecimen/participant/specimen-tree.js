@@ -255,6 +255,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
           parent.isOpened = parent.hasChildren = true;
           parent.hasChildren = true;
           parent.depth = 0;
+          parent.closeAfterChildrenCreation = spec.closeParent;
 
           var aliquot = new Specimen({
             lineage: 'Aliquot',
@@ -281,8 +282,8 @@ angular.module('os.biospecimen.participant.specimen-tree',
             aliquots.push(angular.copy(aliquot));
           }
 
-          parent.children = aliquots;
-          var specimens = angular.copy(aliquots);
+          parent.children = [].concat(aliquots);
+          var specimens = aliquots;
           specimens.unshift(parent);
           CollectSpecimensSvc.collect(getState(), scope.visit, specimens, parent);
         };
@@ -314,16 +315,37 @@ angular.module('os.biospecimen.participant.specimen-tree',
             storageLocation: {},
             status: 'Collected',
             visitId: scope.visit.id,
-            pathology: scope.parentSpecimen.pathology
+            pathology: scope.parentSpecimen.pathology,
+            closeParent: false
           });
 
           loadSpecimenClasses(scope);
         };
 
         scope.createDerivative = function() {
-          scope.derivative.$saveOrUpdate().then(
+          var closeParent = scope.derivative.closeParent;
+          delete scope.derivative.closeParent;
+          
+          var specimensToSave = undefined;
+          if (closeParent) {
+            specimensToSave = [new Specimen({
+              id: scope.parentSpecimen.id,
+              visitId: scope.visit.id,
+              closeAfterChildrenCreation: true,
+              children: [scope.derivative]
+            })];
+          } else {
+            specimensToSave = [scope.derivative];
+          }
+ 
+          Specimen.save(specimensToSave).then(
             function(result) {
-              scope.parentSpecimen.children.push(result);
+              if (closeParent) {
+                scope.parentSpecimen.activityStatus = result[0].activityStatus;
+                scope.parentSpecimen.children = result[0].children;
+              } else {
+                scope.parentSpecimen.children.push(result[0]);
+              }
               scope.parentSpecimen.isOpened = true;
               scope.specimens = Specimen.flatten(scope.specimenTree);
               scope.revertEdit();

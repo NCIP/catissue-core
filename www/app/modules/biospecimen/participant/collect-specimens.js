@@ -47,6 +47,11 @@ angular.module('os.biospecimen.participant.collect-specimens',
             if (specimen.status != 'Collected') {
               specimen.status = 'Collected';
             }
+
+            if (specimen.closeAfterChildrenCreation) {
+              specimen.selected = true;
+            }
+
             return specimen;
           }
         );
@@ -176,9 +181,10 @@ angular.module('os.biospecimen.participant.collect-specimens',
       function getSpecimensToSave(uiSpecimens, visited) {
         var result = [];
         angular.forEach(uiSpecimens, function(uiSpecimen) {
-          if (uiSpecimen.existingStatus == 'Collected' || // when specimen is already collected
-              !uiSpecimen.selected ||  // when specimen is not selected on ui
-              visited.indexOf(uiSpecimen) > 0) { // when specimen is already visited
+          if (visited.indexOf(uiSpecimen) >= 0 || // already visited
+              !uiSpecimen.selected || // not selected
+              (uiSpecimen.existingStatus == 'Collected' && 
+                !uiSpecimen.closeAfterChildrenCreation)) { // collected and not close after children creation
             return;
           }
 
@@ -203,7 +209,8 @@ angular.module('os.biospecimen.participant.collect-specimens',
           storageLocation: uiSpecimen.storageLocation,
           parentId: angular.isDefined(uiSpecimen.parent) ? uiSpecimen.parent.id : undefined,
           lineage: uiSpecimen.lineage,
-          status: uiSpecimen.status
+          status: uiSpecimen.status,
+          closeAfterChildrenCreation: uiSpecimen.closeAfterChildrenCreation
         };
 
         if (specimen.lineage == 'New' && specimen.status == 'Collected') {

@@ -26,6 +26,8 @@ public class SpecimenDetail extends SpecimenInfo {
 	
 	private Set<String> biohazards;
 	
+	private Boolean closeAfterChildrenCreation;  
+	
 	private List<SpecimenDetail> children;
 	
 	public CollectionEventDetail getCollectionEvent() {
@@ -68,6 +70,14 @@ public class SpecimenDetail extends SpecimenInfo {
 		this.biohazards = biohazards;
 	}
 
+	public Boolean getCloseAfterChildrenCreation() {
+		return closeAfterChildrenCreation;
+	}
+
+	public void setCloseAfterChildrenCreation(Boolean closeAfterChildrenCreation) {
+		this.closeAfterChildrenCreation = closeAfterChildrenCreation;
+	}
+	
 	public static SpecimenDetail from(Specimen specimen) {
 		SpecimenDetail result = new SpecimenDetail();
 		SpecimenInfo.fromTo(specimen, result);

@@ -188,7 +188,7 @@
         </div>
       </div>
 
-      <div class="clearfix">
+      <div class="form-group clearfix">
         <div class="col-xs-3">
           <div class="form-group">
             <input name="noOfAliquots" ng-model="aliquotSpec.noOfAliquots" 
@@ -211,13 +211,23 @@
       </div>
 
       <div class="form-group clearfix">
-        <div class="col-xs-4">
-          <button type="submit" class="btn btn-success" 
-            os-form-submit="collectAliquots()" translate="specimens.buttons.collect_aliquots">
-            Collect Aliquots
+        <div class="col-xs-12 os-spmn-close-parent">
+          <div class="checkbox"> 
+            <os-checkbox ng-model="aliquotSpec.closeParent"></os-checkbox>
+          </div>
+          <div class="message">
+            <span translate="specimens.close_parent_q">Do you want to close parent specimen?</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-xs-12">
+          <button type="submit" class="btn btn-success" os-form-submit="collectAliquots()">
+            <span translate="specimens.buttons.collect_aliquots">Collect Aliquots</span>
           </button>
-          <a class="btn os-btn-text-secondary" ng-click="revertEdit()" translate="common.buttons.cancel">
-            Cancel
+          <a class="btn os-btn-text-secondary" ng-click="revertEdit()">
+            <span translate="common.buttons.cancel">Cancel</span>
           </a>
         </div>
       </div>
@@ -272,6 +282,17 @@
         <div class="col-xs-7">
           <div class="form-group">
             <os-specimen-position os-md-input specimen="derivative" cp-id="cpr.cpId"></os-specimen-position>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-xs-12 os-spmn-close-parent">
+          <div class="checkbox"> 
+            <os-checkbox ng-model="derivative.closeParent"></os-checkbox>
+          </div>
+          <div class="message">
+            <span translate="specimens.close_parent_q">Do you want to close parent specimen?</span>
           </div>
         </div>
       </div>

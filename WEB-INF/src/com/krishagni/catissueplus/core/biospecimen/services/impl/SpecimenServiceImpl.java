@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
 public class SpecimenServiceImpl implements SpecimenService {
 
@@ -247,11 +249,24 @@ public class SpecimenServiceImpl implements SpecimenService {
 			}
 		}
 		
-		Specimen specimen = saveOrUpdate(detail, existing, parent, false);
+		Specimen specimen = existing;
+		if (existing == null || !existing.isCollected()) {
+			specimen = saveOrUpdate(detail, existing, parent, false);
+		}
+				
 		if (detail.getChildren() != null) {
 			for (SpecimenDetail childDetail : detail.getChildren()) {
 				collectSpecimen(childDetail, specimen);
 			}
+		}
+		
+		boolean closeAfterChildrenCreation = false;
+		if (detail.getCloseAfterChildrenCreation() != null) {
+			closeAfterChildrenCreation = detail.getCloseAfterChildrenCreation();
+		}
+		
+		if (closeAfterChildrenCreation) {
+			specimen.close(AuthUtil.getCurrentUser(), Calendar.getInstance().getTime(), "");
 		}
 		
 		return specimen;
