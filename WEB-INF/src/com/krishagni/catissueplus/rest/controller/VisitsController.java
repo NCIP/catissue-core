@@ -1,12 +1,17 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
@@ -123,6 +129,32 @@ public class VisitsController {
 		}
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/spr")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public void downloadSpr(@PathVariable("id") Long visitId, HttpServletResponse response)
+	throws IOException {
+		ResponseEvent<FileDetail> resp = visitService.getSpr(getRequest(visitId));
+		resp.throwErrorIfUnsuccessful();
+		
+		File file = resp.getPayload().getFile();
+		String fileName = resp.getPayload().getFileName();
+		String fileType = Files.probeContentType(file.toPath());
+		
+		response.setContentType(fileType);
+		response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+
+		InputStream in = null;
+		try {
+			in = new FileInputStream(file);
+			IOUtils.copy(in, response.getOutputStream());
+		} catch (IOException e) {
+			throw new RuntimeException("Error sending file", e);
+		} finally {
+			IOUtils.closeQuietly(in);
+		}
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/collect")

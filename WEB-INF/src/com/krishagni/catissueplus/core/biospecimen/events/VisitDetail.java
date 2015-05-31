@@ -47,6 +47,8 @@ public class VisitDetail extends AttributeModifiedSupport {
 
 	private String surgicalPathologyNumber;
 	
+	private String sprName;
+
 	private Date visitDate;
 
 	public Long getCprId() {
@@ -176,6 +178,14 @@ public class VisitDetail extends AttributeModifiedSupport {
 	public void setSurgicalPathologyNumber(String surgicalPathologyNumber) {
 		this.surgicalPathologyNumber = surgicalPathologyNumber;
 	}
+	
+	public String getSprName() {
+		return sprName;
+	}
+
+	public void setSprName(String sprName) {
+		this.sprName = sprName;
+	}
 
 	public Date getVisitDate() {
 		return visitDate;
@@ -195,6 +205,7 @@ public class VisitDetail extends AttributeModifiedSupport {
 		detail.setId(visit.getId());
 		detail.setName(visit.getName());
 		detail.setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
+		detail.setSprName(visit.getSprName());
 		detail.setVisitDate(visit.getVisitDate());
 		detail.setSite(visit.getSite().getName());		
 

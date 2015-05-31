@@ -18,7 +18,9 @@ public enum VisitErrorCode implements ErrorCode {
 	
 	INVALID_VISIT_DATE,
 	
-	REF_ENTITY_FOUND;
+	REF_ENTITY_FOUND,
+	
+	SPR_NOT_FOUND;
 	
 	public String code() {
 		return "VISIT_" + this.name();

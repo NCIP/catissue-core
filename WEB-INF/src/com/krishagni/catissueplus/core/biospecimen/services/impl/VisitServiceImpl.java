@@ -13,6 +13,7 @@ import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
+import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
@@ -148,6 +149,35 @@ public class VisitServiceImpl implements VisitService {
 			resp.setVisit(visit);
 			resp.setSpecimens(collectSpecimensResp.getPayload());
 			return ResponseEvent.response(resp);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<FileDetail> getSpr(RequestEvent<Long> req) {
+		try {
+			Visit visit = getVisit(req.getPayload(), null);
+			
+			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
+		
+			String fileName = visit.getSprName();
+			if (StringUtils.isBlank(fileName)) {
+				return ResponseEvent.userError(VisitErrorCode.SPR_NOT_FOUND);
+			}
+			
+			File file = new File(getSprFilePath(visit.getId()));
+			if (!file.exists()) {
+				return ResponseEvent.userError(VisitErrorCode.SPR_NOT_FOUND);
+			}
+			
+			FileDetail detail = new FileDetail();
+			detail.setFile(file);
+			detail.setFileName(fileName);
+			return ResponseEvent.response(detail);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.services;
 
 import java.util.List;
 
+import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
@@ -25,4 +26,6 @@ public interface VisitService {
 	public ResponseEvent<VisitSpecimenDetail> collectVisitAndSpecimens(RequestEvent<VisitSpecimenDetail> req);
 
 	public ResponseEvent<String> uploadSpr(RequestEvent<SprDetail> req);
+
+	public ResponseEvent<FileDetail> getSpr(RequestEvent<Long> requestEvent);
 }
