@@ -316,33 +316,21 @@
 				</row>
 			</subForm>
 		</row>
-		<row>
-			<subForm>
-				<name>specimenBiohazard</name>
-				<udn>specimenBiohazard</udn>
-				<caption>Specimen Biohazard</caption>
-				<table>SPECIMEN_BIOHAZARD_VIEW</table>
-				<foreignKey>SPECIMEN_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
-				<row>
-					<textField>
-						<name>biohazardName</name>
-						<udn>biohazardName</udn>
-						<caption>Biohazard Name</caption>
-						<column>BIOHAZARD_NAME</column>
-						<maxLength>255</maxLength>
-					</textField>
-
-					<textField>
-						<name>biohazardType</name>
-						<udn>biohazardType</udn>
-						<caption>Biohazard Type</caption>
-						<column>BIOHAZARD_TYPE</column>
-						<maxLength>255</maxLength>
-					</textField>							
-				</row>
-			</subForm>
-		</row>
+                <row>
+                        <listBox>
+                                <name>biohazards</name>
+                                <udn>biohazards</udn>
+                                <caption>Biohazard</caption>
+                                <multiSelect>true</multiSelect>
+                                <table>OS_SPECIMEN_BIOHAZARDS</table>
+                                <column>BIOHAZARD</column>
+                                <foreignKey>SPECIMEN_ID</foreignKey>
+                                <parentKey>IDENTIFIER</parentKey>
+                                <options>
+                                        <sql>select value from catissue_permissible_value where public_id = 'specimen_biohazard' order by value</sql>
+                                </options>
+                        </listBox>
+                </row>
   		<row>
                         <subForm>
                                 <name>extensions</name>
