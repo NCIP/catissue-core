@@ -63,7 +63,7 @@ angular.module('openspecimen', [
         parent: 'signed-in'
       });
 
-    $urlRouterProvider.otherwise('/home');
+    $urlRouterProvider.otherwise('/');
 
     $httpProvider.interceptors.push('httpRespInterceptor');
 
@@ -194,12 +194,10 @@ angular.module('openspecimen', [
       };
     }
   })
-  .run(function($rootScope, $window, $cookieStore, $translate, AuthService, ApiUtil, Setting) {
+  .run(function($rootScope, $window, $cookieStore, $translate, ApiUtil, Setting) {
     if ($window.localStorage['osAuthToken']) {
       $cookieStore.put('osAuthToken', $window.localStorage['osAuthToken']);
       $rootScope.loggedIn = true;
-    } else {
-      AuthService.saveAttemptUrl();
     }
 
     ApiUtil.initialize();

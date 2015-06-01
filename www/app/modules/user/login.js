@@ -1,11 +1,9 @@
 
 angular.module('openspecimen')
-  .factory('AuthService', function($http, $rootScope, $window, $cookieStore, $location, ApiUtil, ApiUrls) {
+  .factory('AuthService', function($http, $rootScope, $window, $cookieStore, ApiUtil, ApiUrls) {
     var url = function() {
       return ApiUrls.getUrl('sessions');
     };
-
-    var redirectToUrlAfterLogin = {url: "/home"};
 
     return {
       authenticate: function(loginData) {
@@ -31,20 +29,6 @@ angular.module('openspecimen')
         $cookieStore.remove('osAuthToken');
         delete $http.defaults.headers.common['X-OS-API-TOKEN'];
         delete $http.defaults.headers.common['Authorization'];
-      },
-
-      saveAttemptUrl: function() {
-        if($location.path() != "/" && $location.path() != "/?logout=true") {
-          redirectToUrlAfterLogin.url = $location.path();
-        }
-        else {
-          redirectToUrlAfterLogin.url = '/home';
-        }
-      },
-
-      redirectToAttemptedUrl: function() {
-        $location.path(redirectToUrlAfterLogin.url);
-        redirectToUrlAfterLogin.url = '/home';
       }
     }
   })
@@ -89,7 +73,7 @@ angular.module('openspecimen')
         };
         $rootScope.loggedIn = true;
         AuthService.saveToken(result.data.token);
-        AuthService.redirectToAttemptedUrl();
+        $state.go('home');
       } else {
         $rootScope.currentUser = {};
         $rootScope.loggedIn = false;
