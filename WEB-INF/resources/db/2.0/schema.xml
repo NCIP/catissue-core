@@ -1972,4 +1972,20 @@
       referencedTableName="CATISSUE_SPECIMEN"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
+  
+  <changeSet author="nmarwaha" id="Updated specimen positions view" runOnChange="true">
+    <sql>
+      create or replace view specimen_pos_view as (
+        select 
+          ocp.identifier as identifier, ocp.occupying_specimen_id as specimen_id,
+          osc.identifier as container_id, osc.name as container_name,
+          ocp.pos_one_str as position_dimension_one_string, ocp.pos_two_str as position_dimension_two_string 
+        from 
+          os_container_positions ocp 
+          join os_storage_containers osc on ocp.storage_container_id = osc.identifier 
+        where 
+          ocp.occupying_specimen_id is not null
+      )
+    </sql>
+  </changeSet>
 </databaseChangeLog>
