@@ -54,7 +54,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 				.setParameterList("userIds", userIds)
 				.list();
 	}
-
+	
 	public User getUser(String loginName, String domainName) {
 		String hql = String.format(GET_USER_BY_LOGIN_NAME_HQL, " and activityStatus != 'Disabled'");
 		List<User> users = executeGetUserByLoginNameHql(hql, loginName, domainName);

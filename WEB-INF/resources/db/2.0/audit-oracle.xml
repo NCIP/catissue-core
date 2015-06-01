@@ -784,7 +784,7 @@
   <changeSet author="slakhani" id="1429175726743-83">
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="CATISSUE_SITE_COORDINATORS_AUD" constraintName="FK_W3JPS5E5BYVOCJPG18NUYFFY" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="REV" referencedTableName="OS_REVISIONS"/>
   </changeSet>
-
+  
   <changeSet author="vlonushte" id="1429178687139-84">
     <addColumn tableName="CATISSUE_COLL_PROT_REG_AUD">
       <column name="CONSENT_DOCUMENT_NAME" type="VARCHAR2(255 CHAR)"/>
@@ -825,4 +825,33 @@
   <changeSet author="vpawar" id="FK on specimen biohazards revision number">
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_SPECIMEN_BIOHAZARDS_AUD"  constraintName="FK_SPEC_BIOHAZARD_AUD_REV" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
   </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-86">
+    <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
+      <column name="SPR_NAME" type="VARCHAR2(255 CHAR)"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-87">
+    <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
+      <column name="sprName_MOD" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-88">
+    <dropColumn columnName="DEIDENTIFIED_REPORT" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-89">
+    <dropColumn columnName="deidentifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-90">  
+    <dropColumn columnName="IDENTIFIED_REPORT" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-91">  
+    <dropColumn columnName="identifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
+  
 </databaseChangeLog>

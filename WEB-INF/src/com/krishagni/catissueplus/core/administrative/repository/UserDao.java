@@ -33,5 +33,5 @@ public interface UserDao extends Dao<User> {
 	public void saveFpToken(ForgotPasswordToken token);
 	
 	public void deleteFpToken(ForgotPasswordToken token);
-	
+
 }

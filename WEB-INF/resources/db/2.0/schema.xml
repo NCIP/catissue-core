@@ -1973,6 +1973,18 @@
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
   
+  <changeSet author="vgaikwad" id="Drop IDENTIFIED_REPORT and DEIDENTIFIED_REPORT columns">
+    <dropColumn columnName="IDENTIFIED_REPORT" tableName="CATISSUE_SPECIMEN_COLL_GROUP"/>
+    <dropColumn columnName="DEIDENTIFIED_REPORT" tableName="CATISSUE_SPECIMEN_COLL_GROUP"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Added a new column in visits table to store SPR filenames">
+    <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+      <column name="SPR_NAME" type="${text.type}(255)"/>
+    </addColumn>
+  </changeSet>
+  
+  
   <changeSet author="nmarwaha" id="Updated specimen positions view" runOnChange="true">
     <sql>
       create or replace view specimen_pos_view as (

@@ -1,10 +1,14 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -15,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
@@ -26,6 +33,7 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
@@ -95,6 +103,42 @@ public class VisitsController {
 		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(visit));
 		resp.throwErrorIfUnsuccessful();				
 		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value="/{id}/spr")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public String uploadSpr(@PathVariable("id") Long visitId, @PathVariable("file") MultipartFile file)
+	throws IOException {
+		ResponseEvent<String> resp = null;
+		InputStream sprIn = null;
+		try {
+			SprDetail sprDetail = new SprDetail();
+			sprIn = file.getInputStream();
+			sprDetail.setSprIn(sprIn);
+			sprDetail.setSprName(file.getOriginalFilename());
+			sprDetail.setVisitId(visitId);
+		
+			resp = visitService.uploadSpr(getRequest(sprDetail));
+		} finally {
+			IOUtils.closeQuietly(sprIn);
+		}
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/spr")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public void downloadSpr(@PathVariable("id") Long visitId, HttpServletResponse httpResp)
+	throws IOException {
+		EntityQueryCriteria crit = new EntityQueryCriteria(visitId);
+		
+		ResponseEvent<FileDetail> resp = visitService.getSpr(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		
+		FileDetail detail = resp.getPayload();
+		Utility.sendToClient(httpResp, detail.getFileName(), detail.getFile());
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/collect")

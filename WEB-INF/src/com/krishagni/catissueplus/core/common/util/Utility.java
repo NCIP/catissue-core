@@ -1,6 +1,8 @@
 package com.krishagni.catissueplus.core.common.util;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -8,6 +10,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
+
+import javax.activation.MimetypesFileTypeMap;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -115,4 +120,21 @@ public class Utility {
 		Calendar cal = Calendar.getInstance();
 		return -1 * (cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET));		
 	}
+	
+	public static void sendToClient(HttpServletResponse httpResp, String fileName, File file) {
+		InputStream in = null;
+		try {
+			String fileType = MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(file);
+			httpResp.setContentType(fileType);
+			httpResp.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+	
+			in = new FileInputStream(file);
+			IOUtils.copy(in, httpResp.getOutputStream());
+		} catch (IOException e) {
+			throw new RuntimeException("Error sending file", e);
+		} finally {
+			IOUtils.closeQuietly(in);
+		}
+	}
+	
 }

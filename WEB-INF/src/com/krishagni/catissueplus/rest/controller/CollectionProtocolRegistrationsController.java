@@ -2,17 +2,13 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -36,6 +32,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolSe
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
@@ -175,7 +172,7 @@ public class CollectionProtocolRegistrationsController {
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/consent-form")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public void downloadConsentForm(@PathVariable("id") Long cprId, HttpServletResponse response) throws IOException {
+	public void downloadConsentForm(@PathVariable("id") Long cprId, HttpServletResponse httpResp) throws IOException {
 		RegistrationQueryCriteria crit = new RegistrationQueryCriteria();
 		crit.setCprId(cprId);
 		
@@ -184,20 +181,8 @@ public class CollectionProtocolRegistrationsController {
 		
 		File file = resp.getPayload();
 		String fileName = file.getName().split("_", 2)[1];
-		String fileType = Files.probeContentType(file.toPath());
 		
-		response.setContentType(fileType);
-		response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
-
-		InputStream in = null;
-		try {
-			in = new FileInputStream(file);
-			IOUtils.copy(in, response.getOutputStream());
-		} catch (IOException e) {
-			throw new RuntimeException("Error sending file", e);
-		} finally {
-			IOUtils.closeQuietly(in);
-		}	
+		Utility.sendToClient(httpResp, fileName, file);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value="/{id}/consent-form")

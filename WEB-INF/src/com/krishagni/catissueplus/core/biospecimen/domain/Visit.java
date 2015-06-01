@@ -45,10 +45,6 @@ public class Visit {
 
 	private String activityStatus;
 
-	private String identifiedReport;
-
-	private String deIdentifiedReport;
-
 	private Site site;
 
 	private String status;
@@ -56,6 +52,8 @@ public class Visit {
 	private String comments;
 
 	private String surgicalPathologyNumber;
+	
+	private String sprName;
 
 	private CollectionProtocolEvent cpEvent;
 
@@ -163,28 +161,20 @@ public class Visit {
 		this.comments = comments;
 	}
 
-	public String getIdentifiedReport() {
-		return identifiedReport;
-	}
-
-	public void setIdentifiedReport(String identifiedReport) {
-		this.identifiedReport = identifiedReport;
-	}
-
-	public String getDeIdentifiedReport() {
-		return deIdentifiedReport;
-	}
-
-	public void setDeIdentifiedReport(String deIdentifiedReport) {
-		this.deIdentifiedReport = deIdentifiedReport;
-	}
-
 	public String getSurgicalPathologyNumber() {
 		return surgicalPathologyNumber;
 	}
 
 	public void setSurgicalPathologyNumber(String surgicalPathologyNumber) {
 		this.surgicalPathologyNumber = surgicalPathologyNumber;
+	}
+	
+	public String getSprName() {
+		return sprName;
+	}
+
+	public void setSprName(String sprName) {
+		this.sprName = sprName;
 	}
 
 	public CollectionProtocolEvent getCpEvent() {
@@ -284,17 +274,14 @@ public class Visit {
 		setRegistration(visit.getRegistration());
 		setSite(visit.getSite());
 		setStatus(visit.getStatus());
-		setIdentifiedReport(visit.getIdentifiedReport());
-		setDeIdentifiedReport(visit.getDeIdentifiedReport());
 		setComments(visit.getComments());
 		setName(visit.getName());		
 		setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 		setVisitDate(visit.getVisitDate());
 	}
 
-	public void updateReports(Visit scg) {
-		this.setIdentifiedReport(scg.getIdentifiedReport());
-		this.setDeIdentifiedReport(scg.getDeIdentifiedReport());
+	public void updateSprName(String sprName) {
+		setSprName(sprName);
 	}	
 	
 	public void addSpecimen(Specimen specimen) {
