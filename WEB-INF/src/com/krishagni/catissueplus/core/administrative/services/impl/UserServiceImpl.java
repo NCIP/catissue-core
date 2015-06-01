@@ -228,6 +228,11 @@ public class UserServiceImpl implements UserService {
 
 			AccessCtrlMgr.getInstance().ensureDeleteUserRights(existing);
 
+			/*
+			 * Appending timestamp to email address, loginName of user while deleting user. 
+			 * To send request reject mail, need original user object.
+			 * So creating user object clone.
+			 */
 			User user = new User();
 			user.update(existing);
 			existing.delete(deleteEntityOp.isClose());
