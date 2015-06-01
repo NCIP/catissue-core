@@ -6,12 +6,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -124,7 +124,7 @@ public class Utility {
 	public static void sendToClient(HttpServletResponse httpResp, String fileName, File file) {
 		InputStream in = null;
 		try {
-			String fileType = Files.probeContentType(file.toPath());
+			String fileType = MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(file);
 			httpResp.setContentType(fileType);
 			httpResp.setHeader("Content-Disposition", "attachment;filename=" + fileName);
 	
