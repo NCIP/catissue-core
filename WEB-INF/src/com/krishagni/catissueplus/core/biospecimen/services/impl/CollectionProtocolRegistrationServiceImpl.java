@@ -157,6 +157,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 	}	
 	
+	@Override
+	@PlusTransactional
 	public ResponseEvent<File> getConsentForm(RequestEvent<RegistrationQueryCriteria> req) {
 		try {
 			Long cprId = req.getPayload().getCprId();
