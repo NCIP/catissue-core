@@ -124,7 +124,7 @@ public class Utility {
 	public static void sendToClient(HttpServletResponse httpResp, String fileName, File file) {
 		InputStream in = null;
 		try {
-			String fileType = MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(file);
+			String fileType = getContentType(file);
 			httpResp.setContentType(fileType);
 			httpResp.setHeader("Content-Disposition", "attachment;filename=" + fileName);
 	
@@ -137,4 +137,8 @@ public class Utility {
 		}
 	}
 	
+	public static String getContentType(File file) {
+		return MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(file);
+	}
+
 }
