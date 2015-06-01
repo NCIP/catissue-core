@@ -73,7 +73,12 @@ angular.module('openspecimen')
         };
         $rootScope.loggedIn = true;
         AuthService.saveToken(result.data.token);
-        $state.go('home');
+        if ($rootScope.reqState) {
+          $state.go($rootScope.reqState.name, $rootScope.reqState.params);
+          $rootScope.reqState = undefined;
+        } else {
+          $state.go('home');
+        }
       } else {
         $rootScope.currentUser = {};
         $rootScope.loggedIn = false;

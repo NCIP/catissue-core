@@ -207,6 +207,16 @@ angular.module('openspecimen', [
         $rootScope.state = toState;
       });
 
+    $rootScope.$on('$stateChangeStart',
+      function(event, toState, toParams, fromState, fromParams) {
+        if (toState.name != 'login') {
+          $rootScope.reqState = {
+            name: toState.name,
+            params: toParams
+          };
+        }
+      });
+
     $rootScope.back = function() {
       $window.history.back();
     };
