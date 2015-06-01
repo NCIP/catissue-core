@@ -27,5 +27,5 @@ public interface VisitService {
 
 	public ResponseEvent<String> uploadSpr(RequestEvent<SprDetail> req);
 
-	public ResponseEvent<FileDetail> getSpr(RequestEvent<Long> requestEvent);
+	public ResponseEvent<FileDetail> getSpr(RequestEvent<EntityQueryCriteria> requestEvent);
 }

@@ -1,11 +1,8 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +33,7 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
@@ -124,7 +122,7 @@ public class VisitsController {
 			resp = visitService.uploadSpr(getRequest(sprDetail));
 		} finally {
 			if (sprIn != null) {
-				sprIn.close();
+				IOUtils.closeQuietly(sprIn);
 			}
 		}
 		resp.throwErrorIfUnsuccessful();
@@ -134,27 +132,17 @@ public class VisitsController {
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/spr")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public void downloadSpr(@PathVariable("id") Long visitId, HttpServletResponse response)
+	public void downloadSpr(@PathVariable("id") Long visitId, HttpServletResponse httoResp)
 	throws IOException {
-		ResponseEvent<FileDetail> resp = visitService.getSpr(getRequest(visitId));
+		EntityQueryCriteria crit = new EntityQueryCriteria(visitId);
+		
+		ResponseEvent<FileDetail> resp = visitService.getSpr(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		
-		File file = resp.getPayload().getFile();
-		String fileName = resp.getPayload().getFileName();
-		String fileType = Files.probeContentType(file.toPath());
-		
-		response.setContentType(fileType);
-		response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
-
-		InputStream in = null;
-		try {
-			in = new FileInputStream(file);
-			IOUtils.copy(in, response.getOutputStream());
-		} catch (IOException e) {
-			throw new RuntimeException("Error sending file", e);
-		} finally {
-			IOUtils.closeQuietly(in);
-		}
+		FileDetail detail = resp.getPayload();
+		String fileName = detail.getFileName();
+		fileName = fileName.substring(0, fileName.lastIndexOf(".")) + ".txt"; 
+		Utility.sendToClient(httoResp, fileName, detail.getFile());
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/collect")

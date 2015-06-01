@@ -2,11 +2,13 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
@@ -158,20 +160,21 @@ public class VisitServiceImpl implements VisitService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<FileDetail> getSpr(RequestEvent<Long> req) {
+	public ResponseEvent<FileDetail> getSpr(RequestEvent<EntityQueryCriteria> req) {
 		try {
-			Visit visit = getVisit(req.getPayload(), null);
+			EntityQueryCriteria crit = req.getPayload();
+			Visit visit = getVisit(crit.getId(), crit.getName());
 			
 			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
 		
 			String fileName = visit.getSprName();
 			if (StringUtils.isBlank(fileName)) {
-				return ResponseEvent.userError(VisitErrorCode.SPR_NOT_FOUND);
+				return ResponseEvent.userError(VisitErrorCode.NO_SPR_UPLOADED);
 			}
 			
 			File file = new File(getSprFilePath(visit.getId()));
 			if (!file.exists()) {
-				return ResponseEvent.userError(VisitErrorCode.SPR_NOT_FOUND);
+				return ResponseEvent.serverError(VisitErrorCode.UNABLE_TO_LOCATE_SPR);
 			}
 			
 			FileDetail detail = new FileDetail();
@@ -198,14 +201,13 @@ public class VisitServiceImpl implements VisitService {
 			DocumentDeIdentifier deIdentifier = getSprDeIdentifier(); 
 			
 			if (deIdentifier != null) {
-				Map<String, Object> props = new HashMap<String, Object>();
-				props.put("visitId", detail.getVisitId());
+				Map<String, Object> props = Collections.<String, Object>singletonMap("visitId", detail.getVisitId());
 				sprText = deIdentifier.deIdentify(sprText, props);
 			} 
 
-			String filePath = getSprFilePath(visit.getId());
-			PdfUtil.create(filePath, sprText);
- 			
+			File file = new File(getSprFilePath(visit.getId()));
+			FileUtils.writeStringToFile(file, sprText, (String) null, false);
+			
 			visit.updateSprName(detail.getSprName()); 
 			return new ResponseEvent<String>(detail.getSprName());
 		} catch (OpenSpecimenException ose) {
@@ -291,7 +293,7 @@ public class VisitServiceImpl implements VisitService {
 				ConfigParams.MODULE, 
 				ConfigParams.SPR_DIR, 
 				getDefaultVisitSprDir());
-		return path + File.separator + visitId + File.separator + "Surgical-Pathology-Report.pdf"; 
+		return path + File.separator + visitId + File.separator + "spr.txt"; 
 	}
 
 	private DocumentDeIdentifier getSprDeIdentifier() {

@@ -51,23 +51,29 @@ public class SprDeIdentifier implements DocumentDeIdentifier {
 		Visit visit = daoFactory.getVisitsDao().getById(visitId);
 		Participant participant = visit.getRegistration().getParticipant();
 		
-		visit.getRegistration().getParticipant().getCprs();
 		StringBuilder regex = new StringBuilder();
 		if(StringUtils.isNotBlank(participant.getLastName())) {
 			regex.append(participant.getLastName());
 		}
+		
 		if(StringUtils.isNotBlank(participant.getFirstName())) {
 			addOr(regex);
 			regex.append(participant.getFirstName());
 		}
+		
 		if(StringUtils.isNotBlank(participant.getMiddleName())) {
 			addOr(regex);
 			regex.append(participant.getMiddleName());
 		}
 		
+		if (regex.length() == 0) {
+			return report;
+		}
+		
 		regex.insert(0, "(?i)(");
 		regex.append(")");
 		report = report.replaceAll(regex.toString(), replaceString);
+		
 		return report;
 	}
 

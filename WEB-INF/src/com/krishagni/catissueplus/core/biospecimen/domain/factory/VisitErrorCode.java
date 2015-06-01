@@ -20,7 +20,9 @@ public enum VisitErrorCode implements ErrorCode {
 	
 	REF_ENTITY_FOUND,
 	
-	SPR_NOT_FOUND;
+	NO_SPR_UPLOADED,
+	
+	UNABLE_TO_LOCATE_SPR;
 	
 	public String code() {
 		return "VISIT_" + this.name();
