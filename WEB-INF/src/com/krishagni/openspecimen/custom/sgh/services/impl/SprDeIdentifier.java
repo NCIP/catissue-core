@@ -66,13 +66,11 @@ public class SprDeIdentifier implements DocumentDeIdentifier {
 			regex.append(participant.getMiddleName());
 		}
 		
-		if (regex.length() == 0) {
-			return report;
+		if (regex.length() > 0) {
+			regex.insert(0, "(?i)(");
+			regex.append(")");
+			report = report.replaceAll(regex.toString(), replaceString);
 		}
-		
-		regex.insert(0, "(?i)(");
-		regex.append(")");
-		report = report.replaceAll(regex.toString(), replaceString);
 		
 		return report;
 	}

@@ -121,9 +121,7 @@ public class VisitsController {
 		
 			resp = visitService.uploadSpr(getRequest(sprDetail));
 		} finally {
-			if (sprIn != null) {
-				IOUtils.closeQuietly(sprIn);
-			}
+			IOUtils.closeQuietly(sprIn);
 		}
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
@@ -132,7 +130,7 @@ public class VisitsController {
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/spr")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public void downloadSpr(@PathVariable("id") Long visitId, HttpServletResponse httoResp)
+	public void downloadSpr(@PathVariable("id") Long visitId, HttpServletResponse httpResp)
 	throws IOException {
 		EntityQueryCriteria crit = new EntityQueryCriteria(visitId);
 		
@@ -140,9 +138,7 @@ public class VisitsController {
 		resp.throwErrorIfUnsuccessful();
 		
 		FileDetail detail = resp.getPayload();
-		String fileName = detail.getFileName();
-		fileName = fileName.substring(0, fileName.lastIndexOf(".")) + ".txt"; 
-		Utility.sendToClient(httoResp, fileName, detail.getFile());
+		Utility.sendToClient(httpResp, detail.getFileName(), detail.getFile());
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/collect")

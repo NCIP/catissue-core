@@ -3,7 +3,6 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -208,7 +207,9 @@ public class VisitServiceImpl implements VisitService {
 			File file = new File(getSprFilePath(visit.getId()));
 			FileUtils.writeStringToFile(file, sprText, (String) null, false);
 			
-			visit.updateSprName(detail.getSprName()); 
+			String sprName = detail.getSprName(); 
+			sprName = sprName.substring(0, sprName.lastIndexOf(".")) + ".txt";
+			visit.updateSprName(sprName);
 			return new ResponseEvent<String>(detail.getSprName());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
