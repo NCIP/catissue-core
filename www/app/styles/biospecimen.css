@@ -42,7 +42,12 @@
 }
 
 .fa.os-status-not-collected:before {
-  color: #d9534f;
+  color: #888;
+  padding: 0px 4px;
+}
+
+.fa.os-status-closed:before {
+  color: #d9534f!important;
   padding: 0px 4px;
 }
 
