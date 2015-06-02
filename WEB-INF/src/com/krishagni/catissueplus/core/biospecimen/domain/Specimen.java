@@ -623,6 +623,7 @@ public class Specimen extends BaseEntity {
 		} else if (oldPosition == null && newPosition != null) {
 			transferEvent.setToPosition(newPosition);
 			
+			newPosition.setOccupyingSpecimen(this);
 			newPosition.occupy();
 			setPosition(newPosition);
 		}

@@ -22,6 +22,8 @@ import com.krishagni.catissueplus.core.importer.domain.ObjectSchema.Field;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema.Record;
 
 public class ObjectReader implements Closeable {
+	private static final String CLEAR_FIELD = "##os_clear##";
+	
 	private CsvReader csvReader;
 	
 	private ObjectSchema schema;
@@ -33,7 +35,7 @@ public class ObjectReader implements Closeable {
 	private String dateFmt;
 	
 	private String timeFmt;
-	
+			
 	public ObjectReader(String filePath, ObjectSchema schema, String dateFmt, String timeFmt) {
 		try {
 			this.csvReader = CsvFileReader.createCsvFileReader(filePath, true);
@@ -121,7 +123,10 @@ public class ObjectReader implements Closeable {
 				for (int idx = 1; true; ++idx) {
 					String columnName = prefix + field.getCaption() + "#" + idx;
 					Object value = getValue(field, columnName);
-					if (value == null) {
+					if (isClearField(value)) {
+						values.clear();
+						break;
+					} else if (value == null) {
 						break;
 					}
 					
@@ -133,7 +138,7 @@ public class ObjectReader implements Closeable {
 				String columnName = prefix + field.getCaption();
 				Object value = getValue(field, columnName);
 				if (value != null) {
-					props.put(field.getAttribute(), value);
+					props.put(field.getAttribute(), isClearField(value) ? null : value);
 				}				
 			}
 		}
@@ -176,7 +181,7 @@ public class ObjectReader implements Closeable {
 		String value = csvReader.getColumn(columnName);
 		boolean isBlank = StringUtils.isBlank(value);
 		if (isBlank) {
-			return null;
+			return CLEAR_FIELD;
 		} else if (field.getType() != null && field.getType().equals("date")) {
 			return new SimpleDateFormat(dateFmt).parse(value);
 		} else if (field.getType() != null && field.getType().equals("datetime")) {
@@ -230,6 +235,10 @@ public class ObjectReader implements Closeable {
 		}
 		
 		return columnNames;				
+	}
+	
+	private boolean isClearField(Object value) {
+		return value instanceof String && ((String)value).trim().equals(CLEAR_FIELD);
 	}
 			
 	public static void main(String[] args) 
