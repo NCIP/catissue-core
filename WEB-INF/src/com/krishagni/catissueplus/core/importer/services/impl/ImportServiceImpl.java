@@ -205,7 +205,7 @@ public class ImportServiceImpl implements ImportService {
 			ObjectSchemaCriteria detail = req.getPayload();
 			ObjectSchema schema = schemaFactory.getSchema(detail.getObjectType(), detail.getParams());
 			if (schema == null) {
-				return ResponseEvent.userError(ImportJobErrorCode.OBJ_SCHEMA_NOT_FOUND);
+				return ResponseEvent.userError(ImportJobErrorCode.OBJ_SCHEMA_NOT_FOUND, detail.getObjectType());
 			}
 			
 			return ResponseEvent.response(ObjectReader.getSchemaFields(schema));

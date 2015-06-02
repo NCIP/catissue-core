@@ -86,7 +86,7 @@ public class ObjectReader implements Closeable {
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw OpenSpecimenException.userError(ImportJobErrorCode.RECORD_PARSE_ERROR);
+			throw OpenSpecimenException.userError(ImportJobErrorCode.RECORD_PARSE_ERROR, e.getLocalizedMessage());
 		}
 	}
 	

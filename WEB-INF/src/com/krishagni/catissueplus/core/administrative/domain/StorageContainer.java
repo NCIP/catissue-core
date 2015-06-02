@@ -955,7 +955,11 @@ public class StorageContainer extends BaseEntity {
 				return null;
 			}
 			
-			return Integer.parseInt(pos);
+			try {
+				return Integer.parseInt(pos);
+			} catch (NumberFormatException nfe) {
+				throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_NUMBER_POSITION);
+			}			
 		}
 
 		@Override
