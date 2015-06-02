@@ -1,7 +1,16 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
+import static com.krishagni.catissueplus.core.common.PvAttributes.BIOHAZARD;
+import static com.krishagni.catissueplus.core.common.PvAttributes.COLL_PROC;
+import static com.krishagni.catissueplus.core.common.PvAttributes.CONTAINER;
+import static com.krishagni.catissueplus.core.common.PvAttributes.PATH_STATUS;
+import static com.krishagni.catissueplus.core.common.PvAttributes.RECV_QUALITY;
+import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_ANATOMIC_SITE;
+import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_CLASS;
+import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_LATERALITY;
+import static com.krishagni.catissueplus.core.common.service.PvValidator.areValid;
+import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
 import java.util.Calendar;
 import java.util.HashSet;
@@ -15,10 +24,10 @@ import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPos
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionEvent;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenReceivedEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenReceivedEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
@@ -122,10 +131,11 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 
 	private void setActivityStatus(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		if (StringUtils.isBlank(detail.getActivityStatus())) {
+		String status = detail.getActivityStatus();
+		if (StringUtils.isBlank(status)) {
 			specimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
-		} else if (isValidPv(detail.getActivityStatus(), Status.ACTIVITY_STATUS.getStatus())) {
-			specimen.setActivityStatus(detail.getActivityStatus());
+		} else if (Status.isValidActivityStatus(status)) {
+			specimen.setActivityStatus(status);
 		} else {
 			ose.addError(ActivityStatusErrorCode.INVALID);
 		}
@@ -281,6 +291,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			!status.equals(Specimen.PENDING) && 
 			!status.equals(Specimen.MISSED_COLLECTION)) {
 			ose.addError(SpecimenErrorCode.INVALID_COLL_STATUS);
+			return;
 		}
 
 		specimen.setCollectionStatus(status);
@@ -313,7 +324,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;				
 		}
 		
-		if (!isValidPv(anatomicSite, "anatomic-site")) {
+		if (!isValid(SPECIMEN_ANATOMIC_SITE, 2, anatomicSite, true)) {
 			ose.addError(SpecimenErrorCode.INVALID_ANATOMIC_SITE);
 			return;
 		}
@@ -348,7 +359,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;
 		}
 		
-		if (!isValidPv(laterality, "laterality")) {
+		if (!isValid(SPECIMEN_LATERALITY, laterality)) {
 			ose.addError(SpecimenErrorCode.INVALID_LATERALITY);
 			return;
 		}
@@ -383,7 +394,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;
 		}
 
-		if (!isValidPv(detail.getPathology(), "pathological-status")) {
+		if (!isValid(PATH_STATUS, pathology)) {
 			ose.addError(SpecimenErrorCode.INVALID_PATHOLOGY_STATUS);
 			return;
 		}
@@ -469,7 +480,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;
 		}
 		
-		if (!isValidPv(specimenClass, "specimen-class")) {
+		if (!isValid(SPECIMEN_CLASS, specimenClass)) {
 			ose.addError(SpecimenErrorCode.INVALID_SPECIMEN_CLASS);
 			return;
 		}
@@ -504,7 +515,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;
 		}
 		
-		if (!isValidPv(specimen.getSpecimenClass(), type, "specimen-type")) {
+		if (!isValid(SPECIMEN_CLASS, detail.getSpecimenClass(), type)) {
 			ose.addError(SpecimenErrorCode.INVALID_SPECIMEN_TYPE);
 			return;
 		}
@@ -552,7 +563,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;
 		}
 		
-		if (!isValidPv(biohazards.toArray(new String[0]), "biohazard")) {
+		if (!areValid(BIOHAZARD, biohazards)) {
 			ose.addError(SpecimenErrorCode.INVALID_BIOHAZARDS);
 			return;
 		}
@@ -654,14 +665,24 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		SpecimenCollectionEvent event = SpecimenCollectionEvent.createFromSr(specimen);
 		setEventAttrs(collDetail, event, ose);
 
-		if (StringUtils.isNotBlank(collDetail.getContainer())) {
-			event.setContainer(collDetail.getContainer());
+		String collCont = collDetail.getContainer();
+		if (StringUtils.isNotBlank(collCont)) {
+			if (isValid(CONTAINER, collCont)) {
+				event.setContainer(collCont);				
+			} else {
+				ose.addError(SpecimenErrorCode.INVALID_COLL_CONTAINER);
+			}
+		}
+			
+		String proc = collDetail.getProcedure();
+		if (StringUtils.isNotBlank(proc)) {
+			if (isValid(COLL_PROC, proc)) {
+				event.setProcedure(proc);
+			} else {
+				ose.addError(SpecimenErrorCode.INVALID_COLL_PROC);
+			}
 		}
 		
-		if (StringUtils.isNotBlank(collDetail.getProcedure())) {
-			event.setProcedure(collDetail.getProcedure());
-		}
-				
 		specimen.setCollectionEvent(event);
 	}
 	
@@ -686,8 +707,13 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		SpecimenReceivedEvent event = SpecimenReceivedEvent.createFromSr(specimen);
 		setEventAttrs(recvDetail, event, ose);
 		
-		if (StringUtils.isNotBlank(recvDetail.getReceivedQuality())) {
-			event.setQuality(recvDetail.getReceivedQuality());
+		String recvQuality = recvDetail.getReceivedQuality();
+		if (StringUtils.isNotBlank(recvQuality)) {
+			if (isValid(RECV_QUALITY, recvQuality)) {
+				event.setQuality(recvQuality);
+			} else {
+				ose.addError(SpecimenErrorCode.INVALID_RECV_QUALITY);
+			}
 		}
 		
 		specimen.setReceivedEvent(event);

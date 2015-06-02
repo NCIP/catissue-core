@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -49,7 +50,7 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 	@Override
 	public List<String> getSpecimenClasses() {
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class)
-				.add(Restrictions.eq("attribute", "2003991"));
+				.add(Restrictions.eq("attribute", SPECIMEN_CLASS));
 		return query.setProjection(Projections.property("value")).list();
 	}
 	
@@ -58,7 +59,7 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 	public List<String> getSpecimenTypes(Collection<String> specimenClasses) {
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class)
 				.createAlias("parent", "ppv")
-				.add(Restrictions.eq("ppv.attribute", "2003991"));
+				.add(Restrictions.eq("ppv.attribute", SPECIMEN_CLASS));
 		
 		if (CollectionUtils.isNotEmpty(specimenClasses)) {
 			query.add(Restrictions.in("ppv.value", specimenClasses));
@@ -67,7 +68,58 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 		return query.setProjection(Projections.property("value")).list();
 	}	
 	
+	
+	public boolean exists(String attribute, Collection<String> values) {
+		Number count = (Number)sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class)
+				.add(Restrictions.eq("attribute", attribute))
+				.add(Restrictions.in("value", values))
+				.setProjection(Projections.count("id"))
+				.uniqueResult();
+		return count.intValue() == values.size();
+	}
+	
+	public boolean exists(String attribute, String parentValue, Collection<String> values) {
+		Number count = (Number)sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class)
+				.createAlias("parent", "ppv")
+				.add(Restrictions.eq("ppv.attribute", attribute))
+				.add(Restrictions.eq("ppv.value", parentValue))
+				.add(Restrictions.in("value", values))
+				.setProjection(Projections.count("id"))
+				.uniqueResult();
+		return count.intValue() == values.size();
+	}
 
+	public boolean exists(String attribute, int depth, Collection<String> values) {
+		return exists(attribute, depth, values, false);
+	}
+		
+	public boolean exists(String attribute, int depth, Collection<String> values, boolean anyLevel) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class)
+				.add(Restrictions.in("value", values))
+				.setProjection(Projections.count("id"));
+		
+		for (int i = 1; i <= depth; ++i) {			
+			if (i == 1) {
+				query.createAlias("parent", "pv" + i, anyLevel ? JoinType.LEFT_OUTER_JOIN : JoinType.INNER_JOIN);
+			} else {
+				query.createAlias("pv" + (i - 1) + ".parent", "pv" + i, anyLevel ? JoinType.LEFT_OUTER_JOIN : JoinType.INNER_JOIN);
+			}			
+		}
+		
+		Disjunction attrCond = Restrictions.disjunction();
+		attrCond.add(Restrictions.eq("pv" + depth + ".attribute", attribute));
+		if (anyLevel) {
+			for (int i = depth - 1; i >= 1; i--) {
+				attrCond.add(Restrictions.eq("pv" + i + ".attribute", attribute));
+			}
+			
+			attrCond.add(Restrictions.eq("attribute", attribute));
+		}
+		
+		Number count = (Number)query.add(attrCond).uniqueResult();
+		return count.intValue() == values.size();
+	}
+	
 	private Criteria getPvQuery(ListPvCriteria crit) {
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class);
 		if (StringUtils.isNotBlank(crit.parentAttribute()) || StringUtils.isNotBlank(crit.parentValue())) {
@@ -92,10 +144,12 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 				.createAlias("parent", "mpv")
 				.createAlias("mpv.parent", "tpv", JoinType.LEFT_OUTER_JOIN)
 				.add(Restrictions.disjunction()
-						.add(Restrictions.eq("tpv.attribute", "Tissue_Site_PID"))
-						.add(Restrictions.eq("mpv.attribute", "Tissue_Site_PID"))
+						.add(Restrictions.eq("tpv.attribute", ANATOMIC_SITE))
+						.add(Restrictions.eq("mpv.attribute", ANATOMIC_SITE))
 					);
 	}
 	
 	private static final String ANATOMIC_SITE = "Tissue_Site_PID";
+	
+	private static final String SPECIMEN_CLASS = "2003991";
 }

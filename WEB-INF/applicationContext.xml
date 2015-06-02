@@ -347,18 +347,14 @@
     <property name="taskMgr" ref="scheduledTaskMgr"/>
   </bean>
 	
-  <bean id="permissibleValueSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl">
+  <bean id="pvValidator" class="com.krishagni.catissueplus.core.common.service.PvValidator" factory-method="getInstance">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+
+  <bean id="permissibleValueSvc" class="com.krishagni.catissueplus.core.common.service.impl.PermissibleValueServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
        
-  <bean id="pvMangeerSvc" class="com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl">
-    <property name="permissibleValueSvc" ref="permissibleValueSvc"/>
-  </bean>
-       
-  <bean id="commonValidatorSvc" class="com.krishagni.catissueplus.core.common.CommonValidator">
-    <property name="pvManager" ref="pvMangeerSvc"/>
-  </bean>
-
   <bean id="messageSource" class="com.krishagni.catissueplus.core.common.WildcardReloadableResourceBundle">
     <property name="basenames">
       <list>

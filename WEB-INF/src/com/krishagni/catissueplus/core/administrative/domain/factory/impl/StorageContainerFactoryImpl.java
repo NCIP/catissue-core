@@ -1,5 +1,8 @@
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
+import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_CLASS;
+import static com.krishagni.catissueplus.core.common.service.PvValidator.areValid;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +24,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -377,9 +379,8 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}
 	
 	private void setAllowedSpecimenClasses(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
-		Set<String> allowedSpecimenClasses = detail.getAllowedSpecimenClasses();
-		
-		if (!CommonValidator.isValidPv(allowedSpecimenClasses.toArray(new String[0]), "specimen-class")) {
+		Set<String> allowedSpecimenClasses = detail.getAllowedSpecimenClasses();		
+		if (!areValid(SPECIMEN_CLASS, allowedSpecimenClasses)) {
 			ose.addError(SpecimenErrorCode.INVALID_SPECIMEN_CLASS);
 			return;
 		}
@@ -397,8 +398,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	
 	private void setAllowedSpecimenTypes(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		Set<String> allowedSpecimenTypes = detail.getAllowedSpecimenTypes();
-		
-		if (!CommonValidator.isValidPv(allowedSpecimenTypes.toArray(new String[0]), "specimen-type")) {
+		if (!areValid(SPECIMEN_CLASS, 1, allowedSpecimenTypes)) {
 			ose.addError(SpecimenErrorCode.INVALID_SPECIMEN_TYPE);
 			return;
 		}

@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.ListPvCriteria;
 import com.krishagni.catissueplus.core.administrative.events.PvDetail;
-import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.PermissibleValueService;
 
 @Controller
 @RequestMapping("/permissible-values")

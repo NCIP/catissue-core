@@ -15,6 +15,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -110,6 +111,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 			ose.addError(CpErrorCode.PI_REQUIRED);
 			return;
 		}
+		
 		if (pi == null) {
 			ose.addError(CpErrorCode.PI_NOT_FOUND);
 			return;
@@ -132,7 +134,9 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 				coordinator = daoFactory.getUserDao().getById(user.getId());
 			} else if (user.getLoginName() != null && user.getDomain() != null) {
 				coordinator = daoFactory.getUserDao().getUser(user.getLoginName(), user.getDomain());
-			} else {
+			} 
+			
+			if (coordinator == null) {
 				ose.addError(CpErrorCode.INVALID_COORDINATORS);
 				return;
 			}
@@ -144,13 +148,15 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	}
 	
 	private void setActivityStatus(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
-		if (StringUtils.isBlank(input.getActivityStatus())) {
+		String status = input.getActivityStatus();
+		
+		if (StringUtils.isBlank(status)) {
 			result.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
-			return;
+		} else if (Status.isValidActivityStatus(status)) {
+			result.setActivityStatus(status);
+		} else {
+			ose.addError(ActivityStatusErrorCode.INVALID);
 		}
-
-		// TODO: validate activity status
-		result.setActivityStatus(input.getActivityStatus());
 	}
 	
 	private void setLabelFormats(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {

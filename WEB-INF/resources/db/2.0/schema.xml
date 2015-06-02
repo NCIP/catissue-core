@@ -1984,7 +1984,6 @@
     </addColumn>
   </changeSet>
   
-  
   <changeSet author="nmarwaha" id="Updated specimen positions view" runOnChange="true">
     <sql>
       create or replace view specimen_pos_view as (

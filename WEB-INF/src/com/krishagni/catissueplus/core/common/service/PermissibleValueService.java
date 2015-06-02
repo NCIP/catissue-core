@@ -1,5 +1,5 @@
 
-package com.krishagni.catissueplus.core.administrative.services;
+package com.krishagni.catissueplus.core.common.service;
 
 import java.util.List;
 
@@ -9,7 +9,5 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public interface PermissibleValueService {
-	ResponseEvent<List<PvDetail>> getPermissibleValues(RequestEvent<ListPvCriteria> req);
-	
-	Boolean validate(String attr, List<String> values, String ... parentAttr);
+	public ResponseEvent<List<PvDetail>> getPermissibleValues(RequestEvent<ListPvCriteria> req);
 }

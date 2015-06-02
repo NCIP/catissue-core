@@ -7,11 +7,13 @@ public enum CpeErrorCode implements ErrorCode {
 	
 	DUP_LABEL,
 	
-	LABEL_NOT_FOUND,
-	
 	LABEL_REQUIRED,
 	
 	INVALID_POINT,
+	
+	INVALID_CLINICAL_DIAGNOSIS,
+	
+	INVALID_CLINICAL_STATUS,	
 	
 	REF_ENTITY_FOUND;
 

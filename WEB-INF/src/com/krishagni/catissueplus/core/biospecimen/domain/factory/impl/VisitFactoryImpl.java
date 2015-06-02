@@ -1,7 +1,10 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
+import static com.krishagni.catissueplus.core.common.PvAttributes.CLINICAL_DIAG;
+import static com.krishagni.catissueplus.core.common.PvAttributes.CLINICAL_STATUS;
+import static com.krishagni.catissueplus.core.common.PvAttributes.VISIT_STATUS;
+import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -206,12 +209,12 @@ public class VisitFactoryImpl implements VisitFactory {
 	
 	private void setVisitStatus(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String visitStatus = visitDetail.getStatus();
-		if (isValidPv(visitStatus, "visit-status")) {
-			visit.setStatus(visitStatus);
+		if (!isValid(VISIT_STATUS, visitStatus)) {
+			ose.addError(VisitErrorCode.INVALID_STATUS);			
 			return;
 		}
 		
-		ose.addError(VisitErrorCode.INVALID_STATUS);
+		visit.setStatus(visitStatus);		
 	}
 	
 	private void setVisitStatus(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
@@ -224,12 +227,12 @@ public class VisitFactoryImpl implements VisitFactory {
 
 	private void setClinicalDiagnosis(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String clinicalDiagnosis = visitDetail.getClinicalDiagnosis();
-		if (isValidPv(clinicalDiagnosis, "clinical-diagnosis")) {
-			visit.setClinicalDiagnosis(clinicalDiagnosis);
+		if (!isValid(CLINICAL_DIAG, clinicalDiagnosis)) {
+			ose.addError(VisitErrorCode.INVALID_CLINICAL_DIAGNOSIS);
 			return;
 		}
 		
-		ose.addError(VisitErrorCode.INVALID_CLINICAL_DIAGNOSIS);
+		visit.setClinicalDiagnosis(clinicalDiagnosis);
 	}
 	
 	private void setClinicalDiagnosis(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
@@ -242,12 +245,12 @@ public class VisitFactoryImpl implements VisitFactory {
 	
 	private void setClinicalStatus(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String clinicalStatus = visitDetail.getClinicalStatus();
-		if (isValidPv(clinicalStatus, "clinical-status")) {
-			visit.setClinicalStatus(clinicalStatus);
-			return;
+		if (!isValid(CLINICAL_STATUS, clinicalStatus)) {
+			ose.addError(VisitErrorCode.INVALID_CLINICAL_STATUS);
+			return;			
 		}
 		
-		ose.addError(VisitErrorCode.INVALID_CLINICAL_STATUS);
+		visit.setClinicalStatus(clinicalStatus);
 	}
 	
 	private void setClinicalStatus(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
@@ -260,9 +263,10 @@ public class VisitFactoryImpl implements VisitFactory {
 
 	private void setSite(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String visitSite = visitDetail.getSite();
-		if (visit.isCompleted() && StringUtils.isBlank(visitSite)) {
-			ose.addError(VisitErrorCode.SITE_REQUIRED);
-			return;
+		if (StringUtils.isBlank(visitSite)) {
+			if (visit.isCompleted()) {
+				ose.addError(VisitErrorCode.SITE_REQUIRED);
+			}
 		} else {
 			Site site = daoFactory.getSiteDao().getSiteByName(visitSite);
 			if (site == null) {
@@ -270,7 +274,7 @@ public class VisitFactoryImpl implements VisitFactory {
 				return;
 			}
 			
-			visit.setSite(site);
+			visit.setSite(site);			
 		}
 	}
 	
@@ -286,7 +290,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		String status = visitDetail.getActivityStatus();
 		if (StringUtils.isBlank(status)) {
 			visit.setActive();
-		} else if (isValidPv(status, Status.ACTIVITY_STATUS.getStatus())) {
+		} else if (Status.isValidActivityStatus(status)) {
 			visit.setActivityStatus(status);
 		} else { 
 			ose.addError(ActivityStatusErrorCode.INVALID);

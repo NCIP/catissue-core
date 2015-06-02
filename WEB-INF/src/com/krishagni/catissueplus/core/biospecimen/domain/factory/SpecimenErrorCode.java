@@ -20,13 +20,7 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	DUP_LABEL,
 	
-	LABEL_AUTO_GENERATED,
-	
 	DUP_BARCODE,
-	
-	BARCODE_AUTO_GENERATED,
-	
-	LINEAGE_REQUIRED,
 	
 	INVALID_LINEAGE,
 	
@@ -82,7 +76,13 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	NOT_AVAILABLE_FOR_DIST,
 	
-	INVALID_BIOHAZARDS;
+	INVALID_BIOHAZARDS,
+	
+	INVALID_COLL_PROC,
+	
+	INVALID_COLL_CONTAINER,
+	
+	INVALID_RECV_QUALITY;
 
 	public String code() {
 		return "SPECIMEN_" + this.name();

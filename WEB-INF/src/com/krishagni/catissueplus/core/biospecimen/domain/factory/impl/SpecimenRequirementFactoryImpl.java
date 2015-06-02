@@ -1,5 +1,14 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.*;
+import static com.krishagni.catissueplus.core.common.PvAttributes.COLL_PROC;
+import static com.krishagni.catissueplus.core.common.PvAttributes.CONTAINER;
+import static com.krishagni.catissueplus.core.common.PvAttributes.PATH_STATUS;
+import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_ANATOMIC_SITE;
+import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_CLASS;
+import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_LATERALITY;
+import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,33 +87,31 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 
 	@Override
 	public SpecimenRequirement createDerived(DerivedSpecimenRequirement req) {
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		
 		Long parentId = req.getParentSrId();
-		SpecimenRequirement parent = null;
-		if (parentId != null) {
-			parent = daoFactory.getSpecimenRequirementDao().getById(parentId);
+		if (parentId == null) {
+			ose.addError(PARENT_REQ_REQUIRED);
+			throw ose;
 		}
 		
-		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		SpecimenRequirement parent = daoFactory.getSpecimenRequirementDao().getById(parentId);
 		if (parent == null) {
 			ose.addError(SrErrorCode.PARENT_NOT_FOUND);
 			throw ose;
 		}
 		
 		SpecimenRequirement derived = parent.copy();
-		derived.setLineage("Derived");
+		derived.setLineage(Specimen.DERIVED);
 		setSpecimenClass(req.getSpecimenClass(), derived, ose);
-		setSpecimenType(req.getType(), derived, ose);
+		setSpecimenType(req.getSpecimenClass(), req.getType(), derived, ose);
 		setInitialQty(req.getQuantity(), derived, ose);
 		setStorageType(req.getStorageType(), derived, ose);
 		setConcentration(req.getConcentration(), derived, ose);
 		setLabelFormat(req.getLabelFmt(), derived, ose);
+		derived.setName(req.getName());
 		
-		if (StringUtils.isNotBlank(req.getName())) {
-			derived.setName(req.getName());
-		}
-		
-		ose.checkAndThrow();
-		
+		ose.checkAndThrow();		
 		derived.setParentSpecimenRequirement(parent);
 		return derived;
 	}
@@ -118,8 +125,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		
 		//
 		// Specimen class and type are set here so that properties dependent on these can
-		// be calculated and set appropriately. For example, concentration is set only
-		// for molecular specimens.
+		// be calculated and set appropriately. 
 		//
 		setSpecimenClass(req, sr, ose);
 		setSpecimenType(req, sr, ose);		
@@ -146,14 +152,15 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	
 	@Override
 	public List<SpecimenRequirement> createAliquots(AliquotSpecimensRequirement req) {
-		Long parentSrId = req.getParentSrId();
-		SpecimenRequirement parent = null;
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
-		if (parentSrId != null) {
-			parent = daoFactory.getSpecimenRequirementDao().getById(parentSrId);
+		Long parentSrId = req.getParentSrId();
+		if (parentSrId == null) {
+			ose.addError(PARENT_REQ_REQUIRED);
+			throw ose;
 		}
 		
-		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		SpecimenRequirement parent = daoFactory.getSpecimenRequirementDao().getById(parentSrId);
 		if (parent == null) {
 			ose.addError(SrErrorCode.PARENT_NOT_FOUND);
 			throw ose;
@@ -199,7 +206,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		}
 		
 		if (!specimenLabelGenerator.isValidLabelTmpl(labelFmt)) {
-			ose.addError(SrErrorCode.INVALID_LABEL_FMT);
+			ose.addError(INVALID_LABEL_FMT);
 		}
 		
 		sr.setLabelFormat(labelFmt);
@@ -210,47 +217,61 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 	
 	private void setSpecimenClass(String specimenClass, SpecimenRequirement sr, OpenSpecimenException ose) {
-		ensureNotEmpty(specimenClass, SrErrorCode.SPECIMEN_CLASS_REQUIRED, ose);
+		ensureNotEmptyAndValid(SPECIMEN_CLASS, specimenClass, SPECIMEN_CLASS_REQUIRED, INVALID_SPECIMEN_CLASS, ose);
 		sr.setSpecimenClass(specimenClass);
-		// TODO: Check whether class is valid
-		
 	}
 	
 	private void setSpecimenType(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		setSpecimenType(detail.getType(), sr, ose);
+		setSpecimenType(detail.getSpecimenClass(), detail.getType(), sr, ose);
 	}
 	
-	private void setSpecimenType(String type, SpecimenRequirement sr, OpenSpecimenException ose) {
-		ensureNotEmpty(type, SrErrorCode.SPECIMEN_TYPE_REQUIRED, ose);		
-		sr.setSpecimenType(type);
-		// TODO: Check whether type is valid for class;		
+	private void setSpecimenType(String specimenClass, String type, SpecimenRequirement sr, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(type)) {
+			ose.addError(SPECIMEN_TYPE_REQUIRED);
+			return;
+		}
+		
+		if (!isValid(SPECIMEN_CLASS, specimenClass, type)) {
+			ose.addError(INVALID_SPECIMEN_TYPE);
+			return;
+		}
+				
+		sr.setSpecimenType(type);		
 	}
 	
 	private void setAnatomicSite(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		String anatomicSite = ensureNotEmpty(detail.getAnatomicSite(), SrErrorCode.ANATOMIC_SITE_REQUIRED, ose);
+		String anatomicSite = detail.getAnatomicSite();
+		if (StringUtils.isBlank(anatomicSite)) {
+			ose.addError(ANATOMIC_SITE_REQUIRED);
+			return;
+		}
+		
+		if (!isValid(SPECIMEN_ANATOMIC_SITE, 2, anatomicSite, true)) {
+			ose.addError(INVALID_ANATOMIC_SITE);
+			return;
+		}
+		
 		sr.setAnatomicSite(anatomicSite);
-		// TODO: check for valid site value
 	}
 	
 	private void setLaterality(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		String laterality = ensureNotEmpty(detail.getLaterality(), SrErrorCode.LATERALITY_REQUIRED, ose);
+		String laterality = detail.getLaterality();
+		ensureNotEmptyAndValid(SPECIMEN_LATERALITY, laterality, LATERALITY_REQUIRED, INVALID_LATERALITY, ose);
 		sr.setLaterality(laterality);
-		// TODO: check for valid laterality value
 	}
 	
 	private void setPathologyStatus(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		String pathologyStatus = ensureNotEmpty(detail.getPathology(), SrErrorCode.PATHOLOGY_STATUS_REQUIRED, ose);
-		sr.setPathologyStatus(pathologyStatus);
-		// TODO: check for valid pathology status
+		String pathology = detail.getPathology();
+		ensureNotEmptyAndValid(PATH_STATUS, pathology, PATHOLOGY_STATUS_REQUIRED, INVALID_PATHOLOGY_STATUS, ose);
+		sr.setPathologyStatus(pathology);
 	}
 	
 	private void setStorageType(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
 		setStorageType(detail.getStorageType(), sr, ose);
-		// TODO: check for valid storage type
 	}
 
 	private void setStorageType(String storageType, SpecimenRequirement sr, OpenSpecimenException ose) {
-		ensureNotEmpty(storageType, SrErrorCode.STORAGE_TYPE_REQUIRED, ose);
+		storageType = ensureNotEmpty(storageType, SrErrorCode.STORAGE_TYPE_REQUIRED, ose);
 		sr.setStorageType(storageType);
 		// TODO: check for valid storage type
 	}
@@ -261,7 +282,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		
 	private void setInitialQty(Double initialQty, SpecimenRequirement sr, OpenSpecimenException ose) {
 		if (initialQty == null || initialQty < 0) {
-			ose.addError(SrErrorCode.INVALID_QTY);
+			ose.addError(INVALID_QTY);
 			return;
 		}
 		
@@ -273,12 +294,8 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 	
 	private void setConcentration(Double concentration, SpecimenRequirement sr, OpenSpecimenException ose) {
-		if (sr.getSpecimenClass() == null || !"Molecular".equals(sr.getSpecimenClass())) { 
-			return;
-		}
-		
 		if (concentration != null && concentration < 0) { 
-			ose.addError(SrErrorCode.CONCENTRATION_MUST_BE_POSITIVE);
+			ose.addError(CONCENTRATION_MUST_BE_POSITIVE);
 			return;
 		}
 		
@@ -286,29 +303,29 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 	
 	private void setCollector(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		sr.setCollector(ensureValidUser(detail.getCollector(), SrErrorCode.COLLECTOR_NOT_FOUND, ose));
+		sr.setCollector(ensureValidUser(detail.getCollector(), COLLECTOR_NOT_FOUND, ose));
 	}
 
 	private void setCollectionProcedure(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		String collProc = ensureNotEmpty(detail.getCollectionProcedure(), SrErrorCode.COLL_PROC_REQUIRED, ose);
+		String collProc = detail.getCollectionProcedure();
+		ensureNotEmptyAndValid(COLL_PROC, collProc, COLL_PROC_REQUIRED, INVALID_COLL_PROC, ose);
 		sr.setCollectionProcedure(collProc);
-		// TODO: check for valid collection proc
 	}
 
 	private void setCollectionContainer(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		String collContainer = ensureNotEmpty(detail.getCollectionContainer(), SrErrorCode.COLL_CONT_REQUIRED, ose);
-		sr.setCollectionContainer(collContainer);
-		// TODO: check for valid collection container
+		String collCont = detail.getCollectionContainer();
+		ensureNotEmptyAndValid(CONTAINER, collCont, COLL_CONT_REQUIRED, INVALID_COLL_CONT, ose);		
+		sr.setCollectionContainer(collCont);
 	}
 
 	private void setReceiver(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		sr.setReceiver(ensureValidUser(detail.getReceiver(), SrErrorCode.RECEIVER_NOT_FOUND, ose));
+		sr.setReceiver(ensureValidUser(detail.getReceiver(), RECEIVER_NOT_FOUND, ose));
 	}
 
 	private void setCpe(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
 		Long eventId = detail.getEventId();
 		if (eventId == null) {
-			ose.addError(SrErrorCode.CPE_REQUIRED);
+			ose.addError(CPE_REQUIRED);
 			return;
 		}
 		
@@ -320,6 +337,24 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		sr.setCollectionProtocolEvent(cpe);
 	}
 		
+	private String ensureNotEmptyAndValid(String attr, String value, ErrorCode req, ErrorCode invalid, OpenSpecimenException ose) {
+		value = ensureNotEmpty(value, req, ose);
+		if (value != null) {
+			value = ensureValid(attr, value, invalid, ose);
+		}
+		
+		return value;
+	}
+	
+	private String ensureValid(String attr, String value, ErrorCode invalid, OpenSpecimenException ose) {
+		if (!isValid(attr, value)) {
+			ose.addError(invalid, value);
+			return null;
+		}
+		
+		return value;
+	}
+	
 	private String ensureNotEmpty(String value, ErrorCode required, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(value)) {
 			ose.addError(required);

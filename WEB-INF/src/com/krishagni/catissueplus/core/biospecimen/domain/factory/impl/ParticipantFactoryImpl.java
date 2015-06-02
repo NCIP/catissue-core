@@ -1,7 +1,13 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
+import static com.krishagni.catissueplus.core.common.PvAttributes.ETHNICITY;
+import static com.krishagni.catissueplus.core.common.PvAttributes.GENDER;
+import static com.krishagni.catissueplus.core.common.PvAttributes.GENOTYPE;
+import static com.krishagni.catissueplus.core.common.PvAttributes.RACE;
+import static com.krishagni.catissueplus.core.common.PvAttributes.VITAL_STATUS;
+import static com.krishagni.catissueplus.core.common.service.PvValidator.areValid;
+import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -124,9 +130,8 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			return;
 		}
 		
-		String vitalStatus = detail.getVitalStatus();
-		
-		if (StringUtils.isNotBlank(vitalStatus) && !isValidPv(vitalStatus, VITAL_STATUS)) {
+		String vitalStatus = detail.getVitalStatus();		
+		if (!isValid(VITAL_STATUS, vitalStatus)) {
 			oce.addError(ParticipantErrorCode.INVALID_VITAL_STATUS);
 			return;
 		}
@@ -183,12 +188,12 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			return;
 		}
 		
-		if (isValidPv(status, Status.ACTIVITY_STATUS.toString())) {
-			participant.setActivityStatus(status);
+		if (!Status.isValidActivityStatus(status)) {
+			oce.addError(ActivityStatusErrorCode.INVALID);
 			return;
 		}
 		
-		oce.addError(ActivityStatusErrorCode.INVALID);
+		participant.setActivityStatus(status);		
 	}
 
 	private void setSexGenotype(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
@@ -197,7 +202,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		}
 		
 		String genotype = detail.getSexGenotype();		
-		if (StringUtils.isNotBlank(genotype) && !isValidPv(genotype, SEX_GENOTYPE)) {
+		if (!isValid(GENOTYPE, genotype)) {
 			oce.addError(ParticipantErrorCode.INVALID_GENOTYPE);
 			return;
 		}
@@ -211,7 +216,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		}
 		
 		String gender = detail.getGender();		
-		if (StringUtils.isNotBlank(gender) && !isValidPv(gender, GENDER)) {
+		if (!isValid(GENDER, gender)) {
 			oce.addError(ParticipantErrorCode.INVALID_GENDER);
 			return;
 		}
@@ -229,7 +234,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			return;
 		}
 
-		if (!isValidPv(races.toArray(new String[0]), RACE)) {
+		if (!areValid(RACE, races)) {
 			oce.addError(ParticipantErrorCode.INVALID_RACE);
 			return;
 		}
@@ -243,7 +248,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		}
 		
 		String ethnicity = detail.getEthnicity();		
-		if (StringUtils.isNotBlank(ethnicity) && !isValidPv(ethnicity, ETHNICITY)) {
+		if (!isValid(ETHNICITY, ethnicity)) {
 			oce.addError(ParticipantErrorCode.INVALID_ETHNICITY);
 			return;
 		}
@@ -328,15 +333,5 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		}
 	}
 	
-	private final String RACE = "race";
-
-	private final String ETHNICITY = "ethnicity";
-
-	private final String VITAL_STATUS = "vital status";
-
-	private final String GENDER = "gender";
-
-	private final String SEX_GENOTYPE = "sexGenotype";
-
 	private static final Pattern SSN_PATTERN = Pattern.compile("[0-9]{3}-[0-9]{2}-[0-9]{4}");
 }

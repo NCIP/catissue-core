@@ -1,6 +1,9 @@
 
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
+import static com.krishagni.catissueplus.core.common.PvAttributes.SITE_TYPE;
+import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +18,6 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -156,8 +158,9 @@ public class SiteFactoryImpl implements SiteFactory {
 			return;
 		}
 		
-		if (!CommonValidator.isValidPv(siteType, "site type")) {
+		if (!isValid(SITE_TYPE, siteType)) {
 			ose.addError(SiteErrorCode.INVALID_TYPE);
+			return;
 		}
 		
 		site.setType(siteType);
