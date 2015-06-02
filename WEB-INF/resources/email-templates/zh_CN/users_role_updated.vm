@@ -81,7 +81,7 @@
 
 	            #foreach( $ac in $sr.role.acl )
 		      <tr style="padding-top: 10px; padding-bottom: 10px;">
-	                <td>$ac.resource.name</td>
+	                <td>$messageSource.getMessage($ac.resource.name, null, $locale)</td>
 	                <td>
 		          #set( $operations = [] )
 		          #foreach( $resourceInstantOp in $ac.operations )

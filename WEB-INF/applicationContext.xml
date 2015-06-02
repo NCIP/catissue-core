@@ -106,6 +106,7 @@
     <property name="daoFactory" ref="rbacDaoFactory"/>
     <property name="userDao" ref="userDao"/>
     <property name="emailService" ref="emailService"/>
+    <property name="messageSource" ref="messageSource"/>
   </bean>
 	
   <bean id="visitTokenRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">

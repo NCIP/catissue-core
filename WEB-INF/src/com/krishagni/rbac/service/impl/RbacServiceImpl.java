@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Session;
+import org.springframework.context.MessageSource;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -62,6 +64,8 @@ public class RbacServiceImpl implements RbacService {
 	
 	private EmailService emailService;
 	
+	private MessageSource messageSource;
+	
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
 	}
@@ -76,6 +80,10 @@ public class RbacServiceImpl implements RbacService {
 
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
+	}
+	
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 
 	@Override
@@ -894,6 +902,8 @@ public class RbacServiceImpl implements RbacService {
 		props.put("user", user);
 		props.put("sr", newSr);
 		props.put("oldSr", oldSrDetails);
+		props.put("messageSource", messageSource);
+		props.put("locale", Locale.getDefault());
 		
 		emailService.sendEmail(ROLE_UPDATED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	}
