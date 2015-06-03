@@ -238,21 +238,22 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		Long parentId = detail.getParentId();
 		String parentLabel = detail.getParentLabel();
 		
-		boolean parentSpecified = true;
+		Object key = null;
 		if (StringUtils.isNotBlank(parentLabel)) {
+			key = parentLabel;
 			parent = daoFactory.getSpecimenDao().getByLabel(parentLabel);
 		} else if (parentId != null) {
+			key = parentId;
 			parent = daoFactory.getSpecimenDao().getById(parentId);
-		} else if (specimen.getVisit() != null && specimen.getSpecimenRequirement() != null) {
+		} else if (specimen.getVisit() != null && specimen.getSpecimenRequirement() != null) {			
 			Long visitId = specimen.getVisit().getId();
 			Long srId = specimen.getSpecimenRequirement().getId();
+			key = visitId + ":" + srId;
 			parent = daoFactory.getSpecimenDao().getParentSpecimenByVisitAndSr(visitId, srId);
-		} else {
-			parentSpecified = false;
 		}
 		
 		if (parent == null) {
-			ose.addError(parentSpecified ? SpecimenErrorCode.NOT_FOUND : SpecimenErrorCode.PARENT_REQUIRED);
+			ose.addError(key != null ? SpecimenErrorCode.NOT_FOUND : SpecimenErrorCode.PARENT_REQUIRED, key);
 		}
 		
 		specimen.setParentSpecimen(parent);

@@ -441,7 +441,7 @@ public class AccessCtrlMgr {
 	private void ensureSpecimenObjectRights(Long specimenId, Operation op) {
 		Specimen specimen = daoFactory.getSpecimenDao().getById(specimenId);
 		if (specimen == null) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND);
+			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND, specimenId);
 		}
 		
 		ensureVisitAndSpecimenObjectRights(specimen.getRegistration(), op);

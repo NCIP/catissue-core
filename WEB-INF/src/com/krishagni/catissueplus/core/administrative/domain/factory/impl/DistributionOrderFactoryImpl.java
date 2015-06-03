@@ -250,9 +250,8 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 	}
 	
 	private DistributionOrderItem getOrderItem(DistributionOrderItemDetail detail, DistributionOrder order, OpenSpecimenException ose) {
-		Specimen specimen = getSpecimen(detail.getSpecimen());
+		Specimen specimen = getSpecimen(detail.getSpecimen(), ose);
 		if (specimen == null) {
-			ose.addError(SpecimenErrorCode.NOT_FOUND);
 			return null;
 		} 
 
@@ -275,13 +274,20 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		return orderItem;
 	}
 	
-	private Specimen getSpecimen(SpecimenInfo info) {
+	private Specimen getSpecimen(SpecimenInfo info, OpenSpecimenException ose) {
 		Specimen specimen = null;
+		Object key = null;
 		
 		if (info.getId() != null) {
+			key = info.getId();
 			specimen = daoFactory.getSpecimenDao().getById(info.getId());
 		} else if (StringUtils.isNotBlank(info.getLabel())) {
+			key = info.getLabel();
 			specimen = daoFactory.getSpecimenDao().getByLabel(info.getLabel());
+		}
+		
+		if (specimen == null) {
+			ose.addError(SpecimenErrorCode.NOT_FOUND, key);
 		}
 		
 		return specimen;

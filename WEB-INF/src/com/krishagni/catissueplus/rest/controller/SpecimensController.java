@@ -64,7 +64,7 @@ public class SpecimensController {
 			return true;
 		}
 		
-		throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND);
+		throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND, label);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)

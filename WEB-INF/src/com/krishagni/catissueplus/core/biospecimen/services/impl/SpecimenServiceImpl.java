@@ -65,15 +65,10 @@ public class SpecimenServiceImpl implements SpecimenService {
 		try {
 			EntityQueryCriteria crit = req.getPayload();
 			
-			Specimen specimen = null;
-			if (crit.getId() != null) {
-				specimen = daoFactory.getSpecimenDao().getById(crit.getId());
-			} else if (crit.getName() != null) {
-				specimen = daoFactory.getSpecimenDao().getByLabel(crit.getName());
-			}
-			
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			Specimen specimen = getSpecimen(crit.getId(), crit.getName(), ose);
 			if (specimen == null) {
-				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND);
+				return ResponseEvent.error(ose);
 			}
 			
 			AccessCtrlMgr.getInstance().ensureReadSpecimenRights(specimen);
@@ -142,18 +137,14 @@ public class SpecimenServiceImpl implements SpecimenService {
 	public ResponseEvent<SpecimenDetail> updateSpecimenStatus(RequestEvent<SpecimenStatusDetail> req) {
 		try {
 			SpecimenStatusDetail detail = req.getPayload();
-
-			Specimen specimen = null;			
-			if (detail.getId() != null) {
-				specimen = daoFactory.getSpecimenDao().getById(detail.getId());
-			} else if (StringUtils.isNotBlank(detail.getLabel())) {
-				specimen = daoFactory.getSpecimenDao().getByLabel(detail.getLabel());
-			}
 			
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			Specimen specimen = getSpecimen(detail.getId(), detail.getLabel(), ose);
 			if (specimen == null) {
-				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND);
+				return ResponseEvent.error(ose);
 			}
 			
+			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);
 			specimen.updateStatus(detail.getStatus(), detail.getReason());
 			return ResponseEvent.response(SpecimenDetail.from(specimen));
 		} catch (OpenSpecimenException ose) {
@@ -215,7 +206,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		try {
 			Map<String, Long> ids = daoFactory.getSpecimenDao().getCprAndVisitIds(req.getPayload());
 			if (ids == null || ids.isEmpty()) {
-				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND);
+				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND, req.getPayload());
 			}
 			
 			return ResponseEvent.response(ids);
@@ -245,7 +236,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		if (detail.getId() != null) {
 			existing = daoFactory.getSpecimenDao().getById(detail.getId());
 			if (existing == null) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND);
+				throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND, detail.getId());
 			}
 		}
 		
@@ -274,15 +265,10 @@ public class SpecimenServiceImpl implements SpecimenService {
 	
 	private ResponseEvent<SpecimenDetail> updateSpecimen(SpecimenDetail detail, boolean partial) {
 		try {
-			Specimen existing = null;
-			if (detail.getId() != null) {
-				existing = daoFactory.getSpecimenDao().getById(detail.getId());
-			} else if (StringUtils.isNotBlank(detail.getLabel())) {
-				existing = daoFactory.getSpecimenDao().getByLabel(detail.getLabel());
-			}
-				
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			Specimen existing = getSpecimen(detail.getId(), detail.getLabel(), ose);
 			if (existing == null) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND);
+				return ResponseEvent.error(ose);
 			}
 			
 			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(existing);
@@ -389,5 +375,24 @@ public class SpecimenServiceImpl implements SpecimenService {
 		});
 		
 		return specimens;		
+	}
+	
+	private Specimen getSpecimen(Long specimenId, String label, OpenSpecimenException ose) {
+		Specimen specimen = null;
+		Object key = null;
+		
+		if (specimenId != null) {
+			key = specimenId;
+			specimen = daoFactory.getSpecimenDao().getById(specimenId);
+		} else if (StringUtils.isNotBlank(label)) {
+			key = label;
+			specimen = daoFactory.getSpecimenDao().getByLabel(label);
+		}
+		
+		if (specimen == null) {
+			ose.addError(SpecimenErrorCode.NOT_FOUND, key);
+		}
+		
+		return specimen;
 	}
 }

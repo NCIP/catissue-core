@@ -380,14 +380,17 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			String label) {
 		
 		Specimen specimen = null;
+		Object key = null;
 		if (specimenId != null) {
+			key = specimenId;
 			specimen = daoFactory.getSpecimenDao().getById(specimenId);
 		} else if (StringUtils.isNotBlank(label)) {
+			key = label;
 			specimen = daoFactory.getSpecimenDao().getByLabel(label);
 		}
 		
 		if (specimen == null) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND);
+			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND, key);
 		}
 		
 		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);		

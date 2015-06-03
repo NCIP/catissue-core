@@ -52,7 +52,7 @@ public class SpecimenEventsServiceImpl implements SpecimenEventsService {
 			String specimenLabel = formData.getAppData().get("id").toString();
 			Specimen specimen = daoFactory.getSpecimenDao().getByLabel(specimenLabel);
 			if (specimen == null) {
-				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND);				
+				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND, specimenLabel);				
 			}
 			
 			Long cpId = specimen.getVisit().getRegistration().getCollectionProtocol().getId();

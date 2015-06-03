@@ -85,7 +85,7 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>> {
 				String label = (String)extnObj.get("specimenLabel");
 				Specimen specimen = daoFactory.getSpecimenDao().getByLabel(label);
 				if (specimen == null) {
-					return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND);
+					return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND, label);
 				}
 				
 				objectId = specimen.getId();
