@@ -276,6 +276,7 @@
 
     "spr": "Surgical Pathology Report",
     "spr_uploaded": "Surgical pathology report {{file}} uploaded successfully.",
+    "spr_saved": "Surgical pathology report saved successfully.",
 
     "status": {
       "pending": "Pending",

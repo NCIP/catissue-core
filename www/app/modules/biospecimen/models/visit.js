@@ -88,7 +88,15 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
 
     Visit.prototype.getSprUrl = function() {
       return Visit.url() + this.$id() + '/spr';
-    }
+    };
+
+    Visit.prototype.getSpr = function() {
+      return $http.get(this.getSprUrl()).then(ApiUtil.processResp);
+    };
+
+    Visit.prototype.updateSpr = function(sprContent) {
+      return $http.put(this.getSprUrl(), sprContent).then(ApiUtil.processResp);
+    };
 
     return Visit;
   });

@@ -141,6 +141,16 @@ public class VisitsController {
 		Utility.sendToClient(httpResp, detail.getFileName(), detail.getFile());
 	}
 	
+	@RequestMapping(method = RequestMethod.PUT, value="/{id}/spr")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public String updateSpr(@PathVariable("id") Long visitId, @RequestBody SprDetail sprDetail) {
+		sprDetail.setVisitId(visitId);
+		ResponseEvent<String>resp = visitService.updateSpr(getRequest(sprDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, value="/collect")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

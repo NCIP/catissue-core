@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -139,6 +140,15 @@ public class Utility {
 	
 	public static String getContentType(File file) {
 		return MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(file);
+	}
+	
+	public static void createFile(String filePath, String fileText) {
+		try {
+			File file = new File(filePath);
+			FileUtils.writeStringToFile(file, fileText, (String) null, false);
+		} catch (IOException e) {
+			throw new RuntimeException("Error sending file", e);
+		}
 	}
 
 }

@@ -6,6 +6,18 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
       $scope.sprUrl = $sce.trustAsResourceUrl(visit.getSprUrl());
       $scope.sprName = visit.sprName;
       $scope.uploadMode = false;
+      $scope.editMode = false;
+      $scope.spr = {};
+
+      loadSpr();
+    }
+
+    function loadSpr() {
+     visit.getSpr().then(
+        function(result) {
+          $scope.spr.sprContent = result.data;
+        }
+      );
     }
 
     $scope.showUploadMode = function() {
@@ -16,14 +28,33 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
       $scope.uploadMode = false;
     }
 
+    $scope.showEditMode = function() {
+      $scope.editMode = true;
+    }
+
+    $scope.cancelSprEdit = function() {
+       $scope.editMode = false;
+    }
+
     $scope.upload = function() {
       $scope.sprUploader.ctrl.submit().then(
         function(fileName) {
+          Alerts.success("visits.spr_uploaded", {file:fileName});
           $scope.uploadMode = false;
           $scope.sprName = fileName;
-          Alerts.success("visits.spr_uploaded", {file:fileName});
+          loadSpr();
         }
       )
+    }
+
+    $scope.saveSpr = function() {
+      var data = {sprContent: $scope.spr.sprContent};
+      visit.updateSpr(data).then(
+        function(result) {
+          Alerts.success("visits.spr_saved");
+          $scope.editMode = false;
+        }
+      );
     }
 
     $scope.confirmDeleteSpr = function() {
