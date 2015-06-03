@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -47,12 +48,28 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		return getUsers(criteria.list());
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<User> getUsersByIds(List<Long> userIds) {
-		return sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_USERS_BY_IDS)
-				.setParameterList("userIds", userIds)
-				.list();
+		return getUsersByIdsAndInstitute(userIds, null);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<User> getUsersByIdsAndInstitute(List<Long> userIds, Long instituteId) {
+		String hql = GET_USER_BY_IDS_AND_INSTITUE_HQL;
+		if (instituteId != null) {
+			hql = String.format(hql, " join u.department dept join dept.institute inst ", " and inst.id = :instituteId ");
+		} else {
+			hql = String.format(hql, "", "");
+		}
+		
+		Query query = sessionFactory.getCurrentSession()
+				.createQuery(hql)
+				.setParameterList("userIds", userIds);
+		
+		if (instituteId != null) {
+			query.setLong("instituteId", instituteId);
+		}
+		
+		return query.list();
 	}
 	
 	public User getUser(String loginName, String domainName) {
@@ -246,10 +263,16 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	private static final String GET_USER_BY_EMAIL_HQL = 
 			"from com.krishagni.catissueplus.core.administrative.domain.User where emailAddress = :emailAddress %s";
 	
+	private static final String GET_USER_BY_IDS_AND_INSTITUE_HQL = 
+			"select " +
+			"  u " +
+			"from " + 
+			"  com.krishagni.catissueplus.core.administrative.domain.User u %s " + 
+			"where " + 
+			"  u.id in (:userIds) and u.activityStatus != 'Disabled' %s";
+	
 	private static final String FQN = User.class.getName();
 
-	private static final String GET_USERS_BY_IDS = FQN + ".getUsersByIds";
-	
 	private static final String GET_DEPENDENT_ENTITIES = FQN + ".getDependentEntities"; 
 	
 	private static final String TOKEN_FQN = ForgotPasswordToken.class.getName();

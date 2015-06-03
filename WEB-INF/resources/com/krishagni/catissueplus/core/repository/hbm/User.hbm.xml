@@ -46,14 +46,6 @@
  
     <property name="admin" column="IS_ADMIN"/>
     
-    <query name="getUsersByIds">
-      from 
-        com.krishagni.catissueplus.core.administrative.domain.User 
-      where 
-        id in (:userIds) 
-        and activityStatus != 'Disabled'
-    </query>
-    
     <sql-query name="getDependentEntities">
       <return-scalar column="entityName" type="string"/>
       <return-scalar column="count" type="int"/>    

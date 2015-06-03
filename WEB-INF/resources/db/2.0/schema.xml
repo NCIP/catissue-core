@@ -1999,4 +1999,53 @@
       )
     </sql>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Drop FK on csm_user_id from shared specimenlist tags table">
+    <dropForeignKeyConstraint
+      baseTableName="SHARED_SPECIMENLIST_TAGS"
+      constraintName="FK_SPECIMENLIST_SHARE_USER_ID"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop FK on csm_user_id from shared query tags table">
+    <dropForeignKeyConstraint
+      baseTableName="SHARED_QUERY_TAGS"
+      constraintName="FK_QUERYTAG_SHARE_USER_ID"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop FK on csm_user_id from catissue user table">
+    <dropForeignKeyConstraint
+      baseTableName="CATISSUE_USER"
+      constraintName="FK_CATISSUE_USER_CSMID"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop UK on csm_user_id from catissue user table">
+    <dropUniqueConstraint
+      constraintName="CSM_USER_ID_UNIQUE_KEY"
+      tableName="CATISSUE_USER"
+      uniqueColumns="CSM_USER_ID"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop csm_user_id column from catissue user table">
+    <dropColumn
+      columnName="CSM_USER_ID"
+      tableName="CATISSUE_USER"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Add FK to user id in shared specimenlist tags table">
+    <addForeignKeyConstraint
+      constraintName="FK_SHARED_SPECLIST_USER_ID"
+      baseTableName="SHARED_SPECIMENLIST_TAGS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Add FK to user id in shared query tags table">
+    <addForeignKeyConstraint
+      constraintName="FK_SHARED_QUERY_USER_ID"
+      baseTableName="SHARED_QUERY_TAGS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
 </databaseChangeLog>

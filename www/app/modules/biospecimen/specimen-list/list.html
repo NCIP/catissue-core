@@ -89,10 +89,16 @@
       <div class="os-table-body">
         <div class="row" ng-repeat="list in lists.sharedLists">
           <div class="col col-xs-12 clearfix list"
-            ng-class="{'os-specimen-list-selected-list': selectedList.id == list.id}"> 
+            ng-class="{'os-specimen-list-selected-list': lists.selectedList.id == list.id}"> 
             <div class="pull-left" ng-click="selectList(list)" title="{{list.name}}">
               <span>{{list.name}}</span>
             </div>
+            <div class="pull-right" ng-if="currentUser.admin">
+              <button type="button" class="btn btn-xs btn-default" ui-sref="specimen-list-addedit({listId: list.id})">
+                <span class="fa fa-pencil"></span>
+              </button> 
+            </div>
+            <div class="clearfix"></div>
           </div>
         </div>
       </div>
@@ -110,12 +116,12 @@
 </script>
 
 <script type="text/ng-template" id="specimen-list/specimens.html">
-  <div class="os-table" overflow="auto" ng-if="specimens.length > 0">
+  <div class="os-table" overflow="auto" ng-if="listSpecimens.actualCount != 0">
     <div class="os-table-head">
       <div class="row">
         <div class="col os-col-20">
           <div class="clearfix">
-            <div class="pull-left os-select-specimen-cb">
+            <div class="pull-left os-select-specimen-cb" ng-if="listSpecimens.isAllowedToDelete">
               <os-checkbox ng-change="toggleAllSpecimenSelect()" ng-model="selection.all" ></os-checkbox>
             </div>
             <div class="pull-left" style="padding-left: 12px;">
@@ -138,11 +144,11 @@
       </div>
     </div>
     <div class="os-table-body">
-      <div class="row" ng-repeat="specimen in specimens"
+      <div class="row" ng-repeat="specimen in listSpecimens.specimens"
         ng-class="{selected: specimen.selected}">
         <div class="col os-col-20">
           <div class="clearfix">
-            <div class="pull-left os-select-specimen-cb">
+            <div class="pull-left os-select-specimen-cb" ng-if="listSpecimens.isAllowedToDelete">
               <os-checkbox ng-change="toggleSpecimenSelect(specimen)" ng-model="specimen.selected"></os-checkbox>
             </div>
             <div class="pull-left" style="padding-left: 12px;">
@@ -171,9 +177,16 @@
           <span>{{specimen.lineage}}</span>
         </div>
       </div>
+      <div class="row" ng-if="listSpecimens.actualCount > listSpecimens.specimens.length">
+        <div class="col os-col-100">
+          <span class="text-warning" translate="specimen_list.more_specimens">
+           There are more specimens in list than displayed.
+          </span>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="os-table" ng-if="!specimens || specimens.length == 0">
+  <div class="os-table" ng-if="listSpecimens.actualCount == 0">
     <div class="os-table-head">
       <div class="row">
         <div class="col col-xs-10">

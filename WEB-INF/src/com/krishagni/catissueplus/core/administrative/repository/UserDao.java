@@ -14,6 +14,8 @@ public interface UserDao extends Dao<User> {
 	
 	public List<User> getUsersByIds(List<Long> userIds);
 	
+	public List<User> getUsersByIdsAndInstitute(List<Long> userIds, Long instituteId);
+	
 	public User getUser(String loginName, String domain);
 	
 	public User getSystemUser();

@@ -16,9 +16,12 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
+import com.krishagni.catissueplus.core.common.Pair;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
 public class SpecimenListFactoryImpl implements SpecimenListFactory {
 	private DaoFactory daoFactory;
@@ -87,7 +90,9 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 	
 	private void setSpecimens(SpecimenList list, List<String> labels, OpenSpecimenException ose) {
 		if (labels != null && !labels.isEmpty()) {
-			SpecimenListCriteria crit = new SpecimenListCriteria().labels(labels);			
+			List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
+			SpecimenListCriteria crit = new SpecimenListCriteria().labels(labels).siteCps(siteCpPairs);	
+			
 			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimens(crit);
 			if (specimens.size() != labels.size()) {
 				ose.addError(SpecimenListErrorCode.INVALID_LABELS);
@@ -101,7 +106,13 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 	
 	private void setSharedUsers(SpecimenList specimenList, List<Long> userIds, OpenSpecimenException ose) {
 		if (userIds != null && !userIds.isEmpty()) {
-			List<User> sharedUsers = daoFactory.getUserDao().getUsersByIds(userIds);
+			Long instituteId = null;
+			if (!AuthUtil.isAdmin()) {
+				User user = daoFactory.getUserDao().getById(AuthUtil.getCurrentUser().getId());
+				instituteId = user.getInstitute().getId();
+			}
+			
+			List<User> sharedUsers = daoFactory.getUserDao().getUsersByIdsAndInstitute(userIds, instituteId);
 			if (sharedUsers.size() != userIds.size()) {
 				ose.addError(SpecimenListErrorCode.INVALID_USERS_LIST);
 			} else {

@@ -1045,6 +1045,7 @@
     "my_lists": "My Lists",
     "shared_lists": "Shared Lists",
     "info": "Information",
+    "more_specimens": "There are more specimens in list than displayed.",
     "no_specimens": "There are no specimens to show in selected specimen list.",
     "description": "Description",
     "cp": "Collection Protocol",

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.biospecimen.events.ListSpecimensDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ShareSpecimenListOp;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
@@ -83,8 +84,8 @@ public class SpecimenListsController {
 	@RequestMapping(method = RequestMethod.GET, value="/{listId}/specimens")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SpecimenDetail> getListSpecimens(@PathVariable("listId") Long listId) {
-		ResponseEvent<List<SpecimenDetail>> resp = specimenListSvc.getListSpecimens(getRequest(listId));
+	public ListSpecimensDetail getListSpecimens(@PathVariable("listId") Long listId) {
+		ResponseEvent<ListSpecimensDetail> resp = specimenListSvc.getListSpecimens(getRequest(listId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

@@ -9,7 +9,17 @@ import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 public class SpecimenListDaoImpl extends AbstractDao<SpecimenList> implements SpecimenListDao {
 	private static final String FQN = SpecimenList.class.getName();
 	
+	private static final String GET_SPECIMEN_LISTS = FQN + ".getSpecimenLists";
+	
 	private static final String GET_SPECIMEN_LISTS_BY_USER = FQN + ".getSpecimenListsByUser";
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SpecimenList> getSpecimenLists() {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_SPECIMEN_LISTS)
+				.list();
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

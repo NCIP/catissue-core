@@ -38,6 +38,10 @@
     </set>
     
     <property name="deletedOn" column="DELETED_ON"/>
+    
+    <query name="getSpecimenLists">
+      from SpecimenList l where l.deletedOn is null order by l.name
+    </query>
 	
     <query name="getSpecimenListsByUser">
       select 
