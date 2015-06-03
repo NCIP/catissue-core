@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
   .controller('ParticipantListCtrl', function(
-    $scope, $state, $stateParams, $modal, $q, 
+    $scope, $state, $stateParams, $modal, $q, osRightDrawerSvc,
     cp, CollectionProtocolRegistration, Util, CpConfigSvc) {
 
     function init() {
@@ -19,6 +19,13 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
     function loadParticipants() {
       CollectionProtocolRegistration.listForCp($scope.cpId, true, $scope.filterOpts).then(
         function(cprList) {
+          if (!$scope.cprList && cprList.length > 12) {
+            //
+            // Show search options when number of participants are more than 12
+            //
+            osRightDrawerSvc.open();
+          }
+
           $scope.cprList = cprList;
         }
       )

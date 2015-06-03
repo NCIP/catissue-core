@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.user.list', ['os.administrative.models'])
-  .controller('UserListCtrl', function($scope, $state, User, PvManager, Util) {
+  .controller('UserListCtrl', function($scope, $state, osRightDrawerSvc, User, PvManager, Util) {
     function init() {
       $scope.userFilterOpts = {};
       loadUsers();
@@ -23,6 +23,13 @@ angular.module('os.administrative.user.list', ['os.administrative.models'])
 
     function loadUsers(filterOpts) {
       User.query(filterOpts).then(function(result) {
+        if (!$scope.users && result.length > 12) {
+          //
+          // Show search options when # of users are more than 12
+          //
+          osRightDrawerSvc.open();
+        }
+
         $scope.users = result; 
       });
     };

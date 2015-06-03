@@ -30,21 +30,46 @@ angular.module('openspecimen')
   })
   .factory('osRightDrawerSvc', function() {
     var drawerEl = undefined;
+    
+    function setCardsViewWidth(width) {
+      var cardsDiv = drawerEl.parent().find("div.os-cards, div.os-list-container");
+      cardsDiv.css('width', width);
+    }
+
+    function open() {
+      if (drawerEl.hasClass('active')) {
+        return;
+      }
+
+      drawerEl.addClass('active');
+      drawerEl.find('input, textArea, select, button').filter(':visible:first').focus();
+      setCardsViewWidth('75%');
+    }
+
+    function close() {
+      if (!drawerEl.hasClass('active')) {
+        return;
+      }
+
+      drawerEl.removeClass('active');
+      setCardsViewWidth('100%');
+    }
+       
     return {
       setDrawer: function(drawer) {
         drawerEl = drawer;
       },
 
       toggle: function() {
-        drawerEl.toggleClass('active');
-
-        var cardsDiv = drawerEl.parent().find("div.os-cards, div.os-list-container");
         if (drawerEl.hasClass('active')) {
-          cardsDiv.css("width", "75%");
-          drawerEl.find('input, textArea, select, button').filter(':visible:first').focus();
+          close();
         } else {
-          cardsDiv.css("width", "100%");
+          open();
         }
-      }
+      },
+
+      open: open,
+
+      close: close
     }
   });
