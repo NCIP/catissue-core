@@ -339,6 +339,15 @@ angular.module('openspecimen')
           }
         } 
 
+        var missingLabels = getMissingLabels(payload, specimens);
+        if (missingLabels.length > 0) {
+          Alerts.errorText(
+            "Parent specimen labels not specified." +
+            " Child specimens: " + missingLabels.join()
+          );
+          return;
+        }
+
         Specimen.save(payload).then(
           function() {
             $state.go('participant-list', {cpId: $scope.cpId});
@@ -360,7 +369,7 @@ angular.module('openspecimen')
           }     
         });
 
-        return {
+        var specimenToSave = {
           label: label.trim(),
           reqId: specimen.id,
           status: 'Collected',      
@@ -368,6 +377,48 @@ angular.module('openspecimen')
           visitId: specimen.visitId,
           children: children
         };
+  
+        return anyChildHasLabel(specimenToSave) ? specimenToSave : null;
+      }
+
+      function anyChildHasLabel(specimen) {
+        if (!!specimen.label) {
+          return true;
+        }
+
+        for (var i = 0; i < specimen.children.length; ++i) {
+          if (anyChildHasLabel(specimen.children[i])) {
+            return true;
+          }
+        }
+
+        return false;
+      }
+  
+      function getMissingLabels(specimenTree, specimens) {
+        var labelsToSave = getLabelsFromSpecimenTree(specimenTree);
+        var missing = [];
+        angular.forEach(specimens, function(specimen) {
+          var label = specimen.label;
+          if (!!label && labelsToSave.indexOf(label) == -1) {
+            missing.push(label);
+          }
+        }); 
+
+        return missing;
+      }
+
+      function getLabelsFromSpecimenTree(specimenTree) {
+        var labels = [];
+        angular.forEach(specimenTree, function(specimen) {
+          if (!!specimen.label) {
+            labels.push(specimen.label);
+          }
+
+          labels = labels.concat(getLabelsFromSpecimenTree(specimen.children));
+        });
+
+        return labels;
       }
 
       init();
