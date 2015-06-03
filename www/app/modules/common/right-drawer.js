@@ -44,6 +44,7 @@ angular.module('openspecimen')
       drawerEl.addClass('active');
       drawerEl.find('input, textArea, select, button').filter(':visible:first').focus();
       setCardsViewWidth('75%');
+      drawerEl.scope().$emit('osRightDrawerOpen');
     }
 
     function close() {
@@ -53,6 +54,7 @@ angular.module('openspecimen')
 
       drawerEl.removeClass('active');
       setCardsViewWidth('100%');
+      drawerEl.scope().$emit('osRightDrawerClose');
     }
        
     return {

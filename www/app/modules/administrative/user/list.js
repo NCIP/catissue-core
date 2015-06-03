@@ -1,22 +1,67 @@
 
 angular.module('os.administrative.user.list', ['os.administrative.models'])
-  .controller('UserListCtrl', function($scope, $state, osRightDrawerSvc, User, PvManager, Util) {
-    function init() {
-      $scope.userFilterOpts = {};
-      loadUsers();
-      loadPvs();
-      Util.filter($scope, 'userFilterOpts', loadUsers);
-    }
+  .controller('UserListCtrl', function(
+    $scope, $state, $rootScope, 
+    osRightDrawerSvc, Institute, User, PvManager, Util) {
 
-    function loadPvs() {
+    var pvInit = false;
+
+    function init() {
+      loadUsers();
+      initPvsAndFilterOpts();
+    }
+  
+    function initPvsAndFilterOpts() {
+      $scope.userFilterOpts = {};
+      $scope.$on('osRightDrawerOpen', function() {
+        if (pvInit) {
+          return;
+        }
+
+        loadActivityStatuses();
+        loadInstitutes().then(
+          function(institutes) {
+            if (institutes.length == 1) {
+              $scope.userFilterOpts.institute = institutes[0].name;
+            }
+
+            Util.filter($scope, 'userFilterOpts', loadUsers);
+          }
+        );
+
+        pvInit = true;
+      });
+    }
+   
+    function loadActivityStatuses() {
       PvManager.loadPvs('activity-status').then(
         function(result) {
-          $scope.activityStatuses = result;
-
+          $scope.activityStatuses = [].concat(result);
           var idx = $scope.activityStatuses.indexOf('Disabled');
           if (idx != -1) {
             $scope.activityStatuses.splice(idx, 1);
           }
+        }
+      );
+    }
+
+    function loadInstitutes() {
+      var q = undefined;
+      if ($rootScope.currentUser.admin) {
+        q = Institute.query();
+      } else {
+        q = $rootScope.currentUser.getInstitute();
+      }
+
+      return q.then(
+        function(result) {
+          if (result instanceof Array) {
+            $scope.institutes = result;
+          } else {
+            $scope.institutes = [result];
+          }
+ 
+          return $scope.institutes;
         }
       );
     }
