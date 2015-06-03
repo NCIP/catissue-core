@@ -9,6 +9,13 @@ angular.module('os.biospecimen.participant.specimen-tree',
     CollectSpecimensSvc, Specimen, SpecimenLabelPrinter, SpecimenList, SpecimensHolder,
     Alerts, PvManager, Util) {
 
+    function openSpecimenTree(specimens) {
+      angular.forEach(specimens, function(specimen) {
+        specimen.isOpened = true;
+        openSpecimenTree(specimen.children);
+      });
+    }
+
     function loadSpecimenClasses(scope) {
       if (scope.classesLoaded) {
         return;
@@ -119,10 +126,12 @@ angular.module('os.biospecimen.participant.specimen-tree',
       templateUrl: 'modules/biospecimen/participant/specimens.html',
 
       link: function(scope, element, attrs) {
-        scope.specimens = Specimen.flatten(scope.specimenTree);
         scope.view = 'list';
         scope.parentSpecimen = undefined;
         loadAllSpecimenList(scope);
+
+        scope.specimens = Specimen.flatten(scope.specimenTree);
+        openSpecimenTree(scope.specimens);
 
         scope.openSpecimenNode = function(specimen) {
           specimen.isOpened = true;
