@@ -78,10 +78,12 @@
 		      <th align="left" style="border-bottom:1px solid #e3e3e3;">Resource</th>
 		      <th align="left" style="border-bottom:1px solid #e3e3e3;">Permissions</th>
 		    </tr>
-
+              
+		    #set($prefix = "rbac_resource_")
 	            #foreach( $ac in $sr.role.acl )
 		      <tr style="padding-top: 10px; padding-bottom: 10px;">
-	                <td>$messageSource.getMessage($ac.resource.name, null, $locale)</td>
+		        #set($resourceKey = "$prefix$ac.resource.name")
+	                <td>$messageSource.getMessage($resourceKey.toLowerCase(), null, $locale)</td>
 	                <td>
 		          #set( $operations = [] )
 		          #foreach( $resourceInstantOp in $ac.operations )

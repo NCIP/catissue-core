@@ -106,7 +106,6 @@
     <property name="daoFactory" ref="rbacDaoFactory"/>
     <property name="userDao" ref="userDao"/>
     <property name="emailService" ref="emailService"/>
-    <property name="messageSource" ref="messageSource"/>
   </bean>
 	
   <bean id="visitTokenRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
@@ -402,6 +401,7 @@
 
   <bean id="templateService" class="com.krishagni.catissueplus.core.common.service.impl.TemplateServiceImpl">
     <property name="velocityEngine" ref="velocityEngine"/>
+    <property name="messageSource" ref="messageSource"/>
   </bean>
 
   <bean id="emailService" class="com.krishagni.catissueplus.core.common.service.impl.EmailServiceImpl">

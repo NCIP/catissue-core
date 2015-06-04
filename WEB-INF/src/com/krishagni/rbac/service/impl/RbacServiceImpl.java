@@ -64,8 +64,6 @@ public class RbacServiceImpl implements RbacService {
 	
 	private EmailService emailService;
 	
-	private MessageSource messageSource;
-	
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
 	}
@@ -82,10 +80,6 @@ public class RbacServiceImpl implements RbacService {
 		this.emailService = emailService;
 	}
 	
-	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
-	}
-
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<ResourceDetail>> getResources(RequestEvent<ResourceListCriteria> req) {
@@ -902,8 +896,6 @@ public class RbacServiceImpl implements RbacService {
 		props.put("user", user);
 		props.put("sr", newSr);
 		props.put("oldSr", oldSrDetails);
-		props.put("messageSource", messageSource);
-		props.put("locale", Locale.getDefault());
 		
 		emailService.sendEmail(ROLE_UPDATED_EMAIL_TMPL, new String[]{user.getEmailAddress()}, props);
 	}
