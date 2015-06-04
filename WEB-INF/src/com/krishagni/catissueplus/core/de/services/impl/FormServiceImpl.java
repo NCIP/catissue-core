@@ -55,6 +55,7 @@ import edu.common.dynamicextensions.domain.nui.PageBreak;
 import edu.common.dynamicextensions.domain.nui.PermissibleValue;
 import edu.common.dynamicextensions.domain.nui.SelectControl;
 import edu.common.dynamicextensions.domain.nui.SubFormControl;
+import edu.common.dynamicextensions.domain.nui.ValidationErrors;
 import edu.common.dynamicextensions.napi.FileControlValue;
 import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.napi.FormDataManager;
@@ -316,8 +317,10 @@ public class FormServiceImpl implements FormService {
 			User user = AuthUtil.getCurrentUser();
 			FormData formData = saveOrUpdateFormData(user, detail.getRecordId(), detail.getFormData());
 			return ResponseEvent.response(FormDataDetail.ok(formData.getContainer().getId(), formData.getRecordId(), formData));
+		} catch (ValidationErrors ve) {
+			return ResponseEvent.userError(FormErrorCode.INVALID_DATA, ve.getMessage());
 		} catch(IllegalArgumentException ex) {
-			return ResponseEvent.userError(FormErrorCode.INVALID_DATA);
+			return ResponseEvent.userError(FormErrorCode.INVALID_DATA, ex.getMessage());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -534,6 +537,8 @@ public class FormServiceImpl implements FormService {
 		if(formContexts == null) {
 			throw new IllegalArgumentException("Invalid form context id");
 		}
+		
+		formData.validate();
 		
 		FormContextBean formContext = formContexts.get(0);
 		String entityType = formContext.getEntityType();
