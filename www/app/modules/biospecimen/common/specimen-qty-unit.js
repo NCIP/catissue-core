@@ -1,5 +1,5 @@
 angular.module('os.biospecimen.common.specimenqtyunit', [])
-  .directive('osSpecimenQtyUnit', function($http, $q, ApiUrls) {
+  .factory('SpecimenQtyUnitSvc', function($http, $q, ApiUrls) {
     var callQ = undefined;
     
     // { 'Cell': {'default': 'Cells'}, 'Tissue': {'default': 'gm', 'Fixed Tissue Block': 'blocks'}}
@@ -70,7 +70,12 @@ angular.module('os.biospecimen.common.specimenqtyunit', [])
 
       return d.promise;
     }
-    
+
+    return {
+      getUnit: getUnit
+    }
+  })
+  .directive('osSpecimenQtyUnit', function(SpecimenQtyUnitSvc) {
     return {
       restrict: 'E',
 
@@ -89,7 +94,7 @@ angular.module('os.biospecimen.common.specimenqtyunit', [])
             return;
           }
 
-          getUnit(scope.specimenClass, scope.type).then(
+          SpecimenQtyUnitSvc.getUnit(scope.specimenClass, scope.type).then(
             function(unit) {
               element.html(unit.htmlDisplayCode || unit.unit);
             }

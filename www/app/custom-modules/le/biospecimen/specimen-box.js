@@ -1,5 +1,5 @@
 angular.module('openspecimen')
-  .directive('leSpecimenBox', function() {
+  .directive('leSpecimenBox', function(SpecimenQtyUnitSvc) {
     function drawBox(opts, element) {
       var dimension = opts.dimension;
       var specimens = opts.specimens;
@@ -7,12 +7,12 @@ angular.module('openspecimen')
       var height = (element.height() - 40)/ dimension.rows;
       var width = (element.width() - 40)/ dimension.columns;
 
-      if (width < 120) {
-        width = 120;
+      if (width < 175) {
+        width = 175;
       }
 
-      if (height < 100) {
-        height = 100;
+      if (height < 125) {
+        height = 125;
       }
 
       var box = angular.element('<table/>').addClass('os-le-box');
@@ -33,9 +33,16 @@ angular.module('openspecimen')
           if (idx != -1) {
             var specimen = specimens[idx];
             if (opts.compact || specimen.empi == lastEmpi || j == 0) {
-              colContent.append(angular.element('<div class="title"/>').append(specimen.empi));
+              colContent.append(angular.element('<div class="title"/>').append(specimen.primarySpmnLabel));
               colContent.append(angular.element('<div class="label"/>').append(specimen.label));
-              colContent.append(angular.element('<div class="desc"/>').append(specimen.type));
+              colContent.append(
+                angular.element('<div class="desc"/>')
+                  .append(angular.element('<div/>').append(specimen.type))
+                  .append(angular.element('<span/>').append(specimen.initialQty))
+                  .append(getUnit(specimen)).append(angular.element('<span/>').append('&nbsp;'))
+                  .append(angular.element('<span/>').append(specimen.collectionContainer))
+              );
+
               lastEmpi = specimen.empi;
               idx++;
 
@@ -76,6 +83,17 @@ angular.module('openspecimen')
       }
 
       return -1;
+    }
+
+    function getUnit(specimen) {
+      var unitEl = angular.element('<span/>');
+      SpecimenQtyUnitSvc.getUnit(specimen.specimenClass, specimen.type).then(
+        function(unit) {
+          unitEl.html(unit.htmlDisplayCode || unit.unit)
+        }
+      );
+
+      return unitEl;
     }
 
     return {

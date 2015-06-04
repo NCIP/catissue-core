@@ -189,6 +189,7 @@ angular.module('openspecimen')
         var result = [];
         angular.forEach(requirements, function(requirement) {
           requirement.parentSpecimenId = primarySpmn.id;
+          requirement.primarySpmnLabel = primarySpmn.label;
           setEmpiAndVisitId(requirement, empi, visitId);
           flatten(requirement, result);
         });
@@ -212,6 +213,7 @@ angular.module('openspecimen')
         }
 
         angular.forEach(requirement.children, function(childReq) {
+          childReq.primarySpmnLabel = requirement.primarySpmnLabel;
           flatten(childReq, result);
         });
       }      
