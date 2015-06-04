@@ -77,7 +77,7 @@ public class RbacServiceImpl implements RbacService {
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
 	}
-
+	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<ResourceDetail>> getResources(RequestEvent<ResourceListCriteria> req) {

@@ -401,6 +401,7 @@
 
   <bean id="templateService" class="com.krishagni.catissueplus.core.common.service.impl.TemplateServiceImpl">
     <property name="velocityEngine" ref="velocityEngine"/>
+    <property name="messageSource" ref="messageSource"/>
   </bean>
 
   <bean id="emailService" class="com.krishagni.catissueplus.core.common.service.impl.EmailServiceImpl">

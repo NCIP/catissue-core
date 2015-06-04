@@ -736,13 +736,13 @@
     "add_resource": "Add Resource",
 
     "resources" : {
-      "CollectionProtocol": "Collection Protocol",
-      "Order": "Order",
-      "ParticipantPhi": "Participant (PHI)",
-      "ParticipantDeid": "Participant (DeId)",
+      "CollectionProtocol": "Collection Protocols",
+      "Order": "Orders",
+      "ParticipantPhi": "Participants (PHI)",
+      "ParticipantDeid": "Participants (DeId)",
       "VisitAndSpecimen": "Visits and Specimens",
-      "StorageContainer": "Storage Container",
-      "User": "User"
+      "StorageContainer": "Storage Containers",
+      "User": "Users"
     },
 
     "menu": {
