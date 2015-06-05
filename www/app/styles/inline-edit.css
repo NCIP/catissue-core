@@ -29,7 +29,7 @@
 }
 
 .os-inline-editable.inactive button {
- display: none;
+  display: none;
 }
 
 .os-content .os-inline-editable.inactive button span {
@@ -97,7 +97,7 @@
 }
 
 .os-content-block .value:hover {
-  border:none;
+  border: none;
 }
 
 .os-content-block span {
