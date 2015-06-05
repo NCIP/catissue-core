@@ -97,7 +97,7 @@ public class UserSummary {
 		List<UserSummary> result = new ArrayList<UserSummary>();
 		if (users == null) {
 			return result;
-		}
+		}	
 
 		for (User user : users) {
 			result.add(UserSummary.from(user));

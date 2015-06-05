@@ -1045,6 +1045,7 @@
     "my_lists": "My Lists",
     "shared_lists": "Shared Lists",
     "info": "Information",
+    "more_specimens": "One or more specimens in list could not be displayed because you do not have enough rights to view them",
     "no_specimens": "There are no specimens to show in selected specimen list.",
     "description": "Description",
     "cp": "Collection Protocol",

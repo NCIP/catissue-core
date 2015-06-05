@@ -406,7 +406,7 @@ public class AccessCtrlMgr {
 		
 		String[] ops = {Operation.READ.getName()};
 		Set<Pair<Long, Long>> siteCpPairs = getVisitAndSpecimenSiteCps(ops);
-		siteCpPairs.addAll(getDistributionOrderSiteCps(ops));
+		//siteCpPairs.addAll(getDistributionOrderSiteCps(ops));
 		
 		Set<Long> sitesOfAllCps = new HashSet<Long>();
 		List<Pair<Long, Long>> result = new ArrayList<Pair<Long, Long>>();		

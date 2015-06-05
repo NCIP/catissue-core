@@ -94,6 +94,8 @@ public class Specimen extends BaseEntity {
 	
 	private List<SpecimenTransferEvent> transferEvents;
 	
+	private Set<SpecimenList> specimenLists =  new HashSet<SpecimenList>();
+	
 	@Autowired
 	@Qualifier("specimenLabelGenerator")
 	private LabelGenerator labelGenerator;
@@ -409,6 +411,15 @@ public class Specimen extends BaseEntity {
 			this.transferEvents = SpecimenTransferEvent.getFor(this);
 		}		
 		return this.transferEvents;
+	}
+	
+	@NotAudited
+	public Set<SpecimenList> getSpecimenLists() {
+		return specimenLists;
+	}
+
+	public void setSpecimenLists(Set<SpecimenList> specimenLists) {
+		this.specimenLists = specimenLists;
 	}
 
 	public LabelGenerator getLabelGenerator() {

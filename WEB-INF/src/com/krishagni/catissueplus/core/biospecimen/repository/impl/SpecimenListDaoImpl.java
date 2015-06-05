@@ -9,7 +9,19 @@ import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 public class SpecimenListDaoImpl extends AbstractDao<SpecimenList> implements SpecimenListDao {
 	private static final String FQN = SpecimenList.class.getName();
 	
+	private static final String GET_SPECIMEN_LISTS = FQN + ".getSpecimenLists";
+	
 	private static final String GET_SPECIMEN_LISTS_BY_USER = FQN + ".getSpecimenListsByUser";
+	
+	private static final String GET_LIST_SPECIMENS_COUNT = FQN + ".getListSpecimnesCount";
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SpecimenList> getSpecimenLists() {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_SPECIMEN_LISTS)
+				.list();
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -24,6 +36,14 @@ public class SpecimenListDaoImpl extends AbstractDao<SpecimenList> implements Sp
 	public SpecimenList getSpecimenList(Long listId) {
 		return (SpecimenList)sessionFactory.getCurrentSession()
 				.get(SpecimenList.class, listId);
+	}
+	
+	@Override
+	public Long getListSpecimensCount(Long listId) {
+		return ((Number) sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_LIST_SPECIMENS_COUNT)
+				.setLong("listId", listId)
+				.uniqueResult()).longValue();
 	}
 
 	@Override
