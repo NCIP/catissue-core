@@ -4,16 +4,16 @@
   </div>
   <div class="container os-le-box-container">
     <div style="flex: 1; display: flex; margin-bottom: 20px;">
-      <div style="flex: 9; margin-right: 15px;">
+      <div class="input-group" os-textarea-input-group>
         <textarea ng-model="boxData.csLabels" ng-model-options="{debounce: 500}" 
           ng-change="processAliquotLabels(boxData.csLabels)" os-enable-tab
           class="form-control" placeholder="Paste labels from Clipboard" rows="2">
         </textarea>
-      </div>
-      <div style="flex: 1;">
-        <button class="btn btn-primary" ng-click="saveAliquots()">
-          Save Aliquots
-        </button>
+        <span class="input-group-btn">
+          <button class="btn btn-primary" ng-click="saveAliquots()">
+            Save Aliquots
+          </button>
+        </span>
       </div>
     </div>
     <div style="flex: 9; overflow: auto">
