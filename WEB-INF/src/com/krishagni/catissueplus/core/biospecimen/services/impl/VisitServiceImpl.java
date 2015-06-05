@@ -224,8 +224,13 @@ public class VisitServiceImpl implements VisitService {
 			SprDetail detail = req.getPayload();
 			AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(detail.getVisitId());
 			
+			File file = new File(getSprFilePath(detail.getVisitId()));
+			if (!file.exists()) {
+				return ResponseEvent.userError(VisitErrorCode.UNABLE_TO_LOCATE_SPR);
+			}
+			
 			Utility.createFile(getSprFilePath(detail.getVisitId()), detail.getSprContent());
-			return new ResponseEvent<String>(detail.getSprContent());
+			return ResponseEvent.response(detail.getSprContent());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
