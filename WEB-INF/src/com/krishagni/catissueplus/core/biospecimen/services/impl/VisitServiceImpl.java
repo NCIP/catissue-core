@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
@@ -35,6 +34,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class VisitServiceImpl implements VisitService {
 	private DaoFactory daoFactory;
@@ -204,13 +204,33 @@ public class VisitServiceImpl implements VisitService {
 				sprText = deIdentifier.deIdentify(sprText, props);
 			} 
 
-			File file = new File(getSprFilePath(visit.getId()));
-			FileUtils.writeStringToFile(file, sprText, (String) null, false);
+			Utility.createFile(getSprFilePath(visit.getId()), sprText);
 			
 			String sprName = detail.getSprName(); 
 			sprName = sprName.substring(0, sprName.lastIndexOf(".")) + ".txt";
 			visit.updateSprName(sprName);
 			return new ResponseEvent<String>(detail.getSprName());
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<String> updateSpr(RequestEvent<SprDetail> req) {
+		try {
+			SprDetail detail = req.getPayload();
+			AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(detail.getVisitId());
+			
+			File file = new File(getSprFilePath(detail.getVisitId()));
+			if (!file.exists()) {
+				return ResponseEvent.userError(VisitErrorCode.UNABLE_TO_LOCATE_SPR);
+			}
+			
+			Utility.createFile(file.getAbsolutePath(), detail.getSprContent());
+			return ResponseEvent.response(detail.getSprContent());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

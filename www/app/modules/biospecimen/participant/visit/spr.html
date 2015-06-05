@@ -43,4 +43,19 @@
       </li>
     </ul>
   </div>
+
+  <div class="col-xs-8">
+    <h3 class="os-sub-section-title" translate="visits.spr">Surgical Pathology Report</h3>
+    <div class="os-content os-content-block">
+      <div os-inline-editors on-save="saveSpr">
+        <div class="item">
+          <os-inline-edit editor="sprEditor" name="status" class="value value-md" value="spr.sprContent">
+            <span ng-if="sprEditor.isDisplayMode()">{{spr.sprContent}}</span>
+            <textarea ng-if="sprEditor.isEditMode()" ng-model="sprEditor.editValue" class="os-big-textarea"></textarea>
+          </os-inline-edit>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+

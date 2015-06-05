@@ -10,6 +10,8 @@ public class SprDetail {
 	
 	private InputStream sprIn;
 	
+	private String sprContent;
+	
 	public Long getVisitId() {
 		return visitId;
 	}
@@ -32,6 +34,14 @@ public class SprDetail {
 
 	public void setSprIn(InputStream spr) {
 		this.sprIn = spr;
+	}
+
+	public String getSprContent() {
+		return sprContent;
+	}
+
+	public void setSprContent(String sprContent) {
+		this.sprContent = sprContent;
 	}
 	
 }
