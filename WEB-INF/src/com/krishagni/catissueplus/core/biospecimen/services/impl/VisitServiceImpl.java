@@ -229,7 +229,7 @@ public class VisitServiceImpl implements VisitService {
 				return ResponseEvent.userError(VisitErrorCode.UNABLE_TO_LOCATE_SPR);
 			}
 			
-			Utility.createFile(getSprFilePath(detail.getVisitId()), detail.getSprContent());
+			Utility.createFile(file.getAbsolutePath(), detail.getSprContent());
 			return ResponseEvent.response(detail.getSprContent());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
