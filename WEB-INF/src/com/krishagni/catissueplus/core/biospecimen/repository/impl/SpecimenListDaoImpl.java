@@ -13,7 +13,7 @@ public class SpecimenListDaoImpl extends AbstractDao<SpecimenList> implements Sp
 	
 	private static final String GET_SPECIMEN_LISTS_BY_USER = FQN + ".getSpecimenListsByUser";
 	
-	private static final String GET_LIST_SPECIMENS_COUNT = FQN + ".getListSpecimnesCount";
+	private static final String GET_LIST_SPECIMENS_COUNT = FQN + ".getListSpecimensCount";
 	
 	@SuppressWarnings("unchecked")
 	@Override

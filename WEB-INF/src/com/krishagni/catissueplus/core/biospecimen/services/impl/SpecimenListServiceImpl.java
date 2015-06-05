@@ -89,7 +89,8 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
-			return ResponseEvent.response(SpecimenListDetails.from(specimenList));			
+			List<Specimen> accessibleSpecimens = getAccessibleSpecimens(specimenList.getId(), null);
+			return ResponseEvent.response(SpecimenListDetails.from(specimenList, accessibleSpecimens));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);			
 		}
@@ -111,7 +112,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			listDetails.setOwner(owner);
 			
 			SpecimenList specimenList = specimenListFactory.createSpecimenList(listDetails);
-			isValidSpecimensAndUsers(specimenList, siteCpPairs);
+			ensureValidSpecimensAndUsers(specimenList, siteCpPairs);
 			daoFactory.getSpecimenListDao().saveOrUpdate(specimenList);
 			return ResponseEvent.response(SpecimenListDetails.from(specimenList));
 		} catch (OpenSpecimenException ose) {
@@ -146,7 +147,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			listDetails.setOwner(owner);
 			
 			SpecimenList specimenList = specimenListFactory.createSpecimenList(listDetails);
-			isValidSpecimensAndUsers(specimenList, null);
+			ensureValidSpecimensAndUsers(specimenList, null);
 			existing.update(specimenList);
 			
 			daoFactory.getSpecimenListDao().saveOrUpdate(existing);
@@ -197,18 +198,14 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
+			Long specimensCount = daoFactory.getSpecimenListDao().getListSpecimensCount(listId);
 			List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
 			if (siteCpPairs != null && siteCpPairs.isEmpty()) {
-				return ResponseEvent.response(new ListSpecimensDetail());
+				return ResponseEvent.response(ListSpecimensDetail.from(specimensCount));
 			}
 			
-			SpecimenListCriteria crit = new SpecimenListCriteria()
-				.specimenListId(listId)
-				.siteCps(siteCpPairs);
-			
-			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimens(crit);
-			Long specimensCount = daoFactory.getSpecimenListDao().getListSpecimensCount(listId);
-			return ResponseEvent.response(ListSpecimensDetail.from(specimens, specimensCount));
+			List<Specimen> accessibleSpecimens = getAccessibleSpecimens(listId, siteCpPairs);
+			return ResponseEvent.response(ListSpecimensDetail.from(accessibleSpecimens, specimensCount));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -239,9 +236,9 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			if (labels == null || labels.isEmpty()) {
 				specimens = new ArrayList<Specimen>();
 			} else {
+				ensureValidSpecimens(labels, null);
 				specimens = daoFactory.getSpecimenDao()
 						.getSpecimens(new SpecimenListCriteria().labels(labels));
-				isValidSpecimens(labels, null);
 			}
 			
 			switch (opDetail.getOp()) {
@@ -295,8 +292,8 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			if (userIds == null || userIds.isEmpty()) {
 				users = new ArrayList<User>();
 			} else {
+				ensureValidUsers(userIds);
 				users = daoFactory.getUserDao().getUsersByIds(userIds);
-				isValidUsers(userIds);
 			}
 			
 			switch (opDetail.getOp()) {
@@ -327,12 +324,24 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 		}
 	}
 	
-	private void isValidSpecimensAndUsers(SpecimenList specimenList, List<Pair<Long, Long>> siteCpPairs) {
-		isValidSpecimens(specimenList, siteCpPairs);
-		isValidUsers(specimenList, siteCpPairs);
+	private List<Specimen> getAccessibleSpecimens(Long specimenListId, List<Pair<Long, Long>> siteCpPairs) {
+		if (siteCpPairs == null) {
+			siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
+		}
+		
+		SpecimenListCriteria crit = new SpecimenListCriteria()
+			.specimenListId(specimenListId)
+			.siteCps(siteCpPairs);
+		
+		return daoFactory.getSpecimenDao().getSpecimens(crit);
 	}
 	
-	private void isValidSpecimens(SpecimenList specimenList, List<Pair<Long, Long>> siteCpPairs) {
+	private void ensureValidSpecimensAndUsers(SpecimenList specimenList, List<Pair<Long, Long>> siteCpPairs) {
+		ensureValidSpecimens(specimenList, siteCpPairs);
+		ensureValidUsers(specimenList, siteCpPairs);
+	}
+	
+	private void ensureValidSpecimens(SpecimenList specimenList, List<Pair<Long, Long>> siteCpPairs) {
 		if (!CollectionUtils.isEmpty(specimenList.getSpecimens())) {
 			return;
 		}
@@ -342,10 +351,10 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			labels.add(specimen.getLabel());
 		}
 		
-		isValidSpecimens(labels, siteCpPairs);
+		ensureValidSpecimens(labels, siteCpPairs);
 	}
 	
-	private void isValidSpecimens(List<String> specimenLabels,  List<Pair<Long, Long>> siteCpPairs) {
+	private void ensureValidSpecimens(List<String> specimenLabels,  List<Pair<Long, Long>> siteCpPairs) {
 		if (siteCpPairs == null) {
 			siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
 		}
@@ -359,7 +368,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 		
 	}
 	
-	private void isValidUsers(SpecimenList specimenList, List<Pair<Long, Long>> siteCpPairs) {
+	private void ensureValidUsers(SpecimenList specimenList, List<Pair<Long, Long>> siteCpPairs) {
 		if (!CollectionUtils.isEmpty(specimenList.getSharedWith())) {
 			return;
 		}
@@ -373,10 +382,10 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			sharedUsers.add(user.getId());
 		}
 		
-		isValidUsers(sharedUsers);
+		ensureValidUsers(sharedUsers);
 	}
 	
-	private void isValidUsers(List<Long> userIds) {
+	private void ensureValidUsers(List<Long> userIds) {
 		Long instituteId = null;
 		if (!AuthUtil.isAdmin()) {
 			User user = daoFactory.getUserDao().getById(AuthUtil.getCurrentUser().getId());
