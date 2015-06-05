@@ -1,14 +1,17 @@
 
 .os-inline-editable {
   position: relative;
+  width: 100%
 }
 
-.os-key-values .item .value.os-inline-editable.inactive {
+.os-key-values .item .value.os-inline-editable.inactive,
+.os-content .item .value.os-inline-editable.inactive {
   padding: 2px 30px 2px 5px;
   min-height: 28px;
 }
 
-.os-key-values .item .value.os-inline-editable.active {
+.os-key-values .item .value.os-inline-editable.active,
+.os-content .item .value.os-inline-editable.active {
   position: absolute;
   z-index: 1;
 }
@@ -26,23 +29,21 @@
 }
 
 .os-inline-editable.inactive button {
-  display: none;
+ display: none;
 }
 
-/**
- * In OS version 2.0 we are not supporting inline edit,
- * hence commented following two css
- * 1. "os-inline-editable.inactive:hover"
- * 2. "os-inline-editable.inactive:hover button"
- * which was used to show editable box on hover
- */
+.os-content .os-inline-editable.inactive button span {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+}
 
-/*.os-inline-editable.inactive:hover {
+.os-content .os-inline-editable.inactive:hover {
   box-shadow: 0 0 0 1px #ccc;
   border-radius: 4px;
 }
 
-.os-inline-editable.inactive:hover button {
+.os-content .os-inline-editable.inactive:hover button {
   background: #f5f5f5;
   color: #707070;
   position: absolute;
@@ -55,10 +56,10 @@
   border-top: 0px;
   border-bottom: 0px;
   height: 100%;
-}*/
+}
 
 .os-inline-editable .action-btns {
-  position: absolute;
+  float: right;
   right: 5px;
   background: #f5f5f5;
   height: 34px;
@@ -89,4 +90,24 @@
 
 .os-inline-editable .action-btns button:hover {
   color: #232323;
+}
+
+.os-content-block .value.inactive {
+  border: 1px solid #ccc;
+}
+
+.os-content-block .value:hover {
+  border:none;
+}
+
+.os-content-block span {
+  white-space: pre-line;
+}
+
+.os-big-textarea {
+  width: 100%;
+  height: 400px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: block;
 }

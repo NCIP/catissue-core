@@ -1,7 +1,7 @@
-<div class="os-inline-editable" ng-class="{'inactive': !enabled, 'active': enabled}">
+<div class="os-inline-editable"  ng-class="{'inactive': !enabled, 'active': enabled}">
   <ng-transclude ng-if="!enabled"></ng-transclude>
   <button ng-if="!enabled" class="btn" ng-click="edit()">
-    <span class="glyphicon glyphicon-pencil" 
+    <span class="fa fa-pencil"
       bs-tooltip data-title="Click to edit" data-container="body" data-placement="bottom">
     </span>
   </button>

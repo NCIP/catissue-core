@@ -6,7 +6,6 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
       $scope.sprUrl = $sce.trustAsResourceUrl(visit.getSprUrl());
       $scope.sprName = visit.sprName;
       $scope.uploadMode = false;
-      $scope.editMode = false;
       $scope.spr = {};
 
       loadSpr();
@@ -28,14 +27,6 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
       $scope.uploadMode = false;
     }
 
-    $scope.showEditMode = function() {
-      $scope.editMode = true;
-    }
-
-    $scope.cancelSprEdit = function() {
-       $scope.editMode = false;
-    }
-
     $scope.upload = function() {
       $scope.sprUploader.ctrl.submit().then(
         function(fileName) {
@@ -47,14 +38,9 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
       )
     }
 
-    $scope.saveSpr = function() {
-      var data = {sprContent: $scope.spr.sprContent};
-      visit.updateSpr(data).then(
-        function(result) {
-          Alerts.success("visits.spr_saved");
-          $scope.editMode = false;
-        }
-      );
+    $scope.saveSpr = function(sprEditor, sprContent) {
+      var data = {sprContent: sprContent};
+      return visit.updateSpr(data);
     }
 
     $scope.confirmDeleteSpr = function() {
