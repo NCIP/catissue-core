@@ -10,7 +10,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 public class ListSpecimensDetail {
 	private List<SpecimenDetail> specimens = new ArrayList<SpecimenDetail>();
 	
-	private int actualCount;
+	private Long actualCount;
 
 	public List<SpecimenDetail> getSpecimens() {
 		return specimens;
@@ -20,15 +20,15 @@ public class ListSpecimensDetail {
 		this.specimens = specimens;
 	}
 
-	public int getActualCount() {
+	public Long getActualCount() {
 		return actualCount;
 	}
 
-	public void setActualCount(int actualCount) {
+	public void setActualCount(Long actualCount) {
 		this.actualCount = actualCount;
 	}
 	
-	public static ListSpecimensDetail from(List<Specimen> specimens, int actualCount) {
+	public static ListSpecimensDetail from(List<Specimen> specimens, Long actualCount) {
 		ListSpecimensDetail detail = new ListSpecimensDetail();
 		detail.setSpecimens(SpecimenDetail.from(new HashSet<Specimen>(specimens)));
 		detail.setActualCount(actualCount); 

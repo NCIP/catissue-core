@@ -107,7 +107,6 @@ public class SpecimenDetail extends SpecimenInfo {
 			result.add(SpecimenDetail.from(specimen));
 		}
 		
-		sort(result);
 		return result;
 	}
 	

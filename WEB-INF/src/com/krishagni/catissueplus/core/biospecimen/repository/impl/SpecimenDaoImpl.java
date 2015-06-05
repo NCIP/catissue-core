@@ -44,9 +44,9 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 			addSiteCpsCond(query, crit.siteCps());
 		}
 		
-		if (crit.specimeListId() != null) {
-			query.createAlias("specimenLists", "list");
-			query.add(Restrictions.eq("list.id", crit.specimeListId()));
+		if (crit.specimenListId() != null) {
+			query.createAlias("specimenLists", "list")
+				.add(Restrictions.eq("list.id", crit.specimenListId()));
 		}
 				
 		return query.list();
@@ -178,15 +178,11 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		
 			cond.add(
 				/** mrn site = siteId or cp site = siteId **/
-				Restrictions.conjunction()
-					.add(
-						Restrictions.disjunction()
-							.add(Restrictions.isNull("mrnSite.id"))
-							.add(Restrictions.eq("mrnSite.id", siteId))
-					)
+				Restrictions.disjunction()
+					.add(Restrictions.eq("mrnSite.id", siteId))
 					.add(Restrictions.eq("cpSite.id", siteId))
 			);
-			
+
 			if (cpId != null) {
 				cond.add(Restrictions.eq("cp.id", cpId));
 			}

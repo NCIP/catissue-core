@@ -406,7 +406,7 @@ public class AccessCtrlMgr {
 		
 		String[] ops = {Operation.READ.getName()};
 		Set<Pair<Long, Long>> siteCpPairs = getVisitAndSpecimenSiteCps(ops);
-		siteCpPairs.addAll(getDistributionOrderSiteCps(ops));
+		//siteCpPairs.addAll(getDistributionOrderSiteCps(ops));
 		
 		Set<Long> sitesOfAllCps = new HashSet<Long>();
 		List<Pair<Long, Long>> result = new ArrayList<Pair<Long, Long>>();		
@@ -441,7 +441,7 @@ public class AccessCtrlMgr {
 	private void ensureSpecimenObjectRights(Long specimenId, Operation op) {
 		Specimen specimen = daoFactory.getSpecimenDao().getById(specimenId);
 		if (specimen == null) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND);
+			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND, specimenId);
 		}
 		
 		ensureVisitAndSpecimenObjectRights(specimen.getRegistration(), op);

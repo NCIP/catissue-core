@@ -54,5 +54,16 @@
       order by
         l.name
     </query>
+    
+   <query name="getListSpecimnesCount">
+     select 
+       count(s.id)
+     from
+       SpecimenList l inner join l.specimens s
+     where 
+       l.id = :listId 
+       and s.activityStatus = 'Active'
+   </query>
+   
   </class> 
 </hibernate-mapping>

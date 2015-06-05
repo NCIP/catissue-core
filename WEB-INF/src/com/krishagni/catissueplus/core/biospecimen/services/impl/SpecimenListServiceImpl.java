@@ -2,10 +2,9 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
+import org.springframework.util.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -56,7 +55,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenListSummary>> getUserSpecimenLists(RequestEvent<?> req) {
 		try {
-			Long userId = AuthUtil.getCurrentUser().getId();			
+			Long userId = AuthUtil.getCurrentUser().getId();
 			List<SpecimenList> specimenLists = new ArrayList<SpecimenList>();
 			if (AuthUtil.isAdmin()){
 				specimenLists = daoFactory.getSpecimenListDao().getSpecimenLists();
@@ -111,7 +110,8 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			owner.setId(AuthUtil.getCurrentUser().getId());
 			listDetails.setOwner(owner);
 			
-			SpecimenList specimenList = specimenListFactory.createSpecimenList(listDetails);	
+			SpecimenList specimenList = specimenListFactory.createSpecimenList(listDetails);
+			isValidSpecimensAndUsers(specimenList, siteCpPairs);
 			daoFactory.getSpecimenListDao().saveOrUpdate(specimenList);
 			return ResponseEvent.response(SpecimenListDetails.from(specimenList));
 		} catch (OpenSpecimenException ose) {
@@ -146,6 +146,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			listDetails.setOwner(owner);
 			
 			SpecimenList specimenList = specimenListFactory.createSpecimenList(listDetails);
+			isValidSpecimensAndUsers(specimenList, null);
 			existing.update(specimenList);
 			
 			daoFactory.getSpecimenListDao().saveOrUpdate(existing);
@@ -202,11 +203,12 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			}
 			
 			SpecimenListCriteria crit = new SpecimenListCriteria()
-				.specimeListId(listId)
+				.specimenListId(listId)
 				.siteCps(siteCpPairs);
 			
 			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimens(crit);
-			return ResponseEvent.response(ListSpecimensDetail.from(specimens, specimenList.getSpecimens().size()));
+			Long specimensCount = daoFactory.getSpecimenListDao().getListSpecimensCount(listId);
+			return ResponseEvent.response(ListSpecimensDetail.from(specimens, specimensCount));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -237,9 +239,9 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			if (labels == null || labels.isEmpty()) {
 				specimens = new ArrayList<Specimen>();
 			} else {
-				List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
 				specimens = daoFactory.getSpecimenDao()
-						.getSpecimens(new SpecimenListCriteria().labels(labels).siteCps(siteCpPairs));
+						.getSpecimens(new SpecimenListCriteria().labels(labels));
+				isValidSpecimens(labels, null);
 			}
 			
 			switch (opDetail.getOp()) {
@@ -283,7 +285,8 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
 			}
 			
-			if (!isAllowedToShareList(specimenList)) {
+			Long userId = AuthUtil.getCurrentUser().getId();
+			if (!AuthUtil.isAdmin() && !specimenList.getOwner().getId().equals(userId)) {
 				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
@@ -292,13 +295,8 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			if (userIds == null || userIds.isEmpty()) {
 				users = new ArrayList<User>();
 			} else {
-				Long instituteId = null;
-				if (!AuthUtil.isAdmin()) {
-					User user = daoFactory.getUserDao().getById(AuthUtil.getCurrentUser().getId());
-					instituteId = user.getInstitute().getId();
-				}
-				
-				users = daoFactory.getUserDao().getUsersByIdsAndInstitute(userIds, instituteId);
+				users = daoFactory.getUserDao().getUsersByIds(userIds);
+				isValidUsers(userIds);
 			}
 			
 			switch (opDetail.getOp()) {
@@ -329,24 +327,65 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 		}
 	}
 	
-	private boolean isAllowedToShareList(SpecimenList specimenList) {
-		boolean isAllowed = false;
-		Long userId = AuthUtil.getCurrentUser().getId();
-		
-		if (AuthUtil.isAdmin()) {
-			isAllowed = true;
-		} else if (specimenList.getOwner().getId().equals(userId)) {
-			isAllowed = true;
-		} else {
-			Set<User> sharedWith = specimenList.getSharedWith();
-			for (User user: sharedWith) {
-				if (user.getId().equals(userId)) {
-					isAllowed = true;
-					break;
-				}
-			}
+	private void isValidSpecimensAndUsers(SpecimenList specimenList, List<Pair<Long, Long>> siteCpPairs) {
+		isValidSpecimens(specimenList, siteCpPairs);
+		isValidUsers(specimenList, siteCpPairs);
+	}
+	
+	private void isValidSpecimens(SpecimenList specimenList, List<Pair<Long, Long>> siteCpPairs) {
+		if (!CollectionUtils.isEmpty(specimenList.getSpecimens())) {
+			return;
 		}
- 		
-		return isAllowed;
+		
+		List<String> labels = new ArrayList<String>();
+		for (Specimen specimen : specimenList.getSpecimens()) {
+			labels.add(specimen.getLabel());
+		}
+		
+		isValidSpecimens(labels, siteCpPairs);
+	}
+	
+	private void isValidSpecimens(List<String> specimenLabels,  List<Pair<Long, Long>> siteCpPairs) {
+		if (siteCpPairs == null) {
+			siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
+		}
+		
+		List<Specimen> specimens = daoFactory.getSpecimenDao()
+				.getSpecimens(new SpecimenListCriteria().labels(specimenLabels).siteCps(siteCpPairs));
+		
+		if (specimens.size() != specimenLabels.size()) {
+			throw OpenSpecimenException.userError(SpecimenListErrorCode.INVALID_LABELS);
+		}
+		
+	}
+	
+	private void isValidUsers(SpecimenList specimenList, List<Pair<Long, Long>> siteCpPairs) {
+		if (!CollectionUtils.isEmpty(specimenList.getSharedWith())) {
+			return;
+		}
+		
+		Long userId = specimenList.getOwner().getId();
+		List<Long> sharedUsers = new ArrayList<Long>();
+		for (User user : specimenList.getSharedWith()) {
+			if (user.getId().equals(userId)) {
+				continue;
+			}
+			sharedUsers.add(user.getId());
+		}
+		
+		isValidUsers(sharedUsers);
+	}
+	
+	private void isValidUsers(List<Long> userIds) {
+		Long instituteId = null;
+		if (!AuthUtil.isAdmin()) {
+			User user = daoFactory.getUserDao().getById(AuthUtil.getCurrentUser().getId());
+			instituteId = user.getInstitute().getId();
+		}
+		
+		List<User> users = daoFactory.getUserDao().getUsersByIdsAndInstitute(userIds, instituteId);
+		if (userIds.size() != users.size()) {
+			throw OpenSpecimenException.userError(SpecimenListErrorCode.INVALID_USERS_LIST);
+		}
 	}
 }

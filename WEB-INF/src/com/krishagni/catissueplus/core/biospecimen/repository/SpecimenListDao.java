@@ -12,5 +12,7 @@ public interface SpecimenListDao extends Dao<SpecimenList> {
 	
 	public SpecimenList getSpecimenList(Long listId);
 	
+	public Long getListSpecimensCount(Long listId);
+	
 	public void deleteSpecimenList(SpecimenList listId);
 }

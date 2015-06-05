@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -54,22 +53,18 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	
 	@SuppressWarnings("unchecked")
 	public List<User> getUsersByIdsAndInstitute(List<Long> userIds, Long instituteId) {
-		String hql = GET_USER_BY_IDS_AND_INSTITUE_HQL;
-		if (instituteId != null) {
-			hql = String.format(hql, " join u.department dept join dept.institute inst ", " and inst.id = :instituteId ");
-		} else {
-			hql = String.format(hql, "", "");
-		}
-		
-		Query query = sessionFactory.getCurrentSession()
-				.createQuery(hql)
-				.setParameterList("userIds", userIds);
+		Criteria criteria = sessionFactory.getCurrentSession()
+				.createCriteria(User.class, "u")
+				.add(Restrictions.ne("u.activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus()))
+				.add(Restrictions.in("u.id", userIds));
 		
 		if (instituteId != null) {
-			query.setLong("instituteId", instituteId);
+			criteria.createAlias("u.department", "dept")
+				.createAlias("dept.institute", "inst")
+				.add(Restrictions.eq("inst.id", instituteId));
 		}
 		
-		return query.list();
+		return criteria.list();
 	}
 	
 	public User getUser(String loginName, String domainName) {
@@ -262,14 +257,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	
 	private static final String GET_USER_BY_EMAIL_HQL = 
 			"from com.krishagni.catissueplus.core.administrative.domain.User where emailAddress = :emailAddress %s";
-	
-	private static final String GET_USER_BY_IDS_AND_INSTITUE_HQL = 
-			"select " +
-			"  u " +
-			"from " + 
-			"  com.krishagni.catissueplus.core.administrative.domain.User u %s " + 
-			"where " + 
-			"  u.id in (:userIds) and u.activityStatus != 'Disabled' %s";
 	
 	private static final String FQN = User.class.getName();
 

@@ -15,7 +15,7 @@
         <span class="fa fa-shopping-cart"></span>
         <span translate="specimen_list.distribute">Distribute</span>
       </button>
-      <button class="btn btn-danger" ng-click="confirmRemoveSpecimens()">
+      <button class="btn btn-danger" ng-click="confirmRemoveSpecimens()" ng-if="listSpecimens.isAllowedToDelete">
         <span class="fa fa-trash"></span>
         <span translate="common.buttons.delete">Delete</span>
       </button>
@@ -93,7 +93,7 @@
             <div class="pull-left" ng-click="selectList(list)" title="{{list.name}}">
               <span>{{list.name}}</span>
             </div>
-            <div class="pull-right" ng-if="currentUser.admin">
+            <div show-if-admin class="pull-right">
               <button type="button" class="btn btn-xs btn-default" ui-sref="specimen-list-addedit({listId: list.id})">
                 <span class="fa fa-pencil"></span>
               </button> 
@@ -121,7 +121,7 @@
       <div class="row">
         <div class="col os-col-20">
           <div class="clearfix">
-            <div class="pull-left os-select-specimen-cb" ng-if="listSpecimens.isAllowedToDelete">
+            <div class="pull-left os-select-specimen-cb">
               <os-checkbox ng-change="toggleAllSpecimenSelect()" ng-model="selection.all" ></os-checkbox>
             </div>
             <div class="pull-left" style="padding-left: 12px;">
@@ -148,7 +148,7 @@
         ng-class="{selected: specimen.selected}">
         <div class="col os-col-20">
           <div class="clearfix">
-            <div class="pull-left os-select-specimen-cb" ng-if="listSpecimens.isAllowedToDelete">
+            <div class="pull-left os-select-specimen-cb">
               <os-checkbox ng-change="toggleSpecimenSelect(specimen)" ng-model="specimen.selected"></os-checkbox>
             </div>
             <div class="pull-left" style="padding-left: 12px;">
