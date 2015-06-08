@@ -1,9 +1,9 @@
 angular.module('openspecimen')
   .controller('le.RegAndCollectSpecimensCtrl', 
     function(
-      $scope, $state, $stateParams, $http, 
+      $scope, $state, $stateParams, $http,
       CollectionProtocolEvent, SpecimenRequirement, Visit, Specimen, 
-      CpConfigSvc, Alerts, Util, ApiUrls) {
+      User, CpConfigSvc, Alerts, Util, ApiUrls) {
 
       var baseUrl = ApiUrls.getBaseUrl();
       var currCpe = undefined;
@@ -12,6 +12,7 @@ angular.module('openspecimen')
         $scope.cpId = $stateParams.cpId
         $scope.view = 'register';
         $scope.participants = [];
+        $scope.users = [];
         $scope.visit = {};
         $scope.tabOrderCnt = 0;
         $scope.boxOpts = {
@@ -25,6 +26,11 @@ angular.module('openspecimen')
           delimiter: ',',
           ctrl: undefined
         },
+ 
+        $scope.childSpmnsData = {
+          view: 'box',
+          specimens: undefined 
+        },
 
         CpConfigSvc.getWorkflowData($scope.cpId, 'registerParticipant').then(
           function(data) {
@@ -32,6 +38,12 @@ angular.module('openspecimen')
             angular.extend($scope.boxOpts, boxOpts);
           }
         );
+
+        User.query().then(
+          function(users) {
+            $scope.users = users;
+          }
+        );  
       }
 
       function registerParticipants() {
@@ -187,14 +199,70 @@ angular.module('openspecimen')
 
       function prepareChildSpecimens(requirements, empi, visitId, primarySpmn) {
         var result = [];
-        angular.forEach(requirements, function(requirement) {
+        primarySpmn.depth = 0;
+        
+        angular.forEach(requirements, function(requirement, $index) {
+          if ($index == 0) {
+            requirement.parent = primarySpmn;
+          }
+
           requirement.parentSpecimenId = primarySpmn.id;
           requirement.primarySpmnLabel = primarySpmn.label;
+          requirement.showInTree = requirement.nonVirtual = anyNonVirtualSpecimen(requirement);
+          requirement.depth = 1;
+          requirement.frozenBy = {};
           setEmpiAndVisitId(requirement, empi, visitId);
-          flatten(requirement, result);
+          flatten(requirement, result, 2);
         });
 
+        groupAliquots(requirements);
         return result;
+      }
+
+      function groupAliquots(specimens) {
+        var group = [];
+        angular.forEach(specimens, function(specimen) {
+          if (specimen.lineage == 'Aliquot' && specimen.nonVirtual) {
+            group.push(specimen);
+          }
+        });
+
+        if (group.length > 1) {
+          angular.forEach(group, function(specimen, $index) {
+            specimen.grouped = true;
+            setShowInTree($index == 0 ? specimen.children : [specimen], false);
+          });
+
+          group[0].group = group;
+          watchAliquotGrpChanges(group[0]);
+        }
+      }
+
+      function setShowInTree(specimens, showInTree, expandOrCollapse) {
+        angular.forEach(specimens, function(specimen) {
+          var nextLevel = expandOrCollapse;
+          if (showInTree) {
+            if (!specimen.grouped && specimen.nonVirtual) {
+              specimen.showInTree = true;
+            } else if (specimen.grouped && expandOrCollapse) {
+              specimen.showInTree = true;
+              nextLevel = false;
+            } else if (specimen.grouped && !!specimen.group) {
+              specimen.showInTree = true;
+            }
+          } else {
+            if (!expandOrCollapse || !specimen.grouped || !specimen.group) {
+              specimen.showInTree = false;
+              nextLevel = false;
+            }
+
+            if (specimen.group) {
+              specimen.expanded = false;
+            }
+          }
+
+          setShowInTree(specimen.children, showInTree, nextLevel);
+        });
       }
 
       function setEmpiAndVisitId(requirement, empi, visitId) {
@@ -205,7 +273,7 @@ angular.module('openspecimen')
         });
       }
 
-      function flatten(requirement, result) {
+      function flatten(requirement, result, depth) {
         if (result) {
           result.push(requirement);
         } else {
@@ -214,8 +282,13 @@ angular.module('openspecimen')
 
         angular.forEach(requirement.children, function(childReq) {
           childReq.primarySpmnLabel = requirement.primarySpmnLabel;
-          flatten(childReq, result);
+          childReq.depth = depth;
+          childReq.showInTree = childReq.nonVirtual = anyNonVirtualSpecimen(childReq);
+          childReq.frozenBy = {};
+          flatten(childReq, result, depth + 1);
         });
+
+        groupAliquots(requirement.children);
       }      
 
       function assignLabels(labels) {
@@ -252,6 +325,36 @@ angular.module('openspecimen')
         }
 
         return true;
+      }
+
+      function watchAliquotGrpChanges(grpLeader) {
+        $scope.$watchGroup(
+          [
+            function() { return grpLeader.initialQty; },
+            function() { return grpLeader.frozenBy; },
+            function() { return grpLeader.frozenTime; }
+          ],
+
+          function(newVal, oldVal) {
+            if (oldVal == undefined) {
+              return;
+            }
+
+            if (!grpLeader.group || grpLeader.expanded) {
+              return;
+            }
+
+            angular.forEach(grpLeader.group, function(aliquot, $index) {
+              if ($index == 0) {
+                return;
+              }
+
+              aliquot.initialQty = grpLeader.initialQty; 
+              aliquot.frozenBy = grpLeader.frozenBy; 
+              aliquot.frozenTime = grpLeader.frozenTime; 
+            });
+          }
+        );
       }
 
       $scope.addParticipant = function() {
@@ -323,13 +426,81 @@ angular.module('openspecimen')
         }
       };
 
+      $scope.toggleView = function() {
+        if ($scope.childSpmnsData.view == 'box') {
+          $scope.childSpmnsData.view = 'tree'; 
+          if (!!$scope.childSpmnsData.specimens) {
+            return;
+          }
+
+          var treeViewSpmns = [],
+              partChildSpmns = [];
+              lastEmpi = undefined;
+
+          angular.forEach($scope.boxOpts.specimens, function(specimen, $index) {
+            if ($index != 0 && specimen.empi != lastEmpi) {
+              treeViewSpmns.push({empi: lastEmpi, specimens:partChildSpmns});
+              partChildSpmns = [];
+            }
+
+            var parent = specimen.parent;
+            specimen.parent = undefined;
+
+            if (parent) {
+              partChildSpmns.push(parent);
+              parent.showInTree = true;
+            }
+
+            partChildSpmns.push(specimen);
+            lastEmpi = specimen.empi;
+          });
+
+          if (partChildSpmns.length > 0) {
+            treeViewSpmns.push({empi: lastEmpi, specimens: partChildSpmns});
+          }
+            
+          $scope.childSpmnsData.specimens = treeViewSpmns;
+        } else {
+          $scope.treeViewValidator.formSubmitted(true);
+          if (!$scope.treeViewValidator.isValidForm()) {
+            Alerts.error("common.form_validation_error");
+            return;
+          }
+
+          $scope.childSpmnsData.view = 'box'; 
+        }
+      }
+
+      $scope.expandAliquotsGroup = function(spmn) {
+        setShowInTree(spmn.group, true, true)
+        spmn.expanded = true;
+      }
+
+      $scope.collapseAliquotsGroup = function(spmn) {
+        setShowInTree(spmn.group, false, true)
+        spmn.expanded = false;
+      }
+
+      $scope.setTreeViewFormValidator = function(validator) {
+        $scope.treeViewValidator = validator;
+      }
+
       $scope.saveAliquots = function() {
+        if ($scope.childSpmnsData.view == 'tree') {
+          $scope.treeViewValidator.formSubmitted(true);
+          if (!$scope.treeViewValidator.isValidForm()) {
+            Alerts.error("common.form_validation_error");
+            return;
+          }
+        }
+          
         var payload = [];
         var specimens = $scope.boxOpts.specimens;
         if (!validSpecimens(specimens)) {
           return;
         }
 
+        var payload = { specimens: [], events: [] };
         for (var i = 0; i < specimens.length; ++i) {
           if (!specimens[i].parentSpecimenId) {
             continue;
@@ -337,11 +508,12 @@ angular.module('openspecimen')
 
           var toSave = getChildSpecimensToSave(specimens[i]);
           if (toSave) {
-            payload.push(toSave);
+            payload.specimens.push(toSave.specimen);
+            payload.events = payload.events.concat(toSave.events);
           }
         } 
 
-        var missingLabels = getMissingLabels(payload, specimens);
+        var missingLabels = getMissingLabels(payload.specimens, specimens);
         if (missingLabels.length > 0) {
           Alerts.errorText(
             "Parent specimen labels not specified." +
@@ -350,7 +522,7 @@ angular.module('openspecimen')
           return;
         }
 
-        Specimen.save(payload).then(
+        $http.post(baseUrl + 'le/specimens/children', payload).then(
           function() {
             $state.go('participant-list', {cpId: $scope.cpId});
           }
@@ -364,10 +536,12 @@ angular.module('openspecimen')
         }
 
         var children = [];
+        var events = [];
         angular.forEach(specimen.children, function(childSpecimen) {
           var toSave = getChildSpecimensToSave(childSpecimen);
           if (toSave) {
-            children.push(toSave);
+            children.push(toSave.specimen);
+            events = events.concat(toSave.events);
           }     
         });
 
@@ -377,26 +551,44 @@ angular.module('openspecimen')
           status: 'Collected',      
           parentId: specimen.parentSpecimenId,
           visitId: specimen.visitId,
-          children: children
+          children: children,
+          initialQty: specimen.initialQty
         };
+
+        if (!!specimen.frozenTime  || !!specimen.frozenBy.id) {
+          events.push({
+            reqId: specimen.id,
+            user: specimen.frozenBy, 
+            time: specimen.frozenTime
+          });
+        }
   
-        return anyChildHasLabel(specimenToSave) ? specimenToSave : null;
+        var specimenAndEvents = {specimen: specimenToSave, events: events};
+        return anyChildHasLabel(specimenToSave) ? specimenAndEvents : null;
       }
 
       function anyChildHasLabel(specimen) {
-        if (!!specimen.label) {
+        return anySpecimen(specimen, function(s) { return !!s.label; });
+      }
+
+      function anyNonVirtualSpecimen(specimen) {
+        return anySpecimen(specimen, function(s) { return s.storageType != 'Virtual' });
+      }
+
+      function anySpecimen(specimen, predicateFn) {
+        if (predicateFn(specimen)) {
           return true;
         }
 
         for (var i = 0; i < specimen.children.length; ++i) {
-          if (anyChildHasLabel(specimen.children[i])) {
+          if (predicateFn(specimen.children[i])) {
             return true;
           }
         }
 
         return false;
       }
-  
+
       function getMissingLabels(specimenTree, specimens) {
         var labelsToSave = getLabelsFromSpecimenTree(specimenTree);
         var missing = [];

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.openspecimen.custom.le.events.SpecimenAndFrozenEventDetail;
 import com.krishagni.openspecimen.custom.le.services.SpecimenCollectionService;
 
 @Controller("leSpecimenCollectionController")
@@ -32,5 +33,14 @@ public class SpecimenCollectionController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-
+	
+	@RequestMapping(method = RequestMethod.POST, value="/children")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SpecimenAndFrozenEventDetail collectChildSpecimens(@RequestBody SpecimenAndFrozenEventDetail input) {
+		RequestEvent<SpecimenAndFrozenEventDetail> req = new RequestEvent<SpecimenAndFrozenEventDetail>(input);
+		ResponseEvent<SpecimenAndFrozenEventDetail> resp = specimenCollSvc.collectChildSpecimens(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();		
+	}
 }
