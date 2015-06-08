@@ -59,7 +59,7 @@
 
     <field>
       <caption>SSN</caption>
-      <attribute>ssn</attribute>
+      <attribute>uid</attribute>
     </field>  
 
     <field>

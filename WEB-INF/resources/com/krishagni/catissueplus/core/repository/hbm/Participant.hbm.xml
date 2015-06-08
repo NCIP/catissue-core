@@ -27,7 +27,7 @@
 
     <property name="ethnicity" column="ETHNICITY" />
 
-    <property name="socialSecurityNumber" column="SOCIAL_SECURITY_NUMBER" unique="true" />
+    <property name="uid" column="SOCIAL_SECURITY_NUMBER" unique="true" />
 
     <property name="activityStatus" column="ACTIVITY_STATUS" />
 
@@ -52,11 +52,11 @@
       <element column="RACE_NAME" type="string" />
     </set>
 
-    <query name="getBySsn">
+    <query name="getByUid">
       from 
         com.krishagni.catissueplus.core.biospecimen.domain.Participant p
       where 
-        p.socialSecurityNumber = :ssn
+        p.uid = :uid
     </query>
  
     <query name="getByEmpi">
@@ -73,13 +73,13 @@
         p.lastName = :lname and birthDate = :dob
     </query>
 
-    <query name="getParticipantIdBySSN">
+    <query name="getParticipantIdByUid">
       select 
         p.id 
       from
         com.krishagni.catissueplus.core.biospecimen.domain.Participant p
       where 
-        p.socialSecurityNumber = :ssn
+        p.uid = :uid
     </query>
 
     <query name="getPmiIdBySiteMrn">

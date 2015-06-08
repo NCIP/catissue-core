@@ -61,10 +61,9 @@
         </div>
 
         <div class="form-group">
-          <label class="col-xs-3 control-label" translate="participant.ssn">Social Security Number</label>
+          <label class="col-xs-3 control-label" translate="participant.uid">Social Security Number</label>
           <div class="col-xs-6">
-            <input type="text" ng-model="cpr.participant.ssn" class="form-control" 
-              ui-mask="999-99-9999" placeholder="XXX-XX-XXXX">
+            <input type="text" ng-model="cpr.participant.uid" class="form-control">
           </div>
         </div>
 
@@ -205,7 +204,7 @@
           <div class="col os-col-15" translate="participant.first_name">First Name</div>
           <div class="col os-col-15" translate="participant.last_name">Last Name</div>
           <div class="col os-col-15" translate="participant.birth_date">Birth Date</div>
-          <div class="col os-col-10" translate="participant.ssn_short">SSN</div>
+          <div class="col os-col-10" translate="participant.uid_short">SSN</div>
           <div class="col os-col-20" translate="participant.pmis">Medical Identifiers</div>
           <div class="col os-col-20" translate="participant.matched_attrs">Matched Attributes</div>
         </div>
@@ -221,7 +220,7 @@
           <div class="col os-col-15">{{matchedPart.participant.firstName | osNoValue}}</div>
           <div class="col os-col-15">{{matchedPart.participant.lastName | osNoValue}}</div>
           <div class="col os-col-15">{{matchedPart.participant.birthDate | date: global.dateFmt | osNoValue}}</div>
-          <div class="col os-col-10">{{matchedPart.participant.ssn | osNoValue}}</div>
+          <div class="col os-col-10">{{matchedPart.participant.uid | osNoValue}}</div>
           <div class="col os-col-20">{{matchedPart.participant.pmis | osArrayJoin: pmiText | osNoValue}}</div>
           <div class="col os-col-20">{{matchedPart.matchedAttrs | osArrayJoin: matchedAttrText}}</div>
         </div>

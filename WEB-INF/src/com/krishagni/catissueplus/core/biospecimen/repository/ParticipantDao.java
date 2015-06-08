@@ -10,7 +10,7 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface ParticipantDao extends Dao<Participant> {
 	
-	public Participant getBySsn(String ssn);
+	public Participant getByUid(String uid);
 	
 	public Participant getByEmpi(String empi);
 	
@@ -20,7 +20,7 @@ public interface ParticipantDao extends Dao<Participant> {
 	
 	public List<Long> getParticipantIdsByPmis(List<PmiDetail> pmis);
 
-	public boolean isSsnUnique(String socialSecurityNumber);
+	public boolean isUidUnique(String uid);
 
 	public boolean isPmiUnique(String siteName, String mrn);
 }

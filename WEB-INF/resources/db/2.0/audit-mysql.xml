@@ -846,4 +846,11 @@
     <dropColumn columnName="identifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
   </changeSet>  
 
+  <changeSet author="vpawar" id="Rename SSN mod column to UID mod">
+    <renameColumn tableName="catissue_participant_aud" 
+      oldColumnName="socialSecurityNumber_MOD" 
+      newColumnName="uid_MOD" 
+      columnDataType="BIT"/>
+  </changeSet>
+
 </databaseChangeLog>

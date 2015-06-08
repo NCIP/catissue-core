@@ -1999,4 +1999,61 @@
       )
     </sql>
   </changeSet>
+
+  <changeSet author="vpawar" id="Create procedure to add config property" dbms="mysql">
+    <sql endDelimiter="//">
+      create procedure add_cfg_prop(
+        in moduleName text, 
+        in propName text,
+        in propCode text,
+        in propDesc text,
+        in propType text,
+        in defValue text
+      )
+      begin
+        select identifier into @module_id from os_modules where name = moduleName;
+
+        insert into os_cfg_props
+          (identifier, name, display_name_code, desc_code, data_type, module_id)
+        values
+          (default, propName, propCode, propDesc, propType, @module_id);
+
+        select last_insert_id() into @prop_id;
+
+        insert into os_cfg_settings
+          (identifier, property_id, value, activated_by, activation_date, activity_status)
+        values
+          (default, @prop_id, defValue, 1, current_timestamp(), 'Active');
+      end
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Create procedure to add config property" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace procedure add_cfg_prop(
+        moduleName in varchar2, 
+        propName   in varchar2,
+        propCode   in varchar2,
+        propDesc   in varchar2,
+        propType   in varchar2,
+        defValue   in varchar2
+      ) is
+        module_id number(20);
+      begin
+        select identifier into module_id from os_modules where name = moduleName;
+
+        insert into os_cfg_props
+          (identifier, name, display_name_code, desc_code, data_type, module_id)
+        values
+          (os_cfg_props_seq.nextval, propName, propCode, propDesc, propType, module_id);
+
+        insert into os_cfg_settings
+          (identifier, property_id, value, activated_by, activation_date, activity_status)
+        values
+          (os_cfg_settings_seq.nextval, os_cfg_props_seq.currval, defValue, 1, sysdate, 'Active');
+      end;
+      //
+    </sql>
+  </changeSet>
 </databaseChangeLog>

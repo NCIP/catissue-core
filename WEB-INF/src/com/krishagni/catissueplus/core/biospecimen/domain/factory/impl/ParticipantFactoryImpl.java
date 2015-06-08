@@ -13,7 +13,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -21,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
@@ -29,10 +29,15 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantUti
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.PmiDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.RegexValidator;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Validator;
 
 public class ParticipantFactoryImpl implements ParticipantFactory {
 
@@ -71,7 +76,8 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			participant.setId(detail.getId());
 		}
 
-		setSsn(detail, participant, partial, ose);
+		setUid(detail, participant, partial, ose);
+		setEmpi(detail, participant, partial, ose);
 		setName(detail, participant, partial, ose);
 		setVitalStatus(detail, participant, partial, ose);
 		setBirthDate(detail, participant, partial, ose);
@@ -81,34 +87,51 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		setGender(detail, participant, partial, ose);
 		setRace(detail, participant, partial, ose);
 		setEthnicity(detail, participant, partial, ose);
-		setPmi(detail, participant, partial, ose);
-		
-		if (!partial || detail.isAttrModified("empi")) {
-			participant.setEmpi(detail.getEmpi());
-		}				
+		setPmi(detail, participant, partial, ose);		
 	}
 
-	private void setSsn(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
-		if (partial && !detail.isAttrModified("ssn")) {
+	private void setUid(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
+		if (partial && !detail.isAttrModified("uid")) {
 			return;
 		}
 		
-		String ssn = detail.getSsn();
-		
-		if (StringUtils.isBlank(ssn)) { 
-			participant.setSocialSecurityNumber(null);
+		String uid = detail.getUid();		
+		if (StringUtils.isBlank(uid)) { 
+			participant.setUid(null);
 			return;
 		}
 		
-		if (isValidSsn(ssn)) {
-			if (partial && !ssn.equals(participant.getSocialSecurityNumber())) {
-				ParticipantUtil.ensureUniqueSsn(daoFactory, ssn, oce);
-			}
-							
-			participant.setSocialSecurityNumber(ssn);
-		} else {
-			oce.addError(ParticipantErrorCode.INVALID_SSN);
+		if (!isValidUid(uid, oce)) {
+			return;
 		}
+		
+		if (partial && !uid.equals(participant.getUid())) {
+			ParticipantUtil.ensureUniqueUid(daoFactory, uid, oce);
+		}
+		
+		participant.setUid(uid);
+	}
+	
+	private void setEmpi(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException ose) {
+		if (partial && !detail.isAttrModified("empi")) {
+			return;
+		}
+		
+		String empi = detail.getEmpi();
+		if (StringUtils.isBlank(empi)) {
+			participant.setEmpi(null);
+			return;
+		}
+		
+		if (!isValidMpi(empi, ose)) {
+			return;
+		}
+		
+		if (partial && !empi.equals(participant.getEmpi())) {
+			//ParticipantUtil.en
+		}
+		
+		participant.setEmpi(empi);
 	}
 	
 	private void setName(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException ose) {
@@ -321,17 +344,44 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		return pmi;
 	}
 
-	private boolean isValidSsn(String ssn) {
-		try {
-			if (StringUtils.isBlank(ssn)) {
-				return true;
-			}
-			
-			return SSN_PATTERN.matcher(ssn).matches();
-		} catch (Exception exp) {
-			return false;
-		}
+	private boolean isValidUid(String uid, OpenSpecimenException ose) {
+		return isValidInput(
+				uid, 
+				ConfigParams.PARTICIPANT_UID_PATTERN, 
+				ConfigParams.PARTICIPANT_UID_VALIDATOR, 
+				ParticipantErrorCode.INVALID_UID, 
+				ose);
 	}
 	
-	private static final Pattern SSN_PATTERN = Pattern.compile("[0-9]{3}-[0-9]{2}-[0-9]{4}");
+	private boolean isValidMpi(String mpi, OpenSpecimenException ose) {
+		return isValidInput(
+				mpi, 
+				ConfigParams.MPI_PATTERN,
+				ConfigParams.MPI_VALIDATOR, 
+				ParticipantErrorCode.INVALID_MPI, 
+				ose);
+	}
+	
+	
+	private boolean isValidInput(String input, String patternCfg, String validatorCfg, ErrorCode error, OpenSpecimenException ose) {
+		String pattern = ConfigUtil.getInstance()
+				.getStrSetting(ConfigParams.MODULE, patternCfg, null);
+		if (StringUtils.isNotBlank(pattern)) {
+			if (!RegexValidator.validate(pattern, input)) {
+				ose.addError(error, input);
+				return false;
+			}
+			
+			return true;
+		}
+		
+		String validatorName = ConfigUtil.getInstance()
+				.getStrSetting(ConfigParams.MODULE, validatorCfg, null);
+		if (StringUtils.isBlank(validatorName)) {
+			return true;
+		}
+		
+		Validator validator = OpenSpecimenAppCtxProvider.getBean(validatorName);
+		return validator.validate(input, ose);		
+	}
 }

@@ -187,8 +187,8 @@
     "last_name": "Last Name",
     "middle_name": "Middle Name",
     "birth_date": "Birth Date",
-    "ssn": "Social Security Number", 
-    "ssn_short": "SSN",
+    "uid": "Social Security Number", 
+    "uid_short": "SSN",
     "mpi": "Master Patient Index",
     "gender": "Gender",
     "vital_status": "Vital Status",
@@ -218,7 +218,7 @@
     "matching_attr": {
       "empi": "EMPI",
       "pmi": "MRN",
-      "ssn": "SSN",
+      "uid": "SSN",
       "lnameAndDob": "Last Name and DOB"
     },
 

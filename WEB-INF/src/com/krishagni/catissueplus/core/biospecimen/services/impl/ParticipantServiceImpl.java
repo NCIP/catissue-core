@@ -136,7 +136,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	
 	public void createParticipant(Participant participant) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		ParticipantUtil.ensureUniqueSsn(daoFactory, participant.getSocialSecurityNumber(), ose);
+		ParticipantUtil.ensureUniqueUid(daoFactory, participant.getUid(), ose);
 		ParticipantUtil.ensureUniquePmis(daoFactory, PmiDetail.from(participant.getPmis(), false), participant, ose);		
 		ose.checkAndThrow();
 		
@@ -146,10 +146,10 @@ public class ParticipantServiceImpl implements ParticipantService {
 	public void updateParticipant(Participant existing, Participant newParticipant) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
-		String existingSsn = existing.getSocialSecurityNumber();
-		String newSsn = newParticipant.getSocialSecurityNumber();
-		if (StringUtils.isNotBlank(newSsn) && !newSsn.equals(existingSsn)) {
-			ParticipantUtil.ensureUniqueSsn(daoFactory, newSsn, ose);
+		String existingUid = existing.getUid();
+		String newUid = newParticipant.getUid();
+		if (StringUtils.isNotBlank(newUid) && !newUid.equals(existingUid)) {
+			ParticipantUtil.ensureUniqueUid(daoFactory, newUid, ose);
 		}
 		
 		

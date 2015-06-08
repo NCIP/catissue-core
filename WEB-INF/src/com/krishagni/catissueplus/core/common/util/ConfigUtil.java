@@ -39,5 +39,9 @@ public class ConfigUtil {
 	public String getTimeFmt() {
 		return cfgSvc.getTimeFormat();
 	}
+	
+	public String getStrSetting(String module, String name, String defValue) {
+		return cfgSvc.getStrSetting(module, name, defValue);
+	}
 
 }

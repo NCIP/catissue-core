@@ -36,7 +36,7 @@ public class Participant extends BaseEntity {
 
 	protected String ethnicity;
 
-	protected String socialSecurityNumber;
+	protected String uid;
 
 	protected String activityStatus;
 
@@ -114,12 +114,12 @@ public class Participant extends BaseEntity {
 		this.ethnicity = ethnicity;
 	}
 
-	public String getSocialSecurityNumber() {
-		return socialSecurityNumber;
+	public String getUid() {
+		return uid;
 	}
 
-	public void setSocialSecurityNumber(String socialSecurityNumber) {
-		this.socialSecurityNumber = socialSecurityNumber;
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	public String getActivityStatus() {
@@ -187,7 +187,7 @@ public class Participant extends BaseEntity {
 		setFirstName(participant.getFirstName());
 		setLastName(participant.getLastName());
 		setMiddleName(participant.getMiddleName());
-		setSocialSecurityNumber(participant.getSocialSecurityNumber());
+		setUid(participant.getUid());
 		setActivityStatus(participant.getActivityStatus());
 		setSexGenotype(participant.getSexGenotype());
 		setVitalStatus(participant.getVitalStatus());
@@ -215,7 +215,7 @@ public class Participant extends BaseEntity {
 		checkActiveDependents();
 
 		disableMrns();		
-		this.socialSecurityNumber = Utility.getDisabledValue(this.socialSecurityNumber);
+		this.uid = Utility.getDisabledValue(this.uid);
 		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 	}
 

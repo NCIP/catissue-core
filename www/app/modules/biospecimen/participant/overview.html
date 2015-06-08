@@ -44,11 +44,10 @@
       </li>
 
       <li class="item">
-        <strong class="key key-sm" translate="participant.ssn_short">Social Security No:</strong>
-        <os-inline-edit editor="ssnEditor" name="ssn" class="value value-md" value="cpr.participant.ssn">
-          <span ng-if="ssnEditor.isDisplayMode()">{{ssnEditor.viewValue | osNoValue}}</span>
-          <input ng-if="ssnEditor.isEditMode()" type="text" ng-model="ssnEditor.editValue" class="form-control" 
-              ui-mask="999-99-9999" placeholder="XXX-XX-XXXX">
+        <strong class="key key-sm" translate="participant.uid">Social Security No:</strong>
+        <os-inline-edit editor="uidEditor" name="uid" class="value value-md" value="cpr.participant.uid">
+          <span ng-if="uidEditor.isDisplayMode()">{{uidEditor.viewValue | osNoValue}}</span>
+          <input ng-if="uidEditor.isEditMode()" type="text" ng-model="uidEditor.editValue" class="form-control">
         </os-inline-edit>
       </li>
 

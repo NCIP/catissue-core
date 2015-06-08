@@ -413,4 +413,30 @@
       //     
     </sql>
   </changeSet>
+
+  <changeSet author="vpawar" id="Config settings to specify UID pattern and/or validator">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'participant_uid_pattern', 
+        'participant_uid_pattern', 'participant_uid_pattern_desc',
+        'STRING', '^(?!000|666)[0-8][0-9]{2}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$'
+      );
+    </sql>
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'participant_uid_validator', 
+        'participant_uid_validator', 'participant_uid_validator_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Config settings to specify MPI pattern and/or validator">
+    <sql>
+      call add_cfg_prop('biospecimen', 'mpi_pattern', 'mpi_pattern', 'mpi_pattern_desc', 'STRING', '');
+    </sql>
+    <sql>
+      call add_cfg_prop('biospecimen', 'mpi_validator', 'mpi_validator', 'mpi_validator_desc', 'STRING', '');
+    </sql>
+  </changeSet>
 </databaseChangeLog>
