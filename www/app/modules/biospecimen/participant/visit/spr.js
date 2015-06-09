@@ -1,9 +1,9 @@
 angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
-  .controller('VisitSprCtrl', function($scope, $sce, visit, Alerts) {
+  .controller('VisitSprCtrl', function($scope, $sce, visit, DeleteUtil, Alerts) {
 
     function init() {
       $scope.sprUploader = {};
-      $scope.sprUrl = $sce.trustAsResourceUrl(visit.getSprUrl());
+      $scope.sprUrl = $sce.trustAsResourceUrl(visit.getSprFileUrl());
       $scope.sprName = visit.sprName;
       $scope.uploadMode = false;
       $scope.spr = {};
@@ -12,9 +12,12 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
     }
 
     function loadSpr() {
-     visit.getSpr().then(
+      if (!$scope.sprName) {
+        return;
+      }
+      visit.getSprText().then(
         function(result) {
-          $scope.spr.sprContent = result.data;
+          $scope.spr.sprText = result.data;
         }
       );
     }
@@ -38,13 +41,27 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
       )
     }
 
-    $scope.saveSpr = function(sprEditor, sprContent) {
-      var data = {sprContent: sprContent};
-      return visit.updateSpr(data);
+    $scope.saveSpr = function(sprEditor, sprText) {
+      var data = {sprText: sprText};
+      return visit.updateSprText(data);
     }
 
     $scope.confirmDeleteSpr = function() {
-      //TODO: Delete Spr feature
+      DeleteUtil.confirmDelete({
+        entity: {sprName: $scope.sprName},
+        templateUrl: 'modules/biospecimen/participant/visit/confirm-delete-spr-file.html',
+        delete: deleteSpr
+      });
+    }
+
+    function deleteSpr() {
+      visit.deleteSprFile().then(
+        function(result) {
+          if (result.data) {
+            $scope.sprName = undefined;
+          }
+        }
+      );
     }
 
     init();

@@ -105,29 +105,30 @@ public class VisitsController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value="/{id}/spr")
+	@RequestMapping(method = RequestMethod.POST, value="/{id}/spr-file")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public String uploadSpr(@PathVariable("id") Long visitId, @PathVariable("file") MultipartFile file)
+	public String uploadSprFile(@PathVariable("id") Long visitId, @PathVariable("file") MultipartFile file)
 	throws IOException {
 		ResponseEvent<String> resp = null;
-		InputStream sprIn = null;
+		InputStream inputStream = null;
 		try {
 			SprDetail sprDetail = new SprDetail();
-			sprIn = file.getInputStream();
-			sprDetail.setSprIn(sprIn);
-			sprDetail.setSprName(file.getOriginalFilename());
+			inputStream = file.getInputStream();
+			sprDetail.setInputStream(inputStream);
+			sprDetail.setName(file.getOriginalFilename());
+			sprDetail.setFileContentType(file.getContentType());
 			sprDetail.setVisitId(visitId);
-		
+			
 			resp = visitService.uploadSpr(getRequest(sprDetail));
 		} finally {
-			IOUtils.closeQuietly(sprIn);
+			IOUtils.closeQuietly(inputStream);
 		}
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value="/{id}/spr")
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/spr-file")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public void downloadSpr(@PathVariable("id") Long visitId, HttpServletResponse httpResp)
@@ -141,12 +142,35 @@ public class VisitsController {
 		Utility.sendToClient(httpResp, detail.getFileName(), detail.getFile());
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value="/{id}/spr")
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/spr-text") 
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public String updateSpr(@PathVariable("id") Long visitId, @RequestBody SprDetail sprDetail) {
+	public String getSprText(@PathVariable("id") Long visitId) {
+		EntityQueryCriteria crit = new EntityQueryCriteria(visitId);
+		
+		ResponseEvent<FileDetail> resp = visitService.getSpr(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		
+		FileDetail detail = resp.getPayload();
+		return Utility.getFileText(detail.getFile());
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value="/{id}/spr-text")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public String updateSprText(@PathVariable("id") Long visitId, @RequestBody SprDetail sprDetail) {
 		sprDetail.setVisitId(visitId);
-		ResponseEvent<String>resp = visitService.updateSpr(getRequest(sprDetail));
+		ResponseEvent<String>resp = visitService.updateSprText(getRequest(sprDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}/spr-file")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public boolean deleteSprFile(@PathVariable("id") Long visitId) {
+		EntityQueryCriteria crit = new EntityQueryCriteria(visitId);
+		ResponseEvent<Boolean> resp = visitService.deleteSprFile(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

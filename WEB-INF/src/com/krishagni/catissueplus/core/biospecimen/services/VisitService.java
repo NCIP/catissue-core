@@ -29,5 +29,7 @@ public interface VisitService {
 	
 	public ResponseEvent<String> uploadSpr(RequestEvent<SprDetail> req);
 
-	public ResponseEvent<String> updateSpr(RequestEvent<SprDetail> req);
+	public ResponseEvent<String> updateSprText(RequestEvent<SprDetail> req);
+
+	public ResponseEvent<Boolean> deleteSprFile(RequestEvent<EntityQueryCriteria> req);
 }

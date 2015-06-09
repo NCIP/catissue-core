@@ -46,14 +46,19 @@
 
   <div class="col-xs-8">
     <h3 class="os-sub-section-title" translate="visits.spr">Surgical Pathology Report</h3>
-    <div class="os-content os-content-block">
-      <div os-inline-editors on-save="saveSpr">
-        <div class="item">
-          <os-inline-edit editor="sprEditor" name="status" class="value value-md" value="spr.sprContent">
-            <span ng-if="sprEditor.isDisplayMode()">{{spr.sprContent}}</span>
-            <textarea ng-if="sprEditor.isEditMode()" ng-model="sprEditor.editValue" class="os-big-textarea"></textarea>
-          </os-inline-edit>
+    <div ng-switch on="!!sprName">
+      <div class="os-inline-activated os-inline-editable-lg" ng-switch-when="true">
+        <div os-inline-editors on-save="saveSpr">
+          <div class="item">
+            <os-inline-edit editor="sprEditor" name="status" class="value value-md" value="spr.sprText">
+              <span ng-if="sprEditor.isDisplayMode()" class="os-pre-line">{{spr.sprText}}</span>
+              <textarea ng-if="sprEditor.isEditMode()" ng-model="sprEditor.editValue" class="form-control os-textarea-lg"></textarea>
+            </os-inline-edit>
+          </div>
         </div>
+      </div>
+      <div ng-switch-when="false" class="alert alert-warning">
+        <span translate="visits.no_spr">No Surgical pathology Report Uploaded. Do you want to upload now?</span>
       </div>
     </div>
   </div>

@@ -6,12 +6,14 @@ public class SprDetail {
 	
 	private Long visitId;
 
-	private String sprName;
+	private String name;
 	
-	private InputStream sprIn;
+	private InputStream inputStream;
 	
-	private String sprContent;
+	private String fileContentType;
 	
+	private String sprText;
+
 	public Long getVisitId() {
 		return visitId;
 	}
@@ -20,28 +22,36 @@ public class SprDetail {
 		this.visitId = visitId;
 	}
 
-	public String getSprName() {
-		return sprName;
+	public String getName() {
+		return name;
 	}
 
-	public void setSprName(String sprName) {
-		this.sprName = sprName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public InputStream getSprIn() {
-		return sprIn;
+	public InputStream getInputStream() {
+		return inputStream;
 	}
 
-	public void setSprIn(InputStream spr) {
-		this.sprIn = spr;
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
 	}
 
-	public String getSprContent() {
-		return sprContent;
+	public String getFileContentType() {
+		return fileContentType;
 	}
 
-	public void setSprContent(String sprContent) {
-		this.sprContent = sprContent;
+	public void setFileContentType(String fileContentType) {
+		this.fileContentType = fileContentType;
+	}
+
+	public String getSprText() {
+		return sprText;
+	}
+
+	public void setSprText(String sprText) {
+		this.sprText = sprText;
 	}
 	
 }

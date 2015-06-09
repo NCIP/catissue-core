@@ -86,17 +86,25 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
       return Form.listRecords(url);
     };
 
-    Visit.prototype.getSprUrl = function() {
-      return Visit.url() + this.$id() + '/spr';
+    Visit.prototype.getSprFileUrl = function() {
+      return Visit.url() + this.$id() + '/spr-file';
     };
 
-    Visit.prototype.getSpr = function() {
-      return $http.get(this.getSprUrl()).then(ApiUtil.processResp);
+    Visit.prototype.getSprTextUrl = function() {
+      return Visit.url() + this.$id() + '/spr-text';
     };
 
-    Visit.prototype.updateSpr = function(sprContent) {
-      return $http.put(this.getSprUrl(), sprContent).then(ApiUtil.processResp);
+    Visit.prototype.getSprText = function() {
+      return $http.get(this.getSprTextUrl()).then(ApiUtil.processResp);
     };
+
+    Visit.prototype.updateSprText = function(sprText) {
+      return $http.put(this.getSprTextUrl(), sprText).then(ApiUtil.processResp);
+    };
+
+    Visit.prototype.deleteSprFile = function() {
+      return $http.delete(this.getSprFileUrl()).then(ApiUtil.processResp);
+    }
 
     return Visit;
   });

@@ -42,7 +42,7 @@ angular.module('openspecimen')
       }
     };
   })
-  .directive('osInlineEdit', function($timeout) {
+  .directive('osInlineEdit', function($timeout, $window) {
     return {
       restrict: 'E',
       require: ['^osInlineEditors', 'osInlineEdit'],
@@ -107,6 +107,7 @@ angular.module('openspecimen')
 
             scope.edit = function() {
               editorMgr.open(thisEditor);
+              onClickListener();
             };
 
             scope.ok = function() {
@@ -125,6 +126,21 @@ angular.module('openspecimen')
             scope.cancel = function() {
               editorMgr.close(thisEditor);
             };
+
+            $(element).click(function() {
+              scope.clickedOnEditor = true;
+            });
+
+            function onClickListener() {
+              $window.onclick = function(event) {
+                if (!scope.clickedOnEditor) {
+                  scope.cancel();
+                  $window.onclick = undefined;
+                }
+                scope.clickedOnEditor = false;
+                scope.$apply();
+              }
+            }
           }
         }
       },

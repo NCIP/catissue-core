@@ -16,11 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import au.com.bytecode.opencsv.CSVWriter;
+
+import com.krishagni.catissueplus.core.common.PdfUtil;
 
 public class Utility {
 	public static String getDisabledValue(String value) {
@@ -142,13 +143,32 @@ public class Utility {
 		return MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(file);
 	}
 	
-	public static void createFile(String filePath, String fileText) {
+	public static String getFileText(File file) {
+		FileInputStream in = null;
 		try {
-			File file = new File(filePath);
-			FileUtils.writeStringToFile(file, fileText, (String) null, false);
-		} catch (IOException e) {
-			throw new RuntimeException("Error sending file", e);
+			in = new FileInputStream(file);
+			MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+			String contentType = mimeTypesMap.getContentType(file);
+			return getFileText(in, contentType);
+		} catch (Exception e) {
+			throw new RuntimeException("Error getting file text", e);
+		} finally {
+			IOUtils.closeQuietly(in);
 		}
+	}
+	
+	public static String getFileText(InputStream in, String contentType) {
+		String fileText = null;
+		try {
+			if (StringUtils.isBlank(contentType) || !contentType.equals("application/pdf")) {
+				fileText = IOUtils.toString(in);
+			} else {
+				fileText = PdfUtil.getText(in);
+			}
+			return fileText;
+		} catch (IOException e) {
+			throw new RuntimeException("Error getting file text", e);
+		}	
 	}
 
 }
