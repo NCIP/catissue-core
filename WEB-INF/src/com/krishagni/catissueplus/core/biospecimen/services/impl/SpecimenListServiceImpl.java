@@ -112,7 +112,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			listDetails.setOwner(owner);
 			
 			SpecimenList specimenList = specimenListFactory.createSpecimenList(listDetails);
-			ensureValidSpecimensAndUsers(specimenList, siteCpPairs);
+			ensureValidSpecimensAndUsers(listDetails, specimenList, siteCpPairs);
 			daoFactory.getSpecimenListDao().saveOrUpdate(specimenList);
 			return ResponseEvent.response(SpecimenListDetails.from(specimenList));
 		} catch (OpenSpecimenException ose) {
@@ -125,38 +125,13 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<SpecimenListDetails> updateSpecimenList(RequestEvent<SpecimenListDetails> req) {
-		try {
-			SpecimenListDetails listDetails = req.getPayload();
-			Long listId = listDetails.getId();
-			if (listId == null) {
-				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
-			}
-						
-			SpecimenList existing = daoFactory.getSpecimenListDao().getSpecimenList(listId);
-			if (existing == null) {
-				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
-			}
-			
-			Long userId = AuthUtil.getCurrentUser().getId();
-			if (!AuthUtil.isAdmin() && !existing.canUserAccess(userId)) {
-				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
-			}
-			
-			UserSummary owner = new UserSummary();
-			owner.setId(existing.getOwner().getId());
-			listDetails.setOwner(owner);
-			
-			SpecimenList specimenList = specimenListFactory.createSpecimenList(listDetails);
-			ensureValidSpecimensAndUsers(specimenList, null);
-			existing.update(specimenList);
-			
-			daoFactory.getSpecimenListDao().saveOrUpdate(existing);
-			return ResponseEvent.response(SpecimenListDetails.from(existing));			
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
+		return updateSpecimenList(req, false);
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SpecimenListDetails> patchSpecimenList(RequestEvent<SpecimenListDetails> req) {
+		return updateSpecimenList(req, true);
 	}
 	
 	@Override
@@ -183,41 +158,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 		}
 	}
 
-	@Override
-	@PlusTransactional
-	public ResponseEvent<SpecimenListDetails> patchSpecimenList(RequestEvent<SpecimenListDetails> req) {
-		try {
-			SpecimenListDetails listDetails = req.getPayload();
-			SpecimenList existing = daoFactory.getSpecimenListDao().getSpecimenList(listDetails.getId());
-			if (existing == null) {
-				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
-			}
-			
-			Long userId = AuthUtil.getCurrentUser().getId();
-			if (!AuthUtil.isAdmin() && !existing.canUserAccess(userId)) {
-				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
-			}
-			
-			SpecimenList specimenList = specimenListFactory.createSpecimenList(existing, listDetails);
-			
-			if (listDetails.isAttrModified("specimens")) {
-				ensureValidSpecimens(specimenList, null);
-			}
-			
-			if (listDetails.isAttrModified("sharedWith")){
-				ensureValidUsers(specimenList, null);
-			}
-			
-			existing.update(specimenList);
-			
-			List<Specimen> readAccessSpecimens = getReadAccessSpecimens(specimenList.getId(), null);
-			return ResponseEvent.response(SpecimenListDetails.from(existing, readAccessSpecimens));
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
-	}
+	
 
 	@Override
 	@PlusTransactional
@@ -358,6 +299,43 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 		}
 	}
 	
+	@PlusTransactional
+	private ResponseEvent<SpecimenListDetails> updateSpecimenList(RequestEvent<SpecimenListDetails> req, boolean partial) {
+		try {
+			SpecimenListDetails listDetails = req.getPayload();
+			SpecimenList existing = daoFactory.getSpecimenListDao().getSpecimenList(listDetails.getId());
+			if (existing == null) {
+				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
+			}
+			
+			Long userId = AuthUtil.getCurrentUser().getId();
+			if (!AuthUtil.isAdmin() && !existing.canUserAccess(userId)) {
+				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
+			}
+			
+			UserSummary owner = new UserSummary();
+			owner.setId(existing.getOwner().getId());
+			listDetails.setOwner(owner);
+			
+			SpecimenList specimenList = null;
+			if (partial) {
+				specimenList = specimenListFactory.createSpecimenList(existing, listDetails);
+			} else {
+				specimenList = specimenListFactory.createSpecimenList(listDetails);
+			}
+			
+			ensureValidSpecimensAndUsers(listDetails, specimenList, null);
+			existing.update(specimenList);
+			
+			List<Specimen> readAccessSpecimens = getReadAccessSpecimens(specimenList.getId(), null);
+			return ResponseEvent.response(SpecimenListDetails.from(existing, readAccessSpecimens));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
 	private List<Specimen> getReadAccessSpecimens(Long specimenListId, List<Pair<Long, Long>> siteCpPairs) {
 		return getReadAccessSpecimens(specimenListId, null, siteCpPairs);
 	}
@@ -379,9 +357,14 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 		return daoFactory.getSpecimenDao().getSpecimens(crit);
 	}
 	
-	private void ensureValidSpecimensAndUsers(SpecimenList specimenList, List<Pair<Long, Long>> siteCpPairs) {
-		ensureValidSpecimens(specimenList, siteCpPairs);
-		ensureValidUsers(specimenList, siteCpPairs);
+	private void ensureValidSpecimensAndUsers(SpecimenListDetails details, SpecimenList specimenList, List<Pair<Long, Long>> siteCpPairs) {
+		if (details.isAttrModified("specimens")) {
+			ensureValidSpecimens(specimenList, siteCpPairs);
+		}
+		
+		if (details.isAttrModified("sharedWith")){
+			ensureValidUsers(specimenList, siteCpPairs);
+		}
 	}
 	
 	private void ensureValidSpecimens(SpecimenList specimenList, List<Pair<Long, Long>> siteCpPairs) {

@@ -5,8 +5,10 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenList;
+import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
+@ListenAttributeChanges
 public class SpecimenListDetails extends SpecimenListSummary {
 	private List<UserSummary> sharedWith;
 	

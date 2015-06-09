@@ -45,7 +45,7 @@
             <span ng-if="!list.id"  translate="common.buttons.create"> Create </span>
             <span ng-if="!!list.id" translate="common.buttons.update"> Update </span>
           </button>
-          <button class="btn btn-danger" ng-if="!!list.id" ng-click="deleteList()">
+          <button class="btn btn-danger" ng-if="list.isAllowedToDeleteList" ng-click="deleteList()">
             <span translate="common.buttons.delete">Delete</span>
           </button>
           <button class="btn os-btn-text" ng-click="back()">

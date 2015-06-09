@@ -5,8 +5,13 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
     function init() { 
       $scope.list = list;
       $scope.list.specimens = SpecimensHolder.getSpecimens() || list.specimens;
+      $scope.list.isAllowedToDeleteList = isAllowedToDeleteList(); 
       $scope.isQueryOrSpecimenPage =  SpecimensHolder.getSpecimens() != undefined;
       SpecimensHolder.setSpecimens(undefined);
+    }
+
+    function isAllowedToDeleteList() {
+       return !!$scope.list.id && ($scope.list.owner.id == $scope.currentUser.id || $scope.currentUser.admin)
     }
 
     $scope.saveOrUpdateList = function() {
@@ -19,15 +24,14 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
       var specimenList =  new SpecimenList({
         id: $scope.list.id,
         name: $scope.list.name,
-        sharedWith: sharedWith,
-        specimens: $scope.list.specimens
+        sharedWith: sharedWith
       }); 
 
       var $q = undefined;
       if (!specimenList.id) {
+        specimenList.specimens =  $scope.list.specimens;
         $q = specimenList.$saveOrUpdate();
       } else {
-        specimenList.modifiedAttrs = ['name', 'sharedWith'];
         $q = specimenList.$patch();
       }
  
