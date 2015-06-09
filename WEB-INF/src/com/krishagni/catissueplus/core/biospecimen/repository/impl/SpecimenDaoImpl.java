@@ -28,7 +28,6 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	@SuppressWarnings("unchecked")
 	public List<Specimen> getSpecimens(SpecimenListCriteria crit) {
 		Criteria query = getSessionFactory().getCurrentSession().createCriteria(Specimen.class)
-				.add(Restrictions.eq("activityStatus", "Active"))
 				.addOrder(Order.asc("id"))
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		

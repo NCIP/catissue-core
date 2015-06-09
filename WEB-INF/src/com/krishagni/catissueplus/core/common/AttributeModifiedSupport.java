@@ -13,4 +13,13 @@ public class AttributeModifiedSupport {
 	public boolean isAttrModified(String attr) {
 		return modifiedAttrs.contains(attr);
 	}
+
+	public Set<String> getModifiedAttrs() {
+		return modifiedAttrs;
+	}
+
+	public void setModifiedAttrs(Set<String> modifiedAttrs) {
+		this.modifiedAttrs = modifiedAttrs;
+	}
+	
 }

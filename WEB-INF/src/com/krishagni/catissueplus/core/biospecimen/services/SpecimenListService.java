@@ -23,7 +23,9 @@ public interface SpecimenListService {
 	
 	public ResponseEvent<ListSpecimensDetail> getListSpecimens(RequestEvent<Long> req);
 	
-	public ResponseEvent<List<SpecimenDetail>>  updateListSpecimens(RequestEvent<UpdateListSpecimensOp> req);
+	public ResponseEvent<SpecimenListDetails> patchSpecimenList(RequestEvent<SpecimenListDetails> req);
+	
+	public ResponseEvent<ListSpecimensDetail>  updateListSpecimens(RequestEvent<UpdateListSpecimensOp> req);
 	
 	public ResponseEvent<List<UserSummary>> shareSpecimenList(RequestEvent<ShareSpecimenListOp> req);
 	

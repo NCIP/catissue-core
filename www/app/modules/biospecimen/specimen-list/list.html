@@ -15,7 +15,7 @@
         <span class="fa fa-shopping-cart"></span>
         <span translate="specimen_list.distribute">Distribute</span>
       </button>
-      <button class="btn btn-danger" ng-click="confirmRemoveSpecimens()" ng-if="listSpecimens.isAllowedToDelete">
+      <button class="btn btn-danger" ng-click="confirmRemoveSpecimens()">
         <span class="fa fa-trash"></span>
         <span translate="common.buttons.delete">Delete</span>
       </button>
@@ -93,7 +93,7 @@
             <div class="pull-left" ng-click="selectList(list)" title="{{list.name}}">
               <span>{{list.name}}</span>
             </div>
-            <div show-if-admin class="pull-right">
+           <div class="pull-right">
               <button type="button" class="btn btn-xs btn-default" ui-sref="specimen-list-addedit({listId: list.id})">
                 <span class="fa fa-pencil"></span>
               </button> 

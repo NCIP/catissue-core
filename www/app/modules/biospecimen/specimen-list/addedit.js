@@ -22,8 +22,16 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
         sharedWith: sharedWith,
         specimens: $scope.list.specimens
       }); 
+
+      var $q = undefined;
+      if (!specimenList.id) {
+        $q = specimenList.$saveOrUpdate();
+      } else {
+        specimenList.modifiedAttrs = ['name', 'sharedWith'];
+        $q = specimenList.$patch();
+      }
  
-      specimenList.$saveOrUpdate().then(
+      $q.then(
         function(savedList) {
           if ($scope.isQueryOrSpecimenPage) {
             $scope.back();

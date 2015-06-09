@@ -80,6 +80,15 @@ public class SpecimenListsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+	
+	@RequestMapping(method = RequestMethod.PATCH, value="/{listId}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SpecimenListDetails patchSpecimenList(@PathVariable Long listId, @RequestBody SpecimenListDetails details) {
+		ResponseEvent<SpecimenListDetails> resp = specimenListSvc.patchSpecimenList(getRequest(details));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 			
 	@RequestMapping(method = RequestMethod.GET, value="/{listId}/specimens")
 	@ResponseStatus(HttpStatus.OK)
@@ -93,7 +102,7 @@ public class SpecimenListsController {
 	@RequestMapping(method = RequestMethod.PUT, value="/{listId}/specimens")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SpecimenDetail> updateListSpecimens(
+	public ListSpecimensDetail updateListSpecimens(
 			@PathVariable("listId") Long listId,
 			@RequestParam(value = "operation", required = false, defaultValue = "UPDATE") String operation,
 			@RequestBody List<String> specimenLabels) {
@@ -104,7 +113,7 @@ public class SpecimenListsController {
 		opDetail.setOp(com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensOp.Operation.valueOf(operation));
 		
 
-		ResponseEvent<List<SpecimenDetail>> resp = specimenListSvc.updateListSpecimens(getRequest(opDetail));
+		ResponseEvent<ListSpecimensDetail> resp = specimenListSvc.updateListSpecimens(getRequest(opDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

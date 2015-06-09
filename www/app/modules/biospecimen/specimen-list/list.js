@@ -54,9 +54,8 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
     function removeSpecimensFromList() {
       var list = $scope.lists.selectedList;
       list.removeSpecimens($scope.selection.specimens).then(
-        function(specimens) {
-          $scope.listSpecimens.specimens = specimens;
-          $scope.listSpecimens.actualCount = specimens.length;
+        function(listSpecimens) {
+          $scope.listSpecimens = listSpecimens;
           $scope.selection = resetSelection();
           Alerts.success('specimen_list.specimens_removed', {name: list.name});
         }
@@ -68,13 +67,7 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
       $scope.lists.selectedList = specimenList;
       specimenList.getSpecimens().then(
         function(listSpecimens) {
-          var myLists =  $scope.lists.myLists;
-
-          $scope.listSpecimens = {
-            specimens: listSpecimens.specimens,
-            actualCount: listSpecimens.actualCount,
-            isAllowedToDelete:  myLists.indexOf(specimenList) != -1 || $scope.currentUser.admin
-          };
+          $scope.listSpecimens = listSpecimens
         }
       );
     }
