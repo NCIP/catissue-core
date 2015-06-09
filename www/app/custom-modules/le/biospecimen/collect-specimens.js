@@ -434,7 +434,7 @@ angular.module('openspecimen')
           }
 
           var treeViewSpmns = [],
-              partChildSpmns = [];
+              partChildSpmns = [],
               lastEmpi = undefined;
 
           angular.forEach($scope.boxOpts.specimens, function(specimen, $index) {
