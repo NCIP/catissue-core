@@ -188,7 +188,7 @@ public class VisitServiceImpl implements VisitService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<String> uploadSpr(RequestEvent<SprDetail> req) {
+	public ResponseEvent<String> uploadSprFile(RequestEvent<SprDetail> req) {
 		try {
 			SprDetail detail = req.getPayload();
 			Visit visit = getVisit(detail.getVisitId(), null);

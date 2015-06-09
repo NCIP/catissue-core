@@ -27,7 +27,7 @@ public interface VisitService {
 
 	public ResponseEvent<FileDetail> getSpr(RequestEvent<EntityQueryCriteria> req);
 	
-	public ResponseEvent<String> uploadSpr(RequestEvent<SprDetail> req);
+	public ResponseEvent<String> uploadSprFile(RequestEvent<SprDetail> req);
 
 	public ResponseEvent<String> updateSprText(RequestEvent<SprDetail> req);
 

@@ -120,7 +120,7 @@ public class VisitsController {
 			sprDetail.setFileContentType(file.getContentType());
 			sprDetail.setVisitId(visitId);
 			
-			resp = visitService.uploadSpr(getRequest(sprDetail));
+			resp = visitService.uploadSprFile(getRequest(sprDetail));
 		} finally {
 			IOUtils.closeQuietly(inputStream);
 		}
