@@ -500,7 +500,10 @@ public class Specimen extends BaseEntity {
 			return;
 		}
 		
-		setLabel(specimen.getLabel());
+		if (StringUtils.isBlank(getLabel())) {
+			setLabel(specimen.getLabel());
+		}
+		
 		setBarcode(specimen.getBarcode());
 		
 		updateEvent(getCollectionEvent(), specimen.getCollectionEvent());

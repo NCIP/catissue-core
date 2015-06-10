@@ -123,6 +123,11 @@
     "derivative_label_fmt": "Derivative Label Format",
     "aliquot_label_fmt": "Aliquot Label Format",
     "store_all_aliquots_in_same_container": "Store all Aliquots in same Container",
+    "visit_name_fmt": "Visit Name Format",
+    "manual_enabled_for": "Manual Inputs Allowed For",
+    "ppids": "Participant Protocol IDs",
+    "visit_names": "Visit Names",
+    "spec_labels": "Specimen Labels",
 
     "unsigned_consent_url": "Unsigned Consent Form URL",
     "consent_tiers": "Consent Tiers", 

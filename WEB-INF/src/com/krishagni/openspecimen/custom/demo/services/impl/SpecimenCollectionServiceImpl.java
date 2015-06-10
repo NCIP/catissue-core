@@ -119,7 +119,7 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 		visit.setStatus(Visit.VISIT_STATUS_COMPLETED);
 		
 		RequestEvent<VisitDetail> req = new RequestEvent<VisitDetail>(visit);
-		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(req);
+		ResponseEvent<VisitDetail> resp = visitService.addVisit(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

@@ -52,7 +52,15 @@ public class CollectionProtocol extends BaseEntity {
 	
 	private String ppidFormat;
 	
+	private String visitNameFormat;
+	
 	private String unsignedConsentDocumentURL;
+	
+	private Boolean manualPpidEnabled;
+	
+	private Boolean manualVisitNameEnabled;
+	
+	private Boolean manualSpecLabelEnabled;
 	
 	private Set<ConsentTier> consentTier = new HashSet<ConsentTier>();
 	
@@ -174,12 +182,44 @@ public class CollectionProtocol extends BaseEntity {
 		this.ppidFormat = ppidFormat;
 	}
 
+	public String getVisitNameFormat() {
+		return visitNameFormat;
+	}
+
+	public void setVisitNameFormat(String visitNameFormat) {
+		this.visitNameFormat = visitNameFormat;
+	}
+
 	public String getUnsignedConsentDocumentURL() {
 		return unsignedConsentDocumentURL;
 	}
 
 	public void setUnsignedConsentDocumentURL(String unsignedConsentDocumentURL) {
 		this.unsignedConsentDocumentURL = unsignedConsentDocumentURL;
+	}
+
+	public void setManualPpidEnabled(Boolean manualPpidEnabled) {
+		this.manualPpidEnabled = manualPpidEnabled;
+	}
+	
+	public boolean isManualPpidEnabled() {
+		return manualPpidEnabled != null ? manualPpidEnabled : false;
+	}
+
+	public void setManualVisitNameEnabled(Boolean manualVisitNameEnabled) {
+		this.manualVisitNameEnabled = manualVisitNameEnabled;
+	}
+	
+	public boolean isManualVisitNameEnabled() {
+		return manualVisitNameEnabled != null ? manualVisitNameEnabled : false;
+	}
+	
+	public void setManualSpecLabelEnabled(Boolean manualSpecLabelEnabled) {
+		this.manualSpecLabelEnabled = manualSpecLabelEnabled;
+	}
+	
+	public boolean isManualSpecLabelEnabled() {
+		return manualSpecLabelEnabled != null ? manualSpecLabelEnabled : false;
 	}
 
 	@NotAudited
@@ -244,20 +284,24 @@ public class CollectionProtocol extends BaseEntity {
 	}
 	
 	public void update(CollectionProtocol cp) {
-		this.setTitle(cp.getTitle()); 
-		this.setShortTitle(cp.getShortTitle()); 
-		this.setStartDate(cp.getStartDate());
-		this.setEndDate(cp.getEndDate());
-		this.setActivityStatus(cp.getActivityStatus());
-		this.setPrincipalInvestigator(cp.getPrincipalInvestigator());
-		this.setIrbIdentifier(cp.getIrbIdentifier());
-		this.setEnrollment(cp.getEnrollment());
-		this.setDescriptionURL(cp.getDescriptionURL());
-		this.setSpecimenLabelFormat(cp.getSpecimenLabelFormat());
-		this.setDerivativeLabelFormat(cp.getDerivativeLabelFormat());
-		this.setAliquotLabelFormat(cp.getAliquotLabelFormat());
-		this.setPpidFormat(cp.getPpidFormat());
-		this.setUnsignedConsentDocumentURL(cp.getUnsignedConsentDocumentURL());
+		setTitle(cp.getTitle()); 
+		setShortTitle(cp.getShortTitle()); 
+		setStartDate(cp.getStartDate());
+		setEndDate(cp.getEndDate());
+		setActivityStatus(cp.getActivityStatus());
+		setPrincipalInvestigator(cp.getPrincipalInvestigator());
+		setIrbIdentifier(cp.getIrbIdentifier());
+		setEnrollment(cp.getEnrollment());
+		setDescriptionURL(cp.getDescriptionURL());
+		setPpidFormat(cp.getPpidFormat());
+		setManualPpidEnabled(cp.isManualPpidEnabled());
+		setVisitNameFormat(cp.getVisitNameFormat());
+		setManualVisitNameEnabled(cp.isManualVisitNameEnabled());
+		setSpecimenLabelFormat(cp.getSpecimenLabelFormat());
+		setDerivativeLabelFormat(cp.getDerivativeLabelFormat());
+		setAliquotLabelFormat(cp.getAliquotLabelFormat());
+		setManualSpecLabelEnabled(cp.isManualSpecLabelEnabled());
+		setUnsignedConsentDocumentURL(cp.getUnsignedConsentDocumentURL());
 		
 		CollectionUpdater.update(this.repositories, cp.getRepositories());
 		CollectionUpdater.update(this.coordinators, cp.getCoordinators());
@@ -359,5 +403,5 @@ public class CollectionProtocol extends BaseEntity {
 		}
 		
 		return null;
-	}
+	}	
 }

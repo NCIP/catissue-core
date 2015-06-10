@@ -65,11 +65,13 @@
                 <os-specimen-desc specimen="specimen"></os-specimen-desc>
               </div>
             </td>
-            <td class="col os-col-10" ng-switch="!specimen.label && !!specimen.labelFmt">
+            <td class="col os-col-10" ng-init="pLabel = specimen.label"
+              ng-switch="!cp.manualSpecLabelEnabled && !specimen.label && !!specimen.labelFmt"> 
               <span ng-switch-when="true">Auto</span>
               <div ng-switch-default>
-                <input type="text" os-md-input edit-when="specimen.existingStatus != 'Collected'"
-                  name="label" ng-model="specimen.label" ng-required="specimen.status == 'Collected'"
+                <input type="text" os-md-input edit-when="!pLabel"
+                  name="label" ng-model="specimen.label" 
+                  ng-required="!specimen.labelFmt || cp.manualSpecLabelEnabled"
                   ng-model-options="{updateOn: 'blur', allowInvalid: 'true'}" os-unique-specimen-label>
                 <div os-field-error field="sform.label"></div>
               </div>
@@ -122,10 +124,16 @@
         <div class="form-group">
           <label class="col-xs-2 control-label">Visit Details</label>
           <div ng-if="visit.status != 'Complete'">
+            <div class="col-xs-3 input" ng-if="cp.manualVisitNameEnabled">
+              <input name="visitName" ng-model="visit.name" class="form-control" type="text" 
+                os-md-input required placeholder="Visit Name">
+              <div os-field-error field="collectionForm.visitName"></div>
+            </div>
             <div class="col-xs-3 input">
               <div os-md-input ng-model="visit.visitDate" placeholder="Visit Date">
                 <input name="visitDate" ng-model="visit.visitDate" class="form-control" type="text"
-                  datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="visitDt.isOpen" ng-focus="visitDt.isOpen=true"
+                  datepicker-popup="{{global.dateFmt}}" show-button-bar="true"
+                  is-open="visitDt.isOpen" ng-focus="visitDt.isOpen=true"
                   required placeholder="Visit Date">
                 <div os-field-error field="collectionForm.visitDate"></div>
               </div>

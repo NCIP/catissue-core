@@ -89,7 +89,7 @@ public class VisitsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public VisitDetail addVisit(@RequestBody VisitDetail visit) {
-		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(visit));
+		ResponseEvent<VisitDetail> resp = visitService.addVisit(getRequest(visit));
 		resp.throwErrorIfUnsuccessful();				
 		return resp.getPayload();
 	}
@@ -100,7 +100,7 @@ public class VisitsController {
 	public VisitDetail updateVisit(@PathVariable("id") Long visitId, @RequestBody VisitDetail visit) {
 		visit.setId(visitId);
 		
-		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(visit));
+		ResponseEvent<VisitDetail> resp = visitService.updateVisit(getRequest(visit));
 		resp.throwErrorIfUnsuccessful();				
 		return resp.getPayload();
 	}

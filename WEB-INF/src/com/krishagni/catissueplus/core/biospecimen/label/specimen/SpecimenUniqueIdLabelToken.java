@@ -27,4 +27,9 @@ public class SpecimenUniqueIdLabelToken extends AbstractSpecimenLabelToken {
 		Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("Specimen", getName());
 		return "" + uniqueId.toString();
 	}
+	
+	@Override
+	public int validate(Object object, String input, int startIdx) {
+		return super.validateNumber(input, startIdx);
+	}	
 }

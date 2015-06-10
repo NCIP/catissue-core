@@ -2056,4 +2056,28 @@
       //
     </sql>
   </changeSet>
+
+  <changeSet author="vpawar" id="Add visit name format column to CP">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="VISIT_NAME_FORMAT" type="${text.type}(255)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Flag to specify whether manual input of PPID is allowed">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="MANUAL_PPID_ALLOWED" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Flag to specify whether manual input of visit name is allowed">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="MANUAL_VISIT_NAME_ALLOWED" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Flag to specify whether manual input of specimen labels is allowed">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="MANUAL_SPEC_LABEL_ALLOWED" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

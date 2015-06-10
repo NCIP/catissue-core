@@ -42,7 +42,15 @@
     <property name="aliquotLabelFormat" column="ALIQUOT_LABEL_FORMAT"/>
 
     <property name="ppidFormat" column="PPID_FORMAT"/>
-          
+    
+    <property name="visitNameFormat" column="VISIT_NAME_FORMAT"/>
+    
+    <property name="manualPpidEnabled" column="MANUAL_PPID_ALLOWED"/>
+
+    <property name="manualVisitNameEnabled" column="MANUAL_VISIT_NAME_ALLOWED"/>
+
+    <property name="manualSpecLabelEnabled" column="MANUAL_SPEC_LABEL_ALLOWED"/>
+
     <property name="unsignedConsentDocumentURL" column="UNSIGNED_CONSENT_DOC_URL"/>
 
     <set name="consentTier" table="CATISSUE_CONSENT_TIER" inverse="false" cascade="all-delete-orphan">

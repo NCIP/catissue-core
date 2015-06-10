@@ -16,19 +16,19 @@
           <label class="col-xs-3 control-label" translate="participant.reg_date">Registration Date</label>
           <div class="col-xs-6">
             <input type="text" name="regDate" ng-model="cpr.registrationDate" class="form-control" 
-              datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="regDt.isOpen" ng-focus="regDt.isOpen=true"
+              datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
+              is-open="regDt.isOpen" ng-focus="regDt.isOpen=true"
               required placeholder="{{'participant.regDate' | translate}}"/>
-
             <div os-field-error field="pform.regDate"></div>
           </div>
         </div>
 
-        <div class="form-group" ng-if="cpr.id || !cp.ppidFmt">
+        <div class="form-group" ng-if="cpr.id || !cp.ppidFmt || cp.manualPpidEnabled">
           <label class="col-xs-3 control-label" translate="participant.ppid">Participant Protocol ID</label>
           <div class="col-xs-6">
             <input type="text" name="ppid" ng-model="cpr.ppid" class="form-control" 
-              placeholder="{{'participant.ppid' | translate}}" ng-disabled="!!cp.ppidFmt">
-
+              placeholder="{{'participant.ppid' | translate}}" 
+              ng-required="!cp.ppidFmt || cp.manualPpidEnabled" ng-disabled="!!cpr.id">
             <div os-field-error field="pform.ppid"></div>
           </div>
         </div>
@@ -55,7 +55,8 @@
           <label class="col-xs-3 control-label" translate="participant.birth_date">Birth Date</label>
           <div class="col-xs-6">
             <input type="text" ng-model="cpr.participant.birthDate" class="form-control" 
-              datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="birthDt.isOpen" ng-focus="birthDt.isOpen=true" 
+              datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
+              is-open="birthDt.isOpen" ng-focus="birthDt.isOpen=true" 
               placeholder="{{'participant.birth_date' | translate}}"/>
           </div>
         </div>
@@ -70,7 +71,8 @@
         <div class="form-group">
           <label class="col-xs-3 control-label" translate="participant.mpi">Master Patient Index</label>
           <div class="col-xs-6">
-            <input type="text" ng-model="cpr.participant.empi" class="form-control" placeholder="{{'participant.mpi' | translate}}"/>
+            <input type="text" ng-model="cpr.participant.empi" class="form-control" 
+              placeholder="{{'participant.mpi' | translate}}"/>
           </div>
         </div>
 
@@ -88,7 +90,8 @@
             <label class="col-xs-3 control-label" translate="participant.ethnicity">Ethnicity</label>
             <div class="col-xs-9">
               <label class="radio-inline" ng-repeat="ethnicity in ethnicities">
-                <input type="radio" name="ethnicity" ng-model="cpr.participant.ethnicity" ng-value="ethnicity"> {{ethnicity}}
+                <input type="radio" name="ethnicity" ng-model="cpr.participant.ethnicity" ng-value="ethnicity"> 
+                <span>{{ethnicity}}</span>
               </label>
             </div>
           </div>
@@ -97,7 +100,8 @@
             <label class="col-xs-3 control-label" translate="participant.vital_status">Vital Status</label>
             <div class="col-xs-9">
               <label class="radio-inline" ng-repeat="vitalStatus in vitalStatuses">
-                <input type="radio" name="vitalStatus" ng-model="cpr.participant.vitalStatus" ng-value="vitalStatus"> {{vitalStatus}}
+                <input type="radio" name="vitalStatus" ng-model="cpr.participant.vitalStatus" ng-value="vitalStatus"> 
+                <span>{{vitalStatus}}</span>
               </label>
             </div>
           </div>
@@ -106,8 +110,10 @@
             <label class="col-xs-3 control-label" translate="participant.death_date">Death Date</label>
             <div class="col-xs-6">
               <input type="text" ng-model="cpr.participant.deathDate" class="form-control" 
-                datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="deathDt.isOpen" ng-focus="deathDt.isOpen=true" 
-                ng-disabled="cpr.participant.vitalStatus != 'Dead'" placeholder="{{'participant.death_date' | translate}}"/>
+                datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
+                is-open="deathDt.isOpen" ng-focus="deathDt.isOpen=true" 
+                ng-disabled="cpr.participant.vitalStatus != 'Dead'" 
+                placeholder="{{'participant.death_date' | translate}}"/>
             </div>
           </div>
 
@@ -122,8 +128,12 @@
         <div class="form-group">
           <div class="col-xs-offset-3 col-xs-6">
             <a ng-click="showAdvDemographics = !showAdvDemographics">
-              <span ng-if="!showAdvDemographics" translate="participant.more_demographics">More Demographic Information</span>
-              <span ng-if="showAdvDemographics" translate="participant.less_demographics">Less Demographic Information</span>
+              <span ng-if="!showAdvDemographics" translate="participant.more_demographics">
+                More Demographic Information
+              </span>
+              <span ng-if="showAdvDemographics" translate="participant.less_demographics">
+                Less Demographic Information
+              </span>
             </a>
           </div>
         </div>

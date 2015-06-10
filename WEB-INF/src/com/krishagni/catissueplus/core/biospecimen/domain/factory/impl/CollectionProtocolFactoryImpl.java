@@ -27,6 +27,8 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	
 	private LabelGenerator specimenLabelGenerator;
 	
+	private LabelGenerator visitNameGenerator;
+	
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
 	}
@@ -37,6 +39,10 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	
 	public void setSpecimenLabelGenerator(LabelGenerator specimenLabelGenerator) {
 		this.specimenLabelGenerator = specimenLabelGenerator;
+	}
+	
+	public void setVisitNameGenerator(LabelGenerator visitNameGenerator) {
+		this.visitNameGenerator = visitNameGenerator;
 	}
 
 	@Override
@@ -56,10 +62,12 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 
 		cp.setIrbIdentifier(input.getIrbId());
 		cp.setPpidFormat(input.getPpidFmt());
+		cp.setManualPpidEnabled(input.getManualPpidEnabled());
 		cp.setEnrollment(input.getAnticipatedParticipantsCount());
 		cp.setDescriptionURL(input.getDescriptionUrl());
 
-		setLabelFormats(input, cp, ose);
+		setVisitNameFmt(input, cp, ose);
+		setLabelFormats(input, cp, ose);		
 		setActivityStatus(input, cp, ose);
 
 		ose.checkAndThrow();
@@ -168,6 +176,8 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		
 		labelFmt = ensureValidLabelFmt(input.getDerivativeLabelFmt(), CpErrorCode.INVALID_DERIVATIVE_LABEL_FMT, ose);
 		result.setDerivativeLabelFormat(labelFmt);
+		
+		result.setManualSpecLabelEnabled(input.getManualSpecLabelEnabled());
 	}
 	
 	private String ensureValidLabelFmt(String labelFmt, ErrorCode error, OpenSpecimenException ose) {
@@ -176,5 +186,19 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		}
 		
 		return labelFmt;
+	}
+
+	private void setVisitNameFmt(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
+		String nameFmt = ensureValidVisitNameFmt(input.getVisitNameFmt(), ose);
+		result.setVisitNameFormat(nameFmt);
+		result.setManualVisitNameEnabled(input.getManualVisitNameEnabled());
+	}
+	
+	private String ensureValidVisitNameFmt(String nameFmt, OpenSpecimenException ose) {
+		if (StringUtils.isNotBlank(nameFmt) && !visitNameGenerator.isValidLabelTmpl(nameFmt)) {
+			ose.addError(CpErrorCode.INVALID_VISIT_NAME_FMT, nameFmt);
+		}
+		
+		return nameFmt;
 	}
 }

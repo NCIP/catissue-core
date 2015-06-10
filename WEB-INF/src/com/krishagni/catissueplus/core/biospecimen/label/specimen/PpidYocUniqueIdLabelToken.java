@@ -38,4 +38,9 @@ public class PpidYocUniqueIdLabelToken extends AbstractSpecimenLabelToken {
 		Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId(name, key);
 		return uniqueId.toString();
 	}
+	
+	@Override
+	public int validate(Object object, String input, int startIdx) {
+		return super.validateNumber(input, startIdx);
+	}	
 }

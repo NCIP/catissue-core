@@ -11,6 +11,10 @@ public enum CprErrorCode implements ErrorCode {
 	
 	DUP_PPID,
 	
+	INVALID_PPID,
+	
+	MANUAL_PPID_NOT_ALLOWED,
+	
 	DUP_BARCODE,
 	
 	DUP_REGISTRATION,

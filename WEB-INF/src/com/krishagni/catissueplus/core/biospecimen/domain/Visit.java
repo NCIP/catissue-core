@@ -274,8 +274,7 @@ public class Visit {
 		setRegistration(visit.getRegistration());
 		setSite(visit.getSite());
 		setStatus(visit.getStatus());
-		setComments(visit.getComments());
-		setName(visit.getName());		
+		setComments(visit.getComments());		
 		setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 		setVisitDate(visit.getVisitDate());
 	}
@@ -297,7 +296,11 @@ public class Visit {
 			return;
 		}
 		
-		setName(labelGenerator.generateLabel(defNameTmpl, this));
+		String visitNameFmt = getCollectionProtocol().getVisitNameFormat();
+		if (StringUtils.isBlank(visitNameFmt)) {
+			visitNameFmt = defNameTmpl;
+		}
+		setName(labelGenerator.generateLabel(visitNameFmt, this));
 	}
 	
 	private void ensureNoActiveChildObjects() {

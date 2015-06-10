@@ -22,7 +22,7 @@ public class VisitImporter implements ObjectImporter<VisitDetail> {
 			RequestEvent<VisitDetail> visitReq = new RequestEvent<VisitDetail>(detail.getObject());
 			
 			if (detail.isCreate()) {
-				return visitSvc.addOrUpdateVisit(visitReq);
+				return visitSvc.addVisit(visitReq);
 			} else {
 				return visitSvc.patchVisit(visitReq);
 			}

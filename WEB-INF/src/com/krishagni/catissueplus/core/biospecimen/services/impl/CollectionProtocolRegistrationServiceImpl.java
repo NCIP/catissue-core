@@ -9,11 +9,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
@@ -54,6 +57,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	private ParticipantService participantService;
 	
 	private ConfigurationServiceImpl cfgSvc;
+	
+	private static final Pattern digitsPtrn = Pattern.compile("%(\\d+)d");  
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -106,16 +111,19 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			
 			CollectionProtocolRegistration existing = getCpr(detail.getId(), detail.getCpId(), detail.getPpid());
 			AccessCtrlMgr.getInstance().ensureUpdateCprRights(existing);
-			
+
+			//
+			// Note: PPID edit is not allowed; therefore PPID validity is
+			// not checked
+			//
+						
 			CollectionProtocolRegistration cpr = cprFactory.createCpr(detail);			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureUniquePpid(existing, cpr, ose);
 			ensureUniqueBarcode(existing, cpr, ose);
 			ose.checkAndThrow();
 			
 			saveParticipant(existing, cpr);
 			existing.update(cpr);
-			cpr.setPpidIfEmpty();
 			
 			daoFactory.getCprDao().saveOrUpdate(existing);
 			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(existing, false));
@@ -338,14 +346,16 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
-		ensureUniqueParticipantReg(cpr, ose);
-		ensureUniquePpid(null, cpr, ose);
+		ensureValidAndUniquePpid(cpr, ose);
+		ensureUniqueParticipantReg(cpr, ose);		
 		ensureUniqueBarcode(null, cpr, ose);
+		
 		ose.checkAndThrow();
 		
 		if (saveParticipant) {
 			saveParticipant(null, cpr);
-		}		
+		}
+		
 		cpr.setPpidIfEmpty();
 		daoFactory.getCprDao().saveOrUpdate(cpr);
 		return CollectionProtocolRegistrationDetail.from(cpr, false);		
@@ -393,14 +403,38 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 	}
 
-	private void ensureUniquePpid(CollectionProtocolRegistration existing, CollectionProtocolRegistration cpr, OpenSpecimenException ose) {
-		if (existing != null && existing.getPpid().equals(cpr.getPpid())) { // ppid has not changed
+	private void ensureValidAndUniquePpid(CollectionProtocolRegistration cpr, OpenSpecimenException ose) {
+		CollectionProtocol cp = cpr.getCollectionProtocol();
+		boolean ppidReq = cp.isManualPpidEnabled() || StringUtils.isBlank(cp.getPpidFormat());
+		
+		String ppid = cpr.getPpid();
+		if (StringUtils.isBlank(ppid)) {
+			if (ppidReq) {
+				ose.addError(CprErrorCode.PPID_REQUIRED);
+			}
+			
 			return;
 		}
 		
-		Long cpId = cpr.getCollectionProtocol().getId();
-		String ppid = cpr.getPpid();		
-		if (daoFactory.getCprDao().getCprByPpid(cpId, ppid) != null) {
+		
+		if (StringUtils.isNotBlank(cp.getPpidFormat())) {
+			//
+			// PPID format is specified
+			//
+			
+			if (!cp.isManualPpidEnabled()) {
+				ose.addError(CprErrorCode.MANUAL_PPID_NOT_ALLOWED);
+				return;
+			}
+			
+			
+			if (!isValidPpid(cp.getPpidFormat(), ppid)) {
+				ose.addError(CprErrorCode.INVALID_PPID, ppid);
+				return;
+			}
+		}
+		
+		if (daoFactory.getCprDao().getCprByPpid(cp.getId(), ppid) != null) {
 			ose.addError(CprErrorCode.DUP_PPID, ppid);
 		}
 	}
@@ -465,5 +499,19 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 		
 		return path + File.separator;
+	}
+	
+	private boolean isValidPpid(String format, String ppid) {
+		Matcher matcher = digitsPtrn.matcher(format);
+		if (!matcher.find()) {
+			return format.equals(ppid);
+		}
+		
+		int matchStartIdx = format.indexOf(matcher.group(0));
+		String beforeDigits = format.substring(0, matchStartIdx);
+		String afterDigits = format.substring(matchStartIdx + matcher.group(0).length());
+		
+		String regex = beforeDigits + "\\d{" + matcher.group(1) + "}" + afterDigits;
+		return Pattern.matches(regex, ppid);		
 	}
 }

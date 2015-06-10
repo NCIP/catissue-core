@@ -31,6 +31,14 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 	private String derivativeLabelFmt;
 
 	private String aliquotLabelFmt;
+	
+	private String visitNameFmt;
+	
+	private Boolean manualPpidEnabled;
+	
+	private Boolean manualVisitNameEnabled;
+	
+	private Boolean manualSpecLabelEnabled;
 
 	private Boolean aliquotsInSameContainer;
 
@@ -115,6 +123,38 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		this.aliquotLabelFmt = aliquotLabelFmt;
 	}
 
+	public String getVisitNameFmt() {
+		return visitNameFmt;
+	}
+
+	public void setVisitNameFmt(String visitNameFmt) {
+		this.visitNameFmt = visitNameFmt;
+	}
+
+	public Boolean getManualPpidEnabled() {
+		return manualPpidEnabled;
+	}
+
+	public void setManualPpidEnabled(Boolean manualPpidEnabled) {
+		this.manualPpidEnabled = manualPpidEnabled;
+	}
+
+	public Boolean getManualVisitNameEnabled() {
+		return manualVisitNameEnabled;
+	}
+
+	public void setManualVisitNameEnabled(Boolean manualVisitNameEnabled) {
+		this.manualVisitNameEnabled = manualVisitNameEnabled;
+	}
+
+	public Boolean getManualSpecLabelEnabled() {
+		return manualSpecLabelEnabled;
+	}
+
+	public void setManualSpecLabelEnabled(Boolean manualSpecLabelEnabled) {
+		this.manualSpecLabelEnabled = manualSpecLabelEnabled;
+	}
+
 	public Boolean getAliquotsInSameContainer() {
 		return aliquotsInSameContainer;
 	}
@@ -162,6 +202,10 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setSpecimenLabelFmt(cp.getSpecimenLabelFormat());
 		result.setDerivativeLabelFmt(cp.getDerivativeLabelFormat());
 		result.setAliquotLabelFmt(cp.getAliquotLabelFormat());
+		result.setVisitNameFmt(cp.getVisitNameFormat());
+		result.setManualPpidEnabled(cp.isManualPpidEnabled());
+		result.setManualVisitNameEnabled(cp.isManualVisitNameEnabled());
+		result.setManualSpecLabelEnabled(cp.isManualSpecLabelEnabled());
 		result.setActivityStatus(cp.getActivityStatus());
 		result.setRepositoryNames(getRepositoryNames(cp.getRepositories()));
 		

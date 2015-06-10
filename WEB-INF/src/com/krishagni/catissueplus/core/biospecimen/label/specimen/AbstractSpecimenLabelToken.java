@@ -1,9 +1,10 @@
 package com.krishagni.catissueplus.core.biospecimen.label.specimen;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.common.domain.AbstractLabelTmplToken;
 import com.krishagni.catissueplus.core.common.domain.LabelTmplToken;
 
-public abstract class AbstractSpecimenLabelToken implements LabelTmplToken {
+public abstract class AbstractSpecimenLabelToken extends AbstractLabelTmplToken implements LabelTmplToken {
 	protected String name = "";
 
 	@Override
@@ -17,12 +18,7 @@ public abstract class AbstractSpecimenLabelToken implements LabelTmplToken {
 			throw new RuntimeException("Invalid input object type");
 		}
 		
-		Specimen specimen = (Specimen)object;
-		if (!specimen.isCollected()) {
-			return "";
-		}
-				
-		return getLabel(specimen);
+		return getLabel((Specimen)object);
 	}
 	
 	public abstract String getLabel(Specimen specimen);

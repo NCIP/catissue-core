@@ -25,7 +25,8 @@ angular.module('os.biospecimen.participant',
       .state('cp-view', {
         url: '/cp-view/:cpId',
         template: '<div ui-view></div>',
-        controller: function() {
+        controller: function($scope, cp) {
+          $scope.cp = cp;
         },
         resolve: {
           cp: function($stateParams, CollectionProtocol) {

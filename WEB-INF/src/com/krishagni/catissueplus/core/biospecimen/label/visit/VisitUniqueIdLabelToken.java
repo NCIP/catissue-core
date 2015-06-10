@@ -27,4 +27,9 @@ public class VisitUniqueIdLabelToken extends AbstractVisitLabelToken {
 		Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("Visit", getName());
 		return "" + uniqueId.toString();
 	}
+	
+	@Override
+	public int validate(Object object, String input, int startIdx) {
+		return super.validateNumber(input, startIdx);
+	}	
 }

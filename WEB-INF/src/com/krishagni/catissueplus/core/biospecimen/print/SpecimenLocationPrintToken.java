@@ -2,9 +2,10 @@ package com.krishagni.catissueplus.core.biospecimen.print;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.common.domain.AbstractLabelTmplToken;
 import com.krishagni.catissueplus.core.common.domain.LabelTmplToken;
 
-public class SpecimenLocationPrintToken implements LabelTmplToken {
+public class SpecimenLocationPrintToken extends AbstractLabelTmplToken implements LabelTmplToken {
 
 	@Override
 	public String getName() {

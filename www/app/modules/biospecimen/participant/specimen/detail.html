@@ -27,7 +27,7 @@
       <span ng-switch-default>{{specimen.type}} ({{specimen.specimenClass}})</span>
     </h3>
 
-    <div class="os-btns right" ng-if="specimen.activityStatus == 'Active'">
+    <div class="os-btns right" ng-if="!specimen.activityStatus || specimen.activityStatus == 'Active'">
       <button show-if-allowed="specimenResource.updateOpts" class="primary" ui-sref="specimen-addedit"
         ng-switch on="specimen.status == 'Collected'" ng-if="!!visit.id">
         <span ng-switch-when="true">

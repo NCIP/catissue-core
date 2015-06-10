@@ -20,6 +20,10 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	DUP_LABEL,
 	
+	INVALID_LABEL,
+	
+	MANUAL_LABEL_NOT_ALLOWED,
+	
 	DUP_BARCODE,
 	
 	INVALID_LINEAGE,

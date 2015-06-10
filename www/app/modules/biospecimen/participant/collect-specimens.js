@@ -137,8 +137,10 @@ angular.module('os.biospecimen.participant.collect-specimens',
               $scope.back();
             });
         } else {
-          $scope.visit.status = 'Complete';
-          var payload = {visit: $scope.visit, specimens: specimensToSave};
+          var visitToSave = angular.copy($scope.visit);
+          visitToSave.status = 'Complete';
+
+          var payload = {visit: visitToSave, specimens: specimensToSave};
           Visit.collectVisitAndSpecimens(payload).then(
             function(result) {
               var visitId = result.data.visit.id;
