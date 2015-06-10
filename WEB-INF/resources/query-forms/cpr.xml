@@ -17,7 +17,7 @@
 			<textField>
 				<name>firstName</name>
 				<udn>firstName</udn>
-				<caption>First Name</caption>
+				<caption>@@participant_first_name@@</caption>
 				<column>FIRST_NAME</column>
 				<maxLength>50</maxLength>
 				<phi>true</phi>
@@ -26,7 +26,7 @@
 			<textField>
 				<name>middleName</name>
 				<udn>middleName</udn>
-				<caption>Middle Name</caption>
+				<caption>@@participant_middle_name@@</caption>
 				<column>MIDDLE_NAME</column>
 				<maxLength>50</maxLength>
 				<phi>true</phi>
@@ -35,7 +35,7 @@
 			<textField>
 				<name>lastName</name>
 				<udn>lastName</udn>
-				<caption>Last Name</caption>
+				<caption>@@participant_last_name@@</caption>
 				<column>LAST_NAME</column>
 				<phi>true</phi>
 			</textField>
@@ -44,7 +44,7 @@
 			<datePicker>
 				<name>dateOfBirth</name>
 				<udn>dateOfBirth</udn>
-				<caption>Date Of Birth</caption>
+				<caption>@@participant_dob@@</caption>
 				<column>DOB</column>
 				<format>MM-dd-yyyy</format>
 				<phi>true</phi>
@@ -54,7 +54,7 @@
 			<textField>
 				<name>ssn</name>
 				<udn>ssn</udn>
-				<caption>Social Security Number</caption>
+				<caption>@@participant_ssn@@</caption>
 				<column>SSN</column>
 				<phi>true</phi>
 			</textField>
@@ -63,7 +63,7 @@
 			<textField>
 				<name>vitalStatus</name>
 				<udn>vitalStatus</udn>
-				<caption>Vital Status</caption>
+				<caption>@@participant_vital_status@@</caption>
 				<column>VITAL_STATUS</column>
 			</textField>
 		</row>
@@ -71,7 +71,7 @@
 			<dropDown>
 				<name>activityStatus</name>
 				<udn>activityStatus</udn>
-				<caption>Activity Status</caption>
+				<caption>@@participant_activity_status@@</caption>
 				<column>ACTIVITY_STATUS</column>
 				<options>
 					<option><value>Active</value></option>
@@ -84,7 +84,7 @@
 			<radioButton>
 				<name>gender</name>
 				<udn>gender</udn>
-				<caption>Gender</caption>
+				<caption>@@Gender@@</caption>
 				<column>GENDER</column>
 				<options>
 					<sql>select value from catissue_permissible_value where public_id = '2003989' order by value</sql>
@@ -95,7 +95,7 @@
 			<dropDown>
 				<name>genotype</name>
 				<udn>genotype</udn>
-				<caption>Genotype</caption>
+				<caption>@@participant_genotype@@</caption>
 				<column>GENOTYPE</column>
 				<options>
 					<sql>select value from catissue_permissible_value where public_id = '2003990' order by value</sql>
@@ -106,7 +106,7 @@
 			<checkBox>
 				<name>race</name>
 				<udn>race</udn>
-				<caption>Race</caption>
+				<caption>@@participant_race@@</caption>
 				<multiSelect>true</multiSelect>
 				<table>CATISSUE_RACE</table>
 				<column>RACE_NAME</column>
@@ -121,7 +121,7 @@
 			<textField>
 				<name>ethnicity</name>
 				<udn>ethnicity</udn>
-				<caption>Ethnicity</caption>
+				<caption>@@participant_ethnicity@@</caption>
 				<column>ETHNICITY</column>
 			</textField>
 		</row>
@@ -129,7 +129,7 @@
 			<textField>
 				<name>barcode</name>
 				<udn>barcode</udn>
-				<caption>Barcode</caption>
+				<caption>@@participant_barcode@@</caption>
 				<column>BARCODE</column>
 			</textField>
 		</row>
@@ -137,7 +137,7 @@
 			<datePicker>
 				<name>regDate</name>
 				<udn>regDate</udn>
-				<caption>Registration Date</caption>
+				<caption>@@participant_registration_date@@</caption>
 				<column>REGISTRATION_DATE</column>
 				<format>MM-dd-yyyy</format>
 				<phi>true</phi>
@@ -148,7 +148,7 @@
 			<datePicker>
 				<name>deathDate</name>
 				<udn>deathDate</udn>
-				<caption>Death Date</caption>
+				<caption>@@participant_death_date@@</caption>
 				<column>DEATH_DATE</column>
 				<format>MM-dd-yyyy</format>
 				<phi>true</phi>
@@ -158,7 +158,7 @@
 			<textField>
 				<name>ppid</name>
 				<udn>ppid</udn>
-				<caption>Protocol Participant ID</caption>
+				<caption>@@participant_ppid@@</caption>
 				<column>PPID</column>
 			</textField>
 		</row>
