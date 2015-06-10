@@ -844,6 +844,18 @@
   
   <changeSet author="vgaikwad" id="1429178687139-89">  
     <dropColumn columnName="identifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
-  </changeSet>  
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Added a new column in visits audit table to store SPR lock status">
+    <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
+      <column name="SPR_LOCK" type="BIT"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Added a column in visits audit table to store modification status of SPR lock">
+    <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
+      <column name="sprLock_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>   
 
 </databaseChangeLog>

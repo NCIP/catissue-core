@@ -26,6 +26,8 @@
     <property name="status" column="COLLECTION_STATUS" />
 		
     <property name="sprName" lazy="true" column="SPR_NAME"/>
+    
+    <property name="sprLock" column="SPR_LOCK"/>
 		
     <property name="comments" type="string" column="COMMENTS"/>
 

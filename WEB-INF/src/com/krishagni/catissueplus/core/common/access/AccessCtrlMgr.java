@@ -792,5 +792,80 @@ public class AccessCtrlMgr {
 				userId, 
 				resource.getName(), 
 				ops.toArray(new String[0]));
-	}	
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////
+	//                                                                                  //
+	//          Surgical pathology report access control helper methods                 //
+	//                                                                                  //
+	//////////////////////////////////////////////////////////////////////////////////////
+	
+	public void ensureCreateOrUpdateSprRights(Visit visit) {
+		ensureSprObjectRights(visit.getRegistration(), Operation.UPDATE);
+	}
+	
+	public void ensureReadSprRights(Visit visit) {
+		ensureSprObjectRights(visit.getRegistration(), Operation.READ);
+	}
+	
+	public void ensureLockSprRights(Visit visit) {
+		ensureSprObjectRights(visit.getRegistration(), Operation.LOCK);
+	}
+	
+	public void ensureUnlockSprRights(Visit visit) {
+		ensureSprObjectRights(visit.getRegistration(), Operation.UNLOCK);
+	}
+	
+	private void ensureSprObjectRights(CollectionProtocolRegistration cpr, Operation op) {
+		
+		ensureVisitAndSpecimenObjectRights(cpr, op);
+		
+		if (AuthUtil.isAdmin()) {
+			return;
+		}
+		
+		Long userId = AuthUtil.getCurrentUser().getId();
+		String resource = Resource.SURGICAL_PATHOLOGY_REPORT.getName();
+		String[] ops = null;
+		if (op == Operation.CREATE || op == Operation.UPDATE) {
+			ops = new String[]{Operation.CREATE.getName(), Operation.UPDATE.getName()};
+		} else {
+			ops = new String[]{op.getName()};
+		}
+		
+		boolean allowed = false;
+		Long cpId = cpr.getCollectionProtocol().getId();		
+		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource, ops);		
+		if (accessList.isEmpty()) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+		
+		Set<Site> mrnSites = cpr.getParticipant().getMrnSites();
+		if (mrnSites.isEmpty()) {
+			return;
+		}
+		
+		for (SubjectAccess access : accessList) {
+			Site accessSite = access.getSite();
+			if (accessSite != null && mrnSites.contains(accessSite)) { // Specific site
+				allowed = true;
+			} else if (accessSite == null) { // All user institute sites
+				Set<Site> instituteSites = getUserInstituteSites(userId);
+				if (CollectionUtils.containsAny(instituteSites, mrnSites)) {
+					allowed = true;
+				}
+			}
+			
+			if (allowed) {
+				break;
+			}
+		}
+		
+		if (!allowed) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+		
+	}
+	
+	
 }

@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
@@ -172,6 +173,19 @@ public class VisitsController {
 		EntityQueryCriteria crit = new EntityQueryCriteria(visitId);
 		ResponseEvent<Boolean> resp = visitService.deleteSprFile(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/spr-lock")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public boolean lockSpr(@PathVariable("id") Long visitId, @RequestBody boolean lock) {
+		SprLockDetail detail = new SprLockDetail();
+		detail.setVisitId(visitId);
+		detail.setLock(lock);
+		ResponseEvent<Boolean> resp = visitService.lockSpr(getRequest(detail));
+		resp.throwErrorIfUnsuccessful();
+		
 		return resp.getPayload();
 	}
 	
