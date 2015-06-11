@@ -32,7 +32,7 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
         specimenList.specimens =  $scope.list.specimens;
         $q = specimenList.$saveOrUpdate();
       } else {
-        $q = specimenList.$patch();
+        $q = specimenList.$patch(specimenList);
       }
  
       $q.then(
