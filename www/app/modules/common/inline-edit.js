@@ -39,7 +39,6 @@ angular.module('openspecimen')
             alert("Something wrong");
           }
         };
-
       }
     };
   })
@@ -103,7 +102,6 @@ angular.module('openspecimen')
           post: function(scope, element, attrs, ctrls) {
             var editorMgr = ctrls[0];
             var thisEditor = ctrls[1];
-
 
             editorMgr.addEditor(thisEditor);
 
