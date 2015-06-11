@@ -195,7 +195,7 @@ public class VisitServiceImpl implements VisitService {
 			
 			AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(visit);
 			
-			String sprText = Utility.getFileText(detail.getInputStream(), detail.getFileContentType());
+			String sprText = Utility.getString(detail.getInputStream(), detail.getContentType());
 			
 			DocumentDeIdentifier deIdentifier = getSprDeIdentifier(); 
 			if (deIdentifier != null) {
@@ -209,7 +209,7 @@ public class VisitServiceImpl implements VisitService {
 			String sprName = detail.getName(); 
 			sprName = sprName.substring(0, sprName.lastIndexOf(".")) + ".txt";
 			visit.updateSprName(sprName);
-			return new ResponseEvent<String>(detail.getName());
+			return new ResponseEvent<String>(sprName);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

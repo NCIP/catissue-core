@@ -117,7 +117,7 @@ public class VisitsController {
 			inputStream = file.getInputStream();
 			sprDetail.setInputStream(inputStream);
 			sprDetail.setName(file.getOriginalFilename());
-			sprDetail.setFileContentType(file.getContentType());
+			sprDetail.setContentType(file.getContentType());
 			sprDetail.setVisitId(visitId);
 			
 			resp = visitService.uploadSprFile(getRequest(sprDetail));

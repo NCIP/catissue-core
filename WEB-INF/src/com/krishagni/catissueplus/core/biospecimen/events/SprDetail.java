@@ -10,7 +10,7 @@ public class SprDetail {
 	
 	private InputStream inputStream;
 	
-	private String fileContentType;
+	private String contentType;
 	
 	private String sprText;
 
@@ -38,12 +38,12 @@ public class SprDetail {
 		this.inputStream = inputStream;
 	}
 
-	public String getFileContentType() {
-		return fileContentType;
+	public String getContentType() {
+		return contentType;
 	}
 
-	public void setFileContentType(String fileContentType) {
-		this.fileContentType = fileContentType;
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
 	public String getSprText() {

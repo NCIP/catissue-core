@@ -36,12 +36,12 @@
   right: 5px;
 }
 
-.os-inline-activated .os-inline-editable.inactive:hover {
+.os-inline-edit-activated .os-inline-editable.inactive:hover {
   box-shadow: 0 0 0 1px #ccc;
   border-radius: 4px;
 }
 
-.os-inline-activated .os-inline-editable.inactive:hover button {
+.os-inline-edit-activated .os-inline-editable.inactive:hover button {
   background: #f5f5f5;
   color: #707070;
   position: absolute;

@@ -39,10 +39,11 @@ angular.module('openspecimen')
             alert("Something wrong");
           }
         };
+
       }
     };
   })
-  .directive('osInlineEdit', function($timeout, $window) {
+  .directive('osInlineEdit', function($timeout, $document) {
     return {
       restrict: 'E',
       require: ['^osInlineEditors', 'osInlineEdit'],
@@ -103,11 +104,12 @@ angular.module('openspecimen')
             var editorMgr = ctrls[0];
             var thisEditor = ctrls[1];
 
+
             editorMgr.addEditor(thisEditor);
 
             scope.edit = function() {
-              editorMgr.open(thisEditor);
               onClickListener();
+              editorMgr.open(thisEditor);
             };
 
             scope.ok = function() {
@@ -125,21 +127,28 @@ angular.module('openspecimen')
 
             scope.cancel = function() {
               editorMgr.close(thisEditor);
+              $document.off('click', onClick);
             };
 
-            $(element).click(function() {
-              scope.clickedOnEditor = true;
-            });
-
+            var clickedOnEdit;
             function onClickListener() {
-              $window.onclick = function(event) {
-                if (!scope.clickedOnEditor) {
-                  scope.cancel();
-                  $window.onclick = undefined;
+              clickedOnEdit = true;
+              $document.on('click', onClick);
+            }
+
+            function onClick(event) {
+              var clickedEle = angular.element(event.target);
+              if (!clickedOnEdit && !clickedEle.parents('div.os-inline-editable').length > 0) {
+                $document.off('click', onClick);
+
+                // If clicked on action buttons no need to cancel. Action buttons itself will do that.
+                if (!clickedEle.parents('div.action-btns').length > 0) {
+                  $timeout(function() {
+                    scope.cancel();
+                  }, 0);
                 }
-                scope.clickedOnEditor = false;
-                scope.$apply();
               }
+              clickedOnEdit = false;
             }
           }
         }
