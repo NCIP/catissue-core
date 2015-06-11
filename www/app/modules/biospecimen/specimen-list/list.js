@@ -5,7 +5,10 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
 
     function init() { 
       $scope.orderCreateOpts = {resource: 'Order', operations: ['Create']};
-      $scope.specimens = [];
+      $scope.listSpecimens = {
+        specimens: [],
+        actualCount: 0
+      }
       $scope.selection = resetSelection();
       $scope.lists = {
         selectedList: undefined,
@@ -36,6 +39,11 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
             }
           });
 
+          //set default selected specimen list from mylists if not empty
+          if (!$stateParams.listId && $scope.lists.myLists.length > 0) {
+            selectedList = $scope.lists.myLists[0];
+          }
+
           if (!!selectedList) {
             $scope.selectList(selectedList);
           }
@@ -46,8 +54,8 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
     function removeSpecimensFromList() {
       var list = $scope.lists.selectedList;
       list.removeSpecimens($scope.selection.specimens).then(
-        function(specimens) {
-          $scope.specimens = specimens;
+        function(listSpecimens) {
+          $scope.listSpecimens = listSpecimens;
           $scope.selection = resetSelection();
           Alerts.success('specimen_list.specimens_removed', {name: list.name});
         }
@@ -58,8 +66,8 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
       $scope.selection = resetSelection();
       $scope.lists.selectedList = specimenList;
       specimenList.getSpecimens().then(
-        function(specimens) {
-          $scope.specimens = specimens;
+        function(listSpecimens) {
+          $scope.listSpecimens = listSpecimens
         }
       );
     }
@@ -69,10 +77,10 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
       if (!$scope.selection.all) {
         $scope.selection.specimens = [];
       } else {
-        $scope.selection.specimens = [].concat($scope.specimens);
+        $scope.selection.specimens = [].concat($scope.listSpecimens.specimens);
       }
 
-      angular.forEach($scope.specimens, function(specimen) {
+      angular.forEach($scope.listSpecimens.specimens, function(specimen) {
         specimen.selected = $scope.selection.all;
       });
     }
@@ -87,7 +95,7 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
         }
       }
 
-      $scope.selection.all = ($scope.selection.specimens.length == $scope.specimens.length);
+      $scope.selection.all = ($scope.selection.specimens.length == $scope.listSpecimens.specimens.length);
       $scope.selection.any = ($scope.selection.specimens.length > 0);
     };
 
