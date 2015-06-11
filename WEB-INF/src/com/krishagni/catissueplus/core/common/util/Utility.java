@@ -118,7 +118,7 @@ public class Utility {
 	
 	public static long getTimezoneOffset() {
 		Calendar cal = Calendar.getInstance();
-		return -1 * (cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET));		
+		return -1 * cal.get(Calendar.ZONE_OFFSET);		
 	}
 	
 	public static void sendToClient(HttpServletResponse httpResp, String fileName, File file) {
