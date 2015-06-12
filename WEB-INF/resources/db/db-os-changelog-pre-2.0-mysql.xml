@@ -1279,7 +1279,7 @@
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="LAST_UPDATED_ON" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column defaultValue="0000-00-00 00:00:00" name="LAST_RUN_ON" type="TIMESTAMP">
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="LAST_RUN_ON" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
             <column name="LAST_RUN_COUNT" type="BIGINT"/>
@@ -1978,7 +1978,7 @@
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="EXEC_START" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column defaultValue="0000-00-00 00:00:00" name="EXEC_END" type="TIMESTAMP">
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="EXEC_END" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
             <column name="EXEC_STATUS" type="VARCHAR(20)"/>
