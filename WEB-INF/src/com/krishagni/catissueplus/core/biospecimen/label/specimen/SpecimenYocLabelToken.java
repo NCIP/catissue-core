@@ -13,7 +13,15 @@ public class SpecimenYocLabelToken extends AbstractSpecimenLabelToken {
 	
 	@Override
 	public String getLabel(Specimen specimen) {
-		SpecimenCollectionEvent collEvent = specimen.getCollectionEvent();		
+		while (specimen.isAliquot() || specimen.isDerivative()) {
+			specimen = specimen.getParentSpecimen();
+		}
+
+		SpecimenCollectionEvent collEvent = specimen.getCollectionEvent();
+		if (collEvent == null) {
+			return "";
+		}
+		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(collEvent.getTime());
 		return "" + cal.get(Calendar.YEAR);

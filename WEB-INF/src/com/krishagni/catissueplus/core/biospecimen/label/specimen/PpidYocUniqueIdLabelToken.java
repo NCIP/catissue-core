@@ -28,11 +28,18 @@ public class PpidYocUniqueIdLabelToken extends AbstractSpecimenLabelToken {
 	@Override
 	public java.lang.String getLabel(Specimen specimen) {	
 		String ppid = specimen.getVisit().getRegistration().getPpid();
+
+		while (specimen.isAliquot() || specimen.isDerivative()) {
+			specimen = specimen.getParentSpecimen();
+		}
 		
+		int yoc = -1;
 		SpecimenCollectionEvent collEvent = specimen.getCollectionEvent();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(collEvent.getTime());
-		int yoc = cal.get(Calendar.YEAR);
+		if (collEvent != null) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(collEvent.getTime());
+			yoc = cal.get(Calendar.YEAR);			
+		}
 		
 		String key = ppid + "_" + yoc;
 		Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId(name, key);
