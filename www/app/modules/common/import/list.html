@@ -14,34 +14,35 @@
     <div class="os-table" ng-if="importJobs.length > 0">
       <div class="os-table-head">
         <div class="row">
-          <div class="col col-xs-3">
+          <div class="col os-col-25">
             <span translate="bulk_imports.job_id">Job ID</span>
           </div>
-          <div class="col col-xs-2">
+          <div class="col os-col-15">
+            <span translate="bulk_imports.submitted_by">Submitted By</span>
+          </div>
+          <div class="col os-col-15">
             <span translate="bulk_imports.submit_time">Submit Time</span>
           </div>
-          <div class="col col-xs-2">
+          <div class="col os-col-15">
             <span translate="bulk_imports.finish_time">Finish Time</span>
           </div>
-          <div class="col col-xs-1">
+          <div class="col os-col-10">
             <span translate="bulk_imports.processed_records">Success</span>
           </div>
-          <div class="col col-xs-1">
+          <div class="col os-col-10">
             <span translate="bulk_imports.failed_records">Failed</span>
           </div>
-          <div class="col col-xs-2">
+          <div class="col os-col-10">
             <span translate="bulk_imports.status">Status</span>
-          </div>
-          <div class="col col-xs-1">
-            <span translate="bulk_imports.file">Report File</span>
+            <span>&nbsp;</span>
           </div>
         </div>
       </div>
       <div class="os-table-body">
         <div class="row" ng-repeat="importJob in importJobs">
-          <div class="col col-xs-3">
+          <div class="col os-col-25">
             <a>
-              <span>#{{importJob.id}} 
+              <span>#{{importJob.id}}</span> 
               <span translate="bulk_imports.import_types.{{importJob.type}}"></span>
               <span ng-switch on="importJob.name != 'extensions'">
                 <span ng-switch-when="true" translate="bulk_imports.object_types.{{importJob.name}}"></span>
@@ -49,23 +50,24 @@
               </span>
             </a>
           </div>
-          <div class="col col-xs-2">
+          <div class="col os-col-15">
+            <span>{{importJob.createdBy.firstName}} {{importJob.createdBy.lastName}}</span>
+          </div>
+          <div class="col os-col-15">
             <span>{{importJob.creationTime | date: global.dateTimeFmt}}</span>
           </div>
-          <div class="col col-xs-2">
+          <div class="col os-col-15">
             <span ng-if="importJob.endTime">{{importJob.endTime | date: global.dateTimeFmt}}</span>
           </div>
-          <div class="col col-xs-1">
+          <div class="col os-col-10">
             <span>{{importJob.totalRecords - importJob.failedRecords}}</span>
           </div>
-          <div class="col col-xs-1">
+          <div class="col os-col-10">
             <span>{{importJob.failedRecords}}</span>
           </div>
-          <div class="col col-xs-2">
+          <div class="col os-col-10 clearfix">
             <span translate="bulk_imports.status_{{importJob.status}}"></span>
-          </div>
-          <div class="col col-xs-1">
-            <a href="{{importJob.outputFileUrl}}" target="_blank">
+            <a class="pull-right" href="{{importJob.outputFileUrl}}" target="_blank">
               <span class="fa fa-download"></span>
             </a>
           </div>

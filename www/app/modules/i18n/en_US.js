@@ -1010,6 +1010,7 @@
     "status_IN_PROGRESS": "In Progress",
 
     "job_id": "Job ID",
+    "submitted_by": "Submitted By",
     "submit_time": "Submit Time",
     "finish_time": "Finish Time",
     "processed_records": "Success",
