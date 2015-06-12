@@ -188,6 +188,7 @@ public class Participant extends BaseEntity {
 		setLastName(participant.getLastName());
 		setMiddleName(participant.getMiddleName());
 		setUid(participant.getUid());
+		setEmpi(participant.getEmpi());
 		setActivityStatus(participant.getActivityStatus());
 		setSexGenotype(participant.getSexGenotype());
 		setVitalStatus(participant.getVitalStatus());

@@ -23,6 +23,19 @@ public class ParticipantUtil {
 		
 		return true;
 	}
+	
+	public static boolean ensureUniqueEmpi(DaoFactory daoFactory, String empi, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(empi)) {
+			return true;
+		}
+		
+		if (daoFactory.getParticipantDao().getByEmpi(empi) != null) {
+			ose.addError(ParticipantErrorCode.DUP_EMPI, empi);
+			return false;
+		}
+		
+		return true;
+	}
 
 	public static boolean ensureUniquePmis(DaoFactory daoFactory, List<PmiDetail> pmis, Participant participant, OpenSpecimenException ose) {
 		List<Long> participantIds = daoFactory.getParticipantDao().getParticipantIdsByPmis(pmis);
