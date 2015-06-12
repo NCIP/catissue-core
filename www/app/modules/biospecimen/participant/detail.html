@@ -5,9 +5,8 @@
       <li> <a ui-sref="participant-list({cpId: cpr.cpId})">Participants</a> </li>
     </ul>
 
-    <h3 ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)"> 
-      <span ng-switch-when="true"> {{cpr.participant.firstName}} {{cpr.participant.lastName}} </span>
-      <span ng-switch-when="false" translate="common.na"> N/A </span>
+    <h3>
+      <span>{{cpr.ppid}}</span>
     </h3>
 
     <div class="os-btns right">
