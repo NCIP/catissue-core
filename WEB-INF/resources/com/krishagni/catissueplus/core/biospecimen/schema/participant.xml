@@ -48,11 +48,6 @@
     </field>  
 
     <field>
-      <caption>Genotype</caption>
-      <attribute>sexGenotype</attribute>
-    </field>  
-
-    <field>
       <caption>Ethnicity</caption>
       <attribute>ethnicity</attribute>
     </field>  
