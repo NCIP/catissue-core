@@ -3,6 +3,8 @@ package com.krishagni.catissueplus.core.de.services.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -49,15 +51,16 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>> {
 	public ResponseEvent<Map<String, Object>> importObject(RequestEvent<ImportObjectDetail<Map<String, Object>>> req) {
 		try {
 			ImportObjectDetail<Map<String, Object>> importDetail = req.getPayload();
-						
-			Map<String, Object> params = importDetail.getParams();			
-			String formName = (String)params.get("formName");
-			Container form = Container.getContainer(formName);
-			if (form == null) {
-				return ResponseEvent.userError(FormErrorCode.NOT_FOUND);
-			}
+			Map<String, Object> params = importDetail.getParams();
 			
 			Map<String, Object> extnObj = importDetail.getObject();
+			String recordId = (String)extnObj.get("recordId");
+			if (importDetail.isCreate() && StringUtils.isNotBlank(recordId)) {
+				return ResponseEvent.userError(FormErrorCode.REC_ID_SPECIFIED_FOR_CREATE);
+			} else if (!importDetail.isCreate() && StringUtils.isBlank(recordId)) {
+				return ResponseEvent.userError(FormErrorCode.REC_ID_REQUIRED);
+			}
+						
 			String entityType = (String)params.get("entityType");
 			Long objectId = null;
 			CollectionProtocol cp = null;
@@ -91,6 +94,12 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>> {
 				objectId = specimen.getId();
 				cp = specimen.getCollectionProtocol();
 			}
+
+			String formName = (String)params.get("formName");
+			Container form = Container.getContainer(formName);
+			if (form == null) {
+				return ResponseEvent.userError(FormErrorCode.NOT_FOUND);
+			}
 			
 			Long formCtxId = formDao.getFormCtxtId(form.getId(), entityType, cp.getId());
 			if (formCtxId == null) {
@@ -104,8 +113,7 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>> {
 			Map<String, Object> formValueMap = (Map<String, Object>)extnObj.get("formValueMap");
 			formValueMap.put("appData", appData);
 			
-			String recordId = (String)extnObj.get("recordId");
-			if (recordId != null) {
+			if (StringUtils.isNotBlank(recordId)) {
 				formValueMap.put("id", Long.parseLong(recordId));
 			}
 									

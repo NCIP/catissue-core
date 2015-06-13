@@ -103,10 +103,6 @@ public class ObjectReader implements Closeable {
 		
 		for (Record subRec : record.getSubRecords()) {
 			Object subObjProps = parseSubObjects(subRec, prefix);
-			if (isEmpty(subObjProps)) {
-				continue;
-			}
-			
 			props.put(subRec.getAttribute(), subObjProps);
 		}
 		

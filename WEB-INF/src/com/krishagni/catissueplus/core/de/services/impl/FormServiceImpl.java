@@ -534,7 +534,7 @@ public class FormServiceImpl implements FormService {
 		formCtxtId.add(((Number) appData.get("formCtxtId")).longValue());
 		
 		List<FormContextBean> formContexts = formDao.getFormContextsById(formCtxtId);
-		if(formContexts == null) {
+		if (formContexts == null) {
 			throw new IllegalArgumentException("Invalid form context id");
 		}
 		
@@ -551,32 +551,29 @@ public class FormServiceImpl implements FormService {
 		}
 		
 		formData.setRecordId(recordId);
+		
 		boolean isInsert = (recordId == null);
+		FormRecordEntryBean recordEntry = null;
 		
 		if (isInsert) {
 			if (!formContext.isMultiRecord()) {
 				Long noOfRecords = formDao.getRecordsCount(formContext.getIdentifier(), objectId);
-				if(noOfRecords >= 1L) {
-					throw new RuntimeException("Form is single record ");
+				if (noOfRecords >= 1L) {
+					throw OpenSpecimenException.userError(FormErrorCode.MULTIPLE_RECS_NOT_ALLOWED);
 				}
+			}
+			
+			recordEntry = new FormRecordEntryBean();
+			recordEntry.setActivityStatus(Status.ACTIVE);			
+		} else {
+			recordEntry = formDao.getRecordEntry(formContext.getIdentifier(), objectId, recordId);
+			if (recordEntry == null || recordEntry.getActivityStatus() != Status.ACTIVE) {
+				throw OpenSpecimenException.userError(FormErrorCode.INVALID_REC_ID, recordId);				
 			}
 		}
 
 		FormDataManager formDataMgr = new FormDataManagerImpl(false);
 		recordId = formDataMgr.saveOrUpdateFormData(null, formData);
-
-		FormRecordEntryBean recordEntry = null;
-		if (isInsert) {
-			recordEntry = new FormRecordEntryBean();
-			recordEntry.setActivityStatus(Status.ACTIVE);
-		}
-		else {
-			recordEntry = formDao.getRecordEntry(formContext.getIdentifier(), objectId, recordId);
-		}
-
-		if (recordEntry.getActivityStatus() == Status.CLOSED) {
-			throw new IllegalArgumentException("Provied record id does not exist");
-		}
 
 		recordEntry.setFormCtxtId(formContext.getIdentifier());
 		recordEntry.setObjectId(objectId);
