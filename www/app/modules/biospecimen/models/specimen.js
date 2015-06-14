@@ -77,6 +77,14 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       );
     }
 
+    Specimen.prototype.getType = function() {
+      return 'specimen';
+    }
+
+    Specimen.prototype.getDisplayName = function() {
+      return this.label;
+    };
+
     Specimen.prototype.hasSufficientQty = function() {
       var qty = this.initialQty;
       angular.forEach(this.children, function(child) {

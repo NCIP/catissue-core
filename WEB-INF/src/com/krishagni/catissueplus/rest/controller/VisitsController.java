@@ -168,9 +168,7 @@ public class VisitsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-	
-	
-	
+		
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

@@ -27,6 +27,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCri
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -155,6 +156,26 @@ public class SpecimensController {
 		ResponseEvent<SpecimenDetail> resp = specimenSvc.updateSpecimenStatus(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();		
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependent-entities")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<DependentEntityDetail> getDependentEntities(@PathVariable("id") Long specimenId) {
+		EntityQueryCriteria crit = new EntityQueryCriteria(specimenId);
+		ResponseEvent<List<DependentEntityDetail>> resp = specimenSvc.getDependentEntities(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SpecimenDetail deleteSpecimen(@PathVariable("id") Long specimenId) {
+		EntityQueryCriteria crit = new EntityQueryCriteria(specimenId);
+		ResponseEvent<SpecimenDetail> resp = specimenSvc.deleteSpecimen(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")

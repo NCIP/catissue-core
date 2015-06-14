@@ -34,6 +34,7 @@ import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.CommonErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -136,6 +137,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	}
 	
 	@Override
+	@PlusTransactional
 	public ResponseEvent<SpecimenDetail> patchSpecimen(RequestEvent<SpecimenDetail> req) {
 		return updateSpecimen(req.getPayload(), true);
 	}
@@ -161,7 +163,50 @@ public class SpecimenServiceImpl implements SpecimenService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-		
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SpecimenDetail> deleteSpecimen(RequestEvent<EntityQueryCriteria> req) {
+		try {
+			EntityQueryCriteria crit = req.getPayload();
+
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			Specimen specimen = getSpecimen(crit.getId(), crit.getName(), ose);
+			if (specimen == null) {
+				return ResponseEvent.error(ose);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureDeleteSpecimenRights(specimen);
+			specimen.disable();
+			return ResponseEvent.response(SpecimenDetail.from(specimen));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}		
+	}
+	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<EntityQueryCriteria> req) {
+		try {
+			EntityQueryCriteria crit = req.getPayload();
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			Specimen specimen = getSpecimen(crit.getId(), crit.getName(), ose);
+			if (specimen == null) {
+				return ResponseEvent.error(ose);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureReadSpecimenRights(specimen);
+			return ResponseEvent.response(specimen.getDependentEntities());
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+			
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenDetail>> collectSpecimens(RequestEvent<List<SpecimenDetail>> req) {
