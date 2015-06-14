@@ -35,7 +35,12 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(User.class, "u")
 				.add(Restrictions.ne("u.activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus()))
-				.setProjection(Projections.countDistinct("u.id"))
+				.add( // not system user
+					Restrictions.not(Restrictions.conjunction()
+						.add(Restrictions.eq("u.loginName", User.SYS_USER))
+						.add(Restrictions.eq("u.authDomain.name", User.DEFAULT_AUTH_DOMAIN))
+					)
+				)
 				.setFirstResult(listCrit.startAt())
 				.setMaxResults(listCrit.maxResults())
 				.addOrder(Order.asc("u.lastName"))
@@ -43,7 +48,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		
 		addSearchConditions(criteria, listCrit);
 		addProjectionFields(criteria);
-		
 		return getUsers(criteria.list());
 	}
 	
@@ -75,7 +79,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	
 	@Override
 	public User getSystemUser() {
-		return getUser(User.SYS_USER, "openspecimen");
+		return getUser(User.SYS_USER, User.DEFAULT_AUTH_DOMAIN);
 	}
 	
 	public User getUserByEmailAddress(String emailAddress) {
