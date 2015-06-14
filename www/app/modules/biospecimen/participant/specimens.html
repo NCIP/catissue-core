@@ -146,8 +146,10 @@
                   </li>
                   <li class="divider"></li>
                   <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
-                    <a href="#">
-                      <i class="fa fa-cogs"></i>
+                    <a ui-sref="
+                         specimen-detail.events({eventId: visit.eventId, visitId: visit.id, 
+                           specimenId: specimen.id, srId: specimen.reqId})">
+                      <i class="fa fa-calendar-o"></i>
                       <span translate="specimens.ctx_menu.add_event">Add Event</span>
                     </a>
                   </li>
