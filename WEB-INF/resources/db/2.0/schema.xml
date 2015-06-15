@@ -2082,34 +2082,54 @@
   </changeSet>
 
   <changeSet author="vlonushte" id="Drop FK on csm_user_id from shared specimenlist tags table">
+    <preConditions onFail="MARK_RAN">
+      <foreignKeyConstraintExists 
+        foreignKeyTableName="SHARED_SPECIMENLIST_TAGS" 
+        foreignKeyName="FK_SPECIMENLIST_SHARE_USER_ID" />
+    </preConditions>
     <dropForeignKeyConstraint
       baseTableName="SHARED_SPECIMENLIST_TAGS"
       constraintName="FK_SPECIMENLIST_SHARE_USER_ID"/>
   </changeSet>
 
   <changeSet author="vlonushte" id="Drop FK on csm_user_id from shared query tags table">
+    <preConditions onFail="MARK_RAN">
+      <foreignKeyConstraintExists 
+        foreignKeyTableName="SHARED_QUERY_TAGS" 
+        foreignKeyName="FK_QUERYTAG_SHARE_USER_ID" />
+    </preConditions>
     <dropForeignKeyConstraint
       baseTableName="SHARED_QUERY_TAGS"
       constraintName="FK_QUERYTAG_SHARE_USER_ID"/>
   </changeSet>
 
   <changeSet author="vlonushte" id="Drop FK on csm_user_id from catissue user table">
+    <preConditions onFail="MARK_RAN">
+      <foreignKeyConstraintExists 
+        foreignKeyTableName="CATISSUE_USER" 
+        foreignKeyName="FK_CATISSUE_USER_CSMID" />
+    </preConditions>
     <dropForeignKeyConstraint
       baseTableName="CATISSUE_USER"
       constraintName="FK_CATISSUE_USER_CSMID"/>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Drop UK on csm_user_id from catissue user table">
+  <changeSet author="vlonushte" id="Drop UK on csm_user_id from catissue user table" failOnError="false">
     <dropUniqueConstraint
-      constraintName="CSM_USER_ID_UNIQUE_KEY"
       tableName="CATISSUE_USER"
+      constraintName="CSM_USER_ID_UNIQUE_KEY"
       uniqueColumns="CSM_USER_ID"/>
   </changeSet>
 
   <changeSet author="vlonushte" id="Drop csm_user_id column from catissue user table">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_USER" 
+        columnName="CSM_USER_ID"/>
+    </preConditions>
     <dropColumn
-      columnName="CSM_USER_ID"
-      tableName="CATISSUE_USER"/>
+      tableName="CATISSUE_USER"
+      columnName="CSM_USER_ID"/>
   </changeSet>
 
   <changeSet author="vlonushte" id="Add FK to user id in shared specimenlist tags table">
