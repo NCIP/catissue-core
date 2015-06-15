@@ -140,7 +140,7 @@ angular.module('openspecimen')
                 $document.off('click', onClick);
 
                 // If clicked on action buttons no need to cancel. Action buttons itself will do that.
-                if (!clickedEle.parents('div.action-btns').length > 0) {
+                if (!(clickedEle.parents('div.action-btns').length > 0)) {
                   $timeout(function() {
                     scope.cancel();
                   }, 0);
