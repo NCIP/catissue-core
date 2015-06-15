@@ -42,7 +42,7 @@ angular.module('openspecimen')
       }
     };
   })
-  .directive('osInlineEdit', function($timeout) {
+  .directive('osInlineEdit', function($timeout, $document) {
     return {
       restrict: 'E',
       require: ['^osInlineEditors', 'osInlineEdit'],
@@ -106,6 +106,7 @@ angular.module('openspecimen')
             editorMgr.addEditor(thisEditor);
 
             scope.edit = function() {
+              onClickListener();
               editorMgr.open(thisEditor);
             };
 
@@ -124,7 +125,29 @@ angular.module('openspecimen')
 
             scope.cancel = function() {
               editorMgr.close(thisEditor);
+              $document.off('click', onClick);
             };
+
+            var clickedOnEdit;
+            function onClickListener() {
+              clickedOnEdit = true;
+              $document.on('click', onClick);
+            }
+
+            function onClick(event) {
+              var clickedEle = angular.element(event.target);
+              if (!clickedOnEdit && !clickedEle.parents('div.os-inline-editable').length > 0) {
+                $document.off('click', onClick);
+
+                // If clicked on action buttons no need to cancel. Action buttons itself will do that.
+                if (!(clickedEle.parents('div.action-btns').length > 0)) {
+                  $timeout(function() {
+                    scope.cancel();
+                  }, 0);
+                }
+              }
+              clickedOnEdit = false;
+            }
           }
         }
       },

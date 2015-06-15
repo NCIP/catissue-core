@@ -21,6 +21,8 @@ import org.apache.commons.lang.StringUtils;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
+import com.krishagni.catissueplus.core.common.PdfUtil;
+
 public class Utility {
 	public static String getDisabledValue(String value) {
 		if (StringUtils.isBlank(value)) {
@@ -139,6 +141,34 @@ public class Utility {
 	
 	public static String getContentType(File file) {
 		return MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(file);
+	}
+	
+	public static String getFileText(File file) {
+		FileInputStream in = null;
+		try {
+			in = new FileInputStream(file);
+			MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+			String contentType = mimeTypesMap.getContentType(file);
+			return getString(in, contentType);
+		} catch (Exception e) {
+			throw new RuntimeException("Error getting file text", e);
+		} finally {
+			IOUtils.closeQuietly(in);
+		}
+	}
+	
+	public static String getString(InputStream in, String contentType) {
+		String fileText = null;
+		try {
+			if (StringUtils.isBlank(contentType) || !contentType.equals("application/pdf")) {
+				fileText = IOUtils.toString(in);
+			} else {
+				fileText = PdfUtil.getText(in);
+			}
+			return fileText;
+		} catch (IOException e) {
+			throw new RuntimeException("Error getting file text", e);
+		}	
 	}
 
 }

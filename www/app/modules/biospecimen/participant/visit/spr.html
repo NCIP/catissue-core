@@ -4,11 +4,11 @@
       <li class="item">
         <strong class="key key-sm" translate="visits.spr">Surgical Pathology Report</strong>
         <div class="value value-md" ng-if="!uploadMode">
-          <div class="pull-left" ng-switch on="!!sprName">
-            <a ng-href="{{sprUrl}}" target="_blank" ng-switch-when="true">{{sprName}}</a>
+          <div class="pull-left" ng-switch on="!!spr.name">
+            <a ng-href="{{sprUrl}}" target="_blank" ng-switch-when="true">{{spr.name}}</a>
             <span ng-switch-when="false" translate="common.not_specified">Not Specified</span>
           </div>
-          <div show-if-allowed="specimenResource.updateOpts" class="col-xs-2" ng-switch on="!!sprName">
+          <div show-if-allowed="specimenResource.updateOpts" class="col-xs-2" ng-switch on="!!spr.name">
             <div class="btn btn-default btn-xs" ng-switch-when="false" ng-click="showUploadMode()">
               <span class="fa fa-wrench"></span>
             </div>
@@ -43,4 +43,24 @@
       </li>
     </ul>
   </div>
+
+  <div class="col-xs-8">
+    <h3 class="os-sub-section-title" translate="visits.spr">Surgical Pathology Report</h3>
+    <div ng-switch on="!!spr.name">
+      <div class="os-inline-edit-activated os-inline-editable-lg" ng-switch-when="true">
+        <div os-inline-editors on-save="saveSpr">
+          <div class="item">
+            <os-inline-edit editor="sprEditor" name="status" class="value value-md" value="spr.text">
+              <span ng-if="sprEditor.isDisplayMode()" class="os-pre-line">{{spr.text}}</span>
+              <textarea ng-if="sprEditor.isEditMode()" ng-model="sprEditor.editValue" class="form-control os-textarea-lg"></textarea>
+            </os-inline-edit>
+          </div>
+        </div>
+      </div>
+      <div ng-switch-when="false" class="alert alert-warning">
+        <span translate="visits.no_spr">No Surgical pathology Report Uploaded. Do you want to upload now?</span>
+      </div>
+    </div>
+  </div>
 </div>
+

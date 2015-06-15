@@ -281,6 +281,9 @@
 
     "spr": "Surgical Pathology Report",
     "spr_uploaded": "Surgical pathology report {{file}} uploaded successfully.",
+    "no_spr": "No surgical pathology report uploaded. Do you want to upload now?",
+    "deleting_spr": "Deleting Surgical Pathology Report",
+    "confirm_delete_spr": "Are you sure you want to delete {{sprName}} ?",
 
     "status": {
       "pending": "Pending",

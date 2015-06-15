@@ -27,7 +27,11 @@ public interface VisitService {
 			
 	public ResponseEvent<VisitSpecimenDetail> collectVisitAndSpecimens(RequestEvent<VisitSpecimenDetail> req);
 
-	public ResponseEvent<String> uploadSpr(RequestEvent<SprDetail> req);
+	public ResponseEvent<FileDetail> getSpr(RequestEvent<EntityQueryCriteria> req);
+	
+	public ResponseEvent<String> uploadSprFile(RequestEvent<SprDetail> req);
 
-	public ResponseEvent<FileDetail> getSpr(RequestEvent<EntityQueryCriteria> requestEvent);
+	public ResponseEvent<String> updateSprText(RequestEvent<SprDetail> req);
+
+	public ResponseEvent<Boolean> deleteSprFile(RequestEvent<EntityQueryCriteria> req);
 }
