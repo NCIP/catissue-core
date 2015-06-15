@@ -3,4 +3,3 @@ cpr.xml
 scg.xml
 specimen.xml
 order.xml
-shipping.xml
