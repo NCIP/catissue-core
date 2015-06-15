@@ -185,7 +185,7 @@
 								<name>specimenOrders</name>
 								<udn>specimenOrders</udn>
 								<caption>Specimen Orders</caption>
-								<table>SPECIMEN_ORDER_VIEW</table>
+								<table>OS_ORDER_ITEMS</table>
 								<foreignKey>SPECIMEN_ID</foreignKey>
 								<parentKey>IDENTIFIER</parentKey>
 								<row>
@@ -193,7 +193,7 @@
 										<name>order</name>
 										<udn>order</udn>
 										<caption>Orders</caption>
-										<table>CATISSUE_ORDER</table>
+										<table>OS_ORDERS</table>
 										<foreignKey>IDENTIFIER</foreignKey>
 										<parentKey>ORDER_ID</parentKey>
 									</subForm>

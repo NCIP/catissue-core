@@ -2129,4 +2129,27 @@
       referencedTableName="CATISSUE_USER"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
+
+  <changeSet author="vpawar" id="Drop older specimen position view">
+    <dropView viewName="specimen_pos_view"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Container position view per new model" runOnChange="true">
+    <createView replaceIfExists="true" viewName="os_specimen_positions_view">
+      select
+        cont.identifier as container_identifier, cont.name container_name,
+        pos.identifier as position_identifier, pos.pos_one_str, pos.pos_two_str,
+        pos.occupying_specimen_id as specimen_id
+      from
+        os_storage_containers cont
+        inner join os_container_positions pos on pos.storage_container_id = cont.identifier
+      where
+        cont.activity_status != 'Disabled' and
+        pos.occupying_specimen_id is not null
+    </createView>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop older order site view">
+    <dropView viewName="order_site_view"/>
+  </changeSet>
 </databaseChangeLog>

@@ -383,7 +383,7 @@
       insert into catissue_permissible_value
         (identifier, public_id, value) 
       select
-        catissue_permi_value_seq.nextval, 'specimen_biohazard', b.name
+        catissue_permissible_value_seq.nextval, 'specimen_biohazard', b.name
       from
         catissue_biohazard b
       where
