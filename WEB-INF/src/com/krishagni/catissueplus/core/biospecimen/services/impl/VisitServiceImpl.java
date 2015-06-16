@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -186,7 +187,7 @@ public class VisitServiceImpl implements VisitService {
 			EntityQueryCriteria crit = req.getPayload();
 			Visit visit = getVisit(crit.getId(), crit.getName());
 			
-			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
+			AccessCtrlMgr.getInstance().ensureReadSprRights(visit);
 		
 			String fileName = visit.getSprName();
 			if (StringUtils.isBlank(fileName)) {
@@ -214,9 +215,7 @@ public class VisitServiceImpl implements VisitService {
 		try {
 			SprDetail detail = req.getPayload();
 			Visit visit = getVisit(detail.getVisitId(), null);
-			
-			AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(visit);
-			
+			ensureUpdateSpr(visit);
 			String sprText = Utility.getString(detail.getInputStream(), detail.getContentType());
 			
 			DocumentDeIdentifier deIdentifier = getSprDeIdentifier(); 
@@ -238,13 +237,15 @@ public class VisitServiceImpl implements VisitService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<String> updateSprText(RequestEvent<SprDetail> req) {
 		try {
 			SprDetail detail = req.getPayload();
-			AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(detail.getVisitId());
+			Visit visit = getVisit(detail.getVisitId(), null);
+			
+			ensureUpdateSpr(visit);
 			
 			File file = getSprFile(detail.getVisitId());
 			if (!file.exists()) {
@@ -258,7 +259,7 @@ public class VisitServiceImpl implements VisitService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<Boolean> deleteSprFile(RequestEvent<EntityQueryCriteria> req) {
@@ -266,7 +267,10 @@ public class VisitServiceImpl implements VisitService {
 			EntityQueryCriteria crit = req.getPayload();
 			Visit visit = getVisit(crit.getId(), crit.getName());
 		
-			AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(visit);
+			if (visit.getSprLocked()) {
+				return ResponseEvent.userError(VisitErrorCode.LOCKED_SPR);
+			}
+			AccessCtrlMgr.getInstance().ensureDeleteSprRights(visit);
 		
 			if (StringUtils.isBlank(visit.getSprName())) {
 				return ResponseEvent.userError(VisitErrorCode.NO_SPR_UPLOADED);
@@ -287,6 +291,23 @@ public class VisitServiceImpl implements VisitService {
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
+	}
+	
+	@PlusTransactional
+	@Override
+	public ResponseEvent<Boolean> lockSpr(RequestEvent<SprLockDetail> req) {
+		SprLockDetail detail = req.getPayload();
+		Visit visit = getVisit(detail.getVisitId(), detail.getVisitName());
+		
+		if (detail.getLock()) {
+			AccessCtrlMgr.getInstance().ensureLockSprRights(visit);
+		} else {
+			AccessCtrlMgr.getInstance().ensureUnlockSprRights(visit);
+		}
+		
+		visit.setSprLocked(detail.getLock());
+
+		return ResponseEvent.response(true);
 	}
 
 	private VisitDetail saveOrUpdateVisit(VisitDetail input, boolean update, boolean partial) {		
@@ -410,6 +431,14 @@ public class VisitServiceImpl implements VisitService {
 			defaultVisitSprDir = ConfigUtil.getInstance().getDataDir() + File.separator + "visit-sprs";
 		}
 		return defaultVisitSprDir;
+	}
+	
+	private void ensureUpdateSpr(Visit visit) {
+		if (visit.getSprLocked()) {
+			throw OpenSpecimenException.userError(VisitErrorCode.LOCKED_SPR);
+		}
+		
+		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSprRights(visit);
 	}
 
 }
