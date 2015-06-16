@@ -1262,7 +1262,9 @@
             <column name="DESCRIPTION" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-113">
+    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-113" runOnChange="false">
+        <validCheckSum>7:ad2b3d1e386743513876279ab1ecea5e</validCheckSum>
+        <validCheckSum>7:24edfbb915d5be8caec7186ceb9986fb</validCheckSum>
         <createTable tableName="catissue_saved_queries">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
@@ -1279,10 +1281,6 @@
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="LAST_UPDATED_ON" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column defaultValueComputed="CURRENT_TIMESTAMP" name="LAST_RUN_ON" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="LAST_RUN_COUNT" type="BIGINT"/>
             <column name="QUERY_DEF" type="TEXT">
                 <constraints nullable="false"/>
             </column>
@@ -1962,30 +1960,6 @@
                 <constraints nullable="false"/>
             </column>
             <column name="USER_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-193">
-        <createTable tableName="report_job_details">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="SCHEDULE_ID" type="BIGINT"/>
-            <column name="USER_ID" type="BIGINT"/>
-            <column name="REPORT_ID" type="BIGINT"/>
-            <column name="FILE_NAME" type="VARCHAR(255)"/>
-            <column name="DOWNLOAD_COUNT" type="BIGINT"/>
-            <column name="CS_ID" type="BIGINT"/>
-            <column defaultValueComputed="CURRENT_TIMESTAMP" name="EXEC_START" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column defaultValueComputed="CURRENT_TIMESTAMP" name="EXEC_END" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="EXEC_STATUS" type="VARCHAR(20)"/>
-            <column name="IS_EMAILED" type="BIT"/>
-            <column name="ERROR_DESC" type="VARCHAR(512)"/>
-            <column name="START_DATE" type="DATE"/>
-            <column name="END_DATE" type="DATE"/>
         </createTable>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-194">

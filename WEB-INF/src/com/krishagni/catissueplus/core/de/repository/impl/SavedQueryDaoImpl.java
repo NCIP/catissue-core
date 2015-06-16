@@ -156,9 +156,6 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 		savedQuery.setLastModifiedBy(modifiedBy);
 		
 		savedQuery.setLastModifiedOn((Date)row[8]);
-		savedQuery.setLastRunCount((Long)row[9]);
-		savedQuery.setLastRunOn((Date)row[10]);
-		
 		return savedQuery;		
 	}
 		
@@ -195,8 +192,6 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 					.add(Projections.property("m.firstName"), "mFirstName")
 					.add(Projections.property("m.lastName"), "mLastName")
 					.add(Projections.property("lastUpdated"), "lastUpdated")
-					.add(Projections.property("lastRunCount"), "lastRunCount")
-					.add(Projections.property("lastRunOn"), "lastRunOn")
 		));		
 	}
 	
