@@ -152,6 +152,19 @@
         activityStatus = 'Active'
     </query>
     
+    <query name="getCpsByShortTitleAndSite">
+      select
+        cp
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
+        join cp.repositories site
+      where
+        cp.shortTitle in (:shortTitles) and
+        site.name = :siteName and
+        cp.activityStatus = 'Active' and
+        site.activityStatus = 'Active'
+    </query>
+    
     <sql-query name="getCpIdsBySiteIds">
       <return-scalar column="cpId" type="long"/> 
       

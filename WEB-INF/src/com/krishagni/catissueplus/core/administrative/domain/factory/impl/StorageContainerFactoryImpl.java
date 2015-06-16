@@ -21,7 +21,6 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.StorageCont
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
@@ -418,14 +417,14 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		Set<String> allowedCps = detail.getAllowedCollectionProtocols();
 		
 		List<CollectionProtocol> cps = new ArrayList<CollectionProtocol>();		
-		if (!CollectionUtils.isEmpty(allowedCps)) {
-			cps = daoFactory.getCollectionProtocolDao().getCpsByShortTitle(allowedCps);
+		if (CollectionUtils.isNotEmpty(allowedCps) && container.getSite() != null) {
+			cps = daoFactory.getCollectionProtocolDao().getCpsByShortTitle(allowedCps, container.getSite().getName());
 			if (cps.size() != allowedCps.size()) {
-				ose.addError(CpErrorCode.NOT_FOUND);
+				ose.addError(StorageContainerErrorCode.INVALID_CPS);
 				return;
 			}			
 		}
-		
+
 		container.setAllowedCps(new HashSet<CollectionProtocol>(cps));		
 	}
 	

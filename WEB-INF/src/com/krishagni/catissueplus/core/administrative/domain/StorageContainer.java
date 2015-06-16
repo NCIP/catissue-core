@@ -464,9 +464,14 @@ public class StorageContainer extends BaseEntity {
 			}			
 		}
 				
-		if (!getCompAllowedCps().isEmpty() && 
-				!getCompAllowedCps().containsAll(container.getCompAllowedCps())) {
-			return false;
+		if (!getCompAllowedCps().isEmpty()) {
+			return getCompAllowedCps().containsAll(container.getCompAllowedCps());
+		} else if (!container.getCompAllowedCps().isEmpty()) {
+			for (CollectionProtocol cp : container.getCompAllowedCps()) {
+				if (!cp.getRepositories().contains(getSite())) {
+					return false;
+				}
+			}
 		}
 		
 		return true;
@@ -482,11 +487,11 @@ public class StorageContainer extends BaseEntity {
 			return false;						
 		}
 		
-		if (!getCompAllowedCps().isEmpty() && !getCompAllowedCps().contains(cp)) {
-			return false;
+		if (!getCompAllowedCps().isEmpty()) {
+			return getCompAllowedCps().contains(cp);
+		} else {
+			return cp.getRepositories().contains(getSite());
 		}
-		
-		return true; 
 	}
 
 	public static boolean isValidScheme(String scheme) {

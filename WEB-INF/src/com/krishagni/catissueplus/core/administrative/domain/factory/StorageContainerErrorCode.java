@@ -46,7 +46,9 @@ public enum StorageContainerErrorCode implements ErrorCode {
 	
 	OCCUPYING_ENTITY_ID_OR_NAME_REQUIRED,
 	
-	INVALID_POSITIONS;
+	INVALID_POSITIONS,
+	
+	INVALID_CPS;
 
 	@Override
 	public String code() {

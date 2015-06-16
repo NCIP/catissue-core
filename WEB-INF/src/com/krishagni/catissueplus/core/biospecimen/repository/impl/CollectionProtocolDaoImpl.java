@@ -95,6 +95,16 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<CollectionProtocol> getCpsByShortTitle(Collection<String> shortTitles, String siteName) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CPS_BY_SHORT_TITLE_N_SITE)
+				.setParameterList("shortTitles", shortTitles)
+				.setString("siteName", siteName)
+				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<Long> getCpIdsBySiteIds(Collection<Long> siteIds) {
 		return sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_CP_IDS_BY_SITE_IDS)
@@ -188,6 +198,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		return CollectionProtocol.class;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private List<Object[]> getCpList(CpListCriteria cpCriteria) {
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(CollectionProtocol.class)
 				.setFirstResult(cpCriteria.startAt())
@@ -284,6 +295,8 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	private static final String GET_CP_BY_TITLE = FQN + ".getCpByTitle";
 	
 	private static final String GET_CPS_BY_SHORT_TITLE = FQN + ".getCpsByShortTitle";
+	
+	private static final String GET_CPS_BY_SHORT_TITLE_N_SITE = FQN + ".getCpsByShortTitleAndSite";
 	
 	private static final String GET_CP_IDS_BY_SITE_IDS = FQN + ".getCpIdsBySiteIds";
 	

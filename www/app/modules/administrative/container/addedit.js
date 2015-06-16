@@ -3,8 +3,6 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     $scope, $state, $stateParams, $q, container, 
     Site, Container, CollectionProtocol, PvManager, Util) {
 
-
-    var allCps = undefined;
     var allSpecimenTypes = undefined;
     var allowedCps = undefined;
     var parentContainerName = undefined;
@@ -102,22 +100,17 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
       var parentCps = parentContainer.calcAllowedCollectionProtocols;
       if (parentCps.length > 0) {
         $scope.cps = parentCps;
-      } else if (!allCps) { // CPs have not been loaded
-        loadAllCps();
       } else {
-        $scope.cps = allCps;
-      }
+        loadAllCps(parentContainer.siteName);
+      } 
 
       $scope.container.allowedCollectionProtocols = allowedCps; 
     };
 
-    function loadAllCps() {
-      if (allCps) {
-        return;
-      }
+    function loadAllCps(siteName) {
+      siteName = !siteName ? $scope.container.siteName : siteName;
 
-      allCps = [];
-      CollectionProtocol.query().then(
+      CollectionProtocol.query({repositoryName: siteName}).then(
         function(cps) {
           $scope.cps = allCps = cps.map(function(cp) { return cp.shortTitle; });
 
@@ -170,6 +163,9 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
       );
     };
           
+    //
+    // invoked when a site is selected on UI
+    // 
     $scope.loadContainers = function(siteName) {
       Container.listForSite(siteName, true, true).then(
         function(result) {
@@ -179,6 +175,8 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
           });
         }
       );
+
+      loadAllCps(siteName);
     };
 
     $scope.save = function() {
