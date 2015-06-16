@@ -383,7 +383,7 @@
       insert into catissue_permissible_value
         (identifier, public_id, value) 
       select
-        catissue_permi_value_seq.nextval, 'specimen_biohazard', b.name
+        catissue_permissible_value_seq.nextval, 'specimen_biohazard', b.name
       from
         catissue_biohazard b
       where
@@ -401,5 +401,21 @@
 
   <changeSet author="vpawar" id="Drop biohazard types table">
     <dropTable tableName="catissue_biohazard"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Drop last_run_on column from catissue_saved_queries table">
+    <dropColumn
+      columnName="LAST_RUN_ON"
+      tableName="CATISSUE_SAVED_QUERIES"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Drop last_run_count column from catissue_saved_queries table">
+    <dropColumn
+      columnName="LAST_RUN_COUNT"
+      tableName="CATISSUE_SAVED_QUERIES"/>
+  </changeSet>
+    
+  <changeSet author="nmarwaha" id="Drop report job details table">
+    <dropTable tableName="report_job_details"/>
   </changeSet>
 </databaseChangeLog>

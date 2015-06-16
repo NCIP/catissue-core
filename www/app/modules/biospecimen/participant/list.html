@@ -27,25 +27,22 @@
     <div class="os-card" ng-repeat="cpr in cprList" ng-click="showParticipantOverview(cpr)">
       <h4>
         <a title="{{'participant.tooltip.view_details' | translate}}" ui-sref="participant-detail.overview({cprId: cpr.cprId})">
-          <span ng-if="!cpr.participant.firstName && !cpr.participant.lastName" translate="common.na">
-            N/A
-          </span>
-          <span ng-if="cpr.participant.firstName || cpr.participant.lastName">
-            {{cpr.participant.firstName}} {{cpr.participant.lastName}}
-          </span>
+          <span>{{cpr.ppid}}</span>
         </a>
       </h4>
-      <h5>
-        <span title="{{'participant.ppid' | translate}}">
-          {{cpr.ppid}}
-        </span>
-        <span title="{{'participant.mpi' | translate}}" ng-if="!!cpr.participant.empi">
-          | {{cpr.participant.empi}}
-        </span>
+
+      <h5 ng-if="!!cpr.participant.empi" title="{{'participant.mpi' | translate}}">
+        <span>{{cpr.participant.empi}}</span>
       </h5>
+        
+      <h5 ng-if="!!cpr.participant.firstName || !!cpr.participant.lastName">
+        <span>{{cpr.participant.firstName}} {{cpr.participant.lastName}}</span>
+      </h5>
+
       <p title="{{'participant.reg_date' | translate}}">
         {{cpr.registrationDate | date: global.dateFmt}}
       </p>
+
       <div class="stats">
         <div class="stat col-xs-6" title="{{'participant.tooltip.completed_visits_count' | translate}}">
           <span class="os-lavatar os-lavatar-sm">V</span>

@@ -34,10 +34,16 @@
       name="specimens" 
       table="CATISSUE_SPEC_TAG_ITEMS">
       <key column="TAG_ID"/>
-      <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen" column="OBJ_ID" />
+      <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen" column="OBJ_ID">
+        <filter name="activeEntity"/>
+      </many-to-many>
     </set>
     
     <property name="deletedOn" column="DELETED_ON"/>
+    
+    <query name="getSpecimenLists">
+      from SpecimenList l where l.deletedOn is null order by l.name
+    </query>
 	
     <query name="getSpecimenListsByUser">
       select 
@@ -49,6 +55,15 @@
         and l.deletedOn is null
       order by
         l.name
+    </query>
+    
+    <query name="getListSpecimensCount">
+      select 
+        count(s.id)
+      from
+        SpecimenList l inner join l.specimens s
+      where 
+        l.id = :listId 
     </query>
   </class> 
 </hibernate-mapping>

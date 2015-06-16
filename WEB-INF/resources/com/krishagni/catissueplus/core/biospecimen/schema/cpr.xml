@@ -51,18 +51,13 @@
       </field>  
 
       <field>
-        <caption>Genotype</caption>
-        <attribute>sexGenotype</attribute>
-      </field>  
-
-      <field>
         <caption>Ethnicity</caption>
         <attribute>ethnicity</attribute>
       </field>  
 
       <field>
         <caption>SSN</caption>
-        <attribute>ssn</attribute>
+        <attribute>uid</attribute>
       </field>  
 
       <field>

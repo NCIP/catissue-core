@@ -150,19 +150,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setLabel(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		if (StringUtils.isNotBlank(detail.getLabel())) {
-			specimen.setLabel(detail.getLabel());
-			return;
-		} 
-		
-		if (!specimen.isCollected() || specimen.isAliquot() || specimen.isDerivative()) {
-			return;
-		}
-		
-		String labelTmpl = specimen.getLabelTmpl();
-		if (StringUtils.isBlank(labelTmpl)) {
-			ose.addError(SpecimenErrorCode.LABEL_REQUIRED);
-		}		
+		specimen.setLabel(detail.getLabel());
 	}
 	
 	private void setLabel(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {

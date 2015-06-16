@@ -41,10 +41,10 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 			}
 		}
 		
-		if (StringUtils.isNotBlank(participant.getSsn())) {
-			Participant matched = dao.getBySsn(participant.getSsn());
+		if (StringUtils.isNotBlank(participant.getUid())) {
+			Participant matched = dao.getByUid(participant.getUid());
 			if (matched != null) {
-				addParticipant(matchedParticipants, matched, "ssn");
+				addParticipant(matchedParticipants, matched, "uid");
 			}
 		}
 		

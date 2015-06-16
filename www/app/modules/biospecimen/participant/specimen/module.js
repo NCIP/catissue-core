@@ -3,6 +3,7 @@ angular.module('os.biospecimen.specimen',
   [
     'ui.router',
     'os.biospecimen.specimen.addedit',
+    'os.biospecimen.specimen.detail',
     'os.biospecimen.specimen.overview'
   ])
   .config(function($stateProvider) {
@@ -54,16 +55,7 @@ angular.module('os.biospecimen.specimen',
       .state('specimen-detail', {
         url: '/detail',
         templateUrl: 'modules/biospecimen/participant/specimen/detail.html',
-        controller: function($scope, cpr, visit, specimen, Specimen) {
-          $scope.cpr = cpr;
-          $scope.visit = visit;
-          $scope.specimen = specimen;
-
-          $scope.childSpecimens = $scope.specimen.children; 
-          $scope.reopen = function() {
-            specimen.reopen();
-          }
-        },
+        controller: 'SpecimenDetailCtrl',
         parent: 'specimen-root'
       })
       .state('specimen-detail.overview', {

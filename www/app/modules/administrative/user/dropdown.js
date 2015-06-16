@@ -17,13 +17,18 @@ angular.module('os.administrative.user.dropdown', ['os.administrative.models'])
         ngModel: '=ngModel',
         placeholder: '@',
         onSelect: '=onSelect',
-        filterOpts: '='
+        filterOpts: '=',
+        defaultList: '='
       },
 
       replace: true,
 
       controller: function($scope) {
         $scope.searchUsers = function(searchTerm) {
+          if (!searchTerm && $scope.defaultList) {
+            $scope.users = $scope.defaultList;
+            return;
+          }
           loadUsers($scope, searchTerm);
         };
 

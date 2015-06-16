@@ -1999,10 +1999,163 @@
       )
     </sql>
   </changeSet>
+
+  <changeSet author="vpawar" id="Create procedure to add config property" dbms="mysql">
+    <sql endDelimiter="//">
+      create procedure add_cfg_prop(
+        in moduleName text, 
+        in propName text,
+        in propCode text,
+        in propDesc text,
+        in propType text,
+        in defValue text
+      )
+      begin
+        select identifier into @module_id from os_modules where name = moduleName;
+
+        insert into os_cfg_props
+          (identifier, name, display_name_code, desc_code, data_type, module_id)
+        values
+          (default, propName, propCode, propDesc, propType, @module_id);
+
+        select last_insert_id() into @prop_id;
+
+        insert into os_cfg_settings
+          (identifier, property_id, value, activated_by, activation_date, activity_status)
+        values
+          (default, @prop_id, defValue, 1, current_timestamp(), 'Active');
+      end
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Create procedure to add config property" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace procedure add_cfg_prop(
+        moduleName in varchar2, 
+        propName   in varchar2,
+        propCode   in varchar2,
+        propDesc   in varchar2,
+        propType   in varchar2,
+        defValue   in varchar2
+      ) is
+        module_id number(20);
+      begin
+        select identifier into module_id from os_modules where name = moduleName;
+
+        insert into os_cfg_props
+          (identifier, name, display_name_code, desc_code, data_type, module_id)
+        values
+          (os_cfg_props_seq.nextval, propName, propCode, propDesc, propType, module_id);
+
+        insert into os_cfg_settings
+          (identifier, property_id, value, activated_by, activation_date, activity_status)
+        values
+          (os_cfg_settings_seq.nextval, os_cfg_props_seq.currval, defValue, 1, sysdate, 'Active');
+      end;
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add visit name format column to CP">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="VISIT_NAME_FORMAT" type="${text.type}(255)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Flag to specify whether manual input of PPID is allowed">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="MANUAL_PPID_ALLOWED" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Flag to specify whether manual input of visit name is allowed">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="MANUAL_VISIT_NAME_ALLOWED" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Flag to specify whether manual input of specimen labels is allowed">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="MANUAL_SPEC_LABEL_ALLOWED" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop FK on csm_user_id from shared specimenlist tags table">
+    <dropForeignKeyConstraint
+      baseTableName="SHARED_SPECIMENLIST_TAGS"
+      constraintName="FK_SPECIMENLIST_SHARE_USER_ID"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop FK on csm_user_id from shared query tags table">
+    <dropForeignKeyConstraint
+      baseTableName="SHARED_QUERY_TAGS"
+      constraintName="FK_QUERYTAG_SHARE_USER_ID"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop FK on csm_user_id from catissue user table">
+    <dropForeignKeyConstraint
+      baseTableName="CATISSUE_USER"
+      constraintName="FK_CATISSUE_USER_CSMID"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop UK on csm_user_id from catissue user table">
+    <dropUniqueConstraint
+      constraintName="CSM_USER_ID_UNIQUE_KEY"
+      tableName="CATISSUE_USER"
+      uniqueColumns="CSM_USER_ID"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop csm_user_id column from catissue user table">
+    <dropColumn
+      columnName="CSM_USER_ID"
+      tableName="CATISSUE_USER"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Add FK to user id in shared specimenlist tags table">
+    <addForeignKeyConstraint
+      constraintName="FK_SHARED_SPECLIST_USER_ID"
+      baseTableName="SHARED_SPECIMENLIST_TAGS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Add FK to user id in shared query tags table">
+    <addForeignKeyConstraint
+      constraintName="FK_SHARED_QUERY_USER_ID"
+      baseTableName="SHARED_QUERY_TAGS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop older specimen position view">
+    <dropView viewName="specimen_pos_view"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Container position view per new model" runOnChange="true">
+    <createView replaceIfExists="true" viewName="os_specimen_positions_view">
+      select
+        cont.identifier as container_identifier, cont.name container_name,
+        pos.identifier as position_identifier, pos.pos_one_str, pos.pos_two_str,
+        pos.occupying_specimen_id as specimen_id
+      from
+        os_storage_containers cont
+        inner join os_container_positions pos on pos.storage_container_id = cont.identifier
+      where
+        cont.activity_status != 'Disabled' and
+        pos.occupying_specimen_id is not null
+    </createView>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop older order site view">
+    <dropView viewName="order_site_view"/>
+  </changeSet>
   
   <changeSet author="vgaikwad" id="Added a new column in visits table to store SPR Lock status">
     <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
-      <column name="SPR_LOCK" type="${boolean.type}" defaultValueBoolean="0">
+      <column name="SPR_LOCKED" type="${boolean.type}" defaultValueBoolean="0">
         <constraints nullable="false"/>
       </column>
     </addColumn>

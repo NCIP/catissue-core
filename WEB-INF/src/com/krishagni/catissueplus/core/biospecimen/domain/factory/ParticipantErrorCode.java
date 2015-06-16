@@ -16,9 +16,13 @@ public enum ParticipantErrorCode implements ErrorCode {
 	
 	INVALID_GENOTYPE,
 	
-	INVALID_SSN,
+	INVALID_UID,
 	
-	DUP_SSN,
+	INVALID_MPI,
+	
+	DUP_UID,
+	
+	DUP_EMPI,
 	
 	INVALID_VITAL_STATUS,
 	

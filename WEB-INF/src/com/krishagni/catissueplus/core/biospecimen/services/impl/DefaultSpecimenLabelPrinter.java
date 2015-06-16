@@ -12,7 +12,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.MessageSource;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;

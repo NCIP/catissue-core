@@ -11,5 +11,5 @@ public class PpidLabelToken extends AbstractSpecimenLabelToken {
 	@Override
 	public String getLabel(Specimen specimen) {
 		return specimen.getVisit().getRegistration().getPpid();
-	}
+	}	
 }

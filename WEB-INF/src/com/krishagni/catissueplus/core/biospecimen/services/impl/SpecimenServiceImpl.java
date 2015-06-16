@@ -12,6 +12,7 @@ import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenLabelPrintJob;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
@@ -33,10 +34,12 @@ import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.CommonErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
+import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
 public class SpecimenServiceImpl implements SpecimenService {
@@ -46,6 +49,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 	private SpecimenFactory specimenFactory;
 	
 	private ConfigurationService cfgSvc;
+	
+	private LabelGenerator labelGenerator;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -57,6 +62,10 @@ public class SpecimenServiceImpl implements SpecimenService {
 	
 	public void setCfgSvc(ConfigurationService cfgSvc) {
 		this.cfgSvc = cfgSvc;
+	}
+	
+	public void setLabelGenerator(LabelGenerator labelGenerator) {
+		this.labelGenerator = labelGenerator;
 	}
 	
 	@Override
@@ -128,6 +137,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	}
 	
 	@Override
+	@PlusTransactional
 	public ResponseEvent<SpecimenDetail> patchSpecimen(RequestEvent<SpecimenDetail> req) {
 		return updateSpecimen(req.getPayload(), true);
 	}
@@ -153,7 +163,50 @@ public class SpecimenServiceImpl implements SpecimenService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-		
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SpecimenDetail> deleteSpecimen(RequestEvent<EntityQueryCriteria> req) {
+		try {
+			EntityQueryCriteria crit = req.getPayload();
+
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			Specimen specimen = getSpecimen(crit.getId(), crit.getName(), ose);
+			if (specimen == null) {
+				return ResponseEvent.error(ose);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureDeleteSpecimenRights(specimen);
+			specimen.disable();
+			return ResponseEvent.response(SpecimenDetail.from(specimen));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}		
+	}
+	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<EntityQueryCriteria> req) {
+		try {
+			EntityQueryCriteria crit = req.getPayload();
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			Specimen specimen = getSpecimen(crit.getId(), crit.getName(), ose);
+			if (specimen == null) {
+				return ResponseEvent.error(ose);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureReadSpecimenRights(specimen);
+			return ResponseEvent.response(specimen.getDependentEntities());
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+			
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenDetail>> collectSpecimens(RequestEvent<List<SpecimenDetail>> req) {
@@ -215,9 +268,31 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 	}
 		
-	private void ensureUniqueLabel(String label, OpenSpecimenException ose) {
+	private void ensureValidAndUniqueLabel(Specimen specimen, OpenSpecimenException ose) {
+		CollectionProtocol cp = specimen.getCollectionProtocol();
+		String labelTmpl = specimen.getLabelTmpl();
+		
+		String label = specimen.getLabel();		
 		if (StringUtils.isBlank(label)) {
+			boolean labelReq = cp.isManualSpecLabelEnabled() || StringUtils.isBlank(labelTmpl);
+			if (labelReq) {
+				ose.addError(SpecimenErrorCode.LABEL_REQUIRED);
+			}
+			
 			return;
+		}
+		
+		
+		if (StringUtils.isNotBlank(labelTmpl)) {
+			if (!cp.isManualSpecLabelEnabled()) {
+				ose.addError(SpecimenErrorCode.MANUAL_LABEL_NOT_ALLOWED);
+				return;
+			}
+			
+			if (!labelGenerator.validate(labelTmpl, specimen, label)) {
+				ose.addError(SpecimenErrorCode.INVALID_LABEL, label);
+				return;
+			}
 		}
 		
 		if (daoFactory.getSpecimenDao().getByLabel(label) != null) {
@@ -296,11 +371,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);
 
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		if (existing == null || // no specimen before 
-			StringUtils.isBlank(existing.getLabel()) || // no label was specified before 
-			!existing.getLabel().equals(specimen.getLabel())) { // new label differs from existing
-			
-			ensureUniqueLabel(specimen.getLabel(), ose); // check for label uniqueness
+		if (existing == null || StringUtils.isBlank(existing.getLabel())) {			
+			ensureValidAndUniqueLabel(specimen, ose);
 		}
 
 		String barcode = specimen.getBarcode();

@@ -32,4 +32,9 @@ public class ParentSpecimenUniqueIdLabelToken extends AbstractSpecimenLabelToken
 		Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId(name, pidStr);
 		return uniqueId.toString();
 	}
+	
+	@Override
+	public int validate(Object object, String input, int startIdx) {
+		return super.validateNumber(input, startIdx);
+	}
 }

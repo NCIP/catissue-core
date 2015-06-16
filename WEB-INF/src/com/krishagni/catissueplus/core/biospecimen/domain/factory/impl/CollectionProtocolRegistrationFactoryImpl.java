@@ -120,21 +120,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			CollectionProtocolRegistrationDetail detail,
 			CollectionProtocolRegistration cpr, 
 			OpenSpecimenException ose) {
-		
-		if (cpr.getCollectionProtocol() == null) {
-			return;
-		}
-		
 		cpr.setPpid(detail.getPpid());
-		
-//		String ppidFormat = cpr.getCollectionProtocol().getPpidFormat();
-//		String ppid = detail.getPpid();
-//		
-//		if (StringUtils.isBlank(ppid) && StringUtils.isBlank(ppidFormat)) {
-//			ose.addError(CprErrorCode.PPID_REQUIRED);
-//		} else {
-//			cpr.setPpid(ppid);
-//		}
 	}
 
 	private void setConsents(

@@ -25,5 +25,7 @@
 
   <bean id="specimenCollSvc" class="com.krishagni.openspecimen.custom.le.services.impl.SpecimenCollectionServiceImpl">
     <property name="visitService"  ref="visitService"/>
+    <property name="specimenSvc" ref="specimenSvc"/>
+    <property name="cfgSvc" ref="cfgSvc"/>
   </bean>
 </beans>

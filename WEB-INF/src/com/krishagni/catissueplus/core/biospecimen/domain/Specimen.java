@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPos
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
@@ -93,6 +94,8 @@ public class Specimen extends BaseEntity {
 	private SpecimenReceivedEvent receivedEvent;
 	
 	private List<SpecimenTransferEvent> transferEvents;
+	
+	private Set<SpecimenList> specimenLists =  new HashSet<SpecimenList>();
 	
 	@Autowired
 	@Qualifier("specimenLabelGenerator")
@@ -410,6 +413,15 @@ public class Specimen extends BaseEntity {
 		}		
 		return this.transferEvents;
 	}
+	
+	@NotAudited
+	public Set<SpecimenList> getSpecimenLists() {
+		return specimenLists;
+	}
+
+	public void setSpecimenLists(Set<SpecimenList> specimenLists) {
+		this.specimenLists = specimenLists;
+	}
 
 	public LabelGenerator getLabelGenerator() {
 		return labelGenerator;
@@ -453,7 +465,7 @@ public class Specimen extends BaseEntity {
 		}
 
 		if (checkChildSpecimens) {
-			ensureChildSpecimensAreDisabled();
+			ensureNoActiveChildSpecimens();
 		}
 
 		virtualize();
@@ -474,6 +486,10 @@ public class Specimen extends BaseEntity {
 		setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
 	}
 	
+	public List<DependentEntityDetail> getDependentEntities() {
+		return DependentEntityDetail.singletonList(Specimen.getEntityName(), getActiveChildSpecimens()); 
+	}
+		
 	public void activate() {
 		if (getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus())) {
 			return;
@@ -500,7 +516,10 @@ public class Specimen extends BaseEntity {
 			return;
 		}
 		
-		setLabel(specimen.getLabel());
+		if (StringUtils.isBlank(getLabel())) {
+			setLabel(specimen.getLabel());
+		}
+		
 		setBarcode(specimen.getBarcode());
 		
 		updateEvent(getCollectionEvent(), specimen.getCollectionEvent());
@@ -785,13 +804,25 @@ public class Specimen extends BaseEntity {
 		return desc.toString();		
 	}
 
-	private void ensureChildSpecimensAreDisabled() {
+	private void ensureNoActiveChildSpecimens() {
 		for (Specimen specimen : getChildCollection()) {
-			if (!specimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
+			if (specimen.isActiveOrClosed() && specimen.isCollected()) {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.REF_ENTITY_FOUND);
 			}
 		}
 	}
+	
+	private int getActiveChildSpecimens() {
+		int count = 0;
+		for (Specimen specimen : getChildCollection()) {
+			if (specimen.isActiveOrClosed() && specimen.isCollected()) {
+				++count;
+			}
+		}
+		
+		return count;
+	}
+	
 	
 	/**
 	 * Ensures following constraints are adhered

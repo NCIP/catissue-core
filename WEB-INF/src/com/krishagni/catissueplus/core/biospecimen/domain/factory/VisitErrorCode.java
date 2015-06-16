@@ -8,7 +8,13 @@ public enum VisitErrorCode implements ErrorCode {
 	
 	INVALID_STATUS,
 	
+	NAME_REQUIRED,
+	
 	DUP_NAME,
+	
+	INVALID_NAME,
+	
+	MANUAL_NAME_NOT_ALLOWED,
 	
 	INVALID_CLINICAL_DIAGNOSIS,
 	

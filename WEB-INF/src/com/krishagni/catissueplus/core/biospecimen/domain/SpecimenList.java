@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -105,7 +106,7 @@ public class SpecimenList {
 		sharedWith.removeAll(users);
 	}
 	
-	public void updateSharedUsers(List<User> users) {
+	public void updateSharedUsers(Collection<User> users) {
 		sharedWith.retainAll(users);
 
 		for (User user : users) {
@@ -134,6 +135,6 @@ public class SpecimenList {
 	public void update(SpecimenList specimenList) {
 		this.setName(specimenList.getName());
 		this.setSpecimens(specimenList.getSpecimens());
-		this.setSharedWith(specimenList.getSharedWith());		
+		this.updateSharedUsers(specimenList.getSharedWith());
 	}
 }

@@ -74,6 +74,14 @@
       <key column="SPECIMEN_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier" />
     </set>
+    
+    <set 
+      name="specimenLists" 
+      table="CATISSUE_SPEC_TAG_ITEMS"
+      lazy="true">
+      <key column="OBJ_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenList" column="TAG_ID" />
+    </set>
 
     <filter name="activeEntity"/>
 

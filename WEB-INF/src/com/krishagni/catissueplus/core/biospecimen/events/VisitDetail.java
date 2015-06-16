@@ -216,7 +216,7 @@ public class VisitDetail extends AttributeModifiedSupport {
 		detail.setName(visit.getName());
 		detail.setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 		detail.setSprName(visit.getSprName());
-		detail.setSprLock(visit.isSprLocked());
+		detail.setSprLock(visit.getSprLocked());
 		detail.setVisitDate(visit.getVisitDate());
 		detail.setSite(visit.getSite().getName());		
 

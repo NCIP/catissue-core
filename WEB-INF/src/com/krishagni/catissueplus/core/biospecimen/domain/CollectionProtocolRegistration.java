@@ -208,9 +208,7 @@ public class CollectionProtocolRegistration {
 			return;
 		}
 		
-		setPpid(cpr.getPpid());
-		setRegistrationDate(cpr.getRegistrationDate());
-		
+		setRegistrationDate(cpr.getRegistrationDate());		
 		setSignedConsentDocumentUrl(cpr.getSignedConsentDocumentUrl());
 		setConsentSignDate(cpr.getConsentSignDate());
 		setConsentWitness(cpr.getConsentWitness());

@@ -21,6 +21,14 @@ public enum FormErrorCode implements ErrorCode {
 			
 	OP_NOT_ALLOWED,
 	
+	MULTIPLE_RECS_NOT_ALLOWED,
+	
+	INVALID_REC_ID,
+	
+	REC_ID_REQUIRED,
+	
+	REC_ID_SPECIFIED_FOR_CREATE,
+	
 	SYS_REC_DEL_NOT_ALLOWED;
 
 	@Override

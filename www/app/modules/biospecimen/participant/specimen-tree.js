@@ -28,12 +28,16 @@ angular.module('os.biospecimen.participant.specimen-tree',
     function loadAllSpecimenList(scope) {
       SpecimenList.query().then(
         function(lists) {
-          scope.specimenLists = [];
-          angular.forEach(lists, function(list) {
-            if (list.owner.id == scope.$parent.currentUser.id) {
-              scope.specimenLists.push(list);
-            }
-          })
+          if (scope.$parent.currentUser.admin) {
+            scope.specimenLists = lists;
+          } else {
+            scope.specimenLists = [];
+            angular.forEach(lists, function(list) {
+              if (list.owner.id == scope.$parent.currentUser.id) {
+                scope.specimenLists.push(list);
+              }
+            })
+          }
         }
       );
     }

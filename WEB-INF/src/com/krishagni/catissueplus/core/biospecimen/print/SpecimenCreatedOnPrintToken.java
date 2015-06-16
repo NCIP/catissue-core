@@ -3,9 +3,10 @@ package com.krishagni.catissueplus.core.biospecimen.print;
 import java.text.SimpleDateFormat;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.common.domain.AbstractLabelTmplToken;
 import com.krishagni.catissueplus.core.common.domain.LabelTmplToken;
 
-public class SpecimenCreatedOnPrintToken implements LabelTmplToken {
+public class SpecimenCreatedOnPrintToken extends AbstractLabelTmplToken implements LabelTmplToken {
 
 	@Override
 	public String getName() {

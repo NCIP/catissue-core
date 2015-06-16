@@ -22,10 +22,10 @@ public class ParticipantDaoImpl extends AbstractDao<Participant> implements Part
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public Participant getBySsn(String ssn) {		
+	public Participant getByUid(String uid) {		
 		List<Participant> participants = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_BY_SSN)
-				.setString("ssn", ssn)
+				.getNamedQuery(GET_BY_UID)
+				.setString("uid", uid)
 				.list();
 		return participants == null || participants.isEmpty() ? null : participants.iterator().next();
 	}
@@ -75,9 +75,9 @@ public class ParticipantDaoImpl extends AbstractDao<Participant> implements Part
 	}
 	
 	@Override
-	public boolean isSsnUnique(String ssn) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PARTICIPANT_ID_BY_SSN);
-		query.setString("ssn", ssn);
+	public boolean isUidUnique(String uid) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PARTICIPANT_ID_BY_UID);
+		query.setString("uid", uid);
 		return query.list().isEmpty() ? true : false;
 	}
 
@@ -125,11 +125,11 @@ public class ParticipantDaoImpl extends AbstractDao<Participant> implements Part
 
 	private static final String FQN = Participant.class.getName();
 
-	private static final String GET_PARTICIPANT_ID_BY_SSN = FQN + ".getParticipantIdBySSN";
+	private static final String GET_PARTICIPANT_ID_BY_UID = FQN + ".getParticipantIdByUid";
 
 	private static final String GET_PMI_ID_BY_SITE_MRN = FQN + ".getPmiIdBySiteMrn";
 	
-	private static final String GET_BY_SSN = FQN + ".getBySsn";
+	private static final String GET_BY_UID = FQN + ".getByUid";
 	
 	private static final String GET_BY_EMPI = FQN + ".getByEmpi";
 	

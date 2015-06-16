@@ -2,14 +2,6 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
   .factory('Participant', function(osModel, $http) {
     var Participant = osModel('participants');
  
-    Participant.formatSsn = function(ssn) {
-      if (!!ssn && ssn.indexOf('-') == -1) {
-        ssn = [ssn.slice(0, 3), '-', ssn.slice(3, 5), '-', ssn.slice(5)].join('');
-      }
-
-      return ssn;
-    };
-
     Participant.prototype.newPmi = function() {
       return {siteName: '', mrn: ''};
     };
@@ -29,10 +21,6 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
       }
 
       return idx;
-    };
-
-    Participant.prototype.formatSsn = function() {
-      return Participant.formatSsn(this.ssn);
     };
 
     Participant.prototype.getPmis = function() {
@@ -57,7 +45,7 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
     Participant.prototype.isMatchingInfoPresent = function() {
       return (this.lastName && this.birthDate) ||
              this.empi ||
-             this.ssn ||
+             this.uid ||
              this.getPmis().length > 0;
     };
 
@@ -66,7 +54,7 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
         lastName: this.lastName,
         birthDate: this.birthDate,
         empi: this.empi,
-        ssn : Participant.formatSsn(this.ssn),
+        uid : this.uid,
         pmis: this.getPmis()
       };
     };
@@ -86,7 +74,6 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
     Participant.prototype.$saveProps = function() {
       var pmis = this.getPmis();
       this.pmis = pmis.length == 0 ? [] : pmis;
-      this.ssn = this.formatSsn();
       return this;
     };
 

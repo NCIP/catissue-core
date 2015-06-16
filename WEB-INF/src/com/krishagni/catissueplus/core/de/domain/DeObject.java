@@ -130,7 +130,49 @@ public abstract class DeObject {
 	
 	public abstract Map<String, Object> getAttrValues();
 	
-	public abstract void setAttrValues(Map<String, Object> attrValues); 
+	public abstract void setAttrValues(Map<String, Object> attrValues);
+	
+	public static Long saveFormData(
+			final String formName, 
+			final String entityType, 
+			final Long cpId, 
+			final Long objectId, 
+			final Map<String, Object> values) {
+		
+		DeObject object = new DeObject() {			
+			@Override
+			public void setAttrValues(Map<String, Object> attrValues) {				
+			}
+			
+			@Override
+			public Long getObjectId() {
+				return objectId;
+			}
+			
+			@Override
+			public String getFormName() {
+				return formName;
+			}
+			
+			@Override
+			public String getEntityType() {
+				return entityType;
+			}
+			
+			@Override
+			public Long getCpId() {
+				return cpId;
+			}
+			
+			@Override
+			public Map<String, Object> getAttrValues() {
+				return values;
+			}
+		};
+		
+		object.saveOrUpdate();
+		return object.getId();
+	}
 	
 	private UserContext getUserCtx() {
 		final User user = AuthUtil.getCurrentUser();

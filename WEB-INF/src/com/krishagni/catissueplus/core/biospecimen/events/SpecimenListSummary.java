@@ -1,9 +1,12 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenList;
+import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
+import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
-public class SpecimenListSummary {
+@ListenAttributeChanges
+public class SpecimenListSummary extends AttributeModifiedSupport {
 	private Long id;
 	
 	private String name;

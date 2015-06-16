@@ -20,6 +20,11 @@ public class OpenSpecimenAppCtxProvider implements ApplicationContextAware {
 		
 		return context;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T getBean(String name) {
+		return (T)getAppCtx().getBean(name);
+	}
 
 	@Override
 	public void setApplicationContext(ApplicationContext ctx)

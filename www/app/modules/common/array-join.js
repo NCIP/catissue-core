@@ -1,6 +1,10 @@
 angular.module('openspecimen')
   .filter('osArrayJoin', function() {
     return function(collection, fun) {
+      if (collection === null || collection === undefined) {
+        return '';
+      }
+
       if(!fun) {
          return collection.join(", ");
       }

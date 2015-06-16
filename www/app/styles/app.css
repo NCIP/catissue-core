@@ -931,6 +931,10 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   padding: 0;
 }
 
+.os-padding-top-4 {
+  padding-top: 4px;
+}
+
 .os-big-dropdown-menu {
   max-height: 400px;
   overflow: auto;
@@ -942,6 +946,6 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 .os-textarea-lg {
   width: 100%;
-  height: 400px!important;
+  height: 390px!important;
   display: block;
 }

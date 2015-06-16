@@ -97,6 +97,15 @@ angular.module('os.common.models', [])
         return $http['delete'](url + this.$id()).then(Model.modelRespTransform);
       };
 
+      Model.prototype.$patch = function(modifiedProps) {
+        var modelObj = this;
+        return $http.patch(url + this.$id(), modifiedProps).then(
+          function(resp) {
+            return angular.extend(modelObj, modifiedProps);
+          }
+        ); 
+      }
+
       Model.prototype.$saveProps = function() { 
         return this;
       };

@@ -157,8 +157,8 @@ public class AccessCtrlMgr {
 		String resource = Resource.CP.getName();
 		String[] ops = {op.getName()};
 		
-		boolean allowed = false;
 		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);		
+		boolean allowed = false;
 		for (SubjectAccess access : accessList) {
 			Site accessSite = access.getSite();
 			CollectionProtocol accessCp = access.getCollectionProtocol();
@@ -804,6 +804,10 @@ public class AccessCtrlMgr {
 		ensureSprObjectRights(visit.getRegistration(), Operation.UPDATE);
 	}
 	
+	public void ensureDeleteSprRights(Visit visit) {
+		ensureSprObjectRights(visit.getRegistration(), Operation.DELETE);
+	}
+	
 	public void ensureReadSprRights(Visit visit) {
 		ensureSprObjectRights(visit.getRegistration(), Operation.READ);
 	}
@@ -817,21 +821,15 @@ public class AccessCtrlMgr {
 	}
 	
 	private void ensureSprObjectRights(CollectionProtocolRegistration cpr, Operation op) {
-		
-		ensureVisitAndSpecimenObjectRights(cpr, op);
-		
+
 		if (AuthUtil.isAdmin()) {
 			return;
 		}
+		ensureVisitAndSpecimenObjectRights(cpr, op);
 		
 		Long userId = AuthUtil.getCurrentUser().getId();
 		String resource = Resource.SURGICAL_PATHOLOGY_REPORT.getName();
-		String[] ops = null;
-		if (op == Operation.CREATE || op == Operation.UPDATE) {
-			ops = new String[]{Operation.CREATE.getName(), Operation.UPDATE.getName()};
-		} else {
-			ops = new String[]{op.getName()};
-		}
+		String[] ops = {op.getName()};
 		
 		boolean allowed = false;
 		Long cpId = cpr.getCollectionProtocol().getId();		
@@ -866,6 +864,4 @@ public class AccessCtrlMgr {
 		}
 		
 	}
-	
-	
 }

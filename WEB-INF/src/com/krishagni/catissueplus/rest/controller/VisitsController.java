@@ -91,7 +91,7 @@ public class VisitsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public VisitDetail addVisit(@RequestBody VisitDetail visit) {
-		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(visit));
+		ResponseEvent<VisitDetail> resp = visitService.addVisit(getRequest(visit));
 		resp.throwErrorIfUnsuccessful();				
 		return resp.getPayload();
 	}
@@ -102,7 +102,7 @@ public class VisitsController {
 	public VisitDetail updateVisit(@PathVariable("id") Long visitId, @RequestBody VisitDetail visit) {
 		visit.setId(visitId);
 		
-		ResponseEvent<VisitDetail> resp = visitService.addOrUpdateVisit(getRequest(visit));
+		ResponseEvent<VisitDetail> resp = visitService.updateVisit(getRequest(visit));
 		resp.throwErrorIfUnsuccessful();				
 		return resp.getPayload();
 	}
@@ -119,7 +119,7 @@ public class VisitsController {
 			inputStream = file.getInputStream();
 			sprDetail.setInputStream(inputStream);
 			sprDetail.setName(file.getOriginalFilename());
-			sprDetail.setFileContentType(file.getContentType());
+			sprDetail.setContentType(file.getContentType());
 			sprDetail.setVisitId(visitId);
 			
 			resp = visitService.uploadSprFile(getRequest(sprDetail));
@@ -218,9 +218,7 @@ public class VisitsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-	
-	
-	
+		
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

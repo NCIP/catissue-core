@@ -120,7 +120,7 @@ public class Utility {
 	
 	public static long getTimezoneOffset() {
 		Calendar cal = Calendar.getInstance();
-		return -1 * (cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET));		
+		return -1 * cal.get(Calendar.ZONE_OFFSET);		
 	}
 	
 	public static void sendToClient(HttpServletResponse httpResp, String fileName, File file) {
@@ -149,7 +149,7 @@ public class Utility {
 			in = new FileInputStream(file);
 			MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
 			String contentType = mimeTypesMap.getContentType(file);
-			return getFileText(in, contentType);
+			return getString(in, contentType);
 		} catch (Exception e) {
 			throw new RuntimeException("Error getting file text", e);
 		} finally {
@@ -157,7 +157,7 @@ public class Utility {
 		}
 	}
 	
-	public static String getFileText(InputStream in, String contentType) {
+	public static String getString(InputStream in, String contentType) {
 		String fileText = null;
 		try {
 			if (StringUtils.isBlank(contentType) || !contentType.equals("application/pdf")) {

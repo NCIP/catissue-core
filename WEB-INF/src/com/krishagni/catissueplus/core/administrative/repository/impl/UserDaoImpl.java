@@ -35,7 +35,12 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(User.class, "u")
 				.add(Restrictions.ne("u.activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus()))
-				.setProjection(Projections.countDistinct("u.id"))
+				.add( // not system user
+					Restrictions.not(Restrictions.conjunction()
+						.add(Restrictions.eq("u.loginName", User.SYS_USER))
+						.add(Restrictions.eq("u.authDomain.name", User.DEFAULT_AUTH_DOMAIN))
+					)
+				)
 				.setFirstResult(listCrit.startAt())
 				.setMaxResults(listCrit.maxResults())
 				.addOrder(Order.asc("u.lastName"))
@@ -43,16 +48,27 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		
 		addSearchConditions(criteria, listCrit);
 		addProjectionFields(criteria);
-		
 		return getUsers(criteria.list());
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<User> getUsersByIds(List<Long> userIds) {
-		return sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_USERS_BY_IDS)
-				.setParameterList("userIds", userIds)
-				.list();
+		return getUsersByIdsAndInstitute(userIds, null);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<User> getUsersByIdsAndInstitute(List<Long> userIds, Long instituteId) {
+		Criteria criteria = sessionFactory.getCurrentSession()
+				.createCriteria(User.class, "u")
+				.add(Restrictions.ne("u.activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus()))
+				.add(Restrictions.in("u.id", userIds));
+		
+		if (instituteId != null) {
+			criteria.createAlias("u.department", "dept")
+				.createAlias("dept.institute", "inst")
+				.add(Restrictions.eq("inst.id", instituteId));
+		}
+		
+		return criteria.list();
 	}
 	
 	public User getUser(String loginName, String domainName) {
@@ -63,7 +79,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	
 	@Override
 	public User getSystemUser() {
-		return getUser(User.SYS_USER, "openspecimen");
+		return getUser(User.SYS_USER, User.DEFAULT_AUTH_DOMAIN);
 	}
 	
 	public User getUserByEmailAddress(String emailAddress) {
@@ -248,8 +264,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	
 	private static final String FQN = User.class.getName();
 
-	private static final String GET_USERS_BY_IDS = FQN + ".getUsersByIds";
-	
 	private static final String GET_DEPENDENT_ENTITIES = FQN + ".getDependentEntities"; 
 	
 	private static final String TOKEN_FQN = ForgotPasswordToken.class.getName();

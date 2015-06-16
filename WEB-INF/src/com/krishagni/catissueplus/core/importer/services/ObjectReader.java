@@ -103,10 +103,6 @@ public class ObjectReader implements Closeable {
 		
 		for (Record subRec : record.getSubRecords()) {
 			Object subObjProps = parseSubObjects(subRec, prefix);
-			if (isEmpty(subObjProps)) {
-				continue;
-			}
-			
 			props.put(subRec.getAttribute(), subObjProps);
 		}
 		
@@ -158,7 +154,7 @@ public class ObjectReader implements Closeable {
 			List<Map<String, Object>> subObjects = new ArrayList<Map<String, Object>>();
 			for (int idx = 1; true; ++idx) {
 				Map<String, Object> subObject = parseObject(record, newPrefix + idx + "#");
-				if (subObject.isEmpty()) {
+				if (isEmptyObj(subObject)) {
 					break;
 				}
 				
@@ -201,6 +197,22 @@ public class ObjectReader implements Closeable {
 		}
 		
 		return false;
+	}
+	
+	private boolean isEmptyObj(Map<String, Object> obj) {
+		if (obj == null || obj.isEmpty()) {
+			return true;
+		}
+		
+		boolean isEmpty = true;
+		for (Map.Entry<String, Object> objProp : obj.entrySet()) {
+			if (objProp.getValue() != null) {
+				isEmpty = false;
+				break;
+			}
+		}
+		
+		return isEmpty;
 	}
 	
 	private static List<String> getSchemaFields(Record record, String prefix) {

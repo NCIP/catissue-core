@@ -23,7 +23,7 @@
 
         <div>
           <button class="btn btn-primary" 
-            os-form-submit="collectPrimarySpecimens()" mousedown-click os-tabable="true">
+            os-form-submit="collectPrimarySpecimens()" mousedown-click="true" os-tabable="true">
             <span translate="common.buttons.submit">Submit</span>
           </button>
         </div>
@@ -46,7 +46,7 @@
   <div class="form-group os-compact-fg">
     <div class="col-xs-6">
       <div os-md-input ng-model="participant.collDetail.collector" placeholder="Collected By">
-        <os-users name="collector" ng-model="participant.collDetail.collector" 
+        <os-users name="collector" ng-model="participant.collDetail.collector" default-list="users"
           placeholder="Collected By" required append-to-body="false" os-tabable="true"> 
         </os-users>
         <div os-field-error field="psform.collector"></div>
@@ -70,7 +70,7 @@
   <div class="form-group os-compact-fg">
     <div class="col-xs-6">
       <div os-md-input ng-model="participant.recvDetail.receiver" placeholder="Received By">
-        <os-users name="receiver" ng-model="participant.recvDetail.receiver" 
+        <os-users name="receiver" ng-model="participant.recvDetail.receiver" default-list="users"
           placeholder="Received By" required append-to-body="false" os-tabable="true"> 
         </os-users>
         <div os-field-error field="psform.receiver"></div>

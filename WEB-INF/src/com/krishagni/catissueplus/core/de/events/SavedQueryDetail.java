@@ -87,7 +87,6 @@ public class SavedQueryDetail extends SavedQuerySummary {
 		detail.setCreatedBy(UserSummary.from(savedQuery.getCreatedBy()));
 		detail.setLastModifiedBy(UserSummary.from(savedQuery.getLastUpdatedBy()));
 		detail.setLastModifiedOn(savedQuery.getLastUpdated());
-		detail.setLastRunCount(savedQuery.getLastRunCount());
 		detail.setFilters(savedQuery.getFilters());
 		detail.setQueryExpression(savedQuery.getQueryExpression());
 		detail.setSelectList(savedQuery.getSelectList());

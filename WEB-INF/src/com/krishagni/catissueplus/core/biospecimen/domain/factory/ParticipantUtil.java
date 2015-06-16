@@ -11,13 +11,26 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class ParticipantUtil {
-	public static boolean ensureUniqueSsn(DaoFactory daoFactory, String ssn, OpenSpecimenException ose) {
-		if (StringUtils.isBlank(ssn)) {
+	public static boolean ensureUniqueUid(DaoFactory daoFactory, String uid, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(uid)) {
 			return true;
 		}
 		
-		if (!daoFactory.getParticipantDao().isSsnUnique(ssn)) {
-			ose.addError(ParticipantErrorCode.DUP_SSN);
+		if (!daoFactory.getParticipantDao().isUidUnique(uid)) {
+			ose.addError(ParticipantErrorCode.DUP_UID, uid);
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean ensureUniqueEmpi(DaoFactory daoFactory, String empi, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(empi)) {
+			return true;
+		}
+		
+		if (daoFactory.getParticipantDao().getByEmpi(empi) != null) {
+			ose.addError(ParticipantErrorCode.DUP_EMPI, empi);
 			return false;
 		}
 		

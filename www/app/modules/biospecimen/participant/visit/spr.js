@@ -4,21 +4,19 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
     function init() {
       $scope.sprUploader = {};
       $scope.sprUrl = $sce.trustAsResourceUrl(visit.getSprFileUrl());
-      $scope.sprName = visit.sprName;
+      $scope.spr = {name: visit.sprName, lock: visit.sprLock};
       $scope.uploadMode = false;
-      $scope.spr = {lock: visit.sprLock};
-
 
       loadSpr();
     }
 
     function loadSpr() {
-      if (!$scope.sprName) {
+      if (!$scope.spr.name) {
         return;
       }
       visit.getSprText().then(
-        function(result) {
-          $scope.spr.sprText = result.data;
+        function(sprText) {
+          $scope.spr.text = sprText;
         }
       );
     }
@@ -36,7 +34,7 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
         function(fileName) {
           Alerts.success("visits.spr_uploaded", {file:fileName});
           $scope.uploadMode = false;
-          $scope.sprName = fileName;
+          $scope.spr.name = fileName;
           loadSpr();
         }
       )
@@ -49,7 +47,7 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
 
     $scope.confirmDeleteSpr = function() {
       DeleteUtil.confirmDelete({
-        entity: {sprName: $scope.sprName},
+        entity: {sprName: $scope.spr.sprName},
         templateUrl: 'modules/biospecimen/participant/visit/confirm-delete-spr-file.html',
         delete: deleteSpr
       });
@@ -57,9 +55,9 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
 
     function deleteSpr() {
       visit.deleteSprFile().then(
-        function(result) {
-          if (result.data) {
-            $scope.sprName = undefined;
+        function(isDeleted) {
+          if (isDeleted) {
+            $scope.spr = {};
           }
         }
       );
@@ -67,7 +65,8 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
 
     $scope.lockSpr = function(lock) {
       visit.lockSpr(lock).then(function(result) {
-        if (result) {
+        $scope.spr.lock = lock;
+        if (lock) {
           Alerts.success("visits.spr_locked");
         } else {
           Alerts.success("visits.spr_unlocked");

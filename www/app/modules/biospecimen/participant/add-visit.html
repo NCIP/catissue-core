@@ -1,11 +1,20 @@
 <div ng-controller="AddVisitCtrl" os-auto-scroll>
   <form name="visitForm" os-form-validator="visitForm" novalidate>
     <div class="clearfix">
+      <div class="col-xs-4" ng-if="cp.manualVisitNameEnabled">
+        <div class="form-group">
+          <input name="visitName" ng-model="visit.name" os-md-input
+            class="form-control" type="text" required placeholder="Visit Name">
+          <div os-field-error field="visitForm.visitName"></div>
+        </div>
+      </div>
+
       <div class="col-xs-4">
         <div class="form-group">
           <div ng-model="visit.visitDate" placeholder="Visit Date" os-md-input>
             <input name="visitDate" ng-model="visit.visitDate" class="form-control" type="text"
-               datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="regDt.isOpen" ng-focus="regDt.isOpen=true"
+               datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
+               is-open="regDt.isOpen" ng-focus="regDt.isOpen=true"
                required placeholder="Visit Date">
           </div>
           <div os-field-error field="visitForm.visitDate"></div>
@@ -17,14 +26,7 @@
           <os-select name="site" ng-model="visit.site" list="sites"
             os-md-input placeholder="Visit Site" required>
           </os-select>
-          <div os-field-error field="visitForm.visitSite"></div>
-        </div>
-      </div>
-
-      <div class="col-xs-4">
-        <div class="form-group">
-          <input name="surgicalPathologyNo" ng-model="visit.surgicalPathologyNumber" 
-            os-md-input class="form-control" type="text" placeholder="Surgical Pathology Number">
+          <div os-field-error field="visitForm.site"></div>
         </div>
       </div>
     </div>
@@ -48,6 +50,14 @@
           <div os-field-error field="visitForm.clinicalStatus"></div>
         </div>
       </div>
+
+      <div class="col-xs-4">
+        <div class="form-group">
+          <input name="surgicalPathologyNo" ng-model="visit.surgicalPathologyNumber" 
+            os-md-input class="form-control" type="text" placeholder="Surgical Pathology Number">
+        </div>
+      </div>
+
     </div>
 
     <div class="clearfix">

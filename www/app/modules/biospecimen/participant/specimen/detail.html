@@ -8,16 +8,12 @@
       </li>
       <li>
         <a ui-sref="participant-detail.overview({cprId: cpr.id})">
-          <ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)">
-            <span ng-switch-when="true"> {{cpr.participant.firstName}} {{cpr.participant.lastName}} </span>
-            <span ng-switch-when="false" translate="common.na"> N/A </span>
-          </ng-switch>
-          <span>({{cpr.ppid}})</span>
+          <span>{{cpr.ppid}}</span>
         </a>
       </li>
       <li>
         <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
-          T{{visit.eventPoint}}: {{visit.eventLabel}}
+          <span>T{{visit.eventPoint}}: {{visit.eventLabel}}</span>
         </a>
       </li>
     </ul>
@@ -27,9 +23,10 @@
       <span ng-switch-default>{{specimen.type}} ({{specimen.specimenClass}})</span>
     </h3>
 
-    <div class="os-btns right" ng-if="specimen.activityStatus == 'Active'">
+    <div class="os-btns right">
       <button show-if-allowed="specimenResource.updateOpts" class="primary" ui-sref="specimen-addedit"
-        ng-switch on="specimen.status == 'Collected'" ng-if="!!visit.id">
+        ng-if="!!visit.id && (!specimen.activityStatus || specimen.activityStatus == 'Active')"
+        ng-switch on="specimen.status == 'Collected'"> 
         <span ng-switch-when="true">
           <span class="fa fa-pencil"></span>
           <span translate="common.buttons.edit">Edit</span>
@@ -39,11 +36,15 @@
           <span translate="specimens.buttons.collect">Collect</span>
         </span>
       </button>
-    </div>
-    <div class="os-btns right" ng-if="specimen.activityStatus == 'Closed'">
-      <button show-if-allowed="specimenResource.updateOpts" class="primary" ng-click="reopen()">
+      <button show-if-allowed="specimenResource.updateOpts" class="primary" ng-click="reopen()"
+        ng-if="specimen.activityStatus == 'Closed'">
         <span class="fa fa-check"></span>
         <span translate="specimens.buttons.reopen">Reopen</span>
+      </button>
+      <button show-if-allowed="specimenResource.deleteOpts" class="default" 
+        ng-if="!!specimen.id" ng-click="deleteSpecimen()">
+        <span class="fa fa-trash"></span>
+        <span translate="common.buttons.delete">Delete</span>
       </button>
     </div>
   </div>

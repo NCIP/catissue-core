@@ -447,8 +447,12 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	private void ensureUniqueLoginNameInDomain(String loginName, String domainName,
-			OpenSpecimenException ose) {
+	private void ensureUniqueLoginNameInDomain(String loginName, String domainName, OpenSpecimenException ose) {
+		if (User.SYS_USER.equals(loginName.trim()) && User.DEFAULT_AUTH_DOMAIN.equals(domainName.trim())) {
+			ose.addError(UserErrorCode.SYS_LOGIN_NAME, loginName);
+			return;
+		}
+		
 		if (!daoFactory.getUserDao().isUniqueLoginName(loginName, domainName)) {
 			ose.addError(UserErrorCode.DUP_LOGIN_NAME);
 		}

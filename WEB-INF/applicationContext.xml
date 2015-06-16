@@ -127,11 +127,13 @@
     <property name="visitFactory" ref="visitFactory"/>
     <property name="specimenSvc" ref="specimenSvc"/>
     <property name="cfgSvc" ref="cfgSvc"/>
+    <property name="visitNameGenerator" ref="visitNameGenerator"/>
   </bean>
 
   <bean id="cpFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolFactoryImpl">
     <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>  
+    <property name="visitNameGenerator" ref="visitNameGenerator"/>
   </bean>
 
   <bean id="cpeFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CpeFactoryImpl">
@@ -211,6 +213,7 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="specimenFactory" ref="specimenFactory"/>
     <property name="cfgSvc" ref="cfgSvc"/>
+    <property name="labelGenerator" ref="specimenLabelGenerator"/>
   </bean>
 
   <bean id="specQtyUnitsSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenQuantityUnitServiceImpl">

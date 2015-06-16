@@ -55,7 +55,7 @@ public class Visit {
 	
 	private String sprName;
 	
-	private Boolean sprLock;
+	private boolean sprLocked;
 
 	private CollectionProtocolEvent cpEvent;
 
@@ -179,16 +179,12 @@ public class Visit {
 		this.sprName = sprName;
 	}
 	
-	public boolean isSprLocked() {
-		return sprLock != null ? sprLock : false;
+	public boolean getSprLocked() {
+		return sprLocked;
 	}
 
-	public Boolean getSprLock() {
-		return sprLock;
-	}
-
-	public void setSprLock(Boolean sprLock) {
-		this.sprLock = sprLock;
+	public void setSprLocked(boolean sprLocked) {
+		this.sprLocked = sprLocked;
 	}
 
 	public CollectionProtocolEvent getCpEvent() {
@@ -288,8 +284,7 @@ public class Visit {
 		setRegistration(visit.getRegistration());
 		setSite(visit.getSite());
 		setStatus(visit.getStatus());
-		setComments(visit.getComments());
-		setName(visit.getName());		
+		setComments(visit.getComments());		
 		setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 		setVisitDate(visit.getVisitDate());
 	}
@@ -311,7 +306,11 @@ public class Visit {
 			return;
 		}
 		
-		setName(labelGenerator.generateLabel(defNameTmpl, this));
+		String visitNameFmt = getCollectionProtocol().getVisitNameFormat();
+		if (StringUtils.isBlank(visitNameFmt)) {
+			visitNameFmt = defNameTmpl;
+		}
+		setName(labelGenerator.generateLabel(visitNameFmt, this));
 	}
 	
 	private void ensureNoActiveChildObjects() {

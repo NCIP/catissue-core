@@ -853,16 +853,71 @@
   <changeSet author="vgaikwad" id="1429178687139-91">  
     <dropColumn columnName="identifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
   </changeSet>
-  
+
+  <changeSet author="vpawar" id="Rename SSN mod column to UID mod">
+    <renameColumn tableName="CATISSUE_PARTICIPANT_AUD" 
+      oldColumnName="SOCIALSECURITYNUMBER_MOD" 
+      newColumnName="UID_MOD" 
+      columnDataType="NUMBER(1, 0)"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add visit name format column to CP">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="VISIT_NAME_FORMAT" type="VARCHAR2(255 CHAR)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Visit name format modified">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="visitNameFormat_MOD" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Flag to specify whether manual input of PPID is allowed">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="MANUAL_PPID_ALLOWED" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Manual input of ppid enabled modified">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="manualPpidEnabled_MOD" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Flag to specify whether manual input of visit name is allowed">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="MANUAL_VISIT_NAME_ALLOWED" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Manual input of visit name enabled modified">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="manualVisitNameEnabled_MOD" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Flag to specify whether manual input of specimen labels is allowed">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="MANUAL_SPEC_LABEL_ALLOWED" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Manual input of specimen label enabled modified">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="manualSpecLabelEnabled_MOD" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
+
   <changeSet author="vgaikwad" id="Added a new column in visits audit table to store SPR lock status">
     <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
-      <column name="SPR_LOCK" type="NUMBER(1, 0)"/>
+      <column name="SPR_LOCKED" type="NUMBER(1, 0)"/>
     </addColumn>
   </changeSet>
   
   <changeSet author="vgaikwad" id="Added a column in visits audit table to store modification status of SPR lock">
     <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
-      <column name="sprLock_MOD" type="NUMBER(1, 0)"/>
+      <column name="sprLocked_MOD" type="NUMBER(1, 0)"/>
     </addColumn>
   </changeSet>
   

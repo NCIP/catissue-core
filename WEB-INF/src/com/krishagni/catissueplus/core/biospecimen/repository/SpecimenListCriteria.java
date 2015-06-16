@@ -11,6 +11,8 @@ public class SpecimenListCriteria extends AbstractListCriteria<SpecimenListCrite
 	
 	private List<String> labels;
 	
+	private Long specimenListId;
+	
 	@Override
 	public SpecimenListCriteria self() {		
 		return this;
@@ -33,4 +35,14 @@ public class SpecimenListCriteria extends AbstractListCriteria<SpecimenListCrite
 		this.labels = labels;
 		return self();
 	}
+
+	public Long specimenListId() {
+		return specimenListId;
+	}
+
+	public SpecimenListCriteria specimenListId(Long specimenListId) {
+		this.specimenListId = specimenListId;
+		return self();
+	}
+	
 }
