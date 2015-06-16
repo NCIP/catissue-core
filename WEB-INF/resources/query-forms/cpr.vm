@@ -1,3 +1,7 @@
+#macro( getMessage $code )
+  $messageSource.getMessage($code, null, $locale)  
+#end
+
 <form>
 	<view>
 		<name>Participant</name>
@@ -17,7 +21,7 @@
 			<textField>
 				<name>firstName</name>
 				<udn>firstName</udn>
-				<caption>@@participant_first_name@@</caption>
+				<caption>#getMessage("participant_first_name")</caption>
 				<column>FIRST_NAME</column>
 				<maxLength>50</maxLength>
 				<phi>true</phi>
@@ -26,7 +30,7 @@
 			<textField>
 				<name>middleName</name>
 				<udn>middleName</udn>
-				<caption>@@participant_middle_name@@</caption>
+				<caption>#getMessage("participant_middle_name")</caption>
 				<column>MIDDLE_NAME</column>
 				<maxLength>50</maxLength>
 				<phi>true</phi>
@@ -35,7 +39,7 @@
 			<textField>
 				<name>lastName</name>
 				<udn>lastName</udn>
-				<caption>@@participant_last_name@@</caption>
+				<caption>#getMessage("participant_last_name")</caption>
 				<column>LAST_NAME</column>
 				<phi>true</phi>
 			</textField>
@@ -44,7 +48,7 @@
 			<datePicker>
 				<name>dateOfBirth</name>
 				<udn>dateOfBirth</udn>
-				<caption>@@participant_dob@@</caption>
+				<caption>#getMessage("participant_dob")</caption>
 				<column>DOB</column>
 				<format>MM-dd-yyyy</format>
 				<phi>true</phi>
@@ -54,7 +58,7 @@
 			<textField>
 				<name>ssn</name>
 				<udn>ssn</udn>
-				<caption>@@participant_ssn@@</caption>
+				<caption>#getMessage("participant_ssn")</caption>
 				<column>SSN</column>
 				<phi>true</phi>
 			</textField>
@@ -63,7 +67,7 @@
 			<textField>
 				<name>vitalStatus</name>
 				<udn>vitalStatus</udn>
-				<caption>@@participant_vital_status@@</caption>
+				<caption>#getMessage("participant_vital_status")</caption>
 				<column>VITAL_STATUS</column>
 			</textField>
 		</row>
@@ -71,7 +75,7 @@
 			<dropDown>
 				<name>activityStatus</name>
 				<udn>activityStatus</udn>
-				<caption>@@participant_activity_status@@</caption>
+				<caption>#getMessage("participant_activity_status")</caption>
 				<column>ACTIVITY_STATUS</column>
 				<options>
 					<option><value>Active</value></option>
@@ -84,7 +88,7 @@
 			<radioButton>
 				<name>gender</name>
 				<udn>gender</udn>
-				<caption>@@Gender@@</caption>
+				<caption>#getMessage("participant_gender")</caption>
 				<column>GENDER</column>
 				<options>
 					<sql>select value from catissue_permissible_value where public_id = '2003989' order by value</sql>
@@ -95,7 +99,7 @@
 			<dropDown>
 				<name>genotype</name>
 				<udn>genotype</udn>
-				<caption>@@participant_genotype@@</caption>
+				<caption>#getMessage("participant_genotype")</caption>
 				<column>GENOTYPE</column>
 				<options>
 					<sql>select value from catissue_permissible_value where public_id = '2003990' order by value</sql>
@@ -106,7 +110,7 @@
 			<checkBox>
 				<name>race</name>
 				<udn>race</udn>
-				<caption>@@participant_race@@</caption>
+				<caption>#getMessage("participant_race")</caption>
 				<multiSelect>true</multiSelect>
 				<table>CATISSUE_RACE</table>
 				<column>RACE_NAME</column>
@@ -121,7 +125,7 @@
 			<textField>
 				<name>ethnicity</name>
 				<udn>ethnicity</udn>
-				<caption>@@participant_ethnicity@@</caption>
+				<caption>#getMessage("participant_ethnicity")</caption>
 				<column>ETHNICITY</column>
 			</textField>
 		</row>
@@ -129,7 +133,7 @@
 			<textField>
 				<name>barcode</name>
 				<udn>barcode</udn>
-				<caption>@@participant_barcode@@</caption>
+				<caption>#getMessage("participant_barcode")</caption>
 				<column>BARCODE</column>
 			</textField>
 		</row>
@@ -137,18 +141,17 @@
 			<datePicker>
 				<name>regDate</name>
 				<udn>regDate</udn>
-				<caption>@@participant_registration_date@@</caption>
+				<caption>#getMessage("participant_registration_date")</caption>
 				<column>REGISTRATION_DATE</column>
 				<format>MM-dd-yyyy</format>
 				<phi>true</phi>
 			</datePicker>
-
 		</row>
 		<row>
 			<datePicker>
 				<name>deathDate</name>
 				<udn>deathDate</udn>
-				<caption>@@participant_death_date@@</caption>
+				<caption>#getMessage("participant_death_date")</caption>
 				<column>DEATH_DATE</column>
 				<format>MM-dd-yyyy</format>
 				<phi>true</phi>
@@ -158,7 +161,7 @@
 			<textField>
 				<name>ppid</name>
 				<udn>ppid</udn>
-				<caption>@@participant_ppid@@</caption>
+				<caption>#getMessage("participant_ppid")</caption>
 				<column>PPID</column>
 			</textField>
 		</row>

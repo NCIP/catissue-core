@@ -1,35 +1,23 @@
 package com.krishagni.catissueplus.core.init;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.Locale;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import java.util.HashMap;
 
 import krishagni.catissueplus.beans.FormContextBean;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.MessageSource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.common.service.TemplateService;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 
@@ -43,7 +31,7 @@ public abstract class ImportForms implements InitializingBean {
 	
 	private DaoFactory daoFactory;
 	
-	private MessageSource messageSource;
+	private TemplateService templateService;
 	
 	//
 	// This is to ensure DE is initialized before importing forms 
@@ -69,9 +57,9 @@ public abstract class ImportForms implements InitializingBean {
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
-
-	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
+	
+	public void setTemplateService(TemplateService templateService) {
+		this.templateService = templateService;
 	}
 
 	public void setDeInitializer(DeInitializer deInitializer) {
@@ -164,33 +152,13 @@ public abstract class ImportForms implements InitializingBean {
 	private void insertFormContext(String formFile, Long formId) {
 		daoFactory.getFormDao().saveOrUpdate(getFormContext(formFile, formId));
 	}
-	
-	private InputStream preProcessDefForms(String formFile) throws Exception{
-		InputStream in = Utility.getResourceInputStream(formFile);
-		try {
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(in);
-			
-			Locale locale = Locale.getDefault();
-			NodeList captionList = doc.getElementsByTagName("caption");
-			for (int i = 0 ; i < captionList.getLength(); i++) {
-				Node node = captionList.item(i);
-				String val = node.getFirstChild().getNodeValue().trim();
-				if (val.startsWith("@@") && val.endsWith("@@")) {
-					String captionVal = messageSource.getMessage(val.replace("@", ""), null, locale);
-					node.getFirstChild().setNodeValue(captionVal);
-					System.out.println("Caption " + val + " is replaced by " + captionVal);
-				}
-			}
-			
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			Source xmlSource = new DOMSource(doc);
-			Result outputTarget = new StreamResult(outputStream);
-			TransformerFactory.newInstance().newTransformer().transform(xmlSource, outputTarget);
-			return new ByteArrayInputStream(outputStream.toByteArray());
-		} finally {
-			IOUtils.closeQuietly(in); 
+		
+	private InputStream preProcessDefForms(String formFile) {
+		if (!formFile.endsWith(".vm")) {
+			return Utility.getResourceInputStream(formFile);
 		}
+		
+		String template = templateService.render(formFile, new HashMap<String, Object>());
+		return new ByteArrayInputStream( template.getBytes() );
 	}
 }

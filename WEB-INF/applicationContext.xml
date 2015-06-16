@@ -459,7 +459,7 @@
     <property name="userDao" ref="userDao"/>
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="deInitializer" ref="deInitializer"/>
-    <property name="messageSource" ref="messageSource"/>
+    <property name="templateService" ref="templateService"/>
   </bean>
 
   <bean id="importSpeForms" class="com.krishagni.catissueplus.core.init.ImportSpecimenEventForms">
@@ -467,7 +467,7 @@
     <property name="userDao" ref="userDao"/>
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="deInitializer" ref="deInitializer"/>
-    <property name="messageSource" ref="messageSource"/>
+    <property name="templateService" ref="templateService"/>
   </bean>
 
   <!-- Move these to importer-beans.xml -->
