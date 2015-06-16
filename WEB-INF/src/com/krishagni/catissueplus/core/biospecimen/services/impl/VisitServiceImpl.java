@@ -194,6 +194,10 @@ public class VisitServiceImpl implements VisitService {
 			SprDetail detail = req.getPayload();
 			Visit visit = getVisit(detail.getVisitId(), null);
 			
+			if (visit.isSprLocked()) {
+				return ResponseEvent.userError(VisitErrorCode.LOCKED_SPR);
+			}
+			
 			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSprRights(visit);
 			
 			String sprText = Utility.getFileText(detail.getInputStream(), detail.getFileContentType());
@@ -224,11 +228,11 @@ public class VisitServiceImpl implements VisitService {
 		try {
 			SprDetail detail = req.getPayload();
 			Visit visit = getVisit(detail.getVisitId(), null);
-			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSprRights(visit);
 			
 			if (visit.isSprLocked()) {
-				return ResponseEvent.serverError(VisitErrorCode.LOCKED_SPR);
+				return ResponseEvent.userError(VisitErrorCode.LOCKED_SPR);
 			}
+			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSprRights(visit);
 			
 			File file = getSprFile(detail.getVisitId());
 			if (!file.exists()) {

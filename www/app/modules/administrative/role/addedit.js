@@ -55,7 +55,19 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
             return {name: operation.name, selected: selected, disabled: disabled};
           }
         );
+
         acl.operations = operations;
+
+        if (acl.resourceName == 'SurgicalPathologyReport') {
+          // For Lock and Unlock
+          var extraOps = ['Lock', 'Unlock'];
+          $scope.sprExtraOps = [];
+          angular.forEach(extraOps, function(op) {
+            var selected = selectedOperations.indexOf(op) != -1;
+            $scope.sprExtraOps.push({name: op, selected: selected, disabled: false});
+          });
+        }
+
       });
     }
 
@@ -71,6 +83,7 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
     };
   
     $scope.save = function() {
+      addSprExtraOps();
       var role = angular.copy($scope.role);
       role.$saveOrUpdate().then(
         function(savedRole) {
@@ -78,6 +91,37 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
         }
       );
     };
+
+    $scope.addSprExtraOps = function(resource) {
+      if (resource == 'SurgicalPathologyReport') {
+        var sprExtraOps = ['Lock', 'Unlock'];
+        $scope.sprExtraOps = [];
+        angular.forEach(sprExtraOps, function(op) {
+          $scope.sprExtraOps.push({name: op, selected: false, disabled: false});
+        });
+      }
+    }
+
+    function addSprExtraOps() {
+      angular.forEach($scope.role.acl, function(acl) {
+        if (acl.resourceName == 'SurgicalPathologyReport') {
+          angular.forEach($scope.sprExtraOps, function(operation) {
+            acl.operations.push(operation);
+          });
+        }
+      });
+    }
+
+    $scope.sprExist = function() {
+      var sprExist = false;
+      angular.forEach($scope.role.acl, function(acl) {
+        if (acl.resourceName == 'SurgicalPathologyReport') {
+          sprExist = true;
+        }
+      });
+
+      return sprExist;
+    }
 
     $scope.setOperations = function(operation, operations) {
       if (operation.name != 'Create') {

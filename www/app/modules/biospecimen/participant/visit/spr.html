@@ -8,7 +8,7 @@
             <a ng-href="{{sprUrl}}" target="_blank" ng-switch-when="true">{{sprName}}</a>
             <span ng-switch-when="false" translate="common.not_specified">Not Specified</span>
           </div>
-          <div show-if-allowed="specimenResource.updateOpts" class="col-xs-2" ng-switch on="!!sprName">
+          <div show-if-allowed="sprResource.updateOpts" class="col-xs-2" ng-switch on="!!sprName">
             <div class="btn btn-default btn-xs" ng-switch-when="false" ng-click="showUploadMode()">
               <span class="fa fa-wrench"></span>
             </div>
@@ -46,6 +46,17 @@
 
   <div class="col-xs-8">
     <h3 class="os-sub-section-title" translate="visits.spr">Surgical Pathology Report</h3>
+    <div class="os-btns">
+
+      <button show-if-allowed="sprResource.lockOpts" class="default" ng-if="!spr.lock" ng-click="lockSpr(true)">
+        <span class="fa fa-lock"></span>
+        <span translate="visits.spr_lock">Lock</span>
+      </button>
+      <button show-if-allowed="sprResource.unlockOpts" class="default" ng-if="spr.lock" ng-click="lockSpr(false)">
+        <span class="fa fa-unlock"></span>
+        <span translate="visits.spr_unlock">Unlock</span>
+      </button>
+    </div>
     <div ng-switch on="!!sprName">
       <div class="os-inline-activated os-inline-editable-lg" ng-switch-when="true">
         <div os-inline-editors on-save="saveSpr">

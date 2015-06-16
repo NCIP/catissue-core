@@ -104,6 +104,13 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
 
     Visit.prototype.deleteSprFile = function() {
       return $http.delete(this.getSprFileUrl()).then(ApiUtil.processResp);
+    };
+
+    Visit.prototype.lockSpr =function(lock) {
+      var url = Visit.url() + this.$id() + '/spr-lock';
+      return $http.put(url, {locked: lock}).then(function(resp) {
+        return resp.data;
+      });
     }
 
     return Visit;

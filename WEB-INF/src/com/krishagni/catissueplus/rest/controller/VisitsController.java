@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.rest.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -179,10 +180,11 @@ public class VisitsController {
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/spr-lock")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public boolean lockSpr(@PathVariable("id") Long visitId, @RequestBody boolean lock) {
+	public boolean lockSpr(@PathVariable("id") Long visitId, @RequestBody Map<String, Boolean> props ) {
 		SprLockDetail detail = new SprLockDetail();
 		detail.setVisitId(visitId);
-		detail.setLock(lock);
+		detail.setLock(props.get("locked").booleanValue());
+		
 		ResponseEvent<Boolean> resp = visitService.lockSpr(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
 		
