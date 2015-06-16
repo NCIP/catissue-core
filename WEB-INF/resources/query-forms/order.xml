@@ -1,14 +1,18 @@
+#macro( getMessage $code )
+  $messageSource.getMessage($code, null, $locale)
+#end
+
 <form>
   <view>
     <name>Order</name>
-    <caption>Order</caption>
+    <caption>#getMessage("order")</caption>
     <table>OS_ORDERS</table>
 
     <row>
       <numberField>
         <name>id</name>
         <udn>id</udn>
-        <caption>Identifier</caption>
+        <caption>#getMessage("order_identifier")</caption>
         <column>IDENTIFIER</column>
       </numberField>
     </row>
@@ -17,7 +21,7 @@
       <textField>
         <name>orderName</name>
         <udn>orderName</udn>
-        <caption>Name</caption>
+        <caption>#getMessage("order_name")</caption>
         <column>NAME</column>
       </textField>
     </row>
@@ -26,7 +30,7 @@
       <subForm>
         <name>distributionProtocol</name>
         <udn>distributionProtocol</udn>
-        <caption>Distribution Protocol</caption>
+        <caption>#getMessage("order_dp")</caption>
         <table>CATISSUE_DISTRIBUTION_PROTOCOL</table>
         <foreignKey>IDENTIFIER</foreignKey>
         <parentKey>DISTRIBUTION_PROTOCOL_ID</parentKey>
@@ -35,16 +39,16 @@
           <textField>
             <name>distributionProtocolTitle</name>
             <udn>distributionProtocolTitle</udn>
-            <caption>Distribution Protocol Title</caption>
+            <caption>#getMessage("order_dp_title")</caption>
             <column>TITLE</column>
           </textField>
         </row>
 
-        <row>
+        <row>	
           <subForm>
             <name>principalInvestigator</name>
             <udn>principalInvestigator</udn>
-            <caption>Principal Investigator</caption>
+            <caption>#getMessage("order_dp_pi")</caption>
             <table>USER_VIEW</table>
             <foreignKey>IDENTIFIER</foreignKey>
             <parentKey>PRINCIPAL_INVESTIGATOR_ID</parentKey>
@@ -52,21 +56,21 @@
               <textField>
                 <name>firstName</name>
                 <udn>firstName</udn>
-                <caption>Principal Investigator First Name</caption>
+                <caption>#getMessage("order_dp_pi_first_name")</caption>
                 <column>FIRST_NAME</column>
               </textField>
           
               <textField>
                 <name>lastName</name>
                 <udn>lastName</udn>
-                <caption>Principal Investigator Last Name</caption>
+                <caption>#getMessage("order_dp_pi_last_name")</caption>
                 <column>LAST_NAME</column>
               </textField>
 
               <textField>
                 <name>email</name>
                 <udn>email</udn>
-                <caption>Principal Investigator Email Address</caption>
+                <caption>#getMessage("order_dp_pi_email")</caption>
                 <column>EMAIL_ADDRESS</column>
               </textField>
             </row>
@@ -79,7 +83,7 @@
       <subForm>
         <name>distributionSite</name>
         <udn>distributionSite</udn>
-        <caption>Receiving Site</caption>
+        <caption>#getMessage("order_site")</caption>
         <table>CATISSUE_SITE</table>
         <foreignKey>IDENTIFIER</foreignKey>
         <parentKey>SITE_ID</parentKey>
@@ -87,7 +91,7 @@
           <dropDown>
             <name>distributionSiteName</name>
             <udn>distributionSiteName</udn>
-            <caption>Receiving Site Name</caption>
+            <caption>#getMessage("order_site_name")</caption>
             <column>NAME</column>
             <options>
               <sql>select distinct name from CATISSUE_SITE</sql>
@@ -101,7 +105,7 @@
       <textField>
         <name>comments</name>
         <udn>comments</udn>
-        <caption>Comments</caption>
+        <caption>#getMessage("order_comments")</caption>
         <column>COMMENTS</column>
       </textField>
     </row>
@@ -110,7 +114,7 @@
       <subForm>
         <name>requester</name>
         <udn>requester</udn>
-        <caption>Requester</caption>
+        <caption>#getMessage("order_requester")</caption>
         <table>USER_VIEW</table>
         <foreignKey>IDENTIFIER</foreignKey>
         <parentKey>REQUESTER_ID</parentKey>
@@ -118,14 +122,14 @@
           <textField>
             <name>requesterFirstName</name>
             <udn>requesterFirstName</udn>
-            <caption>Requester First Name</caption>
+            <caption>#getMessage("order_requester_first_name")</caption>
             <column>FIRST_NAME</column>
           </textField>
           
           <textField>
             <name>requesterLastName</name>
             <udn>requesterLastName</udn>
-            <caption>Requester Last Name</caption>
+            <caption>#getMessage("order_requester_last_name")</caption>
             <column>LAST_NAME</column>
           </textField>
         </row>
@@ -136,7 +140,7 @@
       <datePicker>
         <name>requestedDate</name>
         <udn>requestedDate</udn>
-        <caption>Execution Date</caption>
+        <caption>#getMessage("order_execution_date")</caption>
         <column>EXECUTION_DATE</column>
         <format>MM-dd-yyyy</format>
       </datePicker>
@@ -146,7 +150,7 @@
       <dropDown>
         <name>orderStatus</name>
         <udn>orderStatus</udn>
-        <caption>Order Status</caption>
+        <caption>#getMessage("order_status")</caption>
         <column>STATUS</column>
         <options>
           <option><value>EXECUTED</value></option>

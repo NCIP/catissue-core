@@ -1,14 +1,18 @@
+#macro( getMessage $code )
+  $messageSource.getMessage($code, null, $locale)
+#end
+
 <form>
   <view>
     <name>SpecimenCollectionGroup</name>
-    <caption>Visit</caption>
+    <caption>#getMessage("scg")</caption>
     <table>CATISSUE_SPECIMEN_COLL_GROUP</table>
     <activeCondition>ACTIVITY_STATUS != 'Disabled'</activeCondition>
     <row>
       <numberField>
         <name>id</name>
         <udn>id</udn>
-        <caption>Identifier</caption>
+        <caption>#getMessage("scg_identifier")</caption>
         <column>IDENTIFIER</column>
       </numberField>
     </row>
@@ -16,7 +20,7 @@
       <textField>
         <name>name</name>
         <udn>name</udn>
-        <caption>Name</caption>
+        <caption>#getMessage("scg_name")</caption>
         <column>NAME</column>
       </textField>
     </row>
@@ -24,7 +28,7 @@
       <dropDown>
         <name>activityStatus</name>
         <udn>activityStatus</udn>
-        <caption>Activity Status</caption>
+        <caption>#getMessage("scg_activity_status")</caption>
         <column>ACTIVITY_STATUS</column>
         <options>
           <option><value>Active</value></option>
@@ -37,7 +41,7 @@
       <textField>
         <name>barcode</name>
         <udn>barcode</udn>
-        <caption>Barcode</caption>
+        <caption>#getMessage("scg_barcode")</caption>
         <column>BARCODE</column>
       </textField>
     </row>
@@ -45,7 +49,7 @@
       <subForm>
         <name>site</name>
         <udn>site</udn>
-        <caption>Visit Site</caption>
+        <caption>#getMessage("scg_site")</caption>
         <table>CATISSUE_SITE</table>
         <foreignKey>IDENTIFIER</foreignKey>
         <parentKey>SITE_ID</parentKey>
@@ -53,7 +57,7 @@
           <dropDown>
             <name>name</name>
             <udn>name</udn>
-            <caption>Visit Site Name</caption>
+            <caption>#getMessage("scg_site_name")</caption>
             <column>NAME</column>
             <options>
               <sql>select distinct name from CATISSUE_SITE</sql>
@@ -66,7 +70,7 @@
       <subForm>
         <name>collectionProtocolEvent</name>
         <udn>collectionProtocolEvent</udn>
-        <caption>Collection Protocol Event</caption>
+        <caption>#getMessage("scg_cpe")</caption>
         <table>CATISSUE_COLL_PROT_EVENT</table>
         <foreignKey>IDENTIFIER</foreignKey>
         <parentKey>COLLECTION_PROTOCOL_EVENT_ID</parentKey>
@@ -74,7 +78,7 @@
           <textField>
             <name>collectionPointLabel</name>
             <udn>collectionPointLabel</udn>
-            <caption>Collection Point Label</caption>
+            <caption>#getMessage("scg_cpe_label")</caption>
             <column>COLLECTION_POINT_LABEL</column>
           </textField>
         </row>
@@ -84,7 +88,7 @@
       <dropDown>
         <name>collectionStatus</name>
         <udn>collectionStatus</udn>
-        <caption>Visit Status</caption>
+        <caption>#getMessage("scg_status")</caption>
         <column>COLLECTION_STATUS</column>
         <options>
           <option><value>Pending</value></option>
@@ -97,7 +101,7 @@
       <dropDown>
         <name>clinicalDiagnosis</name>
         <udn>clinicalDiagnosis</udn>
-        <caption>Clinical Diagnosis</caption>
+        <caption>#getMessage("scg_clinical_diagnosis")</caption>
         <column>CLINICAL_DIAGNOSIS</column>
         <options>
           <!-- sql>select value from catissue_permissible_value where public_id = 'Clinical_Diagnosis_PID' order by sortorder, value</sql -->
@@ -109,7 +113,7 @@
       <dropDown>
         <name>clinicalStatus</name>
         <udn>clinicalStatus</udn>
-        <caption>Clinical Status</caption>
+        <caption>#getMessage("scg_clinical_status")</caption>
         <column>CLINICAL_STATUS</column>
         <options>
           <sql>select value from catissue_permissible_value where PUBLIC_ID = '2003988' order by value</sql>
@@ -120,7 +124,7 @@
       <textField>
         <name>surgicalPathologyNo</name>
         <udn>surgicalPathologyNo</udn>
-        <caption>Surgical Pathology Number</caption>
+        <caption>#getMessage("scg_surgical_pathology_number")</caption>
         <column>SURGICAL_PATHOLOGY_NUMBER</column>
         <phi>true</phi>
       </textField>
@@ -129,7 +133,7 @@
       <datePicker>
         <name>collectionDate</name>
         <udn>collectionDate</udn>
-        <caption>Visit Date</caption>
+        <caption>#getMessage("scg_date")</caption>
         <column>COLLECTION_TIMESTAMP</column>
       </datePicker>
     </row>
@@ -137,7 +141,7 @@
       <textField>
         <name>spr</name>
         <udn>spr</udn>
-        <caption>Surgical Pathology Report</caption>
+        <caption>#getMessage("scg_spr")</caption>
         <column>SPR_NAME</column>
       </textField>
     </row>
@@ -145,7 +149,7 @@
       <textField>
         <name>comments</name>
         <udn>comments</udn>
-        <caption>Comments</caption>
+        <caption>#getMessage("scg_comments")</caption>
         <column>COMMENTS</column>
       </textField>
     </row>
@@ -153,7 +157,7 @@
       <subForm>
         <name>specimens</name>
         <udn>specimens</udn>
-        <caption>Specimens</caption>
+        <caption>#getMessage("scg_specimens")</caption>
         <table>CATISSUE_SPECIMEN</table>
         <foreignKey>SPECIMEN_COLLECTION_GROUP_ID</foreignKey>
         <parentKey>IDENTIFIER</parentKey>
@@ -162,7 +166,7 @@
           <subForm>
             <name>specimenOrders</name>
             <udn>specimenOrders</udn>
-            <caption>Specimen Orders</caption>
+            <caption>#getMessage("scg_specimens_order_items")</caption>
             <table>OS_ORDER_ITEMS</table>
             <foreignKey>SPECIMEN_ID</foreignKey>
             <parentKey>IDENTIFIER</parentKey>
@@ -170,7 +174,7 @@
               <subForm>
                 <name>order</name>
                 <udn>order</udn>
-                <caption>Orders</caption>
+                <caption>#getMessage("scg_specimens_order_items_order")</caption>
                 <table>OS_ORDERS</table>
                 <foreignKey>IDENTIFIER</foreignKey>
                 <parentKey>ORDER_ID</parentKey>
@@ -184,7 +188,7 @@
       <subForm>
         <name>extensions</name>
         <udn>extensions</udn>
-        <caption>Extensions</caption>
+        <caption>#getMessage("scg_extensions")</caption>
         <table>SCG_EXTN_RECORDS_VIEW</table>
         <foreignKey>SCG_ID</foreignKey>
         <parentKey>IDENTIFIER</parentKey>

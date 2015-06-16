@@ -361,9 +361,8 @@
   <bean id="messageSource" class="com.krishagni.catissueplus.core.common.WildcardReloadableResourceBundle">
     <property name="basenames">
       <list>
-        <value>classpath:custom-messages/messages*</value>
-        <value>classpath:errors/messages*</value>
         <value>classpath*:com/krishagni/openspecimen/custom/**/messages*</value>
+        <value>classpath:errors/messages*</value>
       </list>
     </property>
   </bean>
