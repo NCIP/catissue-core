@@ -1,8 +1,10 @@
 package com.krishagni.catissueplus.core.init;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.HashMap;
 
 import krishagni.catissueplus.beans.FormContextBean;
 
@@ -15,6 +17,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.common.service.TemplateService;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 
@@ -27,6 +30,8 @@ public abstract class ImportForms implements InitializingBean {
 	private UserDao userDao;
 	
 	private DaoFactory daoFactory;
+	
+	private TemplateService templateService;
 	
 	//
 	// This is to ensure DE is initialized before importing forms 
@@ -53,6 +58,10 @@ public abstract class ImportForms implements InitializingBean {
 		this.daoFactory = daoFactory;
 	}
 	
+	public void setTemplateService(TemplateService templateService) {
+		this.templateService = templateService;
+	}
+
 	public void setDeInitializer(DeInitializer deInitializer) {
 		this.deInitializer = deInitializer;
 	}
@@ -100,14 +109,15 @@ public abstract class ImportForms implements InitializingBean {
 		
 		for (String formFile : formFiles) {
 			InputStream in = null;
-			try {				
+			try {			
+				in = preProcessDefForms(formFile);
 				String existingDigest = daoFactory.getFormDao().getFormChangeLogDigest(formFile);
-				String newDigest = Utility.getResourceDigest(formFile);
+				String newDigest = Utility.getInputStreamDigest(in);
 				if (existingDigest != null && existingDigest.equals(newDigest)) {
 					continue;
 				}
 				
-				in = Utility.getResourceInputStream(formFile);
+				in.reset();
 				Long formId = Container.createContainer(userCtx, in, false);				
 				if (existingDigest == null) {
 					insertFormContext(formFile, formId);
@@ -141,5 +151,10 @@ public abstract class ImportForms implements InitializingBean {
 	
 	private void insertFormContext(String formFile, Long formId) {
 		daoFactory.getFormDao().saveOrUpdate(getFormContext(formFile, formId));
+	}
+		
+	private InputStream preProcessDefForms(String formFile) {
+		String template = templateService.render(formFile, new HashMap<String, Object>());
+		return new ByteArrayInputStream( template.getBytes() );
 	}
 }
