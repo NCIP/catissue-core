@@ -7,6 +7,18 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
 
     var availableSites = [];
 
+    function init() {
+      $scope.cpId = $stateParams.cpId;
+      $scope.pid = undefined;
+      $scope.allowIgnoreMatches = true;
+
+      $scope.cp = cp;
+      $scope.cpr = angular.copy(cpr);
+      $scope.cpr.participant.addPmi($scope.cpr.participant.newPmi());
+      
+      loadPvs();
+    };
+
     function loadPvs() {
       var op = !!$scope.cpr.id ? 'Update' : 'Create';
 
@@ -31,23 +43,12 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       );
     }
 
-    function init() {
-      $scope.cpId = $stateParams.cpId;
-      $scope.pid = undefined;
-      $scope.allowIgnoreMatches = true;
-
-      $scope.cp = cp;
-      $scope.cpr = cpr;
-      $scope.cpr.participant.addPmi($scope.cpr.participant.newPmi());
-      
-      loadPvs();
-    };
-
     function registerParticipant() {
-      var cpr = angular.copy($scope.cpr);
-      cpr.cpId = $scope.cpId;
-      cpr.$saveOrUpdate().then(
+      var cprToSave = angular.copy($scope.cpr);
+      cprToSave.cpId = $scope.cpId;
+      cprToSave.$saveOrUpdate().then(
         function(savedCpr) {
+          angular.extend(cpr, savedCpr);
           $state.go('participant-detail.overview', {cprId: savedCpr.id});
         }
       );
