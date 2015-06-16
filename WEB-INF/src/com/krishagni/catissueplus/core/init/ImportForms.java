@@ -154,10 +154,6 @@ public abstract class ImportForms implements InitializingBean {
 	}
 		
 	private InputStream preProcessDefForms(String formFile) {
-		if (!formFile.endsWith(".vm")) {
-			return Utility.getResourceInputStream(formFile);
-		}
-		
 		String template = templateService.render(formFile, new HashMap<String, Object>());
 		return new ByteArrayInputStream( template.getBytes() );
 	}

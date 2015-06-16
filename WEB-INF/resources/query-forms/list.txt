@@ -1,5 +1,5 @@
 cp.xml
-cpr.vm
+cpr.xml
 scg.xml
 specimen.xml
 order.xml
