@@ -112,6 +112,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			listDetails.setOwner(owner);
 			
 			SpecimenList specimenList = specimenListFactory.createSpecimenList(listDetails);
+			ensureUniqueName(specimenList);
 			ensureValidSpecimensAndUsers(listDetails, specimenList, siteCpPairs);
 			daoFactory.getSpecimenListDao().saveOrUpdate(specimenList);
 			return ResponseEvent.response(SpecimenListDetails.from(specimenList));
@@ -324,6 +325,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 				specimenList = specimenListFactory.createSpecimenList(listDetails);
 			}
 			
+			ensureUniqueName(existing, specimenList);
 			ensureValidSpecimensAndUsers(listDetails, specimenList, null);
 			existing.update(specimenList);
 			
@@ -414,6 +416,21 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 		List<User> users = daoFactory.getUserDao().getUsersByIdsAndInstitute(userIds, instituteId);
 		if (userIds.size() != users.size()) {
 			throw OpenSpecimenException.userError(SpecimenListErrorCode.INVALID_USERS_LIST);
+		}
+	}
+	
+	private void ensureUniqueName(SpecimenList existingList, SpecimenList newList) {
+		if (existingList != null && existingList.getName().equals(newList.getName())) {
+			return;
+		}
+		
+		ensureUniqueName(newList);
+	}
+	
+	private void ensureUniqueName(SpecimenList newList) {
+		SpecimenList list = daoFactory.getSpecimenListDao().getSpecimenListByName(newList.getName());
+		if  (list != null) {
+			throw OpenSpecimenException.userError(SpecimenListErrorCode.DUP_NAME);
 		}
 	}
 }
