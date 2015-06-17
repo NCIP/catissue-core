@@ -54,6 +54,8 @@ public class Visit {
 	private String surgicalPathologyNumber;
 	
 	private String sprName;
+	
+	private boolean sprLocked;
 
 	private CollectionProtocolEvent cpEvent;
 
@@ -175,6 +177,14 @@ public class Visit {
 
 	public void setSprName(String sprName) {
 		this.sprName = sprName;
+	}
+	
+	public boolean getSprLocked() {
+		return sprLocked;
+	}
+
+	public void setSprLocked(boolean sprLocked) {
+		this.sprLocked = sprLocked;
 	}
 
 	public CollectionProtocolEvent getCpEvent() {

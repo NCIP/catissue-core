@@ -28,7 +28,9 @@ public enum VisitErrorCode implements ErrorCode {
 	
 	NO_SPR_UPLOADED,
 	
-	UNABLE_TO_LOCATE_SPR;
+	UNABLE_TO_LOCATE_SPR,
+	
+	LOCKED_SPR;
 	
 	public String code() {
 		return "VISIT_" + this.name();

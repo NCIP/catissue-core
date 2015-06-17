@@ -4,7 +4,7 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
     function init() {
       $scope.sprUploader = {};
       $scope.sprUrl = $sce.trustAsResourceUrl(visit.getSprFileUrl());
-      $scope.spr = {name: visit.sprName};
+      $scope.spr = {name: visit.sprName, locked: visit.sprLocked};
       $scope.uploadMode = false;
 
       loadSpr();
@@ -57,10 +57,21 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
       visit.deleteSprFile().then(
         function(isDeleted) {
           if (isDeleted) {
-            $scope.spr = {};
+            $scope.spr.name = undefined;
           }
         }
       );
+    }
+
+    $scope.lockSpr = function(lock) {
+      visit.lockSpr(lock).then(function(result) {
+        $scope.spr.locked = lock;
+        if (lock) {
+          Alerts.success("visits.spr_locked");
+        } else {
+          Alerts.success("visits.spr_unlocked");
+        }
+      });
     }
 
     init();

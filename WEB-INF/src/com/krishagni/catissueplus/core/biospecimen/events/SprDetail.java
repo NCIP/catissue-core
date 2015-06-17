@@ -5,7 +5,7 @@ import java.io.InputStream;
 public class SprDetail {
 	
 	private Long visitId;
-
+	
 	private String name;
 	
 	private InputStream inputStream;

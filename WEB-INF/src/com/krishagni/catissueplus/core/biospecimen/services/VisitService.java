@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -34,4 +35,6 @@ public interface VisitService {
 	public ResponseEvent<String> updateSprText(RequestEvent<SprDetail> req);
 
 	public ResponseEvent<Boolean> deleteSprFile(RequestEvent<EntityQueryCriteria> req);
+
+	public ResponseEvent<Boolean> lockSpr(RequestEvent<SprLockDetail> req);
 }

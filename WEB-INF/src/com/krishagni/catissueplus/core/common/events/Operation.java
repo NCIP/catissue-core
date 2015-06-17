@@ -9,7 +9,11 @@ public enum Operation {
 	
 	UPDATE("Update"),
 	
-	DELETE("Delete");
+	DELETE("Delete"),
+	
+	LOCK("Lock"),
+	
+	UNLOCK("Unlock");
 	
 	private final String name; 
 	

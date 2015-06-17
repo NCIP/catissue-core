@@ -284,6 +284,8 @@
     "no_spr": "No surgical pathology report uploaded. Do you want to upload now?",
     "deleting_spr": "Deleting Surgical Pathology Report",
     "confirm_delete_spr": "Are you sure you want to delete {{sprName}} ?",
+    "spr_locked": "Surgical pathology report locked successfully.",
+    "spr_unlocked": "Surgical pathology report unlocked successfully.",
 
     "status": {
       "pending": "Pending",
@@ -742,6 +744,8 @@
     "update": "Update",
     "delete": "Delete",
     "add_resource": "Add Resource",
+    "lock": "Lock",
+    "unlock": "Unlock",
 
     "resources" : {
       "CollectionProtocol": "Collection Protocols",
@@ -749,6 +753,7 @@
       "ParticipantPhi": "Participants (PHI)",
       "ParticipantDeid": "Participants (DeId)",
       "VisitAndSpecimen": "Visits and Specimens",
+      "SurgicalPathologyReport": "Surgical Pathology Report",
       "StorageContainer": "Storage Containers",
       "User": "Users"
     },
