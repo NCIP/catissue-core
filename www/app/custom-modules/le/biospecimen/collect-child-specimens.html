@@ -37,7 +37,7 @@
       ng-repeat="partSpmns in childSpmnsData.specimens track by $index">
       <div class="panel-heading">
         <div class="panel-title">
-          <span>Participant: {{partSpmns.empi}}</span>
+          <span>Participant: {{partSpmns.empi}} ({{partSpmns.ppid}})</span>
         </div>
       </div>
       <div class="panel-body">
@@ -45,7 +45,7 @@
           <div class="os-table-head">
             <div class="row">
               <div class="col os-col-30">
-                <span>Description</span>
+                <span>Specimen</span>
               </div>
               <div class="col os-col-15">
                 <span>Label</span>

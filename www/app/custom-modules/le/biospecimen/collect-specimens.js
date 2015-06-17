@@ -188,6 +188,7 @@ angular.module('openspecimen')
             var  childSpecimens = prepareChildSpecimens(
               participant.specimens[j].children, 
               participant.empi, 
+              participant.ppid,
               visitId,
               collPrimarySpmns[j]);
             result = result.concat(childSpecimens);
@@ -197,7 +198,7 @@ angular.module('openspecimen')
         return result;
       }
 
-      function prepareChildSpecimens(requirements, empi, visitId, primarySpmn) {
+      function prepareChildSpecimens(requirements, empi, ppid, visitId, primarySpmn) {
         var result = [];
         primarySpmn.depth = 0;
         
@@ -211,7 +212,7 @@ angular.module('openspecimen')
           requirement.showInTree = requirement.nonVirtual = anyNonVirtualSpecimen(requirement);
           requirement.depth = 1;
           requirement.frozenBy = {};
-          setEmpiAndVisitId(requirement, empi, visitId);
+          setEmpiAndVisitId(requirement, empi, ppid, visitId);
           flatten(requirement, result, 2);
         });
 
@@ -265,11 +266,12 @@ angular.module('openspecimen')
         });
       }
 
-      function setEmpiAndVisitId(requirement, empi, visitId) {
+      function setEmpiAndVisitId(requirement, empi, ppid, visitId) {
         requirement.visitId = visitId;
         requirement.empi = empi;
+        requirement.ppid = ppid;
         angular.forEach(requirement.children, function(childReq) {
-          setEmpiAndVisitId(childReq, empi, visitId);
+          setEmpiAndVisitId(childReq, empi, ppid, visitId);
         });
       }
 
@@ -435,11 +437,12 @@ angular.module('openspecimen')
 
           var treeViewSpmns = [],
               partChildSpmns = [],
-              lastEmpi = undefined;
+              lastEmpi = undefined,
+              lastPpid = undefined;
 
           angular.forEach($scope.boxOpts.specimens, function(specimen, $index) {
             if ($index != 0 && specimen.empi != lastEmpi) {
-              treeViewSpmns.push({empi: lastEmpi, specimens:partChildSpmns});
+              treeViewSpmns.push({empi: lastEmpi, ppid: lastPpid, specimens:partChildSpmns});
               partChildSpmns = [];
             }
 
@@ -453,10 +456,11 @@ angular.module('openspecimen')
 
             partChildSpmns.push(specimen);
             lastEmpi = specimen.empi;
+            lastPpid = specimen.ppid;
           });
 
           if (partChildSpmns.length > 0) {
-            treeViewSpmns.push({empi: lastEmpi, specimens: partChildSpmns});
+            treeViewSpmns.push({empi: lastEmpi, ppid: lastPpid, specimens: partChildSpmns});
           }
             
           $scope.childSpmnsData.specimens = treeViewSpmns;

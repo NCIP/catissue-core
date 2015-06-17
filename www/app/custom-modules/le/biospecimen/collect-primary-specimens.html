@@ -11,7 +11,7 @@
 
         <div class="panel panel-default" ng-repeat="participant in participants" ng-form="psform">
           <div class="panel-heading">
-            <div class="panel-title">Participant: {{participant.empi}}</div>
+            <div class="panel-title">Participant: {{participant.empi}} ({{participant.ppid}})</div>
           </div>
           <div class="panel-body">
             <div ng-include src="'le-specimen-coll-info.html'"></div>
@@ -100,10 +100,12 @@
 </script>
 
 <script type="text/ng-template" id="le-primary-specimen-table.html">
-  <table class="os-table os-table-fixed bulk-edit os-border os-table-muted-hdr">
+  <div class="os-section"></div>
+
+  <table class="os-table os-table-fixed bulk-edit">
     <thead class="os-table-head">
       <tr class="row">
-        <th class="col os-col-50" translate="specimens.description">Description</th>
+        <th class="col os-col-50" translate="specimens.title">Specimen</th>
         <th class="col os-col-20" translate="specimens.label">Label</th>
         <th class="col os-col-20" translate="specimens.qty">Quantity</th>
         <th class="col os-col-10">&nbsp;</th>

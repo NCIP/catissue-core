@@ -199,6 +199,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		if (lineage == null) {
 			if (specimen.getSpecimenRequirement() == null) {
 				lineage = Specimen.NEW;
+			} else {
+				lineage = specimen.getSpecimenRequirement().getLineage();
 			}
 		}
 		
