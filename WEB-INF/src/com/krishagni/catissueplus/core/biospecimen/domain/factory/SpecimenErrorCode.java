@@ -28,8 +28,6 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	INVALID_LINEAGE,
 	
-	PARENT_NOT_FOUND,
-	
 	INVALID_COLL_STATUS,
 	
 	INVALID_QTY,
@@ -37,6 +35,8 @@ public enum SpecimenErrorCode implements ErrorCode {
 	INSUFFICIENT_QTY,
 	
 	PARENT_REQUIRED,
+	
+	PARENT_NF_BY_VISIT_AND_SR,
 	
 	SPECIMEN_CLASS_REQUIRED,
 	

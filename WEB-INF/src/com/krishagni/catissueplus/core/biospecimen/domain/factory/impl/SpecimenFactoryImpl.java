@@ -62,16 +62,23 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	public Specimen createSpecimen(Specimen existing, SpecimenDetail detail, Specimen parent) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
+		if (parent == null) {
+			parent = getSpecimen(detail.getParentId(), detail.getParentLabel(), ose);
+			ose.checkAndThrow();
+		}
+		
 		SpecimenRequirement sr = getSpecimenRequirement(detail, existing, ose);
-		Visit visit = getVisit(detail, existing, ose);
+		Visit visit = getVisit(detail, existing, parent, ose);
 		ose.checkAndThrow();
 		
-		if (sr != null && visit != null) {
-			if (!sr.getCollectionProtocolEvent().getId().equals(visit.getCpEvent().getId())) {
-				ose.addError(SpecimenErrorCode.INVALID_VISIT);
-				throw ose;
-			}			
+		if (sr != null && !sr.getCollectionProtocolEvent().equals(visit.getCpEvent())) {
+			ose.addError(SpecimenErrorCode.INVALID_VISIT);
 		}
+		
+		if (parent != null && !parent.getVisit().equals(visit)) {
+			ose.addError(SpecimenErrorCode.INVALID_VISIT);
+		}		
+		ose.checkAndThrow();
 		
 		Specimen specimen = null;
 		if (sr != null) {
@@ -161,7 +168,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 	}
 
-	private Visit getVisit(SpecimenDetail detail, Specimen existing, OpenSpecimenException ose) {
+	private Visit getVisit(SpecimenDetail detail, Specimen existing, Specimen parent, OpenSpecimenException ose) {
 		Long visitId = detail.getVisitId();
 		String visitName = detail.getVisitName();
 		
@@ -172,6 +179,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			visit = daoFactory.getVisitsDao().getByName(visitName);
 		} else if (existing != null) {
 			visit = existing.getVisit();
+		} else if (parent != null) {
+			visit = parent.getVisit();
 		} else {
 			ose.addError(SpecimenErrorCode.VISIT_REQUIRED);
 			return null;
@@ -191,8 +200,6 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			if (specimen.getSpecimenRequirement() == null) {
 				lineage = Specimen.NEW;
 			}
-			
-			return;
 		}
 		
 		if (!lineage.equals(Specimen.NEW) && 
@@ -225,26 +232,37 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		
 		Long parentId = detail.getParentId();
 		String parentLabel = detail.getParentLabel();
-		
-		Object key = null;
-		if (StringUtils.isNotBlank(parentLabel)) {
-			key = parentLabel;
-			parent = daoFactory.getSpecimenDao().getByLabel(parentLabel);
-		} else if (parentId != null) {
-			key = parentId;
-			parent = daoFactory.getSpecimenDao().getById(parentId);
+		if (parentId != null || StringUtils.isNotBlank(parentLabel)) {
+			parent = getSpecimen(parentId, parentLabel, ose);
 		} else if (specimen.getVisit() != null && specimen.getSpecimenRequirement() != null) {			
 			Long visitId = specimen.getVisit().getId();
-			Long srId = specimen.getSpecimenRequirement().getId();
-			key = visitId + ":" + srId;
+			Long srId = specimen.getSpecimenRequirement().getId();			
 			parent = daoFactory.getSpecimenDao().getParentSpecimenByVisitAndSr(visitId, srId);
-		}
-		
-		if (parent == null) {
-			ose.addError(key != null ? SpecimenErrorCode.NOT_FOUND : SpecimenErrorCode.PARENT_REQUIRED, key);
+			if (parent == null) {
+				ose.addError(SpecimenErrorCode.PARENT_NF_BY_VISIT_AND_SR, visitId, srId);
+			}
+		} else {
+			ose.addError(SpecimenErrorCode.PARENT_REQUIRED);
 		}
 		
 		specimen.setParentSpecimen(parent);
+	}
+	
+	private Specimen getSpecimen(Long id, String label, OpenSpecimenException ose) {
+		Specimen specimen = null;
+		if (id != null) {
+			specimen = daoFactory.getSpecimenDao().getById(id);
+			if (specimen == null) {
+				ose.addError(SpecimenErrorCode.NOT_FOUND, id);
+			}
+		} else if (StringUtils.isNotBlank(label)) {
+			specimen = daoFactory.getSpecimenDao().getByLabel(label);
+			if (specimen == null) {
+				ose.addError(SpecimenErrorCode.NOT_FOUND, label);
+			}
+		}
+		
+		return specimen;		
 	}
 	
 	private void setParentSpecimen(SpecimenDetail detail, Specimen existing, Specimen parent, Specimen specimen, OpenSpecimenException ose) {
