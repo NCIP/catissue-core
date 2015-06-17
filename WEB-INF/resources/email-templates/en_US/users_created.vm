@@ -47,7 +47,11 @@
             <tr>
             <tr>
               <td>
-                <p style="margin: 10px 0 0 0;">You can now proceed to login to the application</p>
+                <p style="margin: 10px 0 0 0;">You can now proceed to login to the application.
+                
+                 Password rules: at least one capital letter, one number, and eight characters. E.g. Login1@3.
+                
+                </p>
               </td>
             <tr>
             <tr>
