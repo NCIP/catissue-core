@@ -183,7 +183,7 @@ public class VisitsController {
 	public boolean lockSpr(@PathVariable("id") Long visitId, @RequestBody Map<String, Boolean> props ) {
 		SprLockDetail detail = new SprLockDetail();
 		detail.setVisitId(visitId);
-		detail.setLock(props.get("locked").booleanValue());
+		detail.setLocked(props.get("locked").booleanValue());
 		
 		ResponseEvent<Boolean> resp = visitService.lockSpr(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();

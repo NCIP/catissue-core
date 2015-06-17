@@ -106,11 +106,9 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
       return $http.delete(this.getSprFileUrl()).then(function(result) { return result.data; });
     };
 
-    Visit.prototype.lockSpr =function(lock) {
+    Visit.prototype.lockSpr = function(lock) {
       var url = Visit.url() + this.$id() + '/spr-lock';
-      return $http.put(url, {locked: lock}).then(function(resp) {
-        return resp.data;
-      });
+      return $http.put(url, {locked: lock}).then(function(result) { return result.data; });
     };
 
     return Visit;

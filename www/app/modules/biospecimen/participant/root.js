@@ -50,10 +50,6 @@ angular.module('os.biospecimen.participant.root', ['os.biospecimen.models'])
         }
       }
 
-
-
-
-
       // Specimen Tree Authorization Options
       var update = AuthorizationService.isAllowed($scope.specimenResource.updateOpts);
       $scope.specimenAllowedOps = {update: update};

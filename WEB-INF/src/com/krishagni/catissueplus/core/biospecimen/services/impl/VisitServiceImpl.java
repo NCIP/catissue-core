@@ -299,13 +299,13 @@ public class VisitServiceImpl implements VisitService {
 		SprLockDetail detail = req.getPayload();
 		Visit visit = getVisit(detail.getVisitId(), detail.getVisitName());
 		
-		if (detail.getLock()) {
+		if (detail.getLocked()) {
 			AccessCtrlMgr.getInstance().ensureLockSprRights(visit);
 		} else {
 			AccessCtrlMgr.getInstance().ensureUnlockSprRights(visit);
 		}
 		
-		visit.setSprLocked(detail.getLock());
+		visit.setSprLocked(detail.getLocked());
 
 		return ResponseEvent.response(true);
 	}

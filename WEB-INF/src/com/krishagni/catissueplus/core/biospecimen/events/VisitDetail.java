@@ -49,7 +49,7 @@ public class VisitDetail extends AttributeModifiedSupport {
 	
 	private String sprName;
 	
-	private boolean sprLock;
+	private boolean sprLocked;
 
 	private Date visitDate;
 
@@ -189,12 +189,12 @@ public class VisitDetail extends AttributeModifiedSupport {
 		this.sprName = sprName;
 	}
 	
-	public boolean getSprLock() {
-		return sprLock;
+	public boolean getSprLocked() {
+		return sprLocked;
 	}
 
-	public void setSprLock(boolean sprLock) {
-		this.sprLock = sprLock;
+	public void setSprLocked(boolean sprLock) {
+		this.sprLocked = sprLock;
 	}
 
 	public Date getVisitDate() {
@@ -216,7 +216,7 @@ public class VisitDetail extends AttributeModifiedSupport {
 		detail.setName(visit.getName());
 		detail.setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 		detail.setSprName(visit.getSprName());
-		detail.setSprLock(visit.getSprLocked());
+		detail.setSprLocked(visit.getSprLocked());
 		detail.setVisitDate(visit.getVisitDate());
 		detail.setSite(visit.getSite().getName());		
 

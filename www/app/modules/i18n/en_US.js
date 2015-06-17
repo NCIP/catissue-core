@@ -284,8 +284,6 @@
     "no_spr": "No surgical pathology report uploaded. Do you want to upload now?",
     "deleting_spr": "Deleting Surgical Pathology Report",
     "confirm_delete_spr": "Are you sure you want to delete {{sprName}} ?",
-    "spr_lock": "Lock",
-    "spr_unlock": "Unlock",
     "spr_locked": "Surgical pathology report locked successfully.",
     "spr_unlocked": "Surgical pathology report unlocked successfully.",
 

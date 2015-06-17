@@ -5,7 +5,7 @@ public class SprLockDetail {
 	
 	private String visitName;
 	
-	private boolean lock;
+	private boolean locked;
 
 	public Long getVisitId() {
 		return visitId;
@@ -23,12 +23,12 @@ public class SprLockDetail {
 		this.visitName = visitName;
 	}
 
-	public boolean getLock() {
-		return lock;
+	public boolean getLocked() {
+		return locked;
 	}
 
-	public void setLock(Boolean lock) {
-		this.lock = lock;
+	public void setLocked(Boolean lock) {
+		this.locked = lock;
 	}
 	
 }

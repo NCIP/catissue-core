@@ -157,8 +157,8 @@ public class AccessCtrlMgr {
 		String resource = Resource.CP.getName();
 		String[] ops = {op.getName()};
 		
-		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);		
 		boolean allowed = false;
+		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);		
 		for (SubjectAccess access : accessList) {
 			Site accessSite = access.getSite();
 			CollectionProtocol accessCp = access.getCollectionProtocol();
@@ -801,37 +801,41 @@ public class AccessCtrlMgr {
 	//////////////////////////////////////////////////////////////////////////////////////
 	
 	public void ensureCreateOrUpdateSprRights(Visit visit) {
-		ensureSprObjectRights(visit.getRegistration(), Operation.UPDATE);
+		ensureSprObjectRights(visit, Operation.UPDATE);
 	}
 	
 	public void ensureDeleteSprRights(Visit visit) {
-		ensureSprObjectRights(visit.getRegistration(), Operation.DELETE);
+		ensureSprObjectRights(visit, Operation.DELETE);
 	}
 	
 	public void ensureReadSprRights(Visit visit) {
-		ensureSprObjectRights(visit.getRegistration(), Operation.READ);
+		ensureSprObjectRights(visit, Operation.READ);
 	}
 	
 	public void ensureLockSprRights(Visit visit) {
-		ensureSprObjectRights(visit.getRegistration(), Operation.LOCK);
+		ensureSprObjectRights(visit, Operation.LOCK);
 	}
 	
 	public void ensureUnlockSprRights(Visit visit) {
-		ensureSprObjectRights(visit.getRegistration(), Operation.UNLOCK);
+		ensureSprObjectRights(visit, Operation.UNLOCK);
 	}
 	
-	private void ensureSprObjectRights(CollectionProtocolRegistration cpr, Operation op) {
-
+	private void ensureSprObjectRights(Visit visit, Operation op) {
 		if (AuthUtil.isAdmin()) {
 			return;
 		}
-		ensureVisitAndSpecimenObjectRights(cpr, op);
+		
+		if (op == Operation.LOCK || op == Operation.UNLOCK) {
+			ensureCreateOrUpdateVisitRights(visit);
+		} else {
+			ensureVisitObjectRights(visit.getId(), op);
+		}
 		
 		Long userId = AuthUtil.getCurrentUser().getId();
 		String resource = Resource.SURGICAL_PATHOLOGY_REPORT.getName();
 		String[] ops = {op.getName()};
 		
-		boolean allowed = false;
+		CollectionProtocolRegistration cpr = visit.getRegistration();
 		Long cpId = cpr.getCollectionProtocol().getId();		
 		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource, ops);		
 		if (accessList.isEmpty()) {
@@ -843,6 +847,7 @@ public class AccessCtrlMgr {
 			return;
 		}
 		
+		boolean allowed = false;
 		for (SubjectAccess access : accessList) {
 			Site accessSite = access.getSite();
 			if (accessSite != null && mrnSites.contains(accessSite)) { // Specific site
