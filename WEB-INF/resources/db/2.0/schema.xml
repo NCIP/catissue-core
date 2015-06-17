@@ -2172,4 +2172,33 @@
   <changeSet author="vpawar" id="Drop older order site view">
     <dropView viewName="order_site_view"/>
   </changeSet>
+
+  <changeSet author="ahegade" id="Drop FK on address_id from catissue site table">
+    <dropForeignKeyConstraint baseTableName="CATISSUE_SITE" constraintName="FKB024C3436CD94566"/>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Drop address_id column from catissue site table">
+    <dropColumn columnName="ADDRESS_ID" tableName="CATISSUE_SITE"/>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Adding address column to site table">
+    <addColumn tableName="CATISSUE_SITE">
+      <column name="ADDRESS" type="${clob.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Drop FK on address_id from catissue user table">
+    <dropForeignKeyConstraint baseTableName="CATISSUE_USER" constraintName="FKB025CFC76CD94566"/>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Drop address_id column from catissue user table">
+    <dropColumn columnName="ADDRESS_ID" tableName="CATISSUE_USER"/>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Adding address column to user table">
+    <addColumn tableName="CATISSUE_USER">
+      <column name="ADDRESS" type="${clob.type}"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

@@ -36,6 +36,7 @@ public class UserFactoryImpl implements UserFactory {
 		setActivityStatus(detail, user, ose);
 		setEmailAddress(detail, user, ose);
 		setDepartment(detail, user, ose);
+		setAddress(detail, user, ose);
 		setAuthDomain(detail, user, ose);
 
 		ose.checkAndThrow();
@@ -55,8 +56,8 @@ public class UserFactoryImpl implements UserFactory {
 		setActivityStatus(detail, existing, user, ose);
 		setEmailAddress(detail, existing, user, ose);
 		setDepartment(detail, existing, user, ose);
+		setAddress(detail, existing, user, ose);
 		setAuthDomain(detail, existing, user, ose);
-		
 		ose.checkAndThrow();
 		return user;		
 	}
@@ -192,7 +193,20 @@ public class UserFactoryImpl implements UserFactory {
 			user.setEmailAddress(existing.getEmailAddress());
 		}
 	}
-	
+
+	private void setAddress(UserDetail detail, User user, OpenSpecimenException ose) {
+		user.setAddress(detail.getAddress());
+	}
+
+	private void setAddress(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
+		if (detail.isAttrModified("address")) {
+			setAddress(detail, user, ose);
+		} else {
+			user.setAddress(existing.getAddress());
+		}
+	}
+
+
 	private void setAuthDomain(UserDetail detail, User user, OpenSpecimenException ose) {
 		String domainName = detail.getDomainName();
 		if (StringUtils.isBlank(domainName)) {

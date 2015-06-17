@@ -23,6 +23,8 @@
             
     <property name="activityStatus" column="ACTIVITY_STATUS"/>
 
+    <property name="address" column="address"/>
+
     <set name="coordinators"  table="CATISSUE_SITE_COORDINATORS">
       <key column="SITE_ID"/>
       <many-to-many column="USER_ID" class="com.krishagni.catissueplus.core.administrative.domain.User"/>

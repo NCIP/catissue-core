@@ -102,6 +102,7 @@ public class SiteDetail extends AttributeModifiedSupport {
 		siteDto.setCode(site.getCode());
 		siteDto.setType(site.getType());
 		siteDto.setActivityStatus(site.getActivityStatus());
+		siteDto.setAddress(site.getAddress());
 		siteDto.setCoordinators(UserSummary.from(site.getCoordinators()));
 		return siteDto;
 	}

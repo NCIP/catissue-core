@@ -64,7 +64,7 @@ public class User extends BaseEntity implements UserDetails {
 
 	private Department department;
 
-	private Address address;
+	private String address;
 
 	private String comments;
 	
@@ -171,11 +171,11 @@ public class User extends BaseEntity implements UserDetails {
 	}
 
 	@NotAudited
-	public Address getAddress() {
+	public String getAddress() {
 		return address;
 	}
 
-	public void setAddress(Address address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 

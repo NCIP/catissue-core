@@ -908,4 +908,28 @@
       <column name="manualSpecLabelEnabled_MOD" type="NUMBER(1, 0)"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="ahegade" id="Address column for catissue site audit table">
+    <addColumn tableName="catissue_site_aud">
+      <column name="ADDRESS" type="text"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Address column for catissue site audit table modified">
+    <addColumn tableName="catissue_site_aud">
+      <column name="address_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Address column for catissue user audit table">
+    <addColumn tableName="catissue_user_aud">
+      <column name="ADDRESS" type="text"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Address column for catissue user audit table modified">
+    <addColumn tableName="catissue_user_aud">
+      <column name="address_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

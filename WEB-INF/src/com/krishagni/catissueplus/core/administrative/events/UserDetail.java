@@ -158,6 +158,7 @@ public class UserDetail extends AttributeModifiedSupport {
 		detail.setDeptName(user.getDepartment().getName());
 		detail.setInstituteName(user.getInstitute().getName());
 		detail.setAdmin(user.isAdmin());
+		detail.setAddress(user.getAddress());
 		setUserSiteNames(detail, user.getSites());	
 
 		return detail;
