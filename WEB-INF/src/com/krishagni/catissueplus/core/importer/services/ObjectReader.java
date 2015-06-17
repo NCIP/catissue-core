@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ import com.krishagni.catissueplus.core.importer.domain.ObjectSchema.Field;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema.Record;
 
 public class ObjectReader implements Closeable {
-	private static final String CLEAR_FIELD = "##os_clear##";
+	private static final String SET_TO_BLANK = "##set_to_blank##";
 	
 	private CsvReader csvReader;
 	
@@ -103,7 +104,17 @@ public class ObjectReader implements Closeable {
 		
 		for (Record subRec : record.getSubRecords()) {
 			Object subObjProps = parseSubObjects(subRec, prefix);
-			props.put(subRec.getAttribute(), subObjProps);
+			if (subObjProps instanceof List<?>) {
+				List<Map<String, Object>> subObjs = (List<Map<String, Object>>)subObjProps;
+				if (!subObjs.isEmpty()) {
+					props.put(subRec.getAttribute(), removeEmptyObjs(subObjs));
+				}
+			} else if (subObjProps instanceof Map<?, ?>) {
+				Map<String, Object> subObj = (Map<String, Object>)subObjProps;
+				if (!subObj.isEmpty()) {
+					props.put(subRec.getAttribute(), nullOrObj(subObj));
+				}
+			}
 		}
 		
 		return props;
@@ -116,11 +127,13 @@ public class ObjectReader implements Closeable {
 		for (Field field : record.getFields()) {
 			if (field.isMultiple()) {
 				List<Object> values = new ArrayList<Object>();
+				boolean setToBlank = false;
 				for (int idx = 1; true; ++idx) {
 					String columnName = prefix + field.getCaption() + "#" + idx;
 					Object value = getValue(field, columnName);
-					if (isClearField(value)) {
+					if (isSetToBlankField(value)) {
 						values.clear();
+						setToBlank = true;
 						break;
 					} else if (value == null) {
 						break;
@@ -129,12 +142,16 @@ public class ObjectReader implements Closeable {
 					values.add(value);
 				}
 				
-				props.put(field.getAttribute(), values);				
+				if (setToBlank) {
+					props.put(field.getAttribute(), Collections.emptyList());
+				} else if (!values.isEmpty()) {
+					props.put(field.getAttribute(), values);
+				}				
 			} else {
 				String columnName = prefix + field.getCaption();
 				Object value = getValue(field, columnName);
 				if (value != null) {
-					props.put(field.getAttribute(), isClearField(value) ? null : value);
+					props.put(field.getAttribute(), isSetToBlankField(value) ? null : value);
 				}				
 			}
 		}
@@ -154,7 +171,7 @@ public class ObjectReader implements Closeable {
 			List<Map<String, Object>> subObjects = new ArrayList<Map<String, Object>>();
 			for (int idx = 1; true; ++idx) {
 				Map<String, Object> subObject = parseObject(record, newPrefix + idx + "#");
-				if (isEmptyObj(subObject)) {
+				if (subObject.isEmpty()) {
 					break;
 				}
 				
@@ -175,9 +192,10 @@ public class ObjectReader implements Closeable {
 		}
 		
 		String value = csvReader.getColumn(columnName);
-		boolean isBlank = StringUtils.isBlank(value);
-		if (isBlank) {
-			return CLEAR_FIELD;
+		if (StringUtils.isBlank(value)) {
+			return null;
+		} else if (value.trim().equals(SET_TO_BLANK)) {
+			return SET_TO_BLANK;
 		} else if (field.getType() != null && field.getType().equals("date")) {
 			return new SimpleDateFormat(dateFmt).parse(value);
 		} else if (field.getType() != null && field.getType().equals("datetime")) {
@@ -186,35 +204,28 @@ public class ObjectReader implements Closeable {
 			return value;
 		}
 	}
-	
-	private boolean isEmpty(Object obj) {
-		if (obj instanceof List<?>) {
-			List<?> list = (List<?>)obj;
-			return list.isEmpty();
-		} else if (obj instanceof Map<?, ?>) {
-			Map<?, ?> map = (Map<?, ?>)obj;
-			return map.isEmpty();
-		}
 		
-		return false;
-	}
-	
-	private boolean isEmptyObj(Map<String, Object> obj) {
-		if (obj == null || obj.isEmpty()) {
-			return true;
-		}
-		
-		boolean isEmpty = true;
-		for (Map.Entry<String, Object> objProp : obj.entrySet()) {
-			if (objProp.getValue() != null) {
-				isEmpty = false;
-				break;
+	private List<Map<String, Object>> removeEmptyObjs(List<Map<String, Object>> objs) {
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		for (Map<String, Object> obj : objs) {
+			if (nullOrObj(obj) != null) {
+				result.add(obj);
 			}
 		}
 		
-		return isEmpty;
+		return result;
 	}
 	
+	private Map<String, Object> nullOrObj(Map<String, Object> obj) {
+		for (Map.Entry<String, Object> prop : obj.entrySet()) {
+			if (prop.getValue() != null) {
+				return obj;
+			}
+		}
+		
+		return null;
+	}
+		
 	private static List<String> getSchemaFields(Record record, String prefix) {
 		List<String> columnNames = new ArrayList<String>();
 		
@@ -249,8 +260,8 @@ public class ObjectReader implements Closeable {
 		return columnNames;				
 	}
 	
-	private boolean isClearField(Object value) {
-		return value instanceof String && ((String)value).trim().equals(CLEAR_FIELD);
+	private boolean isSetToBlankField(Object value) {
+		return value instanceof String && ((String)value).trim().equals(SET_TO_BLANK);
 	}
 			
 	public static void main(String[] args) 
