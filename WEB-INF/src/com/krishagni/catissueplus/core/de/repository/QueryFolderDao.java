@@ -10,5 +10,7 @@ public interface QueryFolderDao extends Dao<QueryFolder> {
 	
 	public QueryFolder getQueryFolder(Long folderId);
 	
+	public QueryFolder getByName(String name);
+	
 	public void deleteFolder(QueryFolder folder);
 }

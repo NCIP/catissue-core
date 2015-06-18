@@ -13,6 +13,8 @@ public class QueryFolderDaoImpl extends AbstractDao<QueryFolder> implements Quer
 	private static final String FQN = QueryFolder.class.getName();
 	
 	private static final String GET_QUERY_FOLDERS_BY_USER = FQN + ".getQueryFoldersByUser";
+	
+	private static final String GET_FOLDER_BY_NAME = FQN +".getQueryFoldersByName";
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -30,5 +32,15 @@ public class QueryFolderDaoImpl extends AbstractDao<QueryFolder> implements Quer
 	@Override
 	public void deleteFolder(QueryFolder folder) {
 		sessionFactory.getCurrentSession().delete(folder);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public QueryFolder getByName(String name) { 
+		List<QueryFolder> folders = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_FOLDER_BY_NAME)
+				.setString("name", name)
+				.list();
+		return folders.isEmpty() ? null : folders.iterator().next();
 	}
 }

@@ -176,7 +176,7 @@ public class SavedQuery {
 	}
 
 	public String getQueryDefJson() {
-		return getQueryDefJson(false);
+		return getQueryDefJson(true);
 	}
 	
 	public String getQueryDefJson(boolean includeTitle) {
@@ -209,10 +209,10 @@ public class SavedQuery {
 		} catch (Exception e) {
 			throw new RuntimeException("Error marshalling JSON to saved query", e);
 		}
-		
+		this.title = query.title;
 		this.cpId = query.cpId;
 		this.selectList = query.selectList;
-		this.filters = query.filters;		
+		this.filters = query.filters;
 		this.queryExpression = query.queryExpression;
 		this.drivingForm = query.drivingForm;
 		this.reporting = query.reporting;
