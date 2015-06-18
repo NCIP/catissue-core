@@ -180,14 +180,10 @@ public class VisitsController {
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/spr-lock")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public boolean lockSpr(@PathVariable("id") Long visitId, @RequestBody Map<String, Boolean> props ) {
-		SprLockDetail detail = new SprLockDetail();
+	public SprLockDetail updateSprLockStatus(@PathVariable("id") Long visitId, @RequestBody SprLockDetail detail) {
 		detail.setVisitId(visitId);
-		detail.setLocked(props.get("locked").booleanValue());
-		
-		ResponseEvent<Boolean> resp = visitService.lockSpr(getRequest(detail));
+		ResponseEvent<SprLockDetail> resp = visitService.updateSprLockStatus(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
-		
 		return resp.getPayload();
 	}
 	

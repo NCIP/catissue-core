@@ -452,48 +452,15 @@ public class AccessCtrlMgr {
 			return;
 		}
 		
-		Long userId = AuthUtil.getCurrentUser().getId();
-		String resource = Resource.VISIT_N_SPECIMEN.getName();
 		String[] ops = null;
 		if (op == Operation.CREATE || op == Operation.UPDATE) {
 			ops = new String[]{Operation.CREATE.getName(), Operation.UPDATE.getName()};
 		} else {
 			ops = new String[]{op.getName()};
 		}
-		
-		boolean allowed = false;
-		Long cpId = cpr.getCollectionProtocol().getId();		
-		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource, ops);		
-		if (accessList.isEmpty()) {
-			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
-		}
-		
-		Set<Site> mrnSites = cpr.getParticipant().getMrnSites();
-		if (mrnSites.isEmpty()) {
-			return;
-		}
-		
-		for (SubjectAccess access : accessList) {
-			Site accessSite = access.getSite();
-			if (accessSite != null && mrnSites.contains(accessSite)) { // Specific site
-				allowed = true;
-			} else if (accessSite == null) { // All user institute sites
-				Set<Site> instituteSites = getUserInstituteSites(userId);
-				if (CollectionUtils.containsAny(instituteSites, mrnSites)) {
-					allowed = true;
-				}
-			}
-			
-			if (allowed) {
-				break;
-			}
-		}
-		
-		if (!allowed) {
-			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
-		}
+		ensureSprOrVisitAndSpecimenObjectRights(cpr, Resource.VISIT_N_SPECIMEN, ops);
 	}
-	
+
 	private Set<Pair<Long, Long>> getVisitAndSpecimenSiteCps(String[] ops) {
 		Long userId = AuthUtil.getCurrentUser().getId();
 		String resource = Resource.VISIT_N_SPECIMEN.getName();
@@ -830,14 +797,15 @@ public class AccessCtrlMgr {
 		} else {
 			ensureVisitObjectRights(visit.getId(), op);
 		}
-		
-		Long userId = AuthUtil.getCurrentUser().getId();
-		String resource = Resource.SURGICAL_PATHOLOGY_REPORT.getName();
-		String[] ops = {op.getName()};
-		
 		CollectionProtocolRegistration cpr = visit.getRegistration();
+		String[] ops = {op.getName()};
+		ensureSprOrVisitAndSpecimenObjectRights(cpr, Resource.SURGICAL_PATHOLOGY_REPORT, ops);
+	}
+	
+	private void ensureSprOrVisitAndSpecimenObjectRights(CollectionProtocolRegistration cpr, Resource resource, String[] ops) {
+		Long userId = AuthUtil.getCurrentUser().getId();
 		Long cpId = cpr.getCollectionProtocol().getId();		
-		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource, ops);		
+		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource.getName(), ops);		
 		if (accessList.isEmpty()) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
@@ -867,6 +835,5 @@ public class AccessCtrlMgr {
 		if (!allowed) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
-		
 	}
 }

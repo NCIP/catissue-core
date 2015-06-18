@@ -36,5 +36,5 @@ public interface VisitService {
 
 	public ResponseEvent<Boolean> deleteSprFile(RequestEvent<EntityQueryCriteria> req);
 
-	public ResponseEvent<Boolean> lockSpr(RequestEvent<SprLockDetail> req);
+	public ResponseEvent<SprLockDetail> updateSprLockStatus(RequestEvent<SprLockDetail> req);
 }

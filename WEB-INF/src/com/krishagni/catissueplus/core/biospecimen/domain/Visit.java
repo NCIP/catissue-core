@@ -179,7 +179,7 @@ public class Visit {
 		this.sprName = sprName;
 	}
 	
-	public boolean getSprLocked() {
+	public boolean isSprLocked() {
 		return sprLocked;
 	}
 

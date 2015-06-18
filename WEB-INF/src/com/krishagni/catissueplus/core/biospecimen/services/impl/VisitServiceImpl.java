@@ -215,7 +215,7 @@ public class VisitServiceImpl implements VisitService {
 		try {
 			SprDetail detail = req.getPayload();
 			Visit visit = getVisit(detail.getVisitId(), null);
-			ensureUpdateSpr(visit);
+			ensureUpdateSprRights(visit);
 			String sprText = Utility.getString(detail.getInputStream(), detail.getContentType());
 			
 			DocumentDeIdentifier deIdentifier = getSprDeIdentifier(); 
@@ -245,7 +245,7 @@ public class VisitServiceImpl implements VisitService {
 			SprDetail detail = req.getPayload();
 			Visit visit = getVisit(detail.getVisitId(), null);
 			
-			ensureUpdateSpr(visit);
+			ensureUpdateSprRights(visit);
 			
 			File file = getSprFile(detail.getVisitId());
 			if (!file.exists()) {
@@ -267,7 +267,7 @@ public class VisitServiceImpl implements VisitService {
 			EntityQueryCriteria crit = req.getPayload();
 			Visit visit = getVisit(crit.getId(), crit.getName());
 		
-			if (visit.getSprLocked()) {
+			if (visit.isSprLocked()) {
 				return ResponseEvent.userError(VisitErrorCode.LOCKED_SPR);
 			}
 			AccessCtrlMgr.getInstance().ensureDeleteSprRights(visit);
@@ -295,19 +295,16 @@ public class VisitServiceImpl implements VisitService {
 	
 	@PlusTransactional
 	@Override
-	public ResponseEvent<Boolean> lockSpr(RequestEvent<SprLockDetail> req) {
+	public ResponseEvent<SprLockDetail> updateSprLockStatus(RequestEvent<SprLockDetail> req) {
 		SprLockDetail detail = req.getPayload();
 		Visit visit = getVisit(detail.getVisitId(), detail.getVisitName());
-		
-		if (detail.getLocked()) {
+		if (detail.isLocked()) {
 			AccessCtrlMgr.getInstance().ensureLockSprRights(visit);
 		} else {
 			AccessCtrlMgr.getInstance().ensureUnlockSprRights(visit);
 		}
-		
-		visit.setSprLocked(detail.getLocked());
-
-		return ResponseEvent.response(true);
+		visit.setSprLocked(detail.isLocked());
+		return ResponseEvent.response(detail);
 	}
 
 	private VisitDetail saveOrUpdateVisit(VisitDetail input, boolean update, boolean partial) {		
@@ -433,8 +430,8 @@ public class VisitServiceImpl implements VisitService {
 		return defaultVisitSprDir;
 	}
 	
-	private void ensureUpdateSpr(Visit visit) {
-		if (visit.getSprLocked()) {
+	private void ensureUpdateSprRights(Visit visit) {
+		if (visit.isSprLocked()) {
 			throw OpenSpecimenException.userError(VisitErrorCode.LOCKED_SPR);
 		}
 		

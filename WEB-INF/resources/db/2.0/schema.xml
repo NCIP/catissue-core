@@ -2201,7 +2201,7 @@
     </addColumn>
   </changeSet>
 
-  <changeSet author="vgaikwad" id="Added a new column in visits table to store SPR Lock status">
+  <changeSet author="vgaikwad" id="Added a new column in visits table to store SPR lock status">
     <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
       <column name="SPR_LOCKED" type="${boolean.type}" defaultValueBoolean="0">
         <constraints nullable="false"/>

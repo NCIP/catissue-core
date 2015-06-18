@@ -23,12 +23,12 @@ public class SprLockDetail {
 		this.visitName = visitName;
 	}
 
-	public boolean getLocked() {
+	public boolean isLocked() {
 		return locked;
 	}
 
-	public void setLocked(Boolean lock) {
-		this.locked = lock;
+	public void setLocked(boolean locked) {
+		this.locked = locked;
 	}
 	
 }
