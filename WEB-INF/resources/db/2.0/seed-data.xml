@@ -53,16 +53,24 @@
   <changeSet author="nmarwaha" id="Insert default system user" dbms="mysql">
     <validCheckSum>7:4ff43753720efddae30844e02324d842</validCheckSum>
     <validCheckSum>7:c0899557d2ba8e128914a848388a660b</validCheckSum>
+    <validCheckSum>7:f2d36378a001d6b67ac813a1adfe457a</validCheckSum>
     <sql>
-      insert into catissue_user values (default, '$system', 'System', null, '$system', null, 'Locked', null,null, null, null, 0, null, null, 'openspecimen', 1);
+      insert into catissue_user
+        (identifier, email_address, first_name, login_name, activity_status, first_time_login, domain_name, is_admin)
+      values
+        (default, '$system', 'System', '$system', 'Locked', 0, 'openspecimen', 1);
     </sql>
   </changeSet>
 
   <changeSet author="nmarwaha" id="Insert default system user" dbms="oracle">
     <validCheckSum>7:4ff43753720efddae30844e02324d842</validCheckSum>
     <validCheckSum>7:c0899557d2ba8e128914a848388a660b</validCheckSum>
+    <validCheckSum>7:f2d36378a001d6b67ac813a1adfe457a</validCheckSum>
     <sql>
-      insert into catissue_user values (CATISSUE_USER_SEQ.nextval, '$system', 'System', null, '$system', null, 'Locked', null, null, null, null, null, 0, null, 'openspecimen', 1);
+      insert into catissue_user
+        (identifier, email_address, first_name, login_name, activity_status, first_time_login, domain_name, is_admin)
+      values
+        (default, '$system', 'System', '$system', 'Locked', 0, 'openspecimen', 1);
     </sql>
   </changeSet>
   
