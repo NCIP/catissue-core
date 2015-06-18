@@ -51,27 +51,27 @@
     </query>
     
     <sql-query name="insertQueryChangeLog">
-      insert 
-        into 
-      catissue_import_queries_log
-		(filename, md5_digest, status, executed_on, query_id) 
+      insert into catissue_import_queries_log
+        (filename, md5_digest, status, executed_on, query_id) 
       values
-		(:fileName, :md5_digest, :status, :executed_on, :query_id)
+        (:fileName, :md5_digest, :status, :executed_on, :query_id)
     </sql-query>
     
     <sql-query name="getQueryIdAndDigest">
       select 
-		query_id, md5_digest 
+        query_id, md5_digest 
       from
         catissue_import_queries_log ql 
       where
-        ql.filename = :fileName and ql.executed_on in ( 
+        ql.filename = :fileName 
+        and ql.executed_on in ( 
           select 
             max(executed_on) 
           from
             catissue_import_queries_log 
           where
-            filename = :fileName )
+            filename = :fileName 
+        )
     </sql-query>
   </class> 
 </hibernate-mapping>

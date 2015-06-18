@@ -14,7 +14,7 @@ public class QueryFolderDaoImpl extends AbstractDao<QueryFolder> implements Quer
 	
 	private static final String GET_QUERY_FOLDERS_BY_USER = FQN + ".getQueryFoldersByUser";
 	
-	private static final String GET_FOLDER_BY_NAME = FQN +".getQueryFoldersByName";
+	private static final String GET_FOLDER_BY_NAME = FQN + ".getQueryFolderByName";
 
 	@SuppressWarnings("unchecked")
 	@Override

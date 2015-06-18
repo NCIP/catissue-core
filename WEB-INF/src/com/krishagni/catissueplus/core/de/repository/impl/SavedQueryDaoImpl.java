@@ -239,7 +239,7 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 		return result;		
 	}
 	
-	private static final String INSERT_QUERY_CHANGE_LOG_SQL = FQN +".insertQueryChangeLog"; 
+	private static final String INSERT_QUERY_CHANGE_LOG_SQL = FQN + ".insertQueryChangeLog"; 
 	
 	private static final String GET_QUERY_ID_AND_MD5_SQL = FQN + ".getQueryIdAndDigest"; 
 }

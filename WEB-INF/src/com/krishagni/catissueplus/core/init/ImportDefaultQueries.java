@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.init;
 
+import java.io.File;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
@@ -69,7 +70,7 @@ public class ImportDefaultQueries implements InitializingBean {
 
 		Set<SavedQuery> queries = new HashSet<SavedQuery>();
 		for (Resource resource : resources) {
-			String filename = QUERIES_DIRECTORY + "/" + resource.getFilename();
+			String filename = QUERIES_DIRECTORY + File.separator + resource.getFilename();
 			System.out.println("Importing query from file: " + filename);
 			String newDigest = Utility.getResourceDigest(filename);
 			byte[] content = IOUtils.toByteArray(resource.getURI());
@@ -101,9 +102,7 @@ public class ImportDefaultQueries implements InitializingBean {
 			savedQuery.setCreatedBy(sysUser);
 			savedQuery.setLastUpdated(new Date());
 			savedQuery.setLastUpdatedBy(sysUser);
-//			String title = savedQuery.getTitle();
 			daoFactory.getSavedQueryDao().saveOrUpdate(savedQuery);
-//			savedQuery.setTitle(title);
 			if (savedQuery.getId() == null) {
 				System.out.println("Error saving query definition from file: " + filename);
 				return null;
@@ -133,7 +132,7 @@ public class ImportDefaultQueries implements InitializingBean {
 	}
 
 	private void shareDefaultQueries(Set<SavedQuery> queries) {
-		QueryFolder folder = getFolderByName(DEFAULT_QUERIES);
+		QueryFolder folder = daoFactory.getQueryFolderDao().getByName(DEFAULT_QUERIES);
 		if (folder == null) {
 			folder = new QueryFolder();
 		}
@@ -143,12 +142,8 @@ public class ImportDefaultQueries implements InitializingBean {
 		daoFactory.getQueryFolderDao().saveOrUpdate(folder);
 	}
 	
-	private QueryFolder getFolderByName(String folderName) {
-		return daoFactory.getQueryFolderDao().getByName(folderName);
-	}
-	
 	private static final String DEFAULT_QUERIES = "Default Queries";
 	
-	private static final String QUERIES_DIRECTORY = "/aq-queries";
+	private static final String QUERIES_DIRECTORY = File.separator + "aq-queries";
 
 }
