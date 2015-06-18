@@ -3,7 +3,9 @@ package com.krishagni.catissueplus.rest.controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.administrative.events.AssignPositionsOp;
 import com.krishagni.catissueplus.core.administrative.events.ContainerMapExportDetail;
 import com.krishagni.catissueplus.core.administrative.events.ContainerQueryCriteria;
+import com.krishagni.catissueplus.core.administrative.events.ContainerReplicationDetail;
 import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
@@ -281,6 +284,19 @@ public class StorageContainersController {
 		return resp.getPayload();
 	}
 	
+	@RequestMapping(method = RequestMethod.POST, value="/{id}/replica")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Boolean> replicateStorageContainer(@PathVariable Long id, @RequestBody ContainerReplicationDetail repl) {
+		repl.setSourceContainerId(id);
+
+		RequestEvent<ContainerReplicationDetail> req = new RequestEvent<ContainerReplicationDetail>(repl);
+		ResponseEvent<Boolean> resp = storageContainerSvc.replicateStorageContainer(req);
+		resp.throwErrorIfUnsuccessful();
+
+		return Collections.singletonMap("status", true);
+	}
+
 	private StorageContainerDetail getContainer(ContainerQueryCriteria crit) {
 		RequestEvent<ContainerQueryCriteria> req = new RequestEvent<ContainerQueryCriteria>(crit);
 		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.getStorageContainer(req);

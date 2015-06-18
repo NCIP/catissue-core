@@ -544,6 +544,10 @@ public class AccessCtrlMgr {
 		ensureStorageContainerObjectRights(container, Operation.CREATE);
 	}
 	
+	public void ensureCreateContainerRights(Site containerSite) {
+		ensureStorageContainerObjectRights(containerSite, Operation.CREATE);
+	}
+	
 	public void ensureReadContainerRights(StorageContainer container) {
 		ensureStorageContainerObjectRights(container, Operation.READ);
 	}
@@ -561,6 +565,14 @@ public class AccessCtrlMgr {
 			return;
 		}
 		
+		ensureStorageContainerObjectRights(container.getSite(), op);
+	}
+	
+	private void ensureStorageContainerObjectRights(Site containerSite, Operation op) {
+		if (AuthUtil.isAdmin()) {
+			return;
+		}
+		
 		Long userId = AuthUtil.getCurrentUser().getId();
 		String resource = Resource.STORAGE_CONTAINER.getName();
 		String[] ops = {op.getName()};
@@ -571,7 +583,6 @@ public class AccessCtrlMgr {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 		
-		Site containerSite = container.getSite();
 		for (SubjectAccess access : accessList) {
 			Site accessSite = access.getSite();
 			if (accessSite != null && accessSite.equals(containerSite)) { // Specific site

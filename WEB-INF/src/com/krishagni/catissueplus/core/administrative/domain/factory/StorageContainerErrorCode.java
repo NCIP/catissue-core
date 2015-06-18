@@ -8,6 +8,10 @@ public enum StorageContainerErrorCode implements ErrorCode {
 	
 	NAME_REQUIRED,
 	
+	ID_OR_NAME_REQ,
+	
+	SRC_ID_OR_NAME_REQ,
+	
 	DUP_NAME,
 	
 	DUP_BARCODE,

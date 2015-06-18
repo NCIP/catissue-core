@@ -2,18 +2,23 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
 import com.krishagni.catissueplus.core.administrative.events.AssignPositionsOp;
 import com.krishagni.catissueplus.core.administrative.events.ContainerMapExportDetail;
 import com.krishagni.catissueplus.core.administrative.events.ContainerQueryCriteria;
+import com.krishagni.catissueplus.core.administrative.events.ContainerReplicationDetail;
+import com.krishagni.catissueplus.core.administrative.events.ContainerReplicationDetail.DestinationDetail;
 import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
@@ -27,11 +32,13 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorC
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 public class StorageContainerServiceImpl implements StorageContainerService {
@@ -90,10 +97,6 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	public ResponseEvent<StorageContainerDetail> getStorageContainer(RequestEvent<ContainerQueryCriteria> req) {
 		try {		
 			StorageContainer container = getContainer(req.getPayload());						
-			if (container == null) {
-				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
-			}
-			
 			AccessCtrlMgr.getInstance().ensureReadContainerRights(container);
 			return ResponseEvent.response(StorageContainerDetail.from(container));
 		} catch (OpenSpecimenException ose) {
@@ -197,11 +200,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	public ResponseEvent<ContainerMapExportDetail> exportMap(RequestEvent<ContainerQueryCriteria> req) {
 		try {
 			StorageContainer container = getContainer(req.getPayload());						
-			if (container == null) {
-				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
-			}
 			AccessCtrlMgr.getInstance().ensureReadContainerRights(container);
-			
 			File file = mapExporter.exportToFile(container);
 			return ResponseEvent.response(new ContainerMapExportDetail(container.getName(), file));
 		} catch (Exception e) {
@@ -215,9 +214,6 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		try {
 			AssignPositionsOp op = req.getPayload();
 			StorageContainer container = getContainer(op.getContainerId(), op.getContainerName());
-			if (container == null) {
-				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
-			}
 			
 			List<StorageContainerPosition> positions = new ArrayList<StorageContainerPosition>();
 			for (StorageContainerPositionDetail posDetail : op.getPositions()) {
@@ -268,18 +264,54 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		}
 	}
 
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Boolean> replicateStorageContainer(RequestEvent<ContainerReplicationDetail> req) {
+		try {
+			ContainerReplicationDetail replDetail = req.getPayload();
+			StorageContainer srcContainer = getContainer(
+					replDetail.getSourceContainerId(), 
+					replDetail.getSourceContainerName(), 
+					StorageContainerErrorCode.SRC_ID_OR_NAME_REQ);
+			
+			for (DestinationDetail dest : replDetail.getDestinations()) {
+				replicateContainer(srcContainer, dest);
+			}
+
+			return ResponseEvent.response(true);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}	
+	
 	private StorageContainer getContainer(ContainerQueryCriteria crit) {
 		return getContainer(crit.getId(), crit.getName());
 	}
 	
 	private StorageContainer getContainer(Long id, String name) {
+		return getContainer(id, name, StorageContainerErrorCode.ID_OR_NAME_REQ);
+	}
+	
+	private StorageContainer getContainer(Long id, String name, ErrorCode requiredErrCode) {
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		StorageContainer container = null;
 		if (id != null) {
 			container = daoFactory.getStorageContainerDao().getById(id);
+			if (container == null) {
+				ose.addError(StorageContainerErrorCode.NOT_FOUND, id);
+			}
 		} else if (StringUtils.isNotBlank(name)) {
 			container = daoFactory.getStorageContainerDao().getByName(name);
+			if (container == null) {
+				ose.addError(StorageContainerErrorCode.NOT_FOUND, name);
+			}
+		} else if (requiredErrCode != null) {
+			ose.addError(requiredErrCode);
 		}
 		
+		ose.checkAndThrow();
 		return container;
 	}
 	
@@ -287,9 +319,6 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		try {
 			StorageContainerDetail input = req.getPayload();			
 			StorageContainer existing = getContainer(input.getId(), input.getName());			
-			if (existing == null) {
-				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
-			}
 			AccessCtrlMgr.getInstance().ensureUpdateContainerRights(existing);			
 			
 			input.setId(existing.getId());
@@ -316,7 +345,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		if (!isUniqueName(existing, newContainer)) {
-			ose.addError(StorageContainerErrorCode.DUP_NAME);
+			ose.addError(StorageContainerErrorCode.DUP_NAME, newContainer.getName());
 		}
 		
 		if (!isUniqueBarcode(existing, newContainer)) {
@@ -331,7 +360,11 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			return true;
 		}
 		
-		StorageContainer container = daoFactory.getStorageContainerDao().getByName(newContainer.getName());
+		return isUniqueName(newContainer.getName());
+	}
+		
+	private boolean isUniqueName(String name) {
+		StorageContainer container = daoFactory.getStorageContainerDao().getByName(name);
 		return container == null;
 	}
 	
@@ -417,10 +450,6 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			String containerName) {
 		
 		StorageContainer childContainer = getContainer(containerId, containerName);
-		if (childContainer == null) {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.NOT_FOUND);
-		}
-		
 		AccessCtrlMgr.getInstance().ensureUpdateContainerRights(childContainer);
 		if (!container.canContain(childContainer)) {
 			throw OpenSpecimenException.userError(
@@ -436,5 +465,85 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		StorageContainerPosition position = container.createPosition(pos.getPosOne(), pos.getPosTwo());
 		position.setOccupyingContainer(childContainer);
 		return position;
+	}
+	
+	private void replicateContainer(StorageContainer srcContainer, DestinationDetail dest) {
+		StorageContainer parentContainer = getContainer(dest.getParentContainerId(), dest.getParentContainerName(), null);
+		
+		Site site = null;
+		if (parentContainer != null) {
+			site = parentContainer.getSite();
+		} else if (StringUtils.isNotBlank(dest.getSiteName())) {
+			site = getSite(dest.getSiteName());
+		} else {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.REQUIRED_SITE_OR_PARENT_CONT);
+		}
+		
+		if (parentContainer != null && dest.getNewContainerNames().size() > parentContainer.freePositionsCount()) {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.NO_FREE_SPACE);
+		}
+		
+		AccessCtrlMgr.getInstance().ensureCreateContainerRights(site);
+
+		for (CollectionProtocol cp : srcContainer.getAllowedCps()) {
+			if (!cp.getRepositories().contains(site)) {
+				throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_CPS);
+			}
+		}
+				
+		for (String name : dest.getNewContainerNames()) {
+			if (!isUniqueName(name)) {
+				throw OpenSpecimenException.userError(StorageContainerErrorCode.DUP_NAME, name);
+			}
+		}
+		
+		boolean validatedOnce = false;
+		for (String name : dest.getNewContainerNames()) {
+			StorageContainer newContainer = getContainerCopy(srcContainer, name, site, parentContainer);
+			if (!validatedOnce) {
+				newContainer.validateRestrictions();
+				validatedOnce = true;
+			}
+			
+			daoFactory.getStorageContainerDao().saveOrUpdate(newContainer);
+		}				
+	}
+	
+	private StorageContainer getContainerCopy(StorageContainer source, String name, Site site, StorageContainer parentContainer) {
+		StorageContainer copy = new StorageContainer();
+		copy.setName(name);
+		copy.setTemperature(source.getTemperature());
+		copy.setNoOfColumns(source.getNoOfColumns());
+		copy.setNoOfRows(source.getNoOfRows());
+		copy.setColumnLabelingScheme(source.getColumnLabelingScheme());
+		copy.setRowLabelingScheme(source.getRowLabelingScheme());
+		copy.setSite(site);
+		copy.setParentContainer(parentContainer);
+		copy.setComments(source.getComments());
+		copy.setAllowedSpecimenClasses(new HashSet<String>(source.getAllowedSpecimenClasses()));		
+		copy.setAllowedSpecimenTypes(new HashSet<String>(source.getAllowedSpecimenTypes()));
+		copy.setAllowedCps(new HashSet<CollectionProtocol>(source.getAllowedCps()));
+		copy.setCompAllowedSpecimenClasses(copy.computeAllowedSpecimenClasses());
+		copy.setCompAllowedSpecimenTypes(copy.computeAllowedSpecimenTypes());
+		copy.setCompAllowedCps(copy.computeAllowedCps());
+		copy.setStoreSpecimenEnabled(source.isStoreSpecimenEnabled());
+		copy.setCreatedBy(AuthUtil.getCurrentUser());
+		
+		if (parentContainer != null) {
+			StorageContainerPosition position = parentContainer.nextAvailablePosition();
+			position.setOccupyingContainer(copy);
+			parentContainer.addPosition(position);
+		}
+		
+		return copy;
 	}	
+	
+	private Site getSite(String name) {
+		Site site = daoFactory.getSiteDao().getSiteByName(name);
+		if (site == null) {
+			throw OpenSpecimenException.userError(SiteErrorCode.NOT_FOUND, name);
+		}
+		
+		return site;
+	}
 }

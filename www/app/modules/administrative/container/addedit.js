@@ -112,7 +112,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
 
       CollectionProtocol.query({repositoryName: siteName}).then(
         function(cps) {
-          $scope.cps = allCps = cps.map(function(cp) { return cp.shortTitle; });
+          $scope.cps = cps.map(function(cp) { return cp.shortTitle; });
 
           // fix - pre-selected cps were getting cleared
           $scope.container.allowedCollectionProtocols = allowedCps; 
