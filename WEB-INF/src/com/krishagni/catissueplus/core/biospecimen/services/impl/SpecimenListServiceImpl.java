@@ -81,7 +81,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			Long listId = req.getPayload();
 			SpecimenList specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);
 			if (specimenList == null) {
-				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
+				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND, listId);
 			}
 			
 			Long userId = AuthUtil.getCurrentUser().getId();
@@ -139,9 +139,10 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 	@PlusTransactional
 	public ResponseEvent<SpecimenListDetails> deleteSpecimenList(RequestEvent<Long> req) {
 		try {
-			SpecimenList existing = daoFactory.getSpecimenListDao().getSpecimenList(req.getPayload());
+			Long listId = req.getPayload();
+			SpecimenList existing = daoFactory.getSpecimenListDao().getSpecimenList(listId);
 			if (existing == null) {
-				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
+				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND, listId);
 			}
 			
 			Long userId = AuthUtil.getCurrentUser().getId();
@@ -168,7 +169,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			Long listId = req.getPayload();
 			SpecimenList specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);			
 			if (specimenList == null) {
-				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
+				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND, listId);
 			}
 			
 			Long userId = AuthUtil.getCurrentUser().getId();
@@ -200,7 +201,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			Long listId = opDetail.getListId();
 			SpecimenList specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);			
 			if (specimenList == null) {
-				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
+				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND, listId);
 			}
 			
 			Long userId = AuthUtil.getCurrentUser().getId();
@@ -255,7 +256,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			Long listId = opDetail.getListId();
 			SpecimenList specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);
 			if (specimenList == null) {
-				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
+				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND, listId);
 			}
 			
 			Long userId = AuthUtil.getCurrentUser().getId();
@@ -306,7 +307,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			SpecimenListDetails listDetails = req.getPayload();
 			SpecimenList existing = daoFactory.getSpecimenListDao().getSpecimenList(listDetails.getId());
 			if (existing == null) {
-				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND);
+				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND, listDetails.getId());
 			}
 			
 			Long userId = AuthUtil.getCurrentUser().getId();
@@ -430,7 +431,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 	private void ensureUniqueName(SpecimenList newList) {
 		SpecimenList list = daoFactory.getSpecimenListDao().getSpecimenListByName(newList.getName());
 		if  (list != null) {
-			throw OpenSpecimenException.userError(SpecimenListErrorCode.DUP_NAME);
+			throw OpenSpecimenException.userError(SpecimenListErrorCode.DUP_NAME, newList.getName());
 		}
 	}
 }
