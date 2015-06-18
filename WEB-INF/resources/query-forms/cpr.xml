@@ -199,7 +199,7 @@
       <subForm>
         <name>scgs</name>
         <udn>scgs</udn>
-        <caption>#getMessage("participnat_scg")</caption>
+        <caption>#getMessage("participant_visits")</caption>
         <table>CATISSUE_SPECIMEN_COLL_GROUP</table>
         <foreignKey>COLLECTION_PROTOCOL_REG_ID</foreignKey>
         <parentKey>CPR_ID</parentKey>
@@ -208,7 +208,7 @@
           <subForm>
             <name>specimens</name>
             <udn>specimens</udn>
-            <caption>#getMessage("participnat_scg_specimens")</caption>
+            <caption>#getMessage("participant_visits_specimens")</caption>
             <table>CATISSUE_SPECIMEN</table>
             <foreignKey>SPECIMEN_COLLECTION_GROUP_ID</foreignKey>
             <parentKey>IDENTIFIER</parentKey>
@@ -217,7 +217,7 @@
               <subForm>
                 <name>specimenOrders</name>
                 <udn>specimenOrders</udn>
-                <caption>#getMessage("participnat_scg_specimens_order_items")</caption>
+                <caption>#getMessage("participant_visits_specimens_order_items")</caption>
                 <table>OS_ORDER_ITEMS</table>
                 <foreignKey>SPECIMEN_ID</foreignKey>
                 <parentKey>IDENTIFIER</parentKey>
@@ -225,7 +225,7 @@
                   <subForm>
                     <name>order</name>
                     <udn>order</udn>
-                    <caption>#getMessage("participnat_scg_specimens_order_items_order")</caption>
+                    <caption>#getMessage("participant_visits_specimens_order_items_order")</caption>
                     <table>OS_ORDERS</table>
                     <foreignKey>IDENTIFIER</foreignKey>
                     <parentKey>ORDER_ID</parentKey>

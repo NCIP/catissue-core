@@ -69,14 +69,14 @@ public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory {
 	private ObjectSchema parseSchema(String schemaResource) {
 		InputStream in = null;
 		try {
-			in = preProcessSchema(schemaResource);
+			in = preprocessSchema(schemaResource);
 			return ObjectSchema.parseSchema(in);
 		} finally {
 			IOUtils.closeQuietly(in);
 		}
 	}
 	
-	private InputStream preProcessSchema(String schemaResource) {
+	private InputStream preprocessSchema(String schemaResource) {
 		String template = templateService.render(schemaResource, new HashMap<String, Object>());
 		return new ByteArrayInputStream( template.getBytes() );
 	}

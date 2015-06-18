@@ -9,63 +9,63 @@
     <name>com.krishagni.catissueplus.core.biospecimen.events.VisitDetail</name>
    
     <field>
-      <caption>#getMessage("scg_cp_short_title")</caption>
+      <caption>#getMessage("visit_cp_short_title")</caption>
       <attribute>cpShortTitle</attribute>
     </field>     
 
     <field>
-      <caption>#getMessage("scg_ppid")</caption>
+      <caption>#getMessage("visit_ppid")</caption>
       <attribute>ppid</attribute>
     </field>     
 
     <field>
-      <caption>#getMessage("scg_event_label")</caption>
+      <caption>#getMessage("visit_event_label")</caption>
       <attribute>eventLabel</attribute>
     </field>     
 
     <field>
-      <caption>#getMessage("scg_name")</caption>
+      <caption>#getMessage("visit_name")</caption>
       <attribute>name</attribute>
     </field>     
 
     <field>
       <type>date</type>
-      <caption>#getMessage("scg_date")</caption>
+      <caption>#getMessage("visit_date")</caption>
       <attribute>visitDate</attribute>
     </field>  
 
     <field>
-      <caption>#getMessage("scg_site")</caption>
+      <caption>#getMessage("visit_site")</caption>
       <attribute>site</attribute>
     </field>  
 
     <field>
-      <caption>#getMessage("scg_status")</caption>
+      <caption>#getMessage("visit_status")</caption>
       <attribute>status</attribute>
     </field>  
 
     <field>
-      <caption>#getMessage("scg_clinical_diagnosis")</caption>
+      <caption>#getMessage("visit_clinical_diagnosis")</caption>
       <attribute>clinicalDiagnosis</attribute>
     </field>  
 
     <field>
-      <caption>#getMessage("scg_clinical_status")</caption>
+      <caption>#getMessage("visit_clinical_status")</caption>
       <attribute>clinicalStatus</attribute>
     </field>  
 
     <field>
-      <caption>#getMessage("scg_surgical_pathology_number")</caption>
+      <caption>#getMessage("visit_surgical_pathology_number")</caption>
       <attribute>surgicalPathologyNumber</attribute>
     </field>  
 
     <field>
-      <caption>#getMessage("scg_comments")</caption>
+      <caption>#getMessage("visit_comments")</caption>
       <attribute>comments</attribute>
     </field>  
 
     <field>
-      <caption>#getMessage("scg_activity_status")</caption>
+      <caption>#getMessage("visit_activity_status")</caption>
       <attribute>activityStatus</attribute>
     </field>  
   </record>

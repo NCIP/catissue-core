@@ -92,7 +92,7 @@
     </record>
 
     <record>
-      <caption>#getMessage("participnat_cpr")</caption>
+      <caption>#getMessage("participant_cpr")</caption>
       <attribute>registrations</attribute>
       <multiple>true</multiple>
 
