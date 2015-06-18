@@ -54,7 +54,6 @@ angular.module('os.biospecimen.participant.root', ['os.biospecimen.models'])
       var update = AuthorizationService.isAllowed($scope.specimenResource.updateOpts);
       $scope.specimenAllowedOps = {update: update};
 
-
       // Surgical Pathology Report Authorization Options
       $scope.sprResource = {
         readOpts: {
