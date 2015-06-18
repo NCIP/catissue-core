@@ -57,6 +57,10 @@
         l.name
     </query>
     
+    <query name="getSpecimenListByName">
+      from SpecimenList l where l.name = :name
+    </query>
+    
     <query name="getListSpecimensCount">
       select 
         count(s.id)

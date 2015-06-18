@@ -13,6 +13,8 @@ public class SpecimenListDaoImpl extends AbstractDao<SpecimenList> implements Sp
 	
 	private static final String GET_SPECIMEN_LISTS_BY_USER = FQN + ".getSpecimenListsByUser";
 	
+	private static final String GET_SPECIMEN_LIST_BY_NAME = FQN + ".getSpecimenListByName";
+	
 	private static final String GET_LIST_SPECIMENS_COUNT = FQN + ".getListSpecimensCount";
 	
 	@SuppressWarnings("unchecked")
@@ -36,6 +38,17 @@ public class SpecimenListDaoImpl extends AbstractDao<SpecimenList> implements Sp
 	public SpecimenList getSpecimenList(Long listId) {
 		return (SpecimenList)sessionFactory.getCurrentSession()
 				.get(SpecimenList.class, listId);
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public SpecimenList getSpecimenListByName(String name) {
+		List<SpecimenList> result = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_SPECIMEN_LIST_BY_NAME)
+				.setString("name", name)
+				.list();
+		
+		return result.isEmpty() ? null : result.get(0);
 	}
 	
 	@Override
