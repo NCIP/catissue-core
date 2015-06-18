@@ -911,25 +911,37 @@
 
   <changeSet author="ahegade" id="Address column for catissue site audit table">
     <addColumn tableName="catissue_site_aud">
-      <column name="ADDRESS" type="text"/>
+      <column name="ADDRESS" type="CLOB"/>
     </addColumn>
   </changeSet>
 
   <changeSet author="ahegade" id="Address column for catissue site audit table modified">
     <addColumn tableName="catissue_site_aud">
-      <column name="address_MOD" type="BIT"/>
+      <column name="address_MOD" type="NUMBER(1, 0)"/>
     </addColumn>
   </changeSet>
 
   <changeSet author="ahegade" id="Address column for catissue user audit table">
     <addColumn tableName="catissue_user_aud">
-      <column name="ADDRESS" type="text"/>
+      <column name="ADDRESS" type="CLOB"/>
     </addColumn>
   </changeSet>
 
   <changeSet author="ahegade" id="Address column for catissue user audit table modified">
     <addColumn tableName="catissue_user_aud">
-      <column name="address_MOD" type="BIT"/>
+      <column name="address_MOD" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Added column to specify order of specimen requirements">
+    <addColumn tableName="catissue_cp_req_specimen_aud">
+      <column name="SORT_ORDER" type="NUMBER(5, 0)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Column to track whether order column got modified">
+    <addColumn tableName="catissue_cp_req_specimen_aud">
+      <column name="sortOrder_MOD" type="NUMBER(1, 0)"/>
     </addColumn>
   </changeSet>
 </databaseChangeLog>

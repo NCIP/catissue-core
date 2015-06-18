@@ -49,6 +49,8 @@ public class SpecimenRequirement {
 	private CollectionProtocolEvent collectionProtocolEvent;
 
 	private String labelFormat;
+	
+	private Integer sortOrder;
 
 	private String activityStatus;
 			
@@ -199,6 +201,14 @@ public class SpecimenRequirement {
 		this.labelFormat = labelFormat;
 	}
 
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+
 	public String getActivityStatus() {
 		return activityStatus;
 	}
@@ -248,6 +258,7 @@ public class SpecimenRequirement {
 		}
 
 		setName(sr.getName());
+		setSortOrder(sr.getSortOrder());
 		setInitialQuantity(sr.getInitialQuantity());
 		setStorageType(sr.getStorageType());
 		setLabelFormat(sr.getLabelFormat());
@@ -370,7 +381,8 @@ public class SpecimenRequirement {
 	}
 	
 	private static final String[] EXCLUDE_COPY_PROPS = {
-		"id", 
+		"id",
+		"sortOrder",
 		"parentSpecimenRequirement",
 		"childSpecimenRequirements",
 		"specimens"		

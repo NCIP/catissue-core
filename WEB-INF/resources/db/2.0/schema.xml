@@ -2201,4 +2201,10 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="vpawar" id="Added column to specify order of specimen requirements">
+    <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+      <column name="SORT_ORDER" type="${smallint.type}"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

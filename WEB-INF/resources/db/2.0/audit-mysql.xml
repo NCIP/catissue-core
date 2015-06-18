@@ -925,4 +925,15 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="vpawar" id="Added column to specify order of specimen requirements">
+    <addColumn tableName="catissue_cp_req_specimen_aud">
+      <column name="SORT_ORDER" type="INT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Column to track whether order column got modified">
+    <addColumn tableName="catissue_cp_req_specimen_aud">
+      <column name="sortOrder_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

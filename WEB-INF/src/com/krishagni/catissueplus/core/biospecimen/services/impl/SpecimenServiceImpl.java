@@ -281,8 +281,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			
 			return;
 		}
-		
-		
+
 		if (StringUtils.isNotBlank(labelTmpl)) {
 			if (!cp.isManualSpecLabelEnabled()) {
 				ose.addError(SpecimenErrorCode.MANUAL_LABEL_NOT_ALLOWED);

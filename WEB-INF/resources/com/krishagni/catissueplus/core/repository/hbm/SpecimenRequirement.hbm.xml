@@ -8,76 +8,31 @@
     name="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement" 
     table="CATISSUE_CP_REQ_SPECIMEN">
 
-    <id
-      name="id"
-      column="IDENTIFIER"
-      type="long"
-      length="30"
-      unsaved-value="null">
-      
+    <id name="id" column="IDENTIFIER">
       <generator class="native">
         <param name="sequence">CATISSUE_REQ_SPECIMEN_SEQ</param>
       </generator>
     </id>
 
-    <property
-      name="name"
-      type="string"
-      column="SPEC_REQ_LABEL"
-      length="255"/>
+    <property name="name" column="SPEC_REQ_LABEL"/>
 
-    <property
-      name="lineage"
-      type="string"
-      column="LINEAGE"
-      length="50"/>
+    <property name="lineage" column="LINEAGE"/>
       
-    <property
-      name="specimenClass"
-      type="string"
-      column="SPECIMEN_CLASS"
-      length="50"/>
+    <property name="specimenClass" column="SPECIMEN_CLASS"/>
 
-    <property
-      name="specimenType"
-      type="string"
-      column="SPECIMEN_TYPE"
-      length="50"/>
+    <property name="specimenType" column="SPECIMEN_TYPE"/>
       
-    <property
-      name="anatomicSite"
-      type="string"
-      column="TISSUE_SITE"
-      length="50"/>
+    <property name="anatomicSite" column="TISSUE_SITE"/>
 
-    <property
-      name="laterality"
-      type="string"
-      column="TISSUE_SIDE"
-      length="50"/>
+    <property name="laterality" column="TISSUE_SIDE"/>
       
-    <property
-      name="pathologyStatus"
-      type="string"
-      column="PATHOLOGICAL_STATUS"
-      length="50"/>
+    <property name="pathologyStatus" column="PATHOLOGICAL_STATUS"/>
 
-    <property
-      name="storageType"
-      type="string"
-      column="STORAGE_TYPE"
-      length="50"/>
+    <property name="storageType" column="STORAGE_TYPE"/>
 
-    <property
-      name="initialQuantity"
-      type="double"
-      column="INITIAL_QUANTITY"
-      length="50"/>
+    <property name="initialQuantity" column="INITIAL_QUANTITY"/>
 
-    <property
-      name="concentration"
-      type="double"
-      column="CONCENTRATION"/>
+    <property name="concentration" column="CONCENTRATION"/>
 
     <many-to-one
       name="collector"
@@ -85,17 +40,9 @@
       cascade="none"
       column="COLLECTOR_ID"/>
 
-    <property
-      name="collectionProcedure"
-      type="string"
-      column="COLLECTION_PROCEDURE"
-      length="50"/>
+    <property name="collectionProcedure" column="COLLECTION_PROCEDURE"/>
 
-    <property
-      name="collectionContainer"
-      type="string"
-      column="COLLECTION_CONTAINER"
-      length="50"/>
+    <property name="collectionContainer" column="COLLECTION_CONTAINER"/>
 
     <many-to-one
       name="receiver"
@@ -109,17 +56,11 @@
       cascade="none"
       column="COLLECTION_PROTOCOL_EVENT_ID"/>
 
-    <property
-      name="labelFormat"
-      type="string"
-      column="LABELFORMAT"
-      length="255" />
+    <property name="labelFormat" column="LABELFORMAT"/>
 
-    <property
-      name="activityStatus"
-      type="string"
-      column="ACTIVITY_STATUS"
-      length="50"/>
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+  
+    <property name="sortOrder" column="SORT_ORDER"/>
       
     <many-to-one
       name="parentSpecimenRequirement"
@@ -134,7 +75,6 @@
       <filter name="activeEntity"/>
     </set>
 
-      
     <set
       name="specimens"
       table="CATISSUE_SPECIMEN"

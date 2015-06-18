@@ -45,6 +45,8 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 	
 	private String labelFmt;
 	
+	private Integer sortOrder;
+	
 	private Long eventId;
 	
 	private List<SpecimenRequirementDetail> children;
@@ -177,6 +179,14 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		this.labelFmt = labelFmt;
 	}
 
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+
 	public Long getEventId() {
 		return eventId;
 	}
@@ -195,7 +205,13 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 
 	@Override
 	public int compareTo(SpecimenRequirementDetail other) {
-		if (id != null && other.id != null) {
+		if (sortOrder != null && other.sortOrder != null) {
+			return sortOrder.compareTo(other.sortOrder);
+		} else if (sortOrder != null) {
+			return -1;
+		} else if (other.sortOrder != null) {
+			return 1;
+		} else if (id != null && other.id != null) {
 			return id.compareTo(other.id);
 		} else if (id != null) {
 			return -1;
@@ -249,6 +265,7 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		detail.setCollectionContainer(sr.getCollectionContainer());
 		detail.setReceiver(sr.getReceiver() == null ? null : UserSummary.from(sr.getReceiver()));
 		detail.setLabelFmt(sr.getLabelFormat());
+		detail.setSortOrder(sr.getSortOrder());
 		detail.setEventId(sr.getCollectionProtocolEvent().getId());
 		detail.setChildren(from(sr.getChildSpecimenRequirements()));
 		

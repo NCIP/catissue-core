@@ -39,6 +39,8 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 	
 	private Long reqId;
 	
+	private Integer sortOrder;
+	
 	private String label;
 	
 	private String barcode;
@@ -133,6 +135,14 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 
 	public void setReqId(Long reqId) {
 		this.reqId = reqId;
+	}
+
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 
 	public String getLabel() {
@@ -316,6 +326,7 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		SpecimenRequirement sr= specimen.getSpecimenRequirement();
 		result.setReqId(sr != null ? sr.getId() : null);
 		result.setReqLabel(sr != null ? sr.getName() : null);
+		result.setSortOrder(sr != null ? sr.getSortOrder() : null);
 		result.setLabel(specimen.getLabel());
 		result.setBarcode(specimen.getBarcode());
 		result.setType(specimen.getSpecimenType());
@@ -355,6 +366,7 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		result.setId(null);	
 		result.setReqId(anticipated.getId());
 		result.setReqLabel(anticipated.getName());
+		result.setSortOrder(anticipated.getSortOrder());
 		result.setBarcode(null);
 		result.setType(anticipated.getSpecimenType());
 		result.setSpecimenClass(anticipated.getSpecimenClass());
@@ -373,7 +385,13 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 	
 	@Override
 	public int compareTo(SpecimenInfo other) {
-		if (reqId != null && other.reqId != null) {
+		if (sortOrder != null && other.sortOrder != null) {
+			return sortOrder.compareTo(other.sortOrder);
+		} else if (sortOrder != null) {
+			return -1;
+		} else if (other.sortOrder != null) {
+			return 1;
+		} else if (reqId != null && other.reqId != null) {
 			return reqId.compareTo(other.reqId);
 		} else if (reqId != null) {
 			return -1;

@@ -78,7 +78,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setReceiver(detail, requirement, ose);		
 		setCpe(detail, requirement, ose);
 		
-		// TODO:
+		requirement.setSortOrder(detail.getSortOrder());
 		requirement.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 
 		ose.checkAndThrow();		
@@ -122,6 +122,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		sr.setName(req.getName());
+		sr.setSortOrder(req.getSortOrder());
 		
 		//
 		// Specimen class and type are set here so that properties dependent on these can
@@ -145,7 +146,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setCollectionProcedure(req, sr, ose);
 		setCollectionContainer(req, sr, ose);
 		setReceiver(req, sr, ose);		
-
+		
 		ose.checkAndThrow();	
 		return sr;		
 	}
