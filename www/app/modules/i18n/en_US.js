@@ -583,6 +583,7 @@
     "login_name": "Login Name",
     "password": "Password",
     "confirm_password": "Confirm Password",
+    "password_rule": "Tip: Password should contains atleast 1 uppercase letter, 1 lowercase  letter, 1 number and should be 8 characters long.",
     "sign_in_title": "Sign in to continue to OpenSpecimen",
     "sign_in_failed": "The username or password you entered is incorrect",
     "sign_in": "Sign In",
