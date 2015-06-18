@@ -475,6 +475,7 @@
   </bean>
 
   <bean id="objectSchemaFactory" class="com.krishagni.catissueplus.core.importer.services.impl.ObjectSchemaFactoryImpl">
+    <property name="templateService" ref="templateService"/>
     <property name="schemaResources">
       <list>
         <value>com/krishagni/catissueplus/core/administrative/schema/institute.xml</value>

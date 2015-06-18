@@ -110,7 +110,7 @@ public abstract class ImportForms implements InitializingBean {
 		for (String formFile : formFiles) {
 			InputStream in = null;
 			try {			
-				in = preProcessDefForms(formFile);
+				in = preProcessForms(formFile);
 				String existingDigest = daoFactory.getFormDao().getFormChangeLogDigest(formFile);
 				String newDigest = Utility.getInputStreamDigest(in);
 				if (existingDigest != null && existingDigest.equals(newDigest)) {
@@ -153,7 +153,7 @@ public abstract class ImportForms implements InitializingBean {
 		daoFactory.getFormDao().saveOrUpdate(getFormContext(formFile, formId));
 	}
 		
-	private InputStream preProcessDefForms(String formFile) {
+	private InputStream preProcessForms(String formFile) {
 		String template = templateService.render(formFile, new HashMap<String, Object>());
 		return new ByteArrayInputStream( template.getBytes() );
 	}
