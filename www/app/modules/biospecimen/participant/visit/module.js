@@ -3,7 +3,6 @@ angular.module('os.biospecimen.visit', [
     'ui.router',
     'os.biospecimen.participant.specimen-tree',
     'os.biospecimen.extensions',
-    'os.biospecimen.visit.root',
     'os.biospecimen.visit.addedit',
     'os.biospecimen.visit.spr',
     'os.biospecimen.visit.detail'

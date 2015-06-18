@@ -26,11 +26,7 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
        Operation.query().then(
          function(operations) {
            angular.forEach(operations, function(operation) {
-             var show = true;
-             if (operation.name == 'Lock' || operation.name == 'Unlock') {
-               show = false;
-             }
-
+             var show = !(operation.name == 'Lock' || operation.name == 'Unlock');
              $scope.sortedOperations[operationsOrder.indexOf(operation.name)] = {
                name: operation.name,
                selected: false,

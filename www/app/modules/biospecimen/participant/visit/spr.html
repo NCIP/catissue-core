@@ -48,10 +48,12 @@
     <div class="clearfix os-section">
       <h3 class="os-sub-section-title pull-left os-padding-top-4" translate="visits.spr">Surgical Pathology Report</h3>
       <div class="col-xs-2" ng-switch on="spr.locked" ng-if="!!spr.name">
-        <button show-if-allowed="sprResource.lockOpts" ng-switch-when="false" class="btn btn-default btn-xs" ng-click="toggleSprLock(true)">
+        <button show-if-allowed="sprResource.lockOpts" ng-switch-when="false" class="btn btn-default btn-xs"
+          title="{{'visits.lock_spr'|translate}}" ng-click="toggleSprLock(true)">
           <span class="fa fa-lock"></span>
         </button>
-        <button show-if-allowed="sprResource.unlockOpts" ng-switch-when="true" class="btn btn-default btn-xs" ng-click="toggleSprLock(false)">
+        <button show-if-allowed="sprResource.unlockOpts" ng-switch-when="true" class="btn btn-default btn-xs"
+          title="{{'visits.unlock_spr'|translate}}" ng-click="toggleSprLock(false)">
           <span class="fa fa-unlock"></span>
         </button>
       </div>

@@ -286,6 +286,8 @@
     "confirm_delete_spr": "Are you sure you want to delete {{sprName}} ?",
     "spr_locked": "Surgical pathology report locked successfully.",
     "spr_unlocked": "Surgical pathology report unlocked successfully.",
+    "lock_spr": "Click to lock Surgical Pathology Report",
+    "unlock_spr": "Click to unlock Surgical Pathology Report",
 
     "status": {
       "pending": "Pending",
