@@ -63,10 +63,10 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
       );
     }
 
-    $scope.lockSpr = function(lock) {
-      visit.lockSpr(lock).then(function(result) {
-        $scope.spr.locked = lock;
-        if (lock) {
+    $scope.toggleSprLock = function(lock) {
+      visit.updateSprLockStatus(lock).then(function(result) {
+        $scope.spr.locked = result.locked;
+        if ($scope.spr.locked) {
           Alerts.success("visits.spr_locked");
         } else {
           Alerts.success("visits.spr_unlocked");

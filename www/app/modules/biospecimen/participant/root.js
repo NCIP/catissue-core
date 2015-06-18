@@ -53,6 +53,45 @@ angular.module('os.biospecimen.participant.root', ['os.biospecimen.models'])
       // Specimen Tree Authorization Options
       var update = AuthorizationService.isAllowed($scope.specimenResource.updateOpts);
       $scope.specimenAllowedOps = {update: update};
+
+
+      // Surgical Pathology Report Authorization Options
+      $scope.sprResource = {
+        readOpts: {
+          resource: 'SurgicalPathologyReport',
+          operations: ['Read'],
+          cp: $scope.cpr.cpShortTitle,
+          sites: sites
+        },
+
+        updateOpts: {
+          resource: 'SurgicalPathologyReport',
+          operations: ['Update'],
+          cp: $scope.cpr.cpShortTitle,
+          sites: sites
+        },
+
+        deleteOpts: {
+          resource: 'SurgicalPathologyReport',
+          operations: ['Delete'],
+          cp: $scope.cpr.cpShortTitle,
+          sites: sites
+        },
+
+        lockOpts: {
+          resource: 'SurgicalPathologyReport',
+          operations: ['Lock'],
+          cp: $scope.cpr.cpShortTitle,
+          sites: sites
+        },
+
+        unlockOpts: {
+          resource: 'SurgicalPathologyReport',
+          operations: ['Unlock'],
+          cp: $scope.cpr.cpShortTitle,
+          sites: sites
+        }
+      }
     }
 
     init();

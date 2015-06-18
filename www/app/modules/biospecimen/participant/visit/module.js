@@ -24,7 +24,11 @@ angular.module('os.biospecimen.visit', [
             return null;           
           }
         },
-        controller: 'VisitRootCtrl',
+        controller: function($scope, cpr, visit) {
+          $scope.visit = $scope.object = visit;
+          $scope.entityType = 'SpecimenCollectionGroup';
+          $scope.extnState = 'visit-detail.extensions.'
+        },
         abstract: true,
         parent: 'participant-root'
       })

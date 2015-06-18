@@ -4,12 +4,10 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
     $scope, $state, $translate, role,
     Operation, Resource) {
 
-    var sprExtraOps = ['Lock', 'Unlock'];
-
     function init() {
       $scope.role = role;
       loadPvs();
-      sprExist();
+      sprExists();
     }
 
     function loadPvs() {
@@ -28,7 +26,17 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
        Operation.query().then(
          function(operations) {
            angular.forEach(operations, function(operation) {
-             $scope.sortedOperations[operationsOrder.indexOf(operation.name)] = {name: operation.name, selected: false, disabled: false};
+             var show = true;
+             if (operation.name == 'Lock' || operation.name == 'Unlock') {
+               show = false;
+             }
+
+             $scope.sortedOperations[operationsOrder.indexOf(operation.name)] = {
+               name: operation.name,
+               selected: false,
+               disabled: false,
+               show: show
+             };
            });
 
            getSelectedOperations($scope.role);
@@ -55,21 +63,17 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
               disabled = selectedOperations.indexOf('Create') != -1;
             }
 
-            return {name: operation.name, selected: selected, disabled: disabled};
+            var show = true;
+            if (acl.resourceName != 'SurgicalPathologyReport' &&
+                 (operation.name == 'Lock' || operation.name == 'Unlock')) {
+              show = false;
+            }
+
+            return {name: operation.name, selected: selected, disabled: disabled, show: show};
           }
         );
 
         acl.operations = operations;
-
-        // For SPR resource and extra opts
-        if (acl.resourceName == 'SurgicalPathologyReport') {
-          $scope.sprExtraOps = [];
-          angular.forEach(sprExtraOps, function(op) {
-            var selected = selectedOperations.indexOf(op) != -1;
-            $scope.sprExtraOps.push({name: op, selected: selected, disabled: false});
-          });
-        }
-
       });
     }
 
@@ -83,11 +87,10 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
         $scope.addResource();
       }
 
-      sprExist();
+      sprExists();
     };
   
     $scope.save = function() {
-      updateAclWithSprExtraOps();
       var role = angular.copy($scope.role);
       role.$saveOrUpdate().then(
         function(savedRole) {
@@ -96,30 +99,23 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
       );
     };
 
-    $scope.onResourceSelect = function(resource) {
-      if (resource == 'SurgicalPathologyReport') {
-        $scope.sprExtraOps = [];
-        angular.forEach(sprExtraOps, function(op) {
-          $scope.sprExtraOps.push({name: op, selected: false, disabled: false});
-        });
+    $scope.onResourceSelect = function(ac) {
+      if (ac.resourceName != 'SurgicalPathologyReport') {
+        return;
       }
-
-      sprExist();
-    }
-
-    function updateAclWithSprExtraOps() {
-      angular.forEach($scope.role.acl, function(acl) {
-        if (acl.resourceName == 'SurgicalPathologyReport') {
-          acl.operations = acl.operations.concat($scope.sprExtraOps);
+      $scope.sprExists = true;
+      angular.forEach(ac.operations, function(operation) {
+        if (operation.name == 'Lock' || operation.name == 'Unlock') {
+          operation.show = true;
         }
       });
     }
 
-    function sprExist() {
-      $scope.sprExist = false;
+    function sprExists() {
+      $scope.sprExists = false;
       for (var key in $scope.role.acl) {
         if ($scope.role.acl[key].resourceName == 'SurgicalPathologyReport') {
-          $scope.sprExist = true;
+          $scope.sprExists = true;
           break;
         }
       }
