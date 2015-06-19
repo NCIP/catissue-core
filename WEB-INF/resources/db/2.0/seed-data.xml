@@ -195,4 +195,36 @@
         ('specimen_biohazard', 'Specimen Biohazard', 'Specimen Biohazard', '2.0', ${now})
     </sql>
   </changeSet>
+  
+  <changeSet author="vgaikwad" id="Add Lock, Unlock operations" dbms="mysql">
+    <sql>
+	  insert into RBAC_OPERATIONS(NAME) values ('Lock');
+	  insert into RBAC_OPERATIONS(NAME) values ('Unlock');      
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Add Lock, Unlock operations" dbms="oracle">
+    <sql>
+	  insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATIONS_SEQ.nextval, 'Lock');
+	  insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATIONS_SEQ.nextval, 'Unlock');      
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Add Surgical Pathology Report resource" dbms="mysql">
+    <sql>
+      insert into RBAC_RESOURCES(NAME) values('SurgicalPathologyReport');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Add Surgical Pathology Report resource" dbms="oracle">
+    <sql>
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'SurgicalPathologyReport');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Assign Surgical Pathology Report resource and all its operations to Administrator role">
+    <sql>
+      call assign_to_role('Administrator', 'SurgicalPathologyReport', 'Read,Create,Update,Delete,Lock,Unlock');
+    </sql>
+  </changeSet>  
 </databaseChangeLog>
