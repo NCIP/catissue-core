@@ -944,4 +944,16 @@
       <column name="sortOrder_MOD" type="NUMBER(1, 0)"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="ahegade" id="Phone Number column for catissue user audit table">
+    <addColumn tableName="catissue_user_aud">
+      <column name="PHONE_NUMBER" type="VARCHAR2(16 CHAR)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Phone Number column for catissue user audit modified">
+    <addColumn tableName="catissue_user_aud">
+      <column name="phonenumber_MOD" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

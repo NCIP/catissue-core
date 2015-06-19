@@ -1,17 +1,14 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.*;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Pattern;
-
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
+import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
+import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -22,14 +19,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
-import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
-import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
-import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
-import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
-import com.krishagni.catissueplus.core.common.util.Status;
-import com.krishagni.catissueplus.core.common.util.Utility;
+import java.util.*;
+import java.util.regex.Pattern;
+
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.DOMAIN_CHANGE_NOT_ALLOWED;
+import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.DOMAIN_NAME_REQUIRED;
 
 @Configurable
 @Audited
@@ -55,6 +49,8 @@ public class User extends BaseEntity implements UserDetails {
 	private Set<Site> sites = new HashSet<Site>();
 
 	private String emailAddress;
+
+	private String phoneNumber;
 
 	private String loginName;
 
@@ -106,6 +102,14 @@ public class User extends BaseEntity implements UserDetails {
 
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	@NotAudited
@@ -256,6 +260,7 @@ public class User extends BaseEntity implements UserDetails {
 		this.setAddress(user.getAddress());
 		this.setDepartment(user.getDepartment());
 		this.setEmailAddress(user.getEmailAddress());
+		this.setPhoneNumber(user.getPhoneNumber());
 		this.setComments(user.getComments());
 		this.setAdmin(user.isAdmin());		
 	}

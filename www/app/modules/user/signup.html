@@ -25,10 +25,15 @@
         </div>
 
         <div class="form-group">
-          <div class="col-xs-12">
+          <div class="col-xs-6">
             <input type="email" name="email" class="form-control" ng-model="user.emailAddress"
               placeholder="{{'user.email_address' | translate}}" ng-maxlength="255" required> 
             <div os-field-error field="userForm.email"></div>
+          </div>
+          <div class="col-xs-6">
+            <input type="text" name="phoneNumber" ng-model="user.phoneNumber" class="form-control"
+                   placeholder="{{'user.phone_number' | translate}}" ng-maxlength="16" required/>
+            <div os-field-error field="userForm.phoneNumber"></div>
           </div>
         </div>
 

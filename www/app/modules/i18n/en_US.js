@@ -574,6 +574,7 @@
     "login_name": "Login Name",
     "domain_name": "Domain Name",
     "email_address": "Email Address",
+    "phone_number": "Phone Number",
     "institute": "Institute",
     "department": "Department",
     "address": "Address",

@@ -1,16 +1,12 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
 import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
+
+import java.util.*;
 
 @ListenAttributeChanges
 public class UserDetail extends AttributeModifiedSupport {
@@ -24,6 +20,8 @@ public class UserDetail extends AttributeModifiedSupport {
 	private String domainName;
 
 	private String emailAddress;
+
+	private String phoneNumber;
 
 	private String loginName;
 
@@ -79,6 +77,14 @@ public class UserDetail extends AttributeModifiedSupport {
 
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public String getLoginName() {
@@ -154,6 +160,7 @@ public class UserDetail extends AttributeModifiedSupport {
 		detail.setCreationDate(user.getCreationDate());
 		detail.setActivityStatus(user.getActivityStatus());
 		detail.setEmailAddress(user.getEmailAddress());
+		detail.setPhoneNumber(user.getPhoneNumber());
 		detail.setDomainName(user.getAuthDomain().getName());
 		detail.setDeptName(user.getDepartment().getName());
 		detail.setInstituteName(user.getInstitute().getName());

@@ -16,6 +16,8 @@
 
     <property name="emailAddress" column="EMAIL_ADDRESS" unique="true"/>
 
+    <property name="phoneNumber" column="PHONE_NUMBER"/>
+
     <property name="firstName"  column="FIRST_NAME"/>
 
     <property name="lastName" column="LAST_NAME"/>

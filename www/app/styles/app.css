@@ -554,6 +554,28 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   width: 50%;
 }
 
+.os-two-cols > .one-line-item, .os-two-cols > .one-line-item > .value {
+  width: 100%!important;
+}
+
+.os-two-cols > .one-line-item {
+  margin-top: 25px;
+}
+
+.os-two-cols > .one-line-item > .key-sm {
+  width: 10%!important;
+  font-weight: 600 !important;
+}
+
+.os-hr {
+  margin-top: 15px;
+  margin-bottom: 20px;
+  margin-left: 10%;
+  border: 0;
+  border-top: 1px solid ;
+  border-color: #E6E6E6;
+}
+
 .os-key-values .item .key, .os-key-values .item .value {
   /*word-wrap: break-word;
   word-break: break-word;*/
