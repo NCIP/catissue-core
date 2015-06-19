@@ -2207,4 +2207,12 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="ahegade" id="update existing short title with 50 chars">
+    <sql>update CATISSUE_COLLECTION_PROTOCOL set short_title = substr(short_title, 1, 50)</sql>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Modify length of short title in catissue_collection_protocol table">
+    <modifyDataType tableName="CATISSUE_COLLECTION_PROTOCOL" columnName="SHORT_TITLE" newDataType="${text.type}(50)" />
+  </changeSet>
+
 </databaseChangeLog>
