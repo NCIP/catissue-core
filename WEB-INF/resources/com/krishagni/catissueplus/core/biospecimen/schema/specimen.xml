@@ -44,7 +44,7 @@
     </field>  
 
     <field>
-      <caption>#getMessage("specimen_site")</caption>
+      <caption>#getMessage("specimen_anatomic_site")</caption>
       <attribute>anatomicSite</attribute>
     </field>  
 
@@ -54,7 +54,7 @@
     </field>  
 
     <field>
-      <caption>#getMessage("specimen_status")</caption>
+      <caption>#getMessage("specimen_collection_status")</caption>
       <attribute>status</attribute>
     </field>  
 

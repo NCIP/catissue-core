@@ -112,7 +112,7 @@
       <dropDown>
         <name>tissueSite</name>
         <udn>tissueSite</udn>
-        <caption>#getMessage("specimen_site")</caption>
+        <caption>#getMessage("specimen_anatomic_site")</caption>
         <column>TISSUE_SITE</column>
         <options>
           <sql>
