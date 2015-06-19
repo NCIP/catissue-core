@@ -107,5 +107,13 @@ angular.module('os.administrative.models.container', ['os.common.models'])
       );
     };
 
+    Container.prototype.replicate = function(destinations) {
+      return $http.post(Container.url() + this.$id() + '/replica', {destinations: destinations}).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    };
+
     return Container;
   });

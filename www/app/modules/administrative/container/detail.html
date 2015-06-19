@@ -14,6 +14,11 @@
         <span class="fa fa-download"></span>
         <span translate="common.buttons.export">Export</span>
       </a>
+      <button show-if-allowed="containerResource.createOpts" class="default"
+        ui-sref="container-replicate({containerId: container.id})">
+        <span class="fa fa-copy"></span>
+        <span translate="container.replicate">Replicate</span>
+      </button>
       <button show-if-allowed="containerResource.deleteOpts" class="default" ng-click="deleteContainer()">
         <span class="fa fa-trash"></span>
         <span translate="common.buttons.delete">Delete</span>

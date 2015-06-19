@@ -492,6 +492,10 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		}
 				
 		for (String name : dest.getNewContainerNames()) {
+			if (StringUtils.isBlank(name)) {
+				throw OpenSpecimenException.userError(StorageContainerErrorCode.NAME_REQUIRED);
+			}
+			
 			if (!isUniqueName(name)) {
 				throw OpenSpecimenException.userError(StorageContainerErrorCode.DUP_NAME, name);
 			}

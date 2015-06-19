@@ -7,6 +7,7 @@ angular.module('os.administrative.container',
     'os.administrative.container.detail',
     'os.administrative.container.overview',
     'os.administrative.container.locations',
+    'os.administrative.container.replicate',
     'os.administrative.container.util',
     'os.administrative.container.map'
   ])
@@ -74,6 +75,17 @@ angular.module('os.administrative.container',
               title: 'container.bulk_import_jobs',
               objectTypes: ['storageContainer']
             }
+          }
+        },
+        parent: 'container-root'
+      })
+      .state('container-replicate', {
+        url: '/container-replicate/:containerId',
+        templateUrl: 'modules/administrative/container/replicate.html',
+        controller: 'ContainerReplCtrl',
+        resolve: {
+          container: function($stateParams, Container) {
+            return Container.getById($stateParams.containerId);
           }
         },
         parent: 'container-root'
