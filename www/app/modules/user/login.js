@@ -13,6 +13,7 @@ angular.module('openspecimen')
       logout: function() {
         var q = $http.delete(url());
         this.removeToken();
+        delete $rootScope.reqState;
         delete $rootScope.currentUser;
         return q.then(ApiUtil.processResp);
       },
