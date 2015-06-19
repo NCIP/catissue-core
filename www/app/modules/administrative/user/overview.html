@@ -90,16 +90,12 @@
           </div>
         </os-inline-edit>
       </li>
-      <li class="one-line-item item">
+    </ul>
+      <div class="os-sub-section">
         <strong class="key key-sm" translate="user.address">Address</strong>
         <div class="os-hr"></div>
-        <os-inline-edit editor="addressEditor" name="emailAddress" class="value value-md" value="user.address">
-          <span ng-if="addressEditor.isDisplayMode()">{{addressEditor.viewValue | osNoValue}}</span>
-          <textarea ng-if="addressEditor.isEditMode()"  rows="2"  ng-model="addressEditor.editValue" class="form-control"
-            placeholder="{{'user.address' | translate}}"></textarea>
-        </os-inline-edit>
-      </li>
-    </ul>
+        <span class="value value-md" os-inline-eddit>{{user.address}}</span>
+      </div>
 
     <div ng-if="user.activityStatus == 'Pending' && currentUser.admin">
       <button class="btn btn-success" ng-click="activate()">
