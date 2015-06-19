@@ -3,10 +3,11 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
   .controller('RoleAddEditCtrl', function(
     $scope, $state, $translate, role,
     Operation, Resource) {
-    
-    var init = function() {
+
+    function init() {
       $scope.role = role;
       loadPvs();
+      sprExists();
     }
 
     function loadPvs() {
@@ -25,7 +26,13 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
        Operation.query().then(
          function(operations) {
            angular.forEach(operations, function(operation) {
-             $scope.sortedOperations[operationsOrder.indexOf(operation.name)] = {name: operation.name, selected: false, disabled: false};
+             var show = !(operation.name == 'Lock' || operation.name == 'Unlock');
+             $scope.sortedOperations[operationsOrder.indexOf(operation.name)] = {
+               name: operation.name,
+               selected: false,
+               disabled: false,
+               show: show
+             };
            });
 
            getSelectedOperations($scope.role);
@@ -52,9 +59,16 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
               disabled = selectedOperations.indexOf('Create') != -1;
             }
 
-            return {name: operation.name, selected: selected, disabled: disabled};
+            var show = true;
+            if (acl.resourceName != 'SurgicalPathologyReport' &&
+                 (operation.name == 'Lock' || operation.name == 'Unlock')) {
+              show = false;
+            }
+
+            return {name: operation.name, selected: selected, disabled: disabled, show: show};
           }
         );
+
         acl.operations = operations;
       });
     }
@@ -68,6 +82,8 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
       if ($scope.role.acl.length == 0) {
         $scope.addResource();
       }
+
+      sprExists();
     };
   
     $scope.save = function() {
@@ -78,6 +94,28 @@ angular.module('os.administrative.role.addedit', ['os.administrative.models'])
         }
       );
     };
+
+    $scope.onResourceSelect = function(ac) {
+      if (ac.resourceName != 'SurgicalPathologyReport') {
+        return;
+      }
+      $scope.sprExists = true;
+      angular.forEach(ac.operations, function(operation) {
+        if (operation.name == 'Lock' || operation.name == 'Unlock') {
+          operation.show = true;
+        }
+      });
+    }
+
+    function sprExists() {
+      $scope.sprExists = false;
+      for (var key in $scope.role.acl) {
+        if ($scope.role.acl[key].resourceName == 'SurgicalPathologyReport') {
+          $scope.sprExists = true;
+          break;
+        }
+      }
+    }
 
     $scope.setOperations = function(operation, operations) {
       if (operation.name != 'Create') {

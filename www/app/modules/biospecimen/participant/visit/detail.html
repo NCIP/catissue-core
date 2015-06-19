@@ -48,7 +48,7 @@
           <span class="os-title" translate="visits.menu.overview">Overview</span>
         </a>
       </li>
-      <li ui-sref-active="active" ng-if="!!visit.id">
+      <li show-if-allowed="sprResource.readOpts" ui-sref-active="active" ng-if="!!visit.id">
         <a ui-sref=".spr">
           <i class="fa fa-file-text-o"></i>
           <span class="os-title" translate="visits.menu.spr_report">Surgical Pathology Report</span>

@@ -11,6 +11,8 @@ public enum Resource {
 	
 	VISIT_N_SPECIMEN("VisitAndSpecimen"),
 	
+	SURGICAL_PATHOLOGY_REPORT("SurgicalPathologyReport"),
+	
 	STORAGE_CONTAINER("StorageContainer"),
 	
 	USER("User"),

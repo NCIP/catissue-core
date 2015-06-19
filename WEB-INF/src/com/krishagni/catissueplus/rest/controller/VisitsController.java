@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.rest.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
@@ -171,6 +173,16 @@ public class VisitsController {
 	public boolean deleteSprFile(@PathVariable("id") Long visitId) {
 		EntityQueryCriteria crit = new EntityQueryCriteria(visitId);
 		ResponseEvent<Boolean> resp = visitService.deleteSprFile(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/spr-lock")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SprLockDetail updateSprLockStatus(@PathVariable("id") Long visitId, @RequestBody SprLockDetail detail) {
+		detail.setVisitId(visitId);
+		ResponseEvent<SprLockDetail> resp = visitService.updateSprLockStatus(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
