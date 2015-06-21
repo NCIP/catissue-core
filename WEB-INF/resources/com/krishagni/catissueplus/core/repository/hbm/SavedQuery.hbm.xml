@@ -54,7 +54,7 @@
       insert into catissue_import_queries_log
         (filename, md5_digest, status, executed_on, query_id) 
       values
-        (:fileName, :md5_digest, :status, :executed_on, :query_id)
+        (:fileName, :md5Digest, :status, :executedOn, :queryId)
     </sql-query>
     
     <sql-query name="getQueryIdAndDigest">

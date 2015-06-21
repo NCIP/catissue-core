@@ -1,13 +1,17 @@
 
 package com.krishagni.catissueplus.core.init;
 
-import java.io.File;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -24,6 +28,8 @@ import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 
 public class ImportDefaultQueries implements InitializingBean {
+	
+	private static Log LOGGER = LogFactory.getLog(ImportDefaultQueries.class);
 
 	private PlatformTransactionManager txnMgr;
 
@@ -70,11 +76,11 @@ public class ImportDefaultQueries implements InitializingBean {
 
 		Set<SavedQuery> queries = new HashSet<SavedQuery>();
 		for (Resource resource : resources) {
-			String filename = QUERIES_DIRECTORY + File.separator + resource.getFilename();
-			System.out.println("Importing query from file: " + filename);
+			String filename = QUERIES_DIRECTORY + "/" + resource.getFilename();
+			LOGGER.info("Importing query from file: " + filename);
 			String newDigest = Utility.getResourceDigest(filename);
 			byte[] content = IOUtils.toByteArray(resource.getURI());
-			Map<String, Object> result = daoFactory.getSavedQueryDao().getChangelogDetails(filename);
+			Map<String, Object> result = daoFactory.getSavedQueryDao().getQueryChangelogDetails(filename);
 			
 			if (result == null) {
 				SavedQuery query = insertQuery(filename, content, newDigest);
@@ -86,7 +92,7 @@ public class ImportDefaultQueries implements InitializingBean {
 				String existingDigest = (String)result.get("md5Digest");
 
 				if (existingDigest != null && existingDigest.equals(newDigest)) {
-					System.out.println("No change found in file " + filename + " since last import");
+					LOGGER.info("No change found in file " + filename + " since last import");
 					continue;
 				}
 				updateQuery(queryId, filename, content, newDigest);
@@ -95,40 +101,39 @@ public class ImportDefaultQueries implements InitializingBean {
 		shareDefaultQueries(queries);
 	}
 	
-	private SavedQuery insertQuery(String filename, byte[] queryContent, String md5) {
+	private SavedQuery insertQuery(String filename, byte[] queryContent, String md5Digest) {
 		SavedQuery savedQuery = new SavedQuery();
 		try {
-			savedQuery.setQueryDefJson(new String(queryContent));
+			savedQuery.setQueryDefJson(new String(queryContent), true);
 			savedQuery.setCreatedBy(sysUser);
 			savedQuery.setLastUpdated(new Date());
 			savedQuery.setLastUpdatedBy(sysUser);
 			daoFactory.getSavedQueryDao().saveOrUpdate(savedQuery);
-			if (savedQuery.getId() == null) {
-				System.out.println("Error saving query definition from file: " + filename);
-				return null;
-			}
-			insertChangeLog(filename, md5, "INSERTED", savedQuery.getId());
+			insertChangeLog(filename, md5Digest, "INSERTED", savedQuery.getId());
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Error saving query definition from file: " + filename);
+			LOGGER.error("Error saving query definition from file: " + filename, e);
 		}
 		return savedQuery;
 	}
 
-	private void updateQuery(Long queryId, String filename, byte[] queryContent, String md5) {
+	private void updateQuery(Long queryId, String filename, byte[] queryContent, String md5Digest) {
 		try {
+			List<SavedQuery> savedQueries = daoFactory.getSavedQueryDao().getQueriesByIds(Arrays.asList(queryId));
 			SavedQuery savedQuery = new SavedQuery();
-			savedQuery.setQueryDefJson(new String(queryContent));
-			savedQuery.setId(queryId);
+			if(!CollectionUtils.isEmpty(savedQueries)){
+				savedQuery = savedQueries.get(0);
+			}
+			
+			savedQuery.setQueryDefJson(new String(queryContent), true);
 			daoFactory.getSavedQueryDao().saveOrUpdate(savedQuery);
-			insertChangeLog(filename, md5, "UPDATED", queryId);
+			insertChangeLog(filename, md5Digest, "UPDATED", queryId);
 		} catch (Exception e) {
-			System.out.println("Error updating query " + queryId + " using definition from file: " + filename);
+			LOGGER.error("Error updating query " + queryId + " using definition from file: " + filename, e);
 		}
 	}
 
 	private void insertChangeLog(String filename, String md5Digest, String status, Long id) {
-		daoFactory.getSavedQueryDao().insertFormChangeLog(filename, md5Digest, status, id);
+		daoFactory.getSavedQueryDao().insertQueryChangeLog(filename, md5Digest, status, id);
 	}
 
 	private void shareDefaultQueries(Set<SavedQuery> queries) {
@@ -144,6 +149,6 @@ public class ImportDefaultQueries implements InitializingBean {
 	
 	private static final String DEFAULT_QUERIES = "Default Queries";
 	
-	private static final String QUERIES_DIRECTORY = File.separator + "aq-queries";
+	private static final String QUERIES_DIRECTORY = "/default-queries";
 
 }

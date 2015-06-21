@@ -143,7 +143,7 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, Object> getChangelogDetails(String fileName) {
+	public Map<String, Object> getQueryChangelogDetails(String fileName) {
 		List<Object[]> rows = sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_QUERY_ID_AND_MD5_SQL)
 				.setString("fileName", fileName)
@@ -160,14 +160,14 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 	}
 	
 	@Override
-	public void insertFormChangeLog(String fileName, String digest, String status, Long queryId) {
+	public void insertQueryChangeLog(String fileName, String digest, String status, Long queryId) {
 		sessionFactory.getCurrentSession()
 				.getNamedQuery(INSERT_QUERY_CHANGE_LOG_SQL)
 				.setString("fileName", fileName)
-				.setString("md5_digest", digest)
+				.setString("md5Digest", digest)
 				.setString("status", status)
-				.setLong("query_id", queryId)
-				.setTimestamp("executed_on", Calendar.getInstance().getTime())
+				.setLong("queryId", queryId)
+				.setTimestamp("executedOn", Calendar.getInstance().getTime())
 				.executeUpdate();
 	}
 	
