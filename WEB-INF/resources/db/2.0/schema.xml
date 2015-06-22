@@ -2225,7 +2225,7 @@
 
   <changeSet author="ahegade" id="Adding mandatory field Phone number to user table">
     <addColumn tableName="CATISSUE_USER">
-      <column name="PHONE_NUMBER" type="${text.type}(16)" defaultValue="">
+      <column name="PHONE_NUMBER" type="${text.type}(16)" defaultValue=" ">
         <constraints nullable="false"/>
       </column>
     </addColumn>
