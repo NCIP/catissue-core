@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.common.service.impl;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -31,9 +32,9 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	
 	private static final String TEMPLATE_SOURCE = "email-templates/";
 	
-	private static final String BASE_TMPL = "baseTemplate.vm";
+	private static final String BASE_TMPL = "baseTemplate";
 	
-	private static final String FOOTER_TMPL = "footer.vm";
+	private static final String FOOTER_TMPL = "footer";
 	
 	private static String subjectPrefix;
 	
@@ -107,7 +108,7 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	public boolean sendEmail(String emailTmplKey, String[] to, File[] attachments, Map<String, Object> props) {
 		String adminEmailId = getAdminEmailId();
 		
-		props.put("template", getEmailTmpl(emailTmplKey));
+		props.put("template", getTemplate(emailTmplKey));
 		props.put("footer", getFooterTmpl());
 		props.put("appUrl", getAppUrl());
 		props.put("adminEmailAddress", adminEmailId);
@@ -168,10 +169,6 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 		return subjectPrefix + messageSource.getMessage(emailTmplKey.toLowerCase() + "_subj", subjParams, Locale.getDefault());
 	}
 	
-	private String getEmailTmpl(String emailTmplKey) {
-		return getTmplSource() + emailTmplKey + ".vm";
-	}
-	
 	private class SendMailTask implements Runnable {
 		private MimeMessage mimeMessage;
 		
@@ -189,16 +186,22 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 		}
 	}
 	
-	private String getTmplSource() {
-		return TEMPLATE_SOURCE + Locale.getDefault().toString() + "/";
+	private String getTemplate(String tmplKey) {
+		String localeTmpl = TEMPLATE_SOURCE + Locale.getDefault().toString() + "/" + tmplKey + ".vm";
+		URL url = this.getClass().getClassLoader().getResource(localeTmpl);
+		if (url == null) {
+			localeTmpl = TEMPLATE_SOURCE + "default/" + tmplKey + ".vm";			
+		}
+		
+		return localeTmpl;
 	}
 	
 	private String getBaseTmpl() {
-		return getTmplSource() + BASE_TMPL;
+		return getTemplate(BASE_TMPL);
 	}
 	
 	private String getFooterTmpl() {
-		return getTmplSource() + FOOTER_TMPL;
+		return getTemplate(FOOTER_TMPL);
 	}
 	
 	/**
