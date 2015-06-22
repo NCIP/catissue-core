@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -24,6 +25,8 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+
+import edu.common.dynamicextensions.domain.nui.DisableAction;
 
 public class CollectionProtocolRegistrationDaoImpl 
 	extends AbstractDao<CollectionProtocolRegistration> 
@@ -146,45 +149,55 @@ public class CollectionProtocolRegistrationDaoImpl
 				.setFirstResult(cprCrit.startAt() < 0 ? 0 : cprCrit.startAt())
 				.setMaxResults(cprCrit.maxResults() < 0 || cprCrit.maxResults() > 100 ? 100 : cprCrit.maxResults());
 		
-		addMrnSiteCondition(query, cprCrit);
-		addEmpiCondition(query, cprCrit);
+		addRegDateCondition(query, cprCrit);
+		addMrnSiteAndEmpiAndSsnCondition(query, cprCrit);
 		addNameAndPpidCondition(query, cprCrit);
 		addDobCondition(query, cprCrit);
 		addSpecimenCondition(query, cprCrit);
 		return query;		
 	}
 	
-	private void addMrnSiteCondition(Criteria query, CprListCriteria crit) {
-		boolean mrnSpecified   = StringUtils.isNotBlank(crit.mrn());
+	private void addRegDateCondition(Criteria query, CprListCriteria crit) {
+		if (crit.registrationDate() == null) {
+			return;
+		}
+		
+		query.add(Restrictions.eq("registrationDate", crit.registrationDate()));
+	}
+	
+	private void addMrnSiteAndEmpiAndSsnCondition(Criteria query, CprListCriteria crit) {
+		boolean mrnSpecified   = StringUtils.isNotBlank(crit.empi_or_mrn_or_ssn());
 		boolean sitesSpecified = CollectionUtils.isNotEmpty(crit.siteIds());
 		
+		Disjunction orCriteria = Restrictions.disjunction();
+		
 		if (mrnSpecified && sitesSpecified) {
-			query.createAlias("participant.pmis", "pmi")
-				.createAlias("pmi.site", "site")
-				.add(Restrictions.ilike("pmi.medicalRecordNumber", crit.mrn(), MatchMode.ANYWHERE))
+			query.createAlias("participant.pmis", "pmi", JoinType.LEFT_OUTER_JOIN)
+				.createAlias("pmi.site", "site");
+			
+			orCriteria.add(Restrictions.ilike("pmi.medicalRecordNumber", crit.empi_or_mrn_or_ssn(), MatchMode.ANYWHERE))
 				.add(Restrictions.in("site.id", crit.siteIds()));
 
 		} else if (mrnSpecified) {
-			query.createAlias("participant.pmis", "pmi")
-				.add(Restrictions.ilike("pmi.medicalRecordNumber", crit.mrn(), MatchMode.ANYWHERE));
+			query.createAlias("participant.pmis", "pmi", JoinType.LEFT_OUTER_JOIN);
+			orCriteria.add(Restrictions.ilike("pmi.medicalRecordNumber", crit.empi_or_mrn_or_ssn(), MatchMode.ANYWHERE));
 
 		} else if (sitesSpecified) {
 			query.createAlias("participant.pmis", "pmi", JoinType.LEFT_OUTER_JOIN)
-			.createAlias("pmi.site", "site", JoinType.LEFT_OUTER_JOIN)
-			.add(Restrictions.disjunction()
+			.createAlias("pmi.site", "site", JoinType.LEFT_OUTER_JOIN);
+			orCriteria.add(Restrictions.disjunction()
 					.add(Restrictions.isNull("site.id"))
 					.add(Restrictions.in("site.id", crit.siteIds())));
 		} else {
 			// both MRN and sites are not specified. Do nothing
-		}		
-	}
-	
-	private void addEmpiCondition(Criteria query, CprListCriteria crit) {
-		if (StringUtils.isBlank(crit.empi())) {
-			return;
 		}
 		
-		query.add(Restrictions.ilike("participant.empi", crit.empi(), MatchMode.ANYWHERE));
+		if (StringUtils.isNotBlank(crit.empi_or_mrn_or_ssn())) {
+			orCriteria.add(Restrictions.ilike("participant.empi", crit.empi_or_mrn_or_ssn(), MatchMode.ANYWHERE))
+				.add(Restrictions.ilike("participant.uid", crit.empi_or_mrn_or_ssn(), MatchMode.ANYWHERE));
+		}
+		
+		query.add(orCriteria);
 	}
 	
 	private void addNameAndPpidCondition(Criteria query, CprListCriteria crit) {
