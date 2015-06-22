@@ -35,6 +35,7 @@ public class UserFactoryImpl implements UserFactory {
 		setLoginName(detail, user, ose);
 		setActivityStatus(detail, user, ose);
 		setEmailAddress(detail, user, ose);
+		setPhoneNumber(detail, user, ose);
 		setDepartment(detail, user, ose);
 		setAddress(detail, user, ose);
 		setAuthDomain(detail, user, ose);
@@ -55,6 +56,7 @@ public class UserFactoryImpl implements UserFactory {
 		setLoginName(detail, existing, user, ose);
 		setActivityStatus(detail, existing, user, ose);
 		setEmailAddress(detail, existing, user, ose);
+		setPhoneNumber(detail, existing, user, ose);
 		setDepartment(detail, existing, user, ose);
 		setAddress(detail, existing, user, ose);
 		setAuthDomain(detail, existing, user, ose);
@@ -191,6 +193,24 @@ public class UserFactoryImpl implements UserFactory {
 			setEmailAddress(detail, user, ose);
 		} else {
 			user.setEmailAddress(existing.getEmailAddress());
+		}
+	}
+
+	private void setPhoneNumber(UserDetail detail, User user, OpenSpecimenException ose) {
+		String phoneNumber = detail.getPhoneNumber();
+		if (StringUtils.isBlank(phoneNumber)) {
+			ose.addError(UserErrorCode.PHONE_NUMBER_REQUIRED);
+			return;
+		}
+
+		user.setPhoneNumber(phoneNumber);
+	}
+
+	private void setPhoneNumber(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
+		if (detail.isAttrModified("phoneNumber")) {
+			setPhoneNumber(detail, user, ose);
+		} else {
+			user.setPhoneNumber(existing.getPhoneNumber());
 		}
 	}
 

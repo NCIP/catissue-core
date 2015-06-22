@@ -554,6 +554,20 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   width: 50%;
 }
 
+.os-line-section >.key:after {
+  content: '';
+  display: block;
+  margin-top: -10px;
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid ;
+  border-color: #E6E6E6;
+}
+
+.os-line-section >.key {
+  background: #ffffff;
+}
+
 .os-key-values .item .key, .os-key-values .item .value {
   /*word-wrap: break-word;
   word-break: break-word;*/

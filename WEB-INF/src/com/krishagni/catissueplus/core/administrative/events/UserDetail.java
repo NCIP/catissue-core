@@ -25,6 +25,8 @@ public class UserDetail extends AttributeModifiedSupport {
 
 	private String emailAddress;
 
+	private String phoneNumber;
+
 	private String loginName;
 
 	private List<String> siteNames = new ArrayList<String>();
@@ -79,6 +81,14 @@ public class UserDetail extends AttributeModifiedSupport {
 
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public String getLoginName() {
@@ -154,6 +164,7 @@ public class UserDetail extends AttributeModifiedSupport {
 		detail.setCreationDate(user.getCreationDate());
 		detail.setActivityStatus(user.getActivityStatus());
 		detail.setEmailAddress(user.getEmailAddress());
+		detail.setPhoneNumber(user.getPhoneNumber());
 		detail.setDomainName(user.getAuthDomain().getName());
 		detail.setDeptName(user.getDepartment().getName());
 		detail.setInstituteName(user.getInstitute().getName());

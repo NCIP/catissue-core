@@ -2207,6 +2207,7 @@
     </addColumn>
   </changeSet>
 
+
   <changeSet author="ahegade" id="update existing short title with 50 chars">
     <sql>update CATISSUE_COLLECTION_PROTOCOL set short_title = substr(short_title, 1, 50)</sql>
   </changeSet>
@@ -2218,8 +2219,16 @@
   <changeSet author="vgaikwad" id="Added a new column in visits table to store SPR lock status">
     <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
       <column name="SPR_LOCKED" type="${boolean.type}" defaultValueBoolean="0">
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Adding mandatory field Phone number to user table">
+    <addColumn tableName="CATISSUE_USER">
+      <column name="PHONE_NUMBER" type="${text.type}(16)" defaultValue="">
         <constraints nullable="false"/>
       </column>
     </addColumn>
   </changeSet>
+
 </databaseChangeLog>

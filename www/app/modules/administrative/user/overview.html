@@ -54,6 +54,21 @@
       </li>
 
       <li class="item">
+        <strong class="key key-sm" translate="user.phone_number">Phone Number</strong>
+        <span class="value value-md" os-inline-eddit>{{user.phoneNumber}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="user.institute">Institute</strong>
+        <span class="value value-md" os-inline-eddit>{{user.instituteName}}</span>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="user.department">Department</strong>
+        <span class="value value-md" os-inline-eddit>{{user.deptName}}</span>
+      </li>
+
+      <li class="item">
         <strong class="key key-sm" translate="user.super_admin">Super Admin</strong>
 
         <os-inline-edit editor="adminEditor" name="admin" class="value value-md" value="user.admin">
@@ -75,26 +90,12 @@
           </div>
         </os-inline-edit>
       </li>
-      
-      <li class="item">
-        <strong class="key key-sm" translate="user.institute">Institute</strong>
-        <span class="value value-md" os-inline-eddit>{{user.instituteName}}</span>
-      </li>
-      
-      <li class="item">
-        <strong class="key key-sm" translate="user.department">Department</strong>
-        <span class="value value-md" os-inline-eddit>{{user.deptName}}</span>
-      </li>
-
-      <li class="item">
-        <strong class="key key-sm" translate="user.address">Address</strong>
-        <os-inline-edit editor="addressEditor" name="emailAddress" class="value value-md" value="user.address">
-          <span ng-if="addressEditor.isDisplayMode()">{{addressEditor.viewValue | osNoValue}}</span>
-          <textarea ng-if="addressEditor.isEditMode()"  rows="2"  ng-model="addressEditor.editValue" class="form-control"
-            placeholder="{{'user.address' | translate}}"></textarea>
-        </os-inline-edit>
-      </li>
     </ul>
+
+    <div class="os-section os-line-section">
+      <strong class="key key-sm" translate="user.address">Address</strong>
+      <span class="value value-md">{{user.address}}</span>
+    </div>
 
     <div ng-if="user.activityStatus == 'Pending' && currentUser.admin">
       <button class="btn btn-success" ng-click="activate()">

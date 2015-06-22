@@ -948,4 +948,16 @@
       <column name="sortOrder_MOD" type="BIT"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="ahegade" id="Phone Number column for catissue user audit table">
+    <addColumn tableName="catissue_user_aud">
+      <column name="PHONE_NUMBER" type="VARCHAR(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Phone Number column for catissue user audit modified">
+    <addColumn tableName="catissue_user_aud">
+      <column name="phonenumber_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>
