@@ -1,3 +1,7 @@
+#macro( getMessage $code )
+  $messageSource.getMessage($code, null, $locale)
+#end
+
 <object-schema>
   <name>visit</name>
 
@@ -5,63 +9,63 @@
     <name>com.krishagni.catissueplus.core.biospecimen.events.VisitDetail</name>
    
     <field>
-      <caption>CP Short Title</caption>
+      <caption>#getMessage("visit_cp_short_title")</caption>
       <attribute>cpShortTitle</attribute>
     </field>     
 
     <field>
-      <caption>PPID</caption>
+      <caption>#getMessage("visit_ppid")</caption>
       <attribute>ppid</attribute>
     </field>     
 
     <field>
-      <caption>Event Label</caption>
+      <caption>#getMessage("visit_event_label")</caption>
       <attribute>eventLabel</attribute>
     </field>     
 
     <field>
-      <caption>Name</caption>
+      <caption>#getMessage("visit_name")</caption>
       <attribute>name</attribute>
     </field>     
 
     <field>
       <type>date</type>
-      <caption>Date Of Visit</caption>
+      <caption>#getMessage("visit_date")</caption>
       <attribute>visitDate</attribute>
     </field>  
 
     <field>
-      <caption>Site Of Visit</caption>
+      <caption>#getMessage("visit_site")</caption>
       <attribute>site</attribute>
     </field>  
 
     <field>
-      <caption>Status</caption>
+      <caption>#getMessage("visit_status")</caption>
       <attribute>status</attribute>
     </field>  
 
     <field>
-      <caption>Clinical Diagnosis</caption>
+      <caption>#getMessage("visit_clinical_diagnosis")</caption>
       <attribute>clinicalDiagnosis</attribute>
     </field>  
 
     <field>
-      <caption>Clinical Status</caption>
+      <caption>#getMessage("visit_clinical_status")</caption>
       <attribute>clinicalStatus</attribute>
     </field>  
 
     <field>
-      <caption>Surgical Pathology Number</caption>
+      <caption>#getMessage("visit_surgical_pathology_number")</caption>
       <attribute>surgicalPathologyNumber</attribute>
     </field>  
 
     <field>
-      <caption>Comments</caption>
+      <caption>#getMessage("visit_comments")</caption>
       <attribute>comments</attribute>
     </field>  
 
     <field>
-      <caption>Activity Status</caption>
+      <caption>#getMessage("visit_activity_status")</caption>
       <attribute>activityStatus</attribute>
     </field>  
   </record>

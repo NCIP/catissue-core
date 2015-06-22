@@ -1,7 +1,11 @@
+#macro( getMessage $code )
+  $messageSource.getMessage($code, null, $locale)
+#end
+
 <form>
   <view>
     <name>Specimen</name>
-    <caption>Specimen</caption>
+    <caption>#getMessage("specimen")</caption>
     <table>CATISSUE_SPECIMEN</table>
     <hierarchyTable>CATISSUE_SPECIMEN_HIERARCHY</hierarchyTable>
     <hierarchyAncestorColumn>ANCESTOR_ID</hierarchyAncestorColumn>
@@ -12,7 +16,7 @@
       <numberField>
         <name>id</name>
         <udn>id</udn>
-        <caption>Identifier</caption>
+        <caption>#getMessage("specimen_identifier")</caption>
         <column>IDENTIFIER</column>
       </numberField>
     </row>
@@ -21,7 +25,7 @@
       <dropDown>
         <name>lineage</name>
         <udn>lineage</udn>
-        <caption>Lineage</caption>
+        <caption>#getMessage("specimen_lineage")</caption>
         <column>LINEAGE</column>
         <options>
           <option><value>New</value></option>
@@ -35,7 +39,7 @@
       <textField>
         <name>label</name>
         <udn>label</udn>
-        <caption>Specimen Label</caption>
+        <caption>#getMessage("specimen_label")</caption>
         <column>LABEL</column>
       </textField>
     </row>
@@ -44,7 +48,7 @@
       <subForm>
         <name>parentSpecimen</name>
         <udn>parentSpecimen</udn>
-        <caption>Parent Specimen</caption>
+        <caption>#getMessage("specimen_parent_specimen")</caption>
         <table>CATISSUE_SPECIMEN</table>
         <foreignKey>IDENTIFIER</foreignKey>
         <parentKey>PARENT_SPECIMEN_ID</parentKey>
@@ -52,7 +56,7 @@
           <textField>
             <name>parentLabel</name>
             <udn>parentLabel</udn>
-            <caption>Parent Specimen Label</caption>
+            <caption>#getMessage("specimen_parent_specimen_label")</caption>
             <column>LABEL</column>
           </textField>  
         </row>
@@ -63,7 +67,7 @@
       <textField>
         <name>barcode</name>
         <udn>barcode</udn>
-        <caption>Barcode</caption>
+        <caption>#getMessage("specimen_barcode")</caption>
         <column>BARCODE</column>
       </textField>
     </row>
@@ -72,7 +76,7 @@
       <dropDown>
         <name>class</name>
         <udn>class</udn>
-        <caption>Class</caption>
+        <caption>#getMessage("specimen_class")</caption>
         <column>SPECIMEN_CLASS</column>
         <options>
           <sql>
@@ -86,7 +90,7 @@
       <dropDown>
         <name>type</name>
         <udn>type</udn>
-        <caption>Type</caption>
+        <caption>#getMessage("specimen_type")</caption>
         <column>SPECIMEN_TYPE</column>
         <options>
           <sql>
@@ -108,7 +112,7 @@
       <dropDown>
         <name>tissueSite</name>
         <udn>tissueSite</udn>
-        <caption>Anatomic Site</caption>
+        <caption>#getMessage("specimen_anatomic_site")</caption>
         <column>TISSUE_SITE</column>
         <options>
           <sql>
@@ -151,7 +155,7 @@
       <dropDown>
         <name>tissueSide</name>
         <udn>tissueSide</udn>
-        <caption>Laterality</caption>
+        <caption>#getMessage("specimen_laterality")</caption>
         <column>TISSUE_SIDE</column>
         <options>
           <sql>select value from catissue_permissible_value where public_id = '2003992' order by value</sql>
@@ -163,7 +167,7 @@
       <dropDown>
         <name>pathologicalStatus</name>
         <udn>pathologicalStatus</udn>
-        <caption>Pathological Status</caption>
+        <caption>#getMessage("specimen_pathological_status")</caption>
         <column>PATHOLOGICAL_STATUS</column>
         <options>
           <sql>select value from catissue_permissible_value where public_id = '2003993' order by value</sql>
@@ -175,7 +179,7 @@
       <datePicker>
         <name>createdOn</name>
         <udn>createdOn</udn>
-        <caption>Created On</caption>
+        <caption>#getMessage("specimen_created_on")</caption>
         <column>CREATED_ON_DATE</column>
       </datePicker>
     </row>
@@ -184,7 +188,7 @@
       <numberField>
         <name>initialQty</name>
         <udn>initialQty</udn>
-        <caption>Initial Quantity</caption>
+        <caption>#getMessage("specimen_initial_quantity")</caption>
         <column>INITIAL_QUANTITY</column>
       </numberField>
     </row>
@@ -193,7 +197,7 @@
       <numberField>
         <name>availableQty</name>
         <udn>availableQty</udn>
-        <caption>Available Quantity</caption>
+        <caption>#getMessage("specimen_available_quantity")</caption>
         <column>AVAILABLE_QUANTITY</column>
       </numberField>
     </row>
@@ -202,7 +206,7 @@
       <booleanCheckBox>
         <name>isAvailable</name>
         <udn>isAvailable</udn>
-        <caption>Is Available</caption>
+        <caption>#getMessage("specimen_is_available")</caption>
         <column>AVAILABLE</column>
       </booleanCheckBox>
     </row>
@@ -211,7 +215,7 @@
       <numberField>
         <name>concentration</name>
         <udn>concentration</udn>
-        <caption>Concentration</caption>
+        <caption>#getMessage("specimen_concentration")</caption>
         <column>CONCENTRATION</column>
       </numberField>
     </row>
@@ -220,7 +224,7 @@
       <dropDown>
         <name>collectionStatus</name>
         <udn>collectionStatus</udn>
-        <caption>Collection Status</caption>
+        <caption>#getMessage("specimen_collection_status")</caption>
         <column>COLLECTION_STATUS</column>
         <options>
           <option><value>Pending</value></option>
@@ -234,7 +238,7 @@
       <dropDown>
         <name>activityStatus</name>
         <udn>activityStatus</udn>
-        <caption>Activity Status</caption>
+        <caption>#getMessage("specimen_activity_status")</caption>
         <column>ACTIVITY_STATUS</column>
         <options>
           <option><value>Active</value></option>
@@ -248,7 +252,7 @@
       <textField>
         <name>comments</name>
         <udn>comments</udn>
-        <caption>Comments</caption>
+        <caption>#getMessage("specimen_comments")</caption>
         <column>COMMENTS</column>
       </textField>
     </row>
@@ -257,7 +261,7 @@
       <subForm>
         <name>specimenPosition</name>
         <udn>specimenPosition</udn>
-        <caption>Specimen Storage Details</caption>
+        <caption>#getMessage("specimen_spec_position")</caption>
         <table>OS_SPECIMEN_POSITIONS_VIEW</table>
         <foreignKey>SPECIMEN_ID</foreignKey>
         <parentKey>IDENTIFIER</parentKey>
@@ -266,7 +270,7 @@
           <textField>
             <name>containerName</name>
             <udn>containerName</udn>
-            <caption>Storage Container Name</caption>
+            <caption>#getMessage("specimen_spec_position_container_name")</caption>
             <column>CONTAINER_NAME</column>
             <maxLength>255</maxLength>
           </textField>              
@@ -274,7 +278,7 @@
           <textField>
             <name>positionDimensionTwoString</name>
             <udn>positionDimensionTwoString</udn>
-            <caption>Storage Container Row</caption>
+            <caption>#getMessage("specimen_spec_position_container_row")</caption>
             <column>POS_TWO_STR</column>
             <maxLength>255</maxLength>
           </textField>              
@@ -282,7 +286,7 @@
           <textField>
             <name>positionDimensionOneString</name>
             <udn>positionDimensionOneString</udn>
-            <caption>Storage Container Column</caption>
+            <caption>#getMessage("specimen_spec_position_container_column")</caption>
             <column>POS_ONE_STR</column>
             <maxLength>255</maxLength>
           </textField>              
@@ -294,7 +298,7 @@
       <listBox>
         <name>biohazards</name>
         <udn>biohazards</udn>
-        <caption>Biohazard</caption>
+        <caption>#getMessage("specimen_biohazard")</caption>
         <multiSelect>true</multiSelect>
         <table>OS_SPECIMEN_BIOHAZARDS</table>
         <column>BIOHAZARD</column>
@@ -312,7 +316,7 @@
       <subForm>
         <name>externalIdentifiers</name>
         <udn>externalIdentifiers</udn>
-        <caption>External Identifiers</caption>
+        <caption>#getMessage("specimen_external_ids")</caption>
         <table>CATISSUE_EXTERNAL_IDENTIFIER</table>
         <foreignKey>SPECIMEN_ID</foreignKey>
         <parentKey>IDENTIFIER</parentKey>
@@ -320,7 +324,7 @@
           <textField>
             <name>externalIdentifierName</name>
             <udn>externalIdentifierName</udn>
-            <caption>External Identifier Name</caption>
+            <caption>#getMessage("specimen_external_ids_name")</caption>
             <column>NAME</column>
             <maxLength>255</maxLength>
           </textField>  
@@ -329,7 +333,7 @@
           <textField>
             <name>externalIdentifierValue</name>
             <udn>externalIdentifierValue</udn>
-            <caption>External Identifier Value</caption>
+            <caption>#getMessage("specimen_external_ids_value")</caption>
             <column>VALUE</column>
             <maxLength>255</maxLength>
           </textField>  
@@ -341,7 +345,7 @@
       <subForm>
         <name>specimenOrders</name>
         <udn>specimenOrders</udn>
-        <caption>Specimen Orders</caption>
+        <caption>#getMessage("specimen_order_items")</caption>
         <table>OS_ORDER_ITEMS</table>
         <foreignKey>SPECIMEN_ID</foreignKey>
         <parentKey>IDENTIFIER</parentKey>
@@ -350,7 +354,7 @@
           <subForm>
             <name>order</name>
             <udn>order</udn>
-            <caption>Orders</caption>
+            <caption>#getMessage("specimen_order_items_order")</caption>
             <table>OS_ORDERS</table>
             <foreignKey>IDENTIFIER</foreignKey>
             <parentKey>ORDER_ID</parentKey>
@@ -363,7 +367,7 @@
       <subForm>
         <name>extensions</name>
         <udn>extensions</udn>
-        <caption>Extensions</caption>
+        <caption>#getMessage("specimen_extensions")</caption>
         <table>SPECIMEN_EXTN_RECORDS_VIEW</table>
         <foreignKey>SPECIMEN_ID</foreignKey>
         <parentKey>IDENTIFIER</parentKey>

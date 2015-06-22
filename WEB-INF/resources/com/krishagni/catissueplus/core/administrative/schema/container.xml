@@ -1,88 +1,92 @@
+#macro( getMessage $code )
+  $messageSource.getMessage($code, null, $locale)
+#end
+
 <object-schema>
   <name>storageContainer</name>
   <record> 
     <name>com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail</name>
     
     <field>
-      <caption>Name</caption>
+      <caption>#getMessage("container_name")</caption>
       <attribute>name</attribute>
     </field>
 
     <field>
-      <caption>Barcode</caption>
+      <caption>#getMessage("container_barcode")</caption>
       <attribute>barcode</attribute>
     </field>
 
     <field>
-      <caption>Activity Status</caption>
+      <caption>#getMessage("container_activity_status")</caption>
       <attribute>activityStatus</attribute>
     </field>
 
     <field>
-      <caption>Site Name</caption>
+      <caption>#getMessage("container_site")</caption>
       <attribute>siteName</attribute>
     </field>
 
     <field>
-      <caption>Parent Container Name</caption>
+      <caption>#getMessage("container_parent_container")</caption>
       <attribute>parentContainerName</attribute>
     </field>
 
     <field>
-      <caption>No. of Columns</caption>
+      <caption>#getMessage("container_no_of_columns")</caption>
       <attribute>noOfColumns</attribute>
     </field>
 
     <field>
-      <caption>No. of Rows</caption>
+      <caption>#getMessage("container_no_of_rows")</caption>
       <attribute>noOfRows</attribute>
     </field>
 
     <field>
-      <caption>Column Labeling Scheme</caption>
+      <caption>#getMessage("container_column_labeling_scheme")</caption>
       <attribute>columnLabelingScheme</attribute>
     </field>
 
     <field>
-      <caption>Row Labeling Scheme</caption>
+      <caption>#getMessage("container_row_labeling_scheme")</caption>
       <attribute>rowLabelingScheme</attribute>
     </field>
 
     <record>
       <attribute>position</attribute>
-      <caption>Position</caption>
+      <caption>#getMessage("container_position")</caption>
       
       <field>
-        <caption>Column</caption>
+        <caption>#getMessage("container_position_column")</caption>
         <attribute>posOne</attribute>
       </field>
     
       <field>
-        <caption>Row</caption>
+        <caption>#getMessage("container_position_row")</caption>
         <attribute>posTwo</attribute>
       </field>
     </record>
     
     <field>
       <multiple>true</multiple>
-      <caption>Allowed Specimen Class</caption>
+      <caption>#getMessage("container_allowed_specimen_class")</caption>
       <attribute>allowedSpecimenClasses</attribute>
     </field>
 
     <field>
       <multiple>true</multiple>
-      <caption>Allowed Specimen Type</caption>
+      <caption>#getMessage("container_allowed_specimen_type")</caption>
       <attribute>allowedSpecimenTypes</attribute>
     </field>
 
     <field>
       <multiple>true</multiple>
-      <caption>Allowed Collection Protocol</caption>
+      <caption>#getMessage("container_allowed_cp")</caption>
       <attribute>allowedCollectionProtocols</attribute>
     </field>
 
     <field>
-      <caption>Stores Specimen</caption>
+      <caption>#getMessage("container_stores_specimen")</caption>
       <attribute>storeSpecimensEnabled</attribute>
     </field>
   </record>

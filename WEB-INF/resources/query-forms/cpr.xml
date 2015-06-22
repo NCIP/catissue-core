@@ -1,7 +1,11 @@
+#macro( getMessage $code )
+  $messageSource.getMessage($code, null, $locale)  
+#end
+
 <form>
   <view>
     <name>Participant</name>
-    <caption>Participant</caption>
+    <caption>#getMessage("participant")</caption>
     <table>CPR_VIEW</table>
     <primaryKey>CPR_ID</primaryKey>
     <activeCondition>ACTIVITY_STATUS != 'Disabled'</activeCondition>  
@@ -9,7 +13,7 @@
       <numberField>
         <name>id</name>
         <udn>id</udn>
-        <caption>Identifier</caption>
+        <caption>#getMessage("participant_identifier")</caption>
         <column>PARTICIPANT_ID</column>
       </numberField>
     </row>
@@ -17,7 +21,7 @@
       <textField>
         <name>firstName</name>
         <udn>firstName</udn>
-        <caption>First Name</caption>
+        <caption>#getMessage("participant_first_name")</caption>
         <column>FIRST_NAME</column>
         <maxLength>50</maxLength>
         <phi>true</phi>
@@ -26,7 +30,7 @@
       <textField>
         <name>middleName</name>
         <udn>middleName</udn>
-        <caption>Middle Name</caption>
+        <caption>#getMessage("participant_middle_name")</caption>
         <column>MIDDLE_NAME</column>
         <maxLength>50</maxLength>
         <phi>true</phi>
@@ -35,7 +39,7 @@
       <textField>
         <name>lastName</name>
         <udn>lastName</udn>
-        <caption>Last Name</caption>
+        <caption>#getMessage("participant_last_name")</caption>
         <column>LAST_NAME</column>
         <phi>true</phi>
       </textField>
@@ -44,7 +48,7 @@
       <datePicker>
         <name>dateOfBirth</name>
         <udn>dateOfBirth</udn>
-        <caption>Date Of Birth</caption>
+        <caption>#getMessage("participant_dob")</caption>
         <column>DOB</column>
         <format>MM-dd-yyyy</format>
         <phi>true</phi>
@@ -54,7 +58,7 @@
       <datePicker>
         <name>deathDate</name>
         <udn>deathDate</udn>
-        <caption>Death Date</caption>
+        <caption>#getMessage("participant_death_date")</caption>
         <column>DEATH_DATE</column>
         <format>MM-dd-yyyy</format>
         <phi>true</phi>
@@ -64,7 +68,7 @@
       <textField>
         <name>ssn</name>
         <udn>ssn</udn>
-        <caption>Social Security Number</caption>
+        <caption>#getMessage("participant_ssn")</caption>
         <column>SSN</column>
         <phi>true</phi>
       </textField>
@@ -73,7 +77,7 @@
       <textField>
         <name>vitalStatus</name>
         <udn>vitalStatus</udn>
-        <caption>Vital Status</caption>
+        <caption>#getMessage("participant_vital_status")</caption>
         <column>VITAL_STATUS</column>
       </textField>
     </row>
@@ -81,7 +85,7 @@
       <dropDown>
         <name>activityStatus</name>
         <udn>activityStatus</udn>
-        <caption>Activity Status</caption>
+        <caption>#getMessage("participant_activity_status")</caption>
         <column>ACTIVITY_STATUS</column>
         <options>
           <option><value>Active</value></option>
@@ -94,7 +98,7 @@
       <radioButton>
         <name>gender</name>
         <udn>gender</udn>
-        <caption>Gender</caption>
+        <caption>#getMessage("participant_gender")</caption>
         <column>GENDER</column>
         <options>
           <sql>select value from catissue_permissible_value where public_id = '2003989' order by value</sql>
@@ -105,7 +109,7 @@
       <dropDown>
         <name>genotype</name>
         <udn>genotype</udn>
-        <caption>Genotype</caption>
+        <caption>#getMessage("participant_genotype")</caption>
         <column>GENOTYPE</column>
         <options>
           <sql>select value from catissue_permissible_value where public_id = '2003990' order by value</sql>
@@ -116,7 +120,7 @@
       <checkBox>
         <name>race</name>
         <udn>race</udn>
-        <caption>Race</caption>
+        <caption>#getMessage("participant_race")</caption>
         <multiSelect>true</multiSelect>
         <table>CATISSUE_RACE</table>
         <column>RACE_NAME</column>
@@ -131,7 +135,7 @@
       <textField>
         <name>ethnicity</name>
         <udn>ethnicity</udn>
-        <caption>Ethnicity</caption>
+        <caption>#getMessage("participant_ethnicity")</caption>
         <column>ETHNICITY</column>
       </textField>
     </row>
@@ -139,7 +143,7 @@
       <subForm>
         <name>medicalRecord</name>
         <udn>medicalRecord</udn>
-        <caption>Medical Record Number</caption>
+        <caption>#getMessage("participant_mrn")</caption>
         <table>PART_MED_REC_VIEW</table>
         <foreignKey>PARTICIPANT_ID</foreignKey>
         <parentKey>PARTICIPANT_ID</parentKey>
@@ -147,7 +151,7 @@
           <textField>
             <name>medicalRecordNumber</name>
             <udn>medicalRecordNumber</udn>
-            <caption>Medical Record Number</caption>
+            <caption>#getMessage("participant_mrn_mrn")</caption>
             <column>MEDICAL_RECORD_NUMBER</column>
             <maxLength>255</maxLength>
             <phi>true</phi>
@@ -156,7 +160,7 @@
           <dropDown>
             <name>mrnSiteName</name>
             <udn>mrnSiteName</udn>
-            <caption>MRN Site</caption>
+            <caption>#getMessage("participant_mrn_site")</caption>
             <column>SITE_NAME</column>
             <options>
               <sql>select distinct name from CATISSUE_SITE</sql>
@@ -169,7 +173,7 @@
       <textField>
         <name>barcode</name>
         <udn>barcode</udn>
-        <caption>Barcode</caption>
+        <caption>#getMessage("participant_barcode")</caption>
         <column>BARCODE</column>
       </textField>
     </row>
@@ -177,7 +181,7 @@
       <datePicker>
         <name>regDate</name>
         <udn>regDate</udn>
-        <caption>Registration Date</caption>
+        <caption>#getMessage("participant_registration_date")</caption>
         <column>REGISTRATION_DATE</column>
         <format>MM-dd-yyyy</format>
         <phi>true</phi>
@@ -187,7 +191,7 @@
       <textField>
         <name>ppid</name>
         <udn>ppid</udn>
-        <caption>Protocol Participant ID</caption>
+        <caption>#getMessage("participant_ppid")</caption>
         <column>PPID</column>
       </textField>
     </row>
@@ -195,7 +199,7 @@
       <subForm>
         <name>scgs</name>
         <udn>scgs</udn>
-        <caption>Visits</caption>
+        <caption>#getMessage("participant_visits")</caption>
         <table>CATISSUE_SPECIMEN_COLL_GROUP</table>
         <foreignKey>COLLECTION_PROTOCOL_REG_ID</foreignKey>
         <parentKey>CPR_ID</parentKey>
@@ -204,7 +208,7 @@
           <subForm>
             <name>specimens</name>
             <udn>specimens</udn>
-            <caption>Specimens</caption>
+            <caption>#getMessage("participant_visits_specimens")</caption>
             <table>CATISSUE_SPECIMEN</table>
             <foreignKey>SPECIMEN_COLLECTION_GROUP_ID</foreignKey>
             <parentKey>IDENTIFIER</parentKey>
@@ -213,7 +217,7 @@
               <subForm>
                 <name>specimenOrders</name>
                 <udn>specimenOrders</udn>
-                <caption>Specimen Orders</caption>
+                <caption>#getMessage("participant_visits_specimens_order_items")</caption>
                 <table>OS_ORDER_ITEMS</table>
                 <foreignKey>SPECIMEN_ID</foreignKey>
                 <parentKey>IDENTIFIER</parentKey>
@@ -221,7 +225,7 @@
                   <subForm>
                     <name>order</name>
                     <udn>order</udn>
-                    <caption>Orders</caption>
+                    <caption>#getMessage("participant_visits_specimens_order_items_order")</caption>
                     <table>OS_ORDERS</table>
                     <foreignKey>IDENTIFIER</foreignKey>
                     <parentKey>ORDER_ID</parentKey>
@@ -237,7 +241,7 @@
       <subForm>
         <name>consentTier</name>
         <udn>consentTier</udn>
-        <caption>Consent Tier</caption>
+        <caption>#getMessage("participant_consent_tier")</caption>
         <table>CONSENT_TIER_VIEW</table>
         <foreignKey>CPR_ID</foreignKey>
         <parentKey>CPR_ID</parentKey>
@@ -245,14 +249,14 @@
           <textField>
             <name>consentTierStatement</name>
             <udn>consentTierStatement</udn>
-            <caption>Consent Tier Statement</caption>
+            <caption>#getMessage("participant_consent_tier_statement")</caption>
             <column>STATEMENT</column>
           </textField>
 
           <dropDown>
             <name>consentResponseStatement</name>
             <udn>consentResponseStatement</udn>
-            <caption>Consent Response</caption>
+            <caption>#getMessage("participant_consent_tier_response")</caption>
             <column>RESPONSE</column>
             <options>
               <option><value>Yes</value></option>
@@ -267,7 +271,7 @@
       <datePicker>
         <name>consentSignDate</name>
         <udn>consentSignDate</udn>
-        <caption>Consent Sign Date</caption>
+        <caption>#getMessage("participant_consent_sign_date")</caption>
         <column>CONSENT_SIGN_DATE</column>
         <format>MM-dd-yyyy</format>
       </datePicker>
@@ -276,7 +280,7 @@
       <textField>
         <name>consentDocUrl</name>
         <udn>consentDocUrl</udn>
-        <caption>Consent Document Url</caption>
+        <caption>#getMessage("participant_consent_document_url")</caption>
         <column>CONSENT_DOC_URL</column>
       </textField>
     </row>
@@ -284,7 +288,7 @@
       <subForm>
         <name>consentWitness</name>
         <udn>consentWitness</udn>
-        <caption>Consent Witness</caption>
+        <caption>#getMessage("participant_consent_witness")</caption>
         <table>USER_VIEW</table>
         <foreignKey>IDENTIFIER</foreignKey>
         <parentKey>CONSENT_WITNESS</parentKey>
@@ -292,14 +296,14 @@
           <textField>
             <name>firstName</name>
             <udn>firstName</udn>
-            <caption>Consent Witness First Name</caption>
+            <caption>#getMessage("participant_consent_witness_first_name")</caption>
             <column>FIRST_NAME</column>
           </textField>
           
           <textField>
             <name>lastName</name>
             <udn>lastName</udn>
-            <caption>Consent Witness Last Name</caption>
+            <caption>#getMessage("participant_consent_witness_last_name")</caption>
             <column>LAST_NAME</column>
           </textField>
         </row>
@@ -309,7 +313,7 @@
       <subForm>
         <name>extensions</name>
         <udn>extensions</udn>
-        <caption>Extensions</caption>
+        <caption>#getMessage("participant_extensions")</caption>
         <table>CPR_EXTENSION_RECORDS_VIEW</table>
         <foreignKey>CPR_ID</foreignKey>
         <parentKey>CPR_ID</parentKey>

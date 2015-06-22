@@ -361,8 +361,8 @@
   <bean id="messageSource" class="com.krishagni.catissueplus.core.common.WildcardReloadableResourceBundle">
     <property name="basenames">
       <list>
-        <value>classpath:errors/messages*</value>
         <value>classpath*:com/krishagni/openspecimen/custom/**/messages*</value>
+        <value>classpath:errors/messages*</value>
       </list>
     </property>
   </bean>
@@ -458,6 +458,7 @@
     <property name="userDao" ref="userDao"/>
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="deInitializer" ref="deInitializer"/>
+    <property name="templateService" ref="templateService"/>
   </bean>
 
   <bean id="importSpeForms" class="com.krishagni.catissueplus.core.init.ImportSpecimenEventForms">
@@ -465,6 +466,7 @@
     <property name="userDao" ref="userDao"/>
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="deInitializer" ref="deInitializer"/>
+    <property name="templateService" ref="templateService"/>
   </bean>
 
   <!-- Move these to importer-beans.xml -->
@@ -473,6 +475,7 @@
   </bean>
 
   <bean id="objectSchemaFactory" class="com.krishagni.catissueplus.core.importer.services.impl.ObjectSchemaFactoryImpl">
+    <property name="templateService" ref="templateService"/>
     <property name="schemaResources">
       <list>
         <value>com/krishagni/catissueplus/core/administrative/schema/institute.xml</value>
