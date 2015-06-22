@@ -96,13 +96,13 @@ public class SprDeIdentifier implements DocumentDeIdentifier {
 		StringBuilder regexPhi = new StringBuilder();
 		StringBuilder regexDeleteNextLine = new StringBuilder();
 		StringBuilder regexDeleteLine = new StringBuilder();
-		StringBuilder regexDeIdetifyWord = new StringBuilder();
+		StringBuilder regexDeIdentifyWord = new StringBuilder();
 		
 		for (Object[] obj : list) {
 			String searchText = (String) obj[0];
-			boolean deleteLine = (Boolean) obj[1];
-			boolean deleteNextLine = (Boolean) obj[2];
-			if (deleteLine && deleteNextLine) {
+			boolean deleteLine = (obj[1] != null) ? (Boolean) obj[1] : false;
+			boolean deleteNextLine = (obj[2] != null) ? (Boolean) obj[2] : false;
+			if (deleteNextLine) {
 				if (searchText.equals("Sex: Age: DOB:")) {
 					addOr(regexPhi);
 					regexPhi.append(searchText);
@@ -114,25 +114,25 @@ public class SprDeIdentifier implements DocumentDeIdentifier {
 				addOr(regexDeleteLine);
 				regexDeleteLine.append(searchText);
 			} else {
-				addOr(regexDeIdetifyWord);
-				regexDeIdetifyWord.append(searchText);
+				addOr(regexDeIdentifyWord);
+				regexDeIdentifyWord.append(searchText);
 			}
 		}
 	
-		report = replaceString(report, regexPhi, REPLACE_3_LINE_REGX, true);
-		report = replaceString(report, regexDeleteNextLine, REPLACE_2_LINE_REGX, true);
-		report = replaceString(report, regexDeleteLine, REPLACE_1_LINE_REGX, true);
-		report = replaceString(report, regexDeIdetifyWord, REPLACE_WORD, false);
+		report = replaceString(report, REPLACE_3_LINE_REGX, regexPhi, true);
+		report = replaceString(report, REPLACE_2_LINE_REGX, regexDeleteNextLine, true);
+		report = replaceString(report, REPLACE_1_LINE_REGX, regexDeleteLine, true);
+		report = replaceString(report, REPLACE_WORD, regexDeIdentifyWord, false);
 		return report;
 	}
 	
-	private String replaceString(String report, StringBuilder regxText, String regxExp, boolean delete) {
-		if (regxText.length() <= 0) {
-			return report;
+	private String replaceString(String input, String regexFmt, StringBuilder regexText, boolean delete) {
+		if (regexText.length() <= 0) {
+			return input;
 		}
-		regxExp = String.format(regxExp, regxText);
+		regexFmt = String.format(regexFmt, regexText);
 		String replacement = delete ? StringUtils.EMPTY : REPLACEMENT_STRING;
-		return report.replaceAll(regxExp, replacement);
+		return input.replaceAll(regexFmt, replacement);
 	}
 
 	private void addOr(StringBuilder cond) {
@@ -145,11 +145,11 @@ public class SprDeIdentifier implements DocumentDeIdentifier {
 	
 	private static final String REPLACEMENT_STRING = "XXX";
 	
-	private static final String REPLACE_3_LINE_REGX = "(?i).*?(%s).*?\\n.*?\\n.*?\\n";
+	private static final String REPLACE_3_LINE_REGX = "(?i).*?(%s)((.*?\\n.*?\\n.*?\\n)|(.*?\\n.*?\\n)|(.*?\\n)|(\\b))";
 	
-	private static final String REPLACE_2_LINE_REGX = "(?i).*?(%s).*?\\n.*?\\n";
+	private static final String REPLACE_2_LINE_REGX = "(?i).*?(%s)((.*?\\n.*?\\n)|(.*?\\n)|(\\b))";
 	
-	private static final String REPLACE_1_LINE_REGX = "(?i).*?(%s).*?\\n";
+	private static final String REPLACE_1_LINE_REGX = "(?i).*?(%s)((.*?\\n)|(\\b))";
 	
 	private static final String REPLACE_WORD = "(?i).*?(%s)\\b";
 	
