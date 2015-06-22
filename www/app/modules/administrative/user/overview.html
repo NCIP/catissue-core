@@ -91,11 +91,12 @@
         </os-inline-edit>
       </li>
     </ul>
-      <div class="os-sub-section">
-        <strong class="key key-sm" translate="user.address">Address</strong>
-        <div class="os-hr"></div>
-        <span class="value value-md" os-inline-eddit>{{user.address}}</span>
-      </div>
+
+    <div class="os-sub-section">
+      <strong class="key key-sm" translate="user.address">Address</strong>
+      <div class="os-hr"></div>
+      <span class="value value-md">{{user.address}}</span>
+    </div>
 
     <div ng-if="user.activityStatus == 'Pending' && currentUser.admin">
       <button class="btn btn-success" ng-click="activate()">

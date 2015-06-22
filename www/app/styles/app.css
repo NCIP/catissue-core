@@ -554,6 +554,10 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   width: 50%;
 }
 
+.os-sub-section {
+  margin-bottom: 40px;
+}
+
 .os-sub-section >.os-hr {
   margin-top: -10px;
   margin-bottom: 20px;
