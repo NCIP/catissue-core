@@ -1,8 +1,11 @@
 package com.krishagni.catissueplus.core.de.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
@@ -138,6 +141,36 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 		return count.iterator().next().intValue() != 0;
 	}	
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> getQueryChangeLogDetails(String fileName) {
+		List<Object[]> rows = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_QUERY_ID_AND_MD5_SQL)
+				.setString("fileName", fileName)
+				.list();
+		if (CollectionUtils.isEmpty(rows)) {
+			return null;
+		}
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		Object[] row = rows.iterator().next();
+		result.put("queryId", row[0]);
+		result.put("md5Digest", row[1]);
+		return result;
+	}
+	
+	@Override
+	public void insertQueryChangeLog(String fileName, String digest, String status, Long queryId) {
+		sessionFactory.getCurrentSession()
+				.getNamedQuery(INSERT_QUERY_CHANGE_LOG_SQL)
+				.setString("fileName", fileName)
+				.setString("md5Digest", digest)
+				.setString("status", status)
+				.setLong("queryId", queryId)
+				.setTimestamp("executedOn", Calendar.getInstance().getTime())
+				.executeUpdate();
+	}
+	
 	private SavedQuerySummary getSavedQuerySummary(Object[] row) {
 		SavedQuerySummary savedQuery = new SavedQuerySummary();
 		savedQuery.setId((Long)row[0]);
@@ -205,4 +238,8 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 		
 		return result;		
 	}
+	
+	private static final String INSERT_QUERY_CHANGE_LOG_SQL = FQN + ".insertQueryChangeLog"; 
+	
+	private static final String GET_QUERY_ID_AND_MD5_SQL = FQN + ".getQueryIdAndDigest"; 
 }

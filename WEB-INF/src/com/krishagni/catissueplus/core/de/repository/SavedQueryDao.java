@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.de.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.common.repository.Dao;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
@@ -20,5 +21,9 @@ public interface SavedQueryDao extends Dao<SavedQuery>{
 	public List<SavedQuerySummary> getQueriesByFolderId(Long folderId, int startAt, int maxRecords, String ... searchString);
 	
 	public boolean isQuerySharedWithUser(Long queryId, Long userId);
+	
+	public Map<String, Object> getQueryChangeLogDetails(String file);
+	
+	public void insertQueryChangeLog(String file, String digest, String status, Long queryId);
 
 }

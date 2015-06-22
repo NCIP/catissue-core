@@ -569,6 +569,12 @@
     <property name="transactionManager" ref="transactionManager"/>
     <property name="messageSource" ref="messageSource"/>
   </bean>
+  
+  <bean id="importDefaultQueries" class="com.krishagni.catissueplus.core.init.ImportDefaultQueries">
+    <property name="txnMgr" ref="transactionManager"/>
+    <property name="daoFactory" ref="deDaoFactory"/>
+    <property name="userDao" ref="userDao"/>
+  </bean>
 
   <task:scheduler id="taskScheduler" pool-size="1"/>
   <task:annotation-driven scheduler="taskScheduler"/>

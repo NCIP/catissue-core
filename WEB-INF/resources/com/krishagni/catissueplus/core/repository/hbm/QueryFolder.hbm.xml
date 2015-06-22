@@ -47,5 +47,9 @@
       where 
         owner.id = :userId or sharedWith.id = :userId or f.sharedWithAll = true
     </query>
+    
+    <query name="getQueryFolderByName">
+      from QueryFolder f where f.name = :name
+    </query>
   </class> 
 </hibernate-mapping>

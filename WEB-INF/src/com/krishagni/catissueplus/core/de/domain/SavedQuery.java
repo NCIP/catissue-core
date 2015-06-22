@@ -203,16 +203,22 @@ public class SavedQuery {
 	}
 
 	public void setQueryDefJson(String queryDefJson) {
+		setQueryDefJson(queryDefJson, false);
+	}
+	
+	public void setQueryDefJson(String queryDefJson, boolean includeTitle) {
 		SavedQuery query = null;
 		try {
 			query = getReadMapper().readValue(queryDefJson, SavedQuery.class);
 		} catch (Exception e) {
 			throw new RuntimeException("Error marshalling JSON to saved query", e);
 		}
-		
+		if(includeTitle){
+			this.title = query.title;
+		}
 		this.cpId = query.cpId;
 		this.selectList = query.selectList;
-		this.filters = query.filters;		
+		this.filters = query.filters;
 		this.queryExpression = query.queryExpression;
 		this.drivingForm = query.drivingForm;
 		this.reporting = query.reporting;
