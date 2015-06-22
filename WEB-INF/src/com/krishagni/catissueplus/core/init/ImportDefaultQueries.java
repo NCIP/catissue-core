@@ -80,7 +80,7 @@ public class ImportDefaultQueries implements InitializingBean {
 			LOGGER.info("Importing query from file: " + filename);
 			String newDigest = Utility.getResourceDigest(filename);
 			byte[] content = IOUtils.toByteArray(resource.getURI());
-			Map<String, Object> result = daoFactory.getSavedQueryDao().getQueryChangelogDetails(filename);
+			Map<String, Object> result = daoFactory.getSavedQueryDao().getQueryChangeLogDetails(filename);
 			
 			if (result == null) {
 				SavedQuery query = insertQuery(filename, content, newDigest);
@@ -118,10 +118,9 @@ public class ImportDefaultQueries implements InitializingBean {
 
 	private void updateQuery(Long queryId, String filename, byte[] queryContent, String md5Digest) {
 		try {
-			List<SavedQuery> savedQueries = daoFactory.getSavedQueryDao().getQueriesByIds(Arrays.asList(queryId));
-			SavedQuery savedQuery = new SavedQuery();
-			if(!CollectionUtils.isEmpty(savedQueries)){
-				savedQuery = savedQueries.get(0);
+			SavedQuery savedQuery = daoFactory.getSavedQueryDao().getQuery(queryId);
+			if(savedQuery == null){
+				savedQuery = new SavedQuery();
 			}
 			
 			savedQuery.setQueryDefJson(new String(queryContent), true);

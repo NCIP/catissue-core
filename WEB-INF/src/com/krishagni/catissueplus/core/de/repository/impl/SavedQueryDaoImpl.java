@@ -143,7 +143,7 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, Object> getQueryChangelogDetails(String fileName) {
+	public Map<String, Object> getQueryChangeLogDetails(String fileName) {
 		List<Object[]> rows = sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_QUERY_ID_AND_MD5_SQL)
 				.setString("fileName", fileName)

@@ -22,7 +22,7 @@ public interface SavedQueryDao extends Dao<SavedQuery>{
 	
 	public boolean isQuerySharedWithUser(Long queryId, Long userId);
 	
-	public Map<String, Object> getQueryChangelogDetails(String file);
+	public Map<String, Object> getQueryChangeLogDetails(String file);
 	
 	public void insertQueryChangeLog(String file, String digest, String status, Long queryId);
 
