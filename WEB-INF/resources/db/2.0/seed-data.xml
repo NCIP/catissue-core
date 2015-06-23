@@ -70,7 +70,7 @@
       insert into catissue_user
         (identifier, email_address, first_name, login_name, activity_status, first_time_login, domain_name, is_admin)
       values
-        (default, '$system', 'System', '$system', 'Locked', 0, 'openspecimen', 1);
+        (CATISSUE_USER_SEQ.nextval, '$system', 'System', '$system', 'Locked', 0, 'openspecimen', 1);
     </sql>
   </changeSet>
   
