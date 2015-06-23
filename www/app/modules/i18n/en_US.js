@@ -930,6 +930,7 @@
     "select_fields": "Select Fields",
     "aggregates": "Aggregates",
     "pivot_table": "Pivot Table",
+    "reporting_opts": "Reporting Options",
     
     "define_view_info": "Please select fields that you wish to view in results table. Drag and drop the fields to reorder the view",
 
@@ -955,6 +956,13 @@
     "no_queries": "No queries to show",
     "no_queries_selected": "No queries selected. Please select at least one query",
     "info": "Information",
+
+    "report_type": "Report Type",
+    "select_report_type": "Select Report Type",
+    "total_fields": "Total Fields",
+    "select_total_fields": "Select fields whose value needs to be summed up for all rows",
+    "avg_fields": "Average Fields",
+    "select_avg_fields": "Select fields whose value need to be averaged for all rows",
 
     "expr_toolbar": {
       "and": "AND",
@@ -990,6 +998,12 @@
       "min": "Minimum",
       "max": "Maximum",
       "avg": "Average"
+    },
+
+    "reporting": {
+      "none": "None",
+      "crosstab": "Pivot Table",
+      "columnsummary": "Column Summary"
     },
 
     "tooltip": {

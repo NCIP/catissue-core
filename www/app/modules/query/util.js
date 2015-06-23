@@ -312,15 +312,19 @@ angular.module('os.query.util', [])
         return '';
       }
 
+      var rptFields = getReportFields(selectedFields, true);
+      if (reporting.type == 'columnsummary') {
+        return getColumnSummaryRptExpr(rptFields, reporting);
+      }
+
       if (reporting.type != 'crosstab') {
         return reporting.type;
       }
 
-      var pivotTabFields = getPivotTabFields(selectedFields, true);
-      var rowIdx = getFieldIndices(pivotTabFields, reporting.params.groupRowsBy);
-      var colIdx = getFieldIndices(pivotTabFields, [reporting.params.groupColBy]);
+      var rowIdx = getFieldIndices(rptFields, reporting.params.groupRowsBy);
+      var colIdx = getFieldIndices(rptFields, [reporting.params.groupColBy]);
       colIdx = colIdx.length > 0 ? colIdx[0] : undefined;
-      var summaryIdx = getFieldIndices(pivotTabFields, reporting.params.summaryFields);
+      var summaryIdx = getFieldIndices(rptFields, reporting.params.summaryFields);
 
       var includeSubTotals = "";
       if (reporting.params.includeSubTotals) {
@@ -333,9 +337,36 @@ angular.module('os.query.util', [])
                '(' + summaryIdx.join(',') + ') ' + 
                includeSubTotals + 
              ')';
-    };
+    }
 
-    function getPivotTabFields(selectedFields, fresh) {
+    function getColumnSummaryRptExpr(rptFields, rpt) {
+      var expr = 'columnsummary(';
+      var addComma = false;
+      if (rpt.params.sum && rpt.params.sum.length > 0) {
+        expr += "\"sum\",";
+        expr += "\"" + rpt.params.sum.length + "\",";
+        var sumIdx = getFieldIndices(rptFields, rpt.params.sum);
+        sumIdx = sumIdx.map(function(idx) { return "\"" + idx + "\""; });
+        expr += sumIdx.join(",");
+        addComma = true;
+      }
+
+      if (rpt.params.avg && rpt.params.avg.length > 0) {
+        if (addComma) {
+          expr += ", ";
+        }
+        expr += "\"avg\",";
+        expr += "\"" + rpt.params.avg.length + "\",";
+        var avgIdx = getFieldIndices(rptFields, rpt.params.avg);
+        avgIdx = avgIdx.map(function(idx) { return "\"" + idx + "\""; });
+        expr += avgIdx.join(",");
+      }
+
+      expr += ')';
+      return expr;
+    }
+
+    function getReportFields(selectedFields, fresh) {
       var reportFields = [];
 
       angular.forEach(selectedFields, function(field) {

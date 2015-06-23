@@ -97,7 +97,9 @@ angular.module('os.query.results', ['os.query.models'])
           if (qc.reporting.type == 'crosstab') {
             preparePivotTable(result);
           } else {
-            prepareDataGrid(result);
+            var showColSummary = qc.reporting.type == 'columnsummary';
+            prepareDataGrid(showColSummary, result);
+            $scope.resultsCtx.gridOpts.headerRowHeight = showColSummary ? 101 : 70;
           }
         },
 
@@ -131,8 +133,14 @@ angular.module('os.query.results', ['os.query.models'])
       };
     };
 
-    function prepareDataGrid(result) {
-      var idx = -1;
+    function prepareDataGrid(showColSummary, result) {
+      var idx = -1,
+          summaryRow = [];
+
+      if (showColSummary && !!result.rows && result.rows.length > 0) {
+        summaryRow = result.rows.splice(result.rows.length - 1, 1)[0];
+      }
+
       var colDefs = result.columnLabels.map(
         function(columnLabel) {
           ++idx;
@@ -140,7 +148,9 @@ angular.module('os.query.results', ['os.query.models'])
             field: "col" + idx,
             displayName: columnLabel,
             width: 100,
-            headerCellTemplate: 'modules/query/column-filter.html'
+            headerCellTemplate: 'modules/query/column-filter.html',
+            showSummary: showColSummary,
+            summary: summaryRow[idx]
           };
         }
       );

@@ -16,10 +16,17 @@ angular.module('os.query.defineview', ['os.query.models'])
       $scope.wideRowMode = angular.copy(queryCtx.wideRowMode); 
       $scope.reporting = angular.copy(queryCtx.reporting);
       $scope.pivotTable = (queryCtx.reporting.type == 'crosstab');
-      $scope.reportingOpts = [ // TODO: Translate label
-        {type: 'none', label: 'None'},
-        {type: 'crosstab', label: 'Crosstab'}
-      ];
+      
+      $scope.reportingOpts = [];
+      $translate('queries.reporting.none').then(
+        function() {
+          $scope.reportingOpts = [
+            {type: 'none',          label: $translate.instant('queries.reporting.none')},
+            {type: 'crosstab',      label: $translate.instant('queries.reporting.crosstab')},
+            {type: 'columnsummary', label: $translate.instant('queries.reporting.columnsummary')}
+          ];
+        }
+      );
 
       forms = getForms();
       $scope.treeOpts = getTreeOpts();
@@ -94,13 +101,17 @@ angular.module('os.query.defineview', ['os.query.models'])
       }
     };
 
-    $scope.createPivotTable = function(pivotTable) {
-      if (!pivotTable) {
-        $scope.reporting = {type: '', params: {}};
-      } else {
-        $scope.reporting.type = 'crosstab';
+    $scope.onReportTypeSelect = function() {
+      var type = $scope.reporting.type;
+      if (type == 'crosstab') {
+        $scope.reporting = {type: 'crosstab', params: {groupRowsBy: [], summaryFields: []}};
         $scope.preparePivotTableOpts();
-      }
+      } else if (type == 'columnsummary') {
+        $scope.reporting = {type: 'columnsummary', params: {sum: [], avg: []}};
+        $scope.prepareColumnSummaryReportOpts();
+      } else {
+        $scope.reporting = {type: '', params: {}};
+      } 
     };
 
     $scope.prepareAggregateOpts = function() {
@@ -117,6 +128,16 @@ angular.module('os.query.defineview', ['os.query.models'])
       prepareAggFns($scope.selectedFields, aggFns, init);
       return true;
     };   
+
+    $scope.prepareReportingOpts = function() {
+      if ($scope.reporting.type == 'crosstab') {
+        return $scope.preparePivotTableOpts();
+      } else if ($scope.reporting.type == 'columnsummary') {
+        return $scope.prepareColumnSummaryReportOpts();
+      }
+
+      return true;
+    }
 
     $scope.preparePivotTableOpts = function() {
       if ($scope.reporting.type != 'crosstab') {
@@ -145,6 +166,25 @@ angular.module('os.query.defineview', ['os.query.models'])
       return true;
     };
 
+    $scope.prepareColumnSummaryReportOpts = function() {
+      if ($scope.reporting.type != 'columnsummary') {
+        return true;
+      }
+
+      $scope.columnSummaryFields = getColumnSummaryFields($scope.selectedFields);
+      var rptParams = $scope.reporting.params;
+      if (rptParams.sum) {
+        rptParams.sum = removeUnselectedFields(rptParams.sum, $scope.columnSummaryFields);
+      }
+
+      if (rptParams.avg) {
+        rptParams.avg = removeUnselectedFields(rptParams.avg, $scope.columnSummaryFields);
+      }
+
+      prepareColumnSummaryFields();
+      return true;
+    }
+
     $scope.onGroupRowsByChange = function(newVal) {
       $scope.reporting.params.groupRowsBy = newVal;
       preparePivotTabFields($scope.reportFields);
@@ -158,6 +198,16 @@ angular.module('os.query.defineview', ['os.query.models'])
     $scope.onSummaryFieldChange = function(newVal) {
       $scope.reporting.params.summaryFields = newVal;
       preparePivotTabFields($scope.reportFields);
+    };
+
+    $scope.onColumnSumFieldsChange = function(newVal) {
+      $scope.reporting.params.sum = newVal;
+      prepareColumnSummaryFields();
+    };
+
+    $scope.onColumnAvgFieldsChange = function(newVal) {
+      $scope.reporting.params.avg = newVal;
+      prepareColumnSummaryFields();
     };
 
     function getForms() {
@@ -657,6 +707,61 @@ angular.module('os.query.defineview', ['os.query.models'])
       );
 
       return selectedFieldsMap;
+    }
+
+    function getColumnSummaryFields(selectedFields) {
+      var columnSummaryFields = [];
+
+      for (var i = 0; i < selectedFields.length; ++i) {
+        var field = selectedFields[i];
+        var isAgg = false;
+        var len = field.aggFns ? field.aggFns.length : 0;
+        for (var j = 0; j < len; ++j) {
+          var aggFn = field.aggFns[j];
+          if (aggFn.opted) {
+            columnSummaryFields.push({
+              id: field.name + '$' + aggFn.name,
+              name: field.name,
+              value: aggFn.desc,
+              aggFn: aggFn.name
+            });
+            isAgg = true;
+          }
+        }
+
+        if (!isAgg && (field.type == 'INTEGER' || field.type == 'FLOAT')) {
+          columnSummaryFields.push({id: field.name, name: field.name, value: field.form + ": " + field.label});
+        }
+      }
+
+      return columnSummaryFields;
+    }
+
+    function getColumnSumFields(reportFields) {
+      var rptParams = $scope.reporting.params;
+
+      var excludeFields = [];
+      if (rptParams.avg) {
+        excludeFields = excludeFields.concat(rptParams.avg);
+      }
+
+      return getGroupFields(reportFields, excludeFields);
+    };
+
+    function getColumnAvgFields(reportFields) {
+      var rptParams = $scope.reporting.params;
+
+      var excludeFields = [];
+      if (rptParams.sum) {
+        excludeFields = excludeFields.concat(rptParams.sum);
+      }
+
+      return getGroupFields(reportFields, excludeFields);
+    };
+
+    function prepareColumnSummaryFields() {
+      $scope.columnSumFields = getColumnSumFields($scope.columnSummaryFields);
+      $scope.columnAvgFields = getColumnAvgFields($scope.columnSummaryFields);
     }
 
     init();

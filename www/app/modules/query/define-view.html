@@ -24,11 +24,11 @@
         </div>
       </os-wizard-step>
 
-      <os-wizard-step on-finish="preparePivotTableOpts" title="{{'queries.aggregates' | translate}}">
+      <os-wizard-step on-finish="prepareReportingOpts" title="{{'queries.aggregates' | translate}}">
         <div ng-include="'aggregate-functions.html'"></div>
       </os-wizard-step>
 
-      <os-wizard-step title="{{'queries.pivot_table' | translate}}">
+      <os-wizard-step title="{{'queries.reporting_opts' | translate}}">
         <div ng-include="'pivot-table.html'"></div>
       </os-wizard-step>
 
@@ -112,11 +112,15 @@
 <script type="text/ng-template" id="pivot-table.html">
   <div class="os-query-dv-pivot-table">
     <div class="form-group">
-      <label class="checkbox-inline">
-        <input type="checkbox" ng-model="pivotTable" 
-          ng-checked="reporting.type == 'crosstab'" ng-change="createPivotTable(pivotTable)"> 
-        <span translate="queries.create_pivot_table">Create Pivot Table</span>
-      </label>
+      <label translate="queries.report_type">Report Type</label>
+      <os-select 
+        placeholder="{{'queries.select_report_type' | translate}}"
+        list="reportingOpts" 
+        display-prop="label"
+        select-prop="type"
+        on-select="onReportTypeSelect()"
+        ng-model="reporting.type">
+      </os-select>
     </div>
 
     <div ng-if="reporting.type == 'crosstab'">
@@ -161,6 +165,29 @@
             Include sub-totals
           </span>
         </label>
+      </div>
+    </div>
+
+    <div ng-if="reporting.type == 'columnsummary'">
+      <div class="form-group">
+        <label translate="queries.total_fields">Total Fields</label>
+        <os-select 
+          placeholder="{{'queries.select_total_fields' | translate}}"
+          list="columnSumFields"
+          display-prop="value"
+          on-change="onColumnSumFieldsChange"
+          multiple ng-model="reporting.params.sum">
+        </os-select>
+      </div>
+      <div class="form-group">
+        <label translate="queries.avg_fields">Average Fields</label>
+        <os-select 
+          placeholder="{{'queries.select_avg_fields' | translate}}"
+          list="columnAvgFields"
+          display-prop="value"
+          on-change="onColumnAvgFieldsChange"
+          multiple ng-model="reporting.params.avg">
+        </os-select>
       </div>
     </div>
   </div>

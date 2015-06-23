@@ -21,6 +21,11 @@
    ng-style="{ 'width' : col.width - 10 + 'px' }" 
    style="position: absolute; top: 30px; bottom: 30px; left: 5px; bottom:0;"/>
 
+<div style="position: absolute; top: 71px; border-top: 1px solid #ccc; padding: 5px; width: 100%;" 
+  ng-if="col.colDef.showSummary">
+  <span>{{col.colDef.summary}}</span>
+</div>
+
 <div ng-show="col.resizable" 
   class="ngHeaderGrip" 
   ng-click="col.gripClick($event)" 
