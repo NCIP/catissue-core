@@ -1,14 +1,11 @@
 
 package com.krishagni.catissueplus.core.init;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -139,6 +136,7 @@ public class ImportDefaultQueries implements InitializingBean {
 		QueryFolder folder = daoFactory.getQueryFolderDao().getByName(DEFAULT_QUERIES);
 		if (folder == null) {
 			folder = new QueryFolder();
+			folder.setOwner(sysUser);
 		}
 		folder.getSavedQueries().addAll(queries);
 		folder.setSharedWithAll(true);
