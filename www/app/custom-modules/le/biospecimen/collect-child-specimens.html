@@ -10,14 +10,14 @@
             ng-change="processAliquotLabels(boxData.csLabels)" os-enable-tab
             class="form-control" placeholder="Paste labels from Clipboard" rows="2">
           </textarea>
-          <span class="input-group-btn">
+          <span class="input-group-btn os-btns">
             <button class="btn btn-primary" ng-click="saveAliquots()">
               <span>Save Aliquots</span>
             </button>
-            <a class="btn os-btn-text" ng-click="toggleView()" ng-switch on="childSpmnsData.view">
+            <button class="btn default" ng-click="toggleView()" ng-switch on="childSpmnsData.view">
               <span ng-switch-when="box">Tree View</span>
               <span ng-switch-when="tree">Box View</span>
-            </a>
+            </button>
           </span>
         </div>
       </div>
