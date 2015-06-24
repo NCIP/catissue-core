@@ -963,6 +963,10 @@
     "select_total_fields": "Select fields whose value needs to be summed up for all rows",
     "avg_fields": "Average Fields",
     "select_avg_fields": "Select fields whose value need to be averaged for all rows",
+    "no_total_or_avg_fields": "Select at least one field whose value needs to be summed up or averaged for all rows",
+    "pivot_table_no_row_fields": "Select at least one field to use for grouping rows in pivot table",
+    "pivot_table_no_col_field": "Select field to use for grouping columns in pivot table",
+    "pivot_table_no_summary_fields": "Select at least one summary field",
 
     "expr_toolbar": {
       "and": "AND",

@@ -69,6 +69,12 @@ angular.module('os.query.defineview', ['os.query.models'])
           Alerts.error('queries.pivot_table_no_summary_fields');
           return;
         }
+      } else if ($scope.reporting.type == 'columnsummary') {
+        if ((!rptParams.sum || rptParams.sum.length == 0) && 
+            (!rptParams.avg || rptParams.avg.length == 0)) {
+          Alerts.error('queries.no_total_or_avg_fields');
+          return;
+        }
       }
 
       sanitizeSelectedFields($scope.selectedFields);
