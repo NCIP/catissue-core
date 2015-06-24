@@ -13,7 +13,7 @@ public class CprListCriteria extends AbstractListCriteria<CprListCriteria> {
 	
 	private String ppid;
 	
-	private String empi_or_mrn_or_ssn;
+	private String participantId;
 
 	private String name;
 	
@@ -55,12 +55,12 @@ public class CprListCriteria extends AbstractListCriteria<CprListCriteria> {
 		return self();
 	}
 	
-	public String empi_or_mrn_or_ssn() {
-		return empi_or_mrn_or_ssn;
+	public String participantId() {
+		return participantId;
 	}
 
-	public CprListCriteria empi_or_mrn_or_ssn(String empi_or_mrn_or_ssn) {
-		this.empi_or_mrn_or_ssn = empi_or_mrn_or_ssn;
+	public CprListCriteria participantId(String participantId) {
+		this.participantId = participantId;
 		return self();
 	}
 

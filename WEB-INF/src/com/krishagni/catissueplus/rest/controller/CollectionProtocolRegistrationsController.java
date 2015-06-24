@@ -62,42 +62,42 @@ public class CollectionProtocolRegistrationsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<CprSummary> getRegistrations(
-			@RequestParam(value = "cpId",               required = true)
+			@RequestParam(value = "cpId",             required = true)
 			Long cpId,
 			
-			@RequestParam(value = "registrationDate",   required = false) 
+			@RequestParam(value = "registrationDate", required = false) 
 			@DateTimeFormat(pattern="yyyy-MM-dd")
 			Date registrationDate,
 			
-			@RequestParam(value = "query",              required = false)
+			@RequestParam(value = "query",            required = false)
 			String searchStr,
 			
-			@RequestParam(value = "name",               required = false)
+			@RequestParam(value = "name",             required = false)
 			String name,
 			
-			@RequestParam(value = "ppid",               required = false)
+			@RequestParam(value = "ppid",             required = false)
 			String ppid,
 			
-			@RequestParam(value = "empi_or_mrn_or_ssn", required = false)
-			String empi_or_mrn_or_ssn,
+			@RequestParam(value = "participantId",    required = false)
+			String participantId,
 			
-			@RequestParam(value = "empi",               required = false)
+			@RequestParam(value = "empi",             required = false)
 			String empi,
 			
-			@RequestParam(value = "dob",                required = false) 
+			@RequestParam(value = "dob",              required = false) 
 			@DateTimeFormat(pattern="yyyy-MM-dd")
 			Date dob,
 			
-			@RequestParam(value = "specimen",           required = false)
+			@RequestParam(value = "specimen",         required = false)
 			String specimen,
 			
-			@RequestParam(value = "startAt",            required = false, defaultValue = "0")
+			@RequestParam(value = "startAt",          required = false, defaultValue = "0")
 			int startAt,
 			
-			@RequestParam(value = "maxRecs",            required = false, defaultValue = "100")
+			@RequestParam(value = "maxRecs",          required = false, defaultValue = "100")
 			int maxRecs,
 			
-			@RequestParam(value = "includeStats",       required = false, defaultValue = "false") 
+			@RequestParam(value = "includeStats",     required = false, defaultValue = "false") 
 			boolean includeStats) {
 
 		CprListCriteria crit = new CprListCriteria()
@@ -106,7 +106,7 @@ public class CollectionProtocolRegistrationsController {
 			.query(searchStr)
 			.name(name)
 			.ppid(ppid)
-			.empi_or_mrn_or_ssn(empi_or_mrn_or_ssn)
+			.participantId(participantId)
 			.dob(dob)
 			.specimen(specimen)
 			.startAt(startAt)

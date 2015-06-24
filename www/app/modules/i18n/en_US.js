@@ -183,6 +183,7 @@
   "participant": {
     "list": "Participants",
    
+    "id": "MPI / MRN / SSN",
     "register_participant": "Register Participant",
     "edit_participant": "Edit Participant",
     "reg_date": "Registration Date",
@@ -213,7 +214,6 @@
     "spmn_label_or_barcode": "Specimen Label / Barcode",
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
-    "mpi_or_mrn_or_ssn": "MPI / MRN / SSN",
   
     "signed_consent_form": "Signed Consent Form",
     "deleting_consent_form": "Deleting Signed Consent Form",

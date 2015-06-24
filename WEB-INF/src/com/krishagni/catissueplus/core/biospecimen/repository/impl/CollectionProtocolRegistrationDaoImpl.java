@@ -166,38 +166,32 @@ public class CollectionProtocolRegistrationDaoImpl
 	}
 	
 	private void addMrnSiteAndEmpiAndSsnCondition(Criteria query, CprListCriteria crit) {
-		boolean mrnSpecified   = StringUtils.isNotBlank(crit.empi_or_mrn_or_ssn());
+		boolean participantIdSpecified   = StringUtils.isNotBlank(crit.participantId());
 		boolean sitesSpecified = CollectionUtils.isNotEmpty(crit.siteIds());
 		
-		Disjunction orCriteria = Restrictions.disjunction();
-		
-		if (mrnSpecified && sitesSpecified) {
-			query.createAlias("participant.pmis", "pmi", JoinType.LEFT_OUTER_JOIN)
-				.createAlias("pmi.site", "site");
-			
-			orCriteria.add(Restrictions.ilike("pmi.medicalRecordNumber", crit.empi_or_mrn_or_ssn(), MatchMode.ANYWHERE))
-				.add(Restrictions.in("site.id", crit.siteIds()));
-
-		} else if (mrnSpecified) {
+		if (participantIdSpecified) {
 			query.createAlias("participant.pmis", "pmi", JoinType.LEFT_OUTER_JOIN);
-			orCriteria.add(Restrictions.ilike("pmi.medicalRecordNumber", crit.empi_or_mrn_or_ssn(), MatchMode.ANYWHERE));
-
+			
+			Disjunction orCriteria = Restrictions.disjunction();
+			orCriteria.add(Restrictions.ilike("pmi.medicalRecordNumber", crit.participantId(), MatchMode.ANYWHERE))
+				.add(Restrictions.ilike("participant.empi", crit.participantId(), MatchMode.ANYWHERE))
+				.add(Restrictions.ilike("participant.uid", crit.participantId(), MatchMode.ANYWHERE));
+				
+			if (sitesSpecified) {
+				query.createAlias("pmi.site", "site");
+				orCriteria.add(Restrictions.in("site.id", crit.siteIds()));
+			}
+			
+			query.add(orCriteria);
 		} else if (sitesSpecified) {
 			query.createAlias("participant.pmis", "pmi", JoinType.LEFT_OUTER_JOIN)
-			.createAlias("pmi.site", "site", JoinType.LEFT_OUTER_JOIN);
-			orCriteria.add(Restrictions.disjunction()
+				.createAlias("pmi.site", "site", JoinType.LEFT_OUTER_JOIN)
+				.add(Restrictions.disjunction()
 					.add(Restrictions.isNull("site.id"))
 					.add(Restrictions.in("site.id", crit.siteIds())));
 		} else {
 			// both MRN and sites are not specified. Do nothing
 		}
-		
-		if (StringUtils.isNotBlank(crit.empi_or_mrn_or_ssn())) {
-			orCriteria.add(Restrictions.ilike("participant.empi", crit.empi_or_mrn_or_ssn(), MatchMode.ANYWHERE))
-				.add(Restrictions.ilike("participant.uid", crit.empi_or_mrn_or_ssn(), MatchMode.ANYWHERE));
-		}
-		
-		query.add(orCriteria);
 	}
 	
 	private void addNameAndPpidCondition(Criteria query, CprListCriteria crit) {
