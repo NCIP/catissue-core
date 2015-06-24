@@ -15,6 +15,8 @@
         <ul class="dropdown-menu dropdown-menu-right" role="menu">
           <li><a>{{currentUser.lastName + ' ' + currentUser.firstName}}</a></li>
           <li class="divider"></li>
+          <li><a ui-sref="user-password({userId: currentUser.id})">Change Password</a></li>
+          <li class="divider"></li>
           <li><a ui-sref="login({logout:true})">Log Out</a></li>
         </ul>
       </li>

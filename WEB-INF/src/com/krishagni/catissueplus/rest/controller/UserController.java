@@ -181,7 +181,7 @@ public class UserController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/update-password")
+	@RequestMapping(method = RequestMethod.PUT, value = "/password")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public Boolean changePassword(@RequestBody PasswordDetails passwordDetails) {
@@ -241,4 +241,5 @@ public class UserController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+
 }

@@ -6,6 +6,7 @@ angular.module('os.administrative.user',
     'os.administrative.user.addedit',
     'os.administrative.user.detail',
     'os.administrative.user.roles',
+    'os.administrative.user.password',
     'os.common.import'
   ])
 
@@ -110,5 +111,16 @@ angular.module('os.administrative.user',
         controller: 'UserRolesCtrl',
         parent: 'user-detail'
       })
+      .state('user-password', {
+        url: '/user-password-change/:userId',
+        templateUrl: 'modules/administrative/user/password.html',
+        resolve: {
+          user: function($stateParams, User) {
+            return User.getById($stateParams.userId);
+          }
+        },
+        controller: 'UserPasswordCtrl',
+          parent: 'user-root'
+        })
   });
 

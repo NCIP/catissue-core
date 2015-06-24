@@ -72,7 +72,8 @@
       "search": "Search",
       "clear_filters": "Clear Filters",
       "close": "Close",
-      "upload": "Upload"
+      "upload": "Upload",
+      "reset_password": "Reset Password"
     }
   },
 
@@ -652,6 +653,12 @@
 
     "menu_options": {
       "delete": "Delete"
+    },
+
+    "password": {
+      "old_password": "Old Password",
+      "new_password": "New Password",
+      "confirm_password": "Confirm Password"
     }
 
   },
