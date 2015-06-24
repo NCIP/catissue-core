@@ -194,8 +194,9 @@ angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models
         if (!filter.field) {
           return undefined;
         }
-        QueryUtil.disableCpSelection(queryCtx);
       }
+
+      QueryUtil.disableCpSelection(queryCtx);
     }
 
     return QueryGlobalData;
