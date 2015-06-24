@@ -239,7 +239,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}
 	
 	private void setSiteAndParentContainer(StorageContainerDetail detail, StorageContainer existing, StorageContainer container, OpenSpecimenException ose) {
-		if (detail.isAttrModified("siteName") || detail.isAttrModified("parentContainerName")) {
+		if (detail.isAttrModified("siteName") || detail.isAttrModified("parentContainerName") || detail.isAttrModified("parentContainerId")) {
 			setSiteAndParentContainer(detail, container, ose);
 		} else {
 			container.setSite(existing.getSite());
@@ -262,17 +262,25 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		return site;		
 	}
 	
-	private StorageContainer setParentContainer(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {		
-		String parentName = detail.getParentContainerName();
-		if (StringUtils.isBlank(parentName)) {
+	private StorageContainer setParentContainer(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
+		StorageContainer parentContainer = null;
+		Object key = null;
+		if (detail.getParentContainerId() != null) {
+			parentContainer = daoFactory.getStorageContainerDao().getById(detail.getParentContainerId());
+			key = detail.getParentContainerId();
+		} else if (StringUtils.isNotBlank(detail.getParentContainerName())) {
+			parentContainer = daoFactory.getStorageContainerDao().getByName(detail.getParentContainerName());
+			key = detail.getParentContainerName();
+		}
+		
+		if (parentContainer == null) { 
+			if (key != null) {
+				ose.addError(StorageContainerErrorCode.PARENT_CONT_NOT_FOUND, key);
+			}
+			
 			return null;
 		}
 		
-		StorageContainer parentContainer = daoFactory.getStorageContainerDao().getByName(parentName);
-		if (parentContainer == null) {
-			ose.addError(StorageContainerErrorCode.PARENT_CONT_NOT_FOUND);
-		}
-			
 		container.setParentContainer(parentContainer);
 		return parentContainer;
 	}
@@ -295,12 +303,12 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 			if (parentContainer.canContainerOccupyPosition(container.getId(), posOne, posTwo)) {
 				position = parentContainer.createPosition(posOne, posTwo);
 			} else {
-				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE);
+				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, parentContainer.getName());
 			}
 		} else {
 			position = parentContainer.nextAvailablePosition();
 			if (position == null) {
-				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE);
+				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, parentContainer.getName());
 			} 
 		} 
 		

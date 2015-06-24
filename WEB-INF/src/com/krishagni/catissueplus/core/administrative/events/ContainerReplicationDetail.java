@@ -35,14 +35,18 @@ public class ContainerReplicationDetail {
 	}
 
 	public static class DestinationDetail {
+		private String name;
+		
 		private String siteName;
 		
 		private String parentContainerName;
 		
 		private Long parentContainerId;
 		
-		private List<String> newContainerNames = new ArrayList<String>();
-
+		private String posOne;
+		
+		private String posTwo;
+		
 		public String getSiteName() {
 			return siteName;
 		}
@@ -67,12 +71,28 @@ public class ContainerReplicationDetail {
 			this.parentContainerId = parentContainerId;
 		}
 
-		public List<String> getNewContainerNames() {
-			return newContainerNames;
+		public String getName() {
+			return name;
 		}
 
-		public void setNewContainerNames(List<String> newContainerNames) {
-			this.newContainerNames = newContainerNames;
-		}		
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getPosOne() {
+			return posOne;
+		}
+
+		public void setPosOne(String posOne) {
+			this.posOne = posOne;
+		}
+
+		public String getPosTwo() {
+			return posTwo;
+		}
+
+		public void setPosTwo(String posTwo) {
+			this.posTwo = posTwo;
+		}
 	}
 }

@@ -8,10 +8,8 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
-import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
 import com.krishagni.catissueplus.core.administrative.events.AssignPositionsOp;
@@ -435,7 +433,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		}
 		
 		if (!container.canSpecimenOccupyPosition(specimen.getId(), pos.getPosOne(), pos.getPosTwo())) {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.NO_FREE_SPACE);
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
 		}
 		
 		StorageContainerPosition position = container.createPosition(pos.getPosOne(), pos.getPosTwo());
@@ -459,7 +457,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		}
 		
 		if (!container.canContainerOccupyPosition(childContainer.getId(), pos.getPosOne(), pos.getPosTwo())) {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.NO_FREE_SPACE);
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
 		}
 		
 		StorageContainerPosition position = container.createPosition(pos.getPosOne(), pos.getPosTwo());
@@ -468,61 +466,32 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	}
 	
 	private void replicateContainer(StorageContainer srcContainer, DestinationDetail dest) {
-		StorageContainer parentContainer = getContainer(dest.getParentContainerId(), dest.getParentContainerName(), null);
+		StorageContainerDetail detail = new StorageContainerDetail();
+		detail.setName(dest.getName());
+		detail.setSiteName(dest.getSiteName());
+		detail.setParentContainerId(dest.getParentContainerId());
+		detail.setParentContainerName(dest.getParentContainerName());
 		
-		Site site = null;
-		if (parentContainer != null) {
-			site = parentContainer.getSite();
-		} else if (StringUtils.isNotBlank(dest.getSiteName())) {
-			site = getSite(dest.getSiteName());
-		} else {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.REQUIRED_SITE_OR_PARENT_CONT);
-		}
+		StorageContainerPositionDetail position = new StorageContainerPositionDetail();
+		position.setPosOne(dest.getPosOne());
+		position.setPosTwo(dest.getPosTwo());
+		detail.setPosition(position);
 		
-		if (parentContainer != null && dest.getNewContainerNames().size() > parentContainer.freePositionsCount()) {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.NO_FREE_SPACE);
-		}
+		StorageContainer replica = containerFactory.createStorageContainer(getContainerCopy(srcContainer), detail);
+		AccessCtrlMgr.getInstance().ensureCreateContainerRights(replica);
 		
-		AccessCtrlMgr.getInstance().ensureCreateContainerRights(site);
-
-		for (CollectionProtocol cp : srcContainer.getAllowedCps()) {
-			if (!cp.getRepositories().contains(site)) {
-				throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_CPS);
-			}
-		}
-				
-		for (String name : dest.getNewContainerNames()) {
-			if (StringUtils.isBlank(name)) {
-				throw OpenSpecimenException.userError(StorageContainerErrorCode.NAME_REQUIRED);
-			}
-			
-			if (!isUniqueName(name)) {
-				throw OpenSpecimenException.userError(StorageContainerErrorCode.DUP_NAME, name);
-			}
-		}
-		
-		boolean validatedOnce = false;
-		for (String name : dest.getNewContainerNames()) {
-			StorageContainer newContainer = getContainerCopy(srcContainer, name, site, parentContainer);
-			if (!validatedOnce) {
-				newContainer.validateRestrictions();
-				validatedOnce = true;
-			}
-			
-			daoFactory.getStorageContainerDao().saveOrUpdate(newContainer);
-		}				
+		ensureUniqueConstraints(null, replica);
+		replica.validateRestrictions();
+		daoFactory.getStorageContainerDao().saveOrUpdate(replica);
 	}
 	
-	private StorageContainer getContainerCopy(StorageContainer source, String name, Site site, StorageContainer parentContainer) {
+	private StorageContainer getContainerCopy(StorageContainer source) {
 		StorageContainer copy = new StorageContainer();
-		copy.setName(name);
 		copy.setTemperature(source.getTemperature());
 		copy.setNoOfColumns(source.getNoOfColumns());
 		copy.setNoOfRows(source.getNoOfRows());
 		copy.setColumnLabelingScheme(source.getColumnLabelingScheme());
 		copy.setRowLabelingScheme(source.getRowLabelingScheme());
-		copy.setSite(site);
-		copy.setParentContainer(parentContainer);
 		copy.setComments(source.getComments());
 		copy.setAllowedSpecimenClasses(new HashSet<String>(source.getAllowedSpecimenClasses()));		
 		copy.setAllowedSpecimenTypes(new HashSet<String>(source.getAllowedSpecimenTypes()));
@@ -532,22 +501,6 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		copy.setCompAllowedCps(copy.computeAllowedCps());
 		copy.setStoreSpecimenEnabled(source.isStoreSpecimenEnabled());
 		copy.setCreatedBy(AuthUtil.getCurrentUser());
-		
-		if (parentContainer != null) {
-			StorageContainerPosition position = parentContainer.nextAvailablePosition();
-			position.setOccupyingContainer(copy);
-			parentContainer.addPosition(position);
-		}
-		
 		return copy;
 	}	
-	
-	private Site getSite(String name) {
-		Site site = daoFactory.getSiteDao().getSiteByName(name);
-		if (site == null) {
-			throw OpenSpecimenException.userError(SiteErrorCode.NOT_FOUND, name);
-		}
-		
-		return site;
-	}
 }

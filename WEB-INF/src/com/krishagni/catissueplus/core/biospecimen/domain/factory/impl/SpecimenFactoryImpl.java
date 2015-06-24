@@ -622,12 +622,12 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			if (container.canSpecimenOccupyPosition(specimen.getId(), posOne, posTwo)) {
 				position = container.createPosition(posOne, posTwo);
 			} else {
-				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE);
+				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
 			}
 		} else {
 			position = container.nextAvailablePosition();
 			if (position == null) {
-				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE);
+				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
 			} 
 		} 
 		
