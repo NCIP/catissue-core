@@ -1,11 +1,10 @@
 angular.module('os.administrative.user.password', ['os.administrative.models'])
   .controller('UserPasswordCtrl', function($scope, $rootScope, $state, $stateParams,
-    user, User, Alerts) {
+    user, User) {
  
     function init() {
       $scope.user = user;
-      $scope.passwordDetail = {};
-      $scope.passwordDetail.userId = user.id;
+      $scope.passwordDetail = {userId: user.id};
     }
 
     $scope.updatePassword = function() {
@@ -16,5 +15,6 @@ angular.module('os.administrative.user.password', ['os.administrative.models'])
         }
       });
     }
+
     init();
   });

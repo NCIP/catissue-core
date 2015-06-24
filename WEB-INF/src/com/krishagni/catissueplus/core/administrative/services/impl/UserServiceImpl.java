@@ -262,13 +262,13 @@ public class UserServiceImpl implements UserService {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 
-			if (currentUser.getId().equals(user.getId())) {
+			if (currentUser.equals(user)) {
 				if (!user.isValidOldPassword(detail.getOldPassword())) {
 					return ResponseEvent.userError(UserErrorCode.INVALID_OLD_PASSWD);
 				}
 
 			} else if (!currentUser.isAdmin()) {
-				return ResponseEvent.response(false);
+				return ResponseEvent.userError(UserErrorCode.PERMISSION_DENIED);
 			}
 			user.changePassword(detail.getNewPassword());
 			daoFactory.getUserDao().saveOrUpdate(user);
