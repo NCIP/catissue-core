@@ -101,7 +101,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			return;
 		}
 		
-		if (!isValidUid(uid, oce)) {
+		if (!ParticipantUtil.isValidUid(uid, oce)) {
 			return;
 		}
 		
@@ -123,7 +123,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			return;
 		}
 		
-		if (!isValidMpi(empi, ose)) {
+		if (!ParticipantUtil.isValidMpi(empi, ose)) {
 			return;
 		}
 		
@@ -344,44 +344,4 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		return pmi;
 	}
 
-	private boolean isValidUid(String uid, OpenSpecimenException ose) {
-		return isValidInput(
-				uid, 
-				ConfigParams.PARTICIPANT_UID_PATTERN, 
-				ConfigParams.PARTICIPANT_UID_VALIDATOR, 
-				ParticipantErrorCode.INVALID_UID, 
-				ose);
-	}
-	
-	private boolean isValidMpi(String mpi, OpenSpecimenException ose) {
-		return isValidInput(
-				mpi, 
-				ConfigParams.MPI_PATTERN,
-				ConfigParams.MPI_VALIDATOR, 
-				ParticipantErrorCode.INVALID_MPI, 
-				ose);
-	}
-	
-	
-	private boolean isValidInput(String input, String patternCfg, String validatorCfg, ErrorCode error, OpenSpecimenException ose) {
-		String pattern = ConfigUtil.getInstance()
-				.getStrSetting(ConfigParams.MODULE, patternCfg, null);
-		if (StringUtils.isNotBlank(pattern)) {
-			if (!RegexValidator.validate(pattern, input)) {
-				ose.addError(error, input);
-				return false;
-			}
-			
-			return true;
-		}
-		
-		String validatorName = ConfigUtil.getInstance()
-				.getStrSetting(ConfigParams.MODULE, validatorCfg, null);
-		if (StringUtils.isBlank(validatorName)) {
-			return true;
-		}
-		
-		Validator validator = OpenSpecimenAppCtxProvider.getBean(validatorName);
-		return validator.validate(input, ose);		
-	}
 }

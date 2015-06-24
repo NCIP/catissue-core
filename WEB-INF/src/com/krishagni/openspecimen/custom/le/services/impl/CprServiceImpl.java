@@ -13,6 +13,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantUtil;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
@@ -67,10 +68,19 @@ public class CprServiceImpl implements CprService {
 			return null;
 		}
 		
+		if (!ParticipantUtil.isValidMpi(empi, ose)) {
+			return null;
+		}
+		
 		String ppid = detail.getPpid();
 		if (StringUtils.isBlank(ppid)) {
 			ose.addError(CprErrorCode.PPID_REQUIRED);
-			return detail;
+			return null;
+		}
+
+		if (!cp.isValidPpid(ppid)) {
+			ose.addError(CprErrorCode.INVALID_PPID, ppid);
+			return null;
 		}
 		
 		Participant participant = daoFactory.getParticipantDao().getByEmpi(empi);
@@ -81,7 +91,7 @@ public class CprServiceImpl implements CprService {
 		
 		CollectionProtocolRegistration cpr = daoFactory.getCprDao().getCprByPpid(cp.getId(), ppid);
 		if (cpr != null && !cpr.getParticipant().equals(participant)) {
-			ose.addError(CprErrorCode.DUP_PPID);
+			ose.addError(CprErrorCode.DUP_PPID, ppid);
 			return detail;
 		} 
 		

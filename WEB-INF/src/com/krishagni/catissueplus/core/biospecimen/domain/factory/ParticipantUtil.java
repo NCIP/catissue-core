@@ -5,10 +5,16 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.events.PmiDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.RegexValidator;
+import com.krishagni.catissueplus.core.common.util.Validator;
 
 public class ParticipantUtil {
 	public static boolean ensureUniqueUid(DaoFactory daoFactory, String uid, OpenSpecimenException ose) {
@@ -58,4 +64,43 @@ public class ParticipantUtil {
 		
 		return true;
 	}
+	
+	public static boolean isValidMpi(String empi, OpenSpecimenException ose) {
+		return isValidInput(
+				empi, 
+				ConfigParams.MPI_PATTERN, 
+				ConfigParams.MPI_VALIDATOR, 
+				ParticipantErrorCode.INVALID_MPI, 
+				ose);
+	}
+	
+	public static boolean isValidUid(String uid, OpenSpecimenException ose) {
+		return isValidInput(
+				uid, 
+				ConfigParams.PARTICIPANT_UID_PATTERN, 
+				ConfigParams.PARTICIPANT_UID_VALIDATOR, 
+				ParticipantErrorCode.INVALID_UID, 
+				ose);
+	}
+	
+	private static boolean isValidInput(String input, String patternCfg, String validatorCfg, ErrorCode error, OpenSpecimenException ose) {
+		String pattern = ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, patternCfg, null);
+		
+		if (StringUtils.isNotBlank(pattern)) {
+			if (!RegexValidator.validate(pattern, input)) {
+				ose.addError(error, input);
+				return false;
+			}
+			
+			return true;
+		}
+		
+		String validatorName = ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, validatorCfg, null);
+		if (StringUtils.isBlank(validatorName)) {
+			return true;
+		}
+		
+		Validator validator = OpenSpecimenAppCtxProvider.getBean(validatorName);
+		return validator.validate(input, ose);		
+	}	
 }

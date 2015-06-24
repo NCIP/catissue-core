@@ -9,8 +9,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -57,8 +55,6 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	private ParticipantService participantService;
 	
 	private ConfigurationServiceImpl cfgSvc;
-	
-	private static final Pattern digitsPtrn = Pattern.compile("%(\\d+)d");  
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -310,11 +306,15 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	public ResponseEvent<ParticipantRegistrationsList> createRegistrations(RequestEvent<ParticipantRegistrationsList> req) {
 		try {
 			ParticipantRegistrationsList input = req.getPayload();
+			ParticipantDetail inputParticipant = input.getParticipant();
+			if (inputParticipant == null) {
+				inputParticipant = new ParticipantDetail();
+			}
 						
 			//
 			// Step 1: Save or update participant
 			//
-			ParticipantDetail participantDetail = participantService.saveOrUpdateParticipant(input.getParticipant());
+			ParticipantDetail participantDetail = participantService.saveOrUpdateParticipant(inputParticipant);
 			ParticipantDetail p = new ParticipantDetail();
 			p.setId(participantDetail.getId());
 			
@@ -428,7 +428,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			}
 			
 			
-			if (!isValidPpid(cp.getPpidFormat(), ppid)) {
+			if (!cp.isValidPpid(ppid)) {
 				ose.addError(CprErrorCode.INVALID_PPID, ppid);
 				return;
 			}
@@ -499,19 +499,5 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 		
 		return path + File.separator;
-	}
-	
-	private boolean isValidPpid(String format, String ppid) {
-		Matcher matcher = digitsPtrn.matcher(format);
-		if (!matcher.find()) {
-			return format.equals(ppid);
-		}
-		
-		int matchStartIdx = format.indexOf(matcher.group(0));
-		String beforeDigits = format.substring(0, matchStartIdx);
-		String afterDigits = format.substring(matchStartIdx + matcher.group(0).length());
-		
-		String regex = beforeDigits + "\\d{" + matcher.group(1) + "}" + afterDigits;
-		return Pattern.matches(regex, ppid);		
-	}
+	}	
 }
