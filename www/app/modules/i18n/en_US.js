@@ -1115,7 +1115,9 @@
     "confirm_remove_specimens": "Are you sure you want to remove selected specimens from {{name}} list?",
     "specimens_added": "Specimens sucessfully added to {{name}} list",
     "specimens_removed": "Specimens successfully removed from {{name}} list",
-    "distribute": "Distribute"
+    "distribute": "Distribute",
+    "no_specimens_for_deletion": "Please select at least one specimen for deletion",
+    "no_specimens_for_distribution": "Please select at least one specimen to add distribute list"
    },
 
    "orders": {
