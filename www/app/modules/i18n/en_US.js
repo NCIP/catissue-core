@@ -72,7 +72,8 @@
       "search": "Search",
       "clear_filters": "Clear Filters",
       "close": "Close",
-      "upload": "Upload"
+      "upload": "Upload",
+      "reset_password": "Reset Password"
     }
   },
 
@@ -592,6 +593,7 @@
     "sign_in_title": "Sign in to continue to OpenSpecimen",
     "sign_in_failed": "The username or password you entered is incorrect",
     "sign_in": "Sign In",
+    "logout":"Log Out",
     "forgot_password": "Forgot password?",
     "approve_user": "Approve User",
     "reject_user": "Reject User",
@@ -653,6 +655,13 @@
 
     "menu_options": {
       "delete": "Delete"
+    },
+
+    "password": {
+      "old_password": "Old Password",
+      "new_password": "New Password",
+      "confirm_password": "Confirm Password",
+      "change_password": "Change Password"
     }
 
   },
