@@ -68,5 +68,9 @@ angular.module('os.biospecimen.models.cpr',
       return $http.delete(this.getSignedConsentFormUrl()).then(function(result){ return result.data; });
     }
 
+    CollectionProtocolRegistration.prototype.saveConsentResponse = function() {
+      //TODO: save consent response
+    }
+
     return CollectionProtocolRegistration;
   });

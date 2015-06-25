@@ -657,11 +657,11 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 }
 
 .os-left-align {
-  text-align: left;
+  text-align: left!important;
 }
 
 .os-right-align {
-  text-align: right;
+  text-align: right!important;
 }
 
 .os-input-addon-grp {
@@ -959,3 +959,4 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   height: 390px!important;
   display: block;
 }
+

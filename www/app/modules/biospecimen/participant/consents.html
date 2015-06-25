@@ -2,7 +2,7 @@
   <div class="col-xs-8">
     <ul class="os-key-values os-one-col">
       <li class="item">
-        <strong class="key key-sm" translate="participant.signed_consent_form">Signed Consent Form</strong>
+        <strong class="key key-sm" translate="participant.consent.signed_consent_form">Signed Consent Form</strong>
         <div class="value value-md" ng-if="!uploadMode">
           <div class="pull-left" ng-switch on="!!consent.consentDocumentName"> 
             <a ng-href="{{consentFormUrl}}" target="_blank" ng-switch-when="true">{{consent.consentDocumentName}}</a>
@@ -42,5 +42,103 @@
         </div>
       </li>
     </ul>
+  </div>
+
+  <div class="col-xs-10">
+    <h3 class="os-sub-section-title" translate="participant.consent.consents">Consents</h3>
+    <div ng-if="consent.consentTierResponses.length == 0" class="alert alert-warning">
+      <span translate="participant.consent.no_consent">No consents specified to clinical study. Do you want to add now?</span>
+    </div>
+    <div ng-if="consent.consentTierResponses.length > 0">
+      <div class="form-horizontal os-bio-spmn-form">
+        <div class="col-xs-9">
+          <div class="form-group">
+            <label class="col-xs-2 control-label os-left-align" translate="participant.consent.date">Date</label>
+            <div class="col-xs-4" ng-switch on="consentUpdateRight">
+              <div class="input" ng-switch-when="true">
+                <div os-md-input ng-model="consent.consentSignatureDate" placeholder="{{'participant.consent.date'|translate}}">
+                  <input name="consentDate" ng-model="consent.consentSignatureDate" class="form-control" type="text"
+                    datepicker-popup="{{global.dateFmt}}" show-button-bar="true"
+                    is-open="consentDt.isOpen" ng-click="consentDt.isOpen=true"
+                    placeholder="{{'participant.consent.date'|translate}}">
+                </div>
+              </div>
+              <div ng-switch-when="false" class="os-md-input read">
+                <span>{{consents.consentDate | date: global.dateFmt | osNoValue}}</span>
+              </div>
+            </div>
+
+            <label class="col-xs-2 control-label os-left-align" translate="participant.consent.witness">Witness</label>
+            <div class="col-xs-4" ng-switch on="consentUpdateRight">
+              <div class="input" ng-switch-when="true">
+                <div os-md-input ng-model="consent.witnessName" placeholder="{{'participant.consent.witness'|translate}}">
+                  <os-users ng-model="consent.witnessName" placeholder="{{'participant.consent.witness'|translate}}"> </os-users>
+                </div>
+              </div>
+              <div ng-switch-when="false" class="os-md-input read">
+                <span>{{consents.consentWitness | osNoValue}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <table class="os-table os-table-fixed os-table-tree bulk-edit os-border os-table-muted-hdr">
+        <thead class="os-table-head">
+          <tr class="row">
+            <th class="col" ng-class="{'col-xs-7': consentUpdateRight, 'col-xs-10': !consentUpdateRight}"
+              translate="participant.consent.consent">Consent</th>
+            <th class="col" ng-class="{'col-xs-5': consentUpdateRight, 'col-xs-2': !consentUpdateRight}"
+              translate="participant.consent.response">Response</th>
+          </tr>
+        </thead>
+
+        <tbody class="os-table-body">
+          <tr class="row" ng-repeat="consentTierResponse in consent.consentTierResponses">
+            <td class="col" ng-class="{'col-xs-6': consentUpdateRight, 'col-xs-10': !consentUpdateRight}">
+              <span title="{{consentTierResponse.consentStatement}}">{{consentTierResponse.consentStatement}}</span>
+            </td>
+            <td class="col col-xs-5" ng-if="consentUpdateRight">
+              <div class="col-xs-2">
+                <label class="radio-inline">
+                  <input type="radio" name="{{$index}}" ng-model="consentTierResponse.participantResponse" value="Yes">
+                    <span translate="participant.consent.response_value.yes">Yes</span>
+                </label>
+              </div>
+              <div class="col-xs-2">
+                <label class="radio-inline">
+                  <input type="radio" name="{{$index}}" ng-model="consentTierResponse.participantResponse" value="No">
+                  <span translate="participant.consent.response_value.no">No</span>
+                </label>
+              </div>
+              <div class="col-xs-4">
+                <label class="radio-inline">
+                  <input type="radio" name="{{$index}}" ng-model="consentTierResponse.participantResponse" value="Not_Specified">
+                  <span translate="participant.consent.response_value.not_specified">Not Specified</span>
+                </label>
+              </div>
+              <div class="col-xs-4" ng-if="consentEditMode">
+                <label class="radio-inline">
+                  <input type="radio" name="{{$index}}" ng-model="consentTierResponse.participantResponse" value="Withdrawn">
+                  <span translate="participant.consent.response_value.withdrawn">Withdrawn</span>
+                </label>
+              </div>
+            </td>
+
+            <td class="col col-xs-2" ng-if="!consentUpdateRight">
+              <span>{{consentTierResponse.participantResponse | osNoValue}}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="row">
+        <div class="col-xs-10">
+          <button type="submit" class="btn btn-primary" ng-click="saveConsentTierResponses()">
+            <span translate="common.buttons.submit">Submit</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -126,23 +126,23 @@
   display: none;
 }
 
-.os-spmn-coll-detail label {
+.os-bio-spmn-form label {
   color: #666666;
 }
 
-.os-spmn-coll-detail .input {
+.os-bio-spmn-form .input {
   margin-top: -17px;
 }
 
-.os-spmn-coll-detail .form-group {
+.os-bio-spmn-form .form-group {
   margin-bottom: 30px;
 }
 
-.os-spmn-coll-detail .os-md-input.read {
+.os-bio-spmn-form .os-md-input.read {
   margin-top: 7px;
 }
 
-.os-spmn-coll-detail .input, .os-spmn-coll-detail .read {
+.os-bio-spmn-form .input, .os-bio-spmn-form .read {
   padding-left: 0px;
 }
 
@@ -161,4 +161,5 @@
   color: #707070;
   float: left;
 }
+
   
