@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
+
 public class ConsentDetail {
+	private Long cprId;
 	
 	private String consentDocumentUrl;
 
@@ -16,6 +20,14 @@ public class ConsentDetail {
 	private List<ConsentTierResponseDetail> consentTierResponses = new ArrayList<ConsentTierResponseDetail>();
 	
 	private String consentDocumentName;
+
+	public Long getCprId() {
+		return cprId;
+	}
+
+	public void setCprId(Long cprId) {
+		this.cprId = cprId;
+	}
 
 	public String getConsentDocumentUrl() {
 		return consentDocumentUrl;
@@ -55,6 +67,34 @@ public class ConsentDetail {
 
 	public void setConsentDocumentName(String consentDocumentName) {
 		this.consentDocumentName = consentDocumentName;
+	}
+	
+	public static ConsentDetail fromCpr(CollectionProtocolRegistration cpr) {
+		ConsentDetail consent = new ConsentDetail();
+		consent.setConsentDocumentUrl(cpr.getSignedConsentDocumentUrl());
+		consent.setConsentSignatureDate(cpr.getConsentSignDate());
+		
+		String fileName = cpr.getSignedConsentDocumentName();
+		if (fileName != null) {
+			fileName = fileName.split("_", 2)[1];
+		}
+		consent.setConsentDocumentName(fileName);
+		if (cpr.getConsentWitness() != null) {
+			consent.setWitnessName(cpr.getConsentWitness().getEmailAddress());
+		}
+		
+		if (cpr.getConsentResponses() != null) {
+			for (ConsentTierResponse response : cpr.getConsentResponses()) {
+				ConsentTierResponseDetail stmt = new ConsentTierResponseDetail();
+				if (response.getConsentTier() != null) {
+					stmt.setConsentStatement(response.getConsentTier().getStatement());
+					stmt.setParticipantResponse(response.getResponse());
+					consent.getConsentTierResponses().add(stmt);
+				}
+				
+			}
+		}
+		return consent;
 	}
 	
 }
