@@ -120,7 +120,7 @@ angular.module('os.administrative.user',
           }
         },
         controller: 'UserPasswordCtrl',
-          parent: 'user-root'
-        })
+        parent: 'user-root'
+      })
   });
 
