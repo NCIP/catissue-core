@@ -28,6 +28,7 @@
   </bean>
   
   <bean id="sghReportsDeIdentifier" class="com.krishagni.openspecimen.custom.sgh.services.impl.SprDeIdentifier">
+    <property name="sessionFactory" ref="sessionFactory" />
     <property name="daoFactory"  ref="biospecimenDaoFactory"/>
   </bean>
 
