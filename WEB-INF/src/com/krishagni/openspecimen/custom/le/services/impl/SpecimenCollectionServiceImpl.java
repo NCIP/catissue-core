@@ -110,7 +110,12 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 	
 	private void addFrozenEvents(Map<Long, Long> reqSpecimenIdMap, List<EventDetail> events) {
 		for (EventDetail event : events) {
-			Long specimenId = reqSpecimenIdMap.get(event.getReqId());
+			Long specimenId = event.getSpecimenId();
+			if (specimenId == null) {
+				specimenId = reqSpecimenIdMap.get(event.getReqId());
+				event.setSpecimenId(specimenId);
+			}
+
 			if (specimenId == null) {
 				continue;
 			}

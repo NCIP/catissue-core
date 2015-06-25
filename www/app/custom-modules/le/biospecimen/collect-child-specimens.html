@@ -66,7 +66,7 @@
           </div>
           <div class="os-table-body">
             <div class="row" ng-repeat="spmn in partSpmns.specimens track by $index" 
-              ng-form="sform" ng-if="spmn.showInTree">
+              ng-form="sform" ng-if="spmn.showInTree" ng-class="{'os-le-aliquot': spmn.lineage == 'Aliquot'}">
               <div class="col os-col-30">
                 <div style="padding-left: {{spmn.depth * 20}}px">
                   <os-specimen-desc specimen="spmn"></os-specimen-desc>
@@ -103,7 +103,7 @@
                 <div os-field-error field="sform.qty"></div>
               </div>
               <div class="col os-col-15 input">
-                <div ng-if="spmn.status != 'Collected'">
+                <div>
                   <div os-md-input ng-model="spmn.frozenTime">
                     <input ng-model="spmn.frozenTime" class="form-control" type="text"
                       datepicker-popup="{{global.dateFmt}}" show-button-bar="true" datepicker-append-to-body="true" 
@@ -112,13 +112,13 @@
                 </div>
               </div>
               <div class="col os-col-10 input">
-                <div class="os-md-input" ng-if="spmn.status != 'Collected'">
+                <div class="os-md-input">
                   <timepicker class="os-time-no-wheels" ng-model="spmn.frozenTime" show-meridian="false">
                   </timepicker>
                 </div>
               </div>
               <div class="col os-col-20 input">
-                <div class="os-md-input" ng-if="spmn.status != 'Collected'">
+                <div class="os-md-input">
                   <os-users ng-model="spmn.frozenBy" default-list="users"> </os-users>
                 </div>
               </div>

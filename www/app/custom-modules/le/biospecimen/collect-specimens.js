@@ -1,7 +1,7 @@
 angular.module('openspecimen')
   .controller('le.RegAndCollectSpecimensCtrl', 
     function(
-      $scope, $state, $stateParams, $http,
+      $rootScope, $scope, $state, $stateParams, $http,
       CollectionProtocolEvent, SpecimenRequirement, Visit, Specimen, 
       User, CpConfigSvc, Alerts, Util, ApiUrls) {
 
@@ -201,6 +201,7 @@ angular.module('openspecimen')
       function prepareChildSpecimens(requirements, empi, ppid, visitId, primarySpmn) {
         var result = [];
         primarySpmn.depth = 0;
+        primarySpmn.frozenBy = {};
         
         angular.forEach(requirements, function(requirement, $index) {
           if ($index == 0) {
@@ -212,6 +213,11 @@ angular.module('openspecimen')
           requirement.showInTree = requirement.nonVirtual = anyNonVirtualSpecimen(requirement);
           requirement.depth = 1;
           requirement.frozenBy = {};
+          if (requirement.lineage == 'Aliquot') {
+            requirement.frozenBy = $rootScope.currentUser;
+            requirement.frozenTime = new Date();
+          }
+
           setEmpiAndVisitId(requirement, empi, ppid, visitId);
           flatten(requirement, result, 2);
         });
@@ -287,6 +293,11 @@ angular.module('openspecimen')
           childReq.depth = depth;
           childReq.showInTree = childReq.nonVirtual = anyNonVirtualSpecimen(childReq);
           childReq.frozenBy = {};
+          if (childReq.lineage == 'Aliquot') {
+            childReq.frozenBy = $rootScope.currentUser;
+            childReq.frozenTime = new Date();
+          }
+
           flatten(childReq, result, depth + 1);
         });
 
@@ -442,7 +453,7 @@ angular.module('openspecimen')
 
           angular.forEach($scope.boxOpts.specimens, function(specimen, $index) {
             if ($index != 0 && specimen.empi != lastEmpi) {
-              treeViewSpmns.push({empi: lastEmpi, ppid: lastPpid, specimens:partChildSpmns});
+              treeViewSpmns.push({empi: lastEmpi, ppid: lastPpid, specimens: partChildSpmns});
               partChildSpmns = [];
             }
 
@@ -498,13 +509,25 @@ angular.module('openspecimen')
           }
         }
           
-        var payload = [];
         var specimens = $scope.boxOpts.specimens;
         if (!validSpecimens(specimens)) {
           return;
         }
 
         var payload = { specimens: [], events: [] };
+
+        angular.forEach($scope.childSpmnsData.specimens, function(partSpmns) {
+          angular.forEach(partSpmns.specimens, function(spmn) {
+            if (spmn.lineage == 'New' && (spmn.frozenTime  || spmn.frozenBy.id)) {
+              payload.events.push({
+                specimenId: spmn.id,
+                user: spmn.frozenBy,
+                time: spmn.frozenTime
+              });
+            }
+          });
+        });
+
         for (var i = 0; i < specimens.length; ++i) {
           if (!specimens[i].parentSpecimenId) {
             continue;
