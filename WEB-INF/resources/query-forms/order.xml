@@ -44,6 +44,15 @@
           </textField>
         </row>
 
+	<row>
+          <numberField>
+            <name>irbId</name>
+            <udn>irbId</udn>
+            <caption>#getMessage("order_dp_irb_id")</caption>
+            <column>IRB_IDENTIFIER</column>
+          </numberField>
+        </row>
+
         <row>	
           <subForm>
             <name>principalInvestigator</name>
@@ -99,6 +108,15 @@
           </dropDown>              
         </row>
       </subForm>
+    </row>
+
+    <row>
+      <textField>
+        <name>trackingUrl</name>
+        <udn>trackingUrl</udn>
+        <caption>#getMessage("order_tracking_url")</caption>
+        <column>TRACKING_URL</column>
+      </textField>
     </row>
 
     <row>
