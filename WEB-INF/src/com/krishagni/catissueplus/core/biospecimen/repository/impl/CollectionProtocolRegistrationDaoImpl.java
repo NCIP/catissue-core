@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
@@ -172,21 +173,24 @@ public class CollectionProtocolRegistrationDaoImpl
 		if (participantIdSpecified) {
 			query.createAlias("participant.pmis", "pmi", JoinType.LEFT_OUTER_JOIN);
 			
-			Disjunction orCriteria = Restrictions.disjunction();
-			orCriteria.add(Restrictions.ilike("pmi.medicalRecordNumber", crit.participantId(), MatchMode.ANYWHERE))
-				.add(Restrictions.ilike("participant.empi", crit.participantId(), MatchMode.ANYWHERE))
-				.add(Restrictions.ilike("participant.uid", crit.participantId(), MatchMode.ANYWHERE));
-				
+			Conjunction pmiCond = Restrictions.conjunction();
+			pmiCond.add(Restrictions.ilike("pmi.medicalRecordNumber", crit.participantId(), MatchMode.ANYWHERE));
+
 			if (sitesSpecified) {
 				query.createAlias("pmi.site", "site");
-				orCriteria.add(Restrictions.in("site.id", crit.siteIds()));
+				pmiCond.add(Restrictions.in("site.id", crit.siteIds()));
 			}
 			
-			query.add(orCriteria);
+			Disjunction orCond = Restrictions.disjunction();
+			orCond.add(pmiCond)
+				.add(Restrictions.ilike("participant.empi", crit.participantId(), MatchMode.ANYWHERE))
+				.add(Restrictions.ilike("participant.uid", crit.participantId(), MatchMode.ANYWHERE));
+			
+			query.add(orCond);
 		} else if (sitesSpecified) {
 			query.createAlias("participant.pmis", "pmi", JoinType.LEFT_OUTER_JOIN)
-				.createAlias("pmi.site", "site", JoinType.LEFT_OUTER_JOIN)
-				.add(Restrictions.disjunction()
+			.createAlias("pmi.site", "site", JoinType.LEFT_OUTER_JOIN)
+			.add(Restrictions.disjunction()
 					.add(Restrictions.isNull("site.id"))
 					.add(Restrictions.in("site.id", crit.siteIds())));
 		} else {
