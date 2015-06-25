@@ -62,7 +62,7 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
       );
     }
 
-    function showSelectSpecimens(msgCode) {
+    function showSelectSpecimensErrMsg(msgCode) {
       Alerts.error(msgCode);
     };
 
@@ -105,7 +105,7 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
 
     $scope.confirmRemoveSpecimens = function () {
       if (!$scope.selection.any) {
-        showSelectSpecimens("specimen_list.no_specimens_for_delete");
+        showSelectSpecimensErrMsg("specimen_list.no_specimens_for_deletion");
         return;
       }
 
@@ -118,7 +118,7 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
 
     $scope.distributeSpecimens = function() {
       if (!$scope.selection.any) {
-        showSelectSpecimens("specimen_list.no_specimens_for_distribute_list");
+        showSelectSpecimensErrMsg("specimen_list.no_specimens_for_distribution");
         return;
       }
 

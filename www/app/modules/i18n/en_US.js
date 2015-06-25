@@ -1097,8 +1097,8 @@
     "specimens_added": "Specimens sucessfully added to {{name}} list",
     "specimens_removed": "Specimens successfully removed from {{name}} list",
     "distribute": "Distribute",
-    "no_specimens_for_delete": "Please select at least one specmen to delete from specimen list",
-    "no_specimens_for_distribute_list": "Please select at least one specmen to add distribute list"
+    "no_specimens_for_deletion": "Please select at least one specimen for deletion",
+    "no_specimens_for_distribution": "Please select at least one specimen to add distribute list"
    },
 
    "orders": {
