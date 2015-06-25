@@ -16,9 +16,10 @@ angular.module('os.administrative.models.container', ['os.common.models'])
       return Container.query(angular.extend(defOpts, opts || {}));
     };
 
-    Container.listForSite = function(siteName, onlyFreeContainers, flatten) {
+    Container.listForSite = function(siteName, onlyFreeContainers, flatten, name) {
       var params = {
         site: siteName,
+        name: name,
         anyLevelContainers: true,
         onlyFreeContainers: !!onlyFreeContainers
       };

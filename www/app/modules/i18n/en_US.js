@@ -78,6 +78,7 @@
 
   "form_errors": {
     "required": "Please fill out this field",
+    "min": "This field value is too less",
     "minlength": "This field value is too short",
     "maxlength": "This field value is too long",
     "date": "This field value is not valid date",
@@ -707,14 +708,19 @@
     "paste_specimen_labels": "Paste or input specimen labels separated by comma",
     "no_free_locs": "Container does not have enough free locations to accommodate input specimen labels",
     "replicated_successfully": "Container {{name}} replicated successfully",
-    "empty_names_not_allowed": "Empty container names not allowed",
-    "new_container_names": "New Container Names",
+
+    "replication_count": "Enter number of containers to create",
     "no_repl_dest": "No target site or parent container specified. Add one by clicking Add Another",
+    "new_name": "New Container Name",
+    "row": "Row",
+    "column": "Column",
     "target_site": "Target Site",
     "target_parent_cont": "Target Parent Container",
-    "paste_container_names": "Paste or input container names separated by comma",
     "replicate": "Replicate",
     "add_another": "Add Another",
+
+    "pos_selector": "Container Position Selector",
+    "selected_pos": "Selected Position: ",
 
     "bulk_import": "Import Storage Containers",
     "bulk_import_jobs": "Import Storage Containers Jobs List",
