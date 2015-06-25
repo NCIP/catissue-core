@@ -256,14 +256,20 @@ public class UserServiceImpl implements UserService {
 		try {
 			PasswordDetails detail = req.getPayload();
 			User user = daoFactory.getUserDao().getById(detail.getUserId());
+			User currentUser = AuthUtil.getCurrentUser();
+
 			if (user == null) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
-			
-			if (!user.isValidOldPassword(detail.getOldPassword())) {
-				return ResponseEvent.userError(UserErrorCode.INVALID_OLD_PASSWD);
+
+			if (currentUser.equals(user)) {
+				if (!user.isValidOldPassword(detail.getOldPassword())) {
+					return ResponseEvent.userError(UserErrorCode.INVALID_OLD_PASSWD);
+				}
+
+			} else if (!currentUser.isAdmin()) {
+				return ResponseEvent.userError(UserErrorCode.PERMISSION_DENIED);
 			}
-			
 			user.changePassword(detail.getNewPassword());
 			daoFactory.getUserDao().saveOrUpdate(user);
 			sendPasswdChangedEmail(user);
