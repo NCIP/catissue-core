@@ -14,7 +14,7 @@ public class SubjectRole {
 	
 	private Site site;
 	
-	private Boolean systemRole;
+	private boolean systemRole;
 
 	public Long getId() {
 		return id;
@@ -56,11 +56,11 @@ public class SubjectRole {
 		this.site = site;
 	}
 	
-	public Boolean getSystemRole() {
+	public boolean isSystemRole() {
 		return systemRole;
 	}
 
-	public void setSystemRole(Boolean systemRole) {
+	public void setSystemRole(boolean systemRole) {
 		this.systemRole = systemRole;
 	}
 

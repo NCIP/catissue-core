@@ -63,6 +63,7 @@ public class SubjectRoleDetail {
 		SubjectRoleDetail sr = new SubjectRoleDetail();
 		sr.setId(subjectRole.getId());
 		sr.setRole(RoleDetail.from(subjectRole.getRole()));
+		sr.setSystemRole(subjectRole.isSystemRole());
 		
 		if (subjectRole.getCollectionProtocol() != null) {
 			sr.setCollectionProtocol(CollectionProtocolSummary.from(subjectRole.getCollectionProtocol()));
