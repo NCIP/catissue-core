@@ -112,7 +112,7 @@
     "end_date": "End Date",
     "consents_waived": "Consents Waived",
     "ethics_approval_id": "Ethics Approval ID",
-    "ppid_fmt": "Participant De-ID Format",
+    "ppid_fmt": "De-ID Format",
     "ppid_prefix": "Prefix",
     "ppid_digits": "No. of digits",
     "ppid_suffix": "Suffix",
