@@ -162,3 +162,9 @@
   float: left;
 }
   
+.os-consent-stmt {
+  font-weight: bold;
+  font-style: italic;
+  color: #707070;
+  margin-bottom: 7px;
+}
