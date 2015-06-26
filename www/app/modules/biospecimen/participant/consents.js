@@ -1,24 +1,34 @@
 
 angular.module('os.biospecimen.participant.consents', [])
-  .controller('ParticipantConsentsCtrl', function($scope, $sce, cpr, CollectionProtocol,
-     DeleteUtil, AuthorizationService) {
+  .controller('ParticipantConsentsCtrl', function($scope, $sce, cpr, consents,
+    CollectionProtocol, DeleteUtil) {
 
     function init() {
       $scope.consentFormUploader = {};
       $scope.consentFormUrl = $sce.trustAsResourceUrl(cpr.getSignedConsentFormUrl());
-      $scope.consent = angular.copy(cpr.consentDetails);
+      $scope.consent = consents;
       $scope.uploadMode = false;
-      $scope.consentEditMode = true;
-      $scope.consentUpdateRight = AuthorizationService.isAllowed($scope.participantResource.updateOpts);
 
-      if ($scope.consent.consentTierResponses.length == 0) {
-        $scope.consentEditMode = false;
-        CollectionProtocol.getConsentTiers(cpr.cpId).then(function(consents) {
-          angular.forEach(consents, function(consent) {
-            $scope.consent.consentTierResponses.push({consentStatement: consent.statement});
-          });
+      $scope.existingConsentTierResponses = angular.copy($scope.consent.consentTierResponses);
+      CollectionProtocol.getConsentTiers(cpr.cpId).then(function(consentTiers) {
+        $scope.consent.consentTierResponses = [];
+        angular.forEach(consentTiers, function(consentTier) {
+          $scope.consent.consentTierResponses.push({consentStatement: consentTier.statement,
+            participantResponse: getConsentStatementResponse(consentTier.statement)});
         });
+        $scope.consentExists = $scope.consent.consentTierResponses.length > 0;
+      });
+    }
+
+    function getConsentStatementResponse(statement) {
+      var participantResponse = 'None';
+      for (var i=0; i < $scope.existingConsentTierResponses.length; i++) {
+        if ($scope.existingConsentTierResponses[i].consentStatement == statement) {
+          participantResponse = $scope.existingConsentTierResponses[i].participantResponse;
+          break;
+        }
       }
+      return participantResponse;
     }
 
     function deleteConsentForm() {
@@ -56,9 +66,15 @@ angular.module('os.biospecimen.participant.consents', [])
       });
     }
 
-    $scope.saveConsentTierResponses = function() {
-      cpr.saveConsentResponse().then(function(result) {
-      })
+    $scope.showEditConsents = function() {
+      $scope.editMode = true;
+    }
+
+    $scope.saveConsents = function() {
+      cpr.saveConsentResponse($scope.consent).then(function(result) {
+        $scope.consents = result;
+        $scope.editMode = false;
+      });
     }
 
     init();

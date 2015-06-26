@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class ConsentDetail {
 	private Long cprId;
@@ -15,7 +16,7 @@ public class ConsentDetail {
 
 	private Date consentSignatureDate;
 
-	private String witnessName;
+	private UserSummary witness;
 
 	private List<ConsentTierResponseDetail> consentTierResponses = new ArrayList<ConsentTierResponseDetail>();
 	
@@ -45,12 +46,12 @@ public class ConsentDetail {
 		this.consentSignatureDate = consentSignatureDate;
 	}
 
-	public String getWitnessName() {
-		return witnessName;
+	public UserSummary getWitness() {
+		return witness;
 	}
 
-	public void setWitnessName(String witnessName) {
-		this.witnessName = witnessName;
+	public void setWitness(UserSummary witness) {
+		this.witness = witness;
 	}
 
 	public List<ConsentTierResponseDetail> getConsentTierResponses() {
@@ -80,7 +81,7 @@ public class ConsentDetail {
 		}
 		consent.setConsentDocumentName(fileName);
 		if (cpr.getConsentWitness() != null) {
-			consent.setWitnessName(cpr.getConsentWitness().getEmailAddress());
+			consent.setWitness(UserSummary.from(cpr.getConsentWitness()));
 		}
 		
 		if (cpr.getConsentResponses() != null) {

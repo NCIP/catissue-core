@@ -220,17 +220,15 @@
       "signed_consent_form": "Signed Consent Form",
       "deleting_consent_form": "Deleting Signed Consent Form",
       "confirm_delete_consent_form": "Are you sure you want to delete {{consentDocumentName}}?",
-      "no_consent": "No consents specified to clinical study.",
-      "consents": "Consents",
-      "consent": "Consent",
-      "response": "Response",
-      "date": "Date",
-      "witness": "Witness",
+      "consent_responses": "Consent Responses",
+      "signature_date": "Consent Signature Date",
+      "witness": "Consent Witness",
       "response_value": {
         "yes": "Yes",
         "no": "No",
         "not_specified": "Not Specified",
-        "withdrawn": "Withdrawn"
+        "withdrawn": "Withdrawn",
+        "none": "None"
       }
     },
 

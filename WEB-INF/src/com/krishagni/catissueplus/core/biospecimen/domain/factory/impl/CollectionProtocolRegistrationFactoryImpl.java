@@ -27,6 +27,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 
@@ -172,12 +173,20 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	}
 	
 	private void setConsentWitness(CollectionProtocolRegistration cpr, ConsentDetail consentDetail, OpenSpecimenException ose) {
-		String witnessEmailId = consentDetail.getWitnessName();
-		if (StringUtils.isBlank(witnessEmailId)) {
+		UserSummary user = consentDetail.getWitness();
+		if (user == null) {
 			return;
 		}
 		
-		User witness = daoFactory.getUserDao().getUserByEmailAddress(witnessEmailId);
+		User witness = null;
+		if (user != null && user.getId() != null) {
+			witness = daoFactory.getUserDao().getById(user.getId());
+		} else if (user != null && user.getEmailAddress() != null) {
+			witness = daoFactory.getUserDao().getUserByEmailAddress(user.getEmailAddress());
+		} else if (user != null && user.getLoginName() != null && user.getDomain() != null) {
+			witness = daoFactory.getUserDao().getUser(user.getLoginName(), user.getDomain());
+		}
+		
 		if (witness == null) {
 			ose.addError(CprErrorCode.CONSENT_WITNESS_NOT_FOUND);
 		}

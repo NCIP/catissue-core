@@ -126,23 +126,23 @@
   display: none;
 }
 
-.os-bio-spmn-form label {
+.os-spmn-coll-detail label {
   color: #666666;
 }
 
-.os-bio-spmn-form .input {
+.os-spmn-coll-detail .input {
   margin-top: -17px;
 }
 
-.os-bio-spmn-form .form-group {
+.os-spmn-coll-detail .form-group {
   margin-bottom: 30px;
 }
 
-.os-bio-spmn-form .os-md-input.read {
+.os-spmn-coll-detail .os-md-input.read {
   margin-top: 7px;
 }
 
-.os-bio-spmn-form .input, .os-bio-spmn-form .read {
+.os-spmn-coll-detail .input, .os-spmn-coll-detail .read {
   padding-left: 0px;
 }
 
@@ -161,5 +161,10 @@
   color: #707070;
   float: left;
 }
-
   
+.os-consent-stmt {
+  font-weight: bold;
+  font-style: italic;
+  color: #707070;
+  margin-bottom: 7px;
+}
