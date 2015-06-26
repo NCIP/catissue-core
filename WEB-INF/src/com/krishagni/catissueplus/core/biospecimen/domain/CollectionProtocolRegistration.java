@@ -211,13 +211,13 @@ public class CollectionProtocolRegistration {
 		setRegistrationDate(cpr.getRegistrationDate());		
 		setBarcode(cpr.getBarcode());
 		setParticipant(cpr.getParticipant());
-		updateConsents(cpr);
 	}
 	
-	public void updateConsents(CollectionProtocolRegistration cpr) {
-		setConsentSignDate(cpr.getConsentSignDate());
-		setConsentWitness(cpr.getConsentWitness());
-		setConsentresponses(cpr.getConsentResponses());
+	public void updateConsents(ConsentResponses consentResponses) {
+		setConsentSignDate(consentResponses.getConsentSignDate());
+		setConsentWitness(consentResponses.getConsentWitness());
+		setConsentTierResponses(consentResponses.getConsentResponses());
+		setSignedConsentDocumentUrl(consentResponses.getSignedConsentDocumentUrl());
 	}
 	
 	public void setPpidIfEmpty() {
@@ -235,7 +235,7 @@ public class CollectionProtocolRegistration {
 		}		
 	}
 
-	private void setConsentresponses(Set<ConsentTierResponse> consentResponses) {
+	private void setConsentTierResponses(Collection<ConsentTierResponse> consentResponses) {
 		CollectionUpdater.update(getConsentResponses(), consentResponses);
 		for (ConsentTierResponse resp : getConsentResponses()) {
 			resp.setCpr(this);

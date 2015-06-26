@@ -12,6 +12,10 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 public class ConsentDetail {
 	private Long cprId;
 	
+	private Long cpId;
+	
+	private String ppid;
+	
 	private String consentDocumentUrl;
 
 	private Date consentSignatureDate;
@@ -28,6 +32,22 @@ public class ConsentDetail {
 
 	public void setCprId(Long cprId) {
 		this.cprId = cprId;
+	}
+
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
+	}
+
+	public String getPpid() {
+		return ppid;
+	}
+
+	public void setPpid(String ppid) {
+		this.ppid = ppid;
 	}
 
 	public String getConsentDocumentUrl() {
