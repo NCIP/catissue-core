@@ -15,18 +15,19 @@
     </div>
 
     <div class="form-group">
-      <label class="control-label" translate="participant.mrn">Medical Record Number</label>
+      <label class="control-label" translate="participant.reg_date">Registration Date</label>
       <div class="os-md-input">
-        <input type="text" ng-model="filterOpts.mrn" class="form-control"
-          placeholder="{{'participant.mrn' | translate}}">
+        <input type="text" ng-model="filterOpts.registrationDate" class="form-control"
+          datepicker-popup="{{global.dateFmt}}" is-open="regDt.isOpen" ng-focus="regDt.isOpen=true"
+          placeholder="{{'participant.reg_date' | translate}}">
       </div>
     </div>
 
     <div class="form-group">
-      <label class="control-label" translate="participant.mpi">Master Patient Index</label>
+      <label class="control-label" translate="participant.id">MPI / MRN / SSN</label>
       <div class="os-md-input">
-        <input type="text" ng-model="filterOpts.empi" class="form-control"
-          placeholder="{{'participant.mpi' | translate}}">
+        <input type="text" ng-model="filterOpts.participantId" class="form-control"
+          placeholder="{{'participant.id' | translate}}">
       </div>
     </div>
 

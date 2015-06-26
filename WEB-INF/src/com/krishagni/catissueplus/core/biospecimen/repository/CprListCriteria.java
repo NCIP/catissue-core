@@ -9,12 +9,12 @@ public class CprListCriteria extends AbstractListCriteria<CprListCriteria> {
 	
 	private Long cpId;
 	
+	private Date registrationDate;
+	
 	private String ppid;
 	
-	private String mrn;
-	
-	private String empi;
-	
+	private String participantId;
+
 	private String name;
 	
 	private Date dob;
@@ -32,6 +32,15 @@ public class CprListCriteria extends AbstractListCriteria<CprListCriteria> {
 		return cpId;
 	}
 	
+	public Date registrationDate() {
+		return registrationDate;
+	}
+	
+	public CprListCriteria registrationDate(Date registrationDate) {
+		this.registrationDate = registrationDate;
+		return self();
+	}
+	
 	public CprListCriteria cpId(Long cpId) {
 		this.cpId = cpId;
 		return self();
@@ -46,24 +55,15 @@ public class CprListCriteria extends AbstractListCriteria<CprListCriteria> {
 		return self();
 	}
 	
-	public String mrn() {
-		return mrn;
+	public String participantId() {
+		return participantId;
 	}
-	
-	public CprListCriteria mrn(String mrn) {
-		this.mrn = mrn;
+
+	public CprListCriteria participantId(String participantId) {
+		this.participantId = participantId;
 		return self();
 	}
-	
-	public CprListCriteria empi(String empi) {
-		this.empi = empi;
-		return self();
-	}
-	
-	public String empi() {
-		return empi;
-	}
-	
+
 	public CprListCriteria name(String name) {
 		this.name = name;
 		return self();

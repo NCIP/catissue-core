@@ -185,6 +185,7 @@
   "participant": {
     "list": "Participants",
    
+    "id": "MPI / MRN / SSN",
     "register_participant": "Register Participant",
     "edit_participant": "Edit Participant",
     "reg_date": "Registration Date",
