@@ -55,12 +55,16 @@
 
     <set name="ancestorContainers" table="OS_CONTAINERS_HIERARCHY">
       <key column="DESCENDENT_ID"/>
-      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" column="ANCESTOR_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" column="ANCESTOR_ID">
+        <filter name="activeEntity"/>
+      </many-to-many>
     </set>
 
     <set name="descendentContainers" table="OS_CONTAINERS_HIERARCHY">
       <key column="ANCESTOR_ID"/>
-      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" column="DESCENDENT_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" column="DESCENDENT_ID">
+        <filter name="activeEntity"/>
+      </many-to-many>
     </set>
 
     <set name="allowedSpecimenClasses" table="OS_STOR_CONT_SPEC_CLASSES" cascade="all-delete-orphan">

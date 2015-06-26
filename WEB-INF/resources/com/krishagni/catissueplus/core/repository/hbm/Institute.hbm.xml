@@ -16,7 +16,7 @@
     <property name="name" column="NAME"/>
 
     <property name="activityStatus" column="ACTIVITY_STATUS"/>
-            
+    
     <set 
       name="departments"
       table="OS_DEPARTMENTS" 
@@ -30,8 +30,11 @@
     <set name="sites" inverse="false" cascade="none">
       <key column="INSTITUTE_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.Site"/>
+      <filter name="activeEntity"/>
     </set>
 
+    <filter name="activeEntity"/>
+	
     <query name="getInstituteByName">
       from
         com.krishagni.catissueplus.core.administrative.domain.Institute institute 

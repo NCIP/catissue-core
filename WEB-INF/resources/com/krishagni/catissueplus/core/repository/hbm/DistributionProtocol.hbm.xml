@@ -36,7 +36,10 @@
     <set name="distributionOrders" inverse="false" cascade="none">
       <key column="DISTRIBUTION_PROTOCOL_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DistributionOrder"/>
+      <filter name="activeEntity"/>
     </set>
+    
+    <filter name="activeEntity"/>
       
     <query name="getDistributionProtocolByTitle">
       from 

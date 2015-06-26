@@ -50,6 +50,8 @@
  
     <property name="admin" column="IS_ADMIN"/>
     
+    <filter name="activeEntity"/>
+    
     <sql-query name="getDependentEntities">
       <return-scalar column="entityName" type="string"/>
       <return-scalar column="count" type="int"/>    

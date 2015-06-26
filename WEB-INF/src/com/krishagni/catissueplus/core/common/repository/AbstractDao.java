@@ -43,7 +43,7 @@ public class AbstractDao<T> implements Dao<T> {
 	
 	@Override
 	public T getById(Long id) {
-		return getById(id, "activityStatus != 'Disabled'");
+		return getById(id, null);
 	}
 	
 	@SuppressWarnings("unchecked")
