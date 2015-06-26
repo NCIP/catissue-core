@@ -424,25 +424,31 @@ public class FormServiceImpl implements FormService {
 		try {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 			
-			RemoveFormContextOp opDetail = req.getPayload();			
-			switch (opDetail.getFormType()) {
-				case DATA_ENTRY_FORMS: 
-					return ResponseEvent.userError(FormErrorCode.OP_NOT_ALLOWED);
-				
-				case QUERY_FORMS:
-					Long formId = opDetail.getFormId();
-					FormContextBean queryForm = formDao.getQueryFormContext(formId);
-				
-					if (queryForm == null) { 
-						return ResponseEvent.userError(FormErrorCode.NOT_FOUND);
-					}
-				
-					formDao.delete(queryForm);
-					return ResponseEvent.response(true);
-				
-				default:
-					return ResponseEvent.userError(FormErrorCode.INVALID_REQ);
+			RemoveFormContextOp opDetail = req.getPayload();
+			FormContextBean formCtx = formDao.getFormContext(
+					opDetail.getFormId(), 
+					opDetail.getCpId(), 
+					opDetail.getFormType().getType());
+			
+			if (formCtx == null) {
+				return ResponseEvent.userError(FormErrorCode.NO_ASSOCIATION);
 			}
+			
+			if (formCtx.isSysForm()) {
+				return ResponseEvent.userError(FormErrorCode.SYS_FORM_DEL_NOT_ALLOWED);
+			}
+			
+			switch (opDetail.getRemoveType()) {
+				case SOFT_REMOVE:
+					formCtx.setDeletedOn(Calendar.getInstance().getTime());
+					break;
+					
+				case HARD_REMOVE:
+					formDao.delete(formCtx);
+					break;
+			}
+			
+			return ResponseEvent.response(true);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

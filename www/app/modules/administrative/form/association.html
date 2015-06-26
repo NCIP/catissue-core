@@ -30,7 +30,8 @@
                 <div class="os-tag" ng-if="ctxt.multiRecord" translate="form.multiple_records">Multiple Records</div>
               </div>
               <div class="col col-xs-1">
-                <button class="btn btn-default btn-xs" ng-click="confirmRemoveCtx(ctxt, $index)" ng-if="false">
+                <button class="btn btn-default btn-xs" ng-click="confirmRemoveCtx(ctxt, $index)" 
+                  ng-if="!ctxt.sysForm">
                   <i class="fa fa-trash-o"></i>
                 </button>
               </div>
@@ -70,14 +71,14 @@
   </div>
 
   <div class="os-modal-footer" ng-switch on="enableAttach(cpFormCtxt)">
-    <button ng-switch-when="true"  class="btn os-btn-text" ng-click="cancel()"           translate="common.buttons.cancel">
-      Cancel
+    <button ng-switch-when="true"  class="btn os-btn-text" ng-click="cancel()">
+      <span translate="common.buttons.cancel">Cancel</span>
     </button>
-    <button ng-switch-when="true"  class="btn btn-primary" ng-click="attach(cpFormCtxt)" translate="form.attach_form">
-      Attach Form
+    <button ng-switch-when="true"  class="btn btn-primary" ng-click="attach(cpFormCtxt)">
+      <span translate="form.attach_form">Attach Form</span>
     </button>
-    <button ng-switch-when="false" class="btn btn-primary" ng-click="cancel()"           translate="common.buttons.done">
-      Done
+    <button ng-switch-when="false" class="btn btn-primary" ng-click="cancel()">
+      <span translate="common.buttons.done">Done</span>
     </button>
   </div>
 </div>

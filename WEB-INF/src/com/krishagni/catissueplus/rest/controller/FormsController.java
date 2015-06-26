@@ -7,7 +7,9 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +41,8 @@ import com.krishagni.catissueplus.core.de.events.FormType;
 import com.krishagni.catissueplus.core.de.events.GetFormDataOp;
 import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
+import com.krishagni.catissueplus.core.de.events.RemoveFormContextOp;
+import com.krishagni.catissueplus.core.de.events.RemoveFormContextOp.RemoveType;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
 import edu.common.dynamicextensions.domain.nui.Container;
@@ -167,6 +171,30 @@ public class FormsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="{id}/contexts")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Object> removeFormContext(
+			@PathVariable("id") 
+			Long formId,
+			
+			@RequestParam(value = "entityType", required = true) 
+			String entityType,
+			
+			@RequestParam(value = "cpId", required = true) 
+			Long cpId) {
+		
+		RemoveFormContextOp op = new RemoveFormContextOp();
+		op.setCpId(cpId);
+		op.setFormId(formId);
+		op.setFormType(FormType.fromType(entityType));
+		op.setRemoveType(RemoveType.SOFT_REMOVE);
+
+		ResponseEvent<Boolean> resp = formSvc.removeFormContext(getRequestEvent(op));
+		resp.throwErrorIfUnsuccessful();
+		return Collections.<String, Object>singletonMap("status", resp.getPayload());
+    }
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/records")
 	@ResponseStatus(HttpStatus.OK)
