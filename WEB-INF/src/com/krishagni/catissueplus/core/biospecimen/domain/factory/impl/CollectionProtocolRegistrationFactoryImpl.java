@@ -2,7 +2,6 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
@@ -13,7 +12,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
@@ -36,19 +34,6 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	}
 	
 	@Override
-	public CollectionProtocolRegistration createCpr(
-			CollectionProtocolRegistration existing,
-			ConsentDetail consentDetails) {
-		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		
-		CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
-		BeanUtils.copyProperties(existing, cpr);
-		
-		ose.checkAndThrow();
-		return cpr;
-	}
-	
-	@Override
 	public CollectionProtocolRegistration createCpr(CollectionProtocolRegistrationDetail detail) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
@@ -57,7 +42,6 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		setRegDate(detail, cpr, ose);
 		setActivityStatus(detail, cpr, ose);
 		setCollectionProtocol(detail, cpr, ose);
-		//setConsents(detail, cpr, ose);
 		setPpid(detail, cpr, ose);
 		setParticipant(detail, cpr, ose);
 		

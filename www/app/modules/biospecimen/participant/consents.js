@@ -1,12 +1,12 @@
 
 angular.module('os.biospecimen.participant.consents', [])
-  .controller('ParticipantConsentsCtrl', function($scope, $sce, cpr, consents,
+  .controller('ParticipantConsentsCtrl', function($scope, $sce, cpr, consent,
     CollectionProtocol, DeleteUtil) {
 
     function init() {
       $scope.consentFormUploader = {};
       $scope.consentFormUrl = $sce.trustAsResourceUrl(cpr.getSignedConsentFormUrl());
-      $scope.consent = consents;
+      $scope.consent = consent;
       $scope.uploadMode = false;
 
       $scope.existingConsentTierResponses = angular.copy($scope.consent.consentTierResponses);
@@ -35,7 +35,7 @@ angular.module('os.biospecimen.participant.consents', [])
       cpr.deleteSignedConsentForm().then(
         function(result) {
           if (result) {
-                $scope.consent.consentDocumentName = undefined;
+            $scope.consent.consentDocumentName = undefined;
           }
         }
       );
