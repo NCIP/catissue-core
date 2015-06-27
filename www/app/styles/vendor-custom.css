@@ -121,3 +121,7 @@ body > .ui-select-bootstrap.open {
   z-index: 1050!important;
 }
 
+.os-offset-form-horizontal {
+  margin-right: 15px;
+  margin-left: 15px;
+}

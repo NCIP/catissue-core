@@ -77,14 +77,15 @@ var PivotTable = (function($) {
       var tbody = $("<tbody/>");
 
       var numGrpCols = opts.numGrpCols;
-      if (opts.multipleVal) {
+      if (opts.numValueCols > 1) {
         numGrpCols++;
       }
           
       var result = preProcessRecords(numGrpCols, opts.data);
 
       if (result.grandTotal) {
-        tbody.append(getGrandTotalTr(numGrpCols, result.grandTotal));
+        var trs = getGrandTotalTrs(numGrpCols, result.grandTotal);
+        appendEls(tbody, trs);
       }
 
       if (result.subTotals && result.subTotals.length > 0) {
@@ -97,24 +98,43 @@ var PivotTable = (function($) {
       return tbody;
     };
 
-    var getGrandTotalTr = function(numGrpCols, grandTotal) {
+    var getGrandTotalTrs = function(numGrpCols, grandTotal) {
       var th = $("<th/>")
         .prop("class", "col-key")
-        .prop("colspan", numGrpCols)
+        .prop("colspan", opts.numValueCols > 1 ? numGrpCols - 1 : numGrpCols)
+        .prop("rowspan", opts.numRollupCols)
         .append("Grand Total");
 
-      var tr = $("<tr/>").append(th);
-      for (var i = numGrpCols; i < grandTotal.length; ++i) {
-        tr.append($("<td/>").append(grandTotal[i]));
+      var startIdx = opts.numValueCols > 1 ? numGrpCols - 1 : numGrpCols;
+      var addColKey = opts.numValueCols > 1;
+      var trs = [];
+      for (var i = 0; i < grandTotal.length; ++i) {
+        var tr = $("<tr/>");
+        if (i == 0) {
+          tr.append(th);
+        }
+
+        for (var j = startIdx; j < grandTotal[i].length; ++j) {
+          if (addColKey && j == startIdx) {
+            tr.append($("<th/>").addClass("col-key").append(grandTotal[i][j]));
+          } else {
+            tr.append($("<td/>").append(grandTotal[i][j]));
+          }
+        }
+
+        trs.push(tr);
       }
 
-      return tr;
+      return trs;
     };
 
     var getSubTotalTrs = function(colHeaders, numGrpCols, subTotals) {
       var trs = [];
+      var addColKey = opts.numValueCols > 1;
+      numGrpCols = opts.numValueCols > 1 ? numGrpCols - 1 : numGrpCols;
 
       var lastColIdx = undefined;
+      var lastColVal = undefined;
       for (var i = 0; i < subTotals.length; ++i) {
         var type = subTotals[i].type;
         var subTotal = subTotals[i].record;
@@ -127,20 +147,25 @@ var PivotTable = (function($) {
 
         for (var j = 0; j < numGrpCols; ++j) {
           var th = $("<th/>").prop("class", "col-key");
-          if (j == columnIdx) {
-            th.append(type.value);
-          } else {
-            th.append("All");
+          if ((columnIdx != lastColIdx || lastColVal != type.value) && j == columnIdx) { 
+            th.prop("rowspan", opts.numRollupCols).append(type.value);
+            tr.append(th);
+          } else if (i % opts.numRollupCols == 0) {
+            th.prop("rowspan", opts.numRollupCols).append("All");
+            tr.append(th);
           }
-
-          tr.append(th);
         }
 
         for (var j = numGrpCols; j < subTotal.length; ++j) {
-          tr.append($("<td/>").append(subTotal[j]));
+          if (addColKey && j == numGrpCols) {
+            tr.append($("<th/>").addClass("col-key").append(subTotal[j]));
+          } else {
+            tr.append($("<td/>").append(subTotal[j]));
+          }
         }
 
         lastColIdx = columnIdx;
+        lastColVal = type.value;
         trs.push(tr);
       }
 
@@ -215,6 +240,8 @@ var PivotTable = (function($) {
     };
 
     var getRecordType = function(numGrpCols, record) {
+      numGrpCols = opts.numValueCols > 1 ? numGrpCols - 1 : numGrpCols;
+
       var count = 0, idx = -1, val = undefined;
       for (var i = 0; i < numGrpCols; ++i) {
         if (record[i] == '\u0000\u0000\u0000\u0000\u0000') {
@@ -227,7 +254,7 @@ var PivotTable = (function($) {
 
       if (count == 0) {
         return {type: 'data'};
-      } else if (count == 1 && numGrpCols != 1) {
+      } else if (count == numGrpCols - 1 && numGrpCols != 1) {
         return {type: 'subTotal', colIdx: idx, value: val};
       } else if (count == numGrpCols) {
         return {type: 'grandTotal'};
@@ -235,12 +262,12 @@ var PivotTable = (function($) {
     };
 
     var preProcessRecords = function(numGrpCols, records) {
-      var grandTotal, subTotals = [], data = {};
+      var grandTotal = [], subTotals = [], data = {};
 
       for (var i = 0; i < records.length; ++i) {
         var ret = getRecordType(numGrpCols, records[i]);
         if (ret.type == 'grandTotal') {
-          grandTotal = records[i];
+          grandTotal.push(records[i]);
         } else if (ret.type == 'subTotal') {
           subTotals.push({type: ret, record: records[i]});
         } else {

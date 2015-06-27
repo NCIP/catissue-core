@@ -123,12 +123,20 @@ angular.module('os.query.results', ['os.query.models'])
       $scope.resultsCtx.rows = result.rows;
       $scope.resultsCtx.columnLabels = result.columnLabels;
 
+      var numValueCols = $scope.queryCtx.reporting.params.summaryFields.length;
+      var numRollupCols = numValueCols;
+      var rollupExclFields = $scope.queryCtx.reporting.params.rollupExclFields;
+      if (rollupExclFields && rollupExclFields.length > 0) {
+        numRollupCols = numRollupCols - rollupExclFields.length;
+      }
+
       $scope.resultsCtx.pivotTableOpts = {
         height: '500px',
         width: '1200px',
         colHeaders: $scope.resultsCtx.columnLabels,
         numGrpCols: $scope.queryCtx.reporting.params.groupRowsBy.length,
-        multipleVal: $scope.queryCtx.reporting.params.summaryFields.length > 1,
+        numValueCols: numValueCols,
+        numRollupCols: numRollupCols,
         data: $scope.resultsCtx.rows
       };
     };

@@ -985,6 +985,8 @@
     "pivot_table_no_row_fields": "Select at least one field to use for grouping rows in pivot table",
     "pivot_table_no_col_field": "Select field to use for grouping columns in pivot table",
     "pivot_table_no_summary_fields": "Select at least one summary field",
+    "excl_rollup": "Exclude Rollup For",
+    "select_excl_rollup": "Select fields that should be excluded from rollup",
 
     "expr_toolbar": {
       "and": "AND",
