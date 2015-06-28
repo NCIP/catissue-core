@@ -184,7 +184,7 @@ public class Site extends BaseEntity {
 				.add(Visit.getEntityName(), getVisits().size())
 				.add(StorageContainer.getEntityName(), getStorageContainers().size())
 				.add(CollectionProtocol.getEntityName(), getCollectionProtocols().size())
-				.add(ParticipantMedicalIdentifier.getEntityName(), getParticipants().size())
+				.add(Participant.getEntityName(), getParticipants().size())
 				.add(CollectionProtocolEvent.getEntityName(), getCollectionProtocolEvents().size())
 				.add(DistributionOrder.getEntityName(), getDistributionOrders().size())
 				.build();

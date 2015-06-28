@@ -20,6 +20,8 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Audited
 public class Participant extends BaseEntity {
+	private static final String ENTITY_NAME = "participant";
+	
 	private String lastName;
 
 	private String firstName;
@@ -49,6 +51,10 @@ public class Participant extends BaseEntity {
 	protected Set<ParticipantMedicalIdentifier> pmis = new HashSet<ParticipantMedicalIdentifier>();
 
 	protected Set<CollectionProtocolRegistration> cprs = new HashSet<CollectionProtocolRegistration>();
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
 
 	public String getLastName() {
 		return lastName;
