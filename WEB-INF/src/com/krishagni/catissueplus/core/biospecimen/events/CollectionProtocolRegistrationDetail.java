@@ -153,33 +153,6 @@ public class CollectionProtocolRegistrationDetail {
 		detail.setPpid(cpr.getPpid());
 		detail.setRegistrationDate(cpr.getRegistrationDate());
 		
-		ConsentDetail consent = new ConsentDetail();
-		consent.setConsentDocumentUrl(cpr.getSignedConsentDocumentUrl());
-		consent.setConsentSignatureDate(cpr.getConsentSignDate());
-		
-		String fileName = cpr.getSignedConsentDocumentName();
-		if (fileName != null) {
-			fileName = fileName.split("_", 2)[1];
-		}
-		consent.setConsentDocumentName(fileName);
-		if (cpr.getConsentWitness() != null) {
-			consent.setWitnessName(cpr.getConsentWitness().getEmailAddress());
-		}
-		
-		if (cpr.getConsentResponses() != null) {
-			for (ConsentTierResponse response : cpr.getConsentResponses()) {
-				ConsentTierResponseDetail stmt = new ConsentTierResponseDetail();
-				if (response.getConsentTier() != null) {
-					stmt.setConsentStatment(response.getConsentTier().getStatement());
-					stmt.setParticipantResponse(response.getResponse());
-					consent.getConsentTierResponses().add(stmt);
-				}
-				
-			}
-		}
-		
-		detail.setConsentDetails(consent);
-		
 		CollectionProtocol cp = cpr.getCollectionProtocol();
 		detail.setCpId(cp.getId());
 		detail.setCpTitle(cp.getTitle());

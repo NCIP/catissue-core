@@ -91,7 +91,8 @@ angular.module('openspecimen')
       'anatomic-site'       : 'Tissue_Site_PID',
       'site-type'           : 'Site_Type_PID',
       'clinical-diagnosis'  : 'Clinical_Diagnosis_PID',
-      'specimen-biohazard'  : 'specimen_biohazard'
+      'specimen-biohazard'  : 'specimen_biohazard',
+      'consent_response'    : 'consent_response'
     };
 
     function valueOf(input) {

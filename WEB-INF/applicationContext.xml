@@ -171,6 +171,10 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="participantFactory" ref="participantFactory"/>
   </bean>
+  
+  <bean id="consentResponsesFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.ConsentResponsesFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
 
   <bean id="participantSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.ParticipantServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
@@ -181,6 +185,7 @@
   <bean id="cprSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolRegistrationServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="cprFactory" ref="cprFactory"/>
+    <property name="consentResponsesFactory" ref="consentResponsesFactory"/>
     <property name="participantService" ref="participantSvc"/>
     <property name="cfgSvc" ref="cfgSvc"/>
   </bean>

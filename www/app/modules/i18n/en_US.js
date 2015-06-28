@@ -216,10 +216,22 @@
     "spmn_label_or_barcode": "Specimen Label / Barcode",
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
-  
-    "signed_consent_form": "Signed Consent Form",
-    "deleting_consent_form": "Deleting Signed Consent Form",
-    "confirm_delete_consent_form": "Are you sure you want to delete {{consentDocumentName}}?",
+
+    "consent": {
+      "signed_consent_form": "Signed Consent Form",
+      "deleting_consent_form": "Deleting Signed Consent Form",
+      "confirm_delete_consent_form": "Are you sure you want to delete {{consentDocumentName}}?",
+      "consent_responses": "Consent Responses",
+      "signature_date": "Consent Signature Date",
+      "witness": "Consent Witness",
+      "response_value": {
+        "yes": "Yes",
+        "no": "No",
+        "not_specified": "Not Specified",
+        "withdrawn": "Withdrawn",
+        "none": "None"
+      }
+    },
 
     "similar_participants": "Following participants found that are similar to new participant being registered",
     "matched_attrs": "Matched Attributes",
@@ -284,7 +296,7 @@
 
     "spr": "Surgical Pathology Report",
     "spr_uploaded": "Surgical pathology report {{file}} uploaded successfully.",
-    "no_spr": "No surgical pathology report uploaded. Do you want to upload now?",
+    "no_spr": "No surgical pathology report uploaded.",
     "deleting_spr": "Deleting Surgical Pathology Report",
     "confirm_delete_spr": "Are you sure you want to delete {{sprName}} ?",
     "spr_locked": "Surgical pathology report locked successfully.",

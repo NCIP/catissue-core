@@ -1,17 +1,10 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 
-import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
-import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
-import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
@@ -19,8 +12,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierResponseDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
@@ -32,8 +23,6 @@ import com.krishagni.catissueplus.core.common.util.Status;
 public class CollectionProtocolRegistrationFactoryImpl implements CollectionProtocolRegistrationFactory {
 	private DaoFactory daoFactory;
 
-	private final String CONSENT_RESP_NOT_SPECIFIED = "Not Specified";
-
 	private ParticipantFactory participantFactory;
 
 	public void setParticipantFactory(ParticipantFactory participantFactory) {
@@ -43,7 +32,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
-
+	
 	@Override
 	public CollectionProtocolRegistration createCpr(CollectionProtocolRegistrationDetail detail) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
@@ -53,7 +42,6 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		setRegDate(detail, cpr, ose);
 		setActivityStatus(detail, cpr, ose);
 		setCollectionProtocol(detail, cpr, ose);
-		setConsents(detail, cpr, ose);
 		setPpid(detail, cpr, ose);
 		setParticipant(detail, cpr, ose);
 		
@@ -122,77 +110,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			OpenSpecimenException ose) {
 		cpr.setPpid(detail.getPpid());
 	}
-
-	private void setConsents(
-			CollectionProtocolRegistrationDetail detail,
-			CollectionProtocolRegistration cpr, 
-			OpenSpecimenException ose) {
-		if (cpr.getCollectionProtocol() == null) {
-			return;
-		}
-		
-		Collection<ConsentTier> consents = cpr.getCollectionProtocol().getConsentTier();
-		if (consents == null || consents.isEmpty()) {
-			return;
-		}
-
-		ConsentDetail consentDetail = detail.getConsentDetails();
-		if (consentDetail == null) {
-			return;
-		}
-				
-		setConsentSignDate(cpr, consentDetail);
-		setConsentWitness(cpr, consentDetail, ose);
-		setConsentResponses(cpr, consentDetail);
-		setConsentDocumentUrl(cpr, consentDetail.getConsentDocumentUrl());
-	}
 	
-	private void setConsentDocumentUrl(CollectionProtocolRegistration cpr, String consentDocumentUrl) {
-		cpr.setSignedConsentDocumentUrl(consentDocumentUrl);
-	}
-
-	private void setConsentSignDate(CollectionProtocolRegistration cpr, ConsentDetail consentDetail) {
-		if (consentDetail.getConsentSignatureDate() != null) {
-			cpr.setConsentSignDate(consentDetail.getConsentSignatureDate());
-		}				
-	}
-	
-	private void setConsentWitness(CollectionProtocolRegistration cpr, ConsentDetail consentDetail, OpenSpecimenException ose) {
-		String witnessEmailId = consentDetail.getWitnessName();
-		if (StringUtils.isBlank(witnessEmailId)) {
-			return;
-		}
-		
-		User witness = daoFactory.getUserDao().getUserByEmailAddress(witnessEmailId);
-		if (witness == null) {
-			ose.addError(CprErrorCode.CONSENT_WITNESS_NOT_FOUND);
-		}
-		
-		cpr.setConsentWitness(witness);
-	}
-	
-	private void setConsentResponses(CollectionProtocolRegistration cpr, ConsentDetail consentDetail) {
-		Set<ConsentTierResponse> consentResponses = new HashSet<ConsentTierResponse>();
-		
-		for (ConsentTier consent : cpr.getCollectionProtocol().getConsentTier()) {
-			ConsentTierResponse response = new ConsentTierResponse();
-			response.setResponse(CONSENT_RESP_NOT_SPECIFIED);
-			response.setConsentTier(consent);
-			response.setCpr(cpr);
-			
-			for (ConsentTierResponseDetail userResp : consentDetail.getConsentTierResponses()) {
-				if (consent.getStatement().equals(userResp.getConsentStatment())) {
-					response.setResponse(userResp.getParticipantResponse());
-					break;
-				}
-			}
-			
-			consentResponses.add(response);
-		}
-		
-		cpr.setConsentResponses(consentResponses);		
-	}
-
 	private void setParticipant(
 			CollectionProtocolRegistrationDetail detail,
 			CollectionProtocolRegistration cpr,
@@ -226,4 +144,5 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		
 		cpr.setParticipant(participant);
 	}
+
 }

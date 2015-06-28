@@ -40,4 +40,6 @@ public class PvAttributes {
 	public static final String BIOHAZARD = "specimen_biohazard";
 	
 	public static final String SPECIMEN_ANATOMIC_SITE = "Tissue_Site_PID";
+	
+	public static final String CONSENT_RESPONSE = "consent_response";
 }
