@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
@@ -100,20 +103,22 @@ public class ConsentDetail {
 			fileName = fileName.split("_", 2)[1];
 		}
 		consent.setConsentDocumentName(fileName);
+		
 		if (cpr.getConsentWitness() != null) {
 			consent.setWitness(UserSummary.from(cpr.getConsentWitness()));
 		}
 		
-		if (cpr.getConsentResponses() != null) {
-			for (ConsentTierResponse response : cpr.getConsentResponses()) {
-				ConsentTierResponseDetail stmt = new ConsentTierResponseDetail();
-				if (response.getConsentTier() != null) {
-					stmt.setConsentStatement(response.getConsentTier().getStatement());
-					stmt.setParticipantResponse(response.getResponse());
-					consent.getConsentTierResponses().add(stmt);
+		for (ConsentTier consentTier : cpr.getCollectionProtocol().getConsentTier()) {
+			ConsentTierResponseDetail response = new ConsentTierResponseDetail();
+			response.setConsentStatement(consentTier.getStatement());
+			for (ConsentTierResponse resp : cpr.getConsentResponses()) {
+				if (consentTier.getStatement().equals(resp.getConsentTier().getStatement())) {
+					response.setParticipantResponse(resp.getResponse());
+					break;
 				}
-				
 			}
+			
+			consent.getConsentTierResponses().add(response);
 		}
 		return consent;
 	}

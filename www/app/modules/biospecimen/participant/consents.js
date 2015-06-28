@@ -1,34 +1,48 @@
 
 angular.module('os.biospecimen.participant.consents', [])
   .controller('ParticipantConsentsCtrl', function($scope, $sce, cpr, consent,
-    CollectionProtocol, DeleteUtil) {
+    PvManager,  DeleteUtil) {
 
     function init() {
       $scope.consentFormUploader = {};
       $scope.consentFormUrl = $sce.trustAsResourceUrl(cpr.getSignedConsentFormUrl());
       $scope.consent = consent;
       $scope.uploadMode = false;
+      $scope.editMode = false;
+      $scope.consentExists = $scope.consent.consentTierResponses.length > 0;
+      setDefaultNoneResponse();
+      isConsentsResponseAdd();
 
-      $scope.existingConsentTierResponses = angular.copy($scope.consent.consentTierResponses);
-      CollectionProtocol.getConsentTiers(cpr.cpId).then(function(consentTiers) {
-        $scope.consent.consentTierResponses = [];
-        angular.forEach(consentTiers, function(consentTier) {
-          $scope.consent.consentTierResponses.push({consentStatement: consentTier.statement,
-            participantResponse: getConsentStatementResponse(consentTier.statement)});
-        });
-        $scope.consentExists = $scope.consent.consentTierResponses.length > 0;
-      });
+      loadPvs();
     }
 
-    function getConsentStatementResponse(statement) {
-      var participantResponse = 'None';
-      for (var i=0; i < $scope.existingConsentTierResponses.length; i++) {
-        if ($scope.existingConsentTierResponses[i].consentStatement == statement) {
-          participantResponse = $scope.existingConsentTierResponses[i].participantResponse;
+    function loadPvs() {
+      /**
+       * TODO:
+       * Instead of below hardcoded values, use PvManager.getPvs('consent_response');
+       * Current Permissible Values REST API only return alphabetically sorted values
+       * here needs pvs sorted on basis of value in SORTORDER column of catissue_permissible_value table
+      **/
+      //$scope.consentResponses = PvManager.getPvs('consent_response');
+      $scope.consentResponses = ['Yes', 'No', 'Not Specified', 'Withdrawn', 'None'];
+    }
+
+    function setDefaultNoneResponse() {
+      for (var i = 0; i < $scope.consent.consentTierResponses.length; i++) {
+        if (!$scope.consent.consentTierResponses[i].participantResponse) {
+          $scope.consent.consentTierResponses[i].participantResponse = 'None';
+        }
+      }
+    }
+
+    function isConsentsResponseAdd() {
+      $scope.consentResponseAdd = true;
+      for (var i = 0; i < $scope.consent.consentTierResponses.length; i++) {
+        if (!!$scope.consent.consentTierResponses[i].participantResponse) {
+          $scope.consentResponseAdd = false;
           break;
         }
       }
-      return participantResponse;
     }
 
     function deleteConsentForm() {
@@ -73,7 +87,8 @@ angular.module('os.biospecimen.participant.consents', [])
     $scope.saveConsents = function() {
       cpr.saveConsentResponse($scope.consent).then(function(result) {
         $scope.consents = result;
-        $scope.editMode = false;
+        $scope.editMode = $scope.consentResponseAdd = false;
+
       });
     }
 

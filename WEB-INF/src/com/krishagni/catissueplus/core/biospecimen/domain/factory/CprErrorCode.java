@@ -31,7 +31,9 @@ public enum CprErrorCode implements ErrorCode {
 	
 	CONSENT_FORM_NOT_FOUND,
 	
-	DUP_CONSENT_FORM_NAME;
+	DUP_CONSENT_FORM_NAME,
+	
+	INVALID_CONSENT_RESPONSE;
 	
 	@Override
 	public String code() {

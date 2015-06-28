@@ -1,5 +1,8 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
+import static com.krishagni.catissueplus.core.common.PvAttributes.CONSENT_RESPONSE;
+import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,7 +38,7 @@ public class ConsentResponsesFactoryImpl implements ConsentResponsesFactory {
 		setConsentDocumentUrl(detail, consentResponses);
 		setConsentSignDate(detail, consentResponses);
 		setConsentWitness(detail, consentResponses, ose);
-		setConsentResponses(detail, consentResponses);
+		setConsentResponses(detail, consentResponses, ose);
 
 		ose.checkAndThrow();
 		return consentResponses;
@@ -73,22 +76,27 @@ public class ConsentResponsesFactoryImpl implements ConsentResponsesFactory {
 		consentResponses.setConsentWitness(witness);
 	}
 	
-	private void setConsentResponses(ConsentDetail detail, ConsentResponses consentResponses) {
+	private void setConsentResponses(ConsentDetail detail, ConsentResponses consentResponses, OpenSpecimenException ose) {
 		Set<ConsentTierResponse> consentTierResponses = new HashSet<ConsentTierResponse>();
 
 		CollectionProtocolRegistration cpr = getCpr(detail.getCprId(), detail.getCpId(), detail.getPpid());
 		if (cpr == null) {
 			throw OpenSpecimenException.userError(CprErrorCode.NOT_FOUND);
 		}
+		
 		for (ConsentTier consentTier : cpr.getCollectionProtocol().getConsentTier()) {
 			ConsentTierResponse response = new ConsentTierResponse();
-			response.setResponse(CONSENT_RESP_NO);
 			response.setConsentTier(consentTier);
 			response.setCpr(cpr);
 			
 			for (ConsentTierResponseDetail userResp : detail.getConsentTierResponses()) {
 				if (consentTier.getStatement().equals(userResp.getConsentStatement())) {
-					response.setResponse(userResp.getParticipantResponse());
+					String participantResponse = userResp.getParticipantResponse();
+					if (!isValid(CONSENT_RESPONSE, participantResponse)) {
+						ose.addError(CprErrorCode.INVALID_CONSENT_RESPONSE);
+						return;
+					}
+					response.setResponse(participantResponse);
 					break;
 				}
 			}
@@ -113,6 +121,4 @@ public class ConsentResponsesFactoryImpl implements ConsentResponsesFactory {
 		
 		return cpr;
 	}
-	
-	private static final String CONSENT_RESP_NO = "No";
 }

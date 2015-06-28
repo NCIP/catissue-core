@@ -226,5 +226,72 @@
     <sql>
       call assign_to_role('Administrator', 'SurgicalPathologyReport', 'Read,Create,Update,Delete,Lock,Unlock');
     </sql>
+  </changeSet>
+    
+  <changeSet author="vgaikwad" id="Consent response PV category">
+    <sql>
+      insert into catissue_cde
+        (public_id, long_name, definition, version, last_updated) 
+      values
+        ('consent_response', 'Consent Response', 'Consent Response', 2.0, ${now});
+    </sql>
+  </changeSet>    
+  
+  <changeSet author="vgaikwad" id="Consent response PV's" dbms="mysql">
+    <sql>
+      insert into catissue_permissible_value
+        (public_id, value) 
+      values
+        ('consent_response', 'Yes');
+        
+      insert into catissue_permissible_value
+        (public_id, value) 
+      values
+        ('consent_response', 'No');
+        
+      insert into catissue_permissible_value
+        (public_id, value) 
+      values
+        ('consent_response', 'Withdrawn');
+        
+      insert into catissue_permissible_value
+        (public_id, value)
+      values
+        ('consent_response', 'Not Specified');
+        
+      insert into catissue_permissible_value
+        (public_id, value) 
+      values
+        ('consent_response', 'None');
+    </sql>
   </changeSet>  
+  
+  <changeSet author="vgaikwad" id="Consent response PV's" dbms="oracle">
+    <sql>
+      insert into catissue_permissible_value
+        (identifier, public_id, value) 
+      values
+        (catissue_permi_value_seq.nextval, 'consent_response', 'Yes');
+        
+      insert into catissue_permissible_value
+        (identifier, public_id, value) 
+      values
+        (catissue_permi_value_seq.nextval, 'consent_response', 'No');
+        
+      insert into catissue_permissible_value
+        (identifier, public_id, value) 
+      values
+        (catissue_permi_value_seq.nextval, 'consent_response', 'Withdrawn');
+        
+      insert into catissue_permissible_value
+        (identifier, public_id, value) 
+      values
+        (catissue_permi_value_seq.nextval, 'consent_response', 'Not Specified');
+        
+      insert into catissue_permissible_value
+        (identifier, public_id, value) 
+      values
+        (catissue_permi_value_seq.nextval, 'consent_response', 'None');
+    </sql>
+  </changeSet>       
 </databaseChangeLog>

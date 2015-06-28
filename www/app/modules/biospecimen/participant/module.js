@@ -101,8 +101,8 @@ angular.module('os.biospecimen.participant',
         url: '/consents',
         templateUrl: 'modules/biospecimen/participant/consents.html',
         resolve: {
-          consent: function($stateParams, CollectionProtocolRegistration) {
-            return CollectionProtocolRegistration.getConsents($stateParams.cprId);
+          consent: function(cpr) {
+            return cpr.getConsents();
           }
         },
         controller: 'ParticipantConsentsCtrl',

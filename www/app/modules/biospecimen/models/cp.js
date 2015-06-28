@@ -46,10 +46,6 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       return this.consentModel.query();
     };
 
-    CollectionProtocol.getConsentTiers = function(cpId) {
-      return $http.get(CollectionProtocol.url() + cpId + '/consent-tiers').then(function(result) { return result.data; });
-    };
-
     CollectionProtocol.prototype.newConsentTier = function(consentTier) {
       return new this.consentModel(consentTier);
     };

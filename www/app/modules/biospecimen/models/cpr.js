@@ -78,8 +78,8 @@ angular.module('os.biospecimen.models.cpr',
       return $http.put(url, consents).then(function(result) {return result.data;});
     }
 
-    CollectionProtocolRegistration.getConsents = function(cprId) {
-      var url = CollectionProtocolRegistration.url() + cprId + "/consents";
+    CollectionProtocolRegistration.prototype.getConsents = function() {
+      var url = CollectionProtocolRegistration.url() + this.$id() + "/consents";
       return $http.get(url).then(function(result) {return result.data;});
     }
 
