@@ -301,7 +301,7 @@ public class RbacServiceImpl implements RbacService {
 	@PlusTransactional
 	public ResponseEvent<RoleDetail> getRole(RequestEvent<Long> req) {
 		try {
-			Role role = daoFactory.getRoleDao().getById(req.getPayload(), null);
+			Role role = daoFactory.getRoleDao().getById(req.getPayload());
 			if (role == null) {
 				return ResponseEvent.userError(RbacErrorCode.ROLE_NOT_FOUND);
 			}
@@ -343,7 +343,7 @@ public class RbacServiceImpl implements RbacService {
 			
 			RoleDetail detail = request.getPayload();
 		
-			Role existing = daoFactory.getRoleDao().getById(detail.getId(), null);
+			Role existing = daoFactory.getRoleDao().getById(detail.getId());
 			if (existing == null) {
 				return ResponseEvent.userError(RbacErrorCode.ROLE_NOT_FOUND);
 			}
@@ -369,7 +369,7 @@ public class RbacServiceImpl implements RbacService {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 			
 			Long roleId = req.getPayload();
-			Role role = daoFactory.getRoleDao().getById(roleId, null);
+			Role role = daoFactory.getRoleDao().getById(roleId);
 			if (role == null) {
 				return ResponseEvent.userError(RbacErrorCode.ROLE_NOT_FOUND);
 			}
@@ -391,7 +391,7 @@ public class RbacServiceImpl implements RbacService {
 				return ResponseEvent.userError(RbacErrorCode.SUBJECT_ID_REQUIRED);
 			}
 			
-			Subject subject = daoFactory.getSubjectDao().getById(subjectId, null);
+			Subject subject = daoFactory.getSubjectDao().getById(subjectId);
 			if (subject == null) {
 				return ResponseEvent.userError(RbacErrorCode.SUBJECT_NOT_FOUND);
 			}
@@ -407,7 +407,7 @@ public class RbacServiceImpl implements RbacService {
 	public ResponseEvent<SubjectRoleDetail> updateSubjectRole(RequestEvent<SubjectRoleOp> req) {
 		try {
 			SubjectRoleOp subjectRoleOp = req.getPayload();
-			Subject subject = daoFactory.getSubjectDao().getById(subjectRoleOp.getSubjectId(), null);
+			Subject subject = daoFactory.getSubjectDao().getById(subjectRoleOp.getSubjectId());
 			if (subject == null) {
 				return ResponseEvent.userError(RbacErrorCode.SUBJECT_NOT_FOUND);
 			}
@@ -466,7 +466,7 @@ public class RbacServiceImpl implements RbacService {
 
 	private void addOrRemoveSubjectRole(Site site, CollectionProtocol cp, User user,
 			String[] roleNames, SubjectRoleOp.OP op, boolean systemRole) {
-		Subject subject = daoFactory.getSubjectDao().getById(user.getId(), null);
+		Subject subject = daoFactory.getSubjectDao().getById(user.getId());
 		if (subject == null) {
 			throw OpenSpecimenException.userError(RbacErrorCode.SUBJECT_NOT_FOUND);
 		}
@@ -689,7 +689,7 @@ public class RbacServiceImpl implements RbacService {
 		Map<Long, RoleAccessControl> racMap = new HashMap<Long, RoleAccessControl>();
 		
 		if (detail.getId() != null) {
-			Role existingRole  = daoFactory.getRoleDao().getById(detail.getId(), null);
+			Role existingRole  = daoFactory.getRoleDao().getById(detail.getId());
 			for (RoleAccessControl rac : existingRole.getAcl()) {
 				racMap.put(rac.getId(), rac);
 			}

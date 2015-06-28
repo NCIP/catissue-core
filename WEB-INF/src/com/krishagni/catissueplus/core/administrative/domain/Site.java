@@ -12,6 +12,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCo
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
@@ -45,9 +46,11 @@ public class Site extends BaseEntity {
 	
 	private Set<CollectionProtocol> collectionProtocols = new HashSet<CollectionProtocol>();
 	
-	private Set<ParticipantMedicalIdentifier> pmis = new HashSet<ParticipantMedicalIdentifier>();
+	private Set<Participant> participants = new HashSet<Participant>();
 	
 	private Set<CollectionProtocolEvent> collectionProtocolEvents = new HashSet<CollectionProtocolEvent>();
+	
+	private Set<DistributionOrder> distributionOrders = new HashSet<DistributionOrder>();
 
 	public static String getEntityName() {
 		return ENTITY_NAME;
@@ -137,12 +140,12 @@ public class Site extends BaseEntity {
 	}
 
 	@NotAudited
-	public Set<ParticipantMedicalIdentifier> getPmis() {
-		return pmis;
+	public Set<Participant> getParticipants() {
+		return participants;
 	}
 
-	public void setPmis(Set<ParticipantMedicalIdentifier> pmis) {
-		this.pmis = pmis;
+	public void setParticipants(Set<Participant> participants) {
+		this.participants = participants;
 	}
 
 	@NotAudited
@@ -153,6 +156,15 @@ public class Site extends BaseEntity {
 	public void setCollectionProtocolEvents(
 			Set<CollectionProtocolEvent> collectionProtocolEvents) {
 		this.collectionProtocolEvents = collectionProtocolEvents;
+	}
+
+	@NotAudited
+	public Set<DistributionOrder> getDistributionOrders() {
+		return distributionOrders;
+	}
+
+	public void setDistributionOrders(Set<DistributionOrder> distributionOrders) {
+		this.distributionOrders = distributionOrders;
 	}
 
 	public void update(Site other) {
@@ -172,8 +184,9 @@ public class Site extends BaseEntity {
 				.add(Visit.getEntityName(), getVisits().size())
 				.add(StorageContainer.getEntityName(), getStorageContainers().size())
 				.add(CollectionProtocol.getEntityName(), getCollectionProtocols().size())
-				.add(ParticipantMedicalIdentifier.getEntityName(), getPmis().size())
+				.add(Participant.getEntityName(), getParticipants().size())
 				.add(CollectionProtocolEvent.getEntityName(), getCollectionProtocolEvents().size())
+				.add(DistributionOrder.getEntityName(), getDistributionOrders().size())
 				.build();
 	}
 

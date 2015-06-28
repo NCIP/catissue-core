@@ -51,6 +51,8 @@
       <key column="PARTICIPANT_ID" />
       <element column="RACE_NAME" type="string" />
     </set>
+    
+    <filter name="activeEntity"/>
 
     <query name="getByUid">
       from 

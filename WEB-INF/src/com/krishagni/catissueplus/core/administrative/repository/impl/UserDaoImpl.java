@@ -34,7 +34,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	public List<UserSummary> getUsers(UserListCriteria listCrit) {
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(User.class, "u")
-				.add(Restrictions.ne("u.activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus()))
 				.add( // not system user
 					Restrictions.not(Restrictions.conjunction()
 						.add(Restrictions.eq("u.loginName", User.SYS_USER))
@@ -59,7 +58,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	public List<User> getUsersByIdsAndInstitute(List<Long> userIds, Long instituteId) {
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(User.class, "u")
-				.add(Restrictions.ne("u.activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus()))
 				.add(Restrictions.in("u.id", userIds));
 		
 		if (instituteId != null) {

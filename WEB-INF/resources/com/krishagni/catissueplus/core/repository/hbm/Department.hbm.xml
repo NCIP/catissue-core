@@ -25,6 +25,7 @@
       table="CATISSUE_USER">
       <key column="DEPARTMENT_ID"/>
       <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.User" />
+      <filter name="activeEntity"/>
     </set>
     
     <query name="getDepartment">
