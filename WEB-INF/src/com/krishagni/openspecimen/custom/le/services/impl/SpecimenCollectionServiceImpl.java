@@ -121,7 +121,7 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 			}
 			
 			Long userId = AuthUtil.getCurrentUser().getId();
-			if (event.getUser() != null) {
+			if (event.getUser() != null && event.getUser().getId() != null) {
 				userId = event.getUser().getId();
 			}
 			
