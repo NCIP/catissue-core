@@ -356,6 +356,7 @@
     "aliquot_cnt": "Count of Aliquots",
     "qty_per_aliquot": "Quantity per Aliquot",
     "close_parent_q": "Do you want to close parent specimen?",
+    "comments": "Comments",
     "qty": "Quantity",
     "aliquot": "Aliquot",
     "derived": "Derived",

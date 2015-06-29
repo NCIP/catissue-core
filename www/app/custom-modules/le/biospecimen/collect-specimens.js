@@ -150,6 +150,7 @@ angular.module('openspecimen')
           function(specimen) {
             return getPrimarySpecimenToSave(
               specimen, 
+              participant.comments,
               participant.collDetail, 
               participant.recvDetail);
           }
@@ -158,13 +159,14 @@ angular.module('openspecimen')
         return {visit: visit, specimens: specimens};
       }
 
-      function getPrimarySpecimenToSave(req, collDetail, recvDetail) {
+      function getPrimarySpecimenToSave(req, comments, collDetail, recvDetail) {
         return {
           initialQty: req.initialQty,
           label: req.label,
           reqId: req.id,
           lineage: 'New',
           status: 'Collected',
+          comments: comments,
           collectionEvent: {
             user: collDetail.collector,
             time: collDetail.collectionDate
