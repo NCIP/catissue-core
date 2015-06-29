@@ -237,11 +237,6 @@ edu.common.de.Form = function(args) {
     var caption = args.showTitle == false ? undefined : this.formDef.caption;
     var panel = edu.common.de.Utility.panel(caption, formCtrls, 'default');
     this.formDiv.append(panel);
-
-    if (this.formData != undefined) {
-      this.formData = JSON.parse(this.formData);
-    }
-
     this.setValue(this.formData);
   };
 
@@ -362,9 +357,10 @@ edu.common.de.Form = function(args) {
       type: method,
       url: url,
       headers: this.customHdrs,
+      contentType: 'application/json',
+      dataType: 'json',
       data: JSON.stringify(formData)
     }).done(function(data) { 
-      data = JSON.parse(data);
       that.recordId = data.id;
       if (args.onSaveSuccess) {
         args.onSaveSuccess(data);     
@@ -835,6 +831,10 @@ edu.common.de.SelectField = function(id, field) {
     for (var i = 0; i < field.pvs.length; ++i) {
       var pv = field.pvs[i];
       this.inputEl.append($("<option/>").prop("value", pv.value).append(pv.value));
+    }
+
+    if (field.defaultValue != undefined) {
+      this.inputEl.val(field.defaultValue.value);
     }
 
     return this.inputEl;
