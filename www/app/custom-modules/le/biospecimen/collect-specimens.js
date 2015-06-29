@@ -585,6 +585,7 @@ angular.module('openspecimen')
         if (!!specimen.frozenTime  || !!specimen.frozenBy.id) {
           events.push({
             reqId: specimen.id,
+            visitId: specimen.visitId,
             user: specimen.frozenBy, 
             time: specimen.frozenTime
           });

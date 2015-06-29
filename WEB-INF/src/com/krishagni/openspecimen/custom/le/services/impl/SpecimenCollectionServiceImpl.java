@@ -93,26 +93,26 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 		}
 	}
 	
-	private Map<Long, Long> getReqSpecimenIdMap(List<SpecimenDetail> specimens) {
-		Map<Long, Long> result = new HashMap<Long, Long>();
+	private Map<String, Long> getReqSpecimenIdMap(List<SpecimenDetail> specimens) {
+		Map<String, Long> result = new HashMap<String, Long>();
 		
 		if (specimens == null) {
 			return result;
 		}
 		
 		for (SpecimenDetail specimen : specimens) {
-			result.put(specimen.getReqId(), specimen.getId());
+			result.put(specimen.getVisitId() + "-" + specimen.getReqId(), specimen.getId());
 			result.putAll(getReqSpecimenIdMap(specimen.getChildren()));			
 		}
 		
 		return result;
 	}
 	
-	private void addFrozenEvents(Map<Long, Long> reqSpecimenIdMap, List<EventDetail> events) {
+	private void addFrozenEvents(Map<String, Long> reqSpecimenIdMap, List<EventDetail> events) {
 		for (EventDetail event : events) {
 			Long specimenId = event.getSpecimenId();
-			if (specimenId == null) {
-				specimenId = reqSpecimenIdMap.get(event.getReqId());
+			if (specimenId == null && event.getVisitId() != null && event.getReqId() != null) {
+				specimenId = reqSpecimenIdMap.get(event.getVisitId() + "-" + event.getReqId());
 				event.setSpecimenId(specimenId);
 			}
 
