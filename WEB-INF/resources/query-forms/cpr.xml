@@ -277,14 +277,6 @@
       </datePicker>
     </row>
     <row>
-      <textField>
-        <name>consentDocUrl</name>
-        <udn>consentDocUrl</udn>
-        <caption>#getMessage("participant_consent_document_url")</caption>
-        <column>CONSENT_DOC_URL</column>
-      </textField>
-    </row>
-    <row>
       <subForm>
         <name>consentWitness</name>
         <udn>consentWitness</udn>
