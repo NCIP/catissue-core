@@ -959,3 +959,14 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   height: 390px!important;
   display: block;
 }
+
+.os-welcome-box {
+  text-align: center;
+  padding-top: 10px;
+}
+
+.os-welcome-box div {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+

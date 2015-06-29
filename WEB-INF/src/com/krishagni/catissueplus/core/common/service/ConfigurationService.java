@@ -33,4 +33,6 @@ public interface ConfigurationService {
 	public String getTimeFormat();
 	
 	public String getDeDateTimeFormat();
+	
+	public Map<String, String> getWelcomeVideoSettings();
 }

@@ -284,4 +284,19 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 			Locale.setDefault(newLocale);
 		}
 	}
+	
+	@PlusTransactional
+	public Map<String, String> getWelcomeVideoSettings() {
+		Map<String, String> result = new HashMap<String, String>();
+		List<ConfigSetting> settings = daoFactory.getConfigSettingDao().getAllSettingsByModule("common");
+		for (ConfigSetting setting : settings) {
+			if ("welcome_video_source".equals(setting.getProperty().getName())) {
+				result.put("welcome_video_source", setting.getValue());
+			}
+			else if ("welcome_video_url".equals(setting.getProperty().getName())) {
+				result.put("welcome_video_url", setting.getValue());
+			}
+		}
+		return result;
+	}
 }

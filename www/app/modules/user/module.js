@@ -30,6 +30,25 @@ angular.module('openspecimen')
         },
         controller: 'UserAddEditCtrl',
         parent: 'default'
+      })
+      .state('welcome', {
+        url: '/welcome',
+        templateUrl: 'modules/user/welcome.html',
+        resolve: {
+          videoSettings : function (Setting, $state) {
+            return Setting.getWelcomeVideoSetting().then(function (data) {
+              if (data.welcome_video_source !== 'vimeo' &&
+                data.welcome_video_source !== 'youtube') {
+                $state.go('sign-up');
+              }
+              else {
+                return data;
+              }
+            });
+          }
+        },
+        controller: 'WelcomeCtrl',
+        parent: 'default'
       });
   });
 
