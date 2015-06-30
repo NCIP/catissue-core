@@ -879,7 +879,7 @@
   },
 
   "queries": {
-    "list": "Reports",
+    "list": "Queries",
     "title": "Title",
     "created_by": "Created By",
     "last_updated": "Last Updated",
