@@ -395,6 +395,7 @@
         <entry key="GET">
           <list>
             <value>/institutes/</value>
+            <value>/institutes/byname</value>
             <value>/config-settings/locale</value>
             <value>/auth-domains/</value>
           </list>
