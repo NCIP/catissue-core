@@ -10,8 +10,6 @@ angular.module('os.biospecimen.participant.consents', [])
       $scope.uploadMode = false;
       $scope.editMode = false;
       $scope.consentExists = $scope.consent.consentTierResponses.length > 0;
-      setDefaultNoneResponse();
-      isConsentsResponseAdd();
 
       loadPvs();
     }
@@ -24,25 +22,7 @@ angular.module('os.biospecimen.participant.consents', [])
        * here needs pvs sorted on basis of value in SORTORDER column of catissue_permissible_value table
       **/
       //$scope.consentResponses = PvManager.getPvs('consent_response');
-      $scope.consentResponses = ['Yes', 'No', 'Not Specified', 'Withdrawn', 'None'];
-    }
-
-    function setDefaultNoneResponse() {
-      for (var i = 0; i < $scope.consent.consentTierResponses.length; i++) {
-        if (!$scope.consent.consentTierResponses[i].participantResponse) {
-          $scope.consent.consentTierResponses[i].participantResponse = 'None';
-        }
-      }
-    }
-
-    function isConsentsResponseAdd() {
-      $scope.consentResponseAdd = true;
-      for (var i = 0; i < $scope.consent.consentTierResponses.length; i++) {
-        if (!!$scope.consent.consentTierResponses[i].participantResponse) {
-          $scope.consentResponseAdd = false;
-          break;
-        }
-      }
+      $scope.consentResponses = ['Yes', 'No', 'Not Specified'];
     }
 
     function deleteConsentForm() {
