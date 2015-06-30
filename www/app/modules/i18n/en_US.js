@@ -113,7 +113,7 @@
     "end_date": "End Date",
     "consents_waived": "Consents Waived",
     "ethics_approval_id": "Ethics Approval ID",
-    "ppid_fmt": "PPID Format",
+    "ppid_fmt": "De-ID Format",
     "ppid_prefix": "Prefix",
     "ppid_digits": "No. of digits",
     "ppid_suffix": "Suffix",
@@ -210,7 +210,7 @@
     "site": "Site",
     "select_site": "Select Site",
     "pmis": "Medical Identifiers",
-    "protocol_id": "Protocol Identifier",
+    "protocol_id": "Participant De-ID",
     "filter_title": "Participants Filter", 
     "spmn_label_or_barcode": "Specimen Label / Barcode",
     "collection_protocol": "Collection Protocol",
@@ -246,7 +246,7 @@
     "part_updates": "Participant Updates",
     "part_extensions": "Participant Extensions",
     "registrations": "Participant Registrations",
-    "registered_cps": "Registered CPs",
+    "registered_cps": "Registered Protocols",
     
     "buttons": {
       "register": "Register",
@@ -288,7 +288,7 @@
     "visit_site": "Visit Site",
     "clinical_diagnosis": "Clinical Diagnosis",
     "clinical_status": "Clinical Status",
-    "surgical_path_no": "Surgical Pathology No.",
+    "surgical_path_no": "Surg Path Number",
 
     "bulk_import": "Bulk Import Visits",
     "visit_extensions": "Visit Extensions",

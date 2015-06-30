@@ -100,7 +100,7 @@
             <span title="{{consentTierResponse.consentStatement}}">{{consentTierResponse.consentStatement}}</span>
           </div>
           <div ng-if="!editMode">
-            <span>{{consentTierResponse.participantResponse | osNoValue}}</span>
+            <span>{{consentTierResponse.participantResponse}}</span>
           </div>
           <div ng-if="editMode">
             <label class="radio-inline" ng-repeat="response in consentResponses"

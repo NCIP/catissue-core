@@ -12,7 +12,7 @@
       </li>
 
       <li class="item">
-        <strong class="key key-sm" translate="participant.protocol_id">Protocol Identifier:</strong>
+        <strong class="key key-sm" translate="participant.protocol_id">Participant De-ID:</strong>
         <os-inline-edit editor="ppidEditor" name="ppid" class="value value-md" value="cpr.ppid">
           <span ng-if="ppidEditor.isDisplayMode()">{{ppidEditor.viewValue | osNoValue}}</span>
           <input ng-if="ppidEditor.isEditMode()" type="text" ng-model="ppidEditor.editValue" class="form-control" 
@@ -100,7 +100,7 @@
       </li>
 
       <li class="item">
-        <strong class="key key-sm" translate="participant.registered_cps">Registered CPs:</strong>
+        <strong class="key key-sm" translate="participant.registered_cps">Registered Protocols:</strong>
         <span class="value value-md">{{cpr.participant.registeredCps | osArrayJoin}}</span>
       </li>
     </ul>
