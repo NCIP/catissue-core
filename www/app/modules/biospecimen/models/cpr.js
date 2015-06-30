@@ -16,11 +16,16 @@ angular.module('os.biospecimen.models.cpr',
     CollectionProtocolRegistration.listForCp = function(cpId, includeStats, filterOpts) {
       var params = {cpId: cpId, includeStats: !!includeStats};
       angular.extend(params, filterOpts || {});
+
+      //
+      // Note: yyyy-MM-dd is server date format and is not locale based
+      //
       if (!!params.dob) {
-        //
-        // Note: yyyy-MM-dd is server date format and is not locale based
-        //
         params.dob = $filter('date')(params.dob, 'yyyy-MM-dd');
+      }
+
+      if (!!params.registrationDate) {
+        params.registrationDate = $filter('date')(params.registrationDate, 'yyyy-MM-dd');
       }
       return CollectionProtocolRegistration.query(params);
     };
@@ -66,6 +71,16 @@ angular.module('os.biospecimen.models.cpr',
 
     CollectionProtocolRegistration.prototype.deleteSignedConsentForm = function() {
       return $http.delete(this.getSignedConsentFormUrl()).then(function(result){ return result.data; });
+    }
+
+    CollectionProtocolRegistration.prototype.saveConsentResponse = function(consents) {
+      var url = CollectionProtocolRegistration.url() + this.$id() + "/consents";
+      return $http.put(url, consents).then(function(result) {return result.data;});
+    }
+
+    CollectionProtocolRegistration.prototype.getConsents = function() {
+      var url = CollectionProtocolRegistration.url() + this.$id() + "/consents";
+      return $http.get(url).then(function(result) {return result.data;});
     }
 
     return CollectionProtocolRegistration;

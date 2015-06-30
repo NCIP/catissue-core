@@ -68,7 +68,7 @@ public class AuthDaoImpl extends AbstractDao<AuthDomain> implements AuthDao {
 	
 	@Override
 	public void saveAuthToken(AuthToken token) {
-		 sessionFactory.getCurrentSession().saveOrUpdate(token);
+		sessionFactory.getCurrentSession().saveOrUpdate(token);
 	}
 	
 	@Override

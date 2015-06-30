@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.common.events;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
@@ -23,7 +24,11 @@ public class UserSummary {
 	
 	private String emailAddress;
 
-	private Boolean admin; 
+	private Boolean admin;
+
+	private int cpCount;
+
+	private Date creationDate;
 
 	public Long getId() {
 		return id;
@@ -81,6 +86,22 @@ public class UserSummary {
 		this.admin = admin;
 	}
 
+	public int getCpCount() {
+		return cpCount;
+	}
+
+	public void setCpCount(int cpCount) {
+		this.cpCount = cpCount;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
 	public static UserSummary from(User user) {
 		UserSummary userSummary = new UserSummary();
 		userSummary.setId(user.getId());
@@ -90,6 +111,8 @@ public class UserSummary {
 		userSummary.setDomain(user.getAuthDomain().getName());
 		userSummary.setEmailAddress(user.getEmailAddress());
 		userSummary.setAdmin(user.isAdmin());
+		userSummary.setCreationDate(user.getCreationDate());
+
 		return userSummary;
 	}
 	

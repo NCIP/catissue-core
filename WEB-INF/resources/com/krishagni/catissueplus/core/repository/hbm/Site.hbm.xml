@@ -33,27 +33,42 @@
     <set name="storageContainers" table="OS_STORAGE_CONTAINERS">
       <key column="SITE_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer"/>
+      <filter name="activeEntity"/>
     </set>
          
     <set name="visits" table="CATISSUE_SPECIMEN_COLL_GROUP">
       <key column="SITE_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Visit"/>
+      <filter name="activeEntity"/>
     </set>
     
     <set name="collectionProtocols" table="CATISSUE_SITE_CP" inverse="false" cascade="none" sort="unsorted">
       <key column="SITE_ID"/>
-      <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID">
+        <filter name="activeEntity"/>
+      </many-to-many>
     </set>
     
-    <set name="pmis" inverse="false" cascade="none" sort="unsorted">
+    <set name="participants" table="CATISSUE_PART_MEDICAL_ID" inverse="false" cascade="none" sort="unsorted">
       <key column="SITE_ID"/>
-      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier"/>
+      <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Participant" column="PARTICIPANT_ID">
+        <filter name="activeEntity"/>
+      </many-to-many>
     </set>
     
     <set name="collectionProtocolEvents" inverse="false" cascade="none" sort="unsorted">
       <key column="DEFAULT_SITE_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent"/>    
+      <filter name="activeEntity"/>
     </set>
+    
+    <set name="distributionOrders" inverse="false" cascade="none" sort="unsorted">
+      <key column="SITE_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DistributionOrder"/>
+      <filter name="activeEntity"/>
+    </set>
+    
+    <filter name="activeEntity"/>
 
     <query name="getSitesByNames">
       from 
@@ -68,8 +83,18 @@
       where 
         site.code = :siteCode and site.activityStatus != 'Disabled'
     </query>
-    
-  </class>
 
+    <query name="getCpCountBySites">
+      select
+        site.id, count(cp.id)
+      from
+        com.krishagni.catissueplus.core.administrative.domain.Site site
+        join site.collectionProtocols cp
+      where
+        site.id in (:siteIds)
+      group by
+        site.id
+    </query>
+  </class>
 </hibernate-mapping>
  	

@@ -47,11 +47,11 @@
       <div class="stats">
         <div class="stat col-xs-6" title="{{'institutes.tooltip.department_count' | translate}}">
           <span class="fa fa-sitemap"></span>
-          <span>{{institute.departments.length | number: 0}}</span>
+          <span>{{institute.departmentsCount | number: 0}}</span>
         </div>
         <div class="stat col-xs-6" title="{{'institutes.tooltip.user_count' | translate}}">
           <span class="fa fa-user"></span>
-          <span>{{(institute.userCount || 0) | number: 0}}</span>
+          <span>{{institute.usersCount | number: 0}}</span>
         </div>
       </div>
     </div>

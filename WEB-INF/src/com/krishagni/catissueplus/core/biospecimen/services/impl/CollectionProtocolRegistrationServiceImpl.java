@@ -17,15 +17,18 @@ import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.ConsentResponses;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ConsentResponsesFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentFormDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationsList;
@@ -52,6 +55,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 
 	private CollectionProtocolRegistrationFactory cprFactory;
 	
+	private ConsentResponsesFactory consentResponsesFactory;
+	
 	private ParticipantService participantService;
 	
 	private ConfigurationServiceImpl cfgSvc;
@@ -64,6 +69,10 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		this.cprFactory = cprFactory;
 	}
 	
+	public void setConsentResponsesFactory(ConsentResponsesFactory consentResponsesFactory) {
+		this.consentResponsesFactory = consentResponsesFactory;
+	}
+
 	public void setParticipantService(ParticipantService participantService) {
 		this.participantService = participantService;
 	}
@@ -227,7 +236,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			IOUtils.closeQuietly(outputStream);
 		}
 	}
-
+	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<Boolean> deleteConsentForm(RequestEvent<RegistrationQueryCriteria> req) {
@@ -261,7 +270,40 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
-	}	
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<ConsentDetail> getConsents(RequestEvent<RegistrationQueryCriteria> req) {
+		try {
+			RegistrationQueryCriteria crit = req.getPayload();
+			CollectionProtocolRegistration cpr = getCpr(crit.getCprId(), crit.getCpId(), crit.getPpid());
+			AccessCtrlMgr.getInstance().ensureReadCprRights(cpr);
+			return ResponseEvent.response(ConsentDetail.fromCpr(cpr));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<ConsentDetail> saveConsents(RequestEvent<ConsentDetail> req) {
+		try {
+			ConsentDetail consentDetail = req.getPayload();
+			CollectionProtocolRegistration existing = getCpr(consentDetail.getCprId(), consentDetail.getCpId(), consentDetail.getPpid());
+			AccessCtrlMgr.getInstance().ensureUpdateCprRights(existing);
+			
+			ConsentResponses consentResponses = consentResponsesFactory.createConsentResponses(consentDetail); 
+			existing.updateConsents(consentResponses);
+			return ResponseEvent.response(ConsentDetail.fromCpr(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
 
 	@Override
 	@PlusTransactional

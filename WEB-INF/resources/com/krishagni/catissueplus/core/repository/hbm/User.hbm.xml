@@ -50,6 +50,8 @@
  
     <property name="admin" column="IS_ADMIN"/>
     
+    <filter name="activeEntity"/>
+    
     <sql-query name="getDependentEntities">
       <return-scalar column="entityName" type="string"/>
       <return-scalar column="count" type="int"/>    
@@ -57,33 +59,59 @@
       select 
         de.entityName as entityName, de.count as count
       from
-        (Select
-          'site' as entityName, count(s.identifier) as count  
-        from 
-          catissue_site s
-          inner join catissue_site_coordinators sc on sc.site_id = s.identifier 
-        where
-          s.activity_status != 'Disabled' and
-          sc.USER_ID = :userId
-        union 
-        select 
-          'collection_protocol' as entityName, count(cp.identifier) as count 
-        from 
-          catissue_collection_protocol cp
-          left join catissue_coll_coordinators cc on cc.collection_protocol_id = cp.identifier
-        where 
-          cp.activity_status != 'Disabled' and
-          (cp.principal_investigator_id = :userId or cc.user_id = :userId)
-        union
-        select 
-          'distribution_protocol' as entityName, count(dp.identifier) as count 
-        from
-          catissue_distribution_protocol dp 
-        where
-          dp.activity_status != 'Disabled' and
-          dp.principal_investigator_id = :userId) de
+        (
+          select
+            'site' as entityName, count(s.identifier) as count  
+          from 
+            catissue_site s
+            inner join catissue_site_coordinators sc on sc.site_id = s.identifier 
+          where
+            s.activity_status != 'Disabled' and
+            sc.user_id = :userId
+
+          union 
+
+          select 
+            'collection_protocol' as entityName, count(cp.identifier) as count 
+          from 
+            catissue_collection_protocol cp
+            left join catissue_coll_coordinators cc 
+              on cc.collection_protocol_id = cp.identifier and cp.principal_investigator_id != :userId
+          where 
+            cp.activity_status != 'Disabled' and
+            (cp.principal_investigator_id = :userId or cc.user_id = :userId)
+
+          union
+
+          select 
+            'distribution_protocol' as entityName, count(dp.identifier) as count 
+          from
+            catissue_distribution_protocol dp 
+          where
+            dp.activity_status != 'Disabled' and
+            dp.principal_investigator_id = :userId
+        ) de
       where 
         de.count > 0
+    </sql-query>
+
+    <sql-query name="getCpCountByUsers">
+      <return-scalar column="userId"  type="long"/>
+      <return-scalar column="cpCount" type="int"/>
+
+      select 
+        u.identifier as userId, count(distinct cp.identifier) as cpCount 
+      from 
+        catissue_collection_protocol cp 
+        left join catissue_coll_coordinators cc on cc.collection_protocol_id = cp.identifier 
+        inner join catissue_user u 
+          on u.identifier = cp.principal_investigator_id or u.identifier = cc.user_id 
+      where 
+        u.identifier in (:userIds) and
+        cp.activity_status != 'Disabled' and
+        u.activity_status != 'Disabled'
+      group by 
+        u.identifier
     </sql-query>
   </class>
 </hibernate-mapping>

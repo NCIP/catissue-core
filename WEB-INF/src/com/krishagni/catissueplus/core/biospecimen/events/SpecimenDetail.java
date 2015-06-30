@@ -26,6 +26,8 @@ public class SpecimenDetail extends SpecimenInfo {
 	
 	private Set<String> biohazards;
 	
+	private String comments;
+	
 	private Boolean closeAfterChildrenCreation;  
 	
 	private List<SpecimenDetail> children;
@@ -70,6 +72,14 @@ public class SpecimenDetail extends SpecimenInfo {
 		this.biohazards = biohazards;
 	}
 
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
 	public Boolean getCloseAfterChildrenCreation() {
 		return closeAfterChildrenCreation;
 	}
@@ -93,6 +103,7 @@ public class SpecimenDetail extends SpecimenInfo {
 		
 		result.setLabelFmt(specimen.getLabelTmpl());
 		result.setBiohazards(new HashSet<String>(specimen.getBiohazards()));
+		result.setComments(specimen.getComment());
 		return result;
 	}
 	

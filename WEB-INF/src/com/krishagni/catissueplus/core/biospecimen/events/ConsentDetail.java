@@ -5,17 +5,53 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
+import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
+
 public class ConsentDetail {
+	private Long cprId;
+	
+	private Long cpId;
+	
+	private String ppid;
 	
 	private String consentDocumentUrl;
 
 	private Date consentSignatureDate;
 
-	private String witnessName;
+	private UserSummary witness;
 
 	private List<ConsentTierResponseDetail> consentTierResponses = new ArrayList<ConsentTierResponseDetail>();
 	
 	private String consentDocumentName;
+
+	public Long getCprId() {
+		return cprId;
+	}
+
+	public void setCprId(Long cprId) {
+		this.cprId = cprId;
+	}
+
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
+	}
+
+	public String getPpid() {
+		return ppid;
+	}
+
+	public void setPpid(String ppid) {
+		this.ppid = ppid;
+	}
 
 	public String getConsentDocumentUrl() {
 		return consentDocumentUrl;
@@ -33,12 +69,12 @@ public class ConsentDetail {
 		this.consentSignatureDate = consentSignatureDate;
 	}
 
-	public String getWitnessName() {
-		return witnessName;
+	public UserSummary getWitness() {
+		return witness;
 	}
 
-	public void setWitnessName(String witnessName) {
-		this.witnessName = witnessName;
+	public void setWitness(UserSummary witness) {
+		this.witness = witness;
 	}
 
 	public List<ConsentTierResponseDetail> getConsentTierResponses() {
@@ -55,6 +91,36 @@ public class ConsentDetail {
 
 	public void setConsentDocumentName(String consentDocumentName) {
 		this.consentDocumentName = consentDocumentName;
+	}
+	
+	public static ConsentDetail fromCpr(CollectionProtocolRegistration cpr) {
+		ConsentDetail consent = new ConsentDetail();
+		consent.setConsentDocumentUrl(cpr.getSignedConsentDocumentUrl());
+		consent.setConsentSignatureDate(cpr.getConsentSignDate());
+		
+		String fileName = cpr.getSignedConsentDocumentName();
+		if (fileName != null) {
+			fileName = fileName.split("_", 2)[1];
+		}
+		consent.setConsentDocumentName(fileName);
+		
+		if (cpr.getConsentWitness() != null) {
+			consent.setWitness(UserSummary.from(cpr.getConsentWitness()));
+		}
+		
+		for (ConsentTier consentTier : cpr.getCollectionProtocol().getConsentTier()) {
+			ConsentTierResponseDetail response = new ConsentTierResponseDetail();
+			response.setConsentStatement(consentTier.getStatement());
+			for (ConsentTierResponse resp : cpr.getConsentResponses()) {
+				if (consentTier.getStatement().equals(resp.getConsentTier().getStatement())) {
+					response.setParticipantResponse(resp.getResponse());
+					break;
+				}
+			}
+			
+			consent.getConsentTierResponses().add(response);
+		}
+		return consent;
 	}
 	
 }

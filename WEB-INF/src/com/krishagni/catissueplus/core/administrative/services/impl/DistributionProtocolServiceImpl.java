@@ -1,7 +1,11 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -16,12 +20,9 @@ import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
-import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
-import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
-import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 public class DistributionProtocolServiceImpl implements DistributionProtocolService {
 	private DaoFactory daoFactory;
@@ -40,16 +41,21 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<List<DistributionProtocolDetail>> getDistributionProtocols(RequestEvent<DpListCriteria> req) {
 		try {
-			DpListCriteria crit = req.getPayload();			
+			DpListCriteria crit = req.getPayload();
 			AccessCtrlMgr.getInstance().ensureReadDpRights();
 			if (!AuthUtil.isAdmin()) {
 				User user = daoFactory.getUserDao().getById(AuthUtil.getCurrentUser().getId());
 				crit.instituteId(user.getInstitute().getId());
 			}
 			
-			List<DistributionProtocol> dps = 
-					daoFactory.getDistributionProtocolDao().getDistributionProtocols(crit);
-			return ResponseEvent.response(DistributionProtocolDetail.from(dps));
+			List<DistributionProtocol> dps = daoFactory.getDistributionProtocolDao().getDistributionProtocols(crit);
+			List<DistributionProtocolDetail> result = DistributionProtocolDetail.from(dps);
+			
+			if (crit.includeStat()) {
+				addDpStats(result);
+			}
+						
+			return ResponseEvent.response(result);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -160,6 +166,24 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
+	}
+	
+	private void addDpStats(List<DistributionProtocolDetail> dps) {
+		if (CollectionUtils.isEmpty(dps)) {
+			return;
+		}
+		
+		Map<Long, DistributionProtocolDetail> dpMap = new HashMap<Long, DistributionProtocolDetail>();
+		for (DistributionProtocolDetail dp : dps) {
+			dpMap.put(dp.getId(), dp);
+		}
+				
+		Map<Long, Integer> countMap = daoFactory.getDistributionProtocolDao()
+				.getSpecimensCountByDpIds(dpMap.keySet());
+		
+		for (Map.Entry<Long, Integer> count : countMap.entrySet()) {
+			dpMap.get(count.getKey()).setDistributedSpecimensCount(count.getValue());
+		}		
 	}
 	
 	private void ensureUniqueConstraints(DistributionProtocol newDp, DistributionProtocol existingDp) {

@@ -110,7 +110,7 @@ angular.module('os.query.defineview', ['os.query.models'])
     $scope.onReportTypeSelect = function() {
       var type = $scope.reporting.type;
       if (type == 'crosstab') {
-        $scope.reporting = {type: 'crosstab', params: {groupRowsBy: [], summaryFields: []}};
+        $scope.reporting = {type: 'crosstab', params: {groupRowsBy: [], summaryFields: [], rollupExclFields: []}};
         $scope.preparePivotTableOpts();
       } else if (type == 'columnsummary') {
         $scope.reporting = {type: 'columnsummary', params: {sum: [], avg: []}};
@@ -168,6 +168,12 @@ angular.module('os.query.defineview', ['os.query.models'])
         rptParams.summaryFields = removeUnselectedFields(rptParams.summaryFields, $scope.reportFields);
       }
 
+      if (!rptParams.rollupExclFields) {
+        rptParams.rollupExclFields = [];
+      } else {
+        rptParams.rollupExclFields = removeUnselectedFields(rptParams.rollupExclFields, $scope.reportFields);
+      }
+
       preparePivotTabFields($scope.reportFields);
       return true;
     };
@@ -203,6 +209,7 @@ angular.module('os.query.defineview', ['os.query.models'])
 
     $scope.onSummaryFieldChange = function(newVal) {
       $scope.reporting.params.summaryFields = newVal;
+      removeUnselectedFields($scope.reporting.params.rollupExclFields, newVal);
       preparePivotTabFields($scope.reportFields);
     };
 

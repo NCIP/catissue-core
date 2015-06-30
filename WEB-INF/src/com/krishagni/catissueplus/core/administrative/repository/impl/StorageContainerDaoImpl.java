@@ -97,7 +97,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			addParentRestriction();
 			
 			String hql = new StringBuilder(from).append(" ").append(where)
-					.append(" order by c.name asc")
+					.append(" order by c.id asc")
 					.toString();
 			
 			Query query = sessionFactory.getCurrentSession().createQuery(hql)

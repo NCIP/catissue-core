@@ -36,7 +36,10 @@
     <set name="distributionOrders" inverse="false" cascade="none">
       <key column="DISTRIBUTION_PROTOCOL_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DistributionOrder"/>
+      <filter name="activeEntity"/>
     </set>
+    
+    <filter name="activeEntity"/>
       
     <query name="getDistributionProtocolByTitle">
       from 
@@ -57,7 +60,22 @@
         com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol 
       where 
         activityStatus != 'Disabled' 
-      order by title 
+      order by 
+        title 
+    </query>
+
+    <query name="getSpmnCountByDps">
+      select
+        dp.id, count(orderItem.id)
+      from
+        com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol dp
+        join dp.distributionOrders do
+        join do.orderItems orderItem
+      where
+        dp.id in (:dpIds) and
+        do.status = 'EXECUTED'
+      group by
+        dp.id
     </query>
   </class>
 </hibernate-mapping>

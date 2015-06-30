@@ -2,7 +2,7 @@
   <div class="col-xs-8">
     <ul class="os-key-values os-one-col">
       <li class="item">
-        <strong class="key key-sm" translate="participant.signed_consent_form">Signed Consent Form</strong>
+        <strong class="key key-sm" translate="participant.consent.signed_consent_form">Signed Consent Form</strong>
         <div class="value value-md" ng-if="!uploadMode">
           <div class="pull-left" ng-switch on="!!consent.consentDocumentName"> 
             <a ng-href="{{consentFormUrl}}" target="_blank" ng-switch-when="true">{{consent.consentDocumentName}}</a>
@@ -42,5 +42,75 @@
         </div>
       </li>
     </ul>
+  </div>
+  <div class="col-xs-8" ng-if="consentExists">
+    <div class="list-group">
+      <div class="list-group-item clearfix os-section-hdr">
+        <span translate="participant.consent.consent_responses">Consent Responses</span>
+        <div show-if-allowed="participantResource.updateOpts" class="btn-group os-action-btns pull-right">
+          <button class="btn btn-primary" ng-if="!editMode" ng-click="showEditConsents()">
+            <span class="fa fa-pencil"></span>
+            <span translate="common.buttons.edit">Edit</span>
+          </button>
+          <button class="btn btn-primary" ng-if="editMode" ng-click="saveConsents()">
+            <span translate="common.buttons.save">Save</span>
+          </button>
+        </div>
+      </div>
+      <div class="list-group-item clearfix">
+        <div class="row">
+          <div ng-switch on="editMode">
+            <div ng-switch-when="true">
+              <div class="col-xs-6">
+                <div os-md-input ng-model="consent.consentSignatureDate" placeholder="{{'participant.consent.signature_date'|translate}}">
+                  <input name="consentDate" ng-model="consent.consentSignatureDate" class="form-control" type="text"
+                    datepicker-popup="{{global.dateFmt}}" show-button-bar="true"
+                    is-open="consentDt.isOpen" ng-click="consentDt.isOpen=true"
+                    placeholder="{{'participant.consent.signature_date'|translate}}">
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div os-md-input ng-model="consent.witness" placeholder="{{'participant.consent.witness'|translate}}">
+                  <os-users ng-model="consent.witness" placeholder="{{'participant.consent.witness'|translate}}"> </os-users>
+                </div>
+              </div>
+            </div>
+            <div ng-switch-when="false" class="os-margin-top-15">
+              <div class="col-xs-6 os-md-input read">
+                <label class="os-md-input-label">
+                  <span translate="participant.consent.signature_date">Consent Signature Date</span>
+                </label>
+                <span>{{consent.consentSignatureDate | date: global.dateFmt | osNoValue}}</span>
+              </div>
+              <div class="col-xs-6 os-md-input read">
+                <label class="os-md-input-label">
+                  <span translate="participant.consent.witness">Consent Witness</span>
+                </label>
+                <span ng-if="consent.witness">{{consent.witness.lastName}}, {{consent.witness.firstName}}</span>
+                <span ng-if="!consent.witness" translate="common.not_specified">Not Specified</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="list-group-item clearfix" ng-repeat="consentTierResponse in consent.consentTierResponses" ng-init="consentTierResponseIdx = $index">
+        <div>
+          <div class="os-consent-stmt">
+            <span title="{{consentTierResponse.consentStatement}}">{{consentTierResponse.consentStatement}}</span>
+          </div>
+          <div ng-if="!editMode">
+            <span>{{consentTierResponse.participantResponse | osNoValue}}</span>
+          </div>
+          <div ng-if="editMode">
+            <label class="radio-inline" ng-repeat="response in consentResponses"
+              ng-hide="response=='Withdrawn' && consentResponseAdd">
+              <input type="radio" name="consentTierResponse{{consentTierResponseIdx}}"
+                ng-model="consentTierResponse.participantResponse" ng-value="response"> {{response}}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

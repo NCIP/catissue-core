@@ -63,7 +63,11 @@
         </div>
         <div class="stat col-xs-6" title="{{'user.tooltip.user_since' | translate}}">
           <span class="fa fa-history"></span>
-          <span>{{(user.since || 0 )| number: 0}}</span>
+          <span ng-if="!!user.creationDate">
+            {{user.creationDate | date: 'yyyy'}}
+          </span>
+          <span ng-if="!user.creationDate" translate="common.na">
+          </span>
         </div>
       </div> 
     </div>

@@ -72,12 +72,14 @@
       "search": "Search",
       "clear_filters": "Clear Filters",
       "close": "Close",
-      "upload": "Upload"
+      "upload": "Upload",
+      "reset_password": "Reset Password"
     }
   },
 
   "form_errors": {
     "required": "Please fill out this field",
+    "min": "This field value is too less",
     "minlength": "This field value is too short",
     "maxlength": "This field value is too long",
     "date": "This field value is not valid date",
@@ -183,6 +185,7 @@
   "participant": {
     "list": "Participants",
    
+    "id": "MPI / MRN / SSN",
     "register_participant": "Register Participant",
     "edit_participant": "Edit Participant",
     "reg_date": "Registration Date",
@@ -213,10 +216,22 @@
     "spmn_label_or_barcode": "Specimen Label / Barcode",
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
-  
-    "signed_consent_form": "Signed Consent Form",
-    "deleting_consent_form": "Deleting Signed Consent Form",
-    "confirm_delete_consent_form": "Are you sure you want to delete {{consentDocumentName}}?",
+
+    "consent": {
+      "signed_consent_form": "Signed Consent Form",
+      "deleting_consent_form": "Deleting Signed Consent Form",
+      "confirm_delete_consent_form": "Are you sure you want to delete {{consentDocumentName}}?",
+      "consent_responses": "Consent Responses",
+      "signature_date": "Consent Signature Date",
+      "witness": "Consent Witness",
+      "response_value": {
+        "yes": "Yes",
+        "no": "No",
+        "not_specified": "Not Specified",
+        "withdrawn": "Withdrawn",
+        "none": "None"
+      }
+    },
 
     "similar_participants": "Following participants found that are similar to new participant being registered",
     "matched_attrs": "Matched Attributes",
@@ -281,7 +296,7 @@
 
     "spr": "Surgical Pathology Report",
     "spr_uploaded": "Surgical pathology report {{file}} uploaded successfully.",
-    "no_spr": "No surgical pathology report uploaded. Do you want to upload now?",
+    "no_spr": "No surgical pathology report uploaded.",
     "deleting_spr": "Deleting Surgical Pathology Report",
     "confirm_delete_spr": "Are you sure you want to delete {{sprName}} ?",
     "spr_locked": "Surgical pathology report locked successfully.",
@@ -341,6 +356,7 @@
     "aliquot_cnt": "Count of Aliquots",
     "qty_per_aliquot": "Quantity per Aliquot",
     "close_parent_q": "Do you want to close parent specimen?",
+    "comments": "Comments",
     "qty": "Quantity",
     "aliquot": "Aliquot",
     "derived": "Derived",
@@ -588,9 +604,11 @@
     "login_name": "Login Name",
     "password": "Password",
     "confirm_password": "Confirm Password",
+    "password_rule": "Tip: Password should contains atleast 1 uppercase letter, 1 lowercase  letter, 1 number and should be 8 characters long.",
     "sign_in_title": "Sign in to continue to OpenSpecimen",
     "sign_in_failed": "The username or password you entered is incorrect",
     "sign_in": "Sign In",
+    "logout":"Log Out",
     "forgot_password": "Forgot password?",
     "approve_user": "Approve User",
     "reject_user": "Reject User",
@@ -652,6 +670,13 @@
 
     "menu_options": {
       "delete": "Delete"
+    },
+
+    "change_password": {
+      "old_password": "Old Password",
+      "new_password": "New Password",
+      "confirm_password": "Confirm Password",
+      "change_password": "Change Password"
     }
 
   },
@@ -707,14 +732,19 @@
     "paste_specimen_labels": "Paste or input specimen labels separated by comma",
     "no_free_locs": "Container does not have enough free locations to accommodate input specimen labels",
     "replicated_successfully": "Container {{name}} replicated successfully",
-    "empty_names_not_allowed": "Empty container names not allowed",
-    "new_container_names": "New Container Names",
+
+    "replication_count": "Enter number of containers to create",
     "no_repl_dest": "No target site or parent container specified. Add one by clicking Add Another",
+    "new_name": "New Container Name",
+    "row": "Row",
+    "column": "Column",
     "target_site": "Target Site",
     "target_parent_cont": "Target Parent Container",
-    "paste_container_names": "Paste or input container names separated by comma",
     "replicate": "Replicate",
     "add_another": "Add Another",
+
+    "pos_selector": "Container Position Selector",
+    "selected_pos": "Selected Position: ",
 
     "bulk_import": "Import Storage Containers",
     "bulk_import_jobs": "Import Storage Containers Jobs List",
@@ -802,6 +832,7 @@
     "attach_form": "Attach Form",
     "attached": "Form Successfully Attached",
     "confirm_delete_association": "Are you sure you want to delete this form at <b>{{level.name}}</b> level from <b>{{!collectionProtocol.id ? 'All Protocols' : collectionProtocol.shortTitle}}</b>? \n Please note you will no longer be able to access data for this form",
+    "association_deleted": "Successfully deleted form at {{level.name}} level from {{!collectionProtocol.id ? 'All Protocols' : collectionProtocol.shortTitle}}",
 
     "tooltip": {
       "add": "Click to add new Form",
@@ -967,6 +998,8 @@
     "pivot_table_no_row_fields": "Select at least one field to use for grouping rows in pivot table",
     "pivot_table_no_col_field": "Select field to use for grouping columns in pivot table",
     "pivot_table_no_summary_fields": "Select at least one summary field",
+    "excl_rollup": "Exclude Rollup For",
+    "select_excl_rollup": "Select fields that should be excluded from rollup",
 
     "expr_toolbar": {
       "and": "AND",
@@ -1100,7 +1133,9 @@
     "confirm_remove_specimens": "Are you sure you want to remove selected specimens from {{name}} list?",
     "specimens_added": "Specimens sucessfully added to {{name}} list",
     "specimens_removed": "Specimens successfully removed from {{name}} list",
-    "distribute": "Distribute"
+    "distribute": "Distribute",
+    "no_specimens_for_deletion": "Please select at least one specimen for deletion",
+    "no_specimens_for_distribution": "Please select at least one specimen to create distribution order"
    },
 
    "orders": {

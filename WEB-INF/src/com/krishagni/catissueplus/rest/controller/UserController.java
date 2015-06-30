@@ -65,8 +65,10 @@ public class UserController {
 			String institute,
 			
 			@RequestParam(value = "activityStatus", required = false)
-			String activityStatus
-			){
+			String activityStatus,
+
+			@RequestParam(value = "includeStats", required = false, defaultValue = "false")
+			boolean includeStats) {
 		
 		UserListCriteria crit = new UserListCriteria()
 			.startAt(start)
@@ -75,7 +77,8 @@ public class UserController {
 			.name(name)
 			.loginName(loginName)
 			.instituteName(institute)
-			.activityStatus(activityStatus);
+			.activityStatus(activityStatus)
+			.includeStat(includeStats);
 		
 		
 		RequestEvent<UserListCriteria> req = new RequestEvent<UserListCriteria>(crit);
@@ -181,7 +184,7 @@ public class UserController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/update-password")
+	@RequestMapping(method = RequestMethod.PUT, value = "/password")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public Boolean changePassword(@RequestBody PasswordDetails passwordDetails) {
@@ -241,4 +244,5 @@ public class UserController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+
 }

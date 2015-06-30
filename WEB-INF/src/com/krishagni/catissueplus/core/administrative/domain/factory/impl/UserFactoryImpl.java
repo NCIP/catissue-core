@@ -1,6 +1,9 @@
 
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Department;
@@ -39,7 +42,7 @@ public class UserFactoryImpl implements UserFactory {
 		setDepartment(detail, user, ose);
 		setAddress(detail, user, ose);
 		setAuthDomain(detail, user, ose);
-
+		user.setCreationDate(Calendar.getInstance().getTime());
 		ose.checkAndThrow();
 		return user;
 	}

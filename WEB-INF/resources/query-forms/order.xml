@@ -1,6 +1,4 @@
-#macro( getMessage $code )
-  $messageSource.getMessage($code, null, $locale)
-#end
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
 
 <form>
   <view>
@@ -42,6 +40,15 @@
             <caption>#getMessage("order_dp_title")</caption>
             <column>TITLE</column>
           </textField>
+        </row>
+
+	<row>
+          <numberField>
+            <name>irbId</name>
+            <udn>irbId</udn>
+            <caption>#getMessage("order_dp_irb_id")</caption>
+            <column>IRB_IDENTIFIER</column>
+          </numberField>
         </row>
 
         <row>	
@@ -99,6 +106,15 @@
           </dropDown>              
         </row>
       </subForm>
+    </row>
+
+    <row>
+      <textField>
+        <name>trackingUrl</name>
+        <udn>trackingUrl</udn>
+        <caption>#getMessage("order_tracking_url")</caption>
+        <column>TRACKING_URL</column>
+      </textField>
     </row>
 
     <row>

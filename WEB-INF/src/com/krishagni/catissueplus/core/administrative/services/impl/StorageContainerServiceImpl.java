@@ -483,6 +483,10 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		ensureUniqueConstraints(null, replica);
 		replica.validateRestrictions();
 		daoFactory.getStorageContainerDao().saveOrUpdate(replica);
+		
+		if (replica.getParentContainer() != null && replica.getPosition() != null) {
+			replica.getParentContainer().addPosition(replica.getPosition());
+		}
 	}
 	
 	private StorageContainer getContainerCopy(StorageContainer source) {

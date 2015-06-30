@@ -150,6 +150,17 @@
             <div os-field-error field="sform.pathology"></div>
           </div>
         </div>
+
+        <div class="form-group">
+          <label class="col-xs-3 control-label">
+            <span translate="specimens.comments">Comments</span>
+          </label>
+          <div class="col-xs-6">
+            <textarea ng-model="currSpecimen.comments" class="form-control" 
+              placeholder="{{'specimens.comments' | translate}}" rows="2">
+            </textarea>
+          </div>
+        </div>
       </div>
 
       <div class="form-group" ng-if="currSpecimen.lineage == 'New'">

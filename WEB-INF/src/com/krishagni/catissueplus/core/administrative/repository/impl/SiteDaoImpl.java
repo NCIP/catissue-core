@@ -1,8 +1,11 @@
 
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
@@ -34,7 +37,6 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 				.setMaxResults(listCrit.maxResults());
 				
 		addSearchConditions(query, listCrit);
-
 		return query.list();
 	}
 
@@ -65,8 +67,25 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 		return result.isEmpty() ? null : result.get(0);
 	}
 	
-	private void addSearchConditions(Criteria query, SiteListCriteria listCrit) {
+	@Override
+	@SuppressWarnings("unchecked")
+	public Map<Long, Integer> getCpCountBySite(Collection<Long> siteIds) {		
+		List<Object[]> rows = getSessionFactory().getCurrentSession().getNamedQuery(GET_CP_COUNT_BY_SITES)
+			.setParameterList("siteIds", siteIds)
+			.list();
 		
+		Map<Long, Integer> countMap = new HashMap<Long, Integer>();
+		for (Object[] row : rows) {
+			Long siteId = (Long)row[0];
+			Integer count = ((Long)row[1]).intValue();
+			countMap.put(siteId, count);
+		}
+		
+		return countMap;
+	}
+
+	
+	private void addSearchConditions(Criteria query, SiteListCriteria listCrit) {
 		if (StringUtils.isNotBlank(listCrit.query())) {
 			MatchMode matchMode = listCrit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;
 			query.add(Restrictions.ilike("name", listCrit.query(), matchMode));
@@ -83,5 +102,6 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 	private static final String GET_SITES_BY_NAMES = FQN + ".getSitesByNames";
 	
 	private static final String GET_SITE_BY_CODE = FQN + ".getSiteByCode";
-
+	
+	private static final String GET_CP_COUNT_BY_SITES = FQN + ".getCpCountBySites";
 }

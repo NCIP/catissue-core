@@ -325,11 +325,18 @@ angular.module('os.query.util', [])
       var colIdx = getFieldIndices(rptFields, [reporting.params.groupColBy]);
       colIdx = colIdx.length > 0 ? colIdx[0] : undefined;
       var summaryIdx = getFieldIndices(rptFields, reporting.params.summaryFields);
+      var rollupExclIdx = getFieldIndices(rptFields, reporting.params.rollupExclFields);
 
       var includeSubTotals = "";
       if (reporting.params.includeSubTotals) {
         includeSubTotals = ", true";
       } 
+
+      for (var i = 0; i < summaryIdx.length; ++i) {
+        if (rollupExclIdx.indexOf(summaryIdx[i]) != -1) {
+          summaryIdx[i] = -1 * summaryIdx[i];
+        }
+      }
 
       return 'crosstab(' +
                '(' + rowIdx.join(',') + '), ' + 
@@ -543,7 +550,7 @@ angular.module('os.query.util', [])
           return;
         }
 
-        if (filters[i].field.name.indexOf('extensions.') == 0) {
+        if (!filters[i].expr && filters[i].field.name.indexOf('extensions.') == 0) {
           queryCtx.disableCpSelection = true;
           return;
         }

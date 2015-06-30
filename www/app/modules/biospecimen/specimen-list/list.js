@@ -62,6 +62,10 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
       );
     }
 
+    function showSelectSpecimensErrMsg(msgCode) {
+      Alerts.error(msgCode);
+    };
+
     $scope.selectList = function (specimenList) {
       $scope.selection = resetSelection();
       $scope.lists.selectedList = specimenList;
@@ -100,6 +104,11 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
     };
 
     $scope.confirmRemoveSpecimens = function () {
+      if (!$scope.selection.any) {
+        showSelectSpecimensErrMsg("specimen_list.no_specimens_for_deletion");
+        return;
+      }
+
       DeleteUtil.confirmDelete({
         entity: $scope.lists.selectedList,
         templateUrl: 'modules/biospecimen/specimen-list/confirm-remove-specimens.html',
@@ -108,6 +117,11 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
     }
 
     $scope.distributeSpecimens = function() {
+      if (!$scope.selection.any) {
+        showSelectSpecimensErrMsg("specimen_list.no_specimens_for_distribution");
+        return;
+      }
+
       SpecimensHolder.setSpecimens($scope.selection.specimens);
       $state.go('order-addedit', {orderId: ''});
     }

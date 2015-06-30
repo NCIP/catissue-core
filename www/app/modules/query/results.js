@@ -2,7 +2,7 @@
 angular.module('os.query.results', ['os.query.models'])
   .controller('QueryResultsCtrl', function(
     $scope, $state, $stateParams, $modal, 
-    queryCtx, QueryUtil, QueryExecutor, SpecimenList, SpecimensHolder, Alerts) {
+    queryCtx, QueryCtxHolder, QueryUtil, QueryExecutor, SpecimenList, SpecimensHolder, Alerts) {
 
     function init() {
       $scope.queryCtx = queryCtx;
@@ -123,12 +123,20 @@ angular.module('os.query.results', ['os.query.models'])
       $scope.resultsCtx.rows = result.rows;
       $scope.resultsCtx.columnLabels = result.columnLabels;
 
+      var numValueCols = $scope.queryCtx.reporting.params.summaryFields.length;
+      var numRollupCols = numValueCols;
+      var rollupExclFields = $scope.queryCtx.reporting.params.rollupExclFields;
+      if (rollupExclFields && rollupExclFields.length > 0) {
+        numRollupCols = numRollupCols - rollupExclFields.length;
+      }
+
       $scope.resultsCtx.pivotTableOpts = {
         height: '500px',
         width: '1200px',
         colHeaders: $scope.resultsCtx.columnLabels,
         numGrpCols: $scope.queryCtx.reporting.params.groupRowsBy.length,
-        multipleVal: $scope.queryCtx.reporting.params.summaryFields.length > 1,
+        numValueCols: numValueCols,
+        numRollupCols: numRollupCols,
         data: $scope.resultsCtx.rows
       };
     };
@@ -191,12 +199,28 @@ angular.module('os.query.results', ['os.query.models'])
     };
 
     function getSelectedSpecimens() {
-      var idx = $scope.queryCtx.selectedFields.indexOf('Specimen.label');
-      var colName = $scope.resultsCtx.columnDefs[idx].field;
-      return $scope.selectedRows.map(function(row) {
-         return {label: row[colName]};
-      })
-    }
+      var labelIndices = $scope.resultsCtx.labelIndices;
+      if (!labelIndices) {
+        return [];
+      }
+
+      var specimenLabels = [];
+      var selectedRows = $scope.selectedRows;
+      for (var i = 0; i < selectedRows.length; ++i) {
+        var selectedRow = selectedRows[i];
+        for (var j = 0; j < labelIndices.length; ++j) {
+          var label = selectedRow["col" + labelIndices[j]];
+          if (!label || specimenLabels.indexOf(label) != -1) {
+            continue;
+          }
+
+          specimenLabels.push(label);
+        }
+      }
+
+      return specimenLabels.map(function(label) { return {label: label} });
+    };
+
 
     var gridFilterPlugin = {
       init: function(scope, grid) {
@@ -302,6 +326,7 @@ angular.module('os.query.results', ['os.query.models'])
     }
 
     $scope.createNewSpecimenList = function() {
+      QueryCtxHolder.setCtx(queryCtx);
       SpecimensHolder.setSpecimens(getSelectedSpecimens());
       $state.go('specimen-list-addedit', {listId: ''});
     };

@@ -93,6 +93,14 @@
       </li>
     </ul>
 
+    <div class="os-section os-line-section" ng-if="!!specimen.comments">
+      <strong class="key key-sm">
+        <span translate="specimens.comments">Comments</span>
+        <span>&nbsp;</span>
+      </strong>
+      <span class="value value-md">{{specimen.comments}}</span>
+    </div>
+
     <os-specimen-tree cpr="cpr" visit="visit" specimens="childSpecimens" allowed-ops="specimenAllowedOps">
     </os-specimen-tree>
   </div>

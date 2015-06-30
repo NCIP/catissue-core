@@ -64,6 +64,8 @@
       cascade="none" 
       class="com.krishagni.catissueplus.core.administrative.domain.User"
       column="DISTRIBUTOR_ID"/>
+      
+    <filter name="activeEntity"/>
         
     <query name="getOrderByName">
       from 

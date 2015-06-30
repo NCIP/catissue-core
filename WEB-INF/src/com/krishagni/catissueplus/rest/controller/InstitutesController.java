@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteQueryCriteria;
+import com.krishagni.catissueplus.core.administrative.events.InstituteSummary;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.InstituteService;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
@@ -37,7 +38,7 @@ public class InstitutesController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public List<InstituteDetail> getInstitutes(
+	public List<InstituteSummary> getInstitutes(
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
 			
@@ -48,17 +49,20 @@ public class InstitutesController {
 			String name,
 			
 			@RequestParam(value = "exactMatch", required = false, defaultValue = "false")
-			boolean exactMatch
-			) {
+			boolean exactMatch,
+
+			@RequestParam(value = "includeStats", required = false, defaultValue = "false")
+			boolean includeStats) {
 		
 		InstituteListCriteria crit  = new InstituteListCriteria()
 				.query(name)
 				.exactMatch(exactMatch)
 				.startAt(startAt)
-				.maxResults(maxResults);
+				.maxResults(maxResults)
+				.includeStat(includeStats);
 		
 		RequestEvent<InstituteListCriteria> req = new RequestEvent<InstituteListCriteria>(crit);
-		ResponseEvent<List<InstituteDetail>> resp = instituteSvc.getInstitutes(req);
+		ResponseEvent<List<InstituteSummary>> resp = instituteSvc.getInstitutes(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
@@ -75,6 +79,19 @@ public class InstitutesController {
 		ResponseEvent<InstituteDetail> resp = instituteSvc.getInstitute(req);
 		resp.throwErrorIfUnsuccessful();
 		
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value="/byname")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public InstituteDetail getInstituteByName(@RequestParam(value = "name", required = true) String name) {		
+		InstituteQueryCriteria crit = new InstituteQueryCriteria();
+		crit.setName(name);
+
+		RequestEvent<InstituteQueryCriteria> req = new RequestEvent<InstituteQueryCriteria>(crit);
+		ResponseEvent<InstituteDetail> resp = instituteSvc.getInstitute(req);
+		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 

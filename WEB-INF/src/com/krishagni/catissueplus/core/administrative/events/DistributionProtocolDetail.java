@@ -28,6 +28,8 @@ public class DistributionProtocolDetail {
 
 	private String activityStatus;
 
+	private int distributedSpecimensCount;
+
 	public Long getId() {
 		return id;
 	}
@@ -100,18 +102,26 @@ public class DistributionProtocolDetail {
 		this.activityStatus = activityStatus;
 	}
 
+	public int getDistributedSpecimensCount() {
+		return distributedSpecimensCount;
+	}
+
+	public void setDistributedSpecimensCount(int distributedSpecimensCount) {
+		this.distributedSpecimensCount = distributedSpecimensCount;
+	}
+
 	public static DistributionProtocolDetail from(DistributionProtocol distributionProtocol) {
-		DistributionProtocolDetail details = new DistributionProtocolDetail();
-		details.setShortTitle(distributionProtocol.getShortTitle());
-		details.setId(distributionProtocol.getId());
-		details.setTitle(distributionProtocol.getTitle());
-		details.setIrbId(distributionProtocol.getIrbId());
-		details.setStartDate(distributionProtocol.getStartDate());
-		details.setEndDate(distributionProtocol.getEndDate());
-		details.setInstituteName(distributionProtocol.getInstitute().getName());
-		details.setPrincipalInvestigator(getPrincipleInvestigatorInfo(distributionProtocol.getPrincipalInvestigator()));
-		details.setActivityStatus(distributionProtocol.getActivityStatus());
-		return details;
+		DistributionProtocolDetail detail = new DistributionProtocolDetail();
+		detail.setShortTitle(distributionProtocol.getShortTitle());
+		detail.setId(distributionProtocol.getId());
+		detail.setTitle(distributionProtocol.getTitle());
+		detail.setIrbId(distributionProtocol.getIrbId());
+		detail.setStartDate(distributionProtocol.getStartDate());
+		detail.setEndDate(distributionProtocol.getEndDate());
+		detail.setInstituteName(distributionProtocol.getInstitute().getName());
+		detail.setPrincipalInvestigator(getPrincipleInvestigatorInfo(distributionProtocol.getPrincipalInvestigator()));
+		detail.setActivityStatus(distributionProtocol.getActivityStatus());
+		return detail;
 	}
 
 	private static UserSummary getPrincipleInvestigatorInfo(User principleInvestigator) {

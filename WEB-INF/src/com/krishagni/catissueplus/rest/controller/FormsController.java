@@ -5,9 +5,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.net.URLDecoder;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,10 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
@@ -39,6 +35,8 @@ import com.krishagni.catissueplus.core.de.events.FormType;
 import com.krishagni.catissueplus.core.de.events.GetFormDataOp;
 import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
+import com.krishagni.catissueplus.core.de.events.RemoveFormContextOp;
+import com.krishagni.catissueplus.core.de.events.RemoveFormContextOp.RemoveType;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
 import edu.common.dynamicextensions.domain.nui.Container;
@@ -72,7 +70,7 @@ public class FormsController {
 			type = FormType.DATA_ENTRY_FORMS;
 		}
 		
-		ResponseEvent<List<FormSummary>> resp = formSvc.getForms(getRequestEvent(type));
+		ResponseEvent<List<FormSummary>> resp = formSvc.getForms(getRequest(type));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -81,7 +79,7 @@ public class FormsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public Boolean deleteForm(@PathVariable("id") Long formId) {
-		ResponseEvent<Boolean> resp = formSvc.deleteForm(getRequestEvent(formId));
+		ResponseEvent<Boolean> resp = formSvc.deleteForm(getRequest(formId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -90,7 +88,7 @@ public class FormsController {
 	@ResponseStatus(HttpStatus.OK)
 	public void getFormDefinition(@PathVariable("id") Long formId, Writer writer) 
 	throws IOException {
-		ResponseEvent<Container> resp = formSvc.getFormDefinition(getRequestEvent(formId));		
+		ResponseEvent<Container> resp = formSvc.getFormDefinition(getRequest(formId));		
 		resp.throwErrorIfUnsuccessful();
 		
 		ContainerSerializer serializer = new ContainerJsonSerializer(resp.getPayload(), writer);
@@ -102,17 +100,25 @@ public class FormsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<FormFieldSummary> getFormFields(
-			@PathVariable("id") Long formId,
-			@RequestParam(value="prefixParentCaption", required=false, defaultValue="false") boolean prefixParentCaption,
-			@RequestParam(value="cpId", required=false, defaultValue="-1") Long cpId,
-			@RequestParam(value="extendedFields", required=false, defaultValue="false") boolean extendedFields) {
+			@PathVariable("id") 
+			Long formId,
+			
+			@RequestParam(value="prefixParentCaption", required=false, defaultValue="false") 
+			boolean prefixParentCaption,
+			
+			@RequestParam(value="cpId", required=false, defaultValue="-1") 
+			Long cpId,
+			
+			@RequestParam(value="extendedFields", required=false, defaultValue="false") 
+			boolean extendedFields) {
+		
 		ListFormFields crit = new ListFormFields();
 		crit.setFormId(formId);
 		crit.setPrefixParentFormCaption(prefixParentCaption);
 		crit.setCpId(cpId);
 		crit.setExtendedFields(extendedFields);
 		
-		ResponseEvent<List<FormFieldSummary>> resp = formSvc.getFormFields(getRequestEvent(crit));
+		ResponseEvent<List<FormFieldSummary>> resp = formSvc.getFormFields(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -120,37 +126,54 @@ public class FormsController {
 	@RequestMapping(method = RequestMethod.GET, value="{id}/data/{recordId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public String getFormData(@PathVariable("id") Long formId, @PathVariable("recordId") Long recordId) {
+	public Map<String, Object> getFormData(
+			@PathVariable("id") 
+			Long formId,
+			
+			@PathVariable("recordId") 
+			Long recordId,
+			
+			@RequestParam(value="includeUdn", required=false, defaultValue="false")
+			boolean includeUdn) {
+		
 		GetFormDataOp op = new GetFormDataOp();
 		op.setFormId(formId);
 		op.setRecordId(recordId);
 		
-		ResponseEvent<FormDataDetail> resp = formSvc.getFormData(getRequestEvent(op));
+		ResponseEvent<FormDataDetail> resp = formSvc.getFormData(getRequest(op));
 		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload().getFormData().toJson();
+		return resp.getPayload().getFormData().getFieldNameValueMap(includeUdn);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="{id}/data")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public String saveFormData(@PathVariable("id") Long formId, @RequestBody String formDataJson) {
-		return saveOrUpdateFormData(formId, formDataJson);
+	public Map<String, Object> saveFormData(
+			@PathVariable("id") 
+			Long formId, 
+			
+			@RequestBody 
+			Map<String, Object> valueMap) {		
+		return saveOrUpdateFormData(formId, valueMap);
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value="{id}/data")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public String updateFormData(
-			@PathVariable("id") Long formId,
-			@RequestBody String formDataJson) {		
-		return saveOrUpdateFormData(formId, formDataJson);
+	public Map<String, Object> updateFormData(
+			@PathVariable("id") 
+			Long formId,
+			
+			@RequestBody 
+			Map<String, Object> valueMap) {		
+		return saveOrUpdateFormData(formId, valueMap);
 	}
 		
 	@RequestMapping(method = RequestMethod.GET, value="{id}/contexts")	
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<FormContextDetail> getFormContexts(@PathVariable("id") Long formId) {
-		ResponseEvent<List<FormContextDetail>> resp = formSvc.getFormContexts(getRequestEvent(formId));
+		ResponseEvent<List<FormContextDetail>> resp = formSvc.getFormContexts(getRequest(formId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -158,15 +181,45 @@ public class FormsController {
 	@RequestMapping(method = RequestMethod.PUT, value="{id}/contexts")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<FormContextDetail> addFormContexts(@PathVariable("id") Long formId, @RequestBody List<FormContextDetail> formCtxts) {
+	public List<FormContextDetail> addFormContexts(
+			@PathVariable("id") 
+			Long formId, 
+			
+			@RequestBody 
+			List<FormContextDetail> formCtxts) {
+		
 		for (FormContextDetail formCtxt : formCtxts) {
 			formCtxt.setFormId(formId);
 		}
 		
-		ResponseEvent<List<FormContextDetail>> resp = formSvc.addFormContexts(getRequestEvent(formCtxts));
+		ResponseEvent<List<FormContextDetail>> resp = formSvc.addFormContexts(getRequest(formCtxts));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="{id}/contexts")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Object> removeFormContext(
+			@PathVariable("id") 
+			Long formId,
+			
+			@RequestParam(value = "entityType", required = true) 
+			String entityType,
+			
+			@RequestParam(value = "cpId", required = true) 
+			Long cpId) {
+		
+		RemoveFormContextOp op = new RemoveFormContextOp();
+		op.setCpId(cpId);
+		op.setFormId(formId);
+		op.setFormType(FormType.fromType(entityType));
+		op.setRemoveType(RemoveType.SOFT_REMOVE);
+
+		ResponseEvent<Boolean> resp = formSvc.removeFormContext(getRequest(op));
+		resp.throwErrorIfUnsuccessful();
+		return Collections.<String, Object>singletonMap("status", resp.getPayload());
+    }
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/records")
 	@ResponseStatus(HttpStatus.OK)
@@ -186,7 +239,7 @@ public class FormsController {
 		opDetail.setEntityType(entityType);
 		opDetail.setFormId(formId);
 		
-		ResponseEvent<List<FormRecordsList>> resp = formSvc.getFormRecords(getRequestEvent(opDetail));
+		ResponseEvent<List<FormRecordsList>> resp = formSvc.getFormRecords(getRequest(opDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -195,7 +248,7 @@ public class FormsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public Long deleteRecords(@PathVariable("id") Long formId, @PathVariable("recordId") Long recId) {		
-		ResponseEvent<Long> resp = formSvc.deleteRecord(getRequestEvent(recId));
+		ResponseEvent<Long> resp = formSvc.deleteRecord(getRequest(recId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -204,7 +257,7 @@ public class FormsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public void exportForm(@PathVariable("id") Long containerId, HttpServletResponse httpResp) {
-		ResponseEvent<Container> resp = formSvc.getFormDefinition(getRequestEvent(containerId));
+		ResponseEvent<Container> resp = formSvc.getFormDefinition(getRequest(containerId));
 		resp.throwErrorIfUnsuccessful();
 			
 		String tmpDir = getTmpDirName();
@@ -234,49 +287,42 @@ public class FormsController {
 		}
 	}
 
-	private String saveOrUpdateFormData(Long formId, String formDataJson) {
-		try {
-			formDataJson = URLDecoder.decode(formDataJson,"UTF-8");
-			if (formDataJson.endsWith("=")) {
-				formDataJson = formDataJson.substring(0, formDataJson.length() -1);
-			}	        			
-		} catch (Exception e) {
-			throw new RuntimeException("Error parsing input JSON", e);
-		}
+	private Map<String, Object> saveOrUpdateFormData(Long formId, Map<String, Object> valueMap) {		
+		FormData formData = FormData.fromValueMap(formId, valueMap);
 		
-		JsonElement formDataJsonEle = new JsonParser().parse(formDataJson);
-		if (formDataJsonEle.isJsonArray()) {
-			return bulkSaveFormData(formId, formDataJson);
-		} else {
-			FormData formData = FormData.fromJson(formDataJson, formId);
-			FormDataDetail saveOp = FormDataDetail.ok(formId, formData.getRecordId(), formData);
-
-			ResponseEvent<FormDataDetail> resp = formSvc.saveFormData(getRequestEvent(saveOp));
-			resp.throwErrorIfUnsuccessful();
-			return resp.getPayload().getFormData().toJson();
-		}
+		FormDataDetail detail = new FormDataDetail();
+		detail.setFormId(formId);
+		detail.setFormData(formData);
+		detail.setRecordId(formData.getRecordId());
+		
+		ResponseEvent<FormDataDetail> resp = formSvc.saveFormData(getRequest(detail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload().getFormData().getFieldNameValueMap(formData.isUsingUdn());
 	}
-	
-	private String bulkSaveFormData(Long formId, String formDataJsonArray) {
-		JsonParser parser = new JsonParser();
-  		JsonArray records = parser.parse(formDataJsonArray).getAsJsonArray();
-  
-  		List<FormData> formDataList = new ArrayList<FormData>();
-  		for (int i = 0; i < records.size(); i++) {
-  			String formDataJson = records.get(i).toString();
-  			FormData formData = FormData.fromJson(formDataJson, formId);
-  			formDataList.add(formData);
-  		}
-				
-  		ResponseEvent<List<FormData>> resp = formSvc.saveBulkFormData(getRequestEvent(formDataList));
-  		resp.throwErrorIfUnsuccessful();
-  		
-  		List<String> savedFormData = new ArrayList<String>();
-  		for (FormData formData : resp.getPayload()) {
-  			savedFormData.add(formData.toJson());
-  		}
-  		return new Gson().toJson(savedFormData);
-  	}
+
+	/**
+	 * Commenting as this doesn't seem to be used in v2
+	 */
+//	private String bulkSaveFormData(Long formId, String formDataJsonArray) {
+//		JsonParser parser = new JsonParser();
+//  		JsonArray records = parser.parse(formDataJsonArray).getAsJsonArray();
+//  
+//  		List<FormData> formDataList = new ArrayList<FormData>();
+//  		for (int i = 0; i < records.size(); i++) {
+//  			String formDataJson = records.get(i).toString();
+//  			FormData formData = FormData.fromJson(formDataJson, formId);
+//  			formDataList.add(formData);
+//  		}
+//				
+//  		ResponseEvent<List<FormData>> resp = formSvc.saveBulkFormData(getRequestEvent(formDataList));
+//  		resp.throwErrorIfUnsuccessful();
+//  		
+//  		List<String> savedFormData = new ArrayList<String>();
+//  		for (FormData formData : resp.getPayload()) {
+//  			savedFormData.add(formData.toJson());
+//  		}
+//  		return new Gson().toJson(savedFormData);
+//  	}
 	
 	private String zipFiles(String dir) {
 		String zipFile = new StringBuilder(System.getProperty("java.io.tmpdir"))
@@ -293,7 +339,7 @@ public class FormsController {
 				.append(System.currentTimeMillis()).append(formCnt.incrementAndGet()).append("create").toString();
 	}
   
-	private <T> RequestEvent<T> getRequestEvent(T payload) {
+	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(payload);				
 	}	
 }

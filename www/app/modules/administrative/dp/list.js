@@ -3,15 +3,17 @@ angular.module('os.administrative.dp.list', ['os.administrative.models'])
   .controller('DpListCtrl', function($scope, $state, DistributionProtocol, Util) {
 
     function init() {
-      $scope.dpFilterOpts = {};
-      loadDps();
+      $scope.dpFilterOpts = {includeStats: true};
+      loadDps($scope.dpFilterOpts);
       Util.filter($scope, 'dpFilterOpts', filter);
     }
     
     function loadDps(filterOpts) {
-      DistributionProtocol.query(filterOpts).then(function(result) {
-        $scope.distributionProtocols = result; 
-      });
+      DistributionProtocol.query(filterOpts).then(
+        function(result) {
+          $scope.distributionProtocols = result; 
+        }
+      );
     }
 
     function filter(filterOpts) {

@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -58,14 +60,21 @@ public class SiteServiceImpl implements SiteService {
 	@PlusTransactional	
 	public ResponseEvent<List<SiteDetail>> getSites(RequestEvent<SiteListCriteria> req) {
 		try {
+			SiteListCriteria listCrit = req.getPayload();			
 			List<Site> sites = null;
-			if (AuthUtil.isAdmin()) {
-				sites = daoFactory.getSiteDao().getSites(req.getPayload());
-			} else {
-				sites = getAccessibleSites(req.getPayload());
-			} 
 			
-			return ResponseEvent.response(SiteDetail.from(sites));
+			if (AuthUtil.isAdmin()) {
+				sites = daoFactory.getSiteDao().getSites(listCrit);
+			} else {
+				sites = getAccessibleSites(listCrit);
+			}
+			
+			List<SiteDetail> result = SiteDetail.from(sites);
+			if (listCrit.includeStat()) {
+				addSiteStats(result);
+			}
+			
+			return ResponseEvent.response(result);
 		} catch(OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch(Exception ex) {
@@ -159,6 +168,22 @@ public class SiteServiceImpl implements SiteService {
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
+	}
+	
+	private void addSiteStats(List<SiteDetail> sites) {
+		if (CollectionUtils.isEmpty(sites)) {
+			return;
+		}
+		
+		Map<Long, SiteDetail> sitesMap = new HashMap<Long, SiteDetail>();
+		for (SiteDetail site : sites) {
+			sitesMap.put(site.getId(), site);
+		}
+		
+		Map<Long, Integer> cpCountMap = daoFactory.getSiteDao().getCpCountBySite(sitesMap.keySet());
+		for (Map.Entry<Long, Integer> cpCount : cpCountMap.entrySet()) {
+			sitesMap.get(cpCount.getKey()).setCpCount(cpCount.getValue());
+		}		
 	}
 
 	private ResponseEvent<SiteDetail> updateSite(RequestEvent<SiteDetail> req, boolean partial) {

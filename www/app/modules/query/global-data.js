@@ -78,12 +78,16 @@ angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models
       this.queryCtx = undefined;
     }
 
+    QueryGlobalData.prototype.setQueryCtx = function(queryCtx) {
+      this.queryCtx = queryCtx;
+    }
+
     QueryGlobalData.prototype.getQueryCtx = function(queryId) {
       if (this.queryCtx) {
         return this.queryCtx;
       }
 
-      if (!queryId) {
+      if (!queryId || queryId <= 0) {
         return this.newQueryCtx();
       }
 
@@ -200,4 +204,22 @@ angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models
     }
 
     return QueryGlobalData;
+  })
+
+  .factory('QueryCtxHolder', function() {
+    var queryCtx;
+ 
+    return {
+      getCtx: function() {
+        return queryCtx;
+      },
+
+      setCtx: function(ctx) {
+        queryCtx = ctx;
+      },
+
+      clearCtx: function() {
+        queryCtx = undefined;
+      }
+    };
   });

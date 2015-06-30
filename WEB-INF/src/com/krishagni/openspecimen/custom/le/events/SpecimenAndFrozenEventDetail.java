@@ -30,6 +30,10 @@ public class SpecimenAndFrozenEventDetail {
 	public static class EventDetail {
 		private Long id;
 		
+		private Long specimenId;
+		
+		private Long visitId;
+		
 		private Long reqId;
 		
 		private UserSummary user;
@@ -42,6 +46,22 @@ public class SpecimenAndFrozenEventDetail {
 
 		public void setId(Long id) {
 			this.id = id;
+		}
+
+		public Long getSpecimenId() {
+			return specimenId;
+		}
+
+		public void setSpecimenId(Long specimenId) {
+			this.specimenId = specimenId;
+		}
+
+		public Long getVisitId() {
+			return visitId;
+		}
+
+		public void setVisitId(Long visitId) {
+			this.visitId = visitId;
 		}
 
 		public Long getReqId() {

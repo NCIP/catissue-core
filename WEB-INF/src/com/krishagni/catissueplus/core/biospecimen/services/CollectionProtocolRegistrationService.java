@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentFormDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationsList;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
@@ -34,11 +35,16 @@ public interface CollectionProtocolRegistrationService {
 	//
 	// TODO: Requires review
 	// 
-	ResponseEvent<CollectionProtocolRegistrationDetail> updateRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req);
+	public ResponseEvent<CollectionProtocolRegistrationDetail> updateRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req);
 	
-	ResponseEvent<File> getConsentForm(RequestEvent<RegistrationQueryCriteria> req);
+	public ResponseEvent<File> getConsentForm(RequestEvent<RegistrationQueryCriteria> req);
 	
-	ResponseEvent<String> uploadConsentForm(RequestEvent<ConsentFormDetail> req);
+	public ResponseEvent<String> uploadConsentForm(RequestEvent<ConsentFormDetail> req);
 
-	ResponseEvent<Boolean> deleteConsentForm(RequestEvent<RegistrationQueryCriteria> req);
+	public ResponseEvent<Boolean> deleteConsentForm(RequestEvent<RegistrationQueryCriteria> req);
+
+	public ResponseEvent<ConsentDetail> saveConsents(RequestEvent<ConsentDetail> req);
+
+	public ResponseEvent<ConsentDetail> getConsents(RequestEvent<RegistrationQueryCriteria> req);
 }
+

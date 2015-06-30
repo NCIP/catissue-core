@@ -215,6 +215,11 @@ angular.module('openspecimen', [
             params: toParams
           };
         }
+
+        $rootScope.stateChangeInfo = {
+          toState  : toState,   toParams  : toParams,
+          fromState: fromState, fromParams: fromParams
+        };
       });
 
     $rootScope.back = function() {

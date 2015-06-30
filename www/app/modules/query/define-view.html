@@ -110,84 +110,128 @@
 </script>
 
 <script type="text/ng-template" id="pivot-table.html">
-  <div class="os-query-dv-pivot-table">
-    <div class="form-group">
-      <label translate="queries.report_type">Report Type</label>
-      <os-select 
-        placeholder="{{'queries.select_report_type' | translate}}"
-        list="reportingOpts" 
-        display-prop="label"
-        select-prop="type"
-        on-select="onReportTypeSelect()"
-        ng-model="reporting.type">
-      </os-select>
-    </div>
-
-    <div ng-if="reporting.type == 'crosstab'">
+  <div class="os-query-dv-pivot-table form-horizontal">
+    <div class="os-offset-form-horizontal">
       <div class="form-group">
-        <label for="group-rows-by" translate="queries.row_fields">Row Fields</label>
-        <os-select id="group-rows-by"
-          placeholder="{{'queries.select_row_group_fields' | translate}}"
-          list="groupRowsBy"
-          display-prop="value"
-          on-change="onGroupRowsByChange"
-          multiple ng-model="reporting.params.groupRowsBy">
-        </os-select>
-      </div>
-
-      <div class="form-group">
-        <label for="group-col-by" translate="queries.column_field">Column Field</label>
-        <os-select id="group-col-by"
-          placeholder="{{'queries.select_col_group_field' | translate}}"
-          list="groupColBy"
-          display-prop="value"
-          on-change="onGroupColByChange"
-          ng-model="reporting.params.groupColBy">
-        </os-select>
-      </div>
-
-      <div class="form-group">
-        <label for="summary-value" translate="queries.value_fields">Value Fields</label>
-        <os-select id="summary-value"
-          placeholder="{{'queries.select_summary_fields' | translate}}"
-          list="summaryFields"
-          display-prop="value"
-          on-change="onSummaryFieldChange"
-          multiple ng-model="reporting.params.summaryFields">
-        </os-select>
-      </div>
-
-      <div class="form-group">
-        <label class="checkbox-inline">
-          <input type="checkbox" ng-model="reporting.params.includeSubTotals" 
-            ng-checked="reporting.params.includeSubTotals">
-          <span translate="queries.include_sub_totals">
-            Include sub-totals
-          </span>
+        <label class="control-label os-col-20" translate="queries.report_type">
+          Report Type
         </label>
+        <div class="os-col-80">
+          <os-select 
+            placeholder="{{'queries.select_report_type' | translate}}"
+            list="reportingOpts" 
+            display-prop="label"
+            select-prop="type"
+            on-select="onReportTypeSelect()"
+            ng-model="reporting.type">
+          </os-select>
+        </div>
       </div>
-    </div>
 
-    <div ng-if="reporting.type == 'columnsummary'">
-      <div class="form-group">
-        <label translate="queries.total_fields">Total Fields</label>
-        <os-select 
-          placeholder="{{'queries.select_total_fields' | translate}}"
-          list="columnSumFields"
-          display-prop="value"
-          on-change="onColumnSumFieldsChange"
-          multiple ng-model="reporting.params.sum">
-        </os-select>
+      <div ng-if="reporting.type == 'crosstab'">
+        <div class="form-group">
+          <label class="control-label os-col-20" for="group-rows-by" translate="queries.row_fields">
+            Row Fields
+          </label>
+          <div class="os-col-80">
+            <os-select id="group-rows-by"
+              placeholder="{{'queries.select_row_group_fields' | translate}}"
+              list="groupRowsBy"
+              display-prop="value"
+              on-change="onGroupRowsByChange"
+              multiple ng-model="reporting.params.groupRowsBy">
+            </os-select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label os-col-20" for="group-col-by" translate="queries.column_field">
+            Column Field
+          </label>
+          <div class="os-col-80">
+            <os-select id="group-col-by"
+              placeholder="{{'queries.select_col_group_field' | translate}}"
+              list="groupColBy"
+              display-prop="value"
+              on-change="onGroupColByChange"
+              ng-model="reporting.params.groupColBy">
+            </os-select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label os-col-20" for="summary-value" translate="queries.value_fields">
+            Value Fields
+          </label>
+          <div class="os-col-80">
+            <os-select id="summary-value"
+              placeholder="{{'queries.select_summary_fields' | translate}}"
+              list="summaryFields"
+              display-prop="value"
+              on-change="onSummaryFieldChange"
+              multiple ng-model="reporting.params.summaryFields">
+            </os-select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label os-col-20" for="excl-value" translate="queries.excl_rollup">
+            Exclude Rollup for
+          </label>
+          <div class="os-col-80">
+            <os-select id="excl-value"
+              placeholder="{{'queries.select_excl_rollup' | translate}}"
+              list="reporting.params.summaryFields"
+              display-prop="value"
+              multiple ng-model="reporting.params.rollupExclFields">
+            </os-select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label os-col-20">&nbsp;</label>
+          <div class="os-col-80">
+            <label class="checkbox-inline">
+              <input type="checkbox" ng-model="reporting.params.includeSubTotals" 
+                ng-checked="reporting.params.includeSubTotals">
+              <span translate="queries.include_sub_totals">
+                Include sub-totals
+              </span>
+            </label>
+          </div>
+        </div>
       </div>
-      <div class="form-group">
-        <label translate="queries.avg_fields">Average Fields</label>
-        <os-select 
-          placeholder="{{'queries.select_avg_fields' | translate}}"
-          list="columnAvgFields"
-          display-prop="value"
-          on-change="onColumnAvgFieldsChange"
-          multiple ng-model="reporting.params.avg">
-        </os-select>
+
+      <div ng-if="reporting.type == 'columnsummary'">
+        <div class="form-group">
+          <label class="control-label os-col-20" translate="queries.total_fields">
+            Total Fields
+          </label>
+          <div class="os-col-80">
+            <os-select 
+              placeholder="{{'queries.select_total_fields' | translate}}"
+              list="columnSumFields"
+              display-prop="value"
+              on-change="onColumnSumFieldsChange"
+              multiple ng-model="reporting.params.sum">
+            </os-select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label os-col-20" translate="queries.avg_fields">
+            Average Fields
+          </label>
+          <div class="os-col-80">
+            <os-select 
+              placeholder="{{'queries.select_avg_fields' | translate}}"
+              list="columnAvgFields"
+              display-prop="value"
+              on-change="onColumnAvgFieldsChange"
+              multiple ng-model="reporting.params.avg">
+            </os-select>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -106,6 +106,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setSpecimenType(detail, existing, specimen, ose);
 		setCreatedOn(detail, existing, specimen, ose);
 		setBiohazards(detail, existing, specimen, ose);
+		setComments(detail, existing, specimen, ose);
 				
 		if (sr != null && 
 				(!sr.getSpecimenClass().equals(specimen.getSpecimenClass()) ||
@@ -585,6 +586,14 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			setBiohazards(detail, specimen, ose);
 		} else {
 			specimen.setBiohazards(existing.getBiohazards());
+		}
+	}
+	
+	private void setComments(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {
+		if (existing == null || detail.isAttrModified("comments")) {
+			specimen.setComment(detail.getComments());
+		} else {
+			specimen.setComment(existing.getComment());
 		}
 	}
 	

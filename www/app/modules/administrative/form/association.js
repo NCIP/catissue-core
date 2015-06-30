@@ -1,6 +1,8 @@
 angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
   .controller('FormCtxtsCtrl', function($scope, $modalInstance, $translate, args, Alerts) {
 
+    var reload = false;
+
     function init() {
       $scope.showFormCtxts = true;
       $scope.extnEntities = [
@@ -82,12 +84,12 @@ angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
       var formContext = $scope.form.newFormContext({form: $scope.form, cpId: cpId, entityType: entity.entity});
 
       formContext.$remove().then(
-        function(ctxIds) {
-          $scope.formCtxts.splice($scope.removeCtxData.idx, 1);
+        function() {
+          $scope.cpFormCtxts.splice($scope.removeCtxData.idx, 1);
           $scope.showFormCtxts = true;
+          Alerts.success("form.association_deleted", $scope.removeCtxData.ctx);
           $scope.removeCtxData = {};
-          
-          //Utility.notify($("#ctx-alerts"), "Deleted!", "success", true);
+          reload = true;
         }
       );
     };
@@ -99,7 +101,7 @@ angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
 
 
     $scope.cancel = function() {
-      $modalInstance.dismiss('cancel');
+      $modalInstance.close(reload);
     }
 
     init();

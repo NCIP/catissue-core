@@ -48,15 +48,19 @@ public class DistributionProtocolController {
 			@RequestParam(value = "startAt", required = false, defaultValue = "0") 
 			int startAt,
 			
-			@RequestParam(value = "maxResults", required = false, defaultValue = "100") 
-			int maxResults) {
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
+			int maxResults,
+
+			@RequestParam(value = "includeStats", required = false, defaultValue = "false")
+			boolean includeStats) {
 		
 		DpListCriteria criteria = new DpListCriteria()
 			.startAt(startAt)
 			.maxResults(maxResults)
 			.query(searchStr)
 			.title(title)
-			.piId(piId);
+			.piId(piId)
+			.includeStat(includeStats);
 		
 		
 		ResponseEvent<List<DistributionProtocolDetail>> resp = dpSvc.getDistributionProtocols(getRequest(criteria));

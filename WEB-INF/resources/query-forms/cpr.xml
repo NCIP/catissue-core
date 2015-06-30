@@ -1,6 +1,4 @@
-#macro( getMessage $code )
-  $messageSource.getMessage($code, null, $locale)  
-#end
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
 
 <form>
   <view>
@@ -275,14 +273,6 @@
         <column>CONSENT_SIGN_DATE</column>
         <format>MM-dd-yyyy</format>
       </datePicker>
-    </row>
-    <row>
-      <textField>
-        <name>consentDocUrl</name>
-        <udn>consentDocUrl</udn>
-        <caption>#getMessage("participant_consent_document_url")</caption>
-        <column>CONSENT_DOC_URL</column>
-      </textField>
     </row>
     <row>
       <subForm>

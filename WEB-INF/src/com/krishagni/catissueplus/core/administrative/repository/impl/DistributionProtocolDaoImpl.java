@@ -1,7 +1,10 @@
 
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -49,6 +52,22 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 				.setString("title", title)
 				.list();
 		return CollectionUtils.isNotEmpty(dps) ? dps.iterator().next() : null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<Long, Integer> getSpecimensCountByDpIds(Collection<Long> dpIds) {
+		List<Object[]> rows = getSessionFactory().getCurrentSession()
+				.getNamedQuery(GET_SPMN_COUNT_BY_DPS)
+				.setParameterList("dpIds", dpIds)
+				.list();
+		
+		Map<Long, Integer> countMap = new HashMap<Long, Integer>();
+		for (Object[] row : rows) {
+			countMap.put((Long)row[0], ((Long)row[1]).intValue());
+		}
+		
+		return countMap;
 	}
 	
 	public Class<DistributionProtocol> getType() {
@@ -101,5 +120,6 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 	private static final String GET_DP_BY_TITLE = FQN + ".getDistributionProtocolByTitle";
 
 	private static final String GET_DP_BY_SHORT_TITLE = FQN + ".getDistributionProtocolByShortTitle";
-
+	
+	private static final String GET_SPMN_COUNT_BY_DPS = FQN + ".getSpmnCountByDps";
 }

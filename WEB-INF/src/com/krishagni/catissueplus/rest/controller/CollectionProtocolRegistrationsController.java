@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentFormDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
@@ -62,47 +63,51 @@ public class CollectionProtocolRegistrationsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<CprSummary> getRegistrations(
-			@RequestParam(value = "cpId",         required = true)
+			@RequestParam(value = "cpId",             required = true)
 			Long cpId,
 			
-			@RequestParam(value = "query",        required = false)
+			@RequestParam(value = "registrationDate", required = false) 
+			@DateTimeFormat(pattern="yyyy-MM-dd")
+			Date registrationDate,
+			
+			@RequestParam(value = "query",            required = false)
 			String searchStr,
 			
-			@RequestParam(value = "name",         required = false)
+			@RequestParam(value = "name",             required = false)
 			String name,
 			
-			@RequestParam(value = "ppid",         required = false)
+			@RequestParam(value = "ppid",             required = false)
 			String ppid,
 			
-			@RequestParam(value = "mrn",          required = false)
-			String mrn,
+			@RequestParam(value = "participantId",    required = false)
+			String participantId,
 			
-			@RequestParam(value = "empi",         required = false)
+			@RequestParam(value = "empi",             required = false)
 			String empi,
 			
-			@RequestParam(value = "dob",          required = false) 
+			@RequestParam(value = "dob",              required = false) 
 			@DateTimeFormat(pattern="yyyy-MM-dd")
 			Date dob,
 			
-			@RequestParam(value = "specimen",     required = false)
+			@RequestParam(value = "specimen",         required = false)
 			String specimen,
 			
-			@RequestParam(value = "startAt",      required = false, defaultValue = "0")
+			@RequestParam(value = "startAt",          required = false, defaultValue = "0")
 			int startAt,
 			
-			@RequestParam(value = "maxRecs",      required = false, defaultValue = "100")
+			@RequestParam(value = "maxRecs",          required = false, defaultValue = "100")
 			int maxRecs,
 			
-			@RequestParam(value = "includeStats", required = false, defaultValue = "false") 
+			@RequestParam(value = "includeStats",     required = false, defaultValue = "false") 
 			boolean includeStats) {
 
 		CprListCriteria crit = new CprListCriteria()
 			.cpId(cpId)
+			.registrationDate(registrationDate)
 			.query(searchStr)
 			.name(name)
 			.ppid(ppid)
-			.mrn(mrn)
-			.empi(empi)
+			.participantId(participantId)
 			.dob(dob)
 			.specimen(specimen)
 			.startAt(startAt)
@@ -211,6 +216,28 @@ public class CollectionProtocolRegistrationsController {
 		ResponseEvent<Boolean> resp = cprSvc.deleteConsentForm(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, value="/{id}/consents")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ConsentDetail getConsents(@PathVariable("id") Long cprId) {
+		RegistrationQueryCriteria crit = new RegistrationQueryCriteria();
+		crit.setCprId(cprId);
+		
+		ResponseEvent<ConsentDetail> resp = cprSvc.getConsents(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method= RequestMethod.PUT, value="/{id}/consents")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ConsentDetail saveConsents(@PathVariable("id") Long cprId, @RequestBody ConsentDetail detail) {
+		detail.setCprId(cprId);
+		ResponseEvent<ConsentDetail> resp = cprSvc.saveConsents(getRequest(detail));
+		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 

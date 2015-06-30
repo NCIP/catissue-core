@@ -53,7 +53,7 @@
 
     <property name="unsignedConsentDocumentURL" column="UNSIGNED_CONSENT_DOC_URL"/>
 
-    <set name="consentTier" table="CATISSUE_CONSENT_TIER" inverse="false" cascade="all-delete-orphan">
+    <set name="consentTier" table="CATISSUE_CONSENT_TIER" inverse="false" cascade="all-delete-orphan" order-by="id">
       <key column="COLL_PROTOCOL_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier"/>
     </set>
@@ -77,12 +77,17 @@
     <set name="collectionProtocolRegistrations" inverse="false" cascade="none">
       <key column="COLLECTION_PROTOCOL_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration"/>
+      <filter name="activeEntity"/>
     </set>
     
     <set name="storageContainers" table="OS_STOR_CONTAINER_CPS" inverse="false">
       <key column="CP_ID"/>
-      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" column="STORAGE_CONTAINER_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" column="STORAGE_CONTAINER_ID">
+        <filter name="activeEntity"/>
+      </many-to-many>
     </set>
+    
+    <filter name="activeEntity"/>
 
     <sql-query name="getParticipantAndSpecimenCount">
       <return-scalar column="cpId" type="long"/>

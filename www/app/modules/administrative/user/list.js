@@ -7,12 +7,12 @@ angular.module('os.administrative.user.list', ['os.administrative.models'])
     var pvInit = false;
 
     function init() {
-      loadUsers();
+      loadUsers({includeStats: true});
       initPvsAndFilterOpts();
     }
   
     function initPvsAndFilterOpts() {
-      $scope.userFilterOpts = {};
+      $scope.userFilterOpts = {includeStats: true};
       $scope.$on('osRightDrawerOpen', function() {
         if (pvInit) {
           return;

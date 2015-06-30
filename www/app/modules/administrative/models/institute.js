@@ -48,11 +48,12 @@ angular.module('os.administrative.models.institute', ['os.common.models'])
       return this;
     }
 
-    Institute.getByName = function (instituteName) {
-      return Institute.query({name : instituteName, exactMatch : true})
-        .then(function(result) {
-          return result ? result[0] : null;
-        });
+    Institute.getByName = function (name) {
+      return $http.get(Institute.url() + 'byname', {params: {name: name}}).then(
+        function(result) {
+          return new Institute(result.data);
+        }
+      );
     }
 
     return Institute;

@@ -16,7 +16,7 @@
     <property name="name" column="NAME"/>
 
     <property name="activityStatus" column="ACTIVITY_STATUS"/>
-            
+    
     <set 
       name="departments"
       table="OS_DEPARTMENTS" 
@@ -30,14 +30,29 @@
     <set name="sites" inverse="false" cascade="none">
       <key column="INSTITUTE_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.Site"/>
+      <filter name="activeEntity"/>
     </set>
 
+    <filter name="activeEntity"/>
+	
     <query name="getInstituteByName">
       from
         com.krishagni.catissueplus.core.administrative.domain.Institute institute 
       where
         institute.name = :name and institute.activityStatus != 'Disabled' 
     </query>
-    
+
+    <query name="getInstituteStats">
+      select
+        institute.id, count(distinct dept.id), count(distinct user.id)
+      from
+        com.krishagni.catissueplus.core.administrative.domain.Institute institute 
+        join institute.departments dept
+        join dept.users user
+      where
+        institute.id in (:instituteIds)
+      group by
+        institute.id
+    </query>
   </class>
 </hibernate-mapping>

@@ -4,13 +4,17 @@ package com.krishagni.catissueplus.core.administrative.repository.impl;
 import static com.krishagni.catissueplus.core.common.util.Utility.numberToLong;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -34,7 +38,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	public List<UserSummary> getUsers(UserListCriteria listCrit) {
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(User.class, "u")
-				.add(Restrictions.ne("u.activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus()))
 				.add( // not system user
 					Restrictions.not(Restrictions.conjunction()
 						.add(Restrictions.eq("u.loginName", User.SYS_USER))
@@ -48,7 +51,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		
 		addSearchConditions(criteria, listCrit);
 		addProjectionFields(criteria);
-		return getUsers(criteria.list());
+		return getUsers(criteria.list(), listCrit);
 	}
 	
 	public List<User> getUsersByIds(List<Long> userIds) {
@@ -59,7 +62,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	public List<User> getUsersByIdsAndInstitute(List<Long> userIds, Long instituteId) {
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(User.class, "u")
-				.add(Restrictions.ne("u.activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus()))
 				.add(Restrictions.in("u.id", userIds));
 		
 		if (instituteId != null) {
@@ -110,7 +112,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		
 		return getDependentEntities(rows);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public ForgotPasswordToken getFpToken(String token) {
 		List<ForgotPasswordToken> result = sessionFactory.getCurrentSession()
@@ -141,24 +143,51 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		sessionFactory.getCurrentSession().delete(token);
 	}
 	
-	private List<UserSummary> getUsers(List<Object[]> rows) {
+	private List<UserSummary> getUsers(List<Object[]> rows, UserListCriteria listCrit) {		
+		Map<Long, UserSummary> userSummaryMap = new HashMap<Long, UserSummary>();
+
 		List<UserSummary> result = new ArrayList<UserSummary>();
-		for (Object[] row : rows) {			
-			result.add(getUserSummary(row));			
+		for (Object[] row : rows) {
+			UserSummary userSummary = getUserSummary(row);
+			if (listCrit.includeStat()) {
+				userSummaryMap.put(userSummary.getId(), userSummary);
+			}
+			
+			result.add(userSummary);
+		}
+
+		if (!listCrit.includeStat() || result.isEmpty()) {
+			return result;
+		}
+
+		List<Object[]> countRows  = getCpCount(userSummaryMap.keySet());
+		for (Object[] row : countRows) {
+			UserSummary userSummary = userSummaryMap.get((Long)row[0]);
+			userSummary.setCpCount((Integer)row[1]);
 		}
 		
 		return result;		
 	}
 
-	private UserSummary getUserSummary(Object[] row) {
+	private UserSummary getUserSummary(Object[] row) {		
 		UserSummary userSummary = new UserSummary();
 		userSummary.setId(numberToLong(row[0]));
 		userSummary.setFirstName((String)row[1]);
 		userSummary.setLastName((String)row[2]);
 		userSummary.setLoginName((String)row[3]);
-		return userSummary;		
+		userSummary.setCreationDate((Date)row[4]);
+		return userSummary;
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	private List<Object[]> getCpCount(Set<Long> userIds) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CP_COUNT_BY_USERS)
+				.setParameterList("userIds", userIds)
+				.list();
+
+	}
+
 	@SuppressWarnings("unchecked")
 	private List<User> executeGetUserByLoginNameHql(String hql, String loginName, String domainName) {
 		return sessionFactory.getCurrentSession()
@@ -183,12 +212,12 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 			addNameRestriction(criteria, listCrit.name());
 			addLoginNameRestriction(criteria, listCrit.loginName());
 		} else {
-			Criterion srchCond = Restrictions.disjunction()
+			criteria.add(
+				Restrictions.disjunction()
 					.add(Restrictions.ilike("u.firstName", searchString, MatchMode.ANYWHERE))
-					.add(Restrictions.ilike("u.lastName", searchString, MatchMode.ANYWHERE))
-					.add(Restrictions.ilike("u.loginName", searchString, MatchMode.ANYWHERE));
-			
-			criteria.add(srchCond);
+					.add(Restrictions.ilike("u.lastName",  searchString, MatchMode.ANYWHERE))
+					.add(Restrictions.ilike("u.loginName", searchString, MatchMode.ANYWHERE))
+			);
 		}
 		
 		addActivityStatusRestriction(criteria, listCrit.activityStatus());
@@ -200,10 +229,11 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 			return;
 		}
 		
-		Criterion nameCond = Restrictions.disjunction()
+		criteria.add(
+			Restrictions.disjunction()
 				.add(Restrictions.ilike("u.firstName", name, MatchMode.ANYWHERE))
-				.add(Restrictions.ilike("u.lastName", name, MatchMode.ANYWHERE));
-		criteria.add(nameCond);
+				.add(Restrictions.ilike("u.lastName", name, MatchMode.ANYWHERE))
+		);
 	}
 	
 	private void addLoginNameRestriction(Criteria criteria, String loginName) {
@@ -211,8 +241,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 			return;
 		}
 		
-		Criterion loginNameCond = Restrictions.ilike("u.loginName", loginName, MatchMode.ANYWHERE);
-		criteria.add(loginNameCond);
+		criteria.add(Restrictions.ilike("u.loginName", loginName, MatchMode.ANYWHERE));
 	}
 	
 	private void addActivityStatusRestriction(Criteria criteria, String activityStatus) {
@@ -220,8 +249,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 			return;
 		}
 		
-		Criterion activityStatusCond = Restrictions.eq("u.activityStatus", activityStatus);
-		criteria.add(activityStatusCond);
+		criteria.add(Restrictions.eq("u.activityStatus", activityStatus));
 	}
 	
 	private void addInstituteRestriction(Criteria criteria, String instituteName) {
@@ -236,11 +264,12 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
 	private void addProjectionFields(Criteria criteria) {
 		criteria.setProjection(Projections.distinct(
-				Projections.projectionList()
-					.add(Projections.property("u.id"), "id")
-					.add(Projections.property("u.firstName"), "firstName")
-					.add(Projections.property("u.lastName"), "lastName")
-					.add(Projections.property("u.loginName"), "loginName")
+			Projections.projectionList()
+				.add(Projections.property("u.id"), "id")
+				.add(Projections.property("u.firstName"), "firstName")
+				.add(Projections.property("u.lastName"), "lastName")
+				.add(Projections.property("u.loginName"), "loginName")
+				.add(Projections.property("u.creationDate"), "creationDate")
 		));
 	}
 	
@@ -264,8 +293,10 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	
 	private static final String FQN = User.class.getName();
 
-	private static final String GET_DEPENDENT_ENTITIES = FQN + ".getDependentEntities"; 
-	
+	private static final String GET_DEPENDENT_ENTITIES = FQN + ".getDependentEntities";
+
+	private static final String GET_CP_COUNT_BY_USERS = FQN + ".getCpCountByUsers";
+
 	private static final String TOKEN_FQN = ForgotPasswordToken.class.getName();
 	
 	private static final String GET_FP_TOKEN_BY_USER = TOKEN_FQN + ".getFpTokenByUser";
