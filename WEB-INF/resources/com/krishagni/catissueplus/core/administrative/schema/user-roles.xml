@@ -1,6 +1,4 @@
-#macro( getMessage $code )
-  $messageSource.getMessage($code, null, $locale)
-#end
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
 
 <object-schema>
   <name>userRoles</name>
