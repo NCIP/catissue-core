@@ -65,8 +65,10 @@ public class UserController {
 			String institute,
 			
 			@RequestParam(value = "activityStatus", required = false)
-			String activityStatus
-			){
+			String activityStatus,
+
+			@RequestParam(value = "includeStats", required = false, defaultValue = "false")
+			boolean includeStats) {
 		
 		UserListCriteria crit = new UserListCriteria()
 			.startAt(start)
@@ -75,7 +77,8 @@ public class UserController {
 			.name(name)
 			.loginName(loginName)
 			.instituteName(institute)
-			.activityStatus(activityStatus);
+			.activityStatus(activityStatus)
+			.includeStat(includeStats);
 		
 		
 		RequestEvent<UserListCriteria> req = new RequestEvent<UserListCriteria>(crit);

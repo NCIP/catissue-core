@@ -41,6 +41,18 @@
       where
         institute.name = :name and institute.activityStatus != 'Disabled' 
     </query>
-    
+
+    <query name="getInstituteStats">
+      select
+        institute.id, count(distinct dept.id), count(distinct user.id)
+      from
+        com.krishagni.catissueplus.core.administrative.domain.Institute institute 
+        join institute.departments dept
+        join dept.users user
+      where
+        institute.id in (:instituteIds)
+      group by
+        institute.id
+    </query>
   </class>
 </hibernate-mapping>

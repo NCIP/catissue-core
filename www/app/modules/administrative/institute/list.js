@@ -2,8 +2,8 @@ angular.module('os.administrative.institute.list', ['os.administrative.models'])
   .controller('InstituteListCtrl', function($scope, $state, Institute, Util) {
 
     function init() {
-      $scope.instituteFilterOpts = {};
-      loadInstitutes();
+      $scope.instituteFilterOpts = {includeStats: true};
+      loadInstitutes($scope.instituteFilterOpts);
       Util.filter($scope, 'instituteFilterOpts', loadInstitutes);
     }
 

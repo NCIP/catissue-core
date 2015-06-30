@@ -83,6 +83,18 @@
       where 
         site.code = :siteCode and site.activityStatus != 'Disabled'
     </query>
+
+    <query name="getCpCountBySites">
+      select
+        site.id, count(cp.id)
+      from
+        com.krishagni.catissueplus.core.administrative.domain.Site site
+        join site.collectionProtocols cp
+      where
+        site.id in (:siteIds)
+      group by
+        site.id
+    </query>
   </class>
 </hibernate-mapping>
  	

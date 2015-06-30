@@ -1,16 +1,21 @@
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
+import com.krishagni.catissueplus.core.administrative.events.InstituteSummary;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
@@ -25,19 +30,38 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Institute> getInstitutes(InstituteListCriteria listCrit) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(Institute.class)
+	public List<InstituteSummary> getInstitutes(InstituteListCriteria listCrit) {
+		Criteria query = sessionFactory.getCurrentSession()
+			.createCriteria(Institute.class, "institute")
 			.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
-			.addOrder(Order.asc("name"))
+			.addOrder(Order.asc("institute.name"))
 			.setFirstResult(listCrit.startAt())
 			.setMaxResults(listCrit.maxResults());
 				
-		if (StringUtils.isNotBlank(listCrit.query())) {
-			MatchMode matchMode = listCrit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;  
-			query.add(Restrictions.ilike("name", listCrit.query(), matchMode));
+		addSearchConditions(query, listCrit);
+		addProjectionFields(query);
+		
+		List<Object[]> rows = query.list();
+		List<InstituteSummary> institutes = new ArrayList<InstituteSummary>();
+		Map<Long, InstituteSummary> instituteMap = new HashMap<Long, InstituteSummary>();
+		
+		for (Object[] row : rows) {
+			InstituteSummary institute = new InstituteSummary();
+			institute.setId((Long)row[0]);
+			institute.setName((String)row[1]);
+			institute.setActivityStatus((String)row[2]);
+			institutes.add(institute);
+			
+			if (listCrit.includeStat()) {
+				instituteMap.put(institute.getId(), institute);
+			}
 		}
-
-		return query.list();
+		
+		if (listCrit.includeStat()) {
+			addInstituteStats(instituteMap);
+		}
+		
+		return institutes;
 	}
 	
 	@Override
@@ -74,6 +98,43 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 		
 		return results.isEmpty() ? null : results.get(0);
 	}
+
+	private void addSearchConditions(Criteria query, InstituteListCriteria listCrit) {
+		if (StringUtils.isBlank(listCrit.query())) {
+			return;
+		}
+		
+		MatchMode matchMode = listCrit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;  
+		query.add(Restrictions.ilike("name", listCrit.query(), matchMode));		
+	}
+	
+	private void addProjectionFields(Criteria query) {
+		query.setProjection(Projections.distinct(
+			Projections.projectionList()
+				.add(Projections.property("institute.id"), "id")
+				.add(Projections.property("institute.name"), "name")
+				.add(Projections.property("institute.activityStatus"), "activityStatus")
+		));
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void addInstituteStats(Map<Long, InstituteSummary> institutesMap) {
+		if (institutesMap == null || institutesMap.isEmpty()) {
+			return;
+		}
+		
+		List<Object[]> stats = getSessionFactory().getCurrentSession()
+			.getNamedQuery(GET_INSTITUTE_STATS)
+			.setParameterList("instituteIds", institutesMap.keySet())
+			.list();
+		
+		for (Object[] stat : stats) {
+			InstituteSummary institute = institutesMap.get((Long)stat[0]);
+			institute.setDepartmentsCount(((Long)stat[1]).intValue());
+			institute.setUsersCount(((Long)stat[2]).intValue());
+		}
+	}
+	
 	
 	private static final String INSTITUTE_FQN = Institute.class.getName();
 	
@@ -81,8 +142,9 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 	
 	private static final String GET_INSTITUTE_BY_NAME = INSTITUTE_FQN + ".getInstituteByName";
 	
+	private static final String GET_INSTITUTE_STATS = INSTITUTE_FQN + ".getInstituteStats";
+	
 	private static final String GET_DEPARTMENT = DEPARTMENT_FQN + ".getDepartment";
 	
-	private static final String GET_DEPT_BY_NAME_AND_INSTITUTE = DEPARTMENT_FQN + ".getDeptByNameAndInstitute";
-	
+	private static final String GET_DEPT_BY_NAME_AND_INSTITUTE = DEPARTMENT_FQN + ".getDeptByNameAndInstitute";	
 }
