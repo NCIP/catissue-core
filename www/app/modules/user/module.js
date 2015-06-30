@@ -37,13 +37,22 @@ angular.module('openspecimen')
         resolve: {
           videoSettings : function (Setting, $state) {
             return Setting.getWelcomeVideoSetting().then(function (data) {
-              if (data.welcome_video_source !== 'vimeo' &&
-                data.welcome_video_source !== 'youtube') {
-                $state.go('sign-up');
+              var result = {};
+              for (i=0; i<data.length; i++) {
+                if (data[i].name === 'welcome_video_source') {
+                  if (data[i].value !== 'vimeo' && data[i].value !== 'youtube') {
+                    $state.go('sign-up');
+                    return;
+                  }
+                  else {
+                    result['welcome_video_source'] = data[i].value;
+                  }
+                }
+                else if (data[i].name === 'welcome_video_url') {
+                  result['welcome_video_url'] = data[i].value;
+                }
               }
-              else {
-                return data;
-              }
+              return result;
             });
           }
         },

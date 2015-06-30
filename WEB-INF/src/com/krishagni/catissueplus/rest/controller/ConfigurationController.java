@@ -58,7 +58,9 @@ public class ConfigurationController {
 	@RequestMapping(method = RequestMethod.GET, value="/welcome-video")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public Map<String, String> getWelcomeVideoSettings() {
-		return cfgSvc.getWelcomeVideoSettings();
+	public List<ConfigSettingDetail> getWelcomeVideoSettings() {
+		ResponseEvent<List<ConfigSettingDetail>> resp = cfgSvc.getWelcomeVideoSettings();
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 }

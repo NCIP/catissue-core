@@ -21,6 +21,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.domain.ConfigErrorCode;
 import com.krishagni.catissueplus.core.common.domain.ConfigProperty;
+import com.krishagni.catissueplus.core.common.domain.ConfigProperty.DataType;
 import com.krishagni.catissueplus.core.common.domain.ConfigSetting;
 import com.krishagni.catissueplus.core.common.domain.Module;
 import com.krishagni.catissueplus.core.common.events.ConfigSettingDetail;
@@ -286,17 +287,22 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	}
 	
 	@PlusTransactional
-	public Map<String, String> getWelcomeVideoSettings() {
-		Map<String, String> result = new HashMap<String, String>();
-		List<ConfigSetting> settings = daoFactory.getConfigSettingDao().getAllSettingsByModule("common");
-		for (ConfigSetting setting : settings) {
-			if ("welcome_video_source".equals(setting.getProperty().getName())) {
-				result.put("welcome_video_source", setting.getValue());
-			}
-			else if ("welcome_video_url".equals(setting.getProperty().getName())) {
-				result.put("welcome_video_url", setting.getValue());
-			}
-		}
-		return result;
+	public ResponseEvent<List<ConfigSettingDetail>> getWelcomeVideoSettings() {
+		List<ConfigSettingDetail> result = new ArrayList<ConfigSettingDetail>();
+		String welcome_video_source = getStrSetting("common", "welcome_video_source");
+		ConfigSettingDetail source = new ConfigSettingDetail();
+		source.setModule("common");
+		source.setName("welcome_video_source");
+		source.setType(DataType.STRING);
+		source.setValue(welcome_video_source);
+		result.add(source);
+		String welcome_video_url = getStrSetting("common", "welcome_video_url");
+		ConfigSettingDetail url = new ConfigSettingDetail();
+		url.setModule("common");
+		url.setName("welcome_video_url");
+		url.setType(DataType.STRING);
+		url.setValue(welcome_video_url);
+		result.add(url);
+		return new ResponseEvent<List<ConfigSettingDetail>>(result);
 	}
 }
