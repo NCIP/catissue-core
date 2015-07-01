@@ -244,8 +244,8 @@
             <column defaultValueComputed="NULL" name="STUDY_CALENDAR_EVENT_POINT" type="FLOAT(126)"/>
             <column name="IS_EMPI_ENABLE" type="NUMBER(1,0)"/>
             <column name="PRINCIPAL_INVESTIGATOR_ID" type="NUMBER(19,0)"/>
-            <column name="TITLE" type="VARCHAR2(512 BYTE)"/>
-            <column name="SHORT_TITLE" type="VARCHAR2(512 BYTE)"/>
+            <column name="TITLE" type="VARCHAR2(255 BYTE)"/>
+            <column name="SHORT_TITLE" type="VARCHAR2(255 BYTE)"/>
             <column name="IRB_IDENTIFIER" type="VARCHAR2(255 BYTE)"/>
             <column name="START_DATE" type="DATE"/>
             <column name="END_DATE" type="DATE"/>
@@ -494,7 +494,7 @@
             <column name="SPECIMEN_ID" type="NUMBER(19,0)"/>
             <column name="USER_ID" type="NUMBER(19,0)"/>
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
-            <column name="DP_TITLE" type="VARCHAR2(512 BYTE)"/>
+            <column name="DP_TITLE" type="VARCHAR2(255 BYTE)"/>
             <column name="ORDER_NAME" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)"/>
             <column name="SPE_ID" type="NUMBER(19,0)">
@@ -534,8 +534,8 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107606" primaryKeyTablespace="USERS"/>
             </column>
             <column name="PRINCIPAL_INVESTIGATOR_ID" type="NUMBER(19,0)"/>
-            <column name="TITLE" type="VARCHAR2(512 BYTE)"/>
-            <column name="SHORT_TITLE" type="VARCHAR2(512 BYTE)"/>
+            <column name="TITLE" type="VARCHAR2(255 BYTE)"/>
+            <column name="SHORT_TITLE" type="VARCHAR2(255 BYTE)"/>
             <column name="IRB_IDENTIFIER" type="VARCHAR2(255 BYTE)"/>
             <column name="START_DATE" type="DATE"/>
             <column name="END_DATE" type="DATE"/>
