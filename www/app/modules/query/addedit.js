@@ -1,9 +1,12 @@
 
 angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.query.save'])
   .controller('QueryAddEditCtrl', function(
-    $scope, $state, $modal, 
+    $scope, $state, $modal, $popover, $translate,
     cps, queryGlobal, queryCtx, Alerts,
     SavedQuery, QueryUtil, QueryExecutor) {
+
+    var popoverOpts = {};
+    var popovers = {};
 
     function init() {
       $scope.openForm = undefined;
@@ -11,11 +14,31 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.quer
       $scope.queryLocal = queryCtx;
       queryGlobal.queryCtx = $scope.queryLocal;
 
+      initPopoverOpts();
       loadCpForms($scope.queryLocal.selectedCp);
     }
 
     function loadCpForms(cp) {
       queryGlobal.loadCpForms(cp);
+    }
+
+    function initPopoverOpts() {
+      $translate('queries.add_filter').then(
+        function(addFilter) {
+          popoverOpts = {
+            title: addFilter, 
+            contentTemplate: 'modules/query/addedit-filter.html', 
+            trigger: 'manual',
+            scope: $scope
+          }
+        }
+      );
+
+      $scope.$on('$destroy', function() {
+        angular.forEach(popovers, function(popover) {
+          popover.destroy();
+        });
+      });
     }
 
     $scope.loadCpForms = function() {
@@ -36,7 +59,7 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.quer
       form.getFields();
     }
 
-    $scope.onFieldSelect = function(field) {
+    $scope.onFieldSelect = function(field, event) {
       QueryUtil.hidePopovers();
       $scope.queryLocal.currFilter = {
         field: field, 
@@ -44,6 +67,10 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.quer
         value: undefined,
         ops: QueryUtil.getAllowedOps(field)
       };
+
+      var popover = $popover(angular.element(event.target), popoverOpts);
+      popover.$promise.then(popover.toggle);
+      popovers.push(popover);
     }
 
     $scope.onTemporalFilterSelect = function() { 

@@ -93,15 +93,12 @@
                     <span class="fa fa-search"> </span>
                   </div>
                 </div>
-                <div id="{{form.name}}.{{field.name}}" 
-                  data-arg="{{form.name}}.{{field.name}}"
-                  ng-repeat="field in ::form.staticFields | filter: {caption: queryLocal.searchField}">
+                <div id="{{::form.name}}.{{::field.name}}"
+                  data-arg="{{::form.name}}.{{::field.name}}"
+                  ng-repeat="field in form.staticFields | filter: {caption: queryLocal.searchField}">
                   <span class="os-query-form-field" ng-class="{'selected': queryLocal.currFilter.field == field}"
-                    ng-click="onFieldSelect(field)"
-                    title="{{'queries.add_filter' | translate}}"
-                    data-placement="right" 
-                    content-template="modules/query/addedit-filter.html" bs-popover>
-                    {{field.caption}}
+                    ng-click="onFieldSelect(field, $event)">
+                    {{::field.caption}}
                   </span>
                 </div>
                 <div class="os-query-block-margin"
@@ -109,22 +106,19 @@
                   <span class="os-query-extn-form"
                     ng-click="extnForm.showExtnFields = !extnForm.showExtnFields" 
                     ng-show="filteredExtnFields.length > 0">
-                    {{extnForm.caption}}
+                    {{::extnForm.caption}}
                     <i ng-if="form.showExtnFields || extnForm.showExtnFields" class="fa fa-caret-down"></i>
                     <i ng-if="!form.showExtnFields && !extnForm.showExtnFields" class="fa fa-caret-right"></i>
                   </span>
 
                   <div class="os-query-extn-form-fields"
                     ng-show="(form.showExtnFields || extnForm.showExtnFields) && filteredExtnFields.length > 0">
-                    <div id="{{form.name}}.{{field.name}}" 
-                      data-arg="{{form.name}}.{{field.name}}"
+                    <div id="{{::form.name}}.{{::field.name}}" 
+                      data-arg="{{::form.name}}.{{::field.name}}"
                       ng-repeat="field in filteredExtnFields  = (extnForm.fields | filter: {caption: queryLocal.searchField})">
                       <span class="os-query-form-field"
-                        ng-click="onFieldSelect(field)"
-                        title="{{'queries.add_filter' | translate}}"
-                        data-placement="right" 
-                        content-template="modules/query/addedit-filter.html" bs-popover>
-                        {{field.caption}}
+                        ng-click="onFieldSelect(field, $event)">
+                        {{::field.caption}}
                       </span>
                     </div>
                   </div>
