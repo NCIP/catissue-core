@@ -33,6 +33,8 @@ public enum CprErrorCode implements ErrorCode {
 	
 	DUP_CONSENT_FORM_NAME,
 	
+	INVALID_CONSENT_STATEMENT,
+	
 	INVALID_CONSENT_RESPONSE;
 	
 	@Override

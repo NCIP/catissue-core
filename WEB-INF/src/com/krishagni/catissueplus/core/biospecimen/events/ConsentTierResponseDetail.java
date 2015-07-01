@@ -3,23 +3,23 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 public class ConsentTierResponseDetail {
 
-	private String consentStatement;
+	private String statement;
 	
-	private String participantResponse;
+	private String response;
 
-	public String getConsentStatement() {
-		return consentStatement;
+	public String getStatement() {
+		return statement;
 	}
 
-	public void setConsentStatement(String consentStatement) {
-		this.consentStatement = consentStatement;
+	public void setStatement(String statement) {
+		this.statement = statement;
 	}
 
-	public String getParticipantResponse() {
-		return participantResponse;
+	public String getResponse() {
+		return response;
 	}
 
-	public void setParticipantResponse(String participantResponse) {
-		this.participantResponse = participantResponse;
+	public void setResponse(String response) {
+		this.response = response;
 	}
 }

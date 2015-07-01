@@ -162,9 +162,17 @@
   float: left;
 }
   
-.os-consent-stmt {
+.os-consent .os-consent-stmt {
   font-weight: bold;
   font-style: italic;
   color: #707070;
   margin-bottom: 7px;
+}
+
+.os-consent .os-md-input.read {
+  margin-top: 15px;
+}
+
+.os-consent .os-consent-response .btn {
+  margin-left: 10px;
 }

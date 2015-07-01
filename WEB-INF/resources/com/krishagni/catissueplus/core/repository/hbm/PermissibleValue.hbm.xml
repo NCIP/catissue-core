@@ -19,6 +19,8 @@
     <property name="value" column="VALUE"/>
 
     <property name="conceptCode" column="CONCEPT_CODE"/>
+    
+    <property name="sortOrder" column="SORTORDER"/>
 
     <many-to-one
       name="parent"

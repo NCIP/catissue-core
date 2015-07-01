@@ -223,14 +223,8 @@
       "consent_responses": "Consent Responses",
       "signature_date": "Consent Signature Date",
       "witness": "Consent Witness",
-      "response_value": {
-        "yes": "Yes",
-        "no": "No",
-        "not_specified": "Not Specified",
-        "withdrawn": "Withdrawn",
-        "none": "None"
-      }
-    },
+      "clear": "Clear response"
+     },
 
     "similar_participants": "Following participants found that are similar to new participant being registered",
     "matched_attrs": "Matched Attributes",
