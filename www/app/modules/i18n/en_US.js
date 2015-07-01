@@ -244,7 +244,7 @@
     "bulk_reg_participants": "Bulk Register Participants",
     "bulk_update_participants": "Bulk Update Participants",
     "part_updates": "Participant Updates",
-    "part_extensions": "Participant Extensions",
+    "part_extensions": "Participant Forms",
     "registrations": "Participant Registrations",
     "registered_cps": "Registered Protocols",
     
@@ -261,7 +261,7 @@
       "overview": "Overview",
       "consents": "Consents",
       "visits": "Visits",
-      "extensions": "Extensions"
+      "extensions": "Forms"
     },
 
     "tooltip": {
@@ -291,7 +291,7 @@
     "surgical_path_no": "Surg Path Number",
 
     "bulk_import": "Bulk Import Visits",
-    "visit_extensions": "Visit Extensions",
+    "visit_extensions": "Visit Forms",
 
     "spr": "Surgical Pathology Report",
     "spr_uploaded": "Surgical pathology report {{file}} uploaded successfully.",
@@ -320,7 +320,7 @@
 
     "menu": {
       "overview": "Overview",
-      "extensions": "Extensions",
+      "extensions": "Forms",
       "spr_report": "Surgical Pathology Report"
     }
   },
@@ -385,7 +385,7 @@
 
     "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
     "bulk_import": "Bulk Import Specimens",
-    "spmn_extensions": "Specimen Extensions",
+    "spmn_extensions": "Specimen Forms",
     "spmn_events": "Specimen Events",
 
     "ctx_menu": {
@@ -399,7 +399,7 @@
 
     "menu": {
       "overview": "Overview",
-      "extensions": "Extensions"
+      "extensions": "Forms"
     },
 
     "buttons": {
@@ -843,27 +843,27 @@
   },
 
   "extensions": {
-    "no_extensions": "No extensions to show",
-    "list": "Extensions",
+    "no_extensions": "No forms to show",
+    "list": "Forms",
 
     "name": "Name",
     "updated_by": "Updated By",
     "update_time": "Update Time",
 
-    "no_records": "No extension records to show",
+    "no_records": "No form records to show",
     
     "edit_record": "Edit Record",
     "new_record": "Create New Record",
 
-    "record_saved": "Extension record saved",
-    "record_deleted": "Extension record deleted",
+    "record_saved": "Form record saved",
+    "record_deleted": "Form record deleted",
 
-    "deleting_record": "Deleting extension record #{{recordId}} of {{formCaption}}",
-    "confirm_delete_record": " Extension record #{{recordId}} of {{formCaption}} will be deleted forever. Are you sure you want to proceed?",
+    "deleting_record": "Deleting form record #{{recordId}} of {{formCaption}}",
+    "confirm_delete_record": " Form record #{{recordId}} of {{formCaption}} will be deleted forever. Are you sure you want to proceed?",
 
-    "bulk_import_participant_extns": "Bulk Import Participant Extensions",
-    "bulk_import_visit_extns": "Bulk Import Visit Extensions",
-    "bulk_import_specimen_extns": "Bulk Import Specimen Extensions",
+    "bulk_import_participant_extns": "Bulk Import Participant Forms",
+    "bulk_import_visit_extns": "Bulk Import Visit Forms",
+    "bulk_import_specimen_extns": "Bulk Import Specimen Forms",
     "bulk_import_specimen_events": "Bulk Import Specimen Events"
   },
 
@@ -1068,7 +1068,7 @@
 
   "bulk_imports": {
     "job_submitted": "Bulk Import Job {{id}} Submitted",
-    "select_extn": "Select Extension",
+    "select_extn": "Select Form",
     "input_file": "Input Records File",
     "download_input_file_tmpl": "Download Template File",
     "import_type": "Import Type",

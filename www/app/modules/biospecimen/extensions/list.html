@@ -3,7 +3,7 @@
   <div class="col-xs-12">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <span translate="extensions.list">Extensions</span>
+        <span translate="extensions.list">Forms</span>
         <div show-if-allowed="extnOpts.update" class="btn-group" style="margin-left: 10px;" dropdown
           ng-if="extnOpts.isEntityActive">
           <button class="btn btn-primary os-round-btn dropdown-toggle">
@@ -20,7 +20,7 @@
       </div>
       <div class="panel-body">
         <span ng-if="!records || records.length == 0" translate="extensions.no_records">
-          No extension records to show
+          No form records to show
         </span>
         <div class="os-table" ng-if="records.length > 0">
           <div class="os-table-head">
