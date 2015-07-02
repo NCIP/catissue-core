@@ -101,9 +101,10 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setAnatomicSite(detail, existing, specimen, ose);
 		setLaterality(detail, existing, specimen, ose);
 		setPathologicalStatus(detail, existing, specimen, ose);
-		setQuantity(detail, existing, specimen, ose);
 		setSpecimenClass(detail, existing, specimen, ose);
 		setSpecimenType(detail, existing, specimen, ose);
+		setQuantity(detail, existing, specimen, ose);
+		setConcentration(detail, existing, specimen, ose);
 		setCreatedOn(detail, existing, specimen, ose);
 		setBiohazards(detail, existing, specimen, ose);
 		setComments(detail, existing, specimen, ose);
@@ -431,7 +432,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			setAvailableQty(detail, specimen, ose);
 		} else {
 			specimen.setAvailableQuantity(existing.getAvailableQuantity());
-		}
+		}		
 	}
 	
 	private void setInitialQty(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
@@ -469,6 +470,27 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		} else {
 			specimen.setIsAvailable(detail.getAvailable());
 		}		
+	}
+	
+	private void setConcentration(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {
+		if (existing == null || detail.isAttrModified("concentration")) {
+			setConcentration(detail, specimen, ose);			
+		} else {
+			specimen.setConcentration(existing.getConcentration());
+		}
+	}
+	
+	private void setConcentration(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
+		if (!specimen.getSpecimenClass().equals("Molecular")) {
+			return;
+		}
+		
+		Specimen parent = specimen.getParentSpecimen();
+		if (specimen.isAliquot() && parent != null) {
+			specimen.setConcentration(parent.getConcentration());
+		} else if (!specimen.isAliquot()) {
+			specimen.setConcentration(detail.getConcentration());
+		}
 	}
 	
 	private void setSpecimenClass(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {

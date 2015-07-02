@@ -211,6 +211,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
           storageLocation: uiSpecimen.storageLocation,
           parentId: angular.isDefined(uiSpecimen.parent) ? uiSpecimen.parent.id : undefined,
           lineage: uiSpecimen.lineage,
+          concentration: uiSpecimen.concentration,
           status: uiSpecimen.status,
           closeAfterChildrenCreation: uiSpecimen.closeAfterChildrenCreation
         };

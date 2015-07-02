@@ -36,7 +36,9 @@
     <property name="createdOn" column="CREATED_ON_DATE" />
 
     <property name="availableQuantity" column="AVAILABLE_QUANTITY" />
-
+    
+    <property name="concentration" column="CONCENTRATION"/>
+    
     <property name="tissueSide" type="string" column="TISSUE_SIDE" />
 		
     <property name="tissueSite" type="string" column="TISSUE_SITE" />

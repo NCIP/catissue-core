@@ -67,6 +67,8 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 	
 	private Boolean available;
 	
+	private Double concentration;
+	
 	private Long parentId;
 	
 	private String parentLabel;
@@ -249,6 +251,14 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		this.available = available;
 	}
 
+	public Double getConcentration() {
+		return concentration;
+	}
+
+	public void setConcentration(Double concentration) {
+		this.concentration = concentration;
+	}
+
 	public Long getParentId() {
 		return parentId;
 	}
@@ -339,6 +349,7 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		result.setInitialQty(specimen.getInitialQuantity());
 		result.setAvailableQty(specimen.getAvailableQuantity());
 		result.setAvailable(specimen.getIsAvailable());
+		result.setConcentration(specimen.getConcentration());
 		if (specimen.getParentSpecimen() != null) {
 			result.setParentId(specimen.getParentSpecimen().getId());
 			result.setParentLabel(specimen.getParentSpecimen().getLabel());
@@ -376,6 +387,7 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		result.setLaterality(anticipated.getLaterality());
 		result.setPathology(anticipated.getPathologyStatus());
 		result.setInitialQty(anticipated.getInitialQuantity());
+		result.setConcentration(anticipated.getConcentration());
 		result.setParentId(null);
 		result.setCollectionContainer(anticipated.getCollectionContainer());
 	

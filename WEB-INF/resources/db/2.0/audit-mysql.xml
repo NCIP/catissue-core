@@ -960,4 +960,16 @@
       <column name="phonenumber_MOD" type="BIT"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vpawar" id="Molecular specimen concentration">
+    <addColumn tableName="catissue_specimen_aud">
+      <column name="CONCENTRATION" type="DOUBLE"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Molecular specimen concentration modified">
+    <addColumn tableName="catissue_specimen_aud">
+      <column name="concentration_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

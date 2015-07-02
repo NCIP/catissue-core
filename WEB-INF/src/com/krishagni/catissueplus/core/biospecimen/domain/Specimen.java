@@ -57,7 +57,7 @@ public class Specimen extends BaseEntity {
 
 	private String specimenType;
 
-	private Double concentrationInMicrogramPerMicroliter;
+	private Double concentration;
 
 	private String label;
 
@@ -96,6 +96,8 @@ public class Specimen extends BaseEntity {
 	private List<SpecimenTransferEvent> transferEvents;
 	
 	private Set<SpecimenList> specimenLists =  new HashSet<SpecimenList>();
+	
+	private boolean concentrationInit = false;
 	
 	@Autowired
 	@Qualifier("specimenLabelGenerator")
@@ -195,12 +197,27 @@ public class Specimen extends BaseEntity {
 		this.specimenType = specimenType;
 	}
 
-	public Double getConcentrationInMicrogramPerMicroliter() {
-		return concentrationInMicrogramPerMicroliter;
+	public Double getConcentration() {
+		return concentration;
 	}
 
-	public void setConcentrationInMicrogramPerMicroliter(Double concentrationInMicrogramPerMicroliter) {
-		this.concentrationInMicrogramPerMicroliter = concentrationInMicrogramPerMicroliter;
+	public void setConcentration(Double concentration) {
+		if (concentrationInit) {
+			if (this.concentration == concentration) {
+				return;
+			}
+
+			if (this.concentration == null || !this.concentration.equals(concentration)) {
+				for (Specimen child : getChildCollection()) {
+					if (child.isAliquot()) {
+						child.setConcentration(concentration);
+					}
+				}
+			}
+		}
+		
+		this.concentration = concentration;
+		this.concentrationInit = true;
 	}
 
 	public String getLabel() {
@@ -531,10 +548,12 @@ public class Specimen extends BaseEntity {
 			setSpecimenClass(parentSpecimen.getSpecimenClass());
 			setSpecimenType(parentSpecimen.getSpecimenType());
 			updateBiohazards(parentSpecimen.getBiohazards());
+			setConcentration(parentSpecimen.getConcentration());
 		} else {
 			setSpecimenClass(specimen.getSpecimenClass());
 			setSpecimenType(specimen.getSpecimenType());
 			updateBiohazards(specimen.getBiohazards());
+			setConcentration(specimen.getConcentration());
 		}
 		
 		if (parentSpecimen == null) {

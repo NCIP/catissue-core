@@ -132,7 +132,7 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
     };
 
     Specimen.prototype.$saveProps = function() {
-      var props = ['concentration', 'children', 'depth', 'hasChildren', 'isOpened'];
+      var props = ['children', 'depth', 'hasChildren', 'isOpened'];
       var that = this;
       props.forEach(function(prop) { delete that[prop]; });
       return this;

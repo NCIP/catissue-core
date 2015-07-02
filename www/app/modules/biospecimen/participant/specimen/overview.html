@@ -56,6 +56,18 @@
         </span>
       </li>
 
+      <li class="item" ng-if="specimen.specimenClass == 'Molecular'">
+        <strong class="key key-sm" translate="specimens.concentration">Concentration</strong>
+        <span class="value value-md" 
+          ng-switch="specimen.concentration != undefined && specimen.concentration != null">
+          <span ng-switch-when="true">
+            {{specimen.concentration}} 
+            <span translate="specimens.concentration_unit"></span>
+          </span>
+          <span ng-switch-default translate="common.not_specified"></span>
+        </span>
+      </li>
+
       <li class="item">
         <strong class="key key-sm" translate="specimens.parent_specimen">Parent Specimen</strong>
         <ng-switch on="!!specimen.parentId">
