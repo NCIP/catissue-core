@@ -1046,6 +1046,12 @@
 
     "tooltip": {
       "view_records": "Click to View Records"
+    },
+
+    "filter": {
+      "title": "Queries Filter",
+      "id_or_title": "Query ID / Title",
+      "type_id_or_title": "Enter query ID or title to search queries"
     }
   },
 

@@ -1,16 +1,18 @@
 <div>
   <div class="os-head">
-    <h3 class="os-title" translate="queries.filter.filter_title">Filter Query</h3>
+    <h3 class="os-title">
+      <span translate="queries.filter.title">Query Filter</span>
+    </h3>
   </div>
 
   <div class="os-body">
     <div class="form-group">
-      <label class="control-label" translate="queries.filter.query_id_or_title">
-        Query ID / Title
+      <label class="control-label">
+        <span translate="queries.filter.id_or_title">Query ID / Title</span>
       </label>
       <div class="os-md-input">
-        <input type="text" ng-model="queryFilterOpts.title" class="form-control"
-          placeholder="{{'queries.filter.type_query_id_or_title' | translate}}">
+        <input type="text" ng-model="filterOpts.searchString" class="form-control"
+          placeholder="{{'queries.filter.type_id_or_title' | translate}}">
       </div>
     </div>
   </div>
