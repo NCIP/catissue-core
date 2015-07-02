@@ -334,6 +334,7 @@
       "not_collected": "Missed Collection",
       "pending": "Pending"
     },
+    "closed": "Closed",
 
     "unplanned": "Unplanned",
 
@@ -371,6 +372,7 @@
     "activity_user_info": "{{user}} created {{name}}",
     "activity_time_info": "{{name}} created on {{time | osServerTime: utcOffset | date: global.dateTimeFmt}}",
     "activity_info": "{{name}} created",
+    "activity_status": "Activity Status",
 
     "reason_for_closing": "Reason for closing",
 
@@ -410,7 +412,8 @@
       "collect": "Collect",
       "print": "Print",
       "assign_to": "Assign To",
-      "reopen": "Reopen"
+      "reopen": "Reopen",
+      "close": "Close"
     },
 
     "errors": {

@@ -1,5 +1,8 @@
 angular.module('os.biospecimen.specimen.detail', [])
-  .controller('SpecimenDetailCtrl', function($scope, $state, cpr, visit, specimen, Specimen, DeleteUtil) {
+  .controller('SpecimenDetailCtrl', function(
+    $scope, $state, $modal, 
+    cpr, visit, specimen, Specimen, DeleteUtil) {
+
     function init() {
       $scope.cpr = cpr;
       $scope.visit = visit;
@@ -27,6 +30,18 @@ angular.module('os.biospecimen.specimen.detail', [])
           }     
         }
       );
+    }
+
+    $scope.closeSpecimen = function() {
+      var modalInstance = $modal.open({
+        templateUrl: 'modules/biospecimen/participant/specimen/close.html',
+        controller: 'SpecimenCloseCtrl',
+        resolve: {
+          specimen: function() {
+            return specimen
+          }
+        }
+      });
     }
 
     init();

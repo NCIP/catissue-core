@@ -58,6 +58,13 @@
   padding: 0px 4px;
 }
 
+.os-page-hdr .os-status-closed {
+  background: #d9534f!important;
+  padding: 2px 4px;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 4px;
+}
 
 /** Used in CP events **/
 .os-cpe-item {
@@ -168,3 +175,5 @@
   color: #707070;
   margin-bottom: 7px;
 }
+
+

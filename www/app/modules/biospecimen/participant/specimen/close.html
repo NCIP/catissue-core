@@ -1,0 +1,24 @@
+
+<div class="os-modal">
+  <div class="os-modal-header">
+    <span>
+     <span translate="specimens.close">Close</span>
+     <span>{{specimen.label}}</span>
+    </span>
+  </div>
+  <div class="os-modal-body">
+    <div class="form-group">
+      <textarea class="form-control" rows="2" ng-model="closeSpec.reason"
+        placeholder="{{'specimens.reason_for_closing' | translate}}">
+      </textarea>
+    </div>
+  </div>
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="cancel()">
+      <span translate="common.buttons.cancel">Cancel</span>
+    </button>
+    <button class="btn btn-primary" ng-click="close()">
+      <span translate="specimens.buttons.close">Close</span>
+    </button>
+  </div>
+</div>

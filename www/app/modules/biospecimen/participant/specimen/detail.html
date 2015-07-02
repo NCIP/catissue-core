@@ -23,6 +23,10 @@
       <span ng-switch-default>{{specimen.type}} ({{specimen.specimenClass}})</span>
     </h3>
 
+    <span class="os-status-closed" ng-if="specimen.activityStatus == 'Closed'" translate="specimens.closed">
+      Closed
+    </span>
+
     <div class="os-btns right">
       <button show-if-allowed="specimenResource.updateOpts" class="primary" ui-sref="specimen-addedit"
         ng-if="!!visit.id && (!specimen.activityStatus || specimen.activityStatus == 'Active')"
@@ -35,6 +39,12 @@
           <span class="fa fa-plus"></span>
           <span translate="specimens.buttons.collect">Collect</span>
         </span>
+      </button>
+      <button show-if-allowed="specimenResource.updateOpts" class="default" 
+        ng-if="specimen.activityStatus == 'Active' && specimen.status == 'Collected'"
+        ng-click="closeSpecimen()">
+        <span class="fa fa-remove"></span>
+        <span translate="specimens.buttons.close">Close</span>
       </button>
       <button show-if-allowed="specimenResource.updateOpts" class="primary" ng-click="reopen()"
         ng-if="specimen.activityStatus == 'Closed'">
