@@ -76,17 +76,20 @@ angular.module('openspecimen')
           scope.editItemIdx = undefined;
 
           var item = scope.items[idx];
-          scope.items.splice(idx, 1);
           if (scope.listChanged) {
             scope.saving = true;
             $q.when(scope.listChanged()('remove', item)).then(
               function(result) {
-                if (!result) {
-                  scope.items.splice(idx, 0, item);
-                }
+                scope.items.splice(idx, 1);
+                scope.saving = false;
+              },
+
+              function(result) {
                 scope.saving = false;
               }
             );
+          } else {
+            scope.items.splice(idx, 1);
           } 
         };
 

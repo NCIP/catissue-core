@@ -56,6 +56,7 @@
     <set name="consentTier" table="CATISSUE_CONSENT_TIER" inverse="false" cascade="all-delete-orphan" order-by="id">
       <key column="COLL_PROTOCOL_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier"/>
+      <filter name="activeEntity"/>
     </set>
 
     <set name="coordinators" table="CATISSUE_COLL_COORDINATORS" inverse="false" cascade="none" sort="unsorted">
@@ -184,5 +185,37 @@
         and site.activity_status = 'Active'
         and cp_site.site_id in (:siteIds)
     </sql-query>
+    
+    <query name="getConsentTier"> 
+      select 
+        ct
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier ct
+      where 
+        ct.id = :consentId
+    </query>
+    
+    <query name="getConsentTierByStatement"> 
+      select 
+        ct
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
+        join cp.consentTier ct
+      where 
+        cp.id = :cpId and ct.statement = :statement
+    </query>   
+    
+     <query name="getConsentResponsesCount">
+      select
+        count(response)
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
+        join cp.collectionProtocolRegistrations cpr
+        join cpr.consentResponses response
+        join response.consentTier ct
+      where
+        ct.id = :consentId
+    </query>
+    
   </class>
 </hibernate-mapping>

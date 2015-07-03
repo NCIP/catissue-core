@@ -355,3 +355,9 @@
   border: none;
   padding: 5px 10px;
 }
+
+.list-group-item .os-btns.right {
+  position: absolute;
+  top: 4px;
+  right: 10px;
+}

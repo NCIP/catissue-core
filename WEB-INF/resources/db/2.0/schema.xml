@@ -2230,5 +2230,13 @@
       </column>
     </addColumn>
   </changeSet>
+  
+  <changeSet author="vgaikwad" id="Added column to specify activity status of consent">
+    <addColumn tableName="CATISSUE_CONSENT_TIER">
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)" defaultValue="Active">
+        <constraints nullable="false"/>
+      </column>  
+    </addColumn>
+  </changeSet> 
 
 </databaseChangeLog>

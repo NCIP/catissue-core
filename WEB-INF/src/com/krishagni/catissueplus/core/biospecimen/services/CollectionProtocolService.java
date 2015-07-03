@@ -46,6 +46,8 @@ public interface CollectionProtocolService {
 
 	public ResponseEvent<ConsentTierDetail> updateConsentTier(RequestEvent<ConsentTierOp> req);
 	
+	public ResponseEvent<List<DependentEntityDetail>> getConsentDependentEntities(RequestEvent<ConsentTierDetail> request);
+	
 	//
 	// Events API
 	//

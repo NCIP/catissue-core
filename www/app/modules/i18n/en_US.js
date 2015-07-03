@@ -1057,7 +1057,9 @@
     "form": "Form",
     "participant": "Participant",
     "specimen_event": "Specimen Event",
-    "specimen_list": "Specimen List"
+    "specimen_list": "Specimen List",
+    "consent_response": "Consent Response",
+    "consent": "Consent"
   },
 
   "bulk_imports": {

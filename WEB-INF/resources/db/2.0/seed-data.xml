@@ -295,13 +295,13 @@
     </sql>
   </changeSet>
   
-  <changeSet author="vgaikwad" id="Delete 'None' and 'Withdrawn' consent response PV's">
+  <changeSet author="vgaikwad" id="Delete 'None' and 'Withdrawn' consent response PVs">
     <sql>
       delete from catissue_permissible_value where public_id = 'consent_response' and value in ('Withdrawn', 'None');
     </sql>
   </changeSet>
   
-  <changeSet author="vgaikwad" id="Add sort order to consent response PV's">
+  <changeSet author="vgaikwad" id="Add sort order to consent response PVs">
     <sql>
       update catissue_permissible_value set sortorder = 1 where public_id = 'consent_response' and value = 'Yes';
       

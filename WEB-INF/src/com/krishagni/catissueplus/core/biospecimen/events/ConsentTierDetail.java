@@ -9,9 +9,19 @@ import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
 
 @JsonFilter("withoutId")
 public class ConsentTierDetail {
+	private Long cpId;
+	
 	private Long id;
 	
 	private String statement;
+	
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
+	}
 
 	public Long getId() {
 		return id;

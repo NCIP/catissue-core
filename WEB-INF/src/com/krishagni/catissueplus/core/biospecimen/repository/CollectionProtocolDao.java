@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
 import com.krishagni.catissueplus.core.biospecimen.domain.CpWorkflowConfig;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
@@ -42,4 +43,11 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	public void saveCpWorkflows(CpWorkflowConfig cfg);
 	
 	public CpWorkflowConfig getCpWorkflows(Long cpId);
+	
+	public ConsentTier getConsentTier(Long consentId);
+	
+	public ConsentTier getConsentTierByStatement(Long cpId, String statement);
+	
+	public int getConsentRespsCount(Long consentId);
+	
 }

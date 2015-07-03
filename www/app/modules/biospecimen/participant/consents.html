@@ -43,11 +43,11 @@
       </li>
     </ul>
   </div>
-  <div class="col-xs-8 os-consent" ng-if="consentExists">
+  <div class="col-xs-8 os-consents" ng-if="consentExists">
     <div class="list-group">
       <div class="list-group-item clearfix os-section-hdr">
         <span translate="participant.consent.consent_responses">Consent Responses</span>
-        <div show-if-allowed="participantResource.updateOpts" class="btn-group os-action-btns pull-right">
+        <div show-if-allowed="participantResource.updateOpts" class="btn-group os-btns right">
           <button class="btn btn-primary" ng-if="!editMode" ng-click="showEditConsents()">
             <span class="fa fa-pencil"></span>
             <span translate="common.buttons.edit">Edit</span>
@@ -100,17 +100,18 @@
             <span title="{{consentTierResponse.statement}}">{{consentTierResponse.statement}}</span>
           </div>
           <div ng-if="!editMode">
-            <span>{{consentTierResponse.response}}</span>
+            <span>{{consentTierResponse.response | osNoValue:'common.none'| translate}}</span>
           </div>
           <div class="os-consent-response" ng-if="editMode">
             <label class="radio-inline" ng-repeat="response in consentResponses">
               <input type="radio" name="consentTierResponse{{consentTierResponseIdx}}"
-                ng-model="consentTierResponse.response" ng-value="response"> {{response}}
+                ng-model="consentTierResponse.response" ng-value="response">
+              <span>{{response}}</span>
             </label>
 
-            <div class="btn btn-default btn-xs" ng-click="clearResponseSelection(consentTierResponse)">
+            <button class="btn btn-default btn-xs" ng-click="clearResponseSelection(consentTierResponse)">
               <span class="fa fa-remove" title="{{'participant.consent.clear' | translate}}"></span>
-            </div>
+            </button>
           </div>
         </div>
       </div>

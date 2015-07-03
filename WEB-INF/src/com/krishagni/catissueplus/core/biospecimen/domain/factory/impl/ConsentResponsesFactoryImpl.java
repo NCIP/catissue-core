@@ -101,7 +101,7 @@ public class ConsentResponsesFactoryImpl implements ConsentResponsesFactory {
 			
 			String resp = consentResponse.getResponse();
 			if (!isValid(CONSENT_RESPONSE, resp)) {
-				ose.addError(CprErrorCode.INVALID_CONSENT_RESPONSE);
+				ose.addError(CprErrorCode.INVALID_CONSENT_RESPONSE, resp);
 				return;
 			}
 			response.setResponse(resp);

@@ -22,13 +22,21 @@ angular.module('os.common.delete')
         }
       });
 
-      modalInstance.result.then(function(object) {
-        if (typeof props.onDeletion == 'function') {
-          props.onDeletion();
-        } else {
-          $state.go(props.onDeleteState);
+      modalInstance.result.then(
+        function(object) {
+          if (typeof props.onDeletion == 'function') {
+            props.onDeletion();
+          } else {
+            $state.go(props.onDeleteState);
+          }
+        },
+
+        function() {
+          if (typeof props.onDeleteFail == 'function') {
+            props.onDeleteFail();
+          }
         }
-      });
+      );
     }
 
     function confirmDelete(opts) {

@@ -61,7 +61,6 @@ angular.module('os.biospecimen.participant.consents', [])
       cpr.saveConsentResponse($scope.consent).then(function(result) {
         $scope.consents = result;
         $scope.editMode = $scope.consentResponseAdd = false;
-
       });
     }
 
