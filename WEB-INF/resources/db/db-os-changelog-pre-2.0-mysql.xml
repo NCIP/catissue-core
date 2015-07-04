@@ -229,8 +229,8 @@
             <column name="CONSENT_DOCUMENT_NAME" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-27">
-        <validCheckSum>7:ab65e789b9764233ec5eff69935d6a62</validCheckSum>
+    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-27" runOnChange="false">
+        <validCheckSum>7:6b7bfb0858a36866a3a7abd9cd3caf7b</validCheckSum>
         <createTable tableName="catissue_collection_protocol">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
@@ -483,7 +483,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-48">
+    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-48" runOnChange="false">
         <validCheckSum>7:cdbe74310ba75e7002eee2b336804d82</validCheckSum>
         <createTable tableName="catissue_distri_event_param">
             <column name="DISTRIBUTED_QUANTITY" type="DOUBLE"/>
@@ -526,8 +526,8 @@
             <column name="ORDER_ID" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-51">
-        <validCheckSum>7:93c9e33fc6aece33d8efc07027a4f729</validCheckSum>
+    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-51" runOnChange="false">
+        <validCheckSum>7:d0165e03bfebc4a0ba923e01e2eb60cc</validCheckSum>
         <createTable tableName="catissue_distribution_protocol">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
@@ -1885,7 +1885,8 @@
             <column defaultValue="Active" name="ACTIVITY_STATUS" type="VARCHAR(64)"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-185">
+    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-185" runOnChange="false">
+        <validCheckSum>7:cf3bf408ae09c8483b7a5e88fb108151</validCheckSum>
         <createTable tableName="os_distribution_protocol">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
