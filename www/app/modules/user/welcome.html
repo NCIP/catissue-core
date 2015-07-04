@@ -1,0 +1,19 @@
+<div class="os-center-box os-sign-up-box" ng-if="!!videoSettings">
+  <div class="os-header">
+    <h3 translate="user.welcome_title">Welcome to OpenSpecimen</h3>
+  </div>
+  <div class="os-welcome-box">
+    <div>
+      <iframe ng-src="{{iframeUrl}}" ng-if="videoSettings.welcome_video_source == 'vimeo'"
+        width="500" height="281" frameborder="0"
+        webkitallowfullscreen mozallowfullscreen allowfullscreen>
+      </iframe>
+      <iframe ng-src="{{iframeUrl}}" ng-if="videoSettings.welcome_video_source == 'youtube'"
+        width="500" height="281" frameborder="0" allowfullscreen>
+      </iframe>
+    </div>
+    <div>
+      <a ui-sref="sign-up" translate="user.proceed_sign_up">Proceed to Sign Up</a>
+    </div>
+  </div>
+</div>

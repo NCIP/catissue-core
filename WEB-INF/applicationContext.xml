@@ -397,6 +397,7 @@
             <value>/institutes/</value>
             <value>/institutes/byname</value>
             <value>/config-settings/locale</value>
+            <value>/config-settings/welcome-video</value>
             <value>/auth-domains/</value>
           </list>
         </entry>

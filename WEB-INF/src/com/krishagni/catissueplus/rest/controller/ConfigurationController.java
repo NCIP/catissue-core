@@ -54,4 +54,11 @@ public class ConfigurationController {
 	public Map<String, Object> getLocaleSettings() {
 		return cfgSvc.getLocaleSettings();
 	}	
+	
+	@RequestMapping(method = RequestMethod.GET, value="/welcome-video")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, String> getWelcomeVideoSettings() {
+		return cfgSvc.getWelcomeVideoSettings();
+	}
 }

@@ -675,8 +675,10 @@
       "new_password": "New Password",
       "confirm_password": "Confirm Password",
       "change_password": "Change Password"
-    }
-
+    },
+    
+    "proceed_sign_up": "Proceed to Sign Up",
+    "welcome_title": "Welcome to OpenSpecimen"
   },
 
   "forgot_password": {

@@ -9,6 +9,14 @@ angular.module('os.administrative.models.setting', ['os.common.models'])
         }
       );
     }
+    
+    Setting.getWelcomeVideoSetting = function () {
+      return $http.get(Setting.url() + 'welcome-video').then(
+        function (resp) {
+          return resp.data;
+        }
+      );
+    };
 
     return Setting;
   });

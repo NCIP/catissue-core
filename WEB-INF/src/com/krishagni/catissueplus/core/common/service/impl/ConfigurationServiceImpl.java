@@ -21,6 +21,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.domain.ConfigErrorCode;
 import com.krishagni.catissueplus.core.common.domain.ConfigProperty;
+import com.krishagni.catissueplus.core.common.domain.ConfigProperty.DataType;
 import com.krishagni.catissueplus.core.common.domain.ConfigSetting;
 import com.krishagni.catissueplus.core.common.domain.Module;
 import com.krishagni.catissueplus.core.common.events.ConfigSettingDetail;
@@ -214,7 +215,29 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		return getDeDateFormat() + " " + getTimeFormat();
 	}
 	
+	@Override
+	public Map<String, String> getWelcomeVideoSettings() {
+		Map<String, ConfigSetting> moduleConfig = configSettings.get("common");
+		if (moduleConfig == null) {
+			return Collections.emptyMap();
+		}
+		
+		Map<String, String> result = new HashMap<String, String>();
+		
+		ConfigSetting source = moduleConfig.get("welcome_video_source");
+		if (source != null) {
+			result.put("welcome_video_source", source.getValue());
+		}
+		
+		ConfigSetting url = moduleConfig.get("welcome_video_url");
+		if (url != null) {
+			result.put("welcome_video_url", url.getValue());
+		}
+		
+		return result;
+	}
 	
+		
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		reload();
@@ -283,5 +306,5 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		if (!existingLocale.equals(newLocale)) {
 			Locale.setDefault(newLocale);
 		}
-	}
+	}	
 }
