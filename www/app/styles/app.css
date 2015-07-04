@@ -958,3 +958,9 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   height: 390px!important;
   display: block;
 }
+ 
+.list-group-item .os-btns.right {
+  position: absolute;
+  top: 4px;
+  right: 10px;
+} 
