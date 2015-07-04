@@ -1332,99 +1332,6 @@
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
 
-  <changeSet author="vpawar" id="Print specimen label jobs table">
-    <createTable tableName="OS_SPECIMEN_LABEL_PRINT_JOBS">
-      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
-        <constraints primaryKey="true" nullable="false" primaryKeyName="PK_OS_SP_LABEL_PRINT_JOBS"/>
-      </column>
-
-      <column name="SUBMITTED_BY" type="${int.type}">
-        <constraints nullable="false"/>
-      </column>
-    
-      <column name="SUBMISSION_DATE" type="${timestamp.type}">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-  </changeSet>
-  
-  <changeSet author="vpawar" id="Specimen print label jobs sequence" dbms="oracle">
-    <createSequence 
-      sequenceName="OS_SPEC_LABEL_PRINT_JOBS_SEQ" 
-      startValue="1" 
-      incrementBy="1" 
-      ordered="true" />
-  </changeSet>
-
-  <changeSet author="vpawar" id="FK on submitted by of print label jobs">
-    <addForeignKeyConstraint
-      constraintName="FK_SPMN_LBL_PRN_JOBS_SUBM_ID"
-      baseTableName="OS_SPECIMEN_LABEL_PRINT_JOBS"
-      baseColumnNames="SUBMITTED_BY"
-      referencedTableName="CATISSUE_USER"
-      referencedColumnNames="IDENTIFIER"/>
-  </changeSet>
-
-  <changeSet author="vpawar" id="Print specimen label job items table">
-    <createTable tableName="OS_SPEC_LABEL_PRINT_JOB_ITEMS">
-      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
-        <constraints primaryKey="true" nullable="false" primaryKeyName="PK_OS_SP_LBL_PRNT_JOB_ITEMS"/>
-      </column>
-
-      <column name="JOB_ID" type="${int.type}">
-        <constraints nullable="false"/>
-      </column>
-    
-      <column name="SPECIMEN_ID" type="${int.type}">
-        <constraints nullable="false"/>
-      </column>
-    
-      <column name="PRINT_DATE" type="${nullable.ts.type}"/>
-
-      <column name="PRINTER_NAME" type="${text.type}(32)">
-        <constraints nullable="false"/>
-      </column>
-
-      <column name="STATUS" type="${text.type}(16)">
-        <constraints nullable="false"/>
-      </column>
-
-      <column name="LABEL_TYPE" type="${text.type}(128)">
-        <constraints nullable="false"/>
-      </column>
-
-      <column name="DATA" type="${text.type}(1024)">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-  </changeSet>
-  
-  <changeSet author="vpawar" id="Specimen label print job items sequence" dbms="oracle">
-    <createSequence 
-      sequenceName="OS_SPEC_LBL_PRN_JOB_ITEMS_SEQ" 
-      startValue="1" 
-      incrementBy="1" 
-      ordered="true" />
-  </changeSet>
-
-  <changeSet author="vpawar" id="FK on job id of print label job items">
-    <addForeignKeyConstraint
-      constraintName="FK_SPMN_LBL_PRN_JITEMS_JID"
-      baseTableName="OS_SPEC_LABEL_PRINT_JOB_ITEMS"
-      baseColumnNames="JOB_ID"
-      referencedTableName="OS_SPECIMEN_LABEL_PRINT_JOBS"
-      referencedColumnNames="IDENTIFIER"/>
-  </changeSet>
-
-  <changeSet author="vpawar" id="FK on specimen of print label job items">
-    <addForeignKeyConstraint
-      constraintName="FK_SPMN_LBL_PRN_JITEMS_SPMN_ID"
-      baseTableName="OS_SPEC_LABEL_PRINT_JOB_ITEMS"
-      baseColumnNames="SPECIMEN_ID"
-      referencedTableName="CATISSUE_SPECIMEN"
-      referencedColumnNames="IDENTIFIER"/>
-  </changeSet>
-
   <changeSet author="vpawar" id="A flag to determine whether user is admin">
     <addColumn tableName="CATISSUE_USER">
       <column name="IS_ADMIN" type="${boolean.type}"/>
@@ -2229,6 +2136,98 @@
         <constraints nullable="false"/>
       </column>
     </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Label print jobs table">
+    <createTable tableName="OS_LABEL_PRINT_JOBS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="PK_OS_LABEL_PRINT_JOBS"/>
+      </column>
+
+      <column name="ITEM_TYPE" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="SUBMITTED_BY" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    
+      <column name="SUBMISSION_DATE" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="NUM_COPIES" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="vpawar" id="Label print jobs sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_LABEL_PRINT_JOBS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on print job submitted user">
+    <addForeignKeyConstraint
+      constraintName="FK_LBL_PRN_JOBS_SUBM_ID"
+      baseTableName="OS_LABEL_PRINT_JOBS"
+      baseColumnNames="SUBMITTED_BY"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Label print job items table">
+    <createTable tableName="OS_LABEL_PRINT_JOB_ITEMS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="PK_OS_LBL_PRNT_JOB_ITEMS"/>
+      </column>
+
+      <column name="JOB_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    
+      <column name="ITEM_LABEL" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+    
+      <column name="PRINT_DATE" type="${nullable.ts.type}"/>
+
+      <column name="PRINTER_NAME" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="STATUS" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="LABEL_TYPE" type="${text.type}(128)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="DATA" type="${text.type}(1024)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="vpawar" id="Label print job items sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_LBL_PRN_JOB_ITEMS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on label print job id of job items">
+    <addForeignKeyConstraint
+      constraintName="FK_LBL_PRN_JITEMS_JID"
+      baseTableName="OS_LABEL_PRINT_JOB_ITEMS"
+      baseColumnNames="JOB_ID"
+      referencedTableName="OS_LABEL_PRINT_JOBS"
+      referencedColumnNames="IDENTIFIER"/>
   </changeSet>
 
 </databaseChangeLog>

@@ -12,7 +12,7 @@ public class SpecimenLineagePrintToken extends AbstractLabelTmplToken implements
 	}
 
 	@Override
-	public String getReplacement(Object object) { // TODO: date format from locale
+	public String getReplacement(Object object) { 
 		Specimen specimen = (Specimen)object;
 		return specimen.getLineage();
 	}

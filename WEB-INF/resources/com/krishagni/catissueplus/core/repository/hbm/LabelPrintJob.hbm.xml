@@ -4,15 +4,15 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false">
-  <class
-    name="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenLabelPrintJob"
-    table="OS_SPECIMEN_LABEL_PRINT_JOBS">
-	
+  <class name="com.krishagni.catissueplus.core.common.domain.LabelPrintJob" table="OS_LABEL_PRINT_JOBS">
+
     <id name="id" column="IDENTIFIER">
       <generator class="native">
-        <param name="sequence">OS_SPEC_LABEL_PRINT_JOBS_SEQ</param>
+        <param name="sequence">OS_LABEL_PRINT_JOBS_SEQ</param>
       </generator>
     </id>
+
+    <property name="itemType" column="ITEM_TYPE"/>
 
     <many-to-one
       name="submittedBy"
@@ -21,9 +21,11 @@
  
     <property name="submissionDate" column="SUBMISSION_DATE" not-null="true"/>
 
-    <set name="items" table="OS_SPEC_LABEL_PRINT_JOB_ITEMS" inverse="true" cascade="all-delete-orphan">
+    <property name="numCopies" column="NUM_COPIES"/>
+
+    <set name="items" table="OS_LABEL_PRINT_JOB_ITEMS" inverse="true" cascade="all-delete-orphan">
       <key column="JOB_ID"/>
-      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenLabelPrintJobItem"/>
+      <one-to-many class="com.krishagni.catissueplus.core.common.domain.LabelPrintJobItem"/>
     </set>
   </class>
 </hibernate-mapping>

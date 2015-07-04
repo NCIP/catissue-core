@@ -4,51 +4,6 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-
-  <changeSet author="vpawar" id="Default print config settings" dbms="mysql">
-    <sql>
-      insert into os_modules
-        (identifier, name, description)
-      values 
-        (default, 'label_printer', 'Default specimen label printer');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (default, 'rules_file', 'label_print_rules_file', 'label_print_rules_file_desc', 
-         'STRING', last_insert_id());
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (default, last_insert_id(), 
-         'classpath:/com/krishagni/catissueplus/core/biospecimen/default_print_rules.csv',
-         1, current_timestamp(), 'Active');
-    </sql>
-  </changeSet>
-
-  <changeSet author="vpawar" id="Default print config settings" dbms="oracle">
-    <sql>
-      insert into os_modules
-        (identifier, name, description)
-      values 
-        (OS_MODULES_SEQ.nextval, 'label_printer', 'Default specimen label printer');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (OS_CFG_PROPS_SEQ.nextval, 'rules_file', 'label_print_rules_file', 'label_print_rules_file_desc', 
-         'STRING', os_modules_seq.currval);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, 
-         'classpath:/com/krishagni/catissueplus/core/biospecimen/default_print_rules.csv',
-         1, sysdate, 'Active');
-    </sql>
-  </changeSet>
-
   <changeSet author="vpawar" id="Default email config settings" dbms="mysql">
     <sql>
       insert into os_modules
@@ -437,6 +392,40 @@
     </sql>
     <sql>
       call add_cfg_prop('biospecimen', 'mpi_validator', 'mpi_validator', 'mpi_validator_desc', 'STRING', '');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Default specimen label print config settings">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'specimen_label_printer', 
+        'specimen_label_printer', 'specimen_label_printer_desc', 'STRING', 
+        'defaultSpecimenLabelPrinter'
+      );
+    </sql>
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'specimen_label_print_rules', 
+        'specimen_label_print_rules', 'specimen_label_print_rules_desc', 'STRING', 
+        'classpath:/com/krishagni/catissueplus/core/biospecimen/default_specimen_print_rules.csv'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Default visit label print config settings">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'visit_label_printer', 
+        'visit_label_printer', 'visit_label_printer_desc', 'STRING', 
+        'defaultVisitLabelPrinter'
+      );
+    </sql>
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'visit_label_print_rules', 
+        'visit_label_print_rules', 'visit_label_print_rules_desc', 'STRING', 
+        'classpath:/com/krishagni/catissueplus/core/biospecimen/default_visit_print_rules.csv'
+      );
     </sql>
   </changeSet>
 </databaseChangeLog>

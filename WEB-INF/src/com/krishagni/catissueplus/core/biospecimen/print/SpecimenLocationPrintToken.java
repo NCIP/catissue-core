@@ -13,11 +13,11 @@ public class SpecimenLocationPrintToken extends AbstractLabelTmplToken implement
 	}
 
 	@Override
-	public String getReplacement(Object object) { // TODO: date format from locale
+	public String getReplacement(Object object) {
 		Specimen specimen = (Specimen)object;
 		StorageContainerPosition position = specimen.getPosition();
 		if (position == null) {
-			return "Virtual";
+			return "Virtual"; // TODO: pick from locale
 		}
 		
 		return new StringBuilder(position.getContainer().getName())

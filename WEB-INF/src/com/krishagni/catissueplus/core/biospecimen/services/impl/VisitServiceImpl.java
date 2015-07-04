@@ -36,6 +36,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
+import com.krishagni.catissueplus.core.common.service.LabelPrinter;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
@@ -306,6 +307,18 @@ public class VisitServiceImpl implements VisitService {
 		visit.setSprLocked(detail.isLocked());
 		return ResponseEvent.response(detail);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public LabelPrinter<Visit> getLabelPrinter() {
+		String beanName = cfgSvc.getStrSetting(
+				ConfigParams.MODULE, 
+				ConfigParams.VISIT_LABEL_PRINTER, 
+				"defaultVisitLabelPrinter");
+		
+		return (LabelPrinter<Visit>)OpenSpecimenAppCtxProvider.getAppCtx().getBean(beanName);
+	}
+	
 
 	private VisitDetail saveOrUpdateVisit(VisitDetail input, boolean update, boolean partial) {		
 		Visit existing = null;

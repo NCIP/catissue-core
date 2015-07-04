@@ -50,7 +50,7 @@ public interface DaoFactory {
 	
 	public ConfigSettingDao getConfigSettingDao();
 	
-	public SpecimenLabelPrintJobDao getSpecimenLabelPrintJobDao();
+	public LabelPrintJobDao getLabelPrintJobDao();
 	
 	public SpecimenQuantityUnitDao getSpecimenQuantityUnitDao();
 }

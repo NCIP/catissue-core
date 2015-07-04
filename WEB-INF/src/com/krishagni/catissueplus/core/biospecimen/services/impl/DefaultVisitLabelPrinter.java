@@ -17,6 +17,7 @@ import org.springframework.security.web.util.matcher.IpAddressMatcher;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.domain.LabelPrintJob;
 import com.krishagni.catissueplus.core.common.domain.LabelPrintJobItem;
@@ -29,10 +30,10 @@ import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.LabelPrinter;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
-public class DefaultSpecimenLabelPrinter implements LabelPrinter<Specimen>, InitializingBean, ConfigChangeListener {
-	private static final Logger logger = Logger.getLogger(DefaultSpecimenLabelPrinter.class);
+public class DefaultVisitLabelPrinter implements LabelPrinter<Visit>, InitializingBean, ConfigChangeListener {
+	private static final Logger logger = Logger.getLogger(DefaultVisitLabelPrinter.class);
 	
-	private List<SpecimenLabelPrintRule> rules = new ArrayList<SpecimenLabelPrintRule>();
+	private List<VisitLabelPrintRule> rules = new ArrayList<VisitLabelPrintRule>();
 	
 	private DaoFactory daoFactory;
 	
@@ -59,7 +60,7 @@ public class DefaultSpecimenLabelPrinter implements LabelPrinter<Specimen>, Init
 	}
 
 	@Override
-	public LabelPrintJob print(List<Specimen> specimens, int numCopies) {		
+	public LabelPrintJob print(List<Visit> visits, int numCopies) {		
 		try {
 			String ipAddr = AuthUtil.getRemoteAddr();
 			User currentUser = AuthUtil.getCurrentUser();
@@ -67,45 +68,45 @@ public class DefaultSpecimenLabelPrinter implements LabelPrinter<Specimen>, Init
 			LabelPrintJob job = new LabelPrintJob();
 			job.setSubmissionDate(Calendar.getInstance().getTime());
 			job.setSubmittedBy(currentUser);
-			job.setItemType(Specimen.getEntityName());
+			job.setItemType(Visit.getEntityName());
 			job.setNumCopies(numCopies <= 0 ? 1 : numCopies);
 	
-			for (Specimen specimen : specimens) {				
+			for (Visit visit : visits) {
 				boolean found = false;
-				for (SpecimenLabelPrintRule rule : rules) {
-					if (!rule.isApplicableFor(specimen, currentUser, ipAddr)) {
+				for (VisitLabelPrintRule rule : rules) {
+					if (!rule.isApplicableFor(visit, currentUser, ipAddr)) {
 						continue;
 					}
 					
 					LabelPrintJobItem item = new LabelPrintJobItem();
 					item.setJob(job);
 					item.setPrinterName(rule.getPrinterName());
-					item.setItemLabel(specimen.getLabel());
+					item.setItemLabel(visit.getName());
 					item.setStatus(Status.QUEUED);
 					item.setLabelType(rule.getLabelType());
-					item.setData(rule.formatPrintData(specimen));
-						
+					item.setData(rule.formatPrintData(visit));
+
 					job.getItems().add(item);
 					found = true;
 					break;
 				}
 				
 				if (!found) {
-					logger.warn("No print rule matched specimen: " + specimen.getLabel());
+					logger.warn("No print rule matched visit: " + visit.getName());
 				}
 			}
 			
 			if (job.getItems().isEmpty()) {
-				return null;				
+				return null;
 			}
-			
-			daoFactory.getLabelPrintJobDao().saveOrUpdate(job);			
+
+			daoFactory.getLabelPrintJobDao().saveOrUpdate(job);
 			return job;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw OpenSpecimenException.serverError(e);			
+			throw OpenSpecimenException.serverError(e);
 		}
-	}	
+	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -115,7 +116,7 @@ public class DefaultSpecimenLabelPrinter implements LabelPrinter<Specimen>, Init
 	
 	@Override
 	public void onConfigChange(String name, String value) {
-		if (!name.equals(ConfigParams.SPECIMEN_LABEL_PRINT_RULES)) {
+		if (!name.equals(ConfigParams.VISIT_LABEL_PRINT_RULES)) {
 			return;
 		}
 		
@@ -124,8 +125,8 @@ public class DefaultSpecimenLabelPrinter implements LabelPrinter<Specimen>, Init
 		
 	private void reloadRules() {
 		String rulesFile = cfgSvc.getStrSetting(
-				ConfigParams.MODULE, 
-				ConfigParams.SPECIMEN_LABEL_PRINT_RULES, 
+				ConfigParams.MODULE,
+				ConfigParams.VISIT_LABEL_PRINT_RULES, 
 				(String)null);
 		
 		if (StringUtils.isBlank(rulesFile)) {
@@ -138,7 +139,7 @@ public class DefaultSpecimenLabelPrinter implements LabelPrinter<Specimen>, Init
 			classpath = true;
 		}
 				
-		List<SpecimenLabelPrintRule> rules = new ArrayList<SpecimenLabelPrintRule>();
+		List<VisitLabelPrintRule> rules = new ArrayList<VisitLabelPrintRule>();
 		
 		BufferedReader reader = null;
 		try {
@@ -150,7 +151,7 @@ public class DefaultSpecimenLabelPrinter implements LabelPrinter<Specimen>, Init
 						
 			String ruleLine = null;
 			while ((ruleLine = reader.readLine()) != null) {
-				SpecimenLabelPrintRule rule = parseRule(ruleLine);
+				VisitLabelPrintRule rule = parseRule(ruleLine);
 				if (rule == null) {
 					continue;
 				}
@@ -166,29 +167,28 @@ public class DefaultSpecimenLabelPrinter implements LabelPrinter<Specimen>, Init
 		}
 	}
 	
-	private SpecimenLabelPrintRule parseRule(String ruleLine) {
+	private VisitLabelPrintRule parseRule(String ruleLine) {
 		try {
 			if (ruleLine.startsWith("#")) {
 				return null;
 			}
 			
 			String[] ruleLineFields = ruleLine.split("\\s+");
-			if (ruleLineFields == null || ruleLineFields.length != 7) {
+			if (ruleLineFields == null || ruleLineFields.length != 6) {
 				logger.error("Invalid rule: " + ruleLine);
 				return null;
 			}
 			
-			SpecimenLabelPrintRule rule = new SpecimenLabelPrintRule();
-			rule.setSpecimenClass(ruleLineFields[0]);
-			rule.setSpecimenType(ruleLineFields[1]);
-			rule.setUserLogin(ruleLineFields[2]);
+			VisitLabelPrintRule rule = new VisitLabelPrintRule();
+			rule.setCpShortTitle(ruleLineFields[0]);
+			rule.setUserLogin(ruleLineFields[1]);
 			
-			if (!ruleLineFields[3].equals("*")) {
-				rule.setIpAddressMatcher(new IpAddressMatcher(ruleLineFields[3]));
-			}			
-			rule.setLabelType(ruleLineFields[4]);
-			
-			String[] labelTokens = ruleLineFields[5].split(",");			
+			if (!ruleLineFields[2].equals("*")) {
+				rule.setIpAddressMatcher(new IpAddressMatcher(ruleLineFields[2]));
+			}
+			rule.setLabelType(ruleLineFields[3]);
+
+			String[] labelTokens = ruleLineFields[4].split(",");
 			boolean badTokens = false;			
 			
 			List<LabelTmplToken> tokens = new ArrayList<LabelTmplToken>();
@@ -208,7 +208,7 @@ public class DefaultSpecimenLabelPrinter implements LabelPrinter<Specimen>, Init
 			}
 			
 			rule.setDataTokens(tokens);
-			rule.setPrinterName(ruleLineFields[6]);
+			rule.setPrinterName(ruleLineFields[5]);
 			rule.setMessageSource(messageSource);
 			return rule;
 		} catch (Exception e) {
@@ -216,5 +216,5 @@ public class DefaultSpecimenLabelPrinter implements LabelPrinter<Specimen>, Init
 		}
 		
 		return null;
-	}
+	}		
 }

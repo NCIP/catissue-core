@@ -420,7 +420,7 @@
     <property name="cfgSvc" ref="cfgSvc"/>
   </bean>
 
-  <bean id="printLabelTokensRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
+  <bean id="specimenPrintLabelTokensRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
     <property name="tokens">
       <list>
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenAnatomicSitePrintToken"/>
@@ -440,13 +440,30 @@
     </property>
   </bean>
 
+  <bean id="visitPrintLabelTokensRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
+    <property name="tokens">
+      <list>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.VisitCpShortTitlePrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.VisitDatePrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.VisitNamePrintToken"/>
+      </list>
+    </property>
+  </bean>
+
   <bean id="defaultSpecimenLabelPrinter" class="com.krishagni.catissueplus.core.biospecimen.services.impl.DefaultSpecimenLabelPrinter">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="cfgSvc" ref="cfgSvc"/>
-    <property name="printLabelTokensRegistrar" ref="printLabelTokensRegistrar"/>
+    <property name="printLabelTokensRegistrar" ref="specimenPrintLabelTokensRegistrar"/>
     <property name="messageSource" ref="messageSource"/>
   </bean>
-
+ 
+  <bean id="defaultVisitLabelPrinter" class="com.krishagni.catissueplus.core.biospecimen.services.impl.DefaultVisitLabelPrinter">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="cfgSvc" ref="cfgSvc"/>
+    <property name="printLabelTokensRegistrar" ref="visitPrintLabelTokensRegistrar"/>
+    <property name="messageSource" ref="messageSource"/>
+  </bean>
+ 
   <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
     <property name="corePoolSize" value="5" />
     <property name="maxPoolSize" value="10" />
