@@ -30,7 +30,11 @@
 
   <property name="clob.type" value="text" dbms="mysql"/>
   <property name="clob.type" value="clob" dbms="oracle"/>
- 
+
+  <changeSet author="nmarwaha" id="Modify length of ID column in databasechangelog table">
+    <modifyDataType tableName="databasechangelog" columnName="ID" newDataType="${text.type}(255)" />
+  </changeSet>  
+  
   <changeSet author="vpawar" id="Simplified storage containers" failOnError="true">
     <createTable tableName="OS_STORAGE_CONTAINERS">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
@@ -2228,6 +2232,30 @@
       baseColumnNames="JOB_ID"
       referencedTableName="OS_LABEL_PRINT_JOBS"
       referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="update existing CP title with 255 chars">
+    <sql>update CATISSUE_COLLECTION_PROTOCOL set title = substr(title, 1, 255)</sql>
+  </changeSet>
+
+  <changeSet author="nmarwaha" id="Modify length of CP title in catissue_collection_protocol table">
+    <modifyDataType tableName="CATISSUE_COLLECTION_PROTOCOL" columnName="TITLE" newDataType="${text.type}(255)" />
+  </changeSet>
+
+  <changeSet author="nmarwaha" id="update existing DP title with 255 chars">
+    <sql>update CATISSUE_DISTRIBUTION_PROTOCOL set title = substr(title, 1, 255)</sql>
+  </changeSet>
+
+  <changeSet author="nmarwaha" id="Modify length of DP title in catissue_distribution_protocol table">
+    <modifyDataType tableName="CATISSUE_DISTRIBUTION_PROTOCOL" columnName="TITLE" newDataType="${text.type}(255)" />
+  </changeSet>
+
+  <changeSet author="nmarwaha" id="update existing DP short_title with 50 chars">
+    <sql>update CATISSUE_DISTRIBUTION_PROTOCOL set short_title = substr(short_title, 1, 50)</sql>
+  </changeSet>
+
+  <changeSet author="nmarwaha" id="Modify length of DP short_title in catissue_distribution_protocol table">
+    <modifyDataType tableName="CATISSUE_DISTRIBUTION_PROTOCOL" columnName="SHORT_TITLE" newDataType="${text.type}(50)" />
   </changeSet>
 
 </databaseChangeLog>
