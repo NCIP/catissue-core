@@ -122,7 +122,7 @@ public class DistributionProtocol {
 	public void update(DistributionProtocol distributionProtocol) {
 		if (distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
 			setShortTitle(Utility.getDisabledValue(distributionProtocol.getShortTitle(), 50));
-			setTitle(Utility.getDisabledValue(distributionProtocol.getTitle(), 50));
+			setTitle(Utility.getDisabledValue(distributionProtocol.getTitle(), 255));
 		}
 		else {
 			setShortTitle(distributionProtocol.getShortTitle());
