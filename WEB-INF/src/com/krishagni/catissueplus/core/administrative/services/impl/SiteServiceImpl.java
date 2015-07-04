@@ -161,8 +161,8 @@ public class SiteServiceImpl implements SiteService {
 				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 			}
 			
-			existing.delete(deleteOp.isClose());
 			removeDefaultCoordinatorRoles(existing, existing.getCoordinators());
+			existing.delete(deleteOp.isClose());
 			return ResponseEvent.response(SiteDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
