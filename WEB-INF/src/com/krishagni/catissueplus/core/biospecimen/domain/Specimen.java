@@ -486,8 +486,8 @@ public class Specimen extends BaseEntity {
 		}
 
 		virtualize();
-		setLabel(Utility.getDisabledValue(getLabel()));
-		setBarcode(Utility.getDisabledValue(getBarcode()));
+		setLabel(Utility.getDisabledValue(getLabel(), 255));
+		setBarcode(Utility.getDisabledValue(getBarcode(), 255));
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());		
 		
 	}

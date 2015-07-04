@@ -419,8 +419,8 @@ public class CollectionProtocol extends BaseEntity {
 			throw OpenSpecimenException.userError(CpeErrorCode.REF_ENTITY_FOUND);
 		}
 
-		setTitle(Utility.appendTimestamp(getTitle()));
-		setShortTitle(Utility.appendTimestamp(getShortTitle()));
+		setTitle(Utility.getDisabledValue(getTitle(), 255));
+		setShortTitle(Utility.getDisabledValue(getShortTitle(), 50));
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 

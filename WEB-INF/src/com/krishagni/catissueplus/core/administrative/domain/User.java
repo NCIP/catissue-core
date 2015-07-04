@@ -304,8 +304,8 @@ public class User extends BaseEntity implements UserDetails {
 				throw OpenSpecimenException.userError(UserErrorCode.REF_ENTITY_FOUND);
 			}
 			
-			setLoginName(Utility.appendTimestamp(getLoginName()));
-			setEmailAddress(Utility.appendTimestamp(getEmailAddress()));
+			setLoginName(Utility.getDisabledValue(getLoginName(), 255));
+			setEmailAddress(Utility.getDisabledValue(getEmailAddress(), 255));
 		}
 		
 		setActivityStatus(activityStatus);
