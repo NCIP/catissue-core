@@ -39,7 +39,11 @@ public enum CpErrorCode implements ErrorCode {
 	
 	PI_DOES_NOT_BELONG_CP_REPOS,
 	
-	CO_ORD_DOES_NOT_BELONG_CP_REPOS;
+	CO_ORD_DOES_NOT_BELONG_CP_REPOS,
+	
+	CONSENT_REF_ENTITY_FOUND,
+	
+	DUP_CONSENT;
 	
 	@Override
 	public String code() {

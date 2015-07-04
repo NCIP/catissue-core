@@ -223,14 +223,8 @@
       "consent_responses": "Consent Responses",
       "signature_date": "Consent Signature Date",
       "witness": "Consent Witness",
-      "response_value": {
-        "yes": "Yes",
-        "no": "No",
-        "not_specified": "Not Specified",
-        "withdrawn": "Withdrawn",
-        "none": "None"
-      }
-    },
+      "clear": "Clear response"
+     },
 
     "similar_participants": "Following participants found that are similar to new participant being registered",
     "matched_attrs": "Matched Attributes",
@@ -1074,7 +1068,9 @@
     "form": "Form",
     "participant": "Participant",
     "specimen_event": "Specimen Event",
-    "specimen_list": "Specimen List"
+    "specimen_list": "Specimen List",
+    "consent_response": "Consent Response",
+    "consent": "Consent"
   },
 
   "bulk_imports": {

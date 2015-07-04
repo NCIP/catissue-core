@@ -1,9 +1,9 @@
 
 angular.module('openspecimen')
-  .filter('osNoValue', function() {
+  .filter('osNoValue', function($translate) {
     return function(input, placeholder) {
-      var result = placeholder || 'Not Specified';
 
+      var result = placeholder || $translate.instant("common.not_specified");
       if (angular.isUndefined(input) || input === null) {
         return result;
       }

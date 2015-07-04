@@ -284,6 +284,7 @@ public class CollectionProtocol extends BaseEntity {
 	public ConsentTier addConsentTier(ConsentTier ct) {
 		ct.setId(null);
 		ct.setCollectionProtocol(this);
+		ct.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 		consentTier.add(ct);
 		return ct;
 	}
@@ -348,10 +349,14 @@ public class CollectionProtocol extends BaseEntity {
 	public ConsentTier removeConsentTier(Long ctId) {		
 		ConsentTier ct = getConsentTierById(ctId);
 		if (ct == null) {
-			return null;
+			throw OpenSpecimenException.userError(CpErrorCode.CONSENT_TIER_NOT_FOUND);
 		}
 		
-		consentTier.remove(ct);
+		List<DependentEntityDetail> dependentEntities = ct.getDependentEntities();
+		if (!dependentEntities.isEmpty()) {
+			throw OpenSpecimenException.userError(CpErrorCode.CONSENT_REF_ENTITY_FOUND, ct.getStatement());
+		}
+		ct.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 		return ct;
 	}	
 	

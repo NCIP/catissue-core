@@ -980,4 +980,17 @@
       <column name="concentration_MOD" type="NUMBER(1, 0)"/>
     </addColumn>
   </changeSet>
+  
+  <changeSet author="vgaikwad" id="Added column to specify activity status of consent in audit table">
+    <addColumn tableName="catissue_consent_tier_aud">
+      <column name="ACTIVITY_STATUS" type="VARCHAR2(16 CHAR)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Column to track whether consent activity status column got modified">
+    <addColumn tableName="catissue_consent_tier_aud">
+      <column name="activityStatus_MOD" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
+  	  
 </databaseChangeLog>

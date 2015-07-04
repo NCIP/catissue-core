@@ -21,6 +21,7 @@ import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
 import com.krishagni.catissueplus.core.biospecimen.domain.CpWorkflowConfig;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
@@ -186,13 +187,37 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	@SuppressWarnings("unchecked")
 	public CpWorkflowConfig getCpWorkflows(Long cpId) {		
 		List<CpWorkflowConfig> cfgs = sessionFactory.getCurrentSession()
-			.createCriteria(CpWorkflowConfig.class)
-			.add(Restrictions.eq("id", cpId))
-			.list();
+				.createCriteria(CpWorkflowConfig.class)
+				.add(Restrictions.eq("id", cpId))
+				.list();
 		
 		return cfgs.isEmpty() ? null : cfgs.iterator().next();
 	}
+
+	@Override
+	public ConsentTier getConsentTier(Long consentId) {
+		return (ConsentTier) sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CONSENT_TIER)
+				.setLong("consentId", consentId)
+				.uniqueResult();
+	}
 	
+	@Override
+	public ConsentTier getConsentTierByStatement(Long cpId, String statement) {
+		return (ConsentTier) sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CONSENT_TIER_BY_STATEMENT)
+				.setLong("cpId", cpId)
+				.setString("statement", statement);
+	}
+	
+	@Override
+	public int getConsentRespsCount(Long consentId) {
+		return ((Number)sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CONSENT_RESP_COUNT)
+				.setLong("consentId", consentId)
+				.uniqueResult()).intValue();
+	}
+		
 	@Override
 	public Class<CollectionProtocol> getType() {
 		return CollectionProtocol.class;
@@ -300,6 +325,12 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	
 	private static final String GET_CP_IDS_BY_SITE_IDS = FQN + ".getCpIdsBySiteIds";
 	
+	private static final String GET_CONSENT_TIER = FQN + ".getConsentTier";
+
+	private static final String GET_CONSENT_TIER_BY_STATEMENT = FQN + ".getConsentTierByStatement";
+	
+	private static final String GET_CONSENT_RESP_COUNT = FQN + ".getConsentResponsesCount";
+		
 	private static final String CPE_FQN = CollectionProtocolEvent.class.getName();
 	
 	private static final String GET_CPE_BY_ID = CPE_FQN + ".getCpeById";

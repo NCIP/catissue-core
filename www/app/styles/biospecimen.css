@@ -169,11 +169,17 @@
   float: left;
 }
   
-.os-consent-stmt {
+.os-consents .os-consent-stmt {
   font-weight: bold;
   font-style: italic;
   color: #707070;
   margin-bottom: 7px;
 }
 
+.os-consents .os-md-input.read {
+  margin-top: 15px;
+}
 
+.os-consents .os-consent-response .btn {
+  margin-left: 10px;
+}

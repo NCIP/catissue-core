@@ -11,6 +11,8 @@ public class PermissibleValue extends BaseEntity {
 	private String conceptCode;
 
 	private PermissibleValue parent;
+	
+	private Long sortOrder;
 
 	public String getValue() {
 		return value;
@@ -44,10 +46,19 @@ public class PermissibleValue extends BaseEntity {
 		this.parent = parent;
 	}
 	
+	public Long getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(Long sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+
 	public void update(PermissibleValue other) {
 		setConceptCode(other.getConceptCode());
 		setAttribute(other.getAttribute());
 		setParent(other.getParent());
 		setValue(other.getValue());
+		setSortOrder(other.getSortOrder());
 	}
 }

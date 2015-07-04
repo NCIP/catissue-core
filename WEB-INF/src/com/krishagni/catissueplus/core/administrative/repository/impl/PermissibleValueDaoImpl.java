@@ -42,6 +42,7 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 		
 		int maxResults = crit.maxResults() < 0 ? 100 : crit.maxResults();
 		return query.setMaxResults(maxResults)
+			.addOrder(Order.asc("sortOrder"))
 			.addOrder(Order.asc("value"))
 			.list();
 	}
