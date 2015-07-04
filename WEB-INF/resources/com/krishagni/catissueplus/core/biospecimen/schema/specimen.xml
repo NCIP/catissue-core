@@ -72,6 +72,11 @@
     </field>
 
     <field>
+      <caption>#getMessage("specimen_concentration")</caption>
+      <attribute>concentration</attribute>
+    </field>
+
+    <field>
       <multiple>true</multiple>
       <caption>#getMessage("specimen_biohazard")</caption>
       <attribute>biohazards</attribute>
