@@ -215,7 +215,29 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		return getDeDateFormat() + " " + getTimeFormat();
 	}
 	
+	@Override
+	public Map<String, String> getWelcomeVideoSettings() {
+		Map<String, ConfigSetting> moduleConfig = configSettings.get("common");
+		if (moduleConfig == null) {
+			return Collections.emptyMap();
+		}
+		
+		Map<String, String> result = new HashMap<String, String>();
+		
+		ConfigSetting source = moduleConfig.get("welcome_video_source");
+		if (source != null) {
+			result.put("welcome_video_source", source.getValue());
+		}
+		
+		ConfigSetting url = moduleConfig.get("welcome_video_url");
+		if (url != null) {
+			result.put("welcome_video_url", url.getValue());
+		}
+		
+		return result;
+	}
 	
+		
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		reload();
@@ -284,25 +306,5 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		if (!existingLocale.equals(newLocale)) {
 			Locale.setDefault(newLocale);
 		}
-	}
-	
-	@PlusTransactional
-	public ResponseEvent<List<ConfigSettingDetail>> getWelcomeVideoSettings() {
-		List<ConfigSettingDetail> result = new ArrayList<ConfigSettingDetail>();
-		String welcome_video_source = getStrSetting("common", "welcome_video_source");
-		ConfigSettingDetail source = new ConfigSettingDetail();
-		source.setModule("common");
-		source.setName("welcome_video_source");
-		source.setType(DataType.STRING);
-		source.setValue(welcome_video_source);
-		result.add(source);
-		String welcome_video_url = getStrSetting("common", "welcome_video_url");
-		ConfigSettingDetail url = new ConfigSettingDetail();
-		url.setModule("common");
-		url.setName("welcome_video_url");
-		url.setType(DataType.STRING);
-		url.setValue(welcome_video_url);
-		result.add(url);
-		return new ResponseEvent<List<ConfigSettingDetail>>(result);
-	}
+	}	
 }
