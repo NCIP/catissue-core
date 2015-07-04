@@ -271,6 +271,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			}
 			
 			AccessCtrlMgr.getInstance().ensureDeleteCpRights(existingCp);
+			removeDefaultPiRoles(existingCp, existingCp.getPrincipalInvestigator());
+			removeDefaultCoordinatorRoles(existingCp, existingCp.getCoordinators());
 			existingCp.delete();
 			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
 		} catch (OpenSpecimenException ose) {
