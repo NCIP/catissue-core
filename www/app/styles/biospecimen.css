@@ -36,6 +36,11 @@
   padding: 0px 4px;
 }
 
+.fa.os-status-missed:before {
+  color: #888;
+  padding: 0px 4px;
+}
+
 .fa.os-status-pending:before {
   color: #f0ad4e;
   padding: 0px 4px;
@@ -89,6 +94,7 @@
 
 .os-key-values .value.os-status-collected, 
 .os-key-values .value.os-status-not-collected, 
+.os-key-values .value.os-status-missed,
 .os-key-values .value.os-status-pending {
   width: initial!important;
   border-radius: 4px;
@@ -102,6 +108,10 @@
 
 .os-key-values .value.os-status-pending {
   background: #f0ad4e;
+}
+
+.os-key-values .value.os-status-missed {
+  background: #888;
 }
 
 .os-key-values .value.os-status-not-collected {

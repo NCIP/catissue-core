@@ -1,11 +1,6 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.PvAttributes.CLINICAL_DIAG;
-import static com.krishagni.catissueplus.core.common.PvAttributes.CLINICAL_STATUS;
-import static com.krishagni.catissueplus.core.common.PvAttributes.VISIT_STATUS;
-import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
-
 import java.util.Calendar;
 import java.util.Date;
 
@@ -27,11 +22,18 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
+import static com.krishagni.catissueplus.core.common.PvAttributes.CLINICAL_DIAG;
+import static com.krishagni.catissueplus.core.common.PvAttributes.CLINICAL_STATUS;
+import static com.krishagni.catissueplus.core.common.PvAttributes.VISIT_STATUS;
+import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
+
 public class VisitFactoryImpl implements VisitFactory {
 
 	private DaoFactory daoFactory;
 	
 	private String defaultNameTmpl;
+
+	private String defaultMissedNameTmpl;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -39,6 +41,10 @@ public class VisitFactoryImpl implements VisitFactory {
 	
 	public void setDefaultNameTmpl(String defNameTmpl) {
 		this.defaultNameTmpl = defNameTmpl;
+	}
+
+	public void setDefaultMissedNameTmpl(String defaultMissedNameTmpl) {
+		this.defaultMissedNameTmpl = defaultMissedNameTmpl;
 	}
 
 	@Override
@@ -59,11 +65,15 @@ public class VisitFactoryImpl implements VisitFactory {
 		setClinicalStatus(visitDetail, visit, ose);
 		setSite(visitDetail, visit, ose);
 		setActivityStatus(visitDetail, visit, ose);
-		
 		visit.setComments(visitDetail.getComments());
 		visit.setSurgicalPathologyNumber(visitDetail.getSurgicalPathologyNumber());
 		visit.setDefNameTmpl(defaultNameTmpl);
-		
+
+		if (visit.getStatus().equals(Visit.VISIT_STATUS_MISSED)) {
+			visit.setDefNameTmpl(defaultMissedNameTmpl);
+			visit.setMissedVisitReason(visitDetail.getMissedVisitReason());
+		}
+
 		ose.checkAndThrow();
 		return visit;
 	}
@@ -92,6 +102,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		setActivityStatus(detail, existing, visit, ose);
 		setComments(detail, existing, visit, ose);
 		setSurgicalPathNo(detail, existing, visit, ose);
+		setMissedVisitReason(detail, existing, visit);
 		visit.setDefNameTmpl(defaultNameTmpl);
 		
 		ose.checkAndThrow();
@@ -286,13 +297,21 @@ public class VisitFactoryImpl implements VisitFactory {
 		}
 	}
 
+	private void setMissedVisitReason(VisitDetail detail, Visit existing, Visit visit) {
+		if (detail.isAttrModified("missedVisitReason")) {
+			visit.setMissedVisitReason(detail.getMissedVisitReason());
+		} else {
+			visit.setMissedVisitReason(existing.getMissedVisitReason());
+		}
+	}
+
 	private void setActivityStatus(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String status = visitDetail.getActivityStatus();
 		if (StringUtils.isBlank(status)) {
 			visit.setActive();
 		} else if (Status.isValidActivityStatus(status)) {
 			visit.setActivityStatus(status);
-		} else { 
+		} else {
 			ose.addError(ActivityStatusErrorCode.INVALID);
 		}
 	}

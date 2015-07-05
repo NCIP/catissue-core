@@ -3,6 +3,7 @@ angular.module('os.biospecimen.participant.addvisit', ['os.biospecimen.participa
     function loadPvs() {
       $scope.visitStatuses = PvManager.getPvs('visit-status');
       $scope.sites = PvManager.getSites();
+      $scope.missedVisitReasons = PvManager.getPvs('missed-visit-reason');
       $scope.clinicalStatuses = PvManager.getPvs('clinical-status');
 
       $scope.searchClinicalDiagnoses = function(searchTerm) {
@@ -45,7 +46,10 @@ angular.module('os.biospecimen.participant.addvisit', ['os.biospecimen.participa
       $scope.visit = getVisit();
     }
 
-    $scope.addVisit = function() {
+    $scope.addVisit = function(visitStatus) {
+      if (visitStatus) {
+        $scope.visit.status = visitStatus;
+      }
       $scope.visit.$saveOrUpdate().then(
         function(result) {
           angular.extend($scope.visitToAdd, result);

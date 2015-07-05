@@ -985,4 +985,16 @@
     </addColumn>
   </changeSet>
   
+  <changeSet author="ahegade" id="Missed visit reason column for scg table">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="MISSED_VISIT_REASON" type="VARCHAR(255)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Missed visit reason for visit audit modified">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="missedVisitReason_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

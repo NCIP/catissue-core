@@ -86,7 +86,9 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	INVALID_COLL_CONTAINER,
 	
-	INVALID_RECV_QUALITY;
+	INVALID_RECV_QUALITY,
+
+	CANNOT_COLLECT_FROM_MISSED_VISIT;
 
 	public String code() {
 		return "SPECIMEN_" + this.name();

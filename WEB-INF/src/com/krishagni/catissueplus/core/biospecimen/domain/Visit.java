@@ -33,6 +33,8 @@ public class Visit {
 	
 	public static final String VISIT_STATUS_COMPLETED = "Complete";
 
+	public static final String VISIT_STATUS_MISSED = "Missed Collection";
+
 	private Long id;
 
 	private String name;
@@ -64,6 +66,8 @@ public class Visit {
 	private CollectionProtocolRegistration registration;
 	
 	private String defNameTmpl;
+
+	private String missedVisitReason;
 	
 	@Autowired
 	@Qualifier("visitNameGenerator")
@@ -233,6 +237,14 @@ public class Visit {
 
 	public void setDefNameTmpl(String defNameTmpl) {
 		this.defNameTmpl = defNameTmpl;
+	}
+
+	public String getMissedVisitReason() {
+		return missedVisitReason;
+	}
+
+	public void setMissedVisitReason(String missedVisitReason) {
+		this.missedVisitReason = missedVisitReason;
 	}
 
 	public void setActive() {

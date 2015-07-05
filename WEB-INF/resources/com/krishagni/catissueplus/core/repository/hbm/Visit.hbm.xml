@@ -35,6 +35,8 @@
 
     <property name="visitDate" type="timestamp" column="COLLECTION_TIMESTAMP" />
 
+    <property name="missedVisitReason" column="MISSED_VISIT_REASON" />
+
     <many-to-one name="registration"
       class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration"
       column="COLLECTION_PROTOCOL_REG_ID" />
@@ -72,11 +74,13 @@
       <return-scalar column="status" type="string"/>
       <return-scalar column="visit_date" type="timestamp"/>
       <return-scalar column="reg_date" type="timestamp"/>
- 
+      <return-scalar column="missedVisitReason" type="string"/>
+
       select   
         scg.identifier as id, cpe.identifier as event_id, scg.name as name, cpe.activity_status as event_status,
         cpe.collection_point_label as label, cpe.study_calendar_event_point as calendar_point,
-        scg.collection_status as status, scg.collection_timestamp as visit_date, cpr.registration_date as reg_date 
+        scg.collection_status as status, scg.collection_timestamp as visit_date, cpr.registration_date as reg_date,
+        scg.missed_visit_reason as missedVisitReason
       from   
         catissue_coll_prot_reg cpr
         inner join catissue_coll_prot_event cpe 

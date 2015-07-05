@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
@@ -12,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
@@ -350,11 +352,23 @@ public class VisitServiceImpl implements VisitService {
 		} else {
 			existing.update(visit);
 		}
-				
+
+		if (existing.getStatus().equals(Visit.VISIT_STATUS_MISSED)) {
+			markSpecimensAsMissed(existing.getSpecimens());
+		}
 		daoFactory.getVisitsDao().saveOrUpdate(existing);
 		return VisitDetail.from(existing);		
 	}
-	
+
+	private void markSpecimensAsMissed(Set<Specimen> specimens) {
+		for (Specimen specimen : specimens) {
+			specimen.setCollectionStatus(Specimen.MISSED_COLLECTION);
+			if (specimen.getChildCollection().size() > 0) {
+				markSpecimensAsMissed(specimen.getChildCollection());
+			}
+		}
+	}
+
 	private Visit getVisit(Long visitId, String visitName) {
 		Visit visit = null;
 		
@@ -375,7 +389,7 @@ public class VisitServiceImpl implements VisitService {
 		CollectionProtocol cp = visit.getCollectionProtocol();
 		String name = visit.getName();
 		
-		if (StringUtils.isBlank(name)) {
+		if (StringUtils.isBlank(name) && !visit.getStatus().equals(Visit.VISIT_STATUS_MISSED)) {
 			if (cp.isManualVisitNameEnabled()) {
 				ose.addError(VisitErrorCode.NAME_REQUIRED);
 			}

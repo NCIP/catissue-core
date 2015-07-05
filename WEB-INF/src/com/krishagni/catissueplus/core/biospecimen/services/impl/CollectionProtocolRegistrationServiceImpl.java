@@ -334,7 +334,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			} else if (crit.getEventId() != null) {
 				specimens = getAnticipatedSpecimens(crit.getCprId(), crit.getEventId());
 			}
-			
+
 			return ResponseEvent.response(specimens);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -506,9 +506,23 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		Set<SpecimenRequirement> anticipatedSpecimens = visit.getCpEvent().getTopLevelAnticipatedSpecimens();
 		Set<Specimen> specimens = visit.getTopLevelSpecimens();
 
-		return SpecimenDetail.getSpecimens(anticipatedSpecimens, specimens);
+		List<SpecimenDetail> specimenDetails = SpecimenDetail.getSpecimens(anticipatedSpecimens, specimens);
+
+		if (visit.getStatus().equals(Visit.VISIT_STATUS_MISSED)) {
+			markAllSpecimensAsMissed(specimenDetails);
+		}
+		return specimenDetails;
 	}
-	
+
+	private void markAllSpecimensAsMissed(List<SpecimenDetail> specimenDetails) {
+		for (SpecimenDetail specimenDetail : specimenDetails) {
+			specimenDetail.setStatus(Specimen.MISSED_COLLECTION);
+			if (specimenDetail.getChildren().size() > 0) {
+				markAllSpecimensAsMissed(specimenDetail.getChildren());
+			}
+		}
+	}
+
 	private List<SpecimenDetail> getAnticipatedSpecimens(Long cprId, Long eventId) {
 		CollectionProtocolEvent cpe = daoFactory.getCollectionProtocolDao().getCpe(eventId);
 		if (cpe == null) {
