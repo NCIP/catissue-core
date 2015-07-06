@@ -22,5 +22,7 @@ public class ConfigParams {
 	public static final String SPR_DEIDENTIFIER          = "spr_deidentifier";
 	
 	public static final String SPR_DIR                   = "spr_dir";
+	
+	public static final String SPECIMEN_TYPE_ABBR_MAP    = "specimen_type_abbr_map";
 
 }
