@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
@@ -35,14 +34,10 @@ public class Utility {
 		
 		int valueMaxLength = maxLength - 14;
 		if (value.length() > valueMaxLength) {
-			value = value.substring(0, valueMaxLength - 1);
+			value = value.substring(0, valueMaxLength);
 		}
 		
-		return value + "_" + getCurrentTimeStamp();
-	}
-
-	private static String getCurrentTimeStamp() {
-		return new SimpleDateFormat().format(Calendar.getInstance().getTime());
+		return value + "_" + Calendar.getInstance().getTimeInMillis();
 	}
 	
 	public static Long numberToLong(Object number) {
