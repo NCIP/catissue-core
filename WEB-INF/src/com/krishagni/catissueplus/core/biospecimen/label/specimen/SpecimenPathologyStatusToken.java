@@ -17,6 +17,10 @@ public class SpecimenPathologyStatusToken extends AbstractSpecimenLabelToken {
 		}
 	}
 	
-	public static final String NON_MALIGNANT = "Non-Malignant";
-	public static final String NORMAL = "Normal";
+	//
+	// TODO: Requires internationalization
+	//
+	private static final String NON_MALIGNANT = "Non-Malignant";
+	
+	private static final String NORMAL = "Normal";
 }
