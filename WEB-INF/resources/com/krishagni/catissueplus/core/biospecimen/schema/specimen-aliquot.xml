@@ -1,0 +1,34 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>specimenAliquot</name>
+
+  <record> 
+    <name>com.krishagni.catissueplus.core.biospecimen.events.SpecimenAliquotsSpec</name>
+   
+    <field>
+      <caption>#getMessage("specimen_parent_specimen_label")</caption>
+      <attribute>parentLabel</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_qty_per_aliquot")</caption>
+      <attribute>qtyPerAliquot</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_no_of_aliquots")</caption>
+      <attribute>noOfAliquots</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_location_container")</caption>
+      <attribute>containerName</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_created_on")</caption>
+      <attribute>createdOn</attribute>
+    </field>
+  </record>
+</object-schema>

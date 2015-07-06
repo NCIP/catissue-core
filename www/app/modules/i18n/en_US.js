@@ -385,6 +385,10 @@
     "bulk_import": "Bulk Import Specimens",
     "spmn_extensions": "Specimen Extensions",
     "spmn_events": "Specimen Events",
+    "spmn_aliquots": "Specimen Aliquots",
+    "bulk_import_aliquots": "Bulk Import Aliquots",
+    "spmn_derivatives": "Specimen Derivatives",
+    "bulk_import_derivatives": "Bulk Import Derivatives",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",
@@ -1106,7 +1110,9 @@
       "cpr": "Collection Protocol Registrations",
       "participant": "Participants",
       "visit": "Visits",
-      "specimen": "Specimens"
+      "specimen": "Specimens",
+      "specimenAliquot": "Specimen Aliquots",
+      "specimenDerivative": "Derived Specimens"
     },
 
     "import_types": {

@@ -26,7 +26,7 @@ import com.krishagni.catissueplus.core.importer.services.ObjectImporter;
 import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.napi.FormData;
 
-public class ExtensionsImporter implements ObjectImporter<Map<String, Object>> {
+public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, Map<String, Object>> {
 	
 	private FormService formSvc;
 	

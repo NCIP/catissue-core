@@ -481,7 +481,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setConcentration(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		if (!specimen.getSpecimenClass().equals("Molecular")) {
+		if (StringUtils.isBlank(specimen.getSpecimenClass()) || !specimen.getSpecimenClass().equals("Molecular")) {
 			return;
 		}
 		

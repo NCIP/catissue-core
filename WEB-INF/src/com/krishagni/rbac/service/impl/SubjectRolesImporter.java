@@ -7,7 +7,7 @@ import com.krishagni.catissueplus.core.importer.services.ObjectImporter;
 import com.krishagni.rbac.events.SubjectRolesList;
 import com.krishagni.rbac.service.RbacService;
 
-public class SubjectRolesImporter implements ObjectImporter<SubjectRolesList> {
+public class SubjectRolesImporter implements ObjectImporter<SubjectRolesList, SubjectRolesList> {
 	
 	private RbacService rbacSvc;
 	

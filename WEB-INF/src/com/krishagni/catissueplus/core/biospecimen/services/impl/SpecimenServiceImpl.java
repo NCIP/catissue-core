@@ -17,8 +17,10 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorC
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenAliquotsSpec;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenStatusDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
@@ -217,6 +219,66 @@ public class SpecimenServiceImpl implements SpecimenService {
 			}
 			
 			return ResponseEvent.response(result);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<SpecimenDetail>> createAliquots(RequestEvent<SpecimenAliquotsSpec> req) {
+		try {
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			
+			SpecimenAliquotsSpec spec = req.getPayload();
+			Specimen parentSpecimen = getSpecimen(spec.getParentId(), spec.getParentLabel(), ose);
+			ose.checkAndThrow();
+			
+			if (!parentSpecimen.isCollected()) {
+				return ResponseEvent.userError(SpecimenErrorCode.NOT_COLLECTED, parentSpecimen.getLabel());
+			}
+									
+			Integer count = spec.getNoOfAliquots();
+			Double aliquotQty = spec.getQtyPerAliquot();
+			double reqQty = 0;
+						
+			if (count != null && aliquotQty != null) {
+				if (count <= 0 || aliquotQty <= 0) {
+					return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
+				}
+				
+				reqQty = count * aliquotQty;
+				if (reqQty > parentSpecimen.getAvailableQuantity()) {
+					return ResponseEvent.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
+				}
+			} else if (count != null && count > 0) {				
+				aliquotQty =  Math.round(parentSpecimen.getAvailableQuantity() / count * 10000) / 10000.0; 
+			} else if (aliquotQty != null && aliquotQty > 0) {
+				count = (int)Math.floor(parentSpecimen.getAvailableQuantity() / aliquotQty);
+			} else {
+				return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
+			}
+			
+			List<SpecimenDetail> aliquots = new ArrayList<SpecimenDetail>();
+			for (int i = 0; i < count; ++i) {
+				SpecimenDetail aliquot = new SpecimenDetail();
+				aliquot.setLineage(Specimen.ALIQUOT);
+				aliquot.setInitialQty(aliquotQty);
+				aliquot.setAvailableQty(aliquotQty);
+				aliquot.setParentLabel(parentSpecimen.getLabel());
+				aliquot.setParentId(parentSpecimen.getId());
+				aliquot.setCreatedOn(spec.getCreatedOn());
+				
+				StorageLocationSummary location = new StorageLocationSummary();
+				location.name = spec.getContainerName();
+				aliquot.setStorageLocation(location);
+				
+				aliquots.add(aliquot);				
+			}
+			
+			return collectSpecimens(new RequestEvent<List<SpecimenDetail>>(aliquots));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

@@ -314,7 +314,7 @@ public class ImportServiceImpl implements ImportService {
 		public void run() {
 			SecurityContextHolder.getContext().setAuthentication(auth);			
 			ObjectSchema   schema   = schemaFactory.getSchema(job.getName(), job.getParams());
-			ObjectImporter<Object> importer = importerFactory.getImporter(job.getName());
+			ObjectImporter<Object, Object> importer = importerFactory.getImporter(job.getName());
 			
 			ObjectReader objReader = null;
 			CSVWriter csvWriter = null;
@@ -374,7 +374,7 @@ public class ImportServiceImpl implements ImportService {
 			}
 		}
 		
-		private String importObject(final ObjectImporter<Object> importer, Object object, Map<String, Object> params) {
+		private String importObject(final ObjectImporter<Object, Object> importer, Object object, Map<String, Object> params) {
 			try {
 				ImportObjectDetail<Object> detail = new ImportObjectDetail<Object>();
 				detail.setCreate(job.getType() == Type.CREATE);

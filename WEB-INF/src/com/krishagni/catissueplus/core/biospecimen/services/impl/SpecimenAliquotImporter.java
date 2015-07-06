@@ -1,5 +1,8 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import java.util.List;
+
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenAliquotsSpec;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -7,7 +10,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.importer.events.ImportObjectDetail;
 import com.krishagni.catissueplus.core.importer.services.ObjectImporter;
 
-public class SpecimenImporter implements ObjectImporter<SpecimenDetail, SpecimenDetail> {
+public class SpecimenAliquotImporter implements ObjectImporter<SpecimenAliquotsSpec, List<SpecimenDetail>> {
 	
 	private SpecimenService specimenSvc;
 	
@@ -16,16 +19,11 @@ public class SpecimenImporter implements ObjectImporter<SpecimenDetail, Specimen
 	}
 	
 	@Override
-	public ResponseEvent<SpecimenDetail> importObject(RequestEvent<ImportObjectDetail<SpecimenDetail>> req) {
+	public ResponseEvent<List<SpecimenDetail>> importObject(RequestEvent<ImportObjectDetail<SpecimenAliquotsSpec>> req) {
 		try {
-			ImportObjectDetail<SpecimenDetail> detail = req.getPayload();
-			RequestEvent<SpecimenDetail> specReq = new RequestEvent<SpecimenDetail>(detail.getObject());
-			
-			if (detail.isCreate()) {
-				return specimenSvc.createSpecimen(specReq);
-			} else {
-				return specimenSvc.patchSpecimen(specReq);
-			}
+			ImportObjectDetail<SpecimenAliquotsSpec> detail = req.getPayload();
+			RequestEvent<SpecimenAliquotsSpec> specReq = new RequestEvent<SpecimenAliquotsSpec>(detail.getObject());			
+			return specimenSvc.createAliquots(specReq);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}		

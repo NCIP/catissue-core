@@ -1,0 +1,80 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>specimenDerivative</name>
+
+  <record> 
+    <name>com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail</name>
+   
+    <field>
+      <caption>#getMessage("specimen_parent_specimen_label")</caption>
+      <attribute>parentLabel</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_label")</caption>
+      <attribute>label</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_barcode")</caption>
+      <attribute>barcode</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_class")</caption>
+      <attribute>specimenClass</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_type")</caption>
+      <attribute>type</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_collection_status")</caption>
+      <attribute>status</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_initial_quantity")</caption>
+      <attribute>initialQty</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_available_quantity")</caption>
+      <attribute>availableQty</attribute>
+    </field>
+
+    <field>
+      <multiple>true</multiple>
+      <caption>#getMessage("specimen_biohazard")</caption>
+      <attribute>biohazards</attribute>
+    </field>
+
+    <record>
+      <caption>#getMessage("specimen_location")</caption>
+      <attribute>storageLocation</attribute>
+
+      <field>
+        <caption>#getMessage("specimen_location_container")</caption>
+        <attribute>name</attribute>
+      </field>
+
+      <field>
+        <caption>#getMessage("specimen_location_row")</caption>
+        <attribute>positionY</attribute>
+      </field>
+
+      <field>
+        <caption>#getMessage("specimen_location_column")</caption>
+        <attribute>positionX</attribute>
+      </field>
+    </record>
+
+    <field>
+      <caption>#getMessage("specimen_created_on")</caption>
+      <attribute>createdOn</attribute>
+    </field>
+  </record>
+</object-schema>
