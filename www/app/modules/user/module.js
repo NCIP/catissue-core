@@ -30,7 +30,16 @@ angular.module('openspecimen')
         },
         controller: 'UserAddEditCtrl',
         parent: 'default'
+      })
+      .state('welcome', {
+        url: '/welcome',
+        templateUrl: 'modules/user/welcome.html',
+        resolve: {
+          videoSettings : function (Setting) {            
+            return Setting.getWelcomeVideoSetting();
+          }
+        },
+        controller: 'WelcomeCtrl',
+        parent: 'default'
       });
   });
-
-

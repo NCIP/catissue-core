@@ -271,6 +271,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			}
 			
 			AccessCtrlMgr.getInstance().ensureDeleteCpRights(existingCp);
+			removeDefaultPiRoles(existingCp, existingCp.getPrincipalInvestigator());
+			removeDefaultCoordinatorRoles(existingCp, existingCp.getCoordinators());
 			existingCp.delete();
 			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
 		} catch (OpenSpecimenException ose) {
@@ -338,10 +340,12 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			ConsentTier resp = null;			
 			switch (opDetail.getOp()) {
 				case ADD:
+					ensureUniqueConsentStatement(input, cp);
 					resp = cp.addConsentTier(input.toConsentTier());
 					break;
 					
 				case UPDATE:
+					ensureUniqueConsentStatement(input, cp);
 					resp = cp.updateConsentTier(input.toConsentTier());
 					break;
 					
@@ -361,6 +365,20 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			return ResponseEvent.serverError(e);
 		}		
 	}	
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<DependentEntityDetail>> getConsentDependentEntities(RequestEvent<ConsentTierDetail> req) {
+		try {
+			ConsentTierDetail consentTierDetail = req.getPayload();
+			ConsentTier consentTier = getConsentTier(consentTierDetail);
+			return ResponseEvent.response(consentTier.getDependentEntities());
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch(Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
 
 	@Override
 	@PlusTransactional
@@ -891,5 +909,30 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	private String[] getDefaultCoordinatorRoles() {
 		return new String[] {"Coordinator"};
 	}
+	
+	private ConsentTier getConsentTier(ConsentTierDetail consentTierDetail) {
+		CollectionProtocolDao cpDao = daoFactory.getCollectionProtocolDao();
+		
+		ConsentTier consentTier = null;
+		if (consentTierDetail.getId() != null) {
+			consentTier = cpDao.getConsentTier(consentTierDetail.getId());
+		} else if (StringUtils.isNotBlank(consentTierDetail.getStatement()) && consentTierDetail.getCpId() != null ) {
+			consentTier = cpDao.getConsentTierByStatement(consentTierDetail.getCpId(), consentTierDetail.getStatement());
+		}
+		
+		if (consentTier == null) {
+			throw OpenSpecimenException.userError(CpErrorCode.CONSENT_TIER_NOT_FOUND);
+		}
+		
+		return consentTier;
+	}
 
+	private void ensureUniqueConsentStatement(ConsentTierDetail consentTierDetail, CollectionProtocol cp) {
+		for (ConsentTier consentTier : cp.getConsentTier()) {
+			if (consentTierDetail.getStatement().equals(consentTier.getStatement()) && 
+					consentTier.getId() != consentTierDetail.getId()) {
+				throw OpenSpecimenException.userError(CpErrorCode.DUP_CONSENT, consentTier.getStatement());
+			}
+		}
+	}
 }

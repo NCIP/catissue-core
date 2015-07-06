@@ -15,14 +15,7 @@ angular.module('os.biospecimen.participant.consents', [])
     }
 
     function loadPvs() {
-      /**
-       * TODO:
-       * Instead of below hardcoded values, use PvManager.getPvs('consent_response');
-       * Current Permissible Values REST API only return alphabetically sorted values
-       * here needs pvs sorted on basis of value in SORTORDER column of catissue_permissible_value table
-      **/
-      //$scope.consentResponses = PvManager.getPvs('consent_response');
-      $scope.consentResponses = ['Yes', 'No', 'Not Specified'];
+      $scope.consentResponses = PvManager.getPvs('consent_response');
     }
 
     function deleteConsentForm() {
@@ -68,8 +61,11 @@ angular.module('os.biospecimen.participant.consents', [])
       cpr.saveConsentResponse($scope.consent).then(function(result) {
         $scope.consents = result;
         $scope.editMode = $scope.consentResponseAdd = false;
-
       });
+    }
+
+    $scope.clearResponseSelection = function(consentTierResponse) {
+      consentTierResponse.response = undefined;
     }
 
     init();

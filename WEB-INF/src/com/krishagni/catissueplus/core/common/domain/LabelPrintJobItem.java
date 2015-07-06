@@ -1,17 +1,19 @@
-package com.krishagni.catissueplus.core.biospecimen.domain;
+package com.krishagni.catissueplus.core.common.domain;
 
 import java.util.Date;
 
-public class SpecimenLabelPrintJobItem extends BaseEntity {
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
+
+public class LabelPrintJobItem extends BaseEntity {
 	public enum Status {
 		QUEUED,
 		PRINTED,
 		EXPIRED
 	};
 	
-	private SpecimenLabelPrintJob job;
+	private LabelPrintJob job;
 	
-	private Specimen specimen;
+	private String itemLabel;
 	
 	private Date printDate;
 	
@@ -23,20 +25,20 @@ public class SpecimenLabelPrintJobItem extends BaseEntity {
 	
 	private String data;
 
-	public SpecimenLabelPrintJob getJob() {
+	public LabelPrintJob getJob() {
 		return job;
 	}
 
-	public void setJob(SpecimenLabelPrintJob job) {
+	public void setJob(LabelPrintJob job) {
 		this.job = job;
 	}
 
-	public Specimen getSpecimen() {
-		return specimen;
+	public String getItemLabel() {
+		return itemLabel;
 	}
 
-	public void setSpecimen(Specimen specimen) {
-		this.specimen = specimen;
+	public void setItemLabel(String itemLabel) {
+		this.itemLabel = itemLabel;
 	}
 
 	public Date getPrintDate() {

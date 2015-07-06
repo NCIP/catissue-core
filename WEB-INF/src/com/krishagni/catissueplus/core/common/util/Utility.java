@@ -6,9 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -21,19 +19,25 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import au.com.bytecode.opencsv.CSVWriter;
+
 import com.krishagni.catissueplus.core.common.PdfUtil;
 
 public class Utility {
-	public static String getDisabledValue(String value) {
+	public static String getDisabledValue(String value, int maxLength) {
 		if (StringUtils.isBlank(value)) {
 			return value;
 		}
 		
-		return value + "_" + getCurrentTimeStamp();
-	}
-
-	private static String getCurrentTimeStamp() {
-		return new SimpleDateFormat().format(Calendar.getInstance().getTime());
+		if (maxLength < 14) {
+			throw new IllegalArgumentException("Max length should be at least 14 characters");
+		}
+		
+		int valueMaxLength = maxLength - 14;
+		if (value.length() > valueMaxLength) {
+			value = value.substring(0, valueMaxLength);
+		}
+		
+		return value + "_" + Calendar.getInstance().getTimeInMillis();
 	}
 	
 	public static Long numberToLong(Object number) {
@@ -56,12 +60,6 @@ public class Utility {
 		return leftOperand.containsAll(rightOperand);		
 	}	
 	
-	public static String appendTimestamp(String name) {
-		Calendar cal = Calendar.getInstance();
-		name = name + "_" + cal.getTimeInMillis();
-		return name;
-	}
-
 	public static String getInputStreamDigest(InputStream in) 
 	throws IOException {
 		return DigestUtils.md5Hex(getInputStreamBytes(in));

@@ -4,15 +4,18 @@ package com.krishagni.catissueplus.core.biospecimen.services;
 import java.util.List;
 import java.util.Map;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenAliquotsSpec;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenLabelPrintJobSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenStatusDetail;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.LabelPrinter;
 
 public interface SpecimenService {
 	public ResponseEvent<SpecimenDetail> getSpecimen(RequestEvent<EntityQueryCriteria> req);
@@ -33,9 +36,14 @@ public interface SpecimenService {
 	
 	public ResponseEvent<List<SpecimenDetail>> collectSpecimens(RequestEvent<List<SpecimenDetail>> req);
 	
+	public ResponseEvent<List<SpecimenDetail>> createAliquots(RequestEvent<SpecimenAliquotsSpec> req);
+	
 	public ResponseEvent<Boolean> doesSpecimenExists(RequestEvent<String> label);
 	
-	public ResponseEvent<SpecimenLabelPrintJobSummary> printSpecimenLabels(RequestEvent<PrintSpecimenLabelDetail> req);
+	public ResponseEvent<LabelPrintJobSummary> printSpecimenLabels(RequestEvent<PrintSpecimenLabelDetail> req);
+	
+	/** Used mostly by plugins **/
+	public LabelPrinter<Specimen> getLabelPrinter();
 	
 	/** Mostly present for UI **/
 	public ResponseEvent<Map<String, Long>> getCprAndVisitIds(RequestEvent<Long> req);

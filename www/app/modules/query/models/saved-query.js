@@ -3,10 +3,11 @@ angular.module('os.query.models.savedquery', ['os.common.models'])
   .factory('SavedQuery', function($http, osModel, QueryUtil) {
     var SavedQuery = osModel('saved-queries');
 
-    SavedQuery.list = function() {
+    SavedQuery.list = function(filterOpts) {
       var result = {count: 0, queries: []};
+      var params = angular.extend({countReq: false}, filterOpts);
       
-      $http.get(SavedQuery.url(), {countReq: true}).then(
+      $http.get(SavedQuery.url(), {params: params}).then(
         function(resp) {
           result.count = resp.data.count;
           result.queries = resp.data.queries.map(

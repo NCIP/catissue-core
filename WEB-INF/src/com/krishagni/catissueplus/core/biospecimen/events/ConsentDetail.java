@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
@@ -110,10 +108,10 @@ public class ConsentDetail {
 		
 		for (ConsentTier consentTier : cpr.getCollectionProtocol().getConsentTier()) {
 			ConsentTierResponseDetail response = new ConsentTierResponseDetail();
-			response.setConsentStatement(consentTier.getStatement());
+			response.setStatement(consentTier.getStatement());
 			for (ConsentTierResponse resp : cpr.getConsentResponses()) {
 				if (consentTier.getStatement().equals(resp.getConsentTier().getStatement())) {
-					response.setParticipantResponse(resp.getResponse());
+					response.setResponse(resp.getResponse());
 					break;
 				}
 			}

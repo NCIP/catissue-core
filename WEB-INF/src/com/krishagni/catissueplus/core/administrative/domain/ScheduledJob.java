@@ -237,7 +237,7 @@ public class ScheduledJob extends BaseEntity {
 	
 	public void delete() {
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
-		name = Utility.getDisabledValue(name);
+		name = Utility.getDisabledValue(name, 255);
 	}
 	
 	private Date getNextMinutelyOccurence() {

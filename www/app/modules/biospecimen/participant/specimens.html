@@ -155,7 +155,7 @@
                   </li>
                   <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
                     <a ng-click="showCloseSpecimen(specimen)">
-                      <i class="fa fa-trash"></i>
+                      <i class="fa fa-remove"></i>
                       <span translate="specimens.ctx_menu.close">Close</span>
                     </a>
                   </li>
@@ -243,7 +243,7 @@
   <div>
     <form name="derivativeForm" os-form-validator="derivativeForm" novalidate>
       <div class="clearfix">
-        <div class="col-xs-3">
+        <div class="os-col-30">
           <div class="form-group">
             <os-select name="specimenClass" on-change="loadSpecimenTypes(derivative.specimenClass)" 
               ng-model="derivative.specimenClass" list="specimenClasses"
@@ -253,7 +253,7 @@
           </div>
         </div>
 
-        <div class="col-xs-4">
+        <div class="os-col-30">
           <div class="form-group">
             <os-select name="specimenType" ng-model="derivative.type" list="specimenTypes"
               os-md-input placeholder="{{'specimens.type' | translate}}" required>
@@ -262,7 +262,7 @@
           </div>
         </div>
   
-        <div class="col-xs-3">
+        <div class="os-col-30">
           <div class="form-group">
             <input name="label" ng-model="derivative.label" os-md-input class="form-control"
               type="text" placeholder="{{'specimens.label' | translate}}" 
@@ -273,7 +273,7 @@
       </div>
  
       <div class="clearfix">
-        <div class="col-xs-3">
+        <div class="os-col-30">
           <div class="form-group">
             <input name="quantity" ng-model="derivative.initialQty" os-md-input class="form-control" 
               type="text" placeholder="{{'specimens.qty' | translate}}" required 
@@ -282,7 +282,17 @@
           </div>
         </div>
 
-        <div class="col-xs-7">
+        <div class="os-col-30" ng-if="derivative.specimenClass == 'Molecular'">
+          <div class="form-group">
+            <input name="concentration" ng-model="derivative.concentration" os-md-input class="form-control" 
+              type="text" placeholder="{{'specimens.concentration' | translate}}" 
+              ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/" ng-model-options="{allowInvalid: 'true'}">
+            <div os-field-error field="derivativeForm.concentration"></div>
+          </div>
+        </div>
+
+        <div ng-class="{'os-col-50': derivative.specimenClass != 'Molecular', 
+                        'os-col-40': derivative.specimenClass == 'Molecular'}">
           <div class="form-group">
             <os-specimen-position os-md-input specimen="derivative" cp-id="cpr.cpId"></os-specimen-position>
           </div>

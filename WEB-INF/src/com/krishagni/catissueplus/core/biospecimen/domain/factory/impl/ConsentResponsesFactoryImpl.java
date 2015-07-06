@@ -83,27 +83,32 @@ public class ConsentResponsesFactoryImpl implements ConsentResponsesFactory {
 		if (cpr == null) {
 			throw OpenSpecimenException.userError(CprErrorCode.NOT_FOUND);
 		}
-		
-		for (ConsentTier consentTier : cpr.getCollectionProtocol().getConsentTier()) {
+
+		for (ConsentTierResponseDetail consentResponse : detail.getConsentTierResponses()) {
 			ConsentTierResponse response = new ConsentTierResponse();
-			response.setConsentTier(consentTier);
 			response.setCpr(cpr);
 			
-			for (ConsentTierResponseDetail userResp : detail.getConsentTierResponses()) {
-				if (consentTier.getStatement().equals(userResp.getConsentStatement())) {
-					String participantResponse = userResp.getParticipantResponse();
-					if (!isValid(CONSENT_RESPONSE, participantResponse)) {
-						ose.addError(CprErrorCode.INVALID_CONSENT_RESPONSE);
-						return;
-					}
-					response.setResponse(participantResponse);
+			for (ConsentTier consentTier : cpr.getCollectionProtocol().getConsentTier()) { 
+				if (consentTier.getStatement().equals(consentResponse.getStatement())) {
+					response.setConsentTier(consentTier);
 					break;
 				}
 			}
 			
+			if (response.getConsentTier() == null) {
+				ose.addError(CprErrorCode.INVALID_CONSENT_STATEMENT, consentResponse.getStatement());
+			}
+			
+			String resp = consentResponse.getResponse();
+			if (!isValid(CONSENT_RESPONSE, resp)) {
+				ose.addError(CprErrorCode.INVALID_CONSENT_RESPONSE, resp);
+				return;
+			}
+			response.setResponse(resp);
+			
 			consentTierResponses.add(response);
 		}
-		
+
 		consentResponses.setConsentResponses(consentTierResponses);		
 	}
 	

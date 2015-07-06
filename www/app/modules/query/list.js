@@ -1,10 +1,11 @@
 
 angular.module('os.query.list', ['os.query.models'])
   .controller('QueryListCtrl', function(
-    $scope, $modal,
-    currentUser, queryGlobal, SavedQuery, QueryFolder, Alerts) {
+    $scope, $modal, currentUser, queryGlobal, 
+    Util, SavedQuery, QueryFolder, Alerts) {
 
     function init() {
+      $scope.filterOpts = {searchString: ''};
       $scope.queryList = [];
       $scope.selectedQueries = [];
       $scope.folders = {
@@ -14,12 +15,18 @@ angular.module('os.query.list', ['os.query.models'])
       };
 
       queryGlobal.clearQueryCtx();
-      loadAllQueries();
+      loadQueries($scope.filterOpts);
       loadAllFolders();
+      Util.filter($scope, 'filterOpts', loadQueries);
     };
 
-    function loadAllQueries() {
-      $scope.queryList = SavedQuery.list();
+    function loadQueries(filterOpts) {
+      $scope.selectedQueries = [];
+      if (!$scope.folders.selectedFolder) {
+        $scope.queryList = SavedQuery.list(filterOpts);
+      } else {
+        $scope.queryList = $scope.folders.selectedFolder.getQueries(filterOpts);
+      }
     };
  
     function loadAllFolders() {
@@ -40,13 +47,9 @@ angular.module('os.query.list', ['os.query.models'])
     };
 
     function loadFolderQueries(folder) {
-      $scope.selectedQueries = [];
       $scope.folders.selectedFolder = folder;
-      if (!folder) {
-        loadAllQueries();
-      } else {
-        $scope.queryList = folder.getQueries(true);
-      }
+      $scope.filterOpts = {};
+      loadQueries($scope.filterOpts);
     };
 
     $scope.importQuery = function() {

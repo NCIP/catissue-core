@@ -4,7 +4,8 @@ angular.module('os.biospecimen.specimen',
     'ui.router',
     'os.biospecimen.specimen.addedit',
     'os.biospecimen.specimen.detail',
-    'os.biospecimen.specimen.overview'
+    'os.biospecimen.specimen.overview',
+    'os.biospecimen.specimen.close'
   ])
   .config(function($stateProvider) {
     $stateProvider

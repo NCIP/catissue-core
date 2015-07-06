@@ -7,7 +7,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.importer.events.ImportObjectDetail;
 import com.krishagni.catissueplus.core.importer.services.ObjectImporter;
 
-public class SpecimenImporter implements ObjectImporter<SpecimenDetail> {
+public class SpecimenImporter implements ObjectImporter<SpecimenDetail, SpecimenDetail> {
 	
 	private SpecimenService specimenSvc;
 	

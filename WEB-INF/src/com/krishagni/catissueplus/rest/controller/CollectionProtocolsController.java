@@ -212,9 +212,14 @@ public class CollectionProtocolsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public ConsentTierDetail updateConsentTier(
-			@PathVariable("id") Long cpId,
-			@PathVariable("tierId") Long tierId,
-			@RequestBody ConsentTierDetail consentTier) {
+			@PathVariable("id") 
+			Long cpId,
+			
+			@PathVariable("tierId") 
+			Long tierId,
+			
+			@RequestBody 
+			ConsentTierDetail consentTier) {
 		
 		consentTier.setId(tierId);
 		return performConsentTierOp(OP.UPDATE, cpId, consentTier);
@@ -224,14 +229,34 @@ public class CollectionProtocolsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public ConsentTierDetail removeConsentTier(
-			@PathVariable("id") Long cpId,
-			@PathVariable("tierId") Long tierId) {
+			@PathVariable("id") 
+			Long cpId,
+			
+			@PathVariable("tierId") 
+			Long tierId) {
 		
 		ConsentTierDetail consentTier = new ConsentTierDetail();
 		consentTier.setId(tierId);
 		return performConsentTierOp(OP.REMOVE, cpId, consentTier);		
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/consent-tiers/{tierId}/dependent-entities")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public List<DependentEntityDetail> getConsentDependentEntities(
+			@PathVariable("id") 
+			Long cpId,
+			
+			@PathVariable("tierId") 
+			Long tierId) {
+		ConsentTierDetail consentTierDetail = new ConsentTierDetail();
+		consentTierDetail.setCpId(cpId);
+		consentTierDetail.setId(tierId);
+		
+		ResponseEvent<List<DependentEntityDetail>> resp = cpSvc.getConsentDependentEntities(getRequest(consentTierDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/workflows")
 	@ResponseStatus(HttpStatus.OK)

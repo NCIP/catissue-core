@@ -229,7 +229,8 @@
             <column name="CONSENT_DOCUMENT_NAME" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-27">
+    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-27" runOnChange="false">
+        <validCheckSum>7:6b7bfb0858a36866a3a7abd9cd3caf7b</validCheckSum>
         <createTable tableName="catissue_collection_protocol">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
@@ -243,8 +244,8 @@
             <column name="STUDY_CALENDAR_EVENT_POINT" type="DOUBLE"/>
             <column name="IS_EMPI_ENABLE" type="BIT"/>
             <column name="PRINCIPAL_INVESTIGATOR_ID" type="BIGINT"/>
-            <column name="TITLE" type="VARCHAR(512)"/>
-            <column name="SHORT_TITLE" type="VARCHAR(512)"/>
+            <column name="TITLE" type="VARCHAR(255)"/>
+            <column name="SHORT_TITLE" type="VARCHAR(50)"/>
             <column name="IRB_IDENTIFIER" type="VARCHAR(255)"/>
             <column name="START_DATE" type="DATE"/>
             <column name="END_DATE" type="DATE"/>
@@ -482,7 +483,8 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-48">
+    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-48" runOnChange="false">
+        <validCheckSum>7:cdbe74310ba75e7002eee2b336804d82</validCheckSum>
         <createTable tableName="catissue_distri_event_param">
             <column name="DISTRIBUTED_QUANTITY" type="DOUBLE"/>
             <column name="DISTRIBUTION_ID" type="BIGINT"/>
@@ -490,7 +492,7 @@
             <column name="SPECIMEN_ID" type="BIGINT"/>
             <column name="USER_ID" type="BIGINT"/>
             <column name="COMMENTS" type="VARCHAR(500)"/>
-            <column name="DP_TITLE" type="VARCHAR(512)"/>
+            <column name="DP_TITLE" type="VARCHAR(255)"/>
             <column name="ORDER_NAME" type="VARCHAR(500)"/>
             <column name="IDENTIFIER" type="BIGINT"/>
             <column defaultValueNumeric="0" name="SPE_ID" type="BIGINT">
@@ -524,14 +526,15 @@
             <column name="ORDER_ID" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-51">
+    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-51" runOnChange="false">
+        <validCheckSum>7:d0165e03bfebc4a0ba923e01e2eb60cc</validCheckSum>
         <createTable tableName="catissue_distribution_protocol">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="PRINCIPAL_INVESTIGATOR_ID" type="BIGINT"/>
-            <column name="TITLE" type="VARCHAR(512)"/>
-            <column name="SHORT_TITLE" type="VARCHAR(512)"/>
+            <column name="TITLE" type="VARCHAR(255)"/>
+            <column name="SHORT_TITLE" type="VARCHAR(50)"/>
             <column name="IRB_IDENTIFIER" type="VARCHAR(255)"/>
             <column name="START_DATE" type="DATE"/>
             <column name="END_DATE" type="DATE"/>
@@ -1882,14 +1885,15 @@
             <column defaultValue="Active" name="ACTIVITY_STATUS" type="VARCHAR(64)"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-185">
+    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-185" runOnChange="false">
+        <validCheckSum>7:cf3bf408ae09c8483b7a5e88fb108151</validCheckSum>
         <createTable tableName="os_distribution_protocol">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="PRINCIPAL_INVESTIGATOR_ID" type="BIGINT"/>
             <column name="TITLE" type="VARCHAR(255)"/>
-            <column name="SHORT_TITLE" type="VARCHAR(255)"/>
+            <column name="SHORT_TITLE" type="VARCHAR(50)"/>
             <column name="ACTIVITY_STATUS" type="VARCHAR(30)"/>
             <column name="IRB_IDENTIFIER" type="VARCHAR(255)"/>
             <column name="START_DATE" type="DATE"/>

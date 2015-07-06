@@ -94,7 +94,7 @@ public class Institute extends BaseEntity {
 		if (!close) {
 			ensureFreeOfDependencies();
 			
-			setName(Utility.appendTimestamp(getName()));
+			setName(Utility.getDisabledValue(getName(), 255));
 			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 		}
 		

@@ -8,29 +8,29 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenLabelPrintJob;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
+import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenAliquotsSpec;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenLabelPrintJobSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenStatusDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
-import com.krishagni.catissueplus.core.biospecimen.services.SpecimenLabelPrinter;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
+import com.krishagni.catissueplus.core.common.domain.LabelPrintJob;
 import com.krishagni.catissueplus.core.common.errors.CommonErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -40,6 +40,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
+import com.krishagni.catissueplus.core.common.service.LabelPrinter;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
 public class SpecimenServiceImpl implements SpecimenService {
@@ -227,6 +228,66 @@ public class SpecimenServiceImpl implements SpecimenService {
 	
 	@Override
 	@PlusTransactional
+	public ResponseEvent<List<SpecimenDetail>> createAliquots(RequestEvent<SpecimenAliquotsSpec> req) {
+		try {
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			
+			SpecimenAliquotsSpec spec = req.getPayload();
+			Specimen parentSpecimen = getSpecimen(spec.getParentId(), spec.getParentLabel(), ose);
+			ose.checkAndThrow();
+			
+			if (!parentSpecimen.isCollected()) {
+				return ResponseEvent.userError(SpecimenErrorCode.NOT_COLLECTED, parentSpecimen.getLabel());
+			}
+									
+			Integer count = spec.getNoOfAliquots();
+			Double aliquotQty = spec.getQtyPerAliquot();
+			double reqQty = 0;
+						
+			if (count != null && aliquotQty != null) {
+				if (count <= 0 || aliquotQty <= 0) {
+					return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
+				}
+				
+				reqQty = count * aliquotQty;
+				if (reqQty > parentSpecimen.getAvailableQuantity()) {
+					return ResponseEvent.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
+				}
+			} else if (count != null && count > 0) {				
+				aliquotQty =  Math.round(parentSpecimen.getAvailableQuantity() / count * 10000) / 10000.0; 
+			} else if (aliquotQty != null && aliquotQty > 0) {
+				count = (int)Math.floor(parentSpecimen.getAvailableQuantity() / aliquotQty);
+			} else {
+				return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
+			}
+			
+			List<SpecimenDetail> aliquots = new ArrayList<SpecimenDetail>();
+			for (int i = 0; i < count; ++i) {
+				SpecimenDetail aliquot = new SpecimenDetail();
+				aliquot.setLineage(Specimen.ALIQUOT);
+				aliquot.setInitialQty(aliquotQty);
+				aliquot.setAvailableQty(aliquotQty);
+				aliquot.setParentLabel(parentSpecimen.getLabel());
+				aliquot.setParentId(parentSpecimen.getId());
+				aliquot.setCreatedOn(spec.getCreatedOn());
+				
+				StorageLocationSummary location = new StorageLocationSummary();
+				location.name = spec.getContainerName();
+				aliquot.setStorageLocation(location);
+				
+				aliquots.add(aliquot);				
+			}
+			
+			return collectSpecimens(new RequestEvent<List<SpecimenDetail>>(aliquots));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
 	public ResponseEvent<Boolean> doesSpecimenExists(RequestEvent<String> req) {
 		return ResponseEvent.response(daoFactory.getSpecimenDao().getByLabel(req.getPayload()) != null);
 	}
@@ -234,25 +295,38 @@ public class SpecimenServiceImpl implements SpecimenService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<SpecimenLabelPrintJobSummary> printSpecimenLabels(RequestEvent<PrintSpecimenLabelDetail> req) {
-		SpecimenLabelPrinter printer = getLabelPrinter();
+	public ResponseEvent<LabelPrintJobSummary> printSpecimenLabels(RequestEvent<PrintSpecimenLabelDetail> req) {
+		PrintSpecimenLabelDetail printDetail = req.getPayload();
+		
+		LabelPrinter<Specimen> printer = getLabelPrinter();
 		if (printer == null) {
 			return ResponseEvent.serverError(SpecimenErrorCode.NO_PRINTER_CONFIGURED);
 		}
 				
-		List<Specimen> specimens = getSpecimensToPrint(req.getPayload());
+		List<Specimen> specimens = getSpecimensToPrint(printDetail);
 		if (CollectionUtils.isEmpty(specimens)) {
 			return ResponseEvent.userError(SpecimenErrorCode.NO_SPECIMENS_TO_PRINT);
 		}
 		
-		SpecimenLabelPrintJob job = printer.print(specimens);
+		LabelPrintJob job = printer.print(specimens, printDetail.getNumCopies());
 		if (job == null) {
 			return ResponseEvent.userError(SpecimenErrorCode.PRINT_ERROR);
 		}
 		
-		return ResponseEvent.response(SpecimenLabelPrintJobSummary.from(job));
+		return ResponseEvent.response(LabelPrintJobSummary.from(job));
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public LabelPrinter<Specimen> getLabelPrinter() {
+		String labelPrinterBean = cfgSvc.getStrSetting(
+				ConfigParams.MODULE, 
+				ConfigParams.SPECIMEN_LABEL_PRINTER, 
+				"defaultSpecimenLabelPrinter");
+		
+		return (LabelPrinter<Specimen>)OpenSpecimenAppCtxProvider.getAppCtx().getBean(labelPrinterBean);
+	}
+		
 	@Override
 	@PlusTransactional
 	public ResponseEvent<Map<String, Long>> getCprAndVisitIds(RequestEvent<Long> req) {
@@ -414,16 +488,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 		specimen.addCollRecvEvents();
 	}
 	
-	private SpecimenLabelPrinter getLabelPrinter() {
-		String labelPrinterBean = cfgSvc.getStrSetting(
-				ConfigParams.MODULE, 
-				ConfigParams.LABEL_PRINTER, 
-				"defaultSpecimenLabelPrinter");
-		return (SpecimenLabelPrinter)OpenSpecimenAppCtxProvider
-				.getAppCtx()
-				.getBean(labelPrinterBean);
-	}
-	
 	private List<Specimen> getSpecimensToPrint(PrintSpecimenLabelDetail detail) {
 		SpecimenDao specimenDao = daoFactory.getSpecimenDao();
 		
@@ -437,13 +501,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 		} else if (StringUtils.isNotBlank(detail.getVisitName())) {
 			specimens = specimenDao.getSpecimensByVisitName(detail.getVisitName());
 		}
-		
-		CollectionUtils.filter(specimens, new Predicate() {			
-			@Override
-			public boolean evaluate(Object obj) {
-				return ((Specimen)obj).isCollected();
-			}
-		});
 		
 		return specimens;		
 	}

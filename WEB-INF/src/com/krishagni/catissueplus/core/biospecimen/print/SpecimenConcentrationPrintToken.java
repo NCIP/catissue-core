@@ -14,7 +14,7 @@ public class SpecimenConcentrationPrintToken extends AbstractLabelTmplToken impl
 	@Override
 	public String getReplacement(Object object) {
 		Specimen specimen = (Specimen)object;
-		Double dbl = specimen.getConcentrationInMicrogramPerMicroliter();
+		Double dbl = specimen.getConcentration();
 		return dbl != null ? dbl.toString() : null;
 	}
 }

@@ -13,7 +13,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -196,9 +195,9 @@ public class Site extends BaseEntity {
 			activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 			ensureFreeOfDependencies();
 			
-			setName(Utility.appendTimestamp(getName()));
+			setName(Utility.getDisabledValue(getName(), 255));
 			if (getCode() != null) {
-				setCode(Utility.appendTimestamp(getCode()));
+				setCode(Utility.getDisabledValue(getCode(), 50));
 			}
 		}
 		

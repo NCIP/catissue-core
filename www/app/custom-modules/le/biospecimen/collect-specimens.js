@@ -629,6 +629,8 @@ angular.module('openspecimen')
           }
         }); 
 
+        console.log("Labels to save: " + labelsToSave.join());
+        console.log("Missing Labels: " + missing.join());
         return missing;
       }
 

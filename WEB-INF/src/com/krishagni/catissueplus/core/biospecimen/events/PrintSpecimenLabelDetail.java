@@ -11,6 +11,8 @@ public class PrintSpecimenLabelDetail {
 	private Long visitId;
 	
 	private String visitName;
+	
+	private int numCopies = 1;
 
 	public List<Long> getSpecimenIds() {
 		return specimenIds;
@@ -42,6 +44,14 @@ public class PrintSpecimenLabelDetail {
 
 	public void setVisitName(String visitName) {
 		this.visitName = visitName;
+	}
+
+	public int getNumCopies() {
+		return numCopies;
+	}
+
+	public void setNumCopies(int numCopies) {
+		this.numCopies = numCopies;
 	} 
 	
 	

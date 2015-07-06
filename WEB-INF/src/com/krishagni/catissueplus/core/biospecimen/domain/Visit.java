@@ -268,7 +268,7 @@ public class Visit {
 			specimen.disable(false);
 		}
 		
-		setName(Utility.getDisabledValue(getName()));
+		setName(Utility.getDisabledValue(getName(), 255));
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 	

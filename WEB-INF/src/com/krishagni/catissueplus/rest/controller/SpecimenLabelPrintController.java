@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenLabelPrintJobSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -25,9 +25,9 @@ public class SpecimenLabelPrintController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public SpecimenLabelPrintJobSummary printLabel(@RequestBody PrintSpecimenLabelDetail detail) {
+	public LabelPrintJobSummary printLabel(@RequestBody PrintSpecimenLabelDetail detail) {
 		RequestEvent<PrintSpecimenLabelDetail> req = new RequestEvent<PrintSpecimenLabelDetail>(detail);
-		ResponseEvent<SpecimenLabelPrintJobSummary> resp = specimenSvc.printSpecimenLabels(req);
+		ResponseEvent<LabelPrintJobSummary> resp = specimenSvc.printSpecimenLabels(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

@@ -12,7 +12,7 @@ public interface ConfigurationService {
 	public ResponseEvent<List<ConfigSettingDetail>> getSettings(RequestEvent<String> req);
 	
 	public ResponseEvent<ConfigSettingDetail> saveSetting(RequestEvent<ConfigSettingDetail> req);
-	
+		
 	//
 	// Internal to app APIs
 	//
@@ -33,4 +33,7 @@ public interface ConfigurationService {
 	public String getTimeFormat();
 	
 	public String getDeDateTimeFormat();
+	
+	public Map<String, String> getWelcomeVideoSettings();
+	
 }

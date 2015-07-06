@@ -11,7 +11,13 @@ public class ConfigParams {
 	
 	public static final String MPI_VALIDATOR             = "mpi_validator";
 	
-	public static final String LABEL_PRINTER             = "label_printer";
+	public static final String SPECIMEN_LABEL_PRINTER    = "specimen_label_printer";
+	
+	public static final String SPECIMEN_LABEL_PRINT_RULES = "specimen_label_print_rules";
+	
+	public static final String VISIT_LABEL_PRINTER       = "visit_label_printer";
+	
+	public static final String VISIT_LABEL_PRINT_RULES   = "visit_label_print_rules";
 	
 	public static final String SPR_DEIDENTIFIER          = "spr_deidentifier";
 	

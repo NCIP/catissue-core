@@ -325,7 +325,7 @@ public class SpecimenRequirement {
 		specimen.setPathologicalStatus(getPathologyStatus());
 		specimen.setInitialQuantity(getInitialQuantity());
 		specimen.setAvailableQuantity(getInitialQuantity());
-		specimen.setConcentrationInMicrogramPerMicroliter(getConcentration());
+		specimen.setConcentration(getConcentration());
 		specimen.setSpecimenRequirement(this);
 		return specimen;
 	}

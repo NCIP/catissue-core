@@ -231,6 +231,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-27">
+        <validCheckSum>7:14ea667e59d7455e646ed57e6465a4f0</validCheckSum>
         <createTable tableName="CATISSUE_COLLECTION_PROTOCOL">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107490" primaryKeyTablespace="USERS"/>
@@ -244,8 +245,8 @@
             <column defaultValueComputed="NULL" name="STUDY_CALENDAR_EVENT_POINT" type="FLOAT(126)"/>
             <column name="IS_EMPI_ENABLE" type="NUMBER(1,0)"/>
             <column name="PRINCIPAL_INVESTIGATOR_ID" type="NUMBER(19,0)"/>
-            <column name="TITLE" type="VARCHAR2(512 BYTE)"/>
-            <column name="SHORT_TITLE" type="VARCHAR2(512 BYTE)"/>
+            <column name="TITLE" type="VARCHAR2(255 BYTE)"/>
+            <column name="SHORT_TITLE" type="VARCHAR2(50 BYTE)"/>
             <column name="IRB_IDENTIFIER" type="VARCHAR2(255 BYTE)"/>
             <column name="START_DATE" type="DATE"/>
             <column name="END_DATE" type="DATE"/>
@@ -487,6 +488,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-48">
+        <validCheckSum>7:8c92d518fc025d4a811aec2498abc5a6</validCheckSum>
         <createTable tableName="CATISSUE_DISTRI_EVENT_PARAM">
             <column name="DISTRIBUTED_QUANTITY" type="FLOAT(24)"/>
             <column name="DISTRIBUTION_ID" type="NUMBER(19,0)"/>
@@ -494,7 +496,7 @@
             <column name="SPECIMEN_ID" type="NUMBER(19,0)"/>
             <column name="USER_ID" type="NUMBER(19,0)"/>
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
-            <column name="DP_TITLE" type="VARCHAR2(512 BYTE)"/>
+            <column name="DP_TITLE" type="VARCHAR2(255 BYTE)"/>
             <column name="ORDER_NAME" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)"/>
             <column name="SPE_ID" type="NUMBER(19,0)">
@@ -529,13 +531,14 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-51">
+        <validCheckSum>7:1ec6668a6dba59f1bea0e62b0069799d</validCheckSum>
         <createTable tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107606" primaryKeyTablespace="USERS"/>
             </column>
             <column name="PRINCIPAL_INVESTIGATOR_ID" type="NUMBER(19,0)"/>
-            <column name="TITLE" type="VARCHAR2(512 BYTE)"/>
-            <column name="SHORT_TITLE" type="VARCHAR2(512 BYTE)"/>
+            <column name="TITLE" type="VARCHAR2(255 BYTE)"/>
+            <column name="SHORT_TITLE" type="VARCHAR2(50 BYTE)"/>
             <column name="IRB_IDENTIFIER" type="VARCHAR2(255 BYTE)"/>
             <column name="START_DATE" type="DATE"/>
             <column name="END_DATE" type="DATE"/>

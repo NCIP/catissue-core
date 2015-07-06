@@ -18,6 +18,8 @@ import org.hibernate.envers.NotAudited;
 @AuditTable(value="CAT_CONSENT_TIER_RESPONSE_AUD")
 public class ConsentTierResponse {
 
+	private static final String ENTITY_NAME = "consent_response";
+
 	private Long id;
 
 	private String response;
@@ -25,6 +27,10 @@ public class ConsentTierResponse {
 	private ConsentTier consentTier;
 
 	private CollectionProtocolRegistration cpr;
+	
+	public static String getEntityName() {
+		return ENTITY_NAME;
+	}
 
 	public Long getId() {
 		return id;

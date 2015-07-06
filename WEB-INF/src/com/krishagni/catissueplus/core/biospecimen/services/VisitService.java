@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.services;
 
 import java.util.List;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
@@ -12,6 +13,7 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.LabelPrinter;
 
 public interface VisitService {
 	public ResponseEvent<VisitDetail> getVisit(RequestEvent<EntityQueryCriteria> req);
@@ -37,4 +39,6 @@ public interface VisitService {
 	public ResponseEvent<Boolean> deleteSprFile(RequestEvent<EntityQueryCriteria> req);
 
 	public ResponseEvent<SprLockDetail> updateSprLockStatus(RequestEvent<SprLockDetail> req);
+	
+	public LabelPrinter<Visit> getLabelPrinter();
 }

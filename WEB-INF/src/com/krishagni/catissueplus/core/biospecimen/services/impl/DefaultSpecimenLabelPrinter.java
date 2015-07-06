@@ -15,20 +15,21 @@ import org.springframework.context.MessageSource;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenLabelPrintJob;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenLabelPrintJobItem;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenLabelPrintJobItem.Status;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.biospecimen.services.SpecimenLabelPrinter;
+import com.krishagni.catissueplus.core.common.domain.LabelPrintJob;
+import com.krishagni.catissueplus.core.common.domain.LabelPrintJobItem;
 import com.krishagni.catissueplus.core.common.domain.LabelTmplToken;
 import com.krishagni.catissueplus.core.common.domain.LabelTmplTokenRegistrar;
+import com.krishagni.catissueplus.core.common.domain.LabelPrintJobItem.Status;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
+import com.krishagni.catissueplus.core.common.service.LabelPrinter;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
-public class DefaultSpecimenLabelPrinter implements SpecimenLabelPrinter, InitializingBean, ConfigChangeListener {
+public class DefaultSpecimenLabelPrinter implements LabelPrinter<Specimen>, InitializingBean, ConfigChangeListener {
 	private static final Logger logger = Logger.getLogger(DefaultSpecimenLabelPrinter.class);
 	
 	private List<SpecimenLabelPrintRule> rules = new ArrayList<SpecimenLabelPrintRule>();
@@ -58,14 +59,16 @@ public class DefaultSpecimenLabelPrinter implements SpecimenLabelPrinter, Initia
 	}
 
 	@Override
-	public SpecimenLabelPrintJob print(List<Specimen> specimens) {		
+	public LabelPrintJob print(List<Specimen> specimens, int numCopies) {		
 		try {
 			String ipAddr = AuthUtil.getRemoteAddr();
 			User currentUser = AuthUtil.getCurrentUser();
 			
-			SpecimenLabelPrintJob job = new SpecimenLabelPrintJob();
+			LabelPrintJob job = new LabelPrintJob();
 			job.setSubmissionDate(Calendar.getInstance().getTime());
 			job.setSubmittedBy(currentUser);
+			job.setItemType(Specimen.getEntityName());
+			job.setNumCopies(numCopies <= 0 ? 1 : numCopies);
 	
 			for (Specimen specimen : specimens) {				
 				boolean found = false;
@@ -74,10 +77,10 @@ public class DefaultSpecimenLabelPrinter implements SpecimenLabelPrinter, Initia
 						continue;
 					}
 					
-					SpecimenLabelPrintJobItem item = new SpecimenLabelPrintJobItem();
+					LabelPrintJobItem item = new LabelPrintJobItem();
 					item.setJob(job);
 					item.setPrinterName(rule.getPrinterName());
-					item.setSpecimen(specimen);
+					item.setItemLabel(specimen.getLabel());
 					item.setStatus(Status.QUEUED);
 					item.setLabelType(rule.getLabelType());
 					item.setData(rule.formatPrintData(specimen));
@@ -96,7 +99,7 @@ public class DefaultSpecimenLabelPrinter implements SpecimenLabelPrinter, Initia
 				return null;				
 			}
 			
-			daoFactory.getSpecimenLabelPrintJobDao().saveOrUpdate(job);			
+			daoFactory.getLabelPrintJobDao().saveOrUpdate(job);			
 			return job;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,16 +110,24 @@ public class DefaultSpecimenLabelPrinter implements SpecimenLabelPrinter, Initia
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		reloadRules();
-		cfgSvc.registerChangeListener(LABEL_PRINT_MODULE, this);
+		cfgSvc.registerChangeListener(ConfigParams.MODULE, this);
 	}
 	
 	@Override
 	public void onConfigChange(String name, String value) {
+		if (!name.equals(ConfigParams.SPECIMEN_LABEL_PRINT_RULES)) {
+			return;
+		}
+		
 		reloadRules();
 	}		
 		
 	private void reloadRules() {
-		String rulesFile = cfgSvc.getStrSetting(LABEL_PRINT_MODULE, RULES_FILE_CFG_NAME, (String)null);
+		String rulesFile = cfgSvc.getStrSetting(
+				ConfigParams.MODULE, 
+				ConfigParams.SPECIMEN_LABEL_PRINT_RULES, 
+				(String)null);
+		
 		if (StringUtils.isBlank(rulesFile)) {
 			return;
 		}
@@ -206,9 +217,4 @@ public class DefaultSpecimenLabelPrinter implements SpecimenLabelPrinter, Initia
 		
 		return null;
 	}
-		
-	private static final String LABEL_PRINT_MODULE = "label_printer";
-	
-	private static final String RULES_FILE_CFG_NAME = "rules_file";
-
 }

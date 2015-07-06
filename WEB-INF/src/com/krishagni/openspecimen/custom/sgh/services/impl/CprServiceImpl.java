@@ -13,7 +13,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegi
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenLabelPrintJobSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -62,7 +62,7 @@ public class CprServiceImpl implements CprService {
 		try {
 			BulkParticipantRegSummary regReq = req.getPayload();
 			int participantCount = regReq.getParticipantCount();
-			if(participantCount < 1){
+			if (participantCount < 1){
 				return ResponseEvent.userError(SghErrorCode.INVALID_PARTICIPANT_COUNT);
 			}
 			
@@ -98,9 +98,9 @@ public class CprServiceImpl implements CprService {
 			RequestEvent<VisitSpecimenDetail> visitCollReq = getVisitCollReq(cprDetail, cpe, visitCnt++);
 			ResponseEvent<VisitSpecimenDetail> visitCollResp = visitService.collectVisitAndSpecimens(visitCollReq);
 			visitCollResp.throwErrorIfUnsuccessful();
-			if(isPrintLabels){
+			if (isPrintLabels){
 				RequestEvent<PrintSpecimenLabelDetail> printLabelsReq = getPrintLabelsReq(visitCollResp.getPayload());
-				ResponseEvent<SpecimenLabelPrintJobSummary> printLabelsResp = specimenSvc.printSpecimenLabels(printLabelsReq);
+				ResponseEvent<LabelPrintJobSummary> printLabelsResp = specimenSvc.printSpecimenLabels(printLabelsReq);
 				printLabelsResp.throwErrorIfUnsuccessful();
 			}
 			visitCnt++;

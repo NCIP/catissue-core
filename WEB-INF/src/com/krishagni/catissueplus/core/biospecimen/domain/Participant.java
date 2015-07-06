@@ -222,7 +222,7 @@ public class Participant extends BaseEntity {
 		checkActiveDependents();
 
 		disableMrns();		
-		this.uid = Utility.getDisabledValue(this.uid);
+		this.uid = Utility.getDisabledValue(this.uid, 50);
 		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 	}
 
@@ -270,7 +270,7 @@ public class Participant extends BaseEntity {
 
 	private void disableMrns() {
 		for (ParticipantMedicalIdentifier pmi : getPmis()) {
-			pmi.setMedicalRecordNumber(Utility.getDisabledValue(pmi.getMedicalRecordNumber()));
+			pmi.setMedicalRecordNumber(Utility.getDisabledValue(pmi.getMedicalRecordNumber(), 255));
 		}
 	}
 
