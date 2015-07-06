@@ -119,9 +119,9 @@
       </span>
     </div>
 
-    <div class="input-group" style="margin-bottom:5px;">
+    <div class="input-group" style="margin-bottom:5px;" os-textarea-input-group>
       <textarea ng-model="input.labelText" class="form-control" 
-        placeholder="{{'orders.enter_specimen_label' | translate}}" os-enable-tab>
+        placeholder="{{'orders.enter_specimen_label' | translate}}" os-enable-tab rows="2">
       </textarea>
       <span class="input-group-btn">
         <button class="btn btn-primary" ng-click="addSpecimens()">
@@ -231,10 +231,10 @@
         <button class="btn os-btn-secondary" ng-click="doWizard.previous(false)">
           <span translate="common.buttons.previous"> Previous </span>
         </button>
-        <button class="btn btn-primary" os-form-submit="saveDraft()">
+        <button class="btn btn-primary" os-form-submit="saveDraft()" ng-disabled="!order.orderItems.length">
           <span translate="orders.buttons.save_draft"> Save as Draft </span>
         </button>
-        <button class="btn btn-primary" os-form-submit="distribute()">
+        <button class="btn btn-primary" os-form-submit="distribute()" ng-disabled="!order.orderItems.length">
           <span translate="orders.buttons.distribute"> Distribute </span>
         </button>
       </div>

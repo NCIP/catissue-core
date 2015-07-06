@@ -175,17 +175,18 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		Set<DistributionOrderItem> items = new HashSet<DistributionOrderItem>();
 		Set<Long> specimens = new HashSet<Long>();
 		
+		boolean dupAdded = false;
 		for (DistributionOrderItemDetail oid : detail.getOrderItems()) {
 			DistributionOrderItem item = getOrderItem(oid, order, ose);
-			if (item != null) {
-				items.add(item);
-				specimens.add(item.getSpecimen().getId());
+			if (item == null) {
+				continue;
 			}
-		}
-		
-		if (specimens.size() < detail.getOrderItems().size()) {
-			ose.addError(DistributionOrderErrorCode.DUPLICATE_SPECIMENS);
-			return;
+			
+			items.add(item);
+			if (!specimens.add(item.getSpecimen().getId()) && !dupAdded) {
+				ose.addError(DistributionOrderErrorCode.DUPLICATE_SPECIMENS);
+				dupAdded = true;
+			}
 		}
 		
 		order.setOrderItems(items);

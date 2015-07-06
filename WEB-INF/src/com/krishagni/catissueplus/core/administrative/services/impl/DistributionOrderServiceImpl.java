@@ -147,6 +147,10 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			specimenIds.add(orderItem.getSpecimen().getId());
 		}
 		
+		if (specimenIds.isEmpty()) {
+			throw OpenSpecimenException.userError(DistributionOrderErrorCode.NO_SPECIMENS_TO_DIST);
+		}
+		
 		Map<String, Long> specimenInstituteIdMap = 
 				daoFactory.getSpecimenDao().getSpecimenInstitutes(specimenIds);
 		
