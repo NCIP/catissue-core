@@ -105,7 +105,7 @@ public class SpecimenTypeLabelToken extends AbstractSpecimenLabelToken implement
 					continue;
 				}
 				
-				String[] fields = line.split(",");
+				String[] fields = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
 				if (fields.length != 2) {
 					logger.error("Invalid input line: " + line + ". Ignoring");
 					continue;
