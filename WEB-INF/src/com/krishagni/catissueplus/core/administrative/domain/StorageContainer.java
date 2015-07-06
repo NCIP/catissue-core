@@ -610,9 +610,9 @@ public class StorageContainer extends BaseEntity {
 			child.deleteWithoutCheck();
 		}
 		
-		setName(Utility.appendTimestamp(getName()));
+		setName(Utility.getDisabledValue(getName(), 64));
 		if (getBarcode() != null) {
-			setBarcode(Utility.appendTimestamp(getBarcode()));
+			setBarcode(Utility.getDisabledValue(getBarcode(), 64));
 		}
 		
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());

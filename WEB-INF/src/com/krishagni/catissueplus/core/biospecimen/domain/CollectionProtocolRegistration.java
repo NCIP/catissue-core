@@ -197,8 +197,8 @@ public class CollectionProtocolRegistration {
 			visit.delete();
 		}
 		
-		setBarcode(Utility.getDisabledValue(getBarcode()));
-		setPpid(Utility.getDisabledValue(getPpid()));
+		setBarcode(Utility.getDisabledValue(getBarcode(), 255));
+		setPpid(Utility.getDisabledValue(getPpid(), 255));
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 

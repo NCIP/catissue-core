@@ -121,8 +121,8 @@ public class DistributionProtocol {
 
 	public void update(DistributionProtocol distributionProtocol) {
 		if (distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
-			setShortTitle(Utility.appendTimestamp(distributionProtocol.getShortTitle()));
-			setTitle(Utility.appendTimestamp(distributionProtocol.getTitle()));
+			setShortTitle(Utility.getDisabledValue(distributionProtocol.getShortTitle(), 50));
+			setTitle(Utility.getDisabledValue(distributionProtocol.getTitle(), 255));
 		}
 		else {
 			setShortTitle(distributionProtocol.getShortTitle());
@@ -147,8 +147,8 @@ public class DistributionProtocol {
 			throw OpenSpecimenException.userError(DistributionProtocolErrorCode.REF_ENTITY_FOUND);
 		}
 		
-		setShortTitle(Utility.appendTimestamp(getShortTitle()));
-		setTitle(Utility.appendTimestamp(getTitle()));
+		setShortTitle(Utility.getDisabledValue(getShortTitle(), 50));
+		setTitle(Utility.getDisabledValue(getTitle(), 255));
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 	
