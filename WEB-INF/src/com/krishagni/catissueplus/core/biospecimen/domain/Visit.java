@@ -289,7 +289,11 @@ public class Visit {
 		if (!isActive()) {
 			return;
 		}
-		
+
+		if (StringUtils.isNotBlank(visit.getName())) {
+			setName(visit.getName());
+		}
+
 		setClinicalDiagnosis(visit.getClinicalDiagnosis());
 		setClinicalStatus(visit.getClinicalStatus());
 		setCpEvent(visit.getCpEvent());
@@ -317,9 +321,9 @@ public class Visit {
 		if (StringUtils.isNotBlank(name)) {
 			return;
 		}
-		
+
 		String visitNameFmt = getCollectionProtocol().getVisitNameFormat();
-		if (StringUtils.isBlank(visitNameFmt)) {
+		if (StringUtils.isBlank(visitNameFmt) || status.equals(VISIT_STATUS_MISSED)) {
 			visitNameFmt = defNameTmpl;
 		}
 		setName(labelGenerator.generateLabel(visitNameFmt, this));

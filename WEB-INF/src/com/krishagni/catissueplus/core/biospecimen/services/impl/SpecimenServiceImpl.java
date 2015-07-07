@@ -422,7 +422,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 	}
 
 	private void ensureVisitNotMissed(Specimen specimen, OpenSpecimenException ose) {
-		if(specimen.getVisit().getStatus().equals(Visit.VISIT_STATUS_MISSED)) {
+		if(specimen.getVisit().getStatus().equals(Visit.VISIT_STATUS_MISSED) &&
+				!specimen.getCollectionStatus().equals(Specimen.MISSED_COLLECTION)) {
 			ose.addError(SpecimenErrorCode.CANNOT_COLLECT_FROM_MISSED_VISIT);
 		}
 	}

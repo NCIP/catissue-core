@@ -350,6 +350,11 @@ public class VisitServiceImpl implements VisitService {
 			visit.setNameIfEmpty();
 			existing = visit;			
 		} else {
+			if ((existing.getStatus().equals(Visit.VISIT_STATUS_MISSED) && !visit.getStatus().equals(Visit.VISIT_STATUS_MISSED)) ||
+					(!existing.getStatus().equals(Visit.VISIT_STATUS_MISSED) && visit.getStatus().equals(Visit.VISIT_STATUS_MISSED))) {
+				visit.setName(null);
+				visit.setNameIfEmpty();
+			}
 			existing.update(visit);
 		}
 
@@ -406,8 +411,9 @@ public class VisitServiceImpl implements VisitService {
 				ose.addError(VisitErrorCode.MANUAL_NAME_NOT_ALLOWED);
 				return;
 			}
-			
-			if (!visitNameGenerator.validate(cp.getVisitNameFormat(), visit, name)) {
+
+
+			if (!visit.getStatus().equals(Visit.VISIT_STATUS_MISSED) && !visitNameGenerator.validate(cp.getVisitNameFormat(), visit, name)) {
 				ose.addError(VisitErrorCode.INVALID_NAME, name);
 				return;
 			}
