@@ -18,8 +18,7 @@
   .os-file-upload .name {
     position: absolute;
     top: 7px;
-    left: 10px;
-    min-width: 163px;
-    background: #fff;
+    left: 17px;
+    background-color: transparent;
   }
 }
