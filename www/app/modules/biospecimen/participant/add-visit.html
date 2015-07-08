@@ -32,7 +32,7 @@
 
       <div class="col-xs-6" ng-if="visit.status == 'Missed Collection'">
         <div class="form-group">
-          <os-select name="site" ng-model="visit.missedReason" list="missedVisitReasons"
+          <os-select name="site" ng-model="visit.missedReason" list="missedReasons"
                      os-md-input placeholder="Reason for Missed">
           </os-select>
           <div os-field-error field="visitForm.site"></div>

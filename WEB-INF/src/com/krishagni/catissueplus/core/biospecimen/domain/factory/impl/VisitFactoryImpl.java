@@ -345,10 +345,10 @@ public class VisitFactoryImpl implements VisitFactory {
 		for (SpecimenRequirement anticipatedSpecimen : anticipatedSpecimens) {
 			Specimen specimen = anticipatedSpecimen.getSpecimen();
 			specimen.setCollectionStatus(status);
-			setAnticipatedSpecimenStatus(specimen, anticipatedSpecimen.getChildSpecimenRequirements(), status);
 			if (!visit.getSpecimens().contains(specimen)) {
 				specimen.setVisit(visit);
 				visit.addSpecimen(specimen);
+				setAnticipatedSpecimenStatus(specimen, anticipatedSpecimen.getChildSpecimenRequirements(), status);
 			}
 		}
 	}
@@ -357,9 +357,10 @@ public class VisitFactoryImpl implements VisitFactory {
 		for (SpecimenRequirement anticipatedSpecimen : specimens) {
 			Specimen specimen = anticipatedSpecimen.getSpecimen();
 			specimen.setCollectionStatus(status);
+			specimen.setParentSpecimen(parentSpecimen);
+			specimen.setVisit(parentSpecimen.getVisit());
 			setAnticipatedSpecimenStatus(specimen, anticipatedSpecimen.getChildSpecimenRequirements(), status);
 			parentSpecimen.getChildCollection().add(specimen);
-			specimen.setVisit(parentSpecimen.getVisit());
 		}
 	}
 }

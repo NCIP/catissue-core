@@ -46,10 +46,7 @@ angular.module('os.biospecimen.participant.addvisit', ['os.biospecimen.participa
       $scope.visit = getVisit();
     }
 
-    $scope.addVisit = function(visitStatus) {
-      if (visitStatus) {
-        $scope.visit.status = visitStatus;
-      }
+    $scope.addVisit = function() {
       $scope.visit.$saveOrUpdate().then(
         function(result) {
           angular.extend($scope.visitToAdd, result);
