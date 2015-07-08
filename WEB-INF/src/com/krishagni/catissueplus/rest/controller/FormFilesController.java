@@ -35,13 +35,13 @@ public class FormFilesController {
 	@Autowired
 	private HttpServletRequest httpServletRequest;
 	
-	@RequestMapping(method = RequestMethod.POST,  produces="text/plain")
+	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
-	public String uploadFile(@PathVariable("file") MultipartFile file) {
+	public FileDetail uploadFile(@PathVariable("file") MultipartFile file) {
 		ResponseEvent<FileDetail> resp = formSvc.uploadFile(getRequestEvent(file));
 		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload().getFilename();
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
