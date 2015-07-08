@@ -8,6 +8,7 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -54,14 +55,19 @@ public class QueryController {
 	@RequestMapping(method = RequestMethod.GET, value="/export")
 	@ResponseStatus(HttpStatus.OK)
 	public void downloadExportDataFile(
-			@RequestParam(value="fileId", required=true) String fileId,
+			@RequestParam(value = "fileId", required = true) 
+			String fileId,
+			
+			@RequestParam(value = "filename", required = false, defaultValue = "QueryResults.csv")
+			String filename,
+			
 			HttpServletResponse response) {
 		
 		File file = response(querySvc.getExportDataFile(getRequest(fileId)));
 
 		response.setContentType("text/csv;");
-		response.setHeader("Content-Disposition", "attachment;filename=QueryResults.csv");
-			
+		response.setHeader("Content-Disposition", "attachment;filename=" + filename);
+
 		InputStream in = null;
 		try {
 			in = new FileInputStream(file);

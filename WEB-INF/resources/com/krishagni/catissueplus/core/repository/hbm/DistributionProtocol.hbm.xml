@@ -33,6 +33,11 @@
     
     <property name="activityStatus" column="ACTIVITY_STATUS"/>
     
+    <many-to-one
+      name="report"
+      class="com.krishagni.catissueplus.core.de.domain.SavedQuery"
+      column="REPORT_ID"/>
+      
     <set name="distributionOrders" inverse="false" cascade="none">
       <key column="DISTRIBUTION_PROTOCOL_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DistributionOrder"/>

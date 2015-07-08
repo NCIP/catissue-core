@@ -1,6 +1,8 @@
 package com.krishagni.catissueplus.core.de.services.impl;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -12,14 +14,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Session;
@@ -282,7 +283,7 @@ public class QueryServiceImpl implements QueryService {
 					getRestriction(user, opDetail.getCpId()));
 			
 			QueryResponse resp = query.getData();
-			insertAuditLog(user, req, resp);
+			insertAuditLog(user, opDetail, resp);
 			
 			queryResult = resp.getResultData();
 			queryResult.setScreener(new QueryResultScreenerImpl(user, countQuery));
@@ -318,24 +319,7 @@ public class QueryServiceImpl implements QueryService {
 	@PlusTransactional
 	public ResponseEvent<QueryDataExportResult> exportQueryData(RequestEvent<ExecuteQueryEventOp> req) {
 		try {
-			ExecuteQueryEventOp opDetail = req.getPayload();
-			User user = AuthUtil.getCurrentUser();
-			boolean countQuery = opDetail.getRunType().equals("Count");
-			
-			
-			Query query = Query.createQuery();
-			query.wideRowMode(WideRowMode.valueOf(opDetail.getWideRowMode()))
-				.ic(true)
-				.dateFormat(ConfigUtil.getInstance().getDeDateFmt())
-				.timeFormat(ConfigUtil.getInstance().getTimeFmt())
-				.compile(
-					cprForm, 
-					getAqlWithCpIdInSelect(user, countQuery, opDetail.getAql()), 
-					getRestriction(user, opDetail.getCpId()));
-			
-			String filename = UUID.randomUUID().toString();
-			boolean completed = exportData(filename, query, req);
-			return ResponseEvent.response(QueryDataExportResult.create(filename, completed));
+			return ResponseEvent.response(exportQueryData(req.getPayload(), null));
 		} catch (QueryParserException qpe) {
 			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);		
 		} catch (IllegalArgumentException iae) {
@@ -716,7 +700,87 @@ public class QueryServiceImpl implements QueryService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-         
+
+	@Override
+	@PlusTransactional
+	public QueryDataExportResult exportQueryData(final ExecuteQueryEventOp opDetail, final ExportProcessor processor) {
+		OutputStream out = null;
+		
+		try {
+			final User user = AuthUtil.getCurrentUser();
+			final String filename = UUID.randomUUID().toString();
+			final OutputStream fout = new FileOutputStream(getExportDataDir() + File.separator + filename);
+			out = fout;
+			
+			if (processor != null) {
+				processor.headers(out);
+			}
+			
+			final Query query = Query.createQuery();
+			query.wideRowMode(WideRowMode.valueOf(opDetail.getWideRowMode()))
+				.ic(true)
+				.dateFormat(ConfigUtil.getInstance().getDeDateFmt())
+				.timeFormat(ConfigUtil.getInstance().getTimeFmt())
+				.compile(
+					cprForm, 
+					getAqlWithCpIdInSelect(user, opDetail.getRunType().equals("Count"), opDetail.getAql()), 
+					getRestriction(user, opDetail.getCpId()));
+					
+			Future<Boolean> result = exportThreadPool.submit(new Callable<Boolean>() {
+				@Override
+				public Boolean call() throws Exception {				
+					QueryResultExporter exporter = new QueryResultCsvExporter();
+
+					Session session = startTxn();
+					try {
+						QueryResponse resp = exporter.export(fout, query, new QueryResultScreenerImpl(user, false));
+						insertAuditLog(user, opDetail, resp);
+						sendEmail();
+						session.getTransaction().commit();
+					} catch (Exception e) {
+						Transaction txn = session.getTransaction();
+						if (txn != null) {
+							txn.rollback();
+						}
+					} finally {
+						if (session != null) {
+							session.close();
+						}
+					}
+	                
+					return true;
+				}
+				
+				private void sendEmail() {
+					try {
+						User user = userDao.getById(AuthUtil.getCurrentUser().getId());
+						
+						SavedQuery savedQuery = null;
+						Long queryId = opDetail.getSavedQueryId();
+						if (queryId != null) {
+							savedQuery = daoFactory.getSavedQueryDao().getQuery(queryId);
+						}					
+						sendQueryDataExportedEmail(user, savedQuery, filename);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}				
+				}
+			});
+			
+			boolean completed = false;
+			try {
+				completed = result.get(ONLINE_EXPORT_TIMEOUT_SECS, TimeUnit.SECONDS);
+			} catch (TimeoutException te) {
+				completed = false;
+			}		
+			
+			return QueryDataExportResult.create(filename, completed);
+		} catch (Exception e) {
+			IOUtils.closeQuietly(out);
+			throw OpenSpecimenException.serverError(e);
+		}
+	}
+		
 	private SavedQuery getSavedQuery(SavedQueryDetail detail) {
 		SavedQuery savedQuery = new SavedQuery();		
 		savedQuery.setTitle(detail.getTitle());
@@ -739,59 +803,6 @@ public class QueryServiceImpl implements QueryService {
 				queryDetail.getSelectList(),
 				queryDetail.getFilters(),
 				queryDetail.getQueryExpression());
-	}
-	
-	private boolean exportData(final String filename, final Query query, final RequestEvent<ExecuteQueryEventOp> req) 
-	throws ExecutionException, InterruptedException, CancellationException {
-		final User user = AuthUtil.getCurrentUser();
-		Future<Boolean> result = exportThreadPool.submit(new Callable<Boolean>() {
-			@Override
-			public Boolean call() throws Exception {				
-				QueryResultExporter exporter = new QueryResultCsvExporter();
-				String path = getExportDataDir() + File.separator + filename;
-				
-				Session session = startTxn();
-				try {
-					QueryResponse resp = exporter.export(
-						path, query, new QueryResultScreenerImpl(user, false));
-					insertAuditLog(user, req, resp);
-					sendEmail();
-					session.getTransaction().commit();
-				} catch (Exception e) {
-					Transaction txn = session.getTransaction();
-					if (txn != null) {
-						txn.rollback();
-					}
-				} finally {
-					if (session != null) {
-						session.close();
-					}
-				}
-                
-				return true;
-			}
-			
-			private void sendEmail() {
-				try {
-					User user = userDao.getById(AuthUtil.getCurrentUser().getId());
-					
-					SavedQuery savedQuery = null;
-					Long queryId = req.getPayload().getSavedQueryId();
-					if (queryId != null) {
-						savedQuery = daoFactory.getSavedQueryDao().getQuery(queryId);
-					}					
-					sendQueryDataExportedEmail(user, savedQuery, filename);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}				
-			}
-		});
-		
-		try {
-			return result.get(ONLINE_EXPORT_TIMEOUT_SECS, TimeUnit.SECONDS);
-		} catch (TimeoutException te) {
-			return false;
-		}		
 	}
 	
 	private String getRestriction(User user, Long cpId) {
@@ -871,13 +882,13 @@ public class QueryServiceImpl implements QueryService {
 		return dir;
 	}
 
-	private void insertAuditLog(User user, RequestEvent<ExecuteQueryEventOp> req, QueryResponse resp) {
+	private void insertAuditLog(User user, ExecuteQueryEventOp opDetail, QueryResponse resp) {
 		QueryAuditLog auditLog = new QueryAuditLog();
-		auditLog.setQueryId(req.getPayload().getSavedQueryId());
+		auditLog.setQueryId(opDetail.getSavedQueryId());
 		auditLog.setRunBy(user);
 		auditLog.setTimeOfExecution(resp.getTimeOfExecution());
 		auditLog.setTimeToFinish(resp.getExecutionTime());
-		auditLog.setRunType(req.getPayload().getRunType());
+		auditLog.setRunType(opDetail.getRunType());
 		auditLog.setSql(resp.getSql());
 		daoFactory.getQueryAuditLogDao().saveOrUpdate(auditLog);
 	}

@@ -27,6 +27,10 @@ public class AqlBuilder {
 	}
 	
 	public String getQuery(Object[] selectList, Filter[] filters, QueryExpressionNode[] queryExprNodes) {
+		return getQuery(selectList, filters, null, queryExprNodes);
+	}
+	
+	public String getQuery(Object[] selectList, Filter[] filters, Filter[] conjunctionFilters, QueryExpressionNode[] queryExprNodes) {
 		Map<Integer, Filter> filterMap = new HashMap<Integer, Filter>();
 		for (Filter filter : filters) {
 			filterMap.put(filter.getId(), filter);
@@ -34,6 +38,20 @@ public class AqlBuilder {
 		
 		String selectClause = buildSelectClause(filterMap, selectList);
 		String whereClause = buildWhereClause(filterMap, queryExprNodes);
+		if (conjunctionFilters != null && conjunctionFilters.length > 0) {
+			whereClause = "(" + whereClause + ") and (";
+			for (int i = 0; i < conjunctionFilters.length; ++i) {
+				if (i > 0) {
+					whereClause += " and ";
+				}
+				
+				whereClause += buildFilterExpr(conjunctionFilters[i]);
+				++i;
+			}
+			
+			whereClause += ")";
+		}
+		
 		return "select " + selectClause + " where " + whereClause;		
 	}
 	

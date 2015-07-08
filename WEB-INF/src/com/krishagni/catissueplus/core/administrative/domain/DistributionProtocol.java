@@ -11,6 +11,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
+import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 
 public class DistributionProtocol {
 	private static final String ENTITY_NAME = "distribution_protocol";
@@ -32,6 +33,8 @@ public class DistributionProtocol {
 	private Date endDate;
 
 	private String activityStatus;
+	
+	private SavedQuery report;
 	
 	private Set<DistributionOrder> distributionOrders = new HashSet<DistributionOrder>();
 	
@@ -111,6 +114,14 @@ public class DistributionProtocol {
 		this.activityStatus = activityStatus;
 	}
 
+	public SavedQuery getReport() {
+		return report;
+	}
+
+	public void setReport(SavedQuery report) {
+		this.report = report;
+	}
+
 	public Set<DistributionOrder> getDistributionOrders() {
 		return distributionOrders;
 	}
@@ -134,6 +145,7 @@ public class DistributionProtocol {
 		setStartDate(distributionProtocol.getStartDate());
 		setEndDate(distributionProtocol.getEndDate());
 		setActivityStatus(distributionProtocol.getActivityStatus());
+		setReport(distributionProtocol.getReport());
 	}
 	
 	public List<DependentEntityDetail> getDependentEntities() {

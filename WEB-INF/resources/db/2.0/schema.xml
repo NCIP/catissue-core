@@ -2266,4 +2266,35 @@
     <modifyDataType tableName="CATISSUE_DISTRIBUTION_PROTOCOL" columnName="SHORT_TITLE" newDataType="${text.type}(50)" />
   </changeSet>
 
+  <changeSet author="vpawar" id="Column to specify query to use for DO reports">
+    <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+      <column name="REPORT_ID" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add FK on DP report template">
+    <addForeignKeyConstraint
+      constraintName="FK_DP_REPORT_ID"
+      baseTableName="CATISSUE_DISTRIBUTION_PROTOCOL"
+      baseColumnNames="REPORT_ID"
+      referencedTableName="CATISSUE_SAVED_QUERIES"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Specimen distribution view" runOnChange="true">
+    <createView replaceIfExists="true" viewName="os_specimen_distribution_view">
+      select 
+        oi.identifier as identifier,
+        o.identifier as order_id,
+        o.name as name, 
+        oi.quantity as quantity, 
+        oi.status as status, 
+        oi.specimen_id as specimen_id
+      from 
+        os_orders o 
+        inner join os_order_items oi on oi.order_id = o.identifier
+      where
+        o.activity_status != 'Disabled'
+    </createView>
+  </changeSet>
 </databaseChangeLog>

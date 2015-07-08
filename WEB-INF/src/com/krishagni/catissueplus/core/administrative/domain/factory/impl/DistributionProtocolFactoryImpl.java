@@ -15,12 +15,20 @@ import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.de.domain.SavedQuery;
+import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
 
 public class DistributionProtocolFactoryImpl implements DistributionProtocolFactory {
 	private DaoFactory daoFactory;
+	
+	private com.krishagni.catissueplus.core.de.repository.DaoFactory deDaoFactory;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+	
+	public void setDeDaoFactory(com.krishagni.catissueplus.core.de.repository.DaoFactory deDaoFactory) {
+		this.deDaoFactory = deDaoFactory;
 	}
 
 	@Override
@@ -37,6 +45,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		setStartDate(detail, distributionProtocol);
 		setEndDate(detail, distributionProtocol);
 		setActivityStatus(detail, distributionProtocol, ose);
+		setReport(detail, distributionProtocol, ose);
 		
 		ose.checkAndThrow();
 		return distributionProtocol;
@@ -119,5 +128,19 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		}
 		
 		distributionProtocol.setActivityStatus(activityStatus);
+	}
+
+	private void setReport(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
+		if (detail.getReport() == null || detail.getReport().getId() == null) {
+			return;
+		}
+
+		SavedQuery report = deDaoFactory.getSavedQueryDao().getQuery(detail.getReport().getId());
+		if (report == null) {
+			ose.addError(SavedQueryErrorCode.NOT_FOUND);
+			return;
+		}
+
+		distributionProtocol.setReport(report);
 	}
 }

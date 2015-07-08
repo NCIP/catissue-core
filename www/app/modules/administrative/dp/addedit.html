@@ -2,11 +2,19 @@
 <div>
   <div os-page-header>
     <ul os-breadcrumbs>
-      <li><a ui-sref="dp-list" translate="dp.list">Distribution Protocols</a></li>
+      <li>
+        <a ui-sref="dp-list">
+          <span translate="dp.list">Distribution Protocols</span>
+        </a>
+      </li>
     </ul>
     <h3>
-      <span ng-if="!distributionProtocol.id" translate="dp.create_dp_title">Create Distribution Protocol</span>
-      <span ng-if="!!distributionProtocol.id">{{distributionProtocol.shortTitle}}</span>
+      <span ng-if="!distributionProtocol.id" translate="dp.create_dp_title">
+        Create Distribution Protocol
+      </span>
+      <span ng-if="!!distributionProtocol.id">
+        {{distributionProtocol.shortTitle}}
+      </span>
     </h3>
   </div>
   
@@ -61,14 +69,26 @@
         <label class="control-label col-xs-3" translate="dp.date">Date</label>
         <div class="col-xs-3">
           <input type="text" name="startDate" ng-model="distributionProtocol.startDate" class="form-control" 
-            datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="startDt.isOpen" ng-focus="startDt.isOpen=true" 
+            datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
+            is-open="startDt.isOpen" ng-focus="startDt.isOpen=true" 
             placeholder="{{'dp.start_date' | translate}}" />   
         </div>  
         <div class="col-xs-3">
           <input type="text" name="endDate" ng-model="distributionProtocol.endDate" class="form-control" 
-            datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="endDt.isOpen" ng-focus="endDt.isOpen=true" 
+            datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
+            is-open="endDt.isOpen" ng-focus="endDt.isOpen=true" 
             placeholder="{{'dp.end_date' | translate}}" />   
         </div>  
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="dp.order_report_query">Order Report Query</label>
+        <div class="col-xs-6">
+          <os-select name="report" ng-model="distributionProtocol.report" 
+            list="queryList.queries" display-prop="title" refresh="loadQueries"
+            placeholder="{{'dp.order_report_query' | translate}}">
+          </os-select>
+        </div>
       </div>
      
       <div class="os-divider"></div>
@@ -79,10 +99,11 @@
             <span ng-if="!distributionProtocol.id"  translate="common.buttons.create"> Create </span>
             <span ng-if="!!distributionProtocol.id" translate="common.buttons.update"> Update </span>
           </button>
-          <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">Discard</button>
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.discard">Discard</span>
+          </button>
         </div>
       </div>  
-         
     </form>
   </div>
 </div>

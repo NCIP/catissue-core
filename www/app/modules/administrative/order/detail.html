@@ -13,6 +13,10 @@
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
+      <button class="default" ng-click="downloadReport()" ng-if="order.status == 'EXECUTED' && rptTmplConfigured">
+        <span class="fa fa-download"></span>
+        <span translate="orders.buttons.download_report">Download Report</span>
+      </button>
     </div>
   </div>
 

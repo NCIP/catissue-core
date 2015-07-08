@@ -8,6 +8,7 @@ import java.util.List;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 
 public class DistributionProtocolDetail {
 	private Long id;
@@ -29,6 +30,8 @@ public class DistributionProtocolDetail {
 	private String activityStatus;
 
 	private int distributedSpecimensCount;
+	
+	private SavedQuerySummary report;
 
 	public Long getId() {
 		return id;
@@ -110,6 +113,14 @@ public class DistributionProtocolDetail {
 		this.distributedSpecimensCount = distributedSpecimensCount;
 	}
 
+	public SavedQuerySummary getReport() {
+		return report;
+	}
+
+	public void setReport(SavedQuerySummary report) {
+		this.report = report;
+	}
+
 	public static DistributionProtocolDetail from(DistributionProtocol distributionProtocol) {
 		DistributionProtocolDetail detail = new DistributionProtocolDetail();
 		detail.setShortTitle(distributionProtocol.getShortTitle());
@@ -121,6 +132,11 @@ public class DistributionProtocolDetail {
 		detail.setInstituteName(distributionProtocol.getInstitute().getName());
 		detail.setPrincipalInvestigator(getPrincipleInvestigatorInfo(distributionProtocol.getPrincipalInvestigator()));
 		detail.setActivityStatus(distributionProtocol.getActivityStatus());
+
+		if (distributionProtocol.getReport() != null) {
+			detail.setReport(SavedQuerySummary.fromSavedQuery(distributionProtocol.getReport()));
+		}
+
 		return detail;
 	}
 

@@ -1,6 +1,8 @@
 package com.krishagni.catissueplus.core.de.services;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -56,4 +58,14 @@ public interface QueryService {
 	// query export APIs
 	//
 	public ResponseEvent<String> getQueryDef(RequestEvent<Long> req);
+	
+	//
+	// internal use
+	// 
+	public interface ExportProcessor {
+		public void headers(OutputStream out);
+	}	
+
+	public QueryDataExportResult exportQueryData(ExecuteQueryEventOp opDetail, ExportProcessor processor);
+	
 }

@@ -560,6 +560,7 @@
     "irb_id": "IRB ID",
     "description_url": "Description URL",
     "institute": "Institute",
+    "order_report_query": "Order Report Query",
 
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",
@@ -1176,6 +1177,10 @@
      "enter_specimen_label": "Enter specimen labels separated by comma/tab/newline",
      "filter": "Distribution Order Filters",
      "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
+
+     "report_gen_initiated": "Generating distribution order report...",
+     "downloading_report": "Downloading distribution order report...",
+     "report_will_be_emailed": "Generating distribution order report is taking more time than anticipated. Link to download report will be sent to you by email",
    
      "spec": {
        "label": "Label",
@@ -1199,7 +1204,8 @@
 
      "buttons": {
        "distribute": "Distribute",
-       "save_draft": "Save Draft"
+       "save_draft": "Save Draft",
+       "download_report": "Download Report"
      },
 
      "tooltip": {

@@ -325,7 +325,8 @@
   </bean>
 	
   <bean id="distributionProtocolFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionProtocolFactoryImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="daoFactory"   ref="biospecimenDaoFactory"/>
+    <property name="deDaoFactory" ref="deDaoFactory"/>
   </bean>
 
   <bean id="distributionProtocolService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionProtocolServiceImpl">
@@ -338,8 +339,10 @@
   </bean>
 
   <bean id="distributionOrderService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionOrderServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="daoFactory"          ref="biospecimenDaoFactory"/>
     <property name="distributionFactory" ref="distributionFactory" />
+    <property name="querySvc"            ref="querySvc"/>
+    <property name="messageSource"       ref="messageSource"/>
   </bean>
   
   <bean id="scheduledJobFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.ScheduledJobFactoryImpl">

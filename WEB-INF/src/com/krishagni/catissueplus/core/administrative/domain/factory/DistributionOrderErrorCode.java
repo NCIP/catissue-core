@@ -19,6 +19,8 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 	
 	INVALID_QUANTITY,
 	
+	RPT_TMPL_NOT_CONFIGURED,
+	
 	STATUS_CHANGE_NOT_ALLOWED, 
 	
 	ALREADY_EXECUTED,

@@ -21,6 +21,7 @@ import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSu
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.de.events.QueryDataExportResult;
 
 @Controller
 @RequestMapping("/distribution-orders")
@@ -90,6 +91,15 @@ public class DistributionOrderController {
 		
 		order.setId(distributionId);
 		ResponseEvent<DistributionOrderDetail> resp = distributionService.updateOrder(getRequest(order));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/report")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public QueryDataExportResult exportDistributionReport(@PathVariable("id") Long orderId) {
+		ResponseEvent<QueryDataExportResult> resp = distributionService.exportReport(new RequestEvent<Long>(orderId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

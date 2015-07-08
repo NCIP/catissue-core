@@ -229,6 +229,10 @@ public class SavedQuery {
 		return AqlBuilder.getInstance().getQuery(selectList, filters, queryExpression);
 	}
 	
+	public String getAql(Filter[] conjunctionFilters) {
+		return AqlBuilder.getInstance().getQuery(selectList, filters, conjunctionFilters, queryExpression);
+	}
+	
 	public void update(SavedQuery query) {
 		setTitle(query.getTitle());
 		setCpId(query.getCpId());

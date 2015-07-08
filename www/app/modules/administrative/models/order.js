@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.models.order', ['os.common.models'])
-  .factory('DistributionOrder', function(osModel) {
+  .factory('DistributionOrder', function(osModel, $http) {
     var DistributionOrder = osModel('distribution-orders');
 
     DistributionOrder.prototype.getType = function() {
@@ -26,6 +26,14 @@ angular.module('os.administrative.models.order', ['os.common.models'])
       });
 
       return this;
+    }
+
+    DistributionOrder.prototype.generateReport = function() {
+      return $http.get(DistributionOrder.url() + this.$id() + '/report').then(
+        function(resp) {
+          return resp.data;
+        }
+      );
     }
 
     return DistributionOrder;

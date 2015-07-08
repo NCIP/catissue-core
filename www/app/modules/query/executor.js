@@ -62,10 +62,11 @@ angular.module('os.query.executor', [])
         );
       },
 
-      downloadDataFile: function(fileId) {
+      downloadDataFile: function(fileId, filename) {
+        filename = !!filename ? filename : 'QueryResults.csv';
         var link = angular.element('<a/>').attr(
           {
-            href: queryUrl + '/export?fileId=' + fileId,
+            href: queryUrl + '/export?fileId=' + fileId + '&filename=' + filename,
             target: '_blank'
           }
         );

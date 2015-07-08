@@ -1,9 +1,15 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import org.springframework.context.MessageSource;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder.Status;
@@ -21,12 +27,26 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.Utility;
+import com.krishagni.catissueplus.core.de.domain.Filter;
+import com.krishagni.catissueplus.core.de.domain.Filter.Op;
+import com.krishagni.catissueplus.core.de.domain.SavedQuery;
+import com.krishagni.catissueplus.core.de.events.ExecuteQueryEventOp;
+import com.krishagni.catissueplus.core.de.events.QueryDataExportResult;
+import com.krishagni.catissueplus.core.de.services.QueryService;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
+
+import edu.common.dynamicextensions.query.WideRowMode;
 
 public class DistributionOrderServiceImpl implements DistributionOrderService {
 	private DaoFactory daoFactory;
 
 	private DistributionOrderFactory distributionFactory;
+	
+	private QueryService querySvc;
+	
+	private MessageSource messageSource;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -34,6 +54,14 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 
 	public void setDistributionFactory(DistributionOrderFactory distributionFactory) {
 		this.distributionFactory = distributionFactory;
+	}
+	
+	public void setQuerySvc(QueryService querySvc) {
+		this.querySvc = querySvc;
+	}
+	
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 	
 	@Override
@@ -132,6 +160,29 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 		}
 	}
 	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<QueryDataExportResult> exportReport(RequestEvent<Long> req) {
+		try {
+			Long orderId = req.getPayload();
+			DistributionOrder order = daoFactory.getDistributionOrderDao().getById(orderId);
+			if (order == null) {
+				return ResponseEvent.userError(DistributionOrderErrorCode.NOT_FOUND);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureReadDistributionOrderRights(order);
+			if (order.getDistributionProtocol().getReport() == null) {
+				return ResponseEvent.userError(DistributionOrderErrorCode.RPT_TMPL_NOT_CONFIGURED);
+			}
+			
+			return new ResponseEvent<QueryDataExportResult>(exportOrderReport(order));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+		
 	private void ensureUniqueConstraints(DistributionOrder distribution) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);		
 		if (daoFactory.getDistributionOrderDao().getOrder(distribution.getName()) != null) {
@@ -169,5 +220,38 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 					invalidSpecimens.delete(labelsLen - 2, labelsLen),
 					order.getInstitute().getName());
 		}
+	}
+	
+	private QueryDataExportResult exportOrderReport(final DistributionOrder order) {
+		SavedQuery report = order.getDistributionProtocol().getReport();
+		Filter filter = new Filter();
+		filter.setField("Order.id");
+		filter.setOp(Op.EQ);
+		filter.setValues(new String[] { order.getId().toString() });
+		
+		ExecuteQueryEventOp execReportOp = new ExecuteQueryEventOp();
+		execReportOp.setDrivingForm("Participant");
+		execReportOp.setAql(report.getAql(new Filter[] { filter }));			
+		execReportOp.setWideRowMode(WideRowMode.DEEP.name());
+		execReportOp.setRunType("Export");
+		return querySvc.exportQueryData(execReportOp, new QueryService.ExportProcessor() {			
+			@Override
+			public void headers(OutputStream out) {
+				PrintWriter writer = new PrintWriter(out);
+				writer.println(getMessage("dist_order_name")       + ", " + order.getName());
+				writer.println(getMessage("dist_dp_title")         + ", " + order.getDistributionProtocol().getTitle());
+				writer.println(getMessage("dist_requestor_name")   + ", " + order.getRequester().formattedName());
+				writer.println(getMessage("dist_requested_date")   + ", " + Utility.getDateString(order.getExecutionDate()));
+				writer.println(getMessage("dist_receiving_site")   + ", " + order.getSite().getName());
+				writer.println(getMessage("dist_exported_by")      + ", " + AuthUtil.getCurrentUser().formattedName());
+				writer.println(getMessage("dist_exported_on")      + ", " + Utility.getDateString(Calendar.getInstance().getTime()));
+				writer.println();
+				writer.flush();
+			}
+		});
+	}
+	
+	private String getMessage(String code) {
+		return messageSource.getMessage(code, null, Locale.getDefault());
 	}
 }
