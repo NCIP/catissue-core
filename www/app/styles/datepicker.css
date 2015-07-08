@@ -1,0 +1,32 @@
+
+.os-datepicker {
+  position: relative;
+}
+
+.os-datepicker input:first-child {
+  width: 100%;
+  height: 100%
+  margin: 0px;
+  padding-right: 35px;
+}
+
+.os-datepicker button.fa {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  height: 100%;
+}
+
+.os-datepicker.form-control input:first-child {
+  border: none;
+  border-radius: inherit;
+  outline: none;
+  /* chrome gives outline to input elements.*/
+  padding-right: 30px;
+}
+
+.os-datepicker.form-control button.fa {
+  border: none;
+  border-radius: inherit;
+}
+
