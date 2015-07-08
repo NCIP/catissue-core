@@ -309,5 +309,90 @@
       
       update catissue_permissible_value set sortorder = 3 where public_id = 'consent_response' and value = 'Not Specified';
     </sql>
-  </changeSet>      
+  </changeSet>
+
+  <changeSet dbms="mysql" author="ahegade" id="Adding reasons for missed visits in pv table">
+    <sql>
+      insert into catissue_permissible_value
+        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
+      values
+        (default, null, null, null, "Previous excisional biopsy done", "missed_reason", null),
+        (default, null, null, null, "Tumour too small (size less than 2cm or in-situ ca)", "missed_reason", null),
+        (default, null, null, null, "Not Malignant tissue", "missed_reason", null),
+        (default, null, null, null, "No residual tumour after treatment", "missed_reason", null),
+        (default, null, null, null, "Open and closed ops / Bypass ops", "missed_reason", null),
+        (default, null, null, null, "OT surgeon forgot to page TRO", "missed_reason", null),
+        (default, null, null, null, "Patient declined tissue donation", "missed_reason", null),
+        (default, null, null, null, "No post ops consent taken within 3 months", "missed_reason", null),
+        (default, null, null, null, "Late Case", "missed_reason", null),
+        (default, null, null, null, "Specimen sent to Frozen Section", "missed_reason", null),
+        (default, null, null, null, "No Pre-Op consent", "missed_reason", null),
+        (default, null, null, null, "Other reasons", "missed_reason", null)
+    </sql>
+  </changeSet>
+
+  <changeSet dbms="oracle" author="ahegade" id="Adding reasons for missed visits in pv table">
+    <sql>
+      insert into catissue_permissible_value
+        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
+      values
+        (catissue_permi_value_seq.nextval, null, null, null, "Previous excisional biopsy done", "missed_reason", null);
+
+      insert into catissue_permissible_value
+        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
+      values
+        (catissue_permi_value_seq.nextval, null, null, null, "Tumour too small (size less than 2cm or in-situ ca)", "missed_reason", null);
+
+      insert into catissue_permissible_value
+        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
+      values
+        (catissue_permi_value_seq.nextval, null, null, null, "Not Malignant tissue", "missed_reason", null);
+
+      insert into catissue_permissible_value
+        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
+      values
+        (catissue_permi_value_seq.nextval, null, null, null, "No residual tumour after treatment", "missed_reason", null);
+
+      insert into catissue_permissible_value
+        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
+      values
+        (catissue_permi_value_seq.nextval, null, null, null, "Open and closed ops / Bypass ops", "missed_reason", null);
+
+      insert into catissue_permissible_value
+        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
+      values
+        (catissue_permi_value_seq.nextval, null, null, null, "OT surgeon forgot to page TRO", "missed_reason", null);
+
+      insert into catissue_permissible_value
+        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
+      values
+        (catissue_permi_value_seq.nextval, null, null, null, "Patient declined tissue donation", "missed_reason", null);
+
+      insert into catissue_permissible_value
+        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
+      values
+        (catissue_permi_value_seq.nextval, null, null, null, "No post ops consent taken within 3 months", "missed_reason", null);
+
+      insert into catissue_permissible_value
+        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
+      values
+        (catissue_permi_value_seq.nextval, null, null, null, "Late Case", "missed_reason", null);
+
+      insert into catissue_permissible_value
+        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
+      values
+        (catissue_permi_value_seq.nextval, null, null, null, "Specimen sent to Frozen Section", "missed_reason", null);
+
+      insert into catissue_permissible_value
+        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
+      values
+        (catissue_permi_value_seq.nextval, null, null, null, "No Pre-Op consent", "missed_reason", null);
+
+      insert into catissue_permissible_value
+        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
+      values
+        (catissue_permi_value_seq.nextval, null, null, null, "Other reasons", "missed_reason", null);
+
+    </sql>
+  </changeSet>
 </databaseChangeLog>

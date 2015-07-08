@@ -308,7 +308,11 @@ public class Specimen extends BaseEntity {
 				addCollRecvEvents();
 			}
 		}
-		
+
+		if(getVisit() != null && (getVisit().isMissed() && !isMissed())) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.CANNOT_COLLECT_FROM_MISSED_VISIT);
+		}
+
 		this.collectionStatus = collectionStatus;		
 	}
 
@@ -470,6 +474,10 @@ public class Specimen extends BaseEntity {
 	
 	public boolean isCollected() {
 		return Status.SPECIMEN_COLLECTION_STATUS_COLLECTED.getStatus().equals(this.collectionStatus);
+	}
+
+	public boolean isMissed() {
+		return MISSED_COLLECTION.equals(this.collectionStatus);
 	}
 
 	public void disable() {

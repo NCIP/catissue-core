@@ -249,6 +249,10 @@ angular.module('os.biospecimen.participant.specimen-tree',
           scope.aliquotSpec = {};
         };
 
+        scope.isEditAllowed = function(specimen) {
+          return (!scope.allowedOps || scope.allowedOps.update) && specimen.activityStatus == 'Active' && specimen.status != 'Missed Collection'
+        }
+        
         scope.collectAliquots = function() {
           var spec = scope.aliquotSpec;
           var parent = scope.parentSpecimen;

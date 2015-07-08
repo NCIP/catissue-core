@@ -13,7 +13,6 @@ import org.apache.commons.lang.StringUtils;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
@@ -393,8 +392,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 			ensureUniqueBarcode(specimen.getBarcode(), ose);
 		}
 
-		ensureVisitNotMissed(specimen, ose);
-
 		ose.checkAndThrow();
 
 		boolean newSpecimen = true;
@@ -419,13 +416,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 			addEvents(specimen);
 		}
 		return specimen;
-	}
-
-	private void ensureVisitNotMissed(Specimen specimen, OpenSpecimenException ose) {
-		if(specimen.getVisit().getStatus().equals(Visit.VISIT_STATUS_MISSED) &&
-				!specimen.getCollectionStatus().equals(Specimen.MISSED_COLLECTION)) {
-			ose.addError(SpecimenErrorCode.CANNOT_COLLECT_FROM_MISSED_VISIT);
-		}
 	}
 
 	private void addEvents(Specimen specimen) {

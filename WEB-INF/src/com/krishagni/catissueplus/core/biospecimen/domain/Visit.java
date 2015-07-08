@@ -67,7 +67,7 @@ public class Visit {
 	
 	private String defNameTmpl;
 
-	private String missedVisitReason;
+	private String missedReason;
 	
 	@Autowired
 	@Qualifier("visitNameGenerator")
@@ -239,12 +239,12 @@ public class Visit {
 		this.defNameTmpl = defNameTmpl;
 	}
 
-	public String getMissedVisitReason() {
-		return missedVisitReason;
+	public String getMissedReason() {
+		return missedReason;
 	}
 
-	public void setMissedVisitReason(String missedVisitReason) {
-		this.missedVisitReason = missedVisitReason;
+	public void setMissedReason(String missedVisitReason) {
+		this.missedReason = missedVisitReason;
 	}
 
 	public void setActive() {
@@ -288,10 +288,6 @@ public class Visit {
 		updateActivityStatus(visit.getActivityStatus());
 		if (!isActive()) {
 			return;
-		}
-
-		if (StringUtils.isNotBlank(visit.getName())) {
-			setName(visit.getName());
 		}
 
 		setClinicalDiagnosis(visit.getClinicalDiagnosis());
@@ -346,5 +342,9 @@ public class Visit {
 		}
 		
 		return count;
+	}
+
+	public boolean isMissed() {
+		return getStatus().equals(Visit.VISIT_STATUS_MISSED);
 	}
 }

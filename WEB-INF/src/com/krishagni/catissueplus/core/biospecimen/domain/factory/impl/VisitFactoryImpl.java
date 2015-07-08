@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -10,6 +11,8 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
@@ -33,18 +36,12 @@ public class VisitFactoryImpl implements VisitFactory {
 	
 	private String defaultNameTmpl;
 
-	private String defaultMissedNameTmpl;
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 	
 	public void setDefaultNameTmpl(String defNameTmpl) {
 		this.defaultNameTmpl = defNameTmpl;
-	}
-
-	public void setDefaultMissedNameTmpl(String defaultMissedNameTmpl) {
-		this.defaultMissedNameTmpl = defaultMissedNameTmpl;
 	}
 
 	@Override
@@ -69,15 +66,15 @@ public class VisitFactoryImpl implements VisitFactory {
 		visit.setSurgicalPathologyNumber(visitDetail.getSurgicalPathologyNumber());
 		visit.setDefNameTmpl(defaultNameTmpl);
 
-		if (visit.getStatus().equals(Visit.VISIT_STATUS_MISSED)) {
-			visit.setDefNameTmpl(defaultMissedNameTmpl);
-			visit.setMissedVisitReason(visitDetail.getMissedVisitReason());
+		if (visit.isMissed()) {
+			visit.setMissedReason(visitDetail.getMissedReason());
+			persistAnticipatedSpecimens(visit, Specimen.MISSED_COLLECTION);
 		}
 
 		ose.checkAndThrow();
 		return visit;
 	}
-	
+
 	@Override
 	public Visit createVisit(Visit existing, VisitDetail detail) {
 		Visit visit = new Visit();
@@ -104,7 +101,10 @@ public class VisitFactoryImpl implements VisitFactory {
 		setSurgicalPathNo(detail, existing, visit, ose);
 		setMissedVisitReason(detail, existing, visit);
 		visit.setDefNameTmpl(defaultNameTmpl);
-		
+
+		if (visit.isMissed()) {
+			persistAnticipatedSpecimens(visit, Specimen.MISSED_COLLECTION);
+		}
 		ose.checkAndThrow();
 		return visit;
 	}
@@ -298,10 +298,10 @@ public class VisitFactoryImpl implements VisitFactory {
 	}
 
 	private void setMissedVisitReason(VisitDetail detail, Visit existing, Visit visit) {
-		if (detail.isAttrModified("missedVisitReason")) {
-			visit.setMissedVisitReason(detail.getMissedVisitReason());
+		if (detail.isAttrModified("missedReason")) {
+			visit.setMissedReason(detail.getMissedReason());
 		} else {
-			visit.setMissedVisitReason(existing.getMissedVisitReason());
+			visit.setMissedReason(existing.getMissedReason());
 		}
 	}
 
@@ -337,6 +337,29 @@ public class VisitFactoryImpl implements VisitFactory {
 			visit.setSurgicalPathologyNumber(detail.getSurgicalPathologyNumber());
 		} else {
 			visit.setSurgicalPathologyNumber(existing.getSurgicalPathologyNumber());
+		}
+	}
+
+	private void persistAnticipatedSpecimens(Visit visit, String status) {
+		Set<SpecimenRequirement> anticipatedSpecimens = visit.getCpEvent().getTopLevelAnticipatedSpecimens();
+		for (SpecimenRequirement anticipatedSpecimen : anticipatedSpecimens) {
+			Specimen specimen = anticipatedSpecimen.getSpecimen();
+			specimen.setCollectionStatus(status);
+			setAnticipatedSpecimenStatus(specimen, anticipatedSpecimen.getChildSpecimenRequirements(), status);
+			if (!visit.getSpecimens().contains(specimen)) {
+				specimen.setVisit(visit);
+				visit.addSpecimen(specimen);
+			}
+		}
+	}
+
+	private void setAnticipatedSpecimenStatus(Specimen parentSpecimen, Set<SpecimenRequirement> specimens, String status) {
+		for (SpecimenRequirement anticipatedSpecimen : specimens) {
+			Specimen specimen = anticipatedSpecimen.getSpecimen();
+			specimen.setCollectionStatus(status);
+			setAnticipatedSpecimenStatus(specimen, anticipatedSpecimen.getChildSpecimenRequirements(), status);
+			parentSpecimen.getChildCollection().add(specimen);
+			specimen.setVisit(parentSpecimen.getVisit());
 		}
 	}
 }

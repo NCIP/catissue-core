@@ -58,6 +58,7 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 			cal.add(Calendar.DAY_OF_YEAR, visit.getEventPoint());
 			visit.setAnticipatedVisitDate(cal.getTime());
 			visit.setMissedVisitReason((String)row[9]);
+
 			visits.add(visit);
 			if (crit.includeStat()) {				
 				visitsMap.put(getVisitKey(visit.getId(), visit.getEventId()), visit);

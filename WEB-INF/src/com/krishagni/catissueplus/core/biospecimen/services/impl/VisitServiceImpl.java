@@ -345,31 +345,27 @@ public class VisitServiceImpl implements VisitService {
 		
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		if (existing == null) {
-			ensureValidAndUniqueVisitName(visit, ose);			
-			ose.checkAndThrow();
-			visit.setNameIfEmpty();
-			existing = visit;			
-		} else {
-			if ((existing.getStatus().equals(Visit.VISIT_STATUS_MISSED) && !visit.getStatus().equals(Visit.VISIT_STATUS_MISSED)) ||
-					(!existing.getStatus().equals(Visit.VISIT_STATUS_MISSED) && visit.getStatus().equals(Visit.VISIT_STATUS_MISSED))) {
-				visit.setName(null);
+			if (!visit.isMissed()) {
+				ensureValidAndUniqueVisitName(visit, ose);
 				visit.setNameIfEmpty();
 			}
+			ose.checkAndThrow();
+			existing = visit;
+		} else {
 			existing.update(visit);
 		}
-
 		if (existing.getStatus().equals(Visit.VISIT_STATUS_MISSED)) {
-			markSpecimensAsMissed(existing.getSpecimens());
+			setSpecimenStatus(existing.getSpecimens(), Visit.VISIT_STATUS_MISSED);
 		}
 		daoFactory.getVisitsDao().saveOrUpdate(existing);
 		return VisitDetail.from(existing);		
 	}
 
-	private void markSpecimensAsMissed(Set<Specimen> specimens) {
+	private void setSpecimenStatus(Set<Specimen> specimens, String status) {
 		for (Specimen specimen : specimens) {
-			specimen.setCollectionStatus(Specimen.MISSED_COLLECTION);
+			specimen.setCollectionStatus(status);
 			if (specimen.getChildCollection().size() > 0) {
-				markSpecimensAsMissed(specimen.getChildCollection());
+				setSpecimenStatus(specimen.getChildCollection(), status);
 			}
 		}
 	}
@@ -394,7 +390,7 @@ public class VisitServiceImpl implements VisitService {
 		CollectionProtocol cp = visit.getCollectionProtocol();
 		String name = visit.getName();
 		
-		if (StringUtils.isBlank(name) && !visit.getStatus().equals(Visit.VISIT_STATUS_MISSED)) {
+		if (StringUtils.isBlank(name)) {
 			if (cp.isManualVisitNameEnabled()) {
 				ose.addError(VisitErrorCode.NAME_REQUIRED);
 			}
@@ -413,7 +409,7 @@ public class VisitServiceImpl implements VisitService {
 			}
 
 
-			if (!visit.getStatus().equals(Visit.VISIT_STATUS_MISSED) && !visitNameGenerator.validate(cp.getVisitNameFormat(), visit, name)) {
+			if (!visitNameGenerator.validate(cp.getVisitNameFormat(), visit, name)) {
 				ose.addError(VisitErrorCode.INVALID_NAME, name);
 				return;
 			}

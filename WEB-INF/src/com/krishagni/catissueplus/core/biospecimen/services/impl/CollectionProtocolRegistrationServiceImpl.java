@@ -506,21 +506,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		Set<SpecimenRequirement> anticipatedSpecimens = visit.getCpEvent().getTopLevelAnticipatedSpecimens();
 		Set<Specimen> specimens = visit.getTopLevelSpecimens();
 
-		List<SpecimenDetail> specimenDetails = SpecimenDetail.getSpecimens(anticipatedSpecimens, specimens);
-
-		if (visit.getStatus().equals(Visit.VISIT_STATUS_MISSED)) {
-			markAllSpecimensAsMissed(specimenDetails);
-		}
-		return specimenDetails;
-	}
-
-	private void markAllSpecimensAsMissed(List<SpecimenDetail> specimenDetails) {
-		for (SpecimenDetail specimenDetail : specimenDetails) {
-			specimenDetail.setStatus(Specimen.MISSED_COLLECTION);
-			if (specimenDetail.getChildren().size() > 0) {
-				markAllSpecimensAsMissed(specimenDetail.getChildren());
-			}
-		}
+		return SpecimenDetail.getSpecimens(visit.getStatus(), anticipatedSpecimens, specimens);
 	}
 
 	private List<SpecimenDetail> getAnticipatedSpecimens(Long cprId, Long eventId) {

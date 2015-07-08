@@ -216,8 +216,7 @@
             </div>
           </div>
           <div class="os-table-body">
-            <div ng-repeat="visit in missedVisits"
-                 ng-class="{'os-inplace-form-edit-po': rptVisitIdx == $index}">
+            <div ng-repeat="visit in missedVisits">
               <div class="row title">
                 <div class="col col-xs-5">
                   <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
@@ -230,10 +229,6 @@
                 <div class="col col-xs-4">
                   {{visit.missedVisitReason | osNoValue}}
                 </div>
-
-              </div>
-              <div class="row content" ng-if="rptVisitIdx == $index">
-                <div ng-include="'modules/biospecimen/participant/add-visit.html'"></div>
               </div>
             </div>
           </div>
@@ -261,7 +256,7 @@
           </div>
           <div class="os-table-body">
             <div ng-repeat="visit in anticipatedVisits"
-              ng-class="{'os-inplace-form-edit-po': (addVisitIdx == $index) || (missedVisitIdx == $index)}">
+              ng-class="{'os-inplace-form-edit-po': (addVisitIdx == $index)}">
               <div class="row title">
                 <div class="col col-xs-5">
                   <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
@@ -302,7 +297,7 @@
                 <div ng-include="'modules/biospecimen/participant/add-visit.html'"></div>
               </div>
               <div class="row content" ng-if="missedVisitIdx == $index">
-                <div ng-include="'modules/biospecimen/participant/missed-visit.html'"></div>
+                <div ng-include="'modules/biospecimen/participant/add-visit.html'"></div>
               </div>
             </div>
           </div>

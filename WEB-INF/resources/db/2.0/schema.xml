@@ -2280,32 +2280,13 @@
       insert into catissue_cde
         (public_id, long_name, definition, version, last_updated)
       values
-        ("missed_visit_reason", "Missed Visit Reason", "Missed Visit Reason", "2.0", null)
-    </sql>
-  </changeSet>
-  <changeSet dbms="mysql" author="ahegade" id="Adding reasons for missed visits in pv table">
-    <sql>
-      insert into catissue_permissible_value
-        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
-      values
-        (default, null, null, null, "Previous excisional biopsy done", "missed_visit_reason", null),
-        (default, null, null, null, "Tumour too small (size less than 2cm or in-situ ca)", "missed_visit_reason", null),
-        (default, null, null, null, "Not Malignant tissue", "missed_visit_reason", null),
-        (default, null, null, null, "No residual tumour after treatment", "missed_visit_reason", null),
-        (default, null, null, null, "Open and closed ops / Bypass ops", "missed_visit_reason", null),
-        (default, null, null, null, "OT surgeon forgot to page TRO", "missed_visit_reason", null),
-        (default, null, null, null, "Patient declined tissue donation", "missed_visit_reason", null),
-        (default, null, null, null, "No post ops consent taken within 3 months", "missed_visit_reason", null),
-        (default, null, null, null, "Late Case", "missed_visit_reason", null),
-        (default, null, null, null, "Specimen sent to Frozen Section", "missed_visit_reason", null),
-        (default, null, null, null, "No Pre-Op consent", "missed_visit_reason", null),
-        (default, null, null, null, "Other reasons", "missed_visit_reason", null)
+        ("missed_reason", "Missed Visit Reason", "Missed Visit Reason", "2.0", null)
     </sql>
   </changeSet>
 
-  <changeSet author="ahegade" id="Adding missed visit reason column in scg table">
+  <changeSet author="ahegade" id="Adding missed visit reason column in visit table">
     <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
-      <column name="MISSED_VISIT_REASON" type="${text.type}(255)"/>
+      <column name="MISSED_REASON" type="${text.type}(255)"/>
     </addColumn>
   </changeSet>
 

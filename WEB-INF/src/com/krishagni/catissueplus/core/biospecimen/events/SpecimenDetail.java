@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -164,7 +165,29 @@ public class SpecimenDetail extends SpecimenInfo {
 		SpecimenDetail.sort(result);
 		return result;
 	}
-	
+
+
+	public static List<SpecimenDetail> getSpecimens(String visitStatus,
+			Collection<SpecimenRequirement> anticipated,
+			Collection<Specimen> specimens) {
+
+		List<SpecimenDetail> result = SpecimenDetail.from(specimens);
+		merge(anticipated, result, null, getReqSpecimenMap(result));
+
+		SpecimenDetail.sort(result);
+		if (visitStatus.equals(Visit.VISIT_STATUS_MISSED)) {
+			setSpecimensStatus(result, Visit.VISIT_STATUS_MISSED);
+		}
+		return result;
+	}
+
+	private static void setSpecimensStatus(List<SpecimenDetail> specimenDetails, String status) {
+		for (SpecimenDetail specimenDetail : specimenDetails) {
+			specimenDetail.setStatus(status);
+			setSpecimensStatus(specimenDetail.getChildren(), status);
+		}
+	}
+
 	private static Map<Long, SpecimenDetail> getReqSpecimenMap(List<SpecimenDetail> specimens) {
 		Map<Long, SpecimenDetail> reqSpecimenMap = new HashMap<Long, SpecimenDetail>();
 						

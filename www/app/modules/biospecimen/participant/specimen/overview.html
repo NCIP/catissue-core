@@ -9,17 +9,16 @@
 
       <li class="item">
         <strong class="key key-sm" translate="specimens.collection_status">Status</strong>
-        <ng-switch on="specimen.status" ng-if="specimen.hasOwnProperty(status)">
+        <ng-switch on="specimen.status">
           <span ng-switch-when="Collected" class="value value-md os-status-collected">Collected</span>
           <span ng-switch-when="Missed Collection" class="value value-md os-status-missed">Missed Collection</span>
-          <span ng-switch-default class="value value-md os-status-pending">Pending</span>
-        </ng-switch>
-
-        <ng-switch on="visit.status" ng-if="!specimen.hasOwnProperty(status)">
-          <span ng-switch-when="Missed Collection" class="value value-md os-status-missed">Missed Collection</span>
-          <span ng-switch-default class="value value-md os-status-pending">Pending</span>
+          <span ng-switch-default>
+            <span class="value value-md os-status-missed" ng-if="visit.status == 'Missed Collection'">Missed Collection</span>
+            <span class="value value-md os-status-pending" ng-if="visit.status != 'Missed Collection'">Pending</span>
+          </span>
         </ng-switch>
       </li>
+
 
       <li class="item">
         <strong class="key key-sm" translate="specimens.class">Specimen Class</strong>
