@@ -46,7 +46,7 @@
 
       <li class="item">
         <strong class="key key-sm" translate="specimens.available_qty">Available Quantity</strong>
-        <span class="value value-md" ng-switch="!!specimen.availableQty">
+        <span class="value value-md" ng-switch="!!specimen.availableQty || specimen.availableQty == 0">
           <span ng-switch-when="true">
             {{specimen.availableQty}}
             <os-specimen-qty-unit specimen-class="specimen.specimenClass" type="specimen.type">
