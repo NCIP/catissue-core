@@ -262,8 +262,11 @@ public class SpecimenRequirement {
 		setInitialQuantity(sr.getInitialQuantity());
 		setStorageType(sr.getStorageType());
 		setLabelFormat(sr.getLabelFormat());
-		setConcentration(sr.getConcentration());
 		
+		if (!isAliquot()) {
+			updateConcentration(sr.getConcentration());
+		}
+
 		if (getQtyAfterAliquotsUse() < 0) {
 			throw OpenSpecimenException.userError(SrErrorCode.INSUFFICIENT_QTY);
 		}
@@ -375,11 +378,20 @@ public class SpecimenRequirement {
 		setCollectionProcedure(sr.getCollectionProcedure());
 		setReceiver(sr.getReceiver());
 		
-		for (SpecimenRequirement childSr : sr.getChildSpecimenRequirements()) {
+		for (SpecimenRequirement childSr : getChildSpecimenRequirements()) {
 			childSr.updateRequirementAttrs(sr);
 		}		
 	}
 	
+	private void updateConcentration(Double concentration) {
+		setConcentration(concentration);
+		for (SpecimenRequirement childSr : getChildSpecimenRequirements()) {
+			if (childSr.isAliquot()) {
+				childSr.updateConcentration(concentration);
+			}
+		}
+	}
+
 	private static final String[] EXCLUDE_COPY_PROPS = {
 		"id",
 		"sortOrder",
