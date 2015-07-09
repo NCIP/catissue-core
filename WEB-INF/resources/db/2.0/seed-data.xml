@@ -310,4 +310,21 @@
       update catissue_permissible_value set sortorder = 3 where public_id = 'consent_response' and value = 'Not Specified';
     </sql>
   </changeSet>      
+  
+  <changeSet  author="ahegade" id="Adding ScheduleJob resources" dbms="mysql">
+    <sql>
+      insert into RBAC_RESOURCES(NAME) values('ScheduledJob');
+    </sql>
+  </changeSet>
+
+  <changeSet  author="ahegade" id="Adding ScheduleJob resources" dbms="oracle">
+    <sql>
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'ScheduldeJob');
+    </sql>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Insert permissions related to scheduled jobs role" >
+    <sql>call assign_to_role('Administrator', 'ScheduledJob', 'Read,Create,Update,Delete');</sql>
+    <sql>commit;</sql>
+  </changeSet>
 </databaseChangeLog>

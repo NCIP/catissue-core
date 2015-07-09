@@ -22,7 +22,6 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
-import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class ScheduledTaskManagerImpl implements ScheduledTaskManager, ScheduledTaskListener {
 	private static ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5);
@@ -55,6 +54,21 @@ public class ScheduledTaskManagerImpl implements ScheduledTaskManager, Scheduled
 		ScheduledFuture<?> future = executorService.schedule(taskWrapper, getNextScheduleInMin(job), TimeUnit.MINUTES);
 		scheduledJobs.put(job.getId(), future);
 	}
+
+	@Override
+	public void run(ScheduledJob job, User currentUser) {
+		if (isJobQueued(job)) {
+			cancel(job);
+		}
+
+		if (!job.isActiveJob()) {
+			return;
+		}
+
+		ScheduledTaskWrapper taskWrapper = new ScheduledTaskWrapper(job, currentUser, this);
+		ScheduledFuture<?> future = executorService.schedule(taskWrapper, 0, TimeUnit.MINUTES);
+		scheduledJobs.put(job.getId(), future);
+	}
 	
 	@Override
 	public void cancel(ScheduledJob job) {
@@ -76,7 +90,9 @@ public class ScheduledTaskManagerImpl implements ScheduledTaskManager, Scheduled
 		jobRun.completed();
 		jobRun = updateJobRun(jobRun);
 		scheduledJobs.remove(jobRun.getScheduledJob().getId());
-		schedule(jobRun.getScheduledJob());
+		if (!jobRun.getScheduledJob().isOnDemand()) {
+			schedule(jobRun.getScheduledJob());
+		}
 	}
 
 	@Override

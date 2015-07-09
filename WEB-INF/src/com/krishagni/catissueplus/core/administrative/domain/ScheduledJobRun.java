@@ -9,7 +9,7 @@ public class ScheduledJobRun extends BaseEntity {
 		SUCCEEDED,
 		FAILED
 	}
-	
+
 	private Date startedAt;
 	
 	private Date finishedAt;
@@ -21,6 +21,8 @@ public class ScheduledJobRun extends BaseEntity {
 	private String message;
 	
 	private ScheduledJob scheduledJob;
+
+	private User runBy;
 
 	public Date getStartedAt() {
 		return startedAt;
@@ -70,6 +72,14 @@ public class ScheduledJobRun extends BaseEntity {
 		this.scheduledJob = scheduledJob;
 	}
 
+	public User getRunBy() {
+		return runBy;
+	}
+
+	public void setRunBy(User runBy) {
+		this.runBy = runBy;
+	}
+
 	public void inProgress(ScheduledJob job) {
 		startedAt = new Date();
 		status = Status.IN_PROGRESS;
@@ -101,5 +111,6 @@ public class ScheduledJobRun extends BaseEntity {
 		setMessage(other.message);
 		setStartedAt(other.startedAt);
 		setFinishedAt(other.finishedAt);
+		setRunBy(other.getRunBy());
 	}
 }

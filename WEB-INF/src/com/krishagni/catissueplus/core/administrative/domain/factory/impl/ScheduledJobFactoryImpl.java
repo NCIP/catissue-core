@@ -34,14 +34,17 @@ public class ScheduledJobFactoryImpl implements ScheduledJobFactory {
 
 	@Override
 	public ScheduledJob createScheduledJob(ScheduledJobDetail detail) {
+
 		ScheduledJob job = new ScheduledJob();
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
 		setName(detail, job, ose);
-		setStartAndEndDates(detail, job, ose);
+		if (!detail.getRepeatSchedule().equals(RepeatSchedule.ONDEMAND.toString())) {
+			setStartAndEndDates(detail, job, ose);
+		}
+		setRepeatSchedule(detail, job, ose);
 		setCreatedBy(detail, job, ose);
 		setActivityStatus(detail, job, ose);
-		setRepeatSchedule(detail, job, ose);
 		setType(detail, job, ose);
 		setRecipients(detail, job, ose);
 			
@@ -114,11 +117,13 @@ public class ScheduledJobFactoryImpl implements ScheduledJobFactory {
 			return;
 		}
 		job.setRepeatSchedule(repeat);
-		
-		setScheduledMinute(detail, job, ose);
-		setScheduledHour(detail, job, ose);
-		setScheduledDayOfWeek(detail, job, ose);
-		setScheduledDayOfMonth(detail, job, ose);
+
+		if (!detail.getRepeatSchedule().equals(RepeatSchedule.ONDEMAND.toString())) {
+			setScheduledMinute(detail, job, ose);
+			setScheduledHour(detail, job, ose);
+			setScheduledDayOfWeek(detail, job, ose);
+			setScheduledDayOfMonth(detail, job, ose);
+		}
 	}
 
 	private void setScheduledMinute(ScheduledJobDetail detail, ScheduledJob job, OpenSpecimenException ose) {

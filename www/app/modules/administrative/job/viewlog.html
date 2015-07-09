@@ -1,0 +1,65 @@
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li>
+        <a ui-sref="job-list" translate="jobs.list">Custom Reports</a>
+      </li>
+    </ul>
+    <h3 ng-switch on="jobRuns.length == 0">
+      <span ng-switch-when="true" translate="jobs.noRun">Create Custom Report"</span>
+      <span ng-switch-default>{{jobRuns[0].scheduledJob.name}} Run logs</span>
+    </h3>
+  </div>
+
+  <div class="container">
+    <div class="os-table">
+      <div class="os-table-head">
+        <div class="row">
+          <div class="col col-xs-1">
+            <span translate="jobs.id">Id#</span>
+          </div>
+          <div class="col col-xs-3">
+            <span translate="jobs.run_by">Run By</span>
+          </div>
+          <div class="col col-xs-2">
+            <span translate="jobs.started_at">Started At</span>
+          </div>
+          <div class="col col-xs-2">
+            <span translate="jobs.time_taken">Time Taken</span>
+          </div>
+          <div class="col col-xs-2">
+            <span translate="jobs.status">Status</span>
+          </div>
+
+          <div class="col col-xs-2">&nbsp;</div>
+
+        </div>
+      </div>
+      <div class="os-table-body">
+        <div class="row" ng-repeat="jobRun in jobRuns">
+          <div class="col col-xs-1">
+            #{{jobRun.id}}
+          </div>
+          <div class="col col-xs-3">
+            <span>{{jobRun.runBy.firstName}} {{jobRun.runBy.lastName}}</span>
+          </div>
+          <div class="col col-xs-2">
+            <span>{{jobRun.startedAt | date: global.dateFmt | osNoValue}}</span>
+          </div>
+          <div class="col col-xs-2">
+            <span>{{(jobRun.finishedAt - jobRun.startedAt)/1000 | number : 2}}</span>
+          </div>
+          <div class="col col-xs-2">
+            <span>{{'jobs.statuses.' + jobRun.status | translate}}</span>
+          </div>
+          <div class="col col-xs-2" show-if-allowed="jobResource.runOpts">
+            <a ui-sref="scheduled-job-runs({jobId: jobRun.id})">
+              <i class="fa fa-download"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

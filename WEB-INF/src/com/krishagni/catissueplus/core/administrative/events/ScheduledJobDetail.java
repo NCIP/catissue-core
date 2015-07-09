@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJob;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
+@JsonFilter("withoutId")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ScheduledJobDetail {
 	private Long id;
 
@@ -41,6 +45,8 @@ public class ScheduledJobDetail {
 	private List<UserSummary> recipients = new ArrayList<UserSummary>();
 	
 	private Boolean isActiveJob;
+
+	private Date lastRunOn;
 
 	public Long getId() {
 		return id;
@@ -178,6 +184,14 @@ public class ScheduledJobDetail {
 		this.isActiveJob = isActiveJob;
 	}
 
+	public Date getLastRunOn() {
+		return lastRunOn;
+	}
+
+	public void setLastRunOn(Date lastRunOn) {
+		this.lastRunOn = lastRunOn;
+	}
+
 	public static ScheduledJobDetail from(ScheduledJob job) {
 		ScheduledJobDetail detail = new ScheduledJobDetail();
 	
@@ -188,20 +202,21 @@ public class ScheduledJobDetail {
 		detail.setRepeatSchedule(job.getRepeatSchedule().toString());
 		detail.setType(job.getType().toString());
 		detail.setCommand(job.getCommand());
-		detail.setNextRunOn(job.getNextRunOn());
-		detail.setStartDate(job.getStartDate());
-		detail.setEndDate(job.getEndDate());
+		if (!detail.getRepeatSchedule().equals(ScheduledJob.RepeatSchedule.ONDEMAND.toString())) {
+			detail.setNextRunOn(job.getNextRunOn());
+			detail.setStartDate(job.getStartDate());
+			detail.setEndDate(job.getEndDate());
+			detail.setScheduledMinute(job.getScheduledMinute());
+			detail.setScheduledHour(job.getScheduledHour());
+			detail.setScheduledDayOfMonth(job.getScheduledDayOfMonth());
+			if (job.getScheduledDayOfWeek() != null) {
+				detail.setScheduledDayOfWeek(job.getScheduledDayOfWeek().toString());
+			}
+		}
+
 		detail.setIsActiveJob(job.isActiveJob());
 		detail.setTaskImplFqn(job.getTaskImplfqn());
 		detail.setRecipients(UserSummary.from(job.getRecipients()));
-		detail.setScheduledMinute(job.getScheduledMinute());
-		detail.setScheduledHour(job.getScheduledHour());
-		detail.setScheduledDayOfMonth(job.getScheduledDayOfMonth());
-		
-		if (job.getScheduledDayOfWeek() != null) {
-			detail.setScheduledDayOfWeek(job.getScheduledDayOfWeek().toString());
-		}
-		
 		return detail;
 	}
 	

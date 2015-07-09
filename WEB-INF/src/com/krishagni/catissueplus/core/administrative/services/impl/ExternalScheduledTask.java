@@ -13,8 +13,10 @@ public class ExternalScheduledTask implements ScheduledTask {
 	private void executeProcess(ScheduledJobRun jobRun) {
 		String command = jobRun.getScheduledJob().getCommand();
 		try {
-			Process process = Runtime.getRuntime().exec(command);
+			Process process = Runtime.getRuntime().exec(command, new String[] {"JOB_ID=" + jobRun.getId()});
+//			Process process = Runtime.getRuntime().exec(command);
 			process.waitFor();
+
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

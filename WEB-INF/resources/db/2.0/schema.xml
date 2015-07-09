@@ -2297,4 +2297,10 @@
         o.activity_status != 'Disabled'
     </createView>
   </changeSet>
+
+  <changeSet author="ahegade" id="Adding run by column to scheduled job run table">
+    <addColumn tableName="OS_SCHEDULED_JOB_RUNS">
+      <column name="RUN_BY" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

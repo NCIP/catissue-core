@@ -1,0 +1,87 @@
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li>
+        <a ui-sref="job-list" translate="jobs.list">Custom Reports</a>
+      </li>
+    </ul>
+    <h3 ng-switch on="!job.id">
+      <span ng-switch-when="true" translate="jobs.create">Create Custom Report"</span>
+      <span ng-switch-default>{{job.name}}</span>
+    </h3>
+  </div>
+
+  <div class="container">
+    <form name="jobForm" class="form-horizontal" os-form-validator="jobForm" validator="jobFormValidator" novalidate>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="jobs.name">Job Name</label>
+        <div class="col-xs-6">
+          <input type="text" name="name" ng-model="job.name"
+                 class="form-control" placeholder="{{'jobs.name' | translate}}" ng-maxlength="255" required/>
+          <div os-field-error field="jobForm.name"></div>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="true == false">
+        <label class="col-xs-3 control-label" translate="jobs.category">Job Category</label>
+        <div class="col-xs-6 clearfix">
+          <label class="radio-inline col-xs-3">
+            <input type="radio" name="jobCategory" ng-model="job.repeatSchedule" ng-value="'SCHEDULED'">
+            <span translate="jobs.scheduled"></span>
+          </label>
+          <label class="radio-inline col-xs-3">
+            <input type="radio" name="jobCategory" ng-model="job.repeatSchedule" ng-value="'ONDEMAND'">
+            <span translate="jobs.ondemand"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if ="job.repeatSchedule == 'SCHEDULED'" >
+        <p class="col-xs-5 control-label">Under construction</p>
+      </div>
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="jobs.type">Job Type</label>
+        <div class="col-xs-6 clearfix">
+          <label class="radio-inline col-xs-3">
+            <input type="radio" name="jobType" ng-model="job.type" ng-value="'INTERNAL'">
+            <span translate="jobs.internal"></span>
+          </label>
+          <label class="radio-inline col-xs-3">
+            <input type="radio" name="jobType" ng-model="job.type" ng-value="'EXTERNAL'">
+            <span translate="jobs.external"></span>
+          </label>
+        </div>
+      </div>
+
+
+      <div class="form-group" ng-if="job.type == 'EXTERNAL'">
+        <label class="col-xs-3 control-label" translate="jobs.command">External Command</label>
+        <div class="col-xs-6">
+          <textarea rows="2" placeholder="{{'jobs.command_desc' | translate}}" ng-model="job.command" class="form-control">
+          </textarea>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="job.type == 'INTERNAL'">
+        <label class="col-xs-3 control-label" translate="jobs.implementation">Internal Function</label>
+        <div class="col-xs-6">
+          <textarea rows="2" placeholder="{{'jobs.implementation_desc' | translate}}" ng-model="job.taskImplFqn" class="form-control">
+          </textarea>
+        </div>
+      </div>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6">
+          <button class="btn btn-primary" os-form-submit="createJob()">
+            <span ng-if="!job.id" translate="common.buttons.create"> Create </span>
+            <span ng-if="!!job.id" translate="common.buttons.update"> Update </span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard"> Discard </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

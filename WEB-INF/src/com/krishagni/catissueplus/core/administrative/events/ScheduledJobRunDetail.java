@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJobRun;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class ScheduledJobRunDetail {
 	private Long id;
@@ -20,6 +21,8 @@ public class ScheduledJobRunDetail {
 	private String logFilePath;
 	
 	private String message;
+
+	private UserSummary runBy;
 
 	public Long getId() {
 		return id;
@@ -76,7 +79,15 @@ public class ScheduledJobRunDetail {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
+
+	public UserSummary getRunBy() {
+		return runBy;
+	}
+
+	public void setRunBy(UserSummary runBy) {
+		this.runBy = runBy;
+	}
+
 	public static ScheduledJobRunDetail from(ScheduledJobRun job) {
 		ScheduledJobRunDetail detail = new ScheduledJobRunDetail();
 		detail.setId(job.getId());
@@ -86,6 +97,11 @@ public class ScheduledJobRunDetail {
 		detail.setLogFilePath(job.getLogFilePath());
 		detail.setStartedAt(job.getStartedAt());
 		detail.setFinishedAt(job.getFinishedAt());
+
+		if (job.getScheduledJob().isOnDemand() && job.getRunBy() != null) {
+			detail.setRunBy(UserSummary.from(job.getRunBy()));
+		}
+
 		return detail;
 	}
 	

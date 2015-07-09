@@ -26,7 +26,9 @@
     "specimen_lists_desc": "Create, share and manage specimen lists",
     "forms_desc": "Create and manage custom forms",
     "settings_desc": "Manage application configuration settings",
-    "distribution_orders_desc": "Create, execute request orders for distributing specimens"
+    "distribution_orders_desc": "Create, execute request orders for distributing specimens",
+    "custom_reports": "Custom Reports",
+    "custom_reports_desc": "Create, execute custom reports"
   },
 
   "common": {
@@ -802,7 +804,8 @@
       "VisitAndSpecimen": "Visits and Specimens",
       "SurgicalPathologyReport": "Surgical Pathology Report",
       "StorageContainer": "Storage Containers",
-      "User": "Users"
+      "User": "Users",
+      "ScheduledJob": "Custom Reports"
     },
 
     "menu": {
@@ -1211,6 +1214,49 @@
      "tooltip": {
        "create": "Create new distribution order",
        "search": "Filter out distribution orders"
+     }
+   },
+
+   "jobs": {
+     "list": "Custom Reports list",
+     "create": "Create Custom Report",
+     "id": "Job Id#",
+     "name": "Name",
+     "title": "Title",
+     "schedule": "Schedule",
+     "created_by": "Created By",
+     "last_run_on": "Last Run On",
+     "execute": "Execute custom report",
+     "edit": "Edit custom report",
+     "delete": "Delete custom report",
+     "scheduled": "Scheduled",
+     "ondemand": "On Demand",
+     "type": "Type",
+     "category": "Category",
+     "command": "External Command",
+     "command_desc": "Specify the valid external command",
+     "implementation": "Implementation",
+     "implementation_desc": "Specify fully qualified name of the implementation",
+     "internal": "Internal",
+     "external": "External",
+     "view_log": "View log",
+     "noRun": "No run logs to show",
+     "run_by": "Run By",
+     "started_at": "Started At",
+     "time_taken": "Time Taken",
+     "status": "Status",
+     "ONDEMAND": "On Demand",
+     "filter": "Custom Reports Filter",
+
+     "tooltip": {
+       "create": "Create new custom report",
+       "search": "Filter out custom report"
+     },
+
+     "statuses": {
+       "SUCCEEDED": "Success",
+       "FAILURE": "Failure",
+       "INPROGRESS": "In Progress"
      }
    }
 

@@ -19,11 +19,11 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 public class ScheduledJob extends BaseEntity {
 	public enum RepeatSchedule { 
 		//TODO: remove minutely after demo.
-		MINUTELY,
 		HOURLY,
 		DAILY,
 		WEEKLY,
-		MONTHLY
+		MONTHLY,
+		ONDEMAND
 	}
 	
 	public enum DayOfWeek {
@@ -197,11 +197,17 @@ public class ScheduledJob extends BaseEntity {
 		CollectionUpdater.update(this.getRecipients(), other.getRecipients());
 	}
 
+	public boolean isOnDemand() {
+		return repeatSchedule.equals(RepeatSchedule.ONDEMAND);
+	}
 	public boolean isActiveJob() {
 		if (!Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(activityStatus)) {
 			return false;
 		}
-		
+
+		if (isOnDemand()) {
+			return true;
+		}
 		Date current = new Date();
 		if (current.before(startDate)) {
 			return false;
@@ -221,10 +227,7 @@ public class ScheduledJob extends BaseEntity {
 			
 			case HOURLY:
 				return getNextHourlyOccurence();
-			
-			case MINUTELY:
-				return getNextMinutelyOccurence();
-			
+
 			case MONTHLY:
 				return getNextMonthlyOccurence();
 			

@@ -16,6 +16,6 @@ public interface ScheduledJobDao extends Dao<ScheduledJob> {
 	public ScheduledJob getJobByName(String name);
 	
 	public List<ScheduledJobRun> getJobRuns(JobRunsListCriteria listCriteria);
-	
+
 	public void saveOrUpdateJobRun(ScheduledJobRun job);
 }
