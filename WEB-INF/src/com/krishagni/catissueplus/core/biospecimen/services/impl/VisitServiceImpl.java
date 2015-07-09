@@ -343,18 +343,29 @@ public class VisitServiceImpl implements VisitService {
 		
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		if (existing == null) {
-			ensureValidAndUniqueVisitName(visit, ose);			
+			ensureValidAndUniqueVisitName(visit, ose);
 			ose.checkAndThrow();
-			visit.setNameIfEmpty();
-			existing = visit;			
+
+			if (visit.isMissed()) {
+				visit.createMissedSpecimens();
+			} else {
+				visit.setNameIfEmpty();
+			}
+			
+			existing = visit;
 		} else {
+			if (StringUtils.isBlank(existing.getName())) {
+				ensureValidAndUniqueVisitName(visit, ose);
+				ose.checkAndThrow();
+			}
+			
 			existing.update(visit);
 		}
-				
+		
 		daoFactory.getVisitsDao().saveOrUpdate(existing);
 		return VisitDetail.from(existing);		
 	}
-	
+
 	private Visit getVisit(Long visitId, String visitName) {
 		Visit visit = null;
 		
@@ -376,7 +387,7 @@ public class VisitServiceImpl implements VisitService {
 		String name = visit.getName();
 		
 		if (StringUtils.isBlank(name)) {
-			if (cp.isManualVisitNameEnabled()) {
+			if (cp.isManualVisitNameEnabled() && visit.isCompleted()) {
 				ose.addError(VisitErrorCode.NAME_REQUIRED);
 			}
 			
@@ -392,7 +403,8 @@ public class VisitServiceImpl implements VisitService {
 				ose.addError(VisitErrorCode.MANUAL_NAME_NOT_ALLOWED);
 				return;
 			}
-			
+
+
 			if (!visitNameGenerator.validate(cp.getVisitNameFormat(), visit, name)) {
 				ose.addError(VisitErrorCode.INVALID_NAME, name);
 				return;

@@ -33,12 +33,22 @@
 
   <div class="container os-margin-top">
     <form name="vform" class="form-horizontal" os-form-validator="vform" validator="vformValidator" novalidate>
-      <div class="form-group" ng-if="!!currVisit.id || cp.manualVisitNameEnabled">
+      <div class="form-group" ng-if="!!currVisit.name || cp.manualVisitNameEnabled">
         <label class="col-xs-3 control-label" translate="visits.name">Name</label>
-        <div class="col-xs-6">
+        <div class="col-xs-6" ng-init="pName=currVisit.name">
           <input type="text" name="name" ng-model="currVisit.name" class="form-control" 
-            placeholder="Name" ng-required="cp.manualVisitNameEnabled" ng-disabled="!!currVisit.id"/>
+            placeholder="Name" ng-required="currVisit.status == 'Complete' && cp.manualVisitNameEnabled" 
+            ng-disabled="!!pName"/>
           <div os-field-error field="vform.name"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label">Status</label>
+        <div class="col-xs-6">
+          <os-select name="status" ng-model="currVisit.status" list="visitStatuses"
+            required placeholder="Status of Visit"/>
+          <div os-field-error field="sform.status"></div>
         </div>
       </div>
 
@@ -57,17 +67,9 @@
         <label class="col-xs-3 control-label">Site of Visit</label>
         <div class="col-xs-6">
           <os-select name="site" ng-model="currVisit.site" list="sites" 
-            required placeholder="Site of Visit"> </os-select>
+            ng-required="currVisit.status != 'Missed Collection'" placeholder="Site of Visit"> 
+          </os-select>
           <div os-field-error field="vform.site"></div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label">Status</label>
-        <div class="col-xs-6">
-          <os-select name="status" ng-model="currVisit.status" list="visitStatuses"
-            required placeholder="Status of Visit"/>
-          <div os-field-error field="sform.status"></div>
         </div>
       </div>
 
@@ -97,6 +99,16 @@
         </div>
       </div>
 
+      <div class="form-group" ng-if="currVisit.status == 'Missed Collection'">
+        <label class="col-xs-3 control-label">Reason for Missed Visit</label>
+        <div class="col-xs-6">
+          <os-select name="missedReason" ng-model="currVisit.missedReason" list="missedReasons"
+            placeholder="Reason for Missed Visit">
+          </os-select>
+          <div os-field-error field="vform.missedReason"></div>
+        </div>
+      </div>
+
       <div class="form-group">
         <label class="col-xs-3 control-label">Comments</label>
         <div class="col-xs-6">
@@ -110,11 +122,11 @@
       <div class="form-group">
         <div class="col-xs-offset-3 col-xs-6">
           <button class="btn btn-primary" os-form-submit="saveVisit()" ng-switch on="!!currVisit.id">
-            <span ng-switch-when="true">Update</span>
-            <span ng-switch-default>Add</span>
+            <span ng-switch-when="true" translate="common.buttons.update">Update</span>
+            <span ng-switch-default translate="common.buttons.create">Create</span>
           </button>
-          <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">
-            Discard
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.discard">Discard</span>
           </button>
         </div>
       </div>

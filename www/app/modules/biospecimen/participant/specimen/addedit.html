@@ -22,11 +22,9 @@
       </li>
     </ul>
 
-    <h3>
-      <ng-switch on="!!currSpecimen.id">
-        <span ng-switch-when="true">Update {{currSpecimen.label}}</span> 
-        <span ng-switch-default>Collection Specimen</span>
-      </ng-switch>
+    <h3 ng-switch on="!!currSpecimen.label">
+      <span ng-switch-when="true">{{currSpecimen.label}}</span>
+      <span ng-switch-default>{{currSpecimen.type}} ({{currSpecimen.specimenClass}})</span>
     </h3>
   </div>
 
@@ -37,11 +35,22 @@
         <label class="col-xs-3 control-label">Label</label>
         <div class="col-xs-6">
           <input type="text" name="label" ng-model="currSpecimen.label" class="form-control" 
-            ng-required="!currSpecimen.labelFmt || cp.manualSpecLabelEnabled" ng-disabled="!!pLabel"
-            placeholder="{{'specimens.label' | translate}}"/>
+            ng-required="currSpecimen.status == 'Collected' && (!currSpecimen.labelFmt || cp.manualSpecLabelEnabled)" 
+            ng-disabled="!!pLabel" placeholder="{{'specimens.label' | translate}}"/>
           <div os-field-error field="sform.label"></div>
         </div>
       </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label">Collection Status</label>
+        <div class="col-xs-6">
+          <os-select name="collectionStatus" ng-model="currSpecimen.status" list="collectionStatuses"
+            required placeholder="Collection Status">
+          </os-select>
+          <div os-field-error field="sform.collectionStatus"></div>
+        </div>
+      </div>
+
 
       <div ng-if="currSpecimen.lineage != 'Aliquot'">
         <div class="form-group">
@@ -109,20 +118,10 @@
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" ng-if="currSpecimen.status == 'Collected'">
         <label class="col-xs-3 control-label">Location</label>
         <div class="col-xs-6">
           <os-specimen-position specimen="currSpecimen" cp-id="cpr.cpId"></os-specimen-position>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label">Collection Status</label>
-        <div class="col-xs-6">
-          <os-select name="collectionStatus" ng-model="currSpecimen.status" list="collectionStatuses"
-            required placeholder="Collection Status">
-          </os-select>
-          <div os-field-error field="sform.collectionStatus"></div>
         </div>
       </div>
 

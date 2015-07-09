@@ -35,6 +35,8 @@
 
     <property name="visitDate" type="timestamp" column="COLLECTION_TIMESTAMP" />
 
+    <property name="missedReason" column="MISSED_REASON" />
+
     <many-to-one name="registration"
       class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration"
       column="COLLECTION_PROTOCOL_REG_ID" />
@@ -64,19 +66,21 @@
 
     <sql-query name="getVisitsSummaryByCprId">
       <return-scalar column="id" type="long"/>
-      <return-scalar column="event_id" type="long"/>
+      <return-scalar column="eventId" type="long"/>
       <return-scalar column="name" type="string"/>
-      <return-scalar column="event_status" type="string"/>
+      <return-scalar column="eventStatus" type="string"/>
       <return-scalar column="label" type="string"/>
-      <return-scalar column="calendar_point" type="int"/>
+      <return-scalar column="calendarPoint" type="int"/>
       <return-scalar column="status" type="string"/>
-      <return-scalar column="visit_date" type="timestamp"/>
-      <return-scalar column="reg_date" type="timestamp"/>
- 
+      <return-scalar column="visitDate" type="timestamp"/>
+      <return-scalar column="regDate" type="timestamp"/>
+      <return-scalar column="missedReason" type="string"/>
+
       select   
-        scg.identifier as id, cpe.identifier as event_id, scg.name as name, cpe.activity_status as event_status,
-        cpe.collection_point_label as label, cpe.study_calendar_event_point as calendar_point,
-        scg.collection_status as status, scg.collection_timestamp as visit_date, cpr.registration_date as reg_date 
+        scg.identifier as id, cpe.identifier as eventId, scg.name as name, cpe.activity_status as eventStatus,
+        cpe.collection_point_label as label, cpe.study_calendar_event_point as calendarPoint,
+        scg.collection_status as status, scg.collection_timestamp as visitDate, cpr.registration_date as regDate,
+        scg.missed_reason as missedReason
       from   
         catissue_coll_prot_reg cpr
         inner join catissue_coll_prot_event cpe 

@@ -27,6 +27,8 @@ public class VisitSummary implements Comparable<VisitSummary> {
 	private int uncollectedSpecimens;
 	
 	private int unplannedSpecimens;
+
+	private String missedReason;
 	
 	public Long getId() {
 		return id;
@@ -122,6 +124,14 @@ public class VisitSummary implements Comparable<VisitSummary> {
 
 	public void setUnplannedSpecimens(int unplannedSpecimens) {
 		this.unplannedSpecimens = unplannedSpecimens;
+	}
+
+	public String getMissedReason() {
+		return missedReason;
+	}
+
+	public void setMissedVisitReason(String missedReason) {
+		this.missedReason = missedReason;
 	}
 
 	@Override

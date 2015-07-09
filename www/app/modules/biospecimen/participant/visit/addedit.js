@@ -3,6 +3,7 @@ angular.module('os.biospecimen.visit.addedit', [])
   .controller('AddEditVisitCtrl', function($scope, $state, cpr, visit, PvManager) {
     function loadPvs() {
       $scope.visitStatuses = PvManager.getPvs('visit-status');
+      $scope.missedReasons = PvManager.getPvs('missed-visit-reason');
       $scope.sites = PvManager.getSites();
       $scope.clinicalStatuses = PvManager.getPvs('clinical-status');
 
@@ -16,7 +17,7 @@ angular.module('os.biospecimen.visit.addedit', [])
 
       var currVisit = $scope.currVisit = angular.copy(visit);
       angular.extend(currVisit, {cprId: cpr.id, cpTitle: cpr.cpTitle});
-
+      
       if (!currVisit.id && currVisit.anticipatedVisitDate) {
         angular.extend(currVisit, {visitDate: currVisit.anticipatedVisitDate, status: 'Complete'});
         delete currVisit.anticipatedVisitDate;

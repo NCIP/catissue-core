@@ -274,6 +274,7 @@
     "occurred_visits": "Occurred Visits",
     "collection_status": "Collection Status",
     "anticipated_visits": "Anticipated Visits",
+    "missed_visits": "Missed Visits",
     "anticipated_specimens": "Anticipated Specimens",
     "visit_status": "Status",
     "name": "Name",
@@ -296,10 +297,11 @@
     "spr_unlocked": "Surgical pathology report unlocked successfully.",
     "lock_spr": "Click to lock Surgical Pathology Report",
     "unlock_spr": "Click to unlock Surgical Pathology Report",
-
+    "reason": "Reason",
     "status": {
       "pending": "Pending",
-      "complete": "Complete"
+      "complete": "Complete",
+      "missed": "Missed Collection"
     },
 
     "ctx_menu": {
@@ -309,7 +311,8 @@
       "collect_planned_specimens": "Collect Planned Specimens",
       "collect_unplanned_specimens": "Collect Unplanned Specimens",
       "print_specimen_labels": "Print Specimen Labels",
-      "repeat_visit": "Repeat Visit"
+      "repeat_visit": "Repeat Visit",
+      "missed_visit": "Missed Visit"
     },
 
     "menu": {

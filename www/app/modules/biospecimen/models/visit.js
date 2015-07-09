@@ -65,6 +65,10 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
       return visitFilter(visits, function(visit) { return !visit.status || visit.status == 'Pending'; });
     };
 
+    Visit.missedVisits = function(visits) {
+      return visitFilter(visits, function(visit) { return visit.status == 'Missed Collection'; });
+    };
+
     Visit.collectVisitAndSpecimens = function(visitAndSpecimens) {
       return $http.post(Visit.url() + 'collect', visitAndSpecimens).then(ApiUtil.processResp);
     };

@@ -2297,4 +2297,10 @@
         o.activity_status != 'Disabled'
     </createView>
   </changeSet>
+
+  <changeSet author="ahegade" id="Adding missed visit reason column in visit table">
+    <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+      <column name="MISSED_REASON" type="${text.type}(255)"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

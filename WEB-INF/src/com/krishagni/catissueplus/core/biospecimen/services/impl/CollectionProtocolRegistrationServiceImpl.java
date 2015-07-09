@@ -334,7 +334,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			} else if (crit.getEventId() != null) {
 				specimens = getAnticipatedSpecimens(crit.getCprId(), crit.getEventId());
 			}
-			
+
 			return ResponseEvent.response(specimens);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -508,7 +508,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 
 		return SpecimenDetail.getSpecimens(anticipatedSpecimens, specimens);
 	}
-	
+
 	private List<SpecimenDetail> getAnticipatedSpecimens(Long cprId, Long eventId) {
 		CollectionProtocolEvent cpe = daoFactory.getCollectionProtocolDao().getCpe(eventId);
 		if (cpe == null) {

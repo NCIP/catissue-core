@@ -11,10 +11,11 @@
         <strong class="key key-sm" translate="specimens.collection_status">Status</strong>
         <ng-switch on="specimen.status">
           <span ng-switch-when="Collected" class="value value-md os-status-collected">Collected</span>
-          <span ng-switch-when="Missed Collection" class="value value-md os-status-not-collected">Missed Collection</span>
+          <span ng-switch-when="Missed Collection" class="value value-md os-status-missed">Missed Collection</span>
           <span ng-switch-default class="value value-md os-status-pending">Pending</span>
         </ng-switch>
       </li>
+
 
       <li class="item">
         <strong class="key key-sm" translate="specimens.class">Specimen Class</strong>
@@ -74,7 +75,8 @@
           <span class="value value-md" ng-switch-when="true">
             <a ui-sref="specimen-detail.overview(
                          {eventId: visit.eventId, visitId: visit.id, specimenId: specimen.parentId, srId: specimen.reqId})">
-              {{specimen.parentLabel}}
+              <span ng-if="!!specimen.parentLabel">{{specimen.parentLabel}}</span>
+              <span ng-if="!specimen.parentLabel" translate="specimens.parent_specimen">Parent Specimen</span>
             </a>
           </span>
           <span class="value value-md" ng-switch-default>None</span>

@@ -164,7 +164,7 @@ public class SpecimenDetail extends SpecimenInfo {
 		SpecimenDetail.sort(result);
 		return result;
 	}
-	
+
 	private static Map<Long, SpecimenDetail> getReqSpecimenMap(List<SpecimenDetail> specimens) {
 		Map<Long, SpecimenDetail> reqSpecimenMap = new HashMap<Long, SpecimenDetail>();
 						
