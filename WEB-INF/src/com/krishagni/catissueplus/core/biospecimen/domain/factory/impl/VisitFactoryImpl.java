@@ -1,9 +1,14 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
+import static com.krishagni.catissueplus.core.common.PvAttributes.CLINICAL_DIAG;
+import static com.krishagni.catissueplus.core.common.PvAttributes.CLINICAL_STATUS;
+import static com.krishagni.catissueplus.core.common.PvAttributes.MISSED_VISIT_REASON;
+import static com.krishagni.catissueplus.core.common.PvAttributes.VISIT_STATUS;
+import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
+
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -11,8 +16,6 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
-import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
@@ -24,11 +27,6 @@ import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
-
-import static com.krishagni.catissueplus.core.common.PvAttributes.CLINICAL_DIAG;
-import static com.krishagni.catissueplus.core.common.PvAttributes.CLINICAL_STATUS;
-import static com.krishagni.catissueplus.core.common.PvAttributes.VISIT_STATUS;
-import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
 public class VisitFactoryImpl implements VisitFactory {
 
@@ -62,15 +60,11 @@ public class VisitFactoryImpl implements VisitFactory {
 		setClinicalStatus(visitDetail, visit, ose);
 		setSite(visitDetail, visit, ose);
 		setActivityStatus(visitDetail, visit, ose);
+		setMissedReason(visitDetail, visit, ose);
 		visit.setComments(visitDetail.getComments());
 		visit.setSurgicalPathologyNumber(visitDetail.getSurgicalPathologyNumber());
 		visit.setDefNameTmpl(defaultNameTmpl);
-
-		if (visit.isMissed()) {
-			visit.setMissedReason(visitDetail.getMissedReason());
-			persistAnticipatedSpecimens(visit, Specimen.MISSED_COLLECTION);
-		}
-
+		
 		ose.checkAndThrow();
 		return visit;
 	}
@@ -99,12 +93,9 @@ public class VisitFactoryImpl implements VisitFactory {
 		setActivityStatus(detail, existing, visit, ose);
 		setComments(detail, existing, visit, ose);
 		setSurgicalPathNo(detail, existing, visit, ose);
-		setMissedVisitReason(detail, existing, visit);
+		setMissedVisitReason(detail, existing, visit, ose);
 		visit.setDefNameTmpl(defaultNameTmpl);
 
-		if (visit.isMissed()) {
-			persistAnticipatedSpecimens(visit, Specimen.MISSED_COLLECTION);
-		}
 		ose.checkAndThrow();
 		return visit;
 	}
@@ -297,9 +288,19 @@ public class VisitFactoryImpl implements VisitFactory {
 		}
 	}
 
-	private void setMissedVisitReason(VisitDetail detail, Visit existing, Visit visit) {
+	private void setMissedReason(VisitDetail detail, Visit visit, OpenSpecimenException ose) {
+		String missedReason = detail.getMissedReason();
+		if (!isValid(MISSED_VISIT_REASON, missedReason)) {
+			ose.addError(VisitErrorCode.INVALID_MISSED_REASON);
+			return;
+		}
+		
+		visit.setMissedReason(missedReason);
+	}
+	
+	private void setMissedVisitReason(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
 		if (detail.isAttrModified("missedReason")) {
-			visit.setMissedReason(detail.getMissedReason());
+			setMissedReason(detail, visit, ose);
 		} else {
 			visit.setMissedReason(existing.getMissedReason());
 		}
@@ -337,30 +338,6 @@ public class VisitFactoryImpl implements VisitFactory {
 			visit.setSurgicalPathologyNumber(detail.getSurgicalPathologyNumber());
 		} else {
 			visit.setSurgicalPathologyNumber(existing.getSurgicalPathologyNumber());
-		}
-	}
-
-	private void persistAnticipatedSpecimens(Visit visit, String status) {
-		Set<SpecimenRequirement> anticipatedSpecimens = visit.getCpEvent().getTopLevelAnticipatedSpecimens();
-		for (SpecimenRequirement anticipatedSpecimen : anticipatedSpecimens) {
-			Specimen specimen = anticipatedSpecimen.getSpecimen();
-			specimen.setCollectionStatus(status);
-			if (!visit.getSpecimens().contains(specimen)) {
-				specimen.setVisit(visit);
-				visit.addSpecimen(specimen);
-				setAnticipatedSpecimenStatus(specimen, anticipatedSpecimen.getChildSpecimenRequirements(), status);
-			}
-		}
-	}
-
-	private void setAnticipatedSpecimenStatus(Specimen parentSpecimen, Set<SpecimenRequirement> specimens, String status) {
-		for (SpecimenRequirement anticipatedSpecimen : specimens) {
-			Specimen specimen = anticipatedSpecimen.getSpecimen();
-			specimen.setCollectionStatus(status);
-			specimen.setParentSpecimen(parentSpecimen);
-			specimen.setVisit(parentSpecimen.getVisit());
-			setAnticipatedSpecimenStatus(specimen, anticipatedSpecimen.getChildSpecimenRequirements(), status);
-			parentSpecimen.getChildCollection().add(specimen);
 		}
 	}
 }

@@ -42,4 +42,6 @@ public class PvAttributes {
 	public static final String SPECIMEN_ANATOMIC_SITE = "Tissue_Site_PID";
 	
 	public static final String CONSENT_RESPONSE = "consent_response";
+	
+	public static final String MISSED_VISIT_REASON = "missed_visit_reason";
 }

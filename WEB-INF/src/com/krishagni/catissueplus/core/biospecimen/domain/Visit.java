@@ -142,20 +142,6 @@ public class Visit {
 	}
 
 	public void setStatus(String status) {
-		if (this.status != null && this.status.equals(status)) {
-			return;
-		}
-		
-		if (StringUtils.isBlank(status)) {
-			throw OpenSpecimenException.userError(VisitErrorCode.INVALID_STATUS);
-		}
-		
-		if (this.status != null && VISIT_STATUS_PENDING.equals(status)) {
-			for (Specimen specimen : specimens) {
-				specimen.setPending();
-			}
-		}
-		
 		this.status = status;
 	}
 
@@ -256,9 +242,17 @@ public class Visit {
 	}
 
 	public boolean isCompleted() {
-		return Visit.VISIT_STATUS_COMPLETED.equals(this.status);
+		return isCompleted(getStatus());
 	}
-
+	
+	public boolean isPending() {
+		return isPending(getStatus());
+	}
+	
+	public boolean isMissed() {
+		return isMissed(getStatus());
+	}
+	
 	public List<DependentEntityDetail> getDependentEntities() {
 		return DependentEntityDetail.singletonList(Specimen.getEntityName(), getActiveSpecimens()); 
 	}
@@ -289,14 +283,19 @@ public class Visit {
 		if (!isActive()) {
 			return;
 		}
+		
+		if (StringUtils.isBlank(name)) {
+			setName(visit.getName());
+		}
 
 		setClinicalDiagnosis(visit.getClinicalDiagnosis());
 		setClinicalStatus(visit.getClinicalStatus());
 		setCpEvent(visit.getCpEvent());
 		setRegistration(visit.getRegistration());
 		setSite(visit.getSite());
-		setStatus(visit.getStatus());
-		setComments(visit.getComments());		
+		updateStatus(visit.getStatus());		
+		setComments(visit.getComments());
+		setMissedReason(isMissed() ? visit.getMissedReason() : null);
 		setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 		setVisitDate(visit.getVisitDate());
 	}
@@ -306,7 +305,8 @@ public class Visit {
 	}	
 	
 	public void addSpecimen(Specimen specimen) {
-		specimens.add(specimen);
+		specimen.setVisit(this);
+		getSpecimens().add(specimen);
 	}
 	
 	public CollectionProtocol getCollectionProtocol() {
@@ -314,17 +314,70 @@ public class Visit {
 	}
 	
 	public void setNameIfEmpty() {
-		if (StringUtils.isNotBlank(name)) {
+		if (StringUtils.isNotBlank(name) || !isCompleted()) {
 			return;
 		}
 
 		String visitNameFmt = getCollectionProtocol().getVisitNameFormat();
-		if (StringUtils.isBlank(visitNameFmt) || status.equals(VISIT_STATUS_MISSED)) {
+		if (StringUtils.isBlank(visitNameFmt)) {
 			visitNameFmt = defNameTmpl;
 		}
 		setName(labelGenerator.generateLabel(visitNameFmt, this));
 	}
 	
+	public void updateStatus(String status) {
+		if (StringUtils.isBlank(status)) {
+			throw OpenSpecimenException.userError(VisitErrorCode.INVALID_STATUS);
+		}
+		
+		if (status.equals(getStatus())) {
+			return;
+		}
+		
+		setStatus(status);		
+		if (isMissed(status) || isPending(status)) {
+			updateSpecimenStatus(status);
+		}		
+	}
+	
+	public void updateSpecimenStatus(String status) {
+		for (Specimen specimen : getTopLevelSpecimens()) {
+			specimen.updateCollectionStatus(status);
+		}
+		
+		if (Specimen.isMissed(status)) {
+			createMissedSpecimens();
+		}
+	}
+	
+	public void createMissedSpecimens() {
+		Set<SpecimenRequirement> anticipated = getCpEvent().getTopLevelAnticipatedSpecimens();
+		for (Specimen specimen : getTopLevelSpecimens()) {
+			if (specimen.getSpecimenRequirement() != null) {
+				anticipated.remove(specimen.getSpecimenRequirement());
+			}			
+		}
+		
+		for (SpecimenRequirement sr : anticipated) {
+			Specimen specimen = sr.getSpecimen();
+			specimen.setVisit(this);
+			specimen.updateCollectionStatus(Specimen.MISSED_COLLECTION);
+			addSpecimen(specimen);
+		}		
+	}
+	
+	public static boolean isCompleted(String status) {
+		return Visit.VISIT_STATUS_COMPLETED.equals(status);
+	}
+	
+	public static boolean isPending(String status) {
+		return Visit.VISIT_STATUS_PENDING.equals(status);
+	}
+	
+	public static boolean isMissed(String status) {
+		return Visit.VISIT_STATUS_MISSED.equals(status);
+	}	
+		
 	private void ensureNoActiveChildObjects() {
 		for (Specimen specimen : getSpecimens()) {
 			if (specimen.isActiveOrClosed() && specimen.isCollected()) {
@@ -342,9 +395,5 @@ public class Visit {
 		}
 		
 		return count;
-	}
-
-	public boolean isMissed() {
-		return getStatus().equals(Visit.VISIT_STATUS_MISSED);
 	}
 }

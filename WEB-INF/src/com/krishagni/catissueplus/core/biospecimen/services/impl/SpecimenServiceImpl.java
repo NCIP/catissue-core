@@ -287,7 +287,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		String label = specimen.getLabel();		
 		if (StringUtils.isBlank(label)) {
 			boolean labelReq = cp.isManualSpecLabelEnabled() || StringUtils.isBlank(labelTmpl);
-			if (labelReq) {
+			if (labelReq && specimen.isCollected()) {
 				ose.addError(SpecimenErrorCode.LABEL_REQUIRED);
 			}
 			

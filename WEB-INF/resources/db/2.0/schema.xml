@@ -2266,29 +2266,10 @@
     <modifyDataType tableName="CATISSUE_DISTRIBUTION_PROTOCOL" columnName="SHORT_TITLE" newDataType="${text.type}(50)" />
   </changeSet>
 
-<changeSet dbms="mysql" author="ahegade" id="Adding missed collection status in permissible value for scg">
-    <sql>
-      insert into catissue_permissible_value
-        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
-      values
-        (default, null, null, null, "Missed Collection", "scg_collection_status", null)
-    </sql>
-  </changeSet>
-
-  <changeSet  author="ahegade" id="Adding entry into cde table for missed visits">
-    <sql>
-      insert into catissue_cde
-        (public_id, long_name, definition, version, last_updated)
-      values
-        ("missed_reason", "Missed Visit Reason", "Missed Visit Reason", "2.0", null)
-    </sql>
-  </changeSet>
-
   <changeSet author="ahegade" id="Adding missed visit reason column in visit table">
     <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
       <column name="MISSED_REASON" type="${text.type}(255)"/>
     </addColumn>
   </changeSet>
-
 
 </databaseChangeLog>

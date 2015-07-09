@@ -14,7 +14,11 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	VISIT_REQUIRED,
 	
-	VISIT_NOT_COMPLETED,
+	COMPL_VISIT_REQ,
+	
+	COMPL_OR_PENDING_VISIT_REQ,
+	
+	COMPL_OR_MISSED_VISIT_REQ,
 	
 	LABEL_REQUIRED,
 	
@@ -37,6 +41,12 @@ public enum SpecimenErrorCode implements ErrorCode {
 	PARENT_REQUIRED,
 	
 	PARENT_NF_BY_VISIT_AND_SR,
+	
+	COLL_PARENT_REQ,
+	
+	COLL_OR_MISSED_PARENT_REQ,
+	
+	COLL_OR_PENDING_PARENT_REQ,
 	
 	SPECIMEN_CLASS_REQUIRED,
 	
@@ -86,9 +96,7 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	INVALID_COLL_CONTAINER,
 	
-	INVALID_RECV_QUALITY,
-
-	CANNOT_COLLECT_FROM_MISSED_VISIT;
+	INVALID_RECV_QUALITY;
 
 	public String code() {
 		return "SPECIMEN_" + this.name();

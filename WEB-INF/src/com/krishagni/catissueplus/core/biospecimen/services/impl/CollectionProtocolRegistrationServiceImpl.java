@@ -506,7 +506,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		Set<SpecimenRequirement> anticipatedSpecimens = visit.getCpEvent().getTopLevelAnticipatedSpecimens();
 		Set<Specimen> specimens = visit.getTopLevelSpecimens();
 
-		return SpecimenDetail.getSpecimens(visit.getStatus(), anticipatedSpecimens, specimens);
+		return SpecimenDetail.getSpecimens(anticipatedSpecimens, specimens);
 	}
 
 	private List<SpecimenDetail> getAnticipatedSpecimens(Long cprId, Long eventId) {

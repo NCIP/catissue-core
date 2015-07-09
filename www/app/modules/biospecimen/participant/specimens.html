@@ -65,7 +65,7 @@
           <div class="row title" ng-class="{'selected': specimen.selected}">
             <div class="col col-xs-5">
               <div class="clearfix">
-                <div class="os-select-specimen-cb" ng-hide="specimen.status == 'Missed Collection' || visit.status == 'Missed Collection'">
+                <div class="os-select-specimen-cb" ng-hide="specimen.status == 'Missed Collection'">
                   <os-checkbox ng-change="toggleSpecimenSelect(specimen)" ng-model="specimen.selected"></os-checkbox>
                 </div>
 
@@ -82,8 +82,8 @@
 
                     <span class="fa fa-circle"
                       ng-class="{'os-status-collected': specimen.status == 'Collected',
-                                 'os-status-pending': specimen.status == 'Pending' || (!specimen.status && visit.status != 'Missed Collection'),
-                                 'os-status-not-collected': specimen.status == 'Missed Collection' || visit.status == 'Missed Collection',
+                                 'os-status-pending': specimen.status == 'Pending' || !specimen.status,
+                                 'os-status-not-collected': specimen.status == 'Missed Collection',
                                  'os-status-closed': specimen.activityStatus == 'Closed'}">
                      </span>
 
@@ -134,20 +134,20 @@
                     </a>
                   </li>
                   <li class="divider"></li>
-                  <li ng-if="isEditAllowed(specimen)">
+                  <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
                     <a ng-click="showCreateAliquots(specimen)">
                       <i class="fa fa-share-alt"></i>
                       <span translate="specimens.ctx_menu.create_aliquots">Create Aliquots</span>
                     </a>
                   </li>
-                  <li ng-if="isEditAllowed(specimen)">
+                  <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
                     <a ng-click="showCreateDerivative(specimen)">
                       <i class="fa fa-flask"></i>
                       <span translate="specimens.ctx_menu.create_derivative">Create Derivative</span>
                     </a>
                   </li>
                   <li class="divider"></li>
-                  <li ng-if="isEditAllowed(specimen)">
+                  <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
                     <a ui-sref="
                          specimen-detail.events({eventId: visit.eventId, visitId: visit.id, 
                            specimenId: specimen.id, srId: specimen.reqId})">
@@ -155,7 +155,7 @@
                       <span translate="specimens.ctx_menu.add_event">Add Event</span>
                     </a>
                   </li>
-                  <li ng-if="isEditAllowed(specimen)">
+                  <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
                     <a ng-click="showCloseSpecimen(specimen)">
                       <i class="fa fa-remove"></i>
                       <span translate="specimens.ctx_menu.close">Close</span>

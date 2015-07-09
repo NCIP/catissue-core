@@ -5,7 +5,6 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
@@ -13,7 +12,6 @@ import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
-import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
@@ -345,29 +343,27 @@ public class VisitServiceImpl implements VisitService {
 		
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		if (existing == null) {
-			if (!visit.isMissed()) {
-				ensureValidAndUniqueVisitName(visit, ose);
+			ensureValidAndUniqueVisitName(visit, ose);
+			ose.checkAndThrow();
+
+			if (visit.isMissed()) {
+				visit.createMissedSpecimens();
+			} else {
 				visit.setNameIfEmpty();
 			}
-			ose.checkAndThrow();
+			
 			existing = visit;
 		} else {
+			if (StringUtils.isBlank(existing.getName())) {
+				ensureValidAndUniqueVisitName(visit, ose);
+				ose.checkAndThrow();
+			}
+			
 			existing.update(visit);
 		}
-		if (existing.getStatus().equals(Visit.VISIT_STATUS_MISSED)) {
-			setSpecimenStatus(existing.getSpecimens(), Visit.VISIT_STATUS_MISSED);
-		}
+		
 		daoFactory.getVisitsDao().saveOrUpdate(existing);
 		return VisitDetail.from(existing);		
-	}
-
-	private void setSpecimenStatus(Set<Specimen> specimens, String status) {
-		for (Specimen specimen : specimens) {
-			specimen.setCollectionStatus(status);
-			if (specimen.getChildCollection().size() > 0) {
-				setSpecimenStatus(specimen.getChildCollection(), status);
-			}
-		}
 	}
 
 	private Visit getVisit(Long visitId, String visitName) {
@@ -391,7 +387,7 @@ public class VisitServiceImpl implements VisitService {
 		String name = visit.getName();
 		
 		if (StringUtils.isBlank(name)) {
-			if (cp.isManualVisitNameEnabled()) {
+			if (cp.isManualVisitNameEnabled() && visit.isCompleted()) {
 				ose.addError(VisitErrorCode.NAME_REQUIRED);
 			}
 			

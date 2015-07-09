@@ -3,7 +3,7 @@ angular.module('os.biospecimen.participant.addvisit', ['os.biospecimen.participa
     function loadPvs() {
       $scope.visitStatuses = PvManager.getPvs('visit-status');
       $scope.sites = PvManager.getSites();
-      $scope.missedReasons = PvManager.getPvs('missed-reason');
+      $scope.missedReasons = PvManager.getPvs('missed-visit-reason');
       $scope.clinicalStatuses = PvManager.getPvs('clinical-status');
 
       $scope.searchClinicalDiagnoses = function(searchTerm) {
@@ -19,11 +19,16 @@ angular.module('os.biospecimen.participant.addvisit', ['os.biospecimen.participa
         eventId: $scope.visit.eventId
       });
 
+      var visitStatus = $scope.visitToAdd.status;
+      if (!visitStatus) {
+        visitStatus = 'Complete';
+      }
+
       if (!!$scope.visitToAdd.id) {
         Visit.getById($scope.visitToAdd.id).then(
           function(result) {
             angular.extend(visit, result);
-            angular.extend(visit, {id: undefined, name: undefined, status: $scope.visitToAdd.status ? $scope.visitToAdd.status : 'Complete'});
+            angular.extend(visit, {id: undefined, name: undefined, status: visitStatus});
           }
         );
       } else {
@@ -33,7 +38,7 @@ angular.module('os.biospecimen.participant.addvisit', ['os.biospecimen.participa
             visit.clinicalStatus = cpe.clinicalStatus;
             visit.site = cpe.defaultSite;
             visit.visitDate = $scope.visitToAdd.anticipatedVisitDate;
-            visit.status = $scope.visitToAdd.status ? $scope.visitToAdd.status : 'Complete';
+            visit.status = visitStatus;
           }
         );
       }

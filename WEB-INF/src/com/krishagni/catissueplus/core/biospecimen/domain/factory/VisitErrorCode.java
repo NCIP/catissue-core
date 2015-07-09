@@ -20,6 +20,8 @@ public enum VisitErrorCode implements ErrorCode {
 	
 	INVALID_CLINICAL_STATUS,
 	
+	INVALID_MISSED_REASON,
+	
 	SITE_REQUIRED,
 	
 	INVALID_VISIT_DATE,

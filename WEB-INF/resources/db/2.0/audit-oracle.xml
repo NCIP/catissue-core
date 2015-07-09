@@ -989,7 +989,7 @@
 
   <changeSet author="ahegade" id="Missed reason column in visits table">
     <addColumn tableName="cat_specimen_coll_group_aud">
-      <column name="MISSED_REASON" type="VARCHAR2(255)"/>
+      <column name="MISSED_REASON" type="VARCHAR2(255 CHAR)"/>
     </addColumn>
   </changeSet>
 
@@ -998,7 +998,6 @@
       <column name="missedReason_MOD" type="NUMBER(1, 0)"/>
     </addColumn>
   </changeSet>
-
 
   <changeSet author="vgaikwad" id="Column to track whether consent activity status column got modified">
     <addColumn tableName="catissue_consent_tier_aud">

@@ -30,7 +30,7 @@
     <div class="os-btns right">
       <button show-if-allowed="specimenResource.updateOpts" class="primary" ui-sref="specimen-addedit"
         ng-if="!!visit.id && (!specimen.activityStatus || specimen.activityStatus == 'Active')"
-        ng-switch on="specimen.status == 'Collected'"> 
+        ng-switch on="!!specimen.id"> 
         <span ng-switch-when="true">
           <span class="fa fa-pencil"></span>
           <span translate="common.buttons.edit">Edit</span>

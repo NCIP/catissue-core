@@ -55,29 +55,26 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
      */
     $scope.addVisitIdx = -1;
     $scope.rptVisitIdx = -1;
-    $scope.missedVisitIdx = -1;
 
     $scope.showAddVisit = function(visit, index) {
       $scope.addVisitIdx = index;
       $scope.rptVisitIdx = -1;
-      $scope.missedVisitIdx = -1;
       $scope.visitToAdd = visit;
     };
 
     $scope.revertAddVisit = function() {
-      $scope.addVisitIdx = $scope.rptVisitIdx = $scope.missedVisitIdx = -1;
+      $scope.addVisitIdx = $scope.rptVisitIdx = -1;
       $scope.visitToAdd = {};
     };
 
     $scope.showRepeatVisit = function(visit, index) {
       $scope.addVisitIdx = -1;
-      $scope.missedVisitIdx = -1;
       $scope.rptVisitIdx = index;
       $scope.visitToAdd = angular.copy(visit);
     };
 
     $scope.showMissedVisit = function(visit, index) {
-      $scope.missedVisitIdx = index;
+      $scope.addVisitIdx = index;
       $scope.rptVisitIdx = -1;
       $scope.visitToAdd = angular.extend(angular.copy(visit), {status: 'Missed Collection'});
     };

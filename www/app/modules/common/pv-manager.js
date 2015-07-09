@@ -94,7 +94,7 @@ angular.module('openspecimen')
       'clinical-diagnosis'  : 'Clinical_Diagnosis_PID',
       'specimen-biohazard'  : 'specimen_biohazard',
       'consent_response'    : 'consent_response',
-      'missed-reason'       : 'missed_reason'
+      'missed-visit-reason' : 'missed_visit_reason'
     };
 
     function valueOf(input) {
