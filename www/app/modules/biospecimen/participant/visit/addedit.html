@@ -67,7 +67,8 @@
         <label class="col-xs-3 control-label">Site of Visit</label>
         <div class="col-xs-6">
           <os-select name="site" ng-model="currVisit.site" list="sites" 
-            required placeholder="Site of Visit"> </os-select>
+            ng-required="currVisit.status != 'Missed Collection'" placeholder="Site of Visit"> 
+          </os-select>
           <div os-field-error field="vform.site"></div>
         </div>
       </div>
