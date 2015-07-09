@@ -319,7 +319,7 @@
 
   <changeSet  author="ahegade" id="Adding ScheduleJob resources" dbms="oracle">
     <sql>
-      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'ScheduldeJob');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'ScheduledJob');
     </sql>
   </changeSet>
 
