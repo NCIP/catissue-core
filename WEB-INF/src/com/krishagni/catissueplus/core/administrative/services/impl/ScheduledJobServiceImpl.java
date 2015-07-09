@@ -244,7 +244,9 @@ public class ScheduledJobServiceImpl implements ScheduledJobService, Initializin
 					.maxResults(5000000);
 			List<ScheduledJob> jobs = daoFactory.getScheduledJobDao().getScheduledJobs(crit);
 			for (ScheduledJob job : jobs) {
-				taskMgr.schedule(job);
+				if (!job.isOnDemand()) {
+					taskMgr.schedule(job);
+				}
 			}
 			
 		} catch (Exception e) {
