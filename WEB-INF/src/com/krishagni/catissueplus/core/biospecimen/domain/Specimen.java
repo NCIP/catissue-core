@@ -520,9 +520,6 @@ public class Specimen extends BaseEntity {
 	}
 
 	public void update(Specimen specimen) {		
-		String previousStatus = getCollectionStatus();
-		Double previousQty = getInitialQuantity();
-		
 		updateStatus(specimen.getActivityStatus(), null);
 		if (!isActive()) {
 			return;
@@ -567,18 +564,6 @@ public class Specimen extends BaseEntity {
 				
 		setComment(specimen.getComment());		
 		updatePosition(specimen.getPosition());
-		
-		if (isAliquot()) {
-			if (isCollected()) {
-				if (!collectionStatus.equals(previousStatus)) { // *** -> COLLECTED
-					decAliquotedQtyFromParent();
-				} else if (!initialQuantity.equals(previousQty)) {
-					adjustParentSpecimenQty(initialQuantity - previousQty);
-				}
-			} else if (COLLECTED.equals(previousStatus)) { // COLLECTED -> ***
-				adjustParentSpecimenQty(-previousQty); // give back the quantity to parent
-			}
-		}
 		
 		checkQtyConstraints();
 	}
