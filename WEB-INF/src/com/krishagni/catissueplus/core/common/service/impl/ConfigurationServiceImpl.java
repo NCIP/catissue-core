@@ -1,12 +1,16 @@
 package com.krishagni.catissueplus.core.common.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,6 +19,7 @@ import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -42,6 +47,9 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	private DaoFactory daoFactory;
 	
 	private MessageSource messageSource;
+	
+	@Autowired
+	private Properties applicationProperties;
 		
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -236,7 +244,26 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		return result;
 	}
 	
-		
+	@Override
+	public Map<String, Object> getBuildInfo() {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			String buildVersion = applicationProperties.getProperty("buildinfo.version");
+			if (buildVersion != null) {
+				result.put("build_version", buildVersion);
+			}
+			String date = applicationProperties.getProperty("buildinfo.date");
+			if (date != null) {
+				SimpleDateFormat formater = new SimpleDateFormat("dd-MM-yyyy");
+				Date buildDate = formater.parse(date);
+				result.put("build_date", buildDate);
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		reload();

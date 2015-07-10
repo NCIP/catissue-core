@@ -17,6 +17,14 @@ angular.module('os.administrative.models.setting', ['os.common.models'])
         }
       );
     };
+    
+    Setting.getBuildInfo = function () {
+      return $http.get(Setting.url() + 'build-info').then(
+        function (resp) {
+          return resp.data;
+        }
+      );
+    };
 
     return Setting;
   });

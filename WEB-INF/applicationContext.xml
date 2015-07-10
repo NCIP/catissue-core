@@ -637,6 +637,10 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="jdbcTemplate" ref="jdbcTemplate"/>
   </bean>
+  
+  <bean id="applicationProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+    <property name="location" value="classpath:application.properties"></property>
+  </bean>
 
   <task:scheduler id="taskScheduler" pool-size="1"/>
   <task:annotation-driven scheduler="taskScheduler"/>

@@ -51,6 +51,9 @@ angular.module('openspecimen', [
           },
           authInit: function(AuthorizationService) {
             return AuthorizationService.initializeUserRights();
+          },
+          buildInfo: function(Setting) {
+            return Setting.getBuildInfo();
           }
         },
         controller: 'SignedInCtrl'

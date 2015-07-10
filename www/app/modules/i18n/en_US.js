@@ -47,6 +47,9 @@
     "digits": "digits",
     "not_specified": "Not Specified",
     "loading": "Loading...",
+    "build_info_title": "Application Info.",
+    "build_version": "Version",
+    "build_date": "Date",
 
     "buttons": {
       "add": "Add",
