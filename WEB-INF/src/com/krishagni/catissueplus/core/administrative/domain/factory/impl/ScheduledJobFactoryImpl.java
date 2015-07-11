@@ -39,14 +39,14 @@ public class ScheduledJobFactoryImpl implements ScheduledJobFactory {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
 		setName(detail, job, ose);
-		if (!detail.getRepeatSchedule().equals(RepeatSchedule.ONDEMAND.toString())) {
-			setStartAndEndDates(detail, job, ose);
-		}
 		setRepeatSchedule(detail, job, ose);
-		setCreatedBy(detail, job, ose);
+		setStartAndEndDates(detail, job, ose);
 		setActivityStatus(detail, job, ose);
 		setType(detail, job, ose);
 		setRecipients(detail, job, ose);
+		
+		job.setRtArgsProvided(detail.getRtArgsProvided());
+		job.setRtArgsHelpText(detail.getRtArgsHelpText());
 			
 		ose.checkAndThrow();
 		return job;
@@ -62,7 +62,14 @@ public class ScheduledJobFactoryImpl implements ScheduledJobFactory {
 		job.setName(name);
 	}
 
+	//
+	// this method requires to be invoked after setting repeat schedule
+	//
 	private void setStartAndEndDates(ScheduledJobDetail detail,	ScheduledJob job, OpenSpecimenException ose) {
+		if (job.getRepeatSchedule() == null || job.getRepeatSchedule().equals(RepeatSchedule.ONDEMAND)) {
+			return;
+		}
+		
 		if (detail.getStartDate() == null) {
 			ose.addError(ScheduledJobErrorCode.START_DATE_REQUIRED);
 			return;
@@ -109,21 +116,22 @@ public class ScheduledJobFactoryImpl implements ScheduledJobFactory {
 			return;
 		}
 		
-		RepeatSchedule repeat = null;
 		try {
-			repeat = RepeatSchedule.valueOf(detail.getRepeatSchedule());
+			job.setRepeatSchedule(RepeatSchedule.valueOf(detail.getRepeatSchedule()));
 		} catch (IllegalArgumentException ile) {
-			ose.addError(ScheduledJobErrorCode.INVALID_REPEAT_SCHEDULE);
+			ose.addError(ScheduledJobErrorCode.INVALID_REPEAT_SCHEDULE, detail.getRepeatSchedule());
 			return;
 		}
-		job.setRepeatSchedule(repeat);
-
-		if (!detail.getRepeatSchedule().equals(RepeatSchedule.ONDEMAND.toString())) {
-			setScheduledMinute(detail, job, ose);
-			setScheduledHour(detail, job, ose);
-			setScheduledDayOfWeek(detail, job, ose);
-			setScheduledDayOfMonth(detail, job, ose);
+		
+		if (job.getRepeatSchedule().equals(RepeatSchedule.ONDEMAND)) {
+			job.setScheduledMinute(0);
+			return;
 		}
+		
+		setScheduledMinute(detail, job, ose);
+		setScheduledHour(detail, job, ose);
+		setScheduledDayOfWeek(detail, job, ose);
+		setScheduledDayOfMonth(detail, job, ose);
 	}
 
 	private void setScheduledMinute(ScheduledJobDetail detail, ScheduledJob job, OpenSpecimenException ose) {
@@ -217,7 +225,7 @@ public class ScheduledJobFactoryImpl implements ScheduledJobFactory {
 		}
 		
 		try {
-			ScheduledTask jobImpl = (ScheduledTask) Class.forName(fqn).newInstance();
+			Class.forName(fqn);
 		} catch (Exception e) {
 			ose.addError(ScheduledJobErrorCode.INVALID_TASK_IMPL_FQN);
 			return;

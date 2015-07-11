@@ -1,23 +1,19 @@
 
-angular.module('os.administrative.job.addedit', ['os.administrative.models', 'os.biospecimen.models'])
-  .controller('JobAddEditCtrl', function(
-    $scope, $state, $translate, job, ScheduledJobs, Alerts, User) {
+angular.module('os.administrative.job.addedit', ['os.administrative.models'])
+  .controller('JobAddEditCtrl', function($scope, $state, job) {
     
     function init() {
-     console.warn("Job Add edit");
-     if (job.id != undefined) {
-       job.createdBy = $scope.currentUser;
-       job.startDate = new Date();
-     }
-     $scope.job =  job;
+      if (!!job.id) {
+        job.startDate = new Date();
+      }
+
+      $scope.job =  job;
     }
 
 
-    $scope.createJob = function() {
-      console.warn("Create job");
-      var scheduledJob = angular.copy($scope.job);
-      angular.copy(scheduledJob).$saveOrUpdate().then(
-        function(scheduledJob) {
+    $scope.saveOrUpdateJob = function() {
+      $scope.job.$saveOrUpdate().then(
+        function(result) {
           $state.go('job-list');
         }
       );

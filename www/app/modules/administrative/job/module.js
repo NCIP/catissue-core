@@ -2,7 +2,7 @@ angular.module('os.administrative.job',
   [ 
     'ui.router',
     'os.administrative.job.list',
-    'os.administrative.job.viewlog',
+    'os.administrative.job.runlog',
     'os.administrative.job.addedit'
   ])
 
@@ -23,42 +23,40 @@ angular.module('os.administrative.job',
         },
         parent: 'signed-in'
       })
-
       .state('job-list', {
         url: '/jobs',
         templateUrl: 'modules/administrative/job/list.html',
         controller: 'JobListCtrl',
         parent: 'job-root'
       })
-
       .state('job-addedit', {
         url: '/job-addedit/:jobId',
         templateUrl: 'modules/administrative/job/addedit.html',
+        controller: 'JobAddEditCtrl',
         resolve: {
-          job: function($stateParams, ScheduledJobs) {
-            if ($stateParams.jobId) {
-              return ScheduledJobs.getById($stateParams.jobId);
+          job: function($stateParams, ScheduledJob) {
+            if (!!$stateParams.jobId) {
+              return ScheduledJob.getById($stateParams.jobId);
             }
 
-            return new ScheduledJobs({
+            return new ScheduledJob({
               repeatSchedule: 'ONDEMAND',
               recipients: [],
               startDate: new Date()
             })
-
           }
         },
-        controller: 'JobAddEditCtrl',
         parent: 'job-root'
       })
-
-      .state('job-log', {
-        url: '/job-log/:jobId',
-        templateUrl: 'modules/administrative/job/viewlog.html',
-        controller: 'JobViewLogCtrl',
+      .state('job-run-log', {
+        url: '/job-run-log/:jobId',
+        templateUrl: 'modules/administrative/job/runlog.html',
+        controller: 'JobRunLogCtrl',
+        resolve: {
+          job: function($stateParams, ScheduledJob) {
+            return ScheduledJob.getById($stateParams.jobId);
+          }
+        },
         parent: 'job-root'
       })
-
-
-
   });

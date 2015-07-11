@@ -24,7 +24,7 @@ public interface ScheduledJobService {
 	
 	public ResponseEvent<ScheduledJobDetail> deleteScheduledJob(RequestEvent<Long> req);
 
-	public ResponseEvent<ScheduledJobDetail>  executeJob(RequestEvent<Long> request);
+	public ResponseEvent<ScheduledJobDetail>  executeJob(RequestEvent<ScheduledJobRunDetail> request);
 
 
 	/*
@@ -34,7 +34,7 @@ public interface ScheduledJobService {
 	
 	public ResponseEvent<ScheduledJobRunDetail> getJobRun(RequestEvent<Long> req);
 
-	public ResponseEvent<JobExportDetail> getExportDataFile(RequestEvent<Long> req);
+	public ResponseEvent<JobExportDetail> getJobResultFile(RequestEvent<Long> req);
 
 }
 

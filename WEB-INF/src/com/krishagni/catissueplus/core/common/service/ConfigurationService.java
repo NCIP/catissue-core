@@ -28,6 +28,8 @@ public interface ConfigurationService {
 	
 	public Map<String, Object> getLocaleSettings();
 	
+	public String getDateFormat();
+	
 	public String getDeDateFormat();
 	
 	public String getTimeFormat();

@@ -10,7 +10,9 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 public class ScheduledJobRunDetail {
 	private Long id;
 	
-	private ScheduledJobDetail scheduledJob;
+	private Long jobId;
+	
+	private String jobName;
 	
 	private Date startedAt;
 	
@@ -23,6 +25,8 @@ public class ScheduledJobRunDetail {
 	private String message;
 
 	private UserSummary runBy;
+	
+	private String rtArgs;
 
 	public Long getId() {
 		return id;
@@ -32,12 +36,20 @@ public class ScheduledJobRunDetail {
 		this.id = id;
 	}
 
-	public ScheduledJobDetail getScheduledJob() {
-		return scheduledJob;
+	public Long getJobId() {
+		return jobId;
 	}
 
-	public void setScheduledJob(ScheduledJobDetail sheduledJob) {
-		this.scheduledJob = sheduledJob;
+	public void setJobId(Long jobId) {
+		this.jobId = jobId;
+	}
+
+	public String getJobName() {
+		return jobName;
+	}
+
+	public void setJobName(String jobName) {
+		this.jobName = jobName;
 	}
 
 	public Date getStartedAt() {
@@ -88,20 +100,26 @@ public class ScheduledJobRunDetail {
 		this.runBy = runBy;
 	}
 
+	public String getRtArgs() {
+		return rtArgs;
+	}
+
+	public void setRtArgs(String rtArgs) {
+		this.rtArgs = rtArgs;
+	}
+
 	public static ScheduledJobRunDetail from(ScheduledJobRun job) {
 		ScheduledJobRunDetail detail = new ScheduledJobRunDetail();
 		detail.setId(job.getId());
-		detail.setScheduledJob(ScheduledJobDetail.from(job.getScheduledJob()));
+		detail.setJobId(job.getScheduledJob().getId());
+		detail.setJobName(job.getScheduledJob().getName());
 		detail.setStatus(job.getStatus().toString());
 		detail.setMessage(job.getMessage());
 		detail.setLogFilePath(job.getLogFilePath());
 		detail.setStartedAt(job.getStartedAt());
 		detail.setFinishedAt(job.getFinishedAt());
-
-		if (job.getScheduledJob().isOnDemand() && job.getRunBy() != null) {
-			detail.setRunBy(UserSummary.from(job.getRunBy()));
-		}
-
+		detail.setRunBy(UserSummary.from(job.getRunBy()));
+		detail.setRtArgs(job.getRtArgs());
 		return detail;
 	}
 	

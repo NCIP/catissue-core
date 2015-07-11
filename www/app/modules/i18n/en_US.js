@@ -14,6 +14,7 @@
     "forms": "Forms",
     "specimen_lists": "Specimen Lists",
     "distribution_orders": "Distribution Orders",
+    "jobs": "Jobs",
 
     "cp_desc": "Create, update SOP of visits and specimens",
     "dp_desc": "Create, update procedures for distributing specimens",
@@ -27,8 +28,7 @@
     "forms_desc": "Create and manage custom forms",
     "settings_desc": "Manage application configuration settings",
     "distribution_orders_desc": "Create, execute request orders for distributing specimens",
-    "custom_reports": "Custom Reports",
-    "custom_reports_desc": "Create, execute custom reports"
+    "jobs_desc": "Create, schedule, execute jobs"
   },
 
   "common": {
@@ -48,7 +48,9 @@
     "view_jobs": "View Jobs",
     "digits": "digits",
     "not_specified": "Not Specified",
+    "update": "Update",
     "loading": "Loading...",
+    "help": "Help",
 
     "buttons": {
       "add": "Add",
@@ -1218,45 +1220,66 @@
    },
 
    "jobs": {
-     "list": "Custom Reports list",
-     "create": "Create Custom Report",
-     "id": "Job Id#",
+     "list": "Jobs",
+     "create": "Create Job",
+     "id": "ID",
      "name": "Name",
      "title": "Title",
      "schedule": "Schedule",
      "created_by": "Created By",
      "last_run_on": "Last Run On",
-     "execute": "Execute custom report",
-     "edit": "Edit custom report",
-     "delete": "Delete custom report",
-     "scheduled": "Scheduled",
-     "ondemand": "On Demand",
-     "type": "Type",
-     "category": "Category",
-     "command": "External Command",
-     "command_desc": "Specify the valid external command",
-     "implementation": "Implementation",
-     "implementation_desc": "Specify fully qualified name of the implementation",
+     
+     "create_job": "Create Job",
+     "type": "Job Type",
      "internal": "Internal",
      "external": "External",
-     "view_log": "View log",
-     "noRun": "No run logs to show",
+
+     "command": "External Command",
+     "command_desc": "Absolute path of command to execute along with input arguments",
+
+     "fqn": "Implementation",
+     "fqn_desc": "Fully qualified name of class implementing the task to run",
+
+     "run_args": "Runtime Arguments",
+     "args_provided": "Provided",
+     "args_not_provided": "Not Provided",
+     "args_help_text": "Help Text",
+     "args_help_text_desc": "Text to display users at time of collecting arguments for job run",
+    
+     "run_job": "Run Job",
+     "edit_job": "Edit Job Details",
+     "delete_job": "Delete Job",
+     "view_job_runs": "View Job Runs",
+
+     "queued_for_exec": "Job {{name}} queued for execution",
+
+     "run_logs": "Run Logs",
+     "seconds": "seconds",
+
+     "no_runs": "No run logs to show",
      "run_by": "Run By",
      "started_at": "Started At",
      "time_taken": "Time Taken",
      "status": "Status",
-     "ONDEMAND": "On Demand",
-     "filter": "Custom Reports Filter",
 
      "tooltip": {
-       "create": "Create new custom report",
-       "search": "Filter out custom report"
+       "create_job": "Create new scheduled job",
+       "search_jobs": "Search jobs"
+     },
+
+     "schedules": {
+       "ONDEMAND": "On Demand"
+     },
+
+     "types": {
+       "INTERNAL": "Internal",
+       "EXTERNAL": "External"
      },
 
      "statuses": {
        "SUCCEEDED": "Success",
-       "FAILURE": "Failure",
-       "INPROGRESS": "In Progress"
+       "FAILED": "Failed",
+       "IN_PROGRESS": "In Progress"
      }
    }
 

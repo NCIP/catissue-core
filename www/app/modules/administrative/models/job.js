@@ -1,18 +1,35 @@
 
 angular.module('os.administrative.models.job', ['os.common.models'])
-  .factory('ScheduledJobs', function(osModel, $http) {
-    var ScheduledJobs = osModel('scheduled-jobs');
+  .factory('ScheduledJob', function(osModel, $http) {
+    var ScheduledJob = osModel('scheduled-jobs');
 
-    ScheduledJobs.prototype.getType = function() {
-      return 'scheduled-jobs';
+    ScheduledJob.prototype.getType = function() {
+      return 'scheduled_jobs';
     }
 
-    ScheduledJobs.prototype.getDisplayName = function() {
+    ScheduledJob.prototype.getDisplayName = function() {
       return this.name;
     }
 
-    ScheduledJobs.executeJob = function(jobId) {
-      return $http.post(ScheduledJobs.url()  + jobId);
+    ScheduledJob.prototype.executeJob = function(args) {
+      return $http.post(ScheduledJob.url()  + this.$id() + '/runs', args).then(
+        function(result) {
+          return result.data;
+        }
+      );
     }
-    return ScheduledJobs;
+
+    ScheduledJob.prototype.getRuns = function() {
+      return $http.get(ScheduledJob.url() + this.$id() + '/runs').then(
+        function(result) {
+          return result.data;
+        }
+      );
+    }
+
+    ScheduledJob.prototype.getResultUrl = function(runId) {
+      return ScheduledJob.url() + this.$id() + '/runs/' + runId + '/result-file';
+    }
+
+    return ScheduledJob;
   });

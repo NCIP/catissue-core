@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        
+  <property name="now" value="now()"   dbms="mysql" />
+  <property name="now" value="sysdate" dbms="oracle" />
+
+  <changeSet  author="ahegade" id="ScheduleJob resource" dbms="mysql">
+    <sql>
+      insert into rbac_resources(name) values('ScheduledJob');
+    </sql>
+  </changeSet>
+
+  <changeSet  author="ahegade" id="Adding ScheduleJob resources" dbms="oracle">
+    <sql>
+      insert into rbac_resources
+        (identifier, name) 
+      values
+        (rbac_resources_seq.nextval, 'ScheduledJob');
+    </sql>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Default job permissions to site admin">
+    <sql>call assign_to_role('Administrator', 'ScheduledJob', 'Read');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+</databaseChangeLog>

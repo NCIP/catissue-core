@@ -858,8 +858,8 @@ public class AccessCtrlMgr {
 		ensureScheduledJobRights(ops);
 	}
 
-	public void ensureRunScheduledJobRights() {
-		Operation[] ops = {Operation.READ, Operation.UPDATE};
+	public void ensureRunJobRights() {
+		Operation[] ops = {Operation.READ};
 		ensureScheduledJobRights(ops);
 	}
 
@@ -884,7 +884,6 @@ public class AccessCtrlMgr {
 		}
 
 		User user = AuthUtil.getCurrentUser();
-
 		if (!canUserPerformOp(user.getId(), Resource.SCHEDULED_JOB, ops)) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
