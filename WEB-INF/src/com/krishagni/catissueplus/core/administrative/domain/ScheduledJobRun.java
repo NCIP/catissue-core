@@ -1,6 +1,10 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.util.Calendar;
 import java.util.Date;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
 public class ScheduledJobRun extends BaseEntity {
@@ -9,7 +13,7 @@ public class ScheduledJobRun extends BaseEntity {
 		SUCCEEDED,
 		FAILED
 	}
-	
+
 	private Date startedAt;
 	
 	private Date finishedAt;
@@ -21,6 +25,10 @@ public class ScheduledJobRun extends BaseEntity {
 	private String message;
 	
 	private ScheduledJob scheduledJob;
+
+	private User runBy;
+	
+	private String rtArgs;
 
 	public Date getStartedAt() {
 		return startedAt;
@@ -70,8 +78,24 @@ public class ScheduledJobRun extends BaseEntity {
 		this.scheduledJob = scheduledJob;
 	}
 
+	public User getRunBy() {
+		return runBy;
+	}
+
+	public void setRunBy(User runBy) {
+		this.runBy = runBy;
+	}
+
+	public String getRtArgs() {
+		return rtArgs;
+	}
+
+	public void setRtArgs(String rtArgs) {
+		this.rtArgs = rtArgs;
+	}
+
 	public void inProgress(ScheduledJob job) {
-		startedAt = new Date();
+		startedAt = Calendar.getInstance().getTime();
 		status = Status.IN_PROGRESS;
 		scheduledJob = job;
 	}
@@ -81,13 +105,16 @@ public class ScheduledJobRun extends BaseEntity {
 	}
 	
 	public void completed(String logFile) {
-		finishedAt = new Date();
+		finishedAt = Calendar.getInstance().getTime();
 		status = Status.SUCCEEDED;
-		logFilePath = logFile;
+		
+		if (StringUtils.isNotBlank(logFile)) {
+			logFilePath = logFile;
+		}		
 	}
 	
 	public void failed(Exception e) {
-		finishedAt = new Date();
+		finishedAt = Calendar.getInstance().getTime();
 		status = Status.FAILED;
 		
 		if (e != null) {
@@ -101,5 +128,6 @@ public class ScheduledJobRun extends BaseEntity {
 		setMessage(other.message);
 		setStartedAt(other.startedAt);
 		setFinishedAt(other.finishedAt);
+		setRunBy(other.getRunBy());
 	}
 }

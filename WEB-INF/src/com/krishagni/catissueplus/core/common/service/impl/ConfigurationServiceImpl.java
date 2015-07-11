@@ -200,6 +200,11 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	}
 		
 	@Override
+	public String getDateFormat() {
+		return messageSource.getMessage("common_date_fmt", null, Locale.getDefault());
+	}
+	
+	@Override
 	public String getDeDateFormat() {		
 		return messageSource.getMessage("common_de_be_date_fmt", null, Locale.getDefault());
 	}

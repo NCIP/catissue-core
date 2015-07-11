@@ -15,14 +15,18 @@ public interface ScheduledJobService {
 	 * job api's
 	 */
 	public ResponseEvent<List<ScheduledJobDetail>> getScheduledJobs(RequestEvent<ScheduledJobListCriteria> req);
-	
+
+	public ResponseEvent<ScheduledJobDetail> getScheduledJob(RequestEvent<Long> req);
+
 	public ResponseEvent<ScheduledJobDetail> createScheduledJob(RequestEvent<ScheduledJobDetail> req);
 	
 	public ResponseEvent<ScheduledJobDetail> updateScheduledJob(RequestEvent<ScheduledJobDetail> req);
 	
 	public ResponseEvent<ScheduledJobDetail> deleteScheduledJob(RequestEvent<Long> req);
-	
-	
+
+	public ResponseEvent<ScheduledJobDetail>  executeJob(RequestEvent<ScheduledJobRunDetail> request);
+
+
 	/*
 	 * Job instance api's
 	 */
@@ -30,8 +34,8 @@ public interface ScheduledJobService {
 	
 	public ResponseEvent<ScheduledJobRunDetail> getJobRun(RequestEvent<Long> req);
 
-	public ResponseEvent<JobExportDetail> getExportDataFile(RequestEvent<Long> req);
-	
+	public ResponseEvent<JobExportDetail> getJobResultFile(RequestEvent<Long> req);
+
 }
 
 

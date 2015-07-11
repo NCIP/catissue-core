@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJob;
+import com.krishagni.catissueplus.core.administrative.domain.ScheduledJob.RepeatSchedule;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class ScheduledJobDetail {
@@ -41,6 +42,12 @@ public class ScheduledJobDetail {
 	private List<UserSummary> recipients = new ArrayList<UserSummary>();
 	
 	private Boolean isActiveJob;
+
+	private Date lastRunOn;
+	
+	private Boolean rtArgsProvided;
+	
+	private String rtArgsHelpText;
 
 	public Long getId() {
 		return id;
@@ -178,6 +185,30 @@ public class ScheduledJobDetail {
 		this.isActiveJob = isActiveJob;
 	}
 
+	public Date getLastRunOn() {
+		return lastRunOn;
+	}
+
+	public void setLastRunOn(Date lastRunOn) {
+		this.lastRunOn = lastRunOn;
+	}
+
+	public Boolean getRtArgsProvided() {
+		return rtArgsProvided;
+	}
+
+	public void setRtArgsProvided(Boolean rtArgsProvided) {
+		this.rtArgsProvided = rtArgsProvided;
+	}
+
+	public String getRtArgsHelpText() {
+		return rtArgsHelpText;
+	}
+
+	public void setRtArgsHelpText(String rtArgsHelpText) {
+		this.rtArgsHelpText = rtArgsHelpText;
+	}
+
 	public static ScheduledJobDetail from(ScheduledJob job) {
 		ScheduledJobDetail detail = new ScheduledJobDetail();
 	
@@ -188,16 +219,25 @@ public class ScheduledJobDetail {
 		detail.setRepeatSchedule(job.getRepeatSchedule().toString());
 		detail.setType(job.getType().toString());
 		detail.setCommand(job.getCommand());
-		detail.setNextRunOn(job.getNextRunOn());
-		detail.setStartDate(job.getStartDate());
-		detail.setEndDate(job.getEndDate());
 		detail.setIsActiveJob(job.isActiveJob());
 		detail.setTaskImplFqn(job.getTaskImplfqn());
 		detail.setRecipients(UserSummary.from(job.getRecipients()));
+
+		detail.setRtArgsProvided(job.getRtArgsProvided());
+		detail.setRtArgsHelpText(job.getRtArgsHelpText());		
+		
+		if (job.getRepeatSchedule().equals(RepeatSchedule.ONDEMAND)) {
+			return detail;
+		}
+		
+		detail.setStartDate(job.getStartDate());
+		detail.setEndDate(job.getEndDate());
+		detail.setNextRunOn(job.getNextRunOn());
+
 		detail.setScheduledMinute(job.getScheduledMinute());
 		detail.setScheduledHour(job.getScheduledHour());
 		detail.setScheduledDayOfMonth(job.getScheduledDayOfMonth());
-		
+
 		if (job.getScheduledDayOfWeek() != null) {
 			detail.setScheduledDayOfWeek(job.getScheduledDayOfWeek().toString());
 		}

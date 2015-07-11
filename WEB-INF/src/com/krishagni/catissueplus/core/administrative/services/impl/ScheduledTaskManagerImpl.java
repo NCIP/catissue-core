@@ -1,8 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +9,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJob;
@@ -21,13 +20,19 @@ import com.krishagni.catissueplus.core.administrative.services.ScheduledTaskMana
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.service.EmailService;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
-import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class ScheduledTaskManagerImpl implements ScheduledTaskManager, ScheduledTaskListener {
+	private static final Logger logger = Logger.getLogger(ScheduledTaskManagerImpl.class);
+
 	private static ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5);
 	
 	private static Map<Long, ScheduledFuture<?>> scheduledJobs = new HashMap<Long, ScheduledFuture<?>>();
+	
+	private static final String JOB_FINISHED_TEMPLATE = "scheduled_job_finished";
+	
+	private static final String JOB_FAILED_TEMPLATE = "scheduled_job_failed";
 	
 	private DaoFactory daoFactory;
 	
@@ -41,19 +46,39 @@ public class ScheduledTaskManagerImpl implements ScheduledTaskManager, Scheduled
 		this.emailSvc = emailSvc;
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+	//
+	// Scheduled Task Manager API Start
+	//
+	//////////////////////////////////////////////////////////////////////////
+	
 	@Override
-	public void schedule(ScheduledJob job) {
-		if (isJobQueued(job)) {
-			cancel(job);
-		} 
-		
-		if (!job.isActiveJob()) {
+	@PlusTransactional
+	public void schedule(Long jobId) {
+		ScheduledJob job = getScheduledJob(jobId);
+		if (job == null) {
+			logger.error("No job found with ID = " + jobId);
 			return;
 		}
 		
-		ScheduledTaskWrapper taskWrapper = new ScheduledTaskWrapper(job, this);
-		ScheduledFuture<?> future = executorService.schedule(taskWrapper, getNextScheduleInMin(job), TimeUnit.MINUTES);
-		scheduledJobs.put(job.getId(), future);
+		schedule(job);
+	}
+	
+	@Override
+	@PlusTransactional
+	public void schedule(ScheduledJob job) {
+		if (job.isOnDemand()) {
+			return;
+		}
+
+		User user = daoFactory.getUserDao().getSystemUser();
+		runJob(user, job, null, getNextScheduleInMin(job));
+	}
+
+	@Override
+	@PlusTransactional
+	public void run(ScheduledJob job, String args) {
+		runJob(AuthUtil.getCurrentUser(), job, args, 0L);
 	}
 	
 	@Override
@@ -65,53 +90,65 @@ public class ScheduledTaskManagerImpl implements ScheduledTaskManager, Scheduled
 			e.printStackTrace();
 		}
 	}
-
-	@Override
-	public ScheduledJobRun started(ScheduledJob job) {
-		return createJobRun(job.getId());
-	}
-
-	@Override
-	public void completed(ScheduledJobRun jobRun) {
-		jobRun.completed();
-		jobRun = updateJobRun(jobRun);
-		scheduledJobs.remove(jobRun.getScheduledJob().getId());
-		schedule(jobRun.getScheduledJob());
-	}
-
-	@Override
-	public void failed(ScheduledJobRun jobRun, Exception e) {
-		jobRun.failed(e);
-		jobRun = updateJobRun(jobRun);
-		sendFailureEmail(jobRun);
-		scheduledJobs.remove(jobRun.getScheduledJob().getId());
-		schedule(jobRun.getScheduledJob());
-	}
 	
+
+	//////////////////////////////////////////////////////////////////////////
+	//
+	// Scheduled Job Listener API implementation
+	//
+	//////////////////////////////////////////////////////////////////////////
+	
+	@Override
 	@PlusTransactional
-	public ScheduledJobRun createJobRun(Long jobId) {
+	public ScheduledJobRun started(ScheduledJob job, String args, User user) {
 		try {
 			ScheduledJobRun jobRun = new ScheduledJobRun();
-			jobRun.inProgress(getScheduledJob(jobId));
+			jobRun.inProgress(getScheduledJob(job.getId()));
+			jobRun.setRunBy(user);
+			jobRun.setRtArgs(args);
+			
 			daoFactory.getScheduledJobDao().saveOrUpdateJobRun(jobRun);
 			initializeLazilyLoadedEntites(jobRun);
 			return jobRun;
 		} catch (Exception e) {
+			logger.error("Error creating job run. Job name: " + job.getName(), e);
 			throw new RuntimeException(e);
 		}
+		
 	}
-	
+
+	@Override
 	@PlusTransactional
-	public ScheduledJobRun updateJobRun(ScheduledJobRun jobRun) {
-		try {
-			ScheduledJobRun existing = daoFactory.getScheduledJobDao().getJobRun(jobRun.getId());
-			existing.update(jobRun);
-			daoFactory.getScheduledJobDao().saveOrUpdateJobRun(existing);
-			initializeLazilyLoadedEntites(existing);
-			return existing;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+	public void completed(ScheduledJobRun jobRun) {
+		ScheduledJobRun dbRun = daoFactory.getScheduledJobDao().getJobRun(jobRun.getId());
+		dbRun.completed();
+		sendFinishedEmail(dbRun);
+		scheduledJobs.remove(dbRun.getScheduledJob().getId());
+		schedule(dbRun.getScheduledJob().getId());
+	}
+
+	@Override
+	@PlusTransactional
+	public void failed(ScheduledJobRun jobRun, Exception e) {
+		ScheduledJobRun dbRun = daoFactory.getScheduledJobDao().getJobRun(jobRun.getId());
+		dbRun.failed(e);
+		sendFailureEmail(dbRun);
+		scheduledJobs.remove(dbRun.getScheduledJob().getId());
+		schedule(dbRun.getScheduledJob().getId());
+	}
+		
+	private void runJob(User user, ScheduledJob job, String args, Long minutesLater) {
+		if (isJobQueued(job)) {
+			cancel(job);
 		}
+
+		if (!job.isActiveJob()) {
+			return;
+		}
+		
+		ScheduledTaskWrapper taskWrapper = new ScheduledTaskWrapper(job, args, user, this);
+		ScheduledFuture<?> future = executorService.schedule(taskWrapper, minutesLater, TimeUnit.MINUTES);
+		scheduledJobs.put(job.getId(), future);		
 	}
 	
 	private void initializeLazilyLoadedEntites(ScheduledJobRun jobRun) {
@@ -125,49 +162,45 @@ public class ScheduledTaskManagerImpl implements ScheduledTaskManager, Scheduled
 	}
 	
 	private Long getNextScheduleInMin(ScheduledJob job) {
-		Long delay = (job.getNextRunOn().getTime() - (new Date().getTime()))/( 1000 * 60 );
-		delay = delay < 0 ? 0 : delay;
-		return delay;
+		long delay = (job.getNextRunOn().getTime() - System.currentTimeMillis()) / (1000 * 60);
+		return delay < 0 ? 0 : delay;
 	}
 	
 	private ScheduledJob getScheduledJob(Long jobId) {
 		return daoFactory.getScheduledJobDao().getById(jobId);
 	}
 
+	private void sendFinishedEmail(ScheduledJobRun jobRun) {
+		sendEmail(jobRun, JOB_FINISHED_TEMPLATE);
+	}
+	
 	private void sendFailureEmail(ScheduledJobRun jobRun) {
+		sendEmail(jobRun, JOB_FAILED_TEMPLATE);
+	}
+	
+	private void sendEmail(ScheduledJobRun jobRun, String emailTmpl) {
 		ScheduledJob job = jobRun.getScheduledJob();
+		
 		Map<String, Object> props = new HashMap<String, Object>();
-		props.put("fname", job.getCreatedBy().getFirstName());
-		props.put("lname", job.getCreatedBy().getLastName());
-		props.put("jobName", job.getName());
-		props.put("jobRunId", jobRun.getId());
-		props.put("appUrl",  ConfigUtil.getInstance().getAppUrl());
+		props.put("job", job);
+		props.put("jobRun", jobRun);
+		props.put("appUrl",  ConfigUtil.getInstance().getAppUrl());		
 		props.put("$subject", new String[] {job.getName()});
-		List<String> recipients = new ArrayList<String>();
+
+		List<String> recipients = new ArrayList<String>();		
+		if (job.isOnDemand()) {
+			props.put("fname", jobRun.getRunBy().getFirstName());
+			props.put("lname", jobRun.getRunBy().getLastName());
+			recipients.add(jobRun.getRunBy().getEmailAddress());
+		} else {
+			props.put("fname", job.getCreatedBy().getFirstName());
+			props.put("lname", job.getCreatedBy().getLastName());			
+		}
 		
 		for (User user : job.getRecipients()) {
 			recipients.add(user.getEmailAddress());
 		}
 		
-		String[] recipientEmails = new String[recipients.size()];
-		emailSvc.sendEmail(JOB_FAILED_TEMPLATE, recipients.toArray(recipientEmails), props);
-	}
-	
-	public static String getExportDataDir() {
-		String dir = new StringBuilder()
-			.append(ConfigUtil.getInstance().getDataDir()).append(File.separator)			
-			.append("scheduled-jobs").append(File.separator)
-			.toString();
-		
-		File dirFile = new File(dir);
-		if (!dirFile.exists()) {
-			if (!dirFile.mkdirs()) {
-				throw new RuntimeException("Error couldn't create directory for exporting scheduled jobs data");
-			}
-		}
-		
-		return dir;
-	}
-	
-	private static final String JOB_FAILED_TEMPLATE = "scheduled_job_failed";
+		emailSvc.sendEmail(emailTmpl, recipients.toArray(new String[0]), props);
+	}	
 }
