@@ -17,7 +17,7 @@ angular.module('os.administrative.job',
             readOpts  : {resource: 'ScheduledJob', operations: ['Read']},
             createOpts: {resource: 'ScheduledJob', operations: ['Create']},
             updateOpts: {resource: 'ScheduledJob', operations: ['Update']},
-            runOpts   : {resource: 'ScheduledJob', operations: ['Read', 'Update']},
+            runOpts   : {resource: 'ScheduledJob', operations: ['Read']},
             deleteOpts: {resource: 'ScheduledJob', operations: ['Delete']}
           }
         },
