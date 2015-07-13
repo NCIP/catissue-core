@@ -47,9 +47,9 @@
     "digits": "digits",
     "not_specified": "Not Specified",
     "loading": "Loading...",
-    "build_info_title": "Application Info.",
+    "build_info_title": "About OpenSpecimen",
     "build_version": "Version",
-    "build_date": "Date",
+    "build_date": "Build date",
 
     "buttons": {
       "add": "Add",

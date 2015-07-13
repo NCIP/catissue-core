@@ -190,7 +190,9 @@ processResources {
     
     def datasource_dialect = (database_type == "mysql") ? datasource_mysql_dialect : datasource_oracle_dialect
     filter(ReplaceTokens, tokens: [datasource_jndi : datasource_jndi, datasource_type : deployment_type, 
-                                   datasource_dialect : datasource_dialect])
+                                   datasource_dialect : datasource_dialect,
+                                   buildinfo_version : props.buildinfo_version,
+                                   buildinfo_date : props.buildinfo_date])
   }
 }
 
