@@ -194,7 +194,7 @@ angular.module('openspecimen', [
       };
     }
   })
-  .run(function($rootScope, $window, $cookieStore, $translate, ApiUtil, Setting) {
+  .run(function($rootScope, $window, $cookieStore, $q, $translate, $translatePartialLoader, ApiUtil, Setting) {
     if ($window.localStorage['osAuthToken']) {
       $cookieStore.put('osAuthToken', $window.localStorage['osAuthToken']);
       $rootScope.loggedIn = true;
@@ -231,18 +231,26 @@ angular.module('openspecimen', [
       filterWaitInterval: 500
     };
 
-    Setting.getLocale().then(
-      function(settings) {
-        var fmts = {
-          dateFmt: settings.dateFmt,
-          timeFmt: settings.timeFmt,
-          queryDateFmt: {format: settings.deFeDateFmt},
-          dateTimeFmt: settings.dateFmt + ' ' + settings.timeFmt,
-          utcOffset: settings.utcOffset
-        };
+    var promises = [Setting.getLocale(), Setting.getAppProps()];
+    $q.all(promises).then(
+      function(resps) {
+        var localeSettings = resps[0];
+        angular.extend(
+          $rootScope.global,
+          {
+            dateFmt: localeSettings.dateFmt,
+            timeFmt: localeSettings.timeFmt,
+            queryDateFmt: {format: localeSettings.deFeDateFmt},
+            dateTimeFmt: localeSettings.dateFmt + ' ' + localeSettings.timeFmt,
+            utcOffset: localeSettings.utcOffset
+          }
+        );
 
-        angular.extend($rootScope.global, fmts);
-        $translate.use(settings.locale);
+
+        var appProps = resps[1];
+        $translatePartialLoader.addPart('custom-modules/' + appProps['plugin.custom_module']);
+        $translate.use(localeSettings.locale);
+        $translate.refresh();
       }
     );
   });

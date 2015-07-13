@@ -18,5 +18,13 @@ angular.module('os.administrative.models.setting', ['os.common.models'])
       );
     };
 
+    Setting.getAppProps = function() {
+      return $http.get(Setting.url() + 'app-props').then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    };
+
     return Setting;
   });

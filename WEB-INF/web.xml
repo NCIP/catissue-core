@@ -13,6 +13,11 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     <param-value>/WEB-INF/applicationContext.xml</param-value>
   </context-param>
 
+  <context-param>
+    <param-name>contextInitializerClasses</param-name>
+    <param-value>com.krishagni.catissueplus.core.init.AppInitializer</param-value>
+  </context-param>
+
   <filter>
     <filter-name>authTokenFilter</filter-name>
     <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>

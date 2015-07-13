@@ -20,6 +20,7 @@ if(new File(props.app_home + '/webapps').exists()) {
   deploymentLocation = props.app_home + "/webapps"
 }
 
+project.ext["plugin_custom_module"]      = props.plugin_custom_module
 project.ext["datasource_jndi"]           = props.datasource_jndi
 project.ext["deployment_type"]           = props.deployment_type
 project.ext["database_type"]             = props.database_type
@@ -189,8 +190,13 @@ processResources {
     include 'application.properties'
     
     def datasource_dialect = (database_type == "mysql") ? datasource_mysql_dialect : datasource_oracle_dialect
-    filter(ReplaceTokens, tokens: [datasource_jndi : datasource_jndi, datasource_type : deployment_type, 
-                                   datasource_dialect : datasource_dialect])
+    filter(
+      ReplaceTokens, 
+      tokens: [
+        datasource_jndi: datasource_jndi, 
+        datasource_type: deployment_type,
+        datasource_dialect: datasource_dialect,
+        plugin_custom_module: plugin_custom_module])
   }
 }
 

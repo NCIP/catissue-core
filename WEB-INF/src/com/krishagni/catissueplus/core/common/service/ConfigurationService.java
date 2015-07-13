@@ -38,4 +38,6 @@ public interface ConfigurationService {
 	
 	public Map<String, String> getWelcomeVideoSettings();
 	
+	public Map<String, String> getAppProps();
+	
 }
