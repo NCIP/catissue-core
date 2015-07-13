@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet author="ahegade" id="Missed reason column in visits table">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="MISSED_REASON" type="VARCHAR2(255 CHAR)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Track modification of visit missed reason">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="missedReason_MOD" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
+
+</databaseChangeLog>
