@@ -184,6 +184,17 @@ compileJava {
   }
 }
 
+def getTodayDate() {
+  def today = new Date()
+  return String.valueOf(today.getTime())
+}
+
+def getCommitHash() {
+  def revCmd = "git rev-parse --short HEAD"
+  def revision = revCmd.execute()
+  return revision.text.trim()
+}
+
 processResources {
   from(sourceSets.main.resources.srcDirs) {
     include 'application.properties'
@@ -192,7 +203,8 @@ processResources {
     filter(ReplaceTokens, tokens: [datasource_jndi : datasource_jndi, datasource_type : deployment_type, 
                                    datasource_dialect : datasource_dialect,
                                    buildinfo_version : props.buildinfo_version,
-                                   buildinfo_date : props.buildinfo_date])
+                                   buildinfo_date : getTodayDate(),
+                                   buildinfo_commit_hash : getCommitHash()])
   }
 }
 

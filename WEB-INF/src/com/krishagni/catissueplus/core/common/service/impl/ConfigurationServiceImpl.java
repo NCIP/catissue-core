@@ -1,11 +1,8 @@
 package com.krishagni.catissueplus.core.common.service.impl;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -247,19 +244,17 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	@Override
 	public Map<String, Object> getBuildInfo() {
 		Map<String, Object> result = new HashMap<String, Object>();
-		try {
-			String buildVersion = applicationProperties.getProperty("buildinfo.version");
-			if (buildVersion != null) {
-				result.put("build_version", buildVersion);
-			}
-			String date = applicationProperties.getProperty("buildinfo.date");
-			if (date != null) {
-				SimpleDateFormat formater = new SimpleDateFormat("dd-MM-yyyy");
-				Date buildDate = formater.parse(date);
-				result.put("build_date", buildDate);
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
+		String buildVersion = applicationProperties.getProperty("buildinfo.version");
+		if (buildVersion != null) {
+			result.put("build_version", buildVersion);
+		}
+		String date = applicationProperties.getProperty("buildinfo.date");
+		if (date != null) {
+			result.put("build_date", date);
+		}
+		String commitHash = applicationProperties.getProperty("buildinfo.commitHash");
+		if (commitHash != null) {
+			result.put("build_commit_hash", commitHash);
 		}
 		return result;
 	}

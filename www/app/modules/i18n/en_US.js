@@ -50,6 +50,7 @@
     "build_info_title": "About OpenSpecimen",
     "build_version": "Version",
     "build_date": "Build date",
+    "build_commit_hash": "Revision",
 
     "buttons": {
       "add": "Add",
