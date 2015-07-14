@@ -316,13 +316,13 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		}
 	}
 	
-	private void setLocale() {		
-		String setting = getStrSetting("common", "locale", "en_US");
-		Locale newLocale = LocaleUtils.toLocale(setting);
+	private void setLocale() {
 		Locale existingLocale = Locale.getDefault();
-		
+		String setting = getStrSetting("common", "locale", existingLocale.toString());
+		Locale newLocale = LocaleUtils.toLocale(setting);
+
 		if (!existingLocale.equals(newLocale)) {
 			Locale.setDefault(newLocale);
 		}
-	}	
+	}
 }
