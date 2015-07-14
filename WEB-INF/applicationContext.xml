@@ -32,7 +32,7 @@
     </property>
   </bean>
 
-  <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+  <bean id="placeholderConfig" class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
     <property name="properties" ref="appProps"/>
   </bean> 
   
@@ -655,5 +655,5 @@
 
   <context:component-scan base-package="com.krishagni.catissueplus.core"/>
   
-  <import resource="classpath*:com/krishagni/openspecimen/custom/**/*Context.xml"/>
+  <import resource="classpath*:com/krishagni/openspecimen/custom/${plugin.custom_module}/**/*Context.xml"/>
 </beans>
