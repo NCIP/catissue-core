@@ -367,6 +367,7 @@
     "description": "Description",
     "location": "Location",
     "biohazards": "Biohazards",
+    "createdOn": "Created On",
     "concentration_unit": "&#181;g/&#181;l",
     "apply_first_loc_to_all": "Copy First Location To All",
     "activity_full_info": "{{user}} created {{name}} on {{time | osServerTime: global.utcOffset | date: global.dateTimeFmt}}",
@@ -423,7 +424,8 @@
 
     "errors": {
       "duplicate_labels": "One or more specimens using same label",
-      "insufficient_qty": "Insufficient parent specimen quantity to create aliquots"
+      "insufficient_qty": "Insufficient parent specimen quantity to create aliquots",
+      "child_created_date_greater": "The created on date of child specimen should be less than that of Parent Specimen"
     }
   },
 

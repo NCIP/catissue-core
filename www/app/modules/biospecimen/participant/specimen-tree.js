@@ -246,7 +246,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
         scope.showCreateAliquots = function(specimen) {
           scope.view = 'create_aliquots';      
           scope.parentSpecimen = specimen;
-          scope.aliquotSpec = {};
+          scope.aliquotSpec = {createdOn : new Date()};
         };
 
         scope.collectAliquots = function() {
@@ -269,7 +269,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
           parent.hasChildren = true;
           parent.depth = 0;
           parent.closeAfterChildrenCreation = spec.closeParent;
-
+          console.warn("spec.createdOn :" + spec.createdOn);
           var aliquot = new Specimen({
             lineage: 'Aliquot',
             specimenClass: parent.specimenClass,
@@ -287,7 +287,8 @@ angular.module('os.biospecimen.participant.specimen-tree',
             depth: 1,
             isOpened: true,
             hasChildren: false,
-            labelFmt: scope.cpr.aliquotLabelFmt
+            labelFmt: scope.cpr.aliquotLabelFmt,
+            createdOn: spec.createdOn
           });
 
           var aliquots = [];
@@ -329,7 +330,8 @@ angular.module('os.biospecimen.participant.specimen-tree',
             status: 'Collected',
             visitId: scope.visit.id,
             pathology: scope.parentSpecimen.pathology,
-            closeParent: false
+            closeParent: false,
+            createdOn : new Date()
           });
 
           loadSpecimenClasses(scope);

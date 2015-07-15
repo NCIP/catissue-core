@@ -268,6 +268,10 @@ public class Specimen extends BaseEntity {
 	}
 
 	public void setCreatedOn(Date createdOn) {
+		if (createdOn.compareTo(new Date()) > 0) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.CREATED_ON_GREATER_THAN_CURRENT);
+		}
+
 		this.createdOn = createdOn;
 	}
 
@@ -551,11 +555,14 @@ public class Specimen extends BaseEntity {
 		if (parentSpecimen == null) {
 			setTissueSite(specimen.getTissueSite());
 			setTissueSide(specimen.getTissueSide());
-			setPathologicalStatus(specimen.getPathologicalStatus());			
+			setPathologicalStatus(specimen.getPathologicalStatus());
+			setCreatedOn(specimen.getReceivedEvent().getTime());
 		} else {
 			setTissueSite(parentSpecimen.getTissueSite());
 			setTissueSide(parentSpecimen.getTissueSide());
-			setPathologicalStatus(parentSpecimen.getPathologicalStatus());			
+			setPathologicalStatus(parentSpecimen.getPathologicalStatus());
+			setCreatedOn(specimen.getCreatedOn());
+
 		}
 		
 		setInitialQuantity(specimen.getInitialQuantity());		
@@ -564,7 +571,7 @@ public class Specimen extends BaseEntity {
 				
 		setComment(specimen.getComment());		
 		updatePosition(specimen.getPosition());
-		
+
 		checkQtyConstraints();
 	}
 	

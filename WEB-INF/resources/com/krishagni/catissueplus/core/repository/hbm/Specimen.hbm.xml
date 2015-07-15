@@ -33,7 +33,7 @@
 
     <property name="barcode" column="BARCODE" />
 
-    <property name="createdOn" column="CREATED_ON_DATE" />
+    <property name="createdOn" column="CREATED_ON" />
 
     <property name="availableQuantity" column="AVAILABLE_QUANTITY" />
     

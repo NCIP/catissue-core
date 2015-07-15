@@ -60,4 +60,13 @@
       <column name="MISSED_REASON" type="${text.type}(255)"/>
     </addColumn>
   </changeSet>
+
+  <!--<changeSet author="ahegade" id="Modify created on data type in specimen table">-->
+    <!--<modifyDataType tableName="CATISSUE_SPECIMEN" columnName="CREATED_ON_DATE" newDataType="${timestamp.type}" />-->
+  <!--</changeSet>-->
+
+  <changeSet author="ahegade" id="Renaming specimen created on column">
+    <renameColumn columnDataType="${timestamp.type}" newColumnName="CREATED_ON"
+      oldColumnName="CREATED_ON_DATE" tableName="CATISSUE_SPECIMEN"/>
+  </changeSet>
 </databaseChangeLog>
