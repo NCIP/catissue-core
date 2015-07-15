@@ -1183,12 +1183,13 @@
      "details": "Order Details",
      "no_specimens_in_list": "No specimens in order list to distribute. Add at least one specimen",
      "enter_specimen_label": "Enter specimen labels separated by comma/tab/newline",
-     "filter": "Distribution Order Filters",
      "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
 
      "report_gen_initiated": "Generating distribution order report...",
      "downloading_report": "Downloading distribution order report...",
      "report_will_be_emailed": "Generating distribution order report is taking more time than anticipated. Link to download report will be sent to you by email",
+
+     "filters": "Filters",
    
      "spec": {
        "label": "Label",

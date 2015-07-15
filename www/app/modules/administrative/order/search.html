@@ -1,9 +1,53 @@
-<div>
+<div class="os-search">
   <div class="os-head">
-    <h3 class="os-title" translate="orders.filter">Distribution Orders Filter</h3>
+    <h3 class="os-title" translate="orders.filters">
+      Filters
+    </h3>
   </div>
 
   <div class="os-body">
-    <span> Under construction </span>
+    <div class="form-group">
+      <input type="text" ng-model="filterOpts.title" class="form-control"
+        os-md-input placeholder="{{'orders.name' | translate}}">
+    </div>
+
+    <div class="form-group">
+      <div os-md-input ng-model="filterOpts.requestor" placeholder="{{'orders.requestor' | translate}}">
+        <os-users ng-model="filterOpts.requestor" placeholder="{{'orders.requestor' | translate}}"> 
+        </os-users>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div os-md-input ng-model="filterOpts.receivingSite" placeholder="{{'orders.receiving_site' | translate}}">
+        <os-select ng-model="filterOpts.receivingSite" class="form-control"
+          list="sites" os-md-input placeholder="{{'orders.receiving_site' | translate}}">
+        </os-select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div os-md-input ng-model="filterOpts.dp" placeholder="{{'orders.dp' | translate}}">
+        <os-select ng-model="filterOpts.dp" class="form-control"
+          display-prop="shortTitle" list="dps" 
+          os-md-input refresh="loadDps" placeholder="{{'orders.dp' | translate}}">
+        </os-select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div os-md-input ng-model="filterOpts.executionDate" placeholder="{{'orders.execution_date' | translate}}">
+        <input type="text" ng-model="filterOpts.executionDate" class="form-control" 
+          datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
+          is-open="execDt.isOpen" ng-focus="execDt.isOpen=true"
+          placeholder="{{'orders.execution_date' | translate}}">
+      </div>
+    </div>
+
+    <div class="form-group os-btns">
+      <button class="default full-width" ng-click="clearFilters()">
+        <span translate="common.buttons.clear_filters">Clear Filters</span>
+      </button>
+    </div>
   </div>
 </div>

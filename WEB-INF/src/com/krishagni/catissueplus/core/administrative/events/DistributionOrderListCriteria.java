@@ -1,13 +1,25 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.util.Date;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 
 
 public class DistributionOrderListCriteria extends AbstractListCriteria<DistributionOrderListCriteria> {
-
 	private Set<Long> instituteIds;
+	
+	private String dpShortTitle;
+	
+	private Long dpId;
+	
+	private String requestor;
+	
+	private Long requestorId;
+	
+	private Date executionDate;
+	
+	private String receivingSite;
 		
 	@Override
 	public DistributionOrderListCriteria self() {
@@ -20,6 +32,60 @@ public class DistributionOrderListCriteria extends AbstractListCriteria<Distribu
 	
 	public DistributionOrderListCriteria instituteIds(Set<Long> instituteIds) {
 		this.instituteIds = instituteIds;
+		return self();
+	}
+	
+	public String dpShortTitle() {
+		return dpShortTitle;
+	}
+	
+	public DistributionOrderListCriteria dpShortTitle(String dpShortTitle) {
+		this.dpShortTitle = dpShortTitle;
+		return self();
+	}
+
+	public Long dpId() {
+		return dpId;
+	}
+	
+	public DistributionOrderListCriteria dpId(Long dpId) {
+		this.dpId = dpId;
+		return self();
+	}
+	
+	public String requestor() {
+		return requestor;
+	}
+	
+	public DistributionOrderListCriteria requestor(String requestor) {
+		this.requestor = requestor;
+		return self();
+	}
+
+	public Long requestorId() {
+		return requestorId;
+	}
+	
+	public DistributionOrderListCriteria requestorId(Long requestorId) {
+		this.requestorId = requestorId;
+		return self();
+	}
+	
+	public Date executionDate() {
+		return executionDate;
+	}
+	
+	public DistributionOrderListCriteria executionDate(Date executionDate) {
+		this.executionDate = executionDate;
+		return self();
+	}
+	
+	public String receivingSite() {
+		return receivingSite;
+	}
+	
+	public DistributionOrderListCriteria receivingSite(String receivingSite) {
+		this.receivingSite = receivingSite;
 		return self();
 	}
 }

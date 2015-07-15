@@ -965,3 +965,6 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   padding-bottom: 10px;
 }
 
+.os-search .form-group {
+  margin-bottom: 30px;
+}
