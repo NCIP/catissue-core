@@ -269,7 +269,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
           parent.hasChildren = true;
           parent.depth = 0;
           parent.closeAfterChildrenCreation = spec.closeParent;
-          console.warn("spec.createdOn :" + spec.createdOn);
+
           var aliquot = new Specimen({
             lineage: 'Aliquot',
             specimenClass: parent.specimenClass,
