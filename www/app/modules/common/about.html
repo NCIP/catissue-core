@@ -2,15 +2,15 @@
   <ul class="os-key-values">
     <li class="item">
       <span class="key" translate="common.build_version">Version</span>
-      <span class="value">{{buildInfo.build_version}}</span>
+      <span class="value">{{appProps.build_version}}</span>
     </li>
     <li class="item">
       <span class="key" translate="common.build_date">Build date</span>
-      <span class="value">{{buildInfo.build_date | date: global.dateFmt}}</span>
+      <span class="value">{{appProps.build_date | date: global.dateFmt}}</span>
     </li>
     <li class="item">
-      <span class="key" translate="common.build_commit_hash">Revision</span>
-      <span class="value">{{buildInfo.build_commit_hash}}</span>
+      <span class="key" translate="common.build_commit_revision">Revision</span>
+      <span class="value">{{appProps.build_commit_revision}}</span>
     </li>
   </ul>
 </div>

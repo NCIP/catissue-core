@@ -60,7 +60,11 @@
       <key column="SCHEDULED_JOB_ID"/>
       <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
     </set>
+
+    <property name="rtArgsProvided" column="RT_ARGS_PROVIDED"/>
     
+    <property name="rtArgsHelpText" column="RT_ARGS_HELP_TEXT"/>
+        
     <query name="getJobByName">
       from 
         com.krishagni.catissueplus.core.administrative.domain.ScheduledJob

@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.common.service.impl;
 
 import java.io.File;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -24,6 +25,7 @@ import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.service.TemplateService;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 
 public class EmailServiceImpl implements EmailService, ConfigChangeListener, InitializingBean {
 	private static Log LOGGER = LogFactory.getLog(EmailServiceImpl.class);
@@ -105,7 +107,7 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	}
 	
 	@Override
-	public boolean sendEmail(String emailTmplKey, String[] to, File[] attachments, Map<String, Object> props) {
+	public boolean sendEmail(String emailTmplKey, String[] to, File[] attachments, Map<String, Object> props) {		
 		String adminEmailId = getAdminEmailId();
 		
 		props.put("template", getTemplate(emailTmplKey));
@@ -113,6 +115,7 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 		props.put("appUrl", getAppUrl());
 		props.put("adminEmailAddress", adminEmailId);
 		props.put("adminPhone", "1234567890");//TODO: will be replaced by property file
+		props.put("dateFmt", new SimpleDateFormat(ConfigUtil.getInstance().getDateTimeFmt()));
 		String subject = getSubject(emailTmplKey, (String[]) props.get("$subject"));
 		String content = templateService.render(getBaseTmpl(), props);
 		

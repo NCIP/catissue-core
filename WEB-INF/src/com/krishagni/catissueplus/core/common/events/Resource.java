@@ -19,7 +19,10 @@ public enum Resource {
 	
 	ORDER("Order"),
 	
-	DP("DistributionProtocol");
+	DP("DistributionProtocol"),
+
+	SCHEDULED_JOB("ScheduledJob")
+	;
 
 	private final String name;
 	

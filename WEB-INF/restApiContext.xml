@@ -19,5 +19,5 @@
   <context:component-scan base-package="com.krishagni.catissueplus.rest"/>
   <context:component-scan base-package="edu.wustl.dynamicextensions.formdesigner"/>
 
-  <import resource="classpath*:com/krishagni/openspecimen/custom/**/apiContext.xml"/>
+  <import resource="classpath*:com/krishagni/openspecimen/custom/${plugin.custom_module}/**/apiContext.xml"/>
 </beans>

@@ -56,18 +56,18 @@ public class ConfigurationController {
 		return cfgSvc.getLocaleSettings();
 	}	
 	
+	@RequestMapping(method = RequestMethod.GET, value="/app-props")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, String> getAppProps() {
+		return cfgSvc.getAppProps();
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value="/welcome-video")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public Map<String, String> getWelcomeVideoSettings() {
 		return cfgSvc.getWelcomeVideoSettings();
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value="/build-info")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public Map<String, Object> getBuildInfo() {
-		return cfgSvc.getBuildInfo();
 	}
 	
 }

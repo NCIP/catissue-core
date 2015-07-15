@@ -32,12 +32,20 @@ public class ConfigUtil {
 		return cfgSvc.getStrSetting("email", "admin_email_id", "");
 	}
 	
+	public String getDateFmt() {
+		return cfgSvc.getDateFormat();
+	}
+	
 	public String getDeDateFmt() {
 		return cfgSvc.getDeDateFormat();
 	}
 	
 	public String getTimeFmt() {
 		return cfgSvc.getTimeFormat();
+	}
+	
+	public String getDateTimeFmt() {
+		return getDateFmt() + " " + getTimeFmt();
 	}
 	
 	public String getStrSetting(String module, String name, String defValue) {

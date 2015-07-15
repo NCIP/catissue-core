@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJob;
@@ -21,9 +22,10 @@ public class ScheduledJobDaoImpl extends AbstractDao<ScheduledJob> implements
 	public List<ScheduledJob> getScheduledJobs(ScheduledJobListCriteria criteria) {
 		Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(ScheduledJob.class)
-				.add(Restrictions.eq("activityStatus",Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
+				.add(Restrictions.eq("activityStatus",Status.ACTIVITY_STATUS_ACTIVE.getStatus()))				
 				.setFirstResult(criteria.startAt())
-				.setMaxResults(criteria.maxResults());
+				.setMaxResults(criteria.maxResults())
+				.addOrder(Order.desc("id"));
 
 		String searchTerm = criteria.query();
 		if (!StringUtils.isBlank(searchTerm)) {
@@ -60,7 +62,8 @@ public class ScheduledJobDaoImpl extends AbstractDao<ScheduledJob> implements
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(ScheduledJobRun.class)
 				.setFirstResult(listCriteria.startAt())
-				.setMaxResults(listCriteria.maxResults());
+				.setMaxResults(listCriteria.maxResults())
+				.addOrder(Order.desc("id"));
 		
 		if (listCriteria.scheduledJobId() != null) {
 			criteria.createAlias("scheduledJob", "job");

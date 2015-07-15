@@ -28,6 +28,8 @@ public interface ConfigurationService {
 	
 	public Map<String, Object> getLocaleSettings();
 	
+	public String getDateFormat();
+	
 	public String getDeDateFormat();
 	
 	public String getTimeFormat();
@@ -36,6 +38,6 @@ public interface ConfigurationService {
 	
 	public Map<String, String> getWelcomeVideoSettings();
 	
-	public Map<String, Object> getBuildInfo();
+	public Map<String, String> getAppProps();
 	
 }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <property name="boolean.type" value="boolean" dbms="mysql" />
+  <property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
+  <property name="int.type" value="bigint" dbms="mysql" />
+  <property name="int.type" value="number(19,0)" dbms="oracle" />
+
+  <property name="smallint.type" value="smallint" dbms="mysql" />
+  <property name="smallint.type" value="number(5,0)" dbms="oracle" />
+
+  <property name="text.type" value="varchar" dbms="mysql" />
+  <property name="text.type" value="varchar2" dbms="oracle" />
+
+  <property name="double.type" value="double"/>
+
+  <property name="autoIncrement" value="true" dbms="mysql"/>
+  <property name="autoIncrement" value="false" dbms="oracle"/>
+
+  <property name="timestamp.type" value="timestamp" dbms="mysql" />
+  <property name="timestamp.type" value="timestamp" dbms="oracle" />
+
+  <property name="nullable.ts.type" value="timestamp null" dbms="mysql" />
+  <property name="nullable.ts.type" value="timestamp" dbms="oracle" />
+
+  <property name="clob.type" value="text" dbms="mysql"/>
+  <property name="clob.type" value="clob" dbms="oracle"/>
+
+  <changeSet author="ahegade" id="Column to identify user who executed the job">
+    <addColumn tableName="OS_SCHEDULED_JOB_RUNS">
+      <column name="RUN_BY" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Flag to indicate whether args provided at time of job run">
+    <addColumn tableName="OS_SCHEDULED_JOBS">
+      <column name="RT_ARGS_PROVIDED" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Help text to display at time of collecting job runtime args">
+    <addColumn tableName="OS_SCHEDULED_JOBS">
+      <column name="RT_ARGS_HELP_TEXT" type="${text.type}(255)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Job runtime arguments">
+    <addColumn tableName="OS_SCHEDULED_JOB_RUNS">
+      <column name="RT_ARGS" type="${text.type}(255)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Adding missed visit reason column in visit table">
+    <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+      <column name="MISSED_REASON" type="${text.type}(255)"/>
+    </addColumn>
+  </changeSet>
+</databaseChangeLog>

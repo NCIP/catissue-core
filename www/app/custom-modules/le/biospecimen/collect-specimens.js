@@ -316,7 +316,7 @@ angular.module('openspecimen')
           }
 
           if (labelIdx < labels.length) {
-            specimen.label = labels[labelIdx++];
+            specimen.label = labels[labelIdx++].trim();
           } else {
             specimen.label = '';
           }

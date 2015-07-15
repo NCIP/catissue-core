@@ -16,7 +16,6 @@ import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -45,8 +44,7 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	
 	private MessageSource messageSource;
 	
-	@Autowired
-	private Properties applicationProperties;
+	private Properties appProps = new Properties();
 		
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -54,6 +52,10 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
+	}
+	
+	public void setAppProps(Properties appProps) {
+		this.appProps = appProps;
 	}
 
 	@Override
@@ -193,7 +195,7 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	@Override
 	public Map<String, Object> getLocaleSettings() {
 		Map<String, Object> result = new HashMap<String, Object>();
-		
+
 		Locale locale = Locale.getDefault();
 		result.put("locale", locale.toString());
 		result.put("dateFmt", messageSource.getMessage("common_date_fmt", null, locale));
@@ -201,9 +203,15 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		result.put("deFeDateFmt", messageSource.getMessage("common_de_fe_date_fmt", null, locale));
 		result.put("deBeDateFmt", messageSource.getMessage("common_de_be_date_fmt", null, locale));
 		result.put("utcOffset", Utility.getTimezoneOffset());
+
 		return result;
 	}
 		
+	@Override
+	public String getDateFormat() {
+		return messageSource.getMessage("common_date_fmt", null, Locale.getDefault());
+	}
+	
 	@Override
 	public String getDeDateFormat() {		
 		return messageSource.getMessage("common_de_be_date_fmt", null, Locale.getDefault());
@@ -242,23 +250,15 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	}
 	
 	@Override
-	public Map<String, Object> getBuildInfo() {
-		Map<String, Object> result = new HashMap<String, Object>();
-		String buildVersion = applicationProperties.getProperty("buildinfo.version");
-		if (buildVersion != null) {
-			result.put("build_version", buildVersion);
-		}
-		String date = applicationProperties.getProperty("buildinfo.date");
-		if (date != null) {
-			result.put("build_date", date);
-		}
-		String commitHash = applicationProperties.getProperty("buildinfo.commitHash");
-		if (commitHash != null) {
-			result.put("build_commit_hash", commitHash);
-		}
-		return result;
+	public Map<String, String> getAppProps() {
+		Map<String, String> props = new HashMap<String, String>();
+		props.put("plugin.custom_module", appProps.getProperty("plugin.custom_module"));
+		props.put("build_version", appProps.getProperty("buildinfo.version"));
+		props.put("build_date", appProps.getProperty("buildinfo.date"));
+		props.put("build_commit_revision", appProps.getProperty("buildinfo.commit_revision"));
+		return props;
 	}
-	
+			
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		reload();
@@ -319,13 +319,13 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		}
 	}
 	
-	private void setLocale() {		
-		String setting = getStrSetting("common", "locale", "en_US");
-		Locale newLocale = LocaleUtils.toLocale(setting);
+	private void setLocale() {
 		Locale existingLocale = Locale.getDefault();
-		
+		String setting = getStrSetting("common", "locale", existingLocale.toString());
+		Locale newLocale = LocaleUtils.toLocale(setting);
+
 		if (!existingLocale.equals(newLocale)) {
 			Locale.setDefault(newLocale);
 		}
-	}	
+	}
 }

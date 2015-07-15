@@ -1,3 +1,10 @@
+#if( $jobRun.message )
+  #set ($message = $jobRun.message)
+#else
+  #set ($message = "None")
+#end
+
+
 <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
   <tbody>
     <tr>
@@ -9,11 +16,27 @@
                 <p style="margin:10px 0 0 0">
                   Hello $fname $lname,
                   <br><br>
-                  $jobName has failed. Please click on the link below for more details. For any further investigation please contact admin.
-                  <br>
-                  <a href=$appUrl/rest/ng/scheduled-job-runs/$jobRunId>$appUrl/rest/ng/scheduled-job-runs/$jobRunId</a>
-                  <br/><br/>
+                  Job <b>$job.name</b> has failed. Given below are job run details. Please contact administrator for further investigation.
+                  <br><br>
                 </p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <table>
+                  <tr>
+                    <td>Job Run ID </td> <td> : $jobRun.id</td>
+                  </tr>
+                  <tr>
+                    <td>Start Time </td><td> : $dateFmt.format($jobRun.startedAt) </td>
+                  </tr>
+                  <tr>
+                    <td>Finish Time  </td> <td>: $dateFmt.format($jobRun.finishedAt) </td>
+                  </tr>
+                  <tr>
+                    <td>Error</td><td> : $message </td>
+                  </tr>
+                </table>
               </td>
             </tr>
           </tbody>
