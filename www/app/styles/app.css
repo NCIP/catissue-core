@@ -435,16 +435,6 @@ h4 + .btn-group {
   margin-bottom: 0px;
 }
 
-.os-alert-container {
-  text-align: center;
-  z-index: 2000;
-  position: absolute;
-  width:100%;
-  border-radius: 0px;
-  left: 0;
-  top: 50px;
-}
-
 input.ng-dirty.ng-invalid {
   border-color: #FA787E
   box-shadow: none;
