@@ -1308,8 +1308,11 @@ edu.common.de.FileUploadField = function(id, field, args) {
 
     this.uploadBtn = $("<input/>").attr({name: "file", type: "file", 'data-url': uploadUrl});
     uploadIcon.append(this.uploadBtn);
+
     this.uploadBtn.fileupload({
       dataType: 'json',
+
+      headers: args.customHdrs || {},
 
       done: function(e, data) {
         var value = {

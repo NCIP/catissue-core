@@ -320,8 +320,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 	@Override
 	public LabelPrinter<Specimen> getLabelPrinter() {
 		String labelPrinterBean = cfgSvc.getStrSetting(
-				ConfigParams.MODULE, 
-				ConfigParams.SPECIMEN_LABEL_PRINTER, 
+				ConfigParams.MODULE,
+				ConfigParams.SPECIMEN_LABEL_PRINTER,
 				"defaultSpecimenLabelPrinter");
 		
 		return (LabelPrinter<Specimen>)OpenSpecimenAppCtxProvider.getAppCtx().getBean(labelPrinterBean);
@@ -349,7 +349,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		String label = specimen.getLabel();		
 		if (StringUtils.isBlank(label)) {
 			boolean labelReq = cp.isManualSpecLabelEnabled() || StringUtils.isBlank(labelTmpl);
-			if (labelReq) {
+			if (labelReq && specimen.isCollected()) {
 				ose.addError(SpecimenErrorCode.LABEL_REQUIRED);
 			}
 			
@@ -479,7 +479,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 		return specimen;
 	}
-	
+
 	private void addEvents(Specimen specimen) {
 		if (!specimen.isCollected()) {
 			return;

@@ -1,7 +1,7 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <span translate="specimens.list">Specimens</span>
-    <div dropdown class="btn-group os-action-btns">
+    <div dropdown class="btn-group os-action-btns" ng-if = "visit.status != 'Missed Collection'">
       <button ng-if="!allowedOps || allowedOps.update" class="btn btn-primary" ng-click="collectSpecimens()">
         <span class="fa fa-plus"></span>
         <span translate="specimens.buttons.collect"> Collect </span>
@@ -45,7 +45,7 @@
         <div class="row">
           <div class="col col-xs-5">
             <div class="clearfix">
-              <div class="pull-left os-select-specimen-cb">
+              <div class="pull-left os-select-specimen-cb" ng-if="visit.status != 'Missed Collection'">
                 <os-checkbox ng-model="selection.all" ng-change="toggleAllSpecimenSelect()"></os-checkbox>
               </div>
               <div class="pull-left" style="padding-left: 40px;">
@@ -65,7 +65,7 @@
           <div class="row title" ng-class="{'selected': specimen.selected}">
             <div class="col col-xs-5">
               <div class="clearfix">
-                <div class="os-select-specimen-cb"> 
+                <div class="os-select-specimen-cb" ng-hide="specimen.status == 'Missed Collection'">
                   <os-checkbox ng-change="toggleSpecimenSelect(specimen)" ng-model="specimen.selected"></os-checkbox>
                 </div>
 
@@ -79,12 +79,14 @@
                        class="fa fa-chevron-circle-right"
                        ng-click="openSpecimenNode(specimen)">
                     </a>
-                    <span class="fa fa-circle" 
+
+                    <span class="fa fa-circle"
                       ng-class="{'os-status-collected': specimen.status == 'Collected',
                                  'os-status-pending': specimen.status == 'Pending' || !specimen.status,
                                  'os-status-not-collected': specimen.status == 'Missed Collection',
                                  'os-status-closed': specimen.activityStatus == 'Closed'}">
                     </span>
+
                     <a ui-sref="specimen-detail.overview(
                                   {eventId: visit.eventId, visitId: visit.id, specimenId: specimen.id, srId: specimen.reqId})">
                       <os-specimen-desc specimen="specimen"></os-specimen-desc>

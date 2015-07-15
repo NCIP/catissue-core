@@ -5,6 +5,7 @@ angular.module('os.biospecimen.participant.overview', ['os.biospecimen.models'])
     function init() {
       $scope.occurredVisits    = Visit.completedVisits(visits);
       $scope.anticipatedVisits = Visit.anticipatedVisits(visits);
+      $scope.missedVisits      = Visit.missedVisits(visits);
       addMaskMarker();
     }
 

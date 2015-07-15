@@ -30,7 +30,10 @@
   height: 44px;
   background-color: #edeff0;
   text-align: right;
-  /*margin: 10px -20px -10px -20px;*/
+}
+
+.os-modal-body .os-modal-footer {
+  margin: 10px -20px -10px -20px;
 }
 
 .os-modal-footer button {

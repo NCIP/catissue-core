@@ -14,6 +14,7 @@
     "forms": "Forms",
     "specimen_lists": "Specimen Lists",
     "distribution_orders": "Distribution Orders",
+    "jobs": "Jobs",
 
     "cp_desc": "Create, update SOP of visits and specimens",
     "dp_desc": "Create, update procedures for distributing specimens",
@@ -26,7 +27,8 @@
     "specimen_lists_desc": "Create, share and manage specimen lists",
     "forms_desc": "Create and manage custom forms",
     "settings_desc": "Manage application configuration settings",
-    "distribution_orders_desc": "Create, execute request orders for distributing specimens"
+    "distribution_orders_desc": "Create, execute request orders for distributing specimens",
+    "jobs_desc": "Create, schedule, execute jobs"
   },
 
   "common": {
@@ -46,7 +48,9 @@
     "view_jobs": "View Jobs",
     "digits": "digits",
     "not_specified": "Not Specified",
+    "update": "Update",
     "loading": "Loading...",
+    "help": "Help",
 
     "buttons": {
       "add": "Add",
@@ -274,6 +278,7 @@
     "occurred_visits": "Occurred Visits",
     "collection_status": "Collection Status",
     "anticipated_visits": "Anticipated Visits",
+    "missed_visits": "Missed Visits",
     "anticipated_specimens": "Anticipated Specimens",
     "visit_status": "Status",
     "name": "Name",
@@ -296,10 +301,11 @@
     "spr_unlocked": "Surgical pathology report unlocked successfully.",
     "lock_spr": "Click to lock Surgical Pathology Report",
     "unlock_spr": "Click to unlock Surgical Pathology Report",
-
+    "reason": "Reason",
     "status": {
       "pending": "Pending",
-      "complete": "Complete"
+      "complete": "Complete",
+      "missed": "Missed Collection"
     },
 
     "ctx_menu": {
@@ -309,7 +315,8 @@
       "collect_planned_specimens": "Collect Planned Specimens",
       "collect_unplanned_specimens": "Collect Unplanned Specimens",
       "print_specimen_labels": "Print Specimen Labels",
-      "repeat_visit": "Repeat Visit"
+      "repeat_visit": "Repeat Visit",
+      "missed_visit": "Missed Visit"
     },
 
     "menu": {
@@ -802,7 +809,8 @@
       "VisitAndSpecimen": "Visits and Specimens",
       "SurgicalPathologyReport": "Surgical Pathology Report",
       "StorageContainer": "Storage Containers",
-      "User": "Users"
+      "User": "Users",
+      "ScheduledJob": "Custom Reports"
     },
 
     "menu": {
@@ -1211,6 +1219,70 @@
      "tooltip": {
        "create": "Create new distribution order",
        "search": "Filter out distribution orders"
+     }
+   },
+
+   "jobs": {
+     "list": "Jobs",
+     "create": "Create Job",
+     "id": "ID",
+     "name": "Name",
+     "title": "Title",
+     "schedule": "Schedule",
+     "created_by": "Created By",
+     "last_run_on": "Last Run On",
+     
+     "create_job": "Create Job",
+     "type": "Job Type",
+     "internal": "Internal",
+     "external": "External",
+
+     "command": "External Command",
+     "command_desc": "Absolute path of command to execute along with input arguments",
+
+     "fqn": "Implementation",
+     "fqn_desc": "Fully qualified name of class implementing the task to run",
+
+     "run_args": "Runtime Arguments",
+     "args_provided": "Provided",
+     "args_not_provided": "Not Provided",
+     "args_help_text": "Help Text",
+     "args_help_text_desc": "Text to display users at time of collecting arguments for job run",
+    
+     "run_job": "Run Job",
+     "edit_job": "Edit Job Details",
+     "delete_job": "Delete Job",
+     "view_job_runs": "View Job Runs",
+
+     "queued_for_exec": "Job {{name}} queued for execution",
+
+     "run_logs": "Run Logs",
+     "seconds": "seconds",
+
+     "no_runs": "No run logs to show",
+     "run_by": "Run By",
+     "started_at": "Started At",
+     "time_taken": "Time Taken",
+     "status": "Status",
+
+     "tooltip": {
+       "create_job": "Create new scheduled job",
+       "search_jobs": "Search jobs"
+     },
+
+     "schedules": {
+       "ONDEMAND": "On Demand"
+     },
+
+     "types": {
+       "INTERNAL": "Internal",
+       "EXTERNAL": "External"
+     },
+
+     "statuses": {
+       "SUCCEEDED": "Success",
+       "FAILED": "Failed",
+       "IN_PROGRESS": "In Progress"
      }
    }
 

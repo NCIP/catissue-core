@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        
+  <property name="now" value="now()"   dbms="mysql" />
+  <property name="now" value="sysdate" dbms="oracle" />
+
+  <changeSet  author="ahegade" id="ScheduleJob resource" dbms="mysql">
+    <sql>
+      insert into rbac_resources(name) values('ScheduledJob');
+    </sql>
+  </changeSet>
+
+  <changeSet  author="ahegade" id="Adding ScheduleJob resources" dbms="oracle">
+    <sql>
+      insert into rbac_resources
+        (identifier, name) 
+      values
+        (rbac_resources_seq.nextval, 'ScheduledJob');
+    </sql>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Default job permissions to site admin">
+    <sql>call assign_to_role('Administrator', 'ScheduledJob', 'Read');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Adding missed visit status in permissible value" dbms="mysql">
+    <sql>
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (default, "Missed Collection", "scg_collection_status")
+    </sql>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Adding missed visit status in permissible value" dbms="oracle">
+    <sql>
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (catissue_permi_value_seq.nextval, "Missed Collection", "scg_collection_status")
+    </sql>
+  </changeSet>
+
+
+  <changeSet author="ahegade" id="Missed visit reasons PV category">
+    <sql>
+      insert into catissue_cde
+        (public_id, long_name, definition, version, last_updated)
+      values
+        ("missed_visit_reason", "Missed Visit Reason", "Missed Visit Reason", "2.0", ${now})
+    </sql>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Adding missed visit reason PVs" dbms="mysql">
+    <sql>
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (default, "Previous excisional biopsy done", "missed_visit_reason"),
+        (default, "Tumour too small (size less than 2cm or in-situ ca)", "missed_visit_reason"),
+        (default, "Not Malignant tissue", "missed_visit_reason"),
+        (default, "No residual tumour after treatment", "missed_visit_reason"),
+        (default, "Open and closed ops / Bypass ops", "missed_visit_reason"),
+        (default, "OT surgeon forgot to page TRO", "missed_visit_reason"),
+        (default, "Patient declined tissue donation", "missed_visit_reason"),
+        (default, "No post ops consent taken within 3 months", "missed_visit_reason"),
+        (default, "Late Case", "missed_visit_reason"),
+        (default, "Specimen sent to Frozen Section", "missed_visit_reason"),
+        (default, "No Pre-Op consent", "missed_visit_reason"),
+        (default, "Other reasons", "missed_visit_reason")
+    </sql>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Adding missed visit reason PVs" dbms="oracle">
+    <sql>
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (catissue_permi_value_seq.nextval, "Previous excisional biopsy done", "missed_vist_reason");
+
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (catissue_permi_value_seq.nextval, "Tumour too small (size less than 2cm or in-situ ca)", "missed_vist_reason");
+
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (catissue_permi_value_seq.nextval, "Not Malignant tissue", "missed_vist_reason");
+
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (catissue_permi_value_seq.nextval, "No residual tumour after treatment", "missed_vist_reason");
+
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (catissue_permi_value_seq.nextval, "Open and closed ops / Bypass ops", "missed_vist_reason");
+
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (catissue_permi_value_seq.nextval, "OT surgeon forgot to page TRO", "missed_vist_reason");
+
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (catissue_permi_value_seq.nextval, "Patient declined tissue donation", "missed_vist_reason");
+
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (catissue_permi_value_seq.nextval, "No post ops consent taken within 3 months", "missed_vist_reason");
+
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (catissue_permi_value_seq.nextval, "Late Case", "missed_vist_reason");
+
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (catissue_permi_value_seq.nextval, "Specimen sent to Frozen Section", "missed_vist_reason");
+
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (catissue_permi_value_seq.nextval, "No Pre-Op consent", "missed_vist_reason");
+
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (catissue_permi_value_seq.nextval, "Other reasons", "missed_vist_reason");
+
+    </sql>
+  </changeSet>
+
+</databaseChangeLog>

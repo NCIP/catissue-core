@@ -1,0 +1,38 @@
+
+<div class="os-modal">
+  <div class="os-modal-header">
+    <span>{{job.name}}</span>
+  </div>
+  <div class="os-modal-body">
+    <form name="argsForm" os-form-validator="argsForm" novalidate>
+      <div class="form-group">
+        <label class="control-label">
+          <span translate="jobs.run_args">Runtime Arguments</span>
+        </label>
+        <div>
+          <textarea name="args" ng-model="args.args" class="form-control" 
+            placeholder="{{'jobs.run_args' | translate}}" rows="2" required>
+          </textarea>
+          <div os-field-error field="argsForm.args"></div>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="!!job.rtArgsHelpText">
+        <div>
+          <span translate="common.help">Help</span>
+          <span>:</span>
+          <span>{{job.rtArgsHelpText}}</span>
+        </div>
+      </div>
+
+      <div class="os-modal-footer">
+        <button class="btn os-btn-text" ng-click="cancel()">
+          <span translate="common.buttons.cancel">Cancel</span>
+        </button>
+        <button class="btn btn-primary" os-form-submit="ok()">
+          <span translate="jobs.run_job">Run Job</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

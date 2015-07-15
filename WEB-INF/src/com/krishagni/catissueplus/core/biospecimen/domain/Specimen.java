@@ -284,32 +284,7 @@ public class Specimen extends BaseEntity {
 	}
 
 	public void setCollectionStatus(String collectionStatus) {
-		if (this.collectionStatus != null && !this.collectionStatus.equals(collectionStatus)) {
-			if (isCollected()) { // COLLECTED -> PENDING
-				// TODO: check whether this is distributed
-				// Should initial quantity get added over here?				
-				isAvailable = false;
-				availableQuantity = 0.0d;
-				
-				if (position != null) {
-					position.vacate();
-				}				
-				position = null;
-				
-				deleteEvents();
-				
-				for (Specimen child : getChildCollection()) {
-					child.setCollectionStatus(collectionStatus);
-				}				
-			} else if (!getVisit().isCompleted()) { // PENDING -> COLLECTED
-				throw OpenSpecimenException.userError(SpecimenErrorCode.VISIT_NOT_COMPLETED);
-			} else { // PENDING -> COLLECTED
-				decAliquotedQtyFromParent();
-				addCollRecvEvents();
-			}
-		}
-		
-		this.collectionStatus = collectionStatus;		
+		this.collectionStatus = collectionStatus;
 	}
 
 	public Set<String> getBiohazards() {
@@ -469,13 +444,33 @@ public class Specimen extends BaseEntity {
 	}
 	
 	public boolean isCollected() {
-		return Status.SPECIMEN_COLLECTION_STATUS_COLLECTED.getStatus().equals(this.collectionStatus);
+		return isCollected(getCollectionStatus());
+	}
+	
+	public boolean isPending() {
+		return isPending(getCollectionStatus());
+	}
+
+	public boolean isMissed() {
+		return isMissed(getCollectionStatus());
 	}
 
 	public void disable() {
 		disable(true);
 	}
 	
+	public static boolean isCollected(String status) {
+		return COLLECTED.equals(status);
+	}
+	
+	public static boolean isPending(String status) {
+		return PENDING.equals(status);
+	}
+
+	public static boolean isMissed(String status) {
+		return MISSED_COLLECTION.equals(status);
+	}
+		
 	protected void disable(boolean checkChildSpecimens) {
 		if (getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
 			return;
@@ -525,9 +520,6 @@ public class Specimen extends BaseEntity {
 	}
 
 	public void update(Specimen specimen) {		
-		String previousStatus = getCollectionStatus();
-		Double previousQty = getInitialQuantity();
-		
 		updateStatus(specimen.getActivityStatus(), null);
 		if (!isActive()) {
 			return;
@@ -541,7 +533,7 @@ public class Specimen extends BaseEntity {
 		
 		updateEvent(getCollectionEvent(), specimen.getCollectionEvent());
 		updateEvent(getReceivedEvent(), specimen.getReceivedEvent());
-		setCollectionStatus(specimen.getCollectionStatus());
+		updateCollectionStatus(specimen.getCollectionStatus());
 
 		// TODO: Specimen class/type should not be allowed to change 
 		if (isAliquot()) {
@@ -573,18 +565,6 @@ public class Specimen extends BaseEntity {
 		setComment(specimen.getComment());		
 		updatePosition(specimen.getPosition());
 		
-		if (isAliquot()) {
-			if (isCollected()) {
-				if (!collectionStatus.equals(previousStatus)) { // *** -> COLLECTED
-					decAliquotedQtyFromParent();
-				} else if (!initialQuantity.equals(previousQty)) {
-					adjustParentSpecimenQty(initialQuantity - previousQty);
-				}
-			} else if (COLLECTED.equals(previousStatus)) { // COLLECTED -> ***
-				adjustParentSpecimenQty(-previousQty); // give back the quantity to parent
-			}
-		}
-		
 		checkQtyConstraints();
 	}
 	
@@ -600,6 +580,44 @@ public class Specimen extends BaseEntity {
 		} else if (Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(activityStatus)) {
 			activate();
 		}
+	}
+	
+	public void updateCollectionStatus(String collectionStatus) {
+		if (collectionStatus.equals(getCollectionStatus())) {
+			//
+			// no change in collection status; therefore nothing needs to be done
+			//
+			return;
+		}
+		
+		if (isMissed(collectionStatus)) {
+			if (!getVisit().isCompleted() && !getVisit().isMissed()) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.COMPL_OR_MISSED_VISIT_REQ);
+			} else if (getParentSpecimen() != null && !getParentSpecimen().isCollected() && !getParentSpecimen().isMissed()) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.COLL_OR_MISSED_PARENT_REQ);
+			} else {
+				updateHierarchyStatus(collectionStatus);
+				createMissedSpecimens();
+			}
+		} else if (isPending(collectionStatus)) {
+			if (!getVisit().isCompleted() && !getVisit().isPending()) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.COMPL_OR_PENDING_VISIT_REQ);
+			} else if (getParentSpecimen() != null && !getParentSpecimen().isCollected() && !getParentSpecimen().isPending()) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.COLL_OR_PENDING_PARENT_REQ);
+			} else {
+				updateHierarchyStatus(collectionStatus);
+			}
+		} else if (isCollected(collectionStatus)) {
+			if (!getVisit().isCompleted()) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.COMPL_VISIT_REQ);
+			} else if (getParentSpecimen() != null && !getParentSpecimen().isCollected()) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.COLL_PARENT_REQ);
+			} else {
+				setCollectionStatus(collectionStatus);
+				decAliquotedQtyFromParent();
+				addCollRecvEvents();				
+			}
+		}			
 	}
 		
 	public void distribute(User distributor, Date time, Double quantity, boolean closeAfterDistribution) {
@@ -685,7 +703,7 @@ public class Specimen extends BaseEntity {
 	}
 	
 	public void setPending() {
-		setCollectionStatus(PENDING);
+		updateCollectionStatus(PENDING);
 	}
 	
 	public void checkQtyConstraints() {
@@ -918,5 +936,51 @@ public class Specimen extends BaseEntity {
 		}
 		
 		thisEvent.update(otherEvent);
-	}	
+	}
+	
+	private void updateHierarchyStatus(String status) {
+		setCollectionStatus(status);
+
+		if (getId() != null && !isCollected(status)) {
+			setIsAvailable(false);
+			setAvailableQuantity(0.0d);
+
+			if (getPosition() != null) {
+				getPosition().vacate();
+			}
+			setPosition(null);
+				
+			deleteEvents();			
+		}
+				
+		for (Specimen child : getChildCollection()) {
+			child.updateHierarchyStatus(status);
+		}
+	}
+
+	private void createMissedSpecimens() {
+		if (getSpecimenRequirement() == null) {
+			return;
+		}
+
+		Set<SpecimenRequirement> anticipated = new HashSet<SpecimenRequirement>(
+				getSpecimenRequirement().getChildSpecimenRequirements());
+
+		for (Specimen childSpecimen : getChildCollection()) {
+			if (childSpecimen.getSpecimenRequirement() != null) {
+				anticipated.remove(childSpecimen.getSpecimenRequirement());
+				childSpecimen.createMissedSpecimens();
+			}
+		}
+
+		for (SpecimenRequirement sr : anticipated) {
+			Specimen specimen = sr.getSpecimen();
+			specimen.setVisit(getVisit());
+			specimen.setParentSpecimen(this);
+			specimen.setCollectionStatus(Specimen.MISSED_COLLECTION);
+			getChildCollection().add(specimen);
+
+			specimen.createMissedSpecimens();
+		}
+	}
 }

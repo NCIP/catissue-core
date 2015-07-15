@@ -9,8 +9,9 @@
 
       <li class="item">
         <strong class="key key-sm" translate="visits.visit_status">Status</strong>
-        <ng-switch on="visit.status && visit.status == 'Complete'">
-          <span class="value value-md os-status-collected" ng-switch-when="true">{{'visits.status.complete' | translate}}</span>
+        <ng-switch on="visit.status">
+          <span class="value value-md os-status-collected" ng-switch-when="Complete">{{'visits.status.complete' | translate}}</span>
+          <span class="value value-md os-status-missed" ng-switch-when="Missed Collection">{{'visits.status.missed' | translate}}</span>
           <span class="value value-md os-status-pending" ng-switch-default>{{'visits.status.pending' | translate}}</span>
         </ng-switch>
       </li>

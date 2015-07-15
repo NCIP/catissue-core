@@ -18,12 +18,11 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class ScheduledJob extends BaseEntity {
 	public enum RepeatSchedule { 
-		//TODO: remove minutely after demo.
-		MINUTELY,
 		HOURLY,
 		DAILY,
 		WEEKLY,
-		MONTHLY
+		MONTHLY,
+		ONDEMAND
 	}
 	
 	public enum DayOfWeek {
@@ -78,6 +77,14 @@ public class ScheduledJob extends BaseEntity {
 	private String command;
 	
 	private Set<User> recipients = new HashSet<User>();
+	
+	//
+	// UI purpose
+	//
+	private Boolean rtArgsProvided;
+	
+	private String rtArgsHelpText;
+		
 	
 	public String getName() {
 		return name;
@@ -192,14 +199,38 @@ public class ScheduledJob extends BaseEntity {
 		this.recipients = recipients;
 	}
 	
+	public Boolean getRtArgsProvided() {
+		return rtArgsProvided;
+	}
+
+	public void setRtArgsProvided(Boolean rtArgsProvided) {
+		this.rtArgsProvided = rtArgsProvided;
+	}
+
+	public String getRtArgsHelpText() {
+		return rtArgsHelpText;
+	}
+
+	public void setRtArgsHelpText(String rtArgsHelpText) {
+		this.rtArgsHelpText = rtArgsHelpText;
+	}
+
 	public void update(ScheduledJob other) {
 		BeanUtils.copyProperties(other, this, JOB_UPDATE_IGN_PROPS);
 		CollectionUpdater.update(this.getRecipients(), other.getRecipients());
 	}
 
+	public boolean isOnDemand() {
+		return repeatSchedule.equals(RepeatSchedule.ONDEMAND);
+	}
+	
 	public boolean isActiveJob() {
 		if (!Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(activityStatus)) {
 			return false;
+		}
+
+		if (isOnDemand()) {
+			return true;
 		}
 		
 		Date current = new Date();
@@ -215,35 +246,27 @@ public class ScheduledJob extends BaseEntity {
 	}
 
 	public Date getNextRunOn() {
-		switch(repeatSchedule) {
+		switch (repeatSchedule) {
 			case DAILY:
 				return getNextDailyOccurence();
 			
 			case HOURLY:
 				return getNextHourlyOccurence();
-			
-			case MINUTELY:
-				return getNextMinutelyOccurence();
-			
+
 			case MONTHLY:
 				return getNextMonthlyOccurence();
 			
 			case WEEKLY:
 				return getNextWeeklyOccurence();
+				
+			default:
+				return null;
 		}
-		
-		throw OpenSpecimenException.userError(ScheduledJobErrorCode.INVALID_REPEAT_SCHEDULE);
 	}
 	
 	public void delete() {
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
-		name = Utility.getDisabledValue(name, 255);
-	}
-	
-	private Date getNextMinutelyOccurence() {
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.MINUTE, 1);
-		return calendar.getTime();
+		setName(Utility.getDisabledValue(name, 255));
 	}
 	
 	private Date getNextHourlyOccurence() {
@@ -341,6 +364,7 @@ public class ScheduledJob extends BaseEntity {
 	
 	private static final String[] JOB_UPDATE_IGN_PROPS = new String[] {
 		"id", 
+		"createdBy",
 		"recipients"
 	};
 }

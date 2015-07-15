@@ -16,7 +16,12 @@
       name="scheduledJob"
       class="com.krishagni.catissueplus.core.administrative.domain.ScheduledJob"
       column="SCHEDULED_JOB_ID"/>
-      
+
+    <many-to-one
+      name="runBy"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      column="RUN_BY"/>
+
     <property name="status" column="STATUS" not-null="true">
       <type name="org.hibernate.type.EnumType">
         <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.ScheduledJobRun$Status</param>
@@ -31,5 +36,7 @@
     <property name="logFilePath" column="LOG_FILE_PATH"/>
 
     <property name="message" column="MESSAGE"/>
+    
+    <property name="rtArgs" column="RT_ARGS"/>
   </class>
 </hibernate-mapping>

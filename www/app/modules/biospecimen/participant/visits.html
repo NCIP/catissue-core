@@ -16,6 +16,11 @@
         <p class="list-group-item-text" ng-if="visit.status == 'Complete'">
           {{'visits.status.complete' | translate}} | {{visit.visitDate | date: global.dateFmt}}
         </p>
+
+        <p class="list-group-item-text" ng-if="visit.status == 'Missed Collection'">
+          {{'visits.status.missed' | translate}} | {{visit.visitDate | date: global.dateFmt}}
+        </p>
+
         <p class="os-more-options" ng-click="showVisitDetail($event, visit.id, visit.eventId)">
           <span class="fa fa-eye"></span>
         </p>

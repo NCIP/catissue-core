@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -42,6 +43,8 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	private DaoFactory daoFactory;
 	
 	private MessageSource messageSource;
+	
+	private Properties appProps = new Properties();
 		
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -49,6 +52,10 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
+	}
+	
+	public void setAppProps(Properties appProps) {
+		this.appProps = appProps;
 	}
 
 	@Override
@@ -188,7 +195,7 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	@Override
 	public Map<String, Object> getLocaleSettings() {
 		Map<String, Object> result = new HashMap<String, Object>();
-		
+
 		Locale locale = Locale.getDefault();
 		result.put("locale", locale.toString());
 		result.put("dateFmt", messageSource.getMessage("common_date_fmt", null, locale));
@@ -196,9 +203,15 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		result.put("deFeDateFmt", messageSource.getMessage("common_de_fe_date_fmt", null, locale));
 		result.put("deBeDateFmt", messageSource.getMessage("common_de_be_date_fmt", null, locale));
 		result.put("utcOffset", Utility.getTimezoneOffset());
+
 		return result;
 	}
 		
+	@Override
+	public String getDateFormat() {
+		return messageSource.getMessage("common_date_fmt", null, Locale.getDefault());
+	}
+	
 	@Override
 	public String getDeDateFormat() {		
 		return messageSource.getMessage("common_de_be_date_fmt", null, Locale.getDefault());
@@ -236,7 +249,13 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		return result;
 	}
 	
-		
+	@Override
+	public Map<String, String> getAppProps() {
+		Map<String, String> props = new HashMap<String, String>();
+		props.put("plugin.custom_module", appProps.getProperty("plugin.custom_module"));
+		return props;
+	}
+			
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		reload();
@@ -297,13 +316,13 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		}
 	}
 	
-	private void setLocale() {		
-		String setting = getStrSetting("common", "locale", "en_US");
-		Locale newLocale = LocaleUtils.toLocale(setting);
+	private void setLocale() {
 		Locale existingLocale = Locale.getDefault();
-		
+		String setting = getStrSetting("common", "locale", existingLocale.toString());
+		Locale newLocale = LocaleUtils.toLocale(setting);
+
 		if (!existingLocale.equals(newLocale)) {
 			Locale.setDefault(newLocale);
 		}
-	}	
+	}
 }

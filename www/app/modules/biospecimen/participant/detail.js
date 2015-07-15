@@ -73,5 +73,11 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
       $scope.visitToAdd = angular.copy(visit);
     };
 
+    $scope.showMissedVisit = function(visit, index) {
+      $scope.addVisitIdx = index;
+      $scope.rptVisitIdx = -1;
+      $scope.visitToAdd = angular.extend(angular.copy(visit), {status: 'Missed Collection'});
+    };
+
     init();
   });

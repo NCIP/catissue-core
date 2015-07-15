@@ -984,5 +984,5 @@
       <column name="activityStatus_MOD" type="BIT"/>
     </addColumn>
   </changeSet>
-  
+
 </databaseChangeLog>

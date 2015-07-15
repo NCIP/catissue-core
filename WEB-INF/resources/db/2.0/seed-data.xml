@@ -81,7 +81,8 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Insert Coordinator role">
-    <sql>call create_role('Coordinator', 'User can perform all operations within the protocol assigned.');</sql>
+    <validCheckSum>7:8c2c94775aff59d9038d4d52606a0351</validCheckSum>
+    <sql>call create_role('Coordinator', 'User can perform all operations within the assigned protocols.');</sql>
     <sql>call assign_to_role('Coordinator', 'CollectionProtocol', 'Read');</sql>
     <sql>call assign_to_role('Coordinator', 'StorageContainer', 'Read');</sql>
     <sql>call assign_to_role('Coordinator', 'ParticipantPhi', 'Read,Create,Update,Delete');</sql>
@@ -91,7 +92,8 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Insert PI role" >
-    <sql>call create_role('Principal Investigator', 'User has read access to all data within the protocol assigned.');</sql>
+    <validCheckSum>7:3096c21b6d45aba184be4cdd9cd50f04</validCheckSum>
+    <sql>call create_role('Principal Investigator', 'User has read access to all data within the assigned protocols.');</sql>
     <sql>call assign_to_role('Principal Investigator', 'CollectionProtocol', 'Read');</sql>
     <sql>call assign_to_role('Principal Investigator', 'ParticipantPhi', 'Read');</sql>
     <sql>call assign_to_role('Principal Investigator', 'VisitAndSpecimen', 'Read');</sql>
@@ -100,7 +102,8 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Insert Researcher role">
-    <sql>call create_role('Researcher', 'User has read access to non PHI data within the protocols assigned.');</sql>
+    <validCheckSum>7:73d54f2a49088384271054ec76df40c1</validCheckSum>
+    <sql>call create_role('Researcher', 'User has read access to non PHI data within the assigned protocols.');</sql>
     <sql>call assign_to_role('Researcher', 'CollectionProtocol', 'Read');</sql>
     <sql>call assign_to_role('Researcher', 'ParticipantDeid', 'Read');</sql>
     <sql>call assign_to_role('Researcher', 'VisitAndSpecimen', 'Read');</sql>
@@ -109,7 +112,8 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Insert Technician role">
-    <sql>call create_role('Technician', 'User can perform specimen operations without access to PHI data within the protocol assigned.');</sql>
+    <validCheckSum>7:1fe32474226d9782c00fc58a70d87c03</validCheckSum>
+    <sql>call create_role('Technician', 'User can perform specimen operations without access to PHI data within the assigned protocols.');</sql>
     <sql>call assign_to_role('Technician', 'StorageContainer', 'Read');</sql>
     <sql>call assign_to_role('Technician', 'CollectionProtocol', 'Read');</sql>
     <sql>call assign_to_role('Technician', 'ParticipantDeid', 'Read');</sql>
@@ -119,7 +123,8 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Insert Tissue Banker role" >
-    <sql>call create_role('Tissue Banker', 'User can perform all operations within the protocol assigned.');</sql>
+    <validCheckSum>7:eaa20888d67184352c3abe59b391bdfa</validCheckSum>
+    <sql>call create_role('Tissue Banker', 'User can perform all operations within the assigned protocols.');</sql>
     <sql>call assign_to_role('Tissue Banker', 'StorageContainer', 'Read');</sql>
     <sql>call assign_to_role('Tissue Banker', 'CollectionProtocol', 'Read');</sql>
     <sql>call assign_to_role('Tissue Banker', 'ParticipantPhi', 'Read,Create,Update,Delete');</sql>
@@ -129,7 +134,8 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Insert Administrator role" >
-    <sql>call create_role('Administrator', 'User can perform all operations within the site assigned.');</sql>
+    <validCheckSum>7:2c11e4a3560e4566db5f01500d0613e0</validCheckSum>
+    <sql>call create_role('Administrator', 'User can perform all operations within the assigned sites.');</sql>
     <sql>call assign_to_role('Administrator', 'User', 'Read,Create,Update,Delete');</sql>
     <sql>call assign_to_role('Administrator', 'StorageContainer', 'Read,Create,Update,Delete');</sql>
     <sql>call assign_to_role('Administrator', 'CollectionProtocol', 'Read,Create,Update,Delete');</sql>
@@ -309,5 +315,5 @@
       
       update catissue_permissible_value set sortorder = 3 where public_id = 'consent_response' and value = 'Not Specified';
     </sql>
-  </changeSet>      
+  </changeSet>
 </databaseChangeLog>

@@ -6,13 +6,15 @@ import java.util.Date;
 
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJobRun;
 import com.krishagni.catissueplus.core.administrative.services.ScheduledTask;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 
 public class FilesBacklogCleaner implements ScheduledTask {
 
 	private static final int period = 30; //30 days
 	
 	@Override
-	public void doJob(ScheduledJobRun jobRun) throws Exception {
+	public void doJob(ScheduledJobRun jobRun) 
+	throws Exception {
 		cleanupOlderFiles();
 	}
 	
@@ -22,7 +24,7 @@ public class FilesBacklogCleaner implements ScheduledTask {
 		timeBefore.add(Calendar.DATE, -period);
 		Long timeInMilliseconds = timeBefore.getTimeInMillis();
 		
-		cleanupFolder(ScheduledTaskManagerImpl.getExportDataDir(), timeInMilliseconds);
+		cleanupFolder(getExportDataDir(), timeInMilliseconds);
 	}
 	
 	private void cleanupFolder(String directory, Long timeBefore) {
@@ -42,5 +44,21 @@ public class FilesBacklogCleaner implements ScheduledTask {
 		} catch (Exception e) {
 			
 		}
+	}
+	
+	private String getExportDataDir() {
+		String dir = new StringBuilder()
+			.append(ConfigUtil.getInstance().getDataDir()).append(File.separator)			
+			.append("scheduled-jobs").append(File.separator)
+			.toString();
+		
+		File dirFile = new File(dir);
+		if (!dirFile.exists()) {
+			if (!dirFile.mkdirs()) {
+				throw new RuntimeException("Error couldn't create directory for exporting scheduled jobs data");
+			}
+		}
+		
+		return dir;
 	}
 }

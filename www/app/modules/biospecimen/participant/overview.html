@@ -199,6 +199,44 @@
       </div>
     </div>
 
+
+    <div class="os-section" ng-init="ovCollapsed=false" ng-if="missedVisits.length > 0">
+      <button class="os-btn-section-collapse os-btn-transparent" ng-click="ovCollapsed=!ovCollapsed">
+        <span ng-if="!ovCollapsed" class="fa fa-chevron-circle-down"></span>
+        <span ng-if="ovCollapsed" class="fa fa-chevron-circle-right"></span>
+      </button>
+      <h3 class="os-sub-section-title" translate="visits.missed_visits">Missed Visits</h3>
+      <div collapse="ovCollapsed">
+        <div class="os-table os-table-muted-hdr os-border" ng-if="missedVisits.length > 0">
+          <div class="os-table-head">
+            <div class="row">
+              <div class="col col-xs-5" translate="visits.title">Visit</div>
+              <div class="col col-xs-3" translate="common.date">Date</div>
+              <div class="col col-xs-4" translate="visits.reason">Reason</div>
+            </div>
+          </div>
+          <div class="os-table-body">
+            <div ng-repeat="visit in missedVisits">
+              <div class="row title">
+                <div class="col col-xs-5">
+                  <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
+                    T{{visit.eventPoint}}: {{visit.eventLabel}}
+                  </a>
+                </div>
+                <div class="col col-xs-3">
+                  {{visit.visitDate | date: global.dateFmt}}
+                </div>
+                <div class="col col-xs-4">
+                  {{visit.missedReason | osNoValue}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <div class="os-section" ng-init="avCollapsed=false">
       <button class="os-btn-section-collapse os-btn-transparent" ng-click="avCollapsed=!avCollapsed">
         <span ng-if="!avCollapsed" class="fa fa-chevron-circle-down"></span>
@@ -238,6 +276,12 @@
                           <i class="fa fa-plus"></i>
                           <span translate="visits.ctx_menu.add_visit">Add Visit</span>
                         </a> 
+                      </li>
+                      <li show-if-allowed="specimenResource.updateOpts">
+                        <a ng-click="showMissedVisit(visit, $index)">
+                          <i class="fa fa-ban"></i>
+                          <span translate="visits.ctx_menu.missed_visit">Missed Visit</span>
+                        </a>
                       </li>
                       <li>
                         <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">

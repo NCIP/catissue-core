@@ -126,12 +126,13 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Migration script for container data">
+    <validCheckSum>7:c1fd34a4dfd6b7e0a135e7cb80666a46</validCheckSum>
     <sql>
       select identifier into @sys_usr_id from catissue_user where email_address like '$system';
       
       insert into os_storage_containers 
         (identifier, name, barcode, temperature, 
-         no_of_cols, no_of_rows,
+         no_of_rows, no_of_cols,
          column_labeling_scheme, row_labeling_scheme, site_id, 
          parent_container_id, activity_status, comments, created_by)
       select 

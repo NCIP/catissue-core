@@ -48,6 +48,8 @@ public class VisitDetail extends AttributeModifiedSupport {
 	private String surgicalPathologyNumber;
 	
 	private String sprName;
+
+	private String missedReason;
 	
 	private boolean sprLocked;
 
@@ -205,6 +207,14 @@ public class VisitDetail extends AttributeModifiedSupport {
 		this.visitDate = visitDate;
 	}
 
+	public String getMissedReason() {
+		return missedReason;
+	}
+
+	public void setMissedReason(String missedReason) {
+		this.missedReason = missedReason;
+	}
+
 	public static VisitDetail from(Visit visit) {
 		VisitDetail detail = new VisitDetail();
 		detail.setActivityStatus(visit.getActivityStatus());
@@ -218,9 +228,12 @@ public class VisitDetail extends AttributeModifiedSupport {
 		detail.setSprName(visit.getSprName());
 		detail.setSprLocked(visit.isSprLocked());
 		detail.setVisitDate(visit.getVisitDate());
-		detail.setSite(visit.getSite().getName());		
+		detail.setMissedReason(visit.getMissedReason());
 
-		
+		if (visit.getSite() != null) {
+			detail.setSite(visit.getSite().getName());
+		}
+
 		CollectionProtocolRegistration cpr = visit.getRegistration();
 		detail.setCprId(cpr.getId());
 		detail.setPpid(cpr.getPpid());

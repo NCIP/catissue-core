@@ -27,7 +27,10 @@ angular.module('os.biospecimen.specimen.addedit', [])
       currSpecimen.visitId = visit.id;
 
       if (currSpecimen.status != 'Collected') {
-        currSpecimen.status = 'Collected';
+        if (!currSpecimen.id) {
+          currSpecimen.status = 'Collected';
+        }
+
         currSpecimen.availableQty = currSpecimen.initialQty;
       }
 

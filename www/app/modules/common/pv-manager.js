@@ -50,7 +50,8 @@ angular.module('openspecimen')
 
     var visitStatuses = [
       'Complete',
-      'Pending'
+      'Pending',
+      'Missed Collection'
     ];
 
     var specimenStatuses = [
@@ -92,7 +93,8 @@ angular.module('openspecimen')
       'site-type'           : 'Site_Type_PID',
       'clinical-diagnosis'  : 'Clinical_Diagnosis_PID',
       'specimen-biohazard'  : 'specimen_biohazard',
-      'consent_response'    : 'consent_response'
+      'consent_response'    : 'consent_response',
+      'missed-visit-reason' : 'missed_visit_reason'
     };
 
     function valueOf(input) {

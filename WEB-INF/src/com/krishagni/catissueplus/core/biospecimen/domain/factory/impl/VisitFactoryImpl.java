@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
 import static com.krishagni.catissueplus.core.common.PvAttributes.CLINICAL_DIAG;
 import static com.krishagni.catissueplus.core.common.PvAttributes.CLINICAL_STATUS;
+import static com.krishagni.catissueplus.core.common.PvAttributes.MISSED_VISIT_REASON;
 import static com.krishagni.catissueplus.core.common.PvAttributes.VISIT_STATUS;
 import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
@@ -59,7 +60,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		setClinicalStatus(visitDetail, visit, ose);
 		setSite(visitDetail, visit, ose);
 		setActivityStatus(visitDetail, visit, ose);
-		
+		setMissedReason(visitDetail, visit, ose);
 		visit.setComments(visitDetail.getComments());
 		visit.setSurgicalPathologyNumber(visitDetail.getSurgicalPathologyNumber());
 		visit.setDefNameTmpl(defaultNameTmpl);
@@ -67,7 +68,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		ose.checkAndThrow();
 		return visit;
 	}
-	
+
 	@Override
 	public Visit createVisit(Visit existing, VisitDetail detail) {
 		Visit visit = new Visit();
@@ -92,8 +93,9 @@ public class VisitFactoryImpl implements VisitFactory {
 		setActivityStatus(detail, existing, visit, ose);
 		setComments(detail, existing, visit, ose);
 		setSurgicalPathNo(detail, existing, visit, ose);
+		setMissedVisitReason(detail, existing, visit, ose);
 		visit.setDefNameTmpl(defaultNameTmpl);
-		
+
 		ose.checkAndThrow();
 		return visit;
 	}
@@ -286,13 +288,31 @@ public class VisitFactoryImpl implements VisitFactory {
 		}
 	}
 
+	private void setMissedReason(VisitDetail detail, Visit visit, OpenSpecimenException ose) {
+		String missedReason = detail.getMissedReason();
+		if (!isValid(MISSED_VISIT_REASON, missedReason)) {
+			ose.addError(VisitErrorCode.INVALID_MISSED_REASON);
+			return;
+		}
+		
+		visit.setMissedReason(missedReason);
+	}
+	
+	private void setMissedVisitReason(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (detail.isAttrModified("missedReason")) {
+			setMissedReason(detail, visit, ose);
+		} else {
+			visit.setMissedReason(existing.getMissedReason());
+		}
+	}
+
 	private void setActivityStatus(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String status = visitDetail.getActivityStatus();
 		if (StringUtils.isBlank(status)) {
 			visit.setActive();
 		} else if (Status.isValidActivityStatus(status)) {
 			visit.setActivityStatus(status);
-		} else { 
+		} else {
 			ose.addError(ActivityStatusErrorCode.INVALID);
 		}
 	}
