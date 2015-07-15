@@ -38,8 +38,14 @@ angular.module('openspecimen', [
       .state('default', {
         abstract: true,
         templateUrl: 'modules/common/default.html',
-        controller: function($scope, Alerts) {
+        resolve: {
+          appProps: function(Setting) {
+            return Setting.getAppProps();
+          }
+        },
+        controller: function($scope, Alerts, appProps) {
           $scope.alerts = Alerts.messages;
+          $scope.appProps = appProps;
         }
       })
       .state('signed-in', {
