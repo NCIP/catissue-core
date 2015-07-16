@@ -51,6 +51,10 @@
     "update": "Update",
     "loading": "Loading...",
     "help": "Help",
+    "build_info_title": "About OpenSpecimen",
+    "build_version": "Version",
+    "build_date": "Build date",
+    "build_commit_revision": "Revision",
 
     "buttons": {
       "add": "Add",
