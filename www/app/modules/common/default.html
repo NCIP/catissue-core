@@ -8,11 +8,17 @@
         <a ui-sref="welcome" class="btn btn-primary">Sign Up</a>
       </li>
       <li><a href="#">Features</a></li>
+      <li>
+        <a title="{{'common.build_info_title' | translate}}" data-placement="bottom"
+          data-container="body" content-template="modules/common/about.html" bs-popover>
+          <span class="fa fa-info-circle"></span>
+        </a>
+      </li>
     </ul>
   </div>
 
   <div os-content="os-navbar">
-    <div class="os-alert-container" ng-if="alerts.length > 0">
+    <div class="os-alert-container" ng-class="{'show': alerts.length > 0}">
       <alert type="{{alert.type}}" ng-repeat="alert in alerts">{{alert.text}}</alert>
     </div>
     <div ui-view></div>

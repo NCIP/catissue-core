@@ -182,9 +182,17 @@ public class MigrateContainerRestrictions implements InitializingBean {
 		for (StorageContainer childContainer : container.getChildContainers()) {
 			normalizeRestrictions(childContainer);
 			
-			container.getAllowedCps().addAll(childContainer.getAllowedCps());
-			container.getAllowedSpecimenClasses().addAll(childContainer.getAllowedSpecimenClasses());
-			container.getAllowedSpecimenTypes().addAll(childContainer.getAllowedSpecimenTypes());			
+			if(!container.getCompAllowedCps().containsAll(childContainer.getAllowedCps())){
+				container.getAllowedCps().addAll(childContainer.getAllowedCps());
+			}
+			
+			if(!container.getCompAllowedSpecimenClasses().containsAll(childContainer.getAllowedSpecimenClasses())){
+				container.getAllowedSpecimenClasses().addAll(childContainer.getAllowedSpecimenClasses());
+			}
+			
+			if(!container.getCompAllowedSpecimenTypes().containsAll(childContainer.getAllowedSpecimenTypes())){
+				container.getAllowedSpecimenTypes().addAll(childContainer.getAllowedSpecimenTypes());
+			}
 		}
 		
 		for (StorageContainer childContainer : container.getChildContainers()) {
@@ -242,6 +250,11 @@ public class MigrateContainerRestrictions implements InitializingBean {
 	private void setComputedRestrictions(StorageContainer container) {
 		container.getCompAllowedSpecimenClasses().addAll(container.computeAllowedSpecimenClasses());
 		container.getCompAllowedSpecimenTypes().addAll(container.computeAllowedSpecimenTypes());
+		
+		for (String allowedClass : container.getAllowedSpecimenClasses()) {
+			container.getCompAllowedSpecimenTypes().removeAll(specimenTypes.get(allowedClass));
+		}
+		
 		container.getCompAllowedCps().addAll(container.computeAllowedCps());
 	}
 	

@@ -35,6 +35,10 @@ angular.module('os.administrative.models.site', ['os.common.models'])
        return getSites(opts);
     }
 
+    Site.list = function(opts) {
+      return getSites(opts);
+    }
+
     function getSites(opts) {
       return Site.query(opts).then(
         function(sites) {

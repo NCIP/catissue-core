@@ -9,14 +9,15 @@
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
-      <button class="default" os-right-drawer-toggle title="{{'orders.tooltip.search' | translate}}">
+      <button class="default" os-right-drawer-toggle title="{{'orders.tooltip.search' | translate}}"
+        ng-click="loadSearchPvs()">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>
       </button>
     </div>
   </div>
 
-  <div class="container">
+  <div class="container os-list-container">
     <div class="os-table">
       <div class="os-table-head">
         <div class="row">

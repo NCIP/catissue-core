@@ -78,7 +78,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 				crit.instituteIds(instituteIds);
 			}
 						
-			return ResponseEvent.response(daoFactory.getDistributionOrderDao().getOrders(req.getPayload()));
+			return ResponseEvent.response(daoFactory.getDistributionOrderDao().getOrders(crit));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

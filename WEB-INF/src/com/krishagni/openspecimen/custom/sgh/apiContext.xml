@@ -31,5 +31,11 @@
     <property name="sessionFactory" ref="sessionFactory" />
     <property name="daoFactory"  ref="biospecimenDaoFactory"/>
   </bean>
+  
+  <bean id="migrateSprs" class="com.krishagni.openspecimen.custom.sgh.init.MigrateSurgicalPathologyReports">
+    <property name="txnMgr" ref="transactionManager"/>
+    <property name="jdbcTemplate" ref="jdbcTemplate"/>
+    <property name="cfgSvc" ref="cfgSvc"/>
+  </bean>
 
 </beans>

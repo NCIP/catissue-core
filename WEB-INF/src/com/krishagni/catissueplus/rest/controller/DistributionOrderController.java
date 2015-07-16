@@ -1,10 +1,12 @@
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +40,26 @@ public class DistributionOrderController {
 	public List<DistributionOrderSummary> getDistributionOrders(			
 		@RequestParam(value = "query", required = false, defaultValue = "") 
 		String searchTerm,
-			
+		
+		@RequestParam(value = "dpShortTitle", required = false, defaultValue = "")
+		String dpShortTitle,
+		
+		@RequestParam(value = "dpId", required = false)
+		Long dpId,
+		
+		@RequestParam(value = "requestor", required = false, defaultValue = "")
+		String requestor,
+		
+		@RequestParam(value = "requestorId", required = false)
+		Long requestorId,
+		
+		@RequestParam(value = "executionDate", required = false) 
+		@DateTimeFormat(pattern="yyyy-MM-dd")
+		Date executionDate,
+		
+		@RequestParam(value = "receivingSite", required = false, defaultValue = "")
+		String receivingSite,
+		
 		@RequestParam(value = "startAt", required = false, defaultValue = "0") 
 		int startAt,
 			
@@ -51,6 +72,12 @@ public class DistributionOrderController {
 		
 		DistributionOrderListCriteria listCrit = new DistributionOrderListCriteria()
 			.query(searchTerm)
+			.dpShortTitle(dpShortTitle)
+			.dpId(dpId)
+			.requestor(requestor)
+			.requestorId(requestorId)
+			.executionDate(executionDate)
+			.receivingSite(receivingSite)
 			.startAt(startAt)
 			.maxResults(maxResults)
 			.includeStat(includeStats);

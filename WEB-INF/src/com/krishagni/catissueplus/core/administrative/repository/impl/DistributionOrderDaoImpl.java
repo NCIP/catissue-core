@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +23,6 @@ import com.krishagni.catissueplus.core.administrative.events.DistributionProtoco
 import com.krishagni.catissueplus.core.administrative.repository.DistributionOrderDao;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-import com.krishagni.catissueplus.core.common.util.Status;
 
 public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> implements DistributionOrderDao {
 
@@ -81,7 +81,6 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 				.createAlias("distributionProtocol", "dp")
 				.createAlias("requester", "user")
 				.createAlias("site", "site")
-				.add(Restrictions.ne("activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus()))
 				.setFirstResult(crit.startAt() < 0 ? 0 : crit.startAt())
 				.setMaxResults(crit.maxResults() < 0 || crit.maxResults() > 100 ? 100 : crit.maxResults())
 				.addOrder(Order.desc("id"));
@@ -95,15 +94,75 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 		}
 		
 		//
-		// Restrict by search term
+		// Add search restrictions
 		//
-		String searchTerm = crit.query();
-		if (StringUtils.isNotBlank(searchTerm)) {
-			query.add(Restrictions.ilike("name", searchTerm, MatchMode.ANYWHERE));
-		}
+		MatchMode matchMode = crit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;
+		addNameRestriction(query, crit, matchMode);
+		addDpRestriction(query, crit, matchMode);
+		addRequestorRestriction(query, crit, matchMode);
+		addExecutionDtRestriction(query, crit);
+		addReceiveSiteRestriction(query, crit, matchMode);
 		
 		addProjections(query);
 		return query.list();		
+	}
+	
+	private void addNameRestriction(Criteria query, DistributionOrderListCriteria crit, MatchMode mode) {
+		if (StringUtils.isBlank(crit.query())) {
+			return;
+		}
+		
+		query.add(Restrictions.ilike("name", crit.query(), mode));
+	}
+	
+	private void addDpRestriction(Criteria query, DistributionOrderListCriteria crit, MatchMode mode) {
+		if (crit.dpId() != null) {
+			query.add(Restrictions.eq("dp.id", crit.dpId()));
+		} else if (StringUtils.isNotBlank(crit.dpShortTitle())) {
+			query.add(Restrictions.ilike("dp.shortTitle", crit.dpShortTitle(), mode));
+		}		
+	}
+	
+	private void addRequestorRestriction(Criteria query, DistributionOrderListCriteria crit, MatchMode mode) {
+		if (crit.requestorId() != null) {
+			query.add(Restrictions.eq("user.id", crit.requestorId()));
+		} else if (StringUtils.isNotBlank(crit.requestor())) {
+			query.add(
+				Restrictions.disjunction()
+					.add(Restrictions.ilike("user.firstName", crit.requestor(), mode))
+					.add(Restrictions.ilike("user.lastName", crit.requestor(), mode))
+			);
+		}	
+	}
+
+	private void addExecutionDtRestriction(Criteria query, DistributionOrderListCriteria crit) {
+		if (crit.executionDate() == null) {
+			return;
+		}
+		
+		Calendar from = Calendar.getInstance();
+		from.setTime(crit.executionDate());
+		from.set(Calendar.HOUR_OF_DAY, 0);
+		from.set(Calendar.MINUTE, 0);
+		from.set(Calendar.SECOND, 0);
+		from.set(Calendar.MILLISECOND, 0);
+			
+		Calendar to = Calendar.getInstance();
+		to.setTime(crit.executionDate());
+		to.set(Calendar.HOUR_OF_DAY, 23);
+		to.set(Calendar.MINUTE, 59);
+		to.set(Calendar.SECOND, 59);
+		to.set(Calendar.MILLISECOND, 999);
+						
+		query.add(Restrictions.between("executionDate", from.getTime(), to.getTime()));
+	}
+
+	private void addReceiveSiteRestriction(Criteria query, DistributionOrderListCriteria crit, MatchMode mode) {
+		if (StringUtils.isBlank(crit.receivingSite())) {
+			return;
+		}
+		
+		query.add(Restrictions.ilike("site.name", crit.receivingSite(), mode));
 	}
 	
 	private void addProjections(Criteria query) {
@@ -156,5 +215,4 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 	private static final String GET_DIST_ORD_BY_NAME = FQN + ".getOrderByName";
 	
 	private static final String GET_SPEC_CNT_BY_ORDER = FQN + ".getSpecimenCountByOrder";
-
 }
