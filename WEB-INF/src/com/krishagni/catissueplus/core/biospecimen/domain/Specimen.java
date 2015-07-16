@@ -268,8 +268,20 @@ public class Specimen extends BaseEntity {
 	}
 
 	public void setCreatedOn(Date createdOn) {
-		if (createdOn.compareTo(new Date()) > 0) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.CREATED_ON_GREATER_THAN_CURRENT);
+		if (createdOn != null && createdOn.after(new Date())) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.CREATED_ON_GT_CURRENT);
+		}
+
+		if (parentSpecimen == null && receivedEvent != null && !createdOn.equals(receivedEvent.getTime())) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_CREATED_ON_GT_RECEIVED);
+		} else if (parentSpecimen != null && createdOn.before(parentSpecimen.getCreatedOn())) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.CHILD_CREATED_ON_LT_PARENT);
+		}
+
+		for (Specimen child : childCollection) {
+			if (createdOn.after(child.createdOn)) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_CREATED_ON_GT_CHILD);
+			}
 		}
 
 		this.createdOn = createdOn;

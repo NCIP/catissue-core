@@ -1,6 +1,17 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
+import static com.krishagni.catissueplus.core.common.PvAttributes.BIOHAZARD;
+import static com.krishagni.catissueplus.core.common.PvAttributes.COLL_PROC;
+import static com.krishagni.catissueplus.core.common.PvAttributes.CONTAINER;
+import static com.krishagni.catissueplus.core.common.PvAttributes.PATH_STATUS;
+import static com.krishagni.catissueplus.core.common.PvAttributes.RECV_QUALITY;
+import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_ANATOMIC_SITE;
+import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_CLASS;
+import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_LATERALITY;
+import static com.krishagni.catissueplus.core.common.service.PvValidator.areValid;
+import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
+
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,17 +44,6 @@ import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
-
-import static com.krishagni.catissueplus.core.common.PvAttributes.BIOHAZARD;
-import static com.krishagni.catissueplus.core.common.PvAttributes.COLL_PROC;
-import static com.krishagni.catissueplus.core.common.PvAttributes.CONTAINER;
-import static com.krishagni.catissueplus.core.common.PvAttributes.PATH_STATUS;
-import static com.krishagni.catissueplus.core.common.PvAttributes.RECV_QUALITY;
-import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_ANATOMIC_SITE;
-import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_CLASS;
-import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_LATERALITY;
-import static com.krishagni.catissueplus.core.common.service.PvValidator.areValid;
-import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
 public class SpecimenFactoryImpl implements SpecimenFactory {
 
@@ -105,7 +105,6 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setSpecimenType(detail, existing, specimen, ose);
 		setQuantity(detail, existing, specimen, ose);
 		setConcentration(detail, existing, specimen, ose);
-		setCreatedOn(detail, existing, specimen, ose);
 		setBiohazards(detail, existing, specimen, ose);
 		setComments(detail, existing, specimen, ose);
 				
@@ -118,6 +117,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setSpecimenPosition(detail, existing, specimen, ose);
 		setCollectionDetail(detail, existing, specimen, ose);
 		setReceiveDetail(detail, existing, specimen, ose);
+		setCreatedOn(detail, existing, specimen, ose);
 
 		ose.checkAndThrow();
 		return specimen;
@@ -564,7 +564,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setCreatedOn(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		if (detail.getCreatedOn() == null && detail.getParentId() == null) {
+		if (detail.getCreatedOn() == null && detail.getParentId() == null && detail.getReceivedEvent() != null) {
 			specimen.setCreatedOn(detail.getReceivedEvent().getTime());
 		} else if (detail.getCreatedOn() == null) {
 			specimen.setCreatedOn(Calendar.getInstance().getTime());

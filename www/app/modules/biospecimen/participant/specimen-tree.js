@@ -265,6 +265,14 @@ angular.module('os.biospecimen.participant.specimen-tree',
             spec.qtyPerAliquot = Math.round(parent.availableQty / spec.noOfAliquots * 10000) / 10000;
           }
 
+          if (scope.aliquotSpec.createdOn.getTime() < scope.parentSpecimen.createdOn) {
+             Alerts.error("specimens.errors.child_created_on_less");
+             return;
+          } else if (scope.aliquotSpec.createdOn > new Date()) {
+              Alerts.error("specimens.errors.child_created_on_greater");
+              return;
+          }
+
           parent.isOpened = parent.hasChildren = true;
           parent.hasChildren = true;
           parent.depth = 0;
@@ -340,7 +348,15 @@ angular.module('os.biospecimen.participant.specimen-tree',
         scope.createDerivative = function() {
           var closeParent = scope.derivative.closeParent;
           delete scope.derivative.closeParent;
-          
+
+          if (scope.derivative.createdOn.getTime() < scope.parentSpecimen.createdOn) {
+            Alerts.error("specimens.errors.child_created_on_less");
+            return;
+          } else if (scope.derivative.createdOn > new Date()) {
+            Alerts.error("specimens.errors.child_created_on_greater");
+            return;
+          }
+
           var specimensToSave = undefined;
           if (closeParent) {
             specimensToSave = [new Specimen({

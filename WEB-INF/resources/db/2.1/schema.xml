@@ -62,7 +62,10 @@
   </changeSet>
 
   <changeSet author="ahegade" id="Renaming specimen created on column">
-    <renameColumn columnDataType="${timestamp.type}" newColumnName="CREATED_ON"
-      oldColumnName="CREATED_ON_DATE" tableName="CATISSUE_SPECIMEN"/>
+    <renameColumn tableName="CATISSUE_SPECIMEN"
+      oldColumnName="CREATED_ON_DATE"
+      newColumnName="CREATED_ON"
+      columnDataType="${timestamp.type}"/>
   </changeSet>
+
 </databaseChangeLog>

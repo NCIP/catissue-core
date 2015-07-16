@@ -217,9 +217,9 @@
         <div class="col-xs-2 input">
           <div os-md-input ng-model="aliquotSpec.createdOn" placeholder="Created on">
             <input name="createdOn" ng-model="aliquotSpec.createdOn" class="form-control" type="text"
-                   datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="createdOn.isOpen" ng-focus="createdOn.isOpen=true"
-                   required placeholder="Created On">
-            <div os-field-error field="collectionForm.collDate"></div>
+              datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="createdOn.isOpen" ng-focus="createdOn.isOpen=true"
+              required placeholder="Created On">
+            <div os-field-error field="aliquotForm.collDate"></div>
           </div>
         </div>
         <div class="col-xs-2 input">
@@ -314,16 +314,16 @@
         </div>
       </div>
 
-      <div class="form-group clearfix">
-        <div class="col-xs-2 input">
+      <div class="clearfix">
+        <div class="os-col-15 input">
           <div os-md-input ng-model="derivative.createdOn" placeholder="Created on">
             <input name="createdOn" ng-model="derivative.createdOn" class="form-control" type="text"
-                   datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="createdOn.isOpen" ng-focus="createdOn.isOpen=true"
-                   required placeholder="Created On">
-            <div os-field-error field="collectionForm.collDate"></div>
+              datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="createdOn.isOpen" ng-focus="createdOn.isOpen=true"
+              required placeholder="Created On">
+            <div os-field-error field="derivativeForm.collDate"></div>
           </div>
         </div>
-        <div class="col-xs-2 input">
+        <div class="os-col-15 input">
           <timepicker class="os-time-no-wheels" os-md-input ng-model="derivative.createdOn" show-meridian="false"></timepicker>
         </div>
       </div>

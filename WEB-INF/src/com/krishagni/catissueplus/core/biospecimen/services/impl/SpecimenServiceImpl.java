@@ -4,7 +4,6 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -380,18 +379,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 	}
 
-	private void ensureValidCreatedOn(Specimen specimen, OpenSpecimenException ose) {
-		// Specimen created on should not be greater than todays date
-		if (specimen.getParentSpecimen() == null && specimen.getCreatedOn().compareTo(new Date()) > 0) {
-			ose.addError(SpecimenErrorCode.CREATED_ON_GREATER_THAN_CURRENT);
-		}
-		// Child specimen created on should be parent.createdOnn <= specimen.createdOn <= current_date
-		else if (specimen.getParentSpecimen() != null && (specimen.getCreatedOn().compareTo(specimen.getParentSpecimen().getCreatedOn()) < 0 ||
-				specimen.getCreatedOn().compareTo(new Date()) > 0)) {
-			ose.addError(SpecimenErrorCode.CHILD_CREATED_ON_SMALLER_THAN_PARENT);
-		}
-	}
-
 	private Specimen collectSpecimen(SpecimenDetail detail, Specimen parent) {
 		Specimen existing = null;
 		if (detail.getId() != null) {
@@ -467,7 +454,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 			ensureUniqueBarcode(specimen.getBarcode(), ose);
 		}
 
-		ensureValidCreatedOn(specimen, ose);
 		ose.checkAndThrow();
 
 		boolean newSpecimen = true;
