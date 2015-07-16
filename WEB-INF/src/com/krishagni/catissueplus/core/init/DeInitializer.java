@@ -51,7 +51,7 @@ public class DeInitializer implements InitializingBean {
 		Map<String, Object> localeSettings = cfgSvc.getLocaleSettings();		
 		String dateFormat = (String)localeSettings.get("deBeDateFmt");
 		String timeFormat = (String)localeSettings.get("timeFmt");
-		String dataDir = cfgSvc.getStrSetting("common", "data_dir", ".");
+		String dataDir = cfgSvc.getDataDir();
 		
 		String dir = new StringBuilder(dataDir).append(File.separator)
 			.append("de-file-data").append(File.separator)

@@ -252,13 +252,23 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	@Override
 	public Map<String, String> getAppProps() {
 		Map<String, String> props = new HashMap<String, String>();
-		props.put("plugin.custom_module", appProps.getProperty("plugin.custom_module"));
-		props.put("build_version", appProps.getProperty("buildinfo.version"));
-		props.put("build_date", appProps.getProperty("buildinfo.date"));
+		props.put("plugin.custom_module",  appProps.getProperty("plugin.custom_module"));
+		props.put("build_version",         appProps.getProperty("buildinfo.version"));
+		props.put("build_date",            appProps.getProperty("buildinfo.date"));
 		props.put("build_commit_revision", appProps.getProperty("buildinfo.commit_revision"));
 		return props;
 	}
-			
+	
+	@Override
+	public String getDataDir() {		
+		String dataDir = appProps.getProperty("app.data_dir");
+		if (StringUtils.isBlank(dataDir)) {
+			dataDir = ".";
+		}
+		
+		return getStrSetting("common", "data_dir", dataDir);
+	}
+				
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		reload();
