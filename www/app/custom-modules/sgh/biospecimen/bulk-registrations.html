@@ -1,26 +1,43 @@
 <div>
-  <div os-page-header>
+  <div os-page-header> 
     <ul os-breadcrumbs>
-      <li> <a ui-sref="cp-detail.overview({cpId: cp.id})">{{cp.shortTitle}}</a> </li>
+      <li ng-switch on="!!cp.id">
+        <a ng-switch-when="true" ui-sref="cp-detail.overview({cpId: cp.id})">
+          <span>{{cp.shortTitle}}</span>
+        </a>
+        <a ng-switch-default ui-sref="cp-list">
+          <span translate="cp.list">Collection Protocols</span>
+        </a>
+      </li>
     </ul>
     <h3> 
-      <span translate="custom_sgh.register_participants">Register Participants</span>
+      <span translate="custom_sgh.register_participants">
+        Register Participants
+      </span>
     </h3>
   </div>
-   
-  <div class="container os-margin-top">
-    <form class="form-horizontal" name="bulkregistrationForm" os-form-validator="bulkregistrationForm" novalidate>
+
+  <div class="container">
+    <form class="form-horizontal" name="bulkRegForm" os-form-validator="bulkRegForm" novalidate>
       <div class="form-group">
-        <label class="control-label col-xs-4" translate="custom_sgh.number_of_participants">Number of Participants</label>
-        <div class="col-xs-5">
-          <input type="text" name="paticipantCount" ng-model="regReq.participantCount" class="form-control" 
+        <label class="control-label col-xs-3">
+          <span translate="custom_sgh.number_of_participants">
+            Number of Participants
+          </span>
+        </label>
+        <div class="col-xs-6">
+          <input type="text" name="participantCnt" ng-model="regReq.participantCount" class="form-control" 
             placeholder="{{'custom_sgh.number_of_participants' | translate}}" ng-pattern="/^[1-9][0-9]*$/" required>
-          <div os-field-error field="bulkregistrationForm.paticipantCount"></div>
+          <div os-field-error field="bulkRegForm.participantCnt"></div>
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-xs-4" translate="custom_sgh.print_labels">Print Labels</label>
-        <div class="col-xs-5">
+        <label class="control-label col-xs-3">
+          <span translate="custom_sgh.print_labels">
+            Print Labels
+          </span>
+        </label>
+        <div class="col-xs-6">
           <label class="checkbox-inline">
             <input type="checkbox" ng-model="regReq.printLabels" ng-true-value="true" ng-false-value="false"/> 
             <span>&nbsp;</span>
@@ -31,7 +48,7 @@
       <div class="os-divider"></div>
 
       <div class="form-group">
-        <div class="col-xs-offset-4 col-xs-8">
+        <div class="col-xs-offset-3 col-xs-6">
           <button type="submit" class="btn btn-primary" os-form-submit="bulkRegister()">
             <span translate="participant.buttons.register">Register</span>
           </button>
