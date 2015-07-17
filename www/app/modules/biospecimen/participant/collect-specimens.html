@@ -167,9 +167,9 @@
           </div>
           <div class="col-xs-2 input">
             <div os-md-input ng-model="collDetail.collectionDate" placeholder="Collection Time">
-              <input name="collDate" ng-model="collDetail.collectionDate" class="form-control" type="text"
-                datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="collDt.isOpen" ng-focus="collDt.isOpen=true"
-                required placeholder="Collection Date">
+              <os-date-picker name="collDate" date="collDetail.collectionDate"
+                date-format="global.deBeDateFmt" required placeholder="Collection Date">
+              </os-date-picker>
               <div os-field-error field="collectionForm.collDate"></div>
             </div>
           </div>

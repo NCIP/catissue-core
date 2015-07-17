@@ -1,32 +1,33 @@
 
-.os-datepicker {
-  position: relative;
+.os-date-picker > input:focus ~ span.input-group-btn button.btn-default {
+  /* these properties picked from bootstrap.css */
+  border-color: #66AFE9;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px  rgba(102, 175, 233, .6);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px  rgba(102, 175, 233, .6);
 }
 
-.os-datepicker input:first-child {
-  width: 100%;
-  height: 100%
+/*os-date-picker fixes for md-input*/
+.os-md-input .os-date-picker {
+  margin-top: 15px;
+}
+
+.os-md-input .os-date-picker > input {
+  margin-top: 0px;
+}
+
+.os-md-input .os-date-picker span.input-group-btn button.btn-default {
+  height: 26px!important;
+  padding-top: 2px;
+  border-width: 0px 0px 2px 0px;
+  border-color: #dddddd;
+  border-radius: 0px;
   margin: 0px;
-  padding-right: 35px;
 }
 
-.os-datepicker button.fa {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  height: 100%;
-}
-
-.os-datepicker.form-control input:first-child {
-  border: none;
-  border-radius: inherit;
-  outline: none;
-  /* chrome gives outline to input elements.*/
-  padding-right: 30px;
-}
-
-.os-datepicker.form-control button.fa {
-  border: none;
-  border-radius: inherit;
+.os-md-input .os-date-picker > input:focus ~ span.input-group-btn button.btn-default {
+  /*to clear default button property */
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  border-bottom-color: #66AFE9;
 }
 

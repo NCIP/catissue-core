@@ -251,7 +251,8 @@ angular.module('openspecimen', [
             timeFmt: localeSettings.timeFmt,
             queryDateFmt: {format: localeSettings.deFeDateFmt},
             dateTimeFmt: localeSettings.dateFmt + ' ' + localeSettings.timeFmt,
-            utcOffset: localeSettings.utcOffset
+            utcOffset: localeSettings.utcOffset,
+            deBeDateFmt: localeSettings.deBeDateFmt
           }
         );
 
