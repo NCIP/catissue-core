@@ -814,7 +814,7 @@
       "SurgicalPathologyReport": "Surgical Pathology Report",
       "StorageContainer": "Storage Containers",
       "User": "Users",
-      "ScheduledJob": "Custom Reports"
+      "ScheduledJob": "Jobs"
     },
 
     "menu": {
