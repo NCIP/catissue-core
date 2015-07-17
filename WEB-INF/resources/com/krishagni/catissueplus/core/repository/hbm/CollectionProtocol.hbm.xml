@@ -53,7 +53,7 @@
 
     <property name="unsignedConsentDocumentURL" column="UNSIGNED_CONSENT_DOC_URL"/>
 
-    <set name="consentTier" table="CATISSUE_CONSENT_TIER" inverse="false" cascade="all-delete-orphan" order-by="id">
+    <set name="consentTier" table="CATISSUE_CONSENT_TIER" inverse="true" cascade="all-delete-orphan" order-by="id">
       <key column="COLL_PROTOCOL_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier"/>
       <filter name="activeEntity"/>
