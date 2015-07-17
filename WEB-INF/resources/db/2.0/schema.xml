@@ -2297,4 +2297,24 @@
         o.activity_status != 'Disabled'
     </createView>
   </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating sequences for permissible value" dbms="oracle" runOnChange="true">
+    <sql endDelimiter="//">
+      begin
+        declare
+          instId number;
+        begin
+        
+          select 
+            nvl(max(identifier),0)+1 into instId
+          from 
+            catissue_permissible_value;
+  
+          execute immediate('create sequence catissue_permi_value_seq start with '||instId);
+        end;
+      end;
+      //
+    </sql>
+  </changeSet>
+  
 </databaseChangeLog>
