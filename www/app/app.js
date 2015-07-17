@@ -203,7 +203,11 @@ angular.module('openspecimen', [
       };
     }
   })
-  .run(function($rootScope, $window, $cookieStore, $q, $translate, $translatePartialLoader, ApiUtil, Setting) {
+  .run(
+    function(
+      $rootScope, $window, $cookieStore, $q, $translate, $translatePartialLoader, 
+      ApiUtil, Setting, PluginReg) {
+
     if ($window.localStorage['osAuthToken']) {
       $cookieStore.put('osAuthToken', $window.localStorage['osAuthToken']);
       $rootScope.loggedIn = true;
@@ -258,7 +262,12 @@ angular.module('openspecimen', [
 
 
         var appProps = resps[1];
-        $translatePartialLoader.addPart('custom-modules/' + appProps['plugin.custom_module']);
+        var customModule = appProps['plugin.custom_module'];
+        if (!!customModule) {
+          $translatePartialLoader.addPart('custom-modules/' + customModule);
+          PluginReg.usePlugins([customModule]);
+        }
+
         $translate.use(localeSettings.locale);
         $translate.refresh();
       }

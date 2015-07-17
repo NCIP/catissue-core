@@ -25,7 +25,7 @@ public class ConfigUtil {
 	}
 	
 	public String getDataDir() {
-		return cfgSvc.getStrSetting("common", "data_dir", ".");
+		return cfgSvc.getDataDir();
 	}
 	
 	public String getAdminEmailId() {

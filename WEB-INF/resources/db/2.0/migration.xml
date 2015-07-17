@@ -16,6 +16,14 @@
     </sql>
   </changeSet>
   
+  <changeSet author="nmarwaha" id="Add unique constraint for department name for migration">
+    <addUniqueConstraint 
+      columnNames="name" 
+      constraintName="os_uniq_dept_name" 
+      tableName="os_departments" 
+    />
+  </changeSet>
+  
   <changeSet author="nmarwaha" id="Script to map departments and institutes" dbms="mysql">
     <sql>
       insert into os_departments
@@ -65,6 +73,13 @@
       set 
         up.user_dept_id = up.new_dept_id
     </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Drop unique const on department name in department table">
+    <dropUniqueConstraint
+      tableName="os_departments"
+      constraintName="os_uniq_dept_name"
+      uniqueColumns="name"/>
   </changeSet>
   
   <changeSet author="vlonushte" id="Drop foreign key and institution id column from CATISSUE_USER">
@@ -125,7 +140,7 @@
     </sql>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Migration script for container data">
+  <changeSet author="nmarwaha" id="Migration script for container data" dbms="mysql">
     <validCheckSum>7:c1fd34a4dfd6b7e0a135e7cb80666a46</validCheckSum>
     <sql>
       select identifier into @sys_usr_id from catissue_user where email_address like '$system';
@@ -185,6 +200,70 @@
     </sql>
   </changeSet> 
   
+  <changeSet author="nmarwaha" id="Migration script for container data" dbms="oracle">
+    <sql endDelimiter="//">
+      declare 
+        sys_usr_id number;
+      begin 
+        select identifier into sys_usr_id from catissue_user where email_address like '$system';
+      
+        insert into os_storage_containers 
+          (identifier, name, barcode, temperature, 
+           no_of_rows, no_of_cols, 
+           column_labeling_scheme, row_labeling_scheme, site_id, 
+           parent_container_id, activity_status, comments, created_by)
+        select 
+          cc.identifier, cc.name, cc.barcode, csc.temperature, 
+          c_capacity.one_dimension_capacity, c_capacity.two_dimension_capacity,
+          csc.one_dimension_labelling_scheme, csc.two_dimension_labelling_scheme, csc.site_id, 
+          ccp.parent_container_id, cc.activity_status, cc.comments, sys_usr_id
+        from 
+          catissue_storage_container csc 
+          inner join catissue_container cc ON cc.identifier=csc.identifier 
+          inner join catissue_capacity c_capacity ON cc.capacity_id=c_capacity.identifier 
+          left join catissue_container_position ccp ON ccp.container_id=cc.identifier;
+      end;
+      //
+    </sql>
+   
+    <sql>
+      update os_storage_containers set store_specimens = 1 
+      where 
+        (
+          select count(container_id) as count from catissue_specimen_position 
+          where os_storage_containers.identifier=catissue_specimen_position.container_id
+        ) >= 1
+    </sql>
+    
+    <sql>
+      insert into os_container_positions
+        (pos_one, pos_two, 
+         pos_one_str, pos_two_str, 
+         storage_container_id, occupying_specimen_id) 
+      select 
+        cap.position_dimension_two, cap.position_dimension_one, 
+        cap.position_dimension_two_string, cap.position_dimension_one_string,
+        csp.container_id, csp.specimen_id 
+      from 
+        catissue_abstract_position cap 
+        inner join catissue_specimen_position csp ON csp.identifier = cap.identifier
+    </sql>
+    
+    <sql>
+      insert into os_container_positions
+        (pos_one, pos_two, 
+         pos_one_str, pos_two_str,
+         storage_container_id, occupying_container_id) 
+      select 
+        cap.position_dimension_two, cap.position_dimension_one, 
+        cap.position_dimension_two_string, cap.position_dimension_one_string,
+        ccp.parent_container_id, ccp.container_id 
+      from 
+        catissue_abstract_position cap 
+        inner join catissue_container_position ccp on ccp.identifier=cap.identifier
+    </sql>
+  </changeSet>
+  
   <changeSet author="nmarwaha" id="Creating sequences for container and position table" dbms="oracle" runOnChange="true">
     <sql endDelimiter="//">
       begin
@@ -231,9 +310,9 @@
   
   <changeSet id="Drop container hierarchy trigger" author="nmarwaha">
     <sql>
-      drop trigger if exists trg_container_replication
+      drop trigger trg_container_replication
     </sql>
-  </changeSet>      
+  </changeSet>
   
   <changeSet author="vgaikwad" id="Assign Administrator role to existing site coordinators" dbms="mysql">
     <sql>
@@ -419,4 +498,11 @@
   <changeSet author="nmarwaha" id="Drop report job details table">
     <dropTable tableName="report_job_details"/>
   </changeSet>
+  
+  <changeSet author="nmarwaha" id="Set default institute for distribution protocol">
+    <sql>
+      update catissue_site set institute_id = 1;
+    </sql>
+  </changeSet>
+  
 </databaseChangeLog>

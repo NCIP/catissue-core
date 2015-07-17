@@ -231,7 +231,7 @@ public class ImportServiceImpl implements ImportService {
 	}
 	
 	private String getDataDir() {
-		return cfgSvc.getStrSetting("common", "data_dir", ".");
+		return cfgSvc.getDataDir();
 	}
 	
 	private String getImportDir() {

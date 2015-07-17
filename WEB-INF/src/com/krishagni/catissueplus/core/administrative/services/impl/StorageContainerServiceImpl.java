@@ -6,8 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
@@ -75,7 +77,22 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			if (siteIds != null && siteIds.isEmpty()) {
 				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
 			}
-			
+
+
+			if (crit.cpId() != null) {
+				Set<Site> cpRepositories = daoFactory.getCollectionProtocolDao().getById(crit.cpId()).getRepositories();
+				Set<Long> cpSiteIds =  new HashSet<Long>();
+				for (Site cpRepository : cpRepositories) {
+					cpSiteIds.add(cpRepository.getId());
+				}
+
+				if (siteIds == null) {
+					siteIds = cpSiteIds;
+				} else {
+					siteIds =(Set) CollectionUtils.intersection(siteIds, cpSiteIds);
+				}
+			}
+
 			if (siteIds != null) {
 				crit.siteIds(siteIds);
 			}

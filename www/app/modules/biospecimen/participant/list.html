@@ -11,11 +11,9 @@
         <span class="fa fa-plus"></span>
         <span translate="participant.buttons.register">Register</span>
       </button>
-      <button show-if-allowed="participantResource.registerOpts" class="default"
-        title="{{'participant.tooltip.bulk_register' | translate}}" ui-sref="bulk-registrations" ng-if="showBulkRegBtn">
-        <span class="fa fa-plus"></span>
-        <span translate="participant.buttons.bulk_register">Bulk Register</span>
-      </button>
+
+      <os-plugin-hooks view-name="'participant-list'" sec-name="'page-header'"></os-plugin-hooks>
+
       <button class="default" os-right-drawer-toggle title="{{'participant.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>

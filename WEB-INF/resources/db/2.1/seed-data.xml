@@ -42,7 +42,7 @@
       insert into catissue_permissible_value
         (identifier, value, public_id)
       values
-        (catissue_permi_value_seq.nextval, "Missed Collection", "scg_collection_status")
+        (catissue_permi_value_seq.nextval, 'Missed Collection', 'scg_collection_status')
     </sql>
   </changeSet>
 
@@ -52,7 +52,7 @@
       insert into catissue_cde
         (public_id, long_name, definition, version, last_updated)
       values
-        ("missed_visit_reason", "Missed Visit Reason", "Missed Visit Reason", "2.0", ${now})
+        ('missed_visit_reason', 'Missed Visit Reason', 'Missed Visit Reason', '2.0', ${now})
     </sql>
   </changeSet>
 
@@ -81,62 +81,62 @@
       insert into catissue_permissible_value
         (identifier, value, public_id)
       values
-        (catissue_permi_value_seq.nextval, "Previous excisional biopsy done", "missed_vist_reason");
+        (catissue_permi_value_seq.nextval, 'Previous excisional biopsy done', 'missed_visit_reason');
 
       insert into catissue_permissible_value
         (identifier, value, public_id)
       values
-        (catissue_permi_value_seq.nextval, "Tumour too small (size less than 2cm or in-situ ca)", "missed_vist_reason");
+        (catissue_permi_value_seq.nextval, 'Tumour too small (size less than 2cm or in-situ ca)', 'missed_visit_reason');
 
       insert into catissue_permissible_value
         (identifier, value, public_id)
       values
-        (catissue_permi_value_seq.nextval, "Not Malignant tissue", "missed_vist_reason");
+        (catissue_permi_value_seq.nextval, 'Not Malignant tissue', 'missed_visit_reason');
 
       insert into catissue_permissible_value
         (identifier, value, public_id)
       values
-        (catissue_permi_value_seq.nextval, "No residual tumour after treatment", "missed_vist_reason");
+        (catissue_permi_value_seq.nextval, 'No residual tumour after treatment', 'missed_visit_reason');
 
       insert into catissue_permissible_value
         (identifier, value, public_id)
       values
-        (catissue_permi_value_seq.nextval, "Open and closed ops / Bypass ops", "missed_vist_reason");
+        (catissue_permi_value_seq.nextval, 'Open and closed ops / Bypass ops', 'missed_visit_reason');
 
       insert into catissue_permissible_value
         (identifier, value, public_id)
       values
-        (catissue_permi_value_seq.nextval, "OT surgeon forgot to page TRO", "missed_vist_reason");
+        (catissue_permi_value_seq.nextval, 'OT surgeon forgot to page TRO', 'missed_visit_reason');
 
       insert into catissue_permissible_value
         (identifier, value, public_id)
       values
-        (catissue_permi_value_seq.nextval, "Patient declined tissue donation", "missed_vist_reason");
+        (catissue_permi_value_seq.nextval, 'Patient declined tissue donation', 'missed_visit_reason');
 
       insert into catissue_permissible_value
         (identifier, value, public_id)
       values
-        (catissue_permi_value_seq.nextval, "No post ops consent taken within 3 months", "missed_vist_reason");
+        (catissue_permi_value_seq.nextval, 'No post ops consent taken within 3 months', 'missed_visit_reason');
 
       insert into catissue_permissible_value
         (identifier, value, public_id)
       values
-        (catissue_permi_value_seq.nextval, "Late Case", "missed_vist_reason");
+        (catissue_permi_value_seq.nextval, 'Late Case', 'missed_visit_reason');
 
       insert into catissue_permissible_value
         (identifier, value, public_id)
       values
-        (catissue_permi_value_seq.nextval, "Specimen sent to Frozen Section", "missed_vist_reason");
+        (catissue_permi_value_seq.nextval, 'Specimen sent to Frozen Section', 'missed_visit_reason');
 
       insert into catissue_permissible_value
         (identifier, value, public_id)
       values
-        (catissue_permi_value_seq.nextval, "No Pre-Op consent", "missed_vist_reason");
+        (catissue_permi_value_seq.nextval, 'No Pre-Op consent', 'missed_visit_reason');
 
       insert into catissue_permissible_value
         (identifier, value, public_id)
       values
-        (catissue_permi_value_seq.nextval, "Other reasons", "missed_vist_reason");
+        (catissue_permi_value_seq.nextval, 'Other reasons', 'missed_visit_reason');
 
     </sql>
   </changeSet>

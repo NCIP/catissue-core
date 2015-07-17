@@ -78,7 +78,7 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 		logger.info("Migration from DE table start time: " + startTime);
 		
 		int totalMigratedReportsCnt = 0;
-		final int maxResult = 500;
+		final int maxResult = 100;
 		boolean moreRecords = true;
 		while (moreRecords) {
 			TransactionTemplate txnTmpl = new TransactionTemplate(txnMgr);
@@ -134,7 +134,7 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 		logger.info("Migration from static table start time: " + startTime);
 		
 		int totalMigratedReportsCnt = 0;
-		final int maxResult = 500;
+		final int maxResult = 100;
 		boolean moreRecords = true;
 		while (moreRecords) {
 			TransactionTemplate txnTmpl = new TransactionTemplate(txnMgr);
@@ -239,9 +239,10 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 			  "inner join dyextn_abstract_record_entry re on re.abstract_form_context_id = afc.identifier " + 
 			  "inner join catissue_scg_rec_ntry scg_re on scg_re.identifier = re.identifier " + 
 			  "inner join de_e_1905 spr on spr.dyextn_as_1945_1960 = re.identifier " +
+			  "inner join catissue_specimen_coll_group scg on scg.identifier = scg_re.specimen_collection_group_id " +
 			"where "+
 			  "afc.identifier = 47 and spr.de_at_1904_file_name is not null " +
-			  "and spr.activity_status is null and re.activity_status = 'Active' limit ?";
+			  "and spr.activity_status is null and re.activity_status = 'Active' and scg.activity_status <> 'Disabled' limit ?";
 	
 	
 	private static final String GET_SPR_DETAILS_FROM_CATISSUE_SQL =
@@ -253,9 +254,9 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 			  "join catissue_deidentified_report dr on dr.identifier = pr.identifier " + 
 			  "join catissue_report_textcontent rtc on rtc.report_id = pr.identifier " + 
 			  "join catissue_report_content rc on rc.identifier = rtc.identifier " +
-			  "join catissue_specimen_coll_group scg on dr.scg_id = scg.identifier " + 
+			  "join catissue_specimen_coll_group scg on dr.scg_id = scg.identifier " +
 			"where " +
-			  "pr.report_status is null limit ?";
+			  "pr.report_status is null and scg.activity_status <> 'Disabled' limit ?";
 	
 	private static final String UPDATE_SPR_DOCUMENT_NAME_SQL =
 			"update " +
