@@ -425,7 +425,8 @@
     "errors": {
       "duplicate_labels": "One or more specimens using same label",
       "insufficient_qty": "Insufficient parent specimen quantity to create aliquots",
-      "child_created_date_greater": "The created on date of child specimen should be less than that of Parent Specimen"
+      "child_created_on_less": "Created on of child specimen should be greater than that of Parent Specimen",
+      "child_created_on_greater": "Created on of specimen should be less than current date"
     }
   },
 

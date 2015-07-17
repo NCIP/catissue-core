@@ -106,14 +106,14 @@
 
       <div class="form-group" ng-if="currSpecimen.lineage != 'New'">
         <label class="col-xs-3 control-label">Created On</label>
-          <div class="col-xs-4">
+          <div class="col-xs-3">
             <div placeholder="Created on">
               <input name="createdOn" ng-model="currSpecimen.createdOn" class="form-control" type="text"
                 datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="createdOn.isOpen" ng-focus="createdOn.isOpen=true"
                 required placeholder="Created On">
             </div>
           </div>
-          <div class="col-xs-3">
+          <div class="col-xs-4 os-custom-timepicker">
             <timepicker class="os-time-no-wheels"  ng-model="currSpecimen.createdOn" show-meridian="false"></timepicker>
           </div>
         <div os-field-error field="sform.createdOn"></div>
