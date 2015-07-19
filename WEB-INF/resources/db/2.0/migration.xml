@@ -309,6 +309,7 @@
   </changeSet>
   
   <changeSet id="Drop container hierarchy trigger" author="nmarwaha">
+    <validCheckSum>7:b19fcc792300711bf283a765a4cc6f5a</validCheckSum>
     <sql>
       drop trigger trg_container_replication
     </sql>
