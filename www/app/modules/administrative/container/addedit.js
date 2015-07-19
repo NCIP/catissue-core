@@ -8,6 +8,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     var parentContainerName = undefined;
 
     function init() {
+      container.parentContainerId = undefined;
       $scope.container = container;
       parentContainerName = container.parentContainerName;
 
