@@ -1,7 +1,10 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -15,7 +18,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 @Audited
-public class SpecimenRequirement {
+public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 	private Long id;
 	
 	private String name;
@@ -235,6 +238,12 @@ public class SpecimenRequirement {
 		this.childSpecimenRequirements = childSpecimenRequirements;
 	}
 
+	public List<SpecimenRequirement> getOrderedChildRequirements() {
+		List<SpecimenRequirement> childReqs = new ArrayList<SpecimenRequirement>(getChildSpecimenRequirements());
+		Collections.sort(childReqs);
+		return childReqs;
+	}
+
 	@NotAudited
 	public Set<Specimen> getSpecimens() {
 		return specimens;
@@ -281,24 +290,24 @@ public class SpecimenRequirement {
 		BeanUtils.copyProperties(this, copy, EXCLUDE_COPY_PROPS); 
 		return copy;
 	}
-	
+
 	public SpecimenRequirement deepCopy(CollectionProtocolEvent cpe) {
 		if (cpe == null) {
-			cpe = this.getCollectionProtocolEvent();
+			cpe = getCollectionProtocolEvent();
 		}
 		
 		if (isAliquot()) {
-			if (this.getInitialQuantity() > this.parentSpecimenRequirement.getQtyAfterAliquotsUse()) {
+			if (getInitialQuantity() > getParentSpecimenRequirement().getQtyAfterAliquotsUse()) {
 				throw OpenSpecimenException.userError(SrErrorCode.INSUFFICIENT_QTY);
 			}
 		}
 				
-		return deepCopy(cpe, parentSpecimenRequirement);
+		return deepCopy(cpe, getParentSpecimenRequirement());
 	}
 		
 	public void addChildRequirement(SpecimenRequirement childReq) {
 		childReq.setParentSpecimenRequirement(this);
-		childSpecimenRequirements.add(childReq);
+		getChildSpecimenRequirements().add(childReq);
 	}
 	
 	public void addChildRequirements(Collection<SpecimenRequirement> children) {
@@ -308,8 +317,8 @@ public class SpecimenRequirement {
 	}
 	
 	public Double getQtyAfterAliquotsUse() {
-		Double available = initialQuantity;
-		for (SpecimenRequirement childReq : childSpecimenRequirements) {
+		Double available = getInitialQuantity();
+		for (SpecimenRequirement childReq : getChildSpecimenRequirements()) {
 			if (childReq.isAliquot() && childReq.getInitialQuantity() != null) {
 				available -= childReq.getInitialQuantity();
 			}
@@ -355,14 +364,36 @@ public class SpecimenRequirement {
 		}
 	}
 		
+	@Override
+	public int compareTo(SpecimenRequirement other) {
+		if (getSortOrder() != null && other.getSortOrder() != null) {
+			return getSortOrder().compareTo(other.getSortOrder());
+		} else if (getSortOrder() != null) {
+			return -1;
+		} else if (other.getSortOrder() != null) {
+			return 1;
+		} else if (getId() != null && other.getId() != null) {
+			return getId().compareTo(other.getId());
+		} else if (getId() != null) {
+			return -1;
+		} else if(other.getId() != null) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
 	private SpecimenRequirement deepCopy(CollectionProtocolEvent cpe, SpecimenRequirement parent) {
 		SpecimenRequirement result = copy();
 		result.setCollectionProtocolEvent(cpe);
 		result.setParentSpecimenRequirement(parent);
 		
 		Set<SpecimenRequirement> childSrs = new HashSet<SpecimenRequirement>();
-		for (SpecimenRequirement childSr : childSpecimenRequirements) {
-			childSrs.add(childSr.deepCopy(cpe, result));
+		int order = 1;
+		for (SpecimenRequirement childSr : getOrderedChildRequirements()) {
+			SpecimenRequirement copiedSr = childSr.deepCopy(cpe, result);
+			copiedSr.setSortOrder(order++);
+			childSrs.add(copiedSr);
 		}
 		
 		result.setChildSpecimenRequirements(childSrs);

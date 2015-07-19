@@ -1,6 +1,9 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.envers.Audited;
@@ -152,11 +155,15 @@ public class CollectionProtocolEvent {
 	}
 	
 	public void copySpecimenRequirementsTo(CollectionProtocolEvent cpe) {
-		for (SpecimenRequirement sr : getSpecimenRequirements()) {
-			if (sr.getParentSpecimenRequirement() == null) {
-				cpe.addSpecimenRequirement(sr.deepCopy(cpe));
-			}			
-		}		
+		List<SpecimenRequirement> topLevelSrs = new ArrayList<SpecimenRequirement>(getTopLevelAnticipatedSpecimens());
+		Collections.sort(topLevelSrs);
+
+		int order = 1;
+		for (SpecimenRequirement sr : topLevelSrs) {
+			SpecimenRequirement copiedSr = sr.deepCopy(cpe);
+			copiedSr.setSortOrder(order++);
+			cpe.addSpecimenRequirement(copiedSr);
+		}
 	}
 	
 	public void delete() {
