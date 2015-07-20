@@ -7,12 +7,15 @@
       <li class="form-input">
         <a ui-sref="welcome" class="btn btn-primary">Sign Up</a>
       </li>
-      <li><a href="#">Features</a></li>
-      <li>
-        <a title="{{'common.build_info_title' | translate}}" data-placement="bottom"
-          data-container="body" content-template="modules/common/about.html" bs-popover>
+      <li class="dropdown">
+        <a class="dropdown-toggle">
           <span class="fa fa-info-circle"></span>
         </a>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+          <li>
+            <div ng-include src="'modules/common/about.html'"></div>
+          </li>
+        </ul>
       </li>
     </ul>
   </div>

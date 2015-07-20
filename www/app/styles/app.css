@@ -60,6 +60,7 @@ body {
 .os-navbar .menu {
   list-style: none;
   padding: 0px 10px 0px 20px;
+  margin-bottom: 0px;
 }
 
 .os-navbar .menu > li {
@@ -84,6 +85,10 @@ body {
 
 .os-navbar-default > ul > li > a {
   color: #fff;
+}
+
+.os-navbar-default > ul > li > a > span.fa {
+  font-size: 20px;
 }
 
 .os-navbar-default > ul > li:hover {
@@ -575,6 +580,11 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   clear: left;
 }
 
+.os-key-values .item .value {
+  color: #333;
+  font-weight: normal;
+}
+
 .os-key-values.os-one-col .item .key.key-sm {
   width: 30%;
 }
@@ -970,6 +980,27 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 }
 
 .os-about-po {
-  width: 120px;
+  width: 300px;
+  padding: 0px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
+.dropdown-menu .os-about-po { /** offset dropdown menu's padding  **/
+  margin-top: -5px;
+  margin-bottom: -5px;
+  border: none;
+}
+
+.os-about-po .title {
+  padding: 15px; 
+  background: #f5f5f5;
+  color: #333; 
+  border-color: #ddd;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.os-about-po .content {
+  padding: 15px;
+}

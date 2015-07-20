@@ -38,14 +38,8 @@ angular.module('openspecimen', [
       .state('default', {
         abstract: true,
         templateUrl: 'modules/common/default.html',
-        resolve: {
-          appProps: function(Setting) {
-            return Setting.getAppProps();
-          }
-        },
-        controller: function($scope, Alerts, appProps) {
+        controller: function($scope, Alerts) {
           $scope.alerts = Alerts.messages;
-          $scope.appProps = appProps;
         }
       })
       .state('signed-in', {
@@ -57,9 +51,6 @@ angular.module('openspecimen', [
           },
           authInit: function(AuthorizationService) {
             return AuthorizationService.initializeUserRights();
-          },
-          appProps: function(Setting) {
-            return Setting.getAppProps();
           }
         },
         controller: 'SignedInCtrl'
@@ -116,7 +107,7 @@ angular.module('openspecimen', [
 
           if (rejection.data instanceof Array) {
             angular.forEach(rejection.data, function(err) {
-              errMsgs.push(err.message + "(" + err.code + ")");
+              errMsgs.push(err.message + " (" + err.code + ")");
             });
             Alerts.errorText(errMsgs);
           } else if (rejection.config.method != 'HEAD') {
@@ -261,6 +252,7 @@ angular.module('openspecimen', [
 
 
         var appProps = resps[1];
+        $rootScope.global.appProps = appProps;
         var customModule = appProps['plugin.custom_module'];
         if (!!customModule) {
           $translatePartialLoader.addPart('custom-modules/' + customModule);
