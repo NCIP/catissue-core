@@ -48,7 +48,7 @@
       from
         com.krishagni.catissueplus.core.administrative.domain.Institute institute 
         join institute.departments dept
-        join dept.users user
+        left join dept.users user
       where
         institute.id in (:instituteIds)
       group by
