@@ -105,7 +105,6 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setSpecimenType(detail, existing, specimen, ose);
 		setQuantity(detail, existing, specimen, ose);
 		setConcentration(detail, existing, specimen, ose);
-		setCreatedOn(detail, existing, specimen, ose);
 		setBiohazards(detail, existing, specimen, ose);
 		setComments(detail, existing, specimen, ose);
 				
@@ -118,6 +117,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setSpecimenPosition(detail, existing, specimen, ose);
 		setCollectionDetail(detail, existing, specimen, ose);
 		setReceiveDetail(detail, existing, specimen, ose);
+		setCreatedOn(detail, existing, specimen, ose);
 
 		ose.checkAndThrow();
 		return specimen;
@@ -564,10 +564,19 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setCreatedOn(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		if (detail.getCreatedOn() == null) {
-			specimen.setCreatedOn(Calendar.getInstance().getTime());
-		} else {
+		if (!specimen.isCollected()) {
+			//
+			// Created on date/time doesn't have any meaning unless the specimen is collected
+			//
+			return;
+		}
+
+		if (specimen.isPrimary()) {
+			specimen.setCreatedOn(detail.getReceivedEvent().getTime());
+		} else if (detail.getCreatedOn() != null) {
 			specimen.setCreatedOn(detail.getCreatedOn());
+		} else {
+			specimen.setCreatedOn(Calendar.getInstance().getTime());
 		}
 	}
 	

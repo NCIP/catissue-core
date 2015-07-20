@@ -213,6 +213,21 @@
             <div os-field-error field="aliquotForm.qtyPerAliquot"></div>
           </div>
         </div>
+
+        <div class="col-xs-3">
+          <div os-md-input ng-model="aliquotSpec.createdOn" placeholder="{{'specimens.created_on' | translate}}">
+            <input name="createdOn" ng-model="aliquotSpec.createdOn" class="form-control" type="text"
+              datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
+              is-open="createdOn.isOpen" ng-focus="createdOn.isOpen=true"
+              required placeholder="{{'specimens.created_on' | translate}}">
+            <div os-field-error field="aliquotForm.createdOn"></div>
+          </div>
+        </div>
+
+        <div class="col-xs-2">
+          <timepicker class="os-time-no-wheels" os-md-input ng-model="aliquotSpec.createdOn" show-meridian="false">
+          </timepicker>
+        </div>
       </div>
 
       <div class="form-group clearfix">
@@ -298,6 +313,23 @@
           <div class="form-group">
             <os-specimen-position os-md-input specimen="derivative" cp-id="cpr.cpId"></os-specimen-position>
           </div>
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="os-col-30">
+          <div os-md-input ng-model="derivative.createdOn" placeholder="{{'specimens.created_on' | translate}}">
+            <input name="createdOn" ng-model="derivative.createdOn" class="form-control" type="text"
+              datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
+              is-open="createdOn.isOpen" ng-focus="createdOn.isOpen=true"
+              required placeholder="{{'specimens.created_on' | translate}}">
+            <div os-field-error field="derivativeForm.createdOn"></div>
+          </div>
+        </div>
+
+        <div class="os-col-15">
+          <timepicker class="os-time-no-wheels" os-md-input ng-model="derivative.createdOn" show-meridian="false">
+          </timepicker>
         </div>
       </div>
 

@@ -246,7 +246,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
         scope.showCreateAliquots = function(specimen) {
           scope.view = 'create_aliquots';      
           scope.parentSpecimen = specimen;
-          scope.aliquotSpec = {};
+          scope.aliquotSpec = {createdOn : new Date()};
         };
 
         scope.collectAliquots = function() {
@@ -265,6 +265,14 @@ angular.module('os.biospecimen.participant.specimen-tree',
             spec.qtyPerAliquot = Math.round(parent.availableQty / spec.noOfAliquots * 10000) / 10000;
           }
 
+          if (scope.aliquotSpec.createdOn.getTime() < scope.parentSpecimen.createdOn) {
+            Alerts.error("specimens.errors.created_on_lt_parent");
+            return;
+          } else if (scope.aliquotSpec.createdOn > new Date()) {
+            Alerts.error("specimens.errors.created_on_gt_curr_time");
+            return;
+          }
+
           parent.isOpened = parent.hasChildren = true;
           parent.hasChildren = true;
           parent.depth = 0;
@@ -281,6 +289,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
             children: [],
             cprId: scope.cpr.id,
             visitId: parent.visitId,
+            createdOn: spec.createdOn,
 
             selected: true,
             parent: parent,
@@ -329,7 +338,8 @@ angular.module('os.biospecimen.participant.specimen-tree',
             status: 'Collected',
             visitId: scope.visit.id,
             pathology: scope.parentSpecimen.pathology,
-            closeParent: false
+            closeParent: false,
+            createdOn : new Date()
           });
 
           loadSpecimenClasses(scope);
@@ -338,7 +348,15 @@ angular.module('os.biospecimen.participant.specimen-tree',
         scope.createDerivative = function() {
           var closeParent = scope.derivative.closeParent;
           delete scope.derivative.closeParent;
-          
+
+          if (scope.derivative.createdOn.getTime() < scope.parentSpecimen.createdOn) {
+            Alerts.error("specimens.errors.created_on_lt_parent");
+            return;
+          } else if (scope.derivative.createdOn > new Date()) {
+            Alerts.error("specimens.errors.created_on_gt_curr_time");
+            return;
+          }
+
           var specimensToSave = undefined;
           if (closeParent) {
             specimensToSave = [new Specimen({

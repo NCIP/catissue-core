@@ -213,7 +213,8 @@ angular.module('os.biospecimen.participant.collect-specimens',
           lineage: uiSpecimen.lineage,
           concentration: uiSpecimen.concentration,
           status: uiSpecimen.status,
-          closeAfterChildrenCreation: uiSpecimen.closeAfterChildrenCreation
+          closeAfterChildrenCreation: uiSpecimen.closeAfterChildrenCreation,
+          createdOn: uiSpecimen.lineage != 'New' ? uiSpecimen.createdOn : undefined
         };
 
         if (specimen.lineage == 'New' && specimen.status == 'Collected') {

@@ -60,4 +60,14 @@
       <column name="MISSED_REASON" type="${text.type}(255)"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="ahegade" id="Renaming specimen created on column">
+    <renameColumn tableName="CATISSUE_SPECIMEN"
+      oldColumnName="CREATED_ON_DATE"
+      newColumnName="CREATED_ON"
+      columnDataType="${nullable.ts.type}"/>
+  </changeSet>
+
+
+
 </databaseChangeLog>

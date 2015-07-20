@@ -105,6 +105,11 @@
         <strong class="key key-sm" translate="specimens.biohazards">Biohazards</strong>
         <span class="value value-md">{{specimen.biohazards | osArrayJoin | osNoValue}}</span>
       </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="specimens.created_on">Created On</strong>
+        <span class="value value-md">{{specimen.createdOn | date: global.dateTimeFmt | osNoValue}}</span>
+      </li>
     </ul>
 
     <div class="os-section os-line-section" ng-if="!!specimen.comments">

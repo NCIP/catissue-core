@@ -465,7 +465,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			if (!specimen.getParentSpecimen().isActive()) {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.EDIT_NOT_ALLOWED, specimen.getParentSpecimen().getLabel());
 			}
-			
+
 			specimen.getParentSpecimen().addSpecimen(specimen);
 		} else {
 			specimen.checkQtyConstraints(); // TODO: Should we be calling this at all?

@@ -13,4 +13,11 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="ahegade" id="Renaming specimen audit created on column">
+    <renameColumn tableName="catissue_specimen_aud"
+      oldColumnName="CREATED_ON_DATE"
+      newColumnName="CREATED_ON"
+      columnDataType="timestamp null"/>
+  </changeSet>
+
 </databaseChangeLog>
