@@ -85,6 +85,10 @@ public class ConsentResponsesFactoryImpl implements ConsentResponsesFactory {
 		}
 
 		for (ConsentTierResponseDetail consentResponse : detail.getConsentTierResponses()) {
+			if (StringUtils.isBlank(consentResponse.getResponse())) {
+				continue;
+			}
+			
 			ConsentTierResponse response = new ConsentTierResponse();
 			response.setCpr(cpr);
 			
