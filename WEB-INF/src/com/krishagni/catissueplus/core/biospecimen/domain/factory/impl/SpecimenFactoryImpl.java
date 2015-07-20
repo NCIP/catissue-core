@@ -564,12 +564,19 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setCreatedOn(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		if (detail.getCreatedOn() == null && detail.getParentId() == null && detail.getReceivedEvent() != null) {
+		if (!specimen.isCollected()) {
+			//
+			// Created on date/time doesn't have any meaning unless the specimen is collected
+			//
+			return;
+		}
+
+		if (specimen.isPrimary()) {
 			specimen.setCreatedOn(detail.getReceivedEvent().getTime());
-		} else if (detail.getCreatedOn() == null) {
-			specimen.setCreatedOn(Calendar.getInstance().getTime());
-		} else {
+		} else if (detail.getCreatedOn() != null) {
 			specimen.setCreatedOn(detail.getCreatedOn());
+		} else {
+			specimen.setCreatedOn(Calendar.getInstance().getTime());
 		}
 	}
 	

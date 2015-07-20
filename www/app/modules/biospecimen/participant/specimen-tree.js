@@ -266,11 +266,11 @@ angular.module('os.biospecimen.participant.specimen-tree',
           }
 
           if (scope.aliquotSpec.createdOn.getTime() < scope.parentSpecimen.createdOn) {
-             Alerts.error("specimens.errors.child_created_on_less");
-             return;
+            Alerts.error("specimens.errors.created_on_lt_parent");
+            return;
           } else if (scope.aliquotSpec.createdOn > new Date()) {
-              Alerts.error("specimens.errors.child_created_on_greater");
-              return;
+            Alerts.error("specimens.errors.created_on_gt_curr_time");
+            return;
           }
 
           parent.isOpened = parent.hasChildren = true;
@@ -289,14 +289,14 @@ angular.module('os.biospecimen.participant.specimen-tree',
             children: [],
             cprId: scope.cpr.id,
             visitId: parent.visitId,
+            createdOn: spec.createdOn,
 
             selected: true,
             parent: parent,
             depth: 1,
             isOpened: true,
             hasChildren: false,
-            labelFmt: scope.cpr.aliquotLabelFmt,
-            createdOn: spec.createdOn
+            labelFmt: scope.cpr.aliquotLabelFmt
           });
 
           var aliquots = [];
@@ -350,10 +350,10 @@ angular.module('os.biospecimen.participant.specimen-tree',
           delete scope.derivative.closeParent;
 
           if (scope.derivative.createdOn.getTime() < scope.parentSpecimen.createdOn) {
-            Alerts.error("specimens.errors.child_created_on_less");
+            Alerts.error("specimens.errors.created_on_lt_parent");
             return;
           } else if (scope.derivative.createdOn > new Date()) {
-            Alerts.error("specimens.errors.child_created_on_greater");
+            Alerts.error("specimens.errors.created_on_gt_curr_time");
             return;
           }
 

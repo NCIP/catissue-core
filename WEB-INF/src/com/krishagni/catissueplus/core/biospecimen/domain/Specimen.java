@@ -268,22 +268,6 @@ public class Specimen extends BaseEntity {
 	}
 
 	public void setCreatedOn(Date createdOn) {
-		if (createdOn != null && createdOn.after(new Date())) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.CREATED_ON_GT_CURRENT);
-		}
-
-		if (parentSpecimen == null && receivedEvent != null && !createdOn.equals(receivedEvent.getTime())) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_CREATED_ON_GT_RECEIVED);
-		} else if (parentSpecimen != null && createdOn.before(parentSpecimen.getCreatedOn())) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.CHILD_CREATED_ON_LT_PARENT);
-		}
-
-		for (Specimen child : childCollection) {
-			if (createdOn.after(child.createdOn)) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_CREATED_ON_GT_CHILD);
-			}
-		}
-
 		this.createdOn = createdOn;
 	}
 
@@ -459,6 +443,10 @@ public class Specimen extends BaseEntity {
 		return DERIVED.equals(lineage);
 	}
 	
+	public boolean isPrimary() {
+		return NEW.equals(lineage);
+	}
+
 	public boolean isCollected() {
 		return isCollected(getCollectionStatus());
 	}
@@ -551,6 +539,16 @@ public class Specimen extends BaseEntity {
 		updateEvent(getReceivedEvent(), specimen.getReceivedEvent());
 		updateCollectionStatus(specimen.getCollectionStatus());
 
+		if (isCollected()) {
+			if (isPrimary()) {
+				updateCreatedOn(getReceivedEvent().getTime());
+			} else {
+				updateCreatedOn(specimen.getCreatedOn());
+			}
+		} else {
+			updateCreatedOn(null);
+		}
+
 		// TODO: Specimen class/type should not be allowed to change 
 		if (isAliquot()) {
 			setSpecimenClass(parentSpecimen.getSpecimenClass());
@@ -564,17 +562,14 @@ public class Specimen extends BaseEntity {
 			setConcentration(specimen.getConcentration());
 		}
 		
-		if (parentSpecimen == null) {
+		if (isPrimary()) {
 			setTissueSite(specimen.getTissueSite());
 			setTissueSide(specimen.getTissueSide());
 			setPathologicalStatus(specimen.getPathologicalStatus());
-			setCreatedOn(specimen.getReceivedEvent().getTime());
 		} else {
-			setTissueSite(parentSpecimen.getTissueSite());
-			setTissueSide(parentSpecimen.getTissueSide());
-			setPathologicalStatus(parentSpecimen.getPathologicalStatus());
-			setCreatedOn(specimen.getCreatedOn());
-
+			setTissueSite(getParentSpecimen().getTissueSite());
+			setTissueSide(getParentSpecimen().getTissueSide());
+			setPathologicalStatus(getParentSpecimen().getPathologicalStatus());
 		}
 		
 		setInitialQuantity(specimen.getInitialQuantity());		
@@ -713,6 +708,10 @@ public class Specimen extends BaseEntity {
 			specimen.checkQtyConstraints();		
 		}
 		
+		if (specimen.getCreatedOn() != null && specimen.getCreatedOn().before(getCreatedOn())) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.CHILD_CREATED_ON_LT_PARENT);
+		}
+
 		specimen.occupyPosition();		
 		getChildCollection().add(specimen);
 	}
@@ -915,6 +914,7 @@ public class Specimen extends BaseEntity {
 		}
 		
 		getReceivedEvent().saveOrUpdate();
+		setCreatedOn(getReceivedEvent().getTime());
 	}
 	
 	private void deleteEvents() {
@@ -1000,6 +1000,32 @@ public class Specimen extends BaseEntity {
 			getChildCollection().add(specimen);
 
 			specimen.createMissedSpecimens();
+		}
+	}
+
+	private void updateCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+
+		if (createdOn == null) { 
+			for (Specimen childSpecimen : getChildCollection()) {
+				childSpecimen.updateCreatedOn(createdOn);
+			}
+
+			return;
+		}
+
+		if (createdOn.after(Calendar.getInstance().getTime())) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.CREATED_ON_GT_CURRENT);
+		}
+
+		if (!isPrimary() && createdOn.before(getParentSpecimen().getCreatedOn())) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.CHILD_CREATED_ON_LT_PARENT);
+		}
+
+		for (Specimen childSpecimen : getChildCollection()) {
+			if (createdOn.after(childSpecimen.getCreatedOn())) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_CREATED_ON_GT_CHILDREN);
+			}
 		}
 	}
 }

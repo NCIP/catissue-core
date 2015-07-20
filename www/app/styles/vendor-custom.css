@@ -125,18 +125,3 @@ body > .ui-select-bootstrap.open {
   margin-right: 15px;
   margin-left: 15px;
 }
-
-.os-custom-timepicker > table {
-  height: 34px;
-  padding: 6px 12px;
-  background-color: #fff;
-  background-image: none;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.os-custom-timepicker > table > tbody > tr > td > input {
-  border: none;
-  width: 60px;
-  height: 30px;
-}
