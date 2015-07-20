@@ -108,11 +108,10 @@
           <div class="form-group">
             <label class="col-xs-3 control-label" translate="participant.death_date">Death Date</label>
             <div class="col-xs-6">
-              <input type="text" ng-model="cpr.participant.deathDate" class="form-control" 
-                datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
-                is-open="deathDt.isOpen" ng-focus="deathDt.isOpen=true" 
+              <os-date-picker date="cpr.participant.deathDate"
                 ng-disabled="cpr.participant.vitalStatus != 'Dead'" 
-                placeholder="{{'participant.death_date' | translate}}"/>
+                placeholder="{{'participant.death_date' | translate}}">
+              </os-date-picker>
             </div>
           </div>
 

@@ -55,10 +55,9 @@
       <div class="form-group">
         <label class="col-xs-3 control-label">Date of Visit</label>
         <div class="col-xs-6">
-          <input type="text" name="date" ng-model="currVisit.visitDate" class="form-control" 
-            datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
-            is-open="visitDt.isOpen" ng-focus="visitDt.isOpen=true"
-            required placeholder="Date of Visit"/>
+          <os-date-picker name="date" date="currVisit.visitDate" required
+            placeholder="Date of Visit">
+          </os-date-picker>
           <div os-field-error field="vform.date"></div>
         </div>
       </div>

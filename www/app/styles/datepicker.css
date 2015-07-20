@@ -21,6 +21,7 @@
   border-color: #dddddd;
   border-radius: 0px;
   margin: 0px;
+  background-color: transparent;
 }
 
 .os-md-input .os-date-picker > input:focus ~ span.input-group-btn button.btn-default {

@@ -12,10 +12,9 @@
       <div class="col-xs-4">
         <div class="form-group">
           <div ng-model="visit.visitDate" placeholder="Visit Date" os-md-input>
-            <input name="visitDate" ng-model="visit.visitDate" class="form-control" type="text"
-               datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
-               is-open="regDt.isOpen" ng-focus="regDt.isOpen=true"
-               required placeholder="Visit Date">
+            <os-date-picker name="visitDate" date="visit.visitDate" required
+              placeholder="Visit Date">
+            </os-date-picker>
           </div>
           <div os-field-error field="visitForm.visitDate"></div>
         </div>

@@ -6,8 +6,8 @@
         <strong class="key key-sm" translate="participant.reg_date">Registration Date:</strong>
         <os-inline-edit editor="rdEditor" name="regDate" class="value value-md" value="cpr.registrationDate">
           <span ng-if="rdEditor.isDisplayMode()">{{rdEditor.viewValue | date: global.dateFmt | osNoValue}}</span>
-          <input ng-if="rdEditor.isEditMode()" class="form-control" type="text" ng-model="rdEditor.editValue"
-            datepicker-popup="{{global.dateFmt}}" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true">
+          <os-date-picker ng-if="rdEditor.isEditMode()" date="rdEditor.editValue">
+          </os-date-picker>
         </os-inline-edit>
       </li>
 
@@ -42,8 +42,8 @@
         <strong class="key key-sm" translate="participant.birth_date">Birth Date:</strong>
         <os-inline-edit editor="bdEditor" name="birthDate" class="value value-md" value="cpr.participant.birthDate">
           <span ng-if="bdEditor.isDisplayMode()">{{bdEditor.viewValue | date: global.dateFmt | osNoValue}}</span>
-          <input ng-if="bdEditor.isEditMode()" class="form-control" type="text" ng-model="bdEditor.editValue"
-            datepicker-popup="{{global.dateFmt}}" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true">
+          <os-date-picker ng-if="bdEditor.isEditMode()" date="bdEditor.editValue">
+          </os-date-picker>
         </os-inline-edit>
       </li>
 

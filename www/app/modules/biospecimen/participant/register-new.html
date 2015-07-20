@@ -13,9 +13,9 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="participant.reg_date">Registration Date</label>
       <div class="col-xs-6">
-        <input type="text" name="regDate" ng-model="newCpr.registrationDate" class="form-control" 
-          datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="regDt.isOpen" 
-          ng-focus="regDt.isOpen=true" required placeholder="{{'participant.regDate' | translate}}"/>
+        <os-date-picker name="regDate" date="newCpr.registrationDate" required
+          placeholder="{{'participant.regDate' | translate}}">
+        </os-date-picker>
         <div os-field-error field="pform.regDate"></div>
       </div>
     </div>

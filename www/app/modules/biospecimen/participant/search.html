@@ -17,9 +17,9 @@
     <div class="form-group">
       <label class="control-label" translate="participant.reg_date">Registration Date</label>
       <div class="os-md-input">
-        <input type="text" ng-model="filterOpts.registrationDate" class="form-control"
-          datepicker-popup="{{global.dateFmt}}" is-open="regDt.isOpen" ng-focus="regDt.isOpen=true"
+        <os-date-picker date="filterOpts.registrationDate"
           placeholder="{{'participant.reg_date' | translate}}">
+        </os-date-picker>
       </div>
     </div>
 
@@ -42,9 +42,9 @@
     <div class="form-group">
       <label class="control-label" translate="participant.birth_date">Birth Date</label>
       <div class="os-md-input">
-        <input type="text" ng-model="filterOpts.dob" class="form-control" 
-          datepicker-popup="{{global.dateFmt}}" is-open="birthDt.isOpen" ng-focus="birthDt.isOpen=true" 
+        <os-date-picker date="filterOpts.dob"
           placeholder="{{'participant.birth_date' | translate}}"/>
+        </os-date-picker>
       </div>
     </div>
 

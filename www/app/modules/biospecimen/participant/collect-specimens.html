@@ -127,10 +127,9 @@
             </div>
             <div class="col-xs-3 input">
               <div os-md-input ng-model="visit.visitDate" placeholder="Visit Date">
-                <input name="visitDate" ng-model="visit.visitDate" class="form-control" type="text"
-                  datepicker-popup="{{global.dateFmt}}" show-button-bar="true"
-                  is-open="visitDt.isOpen" ng-focus="visitDt.isOpen=true"
-                  required placeholder="Visit Date">
+                <os-date-picker name="visitDate" date="visit.visitDate" required
+                  placeholder="Visit Date">
+                </os-date-picker>
                 <div os-field-error field="collectionForm.visitDate"></div>
               </div>
             </div>
@@ -189,9 +188,9 @@
           </div>
           <div class="col-xs-2 input">
             <div os-md-input ng-model="collDetail.receiveDate" placeholder="Received Time">
-              <input name="receiveDate" ng-model="collDetail.receiveDate" class="form-control" type="text"
-                datepicker-popup="{{global.dateFmt}}" show-button-bar="true" is-open="recvDt.isOpen" ng-focus="recvDt.isOpen=true"
-                required placeholder="Receive Date">
+              <os-date-picker name="receiveDate" date="collDetail.receiveDate" required
+                placeholder="Receive Date">
+              </os-date-picker>
               <div os-field-error field="collectionForm.receiveDate"></div>
             </div>
           </div>

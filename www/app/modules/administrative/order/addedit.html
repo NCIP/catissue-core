@@ -70,10 +70,9 @@
     <div class="form-group">
       <label class="control-label col-xs-3" translate="orders.execution_date">Date</label>
       <div class="col-xs-6">
-        <input type="text" name="executionDate" ng-model="order.executionDate" class="form-control" 
-          datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
-          placeholder="{{'orders.execution_date' | translate}}"   
-          is-open="dt.isOpen" ng-focus="dt.isOpen=true" required>
+        <os-date-picker name="executionDate" date="order.executionDate"
+          placeholder="{{'orders.execution_date' | translate}}" required>
+        </os-date-picker>
         <div os-field-error field="ordForm.executionDate"></div>
       </div>  
     </div>
