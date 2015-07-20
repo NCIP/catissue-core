@@ -93,7 +93,7 @@ angular.module('openspecimen')
           tElement.children().find('div')
            .attr('os-md-input', '')
            .attr('placeholder', tAttrs.placeholder)
-           .attr('ng-model', tAttrs.date)
+           .attr('ng-model', 'date')
         }
 
         var inputEl = tElement.find('input');
