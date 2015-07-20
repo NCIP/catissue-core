@@ -166,12 +166,10 @@
             </div>
           </div>
           <div class="col-xs-2 input">
-            <div os-md-input ng-model="collDetail.collectionDate" placeholder="Collection Time">
-              <os-date-picker name="collDate" date="collDetail.collectionDate"
-                date-format="global.deBeDateFmt" required placeholder="Collection Date">
-              </os-date-picker>
-              <div os-field-error field="collectionForm.collDate"></div>
-            </div>
+            <os-date-picker name="collDate" date="collDetail.collectionDate" md-type="true"
+              required placeholder="Collection Date">
+            </os-date-picker>
+            <div os-field-error field="collectionForm.collDate"></div>
           </div>
           <div class="col-xs-1 input">
             <timepicker class="os-time-no-wheels" os-md-input ng-model="collDetail.collectionDate" show-meridian="false"></timepicker>
