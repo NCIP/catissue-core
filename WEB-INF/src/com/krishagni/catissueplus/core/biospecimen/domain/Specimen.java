@@ -730,7 +730,7 @@ public class Specimen extends BaseEntity {
 		}
 		
 		ensureAliquotQtyOk(
-				SpecimenErrorCode.INIT_QTY_LT_ALIQUOT_QTY, 
+				SpecimenErrorCode.INIT_QTY_LT_ALIQUOT_QTY,
 				SpecimenErrorCode.AVBL_QTY_GT_ACTUAL);
 		
 		if (isAliquot()) {
@@ -1023,7 +1023,7 @@ public class Specimen extends BaseEntity {
 		}
 
 		for (Specimen childSpecimen : getChildCollection()) {
-			if (createdOn.after(childSpecimen.getCreatedOn())) {
+			if (childSpecimen.getCreatedOn() != null && createdOn.after(childSpecimen.getCreatedOn())) {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_CREATED_ON_GT_CHILDREN);
 			}
 		}

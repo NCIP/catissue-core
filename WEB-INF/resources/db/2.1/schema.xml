@@ -65,7 +65,9 @@
     <renameColumn tableName="CATISSUE_SPECIMEN"
       oldColumnName="CREATED_ON_DATE"
       newColumnName="CREATED_ON"
-      columnDataType="${timestamp.type}"/>
+      columnDataType="${nullable.ts.type}"/>
   </changeSet>
+
+
 
 </databaseChangeLog>

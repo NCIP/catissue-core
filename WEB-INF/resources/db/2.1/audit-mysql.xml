@@ -16,7 +16,7 @@
     <renameColumn tableName="catissue_specimen_aud"
       oldColumnName="CREATED_ON_DATE"
       newColumnName="CREATED_ON"
-      columnDataType="timestamp"/>
+      columnDataType="timestamp null"/>
   </changeSet>
 
 </databaseChangeLog>
