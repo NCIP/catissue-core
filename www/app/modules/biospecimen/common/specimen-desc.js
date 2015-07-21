@@ -6,7 +6,8 @@ angular.module('os.biospecimen.common.specimendesc', [])
       replace: 'true',
 
       scope: {
-        specimen: '='
+        specimen: '=',
+        showReqLabel: '=?'
       },
 
       link: function(scope, element, attrs) {
@@ -16,6 +17,10 @@ angular.module('os.biospecimen.common.specimendesc', [])
 
       template: 
         '<span class="os-specimen-desc">' +
+          '<span ng-if="showReqLabel && !!specimen.reqLabel">' +
+            '{{specimen.reqLabel}}: ' +
+          '</span>' +
+
           '<span ng-if="specimen.lineage == \'New\' || detailed">' +
             '<span ng-if="!!specimen.pathology && specimen.pathology != notSpecified">' +
               '{{specimen.pathology}} ' +

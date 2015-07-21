@@ -58,7 +58,7 @@
                              'os-status-pending': specimen.existingStatus == 'Pending' || !specimen.existingStatus,
                              'os-status-not-collected': specimen.existingStatus == 'Missed Collection'}">
                 </span>
-                <os-specimen-desc specimen="specimen"></os-specimen-desc>
+                <os-specimen-desc specimen="specimen" show-req-label="true"></os-specimen-desc>
               </div>
             </td>
             <td class="col os-col-10" ng-init="pLabel = specimen.label"
