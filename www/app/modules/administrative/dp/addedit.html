@@ -68,16 +68,14 @@
       <div class="form-group">
         <label class="control-label col-xs-3" translate="dp.date">Date</label>
         <div class="col-xs-3">
-          <input type="text" name="startDate" ng-model="distributionProtocol.startDate" class="form-control" 
-            datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
-            is-open="startDt.isOpen" ng-focus="startDt.isOpen=true" 
-            placeholder="{{'dp.start_date' | translate}}" />   
+          <os-date-picker name="startDate" date="distributionProtocol.startDate"
+            placeholder="{{'dp.start_date' | translate}}">
+          </os-date-picker>
         </div>  
         <div class="col-xs-3">
-          <input type="text" name="endDate" ng-model="distributionProtocol.endDate" class="form-control" 
-            datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
-            is-open="endDt.isOpen" ng-focus="endDt.isOpen=true" 
-            placeholder="{{'dp.end_date' | translate}}" />   
+          <os-date-picker name="endDate" date="distributionProtocol.endDate"
+            placeholder="{{'dp.end_date' | translate}}">
+          </os-date-picker>
         </div>  
       </div>
 

@@ -40,8 +40,8 @@
         <strong class="key key-sm" translate="dp.start_date">Start Date</strong>
         <os-inline-edit editor="sdEditor" name="startDate" class="value value-md" value="distributionProtocol.startDate">
           <span ng-if="sdEditor.isDisplayMode()">{{sdEditor.viewValue | date: global.dateFmt | osNoValue}}</span>
-          <input ng-if="sdEditor.isEditMode()" class="form-control" type="text" ng-model="sdEditor.editValue"
-            datepicker-popup="{{global.dateFmt}}" show-button-bar="false" is-open="startDt.isOpen" ng-focus="startDt.isOpen=true">
+          <os-date-picker ng-if="sdEditor.isEditMode()" date="sdEditor.editValue">
+          </os-date-picker>
         </os-inline-edit>
       </li>
 
@@ -49,8 +49,8 @@
         <strong class="key key-sm" translate="dp.end_date">End Date</strong>
         <os-inline-edit editor="edEditor" name="endDate" class="value value-md" value="distributionProtocol.endDate">
           <span ng-if="edEditor.isDisplayMode()">{{edEditor.viewValue | date: global.dateFmt | osNoValue}}</span>
-          <input ng-if="edEditor.isEditMode()" class="form-control" type="text" ng-model="edEditor.editValue"
-            datepicker-popup="{{global.dateFmt}}" show-button-bar="false" is-open="endDt.isOpen" ng-focus="endDt.isOpen=true">
+          <os-date-picker ng-if="edEditor.isEditMode()" date="edEditor.editValue">
+          </os-date-picker>
         </os-inline-edit>
       </li>
 

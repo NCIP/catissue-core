@@ -62,4 +62,52 @@ angular.module('openspecimen')
       require: 'ngModel',
       link: link
     };
+  })
+  
+  .directive ('osDatePicker', function ($rootScope, $timeout) {
+    var inputAttrs = ['name', 'required', 'placeholder'];
+    
+    function linker (scope, element, attrs) {
+      if (!scope.dateFormat) {
+        scope.dateFormat = $rootScope.global.shortDateFmt;
+      }
+
+      scope.datePicker = {isOpen: false};
+      scope.showDatePicker = function () {
+        $timeout(function () {
+          scope.datePicker.isOpen = true; 
+        });
+      };
+    }
+    
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'modules/common/datepicker.html',
+      scope: {
+        date: '=',
+        dateFormat: '=?'
+      },
+      compile: function (tElement, tAttrs) {
+        if (tAttrs.mdType == 'true') {
+          tElement.children().find('div')
+           .attr('os-md-input', '')
+           .attr('placeholder', tAttrs.placeholder)
+           .attr('ng-model', 'date')
+        }
+
+        var inputEl = tElement.find('input');
+        angular.forEach(inputAttrs, function(inputAttr) {
+          if (angular.isDefined(tAttrs[inputAttr])) {
+            inputEl.attr(inputAttr, tAttrs[inputAttr]);
+          }
+        });
+
+        //putting the element manipulation in compile ensures that the directive elements will be addded
+        //at the time of compilation which solved form validation problem.
+        return linker;
+        //if compile is provided the link will not be executed so return link function from compile
+      }
+    };
   });
+

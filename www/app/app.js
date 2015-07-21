@@ -243,6 +243,7 @@ angular.module('openspecimen', [
           $rootScope.global,
           {
             dateFmt: localeSettings.dateFmt,
+            shortDateFmt: localeSettings.deBeDateFmt,
             timeFmt: localeSettings.timeFmt,
             queryDateFmt: {format: localeSettings.deFeDateFmt},
             dateTimeFmt: localeSettings.dateFmt + ' ' + localeSettings.timeFmt,

@@ -15,10 +15,9 @@
         <div class="form-group">
           <label class="col-xs-3 control-label" translate="participant.reg_date">Registration Date</label>
           <div class="col-xs-6">
-            <input type="text" name="regDate" ng-model="cpr.registrationDate" class="form-control" 
-              datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
-              is-open="regDt.isOpen" ng-focus="regDt.isOpen=true"
-              required placeholder="{{'participant.regDate' | translate}}"/>
+            <os-date-picker name="regDate" date="cpr.registrationDate"
+              date-format="global.deBeDateFmt" required placeholder="{{'participant.regDate' | translate}}">
+            </os-date-picker>
             <div os-field-error field="pform.regDate"></div>
           </div>
         </div>
@@ -54,10 +53,10 @@
         <div class="form-group">
           <label class="col-xs-3 control-label" translate="participant.birth_date">Birth Date</label>
           <div class="col-xs-6">
-            <input type="text" ng-model="cpr.participant.birthDate" class="form-control" 
-              datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
-              is-open="birthDt.isOpen" ng-focus="birthDt.isOpen=true" 
-              placeholder="{{'participant.birth_date' | translate}}"/>
+            <os-date-picker name="birthDate" date="cpr.participant.birthDate"
+              date-format="global.deBeDateFmt" placeholder="{{'participant.birth_date' | translate}}">
+            </os-date-picker>
+            <div os-field-error field="pform.birthDate"></div>
           </div>
         </div>
 
@@ -109,11 +108,10 @@
           <div class="form-group">
             <label class="col-xs-3 control-label" translate="participant.death_date">Death Date</label>
             <div class="col-xs-6">
-              <input type="text" ng-model="cpr.participant.deathDate" class="form-control" 
-                datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
-                is-open="deathDt.isOpen" ng-focus="deathDt.isOpen=true" 
+              <os-date-picker date="cpr.participant.deathDate"
                 ng-disabled="cpr.participant.vitalStatus != 'Dead'" 
-                placeholder="{{'participant.death_date' | translate}}"/>
+                placeholder="{{'participant.death_date' | translate}}">
+              </os-date-picker>
             </div>
           </div>
 

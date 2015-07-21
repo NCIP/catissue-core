@@ -36,12 +36,9 @@
     </div>
 
     <div class="form-group">
-      <div os-md-input ng-model="filterOpts.executionDate" placeholder="{{'orders.execution_date' | translate}}">
-        <input type="text" ng-model="filterOpts.executionDate" class="form-control" 
-          datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
-          is-open="execDt.isOpen" ng-focus="execDt.isOpen=true"
-          placeholder="{{'orders.execution_date' | translate}}">
-      </div>
+      <os-date-picker date="filterOpts.executionDate" md-type="true"
+        placeholder="{{'orders.execution_date' | translate}}">
+      </os-date-picker>
     </div>
 
     <div class="form-group os-btns">
