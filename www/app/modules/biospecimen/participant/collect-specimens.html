@@ -126,12 +126,10 @@
               <div os-field-error field="collectionForm.visitName"></div>
             </div>
             <div class="col-xs-3 input">
-              <div os-md-input ng-model="visit.visitDate" placeholder="Visit Date">
-                <os-date-picker name="visitDate" date="visit.visitDate" required
-                  placeholder="Visit Date">
-                </os-date-picker>
-                <div os-field-error field="collectionForm.visitDate"></div>
-              </div>
+              <os-date-picker name="visitDate" date="visit.visitDate" required md-type="true"
+                placeholder="Visit Date">
+              </os-date-picker>
+              <div os-field-error field="collectionForm.visitDate"></div>
             </div>
             <div class="col-xs-3 input">
               <os-select name="site" os-md-input ng-model="visit.site" list="sites"
@@ -187,12 +185,10 @@
             </div>
           </div>
           <div class="col-xs-2 input">
-            <div os-md-input ng-model="collDetail.receiveDate" placeholder="Received Time">
-              <os-date-picker name="receiveDate" date="collDetail.receiveDate" required
-                placeholder="Receive Date">
-              </os-date-picker>
-              <div os-field-error field="collectionForm.receiveDate"></div>
-            </div>
+            <os-date-picker name="receiveDate" date="collDetail.receiveDate" required md-type="true"
+              placeholder="Receive Date">
+            </os-date-picker>
+            <div os-field-error field="collectionForm.receiveDate"></div>
           </div>
           <div class="col-xs-1 input">
             <timepicker class="os-time-no-wheels" os-md-input ng-model="collDetail.receiveDate" show-meridian="false"></timepicker>

@@ -36,11 +36,9 @@
     </div>
 
     <div class="form-group">
-      <div os-md-input ng-model="filterOpts.executionDate" placeholder="{{'orders.execution_date' | translate}}">
-        <os-date-picker date="filterOpts.executionDate"
-          placeholder="{{'orders.execution_date' | translate}}">
-        </os-date-picker>
-      </div>
+      <os-date-picker date="filterOpts.executionDate" md-type="true"
+        placeholder="{{'orders.execution_date' | translate}}">
+      </os-date-picker>
     </div>
 
     <div class="form-group os-btns">

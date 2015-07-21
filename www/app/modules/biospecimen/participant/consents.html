@@ -62,11 +62,9 @@
           <div ng-switch on="editMode">
             <div ng-switch-when="true">
               <div class="col-xs-6">
-                <div os-md-input ng-model="consent.consentSignatureDate" placeholder="{{'participant.consent.signature_date'|translate}}">
-                  <os-date-picker name="consentDate" date="consent.consentSignatureDate"
-                    placeholder="{{'participant.consent.signature_date'|translate}}">
-                  </os-date-picker>
-                </div>
+                <os-date-picker name="consentDate" date="consent.consentSignatureDate" md-type="true"
+                  placeholder="{{'participant.consent.signature_date'|translate}}">
+                </os-date-picker>
               </div>
               <div class="col-xs-6">
                 <div os-md-input ng-model="consent.witness" placeholder="{{'participant.consent.witness'|translate}}">
