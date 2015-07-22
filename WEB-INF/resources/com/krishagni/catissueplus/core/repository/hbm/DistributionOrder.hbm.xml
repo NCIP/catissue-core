@@ -70,6 +70,8 @@
     <query name="getOrderByName">
       from 
         com.krishagni.catissueplus.core.administrative.domain.DistributionOrder
+      where
+        name = :name
     </query>
 
     <sql-query name="getSpecimenCountByOrder">

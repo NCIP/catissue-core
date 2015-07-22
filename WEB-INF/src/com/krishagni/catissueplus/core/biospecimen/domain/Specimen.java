@@ -635,7 +635,7 @@ public class Specimen extends BaseEntity {
 	}
 		
 	public void distribute(User distributor, Date time, Double quantity, boolean closeAfterDistribution) {
-		if (!getIsAvailable() || !isCollected() || getAvailableQuantity() <= 0) {
+		if ((getIsAvailable() != null && !getIsAvailable()) || !isCollected() || getAvailableQuantity() <= 0) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_AVAILABLE_FOR_DIST, getLabel());
 		}
 		
