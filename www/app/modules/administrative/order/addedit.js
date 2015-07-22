@@ -88,11 +88,10 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     }
 
     $scope.addSpecimens = function() {
-      var labels = $scope.input.labelText.split(/,|\t|\n/).filter(
-        function(label) {
-          return label.trim().length != 0;
-        }
-      );
+      var labels = 
+        $scope.input.labelText.split(/,|\t|\n/)
+          .map(function(label) { return label.trim(); })
+          .filter(function(label) { return label.length != 0; });
 
       if (labels.length == 0) {
         return; 
