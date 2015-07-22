@@ -57,6 +57,13 @@ angular.module('os.common.form', [])
             controller.setParentValidator(parentValidator);
           });
         }
+
+        element.find("input, select, .os-select-container").keypress(
+          function(e){
+            if ( e.which == 13 ) { // Enter key = keycode 13
+              return false;
+            }
+        });
       }
     };
   })
