@@ -58,10 +58,11 @@ angular.module('os.common.form', [])
           });
         }
 
-        element.find("input, select, .os-select-container").keypress(function(e){
-          if ( e.which == 13 ) { // Enter key = keycode 13
-            return false;
-          }
+        element.find("input, select, .os-select-container").keypress(
+          function(e){
+            if ( e.which == 13 ) { // Enter key = keycode 13
+              return false;
+            }
         });
       }
     };
