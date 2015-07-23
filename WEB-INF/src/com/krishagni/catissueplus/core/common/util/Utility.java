@@ -6,13 +6,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -140,15 +141,15 @@ public class Utility {
 	}
 	
 	public static String getContentType(File file) {
-		return MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(file);
+		FileNameMap contentTypesMap = URLConnection.getFileNameMap();
+		return contentTypesMap.getContentTypeFor(file.getAbsolutePath());
 	}
 	
 	public static String getFileText(File file) {
 		FileInputStream in = null;
 		try {
 			in = new FileInputStream(file);
-			MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
-			String contentType = mimeTypesMap.getContentType(file);
+			String contentType = getContentType(file);
 			return getString(in, contentType);
 		} catch (Exception e) {
 			throw new RuntimeException("Error getting file text", e);
