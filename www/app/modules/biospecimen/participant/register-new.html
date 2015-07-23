@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <div class="form-group" ng-if="!newCpr.cp.ppidFmt">
+    <div class="form-group" ng-if="newCpr.cp && (newCpr.cp.manualPpidEnabled || !newCpr.cp.ppidFmt)">
       <label class="col-xs-3 control-label" translate="participant.ppid">Participant Protocol ID</label>
       <div class="col-xs-6">
         <input type="text" name="ppid" ng-model="newCpr.ppid" class="form-control" 

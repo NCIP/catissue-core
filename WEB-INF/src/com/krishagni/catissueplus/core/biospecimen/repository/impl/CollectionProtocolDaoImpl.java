@@ -51,7 +51,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 			
 			cpList.add(cp);
 		}
-		
+
 		if (includeStats && !cpMap.isEmpty()) {
 			rows = getSessionFactory().getCurrentSession()
 					.getNamedQuery(GET_PARTICIPANT_N_SPECIMEN_CNT)
@@ -278,7 +278,9 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		projs.add(Projections.property("title"));
 		projs.add(Projections.property("startDate"));
 		projs.add(Projections.property("ppidFormat"));
-				
+		projs.add(Projections.property("manualPpidEnabled"));
+
+
 		if (cpCriteria.includePi()) {
 			projs.add(Projections.property("pi.id"));
 			projs.add(Projections.property("pi.firstName"));
@@ -294,13 +296,13 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		cp.setTitle((String)fields[2]);
 		cp.setStartDate((Date)fields[3]);
 		cp.setPpidFmt((String)fields[4]);
-		
+		cp.setManualPpidEnabled((Boolean)fields[5]);
 		if (includePi) {
 			UserSummary user = new UserSummary();
-			user.setId((Long)fields[5]);
-			user.setFirstName((String)fields[6]);
-			user.setLastName((String)fields[7]);
-			user.setLoginName((String)fields[8]);
+			user.setId((Long)fields[6]);
+			user.setFirstName((String)fields[7]);
+			user.setLastName((String)fields[8]);
+			user.setLoginName((String)fields[9]);
 			cp.setPrincipalInvestigator(user);
 		}
 		

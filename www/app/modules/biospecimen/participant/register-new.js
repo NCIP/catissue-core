@@ -26,7 +26,8 @@ angular.module('os.biospecimen.participant.newreg', ['os.biospecimen.models'])
       var cprToSave = new CollectionProtocolRegistration({
         participant: new Participant({id: cpr.participant.id, pmis: cpr.participant.getPmis()}),
         registrationDate: $scope.newCpr.registrationDate,
-        cpId: $scope.newCpr.cp.id
+        cpId: $scope.newCpr.cp.id,
+        ppid: $scope.newCpr.ppid
       });
 
       cprToSave.$saveOrUpdate().then(
