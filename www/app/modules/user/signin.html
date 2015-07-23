@@ -13,7 +13,7 @@
         <input type="password" class="form-control" ng-model="loginData.password"  placeholder="{{'user.password' | translate}}">
         <div ng-if="domains.length > 1">
           <os-select ng-model="loginData.domainName" list="domains" name="domain"
-            placeholder="{{'user.domain_name' | translate}}">
+            placeholder="{{'user.domain_name' | translate}}" required>
           </os-select>
 	</div>
       </div>

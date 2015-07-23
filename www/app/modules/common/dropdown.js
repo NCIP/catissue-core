@@ -36,7 +36,8 @@ angular.module('openspecimen')
         }
 
         var uiSelectMatch = angular.element('<ui-select-match/>')
-          .attr('placeholder', tAttrs.placeholder);
+          .attr('placeholder', tAttrs.placeholder)
+          .attr('allow-clear', tAttrs.required == undefined);
         
         var searchItem = getItemDisplayValue('item', tAttrs);
         var uiSelectChoices = angular.element('<ui-select-choices/>');
