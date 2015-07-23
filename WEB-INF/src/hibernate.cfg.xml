@@ -61,6 +61,8 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/LabelPrintJob.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/LabelPrintJobItem.hbm.xml"/>
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ImportJob.hbm.xml"/>
+		
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Migration.hbm.xml" />
 
 		<mapping resource="com/krishagni/rbac/resources/Group.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/GroupRole.hbm.xml"/>

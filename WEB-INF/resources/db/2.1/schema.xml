@@ -67,7 +67,33 @@
       newColumnName="CREATED_ON"
       columnDataType="${nullable.ts.type}"/>
   </changeSet>
+  
+  <changeSet author="vgaikwad" id="Table to maintain migration status">
+    <createTable tableName="OS_MIGRATIONS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
 
+      <column name="NAME" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
 
+      <column name="VERSION_FROM" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
 
+      <column name="VERSION_TO" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="DATE" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="STATUS" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  
 </databaseChangeLog>

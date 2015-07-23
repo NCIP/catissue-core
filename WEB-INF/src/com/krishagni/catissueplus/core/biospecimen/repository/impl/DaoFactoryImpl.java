@@ -36,6 +36,8 @@ import com.krishagni.catissueplus.core.common.repository.ConfigSettingDao;
 import com.krishagni.catissueplus.core.common.repository.UniqueIdGenerator;
 import com.krishagni.catissueplus.core.common.repository.impl.ConfigSettingDaoImpl;
 import com.krishagni.catissueplus.core.common.repository.impl.UniqueIdGeneratorImpl;
+import com.krishagni.openspecimen.core.migration.repository.MigrationDao;
+import com.krishagni.openspecimen.core.migration.repository.impl.MigrationDaoImpl;
 
 public class DaoFactoryImpl implements DaoFactory {
 	private SessionFactory sessionFactory;
@@ -189,6 +191,13 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public SpecimenQuantityUnitDao getSpecimenQuantityUnitDao() {
 		SpecimenQuantityUnitDaoImpl dao = new SpecimenQuantityUnitDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public MigrationDao getMigrationDao() {
+		MigrationDaoImpl dao = new MigrationDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}
