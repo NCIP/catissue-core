@@ -233,7 +233,7 @@
     "spmn_label_or_barcode": "Specimen Label / Barcode",
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
-
+    "another_protocol": "Register to Another Protocol",
     "consent": {
       "signed_consent_form": "Signed Consent Form",
       "deleting_consent_form": "Deleting Signed Consent Form",
@@ -259,6 +259,7 @@
     "part_extensions": "Participant Forms",
     "registrations": "Participant Registrations",
     "registered_cps": "Registered Protocols",
+    "other_cps": "Other Protocols",
     
     "buttons": {
       "register": "Register",

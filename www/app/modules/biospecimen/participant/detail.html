@@ -15,15 +15,27 @@
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
-      <button ng-if="cpsForReg.length > 0" class="default"
-        ui-sref="participant-newreg">
-        <span class="fa fa-plus"></span>
-        <span>Register New</span>
-      </button>
-      <button show-if-allowed="participantResource.deleteOpts" class="default" ng-click="deleteReg()">
-        <span class="fa fa-trash"></span>
-        <span translate="common.buttons.delete">Delete</span>
-      </button>
+
+      <div dropdown class="inline">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.more">More</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li ng-if="cpsForReg.length > 0">
+            <a ui-sref="participant-newreg">
+              <i class="fa fa-plus"></i>
+              <span translate="participant.another_protocol">Register to Another Protocol</span>
+            </a>
+          </li>
+          <li show-if-allowed="participantResource.deleteOpts">
+            <a ng-click="deleteReg()">
+              <i class="fa fa-trash"></i>
+              <span translate="common.buttons.delete">Delete</span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
