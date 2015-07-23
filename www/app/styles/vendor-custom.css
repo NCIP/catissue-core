@@ -12,6 +12,11 @@
   white-space: normal!important;
 }
 
+.ui-select-bootstrap .ui-select-match .btn-link {
+  color: #333;
+  opacity: 0.8;
+}
+
 .dropdown-menu:before {
   position: absolute;
   top: -7px;

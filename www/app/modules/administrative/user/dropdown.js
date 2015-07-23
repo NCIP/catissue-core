@@ -68,7 +68,7 @@ angular.module('os.administrative.user.dropdown', ['os.administrative.models'])
               '<div>' +
                 '<ui-select ng-model="$parent.ngModel" reset-search-input="true"' + 
                   ' append-to-body="' + bodyAppend + '" os-tabable="' + tabable + '">' +
-                  '<ui-select-match placeholder="{{$parent.placeholder}}">' +
+                  '<ui-select-match placeholder="{{$parent.placeholder}}" allow-clear="'+ (tAttrs.required == undefined) +'">' +
                     '{{$select.selected.lastName}}, {{$select.selected.firstName}}' +
                   '</ui-select-match>' +
                   '<ui-select-choices repeat="user in users" refresh="searchUsers($select.search)" refresh-delay="750">' +
