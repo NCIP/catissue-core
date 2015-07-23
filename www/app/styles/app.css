@@ -580,11 +580,6 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   clear: left;
 }
 
-.os-key-values .item .value {
-  color: #333;
-  font-weight: normal;
-}
-
 .os-key-values.os-one-col .item .key.key-sm {
   width: 30%;
 }
@@ -1003,4 +998,6 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 .os-about-po .content {
   padding: 15px;
+  color: #333;
+  font-weight: normal;
 }
