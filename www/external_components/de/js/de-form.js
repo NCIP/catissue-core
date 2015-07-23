@@ -701,7 +701,7 @@ edu.common.de.DatePicker = function(id, field, args) {
   };
 
   this.postRender = function() {
-    if (field.defaultType == 'CURRENT_DATE' && this.getValue().time.trim() != "") {
+    if (field.defaultType == 'CURRENT_DATE' && this.getValue().value.trim().split(" ").length < 2) {
       this.dateEl.datepicker('setDate', new Date()).datepicker('fill')
     }
   };
