@@ -75,6 +75,7 @@
         <caption>User</caption>
         <column>USER_ID</column>
         <showInGrid>true</showInGrid>
+        <mandatory>true</mandatory>
       </userField>
     </row>
 
@@ -86,6 +87,8 @@
         <column>EVENT_TIMESTAMP</column>
         <format>MM-dd-yyyy HH:mm</format>
         <showInGrid>true</showInGrid>
+        <default>current_date</default>
+        <mandatory>true</mandatory>
       </datePicker>
     </row>
 

@@ -11,6 +11,7 @@
         <udn>url</udn>
         <caption>URL</caption>
         <column>URL</column>
+        <mandatory>true</mandatory>
       </textField>
     </row>
 
@@ -20,6 +21,7 @@
         <udn>name</udn>
         <caption>Name</caption>
         <column>NAME</column>
+        <mandatory>true</mandatory>
       </textField>
     </row>
 
@@ -30,6 +32,7 @@
         <caption>User</caption>
         <column>USER_ID</column>
         <showInGrid>true</showInGrid>
+        <mandatory>true</mandatory>
       </userField>
     </row>
 
@@ -41,6 +44,8 @@
         <column>EVENT_TIMESTAMP</column>
         <format>MM-dd-yyyy HH:mm</format>
         <showInGrid>true</showInGrid>
+        <default>current_date</default>
+        <mandatory>true</mandatory>
       </datePicker>
     </row>
 
