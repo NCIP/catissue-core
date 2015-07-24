@@ -15,8 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
@@ -90,17 +89,19 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 		List<File[]> fileArray = splitArray(srcDir.listFiles(), 100);
 		
 		Status status = Status.SUCCESS;
-		TransactionTemplate txnTmpl = new TransactionTemplate(txnMgr);
 		try {
 			for (final File[] files : fileArray) {
-				txnTmpl.execute(new TransactionCallback<Void>() {
-					@Override
-					public Void doInTransaction(TransactionStatus status) {
-						migrateSprs(files);
-						return null;
-					}
-				});
-			} 			
+				DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+				def.setName("MigrateSprTransaction");
+				TransactionStatus txnStatus = txnMgr.getTransaction(def);
+				try {
+					migrateSprs(files);
+				} catch (Exception e) {
+					txnMgr.rollback(txnStatus);
+					throw e;
+				}
+				txnMgr.commit(txnStatus);
+			}	
 		} catch(Exception e) {
 			status = Status.FAIL;
 			logger.error("Surgical pathology report migration fails with error", e);
@@ -113,7 +114,7 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 		}
 	}
 
-	private void migrateSprs(final File[] files) {
+	private void migrateSprs(final File[] files) throws Exception {
 		for (File srcFile : files) {
 			try {
 				if (srcFile.isDirectory()) {
@@ -126,7 +127,7 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 				
 				Visit visit = daoFactory.getVisitsDao().getById(visitId);
 				if (visit == null || visit.getActivityStatus().equals("Disabled")) {
-				logger.info("Visit does not exist with idenifier: " + visitId);
+					logger.info("Visit does not exist with idenifier: " + visitId);
 					continue;
 				}
 				
@@ -136,11 +137,7 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 				logger.info("Surgical pathology report migrated successfully for visit id "+ visitId);
 			} catch (Exception e) {
 				logger.error("Error while migrating file:" + srcFile.getName(), e);
-				try {
-					throw e;
-				} catch (Exception ex) {
-					logger.error("Error while migration: ", e);
-				}
+				throw e;
 			}
 		}
 	}
@@ -164,7 +161,7 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 		     
 		for (int chunk = 0; chunk < noOfChunks; ++chunk) {
 			int startIdx = chunk * chunkSize;
-		    result.add(Arrays.copyOfRange(array, startIdx, startIdx + chunkSize));
+			result.add(Arrays.copyOfRange(array, startIdx, startIdx + chunkSize));
 		}
 		
 		int remaining  = array.length % chunkSize;
