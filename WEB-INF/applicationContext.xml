@@ -352,6 +352,7 @@
     <property name="distributionFactory" ref="distributionFactory" />
     <property name="querySvc"            ref="querySvc"/>
     <property name="messageSource"       ref="messageSource"/>
+    <property name="emailService" ref="emailService"/>
   </bean>
   
   <bean id="scheduledJobFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.ScheduledJobFactoryImpl">
