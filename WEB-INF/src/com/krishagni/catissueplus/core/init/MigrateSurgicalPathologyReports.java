@@ -96,35 +96,7 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 				txnTmpl.execute(new TransactionCallback<Void>() {
 					@Override
 					public Void doInTransaction(TransactionStatus status) {
-						for (File srcFile : files) {
-							try {
-								if (srcFile.isDirectory()) {
-									continue;
-								}
-								
-								String[] arr = srcFile.getName().split("_", 2);
-								Long visitId = Long.parseLong(arr[0]);
-								String sprName = arr[1];
-								
-								Visit visit = daoFactory.getVisitsDao().getById(visitId);
-								if (visit == null || visit.getActivityStatus().equals("Disabled")) {
-									logger.info("Visit does not exist with idenifier: " + visitId);
-									continue;
-								}
-								
-								String sprText = Utility.getFileText(srcFile);
-								FileUtils.writeStringToFile(getSprFile(visitId), sprText, (String) null, false);
-								visit.setSprName(sprName);
-								logger.info("Surgical pathology report migrated successfully for visit id "+ visitId);
-							} catch (Exception e) {
-								logger.error("Error while migrating file:" + srcFile.getName(), e);
-								try {
-									throw e;
-								} catch (Exception ex) {
-									ex.printStackTrace();
-								}
-							}
-						}
+						migrateSprs(files);
 						return null;
 					}
 				});
@@ -141,6 +113,38 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 		}
 	}
 
+	private void migrateSprs(final File[] files) {
+		for (File srcFile : files) {
+			try {
+				if (srcFile.isDirectory()) {
+					continue;
+				}
+				
+				String[] arr = srcFile.getName().split("_", 2);
+				Long visitId = Long.parseLong(arr[0]);
+				String sprName = arr[1];
+				
+				Visit visit = daoFactory.getVisitsDao().getById(visitId);
+				if (visit == null || visit.getActivityStatus().equals("Disabled")) {
+				logger.info("Visit does not exist with idenifier: " + visitId);
+					continue;
+				}
+				
+				String sprText = Utility.getFileText(srcFile);
+				FileUtils.writeStringToFile(getSprFile(visitId), sprText, (String) null, false);
+				visit.setSprName(sprName);
+				logger.info("Surgical pathology report migrated successfully for visit id "+ visitId);
+			} catch (Exception e) {
+				logger.error("Error while migrating file:" + srcFile.getName(), e);
+				try {
+					throw e;
+				} catch (Exception ex) {
+					logger.error("Error while migration: ", e);
+				}
+			}
+		}
+	}
+
 	private void saveMigration(MigrationDetail detail, Status status) {
 		if (detail == null) {
 			detail = new MigrationDetail();
@@ -154,25 +158,21 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 		migrationSvc.saveMigration(detail);
 	}
 	
-	private static List<File[]> splitArray(File[] array, int max) {
-		int x = array.length / max;
-		int r = (array.length % max); // remainder
-
-		int lower = 0;
-		int upper = 0;
-
-		List<File[]> list = new ArrayList<File[]>();
-		for (int i = 0; i < x; i++) {
-			upper += max;
-			list.add(Arrays.copyOfRange(array, lower, upper));
-			lower = upper;
+	private static List<File[]> splitArray(File[] array, int chunkSize) {
+		List<File[]> result = new ArrayList<File[]>();
+		int noOfChunks = array.length / chunkSize;
+		     
+		for (int chunk = 0; chunk < noOfChunks; ++chunk) {
+			int startIdx = chunk * chunkSize;
+		    result.add(Arrays.copyOfRange(array, startIdx, startIdx + chunkSize));
 		}
-
-		if (r > 0) {
-			list.add(Arrays.copyOfRange(array, lower, (lower + r)));
+		
+		int remaining  = array.length % chunkSize;
+		if (remaining > 0) {
+			result.add(Arrays.copyOfRange(array, array.length - remaining, array.length));
 		}
-
-		return list;
+		
+		return result;
 	}
 	
 	private File getSprFile(Long visitId) {

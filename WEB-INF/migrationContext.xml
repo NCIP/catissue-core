@@ -32,8 +32,12 @@
     </property>
   </bean>
   
+  <bean id="migrationDao" class="com.krishagni.openspecimen.core.migration.repository.impl.MigrationDaoImpl">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+  
   <bean id="migrationSvc" class="com.krishagni.openspecimen.core.migration.services.impl.MigrationServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="migrationDao" ref="migrationDao"/>
   </bean>
   
   <bean id="migrateCntnrRestrictions" class="com.krishagni.catissueplus.core.init.MigrateContainerRestrictions">

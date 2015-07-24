@@ -76,7 +76,7 @@ public class MigrateConsents implements InitializingBean {
 		} finally {
 			saveMigration(detail, status);
 			Date endTime = Calendar.getInstance().getTime();
-			logger.info("Surgical pathology report migration for version OS v1.1 to OS v2.1 end time: " + endTime);
+			logger.info("Consent migration from version OS v1.1 to OS v2.1 end time: " + endTime);
 			logger.info("Total time for migration: " + 
 					(endTime.getTime() - startTime.getTime()) / (1000 * 60) + " minutes");
 		}
@@ -103,6 +103,6 @@ public class MigrateConsents implements InitializingBean {
 				defaultConsentDir);
 	}
 	
-	private static final String MIGRATION_NAME = "Consents";
+	private static final String MIGRATION_NAME = "Participant Consents";
 	
 }

@@ -7,7 +7,7 @@
   <class name="com.krishagni.openspecimen.core.migration.domain.Migration"
     table="OS_MIGRATIONS">
 
-    <id name="id" column="IDENTIFIER" type="long" length="30">
+    <id name="id" column="IDENTIFIER" type="long">
       <generator class="native">
         <param name="sequence">OS_MIGRATION_SEQ</param>
       </generator>

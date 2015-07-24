@@ -1,23 +1,23 @@
 package com.krishagni.openspecimen.core.migration.services.impl;
 
-import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.openspecimen.core.migration.domain.Migration;
 import com.krishagni.openspecimen.core.migration.events.MigrationDetail;
+import com.krishagni.openspecimen.core.migration.repository.MigrationDao;
 import com.krishagni.openspecimen.core.migration.services.MigrationService;
 
 public class MigrationServiceImpl implements MigrationService {
 	
-	private DaoFactory daoFactory;
+	private MigrationDao migrationDao;
 	
-	public void setDaoFactory(DaoFactory daoFactory) {
-		this.daoFactory = daoFactory;
+	public void setMigrationDao(MigrationDao migrationDao) {
+		this.migrationDao = migrationDao;
 	}
 
 	@Override
 	@PlusTransactional
 	public MigrationDetail getMigration(String name, String versionFrom, String versionTo) {
-		Migration migration = daoFactory.getMigrationDao().getMigrationInfo(name, versionFrom, versionTo);
+		Migration migration = migrationDao.getMigrationInfo(name, versionFrom, versionTo);
 		return MigrationDetail.from(migration);
 	}
 
@@ -27,7 +27,7 @@ public class MigrationServiceImpl implements MigrationService {
 		Migration migration = null;
 		
 		if (detail.getId() != null) {
-			migration = daoFactory.getMigrationDao().getById(detail.getId());
+			migration = migrationDao.getById(detail.getId());
 		} else {
 			migration = new Migration();
 		}
@@ -38,7 +38,7 @@ public class MigrationServiceImpl implements MigrationService {
 		migration.setStatus(detail.getStatus());
 		migration.setDate(detail.getDate());
 		
-		daoFactory.getMigrationDao().saveOrUpdate(migration, true);
+		migrationDao.saveOrUpdate(migration, true);
 		return MigrationDetail.from(migration);
 	}
 }

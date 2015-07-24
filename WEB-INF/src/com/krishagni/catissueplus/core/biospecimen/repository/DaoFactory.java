@@ -12,7 +12,6 @@ import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.auth.repository.AuthDao;
 import com.krishagni.catissueplus.core.common.repository.ConfigSettingDao;
 import com.krishagni.catissueplus.core.common.repository.UniqueIdGenerator;
-import com.krishagni.openspecimen.core.migration.repository.MigrationDao;
 
 public interface DaoFactory {
 	public CollectionProtocolDao getCollectionProtocolDao();
@@ -54,6 +53,4 @@ public interface DaoFactory {
 	public LabelPrintJobDao getLabelPrintJobDao();
 	
 	public SpecimenQuantityUnitDao getSpecimenQuantityUnitDao();
-	
-	public MigrationDao getMigrationDao();
 }

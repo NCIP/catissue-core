@@ -96,4 +96,12 @@
     </createTable>
   </changeSet>
   
+  <changeSet author="vgaikwad" id="Migrations table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_MIGRATION_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+  
 </databaseChangeLog>
