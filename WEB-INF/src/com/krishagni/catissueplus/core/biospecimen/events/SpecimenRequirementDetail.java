@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -31,7 +32,7 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 	
 	private String storageType;
 	
-	private Double initialQty;
+	private BigDecimal initialQty;
 	
 	private Double concentration;
 	
@@ -123,11 +124,11 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		this.storageType = storageType;
 	}
 
-	public Double getInitialQty() {
+	public BigDecimal getInitialQty() {
 		return initialQty;
 	}
 
-	public void setInitialQty(Double initialQty) {
+	public void setInitialQty(BigDecimal initialQty) {
 		this.initialQty = initialQty;
 	}
 

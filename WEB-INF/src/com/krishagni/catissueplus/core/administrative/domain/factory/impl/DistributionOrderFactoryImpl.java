@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -256,7 +257,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 			return null;
 		} 
 
-		if (detail.getQuantity() == null || detail.getQuantity() <= 0) {
+		if (detail.getQuantity() == null || detail.getQuantity().compareTo(BigDecimal.ZERO) <= 0) {
 			ose.addError(DistributionOrderErrorCode.INVALID_QUANTITY);
 			return null;
 		}

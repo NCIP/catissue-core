@@ -31,6 +31,9 @@
   <property name="clob.type" value="text" dbms="mysql"/>
   <property name="clob.type" value="clob" dbms="oracle"/>
 
+  <property name="decimal.type" value="decimal" dbms="mysql"/>
+  <property name="decimal.type" value="number" dbms="oracle"/>
+
   <changeSet author="ahegade" id="Column to identify user who executed the job">
     <addColumn tableName="OS_SCHEDULED_JOB_RUNS">
       <column name="RUN_BY" type="${int.type}"/>
@@ -68,6 +71,20 @@
       columnDataType="${nullable.ts.type}"/>
   </changeSet>
 
+  <changeSet author="ahegade" id="Modify initial quantity from double to big decimal in catissue_specimen table">
+    <modifyDataType tableName="CATISSUE_SPECIMEN" columnName="INITIAL_QUANTITY" newDataType="${decimal.type}(16,6)" />
+  </changeSet>
 
+  <changeSet author="ahegade" id="Modify available quantity from double to big decimal in catissue_specimen table">
+    <modifyDataType tableName="CATISSUE_SPECIMEN" columnName="AVAILABLE_QUANTITY" newDataType="${decimal.type}(16,6)" />
+  </changeSet>
+
+  <changeSet author="ahegade" id="Modify quantity from double to big decimal in os_order_items table">
+    <modifyDataType tableName="OS_ORDER_ITEMS" columnName="QUANTITY" newDataType="${decimal.type}(16,6)" />
+  </changeSet>
+
+  <changeSet author="ahegade" id="Modify quantity from double to big decimal in catissue_cp_req_specimen table">
+    <modifyDataType tableName="CATISSUE_CP_REQ_SPECIMEN" columnName="INITIAL_QUANTITY" newDataType="${decimal.type}(16,6)" />
+  </changeSet>
 
 </databaseChangeLog>

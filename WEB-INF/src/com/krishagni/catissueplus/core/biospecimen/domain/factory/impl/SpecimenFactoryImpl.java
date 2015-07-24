@@ -12,6 +12,7 @@ import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_LATER
 import static com.krishagni.catissueplus.core.common.service.PvValidator.areValid;
 import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
@@ -436,7 +437,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setInitialQty(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		Double qty = detail.getInitialQty();
+		BigDecimal qty = detail.getInitialQty();
 		if (qty == null) {
 			SpecimenRequirement sr = specimen.getSpecimenRequirement();			
 			if (sr != null) {
@@ -444,7 +445,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			}
 		}
 				
-		if (qty == null || qty <= 0) {
+		if (qty == null || qty.compareTo(BigDecimal.ZERO)<= 0) {
 			ose.addError(SpecimenErrorCode.INVALID_QTY);
 			return;
 		}
@@ -453,12 +454,12 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setAvailableQty(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		Double availableQty = detail.getAvailableQty();
+		BigDecimal availableQty = detail.getAvailableQty();
 		if (availableQty == null) {
 			availableQty = specimen.getInitialQuantity();
 		}
 		
-		if (availableQty > specimen.getInitialQuantity() || availableQty < 0) {
+		if (availableQty.compareTo(specimen.getInitialQuantity()) > 0 || availableQty.compareTo(BigDecimal.ZERO) < 0) {
 			ose.addError(SpecimenErrorCode.INVALID_QTY);
 			return;
 		}
@@ -466,7 +467,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		specimen.setAvailableQuantity(availableQty);
 		
 		if (detail.getAvailable() == null) {
-			specimen.setIsAvailable(availableQty > 0);
+			specimen.setIsAvailable(availableQty.compareTo(BigDecimal.ZERO) > 0);
 		} else {
 			specimen.setIsAvailable(detail.getAvailable());
 		}		

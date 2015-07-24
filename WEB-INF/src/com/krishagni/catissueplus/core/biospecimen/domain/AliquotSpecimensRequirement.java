@@ -1,11 +1,13 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import java.math.BigDecimal;
+
 public class AliquotSpecimensRequirement {
 	private Long parentSrId;
 	
 	private Integer noOfAliquots;
 	
-	private Double qtyPerAliquot;
+	private BigDecimal qtyPerAliquot;
 	
 	private String storageType;
 	
@@ -27,11 +29,11 @@ public class AliquotSpecimensRequirement {
 		this.noOfAliquots = noOfAliquots;
 	}
 
-	public Double getQtyPerAliquot() {
+	public BigDecimal getQtyPerAliquot() {
 		return qtyPerAliquot;
 	}
 
-	public void setQtyPerAliquot(Double qtyPerAliquot) {
+	public void setQtyPerAliquot(BigDecimal qtyPerAliquot) {
 		this.qtyPerAliquot = qtyPerAliquot;
 	}
 

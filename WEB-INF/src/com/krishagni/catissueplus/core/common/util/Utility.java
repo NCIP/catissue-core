@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,7 +22,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import au.com.bytecode.opencsv.CSVWriter;
-
 import com.krishagni.catissueplus.core.common.PdfUtil;
 
 public class Utility {
@@ -173,5 +173,17 @@ public class Utility {
 	
 	public static String getDateString(Date date) {
 		return new SimpleDateFormat(ConfigUtil.getInstance().getDeDateFmt()).format(date);
+	}
+
+	public static BigDecimal numberToBigDecimal(Object number) {
+		if (number == null) {
+			return null;
+		}
+
+		if (!(number instanceof Number)) {
+			throw new IllegalArgumentException("Input object is not a number");
+		}
+
+		return new BigDecimal(((Number)number).toString());
 	}
 }

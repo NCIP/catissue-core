@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.math.BigDecimal;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 
@@ -12,7 +14,7 @@ public class DistributionOrderItem extends BaseEntity {
 	
 	private DistributionOrder order;
 	
-	private Double quantity;
+	private BigDecimal quantity;
 	
 	private Specimen specimen;
 	
@@ -26,11 +28,11 @@ public class DistributionOrderItem extends BaseEntity {
 		this.order = order;
 	}
 
-	public Double getQuantity() {
+	public BigDecimal getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Double quantity) {
+	public void setQuantity(BigDecimal quantity) {
 		this.quantity = quantity;
 	}
 

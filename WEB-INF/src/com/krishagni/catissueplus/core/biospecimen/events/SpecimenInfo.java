@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -61,9 +62,9 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 	
 	private String pathology;
 	
-	private Double initialQty;
+	private BigDecimal initialQty;
 	
-	private Double availableQty;
+	private BigDecimal availableQty;
 	
 	private Boolean available;
 	
@@ -227,19 +228,19 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		this.pathology = pathology;
 	}
 
-	public Double getInitialQty() {
+	public BigDecimal getInitialQty() {
 		return initialQty;
 	}
 
-	public void setInitialQty(Double initialQty) {
+	public void setInitialQty(BigDecimal initialQty) {
 		this.initialQty = initialQty;
 	}
 
-	public Double getAvailableQty() {
+	public BigDecimal getAvailableQty() {
 		return availableQty;
 	}
 
-	public void setAvailableQty(Double availableQty) {
+	public void setAvailableQty(BigDecimal availableQty) {
 		this.availableQty = availableQty;
 	}
 

@@ -1,6 +1,9 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -42,6 +45,7 @@ import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.service.LabelPrinter;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class SpecimenServiceImpl implements SpecimenService {
 
@@ -52,6 +56,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 	private ConfigurationService cfgSvc;
 	
 	private LabelGenerator labelGenerator;
+
+	private MathContext roundVal = new MathContext(6, RoundingMode.HALF_UP);
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -241,22 +247,24 @@ public class SpecimenServiceImpl implements SpecimenService {
 			}
 									
 			Integer count = spec.getNoOfAliquots();
-			Double aliquotQty = spec.getQtyPerAliquot();
-			double reqQty = 0;
+			BigDecimal aliquotQty = spec.getQtyPerAliquot();
+			BigDecimal reqQty = BigDecimal.ZERO;
 						
 			if (count != null && aliquotQty != null) {
-				if (count <= 0 || aliquotQty <= 0) {
+				if (count <= 0 || aliquotQty.compareTo(BigDecimal.ZERO) <= 0) {
 					return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
 				}
 				
-				reqQty = count * aliquotQty;
-				if (reqQty > parentSpecimen.getAvailableQuantity()) {
+				reqQty = Utility.numberToBigDecimal(count).multiply(aliquotQty);
+				if (reqQty.compareTo(parentSpecimen.getAvailableQuantity()) > 0) {
 					return ResponseEvent.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
 				}
-			} else if (count != null && count > 0) {				
-				aliquotQty =  Math.round(parentSpecimen.getAvailableQuantity() / count * 10000) / 10000.0; 
-			} else if (aliquotQty != null && aliquotQty > 0) {
-				count = (int)Math.floor(parentSpecimen.getAvailableQuantity() / aliquotQty);
+			} else if (count != null && count > 0) {
+				aliquotQty = parentSpecimen.getAvailableQuantity().divide(Utility.numberToBigDecimal(count)).round(roundVal);
+//				aliquotQty =  Math.round(parentSpecimen.getAvailableQuantity() / count * 10000) / 10000.0;
+			} else if (aliquotQty != null && aliquotQty.compareTo(BigDecimal.ZERO) > 0) {
+				count = parentSpecimen.getAvailableQuantity().divide(aliquotQty).intValue();
+//				count = (int)Math.floor(parentSpecimen.getAvailableQuantity() / aliquotQty);
 			} else {
 				return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
 			}

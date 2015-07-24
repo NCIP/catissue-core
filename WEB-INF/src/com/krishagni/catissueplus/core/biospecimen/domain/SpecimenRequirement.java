@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,7 +38,7 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 	
 	private String storageType;
 	
-	private Double initialQuantity;
+	private BigDecimal initialQuantity;
 	
 	private Double concentration;
 	
@@ -135,11 +136,11 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		this.storageType = storageType;
 	}
 
-	public Double getInitialQuantity() {
+	public BigDecimal getInitialQuantity() {
 		return initialQuantity;
 	}
 
-	public void setInitialQuantity(Double initialQuantity) {
+	public void setInitialQuantity(BigDecimal initialQuantity) {
 		this.initialQuantity = initialQuantity;
 	}
 
@@ -276,11 +277,11 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 			updateConcentration(sr.getConcentration());
 		}
 
-		if (getQtyAfterAliquotsUse() < 0) {
+		if (getQtyAfterAliquotsUse().compareTo(BigDecimal.ZERO) < 0) {
 			throw OpenSpecimenException.userError(SrErrorCode.INSUFFICIENT_QTY);
 		}
 		
-		if (isAliquot() && getParentSpecimenRequirement().getQtyAfterAliquotsUse() < 0) {
+		if (isAliquot() && getParentSpecimenRequirement().getQtyAfterAliquotsUse().compareTo(BigDecimal.ZERO) < 0) {
 			throw OpenSpecimenException.userError(SrErrorCode.INSUFFICIENT_QTY);
 		}
 	}
@@ -297,7 +298,7 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		}
 		
 		if (isAliquot()) {
-			if (getInitialQuantity() > getParentSpecimenRequirement().getQtyAfterAliquotsUse()) {
+			if (getInitialQuantity().compareTo(getParentSpecimenRequirement().getQtyAfterAliquotsUse()) > 0) {
 				throw OpenSpecimenException.userError(SrErrorCode.INSUFFICIENT_QTY);
 			}
 		}
@@ -316,11 +317,11 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		}
 	}
 	
-	public Double getQtyAfterAliquotsUse() {
-		Double available = getInitialQuantity();
+	public BigDecimal getQtyAfterAliquotsUse() {
+		BigDecimal available = getInitialQuantity();
 		for (SpecimenRequirement childReq : getChildSpecimenRequirements()) {
 			if (childReq.isAliquot() && childReq.getInitialQuantity() != null) {
-				available -= childReq.getInitialQuantity();
+				available =  available.subtract(childReq.getInitialQuantity());
 			}
 		}
 		
