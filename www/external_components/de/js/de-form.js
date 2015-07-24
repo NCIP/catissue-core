@@ -693,8 +693,8 @@ edu.common.de.DatePicker = function(id, field, args) {
 
     if (this.timeEl) {
       this.timeEl.timepicker({
-        defaultTime: false,
-        showMeridian: false
+        showMeridian: false,
+        minuteStep: 1
       });
     }
 
@@ -702,6 +702,9 @@ edu.common.de.DatePicker = function(id, field, args) {
   };
 
   this.postRender = function() {
+    if (field.defaultType == 'CURRENT_DATE' && this.getValue().value.trim().split(" ").length < 2) {
+      this.dateEl.datepicker('setDate', new Date()).datepicker('fill')
+    }
   };
 
   this.getName = function() {

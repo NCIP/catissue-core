@@ -16,6 +16,7 @@
             select value from catissue_permissible_value where public_id = '2003999' order by value
           </sql>
         </options>
+        <mandatory>true</mandatory>
       </dropDown>
     </row>
 
@@ -26,6 +27,7 @@
         <caption>User</caption>
         <column>USER_ID</column>
         <showInGrid>true</showInGrid>
+        <mandatory>true</mandatory>
       </userField>
     </row>
 
@@ -37,6 +39,8 @@
         <column>EVENT_TIMESTAMP</column>
         <format>MM-dd-yyyy HH:mm</format>
         <showInGrid>true</showInGrid>
+        <default>current_date</default>
+        <mandatory>true</mandatory>
       </datePicker>
     </row>
 

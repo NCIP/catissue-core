@@ -33,6 +33,8 @@
         <column>EVENT_TIMESTAMP</column>
         <format>MM-dd-yyyy HH:mm</format>
         <showInGrid>true</showInGrid>
+        <default>current_date</default>
+        <mandatory>true</mandatory>
       </datePicker>
     </row>
 

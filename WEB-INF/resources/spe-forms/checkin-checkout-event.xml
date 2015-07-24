@@ -15,6 +15,7 @@
           <option><value>CHECK IN</value></option>
           <option><value>CHECK OUT</value></option>
         </options>
+        <mandatory>true</mandatory>
       </dropDown>
     </row>
 
@@ -36,6 +37,8 @@
         <column>EVENT_TIMESTAMP</column>
         <format>MM-dd-yyyy HH:mm</format>
         <showInGrid>true</showInGrid>
+        <default>current_date</default>
+        <mandatory>true</mandatory>
       </datePicker>
     </row>
 
