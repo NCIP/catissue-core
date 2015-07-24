@@ -119,10 +119,7 @@ public abstract class ImportForms implements InitializingBean {
 				
 				in.reset();
 				Long formId = Container.createContainer(userCtx, in, false);				
-				if (existingDigest == null) {
-					insertFormContext(formFile, formId);
-				}
-				
+				saveOrUpdateFormCtx(formFile, formId);
 				daoFactory.getFormDao().insertFormChangeLog(formFile, newDigest, formId);				
 			} finally {
 				IOUtils.closeQuietly(in);
@@ -149,7 +146,7 @@ public abstract class ImportForms implements InitializingBean {
 		};
 	}	
 	
-	private void insertFormContext(String formFile, Long formId) {
+	private void saveOrUpdateFormCtx(String formFile, Long formId) {
 		daoFactory.getFormDao().saveOrUpdate(getFormContext(formFile, formId));
 	}
 		

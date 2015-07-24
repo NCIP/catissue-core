@@ -54,9 +54,13 @@ public class ImportSpecimenEventForms extends ImportForms {
 
 	@Override
 	protected FormContextBean getFormContext(String formFile, Long formId) {
-		Boolean[] eventInfo = eventFormsInfo.get(formFile);
+		FormContextBean formCtx = getDaoFactory().getFormDao().getFormContext(formId, -1L, "SpecimenEvent");
+		if (formCtx == null) {
+			formCtx = new FormContextBean();
+		}
 		
-		FormContextBean formCtx = new FormContextBean();
+		Boolean[] eventInfo = eventFormsInfo.get(formFile);
+		 
 		formCtx.setContainerId(formId);
 		formCtx.setCpId(-1L);
 		formCtx.setEntityType("SpecimenEvent");
@@ -65,7 +69,7 @@ public class ImportSpecimenEventForms extends ImportForms {
 		formCtx.setSortOrder(null);		
 		return formCtx;		
 	}
-
+	
 	@Override
 	protected void cleanup() {
 		eventFormsInfo.clear();		

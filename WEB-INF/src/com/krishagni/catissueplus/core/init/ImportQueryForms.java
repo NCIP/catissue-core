@@ -40,7 +40,11 @@ public class ImportQueryForms extends ImportForms {
 
 	@Override
 	protected FormContextBean getFormContext(String formFile, Long formId) {
-		FormContextBean formCtx = new FormContextBean();
+		FormContextBean formCtx = getDaoFactory().getFormDao().getFormContext(formId, -1L, "Query");
+		if (formCtx == null) {
+			formCtx = new FormContextBean();
+		}
+
 		formCtx.setContainerId(formId);
 		formCtx.setCpId(-1L);
 		formCtx.setEntityType("Query");
