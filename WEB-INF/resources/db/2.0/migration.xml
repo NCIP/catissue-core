@@ -45,26 +45,24 @@
       insert into os_departments
         (identifier, name, institute_id)
       select 
-        OS_DEPARTMENTS_SEQ.nextval, d.name, u.institution_id 
+        os_departments_seq.nextval, d.name, u.institution_id 
       from 
         catissue_user u
         inner join catissue_department d on d.identifier = u.department_id
     </sql>
 
     <sql>
-      MERGE INTO catissue_user us USING
-        (SELECT u.identifier AS usid,
-          od.identifier AS new_dept_id
-        FROM 
+      merge into catissue_user us using (
+        select 
+          u.identifier as user_id, od.identifier as new_dept_id
+        from 
           catissue_user u
-          INNER JOIN os_departments od ON od.institute_id = u.institution_id
-          INNER JOIN catissue_department d ON d.name = od.name
-        WHERE 
-          d.identifier = u.department_id )t 
-        ON 
-          (us.identifier = t.usid) WHEN matched THEN
-        UPDATE
-        SET us.department_id = t.new_dept_id
+          inner join os_departments od on od.institute_id = u.institution_id
+          inner join catissue_department d on d.name = od.name
+        where 
+          d.identifier = u.department_id
+      ) t on (us.identifier = t.user_id) 
+      when matched then update set us.department_id = t.new_dept_id
     </sql>
   </changeSet>
   
