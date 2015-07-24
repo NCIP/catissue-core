@@ -1,4 +1,4 @@
-<div>
+<div class="os-search">
   <div class="os-head">
     <h3 class="os-title" translate="participant.filter_title">
       Participants Filter
@@ -7,59 +7,42 @@
 
   <div class="os-body">
     <div class="form-group">
-      <label class="control-label" translate="participant.ppid">Participant Protocol ID</label>
-      <div class="os-md-input">
-        <input type="text" ng-model="filterOpts.ppid" class="form-control"
-          placeholder="{{'participant.ppid' | translate}}">
-      </div>
+      <input os-md-input type="text" ng-model="filterOpts.ppid" class="form-control"
+        placeholder="{{'participant.ppid' | translate}}">
     </div>
 
     <div class="form-group">
-      <label class="control-label" translate="participant.reg_date">Registration Date</label>
-      <div class="os-md-input">
-        <os-date-picker date="filterOpts.registrationDate"
-          placeholder="{{'participant.reg_date' | translate}}">
-        </os-date-picker>
-      </div>
+      <os-date-picker md-type="true" date="filterOpts.registrationDate"
+        placeholder="{{'participant.reg_date' | translate}}">
+      </os-date-picker>
     </div>
 
     <div class="form-group">
-      <label class="control-label" translate="participant.id">MPI / MRN / SSN</label>
-      <div class="os-md-input">
-        <input type="text" ng-model="filterOpts.participantId" class="form-control"
-          placeholder="{{'participant.id' | translate}}">
-      </div>
+      <input os-md-input type="text" ng-model="filterOpts.participantId" class="form-control"
+        placeholder="{{'participant.id' | translate}}">
     </div>
 
     <div class="form-group">
-      <label class="control-label" translate="participant.name">Name</label>
-      <div class="os-md-input">
-        <input type="text" ng-model="filterOpts.name" class="form-control"
-          placeholder="{{'participant.name' | translate}}">
-      </div>
+      <input os-md-input type="text" ng-model="filterOpts.name" class="form-control"
+        placeholder="{{'participant.name' | translate}}">
     </div>
 
     <div class="form-group">
-      <label class="control-label" translate="participant.birth_date">Birth Date</label>
-      <div class="os-md-input">
-        <os-date-picker date="filterOpts.dob"
-          placeholder="{{'participant.birth_date' | translate}}"/>
-        </os-date-picker>
-      </div>
+      <os-date-picker md-type="true" date="filterOpts.dob"
+        placeholder="{{'participant.birth_date' | translate}}"/>
+      </os-date-picker>
     </div>
 
     <div class="form-group">
-      <label class="control-label" translate="participant.spmn_label_or_barcode">Specimen Label/Barcode</label>
-      <div class="os-md-input">
-        <input type="text" ng-model="filterOpts.specimen" class="form-control"
-          placeholder="{{'participant.spmn_label_or_barcode' | translate}}">
-      </div>
+      <input type="text" os-md-input ng-model="filterOpts.specimen" class="form-control"
+        placeholder="{{'participant.spmn_label_or_barcode' | translate}}">
     </div>
 
-    <div class="form-group os-btns">
+    <div class="form-group os-btns clearfix">
       <button class="default full-width" translate="common.buttons.clear_filters" ng-click="clearFilters()">
         Clear Filters
       </button>
     </div>
+
   </div>
 </div>

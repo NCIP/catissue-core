@@ -1,4 +1,4 @@
-<div>
+<div class="os-search">
   <div class="os-head">
     <h3 class="os-title">
       <span translate="queries.filter.title">Query Filter</span>
@@ -7,13 +7,8 @@
 
   <div class="os-body">
     <div class="form-group">
-      <label class="control-label">
-        <span translate="queries.filter.id_or_title">Query ID / Title</span>
-      </label>
-      <div class="os-md-input">
-        <input type="text" ng-model="filterOpts.searchString" class="form-control"
-          placeholder="{{'queries.filter.type_id_or_title' | translate}}">
-      </div>
+      <input os-md-input type="text" ng-model="filterOpts.searchString" class="form-control"
+        placeholder="{{'queries.filter.id_or_title' | translate}}">
     </div>
   </div>
 </div>

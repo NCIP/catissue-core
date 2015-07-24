@@ -1,20 +1,16 @@
-<div>
+<div class="os-search">
   <div class="os-head">
     <h3 class="os-title" translate="dp.filter.filter_title">Distribution Protocol Filter</h3>
   </div>
 
   <div class="os-body">
     <div class="form-group">
-      <label class="control-label" translate="dp.filter.title_or_short_title">Title / Short Title</label>
-      <div class="os-md-input">
-        <input type="text" ng-model="dpFilterOpts.title" class="form-control"
-          placeholder="{{'dp.filter.title' | translate}}">
-      </div>
+      <input os-md-input type="text" ng-model="dpFilterOpts.title" class="form-control"
+        placeholder="{{'dp.title' | translate}}">
     </div>
 
     <div class="form-group">
-      <label class="control-label" translate="dp.pi">Principal Investigator</label>
-      <div class="os-md-input">
+      <div os-md-input ng-model="dpFilterOpts.pi" placeholder="{{'dp.filter.pi' | translate}}">
         <os-users ng-model="dpFilterOpts.pi" placeholder="{{'dp.filter.pi' | translate}}">
         </os-users>
       </div>

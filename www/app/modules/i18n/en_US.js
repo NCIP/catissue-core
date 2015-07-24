@@ -180,7 +180,7 @@
     },
 
     "filter": {
-      "filter_title": "Collection Protocol Filter",
+      "filter_title": "Filters",
       "title_or_short_title": "Title / Short Title",
       "title": "Type the Title",
       "pi": "Select Principal Investigator",
@@ -229,7 +229,7 @@
     "select_site": "Select Site",
     "pmis": "Medical Identifiers",
     "protocol_id": "PPID",
-    "filter_title": "Participants Filter", 
+    "filter_title": "Filters",
     "spmn_label_or_barcode": "Specimen Label / Barcode",
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
@@ -525,7 +525,7 @@
     },
 
     "filter": {
-      "title": "Institute Filter",
+      "title": "Filters",
       "name": "Type the Name"
     },
 
@@ -562,7 +562,7 @@
     },
 
     "filter": {
-      "title": "Site Filter",
+      "title": "Filters",
       "name": "Type the Name",
       "type": "Select Type"
     },
@@ -601,7 +601,7 @@
     },
 
     "filter": {
-      "filter_title": "Distribution Protocol Filter",
+      "filter_title": "Filters",
       "title_or_short_title": "Title / Short Title",
       "title": "Type the Title",
       "pi": "Select Principal Investigator"
@@ -690,7 +690,7 @@
     },
 
     "filter": {
-      "title": "User Filter",
+      "title": "Filters",
       "name": "Type the Name",
       "login_name": "Type the Login Name",
       "activity_status": "Select the Activity Status"
@@ -793,7 +793,7 @@
     },
 
     "filter": {
-      "title": "Storage Container Filter",
+      "title": "Filters",
       "name": "Type the Name"
     },
 
@@ -1079,7 +1079,7 @@
     },
 
     "filter": {
-      "title": "Queries Filter",
+      "title": "Filters",
       "id_or_title": "Query ID / Title",
       "type_id_or_title": "Enter query ID or title to search queries"
     }
