@@ -130,7 +130,9 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			}
 			
 			daoFactory.getDistributionOrderDao().saveOrUpdate(order);
-			sendOrderProcessedEmail(order);
+			if (order.getStatus() == Status.EXECUTED) {
+				sendOrderProcessedEmail(order);
+			}
 			return ResponseEvent.response(DistributionOrderDetail.from(order));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -161,7 +163,9 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 
 			existingOrder.update(newOrder);
 			daoFactory.getDistributionOrderDao().saveOrUpdate(existingOrder);
-			sendOrderProcessedEmail(existingOrder);
+			if (existingOrder.getStatus() == Status.EXECUTED) {
+				sendOrderProcessedEmail(existingOrder);
+			}
 			return ResponseEvent.response(DistributionOrderDetail.from(existingOrder));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
