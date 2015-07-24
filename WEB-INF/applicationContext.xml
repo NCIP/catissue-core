@@ -641,12 +641,6 @@
   <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  
     <property name="dataSource" ref="dataSource"/>
   </bean>
-  
-  <bean id="migrateCntnrRestrictions" class="com.krishagni.catissueplus.core.init.MigrateContainerRestrictions">
-    <property name="txnMgr" ref="transactionManager"/>
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-    <property name="jdbcTemplate" ref="jdbcTemplate"/>
-  </bean>
 
   <task:scheduler id="taskScheduler" pool-size="1"/>
   <task:annotation-driven scheduler="taskScheduler"/>
@@ -655,5 +649,6 @@
 
   <context:component-scan base-package="com.krishagni.catissueplus.core"/>
   
+  <import resource="migrationContext.xml"/>
   <import resource="classpath*:com/krishagni/openspecimen/custom/${plugin.custom_module}/**/*Context.xml"/>
 </beans>

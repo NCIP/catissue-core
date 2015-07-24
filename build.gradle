@@ -236,6 +236,7 @@ task create_war(type: War) {
     include 'resources/**'
     include 'applicationContext.xml'
     include 'restApiContext.xml'
+    include 'migrationContext.xml'
     include 'web.xml'
     
     into 'WEB-INF/'
