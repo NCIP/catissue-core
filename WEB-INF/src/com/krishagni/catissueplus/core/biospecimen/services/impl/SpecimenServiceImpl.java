@@ -261,10 +261,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 				}
 			} else if (count != null && count > 0) {
 				aliquotQty = parentSpecimen.getAvailableQuantity().divide(Utility.numberToBigDecimal(count)).round(roundVal);
-//				aliquotQty =  Math.round(parentSpecimen.getAvailableQuantity() / count * 10000) / 10000.0;
 			} else if (aliquotQty != null && aliquotQty.compareTo(BigDecimal.ZERO) > 0) {
 				count = parentSpecimen.getAvailableQuantity().divide(aliquotQty).intValue();
-//				count = (int)Math.floor(parentSpecimen.getAvailableQuantity() / aliquotQty);
 			} else {
 				return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
 			}
