@@ -1,8 +1,16 @@
 <div> 
   <div os-page-header>
     <ul os-breadcrumbs>
-      <li> <a ui-sref="cp-detail.overview({cpId: cpr.cpId})">{{cpr.cpShortTitle}}</a> </li>
-      <li> <a ui-sref="participant-list({cpId: cpr.cpId})">Participants</a> </li>
+      <li> 
+        <a ui-sref="cp-detail.overview({cpId: cpr.cpId})">
+          <span>{{cpr.cpShortTitle}}</span>
+        </a> 
+      </li>
+      <li> 
+        <a ui-sref="participant-list({cpId: cpr.cpId})">
+          <span translate="participant.list">Participants</span>
+        </a> 
+      </li>
     </ul>
 
     <h3>
