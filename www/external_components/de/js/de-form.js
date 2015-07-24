@@ -693,7 +693,8 @@ edu.common.de.DatePicker = function(id, field, args) {
 
     if (this.timeEl) {
       this.timeEl.timepicker({
-        showMeridian: false
+        showMeridian: false,
+        minuteStep: 1
       });
     }
 
