@@ -3446,9 +3446,6 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-671">
         <createSequence  sequenceName="CATISSUE_PATHOLOGY_REPORT_SEQ"/>
     </changeSet>
-    <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-672">
-        <createSequence  sequenceName="CATISSUE_PERMISSIBLE_VALUE_SEQ"/>
-    </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-673">
         <createSequence  sequenceName="CATISSUE_PRIVILEGE_SEQ"/>
     </changeSet>

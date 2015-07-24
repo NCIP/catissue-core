@@ -2298,7 +2298,7 @@
     </createView>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Creating sequences for permissible value" dbms="oracle" runOnChange="true">
+  <changeSet author="nmarwaha" id="Creating sequences for permissible value" dbms="oracle">
     <sql endDelimiter="//">
       begin
         declare
@@ -2316,5 +2316,9 @@
       //
     </sql>
   </changeSet>
+  
+  <changeSet author="nmarwaha" id="Modify length of value column of permissible value table">
+    <modifyDataType tableName="catissue_permissible_value" columnName="value" newDataType="${text.type}(255)" />
+  </changeSet>  
   
 </databaseChangeLog>

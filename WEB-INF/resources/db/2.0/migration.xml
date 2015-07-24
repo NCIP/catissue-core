@@ -16,14 +16,6 @@
     </sql>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Add unique constraint for department name for migration">
-    <addUniqueConstraint 
-      columnNames="name" 
-      constraintName="os_uniq_dept_name" 
-      tableName="os_departments" 
-    />
-  </changeSet>
-  
   <changeSet author="nmarwaha" id="Script to map departments and institutes" dbms="mysql">
     <sql>
       insert into os_departments
@@ -48,6 +40,7 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Script to map departments and institutes" dbms="oracle">
+    <validCheckSum>7:9b747c0e6e8b8fc87f96fa2f7fd2c783</validCheckSum>
     <sql>
       insert into os_departments
         (identifier, name, institute_id)
@@ -59,27 +52,20 @@
     </sql>
 
     <sql>
-      update 
-        (
-          select
-            u.department_id as user_dept_id,od.identifier as new_dept_id 
-          from 
-            catissue_user u 
-            inner join os_departments od on od.institute_id = u.institution_id
-            inner join catissue_department d on d.name = od.name 
-          where
-            d.identifier = u.department_id
-        ) up
-      set 
-        up.user_dept_id = up.new_dept_id
+      MERGE INTO catissue_user us USING
+        (SELECT u.identifier AS usid,
+          od.identifier AS new_dept_id
+        FROM 
+          catissue_user u
+          INNER JOIN os_departments od ON od.institute_id = u.institution_id
+          INNER JOIN catissue_department d ON d.name = od.name
+        WHERE 
+          d.identifier = u.department_id )t 
+        ON 
+          (us.identifier = t.usid) WHEN matched THEN
+        UPDATE
+        SET us.department_id = t.new_dept_id
     </sql>
-  </changeSet>
-  
-  <changeSet author="nmarwaha" id="Drop unique const on department name in department table">
-    <dropUniqueConstraint
-      tableName="os_departments"
-      constraintName="os_uniq_dept_name"
-      uniqueColumns="name"/>
   </changeSet>
   
   <changeSet author="vlonushte" id="Drop foreign key and institution id column from CATISSUE_USER">
@@ -201,6 +187,7 @@
   </changeSet> 
   
   <changeSet author="nmarwaha" id="Migration script for container data" dbms="oracle">
+    <validCheckSum>7:afd2942539ed788af85cb6b48cbff9ce</validCheckSum>
     <sql endDelimiter="//">
       declare 
         sys_usr_id number;
@@ -237,11 +224,11 @@
     
     <sql>
       insert into os_container_positions
-        (pos_one, pos_two, 
+        (identifier, pos_one, pos_two, 
          pos_one_str, pos_two_str, 
          storage_container_id, occupying_specimen_id) 
       select 
-        cap.position_dimension_two, cap.position_dimension_one, 
+        os_container_positions_seq.nextval, cap.position_dimension_two, cap.position_dimension_one, 
         cap.position_dimension_two_string, cap.position_dimension_one_string,
         csp.container_id, csp.specimen_id 
       from 
@@ -251,11 +238,11 @@
     
     <sql>
       insert into os_container_positions
-        (pos_one, pos_two, 
+        (identifier, pos_one, pos_two, 
          pos_one_str, pos_two_str,
          storage_container_id, occupying_container_id) 
       select 
-        cap.position_dimension_two, cap.position_dimension_one, 
+        os_container_positions_seq.nextval, cap.position_dimension_two, cap.position_dimension_one, 
         cap.position_dimension_two_string, cap.position_dimension_one_string,
         ccp.parent_container_id, ccp.container_id 
       from 
@@ -460,11 +447,12 @@
   </changeSet>
 
   <changeSet author="vpawar" id="Migrate specimen biohazards PV values" dbms="oracle">
+    <validCheckSum>7:b36f0f73321e8437aa5cdbe26c4c67c6</validCheckSum>
     <sql>
       insert into catissue_permissible_value
         (identifier, public_id, value) 
       select
-        catissue_permissible_value_seq.nextval, 'specimen_biohazard', b.name
+        catissue_permi_value_seq.nextval, 'specimen_biohazard', b.name
       from
         catissue_biohazard b
       where
@@ -485,18 +473,27 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Drop last_run_on column from catissue_saved_queries table">
+    <preConditions>
+      <columnExists columnName="LAST_RUN_ON" tableName="CATISSUE_SAVED_QUERIES"/>
+    </preConditions>
     <dropColumn
       columnName="LAST_RUN_ON"
       tableName="CATISSUE_SAVED_QUERIES"/>
   </changeSet>
   
   <changeSet author="nmarwaha" id="Drop last_run_count column from catissue_saved_queries table">
+    <preConditions>
+      <columnExists columnName="LAST_RUN_COUNT" tableName="CATISSUE_SAVED_QUERIES"/>
+    </preConditions>
     <dropColumn
       columnName="LAST_RUN_COUNT"
       tableName="CATISSUE_SAVED_QUERIES"/>
   </changeSet>
     
   <changeSet author="nmarwaha" id="Drop report job details table">
+    <preConditions>
+      <tableExists tableName="report_job_details"/>
+    </preConditions>
     <dropTable tableName="report_job_details"/>
   </changeSet>
   
