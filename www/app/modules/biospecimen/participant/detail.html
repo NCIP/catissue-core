@@ -32,13 +32,15 @@
         <ul class="dropdown-menu dropdown-menu-right">
           <li ng-if="cpsForReg.length > 0">
             <a ui-sref="participant-newreg">
-              <i class="fa fa-plus"></i>
-              <span translate="participant.another_protocol">Register to Another Protocol</span>
+              <span class="fa fa-plus"></span>
+              <span translate="participant.reg_another_protocol">
+                Register to Another Protocol
+              </span>
             </a>
           </li>
           <li show-if-allowed="participantResource.deleteOpts">
             <a ng-click="deleteReg()">
-              <i class="fa fa-trash"></i>
+              <span class="fa fa-trash"></span>
               <span translate="common.buttons.delete">Delete</span>
             </a>
           </li>

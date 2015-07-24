@@ -280,7 +280,6 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		projs.add(Projections.property("ppidFormat"));
 		projs.add(Projections.property("manualPpidEnabled"));
 
-
 		if (cpCriteria.includePi()) {
 			projs.add(Projections.property("pi.id"));
 			projs.add(Projections.property("pi.firstName"));
