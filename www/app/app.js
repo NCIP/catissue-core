@@ -67,8 +67,8 @@ angular.module('openspecimen', [
 
     $httpProvider.interceptors.push('httpRespInterceptor');
 
-    ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 8380;
+    /*ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
+    ApiUrlsProvider.port = 9090;*/
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
