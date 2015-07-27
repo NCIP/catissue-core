@@ -29,6 +29,7 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
@@ -256,7 +257,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 			return null;
 		} 
 
-		if (detail.getQuantity() == null || detail.getQuantity() <= 0) {
+		if (detail.getQuantity() == null || NumUtil.lessThanEqualsZero(detail.getQuantity())) {
 			ose.addError(DistributionOrderErrorCode.INVALID_QUANTITY);
 			return null;
 		}

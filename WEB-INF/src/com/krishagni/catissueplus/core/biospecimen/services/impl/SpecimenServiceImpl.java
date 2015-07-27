@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -42,6 +43,7 @@ import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.service.LabelPrinter;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.NumUtil;
 
 public class SpecimenServiceImpl implements SpecimenService {
 
@@ -52,6 +54,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 	private ConfigurationService cfgSvc;
 	
 	private LabelGenerator labelGenerator;
+
+	private int precision = 6;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -241,22 +245,22 @@ public class SpecimenServiceImpl implements SpecimenService {
 			}
 									
 			Integer count = spec.getNoOfAliquots();
-			Double aliquotQty = spec.getQtyPerAliquot();
-			double reqQty = 0;
+			BigDecimal aliquotQty = spec.getQtyPerAliquot();
+			BigDecimal reqQty = BigDecimal.ZERO;
 						
 			if (count != null && aliquotQty != null) {
-				if (count <= 0 || aliquotQty <= 0) {
+				if (count <= 0 || NumUtil.lessThanEqualsZero(aliquotQty)) {
 					return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
 				}
 				
-				reqQty = count * aliquotQty;
-				if (reqQty > parentSpecimen.getAvailableQuantity()) {
+				reqQty = NumUtil.multiply(aliquotQty, count);
+				if (NumUtil.greaterThan(reqQty, parentSpecimen.getAvailableQuantity())) {
 					return ResponseEvent.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
 				}
-			} else if (count != null && count > 0) {				
-				aliquotQty =  Math.round(parentSpecimen.getAvailableQuantity() / count * 10000) / 10000.0; 
-			} else if (aliquotQty != null && aliquotQty > 0) {
-				count = (int)Math.floor(parentSpecimen.getAvailableQuantity() / aliquotQty);
+			} else if (count != null && count > 0) {
+				aliquotQty = NumUtil.divide(parentSpecimen.getAvailableQuantity(), count, precision);
+			} else if (aliquotQty != null && NumUtil.greaterThanZero(aliquotQty)) {
+				count = parentSpecimen.getAvailableQuantity().divide(aliquotQty).intValue();
 			} else {
 				return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
 			}

@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -21,6 +22,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
@@ -51,7 +53,7 @@ public class Specimen extends BaseEntity {
 
 	private String lineage;
 
-	private Double initialQuantity;
+	private BigDecimal initialQuantity;
 
 	private String specimenClass;
 
@@ -71,7 +73,7 @@ public class Specimen extends BaseEntity {
 
 	private Date createdOn;
 
-	private Double availableQuantity;
+	private BigDecimal availableQuantity;
 
 	private String collectionStatus;
 	
@@ -157,11 +159,11 @@ public class Specimen extends BaseEntity {
 		this.lineage = lineage;
 	}
 
-	public Double getInitialQuantity() {
+	public BigDecimal getInitialQuantity() {
 		return initialQuantity;
 	}
 
-	public void setInitialQuantity(Double initialQuantity) {
+	public void setInitialQuantity(BigDecimal initialQuantity) {
 		this.initialQuantity = initialQuantity;
 	}
 
@@ -271,11 +273,11 @@ public class Specimen extends BaseEntity {
 		this.createdOn = createdOn;
 	}
 
-	public Double getAvailableQuantity() {
+	public BigDecimal getAvailableQuantity() {
 		return availableQuantity;
 	}
 
-	public void setAvailableQuantity(Double availableQuantity) { 
+	public void setAvailableQuantity(BigDecimal availableQuantity) {
 		this.availableQuantity = availableQuantity;
 	}
 
@@ -512,7 +514,7 @@ public class Specimen extends BaseEntity {
 		}
 		
 		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
-		if (getAvailableQuantity() > 0) {
+		if (NumUtil.greaterThanZero(getAliquotQuantity())) {
 			setIsAvailable(true);
 		}
 		
@@ -634,23 +636,23 @@ public class Specimen extends BaseEntity {
 		}			
 	}
 		
-	public void distribute(User distributor, Date time, Double quantity, boolean closeAfterDistribution) {
-		if ((getIsAvailable() != null && !getIsAvailable()) || !isCollected() || getAvailableQuantity() <= 0) {
+	public void distribute(User distributor, Date time, BigDecimal quantity, boolean closeAfterDistribution) {
+		if ((getIsAvailable() != null && !getIsAvailable()) || !isCollected() || NumUtil.lessThanEqualsZero(getAvailableQuantity())) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_AVAILABLE_FOR_DIST, getLabel());
 		}
 		
-		if (getAvailableQuantity() < quantity) {
+		if (NumUtil.lessThan(getAvailableQuantity(), quantity)) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
 		}
 		
-		setAvailableQuantity(getAvailableQuantity() - quantity);
+		setAvailableQuantity(getAvailableQuantity().subtract(quantity));
 		addDistributionEvent(distributor, time, quantity);
-		if (availableQuantity == 0 || closeAfterDistribution) {
+		if (NumUtil.isZero(availableQuantity) || closeAfterDistribution) {
 			close(distributor, time, "Distributed");
 		}
 	}
 	
-	private void addDistributionEvent(User user, Date time, Double quantity) {
+	private void addDistributionEvent(User user, Date time, BigDecimal quantity) {
 		SpecimenDistributionEvent event = new SpecimenDistributionEvent(this);
 		event.setQuantity(quantity);
 		event.setUser(user);
@@ -737,7 +739,7 @@ public class Specimen extends BaseEntity {
 			//
 			// Ensure initial quantity is less than parent specimen quantity
 			//
-			if (initialQuantity > parentSpecimen.getInitialQuantity()) {
+			if (NumUtil.greaterThan(initialQuantity, parentSpecimen.getInitialQuantity())) {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.ALIQUOT_QTY_GT_PARENT_QTY);
 			}
 			
@@ -795,11 +797,11 @@ public class Specimen extends BaseEntity {
 		setLabel(label);
 	}
 
-	private double getAliquotQuantity() {
-		double aliquotQty = 0.0;
+	private BigDecimal getAliquotQuantity() {
+		BigDecimal aliquotQty = BigDecimal.ZERO;
 		for (Specimen child : getChildCollection()) {
 			if (child.isAliquot() && child.isCollected()) {
-				aliquotQty += child.getInitialQuantity();
+				aliquotQty = aliquotQty.add(child.getInitialQuantity());
 			}
 		}
 		
@@ -886,16 +888,16 @@ public class Specimen extends BaseEntity {
 	 * 2. Specimen available quantity is less than 
 	 *    initial - sum of all immediate aliquot child specimens initial quantity
 	 */
-	private void ensureAliquotQtyOk(SpecimenErrorCode initGtAliquotQty, SpecimenErrorCode avblQtyGtAct) {		
-		double initialQty = getInitialQuantity();
-		double aliquotQty = getAliquotQuantity();
+	private void ensureAliquotQtyOk(SpecimenErrorCode initGtAliquotQty, SpecimenErrorCode avblQtyGtAct) {
+		BigDecimal initialQty = getInitialQuantity();
+		BigDecimal aliquotQty = getAliquotQuantity();
 		
-		if (initialQty < aliquotQty) {
+		if (NumUtil.lessThan(initialQty, aliquotQty)) {
 			throw OpenSpecimenException.userError(initGtAliquotQty);
 		}
-		
-		double actAvailableQty = initialQty - aliquotQty;
-		if (getAvailableQuantity() > actAvailableQty) {
+
+		BigDecimal actAvailableQty = initialQty.subtract(aliquotQty);
+		if (NumUtil.greaterThan(getAvailableQuantity(), actAvailableQty)) {
 			throw OpenSpecimenException.userError(avblQtyGtAct);
 		}
 	}
@@ -945,8 +947,8 @@ public class Specimen extends BaseEntity {
 				p1.getPosTwoOrdinal() == p2.getPosTwoOrdinal();
 	}
 	
-	private void adjustParentSpecimenQty(double qty) {
-		parentSpecimen.setAvailableQuantity(parentSpecimen.getAvailableQuantity() - qty); 
+	private void adjustParentSpecimenQty(BigDecimal qty) {
+		parentSpecimen.setAvailableQuantity(parentSpecimen.getAvailableQuantity().subtract(qty));
 	}
 	
 	private void updateEvent(SpecimenEvent thisEvent, SpecimenEvent otherEvent) {
@@ -962,7 +964,7 @@ public class Specimen extends BaseEntity {
 
 		if (getId() != null && !isCollected(status)) {
 			setIsAvailable(false);
-			setAvailableQuantity(0.0d);
+			setAvailableQuantity(BigDecimal.ZERO);
 
 			if (getPosition() != null) {
 				getPosition().vacate();

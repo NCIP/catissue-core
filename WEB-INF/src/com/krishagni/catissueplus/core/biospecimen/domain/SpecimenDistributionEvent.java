@@ -1,22 +1,25 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.krishagni.catissueplus.core.common.util.NumUtil;
+
 public class SpecimenDistributionEvent extends SpecimenEvent {
-	private double quantity;
+	private BigDecimal quantity;
 
 	
 	public SpecimenDistributionEvent(Specimen specimen) {
 		super(specimen);
 	}
 
-	public double getQuantity() {
+	public BigDecimal getQuantity() {
 		loadRecordIfNotLoaded();
 		return quantity;
 	}
 
-	public void setQuantity(double quantity) {
+	public void setQuantity(BigDecimal quantity) {
 		loadRecordIfNotLoaded();
 		this.quantity = quantity;
 	}
@@ -32,7 +35,7 @@ public class SpecimenDistributionEvent extends SpecimenEvent {
 	protected void setEventAttrs(Map<String, Object> attrValues) {
 		Object number = attrValues.get("quantity");
 		if (number != null) {
-			this.quantity = ((Number)number).doubleValue();
+			this.quantity = NumUtil.numberToBigDecimal(number);
 		}
 	}
 

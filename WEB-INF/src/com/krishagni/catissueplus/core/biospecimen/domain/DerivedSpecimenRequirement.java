@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import java.math.BigDecimal;
+
 public class DerivedSpecimenRequirement {
 	private Long parentSrId;
 	
@@ -7,7 +9,7 @@ public class DerivedSpecimenRequirement {
 	
 	private String type;
 	
-	private Double quantity;
+	private BigDecimal quantity;
 	
 	private Double concentration;
 	
@@ -41,11 +43,11 @@ public class DerivedSpecimenRequirement {
 		this.type = type;
 	}
 
-	public Double getQuantity() {
+	public BigDecimal getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Double quantity) {
+	public void setQuantity(BigDecimal quantity) {
 		this.quantity = quantity;
 	}
 

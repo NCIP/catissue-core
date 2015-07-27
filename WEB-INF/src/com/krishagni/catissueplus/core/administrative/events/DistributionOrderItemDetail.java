@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -12,7 +13,7 @@ public class DistributionOrderItemDetail {
 	
 	private SpecimenInfo specimen;
 	
-	private Double quantity;
+	private BigDecimal quantity;
 	
 	private String status;
 
@@ -32,11 +33,11 @@ public class DistributionOrderItemDetail {
 		this.specimen = specimen;
 	}
 
-	public Double getQuantity() {
+	public BigDecimal getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Double quantity) {
+	public void setQuantity(BigDecimal quantity) {
 		this.quantity = quantity;
 	}
 

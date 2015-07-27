@@ -22,7 +22,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import au.com.bytecode.opencsv.CSVWriter;
-
 import com.krishagni.catissueplus.core.common.PdfUtil;
 
 public class Utility {
@@ -175,4 +174,5 @@ public class Utility {
 	public static String getDateString(Date date) {
 		return new SimpleDateFormat(ConfigUtil.getInstance().getDeDateFmt()).format(date);
 	}
+
 }

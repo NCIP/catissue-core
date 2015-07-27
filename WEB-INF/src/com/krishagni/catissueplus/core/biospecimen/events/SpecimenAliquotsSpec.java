@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class SpecimenAliquotsSpec {
@@ -9,7 +10,7 @@ public class SpecimenAliquotsSpec {
 	
 	private Integer noOfAliquots;
 	
-	private Double qtyPerAliquot;
+	private BigDecimal qtyPerAliquot;
 	
 	private Date createdOn;
 	
@@ -39,11 +40,11 @@ public class SpecimenAliquotsSpec {
 		this.noOfAliquots = noOfAliquots;
 	}
 
-	public Double getQtyPerAliquot() {
+	public BigDecimal getQtyPerAliquot() {
 		return qtyPerAliquot;
 	}
 
-	public void setQtyPerAliquot(Double qtyPerAliquot) {
+	public void setQtyPerAliquot(BigDecimal qtyPerAliquot) {
 		this.qtyPerAliquot = qtyPerAliquot;
 	}
 

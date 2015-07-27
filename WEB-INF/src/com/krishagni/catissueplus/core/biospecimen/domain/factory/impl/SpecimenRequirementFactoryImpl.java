@@ -9,6 +9,7 @@ import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_CLASS
 import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_LATERALITY;
 import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,7 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
+import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactory {
@@ -172,12 +174,12 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			throw ose;
 		}
 		
-		if (req.getQtyPerAliquot() == null || req.getQtyPerAliquot() <= 0) {
+		if (req.getQtyPerAliquot() == null || NumUtil.lessThanEqualsZero(req.getQtyPerAliquot())) {
 			ose.addError(SrErrorCode.INVALID_QTY);
 		}
 		
-		Double total = req.getNoOfAliquots() * req.getQtyPerAliquot();
-		if (total > parent.getQtyAfterAliquotsUse()) {
+		BigDecimal total = NumUtil.multiply(req.getQtyPerAliquot(), req.getNoOfAliquots());
+		if (NumUtil.greaterThan(total, parent.getQtyAfterAliquotsUse())) {
 			ose.addError(SrErrorCode.INSUFFICIENT_QTY);
 		}
 		
@@ -281,8 +283,8 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setInitialQty(detail.getInitialQty(), sr, ose);
 	}
 		
-	private void setInitialQty(Double initialQty, SpecimenRequirement sr, OpenSpecimenException ose) {
-		if (initialQty == null || initialQty < 0) {
+	private void setInitialQty(BigDecimal initialQty, SpecimenRequirement sr, OpenSpecimenException ose) {
+		if (initialQty == null || NumUtil.lessThanZero(initialQty)) {
 			ose.addError(INVALID_QTY);
 			return;
 		}

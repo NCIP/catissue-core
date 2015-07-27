@@ -19,4 +19,16 @@
       columnDataType="timestamp null"/>
   </changeSet>
 
+  <changeSet author="ahegade" id="Modify initial quantity from double to big decimal in specimen audit table">
+    <modifyDataType tableName="catissue_specimen_aud" columnName="INITIAL_QUANTITY" newDataType="decimal(16,6)" />
+  </changeSet>
+
+  <changeSet author="ahegade" id="Modify available quantity from double to big decimal in specimen audit table">
+    <modifyDataType tableName="catissue_specimen_aud" columnName="AVAILABLE_QUANTITY" newDataType="decimal(16,6)" />
+  </changeSet>
+
+  <changeSet author="ahegade" id="Modify quantity from double to big decimal in specimel requirement audit table">
+    <modifyDataType tableName="catissue_cp_req_specimen_aud" columnName="INITIAL_QUANTITY" newDataType="decimal(16,6)" />
+  </changeSet>
+
 </databaseChangeLog>
