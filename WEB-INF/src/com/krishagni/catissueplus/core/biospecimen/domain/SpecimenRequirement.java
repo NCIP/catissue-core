@@ -16,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 @Audited
@@ -277,11 +278,11 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 			updateConcentration(sr.getConcentration());
 		}
 
-		if (getQtyAfterAliquotsUse().compareTo(BigDecimal.ZERO) < 0) {
+		if (NumUtil.lessThanZero(getQtyAfterAliquotsUse())) {
 			throw OpenSpecimenException.userError(SrErrorCode.INSUFFICIENT_QTY);
 		}
 		
-		if (isAliquot() && getParentSpecimenRequirement().getQtyAfterAliquotsUse().compareTo(BigDecimal.ZERO) < 0) {
+		if (isAliquot() && NumUtil.lessThanZero(getParentSpecimenRequirement().getQtyAfterAliquotsUse())) {
 			throw OpenSpecimenException.userError(SrErrorCode.INSUFFICIENT_QTY);
 		}
 	}
@@ -298,7 +299,7 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		}
 		
 		if (isAliquot()) {
-			if (getInitialQuantity().compareTo(getParentSpecimenRequirement().getQtyAfterAliquotsUse()) > 0) {
+			if (NumUtil.greaterThan(getInitialQuantity(), getParentSpecimenRequirement().getQtyAfterAliquotsUse())) {
 				throw OpenSpecimenException.userError(SrErrorCode.INSUFFICIENT_QTY);
 			}
 		}

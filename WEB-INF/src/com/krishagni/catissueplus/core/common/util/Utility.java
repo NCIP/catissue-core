@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -175,15 +174,4 @@ public class Utility {
 		return new SimpleDateFormat(ConfigUtil.getInstance().getDeDateFmt()).format(date);
 	}
 
-	public static BigDecimal numberToBigDecimal(Object number) {
-		if (number == null) {
-			return null;
-		}
-
-		if (!(number instanceof Number)) {
-			throw new IllegalArgumentException("Input object is not a number");
-		}
-
-		return new BigDecimal(((Number)number).toString());
-	}
 }

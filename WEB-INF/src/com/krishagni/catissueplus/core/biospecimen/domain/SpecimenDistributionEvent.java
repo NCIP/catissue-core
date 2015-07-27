@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.krishagni.catissueplus.core.common.util.Utility;
+import com.krishagni.catissueplus.core.common.util.NumUtil;
 
 public class SpecimenDistributionEvent extends SpecimenEvent {
 	private BigDecimal quantity;
@@ -35,7 +35,7 @@ public class SpecimenDistributionEvent extends SpecimenEvent {
 	protected void setEventAttrs(Map<String, Object> attrValues) {
 		Object number = attrValues.get("quantity");
 		if (number != null) {
-			this.quantity = Utility.numberToBigDecimal(number);
+			this.quantity = NumUtil.numberToBigDecimal(number);
 		}
 	}
 

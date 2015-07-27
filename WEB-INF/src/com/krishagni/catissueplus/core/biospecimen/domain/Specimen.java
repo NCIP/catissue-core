@@ -22,6 +22,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
@@ -513,7 +514,7 @@ public class Specimen extends BaseEntity {
 		}
 		
 		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
-		if (getAvailableQuantity().compareTo(BigDecimal.ZERO) > 0) {
+		if (NumUtil.greaterThanZero(getAliquotQuantity())) {
 			setIsAvailable(true);
 		}
 		
@@ -636,17 +637,17 @@ public class Specimen extends BaseEntity {
 	}
 		
 	public void distribute(User distributor, Date time, BigDecimal quantity, boolean closeAfterDistribution) {
-		if ((getIsAvailable() != null && !getIsAvailable()) || !isCollected() || getAvailableQuantity().compareTo(BigDecimal.ZERO) <= 0) {
+		if ((getIsAvailable() != null && !getIsAvailable()) || !isCollected() || NumUtil.lessThanEqualsZero(getAvailableQuantity())) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_AVAILABLE_FOR_DIST, getLabel());
 		}
 		
-		if (getAvailableQuantity().compareTo(quantity) < 0) {
+		if (NumUtil.lessThanZero(getAvailableQuantity())) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
 		}
 		
 		setAvailableQuantity(getAvailableQuantity().subtract(quantity));
 		addDistributionEvent(distributor, time, quantity);
-		if (availableQuantity.compareTo(BigDecimal.ZERO) == 0 || closeAfterDistribution) {
+		if (NumUtil.isZero(availableQuantity) || closeAfterDistribution) {
 			close(distributor, time, "Distributed");
 		}
 	}
@@ -738,7 +739,7 @@ public class Specimen extends BaseEntity {
 			//
 			// Ensure initial quantity is less than parent specimen quantity
 			//
-			if (initialQuantity.compareTo(parentSpecimen.getInitialQuantity()) > 0) {
+			if (NumUtil.greaterThan(initialQuantity, parentSpecimen.getInitialQuantity())) {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.ALIQUOT_QTY_GT_PARENT_QTY);
 			}
 			
@@ -891,12 +892,12 @@ public class Specimen extends BaseEntity {
 		BigDecimal initialQty = getInitialQuantity();
 		BigDecimal aliquotQty = getAliquotQuantity();
 		
-		if (initialQty.compareTo(aliquotQty) < 0) {
+		if (NumUtil.lessThan(initialQty, aliquotQty)) {
 			throw OpenSpecimenException.userError(initGtAliquotQty);
 		}
 
 		BigDecimal actAvailableQty = initialQty.subtract(aliquotQty);
-		if (getAvailableQuantity().compareTo(actAvailableQty) > 0) {
+		if (NumUtil.greaterThan(getAvailableQuantity(), actAvailableQty)) {
 			throw OpenSpecimenException.userError(avblQtyGtAct);
 		}
 	}

@@ -2,8 +2,6 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -45,7 +43,7 @@ import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.service.LabelPrinter;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
-import com.krishagni.catissueplus.core.common.util.Utility;
+import com.krishagni.catissueplus.core.common.util.NumUtil;
 
 public class SpecimenServiceImpl implements SpecimenService {
 
@@ -57,7 +55,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	
 	private LabelGenerator labelGenerator;
 
-	private MathContext roundVal = new MathContext(6, RoundingMode.HALF_UP);
+	private int precision = 6;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -251,17 +249,18 @@ public class SpecimenServiceImpl implements SpecimenService {
 			BigDecimal reqQty = BigDecimal.ZERO;
 						
 			if (count != null && aliquotQty != null) {
-				if (count <= 0 || aliquotQty.compareTo(BigDecimal.ZERO) <= 0) {
+				if (count <= 0 || NumUtil.lessThanEqualsZero(aliquotQty)) {
 					return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
 				}
 				
-				reqQty = Utility.numberToBigDecimal(count).multiply(aliquotQty);
-				if (reqQty.compareTo(parentSpecimen.getAvailableQuantity()) > 0) {
+				reqQty = NumUtil.multiply(aliquotQty, count);
+				if (NumUtil.greaterThan(reqQty, parentSpecimen.getAvailableQuantity())) {
 					return ResponseEvent.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
 				}
 			} else if (count != null && count > 0) {
-				aliquotQty = parentSpecimen.getAvailableQuantity().divide(Utility.numberToBigDecimal(count)).round(roundVal);
-			} else if (aliquotQty != null && aliquotQty.compareTo(BigDecimal.ZERO) > 0) {
+				aliquotQty = NumUtil.divide(parentSpecimen.getAvailableQuantity(), count, precision);
+
+			} else if (aliquotQty != null && NumUtil.greaterThanZero(aliquotQty)) {
 				count = parentSpecimen.getAvailableQuantity().divide(aliquotQty).intValue();
 			} else {
 				return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);

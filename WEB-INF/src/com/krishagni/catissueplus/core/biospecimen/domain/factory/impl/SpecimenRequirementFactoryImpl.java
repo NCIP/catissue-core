@@ -1,6 +1,26 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.*;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.ANATOMIC_SITE_REQUIRED;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.COLLECTOR_NOT_FOUND;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.COLL_CONT_REQUIRED;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.COLL_PROC_REQUIRED;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.CONCENTRATION_MUST_BE_POSITIVE;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.CPE_REQUIRED;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.INVALID_ANATOMIC_SITE;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.INVALID_COLL_CONT;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.INVALID_COLL_PROC;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.INVALID_LABEL_FMT;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.INVALID_LATERALITY;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.INVALID_PATHOLOGY_STATUS;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.INVALID_QTY;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.INVALID_SPECIMEN_CLASS;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.INVALID_SPECIMEN_TYPE;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.LATERALITY_REQUIRED;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.PARENT_REQ_REQUIRED;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.PATHOLOGY_STATUS_REQUIRED;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.RECEIVER_NOT_FOUND;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.SPECIMEN_CLASS_REQUIRED;
+import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.SPECIMEN_TYPE_REQUIRED;
 import static com.krishagni.catissueplus.core.common.PvAttributes.COLL_PROC;
 import static com.krishagni.catissueplus.core.common.PvAttributes.CONTAINER;
 import static com.krishagni.catissueplus.core.common.PvAttributes.PATH_STATUS;
@@ -31,8 +51,8 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
+import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
-import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactory {
 	
@@ -174,12 +194,12 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			throw ose;
 		}
 		
-		if (req.getQtyPerAliquot() == null || req.getQtyPerAliquot().compareTo(BigDecimal.ZERO) <= 0) {
+		if (req.getQtyPerAliquot() == null || NumUtil.lessThanEqualsZero(req.getQtyPerAliquot())) {
 			ose.addError(SrErrorCode.INVALID_QTY);
 		}
 		
-		BigDecimal total = Utility.numberToBigDecimal(req.getNoOfAliquots()).multiply(req.getQtyPerAliquot());
-		if (total.compareTo(parent.getQtyAfterAliquotsUse()) > 0) {
+		BigDecimal total = NumUtil.multiply(req.getQtyPerAliquot(), req.getNoOfAliquots());
+		if (NumUtil.greaterThan(total, parent.getQtyAfterAliquotsUse())) {
 			ose.addError(SrErrorCode.INSUFFICIENT_QTY);
 		}
 		
@@ -284,7 +304,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 		
 	private void setInitialQty(BigDecimal initialQty, SpecimenRequirement sr, OpenSpecimenException ose) {
-		if (initialQty == null || initialQty.compareTo(BigDecimal.ZERO) < 0) {
+		if (initialQty == null || NumUtil.lessThanZero(initialQty)) {
 			ose.addError(INVALID_QTY);
 			return;
 		}
