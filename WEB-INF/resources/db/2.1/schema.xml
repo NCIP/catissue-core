@@ -123,4 +123,11 @@
     <modifyDataType tableName="CATISSUE_CP_REQ_SPECIMEN" columnName="INITIAL_QUANTITY" newDataType="${decimal.type}(16,6)" />
   </changeSet>
 
+  <changeSet author="vpawar" id="Add covering index to record entry table for use in views">
+    <createIndex indexName="OS_EXTN_VIEW_IDX" tableName="CATISSUE_FORM_RECORD_ENTRY">
+      <column name="FORM_CTXT_ID"/>
+      <column name="OBJECT_ID"/>
+      <column name="RECORD_ID"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>
