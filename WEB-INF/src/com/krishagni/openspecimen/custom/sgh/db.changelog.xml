@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <property name="boolean.type" value="boolean" dbms="mysql" />
+  <property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
+  <property name="int.type" value="bigint" dbms="mysql" />
+  <property name="int.type" value="number(19,0)" dbms="oracle" />
+
+  <property name="smallint.type" value="smallint" dbms="mysql" />
+  <property name="smallint.type" value="number(5,0)" dbms="oracle" />
+
+  <property name="text.type" value="varchar" dbms="mysql" />
+  <property name="text.type" value="varchar2" dbms="oracle" />
+
+  <property name="double.type" value="double"/>
+
+  <property name="autoIncrement" value="true" dbms="mysql"/>
+  <property name="autoIncrement" value="false" dbms="oracle"/>
+
+  <property name="timestamp.type" value="timestamp" dbms="mysql" />
+  <property name="timestamp.type" value="timestamp" dbms="oracle" />
+
+  <property name="nullable.ts.type" value="timestamp null" dbms="mysql" />
+  <property name="nullable.ts.type" value="timestamp" dbms="oracle" />
+
+  <property name="clob.type" value="text" dbms="mysql"/>
+  <property name="clob.type" value="clob" dbms="oracle"/>
+
+  <changeSet author="nmarwaha" id="Migrate SCG Missed case data" failOnError="false">
+    <sql>
+      update
+        catissue_specimen_coll_group
+      set
+        REASON_FOR_MISSED_CASE = 'No post ops consent taken within 3 months'
+      where
+        collection_status = 'Not Collected-No post ops consent taken within three months'
+    </sql>
+    
+    <sql>
+      update
+        catissue_specimen_coll_group
+      set
+        MISSED_REASON = REASON_FOR_MISSED_CASE
+    </sql>
+    
+    <sql>
+      update
+        catissue_specimen_coll_group
+      set
+        COLLECTION_STATUS = 'Missed Collection'
+      where
+        COLLECTION_STATUS not in ('Pending', 'Complete')
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Set label formats for all protocols as per SG format" failOnError="false">
+    <sql>
+      update
+        catissue_collection_protocol
+      set
+        LABEL_FORMAT='%VISIT_NAME%-%SP_TYPE%%PPI_YOC_UID%',
+        DERIV_LABEL_FORMAT='%PSPEC_LABEL%-%SP_TYPE%',
+        ALIQUOT_LABEL_FORMAT='%PSPEC_LABEL%_%PSPEC_UID%'
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Reset TRID counter in key sequence table" failOnError="false">
+    <sql>
+      select 
+        MAX(CAST(SUBSTRING(name, 2, length(name)) AS UNSIGNED)) 
+      from 
+        catissue_specimen_coll_group 
+      where 
+        name like 'z%'
+      into 
+        @TRID_FLAG;
+
+      insert into key_seq_generator 
+        (identifier, key_value, key_sequence_id, key_type)
+      values 
+        (default, 'SGH', @TRID_FLAG ,'TRID');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="rvivek" id="Migrating order and distribution data" failOnError="false">
+    <sql>
+      UPDATE 
+        CATISSUE_DISTRIBUTION_PROTOCOL 
+      SET 
+        INSTITUTE_ID=1;
+    </sql>
+    
+    <sql>
+      UPDATE 
+        CATISSUE_ORDER 
+      SET 
+        REQUESTER_ID=1
+      WHERE 
+        REQUESTER_ID IS NULL
+    </sql>
+    
+    <sql>
+      INSERT INTO OS_ORDERS (
+        IDENTIFIER, NAME, REQUESTER_ID, CREATION_DATE, EXECUTION_DATE, STATUS, ORDER_TYPE, 
+        ACTIVITY_STATUS, SITE_ID, DISTRIBUTION_PROTOCOL_ID, DISTRIBUTOR_ID, TRACKING_URL, COMMENTS)
+
+      SELECT 
+        CATISSUE_ORDER.IDENTIFIER AS 'IDENTIFIER', CATISSUE_ORDER.NAME AS 'NAME',
+        CATISSUE_ORDER.REQUESTER_ID AS 'REQUESTER_ID', CATISSUE_ORDER.REQUESTED_DATE AS 'CREATION_DATE',
+        CATISSUE_DISTRIBUTION.EVENT_TIMESTAMP AS 'EXECUTION_DATE',
+        CASE 
+          WHEN CATISSUE_ORDER.STATUS IN ('Completed') THEN 'EXECUTED'
+          ELSE 'PENDING'
+        END AS 'STATUS',
+        NULL AS 'ORDER_TYPE',
+        CATISSUE_DISTRIBUTION.ACTIVITY_STATUS AS 'ACTIVITY_STATUS',
+        CATISSUE_DISTRIBUTION.TO_SITE_ID AS 'SITE_ID',
+        CATISSUE_DISTRIBUTION.DISTRIBUTION_PROTOCOL_ID AS 'DISTRIBUTION_PROTOCOL_ID',
+        CATISSUE_DISTRIBUTION.USER_ID AS 'DISTRIBUTOR_ID',
+        NULL AS 'TRACKING_URL',
+        CATISSUE_ORDER.COMMENTS AS 'COMMENTS'
+      FROM CATISSUE_ORDER
+       JOIN CATISSUE_DISTRIBUTION ON CATISSUE_DISTRIBUTION.ORDER_ID=CATISSUE_ORDER.IDENTIFIER
+       AND CATISSUE_DISTRIBUTION.ORDER_ID IS NOT NULL;
+    </sql>
+    
+    <sql>
+      INSERT INTO OS_ORDER_ITEMS (IDENTIFIER, ORDER_ID, QUANTITY, SPECIMEN_ID, STATUS)
+      SELECT CATISSUE_ORDER_ITEM.IDENTIFIER AS 'IDENTIFIER',
+        CATISSUE_ORDER_ITEM.ORDER_ID AS 'ORDER_ID',
+        CATISSUE_ORDER_ITEM.REQUESTED_QUANTITY AS 'QUANTITY',
+        CATISSUE_DISTRIBUTED_ITEM.SPECIMEN_ID AS 'SPECIMEN_ID',
+        CASE
+          WHEN CATISSUE_ORDER_ITEM.STATUS LIKE 'Distributed And Close' THEN 'DISTRIBUTED_AND_CLOSED'
+          WHEN CATISSUE_ORDER_ITEM.STATUS LIKE 'Distributed' THEN 'DISTRIBUTED'
+          WHEN CATISSUE_ORDER_ITEM.STATUS IN ('New', 'Pending - For Distribution') THEN 'PENDING'
+          ELSE 'TEMP'
+        END AS 'STATUS'
+      FROM 
+        CATISSUE_ORDER_ITEM
+        JOIN CATISSUE_DISTRIBUTED_ITEM ON CATISSUE_DISTRIBUTED_ITEM.IDENTIFIER=CATISSUE_ORDER_ITEM.DISTRIBUTED_ITEM_ID
+        JOIN CATISSUE_DISTRIBUTION ON CATISSUE_DISTRIBUTION.IDENTIFIER=CATISSUE_DISTRIBUTED_ITEM.DISTRIBUTION_ID
+        AND CATISSUE_DISTRIBUTION.ORDER_ID IS NOT NULL;
+    </sql>
+  </changeSet>
+</databaseChangeLog>
