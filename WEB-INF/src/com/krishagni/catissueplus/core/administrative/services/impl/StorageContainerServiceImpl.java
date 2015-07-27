@@ -89,7 +89,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 				if (siteIds == null) {
 					siteIds = cpSiteIds;
 				} else {
-					siteIds =(Set) CollectionUtils.intersection(siteIds, cpSiteIds);
+					siteIds =new HashSet<Long>(CollectionUtils.intersection(siteIds, cpSiteIds));
 				}
 			}
 
