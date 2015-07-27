@@ -641,7 +641,7 @@ public class Specimen extends BaseEntity {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_AVAILABLE_FOR_DIST, getLabel());
 		}
 		
-		if (NumUtil.lessThanZero(getAvailableQuantity())) {
+		if (NumUtil.lessThan(getAvailableQuantity(), quantity)) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
 		}
 		

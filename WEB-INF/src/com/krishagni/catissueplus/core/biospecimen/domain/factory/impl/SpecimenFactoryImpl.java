@@ -44,6 +44,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SpecimenFactoryImpl implements SpecimenFactory {
@@ -445,7 +446,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			}
 		}
 				
-		if (qty == null || qty.compareTo(BigDecimal.ZERO)<= 0) {
+		if (qty == null || NumUtil.lessThanEqualsZero(qty)) {
 			ose.addError(SpecimenErrorCode.INVALID_QTY);
 			return;
 		}

@@ -259,7 +259,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 				}
 			} else if (count != null && count > 0) {
 				aliquotQty = NumUtil.divide(parentSpecimen.getAvailableQuantity(), count, precision);
-
 			} else if (aliquotQty != null && NumUtil.greaterThanZero(aliquotQty)) {
 				count = parentSpecimen.getAvailableQuantity().divide(aliquotQty).intValue();
 			} else {

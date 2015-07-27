@@ -6,22 +6,20 @@ import java.math.RoundingMode;
 
 public class NumUtil {
 
-    BigDecimal zero = BigDecimal.ZERO;
-
     public static Boolean lessThanZero(BigDecimal d) {
-        return d.compareTo(BigDecimal.ZERO) < 0 ? true : false;
+        return d.compareTo(BigDecimal.ZERO) < 0;
     }
 
     public static Boolean lessThanEqualsZero(BigDecimal d) {
-        return d.compareTo(BigDecimal.ZERO) <= 0 ? true : false;
+        return d.compareTo(BigDecimal.ZERO) <= 0;
     }
 
     public static Boolean greaterThanZero(BigDecimal d) {
-        return d.compareTo(BigDecimal.ZERO) > 0 ? true : false;
+        return d.compareTo(BigDecimal.ZERO) > 0;
     }
 
     public static Boolean greaterThanEqualsZero(BigDecimal d) {
-        return d.compareTo(BigDecimal.ZERO) >= 0 ? true : false;
+        return d.compareTo(BigDecimal.ZERO) >= 0;
     }
 
     public static Boolean isZero(BigDecimal d) {
@@ -29,28 +27,28 @@ public class NumUtil {
     }
 
     public static Boolean lessThan(BigDecimal subject, BigDecimal measure) {
-        return subject.compareTo(measure) < 0 ? true : false;
+        return subject.compareTo(measure) < 0;
     }
 
     public static Boolean lessThanEquals(BigDecimal subject, BigDecimal measure) {
-        return subject.compareTo(measure) <= 0 ? true : false;
+        return subject.compareTo(measure) <= 0;
     }
 
     public static Boolean greaterThan(BigDecimal subject, BigDecimal measure) {
-        return subject.compareTo(measure) > 0 ? true : false;
+        return subject.compareTo(measure) > 0;
     }
 
     public static Boolean greaterThanEquals(BigDecimal subject, BigDecimal measure) {
-        return subject.compareTo(measure) >= 0 ? true : false;
+        return subject.compareTo(measure) >= 0;
     }
 
     public static BigDecimal multiply(BigDecimal op1, int op2) {
-        return op1.multiply(numberToBigDecimal(op2));
+        return op1.multiply(new BigDecimal(op2));
     }
 
     public static BigDecimal divide(BigDecimal op1, int op2, int precision) {
         MathContext roundVal = new MathContext(precision, RoundingMode.HALF_UP);
-        return op1.divide(numberToBigDecimal(op2)).round(roundVal);
+        return op1.divide(new BigDecimal(op2)).round(roundVal);
     }
 
     public static BigDecimal numberToBigDecimal(Object number) {

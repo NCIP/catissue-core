@@ -15,8 +15,8 @@ public class SpecimenQtyPrintToken extends AbstractLabelTmplToken implements Lab
 
 	@Override
 	public String getReplacement(Object object) {
-		Specimen specimen = (Specimen)object;
+		Specimen specimen = (Specimen) object;
 		BigDecimal dbl = specimen.getInitialQuantity();
 		return dbl != null ? dbl.toString() : null;
 	}
-}																																															
+}
