@@ -24,11 +24,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormDataDetail;
 import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordStat;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.FormType;
@@ -244,6 +246,15 @@ public class FormsController {
 		return resp.getPayload();
 	}
 		
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/record-stats")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public List<FormRecordStat> getFormRecordStats(@PathVariable("id") Long formId) {
+		ResponseEvent<List<FormRecordStat> > resp = formSvc.getRecordStats(getRequest(formId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
 	@RequestMapping(method = RequestMethod.DELETE, value="{id}/data/{recordId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

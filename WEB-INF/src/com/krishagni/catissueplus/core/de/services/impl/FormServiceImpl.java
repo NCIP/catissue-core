@@ -30,6 +30,7 @@ import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormDataDetail;
 import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordStat;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
@@ -129,6 +130,7 @@ public class FormServiceImpl implements FormService {
 			
 			Long formId = req.getPayload();
 			if (Container.softDeleteContainer(formId)) {
+				formDao.deleteFormContexts(formId);
 				return ResponseEvent.response(true);
 			} else {
 				return ResponseEvent.userError(FormErrorCode.NOT_FOUND);
@@ -524,6 +526,15 @@ public class FormServiceImpl implements FormService {
 			return ResponseEvent.response(result);			
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@PlusTransactional
+	public ResponseEvent<List<FormRecordStat>> getRecordStats(RequestEvent<Long> req) {
+		try {
+			return ResponseEvent.response(formDao.getRecordStats(req.getPayload()));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

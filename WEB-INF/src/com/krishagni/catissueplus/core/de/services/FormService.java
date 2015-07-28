@@ -13,6 +13,7 @@ import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormDataDetail;
 import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordStat;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.FormType;
@@ -61,4 +62,6 @@ public interface FormService {
 	public ResponseEvent<Long> addRecordEntry(RequestEvent<AddRecordEntryOp> req);
 
 	public ResponseEvent<List<FormRecordsList>> getFormRecords(RequestEvent<GetFormRecordsListOp> req);
+	
+	public ResponseEvent<List<FormRecordStat>> getRecordStats(RequestEvent<Long> req);
 }

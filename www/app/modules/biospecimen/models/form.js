@@ -123,6 +123,11 @@ angular.module('os.biospecimen.models.form', ['os.common.models'])
       return result;
     };
 
+    Form.prototype.getRecordStats = function() {
+      return $http.get(Form.url() + this.$id() + '/record-stats').then(function(result) { return result.data });
+    };
+
+
     Form.prototype.getFields = function() {
       var cpId = -1;
       if (!!this.cp) {

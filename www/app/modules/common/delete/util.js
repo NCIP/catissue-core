@@ -57,7 +57,7 @@ angular.module('os.common.delete')
 
       modalInstance.result.then(
         function() {
-          opts.delete();
+          opts.delete(opts.entity);
         }
       );
     };
