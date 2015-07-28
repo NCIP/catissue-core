@@ -55,6 +55,13 @@
       <filter name="activeEntity"/>
     </set>
 
+    <many-to-one
+      name="collector"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      cascade="none"
+      column="COLLECTOR_ID"
+    />
+
     <filter name="activeEntity"/>
 
     <query name="getVisitByName">

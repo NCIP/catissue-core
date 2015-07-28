@@ -3,6 +3,8 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.Date;
 
+import com.krishagni.catissueplus.core.common.events.UserSummary;
+
 public class VisitSummary implements Comparable<VisitSummary> {
 	private Long id;
 	
@@ -29,6 +31,8 @@ public class VisitSummary implements Comparable<VisitSummary> {
 	private int unplannedSpecimens;
 
 	private String missedReason;
+
+	private UserSummary collector;
 	
 	public Long getId() {
 		return id;

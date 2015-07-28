@@ -31,4 +31,16 @@
     <modifyDataType tableName="catissue_cp_req_specimen_aud" columnName="INITIAL_QUANTITY" newDataType="decimal(16,6)" />
   </changeSet>
 
+  <changeSet author="ahegade" id="Collector for visit(missed)">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="COLLECTOR_ID" type="BIGINT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Tracking collector for visit(missed)">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="collector_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

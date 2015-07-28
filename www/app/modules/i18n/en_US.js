@@ -303,6 +303,7 @@
     "clinical_diagnosis": "Clinical Diagnosis",
     "clinical_status": "Clinical Status",
     "surgical_path_no": "Surg Path Number",
+    "collector": "Collector",
 
     "bulk_import": "Bulk Import Visits",
     "visit_extensions": "Visit Forms",

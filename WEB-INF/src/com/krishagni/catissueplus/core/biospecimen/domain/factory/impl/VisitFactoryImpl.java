@@ -13,6 +13,7 @@ import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
@@ -61,6 +62,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		setSite(visitDetail, visit, ose);
 		setActivityStatus(visitDetail, visit, ose);
 		setMissedReason(visitDetail, visit, ose);
+		setCollector(visitDetail, visit, ose);
 		visit.setComments(visitDetail.getComments());
 		visit.setSurgicalPathologyNumber(visitDetail.getSurgicalPathologyNumber());
 		visit.setDefNameTmpl(defaultNameTmpl);
@@ -94,6 +96,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		setComments(detail, existing, visit, ose);
 		setSurgicalPathNo(detail, existing, visit, ose);
 		setMissedVisitReason(detail, existing, visit, ose);
+		setCollector(detail, existing, visit, ose);
 		visit.setDefNameTmpl(defaultNameTmpl);
 
 		ose.checkAndThrow();
@@ -303,6 +306,24 @@ public class VisitFactoryImpl implements VisitFactory {
 			setMissedReason(detail, visit, ose);
 		} else {
 			visit.setMissedReason(existing.getMissedReason());
+		}
+	}
+
+	private void setCollector(VisitDetail detail, Visit visit, OpenSpecimenException ose) {
+		if (detail.getCollector() == null) {
+			return;
+		}
+
+		Long userId = detail.getCollector().getId();
+		User collector = daoFactory.getUserDao().getById(userId);
+		visit.setCollector(collector);
+	}
+
+	private void setCollector(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (detail.isAttrModified("collector")) {
+			setCollector(detail, visit, ose);
+		} else {
+			visit.setCollector(existing.getCollector());
 		}
 	}
 
