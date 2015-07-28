@@ -307,7 +307,8 @@
     "bulk_import": "Bulk Import Visits",
     "visit_extensions": "Visit Forms",
 
-    "spr": "Surgical Pathology Report",
+    "upload_spr": "Upload Surgical Pathology Report",
+    "spr_contents": "Report Contents",
     "spr_uploaded": "Surgical pathology report {{file}} uploaded successfully.",
     "no_spr": "No surgical pathology report uploaded.",
     "deleting_spr": "Deleting Surgical Pathology Report",
