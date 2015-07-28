@@ -56,10 +56,10 @@
     </set>
 
     <many-to-one
-      name="collector"
+      name="missedBy"
       class="com.krishagni.catissueplus.core.administrative.domain.User"
       cascade="none"
-      column="COLLECTOR_ID"
+      column="MISSED_BY"
     />
 
     <filter name="activeEntity"/>

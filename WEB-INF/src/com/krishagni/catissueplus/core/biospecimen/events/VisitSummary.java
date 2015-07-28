@@ -32,7 +32,7 @@ public class VisitSummary implements Comparable<VisitSummary> {
 
 	private String missedReason;
 
-	private UserSummary collector;
+	private UserSummary missedBy;
 	
 	public Long getId() {
 		return id;
@@ -136,6 +136,14 @@ public class VisitSummary implements Comparable<VisitSummary> {
 
 	public void setMissedVisitReason(String missedReason) {
 		this.missedReason = missedReason;
+	}
+
+	public UserSummary getMissedBy() {
+		return missedBy;
+	}
+
+	public void setMissedBy(UserSummary missedBy) {
+		this.missedBy = missedBy;
 	}
 
 	@Override

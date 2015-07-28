@@ -70,7 +70,7 @@ public class Visit {
 
 	private String missedReason;
 
-	private User collector;
+	private User missedBy;
 	
 	@Autowired
 	@Qualifier("visitNameGenerator")
@@ -236,12 +236,12 @@ public class Visit {
 		this.missedReason = missedVisitReason;
 	}
 
-	public User getCollector() {
-		return collector;
+	public User getMissedBy() {
+		return missedBy;
 	}
 
-	public void setCollector(User collector) {
-		this.collector = collector;
+	public void setMissedBy(User missedBy) {
+		this.missedBy = missedBy;
 	}
 
 	public void setActive() {
@@ -307,7 +307,7 @@ public class Visit {
 		updateStatus(visit.getStatus());		
 		setComments(visit.getComments());
 		setMissedReason(isMissed() ? visit.getMissedReason() : null);
-		setCollector(isMissed() ? visit.getCollector() : null);
+		setMissedBy(isMissed() ? visit.getMissedBy() : null);
 		setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 		setVisitDate(visit.getVisitDate());
 	}

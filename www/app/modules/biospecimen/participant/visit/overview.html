@@ -47,8 +47,8 @@
       </li>
 
       <li class="item" ng-if="visit.status == 'Missed Collection'">
-        <strong class="key key-sm" translate="visits.collector">Collector</strong>
-        <span class="value value-md">{{visit.collector.firstName}} {{visit.collector.lastName}}</span>
+        <strong class="key key-sm" translate="visits.missed_by">Missed By</strong>
+        <span class="value value-md">{{visit.missedBy.firstName}} {{visit.missedBy.lastName}}</span>
       </li>
     </ul>
 

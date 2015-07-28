@@ -62,7 +62,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		setSite(visitDetail, visit, ose);
 		setActivityStatus(visitDetail, visit, ose);
 		setMissedReason(visitDetail, visit, ose);
-		setCollector(visitDetail, visit, ose);
+		setMissedBy(visitDetail, visit, ose);
 		visit.setComments(visitDetail.getComments());
 		visit.setSurgicalPathologyNumber(visitDetail.getSurgicalPathologyNumber());
 		visit.setDefNameTmpl(defaultNameTmpl);
@@ -96,7 +96,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		setComments(detail, existing, visit, ose);
 		setSurgicalPathNo(detail, existing, visit, ose);
 		setMissedVisitReason(detail, existing, visit, ose);
-		setCollector(detail, existing, visit, ose);
+		setMissedBy(detail, existing, visit, ose);
 		visit.setDefNameTmpl(defaultNameTmpl);
 
 		ose.checkAndThrow();
@@ -309,21 +309,21 @@ public class VisitFactoryImpl implements VisitFactory {
 		}
 	}
 
-	private void setCollector(VisitDetail detail, Visit visit, OpenSpecimenException ose) {
-		if (detail.getCollector() == null) {
+	private void setMissedBy(VisitDetail detail, Visit visit, OpenSpecimenException ose) {
+		if (detail.getMissedBy() == null) {
 			return;
 		}
 
-		Long userId = detail.getCollector().getId();
+		Long userId = detail.getMissedBy().getId();
 		User collector = daoFactory.getUserDao().getById(userId);
-		visit.setCollector(collector);
+		visit.setMissedBy(collector);
 	}
 
-	private void setCollector(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
-		if (detail.isAttrModified("collector")) {
-			setCollector(detail, visit, ose);
+	private void setMissedBy(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (detail.isAttrModified("missedBy")) {
+			setMissedBy(detail, visit, ose);
 		} else {
-			visit.setCollector(existing.getCollector());
+			visit.setMissedBy(existing.getMissedBy());
 		}
 	}
 

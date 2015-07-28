@@ -52,7 +52,7 @@ public class VisitDetail extends AttributeModifiedSupport {
 
 	private String missedReason;
 
-	private UserSummary collector;
+	private UserSummary missedBy;
 	
 	private boolean sprLocked;
 
@@ -218,12 +218,12 @@ public class VisitDetail extends AttributeModifiedSupport {
 		this.missedReason = missedReason;
 	}
 
-	public UserSummary getCollector() {
-		return collector;
+	public UserSummary getMissedBy() {
+		return missedBy;
 	}
 
-	public void setCollector(UserSummary collector) {
-		this.collector = collector;
+	public void setMissedBy(UserSummary missedBy) {
+		this.missedBy = missedBy;
 	}
 
 	public static VisitDetail from(Visit visit) {
@@ -241,8 +241,8 @@ public class VisitDetail extends AttributeModifiedSupport {
 		detail.setVisitDate(visit.getVisitDate());
 		detail.setMissedReason(visit.getMissedReason());
 
-		if (visit.getCollector() != null) {
-			detail.setCollector(UserSummary.from(visit.getCollector()));
+		if (visit.getMissedBy() != null) {
+			detail.setMissedBy(UserSummary.from(visit.getMissedBy()));
 		}
 
 		if (visit.getSite() != null) {
