@@ -29,7 +29,7 @@
         <span class="fa fa-dashboard"></span>
         <span translate="queries.get_count">Get Count</span>
       </button>
-      <button class="default" ng-click="viewResults()"
+      <button class="default" ui-sref="query-results({queryId: queryLocal.id, editMode: 1})"
         ng-disabled="!queryLocal.isValid || queryLocal.filters.length == 0">
         <span class="fa fa-list"></span>
         <span translate="queries.view_records">View Records</span>

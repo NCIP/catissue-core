@@ -119,9 +119,5 @@ angular.module('os.query.addedit', ['os.query.models', 'os.query.util', 'os.quer
       QueryUtil.hidePopovers();
     }
 
-    $scope.viewResults = function() {
-      $state.go('query-results', {queryId: $scope.queryLocal.id, editMode: true});
-    }
-
     init();
   });
