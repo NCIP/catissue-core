@@ -29,12 +29,12 @@ public class SprDeIdentifier implements DocumentDeIdentifier {
 
 	@Override
 	public String deIdentify(String report, Map<String, Object> contextMap) {
-		report = deIdentifyUsersName(report);		
-		report = deIdentifyParticipantName(report, contextMap);
+		//report = deIdentifyUsersName(report);		
+		//report = deIdentifyParticipantName(report, contextMap);
 		report = deIdentifyOtherText(report);
 		return report;
 	}
-	
+
 	private String deIdentifyUsersName(String report) {
 		UserListCriteria criteria = new UserListCriteria();
 		int startAt = 0;
@@ -103,7 +103,7 @@ public class SprDeIdentifier implements DocumentDeIdentifier {
 			boolean deleteLine = (obj[1] != null) ? (Boolean) obj[1] : false;
 			boolean deleteNextLine = (obj[2] != null) ? (Boolean) obj[2] : false;
 			if (deleteNextLine) {
-				if (searchText.equals("Sex: Age: DOB:")) {
+				if (searchText.equals("Primary Provider:")) {
 					addOr(regexPhi);
 					regexPhi.append(searchText);
 				} else {
@@ -119,7 +119,7 @@ public class SprDeIdentifier implements DocumentDeIdentifier {
 			}
 		}
 	
-		report = replaceString(report, REPLACE_3_LINE_REGX, regexPhi, true);
+		report = replaceString(report, REPLACE_5_LINE_REGX, regexPhi, true);
 		report = replaceString(report, REPLACE_2_LINE_REGX, regexDeleteNextLine, true);
 		report = replaceString(report, REPLACE_1_LINE_REGX, regexDeleteLine, true);
 		report = replaceString(report, REPLACE_WORD, regexDeIdentifyWord, false);
@@ -145,7 +145,7 @@ public class SprDeIdentifier implements DocumentDeIdentifier {
 	
 	private static final String REPLACEMENT_STRING = "XXX";
 	
-	private static final String REPLACE_3_LINE_REGX = "(?i).*?(%s)((.*?\\n.*?\\n.*?\\n)|(.*?\\n.*?\\n)|(.*?\\n)|(\\b))";
+	private static final String REPLACE_5_LINE_REGX = "(?i).*?(%s)((.*?\\n.*?\\n.*?\\n.*?\\n.*?\\n)|(.*?\\n.*?\\n.*?\\n.*?\\n)|(.*?\\n.*?\\n.*?\\n)|(.*?\\n.*?\\n)|(.*?\\n)|(\\b))";
 	
 	private static final String REPLACE_2_LINE_REGX = "(?i).*?(%s)((.*?\\n.*?\\n)|(.*?\\n)|(\\b))";
 	
