@@ -144,7 +144,7 @@
   <changeSet author="vgaikwad" id="Assign CRUD permissions to Surgical Pathology Report resource for Tissue Banker, PI and Coordinator roles">
     <sql>
       call assign_to_role('Tissue Banker', 'SurgicalPathologyReport', 'Read,Create,Update,Delete');
-      call assign_to_role('Principal Investigator', 'SurgicalPathologyReport', 'Read,Create,Update,Delete');
+      call assign_to_role('Principal Investigator', 'SurgicalPathologyReport', 'Read');
       call assign_to_role('Coordinator', 'SurgicalPathologyReport', 'Read,Create,Update,Delete');
     </sql>
   </changeSet>
