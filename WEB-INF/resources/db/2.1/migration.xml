@@ -17,4 +17,84 @@
     </sql>
   </changeSet>
   
+  <changeSet author="nmarwaha" id="Update the Site's default insititute from coordinator" dbms="mysql">
+    <sql>
+      update 
+        catissue_site site 
+        join catissue_site_coordinators siteCrd on siteCrd.site_id = site.identifier
+        join catissue_user usr on usr.identifier = siteCrd.user_id
+        join os_departments dep on dep.identifier = usr.department_id
+      set 
+        site.institute_id = dep.institute_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update the Site's default insititute from coordinator" dbms="oracle">
+    <sql>
+      merge into catissue_site site using (
+        select 
+          site.identifier as site_id, dep.institute_id as inst_id
+        from 
+          catissue_site site 
+          join catissue_site_coordinators siteCrd on siteCrd.site_id = site.identifier
+          join catissue_user usr on usr.identifier = siteCrd.user_id
+          join os_departments dep on dep.identifier = usr.department_id
+      ) t on (site.identifier = t.site_id) 
+      when matched then update set site.institute_id = t.inst_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update the DP's default institute ID from the PI" dbms="mysql">
+    <sql>
+      update 
+        catissue_distribution_protocol dp 
+        join catissue_user u on u.identifier = dp.principal_investigator_id
+        join os_departments dep on dep.identifier = u.department_id
+        join catissue_institution inst on inst.identifier = dep.institute_id
+      set 
+        dp.institute_id = inst.identifier 
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update the DP's default institute ID from the PI" dbms="oracle">
+    <sql>
+      merge into catissue_distribution_protocol dp using (
+        select 
+          dp.identifier as dp_id, dep.institute_id as inst_id
+        from 
+          catissue_distribution_protocol dp 
+          join catissue_user usr on usr.identifier = dp.principal_investigator_id
+          join os_departments dep on dep.identifier = usr.department_id
+      ) t on (dp.identifier = t.dp_id) 
+      when matched then update set dp.institute_id = t.inst_id 
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update the requestor ID to PI if not specified" dbms="mysql">
+    <sql>
+      update 
+        catissue_order ordr
+        join catissue_distribution_protocol dp on ordr.distribution_protocol_id = dp.identifier
+        join catissue_user u on u.identifier = dp.principal_investigator_id
+      set 
+        ordr.requester_id = u.identifier 
+      where 
+        ordr.requester_id is null
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update the requestor ID to PI if not specified" dbms="oracle">
+    <sql>
+      merge into catissue_order ordr using (
+        select 
+          ordr.identifier as order_id, usr.identifier as user_id
+        from 
+          catissue_order ordr
+          join catissue_distribution_protocol dp on ordr.distribution_protocol_id = dp.identifier
+          join catissue_user usr on usr.identifier = dp.principal_investigator_id
+      ) t on (ordr.identifier = t.order_id) 
+      when matched then update set ordr.requester_id = t.order_id
+    </sql>
+  </changeSet>
+  
 </databaseChangeLog>
