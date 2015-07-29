@@ -7,11 +7,15 @@
   
   <changeSet author="vgaikwad" id="Add openspecimen domain and auth provider" dbms="mysql">
     <sql>
-      insert into catissue_deidentified_text(string_content, delete_line, delete_next_line) 
-      values("Primary Provider:", 1, 1);
+      insert into catissue_deidentified_text
+        (string_content, delete_line, delete_next_line) 
+      values
+        ("Primary Provider:", 1, 1);
  
-      insert into catissue_deidentified_text(string_content, delete_line, delete_next_line) 
-      values("\\d{1,2}/\\d{1,2}/\\d{4} \\d{4}\\b", 0, 0);
+      insert into catissue_deidentified_text
+        (string_content, delete_line, delete_next_line) 
+      values
+        ("\\d{1,2}/\\d{1,2}/\\d{4} \\d{4}\\b", 0, 0);
     </sql>
   </changeSet>
   
