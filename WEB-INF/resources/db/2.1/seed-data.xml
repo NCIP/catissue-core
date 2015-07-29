@@ -141,4 +141,10 @@
     </sql>
   </changeSet>
 
+  <changeSet author="vgaikwad" id="Assign Surgical Pathology Report resource and CRUD operations on it to Tissue Banker role">
+    <sql>
+      call assign_to_role('Tissue Banker', 'SurgicalPathologyReport', 'Read,Create,Update,Delete');
+    </sql>
+  </changeSet>
+
 </databaseChangeLog>
