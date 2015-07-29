@@ -87,4 +87,16 @@
     </sql>
   </changeSet>
   
+  <changeSet author="nmarwaha" id="Updating default site for CPE from CP">
+    <sql>
+      update 
+        catissue_coll_prot_event cpe
+        join catissue_site_cp site_cp on site_cp.collection_protocol_id = cpe.collection_protocol_id
+     set 
+       cpe.default_site_id = site_cp.site_id
+     where 
+       cpe.default_site_id is null
+    </sql>
+  </changeSet>
+  
 </databaseChangeLog>
