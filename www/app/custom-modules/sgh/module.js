@@ -2,10 +2,10 @@
 angular.module('openspecimen')
   .config(function($stateProvider) {
     $stateProvider
-      .state('unplanned-bulk-part-regs', {
+      .state('unplanned-bulk-pre-printing', {
         url: '/bulk-participant-regs',
-        templateUrl: 'custom-modules/sgh/biospecimen/bulk-registrations.html',
-        controller: 'sgh.CpBulkRegistrationsCtrl',
+        templateUrl: 'custom-modules/sgh/biospecimen/bulk-printing.html',
+        controller: 'sgh.CpBulkPrintingCtrl',
         resolve: {
           cp: function() {
             return {};
@@ -22,10 +22,10 @@ angular.module('openspecimen')
   })
   .run(function($templateCache, PluginReg) {
     $templateCache.put(
-      'custom-modules/sgh/biospecimen/unplanned-bulk-reg-btn.html',
-      '<button class="default" ui-sref="unplanned-bulk-part-regs">' +
-      '  <span translate="custom_sgh.bulk_reg_participants">' +
-      '    Bulk Register Participants' +
+      'custom-modules/sgh/biospecimen/unplanned-bulk-pre-print-btn.html',
+      '<button class="default" ui-sref="unplanned-bulk-pre-printing">' +
+      '  <span translate="custom_sgh.bulk_pre_printing">' +
+      '    Bulk Pre Print TRIDs' +
       '  </span>' +
       '</button>'
     );
@@ -45,7 +45,7 @@ angular.module('openspecimen')
       {
         'cp-list': {
           'page-header': {
-            template: 'custom-modules/sgh/biospecimen/unplanned-bulk-reg-btn.html'
+            template: 'custom-modules/sgh/biospecimen/unplanned-bulk-pre-print-btn.html'
           }
         },
 

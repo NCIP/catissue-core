@@ -4,11 +4,11 @@
     "register_participants": "Register Participants",
     "participant_registered" : "Successfully registered {{participantCount}} participants",
     "print_labels": "Print Labels",
-    "bulk_pre_printing": "Bulk Pre Printing",
+    "bulk_pre_printing": "Bulk Pre Print TRIDs",
     "bulk_reg": "Bulk Register",
     "trid_printed": "Labels Printed Successfully",
     "trid_count": "TRID Count",
-    "bulk_printing": "Bulk Print Trids for Unplanned Protocols",
+    "bulk_printing": "Bulk Print TRIDs for Unplanned Protocols",
     "buttons":{
       "print": "Print"
     }
