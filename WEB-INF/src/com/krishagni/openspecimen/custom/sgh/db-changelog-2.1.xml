@@ -99,4 +99,62 @@
     </sql>
   </changeSet>
   
+  <changeSet author="nmarwaha" id="Adding SGH specific configuration parameters">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (default, 'sgh', 'SGH custom module');
+    </sql>
+    
+    <sql>
+      call add_cfg_prop(
+        'sgh', 'copies_to_print', 
+        'copies_to_print', 'Number of copies to print for unplanned CP', 
+        'STRING', ''
+      );
+    </sql>
+    
+    <sql>
+      call add_cfg_prop(
+        'sgh', 'trid_copies', 
+        'trid_copies', 'Numbe of copies of TRID', 
+        'STRING', ''
+      );
+    </sql>
+    
+    <sql>
+      call add_cfg_prop(
+        'sgh', 'malignant_aliq_cnt', 
+        'malignant_aliq_cnt', 'Malignant aliquot count for unplanned CP', 
+        'STRING', ''
+      );
+    </sql>
+    
+    <sql>
+      call add_cfg_prop(
+        'sgh', 'non_malignant_aliq_cnt', 
+        'non_malignant_aliq_cnt', 'Non-Malignant aliquot count for unplanned CP', 
+        'STRING', ''
+      );
+    </sql>
+    
+    <sql>
+      call add_cfg_prop(
+        'sgh', 'malignantAliqSuffix', 
+        'malignantAliqSuffix', 'Malignant aliquot suffix', 
+        'STRING', ''
+      );
+    </sql>
+    
+    <sql>
+      call add_cfg_prop(
+        'sgh', 'nonMalignantAliqSuffix', 
+        'nonMalignantAliqSuffix', 'Non-Malignant aliquot suffix', 
+        'STRING', ''
+      );
+    </sql>
+    
+  </changeSet>
+  
 </databaseChangeLog>
