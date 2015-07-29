@@ -17,8 +17,8 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.openspecimen.custom.sgh.SghErrorCode;
-import com.krishagni.openspecimen.custom.sgh.TridGenerator;
-import com.krishagni.openspecimen.custom.sgh.events.BulkTridPrintSummary;
+import com.krishagni.openspecimen.custom.sgh.events.BulkTridPrintOpDetail;
+import com.krishagni.openspecimen.custom.sgh.services.TridGenerator;
 import com.krishagni.openspecimen.custom.sgh.services.TridPrintSvc;
 
 public class TridPrintSvcImpl implements TridPrintSvc {
@@ -27,14 +27,20 @@ public class TridPrintSvcImpl implements TridPrintSvc {
 	
 	private ConfigurationService cfgSvc;
 	
+	private TridGenerator tridGenerator;
+	
 	public void setCfgSvc(ConfigurationService cfgSvc) {
 		this.cfgSvc = cfgSvc;
+	}
+	
+	public void setTridGenerator(TridGenerator tridGenerator) {
+		this.tridGenerator = tridGenerator;
 	}
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Boolean> generateAndPrintTrids(RequestEvent<BulkTridPrintSummary> req) {
-		BulkTridPrintSummary printReq = req.getPayload();
+	public ResponseEvent<Boolean> generateAndPrintTrids(RequestEvent<BulkTridPrintOpDetail> req) {
+		BulkTridPrintOpDetail printReq = req.getPayload();
 		int tridsCount = printReq.getTridCount();
 		if (tridsCount < 1) {
 			return ResponseEvent.userError(SghErrorCode.INVALID_TRID_COUNT);
@@ -47,7 +53,7 @@ public class TridPrintSvcImpl implements TridPrintSvc {
 		
 		List<Specimen> specimens = new ArrayList<Specimen>();
 		for(int i = 0; i < printReq.getTridCount(); i++){
-			String trid = TridGenerator.getNextTrid();
+			String trid = tridGenerator.getNextTrid();
 			specimens.addAll(getSpecimensToPrint(trid));
 		}
 		

@@ -1,7 +1,7 @@
 package com.krishagni.openspecimen.custom.sgh.events;
 
 
-public class BulkTridPrintSummary {
+public class BulkTridPrintOpDetail {
 
 	private Integer tridCount;
 	

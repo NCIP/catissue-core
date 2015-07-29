@@ -1,7 +1,6 @@
 package com.krishagni.openspecimen.custom.sgh.services.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -34,11 +33,10 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.openspecimen.custom.sgh.SghErrorCode;
-import com.krishagni.openspecimen.custom.sgh.TridGenerator;
 import com.krishagni.openspecimen.custom.sgh.events.BulkParticipantRegDetail;
 import com.krishagni.openspecimen.custom.sgh.events.BulkParticipantRegSummary;
 import com.krishagni.openspecimen.custom.sgh.services.CprService;
-import com.krishagni.openspecimen.custom.sgh.util.SpRequirementComparator;
+import com.krishagni.openspecimen.custom.sgh.services.TridGenerator;
 
 public class CprServiceImpl implements CprService {
 	
@@ -50,11 +48,11 @@ public class CprServiceImpl implements CprService {
 	
 	private VisitService visitService;
 	
+	private TridGenerator tridGenerator;
+	
 	@Autowired
 	@Qualifier("specimenLabelGenerator")
 	private LabelGenerator labelGenerator;
-	
-	public static final String ALIQUOT = "Aliquot";
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -70,6 +68,10 @@ public class CprServiceImpl implements CprService {
 
 	public void setVisitService(VisitService visitService) {
 		this.visitService = visitService;
+	}
+	
+	public void setTridGenerator(TridGenerator tridGenerator) {
+		this.tridGenerator = tridGenerator;
 	}
 
 	@Override
@@ -109,28 +111,36 @@ public class CprServiceImpl implements CprService {
 		cprDetail = regResp.getPayload();
 		Set<CollectionProtocolEvent> eventColl = cp.getCollectionProtocolEvents();
 		int visitCnt = 1;
-			
+		
+		List<Long> specimenIds = new ArrayList<Long>();
 		for (CollectionProtocolEvent cpe : eventColl) {
-			VisitDetail visit = createVisit(cprDetail, cpe, visitCnt++);
-			ResponseEvent<VisitDetail> visitResp = visitService.addVisit(getRequest(visit));
+			VisitDetail visitDetail = createVisit(cprDetail, cpe, visitCnt++);
+			ResponseEvent<VisitDetail> visitResp = visitService.addVisit(getRequest(visitDetail));
 			visitResp.throwErrorIfUnsuccessful();
 			
-			visit = visitResp.getPayload();
+			visitDetail = visitResp.getPayload();
+			Visit visit = getVisit(visitDetail, cpe);
 			
 			for (SpecimenRequirement sr : cpe.getSpecimenRequirements()) {
 				if(sr.isAliquot() || sr.isDerivative()){
 					continue;
 				}
-				createAndPrintSpecimen(sr, visit, null, isPrintLabels);
+				createAndPrintSpecimen(sr, visit, null, specimenIds);
 			}
 			visitCnt++;
+		}
+		
+		if(isPrintLabels){
+			RequestEvent<PrintSpecimenLabelDetail> printLabelsReq = getPrintLabelsReq(specimenIds);
+			ResponseEvent<LabelPrintJobSummary> printLabelsResp = specimenSvc.printSpecimenLabels(printLabelsReq);
+			printLabelsResp.throwErrorIfUnsuccessful();
 		}
 		return cprDetail;
 	}
 
-	private void createAndPrintSpecimen(SpecimenRequirement sr, VisitDetail visitDetail, SpecimenDetail parent, Boolean isPrintLabels) {
+	private void createAndPrintSpecimen(SpecimenRequirement sr, Visit visit, SpecimenDetail parent, List<Long> specimenIds) {
 			Specimen specimen = sr.getSpecimen();
-			specimen.setVisit(getVisit(visitDetail));
+			specimen.setVisit(visit);
 			if(parent != null){
 				Specimen parentSpecimen = new Specimen();
 				parentSpecimen.setLabel(parent.getLabel());
@@ -148,32 +158,25 @@ public class CprServiceImpl implements CprService {
 			specimenResp.throwErrorIfUnsuccessful();
 			
 			spDetail = specimenResp.getPayload();
-			if (isPrintLabels && ALIQUOT.equals(spDetail.getLineage())){
-				RequestEvent<PrintSpecimenLabelDetail> printLabelsReq = getPrintLabelsReq(spDetail);
-				ResponseEvent<LabelPrintJobSummary> printLabelsResp = specimenSvc.printSpecimenLabels(printLabelsReq);
-				printLabelsResp.throwErrorIfUnsuccessful();
+			if (Specimen.ALIQUOT.equals(spDetail.getLineage())){
+				specimenIds.add(spDetail.getId());
 			}
 			
-			List<SpecimenRequirement> childList = new ArrayList<SpecimenRequirement>(sr.getChildSpecimenRequirements());
-			Collections.sort(childList, new SpRequirementComparator());
+			List<SpecimenRequirement> childList = sr.getOrderedChildRequirements(); 
 			
 			for (SpecimenRequirement childSr : childList) {
-				createAndPrintSpecimen(childSr, visitDetail, spDetail, isPrintLabels);
+				createAndPrintSpecimen(childSr, visit, spDetail, specimenIds);
 			}
 	}
 
-	private Visit getVisit(VisitDetail visitDetail) {
+	private Visit getVisit(VisitDetail visitDetail, CollectionProtocolEvent cpe) {
 		Visit visit = new Visit();
 		visit.setName(visitDetail.getName());
 		
 		CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
 		cpr.setPpid(visitDetail.getPpid());
 		cpr.setId(visitDetail.getCprId());
-		
-		CollectionProtocol cp = new CollectionProtocol();
-		cp.setTitle(visitDetail.getCpTitle());
-		cp.setShortTitle(visitDetail.getCpShortTitle());
-		cpr.setCollectionProtocol(cp);
+		cpr.setCollectionProtocol(cpe.getCollectionProtocol());
 		
 		visit.setRegistration(cpr);
 		return visit;
@@ -183,7 +186,7 @@ public class CprServiceImpl implements CprService {
 		CollectionProtocolRegistrationDetail cprDetail = new CollectionProtocolRegistrationDetail();
 		cprDetail.setRegistrationDate(new Date());
 		cprDetail.setCpId(cp.getId());
-		cprDetail.setPpid(TridGenerator.getNextTrid());
+		cprDetail.setPpid(tridGenerator.getNextTrid());
 		
 		ParticipantDetail participant = new ParticipantDetail();
 		cprDetail.setParticipant(participant);
@@ -205,7 +208,7 @@ public class CprServiceImpl implements CprService {
 	
 	
 	private String getLabel(Specimen specimen) {
-		String labelTmpl = getLabelTmpl(specimen);				
+		String labelTmpl = specimen.getLabelTmpl();
 		String label = null;
 		if (StringUtils.isNotBlank(labelTmpl)) {
 			label = labelGenerator.generateLabel(labelTmpl, specimen);
@@ -237,9 +240,9 @@ public class CprServiceImpl implements CprService {
 		return labelTmpl;		
 	}
 		
-	private RequestEvent<PrintSpecimenLabelDetail> getPrintLabelsReq(SpecimenDetail SpecDetail) {
+	private RequestEvent<PrintSpecimenLabelDetail> getPrintLabelsReq(List<Long> specimenIds) {
 		PrintSpecimenLabelDetail printLblDetail = new PrintSpecimenLabelDetail();
-		printLblDetail.setSpecimenIds(java.util.Arrays.asList(SpecDetail.getId()));
+		printLblDetail.setSpecimenIds(specimenIds);
 		return getRequest(printLblDetail);
 	}
 	

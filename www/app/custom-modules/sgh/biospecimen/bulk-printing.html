@@ -5,11 +5,11 @@
     </h3>
   </div>
    
-  <div class="container os-margin-top">
+  <div class="container">
     <form class="form-horizontal" name="bulkPrintForm" os-form-validator="bulkPrintForm" novalidate>
       <div class="form-group">
-        <label class="control-label col-xs-4" translate="custom_sgh.trid_count">TRID Count</label>
-        <div class="col-xs-5">
+        <label class="control-label col-xs-3" translate="custom_sgh.trid_count">TRID Count</label>
+        <div class="col-xs-6">
           <input type="text" name="tridCount" ng-model="regReq.tridCount" class="form-control" 
             placeholder="{{'custom_sgh.trid_count' | translate}}" ng-pattern="/^[1-9][0-9]*$/" required>
           <div os-field-error field="bulkPrintForm.tridCount"></div>

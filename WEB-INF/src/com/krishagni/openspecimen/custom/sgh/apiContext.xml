@@ -30,6 +30,7 @@
     <property name="cprService"  ref="cprSvc"/>
     <property name="visitService"  ref="visitService"/>
     <property name="specimenSvc" ref="specimenSvc"/>
+    <property name="tridGenerator" ref="tridGenerator"/>
   </bean>
   
   <bean id="sghReportsDeIdentifier" class="com.krishagni.openspecimen.custom.sgh.services.impl.SprDeIdentifier">
@@ -45,9 +46,10 @@
   
   <bean id="tridPrintSvc" class="com.krishagni.openspecimen.custom.sgh.services.impl.TridPrintSvcImpl">
     <property name="cfgSvc" ref="cfgSvc"/>
+    <property name="tridGenerator" ref="tridGenerator"/>
   </bean>
   
-  <bean id="tridGenrator" class="com.krishagni.openspecimen.custom.sgh.TridGenerator">
+  <bean id="tridGenerator" class="com.krishagni.openspecimen.custom.sgh.services.impl.TridGeneratorImpl">
     <property name="daoFactory"  ref="biospecimenDaoFactory"/>
   </bean>
 
