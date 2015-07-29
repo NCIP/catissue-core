@@ -1,6 +1,7 @@
 package com.krishagni.openspecimen.custom.sgh.services.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -121,11 +122,11 @@ public class CprServiceImpl implements CprService {
 			visitDetail = visitResp.getPayload();
 			Visit visit = getVisit(visitDetail, cpe);
 			
-			for (SpecimenRequirement sr : cpe.getSpecimenRequirements()) {
-				if(sr.isAliquot() || sr.isDerivative()){
-					continue;
-				}
-				createAndPrintSpecimen(sr, visit, null, specimenIds);
+			List<SpecimenRequirement> requirements = new ArrayList<SpecimenRequirement>(cpe.getTopLevelAnticipatedSpecimens());
+			Collections.sort(requirements);
+			
+			for (SpecimenRequirement sr : requirements) {
+				createSpecimens(sr, visit, null, specimenIds);
 			}
 			visitCnt++;
 		}
@@ -138,7 +139,7 @@ public class CprServiceImpl implements CprService {
 		return cprDetail;
 	}
 
-	private void createAndPrintSpecimen(SpecimenRequirement sr, Visit visit, SpecimenDetail parent, List<Long> specimenIds) {
+	private void createSpecimens(SpecimenRequirement sr, Visit visit, SpecimenDetail parent, List<Long> specimenIds) {
 			Specimen specimen = sr.getSpecimen();
 			specimen.setVisit(visit);
 			if(parent != null){
@@ -162,10 +163,8 @@ public class CprServiceImpl implements CprService {
 				specimenIds.add(spDetail.getId());
 			}
 			
-			List<SpecimenRequirement> childList = sr.getOrderedChildRequirements(); 
-			
-			for (SpecimenRequirement childSr : childList) {
-				createAndPrintSpecimen(childSr, visit, spDetail, specimenIds);
+			for (SpecimenRequirement childSr : sr.getOrderedChildRequirements()) {
+				createSpecimens(childSr, visit, spDetail, specimenIds);
 			}
 	}
 
@@ -216,30 +215,6 @@ public class CprServiceImpl implements CprService {
 		return label;
 	}
 	
-	public String getLabelTmpl(Specimen specimen) {
-		String labelTmpl = null;
-		
-		SpecimenRequirement sr = specimen.getSpecimenRequirement();
-		if (sr != null) { 
-			labelTmpl = sr.getLabelFormat();
-		}
-				
-		if (StringUtils.isNotBlank(labelTmpl)) {
-			return labelTmpl;
-		}
-		
-		CollectionProtocol cp = sr.getCollectionProtocol();
-		if (specimen.isAliquot()) {
-			labelTmpl = cp.getAliquotLabelFormat();
-		} else if (specimen.isDerivative()) {
-			labelTmpl = cp.getDerivativeLabelFormat();
-		} else {
-			labelTmpl = cp.getSpecimenLabelFormat();
-		}			
-		
-		return labelTmpl;		
-	}
-		
 	private RequestEvent<PrintSpecimenLabelDetail> getPrintLabelsReq(List<Long> specimenIds) {
 		PrintSpecimenLabelDetail printLblDetail = new PrintSpecimenLabelDetail();
 		printLblDetail.setSpecimenIds(specimenIds);

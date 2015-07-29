@@ -25,7 +25,7 @@ angular.module('openspecimen')
       'custom-modules/sgh/biospecimen/unplanned-bulk-pre-print-btn.html',
       '<button class="default" ui-sref="unplanned-bulk-pre-printing">' +
       '  <span translate="custom_sgh.bulk_pre_printing">' +
-      '    Bulk Pre Printing' +
+      '    Bulk Pre Print TRIDs' +
       '  </span>' +
       '</button>'
     );

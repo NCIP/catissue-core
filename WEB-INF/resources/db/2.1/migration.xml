@@ -17,7 +17,34 @@
     </sql>
   </changeSet>
   
-    <changeSet author="nmarwaha" id="Update the DP's default institute ID from the PI">
+  <changeSet author="nmarwaha" id="Update the Site's default insititute from coordinator" dbms="mysql">
+    <sql>
+      update 
+        catissue_site site 
+        join catissue_site_coordinators siteCrd on siteCrd.site_id = site.identifier
+        join catissue_user usr on usr.identifier = siteCrd.user_id
+        join os_departments dep on dep.identifier = usr.department_id
+      set 
+        site.institute_id = dep.institute_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update the Site's default insititute from coordinator" dbms="oracle">
+    <sql>
+      merge into catissue_site site using (
+        select 
+          site.identifier as site_id, dep.institute_id as inst_id
+        from 
+          catissue_site site 
+          join catissue_site_coordinators siteCrd on siteCrd.site_id = site.identifier
+          join catissue_user usr on usr.identifier = siteCrd.user_id
+          join os_departments dep on dep.identifier = usr.department_id
+      ) t on (site.identifier = t.site_id) 
+      when matched then update set site.institute_id = t.inst_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update the DP's default institute ID from the PI" dbms="mysql">
     <sql>
       update 
         catissue_distribution_protocol dp 
@@ -29,7 +56,21 @@
     </sql>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Update the requestor ID to PI if not specified">
+  <changeSet author="nmarwaha" id="Update the DP's default institute ID from the PI" dbms="oracle">
+    <sql>
+      merge into catissue_distribution_protocol dp using (
+        select 
+          dp.identifier as dp_id, dep.institute_id as inst_id
+        from 
+          catissue_distribution_protocol dp 
+          join catissue_user usr on usr.identifier = dp.principal_investigator_id
+          join os_departments dep on dep.identifier = usr.department_id
+      ) t on (dp.identifier = t.dp_id) 
+      when matched then update set dp.institute_id = t.inst_id 
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update the requestor ID to PI if not specified" dbms="mysql">
     <sql>
       update 
         catissue_order ordr
@@ -42,70 +83,17 @@
     </sql>
   </changeSet>
   
-  <changeSet author="rvivek" id="Migrating order and distribution data" >
+  <changeSet author="nmarwaha" id="Update the requestor ID to PI if not specified" dbms="oracle">
     <sql>
-      INSERT INTO OS_ORDERS (
-        IDENTIFIER, 
-        NAME, 
-        REQUESTER_ID, 
-        CREATION_DATE, 
-        EXECUTION_DATE, 
-        STATUS, 
-        ORDER_TYPE, 
-        ACTIVITY_STATUS, 
-        SITE_ID, 
-        DISTRIBUTION_PROTOCOL_ID, 
-        DISTRIBUTOR_ID, 
-        TRACKING_URL, 
-        COMMENTS)
-
-      SELECT 
-        CATISSUE_ORDER.IDENTIFIER AS 'IDENTIFIER', 
-        CATISSUE_ORDER.NAME AS 'NAME',
-        CATISSUE_ORDER.REQUESTER_ID AS 'REQUESTER_ID', 
-        CATISSUE_ORDER.REQUESTED_DATE AS 'CREATION_DATE',
-        CATISSUE_DISTRIBUTION.EVENT_TIMESTAMP AS 'EXECUTION_DATE',
-        CASE 
-          WHEN CATISSUE_ORDER.STATUS IN ('Completed') THEN 'EXECUTED'
-          ELSE 'PENDING'
-        END AS 'STATUS',
-        NULL AS 'ORDER_TYPE',
-        CATISSUE_DISTRIBUTION.ACTIVITY_STATUS AS 'ACTIVITY_STATUS',
-        CATISSUE_DISTRIBUTION.TO_SITE_ID AS 'SITE_ID',
-        CATISSUE_DISTRIBUTION.DISTRIBUTION_PROTOCOL_ID AS 'DISTRIBUTION_PROTOCOL_ID',
-        CATISSUE_DISTRIBUTION.USER_ID AS 'DISTRIBUTOR_ID',
-        NULL AS 'TRACKING_URL',
-        CATISSUE_ORDER.COMMENTS AS 'COMMENTS'
-      FROM 
-        CATISSUE_ORDER
-       JOIN CATISSUE_DISTRIBUTION ON CATISSUE_DISTRIBUTION.ORDER_ID=CATISSUE_ORDER.IDENTIFIER
-       AND CATISSUE_DISTRIBUTION.ORDER_ID IS NOT NULL;
-    </sql>
-    
-    <sql>
-      INSERT INTO OS_ORDER_ITEMS (
-        IDENTIFIER, 
-        ORDER_ID, 
-        QUANTITY, 
-        SPECIMEN_ID, 
-        STATUS)
-        
-      SELECT 
-        CATISSUE_ORDER_ITEM.IDENTIFIER AS 'IDENTIFIER',
-        CATISSUE_ORDER_ITEM.ORDER_ID AS 'ORDER_ID',
-        CATISSUE_ORDER_ITEM.REQUESTED_QUANTITY AS 'QUANTITY',
-        CATISSUE_DISTRIBUTED_ITEM.SPECIMEN_ID AS 'SPECIMEN_ID',
-        CASE
-          WHEN CATISSUE_ORDER_ITEM.STATUS LIKE 'Distributed And Close' THEN 'DISTRIBUTED_AND_CLOSED'
-          WHEN CATISSUE_ORDER_ITEM.STATUS LIKE 'Distributed' THEN 'DISTRIBUTED'
-          WHEN CATISSUE_ORDER_ITEM.STATUS IN ('New', 'Pending - For Distribution') THEN 'PENDING'
-          ELSE 'TEMP'
-        END AS 'STATUS'
-      FROM 
-        CATISSUE_ORDER_ITEM
-        JOIN CATISSUE_DISTRIBUTED_ITEM ON CATISSUE_DISTRIBUTED_ITEM.IDENTIFIER=CATISSUE_ORDER_ITEM.DISTRIBUTED_ITEM_ID
-        JOIN CATISSUE_DISTRIBUTION ON CATISSUE_DISTRIBUTION.IDENTIFIER=CATISSUE_DISTRIBUTED_ITEM.DISTRIBUTION_ID
-        AND CATISSUE_DISTRIBUTION.ORDER_ID IS NOT NULL;
+      merge into catissue_order ordr using (
+        select 
+          ordr.identifier as order_id, usr.identifier as user_id
+        from 
+          catissue_order ordr
+          join catissue_distribution_protocol dp on ordr.distribution_protocol_id = dp.identifier
+          join catissue_user usr on usr.identifier = dp.principal_investigator_id
+      ) t on (ordr.identifier = t.order_id) 
+      when matched then update set ordr.requester_id = t.order_id
     </sql>
   </changeSet>
   

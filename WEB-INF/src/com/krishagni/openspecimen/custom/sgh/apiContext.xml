@@ -22,7 +22,7 @@
     
   <bean id="sgh-liquibase" class="liquibase.integration.spring.SpringLiquibase">
     <property name="dataSource" ref="dataSource"/>
-    <property name="changeLog" value="classpath:com/krishagni/openspecimen/custom/sgh/db.changelog.xml" />
+    <property name="changeLog" value="classpath:com/krishagni/openspecimen/custom/sgh/db-changelog-2.1.xml" />
   </bean>
   
   <bean id="sgCprService" class="com.krishagni.openspecimen.custom.sgh.services.impl.CprServiceImpl">
