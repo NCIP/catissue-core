@@ -1,8 +1,8 @@
 <div class="os-modal-header">
-    {{'form.deleting_form' | translate: entity }}
+  {{'form.deleting_form' | translate: entity }}
 </div>
 <div class="os-modal-body">
-  <div ng-if="entity.recordStats.length > 0">
+  <div ng-if="entity.dependentEntities.length > 0">
     <h5>{{'form.record_stats' | translate: entity }}</h5>
     <div class="os-section">
       <div class="os-table os-table-muted-hdr os-border">
@@ -13,20 +13,20 @@
           </div>
         </div>
         <div class="os-table-body">
-          <div class="row" ng-repeat="stat in entity.recordStats">
-            <div class="col col-xs-6">{{stat.level.name}}</div>
-            <div class="col col-xs-6">{{stat.recordCount}}</div>
+          <div class="row" ng-repeat="dependentEntity in entity.dependentEntities">
+            <div class="col col-xs-6">{{'entities.' + entity.entityMap[dependentEntity.name] | translate }}</div>
+            <div class="col col-xs-6">{{dependentEntity.count}}</div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div ng-switch on="!entity.recordStats || entity.recordStats.length == 0">
-     <span ng-switch-when="true">{{ 'form.confirm_delete' | translate: entity }}</span>
-     <span ng-switch-when="false">{{ 'form.confirm_delete_with_data' | translate: entity }}</span>
+  <div ng-switch on="!entity.dependentEntities || entity.dependentEntities.length == 0">
+    <span ng-switch-when="true">{{ 'form.confirm_delete' | translate: entity }}</span>
+    <span ng-switch-when="false">{{ 'form.confirm_delete_with_data' | translate: entity }}</span>
   </div>
 </div>
 <div class="os-modal-footer">
-   <button class="btn os-btn-text" ng-click="cancel()" translate="common.buttons.cancel">Cancel</button>
-   <button class="btn btn-danger" ng-click="ok()" translate="common.yes">Yes</button>
+  <button class="btn os-btn-text" ng-click="cancel()" translate="common.buttons.cancel">Cancel</button>
+  <button class="btn btn-danger" ng-click="ok()" translate="common.yes">Yes</button>
 </div>

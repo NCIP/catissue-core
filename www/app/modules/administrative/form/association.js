@@ -5,7 +5,12 @@ angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
 
     function init() {
       $scope.showFormCtxts = true;
-      $scope.extnEntities = args.extnEntities;
+      $scope.extnEntities = [
+        {entity: 'Participant', name: $translate.instant('entities.participant')},
+        {entity: 'Specimen', name: $translate.instant('entities.specimen')},
+        {entity: 'SpecimenCollectionGroup', name: $translate.instant('entities.visit')},
+        {entity: 'SpecimenEvent', name: $translate.instant('entities.specimen_event')}
+      ];
       $scope.form = args.form;
       $scope.cpList = args.cpList;
 

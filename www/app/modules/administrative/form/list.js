@@ -1,16 +1,16 @@
 
 angular.module('os.administrative.form.list', ['os.administrative.models'])
-  .controller('FormListCtrl', function($scope, $modal, $translate, Form, 
+  .controller('FormListCtrl', function(
+    $scope, $modal, $translate, Form, 
     CollectionProtocol, Util, DeleteUtil, Alerts) {
 
     function init() {
-      $scope.extnEntities = [
-        {entity: 'Participant', name: $translate.instant('entities.participant')},
-        {entity: 'Specimen', name: $translate.instant('entities.specimen')},
-        {entity: 'SpecimenCollectionGroup', name: $translate.instant('entities.visit')},
-        {entity: 'SpecimenEvent', name: $translate.instant('entities.specimen_event')}
-      ];
-
+      $scope.entityMap = {
+        Participant: 'participant', 
+        Specimen: 'specimen', 
+        SpecimenCollectionGroup: 'visit', 
+        SpecimenEvent: 'specimen_event'
+      };
       $scope.cpList = [];
       $scope.formsList = [];
       loadAllForms();
@@ -32,10 +32,12 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
     };
 
     function deleteForm(form) {
-      form.$remove().then(function(resp) {
+      form.$remove().then(
+        function(resp) {
           Alerts.success('form.form_deleted', form);
           loadAllForms();
-      });
+        }
+      );
     }
 
     $scope.showFormContexts = function(form) {
@@ -49,8 +51,7 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
               return {
                 formCtxts: formCtxts,
                 form: form,
-                cpList: $scope.cpList,
-                extnEntities: $scope.extnEntities
+                cpList: $scope.cpList
               }
             }
           }
@@ -66,24 +67,18 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
 
 
     $scope.confirmFormDeletion = function(form) {
-      form.recordStats = []
-      form.getRecordStats().then(function(recordStats) {
-        Util.unshiftAll(form.recordStats, recordStats);
-        angular.forEach(form.recordStats, function(stat) {
-          for (var i = 0; i < $scope.extnEntities.length; i++) {
-            var entity = $scope.extnEntities[i];
-            if (entity.entity == stat.level) {
-              stat.level = entity;
-              break;
-            }
-          }
-        });
-      });
+      form.entityMap = $scope.entityMap;
+      form.dependentEntities = [];
+      form.getDependentEntities().then(
+        function(result) {
+          Util.unshiftAll(form.dependentEntities, result);
+        } 
+      );
 
       DeleteUtil.confirmDelete({
         entity: form,
         templateUrl: 'modules/administrative/form/confirm-delete.html',
-        delete: deleteForm
+        delete: function () { deleteForm(form); }
       });
 
     }

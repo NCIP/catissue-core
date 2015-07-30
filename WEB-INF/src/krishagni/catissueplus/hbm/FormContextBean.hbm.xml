@@ -480,16 +480,16 @@
         fc.deleted_on is null
     </sql-query>
     
-    <sql-query name="getRecordStats">
+    <sql-query name="getDependentEntities">
       <return-scalar column="entityType" type="string"/>
-      <return-scalar column="recordCnt" type="long"/>
+      <return-scalar column="recordCnt" type="int"/>
       
       select 
         fc.entity_type as entityType, count(*) as recordCnt
       from 
-        catissue_form_record_entry r
-        inner join catissue_form_context fc on fc.identifier = r.form_ctxt_id
-        inner join dyextn_containers c on c.identifier =fc.container_id		  
+        dyextn_containers c
+        inner join catissue_form_context fc on fc.container_id = c.identifier
+        inner join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier
       where
         c.identifier = :formId and
         r.activity_status = 'ACTIVE' and

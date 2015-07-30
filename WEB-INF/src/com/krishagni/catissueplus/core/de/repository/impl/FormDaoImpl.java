@@ -20,11 +20,11 @@ import org.hibernate.criterion.Restrictions;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
-import com.krishagni.catissueplus.core.de.events.FormRecordStat;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
@@ -403,13 +403,14 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<FormRecordStat> getRecordStats(Long formId) {
+	@Override
+	public List<DependentEntityDetail> getDependentEntities(Long formId) {
 		List<Object[]> rows = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_RECORD_STATS)
+				.getNamedQuery(GET_DEPENDENT_ENTITIES)
 				.setLong("formId", formId)
 				.list();
 		
-		return getRecordStats(rows);
+		return getDependentEntities(rows);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -437,6 +438,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 				.executeUpdate();
 	}
 	
+	@Override
 	public void deleteFormContexts(Long formId) {
 		sessionFactory.getCurrentSession()
 			.createSQLQuery(SOFT_DELETE_FORM_CONTEXTS_SQL)
@@ -598,16 +600,16 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		return forms;
 	}
 	
-	private List<FormRecordStat> getRecordStats(List<Object[]> rows) {
-		List<FormRecordStat> stats = new ArrayList<FormRecordStat>();
+	private List<DependentEntityDetail> getDependentEntities(List<Object[]> rows) {
+		List<DependentEntityDetail> dependentEntities = new ArrayList<DependentEntityDetail>();
 		
 		for (Object[] row: rows) {
-			String level = (String)row[0];
-			long count = ((Number)row[1]).longValue();
-			stats.add(FormRecordStat.from(level, count));
+			String name = (String)row[0];
+			int count = ((Integer)row[1]).intValue();
+			dependentEntities.add(DependentEntityDetail.from(name, count));
 		}
 		
-		return stats;
+		return dependentEntities;
  	}
 	
 	private static final String FQN = FormContextBean.class.getName();
@@ -656,8 +658,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	private static final String GET_RECS = FQN + ".getRecords";
 	
-	private static final String GET_RECORD_STATS = FQN + ".getRecordStats";
-	
+	private static final String GET_DEPENDENT_ENTITIES = FQN + ".getDependentEntities";
 	
 	private static final String GET_CHANGE_LOG_DIGEST_SQL =
 			"select " +

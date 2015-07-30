@@ -30,7 +30,6 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormDataDetail;
 import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
-import com.krishagni.catissueplus.core.de.events.FormRecordStat;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.FormType;
@@ -246,11 +245,11 @@ public class FormsController {
 		return resp.getPayload();
 	}
 		
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/record-stats")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependent-entities")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
-	public List<FormRecordStat> getFormRecordStats(@PathVariable("id") Long formId) {
-		ResponseEvent<List<FormRecordStat> > resp = formSvc.getRecordStats(getRequest(formId));
+	public List<DependentEntityDetail> getDependentEntities(@PathVariable("id") Long formId) {
+		ResponseEvent<List<DependentEntityDetail>> resp = formSvc.getDependentEntities(getRequest(formId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

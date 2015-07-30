@@ -6,10 +6,10 @@ import java.util.Map;
 import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
-import com.krishagni.catissueplus.core.de.events.FormRecordStat;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
@@ -57,7 +57,7 @@ public interface FormDao extends Dao<FormContextBean>{
 	
 	public Map<Long, List<FormRecordSummary>> getFormRecords(Long objectId, String entityType, Long formId);
 	
-	public List<FormRecordStat> getRecordStats(Long formId);
+	public List<DependentEntityDetail> getDependentEntities(Long formId);
 	
 	public String getFormChangeLogDigest(String file);
 	
