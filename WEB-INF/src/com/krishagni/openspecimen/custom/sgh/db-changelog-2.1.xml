@@ -60,8 +60,8 @@
       update
         catissue_collection_protocol
       set
-        LABEL_FORMAT='%VISIT_NAME%-%SP_TYPE%%PPI_YOC_UID%',
-        DERIV_LABEL_FORMAT='%PSPEC_LABEL%-%SP_TYPE%',
+        LABEL_FORMAT='%VISIT_NAME%-%SP_TYPE%%PPI_YOC_UID%-%SP_PATH_STATUS%',
+        DERIV_LABEL_FORMAT='%PSPEC_LABEL%-%SP_TYPE%%PPI_YOC_UID%',
         ALIQUOT_LABEL_FORMAT='%PSPEC_LABEL%_%PSPEC_UID%'
     </sql>
   </changeSet>
