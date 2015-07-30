@@ -130,9 +130,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			}
 			
 			daoFactory.getDistributionOrderDao().saveOrUpdate(order);
-			if (order.getStatus() == Status.EXECUTED) {
-				sendOrderProcessedEmail(order);
-			}
+			sendOrderProcessedEmail(order, null);
 			return ResponseEvent.response(DistributionOrderDetail.from(order));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -163,9 +161,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 
 			existingOrder.update(newOrder);
 			daoFactory.getDistributionOrderDao().saveOrUpdate(existingOrder);
-			if (existingOrder.getStatus() == Status.EXECUTED) {
-				sendOrderProcessedEmail(existingOrder);
-			}
+			sendOrderProcessedEmail(existingOrder, null);
 			return ResponseEvent.response(DistributionOrderDetail.from(existingOrder));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -269,7 +265,10 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 		return messageSource.getMessage(code, null, Locale.getDefault());
 	}
 	
-	private void sendOrderProcessedEmail(DistributionOrder order) {
+	private void sendOrderProcessedEmail(DistributionOrder order, Status status) {
+		if (order.getStatus() != Status.EXECUTED && order.getStatus() != status) {
+			return;
+		}
 		String recipients[] = new String[]{order.getRequester().getEmailAddress(),
 				order.getDistributor().getEmailAddress()};
 		Map<String, Object> props = new HashMap<String, Object>();
