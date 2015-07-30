@@ -19,6 +19,7 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
@@ -129,6 +130,7 @@ public class FormServiceImpl implements FormService {
 			
 			Long formId = req.getPayload();
 			if (Container.softDeleteContainer(formId)) {
+				formDao.deleteFormContexts(formId);
 				return ResponseEvent.response(true);
 			} else {
 				return ResponseEvent.userError(FormErrorCode.NOT_FOUND);
@@ -524,6 +526,15 @@ public class FormServiceImpl implements FormService {
 			return ResponseEvent.response(result);			
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@PlusTransactional
+	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req) {
+		try {
+			return ResponseEvent.response(formDao.getDependentEntities(req.getPayload()));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

@@ -479,6 +479,25 @@
         c.deleted_on is null and	 
         fc.deleted_on is null
     </sql-query>
+    
+    <sql-query name="getDependentEntities">
+      <return-scalar column="entityType" type="string"/>
+      <return-scalar column="recordCnt" type="int"/>
+      
+      select 
+        fc.entity_type as entityType, count(*) as recordCnt
+      from 
+        dyextn_containers c
+        inner join catissue_form_context fc on fc.container_id = c.identifier
+        inner join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier
+      where
+        c.identifier = :formId and
+        r.activity_status = 'ACTIVE' and
+        c.deleted_on is null and 
+        fc.deleted_on is null
+      group by
+        fc.entity_type
+    </sql-query>
 
     <sql-query name="getRecordsByEntityAndObject">
       <return-scalar column="formId" type="long"/>
