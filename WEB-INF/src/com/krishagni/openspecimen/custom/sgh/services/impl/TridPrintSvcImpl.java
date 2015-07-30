@@ -23,7 +23,7 @@ import com.krishagni.openspecimen.custom.sgh.services.TridPrintSvc;
 
 public class TridPrintSvcImpl implements TridPrintSvc {
 
-	private static final String SGH_MODULE = "sgh";
+	private static final String SGH_MODULE = "plugin_sgh";
 	
 	private ConfigurationService cfgSvc;
 	
@@ -118,11 +118,11 @@ public class TridPrintSvcImpl implements TridPrintSvc {
 	}
 
 	private String getMalignantAliqSuffix() {
-		return cfgSvc.getStrSetting(SGH_MODULE, "malignantAliqSuffix", "FZ-T");
+		return cfgSvc.getStrSetting(SGH_MODULE, "malignant_aliq_suffix", "FZ-T");
 	}
 	
 	private String getNonMalignantAliqSuffix() {
-		return cfgSvc.getStrSetting(SGH_MODULE, "nonMalignantAliqSuffix", "FZ-N");
+		return cfgSvc.getStrSetting(SGH_MODULE, "non_malignant_aliq_suffix", "FZ-N");
 	}
 	
 }
