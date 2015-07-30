@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+  
+  <changeSet author="vgaikwad" id="Added text 'Primary Provider:' to deindentify in spr report" dbms="mysql">
+    <sql>
+      insert into catissue_deidentified_text
+        (string_content, delete_line, delete_next_line) 
+      values
+        ("Primary Provider:", 1, 1);
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Added regular expressions for date formats dd-mm-yyyy and dd-mmm-yyyy to deidentify dates in spr report" dbms="mysql">
+    <sql>
+      insert into catissue_deidentified_text
+        (string_content, delete_line, delete_next_line) 
+      values
+        ("\\d{1,2}/\\d{1,2}/\\d{4} \\d{4}\\b", 0, 0);
+        
+      insert into catissue_deidentified_text
+        (string_content, delete_line, delete_next_line) 
+      values
+        ("\\b\\d{1,2}-[a-zA-Z]{3}-\\d{4}", 0, 0);   
+    </sql>
+  </changeSet>
+  
+</databaseChangeLog>
