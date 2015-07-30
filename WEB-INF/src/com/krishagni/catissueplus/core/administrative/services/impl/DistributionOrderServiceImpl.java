@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -27,6 +28,7 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.domain.Filter;
@@ -47,6 +49,8 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 	private QueryService querySvc;
 	
 	private MessageSource messageSource;
+	
+	private EmailService emailService;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -62,6 +66,10 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 	
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
+	}
+	
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
 	}
 	
 	@Override
@@ -122,6 +130,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			}
 			
 			daoFactory.getDistributionOrderDao().saveOrUpdate(order);
+			sendOrderProcessedEmail(order, null);
 			return ResponseEvent.response(DistributionOrderDetail.from(order));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -152,6 +161,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 
 			existingOrder.update(newOrder);
 			daoFactory.getDistributionOrderDao().saveOrUpdate(existingOrder);
+			sendOrderProcessedEmail(existingOrder, null);
 			return ResponseEvent.response(DistributionOrderDetail.from(existingOrder));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -254,4 +264,19 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 	private String getMessage(String code) {
 		return messageSource.getMessage(code, null, Locale.getDefault());
 	}
+	
+	private void sendOrderProcessedEmail(DistributionOrder order, Status status) {
+		if (order.getStatus() != Status.EXECUTED && order.getStatus() != status) {
+			return;
+		}
+		String recipients[] = new String[]{order.getRequester().getEmailAddress(),
+				order.getDistributor().getEmailAddress()};
+		Map<String, Object> props = new HashMap<String, Object>();
+		String subjectParams[] = new String[]{order.getName()};
+		props.put("$subject", subjectParams);
+		props.put("order", order);
+		emailService.sendEmail(ORDER_DISTRIBUTED_EMAIL_TMPL, recipients, props);
+	}
+	
+	private static final String ORDER_DISTRIBUTED_EMAIL_TMPL = "order_distributed";
 }
