@@ -4,8 +4,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-<<<<<<< HEAD
-  
+
   <changeSet author="vgaikwad" id="Added text 'Primary Provider:' to deindentify in spr report" dbms="mysql">
     <sql>
       insert into catissue_deidentified_text
@@ -27,34 +26,8 @@
       values
         ("\\b\\d{1,2}-[a-zA-Z]{3}-\\d{4}", 0, 0);   
     </sql>
-=======
-
-  <property name="boolean.type" value="boolean" dbms="mysql" />
-  <property name="boolean.type" value="number(1,0)" dbms="oracle" />
-
-  <property name="int.type" value="bigint" dbms="mysql" />
-  <property name="int.type" value="number(19,0)" dbms="oracle" />
-
-  <property name="smallint.type" value="smallint" dbms="mysql" />
-  <property name="smallint.type" value="number(5,0)" dbms="oracle" />
-
-  <property name="text.type" value="varchar" dbms="mysql" />
-  <property name="text.type" value="varchar2" dbms="oracle" />
-
-  <property name="double.type" value="double"/>
-
-  <property name="autoIncrement" value="true" dbms="mysql"/>
-  <property name="autoIncrement" value="false" dbms="oracle"/>
-
-  <property name="timestamp.type" value="timestamp" dbms="mysql" />
-  <property name="timestamp.type" value="timestamp" dbms="oracle" />
-
-  <property name="nullable.ts.type" value="timestamp null" dbms="mysql" />
-  <property name="nullable.ts.type" value="timestamp" dbms="oracle" />
-
-  <property name="clob.type" value="text" dbms="mysql"/>
-  <property name="clob.type" value="clob" dbms="oracle"/>
-
+  </changeSet>
+  
   <changeSet author="nmarwaha" id="Migrate SCG Missed case data" failOnError="false">
     <sql>
       update
@@ -116,10 +89,10 @@
       update 
         catissue_coll_prot_event cpe
         join catissue_site_cp site_cp on site_cp.collection_protocol_id = cpe.collection_protocol_id
-     set 
-       cpe.default_site_id = site_cp.site_id
-     where 
-       cpe.default_site_id is null
+      set 
+        cpe.default_site_id = site_cp.site_id
+      where 
+        cpe.default_site_id is null
     </sql>
   </changeSet>
   
@@ -178,8 +151,6 @@
         'STRING', ''
       );
     </sql>
-    
->>>>>>> OS_v20_NM_GH
   </changeSet>
   
 </databaseChangeLog>
