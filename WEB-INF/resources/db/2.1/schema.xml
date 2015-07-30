@@ -130,4 +130,5 @@
       <column name="RECORD_ID"/>
     </createIndex>
   </changeSet>
+  
 </databaseChangeLog>

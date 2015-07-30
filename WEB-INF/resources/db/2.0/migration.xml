@@ -495,10 +495,4 @@
     <dropTable tableName="report_job_details"/>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Set default institute for distribution protocol">
-    <sql>
-      update catissue_site set institute_id = 1;
-    </sql>
-  </changeSet>
-  
 </databaseChangeLog>

@@ -25,21 +25,36 @@
     <property name="changeLog" value="classpath:com/krishagni/openspecimen/custom/sgh/db-changelog-2.1.xml" />
   </bean>
     
+
+
+
+
+
   <bean id="sgCprService" class="com.krishagni.openspecimen.custom.sgh.services.impl.CprServiceImpl">
     <property name="daoFactory"  ref="biospecimenDaoFactory"/>
     <property name="cprService"  ref="cprSvc"/>
     <property name="visitService"  ref="visitService"/>
     <property name="specimenSvc" ref="specimenSvc"/>
+    <property name="tridGenerator" ref="tridGenerator"/>
   </bean>
   
   <bean id="sghReportsDeIdentifier" class="com.krishagni.openspecimen.custom.sgh.services.impl.SprDeIdentifier">
     <property name="sessionFactory" ref="sessionFactory" />
-  </bean>
+  </bean> 
   
   <bean id="migrateSprs" class="com.krishagni.openspecimen.custom.sgh.init.MigrateSurgicalPathologyReports">
     <property name="txnMgr" ref="transactionManager"/>
     <property name="jdbcTemplate" ref="jdbcTemplate"/>
     <property name="cfgSvc" ref="cfgSvc"/>
+  </bean>
+  
+  <bean id="tridPrintSvc" class="com.krishagni.openspecimen.custom.sgh.services.impl.TridPrintSvcImpl">
+    <property name="cfgSvc" ref="cfgSvc"/>
+    <property name="tridGenerator" ref="tridGenerator"/>
+  </bean>
+  
+  <bean id="tridGenerator" class="com.krishagni.openspecimen.custom.sgh.services.impl.TridGeneratorImpl">
+    <property name="daoFactory"  ref="biospecimenDaoFactory"/>
   </bean>
 
 </beans>

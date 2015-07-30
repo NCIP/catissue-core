@@ -4,6 +4,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+<<<<<<< HEAD
   
   <changeSet author="vgaikwad" id="Added text 'Primary Provider:' to deindentify in spr report" dbms="mysql">
     <sql>
@@ -26,6 +27,159 @@
       values
         ("\\b\\d{1,2}-[a-zA-Z]{3}-\\d{4}", 0, 0);   
     </sql>
+=======
+
+  <property name="boolean.type" value="boolean" dbms="mysql" />
+  <property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
+  <property name="int.type" value="bigint" dbms="mysql" />
+  <property name="int.type" value="number(19,0)" dbms="oracle" />
+
+  <property name="smallint.type" value="smallint" dbms="mysql" />
+  <property name="smallint.type" value="number(5,0)" dbms="oracle" />
+
+  <property name="text.type" value="varchar" dbms="mysql" />
+  <property name="text.type" value="varchar2" dbms="oracle" />
+
+  <property name="double.type" value="double"/>
+
+  <property name="autoIncrement" value="true" dbms="mysql"/>
+  <property name="autoIncrement" value="false" dbms="oracle"/>
+
+  <property name="timestamp.type" value="timestamp" dbms="mysql" />
+  <property name="timestamp.type" value="timestamp" dbms="oracle" />
+
+  <property name="nullable.ts.type" value="timestamp null" dbms="mysql" />
+  <property name="nullable.ts.type" value="timestamp" dbms="oracle" />
+
+  <property name="clob.type" value="text" dbms="mysql"/>
+  <property name="clob.type" value="clob" dbms="oracle"/>
+
+  <changeSet author="nmarwaha" id="Migrate SCG Missed case data" failOnError="false">
+    <sql>
+      update
+        catissue_specimen_coll_group
+      set
+        REASON_FOR_MISSED_CASE = 'No post ops consent taken within 3 months'
+      where
+        collection_status = 'Not Collected-No post ops consent taken within three months'
+    </sql>
+    
+    <sql>
+      update
+        catissue_specimen_coll_group
+      set
+        MISSED_REASON = REASON_FOR_MISSED_CASE
+    </sql>
+    
+    <sql>
+      update
+        catissue_specimen_coll_group
+      set
+        COLLECTION_STATUS = 'Missed Collection'
+      where
+        COLLECTION_STATUS not in ('Pending', 'Complete')
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Set label formats for all protocols as per SG format" failOnError="false">
+    <sql>
+      update
+        catissue_collection_protocol
+      set
+        LABEL_FORMAT='%VISIT_NAME%-%SP_TYPE%%PPI_YOC_UID%',
+        DERIV_LABEL_FORMAT='%PSPEC_LABEL%-%SP_TYPE%',
+        ALIQUOT_LABEL_FORMAT='%PSPEC_LABEL%_%PSPEC_UID%'
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Reset TRID counter in key sequence table" failOnError="false">
+    <sql>
+      select 
+        MAX(CAST(SUBSTRING(name, 2, length(name)) AS UNSIGNED)) 
+      from 
+        catissue_specimen_coll_group 
+      where 
+        name like 'z%'
+      into 
+        @TRID_FLAG;
+
+      insert into key_seq_generator 
+        (identifier, key_value, key_sequence_id, key_type)
+      values 
+        (default, 'SGH', @TRID_FLAG ,'TRID');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Updating default site for CPE from CP">
+    <sql>
+      update 
+        catissue_coll_prot_event cpe
+        join catissue_site_cp site_cp on site_cp.collection_protocol_id = cpe.collection_protocol_id
+     set 
+       cpe.default_site_id = site_cp.site_id
+     where 
+       cpe.default_site_id is null
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Adding SGH specific configuration parameters">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (default, 'plugin_sgh', 'SGH custom module plugin');
+    </sql>
+    
+    <sql>
+      call add_cfg_prop(
+        'plugin_sgh', 'copies_to_print', 
+        'copies_to_print', 'copies_to_print_desc', 
+        'STRING', ''
+      );
+    </sql>
+    
+    <sql>
+      call add_cfg_prop(
+        'plugin_sgh', 'trid_copies', 
+        'trid_copies', 'trid_copies_desc', 
+        'STRING', ''
+      );
+    </sql>
+    
+    <sql>
+      call add_cfg_prop(
+        'plugin_sgh', 'malignant_aliq_cnt', 
+        'malignant_aliq_cnt', 'malignant_aliq_cnt_desc', 
+        'STRING', ''
+      );
+    </sql>
+    
+    <sql>
+      call add_cfg_prop(
+        'plugin_sgh', 'non_malignant_aliq_cnt', 
+        'non_malignant_aliq_cnt', 'non_malignant_aliq_cnt_desc', 
+        'STRING', ''
+      );
+    </sql>
+    
+    <sql>
+      call add_cfg_prop(
+        'plugin_sgh', 'malignant_aliq_suffix', 
+        'malignant_aliq_suffix', 'malignant_aliq_suffix_desc', 
+        'STRING', ''
+      );
+    </sql>
+    
+    <sql>
+      call add_cfg_prop(
+        'plugin_sgh', 'non_malignant_aliq_suffix', 
+        'non_malignant_aliq_suffix', 'non_malignant_aliq_suffix_desc', 
+        'STRING', ''
+      );
+    </sql>
+    
+>>>>>>> OS_v20_NM_GH
   </changeSet>
   
 </databaseChangeLog>
