@@ -141,7 +141,7 @@
     </sql>
   </changeSet>
   
-  <changeSet author="vgaikwad" id="Assign CRUD permissions to Surgical Pathology Report resource for Tissue Banker, PI and Coordinator roles">
+  <changeSet author="vgaikwad" id="Assign permissions on SPR resource to PI, Coordinator and Tissue Banker">
     <sql>
       call assign_to_role('Tissue Banker', 'SurgicalPathologyReport', 'Read,Create,Update,Delete');
       call assign_to_role('Principal Investigator', 'SurgicalPathologyReport', 'Read');
