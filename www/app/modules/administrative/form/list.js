@@ -1,8 +1,16 @@
 
 angular.module('os.administrative.form.list', ['os.administrative.models'])
-  .controller('FormListCtrl', function($scope, $modal, Form, CollectionProtocol, DeleteUtil) {
+  .controller('FormListCtrl', function(
+    $scope, $modal, $translate, Form, 
+    CollectionProtocol, Util, DeleteUtil, Alerts) {
 
     function init() {
+      $scope.entityMap = {
+        Participant: 'participant', 
+        Specimen: 'specimen', 
+        SpecimenCollectionGroup: 'visit', 
+        SpecimenEvent: 'specimen_event'
+      };
       $scope.cpList = [];
       $scope.formsList = [];
       loadAllForms();
@@ -22,6 +30,15 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
         }
       );
     };
+
+    function deleteForm(form) {
+      form.$remove().then(
+        function(resp) {
+          Alerts.success('form.form_deleted', form);
+          loadAllForms();
+        }
+      );
+    }
 
     $scope.showFormContexts = function(form) {
       form.getFormContexts().then(function(formCtxts) {
@@ -49,13 +66,21 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
     };
 
 
-    $scope.deleteForm = function(form) {
-      DeleteUtil.delete(form, {
-        deleteWithoutCheck: true,
-        onDeletion: function() {
-          loadAllForms();
-        }
+    $scope.confirmFormDeletion = function(form) {
+      form.entityMap = $scope.entityMap;
+      form.dependentEntities = [];
+      form.getDependentEntities().then(
+        function(result) {
+          Util.unshiftAll(form.dependentEntities, result);
+        } 
+      );
+
+      DeleteUtil.confirmDelete({
+        entity: form,
+        templateUrl: 'modules/administrative/form/confirm-delete.html',
+        delete: function () { deleteForm(form); }
       });
+
     }
 
     init();

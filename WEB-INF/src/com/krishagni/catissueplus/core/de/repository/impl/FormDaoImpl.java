@@ -20,6 +20,7 @@ import org.hibernate.criterion.Restrictions;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
@@ -403,6 +404,17 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<DependentEntityDetail> getDependentEntities(Long formId) {
+		List<Object[]> rows = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_DEPENDENT_ENTITIES)
+				.setLong("formId", formId)
+				.list();
+		
+		return getDependentEntities(rows);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public String getFormChangeLogDigest(String file) {
 		List<Object> rows = sessionFactory.getCurrentSession()
 				.createSQLQuery(GET_CHANGE_LOG_DIGEST_SQL)
@@ -424,6 +436,15 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 				.setLong("formId", formId)
 				.setTimestamp("executedOn", Calendar.getInstance().getTime())
 				.executeUpdate();
+	}
+	
+	@Override
+	public void deleteFormContexts(Long formId) {
+		sessionFactory.getCurrentSession()
+			.createSQLQuery(SOFT_DELETE_FORM_CONTEXTS_SQL)
+			.setTimestamp("deletedOn", Calendar.getInstance().getTime())
+			.setLong("formId", formId)
+			.executeUpdate(); 
 	}
 	
 		
@@ -579,6 +600,18 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		return forms;
 	}
 	
+	private List<DependentEntityDetail> getDependentEntities(List<Object[]> rows) {
+		List<DependentEntityDetail> dependentEntities = new ArrayList<DependentEntityDetail>();
+		
+		for (Object[] row: rows) {
+			String name = (String)row[0];
+			int count = ((Integer)row[1]).intValue();
+			dependentEntities.add(DependentEntityDetail.from(name, count));
+		}
+		
+		return dependentEntities;
+ 	}
+	
 	private static final String FQN = FormContextBean.class.getName();
 	
 	private static final String GET_ALL_FORMS = FQN + ".getAllFormsSummary";
@@ -619,11 +652,13 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	private static final String GET_QUERY_FORM_CONTEXT = FQN + ".getQueryFormCtxtByContainerId";
 	
-	private static final String GET_RECORD_CNT = FQN + ".getRecordCount";
+	private static final String GET_RECORD_CNT = FQN + ".getRecordCount"; 
 	
 	private static final String GET_RECS_BY_TYPE_AND_OBJECT = FQN  + ".getRecordsByEntityAndObject";
 	
 	private static final String GET_RECS = FQN + ".getRecords";
+	
+	private static final String GET_DEPENDENT_ENTITIES = FQN + ".getDependentEntities";
 	
 	private static final String GET_CHANGE_LOG_DIGEST_SQL =
 			"select " +
@@ -644,4 +679,8 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			"	(filename, form_id, md5_digest, executed_on) " +
 			"values " +
 			"   (:filename, :formId, :digest, :executedOn) ";
+	
+	private static final String SOFT_DELETE_FORM_CONTEXTS_SQL = 
+			"update catissue_form_context set deleted_on = :deletedOn where container_id = :formId";
+	
 }

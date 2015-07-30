@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.AddRecordEntryOp;
@@ -61,4 +62,6 @@ public interface FormService {
 	public ResponseEvent<Long> addRecordEntry(RequestEvent<AddRecordEntryOp> req);
 
 	public ResponseEvent<List<FormRecordsList>> getFormRecords(RequestEvent<GetFormRecordsListOp> req);
+	
+	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req);
 }

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
@@ -244,6 +245,15 @@ public class FormsController {
 		return resp.getPayload();
 	}
 		
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependent-entities")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public List<DependentEntityDetail> getDependentEntities(@PathVariable("id") Long formId) {
+		ResponseEvent<List<DependentEntityDetail>> resp = formSvc.getDependentEntities(getRequest(formId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
 	@RequestMapping(method = RequestMethod.DELETE, value="{id}/data/{recordId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
