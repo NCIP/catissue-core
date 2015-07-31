@@ -245,6 +245,10 @@ body {
   margin-right: 24px;
 }
 
+.os-page-hdr .os-title.os-ellipsis {
+  width: 85%;
+}
+
 button.btn.os-round-btn {
   height: 24px;
   width: 24px;
