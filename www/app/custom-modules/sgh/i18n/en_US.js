@@ -31,8 +31,10 @@
   },
   
   "cp": {
-    "ppid_fmt": "TRID Format",
-    "visit_name_fmt": "TRID Format"
+   "ppid_fmt": "TRID(PPID) Format",
+   "visit_name_fmt": "TRID(Visit Name) Format",
+   "ppids": "TRIDs(PPIDs)",
+   "visit_names": "TRIDs(Visit Names)"
   },
   
   "srs": {
