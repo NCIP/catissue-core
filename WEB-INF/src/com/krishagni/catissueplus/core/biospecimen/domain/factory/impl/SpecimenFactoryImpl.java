@@ -574,7 +574,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;
 		}
 
-		if (specimen.isPrimary()) {
+		if (specimen.isPrimary() && detail.getReceivedEvent() != null) {
 			specimen.setCreatedOn(detail.getReceivedEvent().getTime());
 		} else if (detail.getCreatedOn() != null) {
 			specimen.setCreatedOn(detail.getCreatedOn());
