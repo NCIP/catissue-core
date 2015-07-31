@@ -33,45 +33,75 @@ angular.module('openspecimen')
       }, true);
     }
 
-    function csvToArray(input, delimiter) {    
-      if (!input || input.trim().length == 0) {
-        return [];
+    function getEscapeMap(str) {
+      var map = {}, insideSgl = false, insideDbl = false;
+      var lastIdx = -1;
+
+      for (var i = 0; i < str.length; ++i) {
+        if (str[i] == "'" && !insideDbl) {
+          if (insideSgl) {
+            map[lastIdx] = i;
+          } else {
+            lastIdx = i;
+          }
+
+          insideSgl = !insideSgl;
+        } else if (str[i] == '"' && !insideSgl) {
+          if (insideDbl) {
+            map[lastIdx] = i;
+          } else {
+            lastIdx = i;
+          }
+
+          insideDbl = !insideDbl;
+        }
       }
 
-      input = input.trim();
-      delimiter = (delimiter || ",").replace(/([[^$.|?*+(){}])/g, '\\$1');
+      return map;
+    }
 
-      var quotes = "\"'";
+    function getToken(token) {
+      token = token.trim();
+      if (token.length != 0) {
+        if ((token[0] == "'" && token[token.length - 1] == "'") ||
+            (token[0] == '"' && token[token.length - 1] == '"')) {
+          token = token.substring(1, token.length - 1);
+        }
+      }
 
-      // Create a regular expression to parse the CSV values.
-      // match[1] = Contains the delimiter if the RegExp is not at the begin
-      // match[2] = quote, if any
-      // match[3] = string inside quotes, if match[2] exists
-      // match[4] = non-quoted strings
-      var objPattern = new RegExp(
-        // Delimiter or marker of new row
-        "(?:(" + delimiter + ")|[\\n\\r]|^)" +
-        // Quoted fields
-        "(?:([" + quotes + "])((?:[^" + quotes + "]+|(?!\\2).|\\2\\2)*)\\2" + 
-        // Standard fields
-        "|([^" + quotes + delimiter + "\\n\\r]*))",
-        "gi");
+      return token;
+    }
 
-      var result = [];
+    function splitStr(str, re) {
+      var result = [], token = '', escUntil = undefined;
+      var map = getEscapeMap(str);
 
-      var arrMatches;
-      while (arrMatches = objPattern.exec(input)) {
-        var quote = arrMatches[2]
-        if (quote) {
-          // We found a quoted value. When we capture
-          // this value, unescape any double quotes.
-          var strMatchedValue = arrMatches[3].replace(new RegExp( quote + quote, "g" ), quote);
-        } else {
-          // We found a non-quoted value.
-          var strMatchedValue = arrMatches[4];
+      for (var i = 0; i < str.length; ++i) {
+        if (escUntil == undefined) {
+          escUntil = map[i];
         }
 
-        result.push(strMatchedValue);
+        if (i <= escUntil) {
+          token += str[i];
+          if (i == escUntil) {
+            escUntil = undefined;
+          }
+        } else {
+          if (re.exec(str[i]) == null) {
+            token += str[i];
+          } else {
+            token = getToken(token);
+            if (token.length > 0) {
+              result.push(token);
+            }
+            token = '';
+          }
+        }
+      }
+
+      token = getToken(token);
+      if (token.length > 0) {
+        result.push(token);
       }
 
       return result;
@@ -113,7 +143,7 @@ angular.module('openspecimen')
 
       filter: filter,
 
-      csvToArray: csvToArray,
+      splitStr: splitStr,
 
       getDupObjects: getDupObjects
     };

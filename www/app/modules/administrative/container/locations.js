@@ -22,7 +22,7 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
     $scope.showUpdatedMap = function() {
       var newMap = angular.copy($scope.pristineMap);
       var mapIdx = 0, labelIdx = 0;
-      var labels = $scope.input.labels.split(/,|\t/);
+      var labels = Util.splitStr($scope.input.labels, /,|\t|\n/);
 
       var done = false;
       $scope.input.noFreeLocs = false;
