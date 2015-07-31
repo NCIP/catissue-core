@@ -760,7 +760,7 @@
     "stores_specimens": "Stores Specimens",
     "confirm_delete": "{{entityType}} {{entityName}} and its child containers will be deleted forever. Are you sure you want to proceed?",
     "assign_positions": "Assign Positions",
-    "paste_specimen_labels": "Paste or input specimen labels separated by comma",
+    "paste_specimen_labels": "Paste or input specimen labels separated by comma/tab/newline",
     "no_free_locs": "Container does not have enough free locations to accommodate input specimen labels",
     "replicated_successfully": "Container {{name}} replicated successfully",
 
@@ -964,7 +964,7 @@
     "cond_value": "Condition Value",
     "select_cond_value": "Select Condition Value",
     "select_cond_values": "Select Condition Values",
-    "specify_multiple_cond": "Specify Condition Value & then hit enter key",
+    "specify_multiple_cond": "Specify multiple Condition Values separated by comma/tab/newline",
     "range_min": "Range Min",
     "range_max": "Range Max",
     "select_date": "Select Date",

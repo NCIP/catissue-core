@@ -1,6 +1,6 @@
 
 angular.module('os.query.parameterized', ['os.query.models'])
-  .controller('ParameterizedFilterCtrl', function($scope, $modalInstance, queryCtx, QueryUtil) {
+  .controller('ParameterizedFilterCtrl', function($scope, $modalInstance, queryCtx, Util, QueryUtil) {
     function init() {
       $scope.queryCtx = queryCtx;
       angular.forEach(queryCtx.filters, 
@@ -21,6 +21,9 @@ angular.module('os.query.parameterized', ['os.query.models'])
           filter.newOp = filter.op;
           filter.valueType = QueryUtil.getValueType(filter.field, filter.op);
           filter.unaryOp = QueryUtil.isUnaryOp(filter.op);
+          if (filter.valueType == 'tagsSelect') {
+            filter.value = QueryUtil.getStringifiedValue(filter.value);
+          }
         }
       );
     }
@@ -36,9 +39,14 @@ angular.module('os.query.parameterized', ['os.query.models'])
     $scope.ok = function() {
       angular.forEach($scope.queryCtx.filters,
         function(filter) {
-          if (!filter.parameterized || !filter.expr) {
+          if (!filter.parameterized || (filter.valueType != 'tagsSelect' && !filter.expr)) {
             return;
           }
+
+          if (filter.valueType == 'tagsSelect') {
+            filter.value = Util.splitStr(filter.value, /,|\t|\n/);
+            return;
+          } 
 
           var tObj = filter.tObj;
           filter.expr = tObj.lhs + ' ' + filter.op.symbol + ' ';

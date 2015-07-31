@@ -30,9 +30,9 @@
           </os-select>
         </div>
         <div ng-switch-when="tagsSelect">
-          <os-tags tags="queryLocal.currFilter.value" 
-            placeholder="{{'queries.specify_multiple_cond' | translate}}">
-          </os-tags>
+          <textarea class="form-control" placeholder="{{'queries.specify_multiple_cond' | translate}}" rows="2"
+            ng-model="queryLocal.currFilter.value" os-enable-tab>
+          </textarea>
         </div>
         <div ng-switch-when="betweenDate" class="clearfix os-query-range-value">
           <input class="form-control" placeholder="{{'queries.range_min' | translate}}" 

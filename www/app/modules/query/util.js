@@ -574,6 +574,20 @@ angular.module('os.query.util', [])
       queryCtx.disableCpSelection = false;
     }
     
+    function getStringifiedValue(value) {
+      return value.map(
+        function(el) {
+          if (el.indexOf('"') != -1) {
+            return "'" + el + "'";
+          } else if (el.indexOf("'") != -1) {
+            return '"' + el + '"';
+          } else {
+            return el;
+          }
+        }
+      ).join(", ");
+    }
+
     return {
       initOpsDesc:         initOpsDesc,
 
@@ -613,6 +627,8 @@ angular.module('os.query.util', [])
 
       getTemporalExprObj:  getTemporalExprObj,
 
-      disableCpSelection:  disableCpSelection
+      disableCpSelection:  disableCpSelection,
+
+      getStringifiedValue: getStringifiedValue
     };
   });
