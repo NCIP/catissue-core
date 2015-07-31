@@ -446,7 +446,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			}
 		}
 				
-		if (qty == null || NumUtil.lessThanEqualsZero(qty)) {
+		if (!Specimen.isMissed(detail.getStatus()) && (qty == null || NumUtil.lessThanEqualsZero(qty))) {
 			ose.addError(SpecimenErrorCode.INVALID_QTY);
 			return;
 		}
@@ -460,7 +460,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			availableQty = specimen.getInitialQuantity();
 		}
 		
-		if (availableQty.compareTo(specimen.getInitialQuantity()) > 0 || availableQty.compareTo(BigDecimal.ZERO) < 0) {
+		if (!Specimen.isMissed(detail.getStatus()) &&
+			(NumUtil.greaterThan(availableQty, specimen.getInitialQuantity()) || NumUtil.lessThanZero(availableQty))){
 			ose.addError(SpecimenErrorCode.INVALID_QTY);
 			return;
 		}
