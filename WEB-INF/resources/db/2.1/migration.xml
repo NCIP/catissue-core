@@ -97,70 +97,70 @@
     </sql>
   </changeSet>
   
-  <changeSet author="vratnaparkhi" id="Migrate specimen order data" dbms="mysql">
+  <changeSet author="vratnaparkhi" id="Migrate specimen order data">
     <sql>
-	  insert into os_orders (
-	    identifier, 
-	    name, 
-	    requester_id, 
-	    creation_date, 
-	    execution_date, 
-	    status, 
-	    order_type, 
-	    activity_status, 
-	    site_id, 
-	    distribution_protocol_id, 
-	    distributor_id, 
-	    tracking_url, 
-	    comments)
-	  
-	  select 
-	    orders.identifier as identifier, 
-	    orders.name as name,
-	    orders.requester_id as requester_id, 
-	    orders.requested_date as creation_date,
-	    distribution.event_timestamp as execution_date,
-	    case
-		  when orders.status in ('Completed') then 'EXECUTED'
-		  else 'PENDING'
-	    end as status,
-	    null as order_type, 
-	    distribution.activity_status as activity_status, 
-	    distribution.to_site_id as site_id,
-	    distribution.distribution_protocol_id as distribution_protocol_id, 
-	    distribution.user_id as distributor_id,
-	    null as tracking_url, 
-	    orders.comments as comments
-	  from 
-	    catissue_order orders
-	    join catissue_distribution distribution on distribution.order_id=orders.identifier
-	    and distribution.order_id is not null;
-	</sql>
-	<sql>
-	  insert into os_order_items (
-	    identifier, 
-	    order_id, 
-	    quantity, 
-	    specimen_id, 
-	    status)
-	  
-	  select 
-	    order_item.identifier as identifier,
-	    order_item.order_id as order_id,
-	    order_item.requested_quantity as quantity,
-	    distributed_item.specimen_id as specimen_id,
-	    case
-		  when order_item.status like 'Distributed And Close' then 'DISTRIBUTED_AND_CLOSED'
-		  when order_item.status like 'Distributed' then 'DISTRIBUTED'
-		  when order_item.status in ('New', 'Pending - For Distribution', 'Pending - Protocol Review', 'Pending - Specimen Preparation') 
-		  then 'PENDING'
-	    end as status
-	  from 
-	    catissue_order_item order_item
-	    join catissue_distributed_item distributed_item on distributed_item.identifier=order_item.distributed_item_id
-	    join catissue_distribution distribution on distribution.identifier=distributed_item.distribution_id
-	    and distribution.order_id is not null;
-	</sql>
+      insert into os_orders (
+        identifier, 
+        name, 
+        requester_id, 
+        creation_date, 
+        execution_date, 
+        status, 
+        order_type, 
+        activity_status, 
+        site_id, 
+        distribution_protocol_id, 
+        distributor_id, 
+        tracking_url, 
+        comments)
+      
+      select 
+        orders.identifier as identifier, 
+        orders.name as name,
+        orders.requester_id as requester_id, 
+        orders.requested_date as creation_date,
+        distribution.event_timestamp as execution_date,
+        case
+          when orders.status in ('Completed') then 'EXECUTED'
+          else 'PENDING'
+        end as status,
+        null as order_type, 
+        distribution.activity_status as activity_status, 
+        distribution.to_site_id as site_id,
+        distribution.distribution_protocol_id as distribution_protocol_id, 
+        distribution.user_id as distributor_id,
+        null as tracking_url, 
+        orders.comments as comments
+      from 
+        catissue_order orders
+        join catissue_distribution distribution on distribution.order_id=orders.identifier
+        and distribution.order_id is not null;
+    </sql>
+    <sql>
+      insert into os_order_items (
+        identifier, 
+        order_id, 
+        quantity, 
+        specimen_id, 
+        status)
+      
+      select 
+        order_item.identifier as identifier,
+        order_item.order_id as order_id,
+        order_item.requested_quantity as quantity,
+        distributed_item.specimen_id as specimen_id,
+        case
+          when order_item.status like 'Distributed And Close' then 'DISTRIBUTED_AND_CLOSED'
+          when order_item.status like 'Distributed' then 'DISTRIBUTED'
+          when order_item.status in ('New', 'Pending - For Distribution', 'Pending - Protocol Review', 'Pending - Specimen Preparation') 
+          then 'PENDING'
+        end as status
+      from 
+        catissue_order_item order_item
+        join catissue_distributed_item distributed_item on distributed_item.identifier=order_item.distributed_item_id
+        join catissue_distribution distribution on distribution.identifier=distributed_item.distribution_id
+        and distribution.order_id is not null;
+    </sql>
   </changeSet>
 
 </databaseChangeLog>
