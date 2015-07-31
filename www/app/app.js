@@ -29,11 +29,10 @@ angular.module('openspecimen', [
 
     $translatePartialLoaderProvider.addPart('modules');
     $translateProvider.useLoader('$translatePartialLoader', {  
-      urlTemplate: '{part}/i18n/{lang}.js'
+      urlTemplate: '{part}/i18n/{lang}.js',
+      loadFailureHandler: 'i18nErrHandler'
     });
  
-    $translateProvider.preferredLanguage('en_US');
-
     $stateProvider
       .state('default', {
         abstract: true,
@@ -78,6 +77,11 @@ angular.module('openspecimen', [
     };
 
     uiSelectConfig.theme = 'bootstrap';
+  })
+  .factory('i18nErrHandler', function($q) {
+    return function(part, lang) {
+      return $q.when({});
+    }
   })
   .factory('httpRespInterceptor', function($q, $injector, Alerts, $window) {
     return {
@@ -260,7 +264,22 @@ angular.module('openspecimen', [
           PluginReg.usePlugins([customModule]);
         }
 
-        $translate.use(localeSettings.locale);
+        var locale = localeSettings.locale;
+        $translate.use(locale);
+
+        var idx = locale.indexOf('_');
+        var localeLang = (idx != -1) ? locale.substring(0, idx) : locale;
+
+        var langs = [locale];
+        if (locale !== localeLang) {
+          langs.push(localeLang);
+        }
+
+        if (localeLang != 'en') {
+          langs.push('en');
+        }
+
+        $translate.fallbackLanguage(langs);
         $translate.refresh();
       }
     );
