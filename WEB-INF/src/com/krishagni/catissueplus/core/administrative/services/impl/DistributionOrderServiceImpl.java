@@ -121,7 +121,6 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			DistributionOrder order = distributionFactory.createDistributionOrder(detail, Status.PENDING);
 			
 			AccessCtrlMgr.getInstance().ensureCreateDistributionOrderRights(order);
-			ensureSpecimensValidity(order);						
 			ensureUniqueConstraints(order);
 			
 			Status inputStatus = Status.valueOf(detail.getStatus());
@@ -154,7 +153,6 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			
 			DistributionOrder newOrder = distributionFactory.createDistributionOrder(detail, null);
 			AccessCtrlMgr.getInstance().ensureUpdateDistributionOrderRights(newOrder);
-			ensureSpecimensValidity(newOrder);
 			if (!existingOrder.getName().equals(newOrder.getName())) {
 				ensureUniqueConstraints(newOrder);
 			}
@@ -200,36 +198,6 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 		}
 		
 		ose.checkAndThrow();
-	}
-	
-	private void ensureSpecimensValidity(DistributionOrder order) {		
-		Set<Long> specimenIds = new HashSet<Long>();
-		for (DistributionOrderItem orderItem : order.getOrderItems()) {
-			specimenIds.add(orderItem.getSpecimen().getId());
-		}
-		
-		if (specimenIds.isEmpty()) {
-			throw OpenSpecimenException.userError(DistributionOrderErrorCode.NO_SPECIMENS_TO_DIST);
-		}
-		
-		Map<String, Long> specimenInstituteIdMap = 
-				daoFactory.getSpecimenDao().getSpecimenInstitutes(specimenIds);
-		
-		StringBuilder invalidSpecimens = new StringBuilder();
-		Long orderInstituteId = order.getInstitute().getId();
-		for (Map.Entry<String, Long> specimenInstituteId : specimenInstituteIdMap.entrySet()) {
-			if (!specimenInstituteId.getValue().equals(orderInstituteId)) {
-				invalidSpecimens.append(specimenInstituteId.getKey()).append(", ");
-			}
-		}
-				
-		int labelsLen = invalidSpecimens.length();
-		if (labelsLen > 0) {
-			throw OpenSpecimenException.userError(
-					DistributionOrderErrorCode.INVALID_SPECIMENS_FOR_DP, 
-					invalidSpecimens.delete(labelsLen - 2, labelsLen),
-					order.getInstitute().getName());
-		}
 	}
 	
 	private QueryDataExportResult exportOrderReport(final DistributionOrder order) {
