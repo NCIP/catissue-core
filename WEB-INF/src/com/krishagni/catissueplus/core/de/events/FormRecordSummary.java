@@ -72,7 +72,7 @@ public class FormRecordSummary {
 	
 	public void addFieldValue(ControlValue cv) {
 		FieldValue fv = new FieldValue();
-		fv.setName(cv.getControl().getName());
+		fv.setName(cv.getControl().getUserDefinedName());
 		fv.setCaption(cv.getControl().getCaption());
 		fv.setValue(cv.getValue());
 		
