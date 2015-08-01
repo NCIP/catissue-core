@@ -107,6 +107,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
         for (var i = idx + descCnt; i >= idx; --i) {
           $scope.specimens[i].selected = false;
+          $scope.specimens[i].removed = true;
           $scope.specimens.splice(i, 1);
         }
       };
@@ -154,6 +155,10 @@ angular.module('os.biospecimen.participant.collect-specimens',
       function descendentCount(specimen) { 
         var count = 0;
         for (var i = 0; i < specimen.children.length; ++i) {
+          if (specimen.children[i].removed) {
+            continue;
+          }
+
           count += 1 + descendentCount(specimen.children[i]);
         }
 
