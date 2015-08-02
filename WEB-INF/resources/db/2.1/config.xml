@@ -14,4 +14,39 @@
       );
     </sql>
   </changeSet>
+
+  <changeSet author="vpawar" id="Adding auth module" dbms="mysql">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values
+        (default, 'auth', 'auth_desc');
+    </sql>
+  </changeSet> 
+
+  <changeSet author="vpawar" id="Adding auth module" dbms="oracle">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values
+        (os_modules_seq.nextval, 'auth', 'auth_desc');
+    </sql>
+  </changeSet> 
+
+  <changeSet author="vpawar" id="Auth module config settings: failed logins and validate token ip">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'allowed_failed_logins', 
+        'auth_allowed_failed_logins', 'auth_allowed_failed_logins_desc', 
+        'INT', '5'
+      );
+    </sql>
+    <sql>
+      call add_cfg_prop(
+        'auth', 'verify_token_ip_address', 
+        'auth_verify_token_ip_addr', 'auth_verify_token_ip_addr_desc', 
+        'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>

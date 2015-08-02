@@ -150,6 +150,17 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		
 		return value;
 	}
+
+	@Override
+	@PlusTransactional	
+	public Boolean getBoolSetting(String module, String name, Boolean ... defValue) {
+		String value = getStrSetting(module, name, (String)null);
+		if (StringUtils.isBlank(value)) {
+			return defValue != null && defValue.length > 0 ? defValue[0] : null;
+		}
+		
+		return Boolean.parseBoolean(value);		
+	}
 	
 	@Override
 	@PlusTransactional
