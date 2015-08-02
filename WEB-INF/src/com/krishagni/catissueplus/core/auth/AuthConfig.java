@@ -31,7 +31,7 @@ public class AuthConfig {
 	}
 	
 	public int getAllowedFailedLoginAttempts() {
-		return cfgSvc.getIntSetting(AuthConfig.MODULE, AuthConfig.FAILED_ATTEMPTS, 5);
+		return cfgSvc.getIntSetting(MODULE, FAILED_ATTEMPTS, 5);
 	}
 	
 	public boolean isTokenIpVerified() {

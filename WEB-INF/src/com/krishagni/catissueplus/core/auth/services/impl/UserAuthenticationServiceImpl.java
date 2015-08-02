@@ -121,7 +121,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 			}
 
 			if (AuthConfig.getInstance().isTokenIpVerified()) {
-				if (!authToken.getIpAddress().equals(tokenDetail.getIpAddress())) {
+				if (!tokenDetail.getIpAddress().equals(authToken.getIpAddress())) {
 					throw OpenSpecimenException.userError(AuthErrorCode.IP_ADDRESS_CHANGED);
 				}
 			}
