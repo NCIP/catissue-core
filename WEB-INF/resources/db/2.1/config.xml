@@ -15,7 +15,7 @@
     </sql>
   </changeSet>
   
-  <changeSet author="asamgir" id="Config setting to specimen type abbreviation map">
+  <changeSet author="asamgir" id="Config setting to specimen pathology status abbreviation map">
     <sql>
       call add_cfg_prop(
         'biospecimen', 'specimen_path_status_abbr_map', 
