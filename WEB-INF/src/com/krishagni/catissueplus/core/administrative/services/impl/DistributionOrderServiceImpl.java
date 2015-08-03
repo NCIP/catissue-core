@@ -159,9 +159,10 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 				ensureUniqueConstraints(newOrder);
 			}
 
+			Status oldStatus = existingOrder.getStatus();
 			existingOrder.update(newOrder);
 			daoFactory.getDistributionOrderDao().saveOrUpdate(existingOrder);
-			sendOrderProcessedEmail(existingOrder, null);
+			sendOrderProcessedEmail(existingOrder, oldStatus);
 			return ResponseEvent.response(DistributionOrderDetail.from(existingOrder));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -265,17 +266,22 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 		return messageSource.getMessage(code, null, Locale.getDefault());
 	}
 	
-	private void sendOrderProcessedEmail(DistributionOrder order, Status status) {
-		if (order.getStatus() != Status.EXECUTED && order.getStatus() != status) {
+	private void sendOrderProcessedEmail(DistributionOrder order, Status oldStatus) {
+		Status newStatus = order.getStatus();
+		if (!newStatus.equals(Status.EXECUTED) || newStatus.equals(oldStatus)) {
 			return;
 		}
-		String recipients[] = new String[]{order.getRequester().getEmailAddress(),
-				order.getDistributor().getEmailAddress()};
+
+		String[] rcpts = {
+			order.getRequester().getEmailAddress(),
+			order.getDistributor().getEmailAddress()
+		};
+		String[] subjectParams = {order.getName()};
+
 		Map<String, Object> props = new HashMap<String, Object>();
-		String subjectParams[] = new String[]{order.getName()};
 		props.put("$subject", subjectParams);
 		props.put("order", order);
-		emailService.sendEmail(ORDER_DISTRIBUTED_EMAIL_TMPL, recipients, props);
+		emailService.sendEmail(ORDER_DISTRIBUTED_EMAIL_TMPL, rcpts, props);
 	}
 	
 	private static final String ORDER_DISTRIBUTED_EMAIL_TMPL = "order_distributed";
