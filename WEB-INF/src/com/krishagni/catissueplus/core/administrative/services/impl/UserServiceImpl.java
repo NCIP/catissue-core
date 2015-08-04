@@ -372,6 +372,8 @@ public class UserServiceImpl implements UserService {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			
+			AccessCtrlMgr.getInstance().ensureUpdateUserRights(existingUser);
+			
 			User user = null;
 			if (partial) {
 				user = userFactory.createUser(existingUser, detail);
@@ -380,7 +382,7 @@ public class UserServiceImpl implements UserService {
 			}
 			
 			AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
-
+			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueEmail(existingUser, user, ose);
 			ose.checkAndThrow();

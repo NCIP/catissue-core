@@ -6,7 +6,7 @@
 
     <h3>{{user.lastName}} {{user.firstName}}</h3>
 
-    <div class="" ng-if="user.activityStatus != 'Pending'">
+    <div class="" ng-if="(currentUser.admin || !user.admin) && user.activityStatus != 'Pending'">
       <div class="os-btns right">
         <button show-if-allowed="userResource.updateOpts" class="primary" title="{{'user.tooltip.edit' | translate}}"
           ui-sref="user-addedit({userId: user.id})">

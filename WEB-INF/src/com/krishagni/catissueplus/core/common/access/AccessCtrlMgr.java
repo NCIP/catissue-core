@@ -92,6 +92,10 @@ public class AccessCtrlMgr {
 			return;
 		}
 
+		if (user.isAdmin() && op != Operation.READ) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ADMIN_RIGHTS_REQUIRED);
+		}
+		
 		Set<Site> sites = getSites(Resource.USER, op);
 		for (Site site : sites) {
 			if (site.getInstitute().equals(user.getInstitute())) {
