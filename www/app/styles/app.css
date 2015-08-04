@@ -243,6 +243,7 @@ body {
 .os-page-hdr .os-title {
   margin: 0px;
   margin-right: 24px;
+  height: 26px;
 }
 
 .os-page-hdr .os-title.os-ellipsis {
