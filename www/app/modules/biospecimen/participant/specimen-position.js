@@ -27,6 +27,14 @@ angular.module('os.biospecimen.participant.specimen-position', ['os.administrati
 
       scope.onContainerChange = function() {
         specimen.storageLocation = {name: specimen.storageLocation.name};
+        if (specimen.siblingCount) {
+          var siblings = specimen.parent.children;
+          angular.forEach(siblings, function(sibling) {
+            if (!sibling.showInTree) {
+              sibling.storageLocation =  {name: specimen.storageLocation.name};
+            }
+          });
+        }
       };
 
       scope.openPositionSelector = function() {
