@@ -246,10 +246,6 @@ body {
   height: 26px;
 }
 
-.os-page-hdr .os-title.os-ellipsis {
-  width: 85%;
-}
-
 button.btn.os-round-btn {
   height: 24px;
   width: 24px;
@@ -314,12 +310,7 @@ h4 + .btn-group {
 }
 
 .os-page-hdr .os-breadcrumbs ~ .os-btns {
-  position: absolute;
   bottom: 10px;
-}
-
-.os-page-hdr .os-btns {
-  position: absolute;
 }
 
 .os-page-hdr .os-btns div.inline {
@@ -365,6 +356,7 @@ h4 + .btn-group {
 
 .os-page-hdr .os-btns.right {
   right: 25px;
+  float: right;
 }
 
 .os-more-options {
