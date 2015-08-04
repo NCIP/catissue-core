@@ -78,7 +78,7 @@
         <caption>#getMessage("participant_empi")</caption>
         <column>EMPI_ID</column>
         <phi>true</phi>
-       </textField>
+      </textField>
     </row>
     <row>
       <textField>
