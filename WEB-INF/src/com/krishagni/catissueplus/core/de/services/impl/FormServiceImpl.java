@@ -94,17 +94,17 @@ public class FormServiceImpl implements FormService {
 	@PlusTransactional
 	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<FormType> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-    		
 			FormType ft = req.getPayload();
 			switch (ft) {
 				case DATA_ENTRY_FORMS:
+					AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 					return ResponseEvent.response(formDao.getAllFormsSummary());
 				
 				case PARTICIPANT_FORMS:
 				case VISIT_FORMS:
 				case SPECIMEN_FORMS:
 				case SPECIMEN_EVENT_FORMS:
+					AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 					return ResponseEvent.response(formDao.getFormsByEntityType(ft.getType()));
 				
 				case QUERY_FORMS:
