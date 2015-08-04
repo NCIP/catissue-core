@@ -72,13 +72,13 @@
       </textField>
     </row>
     <row>
-	     <textField>
-	      <name>empi</name>
-	      <udn>empi</udn>
-	      <caption>#getMessage("participant_empi")</caption>
-	      <column>EMPI_ID</column>
-	      <phi>true</phi>
-	    </textField>
+      <textField>
+        <name>empi</name>
+        <udn>empi</udn>
+        <caption>#getMessage("participant_empi")</caption>
+        <column>EMPI_ID</column>
+        <phi>true</phi>
+       </textField>
     </row>
     <row>
       <textField>
