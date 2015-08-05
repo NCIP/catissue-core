@@ -1,0 +1,51 @@
+Specimen_Type,Amniotic Fluid,AF
+Specimen_Type,Bile,Bi
+Specimen_Type,Body Cavity Fluid,BCF
+Specimen_Type,Bone Marrow Plasma,BMP
+Specimen_Type,cDNA,cDNA
+Specimen_Type,Cerebrospinal Fluid,CF
+Specimen_Type,Cryopreserved Cells,CC
+Specimen_Type,DNA,DNA
+Specimen_Type,Feces,Fe
+Specimen_Type,Fixed Cell Block,FCB
+Specimen_Type,Fixed Tissue,FiT
+Specimen_Type,Fixed Tissue Block,FTB
+Specimen_Type,Fixed Tissue Slide,FTS
+Specimen_Type,Fresh Tissue,FT
+Specimen_Type,Frozen Cell Block,FrCB
+Specimen_Type,Frozen Cell Pellet,FCP
+Specimen_Type,Frozen Tissue,FrT
+Specimen_Type,Frozen Tissue Block,FrTB
+Specimen_Type,Frozen Tissue Slide,FrTS
+Specimen_Type,Gastric Fluid,GF
+Specimen_Type,Lavage,La
+Specimen_Type,Microdissected,Md
+Specimen_Type,Milk,Mi
+Specimen_Type,Not Specified,NS
+Specimen_Type,Pericardial Fluid,PF
+Specimen_Type,Plasma,Pl
+Specimen_Type,protein,Pr
+Specimen_Type,RNA,RNA
+Specimen_Type,"RNA, cytoplasmic",RNAc
+Specimen_Type,"RNA, nuclear",RNAn
+Specimen_Type,"RNA, poly-A enriched",RNAp
+Specimen_Type,Saliva,Sa
+Specimen_Type,Serum,Se
+Specimen_Type,Slide,Sl
+Specimen_Type,Sputum,Sp
+Specimen_Type,Sweat,Sw
+Specimen_Type,Synovial Fluid,SF
+Specimen_Type,Total Nucleic Acid,TNA
+Specimen_Type,Urine,Ur
+Specimen_Type,Vitreous Fluid,VF
+Specimen_Type,Whole Blood,WB
+Specimen_Type,Whole Bone Marrow,WBM
+Specimen_Type,Whole Genome Amplified DNA,WGAD
+Specimen_Pathology_Status,Malignant,T
+Specimen_Pathology_Status,"Malignant, Invasive",T
+Specimen_Pathology_Status,"Malignant, Pre-Invasive",T
+Specimen_Pathology_Status,"Non-Malignant, Diseased",T
+Specimen_Pathology_Status,Metastatic,T
+Specimen_Pathology_Status,Pre-Malignant,T
+Specimen_Pathology_Status,Non-Malignant,N
+Specimen_Pathology_Status,Not Specified,NS
