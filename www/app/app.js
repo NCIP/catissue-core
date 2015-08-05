@@ -200,7 +200,7 @@ angular.module('openspecimen', [
   })
   .run(
     function(
-      $rootScope, $window, $cookieStore, $q, $translate, $translatePartialLoader, 
+      $rootScope, $window, $cookieStore, $q, $translate, $translatePartialLoader,
       ApiUtil, Setting, PluginReg) {
 
     if ($window.localStorage['osAuthToken']) {
@@ -217,6 +217,8 @@ angular.module('openspecimen', [
 
     $rootScope.$on('$stateChangeStart',
       function(event, toState, toParams, fromState, fromParams) {
+        preventNavigation(event);
+
         if (toState.name != 'login') {
           $rootScope.reqState = {
             name: toState.name,
@@ -238,6 +240,37 @@ angular.module('openspecimen', [
       defaultDomain: 'openspecimen',	
       filterWaitInterval: 500
     };
+
+    $rootScope.allowNavigation = function() {
+      _preventNavigation = false;
+    };
+
+    $rootScope.preventNavigation = function() {
+      _preventNavigation = true;
+    }
+
+    $rootScope.$on('$locationChangeStart',
+      function (event, newUrl, oldUrl) {
+        preventNavigation(event);
+      }
+    );
+
+    // Take care of preventing navigation out of our angular app
+    window.onbeforeunload = function() {
+      if (_preventNavigation) {
+        return $translate.instant('common.confirm_navigation');
+      }
+    }
+
+    var _preventNavigation = false;
+
+    var preventNavigation = function(event) {
+      if (_preventNavigation && !confirm($translate.instant('common.confirm_navigation'))) {
+        event.preventDefault();
+      } else {
+        $rootScope.allowNavigation();
+      }
+    }
 
     var promises = [Setting.getLocale(), Setting.getAppProps()];
     $q.all(promises).then(

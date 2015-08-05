@@ -55,6 +55,7 @@
     "build_version": "Version",
     "build_date": "Build date",
     "build_commit_revision": "Revision",
+    "confirm_navigation": "You have unsaved changes, do you want to continue?",
 
     "buttons": {
       "add": "Add",
