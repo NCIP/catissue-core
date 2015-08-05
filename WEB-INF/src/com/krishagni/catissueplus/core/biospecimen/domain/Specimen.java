@@ -948,6 +948,10 @@ public class Specimen extends BaseEntity {
 	}
 	
 	private void adjustParentSpecimenQty(BigDecimal qty) {
+		BigDecimal parentSpQty = parentSpecimen.getAvailableQuantity().subtract(qty);
+		if (NumUtil.lessThanZero(parentSpQty)) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_INIT_QTY_LT_ALIQUOT_QTY);
+		}
 		parentSpecimen.setAvailableQuantity(parentSpecimen.getAvailableQuantity().subtract(qty));
 	}
 	
