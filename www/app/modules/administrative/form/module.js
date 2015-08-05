@@ -12,9 +12,9 @@ angular.module('os.administrative.form',
         abstract: true,
         template: '<div ui-view></div>',
         resolve: {
-          security: function($q, $rootScope){
-            if(!$rootScope.currentUser.admin){
-               return $q.reject("Access Denied");
+          security: function($q, $rootScope) {
+            if (!$rootScope.currentUser.admin) {
+              return $q.reject("Access Denied");
             }
           }
         },
