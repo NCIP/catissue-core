@@ -243,6 +243,7 @@ body {
 .os-page-hdr .os-title {
   margin: 0px;
   margin-right: 24px;
+  height: 26px;
 }
 
 button.btn.os-round-btn {
@@ -309,12 +310,7 @@ h4 + .btn-group {
 }
 
 .os-page-hdr .os-breadcrumbs ~ .os-btns {
-  position: absolute;
   bottom: 10px;
-}
-
-.os-page-hdr .os-btns {
-  position: absolute;
 }
 
 .os-page-hdr .os-btns div.inline {
@@ -360,6 +356,7 @@ h4 + .btn-group {
 
 .os-page-hdr .os-btns.right {
   right: 25px;
+  float: right;
 }
 
 .os-more-options {
