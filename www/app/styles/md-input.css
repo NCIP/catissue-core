@@ -59,12 +59,13 @@
 }
 
 .os-md-input textarea {
+  resize: none;
+  margin-top: 0px !important;
   border: 0;
   padding: 2px 0px;
   box-shadow: none !important;
   border-radius: 0;;
   border-bottom: 2px solid #ddd;
-  margin-top: 15px;
   outline: none;
   display: block;
   width: 100%;

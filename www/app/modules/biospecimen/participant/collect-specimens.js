@@ -77,7 +77,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         angular.forEach(specimens, function(specimen) {
           specimen.save = true;
           specimen.showInTree = false;
-          if (specimen.lineage != 'Aliquot') {
+          if (specimen.parent == undefined) {
             specimen.showInTree = true;
             $scope.parentChild[specimen.reqId] = [];
           } else {
@@ -346,16 +346,16 @@ angular.module('os.biospecimen.participant.collect-specimens',
       }
 
       $scope.expandAliquotsGroup = function(aliquot) {
-        setAliquotShowInTree(aliquot, true)
+        showAliquots(aliquot, true)
         aliquot.expanded = true;
       }
 
       $scope.collapseAliquotsGroup = function(aliquot) {
-        setAliquotShowInTree(aliquot, false)
+        showAliquots(aliquot, false)
         aliquot.expanded = false;
       }
 
-      function setAliquotShowInTree(aliquot, showInTree) {
+      function showAliquots(aliquot, showInTree) {
         var value = $scope.parentChild[aliquot.parent.reqId];
         angular.forEach(value, function(sibling, $index){
           if (sibling != aliquot) {
