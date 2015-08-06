@@ -22,7 +22,4 @@ public class ConfigParams {
 	public static final String SPR_DEIDENTIFIER          = "spr_deidentifier";
 	
 	public static final String SPR_DIR                   = "spr_dir";
-	
-	public static final String ABBREVIATION_MAP          = "pv_abbreviation_map";
-
 }

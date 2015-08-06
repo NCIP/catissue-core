@@ -10,15 +10,52 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.InitializingBean;
 
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
+import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
-public class AbbreviationMap {
+public class AbbreviationMap implements InitializingBean, ConfigChangeListener {
 
-    public static Map<String, String> abbreviationMap = new HashMap<String, String>();
+    private ConfigurationService cfgSvc;
 
-    public static void loadAbbreviationMap(String customMappingFile, String field) {
+    private Map<String, Map<String, String>> allAbbrValuesMap = new HashMap<String, Map<String, String>>();
+
+    public void setCfgSvc(ConfigurationService cfgSvc) {
+        this.cfgSvc = cfgSvc;
+    }
+
+    public Map<String, Map<String, String>> getAbbreviationMap() {
+        return allAbbrValuesMap;
+    }
+
+    @Override
+    public void onConfigChange(String name, String value) {
+        if (!name.equals(ConfigParams.ABBREVIATION_MAP)) {
+            return;
+        }
+
+        String customMappingFile = cfgSvc.getStrSetting(
+            ConfigParams.MODULE,
+            ConfigParams.ABBREVIATION_MAP,
+            "");
+        loadAbbreviationMap(customMappingFile);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        String customMappingFile = cfgSvc.getStrSetting(
+            ConfigParams.MODULE,
+            ConfigParams.ABBREVIATION_MAP,
+            "");
+
+        loadAbbreviationMap(customMappingFile);
+        cfgSvc.registerChangeListener(ConfigParams.MODULE, this);
+    }
+
+    public void loadAbbreviationMap(String customMappingFile) {
         InputStream defIn = null;
         InputStream custIn = null;
 
@@ -28,7 +65,7 @@ public class AbbreviationMap {
                 throw OpenSpecimenException.serverError(new RuntimeException(DEF_FILE_NOT_FOUND_ERROR));
             }
 
-            abbreviationMap.putAll(getAbbrMap(defIn,field));
+            getAbbrMap(defIn);
 
             if (StringUtils.isBlank(customMappingFile)) {
                 return;
@@ -40,7 +77,7 @@ public class AbbreviationMap {
                 custIn = new FileInputStream(customMappingFile);
             }
 
-            abbreviationMap.putAll(getAbbrMap(custIn,field));
+            getAbbrMap(custIn);
         } catch (Exception e) {
             logger.error("Error loading abbreviation map", e);
             throw OpenSpecimenException.serverError(e);
@@ -50,10 +87,9 @@ public class AbbreviationMap {
         }
     }
 
-    private static Map<String, String> getAbbrMap(InputStream in, String field) {
+    private void getAbbrMap(InputStream in) {
         BufferedReader reader = null;
-        Map<String, String> result = new HashMap<String, String>();
-
+ 
         try {
             reader = new BufferedReader(new InputStreamReader(in));
             String line = null;
@@ -70,25 +106,27 @@ public class AbbreviationMap {
                     continue;
                 }
 
-                if(fields[0].equals(field)) {
-                    String fieldValue = fields[1].trim().replaceAll("\"", "");
-                    String abbr = fields[2].trim().replaceAll("\"", "");
-
-                    if (StringUtils.isEmpty(fieldValue)) {
-                        logger.error("Invalid input line: " + line + ". is empty. Ignoring");
-                        continue;
-                    }
-
-                    if (StringUtils.isEmpty(abbr)) {
-                        logger.error("Invalid input line: " + line + ". Abbreviation is empty. Ignoring");
-                        continue;
-                    }
-
-                    result.put(fieldValue, abbr);
+                Map<String, String> abbreviationMap = allAbbrValuesMap.get(fields[0]);
+                if (abbreviationMap == null) {
+                    abbreviationMap = new HashMap<String, String>();
+                    allAbbrValuesMap.put(fields[0].trim(), abbreviationMap);
                 }
-            }
 
-            return result;
+                String fieldValue = fields[1].trim().replaceAll("\"", "");
+                String abbr = fields[2].trim().replaceAll("\"", "");
+
+                if (StringUtils.isEmpty(fieldValue)) {
+                    logger.error("Invalid input line: " + line + ". is empty. Ignoring");
+                    continue;
+                }
+
+                if (StringUtils.isEmpty(abbr)) {
+                    logger.error("Invalid input line: " + line + ". Abbreviation is empty. Ignoring");
+                    continue;
+                }
+
+                abbreviationMap.put(fieldValue, abbr);
+            }
         } catch (Exception e) {
             logger.error("Error loading abbreviation map", e);
             throw OpenSpecimenException.serverError(e);
