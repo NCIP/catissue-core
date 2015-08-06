@@ -14,7 +14,7 @@ public class SpecimenPathologyStatusToken extends AbstractSpecimenLabelToken {
         this.abbreviationMap = abbreviationMap;
     }
 
-	public SpecimenPathologyStatusToken() {
+    public SpecimenPathologyStatusToken() {
         this.name = "SP_PATH_STATUS";
     }
 
