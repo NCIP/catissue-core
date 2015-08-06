@@ -296,7 +296,8 @@ angular.module('os.biospecimen.participant.specimen-tree',
             depth: 1,
             isOpened: true,
             hasChildren: false,
-            labelFmt: scope.cpr.aliquotLabelFmt
+            labelFmt: scope.cpr.aliquotLabelFmt,
+            showInTree: true
           });
 
           var aliquots = [];
