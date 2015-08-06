@@ -1,7 +1,7 @@
 angular.module('openspecimen')
- .directive('textarea', function() {
+ .directive('osMdTextarea', function() {
    return {
-     restrict: 'E',
+     restrict: 'A',
      link: function( scope , element , attributes ) {
        var threshold    = 20,
        minHeight    = element[0].offsetHeight,

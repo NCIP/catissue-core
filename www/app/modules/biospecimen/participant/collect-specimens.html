@@ -89,7 +89,7 @@
               </div>
               <div ng-switch-default>
 				<span ng-show = "specimen.siblingCount && !specimen.expanded">
-                  <textarea rows="1" os-md-input ng-model="specimen.aliquotLabels"
+                  <textarea os-md-textarea rows="1" os-md-input ng-model="specimen.aliquotLabels"
                     ng-blur="assignLabels(specimen, specimen.aliquotLabels)"/>
                 </span>
                 <span ng-hide = "specimen.siblingCount && !specimen.expanded">
