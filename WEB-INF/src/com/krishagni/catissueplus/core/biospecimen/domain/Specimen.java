@@ -746,6 +746,10 @@ public class Specimen extends BaseEntity {
 			parentSpecimen.ensureAliquotQtyOk(
 					SpecimenErrorCode.PARENT_INIT_QTY_LT_ALIQUOT_QTY, 
 					SpecimenErrorCode.PARENT_AVBL_QTY_GT_ACTUAL);
+
+			if (NumUtil.lessThanZero(parentSpecimen.getAvailableQuantity().subtract(initialQuantity))) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_INIT_QTY_LT_ALIQUOT_QTY);
+			}
 		}
  
 	}
@@ -943,15 +947,11 @@ public class Specimen extends BaseEntity {
 			return false;
 		}
 		
-		return p1.getPosOneOrdinal() == p2.getPosOneOrdinal() && 
+		return p1.getPosOneOrdinal() == p2.getPosOneOrdinal() &&
 				p1.getPosTwoOrdinal() == p2.getPosTwoOrdinal();
 	}
 	
 	private void adjustParentSpecimenQty(BigDecimal qty) {
-		BigDecimal parentSpQty = parentSpecimen.getAvailableQuantity().subtract(qty);
-		if (NumUtil.lessThanZero(parentSpQty)) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_INIT_QTY_LT_ALIQUOT_QTY);
-		}
 		parentSpecimen.setAvailableQuantity(parentSpecimen.getAvailableQuantity().subtract(qty));
 	}
 	
