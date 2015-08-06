@@ -40,7 +40,7 @@ angular.module('openspecimen')
           '</span>' +
           '<span class="os-home-item-info">' +
             '<h3 translate="custom_sgh.bulk_pre_printing">Bulk Pre Print TRIDs</h3>' +
-            '<span translate="custom_sgh.bulk_pre_printing">Bulk Pre Print TRIDs</span>' +
+            '<span translate="custom_sgh.bpp_desc">Bulk pre print TRIDs for unplanned collection protocols</span>' +
           '</span>' +
         '</a>' +
       '</li> '

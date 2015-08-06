@@ -9,6 +9,7 @@
     "trid_printed": "Labels Printed Successfully",
     "trid_count": "TRID Count",
     "bulk_printing": "Bulk Print TRIDs for Unplanned Protocols",
+    "bpp_desc": "Bulk pre print TRIDs for unplanned collection protocols",
     "buttons":{
       "print": "Print"
     }
