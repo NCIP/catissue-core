@@ -69,70 +69,53 @@ angular.module('os.biospecimen.participant.collect-specimens',
         };
 
         loadPvs();
-        setShowInTree($scope.specimens);
+        initTree($scope.specimens);
       };
 
-      function setShowInTree(specimens) {
-        $scope.parentChild = {};
+      function initTree(specimens) {
         angular.forEach(specimens, function(specimen) {
           specimen.save = true;
-          specimen.showInTree = false;
           if (specimen.parent == undefined) {
             specimen.showInTree = true;
-            $scope.parentChild[specimen.reqId] = [];
-          } else {
-            var children = $scope.parentChild[specimen.parent.reqId];
-            if (children == undefined) {
-              children = [];
-            }
-            children.push(specimen);
-            $scope.parentChild[specimen.parent.reqId] = children;
+            createAliquotGrp(specimen);
           }
         });
 
-        angular.forEach($scope.parentChild, function(value, key){
-          if (value[0] == undefined) {
-            return;
+        // Logic of show/hide of aliquots and in the tree
+        angular.forEach(specimens, function(specimen){
+          if (specimen.aliquotGrp || specimen.children.length > 0 || specimen.lineage != 'Aliquot') {
+            specimen.showInTree = true;
           }
 
-          value[0].showInTree = true;
-          value[0].aliquotLabels = "";
-          var aliquotQty = 0;
-          if (value.length > 1) {
-            value[0].siblingCount = value.length;
-            aliquotQty = value[0].initialQty;
-          }
-
-          var showAllAliquots = false;
-          angular.forEach(value, function(sibling) {
-            if (doesAliquotsDiffer(sibling, value[0])) {
-              showAllAliquots = true;
-              value[0].siblingCount = undefined;
-            }
-            if (sibling.label) {
-              value[0].aliquotLabels = value[0].aliquotLabels.concat(value[0].aliquotLabels != "" ? "," : "").concat(sibling.label);
-            }
-          });
-
-          if (showAllAliquots) {
-            angular.forEach(value, function(sibling) {
-              sibling.showInTree = true;
+          if (specimen.aliquotGrp) {
+            specimen.siblingCount = specimen.aliquotGrp.length;
+            var showAllAliquots = false;
+            angular.forEach(specimen.aliquotGrp, function(sibling) {
+              if (sibling.children.length > 0 || specimen.initialQty != sibling.initialQty) {
+                showAllAliquots = true;
+              }
             });
+
+            if (showAllAliquots) {
+               $scope.expandAliquotsGroup(specimen);
+            }
           }
         });
       }
 
-     function doesAliquotsDiffer(aliquot1, aliquot2) {
-       var differ = false;
-       if (aliquot1.initialQty != aliquot2.initialQty) {
-         differ = true;
-       } else if (aliquot2.children.length) {
-         $scope.expandAliquotsGroup(aliquot1);
-       } else if (aliquot1.parent != aliquot2.parent) {
-         differ = true;
-       }
-       return differ;
-     }
+      function createAliquotGrp(specimen) {
+        if (!specimen.children[0]) {
+          return;
+        }
+
+        specimen.children[0].aliquotGrp = [];
+        angular.forEach(specimen.children, function(child) {
+          createAliquotGrp(child);
+          if (child.lineage == 'Aliquot') {
+            specimen.children[0].aliquotGrp.push(child)
+          }
+        });
+      }
 
       function loadPvs() {
         $scope.notSpecified = $translate.instant('pvs.not_specified');
@@ -174,9 +157,9 @@ angular.module('os.biospecimen.participant.collect-specimens',
           $scope.specimens.splice(i, 1);
         }
 
-        var value = $scope.parentChild[specimen.parent.reqId];
+        var value = specimen.parent.children[0];
         if (value != undefined) {
-          value[0].siblingCount -= 1;
+          value.siblingCount -= 1;
         }
       };
 
@@ -325,10 +308,10 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
       $scope.assignLabels = function(aliquot, allLabels) {
         var labels = Util.splitStr(allLabels, /,|\t|\n/);
-        aliquot.siblingCount = labels.length;
+          aliquot.siblingCount = labels.length;
         setSpecimens(aliquot);
-        var value = $scope.parentChild[aliquot.parent.reqId];
-        angular.forEach(value, function(sibling, $index){
+
+        angular.forEach(aliquot.aliquotGrp, function(sibling, $index){
           var label = labels[$index];
           Specimen.isUniqueLabel(label).then(function(result) {
             if (!result) {
@@ -342,7 +325,6 @@ angular.module('os.biospecimen.participant.collect-specimens',
             sibling.save = false;
           }
         });
-
       }
 
       $scope.expandAliquotsGroup = function(aliquot) {
@@ -356,46 +338,40 @@ angular.module('os.biospecimen.participant.collect-specimens',
       }
 
       function showAliquots(aliquot, showInTree) {
-        var value = $scope.parentChild[aliquot.parent.reqId];
-        angular.forEach(value, function(sibling, $index){
-          if (sibling != aliquot) {
+        angular.forEach(aliquot.aliquotGrp, function(sibling) {
+          if (aliquot != sibling) {
             sibling.showInTree = showInTree;
-            if (aliquot.newSiblingCount != undefined && $index >= aliquot.newSiblingCount) {
-              sibling.showInTree = false;
-              sibling.save = false;
-            }
           }
         });
       }
 
       function setSpecimens(aliquot) {
-        var value = $scope.parentChild[aliquot.parent.reqId];
-        if (value.length < aliquot.siblingCount) {
-          var newSiblingsCount = aliquot.siblingCount - value.length;
-          var pos = value.length;
+        if (aliquot.aliquotGrp.length < aliquot.siblingCount) {
+          var newSiblingsCount = aliquot.siblingCount - aliquot.aliquotGrp.length;
+          var pos;
 
+          // Fetch the position of the grouped aliquot
           angular.forEach($scope.specimens, function(sp, $index) {
             if (aliquot == sp) {
-              pos += $index;
+              pos = $index;
             }
           });
 
+          // Add the newly created aliquot to the last in the aliquot group
+          // correspondingly in the flat specimen tree
           for (var i = 0; i < newSiblingsCount; i++) {
-            var newSibling = angular.copy(value[value.length-1]);
-            value.push(newSibling);
+            var newSibling = angular.copy(aliquot.aliquotGrp[aliquot.aliquotGrp.length-1]);
             aliquot.parent.children.push(newSibling);
-            $scope.specimens.splice(pos + i, 0, newSibling);
+            $scope.specimens.splice(pos + aliquot.aliquotGrp.length, 0, newSibling);
+            aliquot.aliquotGrp.push(newSibling);
           }
         }
       }
 
-      $scope.changeQuantity = function(aliquot, qty) {
-        if (aliquot.siblingCount) {
-          var siblings = aliquot.parent.children;
-          angular.forEach(siblings, function(sibling) {
-            if (!sibling.showInTree) {
-              sibling.initialQty =  qty;
-            }
+      $scope.changeQuantity = function(specimen, qty) {
+        if (!specimen.expanded) {
+          angular.forEach(specimen.aliquotGrp, function(sibling) {
+            sibling.initialQty = qty;
           });
         }
       }
@@ -403,6 +379,19 @@ angular.module('os.biospecimen.participant.collect-specimens',
       $scope.updateCount = function(specimen) {
         specimen.siblingCount = specimen.newSiblingCount
         setSpecimens(specimen);
+
+        if (specimen.siblingCount < specimen.aliquotGrp.length) {
+          // Logic to avoid save of removed specimens
+          angular.forEach(specimen.aliquotGrp, function(sibling, $index) {
+            if ($index >= specimen.siblingCount) {
+              sibling.save = false;
+            }
+          });
+
+          // Remove from aliquot group
+          specimen.aliquotGrp.splice(specimen.siblingCount, specimen.aliquotGrp.length);
+        }
+
         $scope.closePopover();
       }
 
