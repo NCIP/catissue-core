@@ -83,7 +83,7 @@ angular.module('openspecimen', [
       return $q.when({});
     }
   })
-  .factory('httpRespInterceptor', function($q, $injector, Alerts, $window) {
+  .factory('httpRespInterceptor', function($q, $injector, $window, Alerts, LocationChangeListener) {
     return {
       request: function(config) {
         return config || $q.when(config);
@@ -94,6 +94,10 @@ angular.module('openspecimen', [
       },
 
       response: function(response) {
+        var httpMethods = ['POST', 'PUT', 'PATCH'];
+        if (response.status == 200 && httpMethods.indexOf(response.config.method) != -1) {
+          LocationChangeListener.allowChange();
+        }
         return response || $q.when(response);
       },
 
@@ -200,8 +204,8 @@ angular.module('openspecimen', [
   })
   .run(
     function(
-      $rootScope, $window, $cookieStore, $q, $translate, $translatePartialLoader, 
-      ApiUtil, Setting, PluginReg) {
+      $rootScope, $window, $cookieStore, $q, $translate, $translatePartialLoader,
+      LocationChangeListener, ApiUtil, Setting, PluginReg) {
 
     if ($window.localStorage['osAuthToken']) {
       $cookieStore.put('osAuthToken', $window.localStorage['osAuthToken']);
@@ -217,6 +221,8 @@ angular.module('openspecimen', [
 
     $rootScope.$on('$stateChangeStart',
       function(event, toState, toParams, fromState, fromParams) {
+        LocationChangeListener.onChange(event);
+
         if (toState.name != 'login') {
           $rootScope.reqState = {
             name: toState.name,
@@ -231,6 +237,7 @@ angular.module('openspecimen', [
       });
 
     $rootScope.back = function() {
+      LocationChangeListener.allowChange();
       $window.history.back();
     };
 
