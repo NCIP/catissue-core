@@ -265,7 +265,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
           return;
         }
 
-        var specimensToSave = getSpecimensToSave($scope.specimens, []);
+        var specimensToSave = getSpecimensToSave($scope.cp, $scope.specimens, []);
         if (!!$scope.visit.id && $scope.visit.status == 'Complete') {
           Specimen.save(specimensToSave).then(
             function() {
@@ -320,7 +320,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         return false;
       };
 
-      function getSpecimensToSave(uiSpecimens, visited) {
+      function getSpecimensToSave(cp, uiSpecimens, visited) {
         var result = [];
         angular.forEach(uiSpecimens, function(uiSpecimen) {
           if (visited.indexOf(uiSpecimen) >= 0 || // already visited
@@ -332,8 +332,19 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
           visited.push(uiSpecimen);
 
+          if ((cp.manualSpecLabelEnabled || !uiSpecimen.labelFmt) && !uiSpecimen.label) {
+            if (!uiSpecimen.grpLeader.expanded) {
+              //
+              // Specimen label is not specified when expected but aliquot group is
+              // in collapsed state. Therefore ignore the specimen or do not save
+              //
+              return;
+            }
+          }
+
+
           var specimen = getSpecimenToSave(uiSpecimen);
-          specimen.children = getSpecimensToSave(uiSpecimen.children, visited);
+          specimen.children = getSpecimensToSave(cp, uiSpecimen.children, visited);
           result.push(specimen);
           return result;
         });
