@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .factory('Util', function($rootScope, $timeout) {
+  .factory('Util', function($rootScope, $timeout, $document) {
     function clear(input) {
       input.splice(0, input.length);
     };
@@ -134,6 +134,13 @@ angular.module('openspecimen')
       return dupObjs;
     }
 
+    function hidePopovers() {
+      var popovers = $document.find('div.popover');
+      angular.forEach(popovers, function(popover) {
+        angular.element(popover).scope().$hide();
+      });
+    }
+
     return {
       clear: clear,
 
@@ -145,6 +152,8 @@ angular.module('openspecimen')
 
       splitStr: splitStr,
 
-      getDupObjects: getDupObjects
+      getDupObjects: getDupObjects,
+
+      hidePopovers: hidePopovers
     };
   });

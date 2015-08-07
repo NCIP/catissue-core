@@ -413,6 +413,7 @@
     "bulk_import_aliquots": "Bulk Import Aliquots",
     "spmn_derivatives": "Specimen Derivatives",
     "bulk_import_derivatives": "Bulk Import Derivatives",
+    "new_aliquot_count": "Change no of Aliquots",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",
@@ -442,7 +443,8 @@
       "duplicate_labels": "One or more specimens using same label",
       "insufficient_qty": "Insufficient parent specimen quantity to create aliquots",
       "created_on_lt_parent": "Created on date/time of specimen less than that of parent specimen",
-      "created_on_gt_curr_time": "Created on date/time of specimen greater than current date/time"
+      "created_on_gt_curr_time": "Created on date/time of specimen greater than current date/time",
+      "aliquot_label_mismatch": "There is a mismatch in number of specified labels and aliquots"
     }
   },
 
