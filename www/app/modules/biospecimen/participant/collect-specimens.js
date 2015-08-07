@@ -74,8 +74,11 @@ angular.module('os.biospecimen.participant.collect-specimens',
       };
 
       function initAliquotGrps(specimens) {
-        angular.forEach(specimens, function(specimen) {
-          if (specimen.parent == undefined) {
+        angular.forEach(specimens, function(specimen, $index) {
+          if (specimen.parent == undefined || $index == 0) {
+            //
+            // Either primary specimen or parent of ad-hoc aliquots
+            //
             specimen.showInTree = true;
             createAliquotGrp(specimen);
           }
