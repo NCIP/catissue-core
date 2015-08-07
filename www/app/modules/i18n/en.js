@@ -55,7 +55,7 @@
     "build_version": "Version",
     "build_date": "Build date",
     "build_commit_revision": "Revision",
-    "confirm_navigation": "You have unsaved changes, do you want to continue?",
+    "confirm_navigation": " You've unsaved form changes. If you navigate away from this page without submitting form, the changes will be lost. Are you sure you want to leave this form/page?",
 
     "buttons": {
       "add": "Add",

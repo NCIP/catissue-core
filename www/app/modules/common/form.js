@@ -1,5 +1,5 @@
 angular.module('os.common.form', [])
-  .directive('osFormValidator', function($rootScope) {
+  .directive('osFormValidator', function(LocationChangeListener) {
     return {
       restrict: 'A',
 
@@ -49,11 +49,11 @@ angular.module('os.common.form', [])
         });
 
         scope.$watch(attrs.name + ".$dirty", function(dirty) {
-           if (dirty) {
-             $rootScope.preventNavigation();
-           } else {
-             $rootScope.allowNavigation();
-           }
+          if (dirty) {
+            LocationChangeListener.preventChange();
+          } else {
+            LocationChangeListener.allowChange();
+          }
         });
 
         if (attrs.validator) {
@@ -96,7 +96,6 @@ angular.module('os.common.form', [])
         ctrl.formSubmitted(true);
         if (ctrl.isValidForm()) {
           scope.$eval(submitHandler);
-          $rootScope.allowNavigation();
         } else {
           Alerts.error("common.form_validation_error");
         }

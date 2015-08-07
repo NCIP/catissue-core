@@ -67,7 +67,7 @@ angular.module('openspecimen', [
     $httpProvider.interceptors.push('httpRespInterceptor');
 
     /*ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 9090;*/
+    ApiUrlsProvider.port = 8180;*/
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
@@ -83,7 +83,7 @@ angular.module('openspecimen', [
       return $q.when({});
     }
   })
-  .factory('httpRespInterceptor', function($q, $injector, Alerts, $window) {
+  .factory('httpRespInterceptor', function($q, $injector, $window, Alerts, LocationChangeListener) {
     return {
       request: function(config) {
         return config || $q.when(config);
@@ -94,6 +94,10 @@ angular.module('openspecimen', [
       },
 
       response: function(response) {
+        var httpMethods = ['POST', 'PUT', 'PATCH'];
+        if (response.status == 200 && httpMethods.indexOf(response.config.method) != -1) {
+          LocationChangeListener.allowChange();
+        }
         return response || $q.when(response);
       },
 
@@ -201,7 +205,7 @@ angular.module('openspecimen', [
   .run(
     function(
       $rootScope, $window, $cookieStore, $q, $translate, $translatePartialLoader,
-      ApiUtil, Setting, PluginReg) {
+      LocationChangeListener, ApiUtil, Setting, PluginReg) {
 
     if ($window.localStorage['osAuthToken']) {
       $cookieStore.put('osAuthToken', $window.localStorage['osAuthToken']);
@@ -217,7 +221,7 @@ angular.module('openspecimen', [
 
     $rootScope.$on('$stateChangeStart',
       function(event, toState, toParams, fromState, fromParams) {
-        preventNavigation(event);
+        LocationChangeListener.onChange(event);
 
         if (toState.name != 'login') {
           $rootScope.reqState = {
@@ -233,6 +237,7 @@ angular.module('openspecimen', [
       });
 
     $rootScope.back = function() {
+      LocationChangeListener.allowChange();
       $window.history.back();
     };
 
@@ -240,37 +245,6 @@ angular.module('openspecimen', [
       defaultDomain: 'openspecimen',	
       filterWaitInterval: 500
     };
-
-    $rootScope.allowNavigation = function() {
-      _preventNavigation = false;
-    };
-
-    $rootScope.preventNavigation = function() {
-      _preventNavigation = true;
-    }
-
-    $rootScope.$on('$locationChangeStart',
-      function (event, newUrl, oldUrl) {
-        preventNavigation(event);
-      }
-    );
-
-    // Take care of preventing navigation out of our angular app
-    window.onbeforeunload = function() {
-      if (_preventNavigation) {
-        return $translate.instant('common.confirm_navigation');
-      }
-    }
-
-    var _preventNavigation = false;
-
-    var preventNavigation = function(event) {
-      if (_preventNavigation && !confirm($translate.instant('common.confirm_navigation'))) {
-        event.preventDefault();
-      } else {
-        $rootScope.allowNavigation();
-      }
-    }
 
     var promises = [Setting.getLocale(), Setting.getAppProps()];
     $q.all(promises).then(
