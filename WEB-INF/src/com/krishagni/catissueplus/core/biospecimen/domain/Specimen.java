@@ -746,10 +746,6 @@ public class Specimen extends BaseEntity {
 			parentSpecimen.ensureAliquotQtyOk(
 					SpecimenErrorCode.PARENT_INIT_QTY_LT_ALIQUOT_QTY, 
 					SpecimenErrorCode.PARENT_AVBL_QTY_GT_ACTUAL);
-
-			if (NumUtil.lessThanZero(parentSpecimen.getAvailableQuantity().subtract(initialQuantity))) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_INIT_QTY_LT_ALIQUOT_QTY);
-			}
 		}
  
 	}
@@ -891,18 +887,23 @@ public class Specimen extends BaseEntity {
 	 *    all immediate aliquot child specimens
 	 * 2. Specimen available quantity is less than 
 	 *    initial - sum of all immediate aliquot child specimens initial quantity
+	 * 3. Specimen available quantity is greater than or equals zero 
 	 */
-	private void ensureAliquotQtyOk(SpecimenErrorCode initGtAliquotQty, SpecimenErrorCode avblQtyGtAct) {
+	private void ensureAliquotQtyOk(SpecimenErrorCode initLtAliquotQty, SpecimenErrorCode avblQtyGtAct) {
 		BigDecimal initialQty = getInitialQuantity();
 		BigDecimal aliquotQty = getAliquotQuantity();
 		
 		if (NumUtil.lessThan(initialQty, aliquotQty)) {
-			throw OpenSpecimenException.userError(initGtAliquotQty);
+			throw OpenSpecimenException.userError(initLtAliquotQty);
 		}
 
 		BigDecimal actAvailableQty = initialQty.subtract(aliquotQty);
 		if (NumUtil.greaterThan(getAvailableQuantity(), actAvailableQty)) {
 			throw OpenSpecimenException.userError(avblQtyGtAct);
+		}
+		
+		if (NumUtil.lessThanZero(getAvailableQuantity())) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
 		}
 	}
 			

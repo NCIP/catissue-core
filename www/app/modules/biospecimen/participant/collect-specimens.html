@@ -60,17 +60,17 @@
                 </span>
                 <os-specimen-desc specimen="specimen" show-req-label="true"></os-specimen-desc>
 
-                <span ng-if="specimen.siblingCount">
+                <span ng-if="specimen.aliquotGrp">
                   <div class="btn-group">
                     <button class="btn btn-xs btn-default" ng-if="specimen.expanded"
                       ng-click="collapseAliquotsGroup(specimen)">
                       <span class="fa fa-minus"></span>
-                      <span>({{specimen.siblingCount}})</span>
+                      <span>({{specimen.aliquotGrp.length}})</span>
                     </button>
                     <button class="btn btn-xs btn-default" ng-if="!specimen.expanded"
                       ng-click="expandAliquotsGroup(specimen)">
                       <span class="fa fa-plus"></span>
-                      <span>({{specimen.siblingCount}})</span>
+                      <span>({{specimen.aliquotGrp.length}})</span>
                     </button>
                     <button class="btn btn-xs btn-default" ng-disabled="specimen.expanded"
                        ng-if = "!cp.manualSpecLabelEnabled && !specimen.label && !!specimen.labelFmt"
@@ -82,21 +82,23 @@
                 </span>
               </div>
             </td>
-            <td class="col os-col-20" ng-init="pLabel = specimen.label"
+            <td class="col os-col-20" 
               ng-switch="!cp.manualSpecLabelEnabled && !specimen.label && !!specimen.labelFmt"> 
               <div ng-switch-when="true">
-                Auto
+                <span>Auto</span>
               </div>
               <div ng-switch-default>
-				<span ng-show = "specimen.siblingCount && !specimen.expanded">
-                  <textarea os-md-textarea rows="1" os-md-input ng-model="specimen.aliquotLabels"
-                    ng-blur="assignLabels(specimen, specimen.aliquotLabels)"/>
-                </span>
-                <span ng-hide = "specimen.siblingCount && !specimen.expanded">
-                  <input type="text" os-md-input edit-when=""
-                    name="label" ng-model="specimen.label"
-                    ng-required="!specimen.labelFmt || cp.manualSpecLabelEnabled"
-                    ng-model-options="{updateOn: 'blur', allowInvalid: 'true'}" os-unique-specimen-label>
+                <span ng-switch on="!!specimen.aliquotGrp && !specimen.expanded">
+                  <span ng-switch-when="true">
+                    <textarea os-md-input rows="1" ng-model="specimen.aliquotLabels"
+                      ng-blur="assignLabels(specimen, specimen.aliquotLabels)"/>
+                  </span>
+                  <span ng-switch-default>
+                    <input type="text" os-md-input edit-when="!specimen.pLabel"
+                      name="label" ng-model="specimen.label"
+                      ng-required="!specimen.labelFmt || cp.manualSpecLabelEnabled"
+                      ng-model-options="{updateOn: 'blur', allowInvalid: 'true'}" os-unique-specimen-label>
+                  </span>
                 </span>
                 <div os-field-error field="sform.label"></div>
               </div>
@@ -230,7 +232,7 @@
 
 <script id="aliquot-count.html" type="text/ng-template">
   <div class="form-group">
-    <input type="text" os-md-input  ng-model="specimen.newSiblingCount"
+    <input type="text" os-md-input  ng-model="specimen.newAliquotsCnt"
       placeholder="{{'specimens.new_aliquot_count' | translate}}">
   </div>
   <div>
