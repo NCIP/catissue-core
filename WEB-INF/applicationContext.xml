@@ -248,10 +248,10 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenYocLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.VisitNameToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenTypeLabelToken">
-          <property name="abbreviationMap" ref="abbreviationMap"/>
+          <property name="AbbreviationConfig" ref="AbbreviationConfig"/>
         </bean>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenPathologyStatusToken">
-          <property name="abbreviationMap" ref="abbreviationMap"/>
+          <property name="AbbreviationConfig" ref="AbbreviationConfig"/>
         </bean>
       </list>
     </property>
@@ -647,7 +647,7 @@
     <property name="dataSource" ref="dataSource"/>
   </bean>
 
-  <bean id="abbreviationMap" class="com.krishagni.catissueplus.core.common.AbbreviationConfig">
+  <bean id="abbreviationConfig" class="com.krishagni.catissueplus.core.common.AbbreviationConfig">
     <property name="cfgSvc" ref="cfgSvc"/>
   </bean>
 
