@@ -647,7 +647,7 @@
     <property name="dataSource" ref="dataSource"/>
   </bean>
 
-  <bean id="abbreviationMap" class="com.krishagni.catissueplus.core.common.AbbreviationMap">
+  <bean id="abbreviationMap" class="com.krishagni.catissueplus.core.common.AbbreviationConfig">
     <property name="cfgSvc" ref="cfgSvc"/>
   </bean>
 

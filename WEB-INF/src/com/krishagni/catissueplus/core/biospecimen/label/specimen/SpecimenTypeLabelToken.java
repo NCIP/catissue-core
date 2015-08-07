@@ -1,36 +1,33 @@
 package com.krishagni.catissueplus.core.biospecimen.label.specimen;
 
-import java.util.Map;
+import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.common.AbbreviationMap;
+import com.krishagni.catissueplus.core.common.AbbreviationConfig;
 import com.krishagni.catissueplus.core.common.errors.AbbreviationErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class SpecimenTypeLabelToken extends AbstractSpecimenLabelToken {
 
-    private AbbreviationMap abbreviationMap;
+    private AbbreviationConfig abbreviationConfig;
  
     public SpecimenTypeLabelToken() {
         this.name = "SP_TYPE";
     }
 
-    public void setAbbreviationMap(AbbreviationMap abbreviationMap) {
-        this.abbreviationMap = abbreviationMap;
+    public void setAbbreviationMap(AbbreviationConfig abbreviationConfig) {
+        this.abbreviationConfig = abbreviationConfig;
     }
 
     @Override
     public String getLabel(Specimen specimen) {
-        Map<String, Map<String, String>> allAbbrValuesMap = abbreviationMap.getAbbreviationMap();
-
-        Map<String, String> spTypeMap = allAbbrValuesMap.get(SPECIMEN_TYPE);
-
-        if (!spTypeMap.containsKey(specimen.getSpecimenType())) {
-            throw OpenSpecimenException.userError(
-                AbbreviationErrorCode.ABBR_VALUE_NOT_FOUND,
-                specimen.getSpecimenType(), SPECIMEN_TYPE.replace("_", " "));
+        String abbreviationValue = abbreviationConfig.getAbbreviation(SPECIMEN_TYPE, specimen.getSpecimenType());
+        if (!StringUtils.isBlank(abbreviationValue)) {
+            return abbreviationValue;
         } else {
-            return spTypeMap.get(specimen.getSpecimenType());
+            throw OpenSpecimenException.userError(AbbreviationErrorCode.ABBR_VALUE_NOT_FOUND,
+                specimen.getPathologicalStatus(),
+                SPECIMEN_TYPE.replace("_", " "));
         }
     }
 
