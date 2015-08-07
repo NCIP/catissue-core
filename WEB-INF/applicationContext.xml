@@ -248,10 +248,10 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenYocLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.VisitNameToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenTypeLabelToken">
-          <property name="AbbreviationConfig" ref="AbbreviationConfig"/>
+          <property name="abbreviationConfig" ref="abbreviationConfig"/>
         </bean>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenPathologyStatusToken">
-          <property name="AbbreviationConfig" ref="AbbreviationConfig"/>
+          <property name="abbreviationConfig" ref="abbreviationConfig"/>
         </bean>
       </list>
     </property>

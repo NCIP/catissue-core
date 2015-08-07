@@ -10,7 +10,7 @@ public class SpecimenPathologyStatusToken extends AbstractSpecimenLabelToken {
 
     private AbbreviationConfig abbreviationConfig;
 
-    public void setAbbreviationMap(AbbreviationConfig abbreviationConfig) {
+    public void setAbbreviationConfig(AbbreviationConfig abbreviationConfig) {
         this.abbreviationConfig = abbreviationConfig;
     }
 

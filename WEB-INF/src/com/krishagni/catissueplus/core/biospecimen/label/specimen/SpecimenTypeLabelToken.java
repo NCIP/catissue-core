@@ -15,7 +15,7 @@ public class SpecimenTypeLabelToken extends AbstractSpecimenLabelToken {
         this.name = "SP_TYPE";
     }
 
-    public void setAbbreviationMap(AbbreviationConfig abbreviationConfig) {
+    public void setAbbreviationConfig(AbbreviationConfig abbreviationConfig) {
         this.abbreviationConfig = abbreviationConfig;
     }
 
@@ -26,7 +26,7 @@ public class SpecimenTypeLabelToken extends AbstractSpecimenLabelToken {
             return abbreviationValue;
         } else {
             throw OpenSpecimenException.userError(AbbreviationErrorCode.ABBR_VALUE_NOT_FOUND,
-                specimen.getPathologicalStatus(),
+                specimen.getSpecimenType(),
                 SPECIMEN_TYPE.replace("_", " "));
         }
     }
