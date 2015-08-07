@@ -76,7 +76,7 @@ angular.module('os.common.form', [])
     };
   })
 
-  .directive('osFormSubmit', function($document, $rootScope, Alerts) {
+  .directive('osFormSubmit', function($document, Alerts) {
     function onSubmit(scope, ctrl, submitHandler) {
       var form = ctrl.getForm();
       if (form.$pending) {
