@@ -91,7 +91,8 @@
                 <span ng-switch on="!!specimen.aliquotGrp && !specimen.expanded">
                   <span ng-switch-when="true">
                     <textarea os-md-input rows="1" ng-model="specimen.aliquotLabels"
-                      ng-blur="assignLabels(specimen, specimen.aliquotLabels)"/>
+                      ng-blur="assignLabels(specimen, specimen.aliquotLabels)">
+                    </textarea>
                   </span>
                   <span ng-switch-default>
                     <input type="text" os-md-input edit-when="!specimen.pLabel"
@@ -230,18 +231,19 @@
   </div>
 </script>
 
-<script id="aliquot-count.html" type="text/ng-template">
-  <div class="form-group">
-    <input type="text" os-md-input  ng-model="specimen.newAliquotsCnt"
-      placeholder="{{'specimens.new_aliquot_count' | translate}}">
-  </div>
+<script type="text/ng-template" id="aliquot-count.html">
   <div>
-    <button class="btn btn-xs btn-success" ng-click="updateCount(specimen)">
-      <span translate="common.buttons.ok"> Ok </span>
-    </button>
-    <button class="btn os-btn-text-secondary"
-      ng-click="closePopover()">
-      <span translate="common.buttons.cancel"> Cancel </span>
-    </button>
+    <div class="form-group">
+      <input type="text" os-md-input  ng-model="specimen.newAliquotsCnt"
+        placeholder="{{'specimens.new_aliquot_count' | translate}}">
+    </div>
+    <div>
+      <button class="btn btn-xs btn-success" ng-click="updateCount(specimen)">
+        <span translate="common.buttons.ok"> Ok </span>
+      </button>
+      <button class="btn os-btn-text-secondary" ng-click="closePopover()">
+        <span translate="common.buttons.cancel"> Cancel </span>
+      </button>
+    </div>
   </div>
 </script>
