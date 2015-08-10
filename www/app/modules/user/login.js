@@ -13,6 +13,7 @@ angular.module('openspecimen')
       logout: function() {
         var q = $http.delete(url());
         this.removeToken();
+        $rootScope.loggedIn = false;
         delete $rootScope.reqState;
         delete $rootScope.currentUser;
         return q.then(ApiUtil.processResp);
@@ -40,6 +41,8 @@ angular.module('openspecimen')
       
       if ($location.search().logout) {
         $scope.logout();
+        $state.go("login", {logout: ''});
+        return;
       }
  
       if ($http.defaults.headers.common['X-OS-API-TOKEN']) {

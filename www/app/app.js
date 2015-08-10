@@ -105,9 +105,7 @@ angular.module('openspecimen', [
         if (rejection.status == 0) {
           Alerts.error("common.server_connect_error");
         } else if (rejection.status == 401) {
-          delete $window.localStorage['osAuthToken'];
-          delete $injector.get("$http").defaults.headers.common['X-OS-API-TOKEN'];
-          $injector.get('$state').go('login'); // using injector to get rid of circular dependencies
+          $injector.get('$state').go('login', {logout: 'true'}); // using injector to get rid of circular dependencies
         } else if (rejection.status / 100 == 5) {
           Alerts.error("common.server_error");
         } else if (rejection.status / 100 == 4) {
@@ -204,7 +202,7 @@ angular.module('openspecimen', [
   })
   .run(
     function(
-      $rootScope, $window, $cookieStore, $q, $translate, $translatePartialLoader,
+      $rootScope, $window, $cookieStore, $q,  $state, $translate, $translatePartialLoader,
       LocationChangeListener, ApiUtil, Setting, PluginReg) {
 
     if ($window.localStorage['osAuthToken']) {
@@ -223,11 +221,14 @@ angular.module('openspecimen', [
       function(event, toState, toParams, fromState, fromParams) {
         LocationChangeListener.onChange(event);
 
-        if (toState.name != 'login') {
+        if (toState.parent != 'default') {
           $rootScope.reqState = {
             name: toState.name,
             params: toParams
           };
+        } else if ($rootScope.loggedIn && toState.name != "login") {
+          event.preventDefault();
+          $state.go("home");
         }
 
         $rootScope.stateChangeInfo = {
