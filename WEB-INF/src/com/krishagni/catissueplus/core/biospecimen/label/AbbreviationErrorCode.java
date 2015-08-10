@@ -1,4 +1,4 @@
-package com.krishagni.catissueplus.core.common.errors;
+package com.krishagni.catissueplus.core.biospecimen.label;
 
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 

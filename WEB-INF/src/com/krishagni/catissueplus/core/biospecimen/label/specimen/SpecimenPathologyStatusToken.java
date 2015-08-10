@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.InitializingBean;
 
+import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.common.ConfigParams;
-import com.krishagni.catissueplus.core.common.errors.AbbreviationErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.label.AbbreviationErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;

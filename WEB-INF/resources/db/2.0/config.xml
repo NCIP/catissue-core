@@ -446,7 +446,7 @@
     </sql>
   </changeSet>
   
-  <changeSet author="asamgir" id="Config setting to specimen type abbreviation map">
+  <changeSet author="asamgir" id="Config setting for specimen type abbreviation map">
     <sql>
       call add_cfg_prop(
         'biospecimen', 'specimen_type_abbr_map', 
