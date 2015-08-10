@@ -150,14 +150,32 @@ angular.module('os.biospecimen.participant.collect-specimens',
             function(s) {
               return s.label;
             }
-          ).join(",");
+          ).join(aliquot.aliquotLabels ? "," : "");
         }
+
+        angular.forEach(aliquot.aliquotGrp, function(sibling){
+          if (aliquot != sibling) {
+            setChildrenShowInTree(sibling, sibling.showInTree);
+          }
+        });
+
       }
 
       function setShowInTree(aliquot, showInTree) {
         angular.forEach(aliquot.aliquotGrp, function(sibling) {
           if (aliquot != sibling) {
             sibling.showInTree = showInTree;
+          }
+        });
+      }
+
+      function setChildrenShowInTree(aliquot, showInTree) {
+        angular.forEach(aliquot.children, function(child) {
+          child.showInTree = showInTree;
+          if (!child.children[0].aliquotGrp) {
+            setChildrenShowInTree(child, showInTree);
+          } else {
+            child.children[0].showInTree = showInTree;
           }
         });
       }
@@ -248,6 +266,13 @@ angular.module('os.biospecimen.participant.collect-specimens',
           var grpIdx = grp.indexOf(specimen);
           grp.splice(grpIdx, 1);
         }
+
+        if (specimen.aliquotGrp) {
+          angular.forEach(specimen.aliquotGrp, function(aliquot) {
+            aliquot.selected = false;
+            aliquot.removed = true;
+          });
+        }
       };
 
       $scope.statusChanged = function(specimen) {
@@ -259,6 +284,12 @@ angular.module('os.biospecimen.participant.collect-specimens',
             curr.status = specimen.status;
             curr = curr.parent;
           }
+        }
+
+        if (!specimen.expanded) {
+          angular.forEach(specimen.aliquotGrp, function(sibling) {
+            sibling.status = specimen.status;
+          });
         }
       };
         
@@ -445,5 +476,9 @@ angular.module('os.biospecimen.participant.collect-specimens',
         Util.hidePopovers();
       }
 
+      $scope.closePopover = function() {
+        Util.hidePopovers();
+      }
+      
       init();
     });

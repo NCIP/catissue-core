@@ -398,7 +398,17 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 				
 		if (detail.getChildren() != null) {
+			StorageLocationSummary initialLocation = new StorageLocationSummary();
+			if (CollectionUtils.isNotEmpty(detail.getChildren())) {
+				initialLocation = detail.getChildren().get(0).getStorageLocation();
+			}
+
 			for (SpecimenDetail childDetail : detail.getChildren()) {
+				if (childDetail.getStorageLocation() == null || childDetail.getStorageLocation().id == null) {
+					initialLocation.reference = true;
+					childDetail.setStorageLocation(initialLocation);
+				}
+
 				collectSpecimen(childDetail, specimen);
 			}
 		}

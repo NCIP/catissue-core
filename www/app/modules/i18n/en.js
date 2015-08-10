@@ -414,7 +414,7 @@
     "bulk_import_aliquots": "Bulk Import Aliquots",
     "spmn_derivatives": "Specimen Derivatives",
     "bulk_import_derivatives": "Bulk Import Derivatives",
-    "new_aliquot_count": "Change no of Aliquots",
+    "new_aliquot_count": "Number of aliquots",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",
