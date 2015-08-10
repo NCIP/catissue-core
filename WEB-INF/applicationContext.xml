@@ -382,7 +382,7 @@
     <property name="basenames">
       <list>
         <value>classpath*:com/krishagni/openspecimen/custom/${plugin.custom_module}/**/messages*</value>
-        <value>classpath:errors/messages*</value>
+        <value>classpath*:errors/messages*</value>
       </list>
     </property>
   </bean>
