@@ -2,7 +2,7 @@ package com.krishagni.catissueplus.core.biospecimen;
 
 public class ConfigParams {
 	public static final String MODULE = "biospecimen";
-	
+
 	public static final String PARTICIPANT_UID_PATTERN   = "participant_uid_pattern";
 	
 	public static final String PARTICIPANT_UID_VALIDATOR = "participant_uid_validator";
@@ -22,7 +22,9 @@ public class ConfigParams {
 	public static final String SPR_DEIDENTIFIER          = "spr_deidentifier";
 	
 	public static final String SPR_DIR                   = "spr_dir";
-	
-	public static final String SPECIMEN_TYPE_ABBR_MAP    = "specimen_type_abbr_map";
+
+        public static final String SP_TYPE_ABBREVIATION_MAP  = "specimen_type_abbr_map";
+
+        public static final String SP_PATH_STATUS_ABBREVIATION_MAP = "specimen_path_status_abbr_map";
 
 }
