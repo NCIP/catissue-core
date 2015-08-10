@@ -9,7 +9,13 @@ public class FormCtxtSummary {
 	
 	private Long formId;
 	
+	private Long recordId;
+
+	private Long objectId;
+	
 	private String formCaption;
+	
+	private String formDataJson;
 	
 	private Integer noOfRecords;
 	
@@ -39,12 +45,36 @@ public class FormCtxtSummary {
 		this.formId = formId;
 	}
 
+	public Long getRecordId() {
+		return recordId;
+	}
+
+	public void setRecordId(Long recordId) {
+		this.recordId = recordId;
+	}
+
+	public Long getObjectId() {
+		return objectId;
+	}
+
+	public void setObjectId(Long objectId) {
+		this.objectId = objectId;
+	}
+
 	public String getFormCaption() {
 		return formCaption;
 	}
 
 	public void setFormCaption(String formCaption) {
 		this.formCaption = formCaption;
+	}
+
+	public String getFormDataJson() {
+		return formDataJson;
+	}
+
+	public void setFormDataJson(String formDataJson) {
+		this.formDataJson = formDataJson;
 	}
 
 	public Integer getNoOfRecords() {

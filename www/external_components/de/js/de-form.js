@@ -163,6 +163,8 @@ edu.common.de.Form = function(args) {
   this.dateFormat = args.dateFormat;
 
   this.customHdrs = args.customHdrs || {};
+
+  this.rendered = false;
   
   if (!this.formDef && this.formDefUrl) {
     var url = this.formDefUrl.replace(":formId", this.formId);
@@ -238,6 +240,7 @@ edu.common.de.Form = function(args) {
     var panel = edu.common.de.Utility.panel(caption, formCtrls, 'default');
     this.formDiv.append(panel);
     this.setValue(this.formData);
+    this.rendered = true;
   };
 
   this.setValue = function(formData) {

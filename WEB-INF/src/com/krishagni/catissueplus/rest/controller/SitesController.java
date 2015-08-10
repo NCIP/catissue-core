@@ -24,6 +24,13 @@ import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
+import com.krishagni.catissueplus.core.de.events.FormDataDetail;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
+import com.krishagni.catissueplus.core.de.services.FormService;
+
+import edu.common.dynamicextensions.napi.FormData;
 
 @Controller
 @RequestMapping("/sites")
@@ -31,6 +38,9 @@ public class SitesController {
 
 	@Autowired
 	private SiteService siteService;
+	
+	@Autowired
+	private FormService formSvc;
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
@@ -103,7 +113,8 @@ public class SitesController {
 		RequestEvent<SiteDetail> req = new RequestEvent<SiteDetail>(siteDetail);
 		ResponseEvent<SiteDetail> resp = siteService.createSite(req);
 		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
+		
+		return saveFormdata(siteDetail.getCustomForm(), resp.getPayload());
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
@@ -115,7 +126,8 @@ public class SitesController {
 		RequestEvent<SiteDetail> req = new RequestEvent<SiteDetail>(siteDetail);
 		ResponseEvent<SiteDetail> resp = siteService.updateSite(req);
 		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
+		
+		return saveFormdata(siteDetail.getCustomForm(), resp.getPayload());
 	}
 	
 	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
@@ -152,5 +164,43 @@ public class SitesController {
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
-	}	
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/form")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public FormCtxtSummary getForm(@RequestParam(value="siteId", required = false) Long siteId) {
+		ListEntityFormsOp op = new ListEntityFormsOp();
+		op.setEntityId(siteId == null ? -1L : siteId);
+		op.setEntityType(EntityType.SITE); 
+        
+		RequestEvent<ListEntityFormsOp> req = new RequestEvent<ListEntityFormsOp>(op);
+		ResponseEvent<FormCtxtSummary> resp = formSvc.getEntityForm(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+
+	private SiteDetail saveFormdata(FormCtxtSummary customForm, SiteDetail siteDetail) {
+		if (customForm == null) {
+			return siteDetail;
+		}
+         
+		Long formId = customForm.getFormId();
+		Long recordId = customForm.getRecordId();
+		FormData formData = FormData.fromJson(customForm.getFormDataJson(), customForm.getFormId());
+		formData.getAppData().put("objectId", siteDetail.getId());
+
+		FormDataDetail detail = new FormDataDetail();
+		detail.setFormId(formId);
+		detail.setRecordId(recordId); 
+		detail.setFormData(formData); 
+ 
+		RequestEvent<FormDataDetail> req = new RequestEvent<FormDataDetail>(detail);
+		ResponseEvent<FormDataDetail> resp = formSvc.saveFormData(req);
+		resp.throwErrorIfUnsuccessful();
+
+		return siteDetail;
+	}
+
 }

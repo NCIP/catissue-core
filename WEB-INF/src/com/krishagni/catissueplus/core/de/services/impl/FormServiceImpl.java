@@ -43,6 +43,7 @@ import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
 import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
 import com.krishagni.catissueplus.core.de.events.RemoveFormContextOp;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
 import com.krishagni.catissueplus.core.de.repository.FormDao;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
@@ -294,7 +295,32 @@ public class FormServiceImpl implements FormService {
 		
 		return ResponseEvent.response(result);
 	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<FormCtxtSummary> getEntityForm(RequestEvent<ListEntityFormsOp> req) {
+		try {
+			ListEntityFormsOp opDetail = req.getPayload();
+			String entityType = "";
+			switch (opDetail.getEntityType()) {
+				case SITE:
+					entityType = FormType.SITE_FORMS.getType();
+					break;
 
+				case COLLECTION_PROTOCOL:
+					entityType = FormType.COLLECTION_PROTOCOL_FORMS.getType();
+					break;
+			}
+			
+			return ResponseEvent.response(
+					formDao.getEntityForm(opDetail.getEntityId(), entityType));
+		}  catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+ 
 	@Override
 	@PlusTransactional
 	public ResponseEvent<FormDataDetail> getFormData(RequestEvent<GetFormDataOp> req) {

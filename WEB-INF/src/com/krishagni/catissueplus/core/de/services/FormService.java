@@ -47,6 +47,8 @@ public interface FormService {
 	
 	public ResponseEvent<EntityFormRecords> getEntityFormRecords(RequestEvent<GetEntityFormRecordsOp> req);
 	
+	public ResponseEvent<FormCtxtSummary> getEntityForm(RequestEvent<ListEntityFormsOp> req);
+	
 	public ResponseEvent<FormDataDetail> getFormData(RequestEvent<GetFormDataOp> req);
 	
 	public ResponseEvent<FormDataDetail> saveFormData(RequestEvent<FormDataDetail> req);

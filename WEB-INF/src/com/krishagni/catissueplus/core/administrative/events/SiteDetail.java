@@ -11,6 +11,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
 import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 
 @ListenAttributeChanges
 public class SiteDetail extends AttributeModifiedSupport {
@@ -31,6 +32,8 @@ public class SiteDetail extends AttributeModifiedSupport {
 	private String activityStatus;
 
 	private int cpCount;
+	
+	private FormCtxtSummary customForm;
 
 	public Long getId() {
 		return id;
@@ -102,6 +105,14 @@ public class SiteDetail extends AttributeModifiedSupport {
 
 	public void setCpCount(int cpCount) {
 		this.cpCount = cpCount;
+	}
+
+	public FormCtxtSummary getCustomForm() {
+		return customForm;
+	}
+
+	public void setCustomForm(FormCtxtSummary customForm) {
+		this.customForm = customForm;
 	}
 
 	public static SiteDetail from(Site site) {

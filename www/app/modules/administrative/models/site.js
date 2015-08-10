@@ -1,5 +1,5 @@
 angular.module('os.administrative.models.site', ['os.common.models'])
-  .factory('Site', function(osModel) {
+  .factory('Site', function(osModel, $http) {
     var Site = new osModel('sites');
 
     Site.prototype.getType = function() {
@@ -37,6 +37,14 @@ angular.module('os.administrative.models.site', ['os.common.models'])
 
     Site.list = function(opts) {
       return getSites(opts);
+    }
+
+    Site.getCustomForm = function(siteId) {
+      var url = Site.url() + "form";
+      if (!!siteId) {
+        url += "?siteId=" + siteId;
+      }
+      return $http.get(url).then(function(result) { return result.data; });
     }
 
     function getSites(opts) {

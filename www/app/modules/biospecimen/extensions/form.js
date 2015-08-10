@@ -10,7 +10,7 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
       link: function(scope, element, attrs) {
         var onceRendered = false;
         scope.$watch(attrs.opts, function(opts, oldVal) {
-          if (onceRendered) {
+          if (!opts || onceRendered) {
             return;
           }
 
@@ -43,11 +43,12 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
             onCancel       : opts.onCancel,
             onPrint        : opts.onPrint,
             onDelete       : opts.onDelete,
+            showActionBtns : opts.onSave != undefined,
             customHdrs     : hdrs
           };
 
-          var form = new edu.common.de.Form(args);
-          form.render();
+          scope.form = new edu.common.de.Form(args);
+          scope.form.render();
           onceRendered = true;
           LocationChangeListener.preventChange();
         }, true);

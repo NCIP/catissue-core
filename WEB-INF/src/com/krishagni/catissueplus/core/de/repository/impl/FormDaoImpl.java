@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.core.de.repository.impl;
 
+import static com.krishagni.catissueplus.core.common.util.Utility.numberToLong;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,7 +59,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 				.setString("entityType", entityType)
 				.list();
 		return getForms(rows);
-   }
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -404,6 +406,22 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public FormCtxtSummary getEntityForm(Long entityId, String entityType) {
+		String sql = GET_ENTITY_FORMS;
+		String entityTable = entityType.equals("Site") ? "catissue_site" : "catissue_collection_protocol";
+
+		sql = String.format(sql, entityTable);
+		List<Object[]> rows = sessionFactory.getCurrentSession()
+			.createSQLQuery(sql.toString())
+			.setLong("entityId", entityId)
+			.setString("entityType", entityType)
+			.list();
+       
+		return rows.isEmpty() ? null : getEntityForm(rows.get(0), entityId);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<DependentEntityDetail> getDependentEntities(Long formId) {
 		List<Object[]> rows = sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_DEPENDENT_ENTITIES)
@@ -612,6 +630,17 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		return dependentEntities;
  	}
 	
+	private FormCtxtSummary getEntityForm(Object[] row, Long objectId) {
+		FormCtxtSummary form = new FormCtxtSummary();
+		form.setObjectId(objectId);
+		form.setFormCtxtId(numberToLong(row[0]));
+		form.setFormId(numberToLong(row[1]));
+		form.setFormCaption((String)row[2]);
+		form.setRecordId(numberToLong(row[3]));
+
+		return form;
+	}
+	
 	private static final String FQN = FormContextBean.class.getName();
 	
 	private static final String GET_ALL_FORMS = FQN + ".getAllFormsSummary";
@@ -659,6 +688,19 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	private static final String GET_RECS = FQN + ".getRecords";
 	
 	private static final String GET_DEPENDENT_ENTITIES = FQN + ".getDependentEntities";
+	
+	private static final String GET_ENTITY_FORMS =
+			"select " +
+			"  fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, r.record_id as recordId " +
+			"from " +
+			"  catissue_form_context fc " +
+			"  left join dyextn_containers c on c.identifier = fc.container_id " +
+			"  left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :entityId " +
+			"  left join %s entity on r.object_id = entity.identifier and r.activity_status = 'ACTIVE' "+
+			"where " +
+			"  fc.entity_type = :entityType " +
+			"group by " +
+			"  formCtxtId, formId, formCaption";
 	
 	private static final String GET_CHANGE_LOG_DIGEST_SQL =
 			"select " +

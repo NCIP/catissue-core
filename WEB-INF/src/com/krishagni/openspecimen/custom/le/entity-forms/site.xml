@@ -1,0 +1,40 @@
+<form>
+  <view>
+    <name>Site</name>
+    <caption>Site</caption>
+    <row>
+      <textField>
+        <name>ST2</name>
+        <udn>city</udn>
+        <caption>City</caption>
+        <phi>false</phi>
+        <mandatory>false</mandatory>
+        <toolTip></toolTip>
+        <showLabel>true</showLabel>
+        <showInGrid>false</showInGrid>
+        <width>8</width>
+        <defaultValue></defaultValue>
+        <url>false</url>
+        <password>false</password>
+      </textField>
+    </row>
+    <row>
+      <numberField>
+        <name>NT3</name>
+        <udn>phNumber</udn>
+        <caption>Ph Number</caption>
+        <phi>false</phi>
+        <mandatory>false</mandatory>
+        <toolTip></toolTip>
+        <showLabel>true</showLabel>
+        <showInGrid>false</showInGrid>
+        <width>8</width>
+        <defaultValue></defaultValue>
+        <noOfDigits>6</noOfDigits>
+        <noOfDigitsAfterDecimal>10</noOfDigitsAfterDecimal>
+      </numberField>
+    </row>
+  </view>
+  <skipRules>
+  </skipRules>
+</form>

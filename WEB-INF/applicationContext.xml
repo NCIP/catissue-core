@@ -422,7 +422,7 @@
   </bean>
 
   <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
-    <property name="resourceLoaderPath" value="/WEB-INF/resources/" />
+    <property name="resourceLoaderPath" value="/WEB-INF/resources/,/WEB-INF/classes/com/krishagni/openspecimen/custom/" />
   </bean>
 
   <bean id="templateService" class="com.krishagni.catissueplus.core.common.service.impl.TemplateServiceImpl">
