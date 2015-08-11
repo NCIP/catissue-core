@@ -203,7 +203,7 @@
   "participant": {
     "list": "Participants",
    
-    "id": "MPI / MRN / SSN",
+    "id": "MPI / MRN / NIN",
     "register_participant": "Register Participant",
     "edit_participant": "Edit Participant",
     "reg_date": "Registration Date",
@@ -213,8 +213,8 @@
     "last_name": "Last Name",
     "middle_name": "Middle Name",
     "birth_date": "Birth Date",
-    "uid": "Social Security Number", 
-    "uid_short": "SSN",
+    "uid": "National Identity Number",
+    "uid_short": "NIN",
     "mpi": "Master Patient Index",
     "gender": "Gender",
     "vital_status": "Vital Status",
@@ -250,7 +250,7 @@
     "matching_attr": {
       "empi": "EMPI",
       "pmi": "MRN",
-      "uid": "SSN",
+      "uid": "NIN",
       "lnameAndDob": "Last Name and DOB"
     },
 
