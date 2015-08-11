@@ -21,7 +21,9 @@ public enum DistributionProtocolErrorCode implements ErrorCode {
 	
 	PI_DOES_NOT_BELONG_TO_INST,
 	
-	REF_ENTITY_FOUND;
+	REF_ENTITY_FOUND,
+	
+	INVALID_DISTRIBUTING_SITES;
 
 	@Override
 	public String code() {

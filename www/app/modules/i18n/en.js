@@ -586,6 +586,10 @@
     "irb_id": "IRB ID",
     "description_url": "Description URL",
     "institute": "Institute",
+    "sites": "Sites",
+    "receiving_institute": "Receiving Institute",
+    "receiving_site": "Receiving Site",
+    "distributing_sites": "Distributing Sites",
     "order_report_query": "Order Report Query",
 
     "tooltip": {

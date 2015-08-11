@@ -12,5 +12,26 @@ angular.module('os.administrative.dp.detail', ['os.administrative.models'])
     $scope.deleteDp = function() {
       DeleteUtil.delete($scope.distributionProtocol, {onDeleteState: 'dp-list'});
     }
+    
+    function init() {
+      $scope.distSites = getDistSiteList();
+    }
+    
+    function getDistSiteList() {
+      var siteList = '';
+      angular.forEach(distributionProtocol.distributingSites, function (allSites) {
+        angular.forEach(allSites.sites, function (siteName) {
+          if (siteList === '') {
+            siteList += siteName;
+          }
+          else {
+            siteList += ', ' + siteName;
+          }
+        });
+      });
+      return siteList;
+    };
+    
+    init();
 
   });

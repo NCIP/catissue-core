@@ -39,15 +39,24 @@
       </div>
        
       <div class="form-group">
-        <label class="control-label col-xs-3" translate="dp.institute">Institute</label>
+        <label class="control-label col-xs-3" translate="dp.receiving_institute">Receiving Institute</label>
         <div class="col-xs-6">
           <os-select name="institute" ng-model="distributionProtocol.instituteName" 
-            list="institutes" select-prop="name" display-prop="name" on-select="loadUsers()"
-            placeholder="{{'dp.institute' | translate}}" required></os-select>
+            list="institutes" select-prop="name" display-prop="name" on-select="onInstituteSelect()"
+            placeholder="{{'dp.receiving_institute' | translate}}" required></os-select>
           <div os-field-error field="dpForm.institute"></div>
         </div>
       </div>
-       
+      
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="dp.receiving_site">Receiving Site</label>
+        <div class="col-xs-6">
+          <os-select name="defReceivingSite" ng-model="distributionProtocol.defReceivingSiteName"
+            list="sites" placeholder="{{'dp.receiving_site' | translate}}">
+          </os-select>
+        </div>
+      </div>
+      
       <div class="form-group">
         <label class="control-label col-xs-3" translate="dp.pi">Principle Investigator</label>
         <div class="col-xs-6">
@@ -89,6 +98,56 @@
         </div>
       </div>
      
+      <div class="os-divider"></div>
+      
+      <div class="form-group clearfix">
+        <div class="col-xs-offset-3 col-xs-3">
+          <label class="control-label" translate="dp.institute">Institute</label>
+        </div>
+        <div class="col-xs-3">
+          <label class="control-label" translate="dp.sites">Sites</label>
+        </div>
+      </div>
+      
+      <div class="form-group clearfix" ng-repeat="site in distributionProtocol.distributingSites">
+        <ng-form name="dpSitesForm" os-form-validator="dpSitesForm" parent-validator="dpFormValidator">
+          <div class="col-xs-3 col-xs-offset-3">
+            <ui-select name="distInstituteName" ng-model="site.instituteName"
+              ng-click="addIfLastDistSite($index)" ng-required="!!site.sites[0]"
+              on-select="onDistInstSelect(site.instituteName, $index)">
+              
+              <ui-select-match placeholder="{{'dp.institute' | translate}}">{{$select.selected}}
+              </ui-select-match>
+              
+              <ui-select-choices repeat="institute in distInstList | filter: $select.search">
+                <span ng-bind-html="institute | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+            <div os-field-error field="dpSitesForm.distInstituteName"></div>
+          </div>
+          
+          <div class="col-xs-3">
+            <ui-select multiple name="distSites" ng-model="site.sites"
+              ng-required="!!site.instituteName">
+              
+              <ui-select-match placeholder="{{'dp.sites' | translate}}">{{$item}}
+              </ui-select-match>
+              
+              <ui-select-choices repeat="site in distSiteList[$index] | filter: $select.search">
+                <span ng-bind-html="site | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+            <div os-field-error field="dpSitesForm.distSites"></div>
+          </div>
+        
+          <div class="col-xs-1">
+            <button class="btn btn-default pull-right" ng-click="removeDistSite(site, $index)">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+          </div>
+        </ng-form>
+      </div>
+      
       <div class="os-divider"></div>
 
       <div class="form-group">

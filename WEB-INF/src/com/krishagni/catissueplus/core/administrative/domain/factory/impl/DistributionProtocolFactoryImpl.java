@@ -1,14 +1,22 @@
 
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
+import com.krishagni.catissueplus.core.administrative.events.DistributingSitesDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
@@ -40,13 +48,14 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		setTitle(detail, distributionProtocol, ose);
 		setShortTitle(detail, distributionProtocol, ose);
 		setInstitute(detail, distributionProtocol, ose);
+		setDefReceivingSite(detail, distributionProtocol, ose);
 		setPrincipalInvestigator(detail, distributionProtocol, ose);
 		setIrbId(detail, distributionProtocol, ose);
 		setStartDate(detail, distributionProtocol);
 		setEndDate(detail, distributionProtocol);
 		setActivityStatus(detail, distributionProtocol, ose);
 		setReport(detail, distributionProtocol, ose);
-		
+		setDistributingSites(detail, distributionProtocol, ose);
 		ose.checkAndThrow();
 		return distributionProtocol;
 	}
@@ -90,6 +99,22 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		}
 		
 		distributionProtocol.setInstitute(institute);
+	}
+	
+	private void setDefReceivingSite(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol,
+			OpenSpecimenException ose) {
+		String defReceivingSiteName = detail.getDefReceivingSiteName();
+		if (StringUtils.isBlank(defReceivingSiteName)) {
+			return;
+		}
+		
+		Site defReceivingSite = daoFactory.getSiteDao().getSiteByName(defReceivingSiteName);
+		if (defReceivingSite == null) {
+			ose.addError(SiteErrorCode.NOT_FOUND);
+			return;
+		}
+		
+		distributionProtocol.setDefReceivingSite(defReceivingSite);
 	}
 	
 	private void setPrincipalInvestigator(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
@@ -142,5 +167,33 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		}
 
 		distributionProtocol.setReport(report);
+	}
+		
+	private void setDistributingSites(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol,
+			OpenSpecimenException ose) {
+		if (CollectionUtils.isEmpty(detail.getDistributingSites())) {
+			return;
+		}
+		
+		List<String> distSites = new ArrayList<String>();
+		List<DistributingSitesDetail> sitesDetail = detail.getDistributingSites();
+		for (DistributingSitesDetail site: sitesDetail) {
+			if (StringUtils.isBlank(site.getInstituteName()) ||
+					CollectionUtils.isEmpty(site.getSites())) {
+				ose.addError(DistributionProtocolErrorCode.INVALID_DISTRIBUTING_SITES);
+				return;
+			}
+			distSites.addAll(site.getSites());
+		}
+		
+		List<Site> distributingSites = daoFactory.getSiteDao().getSitesByNames(distSites);
+		if (distributingSites.size() != distSites.size()) {
+			ose.addError(DistributionProtocolErrorCode.INVALID_DISTRIBUTING_SITES);
+			return;
+		}
+		
+		if (CollectionUtils.isNotEmpty(distributingSites)) {
+			distributionProtocol.setDistributingSites(new HashSet<Site>(distributingSites));
+		}
 	}
 }

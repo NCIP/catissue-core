@@ -20,8 +20,13 @@
       </li>
       
       <li class="item">
-        <strong class="key key-sm" translate="dp.institute">Institute</strong>
+        <strong class="key key-sm" translate="dp.receiving_institute">Receiving Institute</strong>
         <span class="value value-md">{{distributionProtocol.instituteName}}</span>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="dp.receiving_site">Receiving Site</strong>
+        <span class="value value-md">{{distributionProtocol.defReceivingSiteName | osNoValue}}</span>
       </li>
 
       <li class="item">
@@ -61,6 +66,11 @@
           <input ng-if="irbEditor.isEditMode()" type="text" ng-model="irbEditor.editValue" class="form-control" 
             placeholder="{{'dp.irb_id' | translate}}" ng-maxlength="255">
         </os-inline-edit>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="dp.distributing_sites">Distributing Sites</strong>
+        <span class="value value-md">{{distSites | osNoValue}}</span>
       </li>
 
     </ul>
