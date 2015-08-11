@@ -261,6 +261,10 @@ public class UserServiceImpl implements UserService {
 			if (user == null) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
+			
+			if (!user.getAuthDomain().getName().equals(DEFAULT_AUTH_DOMAIN)) {
+				return ResponseEvent.userError(UserErrorCode.PASSWD_CHANGE_NOT_ALLOWED);
+			}
 
 			if (currentUser.equals(user)) {
 				if (!user.isValidOldPassword(detail.getOldPassword())) {
