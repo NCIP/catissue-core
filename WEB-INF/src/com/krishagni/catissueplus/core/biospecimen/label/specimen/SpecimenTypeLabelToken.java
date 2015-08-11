@@ -15,70 +15,63 @@ import com.krishagni.catissueplus.core.common.util.CsvMapReader;
 
 public class SpecimenTypeLabelToken extends AbstractSpecimenLabelToken implements InitializingBean, ConfigChangeListener {
 
-    private String defaultAbbrFile;
+	private String defaultAbbrFile;
 
-    private ConfigurationService cfgSvc;
+	private ConfigurationService cfgSvc;
 
-    private Map<String, String> typeAbbrMap = new HashMap<String, String>();
+	private Map<String, String> spmntypeAbbrMap = new HashMap<String, String>();
 
-    public void setDefaultAbbrFile(String defaultAbbrFile) {
-        this.defaultAbbrFile = defaultAbbrFile;
-    }
+	public SpecimenTypeLabelToken() {
+		this.name = "SP_TYPE";
+	}
 
-    public void setCfgSvc(ConfigurationService cfgSvc) {
-        this.cfgSvc = cfgSvc;
-    }
+	public void setDefaultAbbrFile(String defaultAbbrFile) {
+		this.defaultAbbrFile = defaultAbbrFile;
+	}
 
-    @Override
-    public void onConfigChange(String name, String value) {
-        typeAbbrMap = CsvMapReader.getMap(defaultAbbrFile);
+	public void setCfgSvc(ConfigurationService cfgSvc) {
+		this.cfgSvc = cfgSvc;
+	}
 
-        if (!name.equals(ConfigParams.SP_TYPE_ABBREVIATION_MAP)) {
-            return;
-        }
+	@Override
+	public void onConfigChange(String name, String value) {
+		if (!name.equals(ConfigParams.SP_TYPE_ABBREVIATION_MAP)) {
+			return;
+		}
 
-        String customMappingFile = cfgSvc.getStrSetting(
-            ConfigParams.MODULE,
-            ConfigParams.SP_TYPE_ABBREVIATION_MAP,
-            "");
- 
-        typeAbbrMap.putAll(CsvMapReader.getMap(customMappingFile));
-    }
+		setAbbreviationMap();
+	}
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        typeAbbrMap = CsvMapReader.getMap(defaultAbbrFile);
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		setAbbreviationMap();
+		cfgSvc.registerChangeListener(ConfigParams.MODULE, this);
+	}
 
-        String customMappingFile = cfgSvc.getStrSetting(
-            ConfigParams.MODULE,
-            ConfigParams.SP_TYPE_ABBREVIATION_MAP,
-            "");
+	@Override
+	public String getLabel(Specimen specimen) {
+		String label = spmntypeAbbrMap.get(specimen.getSpecimenType());
 
-        typeAbbrMap.putAll(CsvMapReader.getMap(customMappingFile));
-        cfgSvc.registerChangeListener(ConfigParams.MODULE, this);
-    }
+		if(label == null) {
+			throw OpenSpecimenException.userError(AbbreviationErrorCode.ABBR_VALUE_NOT_FOUND,
+					specimen.getSpecimenType(),
+					SPECIMEN_TYPE);
+		}
 
-    public SpecimenTypeLabelToken() {
-        this.name = "SP_TYPE";
-    }
+		return label;
+	}
 
-    @Override
-    public String getLabel(Specimen specimen) {
-        if(!typeAbbrMap.isEmpty()) {
-            if (typeAbbrMap.containsKey(specimen.getSpecimenType())) {
-                 return typeAbbrMap.get(specimen.getSpecimenType());
-             } else {
-                 throw OpenSpecimenException.userError(AbbreviationErrorCode.ABBR_VALUE_NOT_FOUND,
-                     specimen.getSpecimenType(),
-                     SPECIMEN_TYPE.replace("_", " "));
-             }
-        } else {
-            throw OpenSpecimenException.userError(AbbreviationErrorCode.ABBR_VALUE_NOT_FOUND,
-                specimen.getSpecimenType(),
-                SPECIMEN_TYPE.replace("_", " "));
-        }
-    }
+	private void setAbbreviationMap() {
+		spmntypeAbbrMap = CsvMapReader.getMap(defaultAbbrFile);
 
-    private static final String SPECIMEN_TYPE = "Specimen_Type";
+		String customMappingFile = cfgSvc.getStrSetting(
+				ConfigParams.MODULE,
+				ConfigParams.SP_TYPE_ABBREVIATION_MAP,
+				"");
+
+		spmntypeAbbrMap.putAll(CsvMapReader.getMap(customMappingFile));
+	}
+
+	private static final String SPECIMEN_TYPE = "Specimen Type";
 
 }

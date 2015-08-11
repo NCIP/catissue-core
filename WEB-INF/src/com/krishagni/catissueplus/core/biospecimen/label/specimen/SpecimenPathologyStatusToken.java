@@ -14,69 +14,61 @@ import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.CsvMapReader;
 public class SpecimenPathologyStatusToken extends AbstractSpecimenLabelToken implements InitializingBean, ConfigChangeListener {
 
-    private String defaultAbbrFile;
+	private String defaultAbbrFile;
 
-    private ConfigurationService cfgSvc;
+	private ConfigurationService cfgSvc;
 
-    private Map<String, String> spmnPathStatusAbbrMap = new HashMap<String, String>();
+	private Map<String, String> spmnPathStatusAbbrMap = new HashMap<String, String>();
 
-    public void setDefaultAbbrFile(String defaultAbbrFile) {
-        this.defaultAbbrFile = defaultAbbrFile;
-    }
+	public SpecimenPathologyStatusToken() {
+		this.name = "SP_PATH_STATUS";
+	}
 
-    public void setCfgSvc(ConfigurationService cfgSvc) {
-        this.cfgSvc = cfgSvc;
-    }
+	public void setDefaultAbbrFile(String defaultAbbrFile) {
+		this.defaultAbbrFile = defaultAbbrFile;
+	}
 
-    @Override
-    public void onConfigChange(String name, String value) {
-        spmnPathStatusAbbrMap = CsvMapReader.getMap(defaultAbbrFile);
+	public void setCfgSvc(ConfigurationService cfgSvc) {
+		this.cfgSvc = cfgSvc;
+	}
 
-        if (!name.equals(ConfigParams.SP_PATH_STATUS_ABBREVIATION_MAP)) {
-            return;
-        }
+	@Override
+	public void onConfigChange(String name, String value) {
+		if (!name.equals(ConfigParams.SP_PATH_STATUS_ABBREVIATION_MAP)) {
+			return;
+		}
 
-        String customMappingFile = cfgSvc.getStrSetting(
-            ConfigParams.MODULE,
-            ConfigParams.SP_PATH_STATUS_ABBREVIATION_MAP,
-            "");
+		setAbbreviationMap();
+	}
 
-        spmnPathStatusAbbrMap.putAll(CsvMapReader.getMap(customMappingFile));
-    }
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		setAbbreviationMap();
+		cfgSvc.registerChangeListener(ConfigParams.MODULE, this);
+	}
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        spmnPathStatusAbbrMap = CsvMapReader.getMap(defaultAbbrFile);
+	@Override
+	public String getLabel(Specimen specimen) {
+		String label = spmnPathStatusAbbrMap.get(specimen.getPathologicalStatus());
+		if(label == null) {
+			throw OpenSpecimenException.userError(AbbreviationErrorCode.ABBR_VALUE_NOT_FOUND,
+					specimen.getPathologicalStatus(),
+					SPECIMEN_PATH_STATUS);
+		}
 
-        String customMappingFile = cfgSvc.getStrSetting(
-            ConfigParams.MODULE,
-            ConfigParams.SP_PATH_STATUS_ABBREVIATION_MAP,
-            "");
+		return label;
+	}
 
-        spmnPathStatusAbbrMap.putAll(CsvMapReader.getMap(customMappingFile));
-        cfgSvc.registerChangeListener(ConfigParams.MODULE, this);
-    }
+	private void setAbbreviationMap() {
+		spmnPathStatusAbbrMap = CsvMapReader.getMap(defaultAbbrFile);
 
-    public SpecimenPathologyStatusToken() {
-        this.name = "SP_PATH_STATUS";
-    }
+		String customMappingFile = cfgSvc.getStrSetting(
+				ConfigParams.MODULE,
+				ConfigParams.SP_PATH_STATUS_ABBREVIATION_MAP,
+				"");
 
-    @Override
-    public String getLabel(Specimen specimen) {
-        if(!spmnPathStatusAbbrMap.isEmpty()) {
-            if (spmnPathStatusAbbrMap.containsKey(specimen.getPathologicalStatus())) {
-                return spmnPathStatusAbbrMap.get(specimen.getPathologicalStatus());
-            } else {
-                throw OpenSpecimenException.userError(AbbreviationErrorCode.ABBR_VALUE_NOT_FOUND,
-                    specimen.getPathologicalStatus(),
-                    SPECIMEN_PATH_STATUS.replace("_", " "));
-            }
-        } else {
-            throw OpenSpecimenException.userError(AbbreviationErrorCode.ABBR_VALUE_NOT_FOUND,
-                specimen.getPathologicalStatus(),
-                SPECIMEN_PATH_STATUS.replace("_", " "));
-        }
-    }
+		spmnPathStatusAbbrMap.putAll(CsvMapReader.getMap(customMappingFile));
+	}
 
-    private static final String SPECIMEN_PATH_STATUS = "Specimen_Pathology_Status";
+	private static final String SPECIMEN_PATH_STATUS = "Specimen Pathology Status";
 }
