@@ -14,7 +14,22 @@
 
 .ui-select-bootstrap .ui-select-match .btn-link {
   color: #333;
-  opacity: 0.8;
+  opacity: 0.6;
+  font-size: 8px;
+  margin-top: 3px;
+}
+
+.ui-select-bootstrap .ui-select-match .btn-link:hover {
+  opacity: 1;
+}
+
+.ui-select-bootstrap .ui-select-toggle > .caret {
+  color: #333;
+  opacity: 0.6;
+}
+
+.ui-select-bootstrap .ui-select-toggle > .caret:hover {
+  opacity: 1;
 }
 
 .dropdown-menu:before {
@@ -123,7 +138,7 @@ body > .ui-select-bootstrap.open {
 }
 
 .datepicker {
-  z-index: 1050!important;
+  z-index: 1070!important;
 }
 
 .os-offset-form-horizontal {

@@ -8,11 +8,23 @@ angular.module('os.administrative.form',
 
   .config(function($stateProvider) {
     $stateProvider
+      .state('form-root', {
+        abstract: true,
+        template: '<div ui-view></div>',
+        resolve: {
+          security: function($q, $rootScope) {
+            if (!$rootScope.currentUser.admin) {
+              return $q.reject("Access Denied");
+            }
+          }
+        },
+        parent: 'signed-in'
+      })
       .state('form-list', {
         url: '/forms',
         templateUrl: 'modules/administrative/form/list.html',
         controller: 'FormListCtrl',
-        parent: 'signed-in'
+        parent: 'form-root'
       })
       .state('form-addedit', {
         url: '/form-addedit/:formId',
@@ -27,7 +39,7 @@ angular.module('os.administrative.form',
             return new Form();
           }
         },
-        parent: 'signed-in'
+        parent: 'form-root'
       })
   });
 

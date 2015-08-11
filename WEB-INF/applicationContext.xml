@@ -382,7 +382,7 @@
     <property name="basenames">
       <list>
         <value>classpath*:com/krishagni/openspecimen/custom/${plugin.custom_module}/**/messages*</value>
-        <value>classpath:errors/messages*</value>
+        <value>classpath*:errors/messages*</value>
       </list>
     </property>
   </bean>
@@ -422,7 +422,12 @@
   </bean>
 
   <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
-    <property name="resourceLoaderPath" value="/WEB-INF/resources/" />
+    <property name="velocityProperties">
+      <value>
+        resource.loader=class
+        class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+      </value>
+    </property>
   </bean>
 
   <bean id="templateService" class="com.krishagni.catissueplus.core.common.service.impl.TemplateServiceImpl">

@@ -1,8 +1,8 @@
 <div class="os-container-locations">
   <div class="input-spmn-labels" ng-if="container.storeSpecimensEnabled">
-    <div class="input-group">
+    <div class="input-group" os-textarea-input-group>
       <textarea ng-model="input.labels" class="form-control" 
-        placeholder="{{'container.paste_specimen_labels' | translate}}" rows="1" style="resize: none;" 
+        placeholder="{{'container.paste_specimen_labels' | translate}}" rows="2" style="resize: none;" 
         ng-change="showUpdatedMap()" ng-model-options="{debounce: 500}" os-enable-tab>
       </textarea>
       <span class="input-group-btn">

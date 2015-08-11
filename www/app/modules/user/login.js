@@ -13,6 +13,7 @@ angular.module('openspecimen')
       logout: function() {
         var q = $http.delete(url());
         this.removeToken();
+        $rootScope.loggedIn = false;
         delete $rootScope.reqState;
         delete $rootScope.currentUser;
         return q.then(ApiUtil.processResp);
@@ -43,7 +44,12 @@ angular.module('openspecimen')
       }
  
       if ($http.defaults.headers.common['X-OS-API-TOKEN']) {
-        $state.go('home');
+        if ($rootScope.reqState) {
+          $state.go($rootScope.reqState.name, $rootScope.reqState.params);
+        } else {
+          $state.go('home');
+        }
+        return;
       }
 
       loadPvs();

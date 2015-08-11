@@ -7,7 +7,7 @@
       <os-select ng-model="queryLocal.currFilter.op"
         list="queryLocal.currFilter.ops" display-prop="desc"
         placeholder="{{'queries.select_op' | translate}}"
-        on-change="onOpSelect">
+        on-change="onOpSelect" required>
       </os-select>
     </div>
 
@@ -19,7 +19,7 @@
         <div ng-switch-when="select">
           <os-select ng-model="queryLocal.currFilter.value"
             list="queryLocal.currFilter.field.pvs"
-            placeholder="{{'queries.select_cond_value' | translate}}">
+            placeholder="{{'queries.select_cond_value' | translate}}" required>
           </os-select>
         </div>
         <div ng-switch-when="multiSelect">
@@ -30,9 +30,9 @@
           </os-select>
         </div>
         <div ng-switch-when="tagsSelect">
-          <os-tags tags="queryLocal.currFilter.value" 
-            placeholder="{{'queries.specify_multiple_cond' | translate}}">
-          </os-tags>
+          <textarea class="form-control" placeholder="{{'queries.specify_multiple_cond' | translate}}" rows="2"
+            ng-model="queryLocal.currFilter.value" os-enable-tab>
+          </textarea>
         </div>
         <div ng-switch-when="betweenDate" class="clearfix os-query-range-value">
           <input class="form-control" placeholder="{{'queries.range_min' | translate}}" 

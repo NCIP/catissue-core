@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.codec.Base64;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.auth.AuthConfig;
 import com.krishagni.catissueplus.core.auth.domain.AuthErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.AuthToken;
 import com.krishagni.catissueplus.core.auth.domain.LoginAuditLog;
@@ -30,10 +31,8 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserAuthenticationServiceImpl implements UserAuthenticationService {
-	private static final int LOGIN_FAILED_ATTEMPT = 5;
-
 	private DaoFactory daoFactory;
-
+	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -121,13 +120,13 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 				throw OpenSpecimenException.userError(AuthErrorCode.TOKEN_EXPIRED);
 			}
 
-			String ipAddress = tokenDetail.getIpAddress();
-			if (!authToken.getIpAddress().equals(ipAddress)) {
-				throw OpenSpecimenException.userError(AuthErrorCode.IP_ADDRESS_CHANGED);
+			if (AuthConfig.getInstance().isTokenIpVerified()) {
+				if (!tokenDetail.getIpAddress().equals(authToken.getIpAddress())) {
+					throw OpenSpecimenException.userError(AuthErrorCode.IP_ADDRESS_CHANGED);
+				}
 			}
 
 			User user = authToken.getUser();
-
 			if (!Hibernate.isInitialized(user)) {
 				Hibernate.initialize(user);
 			}
@@ -182,9 +181,11 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	}
 	
 	private void checkFailedLoginAttempt(User user, String ipAddress) {
-		List<LoginAuditLog> logs =
-				daoFactory.getAuthDao().getLoginAuditLogsByUser(user.getId(), LOGIN_FAILED_ATTEMPT);
-		if (logs.size() < LOGIN_FAILED_ATTEMPT) {
+		int failedLoginAttempts = AuthConfig.getInstance().getAllowedFailedLoginAttempts();
+		List<LoginAuditLog> logs = daoFactory.getAuthDao()
+			.getLoginAuditLogsByUser(user.getId(), failedLoginAttempts);
+		
+		if (logs.size() < failedLoginAttempts) {
 			return;
 		}
 		
@@ -204,5 +205,4 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	private String decodeToken(String token) {
 		return new String(Base64.decode(token.getBytes()));
 	}
-	
 }

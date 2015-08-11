@@ -83,7 +83,7 @@ angular.module('openspecimen', [
       return $q.when({});
     }
   })
-  .factory('httpRespInterceptor', function($q, $injector, Alerts, $window) {
+  .factory('httpRespInterceptor', function($rootScope, $q, $injector, $window, Alerts, LocationChangeListener) {
     return {
       request: function(config) {
         return config || $q.when(config);
@@ -94,6 +94,10 @@ angular.module('openspecimen', [
       },
 
       response: function(response) {
+        var httpMethods = ['POST', 'PUT', 'PATCH'];
+        if (response.status == 200 && httpMethods.indexOf(response.config.method) != -1) {
+          LocationChangeListener.allowChange();
+        }
         return response || $q.when(response);
       },
 
@@ -101,6 +105,7 @@ angular.module('openspecimen', [
         if (rejection.status == 0) {
           Alerts.error("common.server_connect_error");
         } else if (rejection.status == 401) {
+          $rootScope.loggedIn = false;
           delete $window.localStorage['osAuthToken'];
           delete $injector.get("$http").defaults.headers.common['X-OS-API-TOKEN'];
           $injector.get('$state').go('login'); // using injector to get rid of circular dependencies
@@ -200,8 +205,8 @@ angular.module('openspecimen', [
   })
   .run(
     function(
-      $rootScope, $window, $cookieStore, $q, $translate, $translatePartialLoader, 
-      ApiUtil, Setting, PluginReg) {
+      $rootScope, $window, $cookieStore, $q,  $state, $translate, $translatePartialLoader,
+      LocationChangeListener, ApiUtil, Setting, PluginReg) {
 
     if ($window.localStorage['osAuthToken']) {
       $cookieStore.put('osAuthToken', $window.localStorage['osAuthToken']);
@@ -217,11 +222,20 @@ angular.module('openspecimen', [
 
     $rootScope.$on('$stateChangeStart',
       function(event, toState, toParams, fromState, fromParams) {
-        if (toState.name != 'login') {
+        LocationChangeListener.onChange(event);
+
+        if (toState.parent != 'default') {
           $rootScope.reqState = {
             name: toState.name,
             params: toParams
           };
+        } else if ($rootScope.loggedIn && toState.name != "login") {
+          event.preventDefault();
+          if ($rootScope.reqState) {
+            $state.go($rootScope.reqState.name, $rootScope.reqState.params);
+          } else {
+            $state.go("home");
+          }
         }
 
         $rootScope.stateChangeInfo = {
@@ -231,6 +245,7 @@ angular.module('openspecimen', [
       });
 
     $rootScope.back = function() {
+      LocationChangeListener.allowChange();
       $window.history.back();
     };
 

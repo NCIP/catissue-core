@@ -96,15 +96,23 @@
       <return-scalar column="specimenCnt" type="long"/>
 
       select 
-        cp.identifier as cpId, count(distinct cpr.identifier) as participantCnt, count(distinct sp.identifier) as specimenCnt 
+        cp.identifier as cpId, count(distinct cpr.identifier) as participantCnt, 
+        count(distinct sp.identifier) as specimenCnt 
       from 
         catissue_collection_protocol cp 
-        left join catissue_coll_prot_reg cpr on cpr.collection_protocol_id = cp.identifier and cpr.activity_status = 'Active'
-        left join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = cpr.identifier 
-        left join catissue_specimen sp on sp.specimen_collection_group_id = scg.identifier and sp.collection_status = 'Collected'
+        left join catissue_coll_prot_reg cpr 
+          on cpr.collection_protocol_id = cp.identifier and 
+             cpr.activity_status != 'Disabled'
+        left join catissue_specimen_coll_group scg 
+          on scg.collection_protocol_reg_id = cpr.identifier and 
+             scg.activity_status != 'Disabled'
+        left join catissue_specimen sp 
+          on sp.specimen_collection_group_id = scg.identifier and 
+             sp.collection_status = 'Collected' and 
+             sp.activity_status != 'Disabled'
       where
         cp.identifier in (:cpIds) and
-        cp.activity_status = 'Active'
+        cp.activity_status != 'Disabled'
       group by 
         cp.identifier
     </sql-query>

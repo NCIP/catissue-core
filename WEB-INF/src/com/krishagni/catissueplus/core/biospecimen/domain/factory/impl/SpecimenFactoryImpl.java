@@ -446,7 +446,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			}
 		}
 				
-		if (qty == null || NumUtil.lessThanEqualsZero(qty)) {
+		if (!Specimen.isMissed(detail.getStatus()) && (qty == null || NumUtil.lessThanEqualsZero(qty))) {
 			ose.addError(SpecimenErrorCode.INVALID_QTY);
 			return;
 		}
@@ -460,7 +460,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			availableQty = specimen.getInitialQuantity();
 		}
 		
-		if (availableQty.compareTo(specimen.getInitialQuantity()) > 0 || availableQty.compareTo(BigDecimal.ZERO) < 0) {
+		if (!Specimen.isMissed(detail.getStatus()) &&
+			(NumUtil.greaterThan(availableQty, specimen.getInitialQuantity()) || NumUtil.lessThanZero(availableQty))){
 			ose.addError(SpecimenErrorCode.INVALID_QTY);
 			return;
 		}
@@ -573,7 +574,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;
 		}
 
-		if (specimen.isPrimary()) {
+		if (specimen.isPrimary() && detail.getReceivedEvent() != null) {
 			specimen.setCreatedOn(detail.getReceivedEvent().getTime());
 		} else if (detail.getCreatedOn() != null) {
 			specimen.setCreatedOn(detail.getCreatedOn());
@@ -660,10 +661,15 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		
 		StorageContainerPosition position = null;
 		String posOne = location.positionX, posTwo = location.positionY;
-		if (StringUtils.isNotBlank(posOne) && StringUtils.isNotBlank(posTwo)) {
+		if (StringUtils.isNotBlank(posOne) && StringUtils.isNotBlank(posTwo) && !location.reference) {
 			if (container.canSpecimenOccupyPosition(specimen.getId(), posOne, posTwo)) {
 				position = container.createPosition(posOne, posTwo);
 			} else {
+				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
+			}
+		} else if (location.reference) {
+			position = container.nextAvailablePosition(location);
+			if (position == null) {
 				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
 			}
 		} else {

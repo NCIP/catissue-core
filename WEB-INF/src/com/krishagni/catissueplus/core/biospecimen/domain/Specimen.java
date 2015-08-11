@@ -887,18 +887,23 @@ public class Specimen extends BaseEntity {
 	 *    all immediate aliquot child specimens
 	 * 2. Specimen available quantity is less than 
 	 *    initial - sum of all immediate aliquot child specimens initial quantity
+	 * 3. Specimen available quantity is greater than or equals zero 
 	 */
-	private void ensureAliquotQtyOk(SpecimenErrorCode initGtAliquotQty, SpecimenErrorCode avblQtyGtAct) {
+	private void ensureAliquotQtyOk(SpecimenErrorCode initLtAliquotQty, SpecimenErrorCode avblQtyGtAct) {
 		BigDecimal initialQty = getInitialQuantity();
 		BigDecimal aliquotQty = getAliquotQuantity();
 		
 		if (NumUtil.lessThan(initialQty, aliquotQty)) {
-			throw OpenSpecimenException.userError(initGtAliquotQty);
+			throw OpenSpecimenException.userError(initLtAliquotQty);
 		}
 
 		BigDecimal actAvailableQty = initialQty.subtract(aliquotQty);
 		if (NumUtil.greaterThan(getAvailableQuantity(), actAvailableQty)) {
 			throw OpenSpecimenException.userError(avblQtyGtAct);
+		}
+		
+		if (NumUtil.lessThanZero(getAvailableQuantity())) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
 		}
 	}
 			
@@ -943,7 +948,7 @@ public class Specimen extends BaseEntity {
 			return false;
 		}
 		
-		return p1.getPosOneOrdinal() == p2.getPosOneOrdinal() && 
+		return p1.getPosOneOrdinal() == p2.getPosOneOrdinal() &&
 				p1.getPosTwoOrdinal() == p2.getPosTwoOrdinal();
 	}
 	

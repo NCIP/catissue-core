@@ -12,7 +12,7 @@ angular.module('openspecimen')
       $http.post(ApiUrls.getBaseUrl() + 'sgh/trids', $scope.regReq).then(
         function(result) {
           Alerts.success("custom_sgh.trid_printed");
-          $state.go('cp-list');  
+          $state.go('home');  
         }
       );
     }

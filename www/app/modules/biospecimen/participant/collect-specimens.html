@@ -1,7 +1,7 @@
-<div> 
+<div>
   <div os-page-header>
     <ul os-breadcrumbs>
-      <li> 
+      <li>
         <a ui-sref="cp-detail.overview({cpId: cpr.cpId})">
           {{cpr.cpTitle}}
         </a> 
@@ -28,10 +28,10 @@
       <table class="os-table os-table-fixed os-table-tree bulk-edit os-border os-table-muted-hdr">
         <thead class="os-table-head">
           <tr class="row">
-            <th class="col os-col-35" translate="specimens.description">Description</th>
-            <th class="col os-col-10" translate="specimens.label">Label</th>
+            <th class="col os-col-30" translate="specimens.description">Description</th>
+            <th class="col os-col-20" translate="specimens.label">Label</th>
             <th class="col os-col-10" translate="specimens.qty">Quantity</th>
-            <th class="col os-col-30">
+            <th class="col os-col-25">
               <span translate="specimens.location">Location</span>
               <a ng-click="applyFirstLocationToAll()"style="font-weight:normal">
                 (<span translate="specimens.apply_first_loc_to_all">Apply First Location To All</span>)
@@ -42,8 +42,8 @@
           </tr>
         </thead>
         <tbody class="os-table-body">
-          <tr class="row" ng-repeat="specimen in specimens | openedTreeNodes" ng-form="sform">
-            <td class="col os-col-35">
+          <tr class="row" ng-repeat="specimen in specimens | openedTreeNodes" ng-form="sform" ng-if="specimen.showInTree">
+            <td class="col os-col-30">
               <div style="padding-left: {{specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16}}px">
                 <a ng-if="specimen.hasChildren && specimen.isOpened" 
                   class="fa fa-chevron-circle-down"
@@ -53,22 +53,54 @@
                   class="fa fa-chevron-circle-right"
                   ng-click="openSpecimenNode(specimen)">
                 </a>
-                <span class="fa fa-circle" 
+                <span class="fa fa-circle"
                   ng-class="{'os-status-collected': specimen.existingStatus == 'Collected',
                              'os-status-pending': specimen.existingStatus == 'Pending' || !specimen.existingStatus,
                              'os-status-not-collected': specimen.existingStatus == 'Missed Collection'}">
                 </span>
                 <os-specimen-desc specimen="specimen" show-req-label="true"></os-specimen-desc>
+
+                <span ng-if="specimen.aliquotGrp">
+                  <div class="btn-group">
+                    <button class="btn btn-xs btn-default" ng-if="specimen.expanded"
+                      ng-click="collapseAliquotsGroup(specimen)">
+                      <span class="fa fa-minus"></span>
+                      <span>({{specimen.aliquotGrp.length}})</span>
+                    </button>
+                    <button class="btn btn-xs btn-default" ng-if="!specimen.expanded"
+                      ng-click="expandAliquotsGroup(specimen)">
+                      <span class="fa fa-plus"></span>
+                      <span>({{specimen.aliquotGrp.length}})</span>
+                    </button>
+                    <button class="btn btn-xs btn-default" ng-disabled="specimen.expanded"
+                       ng-if = "!cp.manualSpecLabelEnabled && !specimen.label && !!specimen.labelFmt"
+                       bs-popover trigger="click" data-container="body"
+                       placement="bottom" content-template="aliquot-count.html">
+                       <span class="fa fa-ellipsis-h"></span>
+                    </button>
+                  </div>
+                </span>
               </div>
             </td>
-            <td class="col os-col-10" ng-init="pLabel = specimen.label"
+            <td class="col os-col-20" 
               ng-switch="!cp.manualSpecLabelEnabled && !specimen.label && !!specimen.labelFmt"> 
-              <span ng-switch-when="true">Auto</span>
+              <div ng-switch-when="true">
+                <span>Auto</span>
+              </div>
               <div ng-switch-default>
-                <input type="text" os-md-input edit-when="!pLabel"
-                  name="label" ng-model="specimen.label" 
-                  ng-required="!specimen.labelFmt || cp.manualSpecLabelEnabled"
-                  ng-model-options="{updateOn: 'blur', allowInvalid: 'true'}" os-unique-specimen-label>
+                <span ng-switch on="!!specimen.aliquotGrp && !specimen.expanded">
+                  <span ng-switch-when="true">
+                    <textarea os-md-input rows="1" ng-model="specimen.aliquotLabels"
+                      ng-blur="assignLabels(specimen, specimen.aliquotLabels)">
+                    </textarea>
+                  </span>
+                  <span ng-switch-default>
+                    <input type="text" os-md-input edit-when="!specimen.pLabel"
+                      name="label" ng-model="specimen.label"
+                      ng-required="!specimen.labelFmt || cp.manualSpecLabelEnabled"
+                      ng-model-options="{updateOn: 'blur', allowInvalid: 'true'}" os-unique-specimen-label>
+                  </span>
+                </span>
                 <div os-field-error field="sform.label"></div>
               </div>
             </td>
@@ -76,7 +108,7 @@
               <div class="os-input-addon-grp">
                 <input type="text" os-md-input edit-when="specimen.existingStatus != 'Collected'"
                   name="qty" ng-model="specimen.initialQty" ng-required="specimen.status == 'Collected'"
-                  ng-model-options="{allowInvalid: 'true'}">
+                  ng-model-options="{allowInvalid: 'true'}" ng-change="changeQuantity(specimen, specimen.initialQty)">
                 <div class="os-input-addon-right os-md-input-addon">
                   <os-specimen-qty-unit specimen-class="specimen.specimenClass" type="specimen.type">
                   </os-specimen-qty-unit>
@@ -84,14 +116,14 @@
               </div>
               <div os-field-error field="sform.qty"></div>
             </td>
-            <td class="col os-col-30" style="overflow: visible;">
+            <td class="col os-col-25" style="overflow: visible;">
               <os-specimen-position os-md-input edit-when="specimen.existingStatus != 'Collected'"
                 specimen="specimen" cp-id="cpr.cpId">
               </os-specimen-position>
             </td>
             <td class="col os-col-10" style="overflow: visible;">
               <os-select os-md-input edit-when="specimen.existingStatus != 'Collected'" list="specimenStatuses" 
-                ng-model="specimen.status" on-change="statusChanged(specimen)"> 
+                ng-model="specimen.status" on-change="statusChanged(specimen)" required> 
               </os-select>
             </td>
             <td class="col os-col-5">
@@ -195,6 +227,23 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="aliquot-count.html">
+  <div>
+    <div class="form-group">
+      <input type="text" os-md-input  ng-model="specimen.newAliquotsCnt"
+        placeholder="{{'specimens.new_aliquot_count' | translate}}">
+    </div>
+    <div>
+      <button class="btn btn-xs btn-success" ng-click="updateCount(specimen)">
+        <span translate="common.buttons.ok"> Ok </span>
+      </button>
+      <button class="btn os-btn-text-secondary" ng-click="closePopover()">
+        <span translate="common.buttons.cancel"> Cancel </span>
+      </button>
     </div>
   </div>
 </script>

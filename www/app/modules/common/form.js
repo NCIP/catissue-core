@@ -1,5 +1,5 @@
 angular.module('os.common.form', [])
-  .directive('osFormValidator', function() {
+  .directive('osFormValidator', function(LocationChangeListener) {
     return {
       restrict: 'A',
 
@@ -46,6 +46,14 @@ angular.module('os.common.form', [])
       link: function(scope, element, attrs, controller) {
         scope.$watch(attrs.osFormValidator, function(form) {
           controller.setForm(form);
+        });
+
+        scope.$watch(attrs.name + ".$dirty", function(dirty) {
+          if (dirty) {
+            LocationChangeListener.preventChange();
+          } else {
+            LocationChangeListener.allowChange();
+          }
         });
 
         if (attrs.validator) {

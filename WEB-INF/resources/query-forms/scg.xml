@@ -92,6 +92,18 @@
           <option><value>Pending</value></option>
           <option><value>Complete</value></option>
           <option><value>Incomplete</value></option>
+          <option><value>Missed Collection</value></option>
+        </options>
+      </dropDown>
+    </row>
+    <row>
+      <dropDown>
+        <name>missedReason</name>
+        <udn>missedReason</udn>
+        <caption>#getMessage("visit_missed_reason")</caption>
+        <column>MISSED_REASON</column>
+        <options>
+          <sql>select value from catissue_permissible_value where PUBLIC_ID = 'missed_visit_reason' order by value</sql>
         </options>
       </dropDown>
     </row>

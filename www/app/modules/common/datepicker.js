@@ -28,7 +28,7 @@ angular.module('openspecimen')
       }
 
       scope.$watch(attrs.ngModel, function(val) {
-        parseDate(val);
+        $timeout(function() { parseDate(val); });
       });
 
       ngModel.$formatters.unshift(function (value) {

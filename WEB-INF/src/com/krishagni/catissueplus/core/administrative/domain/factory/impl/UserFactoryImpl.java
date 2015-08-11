@@ -2,7 +2,6 @@
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 

@@ -12,7 +12,7 @@
                   Hello $order.requester.firstName $order.requester.lastName,
                   <br><br>
                   Your order "$order.name" has been processed.
-                  <br>
+                  <br><br>
                   A brief description of the order:
                   <br><br>
                 </p>

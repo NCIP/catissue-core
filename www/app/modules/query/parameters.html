@@ -27,14 +27,14 @@
               <os-select id="operator" ng-model="filter.newOp"
                 placeholder="{{'queries.select_op' | translate}}"
                 list="filter.field.ops" display-prop="desc" 
-                on-change="onOpSelect(filter)">
+                on-change="onOpSelect(filter)" append-to-body="true" required>
               </os-select>
             </td>
             <td class="col-xs-3" ng-if="filter.expr">
               <os-select id="operator" ng-model="filter.newOp"
                 placeholder="{{'queries.select_op' | translate}}"
                 options="filter.tObj.ops" display-prop="desc"
-                on-change="onOpSelect(filter)">
+                on-change="onOpSelect(filter)" append-to-body="true" required>
               </os-select>
             </td>
             <td class="col-xs-4">
@@ -43,19 +43,19 @@
                   <div ng-switch-when="select">
                     <os-select ng-model="filter.value"
                       placeholder="{{'queries.select_cond_value' | translate}}"
-                      list="filter.field.pvs">
+                      list="filter.field.pvs" append-to-body="true" required>
                     </os-select>
                   </div>
                   <div ng-switch-when="multiSelect">
                     <os-select multiple ng-model="filter.value"
                       placeholder="{{'queries.select_cond_values' | translate}}"
-                      list="filter.field.pvs">
+                      list="filter.field.pvs" append-to-body="true">
                     </os-select>
                   </div>
                   <div ng-switch-when="tagsSelect">
-                    <os-tags tags="filter.value" 
-                      placeholder="{{'queries.specify_multiple_cond' | translate}}">
-                    </os-tags>
+                    <textarea class="form-control" placeholder="{{'queries.specify_multiple_cond' | translate}}" 
+                      rows="2" ng-model="filter.value" os-enable-tab>
+                    </textarea>
                   </div>
                   <div ng-switch-when="betweenDate" class="clearfix os-query-range-value">
                     <input class="pull-left form-control" placeholder="{{'queries.range_min' | translate}}"

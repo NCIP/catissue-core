@@ -22,6 +22,8 @@ public interface ConfigurationService {
 
 	public String getStrSetting(String module, String name, String ... defValue);
 	
+	public Boolean getBoolSetting(String module, String name, Boolean ... defValue);
+	
 	public void reload();
 	
 	public void registerChangeListener(String module, ConfigChangeListener callback);

@@ -1,5 +1,5 @@
 angular.module('os.query.addeditfilter', ['os.query.models'])
-  .controller('QueryAddEditFilterCtrl', function($scope, QueryUtil) {
+  .controller('QueryAddEditFilterCtrl', function($scope, QueryUtil, Util) {
     $scope.onOpSelect = function() {
       QueryUtil.onOpSelect($scope.queryLocal.currFilter);
     };
@@ -30,6 +30,10 @@ angular.module('os.query.addeditfilter', ['os.query.models'])
       var ql = $scope.queryLocal;
       ql.filterId++;
       var filter = angular.extend({form: $scope.openForm, id: ql.filterId}, ql.currFilter);
+      if (filter.valueType == 'tagsSelect') {
+        filter.value = Util.splitStr(filter.value, /,|\t|\n/);
+      }
+
       if (ql.filters.length > 0) {
         ql.exprNodes.push({type: 'op', value: QueryUtil.getOp('and').name});
       }
@@ -49,6 +53,11 @@ angular.module('os.query.addeditfilter', ['os.query.models'])
       var ql = $scope.queryLocal;
       ql.currFilter = angular.copy(filter);
       ql.currFilter.unaryOp = QueryUtil.isUnaryOp(filter.op);
+      ql.currFilter.valueType = QueryUtil.getValueType(filter.field, filter.op);
+      if (ql.currFilter.valueType == 'tagsSelect') {
+        ql.currFilter.value = QueryUtil.getStringifiedValue(ql.currFilter.value);
+      }
+
       if (!filter.expr) {
         ql.currFilter.ops = QueryUtil.getAllowedOps(filter.field);
       }
@@ -59,6 +68,10 @@ angular.module('os.query.addeditfilter', ['os.query.models'])
 
       var ql = $scope.queryLocal;
       var filter = angular.extend({}, ql.currFilter);
+      if (filter.valueType == 'tagsSelect') {
+        filter.value = Util.splitStr(filter.value, /,|\t|\n/);
+      }
+
       for (var i = 0; i < ql.filters.length; ++i) {
         if (filter.id == ql.filters[i].id) {
           ql.filters[i] = filter;

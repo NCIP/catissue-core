@@ -20,8 +20,12 @@
           <i>{{filter.field.caption}} </i>
           <b>{{filter.op.desc}}</b> 
 
-          <i ng-if="filter.op.name == 'between'">{{filter.value[0]}} and {{filter.value[1]}}</i>
-          <i ng-if="filter.op.name != 'between'">{{filter.value}}</i>
+          <ng-switch on="filter.op.name">
+            <i ng-switch-when="between">{{filter.value[0]}} and {{filter.value[1]}}</i>
+            <i ng-switch-when="qin">["{{filter.value.join('", "')}}"]</i>
+            <i ng-switch-when="not_in">["{{filter.value.join('", "')}}"]</i>
+            <i ng-switch-default>{{filter.value}}</i>
+          </ng-switch>
         </div>
         <div ng-switch-when="false"> 
           <i>{{filter.desc}}</i>

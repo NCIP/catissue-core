@@ -35,10 +35,10 @@ angular.module('os.biospecimen.participant.collect-specimens',
   })
   .controller('CollectSpecimensCtrl', 
     function(
-      $scope, $translate, $state,
+      $scope, $translate, $state, $document,
       cpr, visit, 
       Visit, Specimen, PvManager, 
-      CollectSpecimensSvc, Container, Alerts) {
+      CollectSpecimensSvc, Container, Alerts, Util) {
 
       function init() {
         $scope.specimens = CollectSpecimensSvc.getSpecimens().map(
@@ -52,6 +52,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
               specimen.selected = true;
             }
 
+            specimen.pLabel = !!specimen.label;
             return specimen;
           }
         );
@@ -69,7 +70,156 @@ angular.module('os.biospecimen.participant.collect-specimens',
         };
 
         loadPvs();
+        initAliquotGrps($scope.specimens);
       };
+
+      function initAliquotGrps(specimens) {
+        angular.forEach(specimens, function(specimen, $index) {
+          if (specimen.parent == undefined || $index == 0) {
+            //
+            // Either primary specimen or parent of ad-hoc aliquots
+            //
+            specimen.showInTree = true;
+            createAliquotGrp(specimen);
+          }
+        });
+
+        // Logic of show/hide of aliquots and in the tree
+        angular.forEach(specimens, function(specimen) {
+          if (!!specimen.grpLeader) { 
+            // A aliquot specimen's show/hide is determined by group leader
+            return;
+          }
+
+          if (specimen.aliquotGrp || specimen.lineage != 'Aliquot') {
+            specimen.showInTree = true;
+          }
+
+          if (!specimen.aliquotGrp) {
+            return;
+          }
+
+          var expandGrp = specimen.aliquotGrp.some(
+            function(sibling) {
+              return sibling.children.length > 0 || specimen.initialQty != sibling.initialQty;
+            }
+          );
+
+          if (expandGrp) {
+            expandOrCollapseAliquotsGrp(specimen, expandGrp);
+          }
+        });
+      }
+
+      function createAliquotGrp(specimen) {
+        if (!specimen.children || specimen.children.length == 0) {
+          return;
+        }
+
+        var aliquotGrp = [];
+        var grpLeader = undefined;
+        angular.forEach(specimen.children, function(child) {
+          if (child.lineage == 'Aliquot' && child.selected && child.existingStatus != 'Collected') {
+            aliquotGrp.push(child);
+
+            if (!grpLeader) {
+              grpLeader = child;
+            } else {
+              child.grpLeader = grpLeader;
+            }
+          }
+
+          createAliquotGrp(child);
+        });
+
+        if (grpLeader) {
+          grpLeader.aliquotGrp = aliquotGrp;
+          listenContainerChanges(grpLeader);
+        }
+      }
+
+      function expandOrCollapseAliquotsGrp(aliquot, expandOrCollapse) {
+        if (!aliquot.aliquotGrp) {
+          return;
+        }
+
+        setShowInTree(aliquot, expandOrCollapse)
+        aliquot.expanded = expandOrCollapse;
+        if (!aliquot.expanded) {
+          aliquot.aliquotLabels = aliquot.aliquotGrp.map(
+            function(s) {
+              return s.label;
+            }
+          ).join(aliquot.aliquotLabels ? "," : "");
+        }
+
+        angular.forEach(aliquot.aliquotGrp, function(sibling){
+          if (aliquot != sibling) {
+            setChildrenShowInTree(sibling, sibling.showInTree);
+          }
+        });
+
+      }
+
+      function setShowInTree(aliquot, showInTree) {
+        angular.forEach(aliquot.aliquotGrp, function(sibling) {
+          if (aliquot != sibling) {
+            sibling.showInTree = showInTree;
+          }
+        });
+      }
+
+      function setChildrenShowInTree(aliquot, showInTree) {
+        angular.forEach(aliquot.children, function(child) {
+          child.showInTree = showInTree;
+          if (!child.children[0].aliquotGrp) {
+            setChildrenShowInTree(child, showInTree);
+          } else {
+            child.children[0].showInTree = showInTree;
+          }
+        });
+      }
+
+      function addAliquotsToGrp(grpLeader, newSpmnsCnt) {
+        var lastSpmn = grpLeader.aliquotGrp[grpLeader.aliquotGrp.length - 1];
+        
+        var newSpmns = [];
+        var pos = $scope.specimens.indexOf(lastSpmn);
+        for (var i = 0; i < newSpmnsCnt; ++i) {
+          var newSpmn = angular.copy(lastSpmn);
+          grpLeader.aliquotGrp.push(newSpmn);
+          grpLeader.parent.children.push(newSpmn);
+          $scope.specimens.splice(pos + i + 1, 0, newSpmn);
+        }
+      }
+
+      function removeAliquotsFromGrp(grpLeader, count) {
+        var grp = grpLeader.aliquotGrp;
+        for (var i = grp.length - 1; i >= 0 && count >= 1; --i, --count) {
+          $scope.remove(grp[i]);
+        }
+      }
+
+      function listenContainerChanges(specimen) {
+        $scope.$watch(
+          function() {
+            return specimen.storageLocation;
+          },
+          function() {
+            if (specimen.expanded) {
+              return;
+            }
+
+            angular.forEach(specimen.aliquotGrp, function(aliquot, $index) {
+              if ($index == 0) {
+                return;
+              }
+
+              aliquot.storageLocation = {name: specimen.storageLocation.name};
+            });
+          }
+        );
+      }
 
       function loadPvs() {
         $scope.notSpecified = $translate.instant('pvs.not_specified');
@@ -107,7 +257,21 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
         for (var i = idx + descCnt; i >= idx; --i) {
           $scope.specimens[i].selected = false;
+          $scope.specimens[i].removed = true;
           $scope.specimens.splice(i, 1);
+        }
+
+        if (specimen.grpLeader) {
+          var grp = specimen.grpLeader.aliquotGrp;
+          var grpIdx = grp.indexOf(specimen);
+          grp.splice(grpIdx, 1);
+        }
+
+        if (specimen.aliquotGrp) {
+          angular.forEach(specimen.aliquotGrp, function(aliquot) {
+            aliquot.selected = false;
+            aliquot.removed = true;
+          });
         }
       };
 
@@ -121,6 +285,12 @@ angular.module('os.biospecimen.participant.collect-specimens',
             curr = curr.parent;
           }
         }
+
+        if (!specimen.expanded) {
+          angular.forEach(specimen.aliquotGrp, function(sibling) {
+            sibling.status = specimen.status;
+          });
+        }
       };
         
       $scope.saveSpecimens = function() {
@@ -129,7 +299,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
           return;
         }
 
-        var specimensToSave = getSpecimensToSave($scope.specimens, []);
+        var specimensToSave = getSpecimensToSave($scope.cp, $scope.specimens, []);
         if (!!$scope.visit.id && $scope.visit.status == 'Complete') {
           Specimen.save(specimensToSave).then(
             function() {
@@ -154,6 +324,10 @@ angular.module('os.biospecimen.participant.collect-specimens',
       function descendentCount(specimen) { 
         var count = 0;
         for (var i = 0; i < specimen.children.length; ++i) {
+          if (specimen.children[i].removed) {
+            continue;
+          }
+
           count += 1 + descendentCount(specimen.children[i]);
         }
 
@@ -180,7 +354,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         return false;
       };
 
-      function getSpecimensToSave(uiSpecimens, visited) {
+      function getSpecimensToSave(cp, uiSpecimens, visited) {
         var result = [];
         angular.forEach(uiSpecimens, function(uiSpecimen) {
           if (visited.indexOf(uiSpecimen) >= 0 || // already visited
@@ -192,8 +366,19 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
           visited.push(uiSpecimen);
 
+          if ((cp.manualSpecLabelEnabled || !uiSpecimen.labelFmt) && !uiSpecimen.label) {
+            if (!uiSpecimen.grpLeader.expanded) {
+              //
+              // Specimen label is not specified when expected but aliquot group is
+              // in collapsed state. Therefore ignore the specimen or do not save
+              //
+              return;
+            }
+          }
+
+
           var specimen = getSpecimenToSave(uiSpecimen);
-          specimen.children = getSpecimensToSave(uiSpecimen.children, visited);
+          specimen.children = getSpecimensToSave(cp, uiSpecimen.children, visited);
           result.push(specimen);
           return result;
         });
@@ -246,5 +431,54 @@ angular.module('os.biospecimen.participant.collect-specimens',
         return specimen;
       };
 
+      $scope.assignLabels = function(aliquot, labels) {
+        var labels = Util.splitStr(labels, /,|\t|\n/);
+        var newSpmnsCnt = labels.length - aliquot.aliquotGrp.length;
+        if (newSpmnsCnt > 0) {
+          addAliquotsToGrp(aliquot, newSpmnsCnt);
+        }
+
+        angular.forEach(aliquot.aliquotGrp, function(spmn, $index) {
+          if ($index < labels.length) {
+            spmn.label = labels[$index];
+            spmn.selected = true;
+            spmn.removed = false;
+          } 
+        });
+      }
+
+      $scope.expandAliquotsGroup = function(aliquot) {
+        expandOrCollapseAliquotsGrp(aliquot, true);
+      }
+
+      $scope.collapseAliquotsGroup = function(aliquot) {
+        expandOrCollapseAliquotsGrp(aliquot, false);
+      }
+
+      $scope.changeQuantity = function(specimen, qty) {
+        if (!specimen.expanded) {
+          angular.forEach(specimen.aliquotGrp, function(sibling) {
+            sibling.initialQty = qty;
+          });
+        }
+      }
+
+      $scope.updateCount = function(specimen) {
+        var grp = specimen.aliquotGrp;
+        var grpLen = grp.length;
+
+        if (specimen.newAliquotsCnt < grpLen) {
+          removeAliquotsFromGrp(specimen, grpLen - specimen.newAliquotsCnt);
+        } else {
+          addAliquotsToGrp(specimen, specimen.newAliquotsCnt - grpLen);
+        }     
+
+        Util.hidePopovers();
+      }
+
+      $scope.closePopover = function() {
+        Util.hidePopovers();
+      }
+      
       init();
     });
