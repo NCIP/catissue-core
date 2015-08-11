@@ -119,7 +119,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         var aliquotGrp = [];
         var grpLeader = undefined;
         angular.forEach(specimen.children, function(child) {
-          if (child.lineage == 'Aliquot' && child.selected && child.existingStatus != 'Collected') {
+          if (child.lineage == 'Aliquot' && child.selected && child.existingStatus != 'Collected' && child.removed != true) {
             aliquotGrp.push(child);
 
             if (!grpLeader) {
@@ -146,25 +146,24 @@ angular.module('os.biospecimen.participant.collect-specimens',
         setShowInTree(aliquot, expandOrCollapse)
         aliquot.expanded = expandOrCollapse;
         if (!aliquot.expanded) {
-          aliquot.aliquotLabels = aliquot.aliquotGrp.map(
+          aliquot.aliquotLabels =
+            aliquot.aliquotGrp.filter(
+              function(s) {
+                return !!s.label;
+              }
+            ).map(
             function(s) {
               return s.label;
             }
-          ).join(aliquot.aliquotLabels ? "," : "");
+          ).join(",");
         }
-
-        angular.forEach(aliquot.aliquotGrp, function(sibling){
-          if (aliquot != sibling) {
-            setChildrenShowInTree(sibling, sibling.showInTree);
-          }
-        });
-
       }
 
       function setShowInTree(aliquot, showInTree) {
         angular.forEach(aliquot.aliquotGrp, function(sibling) {
           if (aliquot != sibling) {
             sibling.showInTree = showInTree;
+            setChildrenShowInTree(sibling, sibling.showInTree);
           }
         });
       }
@@ -268,10 +267,23 @@ angular.module('os.biospecimen.participant.collect-specimens',
         }
 
         if (specimen.aliquotGrp) {
-          angular.forEach(specimen.aliquotGrp, function(aliquot) {
-            aliquot.selected = false;
-            aliquot.removed = true;
-          });
+          if (!specimen.expanded) {
+            angular.forEach(specimen.aliquotGrp, function(aliquot) {
+              aliquot.selected = false;
+              aliquot.removed = true;
+            });
+          } else {
+            // logic of changing group leader.
+            createAliquotGrp(specimen.parent);
+
+            angular.forEach(specimen.parent.children, function(child) {
+              if (child.removed != true && child.aliquotGrp) {
+                child.expanded = true;
+                child.grpLeader = undefined;
+              }
+            });
+
+          }
         }
       };
 

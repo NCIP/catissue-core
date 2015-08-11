@@ -20,7 +20,6 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.StorageCont
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -420,37 +419,24 @@ public class StorageContainer extends BaseEntity {
 	}
 	
 	public StorageContainerPosition nextAvailablePosition() {
-		Set<Integer> occupiedPositionOrdinals = occupiedPositionsOrdinals();
-		
-		for (int y = 1; y <= getNoOfRows(); ++y) {
-			for (int x = 1; x <= getNoOfColumns(); ++x) {
-				int pos = (y - 1) * getNoOfColumns() + x;
-				if (!occupiedPositionOrdinals.contains(pos)) {
-					String posOne = converters.get(getColumnLabelingScheme()).fromOrdinal(x);
-					String posTwo = converters.get(getRowLabelingScheme()).fromOrdinal(y);
-					return createPosition(x, posOne, y, posTwo);
-				}
-			}
-		}
-		
-		return null;
+		return nextAvailablePosition(1, 1, false);
 	}
 
-	public StorageContainerPosition nextAvailablePosition(StorageLocationSummary referenceLocation) {
-		Integer refX = converters.get(getColumnLabelingScheme()).toOrdinal(referenceLocation.positionX);
-		Integer refY = converters.get(getColumnLabelingScheme()).toOrdinal(referenceLocation.positionY);
+	public StorageContainerPosition nextAvailablePosition(String fromY, String fromX) {
+		Integer refX = converters.get(getColumnLabelingScheme()).toOrdinal(fromX);
+		Integer refY = converters.get(getRowLabelingScheme()).toOrdinal(fromY);
 
 		StorageContainerPosition refPosition = getOccupiedPosition(refX, refY);
-		StorageContainerPosition nextPosition = nextAvailablePosition(refPosition);
+		StorageContainerPosition nextPosition = nextAvailablePosition(refPosition.getPosTwoOrdinal(), refPosition.getPosOneOrdinal(), true);
 
 		return nextPosition != null ? nextPosition : nextAvailablePosition();
 	}
 
-	public StorageContainerPosition nextAvailablePosition(StorageContainerPosition refPosition) {
+	private StorageContainerPosition nextAvailablePosition(int row, int column, boolean sequential) {
 		Set<Integer> occupiedPositionOrdinals = occupiedPositionsOrdinals();
 
-		for (int y = refPosition.getPosTwoOrdinal(); y <= getNoOfRows(); ++y) {
-			int posX = y == refPosition.getPosTwoOrdinal() ? refPosition.getPosOneOrdinal() : 1;
+		for (int y = row; y <= getNoOfRows(); ++y) {
+			int posX = (y == row) && sequential ? column : 1;
 			for (int x = posX; x <= getNoOfColumns(); ++x) {
 				int pos = (y - 1) * getNoOfColumns() + x;
 
