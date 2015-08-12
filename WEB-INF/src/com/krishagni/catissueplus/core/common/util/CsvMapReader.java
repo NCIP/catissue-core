@@ -53,7 +53,7 @@ public class CsvMapReader {
 			String[] columns = null;			
 			while (true) {
 				columns = csvReader.readNext();
-				if (columns == null || columns.length <= 2) {
+				if (columns == null || columns.length != 2) {
 					break;
 				}
 				

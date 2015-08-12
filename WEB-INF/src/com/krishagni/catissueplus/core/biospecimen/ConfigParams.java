@@ -25,5 +25,5 @@ public class ConfigParams {
 
 	public static final String SP_TYPE_ABBR_MAP          = "specimen_type_abbr_map";
 
-	public static final String SP_PATH_STATUS_ABBR_MAP   = "specimen_path_status_abbr_map";
+	public static final String SP_PATH_STATUS_ABBR_MAP   = "spmn_path_status_abbr_map";
 }
