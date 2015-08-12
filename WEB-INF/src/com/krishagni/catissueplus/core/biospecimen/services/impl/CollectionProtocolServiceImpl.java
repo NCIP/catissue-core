@@ -886,30 +886,28 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 	private void addDefaultPiRoles(CollectionProtocol cp, User user) {
 		try {
-			ResponseEvent<Void> resp = rbacSvc.addSubjectRole(null, cp, user, getDefaultPiRoles());
-			resp.throwErrorIfUnsuccessful();
+			rbacSvc.addSubjectRole(null, cp, user, getDefaultPiRoles());
 		} catch (OpenSpecimenException ose) {
-			checkAndThrowCustomError(ose);
+			ose.rethrow(RbacErrorCode.ACCESS_DENIED, CpErrorCode.USER_UPDATE_RIGHTS_REQUIRED);
+			throw ose;
 		}
 	}
 
 	private void removeDefaultPiRoles(CollectionProtocol cp, User user) {
 		try {
-			ResponseEvent<Void> resp =  rbacSvc.removeSubjectRole(null, cp, user, getDefaultPiRoles());
-			resp.throwErrorIfUnsuccessful();
+			rbacSvc.removeSubjectRole(null, cp, user, getDefaultPiRoles());
 		} catch (OpenSpecimenException ose) {
-			checkAndThrowCustomError(ose);
+			ose.rethrow(RbacErrorCode.ACCESS_DENIED, CpErrorCode.USER_UPDATE_RIGHTS_REQUIRED);
 		}
 	}
 	
 	private void addDefaultCoordinatorRoles(CollectionProtocol cp, Collection<User> coordinators) {
 		try {
 			for (User user : coordinators) {
-				ResponseEvent<Void> resp = rbacSvc.addSubjectRole(null, cp, user, getDefaultCoordinatorRoles());
-				resp.throwErrorIfUnsuccessful();
+				rbacSvc.addSubjectRole(null, cp, user, getDefaultCoordinatorRoles());
 			}
 		} catch (OpenSpecimenException ose) {
-			checkAndThrowCustomError(ose);
+			ose.rethrow(RbacErrorCode.ACCESS_DENIED, CpErrorCode.USER_UPDATE_RIGHTS_REQUIRED);
 		}
 	}
 	
@@ -919,17 +917,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 				rbacSvc.removeSubjectRole(null, cp, user, getDefaultCoordinatorRoles());
 			}
 		} catch (OpenSpecimenException ose) {
-			checkAndThrowCustomError(ose);
+			ose.rethrow(RbacErrorCode.ACCESS_DENIED, CpErrorCode.USER_UPDATE_RIGHTS_REQUIRED);
 		}
-	}
-	
-	private void checkAndThrowCustomError(OpenSpecimenException ose) {
-		for (ParameterizedError parameterizedError : ose.getErrors()) {
-			if (parameterizedError.error().equals(RbacErrorCode.ACCESS_DENIED)) {
-				throw OpenSpecimenException.userError(CpErrorCode.USER_UPDATE_RIGHTS_REQUIRED);
-			}
-		}
-		throw ose;
 	}
 	
 	private String[] getDefaultPiRoles() {

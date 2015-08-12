@@ -4,6 +4,9 @@ package com.krishagni.catissueplus.core.common.errors;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
+import com.krishagni.rbac.common.errors.RbacErrorCode;
+
 public class OpenSpecimenException extends RuntimeException {
 	private static final long serialVersionUID = -1473557909717365251L;
 	
@@ -52,6 +55,24 @@ public class OpenSpecimenException extends RuntimeException {
 			throw this;
 		}
 	}
+	
+	public boolean containsError(ErrorCode error) {
+		boolean containsError = false;
+		for (ParameterizedError parameterizedError : this.getErrors()) {
+			if (parameterizedError.error().equals(error)) {
+				containsError = true;
+				break;
+			}
+		}
+		return containsError;
+	}
+	
+	public void rethrow(ErrorCode oldError, ErrorCode newError, Object ... params) {
+		if (this.containsError(oldError)) {
+			throw new OpenSpecimenException(ErrorType.USER_ERROR, newError, params);
+		}
+		throw this;
+	}	
 	
 	public static OpenSpecimenException userError(ErrorCode error, Object ... params) {		
 		return new OpenSpecimenException(ErrorType.USER_ERROR, error, params);

@@ -88,7 +88,7 @@ public interface RbacService {
 	
 	public List<SubjectAccess> getAccessList(Long userId, String resource, String[] operations);
 	
-	public ResponseEvent<Void> addSubjectRole(Site site, CollectionProtocol cp, User user, String[] roleNames);
+	public void addSubjectRole(Site site, CollectionProtocol cp, User user, String[] roleNames);
 	
-	public ResponseEvent<Void> removeSubjectRole(Site site, CollectionProtocol cp, User user, String[] roleNames);
+	public void removeSubjectRole(Site site, CollectionProtocol cp, User user, String[] roleNames);
 }
