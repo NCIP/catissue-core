@@ -292,6 +292,10 @@ public class VisitFactoryImpl implements VisitFactory {
 	}
 
 	private void setMissedReason(VisitDetail detail, Visit visit, OpenSpecimenException ose) {
+		if (!visit.isMissed()) {
+			visit.setMissedReason(null);
+			return;
+		}
 		String missedReason = detail.getMissedReason();
 		if (!isValid(MISSED_VISIT_REASON, missedReason)) {
 			ose.addError(VisitErrorCode.INVALID_MISSED_REASON);
@@ -305,17 +309,39 @@ public class VisitFactoryImpl implements VisitFactory {
 		if (detail.isAttrModified("missedReason")) {
 			setMissedReason(detail, visit, ose);
 		} else {
-			visit.setMissedReason(existing.getMissedReason());
+			visit.setMissedReason(visit.isMissed() ? existing.getMissedReason() : null);
 		}
 	}
 
 	private void setMissedBy(VisitDetail detail, Visit visit, OpenSpecimenException ose) {
+		if (!visit.isMissed()) {
+			visit.setMissedBy(null);
+			return;
+		}
+
 		if (detail.getMissedBy() == null) {
 			return;
 		}
 
+		User collector = null;
 		Long userId = detail.getMissedBy().getId();
-		User collector = daoFactory.getUserDao().getById(userId);
+		if (userId != null) {
+			collector = daoFactory.getUserDao().getById(userId);
+		} else {
+			String emailAddress = detail.getMissedBy().getEmailAddress();
+			if (emailAddress == null) {
+				ose.addError(VisitErrorCode.INVALID_MISSED_USER);
+				return;
+			}
+
+			collector = daoFactory.getUserDao().getUserByEmailAddress(emailAddress);
+		}
+
+		if (collector == null) {
+			ose.addError(VisitErrorCode.INVALID_MISSED_USER);
+			return;
+		}
+
 		visit.setMissedBy(collector);
 	}
 
@@ -323,7 +349,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		if (detail.isAttrModified("missedBy")) {
 			setMissedBy(detail, visit, ose);
 		} else {
-			visit.setMissedBy(existing.getMissedBy());
+			visit.setMissedBy(visit.isMissed() ? existing.getMissedBy() : null);
 		}
 	}
 

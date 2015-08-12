@@ -55,10 +55,8 @@
       <filter name="activeEntity"/>
     </set>
 
-    <many-to-one
-      name="missedBy"
+    <many-to-one name="missedBy"
       class="com.krishagni.catissueplus.core.administrative.domain.User"
-      cascade="none"
       column="MISSED_BY"
     />
 

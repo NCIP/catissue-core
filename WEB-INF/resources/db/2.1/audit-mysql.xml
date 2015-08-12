@@ -31,16 +31,4 @@
     <modifyDataType tableName="catissue_cp_req_specimen_aud" columnName="INITIAL_QUANTITY" newDataType="decimal(16,6)" />
   </changeSet>
 
-  <changeSet author="ahegade" id="Column for specifying person who has missed the visit">
-    <addColumn tableName="cat_specimen_coll_group_aud">
-      <column name="MISSED_BY" type="BIGINT"/>
-    </addColumn>
-  </changeSet>
-
-  <changeSet author="ahegade" id="Tracking the person who has missed the visi">
-    <addColumn tableName="cat_specimen_coll_group_aud">
-      <column name="missedBy_MOD" type="BIT"/>
-    </addColumn>
-  </changeSet>
-
 </databaseChangeLog>
