@@ -460,6 +460,8 @@ public class RbacServiceImpl implements RbacService {
 			return ResponseEvent.response(null);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 	

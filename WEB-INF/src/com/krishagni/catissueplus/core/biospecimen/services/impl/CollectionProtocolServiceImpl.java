@@ -50,10 +50,12 @@ import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr.ParticipantReadAccess;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.errors.ParameterizedError;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.service.RbacService;
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
@@ -883,25 +885,51 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 
 	private void addDefaultPiRoles(CollectionProtocol cp, User user) {
-		ResponseEvent<Void> resp = rbacSvc.addSubjectRole(null, cp, user, getDefaultPiRoles());
-		resp.throwErrorIfUnsuccessful();
+		try {
+			ResponseEvent<Void> resp = rbacSvc.addSubjectRole(null, cp, user, getDefaultPiRoles());
+			resp.throwErrorIfUnsuccessful();
+		} catch (OpenSpecimenException ose) {
+			checkAndThrowCustomError(ose);
+		}
 	}
-	
+
 	private void removeDefaultPiRoles(CollectionProtocol cp, User user) {
-		ResponseEvent<Void> resp =  rbacSvc.removeSubjectRole(null, cp, user, getDefaultPiRoles());
-		resp.throwErrorIfUnsuccessful();
+		try {
+			ResponseEvent<Void> resp =  rbacSvc.removeSubjectRole(null, cp, user, getDefaultPiRoles());
+			resp.throwErrorIfUnsuccessful();
+		} catch (OpenSpecimenException ose) {
+			checkAndThrowCustomError(ose);
+		}
 	}
 	
 	private void addDefaultCoordinatorRoles(CollectionProtocol cp, Collection<User> coordinators) {
-		for (User user : coordinators) {
-			rbacSvc.addSubjectRole(null, cp, user, getDefaultCoordinatorRoles());
+		try {
+			for (User user : coordinators) {
+				ResponseEvent<Void> resp = rbacSvc.addSubjectRole(null, cp, user, getDefaultCoordinatorRoles());
+				resp.throwErrorIfUnsuccessful();
+			}
+		} catch (OpenSpecimenException ose) {
+			checkAndThrowCustomError(ose);
 		}
 	}
 	
 	private void removeDefaultCoordinatorRoles(CollectionProtocol cp, Collection<User> coordinators) {
-		for (User user : coordinators) {
-			rbacSvc.removeSubjectRole(null, cp, user, getDefaultCoordinatorRoles());
+		try {
+			for (User user : coordinators) {
+				rbacSvc.removeSubjectRole(null, cp, user, getDefaultCoordinatorRoles());
+			}
+		} catch (OpenSpecimenException ose) {
+			checkAndThrowCustomError(ose);
 		}
+	}
+	
+	private void checkAndThrowCustomError(OpenSpecimenException ose) {
+		for (ParameterizedError parameterizedError : ose.getErrors()) {
+			if (parameterizedError.error().equals(RbacErrorCode.ACCESS_DENIED)) {
+				throw OpenSpecimenException.userError(CpErrorCode.USER_UPDATE_RIGHTS_REQUIRED);
+			}
+		}
+		throw ose;
 	}
 	
 	private String[] getDefaultPiRoles() {
