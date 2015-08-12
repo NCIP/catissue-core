@@ -69,7 +69,7 @@ public class OpenSpecimenException extends RuntimeException {
 	
 	public void rethrow(ErrorCode oldError, ErrorCode newError, Object ... params) {
 		if (this.containsError(oldError)) {
-			throw new OpenSpecimenException(ErrorType.USER_ERROR, newError, params);
+			throw OpenSpecimenException.userError(newError, params);
 		}
 		throw this;
 	}	
