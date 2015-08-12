@@ -20,12 +20,6 @@ public class ImportEntityForms extends ImportForms {
 	
 	private Map<String, String> entityMap = new HashMap<String, String>();
 	
-	private String moduleName;
-	
-	public void setModuleName(String moduleName) {
-		this.moduleName = moduleName;
-	}
-	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		setCreateTable(true);
@@ -38,14 +32,14 @@ public class ImportEntityForms extends ImportForms {
 		BufferedReader reader = null;
 		InputStream in = null;
 		try {
-			in = Utility.getResourceInputStream("com/krishagni/openspecimen/custom/" + moduleName + "/entity-forms/list.txt");
+			in = Utility.getResourceInputStream("entity-forms/list.txt");
 			reader = new BufferedReader(new InputStreamReader(in));
 			
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				String entityType = line.split("=")[0];
 				String fileName = line.split("=")[1];
-				entityMap.put(moduleName + "/entity-forms/" + fileName, entityType);
+				entityMap.put("entity-forms/" + fileName, entityType);
 			}
 			
 			System.err.println("Forms: " + entityMap.keySet());

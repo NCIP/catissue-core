@@ -18,6 +18,5 @@
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="deInitializer" ref="deInitializer"/>
     <property name="templateService" ref="templateService"/>
-    <property name="moduleName" value="le"/>
   </bean>
 </beans>
