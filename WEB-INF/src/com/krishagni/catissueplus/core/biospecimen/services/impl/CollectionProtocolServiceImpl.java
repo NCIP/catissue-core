@@ -883,11 +883,13 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 
 	private void addDefaultPiRoles(CollectionProtocol cp, User user) {
-		rbacSvc.addSubjectRole(null, cp, user, getDefaultPiRoles());
+		ResponseEvent<Void> resp = rbacSvc.addSubjectRole(null, cp, user, getDefaultPiRoles());
+		resp.throwErrorIfUnsuccessful();
 	}
 	
 	private void removeDefaultPiRoles(CollectionProtocol cp, User user) {
-		rbacSvc.removeSubjectRole(null, cp, user, getDefaultPiRoles());
+		ResponseEvent<Void> resp =  rbacSvc.removeSubjectRole(null, cp, user, getDefaultPiRoles());
+		resp.throwErrorIfUnsuccessful();
 	}
 	
 	private void addDefaultCoordinatorRoles(CollectionProtocol cp, Collection<User> coordinators) {

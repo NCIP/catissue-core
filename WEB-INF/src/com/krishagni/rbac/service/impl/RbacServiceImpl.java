@@ -454,14 +454,24 @@ public class RbacServiceImpl implements RbacService {
 	
 	@Override 
 	@PlusTransactional
-	public void addSubjectRole(Site site, CollectionProtocol cp, User user, String[] roleNames) {
-		addOrRemoveSubjectRole(site, cp, user, roleNames, SubjectRoleOp.OP.ADD, true);
+	public ResponseEvent<Void> addSubjectRole(Site site, CollectionProtocol cp, User user, String[] roleNames) {
+		try {
+			addOrRemoveSubjectRole(site, cp, user, roleNames, SubjectRoleOp.OP.ADD, true);
+			return ResponseEvent.response(null);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		}
 	}
 	
 	@Override 
 	@PlusTransactional
-	public void removeSubjectRole(Site site, CollectionProtocol cp, User user, String[] roleNames) {
-		addOrRemoveSubjectRole(site, cp, user, roleNames, SubjectRoleOp.OP.REMOVE, true);
+	public ResponseEvent<Void> removeSubjectRole(Site site, CollectionProtocol cp, User user, String[] roleNames) {
+		try {
+			addOrRemoveSubjectRole(site, cp, user, roleNames, SubjectRoleOp.OP.REMOVE, true);
+			return ResponseEvent.response(null);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		}
 	}
 
 	private void addOrRemoveSubjectRole(Site site, CollectionProtocol cp, User user,
