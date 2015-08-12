@@ -23,8 +23,7 @@ public class ConfigParams {
 	
 	public static final String SPR_DIR                   = "spr_dir";
 
-	public static final String SP_TYPE_ABBREVIATION_MAP  = "specimen_type_abbr_map";
+	public static final String SP_TYPE_ABBR_MAP          = "specimen_type_abbr_map";
 
-	public static final String SP_PATH_STATUS_ABBREVIATION_MAP = "specimen_path_status_abbr_map";
-
+	public static final String SP_PATH_STATUS_ABBR_MAP   = "specimen_path_status_abbr_map";
 }
