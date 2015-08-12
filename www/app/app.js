@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openspecimen', [
+var osApp = angular.module('openspecimen', [
   'os.common',
   'os.biospecimen',
   'os.administrative',
@@ -19,13 +19,24 @@ angular.module('openspecimen', [
   'ui.autocomplete',
   'mgcrea.ngStrap.popover',
   'angular-loading-bar',
-  'pascalprecht.translate'
-  ])
+  'pascalprecht.translate',
+  'angularLoad'
+  ]);
 
-  .config(function(
-    $stateProvider, $urlRouterProvider, $httpProvider, 
+osApp.config(function(
+    $stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider,
+    $compileProvider, $filterProvider, $provide,
     $translateProvider, $translatePartialLoaderProvider,
     uiSelectConfig, ApiUrlsProvider) {
+
+    osApp.providers = {
+      controller : $controllerProvider.register,
+      state      : $stateProvider.state,
+      directive  : $compileProvider.directive,
+      filter     : $filterProvider.register,
+      factory    : $provide.factory,
+      service    : $provide.service
+    };
 
     $translatePartialLoaderProvider.addPart('modules');
     $translateProvider.useLoader('$translatePartialLoader', {  
@@ -273,12 +284,14 @@ angular.module('openspecimen', [
 
         var appProps = resps[1];
         $rootScope.global.appProps = appProps;
-        var customModule = appProps['plugin.custom_module'];
-        if (!!customModule) {
-          $translatePartialLoader.addPart('custom-modules/' + customModule);
-          PluginReg.usePlugins([customModule]);
+        var plugins = appProps['plugins'];
+        if (plugins) {
+          PluginReg.usePlugins(plugins);
+          angular.forEach(plugins, function(plugin) {
+            $translatePartialLoader.addPart(plugin + '/');
+          });
         }
-
+        
         var locale = localeSettings.locale;
         $translate.use(locale);
 

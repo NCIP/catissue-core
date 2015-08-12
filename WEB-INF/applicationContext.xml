@@ -52,8 +52,12 @@
   
   <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
     <property name="dataSource" ref="dataSource" />
-    <property name="configLocation">
-      <value>classpath:hibernate.cfg.xml</value>
+    <property name="mappingLocations">
+      <list>
+        <value>classpath:com/krishagni/catissueplus/core/repository/hbm/filters.hbm.xml</value>
+        <value>classpath*:com/**/*.hbm.xml</value>
+        <value>classpath*:krishagni/catissueplus/**/*.hbm.xml</value>
+      </list>
     </property>
     <property name="hibernateProperties">
       <props>
@@ -381,7 +385,6 @@
   <bean id="messageSource" class="com.krishagni.catissueplus.core.common.WildcardReloadableResourceBundle">
     <property name="basenames">
       <list>
-        <value>classpath*:com/krishagni/openspecimen/custom/${plugin.custom_module}/**/messages*</value>
         <value>classpath*:errors/messages*</value>
       </list>
     </property>
@@ -656,5 +659,5 @@
   <context:component-scan base-package="com.krishagni.catissueplus.core"/>
   
   <import resource="migrationContext.xml"/>
-  <import resource="classpath*:com/krishagni/openspecimen/custom/${plugin.custom_module}/**/*Context.xml"/>
+  <import resource="classpath*:pluginContext.xml"/>
 </beans>

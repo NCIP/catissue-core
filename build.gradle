@@ -108,6 +108,7 @@ dependencies {
   compile group: 'commons-httpclient', name: 'commons-httpclient', version:'3.1'
   compile group: 'commons-io', name: 'commons-io', version:'2.4'
   compile group: 'commons-lang', name: 'commons-lang', version:'2.6'
+  compile group: 'org.apache.commons', name: 'commons-lang3', version:'3.4'
   compile group: 'commons-logging', name: 'commons-logging', version:'1.2'
   compile group: 'net.sf.ehcache', name: 'ehcache', version:'1.2.3'
   compile group: 'com.google.code.gson', name: 'gson', version:'2.3.1'
@@ -209,7 +210,7 @@ processResources {
         datasource_type: deployment_type,
         datasource_dialect: datasource_dialect,
         app_data_dir: props.app_data_dir,
-        plugin_custom_module: plugin_custom_module,
+        plugin_dir: props.plugin_dir,
         buildinfo_version : props.buildinfo_version,
         buildinfo_date : getTodayDate(),
         buildinfo_commit_revision : getCommitRevision()])
@@ -237,6 +238,7 @@ task create_war(type: War) {
     include 'resources/**'
     include 'applicationContext.xml'
     include 'restApiContext.xml'
+    include 'pluginUiContext.xml'
     include 'migrationContext.xml'
     include 'web.xml'
     

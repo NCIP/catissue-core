@@ -59,7 +59,7 @@ public class ConfigurationController {
 	@RequestMapping(method = RequestMethod.GET, value="/app-props")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public Map<String, String> getAppProps() {
+	public Map<String, Object> getAppProps() {
 		return cfgSvc.getAppProps();
 	}
 	
