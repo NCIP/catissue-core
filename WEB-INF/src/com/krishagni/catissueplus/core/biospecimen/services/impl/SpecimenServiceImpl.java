@@ -11,8 +11,6 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
-import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
-import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -400,10 +398,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 				
 		if (CollectionUtils.isNotEmpty(detail.getChildren())) {
-			StorageLocationSummary referenceLocation = detail.getChildren().get(0).getStorageLocation();
-
 			for (SpecimenDetail childDetail : detail.getChildren()) {
-				childDetail.setStorageLocation(getStorageLocation(referenceLocation, childDetail.getStorageLocation()));
 				collectSpecimen(childDetail, specimen);
 			}
 		}
@@ -418,23 +413,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 		
 		return specimen;
-	}
-
-	private StorageLocationSummary getStorageLocation(StorageLocationSummary referenceLocation, StorageLocationSummary storageLocation) {
-
-		if (referenceLocation.equals(storageLocation) || referenceLocation.name == null || referenceLocation.id == null) {
-			return storageLocation;
-		}  else if (referenceLocation.name.equals(storageLocation.name) &&
-				storageLocation.positionY == null && storageLocation.positionX == null) {
-
-			StorageContainer container = daoFactory.getStorageContainerDao().getById(referenceLocation.id);
-			StorageContainerPosition nextPosition = container.nextAvailablePosition(referenceLocation.positionY, referenceLocation.positionX);;
-			storageLocation.positionY = nextPosition.getPosTwo();
-			storageLocation.positionX = nextPosition.getPosOne();
-			return storageLocation;
-		}
-
-		return storageLocation;
 	}
 
 	private ResponseEvent<SpecimenDetail> updateSpecimen(SpecimenDetail detail, boolean partial) {

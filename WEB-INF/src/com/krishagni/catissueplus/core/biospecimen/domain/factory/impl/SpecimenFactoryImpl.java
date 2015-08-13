@@ -668,7 +668,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
 			}
 		} else {
-			position = container.nextAvailablePosition();
+			position = container.nextAvailablePosition(true);
 			if (position == null) {
 				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
 			} 
