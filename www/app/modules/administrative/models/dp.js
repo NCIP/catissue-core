@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.models.dp', ['os.common.models'])
-  .factory('DistributionProtocol', function(osModel) {
+  .factory('DistributionProtocol', function(osModel, $http) {
     var DistributionProtocol = osModel('distribution-protocols');
 
     DistributionProtocol.prototype.getType = function() {
@@ -12,7 +12,7 @@ angular.module('os.administrative.models.dp', ['os.common.models'])
     }
     
     DistributionProtocol.prototype.newDistSite = function () {
-      return {instituteName: '', sites:[]};
+      return {instituteName: '', sites: []};
     }
     
     DistributionProtocol.prototype.addDistSite = function (distSite) {
@@ -58,6 +58,26 @@ angular.module('os.administrative.models.dp', ['os.common.models'])
       var distSites = this.getDistSite();
       this.distributingSites = distSites.length == 0 ? [] : distSites;
       return this;
+    }
+    
+    DistributionProtocol.prototype.close = function () {
+      var statusSpec = {status: 'Closed'};
+      return updateActivityStatus(this, statusSpec);
+    }
+    
+    DistributionProtocol.prototype.reopen = function () {
+      var statusSpec = {status: 'Active'};
+      return updateActivityStatus(this, statusSpec);
+    }
+    
+    function updateActivityStatus (distributionProtocol, statusSpec) {
+      return $http.put(DistributionProtocol.url() + '/' + distributionProtocol.$id() + '/activity-status',
+        statusSpec).then(
+        function (result) {
+          angular.extend(distributionProtocol, result.data);
+          return new DistributionProtocol(result);
+        }
+      );
     }
 
     return DistributionProtocol;

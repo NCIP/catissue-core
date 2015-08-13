@@ -592,8 +592,13 @@
     "sites": "Sites",
     "receiving_institute": "Receiving Institute",
     "receiving_site": "Receiving Site",
+    "distributing_institute": "Distributing Institute",
     "distributing_sites": "Distributing Sites",
     "order_report_query": "Order Report Query",
+    "close": "Close",
+    "closed": "Closed",
+    "confirm_close_title": "Closing {{shortTitle}} confirmation",
+    "confirm_close": "Are you sure you want to close the distribution protocol {{shortTitle}} ?",
 
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",
@@ -612,11 +617,14 @@
       "filter_title": "Filters",
       "title_or_short_title": "Title / Short Title",
       "title": "Type the Title",
-      "pi": "Select Principal Investigator"
+      "pi": "Select Principal Investigator",
+      "activity_status": "Activity Status"
     },
 
     "menu_options": {
-      "delete": "Delete"
+      "delete": "Delete",
+      "close": "Close",
+      "reopen": "Reopen"
     }
   },
 

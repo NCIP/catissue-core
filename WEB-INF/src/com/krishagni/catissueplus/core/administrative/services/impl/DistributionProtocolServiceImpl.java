@@ -6,17 +6,20 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolStatusDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
+import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -166,6 +169,30 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<DistributionProtocolDetail> updateActivityStatus(
+			RequestEvent<DistributionProtocolStatusDetail> req) {
+		
+		AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+		
+		Long dpId = req.getPayload().getId();
+		String status = req.getPayload().getStatus();
+		DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(dpId);
+		if (existing == null) {
+			return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
+		}
+		
+		if (StringUtils.isBlank(status)) {
+			return ResponseEvent.userError(ActivityStatusErrorCode.INVALID);
+		}
+		
+		existing.setActivityStatus(status);
+		
+		daoFactory.getDistributionProtocolDao().saveOrUpdate(existing);
+		return new ResponseEvent<DistributionProtocolDetail>(DistributionProtocolDetail.from(existing));
 	}
 	
 	private void addDpStats(List<DistributionProtocolDetail> dps) {

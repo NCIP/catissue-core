@@ -95,6 +95,7 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		
 		addPiCondition(query, crit);
 		addInstCondition(query, crit);
+		addActivityStatusCondition(query, crit);
 	}
 	
 	private void addPiCondition(Criteria query, DpListCriteria crit) {
@@ -113,6 +114,15 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		}
 		
 		query.add(Restrictions.eq("institute.id", instituteId));
+	}
+	
+	private void addActivityStatusCondition(Criteria query, DpListCriteria crit) {
+		String activityStatus = crit.activityStatus();
+		if (StringUtils.isBlank(activityStatus)) {
+			return;
+		}
+		
+		query.add(Restrictions.eq("activityStatus", activityStatus));
 	}
 	
 	private static final String FQN = DistributionProtocol.class.getName();

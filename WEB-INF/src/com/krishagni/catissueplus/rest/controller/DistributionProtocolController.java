@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolStatusDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -52,7 +53,10 @@ public class DistributionProtocolController {
 			int maxResults,
 
 			@RequestParam(value = "includeStats", required = false, defaultValue = "false")
-			boolean includeStats) {
+			boolean includeStats,
+			
+			@RequestParam(value = "activityStatus", required = false)
+			String activityStatus) {
 		
 		DpListCriteria criteria = new DpListCriteria()
 			.startAt(startAt)
@@ -60,7 +64,8 @@ public class DistributionProtocolController {
 			.query(searchStr)
 			.title(title)
 			.piId(piId)
-			.includeStat(includeStats);
+			.includeStat(includeStats)
+			.activityStatus(activityStatus);
 		
 		
 		ResponseEvent<List<DistributionProtocolDetail>> resp = dpSvc.getDistributionProtocols(getRequest(criteria));
@@ -114,6 +119,20 @@ public class DistributionProtocolController {
 	@ResponseStatus(HttpStatus.OK)
 	public DistributionProtocolDetail deleteDistributionProtocol(@PathVariable Long id) {
 		ResponseEvent<DistributionProtocolDetail> resp  = dpSvc.deleteDistributionProtocol(getRequest(id));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value ="/{id}/activity-status")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public DistributionProtocolDetail updateActivityStatus(
+			@PathVariable Long id,
+			@RequestBody DistributionProtocolStatusDetail detail) {
+		
+		detail.setId(id);
+		RequestEvent<DistributionProtocolStatusDetail> req = new RequestEvent<DistributionProtocolStatusDetail>(detail);
+		ResponseEvent<DistributionProtocolDetail> resp = dpSvc.updateActivityStatus(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

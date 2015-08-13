@@ -9,6 +9,8 @@ public class DpListCriteria extends AbstractListCriteria<DpListCriteria> {
 	private Long piId;
 	
 	private Long instituteId;
+	
+	private String activityStatus;
 
 	@Override
 	public DpListCriteria self() {
@@ -39,6 +41,15 @@ public class DpListCriteria extends AbstractListCriteria<DpListCriteria> {
 	
 	public DpListCriteria instituteId(Long instituteId) {
 		this.instituteId = instituteId;
+		return self();
+	}
+	
+	public String activityStatus() {
+		return this.activityStatus;
+	}
+	
+	public DpListCriteria activityStatus(String activityStatus) {
+		this.activityStatus = activityStatus;
 		return self();
 	}
 }

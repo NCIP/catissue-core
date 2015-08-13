@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.dp.detail', ['os.administrative.models'])
-  .controller('DpDetailCtrl', function($scope, $q, distributionProtocol, DeleteUtil) {
+  .controller('DpDetailCtrl', function($scope, $q, distributionProtocol, DeleteUtil, $modal) {
     $scope.distributionProtocol = distributionProtocol;
     
     $scope.editDp = function(property, value) {
@@ -31,6 +31,22 @@ angular.module('os.administrative.dp.detail', ['os.administrative.models'])
       });
       return siteList;
     };
+    
+    $scope.closeDp = function () {
+      var modalInstance = $modal.open({
+        templateUrl: 'modules/administrative/dp/close.html',
+        controller: 'DpCloseCtrl',
+        resolve: {
+          distributionProtocol: function () {
+            return distributionProtocol;
+          }
+        }
+      });
+    }
+    
+    $scope.reopenDp = function () {
+      distributionProtocol.reopen();
+    }
     
     init();
 
