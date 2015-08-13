@@ -305,6 +305,8 @@ angular.module('os.biospecimen.participant.collect-specimens',
         }
 
         newLeader.aliquotGrp = members;
+        newLeader.expanded = true;
+        newLeader.grpLeader = null;
         angular.forEach(members, function(member) {
           if (member != newLeader) {
             member.grpLeader = newLeader;
