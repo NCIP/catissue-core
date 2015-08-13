@@ -438,6 +438,8 @@ public class StorageContainer extends BaseEntity {
 	public StorageContainerPosition nextAvailablePosition(String row, String col) {
 		int startRow = 1, startCol = 1;
 		boolean startPosSpecified = StringUtils.isNotBlank(row) && StringUtils.isNotBlank(col);
+		Set<Integer> occupiedPositionOrdinals = occupiedPositionsOrdinals();
+
 		if (startPosSpecified) {
 			startRow = converters.get(getRowLabelingScheme()).toOrdinal(row);
 			startCol = converters.get(getColumnLabelingScheme()).toOrdinal(col);
@@ -446,11 +448,11 @@ public class StorageContainer extends BaseEntity {
 		for (int y = startRow; y <= getNoOfRows(); ++y) {
 			for (int x = startCol; x <= getNoOfColumns(); ++x) {
 				int pos = (y - 1) * getNoOfColumns() + x;
-				if (!occupiedPositionsOrdinals().contains(pos)) {
+				if (!occupiedPositionOrdinals.contains(pos)) {
 					String posOne = converters.get(getColumnLabelingScheme()).fromOrdinal(x);
 					String posTwo = converters.get(getRowLabelingScheme()).fromOrdinal(y);
 
-					return createPosition(x, posOne, y, posTwo);
+					return (lastAssignedPos = createPosition(x, posOne, y, posTwo));
 				}
 			}
 
@@ -691,7 +693,6 @@ public class StorageContainer extends BaseEntity {
 		position.setPosTwoOrdinal(posTwoOrdinal);
 		position.setPosTwo(posTwo);
 		position.setContainer(this);
-		lastAssignedPos = position;
 
 		return position;
 	}
