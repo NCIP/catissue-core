@@ -52,6 +52,7 @@
     <property name="migrationProps" ref="migrationProps"/>
     <property name="cfgSvc" ref="cfgSvc"/>
     <property name="migrationSvc" ref="migrationSvc"/>
+    <property name="jdbcTemplate" ref="jdbcTemplate"/>
   </bean>
   
   <bean id="migrateConsents" class="com.krishagni.catissueplus.core.init.MigrateConsents">
