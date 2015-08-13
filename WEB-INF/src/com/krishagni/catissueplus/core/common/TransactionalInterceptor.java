@@ -45,9 +45,12 @@ public class TransactionalInterceptor {
 					}
 					
 					return result ;
-				} catch (Throwable t) {
+				} catch (OpenSpecimenException ose) {
 					status.setRollbackOnly();
+					throw ose;
+				} catch (Throwable t) {
 					t.printStackTrace();
+					status.setRollbackOnly();
 					throw OpenSpecimenException.serverError(t);
 				}
 			}			
