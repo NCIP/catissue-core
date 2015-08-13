@@ -1,26 +1,24 @@
 package com.krishagni.catissueplus.core.biospecimen.label.specimen;
 
+import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 
-public class SpecimenPathologyStatusToken extends AbstractSpecimenLabelToken {
-	
+public class SpecimenPathologyStatusToken extends AbstractSpmnAbbrLabelToken {
+
 	public SpecimenPathologyStatusToken() {
 		this.name = "SP_PATH_STATUS";
+	}
+
+	@Override
+	protected String getAbbrFileConfigParam() {
+		return ConfigParams.SP_PATH_STATUS_ABBR_MAP;
 	}
 	
 	@Override
 	public String getLabel(Specimen specimen) {
-		if (specimen.getPathologicalStatus().equals(NON_MALIGNANT) || specimen.getPathologicalStatus().equals(NORMAL)) {
-			return "N";
-		} else {
-			return "T";
-		}
+		return super.getLabel(
+			specimen.getPathologicalStatus(), 
+			SpecimenErrorCode.NO_PATH_STATUS_ABBR);
 	}
-	
-	//
-	// TODO: Requires internationalization
-	//
-	private static final String NON_MALIGNANT = "Non-Malignant";
-	
-	private static final String NORMAL = "Normal";
 }

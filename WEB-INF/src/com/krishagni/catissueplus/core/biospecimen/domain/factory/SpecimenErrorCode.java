@@ -106,7 +106,11 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	INVALID_QTY_OR_CNT,
 	
-	NOT_COLLECTED;
+	NOT_COLLECTED,
+	
+	NO_PATH_STATUS_ABBR,
+	
+	NO_TYPE_ABBR;
 
 	public String code() {
 		return "SPECIMEN_" + this.name();
