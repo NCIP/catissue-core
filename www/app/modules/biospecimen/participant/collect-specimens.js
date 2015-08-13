@@ -169,7 +169,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
             specimen.showInTree = true;
             showSpecimenInTree(specimen);
           } else {
-            hideSpecimenTree(specimen);
+            hideSpecimenInTree(specimen);
           }
         });
       }
@@ -186,24 +186,13 @@ angular.module('os.biospecimen.participant.collect-specimens',
         });
       }
 
-      function hideSpecimenTree(specimen) {
+      function hideSpecimenInTree(specimen) {
         specimen.showInTree = false;
         if (specimen.children.length > 0) {
           angular.forEach(specimen.children, function(child) {
-            hideSpecimenTree(child);
+            hideSpecimenInTree(child);
           });
         }
-      }
-
-      function setChildrenShowInTree(aliquot, showInTree) {
-        angular.forEach(aliquot.children, function(child) {
-          child.showInTree = showInTree;
-          if (!child.children[0].aliquotGrp) {
-            setChildrenShowInTree(child, showInTree);
-          } else {
-            child.children[0].showInTree = showInTree;
-          }
-        });
       }
 
       function addAliquotsToGrp(grpLeader, newSpmnsCnt) {
