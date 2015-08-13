@@ -631,7 +631,7 @@ public class Specimen extends BaseEntity {
 			} else {
 				setCollectionStatus(collectionStatus);
 				decAliquotedQtyFromParent();
-				addCollRecvEvents();				
+				addOrUpdateCollRecvEvents();
 			}
 		}			
 	}
@@ -770,9 +770,9 @@ public class Specimen extends BaseEntity {
 		position.occupy();
 	}
 	
-	public void addCollRecvEvents() {
-		addCollectionEvent();
-		addReceivedEvent();		
+	public void addOrUpdateCollRecvEvents() {
+		addOrUpdateCollectionEvent();
+		addOrUpdateReceivedEvent();	
 	}
 	
 	public void setLabelIfEmpty() {
@@ -907,7 +907,7 @@ public class Specimen extends BaseEntity {
 		}
 	}
 			
-	private void addCollectionEvent() {
+	private void addOrUpdateCollectionEvent() {
 		if (isAliquot() || isDerivative()) {
 			return;
 		}
@@ -915,7 +915,7 @@ public class Specimen extends BaseEntity {
 		getCollectionEvent().saveOrUpdate();		
 	}
 	
-	private void addReceivedEvent() {
+	private void addOrUpdateReceivedEvent() {
 		if (isAliquot() || isDerivative()) {
 			return;
 		}

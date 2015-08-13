@@ -460,11 +460,9 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 		ose.checkAndThrow();
 
-		boolean newSpecimen = true;
 		if (existing != null) {
 			existing.update(specimen);
 			specimen = existing;
-			newSpecimen = false;
 		} else if (specimen.getParentSpecimen() != null) {
 			if (!specimen.getParentSpecimen().isActive()) {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.EDIT_NOT_ALLOWED, specimen.getParentSpecimen().getLabel());
@@ -478,18 +476,16 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 		specimen.setLabelIfEmpty();
 		daoFactory.getSpecimenDao().saveOrUpdate(specimen);
-		if (newSpecimen) {
-			addEvents(specimen);
-		}
+		addOrUpdateEvents(specimen);
 		return specimen;
 	}
 
-	private void addEvents(Specimen specimen) {
+	private void addOrUpdateEvents(Specimen specimen) {
 		if (!specimen.isCollected()) {
 			return;
 		}
 		
-		specimen.addCollRecvEvents();
+		specimen.addOrUpdateCollRecvEvents();
 	}
 	
 	private List<Specimen> getSpecimensToPrint(PrintSpecimenLabelDetail detail) {
