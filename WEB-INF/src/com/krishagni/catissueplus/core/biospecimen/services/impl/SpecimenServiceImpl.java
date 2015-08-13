@@ -397,18 +397,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 			specimen = saveOrUpdate(detail, existing, parent, false);
 		}
 				
-		if (detail.getChildren() != null) {
-			StorageLocationSummary initialLocation = new StorageLocationSummary();
-			if (CollectionUtils.isNotEmpty(detail.getChildren())) {
-				initialLocation = detail.getChildren().get(0).getStorageLocation();
-			}
-
+		if (CollectionUtils.isNotEmpty(detail.getChildren())) {
 			for (SpecimenDetail childDetail : detail.getChildren()) {
-				if (childDetail.getStorageLocation() == null || childDetail.getStorageLocation().id == null) {
-					initialLocation.reference = true;
-					childDetail.setStorageLocation(initialLocation);
-				}
-
 				collectSpecimen(childDetail, specimen);
 			}
 		}
@@ -424,7 +414,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		
 		return specimen;
 	}
-	
+
 	private ResponseEvent<SpecimenDetail> updateSpecimen(SpecimenDetail detail, boolean partial) {
 		try {
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
