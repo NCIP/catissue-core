@@ -181,24 +181,16 @@ public class AccessCtrlMgr {
 				// All CPs of a site
 				//
 				allowed = true;
-			} else if (accessSite == null && accessCp == null) {
+			} else if (accessSite == null && (accessCp == null || accessCp.equals(cp))) {
 				//
-				// All CPs of all sites of user institute
-				//
-				Set<Site> instituteSites = getUserInstituteSites(userId);
-				if (CollectionUtils.containsAny(instituteSites, cp.getRepositories())) {
-					allowed = true;
-				}
-			} else if (accessSite == null && accessCp !=  null && accessCp.equals(cp)) {
-				//
-				// Specific CP of all sites
+				// All CPs or specific CP of all user institute sites
 				//
 				Set<Site> instituteSites = getUserInstituteSites(userId);
 				if (CollectionUtils.containsAny(instituteSites, cp.getRepositories())) {
 					allowed = true;
 				}
 			}
-
+			
 			if (allowed) {
 				break;
 			}
@@ -746,7 +738,7 @@ public class AccessCtrlMgr {
 				cpIds.add(access.getCollectionProtocol().getId());
 			} else if (access.getSite() != null) {
 				cpOfSites.add(access.getSite().getId());
-			} else if (access.getSite() == null && access.getCollectionProtocol() != null) {
+			} else if (access.getCollectionProtocol() != null) {
 				cpIds.add(access.getCollectionProtocol().getId());
 			} else  {
 				Collection<Site> sites = getUserInstituteSites(userId);
