@@ -360,6 +360,7 @@
     "label": "Label",
     "type": "Type",
     "pathology": "Pathology",
+    "pathology_status": "Pathology Status",
     "container": "Container",
     "collection_status": "Collection Status",
     "class": "Class",
