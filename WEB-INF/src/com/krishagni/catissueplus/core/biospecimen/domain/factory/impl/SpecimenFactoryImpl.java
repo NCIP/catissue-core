@@ -661,19 +661,14 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		
 		StorageContainerPosition position = null;
 		String posOne = location.positionX, posTwo = location.positionY;
-		if (StringUtils.isNotBlank(posOne) && StringUtils.isNotBlank(posTwo) && !location.reference) {
+		if (StringUtils.isNotBlank(posOne) && StringUtils.isNotBlank(posTwo)) {
 			if (container.canSpecimenOccupyPosition(specimen.getId(), posOne, posTwo)) {
 				position = container.createPosition(posOne, posTwo);
 			} else {
 				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
 			}
-		} else if (location.reference) {
-			position = container.nextAvailablePosition(location);
-			if (position == null) {
-				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
-			}
 		} else {
-			position = container.nextAvailablePosition();
+			position = container.nextAvailablePosition(true);
 			if (position == null) {
 				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
 			} 
