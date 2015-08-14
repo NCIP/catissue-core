@@ -127,7 +127,7 @@
         <div class="col-xs-6"> 
           <div class="input-group">
             <input type="text" name="concentration" ng-model="currSpecimen.concentration" class="form-control" 
-                ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/" multiple placeholder="{{'specimens.concentration' | translate}}">
+                ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/" placeholder="{{'specimens.concentration' | translate}}">
             <div class="input-group-addon">
               <span translate="specimens.concentration_unit"></span>
             </div>
@@ -197,8 +197,8 @@
       <div class="form-group" ng-if="currSpecimen.lineage == 'New'">
         <div class="col-xs-offset-3 col-xs-6">
           <a ng-click="$parent.showAdvAttrs = !$parent.showAdvAttrs">
-            <span ng-if="!showAdvAttrs">More Specimen Information</span>
-            <span ng-if="showAdvAttrs">Less Specimen Information</span>
+            <span ng-if="!showAdvAttrs" translate="specimens.more_info">More Specimen Information</span>
+            <span ng-if="showAdvAttrs" translate="specimens.less_info">Less Specimen Information</span>
           </a>
         </div>
       </div>

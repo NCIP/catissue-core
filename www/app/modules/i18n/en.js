@@ -393,6 +393,8 @@
     "activity_time_info": "{{name}} created on {{time | osServerTime: utcOffset | date: global.dateTimeFmt}}",
     "activity_info": "{{name}} created",
     "activity_status": "Activity Status",
+    "more_info": "More Specimen Information",
+    "less_info": "Less Specimen Information",
 
     "reason_for_closing": "Reason for closing",
 
