@@ -270,7 +270,8 @@ public class Specimen extends BaseEntity {
 	}
 
 	public void setCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
+		// For all specimens, the created on seconds and milliseconds should be reset to 0
+		this.createdOn = Utility.chopSeconds(createdOn);
 	}
 
 	public BigDecimal getAvailableQuantity() {
@@ -709,7 +710,7 @@ public class Specimen extends BaseEntity {
 			specimen.decAliquotedQtyFromParent();		
 			specimen.checkQtyConstraints();		
 		}
-		
+
 		if (specimen.getCreatedOn() != null && specimen.getCreatedOn().before(getCreatedOn())) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.CHILD_CREATED_ON_LT_PARENT);
 		}
