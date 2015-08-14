@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorC
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ReceivedEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenAliquotsSpec;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
@@ -217,7 +219,14 @@ public class SpecimenServiceImpl implements SpecimenService {
 	public ResponseEvent<List<SpecimenDetail>> collectSpecimens(RequestEvent<List<SpecimenDetail>> req) {
 		try {
 			List<SpecimenDetail> result = new ArrayList<SpecimenDetail>();
+
 			for (SpecimenDetail detail : req.getPayload()) {
+				//
+				// Pre-populate specimen interaction objects with
+				// appropriate created on time
+				//
+				setCreatedOn(detail);
+
 				Specimen specimen = collectSpecimen(detail, null);
 				result.add(SpecimenDetail.from(specimen));
 			}
@@ -229,7 +238,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenDetail>> createAliquots(RequestEvent<SpecimenAliquotsSpec> req) {
@@ -345,7 +354,47 @@ public class SpecimenServiceImpl implements SpecimenService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-		
+
+	private void setCreatedOn(SpecimenDetail detail) {
+		//
+		// 1. If primary specimen, copy received time, if available, to created on.
+		//    Otherwise use current time for both created on and receive time
+		// 2. If not primary specimen and parent is already collected, use current time
+		// 3. Copy parent's created on to its children
+		//
+		Date createdOn = Calendar.getInstance().getTime();
+		if (detail.getLineage().equals(Specimen.NEW)) {
+			if (detail.getReceivedEvent() != null && detail.getReceivedEvent().getTime() != null) {
+				setCreatedOn(detail.getChildren(), detail.getReceivedEvent().getTime());
+			} else {
+				ReceivedEventDetail receivedEvent = detail.getReceivedEvent();
+				if (receivedEvent == null) {
+					receivedEvent = new ReceivedEventDetail();
+				}
+
+				receivedEvent.setTime(createdOn);
+				detail.setReceivedEvent(receivedEvent);
+				setCreatedOn(detail.getChildren(), createdOn);
+			}
+		} else {
+			setCreatedOn(detail.getChildren(), createdOn);
+		}
+	}
+
+	private void setCreatedOn(List<SpecimenDetail> details, Date createdOn) {
+		if (CollectionUtils.isEmpty(details)) {
+			return;
+		}
+
+		for (SpecimenDetail detail : details) {
+			if (detail.getCreatedOn() == null) {
+				detail.setCreatedOn(createdOn);
+			}
+
+			setCreatedOn(detail.getChildren(), detail.getCreatedOn());
+		}
+	}
+
 	private void ensureValidAndUniqueLabel(Specimen specimen, OpenSpecimenException ose) {
 		CollectionProtocol cp = specimen.getCollectionProtocol();
 		String labelTmpl = specimen.getLabelTmpl();
@@ -391,7 +440,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND, detail.getId());
 			}
 		}
-		
+
 		Specimen specimen = existing;
 		if (existing == null || !existing.isCollected()) {
 			specimen = saveOrUpdate(detail, existing, parent, false);
@@ -437,7 +486,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		if (existing != null && !existing.isActive()) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.EDIT_NOT_ALLOWED, existing.getLabel());
 		}
-		
+
 		Specimen specimen = null;		
 		if (partial) {
 			specimen = specimenFactory.createSpecimen(existing, detail, parent);
