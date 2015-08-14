@@ -99,7 +99,6 @@ angular.module('os.common.form', [])
             LocationChangeListener.allowChange();
           }
           scope.$eval(attrs.osFormSubmit);
-
         } else {
           Alerts.error("common.form_validation_error");
         }
