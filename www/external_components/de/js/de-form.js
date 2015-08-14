@@ -1380,7 +1380,7 @@ edu.common.de.FileUploadField = function(id, field, args) {
         } else {
           url = args.fileDownloadUrl;
         }
-        var link = $("<a/>").attr("href", url).text(this.value.filename);
+        var link = $("<a/>").attr({href: url, target: "_blank"}).text(this.value.filename);
         this.fileNameSpan.append(link);
       }
 
