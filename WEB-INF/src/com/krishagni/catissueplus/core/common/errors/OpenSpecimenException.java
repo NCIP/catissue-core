@@ -53,6 +53,24 @@ public class OpenSpecimenException extends RuntimeException {
 		}
 	}
 	
+	public boolean containsError(ErrorCode error) {
+		boolean containsError = false;
+		for (ParameterizedError parameterizedError : this.getErrors()) {
+			if (parameterizedError.error().equals(error)) {
+				containsError = true;
+				break;
+			}
+		}
+		return containsError;
+	}
+	
+	public void rethrow(ErrorCode oldError, ErrorCode newError, Object ... params) {
+		if (containsError(oldError)) {
+			throw OpenSpecimenException.userError(newError, params);
+		}
+		throw this;
+	}	
+	
 	public static OpenSpecimenException userError(ErrorCode error, Object ... params) {		
 		return new OpenSpecimenException(ErrorType.USER_ERROR, error, params);
 	}

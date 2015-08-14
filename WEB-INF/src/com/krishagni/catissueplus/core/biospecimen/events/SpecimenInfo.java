@@ -24,8 +24,6 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		public String positionX;
 		
 		public String positionY;
-
-		public Boolean reference = false;
 	}
 	
 	private Long id;

@@ -49,4 +49,15 @@
       );
     </sql>
   </changeSet>
+
+  <changeSet author="asamgir" id="Config setting for specimen pathology status abbreviation map">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'spmn_path_status_abbr_map',
+        'spmn_path_status_abbr_map', 'spmn_path_status_abbr_map_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+
 </databaseChangeLog>
