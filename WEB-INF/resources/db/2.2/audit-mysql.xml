@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+  <changeSet author="ahegade" id="Column for specifying person who has missed the visit">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="MISSED_BY" type="BIGINT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Tracking the person who has missed the visit">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="missedBy_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+</databaseChangeLog>

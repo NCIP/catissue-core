@@ -295,6 +295,7 @@
     "collection_status": "Collection Status",
     "anticipated_visits": "Anticipated Visits",
     "missed_visits": "Missed Visits",
+    "missed_by": "Missed By",
     "anticipated_specimens": "Anticipated Specimens",
     "visit_status": "Status",
     "name": "Name",

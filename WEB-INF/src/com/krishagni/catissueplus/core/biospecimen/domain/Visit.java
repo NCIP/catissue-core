@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -68,6 +69,8 @@ public class Visit {
 	private String defNameTmpl;
 
 	private String missedReason;
+
+	private User missedBy;
 	
 	@Autowired
 	@Qualifier("visitNameGenerator")
@@ -233,6 +236,14 @@ public class Visit {
 		this.missedReason = missedVisitReason;
 	}
 
+	public User getMissedBy() {
+		return missedBy;
+	}
+
+	public void setMissedBy(User missedBy) {
+		this.missedBy = missedBy;
+	}
+
 	public void setActive() {
 		this.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
@@ -296,6 +307,7 @@ public class Visit {
 		updateStatus(visit.getStatus());		
 		setComments(visit.getComments());
 		setMissedReason(isMissed() ? visit.getMissedReason() : null);
+		setMissedBy(isMissed() ? visit.getMissedBy() : null);
 		setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 		setVisitDate(visit.getVisitDate());
 	}

@@ -12,6 +12,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegi
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
 import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 @ListenAttributeChanges
 public class VisitDetail extends AttributeModifiedSupport {
@@ -50,6 +51,8 @@ public class VisitDetail extends AttributeModifiedSupport {
 	private String sprName;
 
 	private String missedReason;
+
+	private UserSummary missedBy;
 	
 	private boolean sprLocked;
 
@@ -215,6 +218,14 @@ public class VisitDetail extends AttributeModifiedSupport {
 		this.missedReason = missedReason;
 	}
 
+	public UserSummary getMissedBy() {
+		return missedBy;
+	}
+
+	public void setMissedBy(UserSummary missedBy) {
+		this.missedBy = missedBy;
+	}
+
 	public static VisitDetail from(Visit visit) {
 		VisitDetail detail = new VisitDetail();
 		detail.setActivityStatus(visit.getActivityStatus());
@@ -229,6 +240,10 @@ public class VisitDetail extends AttributeModifiedSupport {
 		detail.setSprLocked(visit.isSprLocked());
 		detail.setVisitDate(visit.getVisitDate());
 		detail.setMissedReason(visit.getMissedReason());
+
+		if (visit.getMissedBy() != null) {
+			detail.setMissedBy(UserSummary.from(visit.getMissedBy()));
+		}
 
 		if (visit.getSite() != null) {
 			detail.setSite(visit.getSite().getName());

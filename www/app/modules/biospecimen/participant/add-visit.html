@@ -27,12 +27,18 @@
         </div>
       </div>
 
-      <div class="col-xs-6" ng-if="visit.status == 'Missed Collection'">
+      <div class="col-xs-4" ng-if="visit.status == 'Missed Collection'">
         <div class="form-group">
           <os-select name="missedReason" ng-model="visit.missedReason" list="missedReasons"
             os-md-input placeholder="Reason for Missed Visit">
           </os-select>
           <div os-field-error field="visitForm.missedReason"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-4"  ng-if="visit.status == 'Missed Collection'">
+        <div os-md-input ng-model="visit.missedBy" placeholder="Missed By">
+          <os-users ng-model="visit.missedBy" placeholder="Missed By"> </os-users>
         </div>
       </div>
 

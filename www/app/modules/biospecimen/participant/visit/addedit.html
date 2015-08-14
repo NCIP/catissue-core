@@ -99,6 +99,14 @@
       </div>
 
       <div class="form-group" ng-if="currVisit.status == 'Missed Collection'">
+        <label class="col-xs-3 control-label">Missed By</label>
+        <div class="col-xs-6">
+          <os-users name="missedBy" ng-model="currVisit.missedBy" placeholder="{{'visits.missed_by' | translate}}"></os-users>
+          <div os-field-error field="vform.missedBy"></div>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="currVisit.status == 'Missed Collection'">
         <label class="col-xs-3 control-label">Reason for Missed Visit</label>
         <div class="col-xs-6">
           <os-select name="missedReason" ng-model="currVisit.missedReason" list="missedReasons"
