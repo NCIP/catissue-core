@@ -175,4 +175,16 @@ public class Utility {
 		return new SimpleDateFormat(ConfigUtil.getInstance().getDeDateFmt()).format(date);
 	}
 
+	public static Date chopSeconds (Date date) {
+		if (date == null) {
+			return null;
+		}
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
+	}
+
 }

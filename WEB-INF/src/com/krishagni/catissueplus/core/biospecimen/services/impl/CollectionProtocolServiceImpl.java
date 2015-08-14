@@ -54,6 +54,7 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.service.RbacService;
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
@@ -883,22 +884,39 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 
 	private void addDefaultPiRoles(CollectionProtocol cp, User user) {
-		rbacSvc.addSubjectRole(null, cp, user, getDefaultPiRoles());
+		try {
+			rbacSvc.addSubjectRole(null, cp, user, getDefaultPiRoles());
+		} catch (OpenSpecimenException ose) {
+			ose.rethrow(RbacErrorCode.ACCESS_DENIED, CpErrorCode.USER_UPDATE_RIGHTS_REQUIRED);
+			throw ose;
+		}
 	}
-	
+
 	private void removeDefaultPiRoles(CollectionProtocol cp, User user) {
-		rbacSvc.removeSubjectRole(null, cp, user, getDefaultPiRoles());
+		try {
+			rbacSvc.removeSubjectRole(null, cp, user, getDefaultPiRoles());
+		} catch (OpenSpecimenException ose) {
+			ose.rethrow(RbacErrorCode.ACCESS_DENIED, CpErrorCode.USER_UPDATE_RIGHTS_REQUIRED);
+		}
 	}
 	
 	private void addDefaultCoordinatorRoles(CollectionProtocol cp, Collection<User> coordinators) {
-		for (User user : coordinators) {
-			rbacSvc.addSubjectRole(null, cp, user, getDefaultCoordinatorRoles());
+		try {
+			for (User user : coordinators) {
+				rbacSvc.addSubjectRole(null, cp, user, getDefaultCoordinatorRoles());
+			}
+		} catch (OpenSpecimenException ose) {
+			ose.rethrow(RbacErrorCode.ACCESS_DENIED, CpErrorCode.USER_UPDATE_RIGHTS_REQUIRED);
 		}
 	}
 	
 	private void removeDefaultCoordinatorRoles(CollectionProtocol cp, Collection<User> coordinators) {
-		for (User user : coordinators) {
-			rbacSvc.removeSubjectRole(null, cp, user, getDefaultCoordinatorRoles());
+		try {
+			for (User user : coordinators) {
+				rbacSvc.removeSubjectRole(null, cp, user, getDefaultCoordinatorRoles());
+			}
+		} catch (OpenSpecimenException ose) {
+			ose.rethrow(RbacErrorCode.ACCESS_DENIED, CpErrorCode.USER_UPDATE_RIGHTS_REQUIRED);
 		}
 	}
 	

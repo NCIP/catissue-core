@@ -243,10 +243,10 @@
 
       <div class="form-group clearfix">
         <div class="col-xs-12">
-          <button type="submit" class="btn btn-success" os-form-submit="collectAliquots()">
+          <button type="submit" class="btn btn-success" os-form-submit="collectAliquots()" local-form="true">
             <span translate="specimens.buttons.collect_aliquots">Collect Aliquots</span>
           </button>
-          <a class="btn os-btn-text-secondary" ng-click="revertEdit()">
+          <a class="btn os-btn-text-secondary" os-form-cancel="revertEdit()">
             <span translate="common.buttons.cancel">Cancel</span>
           </a>
         </div>

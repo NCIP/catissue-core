@@ -32,7 +32,7 @@
     <form name="sform" class="form-horizontal" os-form-validator="sform" validator="sformValidator" novalidate>
       <div class="form-group" ng-init="pLabel = currSpecimen.label"
         ng-hide="!currSpecimen.label && !!currSpecimen.labelFmt && !cp.manualSpecLabelEnabled">
-        <label class="col-xs-3 control-label">Label</label>
+        <label class="col-xs-3 control-label" translate="specimens.label">Label</label>
         <div class="col-xs-6">
           <input type="text" name="label" ng-model="currSpecimen.label" class="form-control" 
             ng-required="currSpecimen.status == 'Collected' && (!currSpecimen.labelFmt || cp.manualSpecLabelEnabled)" 
@@ -42,32 +42,31 @@
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label">Collection Status</label>
+        <label class="col-xs-3 control-label" translate="specimens.collection_status">Collection Status</label>
         <div class="col-xs-6">
           <os-select name="collectionStatus" ng-model="currSpecimen.status" list="collectionStatuses"
-            required placeholder="Collection Status">
+            required placeholder="{{'specimens.collection_status' | translate}}">
           </os-select>
           <div os-field-error field="sform.collectionStatus"></div>
         </div>
       </div>
 
-
       <div ng-if="currSpecimen.lineage != 'Aliquot'">
         <div class="form-group">
-          <label class="col-xs-3 control-label">Specimen Class</label>
+          <label class="col-xs-3 control-label" translate="specimens.class">Specimen Class</label>
           <div class="col-xs-6">
             <os-select name="class" ng-model="currSpecimen.specimenClass" list="specimenClasses"
-              on-change="loadSpecimenTypes" required placeholder="Specimen Class">
+              on-change="loadSpecimenTypes" required placeholder="{{'specimens.class' | translate}}">
             </os-select>
             <div os-field-error field="sform.class"></div>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="col-xs-3 control-label">Specimen Type</label>
+          <label class="col-xs-3 control-label" translate="specimens.type">Specimen Type</label>
           <div class="col-xs-6">
             <os-select name="type" ng-model="currSpecimen.type" list="specimenTypes"
-              required placeholder="Specimen Type">
+              required placeholder="{{'specimens.type' | translate}}">
             </os-select>
             <div os-field-error field="sform.type"></div>
           </div>
@@ -75,11 +74,11 @@
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label">Initial Quantity</label>
+        <label class="col-xs-3 control-label" translate="specimens.initial_qty">Initial Quantity</label>
         <div class="col-xs-6">
           <div class="input-group">
             <input type="text" name="qty" ng-model="currSpecimen.initialQty" class="form-control" 
-                required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/" placeholder="Initial Quantity">
+                required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/" placeholder="{{'specimens.initial_qty' | translate}}">
             <div class="input-group-addon" ng-switch on="currSpecimen.specimenClass">
               <os-specimen-qty-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type">
               </os-specimen-qty-unit>
@@ -90,11 +89,11 @@
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label">Available Quantity</label>
+        <label class="col-xs-3 control-label" translate="specimens.available_qty">Available Quantity</label>
         <div class="col-xs-6"> 
           <div class="input-group">
             <input type="text" name="aqty" ng-model="currSpecimen.availableQty" class="form-control" 
-                required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/" placeholder="Available Quantity">
+                required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/" placeholder="{{'specimens.available_qty' | translate}}">
             <div class="input-group-addon" ng-switch on="currSpecimen.specimenClass">
               <os-specimen-qty-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type">
               </os-specimen-qty-unit>
@@ -112,7 +111,7 @@
               <input type="text" name="createdOn" ng-model="currSpecimen.createdOn" class="form-control"
                 datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
                 is-open="createdOn.isOpen" ng-focus="createdOn.isOpen=true"
-                required placeholder="Created On">
+                required placeholder="{{'specimens.created_on' | translate}}">
             </div>
             <div class="os-col-15">
               <timepicker class="os-time-no-wheels"  ng-model="currSpecimen.createdOn" show-meridian="false">
@@ -124,11 +123,11 @@
       </div>
 
       <div class="form-group" ng-if="currSpecimen.lineage != 'Aliquot' && currSpecimen.specimenClass == 'Molecular'">
-        <label class="col-xs-3 control-label">Concentration</label>
+        <label class="col-xs-3 control-label" translate="specimens.concentration">Concentration</label>
         <div class="col-xs-6"> 
           <div class="input-group">
             <input type="text" name="concentration" ng-model="currSpecimen.concentration" class="form-control" 
-                ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/" placeholder="Concentration">
+                ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/" placeholder="{{'specimens.concentration' | translate}}">
             <div class="input-group-addon">
               <span translate="specimens.concentration_unit"></span>
             </div>
@@ -138,7 +137,7 @@
       </div>
 
       <div class="form-group" ng-if="currSpecimen.status == 'Collected'">
-        <label class="col-xs-3 control-label">Location</label>
+        <label class="col-xs-3 control-label" translate="specimens.location">Location</label>
         <div class="col-xs-6">
           <os-specimen-position specimen="currSpecimen" cp-id="cpr.cpId"></os-specimen-position>
         </div>
@@ -146,38 +145,38 @@
 
       <div class="form-group"  
         ng-if="(currSpecimen.lineage == 'New' || currSpecimen.lineage == 'Derived') && biohazards.length > 0">
-        <label class="col-xs-3 control-label">Biohazards</label>
+        <label class="col-xs-3 control-label" translate="specimens.biohazards">Biohazards</label>
         <div class="col-xs-6">
           <os-select name="biohazards" ng-model="currSpecimen.biohazards" list="biohazards"
-            multiple placeholder="Biohazards">
+            multiple placeholder="{{'specimens.biohazards' | translate}}">
           </os-select>
         </div>
       </div>
 
       <div ng-if="showAdvAttrs">
         <div class="form-group">
-          <label class="col-xs-3 control-label">Anatomic Site</label>
+          <label class="col-xs-3 control-label" translate="specimens.anatomic_site">Anatomic Site</label>
           <div class="col-xs-6">
             <os-select name="anatomicSite" ng-model="currSpecimen.anatomicSite" list="anatomicSites"
-              required placeholder="Anatomic Site">
+              required placeholder="{{'specimens.anatomic_site' | translate}}">
             </os-select>
             <div os-field-error field="sform.anatomicSite"></div>
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-3 control-label">Laterality</label>
+          <label class="col-xs-3 control-label" translate="specimens.laterality">Laterality</label>
           <div class="col-xs-6">
             <os-select name="laterality" ng-model="currSpecimen.laterality" list="lateralities"
-              required placeholder="Laterality">
+              required placeholder="{{'specimens.laterality' | translate}}">
             </os-select>
             <div os-field-error field="sform.laterality"></div>
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-3 control-label">Pathology Status</label>
+          <label class="col-xs-3 control-label" translate="specimens.pathology_status">Pathology Status</label>
           <div class="col-xs-6">
             <os-select name="pathology" ng-model="currSpecimen.pathology" list="pathologyStatuses"
-              required placeholder="Pathology Status">
+              required placeholder="{{'specimens.pathology_status' | translate}}">
             </os-select>
             <div os-field-error field="sform.pathology"></div>
           </div>
@@ -185,7 +184,7 @@
 
         <div class="form-group">
           <label class="col-xs-3 control-label">
-            <span translate="specimens.comments">Comments</span>
+            <span translate="specimens.comments" translate="specimens.comments">Comments</span>
           </label>
           <div class="col-xs-6">
             <textarea ng-model="currSpecimen.comments" class="form-control" 
@@ -198,8 +197,8 @@
       <div class="form-group" ng-if="currSpecimen.lineage == 'New'">
         <div class="col-xs-offset-3 col-xs-6">
           <a ng-click="$parent.showAdvAttrs = !$parent.showAdvAttrs">
-            <span ng-if="!showAdvAttrs">More Specimen Information</span>
-            <span ng-if="showAdvAttrs">Less Specimen Information</span>
+            <span ng-if="!showAdvAttrs" translate="specimens.more_info">More Specimen Information</span>
+            <span ng-if="showAdvAttrs" translate="specimens.less_info">Less Specimen Information</span>
           </a>
         </div>
       </div>
@@ -209,8 +208,8 @@
       <div class="form-group">
         <div class="col-xs-offset-3 col-xs-6">
           <button class="btn btn-primary" os-form-submit="saveSpecimen()" ng-switch on="!!currSpecimen.id">
-            <span ng-switch-when="true">Update</span>
-            <span ng-switch-default>Collect</span>
+            <span ng-switch-when="true" translate="common.buttons.update">Update</span>
+            <span ng-switch-default translate="specimens.buttons.collect">Collect</span>
           </button>
           <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">
             Discard
