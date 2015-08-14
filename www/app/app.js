@@ -288,7 +288,7 @@ osApp.config(function(
         if (plugins) {
           PluginReg.usePlugins(plugins);
           angular.forEach(plugins, function(plugin) {
-            $translatePartialLoader.addPart(plugin + '/');
+            $translatePartialLoader.addPart('plugin-ui-resources/'+ plugin + '/');
           });
         }
         
