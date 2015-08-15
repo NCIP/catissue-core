@@ -24,9 +24,6 @@ angular.module('os.administrative.site',
               return Site.getById($stateParams.siteId);
             }
             return new Site();
-          },
-          customForm: function($stateParams, Site) {
-            return Site.getCustomForm($stateParams.siteId);
           }
         },
         controller: 'SiteAddEditCtrl',

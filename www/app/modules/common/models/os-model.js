@@ -119,6 +119,10 @@ angular.module('os.common.models', [])
         })
       }
 
+      Model.prototype.getFormCtxt = function() {
+        return $http.get(url + "form").then(function(result) { return result.data; });
+      }
+
       return Model;
     };
 

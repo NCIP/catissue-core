@@ -3,29 +3,44 @@ angular.module("openspecimen")
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
-        
-        if (scope.customForm) {
-          scope.formOpts = {
-            formId: scope.customForm.formId,
-            recordId: scope.customForm.recordId,
-            formCtxtId: parseInt(scope.customForm.formCtxtId),
-            objectId: scope.customForm.objectId
-          }
-        }
 
-        scope.$watch("form.rendered", function(newVal) {
+        scope.$watch(attrs.osCustomForm, function(entity) {
+          if (!entity) {
+            return;
+          }
+
+          entity.getFormCtxt().then(
+            function(formCtxt) {
+              if (!!formCtxt) {
+                scope.formOpts = {
+                  formId: formCtxt.formId,
+                  recordId: !!entity.id ? entity.extensionDetail.id : undefined,
+                  formCtxtId: parseInt(formCtxt.formCtxtId),
+                  objectId: entity.id
+                }
+              }
+            }
+          );
+        });
+        
+        scope.$watch("extForm.rendered", function(newVal) {
           if (newVal) {
               reformHtml();
           }
         });
 
-        scope.getCustomFormData = function () {
-          if (!!scope.customForm) {
-             var formData = {appData: scope.form.appData};
-             angular.extend(formData, scope.form.getValue());
-             scope.customForm.formDataJson = JSON.stringify(formData);
+        scope.getExtFormData = function () {
+          if (!scope.extForm) {
+            return null;
           }
-          return scope.customForm;
+
+          var fieldValues = [];
+          var formData = scope.extForm.getValue();
+          angular.forEach(formData, function(value, key) {
+            fieldValues.push({name: key, value: value});
+          });
+
+          return {fieldValues: fieldValues};
         }
 
         function reformHtml() {

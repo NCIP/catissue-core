@@ -68,6 +68,10 @@ public abstract class ImportForms implements InitializingBean {
 		this.deInitializer = deInitializer;
 	}
 
+	public boolean isCreateTable() {
+		return createTable;
+	}
+
 	public void setCreateTable(boolean createTable) {
 		this.createTable = createTable;
 	}
@@ -124,7 +128,7 @@ public abstract class ImportForms implements InitializingBean {
 				}
 				
 				in.reset();
-				Long formId = Container.createContainer(userCtx, in, createTable);				
+				Long formId = Container.createContainer(userCtx, in, isCreateTable());				
 				saveOrUpdateFormCtx(formFile, formId);
 				daoFactory.getFormDao().insertFormChangeLog(formFile, newDigest, formId);
 			} finally {

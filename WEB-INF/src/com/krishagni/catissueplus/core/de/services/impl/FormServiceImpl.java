@@ -15,7 +15,9 @@ import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.ExtensionForm;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -43,7 +45,6 @@ import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
 import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
 import com.krishagni.catissueplus.core.de.events.RemoveFormContextOp;
-import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
 import com.krishagni.catissueplus.core.de.repository.FormDao;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
@@ -301,19 +302,16 @@ public class FormServiceImpl implements FormService {
 	public ResponseEvent<FormCtxtSummary> getEntityForm(RequestEvent<ListEntityFormsOp> req) {
 		try {
 			ListEntityFormsOp opDetail = req.getPayload();
-			String entityType = "";
+			ExtensionForm form = null;
 			switch (opDetail.getEntityType()) {
 				case SITE:
-					entityType = FormType.SITE_FORMS.getType();
+					form = (new Site()).getExtension();
 					break;
-
-				case COLLECTION_PROTOCOL:
-					entityType = FormType.COLLECTION_PROTOCOL_FORMS.getType();
-					break;
+				default:
+					throw OpenSpecimenException.userError(FormErrorCode.NOT_FOUND);
 			}
 			
-			return ResponseEvent.response(
-					formDao.getEntityForm(opDetail.getEntityId(), entityType));
+			return ResponseEvent.response(form.getEntityForm());
 		}  catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

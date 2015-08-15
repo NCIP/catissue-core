@@ -27,7 +27,7 @@ angular.module('os.common.form', [])
         };
 
         this.isValidForm = function() {
-          return !this._form.$invalid;
+          return !this._form.$invalid && (!$scope.extForm || $scope.extForm.validate());
         };
 
         this.isInteracted = function(field) {

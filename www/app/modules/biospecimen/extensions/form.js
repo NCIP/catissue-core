@@ -47,8 +47,8 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
             customHdrs     : hdrs
           };
 
-          scope.form = new edu.common.de.Form(args);
-          scope.form.render();
+          scope.extForm = new edu.common.de.Form(args);
+          scope.extForm.render();
           onceRendered = true;
           LocationChangeListener.preventChange();
         }, true);

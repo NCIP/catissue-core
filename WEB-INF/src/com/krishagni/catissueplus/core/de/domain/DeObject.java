@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 
@@ -38,10 +39,42 @@ public abstract class DeObject {
 	
 	private boolean recordLoaded = false;
 	
+	private boolean useUdn = true;
+	
 	private static Map<String, Container> formMap = new HashMap<String, Container>();
 	
 	private static Map<String, FormContextBean> formCtxMap = new HashMap<String, FormContextBean>();
 	
+	public DeObject() { }
+	
+	public DeObject(boolean useUdn) {
+		this.useUdn = useUdn;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public boolean isRecordLoaded() {
+		return recordLoaded;
+	}
+
+	public void setRecordLoaded(boolean recordLoaded) {
+		this.recordLoaded = recordLoaded;
+	}
+
+	public boolean isUseUdn() {
+		return useUdn;
+	}
+
+	public void setUseUdn(boolean useUdn) {
+		this.useUdn = useUdn;
+	}
+
 	public void saveOrUpdate() {
 		try {
 			Container form = getForm();
@@ -73,12 +106,16 @@ public abstract class DeObject {
 		daoFactory.getFormDao().saveOrUpdateRecordEntry(re);
 	}
 	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
+	public FormCtxtSummary getEntityForm() {
+		FormContextBean ctxt = getFormContext();
+		FormCtxtSummary summary = null;
+		if (ctxt != null) {
+			summary = new FormCtxtSummary();
+			summary.setFormCtxtId(ctxt.getIdentifier());
+			summary.setFormId(ctxt.getContainerId());
+		}
+		
+		return summary;
 	}
 	
 	/** Hackish method */
@@ -102,12 +139,7 @@ public abstract class DeObject {
 		
 		recordLoaded = true;
 		
-		Long recordId = getId();
-		if (recordId == null) {
-			return;
-		}
-		
-		FormData formData = formDataMgr.getFormData(getForm(), recordId);		
+		FormData formData = getFormData();		
 		if (formData == null) {
 			return;
 		}
@@ -119,7 +151,16 @@ public abstract class DeObject {
 		
 		setAttrValues(attrValues);
 	}
-			
+	
+	protected FormData getFormData() {
+		Long recordId = getId();
+		if (recordId == null) {
+			return null;
+		}
+		
+		return formDataMgr.getFormData(getForm(), recordId);
+	}
+	
 	public abstract Long getObjectId();
 	
 	public abstract String getEntityType();
@@ -135,7 +176,7 @@ public abstract class DeObject {
 	public static Long saveFormData(
 			final String formName, 
 			final String entityType, 
-			final Long cpId, 
+			final Long cpId,
 			final Long objectId, 
 			final Map<String, Object> values) {
 		
@@ -199,7 +240,12 @@ public abstract class DeObject {
 		FormData formData = new FormData(container);
 		
 		for (Map.Entry<String, Object> attr : getAttrValues().entrySet()) {
-			Control ctrl = container.getControlByUdn(attr.getKey());
+			Control ctrl = null;
+			if (isUseUdn()) {
+				ctrl = container.getControlByUdn(attr.getKey());
+			} else {
+				ctrl = container.getControl(attr.getKey());
+			}
 			ControlValue cv = new ControlValue(ctrl, attr.getValue());
 			formData.addFieldValue(cv);
 		}

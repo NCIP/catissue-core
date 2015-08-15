@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
@@ -17,6 +18,10 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCo
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
+import com.krishagni.catissueplus.core.biospecimen.domain.ExtensionForm.FieldValue;
+import com.krishagni.catissueplus.core.biospecimen.domain.SiteExtension;
+import com.krishagni.catissueplus.core.biospecimen.events.ExtensionDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ExtensionDetail.FieldValueDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -45,6 +50,7 @@ public class SiteFactoryImpl implements SiteFactory {
 		setType(detail, site, ose);
 		setAddress(detail, site);
 		setActivityStatus(detail, site, ose);
+		setSiteExtension(detail, site, ose);
 		
 		ose.checkAndThrow();
 		return site;
@@ -63,6 +69,7 @@ public class SiteFactoryImpl implements SiteFactory {
 		setType(detail, existing, site, ose);
 		setAddress(detail, existing, site, ose);
 		setActivityStatus(detail, existing, site, ose);
+		setSiteExtension(detail, existing, site, ose);
 		
 		ose.checkAndThrow();
 		return site;		
@@ -206,6 +213,30 @@ public class SiteFactoryImpl implements SiteFactory {
 			setActivityStatus(detail, site, ose);
 		} else {
 			site.setActivityStatus(existing.getActivityStatus());
+		}
+	}
+	
+	private void setSiteExtension(SiteDetail detail, Site site, OpenSpecimenException ose) {
+		ExtensionDetail extDetail = detail.getExtensionDetail();
+		if (extDetail == null) {
+			return;
+		}
+		
+		SiteExtension extension = SiteExtension.getFor(site);
+		for (FieldValueDetail fvd: extDetail.getFieldValues()) {
+			FieldValue fv = new FieldValue();
+			BeanUtils.copyProperties(fvd, fv);
+			extension.getFieldValues().add(fv);
+		}
+		
+		site.setExtension(extension);
+	}
+	
+	private void setSiteExtension(SiteDetail detail, Site existing, Site site, OpenSpecimenException ose) {
+		if (detail.isAttrModified("extensionDetail")) {
+			setSiteExtension(detail, site, ose);
+		} else {
+			site.setExtension(existing.getExtension());
 		}
 	}
 }
