@@ -28,11 +28,15 @@ public class PvValidator {
 	}
 	
 	public static boolean isValid(String attribute, String value) {
+		return isValid(attribute, value, false);
+	}
+	
+	public static boolean isValid(String attribute, String value, boolean leafCheck) {
 		if (StringUtils.isBlank(value)) {
 			return true;
 		}
 		
-		return getInstance().getPvDao().exists(attribute, Collections.singleton(value));
+		return getInstance().getPvDao().exists(attribute, Collections.singleton(value), leafCheck);
 	}
 	
 	public static boolean isValid(String attribute, String parentValue, String value) {

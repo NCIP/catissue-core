@@ -131,4 +131,10 @@
     </createIndex>
   </changeSet>
 
+  <changeSet author="ahegade" id="Column for specifying person who has missed the visit">
+    <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+      <column name="MISSED_BY" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

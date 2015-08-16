@@ -29,13 +29,7 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PermissibleValue> getPvs(ListPvCriteria crit) {
-		Criteria query = null;
-		if (StringUtils.isNotBlank(crit.attribute()) && crit.attribute().equals(ANATOMIC_SITE)) {
-			query = getAnatomicSiteQuery(crit);
-		} else {
-			query = getPvQuery(crit);
-		}
-		
+		Criteria query = getPvQuery(crit);		
 		if (StringUtils.isNotBlank(crit.query())) {
 			query.add(Restrictions.ilike("value", crit.query(), MatchMode.ANYWHERE));
 		}
@@ -69,16 +63,12 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 		return query.setProjection(Projections.property("value")).list();
 	}	
 	
-	
+	@Override
 	public boolean exists(String attribute, Collection<String> values) {
-		Number count = (Number)sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class)
-				.add(Restrictions.eq("attribute", attribute))
-				.add(Restrictions.in("value", values))
-				.setProjection(Projections.count("id"))
-				.uniqueResult();
-		return count.intValue() == values.size();
+		return exists(attribute, values, false);
 	}
-	
+
+	@Override
 	public boolean exists(String attribute, String parentValue, Collection<String> values) {
 		Number count = (Number)sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class)
 				.createAlias("parent", "ppv")
@@ -90,10 +80,28 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 		return count.intValue() == values.size();
 	}
 
+	public boolean exists(String attribute, Collection<String> values, boolean leafLevelCheck) {
+		Criteria query = sessionFactory.getCurrentSession()
+				.createCriteria(PermissibleValue.class)
+				.add(Restrictions.eq("attribute", attribute))
+				.add(Restrictions.in("value", values))
+				.setProjection(Projections.count("id"));
+		
+		if (leafLevelCheck) {
+			query.createAlias("children", "c", JoinType.LEFT_OUTER_JOIN)
+				.add(Restrictions.isNull("c.id"));
+		}
+		
+		Number count = (Number)query.uniqueResult();				
+		return count.intValue() == values.size();	
+	}
+	
+	@Override
 	public boolean exists(String attribute, int depth, Collection<String> values) {
 		return exists(attribute, depth, values, false);
 	}
-		
+	
+	@Override
 	public boolean exists(String attribute, int depth, Collection<String> values, boolean anyLevel) {
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class)
 				.add(Restrictions.in("value", values))
@@ -137,20 +145,13 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 			query.add(Restrictions.eq("p.value", crit.parentValue()));
 		}
 		
+		if (crit.includeOnlyLeafValue()) {
+			query.createAlias("children", "c", JoinType.LEFT_OUTER_JOIN)
+				.add(Restrictions.isNull("c.id"));			
+		}
+		
 		return query;
 	}
-	
-	private Criteria getAnatomicSiteQuery(ListPvCriteria crit) {
-		return sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class)
-				.createAlias("parent", "mpv")
-				.createAlias("mpv.parent", "tpv", JoinType.LEFT_OUTER_JOIN)
-				.add(Restrictions.disjunction()
-						.add(Restrictions.eq("tpv.attribute", ANATOMIC_SITE))
-						.add(Restrictions.eq("mpv.attribute", ANATOMIC_SITE))
-					);
-	}
-	
-	private static final String ANATOMIC_SITE = "Tissue_Site_PID";
 	
 	private static final String SPECIMEN_CLASS = "2003991";
 }
