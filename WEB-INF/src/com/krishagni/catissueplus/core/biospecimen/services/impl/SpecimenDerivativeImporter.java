@@ -24,8 +24,7 @@ public class SpecimenDerivativeImporter implements ObjectImporter<SpecimenDetail
 			spmnDetail.setLineage(Specimen.DERIVED);
 			spmnDetail.setStatus(Specimen.COLLECTED);
 			
-			RequestEvent<SpecimenDetail> derivedReq = new RequestEvent<SpecimenDetail>(spmnDetail);	
-			return specimenSvc.createSpecimen(derivedReq);
+			return specimenSvc.createDerivative(new RequestEvent<SpecimenDetail>(spmnDetail));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}		

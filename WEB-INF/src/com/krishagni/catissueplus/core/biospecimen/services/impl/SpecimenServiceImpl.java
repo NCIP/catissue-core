@@ -274,7 +274,10 @@ public class SpecimenServiceImpl implements SpecimenService {
 				return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
 			}
 			
-			List<SpecimenDetail> aliquots = new ArrayList<SpecimenDetail>();
+			SpecimenDetail parentDetail = SpecimenDetail.from(parentSpecimen);
+			parentDetail.setCloseAfterChildrenCreation(spec.getCloseParent());
+
+			List<SpecimenDetail> persistedChildren = SpecimenDetail.from(parentSpecimen.getChildCollection());
 			for (int i = 0; i < count; ++i) {
 				SpecimenDetail aliquot = new SpecimenDetail();
 				aliquot.setLineage(Specimen.ALIQUOT);
@@ -287,18 +290,40 @@ public class SpecimenServiceImpl implements SpecimenService {
 				StorageLocationSummary location = new StorageLocationSummary();
 				location.name = spec.getContainerName();
 				aliquot.setStorageLocation(location);
-				
-				aliquots.add(aliquot);				
+
+				persistedChildren.add(aliquot);
 			}
-			
-			return collectSpecimens(new RequestEvent<List<SpecimenDetail>>(aliquots));
+
+			parentDetail.setChildren(persistedChildren);
+			ResponseEvent resp = collectSpecimens(new RequestEvent(Collections.singletonList(parentDetail)));
+
+			return resp;
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SpecimenDetail> createDerivative(RequestEvent<SpecimenDetail> derivedReq) {
+		SpecimenDetail specimenDetail = derivedReq.getPayload();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+
+		Specimen parentSpecimen = getSpecimen(specimenDetail.getParentId(), specimenDetail.getParentLabel(), ose);
+		SpecimenDetail parentDetail = SpecimenDetail.from(parentSpecimen);
+		parentDetail.setCloseAfterChildrenCreation(specimenDetail.getCloseParent());
+
+		List<SpecimenDetail> persistedChildren = SpecimenDetail.from(parentSpecimen.getChildCollection());
+
+		persistedChildren.add(specimenDetail);
+		parentDetail.setChildren(persistedChildren);
+
+		ResponseEvent resp = collectSpecimens(new RequestEvent(Collections.singletonList(parentDetail)));
+
+		return resp;
+	}
 	@Override
 	@PlusTransactional
 	public ResponseEvent<Boolean> doesSpecimenExists(RequestEvent<String> req) {

@@ -15,6 +15,8 @@ public class SpecimenAliquotsSpec {
 	private Date createdOn;
 	
 	private String containerName;
+
+	private Boolean closeParent;
 	
 	public Long getParentId() {
 		return parentId;
@@ -62,5 +64,13 @@ public class SpecimenAliquotsSpec {
 
 	public void setContainerName(String containerName) {
 		this.containerName = containerName;
+	}
+
+	public Boolean getCloseParent() {
+		return closeParent;
+	}
+
+	public void setCloseParent(Boolean closeParent) {
+		this.closeParent = closeParent;
 	}
 }
