@@ -19,6 +19,8 @@ public interface PermissibleValueDao extends Dao<PermissibleValue>{
 	
 	public boolean exists(String attribute, String parentValue, Collection<String> values);
 	
+	public boolean exists(String attribute, Collection<String> values, boolean leafLevelCheck);
+	
 	public boolean exists(String attribute, int depth, Collection<String> values);
 	
 	public boolean exists(String attribute, int depth, Collection<String> values, boolean anyLevel);

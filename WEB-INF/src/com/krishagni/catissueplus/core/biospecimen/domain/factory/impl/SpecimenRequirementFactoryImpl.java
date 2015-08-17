@@ -249,8 +249,8 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			return;
 		}
 		
-		if (!isValid(SPECIMEN_ANATOMIC_SITE, 2, anatomicSite, true)) {
-			ose.addError(INVALID_ANATOMIC_SITE);
+		if (!isValid(SPECIMEN_ANATOMIC_SITE, anatomicSite, true)) {
+			ose.addError(INVALID_ANATOMIC_SITE, anatomicSite);
 			return;
 		}
 		

@@ -55,6 +55,11 @@
       <filter name="activeEntity"/>
     </set>
 
+    <many-to-one name="missedBy"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      column="MISSED_BY"
+    />
+
     <filter name="activeEntity"/>
 
     <query name="getVisitByName">

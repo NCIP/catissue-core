@@ -13,6 +13,8 @@ public class ListPvCriteria extends AbstractListCriteria<ListPvCriteria> {
 	
 	private String parentAttribute;
 	
+	private boolean includeOnlyLeafValue;
+	
 	public String attribute() {
 		return attribute;
 	}
@@ -47,6 +49,15 @@ public class ListPvCriteria extends AbstractListCriteria<ListPvCriteria> {
 	
 	public ListPvCriteria parentAttribute(String parentAttribute) {
 		this.parentAttribute = parentAttribute;
+		return self();
+	}
+	
+	public boolean includeOnlyLeafValue() {
+		return includeOnlyLeafValue;
+	}
+	
+	public ListPvCriteria includeOnlyLeafValue(boolean includeOnlyLeafValue) {
+		this.includeOnlyLeafValue = includeOnlyLeafValue;
 		return self();
 	}
 	

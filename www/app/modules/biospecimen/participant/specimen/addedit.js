@@ -14,7 +14,7 @@ angular.module('os.biospecimen.specimen.addedit', [])
       if (!!specimen.specimenClass) {
         $scope.loadSpecimenTypes(specimen.specimenClass, true);
       }
-      $scope.anatomicSites = PvManager.getPvs('anatomic-site');
+      $scope.anatomicSites = PvManager.getLeafPvs('anatomic-site');
       $scope.lateralities = PvManager.getPvs('laterality');
       $scope.pathologyStatuses = PvManager.getPvs('pathology-status');
       $scope.biohazards = PvManager.getPvs('specimen-biohazard');
