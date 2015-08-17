@@ -277,7 +277,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			SpecimenDetail parentDetail = SpecimenDetail.from(parentSpecimen);
 			parentDetail.setCloseAfterChildrenCreation(spec.getCloseParent());
 
-			List<SpecimenDetail> persistedChildren = SpecimenDetail.from(parentSpecimen.getChildCollection());
+			List<SpecimenDetail> existingChildren = SpecimenDetail.from(parentSpecimen.getChildCollection());
 			for (int i = 0; i < count; ++i) {
 				SpecimenDetail aliquot = new SpecimenDetail();
 				aliquot.setLineage(Specimen.ALIQUOT);
@@ -291,10 +291,10 @@ public class SpecimenServiceImpl implements SpecimenService {
 				location.name = spec.getContainerName();
 				aliquot.setStorageLocation(location);
 
-				persistedChildren.add(aliquot);
+				existingChildren.add(aliquot);
 			}
 
-			parentDetail.setChildren(persistedChildren);
+			parentDetail.setChildren(existingChildren);
 			ResponseEvent resp = collectSpecimens(new RequestEvent(Collections.singletonList(parentDetail)));
 
 			return resp;
@@ -315,10 +315,10 @@ public class SpecimenServiceImpl implements SpecimenService {
 		SpecimenDetail parentDetail = SpecimenDetail.from(parentSpecimen);
 		parentDetail.setCloseAfterChildrenCreation(specimenDetail.getCloseParent());
 
-		List<SpecimenDetail> persistedChildren = SpecimenDetail.from(parentSpecimen.getChildCollection());
+		List<SpecimenDetail> existingChildren = SpecimenDetail.from(parentSpecimen.getChildCollection());
 
-		persistedChildren.add(specimenDetail);
-		parentDetail.setChildren(persistedChildren);
+		existingChildren.add(specimenDetail);
+		parentDetail.setChildren(existingChildren);
 
 		ResponseEvent resp = collectSpecimens(new RequestEvent(Collections.singletonList(parentDetail)));
 

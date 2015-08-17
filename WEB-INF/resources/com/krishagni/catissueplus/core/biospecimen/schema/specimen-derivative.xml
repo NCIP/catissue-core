@@ -79,7 +79,7 @@
 
     <field>
       <caption>#getMessage("specimen_close_parent")</caption>
-                                        <attribute>closeParent</attribute>
+      <attribute>closeParent</attribute>
     </field>
   </record>
 </object-schema>
