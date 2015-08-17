@@ -139,7 +139,7 @@
         orders.comments as comments
       from 
         catissue_distribution distribution
-        left join catissue_order orders on distribution.order_id=orders.identifier
+        left join catissue_order orders on distribution.order_id = orders.identifier
     </sql>
     <sql>
       insert into os_order_items (
@@ -162,8 +162,8 @@
         end as status
       from 
         catissue_distributed_item distributed_item
-        join catissue_order_item order_item on distributed_item.identifier=order_item.distributed_item_id
-        join catissue_distribution distribution on distribution.identifier=distributed_item.distribution_id
+        join catissue_order_item order_item on distributed_item.identifier = order_item.distributed_item_id
+        join catissue_distribution distribution on distribution.identifier = distributed_item.distribution_id
     </sql>
   </changeSet>
 
