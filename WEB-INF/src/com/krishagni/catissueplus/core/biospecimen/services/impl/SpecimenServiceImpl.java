@@ -313,8 +313,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 		ResponseEvent<SpecimenDetail> resp = createSpecimen(new RequestEvent<SpecimenDetail>(specimenDetail));
 		if (resp.isSuccessful() && specimenDetail.closeParent()) {
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			Specimen parentSpecimen = getSpecimen(specimenDetail.getParentId(), specimenDetail.getParentLabel(), ose);
+			Specimen parentSpecimen = getSpecimen(specimenDetail.getParentId(), specimenDetail.getParentLabel(), null);
 			parentSpecimen.close(AuthUtil.getCurrentUser(), new Date(), "");
 		}
 
