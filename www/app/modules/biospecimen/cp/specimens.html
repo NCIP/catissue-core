@@ -28,7 +28,7 @@
           ng-repeat="sr in specimenRequirements | openedTreeNodes">
           <div class="row title">
             <div class="col col-xs-6 os-ellipsis">
-              <div style="padding-left: {{sr.hasChildren ? sr.depth * 20 : sr.depth * 20 + 16}}px">
+              <div ng-style="{'padding-left': (sr.hasChildren ? sr.depth * 20 : sr.depth * 20 + 16) + 'px'}">
                 <a ng-if="sr.hasChildren && sr.isOpened" 
                    class="fa fa-chevron-circle-down"
                    ng-click="closeSpecimenNode(sr)">
