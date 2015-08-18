@@ -57,7 +57,7 @@
         <div class="col col-xs-6">
           <div class="clearfix">
             <div class="pull-left">
-              <div style="padding-left: {{container.hasChildren ? container.depth * 16 : container.depth * 16 + 16}}px">
+              <div ng-style="{'padding-left': (container.hasChildren ? container.depth * 16 : container.depth * 16 + 16) + 'px'}">
                 <a ng-if="container.hasChildren" class="fa" 
                   ng-class="{'fa-chevron-circle-down': container.isOpened, 'fa-chevron-circle-right': !container.isOpened}"
                   ng-click="container.isOpened=!container.isOpened; loadChildren(container, $index)">
