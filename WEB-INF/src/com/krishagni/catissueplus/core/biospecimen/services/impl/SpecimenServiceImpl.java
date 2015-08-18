@@ -291,9 +291,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 				aliquots.add(aliquot);
 			}
-
 			ResponseEvent<List<SpecimenDetail>> resp = collectSpecimens(new RequestEvent<List<SpecimenDetail>>(aliquots));
-			if (resp.isSuccessful() && spec.getCloseParent()) {
+			if (resp.isSuccessful() && spec.closeParent()) {
 				parentSpecimen.close(AuthUtil.getCurrentUser(), new Date(), "");
 			}
 
@@ -313,8 +312,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		specimenDetail.setStatus(Specimen.COLLECTED);
 
 		ResponseEvent<SpecimenDetail> resp = createSpecimen(new RequestEvent<SpecimenDetail>(specimenDetail));
-
-		if (resp.isSuccessful() && specimenDetail.getCloseParent()) {
+		if (resp.isSuccessful() && specimenDetail.closeParent()) {
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			Specimen parentSpecimen = getSpecimen(specimenDetail.getParentId(), specimenDetail.getParentLabel(), ose);
 			parentSpecimen.close(AuthUtil.getCurrentUser(), new Date(), "");

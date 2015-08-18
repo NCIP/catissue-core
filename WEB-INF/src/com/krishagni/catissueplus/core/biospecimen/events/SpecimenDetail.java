@@ -99,6 +99,10 @@ public class SpecimenDetail extends SpecimenInfo {
 		this.closeParent = closeParent;
 	}
 
+	public boolean closeParent() {
+		return closeParent == null ? false : closeParent;
+	}
+
 	public static SpecimenDetail from(Specimen specimen) {
 		SpecimenDetail result = new SpecimenDetail();
 		SpecimenInfo.fromTo(specimen, result);

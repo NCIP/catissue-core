@@ -73,4 +73,9 @@ public class SpecimenAliquotsSpec {
 	public void setCloseParent(Boolean closeParent) {
 		this.closeParent = closeParent;
 	}
+
+	public boolean closeParent() {
+		return closeParent == null ? false : closeParent;
+	}
+
 }
