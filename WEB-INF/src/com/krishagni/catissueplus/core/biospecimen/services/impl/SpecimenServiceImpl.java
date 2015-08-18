@@ -273,7 +273,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 			} else {
 				return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
 			}
-			
+
+
 			List<SpecimenDetail> aliquots = new ArrayList<SpecimenDetail>();
 			for (int i = 0; i < count; ++i) {
 				SpecimenDetail aliquot = new SpecimenDetail();
@@ -287,18 +288,37 @@ public class SpecimenServiceImpl implements SpecimenService {
 				StorageLocationSummary location = new StorageLocationSummary();
 				location.name = spec.getContainerName();
 				aliquot.setStorageLocation(location);
-				
-				aliquots.add(aliquot);				
+
+				aliquots.add(aliquot);
 			}
-			
-			return collectSpecimens(new RequestEvent<List<SpecimenDetail>>(aliquots));
+			ResponseEvent<List<SpecimenDetail>> resp = collectSpecimens(new RequestEvent<List<SpecimenDetail>>(aliquots));
+			if (resp.isSuccessful() && spec.closeParent()) {
+				parentSpecimen.close(AuthUtil.getCurrentUser(), new Date(), "");
+			}
+
+			return resp;
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SpecimenDetail> createDerivative(RequestEvent<SpecimenDetail> derivedReq) {
+		SpecimenDetail specimenDetail = derivedReq.getPayload();
+		specimenDetail.setLineage(Specimen.DERIVED);
+		specimenDetail.setStatus(Specimen.COLLECTED);
+
+		ResponseEvent<SpecimenDetail> resp = createSpecimen(new RequestEvent<SpecimenDetail>(specimenDetail));
+		if (resp.isSuccessful() && specimenDetail.closeParent()) {
+			Specimen parentSpecimen = getSpecimen(specimenDetail.getParentId(), specimenDetail.getParentLabel(), null);
+			parentSpecimen.close(AuthUtil.getCurrentUser(), new Date(), "");
+		}
+
+		return resp;
+	}
 	@Override
 	@PlusTransactional
 	public ResponseEvent<Boolean> doesSpecimenExists(RequestEvent<String> req) {

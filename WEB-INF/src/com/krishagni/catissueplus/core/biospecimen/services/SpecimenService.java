@@ -37,7 +37,9 @@ public interface SpecimenService {
 	public ResponseEvent<List<SpecimenDetail>> collectSpecimens(RequestEvent<List<SpecimenDetail>> req);
 	
 	public ResponseEvent<List<SpecimenDetail>> createAliquots(RequestEvent<SpecimenAliquotsSpec> req);
-	
+
+	public ResponseEvent<SpecimenDetail> createDerivative(RequestEvent<SpecimenDetail> derivedReq);
+
 	public ResponseEvent<Boolean> doesSpecimenExists(RequestEvent<String> label);
 	
 	public ResponseEvent<LabelPrintJobSummary> printSpecimenLabels(RequestEvent<PrintSpecimenLabelDetail> req);

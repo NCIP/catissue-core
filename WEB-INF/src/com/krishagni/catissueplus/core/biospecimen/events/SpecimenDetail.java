@@ -31,6 +31,9 @@ public class SpecimenDetail extends SpecimenInfo {
 	private Boolean closeAfterChildrenCreation;  
 	
 	private List<SpecimenDetail> children;
+
+	// This is needed for creation of derivatives from BO for closing parent specimen.
+	private Boolean closeParent;
 	
 	public CollectionEventDetail getCollectionEvent() {
 		return collectionEvent;
@@ -63,7 +66,7 @@ public class SpecimenDetail extends SpecimenInfo {
 	public void setChildren(List<SpecimenDetail> children) {
 		this.children = children;
 	}
-	
+
 	public Set<String> getBiohazards() {
 		return biohazards;
 	}
@@ -87,7 +90,19 @@ public class SpecimenDetail extends SpecimenInfo {
 	public void setCloseAfterChildrenCreation(Boolean closeAfterChildrenCreation) {
 		this.closeAfterChildrenCreation = closeAfterChildrenCreation;
 	}
-	
+
+	public Boolean getCloseParent() {
+		return closeParent;
+	}
+
+	public void setCloseParent(Boolean closeParent) {
+		this.closeParent = closeParent;
+	}
+
+	public boolean closeParent() {
+		return closeParent == null ? false : closeParent;
+	}
+
 	public static SpecimenDetail from(Specimen specimen) {
 		SpecimenDetail result = new SpecimenDetail();
 		SpecimenInfo.fromTo(specimen, result);
