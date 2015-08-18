@@ -273,11 +273,9 @@ public class SpecimenServiceImpl implements SpecimenService {
 			} else {
 				return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
 			}
-			
-			SpecimenDetail parentDetail = SpecimenDetail.from(parentSpecimen);
-			parentDetail.setCloseAfterChildrenCreation(spec.getCloseParent());
 
-			List<SpecimenDetail> existingChildren = SpecimenDetail.from(parentSpecimen.getChildCollection());
+
+			List<SpecimenDetail> aliquots = new ArrayList<SpecimenDetail>();
 			for (int i = 0; i < count; ++i) {
 				SpecimenDetail aliquot = new SpecimenDetail();
 				aliquot.setLineage(Specimen.ALIQUOT);
@@ -291,11 +289,13 @@ public class SpecimenServiceImpl implements SpecimenService {
 				location.name = spec.getContainerName();
 				aliquot.setStorageLocation(location);
 
-				existingChildren.add(aliquot);
+				aliquots.add(aliquot);
 			}
 
-			parentDetail.setChildren(existingChildren);
-			ResponseEvent resp = collectSpecimens(new RequestEvent(Collections.singletonList(parentDetail)));
+			ResponseEvent<List<SpecimenDetail>> resp = collectSpecimens(new RequestEvent(aliquots));
+			if (resp.isSuccessful() && spec.getCloseParent()) {
+				parentSpecimen.close(AuthUtil.getCurrentUser(), new Date(), "");
+			}
 
 			return resp;
 		} catch (OpenSpecimenException ose) {
@@ -309,18 +309,16 @@ public class SpecimenServiceImpl implements SpecimenService {
 	@PlusTransactional
 	public ResponseEvent<SpecimenDetail> createDerivative(RequestEvent<SpecimenDetail> derivedReq) {
 		SpecimenDetail specimenDetail = derivedReq.getPayload();
-		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		specimenDetail.setLineage(Specimen.DERIVED);
+		specimenDetail.setStatus(Specimen.COLLECTED);
 
-		Specimen parentSpecimen = getSpecimen(specimenDetail.getParentId(), specimenDetail.getParentLabel(), ose);
-		SpecimenDetail parentDetail = SpecimenDetail.from(parentSpecimen);
-		parentDetail.setCloseAfterChildrenCreation(specimenDetail.getCloseParent());
+		ResponseEvent<SpecimenDetail> resp = createSpecimen(new RequestEvent<SpecimenDetail>(specimenDetail));
 
-		List<SpecimenDetail> existingChildren = SpecimenDetail.from(parentSpecimen.getChildCollection());
-
-		existingChildren.add(specimenDetail);
-		parentDetail.setChildren(existingChildren);
-
-		ResponseEvent resp = collectSpecimens(new RequestEvent(Collections.singletonList(parentDetail)));
+		if (resp.isSuccessful() && specimenDetail.getCloseParent()) {
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			Specimen parentSpecimen = getSpecimen(specimenDetail.getParentId(), specimenDetail.getParentLabel(), ose);
+			parentSpecimen.close(AuthUtil.getCurrentUser(), new Date(), "");
+		}
 
 		return resp;
 	}

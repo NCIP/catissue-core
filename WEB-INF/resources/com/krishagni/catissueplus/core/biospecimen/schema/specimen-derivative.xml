@@ -78,6 +78,7 @@
     </field>
 
     <field>
+      <type>boolean</type>
       <caption>#getMessage("specimen_close_parent")</caption>
       <attribute>closeParent</attribute>
     </field>

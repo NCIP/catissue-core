@@ -32,6 +32,7 @@ public class SpecimenDetail extends SpecimenInfo {
 	
 	private List<SpecimenDetail> children;
 
+	// This is needed for creation of derivatives from BO for closing parent specimen.
 	private Boolean closeParent;
 	
 	public CollectionEventDetail getCollectionEvent() {
