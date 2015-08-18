@@ -292,7 +292,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 				aliquots.add(aliquot);
 			}
 
-			ResponseEvent<List<SpecimenDetail>> resp = collectSpecimens(new RequestEvent(aliquots));
+			ResponseEvent<List<SpecimenDetail>> resp = collectSpecimens(new RequestEvent<List<SpecimenDetail>>(aliquots));
 			if (resp.isSuccessful() && spec.getCloseParent()) {
 				parentSpecimen.close(AuthUtil.getCurrentUser(), new Date(), "");
 			}
