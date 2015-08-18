@@ -108,6 +108,8 @@ angular.module('os.biospecimen.participant.collect-specimens',
           if (expandGrp) {
             expandOrCollapseAliquotsGrp(specimen, expandGrp);
           }
+
+          specimen.aliquotLabels = getAliquotGrpLabels(specimen);
         });
       }
 
@@ -146,17 +148,20 @@ angular.module('os.biospecimen.participant.collect-specimens',
         setShowInTree(aliquot, expandOrCollapse)
         aliquot.expanded = expandOrCollapse;
         if (!aliquot.expanded) {
-          aliquot.aliquotLabels =
-            aliquot.aliquotGrp.filter(
-              function(s) {
-                return !!s.label;
-              }
-            ).map(
-              function(s) {
-                return s.label;
-              }
-            ).join(",");
+          aliquot.aliquotLabels = getAliquotGrpLabels(aliquot);
         }
+      }
+
+      function getAliquotGrpLabels(specimen) {
+        return specimen.aliquotGrp.filter(
+          function(s) {
+            return !!s.label;
+          }
+        ).map(
+          function(s) {
+            return s.label;
+          }
+        ).join(",");
       }
 
       function setShowInTree(aliquot, showInTree) {
