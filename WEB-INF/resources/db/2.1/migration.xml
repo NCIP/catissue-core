@@ -99,6 +99,7 @@
   
   <changeSet author="vratnaparkhi" id="Migrate specimen order data">
     <validCheckSum>7:62bf05142d54c8a90c7bb96ce1f9a991</validCheckSum>
+    <validCheckSum>7:69ac63e73e11e9d659765be351e9204e</validCheckSum>
     <sql>
       insert into os_orders (
         identifier, 
@@ -166,40 +167,4 @@
         join catissue_distribution distribution on distribution.identifier = distributed_item.distribution_id
     </sql>
   </changeSet>
-
-  <changeSet author="vpawar" id="Update public_id of all anatomic site PVs at 3 levels" dbms="mysql">
-    <sql>
-      update
-        catissue_permissible_value pv
-        inner join catissue_permissible_value cpv on cpv.parent_identifier = pv.identifier
-      set
-        cpv.public_id = 'Tissue_Site_PID'
-      where
-        pv.public_id = 'Tissue_Site_PID';
-    </sql>
-
-    <sql>
-      update
-        catissue_permissible_value pv
-        inner join catissue_permissible_value ipv on ipv.parent_identifier = pv.identifier
-        inner join catissue_permissible_value cpv on cpv.parent_identifier = ipv.identifier
-      set
-        cpv.public_id = 'Tissue_Site_PID'
-      where
-        pv.public_id = 'Tissue_Site_PID';
-    </sql>
-
-    <sql>
-      update
-        catissue_permissible_value pv
-        inner join catissue_permissible_value ipv on ipv.parent_identifier = pv.identifier
-        inner join catissue_permissible_value ipv1 on ipv1.parent_identifier = ipv.identifier
-        inner join catissue_permissible_value cpv on cpv.parent_identifier = ipv1.identifier
-      set
-        cpv.public_id = 'Tissue_Site_PID'
-      where
-        pv.public_id = 'Tissue_Site_PID';
-    </sql>
-  </changeSet>
-
 </databaseChangeLog>
