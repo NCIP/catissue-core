@@ -30,13 +30,12 @@
 
   <div class="container os-margin-top" ng-init="showAdvAttrs=currSpecimen.lineage == 'New' && !currSpecimen.id && !currSpecimen.reqId">
     <form name="sform" class="form-horizontal" os-form-validator="sform" validator="sformValidator" novalidate>
-      <div class="form-group" ng-init="pLabel = currSpecimen.label"
-        ng-hide="!currSpecimen.label && !!currSpecimen.labelFmt && !cp.manualSpecLabelEnabled">
+      <div class="form-group" ng-if="currSpecimen.id || !currSpecimen.labelFmt || cp.manualSpecLabelEnabled">
         <label class="col-xs-3 control-label" translate="specimens.label">Label</label>
         <div class="col-xs-6">
           <input type="text" name="label" ng-model="currSpecimen.label" class="form-control" 
-            ng-required="currSpecimen.status == 'Collected' && (!currSpecimen.labelFmt || cp.manualSpecLabelEnabled)" 
-            ng-disabled="!!pLabel" placeholder="{{'specimens.label' | translate}}"/>
+            required ng-disabled="currSpecimen.labelFmt && !cp.manualSpecLabelEnabled"
+            placeholder="{{'specimens.label' | translate}}"/>
           <div os-field-error field="sform.label"></div>
         </div>
       </div>

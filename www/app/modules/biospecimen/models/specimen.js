@@ -155,7 +155,7 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
           
       var attrs = ['id', 'name', 'pathologyStatus', 
                    'collector', 'collectionProcedure', 'collectionContainer', 
-                   'receiver', 'labelFmt'];
+                   'receiver'];
       attrs.forEach(function(attr) {
         delete sr[attr];
       });

@@ -532,10 +532,7 @@ public class Specimen extends BaseEntity {
 			return;
 		}
 		
-		if (StringUtils.isBlank(getLabel())) {
-			setLabel(specimen.getLabel());
-		}
-		
+		setLabel(specimen.getLabel());
 		setBarcode(specimen.getBarcode());
 		
 		updateEvent(getCollectionEvent(), specimen.getCollectionEvent());
@@ -777,7 +774,7 @@ public class Specimen extends BaseEntity {
 	}
 	
 	public void setLabelIfEmpty() {
-		if (StringUtils.isNotBlank(label) || !isCollected()) {
+		if (StringUtils.isNotBlank(label)) {
 			return;
 		}
 		

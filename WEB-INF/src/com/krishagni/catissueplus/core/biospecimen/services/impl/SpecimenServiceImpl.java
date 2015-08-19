@@ -291,6 +291,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 				aliquots.add(aliquot);
 			}
+
 			ResponseEvent<List<SpecimenDetail>> resp = collectSpecimens(new RequestEvent<List<SpecimenDetail>>(aliquots));
 			if (resp.isSuccessful() && spec.closeParent()) {
 				parentSpecimen.close(AuthUtil.getCurrentUser(), new Date(), "");
@@ -307,18 +308,19 @@ public class SpecimenServiceImpl implements SpecimenService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<SpecimenDetail> createDerivative(RequestEvent<SpecimenDetail> derivedReq) {
-		SpecimenDetail specimenDetail = derivedReq.getPayload();
-		specimenDetail.setLineage(Specimen.DERIVED);
-		specimenDetail.setStatus(Specimen.COLLECTED);
+		SpecimenDetail spmnDetail = derivedReq.getPayload();
+		spmnDetail.setLineage(Specimen.DERIVED);
+		spmnDetail.setStatus(Specimen.COLLECTED);
 
-		ResponseEvent<SpecimenDetail> resp = createSpecimen(new RequestEvent<SpecimenDetail>(specimenDetail));
-		if (resp.isSuccessful() && specimenDetail.closeParent()) {
-			Specimen parentSpecimen = getSpecimen(specimenDetail.getParentId(), specimenDetail.getParentLabel(), null);
-			parentSpecimen.close(AuthUtil.getCurrentUser(), new Date(), "");
+		ResponseEvent<SpecimenDetail> resp = createSpecimen(new RequestEvent<SpecimenDetail>(spmnDetail));
+		if (resp.isSuccessful() && spmnDetail.closeParent()) {
+			Specimen parent = getSpecimen(spmnDetail.getParentId(), spmnDetail.getParentLabel(), null);
+			parent.close(AuthUtil.getCurrentUser(), new Date(), "");
 		}
 
 		return resp;
 	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<Boolean> doesSpecimenExists(RequestEvent<String> req) {
@@ -415,7 +417,13 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 	}
 
-	private void ensureValidAndUniqueLabel(Specimen specimen, OpenSpecimenException ose) {
+	private void ensureValidAndUniqueLabel(Specimen existing, Specimen specimen, OpenSpecimenException ose) {
+		if (existing != null && 
+			StringUtils.isNotBlank(existing.getLabel()) &&
+			existing.getLabel().equals(specimen.getLabel())) {
+			return;
+		}
+		
 		CollectionProtocol cp = specimen.getCollectionProtocol();
 		String labelTmpl = specimen.getLabelTmpl();
 		
@@ -446,9 +454,17 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 	}
 
-	private void ensureUniqueBarcode(String barcode, OpenSpecimenException ose) {
-		if (daoFactory.getSpecimenDao().getByBarcode(barcode) != null) {
-			ose.addError(SpecimenErrorCode.DUP_BARCODE, barcode);
+	private void ensureUniqueBarcode(Specimen existing, Specimen specimen, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(specimen.getBarcode())) {
+			return;
+		}
+		
+		if (existing != null && specimen.getBarcode().equals(existing.getBarcode())) {
+			return;
+		}
+		
+		if (daoFactory.getSpecimenDao().getByBarcode(specimen.getBarcode()) != null) {
+			ose.addError(SpecimenErrorCode.DUP_BARCODE, specimen.getBarcode());
 		}
 	}
 
@@ -517,16 +533,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);
 
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		if (existing == null || StringUtils.isBlank(existing.getLabel())) {			
-			ensureValidAndUniqueLabel(specimen, ose);
-		}
-
-		String barcode = specimen.getBarcode();
-		if (StringUtils.isNotBlank(barcode) &&
-			(existing == null || !barcode.equals(existing.getBarcode()))) {
-			ensureUniqueBarcode(specimen.getBarcode(), ose);
-		}
-
+		ensureValidAndUniqueLabel(existing, specimen, ose);
+		ensureUniqueBarcode(existing, specimen, ose);
 		ose.checkAndThrow();
 
 		if (existing != null) {

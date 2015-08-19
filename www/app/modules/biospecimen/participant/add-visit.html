@@ -1,7 +1,8 @@
 <div ng-controller="AddVisitCtrl" os-auto-scroll>
   <form name="visitForm" os-form-validator="visitForm" novalidate>
     <div class="clearfix">
-      <div class="col-xs-4" ng-if="cp.manualVisitNameEnabled && visit.status != 'Missed Collection'">
+      <div class="col-xs-4" 
+        ng-if="(!cp.visitNameFmt || cp.manualVisitNameEnabled) && visit.status != 'Missed Collection'">
         <div class="form-group">
           <input name="visitName" ng-model="visit.name" os-md-input
             class="form-control" type="text" required placeholder="Visit Name">

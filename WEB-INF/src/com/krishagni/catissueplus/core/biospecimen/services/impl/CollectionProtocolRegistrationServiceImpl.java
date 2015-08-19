@@ -117,13 +117,9 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			CollectionProtocolRegistration existing = getCpr(detail.getId(), detail.getCpId(), detail.getPpid());
 			AccessCtrlMgr.getInstance().ensureUpdateCprRights(existing);
 
-			//
-			// Note: PPID edit is not allowed; therefore PPID validity is
-			// not checked
-			//
-						
 			CollectionProtocolRegistration cpr = cprFactory.createCpr(detail);			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureValidAndUniquePpid(existing, cpr, ose);
 			ensureUniqueBarcode(existing, cpr, ose);
 			ose.checkAndThrow();
 			
@@ -388,7 +384,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
-		ensureValidAndUniquePpid(cpr, ose);
+		ensureValidAndUniquePpid(null, cpr, ose);
 		ensureUniqueParticipantReg(cpr, ose);		
 		ensureUniqueBarcode(null, cpr, ose);
 		
@@ -445,7 +441,11 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 	}
 
-	private void ensureValidAndUniquePpid(CollectionProtocolRegistration cpr, OpenSpecimenException ose) {
+	private void ensureValidAndUniquePpid(CollectionProtocolRegistration existing, CollectionProtocolRegistration cpr, OpenSpecimenException ose) {
+		if (existing != null && existing.getPpid().equals(cpr.getPpid())) {
+			return;
+		}
+		
 		CollectionProtocol cp = cpr.getCollectionProtocol();
 		boolean ppidReq = cp.isManualPpidEnabled() || StringUtils.isBlank(cp.getPpidFormat());
 		
