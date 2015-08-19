@@ -141,7 +141,7 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 		result.setCreatedBy(UserSummary.from(container.getCreatedBy()));
 		
 		result.setSiteName(container.getSite().getName());
-		result.setStorageLocation(container, result);
+		result.setStorageLocation(StorageLocationSummary.from(container.getPosition()));
 		
 		result.setNoOfColumns(container.getNoOfColumns());
 		result.setNoOfRows(container.getNoOfRows());
@@ -149,19 +149,6 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 		result.setStoreSpecimensEnabled(container.isStoreSpecimenEnabled());
 	}
 	
-	private void setStorageLocation(StorageContainer container, StorageContainerSummary result) {
-		if (container.getParentContainer() == null) {
-			 return;
-		}
-		
-		StorageLocationSummary storageLocation = new StorageLocationSummary();
-		storageLocation.setName(container.getParentContainer().getName());
-		storageLocation.setId(container.getParentContainer().getId());
-		storageLocation.setPositionX(container.getPosition().getPosOne());
-		storageLocation.setPositionY(container.getPosition().getPosTwo());
-		result.setStorageLocation(storageLocation);
-	}
-
 	public static StorageContainerSummary from(StorageContainer container) {
 		return from(container, false);
 	}

@@ -137,7 +137,6 @@ public class StorageContainerDetail extends StorageContainerSummary {
 		result.setAllowedCollectionProtocols(getCpNames(container.getAllowedCps()));		
 		result.setCalcAllowedCollectionProtocols(getCpNames(container.getCompAllowedCps()));
 		
-		//result.setPosition(StorageContainerPositionDetail.from(container.getPosition()));
 		result.setOccupiedPositions(container.occupiedPositionsOrdinals());
 		return result;
 	}

@@ -28,7 +28,6 @@ angular.module('os.administrative.models.container', ['os.common.models'])
       if (flatten == true) {
         ret = ret.then(
           function(containers) {
-            console.log(containers);
             return Container._flatten(containers, 'childContainers');
           }
         );

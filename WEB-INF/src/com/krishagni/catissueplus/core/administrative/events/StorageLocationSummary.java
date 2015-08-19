@@ -1,5 +1,8 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
+
 public class StorageLocationSummary {
 	private Long id;
 	
@@ -39,5 +42,18 @@ public class StorageLocationSummary {
 
 	public void setPositionY(String positionY) {
 		this.positionY = positionY;
+	}
+	
+	public static StorageLocationSummary from(StorageContainerPosition position) {
+		if (position == null) {
+			return null;
+		}
+		
+		StorageLocationSummary storageLocation = new StorageLocationSummary();
+		storageLocation.setName(position.getContainer().getName());
+		storageLocation.setId(position.getContainer().getId());
+		storageLocation.setPositionX(position.getPosOne());
+		storageLocation.setPositionY(position.getPosTwo());
+		return storageLocation;
 	}
 }
