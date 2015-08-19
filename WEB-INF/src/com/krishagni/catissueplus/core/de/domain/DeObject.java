@@ -39,8 +39,10 @@ public abstract class DeObject {
 	
 	private boolean recordLoaded = false;
 	
-	private boolean useUdn = true;
+	private boolean useUdn = false;
 	
+	private List<Attr> attrs = new ArrayList<Attr>();
+ 	
 	private static Map<String, Container> formMap = new HashMap<String, Container>();
 	
 	private static Map<String, FormContextBean> formCtxMap = new HashMap<String, FormContextBean>();
@@ -75,6 +77,14 @@ public abstract class DeObject {
 		this.useUdn = useUdn;
 	}
 
+	public List<Attr> getAttrs() {
+		return attrs;
+	}
+
+	public void setAttrs(List<Attr> attrs) {
+		this.attrs = attrs;
+	}
+
 	public void saveOrUpdate() {
 		try {
 			Container form = getForm();
@@ -106,18 +116,6 @@ public abstract class DeObject {
 		daoFactory.getFormDao().saveOrUpdateRecordEntry(re);
 	}
 	
-	public FormCtxtSummary getEntityForm() {
-		FormContextBean ctxt = getFormContext();
-		FormCtxtSummary summary = null;
-		if (ctxt != null) {
-			summary = new FormCtxtSummary();
-			summary.setFormCtxtId(ctxt.getIdentifier());
-			summary.setFormId(ctxt.getContainerId());
-		}
-		
-		return summary;
-	}
-	
 	/** Hackish method */
 	protected List<Long> getRecordIds() {
 		Long formCtxtId = getFormContext().getIdentifier();
@@ -144,8 +142,11 @@ public abstract class DeObject {
 			return;
 		}
 		
+		attrs = new ArrayList<Attr>();
+		
 		Map<String, Object> attrValues = new HashMap<String, Object>();
 		for (ControlValue cv : formData.getFieldValues()) {
+			attrs.add(Attr.from(cv));
 			attrValues.put(cv.getControl().getUserDefinedName(), cv.getValue());
 		}
 		
@@ -169,7 +170,14 @@ public abstract class DeObject {
 	
 	public abstract Long getCpId();
 	
-	public abstract Map<String, Object> getAttrValues();
+	public Map<String, Object> getAttrValues() {
+		Map<String, Object> vals = new HashMap<String, Object>();
+		for (Attr attr: attrs) {
+			vals.put(attr.getName(), attr.getValue());
+		}
+		
+		return vals;
+	}
 	
 	public abstract void setAttrValues(Map<String, Object> attrValues);
 	
@@ -180,39 +188,22 @@ public abstract class DeObject {
 			final Long objectId, 
 			final Map<String, Object> values) {
 		
-		DeObject object = new DeObject() {			
-			@Override
-			public void setAttrValues(Map<String, Object> attrValues) {				
-			}
-			
-			@Override
-			public Long getObjectId() {
-				return objectId;
-			}
-			
-			@Override
-			public String getFormName() {
-				return formName;
-			}
-			
-			@Override
-			public String getEntityType() {
-				return entityType;
-			}
-			
-			@Override
-			public Long getCpId() {
-				return cpId;
-			}
-			
-			@Override
-			public Map<String, Object> getAttrValues() {
-				return values;
-			}
-		};
-		
+		DeObject object = getInstance(formName, entityType, cpId, objectId, values);
 		object.saveOrUpdate();
 		return object.getId();
+	}
+	
+	public static FormCtxtSummary getExtensionContext(String entityType) {
+		DeObject object = getInstance(entityType, entityType, -1L, null, null);
+		FormContextBean ctxt = object.getFormContext();
+		FormCtxtSummary summary = null;
+		if (ctxt != null) {
+			summary = new FormCtxtSummary();
+			summary.setFormCtxtId(ctxt.getIdentifier());
+			summary.setFormId(ctxt.getContainerId());
+		}
+		
+		return summary;
 	}
 	
 	private UserContext getUserCtx() {
@@ -289,5 +280,95 @@ public abstract class DeObject {
 		}
 		
 		return formCtxt; 
-	}	
+	}
+	
+	private static DeObject getInstance(
+			final String formName, 
+			final String entityType, 
+			final Long cpId,
+			final Long objectId, 
+			final Map<String, Object> values) {
+		return new DeObject() {
+			@Override
+			public void setAttrValues(Map<String, Object> attrValues) {				
+			}
+			
+			@Override
+			public Long getObjectId() {
+				return objectId;
+			}
+			
+			@Override
+			public String getFormName() {
+				return formName;
+			}
+			
+			@Override
+			public String getEntityType() {
+				return entityType;
+			}
+			
+			@Override
+			public Long getCpId() {
+				return cpId;
+			}
+			
+			@Override
+			public Map<String, Object> getAttrValues() {
+				return values;
+			}
+		};
+	}
+	
+	public static class Attr {
+		private String name;
+		
+		private String udn;
+		
+		private String caption;
+		
+		private Object value;
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getUdn() {
+			return udn;
+		}
+
+		public void setUdn(String udn) {
+			this.udn = udn;
+		}
+
+		public String getCaption() {
+			return caption;
+		}
+
+		public void setCaption(String caption) {
+			this.caption = caption;
+		}
+
+		public Object getValue() {
+			return value;
+		}
+
+		public void setValue(Object value) {
+			this.value = value;
+		}
+		
+		public static Attr from(ControlValue cv) {
+			Attr attr = new Attr();
+			attr.setName(cv.getControl().getName()); 
+			attr.setUdn(cv.getControl().getUserDefinedName());
+			attr.setCaption(cv.getControl().getCaption()); 
+			attr.setValue(cv.getValue());
+			
+			return attr;
+		}
+	}
 }

@@ -13,7 +13,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.biospecimen.domain.SiteExtension;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -220,7 +219,7 @@ public class Site extends BaseEntity {
 		setActivityStatus(activityStatus);
 	}
 	
-	public void addOrUpdateExention() {
+	public void addOrUpdateExtension() {
 		if (getExtension() == null) {
 			return;
 		}

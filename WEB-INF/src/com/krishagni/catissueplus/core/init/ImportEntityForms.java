@@ -1,17 +1,13 @@
 package com.krishagni.catissueplus.core.init;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
-
-import com.krishagni.catissueplus.core.common.util.Utility;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import krishagni.catissueplus.beans.FormContextBean;
 
@@ -29,25 +25,15 @@ public class ImportEntityForms extends ImportForms {
 	@Override 
 	protected List<String> listFormFiles() 
 	throws IOException {		
-		BufferedReader reader = null;
-		InputStream in = null;
-		try {
-			in = Utility.getResourceInputStream("entity-forms/list.txt");
-			reader = new BufferedReader(new InputStreamReader(in));
-			
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				String entityType = line.split("=")[0];
-				String fileName = line.split("=")[1];
-				entityMap.put("entity-forms/" + fileName, entityType);
-			}
-			
-			System.err.println("Forms: " + entityMap.keySet());
-			return new ArrayList<String>(entityMap.keySet());
-		} finally {
-			IOUtils.closeQuietly(in);
-			IOUtils.closeQuietly(reader);
+		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(getClass().getClassLoader());
+		Resource[] resources = resolver.getResources("classpath:/entity-forms/*_extension.xml");
+		for (Resource resource: resources) {
+			String fileName = resource.getFilename();
+			String entityType = fileName.split("_")[0];
+			entityMap.put("entity-forms/" + fileName, entityType);
 		}
+		
+		return new ArrayList<String>(entityMap.keySet());
 	}
 
 	@Override

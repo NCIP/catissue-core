@@ -1,19 +1,19 @@
-package com.krishagni.catissueplus.core.biospecimen.events;
+package com.krishagni.catissueplus.core.de.events;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import com.krishagni.catissueplus.core.biospecimen.domain.ExtensionForm.FieldValue;
-import com.krishagni.catissueplus.core.biospecimen.domain.SiteExtension;
+import com.krishagni.catissueplus.core.administrative.domain.SiteExtension;
+import com.krishagni.catissueplus.core.de.domain.DeObject.Attr;
 
 public class ExtensionDetail {
 	private Long id;
 	
 	private Long objectId;
 	
-	private List<FieldValueDetail> fieldValues = new ArrayList<FieldValueDetail>();
+	private List<AttrDetail> attrs = new ArrayList<AttrDetail>();
 
 	public Long getId() {
 		return id;
@@ -31,24 +31,24 @@ public class ExtensionDetail {
 		this.objectId = objectId;
 	}
 
-	public List<FieldValueDetail> getFieldValues() {
-		return fieldValues;
+	public List<AttrDetail> getAttrs() {
+		return attrs;
 	}
 
-	public void setFieldValues(List<FieldValueDetail> fieldValues) {
-		this.fieldValues = fieldValues;
+	public void setAttrs(List<AttrDetail> attrs) {
+		this.attrs = attrs;
 	}
 
 	public static ExtensionDetail from(SiteExtension extension) {
 		ExtensionDetail detail = new ExtensionDetail();
 		detail.setId(extension.getId());
 		detail.setObjectId(extension.getObjectId()); 
-		detail.setFieldValues(FieldValueDetail.from(extension.getFieldValues()));
+		detail.setAttrs(AttrDetail.from(extension.getAttrs()));
 		
 		return detail;
 	}
 	
-	public static class FieldValueDetail {
+	public static class AttrDetail {
 		private String name;
 		
 		private String udn;
@@ -89,17 +89,17 @@ public class ExtensionDetail {
 			this.value = value;
 		}
 		
-		public static FieldValueDetail from(FieldValue fieldvalue) {
-			FieldValueDetail detail = new FieldValueDetail();
-			BeanUtils.copyProperties(fieldvalue, detail);
+		public static AttrDetail from(Attr attr) {
+			AttrDetail detail = new AttrDetail();
+			BeanUtils.copyProperties(attr, detail);
 			
 			return detail;
 		}
 		
-		public static List<FieldValueDetail> from(List<FieldValue> fields) {
-			List<FieldValueDetail> result = new ArrayList<FieldValueDetail>();
-			for (FieldValue fv: fields) {
-				result.add(from(fv));
+		public static List<AttrDetail> from(List<Attr> attrs) {
+			List<AttrDetail> result = new ArrayList<AttrDetail>();
+			for (Attr attr: attrs) {
+				result.add(from(attr));
 			}
 			
 			return result;

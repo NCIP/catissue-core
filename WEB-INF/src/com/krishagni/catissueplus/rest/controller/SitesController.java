@@ -172,7 +172,7 @@ public class SitesController {
 		op.setEntityType(EntityType.SITE); 
         
 		RequestEvent<ListEntityFormsOp> req = new RequestEvent<ListEntityFormsOp>(op);
-		ResponseEvent<FormCtxtSummary> resp = formSvc.getEntityForm(req);
+		ResponseEvent<FormCtxtSummary> resp = formSvc.getEntityExtensionForms(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

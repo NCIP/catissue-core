@@ -3,6 +3,7 @@ angular.module('os.administrative.site.addedit', ['os.administrative.models'])
 
     function init() {
       $scope.site = site;
+      $scope.deFormCtrl = {};
       loadPvs();
     }
 
@@ -20,8 +21,11 @@ angular.module('os.administrative.site.addedit', ['os.administrative.models'])
     }
 
     $scope.save = function() {
+      if (!$scope.deFormCtrl.ctrl.validate()) {
+        return;
+      }
       var site = angular.copy($scope.site);
-      site.extensionDetail = $scope.getExtFormData();
+      site.extensionDetail = $scope.deFormCtrl.ctrl.getFormData();
       site.$saveOrUpdate().then(
         function(savedSite) {
           $state.go('site-detail.overview', {siteId: savedSite.id});

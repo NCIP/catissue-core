@@ -1,5 +1,5 @@
 angular.module("openspecimen")
-  .directive('osCustomForm', function($timeout) {
+  .directive('osCustomForm', function() {
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
@@ -22,45 +22,6 @@ angular.module("openspecimen")
             }
           );
         });
-        
-        scope.$watch("extForm.rendered", function(newVal) {
-          if (newVal) {
-              reformHtml();
-          }
-        });
-
-        scope.getExtFormData = function () {
-          if (!scope.extForm) {
-            return null;
-          }
-
-          var fieldValues = [];
-          var formData = scope.extForm.getValue();
-          angular.forEach(formData, function(value, key) {
-            fieldValues.push({name: key, value: value});
-          });
-
-          return {fieldValues: fieldValues};
-        }
-
-        function reformHtml() {
-          element.find(".col-xs-8")
-            .each(function(index) {
-               angular.element(this)
-                 .addClass("col-xs-12")
-                 .removeClass("col-xs-8");
-            });
-
-          element.find('label')
-            .each(function(index) {
-               angular.element(this).addClass("col-xs-3");
-            });
-
-          element.find(".form-control")
-            .each(function(index) {
-              angular.element(this).wrap("<div class='col-xs-6'></div>");
-            });
-        }
       }
     };
   });

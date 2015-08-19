@@ -12,22 +12,22 @@ import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.SiteExtension;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
-import com.krishagni.catissueplus.core.biospecimen.domain.ExtensionForm.FieldValue;
-import com.krishagni.catissueplus.core.biospecimen.domain.SiteExtension;
-import com.krishagni.catissueplus.core.biospecimen.events.ExtensionDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ExtensionDetail.FieldValueDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.de.domain.DeObject.Attr;
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
 
 public class SiteFactoryImpl implements SiteFactory {
 
@@ -223,10 +223,10 @@ public class SiteFactoryImpl implements SiteFactory {
 		}
 		
 		SiteExtension extension = SiteExtension.getFor(site);
-		for (FieldValueDetail fvd: extDetail.getFieldValues()) {
-			FieldValue fv = new FieldValue();
-			BeanUtils.copyProperties(fvd, fv);
-			extension.getFieldValues().add(fv);
+		for (AttrDetail attrDetail: extDetail.getAttrs()) {
+			Attr attr = new Attr();
+			BeanUtils.copyProperties(attrDetail, attr);
+			extension.getAttrs().add(attr);
 		}
 		
 		site.setExtension(extension);

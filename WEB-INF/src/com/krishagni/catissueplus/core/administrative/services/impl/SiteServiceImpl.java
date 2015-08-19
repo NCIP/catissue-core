@@ -114,7 +114,7 @@ public class SiteServiceImpl implements SiteService {
 			ensureUniqueConstraint(site, null, ose);
 			ose.checkAndThrow();
 			daoFactory.getSiteDao().saveOrUpdate(site, true);
-			site.addOrUpdateExention();
+			site.addOrUpdateExtension();
 			addDefaultCoordinatorRoles(site, site.getCoordinators());
 			return ResponseEvent.response(SiteDetail.from(site));
 		} catch (OpenSpecimenException ose) {
@@ -223,7 +223,7 @@ public class SiteServiceImpl implements SiteService {
 			
 			existing.update(site);			
 			daoFactory.getSiteDao().saveOrUpdate(existing);
-			existing.addOrUpdateExention();
+			existing.addOrUpdateExtension();
 			
 			removeDefaultCoordinatorRoles(existing, removedCoordinators);
 			addDefaultCoordinatorRoles(existing, addedCoordinators);
