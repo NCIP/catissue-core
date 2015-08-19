@@ -7,7 +7,7 @@ angular.module('os.common.delete', [])
       $scope.dependentEntities = dependentEntities;
       $scope.bulkDeleteSuccess = entityProps.successMessage;
       $scope.entityIds = entityProps.entityIds;
-
+      $scope.deleteAll = entityProps.deleteAll;
     }
 
     function onDeletion(entity) {

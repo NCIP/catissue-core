@@ -179,10 +179,10 @@ public class SpecimensController {
 		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value="/{ids}")
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public SpecimenDetail deleteSpecimen(@PathVariable("ids") Long specimenId) {
+	public SpecimenDetail deleteSpecimen(@PathVariable("id") Long specimenId) {
 		EntityQueryCriteria crit = new EntityQueryCriteria(specimenId);
 		ResponseEvent<SpecimenDetail> resp = specimenSvc.deleteSpecimen(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();

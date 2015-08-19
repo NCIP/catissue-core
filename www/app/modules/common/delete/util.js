@@ -73,7 +73,7 @@ angular.module('os.common.delete')
             return {
               entity: object,
               entityIds: entityIds,
-              bulkDelete: true,
+              deleteAll: true,
               confirmDelete: confirmDelete,
               successMessage: successMessage
             }
