@@ -25,6 +25,7 @@ import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPos
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
+import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenEvent;
@@ -39,7 +40,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ReceivedEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenEventDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -643,10 +643,10 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;
 		}
 		
-		if (location.id != null && location.id != -1) {
-			container = daoFactory.getStorageContainerDao().getById(location.id);			
+		if (location.getId() != null && location.getId() != -1) {
+			container = daoFactory.getStorageContainerDao().getById(location.getId());			
 		} else {
-			container = daoFactory.getStorageContainerDao().getByName(location.name);
+			container = daoFactory.getStorageContainerDao().getByName(location.getName());
 		} 
 		
 		if (container == null) {
@@ -660,7 +660,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		StorageContainerPosition position = null;
-		String posOne = location.positionX, posTwo = location.positionY;
+		String posOne = location.getPositionX(), posTwo = location.getPositionY();
 		if (StringUtils.isNotBlank(posOne) && StringUtils.isNotBlank(posTwo)) {
 			if (container.canSpecimenOccupyPosition(specimen.getId(), posOne, posTwo)) {
 				position = container.createPosition(posOne, posTwo);
@@ -693,11 +693,11 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return true;
 		}
 		
-		if (location.id != null && location.id != -1) {
+		if (location.getId() != null && location.getId() != -1) {
 			return false;
 		}
 		
-		if (StringUtils.isNotBlank(location.name)) {
+		if (StringUtils.isNotBlank(location.getName())) {
 			return false;			
 		}
 		

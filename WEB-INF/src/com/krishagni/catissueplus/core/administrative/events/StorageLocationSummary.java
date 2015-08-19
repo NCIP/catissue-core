@@ -1,13 +1,13 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
 public class StorageLocationSummary {
-	public Long id;
+	private Long id;
 	
-	public String name;
+	private String name;
 	
-	public String positionX;
+	private String positionX;
 	
-	public String positionY;
+	private String positionY;
 
 	public Long getId() {
 		return id;

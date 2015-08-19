@@ -12,6 +12,7 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -23,7 +24,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReceivedEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenAliquotsSpec;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenStatusDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
@@ -285,7 +285,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 				aliquot.setCreatedOn(spec.getCreatedOn());
 				
 				StorageLocationSummary location = new StorageLocationSummary();
-				location.name = spec.getContainerName();
+				location.setName(spec.getContainerName());
 				aliquot.setStorageLocation(location);
 				
 				aliquots.add(aliquot);				
