@@ -577,6 +577,7 @@ angular.module('openspecimen')
         var specimenToSave = {
           label: label.trim(),
           reqId: specimen.id,
+          lineage: specimen.lineage,
           status: 'Collected',      
           parentId: specimen.parentSpecimenId,
           visitId: specimen.visitId,
