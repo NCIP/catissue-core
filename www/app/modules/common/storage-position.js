@@ -2,19 +2,25 @@
 angular.module('openspecimen')
   .directive('osStoragePosition', function($modal, $timeout, Container) {
     function loadContainers(name, scope) {
+      scope.entityType = scope.entity.getType();
       var params = {
         name: name, 
         onlyFreeContainers: true
       }
 
-      scope.entityType = scope.entity.getType();
-
-      var entityParams = getEntityParams(scope);
-      if (!entityParams) {
-        return;
+      if (scope.entityType == 'specimen') {
+        angular.extend(params, {
+          cpId: scope.cpId,
+          specimenClass: scope.entity.specimenClass,
+          specimenType: scope.entity.type,
+          storeSpecimensEnabled: true
+        });
+      } else {
+        if (!scope.entity.siteName) {
+          return;
+        }
+        angular.extend(params, {site: scope.entity.siteName});
       }
-
-      angular.extend(params, entityParams);
 
       return Container.query(params).then(
         function(containers) {
@@ -27,34 +33,9 @@ angular.module('openspecimen')
       );
     };
 
-    function getEntityParams(scope) {
-      var params = {};
-      if (scope.entity.getType() == 'specimen') {
-        angular.extend(params, {
-          cpId: scope.cpId,
-          specimenClass: scope.entity.specimenClass,
-          specimenType: scope.entity.type,
-          storeSpecimensEnabled: true
-        })
-      } else if (scope.entity.getType() == 'storage_container') {
-        if (!scope.entity.siteName) {
-          return;
-        }
-
-        angular.extend(params, {site: scope.entity.siteName});
-      }
-      return params;
-    }
-
     function addWatch(scope) {
-      var obj = undefined;
-      if (scope.entity.getType() == 'specimen') {
-        obj = 'entity.type';
-      } else if (scope.entity.getType() == 'storage_container') {
-        obj = 'entity.siteName';
-      }
-
-      scope.$watch(obj, function(newVal, oldVal) {
+      var objType = scope.entity.getType() == 'specimen' ? 'entity.type' : 'entity.siteName';
+      scope.$watch(objType, function(newVal, oldVal) {
         if (!newVal || newVal == oldVal) {
           return;
         }

@@ -34,7 +34,7 @@
         <label class="col-xs-3 control-label" translate="container.parent_site">Parent Site</label>
         <div class="col-xs-6">
           <os-select ng-model="container.siteName" list="sites" placeholder="{{'container.site' | translate}}"
-            name="parentSite" on-change="loadContainers" required>
+            name="parentSite" on-change="loadAllCps" required>
           </os-select>
           <div os-field-error field="cform.parentSite"></div>
         </div>

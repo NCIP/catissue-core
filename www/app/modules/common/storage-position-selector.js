@@ -4,12 +4,7 @@ angular.module('openspecimen')
     function($scope, $modalInstance, $timeout, $q, entity, cpId, Container) {
       $scope.entityType = entity.getType();
       var extend = angular.extend;
-
-      var queryParams = {
-        onlyFreeContainers: true,
-        hierarchical: true
-      };
-      setEntityQueryParams(entity, queryParams);
+      var queryParams = getEntityQueryParams(entity);
 
       function addChildPlaceholders(containers) {
         angular.forEach(containers, function(container) {
@@ -32,17 +27,24 @@ angular.module('openspecimen')
         );
       };
 
-      function setEntityQueryParams(entity, queryParams) {
-         if ($scope.entityType == 'specimen') {
+      function getEntityQueryParams(entity) {
+        var queryParams = {
+          onlyFreeContainers: true,
+          hierarchical: true
+        };
+
+        if ($scope.entityType == 'specimen') {
           extend(queryParams, {
             storeSpecimensEnabled: true,
             specimenClass: entity.specimenClass,
             specimenType: entity.type,
             cpId: cpId
           });
-        } else if ($scope.entityType == 'storage_container') {
+        } else {
           extend(queryParams, {site: entity.siteName});
         }
+
+        return queryParams;
       }
 
       $scope.toggleSelectedContainer = function(wizard, container) {
