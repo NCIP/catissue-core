@@ -170,7 +170,33 @@ public class SpecimenServiceImpl implements SpecimenService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<SpecimenDetail>> updateSpecimensStatuses(RequestEvent<List<SpecimenStatusDetail>> req) {
+		try {
+			List<SpecimenDetail> result = new ArrayList<SpecimenDetail>();
+
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			for (SpecimenStatusDetail detail : req.getPayload()) {
+				Specimen specimen = getSpecimen(detail.getId(), detail.getLabel(), ose);
+				if (specimen == null) {
+					return ResponseEvent.error(ose);
+				}
+
+				AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);
+				specimen.updateStatus(detail.getStatus(), detail.getReason());
+				result.add(SpecimenDetail.from(specimen));
+			}
+
+			return ResponseEvent.response(result);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<SpecimenDetail> deleteSpecimen(RequestEvent<EntityQueryCriteria> req) {
@@ -192,7 +218,27 @@ public class SpecimenServiceImpl implements SpecimenService {
 			return ResponseEvent.serverError(e);
 		}		
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<SpecimenDetail>> deleteSpecimens(RequestEvent<Long[]> request) {
+		List<SpecimenDetail> result = new ArrayList<SpecimenDetail>();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+
+		for (Long specimenId : request.getPayload()) {
+			Specimen specimen = getSpecimen(specimenId, null, ose);
+
+			if (specimen == null) {
+				return ResponseEvent.error(ose);
+			}
+
+			AccessCtrlMgr.getInstance().ensureDeleteSpecimenRights(specimen);
+			specimen.disable(false);
+			result.add(SpecimenDetail.from(specimen));
+		}
+
+		return ResponseEvent.response(result);
+	}
 
 	@Override
 	@PlusTransactional

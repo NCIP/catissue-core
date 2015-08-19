@@ -77,6 +77,22 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       );
     }
 
+    Specimen.bulkDelete = function(specimenIds) {
+      return $http.delete(Specimen.url(), {params: {id: specimenIds}}).then(
+        function(result) {
+          return result.data;
+        }
+      );
+    }
+
+    Specimen.bulkStatusUpdate = function(statusSpecs) {
+      return $http.put(Specimen.url() + '/status', statusSpecs).then(
+        function(result) {
+          return result.data;
+        }
+      );
+    }
+
     Specimen.prototype.getType = function() {
       return 'specimen';
     }

@@ -478,7 +478,7 @@ public class Specimen extends BaseEntity {
 		return MISSED_COLLECTION.equals(status);
 	}
 		
-	protected void disable(boolean checkChildSpecimens) {
+	public void disable(boolean checkChildSpecimens) {
 		if (getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
 			return;
 		}

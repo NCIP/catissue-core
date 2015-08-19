@@ -5,9 +5,9 @@ angular.module('os.biospecimen.participant.specimen-tree',
     'os.biospecimen.participant.collect-specimens'
   ])
   .directive('osSpecimenTree', function(
-    $state, $stateParams, 
+    $state, $stateParams,
     CollectSpecimensSvc, Specimen, SpecimenLabelPrinter, SpecimenList, SpecimensHolder,
-    Alerts, PvManager, Util) {
+    Alerts, PvManager, Util, DeleteUtil) {
 
     function openSpecimenTree(specimens) {
       angular.forEach(specimens, function(specimen) {
@@ -106,6 +106,34 @@ angular.module('os.biospecimen.participant.specimen-tree',
       Alerts.error(msgCode);
     };
 
+    function getSpecimens (scope, message, anyStatus) {
+      if (!scope.selection.any) {
+        showSelectSpecimens(message);
+        return;
+      }
+
+      var specimens = [];
+      var anyUncollected = false;
+      angular.forEach(scope.specimens, function(specimen) {
+        if (!specimen.selected) {
+          return;
+        }
+
+        if ((specimen.status == 'Collected' || anyStatus) && specimen.id) {
+          specimens.push(specimen);
+        } else {
+          anyUncollected = true;
+        }
+      });
+
+      if (specimens.length == 0) {
+        showSelectSpecimens(message);
+        return;
+      }
+
+      return specimens;
+    };
+
     function getSelectedSpecimens(scope) {
       var selectedSpecimens = [];
       angular.forEach(scope.specimens, function(specimen) {
@@ -155,7 +183,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
         };
 
         scope.toggleSpecimenSelect = function(specimen) {
-          selectParentSpecimen(specimen);  
+          selectParentSpecimen(specimen);
           toggleAllSelected(scope.selection, scope.specimens, specimen);
 
           scope.selection.any = specimen.selected ? true : isAnySelected(scope.specimens);
@@ -175,7 +203,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
             } else if (isAnyChildSpecimenSelected(specimen)) {
               if (specimen.status != 'Collected') {
                 // a parent needs to be collected first
-                specimen.selected = true; 
+                specimen.selected = true;
               }
               specimen.isOpened = true;
               specimensToCollect.push(specimen);
@@ -199,31 +227,107 @@ angular.module('os.biospecimen.participant.specimen-tree',
         };
 
         scope.printSpecimenLabels = function() {
-          if (!scope.selection.any) {
-            showSelectSpecimens('specimens.no_specimens_for_print');
+          var specimensToPrint = getSpecimens(scope, 'specimens.no_specimens_for_print', false);
+          if (specimensToPrint.length == 0) {
             return;
           }
 
-          var specimensToPrint = [];
-          var anyUncollected = false;
-          angular.forEach(scope.specimens, function(specimen) {
-            if (!specimen.selected) {
-              return;
+          var specimenIds = specimensToPrint.map(
+            function(s) {
+              return s.id;
             }
+          );
 
-            if (specimen.status == 'Collected') {
-              specimensToPrint.push(specimen.id);
-            } else {
-              anyUncollected = true;
+          SpecimenLabelPrinter.printLabels({specimenIds: specimenIds});
+        };
+
+        scope.deleteSpecimens = function() {
+          var specimensToDelete = getSpecimens(scope, 'specimens.no_specimens_for_delete', true);
+          if (specimensToDelete.length == 0) {
+            return;
+          }
+
+          var specimenIds = specimensToDelete.map(
+            function(s) {
+              return s.id;
+            }
+          );
+          DeleteUtil.bulkDelete (Specimen, specimenIds,
+            { confirmDelete : hasChildren(specimensToDelete) ? 'specimens.delete_specimens_heirarchy' :'specimens.delete_specimens',
+              successMessage: hasChildren(specimensToDelete) ? 'specimens.specimens_hierarchy_deleted' : 'specimens.specimens_deleted',
+              onDeletion: function(result) {
+                angular.forEach(result, function(specimen) {
+                  deleteSpecimen(getSpecimenFromTree(specimensToDelete, specimen));
+                });
+              }
+            }
+          );
+        }
+
+        function hasChildren(specimens) {
+          var hasChildren = false;
+          angular.forEach(specimens, function(specimen) {
+            if (specimen.children.length > 0) {
+              hasChildren = true;
             }
           });
 
-          if (specimensToPrint.length == 0) {
-            showSelectSpecimens('specimens.no_specimens_for_print');
+          return hasChildren;
+        }
+
+        function getSpecimenFromTree(specimensInTree, specimen) {
+          return specimensInTree.filter (
+            function (sp) {
+              if (sp.id == specimen.id) {
+                return sp;
+              }
+            }
+          )[0];
+        }
+
+        function deleteSpecimen(specimen) {
+          nullifySpecimen(specimen);
+          deleteChildren(specimen.children);
+        }
+
+        function deleteChildren(specimens) {
+          angular.forEach(specimens, function(specimen) {
+            nullifySpecimen(specimen);
+            deleteChildren(specimen.children);
+          });
+        }
+
+        function nullifySpecimen(specimen) {
+          specimen.id = null;
+          specimen.label = null;
+          specimen.status = null;
+          specimen.activityStatus = null;
+          specimen.createdOn = null;
+          specimen.selected = false;
+        }
+
+        scope.closeSpecimens = function() {
+          var specimensToClose = getSpecimens(scope, 'specimens.no_specimens_for_close', false);
+          if (specimensToClose.length == 0) {
             return;
           }
-             
-          SpecimenLabelPrinter.printLabels({specimenIds: specimensToPrint});
+
+          var statusSpecs = [];
+          angular.forEach(specimensToClose, function(specimen) {
+            var statusSpec = {status: 'Closed', reason: "", id: specimen.id, label: specimen.label};
+            statusSpecs.push(statusSpec);
+          });
+
+          Specimen.bulkStatusUpdate(statusSpecs).then(
+            function(result) {
+              angular.forEach(result, function(specimen) {
+                var sp = getSpecimenFromTree(specimensToClose, specimen)
+                sp.activityStatus = 'Closed';
+                sp.selected = false;
+              });
+              Alerts.success('specimens.specimens_closed');
+            }
+          );
         };
 
         scope.addSpecimensToSpecimenList = function(list) {

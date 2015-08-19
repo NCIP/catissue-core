@@ -29,9 +29,13 @@ public interface SpecimenService {
 	public ResponseEvent<SpecimenDetail> patchSpecimen(RequestEvent<SpecimenDetail> req);
 	
 	public ResponseEvent<SpecimenDetail> updateSpecimenStatus(RequestEvent<SpecimenStatusDetail> req);
-	
+
+	public ResponseEvent<List<SpecimenDetail>> updateSpecimensStatuses(RequestEvent<List<SpecimenStatusDetail>> request);
+
 	public ResponseEvent<SpecimenDetail> deleteSpecimen(RequestEvent<EntityQueryCriteria> req);
-	
+
+	public ResponseEvent<List<SpecimenDetail>> deleteSpecimens(RequestEvent<Long[]> request);
+
 	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<EntityQueryCriteria> req);
 	
 	public ResponseEvent<List<SpecimenDetail>> collectSpecimens(RequestEvent<List<SpecimenDetail>> req);
@@ -49,4 +53,5 @@ public interface SpecimenService {
 	
 	/** Mostly present for UI **/
 	public ResponseEvent<Map<String, Long>> getCprAndVisitIds(RequestEvent<Long> req);
+
 }

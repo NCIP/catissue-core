@@ -34,7 +34,8 @@
   <div ng-switch on="!dependentEntities || dependentEntities.length == 0">
     <div ng-switch-when="true">
       <button class="btn os-btn-text" ng-click="cancel()" translate="common.buttons.cancel">Cancel</button>
-      <button class="btn btn-danger" ng-click="delete()" translate="common.yes">Yes</button>
+      <button class="btn btn-danger" ng-click="bulkDelete()" ng-if="bulkDelete" translate="common.yes">Yes</button>
+      <button class="btn btn-danger" ng-click="delete()" ng-if="!bulkDelete" translate="common.yes">Yes</button>
     </div>
     <div ng-switch-default>
       <button class="btn btn-primary" ng-click="cancel()" translate="common.buttons.ok">Ok</button>

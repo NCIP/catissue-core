@@ -143,21 +143,32 @@ public class SpecimensController {
 
 	@RequestMapping(method = RequestMethod.PUT, value="/{id}/status")
 	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody	
+	@ResponseBody
 	public SpecimenDetail updateSpecimenStatus(
 			@PathVariable("id")
 			Long specimenId,
-			
+
 			@RequestBody
 			SpecimenStatusDetail detail) {
-		
+
 		detail.setId(specimenId);
-		
+
 		ResponseEvent<SpecimenDetail> resp = specimenSvc.updateSpecimenStatus(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();		
+		return resp.getPayload();
 	}
-	
+
+	@RequestMapping(method = RequestMethod.PUT, value="/status")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<SpecimenDetail> updateSpecimensStatuses(
+			@RequestBody
+			List<SpecimenStatusDetail> details) {
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.updateSpecimensStatuses(getRequest(details));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependent-entities")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -167,13 +178,22 @@ public class SpecimensController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-	
-	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
+
+	@RequestMapping(method = RequestMethod.DELETE, value="/{ids}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public SpecimenDetail deleteSpecimen(@PathVariable("id") Long specimenId) {
+	public SpecimenDetail deleteSpecimen(@PathVariable("ids") Long specimenId) {
 		EntityQueryCriteria crit = new EntityQueryCriteria(specimenId);
 		ResponseEvent<SpecimenDetail> resp = specimenSvc.deleteSpecimen(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<SpecimenDetail> deleteSpecimens(@RequestParam(value = "id") Long[] specimenIds) {
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.deleteSpecimens(getRequest(specimenIds));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

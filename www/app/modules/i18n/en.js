@@ -409,6 +409,8 @@
     "no_specimens_for_collection": "Please select at least one anticipated specimen for collection",
     "no_specimens_for_print": "Please select at least one collected specimen for label printing",
     "no_specimens_for_specimen_list": "Please select at least one specmen to add specimen list",
+    "no_specimens_for_delete":"Please select at least one collected specimen to delete",
+    "no_specimens_for_close":"Please select at least one collected specimen to close",
 
     "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
     "bulk_import": "Bulk Import Specimens",
@@ -419,6 +421,12 @@
     "spmn_derivatives": "Specimen Derivatives",
     "bulk_import_derivatives": "Bulk Import Derivatives",
     "new_aliquot_count": "Number of aliquots",
+
+    "specimens_hierarchy_deleted": "Selected Specimens and their children are deleted successfully",
+    "specimens_deleted": "Selected Specimens are deleted successfully",
+    "delete_specimens_heirarchy": "Are you sure you want to delete the selected specimens and all its child specimens ?",
+    "delete_specimens":  "Are you sure you want to delete the selected specimens ?",
+    "specimens_closed": "Selected Specimens are closed successfully",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",
