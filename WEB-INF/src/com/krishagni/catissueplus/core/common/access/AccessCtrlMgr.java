@@ -580,17 +580,34 @@ public class AccessCtrlMgr {
 	//          Distribution order access control helper methods                        //
 	//                                                                                  //
 	//////////////////////////////////////////////////////////////////////////////////////
-	public Set<Long> getReadAccessDistributionOrderInstitutes() {
+	
+	public Set<Long> getReadAccessDistributionOrderSites() {
 		if (AuthUtil.isAdmin()) {
 			return null;
 		}
-
+		
 		Set<Site> sites = getSites(Resource.ORDER, Operation.READ);
 		Set<Long> result = new HashSet<Long>();
-		for (Site site : sites) {
-			result.add(site.getInstitute().getId());
+		for (Site site: sites) {
+			result.add(site.getId());
 		}
-
+		
+		return result;
+	}
+	
+	public Set<Long> getCreateUpdateAccessDistributionOrderSites() {
+		if (AuthUtil.isAdmin()) {
+			return null;
+		}
+		
+		Set<Site> sites = getSites(Resource.ORDER, Operation.CREATE);
+		Set<Site> updateSites = getSites(Resource.ORDER, Operation.UPDATE);
+		sites.addAll(updateSites);
+		Set<Long> result = new HashSet<Long>();
+		for (Site site: sites) {
+			result.add(site.getId());
+		}
+		
 		return result;
 	}
 

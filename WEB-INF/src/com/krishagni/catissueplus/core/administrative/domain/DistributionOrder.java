@@ -144,7 +144,7 @@ public class DistributionOrder extends BaseEntity {
 	}
 
 	public Institute getInstitute() {
-		return distributionProtocol.getInstitute();
+		return site.getInstitute();
 	}
 
 	public void update(DistributionOrder newOrder) { // TODO: can't update executed order

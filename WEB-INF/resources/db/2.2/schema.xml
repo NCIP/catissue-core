@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+  
+  <property name="boolean.type" value="boolean" dbms="mysql" />
+  <property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
+  <property name="int.type" value="bigint" dbms="mysql" />
+  <property name="int.type" value="number(19,0)" dbms="oracle" />
+
+  <property name="smallint.type" value="smallint" dbms="mysql" />
+  <property name="smallint.type" value="number(5,0)" dbms="oracle" />
+
+  <property name="text.type" value="varchar" dbms="mysql" />
+  <property name="text.type" value="varchar2" dbms="oracle" />
+
+  <property name="double.type" value="double"/>
+
+  <property name="autoIncrement" value="true" dbms="mysql"/>
+  <property name="autoIncrement" value="false" dbms="oracle"/>
+
+  <property name="timestamp.type" value="timestamp" dbms="mysql" />
+  <property name="timestamp.type" value="timestamp" dbms="oracle" />
+
+  <property name="nullable.ts.type" value="timestamp null" dbms="mysql" />
+  <property name="nullable.ts.type" value="timestamp" dbms="oracle" />
+
+  <property name="clob.type" value="text" dbms="mysql"/>
+  <property name="clob.type" value="clob" dbms="oracle"/>
+
+  <property name="decimal.type" value="decimal" dbms="mysql"/>
+  <property name="decimal.type" value="number" dbms="oracle"/>
+
+  <changeSet author="ckhilosiya" id="Add default receiving site column in distribution protocol">
+    <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+      <column name="DEF_RECEIVING_SITE_ID" type="${int.type}"></column>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="FK on default receiving site of distribution protocol">
+    <addForeignKeyConstraint
+      constraintName="FK_DP_DEF_REC_SITE_ID"
+      baseTableName="CATISSUE_DISTRIBUTION_PROTOCOL"
+      baseColumnNames="DEF_RECEIVING_SITE_ID"
+      referencedTableName="CATISSUE_SITE"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Table to maintain distribution protocol sites">
+    <createTable tableName="OS_DISTRIBUTION_PROTOCOL_SITES">
+      <column name="DISTRIBUTION_PROTOCOL_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="SITE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Primary key on distribution protocol id and site id of DP sites">
+    <addPrimaryKey
+      tableName="OS_DISTRIBUTION_PROTOCOL_SITES"
+      columnNames="DISTRIBUTION_PROTOCOL_ID, SITE_ID"/>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="FK on distribution protocol id of DP sites">
+    <addForeignKeyConstraint
+      constraintName="FK_DP_SITES_DP_ID"
+      baseTableName="OS_DISTRIBUTION_PROTOCOL_SITES"
+      baseColumnNames="DISTRIBUTION_PROTOCOL_ID"
+      referencedTableName="CATISSUE_DISTRIBUTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="FK on site id of DP sites">
+    <addForeignKeyConstraint
+      constraintName="FK_DP_SITES_SITE_ID"
+      baseTableName="OS_DISTRIBUTION_PROTOCOL_SITES"
+      baseColumnNames="SITE_ID"
+      referencedTableName="CATISSUE_SITE"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+</databaseChangeLog>

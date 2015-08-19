@@ -70,9 +70,9 @@
       
       <li class="item">
         <strong class="key key-sm" translate="dp.distributing_sites">Distributing Sites</strong>
-        <span class="value value-md">{{distSites | osNoValue}}</span>
+        <span class="value value-md">{{distributionProtocol.distributingSites | osArrayJoin: getDistSiteText | osNoValue}}</span>
       </li>
-
+      
     </ul>
   </div>
 </div>

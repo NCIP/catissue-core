@@ -10,11 +10,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.context.MessageSource;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder.Status;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderFactory;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
@@ -76,14 +79,15 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 	@PlusTransactional
 	public ResponseEvent<List<DistributionOrderSummary>> getOrders(RequestEvent<DistributionOrderListCriteria> req) {
 		try {
-			Set<Long> instituteIds = AccessCtrlMgr.getInstance().getReadAccessDistributionOrderInstitutes();
-			if (instituteIds != null && instituteIds.isEmpty()) {
+			Set<Long> siteIds = AccessCtrlMgr.getInstance().getReadAccessDistributionOrderSites();
+			
+			if (siteIds != null && siteIds.isEmpty()) {
 				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
 			}
 			
 			DistributionOrderListCriteria crit = req.getPayload();
-			if (instituteIds != null) {
-				crit.instituteIds(instituteIds);
+			if (siteIds != null) {
+				crit.siteIds(siteIds);
 			}
 						
 			return ResponseEvent.response(daoFactory.getDistributionOrderDao().getOrders(crit));
@@ -104,7 +108,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 				return ResponseEvent.userError(DistributionOrderErrorCode.NOT_FOUND);
 			}
 			
-			AccessCtrlMgr.getInstance().ensureReadDistributionOrderRights(order);			
+			AccessCtrlMgr.getInstance().ensureReadDistributionOrderRights(order);
 			return ResponseEvent.response(DistributionOrderDetail.from(order));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -217,13 +221,24 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 				daoFactory.getSpecimenDao().getSpecimenInstitutes(specimenIds);
 		
 		StringBuilder invalidSpecimens = new StringBuilder();
-		Long orderInstituteId = order.getInstitute().getId();
+		Set<Site> sites = order.getDistributionProtocol().getDistributingSites();
+		Set<Long> instituteIds = new HashSet<Long>();
+		for (Site site: sites) {
+			instituteIds.add(site.getInstitute().getId());
+		}
 		for (Map.Entry<String, Long> specimenInstituteId : specimenInstituteIdMap.entrySet()) {
-			if (!specimenInstituteId.getValue().equals(orderInstituteId)) {
+			boolean isPresent = false;
+			for (Long id: instituteIds) {
+				if (specimenInstituteId.getValue().equals(id)) {
+					isPresent = true;
+					break;
+				}
+			}
+			if (!isPresent) {
 				invalidSpecimens.append(specimenInstituteId.getKey()).append(", ");
 			}
 		}
-				
+		
 		int labelsLen = invalidSpecimens.length();
 		if (labelsLen > 0) {
 			throw OpenSpecimenException.userError(

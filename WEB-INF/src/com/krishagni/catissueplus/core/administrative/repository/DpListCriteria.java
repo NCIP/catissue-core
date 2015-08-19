@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.repository;
 
+import java.util.Set;
+
 import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 
 public class DpListCriteria extends AbstractListCriteria<DpListCriteria> {
@@ -9,6 +11,8 @@ public class DpListCriteria extends AbstractListCriteria<DpListCriteria> {
 	private Long piId;
 	
 	private Long instituteId;
+	
+	private Set<Long> siteIds;
 	
 	private String activityStatus;
 
@@ -41,6 +45,15 @@ public class DpListCriteria extends AbstractListCriteria<DpListCriteria> {
 	
 	public DpListCriteria instituteId(Long instituteId) {
 		this.instituteId = instituteId;
+		return self();
+	}
+	
+	public Set<Long> siteIds() {
+		return siteIds;
+	}
+	
+	public DpListCriteria siteIds(Set<Long> siteIds) {
+		this.siteIds = siteIds;
 		return self();
 	}
 	

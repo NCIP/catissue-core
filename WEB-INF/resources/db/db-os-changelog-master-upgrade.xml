@@ -19,5 +19,7 @@
   <include file="db/2.1/seed-data.xml"/>
   <include file="db/2.1/audit.xml"/>
   <include file="db/2.1/migration.xml"/>
+  
+  <include file="db/2.2/schema.xml"/>
 
 </databaseChangeLog> 

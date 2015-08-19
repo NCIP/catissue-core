@@ -25,21 +25,21 @@
         <ul class="dropdown-menu dropdown-menu-right">
           <li show-if-admin class="default" ng-click="deleteDp()">
             <a>
-              <i class="fa fa-trash"></i>
+              <span class="fa fa-trash"></span>
               <span translate="dp.menu_options.delete">Delete</span>
             </a>
           </li>
           <li show-if-admin ng-if="distributionProtocol.activityStatus != 'Closed'" class="default"
             ng-click="closeDp()">
             <a>
-              <i class="fa fa-remove"></i>
+              <span class="fa fa-remove"></span>
               <span translate="dp.menu_options.close">Close</span>
             </a>
           </li>
           <li show-if-admin ng-if="distributionProtocol.activityStatus == 'Closed'" class="default"
             ng-click="reopenDp()">
             <a>
-              <i class="fa fa-check"></i>
+              <span class="fa fa-check"></span>
               <span translate="dp.menu_options.reopen">Reopen</span>
             </a>
           </li>

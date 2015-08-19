@@ -7,28 +7,38 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       $scope.distributionProtocol = distributionProtocol;
       $scope.piFilterOpts = {institute: distributionProtocol.instituteName};
       $scope.institutes = [];
+      $scope.instituteList = [];
       $scope.sites = [];
       $scope.queryList = [];
+      $scope.instSiteMap = {};
+      $scope.distSites = [];
       loadInstitutes();
       loadSites($scope.distributionProtocol.instituteName);
       loadQueries();
-      $scope.distInstList = [];
-      $scope.distSiteList = [];
-      $scope.distributionProtocol.addDistSite($scope.distributionProtocol.newDistSite());
     }
     
     function loadInstitutes() {
       Institute.query().then(
         function(institutes) {
           $scope.institutes = institutes;
-          $scope.distInstList = getInstNames(institutes);
-          var distInstNames = $scope.distributionProtocol.getDistInstNames();
-          angular.forEach(distInstNames, getDistSites);
-          filterAvailableDistInst();
+          loadDistInstSites(institutes);
         }
       );
     }
 
+    function loadDistInstSites(institutes) {
+      $scope.instituteList = prepareInstList(institutes);
+      $scope.distSites = prepareDistSites();
+      $scope.instSiteMap = prepareInstSiteMap(institutes);
+      angular.forEach($scope.distSites, function (site, index) {
+        getSites(site.instituteName).then(
+          function (sites) {
+            $scope.instSiteMap[site.instituteName] = sites;
+          }
+        );
+      });
+      $scope.instituteList = filterInstList($scope.institutes, $scope.distSites);
+    }
     
     function loadQueries(searchTerm) {
       $scope.queryList = SavedQuery.list({searchString: searchTerm});
@@ -36,6 +46,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     
     $scope.createDp = function() {
       var dp = angular.copy($scope.distributionProtocol);
+      dp = updateDistSites(dp, $scope.distSites);
       dp.$saveOrUpdate().then(
         function(savedDp) {
           $state.go('dp-detail.overview', {dpId: savedDp.id});
@@ -50,6 +61,97 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       loadSites($scope.distributionProtocol.instituteName);
     }
     
+    $scope.onDistInstSelect = function (index) {
+      var instituteName = $scope.distSites[index].instituteName;
+      getSites(instituteName).then(
+        function (sites) {
+          $scope.instSiteMap[instituteName] = sites;
+        }
+      );
+      $scope.distSites[index].sites = [];
+      $scope.instituteList = filterInstList($scope.institutes, $scope.distSites);
+    }
+    
+    $scope.addNewDistSite = function () {
+      $scope.distSites = addDistSite($scope.distSites);
+    }
+    
+    function addDistSite (distSites) {
+      if (typeof distSites === 'undefined') {
+        distSites = [];
+      }
+      distSites.push({instituteName: '', sites: []});
+      
+      return distSites;
+    }
+    
+    $scope.removeDistSite = function (index) {
+      $scope.distSites.splice(index,1);
+      $scope.instituteList = filterInstList($scope.institutes, $scope.distSites);
+      if ($scope.distSites.length === 0) {
+        $scope.distSites = addDistSite($scope.distSites);
+      }
+    }
+    
+    function prepareDistSites () {
+      var distributingSites = $scope.distributionProtocol.distributingSites;
+      var distSites = [];
+      angular.forEach(distributingSites, function (site) {
+        var isInstPresent = false;
+        angular.forEach(distSites, function (instSite) {
+          if (instSite.instituteName === site.instituteName) {
+            instSite.sites.push(site.name);
+            isInstPresent = true;
+          }
+        });
+        if (!isInstPresent) {
+          distSites.push({instituteName: site.instituteName, sites: [site.name]});
+        }
+      });
+      
+      if (distSites.length == 0) {
+        distSites = addDistSite(distSites);
+      }
+      
+      
+      return distSites;
+    }
+    
+    function prepareInstList (institutes) {
+      var instList = [];
+      angular.forEach(institutes, function (inst) {
+        instList.push(inst.name);
+      });
+      
+      return instList;
+    }
+    
+    function prepareInstSiteMap (institutes) {
+      var instSiteMap = {};
+      angular.forEach(institutes, function (inst) {
+        instSiteMap[inst.name] = [];
+      });
+      
+      return instSiteMap;
+    }
+    
+    function filterInstList (include, exclude) {
+      var newList = [];
+      angular.forEach(include, function (inst) {
+        var isPresent = false;
+        angular.forEach(exclude, function (site) {
+          if (site.instituteName === inst.name) {
+            isPresent = true;
+          }
+        });
+        if (!isPresent) {
+          newList.push(inst.name);
+        }
+      });
+      
+      return newList;
+    }
+    
     function getInstNames (institutes) {
       var instNames = [];
       angular.forEach(institutes, function (inst) {
@@ -59,57 +161,33 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       return instNames;
     }
     
-    function filterAvailableDistInst () {
-      var instituteNames = $scope.distributionProtocol.getDistInstNames();
-      var institutes = getInstNames($scope.institutes);
-      $scope.distInstList = institutes.filter(
-        function (inst) {
-          return instituteNames.indexOf(inst) == -1;
-        }
-      );
-    }
-    
-    $scope.onDistInstSelect = function (instituteName, index) {
-      $scope.distributionProtocol.distributingSites[index].sites = [];
-      $scope.distSiteList.splice(index, 1);
-      getDistSites(instituteName, index);
-      filterAvailableDistInst();
-    };
-    
     function loadSites(instituteName) {
-      Site.listForInstitute(instituteName).then(
+      getSites(instituteName).then(
         function (sites) {
           $scope.sites = sites;
         }
       );
     }
     
-    function getDistSites(instituteName, index) {
-      Site.listForInstitute(instituteName).then(
+    function getSites(instituteName) {
+      return Site.listForInstitute(instituteName).then(
         function (sites) {
-          $scope.distSiteList.splice(index, 0, sites);
+          return sites;
         }
       );
     }
     
-    $scope.addIfLastDistSite = function (index) {
-      var dp = $scope.distributionProtocol;
-      if (index === dp.distributingSites.length - 1) {
-        dp.addDistSite(dp.newDistSite());
-      }
+    function updateDistSites(dp, distSites) {
+      var sites = [];
+      angular.forEach(distSites, function (site) {
+        angular.forEach(site.sites, function (siteName) {
+          sites.push({instituteName: site.instituteName, name: siteName});
+        });
+      });
+      dp.distributingSites = sites;
+      return dp;
     }
     
-    $scope.removeDistSite = function (distSite, index) {
-      var dp = $scope.distributionProtocol;
-      dp.removeDistSite(distSite);
-      if (dp.distributingSites.length == 0) {
-        dp.addDistSite(dp.newDistSite());
-      }
-      
-      $scope.distSiteList.splice(index, 1);
-      filterAvailableDistInst();
-    }
-
     $scope.loadQueries = loadQueries;
     
     init();

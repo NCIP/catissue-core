@@ -103,11 +103,10 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 			return;
 		}
 		
-		if (!requester.getInstitute().equals(order.getInstitute())) {
-			ose.addError(DistributionOrderErrorCode.REQUESTER_DOES_NOT_BELONG_DP_INST);
+		if (!requester.getInstitute().getName().equals(detail.getInstituteName())) {
+			ose.addError(DistributionOrderErrorCode.REQUESTER_DOES_NOT_BELONG_INST);
 			return;
 		}
-		
 		
 		order.setRequester(requester);
 	}
@@ -132,8 +131,8 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 			return;
 		}
 		
-		if (!site.getInstitute().equals(order.getInstitute())) {
-			ose.addError(DistributionOrderErrorCode.RECV_SITE_DOES_NOT_BELONG_DP_INST);
+		if (!site.getInstitute().getName().equals(detail.getInstituteName())) {
+			ose.addError(DistributionOrderErrorCode.RECV_SITE_DOES_NOT_BELONG_INST);
 			return;
 		}
 				

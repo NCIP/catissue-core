@@ -1,24 +1,26 @@
 
 angular.module('os.administrative.order.addedit', ['os.administrative.models', 'os.biospecimen.models'])
   .controller('OrderAddEditCtrl', function(
-    $scope, $state, $translate, order, 
+    $scope, $state, $translate, order, Institute,
     Specimen, SpecimensHolder, Site, DistributionProtocol, DistributionOrder, Alerts) {
     
     function init() {
       $scope.order = order;
       $scope.dpList = [];
+      $scope.instituteList = [];
       $scope.siteList = [];
       $scope.userFilterOpts = {};
       $scope.input = {labelText: ''};
 
       loadItemStatusPvs();
       loadDps();
+      loadInstitutes();
       setUserAndSiteList(order);
 
       if (!order.id && angular.isArray(SpecimensHolder.getSpecimens())) {
         order.orderItems = getOrderItems(SpecimensHolder.getSpecimens());
         SpecimensHolder.setSpecimens(null);
-      } 
+      }
     }
 
     function loadItemStatusPvs() {
@@ -34,9 +36,20 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     }
 
     function loadDps() {
-      DistributionProtocol.query().then(
+      var filterOpts = {activityStatus: 'Active'};
+      DistributionProtocol.query(filterOpts).then(
         function(dps) {
           $scope.dpList = dps;
+        }
+      );
+    }
+    
+    function loadInstitutes () {
+      Institute.query().then(
+        function (institutes) {
+          $scope.institutes = institutes;
+          $scope.instituteList = prepareInstList(institutes);
+          
         }
       );
     }
@@ -47,6 +60,15 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
           $scope.siteList = sites;
         }
       );    
+    }
+
+    function prepareInstList (institutes) {
+      var instList = [];
+      angular.forEach(institutes, function (inst) {
+        instList.push(inst.name);
+      });
+      
+      return instList;
     }
 
     function setUserFilterOpts(institute) {
@@ -76,6 +98,7 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     }
 
     function saveOrUpdate(order) {
+      order.siteId = undefined;
       angular.copy(order).$saveOrUpdate().then(
         function(savedOrder) {
           $state.go('order-detail.overview', {orderId: savedOrder.id});
@@ -85,6 +108,17 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
 
     $scope.onDpSelect = function() {
       setUserAndSiteList($scope.order);
+      $scope.order.instituteName = $scope.order.distributionProtocol.instituteName;
+      $scope.order.siteName = $scope.order.distributionProtocol.defReceivingSiteName;
+      $scope.order.requester = $scope.order.distributionProtocol.principalInvestigator;
+    }
+    
+    $scope.onInstSelect = function () {
+      var instName = $scope.order.instituteName;
+      loadSites(instName);
+      setUserFilterOpts(instName);
+      $scope.order.siteName = '';
+      $scope.order.requester = '';
     }
 
     $scope.addSpecimens = function() {

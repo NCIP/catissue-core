@@ -16,8 +16,8 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.Distributio
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
-import com.krishagni.catissueplus.core.administrative.events.DistributingSitesDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
+import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -101,8 +101,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		distributionProtocol.setInstitute(institute);
 	}
 	
-	private void setDefReceivingSite(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol,
-			OpenSpecimenException ose) {
+	private void setDefReceivingSite(DistributionProtocolDetail detail, DistributionProtocol dp, OpenSpecimenException ose) {
 		String defReceivingSiteName = detail.getDefReceivingSiteName();
 		if (StringUtils.isBlank(defReceivingSiteName)) {
 			return;
@@ -113,8 +112,12 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 			ose.addError(SiteErrorCode.NOT_FOUND);
 			return;
 		}
+		if (!defReceivingSite.getInstitute().getName().equals(detail.getInstituteName())) {
+			ose.addError(SiteErrorCode.INVALID_SITE_INSTITUTE);
+			return;
+		}
 		
-		distributionProtocol.setDefReceivingSite(defReceivingSite);
+		dp.setDefReceivingSite(defReceivingSite);
 	}
 	
 	private void setPrincipalInvestigator(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
@@ -169,21 +172,16 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		distributionProtocol.setReport(report);
 	}
 		
-	private void setDistributingSites(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol,
-			OpenSpecimenException ose) {
+	private void setDistributingSites(DistributionProtocolDetail detail, DistributionProtocol dp, OpenSpecimenException ose) {
 		if (CollectionUtils.isEmpty(detail.getDistributingSites())) {
+			ose.addError(DistributionProtocolErrorCode.DISTRIBUTING_SITES_REQUIRED);
 			return;
 		}
 		
 		List<String> distSites = new ArrayList<String>();
-		List<DistributingSitesDetail> sitesDetail = detail.getDistributingSites();
-		for (DistributingSitesDetail site: sitesDetail) {
-			if (StringUtils.isBlank(site.getInstituteName()) ||
-					CollectionUtils.isEmpty(site.getSites())) {
-				ose.addError(DistributionProtocolErrorCode.INVALID_DISTRIBUTING_SITES);
-				return;
-			}
-			distSites.addAll(site.getSites());
+		List<SiteDetail> sitesDetail = detail.getDistributingSites();
+		for (SiteDetail site: sitesDetail) {
+			distSites.add(site.getName());
 		}
 		
 		List<Site> distributingSites = daoFactory.getSiteDao().getSitesByNames(distSites);
@@ -192,8 +190,6 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 			return;
 		}
 		
-		if (CollectionUtils.isNotEmpty(distributingSites)) {
-			distributionProtocol.setDistributingSites(new HashSet<Site>(distributingSites));
-		}
+		dp.setDistributingSites(new HashSet<Site>(distributingSites));
 	}
 }

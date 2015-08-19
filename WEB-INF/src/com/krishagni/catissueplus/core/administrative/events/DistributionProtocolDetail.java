@@ -35,7 +35,7 @@ public class DistributionProtocolDetail {
 	
 	private SavedQuerySummary report;
 	
-	private List<DistributingSitesDetail> distributingSites = new ArrayList<DistributingSitesDetail>();
+	private List<SiteDetail> distributingSites = new ArrayList<SiteDetail>();
 
 	public Long getId() {
 		return id;
@@ -133,11 +133,11 @@ public class DistributionProtocolDetail {
 		this.report = report;
 	}
 	
-	public List<DistributingSitesDetail> getDistributingSites() {
+	public List<SiteDetail> getDistributingSites() {
 		return distributingSites;
 	}
 	
-	public void setDistributingSites(List<DistributingSitesDetail> distributingSites) {
+	public void setDistributingSites(List<SiteDetail> distributingSites) {
 		this.distributingSites = distributingSites;
 	}
 
@@ -160,7 +160,7 @@ public class DistributionProtocolDetail {
 			detail.setReport(SavedQuerySummary.fromSavedQuery(distributionProtocol.getReport()));
 		}
 		
-		detail.setDistributingSites(DistributingSitesDetail.from(distributionProtocol.getDistributingSites()));
+		detail.setDistributingSites(SiteDetail.from(distributionProtocol.getDistributingSites()));
 		
 		return detail;
 	}

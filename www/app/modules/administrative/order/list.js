@@ -2,14 +2,14 @@
 angular.module('os.administrative.order.list', ['os.administrative.models'])
   .controller('OrderListCtrl', function(
     $scope, $state, $filter, 
-    DistributionOrder, DistributionProtocol, Site, Util) {
+    DistributionOrder, DistributionProtocol, Institute, Util) {
 
     var pvsLoaded = false;
 
     function init() {
       $scope.orders = [];
-      $scope.sites = [];
       $scope.dps = [];
+      $scope.instiuteList = [];
       $scope.filterOpts = {};
 
       loadOrders($scope.filterOpts);
@@ -20,7 +20,7 @@ angular.module('os.administrative.order.list', ['os.administrative.models'])
       var opts = {
         includeStats: true,
         query: filterOpts.title,
-        receivingSite: filterOpts.receivingSite
+        receivingInstitute: filterOpts.receivingInstitute
       };
 
       if (!!filterOpts.executionDate) {
@@ -49,7 +49,7 @@ angular.module('os.administrative.order.list', ['os.administrative.models'])
       }
 
       loadDps();
-      loadSites();
+      loadInstitutes();
       pvsLoaded = true;
     }
 
@@ -61,12 +61,21 @@ angular.module('os.administrative.order.list', ['os.administrative.models'])
       );
     }
  
-    function loadSites() {
-      Site.list().then(
-        function(sites) {
-          $scope.sites = sites;
+    function loadInstitutes() {
+      Institute.query().then(
+        function(institutes) {
+          $scope.instList = prepareInstList(institutes);
         }
       );
+    }
+    
+    function prepareInstList (institutes) {
+      var instList = [];
+      angular.forEach(institutes, function (inst) {
+        instList.push(inst.name);
+      });
+      
+      return instList;
     }
 
     $scope.loadSearchPvs = loadSearchPvs;

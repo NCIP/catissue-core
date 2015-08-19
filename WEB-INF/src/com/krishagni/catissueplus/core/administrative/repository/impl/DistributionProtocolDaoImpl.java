@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -95,6 +96,7 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		
 		addPiCondition(query, crit);
 		addInstCondition(query, crit);
+		addDistSitesCondition(query, crit);
 		addActivityStatusCondition(query, crit);
 	}
 	
@@ -114,6 +116,16 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		}
 		
 		query.add(Restrictions.eq("institute.id", instituteId));
+	}
+	
+	private void addDistSitesCondition(Criteria query, DpListCriteria crit) {
+		Set<Long> siteIds = crit.siteIds();
+		if (siteIds == null) {
+			return;
+		}
+		
+		query.createAlias("distributingSites", "distSite")
+			.add(Restrictions.in("distSite.id", siteIds));
 	}
 	
 	private void addActivityStatusCondition(Criteria query, DpListCriteria crit) {

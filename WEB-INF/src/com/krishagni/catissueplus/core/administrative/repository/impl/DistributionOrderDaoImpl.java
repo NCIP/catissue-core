@@ -86,11 +86,11 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 				.addOrder(Order.desc("id"));
 		
 		//
-		// Restrict by institutes 
+		// Restrict by distributing sites
 		//
-		if (CollectionUtils.isNotEmpty(crit.instituteIds())) {
-			query.createAlias("dp.institute", "institute")
-				.add(Restrictions.in("institute.id", crit.instituteIds()));
+		if (CollectionUtils.isNotEmpty(crit.siteIds())) {
+			query.createAlias("dp.distributingSites", "distSites")
+				.add(Restrictions.in("distSites.id", crit.siteIds()));
 		}
 		
 		//
@@ -101,7 +101,8 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 		addDpRestriction(query, crit, matchMode);
 		addRequestorRestriction(query, crit, matchMode);
 		addExecutionDtRestriction(query, crit);
-		addReceiveSiteRestriction(query, crit, matchMode);
+		addReceivingSiteRestriction(query, crit, matchMode);
+		addReceivingInstRestriction(query, crit, matchMode);
 		
 		addProjections(query);
 		return query.list();		
@@ -157,12 +158,21 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 		query.add(Restrictions.between("executionDate", from.getTime(), to.getTime()));
 	}
 
-	private void addReceiveSiteRestriction(Criteria query, DistributionOrderListCriteria crit, MatchMode mode) {
+	private void addReceivingSiteRestriction(Criteria query, DistributionOrderListCriteria crit, MatchMode mode) {
 		if (StringUtils.isBlank(crit.receivingSite())) {
 			return;
 		}
 		
 		query.add(Restrictions.ilike("site.name", crit.receivingSite(), mode));
+	}
+	
+	private void addReceivingInstRestriction(Criteria query, DistributionOrderListCriteria crit, MatchMode mode) {
+		if (StringUtils.isBlank(crit.receivingInstitute())) {
+			return;
+		}
+		
+		query.createAlias("site.institute", "institute")
+			.add(Restrictions.ilike("institute.name", crit.receivingInstitute(), mode));
 	}
 	
 	private void addProjections(Criteria query) {

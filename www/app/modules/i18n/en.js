@@ -81,7 +81,8 @@
       "clear_filters": "Clear Filters",
       "close": "Close",
       "upload": "Upload",
-      "reset_password": "Reset Password"
+      "reset_password": "Reset Password",
+      "add_new": "Add New"
     }
   },
 
@@ -595,7 +596,6 @@
     "distributing_institute": "Distributing Institute",
     "distributing_sites": "Distributing Sites",
     "order_report_query": "Order Report Query",
-    "close": "Close",
     "closed": "Closed",
     "confirm_close_title": "Closing {{shortTitle}} confirmation",
     "confirm_close": "Are you sure you want to close the distribution protocol {{shortTitle}} ?",
@@ -1216,6 +1216,7 @@
      "dist_date": "Distribution Date",
      "creation_date": "Creation Date",
      "tracking_url": "Tracking URL",
+     "receiving_institute": "Receiving Institute",
      "receiving_site": "Receiving Site",
      "execution_date": "Execution Date",
      "courier_tracking_url": "Courier Tracking URL",

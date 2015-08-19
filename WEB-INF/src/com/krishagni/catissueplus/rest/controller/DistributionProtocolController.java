@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolStatusDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -127,11 +126,14 @@ public class DistributionProtocolController {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public DistributionProtocolDetail updateActivityStatus(
-			@PathVariable Long id,
-			@RequestBody DistributionProtocolStatusDetail detail) {
+			@PathVariable("id")
+			Long id,
+			
+			@RequestBody
+			DistributionProtocolDetail detail) {
 		
 		detail.setId(id);
-		RequestEvent<DistributionProtocolStatusDetail> req = new RequestEvent<DistributionProtocolStatusDetail>(detail);
+		RequestEvent<DistributionProtocolDetail> req = new RequestEvent<DistributionProtocolDetail>(detail);
 		ResponseEvent<DistributionProtocolDetail> resp = dpSvc.updateActivityStatus(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();

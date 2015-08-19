@@ -4,7 +4,6 @@ package com.krishagni.catissueplus.core.administrative.services;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolStatusDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -24,5 +23,5 @@ public interface DistributionProtocolService {
 	
 	public ResponseEvent<DistributionProtocolDetail> deleteDistributionProtocol(RequestEvent<Long> req);
 	
-	public ResponseEvent<DistributionProtocolDetail> updateActivityStatus(RequestEvent<DistributionProtocolStatusDetail> req);
+	public ResponseEvent<DistributionProtocolDetail> updateActivityStatus(RequestEvent<DistributionProtocolDetail> req);
 }

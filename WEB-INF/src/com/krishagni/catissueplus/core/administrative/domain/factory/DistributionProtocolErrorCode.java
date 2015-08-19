@@ -23,7 +23,9 @@ public enum DistributionProtocolErrorCode implements ErrorCode {
 	
 	REF_ENTITY_FOUND,
 	
-	INVALID_DISTRIBUTING_SITES;
+	INVALID_DISTRIBUTING_SITES,
+	
+	DISTRIBUTING_SITES_REQUIRED;
 
 	@Override
 	public String code() {

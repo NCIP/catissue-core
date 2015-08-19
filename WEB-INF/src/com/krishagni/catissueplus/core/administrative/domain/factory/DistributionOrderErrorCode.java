@@ -33,9 +33,9 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 	
 	INVALID_SPECIMENS_FOR_DP,
 	
-	REQUESTER_DOES_NOT_BELONG_DP_INST,
+	REQUESTER_DOES_NOT_BELONG_INST,
 	
-	RECV_SITE_DOES_NOT_BELONG_DP_INST;
+	RECV_SITE_DOES_NOT_BELONG_INST;
 
 	@Override
 	public String code() {
