@@ -486,13 +486,12 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		StorageContainerDetail detail = new StorageContainerDetail();
 		detail.setName(dest.getName());
 		detail.setSiteName(dest.getSiteName());
-		detail.setParentContainerId(dest.getParentContainerId());
-		detail.setParentContainerName(dest.getParentContainerName());
 		
 		StorageContainerPositionDetail position = new StorageContainerPositionDetail();
+		position.setContainerId(dest.getParentContainerId());
+		position.setContainerName(dest.getParentContainerName());
 		position.setPosOne(dest.getPosOne());
 		position.setPosTwo(dest.getPosTwo());
-		detail.setPosition(position);
 		
 		StorageContainer replica = containerFactory.createStorageContainer(getContainerCopy(srcContainer), detail);
 		AccessCtrlMgr.getInstance().ensureCreateContainerRights(replica);

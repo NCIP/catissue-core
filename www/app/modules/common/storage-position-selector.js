@@ -1,17 +1,15 @@
 
-angular.module('os.biospecimen.participant.specimen-position')
-  .controller('SpecimenPositionSelectorCtrl', 
-    function($scope, $modalInstance, $timeout, $q, specimen, cpId, Container) {
+angular.module('openspecimen')
+  .controller('StoragePositionSelectorCtrl',
+    function($scope, $modalInstance, $timeout, $q, entity, cpId, Container) {
+      $scope.entityType = entity.getType();
+      var extend = angular.extend;
+
       var queryParams = {
-        specimenClass: specimen.specimenClass,
-        specimenType: specimen.type,
         onlyFreeContainers: true,
-        cpId: cpId,
-        storeSpecimensEnabled: true,
         hierarchical: true
       };
-
-      var extend = angular.extend;
+      setEntityQueryParams(entity, queryParams);
 
       function addChildPlaceholders(containers) {
         angular.forEach(containers, function(container) {
@@ -33,6 +31,19 @@ angular.module('os.biospecimen.participant.specimen-position')
           }
         );
       };
+
+      function setEntityQueryParams(entity, queryParams) {
+         if ($scope.entityType == 'specimen') {
+          extend(queryParams, {
+            storeSpecimensEnabled: true,
+            specimenClass: entity.specimenClass,
+            specimenType: entity.type,
+            cpId: cpId
+          });
+        } else if ($scope.entityType == 'storage_container') {
+          extend(queryParams, {site: entity.siteName});
+        }
+      }
 
       $scope.toggleSelectedContainer = function(wizard, container) {
         $scope.showGrid = false;

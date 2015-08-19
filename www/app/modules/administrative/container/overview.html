@@ -22,10 +22,10 @@
         <span class="value value-md">{{container.siteName}}</span>
       </li>
 
-      <li class="item" ng-if="!!container.parentContainerId">
+      <li class="item" ng-if="!!container.storageLocation">
         <strong class="key key-sm" translate="container.parent_container">Parent Container</strong>
-        <a class="value value-md" ui-sref="container-detail.overview({containerId: container.parentContainerId})">
-          {{container.parentContainerName}}
+        <a class="value value-md" ui-sref="container-detail.overview({containerId: container.storageLocation.id})">
+          {{container.storageLocation.name}} ({{container.storageLocation.positionY}} X {{container.storageLocation.positionX}})
         </a>
       </li>
 

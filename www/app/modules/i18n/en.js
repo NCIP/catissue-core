@@ -410,6 +410,8 @@
     "no_specimens_for_print": "Please select at least one collected specimen for label printing",
     "no_specimens_for_specimen_list": "Please select at least one specmen to add specimen list",
 
+    "pos_selector": "Specimen Position Selector",
+
     "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
     "bulk_import": "Bulk Import Specimens",
     "spmn_extensions": "Specimen Forms",
@@ -745,7 +747,6 @@
     "update_container": "Update Storage Container",
     "parent_container": "Parent Container",
     "parent_site": "Parent Site",
-    "parent_location": "Parent Location",
     "site": "Site",
     "container": "Container",
     "one": "One",

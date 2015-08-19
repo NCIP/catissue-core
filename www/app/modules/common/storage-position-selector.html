@@ -1,6 +1,7 @@
 <div>
   <div class="os-modal-header">
-    <span>Specimen Position Selector</span>
+    <span ng-if="entityType == 'specimen'" translate="specimen.pos_selector">Specimen Position Selector</span>
+    <span ng-if="entityType == 'storage_container'" translate="container.pos_selector">Container Position Selector</span>
     <div class="os-close" ng-click="cancel()">&times;</div>
   </div>
 
@@ -37,6 +38,7 @@
 </div>
 
 <script type="text/ng-template" id="container-tree.html">
+
   <div class="os-table os-table-fixed os-table-tree os-border os-table-muted-hdr">
     <div class="os-table-head">
       <div class="row">
@@ -77,12 +79,14 @@
         </div>
         <div class="col col-xs-2">
           <button class="btn btn-xs btn-success" ng-click="toggleSelectedContainer(selectPositionWizard, container)"
-            ng-if="container.storeSpecimensEnabled && !container.selected"> 
+            ng-if="(entityType == 'storage_container' || (entityType == 'specimen' && container.storeSpecimensEnabled))
+              && !container.selected">
             <span class="fa fa-check"></span>
             <span translate="common.buttons.select">Select</span>
           </button>
           <button class="btn btn-xs btn-danger" ng-click="toggleSelectedContainer(selectPositionWizard, container)"
-            ng-if="container.storeSpecimensEnabled && container.selected"> 
+            ng-if="(entityType == 'storage_container' || (entityType == 'specimen' && container.storeSpecimensEnabled))
+              && container.selected">
             <span class="fa fa-remove"></span>
             <span translate="common.buttons.unselect">Unselect</span>
           </button>

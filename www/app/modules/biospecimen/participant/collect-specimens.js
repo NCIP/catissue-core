@@ -1,8 +1,7 @@
 
 angular.module('os.biospecimen.participant.collect-specimens', 
   [ 
-    'os.biospecimen.models',
-    'os.biospecimen.participant.specimen-position'
+    'os.biospecimen.models'
   ])
   .factory('CollectSpecimensSvc', function($state) {
     var data = {};

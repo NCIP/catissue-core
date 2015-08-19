@@ -20,6 +20,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.StorageCont
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
+import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -265,12 +266,18 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	private StorageContainer setParentContainer(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		StorageContainer parentContainer = null;
 		Object key = null;
-		if (detail.getParentContainerId() != null) {
-			parentContainer = daoFactory.getStorageContainerDao().getById(detail.getParentContainerId());
-			key = detail.getParentContainerId();
-		} else if (StringUtils.isNotBlank(detail.getParentContainerName())) {
-			parentContainer = daoFactory.getStorageContainerDao().getByName(detail.getParentContainerName());
-			key = detail.getParentContainerName();
+		
+		StorageLocationSummary storageLocation = detail.getStorageLocation();
+		if (storageLocation == null) {
+			return null;
+		}
+		
+		if (storageLocation.getId() != null) {
+			parentContainer = daoFactory.getStorageContainerDao().getById(storageLocation.getId());
+			key = storageLocation.getId();
+		} else if (StringUtils.isNotBlank(storageLocation.getName())) {
+			parentContainer = daoFactory.getStorageContainerDao().getByName(storageLocation.getName());
+			key = storageLocation.getName();
 		}
 		
 		if (parentContainer == null) { 
@@ -288,10 +295,11 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	private void setPosition(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		StorageContainer parentContainer = container.getParentContainer();
 		String posOne = null, posTwo = null;
-
-		if (detail.getPosition() != null) {
-			posOne = detail.getPosition().getPosOne();
-			posTwo = detail.getPosition().getPosTwo();
+		
+		StorageLocationSummary storageLocation = detail.getStorageLocation();
+		if (storageLocation != null) {
+			posOne = storageLocation.getPositionX();
+			posTwo = storageLocation.getPositionY();
 		}
 				
 		if (parentContainer == null) { // top-level container; therefore no position
