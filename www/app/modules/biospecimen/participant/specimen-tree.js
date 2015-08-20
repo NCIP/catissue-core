@@ -257,7 +257,10 @@ angular.module('os.biospecimen.participant.specimen-tree',
               successMessage: hasChildren(specimensToDelete) ? 'specimens.specimens_hierarchy_deleted' : 'specimens.specimens_deleted',
               onDeletion: function(result) {
                 angular.forEach(result, function(specimen) {
-                  deleteSpecimen(getSpecimenFromTree(specimensToDelete, specimen));
+                  var specimenToDelete = getSpecimenFromTree(specimensToDelete, specimen);
+                  if (specimenToDelete != undefined) {
+                    deleteSpecimen(specimenToDelete);
+                  }
                 });
               }
             }
