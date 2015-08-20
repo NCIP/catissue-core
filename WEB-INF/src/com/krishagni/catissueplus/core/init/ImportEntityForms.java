@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.init;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.util.StringUtils;
 
 import krishagni.catissueplus.beans.FormContextBean;
 
@@ -24,15 +26,18 @@ public class ImportEntityForms extends ImportForms {
 
 	@Override 
 	protected List<String> listFormFiles() 
-	throws IOException {		
-		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(getClass().getClassLoader());
-		Resource[] resources = resolver.getResources("classpath:/entity-forms/*_extension.xml");
-		for (Resource resource: resources) {
-			String fileName = resource.getFilename();
-			String entityType = fileName.split("_")[0];
-			entityMap.put("entity-forms/" + fileName, entityType);
+	throws IOException {
+		try {
+			PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(getClass().getClassLoader());
+			Resource[] resources = resolver.getResources("classpath:/entity-forms/*_extension.xml");
+			for (Resource resource: resources) {
+				String fileName = resource.getFilename();
+				String entityType = StringUtils.capitalize(fileName.split("_")[0]) + "Extension";
+				entityMap.put("entity-forms/" + fileName, entityType);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
-		
 		return new ArrayList<String>(entityMap.keySet());
 	}
 

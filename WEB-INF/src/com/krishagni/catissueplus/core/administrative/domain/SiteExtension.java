@@ -32,12 +32,12 @@ public class SiteExtension extends DeObject {
 
 	@Override
 	public String getEntityType() {
-		return "Site";
+		return "SiteExtension";
 	}
 
 	@Override
 	public String getFormName() {
-		return "Site";
+		return getFormNameByEntityType();
 	}
 	
 	@Override

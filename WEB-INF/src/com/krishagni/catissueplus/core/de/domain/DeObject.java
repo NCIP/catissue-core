@@ -10,6 +10,7 @@ import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -18,6 +19,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
+import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 
 import edu.common.dynamicextensions.domain.nui.Container;
@@ -42,6 +44,8 @@ public abstract class DeObject {
 	private boolean useUdn = false;
 	
 	private List<Attr> attrs = new ArrayList<Attr>();
+	
+	private static Map<String, String> entityTypeFormNameMap = new HashMap<String, String>();
  	
 	private static Map<String, Container> formMap = new HashMap<String, Container>();
 	
@@ -137,7 +141,12 @@ public abstract class DeObject {
 		
 		recordLoaded = true;
 		
-		FormData formData = getFormData();		
+		Long recordId = getId();
+		if (recordId == null) {
+			return;
+		}
+		
+		FormData formData = formDataMgr.getFormData(getForm(), recordId);
 		if (formData == null) {
 			return;
 		}
@@ -153,13 +162,15 @@ public abstract class DeObject {
 		setAttrValues(attrValues);
 	}
 	
-	protected FormData getFormData() {
-		Long recordId = getId();
-		if (recordId == null) {
-			return null;
-		}
+	protected String getFormNameByEntityType() {
+		String formName = entityTypeFormNameMap.get(getEntityType());
+		if (formName == null) {
+			List<FormSummary> forms = daoFactory.getFormDao().getFormsByEntityType(getEntityType());
+			formName = forms.isEmpty() ? null: forms.get(0).getName();
+			entityTypeFormNameMap.put(getEntityType(), formName);
+		};
 		
-		return formDataMgr.getFormData(getForm(), recordId);
+		return formName;
 	}
 	
 	public abstract Long getObjectId();
@@ -194,7 +205,7 @@ public abstract class DeObject {
 	}
 	
 	public static FormCtxtSummary getExtensionContext(String entityType) {
-		DeObject object = getInstance(entityType, entityType, -1L, null, null);
+		DeObject object = getInstance(null, entityType, -1L, null, null);
 		FormContextBean ctxt = object.getFormContext();
 		FormCtxtSummary summary = null;
 		if (ctxt != null) {
@@ -279,7 +290,7 @@ public abstract class DeObject {
 			}
 		}
 		
-		return formCtxt; 
+		return formCtxt;
 	}
 	
 	private static DeObject getInstance(
@@ -291,7 +302,7 @@ public abstract class DeObject {
 		return new DeObject() {
 			@Override
 			public void setAttrValues(Map<String, Object> attrValues) {				
-			}
+			}	
 			
 			@Override
 			public Long getObjectId() {
@@ -300,6 +311,9 @@ public abstract class DeObject {
 			
 			@Override
 			public String getFormName() {
+				if (StringUtils.isBlank(formName)) {
+					return getFormNameByEntityType();
+				}
 				return formName;
 			}
 			
