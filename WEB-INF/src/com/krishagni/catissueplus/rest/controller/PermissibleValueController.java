@@ -49,6 +49,9 @@ public class PermissibleValueController {
 			@RequestParam(value = "parentValue", required = false) 
 			String parentValue,
 			
+			@RequestParam(value = "includeOnlyLeafValue", required = false, defaultValue="false")
+			boolean includeOnlyLeafValue,
+						
 			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") 
 			int maxResults) {
 		
@@ -58,6 +61,7 @@ public class PermissibleValueController {
 			.parentValue(parentValue)
 			.includeParentValue(includeParentValue)
 			.parentAttribute(parentAttribute)
+			.includeOnlyLeafValue(includeOnlyLeafValue)
 			.maxResults(maxResults);
 		
 		RequestEvent<ListPvCriteria> req = new RequestEvent<ListPvCriteria>(crit);

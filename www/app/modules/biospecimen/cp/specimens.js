@@ -87,7 +87,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
         $scope.sr.type = '';
       });
 
-      $scope.anatomicSites = PvManager.getPvs('anatomic-site');
+      $scope.anatomicSites = PvManager.getLeafPvs('anatomic-site');
       $scope.lateralities = PvManager.getPvs('laterality');
       $scope.pathologyStatuses = PvManager.getPvs('pathology-status');
       $scope.storageTypes = PvManager.getPvs('storage-type');

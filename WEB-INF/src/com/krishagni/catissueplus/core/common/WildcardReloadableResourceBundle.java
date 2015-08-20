@@ -38,11 +38,9 @@ public class WildcardReloadableResourceBundle extends ReloadableResourceBundleMe
 					String basename = null;
 					if (resource instanceof FileSystemResource || resource instanceof VfsResource) {
 						basename = "classpath:"	+ StringUtils.substringBetween(uri, "/classes/", ".properties");
-					} else if (resource instanceof ClassPathResource) {
+					} else if (resource instanceof ClassPathResource || resource instanceof UrlResource) {
 						basename = StringUtils.substringBefore(uri, ".properties");
-					} else if (resource instanceof UrlResource) {
-						basename = "classpath:"	+ StringUtils.substringBetween(uri, ".jar!/", ".properties");
-					}
+					} 
 
 					if (basename != null) {
 						String fullName = processBasename(basename);

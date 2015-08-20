@@ -45,6 +45,11 @@
         <strong class="key key-sm" translate="visits.surgical_path_no">Surg Path Number</strong>
         <span class="value value-md">{{visit.surgicalPathologyNumber | osNoValue}}</span>
       </li>
+
+      <li class="item" ng-if="visit.status == 'Missed Collection'">
+        <strong class="key key-sm" translate="visits.missed_by">Missed By</strong>
+        <span class="value value-md">{{visit.missedBy.firstName}} {{visit.missedBy.lastName}}</span>
+      </li>
     </ul>
 
     <os-specimen-tree cpr="cpr" visit="visit" specimens="specimens" allowed-ops="specimenAllowedOps"></div>

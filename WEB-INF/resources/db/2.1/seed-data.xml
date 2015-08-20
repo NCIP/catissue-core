@@ -48,6 +48,7 @@
 
 
   <changeSet author="ahegade" id="Missed visit reasons PV category">
+    <validCheckSum>7:a5918f69da80b616592b8f464dd1054b</validCheckSum>
     <sql>
       insert into catissue_cde
         (public_id, long_name, definition, version, last_updated)

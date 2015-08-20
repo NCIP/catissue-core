@@ -405,8 +405,10 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 			return -1;
 		} else if (other.sortOrder != null) {
 			return 1;
-		} else if (reqId != null && other.reqId != null) {
+		} else if (reqId != null && other.reqId != null && reqId != other.reqId) {
 			return reqId.compareTo(other.reqId);
+		} else if (reqId == other.reqId) {
+			return id.compareTo(other.id);
 		} else if (reqId != null) {
 			return -1;
 		} else if (other.reqId != null) {

@@ -203,7 +203,7 @@
   "participant": {
     "list": "Participants",
    
-    "id": "MPI / MRN / SSN",
+    "id": "MPI / MRN / NIN",
     "register_participant": "Register Participant",
     "edit_participant": "Edit Participant",
     "reg_date": "Registration Date",
@@ -213,8 +213,8 @@
     "last_name": "Last Name",
     "middle_name": "Middle Name",
     "birth_date": "Birth Date",
-    "uid": "Social Security Number", 
-    "uid_short": "SSN",
+    "uid": "National Identity Number",
+    "uid_short": "NIN",
     "mpi": "Master Patient Index",
     "gender": "Gender",
     "vital_status": "Vital Status",
@@ -250,7 +250,7 @@
     "matching_attr": {
       "empi": "EMPI",
       "pmi": "MRN",
-      "uid": "SSN",
+      "uid": "NIN",
       "lnameAndDob": "Last Name and DOB"
     },
 
@@ -295,6 +295,7 @@
     "collection_status": "Collection Status",
     "anticipated_visits": "Anticipated Visits",
     "missed_visits": "Missed Visits",
+    "missed_by": "Missed By",
     "anticipated_specimens": "Anticipated Specimens",
     "visit_status": "Status",
     "name": "Name",
@@ -360,6 +361,7 @@
     "label": "Label",
     "type": "Type",
     "pathology": "Pathology",
+    "pathology_status": "Pathology Status",
     "container": "Container",
     "collection_status": "Collection Status",
     "class": "Class",
@@ -392,6 +394,8 @@
     "activity_time_info": "{{name}} created on {{time | osServerTime: utcOffset | date: global.dateTimeFmt}}",
     "activity_info": "{{name}} created",
     "activity_status": "Activity Status",
+    "more_info": "More Specimen Information",
+    "less_info": "Less Specimen Information",
 
     "reason_for_closing": "Reason for closing",
 
@@ -414,7 +418,7 @@
     "bulk_import_aliquots": "Bulk Import Aliquots",
     "spmn_derivatives": "Specimen Derivatives",
     "bulk_import_derivatives": "Bulk Import Derivatives",
-    "new_aliquot_count": "Change no of Aliquots",
+    "new_aliquot_count": "Number of aliquots",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",

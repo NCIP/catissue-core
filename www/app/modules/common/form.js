@@ -76,8 +76,8 @@ angular.module('os.common.form', [])
     };
   })
 
-  .directive('osFormSubmit', function($document, Alerts) {
-    function onSubmit(scope, ctrl, submitHandler) {
+  .directive('osFormSubmit', function($document, Alerts, LocationChangeListener) {
+    function onSubmit(scope, ctrl, attrs) {
       var form = ctrl.getForm();
       if (form.$pending) {
         var pendingWatch = scope.$watch(
@@ -88,14 +88,17 @@ angular.module('os.common.form', [])
           function(pending) {
             if (!pending) {
               pendingWatch();
-              onSubmit(scope, ctrl, submitHandler);
+              onSubmit(scope, ctrl, attrs);
             }
           }
         );
       } else {
         ctrl.formSubmitted(true);
         if (ctrl.isValidForm()) {
-          scope.$eval(submitHandler);
+          if (attrs.localForm) {
+            LocationChangeListener.allowChange();
+          }
+          scope.$eval(attrs.osFormSubmit);
         } else {
           Alerts.error("common.form_validation_error");
         }
@@ -118,14 +121,33 @@ angular.module('os.common.form', [])
             var eventName = "mouseup.formsubmit." + cnt;
             $document.on(eventName, function() {
               $document.unbind(eventName);
-              onSubmit(scope, ctrl, attrs.osFormSubmit);
+              onSubmit(scope, ctrl, attrs);
             });
           })
         } else {
           element.bind('click', function() {
-            onSubmit(scope, ctrl, attrs.osFormSubmit);
+            onSubmit(scope, ctrl, attrs);
           });
         }
+      }
+    };
+  })
+
+  .directive('osFormCancel', function($timeout, LocationChangeListener) {
+    function onCancel(scope, cancelHandler) {
+      LocationChangeListener.allowChange();
+      scope.$eval(cancelHandler);
+    }
+
+    return {
+      restrict: 'A',
+
+      link: function(scope, element, attrs, ctrl) {
+        element.bind('click', function() {
+          $timeout(function() {
+            onCancel(scope, attrs.osFormCancel);
+          });
+        });
       }
     };
   })

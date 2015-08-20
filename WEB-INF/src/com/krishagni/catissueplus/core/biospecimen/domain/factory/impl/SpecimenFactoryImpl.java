@@ -337,8 +337,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;				
 		}
 		
-		if (!isValid(SPECIMEN_ANATOMIC_SITE, 2, anatomicSite, true)) {
-			ose.addError(SpecimenErrorCode.INVALID_ANATOMIC_SITE);
+		if (!isValid(SPECIMEN_ANATOMIC_SITE, anatomicSite, true)) {
+			ose.addError(SpecimenErrorCode.INVALID_ANATOMIC_SITE, anatomicSite);
 			return;
 		}
 		
@@ -668,7 +668,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
 			}
 		} else {
-			position = container.nextAvailablePosition();
+			position = container.nextAvailablePosition(true);
 			if (position == null) {
 				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
 			} 

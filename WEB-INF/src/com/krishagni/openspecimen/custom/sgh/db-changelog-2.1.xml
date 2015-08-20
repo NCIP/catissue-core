@@ -42,7 +42,25 @@
       update
         catissue_specimen_coll_group
       set
+        REASON_FOR_MISSED_CASE = 'No post ops consent taken within 3 months'
+      where
+        REASON_FOR_MISSED_CASE = 'No Post Ops consent taken within 3 mths'
+    </sql>
+    
+    <sql>
+      update
+        catissue_specimen_coll_group
+      set
         MISSED_REASON = REASON_FOR_MISSED_CASE
+    </sql>
+    
+    <sql>
+      update
+        catissue_specimen_coll_group
+      set
+        COLLECTION_STATUS = 'Complete'
+      where
+        COLLECTION_STATUS not in ('Complete-Late')
     </sql>
     
     <sql>
@@ -53,6 +71,12 @@
       where
         COLLECTION_STATUS not in ('Pending', 'Complete')
     </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Drop older reason for missed case column from SCG table" failOnError="false">
+    <dropColumn
+      tableName="CATISSUE_SPECIMEN_COLL_GROUP"
+      columnName="REASON_FOR_MISSED_CASE"/>    
   </changeSet>
   
   <changeSet author="nmarwaha" id="Set label formats for all protocols as per SG format" failOnError="false">

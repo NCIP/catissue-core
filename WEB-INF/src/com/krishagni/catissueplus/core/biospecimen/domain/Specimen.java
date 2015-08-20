@@ -270,7 +270,8 @@ public class Specimen extends BaseEntity {
 	}
 
 	public void setCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
+		// For all specimens, the created on seconds and milliseconds should be reset to 0
+		this.createdOn = Utility.chopSeconds(createdOn);
 	}
 
 	public BigDecimal getAvailableQuantity() {
@@ -486,7 +487,7 @@ public class Specimen extends BaseEntity {
 			ensureNoActiveChildSpecimens();
 		}
 
-		virtualize();
+		virtualize(null);
 		setLabel(Utility.getDisabledValue(getLabel(), 255));
 		setBarcode(Utility.getDisabledValue(getBarcode(), 255));
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());		
@@ -499,7 +500,7 @@ public class Specimen extends BaseEntity {
 		}
 		
 		setIsAvailable(false);
-		virtualize();
+		virtualize(time);
 		addDisposalEvent(user, time, reason);		
 		setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
 	}
@@ -631,7 +632,7 @@ public class Specimen extends BaseEntity {
 			} else {
 				setCollectionStatus(collectionStatus);
 				decAliquotedQtyFromParent();
-				addCollRecvEvents();				
+				addOrUpdateCollRecvEvents();
 			}
 		}			
 	}
@@ -668,11 +669,11 @@ public class Specimen extends BaseEntity {
 		event.saveOrUpdate();
 	}
 	
-	private void virtualize() {
-		transferTo(null);
+	private void virtualize(Date time) {
+		transferTo(null, time);
 	}
 	
-	private void transferTo(StorageContainerPosition newPosition) {
+	private void transferTo(StorageContainerPosition newPosition, Date time) {
 		StorageContainerPosition oldPosition = getPosition();
 		if (same(oldPosition, newPosition)) {
 			return;
@@ -680,7 +681,7 @@ public class Specimen extends BaseEntity {
 		
 		SpecimenTransferEvent transferEvent = new SpecimenTransferEvent(this);
 		transferEvent.setUser(AuthUtil.getCurrentUser());
-		transferEvent.setTime(Calendar.getInstance().getTime());
+		transferEvent.setTime(time == null ? Calendar.getInstance().getTime() : time);
 		
 		if (oldPosition != null && newPosition != null) {
 			transferEvent.setFromPosition(oldPosition);
@@ -709,7 +710,7 @@ public class Specimen extends BaseEntity {
 			specimen.decAliquotedQtyFromParent();		
 			specimen.checkQtyConstraints();		
 		}
-		
+
 		if (specimen.getCreatedOn() != null && specimen.getCreatedOn().before(getCreatedOn())) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.CHILD_CREATED_ON_LT_PARENT);
 		}
@@ -770,9 +771,9 @@ public class Specimen extends BaseEntity {
 		position.occupy();
 	}
 	
-	public void addCollRecvEvents() {
-		addCollectionEvent();
-		addReceivedEvent();		
+	public void addOrUpdateCollRecvEvents() {
+		addOrUpdateCollectionEvent();
+		addOrUpdateReceivedEvent();	
 	}
 	
 	public void setLabelIfEmpty() {
@@ -833,7 +834,7 @@ public class Specimen extends BaseEntity {
 	}
 	
 	public void updatePosition(StorageContainerPosition newPosition) {
-		transferTo(newPosition);
+		transferTo(newPosition, null);
 	}
 	
 	public String getLabelOrDesc() {
@@ -907,7 +908,7 @@ public class Specimen extends BaseEntity {
 		}
 	}
 			
-	private void addCollectionEvent() {
+	private void addOrUpdateCollectionEvent() {
 		if (isAliquot() || isDerivative()) {
 			return;
 		}
@@ -915,7 +916,7 @@ public class Specimen extends BaseEntity {
 		getCollectionEvent().saveOrUpdate();		
 	}
 	
-	private void addReceivedEvent() {
+	private void addOrUpdateReceivedEvent() {
 		if (isAliquot() || isDerivative()) {
 			return;
 		}

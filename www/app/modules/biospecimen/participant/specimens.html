@@ -70,7 +70,7 @@
                 </div>
 
                 <div style="margin-left: 12px;">
-                  <div style="padding-left: {{specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16}}px">
+                  <div ng-style="{'padding-left': (specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16) + 'px'}">
                     <a ng-if="specimen.hasChildren && specimen.isOpened" 
                        class="fa fa-chevron-circle-down"
                        ng-click="closeSpecimenNode(specimen)">
@@ -243,10 +243,10 @@
 
       <div class="form-group clearfix">
         <div class="col-xs-12">
-          <button type="submit" class="btn btn-success" os-form-submit="collectAliquots()">
+          <button type="submit" class="btn btn-success" os-form-submit="collectAliquots()" local-form="true">
             <span translate="specimens.buttons.collect_aliquots">Collect Aliquots</span>
           </button>
-          <a class="btn os-btn-text-secondary" ng-click="revertEdit()">
+          <a class="btn os-btn-text-secondary" os-form-cancel="revertEdit()">
             <span translate="common.buttons.cancel">Cancel</span>
           </a>
         </div>

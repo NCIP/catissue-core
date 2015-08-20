@@ -44,7 +44,7 @@
         <tbody class="os-table-body">
           <tr class="row" ng-repeat="specimen in specimens | openedTreeNodes" ng-form="sform" ng-if="specimen.showInTree">
             <td class="col os-col-30">
-              <div style="padding-left: {{specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16}}px">
+              <div ng-style="{'padding-left': (specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16) + 'px'}">
                 <a ng-if="specimen.hasChildren && specimen.isOpened" 
                   class="fa fa-chevron-circle-down"
                   ng-click="closeSpecimenNode(specimen)">
@@ -60,7 +60,7 @@
                 </span>
                 <os-specimen-desc specimen="specimen" show-req-label="true"></os-specimen-desc>
 
-                <span ng-if="specimen.aliquotGrp">
+                <span ng-if="specimen.aliquotGrp.length > 1">
                   <div class="btn-group">
                     <button class="btn btn-xs btn-default" ng-if="specimen.expanded"
                       ng-click="collapseAliquotsGroup(specimen)">

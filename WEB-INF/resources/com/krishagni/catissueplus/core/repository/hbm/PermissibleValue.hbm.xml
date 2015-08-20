@@ -27,6 +27,11 @@
       class="com.krishagni.catissueplus.core.administrative.domain.PermissibleValue"
       column="PARENT_IDENTIFIER"/>
 
+    <set name="children" inverse="false" cascade="none">
+      <key column="PARENT_IDENTIFIER"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.PermissibleValue"/>
+    </set>
+
     <query name="getSpecimenTypes">
       select
         pv.value

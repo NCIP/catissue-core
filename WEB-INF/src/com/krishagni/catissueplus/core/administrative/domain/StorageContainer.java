@@ -96,7 +96,10 @@ public class StorageContainer extends BaseEntity {
 	private Set<String> compAllowedSpecimenTypes = new HashSet<String>();
 	
 	private Set<CollectionProtocol> compAllowedCps = new HashSet<CollectionProtocol>();
-	
+
+	private transient StorageContainerPosition lastAssignedPos;
+
+
 	public StorageContainer() {
 		ancestorContainers.add(this);
 	}
@@ -417,24 +420,53 @@ public class StorageContainer extends BaseEntity {
 		position.setContainer(this);
 		getOccupiedPositions().add(position);
 	}
-	
+
 	public StorageContainerPosition nextAvailablePosition() {
+		return nextAvailablePosition(null, null);
+	}
+
+	public StorageContainerPosition nextAvailablePosition(boolean fromLastAssignedPos) {
+		String row = null, col = null;
+		if (fromLastAssignedPos && lastAssignedPos != null) {
+			row = lastAssignedPos.getPosTwo();
+			col = lastAssignedPos.getPosOne();
+		}
+
+		return nextAvailablePosition(row, col);
+	}
+
+	public StorageContainerPosition nextAvailablePosition(String row, String col) {
+		int startRow = 1, startCol = 1;
+		boolean startPosSpecified = StringUtils.isNotBlank(row) && StringUtils.isNotBlank(col);
 		Set<Integer> occupiedPositionOrdinals = occupiedPositionsOrdinals();
-		
-		for (int y = 1; y <= getNoOfRows(); ++y) {
-			for (int x = 1; x <= getNoOfColumns(); ++x) {
+
+		if (startPosSpecified) {
+			startRow = converters.get(getRowLabelingScheme()).toOrdinal(row);
+			startCol = converters.get(getColumnLabelingScheme()).toOrdinal(col);
+		}
+
+		for (int y = startRow; y <= getNoOfRows(); ++y) {
+			for (int x = startCol; x <= getNoOfColumns(); ++x) {
 				int pos = (y - 1) * getNoOfColumns() + x;
 				if (!occupiedPositionOrdinals.contains(pos)) {
 					String posOne = converters.get(getColumnLabelingScheme()).fromOrdinal(x);
 					String posTwo = converters.get(getRowLabelingScheme()).fromOrdinal(y);
-					return createPosition(x, posOne, y, posTwo);
+
+					return (lastAssignedPos = createPosition(x, posOne, y, posTwo));
 				}
 			}
+
+			startCol = 1;
 		}
-		
+
+		if (startPosSpecified) {
+			return nextAvailablePosition(null, null);
+		}
+
 		return null;
 	}
-		
+
+
 	public boolean canSpecimenOccupyPosition(Long specimenId, String posOne, String posTwo) {
 		return canOccupyPosition(true, specimenId, posOne, posTwo);
 	}
@@ -661,7 +693,7 @@ public class StorageContainer extends BaseEntity {
 		position.setPosTwoOrdinal(posTwoOrdinal);
 		position.setPosTwo(posTwo);
 		position.setContainer(this);
-		
+
 		return position;
 	}
 	
