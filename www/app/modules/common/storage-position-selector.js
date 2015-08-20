@@ -4,7 +4,7 @@ angular.module('openspecimen')
     function($scope, $modalInstance, $timeout, $q, entity, cpId, Container) {
       $scope.entityType = entity.getType();
       var extend = angular.extend;
-      var queryParams = getEntityQueryParams(entity);
+      var criteria = getContainerListCriteria(entity);
 
       function addChildPlaceholders(containers) {
         angular.forEach(containers, function(container) {
@@ -19,7 +19,7 @@ angular.module('openspecimen')
         $scope.showGrid = false;
         $scope.containers = [];
 
-        Container.query(extend({topLevelContainers: true}, queryParams)).then(
+        Container.query(extend({topLevelContainers: true}, criteria)).then(
           function(containers) {
             addChildPlaceholders(containers);
             $scope.containers = Container.flatten(containers);
@@ -27,24 +27,24 @@ angular.module('openspecimen')
         );
       };
 
-      function getEntityQueryParams(entity) {
-        var queryParams = {
+      function getContainerListCriteria(entity) {
+        var criteria = {
           onlyFreeContainers: true,
           hierarchical: true
         };
 
         if ($scope.entityType == 'specimen') {
-          extend(queryParams, {
+          extend(criteria, {
             storeSpecimensEnabled: true,
             specimenClass: entity.specimenClass,
             specimenType: entity.type,
             cpId: cpId
           });
         } else {
-          extend(queryParams, {site: entity.siteName});
+          extend(criteria, {site: entity.siteName});
         }
 
-        return queryParams;
+        return criteria;
       }
 
       $scope.toggleSelectedContainer = function(wizard, container) {
@@ -86,7 +86,7 @@ angular.module('openspecimen')
         }
 
         var idx = $scope.containers.indexOf(container);
-        Container.query(extend({parentContainerId: container.id}, queryParams)).then(
+        Container.query(extend({parentContainerId: container.id}, criteria)).then(
           function(containers) {
             addChildPlaceholders(containers);
             container.childContainersLoaded = true;

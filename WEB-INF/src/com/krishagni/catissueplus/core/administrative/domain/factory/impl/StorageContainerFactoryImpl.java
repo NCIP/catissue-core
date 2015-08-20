@@ -240,7 +240,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}
 	
 	private void setSiteAndParentContainer(StorageContainerDetail detail, StorageContainer existing, StorageContainer container, OpenSpecimenException ose) {
-		if (detail.isAttrModified("siteName") || detail.isAttrModified("parentContainerName") || detail.isAttrModified("parentContainerId")) {
+		if (detail.isAttrModified("siteName") || detail.isAttrModified("storageLocation")) {
 			setSiteAndParentContainer(detail, container, ose);
 		} else {
 			container.setSite(existing.getSite());
@@ -327,7 +327,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}
 	
 	private void setPosition(StorageContainerDetail detail, StorageContainer existing, StorageContainer container, OpenSpecimenException ose) {
-		if (detail.isAttrModified("position")) {
+		if (detail.isAttrModified("storageLocation")) {
 			setPosition(detail, container, ose);
 		} else {
 			container.setPosition(existing.getPosition());

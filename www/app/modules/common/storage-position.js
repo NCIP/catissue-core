@@ -9,6 +9,10 @@ angular.module('openspecimen')
       }
 
       if (scope.entityType == 'specimen') {
+        if (!scope.entity.type) {
+          return;
+        }
+
         angular.extend(params, {
           cpId: scope.cpId,
           specimenClass: scope.entity.specimenClass,
@@ -19,6 +23,7 @@ angular.module('openspecimen')
         if (!scope.entity.siteName) {
           return;
         }
+
         angular.extend(params, {site: scope.entity.siteName});
       }
 
@@ -33,7 +38,7 @@ angular.module('openspecimen')
       );
     };
 
-    function addWatch(scope) {
+    function watchOccupyingEntityChanges(scope) {
       var objType = scope.entity.getType() == 'specimen' ? 'entity.type' : 'entity.siteName';
       scope.$watch(objType, function(newVal, oldVal) {
         if (!newVal || newVal == oldVal) {
@@ -84,7 +89,7 @@ angular.module('openspecimen')
         loadContainers(name, scope);
       };
 
-      addWatch(scope);
+      watchOccupyingEntityChanges(scope);
     };
 
     return {

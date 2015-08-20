@@ -7,7 +7,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     var allowedCps = undefined;
 
     function init() {
-      container.parentContainerId = undefined;
+      container.storageLocation = !container.storageLocation ? {} : container.storageLocation;
       $scope.container = container;
 
       /**
@@ -71,7 +71,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
         $scope.sites = sites;
       });
 
-      if ($scope.container.storageLocation) {
+      if ($scope.container.storageLocation.name) {
         restrictCpsAndSpecimenTypes();
       } else {
         loadAllCpsAndSpecimenTypes();
@@ -90,7 +90,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     };
 
     function loadAllCpsAndSpecimenTypes() {
-      $scope.loadAllCps();
+      loadAllCps();
       loadAllSpecimenTypes();
     };
      
@@ -99,13 +99,15 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
       if (parentCps.length > 0) {
         $scope.cps = parentCps;
       } else {
-        $scope.loadAllCps(parentContainer.siteName);
+        loadAllCps(parentContainer.siteName);
       } 
 
       $scope.container.allowedCollectionProtocols = allowedCps; 
     };
 
-    $scope.loadAllCps = function(siteName) {
+    $scope.loadAllCps = loadAllCps;
+
+    function loadAllCps(siteName) {
       siteName = !siteName ? $scope.container.siteName : siteName;
 
       CollectionProtocol.query({repositoryName: siteName}).then(
