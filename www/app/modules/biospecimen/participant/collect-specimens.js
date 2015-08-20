@@ -257,7 +257,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         }
 
         for (var i = 1; i < $scope.specimens.length; i++) {
-          if ($scope.specimens[i].existingStatus != 'Collected') {
+          if ($scope.specimens[i].existingStatus != 'Collected' && $scope.specimens[i].storageType != 'Virtual') {
             $scope.specimens[i].storageLocation = {name: containerName};
           }
         }
