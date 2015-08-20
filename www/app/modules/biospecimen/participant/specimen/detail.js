@@ -37,8 +37,8 @@ angular.module('os.biospecimen.specimen.detail', [])
         templateUrl: 'modules/biospecimen/participant/specimen/close.html',
         controller: 'SpecimenCloseCtrl',
         resolve: {
-          specimen: function() {
-            return specimen
+          props: function() {
+            return {specimen: specimen};
           }
         }
       });

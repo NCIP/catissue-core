@@ -7,6 +7,7 @@ import java.util.Map;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenAliquotsSpec;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
@@ -27,14 +28,10 @@ public interface SpecimenService {
 	public ResponseEvent<SpecimenDetail> updateSpecimen(RequestEvent<SpecimenDetail> req);
 	
 	public ResponseEvent<SpecimenDetail> patchSpecimen(RequestEvent<SpecimenDetail> req);
-	
-	public ResponseEvent<SpecimenDetail> updateSpecimenStatus(RequestEvent<SpecimenStatusDetail> req);
 
-	public ResponseEvent<List<SpecimenDetail>> updateSpecimensStatuses(RequestEvent<List<SpecimenStatusDetail>> request);
+	public ResponseEvent<List<SpecimenDetail>> updateSpecimensStatus(RequestEvent<List<SpecimenStatusDetail>> request);
 
-	public ResponseEvent<SpecimenDetail> deleteSpecimen(RequestEvent<EntityQueryCriteria> req);
-
-	public ResponseEvent<List<SpecimenDetail>> deleteSpecimens(RequestEvent<Long[]> request);
+	public ResponseEvent<List<SpecimenDetail>> deleteSpecimens(RequestEvent<List<SpecimenDeleteCriteria>> request);
 
 	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<EntityQueryCriteria> req);
 	

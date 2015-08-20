@@ -63,8 +63,8 @@ angular.module('os.common.delete')
     };
 
     function bulkDelete(object, entityIds, props) {
-      var confirmDelete = props.confirmDelete ? props.confirmDelete : 'delete_entity.confirm_delete';
-      var successMessage = props.successMessage ? props.successMessage : 'delete_entity.entity_deleted';
+      var confirmDelete = props.confirmDelete || 'delete_entity.confirm_delete';
+      var successMessage = props.successMessage || 'delete_entity.entity_deleted';
       var modalInstance = $modal.open({
         templateUrl: 'modules/common/delete/modal.html',
         controller: 'EntityDeleteCtrl',
@@ -73,7 +73,6 @@ angular.module('os.common.delete')
             return {
               entity: object,
               entityIds: entityIds,
-              deleteAll: true,
               confirmDelete: confirmDelete,
               successMessage: successMessage
             }
@@ -86,13 +85,12 @@ angular.module('os.common.delete')
 
       modalInstance.result.then(
         function(object) {
-          if (typeof props.onDeletion == 'function') {
-            props.onDeletion(object);
+          if (typeof props.onBulkDeletion == 'function') {
+            props.onBulkDeletion(object);
           }
         }
       );
     }
-
 
     return {
       delete : deleteEntity,

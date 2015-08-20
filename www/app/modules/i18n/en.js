@@ -422,11 +422,12 @@
     "bulk_import_derivatives": "Bulk Import Derivatives",
     "new_aliquot_count": "Number of aliquots",
 
-    "specimens_hierarchy_deleted": "Selected Specimens and their children are deleted successfully",
-    "specimens_deleted": "Selected Specimens are deleted successfully",
-    "delete_specimens_heirarchy": "Are you sure you want to delete the selected specimens and all its child specimens ?",
-    "delete_specimens":  "Are you sure you want to delete the selected specimens ?",
-    "specimens_closed": "Selected Specimens are closed successfully",
+    "specimens_hierarchy_deleted": "Selected specimens and their children are deleted successfully",
+    "specimens_deleted": "Selected specimens are deleted successfully",
+    "delete_specimens_heirarchy": "Are you sure you want to delete selected specimens and all its children ?",
+    "delete_specimens":  "Are you sure you want to delete selected specimens ?",
+    "specimens_closed": "Selected specimens are closed successfully",
+    "specimen_closed": "Specimen is closed successfully",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",

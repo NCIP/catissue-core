@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenStatusDetail;
@@ -153,18 +155,18 @@ public class SpecimensController {
 
 		detail.setId(specimenId);
 
-		ResponseEvent<SpecimenDetail> resp = specimenSvc.updateSpecimenStatus(getRequest(detail));
+		ResponseEvent<List<SpecimenDetail>>  resp = specimenSvc.updateSpecimensStatus(getRequest(Collections.singletonList(detail)));
 		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
+		return resp.getPayload().get(0);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value="/status")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SpecimenDetail> updateSpecimensStatuses(
+	public List<SpecimenDetail> updateSpecimensStatus(
 			@RequestBody
 			List<SpecimenStatusDetail> details) {
-		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.updateSpecimensStatuses(getRequest(details));
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.updateSpecimensStatus(getRequest(details));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -183,17 +185,28 @@ public class SpecimensController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SpecimenDetail deleteSpecimen(@PathVariable("id") Long specimenId) {
-		EntityQueryCriteria crit = new EntityQueryCriteria(specimenId);
-		ResponseEvent<SpecimenDetail> resp = specimenSvc.deleteSpecimen(getRequest(crit));
+		SpecimenDeleteCriteria crit = new SpecimenDeleteCriteria();
+		crit.setId(specimenId);
+		crit.setForceDelete(false);
+
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.deleteSpecimens(getRequest(Collections.singletonList(crit)));
 		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
+		return resp.getPayload().get(0);
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<SpecimenDetail> deleteSpecimens(@RequestParam(value = "id") Long[] specimenIds) {
-		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.deleteSpecimens(getRequest(specimenIds));
+		List<SpecimenDeleteCriteria> criterias = new ArrayList<SpecimenDeleteCriteria>();
+		for (Long specimenId : specimenIds) {
+			SpecimenDeleteCriteria crit = new SpecimenDeleteCriteria();
+			crit.setId(specimenId);
+			crit.setForceDelete(true);
+			criterias.add(crit);
+		}
+
+		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.deleteSpecimens(getRequest(criterias));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
