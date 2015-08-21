@@ -45,7 +45,9 @@ public enum CpErrorCode implements ErrorCode {
 	
 	DUP_CONSENT,
 	
-	USER_UPDATE_RIGHTS_REQUIRED;
+	USER_UPDATE_RIGHTS_REQUIRED,
+	
+	CONSENT_TIER_FOUND;
 	
 	@Override
 	public String code() {

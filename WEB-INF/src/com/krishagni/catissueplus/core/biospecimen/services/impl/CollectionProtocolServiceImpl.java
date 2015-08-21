@@ -249,6 +249,28 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 	
 	@PlusTransactional
+	public ResponseEvent<CollectionProtocolDetail> updateConsentEnabled(RequestEvent<CollectionProtocolDetail> req) {
+		try {
+			CollectionProtocolDetail detail = req.getPayload();
+			CollectionProtocol existingCp = daoFactory.getCollectionProtocolDao().getById(detail.getId());
+			if (existingCp == null) {
+				return ResponseEvent.userError(CpErrorCode.NOT_FOUND);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureUpdateCpRights(existingCp);
+			
+			if (!existingCp.getConsentTier().isEmpty()) {
+				return ResponseEvent.userError(CpErrorCode.CONSENT_TIER_FOUND, existingCp.getShortTitle());
+			}
+			existingCp.setConsentEnabled(detail.getConsentEnabled());
+			
+			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@PlusTransactional
 	public ResponseEvent<List<DependentEntityDetail>> getCpDependentEntities(RequestEvent<Long> req) {
 		try {
 			CollectionProtocol existingCp = daoFactory.getCollectionProtocolDao().getById(req.getPayload());

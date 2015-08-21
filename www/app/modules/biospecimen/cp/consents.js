@@ -1,6 +1,6 @@
 
 angular.module('os.biospecimen.cp.consents', ['os.biospecimen.models'])
-  .controller('CpConsentsCtrl', function($scope, $state, $q, cp, consentTiers, DeleteUtil) {
+  .controller('CpConsentsCtrl', function($scope, $state, $q, cp, consentTiers, DeleteUtil, Alerts) {
     $scope.cp = cp;
 
     var consents = {
@@ -31,6 +31,14 @@ angular.module('os.biospecimen.cp.consents', ['os.biospecimen.models'])
 
       return undefined;
     };
+
+    $scope.updateConsentEnabled = function() {
+      $scope.cp.updateConsentEnabled().then(
+        function(result) {
+          Alerts.success("cp.consent_enabled_updated", {enabled: result.consentEnabled});
+        }
+      );
+    }
 
     function onConsentDeletion(deferred) {
       return function() {

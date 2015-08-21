@@ -139,6 +139,8 @@
     "visit_names": "Visit Names",
     "spec_labels": "Specimen Labels",
 
+    "consent_enabled": "Consent Enabled",
+    "consent_enabled_updated": "Consent {{enabled ? 'enabled' : 'disabled'}} successfully.",
     "unsigned_consent_url": "Unsigned Consent Form URL",
     "consent_tiers": "Consent Tiers", 
     "add_consent_tier": "Add Statement...",

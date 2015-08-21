@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -170,6 +171,20 @@ public class CollectionProtocolsController {
 	public CollectionProtocolDetail updateCollectionProtocol(@RequestBody CollectionProtocolDetail cp) {
 		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.updateCollectionProtocol(getRequest(cp));
 		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/consent-enabled")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public CollectionProtocolDetail updateConsentEnabled(@PathVariable Long id, @RequestBody Map<String, String> props) {
+		CollectionProtocolDetail cp = new  CollectionProtocolDetail();
+		cp.setId(id);
+		cp.setConsentEnabled(Boolean.valueOf(props.get("consentEnabled")));
+		
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.updateConsentEnabled(getRequest(cp));
+		resp.throwErrorIfUnsuccessful();
+		
 		return resp.getPayload();
 	}
 	

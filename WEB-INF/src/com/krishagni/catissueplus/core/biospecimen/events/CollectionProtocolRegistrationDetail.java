@@ -21,6 +21,8 @@ public class CollectionProtocolRegistrationDetail {
 	private String cpTitle;
 	
 	private String cpShortTitle;
+	
+	private Boolean cpConsentEnabled;
 
 	private String ppid;
 
@@ -77,6 +79,14 @@ public class CollectionProtocolRegistrationDetail {
 
 	public void setCpShortTitle(String cpShortTitle) {
 		this.cpShortTitle = cpShortTitle;
+	}
+
+	public Boolean getCpConsentEnabled() {
+		return cpConsentEnabled;
+	}
+
+	public void setCpConsentEnabled(Boolean cpConsentEnabled) {
+		this.cpConsentEnabled = cpConsentEnabled;
 	}
 
 	public String getPpid() {
@@ -157,6 +167,7 @@ public class CollectionProtocolRegistrationDetail {
 		detail.setCpId(cp.getId());
 		detail.setCpTitle(cp.getTitle());
 		detail.setCpShortTitle(cp.getShortTitle());
+		detail.setCpConsentEnabled(cp.isConsentEnabled());
 		detail.setSpecimenLabelFmt(cp.getSpecimenLabelFormat());
 		detail.setAliquotLabelFmt(cp.getAliquotLabelFormat());
 		detail.setDerivativeLabelFmt(cp.getDerivativeLabelFormat());

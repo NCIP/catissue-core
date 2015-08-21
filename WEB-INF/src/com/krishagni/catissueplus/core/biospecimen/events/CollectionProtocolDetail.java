@@ -44,6 +44,8 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 
 	private String activityStatus;
 	
+	private Boolean consentEnabled;
+	
 	//
 	// mostly used for export and import of CP
 	// 
@@ -171,6 +173,14 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		this.activityStatus = activityStatus;
 	}
 
+	public Boolean getConsentEnabled() {
+		return consentEnabled;
+	}
+
+	public void setConsentEnabled(Boolean consentEnabled) {
+		this.consentEnabled = consentEnabled;
+	}
+
 	public List<ConsentTierDetail> getConsents() {
 		return consents;
 	}
@@ -207,6 +217,7 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setManualVisitNameEnabled(cp.isManualVisitNameEnabled());
 		result.setManualSpecLabelEnabled(cp.isManualSpecLabelEnabled());
 		result.setActivityStatus(cp.getActivityStatus());
+		result.setConsentEnabled(cp.isConsentEnabled());
 		result.setRepositoryNames(getRepositoryNames(cp.getRepositories()));
 		
 		if (fullObject) {

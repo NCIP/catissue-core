@@ -77,5 +77,14 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       return {prefix: input}
     }
 
+    CollectionProtocol.prototype.updateConsentEnabled = function() {
+      var params = {consentEnabled: this.consentEnabled};
+      return $http.put(CollectionProtocol.url() + this.$id() + "/consent-enabled", params).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
     return CollectionProtocol;
   });

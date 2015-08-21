@@ -2,6 +2,13 @@
   <div class="col-xs-8">
     <ul class="os-key-values os-one-col" os-inline-editors on-save="editCp">
       <li class="item">
+        <strong class="key key-sm" translate="cp.consent_enabled">Consent Enabled</strong>
+        <div class="value value-md">
+          <input type="checkbox" ng-model="cp.consentEnabled" ng-change="updateConsentEnabled()" 
+            ng-disabled="!!consents.tiers && consents.tiers.length > 0">
+        </div>
+      </li>
+      <li class="item" ng-if="cp.consentEnabled">
         <strong class="key key-sm" translate="cp.unsigned_consent_url">Unsigned Consent Form URL</strong>
         <os-inline-edit editor="fuEditor" name="consentFormUrl" class="value value-md" value="cp.unsignedConsentUrl">
           <a ng-if="fuEditor.isDisplayMode()" ng-href="{{fuEditor.viewValue | osPrefixHttp}}" target="_blank">
@@ -15,7 +22,7 @@
     <os-editable-item-list 
       items="consents.tiers" text-attr="{{consents.stmtAttr}}"
       list-title="{{'cp.consent_tiers' | translate}}" add-caption="{{'cp.add_consent_tier' | translate}}"
-      list-changed="listChanged">
+      list-changed="listChanged" ng-if="cp.consentEnabled">
     </os-editable-item-list>
   </div>
 </div>
