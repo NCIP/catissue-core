@@ -79,7 +79,7 @@
         <div class="col col-xs-2">
           <button class="btn btn-xs btn-success" ng-click="toggleSelectedContainer(selectPositionWizard, container)"
             ng-if="(entityType == 'storage_container' || (entityType == 'specimen' && container.storeSpecimensEnabled))
-              && !container.selected">
+              && !container.selected && container.freePositions > 0">
             <span class="fa fa-check"></span>
             <span translate="common.buttons.select">Select</span>
           </button>
