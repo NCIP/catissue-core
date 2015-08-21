@@ -63,6 +63,8 @@
       type="string"
       column="CLINICAL_STATUS"
       length="50"/>
+
+    <property name="code" column="CODE"/>
       
     <set
       name="specimenRequirements"
@@ -91,11 +93,22 @@
 
     <filter name="activeEntity"/>
 
-    <query name="getCpeById">
+    <query name="getCpeByIds">
       from 
         com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent cpe
       where
-        cpe.id = :cpeId
+        cpe.id in (:cpeIds)
+    </query>
+
+    <query name="getByCode">
+      select
+        cpe
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent cpe
+        join cpe.collectionProtocol cp
+      where
+        cp.shortTitle = :shortTitle and
+        cpe.code = :code
     </query>
   </class>
 </hibernate-mapping>

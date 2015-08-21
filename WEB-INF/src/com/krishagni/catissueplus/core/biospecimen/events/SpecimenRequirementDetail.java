@@ -18,6 +18,8 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 	
 	private String name;
 	
+	private String code;
+	
 	private String lineage;
 	
 	private String specimenClass;
@@ -66,6 +68,14 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getLineage() {
@@ -249,9 +259,14 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 	}
 	
 	public static SpecimenRequirementDetail from(SpecimenRequirement sr) {
+		return from(sr, true);
+	}
+	
+	public static SpecimenRequirementDetail from(SpecimenRequirement sr, boolean incChildren) {
 		SpecimenRequirementDetail detail = new SpecimenRequirementDetail();
 		detail.setId(sr.getId());
 		detail.setName(sr.getName());
+		detail.setCode(sr.getCode());
 		detail.setLineage(sr.getLineage());
 		detail.setSpecimenClass(sr.getSpecimenClass());
 		detail.setType(sr.getSpecimenType());
@@ -268,22 +283,29 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		detail.setLabelFmt(sr.getLabelFormat());
 		detail.setSortOrder(sr.getSortOrder());
 		detail.setEventId(sr.getCollectionProtocolEvent().getId());
-		detail.setChildren(from(sr.getChildSpecimenRequirements()));
+		
+		if (incChildren) {
+			detail.setChildren(from(sr.getChildSpecimenRequirements()));
+		}
 		
 		return detail;
 	}
 	
 	public static List<SpecimenRequirementDetail> from(Collection<SpecimenRequirement> srs) {
+		return from(srs, true);
+	}
+	
+	public static List<SpecimenRequirementDetail> from(Collection<SpecimenRequirement> srs, boolean incChildren) {
 		List<SpecimenRequirementDetail> result = new ArrayList<SpecimenRequirementDetail>();
 		if (srs == null) {
 			return result;
 		}
 		
 		for (SpecimenRequirement sr : srs) {
-			result.add(from(sr));
+			result.add(from(sr, incChildren));
 		}
 		
 		Collections.sort(result);
-		return result;
-	}	
+		return result;		
+	}
 }

@@ -185,8 +185,9 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			ensureUsersBelongtoCpSites(cp);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureUniqueTitle(cp.getTitle(), ose);
-			ensureUniqueShortTitle(cp.getShortTitle(), ose);
+			ensureUniqueTitle(null, cp, ose);
+			ensureUniqueShortTitle(null, cp, ose);
+			ensureUniqueCode(null, cp, ose);
 			ose.checkAndThrow();
 
 			daoFactory.getCollectionProtocolDao().saveOrUpdate(cp);
@@ -220,6 +221,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueTitle(existingCp, cp, ose);
+			ensureUniqueShortTitle(existingCp, cp, ose);
+			ensureUniqueCode(existingCp, cp, ose);
 			ose.checkAndThrow();
 			
 			User oldPI = existingCp.getPrincipalInvestigator();
@@ -600,6 +603,12 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			SpecimenRequirement derived = srFactory.createDerived(requirement);						
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(derived.getCollectionProtocol());
 			
+			if (StringUtils.isNotBlank(derived.getCode())) {
+				if (derived.getCollectionProtocolEvent().getSrByCode(derived.getCode()) != null) {
+					return ResponseEvent.userError(SrErrorCode.DUP_CODE, derived.getCode());
+				}
+			}
+			
 			daoFactory.getSpecimenRequirementDao().saveOrUpdate(derived, true);
 			return ResponseEvent.response(SpecimenRequirementDetail.from(derived));
 		} catch (OpenSpecimenException ose) {
@@ -801,22 +810,42 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 	
 	private void ensureUniqueTitle(CollectionProtocol existingCp, CollectionProtocol cp, OpenSpecimenException ose) {
-		if (!existingCp.getTitle().equals(cp.getTitle())) {
-			ensureUniqueTitle(cp.getTitle(), ose);
+		String title = cp.getTitle();
+		if (existingCp != null && existingCp.getTitle().equals(title)) {
+			return;
 		}
-	}
-	
-	private void ensureUniqueTitle(String title, OpenSpecimenException ose) {
-		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);
-		if (cp != null) {
-			ose.addError(CpErrorCode.DUP_TITLE);
+		
+		CollectionProtocol dbCp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);
+		if (dbCp != null) {
+			ose.addError(CpErrorCode.DUP_TITLE, title);
 		}		
 	}
 	
-	private void ensureUniqueShortTitle(String shortTitle, OpenSpecimenException ose) {
-		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCpByShortTitle(shortTitle);
-		if (cp != null) {
-			ose.addError(CpErrorCode.DUP_SHORT_TITLE);
+	private void ensureUniqueShortTitle(CollectionProtocol existingCp, CollectionProtocol cp, OpenSpecimenException ose) {
+		String shortTitle = cp.getShortTitle();
+		if (existingCp != null && existingCp.getShortTitle().equals(shortTitle)) {
+			return;
+		}
+		
+		CollectionProtocol dbCp = daoFactory.getCollectionProtocolDao().getCpByShortTitle(shortTitle);
+		if (dbCp != null) {
+			ose.addError(CpErrorCode.DUP_SHORT_TITLE, shortTitle);
+		}
+	}
+	
+	private void ensureUniqueCode(CollectionProtocol existingCp, CollectionProtocol cp, OpenSpecimenException ose) {
+		String code = cp.getCode();
+		if (StringUtils.isBlank(code)) {
+			return;
+		}
+		
+		if (existingCp != null && code.equals(existingCp.getCode())) {
+			return;
+		}
+		
+		CollectionProtocol dbCp = daoFactory.getCollectionProtocolDao().getCpByCode(code);
+		if (dbCp != null) {
+			ose.addError(CpErrorCode.DUP_CODE, code);
 		}
 	}
 	

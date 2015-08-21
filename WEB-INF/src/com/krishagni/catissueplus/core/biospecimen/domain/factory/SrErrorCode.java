@@ -5,6 +5,8 @@ import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 public enum SrErrorCode implements ErrorCode {
 	NOT_FOUND,
 	
+	DUP_CODE,
+	
 	PARENT_NOT_FOUND,
 	
 	PARENT_REQ_REQUIRED,

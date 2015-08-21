@@ -6,10 +6,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 @Audited
@@ -23,6 +26,8 @@ public class CollectionProtocolEvent {
 	private Double eventPoint;
 
 	private CollectionProtocol collectionProtocol;
+	
+	private String code;
 	
 	private Site defaultSite;
 
@@ -71,6 +76,14 @@ public class CollectionProtocolEvent {
 
 	public void setCollectionProtocol(CollectionProtocol collectionProtocol) {
 		this.collectionProtocol = collectionProtocol;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public Site getDefaultSite() {
@@ -143,6 +156,7 @@ public class CollectionProtocolEvent {
 		setEventPoint(other.getEventPoint());
 		setEventLabel(other.getEventLabel());
 		setCollectionProtocol(other.getCollectionProtocol());
+		setCode(other.getCode());
 		setDefaultSite(other.getDefaultSite());
 		setClinicalDiagnosis(other.getClinicalDiagnosis());
 		setClinicalStatus(other.getClinicalStatus());
@@ -150,8 +164,12 @@ public class CollectionProtocolEvent {
 	}
 	
 	public void addSpecimenRequirement(SpecimenRequirement sr) {
-		specimenRequirements.add(sr);
-		sr.setCollectionProtocolEvent(this);		
+		if (StringUtils.isNotBlank(sr.getCode()) && getSrByCode(sr.getCode()) != null) {
+			throw OpenSpecimenException.userError(SrErrorCode.DUP_CODE, sr.getCode());
+		}
+		
+		getSpecimenRequirements().add(sr);
+		sr.setCollectionProtocolEvent(this);
 	}
 	
 	public void copySpecimenRequirementsTo(CollectionProtocolEvent cpe) {
@@ -164,6 +182,16 @@ public class CollectionProtocolEvent {
 			copiedSr.setSortOrder(order++);
 			cpe.addSpecimenRequirement(copiedSr);
 		}
+	}
+	
+	public SpecimenRequirement getSrByCode(String code) {
+		for (SpecimenRequirement sr : getSpecimenRequirements()) {
+			if (code.equals(sr.getCode())) {
+				return sr;
+			}
+		}
+		
+		return null;
 	}
 	
 	public void delete() {

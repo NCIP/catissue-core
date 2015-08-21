@@ -57,6 +57,8 @@ public class VisitDetail extends AttributeModifiedSupport {
 	private boolean sprLocked;
 
 	private Date visitDate;
+	
+	private String code;
 
 	public Long getCprId() {
 		return cprId;
@@ -208,6 +210,14 @@ public class VisitDetail extends AttributeModifiedSupport {
 
 	public void setVisitDate(Date visitDate) {
 		this.visitDate = visitDate;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getMissedReason() {

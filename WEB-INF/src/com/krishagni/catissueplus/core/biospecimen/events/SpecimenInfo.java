@@ -75,6 +75,8 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 	
 	private Date createdOn;
 	
+	private String code;
+	
 	public Long getId() {
 		return id;
 	}
@@ -307,6 +309,14 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		this.createdOn = createdOn;
 	}
 	
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	public static SpecimenInfo from(Specimen specimen) {
 		SpecimenInfo info = new SpecimenInfo();
 		fromTo(specimen,info);

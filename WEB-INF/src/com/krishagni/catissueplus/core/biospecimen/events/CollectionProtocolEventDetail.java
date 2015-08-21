@@ -32,6 +32,8 @@ public class CollectionProtocolEventDetail implements Comparable<CollectionProto
 	
 	private String activityStatus;
 	
+	private String code;
+	
 	//
 	// mostly used for export
 	//
@@ -101,6 +103,14 @@ public class CollectionProtocolEventDetail implements Comparable<CollectionProto
 		this.activityStatus = activityStatus;
 	}
 	
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	public List<SpecimenRequirementDetail> getSpecimenRequirements() {
 		return specimenRequirements;
 	}
@@ -123,6 +133,7 @@ public class CollectionProtocolEventDetail implements Comparable<CollectionProto
 		detail.setClinicalStatus(event.getClinicalStatus());
 		detail.setCollectionProtocol(event.getCollectionProtocol().getTitle());
 		detail.setActivityStatus(event.getActivityStatus());
+		detail.setCode(event.getCode());
 		
 		if (event.getDefaultSite() != null) {
 			detail.setDefaultSite(event.getDefaultSite().getName());

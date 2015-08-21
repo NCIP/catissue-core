@@ -5,7 +5,7 @@
         ng-if="(!cp.visitNameFmt || cp.manualVisitNameEnabled) && visit.status != 'Missed Collection'">
         <div class="form-group">
           <input name="visitName" ng-model="visit.name" os-md-input
-            class="form-control" type="text" required placeholder="Visit Name">
+            class="form-control" type="text" ng-required="!!cp.manualVisitNameEnabled" placeholder="Visit Name">
           <div os-field-error field="visitForm.visitName"></div>
         </div>
       </div>

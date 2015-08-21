@@ -40,6 +40,7 @@ public class CpeFactoryImpl implements CpeFactory {
 		cpe.setId(detail.getId());
 		setEventLabel(detail, cpe, ose);
 		setEventPoint(detail, cpe, ose);
+		setCode(detail, cpe, ose);
 		setCp(detail, cpe, ose);
 		setDefaultSite(detail, cpe, ose);
 		setActivityStatus(detail, cpe, ose);
@@ -57,6 +58,7 @@ public class CpeFactoryImpl implements CpeFactory {
 		CollectionProtocolEvent cpe = new CollectionProtocolEvent();
 
 		setEventLabel(detail, cpe, ose);
+		setCode(detail, cpe, ose);
 		
 		if (detail.getEventPoint() != null) {
 			setEventPoint(detail, cpe, ose);
@@ -115,6 +117,10 @@ public class CpeFactoryImpl implements CpeFactory {
 		}
 		
 		cpe.setEventPoint(eventPoint);
+	}
+	
+	public void setCode(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, OpenSpecimenException ose) {
+		cpe.setCode(detail.getCode());
 	}
 	
 	public void setCp(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, OpenSpecimenException ose) {

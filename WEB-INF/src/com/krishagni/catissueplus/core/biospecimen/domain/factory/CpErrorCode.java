@@ -11,6 +11,8 @@ public enum CpErrorCode implements ErrorCode {
 	
 	DUP_SHORT_TITLE,
 	
+	DUP_CODE,
+	
 	TITLE_REQUIRED,
 	
 	SHORT_TITLE_REQUIRED,

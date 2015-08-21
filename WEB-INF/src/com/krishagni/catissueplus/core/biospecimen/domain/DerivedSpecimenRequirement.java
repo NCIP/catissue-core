@@ -18,6 +18,8 @@ public class DerivedSpecimenRequirement {
 	private String name;
 	
 	private String storageType;
+	
+	private String code;
 
 	public Long getParentSrId() {
 		return parentSrId;
@@ -81,5 +83,13 @@ public class DerivedSpecimenRequirement {
 
 	public void setStorageType(String storageType) {
 		this.storageType = storageType;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 }

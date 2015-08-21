@@ -65,6 +65,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		requirement.setName(detail.getName());
 		requirement.setLineage(Specimen.NEW);
 		
+		setCode(detail, requirement, ose);
 		setLabelFormat(detail, requirement, ose);
 		setSpecimenClass(detail, requirement, ose);
 		setSpecimenType(detail, requirement, ose);
@@ -111,8 +112,9 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setStorageType(req.getStorageType(), derived, ose);
 		setConcentration(req.getConcentration(), derived, ose);
 		setLabelFormat(req.getLabelFmt(), derived, ose);
+		setCode(req.getCode(), derived, ose);
 		derived.setName(req.getName());
-		
+				
 		ose.checkAndThrow();		
 		derived.setParentSpecimenRequirement(parent);
 		return derived;
@@ -135,6 +137,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setInitialQty(req, sr, ose);
 		setStorageType(req, sr, ose);
 		setLabelFormat(req, sr, ose);
+		setCode(req, sr, ose);
 		setConcentration(req, sr, ose);
 		
 		if (!lineage.equals(Specimen.NEW)) {
@@ -197,6 +200,14 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		}
 
 		return aliquots;
+	}
+	
+	private void setCode(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		setCode(detail.getCode(), sr, ose);
+	}
+	
+	private void setCode(String code, SpecimenRequirement sr, OpenSpecimenException ose) {
+		sr.setCode(code);
 	}
 	
 	private void setLabelFormat(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
