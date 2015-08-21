@@ -23,6 +23,7 @@ import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetai
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
+import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.ContainerMapExporter;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
@@ -486,13 +487,13 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		StorageContainerDetail detail = new StorageContainerDetail();
 		detail.setName(dest.getName());
 		detail.setSiteName(dest.getSiteName());
-		detail.setParentContainerId(dest.getParentContainerId());
-		detail.setParentContainerName(dest.getParentContainerName());
 		
-		StorageContainerPositionDetail position = new StorageContainerPositionDetail();
-		position.setPosOne(dest.getPosOne());
-		position.setPosTwo(dest.getPosTwo());
-		detail.setPosition(position);
+		StorageLocationSummary storageLocation = new StorageLocationSummary();
+		storageLocation.setId(dest.getParentContainerId());
+		storageLocation.setName(dest.getParentContainerName());
+		storageLocation.setPositionX(dest.getPosOne());
+		storageLocation.setPositionY(dest.getPosTwo());
+		detail.setStorageLocation(storageLocation);
 		
 		StorageContainer replica = containerFactory.createStorageContainer(getContainerCopy(srcContainer), detail);
 		AccessCtrlMgr.getInstance().ensureCreateContainerRights(replica);

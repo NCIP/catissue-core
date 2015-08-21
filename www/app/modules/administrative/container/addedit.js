@@ -5,12 +5,10 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
 
     var allSpecimenTypes = undefined;
     var allowedCps = undefined;
-    var parentContainerName = undefined;
 
     function init() {
-      container.parentContainerId = undefined;
+      container.storageLocation = container.storageLocation || {};
       $scope.container = container;
-      parentContainerName = container.parentContainerName;
 
       /**
        * Some how the ui-select's multiple option is removing pre-selected items
@@ -39,8 +37,11 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
         //
 
         $scope.locationSelected = true;
-        container.position = {posOne: $stateParams.posOne, posTwo: $stateParams.posTwo};
-        container.parentContainerName = $stateParams.parentContainerName;
+        container.storageLocation = {
+          name: $stateParams.parentContainerName,
+          positionX: $stateParams.posOne,
+          positionY: $stateParams.posTwo
+        };
         restrictCpsAndSpecimenTypes();
       }
 
@@ -48,7 +49,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     };
 
     function watchParentContainer() {
-      $scope.$watch('container.parentContainerName', function(newVal, oldVal) {
+      $scope.$watch('container.storageLocation.name', function(newVal, oldVal) {
         if (newVal == oldVal) {
           return;
         }
@@ -70,20 +71,16 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
         $scope.sites = sites;
       });
 
-      if ($scope.container.parentContainerName) {
+      if ($scope.container.storageLocation.name) {
         restrictCpsAndSpecimenTypes();
       } else {
         loadAllCpsAndSpecimenTypes();
       }
 
-      if (!!$scope.container.siteName) {
-        $scope.loadContainers($scope.container.siteName);
-      }
-
     };
 
     function restrictCpsAndSpecimenTypes() {
-      var parentName = $scope.container.parentContainerName;
+      var parentName = $scope.container.storageLocation.name;
       Container.getByName(parentName).then(
         function(parentContainer) {
           restrictCps(parentContainer);
@@ -93,7 +90,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     };
 
     function loadAllCpsAndSpecimenTypes() {
-      loadAllCps(); 
+      loadAllCps();
       loadAllSpecimenTypes();
     };
      
@@ -163,34 +160,11 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
         }
       );
     };
+
+    $scope.loadAllCps = loadAllCps;
           
-    //
-    // invoked when a site is selected on UI
-    // 
-    $scope.loadContainers = function(siteName) {
-      Container.listForSite(siteName, true, true).then(
-        function(result) {
-          $scope.containers = [];
-          angular.forEach(result, function(container) {
-            $scope.containers.push(container.name);
-          });
-        }
-      );
-
-      loadAllCps(siteName);
-    };
-
     $scope.save = function() {
       var container = angular.copy($scope.container);
-      if (container.id && container.parentContainerName != parentContainerName) {
-        //
-        // if parent container is changed, we need to invalidate 
-        // existing container position
-        // 
-        //
-        container.position = undefined;
-      }
-
       container.$saveOrUpdate().then(
         function(result) {
           if (!$scope.locationSelected) {

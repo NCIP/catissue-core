@@ -1,17 +1,9 @@
 
-angular.module('os.biospecimen.participant.specimen-position')
-  .controller('SpecimenPositionSelectorCtrl', 
-    function($scope, $modalInstance, $timeout, $q, specimen, cpId, Container) {
-      var queryParams = {
-        specimenClass: specimen.specimenClass,
-        specimenType: specimen.type,
-        onlyFreeContainers: true,
-        cpId: cpId,
-        storeSpecimensEnabled: true,
-        hierarchical: true
-      };
-
+angular.module('openspecimen')
+  .controller('StoragePositionSelectorCtrl',
+    function($scope, $modalInstance, $timeout, $q, entity, cpId, Container) {
       var extend = angular.extend;
+      var criteria = getContainerListCriteria(entity);
 
       function addChildPlaceholders(containers) {
         angular.forEach(containers, function(container) {
@@ -25,14 +17,35 @@ angular.module('os.biospecimen.participant.specimen-position')
         $scope.selectedPos = {};
         $scope.showGrid = false;
         $scope.containers = [];
+        $scope.entityType = entity.getType();
 
-        Container.query(extend({topLevelContainers: true}, queryParams)).then(
+        Container.query(extend({topLevelContainers: true}, criteria)).then(
           function(containers) {
             addChildPlaceholders(containers);
             $scope.containers = Container.flatten(containers);
           }
         );
       };
+
+      function getContainerListCriteria(entity) {
+        var criteria = {
+          onlyFreeContainers: true,
+          hierarchical: true
+        };
+
+        if ($scope.entityType == 'specimen') {
+          extend(criteria, {
+            storeSpecimensEnabled: true,
+            specimenClass: entity.specimenClass,
+            specimenType: entity.type,
+            cpId: cpId
+          });
+        } else {
+          extend(criteria, {site: entity.siteName});
+        }
+
+        return criteria;
+      }
 
       $scope.toggleSelectedContainer = function(wizard, container) {
         $scope.showGrid = false;
@@ -73,7 +86,7 @@ angular.module('os.biospecimen.participant.specimen-position')
         }
 
         var idx = $scope.containers.indexOf(container);
-        Container.query(extend({parentContainerId: container.id}, queryParams)).then(
+        Container.query(extend({parentContainerId: container.id}, criteria)).then(
           function(containers) {
             addChildPlaceholders(containers);
             container.childContainersLoaded = true;

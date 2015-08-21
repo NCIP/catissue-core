@@ -1,15 +1,31 @@
 
-angular.module('os.biospecimen.participant.specimen-position', ['os.administrative.models'])
-  .directive('osSpecimenPosition', function($modal, $timeout, Container) {
+angular.module('openspecimen')
+  .directive('osStoragePosition', function($modal, $timeout, Container) {
     function loadContainers(name, scope) {
+      scope.entityType = scope.entity.getType();
       var params = {
         name: name, 
-        onlyFreeContainers: true,
-        cpId: scope.cpId,
-        specimenClass: scope.specimen.specimenClass,
-        specimenType: scope.specimen.type,
-        storeSpecimensEnabled: true,
-      };
+        onlyFreeContainers: true
+      }
+
+      if (scope.entityType == 'specimen') {
+        if (!scope.entity.type) {
+          return;
+        }
+
+        angular.extend(params, {
+          cpId: scope.cpId,
+          specimenClass: scope.entity.specimenClass,
+          specimenType: scope.entity.type,
+          storeSpecimensEnabled: true
+        });
+      } else {
+        if (!scope.entity.siteName) {
+          return;
+        }
+
+        angular.extend(params, {site: scope.entity.siteName});
+      }
 
       return Container.query(params).then(
         function(containers) {
@@ -22,21 +38,32 @@ angular.module('os.biospecimen.participant.specimen-position', ['os.administrati
       );
     };
 
+    function watchOccupyingEntityChanges(scope) {
+      var objType = scope.entity.getType() == 'specimen' ? 'entity.type' : 'entity.siteName';
+      scope.$watch(objType, function(newVal, oldVal) {
+        if (!newVal || newVal == oldVal) {
+          return;
+        }
+
+        loadContainers('', scope);
+      });
+    }
+
     function linker(scope, element, attrs) {
-      var specimen = scope.specimen;
+      var entity = scope.entity;
 
       scope.onContainerChange = function() {
-        specimen.storageLocation = {name: specimen.storageLocation.name};
+        entity.storageLocation = {name: entity.storageLocation.name};
       };
 
       scope.openPositionSelector = function() {
         var modalInstance = $modal.open({
-          templateUrl: 'modules/biospecimen/participant/specimen-position-selector.html',
-          controller: 'SpecimenPositionSelectorCtrl',
+          templateUrl: 'modules/common/storage-position-selector.html',
+          controller: 'StoragePositionSelectorCtrl',
           size: 'lg',
           resolve: {
-            specimen: function() {
-              return scope.specimen
+            entity: function() {
+              return scope.entity
             },
 
             cpId: function() {
@@ -47,29 +74,18 @@ angular.module('os.biospecimen.participant.specimen-position', ['os.administrati
 
         modalInstance.result.then(
           function(position) {
-            angular.extend(scope.specimen.storageLocation, position);
             $timeout(function() {
-              angular.extend(scope.specimen.storageLocation, position);
+              scope.entity.storageLocation = angular.extend(scope.entity.storageLocation || {}, position);
             });
           }
         );
       };
 
       scope.searchContainer = function(name) {
-        if (!specimen.type) {
-          return;
-        }
-
         loadContainers(name, scope);
       };
 
-      scope.$watch('specimen.type', function(newVal, oldVal) {
-        if (!newVal || newVal == oldVal) {
-          return;
-        }
-
-        loadContainers('', scope);
-      });
+      watchOccupyingEntityChanges(scope);
     };
 
     return {
@@ -82,7 +98,7 @@ angular.module('os.biospecimen.participant.specimen-position', ['os.administrati
       terminal: true,
 
       scope: {
-        specimen: '=',
+        entity: '=',
         cpId: '='
       },
 
@@ -108,7 +124,7 @@ angular.module('os.biospecimen.participant.specimen-position', ['os.administrati
       },
 
 
-      templateUrl: 'modules/biospecimen/participant/specimen-position.html'
+      templateUrl: 'modules/common/storage-position.html'
     }
   });
     
