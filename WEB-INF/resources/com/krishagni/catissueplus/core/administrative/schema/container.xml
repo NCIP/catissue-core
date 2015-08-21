@@ -24,11 +24,26 @@
       <caption>#getMessage("container_site")</caption>
       <attribute>siteName</attribute>
     </field>
-
-    <field>
-      <caption>#getMessage("container_parent_container")</caption>
-      <attribute>parentContainerName</attribute>
-    </field>
+    
+    <record>
+      <attribute>storageLocation</attribute>
+      <caption>#getMessage("container_storage_location")</caption>
+      
+      <field>
+        <caption>#getMessage("container_parent_container")</caption>
+        <attribute>name</attribute>
+      </field>
+      
+      <field>
+        <caption>#getMessage("container_position_row")</caption>
+        <attribute>positionY</attribute>
+      </field>
+      
+      <field>
+        <caption>#getMessage("container_position_column")</caption>
+        <attribute>positionX</attribute>
+      </field>
+    </record>
 
     <field>
       <caption>#getMessage("container_no_of_columns")</caption>
@@ -50,21 +65,6 @@
       <attribute>rowLabelingScheme</attribute>
     </field>
 
-    <record>
-      <attribute>position</attribute>
-      <caption>#getMessage("container_position")</caption>
-      
-      <field>
-        <caption>#getMessage("container_position_column")</caption>
-        <attribute>posOne</attribute>
-      </field>
-    
-      <field>
-        <caption>#getMessage("container_position_row")</caption>
-        <attribute>posTwo</attribute>
-      </field>
-    </record>
-    
     <field>
       <multiple>true</multiple>
       <caption>#getMessage("container_allowed_specimen_class")</caption>
