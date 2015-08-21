@@ -44,7 +44,7 @@
         <tbody class="os-table-body">
           <tr class="row" ng-repeat="specimen in specimens | openedTreeNodes" ng-form="sform" ng-if="specimen.showInTree">
             <td class="col os-col-30">
-              <div style="padding-left: {{specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16}}px">
+              <div ng-style="{'padding-left': (specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16) + 'px'}">
                 <a ng-if="specimen.hasChildren && specimen.isOpened" 
                   class="fa fa-chevron-circle-down"
                   ng-click="closeSpecimenNode(specimen)">
@@ -90,8 +90,9 @@
               <div ng-switch-default>
                 <span ng-switch on="!!specimen.aliquotGrp && !specimen.expanded">
                   <span ng-switch-when="true">
-                    <textarea os-md-input rows="1" ng-model="specimen.aliquotLabels"
-                      ng-blur="assignLabels(specimen, specimen.aliquotLabels)">
+                    <textarea os-md-input rows="1" name="label" 
+                      ng-model="specimen.aliquotLabels"
+                      ng-blur="assignLabels(specimen, specimen.aliquotLabels)" required>
                     </textarea>
                   </span>
                   <span ng-switch-default>
@@ -152,9 +153,9 @@
         <div class="form-group">
           <label class="col-xs-2 control-label">Visit Details</label>
           <div ng-if="visit.status != 'Complete'">
-            <div class="col-xs-3 input" ng-if="cp.manualVisitNameEnabled">
+            <div class="col-xs-3 input" ng-if="!cp.visitNameFmt || cp.manualVisitNameEnabled">
               <input name="visitName" ng-model="visit.name" class="form-control" type="text" 
-                os-md-input required placeholder="Visit Name">
+                os-md-input ng-required="!!cp.manualVisitNameEnabled" placeholder="Visit Name">
               <div os-field-error field="collectionForm.visitName"></div>
             </div>
             <div class="col-xs-3 input">

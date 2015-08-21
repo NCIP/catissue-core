@@ -200,6 +200,8 @@ public class ObjectReader implements Closeable {
 			return new SimpleDateFormat(dateFmt).parse(value);
 		} else if (field.getType() != null && field.getType().equals("datetime")) {
 			return new SimpleDateFormat(dateFmt + " " + timeFmt).parse(value);
+		} else if (field.getType() != null && field.getType().equals("boolean")) {
+			return value.equalsIgnoreCase("yes") ? true : value.equalsIgnoreCase("no") ? false : value;
 		} else {
 			return value;
 		}

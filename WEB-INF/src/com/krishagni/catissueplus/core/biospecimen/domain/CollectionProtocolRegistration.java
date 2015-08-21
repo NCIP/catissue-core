@@ -208,9 +208,11 @@ public class CollectionProtocolRegistration {
 			return;
 		}
 		
-		setRegistrationDate(cpr.getRegistrationDate());		
+		setRegistrationDate(cpr.getRegistrationDate());
+		setPpid(cpr.getPpid());
 		setBarcode(cpr.getBarcode());
 		setParticipant(cpr.getParticipant());
+		setPpidIfEmpty();
 	}
 	
 	public void updateConsents(ConsentResponses consentResponses) {

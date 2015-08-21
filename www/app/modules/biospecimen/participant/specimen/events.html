@@ -42,7 +42,7 @@
                 <span>{{event.user}}</span>
               </div>
               <div class="col col-xs-3">
-                <span>{{event.time | osServerTime: global.utcOffset | date: global.dateTimeFmt}}</span>
+                <span>{{event.time | date: global.dateTimeFmt}}</span>
               </div>
               <div class="col col-xs-1" ng-if="specimen.activityStatus == 'Active'">
                 <button show-if-allowed="specimenResource.updateOpts" class="btn btn-xs btn-default"

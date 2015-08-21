@@ -702,7 +702,7 @@ edu.common.de.DatePicker = function(id, field, args) {
   };
 
   this.postRender = function() {
-    if (field.defaultType == 'CURRENT_DATE' && this.getValue().value.trim().split(" ").length < 2) {
+    if (field.defaultType == 'CURRENT_DATE' && this.dateEl.val().trim().length == 0) {
       this.dateEl.datepicker('setDate', new Date()).datepicker('fill')
     }
   };
@@ -720,11 +720,17 @@ edu.common.de.DatePicker = function(id, field, args) {
   };
 	  
   this.getValue = function() {
-    var val = this.dateEl.val();
+    var val = this.dateEl.datepicker('getDate');
     if (this.timeEl) {
-      val = val + ' ' + this.timeEl.val();
+      var time = this.timeEl.val().trim();
+      var parts = time.split(":");
+      if (parts.length == 2) {
+        val.setHours(parseInt(parts[0].trim()));
+        val.setMinutes(parseInt(parts[1].trim()));
+      }
     }
-    return {name: field.name, value: val};
+
+    return {name: field.name, value: '' + val.getTime()};
   };
 
   this.setValue = function(recId, value) {
@@ -733,13 +739,21 @@ edu.common.de.DatePicker = function(id, field, args) {
       return;
     }
 
-    var format = field.format;
-    if (format.indexOf('HH:mm') != -1) { // TODO: Fix this
-      var dateTime = value.split(" ");
-      this.dateEl.val(dateTime[0]);
-      this.timeEl.val(dateTime[1]);
-    } else {
-      this.dateEl.val(value);
+    try {
+      var dt = new Date(parseInt(value));
+      this.dateEl.datepicker('setDate', dt);
+      if (this.timeEl) {
+        this.timeEl.timepicker('setTime', dt);
+      }
+    } catch (e) {
+      var format = field.format;
+      if (format.indexOf('HH:mm') != -1) { // TODO: Fix this
+        var dateTime = value.split(" ");
+        this.dateEl.val(dateTime[0]);
+        this.timeEl.val(dateTime[1]);
+      } else {
+        this.dateEl.val(value);
+      }
     }
 
     this.dateEl.datepicker('update');

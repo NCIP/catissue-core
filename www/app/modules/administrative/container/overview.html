@@ -103,7 +103,7 @@
     <div class="os-table-body">
       <div class="row" ng-repeat="container in childContainers | openedTreeNodes">
         <div class="col col-xs-5">
-          <div style="padding-left: {{container.hasChildren ? container.depth * 16 : container.depth * 16 + 16}}px">
+          <div ng-style="{'padding-left': (container.hasChildren ? container.depth * 16 : container.depth * 16 + 16) + 'px'}">
             <a ng-if="container.hasChildren" class="fa" 
               ng-class="{'fa-chevron-circle-down': container.isOpened, 'fa-chevron-circle-right': !container.isOpened}"
               ng-click="container.isOpened=!container.isOpened; loadChildren(container)">

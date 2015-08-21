@@ -26,8 +26,8 @@
           <label class="col-xs-3 control-label" translate="participant.ppid">Participant Protocol ID</label>
           <div class="col-xs-6">
             <input type="text" name="ppid" ng-model="cpr.ppid" class="form-control" 
-              placeholder="{{'participant.ppid' | translate}}" 
-              ng-required="!cp.ppidFmt || cp.manualPpidEnabled" ng-disabled="!!cpr.id">
+              placeholder="{{'participant.ppid' | translate}}" required
+              ng-disabled="cp.ppidFmt && !cp.manualPpidEnabled">
             <div os-field-error field="pform.ppid"></div>
           </div>
         </div>

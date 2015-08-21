@@ -294,11 +294,8 @@ public class Visit {
 		if (!isActive()) {
 			return;
 		}
-		
-		if (StringUtils.isBlank(name)) {
-			setName(visit.getName());
-		}
-
+				
+		setName(visit.getName());
 		setClinicalDiagnosis(visit.getClinicalDiagnosis());
 		setClinicalStatus(visit.getClinicalStatus());
 		setCpEvent(visit.getCpEvent());
@@ -326,7 +323,7 @@ public class Visit {
 	}
 	
 	public void setNameIfEmpty() {
-		if (StringUtils.isNotBlank(name) || !isCompleted()) {
+		if (StringUtils.isNotBlank(name)) {
 			return;
 		}
 
@@ -334,6 +331,7 @@ public class Visit {
 		if (StringUtils.isBlank(visitNameFmt)) {
 			visitNameFmt = defNameTmpl;
 		}
+		
 		setName(labelGenerator.generateLabel(visitNameFmt, this));
 	}
 	
