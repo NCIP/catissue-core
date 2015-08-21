@@ -74,12 +74,8 @@ angular.module('openspecimen')
 
         modalInstance.result.then(
           function(position) {
-            if (!scope.entity.storageLocation) {
-              scope.entity.storageLocation = {};
-            }
-            angular.extend(scope.entity.storageLocation, position);
             $timeout(function() {
-              angular.extend(scope.entity.storageLocation, position);
+              scope.entity.storageLocation = angular.extend(scope.entity.storageLocation || {}, position);
             });
           }
         );

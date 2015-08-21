@@ -13,10 +13,6 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       }
     );
 
-    Specimen.prototype.getType = function() {
-      return 'specimen';
-    }
-
     Specimen.listFor = function(cprId, visitDetail) {
       return Specimen.query(angular.extend({cprId: cprId}, visitDetail || {}));
     };

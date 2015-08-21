@@ -7,7 +7,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     var allowedCps = undefined;
 
     function init() {
-      container.storageLocation = !container.storageLocation ? {} : container.storageLocation;
+      container.storageLocation = container.storageLocation || {};
       $scope.container = container;
 
       /**
@@ -105,8 +105,6 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
       $scope.container.allowedCollectionProtocols = allowedCps; 
     };
 
-    $scope.loadAllCps = loadAllCps;
-
     function loadAllCps(siteName) {
       siteName = !siteName ? $scope.container.siteName : siteName;
 
@@ -162,6 +160,8 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
         }
       );
     };
+
+    $scope.loadAllCps = loadAllCps;
           
     $scope.save = function() {
       var container = angular.copy($scope.container);

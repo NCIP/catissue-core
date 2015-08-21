@@ -2,7 +2,6 @@
 angular.module('openspecimen')
   .controller('StoragePositionSelectorCtrl',
     function($scope, $modalInstance, $timeout, $q, entity, cpId, Container) {
-      $scope.entityType = entity.getType();
       var extend = angular.extend;
       var criteria = getContainerListCriteria(entity);
 
@@ -18,6 +17,7 @@ angular.module('openspecimen')
         $scope.selectedPos = {};
         $scope.showGrid = false;
         $scope.containers = [];
+        $scope.entityType = entity.getType();
 
         Container.query(extend({topLevelContainers: true}, criteria)).then(
           function(containers) {
