@@ -1,6 +1,6 @@
 angular.module('os.biospecimen.specimen.detail', [])
   .controller('SpecimenDetailCtrl', function(
-    $scope, $state, $modal, 
+    $scope, $state, $modal, $stateParams,
     cpr, visit, specimen, Specimen, DeleteUtil) {
 
     function init() {
@@ -8,6 +8,19 @@ angular.module('os.biospecimen.specimen.detail', [])
       $scope.visit = visit;
       $scope.specimen = specimen;
       $scope.childSpecimens = $scope.specimen.children; 
+    }
+
+    $scope.reload = function() {
+      return reloadSpecimen();
+    }
+
+
+    function reloadSpecimen() {
+      if ($stateParams.specimenId) {
+        return Specimen.getById($stateParams.specimenId);
+      } else if ($stateParams.srId) {
+        return Specimen.getAnticipatedSpecimen($stateParams.srId);
+      }
     }
 
     $scope.reopen = function() {

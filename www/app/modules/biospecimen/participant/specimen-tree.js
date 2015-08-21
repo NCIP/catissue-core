@@ -138,7 +138,9 @@ angular.module('os.biospecimen.participant.specimen-tree',
         cpr: '=',
         visit: '=',
         specimenTree: '=specimens',
-        allowedOps: '='
+        allowedOps: '=',
+        children: '=',
+        reload: '&reload'
       },
 
       templateUrl: 'modules/biospecimen/participant/specimens.html',
@@ -249,9 +251,17 @@ angular.module('os.biospecimen.participant.specimen-tree',
             confirmDelete : hasChildren ? 'specimens.delete_specimens_heirarchy' :'specimens.delete_specimens',
             successMessage: hasChildren ? 'specimens.specimens_hierarchy_deleted' : 'specimens.specimens_deleted',
             onBulkDeletion: function(result) {
-              angular.forEach(specimensToDelete, function(specimen) {
-                deleteSpecimen(specimen);
-              });
+              if (typeof scope.reload == "function") {
+                scope.reload().then(function(result) {
+                  if (scope.children) {
+                    scope.specimens = Specimen.flatten(result.children);
+                  } else {
+                    scope.specimens = Specimen.flatten(result);
+                  }
+                  openSpecimenTree(scope.specimens);
+                });
+              }
+              scope.selection.any = false;
             }
           }
         }
@@ -266,28 +276,6 @@ angular.module('os.biospecimen.participant.specimen-tree',
           });
 
           return childrenExists;
-        }
-
-        function deleteSpecimen(specimen) {
-          nullifySpecimen(specimen);
-          deleteChildren(specimen.children);
-        }
-
-        function deleteChildren(specimens) {
-          angular.forEach(specimens, function(specimen) {
-            nullifySpecimen(specimen);
-            deleteChildren(specimen.children);
-          });
-        }
-
-        function nullifySpecimen(specimen) {
-          specimen.id = null;
-          specimen.label = null;
-          specimen.status = null;
-          specimen.activityStatus = null;
-          specimen.createdOn = null;
-          specimen.selected = false;
-          specimen.storageLocation = null;
         }
 
         scope.closeSpecimens = function() {
