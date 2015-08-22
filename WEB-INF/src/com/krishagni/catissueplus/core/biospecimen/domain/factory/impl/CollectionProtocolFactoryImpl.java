@@ -55,6 +55,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		setRepositories(input, cp, ose);
 		setTitle(input, cp, ose);
 		setShortTitle(input, cp, ose);
+		setCode(input, cp, ose);
 		setPrincipalInvestigator(input, cp, ose);
 		cp.setStartDate(input.getStartDate());
 		cp.setEndDate(input.getEndDate());
@@ -106,6 +107,10 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		}
 
 		result.setShortTitle(input.getShortTitle());
+	}
+	
+	private void setCode(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
+		result.setCode(input.getCode());
 	}
 
 	private void setPrincipalInvestigator(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {

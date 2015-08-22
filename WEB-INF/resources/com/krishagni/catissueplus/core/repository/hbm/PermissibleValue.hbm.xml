@@ -42,5 +42,13 @@
         ppv.attribute = '2003991' and
         ppv.value in (:specimenClasses)
     </query>
+
+    <query name="getByConceptCode">
+      from
+        com.krishagni.catissueplus.core.administrative.domain.PermissibleValue pv
+      where
+        pv.attribute = :attribute and
+        pv.conceptCode = :conceptCode
+    </query>
   </class>
 </hibernate-mapping>

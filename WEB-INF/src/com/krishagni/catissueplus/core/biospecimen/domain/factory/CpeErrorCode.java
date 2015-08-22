@@ -7,6 +7,8 @@ public enum CpeErrorCode implements ErrorCode {
 	
 	DUP_LABEL,
 	
+	DUP_CODE,
+	
 	LABEL_REQUIRED,
 	
 	INVALID_POINT,

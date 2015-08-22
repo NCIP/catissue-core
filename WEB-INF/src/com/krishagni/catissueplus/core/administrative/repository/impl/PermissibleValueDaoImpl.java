@@ -63,6 +63,18 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 		return query.setProjection(Projections.property("value")).list();
 	}	
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public PermissibleValue getByConceptCode(String attribute, String conceptCode) {
+		List<PermissibleValue> pvs = getSessionFactory().getCurrentSession()
+				.getNamedQuery(GET_BY_CONCEPT_CODE)
+				.setString("attribute", attribute)
+				.setString("conceptCode", conceptCode)
+				.list();
+		
+		return CollectionUtils.isEmpty(pvs) ? null : pvs.iterator().next();
+	}
+	
 	@Override
 	public boolean exists(String attribute, Collection<String> values) {
 		return exists(attribute, values, false);
@@ -154,4 +166,8 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 	}
 	
 	private static final String SPECIMEN_CLASS = "2003991";
+	
+	private static final String FQN = PermissibleValue.class.getName();
+	
+	private static final String GET_BY_CONCEPT_CODE = FQN + ".getByConceptCode";
 }

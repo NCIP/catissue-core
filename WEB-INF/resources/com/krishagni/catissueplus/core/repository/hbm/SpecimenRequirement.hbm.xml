@@ -16,6 +16,8 @@
 
     <property name="name" column="SPEC_REQ_LABEL"/>
 
+    <property name="code" column="CODE"/>
+
     <property name="lineage" column="LINEAGE"/>
       
     <property name="specimenClass" column="SPECIMEN_CLASS"/>
@@ -88,6 +90,13 @@
     </set>
 
     <filter name="activeEntity"/>
+
+    <query name="getByCode">
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement sr
+      where
+        sr.code = :code
+    </query>
   </class>
 </hibernate-mapping>
 

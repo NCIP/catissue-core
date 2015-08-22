@@ -17,6 +17,8 @@
 
     <property name="shortTitle" column="SHORT_TITLE"/>
 
+    <property name="code" column="CODE"/>
+    	
     <property name="startDate" column="START_DATE"/>
 
     <property name="endDate" column="END_DATE"/>
@@ -224,6 +226,12 @@
       where
         ct.id = :consentId
     </query>
-    
+
+    <query name="getByCode">
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
+      where
+        cp.code = :code
+    </query>
   </class>
 </hibernate-mapping>
