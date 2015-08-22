@@ -313,7 +313,8 @@ h4 + .btn-group {
   bottom: 10px;
 }
 
-.os-page-hdr .os-btns div.inline {
+.os-page-hdr .os-btns div.inline,
+.os-inline-btn {
   display: inline-block;
   position: relative;
 }
