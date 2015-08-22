@@ -36,7 +36,13 @@ angular.module('os.biospecimen.participant.visits', ['os.biospecimen.models'])
         visitId: $stateParams.visitId,
         eventId: $stateParams.eventId
       };
-      return Specimen.listFor($stateParams.cprId, visitDetail);
+
+      return Specimen.listFor($stateParams.cprId, visitDetail).then(
+        function(specimens) {
+          $scope.specimens = specimens;
+        }
+      );
     }
+
     $scope.specimens = specimens;
   });

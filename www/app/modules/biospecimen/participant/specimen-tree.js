@@ -5,7 +5,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
     'os.biospecimen.participant.collect-specimens',
   ])
   .directive('osSpecimenTree', function(
-    $state, $stateParams, $modal,
+    $state, $stateParams, $modal, $timeout,
     CollectSpecimensSvc, Specimen, SpecimenLabelPrinter, SpecimenList, SpecimensHolder,
     Alerts, PvManager, Util, DeleteUtil) {
 
@@ -139,7 +139,6 @@ angular.module('os.biospecimen.participant.specimen-tree',
         visit: '=',
         specimenTree: '=specimens',
         allowedOps: '=',
-        children: '=',
         reload: '&reload'
       },
 
@@ -220,12 +219,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
             return;
           }
 
-          var specimenIds = specimensToPrint.map(
-            function(s) {
-              return s.id;
-            }
-          );
-
+          var specimenIds = getSpecimenIds(specimensToPrint);
           SpecimenLabelPrinter.printLabels({specimenIds: specimenIds});
         };
 
@@ -235,47 +229,9 @@ angular.module('os.biospecimen.participant.specimen-tree',
             return;
           }
 
-          var specimenIds = specimensToDelete.map(
-            function(s) {
-              return s.id;
-            }
-          );
-
+          var specimenIds = getSpecimenIds(specimensToDelete);
           DeleteUtil.bulkDelete(Specimen, specimenIds, getBulkDeleteOpts(specimensToDelete));
           scope.selection.all = false;
-        }
-
-        function getBulkDeleteOpts(specimensToDelete) {
-          var hasChildren = childrenExists(specimensToDelete);
-          return {
-            confirmDelete : hasChildren ? 'specimens.delete_specimens_heirarchy' :'specimens.delete_specimens',
-            successMessage: hasChildren ? 'specimens.specimens_hierarchy_deleted' : 'specimens.specimens_deleted',
-            onBulkDeletion: function(result) {
-              if (typeof scope.reload == "function") {
-                scope.reload().then(function(result) {
-                  if (scope.children) {
-                    scope.specimens = Specimen.flatten(result.children);
-                  } else {
-                    scope.specimens = Specimen.flatten(result);
-                  }
-                  openSpecimenTree(scope.specimens);
-                });
-              }
-              scope.selection.any = false;
-            }
-          }
-        }
-
-        function childrenExists(specimens) {
-          var childrenExists = false;
-          angular.forEach(specimens, function(specimen) {
-            if (specimen.children.length > 0) {
-              childrenExists = true;
-              return;
-            }
-          });
-
-          return childrenExists;
         }
 
         scope.closeSpecimens = function() {
@@ -284,21 +240,12 @@ angular.module('os.biospecimen.participant.specimen-tree',
             return;
           }
 
-          var statusSpecs = [];
-          angular.forEach(specimensToClose, function(specimen) {
-            var statusSpec = {status: 'Closed', reason: "", id: specimen.id, label: specimen.label};
-            statusSpecs.push(statusSpec);
-          });
-
           var modalInstance = $modal.open({
             templateUrl: 'modules/biospecimen/participant/specimen/close.html',
             controller: 'SpecimenCloseCtrl',
             resolve: {
-              props: function() {
-                return {
-                  statusSpecs : statusSpecs,
-                  specimensToClose: specimensToClose
-                }
+              specimens: function() {
+                return specimensToClose;
               }
             }
           });
@@ -485,6 +432,48 @@ angular.module('os.biospecimen.participant.specimen-tree',
         scope.revertEdit = function() {
           scope.view = 'list';
           scope.parentSpecimen = undefined;
+        }
+
+        function getSpecimenIds(specimens) {
+          return specimens.map(
+            function(s) {
+              return s.id;
+            }
+          );
+        }
+
+        function getBulkDeleteOpts(specimensToDelete) {
+          var hasChildren = childrenExists(specimensToDelete);
+          return {
+            confirmDelete : hasChildren ? 'specimens.delete_specimens_heirarchy' :'specimens.delete_specimens',
+            successMessage: hasChildren ? 'specimens.specimens_hierarchy_deleted' : 'specimens.specimens_deleted',
+            onBulkDeletion: function(result) {
+              if (typeof scope.reload == "function") {
+                scope.reload().then(
+                  function() {
+                    $timeout(function() {
+                      console.warn("hello");
+                      scope.specimens = Specimen.flatten(scope.specimenTree);
+                      openSpecimenTree(scope.specimens);
+                    });
+                  }
+                );
+              }
+              scope.selection.any = false;
+            }
+          }
+        }
+
+        function childrenExists(specimens) {
+          var childrenExists = false;
+          angular.forEach(specimens, function(specimen) {
+            if (specimen.children.length > 0) {
+              childrenExists = true;
+              return;
+            }
+          });
+
+          return childrenExists;
         }
       }
     }

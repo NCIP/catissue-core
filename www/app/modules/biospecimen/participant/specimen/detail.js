@@ -11,16 +11,18 @@ angular.module('os.biospecimen.specimen.detail', [])
     }
 
     $scope.reload = function() {
-      return reloadSpecimen();
-    }
-
-
-    function reloadSpecimen() {
+      var promise = null;
       if ($stateParams.specimenId) {
-        return Specimen.getById($stateParams.specimenId);
+        promise = Specimen.getById($stateParams.specimenId);
       } else if ($stateParams.srId) {
-        return Specimen.getAnticipatedSpecimen($stateParams.srId);
+        promise = Specimen.getAnticipatedSpecimen($stateParams.srId);
       }
+
+      return promise.then(
+        function(specimen) {
+          $scope.childSpecimens = specimen.children;
+        }
+      );
     }
 
     $scope.reopen = function() {
@@ -50,8 +52,8 @@ angular.module('os.biospecimen.specimen.detail', [])
         templateUrl: 'modules/biospecimen/participant/specimen/close.html',
         controller: 'SpecimenCloseCtrl',
         resolve: {
-          props: function() {
-            return {specimen: specimen};
+          specimens: function() {
+            return [specimen];
           }
         }
       });

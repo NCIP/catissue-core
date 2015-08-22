@@ -22,16 +22,16 @@ angular.module('os.common.delete', [])
       }
     }
 
+    function bulkDelete() {
+      $scope.entity.bulkDelete($scope.entityIds).then(onBulkDeletion)
+    };
+
     $scope.delete = function () {
       if (entityProps.entityIds) {
-        $scope.bulkDelete();
+        bulkDelete();
       } else {
         $scope.entity.$remove().then(onDeletion)
       }
-    };
-
-    $scope.bulkDelete = function () {
-      $scope.entity.bulkDelete($scope.entityIds).then(onBulkDeletion)
     };
 
     $scope.cancel = function () {

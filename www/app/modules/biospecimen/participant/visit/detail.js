@@ -23,7 +23,12 @@ angular.module('os.biospecimen.visit.detail', ['os.biospecimen.models'])
         visitId: visit.id,
         eventId: visit.eventId
       };
-      return Specimen.listFor(cpr.id, visitDetail);
+
+      return Specimen.listFor(cpr.id, visitDetail).then(
+        function(specimens) {
+          $scope.specimens = specimens;
+        }
+      );
     }
 
     init();
