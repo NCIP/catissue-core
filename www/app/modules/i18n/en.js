@@ -778,8 +778,6 @@
     "new_name": "New Container Name",
     "row": "Row",
     "column": "Column",
-    "target_site": "Target Site",
-    "target_parent_cont": "Target Parent Container",
     "replicate": "Replicate",
     "add_another": "Add Another",
 
