@@ -5,7 +5,6 @@ angular.module('os.common.delete', [])
       $scope.entity = entityProps.entity;
       $scope.entityProps = entityProps;
       $scope.dependentEntities = dependentEntities;
-      $scope.entityIds = entityProps.entityIds;
     }
 
     function onDeletion(entity) {
@@ -23,14 +22,14 @@ angular.module('os.common.delete', [])
     }
 
     function bulkDelete() {
-      $scope.entity.bulkDelete($scope.entityIds).then(onBulkDeletion)
+      $scope.entity.bulkDelete(entityProps.entityIds).then(onBulkDeletion)
     };
 
     $scope.delete = function () {
       if (entityProps.entityIds) {
         bulkDelete();
       } else {
-        $scope.entity.$remove().then(onDeletion)
+        $scope.entity.$remove().then(onDeletion);
       }
     };
 
