@@ -19,17 +19,17 @@
         <div>
           <span>Selected Position: </span>
           <span ng-if="!!selectedPos.positionX">({{selectedPos.positionY}}, {{selectedPos.positionX}})</span>
-          <span ng-if="!selectedPos.positionX">None</span>
+          <span ng-if="!selectedPos.positionX" translate="common.none">None</span>
         </div>
       </os-wizard-step>
 
       <div class="os-modal-footer">
-        <button class="btn os-btn-text" ng-click="cancel()"> Cancel </button>
+        <button class="btn os-btn-text" translate="common.buttons.cancel" ng-click="cancel()"> Cancel </button>
         <button class="btn os-btn-secondary" ng-if="!selectPositionWizard.isFirstStep()" 
           ng-click="selectPositionWizard.previous(false)">
           Previous
         </button>
-        <button class="btn btn-primary" ng-click="ok()">
+        <button class="btn btn-primary" translate="common.buttons.done" ng-click="ok()">
           Done
         </button>
       </div>
