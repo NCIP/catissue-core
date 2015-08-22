@@ -452,7 +452,6 @@ angular.module('os.biospecimen.participant.specimen-tree',
                 scope.reload().then(
                   function() {
                     $timeout(function() {
-                      console.warn("hello");
                       scope.specimens = Specimen.flatten(scope.specimenTree);
                       openSpecimenTree(scope.specimens);
                     });
@@ -465,15 +464,12 @@ angular.module('os.biospecimen.participant.specimen-tree',
         }
 
         function childrenExists(specimens) {
-          var childrenExists = false;
-          angular.forEach(specimens, function(specimen) {
-            if (specimen.children.length > 0) {
-              childrenExists = true;
-              return;
+          for (var i = 0; i < specimens.length; ++i) {
+            if (specimens[i].children.length > 0) {
+              return true;
             }
-          });
-
-          return childrenExists;
+          }
+          return false;
         }
       }
     }
