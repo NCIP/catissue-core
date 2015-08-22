@@ -17,7 +17,11 @@ public class SpecimenAliquotsSpec {
 	private String containerName;
 
 	private Boolean closeParent;
-	
+
+	private String positionX;
+
+	private String positionY;
+
 	public Long getParentId() {
 		return parentId;
 	}
@@ -78,4 +82,19 @@ public class SpecimenAliquotsSpec {
 		return closeParent == null ? false : closeParent;
 	}
 
+	public String getPositionX() {
+		return positionX;
+	}
+
+	public void setPositionX(String positionX) {
+		this.positionX = positionX;
+	}
+
+	public String getPositionY() {
+		return positionY;
+	}
+
+	public void setPositionY(String positionY) {
+		this.positionY = positionY;
+	}
 }
