@@ -397,6 +397,7 @@
     "activity_status": "Activity Status",
     "more_info": "More Specimen Information",
     "less_info": "Less Specimen Information",
+    "location" : "Location",
 
     "reason_for_closing": "Reason for closing",
 
