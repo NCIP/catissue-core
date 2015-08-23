@@ -220,10 +220,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueTitle(existingCp, cp, ose);
-			
 			if (!existingCp.isConsentsWaived().equals(cp.isConsentsWaived())) {
 			  ensureConsentTierIsEmpty(existingCp, ose);
 			}
+		
 			ose.checkAndThrow();
 			
 			User oldPI = existingCp.getPrincipalInvestigator();
@@ -263,12 +263,14 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(existingCp);
 			
-			if (!existingCp.getConsentTier().isEmpty()) {
+			if (CollectionUtils.isNotEmpty(existingCp.getConsentTier()) {
 				return ResponseEvent.userError(CpErrorCode.CONSENT_TIER_FOUND, existingCp.getShortTitle());
 			}
+
 			existingCp.setConsentsWaived(detail.getConsentsWaived());
-			
 			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -851,7 +853,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 	
 	private void ensureConsentTierIsEmpty(CollectionProtocol existingCp, OpenSpecimenException ose) {
-		if (!existingCp.getConsentTier().isEmpty()) {
+		if (CollectionUtils.isNotEmpty(existingCp.getConsentTier())) {
 			ose.addError(CpErrorCode.CONSENT_TIER_FOUND, existingCp.getShortTitle());
 		}
 	}
