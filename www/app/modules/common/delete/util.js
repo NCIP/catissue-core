@@ -62,9 +62,40 @@ angular.module('os.common.delete')
       );
     };
 
+    function bulkDelete(object, entityIds, props) {
+      var confirmDelete = props.confirmDelete || 'delete_entity.confirm_delete';
+      var successMessage = props.successMessage || 'delete_entity.entity_deleted';
+      var modalInstance = $modal.open({
+        templateUrl: 'modules/common/delete/modal.html',
+        controller: 'EntityDeleteCtrl',
+        resolve: {
+          entityProps: function() {
+            return {
+              entity: object,
+              entityIds: entityIds,
+              confirmDelete: confirmDelete,
+              successMessage: successMessage
+            }
+          },
+          dependentEntities: function() {
+            return [];
+          }
+        }
+      });
+
+      modalInstance.result.then(
+        function(object) {
+          if (typeof props.onBulkDeletion == 'function') {
+            props.onBulkDeletion(object);
+          }
+        }
+      );
+    }
 
     return {
       delete : deleteEntity,
+
+      bulkDelete : bulkDelete,
 
       confirmDelete: confirmDelete
     }

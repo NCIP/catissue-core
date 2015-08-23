@@ -1,38 +1,62 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <span translate="specimens.list">Specimens</span>
-    <div dropdown class="btn-group os-action-btns" ng-if = "visit.status != 'Missed Collection'">
-      <button ng-if="!allowedOps || allowedOps.update" class="btn btn-primary" ng-click="collectSpecimens()">
-        <span class="fa fa-plus"></span>
-        <span translate="specimens.buttons.collect"> Collect </span>
-      </button>
-      <button class="btn btn-default" ng-click="printSpecimenLabels()">
-        <span class="fa fa-print"></span>
-        <span translate="specimens.buttons.print"> Print </span>
-      </button>
-      <button class="btn btn-default dropdown-toggle">
-        <span class="fa fa-list"></span>
-        <span translate="specimens.buttons.assign_to"> Assign To </span>
-      </button>
-      <ul class="dropdown-menu dropdown-menu-right os-query-folders-dd">
-        <li>
-          <input ng-model="searchSpecimenList" type="text" class="form-control" 
-            placeholder="{{'specimen_list.search_list' | translate}}" 
-            ng-click="$event.stopPropagation()">
-        </li>
-        <li>
-          <ul class="dropdown-menu-subgroup">
-            <li ng-repeat="list in specimenLists | filter: searchSpecimenList"
-              ng-click="addSpecimensToSpecimenList(list)">
-              <a><span>{{list.name}}</span></a>
-            </li>
-          </ul>
-        </li>
-        <li class="divider"></li>
-        <li ng-click="addSpecimensToSpecimenList()">
-          <a translate="specimen_list.create_new_list">Create New Specimen List</a>
-        </li>
-      </ul>
+    <div class="os-action-btns" ng-if = "visit.status != 'Missed Collection'">
+      <div dropdown class="btn-group">
+        <button ng-if="!allowedOps || allowedOps.update" class="btn btn-primary" ng-click="collectSpecimens()">
+          <span class="fa fa-plus"></span>
+          <span translate="specimens.buttons.collect"> Collect </span>
+        </button>
+        <button class="btn btn-default dropdown-toggle">
+          <span class="fa fa-list"></span>
+          <span translate="specimens.buttons.assign_to"> Assign To </span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right os-query-folders-dd">
+          <li>
+            <input ng-model="searchSpecimenList" type="text" class="form-control"
+              placeholder="{{'specimen_list.search_list' | translate}}"
+              ng-click="$event.stopPropagation()">
+          </li>
+          <li>
+            <ul class="dropdown-menu-subgroup">
+              <li ng-repeat="list in specimenLists | filter: searchSpecimenList"
+                ng-click="addSpecimensToSpecimenList(list)">
+                <a><span>{{list.name}}</span></a>
+              </li>
+            </ul>
+          </li>
+          <li class="divider"></li>
+          <li ng-click="addSpecimensToSpecimenList()">
+            <a translate="specimen_list.create_new_list">Create New Specimen List</a>
+          </li>
+        </ul>
+      </div>
+      <div dropdown class="os-inline-btn">
+        <button class="btn btn-default dropdown-toggle">
+          <span translate="common.buttons.more">More</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li ng-click="printSpecimenLabels()">
+            <a>
+              <span class="fa fa-print"></span>
+              <span translate="specimens.buttons.print"> Print </span>
+            </a>
+          </li>
+          <li show-if-allowed="participantResource.deleteOpts">
+            <a ng-click="deleteSpecimens()">
+              <span class="fa fa-trash"></span>
+              <span translate="common.buttons.delete"> Delete </span>
+            </a>
+          </li>
+          <li show-if-allowed="participantResource.deleteOpts">
+            <a ng-click="closeSpecimens()">
+              <span class="fa fa-remove"></span>
+              <span translate="common.buttons.close"> Close </span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
   <div class="panel-body">

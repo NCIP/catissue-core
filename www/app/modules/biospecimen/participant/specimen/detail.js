@@ -1,6 +1,6 @@
 angular.module('os.biospecimen.specimen.detail', [])
   .controller('SpecimenDetailCtrl', function(
-    $scope, $state, $modal, 
+    $scope, $state, $modal, $stateParams,
     cpr, visit, specimen, Specimen, DeleteUtil) {
 
     function init() {
@@ -8,6 +8,21 @@ angular.module('os.biospecimen.specimen.detail', [])
       $scope.visit = visit;
       $scope.specimen = specimen;
       $scope.childSpecimens = $scope.specimen.children; 
+    }
+
+    $scope.reload = function() {
+      var promise = null;
+      if ($stateParams.specimenId) {
+        promise = Specimen.getById($stateParams.specimenId);
+      } else if ($stateParams.srId) {
+        promise = Specimen.getAnticipatedSpecimen($stateParams.srId);
+      }
+
+      return promise.then(
+        function(specimen) {
+          $scope.childSpecimens = specimen.children;
+        }
+      );
     }
 
     $scope.reopen = function() {
@@ -37,8 +52,8 @@ angular.module('os.biospecimen.specimen.detail', [])
         templateUrl: 'modules/biospecimen/participant/specimen/close.html',
         controller: 'SpecimenCloseCtrl',
         resolve: {
-          specimen: function() {
-            return specimen
+          specimens: function() {
+            return [specimen];
           }
         }
       });
