@@ -233,5 +233,15 @@
       where
         cp.code = :code
     </query>
+
+    <query name="getRepoIdsByCps">
+      select 
+        r.id
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
+        join cp.repositories r
+      where
+        cp.id in (:cpIds)
+    </query>
   </class>
 </hibernate-mapping>

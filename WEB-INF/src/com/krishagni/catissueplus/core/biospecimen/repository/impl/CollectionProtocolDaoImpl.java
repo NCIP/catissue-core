@@ -124,6 +124,15 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 				.list();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Long> getSiteIdsByCpIds(Collection<Long> cpIds) {
+		return getSessionFactory().getCurrentSession()
+				.getNamedQuery(GET_SITE_IDS_BY_CP_IDS)
+				.setParameterList("cpIds", cpIds)
+				.list();
+	}	
+	
 	@Override
 	public CollectionProtocolEvent getCpe(Long cpeId) {
 		List<CollectionProtocolEvent> events = getCpes(Collections.singleton(cpeId));
@@ -371,6 +380,8 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	private static final String GET_CP_BY_CODE = FQN + ".getByCode";
 	
 	private static final String GET_CP_IDS_BY_SITE_IDS = FQN + ".getCpIdsBySiteIds";
+	
+	private static final String GET_SITE_IDS_BY_CP_IDS = FQN + ".getRepoIdsByCps";
 	
 	private static final String GET_CONSENT_TIER = FQN + ".getConsentTier";
 

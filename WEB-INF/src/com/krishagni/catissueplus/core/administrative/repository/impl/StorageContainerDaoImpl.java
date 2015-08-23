@@ -212,9 +212,8 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			params.put("specimenType", specimenType);
 		}
 		
-		private void addCpRestriction() {			
-			Long cpId = crit.cpId();
-			if (cpId == null || cpId == -1) {
+		private void addCpRestriction() {
+			if (CollectionUtils.isEmpty(crit.cpIds())) {
 				return;
 			}
 			
@@ -225,8 +224,8 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			}
 			
 			addAnd();
-			where.append("(cp is null or cp.id = :cpId)");
-			params.put("cpId", cpId);
+			where.append("(cp is null or cp.id in (:cpIds))");
+			params.put("cpIds", crit.cpIds());
 		}	
 		
 		private void addStoreSpecimenRestriction() {			
