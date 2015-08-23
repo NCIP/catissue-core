@@ -33,7 +33,7 @@ angular.module('openspecimen')
           hierarchical: true
         };
 
-        if ($scope.entityType == 'specimen') {
+        if (entity.getType() == 'specimen') {
           extend(criteria, {
             storeSpecimensEnabled: true,
             specimenClass: entity.specimenClass,

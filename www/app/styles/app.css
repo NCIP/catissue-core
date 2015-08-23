@@ -936,8 +936,12 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   padding-top: 4px;
 }
 
-.os-padding-none {
+.os-no-padding {
   padding: 0px;
+}
+
+.os-no-left-padding {
+  padding-left: 0px;
 }
 
 .os-big-dropdown-menu {
