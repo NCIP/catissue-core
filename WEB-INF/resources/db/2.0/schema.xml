@@ -1314,12 +1314,6 @@
       tableName="CATISSUE_COLLECTION_PROTOCOL"/>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Drop consents waived column from collection_protocol">
-    <dropColumn
-      columnName="CONSENTS_WAIVED"
-      tableName="CATISSUE_COLLECTION_PROTOCOL"/>
-  </changeSet>
-
   <changeSet author="vlonuste" id="Add institute column to site table">
     <addColumn tableName="CATISSUE_SITE">
       <column name="INSTITUTE_ID" type="${int.type}" defaultValue="null">

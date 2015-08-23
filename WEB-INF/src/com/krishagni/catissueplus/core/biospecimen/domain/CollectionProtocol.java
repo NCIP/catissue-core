@@ -67,7 +67,7 @@ public class CollectionProtocol extends BaseEntity {
 	
 	private Boolean manualSpecLabelEnabled;
 	
-	private Boolean consentEnabled;
+	private Boolean consentsWaived;
 	
 	private Set<ConsentTier> consentTier = new HashSet<ConsentTier>();
 	
@@ -229,12 +229,12 @@ public class CollectionProtocol extends BaseEntity {
 		return manualSpecLabelEnabled != null ? manualSpecLabelEnabled : false;
 	}
 
-	public boolean isConsentEnabled() {
-		return consentEnabled != null ? consentEnabled : false;
+	public Boolean isConsentsWaived() {
+		return consentsWaived != null ? consentsWaived: false;
 	}
 
-	public void setConsentEnabled(Boolean consentEnabled) {
-		this.consentEnabled = consentEnabled;
+	public void setConsentsWaived(Boolean consentsWaived) {
+		this.consentsWaived = consentsWaived;
 	}
 
 	@NotAudited

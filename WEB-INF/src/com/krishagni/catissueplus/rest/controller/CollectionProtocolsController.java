@@ -174,15 +174,15 @@ public class CollectionProtocolsController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/consent-enabled")
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/consents-waived")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public CollectionProtocolDetail updateConsentEnabled(@PathVariable Long id, @RequestBody Map<String, String> props) {
+	public CollectionProtocolDetail updateConsentsWaived(@PathVariable Long id, @RequestBody Map<String, String> props) {
 		CollectionProtocolDetail cp = new  CollectionProtocolDetail();
 		cp.setId(id);
-		cp.setConsentEnabled(Boolean.valueOf(props.get("consentEnabled")));
+		cp.setConsentsWaived(Boolean.valueOf(props.get("consentsWaived")));
 		
-		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.updateConsentEnabled(getRequest(cp));
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.updateConsentsWaived(getRequest(cp));
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

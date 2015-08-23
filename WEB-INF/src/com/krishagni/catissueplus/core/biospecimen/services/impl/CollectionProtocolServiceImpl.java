@@ -220,6 +220,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueTitle(existingCp, cp, ose);
+			
+			if (!existingCp.isConsentsWaived().equals(cp.isConsentsWaived())) {
+			  ensureConsentTierIsEmpty(existingCp, ose);
+			}
 			ose.checkAndThrow();
 			
 			User oldPI = existingCp.getPrincipalInvestigator();
@@ -249,7 +253,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 	
 	@PlusTransactional
-	public ResponseEvent<CollectionProtocolDetail> updateConsentEnabled(RequestEvent<CollectionProtocolDetail> req) {
+	public ResponseEvent<CollectionProtocolDetail> updateConsentsWaived(RequestEvent<CollectionProtocolDetail> req) {
 		try {
 			CollectionProtocolDetail detail = req.getPayload();
 			CollectionProtocol existingCp = daoFactory.getCollectionProtocolDao().getById(detail.getId());
@@ -262,7 +266,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			if (!existingCp.getConsentTier().isEmpty()) {
 				return ResponseEvent.userError(CpErrorCode.CONSENT_TIER_FOUND, existingCp.getShortTitle());
 			}
-			existingCp.setConsentEnabled(detail.getConsentEnabled());
+			existingCp.setConsentsWaived(detail.getConsentsWaived());
 			
 			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
 		} catch (Exception e) {
@@ -358,6 +362,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			}
 			
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(cp);
+			
+			if (cp.isConsentsWaived()) {
+				return ResponseEvent.userError(CpErrorCode.CONSNETS_WAIVED, cp.getShortTitle());
+			}
 			
 			ConsentTierDetail input = opDetail.getConsentTier();
 			ConsentTier resp = null;			
@@ -839,6 +847,12 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCpByShortTitle(shortTitle);
 		if (cp != null) {
 			ose.addError(CpErrorCode.DUP_SHORT_TITLE);
+		}
+	}
+	
+	private void ensureConsentTierIsEmpty(CollectionProtocol existingCp, OpenSpecimenException ose) {
+		if (!existingCp.getConsentTier().isEmpty()) {
+			ose.addError(CpErrorCode.CONSENT_TIER_FOUND, existingCp.getShortTitle());
 		}
 	}
 	

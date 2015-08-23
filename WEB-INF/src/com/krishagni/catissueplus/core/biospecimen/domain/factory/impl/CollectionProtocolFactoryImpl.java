@@ -65,7 +65,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		cp.setManualPpidEnabled(input.getManualPpidEnabled());
 		cp.setEnrollment(input.getAnticipatedParticipantsCount());
 		cp.setDescriptionURL(input.getDescriptionUrl());
-		cp.setConsentEnabled(input.getConsentEnabled());
+		cp.setConsentsWaived(input.getConsentsWaived());
 
 		setVisitNameFmt(input, cp, ose);
 		setLabelFormats(input, cp, ose);		

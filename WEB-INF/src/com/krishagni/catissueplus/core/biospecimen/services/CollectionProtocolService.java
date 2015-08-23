@@ -33,7 +33,7 @@ public interface CollectionProtocolService {
 	
 	public ResponseEvent<CollectionProtocolDetail> updateCollectionProtocol(RequestEvent<CollectionProtocolDetail> req);
 	
-	public ResponseEvent<CollectionProtocolDetail> updateConsentEnabled(RequestEvent<CollectionProtocolDetail> req);
+	public ResponseEvent<CollectionProtocolDetail> updateConsentsWaived(RequestEvent<CollectionProtocolDetail> req);
 	
 	public ResponseEvent<CollectionProtocolDetail> importCollectionProtocol(RequestEvent<CollectionProtocolDetail> req);
 	

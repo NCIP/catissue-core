@@ -57,7 +57,7 @@
           <span class="os-title" translate="participant.menu.overview">Overview</span>
         </a>
       </li>
-      <li ui-sref-active="active" ng-if="cpr.cpConsentEnabled">
+      <li ui-sref-active="active" ng-if="!cp.consentsWaived">
         <a ui-sref=".consents">
           <i class="fa fa-pencil-square-o"></i>
           <span class="os-title" translate="participant.menu.consents">Consents</span>

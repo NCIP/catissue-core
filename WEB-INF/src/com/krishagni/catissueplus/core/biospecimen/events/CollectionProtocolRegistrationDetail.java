@@ -8,7 +8,6 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
-import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
 
 @JsonSerialize(include=Inclusion.NON_NULL)
 public class CollectionProtocolRegistrationDetail {
@@ -22,8 +21,6 @@ public class CollectionProtocolRegistrationDetail {
 	
 	private String cpShortTitle;
 	
-	private Boolean cpConsentEnabled;
-
 	private String ppid;
 
 	private String barcode;
@@ -79,14 +76,6 @@ public class CollectionProtocolRegistrationDetail {
 
 	public void setCpShortTitle(String cpShortTitle) {
 		this.cpShortTitle = cpShortTitle;
-	}
-
-	public Boolean getCpConsentEnabled() {
-		return cpConsentEnabled;
-	}
-
-	public void setCpConsentEnabled(Boolean cpConsentEnabled) {
-		this.cpConsentEnabled = cpConsentEnabled;
 	}
 
 	public String getPpid() {
@@ -167,7 +156,6 @@ public class CollectionProtocolRegistrationDetail {
 		detail.setCpId(cp.getId());
 		detail.setCpTitle(cp.getTitle());
 		detail.setCpShortTitle(cp.getShortTitle());
-		detail.setCpConsentEnabled(cp.isConsentEnabled());
 		detail.setSpecimenLabelFmt(cp.getSpecimenLabelFormat());
 		detail.setAliquotLabelFmt(cp.getAliquotLabelFormat());
 		detail.setDerivativeLabelFmt(cp.getDerivativeLabelFormat());

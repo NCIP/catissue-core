@@ -32,10 +32,10 @@ angular.module('os.biospecimen.cp.consents', ['os.biospecimen.models'])
       return undefined;
     };
 
-    $scope.updateConsentEnabled = function() {
-      $scope.cp.updateConsentEnabled().then(
+    $scope.updateConsentsWaived = function() {
+      $scope.cp.updateConsentsWaived().then(
         function(result) {
-          Alerts.success("cp.consent_enabled_updated", {enabled: result.consentEnabled});
+          Alerts.success("cp.consents_waived_updated", {waived: result.consentsWaived});
         }
       );
     }

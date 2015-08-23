@@ -53,7 +53,7 @@
 
     <property name="unsignedConsentDocumentURL" column="UNSIGNED_CONSENT_DOC_URL"/>
     
-    <property name="consentEnabled" column="CONSENT_ENABLED"/>
+    <property name="consentsWaived" column="CONSENTS_WAIVED"/>
 
     <set name="consentTier" table="CATISSUE_CONSENT_TIER" inverse="true" cascade="all-delete-orphan" order-by="id">
       <key column="COLL_PROTOCOL_ID"/>
