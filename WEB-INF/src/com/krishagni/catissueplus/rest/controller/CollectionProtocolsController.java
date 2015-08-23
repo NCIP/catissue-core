@@ -184,7 +184,6 @@ public class CollectionProtocolsController {
 		
 		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.updateConsentsWaived(getRequest(cp));
 		resp.throwErrorIfUnsuccessful();
-		
 		return resp.getPayload();
 	}
 	
