@@ -7,7 +7,9 @@
 
     <h3>
       <span ng-if="!cp.id" translate="cp.create_cp_title">Create Collection Protocol</span>
-      <span ng-if="!!cp.id">{{cp.shortTitle}} <span ng-if="!!cp.code">({{cp.code}})</span></span>
+      <span ng-if="!!cp.id">
+        {{cp.shortTitle}} <span ng-if="!!cp.code && global.appProps.codingEnabled">({{cp.code}})</span>
+      </span>
     </h3>
   </div>
 
@@ -34,13 +36,17 @@
 
       <div class="form-group">
         <label class="control-label col-xs-3" translate="cp.short_title">Short Title</label>
-        <div class="col-xs-3">
+        <div class="col-xs-6">
           <input type="text" name="shortTitle" ng-model="cp.shortTitle" 
             class="form-control" placeholder="{{'cp.short_title' | translate}}" ng-maxlength="50" required>
           <div os-field-error field="cpForm.shortTitle"></div>
         </div>
-        <div class="col-xs-3">
-          <input type="text" name="code" ng-model="cp.code" 
+      </div>
+
+      <div class="form-group" ng-if="global.appProps.codingEnabled">
+        <label class="control-label col-xs-3" translate="cp.code">Short Code</label>
+        <div class="col-xs-6">
+          <input type="text" name="code" ng-model="cp.code" maxlength="16"
             class="form-control" placeholder="{{'cp.code' | translate}}">
           <div os-field-error field="cpForm.code"></div>
         </div>

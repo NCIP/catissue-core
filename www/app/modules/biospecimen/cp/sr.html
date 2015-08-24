@@ -4,7 +4,12 @@
       <strong class="key key-sm" translate="srs.name">Name</strong>
       <div class="value value-md">
         <span>{{childReq.name | osNoValue}}</span> 
-        <span ng-if="childReq.code">({{childReq.code}})</span>
+      </div>
+    </li>
+    <li class="item" ng-if="global.appProps.codingEnabled">
+      <strong class="key key-sm" translate="srs.code">Short Code</strong>
+      <div class="value value-md">
+        <span>{{childReq.code | osNoValue}}</span> 
       </div>
     </li>
     <li class="item">
@@ -62,7 +67,7 @@
         <span>{{childReq.concentration}} <span>&#181;g/&#181;l</span></span>
       </div>
     </li>
-    <li class="item" ng-if="childReq.specimenClass != 'Molecular'">
+    <li class="item" ng-if="global.appProps.codingEnabled == (childReq.specimenClass == 'Molecular')">
       <strong class="key key-sm">&nbsp;</strong>
       <div class="value value-md">
         <span>&nbsp;</span>

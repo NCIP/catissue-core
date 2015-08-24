@@ -115,7 +115,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setCode(req.getCode(), derived, ose);
 		derived.setName(req.getName());
 				
-		ose.checkAndThrow();		
+		ose.checkAndThrow();
 		derived.setParentSpecimenRequirement(parent);
 		return derived;
 	}
