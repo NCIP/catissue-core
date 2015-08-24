@@ -3,7 +3,9 @@
     <ul os-breadcrumbs>
       <li> <a ui-sref="cp-list" translate="menu.collection_protocols"></a> </li>
     </ul>
-    <h3>{{cp.title}}</h3>
+    <h3>
+      {{cp.shortTitle}} <span ng-if="cp.code">({{cp.code}})</span>
+    </h3>
 
     <div class="os-btns right">
       <button show-if-allowed="cpResource.updateOpts" class="primary" ui-sref="cp-addedit({cpId:cp.id})">

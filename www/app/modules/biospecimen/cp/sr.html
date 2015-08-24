@@ -3,7 +3,8 @@
     <li class="item">
       <strong class="key key-sm" translate="srs.name">Name</strong>
       <div class="value value-md">
-        <span>{{childReq.name | osNoValue}}
+        <span>{{childReq.name | osNoValue}}</span> 
+        <span ng-if="childReq.code">({{childReq.code}})</span>
       </div>
     </li>
     <li class="item">

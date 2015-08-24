@@ -4,7 +4,9 @@
       <li class="item">
         <strong class="key key-sm" translate="cp.short_title">Short Title:</strong>
         <os-inline-edit editor="stEditor" name="shortTitle" class="value value-md" value="cp.shortTitle">
-          <span ng-if="stEditor.isDisplayMode()">{{stEditor.viewValue}}</span>
+          <span ng-if="stEditor.isDisplayMode()">
+            {{stEditor.viewValue}} <span ng-if="!!cp.code">({{cp.code}})</span>
+          </span>
           <input ng-if="stEditor.isEditMode()" class="form-control" type="text" ng-model="stEditor.editValue">
         </os-inline-edit>
       </li>
