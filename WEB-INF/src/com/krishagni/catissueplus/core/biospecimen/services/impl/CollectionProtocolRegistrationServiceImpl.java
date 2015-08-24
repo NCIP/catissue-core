@@ -211,7 +211,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			AccessCtrlMgr.getInstance().ensureUpdateCprRights(existing);
 			
 			if (existing.getCollectionProtocol().isConsentsWaived()) {
-				return ResponseEvent.userError(CpErrorCode.CONSNETS_WAIVED, existing.getCollectionProtocol().getShortTitle());
+				return ResponseEvent.userError(CpErrorCode.CONSENTS_WAIVED, existing.getCollectionProtocol().getShortTitle());
 			}
 			
 			String newFileName = UUID.randomUUID() + "_" + detail.getFileName(); 

@@ -51,7 +51,7 @@
   <changeSet author="vlonushte" id="Update collection protocol consents waived">
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
-        select count(identifier) from catissue_collection_protocol where consents_waived in (0, 1)
+        select count(identifier) from catissue_collection_protocol where consents_waived is not null
       </sqlCheck>
     </preConditions>
     <sql>

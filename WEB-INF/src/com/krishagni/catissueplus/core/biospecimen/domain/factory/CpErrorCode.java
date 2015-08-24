@@ -49,7 +49,7 @@ public enum CpErrorCode implements ErrorCode {
 	
 	CONSENT_TIER_FOUND,
 	
-	CONSNETS_WAIVED;
+	CONSENTS_WAIVED;
 	
 	@Override
 	public String code() {

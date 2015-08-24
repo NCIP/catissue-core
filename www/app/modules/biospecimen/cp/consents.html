@@ -4,13 +4,13 @@
       <li class="item" ng-hide="!!consents.tiers && consents.tiers.length > 0">
         <strong class="key key-sm" translate="cp.consents_waived">Consents Waived</strong>
         <div class="value value-md">
-          <div class="btn-group">
-            <button type="button" class="btn btn-primary" ng-model="cp.consentsWaived" 
+          <div class="btn-group btn-group-xs">
+            <button type="button" class="btn btn-default" ng-model="cp.consentsWaived" 
               btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false" 
               ng-change="updateConsentsWaived()" translate="common.yes">
               Yes
             </button>
-            <button type="button" class="btn btn-primary" ng-model="cp.consentsWaived" 
+            <button type="button" class="btn btn-default" ng-model="cp.consentsWaived" 
               btn-checkbox btn-checkbox-true="false" btn-checkbox-false="true" 
               ng-change="updateConsentsWaived()" translate="common.no">
               No

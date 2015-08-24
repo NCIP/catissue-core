@@ -263,7 +263,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(existingCp);
 			
-			if (CollectionUtils.isNotEmpty(existingCp.getConsentTier()) {
+			if (CollectionUtils.isNotEmpty(existingCp.getConsentTier())) {
 				return ResponseEvent.userError(CpErrorCode.CONSENT_TIER_FOUND, existingCp.getShortTitle());
 			}
 
@@ -366,7 +366,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(cp);
 			
 			if (cp.isConsentsWaived()) {
-				return ResponseEvent.userError(CpErrorCode.CONSNETS_WAIVED, cp.getShortTitle());
+				return ResponseEvent.userError(CpErrorCode.CONSENTS_WAIVED, cp.getShortTitle());
 			}
 			
 			ConsentTierDetail input = opDetail.getConsentTier();
