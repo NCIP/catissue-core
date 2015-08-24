@@ -51,4 +51,50 @@
       <column name="CODE" type="${text.type}(16)"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Adding consents waived column to collection protocol table">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists 
+          tableName="CATISSUE_COLLECTION_PROTOCOL" 
+          columnName="CONSENTS_WAIVED"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="CONSENTS_WAIVED" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Update collection protocol consents waived">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select count(identifier) from catissue_collection_protocol where consents_waived is not null
+      </sqlCheck>
+    </preConditions>
+    <sql>
+      update
+        catissue_collection_protocol
+      set
+        consents_waived = 1
+      where
+        identifier not in (
+          select
+            distinct coll_protocol_id
+          from
+            catissue_consent_tier
+          where
+            activity_status = 'Active'
+
+          union
+
+          select
+            distinct collection_protocol_id as cpId
+          from
+            catissue_coll_prot_reg
+          where
+            consent_document_name is not null
+        );
+    </sql>
+  </changeSet>
+
 </databaseChangeLog>

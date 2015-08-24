@@ -8,7 +8,6 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
-import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
 
 @JsonSerialize(include=Inclusion.NON_NULL)
 public class CollectionProtocolRegistrationDetail {
@@ -21,7 +20,7 @@ public class CollectionProtocolRegistrationDetail {
 	private String cpTitle;
 	
 	private String cpShortTitle;
-
+	
 	private String ppid;
 
 	private String barcode;

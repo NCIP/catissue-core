@@ -24,6 +24,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ConsentResponsesFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
@@ -208,6 +209,10 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			}
 			
 			AccessCtrlMgr.getInstance().ensureUpdateCprRights(existing);
+			
+			if (existing.getCollectionProtocol().isConsentsWaived()) {
+				return ResponseEvent.userError(CpErrorCode.CONSENTS_WAIVED, existing.getCollectionProtocol().getShortTitle());
+			}
 			
 			String newFileName = UUID.randomUUID() + "_" + detail.getFileName(); 
 			File newFile = new File(getConsentDirPath() + newFileName);

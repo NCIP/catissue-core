@@ -120,7 +120,6 @@
     "date": "Date",
     "start_date": "Start Date",
     "end_date": "End Date",
-    "consents_waived": "Consents Waived",
     "ethics_approval_id": "Ethics Approval ID",
     "ppid_fmt": "PPID Format",
     "ppid_prefix": "Prefix",
@@ -139,6 +138,8 @@
     "visit_names": "Visit Names",
     "spec_labels": "Specimen Labels",
 
+    "consents_waived": "Is participant consent waived?",
+    "consents_waived_updated": "Participant consent {{waived ? 'waived' : 'enabled'}} successfully.",
     "unsigned_consent_url": "Unsigned Consent Form URL",
     "consent_tiers": "Consent Tiers", 
     "add_consent_tier": "Add Statement...",

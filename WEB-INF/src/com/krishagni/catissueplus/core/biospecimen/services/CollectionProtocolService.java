@@ -33,6 +33,8 @@ public interface CollectionProtocolService {
 	
 	public ResponseEvent<CollectionProtocolDetail> updateCollectionProtocol(RequestEvent<CollectionProtocolDetail> req);
 	
+	public ResponseEvent<CollectionProtocolDetail> updateConsentsWaived(RequestEvent<CollectionProtocolDetail> req);
+	
 	public ResponseEvent<CollectionProtocolDetail> importCollectionProtocol(RequestEvent<CollectionProtocolDetail> req);
 	
 	public ResponseEvent<List<DependentEntityDetail>> getCpDependentEntities(RequestEvent<Long> req);
