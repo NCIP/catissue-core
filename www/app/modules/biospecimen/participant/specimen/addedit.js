@@ -18,12 +18,19 @@ angular.module('os.biospecimen.specimen.addedit', [])
       $scope.lateralities = PvManager.getPvs('laterality');
       $scope.pathologyStatuses = PvManager.getPvs('pathology-status');
       $scope.biohazards = PvManager.getPvs('specimen-biohazard');
+
+      if (!specimen.id) {
+        $scope.collectionProcedure = PvManager.getPvs('collection-procedure');
+        $scope.collectionContainer = PvManager.getPvs('collection-container');
+        $scope.receivedQuality =  PvManager.getPvs('received-quality');
+      }
     };
 
     function init() {
       loadPvs();
 
       var currSpecimen = $scope.currSpecimen = angular.copy(specimen);
+
       currSpecimen.visitId = visit.id;
 
       if (currSpecimen.status != 'Collected') {
@@ -47,9 +54,23 @@ angular.module('os.biospecimen.specimen.addedit', [])
           currSpecimen.labelFmt = cpr.derivativeLabelFmt;
         }
       }
+
+      if (!$scope.currSpecimen.id) {
+        $scope.currSpecimen.collectionEvent = {
+          user: $scope.currentUser,
+          time: new Date()
+        };
+
+        $scope.currSpecimen.receivedEvent = {
+          user: $scope.currentUser,
+          time: new Date()
+        };
+      }
+
     }
 
     $scope.saveSpecimen = function() {
+
       $scope.currSpecimen.$saveOrUpdate().then(
         function(result) {
           angular.extend($scope.specimen, result);

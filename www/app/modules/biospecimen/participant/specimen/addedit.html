@@ -186,14 +186,94 @@
             <span translate="specimens.comments" translate="specimens.comments">Comments</span>
           </label>
           <div class="col-xs-6">
-            <textarea ng-model="currSpecimen.comments" class="form-control" 
+            <textarea ng-model="currSpecimen.comments" class="form-control"
               placeholder="{{'specimens.comments' | translate}}" rows="2">
             </textarea>
           </div>
         </div>
+
+        <div ng-if = "!currSpecimen.id">
+          <div class="os-section-divider" translate="specimens.col_event.detail"/>
+
+          <div class="form-group">
+            <label class="col-xs-3 control-label"  translate="specimens.col_event.collector">User and Time</label>
+            <div class="col-xs-3" name="collectionEvent" ng-model="currSpecimen.collectionEvent.user">
+              <os-users ng-model="currSpecimen.collectionEvent.user" placeholder="{{'specimens.col_event.collector' | translate}}"> </os-users>
+            </div>
+            <div os-field-error field="sform.collectionEvent"></div>
+
+            <div class="os-date-time clearfix">
+              <div class="col-xs-2">
+                <input type="text" name="collectionDate" ng-model="currSpecimen.collectionEvent.time" class="form-control"
+                  datepicker-popup="{{global.dateFmt}}" show-button-bar="true"
+                  is-open="collectionDate.isOpen" ng-focus="collectionDate.isOpen=true"
+                  required placeholder="{{'specimens.col_event.date' | translate}}">
+              </div>
+              <div class="col-xs-1 os-date-time-padding">
+                <timepicker class="os-time-no-wheels" ng-model="currSpecimen.collectionEvent.time" show-meridian="false">
+                </timepicker>
+              </div>
+            </div>
+            <div os-field-error field="sform.collectionDate"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-xs-3 control-label" translate="specimens.col_event.collection_container">Collection Container</label>
+            <div class="col-xs-6">
+              <os-select name="collectionContainer" ng-model="currSpecimen.collectionEvent.container" list="collectionContainer"
+                required placeholder="{{'srs.collection_container' | translate}}">
+              </os-select>
+              <div os-field-error field="sform.collectionContainer"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-xs-3 control-label" translate="specimens.col_event.collection_proc">Collection Procedure</label>
+            <div class="col-xs-6">
+              <os-select name="collectionProcedure" ng-model="currSpecimen.collectionEvent.procedure" list="collectionProcedure"
+                required placeholder="{{'srs.collection_proc' | translate}}">
+              </os-select>
+              <div os-field-error field="sform.collectionProcedure"></div>
+            </div>
+          </div>
+
+          <div class="os-section-divider" translate="specimens.rec_event.detail"/>
+
+          <div class="form-group">
+            <label class="col-xs-3 control-label"  translate="specimens.rec_event.receiver">User and Time</label>
+            <div class="col-xs-3" name="receivedEvent" ng-model="currSpecimen.receivedEvent.user">
+              <os-users ng-model="currSpecimen.receivedEvent.user" placeholder="{{'specimens.rec_event.receiver' | translate}}"> </os-users>
+            </div>
+            <div os-field-error field="sform.receivedEvent"></div>
+
+            <div class="os-date-time clearfix">
+              <div class="col-xs-2">
+                <input type="text" name="receiveDate" ng-model="currSpecimen.receivedEvent.time" class="form-control"
+                  datepicker-popup="{{global.dateFmt}}" show-button-bar="true"
+                  is-open="receiveDate.isOpen" ng-focus="receiveDate.isOpen=true"
+                  requiredplaceholder="{{'specimens.rec_event.date' | translate}}">
+              </div>
+              <div class="col-xs-1 os-date-time-padding">
+                <timepicker class="os-time-no-wheels" ng-model="currSpecimen.receivedEvent.time" show-meridian="false">
+                </timepicker>
+              </div>
+            </div>
+            <div os-field-error field="sform.receiveDate"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-xs-3 control-label" translate="specimens.rec_event.received_quality">Received Quality</label>
+            <div class="col-xs-6">
+              <os-select name="receivedQuality" ng-model="currSpecimen.receivedEvent.receivedQuality" list="receivedQuality"
+                required placeholder="{{'specimens.rec_event.received_quality' | translate}}">
+              </os-select>
+              <div os-field-error field="sform.receivedQuality"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="form-group" ng-if="currSpecimen.lineage == 'New'">
+      <div class="form-group" ng-if="currSpecimen.lineage == 'New' && currSpecimen.id">
         <div class="col-xs-offset-3 col-xs-6">
           <a ng-click="$parent.showAdvAttrs = !$parent.showAdvAttrs">
             <span ng-if="!showAdvAttrs" translate="specimens.more_info">More Specimen Information</span>

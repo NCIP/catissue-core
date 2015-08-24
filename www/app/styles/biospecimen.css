@@ -159,6 +159,10 @@
   border-bottom-right-radius: 0px;
 }
 
+.os-date-time .os-date-time-padding {
+  padding-right: 15px !important;
+}
+
 .os-date-time .os-time-no-wheels tr:nth-child(2) td:nth-child(2) {
   display: none;
 }
