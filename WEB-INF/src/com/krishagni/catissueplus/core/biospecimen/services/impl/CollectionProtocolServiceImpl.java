@@ -663,6 +663,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(sr.getCollectionProtocol());
 			SpecimenRequirement partial = srFactory.createForUpdate(sr.getLineage(), detail);
+			if (isSpecimenClassOrTypeChanged(sr, partial)) {
+				ensureSpecimensNotCollected(sr);
+			}
+			
 			sr.update(partial);
 			return ResponseEvent.response(SpecimenRequirementDetail.from(sr));
 		} catch (OpenSpecimenException ose) {
@@ -1019,5 +1023,18 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 				throw OpenSpecimenException.userError(CpErrorCode.DUP_CONSENT, consentTier.getStatement());
 			}
 		}
+	}
+	
+	private void ensureSpecimensNotCollected(SpecimenRequirement sr) {
+		for (Specimen specimen: sr.getSpecimens()) {
+			if (specimen.isCollected()) {
+				throw OpenSpecimenException.userError(SrErrorCode.SPECIMENS_COLLECTED, sr.getName());
+			}
+		}
+	}
+	
+	private boolean isSpecimenClassOrTypeChanged(SpecimenRequirement existingSr, SpecimenRequirement sr) {
+		return !existingSr.getSpecimenClass().equals(sr.getSpecimenClass()) || 
+				!existingSr.getSpecimenType().equals(sr.getSpecimenType());
 	}
 }

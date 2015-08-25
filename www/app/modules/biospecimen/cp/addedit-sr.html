@@ -19,7 +19,7 @@
         <div class="col-xs-8">
           <os-select name="specimenClass" ng-model="sr.specimenClass" 
             on-select="loadSpecimenTypes(sr.specimenClass)" list="specimenClasses"
-            placeholder="{{'srs.specimen_class' | translate}}" required ng-disabled="!!sr.id">
+            placeholder="{{'srs.specimen_class' | translate}}" required ng-disabled="sr.specimensCollected">
           </os-select>
           <div os-field-error field="srForm.specimenClass"></div>
         </div>
@@ -28,7 +28,7 @@
         <label class="control-label col-xs-4" translate="srs.specimen_type">Specimen Type</label>
         <div class="col-xs-8">
           <os-select name="specimenType" ng-model="sr.type" list="specimenTypes"
-            placeholder="{{'srs.specimen_type' | translate}}" required ng-disabled="!!sr.id">
+            placeholder="{{'srs.specimen_type' | translate}}" required ng-disabled="sr.specimensCollected">
           </os-select>
           <div os-field-error field="srForm.specimenType"></div>
         </div>

@@ -55,7 +55,9 @@ public enum SrErrorCode implements ErrorCode {
 	
 	INVALID_LABEL_FMT,
 	
-	CPE_REQUIRED
+	CPE_REQUIRED,
+	
+	SPECIMENS_COLLECTED
 	
 	;
 
