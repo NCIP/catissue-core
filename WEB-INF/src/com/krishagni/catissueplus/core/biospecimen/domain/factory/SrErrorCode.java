@@ -57,7 +57,7 @@ public enum SrErrorCode implements ErrorCode {
 	
 	CPE_REQUIRED,
 	
-	SPECIMENS_COLLECTED
+	CANNOT_CHANGE_CLASS_OR_TYPE
 	
 	;
 

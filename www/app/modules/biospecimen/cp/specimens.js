@@ -78,7 +78,10 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       }
 
       $scope.specimenClasses = PvManager.getPvs('specimen-class');
-      $scope.specimenTypes = $scope.specimenTypes || [];
+      $scope.specimenTypes = [];
+      if (!!$scope.sr.specimenClass) {
+        $scope.loadSpecimenTypes($scope.sr.specimenClass);
+      }
 
       $scope.$watch('sr.specimenClass', function(newVal, oldVal) {
         if (!newVal || newVal == oldVal || !oldVal) {
@@ -115,6 +118,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     };
 
     $scope.showEditSr = function(sr) {
+      $scope.specimensCount = 0;
       $scope.sr = angular.copy(sr);
       delete $scope.sr.depth;
       delete $scope.sr.hasChildren;
@@ -134,9 +138,11 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
         $scope.view = 'addedit_sr';
       }
 
-      if (!!$scope.sr.specimenClass) {
-        $scope.loadSpecimenTypes($scope.sr.specimenClass);
-      }
+      $scope.sr.getSpecimensCount().then(
+        function(count) {
+          $scope.specimensCount = count;
+        }
+      );
 
       loadPvs();
     };

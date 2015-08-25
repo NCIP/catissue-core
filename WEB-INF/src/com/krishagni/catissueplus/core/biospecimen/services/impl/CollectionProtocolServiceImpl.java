@@ -721,6 +721,25 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	
 	@Override
 	@PlusTransactional
+	public ResponseEvent<Integer> getSrSpecimensCount(RequestEvent<Long> req) {
+		try {
+			Long srId = req.getPayload();
+			SpecimenRequirement sr = daoFactory.getSpecimenRequirementDao().getById(srId);
+			if (sr == null) {
+				throw OpenSpecimenException.userError(SrErrorCode.NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(
+					daoFactory.getSpecimenRequirementDao().getSpecimensCount(srId));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
 	public ResponseEvent<CpWorkflowCfgDetail> getWorkflows(RequestEvent<Long> req) {
 		Long cpId = req.getPayload();
 		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(cpId);
@@ -1026,10 +1045,9 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 	
 	private void ensureSpecimensNotCollected(SpecimenRequirement sr) {
-		for (Specimen specimen: sr.getSpecimens()) {
-			if (specimen.isCollected()) {
-				throw OpenSpecimenException.userError(SrErrorCode.SPECIMENS_COLLECTED, sr.getName());
-			}
+		int count = daoFactory.getSpecimenRequirementDao().getSpecimensCount(sr.getId());
+		if (count > 0) {
+			throw OpenSpecimenException.userError(SrErrorCode.CANNOT_CHANGE_CLASS_OR_TYPE);
 		}
 	}
 	

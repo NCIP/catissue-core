@@ -9,7 +9,6 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
-import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
@@ -54,9 +53,7 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 	private Long eventId;
 	
 	private List<SpecimenRequirementDetail> children;
-	
-	private Boolean specimensCollected = false;
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -217,14 +214,6 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		this.children = children;
 	}
 
-	public Boolean getSpecimensCollected() {
-		return specimensCollected;
-	}
-
-	public void setSpecimensCollected(Boolean specimensCollected) {
-		this.specimensCollected = specimensCollected;
-	}
-
 	@Override
 	public int compareTo(SpecimenRequirementDetail other) {
 		if (sortOrder != null && other.sortOrder != null) {
@@ -294,16 +283,9 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		detail.setLabelFmt(sr.getLabelFormat());
 		detail.setSortOrder(sr.getSortOrder());
 		detail.setEventId(sr.getCollectionProtocolEvent().getId());
- 		
+		
 		if (incChildren) {
 			detail.setChildren(from(sr.getChildSpecimenRequirements()));
-		}
-		
-		for (Specimen specimen: sr.getSpecimens()) {
-			if (specimen.isCollected()) {
-				detail.setSpecimensCollected(true);
-				break;
-			}
 		}
 		
 		return detail;

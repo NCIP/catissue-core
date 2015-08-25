@@ -6,7 +6,7 @@
           <os-select name="specimenClass" on-select="loadSpecimenTypes(childReq.specimenClass)" 
             ng-model="childReq.specimenClass" list="specimenClasses"
             os-md-input placeholder="{{'srs.specimen_class' | translate}}" 
-            required ng-disabled="childReq.specimensCollected">
+            required ng-disabled="specimensCount > 0">
           </os-select>
           <div os-field-error field="derivativeForm.specimenClass"></div>
         </div>
@@ -16,7 +16,7 @@
         <div class="form-group">
           <os-select name="specimenType" ng-model="childReq.type" list="specimenTypes"
             os-md-input placeholder="{{'srs.specimen_type' | translate}}" 
-            required ng-disabled="childReq.specimensCollected">
+            required ng-disabled="specimensCount > 0">
           </os-select>
           <div os-field-error field="derivativeForm.specimenType"></div>
         </div>

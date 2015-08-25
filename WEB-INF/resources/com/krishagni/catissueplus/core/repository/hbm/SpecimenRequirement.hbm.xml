@@ -91,6 +91,17 @@
       where
         sr.code = :code
     </query>
+    
+    <query name="getSpecimensCount">
+      select 
+        count(spec.id) 
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement sr
+        join sr.specimens spec
+      where
+        spec.collectionStatus = 'Collected'
+        and sr.id = :srId
+    </query>
   </class>
 </hibernate-mapping>
 
