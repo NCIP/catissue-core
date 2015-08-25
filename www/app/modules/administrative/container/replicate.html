@@ -124,8 +124,7 @@
           <div class="col-xs-4">
             <div class="clearfix os-storage-position">
               <div class="os-col-60">
-                <os-select ng-model="dest.parentContainerId" list="dest.containers" 
-                  display-prop="name" select-prop="id" 
+                <os-select ng-model="dest.parentContainerName" list="dest.containers"
                   on-select="onContainerSelect(dest)" refresh="searchContainers" refresh-args="dest">
                 </os-select>
               </div>
@@ -137,7 +136,7 @@
               </div>
               <div class="os-col-10">
                 <button class="btn btn-default" ng-click="openPositionSelector(dest)" 
-                  ng-disabled="!dest.parentContainerId">
+                  ng-disabled="!dest.parentContainerName">
                   <span class="fa fa-search"></span>
                 </button>
               </div>
