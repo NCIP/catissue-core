@@ -19,7 +19,7 @@ angular.module('os.biospecimen.specimen.addedit', [])
       $scope.pathologyStatuses = PvManager.getPvs('pathology-status');
       $scope.biohazards = PvManager.getPvs('specimen-biohazard');
 
-      if (!specimen.id) {
+      if (!specimen.id && !specimen.reqId) {
         $scope.collectionProcedure = PvManager.getPvs('collection-procedure');
         $scope.collectionContainer = PvManager.getPvs('collection-container');
         $scope.receivedQuality =  PvManager.getPvs('received-quality');
@@ -55,7 +55,7 @@ angular.module('os.biospecimen.specimen.addedit', [])
         }
       }
 
-      if (!$scope.currSpecimen.id) {
+      if (!$scope.currSpecimen.id && !$scope.currSpecimen.reqId) {
         $scope.currSpecimen.collectionEvent = {
           user: $scope.currentUser,
           time: new Date()

@@ -435,16 +435,16 @@
     "specimen_closed": "Specimen is closed successfully",
 
     "col_event": {
-      "detail": "COLLECTION DETAILS",
-      "collector": "User and Time",
+      "title": "COLLECTION DETAILS",
+      "user_time": "User and Time",
       "date": "Collection Date",
       "collection_container": "Container",
       "collection_proc": "Procedure"
     },
 
-    "rec_event": {
-      "detail": "RECEIVED DETAILS",
-      "receiver": "User and Time",
+    "recv_event": {
+      "title": "RECEIVED DETAILS",
+      "user_time": "User and Time",
       "date": "Receive Date",
       "received_quality": "Quality"
     },

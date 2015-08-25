@@ -164,7 +164,12 @@
 }
 
 .os-date-time .os-time-no-wheels tr:nth-child(2) td:nth-child(2) {
-  display: none;
+  display: block;
+  border-top: 1px solid rgb(204, 204, 204);
+  height: 34px;
+  border-bottom: 1px solid rgb(204, 204, 204);
+  padding-top: 5px;
+  box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px inset;
 }
 
 .os-date-time .os-time-no-wheels tr:nth-child(2) td:nth-child(3) input.form-control {
