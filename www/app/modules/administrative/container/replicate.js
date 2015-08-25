@@ -22,10 +22,11 @@ angular.module('os.administrative.container.replicate', ['os.administrative.mode
     }
 
     function addDest() {
+      var parentContainerId = !!container.storageLocation ? container.storageLocation.id : undefined;
       $scope.destinations.push({
         name: '',
         siteName: container.siteName, 
-        parentContainerId: container.parentContainerId,
+        parentContainerId: parentContainerId,
         posOne: '', 
         posTwo: ''
       });
