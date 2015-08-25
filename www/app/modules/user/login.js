@@ -49,13 +49,13 @@ angular.module('openspecimen')
         } else {
           $state.go('home');
         }
-        return;
+        //return;
       }
 
-      loadPvs();
+      loadDomains();
     }
 
-    function loadPvs() {
+    function loadDomains() {
       $scope.domains = [];
       AuthDomain.getDomainNames().then(
         function(domains) {
