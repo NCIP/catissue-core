@@ -142,11 +142,8 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
         return;
       }
 
-      Specimen.listByLabels(labels).then(
-        function(specimens) {
-          if (labels.length != specimens.length) {
-            Alerts.error('orders.specimens_not_found_or_no_access');
-          }
+      $scope.order.addSpecimen(labels).then(
+        function (specimens) {
           order.orderItems = order.orderItems.concat(getOrderItems(specimens));
           $scope.input.labelText = '';
         }

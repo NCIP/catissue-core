@@ -3,8 +3,10 @@ package com.krishagni.catissueplus.core.administrative.services;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderItemDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.QueryDataExportResult;
@@ -19,4 +21,6 @@ public interface DistributionOrderService {
 	public ResponseEvent<DistributionOrderDetail> updateOrder(RequestEvent<DistributionOrderDetail> req);
 	
 	public ResponseEvent<QueryDataExportResult> exportReport(RequestEvent<Long> req);
+	
+	public ResponseEvent<List<SpecimenInfo>> getSpecimens(RequestEvent<List<DistributionOrderItemDetail>> req);
 }

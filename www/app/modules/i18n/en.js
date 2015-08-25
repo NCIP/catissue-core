@@ -593,7 +593,6 @@
     "sites": "Sites",
     "receiving_institute": "Receiving Institute",
     "receiving_site": "Receiving Site",
-    "distributing_institute": "Distributing Institute",
     "distributing_sites": "Distributing Sites",
     "order_report_query": "Order Report Query",
     "closed": "Closed",

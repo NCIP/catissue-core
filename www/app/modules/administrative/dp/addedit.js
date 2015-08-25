@@ -7,7 +7,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       $scope.distributionProtocol = distributionProtocol;
       $scope.piFilterOpts = {institute: distributionProtocol.instituteName};
       $scope.institutes = [];
-      $scope.instituteList = [];
+      $scope.instituteNames = [];
       $scope.sites = [];
       $scope.queryList = [];
       $scope.instSiteMap = {};
@@ -27,8 +27,8 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     }
 
     function loadDistInstSites(institutes) {
-      $scope.instituteList = prepareInstList(institutes);
-      $scope.distSites = prepareDistSites();
+      $scope.instituteNames = getInstituteNames(institutes);
+      $scope.distSites = getInstDistSitesMap();
       $scope.instSiteMap = prepareInstSiteMap(institutes);
       angular.forEach($scope.distSites, function (site, index) {
         getSites(site.instituteName).then(
@@ -37,7 +37,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
           }
         );
       });
-      $scope.instituteList = filterInstList($scope.institutes, $scope.distSites);
+      $scope.instituteNames = filterInstituteNames($scope.institutes, $scope.distSites);
     }
     
     function loadQueries(searchTerm) {
@@ -63,13 +63,24 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     
     $scope.onDistInstSelect = function (index) {
       var instituteName = $scope.distSites[index].instituteName;
-      getSites(instituteName).then(
-        function (sites) {
-          $scope.instSiteMap[instituteName] = sites;
-        }
-      );
+      if ($scope.instSiteMap[instituteName].length == 0) {
+        getSites(instituteName).then(
+          function (sites) {
+            $scope.instSiteMap[instituteName] = sites;
+          }
+        );
+      }
+      
       $scope.distSites[index].sites = [];
-      $scope.instituteList = filterInstList($scope.institutes, $scope.distSites);
+      $scope.instituteNames = filterInstituteNames($scope.institutes, $scope.distSites);
+    }
+    
+    $scope.removeDistSite = function (index) {
+      $scope.distSites.splice(index,1);
+      $scope.instituteNames = filterInstituteNames($scope.institutes, $scope.distSites);
+      if ($scope.distSites.length === 0) {
+        $scope.distSites = addDistSite($scope.distSites);
+      }
     }
     
     $scope.addNewDistSite = function () {
@@ -77,33 +88,29 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     }
     
     function addDistSite (distSites) {
-      if (typeof distSites === 'undefined') {
+      if (!distSites) {
         distSites = [];
       }
-      distSites.push({instituteName: '', sites: []});
       
+      distSites.push({instituteName: '', sites: []});
       return distSites;
     }
     
-    $scope.removeDistSite = function (index) {
-      $scope.distSites.splice(index,1);
-      $scope.instituteList = filterInstList($scope.institutes, $scope.distSites);
-      if ($scope.distSites.length === 0) {
-        $scope.distSites = addDistSite($scope.distSites);
-      }
-    }
     
-    function prepareDistSites () {
+    
+    function getInstDistSitesMap () {
       var distributingSites = $scope.distributionProtocol.distributingSites;
       var distSites = [];
       angular.forEach(distributingSites, function (site) {
         var isInstPresent = false;
-        angular.forEach(distSites, function (instSite) {
-          if (instSite.instituteName === site.instituteName) {
-            instSite.sites.push(site.name);
+        for (var i = 0; i < distSites.length; i++) {
+          if (distSites[i].instituteName === site.instituteName) {
+            distSites[i].sites.push(site.name);
             isInstPresent = true;
+            break;
           }
-        });
+        }
+        
         if (!isInstPresent) {
           distSites.push({instituteName: site.instituteName, sites: [site.name]});
         }
@@ -113,17 +120,15 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
         distSites = addDistSite(distSites);
       }
       
-      
       return distSites;
     }
     
-    function prepareInstList (institutes) {
-      var instList = [];
-      angular.forEach(institutes, function (inst) {
-        instList.push(inst.name);
-      });
-      
-      return instList;
+    function getInstituteNames (institutes) {
+      return institutes.map(
+        function (institute) {
+          return institute.id;
+        }
+      );
     }
     
     function prepareInstSiteMap (institutes) {
@@ -135,15 +140,17 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       return instSiteMap;
     }
     
-    function filterInstList (include, exclude) {
+    function filterInstituteNames (institutes, selectedInst) {
       var newList = [];
-      angular.forEach(include, function (inst) {
+      angular.forEach(institutes, function (inst) {
         var isPresent = false;
-        angular.forEach(exclude, function (site) {
-          if (site.instituteName === inst.name) {
+        for (var i =0; i < selectedInst.length; i++) {
+          if (selectedInst[i].instituteName === inst.name) {
             isPresent = true;
+            break;
           }
-        });
+        }
+        
         if (!isPresent) {
           newList.push(inst.name);
         }
@@ -181,7 +188,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       var sites = [];
       angular.forEach(distSites, function (site) {
         angular.forEach(site.sites, function (siteName) {
-          sites.push({instituteName: site.instituteName, name: siteName});
+          sites.push({name: siteName});
         });
       });
       dp.distributingSites = sites;

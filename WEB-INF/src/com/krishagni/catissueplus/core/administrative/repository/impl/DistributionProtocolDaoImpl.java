@@ -120,7 +120,7 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 	
 	private void addDistSitesCondition(Criteria query, DpListCriteria crit) {
 		Set<Long> siteIds = crit.siteIds();
-		if (siteIds == null) {
+		if (CollectionUtils.isEmpty(siteIds)) {
 			return;
 		}
 		

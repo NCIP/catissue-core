@@ -179,7 +179,8 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 		ProjectionList projs = Projections.projectionList();
 		query.setProjection(projs);
 		
-		projs.add(Projections.property("id"));
+		//added as duplicate entries come due to distributing site lists
+		projs.add(Projections.distinct(Projections.property("id")));
 		projs.add(Projections.property("name"));
 		projs.add(Projections.property("creationDate"));
 		projs.add(Projections.property("executionDate"));

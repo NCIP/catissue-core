@@ -2,7 +2,9 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,17 +18,21 @@ import org.springframework.context.MessageSource;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder.Status;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem;
-import com.krishagni.catissueplus.core.administrative.domain.Site;
-import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderFactory;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderItemDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
+import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
+import com.krishagni.catissueplus.core.common.errors.CommonErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -125,7 +131,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			DistributionOrder order = distributionFactory.createDistributionOrder(detail, Status.PENDING);
 			
 			AccessCtrlMgr.getInstance().ensureCreateDistributionOrderRights(order);
-			ensureSpecimensValidity(order);						
+			ensureSpecimensValidity(order, null);
 			ensureUniqueConstraints(order);
 			
 			Status inputStatus = Status.valueOf(detail.getStatus());
@@ -158,7 +164,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			
 			DistributionOrder newOrder = distributionFactory.createDistributionOrder(detail, null);
 			AccessCtrlMgr.getInstance().ensureUpdateDistributionOrderRights(newOrder);
-			ensureSpecimensValidity(newOrder);
+			ensureSpecimensValidity(newOrder, null);
 			if (!existingOrder.getName().equals(newOrder.getName())) {
 				ensureUniqueConstraints(newOrder);
 			}
@@ -197,6 +203,56 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			return ResponseEvent.serverError(e);
 		}
 	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<SpecimenInfo>> getSpecimens(RequestEvent<List<DistributionOrderItemDetail>> req) {
+		try {
+			List<DistributionOrderItemDetail> itemDetails = req.getPayload();
+			if (CollectionUtils.isEmpty(itemDetails)) {
+				return ResponseEvent.userError(CommonErrorCode.INVALID_REQUEST);
+			}
+			
+			Long orderId = itemDetails.get(0).getId();
+			List<String> specimenLabels = new ArrayList<String>();
+			for (DistributionOrderItemDetail detail: itemDetails) {
+				specimenLabels.add(detail.getSpecimen().getLabel());
+			}
+			
+			DistributionOrder existingOrder = daoFactory.getDistributionOrderDao().getById(orderId);
+			if (existingOrder == null) {
+				return ResponseEvent.userError(DistributionOrderErrorCode.NOT_FOUND);
+			}
+			
+			if (existingOrder.getStatus().compareTo(Status.EXECUTED) == 0) {
+				return ResponseEvent.userError(DistributionOrderErrorCode.ALREADY_EXECUTED);
+			}
+			
+			List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
+			if (siteCpPairs != null && siteCpPairs.isEmpty()) {
+				return ResponseEvent.response(Collections.<SpecimenInfo>emptyList());
+			}
+			
+			SpecimenListCriteria crit = new SpecimenListCriteria()
+				.labels(specimenLabels)
+				.siteCps(siteCpPairs);
+			
+			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimens(crit);
+			Set<Long> specimenIds = new HashSet<Long>();
+			for (Specimen specimen: specimens) {
+				specimenIds.add(specimen.getId());
+			}
+			
+			ensureSpecimensValidity(existingOrder, specimenIds);
+			List<SpecimenInfo> result = SpecimenInfo.from(specimens);
+			SpecimenInfo.orderByLabels(result, specimenLabels);
+			return ResponseEvent.response(result);
+		} catch(OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
 		
 	private void ensureUniqueConstraints(DistributionOrder distribution) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);		
@@ -207,44 +263,38 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 		ose.checkAndThrow();
 	}
 	
-	private void ensureSpecimensValidity(DistributionOrder order) {		
-		Set<Long> specimenIds = new HashSet<Long>();
-		for (DistributionOrderItem orderItem : order.getOrderItems()) {
-			specimenIds.add(orderItem.getSpecimen().getId());
+	private void ensureSpecimensValidity(DistributionOrder order, Set<Long> specimenIds) {
+		if (CollectionUtils.isEmpty(specimenIds)) {
+			specimenIds = new HashSet<Long>();
+			for (DistributionOrderItem orderItem : order.getOrderItems()) {
+				specimenIds.add(orderItem.getSpecimen().getId());
+			}
+			
+			if (CollectionUtils.isEmpty(specimenIds)) {
+				throw OpenSpecimenException.userError(DistributionOrderErrorCode.NO_SPECIMENS_TO_DIST);
+			}
 		}
 		
-		if (specimenIds.isEmpty()) {
-			throw OpenSpecimenException.userError(DistributionOrderErrorCode.NO_SPECIMENS_TO_DIST);
-		}
-		
-		Map<String, Long> specimenInstituteIdMap = 
-				daoFactory.getSpecimenDao().getSpecimenInstitutes(specimenIds);
-		
-		StringBuilder invalidSpecimens = new StringBuilder();
-		Set<Site> sites = order.getDistributionProtocol().getDistributingSites();
-		Set<Long> instituteIds = new HashSet<Long>();
-		for (Site site: sites) {
-			instituteIds.add(site.getInstitute().getId());
-		}
-		for (Map.Entry<String, Long> specimenInstituteId : specimenInstituteIdMap.entrySet()) {
+		Map<String, Set<Long>> specimenSiteIdsMap = daoFactory.getSpecimenDao().getSpecimenSites(specimenIds);
+		Set<Long> orderAllowedIds = AccessCtrlMgr.getInstance().getDistributionOrderAllowedSites(order);
+		for (Map.Entry<String, Set<Long>> specimenSitesMapEntry: specimenSiteIdsMap.entrySet()) {
 			boolean isPresent = false;
-			for (Long id: instituteIds) {
-				if (specimenInstituteId.getValue().equals(id)) {
-					isPresent = true;
+			for (Long specimenSiteId: specimenSitesMapEntry.getValue()) {
+				for (Long orderSiteId: orderAllowedIds) {
+					if (orderSiteId.equals(specimenSiteId)) {
+						isPresent = true;
+						break;
+					}
+				}
+				
+				if (isPresent) {
 					break;
 				}
 			}
+			
 			if (!isPresent) {
-				invalidSpecimens.append(specimenInstituteId.getKey()).append(", ");
+				throw OpenSpecimenException.userError(DistributionOrderErrorCode.INVALID_SPECIMENS_FOR_DP);
 			}
-		}
-		
-		int labelsLen = invalidSpecimens.length();
-		if (labelsLen > 0) {
-			throw OpenSpecimenException.userError(
-					DistributionOrderErrorCode.INVALID_SPECIMENS_FOR_DP, 
-					invalidSpecimens.delete(labelsLen - 2, labelsLen),
-					order.getInstitute().getName());
 		}
 	}
 	

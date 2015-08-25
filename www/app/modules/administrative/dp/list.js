@@ -32,7 +32,7 @@ angular.module('os.administrative.dp.list', ['os.administrative.models'])
     };
     
     function loadActivityStatuses () {
-      $scope.activityStatuses = PvManager.loadPvs('activity-status').then(
+      PvManager.loadPvs('activity-status').then(
         function (result) {
           $scope.activityStatuses = [].concat(result);
           var idx = $scope.activityStatuses.indexOf('Disabled');

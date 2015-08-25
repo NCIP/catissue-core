@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderItemDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.QueryDataExportResult;
@@ -131,6 +134,32 @@ public class DistributionOrderController {
 	@ResponseBody
 	public QueryDataExportResult exportDistributionReport(@PathVariable("id") Long orderId) {
 		ResponseEvent<QueryDataExportResult> resp = distributionService.exportReport(new RequestEvent<Long>(orderId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/specimens")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<SpecimenInfo> getSpecimens(
+			@PathVariable("id")
+			Long orderId,
+			
+			@RequestParam(value = "labels", required = true)
+			List<String> labels) {
+		
+		List<DistributionOrderItemDetail> details = new ArrayList<DistributionOrderItemDetail>();
+		for (String label: labels) {
+			DistributionOrderItemDetail orderItem = new DistributionOrderItemDetail();
+			orderItem.setId(orderId);
+			SpecimenInfo specimen = new SpecimenInfo();
+			specimen.setLabel(label);
+			orderItem.setSpecimen(specimen);
+			details.add(orderItem);
+		}
+		
+		RequestEvent<List<DistributionOrderItemDetail>> req = new RequestEvent<List<DistributionOrderItemDetail>>(details);
+		ResponseEvent<List<SpecimenInfo>> resp = distributionService.getSpecimens(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

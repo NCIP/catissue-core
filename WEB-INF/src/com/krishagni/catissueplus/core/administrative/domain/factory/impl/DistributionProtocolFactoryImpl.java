@@ -112,7 +112,8 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 			ose.addError(SiteErrorCode.NOT_FOUND);
 			return;
 		}
-		if (!defReceivingSite.getInstitute().getName().equals(detail.getInstituteName())) {
+		
+		if (!defReceivingSite.getInstitute().equals(dp.getInstitute())) {
 			ose.addError(SiteErrorCode.INVALID_SITE_INSTITUTE);
 			return;
 		}
@@ -179,8 +180,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		}
 		
 		List<String> distSites = new ArrayList<String>();
-		List<SiteDetail> sitesDetail = detail.getDistributingSites();
-		for (SiteDetail site: sitesDetail) {
+		for (SiteDetail site: detail.getDistributingSites()) {
 			distSites.add(site.getName());
 		}
 		

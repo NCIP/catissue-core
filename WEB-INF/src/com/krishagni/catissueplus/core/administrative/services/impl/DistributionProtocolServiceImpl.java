@@ -75,19 +75,18 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<DistributionProtocolDetail> getDistributionProtocol(RequestEvent<Long> req) {
 		try {
-			Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSites();
-			if (siteIds != null && CollectionUtils.isEmpty(siteIds)) {
-				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
-			}
-			
 			Long protocolId = req.getPayload();
 			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(protocolId);
 			if (existing == null) {
 				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
 			}
 			
+			AccessCtrlMgr.getInstance().ensureReadDPRights(existing);
 			return ResponseEvent.response(DistributionProtocolDetail.from(existing));
-		} catch (Exception e) {
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		}
+		catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
@@ -196,7 +195,12 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 				return ResponseEvent.userError(ActivityStatusErrorCode.INVALID);
 			}
 			
-			existing.setActivityStatus(status);
+			if (status.equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
+				existing.delete();
+			}
+			else {
+				existing.setActivityStatus(status);
+			}
 			
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(existing);
 			return ResponseEvent.response(DistributionProtocolDetail.from(existing));
