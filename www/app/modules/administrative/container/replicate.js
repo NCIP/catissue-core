@@ -34,17 +34,17 @@ angular.module('os.administrative.container.replicate', ['os.administrative.mode
 
     function setSiteContainers(dest) {
       if (!siteContainersMap[dest.siteName]) {
-        siteContainersMap[dest.siteName] = Container.listForSite(dest.siteName, true, true);
+        siteContainersMap[dest.siteName] = Container.listForSite(dest.siteName, true, true).then(getContainerNames);
       }
 
       siteContainersMap[dest.siteName].then(
         function(containers) {
-          dest.containers = getContainerNameList(containers);
+          dest.containers = containers;
         }
       );
     }
 
-    function getContainerNameList(containers) {
+    function getContainerNames(containers) {
       return containers.map(
         function(container) {
           return container.name;
@@ -73,7 +73,7 @@ angular.module('os.administrative.container.replicate', ['os.administrative.mode
       } else {
         Container.listForSite(dest.siteName, true, true, name).then(
           function(containers) {
-            dest.containers = getContainerNameList(containers);
+            dest.containers = getContainerNames(containers);
           }
         );
       }
