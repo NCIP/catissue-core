@@ -104,18 +104,15 @@
 
       <div class="form-group" ng-if="currSpecimen.lineage != 'New'">
         <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
-        <div class="col-xs-6">
-          <div class="os-date-time">
-            <div class="os-col-85">
-              <input type="text" name="createdOn" ng-model="currSpecimen.createdOn" class="form-control"
-                datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
-                is-open="createdOn.isOpen" ng-focus="createdOn.isOpen=true"
-                required placeholder="{{'specimens.created_on' | translate}}">
-            </div>
-            <div class="os-col-15">
-              <timepicker class="os-time-no-wheels"  ng-model="currSpecimen.createdOn" show-meridian="false">
-              </timepicker>
-            </div>
+        <div class="os-date-time clearfix">
+          <div class="col-xs-4 input">
+            <os-date-picker name="createdOn" date="currSpecimen.createdOn"
+              placeholder="{{'specimens.created_on' | translate}}" required>
+            </os-date-picker>
+          </div>
+          <div class="col-xs-2">
+            <timepicker ng-model="currSpecimen.createdOn" class="os-time-no-wheels" show-meridian="false">
+            </timepicker>
           </div>
           <div os-field-error field="sform.createdOn"></div>
         </div>
@@ -186,14 +183,96 @@
             <span translate="specimens.comments" translate="specimens.comments">Comments</span>
           </label>
           <div class="col-xs-6">
-            <textarea ng-model="currSpecimen.comments" class="form-control" 
+            <textarea ng-model="currSpecimen.comments" class="form-control"
               placeholder="{{'specimens.comments' | translate}}" rows="2">
             </textarea>
           </div>
         </div>
+
+        <div ng-if = "!currSpecimen.id && !currSpecimen.reqId">
+          <div class="os-section-divider" translate="specimens.col_event.title"/>
+
+          <div class="form-group">
+            <label class="col-xs-3 control-label"  translate="specimens.col_event.user_time">User and Time</label>
+            <div class="col-xs-3">
+              <os-users  name="collector" ng-model="currSpecimen.collectionEvent.user" 
+                placeholder="{{'specimens.col_event.user' | translate}}" required> 
+              </os-users>
+              <div os-field-error field="sform.collector"></div>
+            </div>
+
+            <div class="os-date-time clearfix">
+              <div class="col-xs-2 input">
+                <os-date-picker name="collectionDate" date="currSpecimen.collectionEvent.time"
+                  placeholder="{{'specimens.col_event.date' | translate}}" required>
+                </os-date-picker>
+              </div>
+              <div class="col-xs-1 os-timepicker">
+                <timepicker ng-model="currSpecimen.collectionEvent.time" class="os-time-no-wheels" show-meridian="false">
+                </timepicker>
+              </div>
+              <div os-field-error field="sform.collectionDate"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-xs-3 control-label" translate="specimens.col_event.collection_container">Collection Container</label>
+            <div class="col-xs-6">
+              <os-select name="collectionContainer" ng-model="currSpecimen.collectionEvent.container" list="collectionContainers"
+                placeholder="{{'specimens.col_event.collection_container' | translate}}" required>
+              </os-select>
+              <div os-field-error field="sform.collectionContainer"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-xs-3 control-label" translate="specimens.col_event.collection_proc">Collection Procedure</label>
+            <div class="col-xs-6">
+              <os-select name="collectionProcedure" ng-model="currSpecimen.collectionEvent.procedure" list="collectionProcedures"
+                placeholder="{{'specimens.col_event.collection_proc' | translate}}" required>
+              </os-select>
+              <div os-field-error field="sform.collectionProcedure"></div>
+            </div>
+          </div>
+
+          <div class="os-section-divider" translate="specimens.recv_event.title"/>
+
+          <div class="form-group">
+            <label class="col-xs-3 control-label"  translate="specimens.recv_event.user">User and Time</label>
+            <div class="col-xs-3">
+              <os-users name="receiver" ng-model="currSpecimen.receivedEvent.user" 
+                placeholder="{{'specimens.recv_event.user_time' | translate}}" required> 
+              </os-users>
+              <div os-field-error field="sform.receiver"></div>
+            </div>
+
+            <div class="os-date-time clearfix">
+              <div class="col-xs-2 input">
+                <os-date-picker name="receiveDate" date="currSpecimen.receivedEvent.time"
+                  placeholder="{{'specimens.recv_event.date' | translate}}" required>
+                </os-date-picker>
+              </div>
+              <div class="col-xs-1 os-timepicker">
+                <timepicker ng-model="currSpecimen.receivedEvent.time" class="os-time-no-wheels"show-meridian="false">
+                </timepicker>
+              </div>
+              <div os-field-error field="sform.receiveDate"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-xs-3 control-label" translate="specimens.recv_event.received_quality">Received Quality</label>
+            <div class="col-xs-6">
+              <os-select name="receivedQuality" ng-model="currSpecimen.receivedEvent.receivedQuality" list="receivedQualities"
+                placeholder="{{'specimens.recv_event.received_quality' | translate}}" required>
+              </os-select>
+              <div os-field-error field="sform.receivedQuality"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="form-group" ng-if="currSpecimen.lineage == 'New'">
+      <div class="form-group" ng-if="currSpecimen.lineage == 'New' && (currSpecimen.reqId || currSpecimen.id)">
         <div class="col-xs-offset-3 col-xs-6">
           <a ng-click="$parent.showAdvAttrs = !$parent.showAdvAttrs">
             <span ng-if="!showAdvAttrs" translate="specimens.more_info">More Specimen Information</span>

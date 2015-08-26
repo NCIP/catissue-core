@@ -436,6 +436,23 @@
     "specimens_closed": "Selected specimens are closed successfully",
     "specimen_closed": "Specimen is closed successfully",
 
+    "col_event": {
+      "title": "COLLECTION DETAILS",
+      "user_time": "User and Time",
+      "user": "Collector",
+      "date": "Collection Date",
+      "collection_container": "Container",
+      "collection_proc": "Procedure"
+    },
+
+    "recv_event": {
+      "title": "RECEIVED DETAILS",
+      "user_time": "User and Time",
+      "user": "Receiver",
+      "date": "Receive Date",
+      "received_quality": "Quality"
+    },
+
     "ctx_menu": {
       "view_specimen": "View Specimen",
       "edit_specimen": "Edit Specimen",

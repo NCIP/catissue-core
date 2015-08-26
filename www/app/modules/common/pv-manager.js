@@ -86,6 +86,7 @@ angular.module('openspecimen')
       'collection-procedure': '2003996',
       'collection-container': '2003997',
       'vital-status'        : '2004001',
+      'received-quality'    : '2003994',
 
       'ethnicity'           : 'Ethnicity_PID',
       'race'                : 'Race_PID',
