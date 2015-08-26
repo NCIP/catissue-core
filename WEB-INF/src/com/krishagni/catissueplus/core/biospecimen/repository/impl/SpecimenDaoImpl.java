@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,7 +146,23 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		
 		return result;
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Long> getDistributedSpecimens(List<Long> specimenIds) {
+		List<Object> rows = getSessionFactory().getCurrentSession()
+				.getNamedQuery(GET_DISTRIBUTED_SPECIMENS)
+				.setParameterList("specimenIds", specimenIds)
+				.list();
+
+		List<Long> result = new ArrayList<Long>();
+		for (Object row : rows) {
+			result.add((Long)row);
+		}
+
+		return result;
+	}
+
 	private void addLabelsCond(Criteria query, List<String> labels) {
 		int numLabels = labels.size();		
 		Disjunction labelIn = Restrictions.disjunction();
@@ -207,4 +224,7 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	private static final String GET_CPR_AND_VISIT_IDS = FQN + ".getCprAndVisitIds";
 	
 	private static final String GET_SPECIMEN_INSTITUTE_IDS = FQN + ".getSpecimenInstituteIds";
+
+	private static final String GET_DISTRIBUTED_SPECIMENS = FQN + ".getDistributedSpecimens";
+
 }

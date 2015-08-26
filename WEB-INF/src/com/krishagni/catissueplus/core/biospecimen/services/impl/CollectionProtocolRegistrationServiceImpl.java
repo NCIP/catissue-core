@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.beanutils.BeanToPropertyValueTransformer;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -334,6 +336,17 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				specimens = getSpecimensByVisit(crit.getCprId(), crit.getVisitId());
 			} else if (crit.getEventId() != null) {
 				specimens = getAnticipatedSpecimens(crit.getCprId(), crit.getEventId());
+			}
+
+			List<Long> specimenIds = (List<Long>) CollectionUtils.collect(specimens, new BeanToPropertyValueTransformer("id"));
+			List<Long> distributedSpecimenIds = daoFactory.getSpecimenDao().getDistributedSpecimens(specimenIds);
+
+			for (SpecimenDetail detail : specimens) {
+				if (detail.getId() == null) {
+					continue;
+				}
+
+				detail.setDistributed(distributedSpecimenIds.contains(detail.getId()));
 			}
 
 			return ResponseEvent.response(specimens);

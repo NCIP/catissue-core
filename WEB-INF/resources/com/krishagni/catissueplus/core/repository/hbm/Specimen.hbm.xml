@@ -165,5 +165,15 @@
       where
         s.id in (:specimenIds)
     </query>
+
+    <query name="getDistributedSpecimens">
+      select
+        sp.id
+      from
+        com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem o
+        join o.specimen sp
+      where
+        sp.id in (:specimenIds)
+    </query>
   </class>
 </hibernate-mapping>

@@ -108,6 +108,7 @@
                       ng-class="{'os-status-collected': specimen.status == 'Collected',
                                  'os-status-pending': specimen.status == 'Pending' || !specimen.status,
                                  'os-status-not-collected': specimen.status == 'Missed Collection',
+                                 'os-status-distributed': specimen.distributed == true,
                                  'os-status-closed': specimen.activityStatus == 'Closed'}">
                     </span>
 

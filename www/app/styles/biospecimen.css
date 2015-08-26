@@ -56,6 +56,11 @@
   padding: 0px 4px;
 }
 
+.fa.os-status-distributed:before {
+  color: #5bc0de !important;
+  padding: 0px 4px;
+}
+
 .fa.os-lineage-new:before, 
 .fa.os-lineage-aliquot:before, 
 .fa.os-lineage-derivative:before {
@@ -95,7 +100,8 @@
 .os-key-values .value.os-status-collected, 
 .os-key-values .value.os-status-not-collected, 
 .os-key-values .value.os-status-missed,
-.os-key-values .value.os-status-pending {
+.os-key-values .value.os-status-pending,
+.os-key-values .value.os-status-distributed {
   width: initial!important;
   border-radius: 4px;
   font-weight: bold;
@@ -118,6 +124,10 @@
   background: #d9534f;
 }
 
+.os-key-values .value.os-status-distributed {
+  background: #5bc0de;
+}
+
 .os-table.os-spmn-hide-options .os-select-specimen-cb {
   visibility: hidden;
 }
@@ -136,6 +146,10 @@
 .os-storage-position > div {
   padding-left: 0px;
   padding-right: 10px;
+}
+
+.progress-bar-info {
+  background-color: #3B933B !important;
 }
 
 .os-time-no-wheels tbody tr:first-child,
