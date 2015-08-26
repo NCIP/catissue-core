@@ -24,6 +24,8 @@ angular.module('os.biospecimen.cp',
             updateOpts: {resource: 'CollectionProtocol', operations: ['Update']},
             deleteOpts: {resource: 'CollectionProtocol', operations: ['Delete']}
           }
+
+          $scope.codingEnabled = $scope.global.appProps.cp_coding_enabled;
         },
         parent: 'signed-in'
       })

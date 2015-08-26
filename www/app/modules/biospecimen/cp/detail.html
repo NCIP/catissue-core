@@ -4,7 +4,7 @@
       <li> <a ui-sref="cp-list" translate="menu.collection_protocols"></a> </li>
     </ul>
     <h3>
-      {{cp.shortTitle}} <span ng-if="!!cp.code && global.appProps.codingEnabled">({{cp.code}})</span>
+      {{cp.shortTitle}} <span ng-if="codingEnabled && !!cp.code">({{cp.code}})</span>
     </h3>
 
     <div class="os-btns right">

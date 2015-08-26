@@ -9,10 +9,12 @@ public class AliquotSpecimensRequirement {
 	
 	private BigDecimal qtyPerAliquot;
 	
+	private String code;
+	
 	private String storageType;
 	
 	private String labelFmt;
-
+	
 	public Long getParentSrId() {
 		return parentSrId;
 	}
@@ -28,13 +30,21 @@ public class AliquotSpecimensRequirement {
 	public void setNoOfAliquots(Integer noOfAliquots) {
 		this.noOfAliquots = noOfAliquots;
 	}
-
+	
 	public BigDecimal getQtyPerAliquot() {
 		return qtyPerAliquot;
 	}
 
 	public void setQtyPerAliquot(BigDecimal qtyPerAliquot) {
 		this.qtyPerAliquot = qtyPerAliquot;
+	}
+	
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getStorageType() {

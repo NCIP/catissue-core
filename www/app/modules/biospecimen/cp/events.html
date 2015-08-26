@@ -16,7 +16,7 @@
           <div class="list-group-item" ng-class="{'active': selected.id == evt.id}">
             <div ng-click="selectEvent(evt)">
               T{{evt.eventPoint}}: {{evt.eventLabel}} 
-              <span ng-if="global.appProps.codingEnabled && !!evt.code">({{evt.code}})</span> 
+              <span ng-if="codingEnabled && !!evt.code">({{evt.code}})</span> 
             </div>
 
             <div class="os-more-options" dropdown>
@@ -52,7 +52,7 @@
           <div class="list-group-item">
             <div class="title">
               T{{evt.eventPoint}}: {{evt.eventLabel}} 
-              <span ng-if="global.appProps.codingEnabled && !!evt.code">({{evt.code}})</span>
+              <span ng-if="codingEnabled && !!evt.code">({{evt.code}})</span>
             </div>
             <div class="content" ng-include="'event-add-edit.html'"></div>
           </div>
@@ -82,7 +82,7 @@
 
 <script type="text/ng-template" id="event-add-edit.html">
   <form name="eventForm" os-form-validator="eventForm" novalidate>
-    <div class="form-group clearfix" ng-if="global.appProps.codingEnabled ">
+    <div class="form-group clearfix" ng-if="codingEnabled ">
       <input os-md-input autofocus type="text" class="form-control" maxlength="16"
         placeholder="{{'cp.cpe_code' | translate}}" name="eventCode" ng-model="event.code">
       <div os-field-error field="eventForm.eventCode"></div>
