@@ -104,18 +104,15 @@
 
       <div class="form-group" ng-if="currSpecimen.lineage != 'New'">
         <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
-        <div class="col-xs-6">
-          <div class="os-date-time">
-            <div class="os-col-85">
-              <input type="text" name="createdOn" ng-model="currSpecimen.createdOn" class="form-control"
-                datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
-                is-open="createdOn.isOpen" ng-focus="createdOn.isOpen=true"
-                required placeholder="{{'specimens.created_on' | translate}}">
-            </div>
-            <div class="os-col-15">
-              <timepicker class="os-time-no-wheels"  ng-model="currSpecimen.createdOn" show-meridian="false">
-              </timepicker>
-            </div>
+        <div class="os-date-time clearfix">
+          <div class="col-xs-4 input">
+            <os-date-picker name="createdOn" date="currSpecimen.createdOn"
+              placeholder="{{'specimens.created_on' | translate}}" required>
+            </os-date-picker>
+          </div>
+          <div class="col-xs-2">
+            <timepicker ng-model="currSpecimen.createdOn" class="os-time-no-wheels" show-meridian="false">
+            </timepicker>
           </div>
           <div os-field-error field="sform.createdOn"></div>
         </div>
@@ -210,7 +207,7 @@
                   placeholder="{{'specimens.col_event.date' | translate}}" required>
                 </os-date-picker>
               </div>
-              <div class="col-xs-1 os-date-time-padding">
+              <div class="col-xs-1 os-timepicker">
                 <timepicker ng-model="currSpecimen.collectionEvent.time" class="os-time-no-wheels" show-meridian="false">
                 </timepicker>
               </div>
@@ -255,7 +252,7 @@
                   placeholder="{{'specimens.recv_event.date' | translate}}" required>
                 </os-date-picker>
               </div>
-              <div class="col-xs-1 os-date-time-padding">
+              <div class="col-xs-1 os-timepicker">
                 <timepicker ng-model="currSpecimen.receivedEvent.time" class="os-time-no-wheels"show-meridian="false">
                 </timepicker>
               </div>
