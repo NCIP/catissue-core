@@ -66,6 +66,10 @@ angular.module('os.biospecimen.specimen.addedit', [])
           user: $scope.currentUser,
           time: currentDate
         };
+
+        $scope.currSpecimen.collectionEvent.container = "Not Specified";
+        $scope.currSpecimen.collectionEvent.procedure = "Not Specified";
+        $scope.currSpecimen.receivedEvent.receivedQuality = "Acceptable";
       }
 
     }
