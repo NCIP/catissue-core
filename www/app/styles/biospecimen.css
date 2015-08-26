@@ -165,9 +165,9 @@
 
 .os-date-time .os-time-no-wheels tr:nth-child(2) td:nth-child(2) {
   display: block;
-  border-top: 1px solid #CCCCCC;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
   height: 34px;
-  border-bottom: 1px solid #CCCCCC;
   padding-top: 5px;
   box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px inset;
 }
@@ -179,7 +179,7 @@
 }
 
 .os-spmn-coll-detail label {
-  color: #666666;
+  color: #666;
 }
 
 .os-spmn-coll-detail .input {
