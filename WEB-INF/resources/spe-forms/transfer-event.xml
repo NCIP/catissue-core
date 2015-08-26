@@ -1,7 +1,9 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
 <form>
   <view>
     <name>SpecimenTransferEvent</name>
-    <caption>Transfer Event</caption>
+    <caption>#getMessage("transfer_event")</caption>
     <table>CATISSUE_TRANSFER_EVENT_PARAM</table>
     <primaryKey>IDENTIFIER</primaryKey>
 
@@ -9,21 +11,21 @@
       <storageContainer>
         <name>fromContainer</name>
         <udn>fromContainer</udn>
-        <caption>From Container</caption>
+        <caption>#getMessage("from_container")</caption>
         <column>FROM_STORAGE_CONTAINER_ID</column>
       </storageContainer>
       
       <numberField>
         <name>fromDimensionOne</name>
         <udn>fromDimensionOne</udn>
-        <caption>Dimension One</caption>
+        <caption>#getMessage("dimension_one")</caption>
         <column>FROM_POSITION_DIMENSION_ONE</column>
       </numberField>
 
       <numberField>
         <name>fromDimensionTwo</name>
         <udn>fromDimensionTwo</udn>
-        <caption>Dimension Two</caption>
+        <caption>#getMessage("dimension_two")</caption>
         <column>FROM_POSITION_DIMENSION_Two</column>
       </numberField>
     </row>
@@ -32,21 +34,21 @@
       <storageContainer>
         <name>toContainer</name>
         <udn>toContainer</udn>
-        <caption>To Container</caption>
+        <caption>#getMessage("to_container")</caption>
         <column>TO_STORAGE_CONTAINER_ID</column>
       </storageContainer>
       
       <numberField>
         <name>toDimensionOne</name>
         <udn>toDimensionOne</udn>
-        <caption>Dimension One</caption>
+        <caption>#getMessage("dimension_one")</caption>
         <column>TO_POSITION_DIMENSION_ONE</column>
       </numberField>
 
       <numberField>
         <name>toDimensionTwo</name>
         <udn>toDimensionTwo</udn>
-        <caption>Dimension Two</caption>
+        <caption>#getMessage("dimension_two")</caption>
         <column>TO_POSITION_DIMENSION_Two</column>
       </numberField>
     </row>
@@ -55,7 +57,7 @@
       <userField>
         <name>user</name>
         <udn>user</udn>
-        <caption>User</caption>
+        <caption>#getMessage("user")</caption>
         <column>USER_ID</column>
         <showInGrid>true</showInGrid>
       </userField>
@@ -65,7 +67,7 @@
       <datePicker>
         <name>time</name>
         <udn>time</udn>
-        <caption>Date and Time</caption>
+        <caption>#getMessage("date_time")</caption>
         <column>EVENT_TIMESTAMP</column>
         <format>MM-dd-yyyy HH:mm</format>
         <showInGrid>true</showInGrid>
@@ -78,7 +80,7 @@
       <textArea>
         <name>comments</name>
         <udn>comments</udn>
-        <caption>Comments</caption>
+        <caption>#getMessage("comments")</caption>
         <column>COMMENTS</column>
         <height>2</height>
       </textArea>

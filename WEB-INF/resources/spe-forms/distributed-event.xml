@@ -1,7 +1,9 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
 <form>
   <view>
     <name>SpecimenDistributedEvent</name>
-    <caption>Distributed Event</caption>
+    <caption>#getMessage("distributed_event")</caption>
     <table>CATISSUE_DISTRI_EVENT_PARAM</table>
     <primaryKey>IDENTIFIER</primaryKey>
 
@@ -9,7 +11,7 @@
       <numberField>
         <name>quantity</name>
         <udn>quantity</udn>
-        <caption>Quantity</caption>
+        <caption>#getMessage("quantity")</caption>
         <column>DISTRIBUTED_QUANTITY</column>
         <mandatory>true</mandatory>
         <noOfDigitsAfterDecimal>4</noOfDigitsAfterDecimal>
@@ -20,7 +22,7 @@
       <userField>
         <name>user</name>
         <udn>user</udn>
-        <caption>User</caption>
+        <caption>#getMessage("user")</caption>
         <column>USER_ID</column>
         <showInGrid>true</showInGrid>
       </userField>
@@ -30,7 +32,7 @@
       <datePicker>
         <name>time</name>
         <udn>time</udn>
-        <caption>Date and Time</caption>
+        <caption>#getMessage("date_time")</caption>
         <column>EVENT_TIMESTAMP</column>
         <format>MM-dd-yyyy HH:mm</format>
         <showInGrid>true</showInGrid>
@@ -43,7 +45,7 @@
       <textArea>
         <name>comments</name>
         <udn>comments</udn>
-        <caption>Comments</caption>
+        <caption>#getMessage("comments")</caption>
         <column>COMMENTS</column>
         <height>2</height>
       </textArea>

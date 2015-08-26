@@ -1,7 +1,9 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
 <form>
   <view>
     <name>SpecimenMolecularReviewEvent</name>
-    <caption>Molecular Review Event</caption>
+    <caption>#getMessage("molecular_review_event")</caption>
     <table>CATISSUE_MOL_SPE_REVIEW_PARAM</table>
     <primaryKey>IDENTIFIER</primaryKey>
 
@@ -9,7 +11,7 @@
       <textField>
         <name>gelImageUrl</name>
         <udn>gelImageUrl</udn>
-        <caption>Gel Image URL</caption>
+        <caption>#getMessage("gel_image_url")</caption>
         <column>GEL_IMAGE_URL</column>
       </textField>
     </row>
@@ -18,7 +20,7 @@
       <textField>
         <name>qualityIdx</name>
         <udn>qualityIdx</udn>
-        <caption>Quality Index</caption>
+        <caption>#getMessage("quality_index")</caption>
         <column>QUALITY_INDEX</column>
       </textField>
     </row>
@@ -27,7 +29,7 @@
       <numberField>
         <name>gelNumber</name>
         <udn>gelNumber</udn>
-        <caption>Gel Number</caption>
+        <caption>#getMessage("gel_number")</caption>
         <column>GEL_NUMBER</column>
       </numberField>
     </row>
@@ -36,7 +38,7 @@
       <textField>
         <name>laneNumber</name>
         <udn>laneNumber</udn>
-        <caption>Lane Number</caption>
+        <caption>#getMessage("lane_number")</caption>
         <column>LANE_NUMBER</column>
       </textField>
     </row>
@@ -45,7 +47,7 @@
       <numberField>
         <name>absorbanceAt260</name>
         <udn>absorbanceAt260</udn>
-        <caption>Absorbance At 260</caption>
+        <caption>#getMessage("absorbance_at_260")</caption>
         <column>ABSORBANCE_AT_260</column>
       </numberField>
     </row>
@@ -54,7 +56,7 @@
       <numberField>
         <name>absorbanceAt280</name>
         <udn>absorbanceAt280</udn>
-        <caption>Absorbance At 280</caption>
+        <caption>#getMessage("absorbance_at_280")</caption>
         <column>ABSORBANCE_AT_280</column>
       </numberField>
     </row>
@@ -63,7 +65,7 @@
       <numberField>
         <name>ratio28sTo18s</name>
         <udn>ratio28sTo18s</udn>
-        <caption>Ratio 28S To 18S</caption>
+        <caption>#getMessage("ratio_28s_to_18s")</caption>
         <column>RATIO_28S_TO_18S</column>
       </numberField>
     </row>
@@ -72,7 +74,7 @@
       <userField>
         <name>user</name>
         <udn>user</udn>
-        <caption>User</caption>
+        <caption>#getMessage("user")</caption>
         <column>USER_ID</column>
         <showInGrid>true</showInGrid>
         <mandatory>true</mandatory>
@@ -83,7 +85,7 @@
       <datePicker>
         <name>time</name>
         <udn>time</udn>
-        <caption>Date and Time</caption>
+        <caption>#getMessage("date_time")</caption>
         <column>EVENT_TIMESTAMP</column>
         <format>MM-dd-yyyy HH:mm</format>
         <showInGrid>true</showInGrid>
@@ -96,7 +98,7 @@
       <textArea>
         <name>comments</name>
         <udn>comments</udn>
-        <caption>Comments</caption>
+        <caption>#getMessage("comments")</caption>
         <column>COMMENTS</column>
         <height>2</height>
       </textArea>
