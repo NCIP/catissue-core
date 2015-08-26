@@ -46,7 +46,7 @@
       <div class="form-group" ng-if="codingEnabled">
         <label class="control-label col-xs-3" translate="cp.code">Short Code</label>
         <div class="col-xs-6">
-          <input type="text" name="code" ng-model="cp.code" maxlength="16"
+          <input type="text" name="code" ng-model="cp.code" ng-maxlength="16"
             class="form-control" placeholder="{{'cp.code' | translate}}">
           <div os-field-error field="cpForm.code"></div>
         </div>

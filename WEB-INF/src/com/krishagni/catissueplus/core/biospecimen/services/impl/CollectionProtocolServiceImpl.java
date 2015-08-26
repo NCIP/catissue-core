@@ -1,9 +1,9 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -988,7 +988,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 	
 	private void setAliquotCode(SpecimenRequirement parent, List<SpecimenRequirement> aliquots, String code) {
-		List<String> codes = new ArrayList<String>();
+		Set<String> codes = new HashSet<String>();
 		CollectionProtocolEvent cpe = parent.getCollectionProtocolEvent();
 		for (SpecimenRequirement sr:  cpe.getSpecimenRequirements()) {
 			if (StringUtils.isNotBlank(sr.getCode())) {
@@ -998,10 +998,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 		int count = 1;
 		for (SpecimenRequirement sr: aliquots) {
-			while (codes.contains(code + count)) {
+			while (!codes.add(code + count)) {
 				count++;
 			}
-			sr.setCode(code +  count++);
+			sr.setCode(code + count++);
 		}
 	}
 }

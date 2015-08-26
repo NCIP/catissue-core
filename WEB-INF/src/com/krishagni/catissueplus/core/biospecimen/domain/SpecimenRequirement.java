@@ -282,7 +282,7 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 			updateRequirementAttrs(sr);
 		}
 
-		if (StringUtils.isNotBlank(sr.getCode())) {
+		if (StringUtils.isNotBlank(sr.getCode()) && !getCode().equals(sr.getCode())) {
 			if (getCollectionProtocolEvent().getSrByCode(sr.getCode()) != null) {
 				throw OpenSpecimenException.userError(SrErrorCode.DUP_CODE, sr.getCode());
 			}
