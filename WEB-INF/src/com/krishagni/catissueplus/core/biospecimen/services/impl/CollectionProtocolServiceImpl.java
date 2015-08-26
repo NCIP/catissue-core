@@ -663,6 +663,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(sr.getCollectionProtocol());
 			SpecimenRequirement partial = srFactory.createForUpdate(sr.getLineage(), detail);
+			if (isSpecimenClassOrTypeChanged(sr, partial)) {
+				ensureSpecimensNotCollected(sr);
+			}
+			
 			sr.update(partial);
 			return ResponseEvent.response(SpecimenRequirementDetail.from(sr));
 		} catch (OpenSpecimenException ose) {
@@ -708,6 +712,25 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			sr.delete();
 			daoFactory.getSpecimenRequirementDao().saveOrUpdate(sr);
 			return ResponseEvent.response(SpecimenRequirementDetail.from(sr));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Integer> getSrSpecimensCount(RequestEvent<Long> req) {
+		try {
+			Long srId = req.getPayload();
+			SpecimenRequirement sr = daoFactory.getSpecimenRequirementDao().getById(srId);
+			if (sr == null) {
+				throw OpenSpecimenException.userError(SrErrorCode.NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(
+					daoFactory.getSpecimenRequirementDao().getSpecimensCount(srId));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -1019,5 +1042,17 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 				throw OpenSpecimenException.userError(CpErrorCode.DUP_CONSENT, consentTier.getStatement());
 			}
 		}
+	}
+	
+	private void ensureSpecimensNotCollected(SpecimenRequirement sr) {
+		int count = daoFactory.getSpecimenRequirementDao().getSpecimensCount(sr.getId());
+		if (count > 0) {
+			throw OpenSpecimenException.userError(SrErrorCode.CANNOT_CHANGE_CLASS_OR_TYPE);
+		}
+	}
+	
+	private boolean isSpecimenClassOrTypeChanged(SpecimenRequirement existingSr, SpecimenRequirement sr) {
+		return !existingSr.getSpecimenClass().equals(sr.getSpecimenClass()) || 
+				!existingSr.getSpecimenType().equals(sr.getSpecimenType());
 	}
 }

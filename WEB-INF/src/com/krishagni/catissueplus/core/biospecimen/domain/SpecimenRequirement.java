@@ -296,7 +296,7 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		setLabelFormat(sr.getLabelFormat());
 		
 		if (!isAliquot()) {
-			updateConcentration(sr.getConcentration());
+			update(sr.getConcentration(), sr.getSpecimenClass(), sr.getSpecimenType());
 		}
 
 		if (NumUtil.lessThanZero(getQtyAfterAliquotsUse())) {
@@ -437,11 +437,13 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		}		
 	}
 	
-	private void updateConcentration(Double concentration) {
+	private void update(Double concentration, String specimenClass, String specimenType) {
 		setConcentration(concentration);
+		setSpecimenClass(specimenClass);
+		setSpecimenType(specimenType);
 		for (SpecimenRequirement childSr : getChildSpecimenRequirements()) {
 			if (childSr.isAliquot()) {
-				childSr.updateConcentration(concentration);
+				childSr.update(concentration, specimenClass, specimenType);
 			}
 		}
 	}

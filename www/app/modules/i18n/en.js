@@ -494,6 +494,7 @@
     "anatomic_site": "Anatomic Site",
     "laterality": "Laterality",
     "initial_qty": "Initial Quantity",
+    "cannot_change_class_or_type": "Specimen class or type cannot be changed once specimens are collected",
     "collector": "Collector",
     "receiver": "Receiver",
     "collection_container": "Collection Container",
