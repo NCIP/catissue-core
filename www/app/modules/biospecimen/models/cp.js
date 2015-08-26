@@ -77,5 +77,14 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       return {prefix: input}
     }
 
+    CollectionProtocol.prototype.updateConsentsWaived = function() {
+      var params = {consentsWaived: this.consentsWaived};
+      return $http.put(CollectionProtocol.url() + this.$id() + "/consents-waived", params).then(
+        function(resp) {
+          return new CollectionProtocol(result.data);
+        }
+      );
+    }
+
     return CollectionProtocol;
   });

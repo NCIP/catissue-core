@@ -32,10 +32,18 @@
             <th class="col os-col-20" translate="specimens.label">Label</th>
             <th class="col os-col-10" translate="specimens.qty">Quantity</th>
             <th class="col os-col-25">
-              <span translate="specimens.location">Location</span>
-              <a ng-click="applyFirstLocationToAll()"style="font-weight:normal">
-                (<span translate="specimens.apply_first_loc_to_all">Apply First Location To All</span>)
-              </a>
+              <div class="os-col-60 os-no-left-padding">
+                <span translate="specimens.container">Container</span>
+                <a ng-click="applyFirstLocationToAll()"style="font-weight:normal">
+                  (<span translate="specimens.copy_first_to_all">Copy First To All</span>)
+                </a>
+              </div>
+              <div class="os-col-15 os-no-left-padding">
+                <span translate="specimens.row">Row</span>
+              </div>
+              <div class="os-col-15 os-no-left-padding">
+                <span translate="specimens.column">Column</span>
+              </div>
             </th>
             <th class="col os-col-10">Status</th>
             <th class="col os-col-5">&nbsp;</th>
@@ -118,8 +126,8 @@
               <div os-field-error field="sform.qty"></div>
             </td>
             <td class="col os-col-25" style="overflow: visible;">
-              <os-storage-position os-md-input edit-when="specimen.existingStatus != 'Collected'"
-                entity="specimen" cp-id="cpr.cpId">
+              <os-storage-position os-md-input edit-when="entity.existingStatus != 'Collected'"
+                entity="specimen" cp-id="cpr.cpId" hide-placeholder>
               </os-storage-position>
             </td>
             <td class="col os-col-10" style="overflow: visible;">

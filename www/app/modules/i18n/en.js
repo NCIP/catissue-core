@@ -120,7 +120,6 @@
     "date": "Date",
     "start_date": "Start Date",
     "end_date": "End Date",
-    "consents_waived": "Consents Waived",
     "ethics_approval_id": "Ethics Approval ID",
     "ppid_fmt": "PPID Format",
     "ppid_prefix": "Prefix",
@@ -139,6 +138,8 @@
     "visit_names": "Visit Names",
     "spec_labels": "Specimen Labels",
 
+    "consents_waived": "Is participant consent waived?",
+    "consents_waived_updated": "Participant consent {{waived ? 'waived' : 'enabled'}} successfully.",
     "unsigned_consent_url": "Unsigned Consent Form URL",
     "consent_tiers": "Consent Tiers", 
     "add_consent_tier": "Add Statement...",
@@ -362,7 +363,6 @@
     "type": "Type",
     "pathology": "Pathology",
     "pathology_status": "Pathology Status",
-    "container": "Container",
     "collection_status": "Collection Status",
     "class": "Class",
     "anatomic_site": "Anatomic Site",
@@ -384,11 +384,13 @@
     "from": "from",
     "collected_in": "collected in",
     "description": "Description",
-    "location": "Location",
+    "container": "Container",
     "biohazards": "Biohazards",
     "created_on": "Created On",
     "concentration_unit": "&#181;g/&#181;l",
-    "apply_first_loc_to_all": "Copy First Location To All",
+    "copy_first_to_all": "Copy First To All",
+    "row": "Row",
+    "column": "Column",
     "activity_full_info": "{{user}} created {{name}} on {{time | date: global.dateTimeFmt}}",
     "activity_user_info": "{{user}} created {{name}}",
     "activity_time_info": "{{name}} created on {{time | date: global.dateTimeFmt}}",
@@ -396,6 +398,7 @@
     "activity_status": "Activity Status",
     "more_info": "More Specimen Information",
     "less_info": "Less Specimen Information",
+    "location" : "Location",
 
     "reason_for_closing": "Reason for closing",
 
@@ -409,6 +412,8 @@
     "no_specimens_for_collection": "Please select at least one anticipated specimen for collection",
     "no_specimens_for_print": "Please select at least one collected specimen for label printing",
     "no_specimens_for_specimen_list": "Please select at least one specmen to add specimen list",
+    "no_specimens_for_delete":"Please select at least one collected specimen to delete",
+    "no_specimens_for_close":"Please select at least one collected specimen to close",
 
     "pos_selector": "Specimen Position Selector",
 
@@ -421,6 +426,13 @@
     "spmn_derivatives": "Specimen Derivatives",
     "bulk_import_derivatives": "Bulk Import Derivatives",
     "new_aliquot_count": "Number of aliquots",
+
+    "specimens_hierarchy_deleted": "Selected specimens and their children are deleted successfully",
+    "specimens_deleted": "Selected specimens are deleted successfully",
+    "delete_specimens_heirarchy": "Are you sure you want to delete selected specimens and all its children ?",
+    "delete_specimens":  "Are you sure you want to delete selected specimens ?",
+    "specimens_closed": "Selected specimens are closed successfully",
+    "specimen_closed": "Specimen is closed successfully",
 
     "ctx_menu": {
       "view_specimen": "View Specimen",
@@ -777,8 +789,6 @@
     "new_name": "New Container Name",
     "row": "Row",
     "column": "Column",
-    "target_site": "Target Site",
-    "target_parent_cont": "Target Parent Container",
     "replicate": "Replicate",
     "add_another": "Add Another",
 

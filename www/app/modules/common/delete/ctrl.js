@@ -1,7 +1,7 @@
 angular.module('os.common.delete', [])
   .controller('EntityDeleteCtrl', function($scope, $modalInstance, entityProps, dependentEntities, Alerts) {
 
-   function init() {
+    function init() {
       $scope.entity = entityProps.entity;
       $scope.entityProps = entityProps;
       $scope.dependentEntities = dependentEntities;
@@ -14,8 +14,23 @@ angular.module('os.common.delete', [])
       }
     }
 
+    function onBulkDeletion(entity) {
+      if (!!entity) {
+        Alerts.success(entityProps.successMessage);
+        $modalInstance.close(entity);
+      }
+    }
+
+    function bulkDelete() {
+      $scope.entity.bulkDelete(entityProps.entityIds).then(onBulkDeletion)
+    };
+
     $scope.delete = function () {
-      $scope.entity.$remove().then(onDeletion)
+      if (entityProps.entityIds) {
+        bulkDelete();
+      } else {
+        $scope.entity.$remove().then(onDeletion);
+      }
     };
 
     $scope.cancel = function () {

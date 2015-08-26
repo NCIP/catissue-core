@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -169,6 +170,19 @@ public class CollectionProtocolsController {
 	@ResponseBody
 	public CollectionProtocolDetail updateCollectionProtocol(@RequestBody CollectionProtocolDetail cp) {
 		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.updateCollectionProtocol(getRequest(cp));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/consents-waived")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public CollectionProtocolDetail updateConsentsWaived(@PathVariable Long id, @RequestBody Map<String, String> props) {
+		CollectionProtocolDetail cp = new  CollectionProtocolDetail();
+		cp.setId(id);
+		cp.setConsentsWaived(Boolean.valueOf(props.get("consentsWaived")));
+		
+		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.updateConsentsWaived(getRequest(cp));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

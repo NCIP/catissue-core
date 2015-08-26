@@ -22,10 +22,11 @@ angular.module('os.administrative.container.replicate', ['os.administrative.mode
     }
 
     function addDest() {
+      var parentContainerName = !!container.storageLocation ? container.storageLocation.name : undefined;
       $scope.destinations.push({
         name: '',
         siteName: container.siteName, 
-        parentContainerId: container.parentContainerId,
+        parentContainerName: parentContainerName,
         posOne: '', 
         posTwo: ''
       });
@@ -33,12 +34,20 @@ angular.module('os.administrative.container.replicate', ['os.administrative.mode
 
     function setSiteContainers(dest) {
       if (!siteContainersMap[dest.siteName]) {
-        siteContainersMap[dest.siteName] = Container.listForSite(dest.siteName, true, true);
+        siteContainersMap[dest.siteName] = Container.listForSite(dest.siteName, true, true).then(getContainerNames);
       }
 
       siteContainersMap[dest.siteName].then(
         function(containers) {
           dest.containers = containers;
+        }
+      );
+    }
+
+    function getContainerNames(containers) {
+      return containers.map(
+        function(container) {
+          return container.name;
         }
       );
     }
@@ -55,7 +64,7 @@ angular.module('os.administrative.container.replicate', ['os.administrative.mode
 
     $scope.onSiteSelect = function(dest) {
       setSiteContainers(dest);
-      dest.parentContainerId = dest.posOne = dest.posTwo = undefined;
+      dest.parentContainerName = dest.posOne = dest.posTwo = undefined;
     }
 
     $scope.searchContainers = function(name, dest) {
@@ -64,7 +73,7 @@ angular.module('os.administrative.container.replicate', ['os.administrative.mode
       } else {
         Container.listForSite(dest.siteName, true, true, name).then(
           function(containers) {
-            dest.containers = containers;
+            dest.containers = getContainerNames(containers);
           }
         );
       }
@@ -92,11 +101,11 @@ angular.module('os.administrative.container.replicate', ['os.administrative.mode
         size: 'lg',
         resolve: {
           container: function() {
-            if (!containerDetailMap[dest.parentContainerId]) {
-              containerDetailMap[dest.parentContainerId] = Container.getById(dest.parentContainerId);
+            if (!containerDetailMap[dest.parentContainerName]) {
+              containerDetailMap[dest.parentContainerName] = Container.getByName(dest.parentContainerName);
             }
 
-            return containerDetailMap[dest.parentContainerId];
+            return containerDetailMap[dest.parentContainerName];
           }
         }
       });
@@ -122,7 +131,7 @@ angular.module('os.administrative.container.replicate', ['os.administrative.mode
         destinations.push({
           name: uiDest.name,
           siteName: uiDest.siteName, 
-          parentContainerId: uiDest.parentContainerId,
+          parentContainerName: uiDest.parentContainerName,
           posOne: uiDest.posOne,
           posTwo: uiDest.posTwo
         });

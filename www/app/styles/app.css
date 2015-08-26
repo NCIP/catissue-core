@@ -313,7 +313,8 @@ h4 + .btn-group {
   bottom: 10px;
 }
 
-.os-page-hdr .os-btns div.inline {
+.os-page-hdr .os-btns div.inline,
+.os-inline-btn {
   display: inline-block;
   position: relative;
 }
@@ -934,6 +935,14 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 .os-padding-top-4 {
   padding-top: 4px;
+}
+
+.os-no-padding {
+  padding: 0px;
+}
+
+.os-no-left-padding {
+  padding-left: 0px;
 }
 
 .os-big-dropdown-menu {

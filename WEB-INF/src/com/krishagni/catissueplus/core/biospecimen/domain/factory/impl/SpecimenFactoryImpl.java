@@ -664,6 +664,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		if (StringUtils.isNotBlank(posOne) && StringUtils.isNotBlank(posTwo)) {
 			if (container.canSpecimenOccupyPosition(specimen.getId(), posOne, posTwo)) {
 				position = container.createPosition(posOne, posTwo);
+				container.setLastAssignedPos(position);
 			} else {
 				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
 			}

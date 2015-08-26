@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.repository;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
@@ -24,7 +26,7 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 	
 	private boolean hierarchical;
 	
-	private Long cpId;
+	private Set<Long> cpIds;
 	
 	private Set<Long> siteIds;
 	
@@ -114,14 +116,25 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 		return self();
 	}
 	
-	public Long cpId() {
-		return cpId;
+	public Set<Long> cpIds() {
+		return cpIds;
 	}
 	
-	public StorageContainerListCriteria cpId(Long cpId) {
-		this.cpId = cpId;
+	public StorageContainerListCriteria cpIds(Set<Long> cpIds) {
+		this.cpIds = cpIds;
+		return self();
+	}
+	
+	public StorageContainerListCriteria cpIds(Long[] cpIds) {
+		if (cpIds != null && cpIds.length > 0) {
+			this.cpIds = new HashSet<Long>(Arrays.asList(cpIds));
+		} else {
+			this.cpIds = null;
+		}
+		
 		return self();
 	}	
+	
 	
 	public Set<Long> siteIds() {
 		return siteIds;

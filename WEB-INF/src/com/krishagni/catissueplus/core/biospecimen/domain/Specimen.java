@@ -465,20 +465,8 @@ public class Specimen extends BaseEntity {
 	public void disable() {
 		disable(true);
 	}
-	
-	public static boolean isCollected(String status) {
-		return COLLECTED.equals(status);
-	}
-	
-	public static boolean isPending(String status) {
-		return PENDING.equals(status);
-	}
 
-	public static boolean isMissed(String status) {
-		return MISSED_COLLECTION.equals(status);
-	}
-		
-	protected void disable(boolean checkChildSpecimens) {
+	public void disable(boolean checkChildSpecimens) {
 		if (getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
 			return;
 		}
@@ -490,8 +478,19 @@ public class Specimen extends BaseEntity {
 		virtualize(null);
 		setLabel(Utility.getDisabledValue(getLabel(), 255));
 		setBarcode(Utility.getDisabledValue(getBarcode(), 255));
-		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());		
-		
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+	}
+	
+	public static boolean isCollected(String status) {
+		return COLLECTED.equals(status);
+	}
+	
+	public static boolean isPending(String status) {
+		return PENDING.equals(status);
+	}
+
+	public static boolean isMissed(String status) {
+		return MISSED_COLLECTION.equals(status);
 	}
 	
 	public void close(User user, Date time, String reason) {

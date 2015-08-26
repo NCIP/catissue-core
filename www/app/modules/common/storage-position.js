@@ -74,8 +74,10 @@ angular.module('openspecimen')
 
         modalInstance.result.then(
           function(position) {
+            scope.entity.storageLocation = scope.entity.storageLocation || {};
+            angular.extend(scope.entity.storageLocation, position);
             $timeout(function() {
-              scope.entity.storageLocation = angular.extend(scope.entity.storageLocation || {}, position);
+              angular.extend(scope.entity.storageLocation, position);
             });
           }
         );
@@ -103,9 +105,10 @@ angular.module('openspecimen')
       },
 
       compile: function(tElem, tAttrs) {
+        var select = tElem.find('os-select');
+        var input = tElem.find('input');
+
         if (tAttrs.hasOwnProperty('osMdInput')) {
-          var select = tElem.find('os-select');
-          var input = tElem.find('input');
           var button = tElem.find('button');
 
           select.attr('os-md-input', '');
@@ -119,7 +122,12 @@ angular.module('openspecimen')
 
           tElem.find('button').addClass('btn-xs');
         }
- 
+
+        if (tAttrs.hasOwnProperty('hidePlaceholder')) {
+          select.removeAttr('placeholder');
+          input.removeAttr('placeholder');
+        }
+
         return linker;
       },
 

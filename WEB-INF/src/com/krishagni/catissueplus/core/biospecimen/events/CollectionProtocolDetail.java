@@ -196,6 +196,7 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		CollectionProtocolSummary.copy(cp, result);
 		result.setCoordinators(UserSummary.from(cp.getCoordinators()));
 
+		result.setConsentsWaived(cp.isConsentsWaived());
 		result.setIrbId(cp.getIrbIdentifier());
 		result.setAnticipatedParticipantsCount(cp.getEnrollment());
 		result.setDescriptionUrl(cp.getDescriptionURL());
