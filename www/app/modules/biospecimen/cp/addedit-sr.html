@@ -14,6 +14,14 @@
           <input ng-model="sr.name" class="form-control" type="text" placeholder="{{'srs.name' | translate}}">
         </div>
       </div>
+      <div class="form-group" ng-if="codingEnabled">
+        <label class="control-label col-xs-4" translate="srs.code">Short Code</label>
+        <div class="col-xs-8">
+          <input name="code" ng-model="sr.code" class="form-control" type="text" 
+            ng-maxlength="16" placeholder="{{'srs.code' | translate}}">
+          <div os-field-error field="srForm.code"></div>
+        </div>
+      </div>
       <div class="form-group">
         <label class="control-label col-xs-4" translate="srs.specimen_class">Specimen Class</label>
         <div class="col-xs-8">

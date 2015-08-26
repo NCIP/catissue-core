@@ -115,6 +115,7 @@
     "repositories": "Repositories", 
     "title": "Title",
     "short_title": "Short Title",
+    "code": "Short Code",
     "pi": "Principal Investigator",
     "coordinators": "Protocol Coordinators",
     "date": "Date",
@@ -154,6 +155,7 @@
     "no_cpes": "There are no collection protocol events to show. Please create an event by clicking on Add Event...",
     "add_cpe": "Add Event...",
     "cpe_list": "Events",
+    "cpe_code": "Event Code",
     "cpe_point": "Event Point (in Days)",
     "cpe_point_label": "Event Point Label",
     "deleting_event": "Deleting Event...",
@@ -480,6 +482,7 @@
     "new_sr": "New Specimen Requirement",
 
     "name": "Name",
+    "code": "Short Code",
     "type": "Type",
     "pathology": "Pathology",
     "storage_type": "Storage Type",

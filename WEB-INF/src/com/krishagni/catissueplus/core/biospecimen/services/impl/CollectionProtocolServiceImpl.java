@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -617,6 +618,9 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(aliquots.iterator().next().getCollectionProtocol());
 			
 			SpecimenRequirement parent = daoFactory.getSpecimenRequirementDao().getById(requirement.getParentSrId());
+			if (StringUtils.isNotBlank(requirement.getCode())) {
+				setAliquotCode(parent, aliquots, requirement.getCode());
+			}
 			parent.addChildRequirements(aliquots);			
 			daoFactory.getSpecimenRequirementDao().saveOrUpdate(parent, true);
 			return ResponseEvent.response(SpecimenRequirementDetail.from(aliquots));
@@ -1054,5 +1058,23 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	private boolean isSpecimenClassOrTypeChanged(SpecimenRequirement existingSr, SpecimenRequirement sr) {
 		return !existingSr.getSpecimenClass().equals(sr.getSpecimenClass()) || 
 				!existingSr.getSpecimenType().equals(sr.getSpecimenType());
+	}
+	
+	private void setAliquotCode(SpecimenRequirement parent, List<SpecimenRequirement> aliquots, String code) {
+		Set<String> codes = new HashSet<String>();
+		CollectionProtocolEvent cpe = parent.getCollectionProtocolEvent();
+		for (SpecimenRequirement sr:  cpe.getSpecimenRequirements()) {
+			if (StringUtils.isNotBlank(sr.getCode())) {
+				codes.add(sr.getCode());
+			}
+		}
+
+		int count = 1;
+		for (SpecimenRequirement sr: aliquots) {
+			while (!codes.add(code + count)) {
+				count++;
+			}
+			sr.setCode(code + count++);
+		}
 	}
 }

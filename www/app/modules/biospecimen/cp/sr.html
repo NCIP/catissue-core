@@ -3,7 +3,13 @@
     <li class="item">
       <strong class="key key-sm" translate="srs.name">Name</strong>
       <div class="value value-md">
-        <span>{{childReq.name | osNoValue}}
+        <span>{{childReq.name | osNoValue}}</span> 
+      </div>
+    </li>
+    <li class="item" ng-if="codingEnabled">
+      <strong class="key key-sm" translate="srs.code">Short Code</strong>
+      <div class="value value-md">
+        <span>{{childReq.code | osNoValue}}</span> 
       </div>
     </li>
     <li class="item">
@@ -61,7 +67,7 @@
         <span>{{childReq.concentration}} <span>&#181;g/&#181;l</span></span>
       </div>
     </li>
-    <li class="item" ng-if="childReq.specimenClass != 'Molecular'">
+    <li class="item" ng-if="childReq.specimenClass == 'Molecular' ? codingEnabled : !codingEnabled"> 
       <strong class="key key-sm">&nbsp;</strong>
       <div class="value value-md">
         <span>&nbsp;</span>
