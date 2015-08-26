@@ -417,6 +417,17 @@
 
     "pos_selector": "Specimen Position Selector",
 
+    "visit_details": "Visit Details",
+    "visit_name": "Visit Name",
+    "visit_date": "Visit Date",
+    "visit_site": "Visit Site",
+    "collection_details": "Collection Details",
+    "collector": "Collector",
+    "collection_date": "Collection Date",
+    "receive_details": "Receive Details",
+    "receiver": "Receiver",
+    "receive_date": "Receive Date",
+
     "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
     "bulk_import": "Bulk Import Specimens",
     "spmn_extensions": "Specimen Forms",
