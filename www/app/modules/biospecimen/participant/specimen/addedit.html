@@ -198,9 +198,9 @@
           <div class="form-group">
             <label class="col-xs-3 control-label"  translate="specimens.col_event.user_time">User and Time</label>
             <div class="col-xs-3" name="collector">
-              <os-users required ng-model="currSpecimen.collectionEvent.user" placeholder="{{'specimens.col_event.user_time' | translate}}"> </os-users>
+              <os-users required ng-model="currSpecimen.collectionEvent.user" placeholder="{{'specimens.col_event.user' | translate}}"> </os-users>
+              <div os-field-error field="sform.collector"></div>
             </div>
-            <div os-field-error field="sform.collector"></div>
 
             <div class="os-date-time clearfix">
               <div class="col-xs-2 input">
@@ -212,14 +212,14 @@
                 <timepicker class="os-time-no-wheels" ng-model="currSpecimen.collectionEvent.time" show-meridian="false">
                 </timepicker>
               </div>
+              <div os-field-error field="sform.collectionDate"></div>
             </div>
-            <div os-field-error field="sform.collectionDate"></div>
           </div>
 
           <div class="form-group">
             <label class="col-xs-3 control-label" translate="specimens.col_event.collection_container">Collection Container</label>
             <div class="col-xs-6">
-              <os-select name="collectionContainer" ng-model="currSpecimen.collectionEvent.container" list="collectionContainer"
+              <os-select name="collectionContainer" ng-model="currSpecimen.collectionEvent.container" list="collectionContainers"
                 required placeholder="{{'specimens.col_event.collection_container' | translate}}">
               </os-select>
               <div os-field-error field="sform.collectionContainer"></div>
@@ -229,7 +229,7 @@
           <div class="form-group">
             <label class="col-xs-3 control-label" translate="specimens.col_event.collection_proc">Collection Procedure</label>
             <div class="col-xs-6">
-              <os-select name="collectionProcedure" ng-model="currSpecimen.collectionEvent.procedure" list="collectionProcedure"
+              <os-select name="collectionProcedure" ng-model="currSpecimen.collectionEvent.procedure" list="collectionProcedures"
                 required placeholder="{{'specimens.col_event.collection_proc' | translate}}">
               </os-select>
               <div os-field-error field="sform.collectionProcedure"></div>
@@ -239,11 +239,11 @@
           <div class="os-section-divider" translate="specimens.recv_event.title"/>
 
           <div class="form-group">
-            <label class="col-xs-3 control-label"  translate="specimens.recv_event.user_time">User and Time</label>
+            <label class="col-xs-3 control-label"  translate="specimens.recv_event.user">User and Time</label>
             <div class="col-xs-3" name="receiver">
-              <os-users required ng-model="currSpecimen.receivedEvent.user" placeholder="{{'specimens.recv_event.user_time' | translate}}"> </os-users>
+              <os-users ng-model="currSpecimen.receivedEvent.user" required placeholder="{{'specimens.recv_event.user_time' | translate}}"> </os-users>
+              <div os-field-error field="sform.receiver"></div>
             </div>
-            <div os-field-error field="sform.receiver"></div>
 
             <div class="os-date-time clearfix">
               <div class="col-xs-2 input">
@@ -255,14 +255,14 @@
                 <timepicker class="os-time-no-wheels" ng-model="currSpecimen.receivedEvent.time" show-meridian="false">
                 </timepicker>
               </div>
+              <div os-field-error field="sform.receiveDate"></div>
             </div>
-            <div os-field-error field="sform.receiveDate"></div>
           </div>
 
           <div class="form-group">
             <label class="col-xs-3 control-label" translate="specimens.recv_event.received_quality">Received Quality</label>
             <div class="col-xs-6">
-              <os-select name="receivedQuality" ng-model="currSpecimen.receivedEvent.receivedQuality" list="receivedQuality"
+              <os-select name="receivedQuality" ng-model="currSpecimen.receivedEvent.receivedQuality" list="receivedQualities"
                 required placeholder="{{'specimens.recv_event.received_quality' | translate}}">
               </os-select>
               <div os-field-error field="sform.receivedQuality"></div>

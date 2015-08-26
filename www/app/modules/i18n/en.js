@@ -437,6 +437,7 @@
     "col_event": {
       "title": "COLLECTION DETAILS",
       "user_time": "User and Time",
+      "user": "Collector",
       "date": "Collection Date",
       "collection_container": "Container",
       "collection_proc": "Procedure"
@@ -445,6 +446,7 @@
     "recv_event": {
       "title": "RECEIVED DETAILS",
       "user_time": "User and Time",
+      "user": "Receiver",
       "date": "Receive Date",
       "received_quality": "Quality"
     },

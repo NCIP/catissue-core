@@ -20,9 +20,9 @@ angular.module('os.biospecimen.specimen.addedit', [])
       $scope.biohazards = PvManager.getPvs('specimen-biohazard');
 
       if (!specimen.id && !specimen.reqId) {
-        $scope.collectionProcedure = PvManager.getPvs('collection-procedure');
-        $scope.collectionContainer = PvManager.getPvs('collection-container');
-        $scope.receivedQuality =  PvManager.getPvs('received-quality');
+        $scope.collectionProcedures = PvManager.getPvs('collection-procedure');
+        $scope.collectionContainers = PvManager.getPvs('collection-container');
+        $scope.receivedQualities =  PvManager.getPvs('received-quality');
       }
     };
 
@@ -56,14 +56,15 @@ angular.module('os.biospecimen.specimen.addedit', [])
       }
 
       if (!$scope.currSpecimen.id && !$scope.currSpecimen.reqId) {
+        var currentDate = new Date();
         $scope.currSpecimen.collectionEvent = {
           user: $scope.currentUser,
-          time: new Date()
+          time: currentDate
         };
 
         $scope.currSpecimen.receivedEvent = {
           user: $scope.currentUser,
-          time: new Date()
+          time: currentDate
         };
       }
 
