@@ -148,8 +148,12 @@
   padding-right: 10px;
 }
 
-.progress-bar-info {
-  background-color: #3B933B !important;
+.progress-bar-distributed {
+  background-color: #3B933B;
+}
+
+.progress-bar-missed {
+  background-color: #888;
 }
 
 .os-time-no-wheels tbody tr:first-child,
