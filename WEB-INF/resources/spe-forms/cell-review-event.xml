@@ -11,7 +11,7 @@
       <numberField>
         <name>neoPlasticCellularityPct</name>
         <udn>neoPlasticCellularityPct</udn>
-        <caption>#getMessage("neo_plastic_cellularity_percentage")</caption>
+        <caption>#getMessage("cell_review_evnt_neo_plastic_cellularity_pct")</caption>
         <column>NEOPLASTIC_CELLULARITY_PER</column>
       </numberField>
     </row>
@@ -20,7 +20,7 @@
       <numberField>
         <name>viableCellPct</name>
         <udn>viableCellPct</udn>
-        <caption>#getMessage("viable_cell_percentage")</caption>
+        <caption>#getMessage("cell_review_evnt_viable_cell_pct")</caption>
 	<column>VIABLE_CELL_PERCENTAGE</column>
       </numberField>
     </row>
@@ -29,7 +29,7 @@
       <userField>
         <name>user</name>
         <udn>user</udn>
-        <caption>#getMessage("user")</caption>
+        <caption>#getMessage("specimen_evnt_user")</caption>
         <column>USER_ID</column>
         <showInGrid>true</showInGrid>
         <mandatory>true</mandatory>
@@ -40,7 +40,7 @@
       <datePicker>
         <name>time</name>
         <udn>time</udn>
-        <caption>#getMessage("date_time")</caption>
+        <caption>#getMessage("specimen_evnt_date_time")</caption>
         <column>EVENT_TIMESTAMP</column>
         <format>MM-dd-yyyy HH:mm</format>
         <showInGrid>true</showInGrid>
@@ -54,7 +54,7 @@
       <textArea>
         <name>comments</name>
         <udn>comments</udn>
-        <caption>#getMessage("comments")</caption>
+        <caption>#getMessage("specimen_evnt_comments")</caption>
         <column>COMMENTS</column>
         <height>2</height>
       </textArea>
