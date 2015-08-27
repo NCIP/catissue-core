@@ -57,7 +57,12 @@
 }
 
 .fa.os-status-distributed:before {
-  color: #5bc0de !important;
+  color: #5bc0de;
+  padding: 0px 4px;
+}
+
+.fa.os-status-unplanned:before {
+  color: #3B933B;
   padding: 0px 4px;
 }
 
@@ -148,7 +153,7 @@
   padding-right: 10px;
 }
 
-.progress-bar-distributed {
+.progress-bar-unplanned {
   background-color: #3B933B;
 }
 
@@ -240,4 +245,8 @@
 .os-spr .os-btns {
   margin-top: -15px;
   margin-bottom: 10px;
+}
+
+.os-secondary-row {
+  background-color: #eee;
 }
