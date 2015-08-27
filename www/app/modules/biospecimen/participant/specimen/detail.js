@@ -1,13 +1,31 @@
 angular.module('os.biospecimen.specimen.detail', [])
   .controller('SpecimenDetailCtrl', function(
     $scope, $state, $modal, $stateParams,
-    cpr, visit, specimen, Specimen, DeleteUtil) {
+    cpr, visit, specimen, Specimen, SpecimenLabelPrinter, SpecimenList, SpecimensHolder, DeleteUtil, Alerts) {
 
     function init() {
       $scope.cpr = cpr;
       $scope.visit = visit;
       $scope.specimen = specimen;
-      $scope.childSpecimens = $scope.specimen.children; 
+      $scope.childSpecimens = $scope.specimen.children;
+      loadAllSpecimenList();
+    }
+
+    function loadAllSpecimenList() {
+      SpecimenList.query().then(
+        function(lists) {
+          if ($scope.currentUser.admin) {
+            $scope.specimenLists = lists;
+          } else {
+            $scope.specimenLists = [];
+            angular.forEach(lists, function(list) {
+              if (list.owner.id == $scope.currentUser.id) {
+                $scope.specimenLists.push(list);
+              }
+            })
+          }
+        }
+      );
     }
 
     $scope.reload = function() {
@@ -57,6 +75,23 @@ angular.module('os.biospecimen.specimen.detail', [])
           }
         }
       });
+    }
+
+    $scope.printSpecimenLabels = function() {
+      SpecimenLabelPrinter.printLabels({specimenIds: [specimen.id]});
+    };
+
+    $scope.addSpecimensToSpecimenList = function(list) {
+      var selectedSpecimens = [{label: $scope.specimen.label}];
+
+      if (!!list) {
+        list.addSpecimens(selectedSpecimens).then(function(specimens) {
+          Alerts.success('specimen_list.specimens_added', {name: list.name});
+        })
+      } else {
+        SpecimensHolder.setSpecimens(selectedSpecimens);
+        $state.go('specimen-list-addedit', {listId: ''});
+      }
     }
 
     init();
