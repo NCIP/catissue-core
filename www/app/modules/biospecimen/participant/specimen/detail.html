@@ -41,31 +41,9 @@
         </span>
       </button>
 
-      <div dropdown class="os-inline-btn" ng-if="!!specimen.id">
-        <button class="btn btn-default dropdown-toggle">
-          <span class="fa fa-list"></span>
-          <span translate="specimens.buttons.assign_to">Assign To</span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right os-query-folders-dd">
-          <li>
-            <input ng-model="searchSpecimenList" type="text" class="form-control"
-              placeholder="{{'specimen_list.search_list' | translate}}"
-              ng-click="$event.stopPropagation()">
-          </li>
-          <li>
-            <ul class="dropdown-menu-subgroup">
-              <li ng-repeat="list in specimenLists | filter: searchSpecimenList"
-                ng-click="addSpecimensToSpecimenList(list)">
-                <a><span>{{list.name}}</span></a>
-              </li>
-            </ul>
-          </li>
-          <li class="divider"></li>
-          <li ng-click="addSpecimensToSpecimenList()">
-            <a translate="specimen_list.create_new_list">Create New Specimen List</a>
-          </li>
-        </ul>
-      </div>
+      <os-assign-to-list lists="specimenLists" search-list-text="specimen_list.search_list" create-list-text="specimen_list.create_new_list"
+        on-add-to-list="addSpecimensToSpecimenList(list)" ng-if="!!specimen.id">
+      </os-assign-to-list>
 
       <div dropdown class="os-inline-btn" ng-if="!!specimen.id">
         <button class="btn btn-default dropdown-toggle">
@@ -74,14 +52,14 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-right">
           <li show-if-allowed="specimenResource.readOpts"
-          ng-if="specimen.activityStatus == 'Active' && specimen.status == 'Collected'">
+            ng-if="specimen.activityStatus == 'Active' && specimen.status == 'Collected'">
             <a ng-click="printSpecimenLabels()">
               <span class="fa fa-print"></span>
               <span translate="specimens.buttons.print">Print</span>
             </a>
           </li>
           <li show-if-allowed="specimenResource.deleteOpts"
-              ng-if="!!specimen.id">
+            ng-if="!!specimen.id">
             <a ng-click="deleteSpecimen()">
               <span class="fa fa-trash"></span>
               <span translate="common.buttons.delete">Delete</span>

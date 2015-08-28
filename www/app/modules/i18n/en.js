@@ -56,6 +56,8 @@
     "build_date": "Build date",
     "build_commit_revision": "Revision",
     "confirm_navigation": " You've unsaved form changes. If you navigate away from this page without submitting form, the changes will be lost. Are you sure you want to leave this form/page?",
+    "searh_list": "Search list",
+    "create_list": "Create new list",
 
     "buttons": {
       "add": "Add",
@@ -81,7 +83,8 @@
       "clear_filters": "Clear Filters",
       "close": "Close",
       "upload": "Upload",
-      "reset_password": "Reset Password"
+      "reset_password": "Reset Password",
+      "assign_to": "Assign To"
     }
   },
 

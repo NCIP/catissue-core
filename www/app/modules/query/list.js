@@ -108,15 +108,19 @@ angular.module('os.query.list', ['os.query.models'])
     };
 
     $scope.addSelectedQueriesToFolder = function(folder) {
-      folder.addQueries($scope.selectedQueries).then(
-        function(assignedQueries) {
-          var params = {
-            count: $scope.selectedQueries.length,
-            folderName: folder.name
-          };
-          Alerts.success("queries.queries_assigned_to_folder", params);
-        }
-      );
+      if (!folder) {
+        $scope.createNewFolder();
+      } else {
+        folder.addQueries($scope.selectedQueries).then(
+          function(assignedQueries) {
+            var params = {
+              count: $scope.selectedQueries.length,
+              folderName: folder.name
+            };
+            Alerts.success("queries.queries_assigned_to_folder", params);
+          }
+        );
+      }
     };
 
     $scope.createNewFolder = function() {

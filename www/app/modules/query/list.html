@@ -25,31 +25,9 @@
           </li>
         </ul>
       </div>
-      <div dropdown ng-if="selectedQueries.length > 0" class="inline">
-        <button class="default dropdown-toggle">
-          <span class="fa fa-folder"></span>
-          <span translate="queries.assign">Assign</span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right os-query-folders-dd">
-          <li>
-            <input ng-model="searchQueryFolder" type="text" class="form-control" 
-              placeholder="{{'queries.search_folder' | translate}}" 
-              ng-click="$event.stopPropagation()">
-          </li>
-          <li>
-            <ul class="dropdown-menu-subgroup">
-              <li ng-repeat="folder in folders.myFolders | filter: searchQueryFolder"
-                ng-click="addSelectedQueriesToFolder(folder)">
-                <a><span>{{folder.name}}</span></a>
-              </li>
-            </ul>
-          </li>
-          <li class="divider"></li>
-          <li ng-click="createNewFolder()">
-            <a translate="queries.create_new_folder">Create New Folder</a>
-          </li>
-        </ul>
-      </div>
+      <os-assign-to-list lists="folders.myFolders" search-list-text="queries.search_folder" create-list-text="queries.create_new_folder"
+         on-add-to-list="addSelectedQueriesToFolder(folder)">
+      </os-assign-to-list>
       <button os-right-drawer-toggle class="default">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>
