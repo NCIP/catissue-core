@@ -10,19 +10,32 @@
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
-      <a class="btn default" href="{{downloadUri}}" target="_blank">
-        <span class="fa fa-download"></span>
-        <span translate="common.buttons.export">Export</span>
-      </a>
-      <button show-if-allowed="containerResource.createOpts" class="default"
-        ui-sref="container-replicate({containerId: container.id})">
-        <span class="fa fa-copy"></span>
-        <span translate="container.replicate">Replicate</span>
-      </button>
-      <button show-if-allowed="containerResource.deleteOpts" class="default" ng-click="deleteContainer()">
-        <span class="fa fa-trash"></span>
-        <span translate="common.buttons.delete">Delete</span>
-      </button>
+      <div dropdown os-show-if-menu-items-present class="inline">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.more">More</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li>
+            <a href="{{downloadUri}}" target="_blank">
+              <span class="fa fa-download"></span>
+              <span translate="common.buttons.export">Export</span>
+            </a>
+          </li>
+          <li show-if-allowed="containerResource.createOpts">
+            <a ui-sref="container-replicate({containerId: container.id})">
+              <span class="fa fa-copy"></span>
+              <span translate="container.replicate">Replicate</span>
+            </a>
+          </li>
+          <li>
+            <a ng-click="deleteContainer()" show-if-allowed="containerResource.deleteOpts">
+              <span class="fa fa-trash"></span>
+              <span translate="common.buttons.delete">Delete</span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 

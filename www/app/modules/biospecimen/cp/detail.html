@@ -12,7 +12,7 @@
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
-      <div dropdown class="inline">
+      <div dropdown os-show-if-menu-items-present class="inline">
         <button class="default dropdown-toggle">
           <span translate="common.buttons.more">More</span>
           <span class="fa fa-caret-down"></span>
@@ -20,13 +20,13 @@
         <ul class="dropdown-menu dropdown-menu-right">
           <li show-if-allowed="cpResource.deleteOpts" ng-click="deleteCp()">
             <a>
-              <i class="fa fa-trash"></i>
+              <span class="fa fa-trash"></span>
               <span translate="cp.menu_options.delete">Delete</span>
             </a>
           </li>
           <li>
             <a href="{{downloadUri}}" target="_blank">
-              <i class="fa fa-download"></i>
+              <span class="fa fa-download"></span>
               <span translate="cp.menu_options.export">Export</span>
             </a>
           </li>

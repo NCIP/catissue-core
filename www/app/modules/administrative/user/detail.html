@@ -13,14 +13,26 @@
           <span class="fa fa-pencil"></span>
           <span translate="common.buttons.edit">Edit</span>
         </button>
-        <button show-if-allowed="userResource.deleteOpts" class="default" ng-click="deleteUser()">
-          <span class="fa fa-trash"></span>
-          <span translate="common.buttons.delete">Delete</span>
-        </button>
-        <button ng-if="currentUser.id != user.id && currentUser.admin" class="default" ui-sref="user-password({userId: user.id})">
-          <span class="fa fa-key"></span>
-          <span translate="common.buttons.reset_password">Reset Password</span>
-        </button>
+        <div dropdown os-show-if-menu-items-present class="inline">
+          <button class="default dropdown-toggle">
+            <span translate="common.buttons.more">More</span>
+            <span class="fa fa-caret-down"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li show-if-allowed="userResource.deleteOpts">
+              <a ng-click="deleteUser()">
+                <span class="fa fa-trash"></span>
+                <span translate="common.buttons.delete">Delete</span>
+              </a>
+            </li>
+            <li ng-if="currentUser.id != user.id && currentUser.admin">
+              <a ui-sref="user-password({userId: user.id})">
+                <span class="fa fa-key"></span>
+                <span translate="common.buttons.reset_password">Reset Password</span>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
