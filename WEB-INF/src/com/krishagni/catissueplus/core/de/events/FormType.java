@@ -7,7 +7,7 @@ public enum FormType {
 	SPECIMEN_FORMS("Specimen"),	
 	SPECIMEN_EVENT_FORMS("SpecimenEvent"),
 	SITE_FORMS("SiteExtension"),
-	COLLECTION_PROTOCOL_FORMS("CollectionProtocol"),
+	COLLECTION_PROTOCOL_FORMS("CollectionProtocolExtension"),
 	QUERY_FORMS("Query");
 	
 	private String type;

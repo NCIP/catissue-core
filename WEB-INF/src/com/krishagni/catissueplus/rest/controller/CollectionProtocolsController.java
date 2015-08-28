@@ -43,6 +43,10 @@ import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
+import com.krishagni.catissueplus.core.de.services.FormService;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
 
@@ -52,6 +56,9 @@ public class CollectionProtocolsController {
 
 	@Autowired
 	private CollectionProtocolService cpSvc;
+	
+	@Autowired
+	private FormService formSvc;
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
@@ -317,6 +324,20 @@ public class CollectionProtocolsController {
 		}
 		
 		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/form")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public FormCtxtSummary getForm() {
+		ListEntityFormsOp op = new ListEntityFormsOp();
+		op.setEntityType(EntityType.COLLECTION_PROTOCOL); 
+        
+		RequestEvent<ListEntityFormsOp> req = new RequestEvent<ListEntityFormsOp>(op);
+		ResponseEvent<FormCtxtSummary> resp = formSvc.getEntityExtensionForms(req);
+		resp.throwErrorIfUnsuccessful();
+		
 		return resp.getPayload();
 	}
 	

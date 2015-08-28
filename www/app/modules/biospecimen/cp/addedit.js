@@ -6,6 +6,7 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
 
     function init() {
       $scope.cp = cp;
+      $scope.deFormCtrl = {};
 
       /**
        * Some how the ui-select's multiple option is removing pre-selected items
@@ -59,8 +60,13 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
     };
 
     $scope.createCp = function() {
+       if (!$scope.deFormCtrl.ctrl.validate()) {
+        return;
+      }
+
       var cp = angular.copy($scope.cp);
       cp.ppidFmt = getPpidFmt();
+      cp.extensionDetail = $scope.deFormCtrl.ctrl.getFormData();
       cp.$saveOrUpdate().then(
         function(savedCp) {
           $state.go('cp-detail.overview', {cpId: savedCp.id});

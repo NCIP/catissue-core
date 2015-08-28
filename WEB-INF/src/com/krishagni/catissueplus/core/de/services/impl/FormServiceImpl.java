@@ -306,6 +306,11 @@ public class FormServiceImpl implements FormService {
 				case SITE:
 					entityType = FormType.SITE_FORMS.getType();
 					break;
+					
+				case COLLECTION_PROTOCOL:
+					entityType = FormType.COLLECTION_PROTOCOL_FORMS.getType();
+					break;
+					
 				default:
 					throw OpenSpecimenException.userError(FormErrorCode.NOT_FOUND);
 			}

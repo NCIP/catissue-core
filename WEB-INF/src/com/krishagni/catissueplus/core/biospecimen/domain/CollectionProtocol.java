@@ -67,6 +67,8 @@ public class CollectionProtocol extends BaseEntity {
 	
 	private Boolean manualSpecLabelEnabled;
 	
+	private CollectionProtocolExtension extension;
+	
 	private Set<ConsentTier> consentTier = new HashSet<ConsentTier>();
 	
 	private Set<User> coordinators = new HashSet<User>();
@@ -228,6 +230,18 @@ public class CollectionProtocol extends BaseEntity {
 	}
 
 	@NotAudited
+	public CollectionProtocolExtension getExtension() {
+		if (this.extension == null) {
+			this.extension = CollectionProtocolExtension.getFor(this);
+		}
+		return extension;
+	}
+
+	public void setExtension(CollectionProtocolExtension extension) {
+		this.extension = extension;
+	}
+
+	@NotAudited
 	public Set<ConsentTier> getConsentTier() {
 		return consentTier;
 	}
@@ -308,6 +322,7 @@ public class CollectionProtocol extends BaseEntity {
 		setAliquotLabelFormat(cp.getAliquotLabelFormat());
 		setManualSpecLabelEnabled(cp.isManualSpecLabelEnabled());
 		setUnsignedConsentDocumentURL(cp.getUnsignedConsentDocumentURL());
+		setExtension(cp.getExtension());
 		
 		CollectionUpdater.update(this.repositories, cp.getRepositories());
 		CollectionUpdater.update(this.coordinators, cp.getCoordinators());
@@ -422,6 +437,14 @@ public class CollectionProtocol extends BaseEntity {
 		setTitle(Utility.getDisabledValue(getTitle(), 255));
 		setShortTitle(Utility.getDisabledValue(getShortTitle(), 50));
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+	}
+	
+	public void addOrUpdateExtension() {
+		if (getExtension() == null) {
+			return;
+		}
+		
+		getExtension().saveOrUpdate();
 	}
 
 	private ConsentTier getConsentTierById(Long ctId) {

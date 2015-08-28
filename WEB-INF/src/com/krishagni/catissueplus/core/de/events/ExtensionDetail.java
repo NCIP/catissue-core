@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import com.krishagni.catissueplus.core.administrative.domain.SiteExtension;
+import com.krishagni.catissueplus.core.de.domain.DeObject;
 import com.krishagni.catissueplus.core.de.domain.DeObject.Attr;
 
 public class ExtensionDetail {
@@ -39,7 +39,7 @@ public class ExtensionDetail {
 		this.attrs = attrs;
 	}
 
-	public static ExtensionDetail from(SiteExtension extension) {
+	public static ExtensionDetail from(DeObject extension) {
 		ExtensionDetail detail = new ExtensionDetail();
 		detail.setId(extension.getId());
 		detail.setObjectId(extension.getObjectId()); 

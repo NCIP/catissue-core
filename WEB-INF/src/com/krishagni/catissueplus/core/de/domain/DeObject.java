@@ -164,7 +164,7 @@ public abstract class DeObject {
 	
 	protected String getFormNameByEntityType() {
 		String formName = entityTypeFormNameMap.get(getEntityType());
-		if (formName == null) {
+		if (!entityTypeFormNameMap.containsKey(getEntityType())) {
 			List<FormSummary> forms = daoFactory.getFormDao().getFormsByEntityType(getEntityType());
 			formName = forms.isEmpty() ? null: forms.get(0).getName();
 			entityTypeFormNameMap.put(getEntityType(), formName);
@@ -281,12 +281,17 @@ public abstract class DeObject {
 	}
 	
 	private FormContextBean getFormContext() {
-		FormContextBean formCtxt = formCtxMap.get(getFormName());
+		String formName = getFormName();
+		if (formName == null) {
+			return null;
+		}
+		
+		FormContextBean formCtxt = formCtxMap.get(formName);
 		if (formCtxt == null) {
 			synchronized (formCtxMap) {
 				Long formId = getForm().getId();
 				formCtxt = daoFactory.getFormDao().getFormContext(formId, getCpId(), getEntityType());
-				formCtxMap.put(getFormName(), formCtxt);
+				formCtxMap.put(formName, formCtxt);
 			}
 		}
 		
