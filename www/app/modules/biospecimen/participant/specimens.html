@@ -109,8 +109,8 @@
                                  'os-status-collected': specimen.status == 'Collected',
                                  'os-status-pending': specimen.status == 'Pending' || !specimen.status,
                                  'os-status-not-collected': specimen.status == 'Missed Collection',
-                                 'os-status-distributed': specimen.distributed == true,
-                                 'os-status-closed': specimen.activityStatus == 'Closed'}">
+                                 'os-status-closed': specimen.activityStatus == 'Closed' && !specimen.distributed,
+                                 'os-status-distributed': !!specimen.distributed}">
                     </span>
 
                     <a ui-sref="specimen-detail.overview(

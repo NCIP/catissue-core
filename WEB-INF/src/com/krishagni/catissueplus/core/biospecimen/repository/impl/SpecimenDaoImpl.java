@@ -1,7 +1,6 @@
 
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,17 +149,10 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Long> getDistributedSpecimens(List<Long> specimenIds) {
-		List<Object> rows = getSessionFactory().getCurrentSession()
+		return (List<Long>) getSessionFactory().getCurrentSession()
 				.getNamedQuery(GET_DISTRIBUTED_SPECIMENS)
 				.setParameterList("specimenIds", specimenIds)
 				.list();
-
-		List<Long> result = new ArrayList<Long>();
-		for (Object row : rows) {
-			result.add((Long)row);
-		}
-
-		return result;
 	}
 
 	private void addLabelsCond(Criteria query, List<String> labels) {
