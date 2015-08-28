@@ -2,7 +2,7 @@
   <div class="col-xs-8">
     <ul class="os-key-values os-one-col">
       <li class="item">
-        <strong class="key key-sm" translate="participant.consent.signed_consent_form">Signed Consent Form</strong>
+        <strong class="key key-sm" translate="participant.consent.signed_form">Signed Consent Form</strong>
         <div class="value value-md" ng-if="!uploadMode">
           <div class="pull-left" ng-switch on="!!consent.consentDocumentName"> 
             <a ng-href="{{consentFormUrl}}" target="_blank" ng-switch-when="true">{{consent.consentDocumentName}}</a>
@@ -46,7 +46,7 @@
   <div class="col-xs-8 os-consents" ng-if="consentExists">
     <div class="list-group">
       <div class="list-group-item clearfix os-section-hdr">
-        <span translate="participant.consent.consent_responses">Consent Responses</span>
+        <span translate="participant.consent.responses">Consent Responses</span>
         <div show-if-allowed="participantResource.updateOpts" class="btn-group os-btns right">
           <button class="btn btn-primary" ng-if="!editMode" ng-click="showEditConsents()">
             <span class="fa fa-pencil"></span>
