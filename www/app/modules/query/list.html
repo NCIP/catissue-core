@@ -1,6 +1,6 @@
 <div>
   <div os-page-header>
-    <h3>
+    <h3> 
       <span translate="queries.list">Queries</span>
     </h3>
 
@@ -32,8 +32,8 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-right os-query-folders-dd">
           <li>
-            <input ng-model="searchQueryFolder" type="text" class="form-control"
-              placeholder="{{'queries.search_folder' | translate}}"
+            <input ng-model="searchQueryFolder" type="text" class="form-control" 
+              placeholder="{{'queries.search_folder' | translate}}" 
               ng-click="$event.stopPropagation()">
           </li>
           <li>
@@ -55,7 +55,7 @@
         <span translate="common.buttons.search">Search</span>
       </button>
     </div>
-  </div>
+  </div>    
 
   <div class="container os-list-container">
     <div class="row">
@@ -89,7 +89,7 @@
     </div>
     <div class="os-table-body">
       <div class="row" ng-repeat="query in queryList.queries"
-        ng-class="{selected: query.selected}">
+        ng-class="{selected: query.selected}"> 
         <div class="col col-xs-6">
           <div class="clearfix">
             <div class="pull-left os-query-select-cb">
@@ -156,10 +156,10 @@
   </div>
   <div ng-if="queryData.totalQueries > queryData.pageSize">
     <pagination class="pagination-sm"
-      total-items="queryData.totalQueries"
-      items-per-page="queryData.pageSize"
-      max-size="5"
-      ng-model="queryData.currentPage"
+      total-items="queryData.totalQueries" 
+      items-per-page="queryData.pageSize"  
+      max-size="5" 
+      ng-model="queryData.currentPage" 
       ng-change="changeQueriesPage(false)">
     </pagination>
   </div>
@@ -190,9 +190,9 @@
   <div class="os-query-folders">
     <div class="os-table os-table-condensed os-table-borderless" ng-if="folders.myFolders.length != 0">
       <div class="os-table-body">
-        <div class="row" ng-repeat="folder in folders.myFolders">
-          <div class="col col-xs-12 clearfix folder"
-            ng-class="{'os-query-selected-folder': folders.selectedFolder == folder}">
+        <div class="row" ng-repeat="folder in folders.myFolders"> 
+          <div class="col col-xs-12 clearfix folder" 
+            ng-class="{'os-query-selected-folder': folders.selectedFolder == folder}"> 
             <div class="pull-left" ng-click="selectFolder(folder)" title="{{folder.name}}">
               {{folder.name}}
             </div>
@@ -200,7 +200,7 @@
             <div class="pull-right">
               <button type="button" class="btn btn-xs btn-default" ng-click="editFolder(folder)">
                 <span class="fa fa-pencil"></span>
-              </button>
+              </button> 
             </div>
           </div>
         </div>

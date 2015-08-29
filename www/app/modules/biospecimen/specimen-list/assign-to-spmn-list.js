@@ -1,16 +1,16 @@
 
-angular.module('os.biospecimen.participant.assignto',[])
-  .directive('assignToSpmnList', function(SpecimenList) {
+angular.module('os.biospecimen.specimenlist.assignto',[])
+  .directive('osAssignToSpmnList', function(SpecimenList, $rootScope) {
 
     function loadAllSpecimenList(scope) {
       SpecimenList.query().then(
         function(lists) {
-          if (scope.currentUser.admin) {
+          if ($rootScope.currentUser.admin) {
             scope.specimenLists = lists;
           } else {
             scope.specimenLists = [];
             angular.forEach(lists, function(list) {
-              if (list.owner.id == scope.currentUser.id) {
+              if (list.owner.id == $rootScope.currentUser.id) {
                 scope.specimenLists.push(list);
               }
             })
@@ -22,11 +22,10 @@ angular.module('os.biospecimen.participant.assignto',[])
     return {
       restrict: 'E',
       scope: {
-        onAddToList: '&',
-        currentUser: '='
+        onAddToList: '&'
       },
 
-      templateUrl: 'modules/biospecimen/participant/assign-to-spmn-list.html',
+      templateUrl: 'modules/biospecimen/specimen-list/assign-to-spmn-list.html',
 
       link: function(scope, element, attrs) {
         loadAllSpecimenList(scope);
