@@ -3,6 +3,18 @@ angular.module('openspecimen')
   .controller('StoragePositionSelectorCtrl',
     function($scope, $modalInstance, $timeout, $q, entity, cpId, Container) {
       function init() {
+        $scope.listOpts = { type: entity.getType() };
+        if (entity.getType() == 'specimen') {
+          $scope.listOpts.criteria = {
+            storeSpecimensEnabled: true,
+            specimenClass: entity.specimenClass,
+            specimenType: entity.type,
+            cpId: cpId
+          }
+        } else {
+          $scope.listOpts.criteria = { site: entity.siteName };
+        }
+
         $scope.selectedContainer = {}; // step 1
         $scope.selectedPos = {};       // step 2
         $scope.showGrid = false;       // when to draw and show occupancy grid

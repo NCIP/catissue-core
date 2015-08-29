@@ -10,7 +10,7 @@
     <div os-wizard="posWizard">
       <os-wizard-step title="Select Container" on-finish="getOccupancyMap">
         <div class="os-select-container-tab">
-          <os-container-selector entity="entity" cp-id="cpId"
+          <os-container-selector type="listOpts.type" criteria="listOpts.criteria"
             on-toggle-selection="toggleContainerSelection(posWizard, container)">
           </os-container-selector>
         </div>
