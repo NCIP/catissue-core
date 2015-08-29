@@ -8,24 +8,6 @@ angular.module('os.biospecimen.specimen.detail', [])
       $scope.visit = visit;
       $scope.specimen = specimen;
       $scope.childSpecimens = $scope.specimen.children;
-      loadAllSpecimenList();
-    }
-
-    function loadAllSpecimenList() {
-      SpecimenList.query().then(
-        function(lists) {
-          if ($scope.currentUser.admin) {
-            $scope.specimenLists = lists;
-          } else {
-            $scope.specimenLists = [];
-            angular.forEach(lists, function(list) {
-              if (list.owner.id == $scope.currentUser.id) {
-                $scope.specimenLists.push(list);
-              }
-            })
-          }
-        }
-      );
     }
 
     $scope.reload = function() {

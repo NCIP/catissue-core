@@ -44,14 +44,6 @@ angular.module('os.query.results', ['os.query.models'])
       }
     }
 
-    function loadAllSpecimenList() {
-      SpecimenList.query().then(
-        function(lists) {
-          $scope.specimenLists = lists;
-        }
-      );
-    }
-
     function isParameterized() {
       var filters = $scope.queryCtx.filters;
       for (var i = 0; i < filters.length; ++i) {
@@ -191,7 +183,6 @@ angular.module('os.query.results', ['os.query.models'])
 
     function showAddToSpecimenList() {
       if ($scope.queryCtx.selectedFields.indexOf('Specimen.label') != -1) {
-        loadAllSpecimenList();
         return true;
       }
 

@@ -25,23 +25,6 @@ angular.module('os.biospecimen.participant.specimen-tree',
       scope.classesLoaded = true;
     }
 
-    function loadAllSpecimenList(scope) {
-      SpecimenList.query().then(
-        function(lists) {
-          if (scope.$parent.currentUser.admin) {
-            scope.specimenLists = lists;
-          } else {
-            scope.specimenLists = [];
-            angular.forEach(lists, function(list) {
-              if (list.owner.id == scope.$parent.currentUser.id) {
-                scope.specimenLists.push(list);
-              }
-            })
-          }
-        }
-      );
-    }
-
     function toggleAllSelected(selection, specimens, specimen) {
       if (!specimen.selected) {
         selection.all = false;
@@ -147,7 +130,6 @@ angular.module('os.biospecimen.participant.specimen-tree',
       link: function(scope, element, attrs) {
         scope.view = 'list';
         scope.parentSpecimen = undefined;
-        loadAllSpecimenList(scope);
         scope.currentUser = scope.$parent.currentUser;
 
         scope.specimens = Specimen.flatten(scope.specimenTree);

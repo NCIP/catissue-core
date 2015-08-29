@@ -33,13 +33,13 @@
         <ul class="dropdown-menu dropdown-menu-right os-query-folders-dd">
           <li>
             <input ng-model="searchQueryFolder" type="text" class="form-control"
-                   placeholder="{{'queries.search_folder' | translate}}"
-                   ng-click="$event.stopPropagation()">
+              placeholder="{{'queries.search_folder' | translate}}"
+              ng-click="$event.stopPropagation()">
           </li>
           <li>
             <ul class="dropdown-menu-subgroup">
               <li ng-repeat="folder in folders.myFolders | filter: searchQueryFolder"
-                  ng-click="addSelectedQueriesToFolder(folder)">
+                ng-click="addSelectedQueriesToFolder(folder)">
                 <a><span>{{folder.name}}</span></a>
               </li>
             </ul>
