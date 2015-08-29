@@ -3,16 +3,15 @@
     <span class="fa fa-list"></span>
     <span translate="common.buttons.assign_to"> Assign To </span>
   </button>
+  
   <ul class="dropdown-menu dropdown-menu-right os-query-folders-dd">
     <li>
       <input ng-model="searchList" type="text" class="form-control"
-        placeholder="{{searchListText}}"
-        ng-click="$event.stopPropagation()">
+        placeholder="{{searchListText}}" ng-click="$event.stopPropagation()">
     </li>
     <li>
       <ul class="dropdown-menu-subgroup">
-        <li ng-repeat="list in lists | filter: searchList"
-          ng-click="addToList(list)">
+        <li ng-repeat="list in lists | filter: searchList" ng-click="addToList(list)">
           <a><span>{{list.name}}</span></a>
         </li>
       </ul>
