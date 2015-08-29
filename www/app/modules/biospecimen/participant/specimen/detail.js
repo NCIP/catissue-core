@@ -1,7 +1,7 @@
 angular.module('os.biospecimen.specimen.detail', [])
   .controller('SpecimenDetailCtrl', function(
     $scope, $state, $modal, $stateParams,
-    cpr, visit, specimen, Specimen, SpecimenLabelPrinter, SpecimenList, SpecimensHolder, DeleteUtil, Alerts) {
+    cpr, visit, specimen, Specimen, SpecimenLabelPrinter, SpecimensHolder, DeleteUtil, Alerts) {
 
     function init() {
       $scope.cpr = cpr;

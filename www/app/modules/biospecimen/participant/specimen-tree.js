@@ -6,7 +6,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
   ])
   .directive('osSpecimenTree', function(
     $state, $stateParams, $modal, $timeout,
-    CollectSpecimensSvc, Specimen, SpecimenLabelPrinter, SpecimenList, SpecimensHolder,
+    CollectSpecimensSvc, Specimen, SpecimenLabelPrinter, SpecimensHolder,
     Alerts, PvManager, Util, DeleteUtil) {
 
     function openSpecimenTree(specimens) {
