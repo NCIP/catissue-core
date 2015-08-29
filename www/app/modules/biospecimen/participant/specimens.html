@@ -7,9 +7,8 @@
           <span class="fa fa-plus"></span>
           <span translate="specimens.buttons.collect"> Collect </span>
         </button>
-        <os-assign-to-list lists="specimenLists" search-list-text="specimen_list.search_list" create-list-text="specimen_list.create_new_list"
-          on-add-to-list="addSpecimensToSpecimenList(list)">
-        </os-assign-to-list>
+        <assign-to-spmn-list current-user="currentUser" on-add-to-list="addSpecimensToSpecimenList(list)">
+        </assign-to-spmn-list>
       </div>
       <div dropdown class="os-inline-btn">
         <button class="btn btn-default dropdown-toggle">

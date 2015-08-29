@@ -318,11 +318,21 @@ angular.module('os.query.results', ['os.query.models'])
     };
 
     $scope.addSelectedSpecimensToSpecimenList = function(list) {
-      list.addSpecimens(getSelectedSpecimens()).then(
-        function(specimens) {
-          Alerts.success('specimen_list.specimens_added', {name: list.name});
-        }
-      );
+      var selectedSpecimens = getSelectedSpecimens();
+      if (!selectedSpecimens || selectedSpecimens.length == 0) {
+        Alerts.error('specimens.no_specimens_for_specimen_list');
+        return;
+      }
+
+      if (!list) {
+        $scope.createNewSpecimenList();
+      } else {
+        list.addSpecimens(selectedSpecimens).then(
+          function(specimens) {
+            Alerts.success('specimen_list.specimens_added', {name: list.name});
+          }
+        );
+      }
     }
 
     $scope.createNewSpecimenList = function() {

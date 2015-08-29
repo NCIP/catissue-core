@@ -41,9 +41,8 @@
         </span>
       </button>
 
-      <os-assign-to-list lists="specimenLists" search-list-text="specimen_list.search_list" create-list-text="specimen_list.create_new_list"
-        on-add-to-list="addSpecimensToSpecimenList(list)" ng-if="!!specimen.id">
-      </os-assign-to-list>
+      <assign-to-spmn-list current-user="currentUser" on-add-to-list="addSpecimensToSpecimenList(list)" ng-if="!!specimen.id">
+      </assign-to-spmn-list>
 
       <div dropdown class="os-inline-btn" ng-if="!!specimen.id">
         <button class="btn btn-default dropdown-toggle">

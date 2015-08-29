@@ -148,6 +148,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
         scope.view = 'list';
         scope.parentSpecimen = undefined;
         loadAllSpecimenList(scope);
+        scope.currentUser = scope.$parent.currentUser;
 
         scope.specimens = Specimen.flatten(scope.specimenTree);
         openSpecimenTree(scope.specimens);
