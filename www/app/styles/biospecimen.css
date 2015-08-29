@@ -56,6 +56,16 @@
   padding: 0px 4px;
 }
 
+.fa.os-status-distributed:before {
+  color: #5bc0de;
+  padding: 0px 4px;
+}
+
+.fa.os-status-unplanned:before {
+  color: #3B933B;
+  padding: 0px 4px;
+}
+
 .fa.os-lineage-new:before, 
 .fa.os-lineage-aliquot:before, 
 .fa.os-lineage-derivative:before {
@@ -95,7 +105,8 @@
 .os-key-values .value.os-status-collected, 
 .os-key-values .value.os-status-not-collected, 
 .os-key-values .value.os-status-missed,
-.os-key-values .value.os-status-pending {
+.os-key-values .value.os-status-pending,
+.os-key-values .value.os-status-distributed {
   width: initial!important;
   border-radius: 4px;
   font-weight: bold;
@@ -118,6 +129,10 @@
   background: #d9534f;
 }
 
+.os-key-values .value.os-status-distributed {
+  background: #5bc0de;
+}
+
 .os-table.os-spmn-hide-options .os-select-specimen-cb {
   visibility: hidden;
 }
@@ -136,6 +151,14 @@
 .os-storage-position > div {
   padding-left: 0px;
   padding-right: 10px;
+}
+
+.progress-bar-unplanned {
+  background-color: #3B933B;
+}
+
+.progress-bar-missed {
+  background-color: #888;
 }
 
 .os-time-no-wheels tbody tr:first-child,
@@ -222,4 +245,8 @@
 .os-spr .os-btns {
   margin-top: -15px;
   margin-bottom: 10px;
+}
+
+.os-secondary-row {
+  background-color: #eee;
 }

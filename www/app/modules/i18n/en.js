@@ -354,7 +354,8 @@
     "status": {
       "collected": "Collected",
       "not_collected": "Missed Collection",
-      "pending": "Pending"
+      "pending": "Pending",
+      "missed": "Missed"
     },
     "closed": "Closed",
 
