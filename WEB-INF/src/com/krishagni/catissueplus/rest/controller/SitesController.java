@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -164,18 +165,18 @@ public class SitesController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value="/form")
+	@RequestMapping(method = RequestMethod.GET, value="/extension-form")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public FormCtxtSummary getForm() {
 		ListEntityFormsOp op = new ListEntityFormsOp();
-		op.setEntityType(EntityType.SITE); 
+		op.setEntityType(EntityType.SITE_EXTN); 
         
 		RequestEvent<ListEntityFormsOp> req = new RequestEvent<ListEntityFormsOp>(op);
-		ResponseEvent<FormCtxtSummary> resp = formSvc.getEntityExtensionForms(req);
+		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(req);
 		resp.throwErrorIfUnsuccessful();
 		
-		return resp.getPayload();
+		return CollectionUtils.isNotEmpty(resp.getPayload()) ? resp.getPayload().get(0) : null;
 	}
 
 }

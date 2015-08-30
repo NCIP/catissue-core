@@ -57,11 +57,10 @@ public class SiteExtension extends DeObject {
 		}
 		
 		List<Long> recIds = extension.getRecordIds();
-		if (!CollectionUtils.isEmpty(recIds)) {
+		if (CollectionUtils.isNotEmpty(recIds)) {
 			extension.setId(recIds.iterator().next());
 		}
 		
 		return extension;
 	}
-
 }

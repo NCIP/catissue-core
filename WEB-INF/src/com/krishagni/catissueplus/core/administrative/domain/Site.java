@@ -107,9 +107,10 @@ public class Site extends BaseEntity {
 
 	@NotAudited
 	public SiteExtension getExtension() {
-		if (this.extension == null) {
-			this.extension = SiteExtension.getFor(this);
+		if (extension == null) {
+			extension = SiteExtension.getFor(this);
 		}
+		
 		return extension;
 	}
 

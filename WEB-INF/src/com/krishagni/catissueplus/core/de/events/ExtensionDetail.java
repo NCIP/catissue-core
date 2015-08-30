@@ -43,8 +43,7 @@ public class ExtensionDetail {
 		ExtensionDetail detail = new ExtensionDetail();
 		detail.setId(extension.getId());
 		detail.setObjectId(extension.getObjectId()); 
-		detail.setAttrs(AttrDetail.from(extension.getAttrs()));
-		
+		detail.setAttrs(AttrDetail.from(extension.getAttrs()));		
 		return detail;
 	}
 	
@@ -92,7 +91,6 @@ public class ExtensionDetail {
 		public static AttrDetail from(Attr attr) {
 			AttrDetail detail = new AttrDetail();
 			BeanUtils.copyProperties(attr, detail);
-			
 			return detail;
 		}
 		

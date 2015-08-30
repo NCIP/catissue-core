@@ -23,7 +23,6 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
-import com.krishagni.catissueplus.core.de.domain.DeObject;
 import com.krishagni.catissueplus.core.de.domain.FormErrorCode;
 import com.krishagni.catissueplus.core.de.events.AddRecordEntryOp;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
@@ -269,6 +268,14 @@ public class FormServiceImpl implements FormService {
 			    	AccessCtrlMgr.getInstance().ensureReadSpecimenRights(entityId);
 			    	forms = formDao.getSpecimenEventForms(opDetail.getEntityId());
 			    	break;	
+			    	
+			    case SITE_EXTN:
+			    	forms = formDao.getFormContexts(-1L, "SiteExtension");
+			    	break;
+			    	
+			    case CP_EXTN:
+			    	forms = formDao.getFormContexts(-1L, "CollectionProtocolExtension");
+			    	break;
 			}
 			
 			return ResponseEvent.response(forms);			
@@ -296,33 +303,6 @@ public class FormServiceImpl implements FormService {
 		return ResponseEvent.response(result);
 	}
 	
-	@Override
-	@PlusTransactional
-	public ResponseEvent<FormCtxtSummary> getEntityExtensionForms(RequestEvent<ListEntityFormsOp> req) {
-		try {
-			ListEntityFormsOp opDetail = req.getPayload();
-			String entityType = null;
-			switch (opDetail.getEntityType()) {
-				case SITE:
-					entityType = FormType.SITE_FORMS.getType();
-					break;
-					
-				case COLLECTION_PROTOCOL:
-					entityType = FormType.COLLECTION_PROTOCOL_FORMS.getType();
-					break;
-					
-				default:
-					throw OpenSpecimenException.userError(FormErrorCode.NOT_FOUND);
-			}
-			
-			return ResponseEvent.response(DeObject.getExtensionContext(entityType));
-		}  catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
-	}
- 
 	@Override
 	@PlusTransactional
 	public ResponseEvent<FormDataDetail> getFormData(RequestEvent<GetFormDataOp> req) {

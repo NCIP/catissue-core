@@ -4,11 +4,16 @@ package com.krishagni.catissueplus.core.de.events;
 public class ListEntityFormsOp  {
 	public static enum EntityType {
 		COLLECTION_PROTOCOL_REGISTRATION,
+		
 		SPECIMEN,
+		
 		SPECIMEN_EVENT,
+		
 		SPECIMEN_COLLECTION_GROUP,
-		SITE,
-		COLLECTION_PROTOCOL
+		
+		SITE_EXTN,
+		
+		CP_EXTN
 	};
 
 	private Long entityId;
