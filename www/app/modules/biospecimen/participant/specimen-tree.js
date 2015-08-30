@@ -197,7 +197,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
 
         scope.printSpecimenLabels = function() {
           var specimensToPrint = getSelectedSpecimens(scope, 'specimens.no_specimens_for_print', false);
-          if (specimensToPrint.length == 0) {
+          if (specimensToPrint == undefined || specimensToPrint.length == 0) {
             return;
           }
 
