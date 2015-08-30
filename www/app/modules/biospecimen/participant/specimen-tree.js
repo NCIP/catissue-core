@@ -6,7 +6,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
   ])
   .directive('osSpecimenTree', function(
     $state, $stateParams, $modal, $timeout,
-    CollectSpecimensSvc, Specimen, SpecimenLabelPrinter, SpecimenList, SpecimensHolder,
+    CollectSpecimensSvc, Specimen, SpecimenLabelPrinter, SpecimensHolder,
     Alerts, PvManager, Util, DeleteUtil) {
 
     function openSpecimenTree(specimens) {
@@ -23,23 +23,6 @@ angular.module('os.biospecimen.participant.specimen-tree',
 
       scope.specimenClasses = PvManager.getPvs('specimen-class');
       scope.classesLoaded = true;
-    }
-
-    function loadAllSpecimenList(scope) {
-      SpecimenList.query().then(
-        function(lists) {
-          if (scope.$parent.currentUser.admin) {
-            scope.specimenLists = lists;
-          } else {
-            scope.specimenLists = [];
-            angular.forEach(lists, function(list) {
-              if (list.owner.id == scope.$parent.currentUser.id) {
-                scope.specimenLists.push(list);
-              }
-            })
-          }
-        }
-      );
     }
 
     function toggleAllSelected(selection, specimens, specimen) {
@@ -147,7 +130,6 @@ angular.module('os.biospecimen.participant.specimen-tree',
       link: function(scope, element, attrs) {
         scope.view = 'list';
         scope.parentSpecimen = undefined;
-        loadAllSpecimenList(scope);
 
         scope.specimens = Specimen.flatten(scope.specimenTree);
         openSpecimenTree(scope.specimens);

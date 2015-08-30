@@ -40,22 +40,46 @@
           <span translate="specimens.buttons.collect">Collect</span>
         </span>
       </button>
-      <button show-if-allowed="specimenResource.updateOpts" class="default" 
-        ng-if="specimen.activityStatus == 'Active' && specimen.status == 'Collected'"
-        ng-click="closeSpecimen()">
-        <span class="fa fa-remove"></span>
-        <span translate="specimens.buttons.close">Close</span>
-      </button>
-      <button show-if-allowed="specimenResource.updateOpts" class="primary" ng-click="reopen()"
-        ng-if="specimen.activityStatus == 'Closed'">
-        <span class="fa fa-check"></span>
-        <span translate="specimens.buttons.reopen">Reopen</span>
-      </button>
-      <button show-if-allowed="specimenResource.deleteOpts" class="default" 
-        ng-if="!!specimen.id" ng-click="deleteSpecimen()">
-        <span class="fa fa-trash"></span>
-        <span translate="common.buttons.delete">Delete</span>
-      </button>
+
+      <os-assign-to-spmn-list on-add-to-list="addSpecimensToSpecimenList(list)" ng-if="!!specimen.id">
+      </os-assign-to-spmn-list>
+
+      <div dropdown class="os-inline-btn" ng-if="!!specimen.id">
+        <button class="btn btn-default dropdown-toggle">
+          <span translate="common.buttons.more">More</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li show-if-allowed="specimenResource.readOpts"
+            ng-if="specimen.activityStatus == 'Active' && specimen.status == 'Collected'">
+            <a ng-click="printSpecimenLabels()">
+              <span class="fa fa-print"></span>
+              <span translate="specimens.buttons.print">Print</span>
+            </a>
+          </li>
+          <li show-if-allowed="specimenResource.deleteOpts"
+            ng-if="!!specimen.id">
+            <a ng-click="deleteSpecimen()">
+              <span class="fa fa-trash"></span>
+              <span translate="common.buttons.delete">Delete</span>
+            </a>
+          </li>
+          <li show-if-allowed="specimenResource.updateOpts"
+            ng-if="specimen.activityStatus == 'Active' && specimen.status == 'Collected'">
+            <a ng-click="closeSpecimen()">
+              <span class="fa fa-remove"></span>
+              <span translate="common.buttons.close">Close</span>
+            </a>
+          </li>
+          <li show-if-allowed="specimenResource.updateOpts"
+            ng-if="specimen.activityStatus == 'Closed'">
+            <a ng-click="reopen()">
+              <span class="fa fa-check"></span>
+              <span translate="specimens.buttons.reopen">Reopen</span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 

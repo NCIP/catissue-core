@@ -7,29 +7,8 @@
           <span class="fa fa-plus"></span>
           <span translate="specimens.buttons.collect"> Collect </span>
         </button>
-        <button class="btn btn-default dropdown-toggle">
-          <span class="fa fa-list"></span>
-          <span translate="specimens.buttons.assign_to"> Assign To </span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right os-query-folders-dd">
-          <li>
-            <input ng-model="searchSpecimenList" type="text" class="form-control"
-              placeholder="{{'specimen_list.search_list' | translate}}"
-              ng-click="$event.stopPropagation()">
-          </li>
-          <li>
-            <ul class="dropdown-menu-subgroup">
-              <li ng-repeat="list in specimenLists | filter: searchSpecimenList"
-                ng-click="addSpecimensToSpecimenList(list)">
-                <a><span>{{list.name}}</span></a>
-              </li>
-            </ul>
-          </li>
-          <li class="divider"></li>
-          <li ng-click="addSpecimensToSpecimenList()">
-            <a translate="specimen_list.create_new_list">Create New Specimen List</a>
-          </li>
-        </ul>
+        <os-assign-to-spmn-list on-add-to-list="addSpecimensToSpecimenList(list)">
+        </os-assign-to-spmn-list>
       </div>
       <div dropdown class="os-inline-btn">
         <button class="btn btn-default dropdown-toggle">
