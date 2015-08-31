@@ -263,7 +263,7 @@ public class UserServiceImpl implements UserService {
 			}
 			
 			if (!user.getAuthDomain().getName().equals(DEFAULT_AUTH_DOMAIN)) {
-				return ResponseEvent.userError(UserErrorCode.PASSWD_CHANGE_NOT_ALLOWED);
+				return ResponseEvent.userError(UserErrorCode.PASSWD_CHANGE_NOT_ALLOWED, user.getAuthDomain().getName());
 			}
 
 			if (currentUser.equals(user)) {
