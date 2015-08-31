@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -74,24 +73,11 @@ public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
 		List<Field> fields = new ArrayList<Field>();
 		List<Record> subRecords = new ArrayList<Record>();
 		
-		Map<Integer, List<Control>> controlsMap = new TreeMap<Integer, List<Control>>();
-		for(Control ctrl: form.getControls()) {
-			int sequence = ctrl.getSequenceNumber();
-			List<Control> controls = controlsMap.get(sequence);
-			if (controls == null) {
-				controls = new ArrayList<Control>();
-				controlsMap.put(sequence, controls);
-			}
-			controls.add(ctrl);
-		}
-
-		for (Map.Entry<Integer, List<Control>> entry : controlsMap.entrySet()) {
-			for (Control ctrl: entry.getValue()) {
-				if (ctrl instanceof SubFormControl) {
-					subRecords.add(getSubRecord((SubFormControl)ctrl));
-				} else {
-					fields.add(getField(ctrl));
-				}
+		for (Control ctrl: form.getAllControls()) {
+			if (ctrl instanceof SubFormControl) {
+				subRecords.add(getSubRecord((SubFormControl)ctrl));
+			} else {
+				fields.add(getField(ctrl));
 			}
 		}
 		
