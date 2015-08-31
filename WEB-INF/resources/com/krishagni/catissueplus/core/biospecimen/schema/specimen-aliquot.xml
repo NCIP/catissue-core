@@ -27,8 +27,24 @@
     </field>
 
     <field>
+      <caption>#getMessage("specimen_location_start_row")</caption>
+      <attribute>positionY</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_location_start_column")</caption>
+      <attribute>positionX</attribute>
+    </field>
+
+    <field>
       <caption>#getMessage("specimen_created_on")</caption>
       <attribute>createdOn</attribute>
+    </field>
+
+    <field>
+      <type>boolean</type>
+      <caption>#getMessage("specimen_close_parent")</caption>
+      <attribute>closeParent</attribute>
     </field>
   </record>
 </object-schema>

@@ -30,8 +30,6 @@ public class StorageContainerDetail extends StorageContainerSummary {
 	
 	private Set<String> calcAllowedCollectionProtocols = new HashSet<String>();
 	
-	private StorageContainerPositionDetail position;
-	
 	private Set<Integer> occupiedPositions = new HashSet<Integer>();
 
 	public Double getTemperature() {
@@ -114,15 +112,7 @@ public class StorageContainerDetail extends StorageContainerSummary {
 			Set<String> calcAllowedCollectionProtocols) {
 		this.calcAllowedCollectionProtocols = calcAllowedCollectionProtocols;
 	}
-
-	public StorageContainerPositionDetail getPosition() {
-		return position;
-	}
-
-	public void setPosition(StorageContainerPositionDetail position) {
-		this.position = position;
-	}
-
+	
 	public Set<Integer> getOccupiedPositions() {
 		return occupiedPositions;
 	}
@@ -147,7 +137,6 @@ public class StorageContainerDetail extends StorageContainerSummary {
 		result.setAllowedCollectionProtocols(getCpNames(container.getAllowedCps()));		
 		result.setCalcAllowedCollectionProtocols(getCpNames(container.getCompAllowedCps()));
 		
-		result.setPosition(StorageContainerPositionDetail.from(container.getPosition()));
 		result.setOccupiedPositions(container.occupiedPositionsOrdinals());
 		return result;
 	}

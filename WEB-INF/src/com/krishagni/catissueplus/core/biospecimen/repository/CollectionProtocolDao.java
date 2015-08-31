@@ -23,10 +23,16 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	public List<CollectionProtocol> getCpsByShortTitle(Collection<String> shortTitles);
 	
 	public List<CollectionProtocol> getCpsByShortTitle(Collection<String> shortTitles, String siteName);
+	
+	public CollectionProtocol getCpByCode(String code);
 
 	public List<Long> getCpIdsBySiteIds(Collection<Long> siteIds);
+	
+	public List<Long> getSiteIdsByCpIds(Collection<Long> cpIds);
 
 	public CollectionProtocolEvent getCpe(Long cpeId);
+	
+	public List<CollectionProtocolEvent> getCpes(Collection<Long> cpeIds);
 
 	public CollectionProtocolEvent getCpeByEventLabel(Long cpId, String eventLabel);
 	
@@ -34,11 +40,15 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	
 	public CollectionProtocolEvent getCpeByShortTitleAndEventLabel(String shortTitle, String label);
 	
+	public CollectionProtocolEvent getCpeByCode(String shortTitle, String code);
+	
 	public void saveCpe(CollectionProtocolEvent cpe);
 	
 	public void saveCpe(CollectionProtocolEvent cpe, boolean flush);
 
 	public SpecimenRequirement getSpecimenRequirement(Long requirementId);
+	
+	public SpecimenRequirement getSrByCode(String code);
 	
 	public void saveCpWorkflows(CpWorkflowConfig cfg);
 	

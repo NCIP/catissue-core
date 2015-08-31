@@ -2,7 +2,7 @@
 angular.module('os.biospecimen.visit.detail', ['os.biospecimen.models'])
   .controller('VisitDetailCtrl', function(
     $scope, $state,
-    cpr, visit, specimens, DeleteUtil) {
+    cpr, visit, specimens, DeleteUtil, Specimen) {
 
     function init() {
       $scope.cpr = cpr;
@@ -18,6 +18,18 @@ angular.module('os.biospecimen.visit.detail', ['os.biospecimen.models'])
       DeleteUtil.delete($scope.visit, {onDeletion: onVisitDeletion});
     }
 
+    $scope.reload = function() {
+      var visitDetail = {
+        visitId: visit.id,
+        eventId: visit.eventId
+      };
+
+      return Specimen.listFor(cpr.id, visitDetail).then(
+        function(specimens) {
+          $scope.specimens = specimens;
+        }
+      );
+    }
 
     init();
   });

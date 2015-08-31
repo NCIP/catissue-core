@@ -1,13 +1,28 @@
 angular.module('os.biospecimen.specimen.detail', [])
   .controller('SpecimenDetailCtrl', function(
-    $scope, $state, $modal, 
-    cpr, visit, specimen, Specimen, DeleteUtil) {
+    $scope, $state, $modal, $stateParams,
+    cpr, visit, specimen, Specimen, SpecimenLabelPrinter, SpecimensHolder, DeleteUtil, Alerts) {
 
     function init() {
       $scope.cpr = cpr;
       $scope.visit = visit;
       $scope.specimen = specimen;
-      $scope.childSpecimens = $scope.specimen.children; 
+      $scope.childSpecimens = $scope.specimen.children;
+    }
+
+    $scope.reload = function() {
+      var promise = null;
+      if ($stateParams.specimenId) {
+        promise = Specimen.getById($stateParams.specimenId);
+      } else if ($stateParams.srId) {
+        promise = Specimen.getAnticipatedSpecimen($stateParams.srId);
+      }
+
+      return promise.then(
+        function(specimen) {
+          $scope.childSpecimens = specimen.children;
+        }
+      );
     }
 
     $scope.reopen = function() {
@@ -37,11 +52,28 @@ angular.module('os.biospecimen.specimen.detail', [])
         templateUrl: 'modules/biospecimen/participant/specimen/close.html',
         controller: 'SpecimenCloseCtrl',
         resolve: {
-          specimen: function() {
-            return specimen
+          specimens: function() {
+            return [specimen];
           }
         }
       });
+    }
+
+    $scope.printSpecimenLabels = function() {
+      SpecimenLabelPrinter.printLabels({specimenIds: [specimen.id]});
+    };
+
+    $scope.addSpecimensToSpecimenList = function(list) {
+      var selectedSpecimens = [{label: $scope.specimen.label}];
+
+      if (!!list) {
+        list.addSpecimens(selectedSpecimens).then(function(specimens) {
+          Alerts.success('specimen_list.specimens_added', {name: list.name});
+        })
+      } else {
+        SpecimensHolder.setSpecimens(selectedSpecimens);
+        $state.go('specimen-list-addedit', {listId: ''});
+      }
     }
 
     init();

@@ -342,26 +342,20 @@ public class VisitServiceImpl implements VisitService {
 		AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(visit);
 		
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		ensureValidAndUniqueVisitName(existing, visit, ose);
+		ose.checkAndThrow();
+		
 		if (existing == null) {
-			ensureValidAndUniqueVisitName(visit, ose);
-			ose.checkAndThrow();
-
 			if (visit.isMissed()) {
 				visit.createMissedSpecimens();
-			} else {
-				visit.setNameIfEmpty();
 			}
 			
 			existing = visit;
 		} else {
-			if (StringUtils.isBlank(existing.getName())) {
-				ensureValidAndUniqueVisitName(visit, ose);
-				ose.checkAndThrow();
-			}
-			
 			existing.update(visit);
 		}
 		
+		existing.setNameIfEmpty();
 		daoFactory.getVisitsDao().saveOrUpdate(existing);
 		return VisitDetail.from(existing);		
 	}
@@ -382,7 +376,13 @@ public class VisitServiceImpl implements VisitService {
 		return visit;
 	}
 	
-	private void ensureValidAndUniqueVisitName(Visit visit, OpenSpecimenException ose) {
+	private void ensureValidAndUniqueVisitName(Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (existing != null && 
+			StringUtils.isNotBlank(existing.getName()) && 
+			existing.getName().equals(visit.getName())) {
+			return;
+		}
+		
 		CollectionProtocol cp = visit.getCollectionProtocol();
 		String name = visit.getName();
 		

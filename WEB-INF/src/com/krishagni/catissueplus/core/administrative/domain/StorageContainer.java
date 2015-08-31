@@ -231,6 +231,14 @@ public class StorageContainer extends BaseEntity {
 		this.comments = comments;
 	}
 
+	public StorageContainerPosition getLastAssignedPos() {
+		return lastAssignedPos;
+	}
+
+	public void setLastAssignedPos(StorageContainerPosition lastAssignedPos) {
+		this.lastAssignedPos = lastAssignedPos;
+	}
+
 	@NotAudited
 	public Set<StorageContainer> getChildContainers() {
 		return childContainers;
@@ -466,6 +474,12 @@ public class StorageContainer extends BaseEntity {
 		return null;
 	}
 
+	public boolean isPositionOccupied(String posOne, String posTwo) {
+		int posOneOrdinal = converters.get(getColumnLabelingScheme()).toOrdinal(posOne);
+		int posTwoOrdinal = converters.get(getRowLabelingScheme()).toOrdinal(posTwo);
+
+		return getOccupiedPosition(posOneOrdinal, posTwoOrdinal) != null;
+	}
 
 	public boolean canSpecimenOccupyPosition(Long specimenId, String posOne, String posTwo) {
 		return canOccupyPosition(true, specimenId, posOne, posTwo);

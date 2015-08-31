@@ -86,6 +86,7 @@ angular.module('openspecimen')
       'collection-procedure': '2003996',
       'collection-container': '2003997',
       'vital-status'        : '2004001',
+      'received-quality'    : '2003994',
 
       'ethnicity'           : 'Ethnicity_PID',
       'race'                : 'Race_PID',
@@ -110,13 +111,19 @@ angular.module('openspecimen')
       return pvs.map(function(pv) { return transformfn(pv); });
     };
 
-    function loadPvs(attr, srchTerm, transformFn) {
+    function loadPvs(attr, srchTerm, transformFn, incOnlyLeaf) {
       var pvId = pvIdMap[attr];
       if (!pvId) {
         return _getPvs(attr);
       }
 
-      return $http.get(url, {params: {attribute: pvId, searchString: srchTerm}}).then(
+      var params = {
+        attribute: pvId,
+        searchString: srchTerm,
+        includeOnlyLeafValue: incOnlyLeaf
+      };
+
+      return $http.get(url, {params: params}).then(
         function(result) {
           return transform(result.data, transformFn, null);
         }
@@ -163,6 +170,18 @@ angular.module('openspecimen')
             Util.unshiftAll(pvs, result);
           }
         );    
+
+        return pvs;
+      },
+
+      getLeafPvs: function(attr, srchTerm, transformFn) {
+        var pvs = [];
+        loadPvs(attr, srchTerm, transformFn, true).then(
+          function(result) {
+            Util.unshiftAll(pvs, result);
+          }
+        );
+
         return pvs;
       },
 

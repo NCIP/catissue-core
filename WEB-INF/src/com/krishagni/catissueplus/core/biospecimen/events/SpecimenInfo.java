@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
+import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
@@ -16,16 +17,6 @@ import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 
 @ListenAttributeChanges
 public class SpecimenInfo extends AttributeModifiedSupport implements Comparable<SpecimenInfo> {
-	public static class StorageLocationSummary {
-		public Long id;
-		
-		public String name;
-		
-		public String positionX;
-		
-		public String positionY;
-	}
-	
 	private Long id;
 	
 	private Long cprId;
@@ -83,6 +74,10 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 	private String activityStatus;
 	
 	private Date createdOn;
+	
+	private String code;
+
+	private Boolean distributed;
 	
 	public Long getId() {
 		return id;
@@ -316,6 +311,22 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		this.createdOn = createdOn;
 	}
 	
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public Boolean getDistributed() {
+		return distributed;
+	}
+
+	public void setDistributed(Boolean distributed) {
+		this.distributed = distributed;
+	}
+
 	public static SpecimenInfo from(Specimen specimen) {
 		SpecimenInfo info = new SpecimenInfo();
 		fromTo(specimen,info);
@@ -359,12 +370,12 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		StorageLocationSummary location = new StorageLocationSummary();
 		StorageContainerPosition position = specimen.getPosition();
 		if (position == null) {
-			location.id = -1L;
+			location.setId(-1L);
 		} else {
-			location.id = position.getContainer().getId();
-			location.name = position.getContainer().getName();
-			location.positionX = position.getPosOne();
-			location.positionY = position.getPosTwo();
+			location.setId(position.getContainer().getId());
+			location.setName(position.getContainer().getName());
+			location.setPositionX(position.getPosOne());
+			location.setPositionY(position.getPosTwo());
 		}
 		result.setStorageLocation(location);		
 		result.setActivityStatus(specimen.getActivityStatus());

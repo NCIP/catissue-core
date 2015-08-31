@@ -261,12 +261,13 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	}
 	
 	@Override
-	public Map<String, String> getAppProps() {
-		Map<String, String> props = new HashMap<String, String>();
+	public Map<String, Object> getAppProps() {
+		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("plugin.custom_module",  appProps.getProperty("plugin.custom_module"));
 		props.put("build_version",         appProps.getProperty("buildinfo.version"));
 		props.put("build_date",            appProps.getProperty("buildinfo.date"));
 		props.put("build_commit_revision", appProps.getProperty("buildinfo.commit_revision"));
+		props.put("cp_coding_enabled",     getBoolSetting("biospecimen", "cp_coding_enabled", false));
 		return props;
 	}
 	

@@ -9,10 +9,13 @@
 
       <li class="item">
         <strong class="key key-sm" translate="specimens.collection_status">Status</strong>
-        <ng-switch on="specimen.status">
-          <span ng-switch-when="Collected" class="value value-md os-status-collected">Collected</span>
-          <span ng-switch-when="Missed Collection" class="value value-md os-status-missed">Missed Collection</span>
-          <span ng-switch-default class="value value-md os-status-pending">Pending</span>
+        <ng-switch on="!specimen.distributed">
+          <ng-switch ng-switch-when="true" on="specimen.status">
+            <span ng-switch-when="Collected" class="value value-md os-status-collected">Collected</span>
+            <span ng-switch-when="Missed Collection" class="value value-md os-status-missed">Missed Collection</span>
+            <span ng-switch-default class="value value-md os-status-pending">Pending</span>
+          </ng-switch>
+          <span ng-switch-when="false" class="value value-md os-status-distributed" ng-if="specimen.distributed">Distributed</span>
         </ng-switch>
       </li>
 
@@ -120,7 +123,7 @@
       <span class="value value-md">{{specimen.comments}}</span>
     </div>
 
-    <os-specimen-tree cpr="cpr" visit="visit" specimens="childSpecimens" allowed-ops="specimenAllowedOps">
+    <os-specimen-tree cpr="cpr" visit="visit" specimens="childSpecimens" allowed-ops="specimenAllowedOps" reload="reload()">
     </os-specimen-tree>
   </div>
 

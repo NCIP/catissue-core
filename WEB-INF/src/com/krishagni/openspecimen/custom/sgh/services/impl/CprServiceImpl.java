@@ -146,6 +146,7 @@ public class CprServiceImpl implements CprService {
 				Specimen parentSpecimen = new Specimen();
 				parentSpecimen.setLabel(parent.getLabel());
 				parentSpecimen.setId(parent.getId());
+				parentSpecimen.setVisit(visit);
 				specimen.setParentSpecimen(parentSpecimen);
 			}
 			

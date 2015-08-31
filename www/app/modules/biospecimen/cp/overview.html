@@ -9,6 +9,14 @@
         </os-inline-edit>
       </li>
 
+      <li class="item" ng-if="codingEnabled">
+        <strong class="key key-sm" translate="cp.code">Short Code</strong>
+        <os-inline-edit editor="codeEditor" name="code" class="value value-md" value="cp.code">
+          <span ng-if="codeEditor.isDisplayMode()">{{codeEditor.viewValue}}</span>
+          <input ng-if="codeEditor.isEditMode()" class="form-control" type="text" ng-model="codeEditor.editValue">
+        </os-inline-edit>
+      </li>
+
       <li class="item">
         <strong class="key key-sm" translate="cp.pi">Principal Investigator</strong>
         <os-inline-edit editor="piEditor" name="pi" class="value value-md" value="cp.principalInvestigator">

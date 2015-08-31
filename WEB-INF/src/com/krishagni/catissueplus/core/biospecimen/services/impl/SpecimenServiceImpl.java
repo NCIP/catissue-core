@@ -12,6 +12,7 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -21,9 +22,9 @@ import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ReceivedEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenAliquotsSpec;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenStatusDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
@@ -88,7 +89,15 @@ public class SpecimenServiceImpl implements SpecimenService {
 			}
 			
 			AccessCtrlMgr.getInstance().ensureReadSpecimenRights(specimen);
-			return ResponseEvent.response(SpecimenDetail.from(specimen));			
+
+			SpecimenDetail detail = SpecimenDetail.from(specimen);
+			List<Long> distributedSpecimenIds = daoFactory.getSpecimenDao().getDistributedSpecimens(Collections.singletonList(specimen.getId()));
+
+			if (CollectionUtils.isNotEmpty(distributedSpecimenIds)) {
+				detail.setDistributed(distributedSpecimenIds.contains(detail.getId()));
+			}
+
+			return ResponseEvent.response(detail);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -148,51 +157,53 @@ public class SpecimenServiceImpl implements SpecimenService {
 	public ResponseEvent<SpecimenDetail> patchSpecimen(RequestEvent<SpecimenDetail> req) {
 		return updateSpecimen(req.getPayload(), true);
 	}
-	
+
 	@Override
 	@PlusTransactional
-	public ResponseEvent<SpecimenDetail> updateSpecimenStatus(RequestEvent<SpecimenStatusDetail> req) {
+	public ResponseEvent<List<SpecimenDetail>> updateSpecimensStatus(RequestEvent<List<SpecimenStatusDetail>> req) {
 		try {
-			SpecimenStatusDetail detail = req.getPayload();
-			
+			List<SpecimenDetail> result = new ArrayList<SpecimenDetail>();
+
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			Specimen specimen = getSpecimen(detail.getId(), detail.getLabel(), ose);
-			if (specimen == null) {
-				return ResponseEvent.error(ose);
+			for (SpecimenStatusDetail detail : req.getPayload()) {
+				Specimen specimen = getSpecimen(detail.getId(), detail.getLabel(), ose);
+				if (specimen == null) {
+					return ResponseEvent.error(ose);
+				}
+
+				AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);
+				specimen.updateStatus(detail.getStatus(), detail.getReason());
+				result.add(SpecimenDetail.from(specimen));
 			}
-			
-			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);
-			specimen.updateStatus(detail.getStatus(), detail.getReason());
-			return ResponseEvent.response(SpecimenDetail.from(specimen));
+
+			return ResponseEvent.response(result);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
-	public ResponseEvent<SpecimenDetail> deleteSpecimen(RequestEvent<EntityQueryCriteria> req) {
-		try {
-			EntityQueryCriteria crit = req.getPayload();
+	public ResponseEvent<List<SpecimenDetail>> deleteSpecimens(RequestEvent<List<SpecimenDeleteCriteria>> request) {
+		List<SpecimenDetail> result = new ArrayList<SpecimenDetail>();
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			Specimen specimen = getSpecimen(crit.getId(), crit.getName(), ose);
+		for (SpecimenDeleteCriteria criteria : request.getPayload()) {
+			Specimen specimen = getSpecimen(criteria.getId(), criteria.getLabel(), ose);
+
 			if (specimen == null) {
 				return ResponseEvent.error(ose);
 			}
-			
+
 			AccessCtrlMgr.getInstance().ensureDeleteSpecimenRights(specimen);
-			specimen.disable();
-			return ResponseEvent.response(SpecimenDetail.from(specimen));
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}		
+			specimen.disable(!criteria.getForceDelete());
+			result.add(SpecimenDetail.from(specimen));
+		}
+
+		return ResponseEvent.response(result);
 	}
-	
 
 	@Override
 	@PlusTransactional
@@ -273,7 +284,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 			} else {
 				return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
 			}
-			
+
+
 			List<SpecimenDetail> aliquots = new ArrayList<SpecimenDetail>();
 			for (int i = 0; i < count; ++i) {
 				SpecimenDetail aliquot = new SpecimenDetail();
@@ -285,20 +297,46 @@ public class SpecimenServiceImpl implements SpecimenService {
 				aliquot.setCreatedOn(spec.getCreatedOn());
 				
 				StorageLocationSummary location = new StorageLocationSummary();
-				location.name = spec.getContainerName();
+				location.setName(spec.getContainerName());
+				if (spec.getPositionX() != null && spec.getPositionY() != null && i==0) {
+					location.setPositionX(spec.getPositionX());
+					location.setPositionY(spec.getPositionY());
+				}
+
 				aliquot.setStorageLocation(location);
-				
-				aliquots.add(aliquot);				
+
+				aliquots.add(aliquot);
 			}
-			
-			return collectSpecimens(new RequestEvent<List<SpecimenDetail>>(aliquots));
+
+			ResponseEvent<List<SpecimenDetail>> resp = collectSpecimens(new RequestEvent<List<SpecimenDetail>>(aliquots));
+			if (resp.isSuccessful() && spec.closeParent()) {
+				parentSpecimen.close(AuthUtil.getCurrentUser(), new Date(), "");
+			}
+
+			return resp;
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SpecimenDetail> createDerivative(RequestEvent<SpecimenDetail> derivedReq) {
+		SpecimenDetail spmnDetail = derivedReq.getPayload();
+		spmnDetail.setLineage(Specimen.DERIVED);
+		spmnDetail.setStatus(Specimen.COLLECTED);
+
+		ResponseEvent<SpecimenDetail> resp = createSpecimen(new RequestEvent<SpecimenDetail>(spmnDetail));
+		if (resp.isSuccessful() && spmnDetail.closeParent()) {
+			Specimen parent = getSpecimen(spmnDetail.getParentId(), spmnDetail.getParentLabel(), null);
+			parent.close(AuthUtil.getCurrentUser(), new Date(), "");
+		}
+
+		return resp;
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<Boolean> doesSpecimenExists(RequestEvent<String> req) {
@@ -395,7 +433,13 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 	}
 
-	private void ensureValidAndUniqueLabel(Specimen specimen, OpenSpecimenException ose) {
+	private void ensureValidAndUniqueLabel(Specimen existing, Specimen specimen, OpenSpecimenException ose) {
+		if (existing != null && 
+			StringUtils.isNotBlank(existing.getLabel()) &&
+			existing.getLabel().equals(specimen.getLabel())) {
+			return;
+		}
+		
 		CollectionProtocol cp = specimen.getCollectionProtocol();
 		String labelTmpl = specimen.getLabelTmpl();
 		
@@ -426,9 +470,17 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 	}
 
-	private void ensureUniqueBarcode(String barcode, OpenSpecimenException ose) {
-		if (daoFactory.getSpecimenDao().getByBarcode(barcode) != null) {
-			ose.addError(SpecimenErrorCode.DUP_BARCODE, barcode);
+	private void ensureUniqueBarcode(Specimen existing, Specimen specimen, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(specimen.getBarcode())) {
+			return;
+		}
+		
+		if (existing != null && specimen.getBarcode().equals(existing.getBarcode())) {
+			return;
+		}
+		
+		if (daoFactory.getSpecimenDao().getByBarcode(specimen.getBarcode()) != null) {
+			ose.addError(SpecimenErrorCode.DUP_BARCODE, specimen.getBarcode());
 		}
 	}
 
@@ -497,16 +549,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);
 
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		if (existing == null || StringUtils.isBlank(existing.getLabel())) {			
-			ensureValidAndUniqueLabel(specimen, ose);
-		}
-
-		String barcode = specimen.getBarcode();
-		if (StringUtils.isNotBlank(barcode) &&
-			(existing == null || !barcode.equals(existing.getBarcode()))) {
-			ensureUniqueBarcode(specimen.getBarcode(), ose);
-		}
-
+		ensureValidAndUniqueLabel(existing, specimen, ose);
+		ensureUniqueBarcode(existing, specimen, ose);
 		ose.checkAndThrow();
 
 		if (existing != null) {

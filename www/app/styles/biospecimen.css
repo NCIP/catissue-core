@@ -56,6 +56,16 @@
   padding: 0px 4px;
 }
 
+.fa.os-status-distributed:before {
+  color: #5bc0de;
+  padding: 0px 4px;
+}
+
+.fa.os-status-unplanned:before {
+  color: #3B933B;
+  padding: 0px 4px;
+}
+
 .fa.os-lineage-new:before, 
 .fa.os-lineage-aliquot:before, 
 .fa.os-lineage-derivative:before {
@@ -95,7 +105,8 @@
 .os-key-values .value.os-status-collected, 
 .os-key-values .value.os-status-not-collected, 
 .os-key-values .value.os-status-missed,
-.os-key-values .value.os-status-pending {
+.os-key-values .value.os-status-pending,
+.os-key-values .value.os-status-distributed {
   width: initial!important;
   border-radius: 4px;
   font-weight: bold;
@@ -118,6 +129,10 @@
   background: #d9534f;
 }
 
+.os-key-values .value.os-status-distributed {
+  background: #5bc0de;
+}
+
 .os-table.os-spmn-hide-options .os-select-specimen-cb {
   visibility: hidden;
 }
@@ -133,24 +148,22 @@
   padding-right: 32px;
 }
 
-.os-specimen-position > div {
+.os-storage-position > div {
   padding-left: 0px;
   padding-right: 10px;
+}
+
+.progress-bar-unplanned {
+  background-color: #3B933B;
+}
+
+.progress-bar-missed {
+  background-color: #888;
 }
 
 .os-time-no-wheels tbody tr:first-child,
 .os-time-no-wheels tbody tr:last-child {
   display: none;
-}
-
-.os-date-time > div:first-child {
-  padding-left: 0px;
-  padding-right: 10px;
-}
-
-.os-date-time > div:last-child {
-  padding-left: 0px;
-  padding-right: 0px;
 }
 
 .os-date-time .os-time-no-wheels tr:nth-child(2) td:nth-child(1) input.form-control {
@@ -160,7 +173,12 @@
 }
 
 .os-date-time .os-time-no-wheels tr:nth-child(2) td:nth-child(2) {
-  display: none;
+  display: block;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  height: 34px;
+  padding-top: 5px;
+  box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px inset;
 }
 
 .os-date-time .os-time-no-wheels tr:nth-child(2) td:nth-child(3) input.form-control {
@@ -169,8 +187,12 @@
   border-bottom-left-radius: 0px;
 }
 
+.os-date-time .os-timepicker {
+  padding-left: 0px;
+}
+
 .os-spmn-coll-detail label {
-  color: #666666;
+  color: #666;
 }
 
 .os-spmn-coll-detail .input {
@@ -223,4 +245,8 @@
 .os-spr .os-btns {
   margin-top: -15px;
   margin-bottom: 10px;
+}
+
+.os-secondary-row {
+  background-color: #eee;
 }

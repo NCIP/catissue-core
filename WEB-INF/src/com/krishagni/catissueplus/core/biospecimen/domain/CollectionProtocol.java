@@ -34,6 +34,8 @@ public class CollectionProtocol extends BaseEntity {
 	private String title;
 
 	private String shortTitle;
+	
+	private String code;
 
 	private Date startDate;
 
@@ -67,6 +69,8 @@ public class CollectionProtocol extends BaseEntity {
 	
 	private Boolean manualSpecLabelEnabled;
 	
+	private Boolean consentsWaived;
+	
 	private Set<ConsentTier> consentTier = new HashSet<ConsentTier>();
 	
 	private Set<User> coordinators = new HashSet<User>();
@@ -97,6 +101,14 @@ public class CollectionProtocol extends BaseEntity {
 
 	public void setShortTitle(String shortTitle) {
 		this.shortTitle = shortTitle;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public Date getStartDate() {
@@ -227,6 +239,14 @@ public class CollectionProtocol extends BaseEntity {
 		return manualSpecLabelEnabled != null ? manualSpecLabelEnabled : false;
 	}
 
+	public Boolean isConsentsWaived() {
+		return consentsWaived != null ? consentsWaived: false;
+	}
+
+	public void setConsentsWaived(Boolean consentsWaived) {
+		this.consentsWaived = consentsWaived;
+	}
+
 	@NotAudited
 	public Set<ConsentTier> getConsentTier() {
 		return consentTier;
@@ -291,7 +311,8 @@ public class CollectionProtocol extends BaseEntity {
 	
 	public void update(CollectionProtocol cp) {
 		setTitle(cp.getTitle()); 
-		setShortTitle(cp.getShortTitle()); 
+		setShortTitle(cp.getShortTitle());
+		setCode(cp.getCode());
 		setStartDate(cp.getStartDate());
 		setEndDate(cp.getEndDate());
 		setActivityStatus(cp.getActivityStatus());
@@ -363,11 +384,15 @@ public class CollectionProtocol extends BaseEntity {
 	public void addCpe(CollectionProtocolEvent cpe) {
 		CollectionProtocolEvent existing = getCpe(cpe.getEventLabel());
 		if (existing != null) {
-			throw OpenSpecimenException.userError(CpeErrorCode.DUP_LABEL);
+			throw OpenSpecimenException.userError(CpeErrorCode.DUP_LABEL, cpe.getEventLabel());
+		}
+		
+		if (StringUtils.isNotBlank(cpe.getCode()) && getCpeByCode(cpe.getCode()) != null) {
+			throw OpenSpecimenException.userError(CpeErrorCode.DUP_CODE, cpe.getCode());
 		}
 				
 		cpe.setId(null);
-		collectionProtocolEvents.add(cpe);
+		getCollectionProtocolEvents().add(cpe);
 	}
 	
 	public void updateCpe(CollectionProtocolEvent cpe) {
@@ -376,18 +401,25 @@ public class CollectionProtocol extends BaseEntity {
 			throw OpenSpecimenException.userError(CpeErrorCode.NOT_FOUND);
 		}
 
-		CollectionProtocolEvent sameLabelEvent = getCpe(cpe.getEventLabel());
-		if (sameLabelEvent != null && !sameLabelEvent.getId().equals(existing.getId())) {
-			throw OpenSpecimenException.userError(CpeErrorCode.DUP_LABEL);
+		if (!existing.getEventLabel().equals(cpe.getEventLabel())) {
+			if (getCpe(cpe.getEventLabel()) != null) {
+				throw OpenSpecimenException.userError(CpeErrorCode.DUP_LABEL, cpe.getEventLabel());
+			}			
 		}
-
+		
+		if (StringUtils.isNotBlank(cpe.getCode()) && !cpe.getCode().equals(existing.getCode())) {
+			if (getCpeByCode(cpe.getCode()) != null) {
+				throw OpenSpecimenException.userError(CpeErrorCode.DUP_CODE, cpe.getCode());
+			}
+		}
+		
 		existing.update(cpe);
 	}
 	
 	public CollectionProtocolEvent getCpe(Long cpeId) {
-		for (CollectionProtocolEvent existing : collectionProtocolEvents) {
-			if (existing.getId().equals(cpeId)) {
-				return existing;
+		for (CollectionProtocolEvent cpe : getCollectionProtocolEvents()) {
+			if (cpe.getId().equals(cpeId)) {
+				return cpe;
 			}
 		}
 		
@@ -395,9 +427,19 @@ public class CollectionProtocol extends BaseEntity {
 	}
 	
 	public CollectionProtocolEvent getCpe(String eventLabel) {
-		for (CollectionProtocolEvent existing : collectionProtocolEvents) {
-			if (existing.getEventLabel().equalsIgnoreCase(eventLabel)) {
-				return existing;
+		for (CollectionProtocolEvent cpe : getCollectionProtocolEvents()) {
+			if (cpe.getEventLabel().equalsIgnoreCase(eventLabel)) {
+				return cpe;
+			}
+		}
+		
+		return null;
+	}
+	
+	public CollectionProtocolEvent getCpeByCode(String code) {
+		for (CollectionProtocolEvent cpe : getCollectionProtocolEvents()) {
+			if (code.equals(cpe.getCode())) {
+				return cpe;
 			}
 		}
 		

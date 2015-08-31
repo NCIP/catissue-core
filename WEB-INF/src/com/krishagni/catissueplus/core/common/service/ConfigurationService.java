@@ -40,7 +40,7 @@ public interface ConfigurationService {
 	
 	public Map<String, String> getWelcomeVideoSettings();
 	
-	public Map<String, String> getAppProps();
+	public Map<String, Object> getAppProps();
 	
 	public String getDataDir();	
 }

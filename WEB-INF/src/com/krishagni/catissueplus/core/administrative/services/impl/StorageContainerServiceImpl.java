@@ -9,7 +9,6 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
-import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
@@ -23,6 +22,7 @@ import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetai
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
+import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.ContainerMapExporter;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
@@ -78,14 +78,12 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
 			}
 
-
-			if (crit.cpId() != null) {
-				Set<Site> cpRepositories = daoFactory.getCollectionProtocolDao().getById(crit.cpId()).getRepositories();
-				Set<Long> cpSiteIds =  new HashSet<Long>();
-				for (Site cpRepository : cpRepositories) {
-					cpSiteIds.add(cpRepository.getId());
-				}
-
+			if (CollectionUtils.isNotEmpty(crit.cpIds())) {
+				//
+				// TODO: what if cp site IDs is empty because of invalid cp ids
+				// return error
+				//
+				Set<Long> cpSiteIds = new HashSet<Long>(daoFactory.getCollectionProtocolDao().getSiteIdsByCpIds(crit.cpIds()));	
 				if (siteIds == null) {
 					siteIds = cpSiteIds;
 				} else {
@@ -486,13 +484,13 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		StorageContainerDetail detail = new StorageContainerDetail();
 		detail.setName(dest.getName());
 		detail.setSiteName(dest.getSiteName());
-		detail.setParentContainerId(dest.getParentContainerId());
-		detail.setParentContainerName(dest.getParentContainerName());
 		
-		StorageContainerPositionDetail position = new StorageContainerPositionDetail();
-		position.setPosOne(dest.getPosOne());
-		position.setPosTwo(dest.getPosTwo());
-		detail.setPosition(position);
+		StorageLocationSummary storageLocation = new StorageLocationSummary();
+		storageLocation.setId(dest.getParentContainerId());
+		storageLocation.setName(dest.getParentContainerName());
+		storageLocation.setPositionX(dest.getPosOne());
+		storageLocation.setPositionY(dest.getPosTwo());
+		detail.setStorageLocation(storageLocation);
 		
 		StorageContainer replica = containerFactory.createStorageContainer(getContainerCopy(srcContainer), detail);
 		AccessCtrlMgr.getInstance().ensureCreateContainerRights(replica);

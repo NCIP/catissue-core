@@ -25,6 +25,8 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 	
 	private String name;
 	
+	private String code;
+	
 	private String lineage;
 		
 	private String specimenClass;
@@ -79,6 +81,14 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getLineage() {
@@ -255,6 +265,10 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		this.specimens = specimens;
 	}
 	
+	public boolean isPrimary() {
+		return getLineage().equals(Specimen.NEW);
+	}
+	
 	public boolean isAliquot() {
 		return getLineage().equals(Specimen.ALIQUOT);
 	}
@@ -268,14 +282,21 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 			updateRequirementAttrs(sr);
 		}
 
+		if (StringUtils.isNotBlank(sr.getCode()) && !sr.getCode().equals(getCode())) {
+			if (getCollectionProtocolEvent().getSrByCode(sr.getCode()) != null) {
+				throw OpenSpecimenException.userError(SrErrorCode.DUP_CODE, sr.getCode());
+			}
+		}
+		
 		setName(sr.getName());
+		setCode(sr.getCode());
 		setSortOrder(sr.getSortOrder());
 		setInitialQuantity(sr.getInitialQuantity());
 		setStorageType(sr.getStorageType());
 		setLabelFormat(sr.getLabelFormat());
 		
 		if (!isAliquot()) {
-			updateConcentration(sr.getConcentration());
+			update(sr.getConcentration(), sr.getSpecimenClass(), sr.getSpecimenType());
 		}
 
 		if (NumUtil.lessThanZero(getQtyAfterAliquotsUse())) {
@@ -416,11 +437,13 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		}		
 	}
 	
-	private void updateConcentration(Double concentration) {
+	private void update(Double concentration, String specimenClass, String specimenType) {
 		setConcentration(concentration);
+		setSpecimenClass(specimenClass);
+		setSpecimenType(specimenType);
 		for (SpecimenRequirement childSr : getChildSpecimenRequirements()) {
 			if (childSr.isAliquot()) {
-				childSr.updateConcentration(concentration);
+				childSr.update(concentration, specimenClass, specimenType);
 			}
 		}
 	}
@@ -428,6 +451,7 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 	private static final String[] EXCLUDE_COPY_PROPS = {
 		"id",
 		"sortOrder",
+		"code",
 		"parentSpecimenRequirement",
 		"childSpecimenRequirements",
 		"specimens"		

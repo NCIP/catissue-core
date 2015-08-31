@@ -13,6 +13,8 @@ public class CollectionProtocolSummary implements Comparable<CollectionProtocolS
 
 	private String title;
 	
+	private String code;
+	
 	private UserSummary principalInvestigator;
 	
 	private Date startDate;
@@ -49,6 +51,14 @@ public class CollectionProtocolSummary implements Comparable<CollectionProtocolS
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public UserSummary getPrincipalInvestigator() {
@@ -122,6 +132,7 @@ public class CollectionProtocolSummary implements Comparable<CollectionProtocolS
 		detail.setId(cp.getId());
 		detail.setShortTitle(cp.getShortTitle());
 		detail.setTitle(cp.getTitle());
+		detail.setCode(cp.getCode());
 		detail.setStartDate(cp.getStartDate());
 		detail.setEndDate(cp.getEndDate());
 		detail.setPrincipalInvestigator(UserSummary.from(cp.getPrincipalInvestigator()));

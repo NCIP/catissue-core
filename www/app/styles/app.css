@@ -313,7 +313,8 @@ h4 + .btn-group {
   bottom: 10px;
 }
 
-.os-page-hdr .os-btns div.inline {
+.os-page-hdr .os-btns div.inline,
+.os-inline-btn {
   display: inline-block;
   position: relative;
 }
@@ -558,6 +559,16 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 .os-line-section >.key {
   background: #ffffff;
+}
+
+.os-section-divider {
+  border-top: 1px solid #ddd;
+  font-weight: bold;
+  color: #959595;
+  margin-top: 30px;
+  font-size: 12px;
+  padding-top: 5px;
+  letter-spacing: 1px;
 }
 
 .os-key-values .item .key, .os-key-values .item .value {
@@ -934,6 +945,14 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 .os-padding-top-4 {
   padding-top: 4px;
+}
+
+.os-no-padding {
+  padding: 0px;
+}
+
+.os-no-left-padding {
+  padding-left: 0px;
 }
 
 .os-big-dropdown-menu {

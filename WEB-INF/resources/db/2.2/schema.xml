@@ -4,7 +4,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-  
+
   <property name="boolean.type" value="boolean" dbms="mysql" />
   <property name="boolean.type" value="number(1,0)" dbms="oracle" />
 
@@ -34,6 +34,100 @@
   <property name="decimal.type" value="decimal" dbms="mysql"/>
   <property name="decimal.type" value="number" dbms="oracle"/>
 
+  <changeSet author="vpawar" id="Collection protocol short code">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="CODE" type="${text.type}(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Collection protocol event short code">
+    <addColumn tableName="CATISSUE_COLL_PROT_EVENT">
+      <column name="CODE" type="${text.type}(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Anticipated specimen short code">
+    <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+      <column name="CODE" type="${text.type}(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Adding consents waived column to collection protocol table">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists 
+          tableName="CATISSUE_COLLECTION_PROTOCOL" 
+          columnName="CONSENTS_WAIVED"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="CONSENTS_WAIVED" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Update collection protocol consents waived">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select count(identifier) from catissue_collection_protocol where consents_waived is not null
+      </sqlCheck>
+    </preConditions>
+    <sql>
+      update
+        catissue_collection_protocol
+      set
+        consents_waived = 1
+      where
+        identifier not in (
+          select
+            distinct coll_protocol_id
+          from
+            catissue_consent_tier
+          where
+            activity_status = 'Active'
+
+          union
+
+          select
+            distinct collection_protocol_id as cpId
+          from
+            catissue_coll_prot_reg
+          where
+            consent_document_name is not null
+        );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Replace cp short title with cp id as key in key sequence generator table" dbms="mysql" >
+    <sql>
+      update 
+        key_seq_generator ksg 
+        join catissue_collection_protocol cp on ksg.key_value = cp.short_title
+      set 
+        ksg.key_value = cp.identifier
+      where
+        ksg.key_type = 'PPID';
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Replace cp short title with cp id as key in key sequence generator table" dbms="oracle">
+    <sql>
+      merge into
+        key_seq_generator ksg
+      using  (
+        select 
+          k.identifier as key_id, cp.identifier as cp_id
+        from 
+          key_seq_generator k
+          join catissue_collection_protocol cp on  k.key_value = cp.short_title 
+        where 
+          k.key_type = 'PPID'
+      ) t on (ksg.identifier = t.key_id)
+      when matched then
+      update set  
+        ksg.key_value = t.cp_id
+    </sql>
+  </changeSet>
+  
   <changeSet author="ckhilosiya" id="Add default receiving site column in distribution protocol">
     <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
       <column name="DEF_RECEIVING_SITE_ID" type="${int.type}"></column>
@@ -84,5 +178,4 @@
       referencedTableName="CATISSUE_SITE"
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
-  
 </databaseChangeLog>

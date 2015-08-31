@@ -37,7 +37,7 @@ public class PpidYocUniqueIdLabelToken extends AbstractSpecimenLabelToken {
 		SpecimenCollectionEvent collEvent = specimen.getCollectionEvent();
 		if (collEvent != null) {
 			cal.setTime(collEvent.getTime());
-		} else {
+		} else if (specimen.getCreatedOn() != null) {
 			cal.setTime(specimen.getCreatedOn());
 		}
 		

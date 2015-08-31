@@ -1,10 +1,11 @@
 <div ng-controller="AddVisitCtrl" os-auto-scroll>
   <form name="visitForm" os-form-validator="visitForm" novalidate>
     <div class="clearfix">
-      <div class="col-xs-4" ng-if="cp.manualVisitNameEnabled && visit.status != 'Missed Collection'">
+      <div class="col-xs-4" 
+        ng-if="(!cp.visitNameFmt || cp.manualVisitNameEnabled) && visit.status != 'Missed Collection'">
         <div class="form-group">
           <input name="visitName" ng-model="visit.name" os-md-input
-            class="form-control" type="text" required placeholder="Visit Name">
+            class="form-control" type="text" ng-required="!!cp.manualVisitNameEnabled" placeholder="Visit Name">
           <div os-field-error field="visitForm.visitName"></div>
         </div>
       </div>
@@ -27,12 +28,18 @@
         </div>
       </div>
 
-      <div class="col-xs-6" ng-if="visit.status == 'Missed Collection'">
+      <div class="col-xs-4" ng-if="visit.status == 'Missed Collection'">
         <div class="form-group">
           <os-select name="missedReason" ng-model="visit.missedReason" list="missedReasons"
             os-md-input placeholder="Reason for Missed Visit">
           </os-select>
           <div os-field-error field="visitForm.missedReason"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-4"  ng-if="visit.status == 'Missed Collection'">
+        <div os-md-input ng-model="visit.missedBy" placeholder="Missed By">
+          <os-users ng-model="visit.missedBy" placeholder="Missed By"> </os-users>
         </div>
       </div>
 

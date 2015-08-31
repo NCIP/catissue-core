@@ -1,6 +1,9 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
 public class PermissibleValue extends BaseEntity {
@@ -13,6 +16,8 @@ public class PermissibleValue extends BaseEntity {
 	private PermissibleValue parent;
 	
 	private Long sortOrder;
+	
+	private Set<PermissibleValue> children = new HashSet<PermissibleValue>();
 
 	public String getValue() {
 		return value;
@@ -52,6 +57,14 @@ public class PermissibleValue extends BaseEntity {
 
 	public void setSortOrder(Long sortOrder) {
 		this.sortOrder = sortOrder;
+	}
+
+	public Set<PermissibleValue> getChildren() {
+		return children;
+	}
+
+	public void setChildren(Set<PermissibleValue> children) {
+		this.children = children;
 	}
 
 	public void update(PermissibleValue other) {

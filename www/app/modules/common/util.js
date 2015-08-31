@@ -72,7 +72,7 @@ angular.module('openspecimen')
       return token;
     }
 
-    function splitStr(str, re) {
+    function splitStr(str, re, returnEmpty) {
       var result = [], token = '', escUntil = undefined;
       var map = getEscapeMap(str);
 
@@ -91,7 +91,7 @@ angular.module('openspecimen')
             token += str[i];
           } else {
             token = getToken(token);
-            if (token.length > 0) {
+            if (token.length > 0 || !!returnEmpty) {
               result.push(token);
             }
             token = '';

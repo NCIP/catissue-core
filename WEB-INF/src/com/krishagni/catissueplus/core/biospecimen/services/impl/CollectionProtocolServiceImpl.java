@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -185,8 +186,9 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			ensureUsersBelongtoCpSites(cp);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureUniqueTitle(cp.getTitle(), ose);
-			ensureUniqueShortTitle(cp.getShortTitle(), ose);
+			ensureUniqueTitle(null, cp, ose);
+			ensureUniqueShortTitle(null, cp, ose);
+			ensureUniqueCode(null, cp, ose);
 			ose.checkAndThrow();
 
 			daoFactory.getCollectionProtocolDao().saveOrUpdate(cp);
@@ -220,6 +222,12 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueTitle(existingCp, cp, ose);
+			ensureUniqueShortTitle(existingCp, cp, ose);
+			ensureUniqueCode(existingCp, cp, ose);
+			if (!existingCp.isConsentsWaived().equals(cp.isConsentsWaived())) {
+			  ensureConsentTierIsEmpty(existingCp, ose);
+			}
+		
 			ose.checkAndThrow();
 			
 			User oldPI = existingCp.getPrincipalInvestigator();
@@ -240,6 +248,30 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			removeDefaultCoordinatorRoles(cp, removedCoord);
 			addDefaultCoordinatorRoles(cp, addedCoord);
 			
+			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@PlusTransactional
+	public ResponseEvent<CollectionProtocolDetail> updateConsentsWaived(RequestEvent<CollectionProtocolDetail> req) {
+		try {
+			CollectionProtocolDetail detail = req.getPayload();
+			CollectionProtocol existingCp = daoFactory.getCollectionProtocolDao().getById(detail.getId());
+			if (existingCp == null) {
+				return ResponseEvent.userError(CpErrorCode.NOT_FOUND);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureUpdateCpRights(existingCp);
+			
+			if (CollectionUtils.isNotEmpty(existingCp.getConsentTier())) {
+				return ResponseEvent.userError(CpErrorCode.CONSENT_TIER_FOUND, existingCp.getShortTitle());
+			}
+
+			existingCp.setConsentsWaived(detail.getConsentsWaived());
 			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -336,6 +368,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			}
 			
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(cp);
+			
+			if (cp.isConsentsWaived()) {
+				return ResponseEvent.userError(CpErrorCode.CONSENTS_WAIVED, cp.getShortTitle());
+			}
 			
 			ConsentTierDetail input = opDetail.getConsentTier();
 			ConsentTier resp = null;			
@@ -582,6 +618,9 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(aliquots.iterator().next().getCollectionProtocol());
 			
 			SpecimenRequirement parent = daoFactory.getSpecimenRequirementDao().getById(requirement.getParentSrId());
+			if (StringUtils.isNotBlank(requirement.getCode())) {
+				setAliquotCode(parent, aliquots, requirement.getCode());
+			}
 			parent.addChildRequirements(aliquots);			
 			daoFactory.getSpecimenRequirementDao().saveOrUpdate(parent, true);
 			return ResponseEvent.response(SpecimenRequirementDetail.from(aliquots));
@@ -599,6 +638,12 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			DerivedSpecimenRequirement requirement = req.getPayload();
 			SpecimenRequirement derived = srFactory.createDerived(requirement);						
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(derived.getCollectionProtocol());
+			
+			if (StringUtils.isNotBlank(derived.getCode())) {
+				if (derived.getCollectionProtocolEvent().getSrByCode(derived.getCode()) != null) {
+					return ResponseEvent.userError(SrErrorCode.DUP_CODE, derived.getCode());
+				}
+			}
 			
 			daoFactory.getSpecimenRequirementDao().saveOrUpdate(derived, true);
 			return ResponseEvent.response(SpecimenRequirementDetail.from(derived));
@@ -622,6 +667,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(sr.getCollectionProtocol());
 			SpecimenRequirement partial = srFactory.createForUpdate(sr.getLineage(), detail);
+			if (isSpecimenClassOrTypeChanged(sr, partial)) {
+				ensureSpecimensNotCollected(sr);
+			}
+			
 			sr.update(partial);
 			return ResponseEvent.response(SpecimenRequirementDetail.from(sr));
 		} catch (OpenSpecimenException ose) {
@@ -667,6 +716,25 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			sr.delete();
 			daoFactory.getSpecimenRequirementDao().saveOrUpdate(sr);
 			return ResponseEvent.response(SpecimenRequirementDetail.from(sr));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Integer> getSrSpecimensCount(RequestEvent<Long> req) {
+		try {
+			Long srId = req.getPayload();
+			SpecimenRequirement sr = daoFactory.getSpecimenRequirementDao().getById(srId);
+			if (sr == null) {
+				throw OpenSpecimenException.userError(SrErrorCode.NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(
+					daoFactory.getSpecimenRequirementDao().getSpecimensCount(srId));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -801,22 +869,48 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 	
 	private void ensureUniqueTitle(CollectionProtocol existingCp, CollectionProtocol cp, OpenSpecimenException ose) {
-		if (!existingCp.getTitle().equals(cp.getTitle())) {
-			ensureUniqueTitle(cp.getTitle(), ose);
+		String title = cp.getTitle();
+		if (existingCp != null && existingCp.getTitle().equals(title)) {
+			return;
 		}
-	}
-	
-	private void ensureUniqueTitle(String title, OpenSpecimenException ose) {
-		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);
-		if (cp != null) {
-			ose.addError(CpErrorCode.DUP_TITLE);
+		
+		CollectionProtocol dbCp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);
+		if (dbCp != null) {
+			ose.addError(CpErrorCode.DUP_TITLE, title);
 		}		
 	}
 	
-	private void ensureUniqueShortTitle(String shortTitle, OpenSpecimenException ose) {
-		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCpByShortTitle(shortTitle);
-		if (cp != null) {
-			ose.addError(CpErrorCode.DUP_SHORT_TITLE);
+	private void ensureUniqueShortTitle(CollectionProtocol existingCp, CollectionProtocol cp, OpenSpecimenException ose) {
+		String shortTitle = cp.getShortTitle();
+		if (existingCp != null && existingCp.getShortTitle().equals(shortTitle)) {
+			return;
+		}
+		
+		CollectionProtocol dbCp = daoFactory.getCollectionProtocolDao().getCpByShortTitle(shortTitle);
+		if (dbCp != null) {
+			ose.addError(CpErrorCode.DUP_SHORT_TITLE, shortTitle);
+		}
+	}
+	
+	private void ensureUniqueCode(CollectionProtocol existingCp, CollectionProtocol cp, OpenSpecimenException ose) {
+		String code = cp.getCode();
+		if (StringUtils.isBlank(code)) {
+			return;
+		}
+		
+		if (existingCp != null && code.equals(existingCp.getCode())) {
+			return;
+		}
+		
+		CollectionProtocol dbCp = daoFactory.getCollectionProtocolDao().getCpByCode(code);
+		if (dbCp != null) {
+			ose.addError(CpErrorCode.DUP_CODE, code);
+		}
+	}
+	
+	private void ensureConsentTierIsEmpty(CollectionProtocol existingCp, OpenSpecimenException ose) {
+		if (CollectionUtils.isNotEmpty(existingCp.getConsentTier())) {
+			ose.addError(CpErrorCode.CONSENT_TIER_FOUND, existingCp.getShortTitle());
 		}
 	}
 	
@@ -951,6 +1045,36 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 					consentTier.getId() != consentTierDetail.getId()) {
 				throw OpenSpecimenException.userError(CpErrorCode.DUP_CONSENT, consentTier.getStatement());
 			}
+		}
+	}
+	
+	private void ensureSpecimensNotCollected(SpecimenRequirement sr) {
+		int count = daoFactory.getSpecimenRequirementDao().getSpecimensCount(sr.getId());
+		if (count > 0) {
+			throw OpenSpecimenException.userError(SrErrorCode.CANNOT_CHANGE_CLASS_OR_TYPE);
+		}
+	}
+	
+	private boolean isSpecimenClassOrTypeChanged(SpecimenRequirement existingSr, SpecimenRequirement sr) {
+		return !existingSr.getSpecimenClass().equals(sr.getSpecimenClass()) || 
+				!existingSr.getSpecimenType().equals(sr.getSpecimenType());
+	}
+	
+	private void setAliquotCode(SpecimenRequirement parent, List<SpecimenRequirement> aliquots, String code) {
+		Set<String> codes = new HashSet<String>();
+		CollectionProtocolEvent cpe = parent.getCollectionProtocolEvent();
+		for (SpecimenRequirement sr:  cpe.getSpecimenRequirements()) {
+			if (StringUtils.isNotBlank(sr.getCode())) {
+				codes.add(sr.getCode());
+			}
+		}
+
+		int count = 1;
+		for (SpecimenRequirement sr: aliquots) {
+			while (!codes.add(code + count)) {
+				count++;
+			}
+			sr.setCode(code + count++);
 		}
 	}
 }

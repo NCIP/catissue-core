@@ -16,6 +16,8 @@
 
     <property name="name" column="SPEC_REQ_LABEL"/>
 
+    <property name="code" column="CODE"/>
+
     <property name="lineage" column="LINEAGE"/>
       
     <property name="specimenClass" column="SPECIMEN_CLASS"/>
@@ -75,19 +77,31 @@
       <filter name="activeEntity"/>
     </set>
 
-    <set
-      name="specimens"
-      table="CATISSUE_SPECIMEN"
-      lazy="true"
-      inverse="true"
-      cascade="all"
-      sort="unsorted">
-
-      <key column="PARENT_SPECIMEN_ID"/>
-      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"/>
+    <set name="specimens" inverse="true" cascade="all">
+      <key column="REQ_SPECIMEN_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"/>
+      <filter name="activeEntity"/>
     </set>
 
     <filter name="activeEntity"/>
+
+    <query name="getByCode">
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement sr
+      where
+        sr.code = :code
+    </query>
+    
+    <query name="getSpecimensCount">
+      select 
+        count(spec.id) 
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement sr
+        join sr.specimens spec
+      where
+        spec.collectionStatus = 'Collected'
+        and sr.id = :srId
+    </query>
   </class>
 </hibernate-mapping>
 

@@ -31,5 +31,18 @@ angular.module('os.biospecimen.participant.visits', ['os.biospecimen.models'])
       $state.go('visit-detail.overview', {visitId: visitId, eventId: eventId});
     };
 
+    $scope.reload = function() {
+      var visitDetail = {
+        visitId: $stateParams.visitId,
+        eventId: $stateParams.eventId
+      };
+
+      return Specimen.listFor($stateParams.cprId, visitDetail).then(
+        function(specimens) {
+          $scope.specimens = specimens;
+        }
+      );
+    }
+
     $scope.specimens = specimens;
   });

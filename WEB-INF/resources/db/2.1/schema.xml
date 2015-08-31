@@ -130,5 +130,31 @@
       <column name="RECORD_ID"/>
     </createIndex>
   </changeSet>
+
+  <changeSet author="ahegade" id="Column for specifying person who has missed the visit">
+    <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+      <column name="MISSED_BY" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
   
+  <changeSet author="nmarwaha" id="Updating the CPR view to include the EMPI_ID">
+    <createView viewName="cpr_view" replaceIfExists="true"> 
+      select 
+        cpr.IDENTIFIER AS CPR_ID, cpr.COLLECTION_PROTOCOL_ID AS CP_ID,
+        cpr.PARTICIPANT_ID AS PARTICIPANT_ID, p.FIRST_NAME AS FIRST_NAME,
+        p.MIDDLE_NAME AS MIDDLE_NAME, p.LAST_NAME AS LAST_NAME,
+        p.BIRTH_DATE AS DOB, p.SOCIAL_SECURITY_NUMBER AS SSN,
+        cpr.ACTIVITY_STATUS AS ACTIVITY_STATUS, p.GENDER AS GENDER,
+        p.GENOTYPE AS GENOTYPE, cpr.REGISTRATION_DATE AS REGISTRATION_DATE,
+        cpr.PROTOCOL_PARTICIPANT_ID AS PPID, p.VITAL_STATUS AS VITAL_STATUS,
+        p.DEATH_DATE AS DEATH_DATE, p.ETHNICITY AS ETHNICITY,
+        p.EMPI_ID AS EMPI_ID, cpr.BARCODE AS BARCODE,
+        cpr.CONSENT_SIGN_DATE AS CONSENT_SIGN_DATE, cpr.CONSENT_WITNESS AS CONSENT_WITNESS,
+        cpr.CONSENT_DOC_URL AS CONSENT_DOC_URL 
+      from 
+        catissue_coll_prot_reg cpr 
+        join catissue_participant p on cpr.PARTICIPANT_ID = p.IDENTIFIER
+    </createView>
+  </changeSet>
+
 </databaseChangeLog>

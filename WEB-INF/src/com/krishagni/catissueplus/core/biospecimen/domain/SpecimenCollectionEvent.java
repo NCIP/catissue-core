@@ -59,12 +59,11 @@ public class SpecimenCollectionEvent extends SpecimenEvent {
 		this.container = (String)attrValues.get("container");		
 	}
 	
-	public void update(SpecimenCollectionEvent other) {
-		super.update(other);
-		setContainer(other.getContainer());
-		setProcedure(other.getProcedure());
+	@Override
+	public void update(SpecimenEvent other) {
+		update((SpecimenCollectionEvent)other);
 	}
-		
+	
 	public static SpecimenCollectionEvent getFor(Specimen specimen) {
 		if (specimen.getId() == null) {
 			return createFromSr(specimen);
@@ -96,5 +95,11 @@ public class SpecimenCollectionEvent extends SpecimenEvent {
 		}		
 		
 		return event;
+	}
+	
+	private void update(SpecimenCollectionEvent other) {
+		super.update(other);
+		setContainer(other.getContainer());
+		setProcedure(other.getProcedure());
 	}
 }

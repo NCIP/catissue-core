@@ -17,7 +17,6 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 
-import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
@@ -160,7 +159,16 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		
 		return result;
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Long> getDistributedSpecimens(List<Long> specimenIds) {
+		return (List<Long>) getSessionFactory().getCurrentSession()
+				.getNamedQuery(GET_DISTRIBUTED_SPECIMENS)
+				.setParameterList("specimenIds", specimenIds)
+				.list();
+	}
+
 	private void addLabelsCond(Criteria query, List<String> labels) {
 		int numLabels = labels.size();		
 		Disjunction labelIn = Restrictions.disjunction();
@@ -219,4 +227,7 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	private static final String GET_BY_VISIT_NAME = FQN + ".getByVisitName";
 	
 	private static final String GET_CPR_AND_VISIT_IDS = FQN + ".getCprAndVisitIds";
+
+	private static final String GET_DISTRIBUTED_SPECIMENS = FQN + ".getDistributedSpecimens";
+
 }

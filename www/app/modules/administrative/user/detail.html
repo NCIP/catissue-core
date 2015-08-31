@@ -17,7 +17,8 @@
           <span class="fa fa-trash"></span>
           <span translate="common.buttons.delete">Delete</span>
         </button>
-        <button ng-if="currentUser.id != user.id && currentUser.admin" class="default" ui-sref="user-password({userId: user.id})">
+        <button ng-if="user.domainName == global.defaultDomain && currentUser.id != user.id && currentUser.admin" 
+          class="default" ui-sref="user-password({userId: user.id})">
           <span class="fa fa-key"></span>
           <span translate="common.buttons.reset_password">Reset Password</span>
         </button>

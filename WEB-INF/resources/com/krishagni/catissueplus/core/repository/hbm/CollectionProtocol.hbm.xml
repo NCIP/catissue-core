@@ -17,6 +17,8 @@
 
     <property name="shortTitle" column="SHORT_TITLE"/>
 
+    <property name="code" column="CODE"/>
+    	
     <property name="startDate" column="START_DATE"/>
 
     <property name="endDate" column="END_DATE"/>
@@ -52,6 +54,8 @@
     <property name="manualSpecLabelEnabled" column="MANUAL_SPEC_LABEL_ALLOWED"/>
 
     <property name="unsignedConsentDocumentURL" column="UNSIGNED_CONSENT_DOC_URL"/>
+    
+    <property name="consentsWaived" column="CONSENTS_WAIVED"/>
 
     <set name="consentTier" table="CATISSUE_CONSENT_TIER" inverse="true" cascade="all-delete-orphan" order-by="id">
       <key column="COLL_PROTOCOL_ID"/>
@@ -224,6 +228,22 @@
       where
         ct.id = :consentId
     </query>
-    
+
+    <query name="getByCode">
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
+      where
+        cp.code = :code
+    </query>
+
+    <query name="getRepoIdsByCps">
+      select 
+        r.id
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
+        join cp.repositories r
+      where
+        cp.id in (:cpIds)
+    </query>
   </class>
 </hibernate-mapping>

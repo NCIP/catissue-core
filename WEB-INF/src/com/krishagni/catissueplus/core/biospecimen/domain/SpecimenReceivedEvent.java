@@ -41,9 +41,9 @@ public class SpecimenReceivedEvent extends SpecimenEvent {
 		this.quality = (String)attrValues.get("quality");
 	}
 	
-	public void update(SpecimenReceivedEvent other) {
-		super.update(other);
-		setQuality(other.getQuality());
+	@Override
+	public void update(SpecimenEvent other) {
+		update((SpecimenReceivedEvent)other);
 	}
 	
 	public static SpecimenReceivedEvent getFor(Specimen specimen) {
@@ -77,4 +77,9 @@ public class SpecimenReceivedEvent extends SpecimenEvent {
 		
 		return event;
 	}	
+	
+	private void update(SpecimenReceivedEvent other) {
+		super.update(other);
+		setQuality(other.getQuality());
+	}
 }

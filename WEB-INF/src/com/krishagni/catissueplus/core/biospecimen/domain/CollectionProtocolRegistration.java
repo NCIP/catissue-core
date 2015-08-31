@@ -208,9 +208,11 @@ public class CollectionProtocolRegistration {
 			return;
 		}
 		
-		setRegistrationDate(cpr.getRegistrationDate());		
+		setRegistrationDate(cpr.getRegistrationDate());
+		setPpid(cpr.getPpid());
 		setBarcode(cpr.getBarcode());
 		setParticipant(cpr.getParticipant());
+		setPpidIfEmpty();
 	}
 	
 	public void updateConsents(ConsentResponses consentResponses) {
@@ -228,7 +230,7 @@ public class CollectionProtocolRegistration {
 		CollectionProtocol cp = getCollectionProtocol();
 		String ppidFmt = cp.getPpidFormat();
 		if (StringUtils.isNotBlank(ppidFmt)) {
-			Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("PPID", cp.getShortTitle());
+			Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("PPID", cp.getId().toString());
 			setPpid(String.format(ppidFmt, uniqueId.intValue()));
 		} else {
 			setPpid(cp.getId() + "_" + participant.getId());

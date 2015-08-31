@@ -98,6 +98,8 @@
   </changeSet>
   
   <changeSet author="vratnaparkhi" id="Migrate specimen order data">
+    <validCheckSum>7:62bf05142d54c8a90c7bb96ce1f9a991</validCheckSum>
+    <validCheckSum>7:69ac63e73e11e9d659765be351e9204e</validCheckSum>
     <sql>
       insert into os_orders (
         identifier, 
@@ -106,35 +108,39 @@
         creation_date, 
         execution_date, 
         status, 
-        order_type, 
         activity_status, 
         site_id, 
         distribution_protocol_id, 
         distributor_id, 
-        tracking_url, 
         comments)
       
       select 
-        orders.identifier as identifier, 
-        orders.name as name,
-        orders.requester_id as requester_id, 
-        orders.requested_date as creation_date,
+        distribution.identifier as identifier, 
+        case
+          when orders.name is null then distribution.event_timestamp
+          else orders.name
+        end as name,
+        case
+          when orders.requester_id is null then distribution.user_id
+          else orders.requester_id
+        end as requester_id,
+        case
+          when orders.requested_date is null then distribution.event_timestamp
+          else orders.requested_date
+        end as requested_date,
         distribution.event_timestamp as execution_date,
         case
           when orders.status in ('Completed') then 'EXECUTED'
           else 'PENDING'
         end as status,
-        null as order_type, 
         distribution.activity_status as activity_status, 
         distribution.to_site_id as site_id,
         distribution.distribution_protocol_id as distribution_protocol_id, 
         distribution.user_id as distributor_id,
-        null as tracking_url, 
         orders.comments as comments
       from 
-        catissue_order orders
-        join catissue_distribution distribution on distribution.order_id=orders.identifier
-        and distribution.order_id is not null;
+        catissue_distribution distribution
+        left join catissue_order orders on distribution.order_id = orders.identifier
     </sql>
     <sql>
       insert into os_order_items (
@@ -145,9 +151,9 @@
         status)
       
       select 
-        order_item.identifier as identifier,
-        order_item.order_id as order_id,
-        order_item.requested_quantity as quantity,
+        distributed_item.identifier as identifier,
+        distributed_item.distribution_id as order_id,
+        distributed_item.quantity as quantity,
         distributed_item.specimen_id as specimen_id,
         case
           when order_item.status like 'Distributed And Close' then 'DISTRIBUTED_AND_CLOSED'
@@ -156,11 +162,9 @@
           then 'PENDING'
         end as status
       from 
-        catissue_order_item order_item
-        join catissue_distributed_item distributed_item on distributed_item.identifier=order_item.distributed_item_id
-        join catissue_distribution distribution on distribution.identifier=distributed_item.distribution_id
-        and distribution.order_id is not null;
+        catissue_distributed_item distributed_item
+        join catissue_order_item order_item on distributed_item.identifier = order_item.distributed_item_id
+        join catissue_distribution distribution on distribution.identifier = distributed_item.distribution_id
     </sql>
   </changeSet>
-
 </databaseChangeLog>

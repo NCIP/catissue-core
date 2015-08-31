@@ -74,7 +74,7 @@
         </div>
 
         <div class="col-xs-4">
-          <div class="os-specimen-position clearfix">
+          <div class="os-storage-position clearfix">
             <div class="os-col-60">
               <label class="control-label">
                 <span translate="container.parent_container">Parent Container</span>
@@ -111,25 +111,21 @@
       <div class="row form-group" ng-repeat="dest in destinations">
         <ng-form name="destForm" os-form-validator="destForm" parent-validator="replFormValidator">
           <div class="col-xs-offset-1 col-xs-3">
-            <input type="text" name="name" ng-model="dest.name" class="form-control" 
-              placeholder="{{'container.new_name' | translate}}" required>
+            <input type="text" name="name" ng-model="dest.name" class="form-control" required>
             <div os-field-error field="destForm.name"></div>
           </div>
 
           <div class="col-xs-2">
-            <os-select name="siteName" ng-model="dest.siteName" list="sites" on-select="onSiteSelect(dest)" 
-              placeholder="{{'container.target_site' | translate}}" required>
+            <os-select name="siteName" ng-model="dest.siteName" list="sites" on-select="onSiteSelect(dest)" required>
             </os-select>
             <div os-field-error field="destForm.siteName"></div>
           </div>
 
           <div class="col-xs-4">
-            <div class="clearfix os-specimen-position">
+            <div class="clearfix os-storage-position">
               <div class="os-col-60">
-                <os-select ng-model="dest.parentContainerId" list="dest.containers" 
-                  display-prop="name" select-prop="id" 
-                  on-select="onContainerSelect(dest)" refresh="searchContainers" refresh-args="dest"
-                  placeholder="{{'container.target_parent_cont' | translate}}">
+                <os-select ng-model="dest.parentContainerName" list="dest.containers"
+                  on-select="onContainerSelect(dest)" refresh="searchContainers" refresh-args="dest">
                 </os-select>
               </div>
               <div class="os-col-15">
@@ -140,7 +136,7 @@
               </div>
               <div class="os-col-10">
                 <button class="btn btn-default" ng-click="openPositionSelector(dest)" 
-                  ng-disabled="!dest.parentContainerId">
+                  ng-disabled="!dest.parentContainerName">
                   <span class="fa fa-search"></span>
                 </button>
               </div>

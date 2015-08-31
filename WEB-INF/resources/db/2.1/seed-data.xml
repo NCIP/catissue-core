@@ -150,4 +150,79 @@
     </sql>
   </changeSet>
 
+  <changeSet author="vpawar" id="Update public_id of all anatomic site PVs at 3 levels" dbms="mysql">
+    <sql>
+      update
+        catissue_permissible_value pv
+        inner join catissue_permissible_value cpv on cpv.parent_identifier = pv.identifier
+      set
+        cpv.public_id = 'Tissue_Site_PID'
+      where
+        pv.public_id = 'Tissue_Site_PID';
+    </sql>
+
+    <sql>
+      update
+        catissue_permissible_value pv
+        inner join catissue_permissible_value ipv on ipv.parent_identifier = pv.identifier
+        inner join catissue_permissible_value cpv on cpv.parent_identifier = ipv.identifier
+      set
+        cpv.public_id = 'Tissue_Site_PID'
+      where
+        pv.public_id = 'Tissue_Site_PID';
+    </sql>
+
+    <sql>
+      update
+        catissue_permissible_value pv
+        inner join catissue_permissible_value ipv on ipv.parent_identifier = pv.identifier
+        inner join catissue_permissible_value ipv1 on ipv1.parent_identifier = ipv.identifier
+        inner join catissue_permissible_value cpv on cpv.parent_identifier = ipv1.identifier
+      set
+        cpv.public_id = 'Tissue_Site_PID'
+      where
+        pv.public_id = 'Tissue_Site_PID';
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Update public_id of all anatomic site PVs at 3 levels" dbms="oracle">
+    <sql>
+      merge into catissue_permissible_value cpv using (
+        select 
+          pv.identifier as pv_id
+        from 
+          catissue_permissible_value pv
+        where 
+          pv.public_id = 'Tissue_Site_PID'          
+      ) t on (cpv.parent_identifier = t.pv_id) 
+      when matched then update set cpv.public_id = 'Tissue_Site_PID'
+    </sql>
+
+    <sql>
+      merge into catissue_permissible_value cpv using (
+        select 
+          ipv.identifier as pv_id
+        from 
+          catissue_permissible_value pv
+          inner join catissue_permissible_value ipv on ipv.parent_identifier = pv.identifier
+        where 
+          pv.public_id = 'Tissue_Site_PID'          
+      ) t on (cpv.parent_identifier = t.pv_id) 
+      when matched then update set cpv.public_id = 'Tissue_Site_PID'
+    </sql>
+
+    <sql>
+      merge into catissue_permissible_value cpv using (
+        select 
+          ipv1.identifier as pv_id
+        from 
+          catissue_permissible_value pv
+          inner join catissue_permissible_value ipv on ipv.parent_identifier = pv.identifier
+          inner join catissue_permissible_value ipv1 on ipv1.parent_identifier = ipv.identifier
+        where 
+          pv.public_id = 'Tissue_Site_PID'          
+      ) t on (cpv.parent_identifier = t.pv_id) 
+      when matched then update set cpv.public_id = 'Tissue_Site_PID'
+    </sql>
+  </changeSet>
 </databaseChangeLog>

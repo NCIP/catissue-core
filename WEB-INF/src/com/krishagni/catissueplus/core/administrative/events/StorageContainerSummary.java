@@ -23,9 +23,7 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 
 	private String siteName;
 
-	private Long parentContainerId;
-	
-	private String parentContainerName;
+	private StorageLocationSummary storageLocation;
 
 	private UserSummary createdBy;
 	
@@ -78,21 +76,13 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;
 	}
-
-	public Long getParentContainerId() {
-		return parentContainerId;
+	
+	public StorageLocationSummary getStorageLocation() {
+		return storageLocation;
 	}
 
-	public void setParentContainerId(Long parentContainerId) {
-		this.parentContainerId = parentContainerId;
-	}
-
-	public String getParentContainerName() {
-		return parentContainerName;
-	}
-
-	public void setParentContainerName(String parentContainerName) {
-		this.parentContainerName = parentContainerName;
+	public void setStorageLocation(StorageLocationSummary storageLocation) {
+		this.storageLocation = storageLocation;
 	}
 
 	public UserSummary getCreatedBy() {
@@ -102,7 +92,7 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 	public void setCreatedBy(UserSummary createdBy) {
 		this.createdBy = createdBy;
 	}
-
+	
 	public int getNoOfColumns() {
 		return noOfColumns;
 	}
@@ -151,10 +141,7 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 		result.setCreatedBy(UserSummary.from(container.getCreatedBy()));
 		
 		result.setSiteName(container.getSite().getName());
-		if (container.getParentContainer() != null) {
-			result.setParentContainerId(container.getParentContainer().getId());
-			result.setParentContainerName(container.getParentContainer().getName());
-		}
+		result.setStorageLocation(StorageLocationSummary.from(container.getPosition()));
 		
 		result.setNoOfColumns(container.getNoOfColumns());
 		result.setNoOfRows(container.getNoOfRows());

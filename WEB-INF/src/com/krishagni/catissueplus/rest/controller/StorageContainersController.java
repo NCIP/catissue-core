@@ -82,8 +82,11 @@ public class StorageContainersController {
 			String specimenType,
 			
 			@RequestParam(value = "cpId", required = false)
-			Long cpId,
+			Long[] cpIds,
 			
+			@RequestParam(value = "cpShortTitle", required = false)
+			String[] cpShortTitles,
+
 			@RequestParam(value = "storeSpecimensEnabled", required = false)
 			Boolean storeSpecimensEnabled,
 			
@@ -102,7 +105,8 @@ public class StorageContainersController {
 			.topLevelContainers(topLevelContainers)
 			.specimenClass(specimenClass)
 			.specimenType(specimenType)
-			.cpId(cpId)
+			.cpIds(cpIds)
+			.cpShortTitles(cpShortTitles)
 			.storeSpecimensEnabled(storeSpecimensEnabled)
 			.hierarchical(hierarchical);
 					

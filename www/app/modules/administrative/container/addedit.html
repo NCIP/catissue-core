@@ -31,17 +31,19 @@
       </div>
 
       <div class="form-group" ng-if="!locationSelected">
-        <label class="col-xs-3 control-label" translate="container.parent_location">Parent Location</label>
-        <div class="col-xs-3">
+        <label class="col-xs-3 control-label" translate="container.parent_site">Parent Site</label>
+        <div class="col-xs-6">
           <os-select ng-model="container.siteName" list="sites" placeholder="{{'container.site' | translate}}"
-            name="parentSite" on-change="loadContainers" required>
+            name="parentSite" on-change="loadAllCps" required>
           </os-select>
           <div os-field-error field="cform.parentSite"></div>
         </div>
-        <div class="col-xs-3">
-          <os-select ng-model="container.parentContainerName" list="containers"
-            placeholder="{{'container.container' | translate}}" name="parentContainerName">
-          </os-select>
+      </div>
+
+      <div class="form-group" ng-if="!locationSelected">
+        <label class="col-xs-3 control-label" translate="container.parent_container">Parent Container</label>
+        <div class="col-xs-6">
+          <os-storage-position entity="container"></os-storage-position>
         </div>
       </div>
 

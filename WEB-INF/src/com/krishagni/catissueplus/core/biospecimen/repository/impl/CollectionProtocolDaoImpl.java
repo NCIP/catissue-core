@@ -106,6 +106,17 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public CollectionProtocol getCpByCode(String code) {
+		List<CollectionProtocol> cps = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CP_BY_CODE)
+				.setString("code", code)
+				.list();
+		return CollectionUtils.isEmpty(cps) ? null : cps.iterator().next();
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<Long> getCpIdsBySiteIds(Collection<Long> siteIds) {
 		return sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_CP_IDS_BY_SITE_IDS)
@@ -115,13 +126,28 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public CollectionProtocolEvent getCpe(Long cpeId) {
-		List<CollectionProtocolEvent> events = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_CPE_BY_ID)
-				.setLong("cpeId", cpeId)
+	public List<Long> getSiteIdsByCpIds(Collection<Long> cpIds) {
+		return getSessionFactory().getCurrentSession()
+				.getNamedQuery(GET_SITE_IDS_BY_CP_IDS)
+				.setParameterList("cpIds", cpIds)
 				.list();
-		return events != null && !events.isEmpty() ? events.iterator().next() : null;
+	}	
+	
+	@Override
+	public CollectionProtocolEvent getCpe(Long cpeId) {
+		List<CollectionProtocolEvent> events = getCpes(Collections.singleton(cpeId));
+		return CollectionUtils.isEmpty(events) ? null : events.iterator().next();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CollectionProtocolEvent> getCpes(Collection<Long> cpeIds) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CPE_BY_IDS)
+				.setParameterList("cpeIds", cpeIds)
+				.list();
+	}
+	
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -158,6 +184,19 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		
 		return CollectionUtils.isEmpty(events) ? null : events.iterator().next();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public CollectionProtocolEvent getCpeByCode(String shortTitle, String code) {
+		List<CollectionProtocolEvent> events = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_CPE_BY_CODE)
+				.setString("shortTitle", shortTitle)
+				.setString("code", code)
+				.list();
+		
+		return CollectionUtils.isEmpty(events) ? null : events.iterator().next();
+	}
+	
 
 	@Override
 	public void saveCpe(CollectionProtocolEvent cpe) {
@@ -178,6 +217,17 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 				.get(SpecimenRequirement.class, requirementId);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override	
+	public SpecimenRequirement getSrByCode(String code) {
+		List<SpecimenRequirement> srs = sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_SR_BY_CODE)
+			.setString("code", code)
+			.list();
+		
+		return CollectionUtils.isEmpty(srs) ? null : srs.iterator().next();
+	}
+	
 	@Override
 	public void saveCpWorkflows(CpWorkflowConfig cfg) {
 		sessionFactory.getCurrentSession().saveOrUpdate(cfg);
@@ -276,6 +326,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		projs.add(Projections.property("id"));
 		projs.add(Projections.property("shortTitle"));
 		projs.add(Projections.property("title"));
+		projs.add(Projections.property("code"));
 		projs.add(Projections.property("startDate"));
 		projs.add(Projections.property("ppidFormat"));
 		projs.add(Projections.property("manualPpidEnabled"));
@@ -289,19 +340,21 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	}
 
 	private CollectionProtocolSummary getCp(Object[] fields, boolean includePi) {
-		CollectionProtocolSummary cp = new CollectionProtocolSummary();
-		cp.setId((Long)fields[0]);
-		cp.setShortTitle((String)fields[1]);
-		cp.setTitle((String)fields[2]);
-		cp.setStartDate((Date)fields[3]);
-		cp.setPpidFmt((String)fields[4]);
-		cp.setManualPpidEnabled((Boolean)fields[5]);
+		int idx = 0;
+		CollectionProtocolSummary cp = new CollectionProtocolSummary();		
+		cp.setId((Long)fields[idx++]);
+		cp.setShortTitle((String)fields[idx++]);
+		cp.setTitle((String)fields[idx++]);
+		cp.setCode((String)fields[idx++]);
+		cp.setStartDate((Date)fields[idx++]);
+		cp.setPpidFmt((String)fields[idx++]);
+		cp.setManualPpidEnabled((Boolean)fields[idx++]);
 		if (includePi) {
 			UserSummary user = new UserSummary();
-			user.setId((Long)fields[6]);
-			user.setFirstName((String)fields[7]);
-			user.setLastName((String)fields[8]);
-			user.setLoginName((String)fields[9]);
+			user.setId((Long)fields[idx++]);
+			user.setFirstName((String)fields[idx++]);
+			user.setLastName((String)fields[idx++]);
+			user.setLoginName((String)fields[idx++]);
 			cp.setPrincipalInvestigator(user);
 		}
 		
@@ -324,7 +377,11 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	
 	private static final String GET_CPS_BY_SHORT_TITLE_N_SITE = FQN + ".getCpsByShortTitleAndSite";
 	
+	private static final String GET_CP_BY_CODE = FQN + ".getByCode";
+	
 	private static final String GET_CP_IDS_BY_SITE_IDS = FQN + ".getCpIdsBySiteIds";
+	
+	private static final String GET_SITE_IDS_BY_CP_IDS = FQN + ".getRepoIdsByCps";
 	
 	private static final String GET_CONSENT_TIER = FQN + ".getConsentTier";
 
@@ -334,5 +391,11 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		
 	private static final String CPE_FQN = CollectionProtocolEvent.class.getName();
 	
-	private static final String GET_CPE_BY_ID = CPE_FQN + ".getCpeById";
+	private static final String GET_CPE_BY_IDS = CPE_FQN + ".getCpeByIds";
+	
+	private static final String GET_CPE_BY_CODE = CPE_FQN + ".getByCode";
+	
+	private static final String SR_FQN = SpecimenRequirement.class.getName();
+	
+	private static final String GET_SR_BY_CODE = SR_FQN + ".getByCode";
 }
