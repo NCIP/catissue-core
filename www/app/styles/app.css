@@ -383,12 +383,15 @@ h4 + .btn-group {
   color: white;
 }
 
-.os-table-body .row .col.col-xs-1.os-more-options {
+.os-table-body .row .col.os-more-options {
   position: relative;
   text-align: center;
   padding: 0px!important;
   overflow: visible;
   top: 0px!important;
+}
+
+.os-table-body .row .col.col-xs-1.os-more-options {
   width: 8.33333333%!important;
 }
 

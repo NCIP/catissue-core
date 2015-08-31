@@ -301,6 +301,7 @@
     "missed_by": "Missed By",
     "anticipated_specimens": "Anticipated Specimens",
     "visit_status": "Status",
+    "event_label": "Event Label",
     "name": "Name",
     "visit_date": "Visit Date",
     "anticipated_visit_date": "Anticipated Visit Date",
