@@ -11,13 +11,11 @@ angular.module('os.administrative.form',
       .state('form-root', {
         abstract: true,
         template: '<div ui-view></div>',
-        resolve: {
-          security: function($q, $rootScope) {
-            if (!$rootScope.currentUser.admin) {
-              return $q.reject("Access Denied");
-            }
+        controller: function($scope, $state) {
+          if (!$scope.currentUser.admin) {
+            $state.go('home');
           }
-        },
+        }, 
         parent: 'signed-in'
       })
       .state('form-list', {
