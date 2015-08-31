@@ -126,6 +126,9 @@ angular.module('os.biospecimen.cp',
               return CollectionProtocol.getById($stateParams.cpId);
             }
             return new CollectionProtocol();
+          },
+          extensionCtxt: function(CollectionProtocol) {
+            return CollectionProtocol.getExtensionCtxt();
           }
         },
         controller: 'CpAddEditCtrl',

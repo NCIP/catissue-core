@@ -60,7 +60,7 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
             onCancel       : opts.onCancel,
             onPrint        : opts.onPrint,
             onDelete       : opts.onDelete,
-            showActionBtns : opts.onSave != undefined,
+            showActionBtns : opts.showActionBtns,
             customHdrs     : hdrs
           };
 
@@ -68,19 +68,27 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
           ctrl.form.render();
           onceRendered = true;
           LocationChangeListener.preventChange();
+          addWatchForDomChanges(opts); 
         }, true);
 
-        if (!!attrs.ctrl) {
-          scope[attrs.ctrl].ctrl = ctrl;
-          scope.$watch(attrs.ctrl + ".ctrl.form.rendered", function(newVal) {
-            if (newVal) {
-              reformHtml();
-            }
-          });
-          console.log(scope);
+        function addWatchForDomChanges(opts) {
+          if (opts.labelAlignment == 'horizontal') {
+            var domChange = scope.$watch(
+              function() {
+                return element.children().length;
+              },
+
+              function(length) {
+                if (length > 0) {
+                  domChange(); // kill the watch
+                  alignLabelsHorizontally();
+                }
+              }
+            );
+          }
         }
 
-        function reformHtml() {
+        function alignLabelsHorizontally() {
           element.find(".col-xs-8")
             .each(function(index) {
                angular.element(this)
@@ -91,11 +99,7 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
           element.find('label')
             .each(function(index) {
                angular.element(this).addClass("col-xs-3");
-            });
-
-          element.find(".form-control")
-            .each(function(index) {
-              angular.element(this).wrap("<div class='col-xs-6'></div>");
+               angular.element(this).next().wrap("<div class='col-xs-6'></div>");
             });
         }
       }

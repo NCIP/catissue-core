@@ -158,8 +158,8 @@
         </div>
       </div>
 
-      <div  class="custom-form" os-custom-form="cp">
-        <div id='de-form' class='os-extn-form' os-de-form opts='formOpts' ctrl="deFormCtrl"></div>
+      <div class="custom-form" ng-if="!!extnOpts">
+        <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl"></div>
       </div>
 
       <div class="os-divider"></div>
