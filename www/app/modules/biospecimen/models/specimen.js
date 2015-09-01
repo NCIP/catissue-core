@@ -167,9 +167,8 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
     function toSpecimenAttrs(sr) {
       sr.reqId = sr.id;
       sr.reqLabel = sr.name;
-      sr.pathology = sr.pathologyStatus;
-          
-      var attrs = ['id', 'name', 'pathologyStatus', 
+
+      var attrs = ['id', 'name',
                    'collector', 'collectionProcedure', 'collectionContainer', 
                    'receiver'];
       attrs.forEach(function(attr) {

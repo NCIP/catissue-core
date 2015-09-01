@@ -25,7 +25,7 @@
                 <span translate="common.buttons.delete">Delete</span>
               </a>
             </li>
-            <li ng-if="currentUser.id != user.id && currentUser.admin">
+            <li ng-if="user.domainName == global.defaultDomain && currentUser.id != user.id && currentUser.admin">
               <a ui-sref="user-password({userId: user.id})">
                 <span class="fa fa-key"></span>
                 <span translate="common.buttons.reset_password">Reset Password</span>

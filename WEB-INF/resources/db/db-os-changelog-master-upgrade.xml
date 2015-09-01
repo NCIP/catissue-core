@@ -23,4 +23,5 @@
   <include file="db/2.2/schema.xml"/>
   <include file="db/2.2/config.xml"/>
   <include file="db/2.2/audit.xml"/>
+  <include file="db/2.2/migration.xml"/>
 </databaseChangeLog> 
