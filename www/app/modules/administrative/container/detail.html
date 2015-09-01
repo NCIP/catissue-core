@@ -28,8 +28,8 @@
               <span translate="container.replicate">Replicate</span>
             </a>
           </li>
-          <li>
-            <a ng-click="deleteContainer()" show-if-allowed="containerResource.deleteOpts">
+          <li show-if-allowed="containerResource.deleteOpts">
+            <a ng-click="deleteContainer()">
               <span class="fa fa-trash"></span>
               <span translate="common.buttons.delete">Delete</span>
             </a>
