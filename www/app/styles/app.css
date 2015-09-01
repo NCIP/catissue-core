@@ -383,12 +383,15 @@ h4 + .btn-group {
   color: white;
 }
 
-.os-table-body .row .col.col-xs-1.os-more-options {
+.os-table-body .row .col.os-more-options {
   position: relative;
   text-align: center;
   padding: 0px!important;
   overflow: visible;
   top: 0px!important;
+}
+
+.os-table-body .row .col.col-xs-1.os-more-options {
   width: 8.33333333%!important;
 }
 
@@ -559,6 +562,16 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 .os-line-section >.key {
   background: #ffffff;
+}
+
+.os-section-divider {
+  border-top: 1px solid #ddd;
+  font-weight: bold;
+  color: #959595;
+  margin-top: 30px;
+  font-size: 12px;
+  padding-top: 5px;
+  letter-spacing: 1px;
 }
 
 .os-key-values .item .key, .os-key-values .item .value {

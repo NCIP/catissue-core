@@ -268,6 +268,7 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		props.put("build_version",         appProps.getProperty("buildinfo.version"));
 		props.put("build_date",            appProps.getProperty("buildinfo.date"));
 		props.put("build_commit_revision", appProps.getProperty("buildinfo.commit_revision"));
+		props.put("cp_coding_enabled",     getBoolSetting("biospecimen", "cp_coding_enabled", false));
 		return props;
 	}
 	

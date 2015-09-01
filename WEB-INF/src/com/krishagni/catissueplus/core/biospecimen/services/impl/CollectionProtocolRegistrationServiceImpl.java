@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -332,6 +333,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			List<SpecimenDetail> specimens = Collections.emptyList();			
 			if (crit.getVisitId() != null) {
 				specimens = getSpecimensByVisit(crit.getCprId(), crit.getVisitId());
+				checkDistributedSpecimens(specimens);
 			} else if (crit.getEventId() != null) {
 				specimens = getAnticipatedSpecimens(crit.getCprId(), crit.getEventId());
 			}
@@ -343,7 +345,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<ParticipantRegistrationsList> createRegistrations(RequestEvent<ParticipantRegistrationsList> req) {
@@ -537,8 +539,31 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 		
 		return cpr;
-	}	
-	
+	}
+
+	private void checkDistributedSpecimens(List<SpecimenDetail> specimens) {
+		List<Long> specimenIds = new ArrayList<Long>();
+		for (SpecimenDetail detail : specimens) {
+			if (detail.getId() != null) {
+				specimenIds.add(detail.getId());
+			}
+		}
+
+		if (CollectionUtils.isEmpty(specimenIds)) {
+			return;
+		}
+		
+		List<Long> distributedSpecimenIds = daoFactory.getSpecimenDao().getDistributedSpecimens(specimenIds);
+
+		for (SpecimenDetail detail : specimens) {
+			if (detail.getId() == null) {
+				continue;
+			}
+
+			detail.setDistributed(distributedSpecimenIds.contains(detail.getId()));
+		}
+	}
+
 	private String getConsentDirPath() {
 		String path = cfgSvc.getStrSetting(ConfigParams.MODULE, "participant_consent_dir");
 		if (path == null) {

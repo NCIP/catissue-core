@@ -75,5 +75,13 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
       return $http.delete(Sr.url() + this.$id());
     }
 
+    Sr.prototype.getSpecimensCount = function() {
+      return $http.get(Sr.url() + this.$id() + "/specimens-count").then(
+        function(result) { 
+          return result.data; 
+        }
+      );
+    }
+
     return Sr;
   });

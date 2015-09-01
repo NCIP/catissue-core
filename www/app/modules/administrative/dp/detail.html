@@ -11,10 +11,20 @@
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
-      <button show-if-admin class="default" ng-click="deleteDp()">
-        <span class="fa fa-trash"></span>
-        <span translate="common.buttons.delete">Delete</span>
-      </button>
+      <div dropdown os-show-if-menu-items-present class="inline">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.more">More</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li show-if-admin>
+            <a ng-click="deleteDp()">
+              <span class="fa fa-trash"></span>
+              <span translate="common.buttons.delete">Delete</span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 

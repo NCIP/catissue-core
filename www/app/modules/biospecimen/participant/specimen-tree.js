@@ -6,7 +6,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
   ])
   .directive('osSpecimenTree', function(
     $state, $stateParams, $modal, $timeout,
-    CollectSpecimensSvc, Specimen, SpecimenLabelPrinter, SpecimenList, SpecimensHolder,
+    CollectSpecimensSvc, Specimen, SpecimenLabelPrinter, SpecimensHolder,
     Alerts, PvManager, Util, DeleteUtil) {
 
     function openSpecimenTree(specimens) {
@@ -23,23 +23,6 @@ angular.module('os.biospecimen.participant.specimen-tree',
 
       scope.specimenClasses = PvManager.getPvs('specimen-class');
       scope.classesLoaded = true;
-    }
-
-    function loadAllSpecimenList(scope) {
-      SpecimenList.query().then(
-        function(lists) {
-          if (scope.$parent.currentUser.admin) {
-            scope.specimenLists = lists;
-          } else {
-            scope.specimenLists = [];
-            angular.forEach(lists, function(list) {
-              if (list.owner.id == scope.$parent.currentUser.id) {
-                scope.specimenLists.push(list);
-              }
-            })
-          }
-        }
-      );
     }
 
     function toggleAllSelected(selection, specimens, specimen) {
@@ -147,7 +130,6 @@ angular.module('os.biospecimen.participant.specimen-tree',
       link: function(scope, element, attrs) {
         scope.view = 'list';
         scope.parentSpecimen = undefined;
-        loadAllSpecimenList(scope);
 
         scope.specimens = Specimen.flatten(scope.specimenTree);
         openSpecimenTree(scope.specimens);
@@ -215,7 +197,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
 
         scope.printSpecimenLabels = function() {
           var specimensToPrint = getSelectedSpecimens(scope, 'specimens.no_specimens_for_print', false);
-          if (specimensToPrint.length == 0) {
+          if (specimensToPrint == undefined || specimensToPrint.length == 0) {
             return;
           }
 
@@ -259,7 +241,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
           }
           var selectedSpecimens = [];
           getSelectedSpecimens(scope, null, true).map(
-            function(sp) {
+            function(specimen) {
               selectedSpecimens.push({label: specimen.label});
             }
           );

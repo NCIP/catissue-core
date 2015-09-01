@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.container.util', [])
-  .factory('ContainerUtil', function() {
+  .factory('ContainerUtil', function(Util) {
 
     function toAlphabet(num, aCharCode) {
       var result = "";
@@ -62,10 +62,68 @@ angular.module('os.administrative.container.util', [])
       'Roman Lower Case'    : toLowerRoman
     };
 
+    function fromOrdinal(scheme, ordinal) {
+      return convertersMap[scheme](ordinal);
+    }
+
+    function createSpmnPos(container, label, x, y) {
+      return {
+        occuypingEntity: 'specimen', 
+        occupyingEntityName: label,
+        posOne: fromOrdinal(container.columnLabelingScheme, x),
+        posTwo: fromOrdinal(container.rowLabelingScheme, y),
+        posOneOrdinal: x,
+        posTwoOrdinal: y
+      };
+    }
 
     return {
-      fromOrdinal: function(scheme, ordinal) {
-        return convertersMap[scheme](ordinal);
+      fromOrdinal: fromOrdinal, 
+
+      assignPositions: function(container, occupancyMap, inputLabels) {
+        var newMap = angular.copy(occupancyMap);
+        var mapIdx = 0, labelIdx = 0;
+        var labels = Util.splitStr(inputLabels, /,|\t|\n/, true);
+
+        var done = false;
+        var noFreeLocs = false;
+        for (var y = 1; y <= container.noOfRows; ++y) {
+          for (var x = 1; x <= container.noOfColumns; ++x) {
+            if (labelIdx >= labels.length) {
+              done = true;
+              break;
+            }
+
+            if (mapIdx < newMap.length && newMap[mapIdx].posOneOrdinal == x && newMap[mapIdx].posTwoOrdinal == y) {
+              mapIdx++;
+              continue;
+            }
+ 
+            var label = labels[labelIdx++];
+            if (!label || label.trim().length == 0) {
+              continue;
+            }
+
+            var newPos = createSpmnPos(container, label, x, y);
+            newMap.splice(mapIdx, 0, newPos);
+            mapIdx++;
+          }
+
+          if (done) {
+            break;
+          }
+        }
+
+        while (labelIdx < labels.length) {
+          if (!!labels[labelIdx] && labels[labelIdx].trim().length > 0) {
+            noFreeLocs = true;
+            break;
+          }
+
+          labelIdx++;
+        }
+
+        return {map: newMap, noFreeLocs: noFreeLocs};
       }
     };
   });

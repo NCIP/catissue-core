@@ -38,6 +38,14 @@
         </div>
       </div>
 
+      <div class="col-xs-3" ng-if="codingEnabled">
+        <div class="form-group">
+          <input name="code" ng-model="childReq.code" os-md-input class="form-control" type="text" 
+            ng-model-options="{allowInvalid: true}" ng-maxlength="16" placeholder="{{'srs.code' | translate}}">
+          <div os-field-error field="aliquotForm.code"></div>
+        </div>
+      </div>
+
       <div class="col-xs-3">
         <div class="form-group">
           <os-select name="storageType" ng-model="childReq.storageType" list="storageTypes"

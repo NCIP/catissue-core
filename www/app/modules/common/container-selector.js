@@ -3,18 +3,23 @@ angular.module('openspecimen')
     var extend = angular.extend;
 
     function linker(scope, element, attrs) {
-      var criteria = getContainerListCriteria(scope);
-
-      scope.entityType = scope.entity.getType();
+      scope.entityType = scope.type;
       scope.toggleContainerSelection = toggleContainerSelection(scope);
-      scope.loadChildren = loadChildren(scope, criteria);
+      scope.loadChildren = loadChildren(scope);
 
-      initContainersList(scope, criteria);
+      scope.$watch('criteria', function(newVal, oldVal) {
+        if (!newVal) {
+          return;
+        }
+
+        initContainersList(scope);
+      });
     };
 
-    function initContainersList(scope, criteria) {
+    function initContainersList(scope) {
       scope.containers = [];
 
+      var criteria = getContainerListCriteria(scope);
       Container.query(extend({topLevelContainers: true}, criteria)).then(
         function(containers) {
           addChildPlaceholders(containers);
@@ -29,18 +34,7 @@ angular.module('openspecimen')
         hierarchical: true
       };
 
-      if (scope.entity.getType() == 'specimen') {
-        extend(criteria, {
-          storeSpecimensEnabled: true,
-          specimenClass: scope.entity.specimenClass,
-          specimenType: scope.entity.type,
-          cpId: scope.cpId
-        });
-      } else {
-        extend(criteria, {site: scope.entity.siteName});
-      }
-
-      return criteria;
+      return extend(criteria, scope.criteria);
     }
 
     function addChildPlaceholders(containers) {
@@ -62,13 +56,14 @@ angular.module('openspecimen')
       }
     }
 
-    function loadChildren(scope, criteria) {
+    function loadChildren(scope) {
       return function(container) {
         if (container.childContainersLoaded) {
           return;
         }
 
         var idx = scope.containers.indexOf(container);
+        var criteria = getContainerListCriteria(scope);
         Container.query(extend({parentContainerId: container.id}, criteria)).then(
           function(containers) {
             addChildPlaceholders(containers);
@@ -93,8 +88,8 @@ angular.module('openspecimen')
       templateUrl: 'modules/common/container-selector.html',
 
       scope: {
-        entity: '=',
-        cpId: '=?',
+        type: '=',
+        criteria: '=',
         onToggleSelection: '&'
       },
 

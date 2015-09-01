@@ -115,6 +115,7 @@
     "repositories": "Repositories", 
     "title": "Title",
     "short_title": "Short Title",
+    "code": "Short Code",
     "pi": "Principal Investigator",
     "coordinators": "Protocol Coordinators",
     "date": "Date",
@@ -154,6 +155,7 @@
     "no_cpes": "There are no collection protocol events to show. Please create an event by clicking on Add Event...",
     "add_cpe": "Add Event...",
     "cpe_list": "Events",
+    "cpe_code": "Event Code",
     "cpe_point": "Event Point (in Days)",
     "cpe_point_label": "Event Point Label",
     "deleting_event": "Deleting Event...",
@@ -299,6 +301,7 @@
     "missed_by": "Missed By",
     "anticipated_specimens": "Anticipated Specimens",
     "visit_status": "Status",
+    "event_label": "Event Label",
     "name": "Name",
     "visit_date": "Visit Date",
     "anticipated_visit_date": "Anticipated Visit Date",
@@ -352,7 +355,8 @@
     "status": {
       "collected": "Collected",
       "not_collected": "Missed Collection",
-      "pending": "Pending"
+      "pending": "Pending",
+      "missed": "Missed"
     },
     "closed": "Closed",
 
@@ -434,6 +438,23 @@
     "specimens_closed": "Selected specimens are closed successfully",
     "specimen_closed": "Specimen is closed successfully",
 
+    "col_event": {
+      "title": "COLLECTION DETAILS",
+      "user_time": "User and Time",
+      "user": "Collector",
+      "date": "Collection Date",
+      "collection_container": "Container",
+      "collection_proc": "Procedure"
+    },
+
+    "recv_event": {
+      "title": "RECEIVED DETAILS",
+      "user_time": "User and Time",
+      "user": "Receiver",
+      "date": "Receive Date",
+      "received_quality": "Quality"
+    },
+
     "ctx_menu": {
       "view_specimen": "View Specimen",
       "edit_specimen": "Edit Specimen",
@@ -480,6 +501,7 @@
     "new_sr": "New Specimen Requirement",
 
     "name": "Name",
+    "code": "Short Code",
     "type": "Type",
     "pathology": "Pathology",
     "storage_type": "Storage Type",
@@ -494,6 +516,7 @@
     "anatomic_site": "Anatomic Site",
     "laterality": "Laterality",
     "initial_qty": "Initial Quantity",
+    "cannot_change_class_or_type": "Specimen class or type cannot be changed once specimens are collected",
     "collector": "Collector",
     "receiver": "Receiver",
     "collection_container": "Collection Container",

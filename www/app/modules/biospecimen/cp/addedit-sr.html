@@ -14,12 +14,21 @@
           <input ng-model="sr.name" class="form-control" type="text" placeholder="{{'srs.name' | translate}}">
         </div>
       </div>
+      <div class="form-group" ng-if="codingEnabled">
+        <label class="control-label col-xs-4" translate="srs.code">Short Code</label>
+        <div class="col-xs-8">
+          <input name="code" ng-model="sr.code" class="form-control" type="text" 
+            ng-maxlength="16" placeholder="{{'srs.code' | translate}}">
+          <div os-field-error field="srForm.code"></div>
+        </div>
+      </div>
       <div class="form-group">
         <label class="control-label col-xs-4" translate="srs.specimen_class">Specimen Class</label>
         <div class="col-xs-8">
-          <os-select name="specimenClass" ng-model="sr.specimenClass" 
+          <os-select name="specimenClass" ng-model="sr.specimenClass"
             on-select="loadSpecimenTypes(sr.specimenClass)" list="specimenClasses"
-            placeholder="{{'srs.specimen_class' | translate}}" required ng-disabled="!!sr.id">
+            placeholder="{{'srs.specimen_class' | translate}}" required ng-disabled="specimensCount > 0"
+            title="{{(specimensCount > 0 ? 'srs.cannot_change_class_or_type' : '') | translate}}">
           </os-select>
           <div os-field-error field="srForm.specimenClass"></div>
         </div>
@@ -28,7 +37,8 @@
         <label class="control-label col-xs-4" translate="srs.specimen_type">Specimen Type</label>
         <div class="col-xs-8">
           <os-select name="specimenType" ng-model="sr.type" list="specimenTypes"
-            placeholder="{{'srs.specimen_type' | translate}}" required ng-disabled="!!sr.id">
+            placeholder="{{'srs.specimen_type' | translate}}" required ng-disabled="specimensCount > 0"
+            title="{{(specimensCount > 0 ? 'srs.cannot_change_class_or_type' : '') | translate}}">
           </os-select>
           <div os-field-error field="srForm.specimenType"></div>
         </div>

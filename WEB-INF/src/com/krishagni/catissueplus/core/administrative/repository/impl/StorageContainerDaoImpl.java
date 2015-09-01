@@ -213,7 +213,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 		}
 		
 		private void addCpRestriction() {
-			if (CollectionUtils.isEmpty(crit.cpIds())) {
+			if (CollectionUtils.isEmpty(crit.cpIds()) && CollectionUtils.isEmpty(crit.cpShortTitles())) {
 				return;
 			}
 			
@@ -224,8 +224,14 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			}
 			
 			addAnd();
-			where.append("(cp is null or cp.id in (:cpIds))");
-			params.put("cpIds", crit.cpIds());
+
+			if (CollectionUtils.isNotEmpty(crit.cpIds())) {
+				where.append("(cp is null or cp.id in (:cpIds))");
+				params.put("cpIds", crit.cpIds());
+			} else {
+				where.append("(cp is null or cp.shortTitle in (:cpShortTitles))");
+				params.put("cpShortTitles", crit.cpShortTitles());
+			}
 		}	
 		
 		private void addStoreSpecimenRestriction() {			

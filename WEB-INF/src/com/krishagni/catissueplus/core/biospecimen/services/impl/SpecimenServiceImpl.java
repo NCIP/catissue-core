@@ -89,7 +89,15 @@ public class SpecimenServiceImpl implements SpecimenService {
 			}
 			
 			AccessCtrlMgr.getInstance().ensureReadSpecimenRights(specimen);
-			return ResponseEvent.response(SpecimenDetail.from(specimen));			
+
+			SpecimenDetail detail = SpecimenDetail.from(specimen);
+			List<Long> distributedSpecimenIds = daoFactory.getSpecimenDao().getDistributedSpecimens(Collections.singletonList(specimen.getId()));
+
+			if (CollectionUtils.isNotEmpty(distributedSpecimenIds)) {
+				detail.setDistributed(distributedSpecimenIds.contains(detail.getId()));
+			}
+
+			return ResponseEvent.response(detail);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
