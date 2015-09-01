@@ -286,6 +286,7 @@ osApp.config(function(
         $rootScope.global.appProps = appProps;
         var plugins = appProps['plugins'];
         if (plugins) {
+          osApp.providers.pluginReg = PluginReg;
           PluginReg.usePlugins(plugins);
           angular.forEach(plugins, function(plugin) {
             $translatePartialLoader.addPart('plugin-ui-resources/'+ plugin + '/');
