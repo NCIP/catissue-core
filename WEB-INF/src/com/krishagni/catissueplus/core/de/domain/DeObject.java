@@ -22,7 +22,6 @@ import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 
 import edu.common.dynamicextensions.domain.nui.Container;
-import edu.common.dynamicextensions.domain.nui.Control;
 import edu.common.dynamicextensions.domain.nui.UserContext;
 import edu.common.dynamicextensions.napi.ControlValue;
 import edu.common.dynamicextensions.napi.FormData;
@@ -81,6 +80,7 @@ public abstract class DeObject {
 	}
 
 	public List<Attr> getAttrs() {
+		loadRecordIfNotLoaded();
 		return attrs;
 	}
 
@@ -266,19 +266,7 @@ public abstract class DeObject {
 	}
 	
 	private FormData prepareFormData(Container container) {
-		FormData formData = new FormData(container);
-		
-		for (Map.Entry<String, Object> attr : getAttrValues().entrySet()) {
-			Control ctrl = null;
-			if (isUseUdn()) {
-				ctrl = container.getControlByUdn(attr.getKey());
-			} else {
-				ctrl = container.getControl(attr.getKey());
-			}
-			ControlValue cv = new ControlValue(ctrl, attr.getValue());
-			formData.addFieldValue(cv);
-		}
-					
+		FormData formData = FormData.getFormData(container, getAttrValues(), useUdn, null);
 		formData.setRecordId(this.id);
 		return formData;		
 	}

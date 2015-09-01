@@ -25,6 +25,10 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
 
       link: function(scope, element, attrs, ctrl) {
 
+        if (!!attrs.ctrl) {
+          scope[attrs.ctrl].ctrl = ctrl;
+        }
+
         var onceRendered = false;
         scope.$watch(attrs.opts, function(opts, oldVal) {
           if (!opts || onceRendered) {
@@ -96,7 +100,7 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
                  .removeClass("col-xs-8");
             });
 
-          element.find('label')
+          element.find('label.control-label')
             .each(function(index) {
                angular.element(this).addClass("col-xs-3");
                angular.element(this).next().wrap("<div class='col-xs-6'></div>");

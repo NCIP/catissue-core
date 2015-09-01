@@ -998,3 +998,16 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   color: #333;
   font-weight: normal;
 }
+
+.os-toggle-wrap.os-expanded .os-content {
+  display: block;
+}
+
+.os-toggle-wrap.os-collapsed .os-content {
+  display: none;
+}
+
+.os-toggle-wrap .key .fa {
+  margin-left: -18px;
+  width: 14px;
+}
