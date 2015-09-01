@@ -98,7 +98,8 @@
     "match": "This field does not match with above field",
     "dist_qty_gt_avail_qty": "Distribution quantity greater than available",
     "dist_qty_le_zero": "Distribution quantity cannot be less than or equals zero",
-    "nan": "Not a valid number"
+    "nan": "Not a valid number",
+    "dup_item": "Duplicate value"
   },
 
   "pvs": {
@@ -1215,7 +1216,7 @@
     "no_specimens": "There are no specimens to show in selected specimen list.",
     "description": "Description",
     "cp": "Collection Protocol",
-    "label": "Label (Barcode)",
+    "label": "Label",
     "quantity": "Quantity",
     "lineage": "Lineage",
     "remove_specimens": "Removing Specimens From {{name}} list",
