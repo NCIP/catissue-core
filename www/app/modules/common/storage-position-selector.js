@@ -3,7 +3,11 @@ angular.module('openspecimen')
   .controller('StoragePositionSelectorCtrl',
     function($scope, $modalInstance, $timeout, $q, entity, cpId, Container) {
       function init() {
-        $scope.listOpts = { type: entity.getType() };
+        $scope.listOpts = { 
+          type: entity.getType(),
+          name: !!entity.storageLocation ? entity.storageLocation.name : ''
+        };
+
         if (entity.getType() == 'specimen') {
           $scope.listOpts.criteria = {
             storeSpecimensEnabled: true,

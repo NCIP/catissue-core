@@ -807,6 +807,8 @@
     "paste_specimen_labels": "Paste or input specimen labels separated by comma/tab/newline",
     "no_free_locs": "Container does not have enough free locations to accommodate input specimen labels",
     "replicated_successfully": "Container {{name}} replicated successfully",
+    "search": "Type storage container name to filter containers",
+    "no_containers_match_search": "No containers match search criteria to store specimen/s",
 
     "replication_count": "Enter number of containers to create",
     "no_repl_dest": "No target site or parent container specified. Add one by clicking Add Another",

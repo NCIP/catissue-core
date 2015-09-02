@@ -1,9 +1,12 @@
 angular.module('openspecimen')
-  .directive('osContainerSelector', function(Container) {
+  .directive('osContainerSelector', function(Container, Util) {
     var extend = angular.extend;
+    var defaultContainers = undefined;
 
     function linker(scope, element, attrs) {
+      scope.filterOpts = {name: scope.name};
       scope.entityType = scope.type;
+      scope.initList = false;
       scope.toggleContainerSelection = toggleContainerSelection(scope);
       scope.loadChildren = loadChildren(scope);
 
@@ -12,26 +15,39 @@ angular.module('openspecimen')
           return;
         }
 
-        initContainersList(scope);
+        initContainersList(scope, scope.name);
       });
+
+      Util.filter(scope, 'filterOpts', function() { filterContainers(scope); });
     };
 
-    function initContainersList(scope) {
+    function initContainersList(scope, name) {
       scope.containers = [];
 
       var criteria = getContainerListCriteria(scope);
-      Container.query(extend({topLevelContainers: true}, criteria)).then(
+      extend(criteria, !!name ? {name: name} : {topLevelContainers: true});
+      Container.query(criteria).then(
         function(containers) {
-          addChildPlaceholders(containers);
-          scope.containers = Container.flatten(containers);
+          if (!name) {
+            addChildPlaceholders(containers);
+            defaultContainers = scope.containers = Container.flatten(containers);
+          } else {
+            scope.containers = containers;
+          }
+
+          scope.initList = true;
         }
       );
     }
 
-    function getContainerListCriteria(scope) {
+    function getContainerListCriteria(scope, hierarchical) {
+      if (typeof hierarchical === 'undefined') {
+        hierarchical = true;
+      }
+
       var criteria = {
         onlyFreeContainers: true,
-        hierarchical: true
+        hierarchical: hierarchical
       };
 
       return extend(criteria, scope.criteria);
@@ -80,6 +96,25 @@ angular.module('openspecimen')
       };
     }
 
+    function filterContainers(scope) {
+      if (scope.filterOpts.name.trim().length == 0) {
+        if (defaultContainers) {
+          scope.containers = defaultContainers;
+        } else {
+          initContainersList(scope);
+        }
+
+        return;
+      }
+ 
+      var criteria = getContainerListCriteria(scope, false);
+      Container.query(extend({name: scope.filterOpts.name}, criteria)).then(
+        function(containers) {
+          scope.containers = containers;
+        }
+      );
+    }
+
     return {
       restrict: 'E',
  
@@ -89,6 +124,7 @@ angular.module('openspecimen')
 
       scope: {
         type: '=',
+        name: '=',
         criteria: '=',
         onToggleSelection: '&'
       },
