@@ -64,20 +64,15 @@ angular.module('os.administrative.order.list', ['os.administrative.models'])
     function loadInstitutes() {
       Institute.query().then(
         function(institutes) {
-          $scope.instList = prepareInstList(institutes);
+          $scope.instList = institutes.map(
+            function (inst) {
+              return inst.name;
+            }
+          );
         }
       );
     }
     
-    function prepareInstList (institutes) {
-      var instList = [];
-      angular.forEach(institutes, function (inst) {
-        instList.push(inst.name);
-      });
-      
-      return instList;
-    }
-
     $scope.loadSearchPvs = loadSearchPvs;
 
     $scope.loadDps = loadDps;

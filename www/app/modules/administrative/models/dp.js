@@ -12,17 +12,15 @@ angular.module('os.administrative.models.dp', ['os.common.models'])
     }
     
     DistributionProtocol.prototype.close = function () {
-      this.activityStatus = 'Closed';
-      return updateActivityStatus(this);
+      return updateActivityStatus(this, 'Closed');
     }
     
     DistributionProtocol.prototype.reopen = function () {
-      this.activityStatus = 'Active';
-      return updateActivityStatus(this);
+      return updateActivityStatus(this, 'Active');
     }
     
-    function updateActivityStatus (dp) {
-      return $http.put(DistributionProtocol.url() + '/' + dp.$id() + '/activity-status', dp).then(
+    function updateActivityStatus (dp, status) {
+      return $http.put(DistributionProtocol.url() + '/' + dp.$id() + '/activity-status', {activityStatus: status}).then(
         function (result) {
           angular.extend(dp, result.data);
           return new DistributionProtocol(result.data);

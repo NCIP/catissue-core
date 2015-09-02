@@ -37,12 +37,7 @@ angular.module('os.administrative.models.order', ['os.common.models'])
     }
     
     DistributionOrder.prototype.addSpecimen = function (specimenLabels) {
-      var url = DistributionOrder.url() + this.$id() + '/specimens';
-      return $http({
-        url: url,
-        method: 'GET',
-        params: {labels: specimenLabels},
-      }).then(
+      return $http.get(DistributionOrder.url() + this.$id() + '/specimens?labels=' + specimenLabels).then(
         function (resp) {
           return resp.data;
         }

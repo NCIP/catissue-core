@@ -18,13 +18,11 @@ angular.module('os.administrative.dp.detail', ['os.administrative.models'])
     }
     
     $scope.closeDp = function () {
-      var modalInstance = $modal.open({
+      DeleteUtil.confirmDelete({
+        entity: distributionProtocol,
         templateUrl: 'modules/administrative/dp/close.html',
-        controller: 'DpCloseCtrl',
-        resolve: {
-          distributionProtocol: function () {
-            return distributionProtocol;
-          }
+        delete: function () {
+          distributionProtocol.close();
         }
       });
     }

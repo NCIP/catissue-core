@@ -3,8 +3,7 @@ angular.module('os.administrative.dp',
     'ui.router',
     'os.administrative.dp.list',
     'os.administrative.dp.detail',
-    'os.administrative.dp.addedit',
-    'os.administrative.dp.close'
+    'os.administrative.dp.addedit'
   ])
 
   .config(function($stateProvider) {

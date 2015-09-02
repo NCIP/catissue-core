@@ -34,15 +34,12 @@ angular.module('os.administrative.dp.list', ['os.administrative.models'])
     function loadActivityStatuses () {
       PvManager.loadPvs('activity-status').then(
         function (result) {
-          $scope.activityStatuses = [].concat(result);
-          var idx = $scope.activityStatuses.indexOf('Disabled');
-          if (idx != -1) {
-            $scope.activityStatuses.splice(idx, 1);
-          }
-          idx = $scope.activityStatuses.indexOf('Pending');
-          if (idx != -1) {
-            $scope.activityStatuses.splice(idx, 1);
-          }
+          $scope.activityStatuses = [];
+          angular.forEach(result, function (status) {
+            if (status != 'Disabled' && status != 'Pending') {
+              $scope.activityStatuses.push(status);
+            }
+          });
         }
       );
     }
