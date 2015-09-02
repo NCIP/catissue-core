@@ -2,7 +2,10 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,15 +13,26 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.FileType;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SprRequestDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -37,7 +51,9 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.service.LabelPrinter;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class VisitServiceImpl implements VisitService {
@@ -183,10 +199,10 @@ public class VisitServiceImpl implements VisitService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<FileDetail> getSpr(RequestEvent<EntityQueryCriteria> req) {
+	public ResponseEvent<FileDetail> getSpr(RequestEvent<SprRequestDetail> req) {
 		try {
-			EntityQueryCriteria crit = req.getPayload();
-			Visit visit = getVisit(crit.getId(), crit.getName());
+			SprRequestDetail detail = req.getPayload();
+			Visit visit = getVisit(detail.getVisitId(), detail.getVisitName());
 			
 			AccessCtrlMgr.getInstance().ensureReadSprRights(visit);
 		
@@ -199,17 +215,23 @@ public class VisitServiceImpl implements VisitService {
 			if (!file.exists()) {
 				return ResponseEvent.serverError(VisitErrorCode.UNABLE_TO_LOCATE_SPR);
 			}
-			FileDetail detail = new FileDetail();
-			detail.setFile(file);
-			detail.setFileName(fileName);
-			return ResponseEvent.response(detail);
+			
+			if (detail.getType() != null && detail.getType().equals(FileType.PDF)) {
+				file = generatePdf(file, visit);
+				fileName = fileName.split("\\.")[0] + ".pdf";
+			}
+
+			FileDetail fileDetail = new FileDetail();
+			fileDetail.setFile(file);
+			fileDetail.setFileName(fileName);
+			return ResponseEvent.response(fileDetail);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<String> uploadSprFile(RequestEvent<SprDetail> req) {
@@ -461,6 +483,100 @@ public class VisitServiceImpl implements VisitService {
 		}
 		
 		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSprRights(visit);
+	}
+	
+	private File generatePdf(File file, Visit visit) throws Exception {
+		FileOutputStream out = null;
+		Document document = new Document();
+		try {
+			File sprReport = File.createTempFile("spr-report", ".pdf");
+			out= new FileOutputStream(sprReport);
+			
+			PdfWriter.getInstance(document, out);
+			document.open();
+			document.addTitle(MessageUtil.getInstance().getMessage("spr_title"));
+			
+			Paragraph header = new Paragraph();
+			header.setAlignment(Element.ALIGN_CENTER);
+			Chunk chunk = new Chunk(MessageUtil.getInstance().getMessage("spr_header"));
+			chunk.setFont(getFont(10, true));
+			chunk.setUnderline(0.1f, -2f);
+			header.add(chunk);
+			document.add(header);
+			document.add(Chunk.NEWLINE);
+			
+			Paragraph patientInfo = new Paragraph();
+			chunk = new Chunk(MessageUtil.getInstance().getMessage("spr_patient_info"));
+			chunk.setFont(new Font(FontFamily.HELVETICA, 10, Font.BOLD));
+			patientInfo.add(chunk);
+			document.add(patientInfo);
+			PdfPTable patientInfoTbl = getHeader(visit); 
+			document.add(patientInfoTbl);
+		
+			String fileText = Utility.getFileText(file);
+			document.add(new Paragraph(fileText, getFont(8,false)));
+			
+			Paragraph footer = new Paragraph();
+			footer.setAlignment(Element.ALIGN_CENTER);
+			chunk = new Chunk(MessageUtil.getInstance().getMessage("spr_end_of_report"));
+			chunk.setFont(getFont(6, false));
+			chunk.setUnderline(0.1f, -2f);
+			footer.add(chunk);
+			document.add(footer);
+			
+			return sprReport;
+		} catch(Exception e) {
+			throw OpenSpecimenException.serverError(e);
+		} finally {
+			out.close();
+			document.close();
+		}
+	}
+	
+	private Font getFont(int size, boolean bold) {
+		int font = bold ? Font.BOLD: Font.NORMAL;
+		return new Font(FontFamily.HELVETICA, size, font);
+	}
+
+	private PdfPTable getHeader(Visit visit) {
+		PdfPTable header = new PdfPTable(3);
+		header.setSpacingBefore(4f);
+		header.setHorizontalAlignment(Element.ALIGN_LEFT);
+		header.setWidthPercentage(100);
+		header.setSpacingAfter(4f);
+
+		MessageUtil messageUtil = MessageUtil.getInstance();	
+		Map<String, String> headerInfo = new LinkedHashMap<String, String>();
+		headerInfo.put(messageUtil.getMessage("spr_protocol_name"), visit.getCollectionProtocol().getShortTitle());
+		headerInfo.put(messageUtil.getMessage("spr_gender"), visit.getRegistration().getParticipant().getGender());
+		headerInfo.put(messageUtil.getMessage("spr_printed_by"),
+				AuthUtil.getCurrentUser().getLastName() + ", " + AuthUtil.getCurrentUser().getFirstName());
+		headerInfo.put(messageUtil.getMessage("spr_visit_name"), visit.getName().toString());
+		headerInfo.put(messageUtil.getMessage("spr_ppid"), visit.getRegistration().getPpid());
+		Integer age = Utility.getAge(visit.getRegistration().getParticipant().getBirthDate());
+		headerInfo.put(messageUtil.getMessage("spr_age"), (age != null) ? age.toString() : "-");
+		headerInfo.put(messageUtil.getMessage("spr_printed_on_date"), Utility.getDateString(new Date()));
+		headerInfo.put(messageUtil.getMessage("spr_participant_race"),
+				Utility.stringListToCsv(visit.getRegistration().getParticipant().getRaces()));
+		headerInfo.put(messageUtil.getMessage("spr_collection_date"), Utility.getDateString(visit.getVisitDate()));
+		
+		for (Map.Entry<String, String> entry : headerInfo.entrySet()) {
+			Paragraph paragraph = new Paragraph();
+			Chunk chunk = new Chunk(entry.getKey());
+			chunk.setFont(getFont(8, true));
+			paragraph.add(chunk);
+			
+			String value = (entry.getValue() != null) ? entry.getValue() : "-";   
+			chunk = new Chunk(value);
+			chunk.setFont(getFont(8, false));
+			paragraph.add(chunk);
+			
+			PdfPCell cell = new PdfPCell(paragraph);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			header.addCell(cell);
+		}
+		
+		return header;
 	}
 
 }
