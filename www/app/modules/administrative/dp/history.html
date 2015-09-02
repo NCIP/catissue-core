@@ -1,0 +1,36 @@
+<div class="clearfix">
+  <div class="os-table">
+    <div class="os-table-head">
+      <div class="row">
+        <div class="col os-col-25">
+          <span translate="orders.name">Order Name</span>
+        </div>
+        <div class="col os-col-15">
+          <span translate="orders.dist_date">Distribution Date</span>
+        </div>
+        <div class="col os-col-15">
+          <span translate="orders.spec.specimen_type"> Specimen Type </span>
+        </div>
+        <div class="col os-col-15">
+          <span translate="orders.spec.tissue_site">Tissue Site</span>
+        </div>
+        <div class="col os-col-15">
+          <span translate="orders.spec.pathology_status">Pathology Status</span>
+        </div>
+        <div class="col os-col-15">
+          <span translate="orders.specimens_distributed">Specimens Distributed
+        </div>
+      </div>
+    </div>
+    <div class="os-table-body">
+      <div class="row" ng-repeat="order in orders">
+        <div class="col os-col-25">{{order.name}}</div>
+        <div class="col os-col-15">{{order.executionDate | date: global.dateFmt}}</div>
+        <div class="col os-col-15"></div>   <!-- Based on backend -->
+        <div class="col os-col-15"></div>   <!-- Based on backend -->
+        <div class="col os-col-15"></div>   <!-- Based on backend -->
+        <div class="col os-col-15">{{order.specimenCnt}}</div>
+      </div>
+    </div>
+  </div>
+</div>

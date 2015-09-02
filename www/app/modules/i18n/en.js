@@ -643,7 +643,8 @@
     },
     
     "menu": {
-      "overview": "Overview"
+      "overview": "Overview",
+      "history": "History"
     },
 
     "filter": {
@@ -1251,6 +1252,7 @@
      "no_specimens_in_list": "No specimens in order list to distribute. Add at least one specimen",
      "enter_specimen_label": "Enter specimen labels separated by comma/tab/newline",
      "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
+     "specimens_distributed": "Specimens Distributed",
 
      "report_gen_initiated": "Generating distribution order report...",
      "downloading_report": "Downloading distribution order report...",
@@ -1265,7 +1267,10 @@
        "available_qty": "Available",
        "quantity": "Quantity",
        "location": "Location",
-       "virtual": "Virtual"
+       "virtual": "Virtual",
+       "specimen_type": "Specimen Type",
+       "tissue_site": "Tissue Site",
+       "pathology_status": "Pathology Status"
      },
 
      "statuses": {
@@ -1287,7 +1292,7 @@
      "tooltip": {
        "create": "Create new distribution order",
        "search": "Filter out distribution orders"
-     }
+     }     
    },
 
    "jobs": {

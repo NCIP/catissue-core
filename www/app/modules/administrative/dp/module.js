@@ -3,7 +3,8 @@ angular.module('os.administrative.dp',
     'ui.router',
     'os.administrative.dp.list',
     'os.administrative.dp.detail',
-    'os.administrative.dp.addedit'
+    'os.administrative.dp.addedit',
+    'os.administrative.dp.history'
   ])
 
   .config(function($stateProvider) {
@@ -43,5 +44,16 @@ angular.module('os.administrative.dp',
         url: '/overview',
         templateUrl: 'modules/administrative/dp/overview.html',
         parent: 'dp-detail'
+      })
+      .state('dp-detail.history', {
+        url: '/history',
+        templateUrl: 'modules/administrative/dp/history.html',
+        parent: 'dp-detail',
+        resolve: {
+          dpId: function(distributionProtocol) {
+            return distributionProtocol.id;
+          }
+        },
+        controller: 'DpHistoryCtrl'
       });
   });
