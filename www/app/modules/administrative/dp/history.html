@@ -26,9 +26,9 @@
       <div class="row" ng-repeat="order in orders">
         <div class="col os-col-25">{{order.name}}</div>
         <div class="col os-col-15">{{order.executionDate | date: global.dateFmt}}</div>
-        <div class="col os-col-15"></div>   <!-- Based on backend -->
-        <div class="col os-col-15"></div>   <!-- Based on backend -->
-        <div class="col os-col-15"></div>   <!-- Based on backend -->
+        <div class="col os-col-15">{{order.specimens.specimenType}}</div>
+        <div class="col os-col-15">{{order.specimens.tissueSite}}</div>
+        <div class="col os-col-15">{{order.specimens.pathologyStatus}}</div>
         <div class="col os-col-15">{{order.specimenCnt}}</div>
       </div>
     </div>
