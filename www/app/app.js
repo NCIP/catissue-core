@@ -39,6 +39,7 @@ osApp.config(function(
     };
 
     $translatePartialLoaderProvider.addPart('modules');
+    $translateProvider.useSanitizeValueStrategy('sanitize');
     $translateProvider.useLoader('$translatePartialLoader', {  
       urlTemplate: '{part}/i18n/{lang}.js',
       loadFailureHandler: 'i18nErrHandler'
