@@ -1,6 +1,10 @@
 package com.krishagni.catissueplus.core.de.events;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import krishagni.catissueplus.beans.FormContextBean;
 
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
@@ -93,5 +97,24 @@ public class FormCtxtSummary {
 
 	public void setModificationTime(Date modificationTime) {
 		this.modificationTime = modificationTime;
+	}
+	
+	public static FormCtxtSummary from(FormContextBean formCtxt) {
+		FormCtxtSummary result = new FormCtxtSummary();
+		result.setFormCtxtId(formCtxt.getIdentifier());
+		result.setFormId(formCtxt.getContainerId());
+		result.setSysForm(formCtxt.isSysForm());
+		result.setMultiRecord(formCtxt.isMultiRecord());
+		return result;
+	}
+	
+	public static List<FormCtxtSummary> from(List<FormContextBean> formCtxts) {
+		List<FormCtxtSummary> result = new ArrayList<FormCtxtSummary>();
+		
+		for (FormContextBean formCtxt : formCtxts) {
+			result.add(FormCtxtSummary.from(formCtxt));
+		}
+		
+		return result;
 	}
 }

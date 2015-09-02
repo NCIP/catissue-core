@@ -38,6 +38,8 @@ public abstract class ImportForms implements InitializingBean {
 	//
 	private DeInitializer deInitializer;
 	
+	private boolean createTable = false;
+	
 	public PlatformTransactionManager getTxnMgr() {
 		return txnMgr;
 	}
@@ -64,6 +66,14 @@ public abstract class ImportForms implements InitializingBean {
 
 	public void setDeInitializer(DeInitializer deInitializer) {
 		this.deInitializer = deInitializer;
+	}
+
+	public boolean isCreateTable() {
+		return createTable;
+	}
+
+	public void setCreateTable(boolean createTable) {
+		this.createTable = createTable;
 	}
 
 	@Override
@@ -118,9 +128,9 @@ public abstract class ImportForms implements InitializingBean {
 				}
 				
 				in.reset();
-				Long formId = Container.createContainer(userCtx, in, false);				
+				Long formId = Container.createContainer(userCtx, in, isCreateTable());				
 				saveOrUpdateFormCtx(formFile, formId);
-				daoFactory.getFormDao().insertFormChangeLog(formFile, newDigest, formId);				
+				daoFactory.getFormDao().insertFormChangeLog(formFile, newDigest, formId);
 			} finally {
 				IOUtils.closeQuietly(in);
 			}
