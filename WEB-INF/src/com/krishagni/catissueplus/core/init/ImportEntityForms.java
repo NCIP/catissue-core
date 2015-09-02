@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.init;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,15 +27,18 @@ public class ImportEntityForms extends ImportForms {
 	@Override 
 	protected List<String> listFormFiles() 
 	throws IOException {
-		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(getClass().getClassLoader());
+		try {
+			PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(getClass().getClassLoader());
+	
+			Resource[] resources = resolver.getResources("classpath:/entity-forms/*_extension.xml");
+			for (Resource resource: resources) {
+				String filename = resource.getFilename();
+				String entityType = StringUtils.capitalize(filename.split("_")[0]) + "Extension";
+				entityMap.put("entity-forms/" + filename, entityType);
+			}
+		} catch (FileNotFoundException e) {
 
-		Resource[] resources = resolver.getResources("classpath:/entity-forms/*_extension.xml");
-		for (Resource resource: resources) {
-			String filename = resource.getFilename();
-			String entityType = StringUtils.capitalize(filename.split("_")[0]) + "Extension";
-			entityMap.put("entity-forms/" + filename, entityType);
 		}
-
 		return new ArrayList<String>(entityMap.keySet());
 	}
 
