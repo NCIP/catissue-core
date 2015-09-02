@@ -10,7 +10,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
-import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
@@ -25,7 +24,6 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
-import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
@@ -186,13 +184,17 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			
 			Long dpId = req.getPayload().getId();
 			String status = req.getPayload().getActivityStatus();
+			if (StringUtils.isBlank(status) || !Status.isValidActivityStatus(status)) {
+				return ResponseEvent.userError(ActivityStatusErrorCode.INVALID);
+			}
+			
 			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(dpId);
 			if (existing == null) {
 				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
 			}
 			
-			if (StringUtils.isBlank(status) || !Status.isValidActivityStatus(status)) {
-				return ResponseEvent.userError(ActivityStatusErrorCode.INVALID);
+			if (existing.getActivityStatus().equals(status)) {
+				return ResponseEvent.response(DistributionProtocolDetail.from(existing));
 			}
 			
 			if (status.equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
@@ -234,11 +236,11 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		if (!isUniqueTitle(newDp, existingDp)) {
-			ose.addError(DistributionProtocolErrorCode.DUP_TITLE);
+			ose.addError(DistributionProtocolErrorCode.DUP_TITLE, newDp.getTitle());
 		}
 		
 		if (!isUniqueShortTitle(newDp, existingDp)) {
-			ose.addError(DistributionProtocolErrorCode.DUP_SHORT_TITLE);
+			ose.addError(DistributionProtocolErrorCode.DUP_SHORT_TITLE, newDp.getShortTitle());
 		}
 		
 		ose.checkAndThrow();

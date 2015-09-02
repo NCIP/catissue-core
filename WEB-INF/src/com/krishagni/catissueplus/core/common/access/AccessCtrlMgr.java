@@ -30,6 +30,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.domain.Subject;
 import com.krishagni.rbac.domain.SubjectAccess;
@@ -128,17 +129,13 @@ public class AccessCtrlMgr {
 		if (AuthUtil.isAdmin()) {
 			return;
 		}
-
-		Set<Site> userSites = getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
-		for (Site distSite: dp.getDistributingSites()) {
-			for (Site userSite: userSites) {
-				if (userSite.equals(distSite)) {
-					return;
-				}
-			}
-		}
 		
-		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		if (CollectionUtils.isEmpty(CollectionUtils.intersection(
+				getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE}),
+				dp.getDistributingSites()))) {
+			
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -599,41 +596,36 @@ public class AccessCtrlMgr {
 	//                                                                                  //
 	//////////////////////////////////////////////////////////////////////////////////////
 	
+	@SuppressWarnings("unchecked")
 	public Set<Long> getReadAccessDistributionOrderSites() {
 		if (AuthUtil.isAdmin()) {
 			return null;
 		}
 		
-		return getSiteIds(Resource.ORDER, Operation.READ);
+		return (Set<Long>) Utility.collect(getSites(Resource.ORDER, Operation.READ), "id", true);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Set<Long> getCreateUpdateAccessDistributionOrderSites() {
 		if (AuthUtil.isAdmin()) {
 			return null;
 		}
 		
-		return getSiteIds(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
+		return (Set<Long>) Utility.collect(getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE}), "id", true);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Set<Long> getDistributionOrderAllowedSites(DistributionOrder order) {
-		Set<Long> allowedSites = new HashSet<Long>();
+		Set<Site> allowedSites = null;
 		if (AuthUtil.isAdmin()) {
-			for (Site distSite: order.getDistributionProtocol().getDistributingSites()) {
-				allowedSites.add(distSite.getId());
-			}
-			
+			allowedSites = order.getDistributionProtocol().getDistributingSites();
 		} else {
-			for (Long userId: getSiteIds(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE})) {
-				for (Site distSite: order.getDistributionProtocol().getDistributingSites()) {
-					if (userId.equals(distSite.getId())) {
-						allowedSites.add(userId);
-						break;
-					}
-				}
-			}
+			allowedSites = new HashSet<Site>(CollectionUtils.intersection(
+					getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE}),
+					order.getDistributionProtocol().getDistributingSites()));
 		}
 		
-		return allowedSites;
+		return (Set<Long>) Utility.collect(allowedSites, "id", true);
 	}
 
 	public void ensureCreateDistributionOrderRights(DistributionOrder order) {
@@ -657,16 +649,12 @@ public class AccessCtrlMgr {
 			return;
 		}
 		
-		Set<Site> userSites = getSites(Resource.ORDER, operation);
-		for (Site distSite: order.getDistributionProtocol().getDistributingSites()) {
-			for (Site userSite: userSites) {
-				if (userSite.equals(distSite)) {
-					return;
-				}
-			}
+		if (CollectionUtils.isEmpty(CollectionUtils.intersection(
+				getSites(Resource.ORDER, operation),
+				order.getDistributionProtocol().getDistributingSites()))) {
+			
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
-		
-		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 	}
 
 	private Set<Pair<Long, Long>> getDistributionOrderSiteCps(String[] ops) {
@@ -745,19 +733,6 @@ public class AccessCtrlMgr {
 		return results;
 	}
 	
-	public Set<Long> getSiteIds(Resource resource, Operation op) {
-		return getSiteIds(resource, new Operation[]{op});
-	}
-	
-	public Set<Long> getSiteIds(Resource resource, Operation[] ops) {
-		Set<Long> siteIds = new HashSet<Long>();
-		for (Site site: getSites(resource, ops)) {
-			siteIds.add(site.getId());
-		}
-		
-		return siteIds;
-	}
-
 	public Set<Long> getEligibleCpIds(String resource, String op, List<String> siteNames) {
 		if (AuthUtil.isAdmin()) {
 			return null;

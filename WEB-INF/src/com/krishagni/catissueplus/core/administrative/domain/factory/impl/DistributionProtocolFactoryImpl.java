@@ -114,7 +114,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		}
 		
 		if (!defReceivingSite.getInstitute().equals(dp.getInstitute())) {
-			ose.addError(SiteErrorCode.INVALID_SITE_INSTITUTE);
+			ose.addError(SiteErrorCode.INVALID_SITE_INSTITUTE, defReceivingSite.getName(), dp.getInstitute().getName());
 			return;
 		}
 		
@@ -136,7 +136,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		}
 		
 		if (!pi.getInstitute().equals(distributionProtocol.getInstitute())) {
-			ose.addError(DistributionProtocolErrorCode.PI_DOES_NOT_BELONG_TO_INST);
+			ose.addError(DistributionProtocolErrorCode.PI_DOES_NOT_BELONG_TO_INST, pi.formattedName(), distributionProtocol.getInstitute().getName());
 			return;
 		}
 		

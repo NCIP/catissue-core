@@ -126,6 +126,7 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		
 		query.createAlias("distributingSites", "distSite")
 			.add(Restrictions.in("distSite.id", siteIds));
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 	}
 	
 	private void addActivityStatusCondition(Criteria query, DpListCriteria crit) {

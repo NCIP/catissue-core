@@ -104,7 +104,7 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 		addReceivingSiteRestriction(query, crit, matchMode);
 		addReceivingInstRestriction(query, crit, matchMode);
 		
-		addProjections(query);
+		addProjections(query, CollectionUtils.isNotEmpty(crit.siteIds()));
 		return query.list();		
 	}
 	
@@ -175,12 +175,16 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 			.add(Restrictions.ilike("institute.name", crit.receivingInstitute(), mode));
 	}
 	
-	private void addProjections(Criteria query) {
+	private void addProjections(Criteria query, boolean isDistinct) {
 		ProjectionList projs = Projections.projectionList();
-		query.setProjection(projs);
+		if (isDistinct) {
+			//added as duplicate entries come due to distributing site lists
+			query.setProjection(Projections.distinct(projs));
+		} else {
+			query.setProjection(projs);
+		}
 		
-		//added as duplicate entries come due to distributing site lists
-		projs.add(Projections.distinct(Projections.property("id")));
+		projs.add(Projections.property("id"));
 		projs.add(Projections.property("name"));
 		projs.add(Projections.property("creationDate"));
 		projs.add(Projections.property("executionDate"));
