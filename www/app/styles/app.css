@@ -635,7 +635,10 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 .os-section {
   margin-bottom: 20px;
 }
-  
+
+.os-line-section .os-btn-section-collapse {
+  padding-top: 3px;
+} 
 
 .btn-xs.os-btn-icon {
   padding: 0px 4px!important;
@@ -999,15 +1002,3 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   font-weight: normal;
 }
 
-.os-toggle-wrap.os-expanded .os-content {
-  display: block;
-}
-
-.os-toggle-wrap.os-collapsed .os-content {
-  display: none;
-}
-
-.os-toggle-wrap .key .fa {
-  margin-left: -18px;
-  width: 14px;
-}
