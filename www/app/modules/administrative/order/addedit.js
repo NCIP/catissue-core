@@ -136,7 +136,7 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
         return;
       }
 
-      $scope.order.addSpecimen(labels).then(
+      Specimen.listForDp(labels, $scope.order.distributionProtocol.id).then(
         function (specimens) {
           order.orderItems = order.orderItems.concat(getOrderItems(specimens));
           $scope.input.labelText = '';

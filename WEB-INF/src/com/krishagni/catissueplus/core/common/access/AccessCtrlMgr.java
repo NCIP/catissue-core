@@ -130,10 +130,8 @@ public class AccessCtrlMgr {
 			return;
 		}
 		
-		if (CollectionUtils.isEmpty(CollectionUtils.intersection(
-				getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE}),
-				dp.getDistributingSites()))) {
-			
+		Set<Site> userSites = getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
+		if (CollectionUtils.intersection(userSites, dp.getDistributingSites()).isEmpty()) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 	}
@@ -615,14 +613,13 @@ public class AccessCtrlMgr {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Set<Long> getDistributionOrderAllowedSites(DistributionOrder order) {
+	public Set<Long> getDistributionOrderAllowedSites(DistributionProtocol dp) {
 		Set<Site> allowedSites = null;
 		if (AuthUtil.isAdmin()) {
-			allowedSites = order.getDistributionProtocol().getDistributingSites();
+			allowedSites = dp.getDistributingSites();
 		} else {
-			allowedSites = new HashSet<Site>(CollectionUtils.intersection(
-					getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE}),
-					order.getDistributionProtocol().getDistributingSites()));
+			Set<Site> userSites = getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
+			allowedSites = new HashSet<Site>(CollectionUtils.intersection(userSites, dp.getDistributingSites()));
 		}
 		
 		return (Set<Long>) Utility.collect(allowedSites, "id", true);
@@ -649,9 +646,9 @@ public class AccessCtrlMgr {
 			return;
 		}
 		
-		if (CollectionUtils.isEmpty(CollectionUtils.intersection(
+		if (CollectionUtils.intersection(
 				getSites(Resource.ORDER, operation),
-				order.getDistributionProtocol().getDistributingSites()))) {
+				order.getDistributionProtocol().getDistributingSites()).isEmpty()) {
 			
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}

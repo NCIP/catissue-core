@@ -36,13 +36,5 @@ angular.module('os.administrative.models.order', ['os.common.models'])
       );
     }
     
-    DistributionOrder.prototype.addSpecimen = function (specimenLabels) {
-      return $http.get(DistributionOrder.url() + this.$id() + '/specimens?labels=' + specimenLabels).then(
-        function (resp) {
-          return resp.data;
-        }
-      );
-    }
-
     return DistributionOrder;
   });

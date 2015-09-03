@@ -105,7 +105,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		Long siteId = detail.getSiteId();
 		String siteName = detail.getSiteName();		
 		if (siteId == null && StringUtils.isBlank(siteName)) {
-			ose.addError(SiteErrorCode.NAME_REQUIRED);
+			ose.addError(DistributionOrderErrorCode.RECV_SITE_REQUIRED);
 			return;			
 		}
 		

@@ -15,21 +15,22 @@ import org.springframework.context.MessageSource;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder.Status;
+import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderFactory;
+import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
-import com.krishagni.catissueplus.core.administrative.events.DistributionOrderItemDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
 import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
-import com.krishagni.catissueplus.core.common.errors.CommonErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -120,6 +121,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	@PlusTransactional
 	public ResponseEvent<DistributionOrderDetail> createOrder(RequestEvent<DistributionOrderDetail> req) {
@@ -130,8 +132,9 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			AccessCtrlMgr.getInstance().ensureCreateDistributionOrderRights(order);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureSpecimensValidity(order, null, ose);
-			ensureUniqueConstraints(order, ose);
+			Set<Long> specimenIds = (Set<Long>) Utility.collect(order.getOrderItems(), "specimen.id", true);
+			ensureSpecimensValidity(order.getDistributionProtocol(), specimenIds, ose);
+			ensureUniqueConstraints(null, order, ose);
 			ose.checkAndThrow();
 			
 			Status inputStatus = Status.valueOf(detail.getStatus());
@@ -149,6 +152,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	@PlusTransactional
 	public ResponseEvent<DistributionOrderDetail> updateOrder(RequestEvent<DistributionOrderDetail> req) {
@@ -165,11 +169,9 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			AccessCtrlMgr.getInstance().ensureUpdateDistributionOrderRights(newOrder);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureSpecimensValidity(newOrder, null, ose);
-			if (!existingOrder.getName().equals(newOrder.getName())) {
-				ensureUniqueConstraints(newOrder, ose);
-			}
-
+			Set<Long> specimenIds = (Set<Long>) Utility.collect(newOrder.getOrderItems(), "specimen.id", true);
+			ensureSpecimensValidity(newOrder.getDistributionProtocol(), specimenIds, ose);
+			ensureUniqueConstraints(existingOrder, newOrder, ose);
 			ose.checkAndThrow();
 			
 			Status oldStatus = existingOrder.getStatus();
@@ -210,22 +212,13 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 	@Override
 	@PlusTransactional
 	@SuppressWarnings("unchecked")
-	public ResponseEvent<List<SpecimenInfo>> getSpecimens(RequestEvent<List<DistributionOrderItemDetail>> req) {
+	public ResponseEvent<List<SpecimenInfo>> getSpecimens(RequestEvent<VisitSpecimensQueryCriteria> req) {
 		try {
-			List<DistributionOrderItemDetail> itemDetails = req.getPayload();
-			if (CollectionUtils.isEmpty(itemDetails)) {
-				return ResponseEvent.userError(CommonErrorCode.INVALID_REQUEST);
-			}
-			
-			Long orderId = itemDetails.get(0).getId();
-			List<String> specimenLabels = (List<String>) Utility.collect(itemDetails, "specimen.label");
-			DistributionOrder existingOrder = daoFactory.getDistributionOrderDao().getById(orderId);
-			if (existingOrder == null) {
-				return ResponseEvent.userError(DistributionOrderErrorCode.NOT_FOUND);
-			}
-			
-			if (existingOrder.getStatus().compareTo(Status.EXECUTED) == 0) {
-				return ResponseEvent.userError(DistributionOrderErrorCode.ALREADY_EXECUTED);
+			Long dpId = req.getPayload().getDpId();
+			List<String> specimenLabels = req.getPayload().getLabels();
+			DistributionProtocol dp = daoFactory.getDistributionProtocolDao().getById(dpId);
+			if (dp == null) {
+				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
 			}
 			
 			List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
@@ -241,7 +234,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			Set<Long> specimenIds = (Set<Long>) Utility.collect(specimens, "id", true);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureSpecimensValidity(existingOrder, specimenIds, ose);
+			ensureSpecimensValidity(dp, specimenIds, ose);
 			ose.checkAndThrow();
 			
 			List<SpecimenInfo> result = SpecimenInfo.from(specimens);
@@ -254,25 +247,24 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 		}
 	}
 		
-	private void ensureUniqueConstraints(DistributionOrder distribution, OpenSpecimenException ose) {
-		if (daoFactory.getDistributionOrderDao().getOrder(distribution.getName()) != null) {
-			ose.addError(DistributionOrderErrorCode.DUP_NAME, distribution.getName());
+	private void ensureUniqueConstraints(DistributionOrder existingOrder, DistributionOrder newOrder, OpenSpecimenException ose) {
+		if (existingOrder != null && !newOrder.getName().equals(existingOrder.getName())) {
+			DistributionOrder order = daoFactory.getDistributionOrderDao().getOrder(newOrder.getName());
+			if (order != null) {
+				ose.addError(DistributionOrderErrorCode.DUP_NAME, newOrder.getName());
+			}
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	private void ensureSpecimensValidity(DistributionOrder order, Set<Long> specimenIds, OpenSpecimenException ose) {
+	private void ensureSpecimensValidity(DistributionProtocol dp, Set<Long> specimenIds, OpenSpecimenException ose) {
 		if (CollectionUtils.isEmpty(specimenIds)) {
-			specimenIds = (Set<Long>) Utility.collect(order.getOrderItems(), "specimen.id", true);
-			if (CollectionUtils.isEmpty(specimenIds)) {
-				ose.addError(DistributionOrderErrorCode.NO_SPECIMENS_TO_DIST);
-			}
+			ose.addError(DistributionOrderErrorCode.NO_SPECIMENS_TO_DIST);
 		}
 		
 		Map<String, Set<Long>> specimenSiteIdsMap = daoFactory.getSpecimenDao().getSpecimenSites(specimenIds);
-		Set<Long> orderAllowedIds = AccessCtrlMgr.getInstance().getDistributionOrderAllowedSites(order);
+		Set<Long> orderAllowedIds = AccessCtrlMgr.getInstance().getDistributionOrderAllowedSites(dp);
 		for (Map.Entry<String, Set<Long>> specimenSitesMapEntry: specimenSiteIdsMap.entrySet()) {
-			if (CollectionUtils.isEmpty(CollectionUtils.intersection(specimenSitesMapEntry.getValue(), orderAllowedIds))) {
+			if (CollectionUtils.intersection(specimenSitesMapEntry.getValue(), orderAllowedIds).isEmpty()) {
 				ose.addError(DistributionOrderErrorCode.INVALID_SPECIMENS_FOR_DP);
 			}
 		}
