@@ -426,12 +426,6 @@
     "visit_name": "Visit Name",
     "visit_date": "Visit Date",
     "visit_site": "Visit Site",
-    "collection_details": "Collection Details",
-    "collector": "Collector",
-    "collection_date": "Collection Date",
-    "receive_details": "Receive Details",
-    "receiver": "Receiver",
-    "receive_date": "Receive Date",
 
     "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
     "bulk_import": "Bulk Import Specimens",
@@ -451,7 +445,7 @@
     "specimen_closed": "Specimen is closed successfully",
 
     "col_event": {
-      "title": "COLLECTION DETAILS",
+      "title": "Collection Details",
       "user_time": "User and Time",
       "user": "Collector",
       "date": "Collection Date",
@@ -460,7 +454,7 @@
     },
 
     "recv_event": {
-      "title": "RECEIVED DETAILS",
+      "title": "Received Details",
       "user_time": "User and Time",
       "user": "Receiver",
       "date": "Receive Date",

@@ -198,15 +198,15 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="form-group">
-          <label class="col-xs-2 control-label" translate="specimens.collection_details">Collection Details</label>
+          <label class="col-xs-2 control-label" translate="specimens.col_event.title">Collection Details</label>
           <div class="col-xs-3 input">
-            <div os-md-input ng-model="collDetail.collector" placeholder="Collector">
-              <os-users ng-model="collDetail.collector" placeholder="{{'specimens.collector' | translate}}"> </os-users>
+            <div os-md-input ng-model="collDetail.collector" placeholder="{{'specimens.col_event.user' | translate}}">
+              <os-users ng-model="collDetail.collector" placeholder="{{'specimens.col_event.user' | translate}}"> </os-users>
             </div>
           </div>
           <div class="col-xs-2 input">
             <os-date-picker name="collDate" date="collDetail.collectionDate" md-type="true"
-              required placeholder="{{'specimens.collection_date' | translate}}">
+              required placeholder="{{'specimens.col_event.date' | translate}}">
             </os-date-picker>
             <div os-field-error field="collectionForm.collDate"></div>
           </div>
@@ -220,15 +220,15 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="form-group">
-          <label class="col-xs-2 control-label" translate="specimens.receive_details">Receive Details</label>
+          <label class="col-xs-2 control-label" translate="specimens.recv_event.title">Receive Details</label>
           <div class="col-xs-3 input">
-            <div os-md-input ng-model="collDetail.receiver" placeholder="Receiver">
-              <os-users ng-model="collDetail.receiver" placeholder="{{'specimens.receiver' | translate}}"> </os-users>
+            <div os-md-input ng-model="collDetail.receiver" placeholder="{{'specimens.recv_event.user' | translate}}">
+              <os-users ng-model="collDetail.receiver" placeholder="{{'specimens.recv_event.user' | translate}}"> </os-users>
             </div>
           </div>
           <div class="col-xs-2 input">
             <os-date-picker name="receiveDate" date="collDetail.receiveDate" required md-type="true"
-              placeholder="{{'specimens.receive_date' | translate}}">
+              placeholder="{{'specimens.recv_event.date' | translate}}">
             </os-date-picker>
             <div os-field-error field="collectionForm.receiveDate"></div>
           </div>
