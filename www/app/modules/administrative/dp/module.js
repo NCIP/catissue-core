@@ -48,12 +48,7 @@ angular.module('os.administrative.dp',
       .state('dp-detail.history', {
         url: '/history',
         templateUrl: 'modules/administrative/dp/history.html',
-        parent: 'dp-detail',
-        resolve: {
-          dpId: function(distributionProtocol) {
-            return distributionProtocol.id;
-          }
-        },
-        controller: 'DpHistoryCtrl'
+        controller: 'DpHistoryCtrl',
+        parent: 'dp-detail'
       });
   });
