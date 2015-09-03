@@ -141,6 +141,7 @@
     <property name="specimenSvc" ref="specimenSvc"/>
     <property name="cfgSvc" ref="cfgSvc"/>
     <property name="visitNameGenerator" ref="visitNameGenerator"/>
+    <property name="messageSource" ref="messageSource"/>
   </bean>
 
   <bean id="cpFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolFactoryImpl">

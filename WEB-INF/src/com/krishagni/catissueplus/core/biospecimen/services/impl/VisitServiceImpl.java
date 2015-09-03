@@ -7,11 +7,14 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.aspectj.bridge.MessageUtil;
+import org.springframework.context.MessageSource;
 
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -53,7 +56,6 @@ import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.service.LabelPrinter;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
-import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class VisitServiceImpl implements VisitService {
@@ -68,6 +70,8 @@ public class VisitServiceImpl implements VisitService {
 	private LabelGenerator visitNameGenerator;
 	
 	private static String defaultVisitSprDir;
+	
+	private MessageSource messageSource;
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -87,6 +91,10 @@ public class VisitServiceImpl implements VisitService {
 	
 	public void setVisitNameGenerator(LabelGenerator visitNameGenerator) {
 		this.visitNameGenerator = visitNameGenerator;
+	}
+	
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 
 	@Override
@@ -494,21 +502,18 @@ public class VisitServiceImpl implements VisitService {
 			
 			PdfWriter.getInstance(document, out);
 			document.open();
-			document.addTitle(MessageUtil.getInstance().getMessage("spr_title"));
+			document.addTitle(getMessage("spr_title"));
 			
 			Paragraph header = new Paragraph();
 			header.setAlignment(Element.ALIGN_CENTER);
-			Chunk chunk = new Chunk(MessageUtil.getInstance().getMessage("spr_header"));
-			chunk.setFont(getFont(10, true));
-			chunk.setUnderline(0.1f, -2f);
-			header.add(chunk);
+			Chunk headerText = getChunk(getMessage("spr_header"), 10, true, true);
+			header.add(headerText);
 			document.add(header);
 			document.add(Chunk.NEWLINE);
 			
 			Paragraph patientInfo = new Paragraph();
-			chunk = new Chunk(MessageUtil.getInstance().getMessage("spr_patient_info"));
-			chunk.setFont(new Font(FontFamily.HELVETICA, 10, Font.BOLD));
-			patientInfo.add(chunk);
+			Chunk patientInfoText = getChunk(getMessage("spr_patient_info"), 10, true, false);
+			patientInfo.add(patientInfoText);
 			document.add(patientInfo);
 			PdfPTable patientInfoTbl = getHeader(visit); 
 			document.add(patientInfoTbl);
@@ -516,12 +521,11 @@ public class VisitServiceImpl implements VisitService {
 			String fileText = Utility.getFileText(file);
 			document.add(new Paragraph(fileText, getFont(8,false)));
 			
+			
+			Chunk endReport = getChunk(getMessage("spr_end_of_report"), 6, false, true);
 			Paragraph footer = new Paragraph();
 			footer.setAlignment(Element.ALIGN_CENTER);
-			chunk = new Chunk(MessageUtil.getInstance().getMessage("spr_end_of_report"));
-			chunk.setFont(getFont(6, false));
-			chunk.setUnderline(0.1f, -2f);
-			footer.add(chunk);
+			footer.add(endReport);
 			document.add(footer);
 			
 			return sprReport;
@@ -533,11 +537,6 @@ public class VisitServiceImpl implements VisitService {
 		}
 	}
 	
-	private Font getFont(int size, boolean bold) {
-		int font = bold ? Font.BOLD: Font.NORMAL;
-		return new Font(FontFamily.HELVETICA, size, font);
-	}
-
 	private PdfPTable getHeader(Visit visit) {
 		PdfPTable header = new PdfPTable(3);
 		header.setSpacingBefore(4f);
@@ -545,31 +544,26 @@ public class VisitServiceImpl implements VisitService {
 		header.setWidthPercentage(100);
 		header.setSpacingAfter(4f);
 
-		MessageUtil messageUtil = MessageUtil.getInstance();	
 		Map<String, String> headerInfo = new LinkedHashMap<String, String>();
-		headerInfo.put(messageUtil.getMessage("spr_protocol_name"), visit.getCollectionProtocol().getShortTitle());
-		headerInfo.put(messageUtil.getMessage("spr_gender"), visit.getRegistration().getParticipant().getGender());
-		headerInfo.put(messageUtil.getMessage("spr_printed_by"),
+		headerInfo.put(getMessage("spr_protocol_name"), visit.getCollectionProtocol().getShortTitle());
+		headerInfo.put(getMessage("spr_gender"), visit.getRegistration().getParticipant().getGender());
+		headerInfo.put(getMessage("spr_printed_by"),
 				AuthUtil.getCurrentUser().getLastName() + ", " + AuthUtil.getCurrentUser().getFirstName());
-		headerInfo.put(messageUtil.getMessage("spr_visit_name"), visit.getName());
-		headerInfo.put(messageUtil.getMessage("spr_ppid"), visit.getRegistration().getPpid());
+		headerInfo.put(getMessage("spr_visit_name"), visit.getName());
+		headerInfo.put(getMessage("spr_ppid"), visit.getRegistration().getPpid());
 		Integer age = Utility.getAge(visit.getRegistration().getParticipant().getBirthDate());
-		headerInfo.put(messageUtil.getMessage("spr_age"), (age != null) ? age.toString() : "-");
-		headerInfo.put(messageUtil.getMessage("spr_printed_on_date"), Utility.getDateString(new Date()));
-		headerInfo.put(messageUtil.getMessage("spr_participant_race"),
+		headerInfo.put(getMessage("spr_age"), (age != null) ? age.toString() : "-");
+		headerInfo.put(getMessage("spr_printed_on_date"), Utility.getDateString(new Date()));
+		headerInfo.put(getMessage("spr_participant_race"),
 				Utility.stringListToCsv(visit.getRegistration().getParticipant().getRaces()));
-		headerInfo.put(messageUtil.getMessage("spr_collection_date"), Utility.getDateString(visit.getVisitDate()));
+		headerInfo.put(getMessage("spr_collection_date"), Utility.getDateString(visit.getVisitDate()));
 		
 		for (Map.Entry<String, String> entry : headerInfo.entrySet()) {
 			Paragraph paragraph = new Paragraph();
-			Chunk chunk = new Chunk(entry.getKey());
-			chunk.setFont(getFont(8, true));
-			paragraph.add(chunk);
+			paragraph.add(getChunk(entry.getKey(), 8, true, false));
 			
-			String value = (entry.getValue() != null) ? entry.getValue() : "-";   
-			chunk = new Chunk(value);
-			chunk.setFont(getFont(8, false));
-			paragraph.add(chunk);
+			String val = (entry.getValue() != null) ? entry.getValue() : "-";  
+			paragraph.add(getChunk(val, 8, false, false));
 			
 			PdfPCell cell = new PdfPCell(paragraph);
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -578,5 +572,20 @@ public class VisitServiceImpl implements VisitService {
 		
 		return header;
 	}
-
+	
+	private Font getFont(int size, boolean bold) {
+		int font = bold ? Font.BOLD: Font.NORMAL;
+		return new Font(FontFamily.HELVETICA, size, font);
+	}
+	
+	private Chunk getChunk(String message, int fontSize, boolean bold, boolean underline) {
+		Chunk chunk = new Chunk(message);
+		chunk.setFont(getFont(fontSize, bold));
+		chunk.setUnderline(0.1f, -2f);
+		return chunk;
+	}
+	
+	private String getMessage(String code) {
+		return messageSource.getMessage(code, null, Locale.getDefault());
+	}
 }
