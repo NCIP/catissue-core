@@ -422,6 +422,11 @@
 
     "pos_selector": "Specimen Position Selector",
 
+    "visit_details": "Visit Details",
+    "visit_name": "Visit Name",
+    "visit_date": "Visit Date",
+    "visit_site": "Visit Site",
+
     "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
     "bulk_import": "Bulk Import Specimens",
     "spmn_extensions": "Specimen Forms",
@@ -440,7 +445,7 @@
     "specimen_closed": "Specimen is closed successfully",
 
     "col_event": {
-      "title": "COLLECTION DETAILS",
+      "title": "Collection Details",
       "user_time": "User and Time",
       "user": "Collector",
       "date": "Collection Date",
@@ -449,7 +454,7 @@
     },
 
     "recv_event": {
-      "title": "RECEIVED DETAILS",
+      "title": "Received Details",
       "user_time": "User and Time",
       "user": "Receiver",
       "date": "Receive Date",

@@ -159,22 +159,23 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="form-group">
-          <label class="col-xs-2 control-label">Visit Details</label>
+          <label class="col-xs-2 control-label" translate="specimens.visit_details">Visit Details</label>
           <div ng-if="visit.status != 'Complete'">
             <div class="col-xs-3 input" ng-if="!cp.visitNameFmt || cp.manualVisitNameEnabled">
               <input name="visitName" ng-model="visit.name" class="form-control" type="text" 
-                os-md-input ng-required="!!cp.manualVisitNameEnabled" placeholder="Visit Name">
+                os-md-input ng-required="!!cp.manualVisitNameEnabled"
+                placeholder="{{'specimens.visit_name' | translate}}">
               <div os-field-error field="collectionForm.visitName"></div>
             </div>
             <div class="col-xs-3 input">
               <os-date-picker name="visitDate" date="visit.visitDate" required md-type="true"
-                placeholder="Visit Date">
+                placeholder="{{'specimens.visit_date' | translate}}">
               </os-date-picker>
               <div os-field-error field="collectionForm.visitDate"></div>
             </div>
             <div class="col-xs-3 input">
               <os-select name="site" os-md-input ng-model="visit.site" list="sites"
-                placeholder="Visit Site" required>
+                placeholder="{{'specimens.visit_site' | translate}}" required>
               </os-select>
               <div os-field-error field="collectionForm.site"></div>
             </div>
@@ -182,11 +183,11 @@
 
           <div ng-if="visit.status == 'Complete'">
             <div class="col-xs-3 os-md-input read">
-              <label class="os-md-input-label">Visit Date</label>
+              <label class="os-md-input-label" translate="specimens.visit_date">Visit Date</label>
               <span>{{visit.visitDate | date: global.dateFmt}}</span>
             </div>
             <div class="col-xs-3 os-md-input read">
-              <label class="os-md-input-label">Visit Site</label>
+              <label class="os-md-input-label" translate="specimens.visit_site">Visit Site</label>
               <span>{{visit.site}}</span>
             </div>
           </div>
@@ -197,15 +198,15 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="form-group">
-          <label class="col-xs-2 control-label">Collection Details</label>
+          <label class="col-xs-2 control-label" translate="specimens.col_event.title">Collection Details</label>
           <div class="col-xs-3 input">
-            <div os-md-input ng-model="collDetail.collector" placeholder="Collector">
-              <os-users ng-model="collDetail.collector" placeholder="Collector"> </os-users>
+            <div os-md-input ng-model="collDetail.collector" placeholder="{{'specimens.col_event.user' | translate}}">
+              <os-users ng-model="collDetail.collector" placeholder="{{'specimens.col_event.user' | translate}}"> </os-users>
             </div>
           </div>
           <div class="col-xs-2 input">
             <os-date-picker name="collDate" date="collDetail.collectionDate" md-type="true"
-              required placeholder="Collection Date">
+              required placeholder="{{'specimens.col_event.date' | translate}}">
             </os-date-picker>
             <div os-field-error field="collectionForm.collDate"></div>
           </div>
@@ -219,15 +220,15 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="form-group">
-          <label class="col-xs-2 control-label">Receive Details</label>
+          <label class="col-xs-2 control-label" translate="specimens.recv_event.title">Receive Details</label>
           <div class="col-xs-3 input">
-            <div os-md-input ng-model="collDetail.receiver" placeholder="Receiver">
-              <os-users ng-model="collDetail.receiver" placeholder="Receiver"> </os-users>
+            <div os-md-input ng-model="collDetail.receiver" placeholder="{{'specimens.recv_event.user' | translate}}">
+              <os-users ng-model="collDetail.receiver" placeholder="{{'specimens.recv_event.user' | translate}}"> </os-users>
             </div>
           </div>
           <div class="col-xs-2 input">
             <os-date-picker name="receiveDate" date="collDetail.receiveDate" required md-type="true"
-              placeholder="Receive Date">
+              placeholder="{{'specimens.recv_event.date' | translate}}">
             </os-date-picker>
             <div os-field-error field="collectionForm.receiveDate"></div>
           </div>
