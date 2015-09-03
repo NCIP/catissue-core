@@ -240,10 +240,10 @@
     "regDate": "Registration Date",
     "reg_another_protocol": "Register to Another Protocol",
     "consent": {
-      "signed_consent_form": "Signed Consent Form",
-      "deleting_consent_form": "Deleting Signed Consent Form",
-      "confirm_delete_consent_form": "Are you sure you want to delete {{consentDocumentName}}?",
-      "consent_responses": "Consent Responses",
+      "signed_form": "Signed Consent Form",
+      "deleting_form": "Deleting Signed Consent Form",
+      "confirm_delete_form": "Are you sure you want to delete {{consentDocumentName}}?",
+      "responses": "Consent Responses",
       "signature_date": "Consent Signature Date",
       "witness": "Consent Witness",
       "clear": "Clear response"
