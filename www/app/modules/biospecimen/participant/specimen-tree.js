@@ -374,6 +374,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
           if (closeParent) {
             specimensToSave = [new Specimen({
               id: scope.parentSpecimen.id,
+              lineage: scope.parentSpecimen.lineage,
               visitId: scope.visit.id,
               closeAfterChildrenCreation: true,
               children: [scope.derivative]
