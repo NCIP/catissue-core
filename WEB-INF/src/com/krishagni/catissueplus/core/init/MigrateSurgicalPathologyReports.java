@@ -312,8 +312,8 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 			  "pr.identifier reportId, pr.activity_status activityStatus, " +
 			  "dr.scg_id visitId, scg.name visitName, rc.report_data reportContent " + 
 			"from " +
-			  "catissue_pathology_report pr " + 
-			  "join catissue_deidentified_report dr on dr.identifier = pr.identifier " + 
+			  "catissue_deidentified_report dr " + 
+			  "join catissue_pathology_report pr on dr.identifier = pr.identifier " + 
 			  "join catissue_report_textcontent rtc on rtc.report_id = pr.identifier " + 
 			  "join catissue_report_content rc on rc.identifier = rtc.identifier " +
 			  "join catissue_specimen_coll_group scg on dr.scg_id = scg.identifier " +
@@ -325,8 +325,8 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 			  "pr.identifier reportId, pr.activity_status activityStatus, " +
 			  "dr.scg_id visitId, scg.name visitName, rc.report_data reportContent " + 
 			"from " +
-			  "catissue_pathology_report pr " + 
-			  "join catissue_deidentified_report dr on dr.identifier = pr.identifier " + 
+			  "catissue_deidentified_report dr " + 
+			  "join catissue_pathology_report pr on dr.identifier = pr.identifier " + 
 			  "join catissue_report_textcontent rtc on rtc.report_id = pr.identifier " + 
 			  "join catissue_report_content rc on rc.identifier = rtc.identifier " +
 			  "join catissue_specimen_coll_group scg on dr.scg_id = scg.identifier " +
@@ -338,8 +338,8 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 			  "pr.identifier reportId, pr.activity_status activityStatus, " +
 			  "dr.scg_id visitId, scg.name visitName, rc.report_data reportContent " + 
 			"from " +
-			  "catissue_pathology_report pr " + 
-			  "join catissue_identified_report dr on dr.identifier = pr.identifier " + 
+			  "catissue_identified_report dr " + 
+			  "join catissue_pathology_report pr on dr.identifier = pr.identifier " + 
 			  "join catissue_report_textcontent rtc on rtc.report_id = pr.identifier " + 
 			  "join catissue_report_content rc on rc.identifier = rtc.identifier " +
 			  "join catissue_specimen_coll_group scg on dr.scg_id = scg.identifier " +
@@ -351,8 +351,8 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 			  "pr.identifier reportId, pr.activity_status activityStatus, " +
 			  "dr.scg_id visitId, scg.name visitName, rc.report_data reportContent " + 
 			"from " +
-			  "catissue_pathology_report pr " + 
-			  "join catissue_identified_report dr on dr.identifier = pr.identifier " + 
+			  "catissue_identified_report dr " + 
+			  "join catissue_pathology_report pr on dr.identifier = pr.identifier " + 
 			  "join catissue_report_textcontent rtc on rtc.report_id = pr.identifier " + 
 			  "join catissue_report_content rc on rc.identifier = rtc.identifier " +
 			  "join catissue_specimen_coll_group scg on dr.scg_id = scg.identifier " +
