@@ -551,7 +551,7 @@ public class VisitServiceImpl implements VisitService {
 		headerInfo.put(messageUtil.getMessage("spr_gender"), visit.getRegistration().getParticipant().getGender());
 		headerInfo.put(messageUtil.getMessage("spr_printed_by"),
 				AuthUtil.getCurrentUser().getLastName() + ", " + AuthUtil.getCurrentUser().getFirstName());
-		headerInfo.put(messageUtil.getMessage("spr_visit_name"), visit.getName().toString());
+		headerInfo.put(messageUtil.getMessage("spr_visit_name"), visit.getName());
 		headerInfo.put(messageUtil.getMessage("spr_ppid"), visit.getRegistration().getPpid());
 		Integer age = Utility.getAge(visit.getRegistration().getParticipant().getBirthDate());
 		headerInfo.put(messageUtil.getMessage("spr_age"), (age != null) ? age.toString() : "-");

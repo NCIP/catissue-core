@@ -3,7 +3,8 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
 
     function init() {
       $scope.sprUploader = {};
-      $scope.sprUrl = $sce.trustAsResourceUrl(visit.getSprFileUrl());
+      $scope.sprUrl = $sce.trustAsResourceUrl(visit.getSprFileUrl(false));
+      $scope.sprPdfFileUrl = $sce.trustAsResourceUrl(visit.getSprFileUrl(true));
       $scope.spr = {name: visit.sprName, locked: visit.sprLocked};
       $scope.uploadMode = false;
 

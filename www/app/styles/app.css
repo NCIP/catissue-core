@@ -1007,3 +1007,12 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   color: #333;
   font-weight: normal;
 }
+
+.os-command-bar {
+  padding: 0px 15px 10px 15px;
+  margin-bottom: 30px;
+}
+
+.os-command-bar button {
+  margin-right: 10px;
+}
