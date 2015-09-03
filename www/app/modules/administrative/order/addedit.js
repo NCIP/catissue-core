@@ -7,7 +7,7 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     function init() {
       $scope.order = order;
       $scope.dpList = [];
-      $scope.instituteList = [];
+      $scope.instituteNames = [];
       $scope.siteList = [];
       $scope.userFilterOpts = {};
       $scope.input = {labelText: ''};
@@ -47,12 +47,7 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     function loadInstitutes () {
       Institute.query().then(
         function (institutes) {
-          $scope.institutes = institutes;
-          $scope.instituteList = institutes.map(
-            function (inst) {
-              return inst.name;
-            }
-          );
+          $scope.instituteNames = getInstituteNames(institutes);
         }
       );
     }
@@ -64,17 +59,25 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
         }
       );    
     }
-
+    
+    function getInstituteNames (institutes) {
+      return institutes.map(
+        function (inst) {
+          return inst.name;
+        }
+      );
+    }
+    
     function setUserFilterOpts(institute) {
       $scope.userFilterOpts = {institute: institute};
     }
 
-    function getInstituteName(order) {
+    function getOrderInstituteName(order) {
       return !order || !order.distributionProtocol ? undefined : order.distributionProtocol.instituteName;
     }
 
     function setUserAndSiteList(order) {
-      var instituteName = getInstituteName(order);
+      var instituteName = getOrderInstituteName(order);
       setUserFilterOpts(instituteName);
       loadSites(instituteName);
     }

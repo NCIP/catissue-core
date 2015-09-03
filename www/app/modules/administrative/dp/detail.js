@@ -22,13 +22,17 @@ angular.module('os.administrative.dp.detail', ['os.administrative.models'])
         entity: distributionProtocol,
         templateUrl: 'modules/administrative/dp/close.html',
         delete: function () {
-          distributionProtocol.close();
+          distributionProtocol.close().then(function(dp) {
+            $scope.distributionProtocol = dp;
+          })
         }
       });
     }
     
     $scope.reopenDp = function () {
-      distributionProtocol.reopen();
+      distributionProtocol.reopen().then(function (dp) {
+        $scope.distributionProtocol = dp;
+      });
     }
     
   });

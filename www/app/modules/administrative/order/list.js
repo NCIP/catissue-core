@@ -9,7 +9,7 @@ angular.module('os.administrative.order.list', ['os.administrative.models'])
     function init() {
       $scope.orders = [];
       $scope.dps = [];
-      $scope.instiuteList = [];
+      $scope.instituteNames = [];
       $scope.filterOpts = {};
 
       loadOrders($scope.filterOpts);
@@ -64,11 +64,15 @@ angular.module('os.administrative.order.list', ['os.administrative.models'])
     function loadInstitutes() {
       Institute.query().then(
         function(institutes) {
-          $scope.instList = institutes.map(
-            function (inst) {
-              return inst.name;
-            }
-          );
+          $scope.instituteNames = getInstituteNames(institutes);
+        }
+      );
+    }
+    
+    function getInstituteNames (institutes) {
+      return institutes.map(
+        function (inst) {
+          return inst.name;
         }
       );
     }
