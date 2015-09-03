@@ -97,4 +97,35 @@
     </sql>
   </changeSet>
 
+  <changeSet author="vlonushte" id="Replace cp short title with cp id as key in key sequence generator table" dbms="mysql" >
+    <sql>
+      update 
+        key_seq_generator ksg 
+        join catissue_collection_protocol cp on ksg.key_value = cp.short_title
+      set 
+        ksg.key_value = cp.identifier
+      where
+        ksg.key_type = 'PPID';
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Replace cp short title with cp id as key in key sequence generator table" dbms="oracle">
+    <sql>
+      merge into
+        key_seq_generator ksg
+      using  (
+        select 
+          k.identifier as key_id, cp.identifier as cp_id
+        from 
+          key_seq_generator k
+          join catissue_collection_protocol cp on  k.key_value = cp.short_title 
+        where 
+          k.key_type = 'PPID'
+      ) t on (ksg.identifier = t.key_id)
+      when matched then
+      update set  
+        ksg.key_value = t.cp_id
+    </sql>
+  </changeSet>
+  
 </databaseChangeLog>

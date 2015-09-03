@@ -133,7 +133,7 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	public boolean sendEmail(Email mail) {
 		try {
 			final MimeMessage mimeMessage = mailSender.createMimeMessage();
-			final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, false, "UTF-8"); // true = multipart
+			final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8"); // true = multipart
 			message.setSubject(mail.getSubject());
 			message.setTo(mail.getToAddress());
 			

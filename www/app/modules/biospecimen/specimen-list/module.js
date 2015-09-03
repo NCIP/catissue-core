@@ -2,7 +2,8 @@ angular.module('os.biospecimen.specimenlist',
   [ 
     'os.biospecimen.specimenlist.list',
     'os.biospecimen.specimenlist.addedit',
-    'os.biospecimen.specimenlist.specimensholder'
+    'os.biospecimen.specimenlist.specimensholder',
+    'os.biospecimen.specimenlist.assignto'
   ])
 
   .config(function($stateProvider) {

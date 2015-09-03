@@ -163,7 +163,7 @@ edu.common.de.Form = function(args) {
   this.dateFormat = args.dateFormat;
 
   this.customHdrs = args.customHdrs || {};
-  
+
   if (!this.formDef && this.formDefUrl) {
     var url = this.formDefUrl.replace(":formId", this.formId);
     this.formDefXhr = $.ajax({type: 'GET', url: url, headers: this.customHdrs});

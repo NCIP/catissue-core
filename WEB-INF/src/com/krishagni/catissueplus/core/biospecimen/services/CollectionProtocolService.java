@@ -84,6 +84,8 @@ public interface CollectionProtocolService {
 	
 	public ResponseEvent<SpecimenRequirementDetail> deleteSpecimenRequirement(RequestEvent<Long> req);
 	
+	public ResponseEvent<Integer> getSrSpecimensCount(RequestEvent<Long> req);
+	
 	//
 	// Workflow API
 	//

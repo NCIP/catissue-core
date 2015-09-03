@@ -368,6 +368,14 @@
         c.caption		
     </sql-query>
 
+    <query name="getFormContextsByEntity">
+      from 
+        krishagni.catissueplus.beans.FormContextBean fc
+      where
+        fc.entityType = :entityType and
+        fc.cpId = :cpId
+    </query>
+
     <sql-query name="getFormByCtxt">
       <return-scalar column="formId" type="long"/>
       <return-scalar column="formCaption" type="string"/>

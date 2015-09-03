@@ -118,6 +118,15 @@ public class SpecimenRequirementsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/specimens-count")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Integer getSpecimensCount(@PathVariable("id") Long srId) {
+		ResponseEvent<Integer> resp = cpSvc.getSrSpecimensCount(getRequest(srId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 		
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(payload);

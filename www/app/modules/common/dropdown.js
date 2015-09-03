@@ -35,6 +35,10 @@ angular.module('openspecimen')
           uiSelect.attr('on-select', tAttrs.onSelect);
         }
 
+        if (tAttrs.title) {
+           uiSelect.attr('title', tAttrs.title);
+        }
+
         var uiSelectMatch = angular.element('<ui-select-match/>')
           .attr('placeholder', tAttrs.placeholder)
           .attr('allow-clear', tAttrs.required == undefined);

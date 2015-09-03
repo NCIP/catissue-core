@@ -12,6 +12,7 @@ angular.module('os.biospecimen.extensions.addedit-record', [])
       recordId: recId,
       formCtxtId: parseInt($stateParams.formCtxId),
       objectId: $scope.object.id,
+      showActionBtns: true,
 
       onSave: function() {
         $scope.back();

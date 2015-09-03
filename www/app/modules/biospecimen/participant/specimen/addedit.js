@@ -18,12 +18,19 @@ angular.module('os.biospecimen.specimen.addedit', [])
       $scope.lateralities = PvManager.getPvs('laterality');
       $scope.pathologyStatuses = PvManager.getPvs('pathology-status');
       $scope.biohazards = PvManager.getPvs('specimen-biohazard');
+
+      if (!specimen.id && !specimen.reqId) {
+        $scope.collectionProcedures = PvManager.getPvs('collection-procedure');
+        $scope.collectionContainers = PvManager.getPvs('collection-container');
+        $scope.receivedQualities =  PvManager.getPvs('received-quality');
+      }
     };
 
     function init() {
       loadPvs();
 
       var currSpecimen = $scope.currSpecimen = angular.copy(specimen);
+
       currSpecimen.visitId = visit.id;
 
       if (currSpecimen.status != 'Collected') {
@@ -47,9 +54,28 @@ angular.module('os.biospecimen.specimen.addedit', [])
           currSpecimen.labelFmt = cpr.derivativeLabelFmt;
         }
       }
+
+      if (!$scope.currSpecimen.id && !$scope.currSpecimen.reqId) {
+        var currentDate = new Date();
+        $scope.currSpecimen.collectionEvent = {
+          user: $scope.currentUser,
+          time: currentDate
+        };
+
+        $scope.currSpecimen.receivedEvent = {
+          user: $scope.currentUser,
+          time: currentDate
+        };
+
+        $scope.currSpecimen.collectionEvent.container = "Not Specified";
+        $scope.currSpecimen.collectionEvent.procedure = "Not Specified";
+        $scope.currSpecimen.receivedEvent.receivedQuality = "Acceptable";
+      }
+
     }
 
     $scope.saveSpecimen = function() {
+
       $scope.currSpecimen.$saveOrUpdate().then(
         function(result) {
           angular.extend($scope.specimen, result);

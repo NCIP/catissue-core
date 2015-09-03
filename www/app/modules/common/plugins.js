@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .factory('PluginReg', function() {
+  .factory('PluginReg', function($http, angularLoad) {
     /**
      * Structure
      * {
@@ -61,6 +61,21 @@ angular.module('openspecimen')
 
      function usePlugins(pluginNames) {
        activePlugins = [].concat(pluginNames); 
+
+       var pluginUrl = 'plugin-ui-resources/'; 
+       angular.forEach(activePlugins, function(pluginName) {
+         $http.get(pluginUrl + pluginName + '/def.json').then(
+           function(result) {
+             angular.forEach(result.data.styles, function(style) {
+               angularLoad.loadCSS(pluginUrl + style);
+             });
+
+             angular.forEach(result.data.scripts, function(script) {
+               angularLoad.loadScript(pluginUrl + script);
+             });
+           }
+         );
+       });
      }
 
      return {

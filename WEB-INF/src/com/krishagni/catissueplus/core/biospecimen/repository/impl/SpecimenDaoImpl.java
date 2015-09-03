@@ -145,7 +145,16 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		
 		return result;
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Long> getDistributedSpecimens(List<Long> specimenIds) {
+		return (List<Long>) getSessionFactory().getCurrentSession()
+				.getNamedQuery(GET_DISTRIBUTED_SPECIMENS)
+				.setParameterList("specimenIds", specimenIds)
+				.list();
+	}
+
 	private void addLabelsCond(Criteria query, List<String> labels) {
 		int numLabels = labels.size();		
 		Disjunction labelIn = Restrictions.disjunction();
@@ -207,4 +216,7 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	private static final String GET_CPR_AND_VISIT_IDS = FQN + ".getCprAndVisitIds";
 	
 	private static final String GET_SPECIMEN_INSTITUTE_IDS = FQN + ".getSpecimenInstituteIds";
+
+	private static final String GET_DISTRIBUTED_SPECIMENS = FQN + ".getDistributedSpecimens";
+
 }

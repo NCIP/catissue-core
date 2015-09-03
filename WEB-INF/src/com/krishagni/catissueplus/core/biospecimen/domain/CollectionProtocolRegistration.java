@@ -230,7 +230,7 @@ public class CollectionProtocolRegistration {
 		CollectionProtocol cp = getCollectionProtocol();
 		String ppidFmt = cp.getPpidFormat();
 		if (StringUtils.isNotBlank(ppidFmt)) {
-			Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("PPID", cp.getShortTitle());
+			Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("PPID", cp.getId().toString());
 			setPpid(String.format(ppidFmt, uniqueId.intValue()));
 		} else {
 			setPpid(cp.getId() + "_" + participant.getId());

@@ -14,7 +14,7 @@
         {{queryCtx.title}}
       </span>
     </h3>
-    <div class="os-btns right">
+    <div class="os-btns right os-query-btn">
       <button class="default" ng-click="editFilters()">
         <span class="fa fa-pencil"></span>
         <span translate="queries.edit_filters">Edit Filters</span>
@@ -42,29 +42,10 @@
             <span translate="queries.unselect_all">Unselect All</span>
           </button>
         </button>
-        <button class="btn default dropdown-toggle" ng-disabled="!selectedRows || selectedRows.length == 0">
-          <span class="fa fa-folder"></span>
-          <span class="fa fa-caret-down"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right os-query-folders-dd">
-          <li>
-            <input ng-model="searchSpecimenList" type="text" class="form-control" 
-              placeholder="{{'specimen_list.search_list' | translate}}" 
-              ng-click="$event.stopPropagation()">
-          </li>
-          <li>
-            <ul class="dropdown-menu-subgroup">
-              <li ng-repeat="list in specimenLists | filter: searchSpecimenList"
-                ng-click="addSelectedSpecimensToSpecimenList(list)">
-                <a><span>{{list.name}}</span></a>
-              </li>
-            </ul>
-          </li>
-          <li class="divider"></li>
-          <li ng-click="createNewSpecimenList()">
-            <a translate="specimen_list.create_new_list">Create New Specimen List</a>
-          </li>
-        </ul>
+
+        <os-assign-to-spmn-list on-add-to-list="addSelectedSpecimensToSpecimenList(list)">
+        </os-assign-to-spmn-list>
+  
       </div>
     </div>
   </div>

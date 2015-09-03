@@ -116,25 +116,29 @@
         <div class="os-table os-table-muted-hdr os-border" ng-if="occurredVisits.length > 0">
           <div class="os-table-head">
             <div class="row">
-              <div class="col col-xs-5" translate="visits.title">Visit</div>
-              <div class="col col-xs-2" translate="common.date">Date</div>
-              <div class="col col-xs-4" translate="visits.collection_status">Collection Status</div>
-              <div class="col col-xs-1">&nbsp;</div>
+              <div class="col os-col-25" translate="visits.event_label">Event Label</div>
+              <div class="col os-col-25" translate="visits.name">Name</div>
+              <div class="col os-col-15" translate="common.date">Date</div>
+              <div class="col os-col-30" translate="visits.collection_status">Collection Status</div>
+              <div class="col os-col-5">&nbsp;</div>
             </div>
           </div>
           <div class="os-table-body">
             <div ng-repeat="visit in occurredVisits"
               ng-class="{'os-inplace-form-edit-po': rptVisitIdx == $index}">
               <div class="row title">
-                <div class="col col-xs-5">
-                  <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
+                <div class="col os-col-25">
+                  <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
                     T{{visit.eventPoint}}: {{visit.eventLabel}}
                   </a>
                 </div>
-                <div class="col col-xs-2">
+                <div class="col os-col-25">
+                  {{visit.name}}
+                </div>
+                <div class="col os-col-15">
                   {{visit.visitDate | date: global.dateFmt}} 
                 </div>
-                <div class="col col-xs-4">
+                <div class="col os-col-30">
                   <progress class="progress" max="visit.totalSpecimens"
                     bs-popover trigger="hover" placement="bottom" content-template="specimen-count.html">
                     <bar value="visit.collectedSpecimens" type="success">
@@ -143,15 +147,15 @@
                     <bar value="visit.pendingSpecimens" type="warning">
                       <span><b> {{visit.pendingSpecimens}} </b> </span>
                     </bar>
-                    <bar value="visit.uncollectedSpecimens" type="danger">
+                    <bar value="visit.uncollectedSpecimens" type="missed">
                       <span><b> {{visit.uncollectedSpecimens}} </b> </span>
                     </bar>
-                    <bar value="visit.unplannedSpecimens" type="info">
+                    <bar value="visit.unplannedSpecimens" type="unplanned">
                       <span><b> {{visit.unplannedSpecimens}} </b> </span>
                     </bar>
                   </progress>
                 </div>
-                <div class="col col-xs-1 os-more-options">
+                <div class="col os-col-5 os-more-options">
                   <div dropdown>
                     <button class="dropdown-toggle">
                       <span class="fa fa-ellipsis-v"></span>

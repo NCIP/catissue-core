@@ -71,5 +71,5 @@ public class FormContextDetail {
 
 	public void setSysForm(boolean sysForm) {
 		this.sysForm = sysForm;
-	}
+	}	
 }
